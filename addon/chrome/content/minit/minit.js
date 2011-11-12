@@ -825,7 +825,7 @@ function TMP_loadTabs(aURIs, aReplace) {
   try {
     gBrowser.loadTabs(aURIs, bgLoad, aReplace);
   } catch (ex) { }
-  // not in use for Firefox 3.7+
+  // not in use for Firefox 4.0+
   gBrowser.tabContainer.nextTab = 1;
 }
 

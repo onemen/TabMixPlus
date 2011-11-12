@@ -73,7 +73,7 @@
     </content>
   </binding>
 
-  <!-- tabbrowser-tabs bindings for Firefox 3.7+ -->
+  <!-- tabbrowser-tabs bindings for Firefox 4.0+ -->
   <binding id="tabmix-tabbrowser-tabs"
             extends="chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-base-tabbrowser-tabs">
     <implementation>
@@ -284,10 +284,9 @@
       <handler event="dblclick" phase="capturing"><![CDATA[
         if (event.target.localName == "tabs") {
           let allowChangeSize = TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize");
-          let menuBar = document.getElementById("toolbar-menubar");
-          let menuBarIsHiding = menuBar && menuBar.getAttribute("autohide") == "true";
+          let displayAppButton = !document.getElementById("titlebar").hidden;
           if ((TabsInTitlebar.enabled && allowChangeSize) ||
-              (menuBarIsHiding && TabsOnTop.enabled && this.parentNode._dragBindingAlive))
+              (displayAppButton && TabsOnTop.enabled && this.parentNode._dragBindingAlive))
             return;
         }
         TabmixTabClickOptions.onTabBarDblClick(event);

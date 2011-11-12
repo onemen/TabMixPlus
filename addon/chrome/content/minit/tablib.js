@@ -38,7 +38,7 @@ if (this._inited)
   return;
 this._inited = true;
 
-if (Tabmix.isVersion(80)) {
+if (Tabmix.isVersion(80) && ("_handleTabDrag" in gBrowser.tabContainer)) {
   Tabmix.newCode("gBrowser.tabContainer._handleTabDrop", gBrowser.tabContainer._handleTabDrop)._replace(
     'that.tabbrowser.swapBrowsersAndCloseOther(newTab, draggedTab);',
     'TMP_copyTabData(newTab, draggedTab);\
@@ -305,7 +305,7 @@ if ("__ctxextensions__removeTab" in gBrowser)
     Tabmix.newCode("gBrowser._endRemoveTab", gBrowser._endRemoveTab)._replace(
       'this.addTab("about:blank", {skipAnimation: true});',
       'TMP_BrowserOpenTab(null, true);', {check: !_bug563337 && !("TabGroupsManagerApiVer1" in window)}
-    )._replace( // Firefox 3.7+
+    )._replace( // Firefox 4.0+
       'this._blurTab(aTab);',
       'TMP_onRemoveTab(aTab); \
        this.tabContainer.nextTab = 1; \
@@ -1042,22 +1042,17 @@ gBrowser.duplicateInWindow = function (aTab, aMoveTab, aTabData) {
   if (Tabmix.singleWindowMode) {
     if (!aMoveTab)
       this.duplicateTab(aTab, null, aTabData);
-
-    return;
   }
-
-  if (aMoveTab) {
+  else if (aMoveTab) {
     this.replaceTabWithWindow(aTab);
-    return;
   }
   else {
-    let newTab = this.duplicateTab(aTab, null, aTabData, true, true);
+    let newTab = this.duplicateTab(aTab, null, aTabData, true, true);  
     if (Tabmix.isVersion(40))
       this.hideTab(newTab);
     else
-      newTab.collapsed = newTab;
+      newTab.collapsed = true;
     this.replaceTabWithWindow(newTab);
-    return;
   }
 
 }
