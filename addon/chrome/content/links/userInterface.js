@@ -170,12 +170,11 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
        }
      } catch (ex) {/* no pref - do noting */}
    }
-   if (replaceLastTab && !gBrowser.mCurrentTab.collapsed)
+   if ((TabmixTabbar.widthFitTitle || !Tabmix.isVersion(60)) && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
    var loadBlank = url == "about:blank";
    var newTab = replaceLastTab && Tabmix.isVersion(40) ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
-
    if (replaceLastTab) {
      if (TabmixSvc.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
        gBrowser.selectedTab = newTab;
@@ -280,10 +279,13 @@ function TMP_updateUrlBarValue() {
  * @param event         A valid event union.
  * @param aPostData     Additional opaque data used by __TMP_LoadBarURL().
  * @param altDisabled   parameter set by URL Suffix extension, to prevent ALT from opening new tab
+ * @param aUrl          aUrl is not null when we call this function from PopupAutoCompleteRichResult.onPopupClick
+ * @param mayInheritPrincipal
+                        when false prevent any loads from inheriting the currently loaded document's principal
  * @return              Nothing.
  *
  */
-function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl) {
+function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {
   var newTabPref = TabmixSvc.TMPprefs.getBoolPref("opentabfor.urlbar");
   var theBGPref  = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");
   var theURI = aUrl || gURLBar.value;
@@ -308,8 +310,7 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl) {
   }
   var isAltKey = !altDisabled && (theEvent instanceof Event && ('altKey' in theEvent && theEvent.altKey));
   newTabPref = TMP_whereToOpen(newTabPref, isAltKey).inNew;
-
-  __TMP_LoadBarURL(theURI, theEvent, newTabPref, theBGPref, aPostData, true);
+  __TMP_LoadBarURL(theURI, theEvent, newTabPref, theBGPref, aPostData, true, mayInheritPrincipal);
 }
 
 /**
@@ -326,10 +327,11 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl) {
  *                                if true, the newly created tab will be unfocused.
  * @param aPostData               Additional opaque data used by tabbrowser methods
  * @param aAllowThirdPartyFixup   Allow third-party services to fixup this URL
+ * @param mayInheritPrincipal     when false prevent any loads from inheriting the currently loaded document's principal
  * @returns                       Nothing.
  *
  */
-function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostData, aAllowThirdPartyFixup) {
+function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostData, aAllowThirdPartyFixup, mayInheritPrincipal) {
   var originCharset = null;
 
   if (gBrowser.localName != "tabbrowser") {
@@ -351,7 +353,7 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
       // open new tab in 2 step, this prevent focus problem with forms field
       var newTab = gBrowser.addTab("about:blank");
       newTab.linkedBrowser.stop();
-      var flags = nsIWebNavigation.LOAD_FLAGS_NONE;
+      let flags = nsIWebNavigation.LOAD_FLAGS_NONE;
       if (aAllowThirdPartyFixup) {
         flags = nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
       }
@@ -364,7 +366,11 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
   // not opening in a new tab at all
   else {
     gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-    loadURI(aURI, null, aPostData, aAllowThirdPartyFixup);
+    let flags = Ci.nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+    if (typeof(mayInheritPrincipal) == "boolean" && !mayInheritPrincipal) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_DISALLOW_INHERIT_OWNER;
+    }
+    gBrowser.loadURIWithFlags(aURI, flags, null, null, aPostData);
     gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);
   }
 

@@ -1247,7 +1247,7 @@ var gTMPprefObserver = {
       let rulesCount = browserCss.cssRules.length;
       for (let i = 0; i < rulesCount; ++i) {
         let rule = browserCss.cssRules[i];
-        if (rule.selectorText == ".tabbrowser-tab:not([pinned])") {
+        if ("selectorText" in rule && rule.selectorText == ".tabbrowser-tab:not([pinned])") {
           rule.style.removeProperty("width");
           if (typeof(this.dynamicRules["width"]) == "undefined") {
             let _max = TabmixSvc.prefs.getIntPref("browser.tabs.tabMaxWidth");

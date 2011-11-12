@@ -190,7 +190,7 @@
                           prefstring="extensions.tabmix.newTabUrl" />
               </hbox>
               <hbox align="center">
-                <checkbox id="selectLocationBar" label="Select location bar after loading new tab"
+                <checkbox id="selectLocationBar" label="Focus address bar after opening"
                           prefstring="extensions.tabmix.selectLocationBar"/>
               </hbox>
               <hbox align="center">

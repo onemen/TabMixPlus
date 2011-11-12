@@ -2001,16 +2001,18 @@ function TMP_BrowserToolboxCustomizeDone() {
     let _handleCommand = fn in urlbar ? urlbar[fn].toString() : "TMP_BrowserLoadURL";
     if (_handleCommand.indexOf("TMP_BrowserLoadURL") == -1) {
       // set altDisabled if Suffix extension installed
+      // dont use it for Firefox 6.0+ until new Suffix extension is out
       Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
         '{',
         '{ var _data, altDisabled = false;'
       )._replace(
         'this._canonizeURL(aTriggeringEvent);',
         '_data = $& \
-         altDisabled = _data.length == 3;'
+         altDisabled = !Tabmix.isVersion(60) && _data.length == 3;'
       )._replace(
         'if (aTriggeringEvent instanceof MouseEvent) {',
-        'TMP_BrowserLoadURL(aTriggeringEvent,  postData, altDisabled); \
+        'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
+         TMP_BrowserLoadURL(aTriggeringEvent, postData, altDisabled, null, _mayInheritPrincipal); \
          return; \
          $&'
       ).toCode();

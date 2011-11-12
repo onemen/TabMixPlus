@@ -69,6 +69,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
   v.is60 = comparator.compare(version, "6.0a1") >= 0;
   v.is70 = comparator.compare(version, "7.0a1") >= 0;
   v.is80 = comparator.compare(version, "8.0a1") >= 0;
+  v.is90 = comparator.compare(version, "9.0a1") >= 0;
   return v;
 });
 
