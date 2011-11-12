@@ -18,7 +18,7 @@
 
   <!--
     Not in use in Firefox 4.0+
-    In Firefox 4.0 we add onclick attribute directly to the button 
+    In Firefox 4.0 we add onclick attribute directly to the button
   -->
   <binding id="tabbrowser-close-tab-button"
            extends="chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button">
@@ -314,7 +314,8 @@
 
           Tabmix.rtl = window.getComputedStyle(tabbrowser, null).direction == "rtl";
           Tabmix.ltr = !Tabmix.rtl;
-          this._isRTLScrollbox = this.orient != "vertical" && Tabmix.rtl;
+          Tabmix._rtl50 = Tabmix.isVersion(50) && Tabmix.rtl;
+          this._isRTLScrollbox = Tabmix._rtl50 ? false : this.orient != "vertical" && Tabmix.rtl;
           this.setAttribute("closebuttons-side", TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.onLeft") ? "left" : "right");
           this._keepLastTab = TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab");
           this.closeButtonsEnabled = TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.enable");
@@ -492,6 +493,7 @@
               // on underflow update spacer
               if (Tabmix.isVersion(50) && this._lastTabClosedByMouse)
                 this._expandSpacerBy(this.mTabstrip._scrollButtonDown.parentNode.getBoundingClientRect().width);
+
               this.removeAttribute("overflow");
             }
             // we call _positionPinnedTabs when we change TabmixTabbar.scrollButtonsMode value and
@@ -536,7 +538,7 @@
             return;
 
           if (!this._checkNewtabButtonVisibility) {
-            this.disAllowNewtabbutton = this.getAttribute("flowing") == "singlebar" && TabmixSvc.TMPprefs.getBoolPref("newTabButton") && 
+            this.disAllowNewtabbutton = this.getAttribute("flowing") == "singlebar" && TabmixSvc.TMPprefs.getBoolPref("newTabButton") &&
                                            TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2 && (this.canScrollTabsLeft || this.canScrollTabsRight);
             return;
           }
@@ -672,7 +674,8 @@
             return false;
 
           var tabstripWidth = this.mTabstrip.scrollBoxObject.width;
-          var tabstripEnd = this.mTabstrip.scrollBoxObject.screenX + tabstripWidth;
+          var tabstripStart = this.mTabstrip.scrollBoxObject.screenX;
+          var tabstripEnd = tabstripStart + tabstripWidth;
           // Session Manager extesion add tabs too soon for us to check visibility properly
           // we remove SM_restart after timeout see tabmix.js onWindowOpen
           if (this.hasAttribute("SM_restart") && tabstripWidth < 250)
@@ -683,6 +686,13 @@
           //XXX this hack is for the case that the width of the tabbar is round number of tabs
           // when we reach to that number of tabs and tabs need to start shrinking.
           if (this.tabstripInnerbox && !this.overflow) {
+            if (Tabmix._rtl50) {
+              if (tab.boxObject.screenX < tabstripStart)
+                return false;
+              else if (this.tabstripInnerbox.boxObject.screenX < tabstripStart)
+                return false;
+              return true;
+            }
             if (this.tabstripInnerbox.boxObject.screenX + this.tabstripInnerbox.boxObject.width > tabstripEnd) {
               if (tab.boxObject.screenX + tab.boxObject.width < tabstripEnd)
                 return true;
@@ -694,7 +704,9 @@
             }
             return true;
           }
-          if (tab.boxObject.screenX + tab.boxObject.width > tabstripEnd)
+          if (Tabmix._rtl50 && tab.boxObject.screenX < tabstripStart)
+            return false;
+          else if (tab.boxObject.screenX + tab.boxObject.width > tabstripEnd)
             return false;
           else if ( this.getAttribute("multibar") == "scrollbar" ) {
             if (this.getTabRowNumber(tab, this.topTabY) > this.maxRow)
@@ -728,7 +740,8 @@
               if (aIndex < this.collapsedTabs)
                 this.collapsedTabs = aIndex;
               else {
-                var amountToCollapse = tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
+                var amountToCollapse = Tabmix._rtl50 ? this.mTabstrip.scrollBoxObject.screenX - tab.boxObject.screenX :
+                                       tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
                 if(amountToCollapse > 0) {
                   amount = 0;
                   i = this.collapsedTabs;

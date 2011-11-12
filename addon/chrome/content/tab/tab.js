@@ -615,7 +615,7 @@ var gTMPprefObserver = {
               "browser.warnOnQuit",
               "browser.sessionstore.resume_from_crash",
               "browser.startup.page",
-              "browser.link.open_external",
+              "browser.link.open_newwindow.override.external",
               "browser.link.open_newwindow.restriction",
               "browser.link.open_newwindow",
               "browser.ctrlTab.previews"],
@@ -797,17 +797,17 @@ var gTMPprefObserver = {
             TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", 3);
             break;
           case 1: // Display close buttons on all tabs (Default)
-            TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", 1);          
+            TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", 1);
             break;
           case 2: // Don’t display any close buttons
             break;
           case 3: // Display a single close button at the end of the tab strip
             break;
-          default: // invalid value.... don't do anything 
+          default: // invalid value.... don't do anything
             return;
         }
         // show/hide close button on tabs
-        TabmixSvc.prefs.setBoolPref("extensions.tabmix.tabs.closeButtons.enable", val < 2);        
+        TabmixSvc.prefs.setBoolPref("extensions.tabmix.tabs.closeButtons.enable", val < 2);
         // show/hide close button on the tabbar
         TabmixSvc.prefs.setBoolPref("extensions.tabmix.hideTabBarButton", val != 3);
         break;
@@ -886,7 +886,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.optionsToolMenu":
         document.getElementById("tabmix-menu").hidden = !TabmixSvc.prefs.getBoolPref(prefName);
         break;
-      case "browser.link.open_external":
+      case "browser.link.open_newwindow.override.external":
       case "browser.link.open_newwindow.restriction":
       case "browser.link.open_newwindow":
         this.setLink_openPrefs();
@@ -1536,9 +1536,9 @@ var gTMPprefObserver = {
         TabmixSvc.prefs.setIntPref(pref, newVal);
     }
 
-    updateStatus("browser.link.open_external", 2, true, 3);
-    updateStatus("browser.link.open_newwindow.restriction", 0, false, 0);
     updateStatus("browser.link.open_newwindow", 2, true, 3);
+    updateStatus("browser.link.open_newwindow.override.external", 2, true, 3);
+    updateStatus("browser.link.open_newwindow.restriction", 0, false, 0);
   },
 
   // code for Single Window Mode...
@@ -1854,6 +1854,14 @@ var gTMPprefObserver = {
       TabmixSvc.TMPprefs.setBoolPref("selectTabOnMouseDown", TabmixSvc.TMPprefs.getBoolPref("mouseDownSelect"));
       TabmixSvc.TMPprefs.clearUserPref("mouseDownSelect");
     }
+    // 2011-10-11
+    if (TabmixSvc.prefs.prefHasUserValue("browser.link.open_external")) {
+      let val = TabmixSvc.prefs.getIntPref("browser.link.open_external");
+      if (val == TabmixSvc.prefs.getIntPref("browser.link.open_newwindow"))
+        val = -1;
+      TabmixSvc.prefs.setIntPref("browser.link.open_newwindow.override.external", val);
+      TabmixSvc.prefs.clearUserPref("browser.link.open_external");
+    }
 
     // verify valid value
     if (TabmixSvc.TMPprefs.prefHasUserValue("tabs.closeButtons")) {
@@ -1942,7 +1950,7 @@ try { // user report about bug here ... ?
     }
     _setPref(pBranch.PREF_BOOL, "browser.tabs.closeWindowWithLastTab", false); // exist in firefox version 3.5
     _setPref(pBranch.PREF_BOOL, "browser.ctrlTab.previews", true);     // exist in firefox version 3.5
-    _setPref(pBranch.PREF_INT, "browser.link.open_external", 3);               // not exist in firefox from version 3.5
+    _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
   }
 
 }

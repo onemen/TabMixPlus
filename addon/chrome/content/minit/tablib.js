@@ -64,16 +64,17 @@ var newAddtab = Tabmix.newCode("gBrowser." + _addTab, gBrowser[_addTab])._replac
     'this._lastRelatedTab || this.selectedTab', 'this._lastRelatedTab || _selectedTab', {check: Tabmix.isVersion(36)}
   )._replace( //  3.6+
     't.dispatchEvent(evt);',
-    'var _selectedTab = this.selectedTab; \
-     $& \
-     var openTabnext = TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext"); \
-     if (openTabnext) { \
-       var callerFunction = arguments.callee.caller ? arguments.callee.caller.name : ""; \
-       if (callerFunction in this.TMP_blockedCallers) \
-         openTabnext = false; \
-       else if (!TabmixSvc.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) \
-         aRelatedToCurrent = true; \
-     }', {check: Tabmix.isVersion(36)}
+    <![CDATA[
+    var _selectedTab = this.selectedTab;
+    t.dispatchEvent(evt);
+    var openTabnext = TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext");
+    if (openTabnext) {
+      if (Tabmix.isCallerInList(this.TMP_blockedCallers))
+        openTabnext = false;
+      else if (!TabmixSvc.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))
+        aRelatedToCurrent = true;
+    }
+    ]]>, {check: Tabmix.isVersion(36)}
   );
 
 if (Tabmix.isVersion(40)) {
@@ -120,9 +121,11 @@ else {
     'openTabnext', {check: Tabmix.isVersion(36)}
   )._replace( // 3.5
     't.dispatchEvent(evt);',
-    '$& \
-     var callerFunction = arguments.callee.caller ? arguments.callee.caller.name : "";\
-     this.TMP_openTabNext(t, callerFunction);' , {check: !Tabmix.isVersion(36)}
+    <![CDATA[
+    $&
+    if (!Tabmix.isCallerInList(this.TMP_blockedCallers))
+      this.TMP_openTabNext(t);
+    ]]>, {check: !Tabmix.isVersion(36)}
   );
 }
 newAddtab.toCode();
@@ -133,12 +136,12 @@ if (Tabmix.isVersion(40)) {
     tabBar.TMP_inSingleRow = function Tabmix_inSingleRow() {
       if (!this.hasAttribute("multibar"))
         return true;
-      // we get here when we are about to go to single row 
-      // one tab before the last is in the first row and we are closing one tab 
+      // we get here when we are about to go to single row
+      // one tab before the last is in the first row and we are closing one tab
       var tabs = this.tabbrowser.visibleTabs;
       return this.getTabRowNumber(tabs[tabs.length-2], this.topTabY) == 1;
     }
-    
+
     Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
       '{',
       <![CDATA[$&
@@ -221,12 +224,13 @@ if (Tabmix.isVersion(40)) {
   ).toCode();
 }
 
-gBrowser.TMP_blockedCallers = {tabbrowser_TMP_duplicateTab:true,
-                                                     tabbrowser_SSS_duplicateTab:true,
-                                                     sss_restoreWindow:true,
-                                                     ct_SSS_undoCloseTab:true,
-                                                     TMP_BrowserOpenTab:true,
-                                                     TMP_PC_openGroup:true};
+gBrowser.TMP_blockedCallers = ["tabbrowser_TMP_duplicateTab",
+                               "tabbrowser_SSS_duplicateTab",
+                               "sss_restoreWindow",
+                               "ct_SSS_undoCloseTab",
+                               "TMP_BrowserOpenTab",
+                               "TMP_PC_openGroup",
+                               "TMP_addTab"];
 
 // ContextMenu Extensions raplce the original removeTab function
 var _removeTab = "removeTab";
@@ -270,7 +274,9 @@ if ("__ctxextensions__removeTab" in gBrowser)
       'TMP_onRemoveTab(aTab); \
        this.tabContainer.nextTab = 1; \
        try {var animat = TabmixSvc.prefs.getBoolPref("browser.tabs.animate");} catch (ex) {animat = false;} \
-       if (animat) TMP_eventListener.onTabClose_updateTabBar(aTab, true); \
+       if (animat) { \
+         TMP_eventListener.onTabClose_updateTabBar(aTab, true);\
+       } \
        $&'
     ).toCode();
   }
@@ -317,7 +323,7 @@ if ("__ctxextensions__removeTab" in gBrowser)
 
 Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
 '{',
-'{if(!TabmixSvc.prefs.getBoolPref("extensions.tabmix.selectTabOnMouseDown") && arguments.callee.caller.name == "setTab") return; '
+'{if(!TabmixSvc.prefs.getBoolPref("extensions.tabmix.selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
 ).toCode();
 
 Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(
@@ -375,11 +381,15 @@ else {
   );
 }
 
-// after Bug 324164 - Unify Single Window Mode Preferences
+/** patch after Bug 324164 - Unify Single Window Mode Preferences, 
+ *  and before Bug 509664 - Restore hidden pref browser.link.open_newwindow.override.external
+ */
 _openURI = _openURI._replace(
   'aWhere = gPrefService.getIntPref("browser.link.open_newwindow");',
-  'if (isExternal) aWhere = Tabmix.getIntPref("browser.link.open_external",3); \
-   else $&'
+  'if (isExternal) {\
+     aWhere = gPrefService.getIntPref("browser.link.open_newwindow.override.external");\
+     if (aWhere == -1 ) $&\
+   } else $&', {check: !Tabmix.isVersion(100)}
 )._replace(
   'let loadBlankFirst =',
   '$& currentIsBlank ||', {check: Tabmix.isVersion(36) && !Tabmix.isVersion(40)}
@@ -648,11 +658,11 @@ else {
 
 Tabmix.newCode("goQuitApplication", goQuitApplication)._replace(
   'var appStartup',
-  'let callerFunction = arguments.callee.caller ? arguments.callee.caller.name : "";\
-  let closedtByToolkit = callerFunction == "toolkitCloseallOnUnload";\
-  if(!TabmixSessionManager.canQuitApplication(closedtByToolkit)) \
-     return false; \
-  $&'
+  <![CDATA[
+  let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");
+  if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))
+    return false;
+  $&]]>
 ).toCode();
 
   // if usr changed mode to single window mode while having closed window
@@ -822,10 +832,7 @@ else {
 }
 
 // not in use for firefox 3.6+
-gBrowser.TMP_openTabNext = function _TMP_openTabNext(aTab, aCaller) {
-   if (aCaller in this.TMP_blockedCallers)
-     return;
-
+gBrowser.TMP_openTabNext = function _TMP_openTabNext(aTab) {
    // the fix in TreeStyleTabBrowser 0.8.2009073102 hacks.js make new tab open in wrong place
    // when tab don't have Child tabs
    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext")) {
@@ -839,7 +846,6 @@ gBrowser.TMmoveTabTo = function _TMmoveTabTo(aTab, aIndex, flag) {
   var oldPosition = aTab._tPos;
   if (oldPosition == aIndex)
     return aTab;
-
   // Don't allow mixing pinned and unpinned tabs.
   if (Tabmix.isVersion(40)) {
     if (aTab.pinned)
@@ -1072,9 +1078,9 @@ gBrowser.duplicateInWindow = function (aTab, aMoveTab, aTabData) {
   var newWindow = window.openDialog( getBrowserURL(), "_blank", "chrome,all,dialog=no");
   newWindow.tabmix_afterTabduplicated = true;
   newWindow._duplicateData = {tab: aTab, tabData: aTabData, move: aMoveTab};
-  newWindow.addEventListener("load", function (aEvent) {
+  newWindow.addEventListener("load", function TMP_onLoad_duplicateInWindow(aEvent) {
       var win = aEvent.currentTarget;
-      win.removeEventListener("load", arguments.callee, false);
+      win.removeEventListener("load", TMP_onLoad_duplicateInWindow, false);
       win.TMP_SessionStore.initService();
       _restoreWindow(win, 0);
   }, false);
@@ -1635,8 +1641,8 @@ gBrowser.stopMouseHoverSelect = function(aTab) {
 gBrowser.warnAboutClosingTabs =  function (whatToClose, tabPos, protectedTab, aDomain) {
    // try to cach call from other extensions to warnAboutClosingTabs
    if (typeof(whatToClose) == "boolean") {
-      // see TMP_closeWindow
-      if (arguments.callee.caller && arguments.callee.caller.name == "BG__onQuitRequest")
+      // see TMP_closeWindow remark that apply to firefox 4.0+
+      if (Tabmix.isCallerInList("BG__onQuitRequest"))
         return true;
 
       if (!whatToClose)
@@ -1951,7 +1957,8 @@ function TMP_closeWindow(aCountOnlyBrowserWindows) {
 
   // we always show our prompt on Mac
   var showPrompt = Tabmix.isPlatform("Mac") || !isAfterFirefoxPrompt();
-  var quitType = arguments.callee.caller.caller.name;
+  // get caller caller name and make sure we are not on restart
+  var quitType = Tabmix._getCallerNameByIndex(2);
   var askBeforSave = quitType != "restartApp" && quitType != "restart";
   var isLastWindow = Tabmix.numberOfWindows() == 1;
   var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);
@@ -2016,10 +2023,11 @@ function TMP_BrowserToolboxCustomizeDone() {
     else
       fn = "handleCommand"
     let _handleCommand = fn in urlbar ? urlbar[fn].toString() : "TMP_BrowserLoadURL";
-    if (_handleCommand.indexOf("TMP_BrowserLoadURL") == -1) {
+    let TMP_fn = Tabmix.isVersion(100) ? "TMP_whereToOpen" : "TMP_BrowserLoadURL";
+    if (_handleCommand.indexOf(TMP_fn) == -1) {
       // set altDisabled if Suffix extension installed
       // dont use it for Firefox 6.0+ until new Suffix extension is out
-      Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
+      let fixedHandleCommand = Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
         '{',
         '{ var _data, altDisabled = false; \
          if (gBrowser.tabmix_tab) {\
@@ -2029,14 +2037,41 @@ function TMP_BrowserToolboxCustomizeDone() {
       )._replace(
         'this._canonizeURL(aTriggeringEvent);',
         '_data = $& \
-         altDisabled = !Tabmix.isVersion(60) && _data.length == 3;'
+         altDisabled = _data.length == 3;', {check: !Tabmix.isVersion(60)}
       )._replace(
         'if (aTriggeringEvent instanceof MouseEvent) {',
         'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
          TMP_BrowserLoadURL(aTriggeringEvent, postData, altDisabled, null, _mayInheritPrincipal); \
          return; \
-         $&'
-      ).toCode();
+         $&', {check: !Tabmix.isVersion(100)}
+      );
+
+     /* Starting with firefx 10 we are not using TMP_BrowserLoadURL
+      * we don't do anything regarding IeTab and URL Suffix extensions
+      */
+      if (Tabmix.isVersion(100)) {
+        fixedHandleCommand = fixedHandleCommand._replace(
+          'if (isMouseEvent || altEnter) {',
+          'loadNewTab = TMP_whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+           if (isMouseEvent || altEnter || loadNewTab) {'
+        )._replace(
+          // always check whereToOpenLink exept for alt to catch also ctrl/meta
+          'if (isMouseEvent)',
+          'if (true)'
+        )._replace(
+          'where = whereToOpenLink(aTriggeringEvent, false, false);',
+          'where = whereToOpenLink(aTriggeringEvent, false, true);'
+        )._replace(
+          'if (where == "current")',
+          'if (loadNewTab && where == "current") where = "tab";\
+           $&'
+        )._replace(
+          'openUILinkIn(url, where, params);',
+          'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
+           $&'
+        );
+      }
+      fixedHandleCommand.toCode();
 
       // for Omnibar version 0.7.7.20110418+
       if (_Omnibar) {

@@ -3,7 +3,7 @@
  * Firefox 4.0 +
  *
  **/
- 
+
 @import url("chrome://tabmixplus/content/overlay/browsroverlay_base.css");
 
 .tabbrowser-tabs {
@@ -108,4 +108,9 @@
 
 .tabbrowser-tabs[progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
   display: -moz-box;
+}
+
+/* hide new tab in session manager */
+.tabbrowser-tab[tabmix_hide] {
+  display: none;
 }

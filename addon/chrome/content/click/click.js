@@ -67,8 +67,8 @@ var TabmixTabClickOptions = {
     /* alt click*/
     else if (aEvent.button == 0 && aEvent.altKey && !aEvent.ctrlKey && !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt";
-      window.addEventListener("keyup", function(aEvent) {
-        aEvent.currentTarget.removeEventListener("keyup", arguments.callee, true);
+      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(aEvent) {
+        aEvent.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
         aEvent.stopPropagation();
       }, true);
     }
@@ -1010,12 +1010,20 @@ var TabmixAllTabs = {
   _setMenuitemAttributes: function TMP__setMenuitemAttributes(aMenuitem, aTab) {
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
     aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
-    aMenuitem.setAttribute("image", aTab.getAttribute("image"));
-    
-    if (aTab.hasAttribute("busy"))
+
+    if (aTab.hasAttribute("busy")) {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));
-    else
+      aMenuitem.removeAttribute("image");
+    }
+    else {
+      aMenuitem.setAttribute("image", aTab.getAttribute("image"));
       aMenuitem.removeAttribute("busy");
+    }
+
+    if (aTab.hasAttribute("pending"))
+      aMenuitem.setAttribute("pending", aTab.getAttribute("pending"));
+    else
+      aMenuitem.removeAttribute("pending");
 
     if (aTab.selected)
       aMenuitem.setAttribute("selected", "true");

@@ -46,59 +46,88 @@ var _log = {
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
   },
 
-  msg: function(aMessage, aShowCaller) {
-    try {
-      var caller = arguments.callee.caller;
-      var callerName = caller.name;
-      var callerCallerName = "";
-      if (aShowCaller) {
-        let prevCaller = caller.caller;
-        let prevCalerName = prevCaller && "name" in prevCaller ? prevCaller.name : prevCaller || "?" ;
-        callerCallerName = aShowCaller ? " (caller was " + prevCalerName + ")" : "";
-      }
-    } catch (e) {
-      callerCallerName = callerName = "";
-    }
-    TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + ":\n" + aMessage);
+  clog: function TMP_log_clog(aMessage) {
+    TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
-  obj: function(aObj, aMessage, aDisallowLog) {
-    aMessage = aMessage ? aMessage : "";
-    var objS = aObj ? aObj.toString() : "aObj is " + typeof(aObj);
+  msg: function TMP_log_msg(aMessage, aShowCaller, offset) {
+    offset = !offset ? 0 : 1;
+    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
+    let callerName = names[offset+0];
+    let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
+    TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+  },
+
+  // get functions names from Error().stack
+  _getNames: function(aCount, stack) {
+    if (!stack)
+      stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset);
+    else
+      stack = stack.split("\n");
+    // cut the secound if it is from our utils
+    if (stack[0].indexOf("TMP_log_") == 0)
+      stack.splice(0, 1);
+    if (!aCount)
+      aCount = 1;
+    else if (aCount < 0)
+      aCount = stack.length;
+    let names = [];
+    for (let i = 0; i < aCount; i++) {
+      let fn = stack[i];
+      let name = fn.substr(0, fn.indexOf("("));
+      if (!name) {
+        let lastIndexOf = fn.lastIndexOf("/");
+        name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
+      }
+      names.push(name);
+    }
+    return names;
+  },
+
+  obj: function(aObj, aMessage, aDisallowLog, level) {
+    var offset = typeof level == "string" ? "  " : "";
+    aMessage = aMessage ? offset + aMessage + "\n" : "";
+    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
     objS +=  ":\n"
 
-    for (let item in aObj) {
+    for (let prop in aObj) {
       try {
-        let val = aObj[item];
-        let type = typeof(val);
-        objS += item + "[" + type + "]" + " =  " + val + "\n";
-        if (type == "object")
-          objS += "\n";
-      } catch (er) { objS += item + " =  " + "error in this item" + "\n";}
+        let val = aObj[prop];
+        let type = typeof val;
+        if (type == "string")
+          val = "\'" + val + "\'";
+        if (type == "function" && typeof level == "string") {
+          val = val.toString();
+          let code = val.toString().indexOf("native code") > -1 ?
+            "[native code]" : "[code]"
+          val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
+        }
+        objS += offset + prop + "[" + type + "]" + " =  " + val + "\n";
+        if (type == "object" && val != null && level && typeof level == "boolean")
+          objS += this.obj(val, "", true, "deep") + "\n";
+      } catch (ex) {
+        objS += offset + prop + " =  " + "[!!error retrieving property]" + "\n";
+      }
     }
     if (aDisallowLog)
-      objS = aMessage + "\n======================\n" + objS;
+      objS = aMessage + "======================\n" + objS;
     else
-      this.msg(aMessage + "\n=============== Object Properties ===============\n" + objS);
+      this.clog(aMessage + "=============== Object Properties ===============\n" + objS);
     return objS;
   },
 
-  assert: function(aError, aMsg) {
-    var caller = arguments.callee.caller;
-    var callerName = caller && "name" in caller ? caller.name : "";
-    var errAt = callerName ? " at " + callerName : ""
-    var assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError + "\n";
-    var stackText = "stack" in aError ? "Stack Trace: \n" + aError.stack : "";
+  assert: function TMP_log_assert(aError, aMsg) {
+    let names = this._getNames(1, aError.stack);
+    let errAt = " at " + names[0];
+    let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError + "\n";
+    let stackText = "stack" in aError ? "Stack Trace: \n" + aError.stack : "";
     TabmixSvc.console.logStringMessage(assertionText + stackText);
   },
 
   trace: function(aMsg) {
-    try {
-      throw new Error(aMsg);
-    } catch (ex) {
-      let stack = ex.stack.split("\n");
-      let m = stack.splice(3).join("\n");
-      this.msg("Message: " + ex.message + "\nIn function:\n" + stack[2] + "\nTrace:\n" + m);
-    }
+    // cut off the first line of the stack trace, because that's just this function.
+    let stack = Error().stack.split("\n").slice(1);
+
+    TabmixSvc.console.logStringMessage("Tabmix Trace: " + aMsg + '\n' + stack.join("\n"));
   }
 }

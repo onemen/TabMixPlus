@@ -35,12 +35,23 @@ function TMP_TBP_init(aWindowType) {
     ).toCode();
   }
 
-  // we need this only for use our loadSearchInBackground pref
+  // we need this only for use our extensions.tabmix.loadUrlInBackground pref
+  // for normal click this function calls urlbar.handleCommand
+  // for middle click or click with modifiers whereToOpenLink can't be "current"
+  // so we don't need to check for locked tabs only for blanks tabs
   var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
   if (autoComplete) {
     Tabmix.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
       'openUILink(url, aEvent);',
-      'TMP_BrowserLoadURL(aEvent, null, null, url);'
+      <![CDATA[
+      var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
+      var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
+      var pref = "extensions.tabmix.loadUrlInBackground";
+      if (Tabmix.isVersion(100))
+        openUILinkIn(url, where, {inBackground: TabmixSvc.prefs.getBoolPref(pref)});
+      else
+        openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
+      ]]>
     ).toCode();
   }
 

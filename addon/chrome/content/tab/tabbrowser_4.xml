@@ -189,7 +189,7 @@
              this.mTabstrip._scrollButtonUpLeft : this.mTabstrip._scrollButtonUpRight;
 
           // fix incompatibility with Personal Titlebar extension
-          // the extensions trigger tabbar binding reset on toolbars customize 
+          // the extensions trigger tabbar binding reset on toolbars customize
           // we need to init our ui settings again
           if (TabmixTabbar._toolboxcustomizeStart) {
             TabmixTabbar.visibleRows = 1;
@@ -214,7 +214,7 @@
             break;
             case "resize":
               if (aEvent.target != window) {
-                // when we get in and out of tabsintitlebar mode call updateScrollStatus even if the event target is not the window              
+                // when we get in and out of tabsintitlebar mode call updateScrollStatus even if the event target is not the window
                 if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)
                   TabmixTabbar.updateScrollStatus();
                 break;

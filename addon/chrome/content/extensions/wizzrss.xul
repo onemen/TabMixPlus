@@ -6,8 +6,8 @@
     <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
 
     <script type="application/javascript">
-        window.addEventListener("load", function(aEvent) {
-            aEvent.currentTarget.removeEventListener("load", arguments.callee, false);
+        window.addEventListener("load", function TMP_onLoad_wizrssOverlay(aEvent) {
+            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_wizrssOverlay, false);
             TMP_wizzrss.init();
         }, false);
     </script>

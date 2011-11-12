@@ -13,12 +13,12 @@
   <prefpane id="paneTabs">
 
     <preferences id="tabsPreferences">
-      <preference id="extensions.tabmix.hideTabbar"
-                  name="extensions.tabmix.hideTabbar"                type="int"  insertbefore="browser.link.open_external"/>
-      <preference id="extensions.tabmix.tabs.warnOnClose"
-                  name="extensions.tabmix.tabs.warnOnClose"          type="bool" insertbefore="browser.link.open_external"/>
-      <preference id="extensions.tabmix.protectedtabs.warnOnClose"
-                  name="extensions.tabmix.protectedtabs.warnOnClose" type="bool" insertbefore="browser.link.open_external"/>
+      <preference id="extensions.tabmix.hideTabbar"       
+                  name="extensions.tabmix.hideTabbar"                type="int"/>
+      <preference id="extensions.tabmix.tabs.warnOnClose" 
+                  name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
+      <preference id="extensions.tabmix.protectedtabs.warnOnClose" 
+                  name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
     </preferences>
 
     <hbox insertafter="tabsPreferences" align="center">
@@ -40,9 +40,6 @@
               label="&page.header.title;…" oncommand="gTabMix_preferencesOverlay.showTabmixOptions();"/>
     </hbox>
 
-    <!-- "linksOpenInBox" removed in Firefox 3.5 and replace with
-         "linkTargeting"-->
-    <vbox id="linksOpenInBox" hidden="true"/>
     <separator id="tabsSeparator" hidden="true"/>
 
     <vbox id="tabPrefsBox">

@@ -13,8 +13,8 @@
    <script type="application/javascript">
 
    <![CDATA[
-      window.addEventListener("load", function(aEvent) {
-        aEvent.currentTarget.removeEventListener("load", arguments.callee, false);
+      window.addEventListener("load", function TMP_onLoad_tabPreverenceOverlay(aEvent) {
+        aEvent.currentTarget.removeEventListener("load", TMP_onLoad_tabPreverenceOverlay, false);
         TMP_TBP_init(window.document.documentElement.getAttribute("windowtype"));
       }, false);
    ]]>

@@ -254,8 +254,8 @@ function TMP_urlBarOnBlur() {
   if (url != "about:blank")
     browser.userTypedValue = url;
   if (isCurrentTab && gBrowser.mIsBusy) {
-    browser.addEventListener("load", function(aEvent) {
-      aEvent.currentTarget.removeEventListener("load", arguments.callee, true);
+    browser.addEventListener("load", function TMP_onLoad_urlBarOnBlur(aEvent) {
+      aEvent.currentTarget.removeEventListener("load", TMP_onLoad_urlBarOnBlur, true);
       TMP_updateUrlBarValue();
     }, true);
     return;
@@ -279,10 +279,15 @@ function TMP_updateUrlBarValue() {
  * @param event         A valid event union.
  * @param aPostData     Additional opaque data used by __TMP_LoadBarURL().
  * @param altDisabled   parameter set by URL Suffix extension, to prevent ALT from opening new tab
- * @param aUrl          aUrl is not null when we call this function from PopupAutoCompleteRichResult.onPopupClick
+ * @param aUrl          aUrl , not in use anymore  
+ *                      in the past we used this arg from PopupAutoCompleteRichResult.onPopupClick
  * @param mayInheritPrincipal
                         when false prevent any loads from inheriting the currently loaded document's principal
  * @return              Nothing.
+ *
+ *
+ * we call this function from urlbar.handleCommand up to Firefox 10
+ * and from extensions.js for objURLsuffix.  
  *
  */
 function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {
@@ -293,11 +298,11 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPr
      theURI = gIeTab.getHandledURL(theURI, gURLBar.isModeIE);
 
   var middleClick = theEvent instanceof MouseEvent && (theEvent.button == 1 || theEvent.ctrlKey || theEvent.metaKey);
-  if (aUrl || middleClick) { // aUrl is not null when we call this function from PopupAutoCompleteRichResult.onPopupClick
+  if (aUrl || middleClick) {
     let where = whereToOpenLink(theEvent);
     if (Tabmix.isVersion(40) && where != "current") {
-     gURLBar.handleRevert();
-     content.focus();
+      gURLBar.handleRevert();
+      gBrowser.selectedBrowser.focus();
     }
     if (where == "tabshifted") {
       theBGPref  = !theBGPref;

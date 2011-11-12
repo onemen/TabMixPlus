@@ -20,7 +20,7 @@
  * @param suppressTabsOnFileDownload	A Boolean value. If true, the URL will be opened
  *                         within the current tab. If false, according to loadInCurrentTab
  *                         this is mainly to prevent openLinkIn from opening new tab when link, for downloading file, click on pinned tab
- * 
+ *
  * @returns  True if the function opened a URL, or the value
  *			of handleLinkClick() if it chose not to.
  *
@@ -196,12 +196,12 @@ function TMP_contentLinkClick(aEvent) {
   // don't do anything on mail.google or google.com/reader
   var isGmail = /^(http|https):\/\/mail.google.com/.test(href) || /^(http|https):\/\/www.google.com\/reader/.test(href);
   if (isGmail)
-    return;    
+    return;
 
   // don't interrupt with noscript
   if ("className" in target && target.className.indexOf("__noscriptPlaceholder__") > -1)
     return;
-  
+
   // fix donwload button on page - http://get.adobe.com/reader/
   if ("className" in target && /download.button/.test(target.className))
     return;
@@ -472,7 +472,7 @@ function TMP_isGreasemonkeyScript(event, target) {
     let url = target.getAttribute("href");
     if (url && url.match(/\.user\.js(\?|$)/i))
       return true;
-  } 
+  }
 
   return false;
 }
@@ -716,6 +716,9 @@ function TMP_openExSiteLink(event, target, linkNode, currentDomain, targetDomain
                     false to load link in current tab
  */
 function TMP_openTabfromLink(target) {
+    if (TMP_GoogleComLink(target))
+      return null;
+
     var href = null, onclick = null;
     if (target.hasAttribute("href"))
       href = target.getAttribute("href").toLowerCase();
@@ -732,9 +735,36 @@ function TMP_openTabfromLink(target) {
         TMP_checkAttr(onclick, "return "))
       ; // javascript links, do nothing!
     else
-      return !TMP_checkAttr(href, "#");
+      return gBrowser.currentURI.spec.split("#")[0] != target.toString().split("#")[0];
 
     return null;
+}
+
+/**
+ * @brief Test if target link is special Google.com link preferences , advanced_search ...
+ *
+ * @param  target  The target of the event.
+ * @returns true is it is Google special link false for all other links
+ */
+function TMP_GoogleComLink(target) {
+  var location = gBrowser.currentURI.spec;
+  var currentIsnGoogle = /google.co/.test(location);
+  if (!currentIsnGoogle)
+    return false;
+
+  let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
+               "/accounts/Logout", "/accounts/ServiceLogin", "/intl/iw/options/"];
+
+  let testPathname = _list.indexOf(target.pathname) > -1;
+  if (testPathname)
+    return true;
+
+  let _host = ["profiles.google.com", "accounts.google.com"];
+  let testHost = _host.indexOf(target.host) > -1;
+  if (testHost)
+    return true;
+
+  return false;
 }
 
 /**

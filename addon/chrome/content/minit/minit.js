@@ -945,6 +945,9 @@ function TMP_setStripVisibilityTo(aShow) {
 
 var TMP_TabView = {
   init: function (tabBar) {
+    this._patchBrowserTabview();
+    TabmixSessionManager.tabViewEnabled = true; // for Firefox 3.5-3.6.x
+    this.tabViewEnabled = true;
     var selectedGroupTabs = "this.tabbrowser.visibleTabs";
     var gBrowserVisibleTabs = "gBrowser.visibleTabs";
 
@@ -978,7 +981,7 @@ var TMP_TabView = {
     });
 
     tabBar.tabbrowser.__defineGetter__("visibleTabsLastChild", function() {
-      // we only need the last visible tab, 
+      // we only need the last visible tab,
       // find it directly instead of using this.visibleTabs
       var tabs = this.tabs;
       for (let i = tabs.length - 1; i >= 0; i--){
@@ -1206,6 +1209,160 @@ var TMP_TabView = {
     if (indexInGroup < 0 || indexInGroup > lastIndex)
       indexInGroup = lastIndex;
     return gBrowser.visibleTabs[indexInGroup]._tPos;
+  },
+
+
+  /* ............... TabView Code Fix  ............... */
+
+  /*
+   * this code is fixes some bugs in Panorama code when restoring sessions
+   *
+   */
+
+  _patchBrowserTabview: function SM__patchBrowserTabview(){
+    // add missing function for compatibility
+    if (!Tabmix.isVersion(60)) {
+      TabView.updateGroupNumberBroadcaster = function TMP_updateGroupNumberBroadcaster(groupCount) {
+        Tabmix.setItem("tabviewGroupsNumber", "groups", groupCount);
+      }
+    }
+    // add our function to the TabView initFrameCallbacks
+    // we don't need our patch for the first run
+    let self = this;
+    var callback = function callback_TMP_TabView_patchTabviewFrame() {
+      try {
+        TabmixSessionManager._groupItemPushAway();
+        self._patchTabviewFrame();
+      } catch (ex) { Tabmix.assert(ex);}
+    }
+
+    if (TabView._window)
+      callback();
+    else if (Tabmix.isVersion(60))
+      TabView._initFrameCallbacks.push(callback);
+    else {
+      // for firefox 4.0 - 5.0.x
+      window.addEventListener("tabviewframeinitialized", function tabmix_onInit() {
+        window.removeEventListener("tabviewframeinitialized", tabmix_onInit, false);
+        callback();
+      }, false);
+    }
+  },
+
+  _patchTabviewFrame: function SM__patchTabviewFrame(){
+    TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
+    Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
+     '{',
+      <![CDATA[$&
+      // Firefox 9.0 use strict mode - we need to map global variable
+      let win = TabView._window;
+      let GroupItem = win.GroupItem;
+      let iQ = win.iQ;
+      let UI = win.UI;
+      let Utils = win.Utils;
+      let GroupItems = win.GroupItems;
+      ]]>
+    )._replace(
+      'groupItem.userSize = data.userSize;',
+      <![CDATA[
+      // This group is re-used by session restore
+      // make sure all of its children still belong to this group.
+      // Do it before setBounds trigger data save that will overwrite
+      // session restore data.
+      groupItem.getChildren().forEach(function (tabItem) {
+        // for Firefox 4.0-5.0
+        var callback = Tabmix.isVersion(60) ? "" : function () {};
+        // store tab data for later use
+        var tabData = TabView._window.Storage.getTabData(tabItem.tab, callback);
+        if (tabData && tabData.groupID != data.id) {
+          // We call TabItems.resumeReconnecting later to reconnect this item
+          tabItem._reconnected = false;
+        }
+      });
+      $&]]>
+    )._replace(
+      // All remaining children in to-be-closed groups are re-used by
+      // session restore. Mark them for recconct later by UI.reset
+      // or TabItems.resumeReconnecting.
+      //
+      // we don't want tabItem without storage data to _reconnect at
+      // this moment. Calling GroupItems.newTab before we set the
+      // active group, can reconnect the tabItem to the wrong group!
+      // also calling this.parent.remove form tabItem._reconnect
+      // without dontArrange flag can cause unnecessary groupItem
+      // and children arrang (we are about to close this group).
+      'tabItem._reconnect();',
+      '', {check: Tabmix.isVersion(60)}
+    )._replace(
+      'groupItem.destroy({immediately: true});',
+      <![CDATA[
+      groupItem.getChildren().forEach(function (tabItem) {
+        if (tabItem.parent && tabItem.parent.hidden)
+          iQ(tabItem.container).show();
+        tabItem._reconnected = false;
+      });
+      groupItem.close({immediately: true});
+      ]]> , {check: !Tabmix.isVersion(60)}
+    )._replace(
+      'this.',
+      'GroupItems.', {flags: "g"}
+    ).toCode();
+
+    // add tab to the new group on tabs order not tabItem order
+    TabView._window.UI._original_reset = TabView._window.UI.reset;
+    Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
+     '{',
+      <![CDATA[$&
+      // Firefox 9.0 use strict mode - we need to map global variable
+      let win = TabView._window;
+      let Trenches = win.Trenches;
+      let Items = win.Items;
+      let iQ = win.iQ;
+      let Rect = win.Rect;
+      let GroupItems = win.GroupItems;
+      let GroupItem = win.GroupItem;
+      let UI = win.UI;
+      ]]>
+    )._replace(
+      'items = TabItems.getItems();',
+      'items = gBrowser.tabs;'
+    )._replace(
+      'items.forEach(function (item) {',
+      'Array.forEach(items, function(tab) { \
+       let item = tab._tabViewTabItem;'
+    )._replace(
+      'groupItem.add(item, {immediately: true});',
+      'item._reconnected = true; \
+       $&'
+    )._replace(
+      'this.',
+      'UI.', {flags: "g", silent: true}
+    ).toCode();
+
+
+    TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
+    TabView._window.TabItems.resumeReconnecting = function TabItems_resumeReconnecting() {
+      let TabItems = TabView._window.TabItems;
+      let Utils = TabView._window.Utils;
+      Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
+      TabItems._reconnectingPaused = false;
+      Array.forEach(gBrowser.tabs, function (tab){
+        let item = tab._tabViewTabItem;
+        if (!item._reconnected)
+          item._reconnect();
+      });
+    }
+  },
+
+  _resetTabviewFrame: function SM__resetTabviewFrame(){
+    if (TabView._window) {
+      TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
+      TabView._window.UI.reset = TabView._window.UI._original_reset;
+      TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
+      delete TabView._window.GroupItems._original_reconstitute;
+      delete TabView._window.UI._original_reset;
+      delete TabView._window.TabItems._original_resumeReconnecting;
+    }
   }
 
 }

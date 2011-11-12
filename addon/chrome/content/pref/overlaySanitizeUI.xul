@@ -21,8 +21,8 @@
             accesskey: "&sanitizer.entry.accesskey;",
             confirm: "&sanitizer.entry.confirm;"
       }
-      window.addEventListener("load", function(aEvent) {
-        aEvent.currentTarget.removeEventListener("load", arguments.callee, true);
+      window.addEventListener("load", function TMP_onLoad_sanitizeOverlay(aEvent) {
+        aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sanitizeOverlay, true);
         TMP_Sanitizer.addSanitizeItem();
         TMP_Sanitizer.addMenuItem();
       }, true);

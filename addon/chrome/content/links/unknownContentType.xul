@@ -21,8 +21,8 @@
             }
           }
           window._tabToRemove = tabToRemove;
-          window.addEventListener("unload", function(aEvent) {
-            aEvent.currentTarget.removeEventListener("unload", arguments.callee, false);
+          window.addEventListener("unload", function TMP_onLoad_unknownContentType(aEvent) {
+            aEvent.currentTarget.removeEventListener("unload", TMP_onLoad_unknownContentType, false);
             window._tabBrowser.removeTab(window._tabToRemove);
             delete window._tabToRemove;
             delete window._tabBrowser;

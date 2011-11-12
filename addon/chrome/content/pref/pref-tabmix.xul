@@ -95,12 +95,19 @@
                 </menupopup>
               </menulist>
             </hbox>
-            <hbox align="center">
+            <hbox>
+              <checkbox id="externalLink" label="Use separate preference for links from other applications" prefstring_item="no_prefstring" 
+              oncommand="TM_Options.externalLinkValue(this.checked);"/>
+            </hbox>
+            <hbox align="center" class="indent">
               <!-- Open external links in: New Window, New Tab, Current Browser -->
-              <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget"/>
-              <menulist id="externalLinkTarget" prefstring="browser.link.open_external">
+              <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget" observes="obs_externalLink"/>
+              <menulist id="externalLinkTarget" prefstring="browser.link.open_newwindow.override.external" observes="obs_externalLink">
                 <menupopup>
-                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow"/>
+                  <menuitem value="-1" label="&linkTarget.tab;">
+                    <observes element="generalWindowOpen" attribute="label"/>
+                  </menuitem>
+                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow1"/>
                   <menuitem value="3" label="&linkTarget.tab;"/>
                   <menuitem value="1" label="&linkTarget.current;"/>
                 </menupopup>
@@ -226,7 +233,7 @@
                 <spacer style="height: 2em;"/>
                 <!-- Look App Tabs -->
                 <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs" hidden="true"/>
-            </groupbox>            
+            </groupbox>
 <!-- ======================================================== -->
           </tabpanel>
           <tabpanel orient="vertical">
@@ -771,9 +778,10 @@
                     <spacer style="height: 16px;"/>
                     <!-- click on a tabbar -->
                     <label value="&ontabbar.label;" control="ClickTabbar"/>
+                    <!-- we will clone the menupopup from ClickTab on startup -->
                     <menulist id="ClickTabbar" class="indent"/>
                     <spacer style="height: 8px;"/>
-                    <checkbox id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label;" hidden="true"
+                    <checkbox id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label;" class="checkbox_dblClickTabbar"
                           prefstring="extensions.tabmix.dblClickTabbar_changesize" inverted="true"/>
                  </tabpanel>
                </tabpanels>
@@ -1075,7 +1083,7 @@
                       <groupbox flex="1">
                         <caption label="&sm.exit;"/>
                           <radiogroup id="onClose" prefstring="extensions.tabmix.sessions.onClose" align="start"
-                                      oncommand="if (this.selectedIndex == 2) alert(TabmixSvc.getString('tmp.sessionempty'));">                                      
+                                      oncommand="if (this.selectedIndex == 2) alert(TabmixSvc.getString('tmp.sessionempty'));">
                             <radio value="0" id="onClose.savesession" label="&sm.exit.save;"/>
                             <radio value="1" id="onClose.askme" label="&sm.exit.ask;"/>
                             <radio value="2" id="onClose.donothing" label="&sm.exit.nothing;"/>
@@ -1206,6 +1214,7 @@
 
   <!-- tabmixopt broadcasterset -->
   <broadcasterset id="disabled:Broadcaster">
+    <broadcaster id="obs_externalLink"/>
     <broadcaster id="obs_singleWindow"/>
     <broadcaster id="obs_undoClose"/>
     <broadcaster id="obs_openTabNext"/>

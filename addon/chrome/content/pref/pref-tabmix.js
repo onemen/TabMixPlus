@@ -72,8 +72,11 @@ function TM_EMinit() {
     document.getElementById("relatedAfterCurrent").setAttribute("hidden", true);
   }
 
-  if (!Tabmix.isVersion(40)) {
+  if (Tabmix.isVersion(40)) {
+  }
+  else {
     document.getElementById("customizeToolbar").setAttribute("hidden", true);
+    document.getElementById("dblClickTabbar_changesize").setAttribute("hidden", true);
   }
 
   // Init tabclicking options
@@ -254,6 +257,11 @@ var TM_Options = {
 
       this.singleWindow( document.getElementById("singleWindow").checked );
 
+      let external = document.getElementById("externalLinkTarget");
+      let checked = external.value != -1;
+      external.firstChild.firstChild.hidden = checked;
+      document.getElementById("externalLink").checked = checked;
+
       var broadcasters = document.getElementById("disabled:Broadcaster");
       for (var i = 0; i < broadcasters.childNodes.length; ++i ) {
          var _id = broadcasters.childNodes[i].id.replace("obs_", "");
@@ -299,6 +307,19 @@ var TM_Options = {
             aBroadcaster.removeAttribute("disabled");
          }
       }
+   },
+
+   externalLinkValue: function(checked) {
+     let external = document.getElementById("externalLinkTarget");
+     let node = document.getElementById("generalWindowOpen");
+     if (checked) {
+       let prefValue = TabmixSvc.prefs.getIntPref("browser.link.open_newwindow.override.external");
+       external.value = prefValue > -1 ? prefValue : node.value;
+     }
+     else
+       external.value = -1;
+     external.firstChild.firstChild.hidden = checked;
+     updateApplyData(external, external.value);
    },
 
    newTabUrl: function(item, disable, setFocus) {
@@ -366,18 +387,17 @@ var TM_Options = {
    },
 
    singleWindow: function(enableSingleWindow) {
-      if ( enableSingleWindow ) {
-         function updateStatus(itemId, testVal, test, newVal) {
-            var item = document.getElementById(itemId);
-            test = test ? item.value == testVal : item.value != testVal
-            if ( test ) {
-               updateApplyData(item, newVal);
-            }
+      function updateStatus(itemId, testVal, test, newVal) {
+         var item = document.getElementById(itemId);
+         test = test ? item.value == testVal : item.value != testVal
+         if ( test ) {
+            updateApplyData(item, newVal);
          }
-
+      }
+      if ( enableSingleWindow ) {
+         updateStatus("generalWindowOpen", 2, true, 3);
          updateStatus("externalLinkTarget", 2, true, 3);
          updateStatus("divertedWindowOpen", 0, false, 0);
-         updateStatus("generalWindowOpen", 2, true, 3);
       }
    },
 
@@ -516,7 +536,7 @@ function getPrefByType(prefName) {
          case pBranch.PREF_STRING:
             return TabmixSvc.prefs.getCharPref(prefName);
       }
-   } catch (ex) {Tabmix.assert(ex, "error in getPrefByType " + "\n" + "caller " + getPrefByType.caller.name + "\n"+ prefName);}
+   } catch (ex) {Tabmix.assert(ex, "error in getPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName);}
    return null;
 }
 
@@ -660,9 +680,15 @@ function setPrefByType(prefName, newValue, atImport) {
                case "extensions.tabmix.mouseDownSelect":
                   TabmixSvc.prefs.setBoolPref("extensions.tabmix.selectTabOnMouseDown", /true/i.test(newValue));
                   break;
+               // 2011-10-11
+               case "browser.link.open_external":
+                  if (newValue == document.getElementById("generalWindowOpen").value)
+                    newValue = -1;
+                  TabmixSvc.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
+                  break;
             }
       }
-   } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + setPrefByType.caller.name + "\n"+ prefName + "\n" + newValue);}
+   } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}
 }
 
 function TM_setElements (restore, start) {
@@ -678,8 +704,8 @@ function TM_setElements (restore, start) {
            case "browser.ctrlTab.previews": // exist in firefox version 3.5
               TabmixSvc.prefs.setBoolPref(pref, true);
               break;
-           case "browser.link.open_external": // not exist from firefox 3.5
-             TabmixSvc.prefs.setIntPref(pref, 3);
+           case "browser.link.open_newwindow.override.external": // exist from firefox 10.0
+             TabmixSvc.prefs.setIntPref(pref, -1);
               break;
            default:
              if (TabmixSvc.prefs.prefHasUserValue(pref))
@@ -744,7 +770,7 @@ function saveToFile (patterns) {
 
   if (fp.show() != nsIFilePicker.returnCancel) {
     if (fp.file.exists()) fp.file.remove(true);
-    fp.file.create(fp.file.NORMAL_FILE_TYPE, 0666);
+    fp.file.create(fp.file.NORMAL_FILE_TYPE, parseInt("0666", 8));
     stream.init(fp.file, 0x02, 0x200, null);
 
     for (var i = 0; i < patterns.length ; i++) {
@@ -819,7 +845,7 @@ function loadFromFile() {
    fp.appendFilters(nsIFilePicker.filterText);
 
    if (fp.show() != nsIFilePicker.returnCancel) {
-      stream.init(fp.file, 0x01, 0444, null);
+      stream.init(fp.file, 0x01, parseInt("0444", 8), null);
       streamIO.init(stream);
       var input = streamIO.read(stream.available());
       streamIO.close();
@@ -930,15 +956,14 @@ function updateApplyData(item, newValue) {
    else if (pref in applyData)
       delete applyData[pref];
 
-   var applyCount = 0;
-   for (var n in applyData) {
-      if (++applyCount > 0)
-         break;
+   var applyDataIsEmpty = true;
+   for (let n in applyData) {
+      applyDataIsEmpty = false;
+      break;
    }
-
    var applyButton = document.documentElement.getButton("extra1");
-   if (applyButton.disabled != (applyCount == 0))
-      TMP_setButtons(applyCount == 0);
+   if (applyButton.disabled != applyDataIsEmpty)
+     TMP_setButtons(applyDataIsEmpty);
 }
 
 function TMP_setButtons(disable, clearData) {
@@ -1035,9 +1060,6 @@ function tabSelectionChanged(event) {
 }
 
 function setSelectedIndex(index) {
-   if (Tabmix.isVersion(40))
-     document.getElementById("dblClickTabbar_changesize").hidden = index != 0;
-
    var c = ["dbl", "middle", "ctrl", "shift", "alt"];
    var clickTab = document.getElementById("ClickTab");
    var prefId = c[index] + "ClickTab";
@@ -1101,7 +1123,7 @@ function openHelp(aPageaddress) {
     if (topLevel > 0) {
       if (topLevel < 4)
         subLevel--;
-      let subtabs = document.getElementsByAttribute("subtub", "true");      
+      let subtabs = document.getElementsByAttribute("subtub", "true");
       subLevel = subtabs[subLevel].selectedIndex
     }
     let subPage = helpPages[topLevel].tabs[subLevel];

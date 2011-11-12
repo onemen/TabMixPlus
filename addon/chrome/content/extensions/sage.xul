@@ -6,8 +6,8 @@
     <script type="application/javascript" src="chrome://tabmixplus/content/places/places.js"/>
     <script type="application/javascript" src="chrome://tabmixplus/content/extensions/sage.js"/>
     <script type="application/javascript">
-        window.addEventListener("load", function(aEvent) {
-            aEvent.currentTarget.removeEventListener("load", arguments.callee, false);
+        window.addEventListener("load", function TMP_onLoad_sageOverlay(aEvent) {
+            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sageOverlay, false);
             TMP_Sage.init();
         }, false);
     </script>

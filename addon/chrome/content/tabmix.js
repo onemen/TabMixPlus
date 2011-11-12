@@ -12,7 +12,7 @@ function TMP_startup() {
 
   if (Tabmix.isVersion(40)) {
     // multi-rows total heights are diffrent when tabs on top
-    // since this isnot trigger any other event that we can listen to 
+    // since this isnot trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
     TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
     TabsOnTop.toggle = function TabsOnTop_toggle() {
@@ -170,7 +170,7 @@ function TMP_delayedStartup() {
         }
       }
       // fix incompatibility with Personal Titlebar extension
-      // the extensions trigger tabbar binding reset on toolbars customize 
+      // the extensions trigger tabbar binding reset on toolbars customize
       // we need to init our ui settings again
       TabmixTabbar._toolboxcustomizeStart = false;
       if (TabmixTabbar._needResetOnCustomizeDone) {
@@ -268,10 +268,14 @@ var TMP_eventListener = {
       /**
        * for Tabview
        */
+      case "tabviewshown":
+        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
+        break;
       case "tabviewhidden":
+        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
         TMP_LastTab._tabs = null;
         if (TabmixTabbar.hideMode != 2)
-          setTimeout(function () {gBrowser.tabContainer.adjustTabstrip(true)}, 0);
+          setTimeout(function () {gBrowser.tabContainer.adjustTabstrip()}, 0);
         break;
       case "TabShow":
         if (!gBrowser.tabContainer._onDelayTabShow) {
@@ -312,6 +316,10 @@ var TMP_eventListener = {
       return;
 
     window.addEventListener("load", this, false);
+
+    try {
+      TabmixtModules.init();
+    } catch (ex) {Tabmix.assert(ex);}
 
     var tabContainer = gBrowser.tabContainer;
     tabContainer.addEventListener("SSTabRestoring", this, true);
@@ -450,6 +458,7 @@ var TMP_eventListener = {
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
       tabView.addEventListener("tabviewhidden", this, true);
+      tabView.addEventListener("tabviewshown", this, true);
       tabbar.addEventListener("TabShow", this, true);
       tabbar.addEventListener("TabHide", this, true);
     }
@@ -461,9 +470,6 @@ var TMP_eventListener = {
     gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
 
     // init tabmix functions
-    try {
-      TabmixtModules.init();
-    } catch (ex) {Tabmix.assert(ex);}
     try {
       tablib.init();
     } catch (ex) {Tabmix.assert(ex);}
@@ -697,9 +703,10 @@ var TMP_eventListener = {
     // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
     var reloadData = tab.getAttribute("reload-data");
     if (reloadData) {
-      reloadData = reloadData.split(" ");
       Tabmix.autoReload.initTab(tab);
       tab.autoReloadEnabled = true;
+      tab.setAttribute("_reload", true);
+      reloadData = reloadData.split(" ");
       tab.autoReloadURI = reloadData[0];
       tab.autoReloadTime = reloadData[1];
     }
@@ -1005,8 +1012,10 @@ var TMP_eventListener = {
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
       tabView.removeEventListener("tabviewhidden", this, false);
+      tabView.removeEventListener("tabviewshown", this, false);
       gBrowser.tabContainer.removeEventListener("TabShow", this, true);
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
+      TMP_TabView._resetTabviewFrame();
     }
     gBrowser.mPanelContainer.removeEventListener("click", TMP_contentLinkClick, true);
 
@@ -1108,5 +1117,6 @@ var TabmixtModules = {
     Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
     Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
     Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
+    Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
   }
 }

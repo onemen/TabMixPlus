@@ -98,8 +98,7 @@ var TMP_Places = {
          if (inversefocus || (!inversefocus && shift))', {check: !Tabmix.isVersion(40)}
       )._replace( // Firefox 4.0
         'return shift ? "tabshifted" : "tab";',
-        'let caller = arguments.callee.caller ? arguments.callee.caller.name : "";\
-         let pref = caller in {handleLinkClick:true, TMP_howToOpen:true} ?\
+        'let pref = Tabmix.isCallerInList("handleLinkClick", "TMP_howToOpen") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
          let inversefocus = getBoolPref(pref, true);\
          return inversefocus || shift ? "tabshifted" : "tab";', {check: Tabmix.isVersion(40)}
@@ -112,14 +111,17 @@ var TMP_Places = {
       if (Tabmix.isVersion(40)) {
         _loadURI = "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
+        let inBackground = Tabmix.isVersion(100) ? 
+            'if ("backgroundPref" in tabmixArg) params.inBackground = getBoolPref(tabmixArg.backgroundPref);' :
+            'params.backgroundPref = "backgroundPref" in tabmixArg ? tabmixArg.backgroundPref : null;';
+
         Tabmix.newCode("openUILinkIn", openUILinkIn)._replace(
           Tabmix.isVersion(40) ? 'params.fromChrome = true;' : 'params.fromContent = false;',
           '$&\
            var tabmixArg = arguments.length > 5 ? arguments[5] : null; \
            if (tabmixArg) { \
-             params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null; \
-             params.backgroundPref = "backgroundPref" in tabmixArg ? tabmixArg.backgroundPref : null; \
-           }'
+             params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;'
+           + inBackground + '}'
         ).toCode();
 
         let [fnName, fnCode] = ["openLinkIn", openLinkIn];
@@ -307,13 +309,8 @@ var TMP_Places = {
         'if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" : '
                      + newCode + 'TMP_Places.fixWhereToOpen(TMP_Event, aWhere); \
          else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\
-           try {\
-             let caller = Tabmix.isVersion(40) ?\
-                arguments.callee.caller.caller.name :\
-                arguments.callee.caller.name;\
-             var callerIsDoCommand = caller == "PC_doCommand";\
-           } catch (ex) {callerIsDoCommand = false;}\
-           if (!callerIsDoCommand)\
+           let caller = Tabmix._getCallerNameByIndex(Tabmix.isVersion(40) ? 2 : 1);\
+           if (caller != "PC_doCommand")\
              aWhere = ' + newCode + 'TMP_Places.fixWhereToOpen(null, aWhere);\
          }\
          if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +

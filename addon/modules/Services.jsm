@@ -4,6 +4,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 
 let TabmixSvc = {
+  stackOffset: 1,
   getString: function(aStringKey) {
     try {
       return this._strings.GetStringFromName(aStringKey);
@@ -70,6 +71,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
   v.is70 = comparator.compare(version, "7.0a1") >= 0;
   v.is80 = comparator.compare(version, "8.0a1") >= 0;
   v.is90 = comparator.compare(version, "9.0a1") >= 0;
+  v.is100 = comparator.compare(version, "10.0a1") >= 0;
   return v;
 });
 
@@ -87,6 +89,9 @@ if (TabmixSvc.version.is40) {
   XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
 }
 else {
+  // for Tabmix._getNames,in Firefox 3.5-3.6 first entry is 'Error()@:0'
+  TabmixSvc.stackOffset = 2;
+
   XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {
     return Cc["@mozilla.org/preferences-service;1"]
              .getService(Ci.nsIPrefService)

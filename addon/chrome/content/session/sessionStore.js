@@ -177,7 +177,7 @@ var TMP_SessionStore = {
            delete window.tabmix_setSession;
          }
          let result = Tabmix.promptService([TMP_BUTTON_OK, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
-               [title, msg, "", "", buttons], window, start ? callBack : null);
+               [title, msg, "", "", buttons], win || window, start ? callBack : null);
          if (!start)
            callBack(result);
       }
@@ -679,6 +679,19 @@ var TabmixConvertSession = {
       state.selected = TabmixSessionManager.getIntValue(rdfNodeWindow, "selectedIndex") + 1;
       // we don't save windowState in Tabmix, just get the current windowState for all the sessions
       state.sizemode = (window.windowState == window.STATE_MAXIMIZED) ? "maximized" : "normal";
+
+      // save panorama data if exist
+      if ("TabView" in window) {
+        let extData = {};
+        let emptyGroup = Tabmix.JSON.stringify({})
+        extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
+        extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
+        extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
+        extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
+        if (Tabmix.isVersion(70))
+          extData["tabview-last-session-group-name"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-last-session-group-name", "");
+        state.extData = extData;
+      }
       return state;
    },
 
@@ -698,7 +711,6 @@ var TabmixConvertSession = {
             tabsData.push(new _tabData(rdfNodeTab));
          }
       }
-
       tabsData.sort(function (a, b) {return a - b;});
       for (let i = 0; i < tabsData.length ; i++)
          _tabs.push(this.getTabState(tabsData[i].node));
@@ -713,18 +725,18 @@ var TabmixConvertSession = {
          var rdfNodeTab = tabsEnum.getNext();
          if (rdfNodeTab instanceof Ci.nsIRDFResource) {
             var closedTab = {};
-            closedTab.state = this.getTabState(rdfNodeTab);
+            closedTab.state = this.getTabState(rdfNodeTab, true);
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
-            // we use in the RDF revers order
+            // we use revers order in the RDF format
             _tabs.unshift(closedTab);
          }
       }
       return _tabs;
    },
 
-   getTabState: function cs_getTabState(rdfNodeTab) {
+   getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
       var tabData = {entries:[], index: 0, zoom: 1, disallow:"", extData: null, text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
       tabData.index = TabmixSessionManager.getIntValue(rdfNodeTab, "index") + 1;
@@ -740,9 +752,6 @@ var TabmixConvertSession = {
             disallow.push(tabAttribute[j]);
       }
       tabData.disallow = disallow.join(",");
-      var xultab = [];
-      // xultab replace in firefox 3.5+ with tabData.attributes
-      // but nsSessionStore can still read xultab
       tabData.attributes = {};
       if (tabProperties.charAt(0) == "1" && properties.indexOf("protected=") == -1)
          tabData.attributes["protected"] = "true";
@@ -757,11 +766,19 @@ var TabmixConvertSession = {
            }
          });
       }
+      // save panorama data if exist
+      if ("TabView" in window && !aClosedTab) {
+        let data = TabmixSessionManager.getLiteralValue(rdfNodeTab, "tabview-tab");
+        if (data != "") {
+          tabData.extData = {};
+          tabData.extData["tabview-tab"] = data;
+        }
+      }
       return tabData;
    },
 
    getHistoryState: function cs_getHistoryState(rdfNodeTab) {
-      var tmpData = TabmixSessionManager.getLiteralValue(rdfNodeTab, "history").split("|-|");
+      var tmpData = TabmixSessionManager.getDecodedLiteralValue(rdfNodeTab, "history").split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
       var historyData = tmpData.join("|-|").split(sep);
       var historyCount = historyData.length/3;
@@ -770,7 +787,7 @@ var TabmixConvertSession = {
          var entry = { url:"", children:[], ID: 0};
          var index = i * 3;
          entry.url = historyData[index + 1];
-         entry.title = unescape(historyData[index]);
+         entry.title = historyData[index];
          entry.scroll = historyData[index + 2];
          entries.push(entry);
       }
