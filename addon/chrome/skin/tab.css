@@ -1,0 +1,331 @@
+/**
+    Firefox version 3.5.* - 3.6.* - 4.0+
+
+    for ALL platform
+
+**/
+
+/* :::: For .tabs-closebutton .showhover :::: */
+.showhover-box > .tabs-closebutton,
+.showhover-box > .tabs-closebutton > .toolbarbutton-icon {
+  padding: 0px !important;
+}
+
+/* Find a way to eliminate the jump of the tab when tab button display on the tab */
+.tabbrowser-tabs:not([tabmix_skin]):not([Mac]):not([classic=v3]):not([classic40]):not([classic=v3Linux]) .tabbrowser-tab .tabs-closebutton {
+  margin-top: -1px;
+  margin-bottom: -3px;
+}
+
+/* :::: multi-row :::: */
+.tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .scrollbox-innerbox {
+  display: block !important;
+}
+
+/* Fix problem with multi-row when tab width is very small*/
+.tabbrowser-tabs[flowing=multibar]:not([multibar])[inline=true] .tabs-frame .scrollbox-innerbox {
+  display: block !important;
+}
+
+.tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
+  display: none !important;
+}
+
+/*we need to make multirow work on all themes, this should help a bit*/
+.tabbrowser-tabs[flowing=multibar][multibar],
+.tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
+.tabbrowser-tabs:not([classic=v3])[flowing=multibar][multibar] .tabbrowser-tab,
+.tabbrowser-tabs[flowing=multibar][multibar] .tabs-left,
+.tabbrowser-tabs[flowing=multibar][multibar] .tabs-right {
+  max-height: none !important;
+}
+
+.tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
+  display: none !important;
+}
+
+.tabbrowser-tabs[flowing=singlebar] .tabs-frame[orient="horizontal"],
+.tabbrowser-tabs[flowing=scrollbutton] .tabs-frame[orient="horizontal"],
+.tabbrowser-tabs[flowing=multibar]:not([multibar]) .tabs-frame[orient="horizontal"] {
+  overflow: hidden !important;
+}
+
+.tabs-frame[orient="vertical"] {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -moz-box-flex: 1 !important;
+}
+
+/* some theme align text to center this make all tab align to center in multi-rows*/
+.tabbrowser-tabs[flowing=multibar] {
+  text-align: start !important;
+}
+
+/* fix background for multi-row*/
+.tabbrowser-tabs[flowing=multibar][backgroundrepeat] {
+  background-repeat: repeat;
+}
+
+/* For Flowing tabs */
+.tabbrowser-tabs[flowing=multibar] .tabbrowser-tab {
+  vertical-align: bottom;
+}
+
+/* :::: For current unread and other tab styles :::: */
+.tabbrowser-tabs[boldUnread=true] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
+.tabbrowser-tabs[boldCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+font-weight: bold !important;
+}
+
+.tabbrowser-tabs[boldCurrent=false] .tabbrowser-tab[selected="true"] .tab-text,
+.tabbrowser-tabs[boldUnread=false] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
+.tabbrowser-tabs[boldOther=false]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[boldOther=false][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text {
+  font-weight: normal !important;
+}
+
+.tabbrowser-tabs[italicUnread=true] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
+.tabbrowser-tabs[italicCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+  font-style: italic !important;
+}
+
+.tabbrowser-tabs[italicUnread=false] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
+.tabbrowser-tabs[italicCurrent=false] .tabbrowser-tab[selected="true"] .tab-text {
+  font-style: normal !important;
+}
+
+.tabbrowser-tabs[underlineUnread=true] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
+.tabbrowser-tabs[underlineCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+  text-decoration: underline !important;
+}
+
+.tabbrowser-tabs[boldOther=true]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[boldOther=true][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text {
+  font-weight: bold !important;
+}
+
+.tabbrowser-tabs[italicOther=true]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[italicOther=true][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text {
+  font-style: italic !important;
+}
+
+.tabbrowser-tabs[italicOther=false]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[italicOther=false][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text {
+  font-style: normal !important;
+}
+
+.tabbrowser-tabs[underlineOther=true]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[underlineOther=true][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text {
+  text-decoration: underline !important;
+}
+
+/* for extra icons */
+.tab-protect-icon {
+  list-style-image: url("protected.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tab-lock-icon {
+  list-style-image: url("locked.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tab-reload-icon {
+  list-style-image: url("autoreload.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tabbrowser-tabs[extraIcons-autoreload] .tabbrowser-tab[_reload] .tab-reload-icon ,
+.tabbrowser-tabs[extraIcons-protected] .tabbrowser-tab[protected] .tab-protect-icon ,
+.tabbrowser-tabs[extraIcons-locked] .tabbrowser-tab[locked] .tab-lock-icon {
+  display: -moz-box;
+}
+
+/* ::::: new tab button on tab context menu ::::: */
+.newtab-menu-icon:not([platform]) {
+  list-style-image: url("newtab.png");
+}
+
+.newtab-menu-icon[platform=xp],
+.newtab-menu-icon[platform=linux] {
+  list-style-image: url("chrome://browser/skin/Toolbar-small.png");
+}
+
+.newtab-menu-icon[platform=xp] {
+  -moz-image-region: rect(0px 160px 16px 144px);
+}
+.newtab-menu-icon[platform=xp]:hover {
+  -moz-image-region: rect(16px 160px 32px 144px);
+}
+
+.newtab-menu-icon[platform=xp40] {
+  list-style-image: url("chrome://browser/skin/Toolbar.png");
+  -moz-image-region: rect(0pt, 180px, 18px, 162px);
+}
+
+.newtab-menu-icon[platform=v4Mac] {
+  list-style-image: url("chrome://browser/skin/Toolbar.png");
+  -moz-image-region: rect(0, 220px, 20px, 200px);
+}
+
+.newtab-menu-icon[platform=v36Mac] {
+  list-style-image: url("chrome://browser/skin/Toolbar.png");
+  -moz-image-region: rect(0px, 360px, 23px, 324px);
+}
+.newtab-menu-icon[platform=v36Mac]:hover:active {
+  -moz-image-region: rect(46px, 360px, 69px, 324px);
+}
+
+.newtab-menu-icon[platform=linux] {
+  -moz-image-region: rect(0px 64px 16px 48px);
+}
+
+/*  :::::: Tabmix toolbar button :::::: */
+#btn_undoclose, .closedtabs-icon {
+  list-style-image: url(undoclosetab.png);
+}
+
+#btn_undoclose { -moz-image-region: rect(0 24px 24px 0); }
+#btn_undoclose:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#btn_undoclose[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
+toolbar[iconsize=small] #btn_undoclose, .closedtabs-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_undoclose:hover, .closedtabs-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+#btn_undoclose[type=menu-button] .toolbarbutton-icon {
+   margin-right: 0px;
+}
+
+#btn_undoclose[type=menu-button] .toolbarbutton-menubutton-button{
+  padding-right: 2px;
+}
+
+#btn_closedwindows , .closedwindows-icon {
+  list-style-image: url(undoclosewindow.png);
+}
+
+#btn_closedwindows { -moz-image-region: rect(0 24px 24px 0); }
+#btn_closedwindows:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#btn_closedwindows[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
+toolbar[iconsize=small] #btn_closedwindows, .closedwindows-icon >.menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_closedwindows:hover, .closedwindows-icon:hover >.menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px)!important; }
+toolbar[iconsize=small] #btn_closedwindows[disabled=true], .closedwindows-icon[disabled=true] >.menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px)!important; }
+
+#btn_tabslist, #tm-tabsList {
+  list-style-image: url(tabslist.png);
+}
+#btn_tabslist { -moz-image-region: rect(0 24px 24px 0); }
+#btn_tabslist:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#btn_tabslist[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+toolbar[iconsize=small] #btn_tabslist, #tm-tabsList > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_tabslist:hover, #tm-tabsList:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+toolbar[iconsize=small] #btn_tabslist[disabled=true], #tm-tabsList[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+#tabmix-menu , #btn-sm-settings, .tabmix-menu-icon {
+   list-style-image: url(tmpsmall.png);
+}
+.tabmix-menu-icon .menu-iconic-left { -moz-image-region: rect(0 16px 16px 0)!important; }
+
+#btn_sessionmanager, .sessionmanager-icon {
+  list-style-image: url(sessionmanager.png);
+}
+#btn_sessionmanager { -moz-image-region: rect(0 24px 24px 0); }
+#btn_sessionmanager:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#btn_sessionmanager[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+/* fix icon for menu item without image in tabmix menu list */
+.fix-bookmark-item .menu-iconic-left {
+  -moz-image-region: rect(0 16px 16px 0)!important;
+}
+
+/* fix dropmarker orient for toolbarbutton[type="menu"] in FF 2.0 + */
+#btn_undoclose[type="menu"] ,#btn_closedwindows[type="menu"] ,
+#btn_tabslist[type="menu"] ,#btn_sessionmanager[type="menu"] {
+  -moz-box-orient: horizontal;
+}
+
+/* for hashcoulouredtabs */
+#content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
+  list-style-image: none !important;
+}
+
+/* ::::: Fullscreen pseudo-toolbar ::::: */
+#fullscr-bottom-toggler {
+  height: 1px;
+  background: black;
+}
+
+/*
+ *****************************************************************************
+ *                                non default theme
+*/
+/* Chromifox Extreme */
+.tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tabs-closebutton,
+.tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
+  display: none !important;
+}
+
+/* Vfox3 */
+.tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
+  height: 24px;
+}
+
+.tabbrowser-tabs[tabmix_skin="Vfox3"] > .tabbrowser-tab .tabs-closebutton {
+  margin: -2px 2px -1px 0px;
+}
+
+/* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab,
+.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
+  height: 22px;
+  max-height: 22px;
+  margin: 1px 0px 1px;
+}
+
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
+.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
+  height: 23px;
+  max-height: 23px;
+  margin: 0px 0px 1px;
+}
+
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
+.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
+  height: 24px;
+  max-height: 24px;
+  margin: 0px 0px 0px;
+}
+
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,
+.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] .tabs-frame {
+  margin-top: 2px;
+  margin-bottom: 3px;
+}
+
+/* CrystalFox_Qute-BigRedBrent */
+.tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: top;
+}
+
+/* BlackFox_V1-Blue */
+.tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: top;
+}
+
+/* Vista-aero */
+#myTabBarRightBox[vista_aero] {
+  -moz-box-align: start;
+}

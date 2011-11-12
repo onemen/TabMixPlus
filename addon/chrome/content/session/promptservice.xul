@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+
+<dialog id="tabmix-prompt"
+   windowtype="mozilla:tabmixprompt"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+   resizable="no"
+   onload="prompt_init();"
+   buttons="accept, cancel, extra1"
+   ondialogaccept="return prompt_deinit(0);"
+   ondialogcancel="return prompt_deinit(1);"
+   ondialogextra1="return prompt_extra1(2);"
+   buttonpack="center"
+   style="-moz-user-focus: ignore;">
+
+   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/session/promptservice.js"/>
+
+  <hbox >
+    <hbox align="start">
+      <image id="info.icon" class="spaced question-icon"/>
+    </hbox>
+   <vbox>
+      <!-- description -->
+      <vbox id="tm_info" style="width:300px;"/>
+      <!-- menulist -->
+      <menulist id="tm_prompt" sizetopopup="none" style="width:300px;">
+         <menupopup id="tm_prompt_menu">
+            <menuseparator id="tm_prompt-startSeparator" hidden="true"/>
+            <menuseparator id="tm_prompt-endSeparator"/>
+         </menupopup>
+      </menulist>
+      <!-- textbox -->
+      <textbox id="tm_textbox" maxlength="50" oninput="inputText(this);"/>
+      <separator id="space_befor_checkbox" class="thin"/>
+      <!-- checkbox -->
+      <vbox id="checkboxContainer" align="start" collapsed="true">
+         <checkbox id="tm_checkbox"/>
+         <separator id="space_after_checkbox" class="thin"/>
+      </vbox>
+   </vbox>
+  </hbox>
+</dialog>

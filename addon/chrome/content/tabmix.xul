@@ -1,0 +1,465 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
+%tabBrowserDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
+<!-- original code from TBP Lite //-->
+
+<overlay id="tabmix-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/tabmix.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/minit/tablib.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/minit/minit.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/contentLinks.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/userInterface.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/setup.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/tab/tab.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/flst/lasttab.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/click/click.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/places/places.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/session/session.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/session/sessionStore.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
+
+  <window id="main-window"
+    onload="TMP_TBP_Startup();" />
+
+   <!-- Menu in Firefox 4.0+ App Menu -->
+   <vbox id="appmenuPrimaryPane"> 
+      <menu id="appmenu-sessionmanager" label="&session.Tools;" tmp_iconic="menu-iconic sessionmanager-icon" insertafter="appmenu_webDeveloper"
+            onmouseover="TabmixSessionManager.clonePopupMenu(this);" sessionmanager-menu="true">
+      </menu>
+   </vbox>
+
+   <!-- Menu in Tools Menu -->
+   <menupopup id="menu_ToolsPopup">
+      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic"
+         oncommand="TMP_openDialog(-1);"/>
+      <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
+         <menupopup id="tm-sessionmanager_menu"
+                  context="tm_sessionmanagerContextMenu"
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
+                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
+                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
+            <menuitem label="&settings.label;…" tmp_iconic="menuitem-iconic tabmix-menu-icon"
+                  oncommand="TMP_openDialog(5); event.stopPropagation();"/>
+            <menuseparator/>
+            <menu id="tm-sm-closedwindows2" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
+               <menupopup id="tm-sm-closedwindows_menu2"
+                  context="tm_sessionmanagerContextMenu"
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
+                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);event.stopPropagation();"
+                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);event.stopPropagation();">
+                  <menuseparator id="tm-sm-closedwindows2-startSeparator" hidden="true"/>
+                  <menuseparator id="tm-sm-closedwindows2-endSeparator" hidden="true"/>
+               </menupopup>
+            </menu>
+            <menuitem id="tm-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
+                  oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
+            <menuitem id="tm-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall" observes="tmp_menu_AllWindows"
+                  oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+            <menuseparator/>
+            <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
+               <menupopup
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows', 0, true);"
+                  oncommand="TabmixSessionManager.renameSession(event.originalTarget.session);event.stopPropagation();">
+               </menupopup>
+            </menu>
+            <menu anonid="delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;">
+               <menupopup
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
+                  oncommand="TabmixSessionManager.removeSavedSession(event.originalTarget, true);event.stopPropagation();">
+                  <menuseparator id="tm-sm-delete-startSeparator" hidden="true"/>
+                  <menuseparator id="tm-sm-delete-endSeparator" hidden="true"/>
+               </menupopup>
+            </menu>
+            <menuseparator id="tm-sessionmanager-startSeparator"/>
+            <menuseparator id="tm-sessionmanager-endSeparator"/>
+         </menupopup>
+      </menu>
+      <menu id="tm-sm-closedwindows" label="&closedWin.label;" insertbefore="prefSep" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
+         <menupopup id="tm-sm-closedwindows_menu"
+            context="tm_sessionmanagerContextMenu"
+            onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
+            oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
+            onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);">
+            <menuseparator id="tm-sm-closedwindows-startSeparator" hidden="true"/>
+            <menuseparator id="tm-sm-closedwindows-endSeparator" hidden="true"/>
+         </menupopup>
+      </menu>
+   </menupopup>
+
+    <popup id="contentAreaContextMenu">
+      <menuitem id="tm-openlinkhere" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
+         insertbefore="context-openlinkintab"
+         oncommand="gBrowser.openHereWith();"/>
+      <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
+         fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
+         insertafter="context-openlinkintab"
+         oncommand="gBrowser.openInverseLink();"/>
+      <menuitem id="tm-openAllLinks" label="&openalllinks.label;" accesskey="&openalllinks.accesskey;"
+         insertafter="context-openlinkintab" oncommand="TabmixContext.openMultipleLinks();"/>
+      <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
+         insertafter="context-openlinkintab" oncommand="gBrowser.openLinkWithHistory(gBrowser.mCurrentTab);"/>
+      <menuseparator id="tm-content-miscSep" insertafter="context-stop"/>
+      <menuitem id="tm-content-closetab" label="&closeTab.label;" oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-stop"/>
+      <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
+         oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" insertbefore="context-sep-stop"/>
+      <menuitem id="tm-duplicateinWinContext" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
+         oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, false);" insertbefore="context-sep-stop"/>
+      <menuitem id="tm-detachTabContext" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
+         oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, true);" insertbefore="context-sep-stop"/>
+      <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows();" insertbefore="context-sep-stop" />
+      <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser.mCurrentTab);"
+         insertbefore="context-sep-stop" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;"/>
+      <menuitem id="tm-content-protectTab" type="checkbox"
+         oncommand="gBrowser.protectTab(gBrowser.mCurrentTab);"
+         insertbefore="context-sep-stop" label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;"/>
+      <menuitem id="tm-content-lockTab" type="checkbox"
+         oncommand="gBrowser.lockTab(gBrowser.mCurrentTab);"
+         insertbefore="context-sep-stop" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;"/>
+      <menu id="tm-tabsList" label="&tabsList.label;" accesskey="&tabsList.accesskey;" insertbefore="context-sep-stop" tmp_iconic="menu-iconic">
+        <menupopup id="tm-tabsList-menu" class="fix-bookmark-item"
+           onpopupshowing="TabmixAllTabs.createTabsList(this, 2);"
+           onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+           onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
+           oncommand="gBrowser.selectedTab = gBrowser.mTabContainer.childNodes[event.originalTarget.value];"/>
+       </menu>
+      <menuseparator id="tm-content-undoCloseSep" insertbefore="context-sep-stop"/>
+      <menuitem id="tm-content-undoCloseTab" oncommand="TMP_ClosedTabs.undoCloseTab();" insertbefore="context-sep-stop"
+         key="key_undoCloseTab" label="&undoCloseTab.label;" accesskey="&undoCloseTab.accesskey;"/>
+      <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
+         insertbefore="context-sep-stop">
+        <menupopup id="tm-content-undoCloseList-menu" class="fix-bookmark-item"
+          onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this);"
+          onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+          oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
+          onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+      </menu>
+      <menuseparator id="tm-content-textSep" insertbefore="context-sep-undo"/>
+      <menu id="tm-autoreload_menu" label="&autoReload.label;" accesskey="&autoReload.accesskey;" insertafter="context-reload">
+         <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
+      </menu>
+    </popup>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional"
+              observes="tmp_undocloseButton"
+              oncommand="if (!TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
+              onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
+              onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
+              label="&closedtabsbtn.label;"
+              _tooltiptext="&closedtabsbtn.tooltip;"
+              tooltiptext="&closedtabsbtn.tooltip;">
+        <menupopup id="btn_undoclose_menu"
+              context="tm_undocloseContextMenu"
+              onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
+              onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+              oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
+              onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+      </toolbarbutton>
+
+      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true" class="toolbarbutton-1 chromeclass-toolbar-additional"
+              observes="tmp_sessionmanagerButton"
+              _tooltiptext="&sessionbtn.tooltip;"
+              tooltiptext="&sessionbtn.tooltip;"
+              label="&session.Tools;" >
+         <menupopup id="btn_sessionmanager_menu"
+                  context="tm_sessionmanagerContextMenu"
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');
+                                  this.childNodes[2].hidden = document.getElementById('btn_closedwindows') ? true : false;"
+                  onpopuphidden="this.parentNode.setAttribute('tooltiptext', this.parentNode.getAttribute('_tooltiptext'));"
+                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
+                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
+            <menuitem id="btn-sm-settings" label="&settings.label;…" tmp_iconic="menuitem-iconic"
+                  oncommand="TMP_openDialog(5); event.stopPropagation();"/>
+            <menuseparator/>
+            <menu id="tm-sm-closedwindows1" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
+               <menupopup id="tm-sm-closedwindows_menu1"
+                  context="tm_sessionmanagerContextMenu"
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
+                  onpopuphidden="event.stopPropagation();"
+                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);event.stopPropagation();"
+                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);event.stopPropagation();">
+                  <menuseparator id="tm-sm-closedwindows1-startSeparator" hidden="true"/>
+                  <menuseparator id="tm-sm-closedwindows1-endSeparator" hidden="true"/>
+               </menupopup>
+            </menu>
+            <menuitem id="btn-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
+                  oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
+            <menuitem id="btn-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall"  observes="tmp_menu_AllWindows"
+                  oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+            <menuseparator/>
+            <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
+               <menupopup
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows', 0, true);"
+                  oncommand="TabmixSessionManager.renameSession(event.originalTarget.session);event.stopPropagation();">
+               </menupopup>
+            </menu>
+            <menu anonid="delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;">
+               <menupopup
+                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
+                  oncommand="TabmixSessionManager.removeSavedSession(event.originalTarget, true);event.stopPropagation();">
+                  <menuseparator id="tm-sm-delete-startSeparator" hidden="true"/>
+                  <menuseparator id="tm-sm-delete-endSeparator" hidden="true"/>
+               </menupopup>
+            </menu>
+            <menuseparator id="btn_sessionmanager-startSeparator"/>
+            <menuseparator id="btn_sessionmanager-endSeparator"/>
+         </menupopup>
+      </toolbarbutton>
+
+      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+               onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
+               onclick="if (event.target == this) if (event.button == 1) gBrowser.closeAllTabs();"
+               context="hideTabbar_context"
+               label="&tabslistbtn.label;"
+               _tooltiptext="&tabslistbtn.tooltip;"
+               tooltiptext="&tabslistbtn.tooltip;">
+         <menupopup id="btn_tabslist_menu"
+               context="menuedit-tabContextMenu"
+               onpopupshowing="return TabmixAllTabs.createTabsList(this, document.getElementById('btn_tabslistSorted').getAttribute('checked') ? 1 : 2);"
+               onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+               onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
+               oncommand="TabmixAllTabs._tabsListOncommand(event);">
+               <menuseparator id="btn_tabslist_sep"/>
+               <menuitem id="btn_tabslistSorted" label="&sortedTabs.label;" context=""
+                         class="menuitem-iconic" type="checkbox"
+                         tooltiptext="&sortedTabs.tooltip;"
+                         oncommand="TabmixAllTabs.showTabsListPopup(event);"/>
+         </menupopup>
+      </toolbarbutton>
+
+      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+               observes="tmp_closedwindows"
+               label="&closedwindowsbtn.label;"
+               _tooltiptext="&closedwindowsbtn.tooltip;"
+               tooltiptext="&closedwindowsbtn.tooltip;">
+         <menupopup id="btn_closedwindows_menu"
+               context="tm_sessionmanagerContextMenu"
+               onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
+               onpopuphidden="this.parentNode.setAttribute('tooltiptext', this.parentNode.getAttribute('_tooltiptext'));"
+               oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
+               onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);">
+               <menuseparator id="btn_closedwindows-startSeparator" hidden="true"/>
+               <menuseparator id="btn_closedwindows-endSeparator" hidden="true"/>
+         </menupopup>
+      </toolbarbutton>
+    </toolbarpalette>
+
+    <!-- add auto reload popup to reload button -->
+    <toolbarbutton id="reload-button">
+      <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
+    </toolbarbutton>
+
+    <toolbarbutton id="go-button" onclick="TMP_goButtonClick(event);"/>
+
+    <menu id="historyUndoMenu">
+      <menupopup id="historyUndoPopup" class="fix-bookmark-item"
+              context="tm_undocloseContextMenu"
+              onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
+              onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+              oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
+              onclick="TMP_ClosedTabs.checkForMiddleClick(event); event.stopPropagation();"/>
+    </menu>
+
+    <popupset id="mainPopupSet">
+      <menupopup id="extTabMixPopup">
+        <menuseparator id="tm-separator" _afterthis="(&afterthis.label;)" _newtab="&tabCmd.label;" _bookmarkTab="&bookmarktab.label;" type="tabmix"/>
+        <menuseparator id="tm-separator-2" type="tabmix"/>
+        <menu id="tm-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon">
+          <menupopup id="tm-undoCloseList-menu" class="fix-bookmark-item"
+            onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this); event.stopPropagation();"
+            onpopupshown="event.stopPropagation();"
+            onpopuphidden="TabmixAllTabs.hideCommonList(this);"
+            oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
+            onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+        </menu>
+        <menuitem id="tm-duplicateTab" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
+                 oncommand="gBrowser.duplicateTab(gBrowser.mContextTab);"/>
+        <menuitem id="tm-duplicateinWin" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
+                 oncommand="gBrowser.duplicateInWindow(gBrowser.mContextTab, false);"/>
+        <menuitem id="tm-context_openTabInWindow" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
+                 oncommand="gBrowser.duplicateInWindow(gBrowser.mContextTab, true);"/>
+        <menuitem id="tm-mergeWindowsTab" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
+                 oncommand="Tabmix.MergeWindows.mergeWindows();"/>
+        <menuitem id="tm-renameTab" label="&renametab.label;" accesskey="&renametab.accesskey;"
+                 oncommand="gBrowser.renameTab(gBrowser.mContextTab);"/>
+        <menuitem id="tm-copyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
+                 oncommand="gBrowser.copyTabUrl(gBrowser.mContextTab);"/>
+        <menuitem id="tm-closeAllTabs" label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"
+                 oncommand="gBrowser.closeAllTabs();"/>
+        <menuitem id="tm-closeSimilar" label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"
+                 oncommand="gBrowser.closeGroupTabs(gBrowser.mContextTab);"/>
+        <menuitem id="tm-closeRightTabs" label="&closeRightTabsMenu.label;" accesskey="&closeright.accesskey;"
+                 oncommand="gBrowser._closeRightTabs(gBrowser.mContextTab);"/>
+        <menuitem id="tm-closeLeftTabs" label="&closeLeftTabsMenu.label;" accesskey="&closeleft.accesskey;"
+                 oncommand="gBrowser._closeLeftTabs(gBrowser.mContextTab);"/>
+        <menu id="tm-docShell" label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
+         <menupopup
+                 onpopupshowing='for(var i = 0; i != childNodes.length; i++) {childNodes[i].setAttribute("checked",gBrowser.getBrowserForTab(gBrowser.mContextTab).docShell[childNodes[i].value]);}
+                                 event.stopPropagation();'
+                 onpopupshown="event.stopPropagation();"
+                 oncommand="var currentDocShell = gBrowser.getBrowserForTab(gBrowser.mContextTab).docShell; currentDocShell[event.originalTarget.value] = !currentDocShell[event.originalTarget.value];
+                            gBrowser.reloadTab(gBrowser.mContextTab);">
+          <menuitem label="&allowImage.label;" value="allowImages" class="menuitem-iconic" type="checkbox" checked="true" />
+          <menuitem label="&allowFrame.label;" value="allowSubframes" class="menuitem-iconic" type="checkbox" checked="true" />
+          <menuitem label="&allowRedirect.label;" value="allowMetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
+          <menuitem label="&allowPlugin.label;" value="allowPlugins" class="menuitem-iconic" type="checkbox" checked="true" />
+          <menuitem label="&allowJavascript.label;" value="allowJavascript" class="menuitem-iconic" type="checkbox" checked="true" />
+         </menupopup>
+        </menu>
+        <menuitem id="tm-lockTab" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.lockTab(gBrowser.mContextTab);"/>
+        <menuitem id="tm-protectTab" label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.protectTab(gBrowser.mContextTab);"/>
+        <menuitem id="tm-freezeTab" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.freezeTab(gBrowser.mContextTab);" />
+        <menuitem id="tm-reloadLeft" label="&reloadleft.label;" accesskey="&reloadleft.accesskey;"
+                 oncommand="gBrowser._reloadLeftTabs(gBrowser.mContextTab);"/>
+        <menuitem id="tm-reloadRight" label="&reloadright.label;" accesskey="&reloadright.accesskey;"
+                 oncommand="gBrowser._reloadRightTabs(gBrowser.mContextTab);" />
+        <menuitem id="tm-reloadOther" label="&reloadother.label;" accesskey="&reloadother.accesskey;"
+                 oncommand="gBrowser.reloadAllTabsBut(gBrowser.mContextTab);" />
+        <menu id="tm-autoreloadTab_menu" label="&autoReloadTab.label;" accesskey="&autoReloadTab.accesskey;">
+           <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mContextTab);"/>
+        </menu>
+      </menupopup>
+      <!-- popup menu for autoreload -->
+      <menupopup id="autoreload_popup" oncommand="Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);"
+                 onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"
+                 onpopuphidden="this._tab = null;">
+        <menuitem label="&autoReloadTab.label;"  disabled="true" style="font-weight: bold;color: #CC0000;"/>
+        <menuseparator />
+        <menuitem _label="&enable.label;:" type="checkbox"
+                  oncommand="Tabmix.autoReload.toggle(this.parentNode._tab); event.stopPropagation();"/>
+        <menuseparator />
+        <menuitem label="&custom.label;…" oncommand="Tabmix.autoReload.setCustomTime(this.parentNode._tab); event.stopPropagation();"/>
+        <menuitem _label="&custom.label;:" type="radio"
+                  seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"/>
+        <menuseparator />
+        <menuitem label="5  &seconds.label;" type="radio" value="5"/>
+        <menuitem label="15 &seconds.label;" type="radio" value="15"/>
+        <menuitem label="30 &seconds.label;" type="radio" value="30"/>
+        <menuitem label="1  &minute.label;"  type="radio" value="60"/>
+        <menuitem label="2  &minutes.label;" type="radio" value="120"/>
+        <menuitem label="5  &minutes.label;" type="radio" value="300"/>
+        <menuitem label="15 &minutes.label;" type="radio" value="900"/>
+        <menuitem label="30 &minutes.label;" type="radio" value="1800"/>
+        <menuseparator />
+        <menuitem label="&enableTabs.label;" oncommand="Tabmix.autoReload.enableAllTabs(gBrowser); event.stopPropagation();"/>
+        <menuitem label="&disableTabs.label;" oncommand="Tabmix.autoReload.disableAllTabs(gBrowser); event.stopPropagation();"/>
+      </menupopup>
+      <!-- context menu for undoclosetab menupopup -->
+      <menupopup id="tm_undocloseContextMenu"
+                  onpopupshowing="return document.popupNode.value >= 0;">
+        <menuitem id="tmOpen" label="&restoreincurrent.label;" accesskey="&restoreincurrent.accesskey;"
+                  oncommand="TMP_ClosedTabs.restoreTab('current', document.popupNode.value);"/>
+        <menuitem id="tmOpenInNewWindow" label="&restoreinwin.label;" accesskey="&restoreinwin.accesskey;"
+                  oncommand="TMP_ClosedTabs.restoreTab('window', document.popupNode.value);"/>
+        <menuitem id="tmOpenInNewTab" label="&restoreintab.label;" accesskey="&restoreintab.accesskey;"
+                  oncommand="TMP_ClosedTabs.restoreTab('tab', document.popupNode.value);"/>
+        <menuitem id="tmRestoreTab" label="&restoretab.label;" accesskey="&restoretab.accesskey;"
+                  oncommand="TMP_ClosedTabs.restoreTab('original', document.popupNode.value);" default="true"/>
+        <menuseparator id="tmpre-bookmarks-separator"/>
+        <menuitem id="tmAddBookmark" label="&bookmark.label;" accesskey="&bookmark.accesskey;"
+                  oncommand="TMP_ClosedTabs.addBookmarks(document.popupNode.value);"/>
+        <menuitem id="tmcopyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
+                  oncommand="TMP_ClosedTabs.copyTabUrl(document.popupNode.value);"/>
+        <menuseparator id="tmpost-bookmarks-separator"/>
+        <menuitem id="tm_delete" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
+                  oncommand="TMP_ClosedTabs.restoreTab('delete', document.popupNode.value);"/>
+      </menupopup>
+      <!-- context menu for undoclosewindow menupopup for use with sessionRestore from Firefox 3.5+ -->
+      <menupopup id="tm_undocloseWindowContextMenu"
+                  onpopupshowing="return document.popupNode.value >= 0;">
+        <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
+                  oncommand="TabmixSessionManager.restoreWindow('delete', document.popupNode.value);"/>
+      </menupopup>
+      <!-- context menu for session manager menupopup  -->
+      <menupopup id="tm_sessionmanagerContextMenu"
+                  onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
+                  onpopuphidden="TMP_hidePopup();">
+        <menuitem id="tm-sm-OpenInCurrenWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
+                  oncommand="TabmixSessionManager.restoreSession(document.popupNode, true);"/>
+        <menuitem id="tm-sm-OpenInNewWindow" label="&sm.context.restore.new;" accesskey="&sm.context.restore.newkey;"
+                  oncommand="TabmixSessionManager.restoreSession(document.popupNode, false);"/>
+        <menuseparator/>
+        <menuitem id="tm-sm-ReplaceWithThis" label="&sm.context.replacethis;" accesskey="&sm.context.replacethis.key;" observes="tmp_contextmenu_ThisWindow"
+                  oncommand="TabmixSessionManager.sessionUtil('replace', 'thiswindow');"/>
+        <menuitem id="tm-sm-AddThis" label="&sm.context.add;" accesskey="&sm.context.add.key;" observes="tmp_contextmenu_ThisWindow"
+                  oncommand="TabmixSessionManager.addWinToSession('savethiswindow');"/>
+        <menuseparator observes="tmp_contextmenu_ThisWindow"/>
+        <menuitem id="tm-sm-ReplaceWithAll" label="&sm.context.replaceall;" accesskey="&sm.context.replaceall.key;" observes="tmp_contextmenu_AllWindows"
+                  oncommand="TabmixSessionManager.sessionUtil('replace', 'allwindows');"/>
+        <menuitem id="tm-sm-AddAll" label="&sm.context.addall;" accesskey="&sm.context.addall.key;" observes="tmp_contextmenu_AllWindows"
+                  oncommand="TabmixSessionManager.addWinToSession('saveallwindows');"/>
+        <menuseparator observes="tmp_contextmenu_AllWindows"/>
+        <menuitem id="tm-sm-Save" label="&sm.context.save;" accesskey="&sm.context.save.key;"
+                  oncommand="TabmixSessionManager.saveClosedSession();"/>
+        <menuitem id="tm-sm-Rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;"
+                  oncommand="TabmixSessionManager.renameSession(document.popupNode.session);"/>
+        <menuseparator/>
+        <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;"
+                  oncommand="TabmixSessionManager.removeSavedSession(document.popupNode);"/>
+        <menuitem id="tm-sm-DeleteAll" label="&sm.context.deleteall;" accesskey="&sm.context.deleteall.key;"
+                  oncommand="TabmixSessionManager.removeAllSavedSession();"/>
+        <menuseparator/>
+        <menuitem id="tm-sm-SetAsStartup" label="&sm.context.startup;" accesskey="&sm.context.startup.key;" type="checkbox"
+                  oncommand="TabmixSessionManager.setSessionAsStartup(this);"/>
+        <menuitem id="tm-sm-showext" label="&sm.context.details;" accesskey="&sm.context.details.key;" type="checkbox"
+                  oncommand="TabmixSessionManager.setShowNameExt(this);"/>
+      </menupopup>
+      <!-- menupopup for lasttab  -->
+      <menupopup id="lasttabTabList" ignorekeys="true" flex="1"
+                  oncommand="TMP_LastTab.OnMenuCommand(event);"
+                  onpopuphidden="TMP_LastTab.OnPopupHidden();" />
+      <menupopup id="tabslist"
+                 oncommand="TabmixAllTabs._tabsListOncommand(event);"
+                 onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
+      <!-- popup for show\hide the tabbar  -->
+      <menupopup id="hideTabbar_context" oncommand="TabmixSvc.TMPprefs.setIntPref('hideTabbar', event.originalTarget.value);"
+                 onpopupshowing="this.childNodes[TabmixTabbar.hideMode+2].setAttribute('checked' ,'true');">
+        <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
+        <menuseparator/>
+        <menuitem value="0" type="radio" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
+        <menuitem value="1" type="radio" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+        <menuitem value="2" type="radio" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
+      </menupopup >
+      <!-- tabmix tooltip for button  -->
+      <tooltip id="tabmix-tooltip"/>      
+    </popupset>
+
+  <!-- Tabmix Plus KEYS  -->
+  <keyset id="mainKeyset">
+    <key id="key_tm_toggleFLST" label="Toggle FLST" keycode="VK_F9" TM_oncommand="Tabmix.flst.toggle();" />
+    <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
+    <key id="key_tm_slideShow" label="Toggle tab slide show" keycode="VK_F8" TM_oncommand="Tabmix.flst.toggleSlideshow();"/>
+    <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" />
+    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, true);"/>
+    <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows();" />
+    <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');"/>
+    <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');"/>
+  </keyset>
+
+  <!-- Tabmix Plus broadcasterset -->
+  <broadcasterset id="mainBroadcasterSet">
+    <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
+    <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
+    <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>
+    <broadcaster id="tmp_closedwindows" disabled="true"/>
+    <broadcaster id="tmp_undocloseButton" disabled="true" type="menu"/>
+    <broadcaster id="tmp_sessionmanagerButton" disabled="true"/>
+  </broadcasterset>
+
+</overlay>

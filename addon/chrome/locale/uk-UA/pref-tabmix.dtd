@@ -1,0 +1,289 @@
+<!ENTITY tab.links "Посилання">
+<!ENTITY tab.events "Події">
+<!ENTITY tab.mouse "Миша">
+<!ENTITY tab.appearance "Перегляд">
+<!ENTITY tab.menu "Меню">
+<!ENTITY tab.session "Сесії">
+<!ENTITY tab.incompatible "Error">
+<!ENTITY apply.label "Застосувати">
+<!ENTITY settings.export "Експорт налаштувань">
+<!ENTITY settings.import "Імпорт налаштувань">
+<!ENTITY settings.default "За замовчуванням">
+<!ENTITY generalWindowOpen.label "Відкривати посилання, що створюють нові вікна:">
+<!ENTITY externalLinkTarget.label "Відкривати посилання із зовнішніх програм:">
+<!ENTITY linkTarget.tab "У новій вкладці поточного вікна">
+<!ENTITY linkTarget.window "У новім вікні">
+<!ENTITY linkTarget.current "У поточній вкладці">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "Спливаючі вікна Javascript:">
+<!ENTITY divertedWindows.comment "Додаткові налаштування можна знайти в меню браузера">
+<!ENTITY divertedWindowOpen.all "Усі спливаючі відкривати у вкладках">
+<!ENTITY divertedWindowOpen.some "Зі змінюваним розміром — у нових вікнах">
+<!ENTITY divertedWindowOpen.none "Усі спливаючі відкривати в нових вікнах">
+<!ENTITY linkTarget.label "Відкривати посилання з атрибутом 'target' у поточній вкладці">
+<!ENTITY download.label "Не відкривати порожні вкладки при закачуванні файлів">
+<!ENTITY edit.label "Типи файлів">
+<!ENTITY speLink.label "Примусово відкривати в нових вкладках:">
+<!ENTITY speLink.none "Нічого">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "Посилання на зовнішні сайти">
+<!ENTITY singleWindow.label "Дозволити використання примусового одновіконного режиму браузера">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "Відкриття вкладок">
+<!ENTITY tabFocus.label "Фокус вкладок">
+<!ENTITY tabClose.label "Закриття вкладок">
+<!ENTITY tabMerge.label "Об'єднання вкладок">
+<!ENTITY tabFeature.label "Налаштування вкладок">
+<!ENTITY newtab.label "Відкривати в нових вкладках:">
+<!ENTITY replaceLastTabWith.label "When I close last tab replace it with">
+<!ENTITY newtab.blank "Пусті сторінки">
+<!ENTITY newtab.home "Домашню сторінку">
+<!ENTITY newtab.current "Поточну сторінку">
+<!ENTITY newtab.duplicate "Клоновану сторінку">
+<!ENTITY newtab.location "Установлене користувачем">
+<!ENTITY location.label "Адреса">
+<!ENTITY openTabNext.label "Розміщати нові вкладки відразу після поточної">
+<!ENTITY openOtherTabNext.label "Open other tabs next to current one">
+<!ENTITY relatedAfterCurrent.label "Only if related to current tab">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Відкривати клоновані вкладки відразу після оригінальних">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Change opening order">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY openNewTab.label "Відкривати в нових вкладках:">
+<!ENTITY openBookmarks.label "Закладки">
+<!ENTITY openBMKGroups.label "Групи закладок">
+<!ENTITY openBMKGroups.tooltip "Не використовувати відкриті вкладки при відкритті групи закладок">
+<!ENTITY openHistory.label "Посилання з журналу">
+<!ENTITY openUrl.label "З адресного рядка">
+<!ENTITY openSearch.label "З панелі пошуку">
+<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY middlecurrent.tooltip "Тільки для закладок, журналу й заблокованих вкладок">
+<!ENTITY tabFocus.caption "Робити активними вкладки, що відкриваються:">
+<!ENTITY selectTab.label "По посиланнях">
+<!ENTITY selectDivertedTab.label "Замість вікон">
+<!ENTITY selectTabCommand.label "По команді створення нової вкладки">
+<!ENTITY selectTabBH.label "З журналу / закладок">
+<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY warning.caption.label "Warning">
+<!ENTITY warnOnCloseProtected.label "Попереджати при закритті вікна із захищеними вкладками">
+<!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Closing last tab">
+<!ENTITY keepWindow.label.3.1 "Не закривати вікно при закритті останньої вкладки">
+<!ENTITY keeptab.label "Не закривати останню вкладку, якщо панель вкладок завжди відображається">
+<!ENTITY closeOnMerge.label "Закривати вікна після об'єднання вкладок">
+<!ENTITY warnOnMerge.label "Видавати попередження про закриття необ'єднаних вкладок">
+<!ENTITY currenttab.caption.label "Closing current tab">
+<!ENTITY focusTab.labelBegin "При закритті вкладки:">
+<!ENTITY focusTab.firstTab "First tab">
+<!ENTITY focusTab.leftTab "Left tab">
+<!ENTITY focusTab.rightTab "Right tab">
+<!ENTITY focusTab.lastTab "Last tab">
+<!ENTITY focusTab.lastSelectedTab "Last selected tab">
+<!ENTITY focusTab.openerTab "Opener/right tab">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Last opened tab">
+<!ENTITY undoClose.label "Запам'ятовувати в спеціальному кеші останні закриті вкладки">
+<!ENTITY undoCloseCache.label "Пам'ятати не більш:">
+<!ENTITY undoClosepos.label "Відновлювати вкладки в їхній вихідній позиції">
+<!ENTITY menuonlybutton.label "Кнопка на панелі інструментів відображає тільки список">
+<!ENTITY ctrltab.label "Перегортати вкладки по CTRL+Tab у порядкові їх останнього перегляду">
+<!ENTITY cmdtab.label "Перегортати вкладки по CMD+Tab у порядкові останнього перегляду">
+<!ENTITY ctrltab.tabPreviews "Показувати попередній перегляд вкладки">
+<!ENTITY ctrltab.popup "CTRL+Tab відображає спливаюче меню зі списком вкладок">
+<!ENTITY cmdtab.popup "CMD+Tab відображає спливаюче меню зі списком вкладок">
+<!ENTITY tabpopup.mouse "Список вкладок реагує на мишу">
+<!ENTITY mergeNoTabSelection.label "Об'єднання вікон, коли не виділене ні однієї вкладки">
+<!ENTITY mergeTabSelection.label "Об'єднання вікон після виділення вкладок">
+<!ENTITY mergeall.label "Об'єднання всіх вікон в одне">
+<!ENTITY mergelastfocused.label "Об'єднання тільки поточного вікна з останнім активним">
+<!ENTITY mergePopups.label "Також поєднувати спливаючі вікна">
+<!ENTITY popupNextToOpener.label "Розміщати спливаючі вікна поруч із вікнами, які їх відкривали">
+<!ENTITY slideshow.label "За допомогою F8 циклічно перегортати вкладки кожні">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY seconds.label "сек.">
+<!ENTITY minutes.label "хв.">
+<!ENTITY tabBarAppearance.label "Панель вкладок">
+<!ENTITY tabAppearance.label "Параметри вкладок">
+<!ENTITY toolBarAppearance.label "ToolBar">
+<!ENTITY show.ontabbar.label "Show on Tab bar">
+<!ENTITY show.ontab.label "Show on Tab">
+<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "Загальна кнопка закриття вкладок">
+<!ENTITY newTabButton.label "Кнопка додавання нової вкладки">
+<!ENTITY newTabButton.posiotion.left.label "on Left side">
+<!ENTITY newTabButton.posiotion.right.label "on Right side">
+<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY allTabsButton.label "Кнопка всіх вкладок">
+<!ENTITY tabBarSpace.label "Порожні поля по краях панелі вкладок">
+<!ENTITY tabBarSpace.tooltip "Порожні поля для перетаскування вкладок по панелі й клацань мишею">
+<!ENTITY tabbar.label "Ховати панель вкладок, якщо відкрита тільки одна вкладка">
+<!ENTITY dropIndicator.label "Індикатор перетаскування">
+<!ENTITY dropIndicator-native.label "Вбудований стиль">
+<!ENTITY dropIndicator-builtin.label "Стиль TabMix">
+<!ENTITY tabBarPosition.label "Розташування панелі:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "Якщо багато вкладок:">
+<!ENTITY tabScroll.none "Прокручувати вкладки колесом миші">
+<!ENTITY tabScroll.leftRightButtons "Прокручувати за допомогою кнопок із правого й лівого боку">
+<!ENTITY tabScroll.rightButtons "Прокручувати за допомогою кнопок із правого боку">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "Розташовувати вкладки в кілька рядків">
+<!ENTITY maxrow.label "Максимальне число рядків:">
+<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY highlight.label "Підсвічування:">
+<!ENTITY currenttab.style.label "Поточна вкладка">
+<!ENTITY unreadtabs.style.label "Непрочитані вкладки">
+<!ENTITY othertabs.style.label "Other Tabs">
+<!ENTITY setstyles.label "Налаштування стилів">
+<!ENTITY extraIcons.label1 "Icons for">
+<!ENTITY extraIcons.locked "Locked">
+<!ENTITY extraIcons.protected "Protected">
+<!ENTITY extraIcons.autoreload "Auto-Reload">
+<!ENTITY progressMeter.label "Індикатор процесу відкриття сторінки">
+<!ENTITY showTabX.labelBegin "Кнопка закриття на кожній вкладці">
+<!ENTITY showTabX.left "... ліворуч">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "мсек.">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "На всіх вкладках">
+<!ENTITY showTabX.current "Тільки на поточній вкладці">
+<!ENTITY showTabX.hover "Тільки при наведенні курсору миші:">
+<!ENTITY showTabX.alwaysExeption "На всіх вкладках ширше ніж">
+<!ENTITY showTabX.currentHover "На поточній вкладці й вкладці при наведенні курсору миші">
+<!ENTITY minWidth.label "Ширина вкладок: від">
+<!ENTITY widthTo.label "до">
+<!ENTITY widthPixels.label "пікселів (30-1000)">
+<!ENTITY flexTabs.label "Вирівнювати ширину вкладок по довжині їх заголовків">
+<!ENTITY bookastitle.label "Використовувати ім'я закладки як заголовка вкладки">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
+<!ENTITY toolbar.button.label "Customize">
+<!ENTITY toolbar.visible.caption "Visible buttons">
+<!ENTITY toolbar.novisible.label "There are no visible buttons">
+<!ENTITY toolbar.hidden.caption "Hidden buttons">
+<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
+<!ENTITY mouseGesture.label "Налаштування миші">
+<!ENTITY mouseClick.label "Кнопки миші">
+<!ENTITY mouseHoverSelect.labelBegin "Активізувати вкладку наведенням курсору миші:">
+<!ENTITY tabFlip.label "Перемикання клацанням із затримкою по поточній вкладці:">
+<!ENTITY tabFlip.delay "Затримка">
+<!ENTITY addTabDrag.label "Дозволити перетягування вкладок по панелі">
+<!ENTITY enabletabbarscrolling.label "Перегортати вкладки на панелі колесом миші">
+<!ENTITY reverseScroll.label "При прокручуванні вниз перегортати справа наліво">
+<!ENTITY clickFocus.label "Вибирати вкладки повним клацанням миші (нажати — відпустити)">
+<!ENTITY removeEntries.label "Видаляти пункти меню Tabmix за допомогою середньої кнопки миші">
+<!ENTITY removeEntries.tooltip "Включаючи закриті вкладки, вікна й збережені сесії">
+<!ENTITY double.label "Подвійне клацання">
+<!ENTITY middle.label "Середня кнопка">
+<!ENTITY ctrl.label "CTRL+ЛКМ">
+<!ENTITY cmd.label "CMD+ЛКМ">
+<!ENTITY shift.label "SHIFT+ЛКМ">
+<!ENTITY alt.label "ALT+ЛКМ">
+<!ENTITY ontab.label "По вкладці:">
+<!ENTITY ontabbar.label "По панелі вкладок:">
+<!ENTITY clicktab.label "Виберіть дію при клацанні по вкладці або панелі">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY clicktab.nothing "Нічого не робити">
+<!ENTITY clicktab.addtab "Відкрити нову вкладку">
+<!ENTITY clicktab.duplicatetab "Клонувати вкладку">
+<!ENTITY clicktab.duplicatetabw "Клонувати вкладку в новім вікні">
+<!ENTITY clicktab.detachtab "Перемістити вкладку в нове вікно">
+<!ENTITY clicktab.protecttab "Захистити вкладку">
+<!ENTITY clicktab.locktab "Заблокувати вкладку">
+<!ENTITY clicktab.freezetab "Захистити й заблокувати вкладку">
+<!ENTITY clicktab.renametab "Перейменувати вкладку">
+<!ENTITY clicktab.copyTabUrl "Copies the tab's URL to the clipboard">
+<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.selectMerge "Selects the tab for merging">
+<!ENTITY clicktab.mergeTabs "Merges windows together">
+<!ENTITY clicktab.bookTab "Bookmarks the tab">
+<!ENTITY clicktab.bookTabs "Bookmarks all tabs">
+<!ENTITY clicktab.reloadtab "Оновити вкладку">
+<!ENTITY clicktab.reloadtabs "Оновити всі вкладки">
+<!ENTITY clicktab.reloadothertabs "Оновити інші вкладки">
+<!ENTITY clicktab.reloadlefttabs "Оновити вкладки ліворуч">
+<!ENTITY clicktab.reloadrighttabs "Оновити вкладки праворуч">
+<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.removeall "Закрити всі вкладки">
+<!ENTITY clicktab.removeother "Закрити інші вкладки">
+<!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
+<!ENTITY clicktab.removeleft "Закрити вкладки ліворуч">
+<!ENTITY clicktab.removeright "Закрити вкладки праворуч">
+<!ENTITY clicktab.uctab "Відновити закриту вкладку">
+<!ENTITY clicktab.ucatab "Відновити всі закриті вкладки">
+<!ENTITY clicktab.snapback "Відновити вкладку">
+<!ENTITY clicktab.ietab "Відкрити вкладку в IE">
+<!ENTITY contentLoad "Middle-click loads url from clipboard">
+<!ENTITY context.tab "Вкладки">
+<!ENTITY context.main "Сторінки">
+<!ENTITY context.tools "Інструменти">
+<!ENTITY showtabBarContext.label "Склад контекстного меню панелі вкладок:">
+<!ENTITY showContentAreaContext.label "Склад контекстного меню веб-сторінок:">
+<!ENTITY showToolsMenu.label "Додати в меню 'Інструменти':">
+<!ENTITY startupHomePage.label "Показувати домашню сторінку">
+<!ENTITY startupBlankPage.label "Показувати порожню сторінку">
+<!ENTITY startupLastSession.label "Показувати вікна і вкладки відкриті востаннє">
+<!ENTITY sm.extension.description1 "Tab Mix Plus виявив, що встановлений додаток Session Manager">
+<!ENTITY sm.extension.description2 "Менеджер сесій Tab Mix Plus буде відключений">
+<!ENTITY sm.extension.description3 "Ви можете натискувати на кнопку справа, щоб відкрити вікно налаштувань Session Manager">
+<!ENTITY sm.extension.description4 "Конвертувати дані про мої сесії з формату Tab Mix Plus у формат додатку Session Manager">
+<!ENTITY sm.extension.convert.label "Конвертувати">
+<!ENTITY sm.extension.chooseFile.label0 "Дозволити мені вибрати файли з даними для конвертації">
+<!ENTITY sm.extension.chooseFile.label1 "Конвертувати сесії Tab Mix Plus з поточного профілю">
+<!ENTITY ss.enable.label "Використовувати вбудовану функцію відновлення сесій">
+<!ENTITY ss.enable.tooltip "Приберіть галочку, щоб використовувати менеджер сесій Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Розширені налаштування">
+<!ENTITY ss.advanced_setting.warning "Не змінюйте ці параметри, якщо Ви не знаєте, що робите">
+<!ENTITY ss.interval "Мінімальний інтервал між збереженнями сесій">
+<!ENTITY ss.interval.seconds "(в мілісекундах)">
+<!ENTITY ss.privacy_level "Зберігати введені дані, дані, що відправляються, і cookies для">
+<!ENTITY ss.privacy_level.allsites "Всі сайти">
+<!ENTITY ss.privacy_level.unencrypted "Тільки незашифровані сайти">
+<!ENTITY ss.privacy_level.nosites "Ні для яких сайтів">
+<!ENTITY ss.postdata.label1 "Максимальний розмір даних, що відправляються/зберігаються">
+<!ENTITY ss.postdata.label2 "(в байтах, -1 = все)">
+<!ENTITY sessionManger.enable "Включити менеджер сесій">
+<!ENTITY crashRecovery.enable "Включити захист від вильотів">
+<!ENTITY sm.StartExit "Запуск/Вихід">
+<!ENTITY sm.restore "Відновлення">
+<!ENTITY sm.preserve "Збереження">
+<!ENTITY sm.start "При запуску браузера:">
+<!ENTITY sm.start.restore "Відновлювати сесію">
+<!ENTITY sm.start.ask "Запит на відновлення">
+<!ENTITY sm.start.nothing "Не відновлювати сесію">
+<!ENTITY sm.exit "При виході з браузера:">
+<!ENTITY sm.exit.save "Зберігати сесію">
+<!ENTITY sm.exit.ask "Запит на збереження">
+<!ENTITY sm.exit.nothing "Не зберігати сесію">
+<!ENTITY sm.startup "При запуску браузера відкривати:">
+<!ENTITY sm.lastsession "Останню сесію">
+<!ENTITY sm.previouslast "Попередню сесію">
+<!ENTITY sm.chooseifempty "Іншу, якщо вибрана сесія порожня">
+<!ENTITY sm.restore.options "При відновленні сесій:">
+<!ENTITY sm.restore.overwrite "Замінювати існуючі вікна">
+<!ENTITY sm.restore.overwriteTabs "... і вкладки">
+<!ENTITY sm.restore.closedWinList "Зберігати вікна в списку закритих">
+<!ENTITY sm.restore.merge "Об'єднувати декілька вікон в одне">
+<!ENTITY sm.restore.reloadall "Перезавантажувати всі вкладки">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.preserve.options "Зберігати наступні параметри вкладок:">
+<!ENTITY sm.preserve.history "Журнал">
+<!ENTITY sm.preserve.protect "Статус захисту">
+<!ENTITY sm.preserve.locked "Статус блокування">
+<!ENTITY sm.preserve.permission "Дозволи">
+<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.restore.winOptions "Зберігати наступні параметри вікон:">
+<!ENTITY sm.restore.selectedTab "Активна вкладка">
+<!ENTITY sm.restore.closedTabs "Список закритих вкладок">
+<!ENTITY incompatible.extensions "Деякі з ваших додатків не сумісні з Tab Mix Plus. Рекомендується відключити або видалити ці додатки.">
+<!ENTITY incompatible.button.label "Показати список">

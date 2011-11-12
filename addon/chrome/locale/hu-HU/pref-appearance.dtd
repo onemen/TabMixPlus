@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Stílusok">
+<!ENTITY currentTab.label "Aktuális lap">
+<!ENTITY unreadTab.label "Olvasatlan lap">
+<!ENTITY otherTabs.label "Egyéb lapok">
+<!ENTITY italic.label "Dőlt">
+<!ENTITY bold.label "Félkövér">
+<!ENTITY underline.label "Aláhúzott">
+<!ENTITY textcolor.label "Szövegszín">
+<!ENTITY bgColor.label "Háttérszín">
+<!ENTITY statusbar.label "Elrejtés az állapotsorra">
+<!ENTITY useThis.label "stílus alkalmazása">
+<!ENTITY opacity.label "átlátszatlanság">

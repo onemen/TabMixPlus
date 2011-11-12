@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Nahrát na pozadí">
+<!ENTITY searchTabFocus.accesskey "P">
+<!ENTITY title.label "Název">
+<!ENTITY rename_all.label "Přejmenovat všechny stránky se stejnou adresou">
+<!ENTITY rename_permanently.label "Přejmenovat panel natrvalo pro všechny adresy">
+<!ENTITY doctitle.label "Použít název dokumentu">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Nápověda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Vyberte čas ze seznamu nebo zadejte vlastní čas">
+<!ENTITY specifyreload.label "Určit dobu pro opětovné načtení">
+<!ENTITY sanitizer.entry "Historie rozšíření Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "H">
+<!ENTITY sanitizer.entry.confirm "Jste si jisti, že chcete vymazat všechny uložené relace včetně zálohovaných dat?">

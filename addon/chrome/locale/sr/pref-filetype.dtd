@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Управљач врстама датотека">
+<!ENTITY filetype.add "Додај">
+<!ENTITY filetype.edit "Промени">
+<!ENTITY filetype.delete "Обриши">
+<!ENTITY filetype.new "Нова врста датотеке:">

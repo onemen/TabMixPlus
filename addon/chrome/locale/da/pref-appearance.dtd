@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Tilrettet stil">
+<!ENTITY currentTab.label "Nuværende faneblad">
+<!ENTITY unreadTab.label "Ulæste faneblade">
+<!ENTITY otherTabs.label "Andre faneblade">
+<!ENTITY italic.label "Kursiv">
+<!ENTITY bold.label "Fed">
+<!ENTITY underline.label "Understreg">
+<!ENTITY textcolor.label "Tekstfarve">
+<!ENTITY bgColor.label "Baggrundsfarve">
+<!ENTITY statusbar.label "Skjul i statuslinje">
+<!ENTITY useThis.label "brug denne stil for">
+<!ENTITY opacity.label "ugennemsigtighed">

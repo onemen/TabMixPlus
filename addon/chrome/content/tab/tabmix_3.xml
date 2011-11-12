@@ -1,0 +1,1103 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % identityDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%identityDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+%globalDTD;
+<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
+%tabBrowserDTD;
+]>
+
+<bindings id="tabxbindings_3"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!--
+    Not in use in Firefox 4.0+
+    In Firefox 4.0 we add onclick attribute directly to the button 
+  -->
+  <binding id="tabbrowser-close-tab-button"
+           extends="chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button">
+    <handlers>
+      <handler event="click" button="1" action="TMP_ClosedTabs.undoCloseTab();"/>
+    </handlers>
+  </binding>
+
+  <binding id="browser-tab" display="xul:hbox"
+        extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tab">
+    <content chromedir="&locale.dir;"
+             closetabtext="&closeTab.label;">
+      <xul:hbox class="tab-image-left tab-startcap tab-left tab-left-border" xbl:inherits="selected,hover"/>
+      <xul:hbox class="tab-drag-indicator-left"/>
+      <xul:toolbarbutton anonid="tmp-close-button"
+                         tabindex="-1" button_side="left"
+                         clickthrough="never" class="tab-close-button always-left"/>
+      <xul:hbox flex="1" class="tab-middle box-inherit tab-image-middle tab-body" align="center" xbl:inherits="selected">
+        <xul:stack class="tab-icon">
+          <xul:image class="tab-icon-image" xbl:inherits="validate,src=image" role="presentation"/>
+          <xul:image class="tab-protect-icon" />
+          <xul:image class="tab-lock-icon"/>
+          <xul:image class="tab-reload-icon"/>
+        </xul:stack>
+        <xul:stack class="tab-text-stack" flex="1">
+          <xul:progressmeter class="tab-progress" flex="2" mode="normal"
+                             value="0" xbl:inherits="value=tab-progress"/>
+          <xul:label class="tab-text"
+                           xbl:inherits="value=label,accesskey,crop,disabled"
+                           flex="1" role="presentation"/>
+          <xul:hbox class="showhover-box">
+            <xul:toolbarbutton anonid="tmp-close-button"
+                               tabindex="-1" clickthrough="never" class="showhover tabs-closebutton"/>
+          </xul:hbox>
+        </xul:stack>
+      </xul:hbox>
+      <xul:toolbarbutton anonid="tmp-close-button"
+                         tabindex="-1" button_side="right"
+                         clickthrough="never" class="tab-close-button always-right"/>
+      <xul:hbox class="tab-drag-indicator-right"/>
+      <xul:hbox class="tab-image-right tab-endcap tab-right tab-right-border" xbl:inherits="selected,hover"/>
+    </content>
+
+    <implementation>
+
+     <constructor>
+       <![CDATA[
+          if ("tabmix_inited" in this)
+            return;
+
+          if (Tabmix.isVersion(40)) {
+            Tabmix.newCode(null, this.doMouseHoverSelect)._replace(
+              'document.getBindingParent(aTab.parentNode);',
+              'aTab.parentNode.tabbrowser;'
+            ).toCode(false, this, "doMouseHoverSelect");
+          }
+
+          this.tabmix_inited = true;
+       ]]>
+     </constructor>
+    <field name="mIsHover">
+      false
+    </field>
+    <field name="mButtonId">
+      0
+    </field>
+    <field name="mFocusId">
+      0
+    </field>
+    <field name="mSelect">
+      0
+    </field>
+
+    <property name="_isProtected" readonly="true">
+      <getter><![CDATA[
+        return this.hasAttribute("protected") ||
+                  (Tabmix.isVersion(40) && this.pinned) ||
+                  ("permaTabs" in window && this.hasAttribute("isPermaTab"));
+      ]]></getter>
+    </property>
+
+    <property name="mouseHoverSelect" readonly="true">
+      <getter><![CDATA[
+        try {
+          return TabmixSvc.prefs.getBoolPref("extensions.tabmix.mouseOverSelect");
+        }
+        catch(e) {
+          return false;
+        }
+      ]]></getter>
+    </property>
+    <property name="mouseDownSelect" readonly="true">
+      <getter><![CDATA[
+        try {
+          return TabmixSvc.prefs.getBoolPref("extensions.tabmix.selectTabOnMouseDown");
+        }
+        catch(e) {
+          return false;
+        }
+      ]]></getter>
+    </property>
+    <property name="mouseHoverSelectDelay" readonly="true">
+      <getter><![CDATA[
+        try {
+          return TabmixSvc.prefs.getIntPref("extensions.tabmix.mouseOverSelectDelay");
+        }
+        catch(e) {
+          return 250;
+        }
+      ]]></getter>
+    </property>
+    <property name="tabXDelay" readonly="true">
+      <getter><![CDATA[
+        try {
+          return TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons.delay");
+        }
+        catch(e) {
+        return 0;
+        }
+      ]]></getter>
+    </property>
+
+    <property name="baseY"
+              readonly="true"
+              onget="return this.boxObject.y+this.boxObject.height;"/>
+
+    <method name="onMouseOver">
+      <parameter name="aEvent"/>
+      <body><![CDATA[
+        var anonid = aEvent.originalTarget.getAttribute("anonid");
+        if (anonid == "tmp-close-button")
+          this.mOverCloseButton = true;
+        this.mIsHover = true;
+        this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect)
+          this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
+      ]]></body>
+    </method>
+
+    <method name="doMouseHoverSelect">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        var b = document.getBindingParent(aTab.parentNode);
+        if (b.hasAttribute("preventMouseHoverSelect"))
+            b.removeAttribute("preventMouseHoverSelect");
+        else if (aTab.mIsHover)
+           aTab.parentNode.selectedItem = aTab;
+      ]]></body>
+    </method>
+
+    <method name="setShowButton">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        if ( aTab.mIsHover && aTab.getAttribute("showbutton") != "on")
+          aTab.setAttribute("showbutton", "on");
+      ]]></body>
+    </method>
+
+    <method name="onMouseOut">
+      <parameter name="aEvent"/>
+      <body><![CDATA[
+        var anonid = aEvent.originalTarget.getAttribute("anonid");
+        if (anonid == "tmp-close-button")
+          this.mOverCloseButton = false;
+        this.mIsHover = false;
+        clearTimeout(this.mButtonId);
+        this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect && this.mFocusId)
+          clearTimeout(this.mFocusId);
+      ]]></body>
+    </method>
+
+    <method name="removeShowButton">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        if (!aTab.mIsHover && aTab.hasAttribute("showbutton"))
+          aTab.removeAttribute("showbutton");
+      ]]></body>
+    </method>
+
+    <method name="onMouseCommand">
+      <parameter name="aEvent"/>
+      <body><![CDATA[
+        if ( this == this.parentNode.selectedItem ) {
+          this.setAttribute("clickOnCurrent","true");
+        }
+        // don't allow mouse click with modifiers to select tab
+        else if (!aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
+          function TMclickSetTab(tab) {
+            if (tab.parentNode)
+              tab.parentNode._selectNewTab(tab);
+          }
+          this.mSelect = setTimeout(TMclickSetTab, 0, this);
+        }
+      ]]></body>
+    </method>
+
+    <method name="clearTimeouts">
+      <body><![CDATA[
+        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID"];
+        timeouts.forEach(function(aTimeout) {
+          if (aTimeout in this && this[aTimeout]) {
+            clearTimeout(this[aTimeout]);
+            this[aTimeout] = null;
+          }
+        });
+      ]]></body>
+    </method>
+
+    <destructor>
+      <![CDATA[
+          this.clearTimeouts();
+      ]]>
+    </destructor>
+
+    </implementation>
+
+    <handlers>
+      <handler event="mouseover">
+      <![CDATA[
+        this.onMouseOver(event);
+      ]]>
+      </handler>
+
+      <handler event="mouseout">
+      <![CDATA[
+        this.onMouseOut(event);
+      ]]>
+      </handler>
+
+      <handler event="mousedown" button="0" phase="capturing">
+      <![CDATA[
+        // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
+        if (this.mOverCloseButton)
+          event.stopPropagation();
+        else {
+          this.style.MozUserFocus = 'ignore';
+          this.clientTop; // just using this to flush style updates
+          if (this.mouseDownSelect)
+            this.onMouseCommand(event);
+          else
+            event.stopPropagation();
+        }
+      ]]>
+      </handler>
+    </handlers>
+  </binding>
+
+  <!-- support for themes that use tabmix_3 -->
+  <binding id="scroll-tabs_3"
+            extends="chrome://tabmixplus/content/tab/tabbrowser.xml#tabmix-tabbrowser-tabs"/>
+
+  <binding id="tabmix-base-tabbrowser-tabs"
+            extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tabs">
+    <implementation implements="nsITimerCallback, nsIDOMEventListener">
+      <constructor>
+        <![CDATA[
+          TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
+
+          /*
+           * Replace mTabstrip functions
+           */
+          this.mTabstrip._updateScrollButtonsDisabledState = function() { };
+
+          let self = this;
+          this.mTabstrip.ensureElementIsVisible = function(aTab) { self.ensureTabIsVisible(aTab._tPos);};
+
+          if (this.tabmix_inited)
+             return;
+
+          // ODFReader change Cc to something else maybe some other extensions do that too !!!
+          if ("Cc" in window && Cc != Components.classes)
+            Cc = Components.classes;
+
+          if ("Ci" in window && Ci != Components.interfaces)
+            Ci = Components.interfaces;
+
+          this.tabmix_inited = true;
+          var tabbrowser = Tabmix.isVersion(40) ? this.tabbrowser : document.getBindingParent(this);
+
+          Tabmix.rtl = window.getComputedStyle(tabbrowser, null).direction == "rtl";
+          Tabmix.ltr = !Tabmix.rtl;
+          this._isRTLScrollbox = this.orient != "vertical" && Tabmix.rtl;
+          this.setAttribute("closebuttons-side", TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.onLeft") ? "left" : "right");
+          this._keepLastTab = TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab");
+          this.closeButtonsEnabled = TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.enable");
+          this.mCloseButtons = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons");
+
+          /**
+           * if we set this in field[s] they will reset each time the tabbar binding construct
+           * by tabbar position change
+           */
+          this.nextTab = 1;
+          this._collapsedTabs = 0;
+          this._newTabButtonWidth = Tabmix.isVersion(40) ? 22 : 21;
+
+          this.firstChild.setAttribute("flst_id", new Date().getTime());
+          this.firstChild.setAttribute("visited", true);
+          TabmixTabbar.lockallTabs = TabmixSvc.TMPprefs.getBoolPref("lockallTabs");
+          if (TabmixTabbar.lockallTabs)
+            this.firstChild.setAttribute("locked", true);
+
+          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.autoreload"))
+            this.setAttribute("extraIcons-autoreload", true);
+          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.protected"))
+            this.setAttribute("extraIcons-protected", true);
+          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.locked"))
+            this.setAttribute("extraIcons-locked", true);
+
+          if ("linkedBrowser" in this.firstChild)
+            tablib.setLoadURIWithFlags(this.firstChild.linkedBrowser);
+          /**
+           * Session Manager extesion add tabs too soon for us to check isTabVisible properly
+           * we get wrong scrollstatus at startup
+           * we add flag to use in tabBrowser.tabContainer.isTabVisible
+           */
+          this.setAttribute("SM_restart", true);
+
+          try {
+            TMP_beforeStartup(tabbrowser, this);
+          } catch (ex) {Tabmix.assert(ex);}
+        ]]>
+      </constructor>
+
+      <destructor>
+        <![CDATA[
+          delete this.tabstripInnerbox;
+        ]]>
+      </destructor>
+
+      <method name="adjustTabstrip">
+        <parameter name="skipUpdateScrollStatus"/>
+        <parameter name="aUrl"/>
+        <body><![CDATA[
+          // look at TMP_beforeStartup() in setup.js for backward compatibility
+          // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
+          // 1 - alltabs    = close buttons on all tabs
+          // 2 - hovertab   = close buttons on hover tab
+          // 3 - activetab  = close button on active tab only
+          // 4 - hoveractive = close buttons on hover and active tabs
+          // 5 - alltabs wider then  = close buttons on all tabs wider then
+
+          let oldValue = this.getAttribute("closebuttons");
+          var tabbrowser = document.getBindingParent(this);
+          var tabs = this.childNodes;
+          var tabsCount = tabs.length;
+          switch (this.closeButtonsEnabled ? this.mCloseButtons : 0) {
+          case 0:
+            this.removeAttribute("closebuttons-hover");
+            this.setAttribute("closebuttons", "noclose");
+            break;
+          case 1:
+            this.removeAttribute("closebuttons-hover");
+            this.setAttribute("closebuttons", "alltabs");
+            break;
+          case 2:
+            this.setAttribute("closebuttons-hover", "alltabs");
+            this.setAttribute("closebuttons", "noclose");
+            break;
+          case 3:
+          this.removeAttribute("closebuttons-hover");
+            this.setAttribute("closebuttons", "activetab");
+            break;
+          case 4:
+            this.setAttribute("closebuttons-hover", "notactivetab");
+            this.setAttribute("closebuttons", "activetab");
+            break;
+          case 5:
+            this.removeAttribute("closebuttons-hover");
+            if (tabsCount < 2) {
+              this.setAttribute("closebuttons", "alltabs");
+            }
+            else {
+              // make sure not to check collapsed tab for width
+              // this also work with Firefox pinned tabs
+              let tab = this._isRTLScrollbox && !TabmixTabbar.isMultiRow ? this.firstChild : this.lastChild;
+              if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)
+                this.setAttribute("closebuttons", "alltabs");
+              else
+                this.setAttribute("closebuttons", "activetab");
+            }
+            break;
+          }
+
+          /**
+           *  Don't use return in this function
+           *  TreeStyleTabe add some code at the end
+           */
+          if (tabsCount == 1) {
+            if (this._keepLastTab) {
+              this.setAttribute("closebuttons", "noclose");
+              this.removeAttribute("closebuttons-hover");
+            }
+          }
+          else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) {
+            TabmixTabbar.updateScrollStatus();
+            TabmixTabbar.updateBeforeAndAfter();
+          }
+        ]]></body>
+      </method>
+
+      <method name="_fillTrailingGap">
+        <body><![CDATA[
+          // we don't use this in Tabmix
+
+        ]]></body>
+      </method>
+
+      <!--
+      canScrollTabsLeft and canScrollTabsRight are in tabbrowser.xml for Firefox 3.5-3.6
+      and in tabbrowser_4.xml for Firefox, we drop the use of disableScrollTabsLeft and disableScrollTabsRight
+      from Firefox 4.0+
+      -->
+
+      <method name="adjustScrollTabsLeft">
+        <body><![CDATA[
+            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
+            var canScroll = this.realCollapsedTabs > 0;
+            if (rtl)
+              this.canScrollTabsRight = canScroll;
+            else
+              this.canScrollTabsLeft = canScroll;
+        ]]></body>
+      </method>
+
+      <method name="adjustScrollTabsRight">
+        <body><![CDATA[
+            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
+            if ((this.boxObject.width == 0 || this.childNodes.length <= this.maxRow)) {
+              if (rtl)
+                this.canScrollTabsLeft = false;
+              else
+                this.canScrollTabsRight = false;
+            }
+            else {
+              if (rtl)
+                this.canScrollTabsLeft = this.hasAttribute("multibar") ? this.maxRow < this.lastTabRowNumber : !this.lastTabVisible;
+              else
+                this.canScrollTabsRight = this.hasAttribute("multibar") ? this.maxRow < this.lastTabRowNumber : !this.lastTabVisible;
+            }
+        ]]></body>
+      </method>
+
+      <property name="overflow">
+        <getter><![CDATA[
+          return this.hasAttribute("overflow");
+        ]]></getter>
+        <setter><![CDATA[
+          if (this.mTabstrip.orient == "vertical")
+            return val;
+          if (val != this.overflow) {
+            if (val) {
+              if (this.getAttribute("flowing") == "singlebar")
+                return !val;
+              this.setAttribute("overflow", "true");
+            }
+            else {
+              // on underflow update spacer
+              if (Tabmix.isVersion(50) && this._lastTabClosedByMouse)
+                this._expandSpacerBy(this.mTabstrip._scrollButtonDown.parentNode.getBoundingClientRect().width);
+              this.removeAttribute("overflow");
+            }
+            // we call _positionPinnedTabs when we change TabmixTabbar.scrollButtonsMode value and
+            // when we enter or exit from overflow
+            if (Tabmix.isVersion(40))
+              this._positionPinnedTabs();
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="lastTabVisible" readonly="true">
+        <getter>
+        <![CDATA[
+          var tabs = this.childNodes;
+          var index;
+          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
+            index = 0;
+          else
+            index = tabs.length - 1;
+
+          // don't check _removingTabs for visibility
+          let offset = index == 0 ? 1 : -1;
+          let tabbrowser = document.getBindingParent(this);
+          // we don't need to check this in Firefox 4.0
+          if (tabbrowser._removingTabs.length > 0) {
+            while(tabbrowser._removingTabs.indexOf(tabs[index]) > -1)
+              index += offset;
+          }
+          return this.isTabVisible(index);
+        ]]>
+        </getter>
+      </property>
+
+      <!--
+        check that we have enough room to show new tab button after the last tab in the current row
+        we don't want the button to be on the next row when the tab is on the current row
+      -->
+      <method name="adjustNewtabButtonvisibility">
+        <body><![CDATA[
+          if (this.mTabstrip.orient == "vertical")
+            return;
+
+          if (!this._checkNewtabButtonVisibility) {
+            this.disAllowNewtabbutton = this.getAttribute("flowing") == "singlebar" && TabmixSvc.TMPprefs.getBoolPref("newTabButton") && 
+                                           TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2 && (this.canScrollTabsLeft || this.canScrollTabsRight);
+            return;
+          }
+
+         var lastTab = this.lastChild;
+         // button is visible
+         //         A: last tab and the button are in the same row - check if we have room for the button in this row
+         //         B: last tab and the button are NOT in the same row  - NG - hide the button
+         if (!this.disAllowNewtabbutton) {
+           let sameRow = TabmixTabbar.inSameRow(lastTab, this.mTabsNewtabButton);
+           if (sameRow) {
+             let tabstripEnd = this.mTabstrip.scrollBoxObject.screenX + this.mTabstrip.scrollBoxObject.width;
+             let buttonEnd = this.mTabsNewtabButton.boxObject.screenX + this.mTabsNewtabButton.boxObject.width
+             this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
+           }
+           else
+             this.disAllowNewtabbutton = true;
+           return;
+         }
+         // button is NOT visible
+         //         A: 2 last button are in the same row - check if we have room for the button in this row
+         //         B: 2 last button are NOT in the same row - check if we have room for the last tab + button
+         //              after previous to last tab.
+         else {
+           // ignor the case that this tab width is larger then the tabbar
+           let previousTab = lastTab.previousSibling;
+           if (!previousTab) {
+             this.disAllowNewtabbutton = false;
+             return;
+           }
+           let tsbo = this.mTabstrip.scrollBoxObject;
+           let tsboEnd = tsbo.screenX + tsbo.width + (this._rightNewTabButton ? this._rightNewTabButton.boxObject.width: 0);
+           if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
+             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + this._newTabButtonWidth;
+             this.disAllowNewtabbutton = buttonEnd > tsboEnd;
+             return;
+           }
+           else {
+             let lastTabEnd = previousTab.boxObject.screenX + previousTab.boxObject.width
+                                         + lastTab.boxObject.width;
+             // both last tab and new tab button are in the next row
+             if (lastTabEnd > tsboEnd)
+               this.disAllowNewtabbutton = false;
+             else
+               this.disAllowNewtabbutton = lastTabEnd + this._newTabButtonWidth > tsboEnd;
+             return;
+           }
+         }
+        ]]></body>
+      </method>
+
+      <!-- Don't remove collapsed _removingTabs from collapsedTabs
+             we use this for real index
+       -->
+      <property name="collapsedTabs"
+          onget="return this._collapsedTabs">
+        <setter>
+        <![CDATA[
+          const tabs = this.childNodes;
+         /**
+          * In Firefox 4.0 tab = gBrowser.visibleTabs , not including _removingTabs
+          * we can't use _numPinnedTabs since it include _removingTabs
+          * see Bug 633158 - _numPinnedTabs should exclude _removingTabs
+          */
+          var min = this._real_numPinnedTabs;
+          var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
+          if (val > this._collapsedTabs && this.lastTabVisible ) {
+            if (rtl)
+              this.canScrollTabsLeft = false;
+            else
+              this.canScrollTabsRight = false;
+            if (this._collapsedTabs < min)
+              this._collapsedTabs = min;
+            return this._collapsedTabs;
+          }
+          if ( val < min ) val = min;
+          if (rtl) {
+            for(let i = 0; i < tabs.length - val; i++) {
+              if (tabs[i].collapsed)
+                tabs[i].collapsed = false;
+            }
+            for(let i = tabs.length - val; i < tabs.length; i++) {
+              if (!tabs[i].collapsed && !tabs[i].hasAttribute("pinned"))
+                tabs[i].collapsed = true;
+            }
+          }
+          else {
+            for(let i = 0; i < val; i++) {
+              if (!tabs[i].collapsed && !tabs[i].hasAttribute("pinned"))
+                tabs[i].collapsed = true;
+            }
+            for(let i = val; i < tabs.length; i++) {
+              if (tabs[i].collapsed)
+                tabs[i].collapsed = false;
+            }
+          }
+
+          this._collapsedTabs = val;
+          this.adjustScrollTabsLeft();
+          this.adjustScrollTabsRight();
+          this.overflow = this.canScrollTabsLeft || this.canScrollTabsRight;
+
+          return val;
+        ]]>
+        </setter>
+      </property>
+
+      <method name="isTabVisible">
+        <parameter name="aIndex"/>
+        <body>
+        <![CDATA[
+          const tabs = this.childNodes;
+          if (tabs.length == 1)
+            return true;
+
+          if (aIndex < 0 || aIndex > tabs.length - 1)
+            return false;
+
+          var tab = tabs[aIndex];
+          //       var tab = tabs.item(aIndex); this make problem with tab group manager
+          if (!tab)
+            return false;
+
+          // pinned tabs are always visible
+          if (Tabmix.isVersion(40) && tab.pinned)
+            return true;
+
+          var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
+          if (!rtl && this.collapsedTabs > aIndex)
+            return false;
+
+          if (rtl && aIndex > tabs.length - 1 - this.collapsedTabs)
+            return false;
+
+          var tabstripWidth = this.mTabstrip.scrollBoxObject.width;
+          var tabstripEnd = this.mTabstrip.scrollBoxObject.screenX + tabstripWidth;
+          // Session Manager extesion add tabs too soon for us to check visibility properly
+          // we remove SM_restart after timeout see tabmix.js onWindowOpen
+          if (this.hasAttribute("SM_restart") && tabstripWidth < 250)
+            return true;
+
+          if (this.hasAttribute("inline") && !this.hasAttribute("multibar") && this.getTabRowNumber(tab, this.topTabY) > 1)
+            return false;
+          //XXX this hack is for the case that the width of the tabbar is round number of tabs
+          // when we reach to that number of tabs and tabs need to start shrinking.
+          if (this.tabstripInnerbox && !this.overflow) {
+            if (this.tabstripInnerbox.boxObject.screenX + this.tabstripInnerbox.boxObject.width > tabstripEnd) {
+              if (tab.boxObject.screenX + tab.boxObject.width < tabstripEnd)
+                return true;
+              return false;
+            }
+            else if ( this.getAttribute("multibar") == "scrollbar" ) {
+              if (this.getTabRowNumber(tab, this.topTabY) > this.maxRow)
+                return false;
+            }
+            return true;
+          }
+          if (tab.boxObject.screenX + tab.boxObject.width > tabstripEnd)
+            return false;
+          else if ( this.getAttribute("multibar") == "scrollbar" ) {
+            if (this.getTabRowNumber(tab, this.topTabY) > this.maxRow)
+              return false;
+          }
+          return true;
+        ]]>
+        </body>
+      </method>
+
+      <method name="ensureTabIsVisible">
+        <parameter name="aIndex"/>
+        <body>
+        <![CDATA[
+          if ((!this.canScrollTabsLeft && !this.canScrollTabsRight) || this.boxObject.width == 0 || this.isTabVisible(aIndex))
+             return;
+
+          const tabs = this.childNodes;
+          if (aIndex < 0 || aIndex > tabs.length - 1)
+            return;
+          var tab = tabs[aIndex];
+          if (!tab)
+            return;
+
+          var amount, i, j;
+          if ( this.mTabstrip.scrollBoxObject.width < 250 )
+            return;
+
+          if ( TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode") != 2 ) {
+            if (!this._isRTLScrollbox) {
+              if (aIndex < this.collapsedTabs)
+                this.collapsedTabs = aIndex;
+              else {
+                var amountToCollapse = tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
+                if(amountToCollapse > 0) {
+                  amount = 0;
+                  i = this.collapsedTabs;
+                  while(amount < amountToCollapse) {
+                    amount += tabs[i].boxObject.width;
+                    i++;
+                  }
+                  this.collapsedTabs = i;
+                }
+              }
+            }
+            else { // RTL
+              if (aIndex > tabs.length - 1 - this.collapsedTabs)
+                this.collapsedTabs = tabs.length - 1 - aIndex;
+              else {
+                var amountToCollapse = tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
+                if(amountToCollapse > 0) {
+                  amount = 0;
+                  i = this.collapsedTabs;
+                  while(amount < amountToCollapse) {
+                    amount += tabs[tabs.length - 1 - i].boxObject.width;
+                    i++;
+                  }
+                  this.collapsedTabs = i;
+                }
+              }
+            }
+          }
+          else if ( this.getAttribute("multibar") == "scrollbar" ) {
+            if (aIndex < this.collapsedTabs) {
+               while (aIndex < this.collapsedTabs)
+                  this.rowScroll(-1);
+            }
+            else {
+               let top = this.topTabY;
+               let maxRow = this.maxRow;
+               while (this.getTabRowNumber(tab, top) > maxRow)
+                  this.rowScroll(+1);
+            }
+          }
+        ]]>
+        </body>
+      </method>
+
+      <method name="tabsScroll">
+        <parameter name="factor"/>
+        <body>
+        <![CDATA[
+          if ( this.getAttribute("flowing") == "multibar" &&
+            this.getAttribute("multibar") == "scrollbar" )
+              this.rowScroll(factor);
+          else {
+            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
+            if (rtl) factor = factor * -1;
+            this.collapsedTabs += factor;
+          }
+        ]]>
+        </body>
+      </method>
+
+      <method name="rowScroll">
+        <parameter name="factor"/>
+        <body>
+        <![CDATA[
+          const tabs = this.childNodes;
+          var i, firstVisibleIndex = this.collapsedTabs;
+          // make sure that our index is valid
+          if (firstVisibleIndex > tabs.length - 1) {
+            firstVisibleIndex = tabs.length - 1;
+            tabs[firstVisibleIndex].collapsed = false;
+          }
+          var top = this.topTabY;
+          if (factor == -1 ) {
+             // In order to make sure first row is full push last hidden tab to 2nd row or reveal all hidden tabs,
+             // then if last hidden tab is in 2nd row hide the new first visible tab.
+             let lastHidden = firstVisibleIndex - 1 > 0 ? tabs[firstVisibleIndex - 1] : null
+             for (i = firstVisibleIndex - 1; i >= 0; i--) {
+                tabs[i].collapsed = false;
+                if (this.getTabRowNumber(lastHidden, top) == 2) {
+                   i++;
+                   break;
+                }
+             }
+          }
+          else {
+            // find index of the first tab in 2nd row, so we can hide all tab before it
+            for (i = firstVisibleIndex + 1; i < tabs.length; i++) {
+              if (this.getTabRowNumber(tabs[i], top) == 2)
+                break;
+            }
+          }
+          if (i != firstVisibleIndex)
+            this.collapsedTabs = i;
+        ]]>
+        </body>
+      </method>
+
+      <property name="maxRow" readonly="true">
+        <getter><![CDATA[
+          var row = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMaxRow");
+          Tabmix.setItem(this.mTabstrip._scrollButtonDown, "notonbottom", (row > 2) || null);
+          return row;
+        ]]></getter>
+      </property>
+
+      <property name="topTabY" readonly="true">
+        <getter><![CDATA[
+          let index = this.collapsedTabs;
+          let tabs = this.childNodes;
+          let count = tabs.length;
+          while(index < count && tabs[index].boxObject.width == 0)
+            index++;
+
+          let topTab = tabs[index];
+          if (topTab)
+            return topTab.boxObject.y - TMP_getStyle(topTab, "marginTop");
+
+          return this.boxObject.y;
+        ]]></getter>
+      </property>
+
+      <property name="lastTabRowNumber" readonly="true">
+        <getter><![CDATA[
+          // in case we get here when the last tab is about to remove
+          let tabs = this.childNodes;
+          let index = tabs.length - 1;
+          let tabbrowser = document.getBindingParent(this);
+          // we don't need to check this in Firefox 4.0
+          if (tabbrowser._removingTabs.length > 0) {
+            while(tabbrowser._removingTabs.indexOf(tabs[index]) > -1)
+              index--;
+          }
+          if (index < 0)
+            return 1;
+
+          return this.getTabRowNumber(tabs[index], this.topTabY);
+        ]]></getter>
+      </property>
+
+      <method name="getTabRowNumber">
+        <parameter name="aTab"/>
+        <parameter name="aTop"/>
+        <body><![CDATA[
+          var height = aTab ? aTab.boxObject.height : 0;
+          if (height == 0) // don't panic
+            return;
+
+          var marginTop = TMP_getStyle(aTab, "marginTop");
+          var marginBottom = TMP_getStyle(aTab, "marginBottom");
+          height += marginTop + marginBottom;
+          var tabBottom = aTab.boxObject.y - marginTop + height
+          return Math.round((tabBottom - aTop)/height);
+        ]]></body>
+      </method>
+
+      <method name="_handleTabSelect">
+        <body><![CDATA[
+          this.ensureTabIsVisible(this.selectedIndex);
+        ]]></body>
+      </method>
+
+      <method name="_notifyBackgroundTab">
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          // Is the new tab already completely visible?
+          if (this.isTabVisible(aTab._tPos))
+            return;
+
+          //XXX use getBoundingClientRect when we drop Firefox 3.0 support
+          var tsbo = this.mTabstrip.scrollBoxObject;
+          var ctbo = aTab.boxObject;
+          var selbo = this.selectedItem.boxObject;
+          if (!TabmixTabbar.isMultiRow) {
+            if (aTab._tPos >= this.collapsedTabs) {
+              var ctboStart = ctbo.screenX;
+              var ctboEnd = ctboStart + ctbo.width;
+
+              var selStart = selbo.screenX;
+              var selEnd = selStart + selbo.width;
+
+              // Can we make both the new tab and the selected tab completely visible?
+              if (Math.max(ctboEnd - selStart, selEnd - ctboStart) <= tsbo.width) {
+                this.ensureTabIsVisible(aTab._tPos);
+                return;
+              }
+            }
+          }
+          else if (this.selectedIndex >= this.collapsedTabs) {
+            var ctboTop = ctbo.screenY;
+            var ctboBottom = ctboTop + ctbo.height;
+
+            var selTop = selbo.screenY;
+            var selBottom = selTop + selbo.height;
+            if (Math.max(selBottom - ctboTop, ctboBottom - selTop) <= tsbo.height) {
+              this.ensureTabIsVisible(aTab._tPos);
+              return;
+            }
+          }
+
+          this.ensureTabIsVisible(this.selectedIndex);
+
+          if (Tabmix.isVersion(40)) {
+            if (!this._animateElement.hasAttribute("notifybgtab")) {
+              this._animateElement.setAttribute("notifybgtab", "true");
+              setTimeout(function (ele) {
+                ele.removeAttribute("notifybgtab");
+              }, 150, this._animateElement);
+            }
+          }
+          else {
+            // start the flash timer
+            this._animateStep = 0;
+            if (!this._animateTimer)
+              this._animateTimer =
+                Components.classes["@mozilla.org/timer;1"]
+                          .createInstance(Components.interfaces.nsITimer);
+            else
+              this._animateTimer.cancel();
+
+            this._animateTimer.initWithCallback(this, this._animateDelay,
+                                                this._animateTimer.TYPE_REPEATING_SLACK);
+          }
+        ]]></body>
+      </method>
+
+    </implementation>
+  </binding>
+
+  <binding id="tabmix-scroll-button"
+      extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-image">
+
+    <implementation implements="nsITimerCallback, nsIDOMEventListener">
+      <constructor><![CDATA[
+        try {
+          this._scrollDelay =
+             TabmixSvc.prefs.getIntPref("extensions.tabmix.clickToScroll.scrollDelay");
+        }
+        catch (ex) {      }
+
+        this.tabContainer = document.getBindingParent(this);
+        if (this.tabContainer.localName == "arrowscrollbox")
+          this.tabContainer = document.getBindingParent(this.tabContainer);
+
+        this._scrollIndex = this.getAttribute("scrollIndex") == "1" ? 1 : -1;
+        this._side = this._scrollIndex == 1 ? "right" : "left";
+      ]]></constructor>
+
+      <destructor><![CDATA[
+        // Release timer to avoid reference cycles.
+        if (this._scrollTimer) {
+          this._scrollTimer.cancel();
+          this._scrollTimer = null;
+        }
+        this.tabContainer = null;
+        document.removeEventListener("mouseup", this, false);
+        document.removeEventListener("blur", this, true);
+      ]]></destructor>
+
+      <field name="_scrollIndex">0</field>
+      <field name="_scrollDelay">150</field>
+
+      <method name="notify">
+        <parameter name="aTimer"/>
+        <body>
+        <![CDATA[
+          if (this.hasAttribute("disabled")) {
+            this._stopScroll();
+            return;
+          }
+
+          if (!document)
+            aTimer.cancel();
+
+          this.tabContainer.tabsScroll(this._scrollIndex);
+        ]]>
+        </body>
+      </method>
+
+      <method name="_startScroll">
+        <body><![CDATA[
+          if (this.hasAttribute("disabled")) {
+            this._stopScroll();
+            return;
+          }
+          var scrollDelay = this._scrollDelay;
+          if (!this._scrollTimer)
+            this._scrollTimer =
+              Components.classes["@mozilla.org/timer;1"]
+                        .createInstance(Components.interfaces.nsITimer);
+          else
+            this._scrollTimer.cancel();
+
+          this._scrollTimer.initWithCallback(this, scrollDelay,
+                                             this._scrollTimer.TYPE_REPEATING_SLACK);
+          this.notify(this._scrollTimer);
+          this._mousedown = true;
+        ]]>
+        </body>
+      </method>
+
+      <method name="_stopScroll">
+        <body><![CDATA[
+          if (this._scrollTimer)
+            this._scrollTimer.cancel();
+          this._mousedown = false;
+        ]]></body>
+      </method>
+
+      <method name="_pauseScroll">
+        <body><![CDATA[
+          if (this._mousedown) {
+            this._stopScroll();
+            this._mousedown = true;
+            document.addEventListener("mouseup", this, false);
+            document.addEventListener("blur", this, true);
+          }
+        ]]></body>
+      </method>
+
+      <method name="_continueScroll">
+        <body><![CDATA[
+          if (this._mousedown)
+            this._startScroll();
+        ]]></body>
+      </method>
+
+      <method name="handleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          if (aEvent.type == "mouseup" ||
+              aEvent.type == "blur" && aEvent.target == document) {
+            this._mousedown = false;
+            document.removeEventListener("mouseup", this, false);
+            document.removeEventListener("blur", this, true);
+          }
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="mousedown" button="0" phase="capturing">
+        _startScroll();
+      </handler>
+      <handler event="mouseover" button="0" phase="capturing">
+        _continueScroll();
+      </handler>
+      <handler event="mouseup" button="0" phase="capturing">
+        _stopScroll();
+      </handler>
+      <handler event="mouseout" button="0" phase="capturing">
+        _pauseScroll();
+      </handler>
+      <handler event="contextmenu">
+        TabmixAllTabs.createScrollButtonTabsList(event, this._side);
+      </handler>
+      <handler event="dblclick" button="0" phase="capturing">
+        event.stopPropagation();
+      </handler>
+    </handlers>
+
+  </binding>
+
+  <!--
+      we don't use this for Firefox 3.0 +
+      we leave it here because some theme looking for this
+   -->
+  <binding id="tabbrowser"
+      extends="chrome://browser/content/tabbrowser.xml#tabbrowser">
+
+    <implementation>
+
+    </implementation>
+
+  </binding>
+
+</bindings>

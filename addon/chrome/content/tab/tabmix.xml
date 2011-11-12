@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<bindings id="DEPRECATED_tabxbindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+<!--
+      *** DEPRECATED *** DEPRECATED *** DEPRECATED *** DEPRECATED *** DEPRECATED ***
+
+      WE DON'T USE THIS IN TABMIX WE LEAVE IT HERE BECAUSE SOME THEME LOOKING FOR THIS
+-->
+
+  <binding id="browser-tab"
+        extends="chrome://tabmixplus/content/tab/tabmix_3.xml#browser-tab">
+    <implementation>
+    </implementation>
+  </binding>
+
+  <binding id="scroll-tabs"
+            extends="chrome://tabmixplus/content/tab/tabmix_3.xml#scroll-tabs_3">
+    <implementation>
+    </implementation>
+  </binding>
+
+  <binding id="tabbrowser"
+      extends="chrome://browser/content/tabbrowser.xml#tabbrowser">
+    <implementation>
+    </implementation>
+  </binding>
+
+</bindings>

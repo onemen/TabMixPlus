@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Otwórz w tle">
+<!ENTITY searchTabFocus.accesskey "T">
+<!ENTITY title.label "Tytuł">
+<!ENTITY rename_all.label "Zmień nazwy wszystkich stron o takim samym adresie">
+<!ENTITY rename_permanently.label "Zmieniaj nazwę tej karty dla wszystkich adresów">
+<!ENTITY doctitle.label "Użyj tytułu dokumentu">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Pomoc">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Wybierz czas z listy lub wprowadź swój czas">
+<!ENTITY specifyreload.label "Czas odświeżania">
+<!ENTITY sanitizer.entry "Sesje Tab Mix Plusa">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Czy na pewno chcesz usunąć wszystkie zapisane dane sesji i kopie zapasowe?">

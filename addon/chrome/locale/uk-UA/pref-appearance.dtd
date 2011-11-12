@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Налаштування стилів">
+<!ENTITY currentTab.label "Поточна вкладка">
+<!ENTITY unreadTab.label "Непрочитані вкладки">
+<!ENTITY otherTabs.label "Other tabs">
+<!ENTITY italic.label "Курсив">
+<!ENTITY bold.label "Напівжирний">
+<!ENTITY underline.label "Підкреслений">
+<!ENTITY textcolor.label "Колір тексту">
+<!ENTITY bgColor.label "Колір тла">
+<!ENTITY statusbar.label "Не відображати в рядку стану індикатор відкриття вкладок">
+<!ENTITY useThis.label "use this style for">
+<!ENTITY opacity.label "opacity">

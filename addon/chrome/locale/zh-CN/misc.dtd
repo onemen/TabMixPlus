@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "在后台载入标签页">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY title.label "标题">
+<!ENTITY rename_all.label "用相同的地址重命名所有页面">
+<!ENTITY rename_permanently.label "固定重命名该标签页，而无论是何地址">
+<!ENTITY doctitle.label "使用文档标题">
+<!ENTITY forum.label "论坛">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Help">
+<!ENTITY tabmix.label "标签式浏览">
+<!ENTITY reloadtime.label1 "从列表中选择时间或输入您自定义的时间">
+<!ENTITY specifyreload.label "指定重新载入时间">
+<!ENTITY sanitizer.entry "Tab Mix Plus 历史">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "您是否确定要清除包括备份在内的所有已保存的浏览进程数据？">

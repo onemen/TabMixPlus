@@ -1,0 +1,129 @@
+/** 
+    Firefox version 3.5.* - 3.6.*
+
+    ALL platform
+
+**/
+
+/* :::: for miniT drag indicator :::: */
+.tab-drag-indicator-left, .tab-drag-indicator-right {
+  visibility: hidden;
+  background: transparent no-repeat 50% 50%;
+  width: 0px;
+  height: 12px;
+}
+
+.tabbrowser-tab[chromedir="ltr"] .tab-drag-indicator-left,
+.tabbrowser-tab[chromedir="rtl"] .tab-drag-indicator-right {
+  background-image: url("chrome://tabmixplus/skin/drag-left.png");
+}
+
+.tabbrowser-tab[chromedir="ltr"] .tab-drag-indicator-right,
+.tabbrowser-tab[chromedir="rtl"] .tab-drag-indicator-left {
+  background-image: url("chrome://tabmixplus/skin/drag-right.png");
+}
+
+.tabbrowser-tab[dragmark=atLeft] .tab-drag-indicator-left,
+.tabbrowser-tab[dragmark=atRight] .tab-drag-indicator-right {
+  visibility: visible;
+  width: 7px;
+}
+
+/* new tab button after last tab on firefox 3.5+ */
+.tabbrowser-tabs:not([classic=v3Linux]):not([multibar])[inline=true] .tabs-frame > .tabs-newtab-button,
+.tabbrowser-tabs:not([classic=v3Linux])[multibar=true] .tabs-frame > .tabs-newtab-button {
+  height: 22px;
+  max-height: 22px;
+  margin: 1px 0px 1px;
+}
+
+.tabbrowser-tabs[multibar] #fd-tab-button {  /* Speed dial button */
+  padding-top: 1px;
+  height: 23px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.tabbrowser-tabs[flowing=multibar][multibar] #fd-tab-button   /* Speed dial button */ {
+  padding-bottom: 2px;
+}
+
+/* :::: For Scrollable tabs :::: */
+.tabbrowser-tabs:not([flowing=multibar])[disableScrollTabsRight=true] .tabs-frame {
+  border-right-width: 0px;
+}
+.tabbrowser-tabs:not([flowing=multibar])[disableScrollTabsLeft=true] .tabs-frame {
+  border-left-width: 0px;
+}
+
+/* :::: Space on tab bar :::: */
+.tabbrowser-tabs #tabs-right-space, .tabbrowser-tabs #tabs-left-space {
+  display: none;
+}
+.tabbrowser-tabs[tabBarSpace] #tabs-right-space, .tabbrowser-tabs[tabBarSpace] #tabs-left-space {
+  display: -moz-box;
+  width: 15px;
+}
+
+/* :::: For progressmeter on tab  Firefox 3.5-3.6 :::: */
+.tabbrowser-tabs[progressMeter] .tabbrowser-tab[busy=true] .tab-text-stack > .tab-progress {
+  display: -moz-box;
+}
+
+.tab-text-stack >.tab-progress {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px 0px 0px 0px !important;
+  min-width: 0px !important;
+  min-height: 0px !important;
+  border: none;
+  display: none;
+}
+
+.tabbrowser-tabs[useProgressColor] .tabbrowser-tab .tab-progress {
+  -moz-appearance: none;
+  background-color: transparent;
+}
+.tabbrowser-tabs[useProgressColor] .tabbrowser-tab .tab-progress > .progress-bar {
+  -moz-appearance: none;
+}
+
+#context-openlink[disabled=true]{
+  display: none !important;
+}
+
+/* make sure all buttons align to the top row */
+.tabbrowser-tabs[multibar] .tabs-container{
+  -moz-box-align: start;
+}
+
+/* All tabs button */
+#alltabs-place-holder {
+  width: 0px !important;
+}
+
+/* Fix focus ring on tab */
+.tabbrowser-tab:focus .tab-middle {
+  outline: none !important;
+}
+
+/*
+ *  we need this if we don't have scroll button on left side
+ *
+ * FF 3.5-3.6 */
+.tabbrowser-tabs[newTabButton=true][newtab_side="left"] .tabs-container,
+.tabbrowser-tabs[tabBarSpace] .tabs-container {
+  -moz-padding-start: 0px;
+}
+
+.tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=multibar],
+.tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=scrollbutton]:not([scrollbutton-up=left]),
+.tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=scrollbutton]:not([overflow="true"]) {
+ -moz-padding-start: 3px;
+}
+
+/* Tabstrip close button  Firefox 3.0 */
+.tabs-container > .tabs-closebutton {
+  -moz-box-align: start;
+}

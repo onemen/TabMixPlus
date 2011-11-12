@@ -1,0 +1,102 @@
+/** 
+    Firefox version 3.5.* - 3.6.*
+
+    Mac platform
+
+**/
+
+/*  For .tabs-closebutton .showhover */
+.tabbrowser-tabs:not([multibar]) > .tabbrowser-tab .tabs-closebutton {
+  margin: 0px 0px -2px 0px;
+}
+
+.tabbrowser-tabs[multibar] > .tabbrowser-tab .tabs-closebutton {
+  margin: 0px 0px -3px 0px;
+}
+
+.tabbrowser-tabs[classic="v3Mac"] > .tabbrowser-tab .tabs-closebutton {
+  -moz-margin-end: -6px;
+}
+
+/* look like we don't need this in Firefox 4.0+ */
+.tabbrowser-tabs[flowing=multibar][classic=v3Mac] {
+  height: auto;
+}
+
+.tabbrowser-tabs > .tabbrowser-tab .tab-close-button > .toolbarbutton-text {
+  display: none;
+}
+
+.tabbrowser-tabs .tabs-newtab-topbox >.tabs-newtab-button {
+  -moz-border-start: 2px solid;
+  -moz-border-end: none;
+  -moz-border-left-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+  -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+  margin: 0;
+  padding: 0;
+}
+
+.tabbrowser-tabs .tabs-newtab-topbox >.tabs-newtab-button,
+.tabbrowser-tabs .tabs-alltabs-stack >.tabs-alltabs-button {
+  height: 25px;
+}
+
+.tabbrowser-tabs .tabs-newtab-topbox >.tabs-newtab-button:hover,
+.tabs-alltabs-button:hover {
+  background-color: rgba(0,0,0,0.10);
+}
+
+.tabbrowser-tabs .tabs-newtab-topbox >.tabs-newtab-button:hover:active,
+.tabs-alltabs-button:hover:active {
+  background-color: rgba(0,0,0,0.20);
+}
+
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+  height: 24px;
+}
+
+.tabbrowser-tabs[newTabButton=true][newtab_side="left"] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="ltr"],
+.tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="ltr"] {
+  border-left: 2px solid !important;
+  -moz-border-left-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15) !important;
+}
+
+.tabbrowser-tabs[newTabButton=true] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="rtl"],
+.tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="rtl"] {
+  border-right: 2px solid;
+  -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+}
+
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+  border-top: 2px solid;
+  -moz-border-top-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+}
+
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[notonbottom] {
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+}
+
+.tabbrowser-tabs:not([hideAllTabsButton=true]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"],
+.tabbrowser-tabs[hideAllTabsButton=true][closebutton=true] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"] {
+  border-right: 2px solid;
+  -moz-border-right-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+}
+
+.tabbrowser-tabs:not([hideAllTabsButton=true]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"],
+.tabbrowser-tabs[hideAllTabsButton=true][closebutton=true] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"] {
+  border-left: 2px solid;
+  -moz-border-left-colors: rgba(0,0,0,0.25) rgba(255,255,255,0.15);
+}
+
+/* close tab button on tabs */
+.tabbrowser-tabs:not([closeIcon]) > .tabbrowser-tab .tab-close-button:hover,
+.tabbrowser-tabs:not([closeIcon])[closebuttons="alltabs"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button:hover {
+  list-style-image: url("chrome://global/skin/icons/closetab-hover.png");
+}
+
+.tabbrowser-tabs:not([closeIcon]) > .tabbrowser-tab .tab-close-button:hover:active,
+.tabbrowser-tabs:not([closeIcon])[closebuttons="alltabs"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button:hover:active {
+  list-style-image: url("chrome://global/skin/icons/closetab-active.png");
+}

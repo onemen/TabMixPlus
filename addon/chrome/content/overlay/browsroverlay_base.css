@@ -1,0 +1,127 @@
+/**
+ * xml-stylesheet for tabmix.xul
+ *
+ * This file is for general use and intended for ALL Firefox version and Platform
+ * if some rule become obsolete move it to the proper file
+ *
+ **/
+
+label.text-link, label[onclick] {
+  -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
+}
+
+/***
+ *      workaround firefox rules that use .tabbrowser-arrowscrollbox > .scrollbutton-up
+ *                                        .tabbrowser-arrowscrollbox > .scrollbutton-up
+ *      our scrollbutton are inside a secound box for multi-row
+ *      so we add to our box class tabbrowser-arrowscrollbox[type=tabmix] to create fake
+ *      .tabbrowser-arrowscrollbox
+ *
+ ***/
+.tabbrowser-arrowscrollbox[type=tabmix] {
+  -moz-binding: url("chrome://global/content/bindings/general.xml#basecontrol") !important;
+}
+
+.tabbrowser-arrowscrollbox[type=tabmix-scrollbox] {
+  -moz-binding: url("chrome://global/content/bindings/scrollbox.xml#scrollbox") !important;
+}
+
+/* some themes use old copy of tabmix_3.xml that's why we don't use .tabbrowser-arrowscrollbox > .scrollbutton-up */
+.tabmix_scrollbuttons_box > .scrollbutton-up,
+.tabmix_scrollbuttons_box > .scrollbutton-down {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-scroll-button") !important;
+}
+
+.tabbrowser-tabs:not([overflow]) .tabmix_scrollbuttons_box,
+.tabbrowser-arrowscrollbox[flowing=multibar][_side=left] > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=left]:not([scrollbutton-up=left]) > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right][scrollbutton-up=left] > .scrollbutton-up {
+  visibility: collapse;
+}
+
+.tabmix_scrollbuttons_box[_side=right][flowing=scrollbutton] {
+  -moz-box-orient: horizontal;
+}
+
+.tabmix_scrollbuttons_box[_side=right][flowing=multibar] {
+  -moz-box-orient: vertical;
+}
+
+/*
+ * For close button on tab  - look also in browsroverlay3_36.css
+ */
+.tabbrowser-tab .tabs-closebutton {
+  display: none;
+}
+
+.tabbrowser-tab[selected="true"] .tabs-closebutton{
+  -moz-user-focus: normal;
+}
+
+.tabbrowser-tab .tabs-closebutton:focus {
+  outline: none !important;
+}
+
+/*  we don't use .tabbrowser-tab > .tab-close-button[button_side="right"] here
+    because in some theme the buttons are inside tab-middle
+*/
+.tabbrowser-tabs[closebuttons-side="left"] > .tabbrowser-tab .tab-close-button[button_side="right"],
+.tabbrowser-tabs[closebuttons-side="right"] > .tabbrowser-tab .tab-close-button[button_side="left"] {
+  display: none;
+}
+
+.tabbrowser-tab[protected] .tab-close-button {
+  display: none;
+}
+
+.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button[button_side="left"],
+.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button[button_side="right"] {
+   display: none !important;
+}
+
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="left"],
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {
+  display: -moz-box !important;
+}
+
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="right"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="right"],
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="right"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="right"] {
+  display: -moz-box !important;
+}
+
+.tabbrowser-tabs[favhideclose="true"][closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="left"],
+.tabbrowser-tabs[favhideclose="true"][closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {
+  display: -moz-box !important;
+}
+
+.tabbrowser-tabs[favhideclose="true"][closebuttons-side="right"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="right"],
+.tabbrowser-tabs[favhideclose="true"][closebuttons-side="right"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="right"] {
+  display: -moz-box !important;
+}
+
+/* some theme use display: none !important;  so we must use !important; */
+.tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tabs-closebutton,
+.tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tabs-closebutton {
+  display: -moz-box !important;
+}
+
+/*  for PermaTab */
+/*  show PermaTab icon only on right side only right  */
+.tabbrowser-tab[isPermaTab="true"] .tabs-closebutton,
+.tabbrowser-tab[isPermaTab="true"] .tab-close-button[button_side="left"] {
+  display: none !important;
+}
+
+.tabbrowser-tabs[closebuttons-side="right"] > .tabbrowser-tab .showhover-box {
+  -moz-box-pack: end;
+}
+
+/* for themes that use old tabmix_3.xml version */
+.tabbrowser-tabs[closebuttons-side="left"] > .tabbrowser-tab .showhover-flex {
+  display: none !important;
+}
+
+/* prevent text box height from changing when we show the button on tab */
+.tabbrowser-tab .showhover-flex {
+  height: 0px;
+}

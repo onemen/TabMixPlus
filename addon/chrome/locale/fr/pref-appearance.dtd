@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Personnaliser les styles">
+<!ENTITY currentTab.label "Onglet courant">
+<!ENTITY unreadTab.label "Onglets non lus">
+<!ENTITY otherTabs.label "Autres onglets">
+<!ENTITY italic.label "Italique">
+<!ENTITY bold.label "Gras">
+<!ENTITY underline.label "Souligné">
+<!ENTITY textcolor.label "Couleur du texte">
+<!ENTITY bgColor.label "Couleur d'arrière-plan">
+<!ENTITY statusbar.label "Cacher dans la barre d'état">
+<!ENTITY useThis.label "utiliser ce style pour">
+<!ENTITY opacity.label "l'opacité">

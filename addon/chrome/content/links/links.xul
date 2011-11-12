@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://tabmixplus/content/links/text_link.css" type="text/css"?>
+
+<overlay id="tabmixplus-tabprefs-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/contentLinks.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/userInterface.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/links/setup.js"/>
+
+   <script type="application/javascript">
+
+   <![CDATA[
+      window.addEventListener("load", function(aEvent) {
+        aEvent.currentTarget.removeEventListener("load", arguments.callee, false);
+        TMP_TBP_init(window.document.documentElement.getAttribute("windowtype"));
+      }, false);
+   ]]>
+
+   </script>
+   <!-- text_link.css fix the links in the EM/TM -->
+</overlay>

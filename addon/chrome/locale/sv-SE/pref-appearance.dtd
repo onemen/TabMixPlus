@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Anpassa stilar">
+<!ENTITY currentTab.label "Aktuell flik">
+<!ENTITY unreadTab.label "Olästa flikar">
+<!ENTITY otherTabs.label "Andra flikar">
+<!ENTITY italic.label "Kursiv">
+<!ENTITY bold.label "Fet">
+<!ENTITY underline.label "Understruken">
+<!ENTITY textcolor.label "Textfärg">
+<!ENTITY bgColor.label "Bakgrundsfärg">
+<!ENTITY statusbar.label "Göm i statusfält">
+<!ENTITY useThis.label "använder denna stil för">
+<!ENTITY opacity.label "genomskinlighet">

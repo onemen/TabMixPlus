@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<bindings id="tmp_textbindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tmp-text-link" extends="chrome://global/content/bindings/text.xml#text-link">
+    <implementation>
+      <constructor>
+        <![CDATA[
+           eval("this.open ="+this.open.toString().replace(
+             'if (uri)',
+             'if (!("TMP_openURL" in win)) win.TMP_openURL = Tabmix.getTopWin().TMP_openURL; if (uri)'
+           ).replace(
+              'win.open(uri.spec);',
+              'win.TMP_openURL(uri.spec, aEvent);'
+           ).replace(
+              'win.open(href);',
+              'win.TMP_openURL(href, aEvent);'
+           ));
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+</bindings>

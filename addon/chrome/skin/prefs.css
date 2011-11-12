@@ -1,0 +1,252 @@
+#TM_ButtonBox {
+	list-style-image: url(tmpoptions.png) !important;
+}
+#buttontabMixGeneralPrefs {
+   -moz-image-region: rect(0px, 24px,  24px, 0px);
+}
+#buttontabMixEventsPrefs {
+   -moz-image-region: rect(0px, 48px,  24px, 24px)
+}
+#buttontabMixAppearancePrefs {
+   -moz-image-region: rect(0px, 72px,  24px, 48px)
+}
+#buttontabMixMousePrefs {
+   -moz-image-region: rect(0px, 96px,  24px, 72px)
+}
+#buttontabMixMenuPrefs {
+   -moz-image-region: rect(0px, 120px, 24px, 96px)
+}
+#buttontabMixSessionPrefs {
+   list-style-image: url(sessionmanager.png)
+}
+#buttontabMixSessionPrefs {
+   -moz-image-region: rect(0 24px 24px 0);
+}
+#buttontabMixSessionPrefs:hover {
+   -moz-image-region: rect(24px 24px 48px 0);
+}
+
+#buttonIncompatible {
+  list-style-image: url("chrome://global/skin/icons/Error.png");
+  -moz-image-region: auto; /* cut off inheritance */
+  width: 24px !important;
+  height: 24px !important;
+}
+
+#buttonIncompatible  image {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+#buttonIncompatible[collapsed="true"] {
+  visibility: collapse;
+}
+
+tabpanels#tabpanId {
+	-moz-appearance: none !important;
+	margin: 0px !important;
+	padding: 1px !important;
+	border: none !important;
+}
+
+tabpanels#tabpanId tabbox {
+	padding: 0px 1px !important;
+}
+
+#pref-tabmix {
+	padding-top: 0px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	margin: 0px !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox {
+	margin-bottom: 1px !important;
+	background: #EFEFEF !important;
+	border: none !important;
+	border-bottom: 1px solid ThreedShadow !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox button {
+    -moz-appearance: none !important;
+    max-width: 100% !important;
+    min-width: 0px !important;
+    height: auto !important;
+    margin: 1px !important;
+    border: none !important;
+    background-color: transparent !important;
+    background: none !important;
+    padding: 3px 3px 1px 3px !important;
+    color: #545454 !important;
+    font-weight: bold !important;
+    -moz-user-focus: none !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox button:hover {
+    background-color: #E0E8F6 !important;
+    border: none !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox button[checked="true"] {
+    background-color: #C1D2EE !important;
+    border: none !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox .button-box{
+    background: none !important;
+    padding: 3px 3px 1px 3px !important;
+}
+
+/*lets fix some themes, mainly charamel 1.2 */
+#pref-tabmix #TMBox #TM_ButtonBox button .button-endcap{
+background: none !important;
+padding-right: 0px !important;
+height: auto !important;
+-moz-box-pack: start !important;
+-moz-box-align: stretch !important;
+}
+
+#pref-tabmix #TMBox #TM_ButtonBox button .button-body{
+background: none !important;
+}
+
+.timelabel {
+  margin-left: 0px;
+}
+
+/* prevent cutemenu extension from adding icon to our option dialog*/
+#TMBox menuitem .menu-iconic-left,
+#TMBox menuitem .menu-accel-container {
+  visibility: collapse;
+}
+
+.subtabs .tab-text {
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Tabmix toolbar button icons*/
+#_btn_sessionmanager {
+  list-style-image: url(sessionmanager.png);
+}
+
+#_btn_undoclose {
+  list-style-image: url(undoclosetab.png);
+}
+
+#_btn_closedwindows {
+  list-style-image: url(undoclosewindow.png);
+}
+
+#_btn_tabslist {
+  list-style-image: url(tabslist.png);
+}
+
+.tabmixbuttons {
+  -moz-box-align: center;
+  padding: 3px;
+}
+
+.tabmixbuttons > image {
+  -moz-image-region: rect(0 24px 24px 0);
+}
+
+#helpButton .button-icon {
+ margin-right: 6px;
+}
+
+#helpButton[disabled=true] .button-icon{
+  opacity: 0.4;
+}
+
+.tabmix-button {
+  margin: 2px;
+}
+
+/* Chromifox theme force button height to 25px */
+#pref-tabmix[chromifox=true] .spinbuttons-button {
+  max-height: 11px !important;
+}
+
+/***** for default theme *****/
+
+/* fix small bug in firefox tabbox.css
+   tabs moves left or right when selection changed
+   we change the border from 2px to none so
+   we need also to change the padding
+*/
+#tabMixTabBox[chromedir="ltr"] tab[beforeselected="true"],
+#tabMixTabBox[chromedir="rtl"] tab[selected="true"] + tab {
+  padding-right: 2px ;
+}
+
+#tabMixTabBox[chromedir="ltr"] tab[selected="true"] + tab,
+#tabMixTabBox[chromedir="rtl"] tab[beforeselected="true"] {
+  padding-left: 2px ;
+}
+
+.subtabs[selected=true][first-tab=true] {
+  padding-right: 6px ;
+  padding-left: 4px ;
+}
+
+.subtabs[selected=true][last-tab=true] {
+  padding-right: 4px;
+}
+
+.groupbox-panels {
+  -moz-appearance: groupbox;
+  padding: 3px 3px 6px 3px;
+}
+
+.groupbox-tabbox {
+  margin: 3px 2px;
+}
+
+/* hide top tabbox tabs for link and session panel */
+.tabs-hidden > tab {
+  visibility: hidden;
+}
+
+tabpanels#tabpanId[Mac] .tabs-hidden > tab {
+  margin-top: 2px;
+}
+
+#extraIcons-locked .checkbox-icon {
+  list-style-image: url(locked.png);
+  -moz-image-region: rect(0 9px 9px 0);
+  padding: 1px 0px 1px 0px;
+  -moz-margin-end: 3px;
+}
+
+#extraIcons-protected .checkbox-icon {
+  list-style-image: url(protected.png);
+  -moz-image-region: rect(5px 16px 16px 7px);
+  padding-top: 1px;
+  -moz-margin-end: 3px;
+}
+
+#extraIcons-autoreload .checkbox-icon {
+  list-style-image: url(autoreload.png);
+  -moz-image-region: rect(0px 16px 9px 7px);
+  padding: 1px 0px 1px 0px;
+  -moz-margin-end: 3px;
+}
+
+.clicktab-popup {
+  -moz-binding: url("chrome://global/content/bindings/popup.xml#popup");
+  -moz-box-orient: vertical;
+}
+
+.clicktab-popup > * > .arrowscrollbox-scrollbox {
+  overflow: auto !important;
+}
+
+.clicktab-popup > * > .autorepeatbutton-up,
+.clicktab-popup > * > .autorepeatbutton-down {
+  display: none !important;
+}
+
+groupbox[TSTinstalled] label[TSTdisabled="true"] {
+  color: GrayText;
+}

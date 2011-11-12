@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % identityDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%identityDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+%globalDTD;
+<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
+%tabBrowserDTD;
+]>
+
+<bindings id="tabxbindings_30"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!-- tabbrowser-tabs bindings for Firefox 3.0+ -->
+  <!-- revised by CPU and ONEMEN to support more themes -->
+  <binding id="tabmix-tabbrowser-tabs"
+            extends="chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-base-tabbrowser-tabs">
+    <resources>
+      <stylesheet src="chrome://global/skin/scrollbox.css"/>
+    </resources>
+    <content>
+      <xul:stack flex="1" class="tabs-stack">
+        <xul:vbox class="tmp-tabs-bottom">
+          <xul:spacer flex="1"/>
+          <xul:hbox class="tabs-bottom" align="center"/>
+        </xul:vbox>
+        <xul:hbox class="tabs-container"
+                  xbl:inherits="overflow,flowing,scrollbutton-up,newtab_side">
+          <xul:box id="tabs-newTab" class="tabs-newTab" orient="horizontal">
+            <xul:vbox id="tabs-newbutton-box" class="tabs-newtab-topbox">
+              <xul:toolbarbutton class="tabs-newtab-button side-newtab-button" anonid="newtab-button" id="tabs-newbutton"
+                                 command="cmd_newNavigatorTab" chromedir="&locale.dir;"
+                                 tooltiptext="&clicktab.addtab;"
+                                 ondblclick="event.stopPropagation();"/>
+            </xul:vbox>
+          </xul:box>
+
+          <xul:spacer id="tabs-left-space"/>
+          <xul:hbox class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="left" type="tabmix"
+                    xbl:inherits="flowing,scrollbutton-up,Mac">
+            <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
+                               chromedir="&locale.dir;"
+                               anonid="scrollbutton-up"/>
+          </xul:hbox>
+          <xul:scrollbox class="tabs-frame tabbrowser-arrowscrollbox" type="tabmix-scrollbox"
+                         anonid="scroll-tabs-frame" orient="horizontal" flex="1">
+            <children includes="tab"/>
+            <xul:toolbarbutton class="tabs-newtab-button"
+                               command="cmd_newNavigatorTab" chromedir="&locale.dir;"
+                               tooltiptext="&clicktab.addtab;"/>
+          </xul:scrollbox>
+          <xul:box class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="right" type="tabmix"
+                   xbl:inherits="flowing,scrollbutton-up,Mac">
+            <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
+                               chromedir="&locale.dir;"
+                               anonid="scrollbutton-up-right"/>
+            <xul:toolbarbutton class="scrollbutton-down" orient="horizontal" scrollIndex="1"
+                               chromedir="&locale.dir;"
+                               anonid="scrollbutton-down"/>
+          </xul:box>
+          <xul:spacer id="tabs-right-space"/>
+
+          <xul:vbox id="alltabs-place-holder"/>
+          <xul:vbox id="tabs-newbutton-rightbox"/>
+          <xul:stack align="center" pack="end" class="tabs-alltabs-stack">
+            <xul:hbox flex="1" class="tabs-alltabs-box tmp-alltabs-3" anonid="alltabs-box"/>
+            <xul:hbox flex="1" class="tabs-alltabs-box-animate tmp-alltabs-3" anonid="alltabs-box-animate"/>
+            <xul:toolbarbutton class="tabs-alltabs-button tmp-alltabs-3" type="menu" anonid="alltabs-button"
+                               chromedir="&locale.dir;"
+                               tooltipstring="&listAllTabs.label;">
+              <xul:menupopup class="tabs-alltabs-popup"
+                             oncommand="event.stopPropagation();"
+                             onclick="event.stopPropagation();"
+                             anonid="alltabs-popup"
+                             position="after_end"/>
+            </xul:toolbarbutton>
+          </xul:stack>
+
+          <xul:toolbarbutton anonid="tabs-closebutton"
+                             class="close-button tabs-closebutton" chromedir="&locale.dir;" tooltiptext="&closeTab.label;"/>
+
+        </xul:hbox>
+      </xul:stack>
+    </content>
+
+    <implementation>
+      <field name="mTabstripClosebutton" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "tabs-closebutton");
+      </field>
+
+      <field name="mTabstrip" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "scroll-tabs-frame");
+      </field>
+
+      <field name="tabstrip" readonly="true">
+        this.mTabstrip;
+      </field>
+
+      <field name="tabstripInnerbox" readonly="true">
+        document.getAnonymousElementByAttribute(this.mTabstrip, "class", "box-inherit scrollbox-innerbox");
+      </field>
+
+      <field name="mTabsNewtabButton">
+        document.getAnonymousElementByAttribute(this, "class", "tabs-newtab-button");
+      </field>
+
+      <constructor>
+        <![CDATA[
+          window.removeEventListener("resize", this, false);
+
+          if (this.tabmix_inited_3)
+            return;
+
+          // exist from Firefox 4.0
+          this._closeWindowWithLastTab = Tabmix.getBoolPref("browser.tabs.closeWindowWithLastTab", false);
+
+          // remove alltabs-box for firefox 3.6
+          if (Tabmix.isVersion(36)) {
+            let alltabsBox = document.getAnonymousElementByAttribute(this, "anonid", "alltabs-box");
+            if (alltabsBox)
+              alltabsBox.parentNode.removeChild(alltabsBox);
+          }
+
+          /*
+           * Replace mTabstrip functions
+           */
+          this.mTabstrip.scrollBoxObject = this.mTabstrip.boxObject;
+
+          this.mTabstrip.__defineGetter__("scrollClientRect", function() {
+            return this.getBoundingClientRect();
+          });
+          // nsSessionStore.js uses scrollClientSize
+          this.mTabstrip.__defineGetter__("scrollClientSize", function() {
+            return this.clientWidth;
+          });
+
+          this.mTabstrip._scrollButtonDown = document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down");
+          this.mTabstrip._scrollButtonUpLeft = document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up");
+          this.mTabstrip._scrollButtonUpRight = document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up-right");
+          this.mTabstrip._scrollButtonUp = this.mTabstrip._scrollButtonUpLeft;
+
+          this.setAttribute("disableScrollTabsLeft", "true");
+          this.setAttribute("disableScrollTabsRight", "true");
+
+          this.tabmix_inited_3 = true;
+        ]]>
+      </constructor>
+
+      <!--
+      canScrollTabsLeft and canScrollTabsRight are in tabbrowser.xml for Firefox 3.5-3.6
+      and in tabbrowser_4.xml for Firefox, we drop the use of disableScrollTabsLeft and disableScrollTabsRight
+      from Firefox 4.0+
+      -->
+      <property name="canScrollTabsLeft">
+        <getter><![CDATA[
+          return !this.hasAttribute("disableScrollTabsLeft");
+        ]]></getter>
+        <setter><![CDATA[
+          if(val!=this.canScrollTabsLeft) {
+            if(val) {
+              this.removeAttribute("disableScrollTabsLeft");
+              this.mTabstrip.removeAttribute("disableScrollTabsLeft");
+            }
+            else {
+              this.setAttribute("disableScrollTabsLeft", "true");
+              this.mTabstrip.setAttribute("disableScrollTabsLeft", "true");
+            }
+            this.mTabstrip._scrollButtonUp.disabled = !val;
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="canScrollTabsRight">
+        <getter><![CDATA[
+          return !this.hasAttribute("disableScrollTabsRight");
+        ]]></getter>
+        <setter><![CDATA[
+          if(val!=this.canScrollTabsRight) {
+            if(val) {
+              this.removeAttribute("disableScrollTabsRight");
+              this.mTabstrip.removeAttribute("disableScrollTabsRight");
+            }
+            else {
+              this.setAttribute("disableScrollTabsRight", "true");
+              this.mTabstrip.setAttribute("disableScrollTabsRight", "true");
+            }
+            this.mTabstrip._scrollButtonDown.disabled = !val;
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="disAllowNewtabbutton">
+        <getter><![CDATA[
+          return this.hasAttribute("disAllowNewtabbutton");
+        ]]></getter>
+        <setter><![CDATA[
+          if (val != this.disAllowNewtabbutton)
+            Tabmix.setItem(this, "disAllowNewtabbutton", val || null);
+          return val;
+        ]]></setter>
+      </property>
+
+      <field name="_real_numPinnedTabs" readonly="true">0</field>
+
+      <!-- from Firefox 4.0+ this property return collapsedTabs without pinned tabs
+             for Firefox 3.0-3.6 this is the same as collapsedTabs
+      -->
+      <property name="realCollapsedTabs"
+                readonly="true"
+                onget="return this._collapsedTabs;"/>
+
+    </implementation>
+  </binding>
+
+</bindings>

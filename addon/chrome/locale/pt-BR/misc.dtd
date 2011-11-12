@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Carregar no plano de fundo">
+<!ENTITY searchTabFocus.accesskey "P">
+<!ENTITY title.label "Título">
+<!ENTITY rename_all.label "Renomear todas as páginas como o mesmo endereço">
+<!ENTITY rename_permanently.label "Renomear essa aba permanentemente para todos os endereços">
+<!ENTITY doctitle.label "Usar título do documento">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Ajuda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Selecione um tempo da lista ou especifique um outro valor">
+<!ENTITY specifyreload.label "Especificar tempo de atualização">
+<!ENTITY sanitizer.entry "Histórico do Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Tem certeza que deseja apagar TODAS as sessões salvas incluindo os &quot;backups&quot;?">

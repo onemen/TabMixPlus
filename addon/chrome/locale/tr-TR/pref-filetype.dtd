@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Dosya Tipi Düzenleyicisi">
+<!ENTITY filetype.add "Ekle">
+<!ENTITY filetype.edit "Değiştir">
+<!ENTITY filetype.delete "Sil">
+<!ENTITY filetype.new "Yeni dosya tipi:">

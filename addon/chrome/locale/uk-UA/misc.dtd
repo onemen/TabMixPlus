@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Завантажувати в фоні">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY title.label "Заголовок">
+<!ENTITY rename_all.label "Перейменувати всі сторінки з такими ж адресами">
+<!ENTITY rename_permanently.label "Перейменовувати цю вкладку постійно для всіх адрес">
+<!ENTITY doctitle.label "Використовувати заголовок документа">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Довідка">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Choose time from the list or enter your own time">
+<!ENTITY specifyreload.label "Визначення часу оновлення">
+<!ENTITY sanitizer.entry "Журнал Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Ви впевнені, що хочете знищити ВСІ збережені сесії, включаючи резервні копії?">

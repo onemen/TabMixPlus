@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<overlay id="tabmixplus-unknownContentType-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+   <script type="application/javascript"
+          src="chrome://browser/content/utilityOverlay.js"/>
+   <script type="application/javascript">
+   <![CDATA[
+      let win = getTopWin();
+      if (win && win.gTabmixPrefs.getBoolPref("extensions.tabmix.enablefiletype")) {
+        window._tabBrowser = win.gBrowser;
+        let tabToRemove = _tabBrowser.getTabForLastPanel();
+        if (_tabBrowser.browsers.length > 1 && _tabBrowser.isBlankNotBusyTab(tabToRemove)) {
+          if (_tabBrowser.mCurrentTab == tabToRemove) {
+            let newIndex = _tabBrowser.selectIndexAfterRemove(tabToRemove);
+            if (newIndex > -1) {
+              let tab = _tabBrowser.mTabContainer.childNodes.item(newIndex);
+              if (tab)
+                _tabBrowser.selectedTab = tab;
+            }
+          }
+          window._tabToRemove = tabToRemove;
+          window.addEventListener("unload", function(aEvent) {
+            aEvent.currentTarget.removeEventListener("unload", arguments.callee, false);
+            window._tabBrowser.removeTab(window._tabToRemove);
+            delete window._tabToRemove;
+            delete window._tabBrowser;
+          }, false);
+        }
+      }
+   ]]>
+   </script>
+
+</overlay>

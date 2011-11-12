@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "In de achtergrond laden">
+<!ENTITY searchTabFocus.accesskey "a">
+<!ENTITY title.label "Titel">
+<!ENTITY rename_all.label "Alle pagina’s met hetzelfde adres hernoemen">
+<!ENTITY rename_permanently.label "Dit tabblad permanent hernoemen voor alle adressen">
+<!ENTITY doctitle.label "Documenttitel gebruiken">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "Veelgestelde vragen">
+<!ENTITY help.label "Help">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Selecteer een tijd uit de lijst of voer zelf een tijd in">
+<!ENTITY specifyreload.label "Specificeer het tijdsinterval voor herladen">
+<!ENTITY sanitizer.entry "Tab Mix Plus geschiedenis">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "ALLE opgeslagen sessiegegevens inclusief back-ups werkelijk verwijderen?">

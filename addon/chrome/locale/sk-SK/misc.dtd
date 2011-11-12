@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Načítať na pozadí">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY title.label "Názov">
+<!ENTITY rename_all.label "Premenovať všetky stránky s rovnakou adresou">
+<!ENTITY rename_permanently.label "Premenovať túto kartu permanentne pre všetky adresy">
+<!ENTITY doctitle.label "Použiť názov dokumentu">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Pomocník">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Vybrať čas zo zoznamu alebo použiť vlastný">
+<!ENTITY specifyreload.label "Určiť čas znovunačítania">
+<!ENTITY sanitizer.entry "História Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Ste si istý, že chcete vymazať VŠETKY vaše uložené údaje relácií vrátane záloh?">

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  *
+ * The Original Code is downTHEMall
+ *
+ * The Initial Developer of the Original Code is Nils Maier
+ *
+ * -->
+<!DOCTYPE overlay [
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/misc.dtd" >
+%tabmixDTD;
+]>
+
+ <overlay id="tabmix-sanitize-ui" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/session/session.js"/>
+   <script type="application/javascript">
+      var tabmixSanitize = {
+            label: "&sanitizer.entry;",
+            accesskey: "&sanitizer.entry.accesskey;",
+            confirm: "&sanitizer.entry.confirm;"
+      }
+      window.addEventListener("load", function(aEvent) {
+        aEvent.currentTarget.removeEventListener("load", arguments.callee, true);
+        TMP_Sanitizer.addSanitizeItem();
+        TMP_Sanitizer.addMenuItem();
+      }, true);
+   </script>
+
+ </overlay>

@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Personalizar estilos">
+<!ENTITY currentTab.label "Aba atual">
+<!ENTITY unreadTab.label "Abas não lidas">
+<!ENTITY otherTabs.label "Outras abas">
+<!ENTITY italic.label "Itálico">
+<!ENTITY bold.label "Negrito">
+<!ENTITY underline.label "Sublinhado">
+<!ENTITY textcolor.label "Cor do texto">
+<!ENTITY bgColor.label "Cor do fundo">
+<!ENTITY statusbar.label "Ocultar na barra de estado">
+<!ENTITY useThis.label "use esse estilo para">
+<!ENTITY opacity.label "opacidade">

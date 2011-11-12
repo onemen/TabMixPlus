@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Aussehen anpassen">
+<!ENTITY currentTab.label "Aktiver Tab">
+<!ENTITY unreadTab.label "Ungelesene Tabs">
+<!ENTITY otherTabs.label "Andere Tabs">
+<!ENTITY italic.label "Kursiv">
+<!ENTITY bold.label "Fett">
+<!ENTITY underline.label "Unterstrichen">
+<!ENTITY textcolor.label "Textfarbe">
+<!ENTITY bgColor.label "Hintergrundfarbe">
+<!ENTITY statusbar.label "Keine Fortschrittsanzeige in der Statusleiste">
+<!ENTITY useThis.label "Diesen Stil verwenden für">
+<!ENTITY opacity.label "Deckkraft">

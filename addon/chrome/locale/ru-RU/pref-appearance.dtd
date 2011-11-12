@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Настройка стилей">
+<!ENTITY currentTab.label "Текущая вкладка">
+<!ENTITY unreadTab.label "Непрочитанные вкладки">
+<!ENTITY otherTabs.label "Другие вкладки">
+<!ENTITY italic.label "Курсив">
+<!ENTITY bold.label "Полужирный">
+<!ENTITY underline.label "Подчёркнутый">
+<!ENTITY textcolor.label "Цвет текста">
+<!ENTITY bgColor.label "Цвет фона">
+<!ENTITY statusbar.label "Не отображать в строке состояния индикатор открытия вкладок">
+<!ENTITY useThis.label "использовать стиль для">
+<!ENTITY opacity.label "непрозрачность">

@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % identityDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%identityDTD;
+<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+%globalDTD;
+<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
+%tabBrowserDTD;
+]>
+
+<bindings id="tabmixbindings_40"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
+        extends="chrome://tabmixplus/content/tab/tabmix_3.xml#browser-tab">
+    <content context="tabContextMenu" closetabtext="&closeTab.label;">
+      <xul:hbox class="tab-image-left tab-startcap tab-left tab-left-border" xbl:inherits="selected,hover"/>
+      <xul:hbox class="tab-drag-indicator-left"/>
+      <xul:stack class="tab-stack" flex="1">
+        <xul:vbox class="tab-progress-container">
+          <xul:progressmeter class="tab-progress" mode="normal"
+                             xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
+        </xul:vbox>
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+                  class="tab-background">
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+                    class="tab-background-start"/>
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+                    class="tab-background-middle"/>
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+                    class="tab-background-end"/>
+        </xul:hbox>
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                  class="tab-content" align="center">
+          <xul:toolbarbutton anonid="tmp-close-button"
+                         xbl:inherits="fadein,pinned,selected"
+                         tabindex="-1" button_side="left"
+                         clickthrough="never"
+                         class="tab-close-button always-left"/>
+            <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
+              <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
+                         class="tab-throbber"
+                         role="presentation"/>
+              <xul:image xbl:inherits="validate,src=image,fadein,pinned,selected"
+                         class="tab-icon-image"
+                         role="presentation"/>
+              <xul:image class="tab-protect-icon" />
+              <xul:image class="tab-lock-icon"/>
+              <xul:image class="tab-reload-icon"/>
+            </xul:stack>
+            <xul:stack class="tab-text-stack" flex="1" xbl:inherits="fadein,pinned,selected">
+              <xul:label flex="1"
+                         xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
+                         class="tab-text tab-label"
+                         role="presentation"/>
+              <xul:hbox class="showhover-box">
+                <xul:toolbarbutton anonid="tmp-close-button"
+                                   tabindex="-1" clickthrough="never" class="showhover tabs-closebutton"/>
+              </xul:hbox>
+            </xul:stack>
+          <xul:toolbarbutton anonid="tmp-close-button"
+                           xbl:inherits="fadein,pinned,selected"
+                           tabindex="-1" button_side="right"
+                           clickthrough="never"
+                           class="tab-close-button always-right"/>
+        </xul:hbox>
+      </xul:stack>
+      <xul:hbox class="tab-drag-indicator-right"/>
+      <xul:hbox class="tab-image-right tab-endcap tab-right tab-right-border" xbl:inherits="selected,hover"/>
+    </content>
+  </binding>
+
+  <!-- tabbrowser-tabs bindings for Firefox 3.7+ -->
+  <binding id="tabmix-tabbrowser-tabs"
+            extends="chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-base-tabbrowser-tabs">
+    <implementation>
+      <field name="mTabstrip" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "arrowscrollbox");
+      </field>
+
+      <field name="tabstrip" readonly="true">
+        this.mTabstrip;
+      </field>
+
+      <field name="tabstripInnerbox" readonly="true">
+        document.getAnonymousElementByAttribute(this.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+      </field>
+
+      <field name="mTabsNewtabButton">
+        document.getAnonymousElementByAttribute(this, "class", "tabs-newtab-button");
+      </field>
+
+      <constructor>
+        <![CDATA[
+          this.parentNode.addEventListener("dragover", this, true);
+
+          Tabmix.newCode(null, this._positionPinnedTabs)._replace(
+            'var doPosition =',
+            'var doPosition = TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&'
+          ).toCode(false, this, "_positionPinnedTabs");
+
+          if (this.tabmix_inited_40) {
+            this.tabmixTabbarPositionChanged();
+            return;
+          }
+          Services.obs.addObserver(TMP_eventListener.observe, "browser-delayed-startup-finished", false);
+          this.tabmix_inited_40 = true;
+        ]]>
+      </constructor>
+
+      <destructor>
+        <![CDATA[
+          if (this.parentNode)
+            this.parentNode.removeEventListener("dragover", this, true);
+          this.tabbrowser.mTabDropIndicatorBar = null;
+        ]]>
+      </destructor>
+
+      <property name="lastTabVisible" readonly="true">
+        <getter>
+        <![CDATA[
+          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
+            return this.isTabVisible(this.tabbrowser.visibleTabsFirstChild._tPos);
+
+          return this.isTabVisible(this.tabbrowser.visibleTabsLastChild._tPos);
+        ]]>
+        </getter>
+      </property>
+
+      <!--
+      canScrollTabsLeft and canScrollTabsRight are in tabbrowser.xml for Firefox 3.5-3.6
+      and in tabbrowser_4.xml for Firefox, we drop the use of disableScrollTabsLeft and disableScrollTabsRight
+      from Firefox 4.0+
+      -->
+      <property name="canScrollTabsLeft">
+        <getter><![CDATA[
+          return !this.mTabstrip._scrollButtonUp.disabled
+        ]]></getter>
+        <setter><![CDATA[
+          if(val!=this.canScrollTabsLeft)
+            this.mTabstrip._scrollButtonUp.disabled = !val;
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="canScrollTabsRight">
+        <getter><![CDATA[
+          return !this.mTabstrip._scrollButtonDown.disabled
+        ]]></getter>
+        <setter><![CDATA[
+          if(val!=this.canScrollTabsRight)
+            this.mTabstrip._scrollButtonDown.disabled = !val;
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="disAllowNewtabbutton">
+        <getter><![CDATA[
+          return document.getElementById("TabsToolbar").hasAttribute("disAllowNewtabbutton");
+        ]]></getter>
+        <setter><![CDATA[
+          if (val != this.disAllowNewtabbutton)
+            Tabmix.setItem("TabsToolbar", "disAllowNewtabbutton", val || null);
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="tabmixTabbarPositionChanged">
+        <body><![CDATA[
+          // tabbrowser-tabs constructor reset first tab label to New Tab
+          this.tabbrowser.setTabTitle(this.firstChild);
+          let position = TabmixSvc.TMPprefs.getIntPref("newTabButton.position");
+          if (position != 0)
+            gTMPprefObserver.changeNewTabButtonSide(position);
+
+          this.tabbrowser.mTabDropIndicatorBar = this._tabDropIndicator.parentNode;
+
+          // need to add TabScope eventListener
+          // need to find a way to do it for all extensions that add event to the tabstrip
+          if ("TabScope" in window ) {
+            TabScope.uninit();
+            TabScope.init();
+          }
+
+          this.mTabstrip._scrollButtonUp = TabmixSvc.TMPprefs.getIntPref("tabBarMode") == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ?
+             this.mTabstrip._scrollButtonUpLeft : this.mTabstrip._scrollButtonUpRight;
+
+          // initEvent
+          var event = document.createEvent("Events");
+          event.initEvent("TabmixTabbarPositionChanged", true, true);
+          this.dispatchEvent(event);
+        ]]></body>
+      </method>
+
+      <method name="handleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          switch (aEvent.type) {
+            case "dragover":
+              if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+                TMP_tabDNDObserver.onDragOver(aEvent);
+            break;
+            case "resize":
+              if (aEvent.target != window) {
+                // when we get in and out of tabsintitlebar mode call updateScrollStatus even if the event target is not the window              
+                if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)
+                  TabmixTabbar.updateScrollStatus();
+                break;
+              }
+              TabmixTabbar.widthChange(aEvent);
+              gBrowser.updateWindowResizers();
+            break;
+            case "mouseout":
+              // If the "related target" (the node to which the pointer went) is not
+              // a child of the current document, the mouse just left the window.
+              let relatedTarget = aEvent.relatedTarget;
+              if (relatedTarget && relatedTarget.ownerDocument == document)
+                break;
+            case "mousemove":
+              if ("_unlockTabSizing" in this && document.getElementById("tabContextMenu").state != "open")
+                this._unlockTabSizing();
+              break;
+          }
+        ]]></body>
+      </method>
+
+      <property name="_real_numPinnedTabs" readonly="true">
+        <getter><![CDATA[
+///XXX temp workaround untile bug Bug 633158 - _numPinnedTabs should exclude _removingTabs will be fix
+          var count = 0;
+          for (let i = 0; i < this.childNodes.length; i++) {
+            let tab = this.childNodes[i];
+            if (!tab.pinned)
+              break;
+
+            if (this.tabbrowser._removingTabs.indexOf(tab) == -1)
+               count++;
+          }
+          return count;
+        ]]></getter>
+      </property>
+
+      <!-- collapsedTabs without pinned tabs -->
+      <property name="realCollapsedTabs"
+                readonly="true"
+                onget="return this._collapsedTabs - this._real_numPinnedTabs;"/>
+
+      <method name="tabmix_handleNewTab">
+        <parameter name="aTab"/>
+        <parameter name="dontUpdateTabBar"/>
+        <body><![CDATA[
+          if (!aTab.hasAttribute("tabmix_fadein")) {
+            TMP_eventListener.onTabOpen_updateTabBar(aTab);
+            return;
+          }
+          aTab.removeAttribute("tabmix_fadein");
+          if (!dontUpdateTabBar)
+            TMP_eventListener.onTabOpen_updateTabBar(aTab);
+          if (aTab == this.selectedItem)
+            this.ensureTabIsVisible(aTab._tPos);
+        ]]></body>
+      </method>
+
+    </implementation>
+
+    <handlers>
+      <handler event="MozMouseHittest" button="0"  phase="capturing"><![CDATA[
+        if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.detail > 0)
+          event.stopPropagation();
+      ]]></handler>
+
+      <handler event="dblclick" phase="capturing"><![CDATA[
+        TabmixTabClickOptions.onTabBarDblClick(event);
+        event.stopPropagation();
+      ]]></handler>
+
+      <handler event="click" phase="capturing"><![CDATA[
+        TabmixTabClickOptions.onTabClick(event);
+      ]]></handler>
+
+      <handler event="dragstart" phase="capturing"><![CDATA[
+        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+          TMP_tabDNDObserver.onDragStart(event);
+      ]]></handler>
+
+      <handler event="drop" phase="capturing"><![CDATA[
+        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+          TMP_tabDNDObserver.onDrop(event);
+      ]]></handler>
+
+      <handler event="dragend" phase="capturing"><![CDATA[
+        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+          TMP_tabDNDObserver.onDragEnd(event);
+      ]]></handler>
+
+      <handler event="dragexit" phase="capturing"><![CDATA[
+        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+          TMP_tabDNDObserver.onDragExit(event);
+      ]]></handler>
+    </handlers>
+
+  </binding>
+
+  <binding id="tabmix-arrowscrollbox-clicktoscroll" extends="chrome://global/content/bindings/scrollbox.xml#scrollbox-base">
+    <content>
+      <xul:hbox class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="left" type="tabmix"
+                xbl:inherits="flowing,scrollbutton-up">
+        <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
+                           anonid="scrollbutton-up"/>
+      </xul:hbox>
+      <xul:scrollbox class="tabs-frame arrowscrollbox-scrollbox" type="tabmix-scrollbox"
+                     anonid="scrollbox"
+                     flex="1"
+                     xbl:inherits="orient,align,pack,dir">
+        <children/>
+      </xul:scrollbox>
+      <xul:box class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="right" type="tabmix"
+               xbl:inherits="flowing,scrollbutton-up">
+        <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
+                           anonid="scrollbutton-up-right"/>
+        <xul:toolbarbutton class="scrollbutton-down" orient="horizontal" scrollIndex="1"
+                           anonid="scrollbutton-down"/>
+      </xul:box>
+    </content>
+    <implementation>
+      <field name="_scrollbox">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbox");
+      </field>
+
+      <field name="_scrollButtonDown">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down");
+      </field>
+
+      <field name="_scrollButtonUpLeft">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up");
+      </field>
+
+      <field name="_scrollButtonUpRight">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up-right");
+      </field>
+
+      <field name="_scrollButtonUp">
+        this._scrollButtonUpLeft;
+      </field>
+
+      <property name="scrollboxPaddingStart" readonly="true">
+        <getter><![CDATA[
+          var paddingStartName = Tabmix.ltr ? "padding-left" : "padding-right";
+          var scrollboxStyle = window.getComputedStyle(this._scrollbox, null);
+          return parseFloat(scrollboxStyle.getPropertyValue(paddingStartName));
+        ]]></getter>
+      </property>
+
+      <field name="scrollBoxObject">
+        this._scrollbox.boxObject;
+      </field>
+
+      <property name="scrollClientRect" readonly="true">
+        <getter><![CDATA[
+          return this._scrollbox.getBoundingClientRect();
+        ]]></getter>
+      </property>
+
+      <property name="scrollClientSize" readonly="true">
+        <getter><![CDATA[
+          return this.orient == "vertical" ?
+                 this._scrollbox.clientHeight :
+                 this._scrollbox.clientWidth;
+        ]]></getter>
+      </property>
+
+    </implementation>
+  </binding>
+
+</bindings>

@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Bewerken van bestandstypes">
+<!ENTITY filetype.add "Toevoegen">
+<!ENTITY filetype.edit "Wijzigen">
+<!ENTITY filetype.delete "Verwijderen">
+<!ENTITY filetype.new "Nieuw bestandstype:">

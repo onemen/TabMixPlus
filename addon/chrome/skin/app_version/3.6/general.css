@@ -1,0 +1,14 @@
+/** 
+    Firefox version 3.6.*
+
+    ALL platform
+
+**/
+
+/******************************************
+ * for light weight themes                *
+ * -moz-lwtheme only from Firefox 36 !!!  *
+ *****************************************/
+#main-window[tabmix_lwt]:-moz-lwtheme {
+  background-repeat: repeat-y !important;
+}

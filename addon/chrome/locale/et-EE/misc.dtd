@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Laadi taustal">
+<!ENTITY searchTabFocus.accesskey "T">
+<!ENTITY title.label "Pealkiri">
+<!ENTITY rename_all.label "Muuda kõikide sama aadressiga lehtede nimi">
+<!ENTITY rename_permanently.label "Muuda selle kaardi nimi püsivalt kõikide aadressite puhul">
+<!ENTITY doctitle.label "Kasuta dokumendi pealkirja">
+<!ENTITY forum.label "Foorum">
+<!ENTITY faq.label "KKK">
+<!ENTITY help.label "Abi">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Vali ajavahemik loendist või sisesta oma ajavahemik">
+<!ENTITY specifyreload.label "Määra uuestilaadimiste ajavahe">
+<!ENTITY sanitizer.entry "Tab Mix Plus'i salvestatud seansid">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Kas sa oled kindel, et tahad kustutada KÕIK salvestatud seansid ja varufailid?">

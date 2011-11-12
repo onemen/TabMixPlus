@@ -1,0 +1,111 @@
+/**
+ *
+ * Firefox 4.0 +
+ *
+ **/
+ 
+@import url("chrome://tabmixplus/content/overlay/browsroverlay_base.css");
+
+.tabbrowser-tabs {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tabs") !important;
+}
+
+.tabbrowser-tabs > .tabbrowser-arrowscrollbox {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-arrowscrollbox-clicktoscroll") !important;
+}
+
+.tabbrowser-tab {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab") !important;
+}
+
+/* showhover button */
+.showhover-box > .showhover {
+ -moz-binding: url("chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button");
+}
+
+/*** hide tabs-newtab-button that we don't use
+ *
+ * we set newtab_side only for left ot right side afterlast position rules are set by Firefox
+ *
+ ***/
+#tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  visibility: collapse;
+  height: 0px;
+  width: 0px;
+  border: none;
+  margin: 0px;
+}
+
+#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button{
+  visibility: visible;
+}
+
+#TabsToolbar[onStartNewTabButton] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
+  visibility: visible !important;
+}
+
+#TabsToolbar[disAllowNewtabbutton]:not([overflow="true"]):not([newtab_side]) > #new-tab-button,
+#TabsToolbar[newtab_side] > #new-tab-button {
+  visibility: visible;
+}
+
+#TabsToolbar[newTabButton=false] > #new-tab-button {
+  visibility: collapse;
+}
+
+/***  Tab opening animation  ***/
+.tab-progress-container > .tab-progress:not([fadein]):not([pinned]),
+.tab-icon:not([fadein]):not([pinned]) > .tab-protect-icon,
+.tab-icon:not([fadein]):not([pinned]) > .tab-lock-icon,
+.tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon,
+.tab-text-stack:not([fadein]):not([pinned]) > .tabs-closebutton {
+  opacity: 0 !important;
+}
+
+.tab-progress-container > .tab-progress,
+.tab-icon > .tab-protect-icon,
+.tab-icon > .tab-lock-icon,
+.tab-icon > .tab-reload-icon,
+.tab-text-stack > .tabs-closebutton {
+  -moz-transition: opacity 250ms;
+}
+
+/*** backword compatibility with theme that still use old tabmix tab binding ***/
+.tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
+  opacity: 0 !important;
+}
+.tab-text-stack > .tab-progress {
+  -moz-transition: opacity 250ms;
+}
+
+/***  Pinned Tab  ***/
+.tab-text-stack[pinned] {
+  width: 0;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/*  hide AppTabs that restored by Tabmix Session manager after crash */
+.tabbrowser-tab[pinned][tabmix_collapsed] {
+  visibility: collapse !important;
+}
+
+/***  For progressmeter on tab Firefox 4.0+  ***/
+.tab-progress {
+  -moz-transition: opacity 250ms;
+  margin: 0;
+  min-width: 0;
+}
+
+.tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  display: none;
+}
+
+.tabbrowser-tabs[progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
+  display: -moz-box;
+}

@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Учитај у позадини">
+<!ENTITY searchTabFocus.accesskey "п">
+<!ENTITY title.label "Наслов">
+<!ENTITY rename_all.label "Преименуј све странице са истом адресом">
+<!ENTITY rename_permanently.label "Преименуј ову картицу трајно за све адресе">
+<!ENTITY doctitle.label "Користи наслов документа">
+<!ENTITY forum.label "Заједница">
+<!ENTITY faq.label "ЧПП">
+<!ENTITY help.label "Помоћ">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Изаберите време са списка или упишите своје време ---">
+<!ENTITY specifyreload.label "Унесите време поновног учитавања">
+<!ENTITY sanitizer.entry "Историјат Tab Mix Plus-а">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Да ли сте сигурни да желите да избришете СВЕ сачуване сесије укључујући резервне копије?">

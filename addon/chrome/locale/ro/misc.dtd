@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Încarcă în fundal">
+<!ENTITY searchTabFocus.accesskey "f">
+<!ENTITY title.label "Titlu">
+<!ENTITY rename_all.label "Redenumește toate paginile cu aceeași adresă">
+<!ENTITY rename_permanently.label "Redenumește permanent această filă pentru toate adresele">
+<!ENTITY doctitle.label "Utilizează titlul implicit">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "Înterbări și răspunsuri">
+<!ENTITY help.label "Ajutor">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Alegeți intervalul din listă sau furnizați propria valoare">
+<!ENTITY specifyreload.label "Interval reîncărcare">
+<!ENTITY sanitizer.entry "Sesiuni salvate de Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Confirmați ștergerea TUTUROR sesiunilor salvate, inclusiv a arhivelor?">

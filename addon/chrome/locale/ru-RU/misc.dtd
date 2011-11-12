@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Загружать в фоне">
+<!ENTITY searchTabFocus.accesskey "ф">
+<!ENTITY title.label "Заголовок">
+<!ENTITY rename_all.label "Переименовать все страницы с такими же адресами">
+<!ENTITY rename_permanently.label "Переименовывать эту вкладку постоянно для всех адресов">
+<!ENTITY doctitle.label "Использовать заголовок документа">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Справка">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Выберите время из списка или введите собственное">
+<!ENTITY specifyreload.label "Определение времени обновления">
+<!ENTITY sanitizer.entry "Журнал Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "у">
+<!ENTITY sanitizer.entry.confirm "Вы уверены, что хотите удалить ВСЕ сохранённые сессии, включая резервные копии?">

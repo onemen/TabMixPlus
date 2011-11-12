@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
+<overlay id="tabmix-prefOverlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript">
+    var pinTab = document.getElementById("pinTab");
+    pinTab.setAttribute("label", "&pinTab.label;");
+    pinTab.removeAttribute("hidden");
+    document.getElementById("tabclickpinTab").setAttribute("label", "&pinTab.label;");
+
+    var moveToGroup = document.getElementById("moveToGroup");
+    moveToGroup.setAttribute("label", "&moveToGroup.label;");
+    moveToGroup.removeAttribute("hidden");
+
+    document.getElementById("disableTabsAnimate").removeAttribute("hidden");
+    document.getElementById("lockAppTabs").removeAttribute("hidden");
+  </script>
+
+</overlay>

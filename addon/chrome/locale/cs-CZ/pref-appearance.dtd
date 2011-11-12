@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Upravit styly">
+<!ENTITY currentTab.label "Současný panel">
+<!ENTITY unreadTab.label "Nepřečtené panely">
+<!ENTITY otherTabs.label "Ostatní panely">
+<!ENTITY italic.label "Kurzíva">
+<!ENTITY bold.label "Tučně">
+<!ENTITY underline.label "Podtrhnout">
+<!ENTITY textcolor.label "Barva textu">
+<!ENTITY bgColor.label "Barva pozadí">
+<!ENTITY statusbar.label "Skrýt ve stavovém řádku">
+<!ENTITY useThis.label "použít tento styl pro">
+<!ENTITY opacity.label "neprůhlednost">

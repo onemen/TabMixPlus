@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Φόρτωση στο παρασκήνιο">
+<!ENTITY searchTabFocus.accesskey "ω">
+<!ENTITY title.label "Τίτλος">
+<!ENTITY rename_all.label "Μετονομασία όλων των σελίδων με την ίδια διεύθυνση">
+<!ENTITY rename_permanently.label "Μόνιμη μετονομασία καρτέλας για όλες τις διευθύνσεις">
+<!ENTITY doctitle.label "Χρήση του τίτλου του εγγράφου">
+<!ENTITY forum.label "Φόρουμ">
+<!ENTITY faq.label "Συχνές Ερωτήσεις">
+<!ENTITY help.label "Βοήθεια">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Επιλέξτε χρόνο από τη λίστα ή εισάγετε την προσωπική σας επιλογή.">
+<!ENTITY specifyreload.label "Καθορίστε τον χρόνο ανανέωσης">
+<!ENTITY sanitizer.entry "Ιστορικό Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "Τ">
+<!ENTITY sanitizer.entry.confirm "Θέλετε σίγουρα να διαγραφούν όλα τα δεδομένα συνεδριών, συμπεριλαμβανομένων και των αντιγράφων ασφαλείας;">

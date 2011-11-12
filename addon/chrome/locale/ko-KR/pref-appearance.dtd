@@ -1,0 +1,12 @@
+<!ENTITY styles.label "스타일 설정">
+<!ENTITY currentTab.label "현재 탭">
+<!ENTITY unreadTab.label "읽지 않은 탭">
+<!ENTITY otherTabs.label "다른 탭">
+<!ENTITY italic.label "기울임꼴">
+<!ENTITY bold.label "굵게">
+<!ENTITY underline.label "밑줄">
+<!ENTITY textcolor.label "글자 색깔">
+<!ENTITY bgColor.label "배경 색깔">
+<!ENTITY statusbar.label "상태 표시줄에서 숨기기">
+<!ENTITY useThis.label "이 스타일 쓰기">
+<!ENTITY opacity.label "불투명도">

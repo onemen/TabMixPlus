@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Carica in secondo piano">
+<!ENTITY searchTabFocus.accesskey "s">
+<!ENTITY title.label "Titolo">
+<!ENTITY rename_all.label "Rinomina tutte le pagine con lo stesso indirizzo">
+<!ENTITY rename_permanently.label "Rinomina la scheda sempre per tutti gli indirizzi">
+<!ENTITY doctitle.label "Usa il titolo del documento">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Contenuti guida">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Tempo di ricarica da specificare">
+<!ENTITY specifyreload.label "Personalizzazione del tempo di ricarica">
+<!ENTITY sanitizer.entry "Cronologia di Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Eliminare tutti i dati di sessioni salvate inclusi i backup?">

@@ -1,0 +1,40 @@
+/** 
+    Firefox version 3.5.* - 3.6.*
+
+    Linux platform
+
+**/
+
+/* :::: For .tabs-closebutton .showhover :::: */
+.tabbrowser-tabs[classic=v3Linux] .tabbrowser-tab .tabs-closebutton {
+  margin-top: -4px !important; /* did not work without !important */
+  margin-bottom: -4px !important;
+}
+
+
+.tabbrowser-tabs[classic=v3Linux]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[classic=v3Linux][multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: top;
+  height: 25px;
+  max-height: 25px;
+  padding: 3px 0px;
+}
+
+/* Multi-row tabbar for firefox 3.5+ with Linux */
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar]:not([multibar])[inline=true] .tabbrowser-tab[selected="true"],
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar][multibar] .tabbrowser-tab[selected="true"] {
+  height: 26px;
+}
+
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar]:not([multibar])[inline=true] .tabbrowser-tab:not([selected="true"]),
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar][multibar] .tabbrowser-tab:not([selected="true"]) {
+  height: 23px;
+  padding-bottom: 1px;
+  margin-bottom: 0px;
+}
+
+/*  Tab scrollbox arrow buttons - general */
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar] .tabbrowser-arrowscrollbox > .scrollbutton-up,
+.tabbrowser-tabs[classic=v3Linux][flowing=multibar] .tabbrowser-arrowscrollbox > .scrollbutton-down {
+  height: 24px;
+}

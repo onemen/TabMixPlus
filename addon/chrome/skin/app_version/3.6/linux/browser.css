@@ -1,0 +1,11 @@
+/** 
+    Firefox version 3.6.*
+
+    Linux platform
+
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/3.5/general.css");
+@import url("chrome://tabmixplus/skin/app_version/3.5/linux/browser.css");
+
+@import url("chrome://tabmixplus/skin/app_version/3.6/general.css");

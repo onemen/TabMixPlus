@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Prilagodi stilove">
+<!ENTITY currentTab.label "Trenutna kartica">
+<!ENTITY unreadTab.label "Nepročitane kartice">
+<!ENTITY otherTabs.label "Other tabs">
+<!ENTITY italic.label "Nakošeno">
+<!ENTITY bold.label "Podebljano">
+<!ENTITY underline.label "Podvučeno">
+<!ENTITY textcolor.label "Boja teksta">
+<!ENTITY bgColor.label "Boja pozadine">
+<!ENTITY statusbar.label "Sakrij u statusnu traku">
+<!ENTITY useThis.label "use this style for">
+<!ENTITY opacity.label "opacity">

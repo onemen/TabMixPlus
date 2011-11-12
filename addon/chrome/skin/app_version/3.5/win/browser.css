@@ -1,0 +1,208 @@
+/**
+    Firefox version 3.5.* - 3.6.*
+
+    Windows platform
+
+
+**/
+
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-newtab-topbox > .tabs-newtab-button,
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-alltabs-button {
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: ThreeDShadow transparent;
+}
+
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-newtab-topbox > .tabs-newtab-button:hover,
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-alltabs-button:hover {
+  border-bottom-width: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  -moz-border-bottom-colors: ThreeDShadow;
+}
+
+.tabbrowser-tabs[classic=v3][multibar] .tabs-newtab-topbox > .tabs-newtab-button,
+.tabbrowser-tabs[classic=v3][multibar] .tmp-alltabs-3 {
+  padding-top: 1px;
+  height: 23px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.tabbrowser-tabs[classic=v3]:not([multibar]) .tabs-newtab-button {
+  height: 22px;
+}
+
+/* fix border size when two button stick together */
+.tabbrowser-tabs[classic=v3] .tmp-alltabs-3,
+.tabbrowser-tabs[classic=v3] .tabs-container > .tabs-closebutton, /* ff 3.5-3.6 */
+.tabbrowser-tabs[classic=v3] > .tabs-closebutton {
+  margin-left: -1px;
+}
+
+/* Multi-row tabbar for firefox 3.5.x - 3.6.x with Win XP theme */
+.tabbrowser-tabs[flowing=multibar][inline=true][classic=v3] > .tabbrowser-tab,
+.tabbrowser-tabs[flowing=multibar][multibar][classic=v3] > .tabbrowser-tab {
+  height: 22px;
+  max-height: 22px;
+  margin: 1px 0px 1px;
+}
+
+.tabbrowser-tabs[flowing=multibar][inline=true][classic=v3] > .tabbrowser-tab:not([selected="true"]):hover,
+.tabbrowser-tabs[flowing=multibar][multibar][classic=v3] > .tabbrowser-tab:not([selected="true"]):hover {
+  height: 23px;
+  max-height: 23px;
+  margin: 0px 0px 1px;
+}
+
+.tabbrowser-tabs[flowing=multibar][inline=true][classic=v3] > .tabbrowser-tab[selected="true"],
+.tabbrowser-tabs[flowing=multibar][multibar][classic=v3] > .tabbrowser-tab[selected="true"] {
+  height: 24px;
+  max-height: 24px;
+  margin: 0px 0px 0px;
+}
+
+.tabbrowser-tabs[classic=v3][flowing=multibar][inline=true] .tabs-frame,
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-frame {
+  margin-top: 2px;
+  margin-bottom: 3px;
+}
+
+
+/*  Tab scrollbox arrow buttons - general */
+
+/*we need this from Firefox 3.5*/
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up,
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+  height: 24px;
+}
+
+.tabbrowser-tabs:not([disableScrollTabsRight])[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up {
+  margin-bottom: -1px;
+}
+
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3][newTabButton=true] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="ltr"] {
+  border-left-style: solid;
+  -moz-border-radius-topleft: 2px;
+}
+
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3][newTabButton=true] .tabbrowser-arrowscrollbox[_side=left] > .scrollbutton-up[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[_side=right] > .scrollbutton-up[chromedir="rtl"] {
+  border-right-style: solid;
+  -moz-border-radius-topright: 2px;
+}
+
+/*  Tab scrollbox arrow buttons - one row */
+.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([scrollbutton-up=left]) > .scrollbutton-up[chromedir="ltr"] {
+  border-right: none;
+}
+
+.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([scrollbutton-up=left]) > .scrollbutton-up[chromedir="rtl"] {
+  border-left: none;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down[chromedir="ltr"][disabled="true"] {
+  border-left: none;
+  margin-left: -1px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down[chromedir="rtl"][disabled="true"] {
+  border-right: none;
+  margin-right: -1px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up[chromedir="ltr"] {
+  border-right-style: none;
+  -moz-border-radius-topright: 0px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up[chromedir="rtl"] {
+  border-left-style: none;
+  -moz-border-radius-topleft: 0px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up {
+  padding-bottom: 1px;
+  margin-bottom: 0px;
+}
+
+.tabbrowser-tabs[classic=v3][disableScrollTabsRight=true]:not([disableScrollTabsLeft=true]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up {
+  border-bottom: 1px solid;
+  border-bottom-style: solid;
+  -moz-border-bottom-colors: ThreeDShadow;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+  margin-top: 0px;
+  padding-bottom: 1px;
+  margin-bottom: 3px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[disabled="true"] {
+  border-top: none;
+  margin-top: -1px;
+  padding-top: 2px;
+}
+
+.tabbrowser-tabs[classic=v3][multibar=scrollbar] .tabbrowser-arrowscrollbox > .scrollbutton-down[notonbottom] {
+  margin-bottom: 2px;
+  border-bottom: 1px solid;
+  -moz-border-bottom-colors: ThreeDShadow;
+}
+
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox > .scrollbutton-down[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3]:not([hideAllTabsButton=true]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3][newTabButton][newtab_side="right"] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3][newTabButton][newtab_side="afterlast"][overflow="true"] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"],
+.tabbrowser-tabs[classic=v3][hideAllTabsButton=true][closebutton=true] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="ltr"] {
+  border-right-style: solid;
+  -moz-border-radius-topright: 2px;
+}
+
+.tabbrowser-tabs[classic=v3][tabBarSpace] .tabbrowser-arrowscrollbox > .scrollbutton-down[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3]:not([hideAllTabsButton=true]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3][newTabButton][newtab_side="right"] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3][newTabButton][newtab_side="afterlast"][overflow="true"] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"],
+.tabbrowser-tabs[classic=v3][hideAllTabsButton=true][closebutton=true] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down[chromedir="rtl"] {
+  border-left-style: solid;
+  -moz-border-radius-topleft: 2px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabs-alltabs-button[chromedir="rtl"] {
+  border-left-style: none;
+  border-right-style: solid;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-topright: 2px;
+}
+
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] .tabs-container > .tabs-closebutton,
+.tabbrowser-tabs[classic=v3][flowing=multibar][multibar] > .tabs-closebutton {
+  border-bottom: 1px solid threedshadow;
+  margin-bottom: 0px;
+  padding-bottom: 3px;
+}
+
+/*
+   next 2 ruls are to make right border of the 2  scrollbutton align.
+   the up button don't have right border
+*/
+.tabbrowser-tabs[classic=v3][multibar=scrollbar] .tmp-alltabs-3,
+.tabbrowser-tabs[classic=v3][multibar=scrollbar]:not([newtab_side="left"]) > #new-tab-button, /* ff 3.7+ */
+.tabbrowser-tabs[classic=v3][multibar=scrollbar]:not([newtab_side="left"]) .tabs-newbutton-box > .tabs-newtab-button, /* ff 3.5-3.6 */
+.tabbrowser-tabs[classic=v3][multibar=scrollbar][hideAllTabsButton=true] .tabs-container > .tabs-closebutton, /* ff 3.5-3.6 */
+.tabbrowser-tabs[classic=v3][multibar=scrollbar][hideAllTabsButton=true] > .tabs-closebutton {
+  margin-left: -1px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar]:not([hideAllTabsButton=true]) > .scrollbutton-up,
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar][closebutton=true] > .scrollbutton-up {
+  padding-right: 1px;
+}
+
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar][_side=right] {
+  width: 19px;
+}

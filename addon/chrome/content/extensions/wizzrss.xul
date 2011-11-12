@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<overlay id="TMP_wizzrssOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+    <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
+
+    <script type="application/javascript">
+        window.addEventListener("load", function(aEvent) {
+            aEvent.currentTarget.removeEventListener("load", arguments.callee, false);
+            TMP_wizzrss.init();
+        }, false);
+    </script>
+
+</overlay>

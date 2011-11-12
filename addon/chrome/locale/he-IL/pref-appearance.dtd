@@ -1,0 +1,12 @@
+<!ENTITY styles.label "התאם עיצוב">
+<!ENTITY currentTab.label "לשונית נוכחית">
+<!ENTITY unreadTab.label "לשוניות שלא נקראו">
+<!ENTITY otherTabs.label "Other tabs">
+<!ENTITY italic.label "נטוי">
+<!ENTITY bold.label "מודגש">
+<!ENTITY underline.label "קו תחתון">
+<!ENTITY textcolor.label "צבע גופן">
+<!ENTITY bgColor.label "צבע רקע">
+<!ENTITY statusbar.label "החבא בשורת המצב">
+<!ENTITY useThis.label "use this style for">
+<!ENTITY opacity.label "opacity">

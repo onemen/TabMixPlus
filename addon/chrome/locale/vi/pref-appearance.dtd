@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Tùy biến Kiểu">
+<!ENTITY currentTab.label "Thẻ hiện tại">
+<!ENTITY unreadTab.label "Thẻ chưa xem">
+<!ENTITY otherTabs.label "Thẻ khác">
+<!ENTITY italic.label "Nghiêng">
+<!ENTITY bold.label "Đậm">
+<!ENTITY underline.label "Gạch chân">
+<!ENTITY textcolor.label "Màu chữ">
+<!ENTITY bgColor.label "Màu nền">
+<!ENTITY statusbar.label "Ẩn trong thanh trạng thái">
+<!ENTITY useThis.label "dùng kiểu này cho">
+<!ENTITY opacity.label "độ mờ">

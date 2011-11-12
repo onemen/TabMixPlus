@@ -1,0 +1,289 @@
+<!ENTITY tab.links "Links">
+<!ENTITY tab.events "Eventos">
+<!ENTITY tab.mouse "Mouse">
+<!ENTITY tab.appearance "Aparência">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Sessão">
+<!ENTITY tab.incompatible "Erro">
+<!ENTITY apply.label "Aplicar">
+<!ENTITY settings.export "Exportar Configurações">
+<!ENTITY settings.import "Importar Configurações">
+<!ENTITY settings.default "Restaurar Padrões">
+<!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
+<!ENTITY externalLinkTarget.label "Abrir links de outros aplicativos em:">
+<!ENTITY linkTarget.tab "Nova aba na janela atual">
+<!ENTITY linkTarget.window "Nova janela">
+<!ENTITY linkTarget.current "Aba atual">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "Popups JavaScript:">
+<!ENTITY divertedWindows.comment "Outras configurações de Javascript &amp; Popup na janela de Opções principal">
+<!ENTITY divertedWindowOpen.all "Abrir todos os popups em abas">
+<!ENTITY divertedWindowOpen.some "Permitir popups redimensionáveis">
+<!ENTITY divertedWindowOpen.none "Permitir todos os popups">
+<!ENTITY linkTarget.label "Abrir links com o atributo &quot;target&quot; na aba atual">
+<!ENTITY download.label "Prevenir abas em branco ao fazer downloads de arquivos">
+<!ENTITY edit.label "Editar">
+<!ENTITY speLink.label "Forçar para que abram em nova aba:">
+<!ENTITY speLink.none "Nada">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "Links para outros sites">
+<!ENTITY singleWindow.label "Usar somente uma janela (Single Window Mode)">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "Abrindo abas">
+<!ENTITY tabFocus.label "Foco das abas">
+<!ENTITY tabClose.label "Fechando abas">
+<!ENTITY tabMerge.label "Unindo abas">
+<!ENTITY tabFeature.label "Facilidades das abas">
+<!ENTITY newtab.label "Carregar em novas abas:">
+<!ENTITY replaceLastTabWith.label "Quando eu fechar a última aba substituí-la com">
+<!ENTITY newtab.blank "Página em branco">
+<!ENTITY newtab.home "Página inicial">
+<!ENTITY newtab.current "Página atual">
+<!ENTITY newtab.duplicate "Duplicar página">
+<!ENTITY newtab.location "Endereço configurado">
+<!ENTITY location.label "Endereço">
+<!ENTITY openTabNext.label "Abrir novas abas ao lado da aba atual">
+<!ENTITY openOtherTabNext.label "Abrir outras abas próxima da atual">
+<!ENTITY relatedAfterCurrent.label "Apenas se relacionadas à aba atual">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Abrir abas duplicadas ao lado das iniciadoras">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Mudar ordem de abertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Abrir nova aba próxima da última aba aberta a partir da aba atual (desde que foi a última a ser selecionada)">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY openNewTab.label "Abrir novas abas a partir de:">
+<!ENTITY openBookmarks.label "Favoritos">
+<!ENTITY openBMKGroups.label "Grupos de favoritos">
+<!ENTITY openBMKGroups.tooltip "Abrir novas abas para grupos de favoritos">
+<!ENTITY openHistory.label "Histórico">
+<!ENTITY openUrl.label "Barra de endereços">
+<!ENTITY openSearch.label "Campo de pesquisa">
+<!ENTITY middlecurrent1.label "Clique com o botão do meio ou Ctrl+clique abre items na aba atual">
+<!ENTITY middlecurrent.tooltip "Apenas para os Favoritos, Histórico e abas trancadas">
+<!ENTITY tabFocus.caption "Focar/Selecionar abas abertas por:">
+<!ENTITY selectTab.label "Links">
+<!ENTITY selectDivertedTab.label "Janelas desviadas">
+<!ENTITY selectTabCommand.label "Comandos de abrir nova aba">
+<!ENTITY selectTabBH.label "Favoritos/Histórico">
+<!ENTITY duplicateTab.label "Duplicar aba">
+<!ENTITY inversefocus1.label "Clique com o botão do meio ou Ctrl+clique inverte o foco de:">
+<!ENTITY warning.caption.label "Alertas">
+<!ENTITY warnOnCloseProtected.label "Alertar ao fechar janela com abas protegidas">
+<!ENTITY warnOnCloseWindow.label "Alertar-me quando fechar uma janela com várias abas">
+<!ENTITY lasttab.caption.label "Fechando última aba">
+<!ENTITY keepWindow.label.3.1 "Não fechar a janela depois que a última aba for fechada">
+<!ENTITY keeptab.label "Evitar o fechamento da última aba">
+<!ENTITY closeOnMerge.label "Fechar janelas após serem unidas">
+<!ENTITY warnOnMerge.label "Alertar ao fechar abas que não estejam sendo unidas">
+<!ENTITY currenttab.caption.label "Fechando a aba atual">
+<!ENTITY focusTab.labelBegin "Ao fechar aba, selecionar:">
+<!ENTITY focusTab.firstTab "Primeira aba">
+<!ENTITY focusTab.leftTab "Aba à esquerda">
+<!ENTITY focusTab.rightTab "Aba à direita">
+<!ENTITY focusTab.lastTab "Última aba">
+<!ENTITY focusTab.lastSelectedTab "Última aba selecionada">
+<!ENTITY focusTab.openerTab "Aba de origem/à direita">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Última aba aberta">
+<!ENTITY undoClose.label "Habilitar botão de desfazer &quot;fechar aba&quot;">
+<!ENTITY undoCloseCache.label "Número máximo de abas a lembrar:">
+<!ENTITY undoClosepos.label "Restaurar as abas em sua posição original">
+<!ENTITY menuonlybutton.label "Fazer com que o botão só mostre a lista">
+<!ENTITY ctrltab.label "Ctrl-Tab navega pelas abas na ordem das usadas mais recentemente">
+<!ENTITY cmdtab.label "Cmd-Tab navega pelas abas na ordem das usadas mais recentemente">
+<!ENTITY ctrltab.tabPreviews "Mostrar pré-visualização de abas">
+<!ENTITY ctrltab.popup "Ctrl-Tab mostra menu popup com uma lista das abas">
+<!ENTITY cmdtab.popup "Cmd-Tab mostra menu popup com uma lista das abas">
+<!ENTITY tabpopup.mouse "Abas na lista selecionáveis pelo mouse">
+<!ENTITY mergeNoTabSelection.label "Unir janelas se nenhuma aba estiver selecionada">
+<!ENTITY mergeTabSelection.label "Unindo após selecionar abas:">
+<!ENTITY mergeall.label "Unir todas as janelas em uma só">
+<!ENTITY mergelastfocused.label "Unir somente a janela atual com a última selecionada">
+<!ENTITY mergePopups.label "Unir também janelas &quot;popup&quot;">
+<!ENTITY popupNextToOpener.label "Posicionar popups próximos aos seus iniciadores">
+<!ENTITY slideshow.label "Ao apertar F8 ativar modo visualizador de slides a cada">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY seconds.label "segundos">
+<!ENTITY minutes.label "minutos">
+<!ENTITY tabBarAppearance.label "Barra de Abas">
+<!ENTITY tabAppearance.label "Aba">
+<!ENTITY toolBarAppearance.label "Barra de ferramentas">
+<!ENTITY show.ontabbar.label "Mostrar na barra de abas">
+<!ENTITY show.ontab.label "Mostrar na aba">
+<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "Botão &quot;Fechar Aba&quot;">
+<!ENTITY newTabButton.label "Botão &quot;Nova Aba&quot;">
+<!ENTITY newTabButton.posiotion.left.label "Lado esquerdo">
+<!ENTITY newTabButton.posiotion.right.label "Lado direito">
+<!ENTITY newTabButton.posiotion.afterlast.label "Depois da última aba">
+<!ENTITY allTabsButton.label "Botão &quot;Todas as abas&quot;">
+<!ENTITY tabBarSpace.label "Espaço adicional em ambos os lados">
+<!ENTITY tabBarSpace.tooltip "Para clicar e arrastar alguma coisa na barra de abas">
+<!ENTITY tabbar.label "Ocultar a barra de abas se houver apenas uma aba">
+<!ENTITY dropIndicator.label "Indicação ao soltar aba">
+<!ENTITY dropIndicator-native.label "Estilo nativo">
+<!ENTITY dropIndicator-builtin.label "Estilo interno">
+<!ENTITY tabBarPosition.label "Posição:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "Quando as abas não couberem na barra de abas:">
+<!ENTITY tabScroll.none "Barra de abas rolável">
+<!ENTITY tabScroll.leftRightButtons "Rolável com os botões do lado direito e esquerdo">
+<!ENTITY tabScroll.rightButtons "Rolável com os botões do lado direito">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "Múltiplas fileiras">
+<!ENTITY maxrow.label "Número máximo de fileiras:">
+<!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
+<!ENTITY highlight.label "Destacar:">
+<!ENTITY currenttab.style.label "Aba atual">
+<!ENTITY unreadtabs.style.label "Abas não lidas">
+<!ENTITY othertabs.style.label "Outras abas">
+<!ENTITY setstyles.label "Personalizar estilos">
+<!ENTITY extraIcons.label1 "Ícones para">
+<!ENTITY extraIcons.locked "Travada">
+<!ENTITY extraIcons.protected "Protegida">
+<!ENTITY extraIcons.autoreload "Auto-carregar">
+<!ENTITY progressMeter.label "Barra de progresso nas abas">
+<!ENTITY showTabX.labelBegin "Botão &quot;Fechar Aba&quot;">
+<!ENTITY showTabX.left "Colocar no lado esquerdo">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "milisegundos">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "17em">
+<!ENTITY showTabX.always "em todas as abas">
+<!ENTITY showTabX.current "na aba atual">
+<!ENTITY showTabX.hover "quando apontar o mouse">
+<!ENTITY showTabX.alwaysExeption "em todas as abas maiores que">
+<!ENTITY showTabX.currentHover "na aba atual e apontada por">
+<!ENTITY minWidth.label "Tamanho da aba">
+<!ENTITY widthTo.label "para">
+<!ENTITY widthPixels.label "pixels">
+<!ENTITY flexTabs.label "Abas flexíveis">
+<!ENTITY bookastitle.label "Usar nome do Favorito como título da aba">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "25em">
+<!ENTITY toolbar.description "Você pode personalizar quais botões do Tabmix devem ser colocados na barra de ferramentas">
+<!ENTITY toolbar.button.label "Personalizar">
+<!ENTITY toolbar.visible.caption "Botões visíveis">
+<!ENTITY toolbar.novisible.label "Não existem botões visíveis">
+<!ENTITY toolbar.hidden.caption "Botões ocultos">
+<!ENTITY toolbar.nohidden.label "Não existem botões ocultos">
+<!ENTITY mouseGesture.label "Gestos do Mouse">
+<!ENTITY mouseClick.label "Clicando com o Mouse">
+<!ENTITY mouseHoverSelect.labelBegin "Selecionar a aba apontada pelo mouse por">
+<!ENTITY tabFlip.label "Mudar para a última aba selecionada ao clicar a aba atual">
+<!ENTITY tabFlip.delay "Usar um atraso de">
+<!ENTITY addTabDrag.label "Arrastar aba para mudar ordem">
+<!ENTITY enabletabbarscrolling.label "Habilitar seleção de abas por rolagem">
+<!ENTITY reverseScroll.label "Inverter direção de rolagem">
+<!ENTITY clickFocus.label "Selecionar aba clicando com o mouse (apertando e soltando)">
+<!ENTITY removeEntries.label "Remover entradas em listas de menus do TabMix Plus com duplo clique">
+<!ENTITY removeEntries.tooltip "Incluir abas fechadas, janelas fechadas e sessões salvas">
+<!ENTITY double.label "Duplo clique">
+<!ENTITY middle.label "Clique c/ botão do meio">
+<!ENTITY ctrl.label "Ctrl+Clique">
+<!ENTITY cmd.label "Cmd+Clique">
+<!ENTITY shift.label "Shift+Clique">
+<!ENTITY alt.label "Alt+Clique">
+<!ENTITY ontab.label "sobre a aba:">
+<!ENTITY ontabbar.label "sobre a barra de abas:">
+<!ENTITY clicktab.label "Escolher comando a ser executado ao clicar sobre aba ou barra de abas">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY clicktab.nothing "Não faz nada">
+<!ENTITY clicktab.addtab "Abre nova aba">
+<!ENTITY clicktab.duplicatetab "Duplica a aba">
+<!ENTITY clicktab.duplicatetabw "Duplica a aba em nova janela">
+<!ENTITY clicktab.detachtab "Mover aba para uma nova janela">
+<!ENTITY clicktab.protecttab "Protege a aba">
+<!ENTITY clicktab.locktab "Tranca a aba">
+<!ENTITY clicktab.freezetab "Protege e tranca a aba">
+<!ENTITY clicktab.renametab "Renomeia a aba">
+<!ENTITY clicktab.copyTabUrl "Copia o endereço da aba para a área de transferência">
+<!ENTITY clicktab.copyUrlFromClipboard "Carregar URL da área de transferência">
+<!ENTITY clicktab.selectMerge "Seleciona a aba a ser unida">
+<!ENTITY clicktab.mergeTabs "Une janelas">
+<!ENTITY clicktab.bookTab "Adiciona aba aos favoritos">
+<!ENTITY clicktab.bookTabs "Adiciona todas as abas aos favoritos">
+<!ENTITY clicktab.reloadtab "Recarrega a aba">
+<!ENTITY clicktab.reloadtabs "Recarrega todas as abas">
+<!ENTITY clicktab.reloadothertabs "Recarrega as outras abas">
+<!ENTITY clicktab.reloadlefttabs "Recarrega abas à esquerda">
+<!ENTITY clicktab.reloadrighttabs "Recarrega abas à direita">
+<!ENTITY clicktab.autoReloadTab "Ativar/desativar carregamento de abas">
+<!ENTITY clicktab.removeall "Fecha todas as abas">
+<!ENTITY clicktab.removeother "Fecha as outras abas">
+<!ENTITY clicktab.removesimilar "Fecha abas de domínio semelhante">
+<!ENTITY clicktab.removeleft "Fecha abas à esquerda">
+<!ENTITY clicktab.removeright "Fecha abas à direita">
+<!ENTITY clicktab.uctab "Reabre a aba fechada">
+<!ENTITY clicktab.ucatab "Reabre todas as abas fechadas">
+<!ENTITY clicktab.snapback "&quot;SnapBack&quot;">
+<!ENTITY clicktab.ietab "Abre a aba no IE">
+<!ENTITY contentLoad "Clique com o botão do meio abre a url da área de tranferência">
+<!ENTITY context.tab "Menu de Contexto da Aba">
+<!ENTITY context.main "Menu de Contexto Principal">
+<!ENTITY context.tools "Menu &quot;Ferramentas&quot;">
+<!ENTITY showtabBarContext.label "Mostrar no Menu de Contexto da Aba:">
+<!ENTITY showContentAreaContext.label "Mostrar no Menu de Contexto Principal:">
+<!ENTITY showToolsMenu.label "Mostrar no Menu &quot;Ferramentas&quot;:">
+<!ENTITY startupHomePage.label "Mostrar minha página inicial">
+<!ENTITY startupBlankPage.label "Mostrar página em branco">
+<!ENTITY startupLastSession.label "Mostrar minhas últimas janelas e abas">
+<!ENTITY sm.extension.description1 "Tab Mix Plus detectou que a Extensão Session Manager está instalada">
+<!ENTITY sm.extension.description2 "O gerenciador de sessão do Tab Mix Plus será desativado">
+<!ENTITY sm.extension.description3 "Você pode clicar à direita para abrir a janela de opções do Session Manager.">
+<!ENTITY sm.extension.description4 "Converter os dados de Minas sessões do formato do Tab Mix Plus para o formato da extensão Session Manager">
+<!ENTITY sm.extension.convert.label "Converter">
+<!ENTITY sm.extension.chooseFile.label0 "Deixe-me escolher o arquivo de dados para converter">
+<!ENTITY sm.extension.chooseFile.label1 "Converter sessões do Tab Mix Plus do perfil atual">
+<!ENTITY ss.enable.label "Usar Restaurador de Sessão nativo">
+<!ENTITY ss.enable.tooltip "Desmarque para permitir o uso com o Restaurador de Sessão do Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Configuração Avançada">
+<!ENTITY ss.advanced_setting.warning "Não modifique a não ser que saiba o que está fazendo...">
+<!ENTITY ss.interval "Intervalo mínimo de tempo entre salvar dois estados">
+<!ENTITY ss.interval.seconds "(em milissegundos)">
+<!ENTITY ss.privacy_level "Salvar dados confidenciais(dados de formulários, POSTDATA e cookies) para">
+<!ENTITY ss.privacy_level.allsites "Todas as páginas">
+<!ENTITY ss.privacy_level.unencrypted "Somente páginas não criptografadas">
+<!ENTITY ss.privacy_level.nosites "Nenhuma página">
+<!ENTITY ss.postdata.label1 "Quantidade máxima de POSTDATA a ser salva">
+<!ENTITY ss.postdata.label2 "em bytes, -1 = tudo">
+<!ENTITY sessionManger.enable "Ativar Gerenciador de Sessões">
+<!ENTITY crashRecovery.enable "Ativar Recuperação de Falhas">
+<!ENTITY sm.StartExit "Iniciar/Sair">
+<!ENTITY sm.restore "Restaurar">
+<!ENTITY sm.preserve "Preservar">
+<!ENTITY sm.start "Ao iniciar o navegador:">
+<!ENTITY sm.start.restore "Restaurar">
+<!ENTITY sm.start.ask "Confirmar antes de restaurar">
+<!ENTITY sm.start.nothing "Não restaurar">
+<!ENTITY sm.exit "Ao sair do navegador:">
+<!ENTITY sm.exit.save "Salvar Sessão">
+<!ENTITY sm.exit.ask "Confirmar antes de salvar">
+<!ENTITY sm.exit.nothing "Não salvar">
+<!ENTITY sm.startup "Sessão inicial:">
+<!ENTITY sm.lastsession "Última sessão">
+<!ENTITY sm.previouslast "Anterior à última">
+<!ENTITY sm.chooseifempty "Escolher outra se não existir">
+<!ENTITY sm.restore.options "Ao restaurar sessões:">
+<!ENTITY sm.restore.overwrite "Substituir janelas existentes">
+<!ENTITY sm.restore.overwriteTabs "E abas">
+<!ENTITY sm.restore.closedWinList "Salvar janelas na lista de janelas fechadas">
+<!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
+<!ENTITY sm.restore.reloadall "Recarregar todas as abas">
+<!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
+<!ENTITY sm.preserve.options "Preservar abas:">
+<!ENTITY sm.preserve.history "Histórico">
+<!ENTITY sm.preserve.protect "Estado de proteção">
+<!ENTITY sm.preserve.locked "Estado de trancamento">
+<!ENTITY sm.preserve.permission "Permissões">
+<!ENTITY sm.preserve.scroll1 "Posição da barra de rolagem">
+<!ENTITY sm.restore.winOptions "Preservar janelas:">
+<!ENTITY sm.restore.selectedTab "Aba selecionada">
+<!ENTITY sm.restore.closedTabs "Lista de abas fechadas">
+<!ENTITY incompatible.extensions "Alguma das suas extensões são incompatíveis com a Tab Mix Plus, é recomendável que você desative ou desinstale essas extensões">
+<!ENTITY incompatible.button.label "Mostrar lista">

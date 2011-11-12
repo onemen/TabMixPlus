@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Charger en arrière-plan">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY title.label "Titre">
+<!ENTITY rename_all.label "Renommer toutes les pages avec la même adresse">
+<!ENTITY rename_permanently.label "Renommer cet onglet de manière permanente pour toutes les adresses">
+<!ENTITY doctitle.label "Utiliser le titre du document">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Aide">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Choisir l'intervalle de temps désiré dans la liste ou entrer une valeur particulière">
+<!ENTITY specifyreload.label "Spécifier le temps de rechargement">
+<!ENTITY sanitizer.entry "Historique de Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "H">
+<!ENTITY sanitizer.entry.confirm "Voulez-vous vraiment effacer la totalité de vos sessions enregistrées y compris les sauvegardes ?">

@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Personalizar apariencia">
+<!ENTITY currentTab.label "Pestaña seleccionada">
+<!ENTITY unreadTab.label "Pestañas no leídas">
+<!ENTITY otherTabs.label "Otras pestañas">
+<!ENTITY italic.label "Cursiva">
+<!ENTITY bold.label "Negrita">
+<!ENTITY underline.label "Subrayado">
+<!ENTITY textcolor.label "Color texto">
+<!ENTITY bgColor.label "Color fondo">
+<!ENTITY statusbar.label "Ocultar en barra estado">
+<!ENTITY useThis.label "usar este estilo para">
+<!ENTITY opacity.label "opacidad">

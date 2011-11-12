@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Прилагоди стилове">
+<!ENTITY currentTab.label "Текућа картица">
+<!ENTITY unreadTab.label "Непрочитане картице">
+<!ENTITY otherTabs.label "Остале картице">
+<!ENTITY italic.label "Искошено">
+<!ENTITY bold.label "Подебљано">
+<!ENTITY underline.label "Подвучено">
+<!ENTITY textcolor.label "Боја слова">
+<!ENTITY bgColor.label "Боја позадине">
+<!ENTITY statusbar.label "Сакриј у статусну линију">
+<!ENTITY useThis.label "користи овај стил за">
+<!ENTITY opacity.label "провидност">

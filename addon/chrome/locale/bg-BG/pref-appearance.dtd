@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Настройка на стилове">
+<!ENTITY currentTab.label "Текущ подпрозорец">
+<!ENTITY unreadTab.label "Непрочетени подпрозорци">
+<!ENTITY otherTabs.label "Други подпрозорци">
+<!ENTITY italic.label "Курсив">
+<!ENTITY bold.label "Удебелен">
+<!ENTITY underline.label "Подчертан">
+<!ENTITY textcolor.label "Цвят на текста">
+<!ENTITY bgColor.label "Цвят на фона">
+<!ENTITY statusbar.label "Скриване в лентата за състоянието">
+<!ENTITY useThis.label "Използване на стил за">
+<!ENTITY opacity.label "непрозрачност">

@@ -1,0 +1,87 @@
+/** 
+    Firefox version 4.0
+
+    Windows platform
+
+
+    to apply rule only to default them add #tabbrowser-tabs[classic40]
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
+@import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
+
+/* increase the gap between tabs in multi-row */
+#main-window:not([tabsintitlebar]) #TabsToolbar:not([tabmix_aero]) > #tabbrowser-tabs[multibar] > .tabbrowser-tab {
+ margin-bottom: 1px;
+}
+
+#main-window:not([tabsintitlebar]) #TabsToolbar:not([tabmix_aero]) > #tabbrowser-tabs[multibar] {
+ margin-bottom: -1px;
+}
+
+/*  For .tabs-closebutton .showhover */
+.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
+  margin: -3px 0px -3px 0px;
+}
+
+/*  new tab button after last tab on firefox 4.0  aero */
+#TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: bottom;
+}
+
+/* default value padding-bottom: 4px; make row height 24 insted of 23 */
+#TabsToolbar > #tabs-closebutton {
+  padding-bottom: 3px;
+}
+
+#TabsToolbar[multibar] > .toolbarbutton-1,
+#TabsToolbar[multibar] > #tabs-closebutton {
+  height: 26px;
+}
+
+/* for TabsToolbar on bottom with windows 7 */
+#tabmix-bottom-toolbox[tabmix_aero] {
+  -moz-appearance: none;
+  border-top: none;
+  background-color: transparent;
+}
+
+#tabmix-bottom-toolbox > #TabsToolbar[tabmix_aero]:not(:-moz-lwtheme) {
+  -moz-appearance: none;
+  border-style: none;
+}
+
+/*  scrollbutton arrow - fix borders  */
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+  height: 26px;
+}
+
+.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down:not([disabled]),
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+  -moz-border-image: none;
+}
+
+.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up:not([disabled]) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
+}
+
+.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up[disabled] {
+  border-right: 0px;
+}
+
+#TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1:not([disabled]):hover,
+#TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1[open],
+#TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1 > .toolbarbutton-menubutton-button:not([disabled]):hover,
+#TabsToolbar:not([tabmix_aero]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up:not([disabled]):hover,
+#TabsToolbar:not([tabmix_aero]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down:not([disabled]):hover {
+  background-image: -moz-linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.5)),
+                    -moz-linear-gradient(transparent, rgba(0,0,0,.25) 30%),
+                    -moz-linear-gradient(transparent, rgba(0,0,0,.25) 30%),
+                    -moz-linear-gradient(transparent, rgba(0,0,0,.15) 100%),
+                    -moz-linear-gradient(transparent, rgba(0,0,0,.25) 30%);
+  background-position: 1px 1px, 0pt 0px, 100% 0px, 0px 0pt, 0px 100%;
+  background-size: -moz-calc(100% - 2px) -moz-calc(100% - 2px), 1px -moz-calc(100% - 1px), 1px -moz-calc(100% - 1px), 100% 1px, 100% 1px;
+  background-repeat: no-repeat;
+}

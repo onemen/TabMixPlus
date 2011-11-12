@@ -1,0 +1,66 @@
+/**
+ *
+ * Firefox 3.5 - 3.6 only 
+ * This file is not in use for Firefox 4.0+
+ *
+ **/
+
+@import url("chrome://tabmixplus/content/overlay/browsroverlay_base.css");
+
+.tabbrowser-tabs {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser.xml#tabmix-tabbrowser-tabs") !important;
+}
+
+.tabbrowser-tab {
+ -moz-binding: url("chrome://tabmixplus/content/tab/tabmix_3.xml#browser-tab") !important;
+}
+
+.tabs-container > .tabs-closebutton {
+ -moz-binding: url("chrome://tabmixplus/content/tab/tabmix_3.xml#tabbrowser-close-tab-button")!important;
+}
+
+
+/* make sure we can use tabcontext menu when the tabbar is hidden */
+.tabmix-tabContextMenu {
+ visibility: visible !important;
+}
+
+/* tab bar (tabstrip) close button */
+.tabbrowser-tabs[closebutton=false] .close-button {
+  display: none;
+}
+
+/* this override gBrowser.tabContainer.mTabstripClosebutton.collapsed = true */
+.tabbrowser-tabs[closebutton=true] .close-button {
+  display: -moz-box !important;
+  visibility: visible !important;
+}
+
+/* All tabs button */
+.tabbrowser-tabs[hideAllTabsButton=true] .tmp-alltabs-3 {
+  display: none;
+}
+.tabbrowser-tabs:not([hideAllTabsButton=true]) .tmp-alltabs-3 {
+  display: -moz-box;
+}
+
+/*** hide tabs-newtab-button that we don't use ***/
+.tabbrowser-tabs[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[overflow="true"] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+.tabbrowser-tabs[newtab_side]:not([newtab_side="afterlast"]) .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  visibility: collapse;
+  vertical-align: top;
+  height: 0px;
+  width: 0px;
+  border: none;
+  margin: 0px;
+}
+
+/*** hide left / right new tabs-newtab-button ***/
+.tabbrowser-tabs[newTabButton=false] .tabs-newtab-topbox,
+.tabbrowser-tabs:not([disAllowNewtabbutton]):not([overflow="true"])[newtab_side="afterlast"] .tabs-newtab-topbox > .tabs-newtab-button {
+  display: none;
+}
+
+/***   ***/

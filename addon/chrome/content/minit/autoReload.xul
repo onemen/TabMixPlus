@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % miscDTD SYSTEM "chrome://tabmixplus/locale/misc.dtd" >
+%miscDTD;
+]>
+
+<dialog id="reloadevery_custom_dialog"
+        title="&specifyreload.label;"
+        buttons="accept,cancel"
+        ondialogaccept="accept();"
+        onload="load();"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/javascript"><![CDATA[
+
+var gPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch2);
+
+function load(){
+
+    var customReloadTime = gPref.getIntPref("extensions.tabmix.custom_reload_time");
+
+    document.getElementById("autoreload_minutes").value = Math.floor(customReloadTime / 60);
+    document.getElementById("autoreload_seconds").value = customReloadTime % 60;
+    disable_OK();
+}
+
+function accept() {
+    var customReloadTime = getCustomReloadTime();
+    gPref.setIntPref("extensions.tabmix.custom_reload_time", customReloadTime);
+    gPref.setIntPref("extensions.tabmix.reload_time", customReloadTime);
+
+    window.arguments[0].ok = true;
+}
+
+function getCustomReloadTime() {
+    var minutes;
+    if(document.getElementById("autoreload_minutes").value != ''){
+      minutes = parseInt(document.getElementById("autoreload_minutes").value);
+    }
+    else{
+      minutes = 0;
+    }
+
+    var seconds;
+    if(document.getElementById("autoreload_seconds").value != ''){
+      seconds = parseInt(document.getElementById("autoreload_seconds").value);
+    }
+    else{
+      seconds = 0;
+    }
+    return minutes*60 + seconds;
+}
+
+function disable_OK() {
+   document.documentElement.getButton("accept").disabled = getCustomReloadTime() == 0;
+}
+
+]]></script>
+
+  <groupbox orient="horizontal" align="center">
+    <caption label="&reloadtime.label1;" />
+    <menulist id="autoreload_minutes" editable="true"
+             oncommand="disable_OK();"
+             oninput="this.value=parseInt(this.value);
+                      if (this.value=='NaN') this.value='';
+                      if (Number(this.value) &lt; 0) this.value = -this.value;
+                      disable_OK();">
+             <menupopup>
+                  <menuitem value="0" label="0" />
+                  <menuitem value="1" label="1" />
+                  <menuitem value="5" label="5"/>
+                  <menuitem value="10" label="10"/>
+                  <menuitem value="15" label="15" />
+                  <menuitem value="20" label="20"/>
+                  <menuitem value="30" label="30"/>
+             </menupopup>
+    </menulist>
+    <label control="autoreload_minutes" value="&minutes.label;"/>
+
+    <menulist id="autoreload_seconds" editable="true"
+             oncommand="disable_OK();"
+             oninput="this.value=parseInt(this.value);
+                      if (this.value=='NaN') this.value='';
+                      if (Number(this.value) &lt; 0) this.value = -this.value;
+                      if (Number(this.value) &gt; 59) this.value = 59;
+                      disable_OK();">
+             <menupopup>
+                  <menuitem value="0" label="0" />
+                  <menuitem value="10" label="10" />
+                  <menuitem value="20" label="20"/>
+                  <menuitem value="30" label="30"/>
+                  <menuitem value="45" label="45" />
+             </menupopup>
+    </menulist>
+    <label control="autoreload_seconds" value="&seconds.label;"/>
+  </groupbox>
+
+</dialog>

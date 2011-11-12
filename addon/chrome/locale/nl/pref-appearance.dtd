@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Stijlen aanpassen">
+<!ENTITY currentTab.label "Huidig tabblad">
+<!ENTITY unreadTab.label "Ongelezen tabbladen">
+<!ENTITY otherTabs.label "Overige tabbladen">
+<!ENTITY italic.label "Cursief">
+<!ENTITY bold.label "Vet">
+<!ENTITY underline.label "Onderstreept">
+<!ENTITY textcolor.label "Tekstkleur">
+<!ENTITY bgColor.label "Achtergrondkleur">
+<!ENTITY statusbar.label "In statusbalk verbergen">
+<!ENTITY useThis.label "deze stijl gebruiken voor">
+<!ENTITY opacity.label "Doorzichtigheid">

@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/skin/extensions/about.css" type="text/css"?>
+<!DOCTYPE bindings [
+<!ENTITY % aboutDTD SYSTEM "chrome://mozapps/locale/extensions/about.dtd" >
+%aboutDTD;
+<!ENTITY % miscDTD SYSTEM "chrome://tabmixplus/locale/misc.dtd" >
+%miscDTD;
+]>
+<dialog id="genericAbout"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        buttons="accept"
+        buttoniconaccept="close"
+        onload="init();">
+
+  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/links/userInterface.js"/>
+  <script type="application/javascript">
+  <![CDATA[
+    function init() {
+      const Application = Components.classes["@mozilla.org/fuel/application;1"]
+                                     .getService(Components.interfaces.fuelIApplication);
+      if (Components.interfaces.nsIExtensionManager)
+        updateLabels(Application.extensions);
+      else {
+        // Firefox 4.0
+        var addon = window.arguments[0];
+        updateLabels(addon, true)
+      }
+    }
+
+    function updateLabels(extensions, aFirefox4) {
+      var extensionsStrings = document.getElementById("extensionsStrings");
+      document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);
+      try {
+        var currentVersion = aFirefox4 ? extensions.version : extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
+        var extensionVersion = document.getElementById("extensionVersion");
+        extensionVersion.value = extensionsStrings.getFormattedString("aboutWindowVersionString", [currentVersion]);
+      } catch(er) {
+        extensionVersion.hidden = true;
+      }
+      var acceptButton = document.documentElement.getButton("accept");
+      acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
+      var descriptionString =  document.getElementById("descriptionString");
+      var extensionDescription = document.getElementById("extensionDescription");
+      extensionDescription.value = aFirefox4 ? extensions.description : 
+           descriptionString.getString('extensions.{dc572301-7619-498c-a57d-39143191b318}.description');
+    }
+  ]]>
+  </script>
+
+  <stringbundleset id="aboutSet">
+    <stringbundle id="extensionsStrings" src="chrome://mozapps/locale/extensions/extensions.properties"/>
+    <stringbundle id="descriptionString" src="chrome://tabmixplus/locale/tabmix.properties" />
+  </stringbundleset>
+
+  <vbox id="clientBox" flex="1">
+    <hbox class="basic-info">
+      <vbox pack="center">
+        <image id="extensionIcon" src="chrome://tabmixplus/skin/tmp.png"/>
+      </vbox>    
+      <vbox flex="1">
+        <label id="extensionName" value="Tab Mix Plus" crop="end"/>
+        <label id="extensionVersion" crop="end"/>
+      </vbox>
+    </hbox>
+    <description id="extensionDescription" class="boxIndent"/>
+    
+    <separator id="groove" class="groove"/>
+
+    <vbox id="extensionDetailsBox" flex="1">
+      <label id="extensionCreatorLabel" class="sectionTitle">&creator.label;</label>
+      <hbox id="creatorBox" class="boxIndent">
+        <vbox flex="1">
+          <label value="ONEMEN (tabmix.onemen@gmail.com)" flex="1" crop="end" id="extensionCreator"/>
+          <label value="Gary Reyes [CPU]" flex="1" crop="end" class="contributor"/>
+        </vbox>
+        <vbox id="extensionHomepage" style="cursor:default;">
+          <label class="text-link" value="&homepage.label;" style="cursor:pointer;"
+                onclick="TMP_openURL('http://tmp.garyr.net', event)"/>
+          <hbox flex="1">
+            <label value="&forum.label;" style="cursor:pointer;" class="text-link" onclick="TMP_openURL('http://tmp.garyr.net/forum', event)"/>
+            <label value="&help.label;" style="cursor:pointer;" class="text-link" onclick="TMP_openURL('http://tmp.garyr.net/help', event)"/>
+          </hbox>
+        </vbox>
+      </hbox>
+
+      <label id="extensionDevelopers" class="sectionTitle">&developers.label;</label>
+      <vbox flex="1" id="developersBox" class="boxIndent">
+        <label value="ONEMEN (tabmix.onemen@gmail.com)" class="contributor"/>
+      </vbox>
+
+      <label id="extensionContributors" class="sectionTitle">&contributors.label;</label>
+      <vbox flex="1" id="contributorsBox" class="boxIndent">
+        <label value="Bruce Wittmeier (Help page)" flex="1" crop="end" class="contributor"/>
+        <label value="SUN Chun-Yen" class="contributor" />
+        <label value="Piotr Sielski [graphics]" class="contributor" />
+      </vbox>
+
+      <label id="extensionTranslators" class="sectionTitle">&translators.label;</label>
+      <vbox flex="1" id="translatorsBox" class="boxIndent">
+        <label value="Emz, Mohandas (Bulgarian)" class="contributor" />
+        <label value="Jordis (jordis@softcatala.cat) (Catalan)" class="contributor" />
+        <label value="Zvedavaolihen (Czech)" class="contributor" />
+        <label value="Finn S. Sørensen (Danish)" class="contributor" />
+        <label value="ReinekeFux (German)" class="contributor" />
+        <label value="Sonickydon (Greek)" class="contributor" />
+        <label value="Urko (Spanish)" class="contributor" />
+        <label value="Maidur (Estonian)" class="contributor" />
+        <label value="Goofy,PierreFox,Ptit Lutin,Tibox (French)" class="contributor" />
+        <label value="Kami (Hungarian)" class="contributor" />
+        <label value="Luana Di Muzio (Italian)" class="contributor" />
+        <label value="Shadow912, Sub (Japanese)" class="contributor" />
+        <label value="Flactal (Korean)" class="contributor" />
+        <label value="Alf (Dutch)" class="contributor" />
+        <label value="Leszek(teo)Życzkowski (Polish)" class="contributor" />
+        <label value="Pardal Freudenthal, Teboga (Portuguese-Brazilian)" class="contributor" />
+        <label value="Cătălin ZAMFIRESCU (x10firefox) (Romanian)" class="contributor" />
+        <label value="ArtLonger, Quicksilver tears (Russian)" class="contributor" />
+        <label value="Jacen (Slovak)" class="contributor" />
+        <label value="Ивана Петровић, ДакСРБИЈА (Serbian)" class="contributor" />
+        <label value="Aycan Demirel (Turkish)" class="contributor" />
+        <label value="Nguyễn Hoàng Long, NGUYỄN Mạnh Hùng (Vietnamese)" class="contributor" />
+        <label value="Fang5566 (Chinese (Simplified))" class="contributor" />
+        <label value="BloodLust, Yuoo2k (Chinese (Traditional))" class="contributor" />
+      </vbox>
+
+    </vbox>
+  </vbox>
+</dialog>

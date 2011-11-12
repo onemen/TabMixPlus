@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Personalizzazione degli stili">
+<!ENTITY currentTab.label "Scheda attuale">
+<!ENTITY unreadTab.label "Schede non lette">
+<!ENTITY otherTabs.label "Altre schede">
+<!ENTITY italic.label "Corsivo">
+<!ENTITY bold.label "Grassetto">
+<!ENTITY underline.label "Sottolineato">
+<!ENTITY textcolor.label "Colore del testo">
+<!ENTITY bgColor.label "Colore di sfondo">
+<!ENTITY statusbar.label "nascondila nella barra di stato">
+<!ENTITY useThis.label "Utilizza questo stile per">
+<!ENTITY opacity.label "Opacità ">
