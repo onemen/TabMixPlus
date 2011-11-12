@@ -694,7 +694,9 @@ var TMP_eventListener = {
         let tab = gBrowser.tabs[i];
         let browser = tab.linkedBrowser;
         let url = browser.userTypedValue;
-        if (url && browser.__SS_data && browser.__SS_data._tabStillLoading) {
+        let tabStillLoading = Tabmix.isVersion(110) ? browser.__SS_tabStillLoading :
+            browser.__SS_data && browser.__SS_data._tabStillLoading;
+        if (url && tabStillLoading) {
           this._tabStillLoading++;
           let title = TMP_SessionStore._getTitle(browser.__SS_data, url, tab.label);
           if (title != tab.label) {
