@@ -52,7 +52,7 @@ Tabmix_ChangeCode.prototype =  {
       this.needUpdate = true;
     }
     else if (!silent){
-      Tabmix.clog(Tabmix._getNames()[0] + " can't find string: " + substr
+      Tabmix.clog(Tabmix.callerName() + " can't find string: " + substr
           + "\nin " + this.name + "."
           + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
           + "\n\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/"
@@ -79,7 +79,7 @@ Tabmix_ChangeCode.prototype =  {
          this.show();
        delete this;
     } catch (ex) {
-      Components.utils.reportError("Tabmix " + Tabmix._getNames()[0] + " failed to change " + this.name + "\nError: " + ex.message);
+      Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
   },
 
@@ -197,31 +197,29 @@ var Tabmix = {
 
   callerName: function () {
     return this._getCallerNameByIndex(2);
-  }, 
+  },
 
   // return true if the caller name of the calling function is in the
   // arguments list
   isCallerInList: function () {
-    // we need the caller to the caller function
-    // this function is 0, the caller is 1, caller caller is 2
-    let callerName = this._getCallerNameByIndex(2);
-    if (arguments.length == 1 && typeof arguments[0] == "string")
-      return arguments[0] == callerName;
-    
-    if (callerName) {
-      let list = [];
-      Array.forEach(arguments, function(arg) {
-        list = list.concat(arg);
-      });
+    if (!arguments.length) {
+      this.assert("no arguments in Tabmix.isCallerInList");
+      return false;
+    }
 
-      if (!list.length)
-       return false;
-
-      return list.some(function(name){
-        if (name == callerName)
-          return true;
+    try {
+      let callerName = Components.stack.caller.caller.name;
+      if (!callerName)
         return false;
-      });
+///this.log("callerName " + callerName +"\narguments " + (typeof arguments[0] == "object" ? arguments[0] : Array.prototype.slice.call(arguments)))
+      if (typeof arguments[0] == "object")
+        return arguments[0].indexOf(callerName) > -1;
+
+      let args = Array.prototype.slice.call(arguments);
+      return args.indexOf(callerName) > -1;
+
+    } catch (ex) {
+      this.assert(ex, "Error we can't check for caller name");
     }
     return false;
   },
@@ -266,7 +264,7 @@ var Tabmix = {
     let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
     if (stackText)
       TabmixSvc.console.logStringMessage(assertionText + stackText);
-    else 
+    else
       this.trace(assertionText, 2);
   },
 

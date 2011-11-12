@@ -216,11 +216,10 @@
         }
         // don't allow mouse click with modifiers to select tab
         else if (!aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
-          function TMclickSetTab(tab) {
+          this.mSelect = setTimeout(function TMP_onMouseCommand(tab) {
             if (tab.parentNode)
               tab.parentNode._selectNewTab(tab);
-          }
-          this.mSelect = setTimeout(TMclickSetTab, 0, this);
+          }, 0, this);
         }
       ]]></body>
     </method>
@@ -518,7 +517,7 @@
           // don't check _removingTabs for visibility
           let offset = index == 0 ? 1 : -1;
           let tabbrowser = document.getBindingParent(this);
-          // we don't need to check this in Firefox 4.0
+          // we don't need to check this in Firefox 4.0 , we remove this check in TMP_TabView.init
           if (tabbrowser._removingTabs.length > 0) {
             while(tabbrowser._removingTabs.indexOf(tabs[index]) > -1)
               index += offset;
@@ -772,13 +771,14 @@
           }
           else if ( this.getAttribute("multibar") == "scrollbar" ) {
             if (aIndex < this.collapsedTabs) {
-               while (aIndex < this.collapsedTabs)
-                  this.rowScroll(-1);
+              let maxLoops = this.collapsedTabs;
+              for (let i = 0; i < maxLoops, aIndex < this.collapsedTabs; i++)
+                this.rowScroll(-1);
             }
             else {
-               let top = this.topTabY;
                let maxRow = this.maxRow;
-               while (this.getTabRowNumber(tab, top) > maxRow)
+               let tabRow = this.getTabRowNumber(tab, this.topTabY);
+               for (let i = 0; i < tabRow - maxRow; i++)
                   this.rowScroll(+1);
             }
           }
@@ -815,7 +815,7 @@
           }
           var top = this.topTabY;
           if (factor == -1 ) {
-             // In order to make sure first row is full push last hidden tab to 2nd row or reveal all hidden tabs,
+             // In order to make sure first row is full, push last hidden tab to 2nd row or reveal all hidden tabs,
              // then if last hidden tab is in 2nd row hide the new first visible tab.
              let lastHidden = firstVisibleIndex - 1 > 0 ? tabs[firstVisibleIndex - 1] : null
              for (i = firstVisibleIndex - 1; i >= 0; i--) {
@@ -889,8 +889,9 @@
           if (height == 0) // don't panic
             return;
 
-          var marginTop = TMP_getStyle(aTab, "marginTop");
-          var marginBottom = TMP_getStyle(aTab, "marginBottom");
+          var cStyle = window.getComputedStyle(aTab, null);
+          var marginTop = parseInt(cStyle["marginTop"]) || 0;
+          var marginBottom = parseInt(cStyle["marginBottom"]) || 0;
           height += marginTop + marginBottom;
           var tabBottom = aTab.boxObject.y - marginTop + height
           return Math.round((tabBottom - aTop)/height);

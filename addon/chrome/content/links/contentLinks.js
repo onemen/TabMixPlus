@@ -752,8 +752,11 @@ function TMP_GoogleComLink(target) {
   if (!currentIsnGoogle)
     return false;
 
+  if (/\/intl\/\D{2,}\/options\//.test(target.pathname))
+    return true;
+
   let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
-               "/accounts/Logout", "/accounts/ServiceLogin", "/intl/iw/options/"];
+               "/accounts/Logout", "/accounts/ServiceLogin"];
 
   let testPathname = _list.indexOf(target.pathname) > -1;
   if (testPathname)

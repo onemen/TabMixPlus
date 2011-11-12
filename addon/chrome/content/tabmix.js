@@ -895,6 +895,25 @@ var TMP_eventListener = {
   onTabSelect: function TMP_EL_TabSelect(aEvent) {
     var tab = aEvent.target;
     var tabBar = gBrowser.tabContainer;
+
+    // for ColorfulTabs 6.0+
+    // ColorfulTabs trapp TabSelect event after we do
+    // we need to set standout class before we check for getTabRowNumber
+    // and ensureTabIsVisible
+    // this class change tab height (by changing the borders)
+    if (typeof colorfulTabs == "object" && colorfulTabs.standout &&
+        tab.className.indexOf("standout") == -1) {
+      for (let i = 0; i < gBrowser.tabs.length; i++) {
+        let _tab = gBrowser.tabs[i];
+        if (_tab.className.indexOf("standout") > -1) {
+          _tab.className = _tab.className.replace(" standout", "");
+          break;
+        }
+
+      }
+      tab.className = tab.className + " standout";
+    }
+
     // update this functions after new tab select
     tabBar.nextTab = 1;
     tab.setAttribute("flst_id", new Date().getTime());
@@ -904,8 +923,8 @@ var TMP_eventListener = {
     TabmixSessionManager.tabSelected(true);
 
     if (tabBar.hasAttribute("multibar")) {
-      var top = tabBar.topTabY;
-      var tabRow = tabBar.getTabRowNumber(tab, top);
+      let top = tabBar.topTabY;
+      let tabRow = tabBar.getTabRowNumber(tab, top);
       var prev = tab.previousSibling, next = tab.nextSibling;
       if ( prev && tabRow != tabBar.getTabRowNumber(prev, top) )
         prev.removeAttribute("beforeselected");

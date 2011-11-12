@@ -355,9 +355,9 @@ var TabmixTabbar = {
     if (tabstrip.style.maxHeight != tabstrip.style.height || tabstrip.style.maxHeight != newHeight + "px") {
       tabstrip.style.setProperty("max-height",newHeight + "px", "important");
       tabstrip.style.setProperty("height",newHeight + "px", "important");
-      var tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
-      var tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
-      var newTabbarHeight = newHeight + tabsBottomHeight;
+      let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
+      let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
+      let newTabbarHeight = newHeight + tabsBottomHeight;
       if (Tabmix.isVersion(40) && Tabmix.isMac) {
         document.getElementById("TabsToolbar").style.setProperty("height",newTabbarHeight + "px", "important");
       }

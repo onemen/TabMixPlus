@@ -816,7 +816,7 @@ var TabmixSessionManager = {
                this.copyClosedTabsToRDF(winPath);
             }
             closedTabSaved = true;
-         } else {
+         } else if (crashRecovery) {
             // if undoClose = false we delete all in TMP_PrefObserver observe
             if (undoClose) this.deleteWinClosedtabs(winPath); // flush only closedTabs list in session.RDF
          }
@@ -2390,14 +2390,18 @@ try{
       else if (flag == "replace") {
          aList.push(TabmixSvc.getSMString("sm.sessionMenu.lastDefault"));
          aList.push(TabmixSvc.getSMString("sm.sessionMenu.previous"));
-      } else if (flag != "onlyPath"){
-         var empty = ", (" + TabmixSvc.getSMString("sm.session.empty") + ")";
-         var empty1 = this.containerEmpty(this.gSessionPath[1]);
-         var empty2 = this.containerEmpty(this.gSessionPath[2]);
-         if (empty1 && empty2 && aList.length == 0) return null;
-         if (flag == "afterCrash") aList.push(TabmixSvc.getSMString("sm.sessionMenu.lastgood") + (empty1 ? empty : ""));
-         else aList.push(TabmixSvc.getSMString("sm.sessionMenu.last") + (empty1 ? empty : ""));
-         aList.push(TabmixSvc.getSMString("sm.sessionMenu.previous") + (empty2 ? empty : ""));
+      } else {
+         let empty = ", (" + TabmixSvc.getSMString("sm.session.empty") + ")";
+         let empty1 = this.containerEmpty(this.gSessionPath[1]);
+         let empty2 = this.containerEmpty(this.gSessionPath[2]);
+         if (empty1 && empty2 && aList.length == 0)
+            return null;
+
+        if (flag != "onlyPath") {
+           let msg = flag == "afterCrash" ? "sm.sessionMenu.lastgood" : "sm.sessionMenu.last";
+           aList.push(TabmixSvc.getSMString(msg) + (empty1 ? empty : ""));
+           aList.push(TabmixSvc.getSMString("sm.sessionMenu.previous") + (empty2 ? empty : ""));
+        }
       }
       sessionPath.push(this.gSessionPath[1]);
       sessionPath.push(this.gSessionPath[2]);
@@ -3775,16 +3779,23 @@ try{
 
   // aWindow: rdfNodeWindow to read from
   _getdSessionTabviewData: function SM__getdSessionTabviewData(aWindow) {
-    let emptyObj = Tabmix.JSON.stringify({})
-    let groupItems = Tabmix.JSON.parse(this.getLiteralValue(aWindow, "tabview-group", emptyObj));
-    let groupsData = Tabmix.JSON.parse(this.getLiteralValue(aWindow, "tabview-groups", emptyObj));
+    let self = this;
+    function _fixData(id, parse, def) {
+      let data = self.getLiteralValue(aWindow, id);
+      if (data && data != "null")
+        return parse ? Tabmix.JSON.parse(data) : data;
+      return def;
+    }
+
+    let groupItems = _fixData("tabview-group", true, {});
+    let groupsData = _fixData("tabview-groups", true, {});
     this._validateGroupsData(groupItems, groupsData);
     this._tabviewData["tabview-group"] = groupItems;
     this._tabviewData["tabview-groups"] = groupsData;
     this.groupUpdates.lastActiveGroupId = groupsData.activeGroupId;
 
-    this._tabviewData["tabview-ui"] = this.getLiteralValue(aWindow, "tabview-ui", emptyObj);
-    this._tabviewData["tabview-visibility"] = this.getLiteralValue(aWindow, "tabview-visibility", "false");
+    this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
+    this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
 
     if (Tabmix.isVersion(70)) {
       let type = "tabview-last-session-group-name";
@@ -3814,12 +3825,14 @@ try{
     if (!this.tabViewEnabled || tabData.tab.pinned)
       return;
 
+    let parsedData;
     function setData(id) {
       let data = {url:aEntry.currentURI, groupID:id, title:aEntry.label};
       if (!Tabmix.isVersion(60)) {
         // fake bounds, panorama check for bounds in TabItem__reconnect
         data.bounds = {left:0, top:0, width:160, height:120};
       }
+      parsedData = data;
       return Tabmix.JSON.stringify(data);
     }
 
@@ -3837,16 +3850,35 @@ try{
       if (!data || data == "null") {
         if (update.lastActiveGroupId)
           data = setData(update.lastActiveGroupId);
-        else
+        else {
+          // force Panorama to reconnect all reused tabs
+          if (!Tabmix.isVersion(80) && tabData.tab._tabViewTabItem) {
+            tabData.tab._tabViewTabItem._reconnected = false;
+            tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
+          }
           return;
+        }
       }
 
       if (update.IDs) {
-        let parsedData = Tabmix.JSON.parse(data);
+        parsedData = Tabmix.JSON.parse(data);
         if (parsedData.groupID in update.IDs) {
           parsedData.groupID = update.IDs[parsedData.groupID];
           data = Tabmix.JSON.stringify(parsedData);
         }
+      }
+    }
+
+    // force Panorama to reconnect all reused tabs
+    // in Firefox 8.0 + we do it from _patchTabviewFrame
+    if (!Tabmix.isVersion(80)) {
+      let tabItem = tabData.tab._tabViewTabItem;
+      if (tabItem) {
+        let tabData = parsedData || Tabmix.JSON.parse(data);
+        let groupId = tabItem.parent ? tabItem.parent.id : null;
+        if (!tabData || tabData.groupID != groupId)
+          tabItem._reconnected = false;
+          tabItem.__tabmix_reconnected = false;
       }
     }
 
@@ -4081,8 +4113,12 @@ try{
   _setUIpageBounds: function SM__setUIpageBounds() {
     if (TabView._window) {
       let data = TabView._window.Storage.readUIData(window);
+      if (this.isEmptyObject(data))
+        return;
+
       TabView._window.UI._storageSanity(data);
-      TabView._window.UI._pageBounds = data.pageBounds;
+      if (data && data.pageBounds)
+        TabView._window.UI._pageBounds = data.pageBounds;
     }
   },
 

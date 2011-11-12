@@ -229,7 +229,7 @@
               if (relatedTarget && relatedTarget.ownerDocument == document)
                 break;
             case "mousemove":
-              if ("_unlockTabSizing" in this && document.getElementById("tabContextMenu").state != "open")
+              if (Tabmix.isVersion(50) && document.getElementById("tabContextMenu").state != "open")
                 this._unlockTabSizing();
               break;
           }
@@ -282,8 +282,12 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
+        if ((TabsInTitlebar.enabled && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")) ||
+            (TabsOnTop.enabled && this.parentNode._dragBindingAlive))
+          return;
         TabmixTabClickOptions.onTabBarDblClick(event);
         event.stopPropagation();
+        event.preventDefault();
       ]]></handler>
 
       <handler event="click" phase="capturing"><![CDATA[

@@ -72,16 +72,59 @@ var _log = {
     else if (aCount < 0)
       aCount = stack.length;
     let names = [];
-    for (let i = 0; i < aCount; i++) {
-      let fn = stack[i];
-      let name = fn.substr(0, fn.indexOf("("));
-      if (!name) {
-        let lastIndexOf = fn.lastIndexOf("/");
-        name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
-      }
-      names.push(name);
-    }
+    for (let i = 0; i < aCount; i++)
+      names.push(this._name(stack[i]));
+
     return names;
+  },
+
+  // get the name of the function that is in the nth place in Error().stack
+  // don't include this function in the count
+  _getCallerNameByIndex: function TMP_log_getCallerNameByIndex(aPlace) {
+    let stack = Error().stack.split("\n");
+    let fn = stack[TabmixSvc.stackOffset + aPlace];
+
+    if (fn)
+      return this._name(fn);
+    return null;
+  },
+
+  _name: function(fn) {
+    let name = fn.substr(0, fn.indexOf("("));
+    if (!name) {
+      // get file name and line number
+      let lastIndexOf = fn.lastIndexOf("/");
+      name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
+    }
+    return name;
+  },
+
+  callerName: function () {
+    return this._getCallerNameByIndex(2);
+  },
+
+  // return true if the caller name of the calling function is in the
+  // arguments list
+  isCallerInList: function () {
+    if (!arguments.length) {
+      this.assert("no arguments in Tabmix.isCallerInList");
+      return false;
+    }
+
+    try {
+      let callerName = Components.stack.caller.caller.name;
+      if (!callerName)
+        return false;
+      if (typeof arguments[0] == "object")
+        return arguments[0].indexOf(callerName);
+
+      let args = Array.prototype.slice.call(arguments);
+      return args.indexOf(callerName)
+
+    } catch (ex) {
+      this.assert(ex, "Error we can't check for caller name");
+    }
+    return false;
   },
 
   obj: function(aObj, aMessage, aDisallowLog, level) {

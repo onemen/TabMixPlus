@@ -43,18 +43,15 @@ function TMP_setDragEvents(atStart) {
     gBrowser.mTabDropIndicatorBar = document.getAnonymousElementByAttribute(gBrowser, "class", "tab-drop-indicator-bar");
 
   TMP_tabDNDObserver._dragOverDelay = gBrowser.mDragOverDelay;
-
   if (useDefaultDnD) {
     gBrowser.mStrip.setAttribute("ondragstart", "this.parentNode.parentNode._onDragStart(event);");
     gBrowser.mStrip.setAttribute("ondragover", "this.parentNode.parentNode._onDragOver(event);");
     gBrowser.mStrip.setAttribute("ondrop", "this.parentNode.parentNode._onDrop(event);");
     gBrowser.mStrip.setAttribute("ondragend", "this.parentNode.parentNode._onDragEnd(event);");
     gBrowser.mStrip.setAttribute("ondragleave", "this.parentNode.parentNode._onDragLeave(event);");
-    if (!Tabmix.isVersion(40)) {
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondragover", "this.parentNode.parentNode._onDragOver(event);");
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondragleave", "this.parentNode.parentNode._onDragLeave(event);");
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondrop", "this.parentNode.parentNode._onDrop(event);");
-    }
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondragover", "this.parentNode.parentNode._onDragOver(event);");
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondragleave", "this.parentNode.parentNode._onDragLeave(event);");
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondrop", "this.parentNode.parentNode._onDrop(event);");
   }
   else {
     gBrowser.mStrip.setAttribute("ondragstart", "TMP_tabDNDObserver.onDragStart(event)");
@@ -62,35 +59,14 @@ function TMP_setDragEvents(atStart) {
     gBrowser.mStrip.setAttribute("ondrop", "TMP_tabDNDObserver.onDrop(event);");
     gBrowser.mStrip.setAttribute("ondragend", "TMP_tabDNDObserver.onDragEnd(event);");
     gBrowser.mStrip.setAttribute("ondragleave", "TMP_tabDNDObserver.onDragExit(event);");
-    if (!Tabmix.isVersion(40)) {
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondragover", "TMP_tabDNDObserver.onDragOver(event);");
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondragleave", "TMP_tabDNDObserver.onDragExit(event);");
-      gBrowser.mTabDropIndicatorBar.setAttribute("ondrop", "TMP_tabDNDObserver.onDrop(event);");
-    }
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondragover", "TMP_tabDNDObserver.onDragOver(event);");
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondragleave", "TMP_tabDNDObserver.onDragExit(event);");
+    gBrowser.mTabDropIndicatorBar.setAttribute("ondrop", "TMP_tabDNDObserver.onDrop(event);");
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////
 //// Drag and Drop observers
-
-function TMP_TabDragGesture(aEvent) {
-   nsDragAndDrop.startDrag(aEvent, TMP_tabDNDObserver);
-   aEvent.stopPropagation();
-}
-
-function TMP_TabDragOver(aEvent) {
-   nsDragAndDrop.dragOver(aEvent, TMP_tabDNDObserver);
-   aEvent.stopPropagation();
-}
-
-function TMP_TabDragDrop(aEvent) {
-   nsDragAndDrop.drop(aEvent, TMP_tabDNDObserver);
-   aEvent.stopPropagation();
-}
-
-function TMP_TabDragExit(aEvent) {
-   nsDragAndDrop.dragExit(aEvent, TMP_tabDNDObserver);
-}
 
 var TMP_tabDNDObserver = {
   gBackupLabel: "",
@@ -342,6 +318,9 @@ var TMP_tabDNDObserver = {
         // when we drag tab over scroll-down button and then drop
         // the dragged tab can be hidden
         draggedTab.collapsed = false;
+
+        if (gBrowser.tabContainer.hasAttribute("multibar"))
+          TabmixTabbar.updateScrollStatus();
       }
 
       gBrowser.tabContainer.ensureTabIsVisible(newIndex);
@@ -1250,70 +1229,59 @@ var TMP_TabView = {
   },
 
   _patchTabviewFrame: function SM__patchTabviewFrame(){
-    TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-    Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
-     '{',
-      <![CDATA[$&
-      // Firefox 9.0 use strict mode - we need to map global variable
-      let win = TabView._window;
-      let GroupItem = win.GroupItem;
-      let iQ = win.iQ;
-      let UI = win.UI;
-      let Utils = win.Utils;
-      let GroupItems = win.GroupItems;
-      ]]>
-    )._replace(
-      'groupItem.userSize = data.userSize;',
-      <![CDATA[
-      // This group is re-used by session restore
-      // make sure all of its children still belong to this group.
-      // Do it before setBounds trigger data save that will overwrite
-      // session restore data.
-      groupItem.getChildren().forEach(function (tabItem) {
-        // for Firefox 4.0-5.0
-        var callback = Tabmix.isVersion(60) ? "" : function () {};
-        // store tab data for later use
-        var tabData = TabView._window.Storage.getTabData(tabItem.tab, callback);
-        if (tabData && tabData.groupID != data.id) {
-          // We call TabItems.resumeReconnecting later to reconnect this item
-          tabItem._reconnected = false;
-        }
-      });
-      $&]]>
-    )._replace(
-      // All remaining children in to-be-closed groups are re-used by
-      // session restore. Mark them for recconct later by UI.reset
-      // or TabItems.resumeReconnecting.
-      //
-      // we don't want tabItem without storage data to _reconnect at
-      // this moment. Calling GroupItems.newTab before we set the
-      // active group, can reconnect the tabItem to the wrong group!
-      // also calling this.parent.remove form tabItem._reconnect
-      // without dontArrange flag can cause unnecessary groupItem
-      // and children arrang (we are about to close this group).
-      'tabItem._reconnect();',
-      '', {check: Tabmix.isVersion(60)}
-    )._replace(
-      'groupItem.destroy({immediately: true});',
-      <![CDATA[
-      groupItem.getChildren().forEach(function (tabItem) {
-        if (tabItem.parent && tabItem.parent.hidden)
-          iQ(tabItem.container).show();
-        tabItem._reconnected = false;
-      });
-      groupItem.close({immediately: true});
-      ]]> , {check: !Tabmix.isVersion(60)}
-    )._replace(
-      'this.',
-      'GroupItems.', {flags: "g"}
-    ).toCode();
+    if (Tabmix.isVersion(80)) {
+      TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
+      Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
+       '"use strict";',
+        <![CDATA[$&
+        // Firefox 8.0 use strict mode - we need to map global variable
+        let win = TabView._window;
+        let GroupItem = win.GroupItem;
+        let iQ = win.iQ;
+        let UI = win.UI;
+        let Utils = win.Utils;
+        let GroupItems = win.GroupItems;
+        ]]>, {check: Tabmix.isVersion(80)}
+      )._replace(
+        'this.',
+        'GroupItems.', {flags: "g"}
+      )._replace(
+        'groupItem.userSize = data.userSize;',
+        <![CDATA[
+        // This group is re-used by session restore
+        // make sure all of its children still belong to this group.
+        // Do it before setBounds trigger data save that will overwrite
+        // session restore data.
+        groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {
+          var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);
+          if (!tabData || tabData.groupID != data.id) {
+            // We call TabItems.resumeReconnecting later to reconnect this item
+            tabItem._reconnected = false;
+          }
+        });
+        $&]]>
+      )._replace(
+        // All remaining children in to-be-closed groups are re-used by
+        // session restore. Mark them for recconct later by UI.reset
+        // or TabItems.resumeReconnecting.
+        //
+        // we don't want tabItem without storage data to _reconnect at
+        // this moment. Calling GroupItems.newTab before we set the
+        // active group, can reconnect the tabItem to the wrong group!
+        // also calling this.parent.remove form tabItem._reconnect
+        // without dontArrange flag can cause unnecessary groupItem
+        // and children arrang (we are about to close this group).
+        'tabItem._reconnect();',
+        ''
+      ).toCode();
+    }
 
     // add tab to the new group on tabs order not tabItem order
     TabView._window.UI._original_reset = TabView._window.UI.reset;
     Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
-     '{',
+      '"use strict";',
       <![CDATA[$&
-      // Firefox 9.0 use strict mode - we need to map global variable
+      // Firefox 8.0 use strict mode - we need to map global variable
       let win = TabView._window;
       let Trenches = win.Trenches;
       let Items = win.Items;
@@ -1322,7 +1290,10 @@ var TMP_TabView = {
       let GroupItems = win.GroupItems;
       let GroupItem = win.GroupItem;
       let UI = win.UI;
-      ]]>
+      ]]>, {check: Tabmix.isVersion(80)}
+    )._replace(
+      'this.',
+      'UI.', {flags: "g", silent: true, check: Tabmix.isVersion(80)}
     )._replace(
       'items = TabItems.getItems();',
       'items = gBrowser.tabs;'
@@ -1334,11 +1305,7 @@ var TMP_TabView = {
       'groupItem.add(item, {immediately: true});',
       'item._reconnected = true; \
        $&'
-    )._replace(
-      'this.',
-      'UI.', {flags: "g", silent: true}
     ).toCode();
-
 
     TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
     TabView._window.TabItems.resumeReconnecting = function TabItems_resumeReconnecting() {
@@ -1348,6 +1315,10 @@ var TMP_TabView = {
       TabItems._reconnectingPaused = false;
       Array.forEach(gBrowser.tabs, function (tab){
         let item = tab._tabViewTabItem;
+        if (!item.__tabmix_reconnected) {
+          item._reconnected = false;
+          delete item.__tabmix_reconnected;
+        }
         if (!item._reconnected)
           item._reconnect();
       });
@@ -1356,10 +1327,12 @@ var TMP_TabView = {
 
   _resetTabviewFrame: function SM__resetTabviewFrame(){
     if (TabView._window) {
-      TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
+      if (Tabmix.isVersion(80)) {
+        TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
+        delete TabView._window.GroupItems._original_reconstitute;
+      }
       TabView._window.UI.reset = TabView._window.UI._original_reset;
       TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
-      delete TabView._window.GroupItems._original_reconstitute;
       delete TabView._window.UI._original_reset;
       delete TabView._window.TabItems._original_resumeReconnecting;
     }

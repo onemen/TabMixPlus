@@ -979,6 +979,16 @@ var TabmixAllTabs = {
       popup.insertBefore(mi, document.getElementById("btn_tabslist_sep"));
     else
       popup.appendChild(mi);
+
+    // for ColorfulTabs 6.0+
+    if (typeof colorfulTabs == "object") {
+      if (colorfulTabs.clrAllTabsPopPref) {
+        let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
+        mi.style.setProperty('background-image','-moz-linear-gradient(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),-moz-linear-gradient(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
+      }
+      else
+        mi.style.setProperty('background-image','none','important');
+    }
   },
 
   _tabOnAttrModified: function TMP__tabOnAttrModified(aEvent) {

@@ -131,71 +131,32 @@ else {
 newAddtab.toCode();
 
 if (Tabmix.isVersion(40)) {
-  let tabBar = gBrowser.tabContainer;
-  if ("_lockTabSizing" in tabBar) {
-    tabBar.TMP_inSingleRow = function Tabmix_inSingleRow() {
-      if (!this.hasAttribute("multibar"))
-        return true;
-      // we get here when we are about to go to single row
-      // one tab before the last is in the first row and we are closing one tab
-      var tabs = this.tabbrowser.visibleTabs;
-      return this.getTabRowNumber(tabs[tabs.length-2], this.topTabY) == 1;
-    }
-
-    Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
-      '{',
-      <![CDATA[$&
-        if (TabmixTabbar.widthFitTitle) {
-          let tab, tabs = this.tabbrowser.visibleTabs;
-          for (let t = aTab._tPos+1; t < this.childNodes.length; t++) {
-            if (tabs.indexOf(this.childNodes[t]) > -1) {
-              tab = this.childNodes[t];
-              break;
-            }
-          }
-          if (tab && !tab.pinned && !tab.collapsed) {
-            let tabWidth = aTab.getBoundingClientRect().width + "px";
-            tab.style.setProperty("width",tabWidth,"important");
-            tab.removeAttribute("width");
-            this._hasTabTempWidth = true;
-            this.tabbrowser.addEventListener("mousemove", this, false);
-            window.addEventListener("mouseout", this, false);
-          }
-          return;
-        }
-        if (!this.TMP_inSingleRow())
-          return;
-        this._tabDefaultMaxWidth = this.mTabMaxWidth
-      ]]>
-    ).toCode();
-
-    Tabmix.newCode("gBrowser.tabContainer._expandSpacerBy", gBrowser.tabContainer._expandSpacerBy)._replace(
-      '{',
-      '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
-    ).toCode();
-
-    Tabmix.newCode("gBrowser.tabContainer._unlockTabSizing", gBrowser.tabContainer._unlockTabSizing)._replace(
-      '{','{var updateScrollStatus = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
-    )._replace(
-      /(\})(\)?)$/,
-      <![CDATA[
-        if (this._hasTabTempWidth) {
-          this._hasTabTempWidth = false;
-          let tabs = this.tabbrowser.visibleTabs;
-          for (let i = 0; i < tabs.length; i++)
-            tabs[i].style.width = "";
-        }
-        if (updateScrollStatus) {
-          if (this.childNodes.length > 1) {
-            TabmixTabbar.updateScrollStatus();
-            TabmixTabbar.updateBeforeAndAfter();
-          }
-          TabmixTabbar._updateScrollLeft();
-        }
-        $1$2
-      ]]>
-    ).toCode();
-  }
+/* - not ready
+  Tabmix.newCode("gBrowser.tabContainer.handleEvent", gBrowser.tabContainer.handleEvent)._replace(
+    'case "resize":',
+    <![CDATA[
+    case "resize":
+      if (aEvent.target != window) {
+        // when we get in and out of tabsintitlebar mode call updateScrollStatus even if the event target is not the window
+        if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)
+          TabmixTabbar.updateScrollStatus();
+        break;
+      }
+      TabmixTabbar.widthChange(aEvent);
+      gBrowser.updateWindowResizers();
+      break;
+    ]]>
+  )._replace(
+    'case "resize":',
+    <![CDATA[
+    case "dragover":
+      if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+        TMP_tabDNDObserver.onDragOver(aEvent);
+      break;
+    case "resize":
+    ]]>, {check: !Tabmix.isVersion(80)}
+  ).toCode();
+*/
 
   Tabmix.newCode("gBrowser.tabContainer._handleNewTab", gBrowser.tabContainer._handleNewTab)._replace(
     /(\})(\)?)$/,
@@ -211,6 +172,7 @@ if (Tabmix.isVersion(40)) {
     'this.tabContainer.updateVisibility();',  ''
   ).toCode();
 
+//XXX consider to replace handleDroppedLink not use eval here
   Tabmix.newCode("handleDroppedLink", handleDroppedLink)._replace(
     'loadURI(uri, null, postData.value, false);',
     'TMP_contentAreaOnDrop(event, url, postData.value);'
@@ -221,6 +183,72 @@ if (Tabmix.isVersion(40)) {
   Tabmix.newCode("duplicateTabIn", duplicateTabIn)._replace(
     '{',
     '{ if (where == "window" && TMP_getSingleWindowMode()) where = "tab";'
+  ).toCode();
+}
+
+if (Tabmix.isVersion(50)) {
+  let tabBar = gBrowser.tabContainer;
+  tabBar.TMP_inSingleRow = function Tabmix_inSingleRow() {
+    if (!this.hasAttribute("multibar"))
+      return true;
+    // we get here when we are about to go to single row
+    // one tab before the last is in the first row and we are closing one tab
+    var tabs = this.tabbrowser.visibleTabs;
+    return this.getTabRowNumber(tabs[tabs.length-2], this.topTabY) == 1;
+  }
+
+  Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
+    '{',
+    <![CDATA[$&
+      if (TabmixTabbar.widthFitTitle) {
+        let tab, tabs = this.tabbrowser.visibleTabs;
+        for (let t = aTab._tPos+1; t < this.childNodes.length; t++) {
+          if (tabs.indexOf(this.childNodes[t]) > -1) {
+            tab = this.childNodes[t];
+            break;
+          }
+        }
+        if (tab && !tab.pinned && !tab.collapsed) {
+          let tabWidth = aTab.getBoundingClientRect().width + "px";
+          tab.style.setProperty("width",tabWidth,"important");
+          tab.removeAttribute("width");
+          this._hasTabTempWidth = true;
+          this.tabbrowser.addEventListener("mousemove", this, false);
+          window.addEventListener("mouseout", this, false);
+        }
+        return;
+      }
+      if (!this.TMP_inSingleRow())
+        return;
+      this._tabDefaultMaxWidth = this.mTabMaxWidth
+    ]]>
+  ).toCode();
+
+  Tabmix.newCode("gBrowser.tabContainer._expandSpacerBy", gBrowser.tabContainer._expandSpacerBy)._replace(
+    '{',
+    '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
+  ).toCode();
+
+  Tabmix.newCode("gBrowser.tabContainer._unlockTabSizing", gBrowser.tabContainer._unlockTabSizing)._replace(
+    '{','{var updateScrollStatus = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+  )._replace(
+    /(\})(\)?)$/,
+    <![CDATA[
+      if (this._hasTabTempWidth) {
+        this._hasTabTempWidth = false;
+        let tabs = this.tabbrowser.visibleTabs;
+        for (let i = 0; i < tabs.length; i++)
+          tabs[i].style.width = "";
+      }
+      if (updateScrollStatus) {
+        if (this.childNodes.length > 1) {
+          TabmixTabbar.updateScrollStatus();
+          TabmixTabbar.updateBeforeAndAfter();
+        }
+        TabmixTabbar._updateScrollLeft();
+      }
+      $1$2
+    ]]>
   ).toCode();
 }
 
@@ -381,7 +409,7 @@ else {
   );
 }
 
-/** patch after Bug 324164 - Unify Single Window Mode Preferences, 
+/** patch after Bug 324164 - Unify Single Window Mode Preferences,
  *  and before Bug 509664 - Restore hidden pref browser.link.open_newwindow.override.external
  */
 _openURI = _openURI._replace(
