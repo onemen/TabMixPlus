@@ -116,18 +116,10 @@ var TMP_tabDNDObserver = {
     for (var i = 0; i < tabs.length; i++)
       tabs[i].removeAttribute("showbutton");
 
-    if (Tabmix.isVersion(90)) {
-      var tab = gBrowser.tabContainer._getDragTargetTab(event);
-      if (!tab || !tab._fullyOpen || tab.closing)
-        return;      
-      if (event.ctrlKey) {
-        let dt = event.dataTransfer;
-        let browser = tab.linkedBrowser;
-        dt.setData("text/x-moz-url", browser.currentURI.spec + "\n" + browser.contentTitle);
-        let favicon = document.getAnonymousElementByAttribute(tab, "class", "tab-icon-image");
-        dt.setDragImage(favicon, 16, 16);
-        return;
-      }
+    // Firefox dragstart function handle this
+    // we treat this as if we drop a link draggeType = this.DRAG_LINK
+    if (Tabmix.isVersion(80) && event.ctrlKey) {
+      return;
     }
 
     var draggedTab = event.target;

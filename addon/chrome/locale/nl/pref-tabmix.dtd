@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Pagina dupliceren">
 <!ENTITY newtab.location "Gebruikerslocatie">
 <!ENTITY location.label "Locatie">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
 <!ENTITY openOtherTabNext.label "Andere tabbladen openen naast huidige">
 <!ENTITY relatedAfterCurrent.label "Alleen indien gerelateerd aan het huidige tabblad">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Logische stijl">
 <!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
 <!ENTITY tabBarPosition.label "Positie:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Bovenkant (boven inhoud)">
+<!ENTITY tabBarPosition.bottom.label "Onderkant (onder inhoud)">
 <!ENTITY tabScroll.label "Tabbladen als ze niet binnen de vensterbreedte passen:">
 <!ENTITY tabScroll.none "schuifbaar zonder knoppen maken">
 <!ENTITY tabScroll.leftRightButtons "schuifbaar met knoppen aan de linker- en rechterzijde maken">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "op een tabblad:">
 <!ENTITY ontabbar.label "op de tabbladenbalk:">
 <!ENTITY clicktab.label "Kies de opdracht om uit te voeren wanneer op een tabblad of op de tabbladenbalk geklikt wordt">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Voorkomen dat door dubbel-klikken op de tabbladenbalk de vensterafmetingen worden gewijzigd.">
 <!ENTITY clicktab.nothing "Er gebeurt niets">
 <!ENTITY clicktab.addtab "Een nieuw tabblad openen">
 <!ENTITY clicktab.duplicatetab "Het tabblad dupliceren">

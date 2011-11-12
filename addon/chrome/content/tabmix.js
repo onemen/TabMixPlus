@@ -131,7 +131,7 @@ function TMP_delayedStartup() {
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
   if ("bookMarkIds" in window) {
-    let items = window.bookMarkIds.split("|");
+    let items = (window.bookMarkIds + "").split("|");
     for (let i = 0; i < items.length ; i++) {
       if (items[i] && items[i] > -1)
         gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
@@ -164,11 +164,21 @@ function TMP_delayedStartup() {
 
       if (aToolboxChanged) {
         TMP_BrowserToolboxCustomizeDone();
-        if (Tabmix.isVersion(40)) {
+        if (Tabmix.isVersion(40) && !TabmixTabbar._needResetOnCustomizeDone) {
           TabmixTabbar.updateScrollStatus();
           TabmixTabbar.updateBeforeAndAfter();
         }
       }
+      // fix incompatibility with Personal Titlebar extension
+      // the extensions trigger tabbar binding reset on toolbars customize 
+      // we need to init our ui settings again
+      TabmixTabbar._toolboxcustomizeStart = false;
+      if (TabmixTabbar._needResetOnCustomizeDone) {
+        TabmixTabbar.visibleRows = 1;
+        TabmixTabbar.updateSettings(false);
+        TabmixTabbar._needResetOnCustomizeDone = false;
+      }
+
       // if tabmix option dialog is open update visible buttons and set focus if needed
       var optionWindow = TabmixSvc.wm.getMostRecentWindow("mozilla:tabmixopt");
       if (optionWindow) {

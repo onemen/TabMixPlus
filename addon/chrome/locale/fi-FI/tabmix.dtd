@@ -1,53 +1,53 @@
-<!ENTITY closedtabsbtn.label "Closed Tabs">
-<!ENTITY closedtabsbtn.tooltip "Display Closed Tabs List">
-<!ENTITY sessionbtn.tooltip "Display and Manage your Sessions">
-<!ENTITY tabslistbtn.label "Opened Tabs">
-<!ENTITY tabslistbtn.tooltip "Display Opened Tabs List">
-<!ENTITY closedwindowsbtn.label "Closed Windows">
-<!ENTITY closedwindowsbtn.tooltip "Display Closed Windows List">
-<!ENTITY page.header.title "Tab Mix Plus Options">
-<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
-<!ENTITY session.Tools "Session Manager">
-<!ENTITY closedWin.label "Closed Windows List">
-<!ENTITY duplicateTabMenu.label "Duplicate Tab">
-<!ENTITY duplicateTabMenu.accesskey "D">
-<!ENTITY duplicateinWin.label "Duplicate to New Window">
-<!ENTITY duplicateinWin.accesskey "W">
-<!ENTITY detachTab.label "Move to New Window">
-<!ENTITY detachTab.accesskey "E">
-<!ENTITY mergeContext.label "Merge Windows">
-<!ENTITY mergeContext.accesskey "M">
-<!ENTITY renametab.label "Rename Tab">
-<!ENTITY renametab.accesskey "M">
-<!ENTITY copytaburl.label "Copy Tab URL">
-<!ENTITY copytaburl.accesskey "Y">
-<!ENTITY reloadother.label "Reload Other Tabs">
-<!ENTITY reloadother.accesskey "O">
-<!ENTITY reloadleft.label "Reload Left Tabs">
-<!ENTITY reloadleft.accesskey "L">
-<!ENTITY reloadright.label "Reload Right Tabs">
-<!ENTITY reloadright.accesskey "I">
-<!ENTITY autoReloadTab.label "Reload Tab Every">
-<!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReload.label "Reload Every">
-<!ENTITY autoReload.accesskey "E">
-<!ENTITY afterthis.label "After This Tab">
-<!ENTITY bookmarktab.label "Bookmark This Tab">
-<!ENTITY undoCloseListMenu.label "Closed Tabs List">
-<!ENTITY undoCloseListMenu.accesskey "L">
-<!ENTITY closeAllTabsMenu.label "Close All Tabs">
+<!ENTITY closedtabsbtn.label "Suljetut välilehdet">
+<!ENTITY closedtabsbtn.tooltip "Näytä lista suljetuista välilehdistä">
+<!ENTITY sessionbtn.tooltip "Katsele ja hallinnoi istuntojasi">
+<!ENTITY tabslistbtn.label "Avatut välilehdet">
+<!ENTITY tabslistbtn.tooltip "Näytä lista avatuista välilehdistä">
+<!ENTITY closedwindowsbtn.label "Suljetut ikkunat">
+<!ENTITY closedwindowsbtn.tooltip "Näytä lista suljetuista ikkunoista">
+<!ENTITY page.header.title "Tab Mix Plus - Asetukset">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Istuntojenhallinta">
+<!ENTITY session.Tools "Istuntojenhallinta">
+<!ENTITY closedWin.label "Lista suljetuista ikkunoista">
+<!ENTITY duplicateTabMenu.label "Monista välilehti">
+<!ENTITY duplicateTabMenu.accesskey "M">
+<!ENTITY duplicateinWin.label "Monista uuteen ikkunaan">
+<!ENTITY duplicateinWin.accesskey "I">
+<!ENTITY detachTab.label "Siirrä uuteen ikkunaan">
+<!ENTITY detachTab.accesskey "S">
+<!ENTITY mergeContext.label "Yhdistä ikkunat">
+<!ENTITY mergeContext.accesskey "Y">
+<!ENTITY renametab.label "Uudelleennimeä välilehti">
+<!ENTITY renametab.accesskey "N">
+<!ENTITY copytaburl.label "Kopioi välilehden URL-osoite">
+<!ENTITY copytaburl.accesskey "K">
+<!ENTITY reloadother.label "Päivitä muut välilehdet">
+<!ENTITY reloadother.accesskey "P">
+<!ENTITY reloadleft.label "Päivitä vasenmanpuoleiset välilehdet">
+<!ENTITY reloadleft.accesskey "V">
+<!ENTITY reloadright.label "Päivitä oikeanpuoleiset välilehdet">
+<!ENTITY reloadright.accesskey "O">
+<!ENTITY autoReloadTab.label "Välilehden päivitysväli">
+<!ENTITY autoReloadTab.accesskey "L">
+<!ENTITY autoReload.label "Päivitysväli">
+<!ENTITY autoReload.accesskey "Ä">
+<!ENTITY afterthis.label "Tämän välilehden jälkeen">
+<!ENTITY bookmarktab.label "Lisää tämä välilehti kirjanmerkkeihin">
+<!ENTITY undoCloseListMenu.label "Lista suljetuista välilehdistä">
+<!ENTITY undoCloseListMenu.accesskey "U">
+<!ENTITY closeAllTabsMenu.label "Sulje kaikki välilehdet">
 <!ENTITY closeall.accesskey "A">
-<!ENTITY closeSimilarTab.label "Close Similar Tabs">
-<!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Close Left Tabs">
-<!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Close Right Tabs">
-<!ENTITY closeright.accesskey "R">
-<!ENTITY docShellMenu.label "Permissions">
-<!ENTITY docShellMenu.accesskey "P">
-<!ENTITY freezeTabMenu.label "Freeze Tab">
-<!ENTITY freezeTabMenu.accesskey "F">
-<!ENTITY protectTabMenu.label "Protect Tab">
+<!ENTITY closeSimilarTab.label "Sulje samankaltaiset ikkunat">
+<!ENTITY closeSimilarTab.accesskey "M">
+<!ENTITY closeLeftTabsMenu.label "Sulje vasenmanpuoleiset välilehdet">
+<!ENTITY closeleft.accesskey "V">
+<!ENTITY closeRightTabsMenu.label "Sulje oikeanpuoleiset välilehdet">
+<!ENTITY closeright.accesskey "O">
+<!ENTITY docShellMenu.label "Oikeudet">
+<!ENTITY docShellMenu.accesskey "O">
+<!ENTITY freezeTabMenu.label "Jäädytä välilehti">
+<!ENTITY freezeTabMenu.accesskey "J">
+<!ENTITY protectTabMenu.label "Suojaa välilehti">
 <!ENTITY protectTabMenu.tooltip "Protect tabs from being closed">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "Lock Tab">

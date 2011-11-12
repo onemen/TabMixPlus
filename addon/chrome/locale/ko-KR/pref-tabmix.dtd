@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "복제된 페이지">
 <!ENTITY newtab.location "사용자 지정 주소">
 <!ENTITY location.label "주소">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "세 탭을 현재 탭 다음에 열기">
 <!ENTITY openOtherTabNext.label "다른 탭을 현재 탭 다음에 열기">
 <!ENTITY relatedAfterCurrent.label "현재 탭과 관련된 탭에만">

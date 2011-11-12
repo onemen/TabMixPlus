@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Editor de tipus de fitxers">
+<!ENTITY filetype.add "Afegeix">
+<!ENTITY filetype.edit "Modifica">
+<!ENTITY filetype.delete "Suprimeix">
+<!ENTITY filetype.new "Tipus de fitxer nou:">

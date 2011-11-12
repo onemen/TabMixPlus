@@ -4,7 +4,7 @@
 <!ENTITY tab.appearance "Näyttö">
 <!ENTITY tab.menu "Valikko">
 <!ENTITY tab.session "Istunto">
-<!ENTITY tab.incompatible "Error">
+<!ENTITY tab.incompatible "Virhe">
 <!ENTITY apply.label "Käytä">
 <!ENTITY settings.export "Vie asetukset">
 <!ENTITY settings.import "Tuo asetukset">
@@ -25,7 +25,7 @@
 <!ENTITY edit.label "Muokkaa">
 <!ENTITY speLink.label "Pakota avaus uuteen välilehteen:">
 <!ENTITY speLink.none "Ei käytössä">
-<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.allLinks "Kaikki linkit">
 <!ENTITY speLink.external "Linkit muille sivustoille">
 <!ENTITY singleWindow.label "Ota käyttöön yhden ikkunan tila">
 <!ENTITY newTabs.label "New Tabs">
@@ -39,9 +39,10 @@
 <!ENTITY newtab.blank "tyhjällä sivulla">
 <!ENTITY newtab.home "kotisivulla">
 <!ENTITY newtab.current "Nykyisellä sivulla">
-<!ENTITY newtab.duplicate "Duplicate Page">
+<!ENTITY newtab.duplicate "Monista sivu">
 <!ENTITY newtab.location "User Location">
 <!ENTITY location.label "Location">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Open new tabs next to current one">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">
 <!ENTITY relatedAfterCurrent.label "Only if related to current tab">
@@ -58,19 +59,19 @@
 <!ENTITY openBookmarks.label "Bookmarks">
 <!ENTITY openBMKGroups.label "Groups of bookmarks">
 <!ENTITY openBMKGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks">
-<!ENTITY openHistory.label "History">
-<!ENTITY openUrl.label "Address bar">
-<!ENTITY openSearch.label "Search bar">
+<!ENTITY openHistory.label "Historia">
+<!ENTITY openUrl.label "Osoitepalkki">
+<!ENTITY openSearch.label "Hakupalkki">
 <!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
 <!ENTITY middlecurrent.tooltip "Only for bookmarks, history, links forced to open in new tab">
 <!ENTITY tabFocus.caption "Focus/Select tabs that open from:">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Diverted windows">
 <!ENTITY selectTabCommand.label "New tab commands">
-<!ENTITY selectTabBH.label "Bookmarks/History">
-<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY selectTabBH.label "Kirjanmerkit/historia">
+<!ENTITY duplicateTab.label "Monista välilehti">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
-<!ENTITY warning.caption.label "Warning">
+<!ENTITY warning.caption.label "Varoitus">
 <!ENTITY warnOnCloseProtected.label "Warn me when closing window with protected tabs">
 <!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Closing last tab">

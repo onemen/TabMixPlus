@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Lap megkettőzése">
 <!ENTITY newtab.location "Hely">
 <!ENTITY location.label "Hely">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
 <!ENTITY openOtherTabNext.label "Lapok megnyitása az aktuális után">
 <!ENTITY relatedAfterCurrent.label "Csak ha az aktuális laphoz kapcsolódik">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Egyedi stílus">
 <!ENTITY dropIndicator-builtin.label "Beépített stílus">
 <!ENTITY tabBarPosition.label "Pozíció:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Fent (a tartalom felett)">
+<!ENTITY tabBarPosition.bottom.label "Lent (a tartalom alatt)">
 <!ENTITY tabScroll.label "Ha a lapok nem férnek el egy sorban, legyen:">
 <!ENTITY tabScroll.none "görgethető gombok nélkül">
 <!ENTITY tabScroll.leftRightButtons "görgethető a két oldalon elhelyezett gombokkal">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "a lapon:">
 <!ENTITY ontabbar.label "a Lapok eszköztáron:">
 <!ENTITY clicktab.label "Válasszon egy végrehajtandó műveletet, ha egy lapra vagy a Lapok eszköztárra kattint">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Dupla kattintás a lapokon ne változtassa meg az ablak méretét.">
 <!ENTITY clicktab.nothing "ne tegyen semmit">
 <!ENTITY clicktab.addtab "új lap megnyitása">
 <!ENTITY clicktab.duplicatetab "lap megkettőzése">

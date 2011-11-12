@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
 <!ENTITY newtab.location "Uživatelské umístění">
 <!ENTITY location.label "Umístění">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Otevřít nové panely vedle současného panelu">
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle současného">
 <!ENTITY relatedAfterCurrent.label "Pouze pokud je ve vztahu k současnému panelu">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavný styl">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
+<!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">
 <!ENTITY tabScroll.label "Je-li otevřeno velké množství panelů">
 <!ENTITY tabScroll.none "Posuvná lišta panelů">
 <!ENTITY tabScroll.leftRightButtons "Posuvná lišta panelů s tlačítky nalevo i napravo">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "na panel:">
 <!ENTITY ontabbar.label "na lištu panelů:">
 <!ENTITY clicktab.label "Vyberte příkaz, který se má provést při poklepání na panel nebo lištu panelů">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Při dvojím poklikání na lištu s panely nezměnit velikost okna.">
 <!ENTITY clicktab.nothing "Bez akce">
 <!ENTITY clicktab.addtab "Otevřít nový panel">
 <!ENTITY clicktab.duplicatetab "Duplikovat panel">

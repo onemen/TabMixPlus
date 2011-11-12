@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "la pagina duplicata">
 <!ENTITY newtab.location "l&apos;URL definito dell&apos;utente">
 <!ENTITY location.label "Indirizzo web">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
 <!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
 <!ENTITY relatedAfterCurrent.label "Solo se relative alla scheda attuale">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "stile predefinito del browser">
 <!ENTITY dropIndicator-builtin.label "stile incorporato">
 <!ENTITY tabBarPosition.label "Sposta la barra delle schede:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "in alto (sopra al contenuto)">
+<!ENTITY tabBarPosition.bottom.label "in basso (sotto al contenuto)">
 <!ENTITY tabScroll.label "Quando ci sono troppe schede aperte:">
 <!ENTITY tabScroll.none "rendi scorrevole la barra delle schede">
 <!ENTITY tabScroll.leftRightButtons "rendi scorrevole la barra delle schede con pulsanti a destra e sinistra">
@@ -155,7 +156,6 @@
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
 
-
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -170,7 +170,6 @@
 <!ENTITY bookastitle.label "Usa il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
-
 
 -->
 <!ENTITY toolbar.description.width "21em">
@@ -200,7 +199,7 @@
 <!ENTITY ontab.label "Su una scheda">
 <!ENTITY ontabbar.label "Sulla barra delle schede">
 <!ENTITY clicktab.label "Selezionare quali azioni associare al clic con il mouse su una scheda o sulla barra delle schede">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Evita che il doppio clic sulla barra delle schede ridimensioni la finestra del browser">
 <!ENTITY clicktab.nothing "Non ha effetto alcuno">
 <!ENTITY clicktab.addtab "Apri una nuova scheda">
 <!ENTITY clicktab.duplicatetab "Duplica la scheda">

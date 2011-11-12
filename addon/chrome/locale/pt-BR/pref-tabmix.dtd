@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Duplicar página">
 <!ENTITY newtab.location "Endereço configurado">
 <!ENTITY location.label "Endereço">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Abrir novas abas ao lado da aba atual">
 <!ENTITY openOtherTabNext.label "Abrir outras abas próxima da atual">
 <!ENTITY relatedAfterCurrent.label "Apenas se relacionadas à aba atual">

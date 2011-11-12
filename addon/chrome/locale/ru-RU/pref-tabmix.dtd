@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Клонированную страницу">
 <!ENTITY newtab.location "Установлено пользователем">
 <!ENTITY location.label "Адрес">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Размещать новые вкладки сразу после текущей">
 <!ENTITY openOtherTabNext.label "Открывать другие вкладки после текущей">
 <!ENTITY relatedAfterCurrent.label "Только если связано с текущей вкладкой">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Встроенный стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
 <!ENTITY tabBarPosition.label "Расположение панели:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Сверху (над контентом)">
+<!ENTITY tabBarPosition.bottom.label "Снизу (под контентом)">
 <!ENTITY tabScroll.label "Если много вкладок:">
 <!ENTITY tabScroll.none "Прокручивать вкладки колесом мыши">
 <!ENTITY tabScroll.leftRightButtons "Прокручивать с помощью кнопок с правой и левой сторон">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "По вкладке:">
 <!ENTITY ontabbar.label "По панели вкладок:">
 <!ENTITY clicktab.label "Выберите действие при щелчке по вкладке или панели">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Предотвращать изменение размера окна при двойном клике на панели вкладок.">
 <!ENTITY clicktab.nothing "Ничего не предпринимать">
 <!ENTITY clicktab.addtab "Открыть новую вкладку">
 <!ENTITY clicktab.duplicatetab "Клонировать вкладку">

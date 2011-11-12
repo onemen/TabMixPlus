@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Duplicate Page">
 <!ENTITY newtab.location "User Location">
 <!ENTITY location.label "Location">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Open new tabs next to current one">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">
 <!ENTITY relatedAfterCurrent.label "Only if related to current tab">

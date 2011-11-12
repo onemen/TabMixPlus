@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Personalitza els estils">
+<!ENTITY currentTab.label "Pestanya actual">
+<!ENTITY unreadTab.label "Pestanyes pendents de llegir">
+<!ENTITY otherTabs.label "Altres pestanyes">
+<!ENTITY italic.label "Cursiva">
+<!ENTITY bold.label "Negreta">
+<!ENTITY underline.label "Subratllat">
+<!ENTITY textcolor.label "Color del text">
+<!ENTITY bgColor.label "Color de fons">
+<!ENTITY statusbar.label "Amaga a la barra d'estat">
+<!ENTITY useThis.label "utilitza aquest estil per a">
+<!ENTITY opacity.label "opacitat">

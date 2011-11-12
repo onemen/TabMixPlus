@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Duplikér side">
 <!ENTITY newtab.location "Brugerplacering">
 <!ENTITY location.label "Placering">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Åbn nye faneblade ved siden af nuværende">
 <!ENTITY openOtherTabNext.label "Åbn andre faneblade ved siden af det nuværende">
 <!ENTITY relatedAfterCurrent.label "Kun hvis relateret til nuværende faneblad">

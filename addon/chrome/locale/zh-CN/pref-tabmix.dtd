@@ -35,13 +35,14 @@
 <!ENTITY tabMerge.label "标签页合并">
 <!ENTITY tabFeature.label "标签页特性">
 <!ENTITY newtab.label "在新建标签页打开：">
-<!ENTITY replaceLastTabWith.label "当关闭最后一个标签页时，将其替代为：">
+<!ENTITY replaceLastTabWith.label "当关闭最后一个标签页时，将其替代为">
 <!ENTITY newtab.blank "空白页">
 <!ENTITY newtab.home "主页">
 <!ENTITY newtab.current "当前的页面">
 <!ENTITY newtab.duplicate "复制的页面">
 <!ENTITY newtab.location "用户指定的页面">
 <!ENTITY location.label "指定的页面">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
 <!ENTITY relatedAfterCurrent.label "仅当紧邻当前标签页">
@@ -53,7 +54,7 @@
 <!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
 <!ENTITY lockTabs.label "锁定标签页">
 <!ENTITY lockNewTabs.label "锁定新标签页">
-<!ENTITY lockAppTabs.label "锁定 App 标签页">
+<!ENTITY lockAppTabs.label "锁定应用程序标签页">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
 <!ENTITY openBookmarks.label "书签">
 <!ENTITY openBMKGroups.label "书签群组">
@@ -73,12 +74,12 @@
 <!ENTITY warning.caption.label "警告">
 <!ENTITY warnOnCloseProtected.label "关闭含有受保护标签页的窗口时警告我">
 <!ENTITY warnOnCloseWindow.label "关闭含多个标签页的窗口时警告我">
-<!ENTITY lasttab.caption.label "正在关闭最后一个标签页">
+<!ENTITY lasttab.caption.label "关闭最后一个标签页">
 <!ENTITY keepWindow.label.3.1 "关闭最后一个标签页时不关闭窗口">
 <!ENTITY keeptab.label "阻止关闭最后一个标签页">
 <!ENTITY closeOnMerge.label "合并所有窗口后关闭其他窗口">
 <!ENTITY warnOnMerge.label "关闭包含未合并标签页的窗口时警告我">
-<!ENTITY currenttab.caption.label "正在关闭当前标签页">
+<!ENTITY currenttab.caption.label "关闭当前标签页">
 <!ENTITY focusTab.labelBegin "关闭当前标签页后激活：">
 <!ENTITY focusTab.firstTab "第一个标签页">
 <!ENTITY focusTab.leftTab "左侧的标签页">
@@ -89,7 +90,7 @@
 <!ENTITY focusTab.openerTab.rtl "父标签页/左侧标签页">
 <!ENTITY focusTab.lastOpenedTab "上次打开的标签页">
 <!ENTITY undoClose.label "启用撤销关闭标签页功能">
-<!ENTITY undoCloseCache.label "最大可恢复数:">
+<!ENTITY undoCloseCache.label "最大可恢复数：">
 <!ENTITY undoClosepos.label "恢复标签页的原始位置">
 <!ENTITY menuonlybutton.label "工具栏按钮只显示已关闭的标签页列表">
 <!ENTITY ctrltab.label "Ctrl-Tab 以最近被浏览的顺序切换标签页">
@@ -97,7 +98,7 @@
 <!ENTITY ctrltab.tabPreviews "显示标签页缩略图">
 <!ENTITY ctrltab.popup "Ctrl-Tab 显示标签页列表弹出菜单">
 <!ENTITY cmdtab.popup "Cmd-Tab 显示标签页列表弹出菜单">
-<!ENTITY tabpopup.mouse "鼠标指向列表时切换标签页">
+<!ENTITY tabpopup.mouse "鼠标指向列表时显示标签页列表">
 <!ENTITY mergeNoTabSelection.label "未选择标签页时合并窗口">
 <!ENTITY mergeTabSelection.label "选择标签页时合并窗口">
 <!ENTITY mergeall.label "合并所有窗口为一个窗口">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
 <!ENTITY tabBarPosition.label "标签栏位置：">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">
+<!ENTITY tabBarPosition.bottom.label "底部（内容区域下方）">
 <!ENTITY tabScroll.label "当所有标签页占用宽度超过标签栏时,启用：">
 <!ENTITY tabScroll.none "不使用滚动按钮">
 <!ENTITY tabScroll.leftRightButtons "在标签栏左右两侧都显示滚动按钮">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "标签页上:">
 <!ENTITY ontabbar.label "标签栏上:">
 <!ENTITY clicktab.label "选择一个点击标签页或标签栏时要执行的命令">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "双击标签栏时不更改窗口尺寸。">
 <!ENTITY clicktab.nothing "无动作">
 <!ENTITY clicktab.addtab "打开新标签页">
 <!ENTITY clicktab.duplicatetab "复制当前标签页">

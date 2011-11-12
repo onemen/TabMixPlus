@@ -156,7 +156,7 @@ var TMP_LastTab = {
        this.TabHistory.splice(i, 1);
    },
 
-   MaintainTabHistory : function(lastIndex) {
+   MaintainTabHistory : function TMP_LastTab_MaintainTabHistory(lastIndex) {
       var newTabs = [], tab, i;
 
       // Gather tab synchronization info
@@ -214,7 +214,6 @@ try{
      }
      else
        list = gBrowser.tabs;
-
      list = Array.filter(list, function(tab) {
              return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
            });
@@ -222,8 +221,8 @@ try{
    },
 
    OnKeyPress : function _LastTab_OnKeyPress(event) {
-      var tabCount = this.tabs.length;
       if((this.handleCtrlTab || this.showTabList) && event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB && event.ctrlKey && !event.altKey && !event.metaKey) {
+         var tabCount = this.tabs.length;
          if(!this.KeyLock) {
             if (this.handleCtrlTab) {
                this.TabIndex = tabCount - 1;
@@ -365,7 +364,7 @@ try{
       }
    },
 
-   PushSelectedTab : function() {
+   PushSelectedTab : function TMP_LastTab_PushSelectedTab() {
       var selectedTab = gBrowser.tabContainer.selectedItem;
       this.detachTab(selectedTab);
       this.TabHistory.push(selectedTab);

@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "la page dupliquée">
 <!ENTITY newtab.location "une adresse personnalisée">
 <!ENTITY location.label "Adresse">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l'onglet courant">
 <!ENTITY openOtherTabNext.label "Ouvrir d'autres onglets près de l'onglet courant">
 <!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l'onglet courant">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
 <!ENTITY tabBarPosition.label "Position :">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
+<!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">
 <!ENTITY tabScroll.label "Lorsqu'il y a trop d'onglets ouverts :">
 <!ENTITY tabScroll.none "Faire défiler avec la molette de la souris">
 <!ENTITY tabScroll.leftRightButtons "Faire défiler avec les boutons fléchés situés à gauche et à droite">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "sur un onglet :">
 <!ENTITY ontabbar.label "sur la barre d'onglets :">
 <!ENTITY clicktab.label "Choisir la commande à exécuter lors d'un clic sur un onglet ou sur la barre d'onglets">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Empêcher le double clic sur la barre d'onglets de redimensionner la fenêtre.">
 <!ENTITY clicktab.nothing "Ne fait rien">
 <!ENTITY clicktab.addtab "Ouvre un nouvel onglet">
 <!ENTITY clicktab.duplicatetab "Duplique l'onglet">

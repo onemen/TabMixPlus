@@ -188,6 +188,15 @@
           this.mTabstrip._scrollButtonUp = TabmixSvc.TMPprefs.getIntPref("tabBarMode") == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ?
              this.mTabstrip._scrollButtonUpLeft : this.mTabstrip._scrollButtonUpRight;
 
+          // fix incompatibility with Personal Titlebar extension
+          // the extensions trigger tabbar binding reset on toolbars customize 
+          // we need to init our ui settings again
+          if (TabmixTabbar._toolboxcustomizeStart) {
+            TabmixTabbar.visibleRows = 1;
+            TabmixTabbar.updateSettings(false);
+            TabmixTabbar._needResetOnCustomizeDone = true;
+          }
+
           // initEvent
           var event = document.createEvent("Events");
           event.initEvent("TabmixTabbarPositionChanged", true, true);

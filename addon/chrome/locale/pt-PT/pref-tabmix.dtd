@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "Duplicar página">
 <!ENTITY newtab.location "Localização do utilizador">
 <!ENTITY location.label "Localização">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Abrir novos separadores a seguir ao actual">
 <!ENTITY openOtherTabNext.label "Abrir outros separadores a seguir ao actual">
 <!ENTITY relatedAfterCurrent.label "Apenas se relacionado com o separador actual">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo embutido">
 <!ENTITY tabBarPosition.label "Posição:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">
+<!ENTITY tabBarPosition.bottom.label "Fundo (abaixo do conteúdo)">
 <!ENTITY tabScroll.label "Quando os separadores não cabem na largura:">
 <!ENTITY tabScroll.none "Deslizar sem botões">
 <!ENTITY tabScroll.leftRightButtons "Deslizar com botões do lado esquerdo e direito">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "num separador:">
 <!ENTITY ontabbar.label "numa barra de separadores:">
 <!ENTITY clicktab.label "Escolha o comando a executar quando clica num separador ou barra de separadores">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Impede que um duplo clique na barra de separadores mude o tamanho da janela.">
 <!ENTITY clicktab.nothing "Não fazer nada">
 <!ENTITY clicktab.addtab "Abrir novo separador">
 <!ENTITY clicktab.duplicatetab "Duplica o separador">

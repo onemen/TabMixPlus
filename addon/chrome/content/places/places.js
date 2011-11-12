@@ -122,7 +122,13 @@ var TMP_Places = {
            }'
         ).toCode();
 
-        openLinkFunction = Tabmix.newCode("openLinkIn", openLinkIn)._replace(
+        let [fnName, fnCode] = ["openLinkIn", openLinkIn];
+        try {
+          if (typeof(com.tobwithu.wmn.openLinkIn) == "function") {
+            [fnName, fnCode] = ["com.tobwithu.wmn.openLinkIn", com.tobwithu.wmn.openLinkIn];
+          }
+        } catch(ex) {}
+        openLinkFunction = Tabmix.newCode(fnName, fnCode)._replace(
           'var aRelatedToCurrent = params.relatedToCurrent;',
           '$& \
            var bookMarkId = params.bookMarkId; \

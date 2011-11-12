@@ -15,7 +15,7 @@
 <!ENTITY linkTarget.window "fereastră nouă">
 <!ENTITY linkTarget.current "fila curentă">
 <!ENTITY linkTarget.accesskey "c">
-<!ENTITY divertedWindowOpen.label "Ferestre instantanee JavaScript:">
+<!ENTITY divertedWindowOpen.label "JavaScript și ferestre instantanee:">
 <!ENTITY divertedWindows.comment "Opțiuni suplimentare pentru JavaScript și ferestre instantanee sunt disponibile în caseta „Opțiuni” a navigatorului">
 <!ENTITY divertedWindowOpen.all "Deschide toate ferestrele instantanee în file">
 <!ENTITY divertedWindowOpen.some "Permite ferestrelor instantanee să fie redimensionate">
@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "o pagină duplicat">
 <!ENTITY newtab.location "o locație a utilizatorului">
 <!ENTITY location.label "Locație">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Deschide filele noi alături de fila curentă">
 <!ENTITY openOtherTabNext.label "Deschide alte file alături de fila curentă">
 <!ENTITY relatedAfterCurrent.label "Numai dacă sunt în legătură cu fila curentă">
@@ -105,7 +106,7 @@
 <!ENTITY mergePopups.label "De asemena, îmbină și ferestrele instantanee">
 <!ENTITY popupNextToOpener.label "Plasează ferestrele instantanee alături de sursele lor">
 <!ENTITY slideshow.label "F8 comută filele la fiecare">
-<!ENTITY reloadEvery.onReloadButton.label "Afișează meniul 'Reîncarcă la fiecare…' sub butonul 'Reîncarcă'">
+<!ENTITY reloadEvery.onReloadButton.label "Afișează meniul „Reîncarcă la fiecare…” sub butonul „Reîncarcă”">
 <!ENTITY toggleAnimation.label "Dezactivează animarea închiderii/deschiderii filelor">
 <!ENTITY seconds.label "secunde">
 <!ENTITY minutes.label "min">
@@ -114,7 +115,7 @@
 <!ENTITY toolBarAppearance.label "Bară de unelte">
 <!ENTITY show.ontabbar.label "Afișează în bara de file">
 <!ENTITY show.ontab.label "Afișează pe filă">
-<!ENTITY dragNewTabButton.tooltip "Trageți butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
+<!ENTITY dragNewTabButton.tooltip "Glisați butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
 <!ENTITY hideTabBarButton.label "Butonul „Închidere filă”">
 <!ENTITY newTabButton.label "Butonul „Filă nouă”">
 <!ENTITY newTabButton.posiotion.left.label "în marginea stângă">
@@ -127,9 +128,9 @@
 <!ENTITY dropIndicator.label "Indicator de fixare">
 <!ENTITY dropIndicator-native.label "Stil nativ">
 <!ENTITY dropIndicator-builtin.label "Stil intern">
-<!ENTITY tabBarPosition.label "Poziționează:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.label "Poziționează bara de file:">
+<!ENTITY tabBarPosition.top.label "Sus (deasupra conținutului)">
+<!ENTITY tabBarPosition.bottom.label "Jos (dedesubtul conținutului)">
 <!ENTITY tabScroll.label "Când filele depășesc lungimea barei, afișează bara:">
 <!ENTITY tabScroll.none "derulantă, cu butoane">
 <!ENTITY tabScroll.leftRightButtons "derulantă, cu butoane pe marginea stângă și dreaptă">
@@ -167,7 +168,7 @@
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "Puteți alege care dintre butoanele Tab Mix Plus vor fi afișate pe bara de unelte">
-<!ENTITY toolbar.button.label "Alege…">
+<!ENTITY toolbar.button.label "Personalizează bara">
 <!ENTITY toolbar.visible.caption "Butoane afișate">
 <!ENTITY toolbar.novisible.label "(nu există butoane afișate)">
 <!ENTITY toolbar.hidden.caption "Butoane neafișate">
@@ -177,7 +178,7 @@
 <!ENTITY mouseHoverSelect.labelBegin "Selectează fila survolată timp de">
 <!ENTITY tabFlip.label "Selectează ultima filă afișată când se face clic pe fila curentă">
 <!ENTITY tabFlip.delay "Amână pentru">
-<!ENTITY addTabDrag.label "Trage și fixează filele pentru schimbarea ordinii lor">
+<!ENTITY addTabDrag.label "Glisează și fixează filele pentru schimbarea ordinii lor">
 <!ENTITY enabletabbarscrolling.label "Permite defilarea pentru selectarea filelor">
 <!ENTITY reverseScroll.label "Inversează direcția de selectare a filelor">
 <!ENTITY clickFocus.label "Selectează o filă la clic cu mausul (apăsare și eliberare)">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "pe o filă:">
 <!ENTITY ontabbar.label "pe bara de file:">
 <!ENTITY clicktab.label "Comanda ce se execută la clic pe o filă sau pe bara de file">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Nu permite redimensionarea ferestrei cu dublu-clic pe bara de file">
 <!ENTITY clicktab.nothing "Nu executa nimic">
 <!ENTITY clicktab.addtab "Deschide o filă nouă">
 <!ENTITY clicktab.duplicatetab "Duplică fila">
@@ -259,7 +260,7 @@
 <!ENTITY sm.preserve "Conservare">
 <!ENTITY sm.start "La lansarea navigatorului:">
 <!ENTITY sm.start.restore "Restaurează sesiunea">
-<!ENTITY sm.start.ask "Întrabă înaintea restaurării sesiunii">
+<!ENTITY sm.start.ask "Întreabă înaintea restaurării sesiunii">
 <!ENTITY sm.start.nothing "Nu restaura nimic">
 <!ENTITY sm.exit "La închiderea navigatorului:">
 <!ENTITY sm.exit.save "Salvează sesiunea">

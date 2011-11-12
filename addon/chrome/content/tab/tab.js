@@ -5,6 +5,8 @@ var TabmixTabbar = {
   _heights: [],
   _rowHeight: null,
   _width: -1,
+  _toolboxcustomizeStart: false,
+  _needResetOnCustomizeDone: false,
   hideMode: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
   SCROLL_BUTTONS_LEFT_RIGHT: 1,
@@ -46,10 +48,11 @@ var TabmixTabbar = {
         tabBar.overflow = false;
         break;
       case this.SCROLL_BUTTONS_LEFT_RIGHT:
-        if (!tabBar.hasAttribute("scrollbutton-up")) {
+        if (!tabBar.hasAttribute("scrollbutton-up"))
           tabBar.setAttribute("scrollbutton-up", "left");
+        // tabbrowser-tabs constructor reset mTabstrip attribute
+        if (!tabBar.mTabstrip.hasAttribute("scrollbutton-up"))
           tabBar.mTabstrip.setAttribute("scrollbutton-up", "left");
-        }
       case this.SCROLL_BUTTONS_RIGHT:
         if (tabBar.getAttribute("flowing") != "scrollbutton") {
           tabBar.setAttribute("flowing", "scrollbutton");
@@ -1868,6 +1871,11 @@ try { // user report about bug here ... ?
       var oldVersion = TabmixSvc.TMPprefs.prefHasUserValue("version") ? TabmixSvc.TMPprefs.getCharPref("version") : "";
       if (currentVersion != oldVersion) {
         TabmixSvc.TMPprefs.setCharPref("version", currentVersion);
+        // open Tabmix page in a new tab
+        window.setTimeout(function() {
+          let b = Tabmix.getTopWin().gBrowser;
+          b.selectedTab = b.addTab("http://tmp.garyr.net/version_update.htm");
+        },1000);
         // noting more to do at the moment
       }
     }

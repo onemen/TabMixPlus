@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "lehe koopiat">
 <!ENTITY newtab.location "kasutajamääratud aadressi">
 <!ENTITY location.label "Aadress">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
 <!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">
 <!ENTITY relatedAfterCurrent.label "Ainult siis, kui need on seotud praeguse kaardiga">
@@ -128,8 +129,8 @@
 <!ENTITY dropIndicator-native.label "Algupärane">
 <!ENTITY dropIndicator-builtin.label "Sisseehitatud">
 <!ENTITY tabBarPosition.label "Asukoht:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Üleval (sisu kohal)">
+<!ENTITY tabBarPosition.bottom.label "All (sisu all)">
 <!ENTITY tabScroll.label "Kui kaardid ei mahu ühele reale:">
 <!ENTITY tabScroll.none "Keritav riba ilma nuppudeta">
 <!ENTITY tabScroll.leftRightButtons "Keritav riba nuppudega vasakul ja paremal">
@@ -192,7 +193,7 @@
 <!ENTITY ontab.label "kaardil:">
 <!ENTITY ontabbar.label "kaartide ribal:">
 <!ENTITY clicktab.label "Vali käsk, mis käivitatakse kaardil või kaartide ribal klõpsates">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Kaartide ribal topeltklõpsates ära muuda akna suurust.">
 <!ENTITY clicktab.nothing "Ei tee midagi">
 <!ENTITY clicktab.addtab "Avab uue kaardi">
 <!ENTITY clicktab.duplicatetab "Teeb kaardist koopia">

@@ -172,7 +172,7 @@ if (Tabmix.isVersion(40)) {
     ).toCode();
 
     Tabmix.newCode("gBrowser.tabContainer._unlockTabSizing", gBrowser.tabContainer._unlockTabSizing)._replace(
-      '{','{var updateScrollLeft = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+      '{','{var updateScrollStatus = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
     )._replace(
       /(\})(\)?)$/,
       <![CDATA[
@@ -182,8 +182,13 @@ if (Tabmix.isVersion(40)) {
           for (let i = 0; i < tabs.length; i++)
             tabs[i].style.width = "";
         }
-        if (updateScrollLeft)
+        if (updateScrollStatus) {
+          if (this.childNodes.length > 1) {
+            TabmixTabbar.updateScrollStatus();
+            TabmixTabbar.updateBeforeAndAfter();
+          }
           TabmixTabbar._updateScrollLeft();
+        }
         $1$2
       ]]>
     ).toCode();
@@ -408,7 +413,13 @@ _openURI.toCode();
 
 // fix after Bug 606678
 if (Tabmix.isVersion(40)) {
-  Tabmix.newCode("openNewTabWith", openNewTabWith)._replace(
+  let [fnName, fnCode] = ["openNewTabWith", openNewTabWith];
+  try {
+    if (typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
+      [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
+    }
+  } catch(ex) {}
+  Tabmix.newCode(fnName, fnCode)._replace(
     'var originCharset = aDocument && aDocument.characterSet;',
     <![CDATA[
       // inverse focus of middle/ctrl/meta clicked links
@@ -431,7 +442,13 @@ if (Tabmix.isVersion(40)) {
 }
 else {
   // inverse focus of middle/ctrl/meta clicked links
-  Tabmix.newCode("openNewTabWith", openNewTabWith)._replace(
+  let [fnName, fnCode] = ["openNewTabWith", openNewTabWith];
+  try {
+    if (typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
+      [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
+    }
+  } catch(ex) {}
+  Tabmix.newCode(fnName, fnCode)._replace(
   'var wintype = document.documentElement.getAttribute("windowtype");',
   'if (getBoolPref("extensions.tabmix.inversefocusLinks") && aEvent && (aEvent.button == 1 || aEvent.button == 0 && ( aEvent.ctrlKey || aEvent.metaKey ))) loadInBackground = !loadInBackground;\
    $&'
@@ -2004,7 +2021,11 @@ function TMP_BrowserToolboxCustomizeDone() {
       // dont use it for Firefox 6.0+ until new Suffix extension is out
       Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
         '{',
-        '{ var _data, altDisabled = false;'
+        '{ var _data, altDisabled = false; \
+         if (gBrowser.tabmix_tab) {\
+           delete gBrowser.tabmix_tab;\
+           delete gBrowser.tabmix_userTypedValue;\
+         }'
       )._replace(
         'this._canonizeURL(aTriggeringEvent);',
         '_data = $& \
@@ -2112,6 +2133,7 @@ function TMP_BrowserToolboxCustomizeDone() {
 }
 
 function TMP_BrowserCustomizeToolbar() {
+  TabmixTabbar._toolboxcustomizeStart = true;
   if (TabmixTabbar.position == 1) {
     Tabmix._bottomPosition = true;
     gTMPprefObserver.tabBarPositionChanged(0);

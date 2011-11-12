@@ -42,6 +42,7 @@
 <!ENTITY newtab.duplicate "現在のページを複製して表示">
 <!ENTITY newtab.location "指定のページを表示">
 <!ENTITY location.label "指定ページ">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
 <!ENTITY openOtherTabNext.label "その他のタブを現在のタブの直後に開く">
 <!ENTITY relatedAfterCurrent.label "現在のタブと関連があるときのみ">
@@ -160,6 +161,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "24em">
 <!ENTITY showTabX.always "すべてのタブに表示">
@@ -174,6 +176,7 @@
 <!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
 <!-- LOCALIZATION NOTE:
            change this only if you need to change the width 
+
 
 
 
