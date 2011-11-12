@@ -327,6 +327,11 @@ var TMP_eventListener = {
     tabContainer.addEventListener("TabOpen", this, true);
     tabContainer.addEventListener("TabClose", this, true);
     tabContainer.addEventListener("TabSelect", this, true);
+
+    try {
+      TMP_extensionsCompatibility.onContentLoaded();
+    } catch (ex) {Tabmix.assert(ex);}
+
     if (Tabmix.isVersion(40)) {
       tabContainer.addEventListener("TabUnpinned", this, true);
 
@@ -433,11 +438,6 @@ var TMP_eventListener = {
     adjustTabstrip.toCode();
     // no need to updtae updateScrollStatus
     tabContainer.adjustTabstrip(true);
-
-    try {
-      TMP_extensionsCompatibility.onContentLoaded();
-    } catch (ex) {Tabmix.assert(ex);}
-
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
@@ -784,11 +784,16 @@ var TMP_eventListener = {
 
   // TGM extension use it
   onTabOpen_updateTabBar: function TMP_EL_onTabOpen_updateTabBar(aTab) {
-    if (!gBrowser.tabContainer.overflow) {
+    if (aTab.__newLastTab) {
+      delete aTab.__newLastTab;
+      return;
+    }
+    var tabBar = gBrowser.tabContainer;
+    if (!tabBar.overflow) {
       TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
-      if (aTab == gBrowser.tabContainer.selectedItem)
-        gBrowser.tabContainer.ensureTabIsVisible(aTab._tPos);
+      if (aTab == tabBar.selectedItem)
+        tabBar.ensureTabIsVisible(aTab._tPos);
     }
     TabmixTabbar.updateBeforeAndAfter();
   },
@@ -957,7 +962,7 @@ var TMP_eventListener = {
     if (shouldMoveFocus) {
       tabBar.advanceSelectedTab(ScrollDirection, true);
     }
-    else if ("TreeStyleTabBrowser" in window) {
+    else if ("TreeStyleTabBrowser" in window || tabBar.orient == "vertical") {
       if (Tabmix.isPlatform("Linux") && Tabmix.isVersion(40)) {
         aEvent.stopPropagation();
       }

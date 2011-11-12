@@ -49,7 +49,10 @@ function TM_EMinit() {
 
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {
-    document.getElementById("sessionmanager_ext").hidden = false;
+    document.getElementById("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
+    document.getElementById("sessionmanager_ext_tab").hidden = false;
+    document.getElementById("sessionStore_tab").hidden = true;
+    document.getElementById("tabmix_tab").hidden = true;
     document.getElementById("paneSession-tabbox").selectedIndex = 0;
     document.getElementById("chooseFile").selectedIndex = 1;
   }

@@ -964,15 +964,15 @@
       <tabpanel orient="vertical">
         <tabbox id="paneSession-tabbox" flex="1">
           <tabs class="tabs-hidden">
-            <tab/>
-            <tab/>
-            <tab/>
+            <tab id="sessionmanager_ext_tab" hidden="true"/>
+            <tab id="sessionStore_tab"/>
+            <tab id="tabmix_tab"/>
           </tabs>
           <tabpanels flex="1">
             <!-- Session Manager Extension -->
             <tabpanel orient="vertical">
               <!-- Open Session Manager Extension Options -->
-              <groupbox id="sessionmanager_ext" hidden="true">
+              <groupbox id="sessionmanager_ext">
                 <hbox align="end">
                   <vbox style="width: 24em;">
                     <description> &sm.extension.description1;</description>
@@ -980,8 +980,7 @@
                     <description> &sm.extension.description3;</description>
                   </vbox>
                   <spacer flex="1"/>
-                  <button style="min-width: 0px;"
-                          image="chrome://sessionmanager/skin/icon.png"
+                  <button style="min-width: 0px;" id="sessionmanager_button"
                           oncommand="sessionManagerOptions();"/>
                 </hbox>
                 <separator class="groove"/>

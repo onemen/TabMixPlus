@@ -269,15 +269,9 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
       tabBrowser.getTabForBrowser = function (aBrowser) {
         return this._getTabForContentWindow(aBrowser.contentWindow);
       }
-      if (Tabmix.isVersion(40)) {
-        tabBrowser.getTabForLastPanel = function () {
-           return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
-        }
-      }
-      else {
-        tabBrowser.getTabForLastPanel = function () {
-           return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.contentWindow);
-        }
+
+      tabBrowser.getTabForLastPanel = function () {
+         return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
       }
     }
     else {

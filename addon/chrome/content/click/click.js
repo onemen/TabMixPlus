@@ -263,7 +263,7 @@ var TabmixContext = {
       tabContextMenu.insertBefore(reloadAll, document.getElementById("context_reloadTab").nextSibling);
       // move context_closeOtherTabs to the place it was before Fireofox 4.0
       tabContextMenu.insertBefore(closeOther, reloadAll.nextSibling);
-      // from Firefox 3.7 2009-09-11 there is gContextMenu.openLinkInCurrent in contentAreaContextMenu
+      // from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent in contentAreaContextMenu
       // move our menu to that position
       let openLinkInCurrent = document.getElementById("context-openlinkincurrent");
       let tabmix_menu = document.getElementById("tm-openlinkhere");
@@ -618,7 +618,7 @@ var TabmixContext = {
       var lockedTab = gBrowser.mCurrentTab.hasAttribute("locked");
 
      /**
-      * from Firefox 3.7 2009-09-11 there is gContextMenu.openLinkInCurrent
+      * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
       * Firefox only show this menu when the selection text is url see Bug 454518
       * we cahck if gContextMenu.linkURL contain URL
 
@@ -965,7 +965,7 @@ var TabmixAllTabs = {
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     let count = "";
     if (Tabmix.ltr) {
-      count = (tab._tPos < 9 ? "  " : "") + (tab._tPos + 1) + ": ";
+      count = (value<9 ? "  " : "") + (value + 1) + ": ";
       mi.setAttribute("count", count);
     }
     this._setMenuitemAttributes(mi, tab);

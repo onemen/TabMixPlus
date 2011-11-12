@@ -1201,6 +1201,10 @@ var TMP_TabView = {
    */
 
   _patchBrowserTabview: function SM__patchBrowserTabview(){
+    // don't do anything if Session Manager extension installed
+    if (Tabmix.extensions.sessionManager)
+      return;
+
     // add missing function for compatibility
     if (!Tabmix.isVersion(60)) {
       TabView.updateGroupNumberBroadcaster = function TMP_updateGroupNumberBroadcaster(groupCount) {
@@ -1302,11 +1306,20 @@ var TMP_TabView = {
     )._replace(
       'items.forEach(function (item) {',
       'Array.forEach(items, function(tab) { \
+       if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
     )._replace(
       'groupItem.add(item, {immediately: true});',
       'item._reconnected = true; \
        $&'
+    )._replace(
+      /(\})(\)?)$/,
+      <![CDATA[
+        GroupItems.groupItems.forEach(function(group) {
+          if (group != groupItem)
+            group.close();
+        });
+       $1$2]]>
     ).toCode();
 
     TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
@@ -1316,8 +1329,10 @@ var TMP_TabView = {
       Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
       TabItems._reconnectingPaused = false;
       Array.forEach(gBrowser.tabs, function (tab){
+        if (tab.pinned)
+          return;
         let item = tab._tabViewTabItem;
-        if (!item.__tabmix_reconnected) {
+        if ("__tabmix_reconnected" in item && !item.__tabmix_reconnected) {
           item._reconnected = false;
           delete item.__tabmix_reconnected;
         }
@@ -1328,7 +1343,7 @@ var TMP_TabView = {
   },
 
   _resetTabviewFrame: function SM__resetTabviewFrame(){
-    if (TabView._window) {
+    if (!Tabmix.extensions.sessionManager && TabView._window) {
       if (Tabmix.isVersion(80)) {
         TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
         delete TabView._window.GroupItems._original_reconstitute;

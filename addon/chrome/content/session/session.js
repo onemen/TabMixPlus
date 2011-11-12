@@ -15,9 +15,9 @@ const TMP_DLG_SAVE = 0;
 const TMP_DLG_RENAME = 1;
 const TMP_NO_NEED_TO_REPLACE = -1;
 
-/*
-  sanitize privte data by delete the files session.rdf session.old
-*/
+/**
+ *  sanitize privte data by delete the files session.rdf session.old
+ */
 var TMP_Sanitizer = {
    addSanitizeItem: function () {
       if (typeof Sanitizer != 'function')
@@ -731,6 +731,7 @@ var TabmixSessionManager = {
       this.deinit(isLastWindow, false);
       this.windowIsClosing(true, isLastWindow, true, false);
     }
+
     if (this._inited) {
       let obs = TabmixSvc.obs;
       obs.notifyObservers(null, "browser-window-change-state", "closed");
@@ -2396,7 +2397,6 @@ try{
          let empty2 = this.containerEmpty(this.gSessionPath[2]);
          if (empty1 && empty2 && aList.length == 0)
             return null;
-
         if (flag != "onlyPath") {
            let msg = flag == "afterCrash" ? "sm.sessionMenu.lastgood" : "sm.sessionMenu.last";
            aList.push(TabmixSvc.getSMString(msg) + (empty1 ? empty : ""));
@@ -2468,7 +2468,7 @@ try{
           tabview.GroupItems.saveAll();
           tabview.TabItems.saveAll(TabView.isVisible()); // isVisible here for Firefox 4.0-5.0
           // saveActiveGroupName exist since Firefox 7.0
-          if (Tabmix.isVersion(70))
+          if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
             tabview.Storage.saveActiveGroupName(window);
         }
       }
@@ -3068,6 +3068,7 @@ try{
                blankTabs.push(aTab);
             }
          }
+
          // make sure not to remove the current tab
          let index = blankTabs.indexOf(cTab);
          if (index > -1) {
@@ -3087,7 +3088,6 @@ try{
 
          // reuse blank tabs and move tabs to the right place
          var openTabNext = TMP_getOpenTabNextPref();
-
          // fix and merge session Tabview data with current window Tabview data
          this._preperTabviewData(loadOnStartup, blankTabs);
          if (this.groupUpdates.hideSessionActiveGroup) {
@@ -3139,6 +3139,7 @@ try{
          }
          newIndex = newPos;
       }
+
       gBrowser._lastRelatedTab = null;
       // call ensureTabIsVisible before and after we reload the tab
       gBrowser.tabContainer.ensureTabIsVisible(gBrowser.tabContainer.selectedIndex);
@@ -3853,9 +3854,12 @@ try{
           data = setData(update.lastActiveGroupId);
         else {
           // force Panorama to reconnect all reused tabs
-          if (!Tabmix.isVersion(80) && tabData.tab._tabViewTabItem) {
+          if (tabData.tab._tabViewTabItem) {
+            // remove any old data
             tabData.tab._tabViewTabItem._reconnected = false;
-            tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
+            TabmixSvc.ss.deleteTabValue(tabData.tab, id);
+            if (!Tabmix.isVersion(80))
+              tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
           }
           return;
         }
