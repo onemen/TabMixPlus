@@ -282,10 +282,10 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if (event.target.localName == "tabs") {
-          let allowChangeSize = TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize");
-          let displayAppButton = !document.getElementById("titlebar").hidden;
-          if ((TabsInTitlebar.enabled && allowChangeSize) ||
+        if (TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize") && 
+            !Tabmix.isPlatform("Mac") && event.target.localName == "tabs") {
+          let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
+          if (TabsInTitlebar.enabled ||
               (displayAppButton && TabsOnTop.enabled && this.parentNode._dragBindingAlive))
             return;
         }

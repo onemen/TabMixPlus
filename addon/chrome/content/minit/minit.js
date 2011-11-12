@@ -93,12 +93,6 @@ var TMP_tabDNDObserver = {
     for (var i = 0; i < tabs.length; i++)
       tabs[i].removeAttribute("showbutton");
 
-    // Firefox dragstart function handle this
-    // we treat this as if we drop a link draggeType = this.DRAG_LINK
-    if (Tabmix.isVersion(80) && event.ctrlKey) {
-      return;
-    }
-
     var draggedTab = event.target;
     var uri = gBrowser.getBrowserForTab(draggedTab).currentURI;
     var spec = uri ? uri.spec : "about:blank";
