@@ -1,9 +1,19 @@
-/** 
+/**
     Firefox version 3.5.* - 3.6.*
 
     ALL platform
 
 **/
+
+/* :::: multi-row :::: */
+.tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .scrollbox-innerbox {
+  display: block !important;
+}
+
+/* Fix problem with multi-row when tab width is very small*/
+.tabbrowser-tabs[flowing=multibar]:not([multibar])[inline=true] .tabs-frame .scrollbox-innerbox {
+  display: block !important;
+}
 
 /* :::: for miniT drag indicator :::: */
 .tab-drag-indicator-left, .tab-drag-indicator-right {
@@ -118,7 +128,7 @@
 }
 
 .tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=multibar],
-.tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=scrollbutton]:not([scrollbutton-up=left]),
+.tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=scrollbutton]:not([defaultScrollButtons]),
 .tabbrowser-tabs:not([tabBarSpace]) .tabs-container[flowing=scrollbutton]:not([overflow="true"]) {
  -moz-padding-start: 3px;
 }

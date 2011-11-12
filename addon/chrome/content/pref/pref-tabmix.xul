@@ -301,7 +301,7 @@
                   <checkbox id="inverselinks" label="&selectTab.label;" prefstring="extensions.tabmix.inversefocusLinks" />
                 </vbox>
                 <vbox align="start">
-                  <checkbox id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;" style="width: 19em" prefstring="extensions.tabmix.inversefocusOther" observes="obs_midcurrent"/>
+                  <checkbox id="inverseother" align="start" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;" style="width: 19em" prefstring="extensions.tabmix.inversefocusOther" observes="obs_midcurrent"/>
                 </vbox>
               </hbox>
             </groupbox>

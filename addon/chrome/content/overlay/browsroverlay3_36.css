@@ -1,6 +1,6 @@
 /**
  *
- * Firefox 3.5 - 3.6 only 
+ * Firefox 3.5 - 3.6 only
  * This file is not in use for Firefox 4.0+
  *
  **/
@@ -19,6 +19,19 @@
  -moz-binding: url("chrome://tabmixplus/content/tab/tabmix_3.xml#tabbrowser-close-tab-button")!important;
 }
 
+/* some themes use old copy of tabmix_3.xml that's why we don't use .tabbrowser-arrowscrollbox > .scrollbutton-up */
+.tabmix_scrollbuttons_box > .scrollbutton-up,
+.tabmix_scrollbuttons_box > .scrollbutton-down {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-scroll-button") !important;
+}
+
+.tabbrowser-tabs:not([overflow]) .tabmix_scrollbuttons_box,
+.tabbrowser-tabs[overflow][flowing=singlebar] .tabmix_scrollbuttons_box,
+.tabbrowser-arrowscrollbox[flowing=multibar][_side=left] > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=left]:not([defaultScrollButtons]) > .scrollbutton-up,
+.tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right][defaultScrollButtons] > .scrollbutton-up {
+  visibility: collapse;
+}
 
 /* make sure we can use tabcontext menu when the tabbar is hidden */
 .tabmix-tabContextMenu {

@@ -1,7 +1,7 @@
 pref("extensions.tabmix.disableIncompatible", true);
 pref("extensions.tabmix.linkTarget", false);
 
-pref("extensions.tabmix.opentabforLinks", 0); // 2010-09-16 we replaced speLink 
+pref("extensions.tabmix.opentabforLinks", 0); // 2010-09-16 we replaced speLink
 pref("extensions.tabmix.lockallTabs", false); // added 2010-09-16
 pref("extensions.tabmix.lockAppTabs", false); // added 2010-09-16
 pref("extensions.tabmix.singleWindow", false);
@@ -19,7 +19,7 @@ pref("extensions.tabmix.loadUrlInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("browser.tabs.loadFolderAndReplace", true); // remove from firefox 3.7 2009-10-17
+pref("browser.tabs.loadFolderAndReplace", true); // remove from firefox 4.0 2009-10-17
 
 pref("extensions.tabmix.loadOnNewTab", 0);
 pref("extensions.tabmix.newTabUrl", "");
@@ -161,7 +161,10 @@ pref("browser.ctrlTab.previews", true);
  */
 //pref("extensions.tabmix.lasttab.handleCtrlTab", true);
 pref("extensions.tabmix.lasttab.tabPreviews", true); // Firefox 3.1+
+/*
+removed on 2011-11-10
 pref("extensions.tabmix.lasttab.favorLeftToRightOrdering", true);
+*/
 pref("extensions.tabmix.lasttab.respondToMouseInTabList", true);
 pref("extensions.tabmix.lasttab.showTabList", false);
 

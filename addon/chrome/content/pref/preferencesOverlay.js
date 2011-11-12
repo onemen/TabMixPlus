@@ -73,7 +73,7 @@ var gTabMix_preferencesOverlay = {
          TabmixSvc.prompt.alert(window, title, msg);
       }
       else
-         browserWindow.TMP_openDialog(panel == null ? -1 : panel);
+         browserWindow.Tabmix.openOptionsDialog(panel == null ? -1 : panel);
    },
 
 /* ........ panePrivacy .............. */

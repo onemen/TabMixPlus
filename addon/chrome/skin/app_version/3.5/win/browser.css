@@ -97,20 +97,20 @@
 }
 
 /*  Tab scrollbox arrow buttons - one row */
-.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([scrollbutton-up=left]) > .scrollbutton-up[chromedir="ltr"] {
+.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([defaultScrollButtons]) > .scrollbutton-up[chromedir="ltr"] {
   border-right: none;
 }
 
-.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([scrollbutton-up=left]) > .scrollbutton-up[chromedir="rtl"] {
+.tabbrowser-tabs[classic=v3]:not([disableScrollTabsRight=true]) .tabbrowser-arrowscrollbox[flowing=scrollbutton][_side=right]:not([defaultScrollButtons]) > .scrollbutton-up[chromedir="rtl"] {
   border-left: none;
 }
 
-.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down[chromedir="ltr"][disabled="true"] {
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([defaultScrollButtons]) > .scrollbutton-down[chromedir="ltr"][disabled="true"] {
   border-left: none;
   margin-left: -1px;
 }
 
-.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down[chromedir="rtl"][disabled="true"] {
+.tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([defaultScrollButtons]) > .scrollbutton-down[chromedir="rtl"][disabled="true"] {
   border-right: none;
   margin-right: -1px;
 }
@@ -191,7 +191,7 @@
    the up button don't have right border
 */
 .tabbrowser-tabs[classic=v3][multibar=scrollbar] .tmp-alltabs-3,
-.tabbrowser-tabs[classic=v3][multibar=scrollbar]:not([newtab_side="left"]) > #new-tab-button, /* ff 3.7+ */
+.tabbrowser-tabs[classic=v3][multibar=scrollbar]:not([newtab_side="left"]) > #new-tab-button, /* ff 4.0+ */
 .tabbrowser-tabs[classic=v3][multibar=scrollbar]:not([newtab_side="left"]) .tabs-newbutton-box > .tabs-newtab-button, /* ff 3.5-3.6 */
 .tabbrowser-tabs[classic=v3][multibar=scrollbar][hideAllTabsButton=true] .tabs-container > .tabs-closebutton, /* ff 3.5-3.6 */
 .tabbrowser-tabs[classic=v3][multibar=scrollbar][hideAllTabsButton=true] > .tabs-closebutton {

@@ -1,19 +1,19 @@
-const TMP_BUTTON_OK = 0;
-const TMP_BUTTON_CANCEL = 1;
-const TMP_BUTTON_EXTRA1 = 2;
-const TMP_SHOW_MENULIST = 1;
-const TMP_SHOW_TEXTBOX = 0;
-const TMP_HIDE_MENUANDTEXT = 2;
-const TMP_CHECKBOX_UNCHECKED = 0;
-const TMP_CHECKBOX_CHECKED = 1;
-const TMP_HIDE_CHECKBOX = 2;
-const TMP_SELECT_DEFAULT = 0;
-const TMP_SELECT_LASTSESSION = 1;
-const TMP_SELECT_CRASH = 2;
-const TMP_SHOW_CLOSED_WINDOW_LIST = 3;
-const TMP_DLG_SAVE = 0;
-const TMP_DLG_RENAME = 1;
-const TMP_NO_NEED_TO_REPLACE = -1;
+Tabmix.BUTTON_OK = 0;
+Tabmix.BUTTON_CANCEL = 1;
+Tabmix.BUTTON_EXTRA1 = 2;
+Tabmix.SHOW_MENULIST = 1;
+Tabmix.SHOW_TEXTBOX = 0;
+Tabmix.HIDE_MENUANDTEXT = 2;
+Tabmix.CHECKBOX_UNCHECKED = 0;
+Tabmix.CHECKBOX_CHECKED = 1;
+Tabmix.HIDE_CHECKBOX = 2;
+Tabmix.SELECT_DEFAULT = 0;
+Tabmix.SELECT_LASTSESSION = 1;
+Tabmix.SELECT_CRASH = 2;
+Tabmix.SHOW_CLOSED_WINDOW_LIST = 3;
+Tabmix.DLG_SAVE = 0;
+Tabmix.DLG_RENAME = 1;
+Tabmix.NO_NEED_TO_REPLACE = -1;
 
 /**
  *  sanitize privte data by delete the files session.rdf session.old
@@ -409,7 +409,7 @@ var TabmixSessionManager = {
     // whether we are in private browsing mode (from firefox 3.5)
     _inPrivateBrowsing: false,
 
-   // call by TMP_startup
+   // call by Tabmix.startup
    init: function SM_init() {
       if (this._inited)
          return;
@@ -559,7 +559,7 @@ var TabmixSessionManager = {
 
       // we set aPopUp only in canQuitApplication
       if (aPopUp == null)
-        aPopUp = TMP_checkForPopup(window);
+        aPopUp = this.checkForPopup(window);
 
       this.lastSaveTabsCount = this.saveOnWindowClose();
       if (!aLastWindow) {
@@ -579,18 +579,18 @@ var TabmixSessionManager = {
       if ( this.enableManager ) {
          var result = {button: TabmixSvc.SMprefs.getIntPref("onClose"), checked: this.saveClosedtabs};
          if (result.button == 1 && !askBeforSave)
-            result.button = TMP_BUTTON_OK;
+            result.button = Tabmix.BUTTON_OK;
          var sessionNotEmpty = this.updateClosedWindowList(aPopUp);
          if (sessionNotEmpty && result.button == 1) { // Ask me before Save
             // result:  0 - save; 1 - cancel quit; 2 - don't save
             result = this.warnBeforeSaveSession();
             resultData.showMorePrompt = false;
-            if (result.button == TMP_BUTTON_CANCEL) {
+            if (result.button == Tabmix.BUTTON_CANCEL) {
                resultData.canClose = false;
                return resultData;
             }
          }
-         resultData.saveSession = result.button == TMP_BUTTON_OK;
+         resultData.saveSession = result.button == Tabmix.BUTTON_OK;
          resultData.removeClosedTabs = this.saveClosedTabs && !result.checked;
       }
       return resultData;
@@ -611,7 +611,7 @@ var TabmixSessionManager = {
       var msg = TabmixSvc.getSMString("sm.askBeforSave.msg0") + "\n\n"
                 + TabmixSvc.getSMString("sm.askBeforSave.msg1");
       var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
-      var chkBoxState = this.saveClosedTabs ? TMP_CHECKBOX_CHECKED : TMP_HIDE_CHECKBOX;
+      var chkBoxState = this.saveClosedTabs ? Tabmix.CHECKBOX_CHECKED : Tabmix.HIDE_CHECKBOX;
 
       var stringBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
                          .getService(Components.interfaces.nsIStringBundleService)
@@ -619,7 +619,7 @@ var TabmixSessionManager = {
       var buttons = TabmixSvc.setLabel("sm.askBeforSave.button0")
                      + "\n" + stringBundle.GetStringFromName("Cancel")
                      + "\n" + TabmixSvc.setLabel("sm.askBeforSave.button1");
-      return Tabmix.promptService([TMP_BUTTON_OK, TMP_HIDE_MENUANDTEXT, chkBoxState],
+      return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                               [title, msg, "", chkBoxLabel, buttons]);
    },
 
@@ -695,12 +695,12 @@ var TabmixSessionManager = {
       */
       this.saveAllWindows(this.gSessionPath[0], "windowclosed", true);
       // cheack if all open windows are popup
-      var allPopups = TMP_checkForPopup(window);
+      var allPopups = this.checkForPopup(window);
       var wnd, enumerator;
       enumerator = Tabmix.windowEnumerator();
       while ( allPopups && enumerator.hasMoreElements() ) {
          wnd = enumerator.getNext();
-         allPopups = TMP_checkForPopup(wnd);
+         allPopups = this.checkForPopup(wnd);
       }
       var result = this.deinit(true, !aBackup, allPopups); // we fake that we are the last window
       this.windowIsClosing(result.canClose, true, result.saveSession, result.removeClosedTabs);
@@ -747,6 +747,38 @@ var TabmixSessionManager = {
       }
     }
    },
+
+  /**
+   * @brief Checks to see if a given nsIDOMWindow window is a popup or not.
+   *
+   * @param domWindow    A scripted nsIDOMWindow object.
+   * @return             true if the domWindow is a popup, false otherwise.
+   *
+   */
+  checkForPopup: function TMP_checkForPopup(domWindow) {
+    if (!(domWindow instanceof Components.interfaces.nsIDOMWindow)) return false;
+
+    // FIXME: locationbar, menubar, toolbar -
+    // if these are hidden the window is probably a popup
+    var locbarHidden = !domWindow.locationbar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
+    var menubarHidden = !domWindow.menubar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
+    try {
+      var toolbarHidden = !domWindow.toolbar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
+    }
+    catch (e) {
+      toolbarHidden = "hidden" in domWindow.toolbar ? domWindow.toolbar.hidden : false;
+    }
+
+    // the following logic, while possibly slow, is designed
+    // to catch all reasonable permutations of hidden UI
+    if ((locbarHidden && menubarHidden) ||
+        (menubarHidden && toolbarHidden) ||
+        (locbarHidden && menubarHidden && toolbarHidden)) {
+      return true;
+    }
+
+    return false;
+  },
 
    // XXX split this for each pref that has change
    // XXX need to update after permissions, locked......
@@ -903,7 +935,7 @@ var TabmixSessionManager = {
          var msg = TabmixSvc.getSMString("sm.corrupted.msg0") + "\n"
                   + TabmixSvc.getSMString("sm.corrupted.msg1");
          var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-         Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
+         Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                [title, msg, "", "", buttons], window, function(){});
          Tabmix.assert(e);
          file.moveTo(this.profileDir, "session.old");
@@ -1386,10 +1418,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    promptReplaceStartup: function(caller, path) {
       var loadsession = TabmixSvc.SMprefs.getIntPref("onStart.loadsession");
       var sessionpath = TabmixSvc.SMprefs.getCharPref("onStart.sessionpath");
-      var result = {button: TMP_NO_NEED_TO_REPLACE};
+      var result = {button: Tabmix.NO_NEED_TO_REPLACE};
       if (loadsession < 0 || sessionpath != path) return result;
       var label = this.getDecodedLiteralValue(path, "name");
-      var selectionFlag = TMP_SELECT_DEFAULT;
+      var selectionFlag = Tabmix.SELECT_DEFAULT;
       var title, msg, buttons;
       var areYouSure = TabmixSvc.getSMString("sm.areYouSure.msg");
       var chooseStartup = TabmixSvc.getSMString("sm.canChooseStartup.msg");
@@ -1415,10 +1447,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                +  "\n" + areYouSure + "\n\n" + TabmixSvc.getSMString("sm.removeStartup.msg1");
             buttons = [TabmixSvc.setLabel("sm.removeStartup.button0"),
                        TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
-            selectionFlag = TMP_SELECT_LASTSESSION;
+            selectionFlag = Tabmix.SELECT_LASTSESSION;
             break;
       }
-      return Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_MENULIST, TMP_HIDE_CHECKBOX, selectionFlag],
+      return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, selectionFlag],
                   [title, msg, "", "", buttons]);
    },
 
@@ -1426,8 +1458,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (!this.isValidtoSave()) return;
       var path = document.popupNode.session;
       var result = this.promptReplaceStartup("addWinToSession", path);
-      if (result.button == TMP_BUTTON_CANCEL) return;
-      else if (result.button == TMP_BUTTON_OK) this.replaceStartupPref(result, "");
+      if (result.button == Tabmix.BUTTON_CANCEL) return;
+      else if (result.button == Tabmix.BUTTON_OK) this.replaceStartupPref(result, "");
       var saveClosedTabs = this.saveClosedtabs;
       var rdfNodeSession = this.RDFService.GetResource(path);
       var sessionContainer = this.initContainer(rdfNodeSession);
@@ -1447,11 +1479,11 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var path = this._rdfRoot + "/saved/" + id + "/window";
       var pathToReplace = "";
       var session = this.getSessionName("saveprevious", this.getDecodedLiteralValue(oldPath, "name"));
-      if (session.button == TMP_BUTTON_CANCEL) return; // user cancel
-      else if (session.button == TMP_BUTTON_EXTRA1) { // we replace exist session, TMP_BUTTON_OK - save new session
+      if (session.button == Tabmix.BUTTON_CANCEL) return; // user cancel
+      else if (session.button == Tabmix.BUTTON_EXTRA1) { // we replace exist session, Tabmix.BUTTON_OK - save new session
          var result = this.promptReplaceStartup("replaceSession", session.path);
-         if (result.button == TMP_BUTTON_CANCEL) return; // user cancel
-         else if (result.button == TMP_BUTTON_OK) { // we replace startup session
+         if (result.button == Tabmix.BUTTON_CANCEL) return; // user cancel
+         else if (result.button == Tabmix.BUTTON_OK) { // we replace startup session
             this.replaceStartupPref(result, path);
          }
          pathToReplace = session.path;
@@ -1524,8 +1556,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (action == "save") {
          // ask the user for new name or for exist name if the user want to replace
          var session = this.getSessionName("save"+what);
-         if (session.button == TMP_BUTTON_CANCEL) return; // user cancel
-         else if (session.button == TMP_BUTTON_EXTRA1) oldPath = session.path;
+         if (session.button == Tabmix.BUTTON_CANCEL) return; // user cancel
+         else if (session.button == Tabmix.BUTTON_EXTRA1) oldPath = session.path;
          name = session.name;
          saveClosedTabs = session.saveClosedTabs;
       } else {
@@ -1536,8 +1568,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (oldPath != "") { // oldPath is "" if we save to a new name
          // check if the user want to replace startup session
          var result = this.promptReplaceStartup("replaceSession", oldPath);
-         if (result.button == TMP_BUTTON_CANCEL) return; // user cancel
-         else if (result.button == TMP_BUTTON_OK) this.replaceStartupPref(result, newPath);
+         if (result.button == Tabmix.BUTTON_CANCEL) return; // user cancel
+         else if (result.button == Tabmix.BUTTON_OK) this.replaceStartupPref(result, newPath);
       }
       var count = this.saveOneOrAll("save"+what, newPath, saveClosedTabs);
       if (count) this.insertSession(count, name, newPath, oldPath);
@@ -1550,7 +1582,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var title = TabmixSvc.getSMString("sm.title");
          var msg = TabmixSvc.getSMString("sm.dontSaveBlank.msg");
          var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-         Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],[title, msg, "", "", buttons]);
+         Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],[title, msg, "", "", buttons]);
          return false;
       }
       return true;
@@ -1595,8 +1627,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var showChebox, closedtabMsg, saveClosedTabs = this.saveClosedtabs;
       if (action != "rename" && saveClosedTabs) {
          closedtabMsg = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
-         showChebox = TMP_CHECKBOX_CHECKED;
-      } else showChebox = TMP_HIDE_CHECKBOX;
+         showChebox = Tabmix.CHECKBOX_CHECKED;
+      } else showChebox = Tabmix.HIDE_CHECKBOX;
       var msg = TabmixSvc.getSMString("sm.sessionName.msg0") + "\n";
       var title = TabmixSvc.getSMString("sm.sessionName.title." + action);
       var label, buttons, actionFlag;
@@ -1605,20 +1637,20 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          label = old;
          buttons = [TabmixSvc.setLabel("sm.sessionName.button0"),
                         TabmixSvc.setLabel("sm.sessionName.button1")].join("\n");
-         actionFlag = TMP_DLG_RENAME;
+         actionFlag = Tabmix.DLG_RENAME;
       } else {
          label = action == "saveprevious" ? old : gBrowser.mCurrentTab.label;
          buttons = [TabmixSvc.setLabel("sm.askBeforSave.button0"),
                         TabmixSvc.setLabel("sm.askBeforSave.button1"),
                         TabmixSvc.setLabel("sm.replaceStartup.button0")+"..."].join("\n");
-         actionFlag = TMP_DLG_SAVE;
+         actionFlag = Tabmix.DLG_SAVE;
       }
       label = label + "\n" + sessionList.list.join("\n");
-      var result = Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_TEXTBOX, showChebox, actionFlag],[title, msg, label, closedtabMsg, buttons]);
+      var result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_TEXTBOX, showChebox, actionFlag],[title, msg, label, closedtabMsg, buttons]);
       switch (result.button) {
-         case TMP_BUTTON_CANCEL: return {button: result.button};
-         case TMP_BUTTON_OK:
-         case TMP_BUTTON_EXTRA1 :
+         case Tabmix.BUTTON_CANCEL: return {button: result.button};
+         case Tabmix.BUTTON_OK:
+         case Tabmix.BUTTON_EXTRA1 :
             var trimResult = result.label.replace(/^[\s]+/g,"").replace(/[\s]+$/g,"");
             return {button: result.button, name: encodeURI(trimResult), path: sessionList.path[result.value], saveClosedTabs: result.checked};
       }
@@ -1752,7 +1784,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var node = this.RDFService.GetResource(thisSession);
       var oldName = this.getDecodedLiteralValue(node, "name");
       var result = this.getSessionName("rename", oldName);
-      if (result.button == TMP_BUTTON_OK) {
+      if (result.button == Tabmix.BUTTON_OK) {
          this.setLiteral(node, "name", result.name);
          this.saveStateDelayed();
       }
@@ -1775,9 +1807,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          // and let the user cancel the delete or choose diffrent startup session
          var result = this.promptReplaceStartup("removeSavedSession", path);
          switch (result.button) {
-            case TMP_BUTTON_CANCEL: return;
-            case TMP_BUTTON_OK: this.replaceStartupPref(result, "");
-            case TMP_NO_NEED_TO_REPLACE : this.removeSession(path, this._rdfRoot+'/windows');
+            case Tabmix.BUTTON_CANCEL: return;
+            case Tabmix.BUTTON_OK: this.replaceStartupPref(result, "");
+            case Tabmix.NO_NEED_TO_REPLACE : this.removeSession(path, this._rdfRoot+'/windows');
          }
       } else if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
          this.removeSession(path, this.gSessionPath[0]);
@@ -1795,9 +1827,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          msg = TabmixSvc.getSMString("sm.removeAll.msg0") + "\n\n";
          if (TabmixSvc.SMprefs.getIntPref("onStart.loadsession") > -1)
             msg += TabmixSvc.getSMString("sm.removeAll.msg1");
-         result = Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
+         result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                         [title, msg, "", "", buttons]);
-         if (result.button == TMP_BUTTON_OK) {
+         if (result.button == Tabmix.BUTTON_OK) {
             this.deleteSubtree(this.gSessionPath[1]);
             this.deleteSubtree(this.gSessionPath[2]);
             this.deleteSubtree(this.gSessionPath[3]);
@@ -1810,9 +1842,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       } else if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
          title = TabmixSvc.getSMString("sm.removeAll.title.closedwindow");
          msg = TabmixSvc.getSMString("sm.removeAll.msg2");
-         result = Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
+         result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                         [title, msg, "", "", buttons]);
-         if (result.button == TMP_BUTTON_OK) {
+         if (result.button == Tabmix.BUTTON_OK) {
             var sessionContainer = this.initContainer(this.gSessionPath[0]);
             this.deleteWithProp(sessionContainer, "status", "saved");
             this.updateClosedWindowsMenu(true);
@@ -1904,7 +1936,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    createMenuForDialog: function(popup, contents) {
-      if (contents == TMP_SHOW_CLOSED_WINDOW_LIST) {
+      if (contents == Tabmix.SHOW_CLOSED_WINDOW_LIST) {
          // create closed window list popup menu
          this.createMenu(popup, window.opener.this.gSessionPath[0], contents);
       } else {
@@ -1946,7 +1978,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          parentID = "sessionmanagerMenu"
       else if (popup.parentNode.getAttribute("anonid") == "delete")
          parentID = "tm_prompt";
-      else if (contents != TMP_SHOW_CLOSED_WINDOW_LIST)
+      else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST)
          parentID = popup.parentNode.id;
       var aContainer = this.initContainer(container);
       var containerEnum = aContainer.GetElements();
@@ -2129,7 +2161,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             msg = TabmixSvc.getSMString("sm.afterCrash.msg0.again");
          var chkBoxLabel = !this.enableManager ? TabmixSvc.getSMString("sm.afterCrash.chkbox.label") : "";
          var buttons;
-         var chkBoxState = !this.enableManager ? TMP_CHECKBOX_UNCHECKED : TMP_HIDE_CHECKBOX;
+         var chkBoxState = !this.enableManager ? Tabmix.CHECKBOX_UNCHECKED : Tabmix.HIDE_CHECKBOX;
          var closedWinList = this.initContainer(this.gSessionPath[0]).GetCount();
          var lastSession = this.containerEmpty(this.gSessionPath[1]) // last session
          var prevtoLast = this.containerEmpty(this.gSessionPath[2]) // previous to last
@@ -2144,7 +2176,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_MENULIST, TMP_HIDE_CHECKBOX, TMP_SELECT_CRASH],
+               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_CRASH],
                      [title, msg, "", "", buttons], window, callBack);
             } else {
                msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg2") + ".....";
@@ -2154,7 +2186,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   msg += "\n" + TabmixSvc.getSMString("sm.afterCrash.msg4");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0.crashed"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([TMP_BUTTON_OK, TMP_HIDE_MENUANDTEXT, chkBoxState],
+               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
                this.callBackData.label = this.gSessionPath[3];
             }
@@ -2164,7 +2196,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                           + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_MENULIST, TMP_HIDE_CHECKBOX, TMP_SELECT_DEFAULT],
+               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_DEFAULT],
                      [title, msg, "", "", buttons], window, callBack);
             } else if (closedWinList != 0) {
                msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg6");
@@ -2176,7 +2208,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                                 + TabmixSvc.getSMString("sm.afterCrash.msg8") + ":";
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_MENULIST, chkBoxState, TMP_SHOW_CLOSED_WINDOW_LIST],
+               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SHOW_CLOSED_WINDOW_LIST],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
                this.callBackData.whattoLoad = "closedwindow";
             } else {// nothing to restore
@@ -2184,7 +2216,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                if (!this.enableManager)
                   msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg3");
                buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-               Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, chkBoxState],
+               Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
             }
          }
@@ -2204,7 +2236,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
          } catch(ex) { }
       }
-      if (aResult.button == TMP_BUTTON_OK) {
+      if (aResult.button == Tabmix.BUTTON_OK) {
          switch (this.callBackData.whattoLoad) {
             case "session": this.loadSession(aResult.label, "firstwindowopen");
                break;
@@ -2268,7 +2300,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       else
          title = TabmixSvc.getSMString("sm.start.title");
       var chkBoxLabel = afterCrash ? TabmixSvc.getSMString("sm.start.chkbox.label") : "";
-      var chkBoxState = afterCrash ? TMP_CHECKBOX_UNCHECKED : TMP_HIDE_CHECKBOX;
+      var chkBoxState = afterCrash ? Tabmix.CHECKBOX_UNCHECKED : Tabmix.HIDE_CHECKBOX;
       // get saved session list, we only need to get session path
       var sessionList = this.getSessionList("onlyPath");
       var askifempty = restoreFlag > 1 ? false : TabmixSvc.SMprefs.getBoolPref("onStart.askifempty");
@@ -2282,7 +2314,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             let callBack = function (aResult) {
                              TabmixSessionManager.enableCrashRecovery(aResult);
                            }
-            Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, chkBoxState],
+            Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
          }
          this.loadHomePage();
@@ -2337,12 +2369,12 @@ try{
          let callBack = function (aResult) {
                            TabmixSessionManager.onFirstWindowPromptCallBack(aResult);
                         }
-         Tabmix.promptService([TMP_BUTTON_OK, TMP_SHOW_MENULIST, chkBoxState, TMP_SELECT_DEFAULT],
+         Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
                   [title, msg, "", chkBoxLabel, buttons], window, callBack);
 } catch (ex) {Tabmix.assert(ex);}
       }
       else {
-         result.button = startupEmpty ? TMP_BUTTON_CANCEL : TMP_BUTTON_OK;
+         result.button = startupEmpty ? Tabmix.BUTTON_CANCEL : Tabmix.BUTTON_OK;
          result.label = thisPath;
          this.onFirstWindowPromptCallBack(result);
       }
@@ -2357,7 +2389,7 @@ try{
 
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
       this.enableCrashRecovery(aResult);
-      if (aResult.button == TMP_BUTTON_OK)
+      if (aResult.button == Tabmix.BUTTON_OK)
          this.loadSession(aResult.label, "firstwindowopen");
       else
          this.loadHomePage();
@@ -3087,7 +3119,7 @@ try{
          }
 
          // reuse blank tabs and move tabs to the right place
-         var openTabNext = TMP_getOpenTabNextPref();
+         var openTabNext = Tabmix.getOpenTabNextPref();
          // fix and merge session Tabview data with current window Tabview data
          this._preperTabviewData(loadOnStartup, blankTabs);
          if (this.groupUpdates.hideSessionActiveGroup) {
@@ -4154,5 +4186,5 @@ Tabmix.backwardCompatibilityGetter(window, "SessionData", "TabmixSessionData");
 Tabmix.backwardCompatibilityGetter(window, "SessionManager", "TabmixSessionManager");
 Tabmix.backwardCompatibilityGetter(window, "TabDNDObserver", "TMP_tabDNDObserver");
 Tabmix.backwardCompatibilityGetter(window, "gSingleWindowMode", "Tabmix.singleWindowMode");
-Tabmix.backwardCompatibilityGetter(window, "TM_init", "TMP_startup");
+Tabmix.backwardCompatibilityGetter(window, "TM_init", "Tabmix.startup");
 Tabmix.backwardCompatibilityGetter(window, "tabscroll", "TabmixTabbar.scrollButtonsMode");

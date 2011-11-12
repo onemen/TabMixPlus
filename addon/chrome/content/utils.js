@@ -76,16 +76,18 @@ Tabmix_ChangeCode.prototype =  {
        if (this.needUpdate)
          Tabmix.toCode(aObj, aName || this.name, this.value);
        if (aShow)
-         this.show();
+         this.show(aObj, aName);
        delete this;
     } catch (ex) {
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
   },
 
-  show: function() {
+  show: function(aObj, aName) {
     if (this.name != null)
       Tabmix.show(this.name);
+    else if (aObj && aName in aObj)
+      Tabmix.clog(aObj[aName].toString());
   }
 
 }
@@ -272,7 +274,7 @@ var Tabmix = {
     // cut off the first line of the stack trace, because that's just this function.
     let stack = Error().stack.split("\n").slice(slice || 1);
 
-    TabmixSvc.console.logStringMessage("Tabmix Trace: " + aMsg + '\n' + stack.join("\n"));
+    TabmixSvc.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   },
 
   // Show/hide one item (specified via name or the item element itself).
@@ -425,11 +427,11 @@ var Tabmix = {
     }
 
     var dialog = ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul","",'centerscreen'+(modal ? ",modal" : ",dependent") ,dpb);
+           "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +(modal ? ",modal" : ",dependent") ,dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
 
-    return {button: dpb.GetInt(4), checked: (dpb.GetInt(5) == TMP_CHECKBOX_CHECKED),
+    return {button: dpb.GetInt(4), checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
             label: dpb.GetString(5), value: dpb.GetInt(6)};
   },
 
@@ -467,6 +469,9 @@ var Tabmix = {
       return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : JSON.stringify(obj);
     }
   },
+
+  compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
+  itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
   destroy: function() {
     this._define = null;

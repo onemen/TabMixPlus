@@ -17,16 +17,6 @@
   margin-bottom: -3px;
 }
 
-/* :::: multi-row :::: */
-.tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .scrollbox-innerbox {
-  display: block !important;
-}
-
-/* Fix problem with multi-row when tab width is very small*/
-.tabbrowser-tabs[flowing=multibar]:not([multibar])[inline=true] .tabs-frame .scrollbox-innerbox {
-  display: block !important;
-}
-
 .tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
   display: none !important;
 }

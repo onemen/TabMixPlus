@@ -25,7 +25,7 @@ let MergeWindows = {
     var mergePopups = TabmixSvc.prefs.getBoolPref("extensions.tabmix.mergePopups");
     var placePopupNextToOpener = TabmixSvc.prefs.getBoolPref("extensions.tabmix.placePopupNextToOpener");
     var mergeAllWindows = TabmixSvc.prefs.getBoolPref("extensions.tabmix.mergeAllWindows");
-    var openTabNext = topWindow.TMP_getOpenTabNextPref();
+    var openTabNext = topWindow.Tabmix.getOpenTabNextPref();
 
     // other variables used in this function
     var currentIndex, tabs, browsers = new Array(), i, j;
@@ -430,7 +430,7 @@ let MergeWindows = {
         openedBrowser = tabbrowser.getBrowserForTab(newTab);
 
         // we call setScrollPosition after load to make sure scrollPosition is set
-        openedBrowser.addEventListener('load', aWindow.TMP_dupScrollPosition, true);
+        openedBrowser.addEventListener('load', aWindow.tablib.dupScrollPosition, true);
         openedBrowser._scrollData = {
             tabPos: newTab._tPos,
             href: null,

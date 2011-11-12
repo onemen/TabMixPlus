@@ -22,7 +22,7 @@ flst.prototype = {
     }
     catch (e) {
       if (TabmixSvc.is40)
-        return;    
+        return;
       let statusTextFld = TabmixSvc.topWin().document.getElementById("statusbar-display");
       let currentLabel = statusTextFld.label;
       statusTextFld.label = msg;
@@ -52,7 +52,7 @@ flst.prototype = {
     }
     else if (this.moreThenOneTab) {
       let timerInterval = TabmixSvc.prefs.getIntPref("extensions.tabmix.slideDelay") * 1000;
-      this.slideShowTimer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);      
+      this.slideShowTimer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
                         Ci.nsITimer.TYPE_REPEATING_SLACK);
       this.showAlert(this.slideshowOn);

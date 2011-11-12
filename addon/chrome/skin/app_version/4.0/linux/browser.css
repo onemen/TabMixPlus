@@ -1,4 +1,4 @@
-/** 
+/**
     Firefox version 4.0
 
     Linux platform
@@ -34,21 +34,21 @@
 }
 
 /*  Tab scrollbox arrow buttons - fix border */
-.tabbrowser-tabs[classic] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up,
-.tabbrowser-tabs[classic] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+#TabsToolbar[tabmix_skin="classic"] > #tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
+#TabsToolbar[tabmix_skin="classic"] > #tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
   height: 26px;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down:not([disabled]),
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up:not([disabled]),
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
   -moz-border-image: none;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up:-moz-locale-dir(ltr) {
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(ltr) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up:-moz-locale-dir(rtl) {
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
 }

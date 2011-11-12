@@ -44,7 +44,7 @@
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
       <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic"
-         oncommand="TMP_openDialog(-1);"/>
+         oncommand="Tabmix.openOptionsDialog(-1);"/>
       <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
          <menupopup id="tm-sessionmanager_menu"
                   context="tm_sessionmanagerContextMenu"
@@ -52,7 +52,7 @@
                   oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
                   onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
             <menuitem label="&settings.label;…" tmp_iconic="menuitem-iconic tabmix-menu-icon"
-                  oncommand="TMP_openDialog(5); event.stopPropagation();"/>
+                  oncommand="Tabmix.openOptionsDialog(5); event.stopPropagation();"/>
             <menuseparator/>
             <menu id="tm-sm-closedwindows2" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
                <menupopup id="tm-sm-closedwindows_menu2"
@@ -182,7 +182,7 @@
                   oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
                   onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
             <menuitem id="btn-sm-settings" label="&settings.label;…" tmp_iconic="menuitem-iconic"
-                  oncommand="TMP_openDialog(5); event.stopPropagation();"/>
+                  oncommand="Tabmix.openOptionsDialog(5); event.stopPropagation();"/>
             <menuseparator/>
             <menu id="tm-sm-closedwindows1" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
                <menupopup id="tm-sm-closedwindows_menu1"
@@ -262,7 +262,7 @@
       <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
     </toolbarbutton>
 
-    <toolbarbutton id="go-button" onclick="TMP_goButtonClick(event);"/>
+    <toolbarbutton id="go-button" onclick="Tabmix.goButtonClick(event);"/>
 
     <menu id="historyUndoMenu">
       <menupopup id="historyUndoPopup" class="fix-bookmark-item"
@@ -389,7 +389,7 @@
       <!-- context menu for session manager menupopup  -->
       <menupopup id="tm_sessionmanagerContextMenu"
                   onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
-                  onpopuphidden="TMP_hidePopup();">
+                  onpopuphidden="Tabmix.hidePopup();">
         <menuitem id="tm-sm-OpenInCurrenWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
                   oncommand="TabmixSessionManager.restoreSession(document.popupNode, true);"/>
         <menuitem id="tm-sm-OpenInNewWindow" label="&sm.context.restore.new;" accesskey="&sm.context.restore.newkey;"

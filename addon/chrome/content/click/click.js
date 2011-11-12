@@ -11,7 +11,7 @@ var TabmixTabClickOptions = {
 
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
-    if (target == gBrowser.tabContainer.mTabsNewtabButton || (aEvent.button == 0 && anonid == "tmp-close-button"))
+    if (target == gBrowser.tabContainer.mTabsNewtabButton)
       this._blockButtonDblClick = true;
     else if (this._blockButtonDblClick)
       setTimeout(function() {TabmixTabClickOptions._blockButtonDblClick = false; }, 0);
@@ -28,7 +28,6 @@ var TabmixTabClickOptions = {
       return;
 
     this.onDoubleClick = false;
-
     var clickOutTabs = aEvent.target.localName == "tabs";
     var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
 
@@ -302,7 +301,7 @@ var TabmixContext = {
     if (item) // make sure no one removed it before we do
       tabContextMenu.removeChild(item);
 
-    tabContextMenu.setAttribute("onpopuphidden", tabContextMenu.getAttribute("onpopuphidden") + "if (event.target == this) TMP_hidePopup();");
+    tabContextMenu.setAttribute("onpopuphidden", tabContextMenu.getAttribute("onpopuphidden") + "if (event.target == this) Tabmix.hidePopup();");
     tabContextMenu.addEventListener("popupshowing", this.updateTabContextMenu, false);
     tabContextMenu.addEventListener("popupshown", this.tabContextMenuShown, false);
 
@@ -433,11 +432,11 @@ var TabmixContext = {
     Tabmix.showItem(newTab, TabmixSvc.TMPprefs.getBoolPref("newTabMenu"));
     if (clickOutTabs) {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
-      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
+      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab();");
     }
     else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(gBrowser.mContextTab);");
+      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab(gBrowser.mContextTab);");
     }
 
     // Duplicate Commands
@@ -502,7 +501,7 @@ var TabmixContext = {
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.contentDocument.baseURI || browser.currentURI.spec;
-        let docTitle = TMP_getTitleFromBookmark(url, browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"));
+        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"));
         if (!docTitle || docTitle == gBrowser.mStringBundle.getString(Tabmix.isVersion(40) ? "tabs.emptyTabTitle" : "tabs.untitled"))
           titleNotReady = true;
       }
@@ -760,26 +759,15 @@ var TabmixContext = {
       nextEpisode = treeWalker.nextNode();
     }
     if (urls.length)
-     TMP_loadTabs(urls, false);
+     Tabmix.loadTabs(urls, false);
     return true;
   }
 }
 
-// sometimes context popup stay "open", we hide it manually.
-//function TM_hidePopup () {
-function TMP_hidePopup() {
-   var node = document.popupNode;
-   while (node && node.localName != "menubar" && node.localName != "toolbar") {
-      if (node.localName == "menupopup" || node.localName == "popup") {
-         if (node.hasAttribute("open")) node.removeAttribute("open");
-         node.hidePopup();
-      }
-      node = node.parentNode;
-   }
-}
-
 // for all tabs popup lists
 var TabmixAllTabs = {
+  _selectedItem: null,
+  _popup: null,
   backupLabel: "",
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
@@ -797,7 +785,30 @@ var TabmixAllTabs = {
         break;
       case "DOMMouseScroll":
         TMP_eventListener.onTabBarScroll(aEvent);
+      case "scroll":
+        this._popup._updateTabsVisibilityStatus();
         break;
+    }
+  },
+
+  _updateTabsVisibilityStatus: function TMP__updateTabsVisibilityStatus() {
+    var tabContainer = gBrowser.tabContainer;
+    // We don't want menu item decoration unless there is overflow.
+    if (tabContainer.getAttribute("overflow") != "true")
+      return;
+
+    var tabstripBO = tabContainer.mTabstrip.scrollBoxObject;
+    for (var i = 0; i < this.childNodes.length; i++) {
+      let curTab = this.childNodes[i].tab;
+      if (!curTab) // "Tab Groups" menuitem and its menuseparator
+        continue;
+      let curTabBO = curTab.boxObject;
+      if (!curTabBO) // "Tabs From Other Computers" menuitem
+        continue;
+      if (tabContainer.mTabstrip.isElementVisible(curTab))
+        this.childNodes[i].setAttribute("tabIsVisible", "true");
+      else
+        this.childNodes[i].removeAttribute("tabIsVisible");
     }
   },
 
@@ -878,11 +889,18 @@ var TabmixAllTabs = {
     if (popup.hasAttribute("context") && popup.getAttribute("context") != tabContextMenu.id)
       popup.setAttribute("context", tabContextMenu.id);
 
-    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch"))
-      popup.addEventListener("DOMMouseScroll", this, true);
-
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
+
+    if (Tabmix.isVersion(40)) {
+      gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
+      this._popup = popup;
+      if (!this._popup._updateTabsVisibilityStatus)
+        this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
+      this._popup._updateTabsVisibilityStatus();
+    }
+    else if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch"))
+      popup.addEventListener("DOMMouseScroll", this, true);
 
     return true;
   },
@@ -933,19 +951,21 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tabs[i].Tab, tabs[i].Index, aType);
         break;
       case 2:
-        var rtl = Tabmix.rtl && TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode") != 2;
         tabs = gBrowser.tabs;
-        var index = 0;
-        for (i = 0; i < tabs.length; i++) {
-          let tab = tabs[i];
-          if (tab._TMP_removeing)
+        let addToMenu = side != "right";
+        for (let t = 0; t < tabs.length; t++) {
+          let tab = tabs[t];
+          let visible = side && gBrowser.tabContainer.isTabVisible(tab._tPos);
+          if (visible) {
+            if (tab.pinned)
+              continue;
+            else if (side == "left")
+              break;
+            addToMenu = true;
             continue;
-          if (side && side == (rtl ? "right" : "left") && !tab.collapsed)
-            continue;
-          else if (side && side == (rtl ? "left" : "right") &&
-                (tab.collapsed || tab.hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(tab._tPos)))
-            continue;
-          this.createMenuItems(popup, tabs[i], index++, aType);
+          }
+          if (addToMenu)
+            this.createMenuItems(popup, tab, t, aType);
         }
         break;
       case 3:
@@ -954,6 +974,18 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tab, i, aType);
         }
         break;
+    }
+    var scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
+    if (!popup.style.getPropertyValue("max-height")) {
+      popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
+      scrollBox.ensureElementIsVisible(popup.firstChild);
+    }
+
+    if (this._selectedItem) {
+      let items = Array.slice(popup.childNodes);
+      let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
+      scrollBox.ensureElementIsVisible(element);
+      scrollBox.ensureElementIsVisible(this._selectedItem);
     }
   },
 
@@ -969,6 +1001,8 @@ var TabmixAllTabs = {
       mi.setAttribute("count", count);
     }
     this._setMenuitemAttributes(mi, tab);
+    if (tab.selected)
+      this._selectedItem = mi;
 
     mi.value = value;
     tab.mCorrespondingMenuitem = mi;
@@ -1079,14 +1113,21 @@ var TabmixAllTabs = {
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.setAttribute('tooltiptext', item.getAttribute('_tooltiptext'));
 
-    if (Tabmix.isVersion(40))
+    if (Tabmix.isVersion(40)) {
       gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
+      gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
+    }
+    else
+      popup.removeEventListener("DOMMouseScroll", this, true);
+
     gBrowser.tabContainer.removeEventListener("TabClose", this, false);
     popup.removeEventListener("DOMMenuItemActive", this, false);
     popup.removeEventListener("DOMMenuItemInactive", this, false);
-    popup.removeEventListener("DOMMouseScroll", this, true);
 
     this.backupLabel = "";
+    this._selectedItem = null;
+    popup._updateTabsVisibilityStatus = null;
+    this._popup = null;
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {

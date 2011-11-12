@@ -168,8 +168,8 @@ let AutoReload = {
     throw new Error("Tabmix: unexpected argument");
   },
 
-  /**
-  *  called by TabmixProgressListener
+ /**
+  *  called by TabmixProgressListener.listener
   */
   onTabReloaded: function(aTab, aBrowser) {
     var win = _getWindow(aBrowser.contentWindow);

@@ -4,13 +4,13 @@
  * original code by Hemiola SUN, further developed by onemen and CPU
  */
 
-function TMP_startup() {
+Tabmix.startup = function TMP_startup() {
   // disable the "Open New Window action in Single Window Mode...
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (Tabmix.isVersion(40)) {
+  if (this.isVersion(40)) {
     // multi-rows total heights are diffrent when tabs on top
     // since this isnot trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
@@ -29,7 +29,7 @@ function TMP_startup() {
     // replace browser handlers with ours so it recognizes when tabs are acted on
     gBrowser.onTabBarDblClick = function TMP_gBrowser_onTabBarDblClick(aEvent) {TabmixTabClickOptions.onTabBarDblClick(aEvent);};
     gBrowser.onTabClick = function TMP_gBrowser_onTabClick(aEvent) {TabmixTabClickOptions.onTabClick(aEvent);};
-    window.setTimeout(function () {TMP_delayedStartup();}, 0);
+    window.setTimeout(function () {Tabmix.delayedStartup();}, 0);
 
     let goPopup = document.getElementById("goPopup");
     if (goPopup) {
@@ -40,6 +40,10 @@ function TMP_startup() {
     }
 
     gBrowser.onresize = function gBrowser_onresize(aEvent) {TabmixTabbar.widthChange(aEvent);};
+
+    // from Firefox 4.0+ window.BrowserHome is the same as window.BrowserGoHome
+    // Browser:Home open in new tab if the curren tab is locked
+    window.BrowserHome = this.browserHome;
   }
 
   if(gBrowser.moveTabTo)
@@ -60,9 +64,6 @@ function TMP_startup() {
   if (typeof aioCloseWindow == 'function')
     aioCloseWindow = BrowserTryToCloseWindow;
 
-  //Browser:Home open in new tab if the curren tab is locked
-  window.BrowserHome = TMP_BrowserHome;
-
   // add call to TMP_Sanitizer
   // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
   var cmd = document.getElementById("Tools:Sanitize");
@@ -77,14 +78,14 @@ function TMP_startup() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
     let stripIsHidden = TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.getStripVisibility();
-    if (Tabmix.isVersion(40)) {
+    if (this.isVersion(40)) {
       if (stripIsHidden)
         gBrowser.setStripVisibilityTo(true);
-      Tabmix.setItem("TabsToolbar", "onStartNewTabButton", true);
+      this.setItem("TabsToolbar", "onStartNewTabButton", true);
       // save mTabsNewtabButton width
       let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
       tabBar._newTabButtonWidth = lwtheme ? 31 : tabBar.mTabsNewtabButton.getBoundingClientRect().width;
-      Tabmix.setItem("TabsToolbar", "onStartNewTabButton", null);
+      this.setItem("TabsToolbar", "onStartNewTabButton", null);
       if (stripIsHidden)
         gBrowser.setStripVisibilityTo(false);
     }
@@ -106,11 +107,12 @@ function TMP_startup() {
     }
   }
 
-  // we eval navigator-toolbox customizeDone in TMP_delayedStartup
-  TMP_BrowserToolboxCustomizeDone();
+  // we eval navigator-toolbox customizeDone in Tabmix.delayedStartup
+  this._bottomPosition = false;
+  tablib.browserToolboxCustomizeDone();
 }
 
-function TMP_delayedStartup() {
+Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
   TabmixTabbar.updateDisplayBlock();
@@ -119,7 +121,7 @@ function TMP_delayedStartup() {
      we add this also when we use TMP session manager.
      we use Firefox SessionStore closed tab service and for restore after restart
   */
-  if (Tabmix.isFirstWindow)
+  if (this.isFirstWindow)
     TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
@@ -146,7 +148,7 @@ function TMP_delayedStartup() {
       let browser = gBrowser.getBrowserAtIndex(i);
       let aUrl = browser.contentDocument.baseURI;
       aUrl = (aUrl) ? aUrl : browser.currentURI.spec ;
-      let bookMarkName = TMP_getTitleFromBookmark(aUrl);
+      let bookMarkName = TMP_Places.getTitleFromBookmark(aUrl);
       if (bookMarkName && browser.contentDocument.title != bookMarkName)
         browser.contentDocument.title = bookMarkName;
     }
@@ -163,12 +165,24 @@ function TMP_delayedStartup() {
       }
 
       if (aToolboxChanged) {
-        TMP_BrowserToolboxCustomizeDone();
+        tablib.browserToolboxCustomizeDone();
         if (Tabmix.isVersion(40) && !TabmixTabbar._needResetOnCustomizeDone) {
           TabmixTabbar.updateScrollStatus();
           TabmixTabbar.updateBeforeAndAfter();
         }
+
+        // in Firefox 4.0+ make sure our scroll buttons box is after tabbrowser-tabs
+        let box = document.getElementById("tabmixScrollBox");
+        if (box && box != gBrowser.tabContainer.nextSibling) {
+          let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+          TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
+          if (useTabmixButtons && document.getElementById("TabsToolbar").hasAttribute("tabstripoverflow")) {
+            let tabStrip = gBrowser.tabContainer.mTabstrip;
+            tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = false;
+          }
+        }
       }
+
       // fix incompatibility with Personal Titlebar extension
       // the extensions trigger tabbar binding reset on toolbars customize
       // we need to init our ui settings again
@@ -188,10 +202,10 @@ function TMP_delayedStartup() {
           optionWindow.focus();
         }
       }
-    } catch (ex) {Tabmix.assert(ex, "error in TMP_BrowserToolboxCustomizeDone");}
+    } catch (ex) {Tabmix.assert(ex, "error in TMP_customizeDone");}
   };
 
-  if (Tabmix.isVersion(40)) {
+  if (this.isVersion(40)) {
     // set option to Prevent double click on Tab-bar from changing window size.
     if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize"))
       document.getElementById("TabsToolbar")._dragBindingAlive = false;
@@ -221,7 +235,7 @@ var TMP_eventListener = {
     switch (aTopic) {
       case "browser-delayed-startup-finished":
         Services.obs.removeObserver(this, "browser-delayed-startup-finished");
-        TMP_delayedStartup();
+        Tabmix.delayedStartup();
         break;
     }
   },
@@ -305,7 +319,7 @@ var TMP_eventListener = {
 
  /*
   *  we use this event to run this code before load event
-  *  until TMP version 0.3.8.3 we used to run this code from TMP_beforeStartup
+  *  until TMP version 0.3.8.3 we used to run this code from Tabmix.beforeStartup
   *  that called from tabcontainer constractur
   */
   onContentLoaded: function TMP_EL_onContentLoaded() {
@@ -318,7 +332,13 @@ var TMP_eventListener = {
     window.addEventListener("load", this, false);
 
     try {
-      TabmixtModules.init();
+      /**
+      *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
+      */
+      Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
+      Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
+      Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
+      Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");      
     } catch (ex) {Tabmix.assert(ex);}
 
     var tabContainer = gBrowser.tabContainer;
@@ -333,6 +353,8 @@ var TMP_eventListener = {
     } catch (ex) {Tabmix.assert(ex);}
 
     if (Tabmix.isVersion(40)) {
+      Tabmix.contentAreaClick.init();
+    
       tabContainer.addEventListener("TabUnpinned", this, true);
 
       if ("_update" in TabsInTitlebar) {
@@ -449,11 +471,11 @@ var TMP_eventListener = {
     var tabbar = gBrowser.tabContainer;
     // add event for mouse scrolling on tab bar, necessary for linux
     if (Tabmix.isPlatform("Linux")) {
-       document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, false);
+       document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
        tabbar.addEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
     }
     else
-       tabbar.addEventListener("DOMMouseScroll", this, false);
+       tabbar.addEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
 
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
@@ -464,10 +486,13 @@ var TMP_eventListener = {
     }
 
     try {
-      TMP_ProgressListener.startup(gBrowser);
+      TabmixProgressListener.startup(gBrowser);
     } catch (ex) {Tabmix.assert(ex);}
 
-    gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
+    if (Tabmix.isVersion(40))
+      gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    else
+      gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
 
     // init tabmix functions
     try {
@@ -477,16 +502,16 @@ var TMP_eventListener = {
       TMP_Places.init();
     } catch (ex) {Tabmix.assert(ex);}
     try {
-      TMP_startup();
+      Tabmix.startup();
     } catch (ex) {Tabmix.assert(ex);}
     try {
       TMP_extensionsCompatibility.onWindowOpen();
     } catch (ex) {Tabmix.assert(ex);}
     try {
-      TMP_TBP_init();
+      Tabmix.linkHandling_init();
     } catch (ex) {Tabmix.assert(ex);}
     try {
-      TMP_DragAndDrop_init();
+      TMP_tabDNDObserver.init();
     } catch (ex) {Tabmix.assert(ex);}
 
     var tabBar = gBrowser.tabContainer;
@@ -511,7 +536,7 @@ var TMP_eventListener = {
       */
       var ib = gBrowser.mTabDropIndicatorBar;
       if (ib && ib.firstChild) {
-        TMP_tabDNDObserver.marginBottom = TMP_getStyle(ib.firstChild, "marginBottom");
+        TMP_tabDNDObserver.marginBottom = Tabmix.getStyle(ib.firstChild, "marginBottom");
       }
     }
 
@@ -632,7 +657,7 @@ var TMP_eventListener = {
       TabmixTabbar._width = gBrowser.tabContainer.boxObject.width;
       // only hide the tabbar after we catch the width
       if (TabmixTabbar.hideMode == 2)
-        TMP_setStripVisibilityTo(false);
+        Tabmix.setStripVisibilityTo(false);
     }, 100);
 
     TabmixTabbar.position = 0;
@@ -693,7 +718,7 @@ var TMP_eventListener = {
     if (this._tabStillLoading > 0)
       this._tabStillLoading--;
 
-    TMP_restoreTabState(tab);
+    Tabmix.restoreTabState(tab);
   },
 
   onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
@@ -713,10 +738,12 @@ var TMP_eventListener = {
   onFullScreen: function TMP_EL_onFullScreen(aPositionChanged) {
     // add fullscr-bottom-toggler when tabbar is on the bottom
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-    if (TabmixTabbar.position == 1 && (!window.fullScreen || aPositionChanged)) {
+    var fullScreen = window.fullScreen || document.mozFullScreen;
+    if (TabmixTabbar.position == 1 && (!fullScreen || aPositionChanged)) {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
+        fullScrToggler.collapsed = true;
         if (Tabmix.isVersion(40))
           document.getElementById("tabmix-bottom-toolbox").appendChild(fullScrToggler);
         else {
@@ -730,12 +757,27 @@ var TMP_eventListener = {
           'document.getElementById("fullscr-bottom-toggler").collapsed = aShow; \
            $&'
         ).toCode();
+
+        if (Tabmix.isVersion(100)) {
+          Tabmix.newCode("FullScreen.enterDomFullScreen", FullScreen.enterDomFullScreen)._replace(
+            /(\})(\)?)$/,
+            <![CDATA[
+              fullScrToggler = document.getElementById("fullscr-bottom-toggler");
+              if (fullScrToggler) {
+                fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);
+                fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);
+              }
+            $1$2]]>
+          ).toCode();
+        }
       }
-      fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
-      fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
-      fullScrToggler.collapsed = false;
+      if (!document.mozFullScreen) {
+        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
+        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
+        fullScrToggler.collapsed = false;
+      }
     }
-    else if (fullScrToggler && window.fullScreen) {
+    else if (fullScrToggler && fullScreen) {
       fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
@@ -758,7 +800,10 @@ var TMP_eventListener = {
     if (TabmixTabbar.lockallTabs)
       tab.setAttribute("locked", "true");
 
-    this.onTabOpen_delayUpdateTabBar(tab);
+    if (!Tabmix.isVersion(40) || "TabGroupsManagerApiVer1" in window)
+      // from Firefox 4.0+ we call onTabOpen_delayUpdateTabBar from _handleNewTab
+      // after the tab fully opened
+      this.onTabOpen_delayUpdateTabBar(tab);
   },
 
   // this function call onTabOpen_updateTabBar after some delay
@@ -813,26 +858,45 @@ var TMP_eventListener = {
       TabmixTabbar.setHeight(1);
       tabBar.removeAttribute("multibar");
     }
+    if (tab.previousSibling && !TabmixTabbar.inSameRow(tab, tab.previousSibling))
+      tab.style.setProperty("opacity", "0", "important");
+
     var animat = Tabmix.isVersion(40) && TabmixSvc.prefs.getBoolPref("browser.tabs.animate");
-    if (!animat) {
+    if (!animat)
       this.onTabClose_updateTabBar(tab);
-    }
-    else if (tab.pinned && tabsCount == 0) {
-      // in this case the new tab that replace the last tab
-      // trigger onTabOpen_updateTabBar before we update _collapsedTabs
-      // in onTabClose_updateTabBar
-      tabBar._collapsedTabs = 0;
-    }
   },
 
   // TGM extension use it
   onTabClose_updateTabBar: function TMP_EL_onTabClose_updateTabBar(aTab, aDelay) {
     var tabBar = gBrowser.tabContainer;
-    var pinned = Tabmix.isVersion(40) && aTab.pinned;
-    if (!TabmixTabbar.isMultiRow) {
-      if (Tabmix.isVersion(50) && (this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth))
-        return;
+    if (Tabmix.isVersion(40)) {
+      // workaround when we remove last visible tab
+      if (TabmixTabbar.isMultiRow && tabBar.overflow && gBrowser._numPinnedTabs > 0 && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
+        tabBar.mTabstrip.ensureElementIsVisible(gBrowser.mCurrentTab, false);
+      if (!tabBar.TMP_onCloseTimeout) {
+        tabBar.TMP_onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
+          if (tabBar.TMP_onCloseTimeout) {
+            clearTimeout(tabBar.TMP_onCloseTimeout);
+            tabBar.TMP_onCloseTimeout = null;
+          }
+          tabBar.adjustNewtabButtonvisibility();
+          if (TabmixTabbar.isMultiRow) {
+            // first we check for unpinned last tab row number
+            if (tabBar.hasAttribute("multibar") &&
+                tabBar._lastTabRowNumber < TabmixTabbar.visibleRows)
+              tabBar._positionPinnedOnMultiRow();
+            // here we check for last row for both pinned and unpinned
+            if (tabBar.getAttribute("multibar") == "true" &&
+                tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
+              tabBar.updateVerticalTabStrip();
+            TabmixTabbar.updateBeforeAndAfter();
+          }
+        }, aDelay ? 0 : 25);
+      }
+      return;
+    }
 
+    if (!TabmixTabbar.isMultiRow) {
       let lastTabVisible = tabBar.lastTabVisible;
       // only uncollapsed left tab when we can't scroll right
       if (aTab._tPos < tabBar.collapsedTabs)
@@ -885,11 +949,8 @@ var TMP_eventListener = {
         }, aDelay ? 0 : 25);
       }
     }
-    else {
-      if (pinned && tabBar._collapsedTabs)
-        tabBar._collapsedTabs--;
+    else
       tabBar.disAllowNewtabbutton = false;
-    }
   },
 
   onTabSelect: function TMP_EL_TabSelect(aEvent) {
@@ -942,7 +1003,12 @@ var TMP_eventListener = {
     if (tab.hasAttribute("_lockedAppTabs")) {
       gBrowser.lockTab(tab);
     }
-    gBrowser.tabContainer.collapsedTabs--;
+    if (Tabmix.isVersion(40)) {
+      tab.style.marginTop = "";
+      delete tab.__row;
+    }
+    else
+      gBrowser.tabContainer.collapsedTabs--;
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   },
@@ -959,6 +1025,9 @@ var TMP_eventListener = {
         ScrollDirection = -1 * ScrollDirection;
 
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
+    if (Tabmix.isVersion(40) && !shouldMoveFocus)
+      return;
+
     if (shouldMoveFocus) {
       tabBar.advanceSelectedTab(ScrollDirection, true);
     }
@@ -1020,13 +1089,18 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("TabSelect", this, true);
     if (Tabmix.isVersion(40)) {
       gBrowser.tabContainer.removeEventListener("TabUnpinned", this, true);
+
+      let alltabsPopup = document.getElementById("alltabs-popup");
+      if (alltabsPopup)
+        alltabsPopup.removeEventListener("popupshowing", alltabsPopup.__ensureElementIsVisible, false);
     }
+
     if (Tabmix.isPlatform("Linux")) {
-       document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, false);
+       document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
        gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
     }
     else
-       gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, false);
+       gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
 
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
@@ -1036,7 +1110,10 @@ var TMP_eventListener = {
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
       TMP_TabView._resetTabviewFrame();
     }
-    gBrowser.mPanelContainer.removeEventListener("click", TMP_contentLinkClick, true);
+    if (Tabmix.isVersion(40))
+      gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    else
+      gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version
     // we call removeEventListener again here in case user close the window without opening new tabs
@@ -1045,8 +1122,8 @@ var TMP_eventListener = {
 
     gTMPprefObserver.removeObservers();
 
-    TabmixProgressListener.mTabBrowser = null;
-    gBrowser.removeTabsProgressListener(TabmixProgressListener);
+    TabmixProgressListener.listener.mTabBrowser = null;
+    gBrowser.removeTabsProgressListener(TabmixProgressListener.listener);
 
     if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer)
       Tabmix.flst.cancel();
@@ -1129,13 +1206,4 @@ var TMP_eventListener = {
     updateAttrib("class", "tab-text", "role", "presentation");
   }
 
-}
-
-var TabmixtModules = {
-  init: function() {
-    Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
-    Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
-    Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
-    Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
-  }
 }

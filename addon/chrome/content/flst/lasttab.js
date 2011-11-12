@@ -24,7 +24,6 @@ var TMP_LastTab = {
       var menuitem, tab, imageUrl, x, y, i, activeIndex;
 
       TabmixAllTabs.createCommonList(tablist, this.handleCtrlTab ? 3 : 2);
-
       var item = this.tabs[this.TabIndex].mCorrespondingMenuitem;
       item.setAttribute("_moz-menuactive", "true");
       TabmixAllTabs.updateMenuItemActive(null, item);
@@ -70,14 +69,15 @@ var TMP_LastTab = {
       this.TabList.addEventListener("DOMMenuItemActive", this, true);
       this.TabList.addEventListener("DOMMenuItemInactive", this, true);
 
-      var tab = gBrowser.mCurrentTab;
-      this.TabHistory = [tab];
-      if (tab._tPos != 0) {
-         // if session manager select other tab then the first one we need to build TabHistory in two steps
-         // to maintain natural Ctrl-Tab order.
-         // we call MaintainTabHistory from here the 2nd time we will call it from get-tabs.
-         this.MaintainTabHistory(tab._tPos);
-      }
+      // if session manager select other tab then the first one we need to build TabHistory in two steps
+      // to maintain natural Ctrl-Tab order.
+      this.TabHistory = [];
+      var currentIndex = gBrowser.mCurrentTab._tPos;
+      for (let i = currentIndex; i < gBrowser.tabs.length; i++)
+        this.TabHistory.unshift(gBrowser.tabs[i]);
+      for (let i = 0; i < currentIndex; i++)
+        this.TabHistory.unshift(gBrowser.tabs[i]);
+
       this.ReadPreferences();
    },
 
@@ -133,8 +133,10 @@ var TMP_LastTab = {
    },
 
    attachTab: function TMP_LastTab_attachTab(aTab, aPos) {
-     if (!this._inited || this.TabHistory.indexOf(aTab) > -1)
+     if (!this._inited)
        return;
+
+     this.detachTab(aTab);
      var index;
      if(this.favorLeftToRightOrdering) {
        if (Tabmix.isVersion(36) && gBrowser._lastRelatedTab) {
@@ -279,10 +281,8 @@ try{
                TabmixAllTabs.updateMenuItemActive(null, item);
             }
          }
-         else {
+         else
             TabmixAllTabs._tabSelectedFromList(this.tabs[this.TabIndex]);
-         }
-
          event.stopPropagation();
          event.preventDefault();
       }
@@ -407,7 +407,7 @@ try{
 
       this.handleCtrlTab = !tabPreviews && mostRecentlyUsed;
       this.showTabList = !tabPreviews && TabmixSvc.TMPprefs.getBoolPref("lasttab.showTabList");
-      this.favorLeftToRightOrdering = TabmixSvc.TMPprefs.getBoolPref("lasttab.favorLeftToRightOrdering");
+      this.favorLeftToRightOrdering = true;
       this.respondToMouseInTabList = TabmixSvc.TMPprefs.getBoolPref("lasttab.respondToMouseInTabList");
    },
 

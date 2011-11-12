@@ -1,4 +1,4 @@
-/** 
+/**
     Firefox version 4.0
 
     Windows platform
@@ -57,25 +57,26 @@
   height: 26px;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-down:not([disabled]),
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up:not([disabled]),
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
   -moz-border-image: none;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up:not([disabled]) {
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:not([disabled]) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
 }
 
-.tabbrowser-arrowscrollbox[flowing=scrollbutton]:not([scrollbutton-up=left]) > .scrollbutton-up[disabled] {
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up[disabled] {
   border-right: 0px;
 }
 
+/*do the same for windows 7 */
 #TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1:not([disabled]):hover,
 #TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1[open],
 #TabsToolbar:not([tabmix_aero])[multibar] .toolbarbutton-1 > .toolbarbutton-menubutton-button:not([disabled]):hover,
-#TabsToolbar:not([tabmix_aero]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up:not([disabled]):hover,
-#TabsToolbar:not([tabmix_aero]) .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down:not([disabled]):hover {
+#TabsToolbar:not([tabmix_aero]) > #tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]):hover,
+#TabsToolbar:not([tabmix_aero]) > #tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]):hover {
   background-image: -moz-linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.5)),
                     -moz-linear-gradient(transparent, rgba(0,0,0,.25) 30%),
                     -moz-linear-gradient(transparent, rgba(0,0,0,.25) 30%),

@@ -8,7 +8,7 @@
     <script type="application/javascript">
         window.addEventListener("load", function TMP_onLoad_wizrssOverlay(aEvent) {
             aEvent.currentTarget.removeEventListener("load", TMP_onLoad_wizrssOverlay, false);
-            TMP_wizzrss.init();
+            TMP_extensionsCompatibility.wizzrss.init();
         }, false);
     </script>
 

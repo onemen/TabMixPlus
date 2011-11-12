@@ -255,3 +255,7 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
 .groupbox-tabbox:not([selectedIndex="0"]) .checkbox_dblClickTabbar {
   visibility: hidden;
 }
+
+#inverseother > .checkbox-check {
+  margin-top:2px;
+}

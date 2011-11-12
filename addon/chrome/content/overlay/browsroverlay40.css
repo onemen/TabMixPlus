@@ -6,12 +6,16 @@
 
 @import url("chrome://tabmixplus/content/overlay/browsroverlay_base.css");
 
+.tabbrowser-arrowscrollbox[type=tabmix-box] {
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-right-scrollBox") !important;
+}
+
 .tabbrowser-tabs {
   -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tabs") !important;
 }
 
 .tabbrowser-tabs > .tabbrowser-arrowscrollbox {
-  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-arrowscrollbox-clicktoscroll") !important;
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-arrowscrollbox-clicktoscroll") !important;
 }
 
 .tabbrowser-tab {
@@ -21,6 +25,17 @@
 /* showhover button */
 .showhover-box > .showhover {
  -moz-binding: url("chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button");
+}
+
+.tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
+.tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
+  visibility: collapse;
+}
+
+#TabsToolbar:not([tabstripoverflow]) > #tabmixScrollBox,
+#tabmixScrollBox[flowing="singlebar"],
+#tabmixScrollBox[defaultScrollButtons] {
+  visibility: collapse;
 }
 
 /*** hide tabs-newtab-button that we don't use
@@ -47,11 +62,13 @@
   visibility: visible !important;
 }
 
-#TabsToolbar[disAllowNewtabbutton]:not([overflow="true"]):not([newtab_side]) > #new-tab-button,
-#TabsToolbar[newtab_side] > #new-tab-button {
+#TabsToolbar[newTabButton=true][tabstripoverflow] > #new-tab-button,
+#TabsToolbar[newTabButton=true][disAllowNewtabbutton]:not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
+#TabsToolbar[newTabButton=true][newtab_side] > #new-tab-button {
   visibility: visible;
 }
 
+#TabsToolbar:not([disAllowNewtabbutton]):not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
 #TabsToolbar[newTabButton=false] > #new-tab-button {
   visibility: collapse;
 }
@@ -90,9 +107,9 @@
   padding-right: 0 !important;
 }
 
-/*  hide AppTabs that restored by Tabmix Session manager after crash */
-.tabbrowser-tab[pinned][tabmix_collapsed] {
-  visibility: collapse !important;
+/* hide new tab in session manager */
+.tabbrowser-tab[tabmix_hide] {
+  display: none;
 }
 
 /***  For progressmeter on tab Firefox 4.0+  ***/
@@ -110,7 +127,19 @@
   display: -moz-box;
 }
 
-/* hide new tab in session manager */
-.tabbrowser-tab[tabmix_hide] {
-  display: none;
+/* :::: multi-row :::: */
+.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > scrollbox > .scrollbox-innerbox {
+  display: block !important;
+}
+
+/* :::: widthFitTitle :::: */
+.tabbrowser-tabs:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
+  -moz-box-flex: 100;
+  width: 0;
+}
+
+/* for test - highlight tab in drag and drop test */
+.tabbrowser-tab[dragtarget="true"]{
+  -moz-appearance: none;
+  background-image: -moz-linear-gradient(center bottom , rgba(10%,10%,10%,.4) 1px, transparent 1px), -moz-linear-gradient(rgb(255, 204, 102), rgb(255, 204, 102))!important;
 }

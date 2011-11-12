@@ -54,7 +54,7 @@ CompatibilityCheck.prototype = {
   callbackDialog: null,
   list: null,
 
-  // for new AddonManager since Firefox 3.7
+  // for new AddonManager since Firefox 4.0
   getIncompatibleList_New: function TMP_EX_getIncompatibleList_New() {
     function isPending(aAddon, aAction) {
       var action = AddonManager["PENDING_" + aAction.toUpperCase()];
@@ -158,7 +158,7 @@ CompatibilityCheck.prototype = {
 
     // make promptService non modal on startup
     var self = this;
-    var callBack = this.callbackDialog ? null : 
+    var callBack = this.callbackDialog ? null :
                    function (aResult) {
                      aResult.showatStart = showatStart;
                      self.promptCallBack(aResult);
@@ -180,7 +180,7 @@ CompatibilityCheck.prototype = {
       this.doDisable();
       this.restart(aResult.button == this.DISABLE_AND_RESTART);
       this.dialogCallback(true); // we don't need this on startup
-    }  
+    }
   },
 
   doDisable: function TMP_EX_doDisable() {
@@ -230,7 +230,7 @@ CompatibilityCheck.prototype = {
   dialogCallback: function TMP_EX_dialogCallback(aHideButton) {
     if (this.callbackDialog) {
       this.window.gIncompatiblePane.hide_IncompatibleNotice(aHideButton, this.showList);
-    }  
+    }
   },
 
   getList: function TMP_EX_getList() {

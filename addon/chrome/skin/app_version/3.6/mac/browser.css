@@ -57,5 +57,5 @@
 /*.tabbrowser-arrowscrollbox[Mac] > .scrollbutton-up[disabled="true"],*/
 .tabbrowser-arrowscrollbox > .scrollbutton-down[disabled="true"] {
   -moz-image-region: rect(0, 33px, 17px, 22px) !important;
-  background-color: transparent !important; 
+  background-color: transparent !important;
 }

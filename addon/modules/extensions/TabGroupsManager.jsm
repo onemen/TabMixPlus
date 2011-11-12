@@ -60,13 +60,13 @@ let TMP_TabGroupsManager = {
 
     this.newCode("TabGroupsManager.AllGroups.prototype.openNewGroup", aWindow.TabGroupsManager.AllGroups.prototype.openNewGroup)._replace(
       'tab = gBrowser.addTab("about:blank");',
-      'if (arguments.length > 4 && arguments[4] == "TMP_BrowserOpenTab") { tab = TMP_BrowserOpenTab(null, true); } \
+      'if (arguments.length > 4 && arguments[4] == "TMP_BrowserOpenTab") { tab = Tabmix.browserOpenTab(null, true); } \
        else $&'
     ).toCode();
 
     this.newCode("TabGroupsManager.GroupClass.prototype.removeTab", aWindow.TabGroupsManager.GroupClass.prototype.removeTab)._replace(
       'gBrowser.addTab("about:blank")',
-      'TMP_BrowserOpenTab(null, true)'
+      'Tabmix.browserOpenTab(null, true)'
     )._replace(
       'TabGroupsManager.allGroups.openNewGroup();',
       'TabGroupsManager.allGroups.openNewGroup(null, null, null, null, "TMP_BrowserOpenTab");'
@@ -199,8 +199,6 @@ let TMP_TabGroupsManager = {
       "this.childNodes", selectedGroupTabs
     ).toSetter(tabBar, "collapsedTabs");
 
-    this.newCode(null, this._getTopTabY).toGetter(tabBar, "topTabY");
-
     // only allow to show tabs from the current group
     this.newCode("gBrowser.tabContainer.isTabVisible", tabBar.isTabVisible)._replace(
       'this.childNodes', selectedGroupTabs
@@ -300,7 +298,7 @@ let TMP_TabGroupsManager = {
       'TMP_TabView.checkTabs(tabs);'
     ).toCode();
 
-    this.newCode("TabmixProgressListener.onStateChange", aWindow.TabmixProgressListener.onStateChange)._replace(
+    this.newCode("TabmixProgressListener.listener.onStateChange", aWindow.TabmixProgressListener.listener.onStateChange)._replace(
       'let tabsCount = this.mTabBrowser.tabContainer.childNodes.length - this.mTabBrowser._removingTabs.length;',
       'let tabsCount = TabGroupsManagerApiVer1.visibleTabs.length;', {flags: "g"}
     ).toCode();
@@ -313,10 +311,6 @@ let TMP_TabGroupsManager = {
     this.newCode("TMP_eventListener.onTabSelect", aWindow.TMP_eventListener.onTabSelect)._replace(
       oldCode, newCode
     ).toCode();
-  },
-
-  _getTopTabY: function () {
-    return this.tabstripInnerbox.boxObject.y + TMP_getStyle(this.tabstripInnerbox, "paddingTop");
   },
 
   // get _tPos from group index

@@ -13,15 +13,15 @@ var TMP_original_contentAreaClick;
  *
  * @returns		Nothing.
  */
-function TMP_TBP_init(aWindowType) {
+Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (aWindowType == "Extension:Manager") {
       // we're in the EM
-      openURL = TMP_openURL;
+      openURL = this.openURL;
 
       // catch call to tabmix options from EM
-      Tabmix.newCode("gExtensionsViewController.commands.cmd_options", gExtensionsViewController.commands.cmd_options)._replace(
+      this.newCode("gExtensionsViewController.commands.cmd_options", gExtensionsViewController.commands.cmd_options)._replace(
       'var optionsURL = aSelectedItem.getAttribute("optionsURL");',
-      '$& \ if (TMP_cmd_options(optionsURL)) return;'
+      '$& \ if (Tabmix.cmdOptions(optionsURL)) return;'
       ).toCode();
   }
 
@@ -29,9 +29,9 @@ function TMP_TBP_init(aWindowType) {
   if (typeof(Local_Install) == "object") {
     // use TMP call to TMP Options
     var _aURL = "'chrome://tabmixplus/content/pref/pref-tabmix.xul'";
-    Tabmix.newCode("Local_Install.createDropDownMenu", Local_Install.createDropDownMenu)._replace(
+    this.newCode("Local_Install.createDropDownMenu", Local_Install.createDropDownMenu)._replace(
     'aMenuItem.setAttribute("oncommand", thisAction + "; event.stopPropagation();");',
-    'if (thisAction.indexOf('+_aURL+') != -1) thisAction = "TMP_cmd_options('+_aURL+')"; \ $&'
+    'if (thisAction.indexOf('+_aURL+') != -1) thisAction = "Tabmix.cmdOptions('+_aURL+')"; \ $&'
     ).toCode();
   }
 
@@ -41,13 +41,13 @@ function TMP_TBP_init(aWindowType) {
   // so we don't need to check for locked tabs only for blanks tabs
   var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
   if (autoComplete) {
-    Tabmix.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
+    this.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
       'openUILink(url, aEvent);',
       <![CDATA[
       var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
       var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
       var pref = "extensions.tabmix.loadUrlInBackground";
-      if (Tabmix.isVersion(100))
+      if (this.isVersion(100))
         openUILinkIn(url, where, {inBackground: TabmixSvc.prefs.getBoolPref(pref)});
       else
         openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
@@ -56,23 +56,28 @@ function TMP_TBP_init(aWindowType) {
   }
 
   if ("contentAreaClick" in window) {
-    TMP_original_contentAreaClick = window.contentAreaClick;
-    window.contentAreaClick = TMP_contentAreaClick;
+    if (!this.isVersion(40)) {
+      this.original_contentAreaClick = window.contentAreaClick;
+      window.contentAreaClick = TMP_contentAreaClick;
+    }
   }
 
-  window.BrowserOpenTab = TMP_BrowserOpenTab;
+  window.BrowserOpenTab = this.browserOpenTab;
 
-  TMP_openUILink_init();
+  this.openUILink_init();
 
   // for dotCOMplete extensoin
   if ("dotCOMplete" in window)
-     window.dotCOMplete.realBrowserLoadURL = TMP_BrowserLoadURL;
+     window.dotCOMplete.realBrowserLoadURL = this.browserLoadURL;
 }
 
 /**
  * @brief Force-call the window observer at least one time.
  *
  * @returns		Nothing.
+ *
+ * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
+ *        window[onload="TMP_TBP_Startup()"]
  */
 function TMP_TBP_Startup() {
   try {
@@ -101,7 +106,7 @@ function TMP_TBP_Startup() {
        if (!Tabmix.singleWindowMode) {
          window.tabmix_afterTabduplicated = true;
          TabmixSessionManager.init();
-         TMP_copyTabData(gBrowser.selectedTab, uriToLoad);
+         Tabmix.copyTabData(gBrowser.selectedTab, uriToLoad);
          $&
        }
       ]]>
@@ -207,15 +212,15 @@ function TMP_TBP_Startup() {
 }
 
 // this must run before all
-function TMP_beforeStartup(tabBrowser, aTabContainer) {
+Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     if (!Tabmix.isVersion(36)) {
       // for Firefox 3.5.x
-      Tabmix.newCode(null, tabBrowser.moveTabTo)._replace(
+      this.newCode(null, tabBrowser.moveTabTo)._replace(
            'this.mTabContainer.mTabstrip.scrollBoxObject.ensureElementIsVisible(this.mCurrentTab);',
            'this.mTabContainer.ensureTabIsVisible(this.mCurrentTab._tPos);'
       ).toCode(false, tabBrowser, "moveTabTo");
 
-      Tabmix.newCode(null, tabBrowser.addTab)._replace(
+      this.newCode(null, tabBrowser.addTab)._replace(
            'this.mTabContainer.mTabstrip.scrollBoxObject.scrollBy(this.mTabContainer.firstChild.boxObject.width, 0);',
            ''
       ).toCode(false, tabBrowser, "addTab");
@@ -259,13 +264,13 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
              return true;
           return (!aBrowser.sessionHistory || aBrowser.sessionHistory.index < 0 ||
                   (aBrowser.sessionHistory.count < 2 &&
-                  (!aBrowser.currentURI || 
-                  (aboutBlank ? aBrowser.currentURI.spec == "about:blank" : tabmix_isNewTabUrls(aBrowser.currentURI.spec))
+                  (!aBrowser.currentURI ||
+                  (aboutBlank ? aBrowser.currentURI.spec == "about:blank" : Tabmix.isNewTabUrls(aBrowser.currentURI.spec))
           )));
        } catch (ex) {Tabmix.assert(ex); return true;}
     }
 
-    if(Tabmix.isVersion(40)) {
+    if(this.isVersion(40)) {
       tabBrowser.getTabForBrowser = function (aBrowser) {
         return this._getTabForContentWindow(aBrowser.contentWindow);
       }
@@ -292,7 +297,7 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
     // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
     // so we initialize this before start
     // mTabMaxWidth not exist from firefox 4.0
-    var max = Math.max(16, Tabmix.getIntPref("browser.tabs.tabMaxWidth", 250));
+    var max = Math.max(16, this.getIntPref("browser.tabs.tabMaxWidth", 250));
     var min = Math.max(16, TabmixSvc.prefs.getIntPref("browser.tabs.tabMinWidth"));
     if (max < min) {
       TabmixSvc.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
@@ -302,6 +307,7 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
     TabmixTabbar.widthFitTitle = TabmixSvc.TMPprefs.getBoolPref("flexTabs") && (max != min);
+    this.setItem(tabContainer, "widthFitTitle", TabmixTabbar.widthFitTitle || null);
 
     var tabscroll = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode");
     if (tabscroll < 0 || tabscroll > 3 ||
@@ -311,7 +317,8 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
     TabmixTabbar.isMultiRow = tabscroll == TabmixTabbar.SCROLL_BUTTONS_MULTIROW;
-    if (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT)
+
+    if (!this.isVersion(40) && tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT)
       tabContainer.mTabstrip._scrollButtonUp = tabContainer.mTabstrip._scrollButtonUpRight;
 
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore

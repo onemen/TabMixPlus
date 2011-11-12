@@ -48,14 +48,14 @@ var TMP_Sage = {
       var _open = document.getElementById("rssOpenItem");
       var _openInWindow = document.getElementById("rssOpenNewWindowItem");
       var _openInTab = document.getElementById("rssOpenNewTabItem");
-      TMP_updateContextMenu(_open, _openInWindow, _openInTab, this.openTabPref);
+      TMP_Places.updateContextMenu(_open, _openInWindow, _openInTab, this.openTabPref);
    },
 
    get openTabPref() {
       if (TabmixSvc.prefs.prefHasUserValue(this.OPEN_TAB_FOR_SAGE))
          return this.OPEN_TAB_FOR_SAGE;
       else
-         return TMP_prefStringBookmark;
+         return TMP_Places.prefBookmark;
    }
 
 }

@@ -77,14 +77,6 @@
   <binding id="tabmix-tabbrowser-tabs"
             extends="chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-base-tabbrowser-tabs">
     <implementation>
-      <field name="mTabstrip" readonly="true">
-        document.getAnonymousElementByAttribute(this, "anonid", "arrowscrollbox");
-      </field>
-
-      <field name="tabstrip" readonly="true">
-        this.mTabstrip;
-      </field>
-
       <field name="tabstripInnerbox" readonly="true">
         document.getAnonymousElementByAttribute(this.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
@@ -95,12 +87,10 @@
 
       <constructor>
         <![CDATA[
-          this.parentNode.addEventListener("dragover", this, true);
+          Tabmix.newDargnDrop = Tabmix.isVersion(80) && ("_handleTabDrag" in this) && true;
 
-          Tabmix.newCode(null, this._positionPinnedTabs)._replace(
-            'var doPosition =',
-            'var doPosition = TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&'
-          ).toCode(false, this, "_positionPinnedTabs");
+          if (!Tabmix.newDargnDrop)
+            this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
 
           if (this.tabmix_inited_40) {
             this.tabmixTabbarPositionChanged();
@@ -113,48 +103,234 @@
 
       <destructor>
         <![CDATA[
-          if (this.parentNode)
-            this.parentNode.removeEventListener("dragover", this, true);
+          if (!Tabmix.newDargnDrop && this.parentNode)
+            this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           this.tabbrowser.mTabDropIndicatorBar = null;
         ]]>
       </destructor>
 
-      <property name="lastTabVisible" readonly="true">
-        <getter>
-        <![CDATA[
-          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
-            return this.isTabVisible(this.tabbrowser.visibleTabsFirstChild._tPos);
+      <method name="updateVerticalTabStrip">
+        <parameter name="aReset"/>
+        <body><![CDATA[
+          if (Tabmix.extensions.treeStyleTab || !this.visible && TabmixTabbar.visibleRows == 1)
+            return null;
+          // we must adjustNewtabButtonvisibility before get lastTabRowNumber
+          this.adjustNewtabButtonvisibility();
+          // this.lastTabRowNumber is null when we hide the tabbar
+          let rows = aReset ? 1 : (this.lastTabRowNumber || 1);
+          let currentRows = TabmixTabbar.visibleRows;
 
-          return this.isTabVisible(this.tabbrowser.visibleTabsLastChild._tPos);
-        ]]>
-        </getter>
-      </property>
+          let currentMultibar = this.getAttribute("multibar") || null;
+          let maxRow = this.maxRow;
+          // we need to check for the case that last row of tabs is empty and we still have hidden row on top
+          // this can occur when we close last tab in the last row or when some tab changed width
+          if (rows > 1 && rows - maxRow < 0 && this.overflow && this.canScrollTabsLeft) {
+            // try to scroll all the way up
+            this.mTabstrip.scrollByPixels((rows - maxRow) * this.mTabstrip.singleRowHeight);
+            // get lastTabRowNumber after the scroll
+            rows = this.lastTabRowNumber;
+          }
+          let multibar;
+          if (rows == 1)
+            multibar = null; // removeAttribute "multibar"
+          else if (rows > maxRow)
+            [multibar, rows] = ["scrollbar", maxRow];
+          else
+            multibar = "true"
+
+          if (rows > 1 && currentMultibar != multibar) {
+            Tabmix.setItem(this, "multibar", multibar);
+            Tabmix.setItem("TabsToolbar", "multibar", multibar);
+          }
+
+          let vertical = TabmixTabbar.isMultiRow && (TabmixTabbar.widthFitTitle || multibar);
+          Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
+          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
+          TabmixTabbar.setHeight(rows, aReset);
+
+          // prevent new-tab-button on the right from flickering when new tabs animate is on.
+          if (this.disAllowNewtabbutton && TabmixSvc.prefs.getBoolPref("browser.tabs.animate")) {
+            this.disAllowNewtabbutton = false;
+            let self = this;
+            // after 300ms new tab is fully opened
+            setTimeout(function() {self.adjustNewtabButtonvisibility();}, 300);
+          }
+          else
+            this.adjustNewtabButtonvisibility();
+
+          if (this.mTabstrip.orient == "vertical")
+            this.overflow = multibar == "scrollbar";
+          // if we are going to have scrool button on the left with multi-row
+          // update _positionPinnedTabs also when show/hide the buttons
+          if (currentMultibar != multibar || currentRows != rows)
+            this._positionPinnedTabs();
+
+          return multibar;
+        ]]></body>
+      </method>
+
+      <field name="_previousNumPinned">1</field>
+      <field name="_previousMaxPinnedTabsInRow">0</field>
+      <field name="__startOffset">0</field>
+      <field name="__extraStartMargin">10</field>
+
+      <method name="_positionPinnedOnMultiRow">
+        <parameter name="numPinned"/>
+        <body><![CDATA[
+          if (Tabmix.extensions.treeStyleTab)
+            return;
+          // we have to make sure that rearranging pinned tabs in rows don't change
+          // overflow status.
+          // when we increase maxPinnedTabsInRow we can change state from underflow to overflow.
+          // when we decrease maxPinnedTabsInRow we can change state from overflow to underflow.
+          if (!numPinned) {
+            numPinned = this.tabbrowser._numPinnedTabs;
+            if (numPinned == 0)
+              return;
+          }
+
+          if (this.__startOffset == 0) {
+            this._previousNumPinned = numPinned;
+            this._previousMaxPinnedTabsInRow = numPinned;
+            this._setPinnedTabsMargin(numPinned, 1, numPinned);
+          }
+
+          this.setAttribute("positionpinnedtabs", "true");
+          let rows = TabmixTabbar.visibleRows, maxPinnedTabsInRow;
+          let decrease = this._lastTabRowNumber < rows;
+          // when we decrease rows, try to fit all pinned tab in equal number
+          // of rows as normal tabs without changing the amount of normal tabs rows.
+          if (numPinned > 1 && this._previousNumPinned == numPinned && decrease)
+            maxPinnedTabsInRow = this._setTabContainerMargin(numPinned);
+          else {
+            maxPinnedTabsInRow = Math.floor(numPinned / rows);
+            if (numPinned - maxPinnedTabsInRow * rows > 0)
+              maxPinnedTabsInRow++;
+          }
+          if (maxPinnedTabsInRow < numPinned)
+            this._setPinnedTabsMargin(numPinned, rows, maxPinnedTabsInRow);
+
+          // we trigger underflow - prevet undefflow handler call this method again
+          if (!decrease && this._lastTabRowNumber < rows)
+            this.mTabstrip.blockUnderflow = true;
+
+          this._previousNumPinned = numPinned;
+          this._previousMaxPinnedTabsInRow = maxPinnedTabsInRow;
+        ]]></body>
+      </method>
+
+      <method name="_setTabContainerMargin">
+        <parameter name="numPinned"/>
+        <body><![CDATA[
+          // when we decrease rows, try to fit all pinned tab in equal number
+          // of rows as normal tabs without changing the amount of normal tabs rows.
+          let courrent = this._previousMaxPinnedTabsInRow;
+          let width = this.__startOffset / courrent;
+          let rows = Math.min(TabmixTabbar.visibleRows, this._lastTabRowNumber);
+          let maxTabsInRow = Math.floor(numPinned / rows);
+          if (numPinned - maxTabsInRow * rows > 0)
+            maxTabsInRow++;
+          if (maxTabsInRow != courrent) {
+            let diff = maxTabsInRow < courrent ? -1 : 1;
+            if (diff < 0)
+              this.mTabstrip.blockUnderflow = true;
+            else
+              this.mTabstrip.blockOverflow = true;
+            let extra = this.mTabstrip.scrollboxPaddingStart;
+            if (rows > 1)
+              extra += this.__extraStartMargin;
+            this.style.MozMarginStart = maxTabsInRow * width + extra + "px";
+            if (this._lastTabRowNumber != rows) {
+              let extra = this.mTabstrip.scrollboxPaddingStart + this.__extraStartMargin;
+              this.style.MozMarginStart = courrent * width + extra + "px";
+              return courrent;
+            }
+            // reset multi-row, we have place for all tabs in one row.
+            if (rows == 1) {
+              this.updateVerticalTabStrip(true);
+              this.__startOffset = 0;
+            }
+            if (diff < 0)
+              this.mTabstrip.blockUnderflow = false;
+            else
+              this.mTabstrip.blockOverflow = false;
+          }
+          return maxTabsInRow;
+        ]]></body>
+      </method>
+
+      <method name="_setPinnedTabsMargin">
+        <parameter name="numPinned"/>
+        <parameter name="aRows"/>
+        <parameter name="maxTabsInRow"/>
+        <body><![CDATA[
+          let height = TabmixTabbar.singleRowHeight;
+          let paddingStart = this.mTabstrip.scrollboxPaddingStart;
+          let offset = 0, count = 0, extra = this.__extraStartMargin ;
+          //XXX we assume that all pinned tabs have the same width
+          let pinnedTabWidth = this.childNodes[0].scrollWidth;
+          for (let row = 0; row < aRows, count < numPinned; row++) {
+            let thisRowCount = count + maxTabsInRow > numPinned ? numPinned - count : maxTabsInRow;
+            let width = (maxTabsInRow - thisRowCount) * pinnedTabWidth;
+            for (let i = count + thisRowCount - 1; i >= count; i--) {
+              let tab = this.childNodes[i];
+              width += tab.scrollWidth;
+              tab.style.MozMarginStart = - (width + paddingStart + extra) + "px";
+              tab.style.marginTop = (height * row) + "px";
+              tab.__row = row + 1;
+            }
+            count += thisRowCount;
+            offset = Math.max(offset, width);
+          }
+          this.__startOffset = offset;
+          this.style.MozMarginStart = offset + paddingStart + extra + "px";
+        ]]></body>
+      </method>
 
       <!--
       canScrollTabsLeft and canScrollTabsRight are in tabbrowser.xml for Firefox 3.5-3.6
-      and in tabbrowser_4.xml for Firefox, we drop the use of disableScrollTabsLeft and disableScrollTabsRight
-      from Firefox 4.0+
+      and in tabbrowser_4.xml for Firefox 4.0+.
+      We drop the use of disableScrollTabsLeft and disableScrollTabsRight from Firefox 4.0+.
       -->
-      <property name="canScrollTabsLeft">
+      <property name="canScrollTabsLeft" readonly="true"
+                onget="return !this.mTabstrip._scrollButtonUp.disabled;"/>
+
+      <property name="canScrollTabsRight" readonly="true"
+                onget="return !this.mTabstrip._scrollButtonDown.disabled;"/>
+
+      <property name="visibleTabsFirstChild" readonly="true">
         <getter><![CDATA[
-          return !this.mTabstrip._scrollButtonUp.disabled
+          var tabs = this.childNodes;
+          for (let i = 0; i < tabs.length; i++){
+            let tab = tabs[i];
+            if (!tab.hidden && this.tabbrowser._removingTabs.indexOf(tab) == -1)
+              return tab;
+          }
+          return this.mCurrentTab;
         ]]></getter>
-        <setter><![CDATA[
-          if(val!=this.canScrollTabsLeft)
-            this.mTabstrip._scrollButtonUp.disabled = !val;
-          return val;
-        ]]></setter>
       </property>
 
-      <property name="canScrollTabsRight">
+      <property name="visibleTabsLastChild" readonly="true">
         <getter><![CDATA[
-          return !this.mTabstrip._scrollButtonDown.disabled
+          // we only need the last visible tab,
+          // find it directly instead of using this.visibleTabs
+          var tabs = this.childNodes;
+          for (let i = tabs.length - 1; i >= 0; i--){
+            let tab = tabs[i];
+            if (!tab.hidden && this.tabbrowser._removingTabs.indexOf(tab) == -1)
+              return tab;
+          }
+          return this.mCurrentTab;
         ]]></getter>
-        <setter><![CDATA[
-          if(val!=this.canScrollTabsRight)
-            this.mTabstrip._scrollButtonDown.disabled = !val;
-          return val;
-        ]]></setter>
+      </property>
+
+      <property name="lastTabVisible" readonly="true">
+        <getter><![CDATA[
+          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
+            return this.mTabstrip.isElementVisible(this.visibleTabsFirstChild._tPos);
+
+          return this.mTabstrip.isElementVisible(this.visibleTabsLastChild);
+        ]]></getter>
       </property>
 
       <property name="disAllowNewtabbutton">
@@ -166,6 +342,73 @@
             Tabmix.setItem("TabsToolbar", "disAllowNewtabbutton", val || null);
           return val;
         ]]></setter>
+      </property>
+
+      <property name="collapsedTabs"
+                onget="return 0;"
+                onset="return 0;"/>
+
+     <property name="_real_numPinnedTabs" readonly="true">
+       <getter><![CDATA[
+          var count = 0;
+          for (let i = 0; i < this.childNodes.length; i++) {
+            let tab = this.childNodes[i];
+            if (!tab.pinned)
+              break;
+
+            if (this.tabbrowser._removingTabs.indexOf(tab) == -1)
+               count++;
+          }
+          return count;
+       ]]></getter>
+     </property>
+
+      <!-- collapsedTabs without pinned tabs -->
+      <property name="realCollapsedTabs" readonly="true"
+                onget="return 0;"/>
+
+      <method name="isTabVisible">
+        <parameter name="aIndex"/>
+        <body><![CDATA[
+          return this.mTabstrip.isElementVisible(this.childNodes.item(aIndex));
+        ]]></body>
+      </method>
+
+      <method name="ensureTabIsVisible">
+        <parameter name="aIndex"/>
+        <parameter name="aSmoothScroll"/>
+        <body><![CDATA[
+          if (!this.isTabVisible(aIndex))
+            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), aSmoothScroll);
+        ]]></body>
+      </method>
+
+      <method name="rowScroll">
+        <parameter name="factor"/>
+        <body>
+        <![CDATA[
+        ]]>
+        </body>
+      </method>
+
+      <property name="_lastTabRowNumber" readonly="true">
+        <getter><![CDATA[
+          return this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
+        ]]></getter>
+      </property>
+
+      <property name="lastTabRowNumber" readonly="true">
+        <getter><![CDATA[
+          let rows = this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
+
+          let numPinned = this.tabbrowser._numPinnedTabs;
+          if (numPinned) {
+            let lastPinnedTabRow = this.childNodes[numPinned - 1].__row || 1;
+            rows = Math.max(lastPinnedTabRow, rows);
+          }
+
+          return rows;
+        ]]></getter>
       </property>
 
       <method name="tabmixTabbarPositionChanged">
@@ -185,8 +428,9 @@
             TabScope.init();
           }
 
-          this.mTabstrip._scrollButtonUp = TabmixSvc.TMPprefs.getIntPref("tabBarMode") == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ?
-             this.mTabstrip._scrollButtonUpLeft : this.mTabstrip._scrollButtonUpRight;
+          this.mTabstrip.setAttribute("flowing", this.getAttribute("flowing"));
+          let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+          TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
 
           // fix incompatibility with Personal Titlebar extension
           // the extensions trigger tabbar binding reset on toolbars customize
@@ -204,72 +448,44 @@
         ]]></body>
       </method>
 
-      <method name="handleEvent">
-        <parameter name="aEvent"/>
-        <body><![CDATA[
-          switch (aEvent.type) {
-            case "dragover":
-              if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
-                TMP_tabDNDObserver.onDragOver(aEvent);
-            break;
-            case "resize":
-              if (aEvent.target != window) {
-                // when we get in and out of tabsintitlebar mode call updateScrollStatus even if the event target is not the window
-                if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)
-                  TabmixTabbar.updateScrollStatus();
-                break;
-              }
-              TabmixTabbar.widthChange(aEvent);
-              gBrowser.updateWindowResizers();
-            break;
-            case "mouseout":
-              // If the "related target" (the node to which the pointer went) is not
-              // a child of the current document, the mouse just left the window.
-              let relatedTarget = aEvent.relatedTarget;
-              if (relatedTarget && relatedTarget.ownerDocument == document)
-                break;
-            case "mousemove":
-              if (Tabmix.isVersion(50) && document.getElementById("tabContextMenu").state != "open")
-                this._unlockTabSizing();
-              break;
-          }
-        ]]></body>
-      </method>
-
-      <property name="_real_numPinnedTabs" readonly="true">
-        <getter><![CDATA[
-///XXX temp workaround untile bug Bug 633158 - _numPinnedTabs should exclude _removingTabs will be fix
-          var count = 0;
-          for (let i = 0; i < this.childNodes.length; i++) {
-            let tab = this.childNodes[i];
-            if (!tab.pinned)
-              break;
-
-            if (this.tabbrowser._removingTabs.indexOf(tab) == -1)
-               count++;
-          }
-          return count;
-        ]]></getter>
-      </property>
-
-      <!-- collapsedTabs without pinned tabs -->
-      <property name="realCollapsedTabs"
-                readonly="true"
-                onget="return this._collapsedTabs - this._real_numPinnedTabs;"/>
-
-      <method name="tabmix_handleNewTab">
+      <method name="_notifyBackgroundTab">
         <parameter name="aTab"/>
-        <parameter name="dontUpdateTabBar"/>
         <body><![CDATA[
-          if (!aTab.hasAttribute("tabmix_fadein")) {
-            TMP_eventListener.onTabOpen_delayUpdateTabBar(aTab);
+          if (aTab.pinned)
             return;
+          // Is the new tab already completely visible?
+          if (this.mTabstrip.isElementVisible(aTab))
+            return;
+
+          var scrollRect = this.mTabstrip.scrollClientRect;
+          var tab = aTab.getBoundingClientRect();
+
+          if (this.mTabstrip.smoothScroll) {
+            let selected = !this.selectedItem.pinned &&
+                           this.selectedItem.getBoundingClientRect();
+
+            // Can we make both the new tab and the selected tab completely visible?
+            if (!selected ||
+                !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
+                 TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.heigth) {
+              this.mTabstrip.ensureElementIsVisible(aTab);
+              return;
+            }
+
+            if (TabmixTabbar.isMultiRow)
+              this.mTabstrip._smoothScrollByPixels(selected.top - scrollRect.top);
+            else
+              this.mTabstrip._smoothScrollByPixels(this.mTabstrip._isRTLScrollbox ?
+                                                 selected.right - scrollRect.right :
+                                                 selected.left - scrollRect.left);
           }
-          aTab.removeAttribute("tabmix_fadein");
-          if (!dontUpdateTabBar)
-            TMP_eventListener.onTabOpen_delayUpdateTabBar(aTab);
-          if (aTab == this.selectedItem)
-            this.ensureTabIsVisible(aTab._tPos);
+
+          if (!this._animateElement.hasAttribute("notifybgtab")) {
+            this._animateElement.setAttribute("notifybgtab", "true");
+            setTimeout(function (ele) {
+              ele.removeAttribute("notifybgtab");
+            }, 150, this._animateElement);
+          }
         ]]></body>
       </method>
 
@@ -282,7 +498,7 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if (TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize") && 
+        if (TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize") &&
             !Tabmix.isPlatform("Mac") && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
           if (TabsInTitlebar.enabled ||
@@ -319,77 +535,6 @@
       ]]></handler>
     </handlers>
 
-  </binding>
-
-  <binding id="tabmix-arrowscrollbox-clicktoscroll" extends="chrome://global/content/bindings/scrollbox.xml#scrollbox-base">
-    <content>
-      <xul:hbox class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="left" type="tabmix"
-                xbl:inherits="flowing,scrollbutton-up">
-        <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
-                           anonid="scrollbutton-up"/>
-      </xul:hbox>
-      <xul:scrollbox class="tabs-frame arrowscrollbox-scrollbox" type="tabmix-scrollbox"
-                     anonid="scrollbox"
-                     flex="1"
-                     xbl:inherits="orient,align,pack,dir">
-        <children/>
-      </xul:scrollbox>
-      <xul:box class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box" _side="right" type="tabmix"
-               xbl:inherits="flowing,scrollbutton-up">
-        <xul:toolbarbutton class="scrollbutton-up" orient="horizontal" scrollIndex="-1"
-                           anonid="scrollbutton-up-right"/>
-        <xul:toolbarbutton class="scrollbutton-down" orient="horizontal" scrollIndex="1"
-                           anonid="scrollbutton-down"/>
-      </xul:box>
-    </content>
-    <implementation>
-      <field name="_scrollbox">
-        document.getAnonymousElementByAttribute(this, "anonid", "scrollbox");
-      </field>
-
-      <field name="_scrollButtonDown">
-        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down");
-      </field>
-
-      <field name="_scrollButtonUpLeft">
-        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up");
-      </field>
-
-      <field name="_scrollButtonUpRight">
-        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up-right");
-      </field>
-
-      <field name="_scrollButtonUp">
-        this._scrollButtonUpLeft;
-      </field>
-
-      <property name="scrollboxPaddingStart" readonly="true">
-        <getter><![CDATA[
-          var paddingStartName = Tabmix.ltr ? "padding-left" : "padding-right";
-          var scrollboxStyle = window.getComputedStyle(this._scrollbox, null);
-          return parseFloat(scrollboxStyle.getPropertyValue(paddingStartName));
-        ]]></getter>
-      </property>
-
-      <field name="scrollBoxObject">
-        this._scrollbox.boxObject;
-      </field>
-
-      <property name="scrollClientRect" readonly="true">
-        <getter><![CDATA[
-          return this._scrollbox.getBoundingClientRect();
-        ]]></getter>
-      </property>
-
-      <property name="scrollClientSize" readonly="true">
-        <getter><![CDATA[
-          return this.orient == "vertical" ?
-                 this._scrollbox.clientHeight :
-                 this._scrollbox.clientWidth;
-        ]]></getter>
-      </property>
-
-    </implementation>
   </binding>
 
 </bindings>

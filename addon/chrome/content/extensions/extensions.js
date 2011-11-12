@@ -32,7 +32,7 @@ var TMP_extensionsCompatibility = {
           Tabmix.newCode("GlaxChrome.CLT.DragDropManager." + aFn , GlaxChrome[aFn])._replace(
             '{', '{var TabDNDObserver = TMP_tabDNDObserver;', {check: GlaxChrome[aFn].toString().indexOf("TabDNDObserver") != -1}
           )._replace(
-            'TM_init', 'TMP_startup', {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
+            'TM_init', 'Tabmix.startup', {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
           ).toCode();
         }
       });
@@ -51,9 +51,11 @@ var TMP_extensionsCompatibility = {
     }
 
     try {
-      if ("TreeStyleTabService" in window)
-        TMP_TreeStyleTab.onContentLoaded();
-    } catch (ex) {Tabmix.assert(ex, TMP_TreeStyleTab.errorMsg);}
+      if ("TreeStyleTabService" in window) {
+        this.treeStyleTab.onContentLoaded();
+        Tabmix.extensions.treeStyleTab = true;
+      }
+    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
 
     // https://addons.mozilla.org/en-US/firefox/addon/second-search/
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
@@ -62,7 +64,7 @@ var TMP_extensionsCompatibility = {
       func.forEach(function(aFn) {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
           Tabmix.newCode("SecondSearchBrowser.prototype." + aFn , SSB[aFn])._replace(
-            'TM_init', 'TMP_startup'
+            'TM_init', 'Tabmix.startup'
           ).toCode();
         }
       });
@@ -73,7 +75,7 @@ var TMP_extensionsCompatibility = {
       let _getter = SplitBrowser.__lookupGetter__("tabbedBrowsingEnabled");
       if (_getter.toString().indexOf("TM_init") != -1) {
         Tabmix.newCode(null,  _getter)._replace(
-          'TM_init', 'TMP_startup'
+          'TM_init', 'Tabmix.startup'
         ).toGetter(SplitBrowser, "tabbedBrowsingEnabled");
       }
     }
@@ -110,13 +112,13 @@ var TMP_extensionsCompatibility = {
   onWindowOpen: function TMP_EC_onWindowOpen() {
     // Look for RSS/Atom News Reader
     if ("gotoLink" in window)
-      TMP_wizzrss.init();
+      this.wizzrss.init();
 
     if ("openNewsfox" in window)
-      TMP_Newsfox.init();
+      this.newsfox.init();
 
     if ("RSSTICKER" in window)
-      TMP_RSSTICKER.init();
+      this.RSSTICKER.init();
 
     if ("PersonaController" in window && typeof(window.PersonaController) == "object") {
       Tabmix.newCode('PersonaController._applyPersona', PersonaController._applyPersona)._replace(
@@ -155,7 +157,7 @@ var TMP_extensionsCompatibility = {
         'if (bOpenWindow && !Tabmix.singleWindowMode)'
       )._replace(
         'if (bOpenTab)',
-        'if (bOpenTab || TMP_whereToOpen(null).lock)'
+        'if (bOpenTab || Tabmix.whereToOpen(null).lock)'
       ).toCode();
     }
 
@@ -203,10 +205,10 @@ var TMP_extensionsCompatibility = {
       if ("handleURLBarCommand" in objURLsuffix) {
         Tabmix.newCode("objURLsuffix.handleURLBarCommand", objURLsuffix.handleURLBarCommand)._replace(
           'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);',
-          'TMP_BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);'
+          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, altDisabled);'
         )._replace(
           'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value);',
-          'TMP_BrowserLoadURL(aTriggeringEvent, postData.value, true);'
+          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, true);'
         ).toCode();
       }
 
@@ -222,14 +224,14 @@ var TMP_extensionsCompatibility = {
 
     try {
       if ("TreeStyleTabService" in window)
-        TMP_TreeStyleTab.onWindowLoaded();
-    } catch (ex) {Tabmix.assert(ex, TMP_TreeStyleTab.errorMsg);}
+        this.treeStyleTab.onWindowLoaded();
+    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
 
     /* fast dial FdUtils*/
     if ("FdUtils" in window && FdUtils.whereToOpenLink) {
       Tabmix.newCode("FdUtils.whereToOpenLink", FdUtils.whereToOpenLink)._replace(
         'if (e.ctrlKey)',
-        'if (e.ctrlKey || TMP_whereToOpen(null).lock)'
+        'if (e.ctrlKey || Tabmix.whereToOpen(null).lock)'
       ).toCode();
     }
 
@@ -240,7 +242,7 @@ var TMP_extensionsCompatibility = {
       Tabmix.newCode("Local_Install.openThrobber", Local_Install.openThrobber)._replace(
         'local_common.openURL(local_common.getThrobberURL(), inNewTab);',
         'var url = local_common.getThrobberURL(); \
-         local_common.openURL(url, inNewTab ? inNewTab : TMP_checkCurrent(url) == "tab");'
+         local_common.openURL(url, inNewTab ? inNewTab : Tabmix.checkCurrent(url) == "tab");'
       ).toCode();
       // add name to closeallOverlay.onUnload we use it in goQuitApplication
       if ("closeallOverlay" in window && "onUnload" in closeallOverlay) {
@@ -286,6 +288,15 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
+    // Redirect Remover 2.6.4
+    if ("rdrb" in window && rdrb.delayedInit) {
+      Tabmix.newCode("TabmixContext.openMultipleLinks", TabmixContext.openMultipleLinks)._replace(
+        'if (links_urlSecurityCheck(url))',
+        'url = rdrb.cleanLink(url);\
+         $&'
+      ).toCode();
+    }
+
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
@@ -310,11 +321,15 @@ var TMP_extensionsCompatibility = {
     }
 
     // check if Greasemonkey installed
-    TMP_isGreasemonkeyInstalled();
+    if (Tabmix.isVersion(40))
+      Tabmix.contentAreaClick.isGreasemonkeyInstalled();
+    else
+      TMP_isGreasemonkeyInstalled();
   }
+
 }
 
-var TMP_RSSTICKER = {
+TMP_extensionsCompatibility.RSSTICKER = {
    init : function ()  {
      Tabmix.newCode("RSSTICKER.writeFeed ", RSSTICKER.writeFeed)._replace(
        'tbb.setAttribute("onclick"',
@@ -322,8 +337,8 @@ var TMP_RSSTICKER = {
         tbb.setAttribute("_onclick"'
      )._replace(
        'tbb.onContextOpen =',
-       'tbb.onContextOpen = TMP_RSSTICKER.onContextOpen; \
-        tbb.onClick = TMP_RSSTICKER.onClick; \
+       'tbb.onContextOpen = TMP_extensionsCompatibility.RSSTICKER.onContextOpen; \
+        tbb.onClick = TMP_extensionsCompatibility.RSSTICKER.onClick; \
         tbb._onContextOpen ='
      ).toCode();
    },
@@ -342,7 +357,7 @@ var TMP_RSSTICKER = {
 
    onContextOpen : function (target) {
      if (!target) {
-       if (TMP_whereToOpen(null).lock)
+       if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
        else
          window._content.document.location.href = this.href;
@@ -362,14 +377,14 @@ var TMP_RSSTICKER = {
 }
 
 // prevent Wizz RSS from load pages in locked tabs
-var TMP_wizzrss = {
+TMP_extensionsCompatibility.wizzrss = {
    started: null,
    init : function ()  {
       if (this.started)
         return;
       this.started = true;
       var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
-      const newCode = "TMP_wizzrss.openURI";
+      const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
       var _functions = ["addFeedbase","validate","gohome","tryagain","promptStuff",
                         "doSearch","viewLog","renderItem","playEnc","renderAllEnc","playAllEnc",
                         "gotoLink","itemLinkClick","itemListClick"];
@@ -386,7 +401,7 @@ var TMP_wizzrss = {
       var w = Tabmix.getTopWin();
       var tabBrowser = w.gBrowser;
 
-      var openNewTab = w.TMP_whereToOpen(true).lock;
+      var openNewTab = w.Tabmix.whereToOpen(true).lock;
       if (openNewTab) {
          var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
          if (Tabmix.isVersion(36))
@@ -400,23 +415,23 @@ var TMP_wizzrss = {
 }
 
 // prevent Newsfox from load pages in locked tabs
-var TMP_Newsfox = {
+TMP_extensionsCompatibility.newsfox = {
    init : function ()  {
-      Tabmix.newCode("openNewsfox ", openNewsfox)._replace(
+      Tabmix.newCode("openNewsfox", openNewsfox)._replace(
          /if \(newTab\) {/,
-         'newTab = newTab || TMP_whereToOpen(null).lock; \
+         'newTab = newTab || Tabmix.whereToOpen(null).lock; \
          $&'
       ).toCode();
    }
 }
 
 /**
- * fix incompatibilities with TMP_TreeStyleTab
+ * fix incompatibilities with treeStyleTab
  * we get here only if "TreeStyleTabService" exist in window
  *
  *  https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
  */
-var TMP_TreeStyleTab = {
+TMP_extensionsCompatibility.treeStyleTab = {
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
   // flag for version after 2011.01.13.01
   isNewVersion: function () {
@@ -431,7 +446,7 @@ var TMP_TreeStyleTab = {
       if ("overrideExtensionsOnInitAfter" in TreeStyleTabService) {
         // TMupdateSettings replaced with TabmixTabbar.updateSettings
         // TabDNDObserver replaced with TMP_tabDNDObserver
-        // TM_BrowserHome replaced with TMP_BrowserHome
+        // TM_BrowserHome replaced with Tabmix.browserHome
         // tabBarScrollStatus replaced with TabmixTabbar.updateScrollStatus
 
         Tabmix.newCode("TreeStyleTabService.overrideExtensionsOnInitAfter", TreeStyleTabService.overrideExtensionsOnInitAfter)._replace(
@@ -439,7 +454,7 @@ var TMP_TreeStyleTab = {
         )._replace(
           'this.updateTabDNDObserver(TabDNDObserver);',
           'this.updateTabDNDObserver(gBrowser);'
-        )._replace( /* we don't need it, tabmix TMP_BrowserHome calls gBrowser.loadTabs */
+        )._replace( /* we don't need it, tabmix Tabmix.browserHome calls gBrowser.loadTabs */
           'eval("window.TM_BrowserHome = "',
           'if (false) $&'
         )._replace(
@@ -483,7 +498,7 @@ var TMP_TreeStyleTab = {
           '"TMupdateSettings" in window', 'true', {silent: true} // not in use from TST 2011.01.13.01
         )._replace(
           'TM_BrowserHome',
-          'TMP_BrowserHome', {silent: true} // not in use from TST 2011.01.13.01
+          'Tabmix.browserHome', {silent: true} // not in use from TST 2011.01.13.01
         ).toCode();
       }
 
@@ -500,15 +515,18 @@ var TMP_TreeStyleTab = {
     // we don't need this in the new version since we change the tabs-frame place
     // keep it here for non default theme that uses old Tabmix binding
     if (Tabmix.isVersion(40) && "TreeStyleTabBrowser" in window) {
-      Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
-        'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
-        'let newTabButton = document.getElementById("new-tab-button"); \
-         if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
-           newTabBox = newTabButton;'
-      )._replace(
-        'newTabBox.orient',
-        'if (newTabBox) $&', {flags: "g"}
-      ).toCode();
+      let fn = TreeStyleTabBrowser.prototype.initTabbar;
+      if (fn.toString().indexOf("d = this.document") == -1) {
+        Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
+          'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
+          'let newTabButton = document.getElementById("new-tab-button"); \
+           if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
+             newTabBox = newTabButton;'
+        )._replace(
+          'newTabBox.orient',
+          'if (newTabBox) $&', {flags: "g"}
+        ).toCode();
+      }
     }
   },
 
@@ -530,10 +548,12 @@ var TMP_TreeStyleTab = {
           var TMP_sizeProp = gBrowser.treeStyleTab.isVertical ? "height" : "width";'
       ).toCode();
     }
-    if (!TreeStyleTabService.getTreePref("TMP.doNotUpdate.isTabVisible"))
-      replaceHorizontalProps("gBrowser.tabContainer.isTabVisible", gBrowser.tabContainer.isTabVisible);
+    if (!Tabmix.isVersion(40)) {
+      if (!TreeStyleTabService.getTreePref("TMP.doNotUpdate.isTabVisible"))
+        replaceHorizontalProps("gBrowser.tabContainer.isTabVisible", gBrowser.tabContainer.isTabVisible);
 
-    replaceHorizontalProps("gBrowser.tabContainer.ensureTabIsVisible", gBrowser.tabContainer.ensureTabIsVisible);
+      replaceHorizontalProps("gBrowser.tabContainer.ensureTabIsVisible", gBrowser.tabContainer.ensureTabIsVisible);
+    }
 
     /**
      *  TST have eval to TMP_Bookmark.openGroup
@@ -572,8 +592,8 @@ var TMP_TreeStyleTab = {
       $&]]>
     ).toCode();
 
-    // Added 2010-04-10
     if (TreeStyleTabService.getTreePref('compatibility.TMP')) {
+      // Added 2010-04-10
       // TST look for aTab.removeAttribute("tabxleft")
       Tabmix.newCode("window.TabmixTabbar.updateSettings", TabmixTabbar.updateSettings)._replace(
         'TabmixSessionManager.updateTabProp(aTab);',
@@ -581,12 +601,17 @@ var TMP_TreeStyleTab = {
          gBrowser.treeStyleTab.initTabAttributes(aTab);\
          gBrowser.treeStyleTab.initTabContentsOrder(aTab);'
       ).toCode();
-
+      // Added 2010-04-10
       Tabmix.newCode("TMP_eventListener.onTabOpen", TMP_eventListener.onTabOpen)._replace(
         /(\})(\)?)$/,
         'gBrowser.treeStyleTab.initTabAttributes(aTab); \
          gBrowser.treeStyleTab.initTabContentsOrder(aTab); \
          $1$2'
+      ).toCode();
+      // Added 2011-11-09, i'm not sure we relay need it, Tabmix.loadTabs call gBrowser.loadTabs
+      Tabmix.newCode("TabmixContext.openMultipleLinks", TabmixContext.openMultipleLinks)._replace(
+        /(Tabmix.loadTabs\([^\)]+\);)/g,
+        'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
   }

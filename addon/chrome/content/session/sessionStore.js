@@ -36,7 +36,7 @@ var TMP_SessionStore = {
      if (url == tabData.url || url == "*")
        aUndoItem.title = selectedTab.attributes["fixed-label"];
      else {
-       aUndoItem.title = TMP_getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
+       aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
        if (aUndoItem.title == "about:blank") {
          let string = Tabmix.isVersion(40) ?  "tabs.emptyTabTitle" : "tabs.untitled";
          aUndoItem.title = gBrowser.mStringBundle.getString(string);
@@ -176,7 +176,7 @@ var TMP_SessionStore = {
            }
            delete window.tabmix_setSession;
          }
-         let result = Tabmix.promptService([TMP_BUTTON_OK, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
+         let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                [title, msg, "", "", buttons], win || window, start ? callBack : null);
          if (!start)
            callBack(result);
@@ -239,7 +239,7 @@ var TMP_SessionStore = {
       if (fixedLabelUri == aUri || fixedLabelUri == "*")
          return this._getAttribute(aData, "fixed-label");
 
-      return TMP_getTitleFromBookmark(aUri, aTitle, this._getAttribute(aData, "tabmix_bookmarkId"));
+      return TMP_Places.getTitleFromBookmark(aUri, aTitle, this._getAttribute(aData, "tabmix_bookmarkId"));
    },
 
    /**
@@ -569,7 +569,7 @@ var TMP_ClosedTabs = {
       if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {
          gBrowser.TMmoveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos), 1);
       }
-      else if (aWhere != "end" && TMP_getOpenTabNextPref()) // middle click on History > recently closed tabs
+      else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) // middle click on History > recently closed tabs
          // we don't call TMP_openTabNext from add tab if it called from sss_undoCloseTab
          gBrowser.TMP_openTabNext(newTab);
 
@@ -610,7 +610,7 @@ var TabmixConvertSession = {
       TabmixSessionManager.setLiteral("rdf:gSessionManager", "status", "converted");
       TabmixSessionManager.saveStateDelayed();
       var callBack = function (aResult) {
-                  if (aResult.button == TMP_BUTTON_OK) {
+                  if (aResult.button == Tabmix.BUTTON_OK) {
                     setTimeout(function (a,b) {
                       com.morac.gSessionManagerWindowObject.doTMPConvertFile(a,b);
                     }, 0, null, true);
@@ -644,7 +644,7 @@ var TabmixConvertSession = {
                        getService(Ci.nsIStringBundleService);
       let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
       let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
-      return Tabmix.promptService([TMP_BUTTON_OK, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
+      return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
             [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
    },
 

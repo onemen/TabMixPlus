@@ -226,13 +226,13 @@
 
     <method name="clearTimeouts">
       <body><![CDATA[
-        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "TMP_onCloseTimeout", "TMP_onOpenTimeout"];
+        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID"];
         timeouts.forEach(function(aTimeout) {
           if (aTimeout in this && this[aTimeout]) {
             clearTimeout(this[aTimeout]);
             this[aTimeout] = null;
           }
-        });
+        }, this);
       ]]></body>
     </method>
 
@@ -290,14 +290,6 @@
         <![CDATA[
           TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
-          /*
-           * Replace mTabstrip functions
-           */
-          this.mTabstrip._updateScrollButtonsDisabledState = function() { };
-
-          let self = this;
-          this.mTabstrip.ensureElementIsVisible = function(aTab) { self.ensureTabIsVisible(aTab._tPos);};
-
           if (this.tabmix_inited)
              return;
 
@@ -314,6 +306,7 @@
           Tabmix.rtl = window.getComputedStyle(tabbrowser, null).direction == "rtl";
           Tabmix.ltr = !Tabmix.rtl;
           Tabmix._rtl50 = Tabmix.isVersion(50) && Tabmix.rtl;
+
           this._isRTLScrollbox = Tabmix._rtl50 ? false : this.orient != "vertical" && Tabmix.rtl;
           this.setAttribute("closebuttons-side", TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.onLeft") ? "left" : "right");
           this._keepLastTab = TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab");
@@ -351,7 +344,7 @@
           this.setAttribute("SM_restart", true);
 
           try {
-            TMP_beforeStartup(tabbrowser, this);
+            Tabmix.beforeStartup(tabbrowser, this);
           } catch (ex) {Tabmix.assert(ex);}
         ]]>
       </constructor>
@@ -366,7 +359,7 @@
         <parameter name="skipUpdateScrollStatus"/>
         <parameter name="aUrl"/>
         <body><![CDATA[
-          // look at TMP_beforeStartup() in setup.js for backward compatibility
+          // look at Tabmix.beforeStartup() in setup.js for backward compatibility
           // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
           // 1 - alltabs    = close buttons on all tabs
           // 2 - hovertab   = close buttons on hover tab
@@ -433,98 +426,30 @@
         ]]></body>
       </method>
 
-      <method name="_fillTrailingGap">
-        <body><![CDATA[
-          // we don't use this in Tabmix
-
-        ]]></body>
-      </method>
-
-      <!--
-      canScrollTabsLeft and canScrollTabsRight are in tabbrowser.xml for Firefox 3.5-3.6
-      and in tabbrowser_4.xml for Firefox, we drop the use of disableScrollTabsLeft and disableScrollTabsRight
-      from Firefox 4.0+
-      -->
-
-      <method name="adjustScrollTabsLeft">
-        <body><![CDATA[
-            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
-            var canScroll = this.realCollapsedTabs > 0;
-            if (rtl)
-              this.canScrollTabsRight = canScroll;
-            else
-              this.canScrollTabsLeft = canScroll;
-        ]]></body>
-      </method>
-
-      <method name="adjustScrollTabsRight">
-        <body><![CDATA[
-            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
-            if ((this.boxObject.width == 0 || this.childNodes.length <= this.maxRow)) {
-              if (rtl)
-                this.canScrollTabsLeft = false;
-              else
-                this.canScrollTabsRight = false;
-            }
-            else {
-              if (rtl)
-                this.canScrollTabsLeft = this.hasAttribute("multibar") ? this.maxRow < this.lastTabRowNumber : !this.lastTabVisible;
-              else
-                this.canScrollTabsRight = this.hasAttribute("multibar") ? this.maxRow < this.lastTabRowNumber : !this.lastTabVisible;
-            }
-        ]]></body>
-      </method>
-
       <property name="overflow">
         <getter><![CDATA[
           return this.hasAttribute("overflow");
         ]]></getter>
         <setter><![CDATA[
-          if (this.mTabstrip.orient == "vertical")
+          // don't do anything if other extensions set orient to vertical
+          // when we arn't use it.
+          if (!TabmixTabbar.isMultiRow && this.mTabstrip.orient == "vertical")
             return val;
+
           if (val != this.overflow) {
             if (val) {
-              if (this.getAttribute("flowing") == "singlebar")
+              if (!Tabmix.isVersion(40) && this.getAttribute("flowing") == "singlebar")
                 return !val;
               this.setAttribute("overflow", "true");
             }
             else {
-              // on underflow update spacer
-              if (Tabmix.isVersion(50) && this._lastTabClosedByMouse)
-                this._expandSpacerBy(this.mTabstrip._scrollButtonDown.parentNode.getBoundingClientRect().width);
-
               this.removeAttribute("overflow");
             }
-            // we call _positionPinnedTabs when we change TabmixTabbar.scrollButtonsMode value and
-            // when we enter or exit from overflow
             if (Tabmix.isVersion(40))
-              this._positionPinnedTabs();
+              Tabmix.setItem("TabsToolbar", "tabstripoverflow", val || null);
           }
           return val;
         ]]></setter>
-      </property>
-
-      <property name="lastTabVisible" readonly="true">
-        <getter>
-        <![CDATA[
-          var tabs = this.childNodes;
-          var index;
-          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
-            index = 0;
-          else
-            index = tabs.length - 1;
-
-          // don't check _removingTabs for visibility
-          let offset = index == 0 ? 1 : -1;
-          let tabbrowser = document.getBindingParent(this);
-          // we don't need to check this in Firefox 4.0 , we remove this check in TMP_TabView.init
-          if (tabbrowser._removingTabs.length > 0) {
-            while(tabbrowser._removingTabs.indexOf(tabs[index]) > -1)
-              index += offset;
-          }
-          return this.isTabVisible(index);
-        ]]>
-        </getter>
       </property>
 
       <!--
@@ -533,7 +458,7 @@
       -->
       <method name="adjustNewtabButtonvisibility">
         <body><![CDATA[
-          if (this.mTabstrip.orient == "vertical")
+          if (!TabmixTabbar.isMultiRow && this.mTabstrip.orient == "vertical")
             return;
 
           if (!this._checkNewtabButtonVisibility) {
@@ -558,8 +483,8 @@
            return;
          }
          // button is NOT visible
-         //         A: 2 last button are in the same row - check if we have room for the button in this row
-         //         B: 2 last button are NOT in the same row - check if we have room for the last tab + button
+         //         A: 2 last tabs are in the same row - check if we have room for the button in this row
+         //         B: 2 last tabs are NOT in the same row - check if we have room for the last tab + button
          //              after previous to last tab.
          else {
            // ignor the case that this tab width is larger then the tabbar
@@ -589,256 +514,6 @@
         ]]></body>
       </method>
 
-      <!-- Don't remove collapsed _removingTabs from collapsedTabs
-             we use this for real index
-       -->
-      <property name="collapsedTabs"
-          onget="return this._collapsedTabs">
-        <setter>
-        <![CDATA[
-          const tabs = this.childNodes;
-         /**
-          * In Firefox 4.0 tab = gBrowser.visibleTabs , not including _removingTabs
-          * we can't use _numPinnedTabs since it include _removingTabs
-          * see Bug 633158 - _numPinnedTabs should exclude _removingTabs
-          */
-          var min = this._real_numPinnedTabs;
-          var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
-          if (val > this._collapsedTabs && this.lastTabVisible ) {
-            if (rtl)
-              this.canScrollTabsLeft = false;
-            else
-              this.canScrollTabsRight = false;
-            if (this._collapsedTabs < min)
-              this._collapsedTabs = min;
-            return this._collapsedTabs;
-          }
-          if ( val < min ) val = min;
-          if (rtl) {
-            for(let i = 0; i < tabs.length - val; i++) {
-              if (tabs[i].collapsed)
-                tabs[i].collapsed = false;
-            }
-            for(let i = tabs.length - val; i < tabs.length; i++) {
-              if (!tabs[i].collapsed && !tabs[i].hasAttribute("pinned"))
-                tabs[i].collapsed = true;
-            }
-          }
-          else {
-            for(let i = 0; i < val; i++) {
-              if (!tabs[i].collapsed && !tabs[i].hasAttribute("pinned"))
-                tabs[i].collapsed = true;
-            }
-            for(let i = val; i < tabs.length; i++) {
-              if (tabs[i].collapsed)
-                tabs[i].collapsed = false;
-            }
-          }
-
-          this._collapsedTabs = val;
-          this.adjustScrollTabsLeft();
-          this.adjustScrollTabsRight();
-          this.overflow = this.canScrollTabsLeft || this.canScrollTabsRight;
-
-          return val;
-        ]]>
-        </setter>
-      </property>
-
-      <method name="isTabVisible">
-        <parameter name="aIndex"/>
-        <body>
-        <![CDATA[
-          const tabs = this.childNodes;
-          if (tabs.length == 1)
-            return true;
-
-          if (aIndex < 0 || aIndex > tabs.length - 1)
-            return false;
-
-          var tab = tabs[aIndex];
-          //       var tab = tabs.item(aIndex); this make problem with tab group manager
-          if (!tab)
-            return false;
-
-          // pinned tabs are always visible
-          if (Tabmix.isVersion(40) && tab.pinned)
-            return true;
-
-          var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
-          if (!rtl && this.collapsedTabs > aIndex)
-            return false;
-
-          if (rtl && aIndex > tabs.length - 1 - this.collapsedTabs)
-            return false;
-
-          var tabstripWidth = this.mTabstrip.scrollBoxObject.width;
-          var tabstripStart = this.mTabstrip.scrollBoxObject.screenX;
-          var tabstripEnd = tabstripStart + tabstripWidth;
-          // Session Manager extesion add tabs too soon for us to check visibility properly
-          // we remove SM_restart after timeout see tabmix.js onWindowOpen
-          if (this.hasAttribute("SM_restart") && tabstripWidth < 250)
-            return true;
-
-          if (this.hasAttribute("inline") && !this.hasAttribute("multibar") && this.getTabRowNumber(tab, this.topTabY) > 1)
-            return false;
-          //XXX this hack is for the case that the width of the tabbar is round number of tabs
-          // when we reach to that number of tabs and tabs need to start shrinking.
-          if (this.tabstripInnerbox && !this.overflow) {
-            if (Tabmix._rtl50) {
-              if (tab.boxObject.screenX < tabstripStart)
-                return false;
-              else if (this.tabstripInnerbox.boxObject.screenX < tabstripStart)
-                return false;
-              return true;
-            }
-            if (this.tabstripInnerbox.boxObject.screenX + this.tabstripInnerbox.boxObject.width > tabstripEnd) {
-              if (tab.boxObject.screenX + tab.boxObject.width < tabstripEnd)
-                return true;
-              return false;
-            }
-            else if ( this.getAttribute("multibar") == "scrollbar" ) {
-              if (this.getTabRowNumber(tab, this.topTabY) > this.maxRow)
-                return false;
-            }
-            return true;
-          }
-          if (Tabmix._rtl50 && tab.boxObject.screenX < tabstripStart)
-            return false;
-          else if (tab.boxObject.screenX + tab.boxObject.width > tabstripEnd)
-            return false;
-          else if ( this.getAttribute("multibar") == "scrollbar" ) {
-            if (this.getTabRowNumber(tab, this.topTabY) > this.maxRow)
-              return false;
-          }
-          return true;
-        ]]>
-        </body>
-      </method>
-
-      <method name="ensureTabIsVisible">
-        <parameter name="aIndex"/>
-        <body>
-        <![CDATA[
-          if ((!this.canScrollTabsLeft && !this.canScrollTabsRight) || this.boxObject.width == 0 || this.isTabVisible(aIndex))
-             return;
-
-          const tabs = this.childNodes;
-          if (aIndex < 0 || aIndex > tabs.length - 1)
-            return;
-          var tab = tabs[aIndex];
-          if (!tab)
-            return;
-
-          var amount, i, j;
-          if ( this.mTabstrip.scrollBoxObject.width < 250 )
-            return;
-
-          if ( TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode") != 2 ) {
-            if (!this._isRTLScrollbox) {
-              if (aIndex < this.collapsedTabs)
-                this.collapsedTabs = aIndex;
-              else {
-                var amountToCollapse = Tabmix._rtl50 ? this.mTabstrip.scrollBoxObject.screenX - tab.boxObject.screenX :
-                                       tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
-                if(amountToCollapse > 0) {
-                  amount = 0;
-                  i = this.collapsedTabs;
-                  while(amount < amountToCollapse) {
-                    amount += tabs[i].boxObject.width;
-                    i++;
-                  }
-                  this.collapsedTabs = i;
-                }
-              }
-            }
-            else { // RTL
-              if (aIndex > tabs.length - 1 - this.collapsedTabs)
-                this.collapsedTabs = tabs.length - 1 - aIndex;
-              else {
-                var amountToCollapse = tab.boxObject.screenX + tab.boxObject.width - this.mTabstrip.scrollBoxObject.screenX - this.mTabstrip.scrollBoxObject.width;
-                if(amountToCollapse > 0) {
-                  amount = 0;
-                  i = this.collapsedTabs;
-                  while(amount < amountToCollapse) {
-                    amount += tabs[tabs.length - 1 - i].boxObject.width;
-                    i++;
-                  }
-                  this.collapsedTabs = i;
-                }
-              }
-            }
-          }
-          else if ( this.getAttribute("multibar") == "scrollbar" ) {
-            if (aIndex < this.collapsedTabs) {
-              let maxLoops = this.collapsedTabs;
-              for (let i = 0; i < maxLoops, aIndex < this.collapsedTabs; i++)
-                this.rowScroll(-1);
-            }
-            else {
-               let maxRow = this.maxRow;
-               let tabRow = this.getTabRowNumber(tab, this.topTabY);
-               for (let i = 0; i < tabRow - maxRow; i++)
-                  this.rowScroll(+1);
-            }
-          }
-        ]]>
-        </body>
-      </method>
-
-      <method name="tabsScroll">
-        <parameter name="factor"/>
-        <body>
-        <![CDATA[
-          if ( this.getAttribute("flowing") == "multibar" &&
-            this.getAttribute("multibar") == "scrollbar" )
-              this.rowScroll(factor);
-          else {
-            var rtl = this._isRTLScrollbox && !TabmixTabbar.isMultiRow;
-            if (rtl) factor = factor * -1;
-            this.collapsedTabs += factor;
-          }
-        ]]>
-        </body>
-      </method>
-
-      <method name="rowScroll">
-        <parameter name="factor"/>
-        <body>
-        <![CDATA[
-          const tabs = this.childNodes;
-          var i, firstVisibleIndex = this.collapsedTabs;
-          // make sure that our index is valid
-          if (firstVisibleIndex > tabs.length - 1) {
-            firstVisibleIndex = tabs.length - 1;
-            tabs[firstVisibleIndex].collapsed = false;
-          }
-          var top = this.topTabY;
-          if (factor == -1 ) {
-             // In order to make sure first row is full, push last hidden tab to 2nd row or reveal all hidden tabs,
-             // then if last hidden tab is in 2nd row hide the new first visible tab.
-             let lastHidden = firstVisibleIndex - 1 > 0 ? tabs[firstVisibleIndex - 1] : null
-             for (i = firstVisibleIndex - 1; i >= 0; i--) {
-                tabs[i].collapsed = false;
-                if (this.getTabRowNumber(lastHidden, top) == 2) {
-                   i++;
-                   break;
-                }
-             }
-          }
-          else {
-            // find index of the first tab in 2nd row, so we can hide all tab before it
-            for (i = firstVisibleIndex + 1; i < tabs.length; i++) {
-              if (this.getTabRowNumber(tabs[i], top) == 2)
-                break;
-            }
-          }
-          if (i != firstVisibleIndex)
-            this.collapsedTabs = i;
-        ]]>
-        </body>
-      </method>
-
       <property name="maxRow" readonly="true">
         <getter><![CDATA[
           var row = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMaxRow");
@@ -849,35 +524,7 @@
 
       <property name="topTabY" readonly="true">
         <getter><![CDATA[
-          let index = this.collapsedTabs;
-          let tabs = this.childNodes;
-          let count = tabs.length;
-          while(index < count && tabs[index].boxObject.width == 0)
-            index++;
-
-          let topTab = tabs[index];
-          if (topTab)
-            return topTab.boxObject.y - TMP_getStyle(topTab, "marginTop");
-
-          return this.boxObject.y;
-        ]]></getter>
-      </property>
-
-      <property name="lastTabRowNumber" readonly="true">
-        <getter><![CDATA[
-          // in case we get here when the last tab is about to remove
-          let tabs = this.childNodes;
-          let index = tabs.length - 1;
-          let tabbrowser = document.getBindingParent(this);
-          // we don't need to check this in Firefox 4.0
-          if (tabbrowser._removingTabs.length > 0) {
-            while(tabbrowser._removingTabs.indexOf(tabs[index]) > -1)
-              index--;
-          }
-          if (index < 0)
-            return 1;
-
-          return this.getTabRowNumber(tabs[index], this.topTabY);
+          return this.tabstripInnerbox.boxObject.y + Tabmix.getStyle(this.tabstripInnerbox, "paddingTop");
         ]]></getter>
       </property>
 
@@ -888,83 +535,14 @@
           var height = aTab ? aTab.boxObject.height : 0;
           if (height == 0) // don't panic
             return;
-
+          // some theme add marginTop/marginBottom to tabs
           var cStyle = window.getComputedStyle(aTab, null);
           var marginTop = parseInt(cStyle["marginTop"]) || 0;
           var marginBottom = parseInt(cStyle["marginBottom"]) || 0;
           height += marginTop + marginBottom;
+
           var tabBottom = aTab.boxObject.y - marginTop + height
           return Math.round((tabBottom - aTop)/height);
-        ]]></body>
-      </method>
-
-      <method name="_handleTabSelect">
-        <body><![CDATA[
-          this.ensureTabIsVisible(this.selectedIndex);
-        ]]></body>
-      </method>
-
-      <method name="_notifyBackgroundTab">
-        <parameter name="aTab"/>
-        <body><![CDATA[
-          // Is the new tab already completely visible?
-          if (this.isTabVisible(aTab._tPos))
-            return;
-
-          //XXX use getBoundingClientRect when we drop Firefox 3.0 support
-          var tsbo = this.mTabstrip.scrollBoxObject;
-          var ctbo = aTab.boxObject;
-          var selbo = this.selectedItem.boxObject;
-          if (!TabmixTabbar.isMultiRow) {
-            if (aTab._tPos >= this.collapsedTabs) {
-              var ctboStart = ctbo.screenX;
-              var ctboEnd = ctboStart + ctbo.width;
-
-              var selStart = selbo.screenX;
-              var selEnd = selStart + selbo.width;
-
-              // Can we make both the new tab and the selected tab completely visible?
-              if (Math.max(ctboEnd - selStart, selEnd - ctboStart) <= tsbo.width) {
-                this.ensureTabIsVisible(aTab._tPos);
-                return;
-              }
-            }
-          }
-          else if (this.selectedIndex >= this.collapsedTabs) {
-            var ctboTop = ctbo.screenY;
-            var ctboBottom = ctboTop + ctbo.height;
-
-            var selTop = selbo.screenY;
-            var selBottom = selTop + selbo.height;
-            if (Math.max(selBottom - ctboTop, ctboBottom - selTop) <= tsbo.height) {
-              this.ensureTabIsVisible(aTab._tPos);
-              return;
-            }
-          }
-
-          this.ensureTabIsVisible(this.selectedIndex);
-
-          if (Tabmix.isVersion(40)) {
-            if (!this._animateElement.hasAttribute("notifybgtab")) {
-              this._animateElement.setAttribute("notifybgtab", "true");
-              setTimeout(function (ele) {
-                ele.removeAttribute("notifybgtab");
-              }, 150, this._animateElement);
-            }
-          }
-          else {
-            // start the flash timer
-            this._animateStep = 0;
-            if (!this._animateTimer)
-              this._animateTimer =
-                Components.classes["@mozilla.org/timer;1"]
-                          .createInstance(Components.interfaces.nsITimer);
-            else
-              this._animateTimer.cancel();
-
-            this._animateTimer.initWithCallback(this, this._animateDelay,
-                                                this._animateTimer.TYPE_REPEATING_SLACK);
-          }
         ]]></body>
       </method>
 

@@ -1017,7 +1017,7 @@ try {
 } catch(ex) {Tabmix.log(ex);}
 }
 
-// this function is called from here and from TMP_openDialog if the dialog already opened
+// this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
 function TM_selectTab(aSelTab) {
   var tabbox = document.getElementById("tabMixTabBox");
   tabbox.lastselectedIndex = tabbox.selectedIndex;

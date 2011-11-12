@@ -19,7 +19,7 @@
  *                   false if not.
  *
  */
-function TMP_cmd_options(aURL) {
+Tabmix.cmdOptions = function TMP_cmd_options(aURL) {
    if (aURL != "chrome://tabmixplus/content/pref/pref-tabmix.xul")
       return false;
 
@@ -35,12 +35,12 @@ function TMP_cmd_options(aURL) {
       TabmixSvc.prompt.alert(window, title, msg);
    }
    else
-      browserWindow.TMP_openDialog(-1);
+      browserWindow.Tabmix.openOptionsDialog(-1);
 
    return true;
 }
 
-function TMP_openDialog(panel) {
+Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
   var windowMediator = TabmixSvc.wm;
   var tabmixOptionsWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt");
   if (tabmixOptionsWin) {
@@ -74,7 +74,7 @@ function TMP_openDialog(panel) {
  * @return           true.
  *
  */
-function TMP_openURL(aURL, event) {
+Tabmix.openURL = function TMP_openURL(aURL, event) {
    var linkTarget, loadInBackground;
    try {
             linkTarget = TabmixSvc.prefs.getIntPref("browser.link.open_newwindow");
@@ -86,7 +86,7 @@ function TMP_openURL(aURL, event) {
    if (aURL == null) aURL = "about:blank";
 
    // check for an existing window and focus it; it's not application modal
-   var browserWindow = Tabmix.getTopWin();
+   var browserWindow = this.getTopWin();
 
    if (!browserWindow) {
       openDialog("chrome://browser/content/browser.xul", "_blank", "chrome,all,dialog=no", aURL, null, null, null);
@@ -116,7 +116,7 @@ function TMP_openURL(aURL, event) {
             break;
          case 3 :
             // added by request, for extensions with multiple homepages
-            browserWindow.TMP_loadTabs(aURL.split("|"), false);
+            browserWindow.Tabmix.loadTabs(aURL.split("|"), false);
             break;
       }
 
@@ -127,7 +127,7 @@ function TMP_openURL(aURL, event) {
    return true;
 }
 
-function TMP_BrowserOpenTab(aTab, replaceLastTab) {
+Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith") :
                                          TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
    var url;
@@ -145,7 +145,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       case 3 : // duplicate tab
          let currentUrl = gBrowser.currentURI.spec;
          let newTab = gBrowser.duplicateTab(gBrowser.mCurrentTab, null, null, null, true);
-         TMP_clearUrlBar(newTab, currentUrl, true);
+         Tabmix.clearUrlBar(newTab, currentUrl, true);
          return newTab;
          break;
       case 4 : // user url
@@ -218,12 +218,12 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
 
    // focus the address bar on new tab
    if (TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") || loadBlank)
-     TMP_clearUrlBar(newTab, url);
+     Tabmix.clearUrlBar(newTab, url);
 
    return newTab;
 }
 
-function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
+Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aUrl != "about:blank") {
@@ -242,10 +242,10 @@ function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
 
 /**
  * @brief In TMP_BrowserOpenTab we empty and fucos the urlbar
- *        if the user or onload from a page blur the urlbar befroe user typed new valur
+ *        if the user or onload from a page blur the urlbar befroe user typed new value
  *        we restore the current url
  */
-function TMP_urlBarOnBlur() {
+Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (!gBrowser.tabmix_tab)
     return;
 
@@ -257,15 +257,15 @@ function TMP_urlBarOnBlur() {
   if (isCurrentTab && gBrowser.mIsBusy) {
     browser.addEventListener("load", function TMP_onLoad_urlBarOnBlur(aEvent) {
       aEvent.currentTarget.removeEventListener("load", TMP_onLoad_urlBarOnBlur, true);
-      TMP_updateUrlBarValue();
+      Tabmix.updateUrlBarValue();
     }, true);
     return;
   }
 
-  TMP_updateUrlBarValue()
+  this.updateUrlBarValue()
 }
 
-function TMP_updateUrlBarValue() {
+Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   var url = gBrowser.currentURI.spec;
   if (url != gURLBar.value && url != "about:blank") {
     gURLBar.value = gBrowser.userTypedValue = url;
@@ -278,7 +278,7 @@ function TMP_updateUrlBarValue() {
  * @brief Load URLs from the URL bar.
  *
  * @param event         A valid event union.
- * @param aPostData     Additional opaque data used by __TMP_LoadBarURL().
+ * @param aPostData     Additional opaque data used by Tabmix.__loadURLBar().
  * @param altDisabled   parameter set by URL Suffix extension, to prevent ALT from opening new tab
  * @param aUrl          aUrl , not in use anymore  
  *                      in the past we used this arg from PopupAutoCompleteRichResult.onPopupClick
@@ -291,7 +291,7 @@ function TMP_updateUrlBarValue() {
  * and from extensions.js for objURLsuffix.  
  *
  */
-function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {
+Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {
   var newTabPref = TabmixSvc.TMPprefs.getBoolPref("opentabfor.urlbar");
   var theBGPref  = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");
   var theURI = aUrl || gURLBar.value;
@@ -301,7 +301,7 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPr
   var middleClick = theEvent instanceof MouseEvent && (theEvent.button == 1 || theEvent.ctrlKey || theEvent.metaKey);
   if (aUrl || middleClick) {
     let where = whereToOpenLink(theEvent);
-    if (Tabmix.isVersion(40) && where != "current") {
+    if (this.isVersion(40) && where != "current") {
       gURLBar.handleRevert();
       gBrowser.selectedBrowser.focus();
     }
@@ -315,8 +315,8 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPr
     }
   }
   var isAltKey = !altDisabled && (theEvent instanceof Event && ('altKey' in theEvent && theEvent.altKey));
-  newTabPref = TMP_whereToOpen(newTabPref, isAltKey).inNew;
-  __TMP_LoadBarURL(theURI, theEvent, newTabPref, theBGPref, aPostData, true, mayInheritPrincipal);
+  newTabPref = this.whereToOpen(newTabPref, isAltKey).inNew;
+  this.__loadURLBar(theURI, theEvent, newTabPref, theBGPref, aPostData, true, mayInheritPrincipal);
 }
 
 /**
@@ -337,7 +337,7 @@ function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPr
  * @returns                       Nothing.
  *
  */
-function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostData, aAllowThirdPartyFixup, mayInheritPrincipal) {
+Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostData, aAllowThirdPartyFixup, mayInheritPrincipal) {
   var originCharset = null;
 
   if (gBrowser.localName != "tabbrowser") {
@@ -382,7 +382,7 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
     gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);
   }
 
-  if (Tabmix.isVersion(36))
+  if (this.isVersion(36))
     gBrowser.selectedBrowser.focus();
   else
     focusElement(content);
@@ -394,18 +394,18 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
   return;
 }
 
-/* call from TMP_TBP_init and from text.link.xul */
-function TMP_openUILink_init() {
+/* call from Tabmix.linkHandling_init and from text.link.xul */
+Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
-    Tabmix.newCode("openUILink", openUILink)._replace(
+    this.newCode("openUILink", openUILink)._replace(
       'var where = whereToOpenLink(e, ignoreButton, ignoreAlt);',
       <![CDATA[$&
-        var win = Tabmix.getTopWin();
+        var win = this.getTopWin();
         if (win) {
           // don't open blanke tab when we are about to add new livemark
           let _addLivemark = /^feed:/.test(url) && TabmixSvc.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
           if (where == "current" && !_addLivemark)
-            where = win.TMP_checkCurrent(url);
+            where = win.Tabmix.checkCurrent(url);
         }
       ]]>
     )._replace(
@@ -418,7 +418,7 @@ function TMP_openUILink_init() {
   }
 }
 
-function TMP_checkCurrent(url) {
+Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   if (gBrowser.mCurrentTab.hasAttribute("locked")) {
     var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
     if (!isBlankTab)
@@ -427,24 +427,25 @@ function TMP_checkCurrent(url) {
   else if (TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks") == 2 ) {
     // Get current page url
     var curpage = gBrowser.currentURI.spec;
-    var domain = TMP_checkDomain(curpage, url);
+    var domain = this.contentAreaClick.checkDomain(curpage, url);
     if (domain.current && domain.target && domain.target != domain.current)
       return "tab";
   }
   return "current";
 }
 
-function TMP_copyTabData(newTab, oldTab) {
+Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
   let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "tabmix_bookmarkId"];
 
+  var self = this;
   _xulAttributes.forEach(function _setData(attr) {
-    Tabmix.setItem(newTab, attr, oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null);
+    self.setItem(newTab, attr, oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null);
   });
 
-  TMP_restoreTabState(newTab);
+  this.restoreTabState(newTab);
 }
 
-function TMP_restoreTabState(aTab) {
+Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   if (aTab.hasAttribute("_locked")) {
     if (aTab.getAttribute("_locked") == "true")
       aTab.setAttribute("locked", "true");
@@ -455,7 +456,7 @@ function TMP_restoreTabState(aTab) {
   // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
   var reloadData = aTab.getAttribute("reload-data");
   if (reloadData) {
-    Tabmix.autoReload.initTab(aTab);
+    this.autoReload.initTab(aTab);
     aTab.autoReloadEnabled = true;
     aTab.setAttribute("_reload", true);
     reloadData = reloadData.split(" ");
