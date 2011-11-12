@@ -1,45 +1,46 @@
-content   tabmixplus                 jar:chrome/tabmixplus.jar!/content/
-skin      tabmixplus   classic/1.0   jar:chrome/tabmixplus.jar!/skin/
+content   tabmixplus                 chrome/content/
+skin      tabmixplus   classic/1.0   chrome/skin/
 resource  tabmixplus                 modules/
 
-#locale    tabmixplus   ar            jar:chrome/tabmixplus.jar!/locale/ar/
-locale    tabmixplus   bg-BG         jar:chrome/tabmixplus.jar!/locale/bg-BG/
-locale    tabmixplus   ca-AD         jar:chrome/tabmixplus.jar!/locale/ca-AD/
-locale    tabmixplus   cs-CZ         jar:chrome/tabmixplus.jar!/locale/cs-CZ/
-locale    tabmixplus   da            jar:chrome/tabmixplus.jar!/locale/da/
-locale    tabmixplus   de            jar:chrome/tabmixplus.jar!/locale/de/
-locale    tabmixplus   el            jar:chrome/tabmixplus.jar!/locale/el/
-locale    tabmixplus   en-US         jar:chrome/tabmixplus.jar!/locale/en-US/
-locale    tabmixplus   es-ES         jar:chrome/tabmixplus.jar!/locale/es-ES/
-locale    tabmixplus   et-EE         jar:chrome/tabmixplus.jar!/locale/et-EE/
-#locale    tabmixplus   eu-ES         jar:chrome/tabmixplus.jar!/locale/eu-ES/
-#locale    tabmixplus   fa-IR         jar:chrome/tabmixplus.jar!/locale/fa-IR/
-#locale    tabmixplus   fi-FI         jar:chrome/tabmixplus.jar!/locale/fi-FI/
-locale    tabmixplus   fr            jar:chrome/tabmixplus.jar!/locale/fr/
-locale    tabmixplus   he-IL         jar:chrome/tabmixplus.jar!/locale/he-IL/
-locale    tabmixplus   hr-HR         jar:chrome/tabmixplus.jar!/locale/hr-HR/
-locale    tabmixplus   hu-HU         jar:chrome/tabmixplus.jar!/locale/hu-HU/
-locale    tabmixplus   it            jar:chrome/tabmixplus.jar!/locale/it/
-locale    tabmixplus   ja            jar:chrome/tabmixplus.jar!/locale/ja-JP/
-locale    tabmixplus   ko-KR         jar:chrome/tabmixplus.jar!/locale/ko-KR/
-#locale    tabmixplus   lv-LV         jar:chrome/tabmixplus.jar!/locale/lv-LV/
-#locale    tabmixplus   ms-MY         jar:chrome/tabmixplus.jar!/locale/ms-MY/
-locale    tabmixplus   nl            jar:chrome/tabmixplus.jar!/locale/nl/
-locale    tabmixplus   pl            jar:chrome/tabmixplus.jar!/locale/pl/
-locale    tabmixplus   pt-BR         jar:chrome/tabmixplus.jar!/locale/pt-BR/
-locale    tabmixplus   pt-PT         jar:chrome/tabmixplus.jar!/locale/pt-PT/
-locale    tabmixplus   ro            jar:chrome/tabmixplus.jar!/locale/ro/
-locale    tabmixplus   ru-RU         jar:chrome/tabmixplus.jar!/locale/ru-RU/
-locale    tabmixplus   sk-SK         jar:chrome/tabmixplus.jar!/locale/sk-SK/
-locale    tabmixplus   sr            jar:chrome/tabmixplus.jar!/locale/sr/
-locale    tabmixplus   sv-SE         jar:chrome/tabmixplus.jar!/locale/sv-SE/
-locale    tabmixplus   tr-TR         jar:chrome/tabmixplus.jar!/locale/tr-TR/
-locale    tabmixplus   uk-UA         jar:chrome/tabmixplus.jar!/locale/uk-UA/
-locale    tabmixplus   vi            jar:chrome/tabmixplus.jar!/locale/vi/
-#locale    tabmixplus   zh            jar:chrome/tabmixplus.jar!/locale/zh/
-locale    tabmixplus   zh-CN         jar:chrome/tabmixplus.jar!/locale/zh-CN/
-#locale    tabmixplus   zh-SG         jar:chrome/tabmixplus.jar!/locale/zh-SG/
-locale    tabmixplus   zh-TW         jar:chrome/tabmixplus.jar!/locale/zh-TW/
+locale    tabmixplus   ar            chrome/locale/ar/
+locale    tabmixplus   bg-BG         chrome/locale/bg-BG/
+locale    tabmixplus   ca-AD         chrome/locale/ca-AD/
+locale    tabmixplus   cs-CZ         chrome/locale/cs-CZ/
+locale    tabmixplus   da            chrome/locale/da/
+locale    tabmixplus   de            chrome/locale/de/
+locale    tabmixplus   el            chrome/locale/el/
+locale    tabmixplus   en-US         chrome/locale/en-US/
+locale    tabmixplus   es-ES         chrome/locale/es-ES/
+locale    tabmixplus   et-EE         chrome/locale/et-EE/
+locale    tabmixplus   eu-ES         chrome/locale/eu-ES/
+locale    tabmixplus   fa-IR         chrome/locale/fa-IR/
+locale    tabmixplus   fi-FI         chrome/locale/fi-FI/
+locale    tabmixplus   fr            chrome/locale/fr/
+locale    tabmixplus   he-IL         chrome/locale/he-IL/
+locale    tabmixplus   hr-HR         chrome/locale/hr-HR/
+locale    tabmixplus   hu-HU         chrome/locale/hu-HU/
+locale    tabmixplus   it            chrome/locale/it/
+locale    tabmixplus   ja            chrome/locale/ja-JP/
+#locale    tabmixplus   ja-JP         chrome/locale/ja-JP/ - we have ja and ja-JP update
+locale    tabmixplus   ko-KR         chrome/locale/ko-KR/
+locale    tabmixplus   lv-LV         chrome/locale/lv-LV/
+locale    tabmixplus   ms-MY         chrome/locale/ms-MY/
+locale    tabmixplus   nl            chrome/locale/nl/
+locale    tabmixplus   pl            chrome/locale/pl/
+locale    tabmixplus   pt-BR         chrome/locale/pt-BR/
+locale    tabmixplus   pt-PT         chrome/locale/pt-PT/
+locale    tabmixplus   ro            chrome/locale/ro/
+locale    tabmixplus   ru-RU         chrome/locale/ru-RU/
+locale    tabmixplus   sk-SK         chrome/locale/sk-SK/
+locale    tabmixplus   sr            chrome/locale/sr/
+locale    tabmixplus   sv-SE         chrome/locale/sv-SE/
+locale    tabmixplus   tr-TR         chrome/locale/tr-TR/
+locale    tabmixplus   uk-UA         chrome/locale/uk-UA/
+locale    tabmixplus   vi            chrome/locale/vi/
+locale    tabmixplus   zh            chrome/locale/zh/
+locale    tabmixplus   zh-CN         chrome/locale/zh-CN/
+locale    tabmixplus   zh-SG         chrome/locale/zh-SG/
+locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
 

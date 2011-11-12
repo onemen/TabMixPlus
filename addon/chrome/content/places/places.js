@@ -226,6 +226,8 @@ var TMP_Places = {
         if (Tabmix.isVersion(40)) {
           openDialogCode = openDialogCode.replace("$1", "aWindow.").replace("$2", "aWindow.");
           loadTabsCode = loadTabsCode.replace("$1", "gBrowser");
+          if (Tabmix.isVersion(80))
+            loadTabsCode = loadTabsCode.replace("replaceCurrentTab", "false");
         }
         else {
           openDialogCode = openDialogCode.replace("$1", "window.").replace("$2", "");
@@ -245,7 +247,11 @@ var TMP_Places = {
         )._replace(
           openDialogCode,
           'let newWin = $& \
-           newWin.bookMarkIds = ids.join("|");'
+           newWin.bookMarkIds = ids.join("|");', {check: !Tabmix.isVersion(60)}
+        )._replace(
+          '"chrome,dialog=no,all", args);',
+          '$&\
+           browserWindow.bookMarkIds = ids.join("|");', {check: Tabmix.isVersion(60)}
         )._replace(
           /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
           '$& behavior =', {check: treeStyleTab}

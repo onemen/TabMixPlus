@@ -1,0 +1,12 @@
+<!ENTITY styles.label "Pielāgot stilus">
+<!ENTITY currentTab.label "Pašreizējā cilne">
+<!ENTITY unreadTab.label "Nelasītās cilnes">
+<!ENTITY otherTabs.label "Citas cilnes">
+<!ENTITY italic.label "Slīpraksts">
+<!ENTITY bold.label "Treknraksts">
+<!ENTITY underline.label "Pasvītrots">
+<!ENTITY textcolor.label "Teksta krāsa">
+<!ENTITY bgColor.label "Fona krāsa">
+<!ENTITY statusbar.label "Paslēpt statusa joslā">
+<!ENTITY useThis.label "izmantot šo stilu priekš">
+<!ENTITY opacity.label "caurspīdība">

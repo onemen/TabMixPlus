@@ -285,7 +285,7 @@ var TabmixContext = {
       tabContextMenu = gBrowser.tabContextMenu;
 
       if (!tabContextMenu.hasAttribute("id"))
-        tabContextMenu.setAttribute("id", "tabContextMenu");
+        tabContextMenu.setAttribute("id", "MenuEdit" in window ? "menuedit-tabContextMenu" : "tabContextMenu");
 
       // we use it to make sure context menu is not hide when stip is collapsed in Firefox 3.5-3.6
       let _class = tabContextMenu.hasAttribute("class") ? tabContextMenu.setAttribute("class") + " ": "";
@@ -783,7 +783,7 @@ var TabmixAllTabs = {
   backupLabel: "",
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
-      case "DOMAttrModified":
+      case this._attrModifiedEvent:
         this._tabOnAttrModified(aEvent);
         break;
       case "TabClose":
@@ -814,7 +814,7 @@ var TabmixAllTabs = {
   },
 
   isAfterCtrlClick: function TMP_isAfterCtrlClick(aButton) {
-    if (aButton.getAttribute("afterctrlclick")) {
+    if (aButton.hasAttribute("afterctrlclick")) {
       aButton.removeAttribute("afterctrlclick");
       if (aButton.hasAttribute("open"))
         aButton.removeAttribute("open");
@@ -850,6 +850,7 @@ var TabmixAllTabs = {
         gBrowser.removeTab(aTab, {animate: true});
         return;
       }
+      aTab._TMP_removeing = true;
       gBrowser.removeTab(aTab, {animate: true});
       if (gBrowser.tabs.length > 0) {
         this.createTabsList(popup, aType);
@@ -900,6 +901,14 @@ var TabmixAllTabs = {
       popup.removeChild(menuItem);
     }
 
+    if (Tabmix.isVersion(40)) {
+      this._attrModifiedEvent = "TabAttrModified";
+      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
+    }
+    else
+      this._attrModifiedEvent = "DOMAttrModified";
+
+    gBrowser.tabContainer.addEventListener("TabClose", this, false);
     popup.addEventListener("DOMMenuItemActive", this, false);
     popup.addEventListener("DOMMenuItemInactive", this, false);
   },
@@ -926,14 +935,16 @@ var TabmixAllTabs = {
       case 2:
         var rtl = Tabmix.rtl && TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode") != 2;
         tabs = gBrowser.tabs;
+        var index = 0;
         for (i = 0; i < tabs.length; i++) {
-          let index = tabs[i]._tPos;
+          if (tabs[i]._TMP_removeing)
+            continue;
           if (side && side == (rtl ? "right" : "left") && !tabs[i].collapsed)
             continue;
           else if (side && side == (rtl ? "left" : "right") &&
-                (tabs[i].collapsed || tabs[i].hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(index)))
+                (tabs[i].collapsed || tabs[i].hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(tabs[i]._tPos)))
             continue;
-          this.createMenuItems(popup, tabs[i], index, aType);
+          this.createMenuItems(popup, tabs[i], index++, aType);
         }
         break;
       case 3:
@@ -956,19 +967,12 @@ var TabmixAllTabs = {
       count = (value<9 ? "  " : "") + (value + 1) + ": ";
       mi.setAttribute("count", count);
     }
-    mi.setAttribute("label", count + tab.label);
-    mi.setAttribute("crop", tab.getAttribute("crop"));
-    mi.setAttribute("image", tab.getAttribute("image"));
-
-    if (tab.hasAttribute("busy"))
-      mi.setAttribute("busy", tab.getAttribute("busy"));
-    if (tab.selected)
-      mi.setAttribute("selected", "true");
+    this._setMenuitemAttributes(mi, tab);
 
     mi.value = value;
     tab.mCorrespondingMenuitem = mi;
-    tab.addEventListener("DOMAttrModified", this, false);
-    tab.addEventListener("TabClose", this, false);
+    if (!Tabmix.isVersion(40))
+      tab.addEventListener("DOMAttrModified", this, false);
     mi.tab = tab;
 
     if (popup.id == "btn_tabslist_menu")
@@ -978,6 +982,12 @@ var TabmixAllTabs = {
   },
 
   _tabOnAttrModified: function TMP__tabOnAttrModified(aEvent) {
+    if (Tabmix.isVersion(40)) {
+      let tab = aEvent.target;
+      this._setMenuitemAttributes(tab.mCorrespondingMenuitem, tab);
+      return;
+    }
+
     var menuItem = aEvent.target.mCorrespondingMenuitem;
     if (menuItem) {
       var attrName = aEvent.attrName;
@@ -995,6 +1005,22 @@ var TabmixAllTabs = {
             menuItem.setAttribute(attrName, count + aEvent.newValue);
       }
     }
+  },
+
+  _setMenuitemAttributes: function TMP__setMenuitemAttributes(aMenuitem, aTab) {
+    aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
+    aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
+    aMenuitem.setAttribute("image", aTab.getAttribute("image"));
+    
+    if (aTab.hasAttribute("busy"))
+      aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));
+    else
+      aMenuitem.removeAttribute("busy");
+
+    if (aTab.selected)
+      aMenuitem.setAttribute("selected", "true");
+    else
+      aMenuitem.removeAttribute("selected");
   },
 
   _tabOnTabClose: function TMP__tabOnTabClose(aEvent) {
@@ -1023,8 +1049,8 @@ var TabmixAllTabs = {
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
       if ("tab" in menuItem) {
-        menuItem.tab.removeEventListener("DOMAttrModified", this, false);
-        menuItem.tab.removeEventListener("TabClose", this, false);
+        if (!Tabmix.isVersion(40))
+          menuItem.tab.removeEventListener("DOMAttrModified", this, false);
         menuItem.tab.mCorrespondingMenuitem = null;
       }
       popup.removeChild(menuItem);
@@ -1034,6 +1060,9 @@ var TabmixAllTabs = {
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.setAttribute('tooltiptext', item.getAttribute('_tooltiptext'));
 
+    if (Tabmix.isVersion(40))
+      gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
+    gBrowser.tabContainer.removeEventListener("TabClose", this, false);
     popup.removeEventListener("DOMMenuItemActive", this, false);
     popup.removeEventListener("DOMMenuItemInactive", this, false);
     popup.removeEventListener("DOMMouseScroll", this, true);

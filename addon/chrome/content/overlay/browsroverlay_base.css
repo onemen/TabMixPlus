@@ -54,14 +54,6 @@ label.text-link, label[onclick] {
   display: none;
 }
 
-.tabbrowser-tab[selected="true"] .tabs-closebutton{
-  -moz-user-focus: normal;
-}
-
-.tabbrowser-tab .tabs-closebutton:focus {
-  outline: none !important;
-}
-
 /*  we don't use .tabbrowser-tab > .tab-close-button[button_side="right"] here
     because in some theme the buttons are inside tab-middle
 */

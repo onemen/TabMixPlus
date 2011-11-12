@@ -26,6 +26,7 @@ pref("extensions.tabmix.newTabUrl", "");
 pref("extensions.tabmix.replaceLastTabWith", 0);
 pref("extensions.tabmix.newTabUrl_afterLastTab", "");
 
+pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.openNewTabNext", false);
 pref("extensions.tabmix.openTabNext", false);
 pref("extensions.tabmix.openTabNextInverse", true);

@@ -437,6 +437,28 @@ function TMP_contentAreaClick(event, fieldNormalClicks) {
 }
 
 /**
+ * @brief hock the proper Greasemonkey function into Tabmix.isGMEnabled
+ */
+function TMP_isGreasemonkeyInstalled() {
+  try {
+    // Greasemonkey >= 0.9.10
+    Components.utils.import("resource://greasemonkey/util.js");
+    if ('function' == typeof GM_util.getEnabled) {
+      Tabmix.isGMEnabled = GM_util.getEnabled;
+      return;
+    }
+  } catch (e) {
+    // Greasemonkey < 0.9.10
+    if ('function' == typeof GM_getEnabled) {
+      Tabmix.isGMEnabled = GM_getEnabled;
+      return;
+    }
+  }
+
+  TMP_isGreasemonkeyScript = function (a,b) { return false; }
+}
+
+/**
  * @brief Suppress tabs that may be created by installing Greasemonkey script
  *
  * @returns             true if the link is a script.
@@ -446,11 +468,11 @@ function TMP_isGreasemonkeyScript(event, target) {
   if (event.button == 2)
     return false;
 
-  if ("GM_BrowserUI" in window && GM_getEnabled()) {
-    var url = target.getAttribute("href");
+  if (Tabmix.isGMEnabled()) {
+    let url = target.getAttribute("href");
     if (url && url.match(/\.user\.js(\?|$)/i))
       return true;
-  }
+  } 
 
   return false;
 }
@@ -749,7 +771,7 @@ function TMP_getBrowserWindow(aExclude) {
 
     while (windows.hasMoreElements()) {
         var win = windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-        if (TMP_checkForPopup(win.QueryInterface(Components.interfaces.nsIDOMWindowInternal)))
+        if (TMP_checkForPopup(win.QueryInterface(Components.interfaces.nsIDOMWindow)))
             continue;
 
         // this returns the first window that we find; it is not exhaustive
@@ -759,14 +781,14 @@ function TMP_getBrowserWindow(aExclude) {
 }
 
 /**
- * @brief Checks to see if a given nsIDOMWindowInternal window is a popup or not.
+ * @brief Checks to see if a given nsIDOMWindow window is a popup or not.
  *
- * @param domWindow	   A scripted nsIDOMWindowInternal object.
+ * @param domWindow	   A scripted nsIDOMWindow object.
  * @return		   true if the domWindow is a popup, false otherwise.
  *
  */
 function TMP_checkForPopup(domWindow) {
-  if (!(domWindow instanceof Components.interfaces.nsIDOMWindowInternal)) return false;
+  if (!(domWindow instanceof Components.interfaces.nsIDOMWindow)) return false;
 
   // FIXME: locationbar, menubar, toolbar -
   // if these are hidden the window is probably a popup

@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Arestian itxitako fitxak">
+<!ENTITY closedtabsbtn.tooltip "Erakutsi itxitako fitxen zerrenda">
+<!ENTITY sessionbtn.tooltip "Display and Manage your Sessions">
+<!ENTITY tabslistbtn.label "Fitxa irekiak">
+<!ENTITY tabslistbtn.tooltip "Erakutsi fitxa irekien zerrenda">
+<!ENTITY closedwindowsbtn.label "Arestian itxitako leihoak">
+<!ENTITY closedwindowsbtn.tooltip "Erakutsi itxitako leihoen zerrenda">
+<!ENTITY page.header.title "Tab Mix Plus Hobespenak">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY session.Tools "Session Manager">
+<!ENTITY closedWin.label "Itxitako leihoen zerrenda">
+<!ENTITY duplicateTabMenu.label "Fitxa bikoiztu">
+<!ENTITY duplicateTabMenu.accesskey "Z">
+<!ENTITY duplicateinWin.label "Bikoiztu leiho berri batean">
+<!ENTITY duplicateinWin.accesskey "L">
+<!ENTITY detachTab.label "Mugitu leiho berri batera">
+<!ENTITY detachTab.accesskey "M">
+<!ENTITY mergeContext.label "Batu leihoak">
+<!ENTITY mergeContext.accesskey "B">
+<!ENTITY renametab.label "Aldatu fitxaren izena">
+<!ENTITY renametab.accesskey "M">
+<!ENTITY copytaburl.label "Kopiatu fitxaren URL">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Birkargatu beste fitxak">
+<!ENTITY reloadother.accesskey "F">
+<!ENTITY reloadleft.label "Birkargatu ezkerreko fitxak">
+<!ENTITY reloadleft.accesskey "E">
+<!ENTITY reloadright.label "Birkargatu eskuineko fitxak">
+<!ENTITY reloadright.accesskey "R">
+<!ENTITY autoReloadTab.label "Birkargatu behin eta berriz">
+<!ENTITY autoReloadTab.accesskey "D">
+<!ENTITY autoReload.label "Birkargatu behin eta berriz">
+<!ENTITY autoReload.accesskey "T">
+<!ENTITY afterthis.label "Fitxa honen ondoren">
+<!ENTITY bookmarktab.label "Egin fitxa honen laster-marka">
+<!ENTITY undoCloseListMenu.label "Itxitako fitxen zerrenda">
+<!ENTITY undoCloseListMenu.accesskey "X">
+<!ENTITY closeAllTabsMenu.label "Itxi fitxa oro">
+<!ENTITY closeall.accesskey "O">
+<!ENTITY closeSimilarTab.label "Itxi antzeko fitxak">
+<!ENTITY closeSimilarTab.accesskey "Z">
+<!ENTITY closeLeftTabsMenu.label "Itxi ezkerreko fitxak">
+<!ENTITY closeleft.accesskey "E">
+<!ENTITY closeRightTabsMenu.label "Itxi eskuineko fitxak">
+<!ENTITY closeright.accesskey "R">
+<!ENTITY docShellMenu.label "Baimenak">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Izoztu fitxa">
+<!ENTITY freezeTabMenu.accesskey "F">
+<!ENTITY protectTabMenu.label "Babestu fitxa">
+<!ENTITY protectTabMenu.tooltip "Babestu fitxak itxi ez daitezen">
+<!ENTITY protectTabMenu.accesskey "B">
+<!ENTITY lockTabMenu.label "Lotu Fitxa">
+<!ENTITY lockTabMenu.tooltip "Lotura oro fitxa berri batean ireki">
+<!ENTITY lockTabMenu.accesskey "L">
+<!ENTITY bookmarktabs.label "Egin fitxa guztien laster-markak">
+<!ENTITY linkhere.label "Ireki lotura fitxa honetan">
+<!ENTITY linkhere.accesskey "h">
+<!ENTITY linkBackgroundTab.label "Ireki lotura atzeko planoan">
+<!ENTITY linkForegroundTab.label "Ireki lotura aurreko planoan">
+<!ENTITY linkBackgroundTab.accesskey "a">
+<!ENTITY linkForegroundTab.accesskey "u">
+<!ENTITY openalllinks.label "Ireki loturak fitxa berri batzuetan">
+<!ENTITY openalllinks.accesskey "x">
+<!ENTITY linkwithhistory.label "Ireki lotura bikoiztutako fitxa batean">
+<!ENTITY linkwithhistory.accesskey "z">
+<!ENTITY tabsList.label "Fitxa irekien zerrenda">
+<!ENTITY tabsList.accesskey "i">
+<!ENTITY allowImage.label "Irudia">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirect">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Birkargatu fitxa honetan">
+<!ENTITY restoreincurrent.accesskey "h">
+<!ENTITY restoreinwin.label "Birkargatu leiho berri batean">
+<!ENTITY restoreinwin.accesskey "b">
+<!ENTITY restoreintab.label "Birkargatu fitxa berri batean">
+<!ENTITY restoreintab.accesskey "f">
+<!ENTITY restoretab.label "Berreskuratu fitxa">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Egin lotura honen laster-marka">
+<!ENTITY bookmark.accesskey "l">
+<!ENTITY deletelist.label "Kendu zerrendatik">
+<!ENTITY deletelist.accesskey "k">
+<!ENTITY settings.label "Hobespenak">
+<!ENTITY saveWindow.label "Gorde leiho hau">
+<!ENTITY saveAllWindows.label "Gorde leiho guztiak">
+<!ENTITY sm.context.overwrite "Berreskuratu, Gainidatzi dagoen leiho(ak)">
+<!ENTITY sm.context.overwrite.key "G">
+<!ENTITY sm.context.restore.new "Berreskuratu leiho berri batzuetan">
+<!ENTITY sm.context.restore.newkey "b">
+<!ENTITY sm.context.replacethis "Replace, With This Window">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Replace, With All Windows">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Gehitu leiho hau">
+<!ENTITY sm.context.add.key "h">
+<!ENTITY sm.context.addall "Gehitu leiho guztiak">
+<!ENTITY sm.context.addall.key "z">
+<!ENTITY sm.context.save "Gorde">
+<!ENTITY sm.context.save.key "G">
+<!ENTITY sm.context.rename "Aldatu izena">
+<!ENTITY sm.context.rename.key "d">
+<!ENTITY sm.context.delete "Ezabatu">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Ezabatu dena">
+<!ENTITY sm.context.deleteall.key "n">
+<!ENTITY sm.context.startup "Set as Startup Session">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Show Counters, Date and Time in Session Menu">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "M">
+<!ENTITY sortedTabs.label "Sorted Tabs">
+<!ENTITY sortedTabs.tooltip "Check to show the list sorted alphabetically">
+<!ENTITY enable.label "Enable">
+<!ENTITY custom.label "Custom">
+<!ENTITY enableTabs.label "Enable All Tabs">
+<!ENTITY disableTabs.label "Disable All Tabs">
+<!ENTITY seconds.label "seconds">
+<!ENTITY minutes.label "minutes">
+<!ENTITY minute.label "minute">
+<!ENTITY hideTabBar.label "Hide the tab bar">
+<!ENTITY hideTabBar.never.label "Never">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.onOneTab.label "When I have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "Always">
+<!ENTITY hideTabBar.always.key "A">

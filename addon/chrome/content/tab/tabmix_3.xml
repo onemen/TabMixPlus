@@ -260,6 +260,10 @@
 
       <handler event="mousedown" button="0" phase="capturing">
       <![CDATA[
+        if (this.selected) {
+          this.style.MozUserFocus = 'ignore';
+          this.clientTop; // just using this to flush style updates
+        }
         // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
         if (this.mOverCloseButton)
           event.stopPropagation();

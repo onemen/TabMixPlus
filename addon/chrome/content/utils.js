@@ -390,10 +390,10 @@ var Tabmix = {
   JSON: {
     nsIJSON: null,
     parse: function TMP_parse(str) { 
-      return this.nsIJSON.decode(str);
+      return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : JSON.parse(str);
     },
     stringify: function TMP_stringify(obj) {
-      return this.nsIJSON.encode(obj)
+      return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : JSON.stringify(obj);
     }
   },
 

@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Ielādēt fonā">
+<!ENTITY searchTabFocus.accesskey "L">
+<!ENTITY title.label "Nosaukums">
+<!ENTITY rename_all.label "Pārdēvēt visas lapas ar tādu pašu adresi">
+<!ENTITY rename_permanently.label "Pārdēvēt šo cilni uz visiem laikiem visām adresēm">
+<!ENTITY doctitle.label "Lietot noklusēto nosaukumu">
+<!ENTITY forum.label "Forums">
+<!ENTITY faq.label "BUJ">
+<!ENTITY help.label "Palīdzība">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Izvēlieties laiku no saraksta vai arī ievadiet savu laiku">
+<!ENTITY specifyreload.label "Norādīt pārlādēšanas laiku">
+<!ENTITY sanitizer.entry "Tab Mix Plus saglabātās sesijas">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Vai esat pārliecināts, ka vēlaties izdzēst VISAS jūsu saglabātās sesijas, ieskaitot rezerves kopijas?">

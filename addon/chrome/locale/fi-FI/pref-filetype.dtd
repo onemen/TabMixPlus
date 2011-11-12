@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Tiedostotyyppien muokkaus">
+<!ENTITY filetype.add "Lisää">
+<!ENTITY filetype.edit "Muokkaa">
+<!ENTITY filetype.delete "Poista">
+<!ENTITY filetype.new "Uusi tiedostotyyppi:">

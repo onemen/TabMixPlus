@@ -1,6 +1,8 @@
 //code from Dorando and Sboulema's MiniT+, modified by Hemiola SUN
 // modified by onemen
 
+var TMP_TAB_DROP_TYPE = "application/x-moz-tabbrowser-tab"
+
 function TMP_DragAndDrop_init() {
   TMP_setDragEvents(true);
   TMP_tabDNDObserver.draglink = TabmixSvc.getString("droplink.label");
@@ -119,7 +121,7 @@ var TMP_tabDNDObserver = {
     var spec = uri ? uri.spec : "about:blank";
 
     let dt = event.dataTransfer;
-    dt.mozSetDataAt(TAB_DROP_TYPE, draggedTab, 0);
+    dt.mozSetDataAt(TMP_TAB_DROP_TYPE, draggedTab, 0);
     // We must not set text/x-moz-url or text/plain data here,
     // otherwise trying to deatch the tab by dropping it on the desktop
     // may result in an "internet shortcut"
@@ -457,7 +459,7 @@ var TMP_tabDNDObserver = {
 
     }
 
-    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+    var draggedTab = dt.mozGetDataAt(TMP_TAB_DROP_TYPE, 0);
     gBrowser.replaceTabWithWindow(draggedTab);
     aEvent.stopPropagation();
   },
@@ -776,8 +778,8 @@ var TMP_tabDNDObserver = {
 
    var types = dt.mozTypesAt(0);
     // move or copy tab
-    if (types[0] == TAB_DROP_TYPE) {
-      var sourceNode = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+    if (types[0] == TMP_TAB_DROP_TYPE) {
+      var sourceNode = dt.mozGetDataAt(TMP_TAB_DROP_TYPE, 0);
       if (aDraggeType == this.DRAG_TAB_IN_SAME_WINDOW && aEvent.target == sourceNode) {
         return dt.effectAllowed = "none";
       }
@@ -892,7 +894,7 @@ var TMP_undocloseTabButtonObserver = {
   /* for Firefox 3.5-3.6 */
   getSupportedFlavours: function () {
     var flavourSet = new FlavourSet();
-    flavourSet.appendFlavour(TAB_DROP_TYPE);
+    flavourSet.appendFlavour(TMP_TAB_DROP_TYPE);
     flavourSet.appendFlavour("text/x-moz-url");
     flavourSet.appendFlavour("text/unicode");
     return flavourSet;
@@ -904,8 +906,8 @@ var TMP_undocloseTabButtonObserver = {
  */
 function TMP_getSourceNode(aDataTransfer, aSession) {
   var types = aDataTransfer.mozTypesAt(0);
-  if (types[0] == TAB_DROP_TYPE)
-    return aDataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+  if (types[0] == TMP_TAB_DROP_TYPE)
+    return aDataTransfer.mozGetDataAt(TMP_TAB_DROP_TYPE, 0);
   return null;
 }
 

@@ -1,0 +1,15 @@
+<!ENTITY searchTabFocus.label "Lataa taustalla">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY title.label "Nimike">
+<!ENTITY rename_all.label "Nimeä uudelleen sivut joilla on sama osoite">
+<!ENTITY rename_permanently.label "Nimeä tämä välilehti pysyvästi">
+<!ENTITY doctitle.label "Käytä sivun otsikkoa">
+<!ENTITY forum.label "Foorumi">
+<!ENTITY faq.label "UKK">
+<!ENTITY help.label "Apua">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Valitse aika listalta tai määritä itse">
+<!ENTITY specifyreload.label "Määritä uudelleenlatauksen aikaväli">
+<!ENTITY sanitizer.entry "Tallenneteut Tab Mix Plus -istunnot">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Oletko varma että haluat poistaa KAIKKI tallennetut tiedot mukaanlukien varmuuskopiot?">

@@ -308,6 +308,9 @@ var TMP_extensionsCompatibility = {
       if (buttonUp && buttonUp.oncontextmenu)
         _fixOnContextmenu(buttonUp, "left");
     }
+
+    // check if Greasemonkey installed
+    TMP_isGreasemonkeyInstalled();
   }
 }
 

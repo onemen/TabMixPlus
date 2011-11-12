@@ -5,19 +5,21 @@
   <RDF:Description RDF:about="rdf:#$n83In3"
                    NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    NS1:minVersion="3.5"
-                   NS1:maxVersion="6.0a1" />
+                   NS1:maxVersion="9.*" />
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    NS1:id="{dc572301-7619-498c-a57d-39143191b318}"
                    NS1:name="Tab Mix Plus"
-                   NS1:version="0.3.8.6"
+                   NS1:version="0.3.8.7pre.110908a"
                    NS1:type="2"
                    NS1:description="Tab browsing with an added boost."
                    NS1:iconURL="chrome://tabmixplus/skin/tmp.png"
                    NS1:homepageURL="http://tmp.garyr.net"
+                   NS1:updateURL="http://tmp.garyr.net/updates-dev.rdf"
                    NS1:optionsURL="chrome://tabmixplus/content/pref/pref-tabmix.xul"
                    NS1:aboutURL="chrome://tabmixplus/content/about.xul"
                    NS1:creator="ONEMEN  (tabmix.onemen@gmail.com)"
-                   NS1:developer="ONEMEN">
+                   NS1:developer="ONEMEN"
+                   NS1:updateKey="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDmemitmxKFPUxOApIk0IiE9MTdDpoLpEEZpVIeeE5apzQcRPvq2ZoL9SAi1/nwVmGGa+jenml0dU6iDA42b8NkbcoFAruED77AUWfB4OKDtZ7oBpzTbcNmeWsJQkQuff2Kj0upIvzQ5ZU8lZn5YI9NQYXIDMtBWhG7N5Pqw27bMQIDAQAB">
     <NS1:targetApplication RDF:resource="rdf:#$n83In3"/>
   </RDF:Description>
 </RDF:RDF>

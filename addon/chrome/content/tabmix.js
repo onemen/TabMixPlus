@@ -304,7 +304,22 @@ var TMP_eventListener = {
     window.addEventListener("load", this, false);
 
     var tabContainer = gBrowser.tabContainer;
+    tabContainer.addEventListener("SSTabRestoring", this, true);
+    tabContainer.addEventListener("SSTabClosing", this, true);
+    tabContainer.addEventListener("TabOpen", this, true);
+    tabContainer.addEventListener("TabClose", this, true);
+    tabContainer.addEventListener("TabSelect", this, true);
     if (Tabmix.isVersion(40)) {
+      tabContainer.addEventListener("TabUnpinned", this, true);
+
+      if ("_update" in TabsInTitlebar) {
+        // set option to Prevent double click on Tab-bar from changing window size.
+        Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
+          'this._dragBindingAlive',
+          '$& && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")'
+        ).toCode();
+      }
+
       try {
         TMP_TabView.init(tabContainer);
       } catch (ex) {Tabmix.assert(ex);}
@@ -414,22 +429,6 @@ var TMP_eventListener = {
     window.addEventListener("fullscreen", this, true);
 
     var tabbar = gBrowser.tabContainer;
-    tabbar.addEventListener("SSTabRestoring", this, true);
-    tabbar.addEventListener("SSTabClosing", this, true);
-    tabbar.addEventListener("TabOpen", this, true);
-    tabbar.addEventListener("TabClose", this, true);
-    tabbar.addEventListener("TabSelect", this, true);
-    if (Tabmix.isVersion(40)) {
-      tabbar.addEventListener("TabUnpinned", this, true);
-
-      if ("_update" in TabsInTitlebar) {
-        // set option to Prevent double click on Tab-bar from changing window size.
-        Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
-          'this._dragBindingAlive',
-          '$& && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")'
-        ).toCode();
-      }
-    }
     // add event for mouse scrolling on tab bar, necessary for linux
     if (Tabmix.isPlatform("Linux")) {
        document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, false);
@@ -814,8 +813,9 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     var pinned = Tabmix.isVersion(40) && aTab.pinned;
     if (!TabmixTabbar.isMultiRow) {
-      if (Tabmix.isVersion(50) && (this._usingClosingTabsSpacer || this._hasTabTempMaxWidth))
+      if (Tabmix.isVersion(50) && (this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth))
         return;
+
       let lastTabVisible = tabBar.lastTabVisible;
       // only uncollapsed left tab when we can't scroll right
       if (aTab._tPos < tabBar.collapsedTabs)
@@ -903,8 +903,9 @@ var TMP_eventListener = {
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
     var tab = aEvent.target;
-    if (tab.hasAttribute("_lockedAppTabs"))
+    if (tab.hasAttribute("_lockedAppTabs")) {
       gBrowser.lockTab(tab);
+    }
     gBrowser.tabContainer.collapsedTabs--;
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();

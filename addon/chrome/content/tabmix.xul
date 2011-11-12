@@ -440,6 +440,9 @@
       <tooltip id="tabmix-tooltip"/>      
     </popupset>
 
+   <!-- hide Tab groups context menu in all-tabs list button -->
+   <menuitem id="menu_tabview" context=""/>
+
   <!-- Tabmix Plus KEYS  -->
   <keyset id="mainKeyset">
     <key id="key_tm_toggleFLST" label="Toggle FLST" keycode="VK_F9" TM_oncommand="Tabmix.flst.toggle();" />

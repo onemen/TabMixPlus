@@ -212,17 +212,19 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          gBrowser.tabContainer.nextTab++;
    }
 
-   // always focus the address bar on new tab
    // always select new tab when replacing last tab
    var loadInBackground  = replaceLastTab ? false : TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");
    gBrowser.TMP_selectNewForegroundTab(newTab, loadInBackground);
-   TMP_clearUrlBar(newTab, url);
+
+   // focus the address bar on new tab
+   if (TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") || loadBlank)
+     TMP_clearUrlBar(newTab, url);
 
    return newTab;
 }
 
 function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
-  if(/about:home|(www\.)*google\./.test(aUrl))
+  if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aUrl != "about:blank") {
     // clean the the address bar as if the user laod about:blank tab

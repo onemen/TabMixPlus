@@ -151,7 +151,8 @@ if (Tabmix.isVersion(40)) {
             }
           }
           if (tab && !tab.pinned && !tab.collapsed) {
-            tab.style.width = aTab.getBoundingClientRect().width + "px";
+            let tabWidth = aTab.getBoundingClientRect().width + "px";
+            tab.style.setProperty("width",tabWidth,"important");
             tab.removeAttribute("width");
             this._hasTabTempWidth = true;
             this.tabbrowser.addEventListener("mousemove", this, false);
@@ -245,8 +246,10 @@ if ("__ctxextensions__removeTab" in gBrowser)
      ).toCode();
 
     // we are prepare for bug #563337
+    let _bug563337 = false;
     let _beginRemoveTab = gBrowser._beginRemoveTab.toString();
     if (_beginRemoveTab.indexOf('this.addTab("about:blank", {skipAnimation: true});') > -1) {
+      _bug563337 = true;
       Tabmix.newCode("gBrowser._beginRemoveTab", _beginRemoveTab)._replace(
         'this.addTab("about:blank", {skipAnimation: true});',
         'TMP_BrowserOpenTab(null, true);', {check: !("TabGroupsManagerApiVer1" in window)}
@@ -256,7 +259,7 @@ if ("__ctxextensions__removeTab" in gBrowser)
     // we check if browser.tabs.animate exist until bug Bug 380960 - Implement closing tabs animation will land
     Tabmix.newCode("gBrowser._endRemoveTab", gBrowser._endRemoveTab)._replace(
       'this.addTab("about:blank", {skipAnimation: true});',
-      'TMP_BrowserOpenTab(null, true);', {check: !("TabGroupsManagerApiVer1" in window)}
+      'TMP_BrowserOpenTab(null, true);', {check: !_bug563337 && !("TabGroupsManagerApiVer1" in window)}
     )._replace( // Firefox 3.7+
       'this._blurTab(aTab);',
       'TMP_onRemoveTab(aTab); \
