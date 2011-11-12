@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importuj ustawienia">
 <!ENTITY settings.default "Przywróć ustawienia domyślne">
 <!ENTITY generalWindowOpen.label "Odnośniki otwierające się w oknach otwieraj w">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Odnośniki z innych aplikacji otwieraj w">
 <!ENTITY linkTarget.tab "nowej karcie">
 <!ENTITY linkTarget.window "nowym oknie">

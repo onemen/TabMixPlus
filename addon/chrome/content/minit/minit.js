@@ -42,6 +42,7 @@ function TMP_setDragEvents(atStart) {
   else if ("TreeStyleTabBrowser" in window)
     gBrowser.mTabDropIndicatorBar = document.getAnonymousElementByAttribute(gBrowser, "class", "tab-drop-indicator-bar");
 
+  // this block is for Firefox 3.5-3.6.x
   TMP_tabDNDObserver._dragOverDelay = gBrowser.mDragOverDelay;
   if (useDefaultDnD) {
     gBrowser.mStrip.setAttribute("ondragstart", "this.parentNode.parentNode._onDragStart(event);");
@@ -185,7 +186,7 @@ var TMP_tabDNDObserver = {
     // show Drag & Drop message
     if (draggeType == this.DRAG_LINK) {
       this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
-                              gNavigatorBundle.getString("droponnewtabbutton") : this.draglink;
+                              this.gBackupLabel : this.draglink;
       if (event.target.localName != "tab" && event.target.localName != "tabs")
         this.gMsg = this.gBackupLabel;
       var statusTextFld = document.getElementById("statusbar-display");
@@ -339,6 +340,7 @@ var TMP_tabDNDObserver = {
 
       gBrowser.moveTabTo(newTab, newIndex + left_right);
 
+      TMP_copyTabData(newTab, draggedTab);
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
 
       // We need to set selectedTab after we've done

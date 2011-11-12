@@ -10,6 +10,7 @@
 <!ENTITY settings.import "יבא הגדרות">
 <!ENTITY settings.default "שחזר ברירת מחדל">
 <!ENTITY generalWindowOpen.label "פתח קישור שנפתח בחלון חדש ב:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "פתח קישור מתוכנה אחרת ב:">
 <!ENTITY linkTarget.tab "לשונית חדשה">
 <!ENTITY linkTarget.window "חלון חדש">

@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Εισαγωγή ρυθμίσεων">
 <!ENTITY settings.default "Επαναφορά αρχικών">
 <!ENTITY generalWindowOpen.label "Άνοιγμα δεσμών που ανοίγουν σε νέο παράθυρο σε:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Άνοιγμα δεσμών από άλλες εφαρμογές σε:">
 <!ENTITY linkTarget.tab "Νέα καρτέλα">
 <!ENTITY linkTarget.window "Νέο παράθυρο">

@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Увези подешавања">
 <!ENTITY settings.default "Врати подразумеване вредности">
 <!ENTITY generalWindowOpen.label "Везе који се иначе отварају у новом прозору отварај у:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Везе из других апликација отварај у:">
 <!ENTITY linkTarget.tab "новој картици">
 <!ENTITY linkTarget.window "новом прозору">

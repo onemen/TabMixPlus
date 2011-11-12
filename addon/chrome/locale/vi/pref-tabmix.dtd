@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Nhập các Thiết lập">
 <!ENTITY settings.default "Khôi phục Mặc định">
 <!ENTITY generalWindowOpen.label "Mở liên kết vốn sẽ được mở trong một cửa sổ mới trong:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Mở liên kết từ chương trình khác trong:">
 <!ENTITY linkTarget.tab "Thẻ mới">
 <!ENTITY linkTarget.window "Cửa sổ mới">

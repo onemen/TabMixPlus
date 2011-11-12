@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importovanie nastavení">
 <!ENTITY settings.default "Pôvodné nastavenie">
 <!ENTITY generalWindowOpen.label "Odkazy otvárajúce nové okno otvoriť do:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Otvoriť odkazy iných aplikácií do:">
 <!ENTITY linkTarget.tab "Nová karta">
 <!ENTITY linkTarget.window "Nové okno">

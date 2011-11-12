@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Impordi sätted">
 <!ENTITY settings.default "Taasta vaikimisi sätted">
 <!ENTITY generalWindowOpen.label "Uues aknas avanevate linkide avamise asukoht:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Teistest rakendustest pärit linkide avamise asukoht:">
 <!ENTITY linkTarget.tab "Uus kaart">
 <!ENTITY linkTarget.window "Uus aken">

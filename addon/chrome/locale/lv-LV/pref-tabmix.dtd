@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importēt iestatījumus">
 <!ENTITY settings.default "Atjaunot noklusējumus">
 <!ENTITY generalWindowOpen.label "Saites, kas atveras jaunā logā, atvērt:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Saites no citām lietotnēm atvērt:">
 <!ENTITY linkTarget.tab "Jaunā cilnē">
 <!ENTITY linkTarget.window "Jaunā logā">

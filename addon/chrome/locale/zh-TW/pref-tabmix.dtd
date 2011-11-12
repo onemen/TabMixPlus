@@ -10,6 +10,7 @@
 <!ENTITY settings.import "匯入設定值">
 <!ENTITY settings.default "還原預設值">
 <!ENTITY generalWindowOpen.label "將開啟新視窗的鏈結開啟於：">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "外部程序啟動的鏈結開啟於：">
 <!ENTITY linkTarget.tab "新分頁">
 <!ENTITY linkTarget.window "新視窗">

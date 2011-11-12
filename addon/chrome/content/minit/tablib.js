@@ -38,6 +38,14 @@ if (this._inited)
   return;
 this._inited = true;
 
+if (Tabmix.isVersion(80)) {
+  Tabmix.newCode("gBrowser.tabContainer._handleTabDrop", gBrowser.tabContainer._handleTabDrop)._replace(
+    'that.tabbrowser.swapBrowsersAndCloseOther(newTab, draggedTab);',
+    'TMP_copyTabData(newTab, draggedTab);\
+    $&'
+  ).toCode();
+}
+
 if(gBrowser.tabs.length > 0)
   gBrowser.mCurrentTab._selected = true;
 
@@ -925,7 +933,13 @@ gBrowser.duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, 
 
   var newTab = null;
   // try to have SessionStore duplicate the given tab
-  newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
+  if (!aHref && !aTabData) {
+    newTab = Cc["@mozilla.org/browser/sessionstore;1"]
+                .getService(Ci.nsISessionStore)
+                .duplicateTab(window, aTab);
+  }
+  else 
+    newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
 
   if(!newTab && aTabData)
     throw new Error("Tabmix was unable to restore closed tab to new window");
@@ -940,13 +954,13 @@ gBrowser.duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, 
     focusElement(content);
 
   // move new tab to place before we select it
+  var copyToNewWindow = window != aTab.ownerDocument.defaultView;
   if (!disallowSelect && !copyToNewWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
     let pos = newTab._tPos > aTab._tPos ? 1 : 0;
     this.TMmoveTabTo(newTab, aTab._tPos+pos);
   }
 
   var bgPref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground");
-  var copyToNewWindow = window != aTab.ownerDocument.defaultView;
   if (!disallowSelect && !bgPref) {
     newTab.owner = copyToNewWindow ? null : aTab;
     let url = !dontFocuseUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
@@ -1036,82 +1050,15 @@ gBrowser.duplicateInWindow = function (aTab, aMoveTab, aTabData) {
     this.replaceTabWithWindow(aTab);
     return;
   }
-
-  function _restoreWindow(aWindow, aCount) {
-    var tabBrowser = aWindow.gBrowser;
-    // make sure sessionHistory is ready
-    try {
-      if (!tabBrowser.webNavigation.sessionHistory) {
-        throw new Error();
-      }
-    }
-    catch (ex) { // in case browser or history aren't ready yet
-      if (aCount < 10) {
-        var restoreHistoryFunc = function() {_restoreWindow(aWindow, aCount + 1); }
-        aWindow.setTimeout(restoreHistoryFunc, 100);
-        return;
-      }
-    }
-
-    var oldTab = aWindow._duplicateData.tab;
-    var tabData = aWindow._duplicateData.tabData;
-    var sourceWindow = aWindow.opener;
-    // we don't have to do anything if the openr not exist, or we copy only tabdata
-    var moveMode = aWindow._duplicateData.move && sourceWindow && !tabData;
-    if (moveMode) {
-      var sourceBrowser = sourceWindow.gBrowser;
-    }
-    // remove unused blank tab
-    var blankTabToRemove = null;
-    if (tabBrowser.isBlankNotBusyTab(tabBrowser.mCurrentTab)) {
-      blankTabToRemove = tabBrowser.mCurrentTab;
-      blankTabToRemove.collapsed = true;
-    }
-    var newTab = tabBrowser.duplicateTab(oldTab, null, tabData);
-    if (blankTabToRemove) {
-      tabBrowser.removeTab(blankTabToRemove);
-      // show button on new first tab if url exist
-      try {
-        var url = tabData ? tabData.state.entries[tabData.state.index - 1].url : oldTab.linkedBrowser.currentURI.spec;
-      } catch(ex) { }
-      tabBrowser.tabContainer.adjustTabstrip(null, url);
-    }
-    // make sure the new tab is in the end
-    var lastIndex = tabBrowser.tabs.length - 1;
-    if (newTab._tPos < lastIndex)
-      tabBrowser.moveTabTo(newTab, lastIndex);
-
-    // remove old tab and close the other window if _duplicateTab was its last tab
-    if (moveMode) {
-      var needToClose = "needToClose" in  sourceWindow;
-      if (oldTab.parentNode) { // make sure the tab still exist before we try to remove it
-        needToClose = needToClose || sourceBrowser.tabs.length == 1;
-        oldTab.removeAttribute("protected");
-        sourceBrowser.removeTab(oldTab);
-      }
-
-      if (needToClose)
-        sourceWindow.closeWindow(true);
-    }
-
-    delete newWindow._duplicateData;
+  else {
+    let newTab = this.duplicateTab(aTab, null, aTabData, true, true);
+    if (Tabmix.isVersion(40))
+      this.hideTab(newTab);
+    else
+      newTab.collapsed = newTab;
+    this.replaceTabWithWindow(newTab);
+    return;
   }
-
-  // we going to delete the moved tab after some timeout catch the flag now
-  // we use this only if the tab was not exist anymore when its time to remove it
-  if (aMoveTab && this.tabs.length == 1)
-    window.needToClose = true;
-
-  // open new window
-  var newWindow = window.openDialog( getBrowserURL(), "_blank", "chrome,all,dialog=no");
-  newWindow.tabmix_afterTabduplicated = true;
-  newWindow._duplicateData = {tab: aTab, tabData: aTabData, move: aMoveTab};
-  newWindow.addEventListener("load", function TMP_onLoad_duplicateInWindow(aEvent) {
-      var win = aEvent.currentTarget;
-      win.removeEventListener("load", TMP_onLoad_duplicateInWindow, false);
-      win.TMP_SessionStore.initService();
-      _restoreWindow(win, 0);
-  }, false);
 
 }
 

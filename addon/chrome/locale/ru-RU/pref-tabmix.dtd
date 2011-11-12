@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Импорт настроек">
 <!ENTITY settings.default "По умолчанию">
 <!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Открывать ссылки из внешних приложений:">
 <!ENTITY linkTarget.tab "В новой вкладке текущего окна">
 <!ENTITY linkTarget.window "В новом окне">

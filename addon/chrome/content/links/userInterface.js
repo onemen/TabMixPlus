@@ -360,7 +360,7 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
       newTab.linkedBrowser.stop();
       let flags = nsIWebNavigation.LOAD_FLAGS_NONE;
       if (aAllowThirdPartyFixup) {
-        flags = nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+        flags |= nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
       }
       var browser = gBrowser.getBrowserForTab(newTab);
       browser.userTypedValue = aURI;
@@ -371,7 +371,9 @@ function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoadInBackground, aPostDat
   // not opening in a new tab at all
   else {
     gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-    let flags = Ci.nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+    let flags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
+    if (aAllowThirdPartyFixup)
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
     if (typeof(mayInheritPrincipal) == "boolean" && !mayInheritPrincipal) {
       flags |= Ci.nsIWebNavigation.LOAD_FLAGS_DISALLOW_INHERIT_OWNER;
     }
@@ -429,4 +431,44 @@ function TMP_checkCurrent(url) {
       return "tab";
   }
   return "current";
+}
+
+function TMP_copyTabData(newTab, oldTab) {
+  let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "tabmix_bookmarkId"];
+
+  _xulAttributes.forEach(function _setData(attr) {
+    Tabmix.setItem(newTab, attr, oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null);
+  });
+
+  TMP_restoreTabState(newTab);
+}
+
+function TMP_restoreTabState(aTab) {
+  if (aTab.hasAttribute("_locked")) {
+    if (aTab.getAttribute("_locked") == "true")
+      aTab.setAttribute("locked", "true");
+    else
+      aTab.removeAttribute("locked");
+  }
+
+  // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
+  var reloadData = aTab.getAttribute("reload-data");
+  if (reloadData) {
+    Tabmix.autoReload.initTab(aTab);
+    aTab.autoReloadEnabled = true;
+    aTab.setAttribute("_reload", true);
+    reloadData = reloadData.split(" ");
+    aTab.autoReloadURI = reloadData[0];
+    aTab.autoReloadTime = reloadData[1];
+  }
+
+  if (aTab.hasAttribute("tabmix_bookmarkId")) {
+    // make sure the id exist before using it
+    try {
+      let _URI = PlacesUtils.bookmarks.getBookmarkURI(bmitemid);
+      let title = _URI && _URI.spec == aUrl && PlacesUtils.bookmarks.getItemTitle(bmitemid);
+    } catch (ex) {
+      aTab.removeAttribute("tabmix_bookmarkId")
+    }
+  }
 }

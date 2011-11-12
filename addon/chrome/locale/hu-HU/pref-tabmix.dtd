@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Beállítások importálása">
 <!ENTITY settings.default "Alapállapot">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Más programból a linket nyissa meg:">
 <!ENTITY linkTarget.tab "új lapon az aktuális ablakban">
 <!ENTITY linkTarget.window "új ablakban">

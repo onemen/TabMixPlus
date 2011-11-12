@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Uvezi postavke">
 <!ENTITY settings.default "Vrati zadano">
 <!ENTITY generalWindowOpen.label "Otvori poveznice koje se otvaraju u novom prozoru u:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Otvori poveznice iz drugih programa u:">
 <!ENTITY linkTarget.tab "Novoj kartici">
 <!ENTITY linkTarget.window "Novom prozoru">

@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importale da file txt">
 <!ENTITY settings.default "Ripristina predefinite">
 <!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Forza i link provenienti da altre applicazioni ad aprirsi:">
 <!ENTITY linkTarget.tab "in una nuova scheda">
 <!ENTITY linkTarget.window "in una nuova finestra">
@@ -153,10 +154,7 @@
 <!ENTITY showTabX.left "sulla parte sinistra">
 <!ENTITY showTabX.rtl "sulla parte destra">
 <!ENTITY milliseconds.label " ">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width 
-
--->
+<!-- LOCALIZATION NOTEn          change this only if you need to change the width nn-->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
 <!ENTITY showTabX.current "nella scheda attuale">
@@ -168,10 +166,7 @@
 <!ENTITY widthPixels.label "pixel">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Usa il nome del segnalibro come titolo per la scheda">
-<!-- LOCALIZATION NOTE          
-          change this only if you need to change the width 
-
--->
+<!-- LOCALIZATION NOTE          n          change this only if you need to change the width nn-->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
 <!ENTITY toolbar.button.label "Personalizza">

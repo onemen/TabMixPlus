@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importovat nastavení">
 <!ENTITY settings.default "Obnovit výchozí nastavení">
 <!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevřít do:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Odkazy jiných aplikací otevřít do:">
 <!ENTITY linkTarget.tab "nového panelu">
 <!ENTITY linkTarget.window "nového okna">

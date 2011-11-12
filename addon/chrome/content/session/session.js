@@ -2485,7 +2485,7 @@ try{
       updateTabviewData("tabview-visibility");
       updateTabviewData("tabview-groups");
       updateTabviewData("tabview-group");
-      if (Tabmix.isVersion(70))
+      if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
         updateTabviewData("tabview-last-session-group-name");
       if (aBackup)
         this.saveStateDelayed();
@@ -2632,10 +2632,8 @@ try{
                this.deleteClosedtabAt(1, this.gThisWin);
          }
       } else if (tabContainer.IndexOf(nodeToClose) > -1) {
-// xxx  try to use deleteSession ????
          this.deleteSubtree(panelPath);
          tabContainer.RemoveElement(nodeToClose, true);
-// xxx is it necessary to delete this ???
          if (!tabContainer.GetCount()) { // if no tab in the container remove it from the tree
             var winContainer = this.initContainer(this.gSessionPath[0]);
             var rdfNode = this.RDFService.GetResource(this.gThisWin);
@@ -3122,6 +3120,9 @@ try{
             let newTab = TMP_addTab();
             if (needToMove)
                gBrowser.TMmoveTabTo(newTab, cTab._tPos + 1);
+            // just in case the tab is not in its place, move it to the end
+            else if (newTab._tPos < gBrowser.tabs.length - 1)
+               gBrowser.TMmoveTabTo(newTab, gBrowser.tabs.length - 1);
          }
 
          if (tabsCount == blankTabsCount) newPos = 0;
@@ -3797,7 +3798,7 @@ try{
     this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
     this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
 
-    if (Tabmix.isVersion(70)) {
+    if (Tabmix.isVersion(70) && !Tabmix.isVersion(100)) {
       let type = "tabview-last-session-group-name";
       this._lastSessionGroupName = this.getLiteralValue(aWindow, type, "");
     }
@@ -3889,7 +3890,7 @@ try{
   },
 
   _updateLastSessionGroupName: function SM__updateLastSessionGroupName() {
-    if (!Tabmix.isVersion(70))
+    if (!Tabmix.isVersion(70) || Tabmix.isVersion(100))
       return;
 
     // keep current name

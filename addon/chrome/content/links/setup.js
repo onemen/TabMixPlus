@@ -94,14 +94,17 @@ function TMP_TBP_Startup() {
     TabmixSessionManager._inPrivateBrowsing = pbs.privateBrowsingEnabled;
     bowserStartup = bowserStartup._replace(
       'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);',
-      'var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser; \
-       var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec; \
-       gBrowser.tabContainer.adjustTabstrip(true, url); \
-       if (!Tabmix.singleWindowMode) { \
-         window.tabmix_afterTabduplicated = true; \
-         TabmixSessionManager.init(); \
-         $& \
-       }'
+      <![CDATA[
+       var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;
+       var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;
+       gBrowser.tabContainer.adjustTabstrip(true, url);
+       if (!Tabmix.singleWindowMode) {
+         window.tabmix_afterTabduplicated = true;
+         TabmixSessionManager.init();
+         TMP_copyTabData(gBrowser.selectedTab, uriToLoad);
+         $&
+       }
+      ]]>
     );
 
     var windowOpeneByTabmix = "tabmixdata" in window;

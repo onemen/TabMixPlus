@@ -226,7 +226,7 @@
 
     <method name="clearTimeouts">
       <body><![CDATA[
-        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID"];
+        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "TMP_onCloseTimeout", "TMP_onOpenTimeout"];
         timeouts.forEach(function(aTimeout) {
           if (aTimeout in this && this[aTimeout]) {
             clearTimeout(this[aTimeout]);

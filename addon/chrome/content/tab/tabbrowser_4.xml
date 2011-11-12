@@ -262,12 +262,12 @@
         <parameter name="dontUpdateTabBar"/>
         <body><![CDATA[
           if (!aTab.hasAttribute("tabmix_fadein")) {
-            TMP_eventListener.onTabOpen_updateTabBar(aTab);
+            TMP_eventListener.onTabOpen_delayUpdateTabBar(aTab);
             return;
           }
           aTab.removeAttribute("tabmix_fadein");
           if (!dontUpdateTabBar)
-            TMP_eventListener.onTabOpen_updateTabBar(aTab);
+            TMP_eventListener.onTabOpen_delayUpdateTabBar(aTab);
           if (aTab == this.selectedItem)
             this.ensureTabIsVisible(aTab._tPos);
         ]]></body>
@@ -282,9 +282,14 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if ((TabsInTitlebar.enabled && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")) ||
-            (TabsOnTop.enabled && this.parentNode._dragBindingAlive))
-          return;
+        if (event.target.localName == "tabs") {
+          let allowChangeSize = TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize");
+          let menuBar = document.getElementById("toolbar-menubar");
+          let menuBarIsHiding = menuBar && menuBar.getAttribute("autohide") == "true";
+          if ((TabsInTitlebar.enabled && allowChangeSize) ||
+              (menuBarIsHiding && TabsOnTop.enabled && this.parentNode._dragBindingAlive))
+            return;
+        }
         TabmixTabClickOptions.onTabBarDblClick(event);
         event.stopPropagation();
         event.preventDefault();

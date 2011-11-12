@@ -109,7 +109,9 @@ var TMP_Places = {
 
       var openLinkFunction, _loadURI, services = Tabmix.isVersion(40) ? "Services." :"";
       if (Tabmix.isVersion(40)) {
-        _loadURI = "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
+        _loadURI = Tabmix.isVersion(100) ?
+              "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
+              "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
         let inBackground = Tabmix.isVersion(100) ? 
             'if ("backgroundPref" in tabmixArg) params.inBackground = getBoolPref(tabmixArg.backgroundPref);' :

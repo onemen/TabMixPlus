@@ -338,10 +338,6 @@ var TabmixTabbar = {
           // in firefox 4.0+ we can get here if we switch to diffrent tabs position while in multibar
           let rowHeight = height/tabBar.lastTabRowNumber;
           newHeight = rowHeight * aRows;
-          if (fillRowsHeights) {
-            for (let row = 2; row < aRows; row++)
-              this._heights[tabsPosition][row] = rowHeight * row;
-          }
         }
         else
           newHeight = height;
@@ -350,6 +346,11 @@ var TabmixTabbar = {
         newHeight = this.getRowHeight(tabsPosition) * aRows;
 
       this._heights[tabsPosition][aRows] = newHeight;
+      if (fillRowsHeights || (aRows > 2 && typeof(this._heights[tabsPosition][aRows-1]) == "undefined")) {
+        rowHeight = newHeight / aRows;
+        for (let row = 2; row < aRows; row++)
+          this._heights[tabsPosition][row] = rowHeight * row;
+      }
     }
 
     if (tabstrip.style.maxHeight != tabstrip.style.height || tabstrip.style.maxHeight != newHeight + "px") {

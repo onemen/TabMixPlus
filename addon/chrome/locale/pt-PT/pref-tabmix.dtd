@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importar definições">
 <!ENTITY settings.default "restaurar pré-definições">
 <!ENTITY generalWindowOpen.label "Abrir ligações que abren numa nova janela em:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Abrir ligações de outras aplicações em:">
 <!ENTITY linkTarget.tab "Novo separador">
 <!ENTITY linkTarget.window "Nova janela">

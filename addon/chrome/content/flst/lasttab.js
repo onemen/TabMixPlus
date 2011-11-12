@@ -2,7 +2,7 @@
 // The Original Code is the "LastTab" extension for Mozilla Firefox.//
 // version 1.5 - October 26, 2005                                  //
 // The Initial Developer of the Original Code is Timothy Humphrey. //
-*////////////////////////////////////////////////////////////////////
+/*////////////////////////////////////////////////////////////////////
 var TMP_LastTab = {
    CtrlKey : false,
    favorLeftToRightOrdering : true,
@@ -202,6 +202,16 @@ try{
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
    },
 
+   set tabs (val) {
+     if (val != null)
+       return;
+
+     if (this.handleCtrlTab && this.TabHistory.length != gBrowser.tabs.lenght)
+       this.MaintainTabHistory();
+
+     this._tabs = null;
+   },
+
    get tabs () {
      if (this._tabs)
        return this._tabs;
@@ -214,10 +224,10 @@ try{
      }
      else
        list = gBrowser.tabs;
-     list = Array.filter(list, function(tab) {
-             return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
-           });
-     return this._tabs = list;
+    this._tabs = Array.filter(list, function(tab) {
+      return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
+    });
+    return this._tabs;
    },
 
    OnKeyPress : function _LastTab_OnKeyPress(event) {

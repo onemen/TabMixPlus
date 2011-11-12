@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Instellingen importeren">
 <!ENTITY settings.default "Standaardwaarden herstellen">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Koppelingen vanuit andere programma’s openen in:">
 <!ENTITY linkTarget.tab "Nieuw tabblad">
 <!ENTITY linkTarget.window "Nieuw venster">

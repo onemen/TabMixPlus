@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importer indstillinger">
 <!ENTITY settings.default "Genetabler standarder">
 <!ENTITY generalWindowOpen.label "Åbn links der åbner i et nyt vindue i:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Åbn links fra andre programmer i:">
 <!ENTITY linkTarget.tab "Nyt faneblad">
 <!ENTITY linkTarget.window "Nyt vindue">

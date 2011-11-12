@@ -10,6 +10,7 @@
 <!ENTITY settings.import "設定をインポート">
 <!ENTITY settings.default "規定値に戻す">
 <!ENTITY generalWindowOpen.label "新しいウィンドウに開くリンクを:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "外部から読み込まれたリンクを:">
 <!ENTITY linkTarget.tab "新しいタブに開く">
 <!ENTITY linkTarget.window "新しいウィンドウに開く">
@@ -153,16 +154,7 @@
 <!ENTITY showTabX.left "左端に表示">
 <!ENTITY showTabX.rtl "右端に表示">
 <!ENTITY milliseconds.label "ミリ秒">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width 
-
-
-
-
-
-
-
--->
+<!-- LOCALIZATION NOTEn          change this only if you need to change the width nnnnnnnn-->
 <!ENTITY showTabX.popup.width "24em">
 <!ENTITY showTabX.always "すべてのタブに表示">
 <!ENTITY showTabX.current "現在のタブに表示">
@@ -174,16 +166,7 @@
 <!ENTITY widthPixels.label "ピクセル">
 <!ENTITY flexTabs.label "タブ幅をページタイトルの長さに合わせて調節する">
 <!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
-<!-- LOCALIZATION NOTE:
-           change this only if you need to change the width 
-
-
-
-
-
-
-
--->
+<!-- LOCALIZATION NOTE:n           change this only if you need to change the width nnnnnnnn-->
 <!ENTITY toolbar.description.width "24em">
 <!ENTITY toolbar.description "Tab Mix Plusのボタンをツールバーに表示できます">
 <!ENTITY toolbar.button.label "カスタマイズ">

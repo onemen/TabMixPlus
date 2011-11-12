@@ -937,12 +937,13 @@ var TabmixAllTabs = {
         tabs = gBrowser.tabs;
         var index = 0;
         for (i = 0; i < tabs.length; i++) {
-          if (tabs[i]._TMP_removeing)
+          let tab = tabs[i];
+          if (tab._TMP_removeing)
             continue;
-          if (side && side == (rtl ? "right" : "left") && !tabs[i].collapsed)
+          if (side && side == (rtl ? "right" : "left") && !tab.collapsed)
             continue;
           else if (side && side == (rtl ? "left" : "right") &&
-                (tabs[i].collapsed || tabs[i].hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(tabs[i]._tPos)))
+                (tab.collapsed || tab.hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(tab._tPos)))
             continue;
           this.createMenuItems(popup, tabs[i], index++, aType);
         }
@@ -964,7 +965,7 @@ var TabmixAllTabs = {
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     let count = "";
     if (Tabmix.ltr) {
-      count = (value<9 ? "  " : "") + (value + 1) + ": ";
+      count = (tab._tPos < 9 ? "  " : "") + (tab._tPos + 1) + ": ";
       mi.setAttribute("count", count);
     }
     this._setMenuitemAttributes(mi, tab);

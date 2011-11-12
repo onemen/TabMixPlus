@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importa els paràmetres">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
 <!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Obre els enllaços des d'altres aplicacions en:">
 <!ENTITY linkTarget.tab "Pestanya nova">
 <!ENTITY linkTarget.window "Finestra nova">

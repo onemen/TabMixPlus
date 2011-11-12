@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importatze Aukerak">
 <!ENTITY settings.default "Berrezarri lehenetsiak">
 <!ENTITY generalWindowOpen.label "Ireki &quot;leiho berri&quot; linkak horrela:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Ireki beste aplikazioetatiko linkak horrela:">
 <!ENTITY linkTarget.tab "Fitxa Berria">
 <!ENTITY linkTarget.window "Leiho Berria">

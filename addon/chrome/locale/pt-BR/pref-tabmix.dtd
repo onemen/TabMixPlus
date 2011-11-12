@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importar Configurações">
 <!ENTITY settings.default "Restaurar Padrões">
 <!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Abrir links de outros aplicativos em:">
 <!ENTITY linkTarget.tab "Nova aba na janela atual">
 <!ENTITY linkTarget.window "Nova janela">

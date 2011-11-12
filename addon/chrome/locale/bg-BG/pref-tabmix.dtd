@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Импортиране на настройките">
 <!ENTITY settings.default "Възстановяване на настройките по подразбиране">
 <!ENTITY generalWindowOpen.label "Връзките, които се отварят в нов прозорец, да се отварят в:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Отваряне на връзките от външни приложения в:">
 <!ENTITY linkTarget.tab "Нов подпрозорец">
 <!ENTITY linkTarget.window "Нов прозорец">

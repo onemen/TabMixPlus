@@ -17,7 +17,7 @@ let TMP_TabGroupsManager = {
       this.init36(aWindow, tabBar);
 
     this.newCode("TMP_eventListener.onTabOpen", aWindow.TMP_eventListener.onTabOpen)._replace(
-      'this.onTabOpen_updateTabBar(tab);',
+      'this.onTabOpen_delayUpdateTabBar(tab);',
       'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) { }'
     ).toCode();
 

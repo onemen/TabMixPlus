@@ -273,7 +273,7 @@ var TMP_eventListener = {
         break;
       case "tabviewhidden":
         TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
-        TMP_LastTab._tabs = null;
+        TMP_LastTab.tabs = null;
         if (TabmixTabbar.hideMode != 2)
           setTimeout(function () {gBrowser.tabContainer.adjustTabstrip()}, 0);
         break;
@@ -282,7 +282,7 @@ var TMP_eventListener = {
           // pass aEvent to this function for use in TGM
           gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function (aEvent) {
             gBrowser.tabContainer._onDelayTabShow = null;
-            TMP_eventListener.onTabOpen_updateTabBar(aEvent.target);
+            TMP_eventListener.onTabOpen_delayUpdateTabBar(aEvent.target);
           }, 0, aEvent);
         }
         break;
@@ -693,33 +693,7 @@ var TMP_eventListener = {
     if (this._tabStillLoading > 0)
       this._tabStillLoading--;
 
-    if (tab.hasAttribute("_locked")) {
-      if (tab.getAttribute("_locked") == "true")
-        tab.setAttribute("locked", "true");
-      else
-        tab.removeAttribute("locked");
-    }
-
-    // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
-    var reloadData = tab.getAttribute("reload-data");
-    if (reloadData) {
-      Tabmix.autoReload.initTab(tab);
-      tab.autoReloadEnabled = true;
-      tab.setAttribute("_reload", true);
-      reloadData = reloadData.split(" ");
-      tab.autoReloadURI = reloadData[0];
-      tab.autoReloadTime = reloadData[1];
-    }
-
-    if (tab.hasAttribute("tabmix_bookmarkId")) {
-      // make sure the id exist before using it
-      try {
-        let _URI = PlacesUtils.bookmarks.getBookmarkURI(bmitemid);
-        let title = _URI && _URI.spec == aUrl && PlacesUtils.bookmarks.getItemTitle(bmitemid);
-      } catch (ex) {
-        tab.removeAttribute("tabmix_bookmarkId")
-      }
-    }
+    TMP_restoreTabState(tab);
   },
 
   onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
@@ -778,13 +752,34 @@ var TMP_eventListener = {
   onTabOpen: function TMP_EL_onTabOpen(aEvent) {
     var tab = aEvent.target;
     this.setTabAttribute(tab);
-    TMP_LastTab._tabs = null;
+    TMP_LastTab.tabs = null;
     TMP_LastTab.attachTab(tab, 1);
     tablib.setLoadURIWithFlags(tab.linkedBrowser);
     if (TabmixTabbar.lockallTabs)
       tab.setAttribute("locked", "true");
 
-    this.onTabOpen_updateTabBar(tab);
+    this.onTabOpen_delayUpdateTabBar(tab);
+  },
+
+  // this function call onTabOpen_updateTabBar after some delay
+  // when more the one tabs opened at once
+  lastTimeTabOpened: 0,
+  onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+    let tabBar = gBrowser.tabContainer;
+    let self = this, newTime = new Date().getTime();
+    if (tabBar.overflow || newTime - this.lastTimeTabOpened > 200) {
+      this.onTabOpen_updateTabBar(aTab);
+      this.lastTimeTabOpened = newTime;
+    }
+    else if (!tabBar.TMP_onOpenTimeout) {
+      tabBar.TMP_onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
+        if (tabBar.TMP_onOpenTimeout) {
+          clearTimeout(tabBar.TMP_onOpenTimeout);
+          tabBar.TMP_onOpenTimeout = null;
+        }
+        self.onTabOpen_updateTabBar(tab);
+      }, 200, aTab);
+    }
   },
 
   // TGM extension use it
@@ -801,7 +796,7 @@ var TMP_eventListener = {
   onTabClose: function TMP_EL_onTabClose(aEvent) {
     // aTab is the tab we are closing now
     var tab = aEvent.target;
-    TMP_LastTab._tabs = null;
+    TMP_LastTab.tabs = null;
     TMP_LastTab.detachTab(tab);
     var tabBar = gBrowser.tabContainer;
 
@@ -864,15 +859,15 @@ var TMP_eventListener = {
         // don't use the setter here
         tabBar._collapsedTabs--;
       }
-      if (!tabBar._onCloseTimeout) {
-        tabBar._onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
-          if (tabBar._onCloseTimeout) {
-            clearTimeout(tabBar._onCloseTimeout);
-            tabBar._onCloseTimeout = null;
+      if (!tabBar.TMP_onCloseTimeout) {
+        tabBar.TMP_onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
+          if (tabBar.TMP_onCloseTimeout) {
+            clearTimeout(tabBar.TMP_onCloseTimeout);
+            tabBar.TMP_onCloseTimeout = null;
           }
-          let lastTabVisible;
+          let lastTabVisible, lastTab;
           if (tabBar.getAttribute("multibar") == "scrollbar" && tabBar.realCollapsedTabs > 0) {
-            var lastTab = tabBar.lastChild;
+            lastTab = tabBar.lastChild;
             if (tabBar.lastTabRowNumber == tabBar.maxRow && !TabmixTabbar.inSameRow(lastTab, lastTab.previousSibling)) {
               lastTabVisible = tabBar.isTabVisible(lastTab._tPos);
               tabBar.rowScroll(-1);

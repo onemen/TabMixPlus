@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importă">
 <!ENTITY settings.default "Inițializează">
 <!ENTITY generalWindowOpen.label "Deschide legăturile cu deschidere într-o fereastră nouă în:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Deschide legăturile din alte aplicații în:">
 <!ENTITY linkTarget.tab "filă nouă">
 <!ENTITY linkTarget.window "fereastră nouă">

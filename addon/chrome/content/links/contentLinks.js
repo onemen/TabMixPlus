@@ -185,7 +185,7 @@ function TMP_contentLinkClick(aEvent) {
   if (!linkNode)
     return;
 
-  let href = target.ownerDocument.location.href;
+  var href = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
   try {
     // for the moment just do it for Google and Yahoo....
     var blocked = /google|yahoo.com\/search/.test(href);
@@ -330,7 +330,8 @@ function TMP_contentAreaClick(event, fieldNormalClicks) {
    */
   if (TMP_suppressTabsOnFileDownload(event, target, linkNode, suppressTabs)) {
       // don't do anything if we are on gmail and let gmail take care of the download
-      var isGmail = /^(http|https):\/\/mail.google.com/.test(target.ownerDocument.location.href);
+      let url = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
+      var isGmail = /^(http|https):\/\/mail.google.com/.test(url);
       var isHttps = /^https/.test(target);
       if (isGmail || isHttps)
          return true;

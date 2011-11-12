@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Ayarları dosyadan al">
 <!ENTITY settings.default "Varsayılanlara dön">
 <!ENTITY generalWindowOpen.label "Yeni pencerede açılacak bağlatıları burada aç:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Diğer uygulamalardan bağlantıları burada aç:">
 <!ENTITY linkTarget.tab "Yeni sekmede">
 <!ENTITY linkTarget.window "Yeni pencerede">
