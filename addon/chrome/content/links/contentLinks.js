@@ -1357,7 +1357,7 @@ Tabmix.contentAreaClick = {
         return false;
     }
     if (targetDomain && targetDomain != currentDomain ||
-        this.checkAttr(target.getAttribute("onmousedown"), "return rwt"))
+        this.checkAttr(linkNode.getAttribute("onmousedown"), "return rwt"))
       return true;
 
     return false;
