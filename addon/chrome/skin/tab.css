@@ -64,7 +64,7 @@
 /* :::: For current unread and other tab styles :::: */
 .tabbrowser-tabs[boldUnread=true] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text,
 .tabbrowser-tabs[boldCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
-font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .tabbrowser-tabs[boldCurrent=false] .tabbrowser-tab[selected="true"] .tab-text,

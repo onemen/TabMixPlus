@@ -32,17 +32,17 @@ const TMP_DLG_RENAME = 1;
 Components.utils.import("resource://tabmixplus/Services.jsm");
 Components.utils.import("resource://tabmixplus/log.jsm");
 
-function CompatibilityCheck (aWindow, aShowList, aCallbackDialog) {
-    this.window = aWindow;
-    this.showList = aShowList;
-    this.callbackDialog = aCallbackDialog;
-    this.list = [];
-    if (TabmixSvc.version.is40) {
-      Components.utils.import("resource://gre/modules/AddonManager.jsm");
-      this.getIncompatibleList_New();
-    }
-    else
-      this.getIncompatibleList();
+function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
+  this.window = aWindow;
+  this.showList = aShowList;
+  this.callbackDialog = aCallbackDialog;
+  this.list = [];
+  if (TabmixSvc.version.is40) {
+    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+    this.getIncompatibleList_New();
+  }
+  else
+    this.getIncompatibleList();
 }
 
 CompatibilityCheck.prototype = {

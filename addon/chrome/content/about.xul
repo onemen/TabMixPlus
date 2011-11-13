@@ -44,7 +44,7 @@
       acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
       var descriptionString =  document.getElementById("descriptionString");
       var extensionDescription = document.getElementById("extensionDescription");
-      extensionDescription.value = aFirefox4 ? extensions.description : 
+      extensionDescription.value = aFirefox4 ? extensions.description :
            descriptionString.getString('extensions.{dc572301-7619-498c-a57d-39143191b318}.description');
     }
   ]]>
@@ -59,14 +59,14 @@
     <hbox class="basic-info">
       <vbox pack="center">
         <image id="extensionIcon" src="chrome://tabmixplus/skin/tmp.png"/>
-      </vbox>    
+      </vbox>
       <vbox flex="1">
         <label id="extensionName" value="Tab Mix Plus" crop="end"/>
         <label id="extensionVersion" crop="end"/>
       </vbox>
     </hbox>
     <description id="extensionDescription" class="boxIndent"/>
-    
+
     <separator id="groove" class="groove"/>
 
     <vbox id="extensionDetailsBox" flex="1">

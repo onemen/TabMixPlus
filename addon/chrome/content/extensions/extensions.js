@@ -331,7 +331,7 @@ var TMP_extensionsCompatibility = {
 
 TMP_extensionsCompatibility.RSSTICKER = {
    init : function ()  {
-     Tabmix.newCode("RSSTICKER.writeFeed ", RSSTICKER.writeFeed)._replace(
+     Tabmix.newCode("RSSTICKER.writeFeed", RSSTICKER.writeFeed)._replace(
        'tbb.setAttribute("onclick"',
        'tbb.setAttribute("onclick", "this.onClick(event);");\
         tbb.setAttribute("_onclick"'

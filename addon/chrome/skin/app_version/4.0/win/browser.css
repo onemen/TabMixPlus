@@ -52,8 +52,8 @@
 }
 
 /*  scrollbutton arrow - fix borders  */
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up,
-.tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-down {
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
   height: 26px;
 }
 

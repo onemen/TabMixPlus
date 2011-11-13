@@ -163,10 +163,10 @@
         <parameter name="aPrefString"/>
         <body><![CDATA[
           try {
-           if ("decode" in this.JSON)
-             this._prefValues = this.JSON.decode(aPrefString);
-           else
-             this._prefValues = JSON.parse(aPrefString);
+            if ("decode" in this.JSON)
+              this._prefValues = this.JSON.decode(aPrefString);
+            else
+              this._prefValues = JSON.parse(aPrefString);
           }
           catch (er) {
             this._resetDefault(true);
@@ -219,10 +219,10 @@
                 break;
             }
           }
-         if ("encode" in this.JSON)
-           this.prefsSvc.setCharPref(this.prefName, this.JSON.encode(newPrefSValue));
-         else
-           this.prefsSvc.setCharPref(this.prefName, JSON.stringify(newPrefSValue));
+          if ("encode" in this.JSON)
+            this.prefsSvc.setCharPref(this.prefName, this.JSON.encode(newPrefSValue));
+          else
+            this.prefsSvc.setCharPref(this.prefName, JSON.stringify(newPrefSValue));
         ]]></body>
       </method>
 
@@ -317,8 +317,8 @@
             this._RGB.push(document.getAnonymousElementByAttribute(this, "anonid", id));
           }, this);
 
-          this._colorpicker = this.previousSibling;
-          this._parent = document.getBindingParent(this);
+           this._colorpicker = this.previousSibling;
+           this._parent = document.getBindingParent(this);
         ]]>
       </constructor>
       <property name="color">

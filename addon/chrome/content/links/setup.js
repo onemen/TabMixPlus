@@ -6,7 +6,6 @@
  * modified again by Bradley Chapman
  *
  */
-var TMP_original_contentAreaClick;
 
 /**
  * @brief Install the link-handling functions of Tab Mix Plus.
@@ -35,7 +34,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
     ).toCode();
   }
 
-  // we need this only for use our extensions.tabmix.loadUrlInBackground pref
   // for normal click this function calls urlbar.handleCommand
   // for middle click or click with modifiers whereToOpenLink can't be "current"
   // so we don't need to check for locked tabs only for blanks tabs
@@ -74,10 +72,10 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
 /**
  * @brief Force-call the window observer at least one time.
  *
- * @returns		Nothing.
+ * @returns  Nothing.
  *
  * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
- *        window[onload="TMP_TBP_Startup()"]
+ *        window[onload="TMP_TBP_Startup()"] 
  */
 function TMP_TBP_Startup() {
   try {
@@ -196,7 +194,7 @@ function TMP_TBP_Startup() {
       window.setTimeout(checkCompatibility, Tabmix.isVersion(40) ? 0 : 3000, window);
     }
 
-   // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
+    // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
     // if nglayout.debug.disable_xul_cache == true sometimes sessionHistory act strange

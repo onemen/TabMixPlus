@@ -1051,7 +1051,7 @@ var gIncompatiblePane = {
 
     if (aFocus)
       window.focus();
- }
+  }
 }
 
 function tabSelectionChanged(event) {

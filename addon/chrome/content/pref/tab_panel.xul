@@ -13,11 +13,11 @@
   <prefpane id="paneTabs">
 
     <preferences id="tabsPreferences">
-      <preference id="extensions.tabmix.hideTabbar"       
+      <preference id="extensions.tabmix.hideTabbar"
                   name="extensions.tabmix.hideTabbar"                type="int"/>
-      <preference id="extensions.tabmix.tabs.warnOnClose" 
+      <preference id="extensions.tabmix.tabs.warnOnClose"
                   name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
-      <preference id="extensions.tabmix.protectedtabs.warnOnClose" 
+      <preference id="extensions.tabmix.protectedtabs.warnOnClose"
                   name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
     </preferences>
 

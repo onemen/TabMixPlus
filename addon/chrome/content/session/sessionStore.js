@@ -149,7 +149,7 @@ var TMP_SessionStore = {
       else if (this.isSessionStoreEnabled()) {
          // ask the user to choose between TMP session manager and sessionstore
          // we use non modal promptService on start up, so we disabled Tabmix session managerto let the startup
-         // process continue and set tothe appropriate after the dialog prompt dismissed.
+         // process continue and set the appropriate preference after the dialog prompt dismissed.
          if (start) {
             TabmixSvc.prefs.setBoolPref(TMP_SS_MANAGER, false);
             TabmixSvc.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
@@ -577,7 +577,6 @@ var TMP_ClosedTabs = {
          content.focus();
          gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
       }
-
       return newTab;
    },
 
@@ -598,7 +597,7 @@ var TabmixConvertSession = {
 
    startup: function cs_startup() {
       if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
-         return;
+        return;
 
       var sessions = TabmixSessionManager.getSessionList();
       if (!sessions)

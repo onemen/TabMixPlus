@@ -567,12 +567,12 @@ var TMP_tabDNDObserver = {
    var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
    var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
    if ((draggeType == this.DRAG_LINK && lockedTab) || (draggeType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
-      left_right = (mX < tabBo.screenX + tabBo.width / 4 ) ? _left : _right;
+      left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
       if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4 )
          left_right = -1;
    }
    else {
-      left_right = (mX < tabBo.screenX + tabBo.width / 2 ) ? _left : _right;
+      left_right = (mX < tabBo.screenX + tabBo.width / 2) ? _left : _right;
       if (!isCtrlKey && draggeType == this.DRAG_TAB_IN_SAME_WINDOW) {
         if (newIndex == oldIndex - 1)
           left_right = ltr ? _left : _right;
@@ -999,7 +999,7 @@ var TMP_TabView = {
       'gBrowser.tabs', gBrowserVisibleTabs, {flags: "g"}
     )._replace(
       'this.createMenuItems(popup, tab, i, aType);',
-      'if  (tab.hidden) continue; \
+      'if (tab.hidden) continue; \
       $&'
     ).toCode();
 
@@ -1023,7 +1023,7 @@ var TMP_TabView = {
       'tabBar.lastChild', tabBarVisibleTabsLastChild
     )._replace(
       'aTab._tPos < tabBar.collapsedTabs',
-      'aTab._tPosInGroup <  tabBar.collapsedTabs', {flags: "g"}
+      'aTab._tPosInGroup < tabBar.collapsedTabs', {flags: "g"}
     ).toCode();
 
     Tabmix.newCode("TabmixTabbar._updateScrollLeft", TabmixTabbar._updateScrollLeft)._replace(
@@ -1195,7 +1195,7 @@ var TMP_TabView = {
     if (Tabmix.isVersion(80)) {
       TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
       Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
-       '"use strict";',
+        '"use strict";',
         <![CDATA[$&
         // Firefox 8.0 use strict mode - we need to map global variable
         let win = TabView._window;

@@ -11,7 +11,7 @@
   <script type="application/javascript">
     var pinTab = document.getElementById("pinTab");
     pinTab.setAttribute("label", "&pinAppTab.label;");
-    pinTab.removeAttribute("hidden");    
+    pinTab.removeAttribute("hidden");
     document.getElementById("tabclickpinTab").setAttribute("label", "&pinAppTab.label;");
 
     var moveToGroup = document.getElementById("moveToGroup");
@@ -19,7 +19,7 @@
     moveToGroup.removeAttribute("hidden");
 
     document.getElementById("disableTabsAnimate").removeAttribute("hidden");
-    document.getElementById("lockAppTabs").removeAttribute("hidden");    
+    document.getElementById("lockAppTabs").removeAttribute("hidden");
   </script>
 
 </overlay>

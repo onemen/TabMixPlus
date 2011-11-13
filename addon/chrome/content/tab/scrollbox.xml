@@ -262,7 +262,7 @@
             // when widthFitTitle enter vertical mode
             // on flex tab we need to check if we are realy on horizontal overflow
             let self = this;
-            this._enterVerticalMode = setTimeout (function TMP_overflow_enterVerticalMode() {
+            this._enterVerticalMode = setTimeout(function TMP_overflow_enterVerticalMode() {
               self._enterVerticalMode = null;
               if (self.orient == "vertical")
                 return;

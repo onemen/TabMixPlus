@@ -1,5 +1,5 @@
 #TM_ButtonBox {
-	list-style-image: url(tmpoptions.png) !important;
+  list-style-image: url(tmpoptions.png) !important;
 }
 #buttontabMixGeneralPrefs {
    -moz-image-region: rect(0px, 24px,  24px, 0px);

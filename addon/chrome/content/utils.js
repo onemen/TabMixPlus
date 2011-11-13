@@ -1,14 +1,17 @@
+///XXX try to move as many of this into module
+/// use Components.utils.import to import it for any xul that point to this file
+
 /**
  * We replace some global Services with smart getters
  * gIOService     >  TabmixSvc.io
  * gTabmixPrefs   >  TabmixSvc.prefs
  * tabxPrefs      >  TabmixSvc.TMPprefs
- * SessionPref    > TabmixSvc.SMprefs
- * gWindowManager > TabmixSvc.wm
+ * SessionPref    >  TabmixSvc.SMprefs
+ * gWindowManager >  TabmixSvc.wm
  *
  **/
 
- /**
+/**
 rename functions and global variable:
 
 utils.js
@@ -26,7 +29,7 @@ function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
   this.needUpdate = aForceUpdate;
 }
 
-Tabmix_ChangeCode.prototype =  {
+Tabmix_ChangeCode.prototype = {
   needUpdate: false,
   _replace: function TMP_utils__replace(substr ,newString, aParams) {
     var silent;
@@ -51,7 +54,7 @@ Tabmix_ChangeCode.prototype =  {
       this.value = this.value.replace(substr, newString);
       this.needUpdate = true;
     }
-    else if (!silent){
+    else if (!silent) {
       Tabmix.clog(Tabmix.callerName() + " can't find string: " + substr
           + "\nin " + this.name + "."
           + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
@@ -72,12 +75,15 @@ Tabmix_ChangeCode.prototype =  {
   },
 
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
-     try {
-       if (this.needUpdate)
-         Tabmix.toCode(aObj, aName || this.name, this.value);
-       if (aShow)
-         this.show(aObj, aName);
-       delete this;
+    try {
+      if (this.needUpdate)
+        Tabmix.toCode(aObj, aName || this.name, this.value);
+if (!this.needUpdate) {
+  Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
+}
+      if (aShow)
+        this.show(aObj, aName);
+      delete this;
     } catch (ex) {
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
@@ -87,14 +93,19 @@ Tabmix_ChangeCode.prototype =  {
     if (this.name != null)
       Tabmix.show(this.name);
     else if (aObj && aName in aObj)
-      Tabmix.clog(aObj[aName].toString());
+      Tabmix.clog(aObj[aName].toString());    
   }
 
 }
 
 var Tabmix = {
   newCode: function(aObjectName, aObject, aForceUpdate) {
+try {
     return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
+} catch (ex) {
+this.log("aObjectName " + aObjectName);
+this.obj(aObject, "aObject");
+}
   },
 
   isVersion: function(aVersionNo) {
@@ -106,6 +117,7 @@ var Tabmix = {
   },
 
   getObject: function (aMethod, rootID) {
+try {
     var methodsList = aMethod.split(".");
     if (methodsList[0] == "window")
       methodsList.shift();
@@ -118,6 +130,9 @@ var Tabmix = {
       obj = obj[aFn];
     });
     return obj;
+} catch (ex) {
+this.log(aMethod)
+}
   },
 
   show: function(aMethod, rootID, aDelay) {
@@ -140,7 +155,7 @@ var Tabmix = {
   },
 
   // for debug
-    debug: function TMP_utils_debug(aMessage, aShowCaller) {
+  debug: function TMP_utils_debug(aMessage, aShowCaller) {
     if (this._debug)
       this.log(aMessage, aShowCaller);
   },
@@ -151,7 +166,7 @@ var Tabmix = {
 
   log: function TMP_utils_log(aMessage, aShowCaller, offset) {
     offset = !offset ? 0 : 1;
-    let names = this._getNames(aShowCaller ? 2 + offset: 1 + offset);
+    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
     TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
@@ -182,6 +197,7 @@ var Tabmix = {
   _getCallerNameByIndex: function TMP_utils_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
     let fn = stack[TabmixSvc.stackOffset + aPlace];
+
     if (fn)
       return this._name(fn);
     return null;
@@ -197,6 +213,20 @@ var Tabmix = {
     return name;
   },
 
+/*
+  _nameFromComponentsStack: function (Cs) {
+    return Cs.name || 
+           Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
+  },
+
+  callerName: function () {
+///    return this._getCallerNameByIndex(2);
+    try {
+      var name = this._nameFromComponentsStack(Components.stack.caller.caller);
+    } catch (ex) { }
+    return name || "";
+  },
+*/
   callerName: function () {
     return this._getCallerNameByIndex(2);
   },
@@ -208,12 +238,11 @@ var Tabmix = {
       this.assert("no arguments in Tabmix.isCallerInList");
       return false;
     }
-
+    
     try {
       let callerName = Components.stack.caller.caller.name;
       if (!callerName)
         return false;
-///this.log("callerName " + callerName +"\narguments " + (typeof arguments[0] == "object" ? arguments[0] : Array.prototype.slice.call(arguments)))
       if (typeof arguments[0] == "object")
         return arguments[0].indexOf(callerName) > -1;
 
@@ -226,6 +255,16 @@ var Tabmix = {
     return false;
   },
 
+///XXX add new arg as options as object
+/*
+options = {
+  msg: msg
+  log: true / false; defaul true
+  function: true / false defaul false
+  deep: true / false defaul false
+  offset; for intenal use only true / false defaul false
+}
+*/
   obj: function(aObj, aMessage, aDisallowLog, level) {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
@@ -259,6 +298,9 @@ var Tabmix = {
   },
 
   assert: function TMP_utils_assert(aError, aMsg) {
+/*   
+XXX fix this when there is no stack go directly to trace
+*/
     let names = this._getNames(1, aError.stack);
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
@@ -266,7 +308,7 @@ var Tabmix = {
     let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
     if (stackText)
       TabmixSvc.console.logStringMessage(assertionText + stackText);
-    else
+    else 
       this.trace(assertionText, 2);
   },
 
@@ -405,6 +447,8 @@ var Tabmix = {
     // intParam[2] - set checkbox checked  true=1 , false=0, hide=2
     // intParam[3] - flag  - for menuList contents: flag to set menu selected item
     //                     - for textBox rename: 1 , save: 0
+///XXX temp fix
+    // intParam[4] - flag  - 1 - use Tabmix.Sessions.createMenuForDialog
 
     // we use non modal dialog when we call for prompt on startup
     // when we don't have a callBack function use modal dialog
@@ -426,6 +470,7 @@ var Tabmix = {
       }
     }
 
+    // we add dependent to features to make this dialog float over the window on start
     var dialog = ww.openWindow(aWindow,
            "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +(modal ? ",modal" : ",dependent") ,dpb);
     if (!modal)
@@ -461,6 +506,10 @@ var Tabmix = {
 
   // some extensions override native JSON so we use nsIJSON
   JSON: {
+/*
+use       getter for    Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
+    and not defineLazyServiceGetter that use getService
+*/
     nsIJSON: null,
     parse: function TMP_parse(str) {
       return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : JSON.parse(str);
@@ -469,7 +518,7 @@ var Tabmix = {
       return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : JSON.stringify(obj);
     }
   },
-
+  
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
@@ -483,5 +532,4 @@ var Tabmix = {
 Components.utils.import("resource://tabmixplus/XPCOMUtils.jsm");
 Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyServiceGetter(Tabmix.JSON, "nsIJSON", "@mozilla.org/dom/json;1", "nsIJSON");
-
 window.addEventListener("unload", Tabmix.destroy, false);

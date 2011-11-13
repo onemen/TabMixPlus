@@ -1,7 +1,7 @@
 /*////////////////////////////////////////////////////////////////////
 // The Original Code is the "LastTab" extension for Mozilla Firefox.//
-// version 1.5 - October 26, 2005                                  //
-// The Initial Developer of the Original Code is Timothy Humphrey. //
+// version 1.5 - October 26, 2005                                   //
+// The Initial Developer of the Original Code is Timothy Humphrey.  //
 /*////////////////////////////////////////////////////////////////////
 var TMP_LastTab = {
    CtrlKey : false,
@@ -138,7 +138,7 @@ var TMP_LastTab = {
 
      this.detachTab(aTab);
      var index;
-     if(this.favorLeftToRightOrdering) {
+     if (this.favorLeftToRightOrdering) {
        if (Tabmix.isVersion(36) && gBrowser._lastRelatedTab) {
          index = this.TabHistory.indexOf(gBrowser._lastRelatedTab);
          if (index < 0)
@@ -158,7 +158,7 @@ var TMP_LastTab = {
        this.TabHistory.splice(i, 1);
    },
 
-   MaintainTabHistory : function TMP_LastTab_MaintainTabHistory(lastIndex) {
+   MaintainTabHistory: function TMP_LastTab_MaintainTabHistory(lastIndex) {
       var newTabs = [], tab, i;
 
       // Gather tab synchronization info
@@ -225,11 +225,11 @@ try{
        list = this.TabHistory;
      }
      else
-       list = gBrowser.tabs;
-    this._tabs = Array.filter(list, function(tab) {
-      return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
-    });
-    return this._tabs;
+      list = gBrowser.tabs;
+     this._tabs = Array.filter(list, function(tab) {
+       return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
+     });
+     return this._tabs;
    },
 
    OnKeyPress : function _LastTab_OnKeyPress(event) {
@@ -351,7 +351,7 @@ try{
       }
    },
 
-   OnSelect : function() {
+   OnSelect: function() {
       // session manager can select new tab before TMP_LastTab is init
       if (!this._inited)
          return;
@@ -374,7 +374,7 @@ try{
       }
    },
 
-   PushSelectedTab : function TMP_LastTab_PushSelectedTab() {
+   PushSelectedTab: function TMP_LastTab_PushSelectedTab() {
       var selectedTab = gBrowser.tabContainer.selectedItem;
       this.detachTab(selectedTab);
       this.TabHistory.push(selectedTab);
@@ -407,6 +407,7 @@ try{
 
       this.handleCtrlTab = !tabPreviews && mostRecentlyUsed;
       this.showTabList = !tabPreviews && TabmixSvc.TMPprefs.getBoolPref("lasttab.showTabList");
+      ///XXX 2011-11-09 - we drop support for this.favorLeftToRightOrdering = false
       this.favorLeftToRightOrdering = true;
       this.respondToMouseInTabList = TabmixSvc.TMPprefs.getBoolPref("lasttab.respondToMouseInTabList");
    },

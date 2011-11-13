@@ -115,6 +115,7 @@
   margin-right: -1px;
 }
 
+/*  Tab scrollbox arrow buttons - multi-row  */
 .tabbrowser-tabs[classic=v3] .tabbrowser-arrowscrollbox[flowing=multibar] > .scrollbutton-up[chromedir="ltr"] {
   border-right-style: none;
   -moz-border-radius-topright: 0px;

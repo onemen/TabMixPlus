@@ -21,7 +21,7 @@ var TMP_Places = {
       }
    },
 
-   init : function TMP_PC_init() {
+   init: function TMP_PC_init() {
       this.initPlacesUIUtils();
       PlacesController.prototype.beforeTabMixPLusBuildContextMenu = PlacesController.prototype.buildContextMenu;
       PlacesController.prototype.buildContextMenu = function(aPopup) {
@@ -385,7 +385,7 @@ var TMP_Places = {
    getURLsForContainerNode: null,
    _first_instance: false,
 
-   buildContextMenu : function TMP_PC_buildContextMenu() {
+   buildContextMenu: function TMP_PC_buildContextMenu() {
       var _open = document.getElementById("placesContext_open");
       var _openInWindow = document.getElementById("placesContext_open:newwindow");
       var _openInTab = document.getElementById("placesContext_open:newtab");
@@ -423,7 +423,7 @@ var TMP_Places = {
      }
    },
 
-   historyMenuItemsTitle : function TMP_PC_historyMenuItemsTitle(aEvent) {
+   historyMenuItemsTitle: function TMP_PC_historyMenuItemsTitle(aEvent) {
       if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark"))
         return;
 
@@ -442,7 +442,7 @@ var TMP_Places = {
    },
 
    // replace openlivemarksite-menuitem with tabmix function
-   openLivemarkSite : function TMP_PC_openLivemarkSite(aUrl, aEvent) {
+   openLivemarkSite: function TMP_PC_openLivemarkSite(aUrl, aEvent) {
      var where = this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent), this.prefBookmark);
      if (where == "current")
        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
@@ -451,7 +451,7 @@ var TMP_Places = {
 
    // In Firefox 4.0 we replace HistoryMenu.prototype._onCommand with this function
    // look in tablib.js
-   historyMenu : function TMP_PC_historyMenu(aEvent) {
+   historyMenu: function TMP_PC_historyMenu(aEvent) {
       var node = aEvent.target._placesNode;
       if (node) {
          PlacesUIUtils.markPageAsTyped(node.uri);
@@ -463,7 +463,7 @@ var TMP_Places = {
       }
    },
 
-   isBookmarklet : function (url) {
+   isBookmarklet: function (url) {
       var jsURL = /^ *javascript:/;
       return jsURL.test(url) ? true : false;
    },
@@ -515,7 +515,7 @@ var TMP_Places = {
     var tabs = tabBar.childNodes;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-                             TabmixSvc.prefs.getBoolPref("browser.tabs.loadFolderAndReplace");
+        TabmixSvc.prefs.getBoolPref("browser.tabs.loadFolderAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
         TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadBookmarksGroupInBackground") :
         TabmixSvc.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");

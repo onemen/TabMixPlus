@@ -14,7 +14,7 @@
 <!-- original code from TBP Lite //-->
 
 <overlay id="tabmix-overlay"
-   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tabmix.js"/>
@@ -386,7 +386,7 @@
         <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
                   oncommand="TabmixSessionManager.restoreWindow('delete', document.popupNode.value);"/>
       </menupopup>
-      <!-- context menu for session manager menupopup  -->
+      <!-- context menu for session manager menupopup -->
       <menupopup id="tm_sessionmanagerContextMenu"
                   onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
                   onpopuphidden="Tabmix.hidePopup();">
@@ -420,14 +420,14 @@
         <menuitem id="tm-sm-showext" label="&sm.context.details;" accesskey="&sm.context.details.key;" type="checkbox"
                   oncommand="TabmixSessionManager.setShowNameExt(this);"/>
       </menupopup>
-      <!-- menupopup for lasttab  -->
+      <!-- menupopup for lasttab -->
       <menupopup id="lasttabTabList" ignorekeys="true" flex="1"
                   oncommand="TMP_LastTab.OnMenuCommand(event);"
                   onpopuphidden="TMP_LastTab.OnPopupHidden();" />
       <menupopup id="tabslist"
                  oncommand="TabmixAllTabs._tabsListOncommand(event);"
                  onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
-      <!-- popup for show\hide the tabbar  -->
+      <!-- popup for show\hide the tabbar -->
       <menupopup id="hideTabbar_context" oncommand="TabmixSvc.TMPprefs.setIntPref('hideTabbar', event.originalTarget.value);"
                  onpopupshowing="this.childNodes[TabmixTabbar.hideMode+2].setAttribute('checked' ,'true');">
         <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
@@ -436,14 +436,14 @@
         <menuitem value="1" type="radio" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
         <menuitem value="2" type="radio" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
       </menupopup >
-      <!-- tabmix tooltip for button  -->
-      <tooltip id="tabmix-tooltip"/>      
+      <!-- tabmix tooltip for button -->
+      <tooltip id="tabmix-tooltip"/>
     </popupset>
 
    <!-- hide Tab groups context menu in all-tabs list button -->
    <menuitem id="menu_tabview" context=""/>
 
-  <!-- Tabmix Plus KEYS  -->
+  <!-- Tabmix Plus KEYS -->
   <keyset id="mainKeyset">
     <key id="key_tm_toggleFLST" label="Toggle FLST" keycode="VK_F9" TM_oncommand="Tabmix.flst.toggle();" />
     <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
