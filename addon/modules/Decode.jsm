@@ -8,7 +8,7 @@ Components.utils.import("resource://tabmixplus/log.jsm");
 
     use unescape if exist, if removed from firefox we use our own function
 */
-Decode = {
+let Decode = {
   escape: function(str) {
     // we always use encodeURI
     return encodeURI(str);
