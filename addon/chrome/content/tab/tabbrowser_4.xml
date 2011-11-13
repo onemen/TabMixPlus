@@ -143,9 +143,7 @@
             Tabmix.setItem("TabsToolbar", "multibar", multibar);
           }
 
-          let vertical = TabmixTabbar.isMultiRow && (TabmixTabbar.widthFitTitle || multibar);
-          Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
-          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
+          this.setTabStripOrient();
           TabmixTabbar.setHeight(rows, aReset);
 
           // prevent new-tab-button on the right from flickering when new tabs animate is on.
@@ -166,6 +164,17 @@
             this._positionPinnedTabs();
 
           return multibar;
+        ]]></body>
+      </method>
+
+      <method name="setTabStripOrient">
+        <body><![CDATA[
+          // we can't set dispaly:block and orient=vertical when widthFitTitle is false
+          // and we are in one row.
+          let vertical = TabmixTabbar.isMultiRow && 
+              (TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
+          Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
+          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;          
         ]]></body>
       </method>
 

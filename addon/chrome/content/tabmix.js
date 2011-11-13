@@ -218,6 +218,8 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   TMP_extensionsCompatibility.onDelayedStartup();
 
+  TabmixTabbar.updateSettings(true);
+
   gTMPprefObserver.setMenuIcons();
 
   try {
@@ -671,8 +673,6 @@ var TMP_eventListener = {
 
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
-
-    TabmixTabbar.updateSettings(true);
 
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !TabmixSvc.TMPprefs.getBoolPref("optionsToolMenu");

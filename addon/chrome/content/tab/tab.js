@@ -13,7 +13,7 @@ var TabmixTabbar = {
   SCROLL_BUTTONS_MULTIROW: 2,
   SCROLL_BUTTONS_RIGHT: 3,
 
-  updateSettings: function TMP_updateSettings(start, delayUpdate) {
+  updateSettings: function TMP_updateSettings(start) {
     if (!gBrowser || TabmixSvc.TMPprefs.prefHasUserValue("setDefault") || gTMPprefObserver.preventUpdate == true)
       return;
 
@@ -107,11 +107,14 @@ var TabmixTabbar = {
     this.widthFitTitle = TabmixSvc.TMPprefs.getBoolPref("flexTabs") &&
                     (tabBar.mTabMaxWidth != tabBar.mTabMinWidth);
     if (Tabmix.isVersion(40) && !Tabmix.extensions.treeStyleTab) {
-      // we can't set dispaly:block and orient=vertical when widthFitTitle is false
-      // and we are in one row.
-      let vertical = this.isMultiRow && (this.widthFitTitle || tabBar.getAttribute("multibar"));
-      Tabmix.setItem(tabStrip, "orient", vertical ? "vertical" : "horizontal");
-      tabStrip._isRTLScrollbox = !vertical && Tabmix.rtl;
+      if (start) {
+        // Don't change tabstip orient on start before sessionStore ends.
+        // if we set orient to vertical before sessionStore finish
+        // sessionStore don't select the selected tab from last session.        
+        setTimeout(function() {tabBar.setTabStripOrient();}, 0);
+      }
+      else
+        tabBar.setTabStripOrient();
     }
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
 
@@ -183,7 +186,7 @@ var TabmixTabbar = {
     tabBar._checkNewtabButtonvisibility = this.isMultiRow && showNewTabButton && TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2;
 
     var self = this;
-    if (start || delayUpdate)
+    if (start)
       window.setTimeout(function TMP_updateSettings_onstart() {self.updateScrollStatus();}, 0);
     else
       this.updateScrollStatus();
