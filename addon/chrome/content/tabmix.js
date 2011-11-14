@@ -68,11 +68,11 @@ Tabmix.startup = function TMP_startup() {
   if (typeof aioCloseWindow == 'function')
     aioCloseWindow = BrowserTryToCloseWindow;
 
-  // add call to TMP_Sanitizer
+  // add call to Tabmix.Sanitizer
   // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
   var cmd = document.getElementById("Tools:Sanitize");
   if (cmd)
-    cmd.setAttribute("oncommand", cmd.getAttribute("oncommand") + " TMP_Sanitizer.tryToSanitize();");
+    cmd.setAttribute("oncommand", cmd.getAttribute("oncommand") + " Tabmix.Sanitizer.tryToSanitize();");
 
   // if sessionStore disabled use TMP command
   window.undoCloseTab = function ct_window_undoCloseTab(aIndex, aWhere) {

@@ -80,7 +80,7 @@ var gTabMix_preferencesOverlay = {
    onPanePrivacyLoad: function () {
        var clearDataNow = document.getElementById("clearDataNow");
        if (clearDataNow)
-          clearDataNow.setAttribute("oncommand", clearDataNow.getAttribute("oncommand") + " TMP_Sanitizer.tryToSanitize();");
+          clearDataNow.setAttribute("oncommand", clearDataNow.getAttribute("oncommand") + " Tabmix.Sanitizer.tryToSanitize();");
    },
 
 /* ........ paneMain .............. */
