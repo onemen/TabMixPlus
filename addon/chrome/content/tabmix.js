@@ -12,7 +12,7 @@ Tabmix.startup = function TMP_startup() {
 
   if (this.isVersion(40)) {
     // multi-rows total heights are diffrent when tabs on top
-    // since this isnot trigger any other event that we can listen to
+    // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
     TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
     TabsOnTop.toggle = function TabsOnTop_toggle() {
@@ -29,7 +29,11 @@ Tabmix.startup = function TMP_startup() {
     // replace browser handlers with ours so it recognizes when tabs are acted on
     gBrowser.onTabBarDblClick = function TMP_gBrowser_onTabBarDblClick(aEvent) {TabmixTabClickOptions.onTabBarDblClick(aEvent);};
     gBrowser.onTabClick = function TMP_gBrowser_onTabClick(aEvent) {TabmixTabClickOptions.onTabClick(aEvent);};
-    window.setTimeout(function () {Tabmix.delayedStartup();}, 0);
+    window.setTimeout(function () {
+      try {
+        Tabmix.delayedStartup();
+      } catch (ex) {Tabmix.assert(ex);}
+    }, 0);
 
     let goPopup = document.getElementById("goPopup");
     if (goPopup) {
@@ -56,11 +60,11 @@ Tabmix.startup = function TMP_startup() {
   if (typeof aioDupTab == 'function')
     aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
 
-  //override the duplicate in new window function
+  // override the duplicate in new window function
   if (typeof aioDupWindow == 'function')
     aioDupWindow = function() { gBrowser.duplicateInWindow(gBrowser.mCurrentTab); };
 
-  //override the aioCloseWindow function
+  // override the aioCloseWindow function
   if (typeof aioCloseWindow == 'function')
     aioCloseWindow = BrowserTryToCloseWindow;
 
@@ -224,7 +228,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   try {
     TMP_LastTab.init();
-  } catch (ex) {Tabmix.assert(ex);}
+  } catch (ex) {this.assert(ex);}
 }
 
 var TMP_eventListener = {
@@ -237,7 +241,9 @@ var TMP_eventListener = {
     switch (aTopic) {
       case "browser-delayed-startup-finished":
         Services.obs.removeObserver(this, "browser-delayed-startup-finished");
-        Tabmix.delayedStartup();
+        try {
+          Tabmix.delayedStartup();
+        } catch (ex) {Tabmix.assert(ex);}
         break;
     }
   },
@@ -340,7 +346,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
-      Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");      
+      Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
     var tabContainer = gBrowser.tabContainer;
@@ -356,7 +362,7 @@ var TMP_eventListener = {
 
     if (Tabmix.isVersion(40)) {
       Tabmix.contentAreaClick.init();
-    
+
       tabContainer.addEventListener("TabUnpinned", this, true);
 
       if ("_update" in TabsInTitlebar) {
@@ -418,8 +424,8 @@ var TMP_eventListener = {
       }
     }
 
-   // isBlankNotBusyTab isn't exist when we call adjustTabstrip from tabcontainer constructor
-   // so we add this code after constructor already run
+    // isBlankNotBusyTab isn't exist when we call adjustTabstrip from tabcontainer constructor
+    // so we add this code after constructor already run
     var adjustTabstrip = Tabmix.newCode("gBrowser.tabContainer.adjustTabstrip", tabContainer.adjustTabstrip)._replace(
       'if (this._keepLastTab) {',
       'if (!aUrl) { \
@@ -429,26 +435,26 @@ var TMP_eventListener = {
       if (((!aUrl || aUrl == "about:blank") && tabbrowser.isBlankNotBusyTab(this.selectedItem, true)) || this._keepLastTab) {'
     );
 
-   if (Tabmix.isVersion(40)) {
-     adjustTabstrip = adjustTabstrip._replace('document.getBindingParent(this)', 'this.tabbrowser');
-     adjustTabstrip = adjustTabstrip._replace(
-       'this.childNodes;',
-       'tabbrowser.visibleTabs;'
-     )._replace(
-       'this._isRTLScrollbox && !TabmixTabbar.isMultiRow ? this.firstChild : this.lastChild;',
-       'TMP_TabView.checkTabs(tabs);'
-     );
-   }
-   else
-     adjustTabstrip = adjustTabstrip._replace('tabs.length', '$& - tabbrowser._removingTabs.length');
+    if (Tabmix.isVersion(40)) {
+      adjustTabstrip = adjustTabstrip._replace('document.getBindingParent(this)', 'this.tabbrowser');
+      adjustTabstrip = adjustTabstrip._replace(
+        'this.childNodes;',
+        'tabbrowser.visibleTabs;'
+      )._replace(
+        'this._isRTLScrollbox && !TabmixTabbar.isMultiRow ? this.firstChild : this.lastChild;',
+        'TMP_TabView.checkTabs(tabs);'
+      );
+    }
+    else
+      adjustTabstrip = adjustTabstrip._replace('tabs.length', '$& - tabbrowser._removingTabs.length');
 
     // prevent faviconize use its own adjustTabstrip
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
-   if ("faviconize" in window && "override" in faviconize) {
-        Tabmix.newCode("TMP_TabView.checkTabs", TMP_TabView.checkTabs)._replace(
-          '!tab.pinned',
-          '$& && !tab.hasAttribute("faviconized")'
-        ).toCode();
+    if ("faviconize" in window && "override" in faviconize) {
+      Tabmix.newCode("TMP_TabView.checkTabs", TMP_TabView.checkTabs)._replace(
+        '!tab.pinned',
+        '$& && !tab.hasAttribute("faviconized")'
+      ).toCode();
 
       // chage adjustTabstrip
       faviconize.override.adjustTabstrip = function() { };
@@ -471,6 +477,7 @@ var TMP_eventListener = {
     window.addEventListener("fullscreen", this, true);
 
     var tabbar = gBrowser.tabContainer;
+
     // add event for mouse scrolling on tab bar, necessary for linux
     if (Tabmix.isPlatform("Linux")) {
        document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
@@ -480,7 +487,7 @@ var TMP_eventListener = {
        tabbar.addEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
 
     var tabView = document.getElementById("tab-view-deck");
-    if (tabView) {
+    if  (tabView) {
       tabView.addEventListener("tabviewhidden", this, true);
       tabView.addEventListener("tabviewshown", this, true);
       tabbar.addEventListener("TabShow", this, true);
@@ -591,7 +598,7 @@ var TMP_eventListener = {
         tabBar.setAttribute("backgroundrepeat" , true);
       }
       switch (skin) {
-        case "cfxe": //  Chromifox Extreme
+        case "cfxe": // Chromifox Extreme
         case "cfxec":
           tabBar.setAttribute("tabmix_skin" , "cfxec");
           break;
@@ -619,7 +626,7 @@ var TMP_eventListener = {
     // for new tab icon on context menu
     Tabmix.setItem("context_newTab", "platform", platform);
 
-    ///XXX - drop this and see if some one jumps
+    ///XXX - drop this and see if someone jumps
     /* tabBar.setAttribute("platform", "v35"); */
 
     // don't remove maybe some themes use this with Tabmix
@@ -725,7 +732,6 @@ var TMP_eventListener = {
 
   onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
     var tab = aEvent.target;
-
     var browser = tab.linkedBrowser;
     var iconURL = browser.mIconURL;
     if (tab.hasAttribute("busy") || tab.getAttribute("image") != iconURL) {
@@ -837,6 +843,8 @@ var TMP_eventListener = {
     }
     var tabBar = gBrowser.tabContainer;
     if (!tabBar.overflow) {
+      // we use it as a backup for overflow event and for the case that we have
+      // pinned tabs in multi-row
       TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
       if (aTab == tabBar.selectedItem)
@@ -860,6 +868,8 @@ var TMP_eventListener = {
       TabmixTabbar.setHeight(1);
       tabBar.removeAttribute("multibar");
     }
+
+    // if the removed tab is single in its row hide it
     if (tab.previousSibling && !TabmixTabbar.inSameRow(tab, tab.previousSibling))
       tab.style.setProperty("opacity", "0", "important");
 
@@ -914,10 +924,10 @@ var TMP_eventListener = {
       }
 
       window.setTimeout( function TMP_onCloseTimeout_singleRow() {
-                           tabBar.adjustScrollTabsLeft();
-                           tabBar.adjustScrollTabsRight();
-                           tabBar.overflow = tabBar.canScrollTabsLeft || tabBar.canScrollTabsRight;
-                           tabBar.adjustNewtabButtonvisibility();
+                          tabBar.adjustScrollTabsLeft();
+                          tabBar.adjustScrollTabsRight();
+                          tabBar.overflow = tabBar.canScrollTabsLeft || tabBar.canScrollTabsRight;
+                          tabBar.adjustNewtabButtonvisibility();
                        }, 25);
     }
     else if (tabBar.hasAttribute("multibar")) {
@@ -1023,8 +1033,8 @@ var TMP_eventListener = {
       tabs[i].removeAttribute("showbutton");
 
     var ScrollDirection = aEvent.detail > 0 ? 1 : -1;
-      if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
-        ScrollDirection = -1 * ScrollDirection;
+    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
+      ScrollDirection = -1 * ScrollDirection;
 
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
     if (Tabmix.isVersion(40) && !shouldMoveFocus)
@@ -1105,7 +1115,7 @@ var TMP_eventListener = {
        gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, Tabmix.isVersion(40));
 
     var tabView = document.getElementById("tab-view-deck");
-    if  (tabView) {
+    if (tabView) {
       tabView.removeEventListener("tabviewhidden", this, false);
       tabView.removeEventListener("tabviewshown", this, false);
       gBrowser.tabContainer.removeEventListener("TabShow", this, true);

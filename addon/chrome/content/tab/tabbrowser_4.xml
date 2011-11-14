@@ -36,10 +36,10 @@
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                   class="tab-content" align="center">
           <xul:toolbarbutton anonid="tmp-close-button"
-                         xbl:inherits="fadein,pinned,selected"
-                         tabindex="-1" button_side="left"
-                         clickthrough="never"
-                         class="tab-close-button always-left"/>
+                             xbl:inherits="fadein,pinned,selected"
+                             tabindex="-1" button_side="left"
+                             clickthrough="never"
+                             class="tab-close-button always-left"/>
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
@@ -62,10 +62,10 @@
               </xul:hbox>
             </xul:stack>
           <xul:toolbarbutton anonid="tmp-close-button"
-                           xbl:inherits="fadein,pinned,selected"
-                           tabindex="-1" button_side="right"
-                           clickthrough="never"
-                           class="tab-close-button always-right"/>
+                             xbl:inherits="fadein,pinned,selected"
+                             tabindex="-1" button_side="right"
+                             clickthrough="never"
+                             class="tab-close-button always-right"/>
         </xul:hbox>
       </xul:stack>
       <xul:hbox class="tab-drag-indicator-right"/>
@@ -77,6 +77,7 @@
   <binding id="tabmix-tabbrowser-tabs"
             extends="chrome://tabmixplus/content/tab/tabmix_3.xml#tabmix-base-tabbrowser-tabs">
     <implementation>
+
       <field name="tabstripInnerbox" readonly="true">
         document.getAnonymousElementByAttribute(this.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
@@ -130,6 +131,7 @@
             // get lastTabRowNumber after the scroll
             rows = this.lastTabRowNumber;
           }
+
           let multibar;
           if (rows == 1)
             multibar = null; // removeAttribute "multibar"
@@ -171,10 +173,10 @@
         <body><![CDATA[
           // we can't set dispaly:block and orient=vertical when widthFitTitle is false
           // and we are in one row.
-          let vertical = TabmixTabbar.isMultiRow && 
+          let vertical = TabmixTabbar.isMultiRow &&
               (TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
           Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
-          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;          
+          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
         ]]></body>
       </method>
 

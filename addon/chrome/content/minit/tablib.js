@@ -4,7 +4,7 @@ var tablib = {
 version : "tabmixplus",
 _inited: false,
 
-setLoadURIWithFlags : function tablib_setLoadURIWithFlags(aBrowser) {
+setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
   // set init value according to lockallTabs state
   // we update this value in TabmixProgressListener.listener.onStateChange
   aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
@@ -442,7 +442,7 @@ if (Tabmix.isVersion(40)) {
     if (typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
       [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
     }
-  } catch(ex) {}
+  } catch (ex) {}
   Tabmix.newCode(fnName, fnCode)._replace(
     'var originCharset = aDocument && aDocument.characterSet;',
     <![CDATA[
@@ -471,7 +471,7 @@ else {
     if (typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
       [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
     }
-  } catch(ex) {}
+  } catch (ex) {}
   Tabmix.newCode(fnName, fnCode)._replace(
   'var wintype = document.documentElement.getAttribute("windowtype");',
   'if (getBoolPref("extensions.tabmix.inversefocusLinks") && aEvent && (aEvent.button == 1 || aEvent.button == 0 && ( aEvent.ctrlKey || aEvent.metaKey ))) loadInBackground = !loadInBackground;\
@@ -925,7 +925,7 @@ gBrowser.duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, 
   var copyToNewWindow = window != aTab.ownerDocument.defaultView;
   if (!disallowSelect && !copyToNewWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
     let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-    this.TMmoveTabTo(newTab, aTab._tPos+pos);
+    this.TMmoveTabTo(newTab, aTab._tPos + pos);
   }
 
   var bgPref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground");

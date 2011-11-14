@@ -17,7 +17,7 @@ var TabmixTabbar = {
     if (!gBrowser || TabmixSvc.TMPprefs.prefHasUserValue("setDefault") || gTMPprefObserver.preventUpdate == true)
       return;
 
-    var tabBar  = gBrowser.tabContainer;
+    var tabBar = gBrowser.tabContainer;
     var tabStrip = tabBar.mTabstrip;
     var tabscroll = TabmixSvc.TMPprefs.getIntPref("tabBarMode");
     if (tabscroll < 0 || tabscroll > 3 ||
@@ -110,7 +110,7 @@ var TabmixTabbar = {
       if (start) {
         // Don't change tabstip orient on start before sessionStore ends.
         // if we set orient to vertical before sessionStore finish
-        // sessionStore don't select the selected tab from last session.        
+        // sessionStore don't select the selected tab from last session.
         setTimeout(function() {tabBar.setTabStripOrient();}, 0);
       }
       else
@@ -1045,10 +1045,11 @@ var gTMPprefObserver = {
 
   },
 
+  ///XXX maybe its time to remove this we use it only in mac
   /* we use it only for mac in Firefox 3.5 - 3.6 to set close button on tabs */
   tabCloseButton: function() {
     if (Tabmix.isVersion(40) || !Tabmix.isMac)
-       return;
+      return;
 
     // we have some exeptions here....
     // classiccompact theme
@@ -1930,7 +1931,7 @@ var gTMPprefObserver = {
        TabmixSvc.prefs.setBoolPref("browser.tabs.warnOnClose", TabmixSvc.TMPprefs.getBoolPref("windows.warnOnClose"));
        TabmixSvc.TMPprefs.clearUserPref("windows.warnOnClose");
     }
-   // 2010-03-07
+    // 2010-03-07
     if (TabmixSvc.TMPprefs.prefHasUserValue("extraIcons")) {
        TabmixSvc.TMPprefs.setBoolPref("extraIcons.locked", TabmixSvc.TMPprefs.getBoolPref("extraIcons"));
        TabmixSvc.TMPprefs.setBoolPref("extraIcons.protected", TabmixSvc.TMPprefs.getBoolPref("extraIcons"));

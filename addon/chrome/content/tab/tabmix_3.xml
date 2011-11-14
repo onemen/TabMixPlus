@@ -64,21 +64,21 @@
 
     <implementation>
 
-     <constructor>
-       <![CDATA[
-          if ("tabmix_inited" in this)
-            return;
+    <constructor>
+      <![CDATA[
+        if ("tabmix_inited" in this)
+          return;
 
-          if (Tabmix.isVersion(40)) {
-            Tabmix.newCode(null, this.doMouseHoverSelect)._replace(
-              'document.getBindingParent(aTab.parentNode);',
-              'aTab.parentNode.tabbrowser;'
-            ).toCode(false, this, "doMouseHoverSelect");
-          }
+        if (Tabmix.isVersion(40)) {
+          Tabmix.newCode(null, this.doMouseHoverSelect)._replace(
+            'document.getBindingParent(aTab.parentNode);',
+            'aTab.parentNode.tabbrowser;'
+          ).toCode(false, this, "doMouseHoverSelect");
+        }
 
-          this.tabmix_inited = true;
-       ]]>
-     </constructor>
+        this.tabmix_inited = true;
+      ]]>
+    </constructor>
     <field name="mIsHover">
       false
     </field>

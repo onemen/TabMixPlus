@@ -302,16 +302,16 @@ var TabmixSessionData = {
 
          // we set this attribute in loadOneWindow _tabData
          if (Tabmix.isVersion(40) && !checkPref) {
-           let pinned = TMP_SessionStore._getAttribute(tabData, "pinned");
-           if (pinned)
-             gBrowser.pinTab(aTab);
-           else
-             gBrowser.unpinTab(aTab);
+            let pinned = TMP_SessionStore._getAttribute(tabData, "pinned");
+            if (pinned)
+              gBrowser.pinTab(aTab);
+            else
+              gBrowser.unpinTab(aTab);
 
-          if (TMP_SessionStore._getAttribute(tabData, "hidden") == "true")
-            gBrowser.hideTab(aTab);
-          else
-            gBrowser.showTab(aTab);
+            if (TMP_SessionStore._getAttribute(tabData, "hidden") == "true")
+              gBrowser.hideTab(aTab);
+            else
+              gBrowser.showTab(aTab);
          }
 
          if ("colorfulTabs" in window) {
@@ -682,14 +682,14 @@ var TabmixSessionManager = {
    // called from goQuitApplication when user apply File > Exit
    // or when extensions (Mr Tech Toolkit) call goQuitApplication.
    canQuitApplication: function SM_canQuitApplication(aBackup) {
-       // some extension can call goQuitApplication 2nd time (like toolKit)
+       // some extension can call goQuitApplication 2nd time (like ToolKit)
        // we make sure not to run this more the one time
        if (this.windowClosed || this._inPrivateBrowsing)
           return true;
       /*
         1. save all windows
         2. call deinit to the current window (if exist ??)
-        3 if user don't cancel the quit mark all windows as closed
+        3. if user don't cancel the quit mark all windows as closed
         4. return: true if its ok to close
                    false if user cancel quit
       */
@@ -910,7 +910,7 @@ var TabmixSessionManager = {
       }
       else if ("tabmix_loading" in gBrowser.selectedBrowser.contentDocument) {
         gBrowser.selectedBrowser.reload();
-          delete gBrowser.selectedBrowser.contentDocument.tabmix_loading;
+        delete gBrowser.selectedBrowser.contentDocument.tabmix_loading;
       }
    },
 
@@ -1240,7 +1240,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   try {
                     if (TabmixSvc.prefs.getBoolPref("browser.privatebrowsing.keep_current_session"))
                       needToCloseProtected = false;
-                  } catch (ex) {}
+                  } catch (ex) { }
                   // noting to do here if we are not using tabmix session manager
                   if (!TabmixSvc.SMprefs.getBoolPref("manager") && !TabmixSvc.SMprefs.getBoolPref("crashRecovery")) {
                     // nsPrivateBrowsingService.js can not close protected tab we have to do it our self
@@ -2975,7 +2975,7 @@ try{
             break;
          default: Tabmix.log("SessionManager \n error unidentifid caller " + caller);
       }
-/*
+      /*
       1. when open first windows overwrite tab only if they are home page, if firefox open from link or with
          pages that are not the home page append the new tab to the end.
          simple solution is to set browser.startup.page = 0 , when we activate session manager, in this case if we
@@ -2984,7 +2984,7 @@ try{
       3. when loadOneWindow call by openclosedwindow or loadSession we reuse window check user pref for overwrite.
       4. if we open all closed windows to one window append tab to the end and select the selected tab from first window
          in the session.
-*/
+      */
       var cTab = gBrowser.mCurrentTab;
       var concatenate = caller.indexOf("-concatenate") != -1 || (caller == "firstwindowopen" && gBrowser.tabs.length > 1);
       var rdfNodeWindow = this.RDFService.GetResource(path);
@@ -3269,6 +3269,7 @@ try{
       // load closed tabs from saved session and save to current backup.
       if (this.saveClosedtabs)
          this.saveClosedTabs(path, this.gThisWin, "closedtabs", true);
+
       TMP_ClosedTabs.setButtonDisableState();
       gBrowser.tabContainer.nextTab = 1;
       // if we open closed window delete this window from closed window list
@@ -3601,8 +3602,6 @@ try{
          historyEntry.setTitle(entryTitle);
          historyEntry.setURI(newURI);
          historyEntry.saveLayoutStateFlag = true;
-// xxx check if we can use this to reload tab not from Cache;
-// is it good to reload ALL the history ???
          if (TabmixSvc.SMprefs.getBoolPref("save.scrollposition")) {
             if (historyData[index + 2] != "0,0") {
                XY = historyData[index + 2].split(",");
@@ -3632,7 +3631,7 @@ try{
       // "extensions.tabmix.sessions.max_backups";
       try {
         maxBackups = TabmixSvc.SMprefs.getIntPref("max_backups");
-      } catch(ex) {}
+      } catch(ex) { }
 
       this.archiveSessionsFile(maxBackups, false /* don't force */);
     }
@@ -4174,7 +4173,6 @@ try{
     }
     this._groupItems = null;
   }
-
 };
 
 /**
