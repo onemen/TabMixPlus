@@ -53,7 +53,7 @@ let TabmixSvc = {
   }
 }
 
-Components.utils.import("resource://tabmixplus/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
   var appInfo = Cc["@mozilla.org/xre/app-info;1"]

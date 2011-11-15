@@ -3,7 +3,7 @@ var EXPORTED_SYMBOLS = ["flst"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-Components.utils.import("resource://tabmixplus/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
 function flst() {

@@ -529,7 +529,7 @@ use       getter for    Components.classes["@mozilla.org/dom/json;1"].createInst
   }
 }
 
-Components.utils.import("resource://tabmixplus/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyServiceGetter(Tabmix.JSON, "nsIJSON", "@mozilla.org/dom/json;1", "nsIJSON");
 window.addEventListener("unload", Tabmix.destroy, false);
