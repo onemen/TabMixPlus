@@ -283,8 +283,8 @@ var TMP_tabDNDObserver = {
 
     if (Tabmix.isVersion(40))
       document.getElementById("tabmix-tooltip").hidePopup();
-
-    var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW // TreeStyleTab extension look for isTabReorder in our code
+    // old TreeStyleTab extension version look for isTabReorder in our code
+    var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW
     var newIndex = this.getNewIndex(event);
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;
@@ -886,6 +886,8 @@ var TMP_undocloseTabButtonObserver = {
     return flavourSet;
   },
 
+  //XXX we don't need it after bug 455694 (tab drag/detach animations) backed-out.
+  // we leave it in case the code will change again.
   NEW_getSourceNode: function TMP_NEW_getSourceNode(aDataTransfer) {
     let node = aDataTransfer.mozSourceNode;
     while (node && node.localName != "tab" && node.localName != "tabs")

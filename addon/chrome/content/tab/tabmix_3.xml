@@ -532,6 +532,7 @@
         <parameter name="aTab"/>
         <parameter name="aTop"/>
         <body><![CDATA[
+/*XXX we can use aTab.getBoundingClientRect().top if we do the same in topTabY */
           var height = aTab ? aTab.boxObject.height : 0;
           if (height == 0) // don't panic
             return;

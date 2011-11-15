@@ -17,6 +17,7 @@ setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
       var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);
       var isLockedTab = tab.hasAttribute("locked");
       if (!allowLoad && !isBlankTab && isLockedTab) {
+Tabmix.log("loadURIWithFlags open new tab", true);
         var newTab = tabbrowser.addTab();
         tabbrowser.selectedTab = newTab;
         var browser = newTab.linkedBrowser;
@@ -1453,6 +1454,15 @@ gBrowser.setFixLabel = function (label, url, setFixedLabel) {
       }
    }
 }
+
+/** XXX need to fix this functions:
+previousTabIndex
+previousTab
+selectIndexAfterRemove
+
+to return tab instead of index
+since we can have tab hidden or remove the index can change....
+*/
 
 gBrowser.previousTabIndex = function _previousTabIndex(aTab, aTabs) {
   var temp_id, tempIndex = -1, max_id = 0;

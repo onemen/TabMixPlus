@@ -4058,6 +4058,7 @@ try{
   },
 
   showNotification: function SM_showNotification() {
+///XXX NEED to update babelzilla
     var msg = "More tabs restored into hidden groups.";
     try {
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);

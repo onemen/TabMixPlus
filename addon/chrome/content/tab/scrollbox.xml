@@ -276,7 +276,7 @@
                 // prevent last tab from flicring in the case
                 // after pinned tab positioning in rows the tab will stay
                 // in the same row
-                tabs.updateVerticalTabStrip(false, _tabs[_tabs.length-1]);
+                tabs.updateVerticalTabStrip();
               }
             }, 25);
             return;

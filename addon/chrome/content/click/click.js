@@ -975,6 +975,7 @@ var TabmixAllTabs = {
         }
         break;
     }
+//XXX ensureElementIsVisible throw on Firefox 3.5 for the first menu show
     var scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
     if (!popup.style.getPropertyValue("max-height")) {
       popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");

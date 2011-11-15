@@ -88,10 +88,7 @@
 
       <constructor>
         <![CDATA[
-          Tabmix.newDargnDrop = Tabmix.isVersion(80) && ("_handleTabDrag" in this) && true;
-
-          if (!Tabmix.newDargnDrop)
-            this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
 
           if (this.tabmix_inited_40) {
             this.tabmixTabbarPositionChanged();
@@ -104,8 +101,7 @@
 
       <destructor>
         <![CDATA[
-          if (!Tabmix.newDargnDrop && this.parentNode)
-            this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           this.tabbrowser.mTabDropIndicatorBar = null;
         ]]>
       </destructor>
@@ -314,6 +310,7 @@
           var tabs = this.childNodes;
           for (let i = 0; i < tabs.length; i++){
             let tab = tabs[i];
+///XXX in Firefox 7.0+ we can use !tab.closing change this on constructoe !???
             if (!tab.hidden && this.tabbrowser._removingTabs.indexOf(tab) == -1)
               return tab;
           }
@@ -398,6 +395,7 @@
         <parameter name="factor"/>
         <body>
         <![CDATA[
+///XXX remove this when we drop support for Firefox 3.5 - 3.6.x
         ]]>
         </body>
       </method>

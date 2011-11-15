@@ -222,6 +222,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   TMP_extensionsCompatibility.onDelayedStartup();
 
+///XXX move all UI init from TMP_eventListener to here
   TabmixTabbar.updateSettings(true);
 
   gTMPprefObserver.setMenuIcons();
@@ -549,6 +550,7 @@ var TMP_eventListener = {
       }
     }
 
+///XXX check when we use [tabmix_aero] and when we use [classic40=v40aero]
     if (navigator.oscpu.indexOf("Windows NT 6.1") == 0) {
       Tabmix.setItem("TabsToolbar", "tabmix_aero", true);
     }
@@ -572,6 +574,7 @@ var TMP_eventListener = {
         tabBar.setAttribute("classic", "v3Linux");
         tabBar.setAttribute("platform", "linux");
         platform = "linux";
+///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
         if (Tabmix.isVersion(40)) {
           Tabmix.setItem("TabsToolbar", "tabmix_skin", "classic");
@@ -732,6 +735,7 @@ var TMP_eventListener = {
 
   onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
     var tab = aEvent.target;
+/// test if we need this for FF 4.0
     var browser = tab.linkedBrowser;
     var iconURL = browser.mIconURL;
     if (tab.hasAttribute("busy") || tab.getAttribute("image") != iconURL) {
@@ -808,6 +812,7 @@ var TMP_eventListener = {
     if (TabmixTabbar.lockallTabs)
       tab.setAttribute("locked", "true");
 
+///XXX check how it work for TGM
     if (!Tabmix.isVersion(40) || "TabGroupsManagerApiVer1" in window)
       // from Firefox 4.0+ we call onTabOpen_delayUpdateTabBar from _handleNewTab
       // after the tab fully opened
@@ -885,6 +890,7 @@ var TMP_eventListener = {
       // workaround when we remove last visible tab
       if (TabmixTabbar.isMultiRow && tabBar.overflow && gBrowser._numPinnedTabs > 0 && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
         tabBar.mTabstrip.ensureElementIsVisible(gBrowser.mCurrentTab, false);
+///XXXX check ... when closing many tabs it look like the timeout is very long !!
       if (!tabBar.TMP_onCloseTimeout) {
         tabBar.TMP_onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
           if (tabBar.TMP_onCloseTimeout) {
@@ -893,9 +899,12 @@ var TMP_eventListener = {
           }
           tabBar.adjustNewtabButtonvisibility();
           if (TabmixTabbar.isMultiRow) {
+///XXX check if it look beter if we call updateVerticalTabStrip when tabBar.lastTabRowNumber < TabmixTabbar.visibleRows
+/// also when in scroll mode ?
             // first we check for unpinned last tab row number
             if (tabBar.hasAttribute("multibar") &&
                 tabBar._lastTabRowNumber < TabmixTabbar.visibleRows)
+///XXX when we close many tabs --- check if we can skip this!
               tabBar._positionPinnedOnMultiRow();
             // here we check for last row for both pinned and unpinned
             if (tabBar.getAttribute("multibar") == "true" &&
@@ -1036,6 +1045,8 @@ var TMP_eventListener = {
     if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
       ScrollDirection = -1 * ScrollDirection;
 
+///XXX need more work on this
+/// scroll tabstrip without chnaging selection is not working
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
     if (Tabmix.isVersion(40) && !shouldMoveFocus)
       return;
@@ -1144,6 +1155,7 @@ var TMP_eventListener = {
   // some theme not useing updated Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
+//XXX need to improve this
     let reloadIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
     if (!reloadIcon) {
       let lockIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-lock-icon");

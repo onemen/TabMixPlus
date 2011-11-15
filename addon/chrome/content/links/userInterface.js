@@ -18,6 +18,7 @@
  * @return           true if the URL is for tabmix options
  *                   false if not.
  *
+ * In use for Firefox 3.5 - 3.6.x from extension manager
  */
 Tabmix.cmdOptions = function TMP_cmd_options(aURL) {
    if (aURL != "chrome://tabmixplus/content/pref/pref-tabmix.xul")
@@ -394,7 +395,12 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
   return;
 }
 
-/* call from Tabmix.linkHandling_init and from text.link.xul */
+/**
+ * @brief openUILink handles clicks on UI elements that cause URLs to load
+ *
+ * called from Tabmix.linkHandling_init and from text.link.xul
+ *
+ */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
     this.newCode("openUILink", openUILink)._replace(
@@ -434,6 +440,10 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   return "current";
 }
 
+/**
+ * @brief copy Tabmix data from old tab to new tab.
+ *        we use it before swapBrowsersAndCloseOther
+ */
 Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
   let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "tabmix_bookmarkId"];
 

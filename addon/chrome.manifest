@@ -43,6 +43,7 @@ locale    tabmixplus   zh-SG         chrome/locale/zh-SG/
 locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
+overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/private/private_test.xul
 
 overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/pref/preferencesOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul

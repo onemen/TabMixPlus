@@ -564,6 +564,7 @@ var TMP_ClosedTabs = {
       if ("TabView" in window)
         TabView.afterUndoCloseTab();
 
+      //XXX clean this code when we drop support to Firefox 3.5-3.6.x
       // after we open new tab we only need to fix position if this is true
       var restorePosition = TabmixSvc.TMPprefs.getBoolPref("undoClosePosition");
       if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {

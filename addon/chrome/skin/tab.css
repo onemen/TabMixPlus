@@ -234,11 +234,6 @@ toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic
 toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
-/* fix icon for menu item without image in tabmix menu list */
-.fix-bookmark-item .menu-iconic-left {
-  -moz-image-region: rect(0 16px 16px 0)!important;
-}
-
 /* fix dropmarker orient for toolbarbutton[type="menu"] in FF 2.0 + */
 #btn_undoclose[type="menu"] ,#btn_closedwindows[type="menu"] ,
 #btn_tabslist[type="menu"] ,#btn_sessionmanager[type="menu"] {

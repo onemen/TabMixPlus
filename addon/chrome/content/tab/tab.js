@@ -122,6 +122,7 @@ var TabmixTabbar = {
       TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", 1);
 
     // mAllTabsPopup was removed in firfox 4.0
+///XXX we need to use document.getElementById('alltabs-popup') for Firefox 4.0+
     if (tabBar.mAllTabsPopup) {
        // fix bug in positioning the popup off screen or on the button when window is not maximize or when tab bar is in the bottom
        Tabmix.setItem(tabBar.mAllTabsPopup, "position",
@@ -478,8 +479,6 @@ var TabmixTabbar = {
     if (Tabmix.isVersion(40)) {
       Tabmix.setItem(tabBar, "multibar", null);
       Tabmix.setItem("TabsToolbar", "multibar", null);
-      tabBar.tabstripInnerbox.style.removeProperty("display");
-
       let tabsToolbar = document.getElementById("TabsToolbar");
       if (tabsToolbar.hasAttribute("style")) {
         tabsToolbar.style.removeProperty("max-height");
@@ -595,6 +594,7 @@ var TabmixTabbar = {
   },
 
   // call by resize event on content
+  // not in use from Firefox 4.0+
   widthChange: function TMP_tabBarWidthChange(aEvent) {
     var tabBar = gBrowser.tabContainer;
     // mAllTabsPopup was removed in firfox 4.0
@@ -1395,6 +1395,7 @@ var gTMPprefObserver = {
       Tabmix.log('unable to find "' + href + '"');
   },
 
+/*XXX move this and all the code from tabmix dialog to import prefs into mudel file */
   updateOldStylePrefs: function TMP_PO_updateOldStylePrefs() {
     // in 0.3.0.605 we changed tab color from old pref to new pref
     // old pref "extensions.tabmix.currentColor" type integer
@@ -2075,8 +2076,6 @@ try { // user report about bug here ... ?
           return Tabmix.getCharPref(aPref, aDefault);
       }
     }
-    _setPref(pBranch.PREF_BOOL, "browser.tabs.closeWindowWithLastTab", false); // exist in firefox version 3.5
-    _setPref(pBranch.PREF_BOOL, "browser.ctrlTab.previews", true);     // exist in firefox version 3.5
     _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
   }
 

@@ -143,3 +143,17 @@
   -moz-appearance: none;
   background-image: -moz-linear-gradient(center bottom , rgba(10%,10%,10%,.4) 1px, transparent 1px), -moz-linear-gradient(rgb(255, 204, 102), rgb(255, 204, 102))!important;
 }
+
+/*
+  //XXX we don't need it after bug 455694 (tab drag/detach animations) backed-out.
+  // we leave it in case the code will change again.
+
+  animate new tab button move - for Firefox 8.0+ 
+#tabbrowser-tabs[drag=move] > .tabbrowser-arrowscrollbox > .tabs-newtab-button[slide] {
+  -moz-transition: -moz-transform 200ms ease-out;
+}
+
+#tabbrowser-tabs[drag=finish] > .tabbrowser-arrowscrollbox > .tabs-newtab-button[slide] {
+  -moz-transition: -moz-transform 100ms ease-out;
+}
+*/

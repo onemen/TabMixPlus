@@ -510,6 +510,8 @@ var TMP_Places = {
   // fixed: if "browser.tabs.loadFolderAndReplace" is true don't reuse locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "flst_id" from reuse tab
+  //
+  //TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
     var tabBar = gBrowser.tabContainer;
     var tabs = tabBar.childNodes;

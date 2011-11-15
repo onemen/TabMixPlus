@@ -122,6 +122,7 @@
       if (gHideElmParam < TMP_HIDE_MENUANDTEXT) {
          if (gHideElmParam == TMP_SHOW_MENULIST) {
             var item = document.getElementById("tm_prompt").selectedItem;
+///XXX item.fileName - in the new Tabmix.Sessions
             dialogParams.SetString(5, item.session || item.fileName);
             dialogParams.SetInt(6, item.getAttribute("value"));
          }

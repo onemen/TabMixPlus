@@ -93,6 +93,34 @@ var TMP_extensionsCompatibility = {
       }
     }
 
+    /*  we don't use this code - leave it here as a reminder. 
+
+    // workaround for extensions that look for updateIcon
+    // Favicon Picker 2
+    if (typeof(gBrowser.updateIcon) == "undefined") {
+      gBrowser.updateIcon = function updateIcon (aTab) {
+        var browser = gBrowser.getBrowserForTab(aTab);
+        if ((browser.mIconURL || "") != aTab.getAttribute("image")) {
+          if (browser.mIconURL)
+            aTab.setAttribute("image", browser.mIconURL);
+          else
+            aTab.removeAttribute("image");
+          gBrowser._tabAttrModified(aTab);
+        }
+      }
+    }
+    */
+
+    /*
+    // https://addons.mozilla.org/en-US/firefox/addon/tab-flick/
+    if ("TabFlick" in window && typeof(TabFlick.openPanel) == "function") {
+      Tabmix.newCode("TMP_tabDNDObserver.onDragEnd", TMP_tabDNDObserver.onDragEnd)._replace(
+        'gBrowser.replaceTabWithWindow(draggedTab);',
+        'gBrowser.selectedTab = draggedTab; TabFlick.openPanel(aEvent);'
+      ).toCode();
+    }
+    */
+
     // https://addons.mozilla.org/en-US/firefox/addon/bug489729-disable-detach-and-t//
     if ("bug489729" in window) {
       Tabmix.newCode("bug489729.init", bug489729.init)._replace(
@@ -311,7 +339,9 @@ var TMP_extensionsCompatibility = {
 
     var buttonDown = document.getAnonymousElementByAttribute(gBrowser.tabContainer, "anonid", "scrollbutton-down") ||
                      document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip, "anonid", "scrollbutton-down");
-    if (buttonDown && buttonDown.oncontextmenu){
+    //XXX for now we don't do changes for other themes regarding scroll buttons oncontextmenu
+    // this need more testing with other themes
+    if (!Tabmix.isVersion(40) && buttonDown && buttonDown.oncontextmenu){
       _fixOnContextmenu(buttonDown, "right");
       _fixOnContextmenu(buttonDown.previousSibling, "left");
       let buttonUp = document.getAnonymousElementByAttribute(gBrowser.tabContainer, "anonid", "scrollbutton-up") ||
@@ -531,6 +561,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
   },
 
   onWindowLoaded: function () {
+    // for Firefox 3.5 - 3.6.x
     function replaceHorizontalProps(aObjectName, aObject) {
       var ensureTabIsVisible = aObjectName == "gBrowser.tabContainer.ensureTabIsVisible";
       Tabmix.newCode(aObjectName, aObject)._replace(

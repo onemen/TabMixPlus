@@ -44,9 +44,6 @@ function TM_EMinit() {
   window.addEventListener("command", TM_enableApply, false);
   window.addEventListener("input", TM_enableApply, false);
 
-  // check if bookmark item in tab context menu
-  TM_Options.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
-
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {
     document.getElementById("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
@@ -701,12 +698,6 @@ function TM_setElements (restore, start) {
 
       if (restore) {
         switch (pref) {
-           case "browser.tabs.closeWindowWithLastTab": // exist in firefox version 3.5
-              TabmixSvc.prefs.setBoolPref(pref, false);
-              break;
-           case "browser.ctrlTab.previews": // exist in firefox version 3.5
-              TabmixSvc.prefs.setBoolPref(pref, true);
-              break;
            case "browser.link.open_newwindow.override.external": // exist from firefox 10.0
              TabmixSvc.prefs.setIntPref(pref, -1);
               break;

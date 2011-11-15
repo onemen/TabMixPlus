@@ -14,17 +14,19 @@
  *
  * @param linkNode	The DOM node containing the URL to open.
  *
- * @param loadInCurrentTab	A Boolean value. If true, the URL will be opened
- *                 within the current tab. If false, it will be opened in a new tab.
+ * @param loadInCurrentTab A Boolean value. If true, the URL will be opened
+ *        within the current tab. If false, it will be opened in a new tab.
  *
  * @param suppressTabsOnFileDownload	A Boolean value. If true, the URL will be opened
- *                         within the current tab. If false, according to loadInCurrentTab
- *                         this is mainly to prevent openLinkIn from opening new tab when link, for downloading file, click on pinned tab
+ *        within the current tab. If false, according to loadInCurrentTab
+ *        this is mainly to prevent openLinkIn from opening new tab when link,
+ *        for downloading file, click on pinned tab.
  *
- * @returns  True if the function opened a URL, or the value
- *			of handleLinkClick() if it chose not to.
+ * @returns True if the function opened a URL, or the value
+ *          of handleLinkClick() if it chose not to.
  *
  */
+//XXX treeStyleTab look for this function in windowHelperHacks.js TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit
 function TMP_howToOpen(event, linkNode, loadInCurrentTab, suppressTabsOnFileDownload) {
   // this helper function parses the event union for us
   // and makes a better determination of how a link will be opened
@@ -33,6 +35,7 @@ function TMP_howToOpen(event, linkNode, loadInCurrentTab, suppressTabsOnFileDown
     handleLinkClick(event, linkNode.href, linkNode);
     return true;
   }
+  // openLinkIn or openUILinkIn check the value of browser.tabs.loadInBackground
   where = loadInCurrentTab ? "current" : where == "tabshifted" ? where : "tab";
   var doc = event.target.ownerDocument;
   try {
@@ -78,15 +81,15 @@ function TMP_getClickTarget(aEvent) {
   if (isHTMLLink(target)) {
     if (target.hasAttribute("href"))
       linkNode = target;
-     // xxxmpc: this is kind of a hack to work around a Gecko bug (see bug 266932)
-     // we're going to walk up the DOM looking for a parent link node,
-     // this shouldn't be necessary, but we're matching the existing behaviour for left click
-     var parent = target.parentNode;
-     while (parent) {
-       if (isHTMLLink(parent) && parent.hasAttribute("href"))
-         linkNode = parent;
-       parent = parent.parentNode;
-     }
+    // xxxmpc: this is kind of a hack to work around a Gecko bug (see bug 266932)
+    // we're going to walk up the DOM looking for a parent link node,
+    // this shouldn't be necessary, but we're matching the existing behaviour for left click
+    var parent = target.parentNode;
+    while (parent) {
+      if (isHTMLLink(parent) && parent.hasAttribute("href"))
+        linkNode = parent;
+      parent = parent.parentNode;
+    }
   }
   else {
     linkNode = aEvent.originalTarget;
@@ -118,7 +121,7 @@ function TMP_getClickTarget(aEvent) {
  *        links that are not handled here go on to the page code and then to contentAreaClick
  */
 function TMP_contentLinkClick(aEvent) {
-  if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey ||  aEvent.altKey || aEvent.metaKey)
+  if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
     return;
 
   var targetPref = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
@@ -335,7 +338,7 @@ function TMP_contentAreaClick(event, fieldNormalClicks) {
   }
   // use whereToOpenLink() to determine if no modifiers were used
   else if (whereToOpenLink(event) == "current") {
-      if (fieldNormalClicks && (!openT || openT == "_content" || openT  == "_main"))
+    if (fieldNormalClicks && (!openT || openT == "_content" || openT  == "_main"))
       return Tabmix.original_contentAreaClick(event, fieldNormalClicks);
     else if (linkNode.hasAttribute("onclick"))
       return Tabmix.original_contentAreaClick(event, fieldNormalClicks);
@@ -829,15 +832,15 @@ var TMP_DOMWindowOpenObserver = {
 
             newWindow.gAutoHideTabbarPrefListener = {domain: ""}
           }
-         newWindow.gPrivateBrowsingUI.uninit = function() {};
+          newWindow.gPrivateBrowsingUI.uninit = function() {};
 
-         setTimeout(function () {
-           newWindow.close();
-           if (firstTabAdded)
-             existingBrowser.selectedTab = firstTabAdded;
-           else
-             existingWindow.content.focus();
-         },0)
+          setTimeout(function () {
+            newWindow.close();
+            if (firstTabAdded)
+              existingBrowser.selectedTab = firstTabAdded;
+            else
+              existingWindow.content.focus();
+          },0)
         }  catch(ex) { existingWindow.Tabmix.obj(ex); }
     }
 }
@@ -894,6 +897,7 @@ Tabmix.contentAreaClick = {
     var linkTarget = TabmixSvc.prefs.getBoolPref("extensions.tabmix.linkTarget");
     var suppressTabs = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enablefiletype");
 
+///XXX check again how SubmitToTab work
     if (typeof(SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
@@ -1348,6 +1352,7 @@ Tabmix.contentAreaClick = {
   openExSiteLink: function TMP_openExSiteLink(linkNode, currentDomain, targetDomain, targetPref) {
     if (targetPref != 2) return false;
 
+///XXX if we check this in every function do it one time at the start
     if (linkNode.hasAttribute("onclick")) {
       let onclick = linkNode.getAttribute("onclick");
       if (this.checkAttr(onclick, "window.open") ||
@@ -1527,6 +1532,13 @@ Tabmix.contentAreaClick = {
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
           url = TabmixSvc.io.newURI(url.path.substr("/r/?".length), null, null);
+/* DONT DELETE
+      var host = url.hostPort.split(".");
+      //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
+      while (host.length > 2)
+        host.shift();
+      return host.join(".");
+*/
         try {
           var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
               .getService(Ci.nsIEffectiveTLDService);
@@ -1556,3 +1568,60 @@ Tabmix.contentAreaClick = {
     return targetAttr;
   }
 }
+
+/**
+TODO
+need fix for these kind of links 
+  <a href="javascript:void(0)" onclick="javascript:top.location.href='/online/1/HP_487.html#2/209/136';">
+
+need to find a workaround this problem
+http://tmp.garyr.net/forum/viewtopic.php?t=13264
+
+http://www.bom.gov.au/wa/observations/perth.shtml
+
+prevent the link load in both current tab and the new tab
+
+maybe we can catch the click on TMP_contentLinkClick
+then call
+  event.stopPropagation();
+  event.preventDefault();
+
+  and only dispach new click event with flag to bypass our functions
+  if we like it to go to default
+
+XXX - we can delete the onClick attribut in the page
+
+/*
+    // replace onclick function with the form javascript:top.location.href = url
+    // if the tab is locked or we force new tab from link
+///XXX need more work not opne the exect link
+    if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
+      let onclick = linkNode.getAttribute("onclick");
+      let code = "javascript:top.location.href="
+      if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
+        linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
+    }
+    
+/*
+
+openTabfromLink:
+///XXX in http://www.nrg.co.il/online/1/HP_487.html#2/303/552
+    the link open in the same page but open the subject to read in #2/303/552
+    when we load in new page that not work
+
+///    var code = "javascript:top.location.href="
+    var code = "var __tabmix.href="
+    if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code)) {
+Tabmix.log("onclick " + onclick + " " + this.checkAttr(onclick, "javascript:top.location.href=")
++"\nhref " + href + " " + onclick.substr("javascript:top.location.href=".length)
++"\n" + makeURLAbsolute(linkNode.baseURI, onclick.substr(code.length))
+);
+      try {
+        let str = onclick.substr(code.length).replace(/'|"/g, "");
+        let url = makeURLAbsolute(linkNode.baseURI, str);
+        event.__href = url;
+Tabmix.log("event.__href " + event.__href);
+        return "tab";
+      } catch (ex) { }
+    }
+*/

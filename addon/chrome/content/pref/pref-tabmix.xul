@@ -140,6 +140,13 @@
             </hbox>
             <!-- Special control of links -->
             <separator/>
+<!-- Not in use, 
+     NEED to update babelzilla
+            <hbox align="center">
+              <checkbox align="start" id="openLinkWithHistory" label="When opening Link in new tab copy tab history"
+                                 prefstring="extensions.tabmix.openLinkWithHistory" />
+            </hbox>
+-->
             <separator/>
             <hbox align="center">
               <label flex="1" value="&speLink.label;" control="speLink" />

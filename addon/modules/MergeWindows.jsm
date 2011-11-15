@@ -1,3 +1,6 @@
+/*
+TODO: Need major rewrite to use swapBrowsersAndCloseOther and duplicateTab
+*/
 var EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cc = Components.classes;
