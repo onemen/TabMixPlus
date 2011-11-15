@@ -102,7 +102,7 @@ let AutoReload = {
   },
 
   enableAllTabs: function(aTabBrowser) {
-    var tabs = TabmixSvc.version.is40 ? aTabBrowser.visibleTabs : aTabBrowser.tabs;
+    var tabs = aTabBrowser.visibleTabs;
     for(let i=0; i<tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled == null)
@@ -114,7 +114,7 @@ let AutoReload = {
   },
 
   disableAllTabs: function(aTabBrowser) {
-    var tabs = TabmixSvc.version.is40 ? aTabBrowser.visibleTabs : aTabBrowser.tabs;
+    var tabs = aTabBrowser.visibleTabs;
     for(let i=0; i<tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled)
@@ -229,20 +229,8 @@ function _reloadTab(aTab) {
         let win = _getWindow(browser.contentWindow)
         let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
         let msg = TabmixSvc.getString('confirm_autoreloadPostData');
-        let resultOK;
-        if (TabmixSvc.version.is40) {
-          TabmixSvc.obs.addObserver(_observe, "common-dialog-loaded", false);
-          resultOK = TabmixSvc.prompt.confirm(win, title, msg);
-        }
-        else {
-          var params = Cc['@mozilla.org/embedcomp/dialogparam;1'].createInstance(Ci.nsIDialogParamBlock);
-          params.SetString(12, title);
-          params.SetString(0,  msg);
-          params.SetString(2, 'alert-icon');
-          params.SetInt(2, 2);
-          win.openDialog('chrome://global/content/commonDialog.xul', '_blank', 'chrome,modal,centerscreen', params);
-          resultOK = params.GetInt(0) == 0;
-        }
+        TabmixSvc.obs.addObserver(_observe, "common-dialog-loaded", false);
+        let resultOK = TabmixSvc.prompt.confirm(win, title, msg);
         if (resultOK)
           aTab.postDataAcceptedByUser = true;
         else {

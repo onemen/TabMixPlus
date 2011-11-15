@@ -37,12 +37,8 @@ function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
   this.showList = aShowList;
   this.callbackDialog = aCallbackDialog;
   this.list = [];
-  if (TabmixSvc.version.is40) {
-    Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    this.getIncompatibleList_New();
-  }
-  else
-    this.getIncompatibleList();
+  Components.utils.import("resource://gre/modules/AddonManager.jsm");
+  this.getIncompatibleList();
 }
 
 CompatibilityCheck.prototype = {
@@ -55,7 +51,7 @@ CompatibilityCheck.prototype = {
   list: null,
 
   // for new AddonManager since Firefox 4.0
-  getIncompatibleList_New: function TMP_EX_getIncompatibleList_New() {
+  getIncompatibleList: function TMP_EX_getIncompatibleList() {
     function isPending(aAddon, aAction) {
       var action = AddonManager["PENDING_" + aAction.toUpperCase()];
       return !!(aAddon.pendingOperations & action);
@@ -78,50 +74,6 @@ CompatibilityCheck.prototype = {
       }
       self.showResult();
     });
-  },
-
-  getIncompatibleList: function TMP_EX_getIncompatibleList() {
-    var RDFService = Cc["@mozilla.org/rdf/rdf-service;1"]
-               .getService(Ci.nsIRDFService);
-    var Container = Cc["@mozilla.org/rdf/container;1"]
-               .getService(Ci.nsIRDFContainer);
-    var extensionDS = Cc["@mozilla.org/extensions/manager;1"]
-               .getService(Ci.nsIExtensionManager).datasource;
-    var root = "urn:mozilla:item:";
-
-    try { // in ff 1.0.x we can get error at startup
-      Container.Init(extensionDS, RDFService.GetResource(root + "root"));
-    } catch (e) {
-      Tabmix.log("error in getExtensions " + e);
-      return [];
-    }
-
-    function prop(elm, str) {
-      var arc = RDFService.GetResource("http://www.mozilla.org/2004/em-rdf#" + str);
-      var target = extensionDS.GetTarget(elm, arc, true);
-      if (target instanceof Ci.nsIRDFLiteral ||
-              target instanceof Ci.nsIRDFInt)
-        return target.Value;
-      return null;
-    }
-
-    var elements = Container.GetElements();
-    var guid_list = this.getList();
-
-    while (elements.hasMoreElements()) {
-      var element=elements.getNext().QueryInterface(Ci.nsIRDFResource);
-      var id = element.Value.replace(root, "");
-      if (typeof guid_list[id.toLowerCase()] != "undefined") {
-        var opType = prop(element, "opType");
-        var disabled = prop(element, "userDisabled");
-        if ((!disabled && opType != "needs-disable" && opType != "needs-uninstall") ||
-                ( disabled && opType == "needs-enable")) {
-          var name = prop(element, "name");
-          this.list.push({_name: name, id: id, _version:prop(element, "version"), toString:function() {return this._name.toLowerCase();}});
-        }
-      }
-    }
-    this.showResult();
   },
 
   showResult: function TMP_EX_showResult() {
@@ -185,28 +137,11 @@ CompatibilityCheck.prototype = {
 
   doDisable: function TMP_EX_doDisable() {
     var list = this.list;
-    if (TabmixSvc.version.is40) {
-      list.forEach(function(aAddonToDisable) {
-        AddonManager.getAddonByID(aAddonToDisable.id, function(aAddon) {
-          aAddon.userDisabled = true;
-        })
-      });
-    }
-    else {
-      var extensionManager = Cc["@mozilla.org/extensions/manager;1"]
-                               .getService(Ci.nsIExtensionManager);
-      for ( i = 0; i < list.length; i++ ) {
-        try{
-          extensionManager.disableItem(list[i].id);
-        } catch(e) {
-          Tabmix.log("error while disabled " + list[i]._name);
-        }
-      }
-
-      var dataSource = extensionManager.datasource.QueryInterface(Ci.nsIRDFRemoteDataSource);
-      if (dataSource)
-        dataSource.Flush();
-    }
+    list.forEach(function(aAddonToDisable) {
+      AddonManager.getAddonByID(aAddonToDisable.id, function(aAddon) {
+        aAddon.userDisabled = true;
+      })
+    });
   },
 
   restart: function TMP_EX_restart(aRestart) {

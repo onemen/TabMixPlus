@@ -12,10 +12,7 @@ XXX not working good
 var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
 let TMP_TabGroupsManager = {
-  init: function TMP_TGM_init(aWindow, tabBar, aFirefox4) {
-    if (!aFirefox4)
-      this.init36(aWindow, tabBar);
-
+  init: function TMP_TGM_init(aWindow, tabBar) {
     this.newCode("TMP_eventListener.onTabOpen", aWindow.TMP_eventListener.onTabOpen)._replace(
       'this.onTabOpen_delayUpdateTabBar(tab);',
       'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) { }'
@@ -26,7 +23,7 @@ let TMP_TabGroupsManager = {
       'this.onTabClose_updateTabBar(tab);',
       'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) { }'
     )._replace(
-      '!animat', 'true', {check: aFirefox4}
+      '!animat', 'true'
     ).toCode();
 
     this.newCode("TMP_tabDNDObserver._getTabGroupNewIndex", this._getDNDIndex, true).toCode();
@@ -42,13 +39,11 @@ let TMP_TabGroupsManager = {
     ).toCode();
 
     // fix bug in TGM when closeing last tab in a group with animation
-    if (aFirefox4) {
-      this.newCode("gBrowser.removeTab", aWindow.gBrowser.removeTab)._replace(
-        'if (aParams)',
-        'if (this.visibleTabs.length == 1) {aParams ? aParams.animate = false : aParams = {animate: false}};\
-         $&'
-      ).toCode();
-    }
+    this.newCode("gBrowser.removeTab", aWindow.gBrowser.removeTab)._replace(
+      'if (aParams)',
+      'if (this.visibleTabs.length == 1) {aParams ? aParams.animate = false : aParams = {animate: false}};\
+       $&'
+    ).toCode();
 
     this.newCode("TabGroupsManager.EventListener.prototype.onGroupSelect", aWindow.TabGroupsManager.EventListener.prototype.onGroupSelect)._replace(
       '"tabBarScrollStatus" in window', 'true'
@@ -165,152 +160,6 @@ let TMP_TabGroupsManager = {
     this.newCode("window.TMP_TabGroupsManager.tabmixSessionsManager", this.tabmixSessionsManager, true).toCode();
 
     this.newCode("TabmixSessionManager.saveAllGroupsData", this._saveAllGroupsData, true).toCode();
-  },
-
-  // for Firefox 3.5-3.6
-  init36: function TMP_TGM_init(aWindow, tabBar) {
-    tabBar.__defineGetter__("lastTabVisible", function () {return aWindow.TabGroupsManagerApiForTMPVer1.lastTabVisible;});
-
-    var selectedGroupLastChild = "TabGroupsManagerApiVer1.lastTab";
-    this.newCode("gBrowser.tabContainer.adjustNewtabButtonvisibility", tabBar.adjustNewtabButtonvisibility)._replace(
-      'lastTab.previousSibling;',
-      'TabGroupsManagerApiVer1.getPreviousTabInGroup(lastTab);'
-    )._replace(
-      'this.lastChild', selectedGroupLastChild
-    ).toCode();
-
-    var selectedGroupTabs = "TabGroupsManagerApiVer1.visibleTabs";
-    var _getter = tabBar.__lookupGetter__("lastTabRowNumber");
-    this.newCode(null , _getter)._replace('this.childNodes', selectedGroupTabs
-    ).toGetter(tabBar, "lastTabRowNumber");
-
-    this.newCode("gBrowser.tabContainer.adjustScrollTabsRight", tabBar.adjustScrollTabsRight)._replace(
-      'this.childNodes', selectedGroupTabs
-    ).toCode();
-
-    this.newCode("gBrowser.tabContainer.rowScroll", tabBar.rowScroll)._replace(
-      "this.childNodes", selectedGroupTabs
-    ).toCode();
-
-    _getter = tabBar.__lookupGetter__("collapsedTabs");
-    var _setter = tabBar.__lookupSetter__("collapsedTabs");
-    tabBar.__defineGetter__("collapsedTabs", _getter);
-    this.newCode(null, _setter)._replace(
-      "this.childNodes", selectedGroupTabs
-    ).toSetter(tabBar, "collapsedTabs");
-
-    // only allow to show tabs from the current group
-    this.newCode("gBrowser.tabContainer.isTabVisible", tabBar.isTabVisible)._replace(
-      'this.childNodes', selectedGroupTabs
-    )._replace(
-      '{',
-      '{aIndex = TabGroupsManagerApiVer1.getIndexInSelectedGroupFrom_tPos(aIndex);'
-    ).toCode();
-
-    this.newCode("gBrowser.tabContainer.ensureTabIsVisible", tabBar.ensureTabIsVisible)._replace(
-      'this.childNodes', selectedGroupTabs
-    )._replace(
-      'const tabs',
-      'aIndex = TabGroupsManagerApiVer1.getIndexInSelectedGroupFrom_tPos(aIndex); \
-      $&'
-    ).toCode();
-
-    this.newCode("gBrowser.tabContainer._notifyBackgroundTab", tabBar._notifyBackgroundTab)._replace(
-      'aTab._tPos >= this.collapsedTabs',
-      'TabGroupsManagerApiVer1.getIndexInSelectedGroupFrom_tPos(aTab._tPos) >= this.collapsedTabs'
-    )._replace(
-      'this.selectedIndex >= this.collapsedTabs',
-      'TabGroupsManagerApiVer1.getIndexInSelectedGroupFrom_tPos(this.selectedIndex) >= this.collapsedTabs'
-    ).toCode();
-
-    // make scrool button show hidden tabs only from the current group
-    this.newCode("TabmixAllTabs.createCommonList", aWindow.TabmixAllTabs.createCommonList)._replace(
-      'tabs = gBrowser.tabs;',
-      'tabs = side ? ' + selectedGroupTabs + ' : gBrowser.tabs;'
-    ).toCode();
-
-    this.newCode("TMP_Places.openGroup", aWindow.TMP_Places.openGroup)._replace(
-      "tabBar.childNodes", selectedGroupTabs
-    ).toCode();
-
-    this.newCode("TMP_eventListener.onTabClose_updateTabBar", aWindow.TMP_eventListener.onTabClose_updateTabBar)._replace(
-      'lastTab.previousSibling',
-      'TabGroupsManagerApiVer1.getPreviousTabInGroup(lastTab)'
-    )._replace(
-      'tabBar.lastChild', selectedGroupLastChild
-    )._replace(
-      'aTab._tPos < tabBar.collapsedTabs',
-      'TabGroupsManagerApiVer1.getIndexInSelectedGroupFromTab(aTab) < tabBar.collapsedTabs', {flags: "g"}
-    ).toCode();
-
-    Tabmix.newCode("TabmixTabbar._updateScrollLeft", TabmixTabbar._updateScrollLeft)._replace(
-      'tabBar.childNodes', selectedGroupTabs
-    ).toCode(true);
-
-    let tabmixDNDObserver = aWindow.TMP_tabDNDObserver;
-    this.newCode("TMP_tabDNDObserver.onDragOver", tabmixDNDObserver.onDragOver)._replace(
-      'this.getNewIndex(event)',
-      'this._getTabGroupNewIndex(event)'
-    ).toCode();
-
-    this.newCode("TMP_tabDNDObserver.onDrop", tabmixDNDObserver.onDrop)._replace(
-      'this.getNewIndex(event)',
-      'this._getTabGroupNewIndex(event)'
-    ).toCode();
-
-    this.newCode("TMP_tabDNDObserver.onDragEnd", tabmixDNDObserver.onDragEnd)._replace(
-      'tabBar.childNodes', selectedGroupTabs
-    ).toCode();
-
-    this.newCode("TMP_tabDNDObserver.getNewIndex", tabmixDNDObserver.getNewIndex)._replace(
-      'tabBar.childNodes', selectedGroupTabs
-    )._replace(
-      'event.target._tPos',
-      'TabGroupsManagerApiVer1.getIndexInSelectedGroupFromTab(event.target)', {flags: "g"}
-    )._replace(
-      'isTabVisible(i)',
-      'isTabVisible(tabs[i]._tPos)', {flags: "g"}
-    ).toCode();
-
-    this.newCode("TabmixTabbar.getRowHeight", aWindow.TabmixTabbar.getRowHeight)._replace(
-      'tabBar.childNodes', selectedGroupTabs
-    )._replace(
-      'lastTab.previousSibling',
-      'TabGroupsManagerApiVer1.getPreviousTabInGroup(lastTab)'
-    )._replace(
-      'firstTab.nextSibling',
-      'TabGroupsManagerApiVer1.getNextTabInGroup(firstTab);'
-    )._replace(
-      'tabBar.lastChild', selectedGroupLastChild
-    ).toCode();
-
-    this.newCode("TabmixTabbar.widthChange", aWindow.TabmixTabbar.widthChange)._replace(
-      'gBrowser.tabs', selectedGroupTabs
-    )._replace(
-      'tabBar.ensureTabIsVisible(index);',
-      'tabBar.ensureTabIsVisible(tabs[index]._tPos);'
-    )._replace(
-      'tabBar.lastChild', selectedGroupLastChild
-    ).toCode();
-
-    this.newCode("gBrowser.tabContainer.adjustTabstrip", tabBar.adjustTabstrip)._replace(
-      'this._isRTLScrollbox && !TabmixTabbar.isMultiRow ? this.firstChild : this.lastChild;',
-      'TMP_TabView.checkTabs(tabs);'
-    ).toCode();
-
-    this.newCode("TabmixProgressListener.listener.onStateChange", aWindow.TabmixProgressListener.listener.onStateChange)._replace(
-      'let tabsCount = this.mTabBrowser.tabContainer.childNodes.length - this.mTabBrowser._removingTabs.length;',
-      'let tabsCount = TabGroupsManagerApiVer1.visibleTabs.length;', {flags: "g"}
-    ).toCode();
-
-    var oldCode = 'var prev = tab.previousSibling, next = tab.nextSibling;';
-    var newCode = 'var prev = TabGroupsManagerApiVer1.getPreviousTabInGroup(tab), next = TabGroupsManagerApiVer1.getNextTabInGroup(tab);';
-    this.newCode("TabmixTabbar.updateBeforeAndAfter", aWindow.TabmixTabbar.updateBeforeAndAfter)._replace(
-      oldCode, newCode
-    ).toCode();
-    this.newCode("TMP_eventListener.onTabSelect", aWindow.TMP_eventListener.onTabSelect)._replace(
-      oldCode, newCode
-    ).toCode();
   },
 
   // get _tPos from group index

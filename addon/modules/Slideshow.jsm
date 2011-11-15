@@ -20,18 +20,7 @@ flst.prototype = {
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
     }
-    catch (e) {
-      if (TabmixSvc.is40)
-        return;
-      let statusTextFld = TabmixSvc.topWin().document.getElementById("statusbar-display");
-      let currentLabel = statusTextFld.label;
-      statusTextFld.label = msg;
-      this.timer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-      this.timer.initWithCallback(function () {
-            statusTextFld.label = currentLabel;
-            this.timer = null;
-      }, 2500, Ci.nsITimer.TYPE_ONE_SHOT);
-    }
+    catch (e) { }
   },
 
   //toggle flst on/off
