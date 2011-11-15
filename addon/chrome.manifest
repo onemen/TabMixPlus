@@ -71,17 +71,15 @@ overlay   chrome://wizzrss/content/feedster.xul                     chrome://tab
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferences.css
 
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay3_36.css  appversion<3.7
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay40.css    appversion>=4.0b7pre
+style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay40.css
 
-skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/3.5/                  appversion<3.6
-skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/3.6/                  appversion>=3.6
-skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/4.0/                  appversion>=4.0b7pre
+#skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/4.0/                  appversion>=4.0b7pre
+#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/win/                      os=WINNT
+#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/mac/                      os=Darwin
+#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/linux/                    os=Linux
 
-skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/win/                      os=WINNT
-skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/mac/                      os=Darwin
-skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/linux/                    os=Linux
+skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/win/               os=WINNT
+skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/mac/               os=Darwin
+skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/linux/             os=Linux
 
 style   chrome://browser/content/browser.xul   chrome://tabmix-os/skin/browser.css
-# just for Firefox 3.5 we load general.css from here
-style   chrome://browser/content/browser.xul   chrome://tabmix-app-version/skin/general.css               appversion<3.6
