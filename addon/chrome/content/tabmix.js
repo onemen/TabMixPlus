@@ -10,45 +10,19 @@ Tabmix.startup = function TMP_startup() {
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (this.isVersion(40)) {
-    // multi-rows total heights are diffrent when tabs on top
-    // since this is not trigger any other event that we can listen to
-    // we force to add here a call to reset tabbar height
-    TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
-    TabsOnTop.toggle = function TabsOnTop_toggle() {
-      this.tabmix_originaltoggle.apply(this, arguments);
-      if (TabmixTabbar.visibleRows > 1)
-        TabmixTabbar.setHeight(TabmixTabbar.visibleRows, true);
-    }
-
-    let closeButton = document.getElementById("tabs-closebutton");
-    if (closeButton)
-      closeButton.setAttribute("onclick","if (event.button == 1) TMP_ClosedTabs.undoCloseTab();");
+  // multi-rows total heights are diffrent when tabs on top
+  // since this is not trigger any other event that we can listen to
+  // we force to add here a call to reset tabbar height
+  TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
+  TabsOnTop.toggle = function TabsOnTop_toggle() {
+    this.tabmix_originaltoggle.apply(this, arguments);
+    if (TabmixTabbar.visibleRows > 1)
+      TabmixTabbar.setHeight(TabmixTabbar.visibleRows, true);
   }
-  else {
-    // replace browser handlers with ours so it recognizes when tabs are acted on
-    gBrowser.onTabBarDblClick = function TMP_gBrowser_onTabBarDblClick(aEvent) {TabmixTabClickOptions.onTabBarDblClick(aEvent);};
-    gBrowser.onTabClick = function TMP_gBrowser_onTabClick(aEvent) {TabmixTabClickOptions.onTabClick(aEvent);};
-    window.setTimeout(function () {
-      try {
-        Tabmix.delayedStartup();
-      } catch (ex) {Tabmix.assert(ex);}
-    }, 0);
 
-    let goPopup = document.getElementById("goPopup");
-    if (goPopup) {
-      goPopup.addEventListener("popupshowing", TMP_Places.historyMenuItemsTitle, false);
-      let historyMenu = goPopup.parentNode;
-      if (historyMenu)
-        historyMenu.setAttribute("oncommand", "TMP_Places.historyMenu(event);");
-    }
-
-    gBrowser.onresize = function gBrowser_onresize(aEvent) {TabmixTabbar.widthChange(aEvent);};
-
-    // from Firefox 4.0+ window.BrowserHome is the same as window.BrowserGoHome
-    // Browser:Home open in new tab if the curren tab is locked
-    window.BrowserHome = this.browserHome;
-  }
+  let closeButton = document.getElementById("tabs-closebutton");
+  if (closeButton)
+    closeButton.setAttribute("onclick","if (event.button == 1) TMP_ClosedTabs.undoCloseTab();");
 
   if(gBrowser.moveTabTo)
     gBrowser.moveTabTo = gBrowser.TMmoveTabTo;
@@ -499,10 +473,7 @@ var TMP_eventListener = {
       TabmixProgressListener.startup(gBrowser);
     } catch (ex) {Tabmix.assert(ex);}
 
-    if (Tabmix.isVersion(40))
-      gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
-    else
-      gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
+    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // init tabmix functions
     try {
@@ -669,7 +640,8 @@ var TMP_eventListener = {
       TabmixTabbar._width = gBrowser.tabContainer.boxObject.width;
       // only hide the tabbar after we catch the width
       if (TabmixTabbar.hideMode == 2)
-        Tabmix.setStripVisibilityTo(false);
+///XXX - check if we need to use gBrowser.setStripVisibilityTo(false)
+        gBrowser.tabContainer.visible = false;
     }, 100);
 
     TabmixTabbar.position = 0;
@@ -1133,10 +1105,7 @@ var TMP_eventListener = {
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
       TMP_TabView._resetTabviewFrame();
     }
-    if (Tabmix.isVersion(40))
-      gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
-    else
-      gBrowser.mPanelContainer.addEventListener("click", TMP_contentLinkClick, true);
+    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version
     // we call removeEventListener again here in case user close the window without opening new tabs

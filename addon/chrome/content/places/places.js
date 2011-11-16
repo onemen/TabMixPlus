@@ -98,7 +98,7 @@ var TMP_Places = {
          if (inversefocus || (!inversefocus && shift))', {check: !Tabmix.isVersion(40)}
       )._replace( // Firefox 4.0
         'return shift ? "tabshifted" : "tab";',
-        'let pref = Tabmix.isCallerInList("handleLinkClick", "TMP_howToOpen", "TMP_tabshifted", "TMP_contentLinkClick") ?\
+        'let pref = Tabmix.isCallerInList("handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
          let inversefocus = getBoolPref(pref, true);\
          return inversefocus || shift ? "tabshifted" : "tab";', {check: Tabmix.isVersion(40)}

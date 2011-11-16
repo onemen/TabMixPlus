@@ -322,7 +322,6 @@ var TabmixSessionManager = {
     corruptedFile: false,
     afterTabSwap: false,
     _inited: false,
-    tabViewEnabled: false, // for Firefox 3.5-3.6
 
     afterCrash: false,
 
@@ -911,8 +910,7 @@ var TabmixSessionManager = {
       var rdfLabels = ["tabs","closedtabs","index","history","properties","selectedIndex",
                "timestamp","title","url","dontLoad","reOpened","name","nameExt","session",
                "status","tabPos","image","scroll","winFeatures"];
-      if (this.tabViewEnabled)
-        rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
+      rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
       for (var i = 0; i < rdfLabels.length; i++) {
          this.NC_TM[rdfLabels[i]] = this.RDFService.GetResource(this.NC_NS + rdfLabels[i]);
       }
@@ -1127,7 +1125,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       switch (aTopic) {
          case "quit-application-requested":
             // TabView
-            if (this.tabViewEnabled && TabView._window) {
+            if (TabView._window) {
               if (TabView.isVisible())
                 this.setLiteral(this.gThisWin, "tabview-visibility", "true");
               else
@@ -2317,8 +2315,7 @@ try{
       this.saveStateDelayed();
 
       // now that we open our tabs init TabView again
-      if (this.tabViewEnabled)
-        TabView.init();
+      TabView.init();
 
       // some extensions observer for this notification on startup
       // notify observers things are complete.
@@ -2469,11 +2466,9 @@ try{
          this.setIntLiteral(rdfNodeThisWindow, "selectedIndex", this.getTabPosition());
 
       // save TabView data
-      if (this.tabViewEnabled) {
-        try {
-          this.saveTabViewData(rdfNodeThisWindow);
-        } catch (ex) {Tabmix.assert(ex);}
-      }
+      try {
+        this.saveTabViewData(rdfNodeThisWindow);
+      } catch (ex) {Tabmix.assert(ex);}
 
       if (caller == "windowbackup") {
          return savedTabs;
@@ -2710,8 +2705,7 @@ try{
          scroll: bContent.scrollX + "," + bContent.scrollY + "," + zoomFactor
       };
       this.saveTabData(rdfNodeTab, data);
-      if (this.tabViewEnabled)
-        this.saveTabviewTab(rdfNodeTab, aTab);
+      this.saveTabviewTab(rdfNodeTab, aTab);
 
       // dont append if we call from tabClosed function
       if (tabContainer.IndexOf(rdfNodeTab) == -1 && needToAppend) {
@@ -3681,10 +3675,6 @@ try{
 
   // aWindow: rdfNodeWindow to read from
   _setWindowStateBusy: function SM__setWindowStateBusy(aWindow) {
-    // Firefox 3.5-3.6.x
-    if (!this.tabViewEnabled)
-      return;
-
     TMP_SessionStore.initService();
     this._sendWindowStateEvent("Busy");
     this._getdSessionTabviewData(aWindow);
@@ -3696,9 +3686,6 @@ try{
   },
 
   _setWindowStateReady: function SM__setWindowStateReady(aOverwriteTabs, showNotification) {
-    if (!this.tabViewEnabled)
-      return;
-
     this._saveTabviewData();
     if (!aOverwriteTabs)
       this._groupItems = this._tabviewData["tabview-group"];
@@ -3777,7 +3764,7 @@ try{
   },
 
   _setTabviewTab: function SM__setTabviewTab(tabData, aEntry){
-    if (!this.tabViewEnabled || tabData.tab.pinned)
+    if (tabData.tab.pinned)
       return;
 
     let parsedData;
@@ -3935,9 +3922,6 @@ try{
   * blankTabs: remaining blank tabs in this windows
   */
   _preperTabviewData: function SM__preperTabviewData(loadOnStartup, blankTabs) {
-    if (!this.tabViewEnabled)
-      return;
-
     let newGroupItems = this._tabviewData["tabview-group"];
     let groupItems = TabmixSessionData.getWindowValue(window, "tabview-group", true);
     let newGroupItemsIsEmpty = this.isEmptyObject(newGroupItems);

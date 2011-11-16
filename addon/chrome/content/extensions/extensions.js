@@ -17,7 +17,7 @@ var TMP_extensionsCompatibility = {
         let tmp = {};
         Components.utils.import("resource://tabmixplus/extensions/TabGroupsManager.jsm", tmp);
         tmp.TMP_TabGroupsManager.newCode = Tabmix.newCode;
-        tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer, Tabmix.isVersion(40));
+        tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
     } catch (ex) {Tabmix.assert(ex, "error in TabGroupsManager.jsm");}
 
@@ -93,7 +93,7 @@ var TMP_extensionsCompatibility = {
       }
     }
 
-    /*  we don't use this code - leave it here as a reminder. 
+    /*  we don't use this code - leave it here as a reminder.
 
     // workaround for extensions that look for updateIcon
     // Favicon Picker 2
@@ -121,19 +121,9 @@ var TMP_extensionsCompatibility = {
     }
     */
 
+
     // https://addons.mozilla.org/en-US/firefox/addon/bug489729-disable-detach-and-t//
-    if ("bug489729" in window) {
-      Tabmix.newCode("bug489729.init", bug489729.init)._replace(
-        '"TabDNDObserver" in window', 'true', {silent: true}
-      )._replace(
-        'TabDNDObserver', 'TMP_tabDNDObserver', {silent: true, flags: "g"}
-      )._replace(
-        'if (gIsFirefox35) {',
-        'this._dragLeftWindow = false;', {silent: true}
-      )._replace(
-        'gSingleWindowMode', 'Tabmix.singleWindowMode', {silent: true}
-      ).toCode();
-    }
+    // we don't need to do any changes to bug489729 extension version 1.6+
 
   },
 
@@ -328,33 +318,13 @@ var TMP_extensionsCompatibility = {
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
-    // some themes uses old tabmix_3.xml version and call _createTabsList
-    function _fixOnContextmenu(item, side) {
-      if (side == "right")
-        item.oncontextmenu = function (event) {TabmixAllTabs.createScrollButtonTabsList(event, "right");}
-      else
-        item.oncontextmenu = function (event) {TabmixAllTabs.createScrollButtonTabsList(event, "left");}
-      item.removeAttribute("oncontextmenu");
-    }
-
-    var buttonDown = document.getAnonymousElementByAttribute(gBrowser.tabContainer, "anonid", "scrollbutton-down") ||
-                     document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip, "anonid", "scrollbutton-down");
-    //XXX for now we don't do changes for other themes regarding scroll buttons oncontextmenu
+    //XXX some themes uses old tabmix_3.xml version and call _createTabsList
+    // for now we don't do changes for other themes regarding scroll buttons oncontextmenu
+    // with the new code in scrollbox.xml
     // this need more testing with other themes
-    if (!Tabmix.isVersion(40) && buttonDown && buttonDown.oncontextmenu){
-      _fixOnContextmenu(buttonDown, "right");
-      _fixOnContextmenu(buttonDown.previousSibling, "left");
-      let buttonUp = document.getAnonymousElementByAttribute(gBrowser.tabContainer, "anonid", "scrollbutton-up") ||
-                     document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip, "anonid", "scrollbutton-up");
-      if (buttonUp && buttonUp.oncontextmenu)
-        _fixOnContextmenu(buttonUp, "left");
-    }
 
     // check if Greasemonkey installed
-    if (Tabmix.isVersion(40))
-      Tabmix.contentAreaClick.isGreasemonkeyInstalled();
-    else
-      TMP_isGreasemonkeyInstalled();
+    Tabmix.contentAreaClick.isGreasemonkeyInstalled();
   }
 
 }
@@ -408,40 +378,35 @@ TMP_extensionsCompatibility.RSSTICKER = {
 
 // prevent Wizz RSS from load pages in locked tabs
 TMP_extensionsCompatibility.wizzrss = {
-   started: null,
-   init : function ()  {
-      if (this.started)
-        return;
-      this.started = true;
-      var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
-      const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
-      var _functions = ["addFeedbase","validate","gohome","tryagain","promptStuff",
-                        "doSearch","viewLog","renderItem","playEnc","renderAllEnc","playAllEnc",
-                        "gotoLink","itemLinkClick","itemListClick"];
+  started: null,
+  init : function ()  {
+    if (this.started)
+      return;
+    this.started = true;
+    var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
+    const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
+    var _functions = ["addFeedbase","validate","gohome","tryagain","promptStuff",
+                      "doSearch","viewLog","renderItem","playEnc","renderAllEnc","playAllEnc",
+                      "gotoLink","itemLinkClick","itemListClick"];
 
-      _functions.forEach(
-         function(_function) {
-            if (_function in window)
-               Tabmix.newCode("window." + _function, window[_function])._replace(codeToReplace,newCode).toCode();
-         }
-      );
-   },
+    _functions.forEach(function(_function) {
+      if (_function in window)
+        Tabmix.newCode("window." + _function, window[_function])._replace(codeToReplace,newCode).toCode();
+    });
+  },
 
-   openURI : function (uri)  {
-      var w = Tabmix.getTopWin();
-      var tabBrowser = w.gBrowser;
+  openURI : function (uri)  {
+    var w = Tabmix.getTopWin();
+    var tabBrowser = w.gBrowser;
 
-      var openNewTab = w.Tabmix.whereToOpen(true).lock;
-      if (openNewTab) {
-         var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
-         if (Tabmix.isVersion(36))
-           tabBrowser.loadOneTab(uri, {inBackground: theBGPref});
-         else
-           tabBrowser.loadOneTab(uri, null, null, null, theBGPref);
-      }
-      else
-         tabBrowser.loadURI(uri);
-   }
+    var openNewTab = w.Tabmix.whereToOpen(true).lock;
+    if (openNewTab) {
+      var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
+      tabBrowser.loadOneTab(uri, {inBackground: theBGPref});
+    }
+    else
+      tabBrowser.loadURI(uri);
+  }
 }
 
 // prevent Newsfox from load pages in locked tabs
@@ -476,7 +441,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
       if ("overrideExtensionsOnInitAfter" in TreeStyleTabService) {
         // TMupdateSettings replaced with TabmixTabbar.updateSettings
         // TabDNDObserver replaced with TMP_tabDNDObserver
-        // TM_BrowserHome replaced with Tabmix.browserHome
         // tabBarScrollStatus replaced with TabmixTabbar.updateScrollStatus
 
         Tabmix.newCode("TreeStyleTabService.overrideExtensionsOnInitAfter", TreeStyleTabService.overrideExtensionsOnInitAfter)._replace(
@@ -503,15 +467,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
           'TabmixTabbar.getRowHeight', {flags: "g"}
         ).toCode();
 
-        // we add tabbrowser to tabContainer before Firefox 4.0
-        Tabmix.newCode("TreeStyleTabService.updateTabDNDObserver", TreeStyleTabService.updateTabDNDObserver)._replace(
-          'aObserver.tabContainer.tabbrowser == aObserver',
-          'Tabmix.isVersion(40) && $&', {check: !Tabmix.isVersion(40)}
-        )._replace(
-          'let locked =',
-          'var locked =', {flags: "g", silent: true}
-        ).toCode();
-
         /* for treeStyleTab extension look in treeStyleTab hacks.js
            we remove tabxTabAdded function and use TMP_eventListener.onTabOpen from 0.3.7pre.080815
         */
@@ -520,16 +475,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
           gBrowser.tabContainer.removeEventListener('DOMNodeInserted', tabxTabAdded, true);
           return;
         }
-      }
-
-      // TMupdateSettings replaced with TabmixTabbar.updateSettings
-      if ("overrideExtensionsDelayed" in TreeStyleTabService) {
-        Tabmix.newCode("TreeStyleTabService.overrideExtensionsDelayed", TreeStyleTabService.overrideExtensionsDelayed)._replace(
-          '"TMupdateSettings" in window', 'true', {silent: true} // not in use from TST 2011.01.13.01
-        )._replace(
-          'TM_BrowserHome',
-          'Tabmix.browserHome', {silent: true} // not in use from TST 2011.01.13.01
-        ).toCode();
       }
 
       if ('piro.sakura.ne.jp' in window && "tabsDragUtils" in window['piro.sakura.ne.jp']) {
@@ -544,7 +489,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we don't need this in the new version since we change the tabs-frame place
     // keep it here for non default theme that uses old Tabmix binding
-    if (Tabmix.isVersion(40) && "TreeStyleTabBrowser" in window) {
+    if ("TreeStyleTabBrowser" in window) {
       let fn = TreeStyleTabBrowser.prototype.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
         Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
@@ -558,39 +503,23 @@ TMP_extensionsCompatibility.treeStyleTab = {
         ).toCode();
       }
     }
+
+    // we removed TMP_howToOpen function 2011-11-15
+    if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
+      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit",
+          TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit)._replace(
+        'eval("window.TMP_howToOpen',
+        'if (false) $&'
+      ).toCode();
+    }
   },
 
   onWindowLoaded: function () {
-    // for Firefox 3.5 - 3.6.x
-    function replaceHorizontalProps(aObjectName, aObject) {
-      var ensureTabIsVisible = aObjectName == "gBrowser.tabContainer.ensureTabIsVisible";
-      Tabmix.newCode(aObjectName, aObject)._replace(
-        'scrollBoxObject.width < 250',
-        '$& || gBrowser.treeStyleTab.isVertical', {check: ensureTabIsVisible && this.isNewVersion, flags: "g"}
-      )._replace(
-        'scrollBoxObject.screenX',
-        'scrollBoxObject[TMP_screenPosProp]', {flags: "g"}
-      )._replace(
-        'scrollBoxObject.width',
-        'scrollBoxObject[sizeProp]', {check: this.isNewVersion, flags: "g"}
-      )._replace(
-        '{',
-        '{var TMP_screenPosProp = gBrowser.treeStyleTab.isVertical ? "screenY" : "screenX";\
-          var TMP_sizeProp = gBrowser.treeStyleTab.isVertical ? "height" : "width";'
-      ).toCode();
-    }
-    if (!Tabmix.isVersion(40)) {
-      if (!TreeStyleTabService.getTreePref("TMP.doNotUpdate.isTabVisible"))
-        replaceHorizontalProps("gBrowser.tabContainer.isTabVisible", gBrowser.tabContainer.isTabVisible);
-
-      replaceHorizontalProps("gBrowser.tabContainer.ensureTabIsVisible", gBrowser.tabContainer.ensureTabIsVisible);
-    }
-
     /**
      *  TST have eval to TMP_Bookmark.openGroup
      *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830
      *  we also replace call to TreeStyleTabService.openGroupBookmarkBehavior();
-     *  with aOpenGroupBookmarkBehavior that we pass from  PlacesUIUtils._openTabset
+     *  with aOpenGroupBookmarkBehavior that we pass from PlacesUIUtils._openTabset
      *  we only call this functiom from browserWindow so we don't need to call it for
      *  other places windows
      */

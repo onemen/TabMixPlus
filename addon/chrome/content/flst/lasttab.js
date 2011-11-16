@@ -137,16 +137,11 @@ var TMP_LastTab = {
        return;
 
      this.detachTab(aTab);
-     var index;
      if (this.favorLeftToRightOrdering) {
-       if (Tabmix.isVersion(36) && gBrowser._lastRelatedTab) {
-         index = this.TabHistory.indexOf(gBrowser._lastRelatedTab);
-         if (index < 0)
-           index = 1;
-       }
-       else
-         index = this.TabHistory.length - gBrowser.tabContainer.nextTab;
-       this.TabHistory.splice(index, 0, aTab);
+      let index = this.TabHistory.indexOf(gBrowser._lastRelatedTab);
+      if (index < 0)
+        index = 1;
+      this.TabHistory.splice(index, 0, aTab);
      }
      else
        this.TabHistory.splice(this.TabHistory.length-1, 0, aTab);
@@ -217,7 +212,6 @@ try{
    get tabs () {
      if (this._tabs)
        return this._tabs;
-     // this also work with hidden tabs in firefox 3.5-3.6
      let list;
      if (this.handleCtrlTab) {
        if (this.TabHistory.length != gBrowser.tabs.lenght)
@@ -381,13 +375,8 @@ try{
    },
 
    ReadPreferences : function() {
-     /*
-      * Build-in tabPreviews exist in Firefox 3.5+
-      * when tabPreviews is on we disable our own function
-      *
-      * we use Tabmix.getBoolPref to make sure browser.ctrlTab.previews exist (for version before Firefox 3.5)
-      */
-      var mostRecentlyUsed = Tabmix.getBoolPref("browser.ctrlTab.previews", true);
+      // when Build-in tabPreviews is on we disable our own function
+      var mostRecentlyUsed = TabmixSvc.prefs.getBoolPref("browser.ctrlTab.previews");
       var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
       if (tabPreviews) {
          var tabPreviewsCurentStatus = ctrlTab._recentlyUsedTabs ? true : false;

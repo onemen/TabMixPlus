@@ -9,38 +9,6 @@
  *
  */
 
-/**
- * @brief Catch call to tabmix options from EM
- *        we only use Tabmix options if we have browser window
- *
- * @param aURL       A valid options URL string.
- *
- * @return           true if the URL is for tabmix options
- *                   false if not.
- *
- * In use for Firefox 3.5 - 3.6.x from extension manager
- */
-Tabmix.cmdOptions = function TMP_cmd_options(aURL) {
-   if (aURL != "chrome://tabmixplus/content/pref/pref-tabmix.xul")
-      return false;
-
-   var windowMediator = TabmixSvc.wm;
-   var browserWindow = windowMediator.getMostRecentWindow('navigator:browser');
-
-   if (!browserWindow) {
-      var tabmixopt = windowMediator.getMostRecentWindow("mozilla:tabmixopt");
-      if (tabmixopt)
-         tabmixopt.close();
-      var title = TabmixSvc.getString("tabmixoption.error.title");
-      var msg = TabmixSvc.getString("tabmixoption.error.msg");
-      TabmixSvc.prompt.alert(window, title, msg);
-   }
-   else
-      browserWindow.Tabmix.openOptionsDialog(-1);
-
-   return true;
-}
-
 Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
   var windowMediator = TabmixSvc.wm;
   var tabmixOptionsWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt");
@@ -175,7 +143,7 @@ Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
      gBrowser.mCurrentTab.collapsed = true;
 
    var loadBlank = url == "about:blank";
-   var newTab = replaceLastTab && Tabmix.isVersion(40) ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
+   var newTab = replaceLastTab ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
    if (replaceLastTab) {
      newTab.__newLastTab = true;
      if (TabmixSvc.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
@@ -186,10 +154,6 @@ Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
        gBrowser.tabContainer.setAttribute("closebuttons", "noclose");
        gBrowser.tabContainer.removeAttribute("closebuttons-hover");
      }
-     // fix a bug in Firefox when we replace last tab the strip remain visible even if the pref is to hide tabbar
-     // when there is only one tab
-     if (!Tabmix.isVersion(40) && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && gBrowser.getStripVisibility())
-       gBrowser.setStripVisibilityTo(false);
    }
 
    if (!loadBlank) {
@@ -198,10 +162,7 @@ Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          browser.stop();
          let originCharset = gBrowser.contentDocument.characterSet;
          browser.loadURIWithFlags(url, flags, null, originCharset);
-         if (Tabmix.isVersion(36))
-            gBrowser.selectedBrowser.focus();
-         else
-            focusElement(content);
+         gBrowser.selectedBrowser.focus();
       }
       catch (ex) {}
    }
@@ -302,7 +263,7 @@ Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisa
   var middleClick = theEvent instanceof MouseEvent && (theEvent.button == 1 || theEvent.ctrlKey || theEvent.metaKey);
   if (aUrl || middleClick) {
     let where = whereToOpenLink(theEvent);
-    if (this.isVersion(40) && where != "current") {
+    if (where != "current") {
       gURLBar.handleRevert();
       gBrowser.selectedBrowser.focus();
     }
@@ -383,10 +344,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
     gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);
   }
 
-  if (this.isVersion(36))
-    gBrowser.selectedBrowser.focus();
-  else
-    focusElement(content);
+  gBrowser.selectedBrowser.focus();
 
   if (aEvent instanceof Event) {
     aEvent.preventDefault();

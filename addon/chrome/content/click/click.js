@@ -92,7 +92,7 @@ var TabmixTabClickOptions = {
     this.onDoubleClick = true;
     var node = aEvent.originalTarget;
 
-    var blockDblClick = Tabmix.isVersion(40) ? gBrowser.tabContainer._blockDblClick : gBrowser._blockDblClick
+    var blockDblClick = gBrowser.tabContainer._blockDblClick;
     if (blockDblClick && aEvent.originalTarget.localName == "box")
       return;
     // don't do anything if user click on close tab button , or on any other button on tab or tabbar
@@ -239,12 +239,10 @@ var TabmixTabClickOptions = {
         Tabmix.autoReload.toggle(aTab);
         break;
       case 31: // pin/unpin tab
-        if (Tabmix.isVersion(40)) {
-          if (aTab.pinned)
-            gBrowser.unpinTab(aTab);
-          else
-            gBrowser.pinTab(aTab);
-        }
+        if (aTab.pinned)
+          gBrowser.unpinTab(aTab);
+        else
+          gBrowser.pinTab(aTab);
         break;
     }
   }
@@ -255,44 +253,28 @@ var TabmixContext = {
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var tabContextMenu;
     var closeOther = document.getElementById("context_closeOtherTabs");
-    if (Tabmix.isVersion(40)) {
-      tabContextMenu = gBrowser.tabContextMenu;
-      let reloadAll = document.getElementById("context_reloadAllTabs");
-      // move context_reloadAllTabs to the place it was before Fireofox 4.0
-      tabContextMenu.insertBefore(reloadAll, document.getElementById("context_reloadTab").nextSibling);
-      // move context_closeOtherTabs to the place it was before Fireofox 4.0
-      tabContextMenu.insertBefore(closeOther, reloadAll.nextSibling);
-      // from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent in contentAreaContextMenu
-      // move our menu to that position
-      let openLinkInCurrent = document.getElementById("context-openlinkincurrent");
-      let tabmix_menu = document.getElementById("tm-openlinkhere");
-      openLinkInCurrent.parentNode.insertBefore(tabmix_menu, openLinkInCurrent);
+    tabContextMenu = gBrowser.tabContextMenu;
+    let reloadAll = document.getElementById("context_reloadAllTabs");
+    // move context_reloadAllTabs to the place it was before Fireofox 4.0
+    tabContextMenu.insertBefore(reloadAll, document.getElementById("context_reloadTab").nextSibling);
+    // move context_closeOtherTabs to the place it was before Fireofox 4.0
+    tabContextMenu.insertBefore(closeOther, reloadAll.nextSibling);
+    // from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent in contentAreaContextMenu
+    // move our menu to that position
+    let openLinkInCurrent = document.getElementById("context-openlinkincurrent");
+    let tabmix_menu = document.getElementById("tm-openlinkhere");
+    openLinkInCurrent.parentNode.insertBefore(tabmix_menu, openLinkInCurrent);
 
-      if (!document.getElementById("context_bookmarkTab")) {
-        // in firefox 4.0 context_bookmarkTab was removed
-        let bookmarkTab = document.createElement("menuitem");
-        tabContextMenu.insertBefore(bookmarkTab, document.getElementById("context_bookmarkAllTabs"));
-        bookmarkTab.setAttribute("id", "context_bookmarkTab");
-        let label = document.getElementById("tm-separator").getAttribute("_bookmarkTab");
-        bookmarkTab.setAttribute("label", label);
-        bookmarkTab.setAttribute("oncommand", "PlacesCommandHook.bookmarkPage(TabContextMenu.contextTab.linkedBrowser, PlacesUtils.bookmarksMenuFolderId, true);");
-      }
+    if (!document.getElementById("context_bookmarkTab")) {
+      // in firefox 4.0 context_bookmarkTab was removed
+      let bookmarkTab = document.createElement("menuitem");
+      tabContextMenu.insertBefore(bookmarkTab, document.getElementById("context_bookmarkAllTabs"));
+      bookmarkTab.setAttribute("id", "context_bookmarkTab");
+      let label = document.getElementById("tm-separator").getAttribute("_bookmarkTab");
+      bookmarkTab.setAttribute("label", label);
+      bookmarkTab.setAttribute("oncommand", "PlacesCommandHook.bookmarkPage(TabContextMenu.contextTab.linkedBrowser, PlacesUtils.bookmarksMenuFolderId, true);");
     }
-    else {
-      if (!gBrowser.tabContextMenu)
-        gBrowser.tabContextMenu = document.getAnonymousElementByAttribute(gBrowser, "anonid", "tabContextMenu");
-      tabContextMenu = gBrowser.tabContextMenu;
 
-      if (!tabContextMenu.hasAttribute("id"))
-        tabContextMenu.setAttribute("id", "MenuEdit" in window ? "menuedit-tabContextMenu" : "tabContextMenu");
-
-      // we use it to make sure context menu is not hide when stip is collapsed in Firefox 3.5-3.6
-      let _class = tabContextMenu.hasAttribute("class") ? tabContextMenu.setAttribute("class") + " ": "";
-      tabContextMenu.setAttribute("class", _class + "tabmix-tabContextMenu");
-      // From Firefox 3.5.4pre we can not use anonymous menupopup from toolbar button
-      // this hack enable tabmix to use tab context menu from tablist tollbar button
-      gBrowser.tabContainer.parentNode.insertBefore(gBrowser.tabContextMenu, gBrowser.tabContainer);
-    }
     // to be compatible with firefox 3.0 we use our own move-tab-to-new-window
     // firefox don't have function to duplicate the tab to new windows
     // look in gBrowser.duplicateInWindow
@@ -306,7 +288,7 @@ var TabmixContext = {
     tabContextMenu.addEventListener("popupshown", this.tabContextMenuShown, false);
 
     // update context_newTab attribute
-    if (Tabmix.isVersion(40) && !document.getElementById("context_newTab")) {
+    if (!document.getElementById("context_newTab")) {
       // in firefox 4.0 context_newTab was removed
       // we insert context_newTab back as firstChild
       let firstChild = tabContextMenu.firstChild;
@@ -321,15 +303,8 @@ var TabmixContext = {
       newTab.setAttribute("tmp_iconic", "menuitem-iconic newtab-menu-icon");
       newTab.setAttribute("oncommand", "BrowserOpenTab();");
     }
-    else {
-      let newTab = document.getElementById("context_newTab");
-      newTab.setAttribute("_newtab", newTab.getAttribute("label"));
-      newTab.setAttribute("_afterthis", document.getElementById("tm-separator").getAttribute("_afterthis"));
-      newTab.setAttribute("tmp_iconic", "menuitem-iconic newtab-menu-icon");
-      newTab.removeAttribute(Tabmix.isVersion(40) ? "command" : "xbl:inherits");
-    }
 
-    var separators = tabContextMenu.getElementsByTagName(Tabmix.isVersion(40) ? "menuseparator" : "xul:menuseparator");
+    var separators = tabContextMenu.getElementsByTagName("menuseparator");
     for (let i = 0; i < separators.length; i++ ) {
       let separator = separators[i];
       if (separator.parentNode !=  tabContextMenu || separator.hasAttribute("id"))
@@ -368,14 +343,12 @@ var TabmixContext = {
     openTabInWindow.setAttribute("id", "context_openTabInWindow");
 
     // Move pin/unpin and tabViewMenu after context_openTabInWindow
-    if (Tabmix.isVersion(40)) {
-      try { // temp for a few weeks 2010-07-07
+    try { // temp for a few weeks 2010-07-07
       let item = openTabInWindow.nextSibling;
-       tabContextMenu.insertBefore(document.getElementById("context_pinTab"), item);
-       tabContextMenu.insertBefore(document.getElementById("context_unpinTab"), item);
-       tabContextMenu.insertBefore(document.getElementById("context_tabViewMenu"), item);
-      } catch (ex) { }
-    }
+      tabContextMenu.insertBefore(document.getElementById("context_pinTab"), item);
+      tabContextMenu.insertBefore(document.getElementById("context_unpinTab"), item);
+      tabContextMenu.insertBefore(document.getElementById("context_tabViewMenu"), item);
+    } catch (ex) { }
 
     // move context_undoCloseTab before tm-undoCloseList
     var _undoCloseTab = document.getElementById("context_undoCloseTab");
@@ -416,11 +389,9 @@ var TabmixContext = {
     var item;
     if (document.popupNode.parentNode)
       item = document.popupNode.parentNode.parentNode.id;
-    if (item && (item == "btn_tabslist" || item == "btn_tabslistSorted" || item == "alltabs-button")) {
-      if (Tabmix.isVersion(40))
-        TabContextMenu.contextTab = document.popupNode.tab;
-      else
-        gBrowser.mContextTab = document.popupNode.tab;
+    if (item && (item == "btn_tabslist" || item == "btn_tabslistSorted" ||
+          item == "alltabs-button")) {
+      TabContextMenu.contextTab = document.popupNode.tab;
     }
 
     var clickOutTabs = document.popupNode.localName == "tabs";
@@ -443,13 +414,11 @@ var TabmixContext = {
     Tabmix.showItem("tm-duplicateTab", TabmixSvc.TMPprefs.getBoolPref("duplicateMenu"));
     Tabmix.showItem("tm-duplicateinWin", TabmixSvc.TMPprefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
     Tabmix.showItem("context_openTabInWindow", TabmixSvc.TMPprefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
-    if (Tabmix.isVersion(40)) {
-      let show = TabmixSvc.TMPprefs.getBoolPref("pinTabMenu");
-      Tabmix.showItem("context_pinTab", show && !aTab.pinned);
-      Tabmix.showItem("context_unpinTab", show && aTab.pinned);
-      // context_tabViewMenu exist from Firefox 4.0b4
-      Tabmix.showItem("context_tabViewMenu", TabmixSvc.TMPprefs.getBoolPref("moveToGroup") && !aTab.pinned);
-    }
+    var show = TabmixSvc.TMPprefs.getBoolPref("pinTabMenu");
+    Tabmix.showItem("context_pinTab", show && !aTab.pinned);
+    Tabmix.showItem("context_unpinTab", show && aTab.pinned);
+    // context_tabViewMenu exist from Firefox 4.0b4
+    Tabmix.showItem("context_tabViewMenu", TabmixSvc.TMPprefs.getBoolPref("moveToGroup") && !aTab.pinned);
     Tabmix.showItem("tm-mergeWindowsTab", TabmixSvc.TMPprefs.getBoolPref("showMergeWindow") && (!Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow)));
     var showRenameTabMenu = TabmixSvc.TMPprefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
@@ -472,7 +441,7 @@ var TabmixContext = {
     //  ---------------- menuseparator ---------------- //
 
     // Close tab Commands
-    var pinnedTab = Tabmix.isVersion(40) && TabContextMenu.contextTab.pinned;
+    var pinnedTab = TabContextMenu.contextTab.pinned;
     Tabmix.showItem("context_closeTab", TabmixSvc.TMPprefs.getBoolPref("closeTabMenu"));
     Tabmix.showItem("tm-closeAllTabs", TabmixSvc.TMPprefs.getBoolPref("closeAllMenu") && !pinnedTab);
     Tabmix.showItem("tm-closeSimilar", TabmixSvc.TMPprefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
@@ -502,7 +471,7 @@ var TabmixContext = {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.contentDocument.baseURI || browser.currentURI.spec;
         let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"));
-        if (!docTitle || docTitle == gBrowser.mStringBundle.getString(Tabmix.isVersion(40) ? "tabs.emptyTabTitle" : "tabs.untitled"))
+        if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
           titleNotReady = true;
       }
       Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
@@ -510,16 +479,9 @@ var TabmixContext = {
 
     var protectedTab = aTab.hasAttribute("protected");
     var lockedTab = aTab.hasAttribute("locked");
-    var tabsCount, unpinnedTabs, cIndex;
-    if (Tabmix.isVersion(40)) {
-      tabsCount = gBrowser.visibleTabs.length;
-      unpinnedTabs = tabsCount - gBrowser.tabContainer._real_numPinnedTabs;
-      cIndex = TMP_TabView.getIndexInVisibleTabsFromTab(aTab);
-    }
-    else {
-      tabsCount = unpinnedTabs = gBrowser.tabs.length;
-      cIndex = aTab._tPos;
-    }
+    var tabsCount = gBrowser.visibleTabs.length;
+    var unpinnedTabs = tabsCount - gBrowser.tabContainer._real_numPinnedTabs;
+    var cIndex = TMP_TabView.getIndexInVisibleTabsFromTab(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
@@ -622,12 +584,10 @@ var TabmixContext = {
       * we cahck if gContextMenu.linkURL contain URL
 
       * we can remove this menu in tabmix.js but it is safer to just hide it each time
+      * the label for this menu is "Open Link"
+      * we use our own menu "Open Link in This Tab"
       */
-      if (Tabmix.isVersion(40)) {
-        // the label for this menu is "Open Link"
-        // we use our own menu "Open Link in This Tab"
-        Tabmix.showItem("context-openlinkincurrent", false);
-      }
+      Tabmix.showItem("context-openlinkincurrent", false);
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
       Tabmix.showItem("tm-openlinkhere", TabmixSvc.TMPprefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
@@ -771,8 +731,9 @@ var TabmixAllTabs = {
   backupLabel: "",
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
-      case this._attrModifiedEvent:
-        this._tabOnAttrModified(aEvent);
+      case "TabAttrModified":
+        let tab = aEvent.target;
+        this._setMenuitemAttributes(tab.mCorrespondingMenuitem, tab);
         break;
       case "TabClose":
         this._tabOnTabClose(aEvent);
@@ -892,15 +853,11 @@ var TabmixAllTabs = {
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
 
-    if (Tabmix.isVersion(40)) {
-      gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
-      this._popup = popup;
-      if (!this._popup._updateTabsVisibilityStatus)
-        this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
-      this._popup._updateTabsVisibilityStatus();
-    }
-    else if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch"))
-      popup.addEventListener("DOMMouseScroll", this, true);
+    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
+    this._popup = popup;
+    if (!this._popup._updateTabsVisibilityStatus)
+      this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
+    this._popup._updateTabsVisibilityStatus();
 
     return true;
   },
@@ -919,13 +876,7 @@ var TabmixAllTabs = {
       popup.removeChild(menuItem);
     }
 
-    if (Tabmix.isVersion(40)) {
-      this._attrModifiedEvent = "TabAttrModified";
-      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
-    }
-    else
-      this._attrModifiedEvent = "DOMAttrModified";
-
+    gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
     gBrowser.tabContainer.addEventListener("TabClose", this, false);
     popup.addEventListener("DOMMenuItemActive", this, false);
     popup.addEventListener("DOMMenuItemInactive", this, false);
@@ -975,7 +926,7 @@ var TabmixAllTabs = {
         }
         break;
     }
-//XXX ensureElementIsVisible throw on Firefox 3.5 for the first menu show
+
     var scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
     if (!popup.style.getPropertyValue("max-height")) {
       popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
@@ -1007,8 +958,6 @@ var TabmixAllTabs = {
 
     mi.value = value;
     tab.mCorrespondingMenuitem = mi;
-    if (!Tabmix.isVersion(40))
-      tab.addEventListener("DOMAttrModified", this, false);
     mi.tab = tab;
 
     if (popup.id == "btn_tabslist_menu")
@@ -1024,32 +973,6 @@ var TabmixAllTabs = {
       }
       else
         mi.style.setProperty('background-image','none','important');
-    }
-  },
-
-  _tabOnAttrModified: function TMP__tabOnAttrModified(aEvent) {
-    if (Tabmix.isVersion(40)) {
-      let tab = aEvent.target;
-      this._setMenuitemAttributes(tab.mCorrespondingMenuitem, tab);
-      return;
-    }
-
-    var menuItem = aEvent.target.mCorrespondingMenuitem;
-    if (menuItem) {
-      var attrName = aEvent.attrName;
-      var count = "";
-      switch (attrName) {
-        case "label":
-          count = menuItem.getAttribute("count");
-        case "crop":
-        case "busy":
-        case "image":
-        case "selected":
-          if (aEvent.attrChange == aEvent.REMOVAL)
-            menuItem.removeAttribute(attrName);
-          else
-            menuItem.setAttribute(attrName, count + aEvent.newValue);
-      }
     }
   },
 
@@ -1103,8 +1026,6 @@ var TabmixAllTabs = {
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
       if ("tab" in menuItem) {
-        if (!Tabmix.isVersion(40))
-          menuItem.tab.removeEventListener("DOMAttrModified", this, false);
         menuItem.tab.mCorrespondingMenuitem = null;
       }
       popup.removeChild(menuItem);
@@ -1114,13 +1035,8 @@ var TabmixAllTabs = {
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.setAttribute('tooltiptext', item.getAttribute('_tooltiptext'));
 
-    if (Tabmix.isVersion(40)) {
-      gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
-      gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
-    }
-    else
-      popup.removeEventListener("DOMMouseScroll", this, true);
-
+    gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
+    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
     gBrowser.tabContainer.removeEventListener("TabClose", this, false);
     popup.removeEventListener("DOMMenuItemActive", this, false);
     popup.removeEventListener("DOMMenuItemInactive", this, false);
@@ -1132,10 +1048,6 @@ var TabmixAllTabs = {
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {
-    if (!Tabmix.isVersion(40)) {
-      let statusTextFld = document.getElementById("statusbar-display");
-      if (this.backupLabel=="") this.backupLabel = statusTextFld.label;
-    }
     if (!tab)
       tab = event.target;
     this.updateStatusText(tab.getAttribute("statustext"));
@@ -1146,13 +1058,6 @@ var TabmixAllTabs = {
   },
 
   updateStatusText: function TMP_updateStatusText(itemText) {
-    if (Tabmix.isVersion(40))
-      XULBrowserWindow.setOverLink(itemText);
-    else {
-      var statusTextFld = document.getElementById("statusbar-display");
-      var newText = itemText ? itemText : this.backupLabel;
-      if (newText != statusTextFld.label)
-        statusTextFld.label = newText;
-    }
+    XULBrowserWindow.setOverLink(itemText);
   }
 }

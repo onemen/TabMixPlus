@@ -1722,7 +1722,7 @@ var gTMPprefObserver = {
     }
 
     if (TabmixTabbar.hideMode == 2) {
-      Tabmix.setStripVisibilityTo(false);
+      gBrowser.tabContainer.visible = false;
     }
     else if (!gBrowser.getStripVisibility() || onFullScreenExit) {
       // if we are in multi-row and we have more then one tab we need to initialize multi-row again
@@ -1737,7 +1737,7 @@ var gTMPprefObserver = {
           gBrowser.mStrip.setAttribute("moz-collapsed", false);
       }
       else if (moreThenOneTab || TabmixTabbar.hideMode == 0)
-        Tabmix.setStripVisibilityTo(true);
+        gBrowser.tabContainer.visible = true;
       if (moreThenOneTab) {
          TabmixTabbar.updateScrollStatus();
          gBrowser.tabContainer.ensureTabIsVisible(gBrowser.tabContainer.selectedIndex);

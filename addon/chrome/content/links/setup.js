@@ -16,22 +16,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (aWindowType == "Extension:Manager") {
       // we're in the EM
       openURL = this.openURL;
-
-      // catch call to tabmix options from EM
-      this.newCode("gExtensionsViewController.commands.cmd_options", gExtensionsViewController.commands.cmd_options)._replace(
-      'var optionsURL = aSelectedItem.getAttribute("optionsURL");',
-      '$& \ if (Tabmix.cmdOptions(optionsURL)) return;'
-      ).toCode();
-  }
-
-  // with MR Tech's local install
-  if (typeof(Local_Install) == "object") {
-    // use TMP call to TMP Options
-    var _aURL = "'chrome://tabmixplus/content/pref/pref-tabmix.xul'";
-    this.newCode("Local_Install.createDropDownMenu", Local_Install.createDropDownMenu)._replace(
-    'aMenuItem.setAttribute("oncommand", thisAction + "; event.stopPropagation();");',
-    'if (thisAction.indexOf('+_aURL+') != -1) thisAction = "Tabmix.cmdOptions('+_aURL+')"; \ $&'
-    ).toCode();
   }
 
   // for normal click this function calls urlbar.handleCommand
@@ -53,13 +37,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
     ).toCode();
   }
 
-  if ("contentAreaClick" in window) {
-    if (!this.isVersion(40)) {
-      this.original_contentAreaClick = window.contentAreaClick;
-      window.contentAreaClick = TMP_contentAreaClick;
-    }
-  }
-
   window.BrowserOpenTab = this.browserOpenTab;
 
   this.openUILink_init();
@@ -75,7 +52,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
  * @returns  Nothing.
  *
  * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
- *        window[onload="TMP_TBP_Startup()"] 
+ *        window[onload="TMP_TBP_Startup()"]
  */
 function TMP_TBP_Startup() {
   try {
@@ -117,7 +94,7 @@ function TMP_TBP_Startup() {
     var firstWindow = Tabmix.isFirstWindow;
     var disAllow = TabmixSessionManager._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
-                   Tabmix.isVersion(40) && Tabmix.isWindowAfterSessionRestore;
+                   Tabmix.isWindowAfterSessionRestore;
     var sessionManager = TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.manager");
     var crashRecovery = TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.crashRecovery");
     var afterRestart = false;
@@ -129,10 +106,8 @@ function TMP_TBP_Startup() {
     if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
          (firstWindow && crashRecovery && afterCrash) ||
          (firstWindow && sessionManager && restoreOrAsk))) {
-      // for Firefox 4.0 - make sure sessionstore is init without
-      // restornig pinned tabs
-      if (Tabmix.isVersion(40))
-        TabmixSvc.ss.init(null);
+      // make sure sessionstore is init without restornig pinned tabs
+      TabmixSvc.ss.init(null);
 
       // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
       // maybe all tabs in the last session were pinned, we leet firefox to load the hompages
@@ -147,29 +122,13 @@ function TMP_TBP_Startup() {
              gBrowser.tabs[i].loadOnStartup = true;\
          $&'
       );
-      if (!Tabmix.isVersion(40) && !("TabGroupsManagerApiVer1" in window)) {
-        bowserStartup = bowserStartup._replace(
-          'if (window.opener && !window.opener.closed) {',
-          'if (uriToLoad == "about:blank" || "tabmixdata" in window) {\
-            let tabmix_loading = TabmixSvc.getString("session.loading.label") + "..."; \
-            let aBrowser = gBrowser.selectedBrowser; \
-            aBrowser.contentDocument.title = tabmix_loading;\
-            aBrowser.contentDocument.tabmix_loading = true;\
-            aBrowser.mIconURL = "chrome://tabmixplus/skin/tmp.png";\
-            gBrowser.mCurrentTab.setAttribute("image", aBrowser.mIconURL);\
-          }\
-          $&'
-        );
-      }
-      else {
-        bowserStartup = bowserStartup._replace(
-          'if (window.opener && !window.opener.closed) {',
-          'if (uriToLoad == "about:blank" || "tabmixdata" in window) {\
-            gBrowser.selectedBrowser.stop();\
-          }\
-          $&'
-        );
-      }
+      bowserStartup = bowserStartup._replace(
+        'if (window.opener && !window.opener.closed) {',
+        'if (uriToLoad == "about:blank" || "tabmixdata" in window) {\
+          gBrowser.selectedBrowser.stop();\
+        }\
+        $&'
+      );
     }
     bowserStartup.toCode();
 
@@ -191,39 +150,19 @@ function TMP_TBP_Startup() {
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
         new tmp.CompatibilityCheck(aWindow, true);
       }
-      window.setTimeout(checkCompatibility, Tabmix.isVersion(40) ? 0 : 3000, window);
+      window.setTimeout(checkCompatibility, 0, window);
     }
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    // if nglayout.debug.disable_xul_cache == true sometimes sessionHistory act strange
-    // especially with many extensions installed
-    var pref = "nglayout.debug.disable_xul_cache";
-    if ((!Tabmix.isVersion(40) && !firstWindow && !windowOpeneByTabmix) && TabmixSvc.prefs.prefHasUserValue(pref) && TabmixSvc.prefs.getBoolPref(pref)) {
-      window.setTimeout(window[TMP_BrowserStartup], 0);
-    }
-    else
-      window[TMP_BrowserStartup]();
+    window[TMP_BrowserStartup]();
 
   } catch (ex) {Tabmix.assert(ex);}
 }
 
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-    if (!Tabmix.isVersion(36)) {
-      // for Firefox 3.5.x
-      this.newCode(null, tabBrowser.moveTabTo)._replace(
-           'this.mTabContainer.mTabstrip.scrollBoxObject.ensureElementIsVisible(this.mCurrentTab);',
-           'this.mTabContainer.ensureTabIsVisible(this.mCurrentTab._tPos);'
-      ).toCode(false, tabBrowser, "moveTabTo");
-
-      this.newCode(null, tabBrowser.addTab)._replace(
-           'this.mTabContainer.mTabstrip.scrollBoxObject.scrollBy(this.mTabContainer.firstChild.boxObject.width, 0);',
-           ''
-      ).toCode(false, tabBrowser, "addTab");
-    }
-
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {
@@ -268,23 +207,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        } catch (ex) {Tabmix.assert(ex); return true;}
     }
 
-    if(this.isVersion(40)) {
-      tabBrowser.getTabForBrowser = function (aBrowser) {
-        return this._getTabForContentWindow(aBrowser.contentWindow);
-      }
-
-      tabBrowser.getTabForLastPanel = function () {
-         return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
-      }
+    tabBrowser.getTabForBrowser = function (aBrowser) {
+      return this._getTabForContentWindow(aBrowser.contentWindow);
     }
-    else {
-      tabBrowser.getTabForBrowser = function (aBrowser) {
-         return document.getAnonymousElementByAttribute(this, "linkedpanel", aBrowser.parentNode.id);
-      }
 
-      tabBrowser.getTabForLastPanel = function () {
-         return document.getAnonymousElementByAttribute(this, "linkedpanel", this.mPanelContainer.lastChild.id);
-      }
+    tabBrowser.getTabForLastPanel = function () {
+       return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
     }
 
     var tabContainer = aTabContainer || tabBrowser.mTabContainer ||
@@ -315,9 +243,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
     TabmixTabbar.isMultiRow = tabscroll == TabmixTabbar.SCROLL_BUTTONS_MULTIROW;
-
-    if (!this.isVersion(40) && tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT)
-      tabContainer.mTabstrip._scrollButtonUp = tabContainer.mTabstrip._scrollButtonUpRight;
 
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
