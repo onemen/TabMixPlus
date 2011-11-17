@@ -239,7 +239,7 @@
                 <checkbox id="lockallTabs" pack="start" label="&lockNewTabs.label;" prefstring="extensions.tabmix.lockallTabs"/>
                 <spacer style="height: 2em;"/>
                 <!-- Look App Tabs -->
-                <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs" hidden="true"/>
+                <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs"/>
             </groupbox>
 <!-- ======================================================== -->
           </tabpanel>
@@ -441,7 +441,7 @@
                  <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
                </hbox>
                <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;" prefstring="extensions.tabmix.reloadEvery.onReloadButton"/>
-               <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" prefstring="browser.tabs.animate" inverted="true" hidden="true"/>
+               <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" prefstring="browser.tabs.animate" inverted="true"/>
             </vbox>
          </groupbox>
         </tabpanel>
@@ -571,11 +571,8 @@
                 <checkbox id="extraIcons-protected" label="&extraIcons.protected;" prefstring="extensions.tabmix.extraIcons.protected"/>
                 <checkbox id="extraIcons-autoreload" label="&extraIcons.autoreload;" prefstring="extensions.tabmix.extraIcons.autoreload"/>
               </hbox>
-              <box align="start" id="progressMeter-box" orient="vertical">
               <!-- Progress Meter-->
-                <checkbox id="progressMeter" label="&progressMeter.label;" prefstring="extensions.tabmix.progressMeter"/>
-                <checkbox id="noprogress" class="indent" label="&statusbar.label;" prefstring="extensions.tabmix.noprogress" observes="obs_progressMeter"/>
-              </box>
+              <checkbox id="progressMeter" label="&progressMeter.label;" prefstring="extensions.tabmix.progressMeter"/>
               <hbox align="center">
               <!-- user interface for close button on tabs -->
                 <checkbox id="showTabX" label="&showTabX.labelBegin;" prefstring="extensions.tabmix.tabs.closeButtons.enable"/>
@@ -749,7 +746,7 @@
                          <menuitem value="3" label="&clicktab.duplicatetab;" />
                          <menuitem value="14" label="&clicktab.duplicatetabw;" observes="obs_singleWindow"/>
                          <menuitem value="27" label="&clicktab.detachtab;" observes="obs_singleWindow"/>
-                         <menuitem value="31" id="tabclickpinTab"/>
+                         <menuitem value="31" label="&pinAppTab.label;"/>
                             <menuseparator/>
                          <menuitem value="5" label="&clicktab.protecttab;" />
                          <menuitem value="6" label="&clicktab.locktab;" />
@@ -828,10 +825,10 @@
                      <checkbox id="showDetachTab" label="&detachTab.label;" prefstring="extensions.tabmix.detachTabMenu" observes="obs_singleWindow"/>
                      <!-- Merge Windows -->
                      <checkbox id="showMergeWin" label="&mergeContext.label;" prefstring="extensions.tabmix.showMergeWindow"/>
-                     <!-- pin/unpin tabs from Firefox 4.0 -->
-                     <checkbox id="pinTab" prefstring="extensions.tabmix.pinTabMenu" hidden="true"/>
-                     <!-- move to group from Firefox 4.0 -->
-                     <checkbox id="moveToGroup" prefstring="extensions.tabmix.moveToGroup" hidden="true"/>
+                     <!-- pin/unpin tabs -->
+                     <checkbox id="pinTab" label="&pinAppTab.label;" prefstring="extensions.tabmix.pinTabMenu"/>
+                     <!-- move to group -->
+                     <checkbox id="moveToGroup" label="&moveToGroup.label;" prefstring="extensions.tabmix.moveToGroup"/>
                      <!-- Rename tab -->
                      <checkbox id="showRenametab" label="&renametab.label;" prefstring="extensions.tabmix.renameTabMenu" />
                      <!-- Copy tab Url -->
@@ -1238,7 +1235,6 @@
     <broadcaster id="obs_tabRotation"/>
     <broadcaster id="obs_mergePopups"/>
     <broadcaster id="obs_newTabButton"/>
-    <broadcaster id="obs_progressMeter"/>
     <broadcaster id="obs_hideAllTabsButton"/>
   </broadcasterset>
 

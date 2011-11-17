@@ -73,7 +73,6 @@ pref("extensions.tabmix.hideTabbar", 0); // default to browser.tabs.autoHide == 
 pref("extensions.tabmix.tabBarPosition", 0);
 
 pref("extensions.tabmix.progressMeter", true);
-pref("extensions.tabmix.noprogress", false);
 /*
 2010-03-07
 replaced with .locked and .protected

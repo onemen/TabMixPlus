@@ -53,8 +53,6 @@ overlay   chrome://mozapps/content/update/updates.xul               chrome://tab
 overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tabmixplus/content/links/text_link.xul
 overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul
 
-overlay   chrome://tabmixplus/content/pref/pref-tabmix.xul          chrome://tabmixplus/content/pref/pref-tabmixOverlay.xul appversion>4.0b6
-
 overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/places/places.xul                chrome://tabmixplus/content/places/places.xul

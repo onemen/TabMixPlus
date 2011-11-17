@@ -838,8 +838,6 @@ var gTMPprefObserver = {
         this.setTabStyles(prefName);
         break;
       case "extensions.tabmix.progressMeter":
-      // remove this wehn we drop support for Firefox 3.6
-      case "extensions.tabmix.noprogress":
         this.setProgressMeter();
         break;
       case "browser.tabs.tabMaxWidth":
@@ -1624,10 +1622,6 @@ var gTMPprefObserver = {
     // we don't change attribute to be compatible with theme that maybe use this values
     var showOnTabs = TabmixSvc.TMPprefs.getBoolPref("progressMeter");
     Tabmix.setItem(gBrowser.tabContainer, "useProgressColor", showOnTabs && this.tabStylePrefs["progressMeter"].bg || null);
-    if (!Tabmix.isVersion(40)) {
-      let [progressID, hideMain] = ["statusbar-progresspanel", TabmixSvc.TMPprefs.getBoolPref("noprogress")];
-      Tabmix.setItem(progressID, "hidden", hideMain && showOnTabs)
-    }
     Tabmix.setItem(gBrowser.tabContainer, "progressMeter", showOnTabs || null);
     TabmixProgressListener.listener.showProgressOnTab = showOnTabs;
   },

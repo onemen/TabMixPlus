@@ -128,11 +128,8 @@
         <body><![CDATA[
           this.prefsSvc.setBoolPref("extensions.tabmix." + this.id, aEnabled);
           var tabmixOptionsWindow = this._tabmixOptions;
-          if (tabmixOptionsWindow) {
+          if (tabmixOptionsWindow)
             this._tabmixOptionsItem.checked = aEnabled;
-            if (this.id == "progressMeter")
-              tabmixOptionsWindow.TM_Options.disabled("progressMeter");
-          }
 
           this.disabled = !aEnabled
           this._setColorpicker("bg");
@@ -231,11 +228,8 @@
           this.prefsSvc.setCharPref(this.prefName, this._initPrefValues);
           this.prefsSvc.setBoolPref("extensions.tabmix." + this.id, this._initUseThisPref.prefvalue);
           var tabmixOptionsWindow = this._tabmixOptions;
-          if (tabmixOptionsWindow) {
+          if (tabmixOptionsWindow)
             tabmixOptionsWindow.updateApplyData(this._tabmixOptionsItem, this._initUseThisPref.optionvalue);
-            if (this.id == "progressMeter")
-              tabmixOptionsWindow.TM_Options.disabled("progressMeter");
-          }
         ]]></body>
       </method>
 

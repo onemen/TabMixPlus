@@ -10,8 +10,7 @@ var gTabMix_preferencesOverlay = {
          gTabMix_preferencesOverlay.onPaneLoad(this._pane.id);'
       ).toCode(false, prefWindow, "showPane");
 
-      var [name, _function] = Tabmix.isVersion(40) ? ["openLinkIn", openLinkIn] : ["openUILinkIn", openUILinkIn];
-      Tabmix.newCode(name, _function)._replace(
+      Tabmix.newCode("openLinkIn", openLinkIn)._replace(
         'var w = getTopWin();',
         '$& \
          if (w && where == "window" && TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow")) where = "tab";'
@@ -89,14 +88,12 @@ var gTabMix_preferencesOverlay = {
      if (button)
        return;
 
-     if (Tabmix.isVersion(40)) {
-       Tabmix.newCode(null, gMainPane.showAddonsMgr)._replace(
-         'openUILinkIn("about:addons", "window");',
-         'var w = Tabmix.getTopWin();\
-         if (w) w.BrowserOpenAddonsMgr();\
-         else $&'
-       ).toCode(false, gMainPane, "showAddonsMgr");
-     }
+     Tabmix.newCode(null, gMainPane.showAddonsMgr)._replace(
+       'openUILinkIn("about:addons", "window");',
+       'var w = Tabmix.getTopWin();\
+       if (w) w.BrowserOpenAddonsMgr();\
+       else $&'
+     ).toCode(false, gMainPane, "showAddonsMgr");
 
      button = document.createElement("button");
      button.id = "tabmixSessionManager";

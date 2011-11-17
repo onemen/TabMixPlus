@@ -67,21 +67,8 @@ function TM_EMinit() {
     TM_Options.setItem("scrollDelay", "disabled", true);
   }
 
-  if (!Tabmix.isVersion(36)) {
-    document.getElementById("allTabsPpreviews").setAttribute("hidden", true);
-    document.getElementById("relatedAfterCurrent").setAttribute("hidden", true);
-  }
-
-  if (Tabmix.isVersion(40)) {
-  }
-  else {
-    document.getElementById("customizeToolbar").setAttribute("hidden", true);
-    document.getElementById("dblClickTabbar_changesize").setAttribute("hidden", true);
-  }
-
   // Init tabclicking options
   var menuPopup = document.getElementById("ClickTab").firstChild;
-  document.getElementById("tabclickpinTab").removeAttribute("id");
   // block item in tabclicking options that are not in use
   var blocked = browserWindow.gTMPprefObserver.blockedValues;
   for (let i = 0; i < blocked.length; i++) {
@@ -123,16 +110,6 @@ function TM_EMinit() {
     menulist.parentNode.removeAttribute("class");
     hbox.setAttribute("orient", "horizontal");
     hbox.setAttribute("align","center");
-  }
-
-  hbox = document.getElementById("progressMeter-box");
-  var progressMeterv = document.getElementById("progressMeter").boxObject.width;
-  var noprogress = document.getElementById("noprogress");
-  if (Tabmix.isVersion(40))
-    noprogress.hidden = true;
-  if (hbox.boxObject.width > progressMeterv + noprogress.boxObject.width) {
-    noprogress.removeAttribute("class");
-    hbox.setAttribute("orient", "horizontal");
   }
 
   // rtl update
@@ -472,10 +449,6 @@ var TM_Options = {
    },
 
    setShowTabList: function () {
-      // we only need this in Firefox 3.5+
-      if (document.getElementById("ctrltab.tabPreviews") == null)
-         return;
-
       var disableShowTabList = document.getElementById("ctrltab").checked &&
                                 document.getElementById("ctrltab.tabPreviews").checked;
       this.setDisabled("showTabList", disableShowTabList);
@@ -1092,14 +1065,12 @@ function toolbarButtons(aWindow) {
   onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
   onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
   // Display > Tab bar
-  if (Tabmix.isVersion(40)) {
-    let newTabButton = aWindow.document.getElementById("new-tab-button");
-    let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
+  let newTabButton = aWindow.document.getElementById("new-tab-button");
+  let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
 
-    TM_Options.setItem("newTabButton", "disableObserver", !enablePosition || null);
-    TM_Options.setItem("newTabButton", "disabled", !enablePosition || null);
-    TM_Options.disabled("newTabButton", !enablePosition);
-  }
+  TM_Options.setItem("newTabButton", "disableObserver", !enablePosition || null);
+  TM_Options.setItem("newTabButton", "disabled", !enablePosition || null);
+  TM_Options.disabled("newTabButton", !enablePosition);
 }
 
 function openHelp(aPageaddress) {
@@ -1147,8 +1118,5 @@ function openHelp(aPageaddress) {
   // allow to load in current tab
   tabBrowser.selectedBrowser.tabmix_allowLoad = true;
   recentWindow.loadURI(helpUrl, null, null, false);
-  if (Tabmix.isVersion(36))
-    tabBrowser.selectedBrowser.focus();
-  else
-    recentWindow.focusElement(recentWindow.content);
+  tabBrowser.selectedBrowser.focus();
 }
