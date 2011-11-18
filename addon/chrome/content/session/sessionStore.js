@@ -515,8 +515,6 @@ var TMP_ClosedTabs = {
          blankTab.collapsed = true;
          gBrowser.removeTab(blankTab);
       }
-
-      gBrowser.tabContainer.nextTab = 1;
    },
 
    SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {

@@ -2577,7 +2577,7 @@ try{
       if (!this.enableBackup || aTab.hasAttribute("inrestore")) return;
       this.initSession(this.gSessionPath[0], this.gThisWin);
       // can't use aTab._tPos after group of tab delete
-      // we pass old position and new position from TMmoveTabTo
+      // we pass old position and new position from TabMove event
       // we need to fix tabPos for all tab between old position and new position
       var first = Math.min(oldPos, newPos);
       var last = Math.max(oldPos, newPos);
@@ -2948,7 +2948,7 @@ try{
          }
          cTab.setAttribute("inrestore", "true");
          // move selected tab to place
-         gBrowser.TMmoveTabTo(cTab, lastSelectedIndex);
+         gBrowser.moveTabTo(cTab, lastSelectedIndex);
          // remove extra tabs
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
@@ -3020,7 +3020,7 @@ try{
          for (let t = 0; t < blankTabs.length ; t++) {
             blankTab = blankTabs[t];
             tabPos = blankTab._tPos < newPos ? newPos - 1 : newPos;
-            gBrowser.TMmoveTabTo(blankTab, tabPos);
+            gBrowser.moveTabTo(blankTab, tabPos);
          }
 
          if (cTab._tPos == lastIndex || blankTabs.indexOf(gBrowser.tabs[lastIndex]) > -1)
@@ -3028,10 +3028,10 @@ try{
          while (newTotalTabsCount > gBrowser.tabs.length) {
             let newTab = TMP_addTab();
             if (needToMove)
-               gBrowser.TMmoveTabTo(newTab, cTab._tPos + 1);
+               gBrowser.moveTabTo(newTab, cTab._tPos + 1);
             // just in case the tab is not in its place, move it to the end
             else if (newTab._tPos < gBrowser.tabs.length - 1)
-               gBrowser.TMmoveTabTo(newTab, gBrowser.tabs.length - 1);
+               gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);
          }
 
          if (tabsCount == blankTabsCount) newPos = 0;
@@ -3041,7 +3041,7 @@ try{
                if (openTabNext && newPos > 0)
                  newPos--;
                // move selected tab to place
-               gBrowser.TMmoveTabTo(cTab, newPos + lastSelectedIndex);
+               gBrowser.moveTabTo(cTab, newPos + lastSelectedIndex);
             }
             else
               this.updateSelected(newPos + lastSelectedIndex, caller=="firstwindowopen" || caller=="windowopenebytabmix");
@@ -3053,7 +3053,6 @@ try{
       // call mTabstrip.ensureElementIsVisible before and after we reload the tab
       gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
       gBrowser.tabsToLoad = newtabsCount;
-      gBrowser.tabContainer.nextTab = 1;
       this.setStripVisibility(newtabsCount);
 
       var self = this;
@@ -3144,7 +3143,6 @@ try{
          this.saveClosedTabs(path, this.gThisWin, "closedtabs", true);
 
       TMP_ClosedTabs.setButtonDisableState();
-      gBrowser.tabContainer.nextTab = 1;
       // if we open closed window delete this window from closed window list
       var caller1;
       if ("tabmixdata" in window) {

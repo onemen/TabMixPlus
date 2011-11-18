@@ -494,10 +494,9 @@ var TMP_Places = {
        // move tab to place
        index = prevTab._tPos + 1;
        tabPos = aTab._tPos < index ? index - 1 : index;
-       gBrowser.TMmoveTabTo(aTab, tabPos);
+       gBrowser.moveTabTo(aTab, tabPos);
        prevTab = aTab;
     }
-    tabBar.nextTab = 1;
 
     // focus the first tab if prefs say to
     if (!loadInBackground || doReplace &&

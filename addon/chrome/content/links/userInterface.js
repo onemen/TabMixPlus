@@ -167,11 +167,12 @@ Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       catch (ex) {}
    }
    if (aTab && aTab.localName == "tab")
-      gBrowser.TMmoveTabTo(newTab, aTab._tPos + 1);
+      gBrowser.moveTabTo(newTab, aTab._tPos + 1);
    else if (!replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("openNewTabNext")) {
-      gBrowser.TMmoveTabTo(newTab, gBrowser.mCurrentTab._tPos + gBrowser.tabContainer.nextTab, 1);
+      let newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
+      gBrowser.moveTabTo(newTab, newTabPos);
       if (TabmixSvc.TMPprefs.getBoolPref("openTabNextInverse"))
-         gBrowser.tabContainer.nextTab++;
+         gBrowser._lastRelatedTab = newTab;
    }
 
    // always select new tab when replacing last tab

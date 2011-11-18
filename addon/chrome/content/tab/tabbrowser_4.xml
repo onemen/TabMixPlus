@@ -341,7 +341,6 @@
            * if we set this in field[s] they will reset each time the tabbar binding construct
            * by tabbar position change
            */
-          this.nextTab = 1;
           this._newTabButtonWidth = 22;
 
           this.firstChild.setAttribute("flst_id", new Date().getTime());

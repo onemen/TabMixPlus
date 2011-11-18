@@ -20,9 +20,6 @@ Tabmix.startup = function TMP_startup() {
       TabmixTabbar.setHeight(TabmixTabbar.visibleRows, true);
   }
 
-  if(gBrowser.moveTabTo)
-    gBrowser.moveTabTo = gBrowser.TMmoveTabTo;
-
   document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
 
   // override some of All-in-One Gestures function
@@ -81,7 +78,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   TMP_ClosedTabs.setButtonDisableState();
   TabmixSessionManager.toggleRecentlyClosedWindowsButton();
-  gBrowser.tabContainer.nextTab = 1;
   // convert session.rdf to SessionManager extension format
   TabmixConvertSession.startup();
 
@@ -215,6 +211,9 @@ var TMP_eventListener = {
       case "TabSelect":
         this.onTabSelect(aEvent);
         break;
+      case "TabMove":
+        this.onTabMove(aEvent);
+        break;
       case "TabUnpinned":
         this.onTabUnpinned(aEvent);
         break;
@@ -301,6 +300,7 @@ var TMP_eventListener = {
     tabContainer.addEventListener("TabOpen", this, true);
     tabContainer.addEventListener("TabClose", this, true);
     tabContainer.addEventListener("TabSelect", this, true);
+    tabContainer.addEventListener("TabMove", this, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -789,7 +789,6 @@ var TMP_eventListener = {
     }
 
     // update this functions after new tab select
-    tabBar.nextTab = 1;
     tab.setAttribute("flst_id", new Date().getTime());
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
@@ -809,6 +808,11 @@ var TMP_eventListener = {
     var tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
     if (tabsBottom)
       Tabmix.setItem(tabBar, "tabonbottom", tab.baseY >= tabsBottom.boxObject.y || null);
+  },
+
+  onTabMove: function TMP_EL_onTabMove(aEvent) {
+    var tab = aEvent.target;
+    TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
@@ -880,6 +884,7 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("TabClose", this, true);
     gBrowser.tabContainer.removeEventListener("TabSelect", this, true);
     gBrowser.tabContainer.removeEventListener("TabUnpinned", this, true);
+    gBrowser.tabContainer.removeEventListener("TabMove", this, true);
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup)

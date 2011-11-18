@@ -545,11 +545,11 @@ TMP_extensionsCompatibility.treeStyleTab = {
         }
       ]]>
     )._replace(
-      'tabBar.nextTab',
+      /(\})(\)?)$/,
       <![CDATA[
         if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)
           TreeStyleTabService.stopToOpenChildTab(tabToSelect);
-      $&]]>
+      $1$2]]>
     ).toCode();
 
     if (TreeStyleTabService.getTreePref('compatibility.TMP')) {

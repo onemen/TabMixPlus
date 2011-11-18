@@ -130,7 +130,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     )._replace(
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \
-       this.tabContainer.nextTab = 1; \
        if (TabmixSvc.prefs.getBoolPref("browser.tabs.animate")) { \
          TMP_eventListener.onTabClose_updateTabBar(aTab, true);\
        } \
@@ -630,54 +629,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
      }
     }
 
-///XXX we can remove the use of this just leave pointer to the original gBrowser.moveTabTo
-    gBrowser.TMmoveTabTo = function _TMmoveTabTo(aTab, aIndex, flag) {
-      var oldPosition = aTab._tPos;
-      if (oldPosition == aIndex)
-        return aTab;
-      // Don't allow mixing pinned and unpinned tabs.
-      if (aTab.pinned)
-        aIndex = Math.min(aIndex, this._numPinnedTabs - 1);
-      else
-        aIndex = Math.max(aIndex, this._numPinnedTabs);
-      if (oldPosition == aIndex)
-        return aTab;
-
-      if(!(flag & 1)) this.tabContainer.nextTab = 1;
-      this._lastRelatedTab = null;
-      this.mTabFilters.splice(aIndex,0,this.mTabFilters.splice(aTab._tPos, 1)[0]);
-      this.mTabListeners.splice(aIndex,0,this.mTabListeners.splice(aTab._tPos, 1)[0]);
-
-      var tabCount = this.tabs.length;
-      var newPos = tabCount - 1 < aIndex ? tabCount - 1 : aIndex;
-
-      aIndex = aIndex < aTab._tPos ? aIndex: aIndex+1;
-      this.mCurrentTab._selected = false;
-      // use .item() instead of [] because dragging to the end of the strip goes out of
-      // bounds: .item() returns null (so it acts like appendChild), but [] throws
-      this.tabContainer.insertBefore(aTab, this.tabs.item(aIndex));
-
-      // invalidate cache, because tabContainer is about to change
-      this._browsers = null;
-      for (let i = 0; i < tabCount; i++) {
-         this.tabs[i]._tPos = i;
-         this.tabs[i]._selected = false;
-      }
-      this.mCurrentTab._selected = true;
-      this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, false);
-
-      if (aTab.pinned)
-        this.tabContainer._positionPinnedTabs();
-
-      var evt = document.createEvent("UIEvents");
-      evt.initUIEvent("TabMove", true, false, window, oldPosition);
-      aTab.dispatchEvent(evt);
-
-      TabmixSessionManager.tabMoved(aTab, oldPosition, newPos);
-
-      return aTab;
-    }
-
     gBrowser.duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocuseUrlBar) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
@@ -706,7 +657,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       var copyToNewWindow = window != aTab.ownerDocument.defaultView;
       if (!disallowSelect && !copyToNewWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-        this.TMmoveTabTo(newTab, aTab._tPos + pos);
+        this.moveTabTo(newTab, aTab._tPos + pos);
       }
 
       var bgPref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground");
@@ -815,9 +766,9 @@ Tabmix.log("loadURIWithFlags open new tab", true);
           newTab.width = aTab.width;
 
           var index = newTab._tPos;
-          this.TMmoveTabTo(newTab, aTab._tPos);
+          this.moveTabTo(newTab, aTab._tPos);
           var pos = index > aTab._tPos ? 1 : 0;
-          this.TMmoveTabTo(aTab, index + pos);
+          this.moveTabTo(aTab, index + pos);
 
           if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) {
             this.selectedTab = newTab;
@@ -1478,6 +1429,7 @@ since we can have tab hidden or remove the index can change....
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { }
     gBrowser.closeTab = function(aTab) {this.removeTab(aTab);}
+    gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
