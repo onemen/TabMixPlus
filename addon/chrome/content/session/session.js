@@ -2939,8 +2939,6 @@ try{
       var newtabsCount = tabContainer.GetCount();
       var newIndex, aTab, loadOnStartup = [];
       if (newtabsCount > 0 && overwrite) {
-         if (gBrowser.tabContainer.collapsedTabs > 0)
-            gBrowser.tabContainer.collapsedTabs = 0;
          // unpinned tabs reorder tabs, so we loob backward
          for (let i = gBrowser.tabs.length - 1 ; i >= 0; i--) {
            TMP_resetAttributes(gBrowser.tabs[i]);

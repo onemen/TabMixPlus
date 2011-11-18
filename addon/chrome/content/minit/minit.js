@@ -297,10 +297,6 @@ var TMP_tabDNDObserver = {
         if (newIndex != draggedTab._tPos)
           gBrowser.moveTabTo(draggedTab, newIndex);
 
-        // when we drag tab over scroll-down button and then drop
-        // the dragged tab can be hidden
-        draggedTab.collapsed = false;
-
         if (gBrowser.tabContainer.hasAttribute("multibar"))
           TabmixTabbar.updateScrollStatus();
       }

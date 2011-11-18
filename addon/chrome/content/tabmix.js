@@ -260,10 +260,6 @@ var TMP_eventListener = {
         break;
       case "TabHide":
         let tab = aEvent.target;
-        if (tab.collapsed) {
-          gBrowser.tabContainer._collapsedTabs--;
-          tab.collapsed = false;
-        }
         if (!gBrowser.tabContainer._onDelayTabHide) {
           // pass aEvent to this function for use in TGM
           gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
@@ -339,10 +335,6 @@ var TMP_eventListener = {
           this.lockTab(aTab);
           aTab.setAttribute("_lockedAppTabs", "true");
         }
-        if (aTab.collapsed)
-          aTab.collapsed = false;
-        else
-          this.tabContainer.collapsedTabs++;
         this.tabContainer.adjustTabstrip(true);
         TabmixTabbar.updateScrollStatus();
         TabmixTabbar.updateBeforeAndAfter();
@@ -737,7 +729,6 @@ var TMP_eventListener = {
     // strip already collapsed at this point
     var tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
     if (tabsCount == 2 && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide")) {
-      tabBar.collapsedTabs = 0;
       TabmixTabbar.setHeight(1);
       tabBar.removeAttribute("multibar");
     }

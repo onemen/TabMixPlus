@@ -920,10 +920,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
 
       if (this.warnAboutClosingTabs("Group", null, null, aDomain)) {
         var childNodes = this.visibleTabs;
-        if (!TabmixTabbar.isMultiRow) {
-          if (this.tabContainer.collapsedTabs > 0)
-            this.tabContainer.collapsedTabs = 0;
-        }
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
               this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
@@ -979,12 +975,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         }
         this.tabContainer.ensureTabIsVisible(this.tabContainer.selectedIndex);
 
-        if (tabPos >= this.tabContainer.collapsedTabs)
-          this.tabContainer.overflow = false;
-        if (!TabmixTabbar.isMultiRow) {
-          if (this.tabContainer.collapsedTabs > 0)
-            this.tabContainer.collapsedTabs = 0;
-        }
         for (var i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i], {animate: true});
@@ -1002,10 +992,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         this.tabContainer.ensureTabIsVisible(this.tabContainer.selectedIndex);
         var childNodes = this.visibleTabs;
         this.tabContainer.overflow = false;
-        if (!TabmixTabbar.isMultiRow) {
-          if (this.tabContainer.collapsedTabs > 0)
-            this.tabContainer.collapsedTabs = 0;
-        }
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i], {animate: true});

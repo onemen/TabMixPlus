@@ -342,7 +342,6 @@
            * by tabbar position change
            */
           this.nextTab = 1;
-          this._collapsedTabs = 0;
           this._newTabButtonWidth = 22;
 
           this.firstChild.setAttribute("flst_id", new Date().getTime());
@@ -777,10 +776,6 @@
         ]]></setter>
       </property>
 
-      <property name="collapsedTabs"
-                onget="return 0;"
-                onset="return 0;"/>
-
      <property name="_real_numPinnedTabs" readonly="true">
        <getter><![CDATA[
           var count = 0;
@@ -795,10 +790,6 @@
           return count;
        ]]></getter>
      </property>
-
-      <!-- collapsedTabs without pinned tabs -->
-      <property name="realCollapsedTabs" readonly="true"
-                onget="return 0;"/>
 
       <method name="isTabVisible">
         <parameter name="aIndex"/>
@@ -937,7 +928,7 @@
         ]]></body>
       </method>
 
-      <!-- Deprecated stuff, implemented for backwards compatibility. -->
+      <!-- Deprecated stuff, implemented for backwards compatibility. 
       <property name="lastTabVisible" readonly="true">
         <getter><![CDATA[
           if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
@@ -946,6 +937,10 @@
           return this.mTabstrip.isElementVisible(this.visibleTabsLastChild);
         ]]></getter>
       </property>
+
+      <property name="collapsedTabs" onget="return 0;" onset="return 0;"/>
+      <property name="realCollapsedTabs" readonly="true" onget="return 0;"/>
+      -->
 
     </implementation>
 

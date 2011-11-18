@@ -59,8 +59,6 @@ var TabmixTabbar = {
           break;
         case this.SCROLL_BUTTONS_MULTIROW:
           tabBar.setAttribute("flowing", "multibar");
-          if (!start || tabBar.collapsedTabs > 0)
-            tabBar.collapsedTabs = 0;
           break;
       }
 
@@ -352,7 +350,7 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     var tabs = gBrowser.visibleTabs;
 
-    var firstTab = tabs[tabBar.collapsedTabs];
+    var firstTab = tabs[0];
     var lastTab = tabBar.visibleTabsLastChild;
     var top = tabBar.topTabY;
     var lastTabRow = tabBar.lastTabRowNumber;
@@ -391,7 +389,7 @@ var TabmixTabbar = {
 
     // Just in case we missed something in the above code............
     var i, j;
-    i = j = tabBar.collapsedTabs;
+    i = j = tabs[0]._tPos;
     if ( tabs[j] && tabs[j].getAttribute("selected") == "true" )
       j++;
     while (this.inSameRow(tabs.item(i), tabs.item(j)))
