@@ -247,4 +247,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
       TMP_SessionStore.afterSwitchThemes = true;
+
+    TMP_extensionsCompatibility.preInit();
+    
+    if (TabmixSvc.TMPprefs.prefHasUserValue("enableDebug") &&
+        TabmixSvc.TMPprefs.getBoolPref("enableDebug")) {
+      Tabmix._debugMode = true;
+    }
 }

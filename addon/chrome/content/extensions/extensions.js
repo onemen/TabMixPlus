@@ -9,6 +9,12 @@
  *
  */
 var TMP_extensionsCompatibility = {
+  preInit: function TMP_EC_preInit() {
+    if ("TreeStyleTabWindowHelper" in window) {
+      this.treeStyleTab.preInit();
+    }
+  },
+
   onContentLoaded: function TMP_EC_onContentLoaded() {
     try {
       if ("TabGroupsManagerApiVer1" in window) {
@@ -436,6 +442,24 @@ TMP_extensionsCompatibility.treeStyleTab = {
     return false;
   },
 
+  preInit: function () {
+    if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
+      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsPreInit",
+          TreeStyleTabWindowHelper.overrideExtensionsPreInit)._replace(
+        // fix typo in TST
+        'SessionData.tabTSTProperties',
+        'sessionData.tabTSTProperties'
+      )._replace(
+        // TST look for DEPRECATED gBrowser.restoreTab in tablib.init
+        'source[1].replace',
+        '" ".replace'
+      )._replace(
+        'eval("tablib.init',
+        'if (false) $&'
+      ).toCode();
+    }
+  },
+
   onContentLoaded: function () {
     if (!this.isNewVersion) {
       if ("overrideExtensionsOnInitAfter" in TreeStyleTabService) {
@@ -512,6 +536,15 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'if (false) $&'
       ).toCode();
     }
+
+    // we removed TMP_openTabNext function 2011-11-15
+    if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
+      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsDelayed",
+          TreeStyleTabWindowHelper.overrideExtensionsDelayed)._replace(
+        'eval("gBrowser.TMP_openTabNext',
+        'if (false) $&'
+      ).toCode();
+    }
   },
 
   onWindowLoaded: function () {
@@ -564,8 +597,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
       // Added 2010-04-10
       Tabmix.newCode("TMP_eventListener.onTabOpen", TMP_eventListener.onTabOpen)._replace(
         /(\})(\)?)$/,
-        'gBrowser.treeStyleTab.initTabAttributes(aTab); \
-         gBrowser.treeStyleTab.initTabContentsOrder(aTab); \
+        'gBrowser.treeStyleTab.initTabAttributes(tab); \
+         gBrowser.treeStyleTab.initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
       // Added 2011-11-09, i'm not sure we relay need it, Tabmix.loadTabs call gBrowser.loadTabs

@@ -51,11 +51,14 @@ Tabmix_ChangeCode.prototype = {
 
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
     try {
+      if (Tabmix._debugMode) {
+        this.value = this.value.replace("{", "{try {") +
+            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + this.name + '");}}';
+      }
       if (this.needUpdate)
         Tabmix.toCode(aObj, aName || this.name, this.value);
-if (!this.needUpdate) {
-  Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
-}
+      else
+        Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);
       delete this;
@@ -75,12 +78,13 @@ if (!this.needUpdate) {
 
 var Tabmix = {
   newCode: function(aObjectName, aObject, aForceUpdate) {
-try {
-    return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
-} catch (ex) {
-this.log("aObjectName " + aObjectName);
-this.obj(aObject, "aObject");
-}
+    try {
+      return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
+    } catch (ex) {
+      this.log("aObjectName " + aObjectName + "\n" + ex);
+      if (Tabmix._debugMode)
+        this.obj(aObject, "aObject");
+    }
   },
 
   isVersion: function(aVersionNo) {

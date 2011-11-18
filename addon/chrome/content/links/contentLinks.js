@@ -175,8 +175,7 @@ Tabmix.contentAreaClick = {
       ]]>
     )._replace(
       'handleLinkClick(event, href, linkNode);',
-      'event._test = "Tabmix Test";\
-       event.__where = where; event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;\
+      'event.__where = where; event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;\
        var result = $&\
        if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
     ).toCode();
