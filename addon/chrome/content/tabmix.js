@@ -442,14 +442,10 @@ var TMP_eventListener = {
     if (Tabmix.isPlatform("Mac")) {
       Tabmix.isMac = true;
       tabBar.setAttribute("Mac", "true");
-     /*
-      * get Mac drop indicator marginBottom ,   Mac default thme have marginBottom: -24px
-      *
-      * with TreeStyleTab extension vertical tabbar mTabDropIndicatorBar.firstChild is null
-      */
-      var ib = gBrowser.mTabDropIndicatorBar;
-      if (ib && ib.firstChild) {
-        TMP_tabDNDObserver.marginBottom = Tabmix.getStyle(ib.firstChild, "marginBottom");
+      // get Mac drop indicator marginBottom ,   Mac default theme have marginBottom: -24px
+      let ind = gBrowser.tabContainer._tabDropIndicator
+      if (ind) {
+        TMP_tabDNDObserver.marginBottom = Tabmix.getStyle(ind, "marginBottom");
       }
     }
 

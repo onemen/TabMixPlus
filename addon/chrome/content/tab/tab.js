@@ -1427,7 +1427,7 @@ var gTMPprefObserver = {
       return false;
 
     TabmixTabbar.position = aPosition;
-    gBrowser.mTabDropIndicatorBar.firstChild.removeAttribute("style");
+    gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
     // save TabsOnTop status
     function setTabsOnTopCmd (aVisible) {
       // hide/show TabsOnTop menu & menuseparator

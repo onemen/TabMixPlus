@@ -376,7 +376,6 @@
       <destructor>
         <![CDATA[
           this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
-          this.tabbrowser.mTabDropIndicatorBar = null;
           delete this.tabstripInnerbox;
         ]]>
       </destructor>
@@ -869,8 +868,6 @@
           let position = TabmixSvc.TMPprefs.getIntPref("newTabButton.position");
           if (position != 0)
             gTMPprefObserver.changeNewTabButtonSide(position);
-
-          this.tabbrowser.mTabDropIndicatorBar = this._tabDropIndicator.parentNode;
 
           // need to add TabScope eventListener
           // need to find a way to do it for all extensions that add event to the tabstrip
