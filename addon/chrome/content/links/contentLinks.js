@@ -41,10 +41,19 @@ var TMP_DOMWindowOpenObserver = {
         if (!existingWindow)
           return;
 
+        existingWindow.content.focus();
+        // save dimensions
+        var win = aWindow.document.documentElement;
+        aWindow.__winRect = {
+          sizemode: win.getAttribute("sizemode"),
+          width: win.getAttribute("width"),
+          height: win.getAttribute("height"),
+          screenX: win.getAttribute("screenX"),
+          screenY: win.getAttribute("screenY"),
+        }
         // hide the new window
         aWindow.resizeTo(10, 10);
         aWindow.moveTo(-50, -50);
-        var win = aWindow.document.getElementById("main-window");
         win.removeAttribute("sizemode");
         win.setAttribute("width" , 0);
         win.setAttribute("height" , 0);
@@ -125,11 +134,15 @@ var TMP_DOMWindowOpenObserver = {
           newWindow.gPrivateBrowsingUI.uninit = function() {};
 
           setTimeout(function () {
+            // restore window dimensions, to prevent flickring in the next restart
+            var win = newWindow.document.documentElement;
+            for (let attr in newWindow.__winRect)
+              win.setAttribute(attr, newWindow.__winRect[attr]);
             newWindow.close();
             if (firstTabAdded)
               existingBrowser.selectedTab = firstTabAdded;
-            else
-              existingWindow.content.focus();
+            // for the case the window is minimized or not in focus
+            existingWindow.content.focus();
           },0)
         }  catch(ex) { existingWindow.Tabmix.obj(ex); }
     }
