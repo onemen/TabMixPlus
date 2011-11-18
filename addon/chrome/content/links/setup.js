@@ -215,7 +215,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
     }
 
-    var tabContainer = aTabContainer || tabBrowser.mTabContainer ||
+    var tabContainer = aTabContainer || tabBrowser.tabContainer ||
                        document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
 
     TMP_eventListener.init(tabContainer);

@@ -37,10 +37,8 @@ var TMP_SessionStore = {
        aUndoItem.title = selectedTab.attributes["fixed-label"];
      else {
        aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
-       if (aUndoItem.title == "about:blank") {
-         let string = Tabmix.isVersion(40) ?  "tabs.emptyTabTitle" : "tabs.untitled";
-         aUndoItem.title = gBrowser.mStringBundle.getString(string);
-       }
+       if (aUndoItem.title == "about:blank")
+         aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
      }
    },
 
@@ -202,10 +200,10 @@ var TMP_SessionStore = {
       if (!Tabmix.isFirstWindow)
          return false;
 
-      // in Firefox 4.0+ when we close all browser windows without exit (non browser windows are opened)
-      // Firefox restore next browser window that open
+      // When we close all browser windows without exit (non browser windows are opened)
+      // Firefox restore current session when a browser window opens
       if (Tabmix.numberOfWindows(false, null) > 1)
-         return Tabmix.isVersion(40);
+         return true;
 
       var ss = Cc["@mozilla.org/browser/sessionstartup;1"].
                     getService(Ci.nsISessionStartup);
@@ -252,7 +250,6 @@ var TMP_SessionStore = {
     * @returns         attribute value as string or empty string.
     */
    _getAttribute: function TMP_ss__getAttribute(aTabData, attrib) {
-      // tabData.attributes is in use for Firefox 3.5+
       if (aTabData.attributes && attrib in aTabData.attributes)
          return aTabData.attributes[attrib];
 
@@ -374,23 +371,13 @@ var TMP_ClosedTabs = {
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
-      if (!Tabmix.isVersion(40))
-        m.setAttribute("accesskey", TabmixSvc.getString("undoclosetab.clear.accesskey"));
       m.setAttribute("value", -1);
       m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1); event.stopPropagation();");
 
       // "Restore All Tabs"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "restoreAllClosedTabs");
-      if (Tabmix.isVersion(36)) {
-        m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
-        if (!Tabmix.isVersion(40))
-          m.setAttribute("accesskey", gNavigatorBundle.getString("menuRestoreAllTabs.accesskey"));
-      }
-      else {
-        m.setAttribute("label", gNavigatorBundle.getString("menuOpenAllInTabs.label"));
-        m.setAttribute("accesskey", gNavigatorBundle.getString("menuOpenAllInTabs.accesskey"));
-      }
+      m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
       m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2); event.stopPropagation();");
       return true;
@@ -488,7 +475,7 @@ var TMP_ClosedTabs = {
 
       // replace existing _closedTabs
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.isVersion(40) ? Tabmix.JSON.stringify(state) : state.toSource(), false);
+        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
       } catch (e) {}
 
       this.setButtonDisableState();
@@ -519,7 +506,7 @@ var TMP_ClosedTabs = {
       var multiple = closedTabCount > 1;
       for (i = 0; i < closedTabCount; i++) {
          blankTab = blankTabs.pop();
-         this.SSS_undoCloseTab(0, "original", i==0, blankTab, Tabmix.isVersion(40) && multiple);
+         this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
       }
 
       // remove unused blank tabs
@@ -546,8 +533,7 @@ var TMP_ClosedTabs = {
       else if (typeof(aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
          aTabToRemove = cTab;
 
-      if ("TabView" in window)
-        TabView.prepareUndoCloseTab(aTabToRemove);
+      TabView.prepareUndoCloseTab(aTabToRemove);
 
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
@@ -559,20 +545,20 @@ var TMP_ClosedTabs = {
       if (aTabToRemove)
          gBrowser.removeTab(aTabToRemove);
       // add restored tab to current window
-      TabmixSvc.ss.setTabState(newTab, Tabmix.isVersion(40) ? Tabmix.JSON.stringify(tabData.state) : tabData.state.toSource());
+      TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabData.state));
 
-      if ("TabView" in window)
-        TabView.afterUndoCloseTab();
+      TabView.afterUndoCloseTab();
 
-      //XXX clean this code when we drop support to Firefox 3.5-3.6.x
       // after we open new tab we only need to fix position if this is true
+      // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
       var restorePosition = TabmixSvc.TMPprefs.getBoolPref("undoClosePosition");
       if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {
-         gBrowser.TMmoveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos), 1);
+         gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
       }
-      else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) // middle click on History > recently closed tabs
-         // we don't call TMP_openTabNext from add tab if it called from sss_undoCloseTab
-         gBrowser.TMP_openTabNext(newTab);
+      else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
+         let newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
+         gBrowser.moveTabTo(newTab, newTabPos);
+      }
 
       if (aSelectRestoredTab) {
          content.focus();
@@ -681,17 +667,15 @@ var TabmixConvertSession = {
       state.sizemode = (window.windowState == window.STATE_MAXIMIZED) ? "maximized" : "normal";
 
       // save panorama data if exist
-      if ("TabView" in window) {
-        let extData = {};
-        let emptyGroup = Tabmix.JSON.stringify({})
-        extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
-        extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
-        extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
-        extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
-        if (Tabmix.isVersion(70))
-          extData["tabview-last-session-group-name"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-last-session-group-name", "");
-        state.extData = extData;
-      }
+      let extData = {};
+      let emptyGroup = Tabmix.JSON.stringify({})
+      extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
+      extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
+      extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
+      extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
+      if (Tabmix.isVersion(70))
+        extData["tabview-last-session-group-name"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-last-session-group-name", "");
+      state.extData = extData;
       return state;
    },
 
@@ -767,7 +751,7 @@ var TabmixConvertSession = {
          });
       }
       // save panorama data if exist
-      if ("TabView" in window && !aClosedTab) {
+      if (!aClosedTab) {
         let data = TabmixSessionManager.getLiteralValue(rdfNodeTab, "tabview-tab");
         if (data != "") {
           tabData.extData = {};

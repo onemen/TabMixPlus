@@ -90,7 +90,7 @@ var TMP_tabDNDObserver = {
 
     var sourceNode = this.getSourceNode(dt);
     var draggeType = this.getDragType(sourceNode);
-    var newIndex = this.getNewIndex(event);
+    var newIndex = this._getDNDIndex(event);
     var oldIndex = draggeType != this.DRAG_LINK ? sourceNode._tPos : -1;
     var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
     if (newIndex < gBrowser.tabs.length){
@@ -176,7 +176,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (tabBar.canScrollTabsLeft || tabBar.canScrollTabsRight) {
+    if (tabBar.overflow) {
       let tabStrip = tabBar.mTabstrip;
       let ltr = Tabmix.ltr || tabStrip.orient == "vertical";
       let _scroll, targetAnonid;
@@ -244,7 +244,7 @@ var TMP_tabDNDObserver = {
     document.getElementById("tabmix-tooltip").hidePopup();
     // old TreeStyleTab extension version look for isTabReorder in our code
     var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW
-    var newIndex = this.getNewIndex(event);
+    var newIndex = this._getDNDIndex(event);
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;
 
@@ -380,8 +380,9 @@ var TMP_tabDNDObserver = {
       dt.__pinTab = true;
       this.onDrop(aEvent);
     }
-return;
-///XXX test if can remove the rest of this code... check where firefox do the detach
+
+    if (dt.dropEffect != "none")
+      return;
 
     if (Tabmix.singleWindowMode) {
       aEvent.stopPropagation();
@@ -399,7 +400,7 @@ return;
       var bo = tabBar.mTabstrip.scrollBoxObject;
       // in Firefox 4.0 we can pinned all tabs
       let index = tabBar.collapsedTabs;
-      if (index == tabBar.childNodes.length)
+      if (index == gBrowser.visibleTabs.length)
         index--;
       var tabHeight = tabBar.childNodes[index].boxObject.height;
       var endScreenY = bo.screenY + bo.height + 0.5 * tabHeight;
@@ -448,6 +449,16 @@ return;
       document.getElementById("tabmix-tooltip").hidePopup();
   },
 
+  // get _tPos from group index
+  _getDNDIndex: function (aEvent) {
+    var indexInGroup = this.getNewIndex(aEvent);
+    var tabs = gBrowser.visibleTabs;
+    var lastIndex = tabs.length - 1;
+    if (indexInGroup < 0 || indexInGroup > lastIndex)
+      indexInGroup = lastIndex;
+    return tabs[indexInGroup]._tPos;
+  },
+
   getNewIndex: function (event) {
     function getTabRowNumber(tab, top) tab.__row || gBrowser.tabContainer.getTabRowNumber(tab, top);
     // start to chack after collapsedTabs
@@ -458,13 +469,13 @@ return;
     // if no tab is match return gBrowser.tabs.length
     var mX = event.screenX, mY = event.screenY;
     var tabBar = gBrowser.tabContainer;
-    var tabs = tabBar.childNodes;
+    var tabs = gBrowser.visibleTabs;
     var firstIndex = 0;
     var numPinned, numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       if (!Tabmix.ltr)
         firstIndex = 0;
-      for (let i = event.target.localName == "tab" ? event.target._tPos : firstIndex; i < numTabs; i++) {
+      for (let i = event.target.localName == "tab" ? TMP_TabView.getIndexInVisibleTabsFromTab(event.target) : firstIndex; i < numTabs; i++) {
         let tab = tabs[i];
         if (tab.collapsed)
           continue;
@@ -484,8 +495,6 @@ return;
         let tab = tabs[i];
         if (tab.collapsed)
           continue;
-        if (!tabBar.isTabVisible(i))
-          return numTabs;
         let thisRow = getTabRowNumber(tab, top);
         if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
           while (i < numTabs - 1 && getTabRowNumber(tabs[i+1], top) == thisRow)
@@ -797,114 +806,6 @@ Tabmix.getSingleWindowMode = function TMP_getSingleWindowMode() {
 }
 
 var TMP_TabView = {
-  init: function (tabBar) {
-    this._patchBrowserTabview();
-    var selectedGroupTabs = "this.tabbrowser.visibleTabs";
-    var gBrowserVisibleTabs = "gBrowser.visibleTabs";
-
-    // replace gBrowser.tabContainer.lastChild with current group lastChild
-    var selectedGroupLastChild = "this.visibleTabsLastChild";
-    var tabBarVisibleTabsLastChild = "tabBar.visibleTabsLastChild";
-    Tabmix.newCode("gBrowser.tabContainer.adjustNewtabButtonvisibility", tabBar.adjustNewtabButtonvisibility)._replace(
-      'lastTab.previousSibling;',
-      'TMP_TabView.previousVisibleSibling(lastTab);'
-    )._replace(
-      'this.lastChild', selectedGroupLastChild
-    ).toCode();
-
-    // make scrool button show hidden tabs only from the current group
-    Tabmix.newCode("TabmixAllTabs.createCommonList", TabmixAllTabs.createCommonList)._replace(
-      'gBrowser.tabs', gBrowserVisibleTabs, {flags: "g"}
-    )._replace(
-      'this.createMenuItems(popup, tab, i, aType);',
-      'if (tab.hidden) continue; \
-      $&'
-    ).toCode();
-
-    Tabmix.newCode("TMP_Places.openGroup", TMP_Places.openGroup)._replace("tabBar.childNodes", gBrowserVisibleTabs).toCode();
-
-    // we need to get tab position in the group before it get removed
-    Tabmix.newCode("TMP_eventListener.onTabClose", TMP_eventListener.onTabClose)._replace(
-      'var tab = aEvent.target;',
-      '$& \
-       tab._tPosInGroup = TMP_TabView.getTabPosInCurrentGroup(tab);'
-    ).toCode();
-
-    Tabmix.newCode("TMP_eventListener.onTabClose_updateTabBar", TMP_eventListener.onTabClose_updateTabBar)._replace(
-      '{',
-      '$& \
-       if (aTab._tPosInGroup == -1) return;'
-    )._replace(
-      'lastTab.previousSibling',
-      'TMP_TabView.previousVisibleSibling(lastTab)'
-    )._replace(
-      'tabBar.lastChild', tabBarVisibleTabsLastChild
-    )._replace(
-      'aTab._tPos < tabBar.collapsedTabs',
-      'aTab._tPosInGroup < tabBar.collapsedTabs', {flags: "g"}
-    ).toCode();
-
-    Tabmix.newCode("TabmixTabbar._updateScrollLeft", TabmixTabbar._updateScrollLeft)._replace(
-      'tabBar.childNodes', gBrowserVisibleTabs
-    ).toCode();
-
-    Tabmix.newCode("TMP_tabDNDObserver.onDragOver", TMP_tabDNDObserver.onDragOver)._replace(
-      'this.getNewIndex(event)',
-      'TMP_TabView._getDNDIndex(event)'
-    ).toCode();
-
-    Tabmix.newCode("TMP_tabDNDObserver.onDrop", TMP_tabDNDObserver.onDrop)._replace(
-      'this.getNewIndex(event)',
-      'TMP_TabView._getDNDIndex(event)'
-    ).toCode();
-
-    Tabmix.newCode("TMP_tabDNDObserver.onDragEnd", TMP_tabDNDObserver.onDragEnd)._replace('tabBar.childNodes', gBrowserVisibleTabs).toCode();
-
-    Tabmix.newCode("TMP_tabDNDObserver.getNewIndex", TMP_tabDNDObserver.getNewIndex)._replace(
-      'tabBar.childNodes', gBrowserVisibleTabs
-    )._replace(
-      'event.target._tPos',
-      'TMP_TabView.getIndexInVisibleTabsFromTab(event.target)', {flags: "g"}
-    )._replace(
-      '!tabBar.isTabVisible',
-      'false && $&', {flags: "g"}
-    ).toCode();
-
-    Tabmix.newCode("TabmixTabbar.getRowHeight", TabmixTabbar.getRowHeight)._replace(
-      'tabBar.childNodes', gBrowserVisibleTabs
-    )._replace(
-      'lastTab.previousSibling',
-      'TMP_TabView.previousVisibleSibling(lastTab)'
-    )._replace(
-      'firstTab.nextSibling',
-      'TMP_TabView.nextVisibleSibling(firstTab)'
-    )._replace(
-      'tabBar.lastChild', tabBarVisibleTabsLastChild
-    ).toCode();
-
-    Tabmix.newCode("TabmixProgressListener.listener.onStateChange", TabmixProgressListener.listener.onStateChange)._replace(
-      'let tabsCount = this.mTabBrowser.tabContainer.childNodes.length - this.mTabBrowser._removingTabs.length;',
-      'let tabsCount = this.mTabBrowser.visibleTabs.length;', {flags: "g"}
-    ).toCode();
-
-    var oldCode = 'var prev = tab.previousSibling, next = tab.nextSibling;';
-    var newCode = 'var prev = TMP_TabView.previousVisibleSibling(tab), next = TMP_TabView.nextVisibleSibling(tab);'
-    Tabmix.newCode("TabmixTabbar.updateBeforeAndAfter", TabmixTabbar.updateBeforeAndAfter)._replace(oldCode, newCode).toCode();
-    Tabmix.newCode("TMP_eventListener.onTabSelect", TMP_eventListener.onTabSelect)._replace(oldCode, newCode).toCode();
-
-    // we need to stop tabs slideShow before Tabview starts
-    Tabmix.newCode("TabView.toggle", TabView.toggle)._replace(
-      'this.show();',
-      'if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
-       $&'
-    ).toCode();
-
-    Tabmix.newCode("TabmixTabbar.updateDisplayBlock", TabmixTabbar.updateDisplayBlock)._replace(
-      'tabBar.lastChild', tabBarVisibleTabsLastChild
-    ).toCode();
-
-  },
-
   checkTabs: function (tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
@@ -957,17 +858,6 @@ var TMP_TabView = {
     return this.getIndexInVisibleTabsFromTab(gBrowser.tabs.item(aIndex));
   },
 
-  // get _tPos from group index
-  _getDNDIndex: function (aEvent) {
-    var indexInGroup = TMP_tabDNDObserver.getNewIndex(aEvent);
-    var tabs = gBrowser.visibleTabs;
-    var lastIndex = tabs.length - 1;
-    if (indexInGroup < 0 || indexInGroup > lastIndex)
-      indexInGroup = lastIndex;
-    return tabs[indexInGroup]._tPos;
-  },
-
-
   /* ............... TabView Code Fix  ............... */
 
   /*
@@ -975,7 +865,14 @@ var TMP_TabView = {
    *
    */
 
-  _patchBrowserTabview: function SM__patchBrowserTabview(){
+  _patchBrowserTabview: function SM__patchBrowserTabview() {
+    // we need to stop tabs slideShow before Tabview starts
+    Tabmix.newCode("TabView.toggle", TabView.toggle)._replace(
+      'this.show();',
+      'if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
+       $&'
+    ).toCode();
+
     // don't do anything if Session Manager extension installed
     if (Tabmix.extensions.sessionManager)
       return;

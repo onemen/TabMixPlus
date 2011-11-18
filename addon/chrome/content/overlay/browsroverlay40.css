@@ -22,6 +22,10 @@
   -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab") !important;
 }
 
+#TabsToolbar > #tabs-closebutton {
+ -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabbrowser-close-tab-button")!important;
+}
+
 /* showhover button */
 .showhover-box > .showhover {
  -moz-binding: url("chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button");

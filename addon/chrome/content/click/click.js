@@ -395,7 +395,7 @@ var TabmixContext = {
     }
 
     var clickOutTabs = document.popupNode.localName == "tabs";
-    var aTab = clickOutTabs ? gBrowser.mCurrentTab : gBrowser.mContextTab;
+    var aTab = clickOutTabs ? gBrowser.mCurrentTab : TabContextMenu.contextTab;
 
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 
@@ -407,7 +407,7 @@ var TabmixContext = {
     }
     else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab(gBrowser.mContextTab);");
+      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab(TabContextMenu.contextTab);");
     }
 
     // Duplicate Commands
@@ -893,7 +893,7 @@ var TabmixAllTabs = {
           this.Index = index;
         }
         _tabSorting.prototype.toString = function() { return this.Tab.label.toLowerCase(); }
-        let visibleTabs = gBrowser.tabs;
+        let visibleTabs = gBrowser.visibleTabs;
         tabs = new Array(visibleTabs.length);
         for (i = 0; i < visibleTabs.length; i++)
           tabs[i] = new _tabSorting(visibleTabs[i], i);
@@ -902,7 +902,7 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tabs[i].Tab, tabs[i].Index, aType);
         break;
       case 2:
-        tabs = gBrowser.tabs;
+        tabs = gBrowser.visibleTabs;
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];
@@ -922,6 +922,8 @@ var TabmixAllTabs = {
       case 3:
         for (i = TMP_LastTab.tabs.length - 1; i >= 0; i--) {
           let tab = TMP_LastTab.tabs[i];
+          if (tab.hidden)
+            continue;
           this.createMenuItems(popup, tab, i, aType);
         }
         break;

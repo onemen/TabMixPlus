@@ -62,10 +62,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
                           .getService(Ci.nsIVersionComparator);
   var version = appInfo.version;
   let v = {value:version};
-  //XXX remove is35 and is35 when we finish to clean all files
-  v.is35 = comparator.compare(version, "3.1a2") > 0;
-  v.is36 = comparator.compare(version, "3.6a1pre") >= 0;
-
   v.is40 = comparator.compare(version, "4.0b4") >= 0;
   v.is50 = comparator.compare(version, "5.0a1") >= 0;
   v.is60 = comparator.compare(version, "6.0a1") >= 0;

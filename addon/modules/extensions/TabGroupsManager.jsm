@@ -26,8 +26,6 @@ let TMP_TabGroupsManager = {
       '!animat', 'true'
     ).toCode();
 
-    this.newCode("TMP_tabDNDObserver._getTabGroupNewIndex", this._getDNDIndex, true).toCode();
-
     this.newCode("TMP_tabDNDObserver.onDragExit", aWindow.TMP_tabDNDObserver.onDragExit)._replace(
       'if (target)',
       'if (target && !(/^TabGroupsManager/.test(target.id)))'
@@ -160,15 +158,6 @@ let TMP_TabGroupsManager = {
     this.newCode("window.TMP_TabGroupsManager.tabmixSessionsManager", this.tabmixSessionsManager, true).toCode();
 
     this.newCode("TabmixSessionManager.saveAllGroupsData", this._saveAllGroupsData, true).toCode();
-  },
-
-  // get _tPos from group index
-  _getDNDIndex: function (aEvent) {
-    var indexInGroup = this.getNewIndex(aEvent);
-    var lastIndex = TabGroupsManagerApiVer1.visibleTabs.length - 1;
-    if (indexInGroup < 0 || indexInGroup > lastIndex)
-      indexInGroup = lastIndex;
-    return TabGroupsManagerApiVer1.visibleTabs[indexInGroup]._tPos;
   },
 
   // for TabGroupsManager use - don't change function name

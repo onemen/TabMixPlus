@@ -309,7 +309,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
               TabmixTabbar.updateScrollStatus();
               TabmixTabbar.updateBeforeAndAfter();
             }
-            TabmixTabbar._updateScrollLeft();
           }
           $1$2
         ]]>
@@ -488,7 +487,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
 
     Tabmix.newCode("newWindowButtonObserver.onDrop", newWindowButtonObserver.onDrop)._replace(
       '{',
-      '{ if (Tabmix.singleWindowMode) return;'
+      '{if (Tabmix.singleWindowMode) return;'
     ).toCode();
 
     // fix webSearch to open new tab if tab is lock
@@ -525,7 +524,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       $&]]>
     ).toCode();
 
-    // if usr changed mode to single window mode while having closed window
+    // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the current window
     Tabmix.newCode("undoCloseWindow", undoCloseWindow)._replace(
       'window = ss.undoCloseWindow(aIndex || 0);',
@@ -658,7 +657,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       // bounds: .item() returns null (so it acts like appendChild), but [] throws
       this.tabContainer.insertBefore(aTab, this.tabs.item(aIndex));
 
-      // invalidate cache, because mTabContainer is about to change
+      // invalidate cache, because tabContainer is about to change
       this._browsers = null;
       for (let i = 0; i < tabCount; i++) {
          this.tabs[i]._tPos = i;

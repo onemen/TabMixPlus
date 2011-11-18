@@ -15,7 +15,7 @@
           if (_tabBrowser.mCurrentTab == tabToRemove) {
             let newIndex = _tabBrowser.selectIndexAfterRemove(tabToRemove);
             if (newIndex > -1) {
-              let tab = _tabBrowser.mTabContainer.childNodes.item(newIndex);
+              let tab = _tabBrowser.tabs.item(newIndex);
               if (tab)
                 _tabBrowser.selectedTab = tab;
             }

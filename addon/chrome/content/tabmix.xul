@@ -34,7 +34,7 @@
   <window id="main-window"
     onload="TMP_TBP_Startup();" />
 
-   <!-- Menu in Firefox 4.0+ App Menu -->
+   <!-- Menu in Firefox App Menu -->
    <vbox id="appmenuPrimaryPane"> 
       <menu id="appmenu-sessionmanager" label="&session.Tools;" tmp_iconic="menu-iconic sessionmanager-icon" insertafter="appmenu_webDeveloper"
             onmouseover="TabmixSessionManager.clonePopupMenu(this);" sessionmanager-menu="true">
@@ -133,7 +133,7 @@
            onpopupshowing="TabmixAllTabs.createTabsList(this, 2);"
            onpopuphidden="TabmixAllTabs.hideCommonList(this);"
            onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
-           oncommand="gBrowser.selectedTab = gBrowser.mTabContainer.childNodes[event.originalTarget.value];"/>
+           oncommand="gBrowser.selectedTab = gBrowser.tabs[event.originalTarget.value];"/>
        </menu>
       <menuseparator id="tm-content-undoCloseSep" insertbefore="context-sep-stop"/>
       <menuitem id="tm-content-undoCloseTab" oncommand="TMP_ClosedTabs.undoCloseTab();" insertbefore="context-sep-stop"
@@ -286,32 +286,32 @@
             onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
         </menu>
         <menuitem id="tm-duplicateTab" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
-                 oncommand="gBrowser.duplicateTab(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.duplicateTab(TabContextMenu.contextTab);"/>
         <menuitem id="tm-duplicateinWin" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-                 oncommand="gBrowser.duplicateInWindow(gBrowser.mContextTab, false);"/>
+                 oncommand="gBrowser.duplicateInWindow(TabContextMenu.contextTab, false);"/>
         <menuitem id="tm-context_openTabInWindow" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
-                 oncommand="gBrowser.duplicateInWindow(gBrowser.mContextTab, true);"/>
+                 oncommand="gBrowser.duplicateInWindow(TabContextMenu.contextTab, true);"/>
         <menuitem id="tm-mergeWindowsTab" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
                  oncommand="Tabmix.MergeWindows.mergeWindows();"/>
         <menuitem id="tm-renameTab" label="&renametab.label;" accesskey="&renametab.accesskey;"
-                 oncommand="gBrowser.renameTab(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.renameTab(TabContextMenu.contextTab);"/>
         <menuitem id="tm-copyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
-                 oncommand="gBrowser.copyTabUrl(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.copyTabUrl(TabContextMenu.contextTab);"/>
         <menuitem id="tm-closeAllTabs" label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"
                  oncommand="gBrowser.closeAllTabs();"/>
         <menuitem id="tm-closeSimilar" label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"
-                 oncommand="gBrowser.closeGroupTabs(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.closeGroupTabs(TabContextMenu.contextTab);"/>
         <menuitem id="tm-closeRightTabs" label="&closeRightTabsMenu.label;" accesskey="&closeright.accesskey;"
-                 oncommand="gBrowser._closeRightTabs(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser._closeRightTabs(TabContextMenu.contextTab);"/>
         <menuitem id="tm-closeLeftTabs" label="&closeLeftTabsMenu.label;" accesskey="&closeleft.accesskey;"
-                 oncommand="gBrowser._closeLeftTabs(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser._closeLeftTabs(TabContextMenu.contextTab);"/>
         <menu id="tm-docShell" label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
          <menupopup
-                 onpopupshowing='for(var i = 0; i != childNodes.length; i++) {childNodes[i].setAttribute("checked",gBrowser.getBrowserForTab(gBrowser.mContextTab).docShell[childNodes[i].value]);}
+                 onpopupshowing='for(var i = 0; i != childNodes.length; i++) {childNodes[i].setAttribute("checked",gBrowser.getBrowserForTab(TabContextMenu.contextTab).docShell[childNodes[i].value]);}
                                  event.stopPropagation();'
                  onpopupshown="event.stopPropagation();"
-                 oncommand="var currentDocShell = gBrowser.getBrowserForTab(gBrowser.mContextTab).docShell; currentDocShell[event.originalTarget.value] = !currentDocShell[event.originalTarget.value];
-                            gBrowser.reloadTab(gBrowser.mContextTab);">
+                 oncommand="var currentDocShell = gBrowser.getBrowserForTab(TabContextMenu.contextTab).docShell; currentDocShell[event.originalTarget.value] = !currentDocShell[event.originalTarget.value];
+                            gBrowser.reloadTab(TabContextMenu.contextTab);">
           <menuitem label="&allowImage.label;" value="allowImages" class="menuitem-iconic" type="checkbox" checked="true" />
           <menuitem label="&allowFrame.label;" value="allowSubframes" class="menuitem-iconic" type="checkbox" checked="true" />
           <menuitem label="&allowRedirect.label;" value="allowMetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
@@ -320,19 +320,19 @@
          </menupopup>
         </menu>
         <menuitem id="tm-lockTab" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.lockTab(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.lockTab(TabContextMenu.contextTab);"/>
         <menuitem id="tm-protectTab" label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.protectTab(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser.protectTab(TabContextMenu.contextTab);"/>
         <menuitem id="tm-freezeTab" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.freezeTab(gBrowser.mContextTab);" />
+                 oncommand="gBrowser.freezeTab(TabContextMenu.contextTab);" />
         <menuitem id="tm-reloadLeft" label="&reloadleft.label;" accesskey="&reloadleft.accesskey;"
-                 oncommand="gBrowser._reloadLeftTabs(gBrowser.mContextTab);"/>
+                 oncommand="gBrowser._reloadLeftTabs(TabContextMenu.contextTab);"/>
         <menuitem id="tm-reloadRight" label="&reloadright.label;" accesskey="&reloadright.accesskey;"
-                 oncommand="gBrowser._reloadRightTabs(gBrowser.mContextTab);" />
+                 oncommand="gBrowser._reloadRightTabs(TabContextMenu.contextTab);" />
         <menuitem id="tm-reloadOther" label="&reloadother.label;" accesskey="&reloadother.accesskey;"
-                 oncommand="gBrowser.reloadAllTabsBut(gBrowser.mContextTab);" />
+                 oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />
         <menu id="tm-autoreloadTab_menu" label="&autoReloadTab.label;" accesskey="&autoReloadTab.accesskey;">
-           <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mContextTab);"/>
+           <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, TabContextMenu.contextTab);"/>
         </menu>
       </menupopup>
       <!-- popup menu for autoreload -->
@@ -380,7 +380,7 @@
         <menuitem id="tm_delete" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
                   oncommand="TMP_ClosedTabs.restoreTab('delete', document.popupNode.value);"/>
       </menupopup>
-      <!-- context menu for undoclosewindow menupopup for use with sessionRestore from Firefox 3.5+ -->
+      <!-- context menu for undoclosewindow menupopup for use with sessionRestore -->
       <menupopup id="tm_undocloseWindowContextMenu"
                   onpopupshowing="return document.popupNode.value >= 0;">
         <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"

@@ -19,15 +19,8 @@
   <script type="application/javascript">
   <![CDATA[
     function init() {
-      const Application = Components.classes["@mozilla.org/fuel/application;1"]
-                                     .getService(Components.interfaces.fuelIApplication);
-      if (Components.interfaces.nsIExtensionManager)
-        updateLabels(Application.extensions);
-      else {
-        // Firefox 4.0
-        var addon = window.arguments[0];
-        updateLabels(addon, true)
-      }
+      var addon = window.arguments[0];
+      updateLabels(addon, true)
     }
 
     function updateLabels(extensions, aFirefox4) {

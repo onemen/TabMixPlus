@@ -21,9 +21,7 @@ Tabmix.NO_NEED_TO_REPLACE = -1;
 Tabmix.Sanitizer = {
    isSanitizeTMPwithoutPrompet: function (aOnExit) {
      /*
-      * from Firefox 3.5 privacy.sanitize.promptOnSanitize was removed
-      *
-      * the new behavior is:
+      * The behavior is:
       *   - Tools > Clear Recent History... - Always show the UI
       *   - about:privatebrowsing clearing your recent history  - Always show the UI
       *   - clear private data on exit - NEVER show the UI
@@ -165,11 +163,9 @@ var TabmixSessionData = {
           tabProperties += " faviconized=true";
       }
 
-      if (Tabmix.isVersion(40)) {
-        if (aTab.pinned)
-            tabProperties += " pinned=true";
-        tabProperties += " hidden=" + aTab.hidden;
-      }
+      if (aTab.pinned)
+          tabProperties += " pinned=true";
+      tabProperties += " hidden=" + aTab.hidden;
 
       if ("colorfulTabs" in window) {
         try {
@@ -221,7 +217,7 @@ var TabmixSessionData = {
          }
 
          // we set this attribute in loadOneWindow _tabData
-         if (Tabmix.isVersion(40) && !checkPref) {
+         if (!checkPref) {
             let pinned = TMP_SessionStore._getAttribute(tabData, "pinned");
             if (pinned)
               gBrowser.pinTab(aTab);
@@ -325,7 +321,7 @@ var TabmixSessionManager = {
 
     afterCrash: false,
 
-    // whether we are in private browsing mode (from firefox 3.5)
+    // whether we are in private browsing mode
     _inPrivateBrowsing: false,
 
    // call by Tabmix.startup
@@ -342,8 +338,6 @@ var TabmixSessionManager = {
       var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
       var isFirstWindow = Tabmix.isFirstWindow && !_afterTabduplicated;
 
-      // private browsing - from firefox 3.5
-      // closedwindows menu - from firefox 3.5
       let obs = TabmixSvc.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "private-browsing", true);
@@ -397,10 +391,8 @@ var TabmixSessionManager = {
             return;
          }
 
-         // check if sessionStore restore the session after restart we do not need to do anything
-         // In Firefox 3.5-.6 if first tab contentDocument.tabmix_loading is true in this stage
-         // we are not after restart
-         // in Firefox 4.0 when all tabs are pinned then session resore add the home page on restart
+         // If sessionStore restore the session after restart we do not need to do anything
+         // when all tabs are pinned, session resore add the home page on restart
          let tabmixLoading = gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
          let afterRestart = !tabmixLoading && Tabmix.isWindowAfterSessionRestore;
          if (afterRestart)
@@ -725,11 +717,9 @@ var TabmixSessionManager = {
        // hide or show session manager buttons & menus
       var showInMenu = !sessionManager || !TabmixSvc.TMPprefs.getBoolPref("sessionToolsMenu");
       document.getElementById("tm-sessionmanager").hidden = showInMenu;
-      if (Tabmix.isVersion(40)) {
-        let sm = document.getElementById("appmenu-sessionmanager");
-        if (sm)
-          sm.hidden = !sessionManager;
-      }
+      let sm = document.getElementById("appmenu-sessionmanager");
+      if (sm)
+        sm.hidden = !sessionManager;
       var hiddenPref = !sessionManager || !TabmixSvc.TMPprefs.getBoolPref("closedWinToolsMenu");
       document.getElementById("tm-sm-closedwindows").hidden = hiddenPref;
       document.getElementById("tm-sessionmanager").firstChild.childNodes[2].hidden = !hiddenPref;
@@ -1135,8 +1125,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case "browser-lastwindow-close-requested":
             this.savedPrefs["browser.startup.page"] = TabmixSvc.prefs.getIntPref("browser.startup.page");
             this.savedPrefs["browser.tabs.warnOnClose"] = TabmixSvc.prefs.getBoolPref("browser.tabs.warnOnClose");
-            if (Tabmix.isVersion(40))
-              this.savedPrefs["browser.showQuitWarning"] = TabmixSvc.prefs.getBoolPref("browser.showQuitWarning");
+            this.savedPrefs["browser.showQuitWarning"] = TabmixSvc.prefs.getBoolPref("browser.showQuitWarning");
             break;
          case "timer-callback": // timer call back for delayed saving
             this._saveTimer = null;
@@ -1198,7 +1187,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                     break;
                   }
                   TMP_ClosedTabs.getClosedTabAtIndex(-1); // to be on the safe side...
-                  window.setTimeout(function () {TMP_ClosedTabs.setButtonDisableState(); },Tabmix.isVersion(36) ? 0 : 100);
+                  window.setTimeout(function () {TMP_ClosedTabs.setButtonDisableState(); }, 0);
                   this.afterExitPrivateBrowsing = window.setTimeout(function (self) {
                     self._inPrivateBrowsing = false;
                     self.windowClosed = false;
@@ -1232,8 +1221,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    * @param aEvent    a valid event union.
    * @returns         noting.
    *
-   * we can use ss.forgetClosedWindow(index) from Firefox 3.7a1pre after 2009-08-14
-   *
    */
    checkForMiddleClick: function SM_checkForMiddleClick(aEvent) {
       if (aEvent.button != 1)
@@ -1248,10 +1235,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       TabmixSessionManager.restoreWindow(where, index);
       var popup = aEvent.originalTarget.parentNode;
       if (TabmixSvc.ss.getClosedWindowCount() > 0)
-         if (Tabmix.isVersion(40))
-           HistoryMenu.prototype.populateUndoWindowSubmenu(popup.parentNode.id);
-         else
-           HistoryMenu.populateUndoWindowSubmenu(popup.id);
+         HistoryMenu.prototype.populateUndoWindowSubmenu(popup.parentNode.id);
       else {
          popup.hidePopup();
          if (popup.parentNode.localName != "toolbarbutton")
@@ -1260,18 +1244,12 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    forgetClosedWindow: function SM_forgetClosedWindow(aIndex) {
-     // from firefox 3.6+
-     if ("forgetClosedWindow" in TabmixSvc.ss) {
-       if (aIndex < 0) {
-         while (TabmixSvc.ss.getClosedWindowCount() > 0) {
-           TabmixSvc.ss.forgetClosedWindow(0);
-         }
-       }
-       else
-         TabmixSvc.ss.forgetClosedWindow(aIndex);
+     if (aIndex < 0) {
+       while (TabmixSvc.ss.getClosedWindowCount() > 0)
+         TabmixSvc.ss.forgetClosedWindow(0);
      }
      else
-       this.getClosedWindowAtIndex(aIndex);
+       TabmixSvc.ss.forgetClosedWindow(aIndex);
      this.notifyClosedWindowsChanged();
    },
 
@@ -1280,8 +1258,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    * @param aIndex    a Integer value - 0 or grater index to remove
    *                  other value empty the list.
    * @returns         closed window data at aIndex.
-   *
-   * we can use ss.forgetClosedWindow(index) from Firefox 3.6a2pre after 2009-08-14
    *
    */
    getClosedWindowAtIndex: function SM_getClosedWindowAtIndex(aIndex) {
@@ -1296,7 +1272,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       }
       // replace existing _closedWindows
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.isVersion(40) ? Tabmix.JSON.stringify(state) : state.toSource(), false);
+        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
       } catch (ex) {Tabmix.assert(ex);}
 
       return closedWindow;
@@ -1876,10 +1852,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
         let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
         document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
         if (!this.enableManager) {
-          if (Tabmix.isVersion(40))
-            HistoryMenu.prototype.populateUndoWindowSubmenu("btn_closedwindows");
-          else
-            HistoryMenu.populateUndoWindowSubmenu("btn_closedwindows_menu");
+          HistoryMenu.prototype.populateUndoWindowSubmenu("btn_closedwindows");
           return;
         }
       }
@@ -2317,10 +2290,9 @@ try{
       // now that we open our tabs init TabView again
       TabView.init();
 
-      // some extensions observer for this notification on startup
+      // some extensions observers for this notification on startup
       // notify observers things are complete.
-      if (Tabmix.isVersion(40))
-        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+      Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
    },
 
    getSessionList: function SM_getSessionList(flag) {
@@ -2489,8 +2461,7 @@ try{
          }
          var label = _tab.label;
          // replace "Loading..." with the document title (with minimal side-effects)
-         let tabLoadingTitle = Tabmix.isVersion(40) ? gBrowser.mStringBundle.getString("tabs.connecting"):
-                               gBrowser.mStringBundle.getString("tabs.loading");
+         let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
          if (label == tabLoadingTitle) {
             gBrowser.setTabTitle(_tab);
             [label, _tab.label] = [_tab.label, label];
@@ -2920,14 +2891,8 @@ try{
       if (lastSelectedIndex < 0 || lastSelectedIndex >= newtabsCount) lastSelectedIndex = 0;
 
       function TMP_addTab() {
-        let newTab;
-        if (Tabmix.isVersion(40)) {
-          newTab = gBrowser.addTab("about:blank", {skipAnimation: true});
-          newTab.setAttribute("tabmix_hide", "true");
-        }
-        else
-          newTab = gBrowser.addTab("about:blank");
-
+        let newTab = gBrowser.addTab("about:blank", {skipAnimation: true});
+        newTab.setAttribute("tabmix_hide", "true");
         // flag. dont save tab that are in restore phase
         newTab.setAttribute("inrestore", "true");
 
@@ -2945,7 +2910,7 @@ try{
         history.QueryInterface(Ci.nsISHistoryInternal);
 
         if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
-         aTab.setAttribute("width", Tabmix.isVersion(40) ? aTab.getBoundingClientRect().width : aTab.boxObject.width);
+         aTab.setAttribute("width", aTab.getBoundingClientRect().width);
 
         // remove selected and flst_id from all tabs but the current
         if (aTab != cTab) {
@@ -2960,7 +2925,7 @@ try{
         aTab.removeAttribute("label-uri");
         // reset pinned and hidden tabs
         aTab.removeAttribute("hidden");
-        if (Tabmix.isVersion(40) && aTab.pinned)
+        if (aTab.pinned)
           gBrowser.unpinTab(aTab);
 
         // Make sure that set/getTabValue will set/read the correct data by
@@ -2990,7 +2955,7 @@ try{
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
             // workaround to prevent entring Tabview when we remove last item from a group
-            if (Tabmix.isVersion(40) && !Tabmix.isVersion(60))
+            if (!Tabmix.isVersion(60))
                tab._tabViewTabIsRemovedAfterRestore = true;
             gBrowser.removeTab(tab);
          }
@@ -3026,7 +2991,7 @@ try{
          while (blankTabs.length > newtabsCount) {
             blankTab = blankTabs.pop();
             // workaround to prevent entring Tabview when we remove last item from a group
-            if (Tabmix.isVersion(40) && !Tabmix.isVersion(60))
+            if (!Tabmix.isVersion(60))
               blankTab._tabViewTabIsRemovedAfterRestore = true;
             if (blankTab)
                gBrowser.removeTab(blankTab);
@@ -3100,12 +3065,10 @@ try{
         this.node = rdfTab;
         this.properties = self.getLiteralValue(rdfTab, "properties");
         let attrib = {xultab: this.properties};
-        // we can have hidden tabs in Firefox 3.5-3.6 from TGM
         this.hidden = self.groupUpdates.hideSessionActiveGroup ||
                       TMP_SessionStore._getAttribute(attrib, "hidden") == "true";
         this.index = self.getIntValue(rdfTab, "tabPos");
-        if (Tabmix.isVersion(40))
-          this.pinned = TMP_SessionStore._getAttribute(attrib, "pinned") == "true";
+        this.pinned = TMP_SessionStore._getAttribute(attrib, "pinned") == "true";
 
         if (!this.hidden && !restoreSelect && (firstVisibleTab < 0 || this.index < firstVisibleTab))
           firstVisibleTab = this.index;
@@ -3142,17 +3105,15 @@ try{
           // flag. dont save tab that are in restore phase
           if (!tab.hasAttribute("inrestore"))
             tab.setAttribute("inrestore", "true");
-          if (Tabmix.isVersion(40)) {
-            if (data.pinned)
-              gBrowser.pinTab(tab);
+          if (data.pinned)
+            gBrowser.pinTab(tab);
 
-            if (data.hidden) {
-              gBrowser.hideTab(tab);
-              data.index += tabsData.length;
-            }
-            else
-              gBrowser.showTab(tab);
+          if (data.hidden) {
+            gBrowser.hideTab(tab);
+            data.index += tabsData.length;
           }
+          else
+            gBrowser.showTab(tab);
         }
 
         // move selected tab to first place (if any in the array)
@@ -3213,12 +3174,9 @@ try{
    },
 
    setStripVisibility: function(tabCount) {
-      if (tabCount > 1 && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.getStripVisibility()) {
-        // unhide the tab bar
-        gBrowser.setStripVisibilityTo(true);
-        // forceHide was removed in Firefox 3.5
-        if (TabmixSvc.prefs.prefHasUserValue("browser.tabs.forceHide"))
-           TabmixSvc.prefs.clearUserPref("browser.tabs.forceHide")
+      // unhide the tab bar
+      if (tabCount > 1 && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible) {
+        gBrowser.tabContainer.visible = true;
       }
    },
 
@@ -3263,7 +3221,7 @@ try{
          let state = { windows: [], _firstTabs: true };
          state.windows[0] = { _closedTabs: [] };
          state.windows[0]._closedTabs = TabmixConvertSession.getClosedTabsState(this.getResource(fromPath, "closedtabs"));
-         TabmixSvc.ss.setWindowState(window, Tabmix.isVersion(40) ? Tabmix.JSON.stringify(state) : state.toSource(), false);
+         TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
       }
    },
 

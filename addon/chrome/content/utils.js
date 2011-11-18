@@ -1,28 +1,3 @@
-///XXX try to move as many of this into module
-/// use Components.utils.import to import it for any xul that point to this file
-
-/**
- * We replace some global Services with smart getters
- * gIOService     >  TabmixSvc.io
- * gTabmixPrefs   >  TabmixSvc.prefs
- * tabxPrefs      >  TabmixSvc.TMPprefs
- * SessionPref    >  TabmixSvc.SMprefs
- * gWindowManager >  TabmixSvc.wm
- *
- **/
-
-/**
-rename functions and global variable:
-
-utils.js
-========
-TM_PromptService > Tabmix.promptService
-gIsFirefox35 > Tabmix.isVersion(35)
-gIsFirefox36 > Tabmix.isVersion(36)
-gIsFirefox37 > Tabmix.isVersion(37)
-
-*/
-
 function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
   this.name = aObjectName;
   this.value = aCodeString;
@@ -506,16 +481,20 @@ XXX fix this when there is no stack go directly to trace
 
   // some extensions override native JSON so we use nsIJSON
   JSON: {
-/*
-use       getter for    Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
-    and not defineLazyServiceGetter that use getService
-*/
     nsIJSON: null,
     parse: function TMP_parse(str) {
-      return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : JSON.parse(str);
+      try {
+        return JSON.parse(str);
+      } catch(ex) {
+        return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+      }
     },
     stringify: function TMP_stringify(obj) {
-      return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : JSON.stringify(obj);
+      try {
+        return JSON.stringify(obj);
+      } catch(ex) {
+        return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+      }
     }
   },
   
@@ -531,5 +510,7 @@ use       getter for    Components.classes["@mozilla.org/dom/json;1"].createInst
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-XPCOMUtils.defineLazyServiceGetter(Tabmix.JSON, "nsIJSON", "@mozilla.org/dom/json;1", "nsIJSON");
+XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
+  return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+});
 window.addEventListener("unload", Tabmix.destroy, false);
