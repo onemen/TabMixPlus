@@ -341,7 +341,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
       flags |= Ci.nsIWebNavigation.LOAD_FLAGS_DISALLOW_INHERIT_OWNER;
     }
     gBrowser.loadURIWithFlags(aURI, flags, null, null, aPostData);
-    gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);
+    gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
   }
 
   gBrowser.selectedBrowser.focus();

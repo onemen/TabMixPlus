@@ -153,7 +153,7 @@ var TMP_Places = {
       )._replace(
         _loadURI,
         '$&\
-         w.gBrowser.tabContainer.ensureTabIsVisible(w.gBrowser.mCurrentTab._tPos);'
+         w.gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
         'if (bookMarkId) { \

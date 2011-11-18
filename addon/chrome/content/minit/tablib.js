@@ -177,8 +177,8 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       'var title = browser.contentTitle;',
       '$&\
        var url = browser.contentDocument.baseURI || browser.currentURI.spec;\
-       var cIndex, currentTabVisible, urlTitle;\
-       [title, cIndex, currentTabVisible] = tablib.getTabTitle(aTab, url, title);'
+       var currentTab, urlTitle;\
+       [title, currentTab] = tablib.getTabTitle(aTab, url, title);'
     )._replace(
       'title = textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
       '$&\
@@ -191,7 +191,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     )._replace(
       'aTab.crop = crop;',
       '$&\
-       tablib.onTabTitleChanged(aTab, currentTabVisible, cIndex, title == urlTitle);'
+       tablib.onTabTitleChanged(aTab, currentTab, title == urlTitle);'
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar
@@ -471,7 +471,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       )._replace(
        'loadOneOrMoreURIs(homePage);',
        '$& \
-        gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);'
+        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);'
       ).toCode();
     }
 
@@ -614,7 +614,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     Tabmix.newCode("switchToTabHavingURI", switchToTabHavingURI)._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '$& \
-       gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);'
+       gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);'
     ).toCode();
 
   },
@@ -626,7 +626,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         this.loadOneTab(uri, aReferrer, null, aPostData, false, aAllowThirdPartyFixup);
       else {
         loadURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup);
-        gBrowser.tabContainer.ensureTabIsVisible(gBrowser.mCurrentTab._tPos);
+        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
      }
     }
 
@@ -664,7 +664,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
          this.tabs[i]._selected = false;
       }
       this.mCurrentTab._selected = true;
-      this.tabContainer.ensureTabIsVisible(aTab._tPos, false);
+      this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, false);
 
       if (aTab.pinned)
         this.tabContainer._positionPinnedTabs();
@@ -906,7 +906,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         }
         if (!this.mCurrentTab.pinned)
           this.removeTab(this.mCurrentTab, {animate: animate});
-          // _handleTabSelect will call ensureTabIsVisible
+          // _handleTabSelect will call mTabstrip.ensureElementIsVisible
       }
     }
 
@@ -927,7 +927,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         }
         if (!aTab.pinned) {
           this.removeTab(aTab, {animate: true});
-          this.tabContainer.ensureTabIsVisible(this.tabContainer.selectedIndex);
+          this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
         }
       }
     }
@@ -973,7 +973,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         if (aTab._tPos > this.mCurrentTab._tPos) {
           this.selectedTab = aTab;
         }
-        this.tabContainer.ensureTabIsVisible(this.tabContainer.selectedIndex);
+        this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
 
         for (var i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
@@ -989,7 +989,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       if (this.warnAboutClosingTabs("AllBut", null, aTab._isProtected)) {
         if (aTab != this.mCurrentTab)
           this.selectedTab = aTab;
-        this.tabContainer.ensureTabIsVisible(this.tabContainer.selectedIndex);
+        this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
         var childNodes = this.visibleTabs;
         this.tabContainer.overflow = false;
         for (var i = childNodes.length - 1; i >= 0; --i) {
@@ -1481,18 +1481,22 @@ since we can have tab hidden or remove the index can change....
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
+    // return the current tab only if it is visible
+    var currentTab;
     if (TabmixTabbar.widthFitTitle) {
-      var cIndex = gBrowser.tabContainer.selectedIndex;
-      var currentTabVisible = gBrowser.tabContainer.isTabVisible(cIndex);
+      let tabBar = gBrowser.tabContainer;
+      let tab = gBrowser.selectedTab;
+      if (tabBar.mTabstrip.isElementVisible(tab))
+       currentTab = tab;
     }
     if (aTab.getAttribute("label-uri") == url || aTab.getAttribute("label-uri") == "*")
       title = aTab.getAttribute("fixed-label");
     else
       title = TMP_Places.getTitleFromBookmark(url, title, aTab.getAttribute("tabmix_bookmarkId"));
-    return [title, cIndex, currentTabVisible];
+    return [title, currentTab];
   },
 
-  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aCurrentTabVisible, aIndex, isUrlTitle) {
+  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aCurrentTab, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internaly, after load already finished and we have remove
     // width attribute
@@ -1502,13 +1506,13 @@ since we can have tab hidden or remove the index can change....
     function TMP_onTabTitleChanged_update() {
       TabmixTabbar.updateScrollStatus();
       TabmixTabbar.updateBeforeAndAfter();
-      if (aCurrentTabVisible) {
+      if (aCurrentTab) {
         if (!TabmixTabbar.isMultiRow) {
           let scrollPosition = gBrowser.tabContainer.mTabstrip.scrollPosition;
           if (scrollPosition < 100)
             gBrowser.tabContainer.mTabstrip.scrollPosition = 0;
         }
-        gBrowser.tabContainer.ensureTabIsVisible(aIndex, false);
+        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(aCurrentTab, false);
       }
     }
 

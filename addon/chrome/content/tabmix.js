@@ -421,16 +421,6 @@ var TMP_eventListener = {
 
     var tabBar = gBrowser.tabContainer;
 
-   /*
-    * Session Manager extesion add tabs too soon for us to check isTabVisible properly
-    * we get wrong scrollstatus at startup
-    * we add flag to use in tabBrowser.tabContainer.isTabVisible
-    */
-    if (Tabmix.extensions.sessionManager && Tabmix.isWindowAfterSessionRestore)
-      setTimeout(function (_tabBar) { _tabBar.removeAttribute("SM_restart"); }, 0, tabBar);
-    else
-      tabBar.removeAttribute("SM_restart");
-
     if (Tabmix.isPlatform("Mac")) {
       Tabmix.isMac = true;
       tabBar.setAttribute("Mac", "true");
@@ -712,7 +702,7 @@ var TMP_eventListener = {
       TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
       if (aTab == tabBar.selectedItem)
-        tabBar.ensureTabIsVisible(aTab._tPos);
+        tabBar.mTabstrip.ensureElementIsVisible(aTab);
     }
     TabmixTabbar.updateBeforeAndAfter();
   },
@@ -749,7 +739,7 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     // workaround when we remove last visible tab
     if (TabmixTabbar.isMultiRow && tabBar.overflow && gBrowser._numPinnedTabs > 0 && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
-      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.mCurrentTab, false);
+      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 ///XXXX check ... when closing many tabs it look like the timeout is very long !!
     if (!tabBar.TMP_onCloseTimeout) {
       tabBar.TMP_onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
@@ -783,7 +773,7 @@ var TMP_eventListener = {
     // for ColorfulTabs 6.0+
     // ColorfulTabs trapp TabSelect event after we do
     // we need to set standout class before we check for getTabRowNumber
-    // and ensureTabIsVisible
+    // and mTabstrip.ensureElementIsVisible
     // this class change tab height (by changing the borders)
     if (typeof colorfulTabs == "object" && colorfulTabs.standout &&
         tab.className.indexOf("standout") == -1) {

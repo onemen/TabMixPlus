@@ -301,7 +301,7 @@ var TMP_tabDNDObserver = {
           TabmixTabbar.updateScrollStatus();
       }
 
-      gBrowser.tabContainer.ensureTabIsVisible(newIndex);
+      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.tabs.item(newIndex));
       TabmixTabbar.updateBeforeAndAfter();
     }
     else if (draggedTab) {

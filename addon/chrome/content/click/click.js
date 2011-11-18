@@ -906,7 +906,7 @@ var TabmixAllTabs = {
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];
-          let visible = side && gBrowser.tabContainer.isTabVisible(tab._tPos);
+          let visible = side && gBrowser.tabContainer.mTabstrip.isElementVisible(tab);
           if (visible) {
             if (tab.pinned)
               continue;
@@ -1015,9 +1015,9 @@ var TabmixAllTabs = {
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
     if (gBrowser.selectedTab == aTab)
-      gBrowser.tabContainer.ensureTabIsVisible(gBrowser.tabContainer.selectedIndex);
+      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(aTab);
     else
-      // if we select another tab _handleTabSelect will call ensureTabIsVisible
+      // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible
       gBrowser.selectedTab = aTab;
   },
 

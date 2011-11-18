@@ -359,12 +359,6 @@
 
           if ("linkedBrowser" in this.firstChild)
             tablib.setLoadURIWithFlags(this.firstChild.linkedBrowser);
-          /**
-           * Session Manager extesion add tabs too soon for us to check isTabVisible properly
-           * we get wrong scrollstatus at startup
-           * we add flag to use in tabBrowser.tabContainer.isTabVisible
-           */
-          this.setAttribute("SM_restart", true);
 
           try {
             Tabmix.beforeStartup(tabbrowser, this);
@@ -791,22 +785,6 @@
        ]]></getter>
      </property>
 
-      <method name="isTabVisible">
-        <parameter name="aIndex"/>
-        <body><![CDATA[
-          return this.mTabstrip.isElementVisible(this.childNodes.item(aIndex));
-        ]]></body>
-      </method>
-
-      <method name="ensureTabIsVisible">
-        <parameter name="aIndex"/>
-        <parameter name="aSmoothScroll"/>
-        <body><![CDATA[
-          if (!this.isTabVisible(aIndex))
-            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), aSmoothScroll);
-        ]]></body>
-      </method>
-
       <property name="topTabY" readonly="true">
         <getter><![CDATA[
           return this.tabstripInnerbox.boxObject.y + Tabmix.getStyle(this.tabstripInnerbox, "paddingTop");
@@ -928,7 +906,21 @@
         ]]></body>
       </method>
 
-      <!-- Deprecated stuff, implemented for backwards compatibility. 
+      <!-- Deprecated stuff, implemented for backwards compatibility. -->
+      <method name="isTabVisible">
+        <parameter name="aIndex"/>
+        <body><![CDATA[
+          return this.mTabstrip.isElementVisible(this.childNodes.item(aIndex));
+        ]]></body>
+      </method>
+      <method name="ensureTabIsVisible">
+        <parameter name="aIndex"/>
+        <parameter name="aSmoothScroll"/>
+        <body><![CDATA[
+          if (!this.isTabVisible(aIndex))
+            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), aSmoothScroll);
+        ]]></body>
+      </method>
       <property name="lastTabVisible" readonly="true">
         <getter><![CDATA[
           if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
@@ -940,7 +932,6 @@
 
       <property name="collapsedTabs" onget="return 0;" onset="return 0;"/>
       <property name="realCollapsedTabs" readonly="true" onget="return 0;"/>
-      -->
 
     </implementation>
 

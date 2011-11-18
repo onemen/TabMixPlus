@@ -12,13 +12,5 @@
 
   <binding id="tabmix-tabbrowser-tabs"
            extends="chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tabs"/>
-<!--
-make sure not to use any of this if we don't have it in FF 4.0+
 
-      <property name="collapsedTabs"
-      <field name="_real_numPinnedTabs" readonly="true">0</field>
-      <property name="realCollapsedTabs"
-      <method name="isTabVisible">
-      <method name="ensureTabIsVisible">
--->
 </bindings>

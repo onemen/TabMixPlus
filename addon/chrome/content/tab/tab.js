@@ -29,7 +29,7 @@ var TabmixTabbar = {
     this.scrollButtonsMode = tabscroll;
     this.isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
 
-    var currentVisible = start ? true : tabBar.isTabVisible(gBrowser.mCurrentTab._tPos);
+    var currentVisible = start ? true : tabStrip.isElementVisible(gBrowser.mCurrentTab);
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
@@ -143,7 +143,7 @@ var TabmixTabbar = {
 
     window.setTimeout( function TMP_updateSettings_adjustScroll(_currentVisible) {
         if (_currentVisible)
-          tabBar.ensureTabIsVisible(tabBar.selectedIndex);
+          tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
         self.updateBeforeAndAfter();
     }, 50, currentVisible);
   },
@@ -1384,7 +1384,7 @@ var gTMPprefObserver = {
       let moreThenOneTab = gBrowser.tabs.length > 1;
       gBrowser.tabContainer.visible = moreThenOneTab || TabmixTabbar.hideMode == 0;
       if (moreThenOneTab) {
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.mCurrentTab, false);
+        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
         TabmixTabbar.updateBeforeAndAfter();
       }
     }
