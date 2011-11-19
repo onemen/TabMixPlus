@@ -14,16 +14,17 @@ var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 let TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow, tabBar) {
     this.newCode("TMP_eventListener.onTabOpen", aWindow.TMP_eventListener.onTabOpen)._replace(
-      'this.onTabOpen_delayUpdateTabBar(tab);',
-      'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) { }'
+      /(\})(\)?)$/,
+      'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) {Tabmix.log(e);}\
+       $1$2'
     ).toCode();
 
     // in Firefox 4.0 we call TabGroupsManager.eventListener.onTabClose regardless of browser.tabs.animate
     this.newCode("TMP_eventListener.onTabClose", aWindow.TMP_eventListener.onTabClose)._replace(
       'this.onTabClose_updateTabBar(tab);',
-      'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) { }'
+      'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) {Tabmix.log(e);}'
     )._replace(
-      '!animat', 'true'
+      '!TabmixSvc.prefs.getBoolPref("browser.tabs.animate")', 'true'
     ).toCode();
 
     this.newCode("TMP_tabDNDObserver.onDragExit", aWindow.TMP_tabDNDObserver.onDragExit)._replace(
@@ -36,35 +37,19 @@ let TMP_TabGroupsManager = {
       '!tab.hidden && $&'
     ).toCode();
 
-    // fix bug in TGM when closeing last tab in a group with animation
-    this.newCode("gBrowser.removeTab", aWindow.gBrowser.removeTab)._replace(
-      'if (aParams)',
-      'if (this.visibleTabs.length == 1) {aParams ? aParams.animate = false : aParams = {animate: false}};\
-       $&'
-    ).toCode();
-
-    this.newCode("TabGroupsManager.EventListener.prototype.onGroupSelect", aWindow.TabGroupsManager.EventListener.prototype.onGroupSelect)._replace(
-      '"tabBarScrollStatus" in window', 'true'
-    )._replace(
-      'tabBarScrollStatus();', 'TabmixTabbar.updateScrollStatus();'
-    )._replace(
-      'checkBeforeAndAfter();', 'TabmixTabbar.updateBeforeAndAfter();'
-    ).toCode();
-
+    // TabGroupsManager developer , Axel Shootingstar, already update his code acording to Tabmix need
+    // but since i have change TMP_BrowserOpenTab to Tabmix.browserOpenTab, i'm fix it here
     this.newCode("TabGroupsManager.AllGroups.prototype.openNewGroup", aWindow.TabGroupsManager.AllGroups.prototype.openNewGroup)._replace(
-      'tab = gBrowser.addTab("about:blank");',
-      'if (arguments.length > 4 && arguments[4] == "TMP_BrowserOpenTab") { tab = Tabmix.browserOpenTab(null, true); } \
-       else $&'
+      '"TMP_BrowserOpenTab" in window', 'true'
+    )._replace(
+      ' TMP_BrowserOpenTab', ' Tabmix.browserOpenTab'
     ).toCode();
 
     this.newCode("TabGroupsManager.GroupClass.prototype.removeTab", aWindow.TabGroupsManager.GroupClass.prototype.removeTab)._replace(
-      'gBrowser.addTab("about:blank")',
-      'Tabmix.browserOpenTab(null, true)'
+      '"TMP_BrowserOpenTab" in window', 'true'
     )._replace(
-      'TabGroupsManager.allGroups.openNewGroup();',
-      'TabGroupsManager.allGroups.openNewGroup(null, null, null, null, "TMP_BrowserOpenTab");'
+      ' TMP_BrowserOpenTab', ' Tabmix.browserOpenTab'
     ).toCode();
-
 
     // **************************** for Session Manager ****************************
 

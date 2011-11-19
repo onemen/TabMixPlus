@@ -99,6 +99,8 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     if ("__ctxextensions__removeTab" in gBrowser)
       _removeTab = "__ctxextensions__removeTab";
 
+    // we add compatibility fix for tabGroupManager here
+    // so we don't have to work on the same function twice.
     Tabmix.newCode("gBrowser." + _removeTab, gBrowser[_removeTab])._replace(
       '{',
       '{ \
@@ -106,27 +108,26 @@ Tabmix.log("loadURIWithFlags open new tab", true);
        if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
     )._replace(
       '{',
-      '{if (this.visibleTabs.length == 1 && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab")) return;', {check: ("visibleTabs" in gBrowser)}
+      '{var lastTabInGroup = this.visibleTabs.length == 1;\
+       if (lastTabInGroup && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab")) return;'
     )._replace(
-///XXX check if we still need this
-      'aTab.removeAttribute("fadein");',
-      'aTab.removeAttribute("minwidth"); \
-       aTab.removeAttribute("maxwidth"); \
-       delete aTab.minWidth; delete aTab.maxWidth;\
-       $&'
+      // fix bug in TGM when closeing last tab in a group with animation
+      'if (aParams)',
+      'if (lastTabInGroup) {aParams ? aParams.animate = false : aParams = {animate: false}};\
+       $&', {check: Tabmix.extensions.tabGroupManager}
     ).toCode();
 
     // changed by bug #563337
-    if (Tabmix.isVersion(60)) {
+    if (Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager) {
       Tabmix.newCode("gBrowser._beginRemoveTab", gBrowser._beginRemoveTab)._replace(
         'this.addTab("about:blank", {skipAnimation: true});',
-        'Tabmix.browserOpenTab(null, true);', {check: !("TabGroupsManagerApiVer1" in window)}
+        'Tabmix.browserOpenTab(null, true);'
       ).toCode();
     }
 
     Tabmix.newCode("gBrowser._endRemoveTab", gBrowser._endRemoveTab)._replace(
       'this.addTab("about:blank", {skipAnimation: true});',
-      'Tabmix.browserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !("TabGroupsManagerApiVer1" in window)}
+      'Tabmix.browserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager}
     )._replace(
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \
