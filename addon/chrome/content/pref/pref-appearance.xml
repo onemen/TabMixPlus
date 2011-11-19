@@ -57,7 +57,6 @@
     <implementation>
       <constructor>
         <![CDATA[
-          this.JSON = Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
           this.prefsSvc = TMPstyles.prefsSvc;
           this._initUseThisPref = {prefvalue: this.prefsSvc.getBoolPref("extensions.tabmix." + this.id)};
           this._initPrefValues = this.prefsSvc.getCharPref(this.prefName);
@@ -160,10 +159,7 @@
         <parameter name="aPrefString"/>
         <body><![CDATA[
           try {
-            if ("decode" in this.JSON)
-              this._prefValues = this.JSON.decode(aPrefString);
-            else
-              this._prefValues = JSON.parse(aPrefString);
+            this._prefValues = Tabmix.JSON.parse(aPrefString)
           }
           catch (er) {
             this._resetDefault(true);
@@ -216,10 +212,7 @@
                 break;
             }
           }
-          if ("encode" in this.JSON)
-            this.prefsSvc.setCharPref(this.prefName, this.JSON.encode(newPrefSValue));
-          else
-            this.prefsSvc.setCharPref(this.prefName, JSON.stringify(newPrefSValue));
+          this.prefsSvc.setCharPref(this.prefName, Tabmix.JSON.stringify(newPrefSValue));
         ]]></body>
       </method>
 
@@ -347,7 +340,7 @@
         this._parent._savePrefs();
         event.stopPropagation();
       </handler>
-    </handlers>    
+    </handlers>
   </binding>
 
 </bindings>
