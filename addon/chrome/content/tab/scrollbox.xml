@@ -76,6 +76,11 @@
 
           this.tabmix_inited = true;
 
+          Tabmix.newCode(null, this._distanceScroll)._replace(
+            '{',
+            '{ if (aEvent.button == 2) return;'
+          ).toCode(false, this, "_distanceScroll");
+
           Tabmix.newCode(null, this._smoothScrollByPixels)._replace(
             '{',
             '$& \

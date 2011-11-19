@@ -57,7 +57,7 @@ Tabmix_ChangeCode.prototype = {
       }
       if (this.needUpdate)
         Tabmix.toCode(aObj, aName || this.name, this.value);
-      else
+      else if (Tabmix._debugMode)
         Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);

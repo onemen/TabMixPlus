@@ -929,13 +929,12 @@ var TabmixAllTabs = {
         break;
     }
 
-    var scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
-    if (!popup.style.getPropertyValue("max-height")) {
-      popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
-      scrollBox.ensureElementIsVisible(popup.firstChild);
-    }
-
     if (this._selectedItem) {
+      let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
+      if (!popup.style.getPropertyValue("max-height")) {
+        popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
+        scrollBox.ensureElementIsVisible(popup.firstChild);
+      }
       let items = Array.slice(popup.childNodes);
       let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
       scrollBox.ensureElementIsVisible(element);
