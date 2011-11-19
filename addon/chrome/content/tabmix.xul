@@ -158,6 +158,10 @@
               oncommand="if (!TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
               onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
               onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
+              ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
+              ondragenter="TMP_undocloseTabButtonObserver.onDragOver(event);"
+              ondrop="TMP_undocloseTabButtonObserver.onDrop(event);"
+              ondragexit="TMP_undocloseTabButtonObserver.onDragExit(event);"
               label="&closedtabsbtn.label;"
               _tooltiptext="&closedtabsbtn.tooltip;"
               tooltiptext="&closedtabsbtn.tooltip;">

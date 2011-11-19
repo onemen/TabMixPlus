@@ -5,8 +5,6 @@ var TabmixTabbar = {
   _heights: [],
   _rowHeight: null,
   _width: -1,
-  _toolboxcustomizeStart: false,
-  _needResetOnCustomizeDone: false,
   hideMode: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
   SCROLL_BUTTONS_LEFT_RIGHT: 1,

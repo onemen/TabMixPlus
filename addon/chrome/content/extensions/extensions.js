@@ -602,7 +602,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
          gBrowser.treeStyleTab.initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
-      // Added 2011-11-09, i'm not sure we relay need it, Tabmix.loadTabs call gBrowser.loadTabs
+      // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
       Tabmix.newCode("TabmixContext.openMultipleLinks", TabmixContext.openMultipleLinks)._replace(
         /(Tabmix.loadTabs\([^\)]+\);)/g,
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'

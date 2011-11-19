@@ -397,7 +397,7 @@ var TMP_tabDNDObserver = {
       return;
 
     this.clearDragmark(aEvent);
-    
+
     // don't allow to open new window in single window mode
     if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
       aEvent.stopPropagation();
@@ -431,7 +431,7 @@ var TMP_tabDNDObserver = {
         }
       }
     }
-    
+
     // we allow to detach this tab
     // we don't stop event propagation to let Firefox code run
   },
@@ -1024,6 +1024,285 @@ var TMP_TabView = {
       TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
       delete TabView._window.UI._original_reset;
       delete TabView._window.TabItems._original_resumeReconnecting;
+    }
+  }
+}
+
+Tabmix.navToolbox = {
+  customizeStarted: false,
+  toolboxChanged: false,
+  resetUI: false,
+  _bottomPosition: null,
+
+  init: function TMP_navToolbox_init() {
+    this.updateToolboxItems();
+    gNavToolbox.addEventListener("beforecustomization", this, false);
+    gNavToolbox.addEventListener("aftercustomization", this, false);
+  },
+
+  deinit: function TMP_navToolbox_deinit() {
+    gNavToolbox.removeEventListener("beforecustomization", this, false);
+    gNavToolbox.removeEventListener("aftercustomization", this, false);
+  },
+
+  handleEvent: function TMP_navToolbox_handleEvent(aEvent) {
+    switch (aEvent.type) {
+      case "beforecustomization":
+        this.customizeStart();
+        break;
+      case "customizationchange":
+        gNavToolbox.removeEventListener("customizationchange", this, false);
+        this.toolboxChanged = true;
+        break;
+      case "aftercustomization":
+        this.customizeDone(this.toolboxChanged);
+        break;
+    }
+  },
+
+  customizeStart: function TMP_navToolbox_customizeStart() {
+    gNavToolbox.addEventListener("customizationchange", this, false);
+    this.toolboxChanged = false;
+    this.customizeStarted = true;
+    // make sure that tabs-toolbar is on the top before we enter
+    // customize toolbar mode
+    if (TabmixTabbar.position == 1) {
+      this._bottomPosition = true;
+      gTMPprefObserver.tabBarPositionChanged(0);
+    }
+  },
+
+  customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
+    gNavToolbox.removeEventListener("customizationchange", this, false);
+    this.customizeStarted = false;
+
+    if (this._bottomPosition) {
+      this._bottomPosition = null;
+      // restore position to bottom
+      gTMPprefObserver.tabBarPositionChanged(1);
+    }
+
+    if (aToolboxChanged)
+      this.updateToolboxItems();
+
+    // fix incompatibility with Personal Titlebar extension
+    // the extensions trigger tabbar binding reset on toolbars customize
+    // we need to init our ui settings again
+    if (this.resetUI) {
+      TabmixTabbar.visibleRows = 1;
+      TabmixTabbar.updateSettings(false);
+      this.resetUI = false;
+    }
+    else if (aToolboxChanged) {
+      TabmixTabbar.updateScrollStatus();
+      TabmixTabbar.updateBeforeAndAfter();
+    }
+
+    // if tabmix option dialog is open update visible buttons and set focus if needed
+    var optionWindow = TabmixSvc.wm.getMostRecentWindow("mozilla:tabmixopt");
+    if (optionWindow) {
+      optionWindow.toolbarButtons(window);
+      if ("_tabmixCustomizeToolbar" in optionWindow) {
+        delete optionWindow._tabmixCustomizeToolbar;
+        optionWindow.focus();
+      }
+    }
+  },
+
+  updateToolboxItems: function TMP_navToolbox_updateToolboxItems() {
+    this.initializeURLBar();
+    this.initializeSearchbar();
+    this.toolbarButtons();
+    this.initializeAlltabsPopup();
+    this.initializeScrollButtons();
+  },
+
+  initializeURLBar: function TMP_navToolbox_initializeURLBar() {
+    if (!gURLBar)
+      return;
+
+    // onblur attribut reset each time we exit ToolboxCustomize
+    var blur = gURLBar.getAttribute("onblur") || "";
+    if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
+      gURLBar.setAttribute("onblur", blur + "Tabmix.urlBarOnBlur();")
+
+    // Fix incompatibility with Omnibar (O is not defined)
+    // URL Dot 0.4.x extension
+    let fn;
+    let _Omnibar = "Omnibar" in window;
+    if (_Omnibar && "intercepted_handleCommand" in gURLBar) {
+      fn = "intercepted_handleCommand";
+      Tabmix.newCode("gURLBar.handleCommand", gURLBar.handleCommand)._replace(
+        'O.handleSearchQuery',
+        'window.Omnibar.handleSearchQuery', {silent: true}
+      ).toCode();
+    }
+    else if ("urlDot" in window && "handleCommand2" in gURLBar)
+      fn = "handleCommand2";
+    else
+      fn = "handleCommand"
+    let _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
+    let TMP_fn = Tabmix.isVersion(100) ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
+
+    if (_handleCommand.indexOf(TMP_fn) > -1)
+      return;
+
+    // set altDisabled if Suffix extension installed
+    // dont use it for Firefox 6.0+ until new Suffix extension is out
+    let fixedHandleCommand = Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
+      '{',
+      '{ var _data, altDisabled = false; \
+       if (gBrowser.tabmix_tab) {\
+         delete gBrowser.tabmix_tab;\
+         delete gBrowser.tabmix_userTypedValue;\
+       }'
+    )._replace(
+      'this._canonizeURL(aTriggeringEvent);',
+      '_data = $& \
+       altDisabled = _data.length == 3;', {check: !Tabmix.isVersion(60)}
+    )._replace(
+      'if (aTriggeringEvent instanceof MouseEvent) {',
+      'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
+       Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, null, _mayInheritPrincipal); \
+       return; \
+       $&', {check: !Tabmix.isVersion(100)}
+    );
+
+   /* Starting with firefx 10 we are not using Tabmix.browserLoadURL
+    * we don't do anything regarding IeTab and URL Suffix extensions
+    */
+    if (Tabmix.isVersion(100)) {
+      fixedHandleCommand = fixedHandleCommand._replace(
+        'if (isMouseEvent || altEnter) {',
+        'loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+         if (isMouseEvent || altEnter || loadNewTab) {'
+      )._replace(
+        // always check whereToOpenLink exept for alt to catch also ctrl/meta
+        'if (isMouseEvent)',
+        'if (true)'
+      )._replace(
+        'where = whereToOpenLink(aTriggeringEvent, false, false);',
+        'where = whereToOpenLink(aTriggeringEvent, false, true);'
+      )._replace(
+        'if (where == "current")',
+        'if (loadNewTab && where == "current") where = "tab";\
+         $&'
+      )._replace(
+        'openUILinkIn(url, where, params);',
+        'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
+         $&'
+      );
+    }
+    fixedHandleCommand.toCode();
+
+    // for Omnibar version 0.7.7.20110418+
+    if (_Omnibar) {
+      window.Omnibar.intercepted_handleCommand = gURLBar[fn];
+      Tabmix.newCode("Omnibar.intercepted_handleCommand", Omnibar.intercepted_handleCommand)._replace(
+        'Omnibar.handleSearchQuery',
+        'false && Omnibar.handleSearchQuery', {silent: true}
+      ).toCode();
+    }
+  },
+
+  initializeSearchbar: function TMP_navToolbox_initializeSearchbar() {
+    var searchbar = document.getElementById("searchbar");
+    if (!searchbar)
+      return;
+
+    let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
+    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() : searchbar.handleSearchCommand.toString();
+    // we check browser.search.openintab also for search button click
+    if (_handleSearchCommand.indexOf("forceNewTab") == -1) {
+      let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZhandleSearch" :
+                                         "document.getElementById('searchbar').handleSearchCommand";
+      Tabmix.newCode(functionName,  _handleSearchCommand)._replace(
+        'where = whereToOpenLink(aEvent, false, true);',
+        '$& \
+        var forceNewTab = where == "current" && textBox._prefBranch.getBoolPref("browser.search.openintab"); \
+        if (forceNewTab) where = "tab";'
+      ).toCode();
+    }
+
+    let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
+    let _doSearch;
+    if (searchLoadExt)
+      _doSearch = esteban_torres.searchLoad_Options.MOZdoSearch.toString()
+    else
+      _doSearch = organizeSE ? window.organizeSE.doSearch.toString() : searchbar.doSearch.toString();
+
+    if (_doSearch.indexOf("tabmixArg") > -1)
+      return;
+
+    let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZdoSearch" :
+                       (organizeSE ? "window.organizeSE.doSearch" : "document.getElementById('searchbar').doSearch");
+    Tabmix.newCode(functionName,  _doSearch)._replace(
+      /(openUILinkIn[^\(]*\([^\)]+)(\))/,
+      '$1, null, tabmixArg$2'
+    )._replace(
+      'openUILinkIn',
+      <![CDATA[
+        var tabmixArg = {backgroundPref: "extensions.tabmix.loadSearchInBackground"};
+        var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
+        var isLockTab = !isBlankTab && gBrowser.mCurrentTab.hasAttribute("locked");
+        if (aWhere == "current" && isLockTab)
+          aWhere = "tab";
+        else if ((/^tab/).test(aWhere) && isBlankTab)
+          aWhere = "current"
+      $&]]>
+    )._replace(
+      'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
+      'var loadInBackground = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
+    ).toCode();
+  },
+
+  toolbarButtons: function TMP_navToolbox_toolbarButtons() {
+    if (TabmixSessionManager.enableManager == null) {
+      let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
+      TabmixSessionManager.enableManager = TabmixSvc.SMprefs.getBoolPref("manager") && !inPrivateBrowsing;
+      TabmixSessionManager.enableBackup = TabmixSvc.SMprefs.getBoolPref("crashRecovery") && !inPrivateBrowsing;
+    }
+    Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !TabmixSessionManager.enableManager);
+    TabmixSessionManager.toggleRecentlyClosedWindowsButton();
+
+    gTMPprefObserver.showReloadEveryOnReloadButton();
+
+    gTMPprefObserver.changeNewTabButtonSide(TabmixSvc.TMPprefs.getIntPref("newTabButton.position"));
+  },
+
+  initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {
+    let alltabsPopup = document.getElementById("alltabs-popup");
+    if (alltabsPopup && !alltabsPopup._tabmix_inited) {
+      alltabsPopup._tabmix_inited = true;
+      alltabsPopup.setAttribute("context", gBrowser.tabContextMenu.id);
+      alltabsPopup.__ensureElementIsVisible = function () {
+        let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
+        if (!this.style.getPropertyValue("max-height")) {
+          this.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
+          scrollBox.ensureElementIsVisible(this.lastChild);
+        }
+        scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
+      }
+      alltabsPopup.addEventListener("popupshowing", alltabsPopup.__ensureElementIsVisible, false);
+    }
+
+    // alltabs-popup fix visibility for multi-row
+    if (alltabsPopup && Tabmix.isVersion(70) &&
+        alltabsPopup._updateTabsVisibilityStatus.toString().indexOf("isElementVisible") == -1) {
+      alltabsPopup._updateTabsVisibilityStatus = TabmixAllTabs._updateTabsVisibilityStatus;
+    }
+  },
+
+  initializeScrollButtons: function TMP_navToolbox_initializeScrollButtons() {
+    // Make sure our scroll buttons box is after tabbrowser-tabs
+    let box = document.getElementById("tabmixScrollBox");
+    if (box && box != gBrowser.tabContainer.nextSibling) {
+      let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+      TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
+      if (useTabmixButtons && document.getElementById("TabsToolbar").hasAttribute("tabstripoverflow")) {
+        let tabStrip = gBrowser.tabContainer.mTabstrip;
+        tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = false;
+      }
     }
   }
 }

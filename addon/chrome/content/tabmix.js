@@ -59,10 +59,6 @@ Tabmix.startup = function TMP_startup() {
     if (stripIsHidden)
       gBrowser.tabContainer.visible = false;
   }
-
-  // we eval navigator-toolbox customizeDone in Tabmix.delayedStartup
-  this._bottomPosition = false;
-  tablib.browserToolboxCustomizeDone();
 }
 
 Tabmix.delayedStartup = function TMP_delayedStartup() {
@@ -105,56 +101,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     }
   }
 
-  var toolbox = document.getElementById("navigator-toolbox");
-  window._OriginalToolboxCustomizeDone = toolbox.customizeDone;
-  toolbox.customizeDone = function TMP_customizeDone(aToolboxChanged) {
-    window._OriginalToolboxCustomizeDone(aToolboxChanged);
-    try {
-      if (Tabmix._bottomPosition) {
-         Tabmix._bottomPosition = null;
-         gTMPprefObserver.tabBarPositionChanged(1);
-      }
-
-      if (aToolboxChanged) {
-        tablib.browserToolboxCustomizeDone();
-        if (!TabmixTabbar._needResetOnCustomizeDone) {
-          TabmixTabbar.updateScrollStatus();
-          TabmixTabbar.updateBeforeAndAfter();
-        }
-
-        // Make sure our scroll buttons box is after tabbrowser-tabs
-        let box = document.getElementById("tabmixScrollBox");
-        if (box && box != gBrowser.tabContainer.nextSibling) {
-          let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-          TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
-          if (useTabmixButtons && document.getElementById("TabsToolbar").hasAttribute("tabstripoverflow")) {
-            let tabStrip = gBrowser.tabContainer.mTabstrip;
-            tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = false;
-          }
-        }
-      }
-
-      // fix incompatibility with Personal Titlebar extension
-      // the extensions trigger tabbar binding reset on toolbars customize
-      // we need to init our ui settings again
-      TabmixTabbar._toolboxcustomizeStart = false;
-      if (TabmixTabbar._needResetOnCustomizeDone) {
-        TabmixTabbar.visibleRows = 1;
-        TabmixTabbar.updateSettings(false);
-        TabmixTabbar._needResetOnCustomizeDone = false;
-      }
-
-      // if tabmix option dialog is open update visible buttons and set focus if needed
-      var optionWindow = TabmixSvc.wm.getMostRecentWindow("mozilla:tabmixopt");
-      if (optionWindow) {
-        optionWindow.toolbarButtons(window);
-        if ("_tabmixCustomizeToolbar" in optionWindow) {
-          delete optionWindow._tabmixCustomizeToolbar;
-          optionWindow.focus();
-        }
-      }
-    } catch (ex) {Tabmix.assert(ex, "error in TMP_customizeDone");}
-  };
+  Tabmix.navToolbox.init();
 
   // set option to Prevent double click on Tab-bar from changing window size.
   if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize"))
@@ -354,7 +301,7 @@ var TMP_eventListener = {
     ).toCode();
 
     // no need to updtae updateScrollStatus
-    tabContainer.adjustTabstrip();    
+    tabContainer.adjustTabstrip();
 
     // prevent faviconize use its own adjustTabstrip
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
@@ -919,6 +866,8 @@ var TMP_eventListener = {
 
     if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer)
       Tabmix.flst.cancel();
+
+    Tabmix.navToolbox.deinit();
   },
 
   // some theme not useing updated Tabmix tab binding

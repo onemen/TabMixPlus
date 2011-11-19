@@ -440,7 +440,7 @@
             TabmixTabbar.updateBeforeAndAfter();
           }
           Tabmix.setItem("alltabs-popup", "position",
-              (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");          
+              (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
         ]]></body>
       </method>
 
@@ -850,11 +850,11 @@
 
           // fix incompatibility with Personal Titlebar extension
           // the extensions trigger tabbar binding reset on toolbars customize
-          // we need to init our ui settings again
-          if (TabmixTabbar._toolboxcustomizeStart) {
+          // we need to init our ui settings from here and again after customization
+          if (Tabmix.navToolbox.customizeStarted) {
             TabmixTabbar.visibleRows = 1;
             TabmixTabbar.updateSettings(false);
-            TabmixTabbar._needResetOnCustomizeDone = true;
+            Tabmix.navToolbox.resetUI = true;
           }
 
           // initEvent
