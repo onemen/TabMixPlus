@@ -224,6 +224,8 @@ var TabmixTabbar = {
     if (aRows == 1 || aReset)
       this.resetHeight();
     if (aRows == 1) {
+      Tabmix.setItem(tabBar, "multibar", null);
+      Tabmix.setItem("TabsToolbar", "multibar", null);
       tabBar.overflow = false;
       return;
     }
@@ -302,8 +304,6 @@ var TabmixTabbar = {
   resetHeight: function TMP_resetHeight() {
     var tabBar = gBrowser.tabContainer;
     var tabstrip = tabBar.mTabstrip._scrollbox;
-    Tabmix.setItem(tabBar, "multibar", null);
-    Tabmix.setItem("TabsToolbar", "multibar", null);
     let tabsToolbar = document.getElementById("TabsToolbar");
     if (tabsToolbar.hasAttribute("style")) {
       tabsToolbar.style.removeProperty("max-height");
