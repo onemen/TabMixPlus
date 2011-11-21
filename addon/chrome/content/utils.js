@@ -53,7 +53,7 @@ Tabmix_ChangeCode.prototype = {
     try {
       if (Tabmix._debugMode) {
         this.value = this.value.replace("{", "{try {") +
-            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + this.name + '");}}';
+            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.name) + '");}}';
       }
       if (this.needUpdate)
         Tabmix.toCode(aObj, aName || this.name, this.value);
