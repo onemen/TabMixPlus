@@ -15,6 +15,7 @@ var TMP_tabDNDObserver = {
   DRAG_TAB_TO_NEW_WINDOW : 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
+  draggedTab: null,
 
   init: function TMP_tabDNDObserver_init() {
     this.setDragEvents(true);
@@ -60,9 +61,9 @@ var TMP_tabDNDObserver = {
     if (!tab)
       return;
 
-    let tabs = gBrowser.tabContainer.getElementsByAttribute("showbutton" , "*");
-    for (var i = 0; i < tabs.length; i++)
-      tabs[i].removeAttribute("showbutton");
+    this.draggedTab = tab;
+    tab.setAttribute("dragged", true);
+    gBrowser.tabContainer.removeShowButtonAttr();
 
     let dt = event.dataTransfer;
     dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
@@ -374,6 +375,7 @@ var TMP_tabDNDObserver = {
       delete draggedTab._dragOffsetX;
       delete draggedTab._dragOffsetY;
     }
+    draggedTab.removeAttribute("dragged", true);
   },
 
   onDragEnd: function minit_onDragEnd(aEvent) {
@@ -397,6 +399,8 @@ var TMP_tabDNDObserver = {
       return;
 
     this.clearDragmark(aEvent);
+    this.draggedTab.removeAttribute("dragged", true);
+    this.draggedTab = null;
 
     // don't allow to open new window in single window mode
     if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
@@ -447,6 +451,8 @@ var TMP_tabDNDObserver = {
       return;
 
     this.clearDragmark();
+    this.draggedTab.removeAttribute("dragged", true);
+    this.draggedTab = null;
     gBrowser.tabContainer._continueScroll(event);
     this.updateStatusField();
   },

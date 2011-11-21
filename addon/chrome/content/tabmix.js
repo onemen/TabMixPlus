@@ -799,10 +799,7 @@ var TMP_eventListener = {
 
   onTabBarScroll: function TMP_EL_onTabBarScroll(aEvent) {
     var tabBar = gBrowser.tabContainer;
-
-    let tabs = tabBar.getElementsByAttribute("showbutton" , "*");
-    for (let i = 0; i < tabs.length; i++)
-      tabs[i].removeAttribute("showbutton");
+    tabBar.removeShowButtonAttr();
 
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
     if (shouldMoveFocus) {

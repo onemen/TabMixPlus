@@ -191,8 +191,15 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        if ( aTab.mIsHover && aTab.getAttribute("showbutton") != "on")
+        let pref = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons");
+        if (pref != 2 && pref != 4)
+          return;
+
+        if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
+            !aTab.hasAttribute("dragged")) {
           aTab.setAttribute("showbutton", "on");
+          aTab.parentNode.__showbuttonTab = aTab;
+        }
       ]]></body>
     </method>
 
@@ -216,8 +223,11 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        if (!aTab.mIsHover && aTab.hasAttribute("showbutton"))
+        if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
           aTab.removeAttribute("showbutton");
+          if (aTab == aTab.parentNode.__showbuttonTab)
+            delete aTab.parentNode.__showbuttonTab;
+        }
       ]]></body>
     </method>
 
@@ -897,6 +907,15 @@ Tabmix.log("tabmixTabbarPositionChanged");
             setTimeout(function (ele) {
               ele.removeAttribute("notifybgtab");
             }, 150, this._animateElement);
+          }
+        ]]></body>
+      </method>
+
+      <method name="removeShowButtonAttr">
+        <body><![CDATA[
+          if ("__showbuttonTab" in this) {
+            this.__showbuttonTab.removeAttribute("showbutton");
+            delete this.__showbuttonTab;
           }
         ]]></body>
       </method>
