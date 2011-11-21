@@ -804,13 +804,12 @@ var TMP_eventListener = {
     for (let i = 0; i < tabs.length; i++)
       tabs[i].removeAttribute("showbutton");
 
-    var ScrollDirection = aEvent.detail > 0 ? 1 : -1;
-    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
-      ScrollDirection = -1 * ScrollDirection;
-
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
     if (shouldMoveFocus) {
-      tabBar.advanceSelectedTab(ScrollDirection, true);
+      let direction = aEvent.detail > 0 ? 1 : -1;
+      if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
+        direction = -1 * direction;
+      tabBar.advanceSelectedTab(direction, true);
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
