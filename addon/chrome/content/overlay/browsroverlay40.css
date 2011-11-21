@@ -161,3 +161,11 @@
   -moz-transition: -moz-transform 100ms ease-out;
 }
 */
+
+/* we don't need rule for toolbar-drag - when tabbar on buttom */
+#TabsToolbar[tabbaronbuttom] {
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#toolbar") !important;
+  position: fixed !important;
+  -moz-appearance: none !important;
+  background-image: none !important;
+}

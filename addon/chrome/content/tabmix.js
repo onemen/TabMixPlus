@@ -562,11 +562,35 @@ var TMP_eventListener = {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
         fullScrToggler.collapsed = true;
-        document.getElementById("tabmix-bottom-toolbox").appendChild(fullScrToggler);
+        let box = document.getElementById("tabmix-bottom-toolbox")
+        box.parentNode.insertBefore(fullScrToggler, box);
 
         Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
-          'this._isChromeCollapsed = !aShow;',
-          'document.getElementById("fullscr-bottom-toggler").collapsed = aShow; \
+          'gNavToolbox.style.marginTop',
+          <![CDATA[
+            if (TabmixTabbar.position == 1) {
+              let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+              if (aShow) {
+                bottomToolbox.style.marginBottom = "";
+                gTMPprefObserver.updateTabbarBottomPosition();
+              }
+              else {
+                let bottombox = document.getElementById("browser-bottombox");
+                // changing the margin trigger resize event
+                bottomToolbox.style.marginBottom = 
+                        -(bottomToolbox.getBoundingClientRect().height +
+                          bottombox.getBoundingClientRect().height) + "px"
+              }
+            }
+          $&]]>
+        ).toCode();
+
+        Tabmix.newCode("FullScreen._animateUp", FullScreen._animateUp)._replace(
+          'gNavToolbox.style.marginTop = animateFrameAmount',
+          'if (TabmixTabbar.position == 1) {\
+             let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");\
+             bottomToolbox.style.marginBottom = (animateFrameAmount * -1) + "px";\
+           }\
            $&'
         ).toCode();
 

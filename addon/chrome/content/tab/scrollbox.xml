@@ -308,7 +308,50 @@
       ]]></handler>
 
     </handlers>
+  </binding>
 
+  <!-- for tabbar on the bottom of the screen -->
+  <binding id="toolbar"
+           extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+    <content>
+        <xul:hbox flex="1"
+                  xbl:inherits="orient,width"
+                  anonid="toolbar-innerbox"
+                  class="tabmixplus-toolbar-inner-box">
+          <xbl:children/>
+        </xul:hbox>
+    </content>
+    <implementation implements="nsIDOMEventListener">
+      <constructor>
+        <![CDATA[
+          //XXX we don't check for aEvent.target != window to catch changs in browser-bottombox
+          // try to improve it
+          window.addEventListener("resize", this.tabmixHandleEvent, false);
+        ]]>
+      </constructor>
+
+      <destructor>
+        <![CDATA[
+          window.removeEventListener("resize", this.tabmixHandleEvent, false);
+        ]]>
+      </destructor>
+
+      <field name="tabmixToolbarInnerBox" readonly="true">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'toolbar-innerbox');
+      </field>
+
+      <method name="tabmixHandleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          switch (aEvent.type) {
+            case "resize":
+              gTMPprefObserver.updateTabbarBottomPosition(aEvent);
+              break;
+          }
+        ]]></body>
+      </method>
+
+    </implementation>
   </binding>
 
 </bindings>

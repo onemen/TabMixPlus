@@ -46,7 +46,7 @@
   background-color: transparent;
 }
 
-#tabmix-bottom-toolbox > #TabsToolbar[tabmix_aero]:not(:-moz-lwtheme) {
+#TabsToolbar[tabbaronbuttom][tabmix_aero]:not(:-moz-lwtheme) {
   -moz-appearance: none;
   border-style: none;
 }

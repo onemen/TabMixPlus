@@ -311,7 +311,8 @@
           TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
-            this.tabmixTabbarPositionChanged();
+Tabmix.log("tabmixTabbarPositionChanged");
+            this.initializeTabmixUI();
             return;
           }
           this.tabmix_inited = true;
@@ -829,7 +830,7 @@
         ]]></body>
       </method>
 
-      <method name="tabmixTabbarPositionChanged">
+      <method name="initializeTabmixUI">
         <body><![CDATA[
           // tabbrowser-tabs constructor reset first tab label to New Tab
           this.tabbrowser.setTabTitle(this.firstChild);
@@ -856,11 +857,6 @@
             TabmixTabbar.updateSettings(false);
             Tabmix.navToolbox.resetUI = true;
           }
-
-          // initEvent
-          var event = document.createEvent("Events");
-          event.initEvent("TabmixTabbarPositionChanged", true, true);
-          this.dispatchEvent(event);
         ]]></body>
       </method>
 

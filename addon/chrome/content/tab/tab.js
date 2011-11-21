@@ -4,7 +4,6 @@ var TabmixTabbar = {
   _windowStyle: {exist:false, value:null},
   _heights: [],
   _rowHeight: null,
-  _width: -1,
   hideMode: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
   SCROLL_BUTTONS_LEFT_RIGHT: 1,
@@ -177,7 +176,7 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow && tabBar.mTabstrip.orient == "vertical") {
       if (tabBar.hasAttribute("multibar") &&
-          tabBar._lastTabRowNumber < TabmixTabbar.visibleRows)
+          tabBar._lastTabRowNumber < this.visibleRows)
         tabBar._positionPinnedOnMultiRow();
       tabBar.updateVerticalTabStrip();
     }
@@ -299,6 +298,7 @@ var TabmixTabbar = {
         mWin.style.setProperty("padding-top", newTabbarHeight + "px", "important");
       }
     }
+    gTMPprefObserver.updateTabbarBottomPosition();
   },
 
   resetHeight: function TMP_resetHeight() {
@@ -322,6 +322,7 @@ var TabmixTabbar = {
     if (Tabmix.isMac) {
       document.getElementById("TabsToolbar").style.removeProperty("height");
     }
+    gTMPprefObserver.updateTabbarBottomPosition();
   },
 
   // Update beforeselected and afterselected attribute when we are in multi-row mode
@@ -1415,7 +1416,7 @@ var gTMPprefObserver = {
   },
 
   tabBarPositionChanged: function(aPosition) {
-    if (aPosition > 1 || (aPosition != 0 && "TreeStyleTabBrowser" in window)) {
+    if (aPosition > 1 || (aPosition != 0 && Tabmix.extensions.treeStyleTab)) {
       TabmixSvc.TMPprefs.setIntPref("tabBarPosition", 0);
       return false;
     }
@@ -1435,13 +1436,17 @@ var gTMPprefObserver = {
           cmd.nextSibling.hidden = !aVisible;
       }
     }
+    var tabsToolbar = document.getElementById("TabsToolbar");
+    var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    Tabmix.setItem(tabsToolbar, "tabbaronbuttom", TabmixTabbar.position == 1 || null);
     if (TabmixTabbar.position == 1) {// bottom
-      var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       if (!bottomToolbox) {
-        bottomToolbox = document.createElement("toolbox");
+        bottomToolbox = document.createElement("hbox");
         bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
         if (navigator.oscpu.indexOf("Windows NT 6.1") == 0)
           bottomToolbox.setAttribute("tabmix_aero", true);
+        // if we decide to move this box into browser-bottombox
+        // remember to fix background css rules for all platform
         let browser = document.getElementById("browser");
         browser.parentNode.insertBefore(bottomToolbox, browser.nextSibling);
       }
@@ -1450,19 +1455,54 @@ var gTMPprefObserver = {
         gNavToolbox.tabmix_tabsontop = true;
         TabsOnTop.enabled = false;
       }
-      bottomToolbox.appendChild(document.getElementById("TabsToolbar"));
+      this.updateTabbarBottomPosition();
     }
     else {// top
-      gNavToolbox.appendChild(document.getElementById("TabsToolbar"));
       setTabsOnTopCmd(true);
       if (gNavToolbox.tabmix_tabsontop) {
         TabsOnTop.enabled = true;
         gNavToolbox.tabmix_tabsontop = false;
       }
+      this._bottomRect = {top:null, width:null, height:null};
+      bottomToolbox.style.removeProperty("height");
+      tabsToolbar.style.removeProperty("top");
+      tabsToolbar.removeAttribute("width");
     }
     // force TabmixTabbar.setHeight to set tabbar height
     TabmixTabbar.visibleRows = 1;
     return true;
+  },
+
+  _bottomRect: {top:null, width:null, height:null},
+  updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
+    if (TabmixTabbar.position != 1)
+      return;
+    let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    if (aEvent && aEvent.target != window) {
+      // when the event is not from the window check if tabmix-bottom-toolbox
+      // change its position
+      let rect = bottomToolbox.getBoundingClientRect();
+      if (rect.top == this._bottomRect.top &&
+          rect.width == this._bottomRect.width)
+        return;
+    }
+
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    let newHeight = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
+    if (this._bottomRect.height != newHeight) {
+      this._bottomRect.height = newHeight
+      bottomToolbox.style.setProperty("height", newHeight + "px", "important");
+    }
+    // get new rect after changing the height
+    let rect = bottomToolbox.getBoundingClientRect();
+    if (this._bottomRect.top != rect.top) {
+      this._bottomRect.top = rect.top;
+      tabsToolbar.style.setProperty("top", rect.top + "px", "important");
+    }
+    if (this._bottomRect.width != rect.width) {
+      this._bottomRect.width = rect.width;
+      tabsToolbar.setAttribute("width", rect.width);
+    }
   },
 
   // Show Reload Every menu on Reload button
