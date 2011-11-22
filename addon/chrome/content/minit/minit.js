@@ -371,7 +371,7 @@ var TMP_tabDNDObserver = {
       if (gBrowser.mCurrentTab != tab)
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
-    if (Tabmix.isVersion(70)) {
+    if (Tabmix.isVersion(70) && draggedTab) {
       delete draggedTab._dragOffsetX;
       delete draggedTab._dragOffsetY;
     }
@@ -399,8 +399,10 @@ var TMP_tabDNDObserver = {
       return;
 
     this.clearDragmark(aEvent);
-    this.draggedTab.removeAttribute("dragged", true);
-    this.draggedTab = null;
+    if (this.draggedTab) {
+      this.draggedTab.removeAttribute("dragged", true);
+      this.draggedTab = null;
+    }
 
     // don't allow to open new window in single window mode
     if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
@@ -451,8 +453,10 @@ var TMP_tabDNDObserver = {
       return;
 
     this.clearDragmark();
-    this.draggedTab.removeAttribute("dragged", true);
-    this.draggedTab = null;
+    if (this.draggedTab) {
+      this.draggedTab.removeAttribute("dragged", true);
+      this.draggedTab = null;
+    }
     gBrowser.tabContainer._continueScroll(event);
     this.updateStatusField();
   },
