@@ -203,14 +203,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
   },
 
   change_tabContainer: function change_tabContainer() {
-    if (Tabmix.isVersion(80) && ("_handleTabDrag" in gBrowser.tabContainer)) {
-      Tabmix.newCode("gBrowser.tabContainer._handleTabDrop", gBrowser.tabContainer._handleTabDrop)._replace(
-        'that.tabbrowser.swapBrowsersAndCloseOther(newTab, draggedTab);',
-        'Tabmix.copyTabData(newTab, draggedTab);\
-        $&'
-      ).toCode();
-    }
-
+    if (!Tabmix.extensions.verticalTabs)
     Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
       'if (doPosition)',
       'if (numPinned > 0 && this.hasAttribute("multibar"))\

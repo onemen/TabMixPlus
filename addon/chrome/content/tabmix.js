@@ -348,6 +348,9 @@ var TMP_eventListener = {
 
     // init tabmix functions
     try {
+      TMP_extensionsCompatibility.onWindowOpen();
+    } catch (ex) {Tabmix.assert(ex);}
+    try {
       tablib.init();
     } catch (ex) {Tabmix.assert(ex);}
     try {
@@ -355,9 +358,6 @@ var TMP_eventListener = {
     } catch (ex) {Tabmix.assert(ex);}
     try {
       Tabmix.startup();
-    } catch (ex) {Tabmix.assert(ex);}
-    try {
-      TMP_extensionsCompatibility.onWindowOpen();
     } catch (ex) {Tabmix.assert(ex);}
     try {
       Tabmix.linkHandling_init();

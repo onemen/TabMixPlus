@@ -317,7 +317,7 @@
 
       <constructor>
         <![CDATA[
-          this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          this.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
@@ -378,7 +378,7 @@ Tabmix.log("tabmixTabbarPositionChanged");
 
       <destructor>
         <![CDATA[
-          this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          this.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           delete this.tabstripInnerbox;
         ]]>
       </destructor>
@@ -458,7 +458,7 @@ Tabmix.log("tabmixTabbarPositionChanged");
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
-          if (Tabmix.extensions.treeStyleTab || !this.visible && TabmixTabbar.visibleRows == 1)
+          if (Tabmix.extensions.verticalTabBar || !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
@@ -533,7 +533,7 @@ Tabmix.log("tabmixTabbarPositionChanged");
       <method name="_positionPinnedOnMultiRow">
         <parameter name="numPinned"/>
         <body><![CDATA[
-          if (Tabmix.extensions.treeStyleTab)
+          if (Tabmix.extensions.verticalTabBar)
             return;
           // we have to make sure that rearranging pinned tabs in rows don't change
           // overflow status.

@@ -16,7 +16,7 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false};
+    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false, verticalTabBar: false};
     try {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
@@ -61,6 +61,7 @@ var TMP_extensionsCompatibility = {
       if ("TreeStyleTabService" in window) {
         this.treeStyleTab.onContentLoaded();
         Tabmix.extensions.treeStyleTab = true;
+        Tabmix.extensions.verticalTabBar = true;
       }
     } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
 
@@ -135,6 +136,11 @@ var TMP_extensionsCompatibility = {
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
+    if (typeof VerticalTabs == "object") {
+      Tabmix.extensions.verticalTabs = true;
+      Tabmix.extensions.verticalTabBar = true;
+    }
+    
     // Look for RSS/Atom News Reader
     if ("gotoLink" in window)
       this.wizzrss.init();

@@ -18,7 +18,8 @@ var TabmixTabbar = {
     var tabStrip = tabBar.mTabstrip;
     var tabscroll = TabmixSvc.TMPprefs.getIntPref("tabBarMode");
     if (tabscroll < 0 || tabscroll > 3 ||
-        (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
+        (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
+        Tabmix.extensions.verticalTabBar)) {
       TabmixSvc.TMPprefs.setIntPref("tabBarMode", 1);
       return;
     }
@@ -85,7 +86,7 @@ var TabmixTabbar = {
 
     this.widthFitTitle = TabmixSvc.TMPprefs.getBoolPref("flexTabs") &&
                     (tabBar.mTabMaxWidth != tabBar.mTabMinWidth);
-    if (!Tabmix.extensions.treeStyleTab) {
+    if (!Tabmix.extensions.verticalTabBar) {
       if (start) {
         // Don't change tabstip orient on start before sessionStore ends.
         // if we set orient to vertical before sessionStore finish
@@ -1416,7 +1417,7 @@ var gTMPprefObserver = {
   },
 
   tabBarPositionChanged: function(aPosition) {
-    if (aPosition > 1 || (aPosition != 0 && Tabmix.extensions.treeStyleTab)) {
+    if (aPosition > 1 || (aPosition != 0 && Tabmix.extensions.verticalTabBar)) {
       TabmixSvc.TMPprefs.setIntPref("tabBarPosition", 0);
       return false;
     }

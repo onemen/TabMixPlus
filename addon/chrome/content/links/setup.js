@@ -249,7 +249,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       TMP_SessionStore.afterSwitchThemes = true;
 
     TMP_extensionsCompatibility.preInit();
-    
+
     if (TabmixSvc.TMPprefs.prefHasUserValue("enableDebug") &&
         TabmixSvc.TMPprefs.getBoolPref("enableDebug")) {
       Tabmix._debugMode = true;
