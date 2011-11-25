@@ -855,7 +855,7 @@ var TMP_eventListener = {
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup)
-      alltabsPopup.removeEventListener("popupshowing", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
     if (Tabmix.isPlatform("Linux")) {
        document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, true);

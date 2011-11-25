@@ -1285,15 +1285,13 @@ Tabmix.navToolbox = {
     if (alltabsPopup && !alltabsPopup._tabmix_inited) {
       alltabsPopup._tabmix_inited = true;
       alltabsPopup.setAttribute("context", gBrowser.tabContextMenu.id);
+      if (!alltabsPopup.style.getPropertyValue("max-height"))
+        alltabsPopup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
       alltabsPopup.__ensureElementIsVisible = function () {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
-        if (!this.style.getPropertyValue("max-height")) {
-          this.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
-          scrollBox.ensureElementIsVisible(this.lastChild);
-        }
         scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
       }
-      alltabsPopup.addEventListener("popupshowing", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
     }
 
     // alltabs-popup fix visibility for multi-row
