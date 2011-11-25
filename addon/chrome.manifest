@@ -12,9 +12,9 @@ locale    tabmixplus   el            chrome/locale/el/
 locale    tabmixplus   en-US         chrome/locale/en-US/
 locale    tabmixplus   es-ES         chrome/locale/es-ES/
 locale    tabmixplus   et-EE         chrome/locale/et-EE/
-locale    tabmixplus   eu-ES         chrome/locale/eu-ES/
+locale    tabmixplus   eu            chrome/locale/eu/
 locale    tabmixplus   fa-IR         chrome/locale/fa-IR/
-locale    tabmixplus   fi-FI         chrome/locale/fi-FI/
+locale    tabmixplus   fi            chrome/locale/fi/
 locale    tabmixplus   fr            chrome/locale/fr/
 locale    tabmixplus   he-IL         chrome/locale/he-IL/
 locale    tabmixplus   hr-HR         chrome/locale/hr-HR/
@@ -34,7 +34,7 @@ locale    tabmixplus   ru-RU         chrome/locale/ru-RU/
 locale    tabmixplus   sk-SK         chrome/locale/sk-SK/
 locale    tabmixplus   sr            chrome/locale/sr/
 locale    tabmixplus   sv-SE         chrome/locale/sv-SE/
-locale    tabmixplus   tr            chrome/locale/tr-TR/
+locale    tabmixplus   tr            chrome/locale/tr/
 locale    tabmixplus   uk-UA         chrome/locale/uk-UA/
 locale    tabmixplus   vi            chrome/locale/vi/
 locale    tabmixplus   zh            chrome/locale/zh/
