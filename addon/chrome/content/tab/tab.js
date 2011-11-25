@@ -1476,7 +1476,7 @@ var gTMPprefObserver = {
 
   _bottomRect: {top:null, width:null, height:null},
   updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
-    if (TabmixTabbar.position != 1)
+    if (TabmixTabbar.position != 1 || !gBrowser.tabContainer.visible)
       return;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aEvent && aEvent.target != window) {

@@ -313,6 +313,14 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       'this._container.collapsed = !val;',
       'if (TabmixTabbar.hideMode == 2) val = false;\
        $&'
+    )._replace(
+      'this._container.collapsed = !val;',
+      <![CDATA[
+        $&
+        let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+        if (bottomToolbox)
+          bottomToolbox.collapsed = !val;
+      ]]>
     ).toSetter(gBrowser.tabContainer, "visible");
 
   },
