@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Allajoonitud">
 <!ENTITY textcolor.label "Teksti värv">
 <!ENTITY bgColor.label "Taustavärv">
-<!ENTITY statusbar.label "Ära näita olekuribal">
 <!ENTITY useThis.label "kasuta seda stiili nende puhul">
 <!ENTITY opacity.label "läbipaistmatus">

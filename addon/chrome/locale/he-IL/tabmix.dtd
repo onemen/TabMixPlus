@@ -6,7 +6,7 @@
 <!ENTITY closedwindowsbtn.label "חלונות שנסגרו">
 <!ENTITY closedwindowsbtn.tooltip "הצג רשימת חלונות שנסגרו">
 <!ENTITY page.header.title "אפשרויות Tab Mix Plus">
-<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY options.main.sessionbutton.label "מנהל ההפעלות של Tab Mix Plus">
 <!ENTITY session.Tools "מנהל ההפעלות">
 <!ENTITY closedWin.label "רשימת חלונות שנסגרו">
 <!ENTITY duplicateTabMenu.label "שכפל לשונית">

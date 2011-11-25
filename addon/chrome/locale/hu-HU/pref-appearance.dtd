@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Aláhúzott">
 <!ENTITY textcolor.label "Szövegszín">
 <!ENTITY bgColor.label "Háttérszín">
-<!ENTITY statusbar.label "Elrejtés az állapotsorra">
 <!ENTITY useThis.label "stílus alkalmazása">
 <!ENTITY opacity.label "átlátszatlanság">

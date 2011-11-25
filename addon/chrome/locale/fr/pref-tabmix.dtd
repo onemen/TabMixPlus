@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importer les réglages">
 <!ENTITY settings.default "Restaurer les réglages par défaut">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d'autres applications">
 <!ENTITY externalLinkTarget.label "Ouvrir les liens des autres applications dans :">
 <!ENTITY linkTarget.tab "Nouvel onglet">
 <!ENTITY linkTarget.window "Nouvelle fenêtre">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "la page dupliquée">
 <!ENTITY newtab.location "une adresse personnalisée">
 <!ENTITY location.label "Adresse">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "À l'ouverture de l'onglet, positionner le curseur dans la page et non dans la barre d'adresse">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l'onglet courant">
 <!ENTITY openOtherTabNext.label "Ouvrir d'autres onglets près de l'onglet courant">
 <!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l'onglet courant">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Indicateur de déplacement">
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
 <!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">

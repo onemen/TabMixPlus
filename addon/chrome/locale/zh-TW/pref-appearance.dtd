@@ -7,6 +7,5 @@
 <!ENTITY underline.label "底線">
 <!ENTITY textcolor.label "文字顏色">
 <!ENTITY bgColor.label "背景顏色">
-<!ENTITY statusbar.label "隱藏狀態列的進度顯示">
 <!ENTITY useThis.label "套用此樣式到">
 <!ENTITY opacity.label "不透明度">

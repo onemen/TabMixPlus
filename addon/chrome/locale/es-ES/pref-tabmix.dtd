@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importar predisposiciones">
 <!ENTITY settings.default "Restaurar predeterminadas">
 <!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">
 <!ENTITY externalLinkTarget.label "Abrir enlaces de otros programas en:">
 <!ENTITY linkTarget.tab "Nueva pestaña">
 <!ENTITY linkTarget.window "Nueva ventana">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Duplicar página">
 <!ENTITY newtab.location "Ubicación de usuario">
 <!ENTITY location.label "Ubicación">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Enfocar al cargar página con contenido">
 <!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
 <!ENTITY openOtherTabNext.label "Abrir otras pestañas junto a la actual">
 <!ENTITY relatedAfterCurrent.label "Sólo las relacionadas con la actual">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Indicador de arrastre">
 <!ENTITY dropIndicator-native.label "Estilo original">
 <!ENTITY dropIndicator-builtin.label "Estilo añadido">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Posición:">
 <!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">
 <!ENTITY tabBarPosition.bottom.label "Abajo (debajo del contenido)">

@@ -8,7 +8,7 @@
 <!ENTITY faq.label "שאלות נפוצות">
 <!ENTITY help.label "עזרה">
 <!ENTITY tabmix.label "Tab Mix Plus">
-<!ENTITY reloadtime.label1 "Choose time from the list or enter your own time">
+<!ENTITY reloadtime.label1 "בחר זמן מהרשימה או הכנס זמן משלך">
 <!ENTITY specifyreload.label "זמן טעינה מוגדר">
 <!ENTITY sanitizer.entry "רשימת לשוניות שמורות">
 <!ENTITY sanitizer.entry.accesskey "ר">

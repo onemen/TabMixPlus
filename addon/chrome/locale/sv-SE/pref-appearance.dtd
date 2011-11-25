@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Understruken">
 <!ENTITY textcolor.label "Textfärg">
 <!ENTITY bgColor.label "Bakgrundsfärg">
-<!ENTITY statusbar.label "Göm i statusfält">
 <!ENTITY useThis.label "använder denna stil för">
 <!ENTITY opacity.label "genomskinlighet">

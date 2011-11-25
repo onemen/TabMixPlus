@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Impordi sätted">
 <!ENTITY settings.default "Taasta vaikimisi sätted">
 <!ENTITY generalWindowOpen.label "Uues aknas avanevate linkide avamise asukoht:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Kasuta teistest rakendustest pärit linkide jaoks eraldi eelistust">
 <!ENTITY externalLinkTarget.label "Teistest rakendustest pärit linkide avamise asukoht:">
 <!ENTITY linkTarget.tab "Uus kaart">
 <!ENTITY linkTarget.window "Uus aken">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "lehe koopiat">
 <!ENTITY newtab.location "kasutajamääratud aadressi">
 <!ENTITY location.label "Aadress">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
 <!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">
 <!ENTITY relatedAfterCurrent.label "Ainult siis, kui need on seotud praeguse kaardiga">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Lahtilaskmise tähis">
 <!ENTITY dropIndicator-native.label "Algupärane">
 <!ENTITY dropIndicator-builtin.label "Sisseehitatud">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Asukoht:">
 <!ENTITY tabBarPosition.top.label "Üleval (sisu kohal)">
 <!ENTITY tabBarPosition.bottom.label "All (sisu all)">

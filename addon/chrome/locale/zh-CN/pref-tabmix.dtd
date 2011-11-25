@@ -10,7 +10,7 @@
 <!ENTITY settings.import "导入设置">
 <!ENTITY settings.default "恢复默认">
 <!ENTITY generalWindowOpen.label "新窗口链接打开于：">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "对其他应用程序的链接使用区别的首选项">
 <!ENTITY externalLinkTarget.label "来自其他程序的链接打开于：">
 <!ENTITY linkTarget.tab "当前窗口的新标签页">
 <!ENTITY linkTarget.window "新窗口">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "复制的页面">
 <!ENTITY newtab.location "用户指定的页面">
 <!ENTITY location.label "指定的页面">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
 <!ENTITY relatedAfterCurrent.label "仅当紧邻当前标签页">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "拖放指示器">
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "标签栏位置：">
 <!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（内容区域下方）">

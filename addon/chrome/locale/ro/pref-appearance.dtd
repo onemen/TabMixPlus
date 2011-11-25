@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Subliniat">
 <!ENTITY textcolor.label "Culoare text">
 <!ENTITY bgColor.label "Culoare fundal">
-<!ENTITY statusbar.label "Ascunde indicatorul din bara de stare">
 <!ENTITY useThis.label "Folosește stilul pentru:">
 <!ENTITY opacity.label "opacitate">

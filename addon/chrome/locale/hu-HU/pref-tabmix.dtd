@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Beállítások importálása">
 <!ENTITY settings.default "Alapállapot">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">
 <!ENTITY externalLinkTarget.label "Más programból a linket nyissa meg:">
 <!ENTITY linkTarget.tab "új lapon az aktuális ablakban">
 <!ENTITY linkTarget.window "új ablakban">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Lap megkettőzése">
 <!ENTITY newtab.location "Hely">
 <!ENTITY location.label "Hely">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Fókusz a tartalomra nem üres oldal esetén">
 <!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
 <!ENTITY openOtherTabNext.label "Lapok megnyitása az aktuális után">
 <!ENTITY relatedAfterCurrent.label "Csak ha az aktuális laphoz kapcsolódik">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Ejtés jelző">
 <!ENTITY dropIndicator-native.label "Egyedi stílus">
 <!ENTITY dropIndicator-builtin.label "Beépített stílus">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Pozíció:">
 <!ENTITY tabBarPosition.top.label "Fent (a tartalom felett)">
 <!ENTITY tabBarPosition.bottom.label "Lent (a tartalom alatt)">

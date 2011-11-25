@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Unterstrichen">
 <!ENTITY textcolor.label "Textfarbe">
 <!ENTITY bgColor.label "Hintergrundfarbe">
-<!ENTITY statusbar.label "Keine Fortschrittsanzeige in der Statusleiste">
 <!ENTITY useThis.label "Diesen Stil verwenden für">
 <!ENTITY opacity.label "Deckkraft">

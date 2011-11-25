@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Underline">
 <!ENTITY textcolor.label "Text Color">
 <!ENTITY bgColor.label "Background Color">
-<!ENTITY statusbar.label "Hide in statusbar">
 <!ENTITY useThis.label "use this style for">
 <!ENTITY opacity.label "opacity">

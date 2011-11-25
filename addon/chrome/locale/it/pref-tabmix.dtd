@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importale da file txt">
 <!ENTITY settings.default "Ripristina predefinite">
 <!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Utilizza impostazioni distinte per i link provenienti da altre applicazioni">
 <!ENTITY externalLinkTarget.label "Forza i link provenienti da altre applicazioni ad aprirsi:">
 <!ENTITY linkTarget.tab "in una nuova scheda">
 <!ENTITY linkTarget.window "in una nuova finestra">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "la pagina duplicata">
 <!ENTITY newtab.location "l&apos;URL definito dell&apos;utente">
 <!ENTITY location.label "Indirizzo web">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Non selezionare automaticamente la barra degli indirizzi al caricamento di pagine non vuote">
 <!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
 <!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
 <!ENTITY relatedAfterCurrent.label "Solo se relative alla scheda attuale">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Indicatori di trascinamento">
 <!ENTITY dropIndicator-native.label "stile predefinito del browser">
 <!ENTITY dropIndicator-builtin.label "stile incorporato">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Sposta la barra delle schede:">
 <!ENTITY tabBarPosition.top.label "in alto (sopra al contenuto)">
 <!ENTITY tabBarPosition.bottom.label "in basso (sotto al contenuto)">

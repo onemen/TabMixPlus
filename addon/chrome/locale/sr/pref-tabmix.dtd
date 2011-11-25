@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Увези подешавања">
 <!ENTITY settings.default "Врати подразумеване вредности">
 <!ENTITY generalWindowOpen.label "Везе који се иначе отварају у новом прозору отварај у:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Користи посебне поставке за везе из других програма">
 <!ENTITY externalLinkTarget.label "Везе из других апликација отварај у:">
 <!ENTITY linkTarget.tab "новој картици">
 <!ENTITY linkTarget.window "новом прозору">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "дуплираном страницу">
 <!ENTITY newtab.location "локацијом корисника">
 <!ENTITY location.label "Локација">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Пређи на садржај кад се учитава страница која није празна">
 <!ENTITY openTabNext.label "Нове картице отварај поред тренутне">
 <!ENTITY openOtherTabNext.label "Остале картице отварај поред текуће">
 <!ENTITY relatedAfterCurrent.label "Само ако имају неке везе са тренутном">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Индикатор испуштања">
 <!ENTITY dropIndicator-native.label "Изворни стил">
 <!ENTITY dropIndicator-builtin.label "Уграђени стил">
+<!ENTITY verticalTabbar.description "Користите додатак treeStyleTab или VerticalTab да бисте контролисали ова подешавања.">
 <!ENTITY tabBarPosition.label "Позиција:">
 <!ENTITY tabBarPosition.top.label "на врху (изнад садржаја)">
 <!ENTITY tabBarPosition.bottom.label "на дну (испод садржаја)">

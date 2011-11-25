@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Подчёркнутый">
 <!ENTITY textcolor.label "Цвет текста">
 <!ENTITY bgColor.label "Цвет фона">
-<!ENTITY statusbar.label "Не отображать в строке состояния индикатор открытия вкладок">
 <!ENTITY useThis.label "использовать стиль для">
 <!ENTITY opacity.label "непрозрачность">

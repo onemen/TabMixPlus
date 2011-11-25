@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Gạch chân">
 <!ENTITY textcolor.label "Màu chữ">
 <!ENTITY bgColor.label "Màu nền">
-<!ENTITY statusbar.label "Ẩn trong thanh trạng thái">
 <!ENTITY useThis.label "dùng kiểu này cho">
 <!ENTITY opacity.label "độ mờ">

@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Subratllat">
 <!ENTITY textcolor.label "Color del text">
 <!ENTITY bgColor.label "Color de fons">
-<!ENTITY statusbar.label "Amaga a la barra d'estat">
 <!ENTITY useThis.label "utilitza aquest estil per a">
 <!ENTITY opacity.label "opacitat">

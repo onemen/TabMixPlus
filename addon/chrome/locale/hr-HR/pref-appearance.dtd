@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Podvučeno">
 <!ENTITY textcolor.label "Boja teksta">
 <!ENTITY bgColor.label "Boja pozadine">
-<!ENTITY statusbar.label "Sakrij u statusnu traku">
 <!ENTITY useThis.label "use this style for">
 <!ENTITY opacity.label "opacity">

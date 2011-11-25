@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Instellingen importeren">
 <!ENTITY settings.default "Standaardwaarden herstellen">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">
 <!ENTITY externalLinkTarget.label "Koppelingen vanuit andere programma’s openen in:">
 <!ENTITY linkTarget.tab "Nieuw tabblad">
 <!ENTITY linkTarget.window "Nieuw venster">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Pagina dupliceren">
 <!ENTITY newtab.location "Gebruikerslocatie">
 <!ENTITY location.label "Locatie">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Inhoud op voorgrond weergeven bij het laden van een niet-lege pagina">
 <!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
 <!ENTITY openOtherTabNext.label "Andere tabbladen openen naast huidige">
 <!ENTITY relatedAfterCurrent.label "Alleen indien gerelateerd aan het huidige tabblad">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Indicator laten vallen">
 <!ENTITY dropIndicator-native.label "Logische stijl">
 <!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Positie:">
 <!ENTITY tabBarPosition.top.label "Bovenkant (boven inhoud)">
 <!ENTITY tabBarPosition.bottom.label "Onderkant (onder inhoud)">

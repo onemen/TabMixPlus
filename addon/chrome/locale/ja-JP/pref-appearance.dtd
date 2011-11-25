@@ -7,6 +7,5 @@
 <!ENTITY underline.label "下線">
 <!ENTITY textcolor.label "文字色">
 <!ENTITY bgColor.label "背景色">
-<!ENTITY statusbar.label "ステータスバーのプログレスメーターを非表示">
 <!ENTITY useThis.label "このスタイルを適用する">
 <!ENTITY opacity.label "不透明度">

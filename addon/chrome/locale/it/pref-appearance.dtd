@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Sottolineato">
 <!ENTITY textcolor.label "Colore del testo">
 <!ENTITY bgColor.label "Colore di sfondo">
-<!ENTITY statusbar.label "nascondila nella barra di stato">
 <!ENTITY useThis.label "Utilizza questo stile per">
 <!ENTITY opacity.label "Opacità ">

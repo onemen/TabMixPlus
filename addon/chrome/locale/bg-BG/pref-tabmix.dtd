@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Импортиране на настройките">
 <!ENTITY settings.default "Възстановяване на настройките по подразбиране">
 <!ENTITY generalWindowOpen.label "Връзките, които се отварят в нов прозорец, да се отварят в:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Използване на отделни настройки за връзки от други приложения">
 <!ENTITY externalLinkTarget.label "Отваряне на връзките от външни приложения в:">
 <!ENTITY linkTarget.tab "Нов подпрозорец">
 <!ENTITY linkTarget.window "Нов прозорец">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Дублирана страница">
 <!ENTITY newtab.location "По избор">
 <!ENTITY location.label "Адрес">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
 <!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
 <!ENTITY openOtherTabNext.label "Отваряне на други подпрозорци непосредствено до текущия">
 <!ENTITY relatedAfterCurrent.label "Само ако са свързани с текущия подпрозорец">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Индикатор за пускане">
 <!ENTITY dropIndicator-native.label "Стандартен стил">
 <!ENTITY dropIndicator-builtin.label "Вграден стил">
+<!ENTITY verticalTabbar.description "Използване на разширенията treeStyleTab или VerticalTab за контрол на тези настройки.">
 <!ENTITY tabBarPosition.label "Разположение на лентата:">
 <!ENTITY tabBarPosition.top.label "Подпрозорците отгоре">
 <!ENTITY tabBarPosition.bottom.label "Подпрозорците отдолу">

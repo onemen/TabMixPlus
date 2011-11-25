@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Podkreślenie">
 <!ENTITY textcolor.label "Kolor tekstu">
 <!ENTITY bgColor.label "Kolor tła">
-<!ENTITY statusbar.label "Nie wyświetlaj na pasku stanu">
 <!ENTITY useThis.label "Zastosuj styl dla">
 <!ENTITY opacity.label "Krycie ">

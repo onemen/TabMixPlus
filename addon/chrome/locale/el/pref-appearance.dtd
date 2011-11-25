@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Υπογεγραμμένα">
 <!ENTITY textcolor.label "Χρώμα κειμένου">
 <!ENTITY bgColor.label "Χρώμα φόντου">
-<!ENTITY statusbar.label "Απόκρυψη στη γραμμή κατάστασης">
 <!ENTITY useThis.label "Χρήση αυτού του στυλ για">
 <!ENTITY opacity.label "διαφάνεια">

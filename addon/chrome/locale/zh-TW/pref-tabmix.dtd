@@ -10,7 +10,7 @@
 <!ENTITY settings.import "匯入設定值">
 <!ENTITY settings.default "還原預設值">
 <!ENTITY generalWindowOpen.label "將開啟新視窗的鏈結開啟於：">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "外部程序啟動的鏈結使用不同的設定">
 <!ENTITY externalLinkTarget.label "外部程序啟動的鏈結開啟於：">
 <!ENTITY linkTarget.tab "新分頁">
 <!ENTITY linkTarget.window "新視窗">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "複製頁面">
 <!ENTITY newtab.location "自訂網址…">
 <!ENTITY location.label "網址">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "載入非空白頁時，焦點切換至頁面內容">
 <!ENTITY openTabNext.label "新分頁開啟於目前分頁的旁邊">
 <!ENTITY openOtherTabNext.label "其他分頁開啟於目前分頁的旁邊">
 <!ENTITY relatedAfterCurrent.label "只作用於和目前分頁相關的分頁">
@@ -55,7 +55,7 @@
 <!ENTITY openTabNextInverse.tooltip1 "將新分頁開啟於最後一個由本分頁開啟的分頁旁（因為該分頁是最後選取的）">
 <!ENTITY lockTabs.label "鎖定分頁">
 <!ENTITY lockNewTabs.label "鎖定新分頁">
-<!ENTITY lockAppTabs.label "鎖定應用程式標籤">
+<!ENTITY lockAppTabs.label "鎖定應用程式分頁">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
 <!ENTITY openBookmarks.label "書籤">
 <!ENTITY openBMKGroups.label "書籤群組">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "分頁標籤拖曳指標">
 <!ENTITY dropIndicator-native.label "原始樣式">
 <!ENTITY dropIndicator-builtin.label "內建樣式">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "分頁標籤列位置：">
 <!ENTITY tabBarPosition.top.label "頂部（內容上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（內容下方）">

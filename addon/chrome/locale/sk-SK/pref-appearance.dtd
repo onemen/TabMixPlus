@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Podčiarknúť">
 <!ENTITY textcolor.label "Farba textu">
 <!ENTITY bgColor.label "Farba pozadia">
-<!ENTITY statusbar.label "Skryť v stavovom riadku">
 <!ENTITY useThis.label "použiť tento štýl pre">
 <!ENTITY opacity.label "nepriesvitnosť">

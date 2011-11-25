@@ -7,6 +7,5 @@
 <!ENTITY underline.label "下划线">
 <!ENTITY textcolor.label "文字颜色">
 <!ENTITY bgColor.label "背景颜色">
-<!ENTITY statusbar.label "隐藏状态栏的载入进度">
 <!ENTITY useThis.label "该样式应用于">
 <!ENTITY opacity.label "透明度">

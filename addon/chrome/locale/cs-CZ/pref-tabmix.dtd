@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importovat nastavení">
 <!ENTITY settings.default "Obnovit výchozí nastavení">
 <!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevřít do:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Použít vlastní nastavení pro odkazy z jiných aplikací">
 <!ENTITY externalLinkTarget.label "Odkazy jiných aplikací otevřít do:">
 <!ENTITY linkTarget.tab "nového panelu">
 <!ENTITY linkTarget.window "nového okna">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
 <!ENTITY newtab.location "Uživatelské umístění">
 <!ENTITY location.label "Umístění">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Přepnout na obsah při načítání neprázdné stránky">
 <!ENTITY openTabNext.label "Otevřít nové panely vedle současného panelu">
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle současného">
 <!ENTITY relatedAfterCurrent.label "Pouze pokud je ve vztahu k současnému panelu">
@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavný styl">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
 <!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
 <!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">

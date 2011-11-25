@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Sublinhado">
 <!ENTITY textcolor.label "Cor do texto">
 <!ENTITY bgColor.label "Cor de fundo">
-<!ENTITY statusbar.label "Ocultar barra de estado">
 <!ENTITY useThis.label "usar este estilo para">
 <!ENTITY opacity.label "opacidade">

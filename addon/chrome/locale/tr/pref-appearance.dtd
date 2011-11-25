@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Altı çizili">
 <!ENTITY textcolor.label "Metin rengi">
 <!ENTITY bgColor.label "Arkaplan rengi">
-<!ENTITY statusbar.label "Durum çubuğundakini gizle">
 <!ENTITY useThis.label "Stili bunun için kullan">
 <!ENTITY opacity.label "saydamlık">

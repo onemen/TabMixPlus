@@ -129,6 +129,7 @@
 <!ENTITY dropIndicator.label "Indicação ao soltar aba">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo interno">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
 <!ENTITY tabBarPosition.label "Posição:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">
 <!ENTITY tabBarPosition.bottom.label "Bottom (below content)">

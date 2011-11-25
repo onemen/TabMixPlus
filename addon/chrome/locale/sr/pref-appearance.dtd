@@ -7,6 +7,5 @@
 <!ENTITY underline.label "Подвучено">
 <!ENTITY textcolor.label "Боја слова">
 <!ENTITY bgColor.label "Боја позадине">
-<!ENTITY statusbar.label "Сакриј у статусну линију">
 <!ENTITY useThis.label "користи овај стил за">
 <!ENTITY opacity.label "провидност">
