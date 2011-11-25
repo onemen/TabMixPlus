@@ -1042,7 +1042,6 @@ Tabmix.navToolbox = {
   customizeStarted: false,
   toolboxChanged: false,
   resetUI: false,
-  _bottomPosition: null,
 
   init: function TMP_navToolbox_init() {
     this.updateToolboxItems();
@@ -1074,23 +1073,11 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("customizationchange", this, false);
     this.toolboxChanged = false;
     this.customizeStarted = true;
-    // make sure that tabs-toolbar is on the top before we enter
-    // customize toolbar mode
-    if (TabmixTabbar.position == 1) {
-      this._bottomPosition = true;
-      gTMPprefObserver.tabBarPositionChanged(0);
-    }
   },
 
   customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
     gNavToolbox.removeEventListener("customizationchange", this, false);
     this.customizeStarted = false;
-
-    if (this._bottomPosition) {
-      this._bottomPosition = null;
-      // restore position to bottom
-      gTMPprefObserver.tabBarPositionChanged(1);
-    }
 
     if (aToolboxChanged)
       this.updateToolboxItems();
@@ -1303,8 +1290,15 @@ Tabmix.navToolbox = {
 
   initializeScrollButtons: function TMP_navToolbox_initializeScrollButtons() {
     // Make sure our scroll buttons box is after tabbrowser-tabs
-    let box = document.getElementById("tabmixScrollBox");
+    let id = "tabmixScrollBox";
+    let box = document.getElementById(id);
     if (box && box != gBrowser.tabContainer.nextSibling) {
+      // update currentset
+      let tabsToolbar = document.getElementById("TabsToolbar");
+      let cSet = tabsToolbar.getAttribute("currentset").split(",");
+      cSet.splice(1, 0, cSet.splice(cSet.indexOf(id), 1)[0]);
+      tabsToolbar.setAttribute("currentset", cSet);
+      // update physical position
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
       if (useTabmixButtons && document.getElementById("TabsToolbar").hasAttribute("tabstripoverflow")) {
