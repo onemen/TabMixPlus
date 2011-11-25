@@ -60,7 +60,8 @@ function TM_EMinit() {
   }
 
   // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
-  if ("TreeStyleTabBrowser" in browserWindow) {
+  if ("TreeStyleTabBrowser" in browserWindow || typeof(browserWindow.VerticalTabs) == "object") {
+    TM_Options.setItem("treeStyleTab.msg", "hidden", null);
     TM_Options.setItem("tabBarDisplay", "TSTinstalled", true);
     TM_Options.setItem("tabBarPosition", "disabled", true);
     TM_Options.setItem("tabScroll", "disabled", true);
