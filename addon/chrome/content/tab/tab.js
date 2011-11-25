@@ -158,7 +158,11 @@ var TabmixTabbar = {
 
     let tabStrip  = gBrowser.tabContainer.mTabstrip;
     if (newBox || (useTabmixButtons && insertAfterTabs)) {
-      document.getElementById("TabsToolbar").insertBefore(box, gBrowser.tabContainer.nextSibling);
+      let tabsToolbar = document.getElementById("TabsToolbar");
+      let cSet = tabsToolbar.getAttribute("currentset").split(",");
+      cSet.splice(1, 0, "tabmixScrollBox");
+      tabsToolbar.setAttribute("currentset", cSet);
+      tabsToolbar.insertBefore(box, gBrowser.tabContainer.nextSibling);
       tabStrip._scrollButtonDownRight = box._scrollButtonDown;
       tabStrip._scrollButtonUpRight = box._scrollButtonUp;
     }
