@@ -660,6 +660,10 @@ function setPrefByType(prefName, newValue, atImport) {
                     newValue = -1;
                   TabmixSvc.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
                   break;
+               // 2011-11-26
+               case "extensions.tabmix.clickToScroll.scrollDelay":
+                  TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
+                  break;
             }
       }
    } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}

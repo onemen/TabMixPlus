@@ -1628,6 +1628,12 @@ var gTMPprefObserver = {
       TabmixSvc.prefs.setIntPref("browser.link.open_newwindow.override.external", val);
       TabmixSvc.prefs.clearUserPref("browser.link.open_external");
     }
+    // 2011-11-26
+    if (TabmixSvc.prefs.prefHasUserValue("extensions.tabmix.clickToScroll.scrollDelay")) {
+      let val = TabmixSvc.prefs.getIntPref("extensions.tabmix.clickToScroll.scrollDelay");
+      TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
+      TabmixSvc.prefs.clearUserPref("extensions.tabmix.clickToScroll.scrollDelay");
+    }
 
     // verify valid value
     if (TabmixSvc.TMPprefs.prefHasUserValue("tabs.closeButtons")) {

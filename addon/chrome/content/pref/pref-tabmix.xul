@@ -542,7 +542,7 @@
               <hbox align="center" id="clickToScroll.scrollDelay">
                 <label value="&scrolldelay.label;" TSTdisabled="true"/>
                 <textbox id="scrollDelay" size="4" maxlength="4"
-                         prefstring="extensions.tabmix.clickToScroll.scrollDelay" type="number"/>
+                         prefstring="toolkit.scrollbox.clickToScroll.scrollDelay" type="number"/>
                 <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true"/>
               </hbox>
              </vbox>

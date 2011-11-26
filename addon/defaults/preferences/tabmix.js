@@ -275,12 +275,6 @@ pref("extensions.tabmix.reload_time", 15);
 // -1: unlimited
 //  0: no backups created (and deletes all existing backups)
 pref("extensions.tabmix.sessions.max_backups", 7);
-/*
-  A positive integer that determines how many milliseconds to wait before scrolling the tab strip
-  when extensions.tabmix.tabBarMode is 2 (in multi-bar mode) we scroll by row
-  when we are in single window mode we scroll by tab
-*/
-pref("extensions.tabmix.clickToScroll.scrollDelay", 150);
 
 // removed from Firefox 4.0+
 pref("browser.tabs.tabMinWidth", 100);
