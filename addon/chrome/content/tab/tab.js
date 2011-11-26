@@ -877,21 +877,6 @@ var gTMPprefObserver = {
       let index = ss.insertRule(newRule, ss.cssRules.length);
       this.dynamicRules["currentTab" + "bgTabsontop"] = ss.cssRules[index];
     }
-
-    var self = this;
-    var callSubFunction = function TMP_callSubFunction() {
-      try {
-        self.replaceBrowserRules();
-      } catch (ex) {Tabmix.assert(ex);}
-      self.setTabIconMargin();
-      self.setCloseButtonMargin();
-      delete self.tabStyleSheet;
-    }
-
-    try {
-      this.replaceContentBrowserRules();
-    } catch (ex) {Tabmix.assert(ex);}
-    window.setTimeout(function () {callSubFunction();}, 0);
   },
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
@@ -1418,6 +1403,9 @@ var gTMPprefObserver = {
       Tabmix.setItem("TabsToolbar", "newTabButton", false);
       tabBar._rightNewTabButton = null;
     }
+    // style flush to prevent the window from flicker
+    // if we hide the new tab button after tabs on startup
+    tabBar.mTabstrip.clientTop;
   },
 
   tabBarPositionChanged: function(aPosition) {

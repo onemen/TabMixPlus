@@ -232,7 +232,16 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
     TabmixTabbar.widthFitTitle = TabmixSvc.TMPprefs.getBoolPref("flexTabs") && (max != min);
-    this.setItem(tabContainer, "widthFitTitle", TabmixTabbar.widthFitTitle || null);
+    if (TabmixTabbar.widthFitTitle) {
+      this.setItem(tabContainer, "widthFitTitle", true);
+      // we only change the rule that set flex=100 and width=0 at delayedStartup.
+      let tab = tabBrowser.selectedTab;
+      tabBrowser.setTabTitleLoading(tab);
+      tab.setAttribute("flex", "0");
+      tab.setAttribute("width", tab.boxObject.width);
+      tab.clientTop;
+      Tabmix.__felxedTab = tab;
+    }
 
     var tabscroll = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode");
     if (tabscroll < 0 || tabscroll > 3 ||

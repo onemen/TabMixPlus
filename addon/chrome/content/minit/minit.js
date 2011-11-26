@@ -24,6 +24,8 @@ var TMP_tabDNDObserver = {
     // without this the Indicator is not visible on the first drag
     var ind = gBrowser.tabContainer._tabDropIndicator;
     ind.style.MozTransform = "translate(0px, 0px)";
+    // style flush to prevent the window from flicker on startup
+    ind.clientTop;
   },
 
   setDragEvents: function TMP_setDragEvents(atStart) {

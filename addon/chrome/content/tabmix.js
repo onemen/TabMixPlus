@@ -115,9 +115,22 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TMP_extensionsCompatibility.onDelayedStartup();
 
 ///XXX move all UI init from TMP_eventListener to here
-  TabmixTabbar.updateSettings(true);
+  try {
+    // window flicker if we change max-width to soon
+    gTMPprefObserver.replaceContentBrowserRules();
+    gTMPprefObserver.replaceBrowserRules();
+  } catch (ex) {Tabmix.assert(ex);}
+  gTMPprefObserver.setTabIconMargin();
+  gTMPprefObserver.setCloseButtonMargin();
+  delete gTMPprefObserver.tabStyleSheet;
+  if ("__felxedTab" in Tabmix) {
+    Tabmix.__felxedTab.removeAttribute("flex");
+    delete Tabmix.__felxedTab;
+  }
 
   gTMPprefObserver.setMenuIcons();
+  
+  TabmixTabbar.updateSettings(true);
 
   try {
     TMP_LastTab.init();
