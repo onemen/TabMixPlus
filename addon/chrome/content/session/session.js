@@ -983,7 +983,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    * unescape was removed.
    */
    getDecodedLiteralValue: function(node, key) {
-     let encodedString = this.getLiteralValue(node, key);
+     let encodedString = node ? this.getLiteralValue(node, key) : key;
      // in the past we use escape for encoding, we try first to decode with decodeURI
      // only if we fail we use deprecated unescape
      try {
@@ -3443,7 +3443,7 @@ try{
    },
 
    loadTabHistory: function(rdfNodeSession, sHistoryInternal) {
-      var history = this.getDecodedLiteralValue(rdfNodeSession, "history");
+      var history = this.getLiteralValue(rdfNodeSession, "history");
       var tmpData = history.split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
       var historyData = tmpData.join("|-|").split(sep);
@@ -3465,7 +3465,7 @@ try{
          if (!this.enableSaveHistory && sessionIndex != i) continue;
          historyEntry = Components.classes["@mozilla.org/browser/session-history-entry;1"]
                            .createInstance(Ci.nsISHEntry);
-         entryTitle = historyData[index];
+         entryTitle = this.getDecodedLiteralValue(null, historyData[index]);
          uriStr = historyData[index + 1];
          if (uriStr == "") uriStr = "about:blank";
          newURI = TabmixSvc.io.newURI(uriStr, null, null);
