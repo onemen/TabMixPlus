@@ -485,7 +485,7 @@ Tabmix.log("tabmixTabbarPositionChanged");
           else
             multibar = "true"
 
-          if (rows > 1 && currentMultibar != multibar) {
+          if (currentMultibar != multibar) {
             Tabmix.setItem(this, "multibar", multibar);
             Tabmix.setItem("TabsToolbar", "multibar", multibar);
           }
