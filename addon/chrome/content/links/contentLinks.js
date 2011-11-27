@@ -180,7 +180,6 @@ Tabmix.contentAreaClick = {
           href = event.__href;
           where = "tab";
         }
-
         // force handleLinkClick to use openLinkIn by replace "current"
         // with " current", we later use trim() before handleLinkClick call openLinkIn
         event.__where = where == "current" ? " " + where : where;
@@ -192,7 +191,16 @@ Tabmix.contentAreaClick = {
 
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
       'whereToOpenLink(event)',
-      '!event || !event.__where || event.__where == "default" ? $& : event.__where'
+      <![CDATA[
+        $&
+        // don't change where if it is save, window, or we passed 
+        // event.__where = default from contentAreaClick or 
+        // Tabmix.contentAreaClick.contentLinkClick
+        if (event && event.__where && event.__where != "default" &&
+            ["tab","tabshifted","current"].indexOf(where) != -1) {
+          where = event.__where;
+        }
+      ]]>
     )._replace(
       'var doc = event.target.ownerDocument;',
       'where = where.trim();\
