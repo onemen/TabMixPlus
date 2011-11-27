@@ -58,7 +58,8 @@
   margin: 0px;
 }
 
-#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button{
+#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >
+   #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button{
   visibility: visible;
 }
 
@@ -142,30 +143,20 @@
   width: 0;
 }
 
-/* for test - highlight tab in drag and drop test */
-.tabbrowser-tab[dragtarget="true"]{
-  -moz-appearance: none;
-  background-image: -moz-linear-gradient(center bottom , rgba(10%,10%,10%,.4) 1px, transparent 1px), -moz-linear-gradient(rgb(255, 204, 102), rgb(255, 204, 102))!important;
-}
 
-/*
-  //XXX we don't need it after bug 455694 (tab drag/detach animations) backed-out.
-  // we leave it in case the code will change again.
-
-  animate new tab button move - for Firefox 8.0+ 
-#tabbrowser-tabs[drag=move] > .tabbrowser-arrowscrollbox > .tabs-newtab-button[slide] {
-  -moz-transition: -moz-transform 200ms ease-out;
-}
-
-#tabbrowser-tabs[drag=finish] > .tabbrowser-arrowscrollbox > .tabs-newtab-button[slide] {
-  -moz-transition: -moz-transform 100ms ease-out;
-}
-*/
-
+/* :::: tabbar on buttom :::: */
 /* we don't need rule for toolbar-drag - when tabbar on buttom */
 #TabsToolbar[tabbaronbuttom] {
   -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#toolbar") !important;
   position: fixed !important;
   -moz-appearance: none !important;
   background-image: none !important;
+}
+
+/* this will trigger resize if we exit hidden tabbar mode before
+   we set width or height to this box
+*/
+#tabmix-bottom-toolbox {
+  min-width: 1px;
+  min-height: 1px;
 }
