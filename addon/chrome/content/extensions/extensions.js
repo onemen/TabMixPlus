@@ -349,6 +349,11 @@ var TMP_extensionsCompatibility = {
         Tabmix.browserOpenTab();
       }
     }
+    // https://addons.mozilla.org/en-US/firefox/addon/speed-dial/
+    if ("SpeedDial" in window) {
+      window.originalBrowserOpenTab = Tabmix.browserOpenTab;
+      window.BrowserOpenTab = SpeedDial.browserOpenTab;
+    }
   }
 
 }
