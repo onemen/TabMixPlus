@@ -175,14 +175,28 @@ Tabmix.contentAreaClick = {
       ]]>
     )._replace(
       'handleLinkClick(event, href, linkNode);',
-      'event.__where = where; event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;\
-       var result = $&\
-       if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
+      <![CDATA[
+        if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {
+          href = event.__href;
+          where = "tab";
+        }
+
+        // force handleLinkClick to use openLinkIn by replace "current"
+        // with " current", we later use trim() before handleLinkClick call openLinkIn
+        event.__where = where == "current" ? " " + where : where;
+        event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;
+        var result = $&
+        if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);
+      ]]>
     ).toCode();
 
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
       'whereToOpenLink(event)',
       '!event || !event.__where || event.__where == "default" ? $& : event.__where'
+    )._replace(
+      'var doc = event.target.ownerDocument;',
+      'where = where.trim();\
+       $&'
     )._replace(
       'charset: doc.characterSet',
       '$&, suppressTabsOnFileDownload: event.__suppressTabsOnFileDownload'
@@ -315,6 +329,15 @@ Tabmix.contentAreaClick = {
       return;
 
     let targetAttr = this.getTargetAttr(linkNode);
+
+    // replace onclick function with the form javascript:top.location.href = url
+    // if the tab is locked or we force new tab from link
+    if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
+      let onclick = linkNode.getAttribute("onclick");
+      let code = "javascript:top.location.href="
+      if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
+        linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
+    }
 
     var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
     try {
@@ -687,8 +710,15 @@ Tabmix.contentAreaClick = {
     var onclick = null;
     if (href)
       href = href.toLowerCase();
+
+    // we replcae in contentLinkClick the onclick javascript:top.location.href = url
+    // with var __tabmix.href = url
+    if (this.getHrefFromOnClick(event, href, linkNode, "var __tabmix.href="))
+      return "tab";
+
     if (linkNode.hasAttribute("onclick"))
       onclick = linkNode.getAttribute("onclick");
+
     if (this.checkAttr(href, "javascript:") ||
         this.checkAttr(href, "data:") ||
         this.checkAttr(onclick, "window.open") ||
@@ -868,62 +898,19 @@ Tabmix.contentAreaClick = {
         targetAttr = b[0].getAttribute("target");
     }
     return targetAttr;
+  },
+  
+  getHrefFromOnClick: function TMP_getHrefFromOnClick(event, href, linkNode, aCode) {
+    if (this.checkAttr(href, "javascript") &&
+        linkNode.hasAttribute("onclick")) {
+      let onclick = linkNode.getAttribute("onclick");
+      let code = aCode || "javascript:top.location.href=";
+      try {
+        let str = onclick.substr(code.length).replace(/;|'|"/g, "");
+        event.__href = makeURLAbsolute(linkNode.baseURI, str);
+        return true;
+      } catch (ex) {Tabmix.log(ex)}
+    }
+    return false;
   }
 }
-
-/**
-TODO
-need fix for these kind of links 
-  <a href="javascript:void(0)" onclick="javascript:top.location.href='/online/1/HP_487.html#2/209/136';">
-
-need to find a workaround this problem
-http://tmp.garyr.net/forum/viewtopic.php?t=13264
-
-http://www.bom.gov.au/wa/observations/perth.shtml
-
-prevent the link load in both current tab and the new tab
-
-maybe we can catch the click on TMP_contentLinkClick
-then call
-  event.stopPropagation();
-  event.preventDefault();
-
-  and only dispach new click event with flag to bypass our functions
-  if we like it to go to default
-
-XXX - we can delete the onClick attribut in the page
-
-/*
-    // replace onclick function with the form javascript:top.location.href = url
-    // if the tab is locked or we force new tab from link
-///XXX need more work not opne the exect link
-    if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
-      let onclick = linkNode.getAttribute("onclick");
-      let code = "javascript:top.location.href="
-      if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
-        linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
-    }
-    
-/*
-
-openTabfromLink:
-///XXX in http://www.nrg.co.il/online/1/HP_487.html#2/303/552
-    the link open in the same page but open the subject to read in #2/303/552
-    when we load in new page that not work
-
-///    var code = "javascript:top.location.href="
-    var code = "var __tabmix.href="
-    if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code)) {
-Tabmix.log("onclick " + onclick + " " + this.checkAttr(onclick, "javascript:top.location.href=")
-+"\nhref " + href + " " + onclick.substr("javascript:top.location.href=".length)
-+"\n" + makeURLAbsolute(linkNode.baseURI, onclick.substr(code.length))
-);
-      try {
-        let str = onclick.substr(code.length).replace(/'|"/g, "");
-        let url = makeURLAbsolute(linkNode.baseURI, str);
-        event.__href = url;
-Tabmix.log("event.__href " + event.__href);
-        return "tab";
-      } catch (ex) { }
-    }
-*/
