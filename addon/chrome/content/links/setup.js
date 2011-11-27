@@ -29,7 +29,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
       var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
       var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
       var pref = "extensions.tabmix.loadUrlInBackground";
-      if (this.isVersion(100))
+      if (Tabmix.isVersion(100))
         openUILinkIn(url, where, {inBackground: TabmixSvc.prefs.getBoolPref(pref)});
       else
         openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
