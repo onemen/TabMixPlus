@@ -16,8 +16,10 @@ Tabmix.startup = function TMP_startup() {
   TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
   TabsOnTop.toggle = function TabsOnTop_toggle() {
     this.tabmix_originaltoggle.apply(this, arguments);
-    if (TabmixTabbar.visibleRows > 1)
-      TabmixTabbar.setHeight(TabmixTabbar.visibleRows, true);
+    if (TabmixTabbar.visibleRows > 1) {
+      TabmixTabbar.setHeight(1, true);
+      gBrowser.tabContainer.updateVerticalTabStrip();
+    }
   }
 
   document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
