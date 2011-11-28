@@ -283,7 +283,9 @@
                 // in the same row
                 tabs.updateVerticalTabStrip();
               }
-            }, 25);
+            // timeout of 25ms is too short if tabs on title bar and tab width 
+            // is flex (not widthFitTitle)
+            }, 75);
             return;
           }
         }
