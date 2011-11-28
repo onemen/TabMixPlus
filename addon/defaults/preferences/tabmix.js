@@ -152,6 +152,7 @@ pref("extensions.tabmix.mouseOverSelect", false);
 pref("extensions.tabmix.mouseOverSelectDelay", 250);
 pref("extensions.tabmix.tabFlip", false);
 pref("extensions.tabmix.tabFlipDelay", 250);
+pref("extensions.tabmix.lockTabSizingOnClose", true);
 /*
  2008-09-23
 we replace extensions.tabmix.lasttab.handleCtrlTab

@@ -699,6 +699,8 @@
                 <!-- Drag tabs -->
                 <checkbox id="mouseDownSelect" label="&clickFocus.label;" prefstring="extensions.tabmix.selectTabOnMouseDown" inverted="true"/>
                 <checkbox id="middleclickDelete" label="&removeEntries.label;" tooltiptext="&removeEntries.tooltip;" prefstring="extensions.tabmix.middleclickDelete"/>
+                <checkbox id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;" prefstring="extensions.tabmix.lockTabSizingOnClose"
+                          align="start" style="width: 30em;"/>
               </vbox>
               <separator class="groove"/>
               <!-- drop indicator -->

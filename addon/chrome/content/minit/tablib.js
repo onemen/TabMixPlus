@@ -249,6 +249,9 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       }
 
       Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
+        '{',
+        '{if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.lockTabSizingOnClose")) return;'
+      )._replace(
         'var isEndTab =',
         <![CDATA[
           if (TabmixTabbar.widthFitTitle) {
