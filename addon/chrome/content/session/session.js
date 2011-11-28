@@ -2316,7 +2316,7 @@ try{
          let empty = ", (" + TabmixSvc.getSMString("sm.session.empty") + ")";
          let empty1 = this.containerEmpty(this.gSessionPath[1]);
          let empty2 = this.containerEmpty(this.gSessionPath[2]);
-         if (empty1 && empty2 && aList.length == 0)
+         if (empty1 && empty2 && sessionPath.length == 0)
             return null;
         if (flag != "onlyPath") {
            let msg = flag == "afterCrash" ? "sm.sessionMenu.lastgood" : "sm.sessionMenu.last";
