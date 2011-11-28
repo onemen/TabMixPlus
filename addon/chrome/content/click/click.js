@@ -403,11 +403,11 @@ var TabmixContext = {
     Tabmix.showItem(newTab, TabmixSvc.TMPprefs.getBoolPref("newTabMenu"));
     if (clickOutTabs) {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
-      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab();");
+      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
     }
     else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", "Tabmix.browserOpenTab(TabContextMenu.contextTab);");
+      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(TabContextMenu.contextTab);");
     }
 
     // Duplicate Commands

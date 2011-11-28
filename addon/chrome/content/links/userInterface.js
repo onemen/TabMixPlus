@@ -96,9 +96,9 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
    return true;
 }
 
-// Fast-Dial looking for old TMP_BrowserOpenTab see 
-// TMP_extensionsCompatibility.onDelayedStartup
-Tabmix.browserOpenTab = function TMP_BrowserOpenTab(aTab, replaceLastTab) {
+// Don't change this function name other extensions using it
+// Speed-Dial, Fast-Dial, TabGroupManager
+function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith") :
                                          TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
    var url;

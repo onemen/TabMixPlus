@@ -37,7 +37,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
     ).toCode();
   }
 
-  window.BrowserOpenTab = this.browserOpenTab;
+  window.BrowserOpenTab = TMP_BrowserOpenTab;
 
   this.openUILink_init();
 

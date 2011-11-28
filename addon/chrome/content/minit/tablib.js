@@ -121,13 +121,13 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     if (Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager) {
       Tabmix.newCode("gBrowser._beginRemoveTab", gBrowser._beginRemoveTab)._replace(
         'this.addTab("about:blank", {skipAnimation: true});',
-        'Tabmix.browserOpenTab(null, true);'
+        'TMP_BrowserOpenTab(null, true);'
       ).toCode();
     }
 
     Tabmix.newCode("gBrowser._endRemoveTab", gBrowser._endRemoveTab)._replace(
       'this.addTab("about:blank", {skipAnimation: true});',
-      'Tabmix.browserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager}
+      'TMP_BrowserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager}
     )._replace(
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \

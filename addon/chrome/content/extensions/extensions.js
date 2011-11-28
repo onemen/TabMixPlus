@@ -338,22 +338,6 @@ var TMP_extensionsCompatibility = {
 
     // check if Greasemonkey installed
     Tabmix.contentAreaClick.isGreasemonkeyInstalled();
-
-    // http://userlogos.org/extensions/fastdial
-    // FdTabLoader is looking for our DEPRECATED function TMP_BrowserOpenTab
-    // FdTabLoader set BrowserOpenTab on load event
-    // we fix it here after delay to make sure we are the last to set this function
-    if ("FdTabLoader" in window) {
-      window.BrowserOpenTab = function() {
-        FdTabLoader.isNewTab = true;
-        Tabmix.browserOpenTab();
-      }
-    }
-    // https://addons.mozilla.org/en-US/firefox/addon/speed-dial/
-    if ("SpeedDial" in window) {
-      window.originalBrowserOpenTab = Tabmix.browserOpenTab;
-      window.BrowserOpenTab = SpeedDial.browserOpenTab;
-    }
   }
 
 }

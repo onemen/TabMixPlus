@@ -37,20 +37,6 @@ let TMP_TabGroupsManager = {
       '!tab.hidden && $&'
     ).toCode();
 
-    // TabGroupsManager developer , Axel Shootingstar, already update his code acording to Tabmix need
-    // but since i have change TMP_BrowserOpenTab to Tabmix.browserOpenTab, i'm fix it here
-    this.newCode("TabGroupsManager.AllGroups.prototype.openNewGroup", aWindow.TabGroupsManager.AllGroups.prototype.openNewGroup)._replace(
-      '"TMP_BrowserOpenTab" in window', 'true'
-    )._replace(
-      ' TMP_BrowserOpenTab', ' Tabmix.browserOpenTab'
-    ).toCode();
-
-    this.newCode("TabGroupsManager.GroupClass.prototype.removeTab", aWindow.TabGroupsManager.GroupClass.prototype.removeTab)._replace(
-      '"TMP_BrowserOpenTab" in window', 'true'
-    )._replace(
-      ' TMP_BrowserOpenTab', ' Tabmix.browserOpenTab'
-    ).toCode();
-
     // **************************** for Session Manager ****************************
 
     this.newCode("TabmixSessionData.getTabProperties", aWindow.TabmixSessionData.getTabProperties)._replace(
