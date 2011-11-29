@@ -277,6 +277,12 @@ var TMP_eventListener = {
       Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
         'this._dragBindingAlive',
         '$& && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")'
+      )._replace(
+        /(\})(\)?)$/,
+        // when we get in and out of tabsintitlebar mode call updateScrollStatus
+        'if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)\
+           TabmixTabbar.updateScrollStatus();\
+         $1$2'
       ).toCode();
     }
 
