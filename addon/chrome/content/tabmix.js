@@ -685,7 +685,10 @@ var TMP_eventListener = {
     if (!tabBar.overflow) {
       // we use it as a backup for overflow event and for the case that we have
       // pinned tabs in multi-row
-      TabmixTabbar.updateScrollStatus();
+      if (TabmixTabbar.isMultiRow && tabBar.mTabstrip.orient != "vertical")
+        tabBar.mTabstrip._enterVerticalMode();
+      else
+        TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
       if (aTab == tabBar.selectedItem)
         tabBar.mTabstrip.ensureElementIsVisible(aTab);

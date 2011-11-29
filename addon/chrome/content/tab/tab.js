@@ -185,7 +185,7 @@ var TabmixTabbar = {
         tabBar._positionPinnedOnMultiRow();
       tabBar.updateVerticalTabStrip();
     }
-    else
+    else if (!this.isMultiRow)
       tabBar.adjustNewtabButtonvisibility();
   },
 
