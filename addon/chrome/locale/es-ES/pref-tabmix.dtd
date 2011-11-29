@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Indicador de arrastre">
 <!ENTITY dropIndicator-native.label "Estilo original">
 <!ENTITY dropIndicator-builtin.label "Estilo añadido">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Utilice las extensiones TreeStyleTab o Vertical Tab para controlar estas preferencias.">
 <!ENTITY tabBarPosition.label "Posición:">
 <!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">
 <!ENTITY tabBarPosition.bottom.label "Abajo (debajo del contenido)">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Moverse a derechas al desplazar rueda hacia atrás">
 <!ENTITY clickFocus.label "Hacer clic de ratón (pulsar y liberar) para seleccionar una pestaña">
 <!ENTITY removeEntries.label "Para eliminar elementos del menú de Tab Mix Plus use clic central">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Incluye ventanas y pestañas cerradas y sesiones guardadas">
 <!ENTITY double.label "Doble-clic">
 <!ENTITY middle.label "Clic-central">

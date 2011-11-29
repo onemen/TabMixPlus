@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "При прокручуванні вниз перегортати справа наліво">
 <!ENTITY clickFocus.label "Вибирати вкладки повним клацанням миші (нажати — відпустити)">
 <!ENTITY removeEntries.label "Видаляти пункти меню Tabmix за допомогою середньої кнопки миші">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Включаючи закриті вкладки, вікна й збережені сесії">
 <!ENTITY double.label "Подвійне клацання">
 <!ENTITY middle.label "Середня кнопка">

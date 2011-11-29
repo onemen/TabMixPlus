@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Mozgatás jobbra, ha visszafelé görget">
 <!ENTITY clickFocus.label "Egérkattintás kiválasztja a lapot">
 <!ENTITY removeEntries.label "Középső kattintással a Tab Mix Plus menüelemek nem jelennek meg">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Nem jelennek meg továbbá a Bezárt lapok listája, a Bezárt ablakok és az elmentett munkamenetek sem">
 <!ENTITY double.label "Dupla kattintás">
 <!ENTITY middle.label "Középső gombbal kattintás">

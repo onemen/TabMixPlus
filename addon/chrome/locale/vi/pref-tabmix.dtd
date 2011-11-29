@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Nhập các Thiết lập">
 <!ENTITY settings.default "Khôi phục Mặc định">
 <!ENTITY generalWindowOpen.label "Mở liên kết vốn sẽ được mở trong một cửa sổ mới trong:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Sử dụng thiết đặt riêng cho các liên kết từ các ứng dụng khác">
 <!ENTITY externalLinkTarget.label "Mở liên kết từ chương trình khác trong:">
 <!ENTITY linkTarget.tab "Thẻ mới">
 <!ENTITY linkTarget.window "Cửa sổ mới">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.duplicate "Trang bản sao">
 <!ENTITY newtab.location "Địa chỉ Người dùng">
 <!ENTITY location.label "Địa chỉ">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY focusContent.label "Chuyển trỏ chuột tới nội dung khi tải trang trắng">
 <!ENTITY openTabNext.label "Mở thẻ mới kế bên thẻ hiện tại">
 <!ENTITY openOtherTabNext.label "Mở thẻ khác kế bên thẻ hiện tại">
 <!ENTITY relatedAfterCurrent.label "Chỉ khi có liên quan với thẻ hiện tại">
@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Dấu chỉ báo việc thả">
 <!ENTITY dropIndicator-native.label "Kiểu địa phương">
 <!ENTITY dropIndicator-builtin.label "Kiểu cài sẵn">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Dùng ứng dụng StyleTab hoặc VerticalTab để điều khiển các thiết đặt này.">
 <!ENTITY tabBarPosition.label "Vị trí:">
 <!ENTITY tabBarPosition.top.label "Trên (trên nội dung)">
 <!ENTITY tabBarPosition.bottom.label "Dưới (dưới nội dung)">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Đảo ngược hướng thẻ được chọn">
 <!ENTITY clickFocus.label "Nhấn chuột (xuống và thả ra) để chọn một thẻ">
 <!ENTITY removeEntries.label "Xóa các mục trong danh sách trình đơn Tab Mix Plus bằng chuột giữa">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Bao gồm thẻ đã đóng, cửa sổ đã đóng, và phiên làm việc đã lưu">
 <!ENTITY double.label "Nhấp đôi">
 <!ENTITY middle.label "Chuột giữa">

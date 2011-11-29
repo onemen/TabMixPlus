@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Flyt til højre når der scrolles baglæns">
 <!ENTITY clickFocus.label "Museklik (ned og slip) for at markere et faneblad">
 <!ENTITY removeEntries.label "Fjern Tab Mix Plus menufunktioner med midterklik">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Inkluder lukkede faneblade, lukkede vinduer og gemte sessioner">
 <!ENTITY double.label "Dobbeltklik">
 <!ENTITY middle.label "Midterklik">

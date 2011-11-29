@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "分頁標籤拖曳指標">
 <!ENTITY dropIndicator-native.label "原始樣式">
 <!ENTITY dropIndicator-builtin.label "內建樣式">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "由 treeStyleTab 或 VerticalTab 擴充套件來控制這些設定">
 <!ENTITY tabBarPosition.label "分頁標籤列位置：">
 <!ENTITY tabBarPosition.top.label "頂部（內容上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（內容下方）">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "反轉切換方向">
 <!ENTITY clickFocus.label "滑鼠點擊分頁標籤並釋放後才選取分頁">
 <!ENTITY removeEntries.label "允許用滑鼠中鍵移除復原清單中的項目">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "作用於：已關閉分頁列表、已關閉視窗列表、已存瀏覽狀態列表">
 <!ENTITY double.label "雙擊左鍵">
 <!ENTITY middle.label "點擊中鍵">
@@ -288,5 +289,5 @@
 <!ENTITY sm.restore.winOptions "保存視窗：">
 <!ENTITY sm.restore.selectedTab "選取的分頁">
 <!ENTITY sm.restore.closedTabs "已關閉分頁列表">
-<!ENTITY incompatible.extensions "您所安裝的某些擴充套件不相容於 Tab Mix Plus，建議您可以停用或是解除安裝這些擴充套件。">
+<!ENTITY incompatible.extensions "您所安裝的某些擴充套件不相容於 Tab Mix Plus，建議您可以停用或是移除這些擴充套件。">
 <!ENTITY incompatible.button.label "顯示列表">

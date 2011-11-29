@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
 <!ENTITY dropIndicator-native.label "natywny styl">
 <!ENTITY dropIndicator-builtin.label "wbudowany styl">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Aby kontrolować te ustawienia, użyj dodatku treeStyleTab lub VerticalTab.">
 <!ENTITY tabBarPosition.label "Położenie paska kart:">
 <!ENTITY tabBarPosition.top.label "Na górze">
 <!ENTITY tabBarPosition.bottom.label "Na dole">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Obrót kółkiem myszy do siebie – przełącza karty w lewo">
 <!ENTITY clickFocus.label "Uaktywniaj kartę po pełnym cyklu kliknięcia przyciskiem myszy (naciśnięcie i puszczenie przycisku)">
 <!ENTITY removeEntries.label "Kliknięcie ś.p.m. usuwa elementy z rozwijanych list Tab Mix Plusa">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Pozwala na usuwanie takich elementów list jak: zamknięte karty, okna i zapisane sesje">
 <!ENTITY double.label "Dwukrotne kliknięcie">
 <!ENTITY middle.label "Kliknięcie ś.p.m.">

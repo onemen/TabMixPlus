@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Indicador">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo embutido">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Use a árvore StyleTab ou a extensão VerticalTab para controlar essas preferências.">
 <!ENTITY tabBarPosition.label "Posição:">
 <!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">
 <!ENTITY tabBarPosition.bottom.label "Fundo (abaixo do conteúdo)">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Inverter a direcção na qual os separadores são seleccionados">
 <!ENTITY clickFocus.label "Clique do rato (para baixo e deixar) para seleccionar um separador">
 <!ENTITY removeEntries.label "Remover a entrada da lista de menu do Tab Mix Plus usando o clique central">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Inclui separadores fechados, janelas fechadas e sessões guardadas">
 <!ENTITY double.label "Duplo clique">
 <!ENTITY middle.label "Clique central">

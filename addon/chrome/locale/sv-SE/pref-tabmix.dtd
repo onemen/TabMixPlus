@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Flytta till höger vid rullning nedåt">
 <!ENTITY clickFocus.label "Musklick (klicka och släpp) för val av flik">
 <!ENTITY removeEntries.label "Ta bort Tab Mix Plus-meny vid mittenklick">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Inkluderar stängda flikar, stängda fönster och sparade sessioner">
 <!ENTITY double.label "Dubbelklick">
 <!ENTITY middle.label "Mittenklick">

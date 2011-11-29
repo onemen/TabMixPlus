@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Inverse the direction in which tabs are selected">
 <!ENTITY clickFocus.label "Mouse click (down and release) to select a tab">
 <!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
 <!ENTITY double.label "Double-click">
 <!ENTITY middle.label "Middle-click">

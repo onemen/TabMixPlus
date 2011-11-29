@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Inverteix el sentit en el qual se seleccionen les pestanyes">
 <!ENTITY clickFocus.label "Clic amb el ratolí (prémer i deixar anar) per seleccionar una pestanya">
 <!ENTITY removeEntries.label "Elimina les entrades del menú del Tab Mix Plus mitjançant un clic amb el botó del mig">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Inclou les pestanyes tancades, les finestres tancades i les sessions desades">
 <!ENTITY double.label "Doble clic">
 <!ENTITY middle.label "Clic amb el botó del mig">

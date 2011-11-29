@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Richtung des Tab-Wechsels umkehren">
 <!ENTITY clickFocus.label "Tab durch verzögerten Mausklick (drücken und loslassen) in den Vordergrund holen">
 <!ENTITY removeEntries.label "Mit Mittelklick Einträge aus den Listenmenüs entfernen">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Betrifft die Listen für geschlossene Tabs und Fenster sowie gesicherte Sitzungen">
 <!ENTITY double.label "Doppelklick">
 <!ENTITY middle.label "Mittelklick">

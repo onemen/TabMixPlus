@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "スクロール方向を逆にする">
 <!ENTITY clickFocus.label "クリックでタブを選択するとき、ボタンを離すまで選択しない">
 <!ENTITY removeEntries.label "中クリックでTab Mix Plusのメニューリスト項目を削除する">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "[最近閉じたタブ][最近閉じたウィンドウ][保存されたセッション]の各リストを含む">
 <!ENTITY double.label "ダブルクリック">
 <!ENTITY middle.label "中クリック">

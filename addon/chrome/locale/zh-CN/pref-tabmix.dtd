@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "拖放指示器">
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "让 treeStyleTab 或 VerticalTab 扩展接管这些选项。">
 <!ENTITY tabBarPosition.label "标签栏位置：">
 <!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（内容区域下方）">
@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "鼠标向上滚动时切换到右边的标签页">
 <!ENTITY clickFocus.label "鼠标点击并释放时才选择标签页">
 <!ENTITY removeEntries.label "鼠标中键点击时清除 Tab Mix Plus 菜单列表项">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "包括已关闭的标签页、窗口和已保存的浏览进程">
 <!ENTITY double.label "双击左键">
 <!ENTITY middle.label "单击鼠标中键">

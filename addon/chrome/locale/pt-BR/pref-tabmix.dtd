@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Inverter direção de rolagem">
 <!ENTITY clickFocus.label "Selecionar aba clicando com o mouse (apertando e soltando)">
 <!ENTITY removeEntries.label "Remover entradas em listas de menus do TabMix Plus com duplo clique">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Incluir abas fechadas, janelas fechadas e sessões salvas">
 <!ENTITY double.label "Duplo clique">
 <!ENTITY middle.label "Clique c/ botão do meio">

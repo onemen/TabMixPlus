@@ -3,7 +3,7 @@
 <!ENTITY title.label "Titolo">
 <!ENTITY rename_all.label "Rinomina tutte le pagine con lo stesso indirizzo">
 <!ENTITY rename_permanently.label "Rinomina la scheda sempre per tutti gli indirizzi">
-<!ENTITY doctitle.label "Usa il titolo del documento">
+<!ENTITY doctitle.label "Utilizza il titolo del documento">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Contenuti guida">

@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "حر کت به راست هنگام لغزش به عقب">
 <!ENTITY clickFocus.label "کلیک ماوس (فشردن و رها کردن) برای انتخاب تب">
 <!ENTITY removeEntries.label "با استفاده از کلیک وسط ماوس Tab Mix Plus پاک کردن لیست منو">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "شامل تب و پنجره های بسته شده و نشست های ذخیره شده">
 <!ENTITY double.label "دو بار کلیک">
 <!ENTITY middle.label "کلیک وسط">

@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Обрни смер одабирања картица ----">
 <!ENTITY clickFocus.label "Клик мишем (клик и отпуштање) одабира картицу">
 <!ENTITY removeEntries.label "Уклони Tab Mix Plus ставке листе менија помоћу средњег клика ---">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Укључује затворене картице, затворене прозоре и сачуване сесије">
 <!ENTITY double.label "Дупли клик">
 <!ENTITY middle.label "Средњи клик">

@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Seçilen sekmeler için yön tersine">
 <!ENTITY clickFocus.label "Sekmeyi seçmek için fare tıklaması (indir ve bırak)">
 <!ENTITY removeEntries.label "Orta-tıklama, Tab Mix Plus menü ve listelerindeki girdileri kaldırsın">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Kapatılan sekmeler, pencereler ve kaydedilen oturumlar listelerindeki öğeler için">
 <!ENTITY double.label "Çift-tıklama">
 <!ENTITY middle.label "Orta-tıklama">

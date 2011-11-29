@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Pomocí skrolování nazpátek přepínat doprava">
 <!ENTITY clickFocus.label "Klepnutí myší okamžitě vybere panel">
 <!ENTITY removeEntries.label "Pomocí prostředního tlačítka odebrat položky seznamu v menu Tab Mix Plus">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Včetně zavřených panelů, oken a uložených relací">
 <!ENTITY double.label "Dvojklepnutí">
 <!ENTITY middle.label "Prostřední tlačítko">

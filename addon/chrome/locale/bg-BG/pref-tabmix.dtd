@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "Обръщане на посоката, в която биват избирани подпрозорците">
 <!ENTITY clickFocus.label "Избиране на подпрозорец чрез щракване върху него">
 <!ENTITY removeEntries.label "Изтриване на пунктове от списъците на Тab Mix Plus посредством щракване със среден бутон">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Това включва затворени подпрозорци, затворени прозорци и записани сесии">
 <!ENTITY double.label "Двукратно щракване">
 <!ENTITY middle.label "Щракване със среден бутон">

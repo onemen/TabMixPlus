@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "שנה כיוון בו לשוניות נבחרות">
 <!ENTITY clickFocus.label "לחיצה על העכבר לבחירת לשונית">
 <!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "כלול לשוניות שנסגרו, חלונות שנסגרו והפעלות שנשמרו">
 <!ENTITY double.label "לחיצה כפולה">
 <!ENTITY middle.label "לחצן אמצעי">

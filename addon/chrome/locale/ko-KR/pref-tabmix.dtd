@@ -185,6 +185,7 @@
 <!ENTITY reverseScroll.label "스크롤로 선택되는 순서를 반대로">
 <!ENTITY clickFocus.label "마우스를 눌렀다 땐 후에 탭을 선택">
 <!ENTITY removeEntries.label "가운데 클릭으로 Tab Mix Plus 메뉴 목록의 항목을 지우기">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "닫은 탭, 닫은 창 및 저장된 세션 목록을 포함합니다.">
 <!ENTITY double.label "두번 클릭">
 <!ENTITY middle.label "가운데 클릭">
