@@ -90,7 +90,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     delete window.bookMarkIds;
   }
 
-  // set title at startup if we not use session manager
+  // set title at startup if we are not using session manager
   // startup page or home page load before bookmarks service
   if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark")) {
     for (let i = 0; i < gBrowser.mPanelContainer.childNodes.length ; i++) {
@@ -109,11 +109,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize"))
     document.getElementById("TabsToolbar")._dragBindingAlive = false;
 
-  // we repaet this after delay in case some extension change tabContext menu id
-  let alltabsPopup = document.getElementById("alltabs-popup");
-  if (alltabsPopup)
-    alltabsPopup.setAttribute("context", gBrowser.tabContextMenu.id);
-
   TMP_extensionsCompatibility.onDelayedStartup();
 
 ///XXX move all UI init from TMP_eventListener to here
@@ -131,7 +126,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   }
 
   gTMPprefObserver.setMenuIcons();
-  
+
   TabmixTabbar.updateSettings(true);
 
   try {
@@ -601,7 +596,7 @@ var TMP_eventListener = {
               else {
                 let bottombox = document.getElementById("browser-bottombox");
                 // changing the margin trigger resize event
-                bottomToolbox.style.marginBottom = 
+                bottomToolbox.style.marginBottom =
                         -(bottomToolbox.getBoundingClientRect().height +
                           bottombox.getBoundingClientRect().height) + "px"
               }

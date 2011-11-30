@@ -1281,12 +1281,10 @@ Tabmix.navToolbox = {
         scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
       }
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
-    }
 
-    // alltabs-popup fix visibility for multi-row
-    if (alltabsPopup && Tabmix.isVersion(70) &&
-        alltabsPopup._updateTabsVisibilityStatus.toString().indexOf("isElementVisible") == -1) {
-      alltabsPopup._updateTabsVisibilityStatus = TabmixAllTabs._updateTabsVisibilityStatus;
+      // alltabs-popup fix visibility for multi-row
+      if (Tabmix.isVersion(70))
+        alltabsPopup._updateTabsVisibilityStatus = TabmixAllTabs._updateTabsVisibilityStatus;
     }
   },
 
