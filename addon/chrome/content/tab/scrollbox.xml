@@ -89,10 +89,11 @@
 
           if (Tabmix.isVersion(70)) {
             // we divide scrollDelta by the ratio between tab width abd tab height
-            Tabmix.newCode(null, this._arrowScrollAnim.handleEvent)._replace(
+            let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
+            Tabmix.newCode(null, this._arrowScrollAnim[fnName])._replace(
               '0.5 * timePassed * scrollIndex',
               '$& / (TabmixTabbar.isMultiRow ? this.scrollbox._verticalAnimation : 1)'
-            ).toCode(false, this._arrowScrollAnim, "handleEvent");
+            ).toCode(false, this._arrowScrollAnim, fnName);
           }
           else {
             Tabmix.newCode(null, this.notify)._replace(
