@@ -724,11 +724,14 @@ var TabmixSessionManager = {
       document.getElementById("tm-sm-closedwindows").hidden = hiddenPref;
       document.getElementById("tm-sessionmanager").firstChild.childNodes[2].hidden = !hiddenPref;
 
-      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !sessionManager || null);
-
       // we dont need this function to run before sessionmanager init
       if (!this.DATASource)
         return;
+
+      // This causing the window to be transparent for a split second at start
+      // if we get here on startup without delay.
+      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !sessionManager || null);
+
       var windowSaved = false, closedTabSaved = false;
       if (this.enableBackup != crashRecovery) {
          if (crashRecovery) { // save all open window and tab

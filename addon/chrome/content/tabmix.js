@@ -503,6 +503,9 @@ var TMP_eventListener = {
     if (TabmixSvc.TMPprefs.getIntPref("tabBarPosition") == 1)
       gTMPprefObserver.tabBarPositionChanged(1);
 
+    // for light weight themes
+    Tabmix.setItem("main-window", "tabmix_lwt", TabmixTabbar.isMultiRow || TabmixTabbar.position == 1 || null);
+
     // make sure "extensions.tabmix.undoClose" is true if "browser.sessionstore.max_tabs_undo" is not zero
     var sessionstoreUndoClose = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo") > 0;
     if (sessionstoreUndoClose != TabmixSvc.TMPprefs.getBoolPref("undoClose"))
