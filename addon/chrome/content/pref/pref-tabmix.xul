@@ -96,7 +96,7 @@
               </menulist>
             </hbox>
             <hbox>
-              <checkbox id="externalLink" label="&externalLink.useSeparate.label;" prefstring_item="no_prefstring" 
+              <checkbox id="externalLink" label="&externalLink.useSeparate.label;" prefstring_item="no_prefstring"
               oncommand="TM_Options.externalLinkValue(this.checked);"/>
             </hbox>
             <hbox align="center" class="indent">
@@ -140,7 +140,7 @@
             </hbox>
             <!-- Special control of links -->
             <separator/>
-<!-- Not in use, 
+<!-- Not in use,
      NEED to update babelzilla
             <hbox align="center">
               <checkbox align="start" id="openLinkWithHistory" label="When opening Link in new tab copy tab history"
@@ -505,7 +505,7 @@
                 </menulist>
               </hbox>
               <separator/>
-              <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;" 
+              <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
                            hidden="true" id="treeStyleTab.msg">
                 &verticalTabbar.description;
               </description>
@@ -539,11 +539,13 @@
                 <label value="&maxrow.label;" />
                 <textbox id="maxrow" size="2" maxlength="2" prefstring="extensions.tabmix.tabBarMaxRow" type="number" min="2"/>
               </hbox>
+              <checkbox id="smoothScroll" label="&smoothScroll.label;" prefstring="toolkit.scrollbox.smoothScroll"
+                        inverseDependency="true" TSTdisabled="true"/>
               <hbox align="center" id="clickToScroll.scrollDelay">
-                <label value="&scrolldelay.label;" TSTdisabled="true"/>
-                <textbox id="scrollDelay" size="4" maxlength="4"
+                <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
+                <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
                          prefstring="toolkit.scrollbox.clickToScroll.scrollDelay" type="number"/>
-                <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true"/>
+                <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
               </hbox>
              </vbox>
             </groupbox>
@@ -1242,6 +1244,7 @@
     <broadcaster id="obs_mergePopups"/>
     <broadcaster id="obs_newTabButton"/>
     <broadcaster id="obs_hideAllTabsButton"/>
+    <broadcaster id="obs_smoothScroll"/>
   </broadcasterset>
 
   <broadcasterset>

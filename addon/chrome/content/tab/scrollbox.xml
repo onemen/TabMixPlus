@@ -110,6 +110,8 @@
 
           this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+          
+          Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
         ]]>
       </constructor>
 
@@ -117,6 +119,8 @@
         <![CDATA[
           this._scrollButtonUpLeft.removeEventListener("oncontextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.removeEventListener("oncontextmenu", this._createScrollButtonContextMenu, true);
+
+          Services.prefs.removeObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
         ]]>
       </destructor>
 
@@ -127,6 +131,20 @@
           TabmixAllTabs.createScrollButtonTabsList(aEvent, side);
         ]]></body>
       </method>
+
+      <field name="tabmixPrefObserver"><![CDATA[({
+        scrollbox: this,
+        observe: function (subject, topic, data) {
+          switch (data) {
+            case "toolkit.scrollbox.clickToScroll.scrollDelay":
+              this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
+              break;
+            case "toolkit.scrollbox.smoothScroll":
+              this.scrollbox.smoothScroll = Services.prefs.getBoolPref(data);
+              break;
+          }
+        }
+      });]]></field>
 
       <!-- replace the original method -->
       <method name="scrollByPixels">
