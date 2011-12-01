@@ -321,7 +321,7 @@
           TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
-Tabmix.log("tabmixTabbarPositionChanged");
+            Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
             this.initializeTabmixUI();
             return;
           }
@@ -856,6 +856,7 @@ Tabmix.log("tabmixTabbarPositionChanged");
           }
 
           this.mTabstrip.setAttribute("flowing", this.getAttribute("flowing"));
+          this.setTabStripOrient();
           let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
           TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
 
