@@ -145,6 +145,10 @@ var TMP_eventListener = {
       case "browser-delayed-startup-finished":
         Services.obs.removeObserver(this, "browser-delayed-startup-finished");
         try {
+          // master password dialog can popup before startup when Gmail-manager try to login
+          // it can cause load event to fire late, so we get here before onWindowOpen run
+          if (!TMP_eventListener._windowInitialized)
+            TMP_eventListener.onWindowOpen();
           Tabmix.delayedStartup();
         } catch (ex) {Tabmix.assert(ex);}
         break;
@@ -332,7 +336,12 @@ var TMP_eventListener = {
     }
   },
 
+  _windowInitialized: false,
   onWindowOpen: function TMP_EL_onWindowOpen() {
+    if (this._windowInitialized)
+      return;
+
+    this._windowInitialized = true;
     window.removeEventListener("load", this, false);
 
     window.addEventListener("unload", this, false);
@@ -742,6 +751,7 @@ var TMP_eventListener = {
         }
         tabBar.adjustNewtabButtonvisibility();
         if (TabmixTabbar.isMultiRow) {
+///XXX - check this again ! remember to fix the call to _positionPinnedOnMultiRow
 ///XXX check if it look beter if we call updateVerticalTabStrip when tabBar.lastTabRowNumber < TabmixTabbar.visibleRows
 /// also when in scroll mode ?
           // first we check for unpinned last tab row number
