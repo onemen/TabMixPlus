@@ -436,22 +436,31 @@ Tabmix.contentAreaClick = {
    * @brief hock the proper Greasemonkey function into Tabmix.isGMEnabled
    */
   isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled() {
+    var GM_function;
     try {
       // Greasemonkey >= 0.9.10
       Components.utils.import("resource://greasemonkey/util.js");
       if ('function' == typeof GM_util.getEnabled) {
-        Tabmix.isGMEnabled = GM_util.getEnabled;
-        return;
+        GM_function = GM_util.getEnabled;
       }
     } catch (e) {
       // Greasemonkey < 0.9.10
       if ('function' == typeof GM_getEnabled) {
-        Tabmix.isGMEnabled = GM_getEnabled;
-        return;
+        GM_function = GM_getEnabled;
       }
     }
 
-    this.isGreasemonkeyScript = function (a,b) { return false; }
+    if (typeof GM_function !=  "function")
+      return;
+
+    this.isGMEnabled = GM_function;
+    this.isGreasemonkeyScript = function TMP_isGreasemonkeyScript(href) {
+      if (this.isGMEnabled()) {
+        if (href && href.match(/\.user\.js(\?|$)/i))
+          return true;
+      }
+      return false;
+    }
   },
 
   /**
@@ -460,14 +469,7 @@ Tabmix.contentAreaClick = {
    * @returns             true if the link is a script.
    *
    */
-  isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
-    if (Tabmix.isGMEnabled()) {
-      if (href && href.match(/\.user\.js(\?|$)/i))
-        return true;
-    }
-
-    return false;
-  },
+  isGreasemonkeyScript: function (href) { return false; },
 
   /**
    * @brief Suppress tabs that may be created by downloading a file.
