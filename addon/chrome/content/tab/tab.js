@@ -10,6 +10,10 @@ var TabmixTabbar = {
   SCROLL_BUTTONS_MULTIROW: 2,
   SCROLL_BUTTONS_RIGHT: 3,
 
+  get isMultiRow() {
+    return gBrowser.tabContainer.getAttribute("flowing") == "multibar";
+  },
+
   updateSettings: function TMP_updateSettings(start) {
     if (!gBrowser || TabmixSvc.TMPprefs.prefHasUserValue("setDefault") || gTMPprefObserver.preventUpdate == true)
       return;
@@ -25,7 +29,7 @@ var TabmixTabbar = {
     }
     var prevTabscroll = start ? -1 : this.scrollButtonsMode;
     this.scrollButtonsMode = tabscroll;
-    this.isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
+    var isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
 
     var currentVisible = start ? true : tabStrip.isElementVisible(gBrowser.mCurrentTab);
 
@@ -36,7 +40,7 @@ var TabmixTabbar = {
 
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
       this.setScrollButtonBox(useTabmixButtons, false, true);
-      if (this.isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
+      if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // reset overflow and hide the buttons
         // vertical button will prevent us from reset the height to one row.
         // when we get overflow in the other orient then button collapsed will set to false in
@@ -67,7 +71,7 @@ var TabmixTabbar = {
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         tabBar.updateVerticalTabStrip(true);
       }
-      else if (this.isMultiRow && overflow) {
+      else if (isMultiRow && overflow) {
         // if we are in overflow in one line we will have more then one line
         // in multi-row. we try to prevent extra over/underflow events by setting
         // the height in front.
@@ -106,7 +110,7 @@ var TabmixTabbar = {
            (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
 
     // for light weight themes
-    Tabmix.setItem("main-window", "tabmix_lwt", this.isMultiRow || this.position == 1 || null);
+    Tabmix.setItem("main-window", "tabmix_lwt", isMultiRow || this.position == 1 || null);
 
     for (let i = 0; i < tabBar.childNodes.length; i++) {
       let aTab = tabBar.childNodes[i];
@@ -131,7 +135,7 @@ var TabmixTabbar = {
     showNewTabButton =  showNewTabButton && newTabButton && newTabButton.parentNode == toolBar;
     Tabmix.setItem("TabsToolbar", "newTabButton", showNewTabButton || false);
     Tabmix.setItem(tabBar, "tabBarSpace", TabmixSvc.TMPprefs.getBoolPref("tabBarSpace") || null);
-    tabBar._checkNewtabButtonvisibility = this.isMultiRow && showNewTabButton && TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2;
+    tabBar._checkNewtabButtonvisibility = isMultiRow && showNewTabButton && TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2;
 
     var self = this;
     if (start)

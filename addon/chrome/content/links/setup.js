@@ -240,7 +240,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       tab.setAttribute("flex", "0");
       tab.setAttribute("width", tab.boxObject.width);
       tab.clientTop;
-      Tabmix.__felxedTab = tab;
+      this.__felxedTab = tab;
     }
 
     var tabscroll = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode");
@@ -250,7 +250,10 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       tabscroll = 1;
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
-    TabmixTabbar.isMultiRow = tabscroll == TabmixTabbar.SCROLL_BUTTONS_MULTIROW;
+    let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+    this.setItem(tabContainer, "flowing", flowing);
+    tabContainer.mTabstrip.setAttribute("flowing", flowing);
+    this.setItem("tabmixScrollBox", "flowing", flowing);
 
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
@@ -260,6 +263,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     if (TabmixSvc.TMPprefs.prefHasUserValue("enableDebug") &&
         TabmixSvc.TMPprefs.getBoolPref("enableDebug")) {
-      Tabmix._debugMode = true;
+      this._debugMode = true;
     }
 }
