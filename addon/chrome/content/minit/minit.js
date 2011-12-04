@@ -1117,7 +1117,9 @@ Tabmix.navToolbox = {
   },
 
   initializeURLBar: function TMP_navToolbox_initializeURLBar() {
-    if (!gURLBar)
+    if (!gURLBar ||
+        document.documentElement.getAttribute("chromehidden").indexOf("location") != -1 ||
+        typeof gURLBar.handleCommand == "undefined")
       return;
 
     // onblur attribut reset each time we exit ToolboxCustomize

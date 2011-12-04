@@ -235,7 +235,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     if (TabmixTabbar.widthFitTitle) {
       this.setItem(tabContainer, "widthFitTitle", true);
       // we only change the rule that set flex=100 and width=0 at delayedStartup.
-      let tab = tabBrowser.selectedTab;
+      let tab = tabContainer.firstChild;
       tabBrowser.setTabTitleLoading(tab);
       tab.setAttribute("flex", "0");
       tab.setAttribute("width", tab.boxObject.width);
@@ -244,6 +244,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
 
     var tabscroll = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode");
+    if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
+      tabscroll = 1;
     if (tabscroll < 0 || tabscroll > 3 ||
         (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
       TabmixSvc.prefs.setIntPref("extensions.tabmix.tabBarMode", 1);
@@ -266,3 +268,77 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       this._debugMode = true;
     }
 }
+
+Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {
+  // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
+  // 1 - alltabs    = close buttons on all tabs
+  // 2 - hovertab   = close buttons on hover tab
+  // 3 - activetab  = close button on active tab only
+  // 4 - hoveractive = close buttons on hover and active tabs
+  // 5 - alltabs wider then  = close buttons on all tabs wider then
+
+  let oldValue = this.getAttribute("closebuttons");
+  var tabbrowser = this.tabbrowser;
+  var tabs = tabbrowser.visibleTabs;
+  var tabsCount = tabs.length;
+  switch (this.closeButtonsEnabled ? this.mCloseButtons : 0) {
+  case 0:
+    this.removeAttribute("closebuttons-hover");
+    this.setAttribute("closebuttons", "noclose");
+    break;
+  case 1:
+    this.removeAttribute("closebuttons-hover");
+    this.setAttribute("closebuttons", "alltabs");
+    break;
+  case 2:
+    this.setAttribute("closebuttons-hover", "alltabs");
+    this.setAttribute("closebuttons", "noclose");
+    break;
+  case 3:
+    this.removeAttribute("closebuttons-hover");
+    this.setAttribute("closebuttons", "activetab");
+    break;
+  case 4:
+    this.setAttribute("closebuttons-hover", "notactivetab");
+    this.setAttribute("closebuttons", "activetab");
+    break;
+  case 5:
+    this.removeAttribute("closebuttons-hover");
+    if (tabsCount < 2) {
+      this.setAttribute("closebuttons", "alltabs");
+    }
+    else {
+      // make sure not to check collapsed, hidden or pinned tabs for width
+      let tab = TMP_TabView.checkTabs(tabs);
+      if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)
+        this.setAttribute("closebuttons", "alltabs");
+      else
+        this.setAttribute("closebuttons", "activetab");
+    }
+    break;
+  }
+
+ /**
+  *  Don't use return in this function
+  *  TreeStyleTabe add some code at the end
+  */
+  if (tabsCount == 1) {
+    if (!aUrl) {
+        var currentURI = tabbrowser.currentURI;
+        aUrl = currentURI ? currentURI.spec : null;
+    }
+    if (this._keepLastTab ||
+        (!aUrl || aUrl == "about:blank") &&
+        tabbrowser.isBlankNotBusyTab(this.selectedItem, true)) {
+        this.setAttribute("closebuttons", "noclose");
+        this.removeAttribute("closebuttons-hover");
+    }
+  }
+  else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) {
+    TabmixTabbar.updateScrollStatus();
+    TabmixTabbar.updateBeforeAndAfter();
+  }
+///maybe we cad add this to the popupshing / or as css rule ?
+  Tabmix.setItem("alltabs-popup", "position",
+      (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
+ }

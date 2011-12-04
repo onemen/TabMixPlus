@@ -43,9 +43,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
   },
 
   change_gBrowser: function change_gBrowser() {
-    if (gBrowser.tabs.length > 0)
-      gBrowser.mCurrentTab._selected = true;
-
     // NRA-ILA toolbar extension raplce the original addTab function
     var _addTab = "addTab";
     if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser)

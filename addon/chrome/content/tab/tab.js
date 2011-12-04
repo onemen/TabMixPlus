@@ -20,7 +20,11 @@ var TabmixTabbar = {
 
     var tabBar = gBrowser.tabContainer;
     var tabStrip = tabBar.mTabstrip;
+
     var tabscroll = TabmixSvc.TMPprefs.getIntPref("tabBarMode");
+    if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
+      tabscroll = 1;
+
     if (tabscroll < 0 || tabscroll > 3 ||
         (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
         Tabmix.extensions.verticalTabBar)) {

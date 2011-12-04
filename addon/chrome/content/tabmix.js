@@ -308,21 +308,6 @@ var TMP_eventListener = {
       ]]>
     ).toCode();
 
-    // isBlankNotBusyTab isn't exist when we call adjustTabstrip from tabcontainer constructor
-    // also calling aBrowser.sessionHistory to soon can throw exeption - sessionHistory not ready
-    // so we add this code after constructor already run
-    Tabmix.newCode("gBrowser.tabContainer.adjustTabstrip", tabContainer.adjustTabstrip)._replace(
-      'if (this._keepLastTab) {',
-      'if (!aUrl) { \
-        var currentURI = tabbrowser.currentURI; \
-        aUrl = currentURI ? currentURI.spec : null; \
-      }\
-      if (this._keepLastTab || ((!aUrl || aUrl == "about:blank") && tabbrowser.isBlankNotBusyTab(this.selectedItem, true))) {'
-    ).toCode();
-
-    // no need to updtae updateScrollStatus
-    tabContainer.adjustTabstrip();
-
     // prevent faviconize use its own adjustTabstrip
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
     if ("faviconize" in window && "override" in faviconize) {
@@ -347,22 +332,22 @@ var TMP_eventListener = {
     window.addEventListener("unload", this, false);
     window.addEventListener("fullscreen", this, true);
 
-    var tabbar = gBrowser.tabContainer;
+    var tabBar = gBrowser.tabContainer;
 
     // add event for mouse scrolling on tab bar, necessary for linux
     if (Tabmix.isPlatform("Linux")) {
        document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, true);
-       tabbar.addEventListener("DOMMouseScroll", this, true);
+       tabBar.addEventListener("DOMMouseScroll", this, true);
     }
     else
-       tabbar.addEventListener("DOMMouseScroll", this, true);
+       tabBar.addEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
       tabView.addEventListener("tabviewhidden", this, true);
       tabView.addEventListener("tabviewshown", this, true);
-      tabbar.addEventListener("TabShow", this, true);
-      tabbar.addEventListener("TabHide", this, true);
+      tabBar.addEventListener("TabShow", this, true);
+      tabBar.addEventListener("TabHide", this, true);
     }
 
     try {
@@ -390,8 +375,6 @@ var TMP_eventListener = {
     try {
       TMP_tabDNDObserver.init();
     } catch (ex) {Tabmix.assert(ex);}
-
-    var tabBar = gBrowser.tabContainer;
 
     if (Tabmix.isPlatform("Mac")) {
       Tabmix.isMac = true;
@@ -522,6 +505,11 @@ var TMP_eventListener = {
     document.getElementById("tabmix-menu").hidden = !TabmixSvc.TMPprefs.getBoolPref("optionsToolMenu");
 
     TabmixSessionManager.updateSettings();
+
+    tabBar.adjustTabstrip = Tabmix.adjustTabstrip;
+    delete Tabmix.adjustTabstrip;
+    // no need to updtae updateScrollStatus
+    tabBar.adjustTabstrip(true);
   },
 
   _tabStillLoading: 0,
