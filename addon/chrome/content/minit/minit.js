@@ -962,7 +962,7 @@ var TMP_TabView = {
         // without dontArrange flag can cause unnecessary groupItem
         // and children arrang (we are about to close this group).
         'tabItem._reconnect();',
-        ''
+        '', {check: !Tabmix.isVersion(110)}
       ).toCode();
     }
 
