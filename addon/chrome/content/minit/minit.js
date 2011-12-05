@@ -108,12 +108,10 @@ var TMP_tabDNDObserver = {
     var newIndex = this._getDNDIndex(event);
     var oldIndex = draggeType != this.DRAG_LINK ? sourceNode._tPos : -1;
     var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
-    if (newIndex < gBrowser.tabs.length){
-      if (sourceNode && sourceNode.pinned && !gBrowser.tabs[newIndex].pinned && event.target.localName == "tabs" )
-        left_right = 1;
-      else
-        left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
-    }
+///XXX check if we need here visibleTabs insteadof gBrowser.tabs
+///    check with groups with or without pinned tabs
+    if (newIndex < gBrowser.tabs.length)
+      left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
     else {
       newIndex = draggeType != this.DRAG_TAB_IN_SAME_WINDOW && Tabmix.getOpenTabNextPref(draggeType == this.DRAG_LINK) ? tabBar.selectedIndex :
                   gBrowser.tabs.length - 1;
@@ -265,12 +263,8 @@ var TMP_tabDNDObserver = {
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;
 
-    if (newIndex < gBrowser.tabs.length) {
-      if (sourceNode && sourceNode.pinned && !gBrowser.tabs[newIndex].pinned && event.target.localName == "tabs" )
-        left_right = 1;
-      else
-        left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
-    }
+    if (newIndex < gBrowser.tabs.length)
+      left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
     else {
       newIndex = draggeType != this.DRAG_TAB_IN_SAME_WINDOW && Tabmix.getOpenTabNextPref(draggeType == this.DRAG_LINK) ? gBrowser.tabContainer.selectedIndex :
                  gBrowser.tabs.length - 1;
@@ -386,21 +380,7 @@ var TMP_tabDNDObserver = {
   onDragEnd: function minit_onDragEnd(aEvent) {
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
-    if (dt.mozUserCancelled)
-      return;
-
-    // user move tab to the the gap between pinned tabs and tabs
-    let numPinned = gBrowser._numPinnedTabs;
-    if (gBrowser.tabContainer.hasAttribute("multibar") &&
-        gBrowser._numPinnedTabs && dt.dropEffect == "move" &&
-        Tabmix.compare(aEvent.screenX, Tabmix.itemEnd(gBrowser.tabContainer, !Tabmix.ltr), Tabmix.ltr)) {
-      dt.__pinTab = true;
-      aEvent.stopPropagation();
-      this.onDrop(aEvent);
-      return;
-    }
-
-    if (dt.dropEffect != "none")
+    if (dt.mozUserCancelled || dt.dropEffect != "none")
       return;
 
     this.clearDragmark(aEvent);
@@ -488,7 +468,7 @@ var TMP_tabDNDObserver = {
   },
 
   getNewIndex: function (event) {
-    function getTabRowNumber(tab, top) tab.__row || gBrowser.tabContainer.getTabRowNumber(tab, top);
+    function getTabRowNumber(tab, top) tab.pinned ? 1 : gBrowser.tabContainer.getTabRowNumber(tab, top);
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,
@@ -496,7 +476,7 @@ var TMP_tabDNDObserver = {
     var mX = event.screenX, mY = event.screenY;
     var tabBar = gBrowser.tabContainer;
     var tabs = gBrowser.visibleTabs;
-    var numPinned, numTabs = tabs.length;
+    var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       for (let i = event.target.localName == "tab" ? TMP_TabView.getIndexInVisibleTabsFromTab(event.target) : 0; i < numTabs; i++) {
         let tab = tabs[i];
@@ -506,14 +486,7 @@ var TMP_tabDNDObserver = {
     }
     else {
       let top = tabBar.topTabY;
-      let firstIndex = 0;
-      numPinned = gBrowser._numPinnedTabs;
-      if (Tabmix.compare(mX, Tabmix.itemEnd(tabBar, !Tabmix.ltr), Tabmix.ltr)) {
-        numTabs = numPinned;
-      }
-      else
-        firstIndex = numPinned;
-      for (let i = firstIndex; i < numTabs; i++) {
+      for (let i = 0; i < numTabs; i++) {
         let tab = tabs[i];
         let thisRow = getTabRowNumber(tab, top);
         if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
@@ -526,7 +499,7 @@ var TMP_tabDNDObserver = {
           return i;
       }
     }
-    return numPinned && tabBar.hasAttribute("multibar") ? numTabs - 1 : numTabs;
+    return numTabs;
   },
 
   getLeft_Right: function (event, newIndex, oldIndex, draggeType) {
@@ -610,6 +583,8 @@ var TMP_tabDNDObserver = {
       else
          newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0);
 
+///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
+///XXX look like the same is happen with Firefox
       var newMarginY;
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
@@ -681,13 +656,6 @@ var TMP_tabDNDObserver = {
     }
 
     if (browserDragAndDrop.canDropLink(aEvent)) {
-      if (gBrowser.tabContainer.hasAttribute("multibar") &&
-        gBrowser._numPinnedTabs && aEvent.target.localName != "tab" &&
-        Tabmix.compare(aEvent.screenX, Tabmix.itemEnd(gBrowser.tabContainer, !Tabmix.ltr), Tabmix.ltr)) {
-        // don't allow to drop link on the gap berween pinned tabs and tabs
-        return dt.effectAllowed = "none";
-      }
-
       return dt.effectAllowed = dt.dropEffect = "link";
     }
     return dt.effectAllowed = "none";

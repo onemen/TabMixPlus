@@ -159,6 +159,7 @@
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
 
           Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
+          this.firstVisible =  {tab: null, x: 0, y: 0};
         ]]>
       </constructor>
 
@@ -257,13 +258,15 @@
           if (element.pinned)
             return true;
 
-          var vertical = this.orient == "vertical";
+          var [start, end] = this._startEndProps;
+          if (this.orient != "vertical" && Tabmix.rtl)
+            [end, start] = [start, end];
           var rect = this.scrollClientRect;
-          var containerStart = vertical ? rect.top : rect.left;
-          var containerEnd = vertical ? rect.bottom : rect.right;
+          var containerStart = rect[start];
+          var containerEnd = rect[end];
           rect = element.getBoundingClientRect();
-          var elementStart = vertical ? rect.top : rect.left;
-          var elementEnd = vertical ? rect.bottom : rect.right;
+          var elementStart = rect[start];
+          var elementEnd = rect[end];
 
           // we don't need the extra check with scrollContentRect
           // like in ensureElementIsVisible, the element will be invisible anyhow.
@@ -298,6 +301,67 @@
             // after pinned tab positioning in rows the tab will stay
             // in the same row
             tabBar.updateVerticalTabStrip();
+          }
+        ]]></body>
+      </method>
+
+      <field name="firstVisibleRow">null</field>
+      <method name="setFirstTabInRow">
+        <parameter name="scroll"/>
+        <body><![CDATA[
+          let firstVisibleRow = Math.round(this.scrollPosition / this.singleRowHeight) + 1;
+          if (scroll) {
+            if (this.firstVisibleRow == firstVisibleRow)
+              return;
+          }
+          else if (this.firstVisible.tab) {
+            let rect = this.firstVisible.tab.getBoundingClientRect();
+            if (this.firstVisible.x == rect.left && this.firstVisible.y == rect.top)
+              return;
+          }
+
+          this.firstVisibleRow = firstVisibleRow;
+
+          let tabBar = document.getBindingParent(this);
+///XXX check if we can set the margin with animation when we scroll
+          let end = Tabmix.ltr ? "right": "left";
+          let containerEnd = this.scrollClientRect[end];
+          let top = tabBar.topTabY;
+          let tabs = this._getScrollableElements();
+          let index, current = 0;
+          for (let i = 0; i < tabs.length; i++) {
+            let tab = tabs[i];
+            if (tabBar.tabbrowser._removingTabs.indexOf(tab) != -1) {
+              tab.removeAttribute("tabmix-firstTabInRow");
+              continue;
+            }
+            let row = tabBar.getTabRowNumber(tab, top);
+            if (row > current) {
+              current = row;
+              if (!tab.hasAttribute("tabmix-firstTabInRow"))
+                tab.setAttribute("tabmix-firstTabInRow", true);
+              else if (i > 0) {
+                // remove the margin when the tab have place in the previous row
+                let tabEnd = tabs[i-1].getBoundingClientRect()[end] + (Tabmix.ltr ? tab.scrollWidth : 0);
+                if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
+                  tab.removeAttribute("tabmix-firstTabInRow");
+                  continue;
+                }
+              }
+              if (row == firstVisibleRow) {
+                let rect = tab.getBoundingClientRect();
+                this.firstVisible = {tab: tab, x: rect.left, y: rect.top};
+                index = ++i;
+                break;
+              }
+            }
+            else if (tab.hasAttribute("tabmix-firstTabInRow"))
+              tab.removeAttribute("tabmix-firstTabInRow");
+          }
+          for (let i = index; i < tabs.length; i++) {
+            let tab = tabs[i];
+            if (tab.hasAttribute("tabmix-firstTabInRow"))
+              tab.removeAttribute("tabmix-firstTabInRow");
           }
         ]]></body>
       </method>
@@ -367,26 +431,24 @@
           }
         }
 
-        if (TabmixTabbar.isMultiRow) {
-          // updateVerticalTabStrip also call _positionPinnedTabs when it change
-          // rows number, in multi-row the scroll buttons are not in the same side
-          // as pinned tabs so we don't needto call it when going into overflow.
+        if (TabmixTabbar.isMultiRow)
           tabs.updateVerticalTabStrip();
-        }
-        else {
+        else
           tabs.overflow = true;
-          tabs._positionPinnedTabs();
-        }
+
+        tabs._positionPinnedTabs();
       ]]></handler>
 
       <handler event="scroll"><![CDATA[
         if (this.__needToSetVerticalOrient)
           this._enterVerticalMode();
 
-        if (Tabmix.isVersion(50)) {
-          let tabs = document.getBindingParent(this);
-          tabs._unlockTabSizing();
-        }
+        let tabBar = document.getBindingParent(this);
+        if (Tabmix.isVersion(50))
+          tabBar._unlockTabSizing();
+
+        if (TabmixTabbar.isMultiRow && tabBar.firstChild.pinned)
+          this.setFirstTabInRow(true);
       ]]></handler>
 
     </handlers>

@@ -73,6 +73,7 @@ var TabmixTabbar = {
       Tabmix.setItem("tabmixScrollBox", "flowing", flowing);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
+        tabBar.resetFirstTabInRow();
         tabBar.updateVerticalTabStrip(true);
       }
       else if (isMultiRow && overflow) {
@@ -170,6 +171,7 @@ var TabmixTabbar = {
       let cSet = tabsToolbar.getAttribute("currentset").split(",");
       cSet.splice(1, 0, "tabmixScrollBox");
       tabsToolbar.setAttribute("currentset", cSet);
+///XXX check if we can do it only on first oveflow
       tabsToolbar.insertBefore(box, gBrowser.tabContainer.nextSibling);
       tabStrip._scrollButtonDownRight = box._scrollButtonDown;
       tabStrip._scrollButtonUpRight = box._scrollButtonUp;
@@ -188,9 +190,10 @@ var TabmixTabbar = {
   updateScrollStatus: function TMP_updateScrollStatus() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow && tabBar.mTabstrip.orient == "vertical") {
-      if (tabBar.hasAttribute("multibar") &&
-          tabBar._lastTabRowNumber < this.visibleRows)
-        tabBar._positionPinnedOnMultiRow();
+      //XXX we only need setFirstTabInRow from here when tab width changed
+      // so if widthFitTitle is false we need to call it if we actualy change the width
+      // for other chases we need to call it when we change title
+      tabBar.setFirstTabInRow();
       tabBar.updateVerticalTabStrip();
     }
     else if (!this.isMultiRow)
@@ -621,6 +624,7 @@ var gTMPprefObserver = {
           this.dynamicRules["width1"].style.setProperty(rule, val + "px", important);
         }
         TabmixTabbar.updateSettings(false);
+///check if we need to call update 4 times after changing tab width
         window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 50);
         window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 100);
         window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 250);
@@ -885,6 +889,11 @@ var gTMPprefObserver = {
       let index = ss.insertRule(newRule, ss.cssRules.length);
       this.dynamicRules["currentTab" + "bgTabsontop"] = ss.cssRules[index];
     }
+
+    // rule for controling moz-margin-start when we have pinned tab in multi-row
+    let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
+    let index = ss.insertRule(marginStart, ss.cssRules.length);
+    this.dynamicRules["tabmix-firstTabInRow"] = ss.cssRules[index];
   },
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {

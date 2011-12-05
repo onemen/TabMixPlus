@@ -132,6 +132,10 @@ Tabmix.log("loadURIWithFlags open new tab", true);
          TMP_eventListener.onTabClose_updateTabBar(aTab, true);\
        } \
        $&'
+    )._replace(
+      'this.tabContainer.adjustTabstrip();',
+      'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
+       $&'
     ).toCode();
 
     Tabmix.newCode("gBrowser._blurTab", gBrowser._blurTab)._replace(
@@ -200,25 +204,39 @@ Tabmix.log("loadURIWithFlags open new tab", true);
   },
 
   change_tabContainer: function change_tabContainer() {
-    if (!Tabmix.extensions.verticalTabs)
-    Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
-      'if (doPosition)',
-      'if (numPinned > 0 && this.hasAttribute("multibar"))\
-         this._positionPinnedOnMultiRow(numPinned);\
-       else $&'
-    )._replace(
-      'this.mTabstrip._scrollButtonDown.scrollWidth',
-      'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
-    )._replace(
-      'tab.style.MozMarginStart = "";',
-      '$&\
-       tab.style.marginTop = "";\
-       delete tab.__row;'
-    )._replace(
-      'this.style.MozMarginStart = "";',
-      '$&\
-       this.__startOffset = 0;'
-    ).toCode();
+    if (!Tabmix.extensions.verticalTabs) {
+      Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
+        // replace this section first, we add  this.style.MozMarginStart = "" in the 2nd section
+        'this.style.MozMarginStart = "";',
+        <![CDATA[
+          if (TabmixTabbar.isMultiRow)
+            this.resetFirstTabInRow();
+          else $&
+        ]]>
+      )._replace(
+        'if (doPosition)',
+        <![CDATA[
+          if (doPosition && TabmixTabbar.isMultiRow) {
+            this.setAttribute("positionpinnedtabs", "true");
+            let width = this.mTabstrip.scrollboxPaddingStart;
+            for (let i = 0; i < numPinned; i++) {
+              let tab = this.childNodes[i];
+              tab.style.MozMarginStart = width + "px";
+              width += tab.scrollWidth;
+            }
+            if (width != this.firstTabInRowMargin) {
+              this.firstTabInRowMargin = width;
+              this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};
+              gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]
+                .style.setProperty("-moz-margin-start", width + "px", null);
+            }
+            this.style.MozMarginStart = "";
+            this.mTabstrip.setFirstTabInRow();
+          }
+          else $&
+        ]]>
+      ).toCode();
+    }
 
     Tabmix.newCode("gBrowser.tabContainer._handleNewTab", gBrowser.tabContainer._handleNewTab)._replace(
       /(\})(\)?)$/,
@@ -938,7 +956,9 @@ Tabmix.log("loadURIWithFlags open new tab", true);
           this.selectedTab = aTab;
         this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
         var childNodes = this.visibleTabs;
-        this.tabContainer.overflow = false;
+        if (TabmixTabbar.visibleRows > 1)
+          this.tabContainer.updateVerticalTabStrip(true)
+        this.moveTabTo(this.mCurrentTab, 0);
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i], {animate: true});

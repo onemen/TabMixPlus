@@ -383,6 +383,30 @@
         ]]>
       </destructor>
 
+      <method name="setFirstTabInRow">
+        <body><![CDATA[
+          // call our tabstrip function only when we are in multi-row and
+          // in overflow with pinned tabs
+          if (TabmixTabbar.isMultiRow && this.overflow && this.firstChild.pinned)
+            this.mTabstrip.setFirstTabInRow();
+        ]]></body>
+      </method>
+
+      <method name="resetFirstTabInRow">
+        <body><![CDATA[
+          if (this.firstTabInRowMargin == 0)
+            return;
+          this.firstTabInRowMargin = 0;
+          // getElementsByAttribute return a live nodList
+          // each time we remove the attribute we remove node from the list
+          let tabs = this.getElementsByAttribute("tabmix-firstTabInRow" , "*");
+          for (let i = 0, num = tabs.length; i < num; i++) {
+            tabs[0].removeAttribute("tabmix-firstTabInRow");
+          }
+          this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};
+        ]]></body>
+      </method>
+
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
@@ -433,10 +457,6 @@
 
           if (this.mTabstrip.orient == "vertical")
             this.overflow = multibar == "scrollbar";
-          // if we are going to have scrool button on the left with multi-row
-          // update _positionPinnedTabs also when show/hide the buttons
-          if (currentMultibar != multibar || currentRows != rows)
-            this._positionPinnedTabs();
 
           return multibar;
         ]]></body>
@@ -450,124 +470,6 @@
               (TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
           Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
           this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
-        ]]></body>
-      </method>
-
-      <field name="_previousNumPinned">1</field>
-      <field name="_previousMaxPinnedTabsInRow">0</field>
-      <field name="__startOffset">0</field>
-      <field name="__extraStartMargin">10</field>
-
-      <method name="_positionPinnedOnMultiRow">
-        <parameter name="numPinned"/>
-        <body><![CDATA[
-          if (Tabmix.extensions.verticalTabBar)
-            return;
-          // we have to make sure that rearranging pinned tabs in rows don't change
-          // overflow status.
-          // when we increase maxPinnedTabsInRow we can change state from underflow to overflow.
-          // when we decrease maxPinnedTabsInRow we can change state from overflow to underflow.
-          if (!numPinned) {
-            numPinned = this.tabbrowser._numPinnedTabs;
-            if (numPinned == 0)
-              return;
-          }
-
-          if (this.__startOffset == 0) {
-            this._previousNumPinned = numPinned;
-            this._previousMaxPinnedTabsInRow = numPinned;
-            this._setPinnedTabsMargin(numPinned, 1, numPinned);
-          }
-
-          this.setAttribute("positionpinnedtabs", "true");
-          let rows = TabmixTabbar.visibleRows, maxPinnedTabsInRow;
-          let decrease = this._lastTabRowNumber < rows;
-          // when we decrease rows, try to fit all pinned tab in equal number
-          // of rows as normal tabs without changing the amount of normal tabs rows.
-          if (numPinned > 1 && this._previousNumPinned == numPinned && decrease)
-            maxPinnedTabsInRow = this._setTabContainerMargin(numPinned);
-          else {
-            maxPinnedTabsInRow = Math.floor(numPinned / rows);
-            if (numPinned - maxPinnedTabsInRow * rows > 0)
-              maxPinnedTabsInRow++;
-          }
-          if (maxPinnedTabsInRow < numPinned)
-            this._setPinnedTabsMargin(numPinned, rows, maxPinnedTabsInRow);
-
-          // we trigger underflow - prevet undefflow handler call this method again
-          if (!decrease && this._lastTabRowNumber < rows)
-            this.mTabstrip.blockUnderflow = true;
-
-          this._previousNumPinned = numPinned;
-          this._previousMaxPinnedTabsInRow = maxPinnedTabsInRow;
-        ]]></body>
-      </method>
-
-      <method name="_setTabContainerMargin">
-        <parameter name="numPinned"/>
-        <body><![CDATA[
-          // when we decrease rows, try to fit all pinned tab in equal number
-          // of rows as normal tabs without changing the amount of normal tabs rows.
-          let courrent = this._previousMaxPinnedTabsInRow;
-          let width = this.__startOffset / courrent;
-          let rows = Math.min(TabmixTabbar.visibleRows, this._lastTabRowNumber);
-          let maxTabsInRow = Math.floor(numPinned / rows);
-          if (numPinned - maxTabsInRow * rows > 0)
-            maxTabsInRow++;
-          if (maxTabsInRow != courrent) {
-            let diff = maxTabsInRow < courrent ? -1 : 1;
-            if (diff < 0)
-              this.mTabstrip.blockUnderflow = true;
-            else
-              this.mTabstrip.blockOverflow = true;
-            let extra = this.mTabstrip.scrollboxPaddingStart;
-            if (rows > 1)
-              extra += this.__extraStartMargin;
-            this.style.MozMarginStart = maxTabsInRow * width + extra + "px";
-            if (this._lastTabRowNumber != rows) {
-              let extra = this.mTabstrip.scrollboxPaddingStart + this.__extraStartMargin;
-              this.style.MozMarginStart = courrent * width + extra + "px";
-              return courrent;
-            }
-            // reset multi-row, we have place for all tabs in one row.
-            if (rows == 1) {
-              this.updateVerticalTabStrip(true);
-              this.__startOffset = 0;
-            }
-            if (diff < 0)
-              this.mTabstrip.blockUnderflow = false;
-            else
-              this.mTabstrip.blockOverflow = false;
-          }
-          return maxTabsInRow;
-        ]]></body>
-      </method>
-
-      <method name="_setPinnedTabsMargin">
-        <parameter name="numPinned"/>
-        <parameter name="aRows"/>
-        <parameter name="maxTabsInRow"/>
-        <body><![CDATA[
-          let height = TabmixTabbar.singleRowHeight;
-          let paddingStart = this.mTabstrip.scrollboxPaddingStart;
-          let offset = 0, count = 0, extra = this.__extraStartMargin ;
-          //XXX we assume that all pinned tabs have the same width
-          let pinnedTabWidth = this.childNodes[0].scrollWidth;
-          for (let row = 0; row < aRows, count < numPinned; row++) {
-            let thisRowCount = count + maxTabsInRow > numPinned ? numPinned - count : maxTabsInRow;
-            let width = (maxTabsInRow - thisRowCount) * pinnedTabWidth;
-            for (let i = count + thisRowCount - 1; i >= count; i--) {
-              let tab = this.childNodes[i];
-              width += tab.scrollWidth;
-              tab.style.MozMarginStart = - (width + paddingStart + extra) + "px";
-              tab.style.marginTop = (height * row) + "px";
-              tab.__row = row + 1;
-            }
-            count += thisRowCount;
-            offset = Math.max(offset, width);
-          }
-          this.__startOffset = offset;
-          this.style.MozMarginStart = offset + paddingStart + extra + "px";
         ]]></body>
       </method>
 
@@ -729,23 +631,9 @@
         ]]></getter>
       </property>
 
-      <property name="_lastTabRowNumber" readonly="true">
-        <getter><![CDATA[
-          return this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
-        ]]></getter>
-      </property>
-
       <property name="lastTabRowNumber" readonly="true">
         <getter><![CDATA[
-          let rows = this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
-
-          let numPinned = this.tabbrowser._numPinnedTabs;
-          if (numPinned) {
-            let lastPinnedTabRow = this.childNodes[numPinned - 1].__row || 1;
-            rows = Math.max(lastPinnedTabRow, rows);
-          }
-
-          return rows;
+          return this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
         ]]></getter>
       </property>
 

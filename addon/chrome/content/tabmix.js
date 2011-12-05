@@ -728,32 +728,17 @@ var TMP_eventListener = {
       return;
     var tabBar = gBrowser.tabContainer;
     // workaround when we remove last visible tab
-    if (TabmixTabbar.isMultiRow && tabBar.overflow && gBrowser._numPinnedTabs > 0 && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
+///XXX check this again
+    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && tabBar.overflow && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
-///XXXX check ... when closing many tabs it look like the timeout is very long !!
-    if (!tabBar.TMP_onCloseTimeout) {
-      tabBar.TMP_onCloseTimeout = window.setTimeout( function TMP_onCloseTimeout() {
-        if (tabBar.TMP_onCloseTimeout) {
-          clearTimeout(tabBar.TMP_onCloseTimeout);
-          tabBar.TMP_onCloseTimeout = null;
-        }
-        tabBar.adjustNewtabButtonvisibility();
-        if (TabmixTabbar.isMultiRow) {
-///XXX - check this again ! remember to fix the call to _positionPinnedOnMultiRow
-///XXX check if it look beter if we call updateVerticalTabStrip when tabBar.lastTabRowNumber < TabmixTabbar.visibleRows
-/// also when in scroll mode ?
-          // first we check for unpinned last tab row number
-          if (tabBar.hasAttribute("multibar") &&
-              tabBar._lastTabRowNumber < TabmixTabbar.visibleRows)
-///XXX when we close many tabs --- check if we can skip this!
-            tabBar._positionPinnedOnMultiRow();
-          // here we check for last row for both pinned and unpinned
-          if (tabBar.getAttribute("multibar") == "true" &&
-              tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
-            tabBar.updateVerticalTabStrip();
-          TabmixTabbar.updateBeforeAndAfter();
-        }
-      }, aDelay ? 0 : 25);
+
+    if (tabBar.disAllowNewtabbutton)
+      tabBar.adjustNewtabButtonvisibility();
+    if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
+      if (tabBar.getAttribute("multibar") == "true" &&
+          tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
+        tabBar.updateVerticalTabStrip();
+      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -803,6 +788,9 @@ var TMP_eventListener = {
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
     var tab = aEvent.target;
+    // moveTabTo call _positionPinnedTabs when pinned tab moves
+    if (!tab.pinned)
+      gBrowser.tabContainer.setFirstTabInRow();
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
   },
 
@@ -812,7 +800,6 @@ var TMP_eventListener = {
       gBrowser.lockTab(tab);
     }
     tab.style.marginTop = "";
-    delete tab.__row;
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   },
