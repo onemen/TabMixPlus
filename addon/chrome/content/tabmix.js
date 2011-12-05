@@ -334,13 +334,10 @@ var TMP_eventListener = {
 
     var tabBar = gBrowser.tabContainer;
 
+    tabBar.addEventListener("DOMMouseScroll", this, true);
     // add event for mouse scrolling on tab bar, necessary for linux
-    if (Tabmix.isPlatform("Linux")) {
+    if (Tabmix.isPlatform("Linux"))
        document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, true);
-       tabBar.addEventListener("DOMMouseScroll", this, true);
-    }
-    else
-       tabBar.addEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
@@ -478,20 +475,16 @@ var TMP_eventListener = {
     else
       gTMPprefObserver.setAutoHidePref();
 
-    window.setTimeout(function () {
-      // initialize the value of "gTabBarWidth"
-      TabmixTabbar._width = gBrowser.tabContainer.boxObject.width;
-      // only hide the tabbar after we catch the width
-      if (TabmixTabbar.hideMode == 2)
-        gBrowser.tabContainer.visible = false;
-    }, 100);
+    if (TabmixTabbar.hideMode == 2)
+      gBrowser.tabContainer.visible = false;
 
     TabmixTabbar.position = 0;
     if (TabmixSvc.TMPprefs.getIntPref("tabBarPosition") == 1)
       gTMPprefObserver.tabBarPositionChanged(1);
 
     // for light weight themes
-    Tabmix.setItem("main-window", "tabmix_lwt", TabmixTabbar.isMultiRow || TabmixTabbar.position == 1 || null);
+    if (TabmixTabbar.isMultiRow || TabmixTabbar.position == 1)
+      Tabmix.setItem("main-window", "tabmix_lwt", true);
 
     // make sure "extensions.tabmix.undoClose" is true if "browser.sessionstore.max_tabs_undo" is not zero
     var sessionstoreUndoClose = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo") > 0;
@@ -651,8 +644,6 @@ var TMP_eventListener = {
     tablib.setLoadURIWithFlags(tab.linkedBrowser);
     if (TabmixTabbar.lockallTabs)
       tab.setAttribute("locked", "true");
-
-///XXX check how it work for TGM
   },
 
   // this function call onTabOpen_updateTabBar after some delay
@@ -864,12 +855,9 @@ var TMP_eventListener = {
     if (alltabsPopup)
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
-    if (Tabmix.isPlatform("Linux")) {
+    gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
+    if (Tabmix.isPlatform("Linux"))
        document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, true);
-       gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
-    }
-    else
-       gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
