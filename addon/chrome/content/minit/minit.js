@@ -81,7 +81,7 @@ var TMP_tabDNDObserver = {
     dt.mozCursor = "default";
 
     let canvas = tabPreviews.capture(tab, false);
-    let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -26
+    let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37
     dt.setDragImage(canvas, 0, offset);
 
     if (Tabmix.isVersion(70)) {
@@ -216,7 +216,8 @@ var TMP_tabDNDObserver = {
             break;
       }
       if (_scroll) {
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * tabStrip.scrollIncrement);
+        let scrollIncrement = TabmixTabbar.isMultiRow ? Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
+        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
         hideIndicator = true;
       }
     }
@@ -373,11 +374,13 @@ var TMP_tabDNDObserver = {
       if (gBrowser.mCurrentTab != tab)
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
-    if (Tabmix.isVersion(70) && draggedTab) {
-      delete draggedTab._dragOffsetX;
-      delete draggedTab._dragOffsetY;
+    if (draggedTab) {
+      if (Tabmix.isVersion(70)) {
+        delete draggedTab._dragOffsetX;
+        delete draggedTab._dragOffsetY;
+      }
+      draggedTab.removeAttribute("dragged", true);
     }
-    draggedTab.removeAttribute("dragged", true);
   },
 
   onDragEnd: function minit_onDragEnd(aEvent) {

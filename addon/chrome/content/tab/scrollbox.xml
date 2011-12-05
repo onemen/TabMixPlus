@@ -34,7 +34,48 @@
       <field name="_scrollButtonDown">
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
       </field>
+
+      <method name="finishScroll">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          let tabBar = gBrowser.tabContainer;
+          if (tabBar.tabmix_useDefaultDnD || tabBar.orient != "horizontal")
+            return;
+          TMP_tabDNDObserver.clearDragmark();
+          let index, target = aEvent.originalTarget.getAttribute("anonid");
+          if (target == "scrollbutton-up-right")
+            index = -1;
+          else if (target == "scrollbutton-down-right")
+            index = 1;
+          if (index) {
+            let tabstrip = gBrowser.tabContainer.mTabstrip;
+            let amountToScroll, distanceToRow = tabstrip._distanceToRow(0);
+            if (distanceToRow * index < 0)
+              amountToScroll = tabstrip.singleRowHeight * index + distanceToRow;
+            else
+              amountToScroll = distanceToRow;
+            tabstrip.scrollByPixels(amountToScroll);
+          }
+        ]]></body>
+      </method>
     </implementation>
+
+    <handlers>
+      <handler event="dragover"><![CDATA[
+        let tabBar = gBrowser.tabContainer;
+        if (!tabBar.tabmix_useDefaultDnD && tabBar.orient == "horizontal")
+          TMP_tabDNDObserver.onDragOver(event);
+      ]]></handler>
+
+      <handler event="drop"><![CDATA[
+        this.finishScroll(event);
+      ]]></handler>
+
+      <handler event="dragexit"><![CDATA[
+        this.finishScroll(event);
+      ]]></handler>
+    </handlers>
+
   </binding>
 
   <binding id="tabmix-arrowscrollbox-clicktoscroll"
@@ -116,7 +157,7 @@
 
           this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
-          
+
           Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
         ]]>
       </constructor>
