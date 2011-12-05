@@ -749,6 +749,9 @@ var TabmixAllTabs = {
       case "scroll":
         this._popup._updateTabsVisibilityStatus();
         break;
+      case "popupshown":
+        this._ensureElementIsVisible(aEvent);
+        break;
     }
   },
 
@@ -929,17 +932,21 @@ var TabmixAllTabs = {
         break;
     }
 
-    if (this._selectedItem) {
-      let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
-      if (!popup.style.getPropertyValue("max-height")) {
-        popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
-        scrollBox.ensureElementIsVisible(popup.firstChild);
-      }
-      let items = Array.slice(popup.childNodes);
-      let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
-      scrollBox.ensureElementIsVisible(element);
-      scrollBox.ensureElementIsVisible(this._selectedItem);
-    }
+    if (!popup.style.getPropertyValue("max-height"))
+      popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
+
+    if (this._selectedItem)
+      popup.addEventListener("popupshown", this, false);
+  },
+
+  _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
+    var popup = event.target;
+    popup.removeEventListener("popupshown", this, false);
+    let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
+    let items = Array.slice(popup.childNodes);
+    let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
+    scrollBox.ensureElementIsVisible(element);
+    scrollBox.ensureElementIsVisible(this._selectedItem);
   },
 
   createMenuItems: function TMP_createMenuItems(popup, tab, value, aType) {
