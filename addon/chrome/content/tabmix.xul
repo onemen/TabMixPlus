@@ -465,7 +465,7 @@
     <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
     <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>
     <broadcaster id="tmp_closedwindows" disabled="true"/>
-    <broadcaster id="tmp_undocloseButton" disabled="true" type="menu"/>
+    <broadcaster id="tmp_undocloseButton" disabled="true"/>
     <broadcaster id="tmp_sessionmanagerButton" disabled="true"/>
   </broadcasterset>
 
