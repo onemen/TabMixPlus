@@ -445,6 +445,9 @@
           this.setTabStripOrient();
           TabmixTabbar.setHeight(rows, aReset);
 
+          if (this.mTabstrip.orient == "vertical")
+            this.overflow = multibar == "scrollbar";
+
           // prevent new-tab-button on the right from flickering when new tabs animate is on.
           if (this.disAllowNewtabbutton && TabmixSvc.prefs.getBoolPref("browser.tabs.animate")) {
             this.disAllowNewtabbutton = false;
@@ -454,9 +457,6 @@
           }
           else
             this.adjustNewtabButtonvisibility();
-
-          if (this.mTabstrip.orient == "vertical")
-            this.overflow = multibar == "scrollbar";
 
           return multibar;
         ]]></body>
