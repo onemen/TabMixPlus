@@ -83,9 +83,9 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       't.owner = this.selectedTab;', 't.owner = _selectedTab'
     ).toCode();
 
-    gBrowser.TMP_blockedCallers = ["tabbrowser_TMP_duplicateTab",
-                                   "tabbrowser_SSS_duplicateTab",
+    gBrowser.TMP_blockedCallers = ["tabbrowser_SSS_duplicateTab",
                                    "sss_restoreWindow",
+                                   "sss_duplicateTab",
                                    "ct_SSS_undoCloseTab",
                                    "TMP_BrowserOpenTab",
                                    "TMP_PC_openGroup",
@@ -353,8 +353,22 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
 
     Tabmix.newCode("duplicateTabIn", duplicateTabIn)._replace(
-      '{',
-      '{ if (where == "window" && Tabmix.getSingleWindowMode()) where = "tab";'
+      'var loadInBackground',
+      <![CDATA[
+        if (where == "window") {
+          if (Tabmix.getSingleWindowMode()) 
+            where = "tab";
+        }
+        // we prevent sessionStore.duplicateTab from moving the tab
+        else if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
+          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
+          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
+        }
+        $&
+      ]]>
+    )._replace(
+      'browser.tabs.loadBookmarksInBackground',
+      'extensions.tabmix.loadDuplicateInBackground'
     ).toCode();
 
     Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(
@@ -661,9 +675,9 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       if (!newTab && aTabData)
         throw new Error("Tabmix was unable to restore closed tab to new window");
 
-      // if SSS_duplicateTab failed fall back to TMP_duplicateTab
+      // sessionstore duplicateTab failed
       if (!newTab)
-        newTab = this.TMP_duplicateTab(aTab, aHref);
+        retuen;
 
       this.selectedBrowser.focus();
 
@@ -716,32 +730,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabState));
       } catch (ex) {Tabmix.assert(ex);}
 
-      return newTab;
-    }
-
-///XXX we can remove this function
-    gBrowser.TMP_duplicateTab = function tabbrowser_TMP_duplicateTab(aTab, href) {
-      try {
-        var aBrowser = this.getBrowserForTab(aTab);
-        var originalHistory = aBrowser.webNavigation.sessionHistory;
-        var newTab = this.addTab("about:blank");
-        newTab.linkedBrowser.stop();
-
-        var newBrowser = this.getBrowserForTab(newTab);
-        var prop = TabmixSessionData.getTabProperties(aTab);
-        TabmixSessionData.setTabProperties(newTab, prop);
-
-        newBrowser.addEventListener('load', tablib.dupScrollPosition, true);
-        //save scroll data and href to load after we clone tab history
-        var bContent = aBrowser.contentWindow;
-        newBrowser._scrollData = {
-            href: href,
-            _scrollX: bContent.scrollX,
-            _scrollY: bContent.scrollY
-        };
-
-        Tabmix.MergeWindows.cloneTabHistory(newBrowser, Tabmix.MergeWindows.copyHistory(originalHistory));
-      } catch (ex) {Tabmix.assert(ex);}
       return newTab;
     }
 
@@ -1641,6 +1629,7 @@ since we can have tab hidden or remove the index can change....
       gURLBar.focus();
   },
 
+///XXX only in use by MergeWindows.jsm
   dupScrollPosition: function TMP_dupScrollPosition(event) {
     var browser = this;
     var data = browser._scrollData;
