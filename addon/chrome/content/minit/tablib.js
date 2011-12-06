@@ -60,13 +60,17 @@ Tabmix.log("loadURIWithFlags open new tab", true);
        if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'
     )._replace(
       'this._lastRelatedTab = t;',
-      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNextInverse")) $&'
+      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNextInverse")) {\
+         TMP_LastTab.attachTab(t, _lastRelatedTab);\
+         $&\
+       }'
     )._replace(
       'this._lastRelatedTab || this.selectedTab', 'this._lastRelatedTab || _selectedTab'
     )._replace(
       't.dispatchEvent(evt);',
       <![CDATA[
       var _selectedTab = this.selectedTab;
+      var _lastRelatedTab = this._lastRelatedTab;
       t.dispatchEvent(evt);
       var openTabnext = TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext");
       if (openTabnext) {

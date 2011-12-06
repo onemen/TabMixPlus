@@ -5,7 +5,6 @@
 /*////////////////////////////////////////////////////////////////////
 var TMP_LastTab = {
    CtrlKey : false,
-   favorLeftToRightOrdering : true,
    handleCtrlTab : true,
    KeyboardNavigating : true,
    KeyLock : false,
@@ -69,8 +68,8 @@ var TMP_LastTab = {
       this.TabList.addEventListener("DOMMenuItemActive", this, true);
       this.TabList.addEventListener("DOMMenuItemInactive", this, true);
 
-      // if session manager select other tab then the first one we need to build TabHistory in two steps
-      // to maintain natural Ctrl-Tab order.
+      // if session manager select other tab then the first one we need to build
+      // TabHistory in two steps to maintain natural Ctrl-Tab order.
       this.TabHistory = [];
       var currentIndex = gBrowser.mCurrentTab._tPos;
       for (let i = currentIndex; i < gBrowser.tabs.length; i++)
@@ -132,67 +131,21 @@ var TMP_LastTab = {
          event.target.setAttribute("_moz-menuactive", "true");
    },
 
-   attachTab: function TMP_LastTab_attachTab(aTab, aPos) {
+   attachTab: function TMP_LastTab_attachTab(aTab, lastRelatedTab) {
      if (!this._inited)
        return;
 
      this.detachTab(aTab);
-     if (this.favorLeftToRightOrdering) {
-      let index = this.TabHistory.indexOf(gBrowser._lastRelatedTab);
-      if (index < 0)
-        index = 1;
-      this.TabHistory.splice(index, 0, aTab);
-     }
-     else
-       this.TabHistory.splice(this.TabHistory.length-1, 0, aTab);
+     let index = this.TabHistory.indexOf(lastRelatedTab);
+     if (index < 0)
+        index = this.TabHistory.length - 1;
+     this.TabHistory.splice(index, 0, aTab);
    },
 
    detachTab: function TMP_LastTab_detachTab(aTab) {
      var i = this.TabHistory.indexOf(aTab);
      if (i >= 0)
        this.TabHistory.splice(i, 1);
-   },
-
-   MaintainTabHistory: function TMP_LastTab_MaintainTabHistory(lastIndex) {
-      var newTabs = [], tab, i;
-
-      // Gather tab synchronization info
-      if (typeof(lastIndex)=="undefined")
-        lastIndex = gBrowser.tabs.length;
-      for(i = 0; i < lastIndex; i++) {
-         tab = gBrowser.tabs[i];
-         if(this.TabHistory.indexOf(tab) == -1)
-            newTabs[newTabs.length] = tab;
-      }
-
-      // Purge old tab info from history
-      i = 0;
-try{
-      while(i < this.TabHistory.length) {
-         let tab = this.TabHistory[i];
-         if (!tab || gBrowser._removingTabs.indexOf(tab) > -1 || tab.parentNode != gBrowser.tabContainer)
-            this.TabHistory.splice(i, 1);
-         else
-            i++;
-      }
-} catch (e) {Tabmix.log("error from Ctrl+Tab in MaintainTabHistory " + typeof(this.TabHistory[i]) + "\n" + e
-+ "\n" + "this.TabHistory.length " + this.TabHistory.length + "\n" + "i " + i);}
-
-      // Add new tabs to history
-      if(newTabs.length > 0) {
-         tab = this.TabHistory.pop();
-         if(this.favorLeftToRightOrdering) {
-            for(i = newTabs.length - 1; i >= 0; i--) {
-               this.TabHistory.push(newTabs[i]);
-            }
-         }
-         else {
-            for(i = 0; i < newTabs.length; i++) {
-               this.TabHistory.push(newTabs[i]);
-            }
-         }
-         this.TabHistory.push(tab);
-      }
    },
 
    OnKeyDown : function(event) {
@@ -203,23 +156,13 @@ try{
      if (val != null)
        return;
 
-     if (this.handleCtrlTab && this.TabHistory.length != gBrowser.tabs.lenght)
-       this.MaintainTabHistory();
-
      this._tabs = null;
    },
 
    get tabs () {
      if (this._tabs)
        return this._tabs;
-     let list;
-     if (this.handleCtrlTab) {
-       if (this.TabHistory.length != gBrowser.tabs.lenght)
-         this.MaintainTabHistory();
-       list = this.TabHistory;
-     }
-     else
-      list = gBrowser.tabs;
+     let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;
      this._tabs = Array.filter(list, function(tab) {
        return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
      });
@@ -396,8 +339,6 @@ try{
 
       this.handleCtrlTab = !tabPreviews && mostRecentlyUsed;
       this.showTabList = !tabPreviews && TabmixSvc.TMPprefs.getBoolPref("lasttab.showTabList");
-      ///XXX 2011-11-09 - we drop support for this.favorLeftToRightOrdering = false
-      this.favorLeftToRightOrdering = true;
       this.respondToMouseInTabList = TabmixSvc.TMPprefs.getBoolPref("lasttab.respondToMouseInTabList");
    },
 

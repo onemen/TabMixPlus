@@ -751,7 +751,6 @@ var gTMPprefObserver = {
         break;
       case "browser.ctrlTab.previews":
       case "extensions.tabmix.lasttab.tabPreviews":
-      case "extensions.tabmix.lasttab.favorLeftToRightOrdering":
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
         TMP_LastTab.ReadPreferences();

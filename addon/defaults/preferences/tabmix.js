@@ -161,10 +161,6 @@ pref("browser.ctrlTab.previews", true);
  */
 //pref("extensions.tabmix.lasttab.handleCtrlTab", true);
 pref("extensions.tabmix.lasttab.tabPreviews", true); // Firefox 3.1+
-/*
-removed on 2011-11-10
-pref("extensions.tabmix.lasttab.favorLeftToRightOrdering", true);
-*/
 pref("extensions.tabmix.lasttab.respondToMouseInTabList", true);
 pref("extensions.tabmix.lasttab.showTabList", false);
 

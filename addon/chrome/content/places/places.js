@@ -495,6 +495,7 @@ var TMP_Places = {
        index = prevTab._tPos + 1;
        tabPos = aTab._tPos < index ? index - 1 : index;
        gBrowser.moveTabTo(aTab, tabPos);
+       TMP_LastTab.attachTab(aTab, prevTab);
        prevTab = aTab;
     }
 

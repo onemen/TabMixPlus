@@ -171,15 +171,19 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    if (aTab && aTab.localName == "tab")
       gBrowser.moveTabTo(newTab, aTab._tPos + 1);
    else if (!replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("openNewTabNext")) {
-      let newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
-      gBrowser.moveTabTo(newTab, newTabPos);
-      if (TabmixSvc.TMPprefs.getBoolPref("openTabNextInverse"))
-         gBrowser._lastRelatedTab = newTab;
+      // we used to move tab after lastRelatedTab but we don't need it on new tabs
+      // and it mess with recently used tabs order
+      gBrowser.moveTabTo(newTab, gBrowser.selectedTab._tPos + 1);
    }
 
    // always select new tab when replacing last tab
    var loadInBackground  = replaceLastTab ? false : TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");
    gBrowser.TMP_selectNewForegroundTab(newTab, loadInBackground);
+   // make sure to update recently used tabs
+   // if user open many tabs quickly select event don't have time to fire 
+   // before new tab select
+   if (!loadInBackground)
+     TMP_LastTab.PushSelectedTab();
 
    // focus the address bar on new tab
    if (TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") || loadBlank)
