@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "rendi scorrevole la barra delle schede con pulsanti a sinistra">
 <!ENTITY tabScroll.multibar "disponi su molteplici file la barra delle schede">
 <!ENTITY maxrow.label "Numero massimo di file da visualizzare:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
 <!ENTITY highlight.label "Da differenziare">
 <!ENTITY currenttab.style.label "Scheda attuale">
@@ -185,7 +186,7 @@
 <!ENTITY reverseScroll.label "Spostarsi sulla scheda a dx quando si ruota la rotellina del mouse indietro">
 <!ENTITY clickFocus.label "Fai clic su una scheda (giù e rilascia) per selezionarla">
 <!ENTITY removeEntries.label "Il clic centrale elimina dalla lista delle schede un sito per volta">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Quando si chiude una scheda le altre non dovrebbero ridimensionarsi fino a che il cursore rimane sulla barra degli strumenti">
 <!ENTITY removeEntries.tooltip "Incluse le schede chiuse, le finestre chiuse e le sessioni salvate">
 <!ENTITY double.label "Doppio clic">
 <!ENTITY middle.label "Clic centrale">

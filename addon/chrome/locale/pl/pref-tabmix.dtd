@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "wyświetlaj przyciski przewijania po lewej stronie paska">
 <!ENTITY tabScroll.multibar "wyświetlaj je w wielu rzędach">
 <!ENTITY maxrow.label "Maksymalna liczba wyświetlanych rzędów etykiet kart:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
 <!ENTITY highlight.label "Wyróżniaj:">
 <!ENTITY currenttab.style.label "aktywną kartę">

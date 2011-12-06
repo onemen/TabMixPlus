@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
 <!ENTITY tabScroll.multibar "Με πολλές γραμμές">
 <!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">
 <!ENTITY highlight.label "Επισήμανση:">
 <!ENTITY currenttab.style.label "Τρέχουσας καρτέλας">

@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Sol taraftaki butonlarla kaydırılabilir">
 <!ENTITY tabScroll.multibar "Çoklu-satır">
 <!ENTITY maxrow.label "Görüntülenecek en fazla satır sayısı:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
 <!ENTITY highlight.label "Belirginleştir:">
 <!ENTITY currenttab.style.label "Geçerli sekmeyi">

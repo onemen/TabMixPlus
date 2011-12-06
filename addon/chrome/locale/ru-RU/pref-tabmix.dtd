@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
 <!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
 <!ENTITY maxrow.label "Максимальное число строк:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
 <!ENTITY highlight.label "Подсветка:">
 <!ENTITY currenttab.style.label "Текущая вкладка">
@@ -185,7 +186,7 @@
 <!ENTITY reverseScroll.label "При прокрутке вниз листать справа налево">
 <!ENTITY clickFocus.label "Выбирать вкладки полным щелчком мыши (нажать — отпустить)">
 <!ENTITY removeEntries.label "Удалять пункты меню Tab Mix Plus при помощи средней кнопки мыши">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "При закрытии одной вкладки другие не должны изменять свою ширину, пока курсор мыши не покинет область панели вкладок">
 <!ENTITY removeEntries.tooltip "Включая закрытые вкладки, окна и сохранённые сессии">
 <!ENTITY double.label "Двойной щелчок">
 <!ENTITY middle.label "Средняя кнопка">

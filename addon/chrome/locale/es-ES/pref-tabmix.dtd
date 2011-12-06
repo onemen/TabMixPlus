@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
 <!ENTITY tabScroll.multibar "se muestran en filas">
 <!ENTITY maxrow.label "Máximo de filas a mostrar:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
 <!ENTITY highlight.label "Resaltar:">
 <!ENTITY currenttab.style.label "Pestaña actual">

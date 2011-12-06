@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
 <!ENTITY tabScroll.multibar "Mettre la barre d'onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
 <!ENTITY highlight.label "Surligner :">
 <!ENTITY currenttab.style.label "Onglet courant">

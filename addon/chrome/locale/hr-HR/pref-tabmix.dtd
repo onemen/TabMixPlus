@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Više redova">
 <!ENTITY maxrow.label "Najveći broj redova koji se mogu prikazati:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Istakni:">
 <!ENTITY currenttab.style.label "Trenutnu karticu">

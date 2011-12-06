@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Keritav riba nuppudega vasakul">
 <!ENTITY tabScroll.multibar "Mitmerealine">
 <!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
 <!ENTITY highlight.label "Teistsugune stiil:">
 <!ENTITY currenttab.style.label "praegusel kaardil">

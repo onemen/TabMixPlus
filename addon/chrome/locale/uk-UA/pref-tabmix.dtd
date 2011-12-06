@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Розташовувати вкладки в кілька рядків">
 <!ENTITY maxrow.label "Максимальне число рядків:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Підсвічування:">
 <!ENTITY currenttab.style.label "Поточна вкладка">

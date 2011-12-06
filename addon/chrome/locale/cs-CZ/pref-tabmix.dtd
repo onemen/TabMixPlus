@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvný s tlačítky nalevo">
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
 <!ENTITY highlight.label "Zvýraznit:">
 <!ENTITY currenttab.style.label "Současný panel">

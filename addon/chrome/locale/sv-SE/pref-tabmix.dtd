@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Fler-radig">
 <!ENTITY maxrow.label "Max antal av rader att visa:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Belys:">
 <!ENTITY currenttab.style.label "Aktuell flik">

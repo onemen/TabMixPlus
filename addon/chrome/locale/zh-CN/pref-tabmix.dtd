@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
 <!ENTITY tabScroll.multibar "多行标签页">
 <!ENTITY maxrow.label "最多显示的行数：">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
 <!ENTITY highlight.label "高亮：">
 <!ENTITY currenttab.style.label "当前标签页">

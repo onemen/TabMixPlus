@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Múltiplas fileiras">
 <!ENTITY maxrow.label "Número máximo de fileiras:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
 <!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Aba atual">

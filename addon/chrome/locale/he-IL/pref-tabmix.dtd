@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "גלול עם הכפתורים בצד שמאל">
 <!ENTITY tabScroll.multibar "מספר שורות">
 <!ENTITY maxrow.label "מספר מקסימלי לשורות:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "הדגש:">
 <!ENTITY currenttab.style.label "לשונית נוכחית">

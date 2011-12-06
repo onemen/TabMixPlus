@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "スクロール可能にし、左にボタンを表示">
 <!ENTITY tabScroll.multibar "多段表示にする">
 <!ENTITY maxrow.label "バーの最大表示段数:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "スクロールディレイ時間(スクロール間隔)">
 <!ENTITY highlight.label "ハイライト">
 <!ENTITY currenttab.style.label "現在のタブ">

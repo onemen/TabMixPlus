@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "여러 줄로 나누기">
 <!ENTITY maxrow.label "탭 도구 모음의 최대 표시 개수:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "스크롤 지연시간(반복 스크롤 사이의 시간)">
 <!ENTITY highlight.label "강조하기:">
 <!ENTITY currenttab.style.label "현재 탭">

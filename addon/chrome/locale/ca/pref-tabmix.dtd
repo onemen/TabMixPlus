@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Es poden desplaçar amb botons al costat esquerre">
 <!ENTITY tabScroll.multibar "Mostra diverses files">
 <!ENTITY maxrow.label "Nombre màxim de files que es poden mostrar:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">
 <!ENTITY highlight.label "Ressalta:">
 <!ENTITY currenttab.style.label "Pestanya actual">

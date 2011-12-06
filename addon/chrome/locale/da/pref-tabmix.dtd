@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-række">
 <!ENTITY maxrow.label "Maks antal rækker der skal vises:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">
 <!ENTITY highlight.label "Fremhæv:">
 <!ENTITY currenttab.style.label "Nuværende faneblad">

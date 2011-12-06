@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "چند ردیفی شود">
 <!ENTITY maxrow.label "حداکثر تعداد ردیف های قابل نمایش">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "پر رنگ کردن:">
 <!ENTITY currenttab.style.label "تب فعلی">

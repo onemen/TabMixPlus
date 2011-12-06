@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "derulantă, cu butoane pe marginea stângă">
 <!ENTITY tabScroll.multibar "pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Întârziere defilare (interval între pașii defilării)">
 <!ENTITY highlight.label "Evidențiază:">
 <!ENTITY currenttab.style.label "Fila curentă">

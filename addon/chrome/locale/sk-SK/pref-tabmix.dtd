@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
 <!ENTITY highlight.label "Zvýrazniť:">
 <!ENTITY currenttab.style.label "Aktuálna karta">
@@ -185,7 +186,7 @@
 <!ENTITY reverseScroll.label "Prepnúť napravo pri obrátenom skrolovaní">
 <!ENTITY clickFocus.label "Tlačením smerom dole okamžite vybrať karty">
 <!ENTITY removeEntries.label "Zmazať položky ponuky Tab Mix Plus použitím prostredného tlačidla">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Pri zatváraní karty, ostatné karty by nemali meniť svoju veľkosť, kým kurzor opustí oblasť panela nástrojov">
 <!ENTITY removeEntries.tooltip "Zahrnúť zatvorené karty, zatvorené okná uložené relácie">
 <!ENTITY double.label "Dvojkliknutie">
 <!ENTITY middle.label "Prostredné tlačidlo">

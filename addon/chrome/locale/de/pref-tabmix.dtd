@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "mit Pfeilschaltflächen auf der linken Seite scrollen">
 <!ENTITY tabScroll.multibar "mehrzeilig anzeigen">
 <!ENTITY maxrow.label "Maximale Zeilenanzahl:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Mausrad-Verzögerung (Intervall zwischen Scroll-Schritten)">
 <!ENTITY highlight.label "Hervorheben">
 <!ENTITY currenttab.style.label "Aktiven Tab">

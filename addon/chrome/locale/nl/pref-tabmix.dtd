@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
 <!ENTITY highlight.label "Attentie vragen voor:">
 <!ENTITY currenttab.style.label "Huidige tabblad">

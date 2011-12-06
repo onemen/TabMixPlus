@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Có thể cuộn với các nút ở phía bên trái">
 <!ENTITY tabScroll.multibar "Nhiều hàng">
 <!ENTITY maxrow.label "Số lượng hàng tối đa:">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
 <!ENTITY highlight.label "Tô sáng:">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">
