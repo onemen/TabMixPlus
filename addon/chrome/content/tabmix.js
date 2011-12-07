@@ -505,6 +505,8 @@ var TMP_eventListener = {
     delete Tabmix.adjustTabstrip;
     // no need to updtae updateScrollStatus
     tabBar.adjustTabstrip(true);
+    // style flush to prevent the window from flicker
+    tabBar.mTabstrip.clientTop;
   },
 
   _tabStillLoading: 0,
