@@ -1146,7 +1146,7 @@ Tabmix.navToolbox = {
     if (Tabmix.isVersion(100)) {
       fixedHandleCommand = fixedHandleCommand._replace(
         'if (isMouseEvent || altEnter) {',
-        'loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+        'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
          if (isMouseEvent || altEnter || loadNewTab) {'
       )._replace(
         // always check whereToOpenLink exept for alt to catch also ctrl/meta
