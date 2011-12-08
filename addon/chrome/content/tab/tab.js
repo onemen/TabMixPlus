@@ -1501,7 +1501,13 @@ var gTMPprefObserver = {
   updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
     if (TabmixTabbar.position != 1 || !gBrowser.tabContainer.visible)
       return;
+
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    if (bottomToolbox.collapsed != gInPrintPreviewMode)
+      bottomToolbox.collapsed = gInPrintPreviewMode;
+    if (gInPrintPreviewMode)
+      return;
+
     if (aEvent && aEvent.target != window) {
       // when the event is not from the window check if tabmix-bottom-toolbox
       // change its position
@@ -1514,7 +1520,7 @@ var gTMPprefObserver = {
     let tabsToolbar = document.getElementById("TabsToolbar");
     let newHeight = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
     if (this._bottomRect.height != newHeight) {
-      this._bottomRect.height = newHeight
+      this._bottomRect.height = newHeight;
       bottomToolbox.style.setProperty("height", newHeight + "px", "important");
     }
     // get new rect after changing the height
