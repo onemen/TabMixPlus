@@ -1,11 +1,11 @@
 <!ENTITY styles.label "カスタマイズ">
 <!ENTITY currentTab.label "現在のタブ">
 <!ENTITY unreadTab.label "未読のタブ">
-<!ENTITY otherTabs.label "その他のタブ">
+<!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">
 <!ENTITY bold.label "太字">
 <!ENTITY underline.label "下線">
 <!ENTITY textcolor.label "文字色">
 <!ENTITY bgColor.label "背景色">
-<!ENTITY useThis.label "このスタイルを適用する">
+<!ENTITY useThis.label "以下のスタイルを使用　　設定対象">
 <!ENTITY opacity.label "不透明度">

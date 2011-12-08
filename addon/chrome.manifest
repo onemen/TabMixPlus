@@ -20,7 +20,7 @@ locale    tabmixplus   he-IL         chrome/locale/he-IL/
 locale    tabmixplus   hr-HR         chrome/locale/hr-HR/
 locale    tabmixplus   hu-HU         chrome/locale/hu-HU/
 locale    tabmixplus   it            chrome/locale/it/
-locale    tabmixplus   ja            chrome/locale/ja-JP/
+locale    tabmixplus   ja            chrome/locale/ja/
 #locale    tabmixplus   ja-JP         chrome/locale/ja-JP/ - we have ja and ja-JP update
 locale    tabmixplus   ko-KR         chrome/locale/ko-KR/
 locale    tabmixplus   lv-LV         chrome/locale/lv-LV/

@@ -2,10 +2,10 @@
 <!ENTITY closedtabsbtn.tooltip "最近閉じたタブのリストを表示">
 <!ENTITY sessionbtn.tooltip "セッションを表示＆操作">
 <!ENTITY tabslistbtn.label "タブの一覧">
-<!ENTITY tabslistbtn.tooltip "[タブの一覧]を表示">
+<!ENTITY tabslistbtn.tooltip "[タブの一覧] を表示">
 <!ENTITY closedwindowsbtn.label "最近閉じたウィンドウ">
-<!ENTITY closedwindowsbtn.tooltip "[最近閉じたウィンドウ]のリストを表示">
-<!ENTITY page.header.title "Tab Mix Plus のオプション">
+<!ENTITY closedwindowsbtn.tooltip "[最近閉じたウィンドウ] のリストを表示">
+<!ENTITY page.header.title "Tab Mix Plus オプション">
 <!ENTITY options.main.sessionbutton.label "Tab Mix Plus セッションマネージャ">
 <!ENTITY session.Tools "セッションマネージャ">
 <!ENTITY closedWin.label "最近閉じたウィンドウ">
@@ -19,7 +19,7 @@
 <!ENTITY mergeContext.accesskey "M">
 <!ENTITY renametab.label "タブをリネーム">
 <!ENTITY renametab.accesskey "M">
-<!ENTITY copytaburl.label "タブのURLをコピー">
+<!ENTITY copytaburl.label "タブの URL をコピー">
 <!ENTITY copytaburl.accesskey "Y">
 <!ENTITY reloadother.label "他のタブをすべて再読み込み">
 <!ENTITY reloadother.accesskey "O">
@@ -106,7 +106,7 @@
 <!ENTITY sm.context.delete.key "D">
 <!ENTITY sm.context.deleteall "すべて削除">
 <!ENTITY sm.context.deleteall.key "L">
-<!ENTITY sm.context.startup "起動するときに読み込むセッションに指定">
+<!ENTITY sm.context.startup "起動時に読み込むセッションに指定">
 <!ENTITY sm.context.startup.key "P">
 <!ENTITY sm.context.details "カウンターと日付をセッションメニューに表示">
 <!ENTITY sm.context.details.key "C">
