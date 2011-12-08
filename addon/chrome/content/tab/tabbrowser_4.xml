@@ -392,6 +392,7 @@
         ]]></body>
       </method>
 
+      <field name="firstTabInRowMargin">0</field>
       <method name="resetFirstTabInRow">
         <body><![CDATA[
           if (this.firstTabInRowMargin == 0)
@@ -706,7 +707,7 @@
             // Can we make both the new tab and the selected tab completely visible?
             if (!selected ||
                 !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
-                 TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.heigth) {
+                 TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.height) {
               this.mTabstrip.ensureElementIsVisible(aTab);
               return;
             }

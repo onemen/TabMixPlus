@@ -268,7 +268,7 @@ var TabmixTabbar = {
 
       this._heights[tabsPosition][aRows] = newHeight;
       if (fillRowsHeights || (aRows > 2 && typeof(this._heights[tabsPosition][aRows-1]) == "undefined")) {
-        rowHeight = newHeight / aRows;
+        let rowHeight = newHeight / aRows;
         for (let row = 2; row < aRows; row++)
           this._heights[tabsPosition][row] = rowHeight * row;
       }

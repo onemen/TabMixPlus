@@ -219,12 +219,14 @@ var TMP_eventListener = {
         }
         break;
       case "TabHide":
-        let tab = aEvent.target;
         if (!gBrowser.tabContainer._onDelayTabHide) {
           // pass aEvent to this function for use in TGM
           gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
             gBrowser.tabContainer._onDelayTabHide = null;
-            TMP_eventListener.onTabClose_updateTabBar(aEvent.target, true);
+            let tab = aEvent.target;
+            // just to pass the test in onTabClose_updateTabBar
+            tab._tPosInGroup = true;
+            TMP_eventListener.onTabClose_updateTabBar(tab, true);
           }, 0, aEvent);
         }
         break;
