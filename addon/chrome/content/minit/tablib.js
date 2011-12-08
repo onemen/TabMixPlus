@@ -208,6 +208,13 @@ Tabmix.log("loadURIWithFlags open new tab", true);
   },
 
   change_tabContainer: function change_tabContainer() {
+
+    Tabmix.newCode("gBrowser.tabContainer.handleEvent", gBrowser.tabContainer.handleEvent)._replace(
+      'this.adjustTabstrip',
+      'TabmixTabbar._handleResize(); \
+       $&'
+    ).toCode();
+
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
         // replace this section first, we add  this.style.MozMarginStart = "" in the 2nd section

@@ -341,6 +341,20 @@ var TabmixTabbar = {
     gTMPprefObserver.updateTabbarBottomPosition();
   },
 
+  _handleResize: function TMP__handleResize() {
+    var tabBar = gBrowser.tabContainer;
+    if (TabmixTabbar.isMultiRow) {
+      tabBar.setFirstTabInRow();
+      if (tabBar.mTabstrip.orient != "vertical")
+        tabBar.mTabstrip._enterVerticalMode();
+      else
+        tabBar.updateVerticalTabStrip();
+    }
+    ///maybe we cad add this to the popupshing / or as css rule ?
+    Tabmix.setItem("alltabs-popup", "position",
+        (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
+  },
+
   // Update beforeselected and afterselected attribute when we are in multi-row mode
   updateBeforeAndAfter: function TMP_updateBeforeAndAfter() {
     var tabBar = gBrowser.tabContainer;

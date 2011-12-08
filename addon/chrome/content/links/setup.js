@@ -338,7 +338,4 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }
-///maybe we cad add this to the popupshing / or as css rule ?
-  Tabmix.setItem("alltabs-popup", "position",
-      (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
- }
+}
