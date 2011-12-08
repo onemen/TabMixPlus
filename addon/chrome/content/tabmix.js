@@ -708,11 +708,21 @@ var TMP_eventListener = {
       tabBar.removeAttribute("multibar");
     }
 
-    // if the removed tab is single in its row hide it
-    if (tab.previousSibling && !TabmixTabbar.inSameRow(tab, tab.previousSibling))
-      tab.style.setProperty("opacity", "0", "important");
+    // when browser.tabs.animate is true gBrowser._endRemoveTab calls
+    // onTabClose_updateTabBar. 
+    // we would like to get early respond when row height is going to change.
+    var updateNow = !TabmixSvc.prefs.getBoolPref("browser.tabs.animate");
+    if (!updateNow && tabBar.hasAttribute("multibar")) {
+      let lastTab = tabBar.visibleTabsLastChild;
+      if (!TabmixTabbar.inSameRow(lastTab, TMP_TabView.previousVisibleSibling(lastTab))) {
+        updateNow = true;
+        // if the removed tab is single in its row hide it
+        if (lastTab == tab)
+          tab.style.setProperty("opacity", "0", "important");
+      }
+    }
 
-    if (!TabmixSvc.prefs.getBoolPref("browser.tabs.animate"))
+    if (updateNow)
       this.onTabClose_updateTabBar(tab);
   },
 
