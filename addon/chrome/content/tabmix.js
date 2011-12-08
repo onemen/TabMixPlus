@@ -721,19 +721,24 @@ var TMP_eventListener = {
     // it the tab is not in the curent group we don't have to do anything here.
     if (aTab._tPosInGroup == -1)
       return;
+
     var tabBar = gBrowser.tabContainer;
+    function _updateTabstrip() {
+      if (tabBar.getAttribute("multibar") == "true" &&
+          tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
+        tabBar.updateVerticalTabStrip();
+      TabmixTabbar.updateBeforeAndAfter();
+    }
+
     // workaround when we remove last visible tab
-///XXX check this again
     if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && tabBar.overflow && aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 
     if (tabBar.disAllowNewtabbutton)
       tabBar.adjustNewtabButtonvisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
-      if (tabBar.getAttribute("multibar") == "true" &&
-          tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
-        tabBar.updateVerticalTabStrip();
-      TabmixTabbar.updateBeforeAndAfter();
+      _updateTabstrip();
+      setTimeout(function(){_updateTabstrip();}, 0);
     }
   },
 
