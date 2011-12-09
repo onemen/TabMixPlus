@@ -10,15 +10,6 @@ label.text-link, label[onclick] {
   -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
 }
 
-/* some themes use old copy of tabmix_3.xml that's why we don't use .tabbrowser-arrowscrollbox > .scrollbutton-up */
-.tabmix_scrollbuttons_box[_side=right][flowing=scrollbutton] {
-  -moz-box-orient: horizontal;
-}
-
-.tabmix_scrollbuttons_box[_side=right][flowing=multibar] {
-  -moz-box-orient: vertical;
-}
-
 /*
  * For close button on tab
  */

@@ -42,17 +42,6 @@ var TabmixTabbar = {
       let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = tabBar.overflow;
 
-      // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
-      this.setScrollButtonBox(useTabmixButtons, false, true);
-      if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
-        // reset overflow and hide the buttons
-        // vertical button will prevent us from reset the height to one row.
-        // when we get overflow in the other orient then button collapsed will set to false in
-        // the scrollbox event handler
-        tabBar.overflow = false;
-      }
-      tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = !tabBar.overflow;
-
       switch (tabscroll) {
         case this.SCROLL_BUTTONS_HIDDEN:
           tabBar.setAttribute("flowing", "singlebar");
@@ -67,6 +56,17 @@ var TabmixTabbar = {
           tabBar.setAttribute("flowing", "multibar");
           break;
       }
+
+      // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
+      this.setScrollButtonBox(useTabmixButtons, false, true);
+      if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
+        // reset overflow and hide the buttons
+        // vertical button will prevent us from reset the height to one row.
+        // when we get overflow in the other orient then button collapsed will set to false in
+        // the scrollbox event handler
+        tabBar.overflow = false;
+      }
+      tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = !tabBar.overflow;
 
       let flowing = tabBar.getAttribute("flowing");
       tabStrip.setAttribute("flowing", flowing);
@@ -177,6 +177,12 @@ var TabmixTabbar = {
       tabStrip._scrollButtonUpRight = box._scrollButtonUp;
     }
     if (update) {
+      if (useTabmixButtons) {
+        // we have to set orient attribute for Linux theme
+        // maybe other themes need it for display the scroll arrow
+        box.orient = this.isMultiRow ? "vertical" : "horizontal";
+      }
+
       tabStrip._scrollButtonDown = !useTabmixButtons ?
           tabStrip._scrollButtonDownLeft : tabStrip._scrollButtonDownRight;
       gBrowser.tabContainer._animateElement = tabStrip._scrollButtonDown;

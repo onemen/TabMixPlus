@@ -468,7 +468,7 @@
           // we can't set dispaly:block and orient=vertical when widthFitTitle is false
           // and we are in one row.
           let vertical = TabmixTabbar.isMultiRow &&
-              (TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
+              (!Tabmix.isPlatform("Linux") && TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
           Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
           this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
         ]]></body>

@@ -5,7 +5,8 @@
    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
    xmlns:xbl="http://www.mozilla.org/xbl">
 
-  <binding id="tabmix-right-scrollBox" display="xul:box">
+  <binding id="tabmix-right-scrollBox"
+           extends="chrome://global/content/bindings/scrollbox.xml#scrollbox-base">
     <content _side="right">
         <xul:toolbarbutton class="scrollbutton-up"
                            xbl:inherits="orient"
@@ -297,9 +298,8 @@
           if (!isFirstTabVisible || !isLastTabVisible) {
             this.orient = "vertical";
             this.blockUnderflow = true;
-            // prevent last tab from flicring in the case
-            // after pinned tab positioning in rows the tab will stay
-            // in the same row
+            Tabmix.setItem(tabBar, "multibar", true);
+            Tabmix.setItem("TabsToolbar", "multibar", true);
             tabBar.updateVerticalTabStrip();
           }
         ]]></body>
