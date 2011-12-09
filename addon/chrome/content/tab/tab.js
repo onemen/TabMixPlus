@@ -1697,7 +1697,8 @@ try { // user report about bug here ... ?
         // open Tabmix page in a new tab
         window.setTimeout(function() {
           let b = Tabmix.getTopWin().gBrowser;
-          b.selectedTab = b.addTab("http://tmp.garyr.net/version_update.htm?version=" + currentVersion);
+          let channel = /^0.4/.test(currentVersion) ? "devbuild_" : "";
+          b.selectedTab = b.addTab("http://tmp.garyr.net/"+ channel +"version_update.htm?version=" + currentVersion);
         },1000);
         // noting more to do at the moment
       }
