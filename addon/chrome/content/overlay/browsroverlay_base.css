@@ -10,22 +10,6 @@ label.text-link, label[onclick] {
   -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
 }
 
-/***
- *      workaround firefox rules that use .tabbrowser-arrowscrollbox > .scrollbutton-up
- *                                        .tabbrowser-arrowscrollbox > .scrollbutton-up
- *      our scrollbutton are inside a secound box for multi-row
- *      so we add to our box class tabbrowser-arrowscrollbox[type=tabmix] to create fake
- *      .tabbrowser-arrowscrollbox
- *
- ***/
-.tabbrowser-arrowscrollbox[type=tabmix] {
-  -moz-binding: url("chrome://global/content/bindings/general.xml#basecontrol") !important;
-}
-
-.tabbrowser-arrowscrollbox[type=tabmix-scrollbox] {
-  -moz-binding: url("chrome://global/content/bindings/scrollbox.xml#scrollbox") !important;
-}
-
 /* some themes use old copy of tabmix_3.xml that's why we don't use .tabbrowser-arrowscrollbox > .scrollbutton-up */
 .tabmix_scrollbuttons_box[_side=right][flowing=scrollbutton] {
   -moz-box-orient: horizontal;
