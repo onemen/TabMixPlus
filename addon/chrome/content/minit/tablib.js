@@ -965,7 +965,6 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           this.tabContainer.updateVerticalTabStrip(true)
-        this.moveTabTo(this.mCurrentTab, 0);
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i], {animate: true});
