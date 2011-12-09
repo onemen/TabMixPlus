@@ -523,7 +523,7 @@ var TMP_eventListener = {
         let tab = gBrowser.tabs[i];
         let browser = tab.linkedBrowser;
         let url = browser.userTypedValue;
-        let tabStillLoading = Tabmix.isVersion(110) ? browser.__SS_tabStillLoading :
+        let tabStillLoading = Tabmix.isVersion(110) ? "__SS_tabStillLoading" in browser && browser.__SS_tabStillLoading :
             browser.__SS_data && browser.__SS_data._tabStillLoading;
         if (url && tabStillLoading) {
           this._tabStillLoading++;
