@@ -227,11 +227,11 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
         // replace this section first, we add  this.style.MozMarginStart = "" in the 2nd section
         'this.style.MozMarginStart = "";',
-        <![CDATA[
-          if (TabmixTabbar.isMultiRow)
-            this.resetFirstTabInRow();
-          else $&
-        ]]>
+        'this.resetFirstTabInRow();\
+         $&'
+      )._replace(
+        'this.mTabstrip._scrollButtonDown.scrollWidth',
+        'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
         <![CDATA[
