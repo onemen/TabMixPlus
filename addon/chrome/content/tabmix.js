@@ -121,7 +121,10 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setCloseButtonMargin();
   delete gTMPprefObserver.tabStyleSheet;
   if ("__felxedTab" in Tabmix) {
-    Tabmix.__felxedTab.removeAttribute("flex");
+    let tab = Tabmix.__felxedTab;
+    tab.removeAttribute("flex");
+    if (!tab.hasAttribute("busy"))
+      tab.removeAttribute("width");
     delete Tabmix.__felxedTab;
   }
 
@@ -529,13 +532,11 @@ var TMP_eventListener = {
           this._tabStillLoading++;
           let title = TMP_SessionStore._getTitle(browser.__SS_data, url, tab.label);
           if (title != tab.label) {
-            if (setWidth)
-              tab.removeAttribute("width");
-            tab.label = title;
             if (setWidth) {
-              tab.setAttribute("width", tab.boxObject.width);
+              tab.removeAttribute("width");
               tabWidthChanged = true;
             }
+            tab.label = title;
           }
         }
       }
