@@ -87,7 +87,8 @@ var TMP_Places = {
 
       let [fnName, fnCode] = ["openLinkIn", openLinkIn];
       try {
-        if (typeof(com.tobwithu.wmn.openLinkIn) == "function") {
+        if (com.tobwithu && com.tobwithu.wmn &&
+            typeof(com.tobwithu.wmn.openLinkIn) == "function") {
           // update com.tobwithu.wmn.openLinkIn to work with Tabmix's
           // loadInBackground prerfs and add tabmix_bookmarkId
           // to the new tab

@@ -476,7 +476,8 @@ Tabmix.log("loadURIWithFlags open new tab", true);
     // fix compatibility with Webmail Notifier
     let [fnName, fnCode] = ["openNewTabWith", openNewTabWith];
     try {
-      if (typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
+      if (com.tobwithu && com.tobwithu.wmn &&
+          typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
         [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
       }
     } catch (ex) {}
