@@ -14,3 +14,5 @@ chrome/content/overlay/stylesheet.txt
 chrome/content/links/contentLinks_old.js
 chrome/content/minit/TabmixDragAndDrop.js
 test.manifest
+license.txt
+icon.png
