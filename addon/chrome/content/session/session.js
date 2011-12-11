@@ -1654,10 +1654,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    delayRestoreSession: function(node, overwriteWindows) {
       var path = node.session;
-      var id = node.parentNode.parentNode.id;
-      if (node.parentNode.parentNode.hasAttribute("sessionmanager-menu"))
-         this.loadSession(path,'sessionrestore', overwriteWindows);
-      else if (id.indexOf("tm-sm-closedwindows")==0 || id == "btn_closedwindows")
+      var command = node.command;
+      if (command == "loadSession")
+         this.loadSession(path, "sessionrestore", overwriteWindows);
+      else if (command == "openclosedwindow")
          this.openclosedwindow(path, overwriteWindows);
    },
 
@@ -1867,20 +1867,26 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (parentId == "btn_sessionmanager" || parentId == "btn_closedwindows")
          popup.parentNode.removeAttribute("tooltiptext");
       var sessionmanagerMenu = popup.parentNode.hasAttribute("sessionmanager-menu");
-      var parentID;
-      if (sessionmanagerMenu)
-         parentID = "sessionmanagerMenu"
+      var parentID, menuCommand;
+      if (sessionmanagerMenu) {
+         parentID = "sessionmanagerMenu";
+         menuCommand = "loadSession";
+      }
       else if (popup.parentNode.getAttribute("anonid") == "delete")
          parentID = "tm_prompt";
       else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST)
          parentID = popup.parentNode.id;
+      var onClosedWindowsList = parentId.indexOf("tm-sm-closedwindows")==0 || parentId == "btn_closedwindows";
+      if (onClosedWindowsList)
+         menuCommand = "openclosedwindow";
+
       var aContainer = this.initContainer(container);
       var containerEnum = aContainer.GetElements();
       var mi, node, name, nameExt, accessKey,index, nodes = [];
       var showNameExt = TabmixSvc.SMprefs.getBoolPref("menu.showext");
       var loadsession = TabmixSvc.SMprefs.getIntPref("onStart.loadsession");
       var sessionpath = TabmixSvc.SMprefs.getCharPref("onStart.sessionpath");
-      var showTooltip = sessionmanagerMenu || parentId.indexOf("tm-sm-closedwindows")==0 || parentId == "btn_closedwindows";
+      var showTooltip = sessionmanagerMenu || onClosedWindowsList;
       var closedWinList = parentId.indexOf("closedwindows") != -1;
       while(containerEnum.hasMoreElements()) {
          node = containerEnum.getNext();
@@ -1896,9 +1902,14 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          // Insert a menu item for session in the container
          mi = document.createElement("menuitem");
          mi.session = node.QueryInterface(Ci.nsIRDFResource).Value;
+         mi.command = menuCommand;
          mi.setAttribute("session", mi.session);
          if (contents == 1 && loadsession > -1 && mi.session && mi.session == sessionpath) continue;
          mi.setAttribute("value", i);
+         // Ubuntu global menu prevents Session manager menu from working from Tools menu
+         // this hack is only for left click, middle click and right click still not working
+         if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+            mi.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
          mi.value = i;
          if (parentID != "onStart.loadsession") {
             index = closedWinList ? count - 1 - i : i;
@@ -1933,6 +1944,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                menu = document.createElement("menuitem");
                var [sLabel , sessionIndex] = sessionLabel[i].split(" ");
                menu.session = this.gSessionPath[sessionIndex];
+               menu.command = menuCommand;
                if (this.containerEmpty(menu.session) && contents != 1)
                   menu.setAttribute("disabled", "true");
                else
@@ -1942,6 +1954,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                menu.setAttribute("label", sLabel + (showNameExt && contents != 1 ? nameExt : ""));
                if (showTooltip) menu.setAttribute("tooltiptext", sLabel + nameExt);
                menu.setAttribute("value", (-1 - i));
+               if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+                  menu.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
                popup.appendChild (menu);
             }
             if (afterCrash && contents != 1) { // add separator before Crashed menu item
