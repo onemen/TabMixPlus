@@ -168,9 +168,12 @@ var TabmixTabbar = {
     let tabStrip  = gBrowser.tabContainer.mTabstrip;
     if (newBox || (useTabmixButtons && insertAfterTabs)) {
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset").split(",");
-      cSet.splice(1, 0, "tabmixScrollBox");
-      tabsToolbar.setAttribute("currentset", cSet);
+      let cSet = tabsToolbar.getAttribute("currentset");
+      // remove existing tabmixScrollBox item
+      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
+      let index = cSet.indexOf("tabbrowser-tabs");
+      cSet.splice(index + 1, 0, "tabmixScrollBox");
+      tabsToolbar.setAttribute("currentset", cSet.join(","));
 ///XXX check if we can do it only on first oveflow
       tabsToolbar.insertBefore(box, gBrowser.tabContainer.nextSibling);
       tabStrip._scrollButtonDownRight = box._scrollButtonDown;

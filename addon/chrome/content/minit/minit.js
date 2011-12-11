@@ -1268,9 +1268,12 @@ Tabmix.navToolbox = {
     if (box && box != gBrowser.tabContainer.nextSibling) {
       // update currentset
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset").split(",");
-      cSet.splice(1, 0, cSet.splice(cSet.indexOf(id), 1)[0]);
-      tabsToolbar.setAttribute("currentset", cSet);
+      let cSet = tabsToolbar.getAttribute("currentset");
+      // remove existing tabmixScrollBox item
+      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
+      let index = cSet.indexOf("tabbrowser-tabs");
+      cSet.splice(index + 1, 0, "tabmixScrollBox");
+      tabsToolbar.setAttribute("currentset", cSet.join(","));
       // update physical position
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
