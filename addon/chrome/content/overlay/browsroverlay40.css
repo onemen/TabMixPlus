@@ -56,6 +56,7 @@
   width: 0px;
   border: none;
   margin: 0px;
+  vertical-align: bottom;
 }
 
 #TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >
