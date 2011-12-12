@@ -741,9 +741,13 @@ function saveToFile (patterns) {
   fp.appendFilters(nsIFilePicker.filterText);
 
   if (fp.show() != nsIFilePicker.returnCancel) {
-    if (fp.file.exists()) fp.file.remove(true);
-    fp.file.create(fp.file.NORMAL_FILE_TYPE, parseInt("0666", 8));
-    stream.init(fp.file, 0x02, 0x200, null);
+    let file = fp.file;
+    if (!/\.txt$/.test(file.leafName.toLowerCase()))
+      file.leafName += ".txt";
+    if (file.exists())
+      file.remove(true);
+    file.create(file.NORMAL_FILE_TYPE, parseInt("0666", 8));
+    stream.init(file, 0x02, 0x200, null);
 
     for (var i = 0; i < patterns.length ; i++) {
       patterns[i]=patterns[i]+"\n";
