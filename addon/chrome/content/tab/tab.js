@@ -1488,7 +1488,15 @@ var gTMPprefObserver = {
         gNavToolbox.tabmix_tabsontop = true;
         TabsOnTop.enabled = false;
       }
-      this.updateTabbarBottomPosition();
+      if (gBrowser.tabContainer.visible)
+        this.updateTabbarBottomPosition();
+      else {
+        // the tabbar is hidden on startup
+        let height = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
+        bottomToolbox.style.setProperty("height", height + "px", "important");
+        tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
+        tabsToolbar.setAttribute("width", screen.availWidth);
+      }
     }
     else {// top
       setTabsOnTopCmd(true);

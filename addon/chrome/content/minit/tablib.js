@@ -355,8 +355,10 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       <![CDATA[
         $&
         let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-        if (bottomToolbox)
+        if (bottomToolbox) {
           bottomToolbox.collapsed = !val;
+          gTMPprefObserver.updateTabbarBottomPosition();
+        }
       ]]>
     ).toSetter(gBrowser.tabContainer, "visible");
 
