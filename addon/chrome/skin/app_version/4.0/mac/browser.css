@@ -8,6 +8,13 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
 
+/* :::: tabbar on buttom :::: 
+  we leave the default background-image on mac
+#TabsToolbar[tabbaronbuttom] {
+  background-image: none !important;
+}
+*/
+
 .tabbrowser-tabs[classic="v4Mac"] > .tabbrowser-tab .tabs-closebutton {
   margin: 0px;
 }
@@ -21,7 +28,7 @@
 }
 
 #TabsToolbar[multibar] .toolbarbutton-1 {
-  margin-top: 1px;
+  margin-top: 1px !important;
 }
 
 .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {

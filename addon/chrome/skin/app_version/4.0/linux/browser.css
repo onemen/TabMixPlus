@@ -8,6 +8,11 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
 
+/* :::: tabbar on buttom :::: */
+#TabsToolbar[tabbaronbuttom] {
+  background-image: none !important;
+}
+
 /***  For .tabs-closebutton .showhover ***/
 .tabbrowser-tabs .tabbrowser-tab .tabs-closebutton {
   margin-top: -5px !important; /* did not work without !important */

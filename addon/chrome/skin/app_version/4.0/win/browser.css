@@ -10,6 +10,11 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
 
+/* :::: tabbar on buttom :::: */
+#TabsToolbar[tabbaronbuttom] {
+  background-image: none !important;
+}
+
 /* increase the gap between tabs in multi-row */
 #main-window:not([tabsintitlebar]) #TabsToolbar:not([tabmix_aero]) > #tabbrowser-tabs[multibar] > .tabbrowser-tab {
  margin-bottom: 1px;
