@@ -1473,7 +1473,7 @@ var gTMPprefObserver = {
     Tabmix.setItem(tabsToolbar, "tabbaronbuttom", TabmixTabbar.position == 1 || null);
     if (TabmixTabbar.position == 1) {// bottom
       if (!bottomToolbox) {
-        bottomToolbox = document.createElement("hbox");
+        bottomToolbox = document.createElement("toolbox");
         bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
         bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
         if (navigator.oscpu.indexOf("Windows NT 6.1") == 0)
