@@ -1,5 +1,6 @@
-#TM_ButtonBox {
-  list-style-image: url(tmpoptions.png) !important;
+#TM_ButtonBox > radio[pane] {
+  list-style-image: url(tmpoptions.png);
+  padding: 5px 3px 1px;
 }
 #buttontabMixGeneralPrefs {
    -moz-image-region: rect(0px, 24px,  24px, 0px);
@@ -22,18 +23,13 @@
 #buttontabMixSessionPrefs {
    -moz-image-region: rect(0 24px 24px 0);
 }
-#buttontabMixSessionPrefs:hover {
-   -moz-image-region: rect(24px 24px 48px 0);
-}
 
 #buttonIncompatible {
   list-style-image: url("chrome://global/skin/icons/Error.png");
   -moz-image-region: auto; /* cut off inheritance */
-  width: 24px !important;
-  height: 24px !important;
 }
 
-#buttonIncompatible  image {
+radio[pane] > image {
   width: 24px !important;
   height: 24px !important;
 }
@@ -58,56 +54,6 @@ tabpanels#tabpanId tabbox {
 	padding-left: 0px !important;
 	padding-right: 0px !important;
 	margin: 0px !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox {
-	margin-bottom: 1px !important;
-	background: #EFEFEF !important;
-	border: none !important;
-	border-bottom: 1px solid ThreedShadow !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox button {
-    -moz-appearance: none !important;
-    max-width: 100% !important;
-    min-width: 0px !important;
-    height: auto !important;
-    margin: 1px !important;
-    border: none !important;
-    background-color: transparent !important;
-    background: none !important;
-    padding: 3px 3px 1px 3px !important;
-    color: #545454 !important;
-    font-weight: bold !important;
-    -moz-user-focus: none !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox button:hover {
-    background-color: #E0E8F6 !important;
-    border: none !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox button[checked="true"] {
-    background-color: #C1D2EE !important;
-    border: none !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox .button-box{
-    background: none !important;
-    padding: 3px 3px 1px 3px !important;
-}
-
-/*lets fix some themes, mainly charamel 1.2 */
-#pref-tabmix #TMBox #TM_ButtonBox button .button-endcap{
-background: none !important;
-padding-right: 0px !important;
-height: auto !important;
--moz-box-pack: start !important;
--moz-box-align: stretch !important;
-}
-
-#pref-tabmix #TMBox #TM_ButtonBox button .button-body{
-background: none !important;
 }
 
 .timelabel {

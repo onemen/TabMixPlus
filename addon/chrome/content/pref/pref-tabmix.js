@@ -24,6 +24,14 @@ function before_Init() {
   if (skin == "cfxec")
     document.getElementById("pref-tabmix").setAttribute("chromifox", true);
 
+  /* we don't need to fix tabpanels border in ubuntu */
+  if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1) {
+     let panels = document.documentElement.getElementsByAttribute("class" , "groupbox-panels");
+     for (let i = 0, num = panels.length; i < num; i++) {
+        panels[0].removeAttribute("class");
+     }
+  }
+
   gIncompatiblePane.checkForIncompatible(false);
 
   var cancelButton = document.documentElement.getButton("cancel");
@@ -854,6 +862,9 @@ function TM_enableApply(aEvent) {
 
    // only allow event from this item to go on....
    var n = item.localName;
+   if (n == "radio" && item.hasAttribute("pane"))
+      return;
+
    if (n != "radio" && n != "menuitem" &&
               n != "checkbox" && n != "textbox")
       return;
