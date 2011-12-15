@@ -1539,7 +1539,10 @@ var gTMPprefObserver = {
     }
 
     let tabsToolbar = document.getElementById("TabsToolbar");
-    let newHeight = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
+    // when we here after many tabs closed fast mTabstrip height can larger
+    // then one row.
+    let newHeight = TabmixTabbar.visibleRows == 1 ? TabmixTabbar.singleRowHeight :
+            gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
     if (this._bottomRect.height != newHeight) {
       this._bottomRect.height = newHeight;
       bottomToolbox.style.setProperty("height", newHeight + "px", "important");
