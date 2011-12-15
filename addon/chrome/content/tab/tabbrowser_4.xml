@@ -411,7 +411,8 @@
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
-          if (Tabmix.extensions.verticalTabBar || !this.visible && TabmixTabbar.visibleRows == 1)
+          if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
+              !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();

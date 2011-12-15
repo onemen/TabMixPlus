@@ -230,8 +230,12 @@ var TabmixTabbar = {
   },
 
   setHeight: function TMP_setHeight(aRows, aReset) {
-    var tabsPosition = this.getTabsPosition();
+    // don't do anything when the tabbar is hidden
+    // by Print preview or others...
+    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible)
+      return;
 
+    var tabsPosition = this.getTabsPosition();
     // need to reset height
     if (this._tabsPosition != tabsPosition) {
       aReset = true;
