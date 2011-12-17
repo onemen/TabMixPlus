@@ -596,7 +596,7 @@ var TabmixConvertSession = {
       var callBack = function (aResult) {
                   if (aResult.button == Tabmix.BUTTON_OK) {
                     setTimeout(function (a,b) {
-                      com.morac.gSessionManagerWindowObject.doTMPConvertFile(a,b);
+                      TabmixConvertSession.convertFile(a, b);
                     }, 0, null, true);
                   }
                  }
@@ -619,8 +619,11 @@ var TabmixConvertSession = {
       this.convertFile(fp.fileURL.spec);
    },
 
-   convertFile: function cs_convertFile(aFileUri) {
-      com.morac.gSessionManagerWindowObject.doTMPConvertFile(aFileUri);
+   convertFile: function cs_convertFile(aFileUri, aSilent) {
+      if (typeof com.morac.SessionManagerAddon == "object")
+        com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
+      else
+        com.morac.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
    },
 
    confirm: function cs_confirm(aMsg, aCallBack) {
