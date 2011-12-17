@@ -193,8 +193,8 @@ Tabmix.contentAreaClick = {
       'whereToOpenLink(event)',
       <![CDATA[
         $&
-        // don't change where if it is save, window, or we passed 
-        // event.__where = default from contentAreaClick or 
+        // don't change where if it is save, window, or we passed
+        // event.__where = default from contentAreaClick or
         // Tabmix.contentAreaClick.contentLinkClick
         if (event && event.__where && event.__where != "default" &&
             ["tab","tabshifted","current"].indexOf(where) != -1) {
@@ -338,22 +338,22 @@ Tabmix.contentAreaClick = {
 
     let targetAttr = this.getTargetAttr(linkNode);
 
-    // replace onclick function with the form javascript:top.location.href = url
-    // if the tab is locked or we force new tab from link
-    if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
-      let onclick = linkNode.getAttribute("onclick");
-      let code = "javascript:top.location.href="
-      if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
-        linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
-    }
-
     var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
     try {
       // for the moment just do it for Google and Yahoo....
       var blocked = /google|yahoo.com\/search/.test(currentHref);
     } catch (ex) {blocked = false;}
-    if (!blocked)
+    if (!blocked) {
+      // replace onclick function with the form javascript:top.location.href = url
+      // if the tab is locked or we force new tab from link
+      if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
+        let onclick = linkNode.getAttribute("onclick");
+        let code = "javascript:top.location.href="
+        if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
+          linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
+      }
       return;
+    }
 
     // don't do anything on mail.google or google.com/reader
     var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/www.google.com\/reader/.test(currentHref);
@@ -759,6 +759,9 @@ Tabmix.contentAreaClick = {
     if (!currentIsnGoogle)
       return false;
 
+    if (/calendar\/render/.test(location))
+      return true;
+
     if (/\/intl\/\D{2,}\/options\//.test(linkNode.pathname))
       return true;
 
@@ -909,7 +912,7 @@ Tabmix.contentAreaClick = {
     }
     return targetAttr;
   },
-  
+
   getHrefFromOnClick: function TMP_getHrefFromOnClick(event, href, linkNode, aCode) {
     if (this.checkAttr(href, "javascript") &&
         linkNode.hasAttribute("onclick")) {
