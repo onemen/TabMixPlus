@@ -9,7 +9,7 @@
 
       WE DON'T USE THIS IN TABMIX WE LEAVE IT HERE BECAUSE SOME THEME LOOKING FOR THIS
 -->
-  
+
   <binding id="browser-tab"
            extends="chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab"/>
 

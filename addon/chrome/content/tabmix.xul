@@ -35,7 +35,7 @@
     onload="TMP_TBP_Startup();" />
 
    <!-- Menu in Firefox App Menu -->
-   <vbox id="appmenuPrimaryPane"> 
+   <vbox id="appmenuPrimaryPane">
       <menu id="appmenu-sessionmanager" label="&session.Tools;" tmp_iconic="menu-iconic sessionmanager-icon" insertafter="appmenu_webDeveloper"
             onmouseover="TabmixSessionManager.clonePopupMenu(this);" sessionmanager-menu="true">
       </menu>

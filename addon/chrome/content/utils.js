@@ -71,7 +71,7 @@ Tabmix_ChangeCode.prototype = {
     if (this.name != null)
       Tabmix.show(this.name);
     else if (aObj && aName in aObj)
-      Tabmix.clog(aObj[aName].toString());    
+      Tabmix.clog(aObj[aName].toString());
   }
 
 }
@@ -194,7 +194,7 @@ this.log(aMethod)
 
 /*
   _nameFromComponentsStack: function (Cs) {
-    return Cs.name || 
+    return Cs.name ||
            Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
   },
 
@@ -217,7 +217,7 @@ this.log(aMethod)
       this.assert("no arguments in Tabmix.isCallerInList");
       return false;
     }
-    
+
     try {
       let callerName = Components.stack.caller.caller.name;
       if (!callerName)
@@ -277,7 +277,7 @@ options = {
   },
 
   assert: function TMP_utils_assert(aError, aMsg) {
-/*   
+/*
 XXX fix this when there is no stack go directly to trace
 */
     let names = this._getNames(1, aError.stack);
@@ -287,7 +287,7 @@ XXX fix this when there is no stack go directly to trace
     let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
     if (stackText)
       TabmixSvc.console.logStringMessage(assertionText + stackText);
-    else 
+    else
       this.trace(assertionText, 2);
   },
 
@@ -501,7 +501,7 @@ XXX fix this when there is no stack go directly to trace
       }
     }
   },
-  
+
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 

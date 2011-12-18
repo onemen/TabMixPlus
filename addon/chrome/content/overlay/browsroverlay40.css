@@ -151,7 +151,7 @@
   -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#toolbar") !important;
   position: fixed !important;
   -moz-appearance: none !important;
-/* look at browser.css for each platform 
+/* look at browser.css for each platform
   background-image: none !important;
 */
 }

@@ -377,7 +377,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
       'var loadInBackground',
       <![CDATA[
         if (where == "window") {
-          if (Tabmix.getSingleWindowMode()) 
+          if (Tabmix.getSingleWindowMode())
             where = "tab";
         }
         // we prevent sessionStore.duplicateTab from moving the tab

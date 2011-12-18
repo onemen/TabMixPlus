@@ -27,7 +27,9 @@ var TMP_LastTab = {
       item.setAttribute("_moz-menuactive", "true");
       TabmixAllTabs.updateMenuItemActive(null, item);
 
-      //moveTo() method introduces anomalies, e.g. hovering over location bar moves the popup; hiding	and showing the popup works better
+      // moveTo() method introduces anomalies,
+      // e.g. hovering over location bar moves the popup
+      // hiding and showing the popup works better
       x = -element.boxObject.screenX;
       y = 10000;
       tablist.showPopup(element, x, y, "popup", null, null); //show offscreen to get popup measurements

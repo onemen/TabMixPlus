@@ -180,7 +180,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var loadInBackground  = replaceLastTab ? false : TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");
    gBrowser.TMP_selectNewForegroundTab(newTab, loadInBackground);
    // make sure to update recently used tabs
-   // if user open many tabs quickly select event don't have time to fire 
+   // if user open many tabs quickly select event don't have time to fire
    // before new tab select
    if (!loadInBackground)
      TMP_LastTab.PushSelectedTab();

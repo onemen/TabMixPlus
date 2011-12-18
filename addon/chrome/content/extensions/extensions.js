@@ -140,7 +140,7 @@ var TMP_extensionsCompatibility = {
       Tabmix.extensions.verticalTabs = true;
       Tabmix.extensions.verticalTabBar = true;
     }
-    
+
     // Look for RSS/Atom News Reader
     if ("gotoLink" in window)
       this.wizzrss.init();

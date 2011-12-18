@@ -54,7 +54,7 @@
         document.getElementById('fixedLabel').value = window.arguments[0].docTitle;
         window.arguments[0].resetTitle = true;
         apply();
-	  }
+    }
 
     function setRename_all(checked) {
         document.getElementById('rename_all').disabled = checked;

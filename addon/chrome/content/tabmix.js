@@ -710,7 +710,7 @@ var TMP_eventListener = {
     }
 
     // when browser.tabs.animate is true gBrowser._endRemoveTab calls
-    // onTabClose_updateTabBar. 
+    // onTabClose_updateTabBar.
     // we would like to get early respond when row height is going to change.
     var updateNow = !TabmixSvc.prefs.getBoolPref("browser.tabs.animate");
     if (!updateNow && tabBar.hasAttribute("multibar")) {

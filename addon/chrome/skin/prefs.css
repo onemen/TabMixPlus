@@ -39,21 +39,21 @@ radio[pane] > image {
 }
 
 tabpanels#tabpanId {
-	-moz-appearance: none !important;
-	margin: 0px !important;
-	padding: 1px !important;
-	border: none !important;
+  -moz-appearance: none !important;
+  margin: 0px !important;
+  padding: 1px !important;
+  border: none !important;
 }
 
 tabpanels#tabpanId tabbox {
-	padding: 0px 1px !important;
+  padding: 0px 1px !important;
 }
 
 #pref-tabmix {
-	padding-top: 0px !important;
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-	margin: 0px !important;
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  margin: 0px !important;
 }
 
 .timelabel {

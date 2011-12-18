@@ -845,9 +845,9 @@ Tabmix.contentAreaClick = {
  /**
   * @brief Check for certain JavaScript strings inside an attribute.
   *
-  * @param attr			The attribute to check.
-  * @param string		The string to check for.
-  * @returns			true if the strings are present, false if they aren't.
+  * @param attr     The attribute to check.
+  * @param string   The string to check for.
+  * @returns        true if the strings are present, false if they aren't.
   *
   */
   checkAttr: function TMP_checkAttr(attr, string) {
@@ -858,9 +858,9 @@ Tabmix.contentAreaClick = {
  /**
   * @brief Check if link refers to external domain.
   *
-  * @param target  The target link.
-  * @param curpage  The current page url
-  * @returns       current domain and target domain
+  * @param target    The target link.
+  * @param curpage   The current page url
+  * @returns         current domain and target domain
   *
   */
   checkDomain: function TMP_checkDomain(curpage, target) {

@@ -78,7 +78,7 @@
       <tabpanel orient="vertical">
         <tabbox flex="1">
           <tabs class="tabs-hidden">
-	    <!-- dummy label for Ubuntu default theme -->
+            <!-- dummy label for Ubuntu default theme -->
             <tab label="tab"/>
             <tab label="tab"/>
           </tabs>
