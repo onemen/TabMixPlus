@@ -74,7 +74,8 @@
   visibility: visible;
 }
 
-#TabsToolbar:not([disAllowNewtabbutton]):not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
+/* In vertical tabbar the default rules from chrome://browser/content/browser.css are sufficient */
+#TabsToolbar:not([orient="vertical"]):not([disAllowNewtabbutton]):not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
 #TabsToolbar[newTabButton=false] > #new-tab-button {
   visibility: collapse;
 }
