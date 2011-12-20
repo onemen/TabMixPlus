@@ -453,9 +453,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
       Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsPreInit",
           TreeStyleTabWindowHelper.overrideExtensionsPreInit)._replace(
-        // fix typo in TST
+        // fix typo in TST - this typo fixed on TST 0.13.2011121501
         'SessionData.tabTSTProperties',
-        'sessionData.tabTSTProperties'
+        'sessionData.tabTSTProperties', {silent: true}
       )._replace(
         // TST look for DEPRECATED gBrowser.restoreTab in tablib.init
         'source[1].replace',
