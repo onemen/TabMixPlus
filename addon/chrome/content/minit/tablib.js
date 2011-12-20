@@ -136,6 +136,11 @@ var tablib = {
        } \
        $&'
     )._replace(
+      // we call focusAndSelectUrlBar from Tabmix.clearUrlBar
+      // see TMP_BrowserOpenTab
+      'if (aNewTab)',
+      'if (false && aNewTab)'
+    )._replace(
       'this.tabContainer.adjustTabstrip();',
       'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
        $&'

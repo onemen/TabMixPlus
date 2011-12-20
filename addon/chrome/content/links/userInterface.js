@@ -186,7 +186,10 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
      TMP_LastTab.PushSelectedTab();
 
    // focus the address bar on new tab
-   if (TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") || loadBlank)
+   var clearUrlBar = !replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") ||
+       replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
+       loadBlank;
+   if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url);
 
    return newTab;

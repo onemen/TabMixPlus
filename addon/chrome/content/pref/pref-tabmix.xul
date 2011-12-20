@@ -362,6 +362,8 @@
                           type="autocomplete" autocompletesearch="history"
                           prefstring="extensions.tabmix.newTabUrl_afterLastTab" />
               </hbox>
+              <checkbox class="indent" align="center" id="selectLocationBar.afterLastTabClosed" label="&focusContent.label;"
+                        prefstring="extensions.tabmix.selectLocationBar.afterLastTabClosed" inverted="true"/>
             </vbox>
           </groupbox>
           <groupbox flex="1">
