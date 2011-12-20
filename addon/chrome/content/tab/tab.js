@@ -1844,8 +1844,12 @@ var TabmixProgressListener = {
         if (tab.hasAttribute("dontremovevisited"))
           tab.removeAttribute("dontremovevisited")
 
-        if (!tab.hasAttribute("busy"))
+        if (!tab.hasAttribute("busy")) {
           TabmixSessionManager.tabLoaded(tab);
+          // we need to remove width from tabs with url label from here
+          if (tab.hasAttribute("width"))
+            tablib.onTabTitleChanged(tab);
+        }
         if (aRequest.QueryInterface(Ci.nsIChannel).URI.spec != "about:blank")
            aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
       }
