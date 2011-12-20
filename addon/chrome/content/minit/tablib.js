@@ -25,7 +25,6 @@ var tablib = {
         var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);
         var isLockedTab = tab.hasAttribute("locked");
         if (!allowLoad && !isBlankTab && isLockedTab) {
-Tabmix.log("loadURIWithFlags open new tab", true);
           var newTab = tabbrowser.addTab();
           tabbrowser.selectedTab = newTab;
           var browser = newTab.linkedBrowser;
@@ -898,7 +897,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
               this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
-            this.removeTab(childNodes[i], {animate: true});
+            this.removeTab(childNodes[i]);
         }
         if (!aTab.pinned) {
           this.removeTab(aTab, {animate: true});
@@ -933,7 +932,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
 
         for (var i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
-            this.removeTab(childNodes[i], {animate: true});
+            this.removeTab(childNodes[i]);
         }
       }
     }
@@ -952,7 +951,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
 
         for (var i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
-            this.removeTab(childNodes[i], {animate: true});
+            this.removeTab(childNodes[i]);
         }
       }
     }
@@ -970,7 +969,7 @@ Tabmix.log("loadURIWithFlags open new tab", true);
           this.tabContainer.updateVerticalTabStrip(true)
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
-            this.removeTab(childNodes[i], {animate: true});
+            this.removeTab(childNodes[i]);
         }
       }
     }
