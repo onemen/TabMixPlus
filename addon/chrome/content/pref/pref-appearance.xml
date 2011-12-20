@@ -286,7 +286,8 @@
   </binding>
 
   <binding id="tabmix-rgbcontrol">
-    <content>
+    <content align="center">
+        <xul:label value="[RGB]:"/>
         <xul:textbox anonid="red" class="rgbcontrol" xbl:inherits="disabled"
                      maxlength="3" size="1" type="number" min="0" max="255"/>
         <xul:textbox anonid="green" class="rgbcontrol" xbl:inherits="disabled"

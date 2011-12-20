@@ -1209,9 +1209,10 @@ var gTMPprefObserver = {
       else
         return null;
 
-      var opacity = newRGB[3];
-      if (aOpacity != null || opacity == null || opacity < 0 || opacity > 1)
-        newRGB[3] = aOpacity || 1;
+      if (aOpacity != null)
+        newRGB[3] = aOpacity;
+      else if (newRGB[3] == null || newRGB[3] < 0 || newRGB[3] > 1)
+        newRGB[3] = 1;
       return "rgba(" + newRGB.join(",") + ")";
     }
 
