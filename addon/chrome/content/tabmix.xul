@@ -100,9 +100,8 @@
    </menupopup>
 
     <popup id="contentAreaContextMenu">
-      <menuitem id="tm-openlinkhere" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
-         insertbefore="context-openlinkintab"
-         oncommand="gBrowser.openHereWith();"/>
+      <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
+                oncommand="gBrowser.mCurrentBrowser.tabmix_allowLoad = true; gContextMenu.openLinkInCurrent();"/>
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"

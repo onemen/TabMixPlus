@@ -259,12 +259,6 @@ var TabmixContext = {
     tabContextMenu.insertBefore(reloadAll, document.getElementById("context_reloadTab").nextSibling);
     // move context_closeOtherTabs to the place it was before Fireofox 4.0
     tabContextMenu.insertBefore(closeOther, reloadAll.nextSibling);
-    // from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent in contentAreaContextMenu
-    // move our menu to that position
-    let openLinkInCurrent = document.getElementById("context-openlinkincurrent");
-    let tabmix_menu = document.getElementById("tm-openlinkhere");
-    openLinkInCurrent.parentNode.insertBefore(tabmix_menu, openLinkInCurrent);
-
     if (!document.getElementById("context_bookmarkTab")) {
       // in firefox 4.0 context_bookmarkTab was removed
       let bookmarkTab = document.createElement("menuitem");
@@ -582,14 +576,9 @@ var TabmixContext = {
       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
       * Firefox only show this menu when the selection text is url see Bug 454518
       * we cahck if gContextMenu.linkURL contain URL
-
-      * we can remove this menu in tabmix.js but it is safer to just hide it each time
-      * the label for this menu is "Open Link"
-      * we use our own menu "Open Link in This Tab"
       */
-      Tabmix.showItem("context-openlinkincurrent", false);
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
-      Tabmix.showItem("tm-openlinkhere", TabmixSvc.TMPprefs.getBoolPref("openLinkHere") && onLink);
+      Tabmix.showItem("context-openlinkincurrent", TabmixSvc.TMPprefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
       Tabmix.showItem(inverseLink, TabmixSvc.TMPprefs.getBoolPref("openInverseLink") && onLink);
       if (!inverseLink.hidden){

@@ -832,15 +832,6 @@ var tablib = {
       return newTab;
     }
 
-    gBrowser.openHereWith = function () {
-      var url = gContextMenu.linkURL;
-      if (!isValidUrl(url))
-         return;
-
-      this.mCurrentBrowser.tabmix_allowLoad = true;
-      openUILinkIn(gContextMenu.linkURL, "current", null, null, gContextMenu.target.ownerDocument.documentURIObject);
-    }
-
     gBrowser.openInverseLink = function () {
       var url = gContextMenu.linkURL;
       if (!isValidUrl(url))
