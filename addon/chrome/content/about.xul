@@ -20,14 +20,14 @@
   <![CDATA[
     function init() {
       var addon = window.arguments[0];
-      updateLabels(addon, true)
+      updateLabels(addon)
     }
 
-    function updateLabels(extensions, aFirefox4) {
+    function updateLabels(extensions) {
       var extensionsStrings = document.getElementById("extensionsStrings");
       document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);
       try {
-        var currentVersion = aFirefox4 ? extensions.version : extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
+        var currentVersion = extensions.version;
         var extensionVersion = document.getElementById("extensionVersion");
         extensionVersion.value = extensionsStrings.getFormattedString("aboutWindowVersionString", [currentVersion]);
       } catch(er) {
@@ -37,8 +37,7 @@
       acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
       var descriptionString =  document.getElementById("descriptionString");
       var extensionDescription = document.getElementById("extensionDescription");
-      extensionDescription.value = aFirefox4 ? extensions.description :
-           descriptionString.getString('extensions.{dc572301-7619-498c-a57d-39143191b318}.description');
+      extensionDescription.value = extensions.description;
     }
   ]]>
   </script>
