@@ -378,7 +378,7 @@ var tablib = {
     gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
 
     Tabmix.newCode("duplicateTabIn", duplicateTabIn)._replace(
-      'var loadInBackground',
+      'switch (where)',
       <![CDATA[
         if (where == "window") {
           if (Tabmix.getSingleWindowMode())
@@ -393,7 +393,14 @@ var tablib = {
       ]]>
     )._replace(
       'browser.tabs.loadBookmarksInBackground',
-      'extensions.tabmix.loadDuplicateInBackground'
+      'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(120)}
+    )._replace(
+      'gBrowser.selectedTab = newTab;',
+      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(120)}
+    )._replace(
+      'case "tabshifted":',
+      '$&\
+       if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(120)}
     ).toCode();
 
     Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(

@@ -150,7 +150,10 @@ var TMP_Places = {
          if (bookMarkId) newWin.bookMarkIds = bookMarkId;'
       )._replace(
         '"browser.tabs.loadBookmarksInBackground"',
-        'backgroundPref || $&'
+        'backgroundPref || $&', {check: !Tabmix.isVersion(120)}
+      )._replace( // we probably don't need this since Firefox 10
+        'aFromChrome ?',
+        '$& getBoolPref(backgroundPref) ||', {check: Tabmix.isVersion(120)}
       )._replace(
         _loadURI,
         '$&\
@@ -176,7 +179,7 @@ var TMP_Places = {
       }
    },
 
-   functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "openNodeIn"],
+   functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "_openNodeIn"],
    initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(forceInit) {
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       // we enter getURLsForContainerNode into TMP_Places to prevent leakes from PlacesUtils
@@ -197,7 +200,6 @@ var TMP_Places = {
          PlacesUIUtils.tabmix_inited = 1;
       }
       this._first_instance = true;
-      this.functions[4] = "_openNodeIn"
       this.functions.forEach(function(aFn) {
         PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
       });
@@ -264,11 +266,11 @@ var TMP_Places = {
       // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
       // we disable the open menu when the tab is lock
       // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-      Tabmix.newCode("PlacesUIUtils." + this.functions[4], PlacesUIUtils[this.functions[4]])._replace(
+      Tabmix.newCode("PlacesUIUtils._openNodeIn", PlacesUIUtils._openNodeIn)._replace(
         /(function[^\(]*\([^\)]+)(\))/,
         '$1, TMP_Event$2'
       )._replace(
-        'aWindow.openUILinkIn(aNode.uri, aWhere);',
+        'aWindow.openUILinkIn',
         'if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" : '
                      + 'aWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere); \
          else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\
@@ -276,8 +278,16 @@ var TMP_Places = {
            if (caller != "PC_doCommand")\
              aWhere = aWindow.TMP_Places.fixWhereToOpen(null, aWhere);\
          }\
-         if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +
-         'aWindow.openUILinkIn(aNode.uri, aWhere, null, null, null, {bookMarkId: aNode.itemId});'
+         if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
+         $&'
+      )._replace(
+        'aWindow.openUILinkIn(aNode.uri, aWhere);',
+        'aWindow.openUILinkIn(aNode.uri, aWhere, null, null, null, {bookMarkId: aNode.itemId});',
+        {check: !Tabmix.isVersion(120)}
+      )._replace(
+        'inBackground:',
+        'bookMarkId: aNode.itemId,\
+         $&', {check: Tabmix.isVersion(120)}
       ).toCode();
    },
 
@@ -370,7 +380,9 @@ var TMP_Places = {
      var where = this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent), this.prefBookmark);
      if (where == "current")
        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-     openUILinkIn(aUrl, where);
+     openUILinkIn(aUrl, where, {
+        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+     });
    },
 
    // we replace HistoryMenu.prototype._onCommand with this function
@@ -383,7 +395,9 @@ var TMP_Places = {
                       this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
          if (where == "current")
            Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-         openUILinkIn(node.uri, where);
+         openUILinkIn(node.uri, where, {
+           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+         });
       }
    },
 
