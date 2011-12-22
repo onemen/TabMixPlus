@@ -921,9 +921,6 @@ var TabmixAllTabs = {
         break;
     }
 
-    if (!popup.style.getPropertyValue("max-height"))
-      popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
-
     if (this._selectedItem)
       popup.addEventListener("popupshown", this, false);
   },
