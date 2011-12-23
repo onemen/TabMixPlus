@@ -1,18 +1,3 @@
 syntax: glob
-*òåú÷*.*
-modules/sessions/*.*
-modules/Utils.jsm
-modules/ChangeCode.jsm
-chrome/skin/app_version/4.0/dynamic.css
-chrome/content/ýmodules.lnk
-chrome/content/session/sessionsMenuOverlay.xul
-chrome/content/private/*.*
-chrome/content/preferences/*.*
-chrome/content/pref/options.xul
-chrome/content/overlay/tabContextMenu.xul
-chrome/content/overlay/stylesheet.txt
-chrome/content/links/contentLinks_old.js
-chrome/content/minit/TabmixDragAndDrop.js
-test.manifest
 license.txt
 icon.png
