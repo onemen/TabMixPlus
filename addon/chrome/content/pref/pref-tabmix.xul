@@ -544,7 +544,7 @@
                 <textbox id="maxrow" size="2" maxlength="2" prefstring="extensions.tabmix.tabBarMaxRow" type="number" min="2"/>
               </hbox>
               <checkbox id="smoothScroll" label="&smoothScroll.label;" prefstring="toolkit.scrollbox.smoothScroll"
-                        inverseDependency="true" TSTdisabled="true"/>
+                        inverseDependency="true"/>
               <hbox align="center" id="clickToScroll.scrollDelay">
                 <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
                 <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"

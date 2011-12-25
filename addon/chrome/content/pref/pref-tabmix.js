@@ -74,6 +74,7 @@ function TM_EMinit() {
     TM_Options.setItem("tabBarPosition", "disabled", true);
     TM_Options.setItem("tabScroll", "disabled", true);
     TM_Options.setItem("scrollDelay", "disabled", true);
+    TM_Options.setItem("smoothScroll", "disabled", true);
   }
 
   // Init tabclicking options
