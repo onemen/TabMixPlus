@@ -86,23 +86,16 @@
 .tab-icon:not([fadein]):not([pinned]) > .tab-lock-icon,
 .tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon,
 .tab-text-stack:not([fadein]):not([pinned]) > .tabs-closebutton {
-  opacity: 0 !important;
+   display: none !important;
 }
 
-.tab-progress-container > .tab-progress,
-.tab-icon > .tab-protect-icon,
-.tab-icon > .tab-lock-icon,
-.tab-icon > .tab-reload-icon,
-.tab-text-stack > .tabs-closebutton {
-  -moz-transition: opacity 250ms;
+.tabbrowser-tab:not([fadein]):not([pinned]) {
+  border: none;
 }
 
 /*** backword compatibility with theme that still use old tabmix tab binding ***/
 .tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
-  opacity: 0 !important;
-}
-.tab-text-stack > .tab-progress {
-  -moz-transition: opacity 250ms;
+  display: none !important;
 }
 
 /***  Pinned Tab  ***/
@@ -121,7 +114,6 @@
 
 /***  For progressmeter on tab Firefox 4.0+  ***/
 .tab-progress {
-  -moz-transition: opacity 250ms;
   margin: 0;
   min-width: 0;
 }
