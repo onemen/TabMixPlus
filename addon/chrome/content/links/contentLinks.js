@@ -721,13 +721,14 @@ Tabmix.contentAreaClick = {
     if (href)
       href = href.toLowerCase();
 
-    // we replcae in contentLinkClick the onclick javascript:top.location.href = url
-    // with var __tabmix.href = url
-    if (this.getHrefFromOnClick(event, href, linkNode, "var __tabmix.href="))
-      return "tab";
-
     if (linkNode.hasAttribute("onclick"))
       onclick = linkNode.getAttribute("onclick");
+
+    // we replcae in contentLinkClick the onclick javascript:top.location.href = url
+    // with var __tabmix.href = url
+    if (this.checkAttr(onclick, "var __tabmix.href=") &&
+        this.getHrefFromOnClick(event, href, linkNode, "var __tabmix.href="))
+      return "tab";
 
     if (this.checkAttr(href, "javascript:") ||
         this.checkAttr(href, "data:") ||
