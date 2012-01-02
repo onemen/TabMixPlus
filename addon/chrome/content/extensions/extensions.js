@@ -133,6 +133,44 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/bug489729-disable-detach-and-t//
     // we don't need to do any changes to bug489729 extension version 1.6+
 
+
+    // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
+    if ("foxTab" in window) {
+      let loadNewInBackground = '$& var loadNewInBackground = TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");';
+      let newCode = <![CDATA[
+        if (TabmixSvc.TMPprefs.getBoolPref("openNewTabNext"))
+          f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);
+        if (!loadNewInBackground) {
+          f.gBrowser.TMP_selectNewForegroundTab(newTab, false);
+          TMP_LastTab.PushSelectedTab();
+        }
+      ]]>
+      if (typeof(foxTab.openNewTab) == "function") {
+        Tabmix.newCode("foxTab.openNewTab", foxTab.openNewTab)._replace(
+          '{', loadNewInBackground
+        )._replace(
+          'f.isFlashOpen',
+          'f.isFlashOpen && !loadNewInBackground'
+        )._replace(
+          'f.disableTabSelectedNewTab = true;',
+          'f.disableTabSelectedNewTab = !loadNewInBackground;'
+        )._replace(
+          'f.gBrowser.selectedTab = newTab', newCode
+        )._replace(
+          'f.addBrowserListener(f.gBrowser.selectedBrowser);',
+          'if( !loadNewInBackground) $&'
+        ).toCode();
+      }
+      if (typeof(foxTab.showNewTabMessage) == "function") {
+        Tabmix.newCode("foxTab.showNewTabMessage", foxTab.showNewTabMessage)._replace(
+          '{', loadNewInBackground
+        )._replace(
+          'f.gBrowser.selectedTab = newTab', newCode
+        ).toCode();
+      }
+      window.BrowserOpenTab = TMP_BrowserOpenTab;
+      foxTab.defaultBrowserOpenTab = TMP_BrowserOpenTab;
+    }
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
