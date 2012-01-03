@@ -463,6 +463,15 @@ var TMP_eventListener = {
       gTMPprefObserver.createColorRules();
     } catch (ex) {Tabmix.assert(ex);}
 
+   /*
+    * We add minheight to the tab bar to prevent it from shrinking when we
+    * enter/exit private browsing without new tab button after tabs and animation on.
+    * The last tab is removed before the new tab is fully visible, so the tab
+    * bar height is drop below normal height.
+    */
+    var tabsToolbar = document.getElementById("TabsToolbar");
+    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
+
     var position = TabmixSvc.TMPprefs.getIntPref("newTabButton.position");
     gTMPprefObserver.changeNewTabButtonSide(position);
     TMP_ClosedTabs.setButtonType(TabmixSvc.TMPprefs.getBoolPref("undoCloseButton.menuonly"));

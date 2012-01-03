@@ -417,7 +417,7 @@
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
           // this.lastTabRowNumber is null when we hide the tabbar
-          let rows = aReset ? 1 : (this.lastTabRowNumber || 1);
+          let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
           let currentRows = TabmixTabbar.visibleRows;
 
           let currentMultibar = this.getAttribute("multibar") || null;
