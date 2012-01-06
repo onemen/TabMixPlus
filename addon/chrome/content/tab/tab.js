@@ -140,7 +140,7 @@ var TabmixTabbar = {
     showNewTabButton =  showNewTabButton && newTabButton && newTabButton.parentNode == toolBar;
     Tabmix.setItem("TabsToolbar", "newTabButton", showNewTabButton || false);
     Tabmix.setItem(tabBar, "tabBarSpace", TabmixSvc.TMPprefs.getBoolPref("tabBarSpace") || null);
-    tabBar._checkNewtabButtonvisibility = isMultiRow && showNewTabButton && TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2;
+    tabBar._checkNewtabButtonVisibility = isMultiRow && showNewTabButton && TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2;
 
     var self = this;
     if (start)
