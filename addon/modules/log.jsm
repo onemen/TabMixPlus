@@ -29,7 +29,7 @@ var _log = {
       var self = this;
       var logMethod = function () {
         let result = self.getObject(aMethod, rootID).toString();
-        self.msg(aMethod + " = " + result);
+        self.log(aMethod + " = " + result);
         if (self.timer) {
           self.timer.cancel();
           self.timer = null;
@@ -50,7 +50,7 @@ var _log = {
     TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
-  msg: function TMP_log_msg(aMessage, aShowCaller, offset) {
+  log: function TMP_log_log(aMessage, aShowCaller, offset) {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
@@ -160,17 +160,24 @@ var _log = {
   },
 
   assert: function TMP_log_assert(aError, aMsg) {
+/*
+XXX fix this when there is no stack go directly to trace
+*/
     let names = this._getNames(1, aError.stack);
     let errAt = " at " + names[0];
-    let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError + "\n";
-    let stackText = "stack" in aError ? "Stack Trace: \n" + aError.stack : "";
-    TabmixSvc.console.logStringMessage(assertionText + stackText);
+    let location = aError.location ? "\n" + aError.location : "";
+    let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
+    let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
+    if (stackText)
+      TabmixSvc.console.logStringMessage(assertionText + stackText);
+    else
+      this.trace(assertionText, 2);
   },
 
-  trace: function(aMsg) {
+  trace: function(aMsg, slice) {
     // cut off the first line of the stack trace, because that's just this function.
-    let stack = Error().stack.split("\n").slice(1);
+    let stack = Error().stack.split("\n").slice(slice || 1);
 
-    TabmixSvc.console.logStringMessage("Tabmix Trace: " + aMsg + '\n' + stack.join("\n"));
+    TabmixSvc.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   }
 }
