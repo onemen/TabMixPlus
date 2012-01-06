@@ -423,8 +423,40 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    // we allow to detach this tab
-    // we don't stop event propagation to let Firefox code run
+    // we copy this code from gBrowser.tabContainer dragend handler
+    // for the case tabbar is on the bottom
+    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+    // screen.availLeft et. al. only check the screen that this window is on,
+    // but we want to look at the screen the tab is being dropped onto.
+    var sX = {}, sY = {}, sWidth = {}, sHeight = {};
+    Cc["@mozilla.org/gfx/screenmanager;1"]
+      .getService(Ci.nsIScreenManager)
+      .screenForRect(eX, eY, 1, 1)
+      .GetAvailRect(sX, sY, sWidth, sHeight);
+    // ensure new window entirely within screen
+    var winWidth = Math.min(window.outerWidth, sWidth.value);
+    var winHeight = Math.min(window.outerHeight, sHeight.value);
+    var left = Math.min(Math.max(eX - draggedTab._dragOffsetX, sX.value),
+                          sX.value + sWidth.value - winWidth);
+    var top = Math.min(Math.max(eY - draggedTab._dragOffsetY, sY.value),
+                        sY.value + sHeight.value - winHeight);
+
+    delete draggedTab._dragOffsetX;
+    delete draggedTab._dragOffsetY;
+
+    if (gBrowser.tabs.length == 1) {
+      // resize _before_ move to ensure the window fits the new screen.  if
+      // the window is too large for its screen, the window manager may do
+      // automatic repositioning.
+      window.resizeTo(winWidth, winHeight);
+      window.moveTo(left, top);
+      window.focus();
+    } else {
+      gBrowser.replaceTabWithWindow(draggedTab, {screenX: left,
+                                                 screenY: top,
+                                                });
+    }
+    aEvent.stopPropagation();
   },
 
   onDragExit: function minit_onDragExit(event) {
