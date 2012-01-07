@@ -71,13 +71,11 @@
           else
             checked = this._initUseThisPref.prefvalue;
 
-          if (this.id == "progressMeter")
-            this._getElementById("useThis").setAttribute("disabled" , true);
-
-          this._getElementById("useThis").checked = checked;
+          var useThis = this._getElementById("useThis");
+          useThis.checked = checked;
           this.disabled = !checked;
 
-          this._getElementById("useThis").nextSibling.value = document.getElementById("_" + this.id).label;
+          useThis.nextSibling.value = document.getElementById("_" + this.id).label;
           // colorpicker need some time untile its ready
           window.setTimeout( function(self) {self._getPrefs(self._initPrefValues);}, 0, this)
         ]]>
