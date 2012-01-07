@@ -920,6 +920,16 @@ var gTMPprefObserver = {
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
     let index = ss.insertRule(marginStart, ss.cssRules.length);
     this.dynamicRules["tabmix-firstTabInRow"] = ss.cssRules[index];
+
+    // for ColorfulTabs 8.0+
+    if (typeof colorfulTabs == "object") {
+      let newTab = gBrowser.addTab("about:blank");
+      let padding = parseInt(window.getComputedStyle(newTab, null).paddingBottom) || 0;
+      let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
+                    ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
+      ss.insertRule(newRule, ss.cssRules.length);
+      gBrowser.removeTab(newTab);
+    }
   },
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
