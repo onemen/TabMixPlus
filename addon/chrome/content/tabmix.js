@@ -10,15 +10,17 @@ Tabmix.startup = function TMP_startup() {
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  // multi-rows total heights are diffrent when tabs on top
-  // since this is not trigger any other event that we can listen to
-  // we force to add here a call to reset tabbar height
-  TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
-  TabsOnTop.toggle = function TabsOnTop_toggle() {
-    this.tabmix_originaltoggle.apply(this, arguments);
-    if (TabmixTabbar.visibleRows > 1) {
-      TabmixTabbar.setHeight(1, true);
-      gBrowser.tabContainer.updateVerticalTabStrip();
+  if (Tabmix.isVersion(120)) {
+    // multi-rows total heights can be diffrent when tabs are on top
+    // since this is not trigger any other event that we can listen to
+    // we force to add here a call to reset tabbar height
+    TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
+    TabsOnTop.toggle = function TabsOnTop_toggle() {
+      this.tabmix_originaltoggle.apply(this, arguments);
+      if (TabmixTabbar.visibleRows > 1) {
+        TabmixTabbar.setHeight(1, true);
+        gBrowser.tabContainer.updateVerticalTabStrip();
+      }
     }
   }
 

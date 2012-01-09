@@ -477,6 +477,9 @@ var gTMPprefObserver = {
     if ("TreeStyleTabBrowser" in window)
       this.OBSERVING.push("extensions.treestyletab.tabbar.position");
 
+    if (Tabmix.isVersion(120))
+      this.OBSERVING.push("browser.tabs.onTop");
+
     try {
       // add Observer
       for (var i = 0; i < this.OBSERVING.length; ++i)
@@ -805,6 +808,13 @@ var gTMPprefObserver = {
               tabBar.overflow = true;
           }
           TabmixTabbar.updateBeforeAndAfter();
+        break;
+      case "browser.tabs.onTop":
+        // multi-rows total heights can be diffrent when tabs are on top
+        if (TabmixTabbar.visibleRows > 1) {
+          TabmixTabbar.setHeight(1, true);
+          gBrowser.tabContainer.updateVerticalTabStrip();
+        }
         break;
       default:
         TabmixTabbar.updateSettings(false);
