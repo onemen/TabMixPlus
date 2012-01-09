@@ -608,14 +608,28 @@ var TMP_eventListener = {
           $&]]>
         ).toCode();
 
-        Tabmix.newCode("FullScreen._animateUp", FullScreen._animateUp)._replace(
-          'gNavToolbox.style.marginTop = animateFrameAmount',
-          'if (TabmixTabbar.position == 1) {\
-             let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");\
-             bottomToolbox.style.marginBottom = (animateFrameAmount * -1) + "px";\
-           }\
-           $&'
-        ).toCode();
+        if (Tabmix.isVersion(120)) {
+          Tabmix.newCode("FullScreen.sample", FullScreen.sample)._replace(
+            'gNavToolbox.style.marginTop = "";',
+            'TMP_eventListener._updateMarginBottom("");\
+             $&'
+          )._replace(
+            'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
+            '$&\
+             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
+          ).toCode();
+        }
+        else {
+          Tabmix.newCode("FullScreen._animateUp", FullScreen._animateUp)._replace(
+            'gNavToolbox.style.marginTop = "";',
+            'TMP_eventListener._updateMarginBottom("");\
+             $&'
+          )._replace(
+            'gNavToolbox.style.marginTop = animateFrameAmount * -1 + "px";',
+            '$&\
+             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
+          ).toCode();
+        }
 
         if (Tabmix.isVersion(100)) {
           Tabmix.newCode("FullScreen.enterDomFullScreen", FullScreen.enterDomFullScreen)._replace(
@@ -637,9 +651,17 @@ var TMP_eventListener = {
       }
     }
     else if (fullScrToggler && fullScreen) {
+      this._updateMarginBottom("");
       fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
+    }
+  },
+
+  _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
+    if (TabmixTabbar.position == 1) {
+      let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+      bottomToolbox.style.marginBottom = aMargin;
     }
   },
 
