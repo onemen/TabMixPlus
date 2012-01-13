@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Barra de ferramentas">
 <!ENTITY show.ontabbar.label "Mostrar na barra de abas">
 <!ENTITY show.ontab.label "Mostrar na aba">
-<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Botão &quot;Fechar Aba&quot;">
 <!ENTITY newTabButton.label "Botão &quot;Nova Aba&quot;">
 <!ENTITY newTabButton.posiotion.left.label "Lado esquerdo">

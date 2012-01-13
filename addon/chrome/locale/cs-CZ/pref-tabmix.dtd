@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Otevírat všechna vyskakovací okna do panelů">
 <!ENTITY divertedWindowOpen.some "Povolit vyskakovací okna neměnící velikost">
 <!ENTITY divertedWindowOpen.none "Povolit vyskakovací okna">
-<!ENTITY linkTarget.label "Odkazy s atributem 'target' otevřít do současného panelu">
+<!ENTITY linkTarget.label "Odkazy s atributem &apos;target&apos; otevřít do současného panelu">
 <!ENTITY download.label "Neotevírat prázdný panel při stahování souborů">
 <!ENTITY edit.label "Úpravy">
 <!ENTITY speLink.label "Vždy otevřít v novém panelu:">
@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavný styl">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Chcete-li kontrolovat tyto předvolby, použijte rozšíření treeStyleTab nebo VerticalTab.">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
 <!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
 <!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvný s tlačítky nalevo">
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
 <!ENTITY highlight.label "Zvýraznit:">
 <!ENTITY currenttab.style.label "Současný panel">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Pomocí skrolování nazpátek přepínat doprava">
 <!ENTITY clickFocus.label "Klepnutí myší okamžitě vybere panel">
 <!ENTITY removeEntries.label "Pomocí prostředního tlačítka odebrat položky seznamu v menu Tab Mix Plus">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Neměnit velikost ostatních panelů při zavírání panelu, dokud je kurzor v oblasti panelu nástrojů.">
 <!ENTITY removeEntries.tooltip "Včetně zavřených panelů, oken a uložených relací">
 <!ENTITY double.label "Dvojklepnutí">
 <!ENTITY middle.label "Prostřední tlačítko">

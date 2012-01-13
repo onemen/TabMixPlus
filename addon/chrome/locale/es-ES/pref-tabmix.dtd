@@ -107,7 +107,7 @@
 <!ENTITY mergePopups.label "También fusionar ventanas emergentes">
 <!ENTITY popupNextToOpener.label "Situar las ventanas emergentes junto a las de apertura">
 <!ENTITY slideshow.label "Pulsando F8 las pestañas rotan cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de &quot;Recargar cada&quot; en botón de recarga">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de \&quot;Recargar cada\&quot; en botón de recarga">
 <!ENTITY toggleAnimation.label "Desactivar animación de Abrir/Cerrar pestaña">
 <!ENTITY seconds.label "seg">
 <!ENTITY minutes.label "min">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Barra herramientas">
 <!ENTITY show.ontabbar.label "Mostrar en barra de pestañas">
 <!ENTITY show.ontab.label "Mostrar en pestaña">
-<!ENTITY dragNewTabButton.tooltip "Arrastre el botón de &quot;Nueva pestaña&quot; a la barra de pestañas para activar esta opción.">
+<!ENTITY dragNewTabButton.tooltip "Arrastre el botón de \&quot;Nueva pestaña\&quot; a la barra de pestañas para activar esta opción.">
 <!ENTITY hideTabBarButton.label "Botón cerrar pestaña">
 <!ENTITY newTabButton.label "Botón nueva pestaña">
 <!ENTITY newTabButton.posiotion.left.label "Izquierda">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
 <!ENTITY tabScroll.multibar "se muestran en filas">
 <!ENTITY maxrow.label "Máximo de filas a mostrar:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Activar rotación suave">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
 <!ENTITY highlight.label "Resaltar:">
 <!ENTITY currenttab.style.label "Pestaña actual">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Moverse a derechas al desplazar rueda hacia atrás">
 <!ENTITY clickFocus.label "Hacer clic de ratón (pulsar y liberar) para seleccionar una pestaña">
 <!ENTITY removeEntries.label "Para eliminar elementos del menú de Tab Mix Plus use clic central">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Al cerrar una pestaña las otras no cambian de tamaño hasta que el cursor no se aleja de la barra de herramientas.">
 <!ENTITY removeEntries.tooltip "Incluye ventanas y pestañas cerradas y sesiones guardadas">
 <!ENTITY double.label "Doble-clic">
 <!ENTITY middle.label "Clic-central">

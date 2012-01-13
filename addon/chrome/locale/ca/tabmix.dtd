@@ -19,11 +19,11 @@
 <!ENTITY mergeContext.accesskey "F">
 <!ENTITY renametab.label "Reanomena la pestanya">
 <!ENTITY renametab.accesskey "R">
-<!ENTITY copytaburl.label "Copia l'adreça URL de la pestanya">
+<!ENTITY copytaburl.label "Copia l&apos;adreça URL de la pestanya">
 <!ENTITY copytaburl.accesskey "U">
 <!ENTITY reloadother.label "Torna a carregar les altres pestanyes">
 <!ENTITY reloadother.accesskey "O">
-<!ENTITY reloadleft.label "Torna a carregar les pestanyes de l'esquerra">
+<!ENTITY reloadleft.label "Torna a carregar les pestanyes de l&apos;esquerra">
 <!ENTITY reloadleft.accesskey "L">
 <!ENTITY reloadright.label "Torna a carregar les pestanyes de la dreta">
 <!ENTITY reloadright.accesskey "D">
@@ -31,15 +31,15 @@
 <!ENTITY autoReloadTab.accesskey "C">
 <!ENTITY autoReload.label "Torna a carregar cada">
 <!ENTITY autoReload.accesskey "E">
-<!ENTITY afterthis.label "Després d'aquesta pestanya">
-<!ENTITY bookmarktab.label "Afegeix a les adreces d'interès aquesta pestanya">
+<!ENTITY afterthis.label "Després d&apos;aquesta pestanya">
+<!ENTITY bookmarktab.label "Afegeix a les adreces d&apos;interès aquesta pestanya">
 <!ENTITY undoCloseListMenu.label "Llista de pestanyes tancades">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Tanca totes les pestanyes">
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Tanca les pestanyes semblants">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Tanca les pestanyes de l'esquerra">
+<!ENTITY closeLeftTabsMenu.label "Tanca les pestanyes de l&apos;esquerra">
 <!ENTITY closeleft.accesskey "L">
 <!ENTITY closeRightTabsMenu.label "Tanca les pestanyes de la dreta">
 <!ENTITY closeright.accesskey "R">
@@ -51,18 +51,18 @@
 <!ENTITY protectTabMenu.tooltip "Protegeix la pestanya per tal que no es pugui tancar">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "Bloca la pestanya">
-<!ENTITY lockTabMenu.tooltip "Tots els enllaços s'obren en una pestanya nova">
+<!ENTITY lockTabMenu.tooltip "Tots els enllaços s&apos;obren en una pestanya nova">
 <!ENTITY lockTabMenu.accesskey "B">
-<!ENTITY bookmarktabs.label "Afegeix a les adreces d'interès totes les pestanyes">
-<!ENTITY linkhere.label "Obre l'enllaç en aquesta pestanya">
+<!ENTITY bookmarktabs.label "Afegeix a les adreces d&apos;interès totes les pestanyes">
+<!ENTITY linkhere.label "Obre l&apos;enllaç en aquesta pestanya">
 <!ENTITY linkhere.accesskey "Q">
-<!ENTITY linkBackgroundTab.label "Obre l'enllaç en segon pla">
-<!ENTITY linkForegroundTab.label "Obre l'enllaç en primer pla">
+<!ENTITY linkBackgroundTab.label "Obre l&apos;enllaç en segon pla">
+<!ENTITY linkForegroundTab.label "Obre l&apos;enllaç en primer pla">
 <!ENTITY linkBackgroundTab.accesskey "S">
 <!ENTITY linkForegroundTab.accesskey "P">
 <!ENTITY openalllinks.label "Obre els enllaços en pestanyes noves">
 <!ENTITY openalllinks.accesskey "S">
-<!ENTITY linkwithhistory.label "Obre l'enllaç en una pestanya duplicada">
+<!ENTITY linkwithhistory.label "Obre l&apos;enllaç en una pestanya duplicada">
 <!ENTITY linkwithhistory.accesskey "D">
 <!ENTITY tabsList.label "Llista de pestanyes obertes">
 <!ENTITY tabsList.accesskey "L">
@@ -79,7 +79,7 @@
 <!ENTITY restoreintab.accesskey "P">
 <!ENTITY restoretab.label "Restaura la pestanya">
 <!ENTITY restoretab.accesskey "R">
-<!ENTITY bookmark.label "Afegeix l'enllaç a les adreces d'interès...">
+<!ENTITY bookmark.label "Afegeix l&apos;enllaç a les adreces d&apos;interès...">
 <!ENTITY bookmark.accesskey "A">
 <!ENTITY deletelist.label "Suprimeix de la llista">
 <!ENTITY deletelist.accesskey "S">
@@ -106,9 +106,9 @@
 <!ENTITY sm.context.delete.key "S">
 <!ENTITY sm.context.deleteall "Suprimeix-ho tot">
 <!ENTITY sm.context.deleteall.key "T">
-<!ENTITY sm.context.startup "Defineix com a sessió d'inici">
+<!ENTITY sm.context.startup "Defineix com a sessió d&apos;inici">
 <!ENTITY sm.context.startup.key "S">
-<!ENTITY sm.context.details "Mostra els comptadors, la data i l'hora al menú de sessions">
+<!ENTITY sm.context.details "Mostra els comptadors, la data i l&apos;hora al menú de sessions">
 <!ENTITY sm.context.details.key "C">
 <!ENTITY tab.key "T">
 <!ENTITY window.key "N">

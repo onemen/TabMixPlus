@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "工具栏">
 <!ENTITY show.ontabbar.label "在标签栏显示">
 <!ENTITY show.ontab.label "在标签页显示">
-<!ENTITY dragNewTabButton.tooltip "拖动'新建标签页'按钮到标签栏来启用该选项。">
+<!ENTITY dragNewTabButton.tooltip "拖动&apos;新建标签页&apos;按钮到标签栏来启用该选项。">
 <!ENTITY hideTabBarButton.label "标签页关闭按钮">
 <!ENTITY newTabButton.label "新建标签页按钮">
 <!ENTITY newTabButton.posiotion.left.label "左侧">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
 <!ENTITY tabScroll.multibar "多行标签页">
 <!ENTITY maxrow.label "最多显示的行数：">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "启用平滑滚动">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
 <!ENTITY highlight.label "高亮：">
 <!ENTITY currenttab.style.label "当前标签页">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "鼠标向上滚动时切换到右边的标签页">
 <!ENTITY clickFocus.label "鼠标点击并释放时才选择标签页">
 <!ENTITY removeEntries.label "鼠标中键点击时清除 Tab Mix Plus 菜单列表项">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "标签页关闭时，其他标签页需在鼠标离开工具栏区域后更改宽度">
 <!ENTITY removeEntries.tooltip "包括已关闭的标签页、窗口和已保存的浏览进程">
 <!ENTITY double.label "双击左键">
 <!ENTITY middle.label "单击鼠标中键">

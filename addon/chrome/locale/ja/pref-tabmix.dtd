@@ -151,7 +151,7 @@
 <!ENTITY extraIcons.locked "ロック">
 <!ENTITY extraIcons.protected "保護">
 <!ENTITY extraIcons.autoreload "自動再読み込み">
-<!ENTITY progressMeter.label "タブのプログレスメーター">
+<!ENTITY progressMeter.label "プログレスメーター（タブ）">
 <!ENTITY showTabX.labelBegin "[タブを閉じる] ボタンの表示位置の指定">
 <!ENTITY showTabX.left "左端に表示">
 <!ENTITY showTabX.rtl "右端に表示">

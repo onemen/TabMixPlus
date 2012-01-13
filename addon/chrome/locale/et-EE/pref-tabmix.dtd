@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Ava kõik hüpikaknad kaartidel">
 <!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
 <!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
-<!ENTITY linkTarget.label "Ava 'target'-omadusega lingid praegusel kaardil">
+<!ENTITY linkTarget.label "Ava &apos;target&apos;-omadusega lingid praegusel kaardil">
 <!ENTITY download.label "Failide allalaadimisel ära näita tühje kaarte">
 <!ENTITY edit.label "Muuda">
 <!ENTITY speLink.label "Alati ava uuel kaardil:">
@@ -185,7 +185,7 @@
 <!ENTITY enabletabbarscrolling.label "Luba hiirega kerides kaartide vahetamine">
 <!ENTITY reverseScroll.label "Vaheta kaarte vastupidises suunas">
 <!ENTITY clickFocus.label "Hiirega klõpsamine (vajutamine ja lahtilaskmine) valib kaardi">
-<!ENTITY removeEntries.label "Tab Mix Plus'i menüüelementidel hiire keskmise nupuga klõpsamine kustutab selle sisestuse">
+<!ENTITY removeEntries.label "Tab Mix Plus&apos;i menüüelementidel hiire keskmise nupuga klõpsamine kustutab selle sisestuse">
 <!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Hõlmab suletud kaarte, suletud aknaid ja salvestatud seansse">
 <!ENTITY double.label "Topeltklõps">
@@ -208,7 +208,7 @@
 <!ENTITY clicktab.freezetab "Kaitseb ja lukustab kaardi">
 <!ENTITY clicktab.renametab "Muudab kaardi nime">
 <!ENTITY clicktab.copyTabUrl "Kopeerib kaardi URL-i lõikelauale">
-<!ENTITY clicktab.copyUrlFromClipboard "Laadib URL'i lõikelaualt">
+<!ENTITY clicktab.copyUrlFromClipboard "Laadib URL&apos;i lõikelaualt">
 <!ENTITY clicktab.selectMerge "Valib kaardi ühendamiseks">
 <!ENTITY clicktab.mergeTabs "Ühendab aknad">
 <!ENTITY clicktab.bookTab "Lisab kaardi järjehoidjatesse">
@@ -226,7 +226,7 @@
 <!ENTITY clicktab.removeright "Sulgeb parempoolsed kaardid">
 <!ENTITY clicktab.uctab "Taasavab suletud kaardi">
 <!ENTITY clicktab.ucatab "Taasavab kõik suletud kaardid">
-<!ENTITY clicktab.snapback "Lisab kaardile SnapBack'i">
+<!ENTITY clicktab.snapback "Lisab kaardile SnapBack&apos;i">
 <!ENTITY clicktab.ietab "Avab kaardi brauseris IE">
 <!ENTITY contentLoad "Hiire keskmise nupuga klõpsamine laadib lõikelaual oleva veebiaadressi">
 <!ENTITY context.tab "Kaardi hüpikmenüü">
@@ -234,19 +234,19 @@
 <!ENTITY context.tools "Tööriistade menüü">
 <!ENTITY showtabBarContext.label "Kaardi hüpikmenüüs näidatakse:">
 <!ENTITY showContentAreaContext.label "Peamises hüpikmenüüs näidatakse:">
-<!ENTITY showToolsMenu.label "Menüüs 'Tööriistad' näidatakse:">
+<!ENTITY showToolsMenu.label "Menüüs &apos;Tööriistad&apos; näidatakse:">
 <!ENTITY startupHomePage.label "Kuvatakse avalehte">
 <!ENTITY startupBlankPage.label "Kuvatakse tühja lehte">
 <!ENTITY startupLastSession.label "Kuvatakse viimati lahti olnud aknaid ja kaarte">
 <!ENTITY sm.extension.description1 "Tab Mix Plus tuvastas, et paigaldatud on lisa Session Manager">
-<!ENTITY sm.extension.description2 "Tab Mix Plus'i Seansside halduri kasutamine keelatakse">
+<!ENTITY sm.extension.description2 "Tab Mix Plus&apos;i Seansside halduri kasutamine keelatakse">
 <!ENTITY sm.extension.description3 "Sa võid Seansside halduri sätete dialoogiakna avamiseks klõpsata parempoolsel nupul">
-<!ENTITY sm.extension.description4 "Teisenda minu seansside andmed Tab Mix Plus'i formaadist laienduse Session Manager formaati">
+<!ENTITY sm.extension.description4 "Teisenda minu seansside andmed Tab Mix Plus&apos;i formaadist laienduse Session Manager formaati">
 <!ENTITY sm.extension.convert.label "Teisenda">
 <!ENTITY sm.extension.chooseFile.label0 "Lase mul valida, millist andmefaili teisendada">
-<!ENTITY sm.extension.chooseFile.label1 "Teisenda praeguse kasutajaprofiili Tab Mix Plus'i seansid">
+<!ENTITY sm.extension.chooseFile.label1 "Teisenda praeguse kasutajaprofiili Tab Mix Plus&apos;i seansid">
 <!ENTITY ss.enable.label "Kasuta Firefoxi sisseehitatud seansi taastamise funktsiooni">
-<!ENTITY ss.enable.tooltip "Tab Mix Plus'i Seansside halduri kasutamiseks eemalda märgistus">
+<!ENTITY ss.enable.tooltip "Tab Mix Plus&apos;i Seansside halduri kasutamiseks eemalda märgistus">
 <!ENTITY ss.advanced_setting "Täpsemad sätted">
 <!ENTITY ss.advanced_setting.warning "Ära neid sätteid muuda, kui sa pole kindel, mida sa teed">
 <!ENTITY ss.interval "Väikseim ajavahe kahe salvestamise vahel">

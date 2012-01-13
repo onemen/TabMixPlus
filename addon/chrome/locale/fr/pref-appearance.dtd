@@ -6,6 +6,6 @@
 <!ENTITY bold.label "Gras">
 <!ENTITY underline.label "Souligné">
 <!ENTITY textcolor.label "Couleur du texte">
-<!ENTITY bgColor.label "Couleur d'arrière-plan">
+<!ENTITY bgColor.label "Couleur d&apos;arrière-plan">
 <!ENTITY useThis.label "utiliser ce style pour">
-<!ENTITY opacity.label "l'opacité">
+<!ENTITY opacity.label "l&apos;opacité">

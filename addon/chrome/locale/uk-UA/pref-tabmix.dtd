@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Усі спливаючі відкривати у вкладках">
 <!ENTITY divertedWindowOpen.some "Зі змінюваним розміром — у нових вікнах">
 <!ENTITY divertedWindowOpen.none "Усі спливаючі відкривати в нових вікнах">
-<!ENTITY linkTarget.label "Відкривати посилання з атрибутом 'target' у поточній вкладці">
+<!ENTITY linkTarget.label "Відкривати посилання з атрибутом &apos;target&apos; у поточній вкладці">
 <!ENTITY download.label "Не відкривати порожні вкладки при закачуванні файлів">
 <!ENTITY edit.label "Типи файлів">
 <!ENTITY speLink.label "Примусово відкривати в нових вкладках:">
@@ -33,7 +33,7 @@
 <!ENTITY tabOpen.label "Відкриття вкладок">
 <!ENTITY tabFocus.label "Фокус вкладок">
 <!ENTITY tabClose.label "Закриття вкладок">
-<!ENTITY tabMerge.label "Об'єднання вкладок">
+<!ENTITY tabMerge.label "Об&apos;єднання вкладок">
 <!ENTITY tabFeature.label "Налаштування вкладок">
 <!ENTITY newtab.label "Відкривати в нових вкладках:">
 <!ENTITY replaceLastTabWith.label "When I close last tab replace it with">
@@ -78,8 +78,8 @@
 <!ENTITY lasttab.caption.label "Closing last tab">
 <!ENTITY keepWindow.label.3.1 "Не закривати вікно при закритті останньої вкладки">
 <!ENTITY keeptab.label "Не закривати останню вкладку, якщо панель вкладок завжди відображається">
-<!ENTITY closeOnMerge.label "Закривати вікна після об'єднання вкладок">
-<!ENTITY warnOnMerge.label "Видавати попередження про закриття необ'єднаних вкладок">
+<!ENTITY closeOnMerge.label "Закривати вікна після об&apos;єднання вкладок">
+<!ENTITY warnOnMerge.label "Видавати попередження про закриття необ&apos;єднаних вкладок">
 <!ENTITY currenttab.caption.label "Closing current tab">
 <!ENTITY focusTab.labelBegin "При закритті вкладки:">
 <!ENTITY focusTab.firstTab "First tab">
@@ -90,8 +90,8 @@
 <!ENTITY focusTab.openerTab "Opener/right tab">
 <!ENTITY focusTab.openerTab.rtl "Opener/left tab">
 <!ENTITY focusTab.lastOpenedTab "Last opened tab">
-<!ENTITY undoClose.label "Запам'ятовувати в спеціальному кеші останні закриті вкладки">
-<!ENTITY undoCloseCache.label "Пам'ятати не більш:">
+<!ENTITY undoClose.label "Запам&apos;ятовувати в спеціальному кеші останні закриті вкладки">
+<!ENTITY undoCloseCache.label "Пам&apos;ятати не більш:">
 <!ENTITY undoClosepos.label "Відновлювати вкладки в їхній вихідній позиції">
 <!ENTITY menuonlybutton.label "Кнопка на панелі інструментів відображає тільки список">
 <!ENTITY ctrltab.label "Перегортати вкладки по CTRL+Tab у порядкові їх останнього перегляду">
@@ -100,10 +100,10 @@
 <!ENTITY ctrltab.popup "CTRL+Tab відображає спливаюче меню зі списком вкладок">
 <!ENTITY cmdtab.popup "CMD+Tab відображає спливаюче меню зі списком вкладок">
 <!ENTITY tabpopup.mouse "Список вкладок реагує на мишу">
-<!ENTITY mergeNoTabSelection.label "Об'єднання вікон, коли не виділене ні однієї вкладки">
-<!ENTITY mergeTabSelection.label "Об'єднання вікон після виділення вкладок">
-<!ENTITY mergeall.label "Об'єднання всіх вікон в одне">
-<!ENTITY mergelastfocused.label "Об'єднання тільки поточного вікна з останнім активним">
+<!ENTITY mergeNoTabSelection.label "Об&apos;єднання вікон, коли не виділене ні однієї вкладки">
+<!ENTITY mergeTabSelection.label "Об&apos;єднання вікон після виділення вкладок">
+<!ENTITY mergeall.label "Об&apos;єднання всіх вікон в одне">
+<!ENTITY mergelastfocused.label "Об&apos;єднання тільки поточного вікна з останнім активним">
 <!ENTITY mergePopups.label "Також поєднувати спливаючі вікна">
 <!ENTITY popupNextToOpener.label "Розміщати спливаючі вікна поруч із вікнами, які їх відкривали">
 <!ENTITY slideshow.label "За допомогою F8 циклічно перегортати вкладки кожні">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "ToolBar">
 <!ENTITY show.ontabbar.label "Show on Tab bar">
 <!ENTITY show.ontab.label "Show on Tab">
-<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Загальна кнопка закриття вкладок">
 <!ENTITY newTabButton.label "Кнопка додавання нової вкладки">
 <!ENTITY newTabButton.posiotion.left.label "on Left side">
@@ -167,7 +167,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пікселів (30-1000)">
 <!ENTITY flexTabs.label "Вирівнювати ширину вкладок по довжині їх заголовків">
-<!ENTITY bookastitle.label "Використовувати ім'я закладки як заголовка вкладки">
+<!ENTITY bookastitle.label "Використовувати ім&apos;я закладки як заголовка вкладки">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
@@ -207,7 +207,7 @@
 <!ENTITY clicktab.locktab "Заблокувати вкладку">
 <!ENTITY clicktab.freezetab "Захистити й заблокувати вкладку">
 <!ENTITY clicktab.renametab "Перейменувати вкладку">
-<!ENTITY clicktab.copyTabUrl "Copies the tab's URL to the clipboard">
+<!ENTITY clicktab.copyTabUrl "Copies the tab&apos;s URL to the clipboard">
 <!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
 <!ENTITY clicktab.selectMerge "Selects the tab for merging">
 <!ENTITY clicktab.mergeTabs "Merges windows together">
@@ -234,7 +234,7 @@
 <!ENTITY context.tools "Інструменти">
 <!ENTITY showtabBarContext.label "Склад контекстного меню панелі вкладок:">
 <!ENTITY showContentAreaContext.label "Склад контекстного меню веб-сторінок:">
-<!ENTITY showToolsMenu.label "Додати в меню 'Інструменти':">
+<!ENTITY showToolsMenu.label "Додати в меню &apos;Інструменти&apos;:">
 <!ENTITY startupHomePage.label "Показувати домашню сторінку">
 <!ENTITY startupBlankPage.label "Показувати порожню сторінку">
 <!ENTITY startupLastSession.label "Показувати вікна і вкладки відкриті востаннє">
@@ -278,7 +278,7 @@
 <!ENTITY sm.restore.overwrite "Замінювати існуючі вікна">
 <!ENTITY sm.restore.overwriteTabs "... і вкладки">
 <!ENTITY sm.restore.closedWinList "Зберігати вікна в списку закритих">
-<!ENTITY sm.restore.merge "Об'єднувати декілька вікон в одне">
+<!ENTITY sm.restore.merge "Об&apos;єднувати декілька вікон в одне">
 <!ENTITY sm.restore.reloadall "Перезавантажувати всі вкладки">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "Зберігати наступні параметри вкладок:">

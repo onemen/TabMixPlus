@@ -59,7 +59,7 @@
 <!ENTITY openNewTab.label "פתח לשוניות מ:">
 <!ENTITY openBookmarks.label "סימניות">
 <!ENTITY openBMKGroups.label "קבוצת סימניות">
-<!ENTITY openBMKGroups.tooltip "Don't override tabs when opening a group of bookmarks">
+<!ENTITY openBMKGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks">
 <!ENTITY openHistory.label "היסטוריה">
 <!ENTITY openUrl.label "שורת הכתובת">
 <!ENTITY openSearch.label "תיבת החיפוש">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "סרגל כלים">
 <!ENTITY show.ontabbar.label "הצג בסרגל הלשוניות">
 <!ENTITY show.ontab.label "הצג בלשונית">
-<!ENTITY dragNewTabButton.tooltip "גרור כפתור 'לשונית חדשה לסרגל הלשונית">
+<!ENTITY dragNewTabButton.tooltip "גרור כפתור &apos;לשונית חדשה לסרגל הלשונית">
 <!ENTITY hideTabBarButton.label "לחצן סגור לשונית">
 <!ENTITY newTabButton.label "לחצן לשונית חדשה">
 <!ENTITY newTabButton.posiotion.left.label "בצד שמאל">

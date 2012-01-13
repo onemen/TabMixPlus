@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Индикатор испуштања">
 <!ENTITY dropIndicator-native.label "Изворни стил">
 <!ENTITY dropIndicator-builtin.label "Уграђени стил">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Користите додатке treeStyleTab или VerticalTab да бисте контролисали ова подешавања.">
 <!ENTITY tabBarPosition.label "Позиција:">
 <!ENTITY tabBarPosition.top.label "на врху (изнад садржаја)">
 <!ENTITY tabBarPosition.bottom.label "на дну (испод садржаја)">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Омогући померање са дугмадима на левој страни">
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
 <!ENTITY maxrow.label "Максимални број редова за приказ">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при скроловању (време између понављања скроловања)">
 <!ENTITY highlight.label "Истакни:">
 <!ENTITY currenttab.style.label "Текућу картицу">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Обрни смер одабирања картица ----">
 <!ENTITY clickFocus.label "Клик мишем (клик и отпуштање) одабира картицу">
 <!ENTITY removeEntries.label "Уклони Tab Mix Plus ставке листе менија помоћу средњег клика ---">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Када затварам језичак, остали језичци не треба да мењају величину док год показивач миша напусти траку са језичцима">
 <!ENTITY removeEntries.tooltip "Укључује затворене картице, затворене прозоре и сачуване сесије">
 <!ENTITY double.label "Дупли клик">
 <!ENTITY middle.label "Средњи клик">

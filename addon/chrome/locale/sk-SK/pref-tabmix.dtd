@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Otvoriť všetky vyskakovacie okná na kartách">
 <!ENTITY divertedWindowOpen.some "Povoliť zmeny u vyskakovacích okien">
 <!ENTITY divertedWindowOpen.none "Povoliť všetky vyskakovacie okná">
-<!ENTITY linkTarget.label "Odkazy s atribútom 'target' otvoriť na aktuálnej karte">
+<!ENTITY linkTarget.label "Odkazy s atribútom &apos;target&apos; otvoriť na aktuálnej karte">
 <!ENTITY download.label "Blokovať prázdne karty pri sťahovaní súborov">
 <!ENTITY edit.label "Upraviť">
 <!ENTITY speLink.label "Prinútiť otvoriť na novej karte:">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Panel nástrojov">
 <!ENTITY show.ontabbar.label "Zobraziť na paneli karty">
 <!ENTITY show.ontab.label "Zobraziť na karte">
-<!ENTITY dragNewTabButton.tooltip "Presunúť tlačidlo 'Nová karta' na panel kariet pre zapnutie tejto možnosti.">
+<!ENTITY dragNewTabButton.tooltip "Presunúť tlačidlo &apos;Nová karta&apos; na panel kariet pre zapnutie tejto možnosti.">
 <!ENTITY hideTabBarButton.label "Tlačidlo zatvoriť kartu">
 <!ENTITY newTabButton.label "Tlačidlo nová karta">
 <!ENTITY newTabButton.posiotion.left.label "Naľavo">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
 <!ENTITY highlight.label "Zvýrazniť:">
 <!ENTITY currenttab.style.label "Aktuálna karta">

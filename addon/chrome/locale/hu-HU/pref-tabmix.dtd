@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY highlight.label "Kijelölés">
 <!ENTITY currenttab.style.label "Aktuális lap">

@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "derulantă, cu butoane pe marginea stângă">
 <!ENTITY tabScroll.multibar "pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Activează derularea lină">
 <!ENTITY scrolldelay.label "Întârziere defilare (interval între pașii defilării)">
 <!ENTITY highlight.label "Evidențiază:">
 <!ENTITY currenttab.style.label "Fila curentă">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Inversează direcția de selectare a filelor">
 <!ENTITY clickFocus.label "Selectează o filă la clic cu mausul (apăsare și eliberare)">
 <!ENTITY removeEntries.label "Elimină elementele meniului Tab Mix Plus folosind clic-mijloc">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "La închiderea unei file celelalte file nu se redimensionează până când cursorul nu părăsește zona barei de file">
 <!ENTITY removeEntries.tooltip "Include filele închise, ferestrele închise și sesiunile salvate">
 <!ENTITY double.label "Dublu-clic">
 <!ENTITY middle.label "Clic-mijloc">

@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Deslocável com botões no lateral esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas colunas">
 <!ENTITY maxrow.label "Número máximo de colunas a mostrar:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Ativar deslocamento suave">
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
 <!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Separador actual">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Inverter a direcção na qual os separadores são seleccionados">
 <!ENTITY clickFocus.label "Clique do rato (para baixo e deixar) para seleccionar um separador">
 <!ENTITY removeEntries.label "Remover a entrada da lista de menu do Tab Mix Plus usando o clique central">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Ao fechar o separador, outros separadores não devem redimensionar até o cursor deixar a região da barra de ferramentas">
 <!ENTITY removeEntries.tooltip "Inclui separadores fechados, janelas fechadas e sessões guardadas">
 <!ENTITY double.label "Duplo clique">
 <!ENTITY middle.label "Clique central">

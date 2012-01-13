@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Werkbalk">
 <!ENTITY show.ontabbar.label "Op tabbladenbalk weergeven">
 <!ENTITY show.ontab.label "Op tabblad weergeven">
-<!ENTITY dragNewTabButton.tooltip "'Nieuw tabblad' knop naar tabbladenbalk slepen om deze optie in te schakelen.">
+<!ENTITY dragNewTabButton.tooltip "&apos;Nieuw tabblad&apos; knop naar tabbladenbalk slepen om deze optie in te schakelen.">
 <!ENTITY hideTabBarButton.label "Knop Tabblad sluiten">
 <!ENTITY newTabButton.label "Knop Nieuw tabblad">
 <!ENTITY newTabButton.posiotion.left.label "Linkerkant">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
 <!ENTITY highlight.label "Attentie vragen voor:">
 <!ENTITY currenttab.style.label "Huidige tabblad">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Volgorde geselecteerde tabbladen omkeren">
 <!ENTITY clickFocus.label "Muisklik (klikken en loslaten) om tabblad te selecteren">
 <!ENTITY removeEntries.label "Tab Mix Plus menutoevoegingen met middelklikken verwijderen">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Bij sluiten tabblad mogen andere tabbladen niet van grootte veranderen totdat de cursor buiten de werkbalk komt">
 <!ENTITY removeEntries.tooltip "O.a. gesloten tabbladen, gesloten vensters en opgeslagen sessies">
 <!ENTITY double.label "Dubbelklikken">
 <!ENTITY middle.label "Middelklikken">

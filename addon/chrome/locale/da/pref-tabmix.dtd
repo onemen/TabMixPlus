@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Værktøjslinje">
 <!ENTITY show.ontabbar.label "Vis på fanebladslinje">
 <!ENTITY show.ontab.label "Vis på faneblad">
-<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Luk faneblad-knap">
 <!ENTITY newTabButton.label "Nyt faneblad-knap">
 <!ENTITY newTabButton.posiotion.left.label "på venstre side">

@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "ToolBar">
 <!ENTITY show.ontabbar.label "Show on Tab bar">
 <!ENTITY show.ontab.label "Show on Tab">
-<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Gumb Zatvori karticu">
 <!ENTITY newTabButton.label "Gumb Nova kartica">
 <!ENTITY newTabButton.posiotion.left.label "on Left side">

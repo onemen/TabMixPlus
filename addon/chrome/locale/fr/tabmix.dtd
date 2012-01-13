@@ -9,7 +9,7 @@
 <!ENTITY options.main.sessionbutton.label "Gestionnaire de sessions de Tab Mix Plus">
 <!ENTITY session.Tools "Gestionnaire de sessions">
 <!ENTITY closedWin.label "Liste des fenêtres récemment fermées">
-<!ENTITY duplicateTabMenu.label "Dupliquer l'onglet">
+<!ENTITY duplicateTabMenu.label "Dupliquer l&apos;onglet">
 <!ENTITY duplicateTabMenu.accesskey "D">
 <!ENTITY duplicateinWin.label "Dupliquer dans une nouvelle fenêtre">
 <!ENTITY duplicateinWin.accesskey "n">
@@ -17,9 +17,9 @@
 <!ENTITY detachTab.accesskey "v">
 <!ENTITY mergeContext.label "Fusionner les fenêtres">
 <!ENTITY mergeContext.accesskey "F">
-<!ENTITY renametab.label "Renommer l'onglet">
+<!ENTITY renametab.label "Renommer l&apos;onglet">
 <!ENTITY renametab.accesskey "R">
-<!ENTITY copytaburl.label "Copier l'adresse de l'onglet">
+<!ENTITY copytaburl.label "Copier l&apos;adresse de l&apos;onglet">
 <!ENTITY copytaburl.accesskey "a">
 <!ENTITY reloadother.label "Actualiser les autres onglets">
 <!ENTITY reloadother.accesskey "A">
@@ -27,7 +27,7 @@
 <!ENTITY reloadleft.accesskey "g">
 <!ENTITY reloadright.label "Actualiser les onglets de droite">
 <!ENTITY reloadright.accesskey "d">
-<!ENTITY autoReloadTab.label "Actualiser l'onglet toutes les...">
+<!ENTITY autoReloadTab.label "Actualiser l&apos;onglet toutes les...">
 <!ENTITY autoReloadTab.accesskey "o">
 <!ENTITY autoReload.label "Actualiser tous les onglets">
 <!ENTITY autoReload.accesskey "c">
@@ -45,9 +45,9 @@
 <!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permissions">
 <!ENTITY docShellMenu.accesskey "P">
-<!ENTITY freezeTabMenu.label "Geler l'onglet">
+<!ENTITY freezeTabMenu.label "Geler l&apos;onglet">
 <!ENTITY freezeTabMenu.accesskey "G">
-<!ENTITY protectTabMenu.label "Protéger l'onglet">
+<!ENTITY protectTabMenu.label "Protéger l&apos;onglet">
 <!ENTITY protectTabMenu.tooltip "Empêche la fermeture des onglets">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "Verrouiller l&apos;onglet">

@@ -129,7 +129,7 @@
 <!ENTITY dropIndicator.label "Индикатор за пускане">
 <!ENTITY dropIndicator-native.label "Стандартен стил">
 <!ENTITY dropIndicator-builtin.label "Вграден стил">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Използвайте някое от разширенията treeStyleTab или VerticalTab, за да контролирате тези настройки.">
 <!ENTITY tabBarPosition.label "Разположение на лентата:">
 <!ENTITY tabBarPosition.top.label "Подпрозорците отгоре">
 <!ENTITY tabBarPosition.bottom.label "Подпрозорците отдолу">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прелистване чрез бутони, разположени отляво">
 <!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
 <!ENTITY maxrow.label "Максимален брой редове:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
 <!ENTITY highlight.label "Открояване на:">
 <!ENTITY currenttab.style.label "Текущия подпрозорец">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Обръщане на посоката, в която биват избирани подпрозорците">
 <!ENTITY clickFocus.label "Избиране на подпрозорец чрез щракване върху него">
 <!ENTITY removeEntries.label "Изтриване на пунктове от списъците на Тab Mix Plus посредством щракване със среден бутон">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "При затваряне на един подпрозорец, останалите не трябва да изменят ширината си, докато показалецът на мишката не напусне областта на лентата с инструменти">
 <!ENTITY removeEntries.tooltip "Това включва затворени подпрозорци, затворени прозорци и записани сесии">
 <!ENTITY double.label "Двукратно щракване">
 <!ENTITY middle.label "Щракване със среден бутон">

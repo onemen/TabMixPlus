@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "顯示捲動按鈕於分頁列左側">
 <!ENTITY tabScroll.multibar "以多行顯示">
 <!ENTITY maxrow.label "最大顯示的行數：">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">
 <!ENTITY highlight.label "強調">
 <!ENTITY currenttab.style.label "目前分頁">

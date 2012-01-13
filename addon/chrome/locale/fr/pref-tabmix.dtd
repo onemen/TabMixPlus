@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importer les réglages">
 <!ENTITY settings.default "Restaurer les réglages par défaut">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
-<!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d'autres applications">
+<!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d&apos;autres applications">
 <!ENTITY externalLinkTarget.label "Ouvrir les liens des autres applications dans :">
 <!ENTITY linkTarget.tab "Nouvel onglet">
 <!ENTITY linkTarget.window "Nouvelle fenêtre">
@@ -21,13 +21,13 @@
 <!ENTITY divertedWindowOpen.all "Ouvrir toutes les popups dans des onglets">
 <!ENTITY divertedWindowOpen.some "Autoriser les popups non redimensionnées">
 <!ENTITY divertedWindowOpen.none "Autoriser toutes les popups à ouvrir une nouvelle fenêtre">
-<!ENTITY linkTarget.label "Ouvrir les liens avec un attribut target dans l'onglet courant">
-<!ENTITY download.label "Empêcher l'ouverture d'onglets vides lors d'un téléchargement de fichier">
+<!ENTITY linkTarget.label "Ouvrir les liens avec un attribut target dans l&apos;onglet courant">
+<!ENTITY download.label "Empêcher l&apos;ouverture d&apos;onglets vides lors d&apos;un téléchargement de fichier">
 <!ENTITY edit.label "Éditer">
-<!ENTITY speLink.label "Forcer l'ouverture dans un nouvel onglet :">
+<!ENTITY speLink.label "Forcer l&apos;ouverture dans un nouvel onglet :">
 <!ENTITY speLink.none "Rien">
 <!ENTITY speLink.allLinks "Tous les liens">
-<!ENTITY speLink.external "Liens vers d'autres sites">
+<!ENTITY speLink.external "Liens vers d&apos;autres sites">
 <!ENTITY singleWindow.label "Activer le mode Fenêtre Unique">
 <!ENTITY newTabs.label "Nouveaux onglets">
 <!ENTITY tabOpen.label "Ouverture des onglets">
@@ -38,50 +38,50 @@
 <!ENTITY newtab.label "Charger dans un nouvel onglet :">
 <!ENTITY replaceLastTabWith.label "Lorsque je ferme le dernier onglet le remplacer par">
 <!ENTITY newtab.blank "une page vide">
-<!ENTITY newtab.home "la page d'accueil">
+<!ENTITY newtab.home "la page d&apos;accueil">
 <!ENTITY newtab.current "la page courante">
 <!ENTITY newtab.duplicate "la page dupliquée">
 <!ENTITY newtab.location "une adresse personnalisée">
 <!ENTITY location.label "Adresse">
-<!ENTITY focusContent.label "À l'ouverture de l'onglet, positionner le curseur dans la page et non dans la barre d'adresse">
-<!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l'onglet courant">
-<!ENTITY openOtherTabNext.label "Ouvrir d'autres onglets près de l'onglet courant">
-<!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l'onglet courant">
+<!ENTITY focusContent.label "À l&apos;ouverture de l&apos;onglet, positionner le curseur dans la page et non dans la barre d&apos;adresse">
+<!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l&apos;onglet courant">
+<!ENTITY openOtherTabNext.label "Ouvrir d&apos;autres onglets près de l&apos;onglet courant">
+<!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l&apos;onglet courant">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openDuplicateNext.label "Ouvrir les onglets dupliqués à la suite de l'original">
+<!ENTITY openDuplicateNext.label "Ouvrir les onglets dupliqués à la suite de l&apos;original">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Modifier l'ordre d'ouverture">
+<!ENTITY openTabNextInverse.label "Modifier l&apos;ordre d&apos;ouverture">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Ouvrir un nouvel onglet près du dernier onglet ouvert à partir de l'onglet courant (depuis la sélection)">
+<!ENTITY openTabNextInverse.tooltip1 "Ouvrir un nouvel onglet près du dernier onglet ouvert à partir de l&apos;onglet courant (depuis la sélection)">
 <!ENTITY lockTabs.label "Verrouiller les onglets">
 <!ENTITY lockNewTabs.label "Verrouiller les nouveaux onglets">
 <!ENTITY lockAppTabs.label "Verrouiller les onglets des applications">
 <!ENTITY openNewTab.label "Ouvrir des onglets depuis :">
 <!ENTITY openBookmarks.label "Les marque-pages">
 <!ENTITY openBMKGroups.label "Les groupes de marque-pages">
-<!ENTITY openBMKGroups.tooltip "L'ouverture d'un groupe de marque-pages n'écrase pas les onglets ouverts">
-<!ENTITY openHistory.label "L'historique">
-<!ENTITY openUrl.label "La barre d'adresse">
+<!ENTITY openBMKGroups.tooltip "L&apos;ouverture d&apos;un groupe de marque-pages n&apos;écrase pas les onglets ouverts">
+<!ENTITY openHistory.label "L&apos;historique">
+<!ENTITY openUrl.label "La barre d&apos;adresse">
 <!ENTITY openSearch.label "La barre de recherche">
-<!ENTITY middlecurrent1.label "Clic-milieu ou Ctrl-clic ouvre les éléments dans l'onglet courant">
-<!ENTITY middlecurrent.tooltip "Uniquement pour les marque-pages, l'historique et les onglets verrouillés">
+<!ENTITY middlecurrent1.label "Clic-milieu ou Ctrl-clic ouvre les éléments dans l&apos;onglet courant">
+<!ENTITY middlecurrent.tooltip "Uniquement pour les marque-pages, l&apos;historique et les onglets verrouillés">
 <!ENTITY tabFocus.caption "Sélectionner les onglets provenant de :">
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
 <!ENTITY selectTabBH.label "Marque-pages ou Historique">
-<!ENTITY duplicateTab.label "Dupliquer l'onglet">
+<!ENTITY duplicateTab.label "Dupliquer l&apos;onglet">
 <!ENTITY inversefocus1.label "Inverser ce comportement en cas de clic-milieu ou Ctrl-clic pour les :">
 <!ENTITY warning.caption.label "Avertissement">
-<!ENTITY warnOnCloseProtected.label "Avertir lors de la fermeture d'une fenêtre contenant des onglets protégés">
-<!ENTITY warnOnCloseWindow.label "M'avertir à la fermeture d'une fenêtre qui comporte plusieurs onglets">
+<!ENTITY warnOnCloseProtected.label "Avertir lors de la fermeture d&apos;une fenêtre contenant des onglets protégés">
+<!ENTITY warnOnCloseWindow.label "M&apos;avertir à la fermeture d&apos;une fenêtre qui comporte plusieurs onglets">
 <!ENTITY lasttab.caption.label "Fermeture du dernier onglet">
 <!ENTITY keepWindow.label.3.1 "Ne pas fermer la fenêtre lors de la fermeture du dernier onglet">
 <!ENTITY keeptab.label "Empêcher la fermeture du dernier onglet">
 <!ENTITY closeOnMerge.label "Fermer les fenêtres une fois fusionnées">
-<!ENTITY warnOnMerge.label "Avertir lors de la fermeture d'onglets non fusionnés">
-<!ENTITY currenttab.caption.label "Fermeture de l'onglet courant">
-<!ENTITY focusTab.labelBegin "À la fermeture d'un onglet, passer :">
+<!ENTITY warnOnMerge.label "Avertir lors de la fermeture d&apos;onglets non fusionnés">
+<!ENTITY currenttab.caption.label "Fermeture de l&apos;onglet courant">
+<!ENTITY focusTab.labelBegin "À la fermeture d&apos;un onglet, passer :">
 <!ENTITY focusTab.firstTab "Premier onglet">
 <!ENTITY focusTab.leftTab "Onglet de gauche">
 <!ENTITY focusTab.rightTab "Onglet de droite">
@@ -91,41 +91,41 @@
 <!ENTITY focusTab.openerTab.rtl "Déclencheur/onglet de gauche">
 <!ENTITY focusTab.lastOpenedTab "Dernier onglet ouvert">
 <!ENTITY undoClose.label "Activer la réouverture des derniers onglets fermés">
-<!ENTITY undoCloseCache.label "Nombre maximum d'onglets fermés mis en cache :">
+<!ENTITY undoCloseCache.label "Nombre maximum d&apos;onglets fermés mis en cache :">
 <!ENTITY undoClosepos.label "Restaurer la position initiale des onglets">
-<!ENTITY menuonlybutton.label "Le bouton de la barre d'outils n'affiche qu'une liste">
+<!ENTITY menuonlybutton.label "Le bouton de la barre d&apos;outils n&apos;affiche qu&apos;une liste">
 <!ENTITY ctrltab.label "Ctrl-Tab parcourt les onglets du dernier au premier utilisé">
 <!ENTITY cmdtab.label "Cmd-Tab parcourt les onglets du dernier au premier utilisé">
 <!ENTITY ctrltab.tabPreviews "Afficher les aperçus miniatures des onglets">
 <!ENTITY ctrltab.popup "Ctrl-Tab affiche un menu popup de la liste des onglets">
 <!ENTITY cmdtab.popup "Cmd-Tab affiche un menu popup de la liste des onglets">
 <!ENTITY tabpopup.mouse "La souris agit sur la liste des onglets">
-<!ENTITY mergeNoTabSelection.label "Fusionner les fenêtres lorsqu'aucun onglet n'est sélectionné">
+<!ENTITY mergeNoTabSelection.label "Fusionner les fenêtres lorsqu&apos;aucun onglet n&apos;est sélectionné">
 <!ENTITY mergeTabSelection.label "Fusion après la sélection des onglets :">
 <!ENTITY mergeall.label "Fusionner toutes les fenêtres en une seule">
 <!ENTITY mergelastfocused.label "Fusionner seulement la fenêtre courante avec la dernière sélectionnée">
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
-<!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
+<!ENTITY slideshow.label "Touche F8 : Changer d&apos;onglet toutes les">
 <!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
-<!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
+<!ENTITY toggleAnimation.label "Désactiver l&apos;animation d&apos;ouverture/fermeture des onglets">
 <!ENTITY seconds.label "secondes">
 <!ENTITY minutes.label "min">
-<!ENTITY tabBarAppearance.label "Barre d'onglets">
+<!ENTITY tabBarAppearance.label "Barre d&apos;onglets">
 <!ENTITY tabAppearance.label "Onglet">
-<!ENTITY toolBarAppearance.label "Barre d'outils">
-<!ENTITY show.ontabbar.label "Afficher dans la barre d'onglets">
-<!ENTITY show.ontab.label "Afficher dans l'onglet">
-<!ENTITY dragNewTabButton.tooltip "Glisser le bouton &quot;Nouvel onglet&quot; dans votre barre d'onglets pour activer cette option.">
+<!ENTITY toolBarAppearance.label "Barre d&apos;outils">
+<!ENTITY show.ontabbar.label "Afficher dans la barre d&apos;onglets">
+<!ENTITY show.ontab.label "Afficher dans l&apos;onglet">
+<!ENTITY dragNewTabButton.tooltip "Glisser le bouton &quot;Nouvel onglet&quot; dans votre barre d&apos;onglets pour activer cette option.">
 <!ENTITY hideTabBarButton.label "Bouton de fermeture">
 <!ENTITY newTabButton.label "Bouton de nouvel onglet">
 <!ENTITY newTabButton.posiotion.left.label "Côté gauche">
 <!ENTITY newTabButton.posiotion.right.label "Côté droit">
 <!ENTITY newTabButton.posiotion.afterlast.label "Après le dernier onglet">
 <!ENTITY allTabsButton.label "Bouton donnant la liste des onglets ouverts">
-<!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d'autre de la barre d'onglets">
-<!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d'onglets">
-<!ENTITY tabbar.label "Cacher la barre d'onglets quand un seul onglet est ouvert">
+<!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d&apos;autre de la barre d&apos;onglets">
+<!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d&apos;onglets">
+<!ENTITY tabbar.label "Cacher la barre d&apos;onglets quand un seul onglet est ouvert">
 <!ENTITY dropIndicator.label "Indicateur de déplacement">
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
@@ -133,12 +133,12 @@
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
 <!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">
-<!ENTITY tabScroll.label "Lorsqu'il y a trop d'onglets ouverts :">
+<!ENTITY tabScroll.label "Lorsqu&apos;il y a trop d&apos;onglets ouverts :">
 <!ENTITY tabScroll.none "Faire défiler avec la molette de la souris">
 <!ENTITY tabScroll.leftRightButtons "Faire défiler avec les boutons fléchés situés à gauche et à droite">
 <!ENTITY tabScroll.rightButtons "Faire défiler avec les boutons fléchés situés à droite">
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
-<!ENTITY tabScroll.multibar "Mettre la barre d'onglets sur plusieurs lignes">
+<!ENTITY tabScroll.multibar "Mettre la barre d&apos;onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
@@ -159,18 +159,18 @@
 <!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sur tous">
-<!ENTITY showTabX.current "sur l'onglet courant">
+<!ENTITY showTabX.current "sur l&apos;onglet courant">
 <!ENTITY showTabX.hover "au survol après">
 <!ENTITY showTabX.alwaysExeption "sur tous les onglets plus larges que">
-<!ENTITY showTabX.currentHover "sur l'onglet courant et au survol après">
+<!ENTITY showTabX.currentHover "sur l&apos;onglet courant et au survol après">
 <!ENTITY minWidth.label "Largeur :">
 <!ENTITY widthTo.label "à">
 <!ENTITY widthPixels.label "pixels">
-<!ENTITY flexTabs.label "La largeur de l'onglet s'adapte au titre">
-<!ENTITY bookastitle.label "Utiliser le nom du marque-page comme titre d'onglet">
+<!ENTITY flexTabs.label "La largeur de l&apos;onglet s&apos;adapte au titre">
+<!ENTITY bookastitle.label "Utiliser le nom du marque-page comme titre d&apos;onglet">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
-<!ENTITY toolbar.description "Vous pouvez choisir quels boutons de Tabmix afficher dans la barre d'outils">
+<!ENTITY toolbar.description "Vous pouvez choisir quels boutons de Tabmix afficher dans la barre d&apos;outils">
 <!ENTITY toolbar.button.label "Personnaliser">
 <!ENTITY toolbar.visible.caption "Boutons visibles">
 <!ENTITY toolbar.novisible.label "Pas de boutons visibles">
@@ -179,9 +179,9 @@
 <!ENTITY mouseGesture.label "Interface gestuelle">
 <!ENTITY mouseClick.label "Gestion des clics">
 <!ENTITY mouseHoverSelect.labelBegin "Sélectionner un onglet au survol du curseur, après">
-<!ENTITY tabFlip.label "Revenir à l'onglet précédemment sélectionné en cliquant sur l'onglet courant">
+<!ENTITY tabFlip.label "Revenir à l&apos;onglet précédemment sélectionné en cliquant sur l&apos;onglet courant">
 <!ENTITY tabFlip.delay "Utiliser un délai de">
-<!ENTITY addTabDrag.label "Glisser les onglets pour modifier l'ordre">
+<!ENTITY addTabDrag.label "Glisser les onglets pour modifier l&apos;ordre">
 <!ENTITY enabletabbarscrolling.label "Défilement pour sélectionner les onglets">
 <!ENTITY reverseScroll.label "Déplacer vers la droite lors du défilement arrière à la souris">
 <!ENTITY clickFocus.label "Clic de souris (pressé relâché) pour sélectionner un onglet">
@@ -195,30 +195,30 @@
 <!ENTITY shift.label "Maj-clic">
 <!ENTITY alt.label "Alt-clic">
 <!ENTITY ontab.label "sur un onglet :">
-<!ENTITY ontabbar.label "sur la barre d'onglets :">
-<!ENTITY clicktab.label "Choisir la commande à exécuter lors d'un clic sur un onglet ou sur la barre d'onglets">
-<!ENTITY ontabbar.dblClick.label "Empêcher le double clic sur la barre d'onglets de redimensionner la fenêtre.">
+<!ENTITY ontabbar.label "sur la barre d&apos;onglets :">
+<!ENTITY clicktab.label "Choisir la commande à exécuter lors d&apos;un clic sur un onglet ou sur la barre d&apos;onglets">
+<!ENTITY ontabbar.dblClick.label "Empêcher le double clic sur la barre d&apos;onglets de redimensionner la fenêtre.">
 <!ENTITY clicktab.nothing "Ne fait rien">
 <!ENTITY clicktab.addtab "Ouvre un nouvel onglet">
-<!ENTITY clicktab.duplicatetab "Duplique l'onglet">
-<!ENTITY clicktab.duplicatetabw "Duplique l'onglet dans une nouvelle fenêtre">
-<!ENTITY clicktab.detachtab "Déplace l'onglet sur une nouvelle fenêtre">
-<!ENTITY clicktab.protecttab "Protège l'onglet">
-<!ENTITY clicktab.locktab "Verrouille l'onglet">
-<!ENTITY clicktab.freezetab "Protège et verrouille l'onglet">
-<!ENTITY clicktab.renametab "Renomme l'onglet">
-<!ENTITY clicktab.copyTabUrl "Copie l'adresse de l'onglet dans le presse-papiers">
-<!ENTITY clicktab.copyUrlFromClipboard "Charge l'adresse qui est dans le presse-papiers">
-<!ENTITY clicktab.selectMerge "Sélectionne l'onglet pour fusionner">
+<!ENTITY clicktab.duplicatetab "Duplique l&apos;onglet">
+<!ENTITY clicktab.duplicatetabw "Duplique l&apos;onglet dans une nouvelle fenêtre">
+<!ENTITY clicktab.detachtab "Déplace l&apos;onglet sur une nouvelle fenêtre">
+<!ENTITY clicktab.protecttab "Protège l&apos;onglet">
+<!ENTITY clicktab.locktab "Verrouille l&apos;onglet">
+<!ENTITY clicktab.freezetab "Protège et verrouille l&apos;onglet">
+<!ENTITY clicktab.renametab "Renomme l&apos;onglet">
+<!ENTITY clicktab.copyTabUrl "Copie l&apos;adresse de l&apos;onglet dans le presse-papiers">
+<!ENTITY clicktab.copyUrlFromClipboard "Charge l&apos;adresse qui est dans le presse-papiers">
+<!ENTITY clicktab.selectMerge "Sélectionne l&apos;onglet pour fusionner">
 <!ENTITY clicktab.mergeTabs "Fusionne les fenêtres ensemble">
 <!ENTITY clicktab.bookTab "Marque cet onglet">
 <!ENTITY clicktab.bookTabs "Marque tous les onglets">
-<!ENTITY clicktab.reloadtab "Actualise l'onglet">
+<!ENTITY clicktab.reloadtab "Actualise l&apos;onglet">
 <!ENTITY clicktab.reloadtabs "Actualise tous les onglets">
 <!ENTITY clicktab.reloadothertabs "Actualise les autres onglets">
-<!ENTITY clicktab.reloadlefttabs "Actualise l'onglet de gauche">
-<!ENTITY clicktab.reloadrighttabs "Actualise l'onglet de droite">
-<!ENTITY clicktab.autoReloadTab "Active/désactive l'auto-actualisation de l'onglet">
+<!ENTITY clicktab.reloadlefttabs "Actualise l&apos;onglet de gauche">
+<!ENTITY clicktab.reloadrighttabs "Actualise l&apos;onglet de droite">
+<!ENTITY clicktab.autoReloadTab "Active/désactive l&apos;auto-actualisation de l&apos;onglet">
 <!ENTITY clicktab.removeall "Ferme tous les onglets">
 <!ENTITY clicktab.removeother "Ferme les autres onglets">
 <!ENTITY clicktab.removesimilar "Ferme les onglets de même domaine">
@@ -226,30 +226,30 @@
 <!ENTITY clicktab.removeright "Ferme les onglets de droite">
 <!ENTITY clicktab.uctab "Réouvre le dernier onglet fermé">
 <!ENTITY clicktab.ucatab "Réouvre tous les onglets fermés">
-<!ENTITY clicktab.snapback "Relance l'onglet">
-<!ENTITY clicktab.ietab "Ouvre l'onglet dans IE">
+<!ENTITY clicktab.snapback "Relance l&apos;onglet">
+<!ENTITY clicktab.ietab "Ouvre l&apos;onglet dans IE">
 <!ENTITY contentLoad "Clic-milieu charge les url du presse-papiers">
 <!ENTITY context.tab "Menu contextuel des onglets">
 <!ENTITY context.main "Menu contextuel principal">
 <!ENTITY context.tools "Menu des outils">
-<!ENTITY showtabBarContext.label "Afficher dans le menu contextuel de la barre d'onglets :">
+<!ENTITY showtabBarContext.label "Afficher dans le menu contextuel de la barre d&apos;onglets :">
 <!ENTITY showContentAreaContext.label "Afficher dans le menu contextuel principal de la page courante :">
 <!ENTITY showToolsMenu.label "Afficher dans le menu des outils">
-<!ENTITY startupHomePage.label "Afficher ma page d'accueil">
+<!ENTITY startupHomePage.label "Afficher ma page d&apos;accueil">
 <!ENTITY startupBlankPage.label "Afficher une page blanche">
 <!ENTITY startupLastSession.label "Afficher mes fenêtres et onglets de la session précédente">
-<!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l'extension Session Manager est installée">
+<!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l&apos;extension Session Manager est installée">
 <!ENTITY sm.extension.description2 "Le gestionnaire de session Tax Mix Plus est désactivé">
-<!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l'extension Session Manager">
-<!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l'extension Session Manager">
+<!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l&apos;extension Session Manager">
+<!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l&apos;extension Session Manager">
 <!ENTITY sm.extension.convert.label "Convertir">
 <!ENTITY sm.extension.chooseFile.label0 "Me laisser choisir quel fichier de données convertir">
 <!ENTITY sm.extension.chooseFile.label1 "Convertir les sessions Tab Mix Plus du profil courant">
 <!ENTITY ss.enable.label "Utiliser la fonctionnalité de restauration de sessions intégrée">
-<!ENTITY ss.enable.tooltip "Décocher pour autoriser l'utilisation avec le gestionnaire de sessions de Tabmix">
+<!ENTITY ss.enable.tooltip "Décocher pour autoriser l&apos;utilisation avec le gestionnaire de sessions de Tabmix">
 <!ENTITY ss.advanced_setting "Réglages avancés">
-<!ENTITY ss.advanced_setting.warning "Ne les modifiez pas, à moins d'être certain de ce que vous faites">
-<!ENTITY ss.interval "Intervalle minimum de temps entre deux sauvegardes d'état">
+<!ENTITY ss.advanced_setting.warning "Ne les modifiez pas, à moins d&apos;être certain de ce que vous faites">
+<!ENTITY ss.interval "Intervalle minimum de temps entre deux sauvegardes d&apos;état">
 <!ENTITY ss.interval.seconds "(en millisecondes)">
 <!ENTITY ss.privacy_level "Enregistrer les données sensibles (données de formulaire, POSTDATA et cookies) pour">
 <!ENTITY ss.privacy_level.allsites "Tous les sites">
@@ -268,7 +268,7 @@
 <!ENTITY sm.start.nothing "Ne pas restaurer">
 <!ENTITY sm.exit "Quand le navigateur est fermé :">
 <!ENTITY sm.exit.save "Enregistrer la session">
-<!ENTITY sm.exit.ask "Demander avant d'enregistrer la session">
+<!ENTITY sm.exit.ask "Demander avant d&apos;enregistrer la session">
 <!ENTITY sm.exit.nothing "Ne pas enregistrer">
 <!ENTITY sm.startup "Session de démarrage :">
 <!ENTITY sm.lastsession "Dernière session">
@@ -288,7 +288,7 @@
 <!ENTITY sm.preserve.permission "Permissions">
 <!ENTITY sm.preserve.scroll1 "Position de défilement">
 <!ENTITY sm.restore.winOptions "Conserver dans les fenêtres :">
-<!ENTITY sm.restore.selectedTab "L'onglet sélectionné">
+<!ENTITY sm.restore.selectedTab "L&apos;onglet sélectionné">
 <!ENTITY sm.restore.closedTabs "La liste des onglets récemment fermés">
 <!ENTITY incompatible.extensions "Certaines de vos extensions sont incompatibles avec Tab Mix Plus, il est recommandé de désactiver ou désinstaller ces extensions.">
 <!ENTITY incompatible.button.label "Afficher la liste">

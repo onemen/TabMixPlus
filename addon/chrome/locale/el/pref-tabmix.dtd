@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
 <!ENTITY tabScroll.multibar "Με πολλές γραμμές">
 <!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">
 <!ENTITY highlight.label "Επισήμανση:">
 <!ENTITY currenttab.style.label "Τρέχουσας καρτέλας">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Μετακίνηση στα δεξιά όταν γίνεται ανάποδη κύλιση">
 <!ENTITY clickFocus.label "Επιλογή καρτέλας με απλό κλικ (πίεση κι απελευθέρωση)">
 <!ENTITY removeEntries.label "Αφαίρεση στοιχείων του μενού Tab Mix Plus με μεσαίο κλικ">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Να μην αλλάζουν μέγεθος οι καρτέλες μετά το κλείσιμο μιας αν δεν απομακρυνθεί ο κέρσορας από την εργαλειοθήκη">
 <!ENTITY removeEntries.tooltip "Συμπεριλαμβάνει κλεισμένες καρτέλες, κλεισμένα παράθυρα και αποθηκευμένες συνεδρίες">
 <!ENTITY double.label "Διπλό κλικ">
 <!ENTITY middle.label "Μεσαίο κλικ">

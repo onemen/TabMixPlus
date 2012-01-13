@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Barra degli strumenti">
 <!ENTITY show.ontabbar.label "Da mostrare nella barra delle schede">
 <!ENTITY show.ontab.label "Da mostrare nel cartellino delle schede">
-<!ENTITY dragNewTabButton.tooltip "Posizionare il pulsante 'Nuova scheda' nelle barre degli strumenti per attivare l&apos;opzione">
+<!ENTITY dragNewTabButton.tooltip "Posizionare il pulsante &apos;Nuova scheda&apos; nelle barre degli strumenti per attivare l&apos;opzione">
 <!ENTITY hideTabBarButton.label "Pulsante di chiusura schede">
 <!ENTITY newTabButton.label "Pulsante di nuova scheda">
 <!ENTITY newTabButton.posiotion.left.label "nella parte sinistra">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "rendi scorrevole la barra delle schede con pulsanti a sinistra">
 <!ENTITY tabScroll.multibar "disponi su molteplici file la barra delle schede">
 <!ENTITY maxrow.label "Numero massimo di file da visualizzare:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Attiva lo scorrimento continuo">
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
 <!ENTITY highlight.label "Da differenziare">
 <!ENTITY currenttab.style.label "Scheda attuale">
@@ -156,7 +156,7 @@
 <!ENTITY showTabX.left "sulla parte sinistra">
 <!ENTITY showTabX.rtl "sulla parte destra">
 <!ENTITY milliseconds.label " ">
-<!-- LOCALIZATION NOTEn          change this only if you need to change the width nn-->
+<!-- LOCALIZATION NOTE\n          change this only if you need to change the width \n\n-->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
 <!ENTITY showTabX.current "nella scheda attuale">
@@ -168,7 +168,7 @@
 <!ENTITY widthPixels.label "pixel">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
-<!-- LOCALIZATION NOTE          n          change this only if you need to change the width nn-->
+<!-- LOCALIZATION NOTE          \n          change this only if you need to change the width \n\n-->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
 <!ENTITY toolbar.button.label "Personalizza">

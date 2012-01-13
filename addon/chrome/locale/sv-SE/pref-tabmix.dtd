@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Öppna alla popupfönster i flikar">
 <!ENTITY divertedWindowOpen.some "Tillåt orginalstorlek på popupfönster">
 <!ENTITY divertedWindowOpen.none "Tillåt alla popupfönster">
-<!ENTITY linkTarget.label "Öppna länk med 'Target'-attribut i nuvarande flik">
+<!ENTITY linkTarget.label "Öppna länk med &apos;Target&apos;-attribut i nuvarande flik">
 <!ENTITY download.label "Förhindra tomma flikar vid nerladdning av filer">
 <!ENTITY edit.label "Filtyper">
 <!ENTITY speLink.label "Tvinga öppning i ny flik:">
@@ -68,7 +68,7 @@
 <!ENTITY tabFocus.caption "Fokus på flik som öppnas från:">
 <!ENTITY selectTab.label "Länkar">
 <!ENTITY selectDivertedTab.label "Omdirigerade fönster">
-<!ENTITY selectTabCommand.label "Kommandot 'Ny flik'">
+<!ENTITY selectTabCommand.label "Kommandot &apos;Ny flik&apos;">
 <!ENTITY selectTabBH.label "Bokmärken/Historik">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
@@ -94,8 +94,8 @@
 <!ENTITY undoCloseCache.label "Max antal stängda flikar att komma ihåg:">
 <!ENTITY undoClosepos.label "Återställ flikens orginalposition">
 <!ENTITY menuonlybutton.label "Visa bara lista på knapp i verktygsfält">
-<!ENTITY ctrltab.label "Ctrl-Tab cirkulerar mellan flikar i 'senast visad'-ordning">
-<!ENTITY cmdtab.label "Cmd-Tab cirkulerar mellan flikar i 'senast visad'-ordning">
+<!ENTITY ctrltab.label "Ctrl-Tab cirkulerar mellan flikar i &apos;senast visad&apos;-ordning">
+<!ENTITY cmdtab.label "Cmd-Tab cirkulerar mellan flikar i &apos;senast visad&apos;-ordning">
 <!ENTITY ctrltab.tabPreviews "Förhansvisa flikar">
 <!ENTITY ctrltab.popup "Ctrl-Tab visar en popup-lista">
 <!ENTITY cmdtab.popup "Cmd-Tab visar en popup-lista">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "ToolBar">
 <!ENTITY show.ontabbar.label "Show on Tab bar">
 <!ENTITY show.ontab.label "Show on Tab">
-<!ENTITY dragNewTabButton.tooltip "Drag 'New Tab' button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Visa knapp för stäng flik">
 <!ENTITY newTabButton.label "Visa knapp för ny knapp">
 <!ENTITY newTabButton.posiotion.left.label "on Left side">
@@ -277,7 +277,7 @@
 <!ENTITY sm.restore.options "Vid återställning av session:">
 <!ENTITY sm.restore.overwrite "Skriv över befintligt fönster">
 <!ENTITY sm.restore.overwriteTabs "Och flikar">
-<!ENTITY sm.restore.closedWinList "Spara fönster i listan 'Stängda fönster'">
+<!ENTITY sm.restore.closedWinList "Spara fönster i listan &apos;Stängda fönster&apos;">
 <!ENTITY sm.restore.merge "Slå ihop flera fönster till ett">
 <!ENTITY sm.restore.reloadall "Uppdatera alla flikar">
 <!ENTITY sm.notrestore.label "When not restoring on start">
@@ -289,6 +289,6 @@
 <!ENTITY sm.preserve.scroll1 "Scroll Position">
 <!ENTITY sm.restore.winOptions "Skydda fönster:">
 <!ENTITY sm.restore.selectedTab "Vald flik">
-<!ENTITY sm.restore.closedTabs "Lista 'Stängda fönster'">
+<!ENTITY sm.restore.closedTabs "Lista &apos;Stängda fönster&apos;">
 <!ENTITY incompatible.extensions "Några installerade tillägg är inte kompatibla med Tab Mix Plus och det rekommenderas att du avaktiverar eller avinstallerar dom.">
 <!ENTITY incompatible.button.label "Visa lista">

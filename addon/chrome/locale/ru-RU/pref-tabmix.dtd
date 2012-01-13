@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Импорт настроек">
 <!ENTITY settings.default "По умолчанию">
 <!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
-<!ENTITY externalLink.useSeparate.label "Используйте отдельные настройки для ссылок из других приложений">
+<!ENTITY externalLink.useSeparate.label "Использовать отдельные настройки для ссылок из других приложений">
 <!ENTITY externalLinkTarget.label "Открывать ссылки из внешних приложений:">
 <!ENTITY linkTarget.tab "В новой вкладке текущего окна">
 <!ENTITY linkTarget.window "В новом окне">
@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Все всплывающие открывать во вкладках">
 <!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
 <!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
-<!ENTITY linkTarget.label "Открывать ссылки с атрибутом ''target'' в текущей вкладке">
+<!ENTITY linkTarget.label "Открывать ссылки с атрибутом &apos;target&apos; в текущей вкладке">
 <!ENTITY download.label "Не открывать пустые вкладки при закачке файлов">
 <!ENTITY edit.label "Типы файлов">
 <!ENTITY speLink.label "Принудительно открывать в новых вкладках:">
@@ -107,7 +107,7 @@
 <!ENTITY mergePopups.label "Также объединять всплывающие окна">
 <!ENTITY popupNextToOpener.label "Размещать всплывающие окна рядом с окнами, которые их открывали">
 <!ENTITY slideshow.label "С помощью F8 циклически листать вкладки каждые">
-<!ENTITY reloadEvery.onReloadButton.label "Показывать меню ''Обновлять вкладку каждые...'' для кнопки Обновить">
+<!ENTITY reloadEvery.onReloadButton.label "Показывать меню &apos;Обновлять вкладку каждые...&apos; для кнопки Обновить">
 <!ENTITY toggleAnimation.label "Отключить анимацию открытия/закрытия вкладки">
 <!ENTITY seconds.label "сек.">
 <!ENTITY minutes.label "мин.">
@@ -116,7 +116,7 @@
 <!ENTITY toolBarAppearance.label "Панель инструментов">
 <!ENTITY show.ontabbar.label "Отображать на панели вкладок">
 <!ENTITY show.ontab.label "Отображать на вкладке">
-<!ENTITY dragNewTabButton.tooltip "Перетащите кнопку 'Новая вкладка' на панель вкладок, чтобы использовать этот параметр.">
+<!ENTITY dragNewTabButton.tooltip "Перетащите кнопку &apos;Новая вкладка&apos; на панель вкладок, чтобы использовать этот параметр.">
 <!ENTITY hideTabBarButton.label "Общая кнопка закрытия вкладок">
 <!ENTITY newTabButton.label "Кнопка добавления новой вкладки">
 <!ENTITY newTabButton.posiotion.left.label "Слева">
@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
 <!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
 <!ENTITY maxrow.label "Максимальное число строк:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Использовать плавную прокрутку">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
 <!ENTITY highlight.label "Подсветка:">
 <!ENTITY currenttab.style.label "Текущая вкладка">
@@ -234,7 +234,7 @@
 <!ENTITY context.tools "Инструменты">
 <!ENTITY showtabBarContext.label "Состав контекстного меню панели вкладок:">
 <!ENTITY showContentAreaContext.label "Состав контекстного меню веб-страниц:">
-<!ENTITY showToolsMenu.label "Добавить в меню ''Инструменты'':">
+<!ENTITY showToolsMenu.label "Добавить в меню &apos;Инструменты&apos;:">
 <!ENTITY startupHomePage.label "Показывать домашнюю страницу">
 <!ENTITY startupBlankPage.label "Показывать пустую страницу">
 <!ENTITY startupLastSession.label "Показывать окна и вкладки открытые в последний раз">
