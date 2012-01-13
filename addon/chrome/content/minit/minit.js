@@ -1181,16 +1181,14 @@ Tabmix.navToolbox = {
         'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
          if (isMouseEvent || altEnter || loadNewTab) {'
       )._replace(
-        // always check whereToOpenLink exept for alt to catch also ctrl/meta
+        // always check whereToOpenLink except for alt to catch also ctrl/meta
         'if (isMouseEvent)',
-        'if (true)'
+        'if (isMouseEvent || aTriggeringEvent && !altEnter)'
       )._replace(
         'where = whereToOpenLink(aTriggeringEvent, false, false);',
-        'where = whereToOpenLink(aTriggeringEvent, false, true);'
-      )._replace(
-        'if (where == "current")',
-        'if (loadNewTab && where == "current") where = "tab";\
-         $&'
+        '$&\
+         if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
+           where = "tab";'
       )._replace(
         'openUILinkIn(url, where, params);',
         'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
