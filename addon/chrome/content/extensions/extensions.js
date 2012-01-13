@@ -270,7 +270,7 @@ var TMP_extensionsCompatibility = {
     } catch (ex) {}
 
     // make URL Suffix extension compatible with tabmix
-    if ("objURLsuffix" in window) {
+    if ("objURLsuffix" in window && !Tabmix.isVersion(100)) {
       if ("handleURLBarCommand" in objURLsuffix) {
         Tabmix.newCode("objURLsuffix.handleURLBarCommand", objURLsuffix.handleURLBarCommand)._replace(
           'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);',
@@ -279,6 +279,8 @@ var TMP_extensionsCompatibility = {
           'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value);',
           'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, true);'
         ).toCode();
+
+        window.handleURLBarCommand = objURLsuffix.handleURLBarCommand;
       }
 
       if ("canonizeUrl" in objURLsuffix) {
@@ -287,8 +289,6 @@ var TMP_extensionsCompatibility = {
           'return [gURLBar.value, aPostDataRef, true];'
         ).toCode();
       }
-
-      window.handleURLBarCommand = objURLsuffix.handleURLBarCommand;
     }
 
     try {
