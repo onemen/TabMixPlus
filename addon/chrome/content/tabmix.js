@@ -587,25 +587,14 @@ var TMP_eventListener = {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
         fullScrToggler.collapsed = true;
-        let box = document.getElementById("tabmix-bottom-toolbox")
+        let box = document.getElementById("tabmix-bottom-toolbox");
         box.parentNode.insertBefore(fullScrToggler, box);
 
         Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
           'gNavToolbox.style.marginTop',
           <![CDATA[
             if (TabmixTabbar.position == 1) {
-              let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-              if (aShow) {
-                bottomToolbox.style.marginBottom = "";
-                gTMPprefObserver.updateTabbarBottomPosition();
-              }
-              else {
-                let bottombox = document.getElementById("browser-bottombox");
-                // changing the margin trigger resize event
-                bottomToolbox.style.marginBottom =
-                        -(bottomToolbox.getBoundingClientRect().height +
-                          bottombox.getBoundingClientRect().height) + "px"
-              }
+              TMP_eventListener.mouseoverToggle(aShow);
             }
           $&]]>
         ).toCode();
@@ -646,6 +635,9 @@ var TMP_eventListener = {
           ).toCode();
         }
       }
+      if (aPositionChanged) {
+        this.mouseoverToggle(false);
+      }
       if (!document.mozFullScreen) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
         fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
@@ -670,6 +662,21 @@ var TMP_eventListener = {
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode == 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1)
       FullScreen.mouseoverToggle(true);
+  },
+
+  mouseoverToggle: function (aShow) {
+    let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    if (aShow) {
+      bottomToolbox.style.marginBottom = "";
+      gTMPprefObserver.updateTabbarBottomPosition();
+    }
+    else {
+      let bottombox = document.getElementById("browser-bottombox");
+      // changing the margin trigger resize event that calls updateTabbarBottomPosition
+      bottomToolbox.style.marginBottom =
+          -(bottomToolbox.getBoundingClientRect().height +
+          bottombox.getBoundingClientRect().height) + "px";
+    }
   },
 
   // Function to catch when new tabs are created and update tab icons if needed
