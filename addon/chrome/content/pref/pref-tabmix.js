@@ -918,6 +918,8 @@ function TM_enableApply(aEvent) {
 function getValue(item) {
    if (item.localName == "checkbox")
       return item.hasAttribute("inverted") ? !item.checked : item.checked;
+   if (item.hasAttribute("boolean"))
+      return item.selectedIndex == 0;
 
    return item.value;
 }
