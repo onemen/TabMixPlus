@@ -868,6 +868,20 @@ var TMP_eventListener = {
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
+    else if (aEvent.detail != 0 && tabBar.mTabstrip.orient == "horizontal") {
+      // scroll the tabbar by one tab
+      // this code is from scrollbox.xml DOMMouseScroll event handler
+      let tabsSrip = tabBar.mTabstrip;
+      let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
+      let direction = aEvent.detail > 0 ? 1 : -1;
+      if (tabsSrip._prevMouseScrolls.every(function(prev) prev == isVertical))
+        tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
+      if (tabsSrip._prevMouseScrolls.length > 1)
+        tabsSrip._prevMouseScrolls.shift();
+      tabsSrip._prevMouseScrolls.push(isVertical);
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+    }
   },
 
   onWindowClose: function TMP_EL_onWindowClose() {
