@@ -365,58 +365,58 @@
       </menupopup>
       <!-- context menu for undoclosetab menupopup -->
       <menupopup id="tm_undocloseContextMenu"
-                  onpopupshowing="return document.popupNode.value >= 0;">
+                  onpopupshowing="return this.triggerNode.value >= 0;">
         <menuitem id="tmOpen" label="&restoreincurrent.label;" accesskey="&restoreincurrent.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('current', document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.restoreTab('current', this.parentNode.triggerNode.value);"/>
         <menuitem id="tmOpenInNewWindow" label="&restoreinwin.label;" accesskey="&restoreinwin.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('window', document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.restoreTab('window', this.parentNode.triggerNode.value);"/>
         <menuitem id="tmOpenInNewTab" label="&restoreintab.label;" accesskey="&restoreintab.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('tab', document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.restoreTab('tab', this.parentNode.triggerNode.value);"/>
         <menuitem id="tmRestoreTab" label="&restoretab.label;" accesskey="&restoretab.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('original', document.popupNode.value);" default="true"/>
+                  oncommand="TMP_ClosedTabs.restoreTab('original', this.parentNode.triggerNode.value);" default="true"/>
         <menuseparator id="tmpre-bookmarks-separator"/>
         <menuitem id="tmAddBookmark" label="&bookmark.label;" accesskey="&bookmark.accesskey;"
-                  oncommand="TMP_ClosedTabs.addBookmarks(document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.addBookmarks(this.parentNode.triggerNode.value);"/>
         <menuitem id="tmcopyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
-                  oncommand="TMP_ClosedTabs.copyTabUrl(document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.copyTabUrl(this.parentNode.triggerNode.value);"/>
         <menuseparator id="tmpost-bookmarks-separator"/>
         <menuitem id="tm_delete" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('delete', document.popupNode.value);"/>
+                  oncommand="TMP_ClosedTabs.restoreTab('delete', this.parentNode.triggerNode.value);"/>
       </menupopup>
       <!-- context menu for undoclosewindow menupopup for use with sessionRestore -->
       <menupopup id="tm_undocloseWindowContextMenu"
-                  onpopupshowing="return document.popupNode.value >= 0;">
+                  onpopupshowing="return this.triggerNode.value >= 0;">
         <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
-                  oncommand="TabmixSessionManager.restoreWindow('delete', document.popupNode.value);"/>
+                  oncommand="TabmixSessionManager.restoreWindow('delete', this.parentNode.triggerNode.value);"/>
       </menupopup>
       <!-- context menu for session manager menupopup -->
       <menupopup id="tm_sessionmanagerContextMenu"
                   onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
-                  onpopuphidden="Tabmix.hidePopup();">
+                  onpopuphidden="Tabmix.hidePopup(this);">
         <menuitem id="tm-sm-OpenInCurrenWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
-                  oncommand="TabmixSessionManager.restoreSession(document.popupNode, true);"/>
+                  oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, true);"/>
         <menuitem id="tm-sm-OpenInNewWindow" label="&sm.context.restore.new;" accesskey="&sm.context.restore.newkey;"
-                  oncommand="TabmixSessionManager.restoreSession(document.popupNode, false);"/>
+                  oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, false);"/>
         <menuseparator/>
         <menuitem id="tm-sm-ReplaceWithThis" label="&sm.context.replacethis;" accesskey="&sm.context.replacethis.key;" observes="tmp_contextmenu_ThisWindow"
-                  oncommand="TabmixSessionManager.sessionUtil('replace', 'thiswindow');"/>
+                  oncommand="TabmixSessionManager.sessionUtil('replace', 'thiswindow', this.parentNode.triggerNode.session);"/>
         <menuitem id="tm-sm-AddThis" label="&sm.context.add;" accesskey="&sm.context.add.key;" observes="tmp_contextmenu_ThisWindow"
-                  oncommand="TabmixSessionManager.addWinToSession('savethiswindow');"/>
+                  oncommand="TabmixSessionManager.addWinToSession('savethiswindow', this.parentNode.triggerNode.session);"/>
         <menuseparator observes="tmp_contextmenu_ThisWindow"/>
         <menuitem id="tm-sm-ReplaceWithAll" label="&sm.context.replaceall;" accesskey="&sm.context.replaceall.key;" observes="tmp_contextmenu_AllWindows"
-                  oncommand="TabmixSessionManager.sessionUtil('replace', 'allwindows');"/>
+                  oncommand="TabmixSessionManager.sessionUtil('replace', 'allwindows', this.parentNode.triggerNode.session);"/>
         <menuitem id="tm-sm-AddAll" label="&sm.context.addall;" accesskey="&sm.context.addall.key;" observes="tmp_contextmenu_AllWindows"
-                  oncommand="TabmixSessionManager.addWinToSession('saveallwindows');"/>
+                  oncommand="TabmixSessionManager.addWinToSession('saveallwindows', this.parentNode.triggerNode.session);"/>
         <menuseparator observes="tmp_contextmenu_AllWindows"/>
         <menuitem id="tm-sm-Save" label="&sm.context.save;" accesskey="&sm.context.save.key;"
-                  oncommand="TabmixSessionManager.saveClosedSession();"/>
+                  oncommand="TabmixSessionManager.saveClosedSession(this.parentNode.triggerNode);"/>
         <menuitem id="tm-sm-Rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;"
-                  oncommand="TabmixSessionManager.renameSession(document.popupNode.session);"/>
+                  oncommand="TabmixSessionManager.renameSession(this.parentNode.triggerNode.session);"/>
         <menuseparator/>
         <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;"
-                  oncommand="TabmixSessionManager.removeSavedSession(document.popupNode);"/>
+                  oncommand="TabmixSessionManager.removeSavedSession(this.parentNode.triggerNode);"/>
         <menuitem id="tm-sm-DeleteAll" label="&sm.context.deleteall;" accesskey="&sm.context.deleteall.key;"
-                  oncommand="TabmixSessionManager.removeAllSavedSession();"/>
+                  oncommand="TabmixSessionManager.removeAllSavedSession(this.parentNode.triggerNode);"/>
         <menuseparator/>
         <menuitem id="tm-sm-SetAsStartup" label="&sm.context.startup;" accesskey="&sm.context.startup.key;" type="checkbox"
                   oncommand="TabmixSessionManager.setSessionAsStartup(this);"/>

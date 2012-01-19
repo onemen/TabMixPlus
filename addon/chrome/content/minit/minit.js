@@ -802,8 +802,8 @@ Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
 }
 
 // sometimes context popup stay "open", we hide it manually.
-Tabmix.hidePopup = function TMP_hidePopup() {
-   var node = document.popupNode;
+Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
+   var node = aPopupMenu.triggerNode;
    while (node && node.localName != "menubar" && node.localName != "toolbar") {
       if (node.localName == "menupopup" || node.localName == "popup") {
          if (node.hasAttribute("open")) node.removeAttribute("open");

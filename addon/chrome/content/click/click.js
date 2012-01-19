@@ -277,7 +277,7 @@ var TabmixContext = {
     if (item) // make sure no one removed it before we do
       tabContextMenu.removeChild(item);
 
-    tabContextMenu.setAttribute("onpopuphidden", tabContextMenu.getAttribute("onpopuphidden") + "if (event.target == this) Tabmix.hidePopup();");
+    tabContextMenu.setAttribute("onpopuphidden", tabContextMenu.getAttribute("onpopuphidden") + "if (event.target == this) Tabmix.hidePopup(this);");
     tabContextMenu.addEventListener("popupshowing", this.updateTabContextMenu, false);
     tabContextMenu.addEventListener("popupshown", this.tabContextMenuShown, false);
 
@@ -369,7 +369,6 @@ var TabmixContext = {
   },
 
   // Tab context menu popupshowing
-//Tabmix.updateTabContextMenu = function TMP_updateTabContextMenu(event) {
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
     // 'this' here refer to tabContextMenu
 //XXX test if we need this on FF 3.5+
@@ -380,16 +379,14 @@ var TabmixContext = {
     if (event.originalTarget != gBrowser.tabContextMenu)
       return true;
 
-    var item;
-    if (document.popupNode.parentNode)
-      item = document.popupNode.parentNode.parentNode.id;
-    if (item && (item == "btn_tabslist" || item == "btn_tabslistSorted" ||
-          item == "alltabs-button")) {
-      TabContextMenu.contextTab = document.popupNode.tab;
-    }
+    var item, triggerNode = gBrowser.tabContextMenu.triggerNode;
+    if (triggerNode.parentNode)
+      item = triggerNode.parentNode.id;
+    if (item && (item == "btn_tabslist_menu" || item == "alltabs-popup"))
+      TabContextMenu.contextTab = triggerNode.tab;
 
-    var clickOutTabs = document.popupNode.localName == "tabs";
-    var aTab = clickOutTabs ? gBrowser.mCurrentTab : TabContextMenu.contextTab;
+    var clickOutTabs = triggerNode.localName == "tabs";
+    var aTab = clickOutTabs ? gBrowser.selectedTab : TabContextMenu.contextTab;
 
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 

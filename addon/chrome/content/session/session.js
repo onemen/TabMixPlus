@@ -1351,9 +1351,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   [title, msg, "", "", buttons]);
    },
 
-   addWinToSession: function SM_addWinToSession(action) {
+   addWinToSession: function SM_addWinToSession(action, path) {
       if (!this.isValidtoSave()) return;
-      var path = document.popupNode.session;
       var result = this.promptReplaceStartup("addWinToSession", path);
       if (result.button == Tabmix.BUTTON_CANCEL) return;
       else if (result.button == Tabmix.BUTTON_OK) this.replaceStartupPref(result, "");
@@ -1370,8 +1369,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       }
    },
 
-   saveClosedSession: function SM_saveClosedSession() {
-      var oldPath = document.popupNode.session;
+   saveClosedSession: function SM_saveClosedSession(aTriggerNode) {
+      var oldPath = aTriggerNode.session;
       var id = this.getAnonymousId();
       var path = this._rdfRoot + "/saved/" + id + "/window";
       var pathToReplace = "";
@@ -1387,7 +1386,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       }
       container = this.initContainer(path)
       var pathNode, container, extID = "";
-      var node = document.popupNode.parentNode.parentNode;
+      var node = aTriggerNode.parentNode.parentNode;
       if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows")
          extID = "/" + id;
       this.copySubtree(oldPath, path + extID);
@@ -1442,7 +1441,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
    },
 
-   sessionUtil: function(action, what) {
+   sessionUtil: function(action, what, sessionPath) {
       // action = save , replace
       // type = thiswindow , allwindows
       if (!this.isValidtoSave()) return;
@@ -1458,7 +1457,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          name = session.name;
          saveClosedTabs = session.saveClosedTabs;
       } else {
-         oldPath = document.popupNode.session;
+         oldPath = sessionPath;
          name = this.getLiteralValue(oldPath, "name");
          saveClosedTabs = this.saveClosedtabs;
       }
@@ -1585,7 +1584,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    updateSessionMenu: function(menu) {
-      if (typeof(document.popupNode.session) == "undefined")
+      var triggerNode = menu.triggerNode;
+      if (typeof(triggerNode.session) == "undefined")
         return false;
 
       var overwriteWindows = TabmixSvc.SMprefs.getBoolPref("restore.overwritewindows") || Tabmix.singleWindowMode;
@@ -1593,17 +1593,17 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       document.getElementById("tm-sm-OpenInNewWindow").setAttribute("default",!overwriteWindows);
       document.getElementById("tm-sm-OpenInNewWindow").hidden = Tabmix.singleWindowMode;
 
-      var mValue = document.popupNode.getAttribute("value");
+      var mValue = triggerNode.getAttribute("value");
       if (mValue <= -1)
          document.getElementById("tm-sm-Rename").setAttribute("disabled",true);
       else
          document.getElementById("tm-sm-Rename").removeAttribute("disabled");
 
-      var node = document.popupNode.parentNode.parentNode;
+      var node = triggerNode.parentNode.parentNode;
       var mItem = document.getElementById("tm-sm-SetAsStartup");
       if (node.hasAttribute("sessionmanager-menu")) {
          mItem.removeAttribute("disabled");
-         if (document.popupNode.hasAttribute("default"))
+         if (triggerNode.hasAttribute("default"))
             mItem.setAttribute("checked", "true");
         else
             mItem.removeAttribute("checked");
@@ -1629,7 +1629,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             obsThis.hidden = true;
          if (mSave.hidden != false)
             mSave.hidden = false;
-         if (document.popupNode.hasAttribute("disabled"))
+         if (triggerNode.hasAttribute("disabled"))
             mSave.setAttribute("disabled", true);
          else
             mSave.removeAttribute("disabled");
@@ -1663,11 +1663,12 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    setSessionAsStartup: function(popup) {
       if (popup.getAttribute("checked")) {
-         var aValue = document.popupNode.getAttribute("value"); // -1, -2 for for closed session, 1,2.... for saved session
+         let node = popup.parentNode.triggerNode;
+         var aValue = node.getAttribute("value"); // -1, -2 for for closed session, 1,2.... for saved session
          var loadsession = aValue && aValue <= -1 ? aValue : 0;
          TabmixSvc.SMprefs.setIntPref("onStart.loadsession", loadsession);
          if (loadsession > -1)
-            TabmixSvc.SMprefs.setCharPref("onStart.sessionpath", document.popupNode.session);
+            TabmixSvc.SMprefs.setCharPref("onStart.sessionpath", node.session);
          TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
       }
    },
@@ -1714,8 +1715,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       }
    },
 
-   removeAllSavedSession: function SM_removeAllSavedSession() {
-      var node = document.popupNode.parentNode.parentNode;
+   removeAllSavedSession: function SM_removeAllSavedSession(aMenuItem) {
+      var node = aMenuItem.parentNode.parentNode;
       var result, title, msg;
       var buttons = [TabmixSvc.setLabel("sm.removeStartup.button0"),
                      TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
