@@ -89,8 +89,16 @@
    display: none !important;
 }
 
+/* we have display: -moz-box !important; in browsroverlay_base.css
+so display: none !important; is not hide the button */
+.tab-close-button:not([fadein]) {
+  opacity: 0;
+}
+
+/* we don't remove top and bottom borders to prevent tab height from shrinking */
 .tabbrowser-tab:not([fadein]):not([pinned]) {
-  border: none;
+  border-left: none;
+  border-right: none;
 }
 
 /*** backword compatibility with theme that still use old tabmix tab binding ***/
