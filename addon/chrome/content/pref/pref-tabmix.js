@@ -1009,12 +1009,7 @@ function TM_selectTab(aSelTab) {
   var tabbox = document.getElementById("tabMixTabBox");
   tabbox.lastselectedIndex = tabbox.selectedIndex;
   tabbox.selectedIndex = (aSelTab) ? aSelTab : 0;
-  var tabId = document.getElementsByTagName("tab")[aSelTab].id;
-  var catButtons = document.getElementById("TM_ButtonBox").childNodes;
-
-  for(var i = 0; i < catButtons.length; i++)
-    if(catButtons[i].getAttribute("group", "categories"))
-      catButtons[i].setAttribute("checked", (catButtons[i].id == "button" + tabId));
+  document.getElementById("TM_ButtonBox").selectedIndex = tabbox.selectedIndex;
 }
 
 var gIncompatiblePane = {
