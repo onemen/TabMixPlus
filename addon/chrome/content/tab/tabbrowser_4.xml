@@ -653,7 +653,7 @@
           var marginBottom = parseInt(cStyle["marginBottom"]) || 0;
           height += marginTop + marginBottom;
 
-          var tabBottom = aTab.boxObject.y - marginTop + height
+          var tabBottom = aTab.boxObject.y - marginTop + height;
           return Math.round((tabBottom - aTop)/height);
         ]]></body>
       </method>

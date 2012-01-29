@@ -1506,7 +1506,7 @@ since we can have tab hidden or remove the index can change....
       if (aTab.hasAttribute("newtab"))
         aTab.removeAttribute("newtab");
     }
-    else
+    else if (aTab.hasAttribute("fadein"))
       TMP_onTabTitleChanged_update();
   },
 
