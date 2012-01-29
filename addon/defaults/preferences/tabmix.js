@@ -22,7 +22,10 @@ pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
 pref("browser.tabs.loadFolderAndReplace", true); // remove from firefox 4.0 2009-10-17
 
 pref("extensions.tabmix.loadOnNewTab", 0);
-pref("extensions.tabmix.newTabUrl", "");
+/* 2012-01-26
+  we use "browser.newtab.url" from firefox 12
+  pref("extensions.tabmix.newTabUrl", "");
+*/
 pref("extensions.tabmix.replaceLastTabWith", 0);
 pref("extensions.tabmix.newTabUrl_afterLastTab", "");
 

@@ -202,7 +202,6 @@
               <hbox class="indent" align="center" flex="1">
                  <label id="newTabUrlLabel" value="&location.label;:" control="newTabUrl"/>
                  <textbox id="newTabUrl" class="padded uri-element" flex="1"
-                          type="autocomplete" autocompletesearch="history"
                           prefstring="extensions.tabmix.newTabUrl" />
               </hbox>
               <hbox align="center">
@@ -359,7 +358,6 @@
               <hbox class="indent" align="center" flex="1">
                  <label id="newTabUrlLabel_1" value="&location.label;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
-                          type="autocomplete" autocompletesearch="history"
                           prefstring="extensions.tabmix.newTabUrl_afterLastTab" />
               </hbox>
               <checkbox class="indent" align="center" id="selectLocationBar.afterLastTabClosed" label="&focusContent.label;"

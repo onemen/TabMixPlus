@@ -119,9 +119,12 @@ var tablib = {
 
     // changed by bug #563337
     if (Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager) {
+      let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true});';
+      let aboutNewtab = 'this.addTab(BROWSER_NEW_TAB_URL, {skipAnimation: true});';
+      let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
+                 aboutNewtab : aboutBlank;
       Tabmix.newCode("gBrowser._beginRemoveTab", gBrowser._beginRemoveTab)._replace(
-        'this.addTab("about:blank", {skipAnimation: true});',
-        'TMP_BrowserOpenTab(null, true);'
+        code, 'TMP_BrowserOpenTab(null, true);'
       ).toCode();
     }
 
@@ -1676,7 +1679,7 @@ Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
 }
 
 Tabmix.newTabUrls = [
-   "about:blank",
+   "about:newtab", "about:blank",
    "chrome://abouttab/content/text.html",
    "chrome://abouttab/content/tab.html",
    "chrome://google-toolbar/content/new-tab.html",

@@ -681,11 +681,13 @@ Tabmix.contentAreaClick = {
    * @param targetDomain     The domain name of the website URL to be loaded.
    * @param targetPref       An integer value that specifies whether or not links should
    *                         be forced into new tabs.
-   * @returns                true if the function handled the click, false if it didn't.
+   * @returns                true to load link in new tab
+   *                         false to load link in current tab
    *
    */
   openExSiteLink: function TMP_openExSiteLink(linkNode, currentDomain, targetDomain, targetPref) {
-    if (targetPref != 2) return false;
+    if (targetPref != 2 || Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+      return false;
 
 ///XXX if we check this in every function do it one time at the start
     if (linkNode.hasAttribute("onclick")) {
@@ -714,6 +716,9 @@ Tabmix.contentAreaClick = {
               false to load link in current tab
    */
   openTabfromLink: function TMP_openTabfromLink(event, linkNode, href) {
+    if (Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+      return false;
+
     if (this.GoogleComLink(linkNode))
       return null;
 

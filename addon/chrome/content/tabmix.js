@@ -360,6 +360,24 @@ var TMP_eventListener = {
 
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
+    // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
+    if (typeof isBlankPageURL == "function") {
+      Tabmix.isBlankPageURL = isBlankPageURL;
+      XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
+        return Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
+      });
+      Tabmix.newTabUrls.shift();
+      Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
+      Tabmix.newTabURLpref = "browser.newtab.url";
+    }
+    else {
+      Tabmix.isBlankPageURL = function TMP_isBlankPageURL(aURL) {
+        return aURL == "about:blank";
+      }
+      Tabmix.newTabURL = "about:blank";
+      Tabmix.newTabURLpref = "extensions.tabmix.newTabUrl";
+    }
+
     // init tabmix functions
     try {
       TMP_extensionsCompatibility.onWindowOpen();

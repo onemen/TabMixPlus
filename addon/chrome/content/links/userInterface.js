@@ -102,6 +102,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith") :
                                          TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
    var url;
+   var newTabUrl = Tabmix.newTabURL;
    switch (newTabContent) {
       case 0 : // blank tab, by default
          url = "about:blank";
@@ -111,7 +112,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          break;
       case 2 : // current URI
          var currentURI = gBrowser.currentURI;
-         url = currentURI ? currentURI.spec : "about:blank";
+         url = currentURI ? currentURI.spec : newTabUrl;
          break;
       case 3 : // duplicate tab
          let currentUrl = gBrowser.currentURI.spec;
@@ -121,15 +122,15 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          break;
       case 4 : // user url
          try {
-            var prefName = replaceLastTab ? "newTabUrl_afterLastTab" : "newTabUrl";
-            url = TabmixSvc.TMPprefs.getComplexValue(prefName, Components.interfaces.nsIPrefLocalizedString).data;
+            let prefName = replaceLastTab ? "extensions.tabmix.newTabUrl_afterLastTab" : Tabmix.newTabURLpref;
+            url = TabmixSvc.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
          if (!url)
-            url = "about:blank";
+            url = newTabUrl;
          break;
       default:
-         url = "about:blank";
+         url = newTabUrl;
    }
    var flags = nsIWebNavigation.LOAD_FLAGS_NONE;
    // if google.toolbar extension installed check google.toolbar.newtab pref
@@ -144,8 +145,9 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    if ((TabmixTabbar.widthFitTitle || !Tabmix.isVersion(60)) && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
-   var loadBlank = url == "about:blank";
-   var newTab = replaceLastTab ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
+   var loadBlank = Tabmix.isBlankPageURL(url);
+   var _url = loadBlank ? url : "about:blank";
+   var newTab = replaceLastTab ? gBrowser.addTab(_url, {skipAnimation: true}) : gBrowser.addTab(_url);
    if (replaceLastTab) {
      newTab.__newLastTab = true;
      if (TabmixSvc.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
@@ -198,7 +200,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
-  if (aUrl != "about:blank") {
+  if (!Tabmix.isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user laod about:blank tab
     gBrowser.tabmix_tab = aTab;
     gBrowser.tabmix_userTypedValue = aUrl;
@@ -218,13 +220,15 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
  *        we restore the current url
  */
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
+  if (Tabmix.isBlankPageURL(gURLBar.value))
+    gURLBar.value = "";
   if (!gBrowser.tabmix_tab)
     return;
 
   var isCurrentTab = gBrowser.tabmix_tab == gBrowser.mCurrentTab;
   var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
   var url = gBrowser.tabmix_userTypedValue;
-  if (url != "about:blank")
+  if (!Tabmix.isBlankPageURL(url))
     browser.userTypedValue = url;
   if (isCurrentTab && gBrowser.mIsBusy) {
     browser.addEventListener("load", function TMP_onLoad_urlBarOnBlur(aEvent) {
@@ -239,7 +243,7 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
 
 Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   var url = gBrowser.currentURI.spec;
-  if (url != gURLBar.value && url != "about:blank") {
+  if (url != gURLBar.value && !Tabmix.isBlankPageURL(url)) {
     gURLBar.value = gBrowser.userTypedValue = url;
   }
   delete gBrowser.tabmix_tab;

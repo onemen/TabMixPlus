@@ -38,6 +38,9 @@ function before_Init() {
   cancelButton.setAttribute("closebuttonlabel", document.documentElement.getAttribute("closebuttonlabel"));
   cancelButton.setAttribute("cancelbuttonlabel", cancelButton.label);
   TMP_setButtons(true, true);
+
+  // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
+  TM_Options.setItem("newTabUrl", "prefstring", topWindow.Tabmix.newTabURLpref);
 }
 
 // load all preferences into the dialog
@@ -672,6 +675,15 @@ function setPrefByType(prefName, newValue, atImport) {
                // 2011-11-26
                case "extensions.tabmix.clickToScroll.scrollDelay":
                   TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
+                  break;
+               // 2012-01-26
+               case "extensions.tabmix.newTabUrl":
+                  if (Tabmix.getTopWin().Tabmix.newTabURLpref == "browser.newtab.url" && newValue != "") {
+                    let nsISupportsString = Components.interfaces.nsISupportsString;
+                    var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+                    str.data = newValue;
+                    TabmixSvc.prefs.setComplexValue("browser.newtab.url", nsISupportsString, str);
+                  }
                   break;
             }
       }

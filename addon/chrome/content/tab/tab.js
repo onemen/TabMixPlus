@@ -479,6 +479,8 @@ var gTMPprefObserver = {
 
     if (Tabmix.isVersion(120))
       this.OBSERVING.push("browser.tabs.onTop");
+    if (typeof isBlankPageURL == "function")
+      this.OBSERVING.push("browser.newtab.url");
 
     try {
       // add Observer
@@ -815,6 +817,10 @@ var gTMPprefObserver = {
           TabmixTabbar.setHeight(1, true);
           gBrowser.tabContainer.updateVerticalTabStrip();
         }
+        break;
+      case "browser.newtab.url":
+        Tabmix.newTabUrls.shift();
+        Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
         break;
       default:
         TabmixTabbar.updateSettings(false);
@@ -1716,6 +1722,15 @@ var gTMPprefObserver = {
       TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
       TabmixSvc.prefs.clearUserPref("extensions.tabmix.clickToScroll.scrollDelay");
     }
+    // 2012-01-26
+    if (typeof isBlankPageURL == "function" && TabmixSvc.prefs.prefHasUserValue("extensions.tabmix.newTabUrl")) {
+      let nsISupportsString = Components.interfaces.nsISupportsString;
+      var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+      str.data = TabmixSvc.prefs.getComplexValue("extensions.tabmix.newTabUrl", nsISupportsString).data;
+      if (str.data != "")
+        TabmixSvc.prefs.setComplexValue("browser.newtab.url", nsISupportsString, str);
+      TabmixSvc.prefs.clearUserPref("extensions.tabmix.newTabUrl");
+    }
 
     // verify valid value
     if (TabmixSvc.TMPprefs.prefHasUserValue("tabs.closeButtons")) {
@@ -1799,6 +1814,8 @@ try { // user report about bug here ... ?
       }
     }
     _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
+    if (typeof isBlankPageURL != "function") // we use it until firefox 12.0
+      _setPref(pBranch.PREF_STRING, "extensions.tabmix.newTabUrl", "");
   }
 
 }
