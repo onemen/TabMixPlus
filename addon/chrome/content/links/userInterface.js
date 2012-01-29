@@ -252,8 +252,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  * @param event         A valid event union.
  * @param aPostData     Additional opaque data used by Tabmix.__loadURLBar().
  * @param altDisabled   parameter set by URL Suffix extension, to prevent ALT from opening new tab
- * @param aUrl          aUrl , not in use anymore
- *                      in the past we used this arg from PopupAutoCompleteRichResult.onPopupClick
+ * @param aUrl          aUrl , url to load.
  * @param mayInheritPrincipal
                         when false prevent any loads from inheriting the currently loaded document's principal
  * @return              Nothing.

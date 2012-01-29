@@ -1167,7 +1167,7 @@ Tabmix.navToolbox = {
     )._replace(
       'if (aTriggeringEvent instanceof MouseEvent) {',
       'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
-       Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, null, _mayInheritPrincipal); \
+       Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, url, _mayInheritPrincipal); \
        return; \
        $&', {check: !Tabmix.isVersion(100)}
     );
