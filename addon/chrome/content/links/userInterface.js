@@ -274,7 +274,7 @@ Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisa
      theURI = gIeTab.getHandledURL(theURI, gURLBar.isModeIE);
 
   var middleClick = theEvent instanceof MouseEvent && (theEvent.button == 1 || theEvent.ctrlKey || theEvent.metaKey);
-  if (aUrl || middleClick) {
+  if (middleClick) {
     let where = whereToOpenLink(theEvent);
     if (where != "current") {
       gURLBar.handleRevert();
