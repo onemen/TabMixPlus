@@ -396,14 +396,14 @@ var tablib = {
       ]]>
     )._replace(
       'browser.tabs.loadBookmarksInBackground',
-      'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(120)}
+      'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(110)}
     )._replace(
       'gBrowser.selectedTab = newTab;',
-      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(120)}
+      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(110)}
     )._replace(
       'case "tabshifted":',
       '$&\
-       if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(120)}
+       if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(110)}
     ).toCode();
 
     Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(
