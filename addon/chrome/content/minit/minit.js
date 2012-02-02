@@ -59,6 +59,13 @@ var TMP_tabDNDObserver = {
   },
 
   onDragStart: function (event) {
+    // we get here on capturing phase before "tabbrowser-close-tab-button"
+    // binding stop the event propagation
+    if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
+      event.stopPropagation();
+      return;
+    }
+
     var tab = gBrowser.tabContainer._getDragTargetTab(event);
     if (!tab)
       return;
