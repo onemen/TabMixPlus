@@ -1153,7 +1153,13 @@ Tabmix.navToolbox = {
     else
       fn = "handleCommand"
     let _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
-    let TMP_fn = Tabmix.isVersion(100) ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
+
+    // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
+    // instantfox uses pre-Firefox 10 version of handleCommand
+    var testVersionString = "if (aTriggeringEvent instanceof MouseEvent) {";
+    var pre10Version = !Tabmix.isVersion(100) || typeof(InstantFox) == "object" &&
+        _handleCommand.indexOf(testVersionString) > -1;
+    var TMP_fn = !pre10Version ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
 
     if (_handleCommand.indexOf(TMP_fn) > -1)
       return;
@@ -1172,17 +1178,17 @@ Tabmix.navToolbox = {
       '_data = $& \
        altDisabled = _data.length == 3;', {check: !Tabmix.isVersion(60)}
     )._replace(
-      'if (aTriggeringEvent instanceof MouseEvent) {',
+      testVersionString,
       'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
        Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, url, _mayInheritPrincipal); \
        return; \
-       $&', {check: !Tabmix.isVersion(100)}
+       $&', {check: pre10Version}
     );
 
    /* Starting with firefx 10 we are not using Tabmix.browserLoadURL
     * we don't do anything regarding IeTab and URL Suffix extensions
     */
-    if (Tabmix.isVersion(100)) {
+    if (!pre10Version) {
       fixedHandleCommand = fixedHandleCommand._replace(
         'if (isMouseEvent || altEnter) {',
         'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
