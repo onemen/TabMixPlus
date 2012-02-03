@@ -1203,6 +1203,9 @@ Tabmix.navToolbox = {
          if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
            where = "tab";'
       )._replace(
+        '(where == "current")',
+        '(where == "current" || !loadNewTab && /^tab/.test(where))'
+      )._replace(
         'openUILinkIn(url, where, params);',
         'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
          $&'
