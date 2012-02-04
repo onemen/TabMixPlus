@@ -1058,6 +1058,10 @@ var tablib = {
       else
         aTab.setAttribute("protected", "true");
       TabmixSessionManager.updateTabProp(aTab);
+      if (TabmixTabbar.widthFitTitle) {
+        TabmixTabbar.updateScrollStatus();
+        TabmixTabbar.updateBeforeAndAfter();
+      }
     }
 
     gBrowser.freezeTab = function (aTab) {
@@ -1073,6 +1077,10 @@ var tablib = {
         aTab.setAttribute("_locked", "false");
       }
       TabmixSessionManager.updateTabProp(aTab);
+      if (TabmixTabbar.widthFitTitle) {
+        TabmixTabbar.updateScrollStatus();
+        TabmixTabbar.updateBeforeAndAfter();
+      }
     }
 
     gBrowser.SelectToMerge = function(aTab) {
