@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Có thể cuộn với các nút ở phía bên trái">
 <!ENTITY tabScroll.multibar "Nhiều hàng">
 <!ENTITY maxrow.label "Số lượng hàng tối đa:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
 <!ENTITY highlight.label "Tô sáng:">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Đảo ngược hướng thẻ được chọn">
 <!ENTITY clickFocus.label "Nhấn chuột (xuống và thả ra) để chọn một thẻ">
 <!ENTITY removeEntries.label "Xóa các mục trong danh sách trình đơn Tab Mix Plus bằng chuột giữa">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Khi đóng một thẻ, các thẻ khác không được thay đổi kích thước cho tới khi trỏ chuột rời khỏi thanh công cụ">
 <!ENTITY removeEntries.tooltip "Bao gồm thẻ đã đóng, cửa sổ đã đóng, và phiên làm việc đã lưu">
 <!ENTITY double.label "Nhấp đôi">
 <!ENTITY middle.label "Chuột giữa">

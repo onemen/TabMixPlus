@@ -248,7 +248,7 @@
 <!ENTITY ss.enable.label "Χρήση ενσωματωμένης αποκατάστασης συνεδρίας">
 <!ENTITY ss.enable.tooltip "Απεπιλέξτε για να επιτραπεί η χρήση του διαχειριστή συνεδρίας του Tabmix">
 <!ENTITY ss.advanced_setting "Ρυθμίσεις για προχωρημένους">
-<!ENTITY ss.advanced_setting.warning "Μην τις αλλάξετε , εκτός κι αν ξέρετε τι κάνετε">
+<!ENTITY ss.advanced_setting.warning "Μην τις αλλάξετε, εκτός κι αν ξέρετε τι κάνετε">
 <!ENTITY ss.interval "Ελάχιστο μεσοδιάστημα χρόνου μεταξύ της αποθήκευσης δύο καταστάσεων">
 <!ENTITY ss.interval.seconds "(σε χιλιοστά δευτερολέπτου)">
 <!ENTITY ss.privacy_level "Αποθήκευση ευαίσθητων δεδομένων (δεδομένα σε φόρμες, δεδομένα αποστολής και cookies) για :">

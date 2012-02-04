@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
 <!ENTITY tabScroll.multibar "Mettre la barre d&apos;onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Activer le défilement doux">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
 <!ENTITY highlight.label "Surligner :">
 <!ENTITY currenttab.style.label "Onglet courant">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Déplacer vers la droite lors du défilement arrière à la souris">
 <!ENTITY clickFocus.label "Clic de souris (pressé relâché) pour sélectionner un onglet">
 <!ENTITY removeEntries.label "Retirer la liste des entrées du menu Tab Mix Plus en utilisant le clic-milieu">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "À la fermeture d'un onglet, d'autres onglets ne devraient pas se redimensionner jusqu'à ce que le curseur quitte la zone de la barre d'outils">
 <!ENTITY removeEntries.tooltip "Inclure les fenêtres et onglets fermés et les sessions enregistrées">
 <!ENTITY double.label "Double-clic">
 <!ENTITY middle.label "Clic-milieu">
