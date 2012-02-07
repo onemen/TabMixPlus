@@ -11,9 +11,7 @@ locale    tabmixplus   el            chrome/locale/el/
 locale    tabmixplus   en-US         chrome/locale/en-US/
 locale    tabmixplus   es-ES         chrome/locale/es-ES/
 locale    tabmixplus   et-EE         chrome/locale/et-EE/
-locale    tabmixplus   eu            chrome/locale/eu/
 locale    tabmixplus   fa-IR         chrome/locale/fa-IR/
-locale    tabmixplus   fi            chrome/locale/fi/
 locale    tabmixplus   fr            chrome/locale/fr/
 locale    tabmixplus   he-IL         chrome/locale/he-IL/
 locale    tabmixplus   hr-HR         chrome/locale/hr-HR/
@@ -21,7 +19,6 @@ locale    tabmixplus   hu-HU         chrome/locale/hu-HU/
 locale    tabmixplus   it            chrome/locale/it/
 locale    tabmixplus   ja            chrome/locale/ja/
 locale    tabmixplus   ko-KR         chrome/locale/ko-KR/
-locale    tabmixplus   lv-LV         chrome/locale/lv-LV/
 locale    tabmixplus   nl            chrome/locale/nl/
 locale    tabmixplus   pl            chrome/locale/pl/
 locale    tabmixplus   pt-BR         chrome/locale/pt-BR/
@@ -66,15 +63,8 @@ style     chrome://browser/content/preferences/preferences.xul      chrome://tab
 
 style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay40.css
 
-#skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/4.0/                  appversion>=4.0b7pre
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/win/                      os=WINNT
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/mac/                      os=Darwin
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/linux/                    os=Linux
-
 skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/win/               os=WINNT
 skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/mac/               os=Darwin
 skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/linux/             os=Linux
 
 style   chrome://browser/content/browser.xul   chrome://tabmix-os/skin/browser.css
-
-manifest  test.manifest
