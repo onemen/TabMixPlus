@@ -182,7 +182,7 @@ Tabmix.contentAreaClick = {
         }
         // force handleLinkClick to use openLinkIn by replace "current"
         // with " current", we later use trim() before handleLinkClick call openLinkIn
-        event.__where = where == "current" ? " " + where : where;
+        event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;
         event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;
         var result = $&
         if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);
