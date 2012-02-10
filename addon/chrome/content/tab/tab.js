@@ -645,15 +645,15 @@ var gTMPprefObserver = {
           else
             tabMinWidth = tabMaxWidth;
         }
-
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
-        let [rule, val] = prefName == "browser.tabs.tabMaxWidth" ? ["max-width", tabMaxWidth] : ["min-width", tabMinWidth];
-        this.dynamicRules["width"].style.setProperty(rule, val + "px", null);
+        this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", null);
+        this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", null);
         let skin = TabmixSvc.prefs.getCharPref("general.skins.selectedSkin");
         if (skin != "classic/1.0") {
           let important = skin == "classiccompact" ? "important" : null;
-          this.dynamicRules["width1"].style.setProperty(rule, val + "px", important);
+          this.dynamicRules["width1"].style.setProperty("max-width", tabMaxWidth + "px", important);
+          this.dynamicRules["width1"].style.setProperty("min-width", tabMinWidth + "px", important);
         }
         TabmixTabbar.updateSettings(false);
 ///check if we need to call update 4 times after changing tab width
