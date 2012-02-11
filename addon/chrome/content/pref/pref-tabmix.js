@@ -70,8 +70,9 @@ function TM_EMinit() {
     TabmixSessionManager.createMenuForDialog(popup);
   }
 
-  // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
-  if ("TreeStyleTabBrowser" in browserWindow || typeof(browserWindow.VerticalTabs) == "object") {
+  // disable options for position the tabbar and scroll mode if TreeStyleTab extension
+  // or other vertical tabs extensions installed
+  if (browserWindow.Tabmix.extensions.verticalTabBar) {
     TM_Options.setItem("treeStyleTab.msg", "hidden", null);
     TM_Options.setItem("tabBarDisplay", "TSTinstalled", true);
     TM_Options.setItem("tabBarPosition", "disabled", true);
