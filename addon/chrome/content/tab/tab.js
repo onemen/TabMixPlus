@@ -1501,7 +1501,7 @@ var gTMPprefObserver = {
     }
     var tabsToolbar = document.getElementById("TabsToolbar");
     var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-    Tabmix.setItem(tabsToolbar, "tabbaronbuttom", TabmixTabbar.position == 1 || null);
+    Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
     if (TabmixTabbar.position == 1) {// bottom
       if (!bottomToolbox) {
         bottomToolbox = document.createElement("toolbox");

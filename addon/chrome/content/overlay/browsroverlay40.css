@@ -146,9 +146,9 @@ so display: none !important; is not hide the button */
 }
 
 
-/* :::: tabbar on buttom :::: */
-/* we don't need rule for toolbar-drag - when tabbar on buttom */
-#TabsToolbar[tabbaronbuttom] {
+/* :::: tabbar on bottom :::: */
+/* we don't need rule for toolbar-drag - when tabbar on bottom */
+#TabsToolbar[tabbaronbottom] {
   -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#toolbar") !important;
   position: fixed !important;
   -moz-appearance: none !important;

@@ -8,9 +8,9 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
 
-/* :::: tabbar on buttom ::::
+/* :::: tabbar on bottom ::::
   we leave the default background-image on mac
-#TabsToolbar[tabbaronbuttom] {
+#TabsToolbar[tabbaronbottom] {
   background-image: none !important;
 }
 */
