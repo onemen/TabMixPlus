@@ -342,9 +342,6 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);
-    // add event for mouse scrolling on tab bar, necessary for linux
-    if (Tabmix.isPlatform("Linux"))
-       document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
@@ -948,8 +945,6 @@ var TMP_eventListener = {
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
-    if (Tabmix.isPlatform("Linux"))
-       document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
