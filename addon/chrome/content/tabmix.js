@@ -133,6 +133,10 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setMenuIcons();
 
   TabmixTabbar.updateSettings(true);
+  if ("_failedToEnterVerticalMode" in TabmixTabbar) {
+    delete TabmixTabbar._failedToEnterVerticalMode;
+    gBrowser.tabContainer.mTabstrip._enterVerticalMode();
+  }
 
   try {
     TMP_LastTab.init();
