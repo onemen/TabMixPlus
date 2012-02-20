@@ -10,7 +10,7 @@ Tabmix.startup = function TMP_startup() {
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (Tabmix.isVersion(120)) {
+  if (!Tabmix.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
     // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
