@@ -374,6 +374,14 @@ XXX fix this when there is no stack go directly to trace
     return TabmixSvc.wm.getMostRecentWindow("navigator:browser");
   },
 
+  getSingleWindowMode: function TMP_getSingleWindowMode() {
+    // if we don't have any browser window opened return false
+    // so we can open new window
+    if (!this.getTopWin())
+      return false;
+    return TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
+  },
+
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
       Tabmix[aModule + "Initialized"] = false;

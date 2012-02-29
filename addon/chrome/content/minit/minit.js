@@ -820,13 +820,6 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
    }
 }
 
-// if we don't have any browser window opened return false so we can open new window
-Tabmix.getSingleWindowMode = function TMP_getSingleWindowMode() {
-  if (!this.getTopWin())
-    return false;
-  return TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
-}
-
 var TMP_TabView = {
   checkTabs: function (tabs) {
     var firstTab;
