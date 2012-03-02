@@ -273,6 +273,7 @@ var TMP_eventListener = {
     tabContainer.addEventListener("TabClose", this, true);
     tabContainer.addEventListener("TabSelect", this, true);
     tabContainer.addEventListener("TabMove", this, true);
+    tabContainer.addEventListener("TabUnpinned", this, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -280,7 +281,10 @@ var TMP_eventListener = {
 
     Tabmix.contentAreaClick.init();
 
-    tabContainer.addEventListener("TabUnpinned", this, true);
+    // initialize our gURLBar.handleCommand function early before other extensions change
+    // gURLBar.handleCommand by replacing the original function
+    // url-fixer also prevent the use of eval changes by using closure in the replcaed function
+    Tabmix.navToolbox.initializeURLBar();
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.

@@ -1145,7 +1145,15 @@ Tabmix.navToolbox = {
       fn = "handleCommand2";
     else
       fn = "handleCommand"
-    let _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
+
+    let _handleCommand;
+    // Fix incompatibility with https://addons.mozilla.org/en-US/firefox/addon/url-fixer/
+    if ("urlfixerOldHandler" in gURLBar.handleCommand) {
+      _handleCommand = gURLBar.handleCommand.urlfixerOldHandler.toString();
+      fn = "handleCommand.urlfixerOldHandler";
+    }
+    else
+      _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
 
     // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
     // instantfox uses pre-Firefox 10 version of handleCommand
@@ -1206,8 +1214,8 @@ Tabmix.navToolbox = {
     }
     fixedHandleCommand.toCode();
 
-    // for Omnibar version 0.7.7.20110418+
-    if (_Omnibar) {
+    // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
+    if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
       Tabmix.newCode("Omnibar.intercepted_handleCommand", Omnibar.intercepted_handleCommand)._replace(
         'Omnibar.handleSearchQuery',
