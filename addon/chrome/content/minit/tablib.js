@@ -1358,7 +1358,7 @@ since we can have tab hidden or remove the index can change....
           tabsToClose = numTabs - numProtected;
           break;
         case "All_onExit":
-          tabsToClose = numTabs;
+          tabsToClose = numTabs - this._removingTabs.length;
           break;
         case "AllBut":
           if (protectedTab)
