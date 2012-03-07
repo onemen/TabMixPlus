@@ -232,7 +232,8 @@ var TabmixTabbar = {
   setHeight: function TMP_setHeight(aRows, aReset) {
     // don't do anything when the tabbar is hidden
     // by Print preview or others...
-    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible)
+    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible ||
+        FullScreen._isChromeCollapsed)
       return;
 
     var tabsPosition = this.getTabsPosition();
@@ -362,6 +363,9 @@ var TabmixTabbar = {
         tabBar.mTabstrip._enterVerticalMode();
       else
         tabBar.updateVerticalTabStrip();
+
+      if (TabmixTabbar.position == 1)
+        setTimeout(function(){tabBar.updateVerticalTabStrip();},0);
     }
     ///maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",

@@ -372,6 +372,17 @@ var tablib = {
   },
 
   change_utility: function change_utility() {
+    Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
+      'this._isChromeCollapsed = !aShow;',
+      <![CDATA[$&
+        if (aShow)
+          TMP_eventListener.updateMultiRow();
+        if (TabmixTabbar.position == 1) {
+          TMP_eventListener.mouseoverToggle(aShow);
+        }
+      ]]>
+    ).toCode();
+
   //XXX consider to replace handleDroppedLink not use eval here
     Tabmix.newCode("handleDroppedLink", handleDroppedLink)._replace(
       'loadURI(uri, null, postData.value, false);',

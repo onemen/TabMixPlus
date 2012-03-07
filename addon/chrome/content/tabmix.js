@@ -610,17 +610,8 @@ var TMP_eventListener = {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
         fullScrToggler.collapsed = true;
-        let box = document.getElementById("tabmix-bottom-toolbox");
-        box.parentNode.insertBefore(fullScrToggler, box);
-
-        Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
-          'gNavToolbox.style.marginTop',
-          <![CDATA[
-            if (TabmixTabbar.position == 1) {
-              TMP_eventListener.mouseoverToggle(aShow);
-            }
-          $&]]>
-        ).toCode();
+        let addonBar = document.getElementById("addon-bar");
+        addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
         if (Tabmix.isVersion(120)) {
           Tabmix.newCode("FullScreen.sample", FullScreen.sample)._replace(
@@ -673,6 +664,8 @@ var TMP_eventListener = {
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
     }
+    if (fullScreen)
+      TMP_eventListener._updateMultiRow();
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
@@ -688,6 +681,7 @@ var TMP_eventListener = {
   },
 
   mouseoverToggle: function (aShow) {
+    document.getElementById("fullscr-bottom-toggler").collapsed = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
@@ -699,6 +693,14 @@ var TMP_eventListener = {
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
+    }
+  },
+
+  updateMultiRow: function () {
+    if (TabmixTabbar.isMultiRow) {
+      gBrowser.tabContainer.updateVerticalTabStrip();
+      gBrowser.tabContainer.setFirstTabInRow();
+      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
