@@ -140,7 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-row">
 <!ENTITY maxrow.label "Max number of rows to display:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY smoothScroll.label "Käytä pehmeää vieritystä">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Highlight">
 <!ENTITY currenttab.style.label "Current tab">
@@ -186,7 +186,7 @@
 <!ENTITY reverseScroll.label "Inverse the direction in which tabs are selected">
 <!ENTITY clickFocus.label "Mouse click (down and release) to select a tab">
 <!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Suljettaessa välilehteä, säilytä muiden välilehtien koko kunnes kursori poistuu työkalupalkin alueelta">
 <!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
 <!ENTITY double.label "Double-click">
 <!ENTITY middle.label "Middle-click">
