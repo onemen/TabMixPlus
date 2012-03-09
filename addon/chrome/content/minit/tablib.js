@@ -712,9 +712,7 @@ var tablib = {
       // try to have SessionStore duplicate the given tab
 
       if (!aHref && !aTabData) {
-        newTab = Cc["@mozilla.org/browser/sessionstore;1"]
-                    .getService(Ci.nsISessionStore)
-                    .duplicateTab(window, aTab);
+        newTab = TabmixSvc.ss.duplicateTab(window, aTab);
       }
       else
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);

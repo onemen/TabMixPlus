@@ -57,9 +57,7 @@ Tabmix.Sanitizer = {
 // XXX need to add test if we fail to delete then alert the user or ....?
    sanitize: function TMP_SN_sanitize() {
       // get file references
-      var dirService = Components.classes["@mozilla.org/file/directory_service;1"]
-                           .getService(Components.interfaces.nsIProperties);
-      var sessionFile = dirService.get("ProfD", Components.interfaces.nsILocalFile);
+      var sessionFile = Services.dirsvc.get("ProfD", Components.interfaces.nsILocalFile);
       var sessionFileBackup = sessionFile.clone();
       var sessionsBackupDir = sessionFile.clone()
       sessionFile.append("session.rdf");
@@ -524,9 +522,7 @@ var TabmixSessionManager = {
       var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
       var chkBoxState = this.saveClosedTabs ? Tabmix.CHECKBOX_CHECKED : Tabmix.HIDE_CHECKBOX;
 
-      var stringBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                         .getService(Components.interfaces.nsIStringBundleService)
-                         .createBundle("chrome://global/locale/commonDialogs.properties");
+      var stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
       var buttons = TabmixSvc.setLabel("sm.askBeforSave.button0")
                      + "\n" + stringBundle.GetStringFromName("Cancel")
                      + "\n" + TabmixSvc.setLabel("sm.askBeforSave.button1");
@@ -879,9 +875,7 @@ var TabmixSessionManager = {
    },
 
    get profileDir() {
-      return Components.classes["@mozilla.org/file/directory_service;1"]
-            .getService(Components.interfaces.nsIProperties)
-            .get("ProfD", Components.interfaces.nsILocalFile);
+      return Services.dirsvc.get("ProfD", Components.interfaces.nsILocalFile);
    },
 
    getAnonymousId: function() {

@@ -448,8 +448,6 @@ XXX fix this when there is no stack go directly to trace
     for (i = 0; i < strParam.length; i++)
       dpb.SetString(i, strParam[i]);
 
-    var ww = Cc["@mozilla.org/embedcomp/window-watcher;1"]
-                        .getService(Ci.nsIWindowWatcher);
     if (typeof(aWindow) == "undefined") {
       try { aWindow = window;
       }
@@ -458,7 +456,7 @@ XXX fix this when there is no stack go directly to trace
     }
 
     // we add dependent to features to make this dialog float over the window on start
-    var dialog = ww.openWindow(aWindow,
+    var dialog = Services.ww.openWindow(aWindow,
            "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +(modal ? ",modal" : ",dependent") ,dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
@@ -521,6 +519,7 @@ XXX fix this when there is no stack go directly to trace
 }
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);

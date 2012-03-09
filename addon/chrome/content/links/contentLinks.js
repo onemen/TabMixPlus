@@ -891,9 +891,7 @@ Tabmix.contentAreaClick = {
       return host.join(".");
 */
         try {
-          var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
-              .getService(Ci.nsIEffectiveTLDService);
-          var publicSuffix = eTLDService.getPublicSuffixFromHost(url.hostPort);
+          var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
           var level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
         } catch(e) {
           level = 2;
