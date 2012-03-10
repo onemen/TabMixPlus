@@ -52,7 +52,7 @@
 #TabsToolbar[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
 #TabsToolbar[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   visibility: collapse;
-  height: 0px;
+  height: 0px !important;
   width: 0px;
   border: none;
   margin: 0px;
