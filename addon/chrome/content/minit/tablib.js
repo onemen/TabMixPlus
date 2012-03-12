@@ -355,11 +355,9 @@ var tablib = {
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
     Tabmix.newCode(null,  _setter)._replace(
       'this._container.collapsed = !val;',
-      'if (TabmixTabbar.hideMode == 2) val = false;\
-       $&'
-    )._replace(
-      'this._container.collapsed = !val;',
       <![CDATA[
+        if (TabmixTabbar.hideMode == 2)
+          val = false;
         $&
         let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
         if (bottomToolbox) {
