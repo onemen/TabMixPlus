@@ -369,7 +369,7 @@ var TMP_eventListener = {
     if (typeof isBlankPageURL == "function") {
       Tabmix.isBlankPageURL = isBlankPageURL;
       XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
-        return Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
+        return BROWSER_NEW_TAB_URL;
       });
       Tabmix.newTabUrls.shift();
       Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
