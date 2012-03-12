@@ -322,17 +322,13 @@ XXX fix this when there is no stack go directly to trace
 
   _define: function(aType, aObj, aName, aCodeString) {
     let type = aType == "setter" ? "__defineSetter__" : "__defineGetter__";
-    let fn = new Function();
-    eval("fn = " + aCodeString);
+    let fn = eval("(" + aCodeString + ")");
     aObj[type](aName, fn);
   },
 
   toCode: function(aObj, aName, aCodeString) {
-    if (aObj) {
-      let fn = new Function();
-      eval("fn = " + aCodeString);
-      aObj[aName] = fn;
-    }
+    if (aObj)
+      aObj[aName] = eval("(" + aCodeString + ")");
     else
       eval(aName + " = " + aCodeString);
   },
