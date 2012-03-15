@@ -368,6 +368,19 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
+    // override some of All-in-One Gestures function
+    // override the duplicate tab function
+    if (typeof aioDupTab == 'function')
+      aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
+
+    // override the duplicate in new window function
+    if (typeof aioDupWindow == 'function')
+      aioDupWindow = function() { gBrowser.duplicateInWindow(gBrowser.mCurrentTab); };
+
+    // override the aioCloseWindow function
+    if (typeof aioCloseWindow == 'function')
+      aioCloseWindow = BrowserTryToCloseWindow;
+
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {

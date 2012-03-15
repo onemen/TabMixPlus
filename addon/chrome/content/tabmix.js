@@ -26,19 +26,6 @@ Tabmix.startup = function TMP_startup() {
 
   document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
 
-  // override some of All-in-One Gestures function
-  // override the duplicate tab function
-  if (typeof aioDupTab == 'function')
-    aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
-
-  // override the duplicate in new window function
-  if (typeof aioDupWindow == 'function')
-    aioDupWindow = function() { gBrowser.duplicateInWindow(gBrowser.mCurrentTab); };
-
-  // override the aioCloseWindow function
-  if (typeof aioCloseWindow == 'function')
-    aioCloseWindow = BrowserTryToCloseWindow;
-
   // add call to Tabmix.Sanitizer
   // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
   var cmd = document.getElementById("Tools:Sanitize");
@@ -352,7 +339,7 @@ var TMP_eventListener = {
     tabBar.addEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
-    if  (tabView) {
+    if (tabView) {
       tabView.addEventListener("tabviewhidden", this, true);
       tabView.addEventListener("tabviewshown", this, true);
       tabBar.addEventListener("TabShow", this, true);
