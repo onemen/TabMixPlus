@@ -863,21 +863,21 @@ var gTMPprefObserver = {
 
     this.tabStyleSheet = ss;
 
-    var backgroundRule;
     this.gradients = { };
     this.gradients.body = "-moz-linear-gradient(#colorCode, #colorCode)";
     let bottomBorder = "-moz-linear-gradient(bottom, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
     this.gradients.tab = Tabmix.isMac ? this.gradients.body : (bottomBorder + "," + this.gradients.body);
-    backgroundRule = "{-moz-appearance: none; background-image: " + this.gradients.tab + " !important;}"
+    var backgroundRule = "{-moz-appearance: none; background-image: " + this.gradients.tab + " !important;}"
+    var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
     var styleRules = {
-      currentTab:    { text:  '.tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"] .tab-text { color: #colorCode;}',
+      currentTab:    { text:  '.tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"]' + tabTextRule,
                        bg  :  '.tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],'+
                               '.tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' + backgroundRule},
-      unreadTab:     { text:  '.tabbrowser-tabs[useUnreadColor] .tabbrowser-tab:not([selected="true"]):not([visited]) .tab-text { color: #colorCode;}',
+      unreadTab:     { text:  '.tabbrowser-tabs[useUnreadColor] .tabbrowser-tab:not([selected="true"]):not([visited])' + tabTextRule,
                        bg:    '.tabbrowser-tabs[useUnreadBGColor] .tabbrowser-tab:not([selected="true"]):not([visited])' + backgroundRule},
       otherTab:      { text:  '.tabbrowser-tabs[useOtherColor]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
-                              '.tabbrowser-tabs[useOtherColor][unreadTab] .tabbrowser-tab:not([selected="true"])[visited] .tab-text { color: #colorCode;}',
+                              '.tabbrowser-tabs[useOtherColor][unreadTab] .tabbrowser-tab:not([selected="true"])[visited]' + tabTextRule,
                        bg:    '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]),' +
                               '.tabbrowser-tabs[useOtherBGColor][unreadTab] .tabbrowser-tab:not([selected="true"])[visited]' + backgroundRule},
       progressMeter: { bg:    '.tabbrowser-tabs[useProgressColor] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
@@ -1319,7 +1319,7 @@ var gTMPprefObserver = {
 
       if (ruleName != "progressMeter") {
         if (currentValue.textColor != prefValues.textColor)
-          this.dynamicRules[ruleName].style.setProperty("color",prefValues.textColor, null);
+          this.dynamicRules[ruleName].style.setProperty("color", prefValues.textColor, "important");
         this.toggleTabStyles(prefName);
       }
       else
