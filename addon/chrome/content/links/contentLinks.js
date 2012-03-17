@@ -761,7 +761,7 @@ Tabmix.contentAreaClick = {
    */
   GoogleComLink: function TMP_GoogleComLink(linkNode) {
     var location = gBrowser.currentURI.spec;
-    var currentIsnGoogle = /www.google./.test(location);
+    var currentIsnGoogle = /(www|profiles|accounts|groups).google./.test(location);
     if (!currentIsnGoogle)
       return false;
 
@@ -778,7 +778,7 @@ Tabmix.contentAreaClick = {
     if (testPathname)
       return true;
 
-    let _host = ["profiles.google.com", "accounts.google.com"];
+    let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
     let testHost = _host.indexOf(linkNode.host) > -1;
     if (testHost)
       return true;
