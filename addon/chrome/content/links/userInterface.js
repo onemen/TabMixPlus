@@ -374,20 +374,21 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
+    let oldCode = Tabmix.isVersion(140) ? "openUILinkIn(url, where, params);" :
+                  "openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);"
     this.newCode("openUILink", openUILink)._replace(
-      'var where = whereToOpenLink(e, ignoreButton, ignoreAlt);',
-      <![CDATA[$&
-        var win = this.getTopWin();
-        if (win) {
+      oldCode,
+      <![CDATA[
+        var win = getTopWin();
+        if (win && where == "current") {
           // don't open blanke tab when we are about to add new livemark
-          let _addLivemark = /^feed:/.test(url) && TabmixSvc.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
-          if (where == "current" && !_addLivemark)
+          let _addLivemark = /^feed:/.test(url) &&
+             Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
+          if (!_addLivemark)
             where = win.Tabmix.checkCurrent(url);
         }
+        try {$&}  catch (ex) {  }
       ]]>
-    )._replace(
-      'openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);',
-      'try {$&} catch (ex) {  }'
     )._replace( // fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}
