@@ -63,7 +63,7 @@ var TMP_Places = {
         'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
       )._replace(
         'return shift ? "tabshifted" : "tab";',
-        'let pref = Tabmix.isCallerInList("handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
+        'let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
          let inversefocus = getBoolPref(pref, true);\
          return inversefocus || shift ? "tabshifted" : "tab";'
