@@ -397,15 +397,16 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 }
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
-  if (gBrowser.mCurrentTab.hasAttribute("locked")) {
-    var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
+  var opentabforLinks = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
+  if (opentabforLinks == 1 || gBrowser.mCurrentTab.hasAttribute("locked")) {
+    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
     if (!isBlankTab)
        return "tab";
   }
-  else if (TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks") == 2 ) {
+  else if (opentabforLinks == 2) {
     // Get current page url
-    var curpage = gBrowser.currentURI.spec;
-    var domain = this.contentAreaClick.checkDomain(curpage, url);
+    let curpage = gBrowser.currentURI.spec;
+    let domain = this.contentAreaClick.checkDomain(curpage, url);
     if (domain.current && domain.target && domain.target != domain.current)
       return "tab";
   }
