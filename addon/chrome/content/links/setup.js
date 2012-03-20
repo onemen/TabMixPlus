@@ -130,6 +130,13 @@ function TMP_TBP_Startup() {
         $&'
       );
     }
+    // All-in-One Sidebar 0.7.14 brake Firefox 12.0
+    if (Tabmix.isVersion(120) && typeof aios_dominitSidebar == "function") {
+      bowserStartup = bowserStartup._replace(
+        'TabsOnTop.syncCommand();',
+        'TabsOnTop.init();', {silent: true}
+      );
+    }
     bowserStartup.toCode();
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
