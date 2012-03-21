@@ -189,20 +189,20 @@
               <!-- Load on new tab -->
               <hbox align="center">
                 <label value="&newtab.label;" control="loadOnNewTab" />
-                  <menulist id="loadOnNewTab" prefstring="extensions.tabmix.loadOnNewTab">
+                  <menulist id="loadOnNewTab" prefstring="extensions.tabmix.loadOnNewTab.type">
                     <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                      <menuitem value="4" label="&newtab.location.1;" />
                       <menuitem value="0" label="&newtab.blank;" />
                       <menuitem value="1" label="&newtab.home;" />
                       <menuitem value="2" label="&newtab.current;" />
                       <menuitem value="3" label="&newtab.duplicate;" />
-                      <menuitem value="4" label="&newtab.location;" />
                     </menupopup>
                   </menulist>
               </hbox>
               <hbox class="indent" align="center" flex="1">
-                 <label id="newTabUrlLabel" value="&location.label;:" control="newTabUrl"/>
+                 <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
                  <textbox id="newTabUrl" class="padded uri-element" flex="1"
-                          prefstring="extensions.tabmix.newTabUrl" />
+                          prefstring="extensions.tabmix.newtab.url" />
               </hbox>
               <hbox align="center">
                 <checkbox id="selectLocationBar" label="&focusContent.label;"
@@ -344,21 +344,21 @@
               <hbox align="center">
                 <label value="&replaceLastTabWith.label;:"
                        control="replaceLastTabWith" observes="obs_replaceLastTabWith"/>
-                  <menulist id="replaceLastTabWith" prefstring="extensions.tabmix.replaceLastTabWith" idnum="_1"
+                  <menulist id="replaceLastTabWith" prefstring="extensions.tabmix.replaceLastTabWith.type" idnum="_1"
                             observes="obs_replaceLastTabWith">
                     <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                      <menuitem value="4" label="&newtab.location.1;" />
                       <menuitem value="0" label="&newtab.blank;" />
                       <menuitem value="1" label="&newtab.home;" />
                       <menuitem value="2" label="&newtab.current;" />
                       <menuitem value="3" label="&newtab.duplicate;" />
-                      <menuitem value="4" label="&newtab.location;" />
                     </menupopup>
                   </menulist>
               </hbox>
               <hbox class="indent" align="center" flex="1">
-                 <label id="newTabUrlLabel_1" value="&location.label;:" control="newTabUrl_1"/>
+                 <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
-                          prefstring="extensions.tabmix.newTabUrl_afterLastTab" />
+                          prefstring="extensions.tabmix.replaceLastTabWith.newTabUrl" />
               </hbox>
               <checkbox class="indent" align="center" id="selectLocationBar.afterLastTabClosed" label="&focusContent.label;"
                         prefstring="extensions.tabmix.selectLocationBar.afterLastTabClosed" inverted="true"/>

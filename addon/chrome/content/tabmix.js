@@ -367,7 +367,7 @@ var TMP_eventListener = {
         return aURL == "about:blank";
       }
       Tabmix.newTabURL = "about:blank";
-      Tabmix.newTabURLpref = "extensions.tabmix.newTabUrl";
+      Tabmix.newTabURLpref = "extensions.tabmix.newtab.url";
     }
 
     // init tabmix functions

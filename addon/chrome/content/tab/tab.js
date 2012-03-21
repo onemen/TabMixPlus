@@ -1726,14 +1726,43 @@ var gTMPprefObserver = {
       TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
       TabmixSvc.prefs.clearUserPref("extensions.tabmix.clickToScroll.scrollDelay");
     }
-    // 2012-01-26
-    if (typeof isBlankPageURL == "function" && TabmixSvc.prefs.prefHasUserValue("extensions.tabmix.newTabUrl")) {
-      let nsISupportsString = Components.interfaces.nsISupportsString;
-      var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-      str.data = TabmixSvc.prefs.getComplexValue("extensions.tabmix.newTabUrl", nsISupportsString).data;
-      if (str.data != "")
-        TabmixSvc.prefs.setComplexValue("browser.newtab.url", nsISupportsString, str);
-      TabmixSvc.prefs.clearUserPref("extensions.tabmix.newTabUrl");
+    // 2012-03-21
+    // Changing our preference to use New Tab Page as default starting from Firefox 12
+    function _setNewTabUrl(oldPref, newPref, controlPref) {
+      if (TabmixSvc.prefs.prefHasUserValue(oldPref)) {
+        let nsISupportsString = Ci.nsISupportsString;
+        let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+        str.data = TabmixSvc.prefs.getComplexValue(oldPref, nsISupportsString).data;
+        // only updtae new preference value if the old control preference is New Tab Page
+        let control = controlPref == null || TabmixSvc.TMPprefs.prefHasUserValue(controlPref) &&
+                      TabmixSvc.TMPprefs.getIntPref(controlPref) == 4;
+        if (str.data != "" && control)
+          TabmixSvc.prefs.setComplexValue(newPref, nsISupportsString, str);
+        TabmixSvc.prefs.clearUserPref(oldPref);
+      }
+    }
+    if (typeof isBlankPageURL != "function") {
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
+                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith");
+    }
+    else {
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
+                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith");
+      _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
+      _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
+                    "extensions.tabmix.replaceLastTabWith.newtab.url");
+    }
+    if (TabmixSvc.TMPprefs.prefHasUserValue("loadOnNewTab")) {
+      let val = TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
+      TabmixSvc.TMPprefs.setIntPref("loadOnNewTab.type", val);
+      TabmixSvc.TMPprefs.clearUserPref("loadOnNewTab");
+    }
+    if (TabmixSvc.TMPprefs.prefHasUserValue("replaceLastTabWith")) {
+      let val = TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith");
+      TabmixSvc.TMPprefs.setIntPref("replaceLastTabWith.type", val);
+      TabmixSvc.TMPprefs.clearUserPref("replaceLastTabWith");
     }
 
     // verify valid value
@@ -1820,8 +1849,6 @@ try { // user report about bug here ... ?
       }
     }
     _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
-    if (typeof isBlankPageURL != "function") // we use it until firefox 12.0
-      _setPref(pBranch.PREF_STRING, "extensions.tabmix.newTabUrl", "");
   }
 
 }

@@ -2,7 +2,7 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
-var gPrefs;
+var gPrefs, newTabURLpref, replaceLastTabWithNewTabURLpref;
 
 function before_Init() {
   if (Tabmix.isPlatform("Mac")) {
@@ -40,7 +40,13 @@ function before_Init() {
   TMP_setButtons(true, true);
 
   // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-  TM_Options.setItem("newTabUrl", "prefstring", topWindow.Tabmix.newTabURLpref);
+  newTabURLpref = topWindow.Tabmix.newTabURLpref;
+  replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newTabUrl";
+  if (newTabURLpref == "browser.newtab.url") {
+    TM_Options.setItem("newTabUrl", "prefstring", newTabURLpref);
+    replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newtab.url";
+    TM_Options.setItem("newTabUrl_1", "prefstring", replaceLastTabWithNewTabURLpref);
+  }
 }
 
 // load all preferences into the dialog
@@ -557,6 +563,18 @@ function setPrefByType(prefName, newValue, atImport) {
             // in prev version we use " " for to export string to file
             if (atImport && newValue.indexOf('"') == 0)
                newValue = newValue.substring(1,newValue.length-1);
+
+            if (newTabURLpref == "browser.newtab.url") {
+              if (prefName == "extensions.tabmix.newtab.url") {
+                setNewTabUrl("browser.newtab.url", newValue);
+                break;
+              }
+              if (prefName == "extensions.tabmix.replaceLastTabWith.newTabUrl") {
+                setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", newValue);
+                break;
+              }
+            }
+
             TabmixSvc.prefs.setCharPref(prefName, newValue);
             break;
          default:
@@ -679,16 +697,30 @@ function setPrefByType(prefName, newValue, atImport) {
                   break;
                // 2012-01-26
                case "extensions.tabmix.newTabUrl":
-                  if (Tabmix.getTopWin().Tabmix.newTabURLpref == "browser.newtab.url" && newValue != "") {
-                    let nsISupportsString = Components.interfaces.nsISupportsString;
-                    var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-                    str.data = newValue;
-                    TabmixSvc.prefs.setComplexValue("browser.newtab.url", nsISupportsString, str);
-                  }
+                  setNewTabUrl(newTabURLpref, newValue);
+                  break;
+               case "extensions.tabmix.newTabUrl_afterLastTab":
+                  setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
+                  break;
+               // 2012-03-21
+               case "extensions.tabmix.loadOnNewTab":
+                  TabmixSvc.prefs.setIntPref("extensions.tabmix.loadOnNewTab.type", newValue);
+                  break;
+               case "extensions.tabmix.replaceLastTabWith":
+                  TabmixSvc.prefs.setIntPref("extensions.tabmix.replaceLastTabWith.type", newValue);
                   break;
             }
       }
    } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}
+}
+
+function setNewTabUrl(newPref, newValue) {
+  if (newValue != "") {
+    let nsISupportsString = Ci.nsISupportsString;
+    let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+    str.data = newValue;
+    TabmixSvc.prefs.setComplexValue(newPref, nsISupportsString, str);
+  }
 }
 
 function TM_setElements (restore, start) {

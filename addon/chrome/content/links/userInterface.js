@@ -99,8 +99,8 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
 function TMP_BrowserOpenTab(aTab, replaceLastTab) {
-   var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith") :
-                                         TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
+   var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith.type") :
+                                        TabmixSvc.TMPprefs.getIntPref("loadOnNewTab.type");
    var url;
    var newTabUrl = Tabmix.newTabURL;
    switch (newTabContent) {
@@ -121,8 +121,15 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          return newTab;
          break;
       case 4 : // user url
+         let prefName;
+         if (replaceLastTab) {
+           prefName = typeof isBlankPageURL == "function" ?
+                "extensions.tabmix.replaceLastTabWith.newtab.url" :
+                "extensions.tabmix.replaceLastTabWith.newTabUrl"
+         }
+         else
+           prefName = Tabmix.newTabURLpref;
          try {
-            let prefName = replaceLastTab ? "extensions.tabmix.newTabUrl_afterLastTab" : Tabmix.newTabURLpref;
             url = TabmixSvc.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
