@@ -196,7 +196,8 @@ var TMP_LastTab = {
                  if (!this._timer) {
                    this._timer = setTimeout(function (self) {
                      self._timer = null;
-                     self.DisplayTabList();
+                     if (!self.TabListLock)
+                       self.DisplayTabList();
                    }, 200, this);
                  }
                  else
