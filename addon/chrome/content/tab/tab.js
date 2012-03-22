@@ -1809,11 +1809,14 @@ try { // user report about bug here ... ?
       }
       switch (aType) {
         case pBranch.PREF_BOOL:
-          return Tabmix.getBoolPref(aPref, aDefault);
+          Tabmix.getBoolPref(aPref, aDefault);
+          break;
         case pBranch.PREF_INT:
-          return Tabmix.getIntPref(aPref, aDefault);
+          Tabmix.getIntPref(aPref, aDefault);
+          break;
         case pBranch.PREF_STRING:
-          return Tabmix.getCharPref(aPref, aDefault);
+          Tabmix.getCharPref(aPref, aDefault);
+          break;
       }
     }
     _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0

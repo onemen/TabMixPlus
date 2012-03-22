@@ -994,7 +994,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
        } catch (err) {
          Components.utils.reportError("Tabmix is unable to decode " + key + " from "
                + node.QueryInterface(Ci.nsIRDFResource).Value + "\n" + err);
-         return;
+         return "";
        }
        if (node && key) {
          this.setLiteral(node, key, encodeURI(decodedString));

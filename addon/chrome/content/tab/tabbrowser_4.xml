@@ -646,7 +646,7 @@
 /*XXX we can use aTab.getBoundingClientRect().top if we do the same in topTabY */
           var height = aTab ? aTab.boxObject.height : 0;
           if (height == 0) // don't panic
-            return;
+            return 1;
           // some theme add marginTop/marginBottom to tabs
           var cStyle = window.getComputedStyle(aTab, null);
           var marginTop = parseInt(cStyle["marginTop"]) || 0;

@@ -806,6 +806,7 @@ Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
   try {
     return parseInt(window.getComputedStyle(aObj, null)[aStyle]) || 0;
   } catch (ex) {this.assert(ex);}
+  return 0;
 }
 
 // sometimes context popup stay "open", we hide it manually.

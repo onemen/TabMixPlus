@@ -41,12 +41,10 @@ Tabmix_ChangeCode.prototype = {
 
   toSetter: function(aObj, aName) {
     Tabmix._define("setter", aObj, aName, this.value);
-    delete this;
   },
 
   toGetter: function(aObj, aName) {
     Tabmix._define("getter", aObj, aName, this.value);
-    delete this;
   },
 
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
@@ -61,7 +59,6 @@ Tabmix_ChangeCode.prototype = {
         Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);
-      delete this;
     } catch (ex) {
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
@@ -85,6 +82,7 @@ var Tabmix = {
       if (Tabmix._debugMode)
         this.obj(aObject, "aObject");
     }
+    return null;
   },
 
   isVersion: function(aVersionNo) {
@@ -112,6 +110,7 @@ try {
 } catch (ex) {
 this.log(aMethod)
 }
+   return null;
   },
 
   show: function(aMethod, rootID, aDelay) {
