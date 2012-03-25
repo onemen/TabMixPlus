@@ -553,7 +553,7 @@ function setPrefByType(prefName, newValue, atImport) {
                // we use browser.tabs.closeButtons only in 0.3.8.3
                if (newValue < 0 || newValue > 6)
                   newValue = 6;
-               var newValue = [3,5,1,1,2,4,1][newValue];
+               newValue = [3,5,1,1,2,4,1][newValue];
                TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", newValue);
                return;
             }
