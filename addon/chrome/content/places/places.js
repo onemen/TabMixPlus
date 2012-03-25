@@ -65,8 +65,8 @@ var TMP_Places = {
         'return shift ? "tabshifted" : "tab";',
         'let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
-         let inversefocus = getBoolPref(pref, true);\
-         return inversefocus || shift ? "tabshifted" : "tab";'
+         if(getBoolPref(pref, true)) shift = !shift; \
+         $&'
       )._replace(
         'return "window";',
         'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
