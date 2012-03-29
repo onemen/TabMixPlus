@@ -880,7 +880,7 @@ var TMP_eventListener = {
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
-    else if (aEvent.detail != 0 && tabBar.mTabstrip.orient == "horizontal") {
+    else if (aEvent.detail != 0 && tabBar.mTabstrip.orient == "horizontal" || TabmixTabbar.isMultiRow) {
       // scroll the tabbar by one tab
       // this code is from scrollbox.xml DOMMouseScroll event handler
       let tabsSrip = tabBar.mTabstrip;
