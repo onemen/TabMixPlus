@@ -1,0 +1,30 @@
+
+#tabmixRenametab_icon {
+  list-style-image: url("chrome://tabmixplus/skin/tmp.png");
+  width: 48px;
+  height: 48px;
+}
+
+#tabmixRenametab_title {
+  font-size: 130%;
+}
+
+#tabmixRenametab_defaultField {
+  cursor: default;
+  background-color: -moz-dialog;
+  color: graytext;
+}
+
+#tabmixRenametab_panel > spacer {
+  height: 5px;
+}
+
+#tabmixRenametab_panel:not([modified]) #tabmixRenametab_resetButton,
+#tabmixRenametab_panel:not([modified]) #tabmixRenametab_defaultRow {
+  visibility: hidden;
+}
+
+/* for firefox 4.0 - 7.0 */
+#tabmixRenametab_panel > .panel-arrowcontainer > .panel-arrowcontent > .panel-inner-arrowcontent {
+  -moz-box-flex: 1;
+}

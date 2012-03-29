@@ -152,7 +152,7 @@ var TabmixTabClickOptions = {
         TMP_ClosedTabs.undoCloseTab();
         break;
       case 11:
-        gBrowser.renameTab(aTab);
+        Tabmix.renameTab.editTitle(aTab);
         break;
       case 12: //taken from tco
         if (SessionSaver && SessionSaver.snapBackTab)

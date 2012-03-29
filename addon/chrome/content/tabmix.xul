@@ -297,7 +297,7 @@
         <menuitem id="tm-mergeWindowsTab" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
                  oncommand="Tabmix.MergeWindows.mergeWindows();"/>
         <menuitem id="tm-renameTab" label="&renametab.label;" accesskey="&renametab.accesskey;"
-                 oncommand="gBrowser.renameTab(TabContextMenu.contextTab);"/>
+                 oncommand="Tabmix.renameTab.editTitle(TabContextMenu.contextTab);"/>
         <menuitem id="tm-copyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
                  oncommand="gBrowser.copyTabUrl(TabContextMenu.contextTab);"/>
         <menuitem id="tm-closeAllTabs" label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"

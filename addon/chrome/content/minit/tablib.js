@@ -1118,80 +1118,6 @@ var tablib = {
       clipboard.copyString(URL);
     }
 
-    gBrowser.renameTab = function(aTab) {
-      if (aTab.localName != "tab") aTab = this.mCurrentTab;
-      var browser = this.getBrowserForTab(aTab);
-      var url = browser.contentDocument.baseURI || browser.currentURI.spec;
-      var docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"))
-            || this.mStringBundle.getString("tabs.emptyTabTitle");
-      var tabTitle;
-      if (aTab.getAttribute("label-uri") == url || aTab.getAttribute("label-uri") == "*")
-        tabTitle = aTab.getAttribute("fixed-label");
-      else
-        tabTitle = docTitle;
-
-      var data = {
-        value: tabTitle,
-        rename_all: this._renameAll != null ? this._renameAll : TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark"),
-        permanently: aTab.getAttribute("label-uri") == "*",
-        resetTitle: false,
-        modified: false,
-        docTitle: docTitle
-      };
-      window.openDialog('chrome://tabmixplus/content/minit/setFixedLabel.xul', '_blank', 'chrome,modal,centerscreen', data);
-      this._renameAll = data.rename_all;
-      if (data.modified) {
-        var label = data.value;
-        if (data.rename_all)
-          this.setFixLabel(label, url, !data.resetTitle && data.value != docTitle);
-        else {
-          var resetDefault = data.resetTitle || (data.value == docTitle && !data.permanently);
-          Tabmix.setItem(aTab, "fixed-label", resetDefault ? null : label);
-          var _url = resetDefault ? null : data.permanently ? "*" : url;
-          Tabmix.setItem(aTab, "label-uri", _url);
-          TabmixSessionManager.updateTabProp(aTab);
-          if (aTab.getAttribute('label') != label) {
-            aTab.setAttribute('label', label);
-            this._tabAttrModified(aTab);
-            if (TabmixTabbar.widthFitTitle) {
-              TabmixTabbar.updateScrollStatus();
-              TabmixTabbar.updateBeforeAndAfter();
-            }
-            if (aTab == this.mCurrentTab)
-               this.updateTitlebar();
-          }
-        }
-      }
-    }
-
-    gBrowser.setFixLabel = function (label, url, setFixedLabel) {
-      // if setFixedLabel is false we reset title to default
-      var i, wnd, aTab, browser, enumerator = Tabmix.windowEnumerator(), titleChanged = false;
-      while (enumerator.hasMoreElements()) {
-        wnd = enumerator.getNext();
-        for (i = 0; i < wnd.gBrowser.tabs.length; i++) {
-          aTab = wnd.gBrowser.tabs[i];
-          browser = wnd.gBrowser.getBrowserForTab(aTab);
-          if (browser.currentURI.spec == url) {
-            wnd.Tabmix.setItem(aTab, "fixed-label", setFixedLabel ? label : null);
-            wnd.Tabmix.setItem(aTab, "label-uri", setFixedLabel ? url : null);
-            wnd.TabmixSessionManager.updateTabProp(aTab);
-            if (aTab.getAttribute('label') != label) {
-              titleChanged = true;
-              aTab.setAttribute('label', label);
-              this._tabAttrModified(aTab);
-              if (aTab == wnd.gBrowser.mCurrentTab)
-                wnd.gBrowser.updateTitlebar();
-            }
-          }
-        }
-        if (titleChanged && TabmixTabbar.widthFitTitle) {
-          wnd.TabmixTabbar.updateScrollStatus();
-          wnd.TabmixTabbar.updateBeforeAndAfter();
-        }
-      }
-    }
-
 /** XXX need to fix this functions:
 previousTabIndex
 previousTab
@@ -1475,6 +1401,7 @@ since we can have tab hidden or remove the index can change....
     gBrowser.restoreTab = function() { }
     gBrowser.closeTab = function(aTab) {this.removeTab(aTab);}
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
+    gBrowser.renameTab = function(aTab) {Tabmix.renameTab.editTitle(aTab);}
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
