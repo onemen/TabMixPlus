@@ -935,6 +935,7 @@ var TMP_TabView = {
         let UI = win.UI;
         let Utils = win.Utils;
         let GroupItems = win.GroupItems;
+        let Storage = win.Storage;
         ]]>, {check: Tabmix.isVersion(80)}
       )._replace(
         'this.',

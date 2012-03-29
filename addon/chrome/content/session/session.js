@@ -3763,7 +3763,9 @@ try{
           if (tabData.tab._tabViewTabItem) {
             // remove any old data
             tabData.tab._tabViewTabItem._reconnected = false;
-            TabmixSvc.ss.deleteTabValue(tabData.tab, id);
+            try {
+              TabmixSvc.ss.deleteTabValue(tabData.tab, id);
+            } catch (ex) { }
             if (!Tabmix.isVersion(80))
               tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
           }
