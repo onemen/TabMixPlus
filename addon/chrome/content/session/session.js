@@ -3735,7 +3735,11 @@ try{
 
     let parsedData;
     function setData(id) {
-      let data = {url:aEntry.currentURI, groupID:id, title:aEntry.label};
+      let data = { groupID: id };
+      if (!Tabmix.isVersion(140)) {
+        data.url = aEntry.currentURI;
+        data.title = aEntry.label;
+      }
       if (!Tabmix.isVersion(60)) {
         // fake bounds, panorama check for bounds in TabItem__reconnect
         data.bounds = {left:0, top:0, width:160, height:120};
@@ -3925,7 +3929,11 @@ try{
         Array.forEach(gBrowser.tabs, function(tab){
           if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
             return;
-          let data = {url: tab.linkedBrowser.currentURI.spec, groupID: groupID, title: tab.label};
+          let data = { groupID: groupID };
+          if (!Tabmix.isVersion(140)) {
+            data.url = tab.linkedBrowser.currentURI.spec;
+            data.title = tab.label;
+          }
           data = Tabmix.JSON.stringify(data);
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)
