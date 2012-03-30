@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Domovská stránka">
 <!ENTITY newtab.current "Současná stránka">
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
-<!ENTITY newtab.location "Uživatelské umístění">
-<!ENTITY location.label "Umístění">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Přepnout na obsah při načítání neprázdné stránky">
 <!ENTITY openTabNext.label "Otevřít nové panely vedle současného panelu">
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle současného">

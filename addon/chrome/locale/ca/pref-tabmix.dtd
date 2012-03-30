@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Pàgina d&apos;inici">
 <!ENTITY newtab.current "Pàgina actual">
 <!ENTITY newtab.duplicate "Pàgina duplicada">
-<!ENTITY newtab.location "Ubicació de l&apos;usuari">
-<!ENTITY location.label "Ubicació">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Enfoca el contingut en carregar una pàgina que no sigui en blanc">
 <!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l&apos;actual">
 <!ENTITY openOtherTabNext.label "Obre les altres pestanyes al costat de l&apos;actual">

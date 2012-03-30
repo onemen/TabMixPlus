@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Началната страница">
 <!ENTITY newtab.current "Текущата страница">
 <!ENTITY newtab.duplicate "Дублирана страница">
-<!ENTITY newtab.location "По избор">
-<!ENTITY location.label "Адрес">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
 <!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
 <!ENTITY openOtherTabNext.label "Отваряне на други подпрозорци непосредствено до текущия">

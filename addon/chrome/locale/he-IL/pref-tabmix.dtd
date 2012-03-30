@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "דף הבית">
 <!ENTITY newtab.current "עמוד נוכחי">
 <!ENTITY newtab.duplicate "שכפל עמוד">
-<!ENTITY newtab.location "מיקום משתמש">
-<!ENTITY location.label "מיקום">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "התמקד בתוכן בעת טעינת דף לא ריק">
 <!ENTITY openTabNext.label "פתח לשוניות חדשות ליד הלשוניות הנוכחיות">
 <!ENTITY openOtherTabNext.label "פתח לשוניות ליד לשונית זו">

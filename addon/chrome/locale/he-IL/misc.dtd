@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "טען ברקע">
 <!ENTITY searchTabFocus.accesskey "ט">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "כותרת">
-<!ENTITY rename_all.label "שנה שם לכל הדפים עם אותה הכתובת">
-<!ENTITY rename_permanently.label "שנה שם ללשונית זו תמידית לכל הכתובות">
-<!ENTITY doctitle.label "השתמש בכותרת המסמך">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "פורום">
 <!ENTITY faq.label "שאלות נפוצות">
 <!ENTITY help.label "עזרה">

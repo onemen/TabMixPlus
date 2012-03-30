@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "首頁">
 <!ENTITY newtab.current "目前頁面">
 <!ENTITY newtab.duplicate "複製頁面">
-<!ENTITY newtab.location "自訂網址…">
-<!ENTITY location.label "網址">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "載入非空白頁時，焦點切換至頁面內容">
 <!ENTITY openTabNext.label "新分頁開啟於目前分頁的旁邊">
 <!ENTITY openOtherTabNext.label "其他分頁開啟於目前分頁的旁邊">

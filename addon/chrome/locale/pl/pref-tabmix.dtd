@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "stronę startową">
 <!ENTITY newtab.current "aktywną stronę">
 <!ENTITY newtab.duplicate "powielaną stronę">
-<!ENTITY newtab.location "stronę użytkownika">
-<!ENTITY location.label "Lokalizacja">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
 <!ENTITY openOtherTabNext.label "Otwieraj inne karty za aktywną kartą">

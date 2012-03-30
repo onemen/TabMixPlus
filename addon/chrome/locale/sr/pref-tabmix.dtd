@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "почетном страницом">
 <!ENTITY newtab.current "тренутном страницом">
 <!ENTITY newtab.duplicate "дуплираном страницу">
-<!ENTITY newtab.location "локацијом корисника">
-<!ENTITY location.label "Локација">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Пређи на садржај кад се учитава страница која није празна">
 <!ENTITY openTabNext.label "Нове картице отварај поред тренутне">
 <!ENTITY openOtherTabNext.label "Остале картице отварај поред текуће">

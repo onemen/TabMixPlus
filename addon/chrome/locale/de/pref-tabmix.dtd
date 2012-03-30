@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "die Startseite">
 <!ENTITY newtab.current "die aktuelle Seite">
 <!ENTITY newtab.duplicate "ein Duplikat der aktuellen Seite">
-<!ENTITY newtab.location "eine benutzerdefinierte Seite">
-<!ENTITY location.label "Adresse">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Inhaltsbereich fokussieren, falls keine leere Seite geladen wird">
 <!ENTITY openTabNext.label "Neue Tabs neben dem aktiven Tab öffnen">
 <!ENTITY openOtherTabNext.label "Andere Tabs neben dem aktiven Tab öffnen">

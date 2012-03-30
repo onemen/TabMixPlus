@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "بارگذاری در پس زمینه">
 <!ENTITY searchTabFocus.accesskey "ر">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "عنوان">
-<!ENTITY rename_all.label "تغییر نام همه ی صفحه هایی کهنام یکسان دارند">
-<!ENTITY rename_permanently.label "Rename this tab permanently for all address">
-<!ENTITY doctitle.label "استفاده از عنوان پرونده">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "انجمن گفتگو">
 <!ENTITY faq.label "سوالات">
 <!ENTITY help.label "راهنما">

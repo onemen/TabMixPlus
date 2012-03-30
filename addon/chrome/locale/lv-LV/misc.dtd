@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Ielādēt fonā">
 <!ENTITY searchTabFocus.accesskey "L">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Nosaukums">
-<!ENTITY rename_all.label "Pārdēvēt visas lapas ar tādu pašu adresi">
-<!ENTITY rename_permanently.label "Pārdēvēt šo cilni uz visiem laikiem visām adresēm">
-<!ENTITY doctitle.label "Lietot noklusēto nosaukumu">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Forums">
 <!ENTITY faq.label "BUJ">
 <!ENTITY help.label "Palīdzība">

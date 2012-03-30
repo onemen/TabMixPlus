@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "la pagina iniziale">
 <!ENTITY newtab.current "la pagina attuale">
 <!ENTITY newtab.duplicate "la pagina duplicata">
-<!ENTITY newtab.location "l&apos;URL definito dell&apos;utente">
-<!ENTITY location.label "Indirizzo web">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Non selezionare automaticamente la barra degli indirizzi al caricamento di pagine non vuote">
 <!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
 <!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
@@ -158,6 +158,7 @@
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -172,6 +173,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">

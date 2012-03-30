@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "la page d&apos;accueil">
 <!ENTITY newtab.current "la page courante">
 <!ENTITY newtab.duplicate "la page dupliquée">
-<!ENTITY newtab.location "une adresse personnalisée">
-<!ENTITY location.label "Adresse">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "À l&apos;ouverture de l&apos;onglet, positionner le curseur dans la page et non dans la barre d&apos;adresse">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l&apos;onglet courant">
 <!ENTITY openOtherTabNext.label "Ouvrir d&apos;autres onglets près de l&apos;onglet courant">

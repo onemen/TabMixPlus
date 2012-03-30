@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Учитај у позадини">
 <!ENTITY searchTabFocus.accesskey "п">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Наслов">
-<!ENTITY rename_all.label "Преименуј све странице са истом адресом">
-<!ENTITY rename_permanently.label "Преименуј ову картицу трајно за све адресе">
-<!ENTITY doctitle.label "Користи наслов документа">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Заједница">
 <!ENTITY faq.label "ЧПП">
 <!ENTITY help.label "Помоћ">

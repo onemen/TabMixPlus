@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Carrega en segon pla">
 <!ENTITY searchTabFocus.accesskey "S">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Títol">
-<!ENTITY rename_all.label "Reanomena totes les pàgines amb la mateixa adreça">
-<!ENTITY rename_permanently.label "Reanomena aquesta pàgina permanentment per a totes les adreces">
-<!ENTITY doctitle.label "Utilitza el títol del document">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Fòrum">
 <!ENTITY faq.label "PMF">
 <!ENTITY help.label "Ajuda">

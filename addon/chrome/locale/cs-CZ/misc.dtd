@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Nahrát na pozadí">
 <!ENTITY searchTabFocus.accesskey "P">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Název">
-<!ENTITY rename_all.label "Přejmenovat všechny stránky se stejnou adresou">
-<!ENTITY rename_permanently.label "Přejmenovat panel natrvalo pro všechny adresy">
-<!ENTITY doctitle.label "Použít název dokumentu">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Fórum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Nápověda">

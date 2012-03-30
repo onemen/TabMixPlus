@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Ladda i bakgrund">
 <!ENTITY searchTabFocus.accesskey "b">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Namn">
-<!ENTITY rename_all.label "Byt namn på alla sidor med samma namn">
-<!ENTITY rename_permanently.label "Byt namn på denna flik permanent och för alla adresser">
-<!ENTITY doctitle.label "Använda dokumentnamn">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Help">

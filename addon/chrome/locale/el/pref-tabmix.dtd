@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Αρχικής σελίδας">
 <!ENTITY newtab.current "Τρέχουσας σελίδας">
 <!ENTITY newtab.duplicate "Δημιουργία αντιγράφου σελίδας">
-<!ENTITY newtab.location "Τοποθεσία χρήστη">
-<!ENTITY location.label "Τοποθεσία">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Εστίαση στο περιεχόμενο κατά την φόρτωση μη κενής σελίδας">
 <!ENTITY openTabNext.label "Άνοιγμα νέων καρτελών δίπλα στην τρέχουσα">
 <!ENTITY openOtherTabNext.label "Άνοιγμα άλλων καρτελών δίπλα στην τρέχουσα">

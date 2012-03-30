@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Домашнюю страницу">
 <!ENTITY newtab.current "Текущую страницу">
 <!ENTITY newtab.duplicate "Клонированную страницу">
-<!ENTITY newtab.location "Установлено пользователем">
-<!ENTITY location.label "Адрес">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Фокусироваться на вкладке, когда она не пустая">
 <!ENTITY openTabNext.label "Размещать новые вкладки сразу после текущей">
 <!ENTITY openOtherTabNext.label "Открывать другие вкладки после текущей">

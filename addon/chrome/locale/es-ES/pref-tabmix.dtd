@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Página inicio">
 <!ENTITY newtab.current "Página actual">
 <!ENTITY newtab.duplicate "Duplicar página">
-<!ENTITY newtab.location "Ubicación de usuario">
-<!ENTITY location.label "Ubicación">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Enfocar al cargar página con contenido">
 <!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
 <!ENTITY openOtherTabNext.label "Abrir otras pestañas junto a la actual">

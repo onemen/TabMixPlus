@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Başlangıç sayfası">
 <!ENTITY newtab.current "Geçerli sayfa">
 <!ENTITY newtab.duplicate "Sayfayı çiftle">
-<!ENTITY newtab.location "Belli bir konum">
-<!ENTITY location.label "Konum">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Yeni sekmeleri geçerli olana bitişik aç">
 <!ENTITY openOtherTabNext.label "Diğer sekmeleri geçerli olanın bitişiğinde aç">

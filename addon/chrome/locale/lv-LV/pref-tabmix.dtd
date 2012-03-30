@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Mājas lapu">
 <!ENTITY newtab.current "Pašreizējo lapu">
 <!ENTITY newtab.duplicate "Dublikāta lapu">
-<!ENTITY newtab.location "Lietotāja vietu">
-<!ENTITY location.label "Vieta">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Jaunas cilnes atvērt pēc pašreizējās">
 <!ENTITY openOtherTabNext.label "Citas cilnes atvērt pēc pašreizējās">

@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Домашню сторінку">
 <!ENTITY newtab.current "Поточну сторінку">
 <!ENTITY newtab.duplicate "Клоновану сторінку">
-<!ENTITY newtab.location "Установлене користувачем">
-<!ENTITY location.label "Адреса">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Розміщати нові вкладки відразу після поточної">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">

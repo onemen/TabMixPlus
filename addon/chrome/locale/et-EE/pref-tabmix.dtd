@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "avalehte">
 <!ENTITY newtab.current "praegust lehte">
 <!ENTITY newtab.duplicate "lehe koopiat">
-<!ENTITY newtab.location "kasutajamääratud aadressi">
-<!ENTITY location.label "Aadress">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
 <!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">

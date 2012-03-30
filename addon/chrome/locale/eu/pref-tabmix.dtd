@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Etxeko orria">
 <!ENTITY newtab.current "Gaineko orria">
 <!ENTITY newtab.duplicate "Bikoiztu orria">
-<!ENTITY newtab.location "Erabiltzailearen kokapena">
-<!ENTITY location.label "Kokapena">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Ireki fitxa berriak gainekoaren ondoan">
 <!ENTITY openOtherTabNext.label "Ireki bestelako fitxak gainekoaren ondoan">

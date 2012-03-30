@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "pagina gazdă">
 <!ENTITY newtab.current "pagina curentă">
 <!ENTITY newtab.duplicate "o pagină duplicat">
-<!ENTITY newtab.location "o locație a utilizatorului">
-<!ENTITY location.label "Locație">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Selectează conținutul când se încarcă pagini nevide">
 <!ENTITY openTabNext.label "Deschide filele noi alături de fila curentă">
 <!ENTITY openOtherTabNext.label "Deschide alte file alături de fila curentă">

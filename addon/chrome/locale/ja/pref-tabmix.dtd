@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "ホームページを表示">
 <!ENTITY newtab.current "現在のページを表示">
 <!ENTITY newtab.duplicate "現在のページを複製して表示">
-<!ENTITY newtab.location "指定のページを表示">
-<!ENTITY location.label "指定ページ">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "空白ページ以外を読み込むときはコンテンツにフォーカスする">
 <!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
 <!ENTITY openOtherTabNext.label "他のタブを現在のタブの直後に開く">

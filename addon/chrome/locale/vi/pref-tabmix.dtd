@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Trang nhà">
 <!ENTITY newtab.current "Trang hiện tại">
 <!ENTITY newtab.duplicate "Trang bản sao">
-<!ENTITY newtab.location "Địa chỉ Người dùng">
-<!ENTITY location.label "Địa chỉ">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Chuyển trỏ chuột tới nội dung khi tải trang trắng">
 <!ENTITY openTabNext.label "Mở thẻ mới kế bên thẻ hiện tại">
 <!ENTITY openOtherTabNext.label "Mở thẻ khác kế bên thẻ hiện tại">

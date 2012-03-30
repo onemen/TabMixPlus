@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "主页">
 <!ENTITY newtab.current "当前的页面">
 <!ENTITY newtab.duplicate "复制的页面">
-<!ENTITY newtab.location "用户指定的页面">
-<!ENTITY location.label "指定的页面">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">

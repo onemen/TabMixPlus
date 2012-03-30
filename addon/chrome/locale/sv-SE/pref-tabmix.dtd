@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Startsidan">
 <!ENTITY newtab.current "Aktuell sida">
 <!ENTITY newtab.duplicate "Duplicera sida">
-<!ENTITY newtab.location "Lokalisering av användare">
-<!ENTITY location.label "Lokalisering">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Öppna ny flik intill nuvarande">
 <!ENTITY openOtherTabNext.label "Öppna andra flikar intill aktuell flik">

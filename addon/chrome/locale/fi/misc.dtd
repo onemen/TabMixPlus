@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Lataa taustalla">
 <!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Nimike">
-<!ENTITY rename_all.label "Nimeä uudelleen sivut joilla on sama osoite">
-<!ENTITY rename_permanently.label "Nimeä tämä välilehti pysyvästi">
-<!ENTITY doctitle.label "Käytä sivun otsikkoa">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Foorumi">
 <!ENTITY faq.label "UKK">
 <!ENTITY help.label "Apua">

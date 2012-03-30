@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Startpagina">
 <!ENTITY newtab.current "Huidige pagina">
 <!ENTITY newtab.duplicate "Pagina dupliceren">
-<!ENTITY newtab.location "Gebruikerslocatie">
-<!ENTITY location.label "Locatie">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Inhoud op voorgrond weergeven bij het laden van een niet-lege pagina">
 <!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
 <!ENTITY openOtherTabNext.label "Andere tabbladen openen naast huidige">
