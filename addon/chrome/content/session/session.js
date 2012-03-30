@@ -339,6 +339,7 @@ var TabmixSessionManager = {
       let obs = TabmixSvc.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "private-browsing", true);
+      obs.addObserver(this, "private-browsing-change-granted", true);
       obs.addObserver(this, "quit-application-requested", true);
       obs.addObserver(this, "browser-lastwindow-close-requested", true);
       obs.addObserver(this, "sessionstore-windows-restored", true);
@@ -427,7 +428,7 @@ var TabmixSessionManager = {
    },
 
    // we call this function after session restored by sessionStore, after restart or after exit private-browsing
-   onSessionRestored: function SM_onSessionRestored() {
+   onSessionRestored: function SM_onSessionRestored(aKeepClosedWindows) {
       // sync rdf list with sessionstore closed tab after restart
       // we need it when we delete/restore close tab
       if (this.enableBackup && this.saveClosedtabs && TMP_ClosedTabs.count > 0) {
@@ -437,8 +438,10 @@ var TabmixSessionManager = {
 
       // we keep the old session after restart.
       // just remove the restore session from close window list
+      // if we are not exiting private browsing mode
       var sessionContainer = this.initContainer(this.gSessionPath[0]);
-      this.deleteWithProp(sessionContainer, "status", "saved");
+      if (!aKeepClosedWindows)
+        this.deleteWithProp(sessionContainer, "status", "saved");
       // all the windows that opened by restart will save again with new windowID
       // mark all current data with dontLoad flag
       var rdfNodeThisWin = this.RDFService.GetResource(this.gThisWin);
@@ -530,7 +533,8 @@ var TabmixSessionManager = {
                               [title, msg, "", chkBoxLabel, buttons]);
    },
 
-   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs) {
+   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
+        aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
       if (this.windowClosed || this._inPrivateBrowsing)
          return;
 
@@ -554,8 +558,10 @@ var TabmixSessionManager = {
             if (aSaveSession) {
                var rdfNodeClosedWindows = this.RDFService.GetResource(this.gSessionPath[0]);
                var sessionContainer = this.initContainer(rdfNodeClosedWindows);
-               this.deleteWithProp(sessionContainer, "dontLoad");
-               var count = this.countWinsAndTabs(sessionContainer);
+               // don't remove closed windows when entring private browsing mode
+               if (!aKeepClosedWindows)
+                 this.deleteWithProp(sessionContainer, "dontLoad");
+               var count = this.countWinsAndTabs(sessionContainer, "dontLoad");
                this.setLiteral(rdfNodeClosedWindows, "nameExt", this.getNameData(count.win, count.tab));
                // delete closed tab list for this session
                if (aRemoveClosedTabs)
@@ -588,7 +594,7 @@ var TabmixSessionManager = {
 
    // called from goQuitApplication when user apply File > Exit
    // or when extensions (Mr Tech Toolkit) call goQuitApplication.
-   canQuitApplication: function SM_canQuitApplication(aBackup) {
+   canQuitApplication: function SM_canQuitApplication(aBackup, aKeepClosedWindows) {
        // some extension can call goQuitApplication 2nd time (like ToolKit)
        // we make sure not to run this more the one time
        if (this.windowClosed || this._inPrivateBrowsing)
@@ -610,7 +616,7 @@ var TabmixSessionManager = {
          allPopups = this.checkForPopup(wnd);
       }
       var result = this.deinit(true, !aBackup, allPopups); // we fake that we are the last window
-      this.windowIsClosing(result.canClose, true, result.saveSession, result.removeClosedTabs);
+      this.windowIsClosing(result.canClose, true, result.saveSession, result.removeClosedTabs, aKeepClosedWindows);
 
       if (result.canClose) {
          enumerator = Tabmix.windowEnumerator();
@@ -644,6 +650,7 @@ var TabmixSessionManager = {
       obs.notifyObservers(null, "browser-window-change-state", "closed");
       obs.removeObserver(this, "browser-window-change-state");
       obs.removeObserver(this, "private-browsing");
+      obs.removeObserver(this, "private-browsing-change-granted");
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
       obs.removeObserver(this, "sessionstore-windows-restored");
@@ -1136,6 +1143,14 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case "browser-window-change-state":
             this.toggleRecentlyClosedWindowsButton();
             break;
+         case "private-browsing-change-granted":
+            // Whether we restore the session upon resume will be determined by the
+            // usual startup prefs see Bug 660785
+            if (aData == "enter" && (TabmixSvc.SMprefs.getBoolPref("manager") ||
+                TabmixSvc.SMprefs.getBoolPref("crashRecovery"))) {
+              this.canQuitApplication(true, true);
+            }
+            break;
          case "private-browsing":
             switch (aData) {
                case "enter":
@@ -1156,8 +1171,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                     this.toggleRecentlyClosedWindowsButton();
                     break;
                   }
-                  // save curent state
-                  this.canQuitApplication(true);
                   this._inPrivateBrowsing = true;
                   if (needToCloseProtected)
                     this.closeProtectedTabs();
@@ -1184,14 +1197,16 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                     break;
                   }
                   TMP_ClosedTabs.getClosedTabAtIndex(-1); // to be on the safe side...
+                  this.removeSession(this.gThisWin, this.gSessionPath[0]);
                   window.setTimeout(function () {TMP_ClosedTabs.setButtonDisableState(); }, 0);
                   this.afterExitPrivateBrowsing = window.setTimeout(function (self) {
                     self._inPrivateBrowsing = false;
                     self.windowClosed = false;
-                    self.onSessionRestored();
+                    self.onSessionRestored(true);
                     self.updateSettings();
                     self.removeAttribute(self.gThisWin, "dontLoad");
                     self.saveStateDelayed();
+                    self.updateClosedWindowsMenu("check");
                     self.afterExitPrivateBrowsing = null;
                   },0, this);
                   break;
@@ -2177,6 +2192,12 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       this.gThisWin = this.gSessionPath[0] + "/" + gBrowser.windowID;
       this.gThisWinTabs = this.gThisWin + "/tabs";
       this.gThisWinClosedtabs = this.gThisWin + "/closedtabs";
+
+      // make sure we delete closed windows that may exist if we exit Firefox
+      // from private browsing mode. we skip this command in windowIsClosing
+      // when entring private browsing mode
+      this.deleteWithProp(this.initContainer(this.gSessionPath[1]), "dontLoad");
+
       // When Firefox Starts:
       //       pref "onStart"
       //       0 - Restore
@@ -2300,6 +2321,7 @@ try{
       this.saveStateDelayed();
 
       // now that we open our tabs init TabView again
+      TMP_SessionStore.initService();
       TabView.init();
 
       // some extensions observers for this notification on startup
