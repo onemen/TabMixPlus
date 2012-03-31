@@ -281,6 +281,7 @@
       </method>
 
       <method name="_enterVerticalMode">
+        <parameter name="blockUnderflow"/>
         <body><![CDATA[
           // when widthFitTitle is false we enter vertical mode only after we are in overflow
           // if first or last tab is unvisible enter vertical mode
@@ -297,11 +298,12 @@
           let isLastTabVisible = this.isElementVisible(tabs[tabs.length-1]);
           if (!isFirstTabVisible || !isLastTabVisible) {
             this.orient = "vertical";
-            this.blockUnderflow = true;
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
             if (tabBar.updateVerticalTabStrip() == null)
               TabmixTabbar._failedToEnterVerticalMode = true;
+            if (blockUnderflow && this.orient == "vertical")
+              this.blockUnderflow = true;
           }
         ]]></body>
       </method>
@@ -426,7 +428,7 @@
             let self = this;
             this._enterVerticalModeTimeout = setTimeout(function() {
               self._enterVerticalModeTimeout = null;
-              self._enterVerticalMode();
+              self._enterVerticalMode(true);
             }, 25);
             return;
           }
