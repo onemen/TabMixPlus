@@ -508,10 +508,10 @@ XXX fix this when there is no stack go directly to trace
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
-  destroy: function() {
+  destroy: function TMP_utils_destroy() {
     this._define = null;
     this.toCode = null;
-    window.removeEventListener("unload", Tabmix.destroy, false);
+    window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }
 
