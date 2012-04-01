@@ -379,7 +379,8 @@ XXX fix this when there is no stack go directly to trace
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
-      Tabmix[aModule + "Initialized"] = false;
+      this[aModule + "Initialized"] = false;
+    var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, function() {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/"+aModule+".jsm", tmp);
@@ -387,7 +388,7 @@ XXX fix this when there is no stack go directly to trace
       if ("init" in obj)
         obj.init.apply(obj, aArg);
       if (aFlag)
-        window.Tabmix[aModule + "Initialized"] = true;
+        self[aModule + "Initialized"] = true;
       return obj;
     });
   },
@@ -396,9 +397,10 @@ XXX fix this when there is no stack go directly to trace
     if (aOldName in aObject)
       return;
 
+    var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aOldName, function() {
-      Tabmix.informAboutChangeInTabmix(aOldName, aNewName);
-      return Tabmix.getObject(aNewName);
+      self.informAboutChangeInTabmix(aOldName, aNewName);
+      return self.getObject(aNewName);
     });
   },
 
@@ -412,13 +414,13 @@ XXX fix this when there is no stack go directly to trace
       let index = path.indexOf("/", 2) - 3;
       let extensionName = index > -1 ?
          path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
-      Tabmix.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
+      this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\n" + "file: " + "chrome:" + path + "\nline: " + line
                  + "\n\nPlease inform Tabmix Plus developer"
                  + (extensionName ? ( " and " + extensionName + "developer.") : "."));
     }
     else
-      Tabmix.clog(err.message + "\n\n" + stack);
+      this.clog(err.message + "\n\n" + stack);
   },
 
   promptService: function(intParam, strParam, aWindow, aCallBack) {
