@@ -99,11 +99,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     document.getElementById("TabsToolbar")._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
-
-///XXX move all UI init from TMP_eventListener to here
   try {
-    // window flicker if we change max-width to soon
-    gTMPprefObserver.replaceContentBrowserRules();
     gTMPprefObserver.replaceBrowserRules();
   } catch (ex) {Tabmix.assert(ex);}
   gTMPprefObserver.setTabIconMargin();
@@ -524,6 +520,9 @@ var TMP_eventListener = {
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !TabmixSvc.TMPprefs.getBoolPref("optionsToolMenu");
 
+    // without this when Firefox starts with many tabs, tabbar can enter multi-row
+    // before tab width fit to title, and selected tab from last session not always visible
+    gTMPprefObserver.replaceContentBrowserRules();
     TabmixSessionManager.updateSettings();
 
     tabBar.adjustTabstrip = Tabmix.adjustTabstrip;

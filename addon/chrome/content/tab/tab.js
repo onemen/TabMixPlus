@@ -1091,6 +1091,7 @@ var gTMPprefObserver = {
       Tabmix.log('unable to find "' + href + '"');
   },
 
+  _contentBrowserRulesChanged: false,
   replaceContentBrowserRules: function TMP_PO_replaceContentBrowserRules() {
     function contentBrowserRules(browserCss) {
       let rulesCount = browserCss.cssRules.length;
@@ -1124,10 +1125,14 @@ var gTMPprefObserver = {
       }
     }
 
+    if (this._contentBrowserRulesChanged)
+      return;
     var href = "chrome://browser/content/browser.css";
     var styleSheets = this.getStyleSheets(href);
-    if (styleSheets.length)
+    if (styleSheets.length) {
+      this._contentBrowserRulesChanged = true;
       styleSheets.forEach(contentBrowserRules, this);
+    }
     else
       Tabmix.log('unable to find "' + href + '"');
   },
