@@ -1759,15 +1759,18 @@ var gTMPprefObserver = {
       _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
                     "extensions.tabmix.replaceLastTabWith.newtab.url");
     }
+    var _loadOnNewTab = true, _replaceLastTabWith = true;
     if (TabmixSvc.TMPprefs.prefHasUserValue("loadOnNewTab")) {
       let val = TabmixSvc.TMPprefs.getIntPref("loadOnNewTab");
       TabmixSvc.TMPprefs.setIntPref("loadOnNewTab.type", val);
       TabmixSvc.TMPprefs.clearUserPref("loadOnNewTab");
+      _loadOnNewTab = false;
     }
     if (TabmixSvc.TMPprefs.prefHasUserValue("replaceLastTabWith")) {
       let val = TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith");
       TabmixSvc.TMPprefs.setIntPref("replaceLastTabWith.type", val);
       TabmixSvc.TMPprefs.clearUserPref("replaceLastTabWith");
+      _replaceLastTabWith = false;;
     }
 
     // verify valid value
@@ -1788,8 +1791,12 @@ try { // user report about bug here ... ?
         TabmixSvc.TMPprefs.setCharPref("version", currentVersion);
         // open Tabmix page in a new tab
         window.setTimeout(function() {
+          var defaultChanged = "";
+          var showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
+          if (showComment && (_loadOnNewTab || _replaceLastTabWith))
+            defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
-          b.selectedTab = b.addTab("http://tmp.garyr.net/version_update1.htm?version=" + currentVersion);
+          b.selectedTab = b.addTab("http://tmp.garyr.net/version_update2.htm?version=" + currentVersion + defaultChanged);
         },1000);
         // noting more to do at the moment
       }
