@@ -872,25 +872,42 @@ var TMP_eventListener = {
     tabBar.removeShowButtonAttr();
 
     var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
+    if (aEvent.shiftKey)
+      shouldMoveFocus = !shouldMoveFocus;
+    var direction = aEvent.detail;
+    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
+      direction = -1 * direction;
+
     if (shouldMoveFocus) {
-      let direction = aEvent.detail > 0 ? 1 : -1;
-      if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
-        direction = -1 * direction;
+      direction = direction > 0 ? 1 : -1;
       tabBar.advanceSelectedTab(direction, true);
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
-    else if (aEvent.detail != 0 && tabBar.mTabstrip.orient == "horizontal" || TabmixTabbar.isMultiRow) {
-      // scroll the tabbar by one tab
-      // this code is from scrollbox.xml DOMMouseScroll event handler
+    else if (direction != 0) {
+      // this code is based on scrollbox.xml DOMMouseScroll event handler
       let tabsSrip = tabBar.mTabstrip;
-      let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
-      let direction = aEvent.detail > 0 ? 1 : -1;
-      if (tabsSrip._prevMouseScrolls.every(function(prev) prev == isVertical))
-        tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
-      if (tabsSrip._prevMouseScrolls.length > 1)
-        tabsSrip._prevMouseScrolls.shift();
-      tabsSrip._prevMouseScrolls.push(isVertical);
+      let orient = tabsSrip.orient;
+
+      // scroll the tabbar by one tab
+      if (orient == "horizontal" || TabmixTabbar.isMultiRow)
+        direction = direction > 0 ? 1 : -1;
+
+      if (orient == "vertical") {
+        if (aEvent.axis == aEvent.HORIZONTAL_AXIS)
+          return;
+        tabsSrip.scrollByIndex(direction);
+      }
+      else {
+        let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
+
+        if (tabsSrip._prevMouseScrolls.every(function(prev) prev == isVertical))
+          tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
+
+        if (tabsSrip._prevMouseScrolls.length > 1)
+          tabsSrip._prevMouseScrolls.shift();
+        tabsSrip._prevMouseScrolls.push(isVertical);
+      }
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }

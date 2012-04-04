@@ -692,13 +692,6 @@
                 <textbox id="tabFlipDelay" size="4" maxlength="4" prefstring="extensions.tabmix.tabFlipDelay" type="number" observes="obs_tabFlip"/>
                 <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
               </hbox>
-              <hbox align="center">
-                <!-- Tabbar Scrolling -->
-                <checkbox id="tabbarscrolling" label="&enabletabbarscrolling.label;" prefstring="extensions.tabmix.enableScrollSwitch"/>
-              </hbox>
-              <hbox align="center" class="indent">
-                <checkbox id="reversescrolling" label="&reverseScroll.label;" prefstring="extensions.tabmix.reversedScroll" observes="obs_tabbarscrolling"/>
-              </hbox>
               <vbox align="start">
                 <!-- Drag tabs -->
                 <checkbox id="mouseDownSelect" label="&clickFocus.label;" prefstring="extensions.tabmix.selectTabOnMouseDown" inverted="true"/>
@@ -718,6 +711,18 @@
                          src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
                 </radiogroup>
               </hbox>
+            </groupbox>
+            <!-- Tabbar Scrolling -->
+            <groupbox align="start" flex="1">
+              <caption label="&tabbarscrolling.caption;"/>
+              <separator class="thin"/>
+              <label value="&tabbarscrolling.holdShift.label;"/>
+              <radiogroup id="tabbarscrolling" boolean="true" orient="horizontal"
+                          prefstring="extensions.tabmix.enableScrollSwitch">
+                <radio value="0" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"/>
+                <radio value="1" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"/>
+              </radiogroup>
+              <checkbox id="reversescrolling" label="&tabbarscrolling.inverse.label;" prefstring="extensions.tabmix.reversedScroll"/>
             </groupbox>
           </tabpanel>
           <tabpanel orient="vertical" align="start">
@@ -1235,7 +1240,6 @@
     <broadcaster id="obs_showTabX"/>
     <broadcaster id="obs_flexTabs"/>
     <broadcaster id="obs_tabFlip"/>
-    <broadcaster id="obs_tabbarscrolling"/>
     <broadcaster id="obs_midcurrent"/>
     <broadcaster id="obs_filetypeEnable"/>
     <broadcaster id="obs_closeOnMerge"/>
