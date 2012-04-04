@@ -118,9 +118,22 @@
 
           this.tabmix_inited = true;
 
+          this.offsetAmountToScroll = Services.prefs.getBoolPref("extensions.tabmix.offsetAmountToScroll");
           Tabmix.newCode(null, this.ensureElementIsVisible)._replace(
+            'var amountToScroll',
+            '$&, offset = true'
+          )._replace(
             'STOP_DISTANCE = 15;',
             'STOP_DISTANCE = TabmixTabbar.isMultiRow ? 3 : 15;'
+          )._replace(
+            'amountToScroll = this._isScrolling * STOP_DISTANCE;',
+            '$& \
+             offset = false;'
+          )._replace(
+            'this._stopSmoothScroll();',
+            '$& \
+             if (offset) \
+               amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);'
           ).toCode(false, this, "ensureElementIsVisible");
 
           Tabmix.newCode(null, this._distanceScroll)._replace(
@@ -135,7 +148,7 @@
           ).toCode(false, this, "_smoothScrollByPixels");
 
           if (Tabmix.isVersion(70)) {
-            // we divide scrollDelta by the ratio between tab width abd tab height
+            // we divide scrollDelta by the ratio between tab width and tab height
             let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
             Tabmix.newCode(null, this._arrowScrollAnim[fnName])._replace(
               '0.5 * timePassed * scrollIndex',
@@ -149,7 +162,7 @@
             ).toCode(false, this, "notify");
           }
 
-          // the ratio between tab width abd tab height is approximately 6
+          // the ratio between tab width and tab height is approximately 6
           // we multiply here the distance to get same animation effect.
           Tabmix.newCode(null, this._scrollAnim.start)._replace(
             'Math.abs(distance)',
@@ -202,6 +215,28 @@
         <body><![CDATA[
           let newPx = (this._isScrolling || aSmoothScroll) ? px : this._distanceToRow(px);
           this.scrollPosition += newPx;
+        ]]></body>
+      </method>
+
+      <method name="getOffsetAmountToScroll">
+        <parameter name="element"/>
+        <parameter name="amountToScroll"/>
+        <body><![CDATA[
+          var offset = 0, isScrollingLeft = amountToScroll > 0;
+          if (amountToScroll != 0 && this.offsetAmountToScroll &&
+              !TabmixTabbar.isMultiRow) {
+            let tab;
+            if (isScrollingLeft)
+              tab = TMP_TabView.nextVisibleSibling(element);
+            else
+              tab = TMP_TabView.previousVisibleSibling(element);
+            if (tab) {
+              offset = Math.min(50, 0.5 * tab.getBoundingClientRect().width);
+              if (!isScrollingLeft)
+                offset = Math.min(this.scrollPosition, offset);
+            }
+          }
+          return isScrollingLeft ? offset : -offset;
         ]]></body>
       </method>
 

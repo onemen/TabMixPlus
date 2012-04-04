@@ -373,9 +373,9 @@ var TM_Options = {
    },
 
    tabScroll: function() {
-      var selectedValue = document.getElementById("tabScroll").value;
-      var vis = selectedValue == 2 ? "visibility: visible" : "visibility: hidden";
-      this.setItem("maxbar", "style", vis);
+      var multiRow = document.getElementById("tabScroll").value == 2;
+      document.getElementById("maxbar").hidden = !multiRow;
+      document.getElementById("offsetAmountToScroll").hidden = multiRow;
    },
 
    speLink: function() {

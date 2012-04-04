@@ -135,11 +135,12 @@
 <!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
 <!ENTITY tabScroll.label "When tabs don&apos;t fit width:">
 <!ENTITY tabScroll.none "Scrollable without buttons">
-<!ENTITY tabScroll.leftRightButtons "Scrollable with buttons on left and right sides">
+<!ENTITY tabScroll.leftRightButtons "Scrollable with buttons on both sides">
 <!ENTITY tabScroll.rightButtons "Scrollable with buttons on right side">
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-row">
 <!ENTITY maxrow.label "Max number of rows to display:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Highlight">

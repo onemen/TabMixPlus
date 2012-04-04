@@ -492,8 +492,7 @@
                           tooltiptext="&tabBarSpace.tooltip;" />
               </vbox>
             </groupbox>
-            <groupbox flex="1" orient="horizontal" id="tabBarDisplay">
-             <vbox>
+            <groupbox flex="1" id="tabBarDisplay">
               <!-- show/hide the tabbar -->
               <hbox align="center">
                 <label value="&hideTabBar.label;:"/>
@@ -528,7 +527,7 @@
                 </hbox>
                 <hbox pack="end" class="indent">
                   <menulist id="tabScroll" prefstring="extensions.tabmix.tabBarMode">
-                    <menupopup onpopuphidden="TM_Options.tabScroll();">
+                    <menupopup oncommand="TM_Options.tabScroll();">
                       <menuitem value="0" label="&tabScroll.none;"/>
                       <menuitem value="1" label="&tabScroll.leftRightButtons;"/>
                       <menuitem value="3" label="&tabScroll.rightButtons;" rtlLabel="&tabScroll.rightButtons.rtl;"/>
@@ -537,19 +536,23 @@
                   </menulist>
                 </hbox>
               </box>
-              <hbox align="center" id="maxbar">
-                <label value="&maxrow.label;" />
-                <textbox id="maxrow" size="2" maxlength="2" prefstring="extensions.tabmix.tabBarMaxRow" type="number" min="2"/>
-              </hbox>
-              <checkbox id="smoothScroll" label="&smoothScroll.label;" prefstring="toolkit.scrollbox.smoothScroll"
-                        inverseDependency="true"/>
+              <vbox align="start">
+                <hbox align="center" id="maxbar">
+                  <label value="&maxrow.label;" />
+                  <textbox id="maxrow" size="2" maxlength="2" type="number" min="2"
+                           prefstring="extensions.tabmix.tabBarMaxRow"/>
+                </hbox>
+                <checkbox id="offsetAmountToScroll" label="&offsetAmountToScroll.label;" style="height: 22px;"
+                          prefstring="extensions.tabmix.offsetAmountToScroll"/>
+                <checkbox id="smoothScroll" label="&smoothScroll.label;" inverseDependency="true"
+                          prefstring="toolkit.scrollbox.smoothScroll"/>
+              </vbox>
               <hbox align="center" id="clickToScroll.scrollDelay">
                 <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
                 <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
                          prefstring="toolkit.scrollbox.clickToScroll.scrollDelay" type="number"/>
                 <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
               </hbox>
-             </vbox>
             </groupbox>
           </tabpanel>
           <tabpanel orient="vertical">

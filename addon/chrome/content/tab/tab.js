@@ -815,6 +815,9 @@ var gTMPprefObserver = {
           }
           TabmixTabbar.updateBeforeAndAfter();
         break;
+      case "extensions.tabmix.offsetAmountToScroll":
+          gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = TabmixSvc.prefs.getBoolPref(prefName);
+        break;
       case "browser.tabs.onTop":
         // multi-rows total heights can be diffrent when tabs are on top
         if (TabmixTabbar.visibleRows > 1) {
