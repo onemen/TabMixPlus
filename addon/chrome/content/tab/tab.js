@@ -641,6 +641,8 @@ var gTMPprefObserver = {
         break;
       case "browser.tabs.tabMaxWidth":
       case "browser.tabs.tabMinWidth":
+        var tabStrip = gBrowser.tabContainer.mTabstrip;
+        var currentVisible = tabStrip.isElementVisible(gBrowser.mCurrentTab);
         let tabMaxWidth = Math.max(16, TabmixSvc.prefs.getIntPref("browser.tabs.tabMaxWidth"));
         let tabMinWidth = Math.max(16, TabmixSvc.prefs.getIntPref("browser.tabs.tabMinWidth"));
         if (tabMaxWidth < tabMinWidth) {
@@ -660,11 +662,20 @@ var gTMPprefObserver = {
           this.dynamicRules["width1"].style.setProperty("min-width", tabMinWidth + "px", important);
         }
         TabmixTabbar.updateSettings(false);
-///check if we need to call update 4 times after changing tab width
-        window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 50);
-        window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 100);
-        window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 250);
-        window.setTimeout(function TMP_tabWidthCahnged() {TabmixTabbar.updateScrollStatus();}, 500);
+        // we need this timeout when there are many tabs
+        if (typeof this._tabWidthCahnged == "undefined") {
+          let self = this;
+          this._tabWidthCahnged = true;
+          [50, 100, 250, 500].forEach(function (timeout) {
+            setTimeout(function TMP_tabWidthCahnged() {
+              if (currentVisible)
+                tabStrip.ensureElementIsVisible(gBrowser.mCurrentTab);
+              TabmixTabbar.updateScrollStatus();
+              if (timeout == 500)
+                delete self._tabWidthCahnged;
+            }, timeout);
+          });
+        }
         break;
       case "browser.tabs.tabClipWidth":
         gBrowser.tabContainer.mTabClipWidth = TabmixSvc.prefs.getIntPref(prefName);
