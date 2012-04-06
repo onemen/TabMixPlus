@@ -119,6 +119,7 @@
           this.tabmix_inited = true;
 
           this.offsetAmountToScroll = Services.prefs.getBoolPref("extensions.tabmix.offsetAmountToScroll");
+          this.offsetRatio = document.getBindingParent(this).closeButtonsEnabled ? 0.70 : 0.50;
           Tabmix.newCode(null, this.ensureElementIsVisible)._replace(
             'var amountToScroll',
             '$&, offset = true'
@@ -231,7 +232,7 @@
             else
               tab = TMP_TabView.previousVisibleSibling(element);
             if (tab) {
-              offset = Math.min(50, 0.5 * tab.getBoundingClientRect().width);
+              offset = Math.min(50, this.offsetRatio * tab.getBoundingClientRect().width);
               if (!isScrollingLeft)
                 offset = Math.min(this.scrollPosition, offset);
             }

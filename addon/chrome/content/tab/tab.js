@@ -722,7 +722,9 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.setAttribute("closebuttons-side", TabmixSvc.prefs.getBoolPref(prefName) ? "left" : "right");
         break;
       case "extensions.tabmix.tabs.closeButtons.enable":
-        gBrowser.tabContainer.closeButtonsEnabled = TabmixSvc.prefs.getBoolPref(prefName);
+        prefValue = TabmixSvc.prefs.getBoolPref(prefName)
+        gBrowser.tabContainer.closeButtonsEnabled = prefValue;
+        gBrowser.tabContainer.mTabstrip.offsetRatio = prefValue ? 0.70 : 0.50;
         gBrowser.tabContainer.adjustTabstrip();
         break;
       case "extensions.tabmix.tabBarPosition":
