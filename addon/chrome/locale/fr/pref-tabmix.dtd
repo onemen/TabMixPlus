@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "la page d&apos;accueil">
 <!ENTITY newtab.current "la page courante">
 <!ENTITY newtab.duplicate "la page dupliquée">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "l'adresse spécifiée">
+<!ENTITY location.label.1 "Adresse">
 <!ENTITY focusContent.label "À l&apos;ouverture de l&apos;onglet, positionner le curseur dans la page et non dans la barre d&apos;adresse">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l&apos;onglet courant">
 <!ENTITY openOtherTabNext.label "Ouvrir d&apos;autres onglets près de l&apos;onglet courant">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
 <!ENTITY tabScroll.multibar "Mettre la barre d&apos;onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Activer le défilement doux">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
 <!ENTITY highlight.label "Surligner :">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Sélectionner un onglet au survol du curseur, après">
 <!ENTITY tabFlip.label "Revenir à l&apos;onglet précédemment sélectionné en cliquant sur l&apos;onglet courant">
 <!ENTITY tabFlip.delay "Utiliser un délai de">
-<!ENTITY addTabDrag.label "Glisser les onglets pour modifier l&apos;ordre">
-<!ENTITY enabletabbarscrolling.label "Défilement pour sélectionner les onglets">
-<!ENTITY reverseScroll.label "Déplacer vers la droite lors du défilement arrière à la souris">
 <!ENTITY clickFocus.label "Clic de souris (pressé relâché) pour sélectionner un onglet">
 <!ENTITY removeEntries.label "Retirer la liste des entrées du menu Tab Mix Plus en utilisant le clic-milieu">
 <!ENTITY lockTabSizingOnClose.label "À la fermeture d'un onglet, d'autres onglets ne devraient pas se redimensionner jusqu'à ce que le curseur quitte la zone de la barre d'outils">
 <!ENTITY removeEntries.tooltip "Inclure les fenêtres et onglets fermés et les sessions enregistrées">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Double-clic">
 <!ENTITY middle.label "Clic-milieu">
 <!ENTITY ctrl.label "Ctrl-clic">

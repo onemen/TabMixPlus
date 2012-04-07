@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Φόρτωση στο παρασκήνιο">
 <!ENTITY searchTabFocus.accesskey "ω">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Επεξεργασία τίτλου καρτέλας">
+<!ENTITY renametab.reset.label "Επαναφορά αρχικού τίτλου">
 <!ENTITY title.label "Τίτλος">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "Αρχικός">
+<!ENTITY renametab.permanently.label "Μετονομασία καρτέλας ανεξάρτητα από τη διεύθυνση της">
+<!ENTITY renametab.permanently.tooltip "Καρτέλα με ιστορικό - το νέο όνομα θα παραμείνει και όταν αλλάξει η διεύθυνση">
 <!ENTITY forum.label "Φόρουμ">
 <!ENTITY faq.label "Συχνές Ερωτήσεις">
 <!ENTITY help.label "Βοήθεια">

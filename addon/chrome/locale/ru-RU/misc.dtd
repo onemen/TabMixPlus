@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Загружать в фоне">
 <!ENTITY searchTabFocus.accesskey "ф">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Редактировать заголовок вкладки">
+<!ENTITY renametab.reset.label "Вернуть заголовок по умолчанию">
 <!ENTITY title.label "Заголовок">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "По умолчанию">
+<!ENTITY renametab.permanently.label "Переименовать эту вкладку, не обращая внимания на её адрес">
+<!ENTITY renametab.permanently.tooltip "вкладка с историей - новое имя останется, когда адрес изменится">
 <!ENTITY forum.label "Форум">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Справка">

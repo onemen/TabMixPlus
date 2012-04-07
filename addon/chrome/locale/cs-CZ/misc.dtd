@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Nahrát na pozadí">
 <!ENTITY searchTabFocus.accesskey "P">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Upravit název panelu">
+<!ENTITY renametab.reset.label "Obnovit výchozí název">
 <!ENTITY title.label "Název">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "Výchozí">
+<!ENTITY renametab.permanently.label "Přejmenovat panel bez ohledu na jeho adresu">
+<!ENTITY renametab.permanently.tooltip "panel s historií – nový název panelu zůstane i po změně adresy">
 <!ENTITY forum.label "Fórum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Nápověda">

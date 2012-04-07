@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Domovská stránka">
 <!ENTITY newtab.current "Aktuálna stránka">
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Nová karta">
+<!ENTITY location.label.1 "Adresa">
 <!ENTITY focusContent.label "Zamerať obsah pri načítaní nie prázdnej stránky">
 <!ENTITY openTabNext.label "Otvoriť nové karty vedľa aktuálnej karty">
 <!ENTITY openOtherTabNext.label "Otvoriť ostatné karty vedľa aktuálnej">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
 <!ENTITY highlight.label "Zvýrazniť:">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Zobraziť kartu pri prejdení myšou cez ňu">
 <!ENTITY tabFlip.label "Pri kliknutí na aktuálnu kartu prepnúť na naposledy používanú">
 <!ENTITY tabFlip.delay "Použiť prepínane kariet s oneskorením">
-<!ENTITY addTabDrag.label "Zmeniť poradie kariet ich pretiahnutím">
-<!ENTITY enabletabbarscrolling.label "Pomocou skrolovania prepínať medzi kartami">
-<!ENTITY reverseScroll.label "Prepnúť napravo pri obrátenom skrolovaní">
 <!ENTITY clickFocus.label "Tlačením smerom dole okamžite vybrať karty">
 <!ENTITY removeEntries.label "Zmazať položky ponuky Tab Mix Plus použitím prostredného tlačidla">
 <!ENTITY lockTabSizingOnClose.label "Pri zatváraní karty, ostatné karty by nemali meniť svoju veľkosť, kým kurzor opustí oblasť panela nástrojov">
 <!ENTITY removeEntries.tooltip "Zahrnúť zatvorené karty, zatvorené okná uložené relácie">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Dvojkliknutie">
 <!ENTITY middle.label "Prostredné tlačidlo">
 <!ENTITY ctrl.label "Ctrl+kliknutie">

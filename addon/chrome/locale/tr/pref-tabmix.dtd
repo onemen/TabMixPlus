@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Sol taraftaki butonlarla kaydırılabilir">
 <!ENTITY tabScroll.multibar "Çoklu-satır">
 <!ENTITY maxrow.label "Görüntülenecek en fazla satır sayısı:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
 <!ENTITY highlight.label "Belirginleştir:">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Bu süre kadar işaretlenen sekmeleri seç:">
 <!ENTITY tabFlip.label "Geçerli olana tıklandığında öncekine geç">
 <!ENTITY tabFlip.delay "Bu süre kadar gecikme uygula:">
-<!ENTITY addTabDrag.label "Sıralamasını değiştirmek için sekmeleri sürükle">
-<!ENTITY enabletabbarscrolling.label "Seçmek için kaydırma etkin">
-<!ENTITY reverseScroll.label "Seçilen sekmeler için yön tersine">
 <!ENTITY clickFocus.label "Sekmeyi seçmek için fare tıklaması (indir ve bırak)">
 <!ENTITY removeEntries.label "Orta-tıklama, Tab Mix Plus menü ve listelerindeki girdileri kaldırsın">
 <!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
 <!ENTITY removeEntries.tooltip "Kapatılan sekmeler, pencereler ve kaydedilen oturumlar listelerindeki öğeler için">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Çift-tıklama">
 <!ENTITY middle.label "Orta-tıklama">
 <!ENTITY ctrl.label "Ctrl+tıklama">

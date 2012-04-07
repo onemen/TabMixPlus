@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "die Startseite">
 <!ENTITY newtab.current "die aktuelle Seite">
 <!ENTITY newtab.duplicate "ein Duplikat der aktuellen Seite">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Neue Tab-Seite">
+<!ENTITY location.label.1 "Adresse">
 <!ENTITY focusContent.label "Inhaltsbereich fokussieren, falls keine leere Seite geladen wird">
 <!ENTITY openTabNext.label "Neue Tabs neben dem aktiven Tab öffnen">
 <!ENTITY openOtherTabNext.label "Andere Tabs neben dem aktiven Tab öffnen">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "mit Pfeilschaltflächen auf der linken Seite scrollen">
 <!ENTITY tabScroll.multibar "mehrzeilig anzeigen">
 <!ENTITY maxrow.label "Maximale Zeilenanzahl:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Sanftes Scrollen verwenden">
 <!ENTITY scrolldelay.label "Mausrad-Verzögerung (Intervall zwischen Scroll-Schritten)">
 <!ENTITY highlight.label "Hervorheben">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Mauszeiger über einem Tab holt diesen in den Vordergrund nach">
 <!ENTITY tabFlip.label "Bei Klick auf den aktuellen Tab zum zuletzt aktiven wechseln">
 <!ENTITY tabFlip.delay "Verzögerung:">
-<!ENTITY addTabDrag.label "Verschieben von Tabs aktivieren">
-<!ENTITY enabletabbarscrolling.label "Tabs wechseln durch Scrollen mit dem Mausrad über der Tab-Leiste">
-<!ENTITY reverseScroll.label "Richtung des Tab-Wechsels umkehren">
 <!ENTITY clickFocus.label "Tab durch verzögerten Mausklick (drücken und loslassen) in den Vordergrund holen">
 <!ENTITY removeEntries.label "Mit Mittelklick Einträge aus den Listenmenüs entfernen">
 <!ENTITY lockTabSizingOnClose.label "Beim Schließen von Tabs die Größe anderer Tabs nicht verändern, bis der Mauszeiger die Tableiste verlassen hat.">
 <!ENTITY removeEntries.tooltip "Betrifft die Listen für geschlossene Tabs und Fenster sowie gesicherte Sitzungen">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Doppelklick">
 <!ENTITY middle.label "Mittelklick">
 <!ENTITY ctrl.label "Strg+Klick">

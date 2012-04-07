@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Deslocável com botões no lateral esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas colunas">
 <!ENTITY maxrow.label "Número máximo de colunas a mostrar:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Ativar deslocamento suave">
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
 <!ENTITY highlight.label "Destacar:">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Seleccionar separador apontado para">
 <!ENTITY tabFlip.label "Ao clicar no actual trocar para o último separador seleccionado">
 <!ENTITY tabFlip.delay "Usar um atraso de">
-<!ENTITY addTabDrag.label "Arrastar separadores para alterar a sua ordem">
-<!ENTITY enabletabbarscrolling.label "Permitir deslizamento dos separadores seleccionados">
-<!ENTITY reverseScroll.label "Inverter a direcção na qual os separadores são seleccionados">
 <!ENTITY clickFocus.label "Clique do rato (para baixo e deixar) para seleccionar um separador">
 <!ENTITY removeEntries.label "Remover a entrada da lista de menu do Tab Mix Plus usando o clique central">
 <!ENTITY lockTabSizingOnClose.label "Ao fechar o separador, outros separadores não devem redimensionar até o cursor deixar a região da barra de ferramentas">
 <!ENTITY removeEntries.tooltip "Inclui separadores fechados, janelas fechadas e sessões guardadas">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Duplo clique">
 <!ENTITY middle.label "Clique central">
 <!ENTITY ctrl.label "Ctrl-clique">

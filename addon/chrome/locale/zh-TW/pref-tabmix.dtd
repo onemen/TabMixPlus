@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "首頁">
 <!ENTITY newtab.current "目前頁面">
 <!ENTITY newtab.duplicate "複製頁面">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "自訂網址…">
+<!ENTITY location.label.1 "網址">
 <!ENTITY focusContent.label "載入非空白頁時，焦點切換至頁面內容">
 <!ENTITY openTabNext.label "新分頁開啟於目前分頁的旁邊">
 <!ENTITY openOtherTabNext.label "其他分頁開啟於目前分頁的旁邊">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "顯示捲動按鈕於分頁列左側">
 <!ENTITY tabScroll.multibar "以多行顯示">
 <!ENTITY maxrow.label "最大顯示的行數：">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">
 <!ENTITY highlight.label "強調">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "切換至滑鼠所指的分頁，延遲：">
 <!ENTITY tabFlip.label "點擊目前的分頁標籤，切換至上次選取的分頁">
 <!ENTITY tabFlip.delay "延遲：">
-<!ENTITY addTabDrag.label "啟用滑鼠拖曳標籤改變分頁位置">
-<!ENTITY enabletabbarscrolling.label "啟用滑鼠滾輪切換分頁">
-<!ENTITY reverseScroll.label "反轉切換方向">
 <!ENTITY clickFocus.label "滑鼠點擊分頁標籤並釋放後才選取分頁">
 <!ENTITY removeEntries.label "允許用滑鼠中鍵移除復原清單中的項目">
 <!ENTITY lockTabSizingOnClose.label "關閉分頁時，其它分頁在滑鼠移出工具列前不得改變大小">
 <!ENTITY removeEntries.tooltip "作用於：已關閉分頁列表、已關閉視窗列表、已存瀏覽狀態列表">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "雙擊左鍵">
 <!ENTITY middle.label "點擊中鍵">
 <!ENTITY ctrl.label "[Ctrl]+左鍵">

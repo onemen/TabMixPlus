@@ -38,11 +38,11 @@
 <!ENTITY newtab.label "Deschide în filele noi:">
 <!ENTITY replaceLastTabWith.label "Înlocuiește ultima filă închisă cu">
 <!ENTITY newtab.blank "o pagină vidă">
-<!ENTITY newtab.home "pagina gazdă">
+<!ENTITY newtab.home "pagina de start">
 <!ENTITY newtab.current "pagina curentă">
 <!ENTITY newtab.duplicate "o pagină duplicat">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "pagina „Filă nouă”">
+<!ENTITY location.label.1 "Adresă:">
 <!ENTITY focusContent.label "Selectează conținutul când se încarcă pagini nevide">
 <!ENTITY openTabNext.label "Deschide filele noi alături de fila curentă">
 <!ENTITY openOtherTabNext.label "Deschide alte file alături de fila curentă">
@@ -78,18 +78,18 @@
 <!ENTITY lasttab.caption.label "Închidere filă ultimă">
 <!ENTITY keepWindow.label.3.1 "Nu închide fereastra când se închide ultima filă">
 <!ENTITY keeptab.label "Împiedică închiderea ultimei file">
-<!ENTITY closeOnMerge.label "Închide ferestrele odată ce ele sunt îmbinate">
+<!ENTITY closeOnMerge.label "Închide ferestrele după ce au fost îmbinate">
 <!ENTITY warnOnMerge.label "Atenționează la închiderea filelor care nu au fost îmbinate">
 <!ENTITY currenttab.caption.label "Închidere filă curentă">
 <!ENTITY focusTab.labelBegin "La închiderea filei curente, activează:">
-<!ENTITY focusTab.firstTab "Prima filă">
-<!ENTITY focusTab.leftTab "Fila din stânga">
-<!ENTITY focusTab.rightTab "Fila din dreapta">
-<!ENTITY focusTab.lastTab "Ultima filă">
-<!ENTITY focusTab.lastSelectedTab "Ultima filă selectată">
-<!ENTITY focusTab.openerTab "Fila declanșatoare/dreaptă">
-<!ENTITY focusTab.openerTab.rtl "Fila declanșatoare/stângă">
-<!ENTITY focusTab.lastOpenedTab "Ultima filă deschisă">
+<!ENTITY focusTab.firstTab "prima filă">
+<!ENTITY focusTab.leftTab "fila din stânga">
+<!ENTITY focusTab.rightTab "fila din dreapta">
+<!ENTITY focusTab.lastTab "ultima filă">
+<!ENTITY focusTab.lastSelectedTab "ultima filă selectată">
+<!ENTITY focusTab.openerTab "fila declanșatoare/dreaptă">
+<!ENTITY focusTab.openerTab.rtl "fila declanșatoare/stângă">
+<!ENTITY focusTab.lastOpenedTab "ultima filă deschisă">
 <!ENTITY undoClose.label "Activează redeschiderea filelor închise">
 <!ENTITY undoCloseCache.label "Numărul maxim memorat de file închise:">
 <!ENTITY undoClosepos.label "Restaurează poziția originală a filei">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "derulantă, cu butoane pe marginea stângă">
 <!ENTITY tabScroll.multibar "pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Activează derularea lină">
 <!ENTITY scrolldelay.label "Întârziere defilare (interval între pașii defilării)">
 <!ENTITY highlight.label "Evidențiază:">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Selectează fila survolată timp de">
 <!ENTITY tabFlip.label "Selectează ultima filă afișată când se face clic pe fila curentă">
 <!ENTITY tabFlip.delay "Amână pentru">
-<!ENTITY addTabDrag.label "Glisează și fixează filele pentru schimbarea ordinii lor">
-<!ENTITY enabletabbarscrolling.label "Permite defilarea pentru selectarea filelor">
-<!ENTITY reverseScroll.label "Inversează direcția de selectare a filelor">
 <!ENTITY clickFocus.label "Selectează o filă la clic cu mausul (apăsare și eliberare)">
 <!ENTITY removeEntries.label "Elimină elementele meniului Tab Mix Plus folosind clic-mijloc">
 <!ENTITY lockTabSizingOnClose.label "La închiderea unei file celelalte file nu se redimensionează până când cursorul nu părăsește zona barei de file">
 <!ENTITY removeEntries.tooltip "Include filele închise, ferestrele închise și sesiunile salvate">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Dublu-clic">
 <!ENTITY middle.label "Clic-mijloc">
 <!ENTITY ctrl.label "Ctrl+clic">

@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "バックグラウンドで読み込む">
 <!ENTITY searchTabFocus.accesskey "B">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "タブのタイトル名を編集">
+<!ENTITY renametab.reset.label "デフォルトのタイトル名に戻す">
 <!ENTITY title.label "タイトル">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "デフォルト">
+<!ENTITY renametab.permanently.label "アドレスに依存しないタブ名に変更">
+<!ENTITY renametab.permanently.tooltip "タブ履歴 - アドレスが変化してもタブ名は変わりません">
 <!ENTITY forum.label "フォーラム">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "ヘルプ">

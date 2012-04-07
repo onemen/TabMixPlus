@@ -36,16 +36,16 @@
 <!ENTITY tabMerge.label "Спајање картицa">
 <!ENTITY tabFeature.label "Својства картицe">
 <!ENTITY newtab.label "Учитај на новим картицама:">
-<!ENTITY replaceLastTabWith.label "Кад затворим последњу картицу замени је са">
+<!ENTITY replaceLastTabWith.label "Кад затворим последњу картицу, замени је">
 <!ENTITY newtab.blank "празном страницом">
 <!ENTITY newtab.home "почетном страницом">
 <!ENTITY newtab.current "тренутном страницом">
-<!ENTITY newtab.duplicate "дуплираном страницу">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.duplicate "дуплираном страницом">
+<!ENTITY newtab.location.1 "Страница новог језичка">
+<!ENTITY location.label.1 "Адреса">
 <!ENTITY focusContent.label "Пређи на садржај кад се учитава страница која није празна">
 <!ENTITY openTabNext.label "Нове картице отварај поред тренутне">
-<!ENTITY openOtherTabNext.label "Остале картице отварај поред текуће">
+<!ENTITY openOtherTabNext.label "Остале картице отварај поред тренутне">
 <!ENTITY relatedAfterCurrent.label "Само ако имају неке везе са тренутном">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Дуплиране картице отварај поред изворне">
@@ -140,6 +140,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Омогући померање са дугмадима на левој страни">
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
 <!ENTITY maxrow.label "Максимални број редова за приказ">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при скроловању (време између понављања скроловања)">
 <!ENTITY highlight.label "Истакни:">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Обележи картицу показану више од">
 <!ENTITY tabFlip.label "Пребаци се на последњу одабрану картицу приликом клика на текућу">
 <!ENTITY tabFlip.delay "Користи кашњење од">
-<!ENTITY addTabDrag.label "Користи превлачење за мењање редоследа картица">
-<!ENTITY enabletabbarscrolling.label "Дозволи одабирање картица скороловањем---">
-<!ENTITY reverseScroll.label "Обрни смер одабирања картица ----">
 <!ENTITY clickFocus.label "Клик мишем (клик и отпуштање) одабира картицу">
 <!ENTITY removeEntries.label "Уклони Tab Mix Plus ставке листе менија помоћу средњег клика ---">
 <!ENTITY lockTabSizingOnClose.label "Када затварам језичак, остали језичци не треба да мењају величину док год показивач миша напусти траку са језичцима">
 <!ENTITY removeEntries.tooltip "Укључује затворене картице, затворене прозоре и сачуване сесије">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Дупли клик">
 <!ENTITY middle.label "Средњи клик">
 <!ENTITY ctrl.label "Ctrl-клик">

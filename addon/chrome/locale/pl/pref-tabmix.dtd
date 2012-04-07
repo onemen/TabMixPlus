@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "stronę startową">
 <!ENTITY newtab.current "aktywną stronę">
 <!ENTITY newtab.duplicate "powielaną stronę">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Strona nowej karty">
+<!ENTITY location.label.1 "Adres">
 <!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
 <!ENTITY openOtherTabNext.label "Otwieraj inne karty za aktywną kartą">
@@ -140,7 +140,8 @@
 <!ENTITY tabScroll.rightButtons.rtl "wyświetlaj przyciski przewijania po lewej stronie paska">
 <!ENTITY tabScroll.multibar "wyświetlaj je w wielu rzędach">
 <!ENTITY maxrow.label "Maksymalna liczba wyświetlanych rzędów etykiet kart:">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Włącz płynne przewijanie">
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
 <!ENTITY highlight.label "Wyróżniaj:">
 <!ENTITY currenttab.style.label "aktywną kartę">
@@ -181,13 +182,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Po umieszczeniu wskaźnika myszy nad etykietą karty uaktywniaj kartę po">
 <!ENTITY tabFlip.label "Kliknięcie na etykiecie aktywnej karty przełącza do poprzednio aktywnej karty">
 <!ENTITY tabFlip.delay "Opóźnienie wykonania">
-<!ENTITY addTabDrag.label "Zezwalaj na przeciąganie etykiet kart, aby zmienić ich kolejność">
-<!ENTITY enabletabbarscrolling.label "Zezwalaj na przełączanie pomiędzy otwartymi kartami za pomocą kółka myszy">
-<!ENTITY reverseScroll.label "Obrót kółkiem myszy do siebie – przełącza karty w lewo">
 <!ENTITY clickFocus.label "Uaktywniaj kartę po pełnym cyklu kliknięcia przyciskiem myszy (naciśnięcie i puszczenie przycisku)">
 <!ENTITY removeEntries.label "Kliknięcie ś.p.m. usuwa elementy z rozwijanych list Tab Mix Plusa">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Gdy karta jest zamykana inne etykiety kart nie powinny zmieniać szerokości zanim kursor nie zostanie przesunięty poza obszar paska narzędzi">
 <!ENTITY removeEntries.tooltip "Pozwala na usuwanie takich elementów list jak: zamknięte karty, okna i zapisane sesje">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Dwukrotne kliknięcie">
 <!ENTITY middle.label "Kliknięcie ś.p.m.">
 <!ENTITY ctrl.label "Ctrl+kliknięcie">
