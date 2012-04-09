@@ -1948,7 +1948,7 @@ var TabmixProgressListener = {
           if (tab.hasAttribute("width"))
             tablib.onTabTitleChanged(tab);
         }
-        if (aRequest.QueryInterface(Ci.nsIChannel).URI.spec != "about:blank")
+        if (!Tabmix.isBlankPageURL(aRequest.QueryInterface(Ci.nsIChannel).URI.spec))
            aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
       }
       if ((aStateFlags & nsIWebProgressListener.STATE_IS_WINDOW) &&
