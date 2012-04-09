@@ -220,6 +220,10 @@ var tablib = {
        $1$2'
     ).toCode();
 
+    Tabmix.newCode("gBrowser.swapBrowsersAndCloseOther", gBrowser.swapBrowsersAndCloseOther)._replace(
+      '{', '{\
+       Tabmix.copyTabData(aOurTab, aOtherTab);'
+    ).toCode();
   },
 
   change_tabContainer: function change_tabContainer() {

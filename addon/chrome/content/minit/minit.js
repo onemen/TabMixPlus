@@ -322,7 +322,6 @@ var TMP_tabDNDObserver = {
 
       gBrowser.moveTabTo(newTab, newIndex + left_right);
 
-      Tabmix.copyTabData(newTab, draggedTab);
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
 
       // We need to set selectedTab after we've done

@@ -81,7 +81,6 @@ function TMP_TBP_Startup() {
        if (!Tabmix.singleWindowMode) {
          window.tabmix_afterTabduplicated = true;
          TabmixSessionManager.init();
-         Tabmix.copyTabData(gBrowser.selectedTab, uriToLoad);
          $&
        }
       ]]>
