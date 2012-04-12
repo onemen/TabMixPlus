@@ -54,7 +54,7 @@
               tooltiptext="&renametab.permanently.tooltip;"
               oncommand="Tabmix.renameTab.data.permanently = this.checked;"/>
     <spacer/>
-    <hbox pack="end">
+    <hbox id="tabmixRenametab_buttons" pack="end">
       <button id="tabmixRenametab_doneButton"
               class="editBookmarkPanelBottomButton"
               label="&editBookmark.done.label;"

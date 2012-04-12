@@ -34,10 +34,7 @@ function before_Init() {
 
   gIncompatiblePane.checkForIncompatible(false);
 
-  var cancelButton = document.documentElement.getButton("cancel");
-  cancelButton.setAttribute("closebuttonlabel", document.documentElement.getAttribute("closebuttonlabel"));
-  cancelButton.setAttribute("cancelbuttonlabel", cancelButton.label);
-  TMP_setButtons(true, true);
+  TMP_setButtons(true, true, true);
 
   // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
   newTabURLpref = topWindow.Tabmix.newTabURLpref;
@@ -1006,19 +1003,40 @@ function updateApplyData(item, newValue) {
      TMP_setButtons(applyDataIsEmpty);
 }
 
-function TMP_setButtons(disable, clearData) {
+function TMP_setButtons(disable, clearData, start) {
    var docElt = document.documentElement;
    var applyButton = docElt.getButton("extra1");
+   var acceptButton = docElt.getButton("accept");
+   var cancelButton = docElt.getButton("cancel");
+   if (start) {
+      let settingsButton = docElt.getButton("extra2");
+      settingsButton.id = "myExtra2";
+      settingsButton.className += " tabmix-button";
+      settingsButton.label = docElt.getAttribute("setingsbuttonlabel");
+      settingsButton.setAttribute("popup", "tm-settings");
+
+      let helpButton = docElt.getButton("help");
+      helpButton.className += " tabmix-button";
+      helpButton.id = "helpButton";
+
+      acceptButton.id = "myAccept";
+      acceptButton.className += " tabmix-button";
+
+      applyButton.id = "myApply";
+      applyButton.className += " tabmix-button";
+
+      cancelButton.id = "myCancel";
+      cancelButton.className += " tabmix-button";
+      docElt.setAttribute("cancelbuttonlabel", cancelButton.label);
+   }
    applyButton.disabled = disable;
-  var acceptButton = docElt.getButton("accept");
-  acceptButton.hidden = disable;
-  var cancelButton = docElt.getButton("cancel");
+   acceptButton.hidden = disable;
    if (disable)
-     cancelButton.label = cancelButton.getAttribute("closebuttonlabel");
+      cancelButton.label = docElt.getAttribute("closebuttonlabel");
    else
-     cancelButton.label = cancelButton.getAttribute("cancelbuttonlabel");
+      cancelButton.label = docElt.getAttribute("cancelbuttonlabel");
    if (clearData)
-     applyData = [];
+      applyData = [];
 }
 
 function setLastTab(event) {

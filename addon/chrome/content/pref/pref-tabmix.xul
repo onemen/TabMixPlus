@@ -39,6 +39,7 @@
         ondialogextra1="TM_EMsave(true);"
         ondialoghelp="openHelp();"
         closebuttonlabel="&preferencesCloseButton.label;"
+        setingsbuttonlabel="&settings.label;"
         persist="screenX screenY">
 
 
@@ -1210,16 +1211,6 @@
       </tabpanel>
     </tabpanels>
   </tabbox>
-
-  <hbox>
-    <button class="tabmix-button" dlgtype="extra2" id="myExtra2" label="&settings.label;" popup="tm-settings"
-            dir="reverse" image="chrome://tabmixplus/skin/arrow.png"/>
-    <button class="tabmix-button" dlgtype="help" id="helpButton" image="chrome://tabmixplus/skin/help.png"/>
-    <spacer flex="1" />
-    <button class="tabmix-button" dlgtype="accept" id="myAccept" />
-    <button class="tabmix-button" dlgtype="extra1" id="myApply" disabled="true"/>
-    <button class="tabmix-button" dlgtype="cancel" id="myCancel" />
-  </hbox>
  </vbox>
   <popupset prefstring_item="no_prefstring">
     <menupopup id="tm-settings" position="before_start">

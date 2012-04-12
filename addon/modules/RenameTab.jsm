@@ -52,6 +52,14 @@ let RenameTab = {
         popup._overlayLoaded = true;
         popup.hidden = false;
         this.panel = popup;
+
+        // reorder buttons for MacOS & Linux
+        if (this.window.Tabmix.isPlatform("Linux") || this.window.Tabmix.isPlatform("Mac")) {
+          let buttons = this._element("tabmixRenametab_buttons");
+          buttons.removeAttribute("pack");
+          buttons.setAttribute("dir", "rtl");
+        }
+
         this._doShowPanel();
       }).bind(this)
     );
