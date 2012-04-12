@@ -833,8 +833,8 @@ function importData () {
    Tabmix.prefs.setBoolPref("setDefault", true);
 
    // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-   TabmixSvc.SMprefs.setBoolPref("manager", false);
-   TabmixSvc.SMprefs.setBoolPref("crashRecovery", false);
+   Tabmix.prefs.setBoolPref("sessions.manager", false);
+   Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
    Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
    Services.prefs.setIntPref("browser.startup.page", false);
    Services.prefs.savePrefFile(null);

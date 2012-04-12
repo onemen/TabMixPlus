@@ -117,7 +117,7 @@ var TMP_SessionStore = {
          // update session manager settings accourding to current tabmix settings
          if (TMP_manager_enabled) {
             Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
-            switch (TabmixSvc.SMprefs.getIntPref("onStart")) {
+            switch (Tabmix.prefs.getIntPref("sessions.onStart")) {
                case 0:
                   Services.prefs.setIntPref("extensions.sessionmanager.startup", 0);
                   Services.prefs.setIntPref("browser.startup.page", 3);
@@ -127,7 +127,7 @@ var TMP_SessionStore = {
                   break;
                //default: nothing to do
             }
-            switch (TabmixSvc.SMprefs.getIntPref("onClose")) {
+            switch (Tabmix.prefs.getIntPref("sessions.onClose")) {
                case 0:
                   Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 1);
                   break;
@@ -454,7 +454,7 @@ var TMP_ClosedTabs = {
    */
    getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
       // update our session data
-      var updateRDF = TabmixSessionManager.enableBackup && TabmixSvc.SMprefs.getBoolPref("save.closedtabs");
+      var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
       if (updateRDF) {
         if (aIndex >= 0)
            TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);

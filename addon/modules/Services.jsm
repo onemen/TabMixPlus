@@ -86,7 +86,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.pr
 
 // Tabmix preference branch
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {return Services.prefs.getBranch("extensions.tabmix.")});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return Services.prefs.getBranch("extensions.tabmix.sessions.")});
 // string bundle
 XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
