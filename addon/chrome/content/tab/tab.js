@@ -619,6 +619,9 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.disableF8Key":
         this.toggleKey("key_tm_slideShow", prefName);
+        if (Services.prefs.getBoolPref(prefName) &&
+            Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer)
+          Tabmix.flst.cancel();
         break;
       case "extensions.tabmix.hideIcons":
         this.setMenuIcons();
@@ -847,8 +850,8 @@ var gTMPprefObserver = {
 
   },
 
-  toggleKey: function(keiID, prefName) {
-    var key = document.getElementById(keiID);
+  toggleKey: function(keyID, prefName) {
+    var key = document.getElementById(keyID);
     if (Tabmix.getBoolPref(prefName, false)) {
       if (key.hasAttribute("oncommand"))
         key.removeAttribute("oncommand");
