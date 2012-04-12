@@ -16,7 +16,7 @@ var TMP_DOMWindowOpenObserver = {
     *                  additionally not a popup window.
     */
     getBrowserWindow: function(aExclude) {
-      var windows = TabmixSvc.wm.getEnumerator('navigator:browser');
+      var windows = Services.wm.getEnumerator('navigator:browser');
 
       while (windows.hasMoreElements()) {
         let win = windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
@@ -123,7 +123,7 @@ var TMP_DOMWindowOpenObserver = {
           newWindow.PlacesStarButton.updateState = function() {};
           newWindow.PlacesStarButton.uninit = function() {};
           newWindow.OfflineApps.uninit = function() {};
-          var obs = TabmixSvc.obs;
+          var obs = Services.obs;
           obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
           obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
           IndexedDBPromptHelper.init();
@@ -878,11 +878,11 @@ Tabmix.contentAreaClick = {
         return "local_file";
 
       if (url.match(/^http/)) {
-        url = TabmixSvc.io.newURI(url, null, null);
+        url = Services.io.newURI(url, null, null);
 
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
-          url = TabmixSvc.io.newURI(url.path.substr("/r/?".length), null, null);
+          url = Services.io.newURI(url.path.substr("/r/?".length), null, null);
 /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need

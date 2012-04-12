@@ -49,7 +49,7 @@ let TabmixSvc = {
   },
 
   topWin: function() {
-    return this.wm.getMostRecentWindow("navigator:browser");
+    return Services.wm.getMostRecentWindow("navigator:browser");
   }
 }
 
@@ -75,7 +75,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
 
 /**
  * Lazily define services
- * Getters for common services, this should be replaced by Services.jsm in future
+ * Getters for common services, use Services.jsm where possible
  */
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
@@ -85,8 +85,8 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs})
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
 
 // some prefs branches
-XPCOMUtils.defineLazyGetter(TabmixSvc, "TMPprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.")});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.sessions.")});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "TMPprefs", function () {return Services.prefs.getBranch("extensions.tabmix.")});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return Services.prefs.getBranch("extensions.tabmix.sessions.")});
 // string bundle
 XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";

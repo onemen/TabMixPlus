@@ -67,7 +67,7 @@ Tabmix.setSanitizer = {
     if (!aCheckbox.checked)
       return;
 
-    var promptService = TabmixSvc.prompt;
+    var promptService = Services.prompt;
     var title = "Tab Mix Plus - " + document.title;
     var msg = this._confirm;
     var buttonPressed = promptService.confirmEx(null,

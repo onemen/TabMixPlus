@@ -1102,7 +1102,7 @@ Tabmix.navToolbox = {
     }
 
     // if tabmix option dialog is open update visible buttons and set focus if needed
-    var optionWindow = TabmixSvc.wm.getMostRecentWindow("mozilla:tabmixopt");
+    var optionWindow = Services.wm.getMostRecentWindow("mozilla:tabmixopt");
     if (optionWindow) {
       optionWindow.toolbarButtons(window);
       if ("_tabmixCustomizeToolbar" in optionWindow) {

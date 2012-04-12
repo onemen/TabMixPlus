@@ -60,7 +60,7 @@ var gTabMix_preferencesOverlay = {
    },
 
    showTabmixOptions: function (panel) {
-      var windowMediator = TabmixSvc.wm;
+      var windowMediator = Services.wm;
       var browserWindow = windowMediator.getMostRecentWindow('navigator:browser');
 
       if (!browserWindow) {
@@ -69,7 +69,7 @@ var gTabMix_preferencesOverlay = {
             tabmixopt.close();
          let title = TabmixSvc.getString("tabmixoption.error.title");
          let msg = TabmixSvc.getString("tabmixoption.error.msg");
-         TabmixSvc.prompt.alert(window, title, msg);
+         Services.prompt.alert(window, title, msg);
       }
       else
          browserWindow.Tabmix.openOptionsDialog(panel == null ? -1 : panel);

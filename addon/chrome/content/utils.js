@@ -139,7 +139,7 @@ this.log(aMethod)
   },
 
   clog: function TMP_utils_clog(aMessage) {
-    TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
+    Services.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
   log: function TMP_utils_log(aMessage, aShowCaller, offset) {
@@ -147,7 +147,7 @@ this.log(aMethod)
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
-    TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+    Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -285,7 +285,7 @@ XXX fix this when there is no stack go directly to trace
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
     let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
     if (stackText)
-      TabmixSvc.console.logStringMessage(assertionText + stackText);
+      Services.console.logStringMessage(assertionText + stackText);
     else
       this.trace(assertionText, 2);
   },
@@ -294,7 +294,7 @@ XXX fix this when there is no stack go directly to trace
     // cut off the first line of the stack trace, because that's just this function.
     let stack = Error().stack.split("\n").slice(slice || 1);
 
-    TabmixSvc.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
+    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   },
 
   // Show/hide one item (specified via name or the item element itself).
@@ -366,7 +366,7 @@ XXX fix this when there is no stack go directly to trace
   },
 
   getTopWin: function() {
-    return TabmixSvc.wm.getMostRecentWindow("navigator:browser");
+    return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
   getSingleWindowMode: function TMP_getSingleWindowMode() {
@@ -465,7 +465,7 @@ XXX fix this when there is no stack go directly to trace
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
     if (typeof(aWindowtype) == "undefined")
       aWindowtype = "navigator:browser";
-    return TabmixSvc.wm.getEnumerator(aWindowtype);
+    return Services.wm.getEnumerator(aWindowtype);
   },
 
   numberOfWindows: function Tabmix_numberOfWindows(all, aWindowtype) {

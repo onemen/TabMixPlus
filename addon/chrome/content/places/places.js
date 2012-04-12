@@ -305,7 +305,7 @@ var TMP_Places = {
       // when we close the window from which we run eval on PlacesUIUtils
       // we need to do it again on the new window, or else PlacesUtils will be undefined in PlacesUIUtils
       if (this._first_instance) {
-        let win = Tabmix.getTopWin() || TabmixSvc.wm.getMostRecentWindow("Places:Organizer");
+        let win = Tabmix.getTopWin() || Services.wm.getMostRecentWindow("Places:Organizer");
         if (win) {
           PlacesUIUtils.tabmix_inited = placesCount;
           win.TMP_Places.initPlacesUIUtils(true);
@@ -550,7 +550,7 @@ var TMP_Places = {
          }
       } catch (ex) { }
       try {
-         aItemId = PlacesUtils.getMostRecentBookmarkForURI(TabmixSvc.io.newURI(aUrl, null, null));
+         aItemId = PlacesUtils.getMostRecentBookmarkForURI(Services.io.newURI(aUrl, null, null));
          return aItemId > -1 ? PlacesUtils.bookmarks.getItemTitle(aItemId): null;
       } catch (ex) { }
       return null;

@@ -10,7 +10,7 @@
  */
 
 Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
-  var windowMediator = TabmixSvc.wm;
+  var windowMediator = Services.wm;
   var tabmixOptionsWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt");
   if (tabmixOptionsWin) {
     var appearanceWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt-appearance");

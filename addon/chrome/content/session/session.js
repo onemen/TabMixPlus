@@ -336,7 +336,7 @@ var TabmixSessionManager = {
       var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
       var isFirstWindow = Tabmix.isFirstWindow && !_afterTabduplicated;
 
-      let obs = TabmixSvc.obs;
+      let obs = Services.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "private-browsing", true);
       obs.addObserver(this, "private-browsing-change-granted", true);
@@ -646,7 +646,7 @@ var TabmixSessionManager = {
     }
 
     if (this._inited) {
-      let obs = TabmixSvc.obs;
+      let obs = Services.obs;
       obs.notifyObservers(null, "browser-window-change-state", "closed");
       obs.removeObserver(this, "browser-window-change-state");
       obs.removeObserver(this, "private-browsing");
@@ -842,7 +842,7 @@ var TabmixSessionManager = {
    initDATASource: function SM_initDATASource() {
       var file = this.profileDir;
       file.append("session.rdf");
-      var uri = TabmixSvc.io.newFileURI(file).spec;
+      var uri = Services.io.newFileURI(file).spec;
       try {
          this.DATASource = this.RDFService.GetDataSourceBlocking(uri);
       } catch (e) { // corrupted session.rdf
@@ -1291,7 +1291,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    notifyClosedWindowsChanged: function SM_notifyClosedWindowsChanged() {
-     TabmixSvc.obs.notifyObservers(null, "browser-window-change-state", "changed");
+     Services.obs.notifyObservers(null, "browser-window-change-state", "changed");
    },
 
    // enable/disable the Recently Closed Windows button
@@ -1317,7 +1317,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
            this._interval += 500;
            this.saveStateDelayed();
          }
-         TabmixSvc.console.logStringMessage("TabMix :\n" + "Error when tabmix try to write to session.rdf file");
+         Services.console.logStringMessage("TabMix :\n" + "Error when tabmix try to write to session.rdf file");
       }
    },
 
@@ -3502,7 +3502,7 @@ try{
          entryTitle = this.getDecodedLiteralValue(null, historyData[index]);
          uriStr = historyData[index + 1];
          if (uriStr == "") uriStr = "about:blank";
-         newURI = TabmixSvc.io.newURI(uriStr, null, null);
+         newURI = Services.io.newURI(uriStr, null, null);
          historyEntry.setTitle(entryTitle);
          historyEntry.setURI(newURI);
          historyEntry.saveLayoutStateFlag = true;

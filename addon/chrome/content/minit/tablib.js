@@ -1364,7 +1364,7 @@ since we can have tab hidden or remove the index can change....
                                             TabmixSvc.getString("closeWindow.label");
 
       window.focus();
-      var promptService = TabmixSvc.prompt;
+      var promptService = Services.prompt;
       var buttonPressed = promptService.confirmEx(window,
                                                   bundle.getString("tabs.closeWarningTitle"),
                                                   message,
