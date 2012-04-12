@@ -59,29 +59,33 @@ var tablib = {
        if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'
     )._replace(
       'this._lastRelatedTab = t;',
-      'if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNextInverse")) {\
+      'if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {\
          TMP_LastTab.attachTab(t, _lastRelatedTab);\
          $&\
        }'
     )._replace(
       'this._lastRelatedTab || this.selectedTab', 'this._lastRelatedTab || _selectedTab'
     )._replace(
+      /*
+        replace Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")
+        before we use it in the next section.
+      */
+      'Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")',
+      'openTabnext'
+    )._replace(
       't.dispatchEvent(evt);',
       <![CDATA[
       var _selectedTab = this.selectedTab;
       var _lastRelatedTab = this._lastRelatedTab;
       t.dispatchEvent(evt);
-      var openTabnext = TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext");
+      var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
       if (openTabnext) {
         if (Tabmix.isCallerInList(this.TMP_blockedCallers))
           openTabnext = false;
-        else if (!TabmixSvc.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))
+        else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))
           aRelatedToCurrent = true;
       }
       ]]>
-    )._replace(
-      'Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")',
-      'openTabnext'
     )._replace( //  new tab can trigger selection change by some extensions (divX HiQ)
       't.owner = this.selectedTab;', 't.owner = _selectedTab'
     ).toCode();
@@ -109,7 +113,7 @@ var tablib = {
     )._replace(
       '{',
       '{var lastTabInGroup = this.visibleTabs.length == 1;\
-       if (lastTabInGroup && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab")) return;'
+       if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab")) return;'
     )._replace(
       // fix bug in TGM when closeing last tab in a group with animation
       'if (aParams)',
@@ -134,7 +138,7 @@ var tablib = {
     )._replace(
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \
-       if (TabmixSvc.prefs.getBoolPref("browser.tabs.animate")) { \
+       if (Services.prefs.getBoolPref("browser.tabs.animate")) { \
          TMP_eventListener.onTabClose_updateTabBar(aTab, true);\
        } \
        $&'
@@ -295,7 +299,7 @@ var tablib = {
 
       Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
         '{',
-        '{if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.lockTabSizingOnClose")) return;'
+        '{if (!Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
         'var isEndTab =',
         <![CDATA[
@@ -352,7 +356,7 @@ var tablib = {
 
     Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
       '{',
-      '{if(!TabmixSvc.prefs.getBoolPref("extensions.tabmix.selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
     ).toCode();
 
     let _setter = gBrowser.tabContainer.__lookupSetter__("visible");
@@ -401,7 +405,7 @@ var tablib = {
             where = "tab";
         }
         // we prevent sessionStore.duplicateTab from moving the tab
-        else if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
+        else if (Tabmix.prefs.getBoolPref("openDuplicateNext")) {
           let pos = newTab._tPos > aTab._tPos ? 1 : 0;
           gBrowser.moveTabTo(newTab, aTab._tPos + pos);
         }
@@ -412,11 +416,11 @@ var tablib = {
       'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(110)}
     )._replace(
       'gBrowser.selectedTab = newTab;',
-      'if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(110)}
+      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(110)}
     )._replace(
       'case "tabshifted":',
       '$&\
-       if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(110)}
+       if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(110)}
     ).toCode();
 
     Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(
@@ -730,12 +734,12 @@ var tablib = {
 
       // move new tab to place before we select it
       var copyToNewWindow = window != aTab.ownerDocument.defaultView;
-      if (!disallowSelect && !copyToNewWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.openDuplicateNext")) {
+      if (!disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext")) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
         this.moveTabTo(newTab, aTab._tPos + pos);
       }
 
-      var bgPref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground");
+      var bgPref = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
       if (!disallowSelect && !bgPref) {
         newTab.owner = copyToNewWindow ? null : aTab;
         let url = !dontFocuseUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
@@ -819,7 +823,7 @@ var tablib = {
           var pos = index > aTab._tPos ? 1 : 0;
           this.moveTabTo(aTab, index + pos);
 
-          if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadDuplicateInBackground")) {
+          if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) {
             this.selectedTab = newTab;
             aTab.removeAttribute("visited");
             aTab.removeAttribute("flst_id");
@@ -854,7 +858,7 @@ var tablib = {
       // aTab is for treeStyleTab extension look in treeStyleTab hacks.js
       var aTab = this.selectedTab;
 
-      var bgPref = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+      var bgPref = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
       var newTab = this.loadOneTab(url, null, null, null, !bgPref, true);
       if (url == "about:blank")
         tablib.setURLBarFocus();
@@ -879,8 +883,8 @@ var tablib = {
       // when we close window with last tab and we don't have protected tabs
       // we need to warn the user with the proper warning
       var warning = "All";
-      if (TabmixSvc.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-            !TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab") &&
+      if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+            !Tabmix.prefs.getBoolPref("keepLastTab") &&
             this.tabContainer.getElementsByAttribute("protected", true).length == 0 &&
             (!("permaTabs" in window) || this.tabContainer.getElementsByAttribute("isPermaTab", true).length == 0) &&
             this._numPinnedTabs == 0) {
@@ -1173,7 +1177,7 @@ since we can have tab hidden or remove the index can change....
       var l = tabs.length;
       if (l==1)
         return 0;
-      var mode = TabmixSvc.prefs.getIntPref("extensions.tabmix.focusTab");
+      var mode = Tabmix.prefs.getIntPref("focusTab");
       switch ( mode ) {
         case 0: // first tab
           return currentIndex == 0 ? 1 : 0;
@@ -1204,7 +1208,7 @@ since we can have tab hidden or remove the index can change....
         case 2: // opener / right  (default )
         case 5: // right tab
         default:
-          if (mode != 5 && TabmixSvc.prefs.getBoolPref("browser.tabs.selectOwnerOnClose") && "owner" in oldTab) {
+          if (mode != 5 && Services.prefs.getBoolPref("browser.tabs.selectOwnerOnClose") && "owner" in oldTab) {
             var owner = oldTab.owner;
             if (owner && owner.parentNode && owner != oldTab && !owner.hidden) {
               // oldTab and owner still exist just return its position
@@ -1270,19 +1274,19 @@ since we can have tab hidden or remove the index can change....
                   "extensions.tabmix.protectedtabs.warnOnClose",
                   "browser.tabs.warnOnClose"];
       if (onExit) {
-        if (numProtected > 0 && TabmixSvc.prefs.getBoolPref(prefs[1]))
+        if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
           shouldPrompt = 2;
 
-        if (numTabs > 1 && TabmixSvc.prefs.getBoolPref(prefs[2]))
+        if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
       }
       else if (numTabs > 1) {
         if (whatToClose == "Group" &&
-            TabmixSvc.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-            !TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab") &&
-            TabmixSvc.prefs.getBoolPref(prefs[2]))
+            Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+            !Tabmix.prefs.getBoolPref("keepLastTab") &&
+            Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = -1;
-        else if (TabmixSvc.prefs.getBoolPref(prefs[0]))
+        else if (Services.prefs.getBoolPref(prefs[0]))
           shouldPrompt = 1;
       }
 
@@ -1312,7 +1316,7 @@ since we can have tab hidden or remove the index can change....
           if (shouldPrompt == -1) {
             if (tabsToClose == numTabs)
               shouldPrompt = 3;
-            else if (TabmixSvc.prefs.getBoolPref(prefs[0]))
+            else if (Services.prefs.getBoolPref(prefs[0]))
               shouldPrompt = 1;
             else
               return true;
@@ -1336,7 +1340,7 @@ since we can have tab hidden or remove the index can change....
           break;
       }
 
-      if (tabsToClose == numTabs && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab"))
+      if (tabsToClose == numTabs && Tabmix.prefs.getBoolPref("keepLastTab"))
         tabsToClose--;
 
       if (tabsToClose <= 1 && shouldPrompt < 2)
@@ -1377,7 +1381,7 @@ since we can have tab hidden or remove the index can change....
       var reallyClose = (buttonPressed == 0);
       // don't set the pref unless they press OK and it's false
       if (reallyClose && !warnOnClose.value) {
-        TabmixSvc.prefs.setBoolPref(prefs[shouldPrompt - 1], false);
+        Services.prefs.setBoolPref(prefs[shouldPrompt - 1], false);
       }
 
       return reallyClose;
@@ -1385,7 +1389,7 @@ since we can have tab hidden or remove the index can change....
 
     gBrowser.TMP_selectNewForegroundTab = function (aTab, aLoadInBackground, aUrl, addOwner) {
        var bgLoad = (aLoadInBackground != null) ? aLoadInBackground :
-                      TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+                      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
        if (!bgLoad) {
           // set new tab owner
           addOwner = addOwner != null ? addOwner : true;
@@ -1480,7 +1484,7 @@ since we can have tab hidden or remove the index can change....
       return;
     }
     if (gBrowser.tabs.length > 1 ||
-        !TabmixSvc.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab"))
+        !Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab"))
       gBrowser.removeCurrentTab({animate: true});
     else
       closeWindow(true);
@@ -1497,11 +1501,11 @@ since we can have tab hidden or remove the index can change....
       if (aPrefName in TabmixSessionManager.savedPrefs) {
         returnVal.saved = true;
         returnVal.value = TabmixSessionManager.savedPrefs[aPrefName];
-        returnVal.newValue = TabmixSvc.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
+        returnVal.newValue = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
         delete TabmixSessionManager.savedPrefs[aPrefName];
       }
       else
-        returnVal.value = TabmixSvc.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
+        returnVal.value = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
 
       return returnVal;
     }
@@ -1517,10 +1521,10 @@ since we can have tab hidden or remove the index can change....
       // 4. The browser is currently in Private Browsing mode
       // we check for these cases first
 
-      if (!TabmixSvc.prefs.getBoolPref("browser.warnOnQuit"))
+      if (!Services.prefs.getBoolPref("browser.warnOnQuit"))
         return false;
 
-      if (TabmixSvc.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
+      if (Services.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
         return false;
 
       var inPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
@@ -1567,9 +1571,9 @@ since we can have tab hidden or remove the index can change....
     if (canClose && showPrompt && result.showMorePrompt) {
       var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
       var startTime = new Date().valueOf();
-      var oldTime = TabmixSvc.prefs.prefHasUserValue(pref) ? TabmixSvc.prefs.getCharPref(pref) : 0;
+      var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
       canClose = gBrowser.warnAboutClosingTabs("All_onExit");
-      TabmixSvc.prefs.setCharPref(pref, oldTime*1 + (new Date().valueOf() - startTime));
+      Services.prefs.setCharPref(pref, oldTime*1 + (new Date().valueOf() - startTime));
     }
 
     TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);
@@ -1633,8 +1637,8 @@ Tabmix.newTabUrls = [
 ];
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
-  if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.openTabNext") &&
-       (!TabmixSvc.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent))
+  if (Tabmix.prefs.getBoolPref("openTabNext") &&
+       (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent))
     return true;
 
   return false;

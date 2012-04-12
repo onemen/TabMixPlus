@@ -52,7 +52,7 @@ var TMP_Sage = {
    },
 
    get openTabPref() {
-      if (TabmixSvc.prefs.prefHasUserValue(this.OPEN_TAB_FOR_SAGE))
+      if (Services.prefs.prefHasUserValue(this.OPEN_TAB_FOR_SAGE))
          return this.OPEN_TAB_FOR_SAGE;
       else
          return TMP_Places.prefBookmark;

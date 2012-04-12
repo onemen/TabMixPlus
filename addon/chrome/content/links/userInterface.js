@@ -26,7 +26,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
   }
   else {
     if(panel > -1)
-      TabmixSvc.prefs.setIntPref('extensions.tabmix.selected_tab', panel);
+      Tabmix.prefs.setIntPref("selected_tab", panel);
 
     window.openDialog("chrome://tabmixplus/content/pref/pref-tabmix.xul", "Tab Mix Plus", "chrome,titlebar,toolbar,close,dialog=no");
   }
@@ -46,7 +46,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 Tabmix.openURL = function TMP_openURL(aURL, event) {
    var linkTarget, loadInBackground;
    try {
-            linkTarget = TabmixSvc.prefs.getIntPref("browser.link.open_newwindow");
+            linkTarget = Services.prefs.getIntPref("browser.link.open_newwindow");
    }
    catch (e) {
       linkTarget = 1;
@@ -99,8 +99,8 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
 function TMP_BrowserOpenTab(aTab, replaceLastTab) {
-   var newTabContent = replaceLastTab ? TabmixSvc.TMPprefs.getIntPref("replaceLastTabWith.type") :
-                                        TabmixSvc.TMPprefs.getIntPref("loadOnNewTab.type");
+   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
+                                        Tabmix.prefs.getIntPref("loadOnNewTab.type");
    var url;
    var newTabUrl = Tabmix.newTabURL;
    switch (newTabContent) {
@@ -130,7 +130,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          else
            prefName = Tabmix.newTabURLpref;
          try {
-            url = TabmixSvc.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
+            url = Services.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
          if (!url)
@@ -143,7 +143,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    // if google.toolbar extension installed check google.toolbar.newtab pref
    if ("GTB_GoogleToolbarOverlay" in window) {
      try {
-       if (TabmixSvc.prefs.getBoolPref("google.toolbar.newtab")) {
+       if (Services.prefs.getBoolPref("google.toolbar.newtab")) {
          url = "chrome://google-toolbar/content/new-tab.html";
          flags = nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY
        }
@@ -157,7 +157,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var newTab = replaceLastTab ? gBrowser.addTab(_url, {skipAnimation: true}) : gBrowser.addTab(_url);
    if (replaceLastTab) {
      newTab.__newLastTab = true;
-     if (TabmixSvc.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
+     if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
        gBrowser.selectedTab = newTab;
        gBrowser.updateCurrentBrowser();
      }
@@ -179,14 +179,14 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    }
    if (aTab && aTab.localName == "tab")
       gBrowser.moveTabTo(newTab, aTab._tPos + 1);
-   else if (!replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("openNewTabNext")) {
+   else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
       // we used to move tab after lastRelatedTab but we don't need it on new tabs
       // and it mess with recently used tabs order
       gBrowser.moveTabTo(newTab, gBrowser.selectedTab._tPos + 1);
    }
 
    // always select new tab when replacing last tab
-   var loadInBackground  = replaceLastTab ? false : TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");
+   var loadInBackground  = replaceLastTab ? false : Tabmix.prefs.getBoolPref("loadNewInBackground");
    gBrowser.TMP_selectNewForegroundTab(newTab, loadInBackground);
    // make sure to update recently used tabs
    // if user open many tabs quickly select event don't have time to fire
@@ -195,8 +195,8 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
      TMP_LastTab.PushSelectedTab();
 
    // focus the address bar on new tab
-   var clearUrlBar = !replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("selectLocationBar") ||
-       replaceLastTab && TabmixSvc.TMPprefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
+   var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
+       replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
        loadBlank;
    if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url);
@@ -274,8 +274,8 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  *
  */
 Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {
-  var newTabPref = TabmixSvc.TMPprefs.getBoolPref("opentabfor.urlbar");
-  var theBGPref  = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");
+  var newTabPref = Tabmix.prefs.getBoolPref("opentabfor.urlbar");
+  var theBGPref  = Tabmix.prefs.getBoolPref("loadUrlInBackground");
   var theURI = aUrl || gURLBar.value;
   if ("gIeTab" in window)
      theURI = gIeTab.getHandledURL(theURI, gURLBar.isModeIE);
@@ -404,7 +404,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 }
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
-  var opentabforLinks = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
+  var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
   if (opentabforLinks == 1 || gBrowser.mCurrentTab.hasAttribute("locked")) {
     let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
     if (!isBlankTab)

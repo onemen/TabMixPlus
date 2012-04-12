@@ -91,7 +91,7 @@ var TMP_SessionStore = {
     * @returns       Nothing.
     */
    setService: function TMP_ss_setSessionService(msgNo, start, win) {
-      if ("tabmix_setSession" in window || TabmixSvc.prefs.prefHasUserValue("extensions.tabmix.setDefault"))
+      if ("tabmix_setSession" in window || Tabmix.prefs.prefHasUserValue("setDefault"))
          return;
      /*
       * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
@@ -105,8 +105,8 @@ var TMP_SessionStore = {
       */
       const TMP_SS_MANAGER = "extensions.tabmix.sessions.manager";
       const TMP_SS_CRASHRECOVERY = "extensions.tabmix.sessions.crashRecovery";
-      var TMP_manager_enabled = TabmixSvc.prefs.getBoolPref(TMP_SS_MANAGER);
-      var TMP_crashRecovery_enabled = TabmixSvc.prefs.getBoolPref(TMP_SS_CRASHRECOVERY);
+      var TMP_manager_enabled = Services.prefs.getBoolPref(TMP_SS_MANAGER);
+      var TMP_crashRecovery_enabled = Services.prefs.getBoolPref(TMP_SS_CRASHRECOVERY);
       if (!TMP_manager_enabled && !TMP_crashRecovery_enabled) {
          return;
       }
@@ -116,31 +116,31 @@ var TMP_SessionStore = {
       if (Tabmix.extensions.sessionManager) {
          // update session manager settings accourding to current tabmix settings
          if (TMP_manager_enabled) {
-            TabmixSvc.prefs.setBoolPref(TMP_SS_MANAGER, false);
+            Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
             switch (TabmixSvc.SMprefs.getIntPref("onStart")) {
                case 0:
-                  TabmixSvc.prefs.setIntPref("extensions.sessionmanager.startup", 0);
-                  TabmixSvc.prefs.setIntPref("browser.startup.page", 3);
+                  Services.prefs.setIntPref("extensions.sessionmanager.startup", 0);
+                  Services.prefs.setIntPref("browser.startup.page", 3);
                   break;
                case 1:
-                  TabmixSvc.prefs.setIntPref("extensions.sessionmanager.startup", 1);
+                  Services.prefs.setIntPref("extensions.sessionmanager.startup", 1);
                   break;
                //default: nothing to do
             }
             switch (TabmixSvc.SMprefs.getIntPref("onClose")) {
                case 0:
-                  TabmixSvc.prefs.setIntPref("extensions.sessionmanager.backup_session", 1);
+                  Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 1);
                   break;
                case 1:
-                  TabmixSvc.prefs.setIntPref("extensions.sessionmanager.backup_session", 2);
+                  Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 2);
                   break;
                default:
-                  TabmixSvc.prefs.setIntPref("extensions.sessionmanager.backup_session", 0);
+                  Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 0);
             }
          }
          if (TMP_crashRecovery_enabled) {
-            TabmixSvc.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
-            TabmixSvc.prefs.setBoolPref("browser.sessionstore.resume_from_crash", true);
+            Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
+            Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", true);
          }
          delete window.tabmix_setSession;
       }
@@ -149,8 +149,8 @@ var TMP_SessionStore = {
          // we use non modal promptService on start up, so we disabled Tabmix session managerto let the startup
          // process continue and set the appropriate preference after the dialog prompt dismissed.
          if (start) {
-            TabmixSvc.prefs.setBoolPref(TMP_SS_MANAGER, false);
-            TabmixSvc.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
+            Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
+            Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
          }
          let title = "TabMix " + TabmixSvc.getSMString("sm.title");
          let msg = start ? TabmixSvc.getSMString("sm.disable.msg") + "\n\n" : "";
@@ -163,14 +163,14 @@ var TMP_SessionStore = {
          let callBack = function (aResult) {
             if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button == 0))) {
               self.setSessionRestore(false);
-              TabmixSvc.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
-              TabmixSvc.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, TMP_crashRecovery_enabled);
+              Services.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
+              Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, TMP_crashRecovery_enabled);
             }
             else {
               // we don't change any of sessionstore default setting
               // the user will be ask on exit what to do. (browser.warnOnRestart and browser.warnOnQuit are both true on default)
-              TabmixSvc.prefs.setBoolPref(TMP_SS_MANAGER, false);
-              TabmixSvc.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
+              Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
+              Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
            }
            delete window.tabmix_setSession;
          }
@@ -180,17 +180,17 @@ var TMP_SessionStore = {
            callBack(result);
       }
       // when user start new profile or update from firefox 2.0 profile browser.warnOnRestart and browser.warnOnQuit are both true on default
-      else if (!TabmixSvc.prefs.prefHasUserValue("browser.warnOnRestart") ||
-                !TabmixSvc.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-         TabmixSvc.prefs.setBoolPref("browser.warnOnRestart", false);
-         TabmixSvc.prefs.setBoolPref("browser.warnOnQuit", false);
+      else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
+                !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
+         Services.prefs.setBoolPref("browser.warnOnRestart", false);
+         Services.prefs.setBoolPref("browser.warnOnQuit", false);
          delete window.tabmix_setSession;
       }
    },
 
    isSessionStoreEnabled: function () {
-     return TabmixSvc.prefs.getIntPref("browser.startup.page") == 3 ||
-            TabmixSvc.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
+     return Services.prefs.getIntPref("browser.startup.page") == 3 ||
+            Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
    },
 
    afterSwitchThemes: false,
@@ -212,13 +212,13 @@ var TMP_SessionStore = {
    },
 
    setSessionRestore: function (aEnable) {
-      TabmixSvc.prefs.setBoolPref("browser.warnOnRestart", aEnable);
-      TabmixSvc.prefs.setBoolPref("browser.warnOnQuit", aEnable);
-      TabmixSvc.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
+      Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
+      Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
+      Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
       if (aEnable)
-        TabmixSvc.prefs.setIntPref("browser.startup.page", 3);
-      else if (TabmixSvc.prefs.getIntPref("browser.startup.page") == 3)
-        TabmixSvc.prefs.setIntPref("browser.startup.page", 1);
+        Services.prefs.setIntPref("browser.startup.page", 3);
+      else if (Services.prefs.getIntPref("browser.startup.page") == 3)
+        Services.prefs.setIntPref("browser.startup.page", 1);
    },
 
   /**
@@ -392,7 +392,7 @@ var TMP_ClosedTabs = {
       if (index < 0)
          return;
 
-      var where = TabmixSvc.TMPprefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
+      var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
       TMP_ClosedTabs.restoreTab(where, index);
       var popup = aEvent.originalTarget.parentNode;
       if (TMP_ClosedTabs.count > 0)
@@ -518,7 +518,7 @@ var TMP_ClosedTabs = {
    },
 
    SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {
-      if (!TabmixSvc.TMPprefs.getBoolPref("undoClose") || this.count == 0)
+      if (!Tabmix.prefs.getBoolPref("undoClose") || this.count == 0)
          return null;
 
       // get tab data
@@ -549,7 +549,7 @@ var TMP_ClosedTabs = {
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
-      var restorePosition = TabmixSvc.TMPprefs.getBoolPref("undoClosePosition");
+      var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
       if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {
          gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
       }

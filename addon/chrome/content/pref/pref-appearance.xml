@@ -57,15 +57,14 @@
     <implementation>
       <constructor>
         <![CDATA[
-          this.prefsSvc = TMPstyles.prefsSvc;
-          this._initUseThisPref = {prefvalue: this.prefsSvc.getBoolPref("extensions.tabmix." + this.id)};
-          this._initPrefValues = this.prefsSvc.getCharPref(this.prefName);
+          this._initUseThisPref = {prefvalue: Services.prefs.getBoolPref("extensions.tabmix." + this.id)};
+          this._initPrefValues = Services.prefs.getCharPref(this.prefName);
 
           var checked;
           var tabmixOptionsWindow = this._tabmixOptions;
           if (tabmixOptionsWindow) {
             this._initUseThisPref.optionvalue = checked = this._tabmixOptionsItem.checked;
-            this.prefsSvc.setBoolPref("extensions.tabmix." + this.id, checked);
+            Services.prefs.setBoolPref("extensions.tabmix." + this.id, checked);
             tabmixOptionsWindow.updateApplyData(this._tabmixOptionsItem, checked);
           }
           else
@@ -83,7 +82,6 @@
 
       <field name="_initUseThisPref">null</field>
       <field name="_initPrefValue">null</field>
-      <field name="prefsSvc">null</field>
       <field name="_prefValues">null</field>
 
       <property name="prefName"
@@ -123,7 +121,7 @@
       <method name="_updateUseThisState">
         <parameter name="aEnabled"/>
         <body><![CDATA[
-          this.prefsSvc.setBoolPref("extensions.tabmix." + this.id, aEnabled);
+          Services.prefs.setBoolPref("extensions.tabmix." + this.id, aEnabled);
           var tabmixOptionsWindow = this._tabmixOptions;
           if (tabmixOptionsWindow)
             this._tabmixOptionsItem.checked = aEnabled;
@@ -138,7 +136,7 @@
       <method name="_resetDefault">
         <parameter name="aResetOnlyStyle"/>
         <body><![CDATA[
-          if (!aResetOnlyStyle && this.prefsSvc.prefHasUserValue("extensions.tabmix." + this.id)) {
+          if (!aResetOnlyStyle && Services.prefs.prefHasUserValue("extensions.tabmix." + this.id)) {
             var useThis = this._getElementById("useThis");
             useThis.checked = !useThis.checked;
             this._updateUseThisState(useThis.checked);
@@ -146,9 +144,9 @@
           }
 
           var pref = this.prefName;
-          if (this.prefsSvc.prefHasUserValue(pref))
-            this.prefsSvc.clearUserPref(pref);
-          this._initPrefValues = this.prefsSvc.getCharPref(this.prefName);
+          if (Services.prefs.prefHasUserValue(pref))
+            Services.prefs.clearUserPref(pref);
+          this._initPrefValues = Services.prefs.getCharPref(this.prefName);
           this._getPrefs(this._initPrefValues);
         ]]></body>
       </method>
@@ -210,14 +208,14 @@
                 break;
             }
           }
-          this.prefsSvc.setCharPref(this.prefName, Tabmix.JSON.stringify(newPrefSValue));
+          Services.prefs.setCharPref(this.prefName, Tabmix.JSON.stringify(newPrefSValue));
         ]]></body>
       </method>
 
       <method name="_ondialogcancel">
         <body><![CDATA[
-          this.prefsSvc.setCharPref(this.prefName, this._initPrefValues);
-          this.prefsSvc.setBoolPref("extensions.tabmix." + this.id, this._initUseThisPref.prefvalue);
+          Services.prefs.setCharPref(this.prefName, this._initPrefValues);
+          Services.prefs.setBoolPref("extensions.tabmix." + this.id, this._initUseThisPref.prefvalue);
           var tabmixOptionsWindow = this._tabmixOptions;
           if (tabmixOptionsWindow)
             tabmixOptionsWindow.updateApplyData(this._tabmixOptionsItem, this._initUseThisPref.optionvalue);

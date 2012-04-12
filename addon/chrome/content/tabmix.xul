@@ -431,7 +431,7 @@
                  oncommand="TabmixAllTabs._tabsListOncommand(event);"
                  onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       <!-- popup for show\hide the tabbar -->
-      <menupopup id="hideTabbar_context" oncommand="TabmixSvc.TMPprefs.setIntPref('hideTabbar', event.originalTarget.value);"
+      <menupopup id="hideTabbar_context" oncommand="Tabmix.prefs.setIntPref('hideTabbar', event.originalTarget.value);"
                  onpopupshowing="this.childNodes[TabmixTabbar.hideMode+2].setAttribute('checked' ,'true');">
         <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator/>

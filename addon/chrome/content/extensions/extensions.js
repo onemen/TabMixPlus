@@ -95,7 +95,7 @@ var TMP_extensionsCompatibility = {
             getBoolPref.toString().indexOf("return bgSaverPref.prefHasUserValue(sName)") != -1) {
       window.getBoolPref = function getBoolPref ( prefname, def ) {
         try {
-          return TabmixSvc.prefs.getBoolPref(prefname);
+          return Services.prefs.getBoolPref(prefname);
         }
         catch(er) { return def; }
       }
@@ -136,9 +136,9 @@ var TMP_extensionsCompatibility = {
 
     // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
     if ("foxTab" in window) {
-      let loadNewInBackground = '$& var loadNewInBackground = TabmixSvc.TMPprefs.getBoolPref("loadNewInBackground");';
+      let loadNewInBackground = '$& var loadNewInBackground = Tabmix.prefs.getBoolPref("loadNewInBackground");';
       let newCode = <![CDATA[
-        if (TabmixSvc.TMPprefs.getBoolPref("openNewTabNext"))
+        if (Tabmix.prefs.getBoolPref("openNewTabNext"))
           f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);
         if (!loadNewInBackground) {
           f.gBrowser.TMP_selectNewForegroundTab(newTab, false);

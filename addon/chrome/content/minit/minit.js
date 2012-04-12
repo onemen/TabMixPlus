@@ -33,7 +33,7 @@ var TMP_tabDNDObserver = {
     var useDefaultDnD = false;
     if ("TreeStyleTabBrowser" in window) {
       try {
-        var tabbarPosition = TabmixSvc.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
+        var tabbarPosition = Services.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
       }
       catch (er) {};
       useDefaultDnD = tabbarPosition == "left" || tabbarPosition == "right";
@@ -339,7 +339,7 @@ var TMP_tabDNDObserver = {
 
       var bgLoad = true;
       try {
-        bgLoad = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+        bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
       }
       catch (e) { }
 
@@ -588,7 +588,7 @@ var TMP_tabDNDObserver = {
 
    this.clearDragmark();// clear old dragmark if one exist
 
-   if (!TabmixSvc.TMPprefs.getBoolPref("useFirefoxDragmark")) {
+   if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var sameRow = newIndex != 0 && newIndex != gBrowser.tabs.length &&
             TabmixTabbar.inSameRow(gBrowser.tabs[newIndex-1], gBrowser.tabs[newIndex]);
       if (sameRow || left_right==0)
@@ -609,7 +609,7 @@ var TMP_tabDNDObserver = {
                         scrollMode == TabmixTabbar.SCROLL_BUTTONS_HIDDEN ||
                         scrollMode == TabmixTabbar.SCROLL_BUTTONS_MULTIROW ||
                         (scrollMode == TabmixTabbar.SCROLL_BUTTONS_RIGHT &&
-                         !TabmixSvc.TMPprefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
+                         !Tabmix.prefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
       minMargin = scrollRect.left - rect.left - paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
       if (!ltr)
@@ -649,7 +649,7 @@ var TMP_tabDNDObserver = {
     if (this.dragmarkindex == null)
       return;
 
-    if (!TabmixSvc.TMPprefs.getBoolPref("useFirefoxDragmark")) {
+    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var index = this.dragmarkindex.newIndex;
       if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
          this.removetDragmarkAttribute(gBrowser.tabs[index]);
@@ -776,7 +776,7 @@ Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
 }
 
 Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
-  let bgLoad = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+  let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
   try {
     gBrowser.loadTabs(aURIs, bgLoad, aReplace);
   } catch (ex) { }
@@ -787,7 +787,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
    var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
    var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
-   var openTabPref = typeof(pref) == "string" ? TabmixSvc.prefs.getBoolPref(pref) : pref;
+   var openTabPref = typeof(pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
    if (typeof(altKey) != "undefined") {
       // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
       if (altKey && !openTabPref)
@@ -1209,7 +1209,7 @@ Tabmix.navToolbox = {
         '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
       )._replace(
         'openUILinkIn(url, where, params);',
-        'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
+        'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
          $&'
       );
     }
@@ -1272,7 +1272,7 @@ Tabmix.navToolbox = {
       $&]]>
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
-      'var loadInBackground = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
+      'var loadInBackground = Tabmix.prefs.getBoolPref("loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
     ).toCode();
   },
 
@@ -1287,7 +1287,7 @@ Tabmix.navToolbox = {
 
     gTMPprefObserver.showReloadEveryOnReloadButton();
 
-    gTMPprefObserver.changeNewTabButtonSide(TabmixSvc.TMPprefs.getIntPref("newTabButton.position"));
+    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
   },
 
   initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {

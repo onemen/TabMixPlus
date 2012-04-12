@@ -84,8 +84,8 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
 
-// some prefs branches
-XPCOMUtils.defineLazyGetter(TabmixSvc, "TMPprefs", function () {return Services.prefs.getBranch("extensions.tabmix.")});
+// Tabmix preference branch
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {return Services.prefs.getBranch("extensions.tabmix.")});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return Services.prefs.getBranch("extensions.tabmix.sessions.")});
 // string bundle
 XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {

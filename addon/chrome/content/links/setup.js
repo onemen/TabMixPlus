@@ -30,7 +30,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
       var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
       var pref = "extensions.tabmix.loadUrlInBackground";
       if (Tabmix.isVersion(100))
-        openUILinkIn(url, where, {inBackground: TabmixSvc.prefs.getBoolPref(pref)});
+        openUILinkIn(url, where, {inBackground: Services.prefs.getBoolPref(pref)});
       else
         openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
       ]]>
@@ -94,12 +94,12 @@ function TMP_TBP_Startup() {
     var disAllow = TabmixSessionManager._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.manager");
-    var crashRecovery = TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.crashRecovery");
+    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
     var afterRestart = false;
 
-    var restoreOrAsk = TabmixSvc.prefs.getIntPref("extensions.tabmix.sessions.onStart") < 2 || afterRestart;
-    var afterCrash = TabmixSvc.prefs.prefHasUserValue("extensions.tabmix.sessions.crashed");
+    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
+    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
     // don't load home page on first window if session manager or crash recovery is enabled
     if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
@@ -150,7 +150,7 @@ function TMP_TBP_Startup() {
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
-    if (firstWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.disableIncompatible")) {
+    if (firstWindow && Tabmix.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
@@ -229,15 +229,15 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     // so we initialize this before start
     // mTabMaxWidth not exist from firefox 4.0
     var max = Math.max(16, this.getIntPref("browser.tabs.tabMaxWidth", 250));
-    var min = Math.max(16, TabmixSvc.prefs.getIntPref("browser.tabs.tabMinWidth"));
+    var min = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
     if (max < min) {
-      TabmixSvc.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
-      TabmixSvc.prefs.setIntPref("browser.tabs.tabMinWidth", max);
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", max);
       [min, max] = [max, min];
     }
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
-    TabmixTabbar.widthFitTitle = TabmixSvc.TMPprefs.getBoolPref("flexTabs") && (max != min);
+    TabmixTabbar.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") && (max != min);
     if (TabmixTabbar.widthFitTitle) {
       this.setItem(tabContainer, "widthFitTitle", true);
       // we only change the rule that set flex=100 and width=0 at delayedStartup.
@@ -249,12 +249,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       this.__felxedTab = tab;
     }
 
-    var tabscroll = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode");
+    var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
       tabscroll = 1;
     if (tabscroll < 0 || tabscroll > 3 ||
         (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
-      TabmixSvc.prefs.setIntPref("extensions.tabmix.tabBarMode", 1);
+      Tabmix.prefs.setIntPref("tabBarMode", 1);
       tabscroll = 1;
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
@@ -269,8 +269,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     TMP_extensionsCompatibility.preInit();
 
-    if (TabmixSvc.TMPprefs.prefHasUserValue("enableDebug") &&
-        TabmixSvc.TMPprefs.getBoolPref("enableDebug")) {
+    if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
+        Tabmix.prefs.getBoolPref("enableDebug")) {
       this._debugMode = true;
     }
 }

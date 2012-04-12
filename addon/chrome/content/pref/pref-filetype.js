@@ -21,7 +21,7 @@ function FillData()
 
    var data, items, item;
    try {
-      data = TabmixSvc.prefs.getCharPref(list.getAttribute('prefstring'));
+      data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
    }
    catch (e) {}
 
@@ -49,7 +49,7 @@ function Save()
       filetype.push(list.getItemAtIndex(i).getAttribute("label").trim());
 
    try {
-      TabmixSvc.prefs.setCharPref(list.getAttribute('prefstring'), filetype.join(" "));
+      Services.prefs.setCharPref(list.getAttribute('prefstring'), filetype.join(" "));
    }
    catch (ex) {Tabmix.assert(ex, "error in filetype: " + filetype);}
    return true;
@@ -135,8 +135,9 @@ function Del()
 function Restore()
 {
    Save();
-   var pref = "extensions.tabmix.filetype";
-   if (TabmixSvc.prefs.prefHasUserValue(pref)) TabmixSvc.prefs.clearUserPref(pref);
+   var pref = "filetype";
+   if (Tabmix.prefs.prefHasUserValue(pref))
+     Tabmix.prefs.clearUserPref(pref);
    FillData();
 }
 

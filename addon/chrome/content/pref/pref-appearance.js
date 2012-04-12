@@ -1,32 +1,22 @@
 var TMPstyles = {
-  _prefsSvc: null,
-  get prefsSvc() {
-    if (!this._prefsSvc) {
-      this._prefsSvc =  Components.classes["@mozilla.org/preferences-service;1"]
-             .getService(Components.interfaces.nsIPrefService)
-             .QueryInterface(Components.interfaces.nsIPrefBranch);
-    }
-    return this._prefsSvc;
-  },
-
   init: function () {
     try {
-      var index = this.prefsSvc.getIntPref("extensions.tabmix.appearance_tab");
+      var index = Services.prefs.getIntPref("extensions.tabmix.appearance_tab");
     }
     catch (ex) { index = 0; }
     document.getElementById("stylestabs").selectedIndex = index;
 
 
     /* Chromifox theme force button height to 25px */
-    var skin = this.prefsSvc.getCharPref("general.skins.selectedSkin");
+    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
       document.getElementById("AppearanceTabBox").setAttribute("chromifox", true);
   },
 
   save: function () {
-    this.prefsSvc.setIntPref("extensions.tabmix.appearance_tab", document.getElementById("stylestabs").selectedIndex);
+    Services.prefs.setIntPref("extensions.tabmix.appearance_tab", document.getElementById("stylestabs").selectedIndex);
     // store the pref immediately
-    this._prefsSvc.savePrefFile(null);
+    Services.prefs.savePrefFile(null);
   },
 
   cancel: function () {

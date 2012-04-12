@@ -32,7 +32,7 @@ Tabmix.Sanitizer = {
          return false;
 
       try {
-         var sanitizeTabmix = TabmixSvc.prefs.getBoolPref("privacy.clearOnShutdown.extensions-tabmix");
+         var sanitizeTabmix = Services.prefs.getBoolPref("privacy.clearOnShutdown.extensions-tabmix");
       } catch (e) { sanitizeTabmix = false;}
 
       return sanitizeTabmix;
@@ -349,7 +349,7 @@ var TabmixSessionManager = {
       this.enableBackup = TabmixSvc.SMprefs.getBoolPref("crashRecovery") && !this._inPrivateBrowsing;
       this.enableSaveHistory = TabmixSvc.SMprefs.getBoolPref("save.history");
       this.saveClosedtabs = TabmixSvc.SMprefs.getBoolPref("save.closedtabs") &&
-                             TabmixSvc.TMPprefs.getBoolPref("undoClose");
+                             Tabmix.prefs.getBoolPref("undoClose");
       this._lastSaveTime = Date.now();
       // check if we need to backup
       if (isFirstWindow && this.enableManager && !TabmixSvc.SMprefs.prefHasUserValue("sanitized")) {
@@ -375,7 +375,7 @@ var TabmixSessionManager = {
          crashed = status.indexOf("crash") != -1;
          // if this isn't delete on exit, we know next time that firefox crash
          TabmixSvc.SMprefs.setBoolPref("crashed" , true); // we use this in setup.js;
-         TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+         Services.prefs.savePrefFile(null); // store the pref immediately
          this.setLiteral(path, "status", "crash");
 
          // if we after sanitize, we have no data to restore
@@ -401,8 +401,8 @@ var TabmixSessionManager = {
          else if (this.enableManager)
             this.openFirstWindow(false);
 
-         if (TabmixSvc.TMPprefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            TabmixSvc.TMPprefs.clearUserPref("warnAboutClosingTabs.timeout")
+         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
+            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
       }
       else if (this.enableManager && "tabmixdata" in window) {
          path = window.tabmixdata.path;
@@ -485,7 +485,7 @@ var TabmixSessionManager = {
 
       // we call Tabmix.Sanitizer.tryToSanitize from onWindowClose
       // we don't need to show warnBeforeSaveSession dialog if we sanitize TMP without prompet on exit
-      if (TabmixSvc.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") && Tabmix.Sanitizer.isSanitizeTMPwithoutPrompet(true))
+      if (Services.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") && Tabmix.Sanitizer.isSanitizeTMPwithoutPrompet(true))
          return resultData;
 
       if ( this.enableManager ) {
@@ -572,11 +572,11 @@ var TabmixSessionManager = {
          }
          // clean-up....
          if (this.enableBackup) this.deleteSession(this.gSessionPath[3]);
-         if (TabmixSvc.TMPprefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            TabmixSvc.TMPprefs.clearUserPref("warnAboutClosingTabs.timeout");
+         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
+            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
          if (TabmixSvc.SMprefs.prefHasUserValue("crashed"))
             TabmixSvc.SMprefs.clearUserPref("crashed"); // we use this in setup.js;
-         TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+         Services.prefs.savePrefFile(null); // store the pref immediately
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "stopped");
          if (!this.enableManager && !this.enableBackup)
             this.deleteSession(this.gSessionPath[0]);
@@ -634,7 +634,7 @@ var TabmixSessionManager = {
       // if tryToSanitize is false and privacy.sanitize.promptOnSanitize is true
       // we call Tabmix.Sanitizer.sanitize from Firefox Sanitizer
       var tabmixSanitized = isLastWindow &&
-          TabmixSvc.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") &&
+          Services.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") &&
           Tabmix.Sanitizer.tryToSanitize(true);
     }
     catch (ex) {
@@ -710,20 +710,20 @@ var TabmixSessionManager = {
       //          undoClose -
       //          browser.sessionstore.max_tabs_undo
       //
-      var sessionManager = TabmixSvc.TMPprefs.getBoolPref("sessions.manager") && !this._inPrivateBrowsing;
-      var crashRecovery = TabmixSvc.TMPprefs.getBoolPref("sessions.crashRecovery") && !this._inPrivateBrowsing;
-      var enableClosedtabs = TabmixSvc.TMPprefs.getBoolPref("sessions.save.closedtabs");
-      var enableSaveHistory = TabmixSvc.TMPprefs.getBoolPref("sessions.save.history");
-      var undoClose = TabmixSvc.TMPprefs.getBoolPref("undoClose");
-      var maxTabsUndo = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
+      var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager") && !this._inPrivateBrowsing;
+      var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !this._inPrivateBrowsing;
+      var enableClosedtabs = Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
+      var enableSaveHistory = Tabmix.prefs.getBoolPref("sessions.save.history");
+      var undoClose = Tabmix.prefs.getBoolPref("undoClose");
+      var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
 
        // hide or show session manager buttons & menus
-      var showInMenu = !sessionManager || !TabmixSvc.TMPprefs.getBoolPref("sessionToolsMenu");
+      var showInMenu = !sessionManager || !Tabmix.prefs.getBoolPref("sessionToolsMenu");
       document.getElementById("tm-sessionmanager").hidden = showInMenu;
       let sm = document.getElementById("appmenu-sessionmanager");
       if (sm)
         sm.hidden = !sessionManager;
-      var hiddenPref = !sessionManager || !TabmixSvc.TMPprefs.getBoolPref("closedWinToolsMenu");
+      var hiddenPref = !sessionManager || !Tabmix.prefs.getBoolPref("closedWinToolsMenu");
       document.getElementById("tm-sm-closedwindows").hidden = hiddenPref;
       document.getElementById("tm-sessionmanager").firstChild.childNodes[2].hidden = !hiddenPref;
 
@@ -1127,9 +1127,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
               this.saveStateDelayed();
             }
          case "browser-lastwindow-close-requested":
-            this.savedPrefs["browser.startup.page"] = TabmixSvc.prefs.getIntPref("browser.startup.page");
-            this.savedPrefs["browser.tabs.warnOnClose"] = TabmixSvc.prefs.getBoolPref("browser.tabs.warnOnClose");
-            this.savedPrefs["browser.showQuitWarning"] = TabmixSvc.prefs.getBoolPref("browser.showQuitWarning");
+            this.savedPrefs["browser.startup.page"] = Services.prefs.getIntPref("browser.startup.page");
+            this.savedPrefs["browser.tabs.warnOnClose"] = Services.prefs.getBoolPref("browser.tabs.warnOnClose");
+            this.savedPrefs["browser.showQuitWarning"] = Services.prefs.getBoolPref("browser.showQuitWarning");
             break;
          case "timer-callback": // timer call back for delayed saving
             this._saveTimer = null;
@@ -1157,7 +1157,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   // check if we need to close protected tab here
                   var needToCloseProtected = true;
                   try {
-                    if (TabmixSvc.prefs.getBoolPref("browser.privatebrowsing.keep_current_session"))
+                    if (Services.prefs.getBoolPref("browser.privatebrowsing.keep_current_session"))
                       needToCloseProtected = false;
                   } catch (ex) { }
                   // noting to do here if we are not using tabmix session manager
@@ -1243,7 +1243,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (index < 0)
          return;
 
-      var where = TabmixSvc.TMPprefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
+      var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
       TabmixSessionManager.restoreWindow(where, index);
       var popup = aEvent.originalTarget.parentNode;
       if (TabmixSvc.ss.getClosedWindowCount() > 0)
@@ -1447,7 +1447,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          if (result.label == sessionpath ) TabmixSvc.SMprefs.setCharPref("onStart.sessionpath", newPath);
          else TabmixSvc.SMprefs.setCharPref("onStart.sessionpath", result.label);
       }
-      TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+      Services.prefs.savePrefFile(null); // store the pref immediately
    },
 
    sessionUtil: function(action, what, sessionPath) {
@@ -1678,13 +1678,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          TabmixSvc.SMprefs.setIntPref("onStart.loadsession", loadsession);
          if (loadsession > -1)
             TabmixSvc.SMprefs.setCharPref("onStart.sessionpath", node.session);
-         TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+         Services.prefs.savePrefFile(null); // store the pref immediately
       }
    },
 
    setShowNameExt: function() {
       TabmixSvc.SMprefs.setBoolPref("menu.showext", !TabmixSvc.SMprefs.getBoolPref("menu.showext"));
-      TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+      Services.prefs.savePrefFile(null); // store the pref immediately
    },
 
    renameSession: function SM_renameSession(thisSession) {
@@ -1698,7 +1698,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    removeFromMenu: function(event, popup, root) {
-      if (!TabmixSvc.TMPprefs.getBoolPref("middleclickDelete")) return;
+      if (!Tabmix.prefs.getBoolPref("middleclickDelete")) return;
       if ( event.button == 1 && ("session" in event.target)) {
          TabmixSessionManager.removeSavedSession(event.target);
          if (root == this.gSessionPath[0] && this.isClosedWindowsEmpty()) popup.hidePopup();
@@ -1744,7 +1744,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.deleteSubtree(this._rdfRoot+'/windows');
             this.saveStateDelayed();
             TabmixSvc.SMprefs.setIntPref("onStart.loadsession", -1);
-            TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+            Services.prefs.savePrefFile(null); // store the pref immediately
          }
       } else if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
          title = TabmixSvc.getSMString("sm.removeAll.title.closedwindow");
@@ -2151,7 +2151,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (aResult.checked && !this.enableManager) {
          TabmixSvc.SMprefs.setBoolPref("manager", true); // enable session manager
          try {
-            TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+            Services.prefs.savePrefFile(null); // store the pref immediately
          } catch(ex) { }
       }
       if (aResult.button == Tabmix.BUTTON_OK) {
@@ -2307,7 +2307,7 @@ try{
    enableCrashRecovery: function SM_enableCrashRecovery(aResult) {
       if (aResult.checked && this.afterCrash) {
         TabmixSvc.SMprefs.setBoolPref("crashRecovery", true); // enable Crash Recovery
-        TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+        Services.prefs.savePrefFile(null); // store the pref immediately
       }
    },
 
@@ -2387,8 +2387,8 @@ try{
       if (aPopUp)
          curTime = this.getLiteralValue(thisSession, "timestamp", 0);
       else {
-         var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
-         var delay = TabmixSvc.prefs.prefHasUserValue(pref) ? TabmixSvc.prefs.getCharPref(pref)*1 : 0;
+         var pref = "warnAboutClosingTabs.timeout";
+         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref)*1 : 0;
          curTime = new Date().valueOf() - delay;
       }
       var windowEnum = container.GetElements();
@@ -2502,8 +2502,8 @@ try{
          }
          this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
          this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));
-         var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
-         var delay = TabmixSvc.prefs.prefHasUserValue(pref) ? TabmixSvc.prefs.getCharPref(pref)*1 : 0;
+         var pref = "warnAboutClosingTabs.timeout";
+         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref)*1 : 0;
          var newTime = new Date().valueOf() - delay;
          this.setLiteral(rdfNodeThisWindow, "timestamp", newTime);
          // if we overwrite window we don't load it again on restart
@@ -2580,7 +2580,7 @@ try{
          } else tabContainer.RemoveElement(nodeToClose, true);
          if (tabExist) {
             closedTabContainer.AppendElement(nodeToClose);
-            if (closedTabContainer.GetCount() > TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))
+            if (closedTabContainer.GetCount() > Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))
                this.deleteClosedtabAt(1, this.gThisWin);
          }
       } else if (tabContainer.IndexOf(nodeToClose) > -1) {
@@ -3205,7 +3205,7 @@ try{
 
    setStripVisibility: function(tabCount) {
       // unhide the tab bar
-      if (tabCount > 1 && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible) {
+      if (tabCount > 1 && Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible) {
         gBrowser.tabContainer.visible = true;
       }
    },
@@ -3221,13 +3221,13 @@ try{
       var toNew = this.wrapContainer(toPath, conPath);
       var rdfNodeTabs = this.getResource(toPath, "tabs");
       var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
-      var maxTabsUndo = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
+      var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
       var newIndex = -1;
       while (fromOld.Enum.hasMoreElements()) {
          var rdfNodeSession = fromOld.Enum.getNext();
          if (!(rdfNodeSession instanceof Ci.nsIRDFResource)) continue;
          newIndex++;
-         if (isClosedTabs && (fromOld.Count - newIndex > TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))) continue;
+         if (isClosedTabs && (fromOld.Count - newIndex > Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))) continue;
          var uniqueId = "panel" + Date.now() + newIndex;
          var rdfLabelSession = rdfLabelTabs + "/" + uniqueId;
          var newNode = this.RDFService.GetResource(rdfLabelSession);
@@ -3262,7 +3262,7 @@ try{
       var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
       var ctabs = TMP_ClosedTabs.getClosedTabData;
       var tabCount = ctabs.length;
-      var maxTabsUndo = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
+      var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
       var tabData, uniqueId, rdfLabelSession, newNode, historyEntry, scrollPos, history;
       for (var i = tabCount - 1; i >= 0; i--) {
          uniqueId = "panel" + Date.now() + i;

@@ -39,7 +39,7 @@ Tabmix.startup = function TMP_startup() {
 
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible;
+    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible;
     if (stripIsHidden)
       gBrowser.tabContainer.visible = true;
     this.setItem("TabsToolbar", "onStartNewTabButton", true);
@@ -81,7 +81,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   // set title at startup if we are not using session manager
   // startup page or home page load before bookmarks service
-  if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark")) {
+  if (Tabmix.prefs.getBoolPref("titlefrombookmark")) {
     for (let i = 0; i < gBrowser.mPanelContainer.childNodes.length ; i++) {
       let browser = gBrowser.getBrowserAtIndex(i);
       let aUrl = browser.contentDocument.baseURI;
@@ -95,7 +95,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   Tabmix.navToolbox.init();
 
   // set option to Prevent double click on Tab-bar from changing window size.
-  if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize"))
+  if (!Tabmix.prefs.getBoolPref("dblClickTabbar_changesize"))
     document.getElementById("TabsToolbar")._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
@@ -274,7 +274,7 @@ var TMP_eventListener = {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
         'this._dragBindingAlive',
-        '$& && TabmixSvc.prefs.getBoolPref("extensions.tabmix.dblClickTabbar_changesize")'
+        '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
         /(\})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
@@ -296,7 +296,7 @@ var TMP_eventListener = {
       <![CDATA[
         if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))
           aTab.removeAttribute("width");
-        if (TabmixSvc.TMPprefs.getBoolPref("lockAppTabs") &&
+        if (Tabmix.prefs.getBoolPref("lockAppTabs") &&
             !aTab.hasAttribute("locked") && "lockTab" in this) {
           this.lockTab(aTab);
           aTab.setAttribute("_lockedAppTabs", "true");
@@ -401,7 +401,7 @@ var TMP_eventListener = {
       Tabmix.setItem("TabsToolbar", "tabmix_aero", true);
     }
 
-    var skin = TabmixSvc.prefs.getCharPref("general.skins.selectedSkin");
+    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     var platform;
     if (skin=="classic/1.0") {
       if (Tabmix.isMac) {
@@ -481,19 +481,19 @@ var TMP_eventListener = {
     var tabsToolbar = document.getElementById("TabsToolbar");
     Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
 
-    var position = TabmixSvc.TMPprefs.getIntPref("newTabButton.position");
+    var position = Tabmix.prefs.getIntPref("newTabButton.position");
     gTMPprefObserver.changeNewTabButtonSide(position);
-    TMP_ClosedTabs.setButtonType(TabmixSvc.TMPprefs.getBoolPref("undoCloseButton.menuonly"));
+    TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
 
-    TabmixTabbar.hideMode = TabmixSvc.TMPprefs.getIntPref("hideTabbar");
+    TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
    /*
     *  In the first time TMP is running we need to match extensions.tabmix.hideTabbar to browser.tabs.autoHide.
     *  extensions.tabmix.hideTabbar default is 0 "Never Hide tabbar"
     *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar is set to 1 "Hide tabbar when i have only one tab":
     */
-    if (TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
+    if (Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
       TabmixTabbar.hideMode = 1;
-      TabmixSvc.TMPprefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
+      Tabmix.prefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
     }
     else
       gTMPprefObserver.setAutoHidePref();
@@ -502,7 +502,7 @@ var TMP_eventListener = {
       gBrowser.tabContainer.visible = false;
 
     TabmixTabbar.position = 0;
-    if (TabmixSvc.TMPprefs.getIntPref("tabBarPosition") == 1)
+    if (Tabmix.prefs.getIntPref("tabBarPosition") == 1)
       gTMPprefObserver.tabBarPositionChanged(1);
 
     // for light weight themes
@@ -510,15 +510,15 @@ var TMP_eventListener = {
       Tabmix.setItem("main-window", "tabmix_lwt", true);
 
     // make sure "extensions.tabmix.undoClose" is true if "browser.sessionstore.max_tabs_undo" is not zero
-    var sessionstoreUndoClose = TabmixSvc.prefs.getIntPref("browser.sessionstore.max_tabs_undo") > 0;
-    if (sessionstoreUndoClose != TabmixSvc.TMPprefs.getBoolPref("undoClose"))
-      TabmixSvc.TMPprefs.setBoolPref("undoClose", sessionstoreUndoClose);
+    var sessionstoreUndoClose = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") > 0;
+    if (sessionstoreUndoClose != Tabmix.prefs.getBoolPref("undoClose"))
+      Tabmix.prefs.setBoolPref("undoClose", sessionstoreUndoClose);
 
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
 
     // tabmix Options in Tools menu
-    document.getElementById("tabmix-menu").hidden = !TabmixSvc.TMPprefs.getBoolPref("optionsToolMenu");
+    document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
     // without this when Firefox starts with many tabs, tabbar can enter multi-row
     // before tab width fit to title, and selected tab from last session not always visible
@@ -756,7 +756,7 @@ var TMP_eventListener = {
     // if we close the 2nd tab and browser.tabs.autoHide is true reset all scroll and multi-row parameter
     // strip already collapsed at this point
     var tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
-    if (tabsCount == 2 && TabmixSvc.prefs.getBoolPref("browser.tabs.autoHide")) {
+    if (tabsCount == 2 && Services.prefs.getBoolPref("browser.tabs.autoHide")) {
       TabmixTabbar.setHeight(1);
       tabBar.removeAttribute("multibar");
     }
@@ -764,7 +764,7 @@ var TMP_eventListener = {
     // when browser.tabs.animate is true gBrowser._endRemoveTab calls
     // onTabClose_updateTabBar.
     // we would like to get early respond when row height is going to change.
-    var updateNow = !TabmixSvc.prefs.getBoolPref("browser.tabs.animate");
+    var updateNow = !Services.prefs.getBoolPref("browser.tabs.animate");
     if (!updateNow && tabBar.hasAttribute("multibar")) {
       let lastTab = tabBar.visibleTabsLastChild;
       if (!TabmixTabbar.inSameRow(lastTab, TMP_TabView.previousVisibleSibling(lastTab))) {
@@ -871,11 +871,11 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     tabBar.removeShowButtonAttr();
 
-    var shouldMoveFocus = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enableScrollSwitch");
+    var shouldMoveFocus = Tabmix.prefs.getBoolPref("enableScrollSwitch");
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
     var direction = aEvent.detail;
-    if (TabmixSvc.prefs.getBoolPref("extensions.tabmix.reversedScroll"))
+    if (Tabmix.prefs.getBoolPref("reversedScroll"))
       direction = -1 * direction;
 
     if (shouldMoveFocus) {

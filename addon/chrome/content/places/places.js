@@ -96,7 +96,7 @@ var TMP_Places = {
           Tabmix.newCode("openLinkIn", openLinkIn)._replace(
             '{',
             '{var tab;\
-             if (where == "window" && getTopWin() && TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow")) where = "tab";'
+             if (where == "window" && getTopWin() && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
           )._replace(
             'com.tobwithu.wmn.openURL',
             'tab = $&', {flags: "g"}
@@ -143,7 +143,7 @@ var TMP_Places = {
       )._replace(
         'var w = getTopWin();',
         '$& \
-         if (w && where == "window" && TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow")) where = "tab";'
+         if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
       )._replace(
         'Services.ww.openWindow(w || window, getBrowserURL(), null, "chrome,dialog=no,all", sa);',
         'var newWin = $& \
@@ -358,7 +358,7 @@ var TMP_Places = {
    },
 
    historyMenuItemsTitle: function TMP_PC_historyMenuItemsTitle(aEvent) {
-      if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark"))
+      if (!Tabmix.prefs.getBoolPref("titlefrombookmark"))
         return;
 
       var aMenuPopup = aEvent.target;
@@ -417,7 +417,7 @@ var TMP_Places = {
       if (typeof(aPref) == "undefined")
          aPref = this.getPrefByDocumentURI(window);
 
-      var _pref = w.TabmixSvc.prefs;
+      var _pref = w.Services.prefs;
       if ((_pref.getBoolPref(aPref) || aTab.hasAttribute("locked"))) {
          if (aEvent && _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
                (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))
@@ -455,10 +455,10 @@ var TMP_Places = {
     var tabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-        TabmixSvc.prefs.getBoolPref("browser.tabs.loadFolderAndReplace");
+        Services.prefs.getBoolPref("browser.tabs.loadFolderAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
-        TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadBookmarksGroupInBackground") :
-        TabmixSvc.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+        Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
+        Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
@@ -570,7 +570,7 @@ var TMP_Places = {
    },
 
   getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId) {
-    if (!TabmixSvc.prefs.getBoolPref("extensions.tabmix.titlefrombookmark") || !aUrl)
+    if (!Tabmix.prefs.getBoolPref("titlefrombookmark") || !aUrl)
       return aTitle;
 
     var title = this.getBookmarkTitle(aUrl.split("#")[0], aItemId);

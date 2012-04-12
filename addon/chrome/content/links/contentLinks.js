@@ -31,7 +31,7 @@ var TMP_DOMWindowOpenObserver = {
     },
 
     newWindow : function(aWindow) {
-        Tabmix.singleWindowMode = TabmixSvc.TMPprefs.getBoolPref("singleWindow");
+        Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
         gTMPprefObserver.setLink_openPrefs();
         if (!Tabmix.singleWindowMode)
           return;
@@ -217,9 +217,9 @@ Tabmix.contentAreaClick = {
       return where == "tabshifted" ? "tabshifted" : "tab";
     }
 
-    var targetPref = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
-    var linkTarget = TabmixSvc.prefs.getBoolPref("extensions.tabmix.linkTarget");
-    var suppressTabs = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enablefiletype");
+    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
+    var linkTarget = Tabmix.prefs.getBoolPref("linkTarget");
+    var suppressTabs = Tabmix.prefs.getBoolPref("enablefiletype");
 
 ///XXX check again how SubmitToTab work
     if (typeof(SubmitToTab) != 'undefined') {
@@ -277,7 +277,7 @@ Tabmix.contentAreaClick = {
      * are true. See the function comment for more details.
      */
     if (this.divertMiddleClick(event, linkNode, gBrowser.mCurrentTab, currentDomain, targetDomain,
-                              targetPref, TabmixSvc.prefs.getBoolPref("extensions.tabmix.middlecurrent"))) {
+                              targetPref, Tabmix.prefs.getBoolPref("middlecurrent"))) {
       return ["current"];
     }
 
@@ -327,7 +327,7 @@ Tabmix.contentAreaClick = {
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
 
-    var targetPref = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
+    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
     var tabLocked = gBrowser.mCurrentTab.hasAttribute("locked");
     if (!tabLocked && targetPref == 0)
       return;
@@ -391,7 +391,7 @@ Tabmix.contentAreaClick = {
      * portions were taken from disable target for downloads by cusser
      */
     if (this.suppressTabsOnFileDownload(aEvent, href, linkNode,
-           TabmixSvc.prefs.getBoolPref("extensions.tabmix.enablefiletype")))
+           Tabmix.prefs.getBoolPref("enablefiletype")))
       return;
 
     /*
@@ -410,7 +410,7 @@ Tabmix.contentAreaClick = {
                               document.commandDispatcher.focusedWindow.top.frames,
                               gBrowser.mCurrentTab, currentDomain, targetDomain,
                               targetPref,
-                              TabmixSvc.prefs.getBoolPref("extensions.tabmix.linkTarget")))
+                              Tabmix.prefs.getBoolPref("linkTarget")))
       return;
 
     // open links to other sites in a tab only if certain conditions are met. See the
@@ -522,7 +522,7 @@ Tabmix.contentAreaClick = {
     if (linkHref.indexOf("mailto:") == 0)
       return true;
 
-    var filetype = TabmixSvc.prefs.getCharPref("extensions.tabmix.filetype");
+    var filetype = Tabmix.prefs.getCharPref("filetype");
     filetype = filetype.toLowerCase();
     filetype = filetype.split(" ");
     var linkHrefExt = "";
@@ -814,8 +814,8 @@ Tabmix.contentAreaClick = {
    *
    */
   selectExistingTab: function TMP_selectExistingTab(href) {
-    if (TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks") != 0 ||
-        TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground"))
+    if (Tabmix.prefs.getIntPref("opentabforLinks") != 0 ||
+        Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
     function switchIfURIInWindow(aWindow) {
       if (!("gBrowser" in aWindow))

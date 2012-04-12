@@ -85,6 +85,11 @@ var Tabmix = {
     return null;
   },
 
+  get prefs() {
+    delete this.prefs;
+    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+  },
+
   isVersion: function(aVersionNo) {
     let ver = "is" + aVersionNo;
     if (ver in TabmixSvc.version)
@@ -335,10 +340,10 @@ XXX fix this when there is no stack go directly to trace
   getBoolPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getBoolPref(branch + aPrefName);
+      return Services.prefs.getBoolPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setBoolPref(branch + aPrefName, aDefault);
+      Services.prefs.setBoolPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
@@ -346,10 +351,10 @@ XXX fix this when there is no stack go directly to trace
   getIntPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getIntPref(branch + aPrefName);
+      return Services.prefs.getIntPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setIntPref(branch + aPrefName, aDefault);
+      Services.prefs.setIntPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
@@ -357,10 +362,10 @@ XXX fix this when there is no stack go directly to trace
   getCharPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getCharPref(branch + aPrefName);
+      return Services.prefs.getCharPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setCharPref(branch + aPrefName, aDefault);
+      Services.prefs.setCharPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
@@ -374,7 +379,7 @@ XXX fix this when there is no stack go directly to trace
     // so we can open new window
     if (!this.getTopWin())
       return false;
-    return TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
+    return Tabmix.prefs.getBoolPref("singleWindow");
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
