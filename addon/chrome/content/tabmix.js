@@ -397,8 +397,9 @@ var TMP_eventListener = {
       }
     }
 
+    var tabsToolbar = document.getElementById("TabsToolbar");
     if (navigator.oscpu.indexOf("Windows NT 6.1") == 0) {
-      Tabmix.setItem("TabsToolbar", "tabmix_aero", true);
+      Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
     }
 
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
@@ -414,12 +415,12 @@ var TMP_eventListener = {
         platform = "linux";
 ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
-        Tabmix.setItem("TabsToolbar", "tabmix_skin", "classic");
+        Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
       }
       else {
         let version = navigator.oscpu.indexOf("Windows NT 6.1") == 0 ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
-        Tabmix.setItem("TabsToolbar", "classic40", version);
+        Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
       }
     }
@@ -478,8 +479,8 @@ var TMP_eventListener = {
     * The last tab is removed before the new tab is fully visible, so the tab
     * bar height is drop below normal height.
     */
-    var tabsToolbar = document.getElementById("TabsToolbar");
-    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
+    if (!TMP_tabDNDObserver.verticalTreeStyleTab)
+      Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
 
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
     gTMPprefObserver.changeNewTabButtonSide(position);
@@ -884,7 +885,7 @@ var TMP_eventListener = {
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
-    else if (direction != 0) {
+    else if (direction != 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml DOMMouseScroll event handler
       let tabsSrip = tabBar.mTabstrip;
       let orient = tabsSrip.orient;

@@ -28,6 +28,7 @@ var TMP_tabDNDObserver = {
     ind.clientTop;
   },
 
+  verticalTreeStyleTab: false,
   setDragEvents: function TMP_setDragEvents(atStart) {
     // we only set Tabmix events at start if Tree Style Tab is not in vertical mode
     var useDefaultDnD = false;
@@ -37,6 +38,7 @@ var TMP_tabDNDObserver = {
       }
       catch (er) {};
       useDefaultDnD = tabbarPosition == "left" || tabbarPosition == "right";
+      this.verticalTreeStyleTab = useDefaultDnD;
     }
 
     if (atStart && useDefaultDnD) {
