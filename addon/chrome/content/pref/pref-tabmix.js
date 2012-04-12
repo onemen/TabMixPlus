@@ -640,11 +640,13 @@ function setPrefByType(prefName, newValue, atImport) {
                   break;
                // 2008-11-29
                case "extensions.tabmix.maxWidth":
-                  Services.prefs.setIntPref("browser.tabs.tabMaxWidth", newValue);
+               case "browser.tabs.tabMaxWidth":
+                  Tabmix.prefs.setIntPref("tabMaxWidth", newValue);
                   break;
                // 2008-11-29
                case "extensions.tabmix.minWidth":
-                  Services.prefs.setIntPref("browser.tabs.tabMinWidth", newValue);
+               case "browser.tabs.tabMinWidth":
+                  Tabmix.prefs.setIntPref("tabMinWidth", newValue);
                   break;
                // 2009-01-31
                case "extensions.tabmix.newTabButton.leftside":
@@ -707,6 +709,10 @@ function setPrefByType(prefName, newValue, atImport) {
                   break;
                case "extensions.tabmix.replaceLastTabWith":
                   Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
+                  break;
+               // 2012-04-12
+               case "browser.tabs.loadFolderAndReplace":
+                  Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
                   break;
             }
       }

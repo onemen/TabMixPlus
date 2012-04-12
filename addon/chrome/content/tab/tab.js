@@ -500,8 +500,6 @@ var gTMPprefObserver = {
   OBSERVING: ["extensions.tabmix.",
               "browser.tabs.closeButtons",
               "browser.tabs.autoHide",
-              "browser.tabs.tabMinWidth",
-              "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
               "browser.sessionstore.max_tabs_undo",
               "browser.warnOnRestart",
@@ -548,6 +546,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.loadSearchInBackground":
       case "extensions.tabmix.loadDuplicateInBackground":
       case "extensions.tabmix.loadBookmarksGroupInBackground":
+      case "extensions.tabmix.loadFolderAndReplace":
 
       case "extensions.tabmix.filetype":
       case "extensions.tabmix.warnAboutClosingTabs.timeout":
@@ -639,14 +638,14 @@ var gTMPprefObserver = {
       case "extensions.tabmix.progressMeter":
         this.setProgressMeter();
         break;
-      case "browser.tabs.tabMaxWidth":
-      case "browser.tabs.tabMinWidth":
+      case "extensions.tabmix.tabMaxWidth":
+      case "extensions.tabmix.tabMinWidth":
         var tabStrip = gBrowser.tabContainer.mTabstrip;
         var currentVisible = tabStrip.isElementVisible(gBrowser.mCurrentTab);
-        let tabMaxWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
-        let tabMinWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
+        let tabMaxWidth = Math.max(16, Tabmix.prefs.getIntPref("tabMaxWidth"));
+        let tabMinWidth = Math.max(16, Tabmix.prefs.getIntPref("tabMinWidth"));
         if (tabMaxWidth < tabMinWidth) {
-          if (prefName == "browser.tabs.tabMaxWidth")
+          if (prefName == "extensions.tabmix.tabMaxWidth")
             tabMaxWidth = tabMinWidth;
           else
             tabMinWidth = tabMaxWidth;
@@ -1117,8 +1116,8 @@ var gTMPprefObserver = {
           rule.style.removeProperty("width");
           rule.style.removeProperty("-moz-box-flex");
           if (typeof(this.dynamicRules["width"]) == "undefined") {
-            let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
-            let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
+            let _max = Tabmix.prefs.getIntPref("tabMaxWidth");
+            let _min = Tabmix.prefs.getIntPref("tabMinWidth");
             rule.style.setProperty("max-width", _max + "px", null);
             rule.style.setProperty("min-width", _min + "px", null);
             this.dynamicRules["width"] = rule;
@@ -1662,12 +1661,12 @@ var gTMPprefObserver = {
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("maxWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", Tabmix.prefs.getIntPref("maxWidth"));
+       Tabmix.prefs.setIntPref("tabMaxWidth", Tabmix.prefs.getIntPref("maxWidth"));
        Tabmix.prefs.clearUserPref("maxWidth");
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("minWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMinWidth", Tabmix.prefs.getIntPref("minWidth"));
+       Tabmix.prefs.setIntPref("tabMinWidth", Tabmix.prefs.getIntPref("minWidth"));
        Tabmix.prefs.clearUserPref("minWidth");
     }
     // 2009-01-31
@@ -1787,6 +1786,19 @@ var gTMPprefObserver = {
       Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
       Tabmix.prefs.clearUserPref("replaceLastTabWith");
       _replaceLastTabWith = false;;
+    }
+    // 2012-04-12
+    if (Services.prefs.prefHasUserValue("browser.tabs.loadFolderAndReplace")) {
+      Tabmix.prefs.setBoolPref("loadFolderAndReplace", Services.prefs.getBoolPref("browser.tabs.loadFolderAndReplace"));
+      Services.prefs.clearUserPref("browser.tabs.loadFolderAndReplace");
+    }
+    if (Services.prefs.prefHasUserValue("browser.tabs.tabMinWidth")) {
+       Tabmix.prefs.setIntPref("tabMinWidth", Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
+       Services.prefs.clearUserPref("browser.tabs.tabMinWidth");
+    }
+    if (Services.prefs.prefHasUserValue("browser.tabs.tabMaxWidth")) {
+       Tabmix.prefs.setIntPref("tabMaxWidth", Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
+       Services.prefs.clearUserPref("browser.tabs.tabMaxWidth");
     }
 
     // verify valid value

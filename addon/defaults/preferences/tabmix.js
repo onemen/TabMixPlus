@@ -19,7 +19,7 @@ pref("extensions.tabmix.loadUrlInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("browser.tabs.loadFolderAndReplace", true); // remove from firefox 4.0 2009-10-17
+pref("extensions.tabmix.loadFolderAndReplace", true);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
@@ -113,16 +113,8 @@ pref("extensions.tabmix.useUnreadColor", true);
 pref("extensions.tabmix.useProgressColor", true);
 */
 
-/*
-2008-11-29
-replaced with browser.tabs.tabMaxWidth
-*/
-//pref("extensions.tabmix.minWidth", 100);
-/*
-2008-11-29
-replaced with browser.tabs.tabMaxWidth
-*/
-// pref("extensions.tabmix.maxWidth", 250);
+pref("extensions.tabmix.tabMinWidth", 100);
+pref("extensions.tabmix.tabMaxWidth", 250);
 pref("extensions.tabmix.flexTabs", false);
 
 pref("extensions.tabmix.titlefrombookmark", false);
@@ -279,7 +271,3 @@ pref("extensions.tabmix.reload_time", 15);
 // -1: unlimited
 //  0: no backups created (and deletes all existing backups)
 pref("extensions.tabmix.sessions.max_backups", 7);
-
-// removed from Firefox 4.0+
-pref("browser.tabs.tabMinWidth", 100);
-pref("browser.tabs.tabMaxWidth", 250);

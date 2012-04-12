@@ -228,11 +228,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
     // so we initialize this before start
     // mTabMaxWidth not exist from firefox 4.0
-    var max = Math.max(16, this.getIntPref("browser.tabs.tabMaxWidth", 250));
-    var min = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
+    var max = Math.max(16, Tabmix.prefs.getIntPref("tabMaxWidth"));
+    var min = Math.max(16, Tabmix.prefs.getIntPref("tabMinWidth"));
     if (max < min) {
-      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
-      Services.prefs.setIntPref("browser.tabs.tabMinWidth", max);
+      Tabmix.prefs.setIntPref("tabMaxWidth", min);
+      Tabmix.prefs.setIntPref("tabMinWidth", max);
       [min, max] = [max, min];
     }
     tabContainer.mTabMaxWidth = max;

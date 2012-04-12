@@ -254,7 +254,7 @@
                             prefstring="extensions.tabmix.opentabfor.bookmarks"/>
                   <!-- Bookmark Groups open in new tab -->
                   <checkbox id="openBMKGroups" label="&openBMKGroups.label;" tooltiptext="&openBMKGroups.tooltip;"
-                            prefstring="browser.tabs.loadFolderAndReplace" inverted="true"/>
+                            prefstring="extensions.tabmix.loadFolderAndReplace" inverted="true"/>
                   <!-- History opens in new tab -->
                   <checkbox id="openHistory" label="&openHistory.label;"
                             prefstring="extensions.tabmix.opentabfor.history" />
@@ -619,9 +619,9 @@
               <!-- Tab width -->
               <hbox align="center">
                 <label value="&minWidth.label;" />
-                <textbox id="minWidth" size="3" maxlength="3" prefstring="browser.tabs.tabMinWidth" type="number"/>
+                <textbox id="minWidth" size="3" maxlength="3" prefstring="extensions.tabmix.tabMinWidth" type="number"/>
                 <label value="&widthTo.label;" />
-                <textbox id="maxWidth" size="4" maxlength="4" prefstring="browser.tabs.tabMaxWidth" type="number"/>
+                <textbox id="maxWidth" size="4" maxlength="4" prefstring="extensions.tabmix.tabMaxWidth" type="number"/>
                 <label value="&widthPixels.label;" />
               </hbox>
               <vbox align="start">

@@ -445,7 +445,7 @@ var TMP_Places = {
    },
 
   // fixed: reuse all blank tab not just in the end
-  // fixed: if "browser.tabs.loadFolderAndReplace" is true don't reuse locked and protected tabs open bookmark after those tabs
+  // fixed: if "extensions.tabmix.loadFolderAndReplace" is true don't reuse locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "flst_id" from reuse tab
   //
@@ -455,7 +455,7 @@ var TMP_Places = {
     var tabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-        Services.prefs.getBoolPref("browser.tabs.loadFolderAndReplace");
+        Tabmix.prefs.getBoolPref("loadFolderAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
         Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
         Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
