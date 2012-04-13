@@ -301,7 +301,7 @@ var tablib = {
         '{',
         '{if (!Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
-        'var isEndTab =',
+        /var isEndTab =|faviconize.o_lockTabSizing/,
         <![CDATA[
           if (TabmixTabbar.widthFitTitle) {
             let tab, tabs = this.tabbrowser.visibleTabs;
