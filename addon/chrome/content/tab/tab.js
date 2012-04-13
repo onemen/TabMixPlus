@@ -532,41 +532,6 @@ var gTMPprefObserver = {
 
     var prefValue, value;
     switch (prefName) {
-      case "extensions.tabmix.linkTarget":
-
-      case "extensions.tabmix.opentabfor.bookmarks":
-      case "extensions.tabmix.opentabfor.history":
-      case "extensions.tabmix.opentabfor.urlbar":
-      case "extensions.tabmix.middlecurrent":
-      case "extensions.tabmix.inversefocusLinks":
-      case "extensions.tabmix.inversefocusOther":
-
-      case "extensions.tabmix.loadNewInBackground":
-      case "extensions.tabmix.loadUrlInBackground":
-      case "extensions.tabmix.loadSearchInBackground":
-      case "extensions.tabmix.loadDuplicateInBackground":
-      case "extensions.tabmix.loadBookmarksGroupInBackground":
-      case "extensions.tabmix.loadFolderAndReplace":
-
-      case "extensions.tabmix.filetype":
-      case "extensions.tabmix.warnAboutClosingTabs.timeout":
-      case "extensions.tabmix.sessions.crashed":
-      case "extensions.tabmix.disableIncompatible":
-
-      case "extensions.tabmix.appearance_tab":
-      case "extensions.tabmix.selected_tab":
-      case "extensions.tabmix.selected_sub_tab1":
-      case "extensions.tabmix.selected_sub_tab2":
-      case "extensions.tabmix.selected_sub_tab3":
-      case "extensions.tabmix.selected_sub_tab4":
-      case "extensions.tabmix.selected_sub_tab5":
-      case "extensions.tabmix.selected_sub_tab6":
-
-      case "extensions.tabmix.reload_time":
-      case "extensions.tabmix.custom_reload_time":
-      case "extensions.tabmix.resume_session_once":
-      case "extensions.tabmix.tabs.closeButtons.delay":
-        break;
       case "extensions.tabmix.dblClickTabbar_changesize":
         document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
         break;
@@ -779,6 +744,10 @@ var gTMPprefObserver = {
       case "extensions.tabmix.closedWinToolsMenu":
         TabmixSessionManager.updateSettings();
         break;
+      case "extensions.tabmix.sessions.save.permissions":
+        for (let i = 0; i < gBrowser.tabs.length; i++)
+          TabmixSessionManager.updateTabProp(gBrowser.tabs[i]);
+        break;
       case "extensions.tabmix.optionsToolMenu":
         document.getElementById("tabmix-menu").hidden = !Services.prefs.getBoolPref(prefName);
         break;
@@ -844,8 +813,16 @@ var gTMPprefObserver = {
         Tabmix.newTabUrls.shift();
         Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
         break;
-      default:
+      case "extensions.tabmix.tabBarMode":
+      case "extensions.tabmix.tabBarSpace":
+      case "extensions.tabmix.hideTabBarButton":
+      case "extensions.tabmix.hideAllTabsButton":
+      case "extensions.tabmix.newTabButton":
+      case "extensions.tabmix.flexTabs":
         TabmixTabbar.updateSettings(false);
+        break;
+      default:
+        break;
     }
 
   },
