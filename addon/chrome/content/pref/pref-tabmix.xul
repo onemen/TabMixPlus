@@ -1067,7 +1067,8 @@
                   <hbox align="center" pack="end">
                     <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
                     <textbox id="ss_postdatabytes"  prefstring="browser.sessionstore.postdata"
-                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
+                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"
+                             oninput="if (this.inputField.value.indexOf('-') != -1) this.inputField.value = -1;"/>
                   </hbox>
                 </vbox>
               </groupbox>
@@ -1114,11 +1115,13 @@
                     </hbox>
                     <groupbox>
                       <!--<caption label="&sm.startup.caption;"/>-->
+                      <label id="sessionpath" prefstring="extensions.tabmix.sessions.onStart.sessionpath" hidden="true"/>
                       <hbox align="center">
                         <label value="&sm.startup;"/>
                         <menulist id="onStart.loadsession" sizetopopup="none" style="width: 15em;"
                                   prefstring="extensions.tabmix.sessions.onStart.loadsession">
                           <menupopup id="onStart.popup"
+                                     oncommand="TM_Options.setSessionpath(this);"
                                      onpopupshowing="TabmixSessionManager.createMenuForDialog(this);">
                             <menuseparator id="onStart.loadsession-startSeparator" hidden="true"/>
                             <menuseparator id="onStart.loadsession-endSeparator" hidden="true"/>

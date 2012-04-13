@@ -3,6 +3,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
 var gPrefs, newTabURLpref, replaceLastTabWithNewTabURLpref;
+var instantApply;
 
 function before_Init() {
   if (Tabmix.isPlatform("Mac")) {
@@ -34,6 +35,8 @@ function before_Init() {
 
   gIncompatiblePane.checkForIncompatible(false);
 
+  instantApply = document.documentElement.instantApply ||
+     Services.prefs.getBoolPref("browser.preferences.instantApply");
   TMP_setButtons(true, true, true);
 
   // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
@@ -55,8 +58,9 @@ function TM_EMinit() {
 
   // add EventListener when we start
   window.addEventListener("unload", setLastTab, false);
-  window.addEventListener("command", TM_enableApply, false);
-  window.addEventListener("input", TM_enableApply, false);
+  window.addEventListener("command", userChangedValue, false);
+  window.addEventListener("input", userChangedValue, false);
+  window.addEventListener("change", userChangedValue, false);
 
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {
@@ -191,15 +195,6 @@ function TM_EMsave(onApply) {
     // we don't supposed to get here
     for (var i = 0; i < gPrefs.length; ++i )
       setPrefByType(gPrefs[i].getAttribute("prefstring"), getValue(gPrefs[i]));
-  }
-
-  // set saved sessionpath if loadsession >=0
-  var TMP_manager_enabled = Tabmix.prefs.getBoolPref("sessions.manager");
-  if (TMP_manager_enabled) {
-    var val = Tabmix.prefs.getIntPref("sessions.onStart.loadsession");
-    var popup = document.getElementById("onStart.popup");
-    var pref = "sessions.onStart.sessionpath";
-    Tabmix.prefs.setCharPref(pref, popup.getElementsByAttribute("value", val)[0].getAttribute("session"));
   }
 
   applyData = [];
@@ -432,16 +427,36 @@ var TM_Options = {
       }
 
       // TMP session pref
-      updatePrefs("sessionManager", useSessionManager);
-      updatePrefs("sessionCrashRecovery", useSessionManager);
+      function sessionPrefs() {
+         updatePrefs("sessionManager", useSessionManager);
+         updatePrefs("sessionCrashRecovery", useSessionManager);
+      }
 
       // sessionstore pref
-      updatePrefs("browser.warnOnRestart", !useSessionManager);
-      updatePrefs("browser.warnOnQuit", !useSessionManager);
-      updatePrefs("resume_from_crash", !useSessionManager);
-      // "browser.startup.page"
-      updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
-      updatePrefs("browserStartupPage1", useSessionManager ? 1 : 3);
+      function sessionstorePrefs() {
+         updatePrefs("browser.warnOnRestart", !useSessionManager);
+         updatePrefs("browser.warnOnQuit", !useSessionManager);
+         updatePrefs("resume_from_crash", !useSessionManager);
+         // "browser.startup.page"
+         updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
+         updatePrefs("browserStartupPage1", useSessionManager ? 1 : 3);
+      }
+
+      if (useSessionManager) {
+        sessionstorePrefs();
+        sessionPrefs();
+      }
+      else {
+        sessionPrefs();
+        sessionstorePrefs()
+      }
+   },
+
+   setSessionpath: function (popup) {
+      var val = popup.parentNode.selectedItem.value;
+      var sessionpath = document.getElementById("sessionpath");
+      sessionpath.value = popup.getElementsByAttribute("value", val)[0].getAttribute("session");
+      updateApplyData(sessionpath);
    },
 
    setUndoCloseCache: function (item) {
@@ -493,7 +508,7 @@ var TM_Options = {
 }
 
 // other settings not in the main option dialog
-var otherPref = ["sessions.onStart.sessionpath","unreadTabreload","reload_time","custom_reload_time",
+var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
                   "filetype","sessions.menu.showext","disableIncompatible","hideIcons","disableF9Key",
                   "styles.currentTab","styles.unreadTab","styles.otherTab","styles.progressMeter"];
 
@@ -905,7 +920,7 @@ function convertSession() {
 }
 
 var applyData = [];
-function TM_enableApply(aEvent) {
+function userChangedValue(aEvent) {
    var item = aEvent.target;
 
    // only allow event from this item to go on....
@@ -939,17 +954,6 @@ function TM_enableApply(aEvent) {
        item = document.getElementById(itemId);
        item.value = aEvent.target.value; // we don't use this for checkbox
      }
-   }
-
-   // fix "-" in ss_postdatabytes to allow "-1"
-   if (item.id == "ss_postdatabytes" && item.value.length > 1) {
-      var val = item.value;
-
-      if (val.length == 2 && val.indexOf("-") == 0 && val != "-1")
-         aEvent.target.value = "-1";
-
-      if (val.length > 2 && val.indexOf("-") == 0)
-         aEvent.target.value = val.substr(2);
    }
 
    if (item.hasAttribute("prefstring"))
@@ -988,8 +992,16 @@ function updateApplyData(item, newValue) {
    var pref = item.getAttribute("prefstring");
    var savedValue = getPrefByType(pref);
 
-   if (savedValue != newValue)
+   if (savedValue != newValue) {
+     // instant apply except when user change min/max width value
+     if (instantApply && item.id != "minWidth" && item.id != "maxWidth") {
+       setPrefByType(pref, newValue);
+       Services.prefs.savePrefFile(null);
+       return;
+     }
+     else
       applyData[pref] = newValue;
+   }
    else if (pref in applyData)
       delete applyData[pref];
 
@@ -1024,17 +1036,29 @@ function TMP_setButtons(disable, clearData, start) {
 
       applyButton.id = "myApply";
       applyButton.className += " tabmix-button";
+      applyButton.setAttribute("icon", "apply");
 
       cancelButton.id = "myCancel";
       cancelButton.className += " tabmix-button";
       docElt.setAttribute("cancelbuttonlabel", cancelButton.label);
+
+      var spacer = document.getAnonymousElementByAttribute(docElt, "anonid", "spacer");
+      spacer.hidden = false;
    }
+
+   // when in instantApply mode apply and accept buttons are hidden except when user
+   // change min/max width value
    applyButton.disabled = disable;
+   applyButton.hidden = instantApply && disable;
    acceptButton.hidden = disable;
-   if (disable)
-      cancelButton.label = docElt.getAttribute("closebuttonlabel");
-   else
-      cancelButton.label = docElt.getAttribute("cancelbuttonlabel");
+
+   // no buttons on Mac except Help in instantApply mode
+   cancelButton.hidden = Tabmix.isPlatform("Mac") && instantApply && disable;
+
+   var action = disable ? "close" : "cancel"
+   cancelButton.label = docElt.getAttribute(action + "buttonlabel");
+   cancelButton.setAttribute("icon", action);
+
    if (clearData)
       applyData = [];
 }
@@ -1043,8 +1067,9 @@ function setLastTab(event) {
 try {
    // remove EventListener when we exit
    window.removeEventListener("unload", setLastTab, false);
-   window.removeEventListener("command", TM_enableApply, false);
-   window.removeEventListener("input", TM_enableApply, false);
+   window.removeEventListener("command", userChangedValue, false);
+   window.removeEventListener("input", userChangedValue, false);
+   window.removeEventListener("change", userChangedValue, false);
    document.getElementById("tabclicking_tabs").removeEventListener("select", tabSelectionChanged, false);
 
    Tabmix.prefs.setIntPref("selected_tab", document.getElementById("tabMixTabBox").selectedIndex);
