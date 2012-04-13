@@ -381,14 +381,12 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
-    let oldCode = Tabmix.isVersion(140) ? "openUILinkIn(url, where, params);" :
-                  "openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);"
     this.newCode("openUILink", openUILink)._replace(
-      oldCode,
+      /(openUILinkIn[^\(]*\([^\)]+)(\))/,
       <![CDATA[
         var win = getTopWin();
         if (win && where == "current") {
-          // don't open blanke tab when we are about to add new livemark
+          // don't open blank tab when we are about to add new livemark
           let _addLivemark = /^feed:/.test(url) &&
              Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
           if (!_addLivemark)
