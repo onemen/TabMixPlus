@@ -532,6 +532,9 @@ var gTMPprefObserver = {
 
     var prefValue, value;
     switch (prefName) {
+      case "extensions.tabmix.titlefrombookmark":
+        TMP_Places.onPreferencChanged(Services.prefs.getBoolPref(prefName));
+        break;
       case "extensions.tabmix.dblClickTabbar_changesize":
         document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
         break;

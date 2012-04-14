@@ -19,7 +19,7 @@ let RenameTab = {
     var browser = gBrowser.getBrowserForTab(aTab);
     this.data.url = browser.contentDocument.baseURI || browser.currentURI.spec;
     var title = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
-        browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"))
+        browser.contentDocument.title, null, aTab);
     this.data.docTitle = title || gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
     this.data.modified = aTab.getAttribute("label-uri") || null;
     if (this.data.modified == this.data.url || this.data.modified == "*")
@@ -109,17 +109,8 @@ let RenameTab = {
     win.Tabmix.setItem(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
-    if (tab.getAttribute("label") != label) {
-      tab.setAttribute("label", label);
-      let gBrowser = this.window.gBrowser;
-      gBrowser._tabAttrModified(tab);
-      if (win.TabmixTabbar.widthFitTitle) {
-        win.TabmixTabbar.updateScrollStatus();
-        win.TabmixTabbar.updateBeforeAndAfter();
-      }
-      if (tab.selected)
-        gBrowser.updateTitlebar();
-    }
+    if (tab.label != label)
+      win.gBrowser.setTabTitle(tab);
 
     this.hidePopup();
   },

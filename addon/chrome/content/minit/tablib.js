@@ -173,8 +173,8 @@ var tablib = {
     Tabmix.newCode("gBrowser.getWindowTitleForBrowser", gBrowser.getWindowTitleForBrowser)._replace(
       'if (!docTitle)',
       'var url = this.contentDocument.baseURI || this.currentURI.spec; \
-       if (this.mCurrentTab.getAttribute("label-uri") == url || this.mCurrentTab.getAttribute("label-uri") == "*") docTitle = this.mCurrentTab.getAttribute("fixed-label"); \
-       else docTitle = TMP_Places.getTitleFromBookmark(url, docTitle, this.mCurrentTab.getAttribute("tabmix_bookmarkId")); \
+       if (TMP_Places.isUserRenameTab(this.mCurrentTab, url)) docTitle = this.mCurrentTab.getAttribute("fixed-label"); \
+       else docTitle = TMP_Places.getTitleFromBookmark(url, docTitle, null, this.mCurrentTab); \
        $&'
     ).toCode();
 
@@ -192,9 +192,8 @@ var tablib = {
     Tabmix.newCode("gBrowser.setTabTitle", gBrowser.setTabTitle)._replace(
       'var title = browser.contentTitle;',
       '$&\
-       var url = browser.contentDocument.baseURI || browser.currentURI.spec;\
-       var currentTab, urlTitle;\
-       [title, currentTab] = tablib.getTabTitle(aTab, url, title);'
+       var urlTitle, url = browser.contentDocument.baseURI || browser.currentURI.spec;\
+       var title = tablib.getTabTitle(aTab, url, title);'
     )._replace(
       'title = textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
       '$&\
@@ -207,7 +206,7 @@ var tablib = {
     )._replace(
       'aTab.crop = crop;',
       '$&\
-       tablib.onTabTitleChanged(aTab, currentTab, title == urlTitle);'
+       tablib.onTabTitleChanged(aTab, title == urlTitle);'
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar
@@ -1414,50 +1413,36 @@ since we can have tab hidden or remove the index can change....
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
     // return the current tab only if it is visible
-    var currentTab;
     if (TabmixTabbar.widthFitTitle) {
       let tabBar = gBrowser.tabContainer;
       let tab = gBrowser.selectedTab;
       if (tabBar.mTabstrip.isElementVisible(tab))
-       currentTab = tab;
+       TMP_Places.currentTab = tab;
     }
-    if (aTab.getAttribute("label-uri") == url || aTab.getAttribute("label-uri") == "*")
+    if (TMP_Places.isUserRenameTab(aTab, url))
       title = aTab.getAttribute("fixed-label");
     else
-      title = TMP_Places.getTitleFromBookmark(url, title, aTab.getAttribute("tabmix_bookmarkId"));
-    return [title, currentTab];
+      title = TMP_Places.getTitleFromBookmark(url, title, null, aTab);
+    return title;
   },
 
-  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aCurrentTab, isUrlTitle) {
+  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internaly, after load already finished and we have remove
     // width attribute
     if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
       return;
 
-    function TMP_onTabTitleChanged_update() {
-      TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
-      if (aCurrentTab) {
-        if (!TabmixTabbar.isMultiRow) {
-          let scrollPosition = gBrowser.tabContainer.mTabstrip.scrollPosition;
-          if (scrollPosition < 100)
-            gBrowser.tabContainer.mTabstrip.scrollPosition = 0;
-        }
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(aCurrentTab, false);
-      }
-    }
-
     if (aTab.hasAttribute("width")) {
       let width = aTab.boxObject.width;
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
-        TMP_onTabTitleChanged_update();
+        TMP_Places.afterTabTitleChanged();
       if (aTab.hasAttribute("newtab"))
         aTab.removeAttribute("newtab");
     }
     else if (aTab.hasAttribute("fadein"))
-      TMP_onTabTitleChanged_update();
+      TMP_Places.afterTabTitleChanged();
   },
 
   // make sure that our function don't break removeTab function

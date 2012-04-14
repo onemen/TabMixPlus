@@ -79,18 +79,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     delete window.bookMarkIds;
   }
 
-  // set title at startup if we are not using session manager
-  // startup page or home page load before bookmarks service
-  if (Tabmix.prefs.getBoolPref("titlefrombookmark")) {
-    for (let i = 0; i < gBrowser.mPanelContainer.childNodes.length ; i++) {
-      let browser = gBrowser.getBrowserAtIndex(i);
-      let aUrl = browser.contentDocument.baseURI;
-      aUrl = (aUrl) ? aUrl : browser.currentURI.spec ;
-      let bookMarkName = TMP_Places.getTitleFromBookmark(aUrl);
-      if (bookMarkName && browser.contentDocument.title != bookMarkName)
-        browser.contentDocument.title = bookMarkName;
-    }
-  }
+  TMP_Places.onDelayedStartup();
 
   Tabmix.navToolbox.init();
 

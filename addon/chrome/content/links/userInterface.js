@@ -454,11 +454,11 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
 
   if (aTab.hasAttribute("tabmix_bookmarkId")) {
     // make sure the id exist before using it
+    let bmitemid = aTab.getAttribute("tabmix_bookmarkId");
     try {
-      let _URI = PlacesUtils.bookmarks.getBookmarkURI(bmitemid);
-      let title = _URI && _URI.spec == aUrl && PlacesUtils.bookmarks.getItemTitle(bmitemid);
+      let title = PlacesUtils.bookmarks.getItemTitle(bmitemid);
     } catch (ex) {
-      aTab.removeAttribute("tabmix_bookmarkId")
+      aTab.removeAttribute("tabmix_bookmarkId");
     }
   }
 }

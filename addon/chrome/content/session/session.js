@@ -203,10 +203,9 @@ var TabmixSessionData = {
          var bmitemid = TMP_SessionStore._getAttribute(tabData, "tabmix_bookmarkId");
          if (bmitemid) {
            // make sure the id exist before using it
-           try {
-             let _URI = PlacesUtils.bookmarks.getBookmarkURI(bmitemid);
-             let title = _URI && _URI.spec == aUrl && PlacesUtils.bookmarks.getItemTitle(bmitemid);
-             aTab.setAttribute("tabmix_bookmarkId", bmitemid);
+            try {
+               let title = PlacesUtils.bookmarks.getItemTitle(bmitemid);
+               aTab.setAttribute("tabmix_bookmarkId", bmitemid);
             } catch (ex) { }
          }
          var faviconized = TMP_SessionStore._getAttribute(tabData, "faviconized");
