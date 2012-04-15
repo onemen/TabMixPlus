@@ -186,8 +186,16 @@ this.log(aMethod)
     return null;
   },
 
+  // Bug 744842 - don't include actual args in error.stack.toString()
+  // since Bug 744842 landed the stack string don't have (arg1, arg2....)
+  // so we can get the name from the start of the string until @
+  get _char() {
+    delete this._char;
+    return this._char = this.isVersion(140) ? "@" : "(";
+  },
+
   _name: function(fn) {
-    let name = fn.substr(0, fn.indexOf("("));
+    let name = fn.substr(0, fn.indexOf(this._char))
     if (!name) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
