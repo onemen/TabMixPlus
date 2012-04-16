@@ -50,6 +50,11 @@ let TabmixSvc = {
 
   topWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
+  },
+  
+  get direct2dDisabled() {
+    delete this.direct2dDisabled;
+    return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
   }
 }
 

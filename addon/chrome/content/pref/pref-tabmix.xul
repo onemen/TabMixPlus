@@ -40,6 +40,7 @@
         ondialoghelp="openHelp();"
         closebuttonlabel="&preferencesCloseButton.label;"
         setingsbuttonlabel="&settings.label;"
+        minheight="501"
         persist="screenX screenY">
 
 
@@ -1023,8 +1024,7 @@
             <tabpanel orient="vertical">
               <checkbox id="browser.warnOnRestart"   prefstring="browser.warnOnRestart" hidden="true"/>
               <checkbox id="browser.warnOnQuit"      prefstring="browser.warnOnQuit"    hidden="true"/>
-              <groupbox>
-                <vbox align="start">
+              <groupbox align="start">
                   <checkbox id="sessionstore_0" label="&ss.enable.label;" prefstring_item="no_prefstring"
                             tooltiptext="&ss.enable.tooltip;"
                             oncommand="TM_Options.setSessionsOptions(this, 'sessionstore_1');"/>
@@ -1038,10 +1038,8 @@
                     </menupopup>
                   </menulist>
                   <checkbox id="resume_from_crash" label="&crashRecovery.enable;" prefstring="browser.sessionstore.resume_from_crash"/>
-                </vbox>
               </groupbox>
-              <groupbox orient="horizontal" flex="1">
-                <vbox>
+              <groupbox flex="1">
                   <label value="&ss.advanced_setting;" class="header"
                          style="text-decoration: underline;color: #CC0000;"/>
                   <description style="max-width: 50em;" class="header">
@@ -1070,21 +1068,18 @@
                              maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"
                              oninput="if (this.inputField.value.indexOf('-') != -1) this.inputField.value = -1;"/>
                   </hbox>
-                </vbox>
               </groupbox>
             </tabpanel>
             <!-- Tabmix Session manager -->
             <tabpanel orient="vertical">
-              <groupbox>
-                <vbox align="start">
+              <groupbox align="start">
                   <checkbox id="sessionstore_1" label="&ss.enable.label;" prefstring_item="no_prefstring"
                             tooltiptext="&ss.enable.tooltip;"
                             oncommand="TM_Options.setSessionsOptions(this, 'sessionstore_0');"/>
                   <separator/>
                   <checkbox id="sessionManager" label="&sessionManger.enable;" prefstring="extensions.tabmix.sessions.manager"/>
-                  <separator style="height: 7px;"/>
+                  <separator id="sessionManager-separator" style="height: 13px;"/>
                   <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" prefstring="extensions.tabmix.sessions.crashRecovery"/>
-                </vbox>
               </groupbox>
               <tabbox subtub="true" value="5" class="groupbox-tabbox" flex="1">
                 <tabs>
@@ -1092,7 +1087,8 @@
                   <tab label="&sm.restore;" class="subtabs"/>
                   <tab label="&sm.preserve;" class="subtabs"/>
                 </tabs>
-                <tabpanels flex="1" class="groupbox-panels">
+                <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels"
+                           style="padding-bottom: 0px; padding-top: 0px;">
                   <tabpanel orient="vertical">
                     <hbox>
                       <groupbox style="min-width: 14.6em">

@@ -47,6 +47,14 @@ function before_Init() {
     replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newtab.url";
     TM_Options.setItem("newTabUrl_1", "prefstring", replaceLastTabWithNewTabURLpref);
   }
+
+  // there are heights diffrenet in our dialog window when Firefox starts with
+  // gfx.direct2d.disabled true or false
+  if (TabmixSvc.direct2dDisabled) {
+    document.documentElement.setAttribute("minheight", 483);
+    document.getElementById("sessionManager-panels").setAttribute("style", "padding-bottom: 4px;");
+    document.getElementById("sessionManager-separator").setAttribute("style", "height: 11px;");
+  }
 }
 
 // load all preferences into the dialog

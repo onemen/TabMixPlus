@@ -1825,6 +1825,10 @@ try { // user report about bug here ... ?
       this.blockedValues.push(26);
     this.updateTabClickingOptions();
 
+    // capture gfx.direct2d.disabled value on first window
+    // see getter at TabmixSvc
+    TabmixSvc.direct2dDisabled;
+
     // verify that all the prefs exist .....
     this.addMissingPrefs();
     this.preventUpdate = false;
