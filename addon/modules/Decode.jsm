@@ -1,6 +1,5 @@
 var EXPORTED_SYMBOLS = ["Decode"];
 
-Components.utils.import("resource://tabmixplus/log.jsm");
 /*
     The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.
     we use this code only for the case that old escape string was left unused after

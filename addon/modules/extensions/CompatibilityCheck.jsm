@@ -30,7 +30,6 @@ const TMP_DLG_SAVE = 0;
 const TMP_DLG_RENAME = 1;
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
-Components.utils.import("resource://tabmixplus/log.jsm");
 
 function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
   this.window = aWindow;

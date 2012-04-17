@@ -4,7 +4,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
-Components.utils.import("resource://tabmixplus/log.jsm");
 
 let AutoReload = {
   init: function() {
