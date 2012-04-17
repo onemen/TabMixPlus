@@ -67,6 +67,7 @@ let RenameTab = {
 
   _doShowPanel: function() {
     var popup = this.panel;
+    popup.addEventListener("keypress", this, false);
     // dock the panel to the tab icon when possible, otherwise show the panel
     // at screen center
     if (this.window.gBrowser.tabContainer.mTabstrip.isElementVisible(this.data.tab))
@@ -115,6 +116,13 @@ let RenameTab = {
     this.hidePopup();
   },
 
+  handleEvent: function (aEvent) {
+    if (aEvent.type == "keypress" &&
+         aEvent.keyCode == Components.interfaces.nsIDOMKeyEvent.DOM_VK_RETURN &&
+         aEvent.target.localName != "button")
+      this.update();
+  },
+
   onpopupshown: function(aEvent) {
     if (aEvent.target == this.panel) {
       var textbox = this._element("tabmixRenametab_titleField");
@@ -125,6 +133,7 @@ let RenameTab = {
 
   onpopuphidden: function(aEvent) {
     if (aEvent.originalTarget == this.panel) {
+      this.panel.removeEventListener("keypress", this, false);
       this.window = null;
       this.panel = null;
       this.data = {};
