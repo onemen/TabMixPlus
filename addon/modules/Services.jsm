@@ -54,7 +54,11 @@ let TabmixSvc = {
   
   get direct2dDisabled() {
     delete this.direct2dDisabled;
-    return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
+    try {
+      // this pref exist only in windows
+      return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
+    } catch(ex) {}
+    return this.direct2dDisabled = false;
   }
 }
 

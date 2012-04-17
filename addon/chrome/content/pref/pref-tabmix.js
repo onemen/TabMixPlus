@@ -55,6 +55,8 @@ function before_Init() {
     document.getElementById("sessionManager-panels").setAttribute("style", "padding-bottom: 4px;");
     document.getElementById("sessionManager-separator").setAttribute("style", "height: 11px;");
   }
+  if (Tabmix.isPlatform("Linux"))
+    document.getElementById("sessionManager-panels").setAttribute("linux", "true");
 }
 
 // load all preferences into the dialog

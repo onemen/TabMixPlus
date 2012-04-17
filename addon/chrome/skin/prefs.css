@@ -223,3 +223,14 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
 .uri-element[disabled="true"] .textbox-input {
   visibility: collapse;
 }
+
+#sessionManager-panels[linux] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+#sessionManager-panels[linux] groupbox {
+  margin: 2px 5px;
+  padding: 0 5px;
+}
