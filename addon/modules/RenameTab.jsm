@@ -17,7 +17,7 @@ let RenameTab = {
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
     var browser = gBrowser.getBrowserForTab(aTab);
-    this.data.url = browser.contentDocument.baseURI || browser.currentURI.spec;
+    this.data.url = browser.currentURI.spec;
     var title = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
         browser.contentDocument.title, null, aTab);
     this.data.docTitle = title || gBrowser.mStringBundle.getString("tabs.emptyTabTitle");

@@ -172,7 +172,7 @@ var tablib = {
 
     Tabmix.newCode("gBrowser.getWindowTitleForBrowser", gBrowser.getWindowTitleForBrowser)._replace(
       'if (!docTitle)',
-      'var url = this.contentDocument.baseURI || this.currentURI.spec; \
+      'var url = this.currentURI.spec; \
        if (TMP_Places.isUserRenameTab(this.mCurrentTab, url)) docTitle = this.mCurrentTab.getAttribute("fixed-label"); \
        else docTitle = TMP_Places.getTitleFromBookmark(url, docTitle, null, this.mCurrentTab); \
        $&'
@@ -192,8 +192,7 @@ var tablib = {
     Tabmix.newCode("gBrowser.setTabTitle", gBrowser.setTabTitle)._replace(
       'var title = browser.contentTitle;',
       '$&\
-       var urlTitle, url = browser.contentDocument.baseURI || browser.currentURI.spec;\
-       var title = tablib.getTabTitle(aTab, url, title);'
+       var urlTitle, title = tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
     )._replace(
       'title = textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
       '$&\

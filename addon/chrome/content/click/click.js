@@ -460,7 +460,7 @@ var TabmixContext = {
       let titleNotReady;
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
-        let url = browser.contentDocument.baseURI || browser.currentURI.spec;
+        let url = browser.currentURI.spec;
         let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, null, aTab);
         if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
           titleNotReady = true;

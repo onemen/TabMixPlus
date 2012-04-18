@@ -28,10 +28,7 @@ var TMP_SessionStore = {
      let selectedTab = aUndoItem.tabs[aUndoItem.selected - 1];
      if (!selectedTab.entries || selectedTab.entries.length == 0)
        return;
-     let activeIndex = (selectedTab.index || selectedTab.entries.length) - 1;
-     if (activeIndex >= selectedTab.entries.length)
-       activeIndex = selectedTab.entries.length - 1;
-     let tabData = selectedTab.entries[activeIndex];
+     let tabData = this.getActiveEntryData(selectedTab);
      let url = selectedTab.attributes["label-uri"];
      if (url == tabData.url || url == "*")
        aUndoItem.title = selectedTab.attributes["fixed-label"];
@@ -40,6 +37,14 @@ var TMP_SessionStore = {
        if (aUndoItem.title == "about:blank")
          aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
      }
+   },
+
+   // get nsSessionStore active entry data.
+   getActiveEntryData: function TMP_ss_getActiveEntryData(aData) {
+     let activeIndex = (aData.index || aData.entries.length) - 1;
+     if (activeIndex >= aData.entries.length)
+       activeIndex = aData.entries.length - 1;
+     return aData.entries[activeIndex] || {};
    },
 
    /**
@@ -228,7 +233,7 @@ var TMP_SessionStore = {
    *
    * @param aUri      string value - url address
    *
-   * @param aTitle      string value - title
+   * @param aTitle    string value - title
    *
    * @returns         tab title - string.
    */
@@ -304,9 +309,7 @@ var TMP_ClosedTabs = {
    },
 
    getUrl: function ct_getUrl(aTabData) {
-      var history = aTabData.state;
-      var activeIndex = (history.index || history.entries.length) - 1;
-      return history.entries[activeIndex].url;
+      return TMP_SessionStore.getActiveEntryData(aTabData.state).url;
    },
 
    getTitle: function ct_getTitle(aTabData, aUri) {

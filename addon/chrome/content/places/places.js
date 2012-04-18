@@ -561,8 +561,12 @@ var TMP_Places = {
            return PlacesUtils.bookmarks.getItemTitle(aItemId);
          }
       } catch (ex) { }
-      if (aTab)
+      if (aTab) {
          aTab.removeAttribute("tabmix_bookmarkId");
+         // get title for pending tab from SessionStore
+         if (aTab.hasAttribute("pending") && aTab.linkedBrowser.__SS_restoreState == 1)
+           return TMP_SessionStore.getActiveEntryData(aTab.linkedBrowser.__SS_data).title || null;
+      }
       return null;
    },
 
@@ -676,8 +680,7 @@ var TMP_Places = {
     // startup page(s) or home page(s) load before bookmarks service
     for (let i = 0; i < gBrowser.tabs.length ; i++) {
       let browser = gBrowser.getBrowserAtIndex(i);
-      let url = browser.contentDocument.baseURI || browser.currentURI.spec;
-      let bookMarkName = this.getTitleFromBookmark(url);
+      let bookMarkName = this.getTitleFromBookmark(browser.currentURI.spec);
       if (bookMarkName && browser.contentDocument.title != bookMarkName)
         browser.contentDocument.title = bookMarkName;
     }
