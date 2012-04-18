@@ -322,7 +322,7 @@ var TMP_ClosedTabs = {
       if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
          return false;
 
-      TabmixAllTabs.beforeCommonList(aPopup);
+      TabmixAllTabs.beforeCommonList(aPopup, true);
 
       // populate menu
       var closedTabs = this.getClosedTabData;

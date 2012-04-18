@@ -851,7 +851,7 @@ var TabmixAllTabs = {
     return true;
   },
 
-  beforeCommonList: function TMP_beforeCommonList(popup) {
+  beforeCommonList: function TMP_beforeCommonList(popup, aCloseTabsPopup) {
     var item = popup.parentNode;
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.removeAttribute("tooltiptext");
@@ -865,8 +865,10 @@ var TabmixAllTabs = {
       popup.removeChild(menuItem);
     }
 
-    gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
-    gBrowser.tabContainer.addEventListener("TabClose", this, false);
+    if (!aCloseTabsPopup) {
+      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
+      gBrowser.tabContainer.addEventListener("TabClose", this, false);
+    }
     popup.addEventListener("DOMMenuItemActive", this, false);
     popup.addEventListener("DOMMenuItemInactive", this, false);
   },
