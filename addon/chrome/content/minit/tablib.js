@@ -1413,7 +1413,8 @@ since we can have tab hidden or remove the index can change....
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
     // return the current tab only if it is visible
-    if (TabmixTabbar.widthFitTitle) {
+    if (TabmixTabbar.widthFitTitle &&
+        (!TMP_Places.inUpdateBatch || !TMP_Places.currentTab)) {
       let tabBar = gBrowser.tabContainer;
       let tab = gBrowser.selectedTab;
       if (tabBar.mTabstrip.isElementVisible(tab))
@@ -1443,6 +1444,9 @@ since we can have tab hidden or remove the index can change....
     }
     else if (aTab.hasAttribute("fadein"))
       TMP_Places.afterTabTitleChanged();
+    // don't keep unnecessary reference to current tab
+    if (!TMP_Places.inUpdateBatch)
+      TMP_Places.currentTab = null;
   },
 
   // make sure that our function don't break removeTab function

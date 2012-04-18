@@ -803,6 +803,8 @@ var TMP_Places = {
       this._tabTitleChanged = false;
       this.afterTabTitleChanged(this.currentTab);
     }
+    else
+      this.currentTab = null;
   },
 
   onBeforeItemRemoved: function () {},
