@@ -146,14 +146,14 @@ function TM_EMinit() {
   // rtl update
   var direction = window.getComputedStyle(document.getElementById("pref-tabmix"), null).direction;
   if (direction == "rtl") {
-    let rigth = document.getElementById("newTabButton.posiotion.right");
+    let right = document.getElementById("newTabButton.posiotion.right");
     let left = document.getElementById("newTabButton.posiotion.left");
-    let [rigthLabel, leftLabel] = [rigth.label, left.label];
-    [rigth.label, left.label] = [leftLabel, rigthLabel];
+    let [rightLabel, leftLabel] = [right.label, left.label];
+    [right.label, left.label] = [leftLabel, rightLabel];
 
     let focusTab = document.getElementById("focusTab").firstChild.childNodes;
-    [rigthLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
-    [focusTab[2].label, focusTab[1].label] = [leftLabel, rigthLabel];
+    [rightLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
+    [focusTab[2].label, focusTab[1].label] = [leftLabel, rightLabel];
     // "opener/left"
     focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
 
