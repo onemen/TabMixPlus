@@ -79,7 +79,6 @@ pref("extensions.tabmix.hideTabbar", 1); // default to browser.tabs.autoHide == 
 pref("extensions.tabmix.hideTabbar", 0); // default to browser.tabs.autoHide == false
 pref("extensions.tabmix.tabBarPosition", 0);
 
-pref("extensions.tabmix.progressMeter", true);
 /*
 2010-03-07
 replaced with .locked and .protected
@@ -88,12 +87,16 @@ pref("extensions.tabmix.extraIcons", true);
 pref("extensions.tabmix.extraIcons.locked", true);
 pref("extensions.tabmix.extraIcons.protected", true);
 pref("extensions.tabmix.extraIcons.autoreload", true);
+
+pref("extensions.tabmix.currentTab", false);
+pref("extensions.tabmix.unloadedTab", true);
 pref("extensions.tabmix.unreadTab", true);
 pref("extensions.tabmix.unreadTabreload", true);
-pref("extensions.tabmix.currentTab", false);
-
 pref("extensions.tabmix.otherTab", false);
+pref("extensions.tabmix.progressMeter", true);
+
 pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');

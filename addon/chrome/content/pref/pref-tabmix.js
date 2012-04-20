@@ -72,6 +72,9 @@ function TM_EMinit() {
   window.addEventListener("input", userChangedValue, false);
   window.addEventListener("change", userChangedValue, false);
 
+  if (!Tabmix.isVersion(90))
+    TM_Options.setItem("unloadedTab", "style", "visibility: hidden;");
+
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {
     document.getElementById("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");

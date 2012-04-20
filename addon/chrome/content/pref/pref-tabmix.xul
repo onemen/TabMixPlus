@@ -560,17 +560,19 @@
           <tabpanel orient="vertical">
             <groupbox id="tabappearance" flex="1" orient="horizontal">
               <caption label="&highlight.label;"/>
-              <vbox align="start">
+              <vbox flex="1">
                 <!-- Hightlight Current tab -->
                 <checkbox id="currentTab" label="&currenttab.style.label;" prefstring="extensions.tabmix.currentTab"/>
-                <hbox>
-                  <!-- Highlight unread tabs -->
-                  <checkbox id="unreadTab" label="&unreadtabs.style.label;" prefstring="extensions.tabmix.unreadTab"/>
-                  <!-- Highlight other tabs -->
-                  <checkbox id="otherTab" label="&othertabs.style.label;" prefstring="extensions.tabmix.otherTab"/>
-                </hbox>
+                <!-- Highlight unread tabs -->
+                <checkbox id="unreadTab" label="&unreadtabs.style.label;" prefstring="extensions.tabmix.unreadTab"/>
               </vbox>
-              <vbox style="-moz-margin-start: 3em;">
+              <vbox>
+                <!-- Hightlight Unloaded tabs -->
+                <checkbox id="unloadedTab" label="&unloadedtabs.style.label;" prefstring="extensions.tabmix.unloadedTab"/>
+                <!-- Highlight other tabs -->
+                <checkbox id="otherTab" label="&othertabs.style.label;" prefstring="extensions.tabmix.otherTab"/>
+              </vbox>
+              <vbox flex="1" align="end">
                 <button id="advancedAppearance" label="&setstyles.label;…"
                         oncommand="window.openDialog('chrome://tabmixplus/content/pref/pref-appearance.xul', 'advanceAppearanceDialog', 'modal,titlebar,toolbar');"/>
               </vbox>

@@ -596,11 +596,13 @@ var gTMPprefObserver = {
         break;
       // tab appearnce
       case "extensions.tabmix.currentTab":
+      case "extensions.tabmix.unloadedTab":
       case "extensions.tabmix.unreadTab":
       case "extensions.tabmix.otherTab":
         this.toggleTabStyles(prefName);
         break;
       case "extensions.tabmix.styles.currentTab":
+      case "extensions.tabmix.styles.unloadedTab":
       case "extensions.tabmix.styles.unreadTab":
       case "extensions.tabmix.styles.otherTab":
       case "extensions.tabmix.styles.progressMeter":
@@ -872,12 +874,20 @@ var gTMPprefObserver = {
       currentTab:    { text:  '.tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"]' + tabTextRule,
                        bg  :  '.tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],'+
                               '.tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' + backgroundRule},
-      unreadTab:     { text:  '.tabbrowser-tabs[useUnreadColor] .tabbrowser-tab:not([selected="true"]):not([visited])' + tabTextRule,
-                       bg:    '.tabbrowser-tabs[useUnreadBGColor] .tabbrowser-tab:not([selected="true"]):not([visited])' + backgroundRule},
-      otherTab:      { text:  '.tabbrowser-tabs[useOtherColor]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
-                              '.tabbrowser-tabs[useOtherColor][unreadTab] .tabbrowser-tab:not([selected="true"])[visited]' + tabTextRule,
-                       bg:    '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]) .tabbrowser-tab:not([selected="true"]),' +
-                              '.tabbrowser-tabs[useOtherBGColor][unreadTab] .tabbrowser-tab:not([selected="true"])[visited]' + backgroundRule},
+      unloadedTab:   { text:  '.tabbrowser-tabs[useUnloadedColor] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
+                       bg:    '.tabbrowser-tabs[useUnloadedBGColor] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
+      unreadTab:     { text:  '.tabbrowser-tabs[useUnreadColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
+                              '.tabbrowser-tabs[useUnreadColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
+                       bg:    '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]),' +
+                              '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
+      otherTab:      { text:  '.tabbrowser-tabs[useOtherColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
+                              '.tabbrowser-tabs[useOtherColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
+                              '.tabbrowser-tabs[useOtherColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
+                              '.tabbrowser-tabs[useOtherColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
+                       bg:    '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
+                              '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
+                              '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
+                              '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
       progressMeter: { bg:    '.tabbrowser-tabs[useProgressColor] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
     }
 
@@ -886,17 +896,30 @@ var gTMPprefObserver = {
         '.tabbrowser-tabs[useCurrentBGColor] .tab-background-start[selected="true"],' +
         '.tabbrowser-tabs[useCurrentBGColor] .tab-background-middle[selected="true"],' +
         '.tabbrowser-tabs[useCurrentBGColor] .tab-background-end[selected="true"]' + backgroundRule;
+      styleRules.unloadedTab.bg =
+        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-start:not([selected="true"])[pending],' +
+        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-middle:not([selected="true"])[pending],' +
+        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
       styleRules.unreadTab.bg =
-        '.tabbrowser-tabs[useUnreadBGColor] .tab-background-start:not([selected="true"]):not([visited]),' +
-        '.tabbrowser-tabs[useUnreadBGColor] .tab-background-middle:not([selected="true"]):not([visited]),' +
-        '.tabbrowser-tabs[useUnreadBGColor] .tab-background-end:not([selected="true"]):not([visited])' + backgroundRule;
+        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-start:not([visited]),' +
+        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-middle:not([visited]),' +
+        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-end:not([visited]),' +
+        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
+        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
+        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
       styleRules.otherTab.bg =
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]) .tab-background-start:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]) .tab-background-middle:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]) .tab-background-end:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab] .tab-background-start:not([selected="true"])[visited],' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab] .tab-background-middle:not([selected="true"])[visited],' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab] .tab-background-end:not([selected="true"])[visited]' + backgroundRule;
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-start:not([selected="true"]),' +
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-middle:not([selected="true"]),' +
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-end:not([selected="true"]),' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
+        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
+        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
     }
     else {
       styleRules.currentTab.bgTabsontop =
@@ -907,7 +930,7 @@ var gTMPprefObserver = {
 
     // Charter Toolbar extension add Object.prototype.toJSONString
     // that break the use      "for (var rule in styleRules)"
-    var rules = ["currentTab", "unreadTab", "otherTab", "progressMeter"];
+    var rules = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
     for (let j = 0; j < rules.length; j++) {
       let rule = rules[j];
       this.setTabStyles("extensions.tabmix.styles." + rule, true);
@@ -1201,12 +1224,16 @@ var gTMPprefObserver = {
   },
 
   defaultStylePrefs: {    currentTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
+                          unloadedTab: {italic:true,bold:false,underline:false,text:true,textColor:'rgba(204,0,0,1)',bg:true,bgColor:'rgba(236,233,216,1)'},
                            unreadTab: {italic:true,bold:false,underline:false,text:true,textColor:'rgba(204,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
                             otherTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
                        progressMeter: {bg:true,bgColor:'rgba(170,170,255,1)'}},
 
   tabStylePrefs: {},
   setTabStyles: function TMP_PO_setTabStyles(prefName, start) {
+    if (!Tabmix.isVersion(90) && prefName == "extensions.tabmix.styles.unloadedTab")
+      return;
+
     var ruleName = prefName.split(".").pop();
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
@@ -1332,6 +1359,9 @@ var gTMPprefObserver = {
   },
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
+    if (!Tabmix.isVersion(90) && prefName == "unloadedTab")
+      return;
+
     var ruleName = prefName.split(".").pop();
 
     var attrib = (ruleName.charAt(0).toUpperCase() + ruleName.substr(1)).replace("Tab","");
@@ -1340,9 +1370,9 @@ var gTMPprefObserver = {
     var prefValues = this.tabStylePrefs[ruleName];
 
     var control = Tabmix.prefs.getBoolPref(ruleName);
-    // we need to set unreadTab when it is on
-    // in order to control other tabs that aren't read
-    if (ruleName == "unreadTab")
+    // we need to set unreadTab & unloadedTab when they are on
+    // in order to control other tabs that aren't read or unloaded
+    if (ruleName == "unreadTab" || ruleName == "unloadedTab")
       Tabmix.setItem(tabBar, ruleName,                control || null);
 
     // set bold, italic and underline only wehn we control the sytle
@@ -1355,10 +1385,10 @@ var gTMPprefObserver = {
     Tabmix.setItem(tabBar, "use"+ attrib + "BGColor", control && prefValues.bg || null);
 
     // changeing bold attribute can change tab width and effect tabBar scroll status
-    if (currentBoldStyle != control && prefValues.bold) {
-      TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
-    }
+    // also when we turn off unloaded, unread and other style diffrent style can take
+    // control with a diffrent bold attribute
+    TabmixTabbar.updateScrollStatus();
+    TabmixTabbar.updateBeforeAndAfter();
   },
 
   setProgressMeter: function () {
@@ -1934,9 +1964,12 @@ var TabmixProgressListener = {
         if (tabsCount == 1)
           this.mTabBrowser.tabContainer.adjustTabstrip(true);
         tab.removeAttribute("tab-progress");
-        if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
-              !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")
-          tab.removeAttribute("visited");
+        if (!Tabmix.isBlankPageURL(aRequest.QueryInterface(Ci.nsIChannel).URI.spec)) {
+          aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
+          if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
+                !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")
+            tab.removeAttribute("visited");
+        }
         // see gBrowser.openLinkWithHistory in tablib.js
         if (tab.hasAttribute("dontremovevisited"))
           tab.removeAttribute("dontremovevisited")
@@ -1947,8 +1980,6 @@ var TabmixProgressListener = {
           if (tab.hasAttribute("width"))
             tablib.onTabTitleChanged(tab);
         }
-        if (!Tabmix.isBlankPageURL(aRequest.QueryInterface(Ci.nsIChannel).URI.spec))
-           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
       }
       if ((aStateFlags & nsIWebProgressListener.STATE_IS_WINDOW) &&
             (aStateFlags & nsIWebProgressListener.STATE_STOP)) {

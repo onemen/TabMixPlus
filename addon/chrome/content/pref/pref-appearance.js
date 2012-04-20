@@ -6,6 +6,7 @@ var TMPstyles = {
     catch (ex) { index = 0; }
     document.getElementById("stylestabs").selectedIndex = index;
 
+    document.getElementById("_unloadedTab").hidden = !Tabmix.isVersion(90);
 
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
@@ -20,14 +21,14 @@ var TMPstyles = {
   },
 
   cancel: function () {
-    Array.forEach(["currentTab", "unreadTab", "otherTab", "progressMeter"], function(aID) {
-      document.getElementById(aID)._ondialogcancel();
+    Array.forEach(document.getElementById("stylespanels").childNodes, function(panel) {
+      document.getElementById(panel.id)._ondialogcancel();
     });
     this.save();
   },
 
   openHelp: function () {
-    var subPage = ["Current_Tab", "Unread_tabs", "Other_Tabs", "Progress_meter_on_tabs"];
+    var subPage = ["Current_Tab", "Unloaded_tabs", "Unread_tabs", "Other_Tabs", "Progress_meter_on_tabs"];
     var index = document.getElementById("AppearanceTabBox").selectedIndex;
     window.opener.openHelp("Customize_Styles_-_" + subPage[index]);
   }

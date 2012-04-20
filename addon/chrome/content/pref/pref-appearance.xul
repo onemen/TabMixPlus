@@ -28,12 +28,14 @@
    <tabbox id="AppearanceTabBox">
      <tabs id="stylestabs">
       <tab label="&currentTab.label;" id="_currentTab" />
+      <tab label="&unloadedTabs.label;" id="_unloadedTab" />
       <tab label="&unreadTab.label;" id="_unreadTab" />
       <tab label="&otherTabs.label;" id="_otherTab" />
       <tab label="&progressMeter.label;" id="_progressMeter" />
      </tabs>
      <tabpanels flex="1" id="stylespanels">
        <tabpanel id="currentTab"/>
+       <tabpanel id="unloadedTab"/>
        <tabpanel id="unreadTab"/>
        <tabpanel id="otherTab"/>
        <tabpanel id="progressMeter" _hidebox="true" _hidespacer="false"/>
