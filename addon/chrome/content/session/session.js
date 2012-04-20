@@ -3294,7 +3294,7 @@ try{
       for (j = historyStart; j < historyEnd; j++) {
          try {
             historyEntry = tabState.entries[j];
-            history.push(encodeURI(historyEntry.title));
+            history.push(encodeURI(historyEntry.title || ""));
             history.push(historyEntry.url);
             history.push(historyEntry.scroll || "0,0"); // not in use yet
          } catch (ex) {Tabmix.assert(ex, "saveTabHistory error at index " + j); }
