@@ -42,27 +42,30 @@ let RenameTab = {
       return;
     }
 
-    popup = this.window.document.createElement("panel");
+    popup = this.panel = this.window.document.createElement("panel");
     popup._overlayLoaded = false;
     popup.id = "tabmixRenametab_panel";
     this._element("mainPopupSet").appendChild(popup);
     this.window.document.loadOverlay(
-      "chrome://tabmixplus/content/minit/renameTab.xul",
-      (function (aSubject, aTopic, aData) {
-        popup._overlayLoaded = true;
-        popup.hidden = false;
-        this.panel = popup;
-
-        // reorder buttons for MacOS & Linux
-        if (this.window.Tabmix.isPlatform("Linux") || this.window.Tabmix.isPlatform("Mac")) {
-          let buttons = this._element("tabmixRenametab_buttons");
-          buttons.removeAttribute("pack");
-          buttons.setAttribute("dir", "rtl");
-        }
-
-        this._doShowPanel();
-      }).bind(this)
+      "chrome://tabmixplus/content/minit/renameTab.xul", this
     );
+  },
+
+  observe: function(aSubject, aTopic, aData) {
+    if (aTopic != "xul-overlay-merged")
+      return;
+
+    this.panel._overlayLoaded = true;
+    this.panel.hidden = false;
+
+    // reorder buttons for MacOS & Linux
+    if (this.window.Tabmix.isPlatform("Linux") || this.window.Tabmix.isPlatform("Mac")) {
+      let buttons = this._element("tabmixRenametab_buttons");
+      buttons.removeAttribute("pack");
+      buttons.setAttribute("dir", "rtl");
+    }
+
+    this._doShowPanel();
   },
 
   _doShowPanel: function() {
