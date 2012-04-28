@@ -40,7 +40,7 @@
 <!ENTITY newtab.blank "Blank Page">
 <!ENTITY newtab.home "Home Page">
 <!ENTITY newtab.current "Current Page">
-<!ENTITY newtab.duplicate "Duplicate Page">
+<!ENTITY newtab.duplicate "Duplicate Tab with history">
 <!ENTITY newtab.location.1 "New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
