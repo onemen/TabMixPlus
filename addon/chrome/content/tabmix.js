@@ -49,6 +49,10 @@ Tabmix.startup = function TMP_startup() {
     this.setItem("TabsToolbar", "onStartNewTabButton", null);
     if (stripIsHidden)
       gBrowser.tabContainer.visible = false;
+
+    // height shrink to actual size when the tabbar is in display: block (multi-row)
+    if (Tabmix.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
+      tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
   }
 }
 
