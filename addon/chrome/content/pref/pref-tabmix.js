@@ -1188,13 +1188,18 @@ function toolbarButtons(aWindow) {
   }
   onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
   onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
-  // Display > Tab bar
-  let newTabButton = aWindow.document.getElementById("new-tab-button");
-  let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
 
-  TM_Options.setItem("newTabButton", "disableObserver", !enablePosition || null);
-  TM_Options.setItem("newTabButton", "disabled", !enablePosition || null);
-  TM_Options.disabled("newTabButton", !enablePosition);
+  // Display > Tab bar
+  function updateDisabledState(buttonID, itemID) {
+    let button = aWindow.document.getElementById(buttonID);
+    let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
+
+    TM_Options.setItem(itemID, "disableObserver", !enablePosition || null);
+    TM_Options.setItem(itemID, "disabled", !enablePosition || null);
+    TM_Options.disabled(itemID, !enablePosition);
+  }
+  updateDisabledState("new-tab-button", "newTabButton");
+  updateDisabledState("alltabs-button", "hideAllTabsButton");
 }
 
 function openHelp(aPageaddress) {
