@@ -261,7 +261,6 @@ Tabmix.contentAreaClick = {
         let isHttps = /^https/.test(href);
         if (isGmail || isHttps)
            return ["default", true];
-
         return ["current", true];
     }
 
@@ -686,7 +685,7 @@ Tabmix.contentAreaClick = {
    *
    */
   openExSiteLink: function TMP_openExSiteLink(linkNode, currentDomain, targetDomain, targetPref) {
-    if (targetPref != 2 || Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+    if (targetPref != 2 || Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
 ///XXX if we check this in every function do it one time at the start
@@ -716,7 +715,7 @@ Tabmix.contentAreaClick = {
               false to load link in current tab
    */
   openTabfromLink: function TMP_openTabfromLink(event, linkNode, href) {
-    if (Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+    if (Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
     if (this.GoogleComLink(linkNode))

@@ -481,10 +481,11 @@ var gTMPprefObserver = {
     if ("TreeStyleTabBrowser" in window)
       this.OBSERVING.push("extensions.treestyletab.tabbar.position");
 
-    if (Tabmix.isVersion(120))
+    if (Tabmix.isVersion(120)) {
       this.OBSERVING.push("browser.tabs.onTop");
-    if (typeof isBlankPageURL == "function")
-      this.OBSERVING.push("browser.newtab.url");
+      if (!Tabmix.isVersion(130))
+        this.OBSERVING.push("browser.newtab.url");
+    }
 
     try {
       // add Observer
@@ -814,9 +815,8 @@ var gTMPprefObserver = {
           gBrowser.tabContainer.updateVerticalTabStrip();
         }
         break;
-      case "browser.newtab.url":
-        Tabmix.newTabUrls.shift();
-        Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
+      case "browser.newtab.url": // just for Firefox 12
+        BROWSER_NEW_TAB_URL = Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
         break;
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":

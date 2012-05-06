@@ -344,8 +344,6 @@ var TMP_eventListener = {
       XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
         return BROWSER_NEW_TAB_URL;
       });
-      Tabmix.newTabUrls.shift();
-      Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
       Tabmix.newTabURLpref = "browser.newtab.url";
     }
     else {
