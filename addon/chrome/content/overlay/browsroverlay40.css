@@ -177,3 +177,8 @@ so display: none !important; is not hide the button */
   min-width: 1px;
   min-height: 1px;
 }
+
+/* Firefox 12+ hide alltabs-button when it is after the tabbar and tabs are not overflow */
+#tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
+ visibility: visible !important;
+}
