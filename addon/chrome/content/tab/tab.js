@@ -824,6 +824,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.hideAllTabsButton":
       case "extensions.tabmix.newTabButton":
       case "extensions.tabmix.flexTabs":
+      case "extensions.tabmix.setDefault":
         TabmixTabbar.updateSettings(false);
         break;
       default:
