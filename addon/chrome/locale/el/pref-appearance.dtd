@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Προσαρμογή στυλ">
 <!ENTITY currentTab.label "Τρέχουσα καρτέλα">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Μη αναγνωσμένες καρτέλες">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">

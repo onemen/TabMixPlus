@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Pielāgot stilus">
 <!ENTITY currentTab.label "Pašreizējā cilne">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Nelasītās cilnes">
 <!ENTITY otherTabs.label "Citas cilnes">
 <!ENTITY italic.label "Slīpraksts">

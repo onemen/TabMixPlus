@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Настройка стилей">
 <!ENTITY currentTab.label "Текущая вкладка">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Непрочитанные вкладки">
 <!ENTITY otherTabs.label "Другие вкладки">
 <!ENTITY italic.label "Курсив">

@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Personalizar estilos">
 <!ENTITY currentTab.label "Aba atual">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Abas não lidas">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">

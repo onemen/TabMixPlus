@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
 <!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Aba atual">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Abas não lidas">
 <!ENTITY othertabs.style.label "Outras abas">
 <!ENTITY setstyles.label "Personalizar estilos">

@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Mausrad-Verzögerung (Intervall zwischen Scroll-Schritten)">
 <!ENTITY highlight.label "Hervorheben">
 <!ENTITY currenttab.style.label "Aktiven Tab">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Ungelesene Tabs">
 <!ENTITY othertabs.style.label "Andere Tabs">
 <!ENTITY setstyles.label "Aussehen anpassen">

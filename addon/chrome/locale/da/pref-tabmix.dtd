@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">
 <!ENTITY highlight.label "Fremhæv:">
 <!ENTITY currenttab.style.label "Nuværende faneblad">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Ulæste faneblade">
 <!ENTITY othertabs.style.label "Andre faneblade">
 <!ENTITY setstyles.label "Brugerdefineret stil">

@@ -1,5 +1,6 @@
 <!ENTITY styles.label "設定樣式">
 <!ENTITY currentTab.label "目前的分頁">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "未讀的分頁">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">

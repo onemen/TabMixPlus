@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
 <!ENTITY highlight.label "Belirginleştir:">
 <!ENTITY currenttab.style.label "Geçerli sekmeyi">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Bakılmamış sekmeleri">
 <!ENTITY othertabs.style.label "Diğer sekmeleri">
 <!ENTITY setstyles.label "Stilleri özelleştir">

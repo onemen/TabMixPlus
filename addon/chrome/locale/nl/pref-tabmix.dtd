@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
 <!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
 <!ENTITY highlight.label "Attentie vragen voor:">
 <!ENTITY currenttab.style.label "Huidige tabblad">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Ongelezen tabbladen">
 <!ENTITY othertabs.style.label "Overige tabbladen">
 <!ENTITY setstyles.label "Stijlen aanpassen">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "Tab Mix Plus menutoevoegingen met middelklikken verwijderen">
 <!ENTITY lockTabSizingOnClose.label "Bij sluiten tabblad mogen andere tabbladen niet van grootte veranderen totdat de cursor buiten de werkbalk komt">
 <!ENTITY removeEntries.tooltip "O.a. gesloten tabbladen, gesloten vensters en opgeslagen sessies">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Tijdens het scrollen van de tabbladenbalk">
+<!ENTITY tabbarscrolling.holdShift.label "Om tussen deze opties te wisselen, de Shift-toets tijdens het scrollen ingedrukt houden">
+<!ENTITY tabbarscrolling.selectTab.label "Geselecteerd tabblad wijzigen">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Door alle tabbladen scrollen">
+<!ENTITY tabbarscrolling.inverse.label "Scrol richting omkeren">
 <!ENTITY double.label "Dubbelklikken">
 <!ENTITY middle.label "Middelklikken">
 <!ENTITY ctrl.label "Ctrl-klikken">

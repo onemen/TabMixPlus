@@ -1,5 +1,6 @@
 <!ENTITY styles.label "התאם עיצוב">
 <!ENTITY currentTab.label "לשונית נוכחית">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "לשוניות שלא נקראו">
 <!ENTITY otherTabs.label "לשוניות אחרות">
 <!ENTITY italic.label "נטוי">

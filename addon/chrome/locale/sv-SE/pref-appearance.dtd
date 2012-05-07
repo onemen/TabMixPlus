@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Anpassa stilar">
 <!ENTITY currentTab.label "Aktuell flik">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Olästa flikar">
 <!ENTITY otherTabs.label "Andra flikar">
 <!ENTITY italic.label "Kursiv">

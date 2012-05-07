@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Kezdőlap">
 <!ENTITY newtab.current "Aktuális oldal">
 <!ENTITY newtab.duplicate "Lap megkettőzése">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Új lapok oldal">
+<!ENTITY location.label.1 "Webcím">
 <!ENTITY focusContent.label "Fókusz a tartalomra nem üres oldal esetén">
 <!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
 <!ENTITY openOtherTabNext.label "Lapok megnyitása az aktuális után">
@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY highlight.label "Kijelölés">
 <!ENTITY currenttab.style.label "Aktuális lap">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Olvasatlan lapok">
 <!ENTITY othertabs.style.label "Egyéb lapok">
 <!ENTITY setstyles.label "Testreszabott stílusok">

@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
 <!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
 <!ENTITY maxrow.label "Максимальное число строк:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Во время прокрутки показывать часть следующей вкладки">
 <!ENTITY smoothScroll.label "Использовать плавную прокрутку">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
 <!ENTITY highlight.label "Подсветка:">
 <!ENTITY currenttab.style.label "Текущая вкладка">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Непрочитанные вкладки">
 <!ENTITY othertabs.style.label "Другие вкладки">
 <!ENTITY setstyles.label "Настройка стилей">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "Удалять пункты меню Tab Mix Plus при помощи средней кнопки мыши">
 <!ENTITY lockTabSizingOnClose.label "При закрытии одной вкладки другие не должны изменять свою ширину, пока курсор мыши не покинет область панели вкладок">
 <!ENTITY removeEntries.tooltip "Включая закрытые вкладки, окна и сохранённые сессии">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "При прокрутке над панелью вкладок">
+<!ENTITY tabbarscrolling.holdShift.label "Удерживайте Shift во время прокрутки для переключения между этими параметрами">
+<!ENTITY tabbarscrolling.selectTab.label "Изменять выбранную вкладку">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Прокручивать все вкладки">
+<!ENTITY tabbarscrolling.inverse.label "Инвертировать направление прокрутки">
 <!ENTITY double.label "Двойной щелчок">
 <!ENTITY middle.label "Средняя кнопка">
 <!ENTITY ctrl.label "CTRL+ЛКМ">

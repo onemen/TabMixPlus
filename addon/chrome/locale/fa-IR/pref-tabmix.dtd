@@ -145,8 +145,9 @@
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "پر رنگ کردن:">
 <!ENTITY currenttab.style.label "تب فعلی">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "تب های خوانده نشده">
-<!ENTITY othertabs.style.label "Other Tabs">
+<!ENTITY othertabs.style.label "Other tabs">
 <!ENTITY setstyles.label "سفارشی سازی استایل ها">
 <!ENTITY extraIcons.label1 "Icons for">
 <!ENTITY extraIcons.locked "Locked">

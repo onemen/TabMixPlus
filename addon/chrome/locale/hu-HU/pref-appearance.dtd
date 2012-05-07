@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Stílusok">
 <!ENTITY currentTab.label "Aktuális lap">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Olvasatlan lap">
 <!ENTITY otherTabs.label "Egyéb lapok">
 <!ENTITY italic.label "Dőlt">

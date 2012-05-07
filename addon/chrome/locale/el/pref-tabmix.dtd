@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
 <!ENTITY tabScroll.multibar "Με πολλές γραμμές">
 <!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Κατά την κύλιση να εμφανίζεται τμήμα της επόμενης μη εμφανούς καρτέλας">
 <!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">
 <!ENTITY highlight.label "Επισήμανση:">
 <!ENTITY currenttab.style.label "Τρέχουσας καρτέλας">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Μη αναγνωσμένων καρτελών">
 <!ENTITY othertabs.style.label "Άλλες καρτέλες">
 <!ENTITY setstyles.label "Προσαρμογή στυλ">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "Αφαίρεση στοιχείων του μενού Tab Mix Plus με μεσαίο κλικ">
 <!ENTITY lockTabSizingOnClose.label "Να μην αλλάζουν μέγεθος οι καρτέλες μετά το κλείσιμο μιας αν δεν απομακρυνθεί ο κέρσορας από την εργαλειοθήκη">
 <!ENTITY removeEntries.tooltip "Συμπεριλαμβάνει κλεισμένες καρτέλες, κλεισμένα παράθυρα και αποθηκευμένες συνεδρίες">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Κατά την κύλιση πάνω από την εργαλειοθήκη καρτελών">
+<!ENTITY tabbarscrolling.holdShift.label "Κρατήστε πατημένο το shift κατά την κύλιση για εναλλαγή των επιλογών">
+<!ENTITY tabbarscrolling.selectTab.label "Αλλαγή επιλεγμένης καρτέλας">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Κύλιση όλων των καρτελών">
+<!ENTITY tabbarscrolling.inverse.label "Αντιστροφή κατεύθυνσης κύλισης">
 <!ENTITY double.label "Διπλό κλικ">
 <!ENTITY middle.label "Μεσαίο κλικ">
 <!ENTITY ctrl.label "Ctrl-click">

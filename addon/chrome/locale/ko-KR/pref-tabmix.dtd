@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "스크롤 지연시간(반복 스크롤 사이의 시간)">
 <!ENTITY highlight.label "강조하기:">
 <!ENTITY currenttab.style.label "현재 탭">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "읽지 않은 탭">
 <!ENTITY othertabs.style.label "다른 탭">
 <!ENTITY setstyles.label "스타일 설정">

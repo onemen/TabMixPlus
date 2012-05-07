@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "la pagina iniziale">
 <!ENTITY newtab.current "la pagina attuale">
 <!ENTITY newtab.duplicate "la pagina duplicata">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Pagina della nuova scheda">
+<!ENTITY location.label.1 "Indirizzo web">
 <!ENTITY focusContent.label "Non selezionare automaticamente la barra degli indirizzi al caricamento di pagine non vuote">
 <!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
 <!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
 <!ENTITY highlight.label "Da differenziare">
 <!ENTITY currenttab.style.label "Scheda attuale">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Schede non lette">
 <!ENTITY othertabs.style.label "Altre schede">
 <!ENTITY setstyles.label "Personalizza gli stili">
@@ -161,6 +162,7 @@
           change this only if you need to change the width 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -175,6 +177,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 -->
@@ -195,10 +198,10 @@
 <!ENTITY lockTabSizingOnClose.label "Quando si chiude una scheda le altre non dovrebbero ridimensionarsi fino a che il cursore rimane sulla barra degli strumenti">
 <!ENTITY removeEntries.tooltip "Incluse le schede chiuse, le finestre chiuse e le sessioni salvate">
 <!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.holdShift.label "Tenere premuto il tasto Maiusc durante lo scorrimento per passare da un'opzione all'altra">
+<!ENTITY tabbarscrolling.selectTab.label "Cambia la scheda selezionata">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scorri tutte le schede">
+<!ENTITY tabbarscrolling.inverse.label "Inverti la direzione di scorrimento">
 <!ENTITY double.label "Doppio clic">
 <!ENTITY middle.label "Clic centrale">
 <!ENTITY ctrl.label "Ctrl+clic">

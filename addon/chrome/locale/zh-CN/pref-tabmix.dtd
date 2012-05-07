@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
 <!ENTITY tabScroll.multibar "多行标签页">
 <!ENTITY maxrow.label "最多显示的行数：">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "滚动鼠标时显示隐藏的下一个标签页">
 <!ENTITY smoothScroll.label "启用平滑滚动">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
 <!ENTITY highlight.label "高亮：">
 <!ENTITY currenttab.style.label "当前标签页">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "未读标签页">
 <!ENTITY othertabs.style.label "其他标签页">
 <!ENTITY setstyles.label "定制样式">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "鼠标中键点击时清除 Tab Mix Plus 菜单列表项">
 <!ENTITY lockTabSizingOnClose.label "标签页关闭时，其他标签页需在鼠标离开工具栏区域后更改宽度">
 <!ENTITY removeEntries.tooltip "包括已关闭的标签页、窗口和已保存的浏览进程">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "在标签栏滚动鼠标时">
+<!ENTITY tabbarscrolling.holdShift.label "按住 Shift 并滚动鼠标可在这些选项之间切换">
+<!ENTITY tabbarscrolling.selectTab.label "切换所选的标签页">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "在全部标签页中滚动切换">
+<!ENTITY tabbarscrolling.inverse.label "以反方向滚动">
 <!ENTITY double.label "双击左键">
 <!ENTITY middle.label "单击鼠标中键">
 <!ENTITY ctrl.label "Ctrl键+鼠标单击">

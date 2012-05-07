@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Highlight">
 <!ENTITY currenttab.style.label "Current tab">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Unread tabs">
 <!ENTITY othertabs.style.label "Other Tabs">
 <!ENTITY setstyles.label "Customize Styles">

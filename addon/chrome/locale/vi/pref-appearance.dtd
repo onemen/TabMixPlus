@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Tùy biến Kiểu">
 <!ENTITY currentTab.label "Thẻ hiện tại">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Thẻ chưa xem">
 <!ENTITY otherTabs.label "Thẻ khác">
 <!ENTITY italic.label "Nghiêng">

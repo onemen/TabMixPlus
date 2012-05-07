@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
 <!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Separador actual">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Separadores não lidos">
 <!ENTITY othertabs.style.label "Outros separadores">
 <!ENTITY setstyles.label "Personalizar estilos">

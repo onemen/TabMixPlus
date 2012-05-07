@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Określ styl">
 <!ENTITY currentTab.label "Aktywna karta">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Nieobejrzane karty">
 <!ENTITY otherTabs.label "Inne karty">
 <!ENTITY italic.label "Kursywa">

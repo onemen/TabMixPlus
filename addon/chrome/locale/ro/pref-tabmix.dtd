@@ -17,11 +17,11 @@
 <!ENTITY linkTarget.current "fila curentă">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "JavaScript și ferestre instantanee:">
-<!ENTITY divertedWindows.comment "Opțiuni suplimentare pentru JavaScript și ferestre instantanee sunt disponibile în caseta „Opțiuni” a navigatorului">
+<!ENTITY divertedWindows.comment "Opțiuni suplimentare sunt disponibile în caseta „Opțiuni” a navigatorului">
 <!ENTITY divertedWindowOpen.all "Deschide toate ferestrele instantanee în file">
 <!ENTITY divertedWindowOpen.some "Permite ferestrelor instantanee să fie redimensionate">
 <!ENTITY divertedWindowOpen.none "Permite toate ferestrele instantanee">
-<!ENTITY linkTarget.label "Deschide legăturile cu un atribut „țintă” definit, în fila curentă">
+<!ENTITY linkTarget.label "Deschide legăturile cu un atribut „target” în fila curentă">
 <!ENTITY download.label "Împiedică deschiderea filelor vide când se descarcă fișiere">
 <!ENTITY edit.label "Editează extensiile">
 <!ENTITY speLink.label "Forțează deschiderea într-o filă nouă a:">
@@ -41,9 +41,9 @@
 <!ENTITY newtab.home "pagina de start">
 <!ENTITY newtab.current "pagina curentă">
 <!ENTITY newtab.duplicate "o pagină duplicat">
-<!ENTITY newtab.location.1 "pagina „Filă nouă”">
+<!ENTITY newtab.location.1 "o pagină cu adresă specificată">
 <!ENTITY location.label.1 "Adresă:">
-<!ENTITY focusContent.label "Selectează conținutul când se încarcă pagini nevide">
+<!ENTITY focusContent.label "Selectează conținutul când se încarcă o pagină nevidă">
 <!ENTITY openTabNext.label "Deschide filele noi alături de fila curentă">
 <!ENTITY openOtherTabNext.label "Deschide alte file alături de fila curentă">
 <!ENTITY relatedAfterCurrent.label "Numai dacă sunt în legătură cu fila curentă">
@@ -127,24 +127,25 @@
 <!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau lăsarea obiectelor pe bara de file">
 <!ENTITY tabbar.label "Ascunde bara de file numai când există o singură filă deschisă">
 <!ENTITY dropIndicator.label "Indicator de fixare">
-<!ENTITY dropIndicator-native.label "Stil nativ">
-<!ENTITY dropIndicator-builtin.label "Stil intern">
+<!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
+<!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
 <!ENTITY verticalTabbar.description "Utilizează suplimentele „Tree Style Tab” sau  „VerticalTab” pentru a controla aceste opțiuni.">
 <!ENTITY tabBarPosition.label "Poziționează bara de file:">
-<!ENTITY tabBarPosition.top.label "Sus (deasupra conținutului)">
-<!ENTITY tabBarPosition.bottom.label "Jos (dedesubtul conținutului)">
-<!ENTITY tabScroll.label "Când filele depășesc lungimea barei, afișează bara:">
-<!ENTITY tabScroll.none "derulantă, cu butoane">
-<!ENTITY tabScroll.leftRightButtons "derulantă, cu butoane pe marginea stângă și dreaptă">
-<!ENTITY tabScroll.rightButtons "derulantă, cu butoane pe marginea dreaptă">
-<!ENTITY tabScroll.rightButtons.rtl "derulantă, cu butoane pe marginea stângă">
-<!ENTITY tabScroll.multibar "pe mai multe linii">
+<!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
+<!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">
+<!ENTITY tabScroll.label "Când sunt prea multe file deschise:">
+<!ENTITY tabScroll.none "derulează-le cu rozeta mausului">
+<!ENTITY tabScroll.leftRightButtons "afișează butoane de derulare pe ambele margini">
+<!ENTITY tabScroll.rightButtons "afișează butoane de derulare pe marginea dreaptă">
+<!ENTITY tabScroll.rightButtons.rtl "afișează butoane de derulare pe marginea stângă">
+<!ENTITY tabScroll.multibar "afișează-le pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "La derulare, afișează parțial următoarea filă nevizibilă">
 <!ENTITY smoothScroll.label "Activează derularea lină">
-<!ENTITY scrolldelay.label "Întârziere defilare (interval între pașii defilării)">
+<!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării)">
 <!ENTITY highlight.label "Evidențiază:">
 <!ENTITY currenttab.style.label "Fila curentă">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Filele nevizualizate">
 <!ENTITY othertabs.style.label "Alte file">
 <!ENTITY setstyles.label "Personalizează stilurile">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "Elimină elementele meniului Tab Mix Plus folosind clic-mijloc">
 <!ENTITY lockTabSizingOnClose.label "La închiderea unei file celelalte file nu se redimensionează până când cursorul nu părăsește zona barei de file">
 <!ENTITY removeEntries.tooltip "Include filele închise, ferestrele închise și sesiunile salvate">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "La derulare în bara de file">
+<!ENTITY tabbarscrolling.holdShift.label "(ținând apăsată tasta Shift în timpul derulării se schimbă opțiunea implicită)">
+<!ENTITY tabbarscrolling.selectTab.label "Se schimbă fila selectată">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Se derulează toate filele">
+<!ENTITY tabbarscrolling.inverse.label "Inversează sensul derulării">
 <!ENTITY double.label "Dublu-clic">
 <!ENTITY middle.label "Clic-mijloc">
 <!ENTITY ctrl.label "Ctrl+clic">
@@ -289,7 +290,7 @@
 <!ENTITY sm.preserve.protect "Starea de protecție">
 <!ENTITY sm.preserve.locked "Starea de blocare">
 <!ENTITY sm.preserve.permission "Permisiunile">
-<!ENTITY sm.preserve.scroll1 "Poziția de defilare">
+<!ENTITY sm.preserve.scroll1 "Poziția de navigare">
 <!ENTITY sm.restore.winOptions "Memorează în ferestre:">
 <!ENTITY sm.restore.selectedTab "Filele selectate">
 <!ENTITY sm.restore.closedTabs "Lista filelor închise">

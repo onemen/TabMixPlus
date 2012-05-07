@@ -139,12 +139,13 @@
 <!ENTITY tabScroll.rightButtons "Омогући померање са дугмадима на десној страни">
 <!ENTITY tabScroll.rightButtons.rtl "Омогући померање са дугмадима на левој страни">
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
-<!ENTITY maxrow.label "Максимални број редова за приказ">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY maxrow.label "Највећи број број редова који ће се видети:">
+<!ENTITY offsetAmountToScroll.label "Приликом померања прикажи део наредног језичка који се не види у целости">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
-<!ENTITY scrolldelay.label "Задршка при скроловању (време између понављања скроловања)">
+<!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">
 <!ENTITY highlight.label "Истакни:">
-<!ENTITY currenttab.style.label "Текућу картицу">
+<!ENTITY currenttab.style.label "тренутни језичак">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Непрочитане картице">
 <!ENTITY othertabs.style.label "Остале картице">
 <!ENTITY setstyles.label "Прилагоди стилове">
@@ -186,11 +187,11 @@
 <!ENTITY removeEntries.label "Уклони Tab Mix Plus ставке листе менија помоћу средњег клика ---">
 <!ENTITY lockTabSizingOnClose.label "Када затварам језичак, остали језичци не треба да мењају величину док год показивач миша напусти траку са језичцима">
 <!ENTITY removeEntries.tooltip "Укључује затворене картице, затворене прозоре и сачуване сесије">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Када померам точкић у траци са језичцима">
+<!ENTITY tabbarscrolling.holdShift.label "Држите шифт док померате точкић, да бисте применили неку од ових опција">
+<!ENTITY tabbarscrolling.selectTab.label "Промени изабрани језичак">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Крећи се кроз језичке">
+<!ENTITY tabbarscrolling.inverse.label "Обрнути смер померања">
 <!ENTITY double.label "Дупли клик">
 <!ENTITY middle.label "Средњи клик">
 <!ENTITY ctrl.label "Ctrl-клик">

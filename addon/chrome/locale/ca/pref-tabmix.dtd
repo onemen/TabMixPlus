@@ -9,9 +9,9 @@
 <!ENTITY settings.export "Exporta els paràmetres">
 <!ENTITY settings.import "Importa els paràmetres">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
-<!ENTITY generalWindowOpen.label "Obre els enllaços que s&apos;obren en una finestra nova en:">
-<!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d&apos;altres aplicacions">
-<!ENTITY externalLinkTarget.label "Obre els enllaços des d&apos;altres aplicacions en:">
+<!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
+<!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d'altres aplicacions">
+<!ENTITY externalLinkTarget.label "Obre els enllaços des d'altres aplicacions en:">
 <!ENTITY linkTarget.tab "Pestanya nova">
 <!ENTITY linkTarget.window "Finestra nova">
 <!ENTITY linkTarget.current "Pestanya actual">
@@ -19,7 +19,7 @@
 <!ENTITY divertedWindowOpen.label "Finestres emergents del JavaScript:">
 <!ENTITY divertedWindows.comment "A les opcions principals podeu controlar més preferències del JavaScript i de les finestres emergents">
 <!ENTITY divertedWindowOpen.all "Obre totes les finestres emergents en pestanyes">
-<!ENTITY divertedWindowOpen.some "Permet finestres emergents d&apos;una altra mida">
+<!ENTITY divertedWindowOpen.some "Permet finestres emergents d'una altra mida">
 <!ENTITY divertedWindowOpen.none "Permet totes les finestres emergents">
 <!ENTITY linkTarget.label "Obre els enllaços amb atribut «target» a la pestanya actual">
 <!ENTITY download.label "Evita les pestanyes buides en baixar fitxers">
@@ -36,16 +36,16 @@
 <!ENTITY tabMerge.label "Fusionar pestanyes">
 <!ENTITY tabFeature.label "Característiques de pestanyes">
 <!ENTITY newtab.label "Carrega en pestanyes noves:">
-<!ENTITY replaceLastTabWith.label "En tancar l&apos;última pestanya, substitueix-la per">
+<!ENTITY replaceLastTabWith.label "En tancar l'última pestanya, substitueix-la per">
 <!ENTITY newtab.blank "Pàgina en blanc">
-<!ENTITY newtab.home "Pàgina d&apos;inici">
+<!ENTITY newtab.home "Pàgina d'inici">
 <!ENTITY newtab.current "Pàgina actual">
 <!ENTITY newtab.duplicate "Pàgina duplicada">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Pàgina de pestanya nova">
+<!ENTITY location.label.1 "Adreça">
 <!ENTITY focusContent.label "Enfoca el contingut en carregar una pàgina que no sigui en blanc">
-<!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l&apos;actual">
-<!ENTITY openOtherTabNext.label "Obre les altres pestanyes al costat de l&apos;actual">
+<!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l'actual">
+<!ENTITY openOtherTabNext.label "Obre les altres pestanyes al costat de l'actual">
 <!ENTITY relatedAfterCurrent.label "Només si estan relacionades amb la pestanya actual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Obre les pestanyes duplicades al costat de l&apos;original">
@@ -101,27 +101,27 @@
 <!ENTITY cmdtab.popup "Cmd-Tab mostra un menú emergent amb una llista de pestanyes">
 <!ENTITY tabpopup.mouse "Permet seleccionar amb el ratolí a la llista de pestanyes">
 <!ENTITY mergeNoTabSelection.label "Fusiona les finestres quan no hi ha cap pestanya seleccionada">
-<!ENTITY mergeTabSelection.label "En fusionar després d&apos;haver seleccionat les pestanyes:">
+<!ENTITY mergeTabSelection.label "En fusionar després d'haver seleccionat les pestanyes:">
 <!ENTITY mergeall.label "Fusiona totes les finestres en una">
-<!ENTITY mergelastfocused.label "Fusiona només la finestra actual amb l&apos;última seleccionada">
+<!ENTITY mergelastfocused.label "Fusiona només la finestra actual amb l'última seleccionada">
 <!ENTITY mergePopups.label "Fusiona també les finestres emergents">
-<!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l&apos;ha obert">
+<!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l'ha obert">
 <!ENTITY slideshow.label "En prémer F8, automàticament canvia de pestanya cada">
 <!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
-<!ENTITY toggleAnimation.label "Inhabilita l&apos;animació en obrir/tancar la pestanya">
+<!ENTITY toggleAnimation.label "Inhabilita l'animació en obrir/tancar la pestanya">
 <!ENTITY seconds.label "segons">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barra de pestanyes">
 <!ENTITY tabAppearance.label "Pestanya">
-<!ENTITY toolBarAppearance.label "Barra d&apos;eines">
-<!ENTITY show.ontabbar.label "Mostra a la barra d&apos;eines">
+<!ENTITY toolBarAppearance.label "Barra d'eines">
+<!ENTITY show.ontabbar.label "Mostra a la barra d'eines">
 <!ENTITY show.ontab.label "Mostra a la pestanya">
 <!ENTITY dragNewTabButton.tooltip "Arrossegueu el botó «Pestanya nova» a la barra de pestanyes per habilitar aquesta opció.">
 <!ENTITY hideTabBarButton.label "Botó per tancar la pestanya">
 <!ENTITY newTabButton.label "Botó per obrir una pestanya nova">
 <!ENTITY newTabButton.posiotion.left.label "A la part esquerra">
 <!ENTITY newTabButton.posiotion.right.label "A la part dreta">
-<!ENTITY newTabButton.posiotion.afterlast.label "Després de l&apos;última pestanya">
+<!ENTITY newTabButton.posiotion.afterlast.label "Després de l'última pestanya">
 <!ENTITY allTabsButton.label "Botó de llista de totes les pestanyes">
 <!ENTITY tabBarSpace.label "Espai addicional a tots dos costats">
 <!ENTITY tabBarSpace.tooltip "Per poder-hi fer clic i deixar anar pestanyes a la barra de pestanyes">
@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Es poden desplaçar amb botons al costat esquerre">
 <!ENTITY tabScroll.multibar "Mostra diverses files">
 <!ENTITY maxrow.label "Nombre màxim de files que es poden mostrar:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "En desplaçar-se, mostra part de la següent pestanya fora de vista">
 <!ENTITY smoothScroll.label "Habilita el desplaçament suau">
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">
 <!ENTITY highlight.label "Ressalta:">
 <!ENTITY currenttab.style.label "Pestanya actual">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Pestanyes pendents de llegir">
 <!ENTITY othertabs.style.label "Altres pestanyes">
 <!ENTITY setstyles.label "Personalitza els estils">
@@ -154,24 +155,24 @@
 <!ENTITY extraIcons.autoreload "Recàrrega automàtica">
 <!ENTITY progressMeter.label "Indicador de progrés a les pestanyes">
 <!ENTITY showTabX.labelBegin "Botó per tancar la pestanya">
-<!ENTITY showTabX.left "Col·loca&apos;l a la part esquerra">
-<!ENTITY showTabX.rtl "Col·loca&apos;l a la part dreta">
+<!ENTITY showTabX.left "Col·loca'l a la part esquerra">
+<!ENTITY showTabX.rtl "Col·loca'l a la part dreta">
 <!ENTITY milliseconds.label "mseg.">
 <!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "21em">
 <!ENTITY showTabX.always "a totes">
-<!ENTITY showTabX.current "a l&apos;actual">
+<!ENTITY showTabX.current "a l'actual">
 <!ENTITY showTabX.hover "en col·locar-hi el ratolí durant">
 <!ENTITY showTabX.alwaysExeption "a totes les pestanyes més amples de">
-<!ENTITY showTabX.currentHover "a l&apos;actual i en col·locar-hi el ratolí durant">
+<!ENTITY showTabX.currentHover "a l'actual i en col·locar-hi el ratolí durant">
 <!ENTITY minWidth.label "Amplada de les pestanyes:">
 <!ENTITY widthTo.label "a">
 <!ENTITY widthPixels.label "píxels">
-<!ENTITY flexTabs.label "Ajusta l&apos;amplada al títol de la pestanya">
-<!ENTITY bookastitle.label "Utilitza el nom de l&apos;adreça d&apos;interès com a títol de la pestanya">
+<!ENTITY flexTabs.label "Ajusta l'amplada al títol de la pestanya">
+<!ENTITY bookastitle.label "Utilitza el nom de l'adreça d'interès com a títol de la pestanya">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
-<!ENTITY toolbar.description "Podeu personalitzar quins botons del Tab Mix Plus voleu veure a la barra d&apos;eines">
+<!ENTITY toolbar.description "Podeu personalitzar quins botons del Tab Mix Plus voleu veure a la barra d'eines">
 <!ENTITY toolbar.button.label "Personalitza">
 <!ENTITY toolbar.visible.caption "Botons visibles">
 <!ENTITY toolbar.novisible.label "No hi ha cap botó visible">
@@ -180,17 +181,17 @@
 <!ENTITY mouseGesture.label "Gestos de ratolí">
 <!ENTITY mouseClick.label "Clic de ratolí">
 <!ENTITY mouseHoverSelect.labelBegin "Selecciona la pestanya en col·locar-hi el ratolí durant">
-<!ENTITY tabFlip.label "Canvia a l&apos;última pestanya seleccionada en fer clic a la pestanya actual">
+<!ENTITY tabFlip.label "Canvia a l'última pestanya seleccionada en fer clic a la pestanya actual">
 <!ENTITY tabFlip.delay "Utilitza un retard de">
 <!ENTITY clickFocus.label "Clic amb el ratolí (prémer i deixar anar) per seleccionar una pestanya">
 <!ENTITY removeEntries.label "Elimina les entrades del menú del Tab Mix Plus mitjançant un clic amb el botó del mig">
-<!ENTITY lockTabSizingOnClose.label "En tancar una pestanya, les altres no es redimensionaran fins que el cursor no surti de l&apos;àrea de la barra d&apos;eines">
+<!ENTITY lockTabSizingOnClose.label "En tancar una pestanya, les altres no es redimensionaran fins que el cursor no surti de l'àrea de la barra d'eines">
 <!ENTITY removeEntries.tooltip "Inclou les pestanyes tancades, les finestres tancades i les sessions desades">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "En desplaçaments sobre la barra de pestanyes">
+<!ENTITY tabbarscrolling.holdShift.label "Prement Maj en desplaçar-se s'alterna entre aquestes opcions">
+<!ENTITY tabbarscrolling.selectTab.label "Canvia la pestanya seleccionada">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Desplaça per totes les pestanyes">
+<!ENTITY tabbarscrolling.inverse.label "Inverteix el sentit de desplaçament">
 <!ENTITY double.label "Doble clic">
 <!ENTITY middle.label "Clic amb el botó del mig">
 <!ENTITY ctrl.label "Ctrl-Clic">

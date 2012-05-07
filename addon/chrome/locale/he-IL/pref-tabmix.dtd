@@ -145,6 +145,7 @@
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "הדגש:">
 <!ENTITY currenttab.style.label "לשונית נוכחית">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "לשונית שלא נקראה">
 <!ENTITY othertabs.style.label "לשוניות אחרות">
 <!ENTITY setstyles.label "עיצוב">

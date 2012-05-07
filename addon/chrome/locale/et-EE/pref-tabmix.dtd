@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Ava kõik hüpikaknad kaartidel">
 <!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
 <!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
-<!ENTITY linkTarget.label "Ava &apos;target&apos;-omadusega lingid praegusel kaardil">
+<!ENTITY linkTarget.label "Ava 'target'-omadusega lingid praegusel kaardil">
 <!ENTITY download.label "Failide allalaadimisel ära näita tühje kaarte">
 <!ENTITY edit.label "Muuda">
 <!ENTITY speLink.label "Alati ava uuel kaardil:">
@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "avalehte">
 <!ENTITY newtab.current "praegust lehte">
 <!ENTITY newtab.duplicate "lehe koopiat">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "uue kaardi lehte">
+<!ENTITY location.label.1 "Aadress">
 <!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
 <!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">
@@ -140,11 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Keritav riba nuppudega vasakul">
 <!ENTITY tabScroll.multibar "Mitmerealine">
 <!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
+<!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
 <!ENTITY highlight.label "Teistsugune stiil:">
 <!ENTITY currenttab.style.label "praegusel kaardil">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "lugemata kaartidel">
 <!ENTITY othertabs.style.label "teistel kaartidel">
 <!ENTITY setstyles.label "Muuda stiile">
@@ -183,14 +184,14 @@
 <!ENTITY tabFlip.label "Praegusel kaardil klõpsates näita viimati vaadatud kaarti">
 <!ENTITY tabFlip.delay "Viivitus:">
 <!ENTITY clickFocus.label "Hiirega klõpsamine (vajutamine ja lahtilaskmine) valib kaardi">
-<!ENTITY removeEntries.label "Tab Mix Plus&apos;i menüüelementidel hiire keskmise nupuga klõpsamine kustutab selle sisestuse">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.label "Tab Mix Plus'i menüüelementidel hiire keskmise nupuga klõpsamine kustutab selle sisestuse">
+<!ENTITY lockTabSizingOnClose.label "Kaardi sulgemisel ei tohiks teiste kaartide suurus muutuda enne kursori lahkumist tööriistariba alalt">
 <!ENTITY removeEntries.tooltip "Hõlmab suletud kaarte, suletud aknaid ja salvestatud seansse">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Kaartide ribal kerimine">
+<!ENTITY tabbarscrolling.holdShift.label "Nende valikute vahel lülitumiseks hoia kerimise ajal all klahvi Shift">
+<!ENTITY tabbarscrolling.selectTab.label "Muuda valitud kaarti">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Keri kõiki kaarte">
+<!ENTITY tabbarscrolling.inverse.label "Kerimise suund on vastupidine">
 <!ENTITY double.label "Topeltklõps">
 <!ENTITY middle.label "Hiire keskmine nupp">
 <!ENTITY ctrl.label "Ctrl+klõps">
