@@ -1965,7 +1965,8 @@ var TabmixProgressListener = {
         if (tabsCount == 1)
           this.mTabBrowser.tabContainer.adjustTabstrip(true);
         tab.removeAttribute("tab-progress");
-        if (!Tabmix.isBlankPageURL(aRequest.QueryInterface(Ci.nsIChannel).URI.spec)) {
+        let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
+        if (!Tabmix.isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
                 !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")
