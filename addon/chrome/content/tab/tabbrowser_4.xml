@@ -237,8 +237,21 @@
         if ( this == this.parentNode.selectedItem ) {
           this.setAttribute("clickOnCurrent","true");
         }
-        // don't allow mouse click with modifiers to select tab
-        else if (!aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
+        // don't allow mouse click/down with modifiers to select tab
+        else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+          aEvent.stopPropagation();
+        else if (Tabmix.isVersion(150)) {
+          this.parentNode._selectNewTab(this);
+          let isTabFocused = false;
+          try {
+            isTabFocused = (document.commandDispatcher.focusedElement == this);
+          } catch (e) {}
+          if (!isTabFocused) {
+            this.setAttribute("ignorefocus", "true");
+            this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
+          }
+        }
+        else {
           this.mSelect = setTimeout(function TMP_onMouseCommand(tab) {
             if (tab.parentNode)
               tab.parentNode._selectNewTab(tab);
@@ -290,8 +303,6 @@
         if (this.mOverCloseButton)
           event.stopPropagation();
         else {
-          this.style.MozUserFocus = 'ignore';
-          this.clientTop; // just using this to flush style updates
           if (this.mouseDownSelect)
             this.onMouseCommand(event);
           else

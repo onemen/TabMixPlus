@@ -352,10 +352,12 @@ var tablib = {
       ).toCode();
     }
 
-    Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
-      '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
-    ).toCode();
+    if (!Tabmix.isVersion(150)) {
+      Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
+        '{',
+        '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
+      ).toCode();
+    }
 
     let _setter = gBrowser.tabContainer.__lookupSetter__("visible");
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
