@@ -289,18 +289,17 @@ options = {
   },
 
   assert: function TMP_utils_assert(aError, aMsg) {
-/*
-XXX fix this when there is no stack go directly to trace
-*/
+    if (typeof aError.stack != "string") {
+      this.trace(aMsg, 2);
+      return;
+    }
+
     let names = this._getNames(1, aError.stack);
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
-    if (stackText)
-      Services.console.logStringMessage(assertionText + stackText);
-    else
-      this.trace(assertionText, 2);
+    let stackText = "\nStack Trace: \n" + aError.stack;
+    Services.console.logStringMessage(assertionText + stackText);
   },
 
   trace: function(aMsg, slice) {
