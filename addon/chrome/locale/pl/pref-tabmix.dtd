@@ -41,7 +41,7 @@
 <!ENTITY newtab.home "stronę startową">
 <!ENTITY newtab.current "aktywną stronę">
 <!ENTITY newtab.duplicate "powielaną stronę">
-<!ENTITY newtab.location.1 "Strona nowej karty">
+<!ENTITY newtab.location.1 "stronę o poniższym adresie">
 <!ENTITY location.label.1 "Adres">
 <!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
 <!ENTITY highlight.label "Wyróżniaj:">
 <!ENTITY currenttab.style.label "aktywną kartę">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "niewczytane karty">
 <!ENTITY unreadtabs.style.label "nieobejrzane karty">
 <!ENTITY othertabs.style.label "inne karty">
 <!ENTITY setstyles.label "Określ style">

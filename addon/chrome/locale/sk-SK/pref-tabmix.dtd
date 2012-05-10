@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
 <!ENTITY highlight.label "Zvýrazniť:">
 <!ENTITY currenttab.style.label "Aktuálna karta">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Nenačítané karty">
 <!ENTITY unreadtabs.style.label "Neprečítané karty">
 <!ENTITY othertabs.style.label "Ostatné karty">
 <!ENTITY setstyles.label "Prispôsobiť štýly">

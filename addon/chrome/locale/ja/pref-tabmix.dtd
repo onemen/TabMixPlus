@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">
 <!ENTITY highlight.label "ハイライト:">
 <!ENTITY currenttab.style.label "現在のタブ">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "未読込のタブ">
 <!ENTITY unreadtabs.style.label "未読のタブ">
 <!ENTITY othertabs.style.label "他のタブ">
 <!ENTITY setstyles.label "スタイルをカスタマイズ">

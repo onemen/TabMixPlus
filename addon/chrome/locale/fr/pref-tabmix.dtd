@@ -100,32 +100,32 @@
 <!ENTITY ctrltab.popup "Ctrl-Tab affiche un menu popup de la liste des onglets">
 <!ENTITY cmdtab.popup "Cmd-Tab affiche un menu popup de la liste des onglets">
 <!ENTITY tabpopup.mouse "La souris agit sur la liste des onglets">
-<!ENTITY mergeNoTabSelection.label "Fusionner les fenêtres lorsqu&apos;aucun onglet n&apos;est sélectionné">
+<!ENTITY mergeNoTabSelection.label "Fusionner les fenêtres lorsqu'aucun onglet n'est sélectionné">
 <!ENTITY mergeTabSelection.label "Fusion après la sélection des onglets :">
 <!ENTITY mergeall.label "Fusionner toutes les fenêtres en une seule">
 <!ENTITY mergelastfocused.label "Fusionner seulement la fenêtre courante avec la dernière sélectionnée">
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
-<!ENTITY slideshow.label "Touche F8 : Changer d&apos;onglet toutes les">
+<!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
 <!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
-<!ENTITY toggleAnimation.label "Désactiver l&apos;animation d&apos;ouverture/fermeture des onglets">
+<!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
 <!ENTITY seconds.label "secondes">
 <!ENTITY minutes.label "min">
-<!ENTITY tabBarAppearance.label "Barre d&apos;onglets">
+<!ENTITY tabBarAppearance.label "Barre d'onglets">
 <!ENTITY tabAppearance.label "Onglet">
-<!ENTITY toolBarAppearance.label "Barre d&apos;outils">
-<!ENTITY show.ontabbar.label "Afficher dans la barre d&apos;onglets">
-<!ENTITY show.ontab.label "Afficher dans l&apos;onglet">
-<!ENTITY dragNewTabButton.tooltip "Glisser le bouton &quot;Nouvel onglet&quot; dans votre barre d&apos;onglets pour activer cette option.">
+<!ENTITY toolBarAppearance.label "Barre d'outils">
+<!ENTITY show.ontabbar.label "Afficher dans la barre d'onglets">
+<!ENTITY show.ontab.label "Afficher dans l'onglet">
+<!ENTITY dragNewTabButton.tooltip "Glisser le bouton &quot;Nouvel onglet&quot; dans votre barre d'onglets pour activer cette option.">
 <!ENTITY hideTabBarButton.label "Bouton de fermeture">
 <!ENTITY newTabButton.label "Bouton de nouvel onglet">
 <!ENTITY newTabButton.posiotion.left.label "Côté gauche">
 <!ENTITY newTabButton.posiotion.right.label "Côté droit">
 <!ENTITY newTabButton.posiotion.afterlast.label "Après le dernier onglet">
 <!ENTITY allTabsButton.label "Bouton donnant la liste des onglets ouverts">
-<!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d&apos;autre de la barre d&apos;onglets">
-<!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d&apos;onglets">
-<!ENTITY tabbar.label "Cacher la barre d&apos;onglets quand un seul onglet est ouvert">
+<!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d'autre de la barre d'onglets">
+<!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d'onglets">
+<!ENTITY tabbar.label "Cacher la barre d'onglets quand un seul onglet est ouvert">
 <!ENTITY dropIndicator.label "Indicateur de déplacement">
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
@@ -133,19 +133,19 @@
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
 <!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">
-<!ENTITY tabScroll.label "Lorsqu&apos;il y a trop d&apos;onglets ouverts :">
+<!ENTITY tabScroll.label "Lorsqu'il y a trop d'onglets ouverts :">
 <!ENTITY tabScroll.none "Faire défiler avec la molette de la souris">
 <!ENTITY tabScroll.leftRightButtons "Faire défiler avec les boutons fléchés situés à gauche et à droite">
 <!ENTITY tabScroll.rightButtons "Faire défiler avec les boutons fléchés situés à droite">
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
-<!ENTITY tabScroll.multibar "Mettre la barre d&apos;onglets sur plusieurs lignes">
+<!ENTITY tabScroll.multibar "Mettre la barre d'onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
 <!ENTITY offsetAmountToScroll.label "En faisant défiler montrer une partie de l'onglet suivant masqué">
 <!ENTITY smoothScroll.label "Activer le défilement doux">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
 <!ENTITY highlight.label "Surligner :">
 <!ENTITY currenttab.style.label "Onglet courant">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Onglets non chargés">
 <!ENTITY unreadtabs.style.label "Onglets non lus">
 <!ENTITY othertabs.style.label "Autres onglets">
 <!ENTITY setstyles.label "Styles personnalisés">

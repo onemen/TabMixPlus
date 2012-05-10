@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
 <!ENTITY highlight.label "Открояване на:">
 <!ENTITY currenttab.style.label "Текущия подпрозорец">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Незаредените подпрозорци">
 <!ENTITY unreadtabs.style.label "Непрочетените подпрозорци">
 <!ENTITY othertabs.style.label "Другите подпрозорци">
 <!ENTITY setstyles.label "Настройка на стиловете">

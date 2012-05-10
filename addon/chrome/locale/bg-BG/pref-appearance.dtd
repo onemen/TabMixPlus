@@ -1,6 +1,6 @@
 <!ENTITY styles.label "Настройка на стилове">
 <!ENTITY currentTab.label "Текущ подпрозорец">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Незаредени подпрозорци">
 <!ENTITY unreadTab.label "Непрочетени подпрозорци">
 <!ENTITY otherTabs.label "Други подпрозорци">
 <!ENTITY italic.label "Курсив">

@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
 <!ENTITY highlight.label "Tô sáng:">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Các Thẻ chưa tải">
 <!ENTITY unreadtabs.style.label "Thẻ chưa đọc">
 <!ENTITY othertabs.style.label "Thẻ khác">
 <!ENTITY setstyles.label "Tùy biến Kiểu">

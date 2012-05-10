@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">
 <!ENTITY highlight.label "Истакни:">
 <!ENTITY currenttab.style.label "тренутни језичак">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Неучитани језичци">
 <!ENTITY unreadtabs.style.label "Непрочитане картице">
 <!ENTITY othertabs.style.label "Остале картице">
 <!ENTITY setstyles.label "Прилагоди стилове">

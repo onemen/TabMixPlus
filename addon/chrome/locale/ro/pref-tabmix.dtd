@@ -61,7 +61,7 @@
 <!ENTITY openBMKGroups.label "Grupuri de semne de carte">
 <!ENTITY openBMKGroups.tooltip "Nu înlocui filele când se deschide un grup de semne de carte">
 <!ENTITY openHistory.label "Istoric">
-<!ENTITY openUrl.label "Bara de adrese">
+<!ENTITY openUrl.label "Bară de adrese">
 <!ENTITY openSearch.label "Bară de căutare">
 <!ENTITY middlecurrent1.label "Deschide cu clic-mijloc sau Ctrl+clic în fila curentă">
 <!ENTITY middlecurrent.tooltip "Numai pentru semne de carte, istoric, legături forțate să se deschidă într-o filă nouă">
@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării)">
 <!ENTITY highlight.label "Evidențiază:">
 <!ENTITY currenttab.style.label "Fila curentă">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Filele neîncărcate">
 <!ENTITY unreadtabs.style.label "Filele nevizualizate">
 <!ENTITY othertabs.style.label "Alte file">
 <!ENTITY setstyles.label "Personalizează stilurile">

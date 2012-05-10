@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
 <!ENTITY highlight.label "Resaltar:">
 <!ENTITY currenttab.style.label "Pestaña actual">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Pestañas no cargadas">
 <!ENTITY unreadtabs.style.label "Pestañas no leídas">
 <!ENTITY othertabs.style.label "Otras pestañas">
 <!ENTITY setstyles.label "Personalizar estilos">

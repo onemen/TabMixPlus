@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
 <!ENTITY highlight.label "Zvýraznit:">
 <!ENTITY currenttab.style.label "Současný panel">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Nenačtené panely">
 <!ENTITY unreadtabs.style.label "Nepřečtené panely">
 <!ENTITY othertabs.style.label "Ostatní panely">
 <!ENTITY setstyles.label "Přizpůsobit si styly">

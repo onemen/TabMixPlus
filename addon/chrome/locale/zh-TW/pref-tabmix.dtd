@@ -40,7 +40,7 @@
 <!ENTITY newtab.blank "空白頁">
 <!ENTITY newtab.home "首頁">
 <!ENTITY newtab.current "目前頁面">
-<!ENTITY newtab.duplicate "複製頁面">
+<!ENTITY newtab.duplicate "複製頁面（包含歷史）">
 <!ENTITY newtab.location.1 "自訂網址…">
 <!ENTITY location.label.1 "網址">
 <!ENTITY focusContent.label "載入非空白頁時，焦點切換至頁面內容">
@@ -144,9 +144,9 @@
 <!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">
 <!ENTITY highlight.label "強調">
-<!ENTITY currenttab.style.label "目前分頁">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
-<!ENTITY unreadtabs.style.label "未讀分頁">
+<!ENTITY currenttab.style.label "目前的分頁">
+<!ENTITY unloadedtabs.style.label "未載入的分頁">
+<!ENTITY unreadtabs.style.label "未讀的分頁">
 <!ENTITY othertabs.style.label "其他分頁">
 <!ENTITY setstyles.label "設定樣式">
 <!ENTITY extraIcons.label1 "顯示標記">

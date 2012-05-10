@@ -1,6 +1,6 @@
 <!ENTITY styles.label "Określ styl">
 <!ENTITY currentTab.label "Aktywna karta">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Niewczytane karty">
 <!ENTITY unreadTab.label "Nieobejrzane karty">
 <!ENTITY otherTabs.label "Inne karty">
 <!ENTITY italic.label "Kursywa">
@@ -9,4 +9,4 @@
 <!ENTITY textcolor.label "Kolor tekstu">
 <!ENTITY bgColor.label "Kolor tła">
 <!ENTITY useThis.label "Zastosuj styl dla">
-<!ENTITY opacity.label "Krycie ">
+<!ENTITY opacity.label "Krycie">

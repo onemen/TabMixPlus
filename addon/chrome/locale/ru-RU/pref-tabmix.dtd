@@ -145,7 +145,7 @@
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
 <!ENTITY highlight.label "Подсветка:">
 <!ENTITY currenttab.style.label "Текущая вкладка">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Незагруженные вкладки">
 <!ENTITY unreadtabs.style.label "Непрочитанные вкладки">
 <!ENTITY othertabs.style.label "Другие вкладки">
 <!ENTITY setstyles.label "Настройка стилей">

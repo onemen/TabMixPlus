@@ -1,6 +1,6 @@
 <!ENTITY styles.label "定制样式">
 <!ENTITY currentTab.label "当前标签页">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "未加载的标签页">
 <!ENTITY unreadTab.label "未读标签页">
 <!ENTITY otherTabs.label "其他标签页">
 <!ENTITY italic.label "斜体">

@@ -1,6 +1,6 @@
 <!ENTITY styles.label "Prispôsobiť štýly">
 <!ENTITY currentTab.label "Aktuálna karta">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Nenačítané karty">
 <!ENTITY unreadTab.label "Neprečítané karty">
 <!ENTITY otherTabs.label "Ostatné karty">
 <!ENTITY italic.label "Kurzíva">
