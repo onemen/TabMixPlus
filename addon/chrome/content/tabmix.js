@@ -564,6 +564,11 @@ var TMP_eventListener = {
       this._tabStillLoading--;
 
     Tabmix.restoreTabState(tab);
+
+    // don't mark new tab as unread
+    var url = tab.linkedBrowser.currentURI.spec;
+    if (url == "about:blank" || url == "about:newtab")
+      tab.setAttribute("visited", true);
   },
 
   onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {

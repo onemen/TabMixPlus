@@ -3420,6 +3420,10 @@ try{
             _webNav.reload(flags);
          } catch (e) {}
       }
+      // don't mark new tab as unread
+      var url = aBrowser.currentURI.spec;
+      if (url == "about:blank" || url == "about:newtab")
+        tab.setAttribute("visited", true);
 
       // restore scroll position
       if (this.prefBranch.getBoolPref("save.scrollposition")) {
