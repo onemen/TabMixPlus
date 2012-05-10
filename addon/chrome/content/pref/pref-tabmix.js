@@ -336,8 +336,7 @@ var TM_Options = {
    setDisabeled_replaceLastTabWith: function() {
       // we disable replaceLastTabWith if one of this test is true
       // browser.tabs.closeWindowWithLastTab == true OR
-      // extensions.tabmix.keepLastTab = true OR
-      // when we enable the item we need to set the disable state for newTabUrl_1
+      // extensions.tabmix.keepLastTab = true
       var closeWindow = !document.getElementById("keepWindow").checked // inverted pref;
       var keepLastTab = document.getElementById("keepLastTab");
       var disable = closeWindow || keepLastTab.checked;

@@ -498,8 +498,7 @@
               <!-- show/hide the tabbar -->
               <hbox align="center">
                 <label value="&hideTabBar.label;:"/>
-                <menulist id="hideTabbar" oncommand="TM_Options.setDisabled('obs_' + this.id, this.value != 0); TM_Options.setDisabeled_replaceLastTabWith();"
-                          prefstring="extensions.tabmix.hideTabbar">
+                <menulist id="hideTabbar" prefstring="extensions.tabmix.hideTabbar">
                   <menupopup>
                     <menuitem value="0" id="hideTabbar.never"  label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
                     <menuitem value="1" id="hideTabbar.onetab" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
