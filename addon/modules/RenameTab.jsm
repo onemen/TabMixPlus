@@ -27,8 +27,6 @@ let RenameTab = {
     else
       this.data.value = this.data.docTitle;
 
-    this.data.permanently = null;
-
     this.showPanel();
   },
 
@@ -92,8 +90,11 @@ let RenameTab = {
     this._element("tabmixRenametab_titleField").value = this.data.value;
     this._element("tabmixRenametab_defaultField").value = this.data.docTitle;
     this.window.Tabmix.setItem(popup, "modified", this.data.modified);
+    var permanently = this._element("tabmixRenametab_checkbox");
     if (this.data.modified)
-      this._element("tabmixRenametab_checkbox").checked = this.data.modified == "*";
+      permanently.checked = this.data.modified == "*";
+
+    this.data.permanently = permanently.checked;
   },
 
   resetTitle: function() {
