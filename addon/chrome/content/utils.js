@@ -231,7 +231,7 @@ this.log(aMethod)
     }
 
     try {
-      let callerName = Components.stack.caller.caller.name;
+      let callerName = this._getCallerNameByIndex(2);
       if (!callerName)
         return false;
       if (typeof arguments[0] == "object")
