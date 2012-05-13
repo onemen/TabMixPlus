@@ -1,4 +1,19 @@
 var gTabMix_preferencesOverlay = {
+  id: function(id) {return document.getElementById(id);},
+  incontentInit: function gTabMix_preferencesOverlay_incontentInit(aEvent) {
+    var box = this.id("linkTargeting");
+    box.parentNode.insertBefore(this.id("tabmixplusBox"), box);
+
+    var warnOnCloseWindow = this.id("warnOnCloseWindow");
+    warnOnCloseWindow.parentNode.insertBefore(this.id("warnCloseMultiple"), warnOnCloseWindow);
+
+    box = this.id("showTabsInTaskbar").nextSibling;
+    box.parentNode.insertBefore(this.id("_hideTabbar").parentNode, box);
+
+    this.onPaneMainLoad();
+    document.getElementById("startupGroup").setAttribute("incontent", true);
+  },
+
    init: function gTabMix_preferencesOverlay_init(aEvent) {
       var prefWindow = aEvent.target.documentElement;
 
@@ -92,7 +107,7 @@ var gTabMix_preferencesOverlay = {
        'openUILinkIn("about:addons", "window");',
        'var w = Tabmix.getTopWin();\
        if (w) w.BrowserOpenAddonsMgr();\
-       else $&'
+       else $&', {silent: true}
      ).toCode(false, gMainPane, "showAddonsMgr");
 
      button = document.createElement("button");

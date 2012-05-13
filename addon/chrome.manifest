@@ -40,6 +40,7 @@ locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
 
+overlay   about:preferences                                         chrome://tabmixplus/content/pref/incontentPreferences.xul
 overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/pref/preferencesOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 
