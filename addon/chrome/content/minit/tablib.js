@@ -352,12 +352,13 @@ var tablib = {
       ).toCode();
     }
 
-    if (!Tabmix.isVersion(150)) {
-      Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
-        '{',
-        '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
-      ).toCode();
-    }
+    // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
+    // before our mousedown handler can prevent it
+    var callerName = Tabmix.isVersion(150) ? "onxblmousedown" : "setTab";
+    Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
+      '{',
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("' + callerName + '")) return;'
+    ).toCode();
 
     let _setter = gBrowser.tabContainer.__lookupSetter__("visible");
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
