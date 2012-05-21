@@ -14,9 +14,9 @@ Tabmix.startup = function TMP_startup() {
     // multi-rows total heights can be diffrent when tabs are on top
     // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
-    TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
+    Tabmix.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
     TabsOnTop.toggle = function TabsOnTop_toggle() {
-      this.tabmix_originaltoggle.apply(this, arguments);
+      Tabmix.originalFunctions.tabsOnTop_toggle.apply(this, arguments);
       if (TabmixTabbar.visibleRows > 1) {
         TabmixTabbar.setHeight(1, true);
         gBrowser.tabContainer.updateVerticalTabStrip();

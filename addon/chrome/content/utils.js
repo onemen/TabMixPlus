@@ -520,9 +520,11 @@ options = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this._define = null;
     this.toCode = null;
+    this.originalFunctions = null;
     window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }

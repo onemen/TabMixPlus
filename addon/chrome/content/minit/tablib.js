@@ -222,10 +222,11 @@ var tablib = {
        $1$2'
     ).toCode();
 
-    Tabmix.newCode("gBrowser.swapBrowsersAndCloseOther", gBrowser.swapBrowsersAndCloseOther)._replace(
-      '{', '{\
-       Tabmix.copyTabData(aOurTab, aOtherTab);'
-    ).toCode();
+    Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
+    gBrowser.swapBrowsersAndCloseOther = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
+      Tabmix.copyTabData(aOurTab, aOtherTab);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
