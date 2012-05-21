@@ -92,11 +92,12 @@ var TabmixTabClickOptions = {
     this.onDoubleClick = true;
     var node = aEvent.originalTarget;
 
-    var blockDblClick = gBrowser.tabContainer._blockDblClick;
-    if (blockDblClick && aEvent.originalTarget.localName == "box")
-      return;
     // don't do anything if user click on close tab button , or on any other button on tab or tabbar
     if (node.getAttribute("anonid") == "tmp-close-button" || node.localName == "toolbarbutton")
+      return;
+
+    // See hack note in the tabbrowser-close-tab-button binding
+    if (gBrowser.tabContainer._blockDblClick)
       return;
 
     var clickOutTabs = aEvent.target.localName == "tabs";
