@@ -558,7 +558,147 @@ function getPrefByType(prefName) {
 
 function setPrefByType(prefName, newValue, atImport) {
    try {
-      switch (Services.prefs.getPrefType(prefName)) {
+      let prefType = Services.prefs.getPrefType(prefName);
+      // when we import from old saved file, we need to replace old pref that are not in use.
+      // we also check for locked pref for the case user locked pref that we replaced
+      if (atImport && (prefType == Services.prefs.PREF_INVALID || Services.prefs.prefIsLocked(prefName))) {
+         switch (prefName) {
+            // in 0.3.0.605 we changed tab color from old pref to new pref
+            // old pref "extensions.tabmix.currentColor" type integer
+            // new pref "extensions.tabmix.currentColorCode" type string
+            case "extensions.tabmix.currentColor":
+            case "extensions.tabmix.unreadColor":
+            case "extensions.tabmix.progressColor":
+               var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
+                                "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"]
+               newValue = colorCodes[newValue];
+               prefName = prefName + "Code";
+            // in 0.3.7.4 2008-12-24 we combined all style pref into one per type
+            // extensions.tabmix.styles.[TYPE NAME]
+            case "extensions.tabmix.boldUnread":
+            case "extensions.tabmix.italicUnread":
+            case "extensions.tabmix.underlineUnread":
+            case "extensions.tabmix.boldCurrent":
+            case "extensions.tabmix.italicCurrent":
+            case "extensions.tabmix.underlineCurrent":
+            case "extensions.tabmix.unreadColorCode":
+            case "extensions.tabmix.currentColorCode":
+            case "extensions.tabmix.progressColorCode":
+            case "extensions.tabmix.useCurrentColor":
+            case "extensions.tabmix.useUnreadColor":
+            case "extensions.tabmix.useProgressColor":
+               var pref = prefName.toLowerCase().replace(/extensions.tabmix.|color/g,"")
+                                       .replace(/italic|bold|underline/g, ",$&,")
+                                       .replace("use", ",text,")
+                                       .replace("code", ",textColor,")
+                                       .split(",");
+               var styleName, attrib;
+               [styleName, attrib] = prefName.indexOf("Code") > -1 ? [pref[0], pref[1]] : [pref[2], pref[1]];
+               if (styleName == "progress") {
+                 attrib = attrib.replace("text", "bg");
+                 styleName += "Meter"
+               }
+               else
+                 styleName += "Tab";
+               oldStylePrefs[styleName][attrib] = newValue;
+               oldStylePrefs.found = true;
+               return;
+            // changed at 2008-02-26
+            case "extensions.tabmix.undoCloseCache":
+               Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
+               return;
+            // changed at 2008-08-17
+            case "extensions.tabmix.opentabfor.search":
+               Services.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
+               return;
+            // changed at 2008-09-23
+            case "extensions.tabmix.keepWindow":
+               Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
+               return;
+            // changed at 2008-09-28
+            case "browser.ctrlTab.mostRecentlyUsed":
+            case "extensions.tabmix.lasttab.handleCtrlTab":
+               Services.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
+               return;
+            // 2008-11-29
+            case "extensions.tabmix.maxWidth":
+            case "browser.tabs.tabMaxWidth":
+               Tabmix.prefs.setIntPref("tabMaxWidth", newValue);
+               return;
+            // 2008-11-29
+            case "extensions.tabmix.minWidth":
+            case "browser.tabs.tabMinWidth":
+               Tabmix.prefs.setIntPref("tabMinWidth", newValue);
+               return;
+            // 2009-01-31
+            case "extensions.tabmix.newTabButton.leftside":
+               Tabmix.prefs.setIntPref("newTabButton.position", /true/i.test(newValue) ? 0 : 2);
+               return;
+            // 2009-10-10
+            case "extensions.tabmix.windows.warnOnClose":
+               Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
+               Services.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
+               return;
+            // 2010-03-07
+            case "extensions.tabmix.extraIcons":
+               Services.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
+               Services.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
+               return;
+            // 2010-06-05
+            case "extensions.tabmix.tabXMode":
+               // in old version we use tabXMode = 0 to disable the button
+               if (newValue < 1 || newValue > 5)
+                  newValue = 1;
+               Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
+               return;
+            case "extensions.tabmix.tabXMode.enable":
+               Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", /true/i.test(newValue));
+               return;
+            case "extensions.tabmix.tabXLeft":
+               Tabmix.prefs.setBoolPref("tabs.closeButtons.onLeft", /true/i.test(newValue));
+               return;
+            case "extensions.tabmix.tabXDelay":
+               Tabmix.prefs.setIntPref("tabs.closeButtons.delay", newValue);
+               return;
+            // 2010-09-16
+            case "extensions.tabmix.speLink":
+               Tabmix.prefs.setIntPref("opentabforLinks", newValue);
+               return;
+            // 2011-01-26
+            case "extensions.tabmix.mouseDownSelect":
+               Tabmix.prefs.setBoolPref("selectTabOnMouseDown", /true/i.test(newValue));
+               return;
+            // 2011-10-11
+            case "browser.link.open_external":
+               if (newValue == document.getElementById("generalWindowOpen").value)
+                 newValue = -1;
+               Services.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
+               return;
+            // 2011-11-26
+            case "extensions.tabmix.clickToScroll.scrollDelay":
+               Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
+               return;
+            // 2012-01-26
+            case "extensions.tabmix.newTabUrl":
+               setNewTabUrl(newTabURLpref, newValue);
+               return;
+            case "extensions.tabmix.newTabUrl_afterLastTab":
+               setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
+               return;
+            // 2012-03-21
+            case "extensions.tabmix.loadOnNewTab":
+               Tabmix.prefs.setIntPref("loadOnNewTab.type", newValue);
+               return;
+            case "extensions.tabmix.replaceLastTabWith":
+               Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
+               return;
+            // 2012-04-12
+            case "browser.tabs.loadFolderAndReplace":
+               Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
+               return;
+         }
+      }
+      switch (prefType) {
          case pBranch.PREF_BOOL:
             if (atImport) {
                newValue = /true/i.test(newValue);
@@ -600,145 +740,6 @@ function setPrefByType(prefName, newValue, atImport) {
 
             Services.prefs.setCharPref(prefName, newValue);
             break;
-         default:
-            if (!atImport)
-               break;
-            // when we import from old saved file, we need to replace old pref that are not in use.
-            switch (prefName) {
-               // in 0.3.0.605 we changed tab color from old pref to new pref
-               // old pref "extensions.tabmix.currentColor" type integer
-               // new pref "extensions.tabmix.currentColorCode" type string
-               case "extensions.tabmix.currentColor":
-               case "extensions.tabmix.unreadColor":
-               case "extensions.tabmix.progressColor":
-                  var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
-                                   "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"]
-                  newValue = colorCodes[newValue];
-                  prefName = prefName + "Code";
-               // in 0.3.7.4 2008-12-24 we combined all style pref into one per type
-               // extensions.tabmix.styles.[TYPE NAME]
-               case "extensions.tabmix.boldUnread":
-               case "extensions.tabmix.italicUnread":
-               case "extensions.tabmix.underlineUnread":
-               case "extensions.tabmix.boldCurrent":
-               case "extensions.tabmix.italicCurrent":
-               case "extensions.tabmix.underlineCurrent":
-               case "extensions.tabmix.unreadColorCode":
-               case "extensions.tabmix.currentColorCode":
-               case "extensions.tabmix.progressColorCode":
-               case "extensions.tabmix.useCurrentColor":
-               case "extensions.tabmix.useUnreadColor":
-               case "extensions.tabmix.useProgressColor":
-                  var pref = prefName.toLowerCase().replace(/extensions.tabmix.|color/g,"")
-                                          .replace(/italic|bold|underline/g, ",$&,")
-                                          .replace("use", ",text,")
-                                          .replace("code", ",textColor,")
-                                          .split(",");
-                  var styleName, attrib;
-                  [styleName, attrib] = prefName.indexOf("Code") > -1 ? [pref[0], pref[1]] : [pref[2], pref[1]];
-                  if (styleName == "progress") {
-                    attrib = attrib.replace("text", "bg");
-                    styleName += "Meter"
-                  }
-                  else
-                    styleName += "Tab";
-                  oldStylePrefs[styleName][attrib] = newValue;
-                  oldStylePrefs.found = true;
-                  break;
-               // changed at 2008-02-26
-               case "extensions.tabmix.undoCloseCache":
-                  Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
-                  break;
-               // changed at 2008-08-17
-               case "extensions.tabmix.opentabfor.search":
-                  Services.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
-                  break;
-               // changed at 2008-09-23
-               case "extensions.tabmix.keepWindow":
-                  Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
-                  break;
-               // changed at 2008-09-28
-               case "browser.ctrlTab.mostRecentlyUsed":
-               case "extensions.tabmix.lasttab.handleCtrlTab":
-                  Services.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
-                  break;
-               // 2008-11-29
-               case "extensions.tabmix.maxWidth":
-               case "browser.tabs.tabMaxWidth":
-                  Tabmix.prefs.setIntPref("tabMaxWidth", newValue);
-                  break;
-               // 2008-11-29
-               case "extensions.tabmix.minWidth":
-               case "browser.tabs.tabMinWidth":
-                  Tabmix.prefs.setIntPref("tabMinWidth", newValue);
-                  break;
-               // 2009-01-31
-               case "extensions.tabmix.newTabButton.leftside":
-                  Tabmix.prefs.setIntPref("newTabButton.position", /true/i.test(newValue) ? 0 : 2);
-                  break;
-               // 2009-10-10
-               case "extensions.tabmix.windows.warnOnClose":
-                  Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
-                  Services.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
-                  break;
-               // 2010-03-07
-               case "extensions.tabmix.extraIcons":
-                  Services.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
-                  Services.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
-                  break;
-               // 2010-06-05
-               case "extensions.tabmix.tabXMode":
-                  // in old version we use tabXMode = 0 to disable the button
-                  if (newValue < 1 || newValue > 5)
-                     newValue = 1;
-                  Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
-                  break;
-               case "extensions.tabmix.tabXMode.enable":
-                  Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", /true/i.test(newValue));
-                  break;
-               case "extensions.tabmix.tabXLeft":
-                  Tabmix.prefs.setBoolPref("tabs.closeButtons.onLeft", /true/i.test(newValue));
-                  break;
-               case "extensions.tabmix.tabXDelay":
-                  Tabmix.prefs.setIntPref("tabs.closeButtons.delay", newValue);
-                  break;
-               // 2010-09-16
-               case "extensions.tabmix.speLink":
-                  Tabmix.prefs.setIntPref("opentabforLinks", newValue);
-                  break;
-               // 2011-01-26
-               case "extensions.tabmix.mouseDownSelect":
-                  Tabmix.prefs.setBoolPref("selectTabOnMouseDown", /true/i.test(newValue));
-                  break;
-               // 2011-10-11
-               case "browser.link.open_external":
-                  if (newValue == document.getElementById("generalWindowOpen").value)
-                    newValue = -1;
-                  Services.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
-                  break;
-               // 2011-11-26
-               case "extensions.tabmix.clickToScroll.scrollDelay":
-                  Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
-                  break;
-               // 2012-01-26
-               case "extensions.tabmix.newTabUrl":
-                  setNewTabUrl(newTabURLpref, newValue);
-                  break;
-               case "extensions.tabmix.newTabUrl_afterLastTab":
-                  setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
-                  break;
-               // 2012-03-21
-               case "extensions.tabmix.loadOnNewTab":
-                  Tabmix.prefs.setIntPref("loadOnNewTab.type", newValue);
-                  break;
-               case "extensions.tabmix.replaceLastTabWith":
-                  Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
-                  break;
-               // 2012-04-12
-               case "browser.tabs.loadFolderAndReplace":
-                  Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
-                  break;
-            }
       }
    } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}
 }
