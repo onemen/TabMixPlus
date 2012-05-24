@@ -391,6 +391,13 @@ var TMP_extensionsCompatibility = {
 
     // check if Greasemonkey installed
     Tabmix.contentAreaClick.isGreasemonkeyInstalled();
+
+    if (typeof MouseControl == "object" && MouseControl.newTab) {
+      Tabmix.newCode("MouseControl.newTab" , MouseControl.newTab)._replace(
+        'gBrowser.moveTabTo',
+        'if (!Tabmix.prefs.getBoolPref("openNewTabNext")) $&'
+      ).toCode();
+    }
   }
 
 }
