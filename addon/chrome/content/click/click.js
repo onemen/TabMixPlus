@@ -607,7 +607,13 @@ var TabmixContext = {
     var nextEpisode = treeWalker.nextNode();
     var urls = [];
     while (nextEpisode != null) {
-      let url = (nextEpisode.nodeName == "li") ? nextEpisode.firstChild.href : nextEpisode.href;
+      let url;
+      if (nextEpisode.nodeName == "li") {
+        let node = nextEpisode.firstChild;
+        url = node.nodeName == "p" ? node.firstChild.href : node.href;
+      }
+      else
+        url = nextEpisode.href;
       if (links_urlSecurityCheck(url)) {
         if (check)
           return false;
