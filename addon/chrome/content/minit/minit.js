@@ -1281,7 +1281,7 @@ Tabmix.navToolbox = {
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     if (TabmixSessionManager.enableManager == null) {
       let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
-      TabmixSessionManager.enableManager = Tabmixc.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
+      TabmixSessionManager.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
       TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
     }
     Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !TabmixSessionManager.enableManager);
