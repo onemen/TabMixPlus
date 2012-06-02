@@ -222,7 +222,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
 }
 
 /**
- * @brief In TMP_BrowserOpenTab we empty and fucos the urlbar
+ * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
  *        if the user or onload from a page blur the urlbar befroe user typed new value
  *        we restore the current url
  */
