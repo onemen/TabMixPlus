@@ -62,7 +62,6 @@ function before_Init() {
 // load all preferences into the dialog
 function TM_EMinit() {
   var browserWindow = Tabmix.getTopWin();
-  gPrefs =  document.getElementsByAttribute("prefstring", "*");
 
   getTab();
 
@@ -74,6 +73,13 @@ function TM_EMinit() {
 
   if (!Tabmix.isVersion(90))
     TM_Options.setItem("unloadedTab", "style", "visibility: hidden;");
+
+  if (Tabmix.isVersion(130)) {
+    let cmSearch = document.getElementById("contextMenuSearch");
+    cmSearch.hidden = false;
+    cmSearch.setAttribute("prefstring", "browser.search.context.loadInBackground");
+  }
+  gPrefs =  document.getElementsByAttribute("prefstring", "*");
 
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {

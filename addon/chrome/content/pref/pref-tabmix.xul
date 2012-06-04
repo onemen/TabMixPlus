@@ -297,6 +297,8 @@
                   <checkbox id="selectTabUrl" label="&openUrl.label;" prefstring="extensions.tabmix.loadUrlInBackground" inverted="true"/>
                   <!-- Select from Search Bar-->
                   <checkbox id="selectTabSearch" label="&openSearch.label;" prefstring="extensions.tabmix.loadSearchInBackground" inverted="true"/>
+                  <!-- Select from Context menu search-->
+                  <checkbox id="contextMenuSearch" label="&contextMenuSearch.label;…" inverted="true" hidden="true"/>
                   <!-- Select Bookmarks or history -->
                   <checkbox id="selectTabBH" label="&selectTabBH.label;" prefstring="browser.tabs.loadBookmarksInBackground" inverted="true"/>
                   <!-- Select first tab from Bookmark Groups -->
