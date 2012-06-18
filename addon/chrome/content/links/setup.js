@@ -66,8 +66,14 @@ function TMP_TBP_Startup() {
       TMP_DOMWindowOpenObserver.onObserve(window, TMP_DOMWindowOpenObserver);
 
     // make tabmix compatible with ezsidebar extension
-    var TMP_BrowserStartup = "__ezsidebar__BrowserStartup" in window ? "__ezsidebar__BrowserStartup" : "BrowserStartup";
-    var bowserStartup = Tabmix.newCode("window."+TMP_BrowserStartup, window[TMP_BrowserStartup]);
+    var fnContainer, TMP_BrowserStartup;
+    if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
+      [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
+    else if (Tabmix.isVersion(160))
+      [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
+    else
+      [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
+    var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
 
     var pbs = Cc["@mozilla.org/privatebrowsing;1"].
               getService(Ci.nsIPrivateBrowsingService);
@@ -136,11 +142,14 @@ function TMP_TBP_Startup() {
         'TabsOnTop.init();', {silent: true}
       );
     }
-    bowserStartup.toCode();
+    bowserStartup.toCode(false, fnContainer, TMP_BrowserStartup);
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    Tabmix.newCode("delayedStartup", delayedStartup)._replace(
+    var [name, fn] = Tabmix.isVersion(160) ?
+          ["gBrowserInit._delayedStartup", gBrowserInit._delayedStartup] :
+          ["delayedStartup", delayedStartup];
+    Tabmix.newCode(name, fn)._replace(
       '{',
       '{\
        try {\
@@ -161,7 +170,8 @@ function TMP_TBP_Startup() {
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    window[TMP_BrowserStartup]();
+    TMP_BrowserStartup = fnContainer[TMP_BrowserStartup].bind(fnContainer);
+    TMP_BrowserStartup();
 
   } catch (ex) {Tabmix.assert(ex);}
 }
