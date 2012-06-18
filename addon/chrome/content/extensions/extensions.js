@@ -236,7 +236,13 @@ var TMP_extensionsCompatibility = {
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.newCode("faviconize.toggle", faviconize.toggle)._replace(
         /(\})(\)?)$/,
-        'TabmixTabbar.updateScrollStatus(); TabmixTabbar.updateBeforeAndAfter(); $1$2'
+        <![CDATA[
+          tab.removeAttribute("minwidth");
+          tab.removeAttribute("maxwidth");
+          TabmixTabbar.updateScrollStatus();
+          TabmixTabbar.updateBeforeAndAfter();
+          $1$2
+        ]]>
       ).toCode();
     }
 

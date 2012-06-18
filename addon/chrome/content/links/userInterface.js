@@ -461,4 +461,8 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       aTab.removeAttribute("tabmix_bookmarkId");
     }
   }
+
+  // make sure other extensions don't set minwidth maxwidth
+  aTab.removeAttribute("minwidth");
+  aTab.removeAttribute("maxwidth");
 }

@@ -350,7 +350,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
         this.removeAttribute("closebuttons-hover");
     }
   }
-  else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) {
+  else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
+           ("faviconize" in window && Tabmix.callerName() == "onxbltransitionend")) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }
