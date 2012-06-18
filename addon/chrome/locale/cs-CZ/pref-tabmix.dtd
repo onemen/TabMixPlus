@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Odchýlená okna">
 <!ENTITY selectTabCommand.label "Příkazy pro nový panel">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Záložky/Historie">
 <!ENTITY duplicateTab.label "Duplikovat panel">
 <!ENTITY inversefocus1.label "Kliknutí prostředním tlačítkem myši přepnuté pro levou ruku či CTRL+kliknutí se zaměří na:">

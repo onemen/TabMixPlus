@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importar Configurações">
 <!ENTITY settings.default "Restaurar Padrões">
 <!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Usar preferência separada para links de outros aplicativos">
 <!ENTITY externalLinkTarget.label "Abrir links de outros aplicativos em:">
 <!ENTITY linkTarget.tab "Nova aba na janela atual">
 <!ENTITY linkTarget.window "Nova janela">
@@ -26,10 +26,10 @@
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Forçar para que abram em nova aba:">
 <!ENTITY speLink.none "Nada">
-<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.allLinks "Todos os links">
 <!ENTITY speLink.external "Links para outros sites">
 <!ENTITY singleWindow.label "Usar somente uma janela (Single Window Mode)">
-<!ENTITY newTabs.label "New Tabs">
+<!ENTITY newTabs.label "Novas abas">
 <!ENTITY tabOpen.label "Abrindo abas">
 <!ENTITY tabFocus.label "Foco das abas">
 <!ENTITY tabClose.label "Fechando abas">
@@ -41,9 +41,9 @@
 <!ENTITY newtab.home "Página inicial">
 <!ENTITY newtab.current "Página atual">
 <!ENTITY newtab.duplicate "Duplicar página">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY newtab.location.1 "Página Nova aba">
+<!ENTITY location.label.1 "Endereço">
+<!ENTITY focusContent.label "Destacar conteúdo quando carregar a página não-branco">
 <!ENTITY openTabNext.label "Abrir novas abas ao lado da aba atual">
 <!ENTITY openOtherTabNext.label "Abrir outras abas próxima da atual">
 <!ENTITY relatedAfterCurrent.label "Apenas se relacionadas à aba atual">
@@ -53,9 +53,9 @@
 <!ENTITY openTabNextInverse.label "Mudar ordem de abertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir nova aba próxima da última aba aberta a partir da aba atual (desde que foi a última a ser selecionada)">
-<!ENTITY lockTabs.label "Lock tabs">
-<!ENTITY lockNewTabs.label "Lock New tabs">
-<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY lockTabs.label "Bloquear abas">
+<!ENTITY lockNewTabs.label "Bloquear novas abas">
+<!ENTITY lockAppTabs.label "Bloquear abas de aplicativos">
 <!ENTITY openNewTab.label "Abrir novas abas a partir de:">
 <!ENTITY openBookmarks.label "Favoritos">
 <!ENTITY openBMKGroups.label "Grupos de favoritos">
@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Janelas desviadas">
 <!ENTITY selectTabCommand.label "Comandos de abrir nova aba">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">
 <!ENTITY duplicateTab.label "Duplicar aba">
 <!ENTITY inversefocus1.label "Clique com o botão do meio ou Ctrl+clique inverte o foco de:">
@@ -88,7 +89,7 @@
 <!ENTITY focusTab.lastTab "Última aba">
 <!ENTITY focusTab.lastSelectedTab "Última aba selecionada">
 <!ENTITY focusTab.openerTab "Aba de origem/à direita">
-<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.openerTab.rtl "Abrir/fechar aba">
 <!ENTITY focusTab.lastOpenedTab "Última aba aberta">
 <!ENTITY undoClose.label "Habilitar botão de desfazer &quot;fechar aba&quot;">
 <!ENTITY undoCloseCache.label "Número máximo de abas a lembrar:">
@@ -108,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Posicionar popups próximos aos seus iniciadores">
 <!ENTITY slideshow.label "Ao apertar F8 ativar modo visualizador de slides a cada">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">
-<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY toggleAnimation.label "Desativar a animação abrir/fechar na aba">
 <!ENTITY seconds.label "segundos">
 <!ENTITY minutes.label "minutos">
 <!ENTITY tabBarAppearance.label "Barra de Abas">
@@ -116,7 +117,7 @@
 <!ENTITY toolBarAppearance.label "Barra de ferramentas">
 <!ENTITY show.ontabbar.label "Mostrar na barra de abas">
 <!ENTITY show.ontab.label "Mostrar na aba">
-<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY dragNewTabButton.tooltip "Arraste o botão &apos;New Tab&apos; para sua barra de guia para ativar essa opção.">
 <!ENTITY hideTabBarButton.label "Botão &quot;Fechar Aba&quot;">
 <!ENTITY newTabButton.label "Botão &quot;Nova Aba&quot;">
 <!ENTITY newTabButton.posiotion.left.label "Lado esquerdo">
@@ -129,23 +130,23 @@
 <!ENTITY dropIndicator.label "Indicação ao soltar aba">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo interno">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description "Usar as extensões treeStyleTab ou VerticalTab para controlar estas preferências.">
 <!ENTITY tabBarPosition.label "Posição:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">
+<!ENTITY tabBarPosition.bottom.label "Fundo (abaixo do conteúdo)">
 <!ENTITY tabScroll.label "Quando as abas não couberem na barra de abas:">
 <!ENTITY tabScroll.none "Barra de abas rolável">
 <!ENTITY tabScroll.leftRightButtons "Rolável com os botões do lado direito e esquerdo">
 <!ENTITY tabScroll.rightButtons "Rolável com os botões do lado direito">
-<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.rightButtons.rtl "Rolável com botões no lado esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas fileiras">
 <!ENTITY maxrow.label "Número máximo de fileiras:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY offsetAmountToScroll.label "Quando rolagem mostrar parte da próxima guia de out-of-sight">
+<!ENTITY smoothScroll.label "Ativar rolagem suave">
 <!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
 <!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Aba atual">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Abas descarregados">
 <!ENTITY unreadtabs.style.label "Abas não lidas">
 <!ENTITY othertabs.style.label "Outras abas">
 <!ENTITY setstyles.label "Personalizar estilos">
@@ -156,7 +157,7 @@
 <!ENTITY progressMeter.label "Barra de progresso nas abas">
 <!ENTITY showTabX.labelBegin "Botão &quot;Fechar Aba&quot;">
 <!ENTITY showTabX.left "Colocar no lado esquerdo">
-<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY showTabX.rtl "Colocar no lado direito">
 <!ENTITY milliseconds.label "milisegundos">
 <!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "17em">
@@ -185,13 +186,13 @@
 <!ENTITY tabFlip.delay "Usar um atraso de">
 <!ENTITY clickFocus.label "Selecionar aba clicando com o mouse (apertando e soltando)">
 <!ENTITY removeEntries.label "Remover entradas em listas de menus do TabMix Plus com duplo clique">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "Ao fechar uma aba, outras guias não devem redimensionar até que o cursor deixa região de barra de ferramentas">
 <!ENTITY removeEntries.tooltip "Incluir abas fechadas, janelas fechadas e sessões salvas">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Ao rolar sobre a barra de abas">
+<!ENTITY tabbarscrolling.holdShift.label "Segurar a tecla Shift durante a rolagem para alternar entre essas opções">
+<!ENTITY tabbarscrolling.selectTab.label "Trocar as abas selecionadas">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rolar todas as abas">
+<!ENTITY tabbarscrolling.inverse.label "Rolas da direção inversa">
 <!ENTITY double.label "Duplo clique">
 <!ENTITY middle.label "Clique c/ botão do meio">
 <!ENTITY ctrl.label "Ctrl+Clique">
@@ -201,7 +202,7 @@
 <!ENTITY ontab.label "sobre a aba:">
 <!ENTITY ontabbar.label "sobre a barra de abas:">
 <!ENTITY clicktab.label "Escolher comando a ser executado ao clicar sobre aba ou barra de abas">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.dblClick.label "Impedir que o duplo-clique na barra de abas altere o tamanho da janela.">
 <!ENTITY clicktab.nothing "Não faz nada">
 <!ENTITY clicktab.addtab "Abre nova aba">
 <!ENTITY clicktab.duplicatetab "Duplica a aba">

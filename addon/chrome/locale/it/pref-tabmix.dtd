@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Altri link in generale">
 <!ENTITY selectDivertedTab.label "Link che aprono nuove finestre">
 <!ENTITY selectTabCommand.label "Comandi delle nuove schede">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Segnalibri o cronologia">
 <!ENTITY duplicateTab.label "Duplica scheda">
 <!ENTITY inversefocus1.label "Selezionare gli elementi la cui apertura primo/secondo piano verrà invertita con clic centrale/Ctrl+clic">
@@ -163,6 +164,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -177,6 +179,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

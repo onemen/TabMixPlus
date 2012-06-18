@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Omdirigerede vinduer">
 <!ENTITY selectTabCommand.label "Nyt faneblad-kommandoer">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bogmærker/Historik">
 <!ENTITY duplicateTab.label "Dupliker faneblad">
 <!ENTITY inversefocus1.label "Modsat midterklik eller Ctrl-klik fokus på:">

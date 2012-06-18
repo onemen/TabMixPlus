@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Enllaços">
 <!ENTITY selectDivertedTab.label "Pàgines redirigides">
 <!ENTITY selectTabCommand.label "Ordres de pestanya nova">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Adreces d&apos;interès/Historial">
 <!ENTITY duplicateTab.label "Pestanya duplicada">
 <!ENTITY inversefocus1.label "En obrir amb el botó del mig o amb Ctrl-clic, inverteix l&apos;enfocament de:">
@@ -145,7 +146,7 @@
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">
 <!ENTITY highlight.label "Ressalta:">
 <!ENTITY currenttab.style.label "Pestanya actual">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Pestanyes no carregades">
 <!ENTITY unreadtabs.style.label "Pestanyes pendents de llegir">
 <!ENTITY othertabs.style.label "Altres pestanyes">
 <!ENTITY setstyles.label "Personalitza els estils">

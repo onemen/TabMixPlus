@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "קישורים">
 <!ENTITY selectDivertedTab.label "Diverted windows">
 <!ENTITY selectTabCommand.label "פקודת לשונית חדשה">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "סימניות/היסטוריה">
 <!ENTITY duplicateTab.label "שכפל לשונית">
 <!ENTITY inversefocus1.label "הפוך מיקוד לחצן אמצעי:">

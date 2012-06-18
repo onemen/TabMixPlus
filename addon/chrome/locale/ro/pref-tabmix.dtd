@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Legături">
 <!ENTITY selectDivertedTab.label "Ferestre redirecționate">
 <!ENTITY selectTabCommand.label "Comenzi cu parametru „filă nouă”">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Semne de carte/istoric">
 <!ENTITY duplicateTab.label "Duplică fila">
 <!ENTITY inversefocus1.label "Inversează modul de activare cu clic-mijloc sau Ctrl+clic pentru:">

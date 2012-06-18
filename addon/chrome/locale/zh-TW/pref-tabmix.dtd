@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "一般鏈結">
 <!ENTITY selectDivertedTab.label "彈出視窗">
 <!ENTITY selectTabCommand.label "空白分頁">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "書籤、瀏覽記錄">
 <!ENTITY duplicateTab.label "複製分頁">
 <!ENTITY inversefocus1.label "配合上述設定將滑鼠中鍵或 [Ctrl]+左鍵 設為相反效果：">

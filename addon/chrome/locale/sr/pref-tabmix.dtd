@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Веза">
 <!ENTITY selectDivertedTab.label "Преусмерених прозора">
 <!ENTITY selectTabCommand.label "Команди за нову картицу ----">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Обележивача/историјата">
 <!ENTITY duplicateTab.label "Дуплирај картицу">
 <!ENTITY inversefocus1.label "Обрни средњи клик или Control-клик пребацивање за:">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "链接">
 <!ENTITY selectDivertedTab.label "更改方式的窗口">
 <!ENTITY selectTabCommand.label "新建的标签页">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "书签/历史">
 <!ENTITY duplicateTab.label "复制的标签页">
 <!ENTITY inversefocus1.label "中键点击或 Ctrl-点击时已相反方式打开以下项目：">

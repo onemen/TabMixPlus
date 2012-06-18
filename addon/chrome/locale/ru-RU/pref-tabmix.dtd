@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Ссылки">
 <!ENTITY selectDivertedTab.label "Вместо окон">
 <!ENTITY selectTabCommand.label "По команде создания новой вкладки">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Закладки / Журнал посещений">
 <!ENTITY duplicateTab.label "Клонировать вкладку">
 <!ENTITY inversefocus1.label "Инвертировать фокус для действия клик СКМ или Ctrl+ЛКМ">

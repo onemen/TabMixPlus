@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Länkar">
 <!ENTITY selectDivertedTab.label "Omdirigerade fönster">
 <!ENTITY selectTabCommand.label "Kommandot &apos;Ny flik&apos;">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bokmärken/Historik">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">

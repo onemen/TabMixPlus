@@ -1,6 +1,6 @@
 <!ENTITY styles.label "Mukauta tyylejä">
 <!ENTITY currentTab.label "Nykyinen välilehti">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Suljetut välilehdet">
 <!ENTITY unreadTab.label "Lukemamattoman välilehdet">
 <!ENTITY otherTabs.label "Muut välilehdet">
 <!ENTITY italic.label "Kursiivi">

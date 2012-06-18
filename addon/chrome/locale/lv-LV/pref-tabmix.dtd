@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Diverted windows">
 <!ENTITY selectTabCommand.label "New tab commands">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bookmarks/History">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">

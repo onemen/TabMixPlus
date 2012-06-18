@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Linkak">
 <!ENTITY selectDivertedTab.label "Leiho besteratuak">
 <!ENTITY selectTabCommand.label "&quot;Fitxa berri&quot; komandoak">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Lastermarkak/Historia">
 <!ENTITY duplicateTab.label "Bikoiztu fitxa">
 <!ENTITY inversefocus1.label "Erdiko klikak edo CTRL-klikak hautatzen du:">

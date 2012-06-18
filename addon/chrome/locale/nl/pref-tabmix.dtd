@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Koppelingen">
 <!ENTITY selectDivertedTab.label "Omgeleide vensters">
 <!ENTITY selectTabCommand.label "Nieuwe tabbladopdrachten">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
 <!ENTITY duplicateTab.label "Tabblad dupliceren">
 <!ENTITY inversefocus1.label "Middelklik- of Ctrl-klik-focus omdraaien van:">
@@ -145,7 +146,7 @@
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
 <!ENTITY highlight.label "Attentie vragen voor:">
 <!ENTITY currenttab.style.label "Huidige tabblad">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Niet geladen tabbladen">
 <!ENTITY unreadtabs.style.label "Ongelezen tabbladen">
 <!ENTITY othertabs.style.label "Overige tabbladen">
 <!ENTITY setstyles.label "Stijlen aanpassen">

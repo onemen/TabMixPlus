@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "لینک ها">
 <!ENTITY selectDivertedTab.label "پنجره های منتقل شده">
 <!ENTITY selectTabCommand.label "دستورهای تب جدید">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "نشانه گذاری شده ها/تاریخچه">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">

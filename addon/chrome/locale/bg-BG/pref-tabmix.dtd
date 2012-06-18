@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Връзки">
 <!ENTITY selectDivertedTab.label "Вместо прозорци">
 <!ENTITY selectTabCommand.label "При команда за създаване на нов подпрозорец">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Отметки/История">
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
 <!ENTITY inversefocus1.label "Инвертиране на фокуса при щракване със среден бутон или CTRL+ляв бутон върху:">

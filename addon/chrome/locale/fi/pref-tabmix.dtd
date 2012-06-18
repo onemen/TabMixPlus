@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "kotisivulla">
 <!ENTITY newtab.current "Nykyisellä sivulla">
 <!ENTITY newtab.duplicate "Duplicate Page">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
+<!ENTITY newtab.location.1 "Uusi välilehtisivu">
+<!ENTITY location.label.1 "Osoite">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Open new tabs next to current one">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">
@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Diverted windows">
 <!ENTITY selectTabCommand.label "New tab commands">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bookmarks/History">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
@@ -140,12 +141,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-row">
 <!ENTITY maxrow.label "Max number of rows to display:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Vieritettäessä näytä osa seuraavasta piiloon jäävästä välilehdestä">
 <!ENTITY smoothScroll.label "Käytä pehmeää vieritystä">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY highlight.label "Highlight">
 <!ENTITY currenttab.style.label "Current tab">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Suljetut välilehdet">
 <!ENTITY unreadtabs.style.label "Unread tabs">
 <!ENTITY othertabs.style.label "Other Tabs">
 <!ENTITY setstyles.label "Customize Styles">
@@ -187,11 +188,11 @@
 <!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
 <!ENTITY lockTabSizingOnClose.label "Suljettaessa välilehteä, säilytä muiden välilehtien koko kunnes kursori poistuu työkalupalkin alueelta">
 <!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Vieritettäessä välilehtipalkin päällä">
+<!ENTITY tabbarscrolling.holdShift.label "Pidä Shift pohjassa vieritettäessä vaihtaaksesi näiden valintojen välillä">
+<!ENTITY tabbarscrolling.selectTab.label "Vaihda valittu välilehti">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Vieritä kaikki välilehdet">
+<!ENTITY tabbarscrolling.inverse.label "Käännä vierityksen suunta">
 <!ENTITY double.label "Double-click">
 <!ENTITY middle.label "Middle-click">
 <!ENTITY ctrl.label "Ctrl-click">

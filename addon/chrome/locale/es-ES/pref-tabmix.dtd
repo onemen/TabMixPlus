@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Enlaces">
 <!ENTITY selectDivertedTab.label "Otras ventanas">
 <!ENTITY selectTabCommand.label "Comando nueva pestaña">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Marcadores/Historial">
 <!ENTITY duplicateTab.label "Duplicar pestaña">
 <!ENTITY inversefocus1.label "Invertir el enfoque de Clic-central o Ctrl-clic de:">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "По посиланнях">
 <!ENTITY selectDivertedTab.label "Замість вікон">
 <!ENTITY selectTabCommand.label "По команді створення нової вкладки">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "З журналу / закладок">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">

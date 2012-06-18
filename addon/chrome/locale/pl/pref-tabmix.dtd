@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "odnośników">
 <!ENTITY selectDivertedTab.label "przekierowanych okien">
 <!ENTITY selectTabCommand.label "poleceń nowych kart">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "zakładek/historii">
 <!ENTITY duplicateTab.label "powielonych kart">
 <!ENTITY inversefocus1.label "Zmień kolejność otwierania dla czynności kliknięcia ś.p.m lub Ctrl+kliknięcie:">

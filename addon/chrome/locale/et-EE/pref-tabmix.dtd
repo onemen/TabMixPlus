@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Lingid">
 <!ENTITY selectDivertedTab.label "Mujale suunatud aknad">
 <!ENTITY selectTabCommand.label "Uue kaardi käsud">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Järjehoidjad/Ajalugu">
 <!ENTITY duplicateTab.label "Tee kaardist koopia">
 <!ENTITY inversefocus1.label "Hiire keskmise nupuga klõpsamisel või Control-klõpsamisel on fookustamine vastupidine nende puhul:">
@@ -145,7 +146,7 @@
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
 <!ENTITY highlight.label "Teistsugune stiil:">
 <!ENTITY currenttab.style.label "praegusel kaardil">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "laadimata kaartidel">
 <!ENTITY unreadtabs.style.label "lugemata kaartidel">
 <!ENTITY othertabs.style.label "teistel kaartidel">
 <!ENTITY setstyles.label "Muuda stiile">

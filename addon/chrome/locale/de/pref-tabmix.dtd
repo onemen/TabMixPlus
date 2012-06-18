@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
 <!ENTITY selectTabCommand.label "Neuen Tab">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
 <!ENTITY inversefocus1.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Bağlantılardan">
 <!ENTITY selectDivertedTab.label "Ayrılmış pencerelerden">
 <!ENTITY selectTabCommand.label "Yeni sekme komutundan">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Yer imi/Geçmişten">
 <!ENTITY duplicateTab.label "Sekmeyi çiftle">
 <!ENTITY inversefocus1.label "Orta-tıklama ya da Control+tıklama odaklanmayı tersine çevirir:">

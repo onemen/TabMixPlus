@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Ligações">
 <!ENTITY selectDivertedTab.label "Janelas diversas">
 <!ENTITY selectTabCommand.label "Comandos de novo separador">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Marcadores/histórico">
 <!ENTITY duplicateTab.label "Duplicar separador">
 <!ENTITY inversefocus1.label "Clique central inverso ou  Control clique foca:">

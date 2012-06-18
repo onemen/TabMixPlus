@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Lataa taustalla">
 <!ENTITY searchTabFocus.accesskey "B">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Muokkaa välilehden nimeä">
+<!ENTITY renametab.reset.label "Palauta oletusnimi">
 <!ENTITY title.label "Nimike">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "Oletus">
+<!ENTITY renametab.permanently.label "Muuta tämän välilehden nimi sen osoitteesta huolimatta">
+<!ENTITY renametab.permanently.tooltip "Välilehti historian kera - uusi nimi säilyy kun osoite muuttuu">
 <!ENTITY forum.label "Foorumi">
 <!ENTITY faq.label "UKK">
 <!ENTITY help.label "Apua">

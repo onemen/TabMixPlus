@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Rozptýlené okná">
 <!ENTITY selectTabCommand.label "Príkazy nová karta">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Záložky/História">
 <!ENTITY duplicateTab.label "Duplikovať kartu">
 <!ENTITY inversefocus1.label "Zmena zamerania kliknutia prostredným a Control:">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Marque-pages ou Historique">
 <!ENTITY duplicateTab.label "Dupliquer l&apos;onglet">
 <!ENTITY inversefocus1.label "Inverser ce comportement en cas de clic-milieu ou Ctrl-clic pour les :">

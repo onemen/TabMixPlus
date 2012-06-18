@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "リンクから開いたタブ">
 <!ENTITY selectDivertedTab.label "新しいウィンドウに開くはずだったタブ">
 <!ENTITY selectTabCommand.label "[新しいタブ] コマンドで開いたタブ">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">
 <!ENTITY duplicateTab.label "複製したタブ">
 <!ENTITY inversefocus1.label "以下を中クリックまたは Ctrl + クリックで開いたとき、フォーカスを移動する：">
