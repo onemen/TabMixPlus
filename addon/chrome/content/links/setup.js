@@ -248,16 +248,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
     TabmixTabbar.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") && (max != min);
-    if (TabmixTabbar.widthFitTitle) {
+    if (TabmixTabbar.widthFitTitle)
       this.setItem(tabContainer, "widthFitTitle", true);
-      // we only change the rule that set flex=100 and width=0 at delayedStartup.
-      let tab = tabContainer.firstChild;
-      tabBrowser.setTabTitleLoading(tab);
-      tab.setAttribute("flex", "0");
-      tab.setAttribute("width", tab.boxObject.width);
-      tab.clientTop;
-      this.__felxedTab = tab;
-    }
 
     var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)

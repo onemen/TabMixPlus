@@ -153,11 +153,15 @@ so display: none !important; is not hide the button */
 }
 
 /* :::: widthFitTitle :::: */
-.tabbrowser-tabs:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
-  -moz-box-flex: 100;
-  width: 0;
+.tabbrowser-tabs[widthFitTitle] > .tabbrowser-tab:not([pinned]) {
+  -moz-box-flex: 0 !important;
+  width: auto !important;
 }
 
+.tabbrowser-tabs:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
+  -moz-box-flex: 100 !important;
+  width: 0 !important;
+}
 
 /* :::: tabbar on bottom :::: */
 /* we don't need rule for toolbar-drag - when tabbar on bottom */

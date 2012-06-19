@@ -626,14 +626,8 @@ var gTMPprefObserver = {
         }
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
-        this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", null);
-        this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", null);
-        let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-        if (skin != "classic/1.0") {
-          let important = skin == "classiccompact" ? "important" : null;
-          this.dynamicRules["width1"].style.setProperty("max-width", tabMaxWidth + "px", important);
-          this.dynamicRules["width1"].style.setProperty("min-width", tabMinWidth + "px", important);
-        }
+        this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", "important");
+        this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", "important");
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
         if (typeof this._tabWidthCahnged == "undefined") {
@@ -1074,6 +1068,16 @@ var gTMPprefObserver = {
     }
   },
 
+  addWidthRules: function TMP_PO_replaceContentBrowserRules() {
+    let newRule = ".tabbrowser-tab[fadein]:not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
+    let _max = Tabmix.prefs.getIntPref("tabMaxWidth");
+    let _min = Tabmix.prefs.getIntPref("tabMinWidth");
+    newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
+    let ss = this.tabStyleSheet;
+    let index = ss.insertRule(newRule, ss.cssRules.length);
+    this.dynamicRules["width"] = ss.cssRules[index];
+  },
+
  /**
   * we don't need this from 2010-09-15 - Minefiled 4.0b7pre
   * keep it here maybe it fixes some theme ?
@@ -1109,52 +1113,6 @@ var gTMPprefObserver = {
     var styleSheets = this.getStyleSheets(href);
     if (styleSheets.length)
       styleSheets.forEach(browserRules, this);
-    else
-      Tabmix.log('unable to find "' + href + '"');
-  },
-
-  _contentBrowserRulesChanged: false,
-  replaceContentBrowserRules: function TMP_PO_replaceContentBrowserRules() {
-    function contentBrowserRules(browserCss) {
-      let rulesCount = browserCss.cssRules.length;
-      for (let i = 0; i < rulesCount; ++i) {
-        let rule = browserCss.cssRules[i];
-        if ("selectorText" in rule && rule.selectorText == ".tabbrowser-tab:not([pinned])") {
-          rule.style.removeProperty("width");
-          rule.style.removeProperty("-moz-box-flex");
-          if (typeof(this.dynamicRules["width"]) == "undefined") {
-            let _max = Tabmix.prefs.getIntPref("tabMaxWidth");
-            let _min = Tabmix.prefs.getIntPref("tabMinWidth");
-            rule.style.setProperty("max-width", _max + "px", null);
-            rule.style.setProperty("min-width", _min + "px", null);
-            this.dynamicRules["width"] = rule;
-            let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-            if (skin != "classic/1.0") {
-              let important = skin == "classiccompact" ? "!important" : "";
-              let newRule = "#tabbrowser-tabs > .tabbrowser-tab[fadein]:not([pinned]) {min-width: XMinpx " + important + "; max-width: XMaxpx " + important + ";}";
-              newRule = newRule.replace("XMin" ,_min).replace("XMax" ,_max);
-              let ss = this.tabStyleSheet;
-              let index = ss.insertRule(newRule, ss.cssRules.length);
-              this.dynamicRules["width1"] = ss.cssRules[index];
-            }
-          }
-          else {
-            rule.style.removeProperty("max-width");
-            rule.style.removeProperty("min-width");
-          }
-          break;
-        }
-      }
-    }
-
-    if (this._contentBrowserRulesChanged)
-      return;
-    var href = "chrome://browser/content/browser.css";
-    var styleSheets = this.getStyleSheets(href);
-    if (styleSheets.length) {
-      this._contentBrowserRulesChanged = true;
-      styleSheets.forEach(contentBrowserRules, this);
-    }
     else
       Tabmix.log('unable to find "' + href + '"');
   },
