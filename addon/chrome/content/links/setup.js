@@ -69,7 +69,7 @@ function TMP_TBP_Startup() {
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
       [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
-    else if (Tabmix.isVersion(160))
+    else if (Tabmix.isVersion(160) && "gBrowserInit" in window)
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
     else
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
@@ -146,7 +146,7 @@ function TMP_TBP_Startup() {
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [name, fn] = Tabmix.isVersion(160) ?
+    var [name, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
           ["gBrowserInit._delayedStartup", gBrowserInit._delayedStartup] :
           ["delayedStartup", delayedStartup];
     Tabmix.newCode(name, fn)._replace(
