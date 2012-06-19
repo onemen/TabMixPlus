@@ -94,6 +94,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TMP_extensionsCompatibility.onDelayedStartup();
   try {
     gTMPprefObserver.replaceBrowserRules();
+    Tabmix.replaceWidthRules();
   } catch (ex) {Tabmix.assert(ex);}
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
@@ -512,15 +513,22 @@ var TMP_eventListener = {
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
-    // without this when Firefox starts with many tabs, tabbar can enter multi-row
-    // before tab width fit to title, and selected tab from last session not always visible
-    gTMPprefObserver.replaceContentBrowserRules();
+    // prevent window from flicker at atartup when layers.acceleration.disabled is false
+    // delay the call to replaceContentBrowserRules untill first TabOpen
+    // or from Tabmix.delayedStartup
+    Tabmix.replaceWidthRules = function _replaceWidthRules() {
+      tabBar.removeEventListener("TabOpen", _replaceWidthRules, true);
+      // without this when Firefox starts with many tabs, tabbar can enter multi-row
+      // before tab width fit to title, and selected tab from last session not always visible
+      gTMPprefObserver.replaceContentBrowserRules();
+      Tabmix.replaceWidthRules = function() {};
+    }
+    tabBar.addEventListener("TabOpen", Tabmix.replaceWidthRules, true);
+
     TabmixSessionManager.updateSettings();
 
     tabBar.adjustTabstrip = Tabmix.adjustTabstrip;
     delete Tabmix.adjustTabstrip;
-    // no need to updtae updateScrollStatus
-    tabBar.adjustTabstrip(true);
   },
 
   _tabStillLoading: 0,
