@@ -153,12 +153,12 @@ so display: none !important; is not hide the button */
 }
 
 /* :::: widthFitTitle :::: */
-.tabbrowser-tabs[widthFitTitle] > .tabbrowser-tab:not([pinned]) {
+.tabbrowser-tabs[orient="horizontal"][widthFitTitle] > .tabbrowser-tab:not([pinned]) {
   -moz-box-flex: 0 !important;
   width: auto !important;
 }
 
-.tabbrowser-tabs:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
+.tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
   -moz-box-flex: 100 !important;
   width: 0 !important;
 }
