@@ -630,6 +630,11 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
         this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", "important");
+        // fix bug in classiccompact
+        if (typeof classiccompactoptions == "object" &&
+            Services.prefs.getCharPref("general.skins.selectedSkin") == "classiccompact") {
+          classiccompactoptions.setTabWidths(document);
+        }
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
         if (typeof this._tabWidthCahnged == "undefined") {
