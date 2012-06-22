@@ -630,13 +630,13 @@ function setPrefByType(prefName, newValue, atImport) {
                return;
             // 2008-11-29
             case "extensions.tabmix.maxWidth":
-            case "browser.tabs.tabMaxWidth":
-               Tabmix.prefs.setIntPref("tabMaxWidth", newValue);
+            case "extensions.tabmix.tabMaxWidth": // 2012-06-22
+               Services.prefs.setIntPref("browser.tabs.tabMaxWidth", newValue);
                return;
             // 2008-11-29
             case "extensions.tabmix.minWidth":
-            case "browser.tabs.tabMinWidth":
-               Tabmix.prefs.setIntPref("tabMinWidth", newValue);
+            case "extensions.tabmix.tabMinWidth": // 2012-06-22
+               Services.prefs.setIntPref("browser.tabs.tabMinWidth", newValue);
                return;
             // 2009-01-31
             case "extensions.tabmix.newTabButton.leftside":

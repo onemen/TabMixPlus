@@ -116,8 +116,6 @@ pref("extensions.tabmix.useUnreadColor", true);
 pref("extensions.tabmix.useProgressColor", true);
 */
 
-pref("extensions.tabmix.tabMinWidth", 100);
-pref("extensions.tabmix.tabMaxWidth", 250);
 pref("extensions.tabmix.flexTabs", false);
 
 pref("extensions.tabmix.titlefrombookmark", false);
@@ -274,3 +272,7 @@ pref("extensions.tabmix.reload_time", 15);
 // -1: unlimited
 //  0: no backups created (and deletes all existing backups)
 pref("extensions.tabmix.sessions.max_backups", 7);
+
+// removed from Firefox 4.0+, some other extensions may use this pref
+pref("browser.tabs.tabMinWidth", 100);
+pref("browser.tabs.tabMaxWidth", 250);
