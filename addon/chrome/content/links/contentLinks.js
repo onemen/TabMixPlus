@@ -340,8 +340,7 @@ Tabmix.contentAreaClick = {
     var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
     try {
       // for the moment just do it for Google and Yahoo....
-      // facebook.com - 2012-06-18
-      var blocked = /google|yahoo.com\/search|facebook.com/.test(currentHref);
+      var blocked = /google|yahoo.com\/search/.test(currentHref);
     } catch (ex) {blocked = false;}
     if (!blocked) {
       // replace onclick function with the form javascript:top.location.href = url
