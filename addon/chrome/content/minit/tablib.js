@@ -244,7 +244,7 @@ var tablib = {
         'this.resetFirstTabInRow();\
          $&'
       )._replace(
-        'this.mTabstrip._scrollButtonDown.scrollWidth',
+        /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',

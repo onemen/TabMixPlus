@@ -381,7 +381,7 @@
                 tab.setAttribute("tabmix-firstTabInRow", true);
               else if (i > 0) {
                 // remove the margin when the tab have place in the previous row
-                let tabEnd = tabs[i-1].getBoundingClientRect()[end] + (Tabmix.ltr ? tab.scrollWidth : 0);
+                let tabEnd = tabs[i-1].getBoundingClientRect()[end] + (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
                 if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                   tab.removeAttribute("tabmix-firstTabInRow");
                   continue;
