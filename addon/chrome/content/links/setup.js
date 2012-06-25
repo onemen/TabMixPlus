@@ -227,7 +227,10 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
 
     tabBrowser.getTabForLastPanel = function () {
-       return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
+      let browser = this.mPanelContainer.lastChild.firstChild.firstChild;
+      if (Tabmix.isVersion(150)) // changed by Bug 749628
+        browser = browser.firstChild;
+      return this._getTabForContentWindow(browser.contentWindow);
     }
 
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
