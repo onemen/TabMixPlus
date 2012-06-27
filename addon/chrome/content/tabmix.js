@@ -24,7 +24,7 @@ Tabmix.startup = function TMP_startup() {
     }
   }
 
-  document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
+  TabmixContext.toggleEventListener(true);
 
   // add call to Tabmix.Sanitizer
   // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
@@ -915,10 +915,7 @@ var TMP_eventListener = {
     }
 
     TabmixSessionManager.onWindowClose(isLastWindow);
-
-    document.getElementById("contentAreaContextMenu").removeEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
-    gBrowser.tabContextMenu.removeEventListener("popupshowing", TabmixContext.updateTabContextMenu, false);
-    gBrowser.tabContextMenu.removeEventListener("popupshown", TabmixContext.tabContextMenuShown, false);
+    TabmixContext.toggleEventListener(false);
 
     TMP_Places.deinit();
     TMP_LastTab.deinit();

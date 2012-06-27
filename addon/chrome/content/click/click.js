@@ -255,10 +255,6 @@ var TabmixContext = {
     var $id = function(id) document.getElementById(id);
 
     var tabContextMenu = $id("tabContextMenu");
-    tabContextMenu.setAttribute("onpopuphidden", tabContextMenu.getAttribute("onpopuphidden") + "if (event.target == this) Tabmix.hidePopup(this);");
-    tabContextMenu.addEventListener("popupshowing", this.updateTabContextMenu, false);
-    tabContextMenu.addEventListener("popupshown", this.tabContextMenuShown, false);
-
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tm-autoreloadTab_menu"));
     tabContextMenu.insertBefore($id("context_openTabInWindow"), $id("context_pinTab"));
     tabContextMenu.insertBefore($id("context_bookmarkAllTabs"), $id("context_bookmarkTab").nextSibling);
@@ -283,11 +279,40 @@ var TabmixContext = {
       cookiepieContextMenu.init();
   },
 
+  toggleEventListener: function(enable) {
+    var eventListener = enable ? "addEventListener" : "removeEventListener";
+    document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
+    gBrowser.tabContextMenu[eventListener]("popupshowing", this, false);
+    gBrowser.tabContextMenu[eventListener]("popupshown", this, false);
+  },
+
+  handleEvent: function(aEvent) {
+    let id = aEvent.target.id;
+    switch (aEvent.type) {
+      case "popupshowing":
+        if (id == "tabContextMenu")
+          this.updateTabContextMenu(aEvent);
+        else if (id == "contentAreaContextMenu")
+          this.updateMainContextMenu(aEvent);
+        break;
+      case "popupshown":
+        this.tabContextMenuShown(aEvent);
+        break;
+      case "popuphidden":
+        if (id == "tabContextMenu") {
+          aEvent.target.removeEventListener("popuphidden", this, false);
+          Tabmix.hidePopup(aEvent.target);
+        }
+        break;
+    }
+  },
+
   // Tab context menu popupshowing
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
-    // 'this' here refer to tabContextMenu
     if (event.originalTarget != gBrowser.tabContextMenu)
       return true;
+
+    gBrowser.tabContextMenu.addEventListener("popuphidden", this, false);
 
     var item, triggerNode = gBrowser.tabContextMenu.triggerNode;
     if (triggerNode.parentNode)
