@@ -148,8 +148,10 @@
           onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
       </menu>
       <menuseparator id="tm-content-textSep" insertbefore="context-sep-undo"/>
-      <menu id="tm-autoreload_menu" label="&autoReload.label;" accesskey="&autoReload.accesskey;" insertafter="context-reload">
-         <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
+      <menu id="tm-autoreload_menu" insertafter="context-reload"
+            labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
+            labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
+        <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
       </menu>
     </popup>
 

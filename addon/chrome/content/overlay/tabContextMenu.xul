@@ -46,7 +46,8 @@
         <menuitem id="context_reloadTab"/>
 -->
         <menu id="tm-autoreloadTab_menu" insertbefore="context_reloadAllTabs"
-                 label="&autoReloadTab.label;" accesskey="&autoReloadTab.accesskey;">
+              labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
+              labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
            <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, TabContextMenu.contextTab);"/>
         </menu>
 <!--

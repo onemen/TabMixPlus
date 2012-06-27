@@ -413,7 +413,7 @@
           </groupbox>
         </tabpanel>
         <tabpanel orient="vertical">
-         <groupbox orient="vertical" flex="1">
+         <groupbox>
             <vbox align="start">
               <!-- Enable Undo Close Tab -->
               <checkbox id="undoClose" label="&undoClose.label;" prefstring="extensions.tabmix.undoClose"
@@ -446,9 +446,15 @@
                  <textbox id="slideshow" maxlength="3" size="3" prefstring="extensions.tabmix.slideDelay" observes="obs_tabRotation" type="number"/>
                  <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
                </hbox>
-               <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;" prefstring="extensions.tabmix.reloadEvery.onReloadButton"/>
                <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" prefstring="browser.tabs.animate" inverted="true"/>
             </vbox>
+         </groupbox>
+         <groupbox flex="1" align="start">
+           <caption label="&extraIcons.autoreload;"/>
+           <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
+                     prefstring="extensions.tabmix.reload_match_address" inverted="true"/>
+           <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
+                     prefstring="extensions.tabmix.reloadEvery.onReloadButton"/>
          </groupbox>
         </tabpanel>
       </tabpanels>
@@ -925,7 +931,7 @@
                      <!-- link in duplicate tab -->
                      <checkbox id="linkWithHist" label="&linkwithhistory.label;" prefstring="extensions.tabmix.linkWithHistory"/>
                      <!-- reload every -->
-                     <checkbox id="autoreloadTab" label="&autoReload.label;" prefstring="extensions.tabmix.autoReloadContent"/>
+                     <checkbox id="autoreloadTab" label="&autoReloadTab.label;" prefstring="extensions.tabmix.autoReloadContent"/>
                      <!-- Close tab -->
                      <checkbox id="closetab" label="&closeTab.label;" prefstring="extensions.tabmix.closeTabContent"/>
                      <!-- Duplicate tab -->

@@ -354,7 +354,7 @@ var TabmixContext = {
     // Reload Commands
     Tabmix.showItem("context_reloadTab", Tabmix.prefs.getBoolPref("reloadTabMenu"));
     Tabmix.showItem("context_reloadAllTabs", Tabmix.prefs.getBoolPref("reloadAllMenu"));
-    Tabmix.showItem("tm-autoreloadTab_menu", Tabmix.prefs.getBoolPref("autoReloadMenu"));
+    this._showAutoReloadMenu("tm-autoreloadTab_menu", "autoReloadMenu", true);
     Tabmix.showItem("tm-reloadRight", Tabmix.prefs.getBoolPref("reloadRightMenu"));
     Tabmix.showItem("tm-reloadLeft", Tabmix.prefs.getBoolPref("reloadLeftMenu"));
     Tabmix.showItem("tm-reloadOther", Tabmix.prefs.getBoolPref("reloadOtherMenu"));
@@ -565,8 +565,7 @@ var TabmixContext = {
       var mergeMenu = document.getElementById("tm-mergeWindows");
       Tabmix.showItem(mergeMenu, !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent"));
 
-      Tabmix.showItem("tm-autoreload_menu", !contentClick && !gContextMenu.isTextSelected &&
-                     Tabmix.prefs.getBoolPref("autoReloadContent"));
+      this._showAutoReloadMenu("tm-autoreload_menu", "autoReloadContent", !contentClick && !gContextMenu.isTextSelected);
 
       Tabmix.showItem("tm-openAllLinks", Tabmix.prefs.getBoolPref("openAllLinks") && !TabmixContext.openMultipleLinks(true));
 
@@ -580,6 +579,17 @@ var TabmixContext = {
 
     } catch (ex) {Tabmix.assert(ex);}
     return true;
+  },
+
+  _showAutoReloadMenu: function TMP__autoReloadMenu(menuId, pref, test) {
+    let showMenu = Tabmix.prefs.getBoolPref(pref) && test;
+    let menu = document.getElementById(menuId);
+    if (showMenu) {
+      let entity = Tabmix.prefs.getBoolPref("reload_match_address") ? "Site" : "Tab";
+      Tabmix.setItem(menu, "label", menu.getAttribute("label#".replace("#", entity)));
+      Tabmix.setItem(menu, "accesskey", menu.getAttribute("accesskey#".replace("#", entity)));
+    }
+    Tabmix.showItem(menu, showMenu);
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {

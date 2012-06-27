@@ -267,6 +267,7 @@ pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
 pref("extensions.tabmix.custom_reload_time", 90);
 pref("extensions.tabmix.reload_time", 15);
+pref("extensions.tabmix.reload_match_address", false);
 // The maximum number of daily sessions backups to
 // keep in <profile>/sessionbackups. Special values:
 // -1: unlimited
