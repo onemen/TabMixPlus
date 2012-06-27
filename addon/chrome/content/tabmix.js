@@ -36,20 +36,24 @@ Tabmix.startup = function TMP_startup() {
   window.undoCloseTab = function ct_window_undoCloseTab(aIndex, aWhere) {
     return TMP_ClosedTabs.undoCloseTab(aIndex, aWhere);
   };
+}
 
+// we call this at the start of gBrowserInit._delayedStartup
+// if we call it erlier we get this warning:
+// XUL box for _moz_generated_content_before element contained an inline #text child
+Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible;
+    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !tabBar.visible;
     if (stripIsHidden)
-      gBrowser.tabContainer.visible = true;
-    this.setItem("TabsToolbar", "onStartNewTabButton", true);
+      tabBar.visible = true;
+    this.setItem("TabsToolbar", "tabmix-visible", true);
     // save mTabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
     tabBar._newTabButtonWidth = lwtheme ? 31 : tabBar.mTabsNewtabButton.getBoundingClientRect().width;
-    this.setItem("TabsToolbar", "onStartNewTabButton", null);
+    this.setItem("TabsToolbar", "tabmix-visible", null);
     if (stripIsHidden)
-      gBrowser.tabContainer.visible = false;
-
+      tabBar.visible = false;
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     if (Tabmix.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
       tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
@@ -88,8 +92,9 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   Tabmix.navToolbox.init();
 
   // set option to Prevent double click on Tab-bar from changing window size.
+  var tabsToolbar = document.getElementById("TabsToolbar");
   if (!Tabmix.prefs.getBoolPref("dblClickTabbar_changesize"))
-    document.getElementById("TabsToolbar")._dragBindingAlive = false;
+    tabsToolbar._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
   try {
@@ -110,6 +115,15 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   try {
     TMP_LastTab.init();
   } catch (ex) {this.assert(ex);}
+
+ /*
+  * We add minheight to the tab bar to prevent it from shrinking when we
+  * enter/exit private browsing without new tab button after tabs and animation on.
+  * The last tab is removed before the new tab is fully visible, so the tab
+  * bar height is drop below normal height.
+  */
+  if (!TMP_tabDNDObserver.verticalTreeStyleTab)
+    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
 }
 
 var TMP_eventListener = {
@@ -456,15 +470,6 @@ var TMP_eventListener = {
     try {
       gTMPprefObserver.createColorRules();
     } catch (ex) {Tabmix.assert(ex);}
-
-   /*
-    * We add minheight to the tab bar to prevent it from shrinking when we
-    * enter/exit private browsing without new tab button after tabs and animation on.
-    * The last tab is removed before the new tab is fully visible, so the tab
-    * bar height is drop below normal height.
-    */
-    if (!TMP_tabDNDObserver.verticalTreeStyleTab)
-      Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
 
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
     gTMPprefObserver.changeNewTabButtonSide(position);

@@ -1476,9 +1476,6 @@ var gTMPprefObserver = {
       Tabmix.setItem("TabsToolbar", "newTabButton", false);
       tabBar._rightNewTabButton = null;
     }
-    // style flush to prevent the window from flicker
-    // if we hide the new tab button after tabs on startup
-    tabBar.mTabstrip.clientTop;
   },
 
   tabBarPositionChanged: function(aPosition) {

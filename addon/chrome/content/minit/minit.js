@@ -7,7 +7,6 @@ var TMP_tabDNDObserver = {
   lastTime: 0,
   dragmarkindex: null,
   marginBottom: 0,
-  paddingLeft: 0,
   LinuxMarginEnd: 0,
   _dragTime: 0,
   _dragOverDelay: 350,
@@ -17,6 +16,11 @@ var TMP_tabDNDObserver = {
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
 
+  get paddingLeft() {
+    delete this.paddingLeft;
+    return this.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
+  },
+
   init: function TMP_tabDNDObserver_init() {
     this.setDragEvents(true);
     this.draglink = TabmixSvc.getString("droplink.label");
@@ -24,8 +28,6 @@ var TMP_tabDNDObserver = {
     // without this the Indicator is not visible on the first drag
     var ind = gBrowser.tabContainer._tabDropIndicator;
     ind.style.MozTransform = "translate(0px, 0px)";
-    // style flush to prevent the window from flicker on startup
-    ind.clientTop;
   },
 
   verticalTreeStyleTab: false,
@@ -51,7 +53,6 @@ var TMP_tabDNDObserver = {
     }
     gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
     this._dragOverDelay = gBrowser.tabContainer._dragOverDelay;
-    this.paddingLeft  = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
   },
 
   _handleDragover: function (aEvent) {

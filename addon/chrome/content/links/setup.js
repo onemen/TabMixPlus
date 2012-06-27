@@ -154,6 +154,7 @@ function TMP_TBP_Startup() {
       '{\
        try {\
          if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true); \
+         Tabmix.getNewTabButtonWidth();\
          TabmixSessionManager.init();\
        } catch (ex) {Tabmix.assert(ex);}'
     ).toCode();

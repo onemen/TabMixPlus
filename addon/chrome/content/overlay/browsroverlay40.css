@@ -47,10 +47,10 @@
  * we set newtab_side only for left ot right side afterlast position rules are set by Firefox
  *
  ***/
-#tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+#tabbrowser-tabs:not([tabmix-visible])[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar:not([tabmix-visible])[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar:not([tabmix-visible])[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar:not([tabmix-visible])[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   visibility: collapse;
   height: 0px !important;
   width: 0px;
@@ -64,7 +64,7 @@
   visibility: visible;
 }
 
-#TabsToolbar[onStartNewTabButton] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
+#TabsToolbar[tabmix-visible] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
   visibility: visible !important;
 }
 
