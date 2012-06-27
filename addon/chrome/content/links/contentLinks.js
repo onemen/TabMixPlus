@@ -266,7 +266,7 @@ Tabmix.contentAreaClick = {
 
     // Check if link refers to external domain.
     // Get current page url
-    // if user click a link when the psage is reloading linkNode.ownerDocument.location can be null
+    // if user click a link while the page is reloading linkNode.ownerDocument.location can be null
     var curpage = linkNode.ownerDocument.location ? linkNode.ownerDocument.location.href : gBrowser.currentURI.spec;
     var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
     var targetDomain = domain.target;
@@ -860,6 +860,11 @@ Tabmix.contentAreaClick = {
       return false;
   },
 
+  get uriFixup() {
+    delete this.uriFixup;
+    return this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup);
+  },
+
  /**
   * @brief Check if link refers to external domain.
   *
@@ -869,6 +874,7 @@ Tabmix.contentAreaClick = {
   *
   */
   checkDomain: function TMP_checkDomain(curpage, target) {
+    var self = this;
     function getDomain(url) {
       if (typeof(url) != "string")
         url = url.toString();
@@ -876,8 +882,13 @@ Tabmix.contentAreaClick = {
       if (url.match(/^file:/))
         return "local_file";
 
+      try {
+        var fixedURI = self.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+        url = fixedURI.spec;
+      } catch (ex) { }
+
       if (url.match(/^http/)) {
-        url = Services.io.newURI(url, null, null);
+        url = fixedURI || Services.io.newURI(url, null, null);
 
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
