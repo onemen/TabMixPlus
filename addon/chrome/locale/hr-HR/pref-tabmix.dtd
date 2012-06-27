@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Također povuci i skočne prozore">
 <!ENTITY popupNextToOpener.label "Smjesti skočne prozore do onih koji su ih otvorili">
 <!ENTITY slideshow.label "Pritiskanje F8 rotira kartice svakih">
-<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY seconds.label "sekundi">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Traka kartica">
@@ -153,7 +154,7 @@
 <!ENTITY extraIcons.label1 "Icons for">
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
-<!ENTITY extraIcons.autoreload "Auto-Reload">
+<!ENTITY extraIcons.autoreload "Auto Reload">
 <!ENTITY progressMeter.label "Oznaku napretka na karticama">
 <!ENTITY showTabX.labelBegin "Gumb Zatvori karticu">
 <!ENTITY showTabX.left "Smjesti ga na lijevu stranu">

@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Diverted windows">
 <!ENTITY selectTabCommand.label "New tab commands">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Ponnahdusvalikkohaku:">
 <!ENTITY selectTabBH.label "Bookmarks/History">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Also take popup windows">
 <!ENTITY popupNextToOpener.label "Place popups next to their openers">
 <!ENTITY slideshow.label "Pressing F8 rotates tabs every">
-<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY seconds.label "seconds">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Tab Bar">

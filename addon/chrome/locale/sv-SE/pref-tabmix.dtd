@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Inkludera popup-fönster">
 <!ENTITY popupNextToOpener.label "Placera popup-fönster intill källsidan">
 <!ENTITY slideshow.label "F8 cirkulerar flik var">
-<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY seconds.label "sekunder">
 <!ENTITY minutes.label "minuter">
 <!ENTITY tabBarAppearance.label "Flikfält">
@@ -153,7 +154,7 @@
 <!ENTITY extraIcons.label1 "Icons for">
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
-<!ENTITY extraIcons.autoreload "Auto-Reload">
+<!ENTITY extraIcons.autoreload "Auto Reload">
 <!ENTITY progressMeter.label "Förloppsmätare på flik">
 <!ENTITY showTabX.labelBegin "Knapp för stäng flik">
 <!ENTITY showTabX.left "På vänster sida">

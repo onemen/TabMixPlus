@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Janelas desviadas">
 <!ENTITY selectTabCommand.label "Comandos de abrir nova aba">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Buscar pelo menu de contexto por">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">
 <!ENTITY duplicateTab.label "Duplicar aba">
 <!ENTITY inversefocus1.label "Clique com o botão do meio ou Ctrl+clique inverte o foco de:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Unir também janelas &quot;popup&quot;">
 <!ENTITY popupNextToOpener.label "Posicionar popups próximos aos seus iniciadores">
 <!ENTITY slideshow.label "Ao apertar F8 ativar modo visualizador de slides a cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">
 <!ENTITY toggleAnimation.label "Desativar a animação abrir/fechar na aba">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">
 <!ENTITY seconds.label "segundos">
 <!ENTITY minutes.label "minutos">
 <!ENTITY tabBarAppearance.label "Barra de Abas">

@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Δεσμούς">
 <!ENTITY selectDivertedTab.label "Παράθυρα που έχουν παρακαμφθεί">
 <!ENTITY selectTabCommand.label "Εντολές νέων καρτελών">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Αναζήτηση στο μενού περιεχομένου">
 <!ENTITY selectTabBH.label "Σελιδοδείκτες/Ιστορικό">
 <!ENTITY duplicateTab.label "Αντίγραφο καρτέλας">
 <!ENTITY inversefocus1.label "Αντιστροφή εστίασης μεσαίου ή Control+ κλικ για:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Σύμπτυξη και των αναδυόμενων παραθύρων">
 <!ENTITY popupNextToOpener.label "Τοποθέτηση αναδυόμενων δίπλα από τις πηγές τους">
 <!ENTITY slideshow.label "Πατώντας το F8 περιστρέφονται οι καρτέλες κάθε">
-<!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">
 <!ENTITY toggleAnimation.label "Απενεργοποίηση εφέ ανοίγματος/κλεισίματος καρτέλας">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">
 <!ENTITY seconds.label "δευτερόλεπτα">
 <!ENTITY minutes.label "λεπτά">
 <!ENTITY tabBarAppearance.label "Εργαλειοθήκη καρτελών">

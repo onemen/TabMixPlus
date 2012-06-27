@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Pop-up-Fenster ebenfalls einbeziehen">
 <!ENTITY popupNextToOpener.label "Pop-ups direkt neben ihrem Ursprungs-Tab einfügen">
 <!ENTITY slideshow.label "Mit F8 automatischen Tab-Wechsel starten mit einem Intervall von">
-<!ENTITY reloadEvery.onReloadButton.label "Kontextmenü für automatisches Neuladen zur Schaltfläche &quot;Neu laden&quot; hinzufügen">
 <!ENTITY toggleAnimation.label "Tab-Animation beim Öffnen/Schließen deaktivieren">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Kontextmenü für automatisches Neuladen zur Schaltfläche &quot;Neu laden&quot; hinzufügen">
 <!ENTITY seconds.label "Sekunde(n)">
 <!ENTITY minutes.label "Minute(n)">
 <!ENTITY tabBarAppearance.label "Tab-Leiste">

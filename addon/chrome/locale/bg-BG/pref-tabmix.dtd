@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Връзки">
 <!ENTITY selectDivertedTab.label "Вместо прозорци">
 <!ENTITY selectTabCommand.label "При команда за създаване на нов подпрозорец">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
 <!ENTITY selectTabBH.label "Отметки/История">
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
 <!ENTITY inversefocus1.label "Инвертиране на фокуса при щракване със среден бутон или CTRL+ляв бутон върху:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Обединяване също така и на изскачащи прозорци">
 <!ENTITY popupNextToOpener.label "Разполагане на изскачащите прозорци непосредствено до подпрозорците, които са ги отворили">
 <!ENTITY slideshow.label "Натискането на F8 прелиства циклично подпрозорците на всеки">
-<!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">
 <!ENTITY toggleAnimation.label "Изключване на анимацията при отваряне/затваряне на подпрозорци">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">
 <!ENTITY seconds.label "сек.">
 <!ENTITY minutes.label "мин.">
 <!ENTITY tabBarAppearance.label "Лента с подпрозорци">

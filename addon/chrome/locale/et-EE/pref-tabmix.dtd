@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Lingid">
 <!ENTITY selectDivertedTab.label "Mujale suunatud aknad">
 <!ENTITY selectTabCommand.label "Uue kaardi käsud">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Kontekstimenüü kaudu otsimine">
 <!ENTITY selectTabBH.label "Järjehoidjad/Ajalugu">
 <!ENTITY duplicateTab.label "Tee kaardist koopia">
 <!ENTITY inversefocus1.label "Hiire keskmise nupuga klõpsamisel või Control-klõpsamisel on fookustamine vastupidine nende puhul:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Võta kaasa ka hüpikaknad">
 <!ENTITY popupNextToOpener.label "Aseta hüpikaknad nende peremees-akende kõrvale">
 <!ENTITY slideshow.label "F8 vajutamisel vahetatakse kaarte automaatselt selle ajavahemikuga:">
-<!ENTITY reloadEvery.onReloadButton.label "Näita uuestilaadimise nupul Automaatse Uuestilaadimise menüüd">
 <!ENTITY toggleAnimation.label "Keela kaardi avamise/sulgemise animatsioon">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Näita uuestilaadimise nupul Automaatse Uuestilaadimise menüüd">
 <!ENTITY seconds.label "sekundit">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Kaartide riba">

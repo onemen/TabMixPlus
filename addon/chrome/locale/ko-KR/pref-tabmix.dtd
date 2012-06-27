@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "팝업 창도 합치기">
 <!ENTITY popupNextToOpener.label "팝업을 부모 페이지의 옆에 두기">
 <!ENTITY slideshow.label "F8로 탭을 회전시킬 기간">
-<!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
 <!ENTITY seconds.label "초">
 <!ENTITY minutes.label "분">
 <!ENTITY tabBarAppearance.label "탭 도구 모음">

@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Fusiona també les finestres emergents">
 <!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l'ha obert">
 <!ENTITY slideshow.label "En prémer F8, automàticament canvia de pestanya cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
 <!ENTITY toggleAnimation.label "Inhabilita l'animació en obrir/tancar la pestanya">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
 <!ENTITY seconds.label "segons">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barra de pestanyes">

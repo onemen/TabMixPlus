@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "d">
 <!ENTITY autoReloadTab.label "Actualiser l&apos;onglet toutes les...">
 <!ENTITY autoReloadTab.accesskey "o">
-<!ENTITY autoReload.label "Actualiser tous les onglets">
-<!ENTITY autoReload.accesskey "c">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Après cet onglet">
 <!ENTITY bookmarktab.label "Mettre cet onglet en marque-page">
 <!ENTITY undoCloseListMenu.label "Liste des onglets récemment fermés">

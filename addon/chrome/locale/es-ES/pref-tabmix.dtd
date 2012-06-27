@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Enlaces">
 <!ENTITY selectDivertedTab.label "Otras ventanas">
 <!ENTITY selectTabCommand.label "Comando nueva pestaña">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Búsqueda en menú contextual">
 <!ENTITY selectTabBH.label "Marcadores/Historial">
 <!ENTITY duplicateTab.label "Duplicar pestaña">
 <!ENTITY inversefocus1.label "Invertir el enfoque de Clic-central o Ctrl-clic de:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "También fusionar ventanas emergentes">
 <!ENTITY popupNextToOpener.label "Situar las ventanas emergentes junto a las de apertura">
 <!ENTITY slideshow.label "Pulsando F8 las pestañas rotan cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de \&quot;Recargar cada\&quot; en botón de recarga">
 <!ENTITY toggleAnimation.label "Desactivar animación de Abrir/Cerrar pestaña">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de Recargar cada… en botón de recarga">
 <!ENTITY seconds.label "seg">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barra pestañas">
@@ -117,7 +118,7 @@
 <!ENTITY toolBarAppearance.label "Barra herramientas">
 <!ENTITY show.ontabbar.label "Mostrar en barra de pestañas">
 <!ENTITY show.ontab.label "Mostrar en pestaña">
-<!ENTITY dragNewTabButton.tooltip "Arrastre el botón de \&quot;Nueva pestaña\&quot; a la barra de pestañas para activar esta opción.">
+<!ENTITY dragNewTabButton.tooltip "Arrastre el botón de Nueva pestaña a la barra de pestañas para activar esta opción.">
 <!ENTITY hideTabBarButton.label "Botón cerrar pestaña">
 <!ENTITY newTabButton.label "Botón nueva pestaña">
 <!ENTITY newTabButton.posiotion.left.label "Izquierda">

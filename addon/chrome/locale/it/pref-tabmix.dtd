@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Incorpora anche i pop-up">
 <!ENTITY popupNextToOpener.label "Posiziona i pop-up accanto alle schede che li aprono">
 <!ENTITY slideshow.label "Avvia/ferma la rotazione delle schede premendo il tasto F8 ogni">
-<!ENTITY reloadEvery.onReloadButton.label "Mostra il menu a discesa per ricaricare automaticamente le pagine web nel pulsante Ricarica">
 <!ENTITY toggleAnimation.label "Disattiva l&apos;animazione di apertura/chiusura delle schede">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Mostra il menu a discesa per ricaricare automaticamente le pagine web nel pulsante Ricarica">
 <!ENTITY seconds.label "secondi">
 <!ENTITY minutes.label "minuti">
 <!ENTITY tabBarAppearance.label "Barra delle schede">
@@ -165,6 +166,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -179,6 +181,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

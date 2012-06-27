@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Ook pop-upvensters meenemen">
 <!ENTITY popupNextToOpener.label "Pop-ups naast hun openers zetten">
 <!ENTITY slideshow.label "F8 roteert tabbladen elke">
-<!ENTITY reloadEvery.onReloadButton.label "Menu ‘Tabblad vernieuwen na…’ op knop Vernieuwen weergeven">
 <!ENTITY toggleAnimation.label "Animatie bij openen/sluiten tabbladen uitschakelen">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Menu ‘Tabblad vernieuwen na…’ op knop Vernieuwen weergeven">
 <!ENTITY seconds.label "seconden">
 <!ENTITY minutes.label "minu(u)t(en)">
 <!ENTITY tabBarAppearance.label "Tabbladenbalk">

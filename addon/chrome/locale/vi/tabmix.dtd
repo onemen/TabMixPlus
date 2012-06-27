@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "P">
 <!ENTITY autoReloadTab.label "Tải lại Thẻ mỗi">
 <!ENTITY autoReloadTab.accesskey "l">
-<!ENTITY autoReload.label "Tải lại Mỗi">
-<!ENTITY autoReload.accesskey "M">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Sau thẻ này">
 <!ENTITY bookmarktab.label "Đánh dấu Thẻ Này">
 <!ENTITY undoCloseListMenu.label "Danh sách Các thẻ đã Đóng">

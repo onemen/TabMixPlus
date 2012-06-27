@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
 <!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
-<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
 <!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
 <!ENTITY seconds.label "secondes">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barre d'onglets">

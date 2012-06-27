@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Веза">
 <!ENTITY selectDivertedTab.label "Преусмерених прозора">
 <!ENTITY selectTabCommand.label "Команди за нову картицу ----">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Приручним менијем потражи">
 <!ENTITY selectTabBH.label "Обележивача/историјата">
 <!ENTITY duplicateTab.label "Дуплирај картицу">
 <!ENTITY inversefocus1.label "Обрни средњи клик или Control-клик пребацивање за:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Споји и искачуће прозоре">
 <!ENTITY popupNextToOpener.label "Смести искачуће прозоре поред картица из којих су отворени">
 <!ENTITY slideshow.label "Притиском на F8 картице се ротирају сваких">
-<!ENTITY reloadEvery.onReloadButton.label "Покажи дугме „Освежи сваки мени” на дугмету за освежавање">
 <!ENTITY toggleAnimation.label "Онемогући анимацију приликом отварања/затварања језичка">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Покажи дугме „Освежи сваки мени” на дугмету за освежавање">
 <!ENTITY seconds.label "секунди">
 <!ENTITY minutes.label "минута">
 <!ENTITY tabBarAppearance.label "Линија картица">

@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "I">
 <!ENTITY autoReloadTab.label "Obnoviť kartu každých">
 <!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReload.label "Obnoviť každých">
-<!ENTITY autoReload.accesskey "E">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Po tejto karte">
 <!ENTITY bookmarktab.label "Vytvoriť záložku pre túto kartu">
 <!ENTITY undoCloseListMenu.label "Zoznam zatvorených kariet">

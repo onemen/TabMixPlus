@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "Előugró ablakokat is">
 <!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
 <!ENTITY slideshow.label "Az F8 gomb lenyomásával a lapok körkapcsolása">
-<!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
 <!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
 <!ENTITY seconds.label "másodpercenként">
 <!ENTITY minutes.label "percenként">
 <!ENTITY tabBarAppearance.label "Lapok eszköztár">

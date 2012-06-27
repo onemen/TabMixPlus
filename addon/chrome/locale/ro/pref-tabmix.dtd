@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Legături">
 <!ENTITY selectDivertedTab.label "Ferestre redirecționate">
 <!ENTITY selectTabCommand.label "Comenzi cu parametru „filă nouă”">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Căutare din meniul contextual">
 <!ENTITY selectTabBH.label "Semne de carte/istoric">
 <!ENTITY duplicateTab.label "Duplică fila">
 <!ENTITY inversefocus1.label "Inversează modul de activare cu clic-mijloc sau Ctrl+clic pentru:">
@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "De asemena, îmbină și ferestrele instantanee">
 <!ENTITY popupNextToOpener.label "Plasează ferestrele instantanee alături de sursele lor">
 <!ENTITY slideshow.label "F8 comută filele la fiecare">
-<!ENTITY reloadEvery.onReloadButton.label "Afișează meniul „Reîncarcă la fiecare…” sub butonul „Reîncarcă”">
 <!ENTITY toggleAnimation.label "Dezactivează animarea închiderii/deschiderii filelor">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Afișează meniul „Reîncarcă la fiecare…” sub butonul „Reîncarcă”">
 <!ENTITY seconds.label "secunde">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Bară de file">

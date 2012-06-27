@@ -108,8 +108,9 @@
 <!ENTITY mergePopups.label "מזג גם חלונות קופצים">
 <!ENTITY popupNextToOpener.label "מקם חלונות קופצים ליד החלונות שפתחו אותן">
 <!ENTITY slideshow.label "חלצן F8 עושה סבב לשוניות כל...">
-<!ENTITY reloadEvery.onReloadButton.label "הצג תפריט &quot;טעינה חוזרת&quot; בכפתור טען">
 <!ENTITY toggleAnimation.label "נטרל פתיחה/סגור לשונית מונפשת">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "הצג תפריט &quot;טעינה חוזרת&quot; בכפתור טען">
 <!ENTITY seconds.label "שניות">
 <!ENTITY minutes.label "דקות">
 <!ENTITY tabBarAppearance.label "סרגל הלשוניות">
