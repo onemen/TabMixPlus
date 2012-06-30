@@ -255,7 +255,7 @@ var tablib = {
             for (let i = 0; i < numPinned; i++) {
               let tab = this.childNodes[i];
               tab.style.MozMarginStart = width + "px";
-              width += tab.scrollWidth;
+              width += tab.getBoundingClientRect().width;
             }
             if (width != this.firstTabInRowMargin) {
               this.firstTabInRowMargin = width;
