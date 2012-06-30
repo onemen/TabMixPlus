@@ -15,6 +15,10 @@
 }
 */
 
+#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
+  position: static !important;
+}
+
 .tabbrowser-tabs[classic="v4Mac"] > .tabbrowser-tab .tabs-closebutton {
   margin: 0px;
 }
