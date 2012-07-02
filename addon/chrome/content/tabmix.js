@@ -123,7 +123,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   * bar height is drop below normal height.
   */
   if (!TMP_tabDNDObserver.verticalTreeStyleTab)
-    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
+    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height / TabmixTabbar.visibleRows);
 }
 
 var TMP_eventListener = {
