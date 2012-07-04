@@ -1336,7 +1336,8 @@ since we can have tab hidden or remove the index can change....
           break;
       }
 
-      if (tabsToClose == numTabs && Tabmix.prefs.getBoolPref("keepLastTab"))
+      if (whatToClose != "All_onExit" && tabsToClose == numTabs &&
+          Tabmix.prefs.getBoolPref("keepLastTab"))
         tabsToClose--;
 
       if (tabsToClose <= 1 && shouldPrompt < 2)
