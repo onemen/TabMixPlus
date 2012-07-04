@@ -130,7 +130,9 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          else
            prefName = Tabmix.newTabURLpref;
          try {
-            url = Services.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
+            url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+            if (newTabUrl == "about:privatebrowsing" && url == "about:newtab")
+              url = "about:privatebrowsing";
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
          if (!url)

@@ -360,9 +360,7 @@ var TMP_eventListener = {
     // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
     if (typeof isBlankPageURL == "function") {
       Tabmix.isBlankPageURL = isBlankPageURL;
-      XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
-        return BROWSER_NEW_TAB_URL;
-      });
+      Tabmix.__defineGetter__("newTabURL", function() BROWSER_NEW_TAB_URL);
       Tabmix.newTabURLpref = "browser.newtab.url";
     }
     else {
