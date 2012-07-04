@@ -1234,9 +1234,11 @@ Tabmix.navToolbox = {
       return;
 
     let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
-    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() : searchbar.handleSearchCommand.toString();
+    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() :
+                                               searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
-    if (_handleSearchCommand.indexOf("forceNewTab") == -1) {
+    if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
+          _handleSearchCommand.indexOf("forceNewTab") == -1) {
       let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZhandleSearch" :
                                          "document.getElementById('searchbar').handleSearchCommand";
       Tabmix.newCode(functionName,  _handleSearchCommand)._replace(

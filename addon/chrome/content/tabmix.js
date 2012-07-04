@@ -266,9 +266,17 @@ var TMP_eventListener = {
     Tabmix.contentAreaClick.init();
 
     // initialize our gURLBar.handleCommand function early before other extensions change
-    // gURLBar.handleCommand by replacing the original function
+    // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
     // url-fixer also prevent the use of eval changes by using closure in the replcaed function
     Tabmix.navToolbox.initializeURLBar();
+    Tabmix.navToolbox.initializeSearchbar();
+
+    // fix webSearch to open new tab if tab is lock
+    // Searchbar Autosizer extension wrap this function before "load" event
+    Tabmix.newCode("BrowserSearch.webSearch", BrowserSearch.webSearch)._replace(
+      'openUILinkIn(Services.search.defaultEngine.searchForm, "current");',
+      'gBrowser.TMP_openURI(Services.search.defaultEngine.searchForm);', {check: typeof(Omnibar) == "undefined"}
+    ).toCode();
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
@@ -315,7 +323,7 @@ var TMP_eventListener = {
         '$& && !tab.hasAttribute("faviconized")'
       ).toCode();
 
-      // chage adjustTabstrip
+      // change adjustTabstrip
       faviconize.override.adjustTabstrip = function() { };
     }
   },

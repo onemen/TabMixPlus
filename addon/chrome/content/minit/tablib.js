@@ -572,12 +572,6 @@ var tablib = {
       '{if (Tabmix.singleWindowMode) return;'
     ).toCode();
 
-    // fix webSearch to open new tab if tab is lock
-    Tabmix.newCode("BrowserSearch.webSearch", BrowserSearch.webSearch)._replace(
-      'openUILinkIn(Services.search.defaultEngine.searchForm, "current");',
-      'gBrowser.TMP_openURI(Services.search.defaultEngine.searchForm);', {check: typeof(Omnibar) == "undefined"}
-    ).toCode();
-
     Tabmix.newCode("warnAboutClosingWindow", warnAboutClosingWindow)._replace(
       'return gBrowser.warnAboutClosingTabs(true);',
       'return tablib.closeWindow(true);', {flags: "g"}
