@@ -188,11 +188,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        return true;
     }
 
-    //XXX isTabEmpty exist in Firefox 4.0
     tabBrowser.isBlankTab = function(aTab) {
       return this.isBlankBrowser(this.getBrowserForTab(aTab));
     }
 
+    //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
+    // isTabEmpty don't check for Tabmix.isNewTabUrls
     if (("loadTabsProgressively" in window)) {
       tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
          // loadTabsProgressively add pending attribute to pending tab when it stop the tab
@@ -334,15 +335,17 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   *  TreeStyleTabe add some code at the end
   */
   if (tabsCount == 1) {
+    let tab = this.selectedItem;
     if (!aUrl) {
-        var currentURI = tabbrowser.currentURI;
+        let currentURI = tabbrowser.currentURI;
         aUrl = currentURI ? currentURI.spec : null;
     }
     if (this._keepLastTab ||
-        (!aUrl || aUrl == "about:blank") &&
-        tabbrowser.isBlankNotBusyTab(this.selectedItem, true)) {
-        this.setAttribute("closebuttons", "noclose");
-        this.removeAttribute("closebuttons-hover");
+        Tabmix.isBlankPageURL(tab.__newLastTab || null) ||
+       (!aUrl || Tabmix.isBlankPageURL(aUrl)) &&
+        tabbrowser.isBlankNotBusyTab(tab)) {
+      this.setAttribute("closebuttons", "noclose");
+      this.removeAttribute("closebuttons-hover");
     }
   }
   else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
