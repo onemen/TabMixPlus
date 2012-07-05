@@ -3127,9 +3127,10 @@ try{
         // make sure rdf tabs are in order
         tabsData.sort(sortbyIndex);
 
-        // if we don't restoreSelect we need to select first tab in the current group
+        // when we don't restore the selected tab and don't have any tabs opened
+        // by other application, we need to select first tab in the current group
         // if we append the session to hidden groups firstVisibleTab is -1
-        if (!restoreSelect && firstVisibleTab > 0)
+        if (!loadOnStartup.length && !restoreSelect && firstVisibleTab > 0)
           gBrowser.selectedTab = gBrowser.tabs[newIndex + firstVisibleTab];
 
         // set pin tab now before we reorder tabsData
