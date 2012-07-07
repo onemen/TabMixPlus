@@ -298,7 +298,7 @@ var tablib = {
 
       Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
         '{',
-        '{if (!Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
+        '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
         /var isEndTab =|faviconize.o_lockTabSizing/,
         <![CDATA[
