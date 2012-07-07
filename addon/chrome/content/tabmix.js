@@ -968,6 +968,7 @@ var TMP_eventListener = {
       gBrowser.tabContainer.removeEventListener('DOMNodeInserted', tabxTabAdded, true);
 
     gTMPprefObserver.removeObservers();
+    gTMPprefObserver.dynamicRules = null;
 
     TabmixProgressListener.listener.mTabBrowser = null;
     gBrowser.removeTabsProgressListener(TabmixProgressListener.listener);
