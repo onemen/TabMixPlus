@@ -290,7 +290,7 @@ options = {
 
   assert: function TMP_utils_assert(aError, aMsg) {
     if (typeof aError.stack != "string") {
-      this.trace(aMsg + "\n" + aError, 2);
+      this.trace((aMsg || "") + "\n" + aError, 2);
       return;
     }
 
