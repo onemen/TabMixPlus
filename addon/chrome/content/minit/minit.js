@@ -1287,7 +1287,6 @@ Tabmix.navToolbox = {
       TabmixSessionManager.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
       TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
     }
-    Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !TabmixSessionManager.enableManager);
     TabmixSessionManager.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();

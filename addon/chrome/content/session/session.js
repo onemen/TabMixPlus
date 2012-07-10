@@ -89,9 +89,7 @@ Tabmix.Sanitizer = {
          _sessionManager.initDATASource();
 
          // disable closed window list button
-         let broadcaster = wnd.document.getElementById("tmp_closedwindows");
-         if (broadcaster)
-            broadcaster.setAttribute("disabled",true);
+         wnd.Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
          // clear closed tabs and disable the button if we use TMP session manager and save close tabs
          if ((TabmixSessionManager.enableManager || TabmixSessionManager.enableBackup) && TabmixSessionManager.saveClosedTabs) {
@@ -425,8 +423,8 @@ var TabmixSessionManager = {
          this.copyClosedTabsToRDF(this.gThisWin);
       }
       // initialize closed window list broadcaster
-      if (this.enableManager)
-         document.getElementById("tmp_closedwindows").setAttribute("disabled",this.isClosedWindowsEmpty());
+      var disabled = this.enableManager ? this.isClosedWindowsEmpty() : TabmixSvc.ss.getClosedWindowCount() == 0;
+      Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
       this.saveStateDelayed();
    },
@@ -731,13 +729,11 @@ var TabmixSessionManager = {
       document.getElementById("tm-sm-closedwindows").hidden = hiddenPref;
       document.getElementById("tm-sessionmanager").firstChild.childNodes[2].hidden = !hiddenPref;
 
+      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !sessionManager || null);
+
       // we dont need this function to run before sessionmanager init
       if (!this.DATASource)
         return;
-
-      // This causing the window to be transparent for a split second at start
-      // if we get here on startup without delay.
-      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !sessionManager || null);
 
       var windowSaved = false, closedTabSaved = false;
       if (this.enableBackup != crashRecovery) {
@@ -1302,9 +1298,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    toggleRecentlyClosedWindowsButton: function SM_toggleRecentlyClosedWindowsButton() {
      if (this.enableManager || this.enableBackup)
        return;
-     var broadcaster = document.getElementById("tmp_closedwindows");
-     if (broadcaster)
-        broadcaster.setAttribute("disabled",TabmixSvc.ss.getClosedWindowCount() == 0);
+     Tabmix.setItem("tmp_closedwindows", "disabled", TabmixSvc.ss.getClosedWindowCount() == 0 || null);
    },
 
    saveState: function SM_saveState() {
@@ -2022,9 +2016,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var wnd, enumerator = Tabmix.windowEnumerator();
       while ( enumerator.hasMoreElements() ) {
          wnd = enumerator.getNext();
-         var broadcaster = wnd.document.getElementById("tmp_closedwindows");
-         if (broadcaster)
-            broadcaster.setAttribute("disabled",disabled);
+         wnd.Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
       }
    },
 

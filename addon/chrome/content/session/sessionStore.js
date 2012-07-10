@@ -289,9 +289,7 @@ var TMP_ClosedTabs = {
    setButtonDisableState: function ct_setButtonDisableState(aState) {
       if (typeof(aState) == "undefined")
          aState = this.count == 0;
-      aState = aState ? "true" : "false";
-      if (this.buttonBroadcaster.getAttribute("disabled") != aState)
-         this.buttonBroadcaster.setAttribute("disabled", aState);
+      Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
    },
 
   /**
