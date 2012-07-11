@@ -14,13 +14,6 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
 
-  <binding id="tabmix-tab-close-button"
-           extends="chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button">
-    <handlers>
-      <handler event="click" button="0" action="event.stopPropagation();"/>
-    </handlers>
-  </binding>
-
   <binding id="tabbrowser-close-tab-button"
            extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton">
     <handlers>
