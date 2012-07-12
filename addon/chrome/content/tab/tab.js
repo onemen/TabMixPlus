@@ -1792,7 +1792,7 @@ try {
       Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
 try { // user report about bug here ... ?
-    function getVersion(extensions) {
+    let getVersion = function _getVersion(extensions) {
       var currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
       var oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
       if (currentVersion != oldVersion) {

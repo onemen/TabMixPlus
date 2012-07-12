@@ -124,7 +124,7 @@ this.log(aMethod)
         aDelay = 500;
 
       var self = this;
-      function logMethod() {
+      let logMethod = function _logMethod() {
         let result = self.getObject(aMethod, rootID).toString();
         self.clog(aMethod + " = " + result);
       }

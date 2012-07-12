@@ -284,6 +284,9 @@ var TMP_eventListener = {
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
+        'function rect(ele)',
+        'let rect = function _rect(ele)' // for strict mode
+      )._replace(
         /(\})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         'if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)\

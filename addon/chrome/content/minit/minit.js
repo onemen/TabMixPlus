@@ -99,7 +99,7 @@ var TMP_tabDNDObserver = {
       // positioned relative to the corner of the new window created upon
       // dragend such that the mouse appears to have the same position
       // relative to the corner of the dragged tab.
-      function clientX(ele) ele.getBoundingClientRect().left;
+      let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
       let tabOffsetX = clientX(tab) -
                        clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
       tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;

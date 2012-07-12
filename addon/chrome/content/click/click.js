@@ -831,7 +831,7 @@ var TabmixAllTabs = {
 
     switch(aType) {
       case 1:
-        function _tabSorting(tab, index) {
+        let _tabSorting = function __tabSorting(tab, index) {
           this.Tab = tab;
           this.Index = index;
         }

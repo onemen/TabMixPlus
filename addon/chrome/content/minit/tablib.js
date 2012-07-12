@@ -747,25 +747,28 @@ var tablib = {
 
     gBrowser.SSS_duplicateTab = function tabbrowser_SSS_duplicateTab(aTab, aHref, aTabData) {
       var newTab = null;
-      try {
-        var newTab, tabState;
-        // add new history entry after current index
-        function addNewHistoryEntry() {
+      // add new history entry after current index
+      function addNewHistoryEntry() {
+        try {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
           var newEntry = { url: aHref }; // we don't know the page title at this moment
           tabState.entries.splice(activeIndex + 1 , entriesToRemove, newEntry);
           tabState.index++;
-        }
+        } catch (ex) {Tabmix.assert(ex);}
+      }
         // we need to update history title after the new page loaded for use in back/forword button
         var self = this;
-        function updateNewHistoryTitle(aEvent) {
+      function updateNewHistoryTitle(aEvent) {
+        try {
           this.removeEventListener("load", updateNewHistoryTitle, true);
           var history = this.webNavigation.sessionHistory;
           var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
           shEntry.setTitle(self.getTabForBrowser(this).label);
-        }
-
+        } catch (ex) {Tabmix.assert(ex);}
+      }
+      try {
+        var newTab, tabState;
         tabState = aTabData ? aTabData.state : Tabmix.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         newTab = this.addTab("about:blank");
         newTab.linkedBrowser.stop();
