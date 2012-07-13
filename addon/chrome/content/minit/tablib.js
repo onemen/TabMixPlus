@@ -48,6 +48,11 @@ var tablib = {
       _addTab = "origAddTab7c3de167ed6f494aa652f11a71ecb40c";
 
     Tabmix.newCode("gBrowser." + _addTab, gBrowser[_addTab])._replace(
+      'params = arguments[1];',
+      '$&\
+       let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
+       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;});'
+    )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle ? this.mStringBundle.getString("tabs.connecting") : aURI);'
     )._replace(
