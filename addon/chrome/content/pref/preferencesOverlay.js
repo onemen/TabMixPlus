@@ -20,6 +20,12 @@ var gTabMix_preferencesOverlay = {
       this.onPaneLoad(prefWindow.lastSelected);
 
       Tabmix.newCode(null, prefWindow.showPane)._replace(
+        'if (!aPaneElement.loaded) {', ''
+      )._replace(
+        'OverlayLoadObserver.prototype',
+        'if (!aPaneElement.loaded) {\
+         $&'
+      )._replace(
         'this._outer._selectPane(this._pane);',
         '$& \
          gTabMix_preferencesOverlay.onPaneLoad(this._pane.id);'
