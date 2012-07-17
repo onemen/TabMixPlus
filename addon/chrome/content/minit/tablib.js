@@ -1489,7 +1489,7 @@ since we can have tab hidden or remove the index can change....
     // we use this flag in WindowIsClosing
     window.tabmix_warnedBeforeClosing = true;
 
-    // since that some pref can changed by _onQuitRequest we catch is fisrt
+    // since that some pref can changed by _onQuitRequest we catch it fisrt
     // by observe browser-lastwindow-close-requested
     function getSavedPref(aPrefName, type) {
       let returnVal = {saved: false};
