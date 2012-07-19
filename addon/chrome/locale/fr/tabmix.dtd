@@ -29,7 +29,7 @@
 <!ENTITY reloadright.accesskey "d">
 <!ENTITY autoReloadTab.label "Actualiser l&apos;onglet toutes les...">
 <!ENTITY autoReloadTab.accesskey "o">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "Actualiser ce site tous les">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Après cet onglet">
 <!ENTITY bookmarktab.label "Mettre cet onglet en marque-page">

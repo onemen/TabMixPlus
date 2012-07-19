@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Đặt popup kế bên trang đã mở chúng">
 <!ENTITY slideshow.label "Nhấn F8 để xoay vòng thẻ mỗi">
 <!ENTITY toggleAnimation.label "Tắt hiệu ứng động khi mở/đóng thẻ">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Tải lại một thẻ bất chấp địa chỉ của nó">
 <!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">
 <!ENTITY seconds.label "giây">
 <!ENTITY minutes.label "phút">

@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Umiestniť vyskakovacie okná vedľa ich otváračov">
 <!ENTITY slideshow.label "Klávesa F8 prepína medzi kartami každých">
 <!ENTITY toggleAnimation.label "Vypnúť animáciu Otvoriť/Zatvoriť kartu">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Načítať znovu kartu bez ohľadu na jej adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobraziť ponuku Opäť načítať každých na tlačidle Opäť načítať">
 <!ENTITY seconds.label "sek">
 <!ENTITY minutes.label "min">

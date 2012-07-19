@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Umieszczaj wyskakujące okna za oknami, z których są one wywoływane">
 <!ENTITY slideshow.label "Naciśnięcie klawisza [F8] włącza/wyłącza automatyczną rotację kart co">
 <!ENTITY toggleAnimation.label "Wyłącz przełączanie animacji kart">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Odświeżaj kartę bez względu na jej adres">
 <!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odśwież co… w przycisku narzędziowym Odśwież">
 <!ENTITY seconds.label "s">
 <!ENTITY minutes.label "min">
@@ -154,7 +154,7 @@
 <!ENTITY extraIcons.label1 "Ikony dla">
 <!ENTITY extraIcons.locked "zablokowana">
 <!ENTITY extraIcons.protected "zabezpieczona">
-<!ENTITY extraIcons.autoreload "automatycznie odświeżana">
+<!ENTITY extraIcons.autoreload "Automatyczne odświeżanie">
 <!ENTITY progressMeter.label "Pasek postępu na etykietach kart">
 <!ENTITY showTabX.labelBegin "Przycisk zamykania karty">
 <!ENTITY showTabX.left "umieszczaj po lewej stronie etykiety">

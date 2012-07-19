@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Разполагане на изскачащите прозорци непосредствено до подпрозорците, които са ги отворили">
 <!ENTITY slideshow.label "Натискането на F8 прелиства циклично подпрозорците на всеки">
 <!ENTITY toggleAnimation.label "Изключване на анимацията при отваряне/затваряне на подпрозорци">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Презареждане на подпрозорец независимо от адреса му">
 <!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">
 <!ENTITY seconds.label "сек.">
 <!ENTITY minutes.label "мин.">

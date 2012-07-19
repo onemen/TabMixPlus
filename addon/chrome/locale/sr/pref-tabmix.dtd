@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Смести искачуће прозоре поред картица из којих су отворени">
 <!ENTITY slideshow.label "Притиском на F8 картице се ротирају сваких">
 <!ENTITY toggleAnimation.label "Онемогући анимацију приликом отварања/затварања језичка">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Поново учитај страницу, без обзира на адресу">
 <!ENTITY reloadEvery.onReloadButton.label "Покажи дугме „Освежи сваки мени” на дугмету за освежавање">
 <!ENTITY seconds.label "секунди">
 <!ENTITY minutes.label "минута">

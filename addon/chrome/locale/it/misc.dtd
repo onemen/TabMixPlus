@@ -1,10 +1,10 @@
 <!ENTITY searchTabFocus.label "Carica in secondo piano">
 <!ENTITY searchTabFocus.accesskey "s">
-<!ENTITY renametab.panel.title "Modifica del titolo">
-<!ENTITY renametab.reset.label "Ripristina il titolo predefinito">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
 <!ENTITY title.label "Titolo">
-<!ENTITY default.label "Titolo predefinito">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY default.label "Predefinito">
+<!ENTITY renametab.permanently.label "Rinomina la scheda sempre per tutti gli indirizzi">
 <!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">

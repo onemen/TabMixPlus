@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Umístit vyskakovací okna vedle jejich otvíračů">
 <!ENTITY slideshow.label "Klávesa F8 přepíná mezi panely každých">
 <!ENTITY toggleAnimation.label "Zakázat animaci otevírání či zavírání panelu">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Znovu načíst panel bez ohledu na adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku Obnovit každých XY sekund/minut u tlačítka Obnovit">
 <!ENTITY seconds.label "sekund">
 <!ENTITY minutes.label "minut">

@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Размещать всплывающие окна рядом с окнами, которые их открывали">
 <!ENTITY slideshow.label "С помощью F8 циклически листать вкладки каждые">
 <!ENTITY toggleAnimation.label "Отключить анимацию открытия/закрытия вкладки">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Обновлять вкладку независимо от её адреса">
 <!ENTITY reloadEvery.onReloadButton.label "Показывать меню &apos;Обновлять вкладку каждые...&apos; для кнопки Обновить">
 <!ENTITY seconds.label "сек.">
 <!ENTITY minutes.label "мин.">

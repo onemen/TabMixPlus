@@ -29,7 +29,7 @@
 <!ENTITY reloadright.accesskey "I">
 <!ENTITY autoReloadTab.label "重新载入当前页,间隔">
 <!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "重新载入该网站，每隔">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "在当前页之后">
 <!ENTITY bookmarktab.label "将当前标签页加入书签">

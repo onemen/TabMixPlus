@@ -27,9 +27,9 @@
 <!ENTITY reloadleft.accesskey "L">
 <!ENTITY reloadright.label "右側のタブをすべて再読み込み">
 <!ENTITY reloadright.accesskey "I">
-<!ENTITY autoReloadTab.label "指定間隔ごとに再読み込み">
+<!ENTITY autoReloadTab.label "タブを再読み込みする間隔">
 <!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "このサイトを再読み込みする間隔">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "このタブの直後に">
 <!ENTITY bookmarktab.label "このタブをブックマーク...">

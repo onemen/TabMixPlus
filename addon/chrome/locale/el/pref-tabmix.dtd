@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Τοποθέτηση αναδυόμενων δίπλα από τις πηγές τους">
 <!ENTITY slideshow.label "Πατώντας το F8 περιστρέφονται οι καρτέλες κάθε">
 <!ENTITY toggleAnimation.label "Απενεργοποίηση εφέ ανοίγματος/κλεισίματος καρτέλας">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Ανανέωση καρτέλας άσχετα με τη διεύθυνση της.">
 <!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">
 <!ENTITY seconds.label "δευτερόλεπτα">
 <!ENTITY minutes.label "λεπτά">

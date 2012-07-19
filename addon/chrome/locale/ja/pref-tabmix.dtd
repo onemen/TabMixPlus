@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
 <!ENTITY slideshow.label "F8 を押すとタブを自動的に">
 <!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
 <!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
 <!ENTITY seconds.label "秒間隔で切り替える">
 <!ENTITY minutes.label "分">

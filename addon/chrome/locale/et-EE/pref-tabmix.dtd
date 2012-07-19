@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Aseta hüpikaknad nende peremees-akende kõrvale">
 <!ENTITY slideshow.label "F8 vajutamisel vahetatakse kaarte automaatselt selle ajavahemikuga:">
 <!ENTITY toggleAnimation.label "Keela kaardi avamise/sulgemise animatsioon">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Laadi kaart uuesti, sõltumata selle aadressist">
 <!ENTITY reloadEvery.onReloadButton.label "Näita uuestilaadimise nupul Automaatse Uuestilaadimise menüüd">
 <!ENTITY seconds.label "sekundit">
 <!ENTITY minutes.label "min">

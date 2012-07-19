@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "а">
 <!ENTITY autoReloadTab.label "Обновлять вкладку каждые...">
 <!ENTITY autoReloadTab.accesskey "б">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
-<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY autoReloadSite.label "Обновлять этот сайт каждые">
+<!ENTITY autoReloadSite.accesskey "б">
 <!ENTITY afterthis.label "После этой вкладки">
 <!ENTITY bookmarktab.label "Закладка для текущей вкладки">
 <!ENTITY undoCloseListMenu.label "Список закрытых вкладок">

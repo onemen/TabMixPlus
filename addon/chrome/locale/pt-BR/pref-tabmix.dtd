@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Posicionar popups próximos aos seus iniciadores">
 <!ENTITY slideshow.label "Ao apertar F8 ativar modo visualizador de slides a cada">
 <!ENTITY toggleAnimation.label "Desativar a animação abrir/fechar na aba">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Recarregar uma aba independente do seu endereço">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">
 <!ENTITY seconds.label "segundos">
 <!ENTITY minutes.label "minutos">

@@ -109,8 +109,8 @@
 <!ENTITY popupNextToOpener.label "將彈出視窗置於其開啟者旁邊">
 <!ENTITY slideshow.label "按 [F8] 鍵 啟用/停用 自動輪換分頁，每隔">
 <!ENTITY toggleAnimation.label "停用「開啟/關閉分頁的動畫」">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
-<!ENTITY reloadEvery.onReloadButton.label "在重新載入按鈕上顯示重新載入每個分頁的選單">
+<!ENTITY reloadEvery.matchAddress.label "自動更新時不考慮目前分頁的網址">
+<!ENTITY reloadEvery.onReloadButton.label "在重新載入按鈕上顯示「自動更新」的選單">
 <!ENTITY seconds.label "秒">
 <!ENTITY minutes.label "分">
 <!ENTITY tabBarAppearance.label "分頁標籤列">

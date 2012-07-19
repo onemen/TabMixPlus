@@ -28,9 +28,9 @@
 <!ENTITY reloadright.label "Reîncarcă filele din dreapta">
 <!ENTITY reloadright.accesskey "d">
 <!ENTITY autoReloadTab.label "Reîncarcă fila la fiecare">
-<!ENTITY autoReloadTab.accesskey "e">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
-<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY autoReloadTab.accesskey "f">
+<!ENTITY autoReloadSite.label "Încarcă acest sait la fiecare">
+<!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "După această filă">
 <!ENTITY bookmarktab.label "Pune semn de carte la această filă">
 <!ENTITY undoCloseListMenu.label "Lista filelor închise">
@@ -48,7 +48,7 @@
 <!ENTITY freezeTabMenu.label "Îngheață fila">
 <!ENTITY freezeTabMenu.accesskey "g">
 <!ENTITY protectTabMenu.label "Protejează fila">
-<!ENTITY protectTabMenu.tooltip "Dezactivează închiderea filei">
+<!ENTITY protectTabMenu.tooltip "Protejează fila pentru a nu putea fi închisă">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "Blochează fila">
 <!ENTITY lockTabMenu.tooltip "Dezactivează deschiderea altor legături în filă">
@@ -116,9 +116,9 @@
 <!ENTITY sortedTabs.label "File sortate">
 <!ENTITY sortedTabs.tooltip "Afișează lista sortată alfabetic">
 <!ENTITY enable.label "Activează">
-<!ENTITY custom.label "Personalizează">
-<!ENTITY enableTabs.label "Activează toate filele">
-<!ENTITY disableTabs.label "Dezactivează toate filele">
+<!ENTITY custom.label "Interval particular">
+<!ENTITY enableTabs.label "Activează pentru toate filele">
+<!ENTITY disableTabs.label "Dezactivează pentru toate filele">
 <!ENTITY seconds.label "secunde">
 <!ENTITY minutes.label "minute">
 <!ENTITY minute.label "minut">
