@@ -767,7 +767,7 @@ Tabmix.contentAreaClick = {
     if (/calendar\/render/.test(location))
       return true;
 
-    if (/\/intl\/\D{2,}\/options\//.test(linkNode.pathname))
+    if (/\/intl\/\D{2,}\/options\/|search/.test(linkNode.pathname))
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
