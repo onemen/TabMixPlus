@@ -63,10 +63,10 @@ var TMP_Places = {
         'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
       )._replace(
         'return shift ? "tabshifted" : "tab";',
-        'let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
+        '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
          if(getBoolPref(pref, true)) shift = !shift; \
-         $&'
+         $&}'
       )._replace(
         'return "window";',
         'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
@@ -133,9 +133,9 @@ var TMP_Places = {
             "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
       Tabmix.newCode(fnName, fnCode)._replace(
-        'var aRelatedToCurrent = params.relatedToCurrent;',
+        /aRelatedToCurrent\s*= params.relatedToCurrent;/,
         '$& \
-         var bookMarkId = params.bookMarkId; \
+         var newWin, bookMarkId = params.bookMarkId; \
          var backgroundPref = params.backgroundPref;'
       )._replace(
         'where == "current" && w.gBrowser.selectedTab.pinned',
@@ -145,9 +145,12 @@ var TMP_Places = {
         '$& \
          if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
       )._replace(
-        'Services.ww.openWindow(w || window, getBrowserURL(), null, "chrome,dialog=no,all", sa);',
-        'var newWin = $& \
-         if (bookMarkId) newWin.bookMarkIds = bookMarkId;'
+        'Services.ww.openWindow',
+        'newWin = $&'
+      )._replace(
+        /let loadInBackground|var loadInBackground/,
+        'if (newWin && bookMarkId) newWin.bookMarkIds = bookMarkId;\
+         $&'
       )._replace(
         '"browser.tabs.loadBookmarksInBackground"',
         'backgroundPref || $&', {check: !Tabmix.isVersion(110)}

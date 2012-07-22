@@ -382,9 +382,20 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
  *
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
+  // in Firefox 17 /(openUILinkIn[^\(]*\([^\)]+)(\))/, find the first
+  // openUILinkIn in the comment
   if ("openUILink" in window) {
+    let code = ["openUILinkIn(url, where, params);",
+                "openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);"];
+    let source, str = openUILink.toString();
+    if (str.indexOf(code[0]) > -1)
+      source = code[0];
+    else if (str.indexOf(code[1]) > -1)
+      source = code[1];
+    else
+      return; // nothing we can do
     this.newCode("openUILink", openUILink)._replace(
-      /(openUILinkIn[^\(]*\([^\)]+)(\))/,
+      source,
       <![CDATA[
         var win = getTopWin();
         if (win && where == "current") {

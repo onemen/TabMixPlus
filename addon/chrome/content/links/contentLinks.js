@@ -190,9 +190,8 @@ Tabmix.contentAreaClick = {
     ).toCode();
 
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
-      'whereToOpenLink(event)',
-      <![CDATA[
-        $&
+      'whereToOpenLink(event);',
+      <![CDATA[$&
         // don't change where if it is save, window, or we passed
         // event.__where = default from contentAreaClick or
         // Tabmix.contentAreaClick.contentLinkClick
