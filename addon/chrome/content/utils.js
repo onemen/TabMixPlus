@@ -2,10 +2,6 @@ function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
   this.name = aObjectName;
   this.value = aCodeString;
   this.needUpdate = aForceUpdate;
-
-  function inValidChar(str) str.charAt(str.length - 1) != "}";
-  if (Tabmix.isVersion(170) && inValidChar(this.value))
-    this.value += "\n}";
 }
 
 Tabmix_ChangeCode.prototype = {
@@ -51,7 +47,6 @@ Tabmix_ChangeCode.prototype = {
     Tabmix._define("getter", aObj, aName, this.value);
   },
 
-  fixStringOnce: false,
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
     try {
       if (Tabmix._debugMode) {
@@ -65,13 +60,6 @@ Tabmix_ChangeCode.prototype = {
       if (aShow)
         this.show(aObj, aName);
     } catch (ex) {
-      if (Tabmix.isVersion(170) && !this.fixStringOnce &&
-          ex.toString().indexOf("missing }") > -1) {
-        this.fixStringOnce = true;
-        this.value += "\n}";
-        Tabmix.toCode(aObj, aName || this.name, this.value);
-        return;
-      }
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
   },
