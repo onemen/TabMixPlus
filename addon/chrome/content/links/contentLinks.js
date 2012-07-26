@@ -354,7 +354,7 @@ Tabmix.contentAreaClick = {
     }
 
     // don't do anything on mail.google or google.com/reader
-    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/www.google.com\/reader/.test(currentHref);
+    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
     if (isGmail)
       return;
 
@@ -484,7 +484,7 @@ Tabmix.contentAreaClick = {
    */
   suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload(event, href, linkNode, suppressTabs) {
     // if we are in google search don't prevent new tab
-    if (/www.google.(\D+)\/search?/.test(gBrowser.currentURI.spec))
+    if (/\w+\.google\.\D+\/search?/.test(gBrowser.currentURI.spec))
       return false;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
@@ -755,11 +755,11 @@ Tabmix.contentAreaClick = {
    * @brief Test if target link is special Google.com link preferences , advanced_search ...
    *
    * @param linkNode         The DOM node containing the URL to be opened.
-   * @returns true is it is Google special link false for all other links
+   * @returns true it is Google special link false for all other links
    */
   GoogleComLink: function TMP_GoogleComLink(linkNode) {
     var location = gBrowser.currentURI.spec;
-    var currentIsnGoogle = /(www|profiles|accounts|groups).google./.test(location);
+    var currentIsnGoogle = /\/\w+\.google\.\D+\//.test(location);
     if (!currentIsnGoogle)
       return false;
 
