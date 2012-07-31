@@ -977,7 +977,7 @@ var TMP_TabView = {
     TabView._window.UI._original_reset = TabView._window.UI.reset;
     Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
       '"use strict";',
-      <![CDATA[$&
+        <![CDATA[$&
       // Firefox 8.0 use strict mode - we need to map global variable
       let win = TabView._window;
       let Trenches = win.Trenches;
@@ -987,7 +987,7 @@ var TMP_TabView = {
       let GroupItems = win.GroupItems;
       let GroupItem = win.GroupItem;
       let UI = win.UI;
-      ]]>, {check: Tabmix.isVersion(80)}
+        ]]>, {check: Tabmix.isVersion(80)}
     )._replace(
       'this.',
       'UI.', {flags: "g", silent: true, check: Tabmix.isVersion(80)}
@@ -995,7 +995,7 @@ var TMP_TabView = {
       'items = TabItems.getItems();',
       'items = gBrowser.tabs;'
     )._replace(
-      'items.forEach(function (item) {',
+      /items\.forEach\(function\s*\(item\)\s*{/,
       'Array.forEach(items, function(tab) { \
        if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
