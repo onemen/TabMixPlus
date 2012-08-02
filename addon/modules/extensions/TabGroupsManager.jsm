@@ -55,7 +55,7 @@ let TMP_TabGroupsManager = {
       <![CDATA[
         this.saveAllGroupsData(null, rdfNodeThisWindow);
         $&
-      ]]>
+      ]]>.toString()
     ).toCode();
 
     this.newCode("TabmixSessionManager.loadOneWindow", sessionManager.loadOneWindow)._replace(
@@ -75,7 +75,7 @@ let TMP_TabGroupsManager = {
 
           TabGroupsManager.allGroups.loadAllGroupsData();
         }
-      ]]>
+      ]]>.toString()
     )._replace(
       'else if (newtabsCount > 0 && !overwrite) {',
       <![CDATA[$&
@@ -90,14 +90,14 @@ let TMP_TabGroupsManager = {
         }
       }
       if (false) {
-      ]]>
+      ]]>.toString()
     )._replace(
       'if (this.saveClosedtabs)',
       <![CDATA[
         if (false && _restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))
           this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenebytabmix");
         $&
-      ]]>
+      ]]>.toString()
     ).toCode();
 
     this.newCode("TabmixSessionManager.loadOneTab", sessionManager.loadOneTab)._replace(
@@ -115,7 +115,7 @@ let TMP_TabGroupsManager = {
           aTab.removeAttribute("hidden");
           TabGroupsManager.session.moveTabToGroupBySessionStore(aTab);
         } catch (ex) {Tabmix.assert(ex);}
-      ]]>
+      ]]>.toString()
     ).toCode();
 
     this.newCode("TabmixSessionManager.setNC_TM", sessionManager.setNC_TM)._replace(

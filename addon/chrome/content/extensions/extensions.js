@@ -527,7 +527,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'source[1].replace',
         '" ".replace'
       )._replace(
-        'eval("tablib.init',
+        /eval\(["|']tablib\.init/,
         'if (false) $&'
       ).toCode();
     }
@@ -605,7 +605,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
       Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit",
           TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit)._replace(
-        'eval("window.TMP_howToOpen',
+        /eval\(["|']window\.TMP_howToOpen/,
         'if (false) $&'
       ).toCode();
     }
@@ -614,7 +614,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
       Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsDelayed",
           TreeStyleTabWindowHelper.overrideExtensionsDelayed)._replace(
-        'eval("gBrowser.TMP_openTabNext',
+        /eval\(["|']gBrowser\.TMP_openTabNext/,
         'if (false) $&'
       ).toCode();
     }
