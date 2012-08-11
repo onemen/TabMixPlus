@@ -439,7 +439,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
        if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
        else
-         window._content.document.location.href = this.href;
+         window.content.document.location.href = this.href;
      }
      else if (target == "window") {
        if (Tabmix.singleWindowMode)

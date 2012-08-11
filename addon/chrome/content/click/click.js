@@ -595,7 +595,7 @@ var TabmixContext = {
   openMultipleLinks: function TMP_openMultipleLinks(check) {
     var focusedWindow = document.commandDispatcher.focusedWindow;
     if (focusedWindow == window)
-      focusedWindow = _content;
+      focusedWindow = content;
 
     var nsISelectionObject = focusedWindow.getSelection();
     if (nsISelectionObject.isCollapsed) // nothing selected
@@ -634,7 +634,7 @@ var TabmixContext = {
     }
 
     var range = nsISelectionObject.getRangeAt(0);
-    var treeWalker = window._content.document.createTreeWalker(
+    var treeWalker = window.content.document.createTreeWalker(
          range.cloneContents(),
          NodeFilter.SHOW_ELEMENT,
          myNodeFilter,
