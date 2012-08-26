@@ -592,7 +592,13 @@ var tablib = {
       'if (!reallyClose)',
       'if (reallyClose && !window.tabmix_warnedBeforeClosing)\
          reallyClose = tablib.closeWindow();\
-      $&'
+       $&', {check: !Tabmix.isVersion(170)}
+    )._replace(
+      'if (!closeWindow(false, warnAboutClosingWindow))',
+      'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
+       if (reallyClose && !window.tabmix_warnedBeforeClosing)\
+         reallyClose = tablib.closeWindow();\
+       if (!reallyClose)', {check: Tabmix.isVersion(170)}
     ).toCode();
 
     Tabmix.newCode("goQuitApplication", goQuitApplication)._replace(
