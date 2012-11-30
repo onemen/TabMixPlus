@@ -244,8 +244,7 @@ var tablib = {
 
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.newCode("gBrowser.tabContainer._positionPinnedTabs", gBrowser.tabContainer._positionPinnedTabs)._replace(
-        // replace this section first, we add  this.style.MozMarginStart = "" in the 2nd section
-        'this.style.MozMarginStart = "";',
+        'this.removeAttribute("positionpinnedtabs");',
         'this.resetFirstTabInRow();\
          $&'
       )._replace(
@@ -268,7 +267,10 @@ var tablib = {
               gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]
                 .style.setProperty("-moz-margin-start", width + "px", null);
             }
-            this.style.MozMarginStart = "";
+            if (Tabmix.isVersion(170))
+              this.style.MozPaddingStart = "";
+            else
+              this.style.MozMarginStart = "";
             this.mTabstrip.setFirstTabInRow();
           }
           else $&
