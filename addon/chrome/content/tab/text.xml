@@ -11,13 +11,13 @@
         <![CDATA[
            eval("this.open ="+this.open.toString().replace(
              'if (uri)',
-             'if (!("openURL" in win.Tabmix)) win.Tabmix.openURL = Tabmix.getTopWin().Tabmix.openURL; if (uri)'
+             'if (typeof win.Tabmix_openURL != "function") win.Tabmix_openURL = Tabmix.getTopWin().Tabmix.openURL; if (uri)'
            ).replace(
               'win.open(uri.spec);',
-              'win.Tabmix.openURL(uri.spec, aEvent);'
+              'win.Tabmix_openURL(uri.spec, aEvent);'
            ).replace(
               'win.open(href);',
-              'win.Tabmix.openURL(href, aEvent);'
+              'win.Tabmix_openURL(href, aEvent);'
            ));
         ]]>
       </constructor>
