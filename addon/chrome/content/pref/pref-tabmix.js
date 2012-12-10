@@ -59,6 +59,12 @@ function before_Init() {
   }
   if (Tabmix.isPlatform("Linux"))
     $("sessionManager-panels").setAttribute("linux", "true");
+
+  // firefox 18 (bug 769101) changed browser.dtd pinAppTab.label to pinTab.label
+  var pinTabLabel = topWindow.document.getElementById("context_pinTab").getAttribute("label") + "/"
+                  + topWindow.document.getElementById("context_unpinTab").getAttribute("label");
+  $("ClickTabPinTab").label = pinTabLabel;
+  $("pinTab").label = pinTabLabel;
 }
 
 // load all preferences into the dialog

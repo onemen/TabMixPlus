@@ -775,7 +775,7 @@
                          <menuitem value="3" label="&clicktab.duplicatetab;" />
                          <menuitem value="14" label="&clicktab.duplicatetabw;" observes="obs_singleWindow"/>
                          <menuitem value="27" label="&clicktab.detachtab;" observes="obs_singleWindow"/>
-                         <menuitem value="31" label="&pinAppTab.label;"/>
+                         <menuitem value="31" id="ClickTabPinTab"/>
                             <menuseparator/>
                          <menuitem value="5" label="&clicktab.protecttab;" />
                          <menuitem value="6" label="&clicktab.locktab;" />
@@ -855,7 +855,7 @@
                      <!-- Merge Windows -->
                      <checkbox id="showMergeWin" label="&mergeContext.label;" prefstring="extensions.tabmix.showMergeWindow"/>
                      <!-- pin/unpin tabs -->
-                     <checkbox id="pinTab" label="&pinAppTab.label;" prefstring="extensions.tabmix.pinTabMenu"/>
+                     <checkbox id="pinTab" prefstring="extensions.tabmix.pinTabMenu"/>
                      <!-- move to group -->
                      <checkbox id="moveToGroup" label="&moveToGroup.label;" prefstring="extensions.tabmix.moveToGroup"/>
                      <!-- Rename tab -->
