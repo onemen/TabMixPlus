@@ -304,18 +304,16 @@ var TMP_eventListener = {
     // before it dispatch TabPinned event.
     Tabmix.newCode("gBrowser.pinTab", gBrowser.pinTab)._replace(
       'this.tabContainer.adjustTabstrip();',
-      <![CDATA[
-        if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))
-          aTab.removeAttribute("width");
-        if (Tabmix.prefs.getBoolPref("lockAppTabs") &&
-            !aTab.hasAttribute("locked") && "lockTab" in this) {
-          this.lockTab(aTab);
-          aTab.setAttribute("_lockedAppTabs", "true");
-        }
-        this.tabContainer.adjustTabstrip(true);
-        TabmixTabbar.updateScrollStatus();
-        TabmixTabbar.updateBeforeAndAfter();
-      ]]>
+      '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
+      '    aTab.removeAttribute("width");' +
+      '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
+      '      !aTab.hasAttribute("locked") && "lockTab" in this) {' +
+      '    this.lockTab(aTab);' +
+      '    aTab.setAttribute("_lockedAppTabs", "true");' +
+      '  }' +
+      '  this.tabContainer.adjustTabstrip(true);' +
+      '  TabmixTabbar.updateScrollStatus();' +
+      '  TabmixTabbar.updateBeforeAndAfter();'
     ).toCode();
 
     // prevent faviconize use its own adjustTabstrip
@@ -624,13 +622,12 @@ var TMP_eventListener = {
         if (Tabmix.isVersion(100)) {
           Tabmix.newCode("FullScreen.enterDomFullScreen", FullScreen.enterDomFullScreen)._replace(
             /(\})(\)?)$/,
-            <![CDATA[
-              fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-              if (fullScrToggler) {
-                fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);
-                fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);
-              }
-            $1$2]]>
+            '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
+            '  if (fullScrToggler) {' +
+            '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
+            '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
+            '  }' +
+            '$1$2'
           ).toCode();
         }
       }

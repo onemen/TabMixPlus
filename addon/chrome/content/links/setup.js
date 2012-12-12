@@ -25,15 +25,13 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (autoComplete) {
     this.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
       'openUILink(url, aEvent);',
-      <![CDATA[
-      var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
-      var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
-      var pref = "extensions.tabmix.loadUrlInBackground";
-      if (Tabmix.isVersion(100))
-        openUILinkIn(url, where, {inBackground: Services.prefs.getBoolPref(pref)});
-      else
-        openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
-      ]]>
+      'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
+      'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
+      'var pref = "extensions.tabmix.loadUrlInBackground";' +
+      'if (Tabmix.isVersion(100))' +
+      '  openUILinkIn(url, where, {inBackground: Services.prefs.getBoolPref(pref)});' +
+      'else' +
+      '  openUILinkIn(url, where, false, null, null, {backgroundPref: pref});'
     ).toCode();
   }
 
@@ -80,16 +78,14 @@ function TMP_TBP_Startup() {
     TabmixSessionManager._inPrivateBrowsing = pbs.privateBrowsingEnabled;
     bowserStartup = bowserStartup._replace(
       'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);',
-      <![CDATA[
-       var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;
-       var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;
-       gBrowser.tabContainer.adjustTabstrip(true, url);
-       if (!Tabmix.singleWindowMode) {
-         window.tabmix_afterTabduplicated = true;
-         TabmixSessionManager.init();
-         $&
-       }
-      ]]>
+      ' var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
+      ' var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
+      ' gBrowser.tabContainer.adjustTabstrip(true, url);' +
+      ' if (!Tabmix.singleWindowMode) {' +
+      '   window.tabmix_afterTabduplicated = true;' +
+      '   TabmixSessionManager.init();' +
+      '   $&' +
+      ' }'
     );
 
     var windowOpeneByTabmix = "tabmixdata" in window;
@@ -122,16 +118,15 @@ function TMP_TBP_Startup() {
       );
       bowserStartup = bowserStartup._replace(
         'if (window.opener && !window.opener.closed) {',
-        <![CDATA[
-          if (uriToLoad && uriToLoad != "about:blank") {
-            for (var i = 0; i < gBrowser.tabs.length ; i++) {
-              gBrowser.tabs[i].loadOnStartup = true;
-            }
-          }
-          if (uriToLoad == "about:blank" || "tabmixdata" in window) {
-            gBrowser.selectedBrowser.stop();
-          }
-        $&]]>
+        '  if (uriToLoad && uriToLoad != "about:blank") {' +
+        '    for (var i = 0; i < gBrowser.tabs.length ; i++) {' +
+        '      gBrowser.tabs[i].loadOnStartup = true;' +
+        '    }' +
+        '  }' +
+        '  if (uriToLoad == "about:blank" || "tabmixdata" in window) {' +
+        '    gBrowser.selectedBrowser.stop();' +
+        '  }' +
+        '$&'
       );
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
@@ -150,13 +145,12 @@ function TMP_TBP_Startup() {
           ["delayedStartup", delayedStartup];
     Tabmix.newCode(name, fn)._replace(
       '{',
-      <![CDATA[{
-      try {
-        if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);
-        Tabmix.getNewTabButtonWidth();
-        TabmixSessionManager.init();
-      } catch (ex) {Tabmix.assert(ex);}
-      ]]>
+      '{' +
+      'try {' +
+      '  if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);' +
+      '  Tabmix.getNewTabButtonWidth();' +
+      '  TabmixSessionManager.init();' +
+      '} catch (ex) {Tabmix.assert(ex);}'
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix

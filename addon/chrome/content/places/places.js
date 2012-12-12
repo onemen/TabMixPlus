@@ -102,28 +102,25 @@ var TMP_Places = {
             'tab = $&', {flags: "g"}
           )._replace(
             'getBoolPref("browser.tabs.loadInBackground");',
-            <![CDATA[
-              params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&
-            ]]>, {check: !Tabmix.isVersion(100), flags: "g"}
+            'params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&',
+            {check: !Tabmix.isVersion(100), flags: "g"}
           )._replace(
             'getBoolPref("browser.tabs.loadInBackground");',
-            <![CDATA[
-              params.inBackground;
-              if (bg == null)
-                bg = params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&
-            ]]>, {check: Tabmix.isVersion(100), flags: "g"}
+            '  params.inBackground;' +
+            '  if (bg == null)' +
+            '    bg = params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&',
+            {check: Tabmix.isVersion(100), flags: "g"}
           )._replace(
+            // if we are after openLinkIn we don't need this
+            // we already add this attribute in openLinkIn
+            // com.tobwithu.wmn.openURL return tab or window
             /(\})(\)?)$/,
-            <![CDATA[
-              // if we are after openLinkIn we don't need this
-              // we already add this attribute in openLinkIn
-              if (tab && params.bookMarkId) {
-                // com.tobwithu.wmn.openURL return tab or window
-                if (tab.localName != "tab")
-                  tab = tab.gBrowser.getTabForLastPanel();
-                tab.setAttribute("tabmix_bookmarkId", params.bookMarkId);
-              }
-            $1$2]]>
+            '  if (tab && params.bookMarkId) {' +
+            '    if (tab.localName != "tab")' +
+            '      tab = tab.gBrowser.getTabForLastPanel();' +
+            '    tab.setAttribute("tabmix_bookmarkId", params.bookMarkId);' +
+            '  }' +
+            '$1$2'
           ).toCode();
         }
       } catch(ex) {}

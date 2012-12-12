@@ -18,23 +18,22 @@ var tablib = {
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
     Tabmix.newCode(null, aBrowser.loadURIWithFlags)._replace(
       '{',
-      <![CDATA[$&
-        var allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);
-        var tabbrowser = document.getBindingParent(this);
-        var tab = tabbrowser.getTabForBrowser(this);
-        var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);
-        var isLockedTab = tab.hasAttribute("locked");
-        if (!allowLoad && !isBlankTab && isLockedTab) {
-          var newTab = tabbrowser.addTab();
-          tabbrowser.selectedTab = newTab;
-          var browser = newTab.linkedBrowser;
-          browser.stop();
-          browser.tabmix_allowLoad = true;
-          browser.loadURIWithFlags(aURI, aFlags, aReferrerURI, aCharset, aPostData);
-          return;
-        }
-        this.tabmix_allowLoad = aURI == "about:blank" || !isLockedTab;
-      ]]>
+      '$&' +
+      '  var allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
+      '  var tabbrowser = document.getBindingParent(this);' +
+      '  var tab = tabbrowser.getTabForBrowser(this);' +
+      '  var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);' +
+      '  var isLockedTab = tab.hasAttribute("locked");' +
+      '  if (!allowLoad && !isBlankTab && isLockedTab) {' +
+      '    var newTab = tabbrowser.addTab();' +
+      '    tabbrowser.selectedTab = newTab;' +
+      '    var browser = newTab.linkedBrowser;' +
+      '    browser.stop();' +
+      '    browser.tabmix_allowLoad = true;' +
+      '    browser.loadURIWithFlags(aURI, aFlags, aReferrerURI, aCharset, aPostData);' +
+      '    return;' +
+      '  }' +
+      '  this.tabmix_allowLoad = aURI == "about:blank" || !isLockedTab;'
     )._replace(
       'this.webNavigation.LOAD_FLAGS_FROM_EXTERNAL',
       'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL', {check: "loadTabsProgressively" in window }
@@ -79,18 +78,16 @@ var tablib = {
       'openTabnext'
     )._replace(
       't.dispatchEvent(evt);',
-      <![CDATA[
-      var _selectedTab = this.selectedTab;
-      var _lastRelatedTab = this._lastRelatedTab;
-      t.dispatchEvent(evt);
-      var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
-      if (openTabnext) {
-        if (Tabmix.isCallerInList(this.TMP_blockedCallers))
-          openTabnext = false;
-        else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))
-          aRelatedToCurrent = true;
-      }
-      ]]>
+      'var _selectedTab = this.selectedTab;' +
+      'var _lastRelatedTab = this._lastRelatedTab;' +
+      't.dispatchEvent(evt);' +
+      'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
+      'if (openTabnext) {' +
+      '  if (Tabmix.isCallerInList(this.TMP_blockedCallers))' +
+      '    openTabnext = false;' +
+      '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
+      '    aRelatedToCurrent = true;' +
+      '}'
     )._replace( //  new tab can trigger selection change by some extensions (divX HiQ)
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
@@ -252,29 +249,27 @@ var tablib = {
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
-        <![CDATA[
-          if (doPosition && TabmixTabbar.isMultiRow) {
-            this.setAttribute("positionpinnedtabs", "true");
-            let width = this.mTabstrip.scrollboxPaddingStart;
-            for (let i = 0; i < numPinned; i++) {
-              let tab = this.childNodes[i];
-              tab.style.MozMarginStart = width + "px";
-              width += tab.getBoundingClientRect().width;
-            }
-            if (width != this.firstTabInRowMargin) {
-              this.firstTabInRowMargin = width;
-              this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};
-              gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]
-                .style.setProperty("-moz-margin-start", width + "px", null);
-            }
-            if (Tabmix.isVersion(170))
-              this.style.MozPaddingStart = "";
-            else
-              this.style.MozMarginStart = "";
-            this.mTabstrip.setFirstTabInRow();
-          }
-          else $&
-        ]]>
+        '  if (doPosition && TabmixTabbar.isMultiRow) {' +
+        '    this.setAttribute("positionpinnedtabs", "true");' +
+        '    let width = this.mTabstrip.scrollboxPaddingStart;' +
+        '    for (let i = 0; i < numPinned; i++) {' +
+        '      let tab = this.childNodes[i];' +
+        '      tab.style.MozMarginStart = width + "px";' +
+        '      width += tab.getBoundingClientRect().width;' +
+        '    }' +
+        '    if (width != this.firstTabInRowMargin) {' +
+        '      this.firstTabInRowMargin = width;' +
+        '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
+        '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
+        '        .style.setProperty("-moz-margin-start", width + "px", null);' +
+        '    }' +
+        '    if (Tabmix.isVersion(170))' +
+        '      this.style.MozPaddingStart = "";' +
+        '    else' +
+        '      this.style.MozMarginStart = "";' +
+        '    this.mTabstrip.setFirstTabInRow();' +
+        '  }' +
+        '  else $&'
       ).toCode();
     }
 
@@ -308,29 +303,28 @@ var tablib = {
         '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
         /var isEndTab =|faviconize.o_lockTabSizing/,
-        <![CDATA[
-          if (TabmixTabbar.widthFitTitle) {
-            let tab, tabs = this.tabbrowser.visibleTabs;
-            for (let t = aTab._tPos+1; t < this.childNodes.length; t++) {
-              if (tabs.indexOf(this.childNodes[t]) > -1) {
-                tab = this.childNodes[t];
-                break;
-              }
-            }
-            if (tab && !tab.pinned && !tab.collapsed) {
-              let tabWidth = aTab.getBoundingClientRect().width + "px";
-              tab.style.setProperty("width",tabWidth,"important");
-              tab.removeAttribute("width");
-              this._hasTabTempWidth = true;
-              this.tabbrowser.addEventListener("mousemove", this, false);
-              window.addEventListener("mouseout", this, false);
-            }
-            return;
-          }
-          if (!this.TMP_inSingleRow(tabs))
-            return;
-          this._tabDefaultMaxWidth = this.mTabMaxWidth
-          $&]]>
+        '  if (TabmixTabbar.widthFitTitle) {' +
+        '    let tab, tabs = this.tabbrowser.visibleTabs;' +
+        '    for (let t = aTab._tPos+1; t < this.childNodes.length; t++) {' +
+        '      if (tabs.indexOf(this.childNodes[t]) > -1) {' +
+        '        tab = this.childNodes[t];' +
+        '        break;' +
+        '      }' +
+        '    }' +
+        '    if (tab && !tab.pinned && !tab.collapsed) {' +
+        '      let tabWidth = aTab.getBoundingClientRect().width + "px";' +
+        '      tab.style.setProperty("width",tabWidth,"important");' +
+        '      tab.removeAttribute("width");' +
+        '      this._hasTabTempWidth = true;' +
+        '      this.tabbrowser.addEventListener("mousemove", this, false);' +
+        '      window.addEventListener("mouseout", this, false);' +
+        '    }' +
+        '    return;' +
+        '  }' +
+        '  if (!this.TMP_inSingleRow(tabs))' +
+        '    return;' +
+        '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
+        '  $&'
       ).toCode();
 
       Tabmix.newCode("gBrowser.tabContainer._expandSpacerBy", gBrowser.tabContainer._expandSpacerBy)._replace(
@@ -342,21 +336,19 @@ var tablib = {
         '{','{var updateScrollStatus = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
         /(\})(\)?)$/,
-        <![CDATA[
-          if (this._hasTabTempWidth) {
-            this._hasTabTempWidth = false;
-            let tabs = this.tabbrowser.visibleTabs;
-            for (let i = 0; i < tabs.length; i++)
-              tabs[i].style.width = "";
-          }
-          if (updateScrollStatus) {
-            if (this.childNodes.length > 1) {
-              TabmixTabbar.updateScrollStatus();
-              TabmixTabbar.updateBeforeAndAfter();
-            }
-          }
-          $1$2
-        ]]>
+        '  if (this._hasTabTempWidth) {' +
+        '    this._hasTabTempWidth = false;' +
+        '    let tabs = this.tabbrowser.visibleTabs;' +
+        '    for (let i = 0; i < tabs.length; i++)' +
+        '      tabs[i].style.width = "";' +
+        '  }' +
+        '  if (updateScrollStatus) {' +
+        '    if (this.childNodes.length > 1) {' +
+        '      TabmixTabbar.updateScrollStatus();' +
+        '      TabmixTabbar.updateBeforeAndAfter();' +
+        '    }' +
+        '  }' +
+        '  $1$2'
       ).toCode();
     }
 
@@ -372,16 +364,14 @@ var tablib = {
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
     Tabmix.newCode(null,  _setter)._replace(
       'this._container.collapsed = !val;',
-      <![CDATA[
-        if (TabmixTabbar.hideMode == 2)
-          val = false;
-        $&
-        let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-        if (bottomToolbox) {
-          bottomToolbox.collapsed = !val;
-          gTMPprefObserver.updateTabbarBottomPosition();
-        }
-      ]]>
+      '  if (TabmixTabbar.hideMode == 2)' +
+      '    val = false;' +
+      '  $&' +
+      '  let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");' +
+      '  if (bottomToolbox) {' +
+      '    bottomToolbox.collapsed = !val;' +
+      '    gTMPprefObserver.updateTabbarBottomPosition();' +
+      '  }'
     ).toSetter(gBrowser.tabContainer, "visible");
 
   },
@@ -389,13 +379,12 @@ var tablib = {
   change_utility: function change_utility() {
     Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
       'this._isChromeCollapsed = !aShow;',
-      <![CDATA[$&
-        if (aShow)
-          TMP_eventListener.updateMultiRow();
-        if (TabmixTabbar.position == 1) {
-          TMP_eventListener.mouseoverToggle(aShow);
-        }
-      ]]>
+      '  $&' +
+      '  if (aShow)' +
+      '    TMP_eventListener.updateMultiRow();' +
+      '  if (TabmixTabbar.position == 1) {' +
+      '    TMP_eventListener.mouseoverToggle(aShow);' +
+      '  }'
     ).toCode();
 
   //XXX consider to replace handleDroppedLink not use eval here
@@ -406,20 +395,18 @@ var tablib = {
     // update current browser
     gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
 
+    // we prevent sessionStore.duplicateTab from moving the tab
     Tabmix.newCode("duplicateTabIn", duplicateTabIn)._replace(
       'switch (where)',
-      <![CDATA[
-        if (where == "window") {
-          if (Tabmix.getSingleWindowMode())
-            where = "tab";
-        }
-        // we prevent sessionStore.duplicateTab from moving the tab
-        else if (Tabmix.prefs.getBoolPref("openDuplicateNext")) {
-          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
-        }
-        $&
-      ]]>
+      '  if (where == "window") {' +
+      '    if (Tabmix.getSingleWindowMode())' +
+      '      where = "tab";' +
+      '  }' +
+      '  else if (Tabmix.prefs.getBoolPref("openDuplicateNext")) {' +
+      '    let pos = newTab._tPos > aTab._tPos ? 1 : 0;' +
+      '    gBrowser.moveTabTo(newTab, aTab._tPos + pos);' +
+      '  }' +
+      '  $&'
     )._replace(
       'browser.tabs.loadBookmarksInBackground',
       'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(110)}
@@ -458,14 +445,13 @@ var tablib = {
     var _openURI = Tabmix.newCode("nsBrowserAccess.prototype.openURI", nsBrowserAccess.prototype.openURI);
     _openURI = _openURI._replace(
       'win.gBrowser.getBrowserForTab(tab);',
-      <![CDATA[$&
-        if (currentIsBlank && aURI) {
-          let loadflags = isExternal ?
-              Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :
-              Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
-          browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);
-        }
-      ]]>
+      '  $&' +
+      '  if (currentIsBlank && aURI) {' +
+      '    let loadflags = isExternal ?' +
+      '        Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
+      '        Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
+      '    browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);' +
+      '  }'
     )._replace(
       'if (isExternal && (!aURI || aURI.spec == "about:blank")) {',
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
@@ -489,19 +475,18 @@ var tablib = {
 
     _openURI = _openURI._replace(
       'switch (aWhere) {',
-      <![CDATA[
-        if (Tabmix.singleWindowMode &&
-            aWhere == Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW) {
-            aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;
-        }
-        if (aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW &&
-            aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWTAB) {
-            let isLockTab = Tabmix.whereToOpen(null).lock;
-            if (isLockTab) {
-                aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;
-            }
-        }
-        $&]]>
+      '  if (Tabmix.singleWindowMode &&' +
+      '      aWhere == Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW) {' +
+      '      aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
+      '  }' +
+      '  if (aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW &&' +
+      '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWTAB) {' +
+      '      let isLockTab = Tabmix.whereToOpen(null).lock;' +
+      '      if (isLockTab) {' +
+      '          aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
+      '      }' +
+      '  }' +
+      '  $&'
     )._replace(
       'win.gBrowser.loadOneTab',
       'currentIsBlank ? win.gBrowser.mCurrentTab : $&'
@@ -522,22 +507,20 @@ var tablib = {
         [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
       }
     } catch (ex) {}
+    // inverse focus of middle/ctrl/meta clicked links
+    // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.newCode(fnName, fnCode)._replace(
       'var originCharset = aDocument && aDocument.characterSet;',
-      <![CDATA[
-        // inverse focus of middle/ctrl/meta clicked links
-        // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
-        var loadInBackground = false;
-        if (aEvent) {
-          if (aEvent.shiftKey)
-            loadInBackground = !loadInBackground;
-          if (getBoolPref("extensions.tabmix.inversefocusLinks")
-              && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))
-            loadInBackground = !loadInBackground;
-        }
-        var where = loadInBackground ? "tabshifted" : "tab";
-        $&
-      ]]>
+      '  var loadInBackground = false;' +
+      '  if (aEvent) {' +
+      '    if (aEvent.shiftKey)' +
+      '      loadInBackground = !loadInBackground;' +
+      '    if (getBoolPref("extensions.tabmix.inversefocusLinks")' +
+      '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))' +
+      '      loadInBackground = !loadInBackground;' +
+      '  }' +
+      '  var where = loadInBackground ? "tabshifted" : "tab";' +
+      '  $&'
     )._replace(
       'aEvent && aEvent.shiftKey ? "tabshifted" : "tab"',
       'where'
@@ -605,11 +588,10 @@ var tablib = {
 
     Tabmix.newCode("goQuitApplication", goQuitApplication)._replace(
       'var appStartup',
-      <![CDATA[
-      let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");
-      if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))
-        return false;
-      $&]]>
+      'let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");' +
+      'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
+      '  return false;' +
+      '$&'
     ).toCode();
 
     // if user changed mode to single window mode while having closed window

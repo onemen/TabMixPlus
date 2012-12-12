@@ -394,19 +394,17 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       source = code[1];
     else
       return; // nothing we can do
+    /* don't open blank tab when we are about to add new livemark */
     this.newCode("openUILink", openUILink)._replace(
       source,
-      <![CDATA[
-        var win = getTopWin();
-        if (win && where == "current") {
-          // don't open blank tab when we are about to add new livemark
-          let _addLivemark = /^feed:/.test(url) &&
-             Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
-          if (!_addLivemark)
-            where = win.Tabmix.checkCurrent(url);
-        }
-        try {$&}  catch (ex) {  }
-      ]]>
+      '  var win = getTopWin();' +
+      '  if (win && where == "current") {' +
+      '    let _addLivemark = /^feed:/.test(url) &&' +
+      '       Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";' +
+      '    if (!_addLivemark)' +
+      '      where = win.Tabmix.checkCurrent(url);' +
+      '  }' +
+      '  try {$&}  catch (ex) {  }'
     )._replace( // fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}

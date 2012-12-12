@@ -52,70 +52,60 @@ let TMP_TabGroupsManager = {
     let sessionManager = aWindow.TabmixSessionManager;
     this.newCode("TabmixSessionManager.saveOneWindow", sessionManager.saveOneWindow)._replace(
       'if (caller == "windowbackup")',
-      <![CDATA[
-        this.saveAllGroupsData(null, rdfNodeThisWindow);
-        $&
-      ]]>.toString()
+      '  this.saveAllGroupsData(null, rdfNodeThisWindow);' +
+      '  $&'
     ).toCode();
 
     this.newCode("TabmixSessionManager.loadOneWindow", sessionManager.loadOneWindow)._replace(
+      // get saved group data and repalce ids with new one
       'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
-      <![CDATA[$&
-        var [_restoreSelect, _lastSelectedIndex] = [restoreSelect, lastSelectedIndex];
-        [restoreSelect, lastSelectedIndex] = [false, 0];
-
-        // get saved group data and repalce ids with new one
-        let jsonText = this.getLiteralValue(rdfNodeWindow, "tgm_jsonText");
-        TabGroupsManager.session.groupRestored = 1;
-        if (jsonText) {
-          // make sure sessionstore is init
-          TMP_SessionStore.initService();
-          if ("__SSi" in window)
-            TabmixSvc.ss.setWindowValue(window, "TabGroupsManagerAllGroupsData", decodeURI(jsonText));
-
-          TabGroupsManager.allGroups.loadAllGroupsData();
-        }
-      ]]>.toString()
+      '$&' +
+      '  var [_restoreSelect, _lastSelectedIndex] = [restoreSelect, lastSelectedIndex];' +
+      '  [restoreSelect, lastSelectedIndex] = [false, 0];' +
+      '  let jsonText = this.getLiteralValue(rdfNodeWindow, "tgm_jsonText");' +
+      '  TabGroupsManager.session.groupRestored = 1;' +
+      '  if (jsonText) {' +
+      '    // make sure sessionstore is init' +
+      '    TMP_SessionStore.initService();' +
+      '    if ("__SSi" in window)' +
+      '      TabmixSvc.ss.setWindowValue(window, "TabGroupsManagerAllGroupsData", decodeURI(jsonText));' +
+      '    TabGroupsManager.allGroups.loadAllGroupsData();' +
+      '  }'
     )._replace(
+      // open new group and add new tabs to it
       'else if (newtabsCount > 0 && !overwrite) {',
-      <![CDATA[$&
-        // open new group and add new tabs to it
-        gBrowser.selectedTab = TMP_addTab();
-        gBrowser.moveTabTo(gBrowser.selectedTab, gBrowser.tabs.length - 1);
-        newIndex = gBrowser.selectedTab._tPos;
-        let group = TabGroupsManager.allGroups.openNewGroupActive(
-              gBrowser.selectedTab, -1);
-        for (let i = 1; i < newtabsCount; i++) {
-          TMP_addTab();
-        }
-      }
-      if (false) {
-      ]]>.toString()
+      '$&' +
+      '  gBrowser.selectedTab = TMP_addTab();' +
+      '  gBrowser.moveTabTo(gBrowser.selectedTab, gBrowser.tabs.length - 1);' +
+      '  newIndex = gBrowser.selectedTab._tPos;' +
+      '  let group = TabGroupsManager.allGroups.openNewGroupActive(' +
+      '        gBrowser.selectedTab, -1);' +
+      '  for (let i = 1; i < newtabsCount; i++) {' +
+      '    TMP_addTab();' +
+      '  }' +
+      '}' +
+      'if (false) {'
     )._replace(
       'if (this.saveClosedtabs)',
-      <![CDATA[
-        if (false && _restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))
-          this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenebytabmix");
-        $&
-      ]]>.toString()
+      '  if (false && _restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
+      '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenebytabmix");' +
+      '  $&'
     ).toCode();
 
     this.newCode("TabmixSessionManager.loadOneTab", sessionManager.loadOneTab)._replace(
       'var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory);',
-      <![CDATA[
-        $&
-        try {
-          let tabgroupsData = TMP_SessionStore._getAttribute({xultab: tabProperties}, "tabgroups-data");
-          let [groupId, groupName] = ["", ""];
-          if (tabgroupsData) {
-            [groupId, groupName] = tabgroupsData.split(" ");
-          }
-          TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupId", groupId);
-          TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupName", groupName);
-          aTab.removeAttribute("hidden");
-          TabGroupsManager.session.moveTabToGroupBySessionStore(aTab);
-        } catch (ex) {Tabmix.assert(ex);}
-      ]]>.toString()
+      '  $&' +
+      '  try {' +
+      '    let tabgroupsData = TMP_SessionStore._getAttribute({xultab: tabProperties}, "tabgroups-data");' +
+      '    let [groupId, groupName] = ["", ""];' +
+      '    if (tabgroupsData) {' +
+      '      [groupId, groupName] = tabgroupsData.split(" ");' +
+      '    }' +
+      '    TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupId", groupId);' +
+      '    TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupName", groupName);' +
+      '    aTab.removeAttribute("hidden");' +
+      '    TabGroupsManager.session.moveTabToGroupBySessionStore(aTab);' +
+      '  } catch (ex) {Tabmix.assert(ex);}'
     ).toCode();
 
     this.newCode("TabmixSessionManager.setNC_TM", sessionManager.setNC_TM)._replace(

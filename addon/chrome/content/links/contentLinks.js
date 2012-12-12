@@ -153,53 +153,48 @@ Tabmix.contentAreaClick = {
   init: function TMP_CA_init() {
     Tabmix.newCode("contentAreaClick", contentAreaClick)._replace(
       'if (linkNode &&',
-      <![CDATA[
-      var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);
-      var [where, suppressTabsOnFileDownload] =
-            Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);
-      if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-      else if (event.__href) href = event.__href;
-      $&]]>
+      'var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);' +
+      'var [where, suppressTabsOnFileDownload] =' +
+      '      Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);' +
+      'if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +
+      'else if (event.__href) href = event.__href;' +
+      '$&'
     )._replace(
       'if (linkNode.getAttribute("onclick")',
       'if (where == "default") $&'
     )._replace(
       'loadURI(url, null, postData.value, false);',
-      <![CDATA[
-        if (where == "tab" || where == "tabshifted") {
-          let doc = event.target.ownerDocument;
-          openLinkIn(url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,
-                    suppressTabsOnFileDownload: suppressTabsOnFileDownload});
-        }
-        else $&
-      ]]>
+      '  if (where == "tab" || where == "tabshifted") {' +
+      '    let doc = event.target.ownerDocument;' +
+      '    openLinkIn(url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
+      '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});' +
+      '  }' +
+      '  else $&'
     )._replace(
+      // force handleLinkClick to use openLinkIn by replace "current"
+      // with " current", we later use trim() before handleLinkClick call openLinkIn
       'handleLinkClick(event, href, linkNode);',
-      <![CDATA[
-        if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {
-          href = event.__href;
-          where = "tab";
-        }
-        // force handleLinkClick to use openLinkIn by replace "current"
-        // with " current", we later use trim() before handleLinkClick call openLinkIn
-        event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;
-        event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;
-        var result = $&
-        if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);
-      ]]>
+      '  if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {' +
+      '    href = event.__href;' +
+      '    where = "tab";' +
+      '  }' +
+      '  event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;' +
+      '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;' +
+      '  var result = $&' +
+      '  if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
     ).toCode();
 
+    /* don't change where if it is save, window, or we passed
+     * event.__where = default from contentAreaClick or
+     * Tabmix.contentAreaClick.contentLinkClick
+     */
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
       'whereToOpenLink(event);',
-      <![CDATA[$&
-        // don't change where if it is save, window, or we passed
-        // event.__where = default from contentAreaClick or
-        // Tabmix.contentAreaClick.contentLinkClick
-        if (event && event.__where && event.__where != "default" &&
-            ["tab","tabshifted","current"].indexOf(where) != -1) {
-          where = event.__where;
-        }
-      ]]>
+      '$&' +
+      '  if (event && event.__where && event.__where != "default" &&' +
+      '      ["tab","tabshifted","current"].indexOf(where) != -1) {' +
+      '    where = event.__where;' +
+      '  }'
     )._replace(
       'var doc = event.target.ownerDocument;',
       'where = where.trim();\

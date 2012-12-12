@@ -926,37 +926,35 @@ var TMP_TabView = {
 
   _patchTabviewFrame: function SM__patchTabviewFrame(){
     if (Tabmix.isVersion(80)) {
+      // Firefox 8.0 use strict mode - we need to map global variable
       TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
       Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
         '"use strict";',
-        <![CDATA[$&
-        // Firefox 8.0 use strict mode - we need to map global variable
-        let win = TabView._window;
-        let GroupItem = win.GroupItem;
-        let iQ = win.iQ;
-        let UI = win.UI;
-        let Utils = win.Utils;
-        let GroupItems = win.GroupItems;
-        let Storage = win.Storage;
-        ]]>, {check: Tabmix.isVersion(80)}
+        '$&' +
+        'let win = TabView._window;' +
+        'let GroupItem = win.GroupItem;' +
+        'let iQ = win.iQ;' +
+        'let UI = win.UI;' +
+        'let Utils = win.Utils;' +
+        'let GroupItems = win.GroupItems;' +
+        'let Storage = win.Storage;', {check: Tabmix.isVersion(80)}
       )._replace(
         'this.',
         'GroupItems.', {flags: "g"}
       )._replace(
-        'groupItem.userSize = data.userSize;',
-        <![CDATA[
         // This group is re-used by session restore
         // make sure all of its children still belong to this group.
         // Do it before setBounds trigger data save that will overwrite
         // session restore data.
-        groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {
-          var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);
-          if (!tabData || tabData.groupID != data.id) {
-            // We call TabItems.resumeReconnecting later to reconnect this item
-            tabItem._reconnected = false;
-          }
-        });
-        $&]]>
+        // We call TabItems.resumeReconnecting later to reconnect the tabItem.
+        'groupItem.userSize = data.userSize;',
+        'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
+        '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
+        '  if (!tabData || tabData.groupID != data.id) {' +
+        '    tabItem._reconnected = false;' +
+        '  }' +
+        '});' +
+        '$&'
       )._replace(
         // All remaining children in to-be-closed groups are re-used by
         // session restore. Mark them for recconct later by UI.reset
@@ -977,17 +975,15 @@ var TMP_TabView = {
     TabView._window.UI._original_reset = TabView._window.UI.reset;
     Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
       '"use strict";',
-        <![CDATA[$&
-      // Firefox 8.0 use strict mode - we need to map global variable
-      let win = TabView._window;
-      let Trenches = win.Trenches;
-      let Items = win.Items;
-      let iQ = win.iQ;
-      let Rect = win.Rect;
-      let GroupItems = win.GroupItems;
-      let GroupItem = win.GroupItem;
-      let UI = win.UI;
-        ]]>, {check: Tabmix.isVersion(80)}
+      '$&' +
+      'let win = TabView._window;' +
+      'let Trenches = win.Trenches;' +
+      'let Items = win.Items;' +
+      'let iQ = win.iQ;' +
+      'let Rect = win.Rect;' +
+      'let GroupItems = win.GroupItems;' +
+      'let GroupItem = win.GroupItem;' +
+      'let UI = win.UI;', {check: Tabmix.isVersion(80)}
     )._replace(
       'this.',
       'UI.', {flags: "g", silent: true, check: Tabmix.isVersion(80)}
@@ -1005,12 +1001,11 @@ var TMP_TabView = {
        $&'
     )._replace(
       /(\})(\)?)$/,
-      <![CDATA[
-        GroupItems.groupItems.forEach(function(group) {
-          if (group != groupItem)
-            group.close();
-        });
-       $1$2]]>
+      '  GroupItems.groupItems.forEach(function(group) {' +
+      '    if (group != groupItem)' +
+      '      group.close();' +
+      '  });' +
+      ' $1$2'
     ).toCode();
 
     TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
@@ -1266,15 +1261,14 @@ Tabmix.navToolbox = {
       '$1, null, tabmixArg$2'
     )._replace(
       'openUILinkIn',
-      <![CDATA[
-        var tabmixArg = {backgroundPref: "extensions.tabmix.loadSearchInBackground"};
-        var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
-        var isLockTab = !isBlankTab && gBrowser.mCurrentTab.hasAttribute("locked");
-        if (aWhere == "current" && isLockTab)
-          aWhere = "tab";
-        else if ((/^tab/).test(aWhere) && isBlankTab)
-          aWhere = "current"
-      $&]]>
+      '  var tabmixArg = {backgroundPref: "extensions.tabmix.loadSearchInBackground"};' +
+      '  var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
+      '  var isLockTab = !isBlankTab && gBrowser.mCurrentTab.hasAttribute("locked");' +
+      '  if (aWhere == "current" && isLockTab)' +
+      '    aWhere = "tab";' +
+      '  else if ((/^tab/).test(aWhere) && isBlankTab)' +
+      '    aWhere = "current";' +
+      '$&'
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
       'var loadInBackground = Tabmix.prefs.getBoolPref("loadSearchInBackground");', {check: !searchLoadExt && organizeSE}

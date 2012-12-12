@@ -137,14 +137,13 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
     if ("foxTab" in window) {
       let loadNewInBackground = '$& var loadNewInBackground = Tabmix.prefs.getBoolPref("loadNewInBackground");';
-      let newCode = <![CDATA[
-        if (Tabmix.prefs.getBoolPref("openNewTabNext"))
-          f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);
-        if (!loadNewInBackground) {
-          f.gBrowser.TMP_selectNewForegroundTab(newTab, false);
-          TMP_LastTab.PushSelectedTab();
-        }
-      ]]>
+      let newCode =
+        'if (Tabmix.prefs.getBoolPref("openNewTabNext"))' +
+        '  f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);' +
+        'if (!loadNewInBackground) {' +
+        '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
+        '  TMP_LastTab.PushSelectedTab();' +
+        '}'
       if (typeof(foxTab.openNewTab) == "function") {
         Tabmix.newCode("foxTab.openNewTab", foxTab.openNewTab)._replace(
           '{', loadNewInBackground
@@ -236,13 +235,11 @@ var TMP_extensionsCompatibility = {
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.newCode("faviconize.toggle", faviconize.toggle)._replace(
         /(\})(\)?)$/,
-        <![CDATA[
-          tab.removeAttribute("minwidth");
-          tab.removeAttribute("maxwidth");
-          TabmixTabbar.updateScrollStatus();
-          TabmixTabbar.updateBeforeAndAfter();
-          $1$2
-        ]]>
+        '  tab.removeAttribute("minwidth");' +
+        '  tab.removeAttribute("maxwidth");' +
+        '  TabmixTabbar.updateScrollStatus();' +
+        '  TabmixTabbar.updateBeforeAndAfter();' +
+        '  $1$2'
       ).toCode();
     }
 
@@ -637,25 +634,20 @@ TMP_extensionsCompatibility.treeStyleTab = {
       '{if (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
     )._replace(
       'index = prevTab._tPos + 1;',
-      <![CDATA[
-        index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));
-        if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);
-          index = index ? index._tPos : (prevTab._tPos + 1);
-      ]]>
+      '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
+      '  if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);' +
+      '    index = index ? index._tPos : (prevTab._tPos + 1);'
     )._replace(
       'prevTab = aTab;',
-      <![CDATA[
-        $&
-        if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {
-          TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));
-        }
-      ]]>
+      '  $&' +
+      '  if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {' +
+      '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
+      '  }'
     )._replace(
       /(\})(\)?)$/,
-      <![CDATA[
-        if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)
-          TreeStyleTabService.stopToOpenChildTab(tabToSelect);
-      $1$2]]>
+      '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
+      '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
+      '$1$2'
     ).toCode();
 
     if (TreeStyleTabService.getTreePref('compatibility.TMP')) {
