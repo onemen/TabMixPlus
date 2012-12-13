@@ -650,7 +650,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       '$1$2'
     ).toCode();
 
-    if (TreeStyleTabService.getTreePref('compatibility.TMP')) {
+    if (Services.prefs.getBoolPref("extensions.treestyletab.compatibility.TMP")) {
       // Added 2010-04-10
       // TST look for aTab.removeAttribute("tabxleft")
       Tabmix.newCode("window.TabmixTabbar.updateSettings", TabmixTabbar.updateSettings)._replace(
