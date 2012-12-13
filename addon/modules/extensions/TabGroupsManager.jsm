@@ -65,7 +65,7 @@ let TMP_TabGroupsManager = {
       '  let jsonText = this.getLiteralValue(rdfNodeWindow, "tgm_jsonText");' +
       '  TabGroupsManager.session.groupRestored = 1;' +
       '  if (jsonText) {' +
-      '    // make sure sessionstore is init' +
+      '    /* make sure sessionstore is init */' +
       '    TMP_SessionStore.initService();' +
       '    if ("__SSi" in window)' +
       '      TabmixSvc.ss.setWindowValue(window, "TabGroupsManagerAllGroupsData", decodeURI(jsonText));' +
