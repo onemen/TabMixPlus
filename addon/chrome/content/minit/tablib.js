@@ -229,6 +229,13 @@ var tablib = {
       Tabmix.copyTabData(aOurTab, aOtherTab);
       return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     }
+
+    // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
+    // if the tab strip doesn't overflow to prevent layout flushes
+    gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
+      if (this.tabContainer.overflow)
+        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -542,7 +549,7 @@ var tablib = {
       )._replace(
        'loadOneOrMoreURIs(homePage);',
        '$& \
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);'
+        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
       ).toCode();
     }
 
@@ -684,7 +691,7 @@ var tablib = {
     Tabmix.newCode("switchToTabHavingURI", switchToTabHavingURI)._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '{$& \
-       gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);}'
+       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
     ).toCode();
 
   },
@@ -696,8 +703,8 @@ var tablib = {
         this.loadOneTab(uri, aReferrer, null, aPostData, false, aAllowThirdPartyFixup);
       else {
         loadURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup);
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
-     }
+        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
+      }
     }
 
     gBrowser.duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocuseUrlBar) {
@@ -915,7 +922,7 @@ var tablib = {
         }
         if (!aTab.pinned) {
           this.removeTab(aTab, {animate: true});
-          this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
+          this.ensureTabIsVisible(this.selectedTab);
         }
       }
     }
@@ -961,7 +968,7 @@ var tablib = {
         if (aTab._tPos > this.mCurrentTab._tPos) {
           this.selectedTab = aTab;
         }
-        this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
+        this.ensureTabIsVisible(this.selectedTab);
 
         for (var i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
@@ -977,7 +984,7 @@ var tablib = {
       if (this.warnAboutClosingTabs("AllBut", null, aTab._isProtected)) {
         if (aTab != this.mCurrentTab)
           this.selectedTab = aTab;
-        this.tabContainer.mTabstrip.ensureElementIsVisible(this.selectedTab);
+        this.ensureTabIsVisible(this.selectedTab);
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           this.tabContainer.updateVerticalTabStrip(true)

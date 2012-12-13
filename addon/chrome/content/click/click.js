@@ -958,7 +958,7 @@ var TabmixAllTabs = {
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
     if (gBrowser.selectedTab == aTab)
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(aTab);
+      gBrowser.ensureTabIsVisible(aTab);
     else
       // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible
       gBrowser.selectedTab = aTab;

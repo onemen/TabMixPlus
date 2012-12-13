@@ -3081,7 +3081,7 @@ try{
 
       gBrowser._lastRelatedTab = null;
       // call mTabstrip.ensureElementIsVisible before and after we reload the tab
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
       gBrowser.tabsToLoad = newtabsCount;
       this.setStripVisibility(newtabsCount);
 
@@ -3437,7 +3437,7 @@ try{
       }
 
       // call mTabstrip.ensureElementIsVisible for the current tab
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
       // check if we restore all tabs
       if (--gBrowser.tabsToLoad == 0) {
          delete gBrowser.tabsToLoad;

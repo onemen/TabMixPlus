@@ -718,7 +718,8 @@
             if (!selected ||
                 !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
                  TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.height) {
-              this.mTabstrip.ensureElementIsVisible(aTab);
+              if (this.overflow)
+                this.mTabstrip.ensureElementIsVisible(aTab);
               return;
             }
 

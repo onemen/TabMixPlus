@@ -157,7 +157,7 @@ var TMP_Places = {
       )._replace(
         _loadURI,
         '$&\
-         w.gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(w.gBrowser.selectedTab);'
+         w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
         'if (bookMarkId) { \
@@ -642,7 +642,7 @@ var TMP_Places = {
         if (scrollPosition < 100)
           tabstrip.scrollPosition = 0;
       }
-      tabstrip.ensureElementIsVisible(this.currentTab, false);
+      gBrowser.ensureTabIsVisible(this.currentTab, false);
       this.currentTab = null;
     }
   },

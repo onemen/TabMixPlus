@@ -150,7 +150,7 @@ var TabmixTabbar = {
 
     window.setTimeout( function TMP_updateSettings_adjustScroll(_currentVisible) {
         if (_currentVisible)
-          tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+          gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
         self.updateBeforeAndAfter();
     }, 50, currentVisible);
   },
@@ -643,7 +643,7 @@ var gTMPprefObserver = {
           [50, 100, 250, 500].forEach(function (timeout) {
             setTimeout(function TMP_tabWidthCahnged() {
               if (currentVisible)
-                tabStrip.ensureElementIsVisible(gBrowser.mCurrentTab);
+                gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
               TabmixTabbar.updateScrollStatus();
               if (timeout == 500)
                 delete self._tabWidthCahnged;
@@ -1446,7 +1446,7 @@ var gTMPprefObserver = {
       let moreThenOneTab = gBrowser.tabs.length > 1;
       gBrowser.tabContainer.visible = moreThenOneTab || TabmixTabbar.hideMode == 0;
       if (moreThenOneTab) {
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
+        gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
         TabmixTabbar.updateBeforeAndAfter();
       }
     }

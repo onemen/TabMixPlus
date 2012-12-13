@@ -735,7 +735,7 @@ var TMP_eventListener = {
         TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
       if (aTab == tabBar.selectedItem)
-        tabBar.mTabstrip.ensureElementIsVisible(aTab);
+        gBrowser.ensureTabIsVisible(aTab);
     }
     TabmixTabbar.updateBeforeAndAfter();
   },
