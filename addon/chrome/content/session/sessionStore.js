@@ -607,17 +607,17 @@ var TabmixConvertSession = {
    selectFile: function cs_selectFile(aWindow) {
       const nsIFilePicker = Ci.nsIFilePicker;
       var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+      var fpCallback = function fpCallback_done(aResult) {
+         if (aResult == nsIFilePicker.returnOK)
+            this.convertFile(fp.fileURL.spec);
+      }.bind(this);
 
       fp.init(aWindow, this.getString("selectfile"), nsIFilePicker.modeOpen);
       fp.defaultString="session.rdf";
       fp.appendFilter(this.getString("rdffiles"), "*.rdf");
       fp.appendFilter(this.getString("sessionfiles"), "*session*.*");
       fp.appendFilters(nsIFilePicker.filterText | nsIFilePicker.filterAll);
-
-      if (fp.show() != nsIFilePicker.returnOK)
-         return;
-
-      this.convertFile(fp.fileURL.spec);
+      fp.open(fpCallback);
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {

@@ -824,48 +824,67 @@ function exportData() {
   }
 
   saveToFile(patterns);
-  return true;
 }
 
 function saveToFile (patterns) {
-  // thanks to adblock
   const nsIFilePicker = Ci.nsIFilePicker;
   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  var stream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+  var fpCallback = function fpCallback_done(aResult) {
+    if (aResult != nsIFilePicker.returnCancel) {
+      let file = fp.file;
+      if (!/\.txt$/.test(file.leafName.toLowerCase()))
+        file.leafName += ".txt";
+      if (file.exists())
+        file.remove(true);
+      file.create(file.NORMAL_FILE_TYPE, parseInt("0666", 8));
+      let stream = Cc["@mozilla.org/network/file-output-stream;1"].
+                   createInstance(Ci.nsIFileOutputStream);
+      stream.init(file, 0x02, 0x200, null);
+      for (let i = 0; i < patterns.length ; i++) {
+        patterns[i]=patterns[i]+"\n";
+        stream.write(patterns[i], patterns[i].length);
+      }
+      stream.close();
+    }
+  }
 
   fp.init(window, null, nsIFilePicker.modeSave);
   fp.defaultExtension = "txt";
   fp.defaultString = "TMPpref";
   fp.appendFilters(nsIFilePicker.filterText);
-
-  if (fp.show() != nsIFilePicker.returnCancel) {
-    let file = fp.file;
-    if (!/\.txt$/.test(file.leafName.toLowerCase()))
-      file.leafName += ".txt";
-    if (file.exists())
-      file.remove(true);
-    file.create(file.NORMAL_FILE_TYPE, parseInt("0666", 8));
-    stream.init(file, 0x02, 0x200, null);
-
-    for (var i = 0; i < patterns.length ; i++) {
-      patterns[i]=patterns[i]+"\n";
-      stream.write(patterns[i], patterns[i].length);
-    }
-
-    stream.close();
-  }
+  fp.open(fpCallback);
 }
 
 var oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
 function importData () {
-   var pattern = loadFromFile();
+   const nsIFilePicker = Ci.nsIFilePicker;
+   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+   var fpCallback = function fpCallback_done(aResult) {
+      if (aResult != nsIFilePicker.returnCancel) {
+         let stream = Cc["@mozilla.org/network/file-input-stream;1"].
+                      createInstance(Ci.nsIFileInputStream);
+         stream.init(fp.file, 0x01, parseInt("0444", 8), null);
+         let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
+                        createInstance(Ci.nsIScriptableInputStream);
+         streamIO.init(stream);
+         let input = streamIO.read(stream.available());
+         streamIO.close();
+         stream.close();
+         if (input)
+           loadData(input.replace(/\r\n/g, "\n").split("\n"));
+      }
+   }
 
-   if (!pattern) return false;
-   var i;
-   if(pattern[0]!="tabmixplus") {
+   fp.init(window, null, nsIFilePicker.modeOpen);
+   fp.appendFilters(nsIFilePicker.filterText);
+   fp.open(fpCallback);
+}
+
+function loadData (pattern) {
+   if (pattern[0]!="tabmixplus") {
       //  Can not import because it is not a valid file.
       alert(TabmixSvc.getString("tmp.importPref.error1"));
-      return false;
+      return;
    }
 
    // set flag to prevent TabmixTabbar.updateSettings from run for each change
@@ -879,7 +898,7 @@ function importData () {
    Services.prefs.savePrefFile(null);
 
    var prefName, prefValue;
-   for (i=1; i<pattern.length; i++){
+   for (let i = 1; i < pattern.length; i++){
       var index = pattern[i].indexOf("=");
       if (index > 0){
          prefName  = pattern[i].substring(0,index);
@@ -904,31 +923,6 @@ function importData () {
    callUpdateSettings();
 
    Services.prefs.savePrefFile(null); // store the pref immediately
-
-   return true;
-}
-
-function loadFromFile() {
-   // thanks to adblock
-   const nsIFilePicker = Ci.nsIFilePicker;
-   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-   var stream = Cc["@mozilla.org/network/file-input-stream;1"].createInstance(Ci.nsIFileInputStream);
-   var streamIO = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
-
-   fp.init(window, null, nsIFilePicker.modeOpen);
-   fp.appendFilters(nsIFilePicker.filterText);
-
-   if (fp.show() != nsIFilePicker.returnCancel) {
-      stream.init(fp.file, 0x01, parseInt("0444", 8), null);
-      streamIO.init(stream);
-      var input = streamIO.read(stream.available());
-      streamIO.close();
-      stream.close();
-
-      var linebreak = input.match(/(((\n+)|(\r+))+)/m)[1]; // first: whole match -- second: backref-1 -- etc..
-      return input.split(linebreak);
-   }
-   return null;
 }
 
 function sessionManagerOptions() {
