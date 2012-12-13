@@ -78,9 +78,11 @@ function TMP_TBP_Startup() {
     var pbs = Cc["@mozilla.org/privatebrowsing;1"].
               getService(Ci.nsIPrivateBrowsingService);
     TabmixSessionManager._inPrivateBrowsing = pbs.privateBrowsingEnabled;
-    bowserStartup = bowserStartup._replace(
-      'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);',
-      ' var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
+
+    // Bug 756313 - Don't load homepage URI before first paint
+    // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
+    var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
+    var swapNewCode = ' var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
       ' var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
       ' gBrowser.tabContainer.adjustTabstrip(true, url);' +
       ' if (!Tabmix.singleWindowMode) {' +
@@ -88,7 +90,8 @@ function TMP_TBP_Startup() {
       '   TabmixSessionManager.init();' +
       '   $&' +
       ' }'
-    );
+    if (!Tabmix.isVersion(190))
+      bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var windowOpeneByTabmix = "tabmixdata" in window;
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
@@ -153,6 +156,8 @@ function TMP_TBP_Startup() {
       '  Tabmix.getNewTabButtonWidth();' +
       '  TabmixSessionManager.init();' +
       '} catch (ex) {Tabmix.assert(ex);}'
+    )._replace(
+      swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
