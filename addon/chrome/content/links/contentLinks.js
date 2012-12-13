@@ -41,7 +41,7 @@ var TMP_DOMWindowOpenObserver = {
         if (!existingWindow)
           return;
 
-        existingWindow.content.focus();
+        existingWindow.focus();
         // save dimensions
         var win = aWindow.document.documentElement;
         aWindow.__winRect = {
@@ -142,7 +142,7 @@ var TMP_DOMWindowOpenObserver = {
             if (firstTabAdded)
               existingBrowser.selectedTab = firstTabAdded;
             // for the case the window is minimized or not in focus
-            existingWindow.content.focus();
+            existingWindow.focus();
           },0)
         }  catch(ex) { existingWindow.Tabmix.obj(ex); }
     }

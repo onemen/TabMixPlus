@@ -47,7 +47,7 @@ var TabmixTabClickOptions = {
           if (!self.onDoubleClick) {
             gBrowser.previousTab(aTab);
             gBrowser.stopMouseHoverSelect(aTab);
-            content.focus();
+            gBrowser.selectedBrowser.focus();
           }
         }
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
@@ -116,7 +116,7 @@ var TabmixTabClickOptions = {
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
     var action = Tabmix.getIntPref(pref, defaultPref[pref], true);
 
-    content.focus();
+    gBrowser.selectedBrowser.focus();
 
     switch ( action ) {
       case 0 :

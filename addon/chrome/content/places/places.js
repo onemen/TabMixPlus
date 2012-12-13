@@ -533,8 +533,8 @@ var TMP_Places = {
       }
     }
 
-    // and focus the content
-    content.focus();
+    // and focus selectedBrowser
+    gBrowser.selectedBrowser.focus();
 
     // Close any remaining open tabs or blank tabs that are left over.
     while (removeTabs.length > 0) {

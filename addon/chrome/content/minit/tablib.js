@@ -493,7 +493,7 @@ var tablib = {
     )._replace(
       'if (needToFocusWin',
       'if (currentIsBlank && !loadInBackground) \
-         win.content.focus();\
+         win.focus();\
        $&'
     );
     _openURI.toCode();

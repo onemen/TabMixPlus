@@ -794,7 +794,7 @@ var TabmixSessionManager = {
           delete aBrowser.contentDocument.tabmix_loading;
         }
         if (!gBrowser.isBlankBrowser(aBrowser))
-          content.focus();
+          window.focus();
       }
 
       var homePage = gHomeButton.getHomePage();

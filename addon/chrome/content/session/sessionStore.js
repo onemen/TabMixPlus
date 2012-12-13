@@ -560,7 +560,7 @@ var TMP_ClosedTabs = {
       }
 
       if (aSelectRestoredTab) {
-         content.focus();
+         window.focus();
          gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
       }
       return newTab;

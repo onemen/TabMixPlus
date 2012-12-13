@@ -326,7 +326,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
 
   if (gBrowser.localName != "tabbrowser") {
     loadURI(aURI, null, aPostData, aAllowThirdPartyFixup);
-    content.focus();
+    window.focus();
     return;
   }
   else {
@@ -338,7 +338,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
   if (aNewTabPref && !(/^ *javascript:/.test(aURI))) {
     if (gURLBar)
       gURLBar.handleRevert();
-    content.focus();
+    window.focus();
     try {
       // open new tab in 2 step, this prevent focus problem with forms field
       var newTab = gBrowser.addTab("about:blank");
