@@ -286,7 +286,7 @@ var TMP_Places = {
         {check: !Tabmix.isVersion(110)}
       )._replace(
         'inBackground:',
-        'bookMarkId: aNode.itemId,\
+        'bookMarkId: aNode.itemId, initiatingDoc: null,\
          $&', {check: Tabmix.isVersion(110)}
       ).toCode();
    },
@@ -383,7 +383,8 @@ var TMP_Places = {
      if (where == "current")
        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
      openUILinkIn(aUrl, where, {
-        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
+        initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
      });
    },
 
@@ -398,7 +399,8 @@ var TMP_Places = {
          if (where == "current")
            Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
          openUILinkIn(node.uri, where, {
-           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
+           initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
          });
       }
    },

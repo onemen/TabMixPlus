@@ -167,6 +167,7 @@ Tabmix.contentAreaClick = {
       '  if (where == "tab" || where == "tabshifted") {' +
       '    let doc = event.target.ownerDocument;' +
       '    openLinkIn(url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
+      '              initiatingDoc: doc,' +
       '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});' +
       '  }' +
       '  else $&'
