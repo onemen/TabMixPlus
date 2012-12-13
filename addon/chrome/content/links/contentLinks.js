@@ -163,10 +163,11 @@ Tabmix.contentAreaClick = {
       'if (linkNode.getAttribute("onclick")',
       'if (where == "default") $&'
     )._replace(
-      'loadURI(url, null, postData.value, false);',
+      'loadURI(',
       '  if (where == "tab" || where == "tabshifted") {' +
       '    let doc = event.target.ownerDocument;' +
-      '    openLinkIn(url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
+      '    let _url = Tabmix.isVersion(190) ? href : url;' +
+      '    openLinkIn(_url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
       '              initiatingDoc: doc,' +
       '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});' +
       '  }' +
