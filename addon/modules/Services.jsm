@@ -4,6 +4,15 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 
 let TabmixSvc = {
+  _version: {},
+  version: function(aVersionNo) {
+    if (typeof this._version[aVersionNo] == "boolean")
+      return this._version[aVersionNo];
+
+    let v = Services.appinfo.version;
+    return this._version[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+  },
+
   stackOffset: 1,
   getString: function(aStringKey) {
     try {
@@ -64,29 +73,6 @@ let TabmixSvc = {
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
-
-XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
-  var comparator = Services.vc;
-  var version = Services.appinfo.version;
-  let v = {value:version};
-  v.is40 = comparator.compare(version, "4.0b4") >= 0;
-  v.is50 = comparator.compare(version, "5.0a1") >= 0;
-  v.is60 = comparator.compare(version, "6.0a1") >= 0;
-  v.is70 = comparator.compare(version, "7.0a1") >= 0;
-  v.is80 = comparator.compare(version, "8.0a1") >= 0;
-  v.is90 = comparator.compare(version, "9.0a1") >= 0;
-  v.is100 = comparator.compare(version, "10.0a1") >= 0;
-  v.is110 = comparator.compare(version, "11.0a1") >= 0;
-  v.is120 = comparator.compare(version, "12.0a1") >= 0;
-  v.is130 = comparator.compare(version, "13.0a1") >= 0;
-  v.is140 = comparator.compare(version, "14.0a1") >= 0;
-  v.is150 = comparator.compare(version, "15.0a1") >= 0;
-  v.is160 = comparator.compare(version, "16.0a1") >= 0;
-  v.is170 = comparator.compare(version, "17.0a1") >= 0;
-  v.is180 = comparator.compare(version, "18.0a1") >= 0;
-  v.is190 = comparator.compare(version, "19.0a1") >= 0;
-  return v;
-});
 
 /**
  * Lazily define services

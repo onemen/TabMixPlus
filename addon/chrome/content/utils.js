@@ -91,11 +91,7 @@ var Tabmix = {
   },
 
   isVersion: function(aVersionNo) {
-    let ver = "is" + aVersionNo;
-    if (ver in TabmixSvc.version)
-      return TabmixSvc.version[ver];
-
-    throw (Components.returnCode = "INVALID version number " + aVersionNo);
+    return TabmixSvc.version(aVersionNo);
   },
 
   getObject: function (aMethod, rootID) {

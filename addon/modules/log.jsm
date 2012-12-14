@@ -94,7 +94,7 @@ var _log = {
   // so we can get the name from the start of the string until @
   get _char() {
     delete this._char;
-    return this._char = TabmixSvc.version["is140"] ? "@" : "(";
+    return this._char = TabmixSvc.version(140) ? "@" : "(";
   },
 
   _name: function(fn) {
