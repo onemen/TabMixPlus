@@ -437,8 +437,7 @@ var tablib = {
     // hide open link in window in single window mode
     if ("nsContextMenu" in window && "initOpenItems" in nsContextMenu.prototype) {
       Tabmix.newCode("nsContextMenu.prototype.initOpenItems", nsContextMenu.prototype.initOpenItems)._replace(
-        'this.showItem("context-openlink", shouldShow);',
-        'this.showItem("context-openlink", shouldShow && !Tabmix.singleWindowMode);'
+        /context-(openlink|openlinkprivate)",/g, '$& !Tabmix.singleWindowMode &&'
       ).toCode();
     }
 
