@@ -1387,24 +1387,22 @@ var gTMPprefObserver = {
 
   // code for Single Window Mode...
   // disable the "Open New Window action
-  //disable & hides some menuitem
+  // disable & hides some menuitem
   setSingleWindowUI: function() {
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     var newWindowButton = document.getElementById("new-window-button");
     if (newWindowButton)
       newWindowButton.setAttribute("disabled", Tabmix.singleWindowMode);
 
-    var menuItem;
-    var menuFile = document.getElementById("menu_FilePopup");
-    if (menuFile) {
-      menuItem = menuFile.getElementsByAttribute("command", "cmd_newNavigator")[0];
-      if (menuItem)
-        menuItem.setAttribute("hidden", Tabmix.singleWindowMode);
+    var items = document.getElementsByAttribute("command", "cmd_newNavigator");
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].localName == 'menuitem')
+        items[i].setAttribute("hidden", Tabmix.singleWindowMode);
     }
 
     var frameMenu = document.getElementById("frame");
     if (frameMenu) {
-      menuItem = frameMenu.getElementsByAttribute("oncommand", "gContextMenu.openFrame();")[0];
+      let menuItem = frameMenu.getElementsByAttribute("oncommand", "gContextMenu.openFrame();")[0];
       if (menuItem)
         menuItem.setAttribute("hidden", Tabmix.singleWindowMode);
     }
