@@ -160,7 +160,8 @@ var TMP_tabDNDObserver = {
     var hideIndicator = false;
     if (effects == "") {
       this.clearDragmark();
-      gBrowser.tabContainer._continueScroll(event);
+      if (!Tabmix.isVersion(170))
+        gBrowser.tabContainer._continueScroll(event);
       return;
     }
     canDrop = effects != "none";
@@ -483,7 +484,8 @@ var TMP_tabDNDObserver = {
       this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }
-    gBrowser.tabContainer._continueScroll(event);
+    if (!Tabmix.isVersion(170))
+      gBrowser.tabContainer._continueScroll(event);
     this.updateStatusField();
   },
 
