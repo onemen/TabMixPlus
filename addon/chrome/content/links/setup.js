@@ -230,9 +230,9 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
 
     tabBrowser.getTabForLastPanel = function () {
-      let browser = this.mPanelContainer.lastChild.firstChild.firstChild;
-      if (Tabmix.isVersion(150)) // changed by Bug 749628
-        browser = browser.firstChild;
+      let notificationbox = this.mPanelContainer.lastChild;
+      let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
+      let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
       return this._getTabForContentWindow(browser.contentWindow);
     }
 
