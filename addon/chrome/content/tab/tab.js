@@ -5,6 +5,7 @@ var TabmixTabbar = {
   _heights: [],
   _rowHeight: null,
   hideMode: 0,
+  position: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
   SCROLL_BUTTONS_LEFT_RIGHT: 1,
   SCROLL_BUTTONS_MULTIROW: 2,
@@ -357,19 +358,19 @@ var TabmixTabbar = {
 
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
-    if (TabmixTabbar.isMultiRow) {
+    if (this.isMultiRow) {
       tabBar.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical")
         tabBar.mTabstrip._enterVerticalMode();
       else
         tabBar.updateVerticalTabStrip();
 
-      if (TabmixTabbar.position == 1)
+      if (this.position == 1)
         setTimeout(function(){tabBar.updateVerticalTabStrip();},0);
     }
     ///maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
-        (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
+        (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
   // Update beforeselected and afterselected attribute when we are in multi-row mode

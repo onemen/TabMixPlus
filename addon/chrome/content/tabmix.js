@@ -498,7 +498,6 @@ var TMP_eventListener = {
     if (TabmixTabbar.hideMode == 2)
       gBrowser.tabContainer.visible = false;
 
-    TabmixTabbar.position = 0;
     if (Tabmix.prefs.getIntPref("tabBarPosition") == 1)
       gTMPprefObserver.tabBarPositionChanged(1);
 
