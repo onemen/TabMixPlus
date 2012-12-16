@@ -946,7 +946,7 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("TabMove", this, true);
 
     let alltabsPopup = document.getElementById("alltabs-popup");
-    if (alltabsPopup)
+    if (alltabsPopup && alltabsPopup._tabmix_inited)
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);

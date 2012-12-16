@@ -675,7 +675,7 @@ var TMP_Places = {
   },
 
   onDelayedStartup: function () {
-    if (!this._titlefrombookmark)
+    if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
     // set title at startup
