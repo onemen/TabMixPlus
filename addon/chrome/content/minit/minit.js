@@ -1166,6 +1166,10 @@ Tabmix.navToolbox = {
     if (_handleCommand.indexOf(TMP_fn) > -1)
       return;
 
+    if (Tabmix.extensions.ieTab2 && Tabmix.originalFunctions.oldHandleCommand &&
+      Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
+        return;
+
     // set altDisabled if Suffix extension installed
     // dont use it for Firefox 6.0+ until new Suffix extension is out
     let fixedHandleCommand = Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(

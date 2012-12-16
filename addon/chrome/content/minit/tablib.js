@@ -41,12 +41,18 @@ var tablib = {
   },
 
   change_gBrowser: function change_gBrowser() {
+    var fnName, fnCode;
+    if (Tabmix.extensions.ieTab2)
+      [fnName, fnCode] = ["Tabmix.originalFunctions.oldAddTab", Tabmix.originalFunctions.oldAddTab];
     // NRA-ILA toolbar extension raplce the original addTab function
-    var _addTab = "addTab";
-    if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser)
-      _addTab = "origAddTab7c3de167ed6f494aa652f11a71ecb40c";
+    else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
+      let newName = "origAddTab7c3de167ed6f494aa652f11a71ecb40c";
+      [fnName, fnCode] = ["gBrowser." + newName, gBrowser[newName]];
+    }
+    else
+      [fnName, fnCode] = ["gBrowser.addTab", gBrowser.addTab];
 
-    Tabmix.newCode("gBrowser." + _addTab, gBrowser[_addTab])._replace(
+    Tabmix.newCode(fnName, fnCode)._replace(
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
@@ -191,7 +197,11 @@ var tablib = {
       ).toCode();
     }
 
-    Tabmix.newCode("gBrowser.setTabTitle", gBrowser.setTabTitle)._replace(
+    if (Tabmix.extensions.ieTab2)
+      [fnName, fnCode] = ["Tabmix.originalFunctions.oldSetTabTitle", Tabmix.originalFunctions.oldSetTabTitle];
+    else
+      [fnName, fnCode] = ["gBrowser.setTabTitle", gBrowser.setTabTitle];
+    Tabmix.newCode(fnName, fnCode)._replace(
       'var title = browser.contentTitle;',
       '$&\
        var urlTitle, title = tablib.getTabTitle(aTab, browser.currentURI.spec, title);'

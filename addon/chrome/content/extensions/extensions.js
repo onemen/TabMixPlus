@@ -16,7 +16,8 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false, verticalTabBar: false};
+    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false,
+        verticalTabBar: false, ieTab2: false};
     try {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
@@ -169,6 +170,22 @@ var TMP_extensionsCompatibility = {
       }
       window.BrowserOpenTab = TMP_BrowserOpenTab;
       foxTab.defaultBrowserOpenTab = TMP_BrowserOpenTab;
+    }
+
+    // https://addons.mozilla.org/en-US/firefox/addon/ie-tab-2-ff-36/
+    // for version IE Tab V2 4.12.6.1+
+    if (typeof window.IeTab2 == "function" &&
+          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") >= 0) {
+      Tabmix.extensions.ieTab2 = true;
+      Tabmix.newCode("IeTab2.prototype.hookCodeAll", IeTab2.prototype.hookCodeAll)._replace(
+        /(var )?oldAddTab/g, 'Tabmix.originalFunctions.oldAddTab'
+      )._replace(
+        /(var )?oldSetTabTitle/g, 'Tabmix.originalFunctions.oldSetTabTitle'
+      )._replace(
+        /(var )?oldHandleCommand/g, 'Tabmix.originalFunctions.oldHandleCommand'
+      )._replace(
+        /return;\n/, 'return null;\n'
+      ).toCode();
     }
   },
 
