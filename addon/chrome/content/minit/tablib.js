@@ -437,8 +437,25 @@ var tablib = {
     // hide open link in window in single window mode
     if ("nsContextMenu" in window && "initOpenItems" in nsContextMenu.prototype) {
       Tabmix.newCode("nsContextMenu.prototype.initOpenItems", nsContextMenu.prototype.initOpenItems)._replace(
-        /context-(openlink|openlinkprivate)",/g, '$& !Tabmix.singleWindowMode &&'
+        /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
+      )._replace(
+        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&', {check: Tabmix.isVersion(200)}
       ).toCode();
+
+      if (Tabmix.isVersion(200)) {
+        Tabmix.newCode("nsContextMenu.prototype.openLinkInPrivateWindow", nsContextMenu.prototype.openLinkInPrivateWindow)._replace(
+          'openLinkIn(this.linkURL, "window",',
+          'var [win, where] = [window, "window"];\
+           if (Tabmix.singleWindowMode) {\
+             let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
+             if (pbWindow) {\
+               [win, where] = [pbWindow, "tab"];\
+               pbWindow.focus();\
+             }\
+           }\
+           win.openLinkIn(this.linkURL, where,'
+        ).toCode();
+      }
     }
 
     /**

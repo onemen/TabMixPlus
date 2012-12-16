@@ -96,7 +96,7 @@ var TMP_Places = {
           Tabmix.newCode("openLinkIn", openLinkIn)._replace(
             '{',
             '{var tab;\
-             if (where == "window" && getTopWin() && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
+             if (where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? params.private || null : false)) where = "tab";'
           )._replace(
             'com.tobwithu.wmn.openURL',
             'tab = $&', {flags: "g"}
@@ -140,7 +140,7 @@ var TMP_Places = {
       )._replace(
         'var w = getTopWin();',
         '$& \
-         if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
+         if (w && where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) where = "tab";'
       )._replace(
         'Services.ww.openWindow',
         'newWin = $&'

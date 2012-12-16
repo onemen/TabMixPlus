@@ -385,6 +385,13 @@ options = {
     return Tabmix.prefs.getBoolPref("singleWindow");
   },
 
+  isNewWindowAllow: function(isPrivate) {
+    // allow to open new window if not in single window mode or
+    // allow to open new private window if there is no private window
+    return !this.getSingleWindowMode() ||
+           this.isVersion(200) && isPrivate && !this.RecentWindow.getMostRecentBrowserWindow({ private: true });
+  },
+
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
       this[aModule + "Initialized"] = false;
@@ -531,4 +538,8 @@ Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
 });
+if (Tabmix.isVersion(200)) {
+  XPCOMUtils.defineLazyModuleGetter(Tabmix, "RecentWindow",
+             "resource:///modules/RecentWindow.jsm");
+}
 window.addEventListener("unload", Tabmix.destroy, false);
