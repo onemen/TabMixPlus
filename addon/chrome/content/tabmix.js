@@ -29,11 +29,11 @@ Tabmix.startup = function TMP_startup() {
     command.setAttribute("oncommand","if (Tabmix._openPrivateBrowsing()) {" + originalCode + "}");
   }
 
-  if (!Tabmix.isVersion(120)) {
+  if (!this.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
     // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
-    Tabmix.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
+    this.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
     TabsOnTop.toggle = function TabsOnTop_toggle() {
       Tabmix.originalFunctions.tabsOnTop_toggle.apply(this, arguments);
       if (TabmixTabbar.visibleRows > 1) {
@@ -74,7 +74,7 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
     if (stripIsHidden)
       tabBar.visible = false;
     // height shrink to actual size when the tabbar is in display: block (multi-row)
-    if (Tabmix.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
+    if (this.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
       tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
   }
 }
@@ -108,17 +108,17 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   TMP_Places.onDelayedStartup();
 
-  Tabmix.navToolbox.init();
+  this.navToolbox.init();
 
   // set option to Prevent double click on Tab-bar from changing window size.
   var tabsToolbar = document.getElementById("TabsToolbar");
-  if (!Tabmix.prefs.getBoolPref("dblClickTabbar_changesize"))
+  if (!this.prefs.getBoolPref("dblClickTabbar_changesize"))
     tabsToolbar._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
   try {
     gTMPprefObserver.replaceBrowserRules();
-  } catch (ex) {Tabmix.assert(ex);}
+  } catch (ex) {this.assert(ex);}
 
   gTMPprefObserver.setMenuIcons();
 
@@ -142,7 +142,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   * bar height is drop below normal height.
   */
   if (!TMP_tabDNDObserver.verticalTreeStyleTab)
-    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height / TabmixTabbar.visibleRows);
+    this.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height / TabmixTabbar.visibleRows);
 }
 
 var TMP_eventListener = {
