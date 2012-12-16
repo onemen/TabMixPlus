@@ -284,6 +284,11 @@ var TMP_eventListener = {
 
     Tabmix.contentAreaClick.init();
 
+    // make sure AVG Security Toolbar initialized
+    // before we change gURLBar.handleCommand to prevent too much recursion from gURLBar.handleCommand
+    if (window.InitializeOverlay_avg && typeof InitializeOverlay_avg.Init == "function")
+      InitializeOverlay_avg.Init();
+
     // initialize our gURLBar.handleCommand function early before other extensions change
     // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
     // url-fixer also prevent the use of eval changes by using closure in the replcaed function
