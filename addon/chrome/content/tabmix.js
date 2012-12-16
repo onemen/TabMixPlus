@@ -5,10 +5,29 @@
  */
 
 Tabmix.startup = function TMP_startup() {
-  // disable the "Open New Window action in Single Window Mode...
+  // disable the Open New Window action in Single Window Mode...
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
+
+  // Open New Private Window in Single Window Mode only if there is no other private window
+  // otherwise open new tab in most recent private window
+  if (this.isVersion(200)) {
+    this._openPrivateBrowsing = function () {
+      if (this.singleWindowMode) {
+        let pbWindow = this.RecentWindow.getMostRecentBrowserWindow({ private: true });
+        if (pbWindow) {
+          pbWindow.focus();
+          pbWindow.BrowserOpenTab();
+          return false;
+        }
+      }
+      return true;
+    }
+    let command = document.getElementById("Tools:PrivateBrowsing");
+    let originalCode = command.getAttribute("oncommand");
+    command.setAttribute("oncommand","if (Tabmix._openPrivateBrowsing()) {" + originalCode + "}");
+  }
 
   if (!Tabmix.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
