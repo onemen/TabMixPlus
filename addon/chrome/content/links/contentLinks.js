@@ -16,15 +16,22 @@ var TMP_DOMWindowOpenObserver = {
     *                  additionally not a popup window.
     */
     getBrowserWindow: function(aExclude) {
-      var windows = Services.wm.getEnumerator('navigator:browser');
+      // on per-window private browsing mode,
+      // allow to open one private window in single window mode
+      var checkPrivacy = Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
+      function isSuitableBrowserWindow(win) {
+        return (!win.closed &&
+                !TabmixSessionManager.checkForPopup(win) &&
+                 win != aExclude &&
+                (!checkPrivacy ||
+                 PrivateBrowsingUtils.isWindowPrivate(win)));
+      }
+
+      var windows = Services.wm.getEnumerator("navigator:browser");
       while (windows.hasMoreElements()) {
-        let win = windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-        if (TabmixSessionManager.checkForPopup(win))
-            continue;
-
-        // this returns the first window that we find; it is not exhaustive
-        if (win != aExclude)
+        let win = windows.getNext()
+        if (isSuitableBrowserWindow(win))
           return win;
       }
       return null;
