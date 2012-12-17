@@ -21,7 +21,7 @@ var TMP_DOMWindowOpenObserver = {
       var checkPrivacy = Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
       function isSuitableBrowserWindow(win) {
-        return (!win.closed &&
+        return (!win.closed && win.document.readyState == "complete" &&
                 !TabmixSessionManager.checkForPopup(win) &&
                  win != aExclude &&
                 (!checkPrivacy ||
@@ -68,8 +68,7 @@ var TMP_DOMWindowOpenObserver = {
         win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
     },
 
-    onObserve : function(aSubject, aThis) {
-        var newWindow = aSubject;
+    onObserve : function(newWindow) {
         var existingWindow = this.getBrowserWindow(newWindow);
         // no navigator:browser window open yet?
         if (!existingWindow)
@@ -77,7 +76,7 @@ var TMP_DOMWindowOpenObserver = {
 
         // if the href is missing, try again later (xxx)
         if (!newWindow.location.href) {
-            existingWindow.setTimeout(aThis.onObserve, 0, newWindow, aThis);
+            existingWindow.setTimeout(this.onObserve, 0, newWindow);
             return;
         }
 
@@ -113,7 +112,7 @@ var TMP_DOMWindowOpenObserver = {
            urls = [uriToLoad];
         }
         else
-          urls = uriToLoad.split("|");
+          urls = uriToLoad ? uriToLoad.split("|") : [];
         try {
           // open the tabs in current window
           if (urls.length) {
@@ -143,8 +142,10 @@ var TMP_DOMWindowOpenObserver = {
           setTimeout(function () {
             // restore window dimensions, to prevent flickring in the next restart
             var win = newWindow.document.documentElement;
-            for (let attr in newWindow.__winRect)
-              win.setAttribute(attr, newWindow.__winRect[attr]);
+            if (typeof newWindow.__winRect == "object") {
+              for (let attr in newWindow.__winRect)
+                win.setAttribute(attr, newWindow.__winRect[attr]);
+            }
             newWindow.close();
             if (firstTabAdded)
               existingBrowser.selectedTab = firstTabAdded;

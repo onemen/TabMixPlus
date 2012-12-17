@@ -471,6 +471,7 @@ var TabmixTabbar = {
 // Function to catch changes to Tab Mix preferences and update existing windows and tabs
 //
 var gTMPprefObserver = {
+  preventUpdate: false,
   init: function() {
     var pref = "setDefault"
     if (Tabmix.prefs.prefHasUserValue(pref))

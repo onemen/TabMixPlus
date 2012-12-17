@@ -63,7 +63,7 @@ function TMP_TBP_Startup() {
     gTMPprefObserver.init();
     // force-call the observer once, in order to kill new windows faster
     if (Tabmix.singleWindowMode)
-      TMP_DOMWindowOpenObserver.onObserve(window, TMP_DOMWindowOpenObserver);
+      TMP_DOMWindowOpenObserver.onObserve(window);
 
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
