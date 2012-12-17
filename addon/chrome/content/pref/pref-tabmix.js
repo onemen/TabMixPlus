@@ -852,7 +852,10 @@ function saveToFile (patterns) {
   fp.defaultExtension = "txt";
   fp.defaultString = "TMPpref";
   fp.appendFilters(nsIFilePicker.filterText);
-  fp.open(fpCallback);
+  if (Tabmix.isVersion(180))
+    fp.open(fpCallback);
+  else
+    fpCallback(fp.show());
 }
 
 var oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
@@ -877,7 +880,10 @@ function importData () {
 
    fp.init(window, null, nsIFilePicker.modeOpen);
    fp.appendFilters(nsIFilePicker.filterText);
-   fp.open(fpCallback);
+   if (Tabmix.isVersion(180))
+      fp.open(fpCallback);
+   else
+      fpCallback(fp.show());
 }
 
 function loadData (pattern) {
