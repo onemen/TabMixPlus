@@ -233,19 +233,6 @@ var tablib = {
       'TabmixTabbar.updateScrollStatus(); \
        $1$2'
     ).toCode();
-
-    Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
-    gBrowser.swapBrowsersAndCloseOther = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
-      Tabmix.copyTabData(aOurTab, aOtherTab);
-      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
-    }
-
-    // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
-    // if the tab strip doesn't overflow to prevent layout flushes
-    gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
-      if (this.tabContainer.overflow)
-        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
-    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -1426,6 +1413,19 @@ since we can have tab hidden or remove the index can change....
           if (aUrl && Tabmix.isNewTabUrls(aUrl))
             tablib.setURLBarFocus();
        }
+    }
+
+    Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
+    gBrowser.swapBrowsersAndCloseOther = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
+      Tabmix.copyTabData(aOurTab, aOtherTab);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+    }
+
+    // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
+    // if the tab strip doesn't overflow to prevent layout flushes
+    gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
+      if (this.tabContainer.overflow)
+        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
     }
 
     /** DEPRECATED **/
