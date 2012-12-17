@@ -397,7 +397,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
     /* don't open blank tab when we are about to add new livemark */
     this.newCode("openUILink", openUILink)._replace(
       'aIgnoreAlt = params.ignoreAlt;',
-      'aIgnoreAlt = params.ignoreAlt || null;'
+      'aIgnoreAlt = params.ignoreAlt || null;', {check: Tabmix.isVersion(140)}
     )._replace(
       source,
       '  var win = getTopWin();' +
