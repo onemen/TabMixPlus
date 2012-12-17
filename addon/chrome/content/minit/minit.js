@@ -691,10 +691,15 @@ var TMP_tabDNDObserver = {
    var types = dt.mozTypesAt(0);
     // move or copy tab
     if (types[0] == this.TAB_DROP_TYPE) {
-      var sourceNode = dt.mozGetDataAt(this.TAB_DROP_TYPE, 0);
-      if (aDraggeType == this.DRAG_TAB_IN_SAME_WINDOW && aEvent.target == sourceNode) {
+      let sourceNode = dt.mozGetDataAt(this.TAB_DROP_TYPE, 0);
+      if ((aDraggeType == this.DRAG_TAB_IN_SAME_WINDOW && aEvent.target == sourceNode) ||
+        // Do not allow transfering a private tab to a non-private window
+        // and vice versa.
+        (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
+            PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerDocument.defaultView))){
         return dt.effectAllowed = "none";
       }
+
       return dt.effectAllowed = "copyMove";
     }
 
