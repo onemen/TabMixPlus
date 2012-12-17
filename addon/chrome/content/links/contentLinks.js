@@ -820,6 +820,13 @@ Tabmix.contentAreaClick = {
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
     function switchIfURIInWindow(aWindow) {
+      // Only switch to the tab if both source and desination are
+      // private or non-private.
+      if (Tabmix.isVersion(200) &&
+          PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aWindow)) {
+        return false;
+      }
       if (!("gBrowser" in aWindow))
         return false;
       let browsers = aWindow.gBrowser.browsers;
