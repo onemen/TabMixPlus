@@ -427,8 +427,14 @@
         }
 
         var tabs = document.getBindingParent(this);
-        if (tabs.hasAttribute("multibar"))
-          tabs.updateVerticalTabStrip();
+        if (tabs.hasAttribute("multibar")) {
+          //XXX don't do anything on Linux when hovering last tab and
+          // we show close button on tab on hover
+          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+              (!tabs.visibleTabsLastChild.hasAttribute("showbutton") &&
+               !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
+            tabs.updateVerticalTabStrip();
+        }
         else
           tabs.overflow = false;
 
@@ -441,7 +447,7 @@
       ]]></handler>
 
       <handler event="overflow"><![CDATA[
-        // filter underflow events which were dispatched on nested scrollboxes
+        // filter overflow events which were dispatched on nested scrollboxes
         if (event.originalTarget != this._scrollbox)
           return;
 
@@ -470,8 +476,13 @@
           }
         }
 
-        if (TabmixTabbar.isMultiRow)
-          tabs.updateVerticalTabStrip();
+        if (TabmixTabbar.isMultiRow) {
+          //XXX don't do anything on Linux when hovering last tab and
+          // we show close button on tab on hover
+          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+              !tabs.visibleTabsLastChild.hasAttribute("showbutton"))
+            tabs.updateVerticalTabStrip();
+        }
         else
           tabs.overflow = true;
 

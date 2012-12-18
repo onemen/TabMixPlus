@@ -223,6 +223,10 @@
 
         if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
           aTab.removeAttribute("showbutton");
+          // we use this in Linux to prevent underflow
+          // that trigger by hidding the close button
+          aTab.setAttribute("showbutton_removed", true);
+          setTimeout(function(tab) {tab.removeAttribute("showbutton_removed");}, 50, aTab);
           if (aTab == aTab.parentNode.__showbuttonTab)
             delete aTab.parentNode.__showbuttonTab;
         }
