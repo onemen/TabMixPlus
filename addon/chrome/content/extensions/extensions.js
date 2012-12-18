@@ -395,7 +395,7 @@ var TMP_extensionsCompatibility = {
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      aioDupWindow = function() { gBrowser.duplicateInWindow(gBrowser.mCurrentTab); };
+      aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')

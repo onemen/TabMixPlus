@@ -485,8 +485,8 @@ var TMP_ClosedTabs = {
 
    SSS_restoreToNewWindow: function ct_restoreToNewWindow(aIndex) {
       var tabData = this.getClosedTabAtIndex(aIndex);
-      // we pass the current tab as reference to this window
-      return gBrowser.duplicateInWindow(gBrowser.mCurrentTab, null, tabData);
+      // we pass the current tab as a place holder for tabData
+      return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, tabData);
    },
 
    SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {

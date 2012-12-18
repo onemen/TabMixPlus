@@ -789,7 +789,7 @@ var tablib = {
       return newTab;
     }
 
-    gBrowser.duplicateInWindow = function (aTab, aMoveTab, aTabData) {
+    gBrowser.duplicateTabToWindow = function (aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -801,9 +801,9 @@ var tablib = {
         this.replaceTabWithWindow(aTab);
       }
       else {
-        let newTab = this.duplicateTab(aTab, null, aTabData, true, true);
-        this.hideTab(newTab);
-        this.replaceTabWithWindow(newTab);
+        aTab._tabmixCopyToWindow = {data: aTabData};
+        // replaceTabWithWindow not working if there is only one tab in the the window
+        window.openDialog(getBrowserURL(), "_blank", "chrome,dialog=no,all", aTab);
       }
     }
 
@@ -1409,8 +1409,42 @@ since we can have tab hidden or remove the index can change....
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
     gBrowser.swapBrowsersAndCloseOther = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
+      // Do not allow transfering a private tab to a non-private window
+      // and vice versa.
+      if (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView))
+        return;
+
       Tabmix.copyTabData(aOurTab, aOtherTab);
-      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+
+      let pending = aOtherTab.hasAttribute("pending");
+      let copy = aOtherTab._tabmixCopyToWindow;
+      delete aOtherTab._tabmixCopyToWindow;
+      if (typeof copy == "object" || pending) {
+        let tabData = copy ? copy.data : null;
+        // we pass the current tab as reference to this window
+        // when we use tabData
+        let tab = tabData ? aOurTab : aOtherTab;
+        let newTab = this.duplicateTab(tab, null, tabData, true, true);
+        this.moveTabTo(newTab, aOurTab._tPos + 1);
+        // Workarounds for bug 817947
+        // Move a background unloaded tab to New Window fails
+        if (!copy && pending) {
+          let remoteBrowser = aOtherTab.ownerDocument.defaultView.gBrowser;
+          if (!remoteBrowser._beginRemoveTab(aOtherTab, true, true))
+            return;
+          remoteBrowser._endRemoveTab(aOtherTab);
+        }
+        setTimeout(function(b) {
+          if (aOurTab == b.selectedTab)
+            b.selectedTab = newTab;
+          b.selectedBrowser.focus();
+          b.removeTab(aOurTab);
+        },0, this);
+        return;
+      }
+
+      Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     }
 
     // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()

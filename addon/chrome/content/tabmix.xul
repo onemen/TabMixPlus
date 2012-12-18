@@ -117,9 +117,9 @@
       <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
          oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" insertbefore="context-sep-stop"/>
       <menuitem id="tm-duplicateinWinContext" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-         oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, false);" insertbefore="context-sep-stop"/>
+         oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, false);" insertbefore="context-sep-stop"/>
       <menuitem id="tm-detachTabContext" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
-         oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, true);" insertbefore="context-sep-stop"/>
+         oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);" insertbefore="context-sep-stop"/>
       <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows();" insertbefore="context-sep-stop" />
       <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser.mCurrentTab);"
          insertbefore="context-sep-stop" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;"/>
@@ -395,7 +395,7 @@
     <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
     <key id="key_tm_slideShow" label="Toggle tab slide show" keycode="VK_F8" TM_oncommand="Tabmix.flst.toggleSlideshow();"/>
     <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" />
-    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateInWindow(gBrowser.mCurrentTab, true);"/>
+    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);"/>
     <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows();" />
     <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');"/>
     <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');"/>

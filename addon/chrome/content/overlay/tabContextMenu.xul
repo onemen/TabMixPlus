@@ -23,10 +23,10 @@
                  oncommand="gBrowser.duplicateTab(TabContextMenu.contextTab);"/>
         <menuitem id="tm-duplicateinWin" insertbefore="context_pinTab"
                  key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-                 oncommand="gBrowser.duplicateInWindow(TabContextMenu.contextTab, false);"/>
+                 oncommand="gBrowser.duplicateTabToWindow(TabContextMenu.contextTab, false);"/>
         <menuitem id="context_openTabInWindow"
                  key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
-                 oncommand="gBrowser.duplicateInWindow(TabContextMenu.contextTab, true);"/>
+                 oncommand="gBrowser.duplicateTabToWindow(TabContextMenu.contextTab, true);"/>
 <!--
         <menuitem id="context_pinTab">
         <menuitem id="context_unpinTab"/>

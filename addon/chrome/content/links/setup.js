@@ -82,12 +82,14 @@ function TMP_TBP_Startup() {
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
     var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
-    var swapNewCode = ' var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
-      ' var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
-      ' gBrowser.tabContainer.adjustTabstrip(true, url);' +
+    var swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
       '   window.tabmix_afterTabduplicated = true;' +
       '   TabmixSessionManager.init();' +
+      '   let remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
+      '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
+      '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
+      '   gBrowser.selectedTab.label = uriToLoad.label;' +
       '   $&' +
       ' }'
     if (!Tabmix.isVersion(190))

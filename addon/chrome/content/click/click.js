@@ -163,7 +163,7 @@ var TabmixTabClickOptions = {
         TMP_ClosedTabs.restoreTab("original", -2);
         break;
       case 14:
-        gBrowser.duplicateInWindow(aTab, false);
+        gBrowser.duplicateTabToWindow(aTab, false);
         break;
       case 15:
         gBrowser.freezeTab(aTab);
@@ -215,7 +215,7 @@ var TabmixTabClickOptions = {
         PlacesCommandHook.bookmarkCurrentPages();
         break;
       case 27:
-        gBrowser.duplicateInWindow(aTab, true);
+        gBrowser.duplicateTabToWindow(aTab, true);
         break;
       case 28:
         gBrowser.copyTabUrl(aTab);
