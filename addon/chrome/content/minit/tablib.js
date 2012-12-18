@@ -225,14 +225,6 @@ var tablib = {
       'this.tabContainer.visible = aShow;',
       'if (!aShow || TabmixTabbar.hideMode != 2) $&'
     ).toCode();
-
-    // each TabShow or TabHide trigger event that we monitor
-    // we add this as an extra step
-    Tabmix.newCode("gBrowser.showOnlyTheseTabs", gBrowser.showOnlyTheseTabs)._replace(
-      /(\})(\)?)$/,
-      'TabmixTabbar.updateScrollStatus(); \
-       $1$2'
-    ).toCode();
   },
 
   change_tabContainer: function change_tabContainer() {
