@@ -259,8 +259,7 @@ var TMP_Places = {
       }
 
       Tabmix.newCode("PlacesUIUtils.openNodeWithEvent", PlacesUIUtils.openNodeWithEvent)._replace(
-         'window.whereToOpenLink(aEvent), window);',
-         'window.whereToOpenLink(aEvent), window, aEvent);'
+         /whereToOpenLink\(aEvent[,\s\w]*\), window/, '$&, aEvent'
       ).toCode();
 
       // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
