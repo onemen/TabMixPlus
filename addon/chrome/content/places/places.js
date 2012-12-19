@@ -47,11 +47,18 @@ var TMP_Places = {
          ).toGetter(PlacesCommandHook, "uniqueCurrentPages");
       }
 
-      // LiveClick and Boox extensions change this function we can't use it
-      if (!("LiveClick" in window) && "PlacesViewBase" in window && PlacesViewBase.prototype) {
+      if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
+         // LiveClick and Boox extensions change this function we can't use it
+         if (!("LiveClick" in window) && !Tabmix.isVersion(130))
          Tabmix.newCode("PlacesViewBase.prototype._mayAddCommandsItems", PlacesViewBase.prototype._mayAddCommandsItems)._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);", {silent: true}
+         ).toCode();
+
+         if (Tabmix.isVersion(130))
+         Tabmix.newCode("PlacesViewBase.prototype._setLivemarkSiteURIMenuItem", PlacesViewBase.prototype._setLivemarkSiteURIMenuItem)._replace(
+            "openUILink(this.getAttribute('targetURI'), event);",
+            "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
          ).toCode();
       }
 
