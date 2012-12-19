@@ -45,13 +45,13 @@ overlay   chrome://browser/content/preferences/preferences.xul      chrome://tab
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul    appversion>=13.0a1
 
-overlay   chrome://mozapps/content/extensions/about.xul             chrome://tabmixplus/content/links/text_link.xul
-overlay   chrome://mozapps/content/update/updates.xul               chrome://tabmixplus/content/links/text_link.xul
-overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tabmixplus/content/links/text_link.xul
-overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul
+overlay   chrome://mozapps/content/extensions/about.xul             chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
+overlay   chrome://mozapps/content/update/updates.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
+overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
+overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://browser/content/syncSetup.xul                    chrome://tabmixplus/content/links/text_link.xul appversion<13.0a1
-overlay   chrome://browser/content/sync/setup.xul                   chrome://tabmixplus/content/links/text_link.xul appversion>=13.0a1
-overlay   chrome://mozapps/content/update/history.xul               chrome://tabmixplus/content/links/text_link.xul
+overlay   chrome://browser/content/sync/setup.xul                   chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
+overlay   chrome://mozapps/content/update/history.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 
 overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul
