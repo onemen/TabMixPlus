@@ -639,16 +639,16 @@ var gTMPprefObserver = {
         }
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
-        if (typeof this._tabWidthCahnged == "undefined") {
+        if (typeof this._tabWidthChanged == "undefined") {
           let self = this;
-          this._tabWidthCahnged = true;
+          this._tabWidthChanged = true;
           [50, 100, 250, 500].forEach(function (timeout) {
-            setTimeout(function TMP_tabWidthCahnged() {
+            setTimeout(function TMP_tabWidthChanged() {
               if (currentVisible)
                 gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
               TabmixTabbar.updateScrollStatus();
               if (timeout == 500)
-                delete self._tabWidthCahnged;
+                delete self._tabWidthChanged;
             }, timeout);
           });
         }
