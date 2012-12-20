@@ -330,7 +330,8 @@
 
       <constructor>
         <![CDATA[
-          this.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          // add dragover event handler to TabsToolbar to capture dragging over tabbar margin area
+          this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
@@ -391,7 +392,8 @@
 
       <destructor>
         <![CDATA[
-          this.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          if (this.parentNode)
+            this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           delete this.tabstripInnerbox;
         ]]>
       </destructor>
