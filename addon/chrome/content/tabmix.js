@@ -134,15 +134,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   try {
     TMP_LastTab.init();
   } catch (ex) {this.assert(ex);}
-
- /*
-  * We add minheight to the tab bar to prevent it from shrinking when we
-  * enter/exit private browsing without new tab button after tabs and animation on.
-  * The last tab is removed before the new tab is fully visible, so the tab
-  * bar height is drop below normal height.
-  */
-  if (!TMP_tabDNDObserver.verticalTreeStyleTab)
-    this.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height / TabmixTabbar.visibleRows);
 }
 
 var TMP_eventListener = {
