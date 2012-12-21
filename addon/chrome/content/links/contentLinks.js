@@ -271,7 +271,8 @@ Tabmix.contentAreaClick = {
     // Check if link refers to external domain.
     // Get current page url
     // if user click a link while the page is reloading linkNode.ownerDocument.location can be null
-    var curpage = linkNode.ownerDocument.location ? linkNode.ownerDocument.location.href : gBrowser.currentURI.spec;
+    var location = linkNode.ownerDocument.location;
+    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
     var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
     var targetDomain = domain.target;
     var currentDomain = domain.current;
@@ -405,7 +406,8 @@ Tabmix.contentAreaClick = {
      * Get current page url
      * if user click a link when the psage is reloading linkNode.ownerDocument.location can be null
      */
-    var curpage = linkNode.ownerDocument.location ? linkNode.ownerDocument.location.href : gBrowser.currentURI.spec;
+    var location = linkNode.ownerDocument.location;
+    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
     var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
     var targetDomain = domain.target;
     var currentDomain = domain.current;
