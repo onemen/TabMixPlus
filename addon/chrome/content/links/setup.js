@@ -89,7 +89,6 @@ function TMP_TBP_Startup() {
       '   let remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
       '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
       '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
-      '   gBrowser.selectedTab.label = uriToLoad.label;' +
       '   $&' +
       ' }'
     if (!Tabmix.isVersion(190))

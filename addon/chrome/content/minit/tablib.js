@@ -1417,30 +1417,33 @@ since we can have tab hidden or remove the index can change....
 
       Tabmix.copyTabData(aOurTab, aOtherTab);
 
-      let pending = aOtherTab.hasAttribute("pending");
       let copy = aOtherTab._tabmixCopyToWindow;
       delete aOtherTab._tabmixCopyToWindow;
-      if (typeof copy == "object" || pending) {
+      let pendingTab = !copy && aOtherTab.hasAttribute("pending");
+      if (typeof copy == "object" || pendingTab) {
         let tabData = copy ? copy.data : null;
         // we pass the current tab as reference to this window
         // when we use tabData
         let tab = tabData ? aOurTab : aOtherTab;
         let newTab = this.duplicateTab(tab, null, tabData, true, true);
+        if (aOurTab.pinned)
+          this.pinTab(newTab);
+        // force the new tab to skip animation
+        if (Services.prefs.getBoolPref("browser.tabs.animate"))
+          newTab.setAttribute("fadein", "true");
         this.moveTabTo(newTab, aOurTab._tPos + 1);
+        if (aOurTab == this.selectedTab)
+          this.selectedTab = newTab;
+        this.selectedBrowser.focus();
+        this.removeTab(aOurTab, {animate: false});
         // Workarounds for bug 817947
         // Move a background unloaded tab to New Window fails
-        if (!copy && pending) {
+        if (pendingTab) {
           let remoteBrowser = aOtherTab.ownerDocument.defaultView.gBrowser;
           if (!remoteBrowser._beginRemoveTab(aOtherTab, true, true))
             return;
           remoteBrowser._endRemoveTab(aOtherTab);
         }
-        setTimeout(function(b) {
-          if (aOurTab == b.selectedTab)
-            b.selectedTab = newTab;
-          b.selectedBrowser.focus();
-          b.removeTab(aOurTab);
-        },0, this);
         return;
       }
 
