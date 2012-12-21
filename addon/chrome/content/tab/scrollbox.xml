@@ -333,6 +333,10 @@
           let isFirstTabVisible = this.isElementVisible(tabs[0]);
           let isLastTabVisible = this.isElementVisible(tabs[tabs.length-1]);
           if (!isFirstTabVisible || !isLastTabVisible) {
+            // show Newtabbutton for the first time
+            // for the case last tab in row fill the all strip and the button
+            // is on the next row
+            tabBar.disAllowNewtabbutton = false;
             this.orient = "vertical";
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);

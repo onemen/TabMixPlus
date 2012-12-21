@@ -429,11 +429,13 @@
           if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode || FullScreen._isChromeCollapsed ||
               !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
+          if (this._inUpdateVerticalTabStrip)
+            return this.gasAttribute("multibar");
+          this._inUpdateVerticalTabStrip = true;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
           // this.lastTabRowNumber is null when we hide the tabbar
           let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
-          let currentRows = TabmixTabbar.visibleRows;
 
           let currentMultibar = this.getAttribute("multibar") || null;
           let maxRow = this.maxRow;
@@ -475,6 +477,7 @@
           else
             this.adjustNewtabButtonvisibility();
 
+          this._inUpdateVerticalTabStrip = false;
           return multibar;
         ]]></body>
       </method>
