@@ -173,9 +173,9 @@ var TMP_extensionsCompatibility = {
     }
 
     // https://addons.mozilla.org/en-US/firefox/addon/ie-tab-2-ff-36/
-    // for version IE Tab V2 4.12.6.1+
+    // for version IE Tab V2 4.12.6.1
     if (typeof window.IeTab2 == "function" &&
-          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") >= 0) {
+          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") == 0) {
       Tabmix.extensions.ieTab2 = true;
       Tabmix.newCode("IeTab2.prototype.hookCodeAll", IeTab2.prototype.hookCodeAll)._replace(
         /(var )?oldAddTab/g, 'Tabmix.originalFunctions.oldAddTab'
