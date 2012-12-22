@@ -678,6 +678,14 @@
 
       <method name="initializeTabmixUI">
         <body><![CDATA[
+          // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+          // verticalTabs 0.9.1+ is restartless.
+          if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+            Tabmix.extensions.verticalTabs = true;
+            Tabmix.extensions.verticalTabBar = true;
+            TabmixTabbar.updateSettings();
+          }
+
           // tabbrowser-tabs constructor reset first tab label to New Tab
           this.tabbrowser.setTabTitle(this.firstChild);
           let position = Tabmix.prefs.getIntPref("newTabButton.position");
