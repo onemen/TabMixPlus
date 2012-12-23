@@ -1,11 +1,11 @@
 function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
   this.name = aObjectName;
   this.value = aCodeString;
-  this.needUpdate = aForceUpdate;
+  this.needUpdate = aForceUpdate || false;
+  this.notFound = [];
 }
 
 Tabmix_ChangeCode.prototype = {
-  needUpdate: false,
   _replace: function TMP_utils__replace(substr ,newString, aParams) {
     var silent;
     if (typeof aParams != "undefined") {
@@ -29,21 +29,18 @@ Tabmix_ChangeCode.prototype = {
       this.value = this.value.replace(substr, newString);
       this.needUpdate = true;
     }
-    else if (!silent) {
-      Tabmix.clog(Tabmix.callerName() + " can't find string: " + substr
-          + "\nin " + this.name + "."
-          + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
-          + "\n\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/"
-      );
-    }
+    else if (!silent)
+      this.notFound.push(substr);
     return this;
   },
 
   toSetter: function(aObj, aName) {
+    this.isValidToChange(aName);
     Tabmix._define("setter", aObj, aName, this.value);
   },
 
   toGetter: function(aObj, aName) {
+    this.isValidToChange(aName);
     Tabmix._define("getter", aObj, aName, this.value);
   },
 
@@ -53,10 +50,8 @@ Tabmix_ChangeCode.prototype = {
         this.value = this.value.replace("{", "{try {") +
             ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.name) + '");}}';
       }
-      if (this.needUpdate)
+      if (this.isValidToChange(aName))
         Tabmix.toCode(aObj, aName || this.name, this.value);
-      else if (Tabmix._debugMode)
-        Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);
     } catch (ex) {
@@ -69,8 +64,27 @@ Tabmix_ChangeCode.prototype = {
       Tabmix.show(this.name);
     else if (aObj && aName in aObj)
       Tabmix.clog(aObj[aName].toString());
-  }
+  },
 
+  isValidToChange: function(aName) {
+    var notFoundCount = this.notFound.length;
+    if (this.needUpdate && !notFoundCount)
+      return true;
+    var caller = Tabmix._getCallerNameByIndex(2);
+    var fnName = aName || this.name;
+    if (notFoundCount) {
+      let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
+      Tabmix.clog(caller + " was unable to change " + fnName + "."
+        + "\ncan't find string" +str + this.notFound.join("\n    ")
+        + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
+        + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
+      if (Tabmix._debugMode)
+        Tabmix.clog(caller + "\nfunction " + fnName + " = " + this.value);
+    }
+    else if (!this.needUpdate && Tabmix._debugMode)
+      Tabmix.clog(caller + " no update needed to " + fnName);
+    return false;
+  }
 }
 
 var Tabmix = {
