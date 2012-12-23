@@ -1795,8 +1795,12 @@ try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {
       var currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
       var oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
-      if (currentVersion != oldVersion) {
+      var subs = function(str) str.substring(0, str.length-1);
+      if (currentVersion != oldVersion)
         Tabmix.prefs.setCharPref("version", currentVersion);
+      var showNewVersionTab = currentVersion != oldVersion &&
+        (!isNaN(currentVersion.substr(-1)) || subs(currentVersion) != subs(oldVersion))
+      if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(function() {
           var defaultChanged = "";
