@@ -1052,9 +1052,17 @@ var gTMPprefObserver = {
     if (!icon)
       return; // nothing to do....
 
-    // set right margin to text stack when close button is not right to it
     let style = window.getComputedStyle(icon, null);
+    let marginStart = style.getPropertyValue(sMarginStart);
     let marginEnd = style.getPropertyValue(sMarginEnd);
+    // swap button margin-left margin-right for button on the left side
+    if (marginStart != marginEnd) {
+      let newRule = '.tab-close-button[button_side="left"] {' +
+                    '-moz-margin-start: %PX !important;'.replace("%PX", marginEnd) +
+                    '-moz-margin-end: %PX !important;}'.replace("%PX", marginStart);
+      ss.insertRule(newRule, ss.cssRules.length);
+    }
+    // set right margin to text stack when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
