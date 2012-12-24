@@ -442,6 +442,10 @@ var TMP_eventListener = {
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
+        // check if australis tab shape is implemented in window (bug 738491)
+        let australis = document.getElementById("winstripe-tab-clip-path");
+        if (australis)
+          tabBar.setAttribute("australis", true);
       }
     }
     else {
