@@ -23,10 +23,6 @@
   margin: 0px;
 }
 
-.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
-  pointer-events: auto;
-}
-
 #TabsToolbar[multibar] {
   background-repeat: repeat;
 }
