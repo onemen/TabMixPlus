@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Place popups next to their openers">
 <!ENTITY slideshow.label "Pressing F8 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Lataa välilehti uudelleen riippumatta sen osoitteesta">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY seconds.label "seconds">
 <!ENTITY minutes.label "min">

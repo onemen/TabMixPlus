@@ -29,7 +29,7 @@
 <!ENTITY reloadright.accesskey "O">
 <!ENTITY autoReloadTab.label "Välilehden päivitysväli">
 <!ENTITY autoReloadTab.accesskey "L">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "Lataa tämä sivusto joka">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Tämän välilehden jälkeen">
 <!ENTITY bookmarktab.label "Lisää tämä välilehti kirjanmerkkeihin">

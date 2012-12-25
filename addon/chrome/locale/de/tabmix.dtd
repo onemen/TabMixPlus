@@ -29,7 +29,7 @@
 <!ENTITY reloadright.accesskey "c">
 <!ENTITY autoReloadTab.label "Tab automatisch neu laden">
 <!ENTITY autoReloadTab.accesskey "u">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "Seite automatisch neu laden">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "nach diesem Tab">
 <!ENTITY bookmarktab.label "Lesezeichen für diesen Tab hinzufügen">
