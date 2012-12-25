@@ -1,0 +1,12 @@
+<!ENTITY styles.label "أنماط مخصّصة">
+<!ENTITY currentTab.label "اللسان المختار">
+<!ENTITY unloadedTabs.label "الألسنة غير المحمّلة">
+<!ENTITY unreadTab.label "الألسنة غير المقروءة">
+<!ENTITY otherTabs.label "الألسنة الأخرى">
+<!ENTITY italic.label "مائل">
+<!ENTITY bold.label "عريض">
+<!ENTITY underline.label "خط سفلي">
+<!ENTITY textcolor.label "لون النص">
+<!ENTITY bgColor.label "لون الخلفية">
+<!ENTITY useThis.label "استخدام هذا النمط لـ">
+<!ENTITY opacity.label "الإعتام">
