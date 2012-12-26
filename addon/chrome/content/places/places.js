@@ -92,45 +92,9 @@ var TMP_Places = {
          + inBackground + '}'
       ).toCode();
 
-      let [fnName, fnCode] = ["openLinkIn", openLinkIn];
-      try {
-        if (com.tobwithu && com.tobwithu.wmn &&
-            typeof(com.tobwithu.wmn.openLinkIn) == "function") {
-          // update com.tobwithu.wmn.openLinkIn to work with Tabmix's
-          // loadInBackground prerfs and add tabmix_bookmarkId
-          // to the new tab
-          [fnName, fnCode] = ["com.tobwithu.wmn.openLinkIn", com.tobwithu.wmn.openLinkIn];
-          Tabmix.newCode("openLinkIn", openLinkIn)._replace(
-            '{',
-            '{var tab;\
-             if (where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? params.private || null : false)) where = "tab";'
-          )._replace(
-            'com.tobwithu.wmn.openURL',
-            'tab = $&', {flags: "g"}
-          )._replace(
-            'getBoolPref("browser.tabs.loadInBackground");',
-            'params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&',
-            {check: !Tabmix.isVersion(100), flags: "g"}
-          )._replace(
-            'getBoolPref("browser.tabs.loadInBackground");',
-            '  params.inBackground;' +
-            '  if (bg == null)' +
-            '    bg = params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&',
-            {check: Tabmix.isVersion(100), flags: "g"}
-          )._replace(
-            // if we are after openLinkIn we don't need this
-            // we already add this attribute in openLinkIn
-            // com.tobwithu.wmn.openURL return tab or window
-            /(\})(\)?)$/,
-            '  if (tab && params.bookMarkId) {' +
-            '    if (tab.localName != "tab")' +
-            '      tab = tab.gBrowser.getTabForLastPanel();' +
-            '    tab.setAttribute("tabmix_bookmarkId", params.bookMarkId);' +
-            '  }' +
-            '$1$2'
-          ).toCode();
-        }
-      } catch(ex) {}
+      // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+      // in case it warp the function in its object
+      let [fnName, fnCode] = this.getXnotifierFunction("openLinkIn");
 
       var _loadURI = Tabmix.isVersion(100) ?
             "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
@@ -326,6 +290,20 @@ var TMP_Places = {
 
    getURLsForContainerNode: null,
    _first_instance: false,
+
+  // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+  // object name wmn replace with xnotifier for version 3.0+
+  getXnotifierFunction: function(aName) {
+    if (typeof com == "object" && typeof com.tobwithu == "object") {
+      let fn = ["wmn", "xnotifier"].filter(function(f) {
+        return typeof com.tobwithu[f] == "object" &&
+          typeof com.tobwithu[f][aName] == "function";
+      });
+      if (fn.length)
+        return ["com.tobwithu." + fn[0] + "." + aName, com.tobwithu[fn[0]][aName]];
+    }
+    return [aName, window[aName]];
+  },
 
    buildContextMenu: function TMP_PC_buildContextMenu() {
       var _open = document.getElementById("placesContext_open");

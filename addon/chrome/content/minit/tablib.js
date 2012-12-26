@@ -511,14 +511,8 @@ var tablib = {
     _openURI.toCode();
 
     // fix after Bug 606678
-    // fix compatibility with Webmail Notifier
-    let [fnName, fnCode] = ["openNewTabWith", openNewTabWith];
-    try {
-      if (com.tobwithu && com.tobwithu.wmn &&
-          typeof(com.tobwithu.wmn.openNewTabWith) == "function") {
-        [fnName, fnCode] = ["com.tobwithu.wmn.openNewTabWith", com.tobwithu.wmn.openNewTabWith];
-      }
-    } catch (ex) {}
+    // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+    let [fnName, fnCode] = TMP_Places.getXnotifierFunction("openNewTabWith");
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.newCode(fnName, fnCode)._replace(
