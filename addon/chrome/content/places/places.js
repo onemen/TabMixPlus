@@ -408,7 +408,10 @@ var TMP_Places = {
       var _pref = w.Services.prefs;
       if ((_pref.getBoolPref(aPref) || aTab.hasAttribute("locked"))) {
          if (aEvent && _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
-               (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))
+               ((aEvent instanceof MouseEvent &&
+                (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey))) ||
+                (aEvent instanceof XULCommandEvent &&
+                 typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey))))
             aWhere = "current";
          else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
             aWhere = "tab";
