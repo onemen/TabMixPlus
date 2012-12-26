@@ -665,7 +665,7 @@ var TMP_eventListener = {
       fullScrToggler.collapsed = true;
     }
     if (fullScreen)
-      TMP_eventListener._updateMultiRow();
+      this.updateMultiRow();
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
