@@ -115,6 +115,7 @@ function TMP_TBP_Startup() {
          (firstWindow && sessionManager && restoreOrAsk))) {
       // make sure sessionstore is init without restornig pinned tabs
       TabmixSvc.ss.init(null);
+      TabmixSessionManager._notifyWindowsRestored = true;
 
       // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
       // maybe all tabs in the last session were pinned, we leet firefox to load the hompages

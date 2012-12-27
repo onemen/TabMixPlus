@@ -330,6 +330,16 @@ var TabmixSessionManager = {
          return;
       this._inited = true;
 
+      this._init();
+      if (Tabmix.isFirstWindow && this._notifyWindowsRestored) {
+        // restart-less extensions observers for this notification on startup
+        // notify observers things are complete.
+        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+        this._notifyWindowsRestored = false;
+      }
+   },
+
+   _init: function SM__init() {
       // just in case tablib isn't init yet
       // when Webmail Notifier extension istalled and user have master password
       // we can get here before the browser window is loaded
@@ -2319,10 +2329,6 @@ try{
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
       TabView.init();
-
-      // some extensions observers for this notification on startup
-      // notify observers things are complete.
-      Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
    },
 
    getSessionList: function SM_getSessionList(flag) {
