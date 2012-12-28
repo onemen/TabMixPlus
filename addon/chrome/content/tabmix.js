@@ -226,8 +226,6 @@ var TMP_eventListener = {
           gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
             gBrowser.tabContainer._onDelayTabHide = null;
             let tab = aEvent.target;
-            // just to pass the test in onTabClose_updateTabBar
-            tab._tPosInGroup = true;
             TMP_eventListener.onTabClose_updateTabBar(tab, true);
           }, 0, aEvent);
         }
@@ -794,8 +792,8 @@ var TMP_eventListener = {
 
   // TGM extension use it
   onTabClose_updateTabBar: function TMP_EL_onTabClose_updateTabBar(aTab, aDelay) {
-    // it the tab is not in the curent group we don't have to do anything here.
-    if (aTab._tPosInGroup == -1)
+    // if the tab is not in the curent group we don't have to do anything here.
+    if (typeof aTab._tPosInGroup == "number" && aTab._tPosInGroup == -1)
       return;
 
     var tabBar = gBrowser.tabContainer;
