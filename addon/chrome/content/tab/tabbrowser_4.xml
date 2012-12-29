@@ -362,11 +362,14 @@
            */
           this._newTabButtonWidth = 22;
 
-          this.firstChild.setAttribute("flst_id", new Date().getTime());
-          this.firstChild.setAttribute("visited", true);
+          let tab = this.firstChild;
+          tab.setAttribute("flst_id", new Date().getTime());
+          tab.setAttribute("visited", true);
           TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
-          if (TabmixTabbar.lockallTabs)
-            this.firstChild.setAttribute("locked", true);
+          if (TabmixTabbar.lockallTabs) {
+            tab.setAttribute("locked", true);
+            tab.tabmix_allowLoad = false;
+          }
 
           if (Tabmix.prefs.getBoolPref("extraIcons.autoreload"))
             this.setAttribute("extraIcons-autoreload", true);
@@ -376,7 +379,7 @@
             this.setAttribute("extraIcons-locked", true);
 
           if ("linkedBrowser" in this.firstChild)
-            tablib.setLoadURIWithFlags(this.firstChild.linkedBrowser);
+            tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
           try {
             Tabmix.beforeStartup(tabbrowser, this);

@@ -703,8 +703,10 @@ var TMP_eventListener = {
     TMP_LastTab.tabs = null;
     TMP_LastTab.attachTab(tab);
     tablib.setLoadURIWithFlags(tab.linkedBrowser);
-    if (TabmixTabbar.lockallTabs)
+    if (TabmixTabbar.lockallTabs) {
       tab.setAttribute("locked", "true");
+      tab.tabmix_allowLoad = false;
+    }
   },
 
   // this function call onTabOpen_updateTabBar after some delay

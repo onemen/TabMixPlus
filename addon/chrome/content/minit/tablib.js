@@ -1061,6 +1061,7 @@ var tablib = {
         aTab.setAttribute("locked", "true");
         aTab.setAttribute("_locked", "true");
       }
+      aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
       TabmixSessionManager.updateTabProp(aTab);
     }
 
@@ -1090,6 +1091,7 @@ var tablib = {
         aTab.removeAttribute("locked");
         aTab.setAttribute("_locked", "false");
       }
+      aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
