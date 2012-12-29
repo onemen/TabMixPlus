@@ -17,9 +17,19 @@ var tablib = {
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
     Tabmix.newCode(null, aBrowser.loadURIWithFlags)._replace(
+      // equalsExceptRef exist only from Firefox 6.0
+      // we are about to drop support for Firefox 4.0-5.0
       '{',
       '$&' +
-      '  var allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
+      '  var newURI, allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
+      '  try  {' +
+      '    if (!allowLoad) {' +
+      '      newURI = Services.io.newURI(aURI, null, null);' +
+      '      allowLoad = this.currentURI.equals(newURI);' +
+      '    }' +
+      '    if (Tabmix.isVersion(60) && !allowLoad)' +
+      '      allowLoad = this.currentURI.equalsExceptRef(newURI);' +
+      '  } catch (ex) {}'+
       '  var tabbrowser = document.getBindingParent(this);' +
       '  var tab = tabbrowser.getTabForBrowser(this);' +
       '  var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);' +
