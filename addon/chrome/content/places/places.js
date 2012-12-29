@@ -103,7 +103,7 @@ var TMP_Places = {
       Tabmix.newCode(fnName, fnCode)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
         '$& \
-         var newWin, bookMarkId = params.bookMarkId; \
+         var bookMarkId = params.bookMarkId; \
          var backgroundPref = params.backgroundPref;'
       )._replace(
         'where == "current" && w.gBrowser.selectedTab.pinned',
@@ -113,13 +113,9 @@ var TMP_Places = {
         '$& \
          if (w && where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) where = "tab";'
       )._replace(
-        'Services.ww.openWindow',
-        'newWin = $&'
-      )._replace(
-        /let loadInBackground|var loadInBackground/,
-        'if (newWin && bookMarkId) newWin.bookMarkIds = bookMarkId;\
-         $&'
-      )._replace(
+        /Services.ww.openWindow[^;]*;/,
+        'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
+       )._replace(
         '"browser.tabs.loadBookmarksInBackground"',
         'backgroundPref || $&', {check: !Tabmix.isVersion(110)}
       )._replace( // we probably don't need this since Firefox 10
