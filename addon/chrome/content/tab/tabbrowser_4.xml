@@ -82,12 +82,6 @@
       <![CDATA[
         if ("tabmix_inited" in this)
           return;
-
-        Tabmix.newCode(null, this.doMouseHoverSelect)._replace(
-          'document.getBindingParent(aTab.parentNode);',
-          'aTab.parentNode.tabbrowser;'
-        ).toCode(false, this, "doMouseHoverSelect");
-
         this.tabmix_inited = true;
       ]]>
     </constructor>
@@ -175,7 +169,7 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        var b = document.getBindingParent(aTab.parentNode);
+        var b = aTab.parentNode.tabbrowser;
         if (b.hasAttribute("preventMouseHoverSelect"))
             b.removeAttribute("preventMouseHoverSelect");
         else if (aTab.mIsHover)
