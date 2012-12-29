@@ -284,13 +284,6 @@ var TMP_eventListener = {
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
 
-    // fix webSearch to open new tab if tab is lock
-    // Searchbar Autosizer extension wrap this function before "load" event
-    Tabmix.newCode("BrowserSearch.webSearch", BrowserSearch.webSearch)._replace(
-      'openUILinkIn(Services.search.defaultEngine.searchForm, "current");',
-      'gBrowser.TMP_openURI(Services.search.defaultEngine.searchForm);', {check: typeof(Omnibar) == "undefined"}
-    ).toCode();
-
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
