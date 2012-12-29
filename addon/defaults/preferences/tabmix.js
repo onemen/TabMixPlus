@@ -4,6 +4,7 @@ pref("extensions.tabmix.linkTarget", false);
 pref("extensions.tabmix.opentabforLinks", 0); // 2010-09-16 we replaced speLink
 pref("extensions.tabmix.lockallTabs", false); // added 2010-09-16
 pref("extensions.tabmix.lockAppTabs", false); // added 2010-09-16
+pref("extensions.tabmix.updateOpenedTabsLockState", true); // added 2012-12-29
 pref("extensions.tabmix.singleWindow", false);
 
 pref("extensions.tabmix.opentabfor.bookmarks", false);

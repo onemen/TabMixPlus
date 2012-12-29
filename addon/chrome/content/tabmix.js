@@ -865,6 +865,8 @@ var TMP_eventListener = {
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
     var tab = aEvent.target;
+    // we unlock the tab on unpinned only if we have this flag on
+    // see TMP_eventListener.onContentLoaded
     if (tab.hasAttribute("_lockedAppTabs")) {
       gBrowser.lockTab(tab);
     }

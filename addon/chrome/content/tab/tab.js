@@ -545,19 +545,29 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.lockallTabs":
         TabmixTabbar.lockallTabs = Services.prefs.getBoolPref(prefName);
+      case "extensions.tabmix.lockAppTabs":
+        if (!Tabmix.prefs.getBoolPref("updateOpenedTabsLockState"))
+          break;
+        let updatePinned = prefName == "extensions.tabmix.lockAppTabs";
+        let lockAppTabs = Tabmix.prefs.getBoolPref("lockAppTabs")
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
+          if (tab.pinned != updatePinned)
+            continue; // only update for the appropriate tabs type
           // when user change settings to lock all tabs we always lock all tabs
           // regardless if they were lock and unlocked before by the user
-          if (TabmixTabbar.lockallTabs) {
+          if (updatePinned ? lockAppTabs : TabmixTabbar.lockallTabs) {
             tab.setAttribute("locked", "true");
-            tab.removeAttribute("_locked");
           }
-          // don't unlock pinned tab if lockAppTabs is true
-          else if (!tab.hasAttribute("pinned") || !Tabmix.prefs.getBoolPref("lockAppTabs")) {
+          else {
             tab.removeAttribute("locked");
-            tab.removeAttribute("_locked");
           }
+          if (updatePinned) {
+            tab.removeAttribute("_lockedAppTabs");
+            tab.setAttribute("_locked", tab.hasAttribute("locked"));
+          }
+          else
+            tab.removeAttribute("_locked");
           tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
         }
         break;

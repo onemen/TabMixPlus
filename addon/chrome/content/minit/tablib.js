@@ -1101,6 +1101,8 @@ var tablib = {
         aTab.removeAttribute("locked");
         aTab.setAttribute("_locked", "false");
       }
+      // don't keep this flag after user change lock state manually
+      aTab.removeAttribute("_lockedAppTabs");
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {

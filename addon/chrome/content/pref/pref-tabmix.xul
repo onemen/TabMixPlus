@@ -187,7 +187,7 @@
          <tabpanels flex="1">
           <tabpanel orient="vertical">
 <!-- ======================================================== -->
-            <groupbox>
+            <groupbox flex="1">
               <!-- Load on new tab -->
               <hbox align="center">
                 <label value="&newtab.label;" control="loadOnNewTab" />
@@ -215,7 +215,7 @@
                           prefstring="extensions.tabmix.openNewTabNext"/>
               </hbox>
             </groupbox>
-            <groupbox>
+            <groupbox flex="1">
               <!-- Open links next to current tab -->
               <hbox align="center">
                 <checkbox id="openTabNext" label="&openOtherTabNext.label;" tooltiptext="&openTabNext.tooltip;"
@@ -236,13 +236,16 @@
                           prefstring="extensions.tabmix.openDuplicateNext" />
               </hbox>
             </groupbox>
-            <groupbox align="start">
+            <groupbox align="start" flex="1">
               <caption label="&lockTabs.label;"/>
                 <!-- Look All Tabs -->
-                <checkbox id="lockallTabs" pack="start" label="&lockNewTabs.label;" prefstring="extensions.tabmix.lockallTabs"/>
-                <spacer style="height: 2em;"/>
+                <checkbox id="lockallTabs" align="center" label="&lockNewTabs.label;" prefstring="extensions.tabmix.lockallTabs"/>
                 <!-- Look App Tabs -->
-                <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs"/>
+                <checkbox id="lockAppTabs" align="center" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs"/>
+                <spacer style="height: 1em;"/>
+<!-- NEED to update babelzilla -->
+                <checkbox id="updateLockState" align="center" label="Apply changes to open tabs"
+                          prefstring="extensions.tabmix.updateOpenedTabsLockState"/>
             </groupbox>
 <!-- ======================================================== -->
           </tabpanel>
