@@ -233,6 +233,14 @@ var TMP_eventListener = {
     }
   },
 
+  toggleEventListener: function(aObj, aArray, aEnable, aHandler) {
+    var handler = aHandler || this;
+    var eventListener = aEnable ? "addEventListener" : "removeEventListener";
+    aArray.forEach(function(eventName) {
+      aObj[eventListener](eventName, this, true);
+    }, handler);
+  },
+
  /*
   *  we use this event to run this code before load event
   *  until TMP version 0.3.8.3 we used to run this code from Tabmix.beforeStartup
@@ -258,14 +266,9 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    var tabContainer = gBrowser.tabContainer;
-    tabContainer.addEventListener("SSTabRestoring", this, true);
-    tabContainer.addEventListener("SSTabClosing", this, true);
-    tabContainer.addEventListener("TabOpen", this, true);
-    tabContainer.addEventListener("TabClose", this, true);
-    tabContainer.addEventListener("TabSelect", this, true);
-    tabContainer.addEventListener("TabMove", this, true);
-    tabContainer.addEventListener("TabUnpinned", this, true);
+    this._tabrEvents = ["SSTabRestoring", "SSTabClosing",
+      "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
+    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -951,13 +954,7 @@ var TMP_eventListener = {
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
     }
 
-    gBrowser.tabContainer.removeEventListener("SSTabRestoring", this, true);
-    gBrowser.tabContainer.removeEventListener("SSTabClosing", this, true);
-    gBrowser.tabContainer.removeEventListener("TabOpen", this, true);
-    gBrowser.tabContainer.removeEventListener("TabClose", this, true);
-    gBrowser.tabContainer.removeEventListener("TabSelect", this, true);
-    gBrowser.tabContainer.removeEventListener("TabUnpinned", this, true);
-    gBrowser.tabContainer.removeEventListener("TabMove", this, true);
+    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, false);
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
