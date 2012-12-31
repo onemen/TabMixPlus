@@ -168,7 +168,7 @@ this.log(aMethod)
   // get functions names from Error().stack
   _getNames: function(aCount, stack) {
     if (!stack)
-      stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset);
+      stack = Error().stack.split("\n").slice(1);
     else
       stack = stack.split("\n");
     // cut the secound if it is from our utils
@@ -189,7 +189,7 @@ this.log(aMethod)
   // don't include this function in the count
   _getCallerNameByIndex: function TMP_utils_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
-    let fn = stack[TabmixSvc.stackOffset + aPlace];
+    let fn = stack[aPlace + 1];
 
     if (fn)
       return this._name(fn);
@@ -436,7 +436,7 @@ options = {
   informAboutChangeInTabmix: function(aOldName, aNewName) {
     let err = Error(aOldName + " is deprecated in Tabmix since version 0.3.8.5pre.110123a use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
-    let stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset+2);
+    let stack = Error().stack.split("\n").slice(3);
     let file = stack[0] ? stack[0].split(":") : null;
     if (file) {
       let [chrome, path, line] = file;

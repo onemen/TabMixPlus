@@ -13,7 +13,6 @@ let TabmixSvc = {
     return this._version[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
   },
 
-  stackOffset: 1,
   getString: function(aStringKey) {
     try {
       return this._strings.GetStringFromName(aStringKey);
