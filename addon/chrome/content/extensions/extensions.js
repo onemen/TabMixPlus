@@ -92,13 +92,20 @@ var TMP_extensionsCompatibility = {
     // fix bug in backgroundsaver extension
     // that extension use function with the name getBoolPref
     // we replace it back here
-    if ("bgSaverInit" in window && "getBoolPref" in window &&
-            getBoolPref.toString().indexOf("return bgSaverPref.prefHasUserValue(sName)") != -1) {
+    if (typeof bgSaverInit == "function" && typeof getBoolPref == "function" &&
+            getBoolPref.toString().indexOf("bgSaverPref.prefHasUserValue(sName)") != -1) {
       window.getBoolPref = function getBoolPref ( prefname, def ) {
         try {
           return Services.prefs.getBoolPref(prefname);
         }
-        catch(er) { return def; }
+        catch(ex) {
+          try {
+            return (bgSaverPref.prefHasUserValue(prefname) &&
+                    bgSaverPref.getBoolPref(prefname));
+          }
+          catch(e) {}
+        }
+        return def;
       }
     }
 
