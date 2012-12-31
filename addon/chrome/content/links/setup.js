@@ -65,6 +65,16 @@ function TMP_TBP_Startup() {
     if (Tabmix.singleWindowMode)
       TMP_DOMWindowOpenObserver.onObserve(window);
 
+    var SM = TabmixSessionManager;
+    if (Tabmix.isVersion(200)) {
+      SM._inPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+    }
+    else {
+      let pbs = Cc["@mozilla.org/privatebrowsing;1"].
+                getService(Ci.nsIPrivateBrowsingService);
+      SM._inPrivateBrowsing = pbs.privateBrowsingEnabled;
+    }
+
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
@@ -74,10 +84,6 @@ function TMP_TBP_Startup() {
     else
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
     var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
-
-    var pbs = Cc["@mozilla.org/privatebrowsing;1"].
-              getService(Ci.nsIPrivateBrowsingService);
-    TabmixSessionManager._inPrivateBrowsing = pbs.privateBrowsingEnabled;
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
@@ -99,7 +105,7 @@ function TMP_TBP_Startup() {
     Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
 
     var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = TabmixSessionManager._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+    var disAllow = SM._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
@@ -115,7 +121,7 @@ function TMP_TBP_Startup() {
          (firstWindow && sessionManager && restoreOrAsk))) {
       // make sure sessionstore is init without restornig pinned tabs
       TabmixSvc.ss.init(null);
-      TabmixSessionManager._notifyWindowsRestored = true;
+      SM._notifyWindowsRestored = true;
 
       // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
       // maybe all tabs in the last session were pinned, we leet firefox to load the hompages

@@ -1581,10 +1581,12 @@ since we can have tab hidden or remove the index can change....
       if (Services.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
         return false;
 
-      var inPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
-                              getService(Ci.nsIPrivateBrowsingService).
-                              privateBrowsingEnabled;
-      if (inPrivateBrowsing)
+      if (Tabmix.isVersion(200)) {
+        let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: false });
+        if (!nonPrivateWindow)
+          return false;
+      }
+      else if (TabmixSessionManager.globalPrivateBrowsing)
         return false;
 
       // last windows with tabs
