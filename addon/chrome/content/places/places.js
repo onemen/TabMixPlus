@@ -487,8 +487,21 @@ var TMP_Places = {
           }
           else
              aTab = gBrowser.addTab(bmGroup[i], {skipAnimation: multiple});
-          if (bmIds[i] && bmIds[i] > -1)
+          let id = bmIds[i];
+          if (id && id > -1) {
              aTab.setAttribute("tabmix_bookmarkId", bmIds[i]);
+             try {
+                if (this._titlefrombookmark) {
+                   aTab.label = PlacesUtils.bookmarks.getItemTitle(id);
+                   aTab.crop = "center";
+                   gBrowser._tabAttrModified(aTab);
+                   if (aTab.selected)
+                      gBrowser.updateTitlebar();
+                   if (!aTab.hasAttribute("faviconized"))
+                     aTab.removeAttribute("width");
+                }
+             } catch (ex) { }
+          }
        } catch (er) {  }
 
        if (!tabToSelect)
