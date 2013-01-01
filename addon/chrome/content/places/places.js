@@ -550,7 +550,8 @@ var TMP_Places = {
          aTab.removeAttribute("tabmix_bookmarkId");
          // get title for pending tab from SessionStore
          if (aTab.hasAttribute("pending") && aTab.linkedBrowser.__SS_restoreState &&
-             aTab.linkedBrowser.__SS_restoreState == 1)
+             aTab.linkedBrowser.__SS_restoreState == 1 &&
+             typeof aTab.linkedBrowser.__SS_data == "object")
            return TMP_SessionStore.getActiveEntryData(aTab.linkedBrowser.__SS_data).title || null;
       }
       return null;
