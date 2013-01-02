@@ -3397,7 +3397,8 @@ try{
            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_oneTab, true);
            self.afterTabLoad(aEvent.currentTarget, needToReload, rdfNodeSession);
          }, true);
-         aBrowser.gotoIndex(savedHistory.index);
+         aBrowser.webNavigation.sessionHistory.getEntryAtIndex(savedHistory.index, true);
+         aBrowser.webNavigation.sessionHistory.reloadCurrentEntry();
       } catch (e) {Tabmix.log("error in loadOneTab gotoIndex ? ");}
    }, // end of "loadOneTab : function(...............)"
 
