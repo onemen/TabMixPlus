@@ -3380,7 +3380,7 @@ try{
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       aBrowser.stop();
       var webNav = aBrowser.webNavigation;
-      var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory);
+      var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);
       if (savedHistory == null) {
          Tabmix.log("loadOneTab() - tab at index " + aTab._tPos + " failed to load data from the saved session");
          gBrowser.removeTab(aTab);
@@ -3483,7 +3483,7 @@ try{
       }
    },
 
-   loadTabHistory: function(rdfNodeSession, sHistoryInternal) {
+   loadTabHistory: function(rdfNodeSession, sHistoryInternal, aTab) {
       var history = this.getLiteralValue(rdfNodeSession, "history");
       var tmpData = history.split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
@@ -3499,30 +3499,47 @@ try{
       var sessionIndex = this.getIntValue(rdfNodeSession, "index");
       var historyCount = historyData.length/this.HSitems;
       if ( sessionIndex < 0 || sessionIndex >= historyCount ) sessionIndex = historyCount - 1;
-      var index, historyEntry, entryTitle, uriStr, newURI, XY;
-      var currentURI = historyData[sessionIndex * this.HSitems + 1];
       for ( var i = 0; i < historyCount; i++ ){
-         index = i * this.HSitems;
+         let index = i * this.HSitems;
          if (!this.enableSaveHistory && sessionIndex != i) continue;
-         historyEntry = Components.classes["@mozilla.org/browser/session-history-entry;1"]
+         let historyEntry = Components.classes["@mozilla.org/browser/session-history-entry;1"]
                            .createInstance(Ci.nsISHEntry);
-         entryTitle = this.getDecodedLiteralValue(null, historyData[index]);
-         uriStr = historyData[index + 1];
+         let entryTitle = this.getDecodedLiteralValue(null, historyData[index]);
+         let uriStr = historyData[index + 1];
          if (uriStr == "") uriStr = "about:blank";
-         newURI = Services.io.newURI(uriStr, null, null);
+         let newURI = Services.io.newURI(uriStr, null, null);
          historyEntry.setTitle(entryTitle);
          historyEntry.setURI(newURI);
          historyEntry.saveLayoutStateFlag = true;
          if (this.prefBranch.getBoolPref("save.scrollposition")) {
             if (historyData[index + 2] != "0,0") {
-               XY = historyData[index + 2].split(",");
+               let XY = historyData[index + 2].split(",");
                historyEntry.setScrollPosition(XY[0], XY[1]); // XY is array [x,y]
             }
          }
          sHistoryInternal.addEntry(historyEntry, true);
       }
+      var currentTitle = this.getDecodedLiteralValue(null, historyData[sessionIndex * this.HSitems]);
+      var currentURI = historyData[sessionIndex * this.HSitems + 1];
+      // If the page has a title, set it.
+      if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
+         currentTitle = TMP_Places.getTitleFromBookmark(currentURI, currentTitle);
+      if (currentTitle) {
+         aTab.label = currentTitle;
+         aTab.crop = "end";
+      } else if (currentURI != "about:blank") {
+         aTab.label = currentURI;
+         aTab.crop = "center";
+      }
+      if ((currentTitle || currentURI != "about:blank")) {
+        gBrowser._tabAttrModified(aTab);
+        if (aTab.selected)
+          gBrowser.updateTitlebar();
+      }
+      if (!aTab.hasAttribute("faviconized"))
+         aTab.removeAttribute("width");
       if (!this.enableSaveHistory) sessionIndex = 0;
-      return {history: sHistoryInternal, index: sessionIndex, currentURI: currentURI, label: entryTitle};
+      return {history: sHistoryInternal, index: sessionIndex, currentURI: currentURI, label: currentTitle};
    },
 
   /* ............... Back up and archive sessions ............... */
