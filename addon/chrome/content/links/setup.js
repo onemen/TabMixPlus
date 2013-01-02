@@ -101,9 +101,6 @@ function TMP_TBP_Startup() {
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var windowOpeneByTabmix = "tabmixdata" in window;
-    Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
-    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
-
     var firstWindow = Tabmix.isFirstWindow;
     var disAllow = SM._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||

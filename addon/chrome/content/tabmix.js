@@ -255,6 +255,9 @@ var TMP_eventListener = {
 
     window.addEventListener("load", this, false);
 
+    Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
+    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
+
     try {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
