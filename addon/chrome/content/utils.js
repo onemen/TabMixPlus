@@ -511,6 +511,14 @@ options = {
     return count;
   },
 
+  get isSingleBrowserWindow() {
+    return this.numberOfWindows(false, "navigator:browser") == 1;
+  },
+
+  get isLastBrowserWindow() {
+    return this.isSingleBrowserWindow;
+  },
+
   isPlatform: function(aPlatform) {
     return navigator.platform.indexOf(aPlatform) == 0;
   },

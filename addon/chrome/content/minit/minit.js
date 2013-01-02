@@ -1287,12 +1287,12 @@ Tabmix.navToolbox = {
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
-    if (TabmixSessionManager.enableManager == null) {
-      let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
-      TabmixSessionManager.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
-      TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
+    let SM = TabmixSessionManager;
+    if (SM.enableManager == null) {
+      SM.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !SM.globalPrivateBrowsing;
+      SM.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !SM.isPrivateWindow;
     }
-    TabmixSessionManager.toggleRecentlyClosedWindowsButton();
+    SM.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();
 

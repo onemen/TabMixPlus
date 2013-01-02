@@ -930,6 +930,7 @@ var TMP_eventListener = {
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this, false);
 
+    // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() == 0;
     // we close tabmix dialog windows on exit
     if (isLastWindow) {

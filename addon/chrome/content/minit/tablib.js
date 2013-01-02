@@ -1582,7 +1582,8 @@ since we can have tab hidden or remove the index can change....
         return false;
 
       if (Tabmix.isVersion(200)) {
-        let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: false });
+        // try to find non-private window
+        let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
         if (!nonPrivateWindow)
           return false;
       }
@@ -1602,8 +1603,6 @@ since we can have tab hidden or remove the index can change....
 
       // we never get to this function by restart
       // if we are still here we know that we are the last window
-      // we need to check for different Firefox version
-      // in Firefox 4.0:
       // if "browser.showQuitWarning" is true firefox show "Save & Quit"
       // when we quit or close last browser window.
       // if "browser.showQuitWarning" is false and we close last window firefox design
@@ -1618,7 +1617,7 @@ since we can have tab hidden or remove the index can change....
     // get caller caller name and make sure we are not on restart
     var quitType = Tabmix._getCallerNameByIndex(2);
     var askBeforSave = quitType != "restartApp" && quitType != "restart";
-    var isLastWindow = Tabmix.numberOfWindows() == 1;
+    var isLastWindow = Tabmix.isLastBrowserWindow;
     var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);
     var canClose = result.canClose;
     // we only show warnAboutClose if firefox or tabmix didn't do it already

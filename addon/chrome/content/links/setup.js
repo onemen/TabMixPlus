@@ -67,13 +67,37 @@ function TMP_TBP_Startup() {
 
     var SM = TabmixSessionManager;
     if (Tabmix.isVersion(200)) {
-      SM._inPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+      SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      // isPrivateWindow is fix boolean for this window, user can't change private status of a window
+      SM.isPrivateWindow = SM.isWindowPrivate(window);
+      SM.__defineGetter__("isPrivateSession", function() {
+        return this.globalPrivateBrowsing || !TabmixSvc.saveSession;
+      });
+      // set this flag to true if user opens in a session at least one non-private window
+      if (!TabmixSvc.saveSession && !SM.isPrivateWindow)
+        TabmixSvc.saveSession = true;
     }
     else {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
                 getService(Ci.nsIPrivateBrowsingService);
-      SM._inPrivateBrowsing = pbs.privateBrowsingEnabled;
+      SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
+      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) SM.globalPrivateBrowsing;
+      SM.__defineGetter__("isPrivateWindow", function() this.globalPrivateBrowsing);
+      SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
+
+    var windowOpeneByTabmix = "tabmixdata" in window;
+    var firstWindow = Tabmix.isFirstWindow;
+    var disAllow = Tabmix.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+                   Tabmix.extensions.sessionManager ||
+                   Tabmix.isWindowAfterSessionRestore;
+    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
+    var afterRestart = false;
+
+    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
+    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
@@ -99,18 +123,6 @@ function TMP_TBP_Startup() {
       ' }'
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
-
-    var windowOpeneByTabmix = "tabmixdata" in window;
-    var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = SM._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.extensions.sessionManager ||
-                   Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
-    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-    var afterRestart = false;
-
-    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
-    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
     // don't load home page on first window if session manager or crash recovery is enabled
     if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
