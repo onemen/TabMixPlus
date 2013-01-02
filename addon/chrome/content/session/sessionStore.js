@@ -60,7 +60,7 @@ var TMP_SessionStore = {
          return;
 
       var aTab = gBrowser.tabContainer.firstChild;
-      if (aTab != gBrowser.mCurrentTab) {
+      if (!aTab.selected) {
          aTab.removeAttribute("visited");
          aTab.removeAttribute("flst_id");
       };

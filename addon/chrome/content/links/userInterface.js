@@ -215,7 +215,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
     gBrowser.tabmix_userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
   }
-  if (aTab == gBrowser.mCurrentTab) {
+  if (aTab.selected) {
     if (aTimeOut)
       setTimeout(function () {focusAndSelectUrlBar();}, 30);
     else
@@ -234,7 +234,7 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (!gBrowser.tabmix_tab)
     return;
 
-  var isCurrentTab = gBrowser.tabmix_tab == gBrowser.mCurrentTab;
+  var isCurrentTab = gBrowser.tabmix_tab.selected;
   var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
   var url = gBrowser.tabmix_userTypedValue;
   if (!Tabmix.isBlankPageURL(url))

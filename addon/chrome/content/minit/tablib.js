@@ -1440,7 +1440,7 @@ since we can have tab hidden or remove the index can change....
         if (Services.prefs.getBoolPref("browser.tabs.animate"))
           newTab.setAttribute("fadein", "true");
         this.moveTabTo(newTab, aOurTab._tPos + 1);
-        if (aOurTab == this.selectedTab)
+        if (aOurTab.selected)
           this.selectedTab = newTab;
         this.selectedBrowser.focus();
         this.removeTab(aOurTab, {animate: false});

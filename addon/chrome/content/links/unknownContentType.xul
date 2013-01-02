@@ -12,7 +12,7 @@
         window._tabBrowser = win.gBrowser;
         let tabToRemove = _tabBrowser.getTabForLastPanel();
         if (_tabBrowser.browsers.length > 1 && _tabBrowser.isBlankNotBusyTab(tabToRemove)) {
-          if (_tabBrowser.mCurrentTab == tabToRemove) {
+          if (tabToRemove.selected) {
             let newIndex = _tabBrowser.selectIndexAfterRemove(tabToRemove);
             if (newIndex > -1) {
               let tab = _tabBrowser.tabs.item(newIndex);

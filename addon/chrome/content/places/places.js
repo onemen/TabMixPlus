@@ -479,7 +479,7 @@ var TMP_Places = {
              // setTabTitle will call TabmixTabbar.updateScrollStatus for us
              aTab.collapsed = false;
              // reset visited & flst_id attribute
-             if (aTab != gBrowser.mCurrentTab) {
+             if (!aTab.selected) {
                 aTab.removeAttribute("visited");
                 aTab.removeAttribute("flst_id");
              } else

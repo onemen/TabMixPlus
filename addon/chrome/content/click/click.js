@@ -190,7 +190,7 @@ var TabmixTabClickOptions = {
           IeView.ieViewLaunch("Internet Explorer.lnk", href);
         }
         else if (window.gIeTab && window.gIeTab.switchTabEngine) {
-          if (gBrowser.selectedTab != aTab)
+          if (!aTab.selected)
             gBrowser.selectedTab = aTab;
           gIeTab.switchTabEngine(aTab, gIeTab.getBoolPref("ietab.alwaysNewTab", false));
         }
@@ -230,7 +230,7 @@ var TabmixTabClickOptions = {
         middleMousePaste(event);
         if (opennewTab) {
           let tab = gBrowser.getTabForLastPanel();
-          if (tab != gBrowser.mCurrentTab)
+          if (!tab.selected)
             gBrowser.selectedTab = tab;
         }
         break;
@@ -758,7 +758,7 @@ var TabmixAllTabs = {
 
     if (event.button == 1) {
       let aTab = event.originalTarget.tab;
-      if (popup.parentNode.id == "tm-tabsList" && (gBrowser.mCurrentTab == aTab || gBrowser.isBlankTab(gBrowser.mCurrentTab))) {
+      if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser.mCurrentTab))) {
         popup.hidePopup();
         gBrowser.removeTab(aTab, {animate: true});
         return;
@@ -957,7 +957,7 @@ var TabmixAllTabs = {
   },
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
-    if (gBrowser.selectedTab == aTab)
+    if (aTab.selected)
       gBrowser.ensureTabIsVisible(aTab);
     else
       // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible

@@ -375,7 +375,7 @@ var TMP_tabDNDObserver = {
           Tabmix.log("load\n" + ex);
         }
       }
-      if (gBrowser.mCurrentTab != tab)
+      if (!tab.selected)
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
