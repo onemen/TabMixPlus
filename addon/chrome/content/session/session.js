@@ -493,7 +493,7 @@ var TabmixSessionManager = {
 
       // we set aPopUp only in canQuitApplication
       if (aPopUp == null)
-        aPopUp = this.checkForPopup(window);
+        aPopUp = !window.toolbar.visible;
 
       this.lastSaveTabsCount = this.saveOnWindowClose();
       if (!aLastWindow) {
@@ -636,12 +636,12 @@ var TabmixSessionManager = {
       */
       this.saveAllWindows(this.gSessionPath[0], "windowclosed", true);
       // cheack if all open windows are popup
-      var allPopups = this.checkForPopup(window);
+      var allPopups = !window.toolbar.visible;
       var wnd, enumerator;
       enumerator = Tabmix.windowEnumerator();
       while ( allPopups && enumerator.hasMoreElements() ) {
          wnd = enumerator.getNext();
-         allPopups = this.checkForPopup(wnd);
+         allPopups = !wnd.toolbar.visible;
       }
       var result = this.deinit(true, !aBackup, allPopups); // we fake that we are the last window
       this.windowIsClosing(result.canClose, true, result.saveSession, result.removeClosedTabs, aKeepClosedWindows);
@@ -691,38 +691,6 @@ var TabmixSessionManager = {
       }
     }
    },
-
-  /**
-   * @brief Checks to see if a given nsIDOMWindow window is a popup or not.
-   *
-   * @param domWindow    A scripted nsIDOMWindow object.
-   * @return             true if the domWindow is a popup, false otherwise.
-   *
-   */
-  checkForPopup: function TMP_checkForPopup(domWindow) {
-    if (!(domWindow instanceof Components.interfaces.nsIDOMWindow)) return false;
-
-    // FIXME: locationbar, menubar, toolbar -
-    // if these are hidden the window is probably a popup
-    var locbarHidden = !domWindow.locationbar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
-    var menubarHidden = !domWindow.menubar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
-    try {
-      var toolbarHidden = !domWindow.toolbar.QueryInterface(Components.interfaces.nsIDOMBarProp).visible;
-    }
-    catch (e) {
-      toolbarHidden = "hidden" in domWindow.toolbar ? domWindow.toolbar.hidden : false;
-    }
-
-    // the following logic, while possibly slow, is designed
-    // to catch all reasonable permutations of hidden UI
-    if ((locbarHidden && menubarHidden) ||
-        (menubarHidden && toolbarHidden) ||
-        (locbarHidden && menubarHidden && toolbarHidden)) {
-      return true;
-    }
-
-    return false;
-  },
 
    // XXX split this for each pref that has change
    // XXX need to update after permissions, locked......

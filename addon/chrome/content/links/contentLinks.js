@@ -22,8 +22,7 @@ var TMP_DOMWindowOpenObserver = {
 
       function isSuitableBrowserWindow(win) {
         return (!win.closed && win.document.readyState == "complete" &&
-                !TabmixSessionManager.checkForPopup(win) &&
-                 win != aExclude &&
+                win.toolbar.visible && win != aExclude &&
                 (!checkPrivacy ||
                  PrivateBrowsingUtils.isWindowPrivate(win)));
       }

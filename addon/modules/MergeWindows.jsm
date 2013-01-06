@@ -6,6 +6,7 @@ var EXPORTED_SYMBOLS = ["MergeWindows"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
 /*////////////////////////////////////////////////////////////////////
@@ -450,32 +451,12 @@ let MergeWindows = {
 
   // list all browser windows in an array from front to back (z-order on windows, on linux opening order);
   listWindows: function() {
-    // function to check if a window is a popup or a normal window
-    function isPopupWindow(domWin) {
-      // the chrome flags are defined in the nsIWebBrowserChrome interface
-      const webBrowserChrome = Ci.nsIWebBrowserChrome;
-
-      var chromeBrowser = domWin.gBrowser.docShell.QueryInterface(Ci.nsIDocShellTreeItem)
-                                .treeOwner.QueryInterface(Ci.nsIInterfaceRequestor)
-                                .getInterface(webBrowserChrome);
-
-      // check if all chrome is enabled in the window, using chromeFlags from nsIWebBrowserChrome
-      var chromeAll = chromeBrowser.chromeFlags & webBrowserChrome.CHROME_ALL;
-      if (chromeAll == webBrowserChrome.CHROME_ALL) {
-        return false;  // no popup window (the window has all chrome enabled)
-      }
-
-      // in other cases some chrome is missing from the window: popup window
-      return true;
-    }
-
     var windowsArray = new Array(), popupsArray = new Array();
     var i = 0, winEnumerator, currentWindow, isCurrentWindowPopup, win;
     var windowsMediator = TabmixSvc.wm;
     currentWindow = windowsMediator.getMostRecentWindow("navigator:browser");
-    // on linux z enumerator does not work: use normal enumerator
-    var platform = currentWindow.navigator.platform;
-    if (platform.indexOf('Linux') != -1)
+    // getZOrderDOMWindowEnumerator is broken everywhere other than Windows
+    if (Services.appinfo.OS != "WINNT")
       winEnumerator = windowsMediator.getEnumerator("navigator:browser");
     else
       winEnumerator = windowsMediator.getZOrderDOMWindowEnumerator("navigator:browser", false);
@@ -484,13 +465,13 @@ let MergeWindows = {
       // list the current window apart
       if (win == currentWindow.QueryInterface(Ci.nsIDOMWindow)) {
         currentWindow = win;
-        isCurrentWindowPopup = isPopupWindow(win);
+        isCurrentWindowPopup = !win.toolbar.visible;
         continue;
       }
-      if (isPopupWindow(win))
-        popupsArray.push(win);
-      else
+      if (win.toolbar.visible)
         windowsArray.push(win);
+      else
+        popupsArray.push(win);
     }
 
     var windowsList = {windowsArray: windowsArray, popupsArray: popupsArray, currentWindow: currentWindow, isCurrentWindowPopup: isCurrentWindowPopup};
