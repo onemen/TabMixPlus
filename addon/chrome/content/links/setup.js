@@ -55,6 +55,17 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
  *        window[onload="TMP_TBP_Startup()"]
  */
 function TMP_TBP_Startup() {
+  // don't start Tabmix at all if our tabbrowser_4.xml didn't start
+  // when ImTranslator extension installed
+  if (!Tabmix.initialized) {
+    Tabmix.initialized = true;
+    if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+      gBrowserInit.onLoad();
+    else
+      BrowserStartup();
+    return;
+  }
+
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
@@ -196,7 +207,9 @@ function TMP_TBP_Startup() {
 }
 
 // this must run before all
+Tabmix.initialized = false;
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
+    Tabmix.initialized = true;
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {
