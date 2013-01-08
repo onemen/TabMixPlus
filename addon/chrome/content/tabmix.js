@@ -73,9 +73,6 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
     this.setItem("TabsToolbar", "tabmix-visible", null);
     if (stripIsHidden)
       tabBar.visible = false;
-    // height shrink to actual size when the tabbar is in display: block (multi-row)
-    if (this.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
-      tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
   }
 }
 
@@ -125,6 +122,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar.updateSettings(true);
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
+  gTMPprefObserver.miscellaneousRules();
   delete gTMPprefObserver.tabStyleSheet;
   if ("_failedToEnterVerticalMode" in TabmixTabbar) {
     delete TabmixTabbar._failedToEnterVerticalMode;

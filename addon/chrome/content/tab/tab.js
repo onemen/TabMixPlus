@@ -1096,7 +1096,16 @@ var gTMPprefObserver = {
     }
   },
 
-  addWidthRules: function TMP_PO_replaceContentBrowserRules() {
+  miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    // height shrink to actual size when the tabbar is in display: block (multi-row)
+    let newHeight = gBrowser.tabContainer.visibleTabsFirstChild.getBoundingClientRect().height;
+    let newRule = '#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >' +
+                  '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
+                  ' > .tabs-newtab-button {height: #px;}'.replace("#", newHeight);
+    this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
+  },
+
+  addWidthRules: function TMP_PO_addWidthRules() {
     let newRule = ".tabbrowser-tab[fadein]:not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
