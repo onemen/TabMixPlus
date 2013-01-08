@@ -34,6 +34,12 @@
   vertical-align: bottom;
 }
 
+/* enable this rule after bug 738491 australis-tabs-win lands, and move it to diffrent file
+#tabbrowser-tabs[flowing="multibar"]:not([multibar]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: bottom;
+}
+*/
+
 /* default value padding-bottom: 4px; make row height 24 insted of 23 */
 #TabsToolbar > #tabs-closebutton {
   padding-bottom: 3px;
