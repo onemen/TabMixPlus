@@ -1,6 +1,4 @@
-/*
-TODO: Need major rewrite to use swapBrowsersAndCloseOther and duplicateTab
-*/
+
 var EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cc = Components.classes;
@@ -11,543 +9,315 @@ Components.utils.import("resource://tabmixplus/Services.jsm");
 
 /*////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
-// extension for Mozilla Firefox.//
-// version 0.5.1//
-// The Initial Developer of the Original Code is Twanno. //
-// Modfied for TMP by CPU //
-//
-// Convert to module by onemen
-//
+// extension for Mozilla Firefox.                                   //
+// version 0.5.1                                                    //
+// The Initial Developer of the Original Code is Twanno.            //
+// Modfied for TMP by CPU                                           //
+//                                                                  //
+// Convert to module and modfied by onemen                          //
+//                                                                  //
 */////////////////////////////////////////////////////////////////////
 let MergeWindows = {
+  get prefs() {
+    delete this.prefs;
+    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+  },
+
   // merge several windows to one window, or only selected tabs to previous focussed window,
   // or only current window with previous window
-  mergeWindows: function _mergeWindows() {
-    var topWindow = TabmixSvc.topWin();
-    var tabbrowser = topWindow.gBrowser;
+  mergeWindows: function _mergeWindows(aWindow) {
+    var tabbrowser = aWindow.gBrowser;
+    var mergeAllWindows = this.prefs.getBoolPref("mergeAllWindows");
 
-    var mergePopups = TabmixSvc.prefs.getBoolPref("extensions.tabmix.mergePopups");
-    var placePopupNextToOpener = TabmixSvc.prefs.getBoolPref("extensions.tabmix.placePopupNextToOpener");
-    var mergeAllWindows = TabmixSvc.prefs.getBoolPref("extensions.tabmix.mergeAllWindows");
-    var openTabNext = topWindow.Tabmix.getOpenTabNextPref();
-
-    // other variables used in this function
-    var currentIndex, tabs, browsers = new Array(), i, j;
-
-    // get browser windows listed and add them to an array
-    var windowsArrayList = this.listWindows();
-    var windowsArray = windowsArrayList.windowsArray;
-    var popupsArray = windowsArrayList.popupsArray;
-    var currentWindowIsPopup = windowsArrayList.isCurrentWindowPopup;
-
-    // force the merging of windows when the current window is a popup
-    // and the popup would be merged with one other (non popup) window
-    var forceMergeWindows = (currentWindowIsPopup && (windowsArray.length == 1 || !mergeAllWindows));
-
-    // foreground window is not a popup other window(s) is/are popup(s)
-    var mergeBackGround = (windowsArray.length == 0 && popupsArray.length > 0 && !currentWindowIsPopup && mergePopups);
-
-    // alert if just one window is open; no need to merge one window
-    if (!forceMergeWindows && ((!mergePopups && windowsArray.length < 1 && !currentWindowIsPopup)
-        || windowsArray.length+popupsArray.length < 1)) {
-      var errorMessage = TabmixSvc.getString('tmp.merge.error');
-      const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
-      var notificationBox = tabbrowser.getNotificationBox();
-      if (!notificationBox.getNotificationWithValue("mergeWindows")) {
-        const priority = notificationBox.PRIORITY_INFO_MEDIUM;
-        notificationBox.appendNotification(errorMessage, "mergeWindows",
-                                               errorimage, priority, null);
-      }
-      return;
-    }
+    let options = {skipPopup: !this.prefs.getBoolPref("mergePopups")};
+    if (TabmixSvc.version(200))
+      options.private = this.isWindowPrivate(aWindow);
 
     // check if one or more tabs are selected to be merged
-    var selectedTabs = tabbrowser.tabContainer.getElementsByAttribute('mergeselected','true');
-    var tabsSelected = (selectedTabs.length > 0);
+    var selectedTabs = tabbrowser.tabContainer.getElementsByAttribute("mergeselected", true);
+    options.tabsSelected = selectedTabs.length > 0;
+    options.multiple = mergeAllWindows && !options.tabsSelected;
 
-    // don't merge the current window if it is a popup and all windows are to be merged except popups
-    var dontMergeCurrentWindow = (!forceMergeWindows && !mergePopups
-                                   && currentWindowIsPopup && mergeAllWindows);
-
-    // get currently focussed and previously focussed window
-    // and get the window which has been out of focus longest
-    var currentWindow = (dontMergeCurrentWindow)?windowsArray[windowsArray.length-1]:windowsArrayList.currentWindow;
-    var previousWindow = (dontMergeCurrentWindow)?windowsArray[windowsArray.length-2]:windowsArray[windowsArray.length-1];
-    var firstWindow = windowsArray[0];
-
-
-    if (mergeBackGround) {
-      // to correctly merge popup(s) when only the current window is not a popup
-      currentWindow = popupsArray.pop();
-      firstWindow = windowsArrayList.currentWindow;
-      previousWindow = windowsArrayList.currentWindow;
-      currentWindowIsPopup = true;
-      windowsArray[0] = windowsArrayList.currentWindow;
+    if (options.multiple)
+      this.mergeMultipleWindows(aWindow, options);
+    else {
+      let tabsToMove = Array.slice(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
+      this.mergeTwoWindows(aWindow, tabsToMove, options);
     }
+  },
 
-    var previousWindowTabBar = previousWindow.gBrowser.tabContainer;
-    var firstWindowTabBar = firstWindow.gBrowser.tabContainer;
-
-    var previousWindowTabIndex = (openTabNext)?previousWindowTabBar.selectedIndex:previousWindowTabBar.childNodes.length;
-    var firstWindowTabIndex = (openTabNext)?firstWindowTabBar.selectedIndex:firstWindowTabBar.childNodes.length;
-
-   // get currently focussed tab, so it can be selected again after merging
-    if (tabsSelected && !tabbrowser.mCurrentTab.hasAttribute('mergeselected')) {
-      i = 0, j = -1;
-      while (i < tabbrowser.tabs.length) {
-        if (tabbrowser.tabs[i].hasAttribute('mergeselected'))
-          j++;
-        if ((i >= tabbrowser.tabContainer.selectedIndex) && (j > -1)) {
-          currentIndex = j;
-          break;
-        }
-        i++;
+  // merge current window into previously focussed window, unless it was popup
+  // in that case merge previously focussed window into current window
+  mergeTwoWindows: function TMP_mergeTwoWindows(aWindow, aTabs, aOptions) {
+    let tabbrowser = aWindow.gBrowser;
+    let targetWindow = this.getWindowsList(aWindow, aOptions);
+    if (!targetWindow)
+      this.notify(aWindow, aOptions.privateNotMatch);
+    // user set preference to merge popups
+    else if (this.isPopupWindow(targetWindow)) {
+      if (this.isPopupWindow(aWindow)) {
+        ///tabbrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
+        ///XXX - not working at the moment
+        ///this.openNewWindow([aWindow, targetWindow], [], aOptions.private);
+        return;
       }
+      if (aOptions.tabsSelected) {
+        // merge tabs from the popup window into the current window
+        // remove or move to new window tabs that wasn't selected
+        let leftOverTabs = [];
+        for (let i = 0; i < tabbrowser.tabs.length; i++) {
+          let tab = tabbrowser.tabs[i];
+          if (tab.hasAttribute("mergeselected")) {
+            tab.removeAttribute("mergeselected");
+            tab.label = tab.label.substr(4);
+            tabbrowser._tabAttrModified(tab);
+          }
+          else
+            leftOverTabs.push(tab);
+        }
+        if (leftOverTabs.length && this.warnBeforeClosingWindow(aWindow)) {
+          for (let i = 0; i < leftOverTabs.length; i++)
+            tabbrowser.removeTab(leftOverTabs[i]);
+        }
+      }
+      this.swapTabs(aWindow, targetWindow.gBrowser.tabs);
+    }
+    else {
+      // after merge select currently selected tab or first merged tab
+      let tab = aTabs.indexOf(tabbrowser.selectedTab) > -1 ? tabbrowser.selectedTab : aTabs[0];
+      tab.setAttribute("_TMP_selectAfterMerege", true);
+      let canClose = tabbrowser.tabs.length > aTabs.length &&
+                     this.warnBeforeClosingWindow(aWindow);
+      this.swapTabs(targetWindow, aTabs);
+      // _endRemoveTab set _windowIsClosing if the last tab moved to a diffrenent window
+      if (!tabbrowser._windowIsClosing && canClose)
+        aWindow.close();
+      targetWindow.focus();
+    }
+  },
+
+  // merge all suitable windows into the current window unless it is popup
+  mergeMultipleWindows: function TMP_mergeMultipleWindows(aWindow, aOptions) {
+    let {windows: windows, popUps: popUps} = this.getWindowsList(aWindow, aOptions);
+    let concatTabsAndMerge = function(aTargetWindow) {
+      windows = windows.concat(popUps);
+      let tabsToMove = [];
+      for (let i = 0; i < windows.length; i++)
+        tabsToMove = tabsToMove.concat(Array.slice(windows[i].gBrowser.tabs));
+      this.swapTabs(aTargetWindow, tabsToMove);
+    }.bind(this);
+
+    if (!windows.length && !popUps.length)
+      this.notify(aWindow, aOptions.privateNotMatch);
+    else if (this.isPopupWindow(aWindow)) {
+      aWindow.gBrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
+      // all windows are popups
+      if (!windows.length) {
+        ///XXX - not working at the moment
+        ///this.openNewWindow([aWindow], popUps, aOptions.private);
+        return;
+      }
+      // we have at least one non-popup windows
+      // merge all windows into the first window in the list
+      // when we don't merge popups, allow to merge the current popup window
+      // only if there is only one non-popup window
+      if (!aOptions.skipPopup || windows.length == 1)
+        popUps.unshift(aWindow);
+      let targetWindow = windows.shift();
+      concatTabsAndMerge(targetWindow);
+      targetWindow.focus();
     }
     else
-      currentIndex = (tabsSelected)?tabbrowser.tabContainer.selectedIndex:currentWindow.gBrowser.tabContainer.selectedIndex;
+      concatTabsAndMerge(aWindow);
+  },
 
-    // If more then one window is opened and not all windows must be merged to one:
-    // Either because of selected tabs or the pref is set to do so
-    // Merge only the (selected) tabs of the currently focussed window and the previously focussed window
-    if (tabsSelected || !mergeAllWindows) {
-      var openerPosition = -1;
-      tabs = currentWindow.gBrowser.tabs;
+  /* NOT WORKING - need to try to call swapTabs after delay
+  openNewWindow: function(aWindows, aPopUps, aPrivate) {
+    aWindows = aWindows.concat(aPopUps);
+    let concatTabsAndMerge = function _merge_windows(aEvent) {
+      var win = aEvent.currentTarget;
+      win.removeEventListener("load", _merge_windows, false);
+      let tabsToMove = [];
+      for (let i = 0; i < aWindows.length; i++)
+        tabsToMove = tabsToMove.concat(Array.slice(aWindows[i].gBrowser.tabs));
+      this.swapTabs(win, tabsToMove);
+    }.bind(this);
+    var features = "chrome,all,dialog=no";
+    if (TabmixSvc.version(200))
+        features += aPrivate ? ",private" : ",non-private";
+    var newWindow = aWindows[0].openDialog(aWindows[0].getBrowserURL(), "_blank", features, null);
+    newWindow.addEventListener("load", concatTabsAndMerge, false);
+  },
+  */
 
-      // if tabs have been selected, list them in an array
-      if (tabsSelected && !mergeBackGround)
-        browsers = listTabs(selectedTabs, topWindow);
-      else if (tabsSelected && mergeBackGround) {
-        var previousTabs = previousWindow.gBrowser.tabs;
-        browsers = listTabs(tabs, currentWindow);
-        for (i = 0; i < previousTabs.length; i++) {
-          if (!previousTabs[i].hasAttribute('mergeselected'))
-            previousTabs[i].setAttribute('mergeremove', 'true');
-        }
+  // move tabs to a window
+  swapTabs: function TMP_swapTabs(aWindow, tabs) {
+    var tabbrowser = aWindow.gBrowser;
+
+    // tabs from popup windows open after opener or at the end
+    // other tabs open according to our openTabNext preference
+    // and move to place by tabbrowser.addTab
+    var placePopupNextToOpener = this.prefs.getBoolPref("placePopupNextToOpener");
+    function moveTabsFromPopups(newTab, aTab) {
+      let index = tabbrowser.tabs.length - 1;
+      if (placePopupNextToOpener) {
+        // since we merge popup after all other tabs was merged,
+        // we only look for opener in the target window
+        let popupWindow = aTab.ownerDocument.defaultView;
+        let openerWindow = popupWindow.gBrowser.contentWindow.opener;
+        let openerTab = openerWindow &&
+            tabbrowser._getTabForContentWindow(openerWindow.top);
+        if (openerTab)
+          index = openerTab._tPos + 1;
       }
-
-      // if no tabs have been selected, list all tabs of the window in an array
-      else if (!tabsSelected) {
-        browsers = listTabs(tabs, currentWindow);
-      }
-
-      // if the current window is a popup window place the popup next to its opener
-      // when that opener is found in the previous window.
-      if (currentWindowIsPopup && placePopupNextToOpener) {
-        var openerPositionArray = getPopupOpenerPosition(currentWindow, [previousWindow], previousWindowTabIndex);
-        openerPosition = openerPositionArray[0];
-        if (openerPositionArray[1] == 'tabs') {
-          currentIndex = (mergeBackGround)? currentIndex: openerPosition + currentIndex;
-          // the popup opener was found in one of the tabs in the window that will remain.
-          // place the tab(s) next to the opener
-          setTabsInBrowser(previousWindow, browsers, openerPosition);
-        }
-      }
-
-      // place all tabs in one window
-      if (openerPosition == -1) {
-        currentIndex = previousWindowTabIndex + currentIndex;
-        setTabsInBrowser(previousWindow, browsers);
-      }
-
-     // prompt a warning if some tabs are selected and the window with remaining tabs is closed
-      var promptpref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.warnOnclose");
-      var closepref = TabmixSvc.prefs.getBoolPref("extensions.tabmix.closeOnSelect");
-      var askForPrompt = ((promptpref) && (tabsSelected) && (selectedTabs.length < tabs.length));
-      var promptOK = false, promptAgain = { value:true };
-      if (askForPrompt && closepref) {
-        var promptTitle = TabmixSvc.getString('tmp.merge.warning.title');
-        var promptMessage = TabmixSvc.getString('tmp.merge.warning.message');
-        var promptCheckboxLabel = TabmixSvc.getString('tmp.merge.warning.checkboxLabel');
-        promptOK = TabmixSvc.prompt.confirmCheck(topWindow, promptTitle, promptMessage, promptCheckboxLabel, promptAgain);
-      }
-
-      // select the tab which was selected in the top window
-      previousWindowTabBar.selectedIndex = currentIndex;
-
-      // close current window if all tabs are merged or if specified by user to do so with some tabs selected
-      if ((promptOK || (!askForPrompt)) && closepref) {
-        if (!promptAgain.value) {
-          TabmixSvc.prefs.setBoolPref("extensions.tabmix.warnOnClose", false);
-        }
-        previousWindow.focus();
-        currentWindow.close();
-      }
-
-      // If the window is not to be closed, remove the tabs that have been merged
-      // if tab is protect remove mergeselected attribute
-      else {
-        // xxx if we close in one loop we get
-        //Error: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIDOMXULElement.boxObject]
-        // Source file: chrome://global/content/bindings/browser.xml
-        // we need to fix the flst select after remove and made the proper new tab index in gBrowser.removeTab
-        //in the first loop we remove all the tab but the current tab
-        //in the 2nd loop we remove the current tab
-        for (i = selectedTabs.length - 1; i > -1; --i) {
-          var tab = selectedTabs.item(i);
-          if (tab.hasAttribute("protected")) {
-              tab.removeAttribute("mergeselected");
-              tab.label = tab.label.substr(4);
-          }
-          else if (tab != currentWindow.gBrowser.mCurrentTab)
-            currentWindow.gBrowser.removeTab(tab);
-        }
-        for (i = selectedTabs.length - 1; i > -1; --i) {
-           tab = selectedTabs.item(i);
-           currentWindow.gBrowser.removeTab(tab);
-        }
-        previousWindow.focus();
-      }
-
-      if (mergeBackGround && tabsSelected) {
-        // because the other windows are added to the window with selected tabs, the not selected tabs
-        // have to be removed. (normally the selected tabs will be removed and placed in another window)
-        for (i = 0; i < selectedTabs.length; i++) {
-          selectedTabs.item(i).label = selectedTabs.item(i).label.substr(4);
-        }
-
-        for (i = 0; i < previousTabs.length; i++) {
-          if (previousTabs[i].hasAttribute('mergeremove')) {
-            if (i < currentIndex)
-              currentIndex--;
-            previousWindow.gBrowser.removeTab(previousTabs[i]);
-          }
-          if (previousTabs[i].hasAttribute('mergeselected'))
-            previousTabs[i].removeAttribute('mergeselected');
-            previousTabs[i].label = previousTabs[i].label.substr(4);
-        }
-      }
-      previousWindowTabBar.selectedIndex = currentIndex;
-    }
-    // Merge all windows to one window if more then one window is opened and
-    // no tabs are selected and the pref is set to merge all windows.
-    else if (!tabsSelected && mergeAllWindows) {
-       // list all tabs on all windows with history scrollposition
-      var addedTabsLength = 0, popupsList = new Array();
-
-      for (i = 1; i < windowsArray.length; i++) {
-        tabs = windowsArray[i].gBrowser.tabs;
-        browsers = browsers.concat(listTabs(tabs, windowsArray[i]));
-        // the last window in the array is only the current window if merging of popups is disabled
-        // and the current window is a popup window
-        if (windowsArray[i] != currentWindow)
-          addedTabsLength += tabs.length;
-      }
-      // the current window is a popup and popups should also be merged
-      // or the current window is not a popup
-      if (!dontMergeCurrentWindow) {
-        tabs = currentWindow.gBrowser.tabs;
-        if (!currentWindowIsPopup) {
-          browsers = browsers.concat(listTabs(tabs, currentWindow));
-          currentIndex = firstWindowTabIndex + addedTabsLength + currentIndex;
-        }
-        else {
-          var listedTabs = listTabs(tabs, currentWindow);
-          if (placePopupNextToOpener) {
-            openerPositionArray = getPopupOpenerPosition(currentWindow, windowsArray, firstWindowTabIndex);
-            openerPosition = openerPositionArray[0];
-            switch (openerPositionArray[1]) {
-              case 'browsers':
-                // the popup opener was found in the list of browsers that will be added to the remaining window.
-                currentIndex = openerPosition + 1 + currentIndex;
-                popupsList[openerPosition] = listedTabs;
-                currentIndexSet = true;
-                break;
-              case 'tabs':
-                // the popup opener was found in one of the tabs in the window that will remain.
-                setTabsInBrowser(firstWindow, listedTabs, openerPosition);
-                // in this case current index is fixed because the to be focused tab
-                // has now already been added to the remaining window
-                currentIndex = openerPosition + 1 + currentIndex;
-                break;
-              case 'end':
-              default:
-                // no popup opener was found, the popup will be added at the end of the tab list.
-                browsers = browsers.concat(listedTabs);
-                currentIndex = firstWindowTabIndex + addedTabsLength + currentIndex;
-                break;
-            }
-          }
-          else {
-            browsers = browsers.concat(listedTabs);
-            currentIndex = firstWindowTabIndex + addedTabsLength + currentIndex;
-          }
-        }
-      }
-      else // the current window is a popup and should not be merged.
-        currentIndex = firstWindowTabIndex + addedTabsLength + currentIndex;
-
-      // add popup windows to the remaining window when popup windows should also be merged.
-      if (mergePopups) {
-        for (i = 0; i < popupsArray.length; i++) {
-          tabs = popupsArray[i].gBrowser.tabs;
-          if (placePopupNextToOpener) {
-            listedTabs = listTabs(tabs, popupsArray[i]);
-            var newWindowsArray = windowsArray;
-            if (!currentWindowIsPopup && !mergeBackGround)
-              newWindowsArray.push(currentWindow);
-            openerPositionArray = getPopupOpenerPosition(popupsArray[i], newWindowsArray, firstWindowTabIndex);
-            openerPosition = openerPositionArray[0];
-            switch (openerPositionArray[1]) {
-              case 'browsers':
-                // the popup opener was found in the list of browsers that will be added to the remaining window.
-                if (openerPosition < currentIndex)
-                  currentIndex += tabs.length;
-                if (popupsList[openerPosition] instanceof Array)
-                  popupsList[openerPosition] = popupsList[openerPosition].concat(listedTabs);
-                else
-                  popupsList[openerPosition] = listedTabs;
-                break;
-              case 'tabs':
-                // the popup opener was found in one of the tabs in the window that will remain.
-                setTabsInBrowser(firstWindow, listedTabs, openerPosition);
-                if (openerPosition < currentIndex)
-                  currentIndex += tabs.length;
-                break;
-              case 'end':
-              default:
-                // no popup opener was found, the pop up will be added at the end of the tab list.
-                browsers = browsers.concat(listedTabs);
-                break;
-            }
-          }
-          else {
-            browsers = browsers.concat(listTabs(tabs, popupsArray[i]));
-          }
-        }
-      }
-
-      // place all tabs in one window and select the tab which was selected in the top window
-      setTabsInBrowser(firstWindow, browsers);
-
-      // add popups which have openers next to their openers.
-      while (popupsList.length > 0) {
-        var popupTabs = popupsList.pop();
-        if (popupTabs instanceof Array) {
-          var position = popupsList.length;
-          setTabsInBrowser(firstWindow, popupTabs, position);
-        }
-      }
-
-      // select the tab which was selected in the top window
-      firstWindowTabBar.selectedIndex = currentIndex;
-
-      // focus the window now containing the tabs and close all other windows
-      firstWindow.focus();
-
-      // close windows from where tabs have been merged
-      for (i = 1; i < windowsArray.length; i++) {
-        windowsArray[i].close();
-      }
-
-      // close popup windows if the popups have been merged
-      if (mergePopups) {
-        for (i = 0; i < popupsArray.length; i++) {
-          popupsArray[i].close();
-        }
-      }
-
-      // if current window has been merged close it
-      if (!dontMergeCurrentWindow)
-        currentWindow.close();
-      // give focus again to the current window if it is a popup and popups should not be merged
-      if (dontMergeCurrentWindow)
-        windowsArrayList.currentWindow.setTimeout(windowsArrayList.currentWindow.focus, 0);
+      let lastRelatedTab = tabbrowser._lastRelatedTab;
+      tabbrowser.moveTabTo(newTab, index);
+      tabbrowser._lastRelatedTab = lastRelatedTab;
     }
 
-    // retrieve the opener for a popup window, so it can be placed next to it
-    function getPopupOpenerPosition(popupWindow, otherWindows, containerWindowTabsIndex) {
-      var i, j, openerIndex = -1;
-      var openerWindow = popupWindow.gBrowser.contentWindow.opener
-      if (!openerWindow) {
-        return [openerIndex, 'end'];
+    var tabToSelect = null;
+    for (let i = 0; i < tabs.length; i++) {
+      let tab = tabs[i];
+      let isPopup = !tab.ownerDocument.defaultView.toolbar.visible;
+      let newTab = tabbrowser.addTab("about:blank", {dontMove: isPopup});
+      let newBrowser = newTab.linkedBrowser;
+      newBrowser.stop();
+      newBrowser.docShell;
+      if (tab.hasAttribute("_TMP_selectAfterMerege")) {
+        tab.removeAttribute("_TMP_selectAfterMerege");
+        tabToSelect = newTab;
       }
-      for (i = 0; i < otherWindows.length; i++) {
-        if (otherWindows[i] == popupWindow)
-          continue;
-        var tabs = otherWindows[i].gBrowser.tabs;
-        for (j = 0; j < tabs.length; j++) {
-          openerIndex++;
-          var possibleOpener = otherWindows[i].gBrowser.getBrowserForTab(tabs[j]).contentWindow;
-          if (possibleOpener == openerWindow) {
-            var where = (openerIndex >= containerWindowTabsIndex)? 'browsers': 'tabs';
-            return [openerIndex, where];
-          }
-        }
-      }
-      return [-1, 'end'];
+      if (isPopup)
+        moveTabsFromPopups(newTab, tab);
+      // we don't keep tab attributs: visited, flst_id
+      // see in Tabmix.copyTabData list of attributs we copy to the new tab
+      tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
     }
 
-    function listTabs(tabs, aWindow) {
-      var x = 0, curBrowser, browsersArray = new Array();
-      for (x; x < tabs.length; x++) {
-        curBrowser = aWindow.gBrowser.getBrowserForTab(tabs[x]);
-        browsersArray[x] = [[MergeWindows.copyHistory(curBrowser.webNavigation.sessionHistory)],
-                      aWindow.TabmixSessionData.getTabProperties(tabs[x]),
-                      [curBrowser.contentWindow.scrollX, curBrowser.contentWindow.scrollY],
-                      curBrowser.markupDocumentViewer.textZoom];
-      }
+    // select new tab after all other tabs swap to the target window
+    if (tabToSelect)
+      tabbrowser.selectedTab = tabToSelect;
+  },
 
-      return browsersArray;
+  isPopupWindow: function(aWindow) {
+    return !aWindow.toolbar.visible;
+  },
+
+  // we use it only for Fireofx 20+, before that always return false
+  isWindowPrivate: function() {
+    delete this.isWindowPrivate
+    if (TabmixSvc.version(200)) {
+      Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+      this.isWindowPrivate = function(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      return this.isWindowPrivate(arguments[0]);
     }
+    this.isWindowPrivate = function() false;
+    return false;
+  },
 
-    // add cloned tabs to a browser window
-    function setTabsInBrowser(aWindow, pages) {
-      var y = 0, openedBrowser, newTab;
+  /*
+   * Get windows that match the most search in recent order (ZOrder).
+   *
+   * @param aWindow a window to skip.
+   *
+   * @param aOptions an object accepting the arguments for the search.
+   *        Set the private property to true in order to restrict the
+   *        search to private windows only, or to false in order to
+   *        restrict the search to non-private windows only.  To search
+   *        in both groups, don't specify the private property.
+   *
+   *        set skipPopup property to true when the preference is not
+   *        to merge popus.
+   *
+   *        set multiple property to true to get all suitable windows
+   *
+   * @return
+   *        multiple is true all non-popup windows then all popup windows
+   *        multiple is false most recent non-popup windows or most recent
+   *        popup windows
+   */
+  getWindowsList: function(aWindow, aOptions) {
+    let checkPrivacy = typeof aOptions == "object" &&
+                       "private" in aOptions;
 
-      if (openTabNext) {
-        var index = (aWindow == firstWindow)?firstWindowTabIndex:previousWindowTabIndex;
+    let privateNotMatch = 0;
+    let isSuitableBrowserWindow = function (win) {
+      let suitable = win != aWindow && !win.closed;
+      if (!suitable || !checkPrivacy)
+        return suitable;
+
+      if (this.isWindowPrivate(win) == aOptions.private)
+        return true;
+      privateNotMatch++;
+      return false;
+    }.bind(this);
+
+    let windows = [], popUps = [];
+    let isWINNT = Services.appinfo.OS == "WINNT";
+    let more = function() !isWINNT || aOptions.multiple || windows.length == 0;
+    // getEnumerator return windows from oldest to newest, so we use unshift.
+    // when OS is WINNT and option is not multiple the loop stops when we find the most
+    // recent suitable window
+    let fn = isWINNT ? "push" : "unshift";
+    let windowList = !isWINNT ? Services.wm.getEnumerator("navigator:browser") :
+        Services.wm.getZOrderDOMWindowEnumerator("navigator:browser", true);
+    while (more() && windowList.hasMoreElements()) {
+      let nextWin = windowList.getNext();
+      if (isSuitableBrowserWindow(nextWin)) {
+        if (this.isPopupWindow(nextWin))
+          popUps[fn](nextWin);
+        else
+          windows[fn](nextWin);
       }
+    }
+    aOptions.privateNotMatch = privateNotMatch > 0;
+    if (aOptions.skipPopup)
+      popUps = [];
 
-      var tabbrowser = aWindow.gBrowser;
-      // add tabs to defined position in case of a popup: next to its opener
-      var addToPosition = false;
-      if (typeof(arguments[2]) == 'number')  {
-        addToPosition = true;
-        var openerPosition = arguments[2];
-        var position = arguments[2];
-      }
+    if (aOptions.multiple)
+      return {windows: windows, popUps: popUps};
 
-      while (y < pages.length) {
-        newTab = tabbrowser.addTab("about:blank");
-        newTab.linkedBrowser.stop();
-        if (addToPosition)  {
-          var newTabPos = (tabbrowser.getTabIndex)? tabbrowser.getTabIndex(newTab): newTab._tPos;
+    return windows[0] || popUps[0] || null;
+  },
 
-          // the popup is placed next to its opener
-          var newPosition = position + 1;
-          if (newTabPos < newPosition)
-            newPosition--;
-          if (newTabPos != newPosition)
-            getTabIndex.moveTabTo((tabbrowser.getTabIndex)? newTabPos: newTab, newPosition);
-
-          // set the opener again for the popup (this data will otherwise be lost)
-          var openerBrowser = tabbrowser.getBrowserForTab(tabbrowser.tabs[openerPosition]);
-          tabbrowser.getBrowserForTab(newTab).contentWindow.opener = openerBrowser.contentWindow;
-          position++;
-        }
-        else if (openTabNext) {
-          var firstArgument = (tabbrowser.getTabIndex)? tabbrowser.getTabIndex(newTab): newTab;
-          tabbrowser.moveTabTo(firstArgument, index + 1);
-          index++;
-        }
-        openedBrowser = tabbrowser.getBrowserForTab(newTab);
-
-        // we call setScrollPosition after load to make sure scrollPosition is set
-        openedBrowser.addEventListener('load', aWindow.tablib.dupScrollPosition, true);
-        openedBrowser._scrollData = {
-            tabPos: newTab._tPos,
-            href: null,
-            _scrollX: pages[y][2][0],
-            _scrollY: pages[y][2][1]
-        };
-
-        aWindow.TabmixSessionData.setTabProperties(newTab, pages[y][1]);
-        MergeWindows.setClonedContent(openedBrowser, pages[y][0]);
-        y++;
-      }
+  notify: function TMP_mergeNotify(aWindow, privateNotMatch) {
+    let errorMessage = TabmixSvc.getString('tmp.merge.error');
+    ///XXX update babelzilla
+    if (privateNotMatch)
+      errorMessage += ", " + "You can not merge private window with non-private window.";
+    const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
+    let notificationBox = aWindow.gBrowser.getNotificationBox();
+    let name = "mergeWindows-notification";
+    if (!notificationBox.getNotificationWithValue(name)) {
+      const priority = notificationBox.PRIORITY_INFO_MEDIUM;
+      let notificationBar = notificationBox.appendNotification(errorMessage,
+                                name, errorimage, priority, null);
+      aWindow.setTimeout(function(){
+        notificationBox.removeNotification(notificationBar);
+      }, 10000);
     }
   },
 
-  // list all browser windows in an array from front to back (z-order on windows, on linux opening order);
-  listWindows: function() {
-    var windowsArray = new Array(), popupsArray = new Array();
-    var i = 0, winEnumerator, currentWindow, isCurrentWindowPopup, win;
-    var windowsMediator = TabmixSvc.wm;
-    currentWindow = windowsMediator.getMostRecentWindow("navigator:browser");
-    // getZOrderDOMWindowEnumerator is broken everywhere other than Windows
-    if (Services.appinfo.OS != "WINNT")
-      winEnumerator = windowsMediator.getEnumerator("navigator:browser");
-    else
-      winEnumerator = windowsMediator.getZOrderDOMWindowEnumerator("navigator:browser", false);
-    while (winEnumerator.hasMoreElements()) {
-      win = winEnumerator.getNext();
-      // list the current window apart
-      if (win == currentWindow.QueryInterface(Ci.nsIDOMWindow)) {
-        currentWindow = win;
-        isCurrentWindowPopup = !win.toolbar.visible;
-        continue;
-      }
-      if (win.toolbar.visible)
-        windowsArray.push(win);
-      else
-        popupsArray.push(win);
-    }
+  warnBeforeClosingWindow: function(aWindow) {
+    // prompt a warning before closing a window with left ovar tabs
+    var canClose = this.prefs.getBoolPref("closeOnSelect");
+    if (!canClose)
+      return false;
 
-    var windowsList = {windowsArray: windowsArray, popupsArray: popupsArray, currentWindow: currentWindow, isCurrentWindowPopup: isCurrentWindowPopup};
-    return windowsList;
-  },
+    var shouldPrompt = this.prefs.getBoolPref("warnOnclose");
+    if (!shouldPrompt)
+      return true;
 
-  setClonedContent: function(aBrowser, aClonedContents) {
-    if (aClonedContents[0].length == 0) return;
-    this.clonedContents = aClonedContents;
-    this.newBrowser = aBrowser;
-    this.cloneTabHistory(aBrowser, aClonedContents[0]);
-  },
+    var promptAgain = { value:true };
+    var canClose = Services.prompt.confirmCheck(aWindow,
+                   TabmixSvc.getString('tmp.merge.warning.title'),
+                   TabmixSvc.getString('tmp.merge.warning.message'),
+                   TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
+                   promptAgain);
 
-  cloneHistoryEntry: function(aEntry) {
-    if (!aEntry)
-      return null;
-    aEntry = aEntry.QueryInterface(Ci.nsISHContainer);
-    var newEntry = aEntry.clone();
-    newEntry = newEntry.QueryInterface(Ci.nsISHContainer);
-    newEntry.loadType = Math.floor(aEntry.loadType);
-    if (aEntry.childCount) {
-      for (var j = 0; j < aEntry.childCount; j++) {
-          var childEntry = this.cloneHistoryEntry(aEntry.GetChildAt(j));
-          if (childEntry)
-            newEntry.AddChild(childEntry, j);
-      }
-    }
-    return newEntry;
-  },
+    if (canClose && !promptAgain.value)
+      this.prefs.setBoolPref("warnOnClose", false);
 
-  cloneTabHistory: function(aBrowser, originalHistory) {
-    var newHistory = aBrowser.webNavigation.sessionHistory
-
-    newHistory.QueryInterface(Ci.nsISHistoryInternal);
-
-    // delete history entries if they are present
-    if (newHistory.count > 0)
-      newHistory.PurgeHistory(newHistory.count);
-
-    for (var i = 0; i < originalHistory.length; i++) {
-      let entry = originalHistory[i].QueryInterface(Ci.nsISHEntry);
-      let newEntry = this.cloneHistoryEntry(entry);
-      newHistory.addEntry(newEntry, true);
-    }
-
-    // Goto current history location
-    if (originalHistory.length > 0 && originalHistory.index < originalHistory.length) {
-      try {
-        aBrowser.gotoIndex(originalHistory.index);
-      }
-      catch(e) {
-         let win = TabmixSvc.topWin();
-         win.setTimeout( function (browser, index) { browser.gotoIndex(index); }, 0, aBrowser, originalHistory.index);
-      }
-    }
-  },
-
-   copyHistory: function(originalHistory, aOnlyBack) {
-      // variables used in this function
-      var pageCount, currentPageNum, firstPageNum, lastPageNum;
-
-      currentPageNum = originalHistory.index;
-      lastPageNum = originalHistory.count-1;
-
-      firstPageNum = 0;
-      pageCount = lastPageNum+1;
-
-      currentPageNum = currentPageNum-firstPageNum;
-
-      var copiedHistory = new Array();
-      for (var i = firstPageNum; i < pageCount; i++) {
-         copiedHistory.push(originalHistory.getEntryAtIndex(i, false));
-      }
-      copiedHistory.index = currentPageNum;
-
-      return copiedHistory;
-   }
-
+    return canClose;
+  }
 }

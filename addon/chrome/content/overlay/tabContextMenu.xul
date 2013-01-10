@@ -34,7 +34,7 @@
 -->
         <menuitem id="tm-mergeWindowsTab" insertbefore="context_openTabInWindow"
                  key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
-                 oncommand="Tabmix.MergeWindows.mergeWindows();"/>
+                 oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>
         <menuitem id="tm-renameTab" insertbefore="context_openTabInWindow"
                  label="&renametab.label;" accesskey="&renametab.accesskey;"
                  oncommand="Tabmix.renameTab.editTitle(TabContextMenu.contextTab);"/>

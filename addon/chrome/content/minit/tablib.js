@@ -63,10 +63,14 @@ var tablib = {
       [fnName, fnCode] = ["gBrowser.addTab", gBrowser.addTab];
 
     Tabmix.newCode(fnName, fnCode)._replace(
+      '{','{ \
+       var dontMove;'
+    )._replace(
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
-       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;});'
+       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;}); \
+       dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle ? this.mStringBundle.getString("tabs.connecting") : aURI);'
@@ -99,7 +103,7 @@ var tablib = {
       't.dispatchEvent(evt);' +
       'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
       'if (openTabnext) {' +
-      '  if (Tabmix.isCallerInList(this.TMP_blockedCallers))' +
+      '  if (dontMove || Tabmix.isCallerInList(this.TMP_blockedCallers))' +
       '    openTabnext = false;' +
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
       '    aRelatedToCurrent = true;' +
@@ -825,6 +829,7 @@ var tablib = {
           newTab.removeAttribute("busy");
           this.setIcon(newTab, this.getBrowserForTab(aTab).mIconURL);
           newTab.label = aTab.label;
+          this._tabAttrModified(newTab);
           newTab.width = aTab.width;
 
           var index = newTab._tPos;
@@ -1120,8 +1125,9 @@ var tablib = {
         aTab.label = aTab.label.substr(4);
       } else {
         aTab.setAttribute("mergeselected", "true")
-        aTab.label = "(*) "+aTab.label;
+        aTab.label = "(*) " + aTab.label;
       }
+      this._tabAttrModified(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
         TabmixTabbar.updateBeforeAndAfter();
@@ -1658,17 +1664,6 @@ since we can have tab hidden or remove the index can change....
   setURLBarFocus: function TMP_setURLBarFocus() {
     if (gURLBar)
       gURLBar.focus();
-  },
-
-///XXX only in use by MergeWindows.jsm
-  dupScrollPosition: function TMP_dupScrollPosition(event) {
-    var browser = this;
-    var data = browser._scrollData;
-    browser.removeEventListener('load', TMP_dupScrollPosition, true);
-    var tab = gBrowser.getTabForBrowser(browser);
-    if (tab && tab.parentNode)
-      TabmixSessionManager.setScrollPosition(tab, browser, data, 15);
-    delete browser._scrollData;
   },
 
   menuItemTitle: function TMP_menuItemTitle(entry) {

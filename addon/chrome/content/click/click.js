@@ -203,7 +203,7 @@ var TabmixTabClickOptions = {
         gBrowser.SelectToMerge(aTab);
         break;
       case 23:
-        Tabmix.MergeWindows.mergeWindows();
+        Tabmix.MergeWindows.mergeWindows(window);
         break;
       case 24:
         gBrowser.closeGroupTabs(aTab);
