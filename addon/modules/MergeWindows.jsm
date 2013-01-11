@@ -29,90 +29,73 @@ let MergeWindows = {
     var tabbrowser = aWindow.gBrowser;
     var mergeAllWindows = this.prefs.getBoolPref("mergeAllWindows");
 
-    let options = {skipPopup: !this.prefs.getBoolPref("mergePopups")};
-    if (TabmixSvc.version(200))
-      options.private = this.isWindowPrivate(aWindow);
-
     // check if one or more tabs are selected to be merged
     var selectedTabs = tabbrowser.tabContainer.getElementsByAttribute("mergeselected", true);
-    options.tabsSelected = selectedTabs.length > 0;
-    options.multiple = mergeAllWindows && !options.tabsSelected;
-
-    if (options.multiple)
-      this.mergeMultipleWindows(aWindow, options);
+    let options = {
+      skipPopup: !this.prefs.getBoolPref("mergePopups"),
+      private: TabmixSvc.version(200) ? this.isWindowPrivate(aWindow) : false,
+      tabsSelected: selectedTabs.length > 0,
+      multiple: mergeAllWindows && !selectedTabs.length
+    };
+    let {windows: windows, normalWindowsCount: normalWindowsCount} = this.getWindowsList(aWindow, options);
+    if (!windows.length)
+      this.notify(aWindow, options.privateNotMatch);
+    else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
+      windows.unshift(aWindow);
+      this.mergePopUpsToNewWindow(windows, options.private);
+    }
+    else if (options.multiple) {
+      options.normalWindowsCount = normalWindowsCount;
+      this.mergeMultipleWindows(aWindow, windows, options);
+    }
     else {
       let tabsToMove = Array.slice(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
-      this.mergeTwoWindows(aWindow, tabsToMove, options);
+      this.mergeTwoWindows(windows[0], aWindow, tabsToMove, options);
     }
   },
 
   // merge current window into previously focussed window, unless it was popup
   // in that case merge previously focussed window into current window
-  mergeTwoWindows: function TMP_mergeTwoWindows(aWindow, aTabs, aOptions) {
+  mergeTwoWindows: function TMP_mergeTwoWindows(aTargetWindow, aWindow, aTabs, aOptions) {
     let tabbrowser = aWindow.gBrowser;
-    let targetWindow = this.getWindowsList(aWindow, aOptions);
-    if (!targetWindow)
-      this.notify(aWindow, aOptions.privateNotMatch);
-    // user set preference to merge popups
-    else if (this.isPopupWindow(targetWindow)) {
-      if (this.isPopupWindow(aWindow)) {
-        this.mergePopUpsToNewWindow([aWindow, targetWindow], aOptions.private);
-        return;
-      }
+    let canClose = aOptions.tabsSelected && tabbrowser.tabs.length > aTabs.length &&
+                    this.warnBeforeClosingWindow(aWindow);
+    if (this.isPopupWindow(aTargetWindow)) {
       if (aOptions.tabsSelected) {
         // merge tabs from the popup window into the current window
         // remove or move to new window tabs that wasn't selected
-        let leftOverTabs = [];
-        for (let i = 0; i < tabbrowser.tabs.length; i++) {
+        for (let i = tabbrowser.tabs.length - 1; i >=0; i--) {
           let tab = tabbrowser.tabs[i];
           if (tab.hasAttribute("mergeselected")) {
             tab.removeAttribute("mergeselected");
             tab.label = tab.label.substr(4);
             tabbrowser._tabAttrModified(tab);
           }
-          else
-            leftOverTabs.push(tab);
+          else if (canClose)
+            tabbrowser.removeTab(tab);
         }
-        if (leftOverTabs.length && this.warnBeforeClosingWindow(aWindow)) {
-          for (let i = 0; i < leftOverTabs.length; i++)
-            tabbrowser.removeTab(leftOverTabs[i]);
-        }
+        canClose = false;
       }
-      this.swapTabs(aWindow, targetWindow.gBrowser.tabs);
+      [aTargetWindow, aTabs] = [aWindow, aTargetWindow.gBrowser.tabs];
     }
-    else {
-      let canClose = tabbrowser.tabs.length > aTabs.length &&
-                     this.warnBeforeClosingWindow(aWindow);
-      this.swapTabs(targetWindow, aTabs);
-      // _endRemoveTab set _windowIsClosing if the last tab moved to a diffrenent window
-      if (!tabbrowser._windowIsClosing && canClose)
-        aWindow.close();
-    }
+    this.swapTabs(aTargetWindow, aTabs);
+    // _endRemoveTab set _windowIsClosing if the last tab moved to a diffrenent window
+    if (canClose && !tabbrowser._windowIsClosing)
+      aWindow.close();
   },
 
   // merge all suitable windows into the current window unless it is popup
-  mergeMultipleWindows: function TMP_mergeMultipleWindows(aWindow, aOptions) {
-    let {windows: windows, normalWindowsCount: normalWindowsCount} = this.getWindowsList(aWindow, aOptions);
-    if (!windows.length)
-      this.notify(aWindow, aOptions.privateNotMatch);
-    else if (this.isPopupWindow(aWindow)) {
-      // all windows are popups
-      if (!normalWindowsCount) {
-        windows.unshift(aWindow);
-        this.mergePopUpsToNewWindow(windows, aOptions.private);
-        return;
-      }
+  mergeMultipleWindows: function TMP_mergeMultipleWindows(aTargetWindow, aWindows, aOptions) {
+    if (this.isPopupWindow(aTargetWindow)) {
       // we have at least one non-popup windows, so we can merge all windows
       // into the first window in the list.
       // when we don't merge popups, allow to merge the current popup window
       // if there is only one non-popup window.
-      if (!aOptions.skipPopup || normalWindowsCount == 1)
-        windows.splice(normalWindowsCount, 0, aWindow);
-      let targetWindow = windows.shift();
-      this.concatTabsAndMerge(targetWindow, windows);
+      if (!aOptions.skipPopup || aOptions.normalWindowsCount == 1)
+        aWindows.splice(aOptions.normalWindowsCount, 0, aTargetWindow);
+      aTargetWindow = aWindows.shift();
     }
-    else
-      this.concatTabsAndMerge(aWindow, windows);
+    this.concatTabsAndMerge(aTargetWindow, aWindows);
   },
 
   mergePopUpsToNewWindow: function(aWindows, aPrivate) {
@@ -270,12 +253,12 @@ let MergeWindows = {
     if (aOptions.skipPopup)
       popUps = [];
 
-    if (aOptions.multiple) {
-      let normalWindowsCount = windows.length;
+    let normalWindowsCount = windows.length;
+    if (aOptions.multiple)
       return {windows: windows.concat(popUps), normalWindowsCount: normalWindowsCount};
-    }
 
-    return windows[0] || popUps[0] || null;
+    let traget = windows[0] || popUps[0] || null;
+    return {windows: traget ? [traget] : [], normalWindowsCount: normalWindowsCount};
   },
 
   notify: function TMP_mergeNotify(aWindow, privateNotMatch) {
