@@ -56,7 +56,6 @@ let MergeWindows = {
     // user set preference to merge popups
     else if (this.isPopupWindow(targetWindow)) {
       if (this.isPopupWindow(aWindow)) {
-        tabbrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
         this.mergePopUpsToNewWindow([aWindow, targetWindow], aOptions.private);
         return;
       }
@@ -82,16 +81,12 @@ let MergeWindows = {
       this.swapTabs(aWindow, targetWindow.gBrowser.tabs);
     }
     else {
-      // after merge select currently selected tab or first merged tab
-      let tab = aTabs.indexOf(tabbrowser.selectedTab) > -1 ? tabbrowser.selectedTab : aTabs[0];
-      tab.setAttribute("_TMP_selectAfterMerege", true);
       let canClose = tabbrowser.tabs.length > aTabs.length &&
                      this.warnBeforeClosingWindow(aWindow);
       this.swapTabs(targetWindow, aTabs);
       // _endRemoveTab set _windowIsClosing if the last tab moved to a diffrenent window
       if (!tabbrowser._windowIsClosing && canClose)
         aWindow.close();
-      targetWindow.focus();
     }
   },
 
@@ -101,7 +96,6 @@ let MergeWindows = {
     if (!windows.length)
       this.notify(aWindow, aOptions.privateNotMatch);
     else if (this.isPopupWindow(aWindow)) {
-      aWindow.gBrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
       // all windows are popups
       if (!normalWindowsCount) {
         windows.unshift(aWindow);
@@ -116,7 +110,6 @@ let MergeWindows = {
         windows.splice(normalWindowsCount, 0, aWindow);
       let targetWindow = windows.shift();
       this.concatTabsAndMerge(targetWindow, windows);
-      targetWindow.focus();
     }
     else
       this.concatTabsAndMerge(aWindow, windows);
@@ -143,6 +136,15 @@ let MergeWindows = {
 
   // move tabs to a window
   swapTabs: function TMP_swapTabs(aWindow, tabs) {
+    var currentWindow = TabmixSvc.topWin();
+    var notFocused = currentWindow != aWindow;
+    if (notFocused) {
+      // after merge select currently selected tab or first merged tab
+      let selectedTab = currentWindow.gBrowser.selectedTab;
+      let tab = tabs.indexOf(selectedTab) > -1 ? selectedTab : tabs[0];
+      tab.setAttribute("_TMP_selectAfterMerege", true);
+    }
+
     var tabbrowser = aWindow.gBrowser;
 
     // tabs from popup windows open after opener or at the end
@@ -185,9 +187,12 @@ let MergeWindows = {
       tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
     }
 
-    // select new tab after all other tabs swap to the target window
-    if (tabToSelect)
-      tabbrowser.selectedTab = tabToSelect;
+    if (notFocused) {
+      // select new tab after all other tabs swap to the target window
+      if (tabToSelect)
+        tabbrowser.selectedTab = tabToSelect;
+      aWindow.focus();
+    }
   },
 
   isPopupWindow: function(aWindow) {
