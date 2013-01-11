@@ -56,9 +56,8 @@ let MergeWindows = {
     // user set preference to merge popups
     else if (this.isPopupWindow(targetWindow)) {
       if (this.isPopupWindow(aWindow)) {
-        ///tabbrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
-        ///XXX - not working at the moment
-        ///this.openNewWindow([aWindow, targetWindow], [], aOptions.private);
+        tabbrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
+        this.mergePopUpsToNewWindow([aWindow, targetWindow], aOptions.private);
         return;
       }
       if (aOptions.tabsSelected) {
@@ -98,57 +97,49 @@ let MergeWindows = {
 
   // merge all suitable windows into the current window unless it is popup
   mergeMultipleWindows: function TMP_mergeMultipleWindows(aWindow, aOptions) {
-    let {windows: windows, popUps: popUps} = this.getWindowsList(aWindow, aOptions);
-    let concatTabsAndMerge = function(aTargetWindow) {
-      windows = windows.concat(popUps);
-      let tabsToMove = [];
-      for (let i = 0; i < windows.length; i++)
-        tabsToMove = tabsToMove.concat(Array.slice(windows[i].gBrowser.tabs));
-      this.swapTabs(aTargetWindow, tabsToMove);
-    }.bind(this);
-
-    if (!windows.length && !popUps.length)
+    let {windows: windows, normalWindowsCount: normalWindowsCount} = this.getWindowsList(aWindow, aOptions);
+    if (!windows.length)
       this.notify(aWindow, aOptions.privateNotMatch);
     else if (this.isPopupWindow(aWindow)) {
       aWindow.gBrowser.selectedTab.setAttribute("_TMP_selectAfterMerege", true);
       // all windows are popups
-      if (!windows.length) {
-        ///XXX - not working at the moment
-        ///this.openNewWindow([aWindow], popUps, aOptions.private);
+      if (!normalWindowsCount) {
+        windows.unshift(aWindow);
+        this.mergePopUpsToNewWindow(windows, aOptions.private);
         return;
       }
-      // we have at least one non-popup windows
-      // merge all windows into the first window in the list
+      // we have at least one non-popup windows, so we can merge all windows
+      // into the first window in the list.
       // when we don't merge popups, allow to merge the current popup window
-      // only if there is only one non-popup window
-      if (!aOptions.skipPopup || windows.length == 1)
-        popUps.unshift(aWindow);
+      // if there is only one non-popup window.
+      if (!aOptions.skipPopup || normalWindowsCount == 1)
+        windows.splice(normalWindowsCount, 0, aWindow);
       let targetWindow = windows.shift();
-      concatTabsAndMerge(targetWindow);
+      this.concatTabsAndMerge(targetWindow, windows);
       targetWindow.focus();
     }
     else
-      concatTabsAndMerge(aWindow);
+      this.concatTabsAndMerge(aWindow, windows);
   },
 
-  /* NOT WORKING - need to try to call swapTabs after delay
-  openNewWindow: function(aWindows, aPopUps, aPrivate) {
-    aWindows = aWindows.concat(aPopUps);
-    let concatTabsAndMerge = function _merge_windows(aEvent) {
-      var win = aEvent.currentTarget;
-      win.removeEventListener("load", _merge_windows, false);
-      let tabsToMove = [];
-      for (let i = 0; i < aWindows.length; i++)
-        tabsToMove = tabsToMove.concat(Array.slice(aWindows[i].gBrowser.tabs));
-      this.swapTabs(win, tabsToMove);
-    }.bind(this);
+  mergePopUpsToNewWindow: function(aWindows, aPrivate) {
     var features = "chrome,all,dialog=no";
     if (TabmixSvc.version(200))
         features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog(aWindows[0].getBrowserURL(), "_blank", features, null);
-    newWindow.addEventListener("load", concatTabsAndMerge, false);
+    let mergePopUps = function _mergePopUps(aEvent) {
+      newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
+      this.concatTabsAndMerge(newWindow, aWindows);
+    }.bind(this);
+    newWindow.addEventListener("SSWindowStateReady", mergePopUps, false);
   },
-  */
+
+  concatTabsAndMerge: function(aTargetWindow, aWindows) {
+    let tabsToMove = [];
+    for (let i = 0; i < aWindows.length; i++)
+      tabsToMove = tabsToMove.concat(Array.slice(aWindows[i].gBrowser.tabs));
+    this.swapTabs(aTargetWindow, tabsToMove);
+  },
 
   // move tabs to a window
   swapTabs: function TMP_swapTabs(aWindow, tabs) {
@@ -274,8 +265,10 @@ let MergeWindows = {
     if (aOptions.skipPopup)
       popUps = [];
 
-    if (aOptions.multiple)
-      return {windows: windows, popUps: popUps};
+    if (aOptions.multiple) {
+      let normalWindowsCount = windows.length;
+      return {windows: windows.concat(popUps), normalWindowsCount: normalWindowsCount};
+    }
 
     return windows[0] || popUps[0] || null;
   },
