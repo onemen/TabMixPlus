@@ -61,13 +61,11 @@ var TabmixTabbar = {
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
       this.setScrollButtonBox(useTabmixButtons, false, true);
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
-        // reset overflow and hide the buttons
-        // vertical button will prevent us from reset the height to one row.
-        // when we get overflow in the other orient then button collapsed will set to false in
-        // the scrollbox event handler
-        tabBar.overflow = false;
+        // temporarily hide vertical scroll button.
+        // visible button can interfere with row height calculation.
+        // remove the collapsed attribut after updateVerticalTabStrip
+        Tabmix.setItem("tabmixScrollBox", "collapsed", true);
       }
-      tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = !tabBar.overflow;
 
       let flowing = tabBar.getAttribute("flowing");
       tabStrip.setAttribute("flowing", flowing);
@@ -85,6 +83,7 @@ var TabmixTabbar = {
         if (tabBar.updateVerticalTabStrip() == "scrollbar")
           tabBar.overflow = true;
       }
+      Tabmix.setItem("tabmixScrollBox", "collapsed", null);
 
       tabBar._positionPinnedTabs();
       if (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
@@ -194,6 +193,8 @@ var TabmixTabbar = {
       tabStrip._scrollButtonUp = !useTabmixButtons ?
           tabStrip._scrollButtonUpLeft : tabStrip._scrollButtonUpRight;
       tabStrip._updateScrollButtonsDisabledState();
+      tabStrip._scrollButtonUp.collapsed = !gBrowser.tabContainer.overflow;
+      tabStrip._scrollButtonDown.collapsed = !gBrowser.tabContainer.overflow;
     }
   },
 
