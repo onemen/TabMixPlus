@@ -427,7 +427,7 @@
               !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
           if (this._inUpdateVerticalTabStrip)
-            return this.gasAttribute("multibar");
+            return this.gatAttribute("multibar");
           this._inUpdateVerticalTabStrip = true;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
