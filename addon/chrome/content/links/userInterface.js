@@ -199,7 +199,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    // focus the address bar on new tab
    var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-       loadBlank;
+       url == "about:blank" || url == "about:newtab" || url == "about:privatebrowsing";
    if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url);
 
