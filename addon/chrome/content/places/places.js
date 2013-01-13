@@ -486,7 +486,7 @@ var TMP_Places = {
                 aTab.setAttribute("reloadcurrent", true);
           }
           else
-             aTab = gBrowser.addTab(bmGroup[i], {skipAnimation: multiple});
+             aTab = gBrowser.addTab(bmGroup[i], {skipAnimation: multiple, dontMove: true});
           let id = bmIds[i];
           if (id && id > -1) {
              aTab.setAttribute("tabmix_bookmarkId", bmIds[i]);

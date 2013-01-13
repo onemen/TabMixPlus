@@ -112,13 +112,9 @@ var tablib = {
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
-    gBrowser.TMP_blockedCallers = ["tabbrowser_SSS_duplicateTab",
-                                   "sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
-                                   "sss_duplicateTab", "ssi_duplicateTab", // ssi_duplicateTab from Firefox 16+
-                                   "ct_SSS_undoCloseTab",
-                                   "TMP_BrowserOpenTab",
-                                   "TMP_PC_openGroup",
-                                   "TMP_addTab"];
+    gBrowser.TMP_blockedCallers = ["sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
+                                   "sss_duplicateTab", "ssi_duplicateTab"]; // ssi_duplicateTab from Firefox 16+
+
 
     // ContextMenu Extensions raplce the original removeTab function
     var _removeTab = "removeTab";
@@ -787,7 +783,7 @@ var tablib = {
       try {
         var newTab, tabState;
         tabState = aTabData ? aTabData.state : Tabmix.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-        newTab = this.addTab("about:blank");
+        newTab = this.addTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
           addNewHistoryEntry();

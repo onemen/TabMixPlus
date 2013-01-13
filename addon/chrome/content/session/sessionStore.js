@@ -544,7 +544,7 @@ var TMP_ClosedTabs = {
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
 
-      var newTab = aTabToRemove || skipAnimation ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
+      var newTab = gBrowser.addTab("about:blank", {skipAnimation: aTabToRemove || skipAnimation, dontMove: true});
       newTab.linkedBrowser.stop();
       // if tababr is hidden when there is only one tab and
       // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveale
@@ -557,14 +557,12 @@ var TMP_ClosedTabs = {
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
-      var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
-      if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {
-         gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
-      }
-      else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
-         let newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
-         gBrowser.moveTabTo(newTab, newTabPos);
-      }
+      var newTabPos, restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
+      if (aWhere == "current" || (aWhere == "original" && restorePosition))
+         newTabPos = Math.min(gBrowser.tabs.length - 1, tabData.pos);
+      else if (aWhere != "end" && Tabmix.getOpenTabNextPref())
+         newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
+      gBrowser.moveTabTo(newTab, newTabPos);
 
       if (aSelectRestoredTab) {
          window.focus();

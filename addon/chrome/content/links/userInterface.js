@@ -156,7 +156,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
 
    var loadBlank = Tabmix.isBlankPageURL(url);
    var _url = loadBlank ? url : "about:blank";
-   var newTab = replaceLastTab ? gBrowser.addTab(_url, {skipAnimation: true}) : gBrowser.addTab(_url);
+   var newTab = gBrowser.addTab(_url, {skipAnimation: replaceLastTab, dontMove: true});
    if (replaceLastTab) {
      newTab.__newLastTab = url;
      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {

@@ -2942,7 +2942,7 @@ try{
       if (lastSelectedIndex < 0 || lastSelectedIndex >= newtabsCount) lastSelectedIndex = 0;
 
       function TMP_addTab() {
-        let newTab = gBrowser.addTab("about:blank", {skipAnimation: true});
+        let newTab = gBrowser.addTab("about:blank", {skipAnimation: true, dontMove: true});
         newTab.setAttribute("tabmix_hide", "true");
         // flag. dont save tab that are in restore phase
         newTab.setAttribute("inrestore", "true");
