@@ -618,14 +618,17 @@ var tablib = {
     // make sure that undoCloseWindow will open the closed window in the current window
     Tabmix.newCode("undoCloseWindow", undoCloseWindow)._replace(
       'window = ss.undoCloseWindow(aIndex || 0);',
-      'if (Tabmix.singleWindowMode) {\
+      '{if (Tabmix.singleWindowMode) {\
         window = Tabmix.getTopWin();\
         let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
-        TabmixSessionManager.notifyClosedWindowsChanged();\
         state = Tabmix.JSON.stringify(state);\
         ss.setWindowState(window, state, false);\
       }\
-      else $&'
+      else $&}'
+    )._replace(
+      'return window;',
+      'TabmixSessionManager.notifyClosedWindowsChanged();\
+       $&'
     ).toCode();
 
     // disable undo closed window when single window mode is on
