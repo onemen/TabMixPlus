@@ -22,42 +22,59 @@ var TMP_tabDNDObserver = {
   },
 
   init: function TMP_tabDNDObserver_init() {
-    this.setDragEvents(true);
+    var tabBar = gBrowser.tabContainer;
+    if (Tabmix.isVersion(170)) {
+      // Determine what tab we're dragging over.
+      // * In tabmix tabs can have diffrent width
+      // * Point of reference is the start of the dragged tab when
+      //   draging left and the end when draging right. If that point
+      //   is before (for dragging left) or after (for dragging right)
+      //   the middle of a background tab, the dragged tab would take that
+      //   tab's position when dropped.
+      Tabmix.newCode("gBrowser.tabContainer._animateTabMove", gBrowser.tabContainer._animateTabMove)._replace(
+        'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
+        'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
+      )._replace(
+        'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
+        'let halfWidth = boxObject.width / 2;\n\
+            let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
+                          getTabShift(tabs[mid], oldIndex);'
+      )._replace(
+        'screenX + boxObject.width < tabCenter',
+        'screenX + halfWidth < tabCenter'
+      )._replace(
+        'newIndex >= oldIndex',
+        'rtl ? $& : draggingRight && newIndex > -1'
+      ).toCode();
+
+      tabBar.useTabmixDragstart = function() {
+        return this.orient == "horizontal" && this.hasAttribute("multibar");
+      }
+      tabBar.useTabmixDnD = function(aEvent) {
+        return this.orient == "horizontal" &&
+          (this.hasAttribute("multibar") ||
+          !TMP_tabDNDObserver.getSourceNode(aEvent.dataTransfer))
+      }
+    }
+    else {
+      tabBar.useTabmixDragstart = function() {
+        return this.orient == "horizontal";
+      }
+      tabBar.useTabmixDnD = function() {
+        return this.orient == "horizontal"
+      }
+    }
+
+    this._dragOverDelay = tabBar._dragOverDelay;
     this.draglink = TabmixSvc.getString("droplink.label");
 
     // without this the Indicator is not visible on the first drag
-    var ind = gBrowser.tabContainer._tabDropIndicator;
-    ind.style.MozTransform = "translate(0px, 0px)";
-  },
-
-  verticalTreeStyleTab: false,
-  setDragEvents: function TMP_setDragEvents(atStart) {
-    // we only set Tabmix events at start if Tree Style Tab is not in vertical mode
-    var useDefaultDnD = false;
-    if ("TreeStyleTabBrowser" in window) {
-      try {
-        var tabbarPosition = Services.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
-      }
-      catch (er) {};
-      useDefaultDnD = tabbarPosition == "left" || tabbarPosition == "right";
-      this.verticalTreeStyleTab = useDefaultDnD;
-    }
-
-    if (atStart && useDefaultDnD) {
-      gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
-      return; // nothing to do here;
-    }
-
-    if ("tabmix_useDefaultDnD" in gBrowser.tabContainer && gBrowser.tabContainer.tabmix_useDefaultDnD == useDefaultDnD) {
-      return; // nothing to do here;
-    }
-    gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
-    this._dragOverDelay = gBrowser.tabContainer._dragOverDelay;
+    tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
   _handleDragover: function (aEvent) {
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.tabmix_useDefaultDnD && tabBar.orient == "horizontal")
+    if (tabBar.useTabmixDnD(aEvent))
       TMP_tabDNDObserver.onDragOver(aEvent);
   },
 
@@ -232,8 +249,7 @@ var TMP_tabDNDObserver = {
     }
 
     if (draggeType == this.DRAG_LINK) {
-      let tab;
-      tab = tabBar._getDragTargetTab(event);
+      let tab = tabBar._getDragTargetTab(event);
       if (tab) {
         if (!this._dragTime)
           this._dragTime = Date.now();

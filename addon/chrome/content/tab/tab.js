@@ -481,9 +481,6 @@ var gTMPprefObserver = {
     if (Tabmix.prefs.prefHasUserValue(pref))
       Tabmix.prefs.clearUserPref(pref)
 
-    if ("TreeStyleTabBrowser" in window)
-      this.OBSERVING.push("extensions.treestyletab.tabbar.position");
-
     if (Tabmix.isVersion(120)) {
       this.OBSERVING.push("browser.tabs.onTop");
       if (!Tabmix.isVersion(130))
@@ -795,9 +792,6 @@ var gTMPprefObserver = {
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
         TMP_LastTab.ReadPreferences();
-        break;
-      case "extensions.treestyletab.tabbar.position":
-        TMP_tabDNDObserver.setDragEvents(false);
         break;
       case "extensions.tabmix.reloadEvery.onReloadButton":
         this.showReloadEveryOnReloadButton();

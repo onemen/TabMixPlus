@@ -816,22 +816,22 @@
       ]]></handler>
 
       <handler event="dragstart" phase="capturing"><![CDATA[
-        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+        if (this.useTabmixDragstart())
           TMP_tabDNDObserver.onDragStart(event);
       ]]></handler>
 
       <handler event="drop" phase="capturing"><![CDATA[
-        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+        if (this.useTabmixDnD(event))
           TMP_tabDNDObserver.onDrop(event);
       ]]></handler>
 
       <handler event="dragend" phase="capturing"><![CDATA[
-        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+        if (this.useTabmixDnD(event))
           TMP_tabDNDObserver.onDragEnd(event);
       ]]></handler>
 
       <handler event="dragexit" phase="capturing"><![CDATA[
-        if (!this.tabmix_useDefaultDnD && this.orient == "horizontal")
+        if (this.useTabmixDnD(event))
           TMP_tabDNDObserver.onDragExit(event);
       ]]></handler>
     </handlers>

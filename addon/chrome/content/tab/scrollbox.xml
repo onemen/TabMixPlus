@@ -36,11 +36,18 @@
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
       </field>
 
+      <constructor>
+        if (Tabmix.isVersion(170)) {
+          this._scrollButtonUp.removeAttribute("onmouseover");
+          this._scrollButtonDown.removeAttribute("onmouseover");
+        }
+      </constructor>
+
       <method name="finishScroll">
         <parameter name="aEvent"/>
         <body><![CDATA[
           let tabBar = gBrowser.tabContainer;
-          if (tabBar.tabmix_useDefaultDnD || tabBar.orient != "horizontal")
+          if (!tabBar.useTabmixDnD(aEvent))
             return;
           TMP_tabDNDObserver.clearDragmark();
           let index, target = aEvent.originalTarget.getAttribute("anonid");
@@ -64,7 +71,7 @@
     <handlers>
       <handler event="dragover"><![CDATA[
         let tabBar = gBrowser.tabContainer;
-        if (!tabBar.tabmix_useDefaultDnD && tabBar.orient == "horizontal")
+        if (tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.onDragOver(event);
       ]]></handler>
 
