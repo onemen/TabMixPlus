@@ -72,9 +72,6 @@ function TMP_TBP_Startup() {
     gTMPprefObserver.updateOldStylePrefs();
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
-    // force-call the observer once, in order to kill new windows faster
-    if (Tabmix.singleWindowMode)
-      TMP_DOMWindowOpenObserver.onObserve(window);
 
     var SM = TabmixSessionManager;
     if (Tabmix.isVersion(200)) {

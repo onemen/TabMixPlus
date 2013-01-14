@@ -138,7 +138,12 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init(aTabContainer) {
-    TMP_DOMWindowOpenObserver.newWindow(window);
+    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+    if (Tabmix.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      tmp.SingleWindowModeUtils.newWindow(window);
+    }
     window.addEventListener("DOMContentLoaded", this, false);
   },
 
