@@ -3401,9 +3401,9 @@ try{
       var tabProperties = tabData.properties;
       if (tabProperties != "")
          TabmixSessionData.setTabProperties(aTab, tabProperties, true);
-      var aBrowser = gBrowser.getBrowserForTab(aTab);
-      aBrowser.stop();
-      var webNav = aBrowser.webNavigation;
+      var browser = gBrowser.getBrowserForTab(aTab);
+      browser.stop();
+      var webNav = browser.webNavigation;
       var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);
       if (savedHistory == null) {
          Tabmix.log("loadOneTab() - tab at index " + aTab._tPos + " failed to load data from the saved session");
@@ -3417,33 +3417,21 @@ try{
          let self = this;
          let needToReload = this.prefBranch.getBoolPref("restore.reloadall") &&
                          savedHistory.currentURI.indexOf("file:") != 0;
-         aBrowser.addEventListener("load", function TMP_onLoad_oneTab(aEvent) {
+         if (needToReload)
+           aTab.setAttribute("_tabmix_load_bypass_cache", true);
+         browser.addEventListener("load", function TMP_onLoad_oneTab(aEvent) {
            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_oneTab, true);
-           self.afterTabLoad(aEvent.currentTarget, needToReload, rdfNodeSession);
+           self.afterTabLoad(aEvent.currentTarget, rdfNodeSession);
          }, true);
-         aBrowser.webNavigation.sessionHistory.getEntryAtIndex(savedHistory.index, true);
-         aBrowser.webNavigation.sessionHistory.reloadCurrentEntry();
+         browser.webNavigation.sessionHistory.getEntryAtIndex(savedHistory.index, true);
+         browser.webNavigation.sessionHistory.reloadCurrentEntry();
       } catch (e) {Tabmix.log("error in loadOneTab gotoIndex ? ");}
    }, // end of "loadOneTab : function(...............)"
 
-   afterTabLoad: function SM_afterTabLoad(aBrowser, aNeedToReload, aNodeSession) {
+   afterTabLoad: function SM_afterTabLoad(aBrowser, aNodeSession) {
       var tab = gBrowser.getTabForBrowser(aBrowser);
       var tabExist = tab && tab.parentNode; // make sure tab was not removed
 
-      if (tabExist && aNeedToReload) {
-         const nsIWebNavigation = Components.interfaces.nsIWebNavigation;
-         let _webNav = aBrowser.webNavigation;
-         try {
-            let sh = _webNav.sessionHistory;
-            if (sh)
-               _webNav = sh.QueryInterface(nsIWebNavigation);
-         } catch (e) {}
-
-         try {
-            const flags = nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY | nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
-            _webNav.reload(flags);
-         } catch (e) {}
-      }
       // don't mark new tab as unread
       var url = aBrowser.currentURI.spec;
       if (url == "about:blank" || url == "about:newtab")

@@ -1166,7 +1166,7 @@
                         <checkbox id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
                                   prefstring="extensions.tabmix.sessions.restore.saveoverwrite" observes="obs_onRestore.overwritewindows"/>
                         <checkbox id="onRestore.concatenate" label="&sm.restore.merge;" prefstring="extensions.tabmix.sessions.restore.concatenate"/>
-                        <checkbox id="onRestore.reloadall" label="&sm.restore.reloadall;" prefstring="extensions.tabmix.sessions.restore.reloadall"/>
+                        <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" prefstring="extensions.tabmix.sessions.restore.reloadall"/>
                       </vbox>
                     </groupbox>
                   </tabpanel>
