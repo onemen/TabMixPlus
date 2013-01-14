@@ -1115,45 +1115,6 @@ var gTMPprefObserver = {
     this.dynamicRules["width"] = ss.cssRules[index];
   },
 
- /**
-  * we don't need this from 2010-09-15 - Minefiled 4.0b7pre
-  * keep it here maybe it fixes some theme ?
-  */
-  replaceBrowserRules: function TMP_PO_replaceBrowserRules() {
-    function browserRules(browserCss) {
-      let tabImage = "";
-      let rulesCount = browserCss.cssRules.length;
-      let oldImage = "> .tab-icon-image";
-      let oldImageRe = new RegExp(oldImage);
-      let newImage = tabImage + "> .tab-icon > .tab-icon-image";
-      let newImageRe = new RegExp(newImage);
-      let oldText = /> \.tab-(text|label)/;
-      let oldTextRe = oldText;
-      let newText = tabImage + "> .tab-text-stack > .tab-text";
-      let newTextRe = new RegExp(newText);
-
-      for (let i = 0; i < rulesCount; ++i) {
-        let rule = browserCss.cssRules[i];
-        let selector = rule.selectorText;
-        if (oldImageRe.test(selector) && !newImageRe.test(selector)) {
-          let cssText = rule.cssText.replace(oldImage, newImage);
-          this.tabStyleSheet.insertRule(cssText, this.tabStyleSheet.cssRules.length);
-        }
-        else if (oldTextRe.test(selector) && !newTextRe.test(selector)) {
-          let cssText = rule.cssText.replace(oldText, newText);
-          this.tabStyleSheet.insertRule(cssText, this.tabStyleSheet.cssRules.length);
-        }
-      }
-    }
-
-    var href = "chrome://browser/skin/browser.css"
-    var styleSheets = this.getStyleSheets(href);
-    if (styleSheets.length)
-      styleSheets.forEach(browserRules, this);
-    else
-      Tabmix.log('unable to find "' + href + '"');
-  },
-
 /*XXX move this and all the code from tabmix dialog to import prefs into mudel file */
   updateOldStylePrefs: function TMP_PO_updateOldStylePrefs() {
     // in 0.3.0.605 we changed tab color from old pref to new pref

@@ -113,9 +113,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     tabsToolbar._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
-  try {
-    gTMPprefObserver.replaceBrowserRules();
-  } catch (ex) {this.assert(ex);}
 
   gTMPprefObserver.setMenuIcons();
 
