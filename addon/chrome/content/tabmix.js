@@ -123,7 +123,12 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
   gTMPprefObserver.miscellaneousRules();
-  delete gTMPprefObserver.tabStyleSheet;
+  if (!gTMPprefObserver._tabStyleSheet ||
+      gTMPprefObserver._tabStyleSheet.href != "chrome://tabmixplus/skin/tab.css") {
+    Tabmix.log("can't load dynamic styles into tabmixplus/skin/tab.css");
+  }
+  gTMPprefObserver._tabStyleSheet = null;
+
   if ("_failedToEnterVerticalMode" in TabmixTabbar) {
     delete TabmixTabbar._failedToEnterVerticalMode;
     gBrowser.tabContainer.mTabstrip._enterVerticalMode();

@@ -863,16 +863,21 @@ var gTMPprefObserver = {
     return styleSheet;
   },
 
+  _tabStyleSheet: null,
+  get tabStyleSheet() {
+    var href = "chrome://tabmixplus/skin/tab.css";
+    // find tab.css to insert our dynamic rules into it.
+    // insert our rules into document.styleSheets[0] cause problem with other extensions
+    if (!this._tabStyleSheet || this._tabStyleSheet.href != href) {
+      let ss = this.getStyleSheets(href, true);
+      this._tabStyleSheet = ss.length ? ss[0] : document.styleSheets[1];
+    }
+    return this._tabStyleSheet;
+  },
+
   dynamicRules: {},
   createColorRules: function TMP_PO_createColorRules() {
-    // find tab.css to insert our color rules into it.
-    // insert our rules into document.styleSheets[0] cause problem with other extensions
-    var ss = this.getStyleSheets("chrome://tabmixplus/skin/tab.css", true)[0];
-    if (!ss)
-      ss = document.styleSheets[document.styleSheets.length-1];
-
-    this.tabStyleSheet = ss;
-
+    var ss = this.tabStyleSheet;
     this.gradients = { };
     this.gradients.body = "-moz-linear-gradient(#colorCode, #colorCode)";
     let bottomBorder = "-moz-linear-gradient(bottom, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
