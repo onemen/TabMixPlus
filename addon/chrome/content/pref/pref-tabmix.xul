@@ -693,7 +693,7 @@
          </tabs>
          <tabpanels flex="1">
           <tabpanel orient="vertical">
-            <groupbox orient="vertical" flex="1">
+            <groupbox align="start" flex="1">
               <hbox align="center">
                 <checkbox id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                           prefstring="extensions.tabmix.mouseOverSelect"/>
@@ -716,8 +716,10 @@
                 <checkbox id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;" prefstring="extensions.tabmix.lockTabSizingOnClose"
                           align="start" style="width: 30em;"/>
               </vbox>
-              <separator class="groove"/>
+            </groupbox>
+            <groupbox align="start" flex="1">
               <!-- drop indicator -->
+              <checkbox id="moveTabOnDragging" label="&moveTabOnDragging.label;" prefstring="extensions.tabmix.moveTabOnDragging"/>
               <hbox id="dropIndicator">
                 <label value="&dropIndicator.label;:"/>
                 <radiogroup id="dropIndicatorType" boolean="true"

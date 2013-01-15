@@ -24,6 +24,7 @@ var TMP_tabDNDObserver = {
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.isVersion(170)) {
+      tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
       // Determine what tab we're dragging over.
       // * In tabmix tabs can have diffrent width
       // * Point of reference is the start of the dragged tab when
@@ -47,13 +48,24 @@ var TMP_tabDNDObserver = {
         'rtl ? $& : draggingRight && newIndex > -1'
       ).toCode();
 
-      tabBar.useTabmixDragstart = function() {
-        return this.orient == "horizontal" && this.hasAttribute("multibar");
+      tabBar.useTabmixDragstart = function(aEvent) {
+        if (TMP_tabDNDObserver.draggedTab) {
+          delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
+          TMP_tabDNDObserver.draggedTab = null;
+        }
+        return this.orient == "horizontal" &&
+          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+          aEvent.altKey);
       }
       tabBar.useTabmixDnD = function(aEvent) {
+        function checkTab(dt) {
+          let tab = TMP_tabDNDObserver.getSourceNode(dt);
+          return !tab || "__tabmixDragStart" in tab;
+        }
+
         return this.orient == "horizontal" &&
-          (this.hasAttribute("multibar") ||
-          !TMP_tabDNDObserver.getSourceNode(aEvent.dataTransfer))
+          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+          checkTab(aEvent.dataTransfer));
       }
     }
     else {
@@ -90,6 +102,7 @@ var TMP_tabDNDObserver = {
     if (!tab)
       return;
 
+    tab.__tabmixDragStart = true;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
     gBrowser.tabContainer.removeShowButtonAttr();
@@ -404,16 +417,17 @@ var TMP_tabDNDObserver = {
   },
 
   onDragEnd: function minit_onDragEnd(aEvent) {
+    if (this.draggedTab) {
+      delete this.draggedTab.__tabmixDragStart;
+      this.draggedTab.removeAttribute("dragged", true);
+      this.draggedTab = null;
+    }
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
     if (dt.mozUserCancelled || dt.dropEffect != "none")
       return;
 
     this.clearDragmark(aEvent);
-    if (this.draggedTab) {
-      this.draggedTab.removeAttribute("dragged", true);
-      this.draggedTab = null;
-    }
 
     // don't allow to open new window in single window mode
     if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
@@ -497,6 +511,7 @@ var TMP_tabDNDObserver = {
 
     this.clearDragmark();
     if (this.draggedTab) {
+      delete this.draggedTab.__tabmixDragStart;
       this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }

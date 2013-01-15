@@ -126,6 +126,8 @@ pref("extensions.tabmix.tabs.closeButtons", 1);
 pref("extensions.tabmix.tabs.closeButtons.onLeft", false);
 pref("extensions.tabmix.tabs.closeButtons.delay", 50);
 
+
+pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);
 pref("extensions.tabmix.enableScrollSwitch", false);
 pref("extensions.tabmix.reversedScroll", false);

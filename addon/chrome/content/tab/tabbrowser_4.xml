@@ -816,7 +816,7 @@
       ]]></handler>
 
       <handler event="dragstart" phase="capturing"><![CDATA[
-        if (this.useTabmixDragstart())
+        if (this.useTabmixDragstart(event))
           TMP_tabDNDObserver.onDragStart(event);
       ]]></handler>
 

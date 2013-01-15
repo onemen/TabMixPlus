@@ -87,6 +87,9 @@ function TM_EMinit() {
     cmSearch.hidden = false;
     cmSearch.setAttribute("prefstring", "browser.search.context.loadInBackground");
   }
+  if (!Tabmix.isVersion(170))
+    $("moveTabOnDragging").hidden = true;
+
   gPrefs =  document.getElementsByAttribute("prefstring", "*");
 
   // disable TMP session manager setting if session manager extension is install

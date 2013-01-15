@@ -836,6 +836,9 @@ var gTMPprefObserver = {
       case "extensions.tabmix.setDefault":
         TabmixTabbar.updateSettings(false);
         break;
+      case "extensions.tabmix.moveTabOnDragging":
+        gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
+        break;
       default:
         break;
     }
