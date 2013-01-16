@@ -4077,8 +4077,7 @@ try{
   },
 
   showNotification: function SM_showNotification() {
-///XXX NEED to update babelzilla
-    var msg = "More tabs restored into hidden groups.";
+    var msg = TabmixSvc.getSMString("sm.tabview.hiddengroups")
     try {
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);

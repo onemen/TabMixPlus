@@ -263,9 +263,8 @@ let MergeWindows = {
 
   notify: function TMP_mergeNotify(aWindow, privateNotMatch) {
     let errorMessage = TabmixSvc.getString('tmp.merge.error');
-    ///XXX update babelzilla
     if (privateNotMatch)
-      errorMessage += ", " + "You can not merge private window with non-private window.";
+      errorMessage += ", " + TabmixSvc.getString('tmp.merge.private');
     const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
     let notificationBox = aWindow.gBrowser.getNotificationBox();
     let name = "mergeWindows-notification";

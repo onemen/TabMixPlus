@@ -243,8 +243,7 @@
                 <!-- Look App Tabs -->
                 <checkbox id="lockAppTabs" align="center" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs"/>
                 <spacer style="height: 1em;"/>
-<!-- NEED to update babelzilla -->
-                <checkbox id="updateLockState" align="center" label="Apply changes to open tabs"
+                <checkbox id="updateLockState" align="center" label="&updateLockState.label;"
                           prefstring="extensions.tabmix.updateOpenedTabsLockState"/>
             </groupbox>
 <!-- ======================================================== -->
