@@ -274,9 +274,9 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabrEvents = ["SSTabRestoring", "SSTabClosing",
+    this._tabEvents = ["SSTabRestoring", "SSTabClosing",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
-    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, true);
+    this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -963,7 +963,7 @@ var TMP_eventListener = {
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
     }
 
-    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, false);
+    this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
