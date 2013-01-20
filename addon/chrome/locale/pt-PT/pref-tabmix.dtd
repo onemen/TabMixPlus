@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Bloquear separadores">
 <!ENTITY lockNewTabs.label "Bloquear novos separadores">
 <!ENTITY lockAppTabs.label "Bloquear separadores de aplicações">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Abrir separadores de:">
 <!ENTITY openBookmarks.label "Marcadores">
 <!ENTITY openBMKGroups.label "Grupos de marcadores">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espaços extra em ambos os lados">
 <!ENTITY tabBarSpace.tooltip "Para clicar e deixar algo na barra de separadores">
 <!ENTITY tabbar.label "Ocultar barra de separadores apenas quando um separador está aberto">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Indicador">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo embutido">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "E separadores">
 <!ENTITY sm.restore.closedWinList "Guardar janelas na lista de janelas encerradas">
 <!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
-<!ENTITY sm.restore.reloadall "Recarregar todos os separadores">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
 <!ENTITY sm.preserve.options "Preservar separadores:">
 <!ENTITY sm.preserve.history "Histórico">

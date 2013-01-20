@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Tabbladen op slot zetten">
 <!ENTITY lockNewTabs.label "Nieuwe tabbladen op slot zetten">
 <!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Tabbladen openen vanuit:">
 <!ENTITY openBookmarks.label "Bladwijzers">
 <!ENTITY openBMKGroups.label "Groep(en) bladwijzers">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Extra ruimte aan beide zijden">
 <!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
 <!ENTITY tabbar.label "Tabbladenbalk verbergen als maar één tabblad open staat">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Indicator laten vallen">
 <!ENTITY dropIndicator-native.label "Logische stijl">
 <!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "ook tabbladen overschrijven">
 <!ENTITY sm.restore.closedWinList "Vensters in lijst met gesloten vensters bewaren">
 <!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
-<!ENTITY sm.restore.reloadall "Alle tabbladen vernieuwen">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "鎖定分頁">
 <!ENTITY lockNewTabs.label "鎖定新分頁">
 <!ENTITY lockAppTabs.label "鎖定應用程式分頁">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
 <!ENTITY openBookmarks.label "書籤">
 <!ENTITY openBMKGroups.label "書籤群組">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "兩側額外空間">
 <!ENTITY tabBarSpace.tooltip "當分頁數量很多時，方便滑鼠拖曳或點擊分頁標籤列之用">
 <!ENTITY tabbar.label "僅有一個分頁時隱藏分頁標籤列">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "分頁標籤拖曳指標">
 <!ENTITY dropIndicator-native.label "原始樣式">
 <!ENTITY dropIndicator-builtin.label "內建樣式">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "及分頁">
 <!ENTITY sm.restore.closedWinList "先備份目前的瀏覽狀態至 [已關閉視窗列表]">
 <!ENTITY sm.restore.merge "自動合併所有視窗">
-<!ENTITY sm.restore.reloadall "重新載入所有分頁">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "當關閉啟動時還原功能">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Відкривати в нових вкладках:">
 <!ENTITY openBookmarks.label "Закладки">
 <!ENTITY openBMKGroups.label "Групи закладок">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Порожні поля по краях панелі вкладок">
 <!ENTITY tabBarSpace.tooltip "Порожні поля для перетаскування вкладок по панелі й клацань мишею">
 <!ENTITY tabbar.label "Ховати панель вкладок, якщо відкрита тільки одна вкладка">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Індикатор перетаскування">
 <!ENTITY dropIndicator-native.label "Вбудований стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль TabMix">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "... і вкладки">
 <!ENTITY sm.restore.closedWinList "Зберігати вікна в списку закритих">
 <!ENTITY sm.restore.merge "Об&apos;єднувати декілька вікон в одне">
-<!ENTITY sm.restore.reloadall "Перезавантажувати всі вкладки">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "Зберігати наступні параметри вкладок:">
 <!ENTITY sm.preserve.history "Журнал">

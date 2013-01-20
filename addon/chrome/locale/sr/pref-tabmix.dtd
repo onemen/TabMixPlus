@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Закључај језичке">
 <!ENTITY lockNewTabs.label "Закључај нове језичке">
 <!ENTITY lockAppTabs.label "Закључани App језичци">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Отварај картице из:">
 <!ENTITY openBookmarks.label "обележивача">
 <!ENTITY openBMKGroups.label "група обележивача">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Додатни простор са обе стране">
 <!ENTITY tabBarSpace.tooltip "За клик и испуштање на линију картица">
 <!ENTITY tabbar.label "Сакриј линију картица кад је отворена само једна картица">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Индикатор испуштања">
 <!ENTITY dropIndicator-native.label "Изворни стил">
 <!ENTITY dropIndicator-builtin.label "Уграђени стил">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "и картицa">
 <!ENTITY sm.restore.closedWinList "Сачувај прозоре у списку затворених прозора">
 <!ENTITY sm.restore.merge "Споји више прозора у један">
-<!ENTITY sm.restore.reloadall "Поново учитај све картице">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Када се не враћају картице при покретању">
 <!ENTITY sm.preserve.options "За картице очувај:">
 <!ENTITY sm.preserve.history "Историјат">

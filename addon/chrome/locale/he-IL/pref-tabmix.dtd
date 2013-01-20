@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "נעל לשוניות">
 <!ENTITY lockNewTabs.label "נעל לשוניות חדשות">
 <!ENTITY lockAppTabs.label "נעל לשוניות יישום">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "פתח לשוניות מ:">
 <!ENTITY openBookmarks.label "סימניות">
 <!ENTITY openBMKGroups.label "קבוצת סימניות">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "רווח נוסף משני הצדדים">
 <!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">
 <!ENTITY tabbar.label "החבא את סרגל הלשוניות כשיש רק לשונית אחת פתוחה">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "ולשוניות">
 <!ENTITY sm.restore.closedWinList "שמור חלון ברשימת חלונות שנסגרו">
 <!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
-<!ENTITY sm.restore.reloadall "טען מחדש את כל הלשוניות">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "שימור לשוניות:">
 <!ENTITY sm.preserve.history "היסטוריה">

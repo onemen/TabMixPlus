@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Bloquear abas">
 <!ENTITY lockNewTabs.label "Bloquear novas abas">
 <!ENTITY lockAppTabs.label "Bloquear abas de aplicativos">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Abrir novas abas a partir de:">
 <!ENTITY openBookmarks.label "Favoritos">
 <!ENTITY openBMKGroups.label "Grupos de favoritos">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espaço adicional em ambos os lados">
 <!ENTITY tabBarSpace.tooltip "Para clicar e arrastar alguma coisa na barra de abas">
 <!ENTITY tabbar.label "Ocultar a barra de abas se houver apenas uma aba">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Indicação ao soltar aba">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo interno">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "E abas">
 <!ENTITY sm.restore.closedWinList "Salvar janelas na lista de janelas fechadas">
 <!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
-<!ENTITY sm.restore.reloadall "Recarregar todas as abas">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
 <!ENTITY sm.preserve.options "Preservar abas:">
 <!ENTITY sm.preserve.history "Histórico">

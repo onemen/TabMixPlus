@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Bloca les pestanyes">
 <!ENTITY lockNewTabs.label "Bloca les pestanyes noves">
 <!ENTITY lockAppTabs.label "Bloca les pestanyes d&apos;aplicació">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Obre pestanyes des de:">
 <!ENTITY openBookmarks.label "Adreces d&apos;interès">
 <!ENTITY openBMKGroups.label "Grups d&apos;adreces d&apos;interès">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espai addicional a tots dos costats">
 <!ENTITY tabBarSpace.tooltip "Per poder-hi fer clic i deixar anar pestanyes a la barra de pestanyes">
 <!ENTITY tabbar.label "Amaga la barra quan només hi hagi una pestanya oberta">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Indicador de deixar anar">
 <!ENTITY dropIndicator-native.label "Estil nadiu">
 <!ENTITY dropIndicator-builtin.label "Estil integrat">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "I les pestanyes">
 <!ENTITY sm.restore.closedWinList "Desa les finestres a la llista de finestres tancades">
 <!ENTITY sm.restore.merge "Uneix diverses finestres en una">
-<!ENTITY sm.restore.reloadall "Torna a carregar totes les pestanyes">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Quan no es restaura a l&apos;inici">
 <!ENTITY sm.preserve.options "Conserva les pestanyes:">
 <!ENTITY sm.preserve.history "Historial">

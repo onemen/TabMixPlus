@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Zamknout panely">
 <!ENTITY lockNewTabs.label "Zamknout nové panely">
 <!ENTITY lockAppTabs.label "Zamknout panely aplikací">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Otevřít panely z(e):">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openBMKGroups.label "Skupina záložek">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Místo navíc na obou stranách">
 <!ENTITY tabBarSpace.tooltip "Pro umístění něčeho na lištu s panely v případě velkého množství panelů">
 <!ENTITY tabbar.label "Schovat lištu panelů, je-li otevřen jen jeden panel">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavný styl">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "A panely">
 <!ENTITY sm.restore.closedWinList "Uložit okna do seznamu zavřených oken">
 <!ENTITY sm.restore.merge "Sloučit hromadná okna do jednoho">
-<!ENTITY sm.restore.reloadall "Obnovit všechny panely">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Pokud nedojde k obnově po startu">
 <!ENTITY sm.preserve.options "Uchovat panely:">
 <!ENTITY sm.preserve.history "Historie">

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Блокирование вкладок">
 <!ENTITY lockNewTabs.label "Блокировать новые вкладки">
 <!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Открывать в новых вкладках:">
 <!ENTITY openBookmarks.label "Закладки">
 <!ENTITY openBMKGroups.label "Группы закладок">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Пустые поля по краям панели вкладок">
 <!ENTITY tabBarSpace.tooltip "Пустые поля для перетаскивания вкладок по панели и щелчков мышью">
 <!ENTITY tabbar.label "Прятать панель вкладок, если открыта только одна вкладка">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Индикатор перетаскивания">
 <!ENTITY dropIndicator-native.label "Встроенный стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "... и вкладки">
 <!ENTITY sm.restore.closedWinList "Сохранять окна в списке закрытых">
 <!ENTITY sm.restore.merge "Объединять несколько окон в одно">
-<!ENTITY sm.restore.reloadall "Обновлять все вкладки">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">

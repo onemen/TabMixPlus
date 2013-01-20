@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "باز کردن تب ها از">
 <!ENTITY openBookmarks.label "نشانه گذاری شده ها">
 <!ENTITY openBMKGroups.label "گروه های نشانه گذاری شده ها">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "فضای اضافی در دو طرف">
 <!ENTITY tabBarSpace.tooltip "برای کلیک و رها کردن چیزی روی نوار تب ها">
 <!ENTITY tabbar.label "وقتی فقط یک پنجره باز است نوار تب ها را مخفی کن">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "رها کردن نشانگر">
 <!ENTITY dropIndicator-native.label "استایل اصلی">
 <!ENTITY dropIndicator-builtin.label "استایل از قبل تعریف شده">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "فعلی">
 <!ENTITY sm.restore.closedWinList "پنجره های موجود در لیست پنجره های بسته شده را ذخیره کن">
 <!ENTITY sm.restore.merge "ترکیب کردن پنجره های">
-<!ENTITY sm.restore.reloadall "بازگذاری مجدد مجدد تمام تب ها">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "نگاه داشتن تب ها:">
 <!ENTITY sm.preserve.history "تاریخچه">

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Kateatu fitxak">
 <!ENTITY lockNewTabs.label "Kateatu fitxa berriak">
 <!ENTITY lockAppTabs.label "Kateatu aplikazioen fitxak">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Ireki fitxak hortik:">
 <!ENTITY openBookmarks.label "Lastermarkak">
 <!ENTITY openBMKGroups.label "Taldekako Lastermarkak">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Extra spaces on both sides">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
 <!ENTITY tabbar.label "Hide tab bar when only one tab is open">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "And tabs">
 <!ENTITY sm.restore.closedWinList "Save windows in closed windows list">
 <!ENTITY sm.restore.merge "Join multiple windows into one">
-<!ENTITY sm.restore.reloadall "Reload all tabs">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "Preserve Tabs:">
 <!ENTITY sm.preserve.history "History">

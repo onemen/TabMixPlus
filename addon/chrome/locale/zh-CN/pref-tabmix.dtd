@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "锁定标签页">
 <!ENTITY lockNewTabs.label "锁定新标签页">
 <!ENTITY lockAppTabs.label "锁定应用程序标签页">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
 <!ENTITY openBookmarks.label "书签">
 <!ENTITY openBMKGroups.label "书签群组">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "两侧额外空间">
 <!ENTITY tabBarSpace.tooltip "是用于在标签栏点击或拖放某项">
 <!ENTITY tabbar.label "只打开单个标签页时隐藏标签栏">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "拖放指示器">
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "和标签页">
 <!ENTITY sm.restore.closedWinList "把关闭的窗口保存在已关闭的窗口列表中">
 <!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
-<!ENTITY sm.restore.reloadall "重新载入所有标签页">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
 <!ENTITY sm.preserve.options "保持标签页的：">
 <!ENTITY sm.preserve.history "历史">

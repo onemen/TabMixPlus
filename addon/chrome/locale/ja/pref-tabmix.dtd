@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "タブのロック">
 <!ENTITY lockNewTabs.label "新しいタブのロック">
 <!ENTITY lockAppTabs.label "ピン留めしたタブのロック">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
 <!ENTITY openBMKGroups.label "ブックマークグループ">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "両端にスペースを表示">
 <!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">
 <!ENTITY tabbar.label "タブが一つしか開いていない場合、タブバーを隠す">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "ドロップインジケータ">
 <!ENTITY dropIndicator-native.label "既定のスタイル">
 <!ENTITY dropIndicator-builtin.label "Tab Mix Plus のスタイル">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "タブも上書きする">
 <!ENTITY sm.restore.closedWinList "上書きされたウィンドウを[最近閉じたウィンドウ]リストに保存する">
 <!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
-<!ENTITY sm.restore.reloadall "すべてのタブを再読み込み">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
 <!ENTITY sm.preserve.options "タブで状態保持する項目:">
 <!ENTITY sm.preserve.history "履歴">

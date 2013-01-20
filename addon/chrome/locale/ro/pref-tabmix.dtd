@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "File blocate">
 <!ENTITY lockNewTabs.label "Blochează filele noi">
 <!ENTITY lockAppTabs.label "Blochează filele cu aplicații">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Deschide filele din:">
 <!ENTITY openBookmarks.label "Semne de carte">
 <!ENTITY openBMKGroups.label "Grupuri de semne de carte">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Spațiu suplimentar la ambele margini">
 <!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau lăsarea obiectelor pe bara de file">
 <!ENTITY tabbar.label "Ascunde bara de file numai când există o singură filă deschisă">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Indicator de fixare">
 <!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
 <!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "și filele existente">
 <!ENTITY sm.restore.closedWinList "Salvează ferestrele în lista ferestrelor închise">
 <!ENTITY sm.restore.merge "Combină mai multe ferestre într-una singură">
-<!ENTITY sm.restore.reloadall "Reîncarcă toate filele">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
 <!ENTITY sm.preserve.options "Memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
