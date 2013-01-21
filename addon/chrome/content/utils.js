@@ -104,6 +104,11 @@ var Tabmix = {
     return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
   },
 
+  get defaultPrefs() {
+    delete this.defaultPrefs;
+    return this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix.");
+  },
+
   isVersion: function(aVersionNo) {
     return TabmixSvc.version(aVersionNo);
   },

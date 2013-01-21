@@ -52,7 +52,7 @@
 
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
-      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic"
+      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"
          oncommand="Tabmix.openOptionsDialog(-1);"/>
       <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
          <menupopup id="tm-sessionmanager_menu"

@@ -1772,6 +1772,13 @@ try {
       Tabmix.prefs.clearUserPref("tabMaxWidth");
     }
 } catch (ex) {Tabmix.assert(ex);}
+    // 2013-01-21 - lock hideIcons to true in mac
+    if (Services.appinfo.OS == "Darwin" && !Tabmix.prefs.prefIsLocked("hideIcons")) {
+      Tabmix.defaultPrefs.setBoolPref("hideIcons", true);
+      if (Tabmix.prefs.prefHasUserValue("hideIcons"))
+        Tabmix.prefs.clearUserPref("hideIcons");
+      Tabmix.prefs.lockPref("hideIcons");
+    }
 
     // verify valid value
     if (Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
