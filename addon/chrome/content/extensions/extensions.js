@@ -48,14 +48,8 @@ var TMP_extensionsCompatibility = {
     }
 
     if ("com" in window && com.morac &&
-        com.morac.gSessionManagerSessionBrowser ||
-        "gSessionManager" in window) {
+        com.morac.SessionManagerAddon) {
       Tabmix.extensions.sessionManager = true;
-      // temp fix
-      Tabmix.gSessionPath = TabmixSessionManager.gSessionPath;
-      Tabmix.SessionManager = TabmixSessionManager;
-      Tabmix.SessionData = TabmixSessionData;
-      Tabmix.convertSession = TabmixConvertSession
     }
 
     try {

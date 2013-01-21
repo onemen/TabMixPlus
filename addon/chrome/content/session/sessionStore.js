@@ -631,10 +631,7 @@ var TabmixConvertSession = {
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
-      if (typeof com.morac.SessionManagerAddon == "object")
-        com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
-      else
-        com.morac.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
+      com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
    },
 
    confirm: function cs_confirm(aMsg, aCallBack) {
@@ -792,10 +789,8 @@ var TabmixConvertSession = {
 
   sessionManagerOptions: function SM_sessionManagerOptions() {
     if ("com" in window && com.morac &&
-        com.morac.gSessionManager) {
-      com.morac.gSessionManager.openOptions();
+        com.morac.SessionManagerAddon) {
+      com.morac.SessionManagerAddon.gSessionManager.openOptions();
     }
-    else
-      gSessionManager.openOptions();
   }
 }

@@ -4118,7 +4118,7 @@ try{
 
 /**
  * add backward compatibility getters to some of the main object/function/variable
- * that we chaged from version 0.3.8.5pre.110123a
+ * that we changed from version 0.3.8.5pre.110123a
  * we only add this getters to objects the arn't in the name space
  */
 Tabmix.backwardCompatibilityGetter(window, "SessionData", "TabmixSessionData");
