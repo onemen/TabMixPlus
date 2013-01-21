@@ -127,10 +127,8 @@ var TMP_Places = {
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
-        'if (bookMarkId) { \
-           var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
-           tab.setAttribute("tabmix_bookmarkId", bookMarkId); \
-         } \
+        'var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
+         TMP_Places.setTabtitle(tab, url, bookMarkId); \
          $1$2'
       ).toCode();
 
@@ -470,12 +468,13 @@ var TMP_Places = {
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     for (i = 0; i < bmGroup.length ; i++) {
+       let url = bmGroup[i];
        try { // bug 300911
           if (i < reuseTabs.length) {
              aTab = reuseTabs[i];
              let browser = gBrowser.getBrowserForTab(aTab);
-             browser.userTypedValue = bmGroup[i];
-             browser.loadURI(bmGroup[i]);
+             browser.userTypedValue = url;
+             browser.loadURI(url);
              // setTabTitle will call TabmixTabbar.updateScrollStatus for us
              aTab.collapsed = false;
              // reset visited & flst_id attribute
@@ -486,22 +485,9 @@ var TMP_Places = {
                 aTab.setAttribute("reloadcurrent", true);
           }
           else
-             aTab = gBrowser.addTab(bmGroup[i], {skipAnimation: multiple, dontMove: true});
-          let id = bmIds[i];
-          if (id && id > -1) {
-             aTab.setAttribute("tabmix_bookmarkId", bmIds[i]);
-             try {
-                if (this._titlefrombookmark) {
-                   aTab.label = PlacesUtils.bookmarks.getItemTitle(id);
-                   aTab.crop = "center";
-                   gBrowser._tabAttrModified(aTab);
-                   if (aTab.selected)
-                      gBrowser.updateTitlebar();
-                   if (!aTab.hasAttribute("faviconized"))
-                     aTab.removeAttribute("width");
-                }
-             } catch (ex) { }
-          }
+             aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
+
+          this.setTabtitle(aTab, url, bmIds[i]);
        } catch (er) {  }
 
        if (!tabToSelect)
@@ -539,6 +525,25 @@ var TMP_Places = {
        gBrowser.removeTab(removeTabs.pop());
     }
 
+  },
+
+  setTabtitle: function TMP_PC_setTabtitle(aTab, aUrl, aID) {
+    if (!aTab || !aTab.parentNode)
+      return;
+    if (aID && aID > -1)
+       aTab.setAttribute("tabmix_bookmarkId", aID);
+    if (!this._titlefrombookmark)
+      return;
+    let title = this.getTitleFromBookmark(aUrl, aTab.label, -1, aTab);
+    if (title != aTab.label) {
+      aTab.label = title;
+      aTab.crop = "center";
+      gBrowser._tabAttrModified(aTab);
+      if (aTab.selected)
+        gBrowser.updateTitlebar();
+      if (!aTab.hasAttribute("faviconized"))
+        aTab.removeAttribute("width");
+    }
   },
 
    getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aItemId, aTab) {
