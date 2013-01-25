@@ -981,13 +981,19 @@ var gTMPprefObserver = {
     this.dynamicRules["tabmix-firstTabInRow"] = ss.cssRules[index];
 
     // for ColorfulTabs 8.0+
+    // add new rule to adjust selected tab bottom margin
+    // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
-      let newTab = gBrowser.addTab("about:blank");
-      let padding = parseInt(window.getComputedStyle(newTab, null).paddingBottom) || 0;
+      let padding = parseInt(window.getComputedStyle(gBrowser.tabs[0], null).paddingBottom) || 0;
       let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
-      ss.insertRule(newRule, ss.cssRules.length);
-      gBrowser.removeTab(newTab);
+      let index = ss.insertRule(newRule, ss.cssRules.length);
+      newRule = ss.cssRules[index];
+      gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
+        gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
+        let padding = parseInt(window.getComputedStyle(aEvent.target, null).paddingBottom) || 0;
+        newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
+      }, true);
     }
   },
 
