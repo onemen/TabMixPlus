@@ -216,7 +216,7 @@ var TMP_tabDNDObserver = {
     }
     // if we don't set effectAllowed to none then the drop indicator stay
     else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
-               gBrowser.tabs[0].pinned && event.screenX < gBrowser.tabs[0].boxObject.screenX) {
+               gBrowser.tabs[0].pinned && event.screenX > gBrowser.tabs[0].boxObject.screenX) {
       canDrop = false;
       dt.effectAllowed = "none";
     }
