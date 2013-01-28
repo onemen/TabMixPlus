@@ -134,6 +134,10 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   try {
     TMP_LastTab.init();
   } catch (ex) {this.assert(ex);}
+
+  // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
+  // in gBrowser.tabContainer._positionPinnedTabs
+  TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
 }
 
 var TMP_eventListener = {

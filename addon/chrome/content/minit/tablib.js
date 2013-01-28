@@ -269,13 +269,21 @@ var tablib = {
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("-moz-margin-start", width + "px", null);' +
         '    }' +
-        '    if (Tabmix.isVersion(170))' +
+        '    if (Tabmix.isVersion(170)) {' +
         '      this.style.MozPaddingStart = "";' +
+        '      TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
+        '    }' +
         '    else' +
         '      this.style.MozMarginStart = "";' +
         '    this.mTabstrip.setFirstTabInRow();' +
         '  }' +
         '  else $&'
+      )._replace(
+        /(\})(\)?)$/,
+        'if (Tabmix.isVersion(170) && TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
+        '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
+        '}' +
+        '$1$2'
       ).toCode();
     }
 

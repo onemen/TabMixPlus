@@ -15,11 +15,7 @@ var TMP_tabDNDObserver = {
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
-
-  get paddingLeft() {
-    delete this.paddingLeft;
-    return this.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
-  },
+  paddingLeft: 0,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -660,21 +656,16 @@ var TMP_tabDNDObserver = {
       let scrollRect = gBrowser.tabContainer.mTabstrip.scrollClientRect;
       let rect = gBrowser.tabContainer.getBoundingClientRect();
       let scrollMode = TabmixTabbar.scrollButtonsMode;
-      let paddingLeft = !gBrowser.tabContainer.overflow ||
-                        scrollMode == TabmixTabbar.SCROLL_BUTTONS_HIDDEN ||
-                        scrollMode == TabmixTabbar.SCROLL_BUTTONS_MULTIROW ||
-                        (scrollMode == TabmixTabbar.SCROLL_BUTTONS_RIGHT &&
-                         !Tabmix.prefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
-      minMargin = scrollRect.left - rect.left - paddingLeft;
+      minMargin = scrollRect.left - rect.left - this.paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
       if (!ltr)
          [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
 
       tabRect = gBrowser.tabs[index].getBoundingClientRect();
       if (ltr)
-         newMargin = tabRect.left - rect.left  + (left_right == 1 ? tabRect.width + this.LinuxMarginEnd: 0) - paddingLeft;
+         newMargin = tabRect.left - rect.left  + (left_right == 1 ? tabRect.width + this.LinuxMarginEnd: 0) - this.paddingLeft;
       else
-         newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0);
+         newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0) - this.paddingLeft;
 
 ///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
 ///XXX look like the same is happen with Firefox
