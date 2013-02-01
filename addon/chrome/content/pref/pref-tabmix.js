@@ -578,7 +578,8 @@ var TM_Options = {
 // other settings not in the main option dialog
 var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
                   "filetype","sessions.menu.showext","disableIncompatible","hideIcons",
-                  "styles.currentTab","styles.unreadTab","styles.otherTab","styles.progressMeter"];
+                  "styles.currentTab","styles.unloadedTab",
+                  "styles.unreadTab","styles.otherTab","styles.progressMeter"];
 
 function TM_defaultSetting () {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
