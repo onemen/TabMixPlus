@@ -319,7 +319,7 @@ var tablib = {
         /var isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
         '    let tab, tabs = this.tabbrowser.visibleTabs;' +
-        '    for (let t = aTab._tPos+1; t < this.childNodes.length; t++) {' +
+        '    for (let t = aTab._tPos+1, l = this.childNodes.length; t < l; t++) {' +
         '      if (tabs.indexOf(this.childNodes[t]) > -1) {' +
         '        tab = this.childNodes[t];' +
         '        break;' +
@@ -327,7 +327,7 @@ var tablib = {
         '    }' +
         '    if (tab && !tab.pinned && !tab.collapsed) {' +
         '      let tabWidth = aTab.getBoundingClientRect().width + "px";' +
-        '      tab.style.setProperty("width",tabWidth,"important");' +
+        '      tab.style.setProperty("width", tabWidth, "important");' +
         '      tab.removeAttribute("width");' +
         '      this._hasTabTempWidth = true;' +
         '      this.tabbrowser.addEventListener("mousemove", this, false);' +
@@ -337,17 +337,20 @@ var tablib = {
         '  }' +
         '  if (!this.TMP_inSingleRow(tabs))' +
         '    return;' +
-        '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
+        (Tabmix.isVersion(210) ? "" : '  this._tabDefaultMaxWidth = this.mTabMaxWidth;') +
         '  $&'
       ).toCode();
 
+      if (!Tabmix.isVersion(210))
       Tabmix.newCode("gBrowser.tabContainer._expandSpacerBy", gBrowser.tabContainer._expandSpacerBy)._replace(
         '{',
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
       ).toCode();
 
+      var newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
+                                              'this._usingClosingTabsSpacer';
       Tabmix.newCode("gBrowser.tabContainer._unlockTabSizing", gBrowser.tabContainer._unlockTabSizing)._replace(
-        '{','{var updateScrollStatus = this._usingClosingTabsSpacer || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+        '{','{var updateScrollStatus = ' + newString + ' || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
         /(\})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
