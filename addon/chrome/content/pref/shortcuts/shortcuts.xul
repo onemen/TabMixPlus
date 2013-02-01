@@ -31,9 +31,6 @@
     if (!Tabmix.ShortcutsInitialized) {
       let sc = Tabmix.shortcutsLabels = {};
       sc.dupTabToWin = "&clicktab.duplicatetabw;";
-      sc.togglePinTab =
-        document.getElementById("context_pinTab").getAttribute("label") + "/" +
-        document.getElementById("context_unpinTab").getAttribute("label");
       sc.protecttab = "&clicktab.protecttab;";
       sc.locktab = "&clicktab.locktab;";
       sc.freezetab = "&clicktab.freezetab;";

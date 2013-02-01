@@ -74,6 +74,9 @@ let Shortcuts = {
 
     // update keys initial value and label
     let labels = aWindow.Tabmix.shortcutsLabels;
+    labels.togglePinTab =
+        aWindow.document.getElementById("context_pinTab").getAttribute("label") + "/" +
+        aWindow.document.getElementById("context_unpinTab").getAttribute("label");
     for (let [key, keyData] in Iterator(this.keys)) {
       keyData.value = keyData.default || "";
       if (key in labels)
