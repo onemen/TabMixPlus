@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Об&apos;єднання тільки поточного вікна з останнім активним">
 <!ENTITY mergePopups.label "Також поєднувати спливаючі вікна">
 <!ENTITY popupNextToOpener.label "Розміщати спливаючі вікна поруч із вікнами, які їх відкривали">
-<!ENTITY slideshow.label "За допомогою F8 циклічно перегортати вкладки кожні">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">

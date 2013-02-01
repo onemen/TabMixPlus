@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Merge only current window with last focused">
 <!ENTITY mergePopups.label "Also take popup windows">
 <!ENTITY popupNextToOpener.label "Place popups next to their openers">
-<!ENTITY slideshow.label "Pressing F8 rotates tabs every">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Lataa välilehti uudelleen riippumatta sen osoitteesta">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">

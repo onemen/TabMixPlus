@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Sloučit současné okno s naposledy používaným">
 <!ENTITY mergePopups.label "Přidat také vyskakovací okna">
 <!ENTITY popupNextToOpener.label "Umístit vyskakovací okna vedle jejich otvíračů">
-<!ENTITY slideshow.label "Klávesa F8 přepíná mezi panely každých">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Zakázat animaci otevírání či zavírání panelu">
 <!ENTITY reloadEvery.matchAddress.label "Znovu načíst panel bez ohledu na adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku Obnovit každých XY sekund/minut u tlačítka Obnovit">

@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Slå endast ihop nuvarande fönster med det senast fokuserade">
 <!ENTITY mergePopups.label "Inkludera popup-fönster">
 <!ENTITY popupNextToOpener.label "Placera popup-fönster intill källsidan">
-<!ENTITY slideshow.label "F8 cirkulerar flik var">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">

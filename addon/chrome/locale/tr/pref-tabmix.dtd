@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Yalnızca geçerli pencereyi önceki pencereyle birleştir">
 <!ENTITY mergePopups.label "Açılır pencereleri de içer">
 <!ENTITY popupNextToOpener.label "Açılır pencereleri açanın sağına yerleştir">
-<!ENTITY slideshow.label "F8&apos;e basınca her">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Sekme aç/kapa animasyonunu kaldır">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Tazele butonunda otomatik tazeleme menüsünü göster">

@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Σύμπτυξη μόνο του τρέχοντος παραθύρου με το πιο πρόσφατα εστιασμένο">
 <!ENTITY mergePopups.label "Σύμπτυξη και των αναδυόμενων παραθύρων">
 <!ENTITY popupNextToOpener.label "Τοποθέτηση αναδυόμενων δίπλα από τις πηγές τους">
-<!ENTITY slideshow.label "Πατώντας το F8 περιστρέφονται οι καρτέλες κάθε">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Απενεργοποίηση εφέ ανοίγματος/κλεισίματος καρτέλας">
 <!ENTITY reloadEvery.matchAddress.label "Ανανέωση καρτέλας άσχετα με τη διεύθυνση της.">
 <!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">

@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "ترکیب پنجره فعلی با آخرین پنجره">
 <!ENTITY mergePopups.label "همراه با پنجره های باز شدنی">
 <!ENTITY popupNextToOpener.label "قرار دادن پنجره های باز شدنی در کنار پنجره اصلی آنها">
-<!ENTITY slideshow.label "ثانیه می چرخاند">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">

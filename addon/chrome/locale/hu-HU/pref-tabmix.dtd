@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Csak az aktuális balak összefűzése az utoljára kiválasztottal">
 <!ENTITY mergePopups.label "Előugró ablakokat is">
 <!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
-<!ENTITY slideshow.label "Az F8 gomb lenyomásával a lapok körkapcsolása">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
 <!ENTITY reloadEvery.matchAddress.label "Lapok újratöltése a címtől függetlenül">
 <!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">

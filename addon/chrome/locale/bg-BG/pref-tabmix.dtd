@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Обединяване само на текущия и на последно активния прозорци">
 <!ENTITY mergePopups.label "Обединяване също така и на изскачащи прозорци">
 <!ENTITY popupNextToOpener.label "Разполагане на изскачащите прозорци непосредствено до подпрозорците, които са ги отворили">
-<!ENTITY slideshow.label "Натискането на F8 прелиства циклично подпрозорците на всеки">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Изключване на анимацията при отваряне/затваряне на подпрозорци">
 <!ENTITY reloadEvery.matchAddress.label "Презареждане на подпрозорец независимо от адреса му">
 <!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">

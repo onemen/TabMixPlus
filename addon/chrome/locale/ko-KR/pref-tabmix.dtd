@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "현재 창과 마지막으로 활성화된 창만 합치기">
 <!ENTITY mergePopups.label "팝업 창도 합치기">
 <!ENTITY popupNextToOpener.label "팝업을 부모 페이지의 옆에 두기">
-<!ENTITY slideshow.label "F8로 탭을 회전시킬 기간">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">

@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Juntar apenas a última janela com a última apresentada">
 <!ENTITY mergePopups.label "Juntar também janelas de popup">
 <!ENTITY popupNextToOpener.label "Colocar popups ao pé das janelas que o abriram">
-<!ENTITY slideshow.label "Carregar em F8 roda separadores a cada">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Desactivar Abrir/Fechar a animação do separador">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar recarregar todos os menus no botão recarregar">

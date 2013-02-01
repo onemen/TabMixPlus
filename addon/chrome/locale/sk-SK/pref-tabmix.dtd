@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Zlúčiť len aktuálne okno">
 <!ENTITY mergePopups.label "Tiež zachytiť vyskakovacie okná">
 <!ENTITY popupNextToOpener.label "Umiestniť vyskakovacie okná vedľa ich otváračov">
-<!ENTITY slideshow.label "Klávesa F8 prepína medzi kartami každých">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Vypnúť animáciu Otvoriť/Zatvoriť kartu">
 <!ENTITY reloadEvery.matchAddress.label "Načítať znovu kartu bez ohľadu na jej adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobraziť ponuku Opäť načítať každých na tlačidle Opäť načítať">

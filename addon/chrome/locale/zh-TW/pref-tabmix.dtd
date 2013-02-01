@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "合併目前視窗的分頁至上次選取的視窗">
 <!ENTITY mergePopups.label "亦合併其彈出視窗">
 <!ENTITY popupNextToOpener.label "將彈出視窗置於其開啟者旁邊">
-<!ENTITY slideshow.label "按 [F8] 鍵 啟用/停用 自動輪換分頁，每隔">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "停用「開啟/關閉分頁的動畫」">
 <!ENTITY reloadEvery.matchAddress.label "自動更新時不考慮目前分頁的網址">
 <!ENTITY reloadEvery.onReloadButton.label "在重新載入按鈕上顯示「自動更新」的選單">

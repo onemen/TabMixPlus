@@ -122,10 +122,10 @@
 <!ENTITY seconds.label "secunde">
 <!ENTITY minutes.label "minute">
 <!ENTITY minute.label "minut">
-<!ENTITY hideTabBar.label "Ascunde bara de file">
-<!ENTITY hideTabBar.never.label "Niciodată">
-<!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Când este afișată o singură filă">
-<!ENTITY hideTabBar.onOneTab.key "s">
-<!ENTITY hideTabBar.always.label "Întotdeauna">
+<!ENTITY hideTabBar.label "Se ascunde bara de file">
+<!ENTITY hideTabBar.never.label "niciodată">
+<!ENTITY hideTabBar.never.key "n">
+<!ENTITY hideTabBar.onOneTab.label "când este afișată o singură filă">
+<!ENTITY hideTabBar.onOneTab.key "f">
+<!ENTITY hideTabBar.always.label "întotdeauna">
 <!ENTITY hideTabBar.always.key "t">

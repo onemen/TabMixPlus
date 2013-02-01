@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "Schede da bloccare">
 <!ENTITY lockNewTabs.label "Blocca tutte le schede nuove">
 <!ENTITY lockAppTabs.label "Blocca le schede Applicazione">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Applica le modifiche alle schede aperte">
 <!ENTITY openNewTab.label "Schede in secondo piano">
 <!ENTITY openBookmarks.label "Segnalibri">
 <!ENTITY openBMKGroups.label "Gruppi di segnalibri">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Incorporare tutte le finestre insieme anziché solo l&apos;ultima in primo piano">
 <!ENTITY mergePopups.label "Incorpora anche i pop-up">
 <!ENTITY popupNextToOpener.label "Posiziona i pop-up accanto alle schede che li aprono">
-<!ENTITY slideshow.label "Avvia/ferma la rotazione delle schede premendo il tasto F8 ogni">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disattiva l&apos;animazione di apertura/chiusura delle schede">
 <!ENTITY reloadEvery.matchAddress.label "Ricarica la scheda indipendentemente dal suo indirizzo web">
 <!ENTITY reloadEvery.onReloadButton.label "Mostra il menu a discesa per ricaricare automaticamente le pagine web nel pulsante Ricarica">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "Spazio ai lati della barra delle schede">
 <!ENTITY tabBarSpace.tooltip "Lascia spazio su entrambi i lati della barra delle schede per trascinarvi le schede">
 <!ENTITY tabbar.label "Nascondi la barra delle schede quando solo una scheda rimane aperta">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Quando si trascina una scheda spostarla direttamente">
 <!ENTITY dropIndicator.label "Indicatori di trascinamento">
 <!ENTITY dropIndicator-native.label "stile predefinito del browser">
 <!ENTITY dropIndicator-builtin.label "stile incorporato">
@@ -165,7 +165,6 @@
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
 
-
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -180,7 +179,6 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
-
 
 -->
 <!ENTITY toolbar.description.width "21em">
@@ -295,7 +293,7 @@
 <!ENTITY sm.restore.overwriteTabs "comprese le schede">
 <!ENTITY sm.restore.closedWinList "Salva le finestre esistenti nella lista delle schede chiuse">
 <!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Bypassa la cache">
 <!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
 <!ENTITY sm.preserve.options "Dati da preservare per le schede">
 <!ENTITY sm.preserve.history "Cronologia">

@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Fusionner seulement la fenêtre courante avec la dernière sélectionnée">
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
-<!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
 <!ENTITY reloadEvery.matchAddress.label "Actualiser un onglet sans tenir compte de son adresse">
 <!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">

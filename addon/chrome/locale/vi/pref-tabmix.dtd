@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Chỉ trộn cửa sổ hiện tại với cửa sổ được chú ý cuối cùng">
 <!ENTITY mergePopups.label "Cũng trộn luôn cửa sổ popup">
 <!ENTITY popupNextToOpener.label "Đặt popup kế bên trang đã mở chúng">
-<!ENTITY slideshow.label "Nhấn F8 để xoay vòng thẻ mỗi">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Tắt hiệu ứng động khi mở/đóng thẻ">
 <!ENTITY reloadEvery.matchAddress.label "Tải lại một thẻ bất chấp địa chỉ của nó">
 <!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">

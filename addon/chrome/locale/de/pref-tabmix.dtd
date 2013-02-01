@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Nur das aktuelle Fenster mit dem zuletzt aktiven zusammenführen">
 <!ENTITY mergePopups.label "Pop-up-Fenster ebenfalls einbeziehen">
 <!ENTITY popupNextToOpener.label "Pop-ups direkt neben ihrem Ursprungs-Tab einfügen">
-<!ENTITY slideshow.label "Mit F8 automatischen Tab-Wechsel starten mit einem Intervall von">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Tab-Animation beim Öffnen/Schließen deaktivieren">
 <!ENTITY reloadEvery.matchAddress.label "Tab unabhängig von der Adresse neu laden">
 <!ENTITY reloadEvery.onReloadButton.label "Kontextmenü für automatisches Neuladen zur Schaltfläche &quot;Neu laden&quot; hinzufügen">

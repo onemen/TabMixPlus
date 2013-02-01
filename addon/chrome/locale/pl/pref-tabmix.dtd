@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Łącz tylko aktywne okno z poprzednio aktywnym">
 <!ENTITY mergePopups.label "Dołączaj także wyskakujące okienka">
 <!ENTITY popupNextToOpener.label "Umieszczaj wyskakujące okna za oknami, z których są one wywoływane">
-<!ENTITY slideshow.label "Naciśnięcie klawisza [F8] włącza/wyłącza automatyczną rotację kart co">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Wyłącz przełączanie animacji kart">
 <!ENTITY reloadEvery.matchAddress.label "Odświeżaj kartę bez względu na jej adres">
 <!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odśwież co… w przycisku narzędziowym Odśwież">

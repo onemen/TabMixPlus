@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Fusiona només la finestra actual amb l'última seleccionada">
 <!ENTITY mergePopups.label "Fusiona també les finestres emergents">
 <!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l'ha obert">
-<!ENTITY slideshow.label "En prémer F8, automàticament canvia de pestanya cada">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Inhabilita l'animació en obrir/tancar la pestanya">
 <!ENTITY reloadEvery.matchAddress.label "Torna a carregar una pestanya independentment de l'adreça">
 <!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">

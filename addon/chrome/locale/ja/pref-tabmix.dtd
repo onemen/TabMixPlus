@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "タブのロック">
 <!ENTITY lockNewTabs.label "新しいタブのロック">
 <!ENTITY lockAppTabs.label "ピン留めしたタブのロック">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "新しいタブに変更を適用">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
 <!ENTITY openBMKGroups.label "ブックマークグループ">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "現在のウィンドウと直前にフォーカスされたウィンドウだけをマージする">
 <!ENTITY mergePopups.label "ポップアップウィンドウもマージする">
 <!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
-<!ENTITY slideshow.label "F8 を押すとタブを自動的に">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
 <!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
 <!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "両端にスペースを表示">
 <!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">
 <!ENTITY tabbar.label "タブが一つしか開いていない場合、タブバーを隠す">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "タブをドラッグした時（ドロップインジケータを動かすのではなく）タブそのものを直接移動させる">
 <!ENTITY dropIndicator.label "ドロップインジケータ">
 <!ENTITY dropIndicator-native.label "既定のスタイル">
 <!ENTITY dropIndicator-builtin.label "Tab Mix Plus のスタイル">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "タブも上書きする">
 <!ENTITY sm.restore.closedWinList "上書きされたウィンドウを[最近閉じたウィンドウ]リストに保存する">
 <!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
 <!ENTITY sm.preserve.options "タブで状態保持する項目:">
 <!ENTITY sm.preserve.history "履歴">

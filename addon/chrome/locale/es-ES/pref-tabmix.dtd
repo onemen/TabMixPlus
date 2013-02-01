@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Sólo fusionar la ventana actual con la última enfocada">
 <!ENTITY mergePopups.label "También fusionar ventanas emergentes">
 <!ENTITY popupNextToOpener.label "Situar las ventanas emergentes junto a las de apertura">
-<!ENTITY slideshow.label "Pulsando F8 las pestañas rotan cada">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Desactivar animación de Abrir/Cerrar pestaña">
 <!ENTITY reloadEvery.matchAddress.label "Recargar pestaña sin importar su dirección">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de Recargar cada… en botón de recarga">
