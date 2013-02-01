@@ -234,3 +234,111 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
   margin: 2px 5px;
   padding: 0 5px;
 }
+
+
+/* shortcut tab */
+shortcut {
+  -moz-binding: url(chrome://tabmixplus/content/pref/shortcuts/shortcuts.xml#shortcut);
+  -moz-box-orient: vertical;
+}
+
+.shortcut-edit-box {
+  margin: 0 4px;
+  padding-bottom: 2px;
+  font-weight: normal;
+}
+
+.shortcut-image {
+  -moz-box-ordinal-group: 100;
+  opacity: 0.75;
+  cursor: default;
+  width: 20px;
+  height: 20px;
+}
+
+.shortcut-edit-box:not([focused]) > .shortcut-image {
+  visibility: collapse;
+}
+
+shortcut[value=""] .shortcut-edit-box:not([focused]) input,
+shortcut:not([value]) .shortcut-edit-box:not([focused]) input {
+  color: transparent;
+}
+
+.shortcut-image:hover {
+  opacity: 0.85;
+}
+
+.shortcut-image:hover:active {
+  opacity: 1;
+}
+
+shortcut[default="true"] .shortcut-image[anonid="reset"],
+shortcut[value=""] .shortcut-image[anonid="disable"],
+shortcut:not([value]) .shortcut-image[anonid="disable"] {
+  visibility: collapse;
+}
+
+.shortcut-image[anonid="disable"] {
+  list-style-image: url("disabled.png");
+}
+
+.shortcut-image[anonid="reset"] {
+  list-style-image: url("refresh.png");
+  width: 16px;
+  height: 16px;
+  margin: 3px 0 1px;
+}
+
+.shortcut-content {
+  height: 24px;
+  margin: 1px 0px;
+}
+
+.shortcut-notificationbox,
+.shortcut-warning-container,
+shortcut[used="true"] > .shortcut-content {
+  color: rgb(145, 109, 21);
+}
+
+.shortcut-notificationbox,
+.shortcut-warning-container,
+shortcut[used="true"] > .shortcut-content,
+shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > .shortcut-image,
+shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-input {
+/*  font-weight: bold;*/
+  background-color: rgba(255, 255, 0, 0.1); /* yellow */
+/*XXX check from what version of firefox we can use this */
+  background-image: url("chrome://mozapps/skin/extensions/stripes-warning.png");
+  background-repeat: repeat-x;
+}
+
+.shortcut-notificationbox {
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: rgba(28, 31, 37, 0.1) rgba(255, 255, 255, 0.1);
+}
+
+#shortcuts-panel[hide-shortcut-warning="true"] shortcut:not([focused=true]) > .shortcut-notificationbox,
+.shortcut-notificationbox:empty {
+  display: none;
+}
+
+#shortcuts-panel[usedKeys="false"] > .shortcut-warning-container {
+  visibility: hidden;
+}
+
+.warning-icon {
+/*XXX check from what version of firefox we can use this */
+  list-style-image: url("chrome://mozapps/skin/extensions/alerticon-warning.png");
+  width: 16px;
+  height: 15px;
+  margin: 3px 0;
+}
+
+.shortcut-content > * > .text-link {
+  margin-bottom: 0px;
+}
+
+#shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) {
+  visibility: collapse;
+}

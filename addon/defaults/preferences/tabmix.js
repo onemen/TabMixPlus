@@ -236,8 +236,6 @@ pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc 
 pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");
 
 pref("extensions.tabmix.hideIcons", false);
-pref("extensions.tabmix.disableF9Key", true); // 2009-08-28: default changed to true
-pref("extensions.tabmix.disableF8Key", true);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 
 // session manager pref
@@ -280,3 +278,5 @@ pref("extensions.tabmix.sessions.max_backups", 7);
 // removed from Firefox 4.0+, some other extensions may use this pref
 pref("browser.tabs.tabMinWidth", 100);
 pref("browser.tabs.tabMaxWidth", 250);
+
+pref("extensions.tabmix.shortcuts", '{}');

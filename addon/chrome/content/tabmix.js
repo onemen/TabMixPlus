@@ -271,6 +271,7 @@ var TMP_eventListener = {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
       */
+      Tabmix.lazy_import(Tabmix, "Shortcuts", "Shortcuts", "Shortcuts", true);
       Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
@@ -496,8 +497,7 @@ var TMP_eventListener = {
     if (Tabmix.singleWindowMode)
       gTMPprefObserver.setSingleWindowUI();
 
-    gTMPprefObserver.toggleKey("key_tm_slideShow", "extensions.tabmix.disableF8Key");
-    gTMPprefObserver.toggleKey("key_tm_toggleFLST", "extensions.tabmix.disableF9Key");
+    Tabmix.Shortcuts.onWindowOpen(window);
 
     try {
       gTMPprefObserver.createColorRules();

@@ -313,7 +313,7 @@ options = {
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + aError.stack;
+    let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
     Services.console.logStringMessage(assertionText + stackText);
   },
 
@@ -535,14 +535,18 @@ options = {
       try {
         return JSON.parse(str);
       } catch(ex) {
-        return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+        try {
+          return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+        } catch(ex) {return null}
       }
     },
     stringify: function TMP_stringify(obj) {
       try {
         return JSON.stringify(obj);
       } catch(ex) {
-        return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+        try {
+          return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+        } catch(ex) {return null}
       }
     }
   },

@@ -596,15 +596,6 @@ var gTMPprefObserver = {
       case "extensions.tabmix.focusTab":
           Services.prefs.setBoolPref("browser.tabs.selectOwnerOnClose", Services.prefs.getIntPref(prefName) == 2);
         break;
-      case "extensions.tabmix.disableF9Key":
-        this.toggleKey("key_tm_toggleFLST", prefName);
-        break;
-      case "extensions.tabmix.disableF8Key":
-        this.toggleKey("key_tm_slideShow", prefName);
-        if (Services.prefs.getBoolPref(prefName) &&
-            Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer)
-          Tabmix.flst.cancel();
-        break;
       case "extensions.tabmix.hideIcons":
         this.setMenuIcons();
         break;
@@ -843,15 +834,6 @@ var gTMPprefObserver = {
         break;
     }
 
-  },
-
-  toggleKey: function(keyID, prefName) {
-    var key = document.getElementById(keyID);
-    if (Tabmix.getBoolPref(prefName, false)) {
-      if (key.hasAttribute("oncommand"))
-        key.removeAttribute("oncommand");
-    } else
-      key.setAttribute("oncommand", key.getAttribute("TM_oncommand"));
   },
 
   getStyleSheets: function TMP_PO_getStyleSheet(aHerf, aFirst) {
@@ -1784,6 +1766,25 @@ try {
       if (Tabmix.prefs.prefHasUserValue("hideIcons"))
         Tabmix.prefs.clearUserPref("hideIcons");
       Tabmix.prefs.lockPref("hideIcons");
+    }
+
+    // 2013-01-18
+    var useF8Key, useF9Key;
+    if (Tabmix.prefs.prefHasUserValue("disableF8Key")) {
+      useF8Key = !Tabmix.prefs.getBoolPref("disableF8Key");
+      Tabmix.prefs.clearUserPref("disableF8Key");
+    }
+    if (Tabmix.prefs.prefHasUserValue("disableF9Key")) {
+      useF9Key = !Tabmix.prefs.getBoolPref("disableF9Key");
+      Tabmix.prefs.clearUserPref("disableF9Key");
+    }
+    if (useF8Key || useF9Key) {
+      let shortcuts = Tabmix.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
+      if (!shortcuts.slideShow)
+        shortcuts.slideShow = "VK_F8";
+      if (!shortcuts.toggleFLST)
+        shortcuts.toggleFLST = "VK_F9";
+      Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify(shortcuts));
     }
 
     // verify valid value

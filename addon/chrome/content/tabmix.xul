@@ -3,6 +3,7 @@
 <?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
 
 <?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xul"?>
+<?xul-overlay href="chrome://tabmixplus/content/pref/shortcuts/shortcuts.xul"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
@@ -395,18 +396,6 @@
 
    <!-- hide Tab groups context menu in all-tabs list button -->
    <menuitem id="menu_tabview" context=""/>
-
-  <!-- Tabmix Plus KEYS -->
-  <keyset id="mainKeyset">
-    <key id="key_tm_toggleFLST" label="Toggle FLST" keycode="VK_F9" TM_oncommand="Tabmix.flst.toggle();" />
-    <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
-    <key id="key_tm_slideShow" label="Toggle tab slide show" keycode="VK_F8" TM_oncommand="Tabmix.flst.toggleSlideshow();"/>
-    <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" />
-    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);"/>
-    <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows(window);" />
-    <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" command="TabmixSessionUtils:SaveThisWindow"/>
-    <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" command="TabmixSessionUtils:SaveAllWindow"/>
-  </keyset>
 
   <!-- Tabmix Plus broadcasterset -->
   <broadcasterset id="mainBroadcasterSet">

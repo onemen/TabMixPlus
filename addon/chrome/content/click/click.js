@@ -106,18 +106,20 @@ var TabmixTabClickOptions = {
   },
 
   // call action function from click on tabs or tabbar
-  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab) {
+  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, action) {
     if (!pref) return; // just in case we missed something
     var defaultPref = {middleClickTab:2, middleClickTabbar:10, shiftClickTab:5, shiftClickTabbar:0,
                        altClickTab:6, altClickTabbar:0, ctrlClickTab:22, ctrlClickTabbar:0,
                        dblClickTab:0, dblClickTabbar:1};
 
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
-    var action = Tabmix.getIntPref(pref, defaultPref[pref], true);
+    var command = Tabmix.getIntPref(pref, defaultPref[pref], true);
+    this.doCommand(command, aTab, clickOutTabs);
+  },
 
+  doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
     gBrowser.selectedBrowser.focus();
-
-    switch ( action ) {
+    switch (command) {
       case 0 :
         break;
       case 1 :
