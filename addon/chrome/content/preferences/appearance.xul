@@ -84,7 +84,7 @@
               <hbox align="center">
 <!--
                 <checkbox id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"
-                                    oncommand="document.getElementById('customizeToolbar').disabled = !this.checked;"/>
+                                    oncommand="$('customizeToolbar').disabled = !this.checked;"/>
 -->
                 <checkbox id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
                 <!-- new tab button on tabbar position -->

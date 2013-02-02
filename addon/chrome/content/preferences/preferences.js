@@ -3,19 +3,21 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
 
+function $(id) document.getElementById(id);
+
 var gSetTabIndex = {
   _inited: [],
   tabSelectionChanged: function (event) {
     var tabbox = event.target.parentNode;
     if (event.target.localName != "tabs" || !this._inited[tabbox.id])
       return;
-    var preference = document.getElementById("pref_" + tabbox.id);
+    var preference = $("pref_" + tabbox.id);
     preference.valueFromPreferences = tabbox.selectedIndex;
   },
 
   init: function (id) {
-    var tabbox = document.getElementById(id);
-    var preference = document.getElementById("pref_" + tabbox.id);
+    var tabbox = $(id);
+    var preference = $("pref_" + tabbox.id);
     if (preference.value !== null)
       tabbox.selectedIndex = preference.value;
     this._inited[id] = true;
@@ -34,7 +36,7 @@ function TM_EMinit()
    getTab();
   // show groupbox if incompatible extensions exist in this profile
   if (prevWindow.getExtensions().length == 0)
-    document.getElementById("incompatible").collapsed = true;
+    $("incompatible").collapsed = true;
 
   // add EventListener when we start
   window.addEventListener("command", TM_enableApply, false);
@@ -44,7 +46,7 @@ function TM_EMinit()
   window.addEventListener("keypress", keyPressInText, false);
 
   // create saved Session popup menu
-  var popup = document.getElementById("onStart.popup");
+  var popup = $("onStart.popup");
     TabmixSessionManager.createMenuForDialog(popup);
 
   // update tabclicking items that aren't change by tabmix
@@ -58,8 +60,8 @@ function TM_EMinit()
 
   // update pref for 'places'
   if (prevWindow.gIsPlaces) {
-    document.getElementById("openBookmarks").setAttribute("label", document.getElementById("selectTabBH").getAttribute("label"));
-    document.getElementById("openHistory").hidden = true;
+    $("openBookmarks").setAttribute("label", $("selectTabBH").getAttribute("label"));
+    $("openHistory").hidden = true;
   }
 
   TM_setElements(false, true);
@@ -75,7 +77,7 @@ function TM_EMsave(onApply)
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
-  TM_Options.singleWindow( document.getElementById("singleWindow").checked );
+  TM_Options.singleWindow( $("singleWindow").checked );
   TM_verifyWidth();
 
   document.documentElement.getButton('accept').focus()
@@ -94,7 +96,7 @@ function TM_EMsave(onApply)
 
   // set saved sessionpath if loadsession >=0
   var val = Tabmix.prefs.getIntPref("sessions.onStart.loadsession");
-  var popup = document.getElementById("onStart.popup");
+  var popup = $("onStart.popup");
   var pref = "sessions.onStart.sessionpath";
   Tabmix.prefs.setCharPref(pref, popup.getElementsByAttribute("value", val)[0].getAttribute("session"));
 
@@ -119,8 +121,8 @@ function callUpdateSettings() {
 }
 
 function TM_verifyWidth() {
-   var minWidth = document.getElementById("minWidth");
-   var maxWidth = document.getElementById("maxWidth");
+   var minWidth = $("minWidth");
+   var maxWidth = $("maxWidth");
 
    var minValue = minWidth.value;
    var maxValue = maxWidth.value;
@@ -145,14 +147,14 @@ var TM_Options = {
    setRadioFromBoolPref: function(prefId)
    {
 //Tabmix.log("setRadioFromBoolPref " + prefId)
-      var preference = document.getElementById(prefId);
+      var preference = $(prefId);
       return preference.value ? 1 : 0;
    },
 
    setBoolPrefFromRadio: function(itemId)
    {
 //Tabmix.log("setBoolPrefFromRadio " + itemId);
-      var radiogroupItem = document.getElementById(itemId);
+      var radiogroupItem = $(itemId);
       return radiogroupItem.value == 1;
    },
 
@@ -168,7 +170,7 @@ alert("don't use this");
 
   initBroadcasters: function(paneID, start) {
 ///XXX TODO fix me
-    var broadcasters = document.getElementById(paneID + ":Broadcaster");
+    var broadcasters = $(paneID + ":Broadcaster");
     for (var i = 0; i < broadcasters.childNodes.length; ++i ) {
       var _id = broadcasters.childNodes[i].id.replace("obs_", "");
       this.disabled(_id, start);
@@ -178,7 +180,7 @@ alert("don't use this");
   // init broadcaster for obs_undoClose if events pane did not loaded yet
   // we call it from panes : session, menu, mouse
   initUndoCloseBroadcaster: function() {
-    if (!document.getElementById("undoClose") && !Tabmix.prefs.getBoolPref("undoClose"))
+    if (!$("undoClose") && !Tabmix.prefs.getBoolPref("undoClose"))
       this.setDisabled("obs_undoClose", true);
   },
 
@@ -186,13 +188,13 @@ alert("don't use this");
   // we call it from panes : menu, mouse
   initSingleWindowBroadcaster: function() {
     // we use inverseDependency in singleWindow
-    if (!document.getElementById("singleWindow") && Tabmix.prefs.getBoolPref("singleWindow"))
+    if (!$("singleWindow") && Tabmix.prefs.getBoolPref("singleWindow"))
       this.setDisabled("obs_singleWindow", true);
   },
 
   disabled: function(itemOrId, start) {
 try {
-    var item = typeof(itemOrId) == "string" ? document.getElementById(itemOrId) : itemOrId;
+    var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
 //XXX if item not exist ????
     var val;
     if (item.hasAttribute("disableObserver"))
@@ -214,7 +216,7 @@ try {
       // textbox-input inherits the dislabled attribute from the textbox
 
       // all broadcaster has no disabled attribute at startup
-      var aBroadcaster = document.getElementById(id);
+      var aBroadcaster = $(id);
       if (aBroadcaster.hasAttribute("disabled")) {
         aBroadcaster.removeAttribute("disabled");
       }
@@ -225,10 +227,10 @@ try {
   // when "Links" in Events > Tab Focus changed
   selectTab: function() {
 try {
-    var showInverseLink = document.getElementById("showInverseLink");
+    var showInverseLink = $("showInverseLink");
     if (!showInverseLink)  // menu pane not loaded... noting to do
       return;
-    var selectTab = document.getElementById("selectTab");
+    var selectTab = $("selectTab");
     // selectTab item is inverted
     var focusType = selectTab ? selectTab.checked : !Services.prefs.getBoolPref("browser.tabs.loadInBackground");
     var val = showInverseLink.getAttribute((focusType ? "bg" : "fg") + "label");
@@ -238,10 +240,10 @@ try {
 
   speLink: function() {
 try {
-    var midcurrent = document.getElementById("midcurrent");
+    var midcurrent = $("midcurrent");
     if (!midcurrent) // events pane not loaded... noting to do
       return;
-    var speLink = document.getElementById("speLink");
+    var speLink = $("speLink");
     var val = speLink ? speLink.selectedItem.value : Tabmix.prefs.getIntPref("opentabforLinks");
     this.setDisabled("inverselinks", val != 2 && midcurrent.checked);
 } catch (ex) {Tabmix.assert(ex);}
@@ -253,7 +255,7 @@ try {
     this.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
     this.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
     if (setFocus && showTabUrlBox)
-      document.getElementById("newTabUrl" + idnum).focus();
+      $("newTabUrl" + idnum).focus();
   },
 
   setDisabeled_replaceLastTabWith: function() {
@@ -262,21 +264,21 @@ try {
     // extensions.tabmix.keepLastTab = true OR
 ///    // extensions.tabmix.hideTabbar != 0
     // when we enable the item we need to set the disable state for newTabUrl_1
-    var keepLastTab = document.getElementById("keepLastTab");
+    var keepLastTab = $("keepLastTab");
     // when we call this function from hideTabbar oncommand make sure "keepLastTab" exist
     if (!keepLastTab) // events pane not loaded... noting to do
       return;
-    var closeWindow = !document.getElementById("keepWindow").checked // inverted pref;
+    var closeWindow = !$("keepWindow").checked // inverted pref;
     var disable = closeWindow || keepLastTab.checked;
     this.setDisabled("obs_replaceLastTabWith", disable);
-    this.newTabUrl(document.getElementById("replaceLastTabWith"), disable, !disable);
+    this.newTabUrl($("replaceLastTabWith"), disable, !disable);
   },
 
    // Set given attribute of specified item.
    // If the value is null, then it removes the attribute
    // (which works nicely for the disabled attribute).
   setItem: function (id, attrib, val) {
-    var item = document.getElementById(id);
+    var item = $(id);
     if (val == null) {
       item.removeAttribute(attrib);
       return;
@@ -534,7 +536,7 @@ Tabmix.log("",true)
 //XXXX check if we need to use inverted on the value
 function getValue(item) {
    if (item.localName == "checkbox")
-      return document.getElementById("pref_" + item.id).hasAttribute("inverted") ? !item.checked : item.checked;
+      return $("pref_" + item.id).hasAttribute("inverted") ? !item.checked : item.checked;
 
    return item.value;
 }
@@ -542,7 +544,7 @@ function getValue(item) {
 // set value to item
 function setValue(item, newValue) {
    if (item.localName == "checkbox")
-      item.checked = document.getElementById("pref_" + item.id).hasAttribute("inverted") ? !newValue : newValue;
+      item.checked = $("pref_" + item.id).hasAttribute("inverted") ? !newValue : newValue;
    else
       item.value = newValue;
 }
@@ -575,7 +577,7 @@ function TM_disableApply() {
 }
 
 function setLastTab() {
-   Tabmix.prefs.setIntPref("selected_tab", document.getElementById("tabMixTabBox").selectedIndex);
+   Tabmix.prefs.setIntPref("selected_tab", $("tabMixTabBox").selectedIndex);
 
    var subtabs = document.getElementsByAttribute("subtub", "true");
    var subTab = "selected_sub_tab";
@@ -602,11 +604,11 @@ function getTab() {
 
 // this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
 function TM_selectTab(aSelTab) {
-  var tabbox = document.getElementById("tabMixTabBox");
+  var tabbox = $("tabMixTabBox");
   tabbox.lastselectedIndex = tabbox.selectedIndex;
   tabbox.selectedIndex = (aSelTab) ? aSelTab : 0;
   var tabId = document.getElementsByTagName("tab")[aSelTab].id;
-  var catButtons = document.getElementById("TM_ButtonBox").childNodes;
+  var catButtons = $("TM_ButtonBox").childNodes;
 
   for(var i = 0; i < catButtons.length; i++)
     if(catButtons[i].getAttribute('group', 'categories'))
@@ -618,7 +620,7 @@ function showIncompatible() {
    if (topwin) {
       var result = topwin.disableExtensions(this);
       if (result) {
-         document.getElementById("incompatible").collapsed = true;
+         $("incompatible").collapsed = true;
          sizeToContent();
       }
       this.focus();
@@ -636,11 +638,11 @@ function showIncompatible() {
 function toolbarButtons(aWindow) {
   // Display > Toolbar
   var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
-  var onToolbar = document.getElementById("onToolbar");
-  var onPlate = document.getElementById("onPlate");
+  var onToolbar = $("onToolbar");
+  var onPlate = $("onPlate");
   for (var i = 0; i < buttons.length; ++i ) {
     var button = aWindow.document.getElementById(buttons[i]);
-    var optionButton = document.getElementById("_" + buttons[i]).parentNode;
+    var optionButton = $("_" + buttons[i]).parentNode;
     if (button)
       onToolbar.appendChild(optionButton);
     else

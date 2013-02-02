@@ -1,6 +1,6 @@
 var gLinksPane = {
   init: function () {
-    let singleWindow = document.getElementById("singleWindow");
+    let singleWindow = $("singleWindow");
     this.singleWindow(singleWindow.checked);
     TM_Options.disabled(singleWindow, true);
 
@@ -9,9 +9,9 @@ var gLinksPane = {
   },
 
   externalLinkValue: function(checked) {
-    let external = document.getElementById("externalLinkTarget");
-    let node = document.getElementById("generalWindowOpen");
-    let preference = document.getElementById(external.getAttribute("preference"));
+    let external = $("externalLinkTarget");
+    let node = $("generalWindowOpen");
+    let preference = $(external.getAttribute("preference"));
     if (checked) {
       let prefValue = preference.valueFromPreferences;
       preference.value = prefValue > -1 ? prefValue : node.value;
@@ -25,10 +25,10 @@ var gLinksPane = {
   },
 
   updateExternalLinkCeckbox: function (external) {
-    let preference = document.getElementById(external.getAttribute("preference"));
+    let preference = $(external.getAttribute("preference"));
     if (external.value == preference.value)
       return;
-    let checkbox = document.getElementById("externalLink");
+    let checkbox = $("externalLink");
     let checked = preference.value != -1;
     if (checkbox.checked != checked) {
       checkbox.checked = checked;
@@ -46,9 +46,9 @@ var gLinksPane = {
   },
 
   updateStatus: function(itemId, testVal, test, newVal) {
-    var item = document.getElementById(itemId);
+    var item = $(itemId);
     if (test ? item.value == testVal : item.value != testVal) {
-      var preference = document.getElementById(item.getAttribute("preference"));
+      var preference = $(item.getAttribute("preference"));
       preference.batching = true;
       preference.value = newVal;
       preference.batching = false;

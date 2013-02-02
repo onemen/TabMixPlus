@@ -46,7 +46,7 @@ var gCommon = {
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
-      document.getElementById("pref-tabmix").setAttribute("chromifox", true);
+      $("pref-tabmix").setAttribute("chromifox", true);
 
 //    window.addEventListener("command", this.updateObservers, false);
 //    window.addEventListener("command", this, false);
@@ -80,7 +80,7 @@ var gCommon = {
   // for links and session panels
   // we use this hack to hide the tabs at the to but leave the bottom border visible
   setTopMargin: function(aId) {
-    let tabbox = document.getElementById(aId + "-tabbox");
+    let tabbox = $(aId + "-tabbox");
     let tabs = tabbox.firstChild;
 //    let height = tabs.boxObject.height;
 //    tabs.style.setProperty("height", height + "px", "");
@@ -111,9 +111,9 @@ var gCommon = {
   updateObservers: function(aEvent) {
 //try {
 //   var item = aEvent.target;
-   var item = document.getElementById(aEvent.target.id.replace("pref_", ""));
+   var item = $(aEvent.target.id.replace("pref_", ""));
 //alert("updateObservers item.id " + item.id);
-   if (item && item.localName == "checkbox" && document.getElementById("obs_" + item.id))
+   if (item && item.localName == "checkbox" && $("obs_" + item.id))
      TM_Options.disabled(item);
 //} catch (ex) {Tabmix.assert(ex);}
   },
@@ -195,7 +195,7 @@ Tabmix.log("name " + item.name
   },
 
   XXXsetPaneWidth: function(aPaneID) {
-    var aPaneElement = document.getElementById(aPaneID);
+    var aPaneElement = $(aPaneID);
     var contentWidth = this.contentWidth(aPaneElement);
     var targetWidth = parseInt(window.getComputedStyle(document.documentElement._paneDeckContainer, "").width);
     var horizontalPadding = parseInt(window.getComputedStyle(aPaneElement, "").paddingRight);
@@ -223,7 +223,7 @@ Tabmix.log("set Width to " + (horizontalPadding + contentWidth - targetWidth))
   setPaneWidth: function(aPaneID) {
 //return;
 
-    var aPaneElement = document.getElementById(aPaneID);
+    var aPaneElement = $(aPaneID);
 //    var anonymousNodes = document.getAnonymousElementByAttribute(aPaneElement, "class", "groupbox-body");
     var anonymousNodes = document.getAnonymousNodes(aPaneElement);
     var childs = [];
@@ -290,13 +290,13 @@ alert("aPaneID " + aPaneID + " " + maxDiff);
 // call back function from tabmix_checkCompatibility
 function hide_IncompatibleNotice(aHide, aFocus) {
 //  var button = document.documentElement.getElementsByAttribute("pane", "paneIncompatible")[0];
-//  var button = document.getElementById("TabMIxPreferences").getElementsByAttribute("pane", "paneIncompatible")[0];
+//  var button = $("TabMIxPreferences").getElementsByAttribute("pane", "paneIncompatible")[0];
   var button = document.getAnonymousElementByAttribute(document.documentElement, "pane", "paneIncompatible");
 //  Tabmix.log("aHide " + aHide + "\nbutton.collapsed " + button.collapsed);
 
   if (button.collapsed != aHide) {
     button.collapsed = aHide;
-    document.getElementById("paneIncompatible").collapsed = aHide;
+    $("paneIncompatible").collapsed = aHide;
   }
 
   let prefWindow= document.documentElement;
@@ -304,7 +304,7 @@ function hide_IncompatibleNotice(aHide, aFocus) {
 //+"\ngIncompatiblePane.lastSelected " + gIncompatiblePane.lastSelected);
 
   if (aHide && prefWindow.lastSelected == "paneIncompatible")
-    prefWindow.showPane(document.getElementById(gIncompatiblePane.lastSelected));
+    prefWindow.showPane($(gIncompatiblePane.lastSelected));
 
   if (aFocus)
     window.focus();
@@ -324,7 +324,7 @@ var gIncompatiblePane = {
   },
 /*
   init: function () {
-    document.getElementById("paneIncompatible").collapsed = this.paneButton.collapsed;
+    $("paneIncompatible").collapsed = this.paneButton.collapsed;
   },
 */
 
@@ -332,7 +332,7 @@ var gIncompatiblePane = {
     let prefWindow= document.documentElement;
 //Tabmix.log("onPaneSelect \nprefWindow.lastSelected " + prefWindow.lastSelected
 // + "\nprefWindow.currentPane.id " + prefWindow.currentPane.id    );
-//Tabmix.log('document.getElementById("paneIncompatible").collapsed ' + document.getElementById("paneIncompatible").collapsed);
+//Tabmix.log('$("paneIncompatible").collapsed ' + $("paneIncompatible").collapsed);
     if (prefWindow.lastSelected != "paneIncompatible")
       gIncompatiblePane.lastSelected = prefWindow.lastSelected;
   },
@@ -359,7 +359,7 @@ var gIncompatiblePane = {
     if (aHide) {
       let prefWindow= document.documentElement;
       if (prefWindow.lastSelected == "paneIncompatible")
-        prefWindow.showPane(document.getElementById(this.lastSelected));
+        prefWindow.showPane($(this.lastSelected));
     }
 
     if (aFocus)

@@ -10,14 +10,14 @@ var gMenuPane = {
 //    TM_Options.initBroadcasters("paneMenu", true);
     TM_Options.initUndoCloseBroadcaster();
     TM_Options.initSingleWindowBroadcaster();
-//XXX TODO if event pan not loaded yet document.getElementById("selectTab") is null
-//  try to call document.getElementById("selectTab").checked
+//XXX TODO if event pan not loaded yet $("selectTab") is null
+//  try to call $("selectTab").checked
 /*
-    var checked = document.getElementById("selectTab") ? document.getElementById("selectTab").checked || prevValue ?????
+    var checked = $("selectTab") ? $("selectTab").checked || prevValue ?????
 */
     TM_Options.selectTab();
 /*
-    var itam = document.getElementById("selectTab");
+    var itam = $("selectTab");
     var checked = itam ? itam.checked : Services.prefs.getBoolPref("browser.tabs.loadInBackground");
     TM_Options.selectTab(checked);
 */
