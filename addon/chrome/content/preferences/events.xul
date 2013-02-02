@@ -10,243 +10,238 @@
 <overlay id="EventsPaneOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
- <prefpane id="paneEvents" onpaneload="gEventsPane.init();">
+  <prefpane id="paneEvents" onpaneload="gEventsPane.init();">
 
-   <!-- scripts -->
-   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/events.js"/>
+    <!-- scripts -->
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/events.js"/>
 
-   <!-- preferences - list all preferences in this pane -->
-   <preferences>
-      <preference id="pref_events"             name="extensions.tabmix.events.selectedTabIndex"
-                  type="int"/>
-      <preference id="pref_loadOnNewTab"       name="extensions.tabmix.loadOnNewTab.type"    type="int"/>
-      <preference id="pref_newTabUrl"          name="extensions.tabmix.newtab.url"           type="string"/>
-      <preference id="pref_selectLocationBar"  name="extensions.tabmix.selectLocationBar"    type="bool" inverted="true"/>
-      <preference id="pref_openNewTabNext"     name="extensions.tabmix.openNewTabNext"       type="bool"/>
-      <preference id="pref_openTabNext"        name="extensions.tabmix.openTabNext"          type="bool"/>
-      <preference id="pref_openTabNextInverse" name="extensions.tabmix.openTabNextInverse"   type="bool"/>
+    <!-- preferences - list all preferences in this pane -->
+    <preferences>
+      <preference id="pref_events"              name="extensions.tabmix.events.selectedTabIndex"
+                                                                                              type="int"/>
+      <preference id="pref_loadOnNewTab"        name="extensions.tabmix.loadOnNewTab.type"    type="int"/>
+      <preference id="pref_newTabUrl"           name="extensions.tabmix.newtab.url"           type="string"/>
+      <preference id="pref_selectLocationBar"   name="extensions.tabmix.selectLocationBar"
+                  type="bool" inverted="true"/>
+      <preference id="pref_openNewTabNext"      name="extensions.tabmix.openNewTabNext"       type="bool"/>
+      <preference id="pref_openTabNext"         name="extensions.tabmix.openTabNext"          type="bool"/>
+      <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"/>
-      <preference id="pref_openDuplicateNext"  name="extensions.tabmix.openDuplicateNext"    type="bool"/>
-      <preference id="pref_lockallTabs"        name="extensions.tabmix.lockallTabs"          type="bool"/>
-      <preference id="pref_lockAppTabs"        name="extensions.tabmix.lockAppTabs"          type="bool"/>
-      <preference id="pref_openBookmarks"      name="extensions.tabmix.opentabfor.bookmarks" type="bool"/>
-      <preference id="pref_openUrl"            name="extensions.tabmix.opentabfor.urlbar"    type="bool"/>
-      <preference id="pref_openBMKGroups"      name="extensions.tabmix.loadFolderAndReplace"
+      <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
+      <preference id="pref_lockallTabs"         name="extensions.tabmix.lockallTabs"          type="bool"/>
+      <preference id="pref_lockAppTabs"         name="extensions.tabmix.lockAppTabs"          type="bool"/>
+      <preference id="pref_updateLockState"     name="extensions.tabmix.updateOpenedTabsLockState"
+                  type="bool"/>
+      <preference id="pref_openBookmarks"       name="extensions.tabmix.opentabfor.bookmarks" type="bool"/>
+      <preference id="pref_openUrl"             name="extensions.tabmix.opentabfor.urlbar"    type="bool"/>
+      <preference id="pref_openBMKGroups"       name="extensions.tabmix.loadFolderAndReplace"
                   type="bool" inverted="true"/>
-      <preference id="pref_openSearch"         name="browser.search.openintab"               type="bool"/>
-      <preference id="pref_openHistory"        name="extensions.tabmix.opentabfor.history"   type="bool"/>
-      <preference id="pref_midcurrent"         name="extensions.tabmix.middlecurrent"        type="bool"/>
-      <preference id="pref_selectTab"          name="browser.tabs.loadInBackground"
+      <preference id="pref_openSearch"          name="browser.search.openintab"               type="bool"/>
+      <preference id="pref_openHistory"         name="extensions.tabmix.opentabfor.history"   type="bool"/>
+      <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent"        type="bool"/>
+      <preference id="pref_selectTab"           name="browser.tabs.loadInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectTabUrl"       name="extensions.tabmix.loadUrlInBackground"
+      <preference id="pref_selectTabUrl"        name="extensions.tabmix.loadUrlInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectDivertedTab"  name="browser.tabs.loadDivertedInBackground"
+      <preference id="pref_selectDivertedTab"   name="browser.tabs.loadDivertedInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectTabSearch"    name="extensions.tabmix.loadSearchInBackground"
+      <preference id="pref_selectTabSearch"     name="extensions.tabmix.loadSearchInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_NewinBG"            name="extensions.tabmix.loadNewInBackground"
+      <preference id="pref_contextMenuSearch"   name="browser.search.context.loadInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectTabBH"        name="browser.tabs.loadBookmarksInBackground"
+      <preference id="pref_NewinBG"             name="extensions.tabmix.loadNewInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectDuplicate"    name="extensions.tabmix.loadDuplicateInBackground"
+      <preference id="pref_selectTabBH"         name="browser.tabs.loadBookmarksInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_selectBMKGroups"      name="extensions.tabmix.loadBookmarksGroupInBackground"
+      <preference id="pref_selectDuplicate"     name="extensions.tabmix.loadDuplicateInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_inverselinks"       name="extensions.tabmix.inversefocusLinks"    type="bool"/>
-      <preference id="pref_inverseother"       name="extensions.tabmix.inversefocusOther"    type="bool"/>
-      <preference id="pref_warnOnClose"        name="extensions.tabmix.tabs.warnOnClose"     type="bool"/>
-      <preference id="pref_warnOnCloseWindow"  name="browser.tabs.warnOnClose"               type="bool"/>
+      <preference id="pref_selectBMKGroups"     name="extensions.tabmix.loadBookmarksGroupInBackground"
+                  type="bool" inverted="true"/>
+      <preference id="pref_inverselinks"        name="extensions.tabmix.inversefocusLinks"    type="bool"/>
+      <preference id="pref_inverseother"        name="extensions.tabmix.inversefocusOther"    type="bool"/>
+      <preference id="pref_warnOnClose"         name="extensions.tabmix.tabs.warnOnClose"     type="bool"/>
+      <preference id="pref_warnOnCloseWindow"   name="browser.tabs.warnOnClose"               type="bool"/>
       <preference id="pref_warnOnCloseProtected"
-                  name="extensions.tabmix.protectedtabs.warnOnClose"                         type="bool"/>
-      <preference id="pref_keepWindow"         name="browser.tabs.closeWindowWithLastTab"
+                  name="extensions.tabmix.protectedtabs.warnOnClose"                          type="bool"/>
+      <preference id="pref_keepWindow"          name="browser.tabs.closeWindowWithLastTab"
                   type="bool" inverted="true"/>
-      <preference id="pref_keeptab"            name="extensions.tabmix.keepLastTab"          type="bool"/>
-      <preference id="pref_replaceLastTabWith" name="extensions.tabmix.replaceLastTabWith.type"   type="int"/>
-      <preference id="pref_newTabUrl_1"        name="extensions.tabmix.replaceLastTabWith.newTabUrl"
+      <preference id="pref_keeptab"             name="extensions.tabmix.keepLastTab"          type="bool"/>
+      <preference id="pref_replaceLastTabWith"  name="extensions.tabmix.replaceLastTabWith.type"   type="int"/>
+      <preference id="pref_newTabUrl_1"         name="extensions.tabmix.replaceLastTabWith.newTabUrl"
                   type="wstring"/>
-      <preference id="pref_selectLocationBar.afterLastTabClosed"  name="extensions.tabmix.selectLocationBar.afterLastTabClosed"
+      <preference id="pref_afterLastTabClosed"  name="extensions.tabmix.selectLocationBar.afterLastTabClosed"
                   type="bool" inverted="true"/>
-      <preference id="pref_focusTab"           name="extensions.tabmix.focusTab"             type="int"/>
-      <preference id="pref_mergewindows"       name="extensions.tabmix.mergeAllWindows"      type="bool"/>
-      <preference id="pref_mergePopups"        name="extensions.tabmix.mergePopups"          type="bool"/>
+      <preference id="pref_focusTab"            name="extensions.tabmix.focusTab"             type="int"/>
+      <preference id="pref_mergewindows"        name="extensions.tabmix.mergeAllWindows"      type="bool"/>
+      <preference id="pref_mergePopups"         name="extensions.tabmix.mergePopups"          type="bool"/>
       <preference id="pref_popupNextToOpener"
-                  name="extensions.tabmix.placePopupNextToOpener"                            type="bool"/>
-      <preference id="pref_closeOnMerge"       name="extensions.tabmix.closeOnSelect"        type="bool"/>
-      <preference id="pref_warnOnMerge"        name="extensions.tabmix.warnOnclose"          type="bool"/>
-      <preference id="pref_undoClose"          name="extensions.tabmix.undoClose"            type="bool"/>
-      <preference id="pref_undoCloseCache"     name="browser.sessionstore.max_tabs_undo"     type="int"/>
-      <preference id="pref_undoClosepos"       name="extensions.tabmix.undoClosePosition"    type="bool"/>
+                  name="extensions.tabmix.placePopupNextToOpener"                             type="bool"/>
+      <preference id="pref_closeOnMerge"        name="extensions.tabmix.closeOnSelect"        type="bool"/>
+      <preference id="pref_warnOnMerge"         name="extensions.tabmix.warnOnclose"          type="bool"/>
+      <preference id="pref_undoClose"           name="extensions.tabmix.undoClose"            type="bool"/>
+      <preference id="pref_undoCloseCache"      name="browser.sessionstore.max_tabs_undo"     type="int"/>
+      <preference id="pref_undoClosepos"        name="extensions.tabmix.undoClosePosition"    type="bool"/>
       <preference id="pref_menuonlybutton"
-                  name="extensions.tabmix.undoCloseButton.menuonly"                          type="bool"/>
-      <preference id="pref_ctrltab"            name="browser.ctrlTab.previews"               type="bool"/>
+                  name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
+      <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"/>
       <preference id="pref_ctrltab.tabPreviews"
-                  name="extensions.tabmix.lasttab.tabPreviews"                               type="bool"/>
-      <preference id="pref_showTabList"        name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
+                  name="extensions.tabmix.lasttab.tabPreviews"                                type="bool"/>
+      <preference id="pref_showTabList"         name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
       <preference id="pref_respondToMouse"
-                  name="extensions.tabmix.lasttab.respondToMouseInTabList"                   type="bool"/>
-      <preference id="pref_tabRotation"        name="extensions.tabmix.disableF8Key"
+                  name="extensions.tabmix.lasttab.respondToMouseInTabList"                    type="bool"/>
+      <preference id="pref_tabRotation"         name="extensions.tabmix.disableF8Key"
                   type="bool" inverted="true"/>
-      <preference id="pref_slideshow"          name="extensions.tabmix.slideDelay"           type="int"/>
+      <preference id="pref_slideshow"           name="extensions.tabmix.slideDelay"           type="int"/>
+      <preference id="pref_disableTabsAnimate"  name="browser.tabs.animate"   type="bool" inverted="true"/>
+      <preference id="pref_reloadEvery.matchAddress"
+                  name="extensions.tabmix.reload_match_address"               type="bool" inverted="true"/>
       <preference id="pref_reloadEvery.onReloadButton"
-                  name="extensions.tabmix.reloadEvery.onReloadButton"                        type="bool"/>
-      <preference id="pref_disableTabsAnimate"
-                  name="browser.tabs.animate"                        type="bool" inverted="true"/>
-   </preferences>
+                  name="extensions.tabmix.reloadEvery.onReloadButton"                         type="bool"/>
+    </preferences>
 
-    <!-- stringbundles -->
-<!--    <stringbundle id="bundleBrand" src="chrome://branding/locale/brand.properties"/>
-    <stringbundle id="bundleShell" src="chrome://browser/locale/shellservice.properties"/>-->
-
-   <!-- pane content -->
-   <tabbox id="events" flex="1"
-           onselect="gSetTabIndex.tabSelectionChanged(event);">
-         <tabs>
-           <tab label="&newTabs.label;"    class="subtabs" helpTopic="Events_-_New_Tabs"/>
-           <tab label="&tabOpen.label;"    class="subtabs" helpTopic="Events_-_tab_opening"/>
-           <tab label="&tabClose.label;"   class="subtabs" helpTopic="Events_-_Tab_Closing"/>
-           <tab label="&tabMerge.label;"   class="subtabs" helpTopic="Events_-_Tab_Merging"/>
-           <tab label="&tabFeature.label;" class="subtabs" helpTopic="Events_-_Tab_Features"/>
-         </tabs>
-         <tabpanels flex="1">
-          <tabpanel orient="vertical">
+    <!-- pane content -->
+    <tabbox id="events"
+            onselect="gSetTabIndex.tabSelectionChanged(event);">
+      <tabs>
+        <tab label="&newTabs.label;"    class="subtabs" helpTopic="Events_-_New_Tabs"/>
+        <tab label="&tabOpen.label;"    class="subtabs" helpTopic="Events_-_tab_opening"/>
+        <tab label="&tabClose.label;"   class="subtabs" helpTopic="Events_-_Tab_Closing"/>
+        <tab label="&tabMerge.label;"   class="subtabs" helpTopic="Events_-_Tab_Merging"/>
+        <tab label="&tabFeature.label;" class="subtabs" helpTopic="Events_-_Tab_Features"/>
+      </tabs>
+      <tabpanels flex="1">
 <!-- ======================================================== -->
-            <groupbox>
-              <!-- Load on new tab -->
-              <hbox align="center">
-                <label value="&newtab.label;" control="loadOnNewTab" />
-                  <menulist id="loadOnNewTab" preference="pref_loadOnNewTab">
-                    <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
-                      <menuitem value="4" label="&newtab.location.1;" />
-                      <menuitem value="0" label="&newtab.blank;" />
-                      <menuitem value="1" label="&newtab.home;" />
-                      <menuitem value="2" label="&newtab.current;" />
-                      <menuitem value="3" label="&newtab.duplicate;" />
-                    </menupopup>
-                  </menulist>
-              </hbox>
-              <hbox class="indent" align="center" flex="1">
-                 <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
-                 <textbox id="newTabUrl" class="padded uri-element" flex="1"
-                          onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref();"
-                          onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
-                          placeholder="Default New Tab Page"
-                          preference="pref_newTabUrl"/>
-              </hbox>
-              <hbox align="center">
-                <checkbox id="selectLocationBar" label="&focusContent.label;"
-                          preference="pref_selectLocationBar"/>
-              </hbox>
-              <hbox align="center">
-                <checkbox id="openNewTabNext" label="&openTabNext.label;" tooltiptext="&openTabNext.tooltip1;"
-                          preference="pref_openNewTabNext"/>
-              </hbox>
-            </groupbox>
-            <groupbox>
-              <!-- Open links next to current tab -->
-              <hbox align="center">
-                <checkbox id="openTabNext" label="&openOtherTabNext.label;" tooltiptext="&openTabNext.tooltip;"
-                          preference="pref_openTabNext"/>
-              </hbox>
-              <hbox align="center">
-                <checkbox class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;" observes="obs_openTabNext"
-                          preference="pref_relatedAfterCurrent"/>
-              </hbox>
-              <hbox align="center">
-                <checkbox class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;" observes="obs_openTabNext"
-                          preference="pref_openTabNextInverse"
-                          tooltiptext="&openTabNextInverse.tooltip1; &openTabNextInverse.tooltip;" />
-              </hbox>
-              <separator class="groove"/>
-              <hbox align="center">
-                <checkbox id="openDuplicateNext" label="&openDuplicateNext.label;"
-                          preference="pref_openDuplicateNext"/>
-              </hbox>
-            </groupbox>
-            <groupbox align="start">
-              <caption label="&lockTabs.label;"/>
-                <!-- Look All Tabs -->
-                <checkbox id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
-                <spacer style="height: 2em;"/>
-                <!-- Look App Tabs -->
-                <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
-            </groupbox>
-<!-- ======================================================== -->
-        </tabpanel>
-        <tabpanel orient="vertical">
-            <groupbox flex="1">
-              <caption label="&openNewTab.label;"/>
-              <hbox>
-                <vbox align="start" id="tabopening1">
-                  <!-- Bookmarks open in new tab -->
-                  <checkbox id="openBookmarks" label="&openBookmarks.label;"
-                            preference="pref_openBookmarks"/>
-                  <!-- Bookmark Groups open in new tab -->
-                  <checkbox id="openBMKGroups" label="&openBMKGroups.label;" tooltiptext="&openBMKGroups.tooltip;"
-                            preference="pref_openBMKGroups" inverted="true"/>
-                  <!-- History opens in new tab -->
-                  <checkbox id="openHistory" label="&openHistory.label;"
-                            preference="pref_openHistory" />
-                </vbox>
-                <vbox>
-                  <!-- URL open in new tab -->
-                  <checkbox id="openUrl" label="&openUrl.label;"
-                           preference="pref_openUrl"/>
-                  <!-- Search results open in new tab -->
-                  <checkbox id="openSearch" label="&openSearch.label;"
-                           preference="pref_openSearch"/>
-                </vbox>
-              </hbox>
-              <separator class="groove"/>
-              <hbox align="center">
-                <checkbox id="midcurrent" inverseDependency="true" label="&middlecurrent1.label;" tooltiptext="&middlecurrent.tooltip;"
-                          preference="pref_midcurrent" oncommand="TM_Options.speLink();"/>
-              </hbox>
-            </groupbox>
-<!-- ======================================================== -->
-            <groupbox id="tabSettingFocus">
-              <caption label="&tabFocus.caption;" />
-              <hbox>
-                <vbox align="start" id="tabopening2">
-                    <!-- select Links -->
-                    <checkbox id="selectTab" label="&selectTab.label;" preference="pref_selectTab"
-                                             oncommand="TM_Options.selectTab();"/>
-                    <!-- Select Diverted Windows -->
-                    <checkbox id="selectDivertedTab" label="&selectDivertedTab.label;" preference="pref_selectDivertedTab"/>
-                    <!-- new tab commands -->
-                    <checkbox id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>
-                    <!-- duplicate tab -->
-                    <checkbox id="selectDuplicate" label="&duplicateTab.label;" preference="pref_selectDuplicate"/>
-                </vbox>
-                <vbox align="start">
-                    <!-- Select from url bar -->
-                    <checkbox id="selectTabUrl" label="&openUrl.label;" preference="pref_selectTabUrl"/>
-                    <!-- Select from Search Bar-->
-                    <checkbox id="selectTabSearch" label="&openSearch.label;" preference="pref_selectTabSearch"/>
-                    <!-- Select Bookmarks or history -->
-                    <checkbox id="selectTabBH" label="&selectTabBH.label;" preference="pref_selectTabBH"/>
-                    <!-- Select first tab from Bookmark Groups -->
-                    <checkbox id="selectBMKGroups" label="&openBMKGroups.label;" preference="pref_selectBMKGroups"/>
-                </vbox>
-              </hbox>
-              <spacer flex="1"/>
-              <separator class="groove"/>
-              <label value="&inversefocus1.label;"/>
-              <hbox>
-                <vbox align="start" id="tabopening3">
-                  <checkbox id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
-                </vbox>
-                <vbox align="start">
-                  <checkbox id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;" style="width: 19em" preference="pref_inverseother" observes="obs_midcurrent"/>
-                </vbox>
-              </hbox>
-            </groupbox>
-          </tabpanel>
-<!-- ======================================================== -->
-        <tabpanel orient="vertical">
+        <tabpanel>
           <groupbox flex="1">
-<!--
- NEW LOCAL
--->
+            <!-- Load on new tab -->
+            <hbox align="center">
+              <label value="&newtab.label;" control="loadOnNewTab"/>
+              <menulist id="loadOnNewTab" preference="pref_loadOnNewTab">
+                <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                  <menuitem value="4" label="&newtab.location.1;"/>
+                  <menuitem value="0" label="&newtab.blank;"/>
+                  <menuitem value="1" label="&newtab.home;"/>
+                  <menuitem value="2" label="&newtab.current;"/>
+                  <menuitem value="3" label="&newtab.duplicate;"/>
+                </menupopup>
+              </menulist>
+            </hbox>
+            <hbox class="indent" align="center" flex="1">
+              <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
+<!-- NEED to update babelzilla -->
+              <textbox id="newTabUrl" class="padded uri-element" flex="1"
+                       onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
+                       onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
+                       placeholder="Default New Tab Page"
+                       preference="pref_newTabUrl"/>
+            </hbox>
+            <checkbox id="selectLocationBar" label="&focusContent.label;"
+                      preference="pref_selectLocationBar"/>
+            <checkbox id="openNewTabNext" label="&openTabNext.label;"
+                      tooltiptext="&openTabNext.tooltip1;"
+                      preference="pref_openNewTabNext"/>
+          </groupbox>
+          <groupbox flex="1">
+            <!-- Open links next to current tab -->
+            <checkbox id="openTabNext" label="&openOtherTabNext.label;"
+                      tooltiptext="&openTabNext.tooltip;"
+                      preference="pref_openTabNext"/>
+            <checkbox class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;"
+                      preference="pref_relatedAfterCurrent" observes="obs_openTabNext"/>
+            <checkbox class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;"
+                      preference="pref_openTabNextInverse"  observes="obs_openTabNext"
+                      tooltiptext="&openTabNextInverse.tooltip1; &openTabNextInverse.tooltip;"/>
+            <separator class="groove"/>
+            <checkbox id="openDuplicateNext" label="&openDuplicateNext.label;"
+                      preference="pref_openDuplicateNext"/>
+          </groupbox>
+          <groupbox flex="1">
+            <caption label="&lockTabs.label;"/>
+            <!-- Look All Tabs -->
+            <checkbox id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
+            <!-- Look App Tabs -->
+            <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
+            <spacer style="height: 1em;"/>
+            <checkbox id="updateLockState" align="center" label="&updateLockState.label;"
+                      preference="pref_updateLockState"/>
+          </groupbox>
+        </tabpanel>
+<!-- ======================================================== -->
+        <tabpanel>
+          <groupbox flex="1">
+            <caption label="&openNewTab.label;"/>
+            <hbox>
+              <vbox align="start" id="tabopening1">
+                <!-- Bookmarks open in new tab -->
+                <checkbox id="openBookmarks" label="&openBookmarks.label;"
+                          preference="pref_openBookmarks"/>
+                <!-- Bookmark Groups open in new tab -->
+                <checkbox id="openBMKGroups" label="&openBMKGroups.label;"
+                          tooltiptext="&openBMKGroups.tooltip;"
+                          preference="pref_openBMKGroups" inverted="true"/>
+                <!-- History opens in new tab -->
+                <checkbox id="openHistory" label="&openHistory.label;"
+                          preference="pref_openHistory"/>
+              </vbox>
+              <vbox>
+                <!-- URL open in new tab -->
+                <checkbox id="openUrl" label="&openUrl.label;"
+                          preference="pref_openUrl"/>
+                <!-- Search results open in new tab -->
+                <checkbox id="openSearch" label="&openSearch.label;"
+                          preference="pref_openSearch"/>
+              </vbox>
+            </hbox>
+            <spacer flex="1"/>
+            <separator class="groove"/>
+            <checkbox id="midcurrent" inverseDependency="true"
+                      label="&middlecurrent1.label;" tooltiptext="&middlecurrent.tooltip;"
+                      preference="pref_midcurrent" oncommand="TM_Options.speLink();"/>
+          </groupbox>
+          <groupbox flex="1">
+            <caption label="&tabFocus.caption;"/>
+            <hbox>
+              <vbox align="start" id="tabopening2">
+                <!-- select Links -->
+                <checkbox id="selectTab" label="&selectTab.label;" preference="pref_selectTab"
+                          oncommand="TM_Options.selectTab();"/>
+                <!-- Select Diverted Windows -->
+                <checkbox id="selectDivertedTab" label="&selectDivertedTab.label;"
+                          preference="pref_selectDivertedTab"/>
+                <!-- new tab commands -->
+                <checkbox id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>
+                <!-- duplicate tab -->
+                <checkbox id="selectDuplicate" label="&duplicateTab.label;" preference="pref_selectDuplicate"/>
+              </vbox>
+              <vbox align="start">
+                <!-- Select from url bar -->
+                <checkbox id="selectTabUrl" label="&openUrl.label;" preference="pref_selectTabUrl"/>
+                <!-- Select from Search Bar-->
+                <checkbox id="selectTabSearch" label="&openSearch.label;" preference="pref_selectTabSearch"/>
+                <!-- Select from Context menu search-->
+                <checkbox id="contextMenuSearch" label="&contextMenuSearch.label;…" preference="pref_contextMenuSearch"/>
+                <!-- Select Bookmarks or history -->
+                <checkbox id="selectTabBH" label="&selectTabBH.label;" preference="pref_selectTabBH"/>
+                <!-- Select first tab from Bookmark Groups -->
+                <checkbox id="selectBMKGroups" label="&openBMKGroups.label;" preference="pref_selectBMKGroups"/>
+              </vbox>
+            </hbox>
+            <spacer flex="1"/>
+            <separator class="groove"/>
+            <label value="&inversefocus1.label;"/>
+            <hbox align="start">
+              <vbox id="tabopening3">
+                <checkbox id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
+              </vbox>
+              <checkbox id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
+                        style="width: 19em" flexlabel="1" align="start"
+                        preference="pref_inverseother" observes="obs_midcurrent"/>
+            </hbox>
+          </groupbox>
+        </tabpanel>
+<!-- ======================================================== -->
+        <tabpanel>
+          <groupbox flex="1">
             <caption label="&warning.caption.label;"/>
             <vbox align="start">
               <!-- Warn when closing multiple tabs -->
@@ -258,93 +253,76 @@
             </vbox>
           </groupbox>
           <groupbox flex="1">
-<!--
- NEW LOCAL
--->
             <caption label="&lasttab.caption.label;"/>
-            <vbox align="start">
-              <checkbox id="keepWindow" label="&keepWindow.label.3.1;"
-                        preference="pref_keepWindow"
-                        oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
-            </vbox>
-            <vbox align="start">
-              <!-- Don't close the last tab -->
-<!--
-              <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keeptab" observes="obs_hideTabbar"
- -->
-              <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keeptab"
-                                     oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
-            </vbox>
+            <checkbox id="keepWindow" label="&keepWindow.label.3.1;"
+                      preference="pref_keepWindow"
+                      oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
+            <!-- Don't close the last tab -->
+            <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keeptab"
+                      oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
             <vbox>
               <!-- Replace Last Tab With -->
               <hbox align="center">
-                <label value="&replaceLastTabWith.label;:"
-                       control="replaceLastTabWith" observes="obs_replaceLastTabWith"/>
+                <label value="&replaceLastTabWith.label;:" observes="obs_replaceLastTabWith"/>
                   <menulist id="replaceLastTabWith" preference="pref_replaceLastTabWith" idnum="_1"
-                            observes="obs_replaceLastTabWith">
+                    observes="obs_replaceLastTabWith">
                     <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
-                      <menuitem value="4" label="&newtab.location.1;" />
-                      <menuitem value="0" label="&newtab.blank;" />
-                      <menuitem value="1" label="&newtab.home;" />
-                      <menuitem value="2" label="&newtab.current;" />
-                      <menuitem value="3" label="&newtab.duplicate;" />
+                      <menuitem value="4" label="&newtab.location.1;"/>
+                      <menuitem value="0" label="&newtab.blank;"/>
+                      <menuitem value="1" label="&newtab.home;"/>
+                      <menuitem value="2" label="&newtab.current;"/>
+                      <menuitem value="3" label="&newtab.duplicate;"/>
                     </menupopup>
                   </menulist>
               </hbox>
               <hbox class="indent" align="center" flex="1">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
+                          onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
+                          onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
+                          placeholder="Default New Tab Page"
                           preference="pref_newTabUrl_1"/>
               </hbox>
-              <checkbox class="indent" align="center" id="selectLocationBar.afterLastTabClosed" label="&focusContent.label;"
-                        preference="pref_selectLocationBar.afterLastTabClosed"/>
+              <checkbox class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
+                          preference="pref_afterLastTabClosed"/>
             </vbox>
           </groupbox>
           <groupbox flex="1">
-<!--
- NEW LOCAL
--->
             <caption label="&currenttab.caption.label;"/>
             <!-- focus after closing a tab -->
             <box id="focusTab-box" orient="vertical">
               <hbox>
-                <label id="focusTab-label" value="&focusTab.labelBegin;" control="focusTab" />
+                <label id="focusTab-label" value="&focusTab.labelBegin;" control="focusTab"/>
               </hbox>
               <hbox id="focusTab-menulist-box" align="center" pack="end">
-              <menulist id="focusTab" preference="pref_focusTab">
-                <menupopup>
-                  <menuitem value="0" label="&focusTab.firstTab;"/>
-                  <menuitem value="1" label="&focusTab.leftTab;"/>
-                  <menuitem value="5" label="&focusTab.rightTab;"/>
-                  <menuitem value="3" label="&focusTab.lastTab;"/>
-                  <menuitem value="4" label="&focusTab.lastSelectedTab;"/>
-                  <menuitem value="2" label="&focusTab.openerTab;" rtlLabel="&focusTab.openerTab.rtl;"/>
-                  <menuitem value="6" label="&focusTab.lastOpenedTab;"/>
-                </menupopup>
-              </menulist>
-<!--
-NEW LOCAL
-changed locals ENTITIS for focusTab
-              <label value="&focusTab.labelEnd;" control="focusTab"/>
--->
+                <menulist id="focusTab" preference="pref_focusTab">
+                  <menupopup>
+                    <menuitem value="0" label="&focusTab.firstTab;"/>
+                    <menuitem value="1" label="&focusTab.leftTab;"/>
+                    <menuitem value="5" label="&focusTab.rightTab;"/>
+                    <menuitem value="3" label="&focusTab.lastTab;"/>
+                    <menuitem value="4" label="&focusTab.lastSelectedTab;"/>
+                    <menuitem value="2" label="&focusTab.openerTab;" rtlLabel="&focusTab.openerTab.rtl;"/>
+                    <menuitem value="6" label="&focusTab.lastOpenedTab;"/>
+                  </menupopup>
+                </menulist>
               </hbox>
             </box>
           </groupbox>
         </tabpanel>
-        <tabpanel orient="vertical">
-          <groupbox orient="vertical">
+<!-- ======================================================== -->
+        <tabpanel>
+          <groupbox>
             <caption label="&mergeNoTabSelection.label;"/>
             <radiogroup id="mergewindows" preference="pref_mergewindows" align="start">
               <radio value="true" id="merge-allwindows" label="&mergeall.label;"/>
-              <radio value="false" id="merge-lastwindow" label="&mergelastfocused.label;" />
+              <radio value="false" id="merge-lastwindow" label="&mergelastfocused.label;"/>
             </radiogroup>
-            <vbox align="start">
-              <checkbox id="mergePopups" label="&mergePopups.label;" preference="pref_mergePopups"/>
-              <checkbox id="popupNextToOpener" label="&popupNextToOpener.label;"
-                        preference="pref_popupNextToOpener" class="indent" observes="obs_mergePopups"/>
-            </vbox>
+            <checkbox id="mergePopups" label="&mergePopups.label;" preference="pref_mergePopups"/>
+            <checkbox id="popupNextToOpener" label="&popupNextToOpener.label;"
+                      preference="pref_popupNextToOpener" class="indent" observes="obs_mergePopups"/>
           </groupbox>
-          <groupbox orient="vertical" align="start">
+          <groupbox align="start">
             <caption label="&mergeTabSelection.label;"/>
               <!-- Close on Merge -->
               <checkbox id="closeOnMerge" label="&closeOnMerge.label;" preference="pref_closeOnMerge"/>
@@ -352,8 +330,9 @@ changed locals ENTITIS for focusTab
               <checkbox id="warnOnMerge" class="indent" label="&warnOnMerge.label;" preference="pref_warnOnMerge" observes="obs_closeOnMerge"/>
           </groupbox>
         </tabpanel>
-        <tabpanel orient="vertical">
-         <groupbox orient="vertical" flex="1">
+<!-- ======================================================== -->
+        <tabpanel>
+          <groupbox>
             <vbox align="start">
               <!-- Enable Undo Close Tab -->
               <checkbox id="undoClose" label="&undoClose.label;" preference="pref_undoClose"
@@ -369,26 +348,31 @@ changed locals ENTITIS for focusTab
                 <checkbox id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
               </vbox>
             </vbox>
-            <separator class="groove" />
+            <separator class="groove"/>
+            <checkbox id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"
+                      oncommand="gEventsPane.setShowTabList();"/>
+            <checkbox id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
+                      observes="obs_ctrltab" oncommand="gEventsPane.setShowTabList();"/>
+            <checkbox id="showTabList" label="&ctrltab.popup;" preference="pref_showTabList"/>
+            <checkbox id="respondToMouse" class="indent" label="&tabpopup.mouse;" preference="pref_respondToMouse"
+                      observes="obs_showTabList"/>
+            <separator class="groove"/>
             <vbox align="start">
-               <checkbox id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"
-                         oncommand="gEventsPane.setShowTabList();"/>
-               <checkbox id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
-                         observes="obs_ctrltab" oncommand="gEventsPane.setShowTabList();"/>
-               <checkbox id="showTabList" label="&ctrltab.popup;" preference="pref_showTabList"/>
-               <checkbox id="respondToMouse" class="indent" label="&tabpopup.mouse;" preference="pref_respondToMouse"
-                         observes="obs_showTabList"/>
+              <hbox align="center">
+                <checkbox id="tabRotation" label="***Pressing F8 rotates tabs every" preference="pref_tabRotation"/>
+                <textbox id="slideshow" maxlength="3" size="3" preference="pref_slideshow" observes="obs_tabRotation" type="number"/>
+                <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
+              </hbox>
+              <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
             </vbox>
-            <separator class="groove" />
-            <vbox align="start">
-               <hbox align="center">
-                 <checkbox id="tabRotation" label="&slideshow.label;" preference="pref_tabRotation"/>
-                 <textbox id="slideshow" maxlength="3" size="3" preference="pref_slideshow" observes="obs_tabRotation" type="number"/>
-                 <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
-               </hbox>
-               <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;" preference="pref_reloadEvery.onReloadButton"/>
-               <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
-            </vbox>
+         </groupbox>
+         <groupbox flex="1" align="start">
+           <caption label="&extraIcons.autoreload;"/>
+           <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
+                     prefstring="extensions.tabmix.reload_match_address" inverted="true"
+                     preference="pref_reloadEvery.matchAddress"/>
+           <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
+                     preference="pref_reloadEvery.onReloadButton"/>
          </groupbox>
         </tabpanel>
       </tabpanels>
@@ -397,7 +381,6 @@ changed locals ENTITIS for focusTab
    <broadcasterset id="paneEvents:Broadcaster">
       <broadcaster id="obs_openTabNext"/>
       <broadcaster id="obs_midcurrent"/>
-<!--      <broadcaster id="obs_hideTabbar"/>-->
       <broadcaster id="obs_mergePopups"/>
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>

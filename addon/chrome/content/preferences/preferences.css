@@ -45,6 +45,10 @@ radio[pane=paneIncompatible]:not([show=true]) {
  margin-right: 6px;
 }
 
+tabpanel {
+  -moz-box-orient: vertical;
+}
+
 .bottom-separator {
   height: 0px !important;
   margin-bottom: 0px !important;

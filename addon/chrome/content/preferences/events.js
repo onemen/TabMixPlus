@@ -2,6 +2,9 @@ var gEventsPane = {
   init: function () {
     gSetTabIndex.init('events');
 
+    if (!Tabmix.isVersion(130))
+      $("contextMenuSearch").hidden = true;
+
     // for locals with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;
@@ -23,8 +26,6 @@ var gEventsPane = {
     if (browserWindow.Tabmix.newTabURLpref == "browser.newtab.url") {
       let pref_newTabUrl = $("pref_newTabUrl");
       pref_newTabUrl.name = "browser.newtab.url";
-      // in minefiled the default is "about:blank"
-///      this._newTabUrl = pref_newTabUrl.defaultValue;
       this._newTabUrl = "about:newtab";
       pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
 
@@ -55,9 +56,9 @@ var gEventsPane = {
     var vbox2 = $("tabopening2");
     var vbox3 = $("tabopening3");
     var max = Math.max(vbox1.boxObject.width, vbox2.boxObject.width, vbox3.boxObject.width);
-    vbox1.style.setProperty("width",max + "px", "important");
-    vbox2.style.setProperty("width",max + "px", "important");
-    vbox3.style.setProperty("width",max + "px", "important");
+    vbox1.style.setProperty("width", max + "px", "important");
+    vbox2.style.setProperty("width", max + "px", "important");
+    vbox3.style.setProperty("width", max + "px", "important");
 
     gCommon.setPaneWidth("paneEvents");
   },
@@ -102,19 +103,15 @@ var gEventsPane = {
   },
 
   _newTabUrl: "about:blank",
-  syncFromNewTabUrlPref: function () {
+  syncFromNewTabUrlPref: function (item) {
     let pref_newTabUrl = $("pref_newTabUrl");
+    var preference = $(item.getAttribute("preference"));
 
     // If the pref is set to the default, set the value to "" to show the placeholder text
-    let value = pref_newTabUrl.value;
+    let value = preference.value;
     if (value && value.toLowerCase() == this._newTabUrl)
       return "";
-
-    if (pref_newTabUrl.value == "")
-      return this._newTabUrl;
-
-    // Otherwise, show the actual pref value.
-    return undefined;
+    return this.syncToNewTabUrlPref(value);
   },
 
   syncToNewTabUrlPref: function (value) {
@@ -125,4 +122,18 @@ var gEventsPane = {
     // Otherwise, use the actual textbox value.
     return undefined;
   },
+
+///XXX TODO - finish after shortcut panel is ready
+  syncSlideShowControl: function () {
+    let tabRotation = $("tabRotation"), slideShow = $("slideShow");
+    if (tabRotation.hasAttribute("_label")) {
+      let label = tabRotation.getAttribute("_label").split("#1");
+      tabRotation.label = label[0];
+      $("slideshow.labelEnd").value = label[1];
+      tabRotation.removeAttribute("_label");
+    }
+    $("slideshow.link").value = getFormattedKey(slideShow.key) || "???";
+    tabRotation.checked = !slideShow.disabled;
+    TM_Options.disabled(tabRotation);
+  }
 }
