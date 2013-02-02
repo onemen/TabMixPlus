@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+
+<!DOCTYPE bindings SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+
+<bindings id="pref-tabmix-bindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xbl="http://www.mozilla.org/xbl"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <binding id="tabclick-options">
+    <content>
+      <xul:hbox flex="1" align="center">
+         <xul:label flex="1" xbl:inherits="value=label,disabled" onmousedown="this.nextSibling.focus();"/>
+         <xul:menulist anonid="menulist" xbl:inherits="disabled">
+            <xul:menupopup>
+               <xul:menuitem value="0" label="&clicktab.nothing;" />
+                     <xul:menuseparator/>
+               <xul:menuitem value="1"  label="&clicktab.addtab;" />
+               <xul:menuitem value="3"  label="&clicktab.duplicatetab;" />
+               <xul:menuitem value="14" label="&clicktab.duplicatetabw;" observes="obs_singleWindow"/>
+               <xul:menuitem value="27" label="Move the tab to a new window" observes="obs_singleWindow"/>
+                     <xul:menuseparator/>
+               <xul:menuitem value="5"  label="&clicktab.protecttab;" />
+               <xul:menuitem value="6"  label="&clicktab.locktab;" />
+               <xul:menuitem value="15" label="&clicktab.freezetab;" />
+               <xul:menuitem value="11" label="&clicktab.renametab;" />
+               <xul:menuitem value="28" label="Copies the tab's URL to the clipboard" />
+               <xul:menuitem value="22" label="&clicktab.selectMerge;" />
+               <xul:menuitem value="23" label="&clicktab.mergeTabs;" />
+               <xul:menuitem value="25" label="&clicktab.bookTab;"/>
+               <xul:menuitem value="26" label="&clicktab.bookTabs;" observes="bmTabsCommand"/>
+                     <xul:menuseparator/>
+               <xul:menuitem value="4"  label="&clicktab.reloadtab;" />
+               <xul:menuitem value="7"  label="&clicktab.reloadtabs;" />
+               <xul:menuitem value="16" label="&clicktab.reloadothertabs;" />
+               <xul:menuitem value="19" label="&clicktab.reloadlefttabs;" />
+               <xul:menuitem value="20" label="&clicktab.reloadrighttabs;" />
+                     <xul:menuseparator/>
+               <xul:menuitem value="2"  label="&clicktab.removetab;" />
+               <xul:menuitem value="9"  label="&clicktab.removeall;" />
+               <xul:menuitem value="24" label="&clicktab.removesimilar;" />
+               <xul:menuitem value="8"  label="&clicktab.removeother;" />
+               <xul:menuitem value="17" label="&clicktab.removeleft;" />
+               <xul:menuitem value="18" label="&clicktab.removeright;" />
+                     <xul:menuseparator/>
+               <xul:menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose"/>
+               <xul:menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose"/>
+               <xul:menuitem value="12" label="&clicktab.snapback;" observes="snapBack"/>
+               <xul:menuitem value="21" label="&clicktab.ietab;" observes="ieView"/>
+            </xul:menupopup>
+         </xul:menulist>
+      </xul:hbox>
+    </content>
+    <implementation>
+
+      <field name="mMenu">
+            document.getAnonymousElementByAttribute(this, "anonid", "menulist");
+      </field>
+
+      <property name="selectedItem"
+            onget="return this.mMenu.selectedItem;"
+            onset="return this.mMenu.selectedItem = val;" />
+
+      <property name="value"
+            onget="return this.mMenu.value;">
+        <setter>
+        <![CDATA[
+          //
+          // make sure not to set hidden menuitem as the selected menuitem
+          //
+          var item = this.mMenu.getElementsByAttribute("value", val)[0];
+          if (item.hidden)
+            val = 0;
+
+          this.mMenu.value = val;
+          return val;
+        ]]>
+        </setter>
+      </property>
+
+    </implementation>
+  </binding>
+
+</bindings>

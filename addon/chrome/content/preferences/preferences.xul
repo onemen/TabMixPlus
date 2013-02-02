@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/global.css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+
+<?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences-1.css"?>
+
+<!DOCTYPE prefwindow [
+<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd" >
+%tabsDTD;
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%pref-tabmixDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+%globalDTD;
+]>
+
+<prefwindow type="prefwindow"
+            id="TabMIxPreferences"
+            windowtype="mozilla:tabmixopt1"
+            title="&page.header.title;"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            autosize="true"
+            onload="gCommon.init();"
+            ondialogaccept="gCommon.deinit();"
+            ondialogcancel="gCommon.deinit();"
+            ondialogextra1="gCommon.onApply();"
+            ondialoghelp="openHelp();"
+            buttons="accept,cancel,extra1,extra2"
+            buttonlabelextra1="&apply.label;"
+            buttonlabelextra2="&settings.label;"
+            _style="width: 36.5em; min-height: 43.2em;"
+            chromedir="&locale.dir;"
+            persist="screenX screenY">
+
+<!--
+for new set the height and width the same as the old options window
+
+cs-CZ            style="width: 56.5em; min-height: 41.2em;"
+da-DK            style="width: 48.9em; min-height: 41.2em;"
+de-DE            style="width: 48.9em; min-height: 41.2em;"
+el-GR            style="width: 61.5em; min-height: 41.2em;"
+en-US            style="width: 36.5em; min-height: 41.2em;"
+es-ES            style="width: 48.8em; min-height: 41.2em;"
+fa-IR            style="width: 43.0em; min-height: 41.2em;"
+fr-FR            style="width: 56.1em; min-height: 41.2em;"
+hr-HR            style="width: 46.3em; min-height: 41.2em;"
+hu-HU            style="width: 45.9em; min-height: 41.2em;"
+it-IT            style="width: 56.0em; min-height: 41.2em;"
+ja-JP            style="width: 51.4em; min-height: 41.2em;"
+ko-KR            style="width: 39.7em; min-height: 41.2em;"
+nl-NL            style="width: 51.5em; min-height: 41.2em;"
+pl-PL            style="width: 47.5em; min-height: 41.2em;"
+pt-BR            style="width: 48.5em; min-height: 41.2em;"
+ru-RU            style="width: 50.0em; min-height: 41.2em;"
+sk-SK            style="width: 43.2em; min-height: 41.2em;"
+sv-SE            style="width: 37.4em; min-height: 41.2em;"
+zh-CN            style="width: 41.9em; min-height: 41.2em;"
+zh-TW            style="width: 36.4em; min-height: 41.2em;"
+
+-->
+
+
+  <!-- scripts -->
+  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/common.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
+
+  <prefpane id="paneLinks" label="&tab.links;"
+            src="chrome://tabmixplus/content/preferences/links.xul"/>
+  <prefpane id="paneEvents" label="&tab.events;"
+            src="chrome://tabmixplus/content/preferences/events.xul"/>
+  <prefpane id="paneAppearance" label="&tab.appearance;"
+            src="chrome://tabmixplus/content/preferences/appearance.xul"/>
+  <prefpane id="paneMouse" label="&tab.mouse;"
+            src="chrome://tabmixplus/content/preferences/mouse.xul"/>
+  <prefpane id="paneMenu" label="&tab.menu;"
+            src="chrome://tabmixplus/content/preferences/menu.xul"/>
+  <prefpane id="paneSession" label="&tab.session;"
+            src="chrome://tabmixplus/content/preferences/session.xul"/>
+  <prefpane id="paneIncompatible" label="Error"
+            src="chrome://tabmixplus/content/preferences/incompatible.xul"/>
+<!--
+<prefpane id="paneIncompatible" label="Error">
+   <groupbox id="_incompatible" align="stretch" collapsed="true">
+      <hbox align="center">
+         <description style="width: 24em;" class="header">
+            Some of your Extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.
+         </description>
+         <spacer flex="1"/>
+         <button class="header" label="Show List…" oncommand="showIncompatible();"/>
+      </hbox >
+   </groupbox>
+   <separator/>
+</prefpane>
+-->
+
+  <popupset>
+    <menupopup id="tm-settings" position="before_start">
+      <menuitem id="tm-defaults" label="&settings.default;" oncommand="TM_defaultSetting();"/>
+      <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
+      <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
+    </menupopup>
+  </popupset>
+
+<!--
+check how we use this when the calling panel isn't loaded ?
+-->
+  <broadcasterset id="main:Broadcaster">
+    <broadcaster id="obs_singleWindow"/>
+    <broadcaster id="obs_undoClose"/>
+  </broadcasterset>
+
+</prefwindow>

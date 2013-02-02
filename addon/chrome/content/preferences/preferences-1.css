@@ -1,0 +1,21 @@
+/***
+  temp file to make the new option window look the same as the old one
+*/
+
+radio[pane] > image {
+  width: 24px;
+  height: 24px;
+}
+
+prefpane  {
+  padding: 3px 1px 1px 1px;
+}
+
+prefpane > tabbox {
+  padding: 0px 1px;
+}
+
+prefpane > tabbox > tabpanels{
+  width: 520px;
+  height: 436px;
+}

@@ -1,0 +1,366 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%pref-tabmixDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % appearanceDTD SYSTEM "chrome://tabmixplus/locale/pref-appearance.dtd" >
+%appearanceDTD;
+]>
+
+<overlay id="AppearancePaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+ <prefpane id="paneAppearance" onpaneload="gAppearancePane.init();">
+
+   <!-- scripts -->
+   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/appearance.js"/>
+
+   <!-- preferences - list all preferences in this pane -->
+   <preferences>
+      <preference id="pref_appearance"        name="extensions.tabmix.appearance.selectedTabIndex"
+                  type="int"/>
+      <preference id="pref_newTabButton"      name="extensions.tabmix.newTabButton"       type="bool"/>
+      <preference id="pref_newTabButton.posiotion"
+                  name="extensions.tabmix.newTabButton.position"                          type="int"/>
+      <preference id="pref_hideTabBarButton"  name="extensions.tabmix.hideTabBarButton"   type="bool"
+                  inverted="true"/>
+      <preference id="pref_hideAllTabsButton"  name="extensions.tabmix.hideAllTabsButton" type="bool"
+                  inverted="true"/>
+      <preference id="pref_allTabsPpreviews"  name="browser.allTabs.previews"             type="bool"/>
+      <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"        type="bool"/>
+      <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"         type="int"/>
+      <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"     type="int"/>
+      <preference id="pref_tabScroll"         name="extensions.tabmix.tabBarMode"         type="int"/>
+      <preference id="pref_smoothScroll"      name="toolkit.scrollbox.smoothScroll"       type="bool"/>
+      <preference id="pref_scrollDelay"
+                  name="toolkit.scrollbox.clickToScroll.scrollDelay"                      type="int"/>
+      <preference id="pref_maxrow"            name="extensions.tabmix.tabBarMaxRow"       type="int"/>
+      <preference id="pref_offsetAmountToScroll"
+                  name="extensions.tabmix.offsetAmountToScroll"                           type="bool"/>
+      <preference id="pref_currentTab"        name="extensions.tabmix.currentTab"         type="bool"/>
+      <preference id="pref_otherTab"          name="extensions.tabmix.otherTab"           type="bool"/>
+      <preference id="pref_unreadTab"         name="extensions.tabmix.unreadTab"          type="bool"/>
+      <preference id="pref_extraIcons_locked"        name="extensions.tabmix.extraIcons.locked"         type="bool"/>
+      <preference id="pref_extraIcons_protected"     name="extensions.tabmix.extraIcons.protected"         type="bool"/>
+      <preference id="pref_extraIcons_autoreload"    name="extensions.tabmix.extraIcons.autoreload"         type="bool"/>
+      <preference id="pref_progressMeter"     name="extensions.tabmix.progressMeter"      type="bool"/>
+<!--      <preference id="pref_progressMeter40"     name="extensions.tabmix.hideurlbarprogress"      type="bool"/>-->
+<!--      <preference id="pref_showTabX"          name="extensions.tabmix.tabXMode.enable"    type="bool"/>-->
+      <preference id="pref_showTabX"          name="extensions.tabmix.tabs.closeButtons.enable"    type="bool"/>
+<!--      <preference id="pref_tabXLeft"          name="extensions.tabmix.tabXLeft"           type="bool"/>-->
+      <preference id="pref_tabXLeft"          name="extensions.tabmix.tabs.closeButtons.onLeft"           type="bool"/>
+<!--      <preference id="pref_addTabXUI"         name="browser.tabs.closeButtons"           type="int"/>-->
+      <preference id="pref_addTabXUI"         name="extensions.tabmix.tabs.closeButtons"           type="int"/>
+<!--      <preference id="pref_tabXDelay"         name="extensions.tabmix.tabXDelay"          type="int"/>-->
+      <preference id="pref_tabXDelay"         name="extensions.tabmix.tabs.closeButtons.delay"          type="int"/>
+      <preference id="pref_tabClipWidth"      name="browser.tabs.tabClipWidth"            type="int"/>
+      <preference id="pref_minWidth"          name="extensions.tabmix.tabMinWidth"             type="int"/>
+      <preference id="pref_maxWidth"          name="extensions.tabmix.tabMaxWidth"             type="int"/>
+      <preference id="pref_flexTabs"          name="extensions.tabmix.flexTabs"           type="bool"/>
+      <preference id="pref_bookastitle"       name="extensions.tabmix.titlefrombookmark"  type="bool"/>
+      <preference id="pref_enableMaxTabsInRow"
+                  name="extensions.tabmix.enableMaxTabsInRow"                             type="bool"/>
+<!--
+      <preference id="pref_maxTabsInRow"       name="extensions.tabmix.maxTabsInRow"      type="int"/>
+-->
+   </preferences>
+   <!-- stringbundles -->
+
+   <!-- pane content -->
+       <tabbox id="appearance" flex="1"
+               onselect="gSetTabIndex.tabSelectionChanged(event);">
+        <tabs>
+          <tab label="&tabBarAppearance.label;" class="subtabs" helpTopic="Display_-_Tab_bar"/>
+          <tab label="&tabAppearance.label;" class="subtabs" helpTopic="Display_-_Tab"/>
+          <tab label="&toolBarAppearance.label;" class="subtabs" helpTopic="Display_-_ToolBar"/>
+        </tabs>
+        <tabpanels flex="1">
+          <tabpanel orient="vertical">
+            <groupbox id="tabBarAppearance" flex="1">
+              <caption label="&show.ontabbar.label;"/>
+              <!-- new tab button on tabbar -->
+              <hbox align="center">
+<!--
+                <checkbox id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"
+                                    oncommand="document.getElementById('customizeToolbar').disabled = !this.checked;"/>
+-->
+                <checkbox id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
+                <!-- new tab button on tabbar position -->
+                <menulist id="newTabButton.posiotion"
+                          preference="pref_newTabButton.posiotion" observes="obs_newTabButton">
+                <menupopup>
+                  <menuitem value="0" id="newTabButton.posiotion.left"  label="&newTabButton.posiotion.left.label;"/>
+                  <menuitem value="1" id="newTabButton.posiotion.right" label="&newTabButton.posiotion.right.label;"/>
+                  <menuitem value="2" id="newTabButton.posiotion.afterlast" label="&newTabButton.posiotion.afterlast.label;"/>
+                  </menupopup>
+                </menulist>
+                <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"
+                        tooltiptext="&dragNewTabButton.tooltip;" observes="obs_newTabButton"/>
+              </hbox>
+              <!-- tab-close-button on tabbar -->
+              <vbox align="start">
+                <checkbox id="hideTabBarButton" label="&hideTabBarButton.label;" preference="pref_hideTabBarButton"/>
+                <!-- all-tabs-button on tabbar -->
+                <hbox align="center">
+                  <checkbox id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
+                  <checkbox id="allTabsPpreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPpreviews" observes="obs_hideAllTabsButton"/>
+                </hbox>
+                <!-- Space on tabbar -->
+                <checkbox id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
+                          tooltiptext="&tabBarSpace.tooltip;" />
+              </vbox>
+            </groupbox>
+            <groupbox flex="1" id="tabBarDisplay">
+              <!-- show/hide the tabbar -->
+              <hbox align="center">
+                <label value="&hideTabBar.label;:"/>
+                <menulist id="hideTabbar" orient="horizontal" preference="pref_hideTabbar"
+                          oncommand="TM_Options.setDisabeled_replaceLastTabWith();">
+                  <menupopup>
+                    <menuitem value="0" id="hideTabbar.never"  label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
+                    <menuitem value="1" id="hideTabbar.onetab" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+                    <menuitem value="2" id="hideTabbar.always" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
+                  </menupopup>
+                </menulist>
+              </hbox>
+              <separator/>
+<!--
+              <label value="Use treeStyleTab or VerticalTab extension to consrole this preferences" hidden="true" id="treeStyleTab.msg"
+             class="header" style="text-decoration: underline;color: #CC0000;"/>
+-->
+              <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
+                           hidden="true" id="treeStyleTab.msg">
+                &verticalTabbar.description;
+              </description>
+              <!-- choose tab bar position -->
+              <hbox align="center">
+                <label id="tabBarPosition.label" value="&tabBarPosition.label;" control="tabBarPosition" TSTdisabled="true"/>
+                <menulist id="tabBarPosition" preference="pref_tabBarPosition">
+                  <menupopup>
+                    <menuitem value="0" label="&tabBarPosition.top.label;" />
+                    <menuitem value="1" label="&tabBarPosition.bottom.label;" />
+                  </menupopup>
+                </menulist>
+              </hbox>
+              <!-- When too many tabs -->
+              <box id="tabScroll-box" orient="vertical">
+                <hbox>
+                  <label id="tabScroll.label" value="&tabScroll.label;" control="tabScroll" TSTdisabled="true"/>
+                </hbox>
+                <hbox pack="end" class="indent">
+                  <menulist id="tabScroll" preference="pref_tabScroll">
+                    <menupopup oncommand="gAppearancePane.tabScroll();">
+                      <menuitem value="0" label="&tabScroll.none;"/>
+                      <menuitem value="1" label="&tabScroll.leftRightButtons;"/>
+                      <menuitem value="3" label="&tabScroll.rightButtons;" rtlLabel="&tabScroll.rightButtons.rtl;"/>
+                      <menuitem value="2" label="&tabScroll.multibar;"/>
+                    </menupopup>
+                  </menulist>
+                </hbox>
+              </box>
+              <vbox align="start">
+                <hbox align="center" id="maxbar">
+                  <label value="&maxrow.label;" />
+                  <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
+                </hbox>
+                <checkbox id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
+                          preference="pref_offsetAmountToScroll" style="height: 22px;"/>
+                <checkbox id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"
+                          inverseDependency="true"/>
+              </vbox>
+              <hbox align="center" id="clickToScroll.scrollDelay">
+                <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
+                <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
+                         preference="pref_scrollDelay" type="number"/>
+                <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
+              </hbox>
+            </groupbox>
+          </tabpanel>
+          <tabpanel orient="vertical">
+            <groupbox id="tabappearance" flex="1" orient="horizontal">
+              <caption label="&highlight.label;"/>
+              <vbox align="start">
+                <!-- Hightlight Current tab -->
+                <checkbox id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
+                <hbox>
+                  <!-- Highlight unread tabs -->
+                  <checkbox id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
+                  <!-- Highlight other tabs -->
+                  <checkbox id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
+                </hbox>
+              </vbox>
+              <vbox style="-moz-margin-start: 3em;">
+                <button id="advancedAppearance" label="&setstyles.label;…"
+                        oncommand="window.openDialog('chrome://tabmixplus/content/pref/pref-appearance.xul', 'advanceAppearanceDialog', 'modal,titlebar,toolbar');"/>
+              </vbox>
+<!--
+              <hbox align="center">
+                <checkbox id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
+                <spacer flex="1" style="max-width: 10.9em;"/>
+                <button id="advancedAppearance" label="&setstyles.label;…"
+                        oncommand="window.openDialog('chrome://tabmixplus/content/pref/pref-appearance.xul', 'advanceAppearanceDialog', 'modal,titlebar,toolbar');"/>
+              </hbox>
+              <hbox align="center">
+                <checkbox id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
+                <checkbox id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
+              </hbox>
+-->
+              </groupbox>
+              <groupbox flex="1">
+                <caption label="&show.ontab.label;"/>
+                <!-- Extra icons
+                <hbox align="center">
+                  <checkbox id="extraIcons" label="&extraIcons.label;" preference="pref_extraIcons"/>
+                </hbox>
+-->
+              <!-- Extra icons-->
+                <label value="Icons for:"/>
+                <hbox align="center" class="indent">
+                  <checkbox id="extraIcons-locked" label="Locked"  preference="pref_extraIcons_locked"/>
+                  <checkbox id="extraIcons-protected" label="Protected" preference="pref_extraIcons_protected"/>
+                  <checkbox id="extraIcons-autoreload" label="Auto-Reload" preference="pref_extraIcons_autoreload"/>
+                </hbox>
+                <!-- Progress Meter-->
+                <checkbox id="progressMeter" label="&progressMeter.label;" preference="pref_progressMeter"/>
+                <!-- user interface for close button on tabs -->
+                <hbox align="center">
+                  <checkbox id="showTabX" label="&showTabX.labelBegin;" preference="pref_showTabX"/>
+                  <checkbox id="tabXLeft" label="&showTabX.left;" rtlLabel="&showTabX.rtl;"
+                            preference="pref_tabXLeft" observes="obs_showTabX" />
+                </hbox>
+                <hbox id="tabxDependant" class="indent" align="center" style="height: 28px;">
+                  <menulist id="addTabXUI" preference="pref_addTabXUI"
+                            style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
+                    <menupopup oncommand="gAppearancePane.addTabXUI();"
+                                               onpopupshowing="gAppearancePane.setAllTabsItemVisibility(true);"
+                                           onpopuphidden="gAppearancePane.setAllTabsItemVisibility(false);">
+                      <menuitem value="1" label="&showTabX.always;" />
+                      <menuitem value="5" label="&showTabX.alwaysExeption;" observes="obs_flexTabs" id="alltabsItem"/>
+                      <menuitem value="3" label="&showTabX.current;" />
+                      <menuitem value="2" label="&showTabX.hover;"/>
+                      <menuitem value="4" label="&showTabX.currentHover;"/>
+                    </menupopup>
+                  </menulist>
+                  <hbox id="tabXdelaycheck" align="center">
+                    <textbox id="tabXDelay" size="4" maxlength="4" preference="pref_tabXDelay"
+                             observes="obs_showTabX" type="number"/>
+                    <label value="&milliseconds.label;" observes="obs_showTabX" class="timelabel"/>
+                  </hbox>
+                  <hbox id="tabXwidthBox" align="center">
+                    <textbox id="tabXwidth" size="4" maxlength="4" preference="pref_tabClipWidth"
+                             observes="obs_showTabX" type="number"/>
+                    <label value="&widthPixels.label;" observes="obs_showTabX" />
+                  </hbox>
+                </hbox>
+              </groupbox>
+              <groupbox flex="1">
+              <!-- Tab width -->
+                <label value="&minWidth.label; (&widthPixels.label;)" />
+                <hbox align="center" class="indent">
+<!--
+                  <textbox id="min-Width" size="3" maxlength="3" type="number"/>
+-->
+                  <scale id="minScale" width="85" movetoclick="true" spin="minWidth"
+                              preference-editable="true" preference="pref_minWidth" min="22" max="500" value="22" increment="1"
+                              onsynctopreference="gAppearancePane.onsynctopreferenceWidth(this);"
+                              onchange="gAppearancePane.scaleChangeWidth(event);"/>
+<hbox class="_textbox">
+                  <label class="labelWidth">
+                    <observes element="minScale" attribute="value"/>
+                  </label>
+                  <spinbuttons id="minWidth" oncommand="gAppearancePane.spinbuttonChangeWidth(event);"/>
+</hbox>
+                  <label value="&widthTo.label;" />
+<hbox class="_textbox">
+                  <label class="labelWidth">
+                    <observes element="maxScale" attribute="value"/>
+                  </label>
+                  <spinbuttons id="maxWidth" oncommand="gAppearancePane.spinbuttonChangeWidth(event);"/>
+</hbox>
+<!--
+                  <textbox id="max-Width" size="4" maxlength="4" type="number"/>
+-->
+                  <scale id="maxScale" width="85" movetoclick="true" spin="maxWidth"
+                              preference-editable="true" preference="pref_maxWidth" min="22" max="500" value="500" increment="1"
+                              onsynctopreference="gAppearancePane.onsynctopreferenceWidth(this);"
+                              onchange="gAppearancePane.scaleChangeWidth(event);"/>
+<!--
+                  <label value="&widthPixels.label;" />
+-->
+                </hbox>
+<!--
+                <hbox>
+                  <scale id="_minScale" movetoclick="true" width="100"
+                              preference-editable="true" min="22" max="500" value="250" increment="1"
+                              onchange="gAppearancePane._scaleChangeWidth(event);"/>
+                  <scale id="_maxScale" movetoclick="true" width="100"
+                              preference-editable="true" min="22" max="500" value="272" increment="1"
+                              onchange="gAppearancePane._scaleChangeWidth(event);"/>
+                </hbox>
+-->
+                <vbox align="start">
+                  <checkbox id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"
+                            inverseDependency="true"
+                            oncommand="gAppearancePane.setTabXUI();"/>
+                  <checkbox id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
+                </vbox>
+<!-- XXX XXX TEST    max tab in row
+              <hbox align="center">
+                <checkbox id="enableMaxTabsInRow" label="Max number of tabs in row"
+                          preference="pref_enableMaxTabsInRow"/>
+                <textbox id="maxTabsInRow" size="4" maxlength="4" preference="pref_maxTabsInRow" type="number" min="2"/>
+              </hbox>
+-->
+             </groupbox>
+          </tabpanel>
+          <tabpanel orient="vertical">
+            <groupbox flex="1">
+              <hbox>
+                <description class="header" style="width: &toolbar.description.width;">&toolbar.description;</description>
+                <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
+              </hbox>
+              <spacer flex="1"/>
+              <groupbox align="start" id="onToolbar">
+                <caption label="&toolbar.visible.caption;"/>
+                <label value="&toolbar.novisible.label;" class="indent"/>
+              </groupbox>
+              <spacer flex="1"/>
+              <groupbox align="start" id="onPlate">
+                <caption label="&toolbar.hidden.caption;"/>
+                <label value="&toolbar.nohidden.label;" class="indent"/>
+                <hbox class="tabmixbuttons">
+                  <image id="_btn_sessionmanager"/>
+                  <label value="&session.Tools;"/>
+                </hbox>
+                <hbox class="tabmixbuttons">
+                  <image id="_btn_undoclose"/>
+                  <label value="&closedtabsbtn.label;"/>
+                </hbox>
+                <hbox class="tabmixbuttons">
+                  <image id="_btn_closedwindows"/>
+                  <label value="&closedwindowsbtn.label;"/>
+                </hbox>
+                <hbox class="tabmixbuttons">
+                  <image id="_btn_tabslist"/>
+                  <label value="&tabslistbtn.label;"/>
+                </hbox>
+              </groupbox>
+              <spacer flex="1"/>
+            </groupbox>
+          </tabpanel>
+        </tabpanels>
+       </tabbox>
+
+   <broadcasterset id="paneAppearance:Broadcaster">
+      <broadcaster id="obs_newTabButton"/>
+      <broadcaster id="obs_hideAllTabsButton"/>
+      <broadcaster id="obs_showTabX"/>
+      <broadcaster id="obs_flexTabs"/>
+      <broadcaster id="obs_smoothScroll"/>
+   </broadcasterset>
+
+ </prefpane>
+
+</overlay>

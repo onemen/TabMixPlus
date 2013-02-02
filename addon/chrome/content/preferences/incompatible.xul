@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%pref-tabmixDTD;
+]>
+
+<overlay id="IncompatiblePaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- scripts -->
+  <!-- session is here just for constant in promptservice need to fix this -->
+  <script type="application/javascript" src="chrome://tabmixplus/content/session/session.js"/>
+<!--
+  <script type="application/javascript" src="chrome://tabmixplus/content/session/promptservice.js"/>
+-->
+<!--
+ <prefpane id="paneIncompatible" onpaneload="gIncompatiblePane.init();" helpTopic="paneIncompatible">
+-->
+ <prefpane id="paneIncompatible"  helpTopic="paneIncompatible">
+
+    <!-- scripts -->
+
+   <!-- preferences - list all preferences in this pane -->
+
+   <!-- stringbundles -->
+
+   <!-- pane content -->
+      <groupbox id="tabmix_incompatible" align="stretch">
+          <hbox align="center">
+            <description style="width: 24em;" class="header">
+              &incompatible.extensions;
+            </description>
+            <spacer flex="1"/>
+            <button class="header" label="&incompatible.button.label;…" oncommand="gIncompatiblePane.checkForIncompatible(true);"/>
+          </hbox >
+      </groupbox>
+
+ </prefpane>
+
+</overlay>
