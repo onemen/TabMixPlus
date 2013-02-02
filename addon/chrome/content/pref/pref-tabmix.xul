@@ -614,7 +614,7 @@
                 <checkbox id="tabXLeft" label="&showTabX.left;" rtlLabel="&showTabX.rtl;"
                           prefstring="extensions.tabmix.tabs.closeButtons.onLeft" observes="obs_showTabX" />
               </hbox>
-              <hbox id="tabxDependant" class="indent" align="center" style="height: 28px;">
+              <hbox id="tabxDependant" class="indent" align="center">
                 <menulist id="addTabXUI" prefstring="extensions.tabmix.tabs.closeButtons"
                           style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
                   <menupopup oncommand="TM_Options.addTabXUI();"
