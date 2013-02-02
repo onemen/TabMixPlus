@@ -23,7 +23,8 @@
       <preference id="pref_linkTarget"         name="extensions.tabmix.linkTarget"     type="bool"/>
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_speLink"            name="extensions.tabmix.opentabforLinks"        type="int"/>
-      <preference id="pref_singleWindow"       name="extensions.tabmix.singleWindow"   type="bool"/>
+      <preference id="pref_singleWindow"       name="extensions.tabmix.singleWindow"   type="bool"
+                  onchange="gLinksPane.singleWindow(this.value);"/>
     </preferences>
 
     <tabbox flex="1">
@@ -46,10 +47,8 @@
                 </menupopup>
               </menulist>
             </hbox>
-            <hbox>
-              <checkbox id="externalLink" label="&externalLink.useSeparate.label;"
-                        oncommand="gLinksPane.externalLinkValue(this.checked);"/>
-            </hbox>
+            <checkbox id="externalLink" label="&externalLink.useSeparate.label;"
+                      oncommand="gLinksPane.externalLinkValue(this.checked);"/>
             <hbox align="center" class="indent">
               <!-- Open external links in: New Window, New Tab, Current Browser -->
               <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget" observes="obs_externalLink"/>
@@ -79,15 +78,12 @@
             <description style="max-width: 50em;">&divertedWindows.comment;</description>
             <separator/>
             <!-- Force link with target attribute to open in current tab -->
-            <hbox>
-              <checkbox id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget" />
-            </hbox>
+            <checkbox id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget" />
             <hbox align="center">
               <checkbox id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
               <spacer flex="1"/>
               <button id="advancedSetting" label="&edit.label;…" observes="obs_filetypeEnable"
-                      oncommand="window.openDialog('chrome://tabmixplus/content/pref/pref-filetype.xul',
-                                  'filetypePrefsDialog', 'modal,titlebar,toolbar');"/>
+                      oncommand="gLinksPane.openFiletypeEditor();"/>
             </hbox>
             <!-- Special control of links -->
             <separator/>
@@ -103,11 +99,8 @@
               </menulist>
             </hbox>
             <!-- Enable Single Window Mode -->
-            <hbox>
-              <checkbox id="singleWindow" label="&singleWindow.label;" inverseDependency="true"
-                        oncommand="gLinksPane.singleWindow(this.checked);"
-                        preference="pref_singleWindow" />
-            </hbox>
+            <checkbox id="singleWindow" label="&singleWindow.label;" inverseDependency="true"
+                      preference="pref_singleWindow" />
           </groupbox>
         </tabpanel>
       </tabpanels>
