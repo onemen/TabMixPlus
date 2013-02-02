@@ -1,5 +1,10 @@
-/***
-  temp file to make the new option window look the same as the old one
+
+checkbox {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox") !important;
+}
+
+/*
+  rules to make the new option window look the same as the old one
 */
 
 radio[pane] > image {
