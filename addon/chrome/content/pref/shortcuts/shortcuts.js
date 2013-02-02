@@ -9,8 +9,11 @@ function getKeysForShortcut(shortcut, id, win) {
   if (!win)
     win = Services.wm.getMostRecentWindow("navigator:browser");
 
-  let ourKey = win.document.getElementById(id);
-  if (ourKey && ourKey.getAttribute("disabled"))
+  let $ = function(id) id && win.document.getElementById(id);
+  let isDisabled = function(item) item && item.getAttribute("disabled");
+
+  let ourKey = $(id);
+  if (isDisabled(ourKey))
     return null;
 
   let dots = "…"
@@ -18,7 +21,7 @@ function getKeysForShortcut(shortcut, id, win) {
   let usedKeys = Array.filter(keys, function(key) {
     if (ourKey == key)
       return false;
-    if (key.getAttribute("disabled"))
+    if (isDisabled(key) || isDisabled($(key.getAttribute("command"))))
       return false;
     let _key = {
       modifiers: key.getAttribute("modifiers"),
