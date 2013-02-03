@@ -37,7 +37,7 @@ var gEventsPane = {
 //XXXX TODO fix it
     TM_Options.initBroadcasters("paneEvents", true);
     TM_Options.disabled("undoClose", true); // set "obs_undoClose" global observer
-    TM_Options.speLink();
+    this.disableInverseMiddleClick();
     TM_Options.newTabUrl($("loadOnNewTab"), false, false);
     TM_Options.setDisabeled_replaceLastTabWith();
     this.setShowTabList();
@@ -121,6 +121,11 @@ var gEventsPane = {
 
     // Otherwise, use the actual textbox value.
     return undefined;
+  },
+
+  disableInverseMiddleClick: function() {
+    var val = ($("pref_opentabforLinks") || $("pref_opentabforLinks1")).value;
+    TM_Options.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
   },
 
 ///XXX TODO - finish after shortcut panel is ready

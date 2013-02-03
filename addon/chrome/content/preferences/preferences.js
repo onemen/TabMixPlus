@@ -238,17 +238,6 @@ try {
 } catch (ex) {Tabmix.assert(ex);}
   },
 
-  speLink: function() {
-try {
-    var midcurrent = $("midcurrent");
-    if (!midcurrent) // events pane not loaded... noting to do
-      return;
-    var speLink = $("speLink");
-    var val = speLink ? speLink.selectedItem.value : Tabmix.prefs.getIntPref("opentabforLinks");
-    this.setDisabled("inverselinks", val != 2 && midcurrent.checked);
-} catch (ex) {Tabmix.assert(ex);}
-  },
-
   newTabUrl: function(item, disable, setFocus) {
     var showTabUrlBox = item.selectedItem.value == 4;
     var idnum = item.getAttribute("idnum") || "" ;

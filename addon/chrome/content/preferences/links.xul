@@ -22,7 +22,8 @@
                   name="browser.link.open_newwindow.restriction"                       type="int"/>
       <preference id="pref_linkTarget"         name="extensions.tabmix.linkTarget"     type="bool"/>
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
-      <preference id="pref_speLink"            name="extensions.tabmix.opentabforLinks"        type="int"/>
+      <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
+                  onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();"/>
       <preference id="pref_singleWindow"       name="extensions.tabmix.singleWindow"   type="bool"
                   onchange="gLinksPane.singleWindow(this.value);"/>
     </preferences>
@@ -90,8 +91,8 @@
             <separator/>
             <hbox align="center">
               <label flex="1" value="&speLink.label;" control="speLink" />
-              <menulist id="speLink" preference="pref_speLink" >
-                <menupopup onpopuphidden="TM_Options.speLink();">
+              <menulist id="opentabforLinks" preference="pref_opentabforLinks" >
+                <menupopup>
                   <menuitem value="0" label="&speLink.none;" />
                   <menuitem value="1" label="&speLink.allLinks;" />
                   <menuitem value="2" label="&speLink.external;" />
