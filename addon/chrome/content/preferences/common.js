@@ -26,15 +26,13 @@ var gCommon = {
 
     if (docElt.instantApply)
       docElt.getButton("extra1").hidden = true;
-    else {
-//      docElt.getButton("extra1").disabled = true;
-      this._applyButton = docElt.getButton("extra1");
-      this._applyButton.disabled = true;
-//      this._applyButton.value = 0;
-      this._applyButton.data = [];
-    }
 
-    var settingsButton = document.documentElement.getButton("extra2");
+    // always init the apply button for the case user change tab width
+    this._applyButton = docElt.getButton("extra1");
+    this._applyButton.disabled = !docElt.instantApply;
+    this._applyButton.data = [];
+
+    var settingsButton = docElt.getButton("extra2");
     settingsButton.setAttribute("popup","tm-settings");
     settingsButton.setAttribute("dir","reverse");
     settingsButton.setAttribute("image","chrome://tabmixplus/skin/arrow.png");
@@ -68,6 +66,10 @@ var gCommon = {
   },
 
   deinit: function() {
+    if (document.documentElement.instantApply &&
+        this._applyButton.userchangedWidth) {
+      gAppearancePane.changeTabsWidth();
+    }
 //    gIncompatiblePane.paneButton.removeEventListener("click", gIncompatiblePane.onPaneSelect, false);
     gIncompatiblePane.paneButton.parentNode.removeEventListener("select", gIncompatiblePane.onPaneSelect, false);
 //    window.removeEventListener("command", this.updateObservers, false);
@@ -167,7 +169,13 @@ Tabmix.log("name " + item.name
 } catch(ex) {Tabmix.log(ex);}
   },
 
+/// check if i need to use event.preventDefault / stop....
   onApply: function() {
+    if (document.documentElement.instantApply &&
+        this._applyButton.userchangedWidth) {
+      gAppearancePane.changeTabsWidth();
+      return;
+    }
     // set flag to prevent TabmixTabbar.updateSettings from run for each change
     Tabmix.prefs.setBoolPref("setDefault", true);
     // Write all values to preferences.

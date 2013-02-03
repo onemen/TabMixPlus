@@ -155,21 +155,20 @@ tabpanels#tabpanId[Mac] .tabs-hidden > tab {
 #extraIcons-locked .checkbox-icon {
   list-style-image: url(chrome://tabmixplus/skin/locked.png);
   -moz-image-region: rect(0 9px 9px 0);
-  padding: 1px 0px 1px 0px;
-  -moz-margin-end: 3px;
 }
 
 #extraIcons-protected .checkbox-icon {
   list-style-image: url(chrome://tabmixplus/skin/protected.png);
   -moz-image-region: rect(5px 16px 16px 7px);
-  padding-top: 1px;
-  -moz-margin-end: 3px;
 }
 
 #extraIcons-autoreload .checkbox-icon {
   list-style-image: url(chrome://tabmixplus/skin/autoreload.png);
   -moz-image-region: rect(0px 16px 9px 7px);
-  padding: 1px 0px 1px 0px;
+}
+
+.extraIcons .checkbox-icon {
+  padding: 2px 0px 2px 0px;
   -moz-margin-end: 3px;
 }
 
