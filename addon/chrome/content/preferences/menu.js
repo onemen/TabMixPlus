@@ -17,12 +17,21 @@ var gMenuPane = {
 /*
     var checked = $("selectTab") ? $("selectTab").checked || prevValue ?????
 */
-    TM_Options.selectTab();
+    this.setInverseLinkLabel();
 /*
     var itam = $("selectTab");
     var checked = itam ? itam.checked : Services.prefs.getBoolPref("browser.tabs.loadInBackground");
     TM_Options.selectTab(checked);
 */
     gCommon.setPaneWidth("paneMenu");
+  },
+
+  // update item showInverseLink label in menu pane
+  // when "Links" in Events > Tab Focus changed
+  setInverseLinkLabel: function() {
+    var showInverseLink = $("showInverseLink");
+    var val = ($("pref_selectTab") || $("pref_selectTab1")).value;
+    var label = showInverseLink.getAttribute((val ? "bg" : "fg") + "label");
+    showInverseLink.setAttribute("label", label);
   }
 }

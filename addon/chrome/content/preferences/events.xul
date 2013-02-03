@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd" >
+<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd">
 %tabsDTD;
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
 ]>
 
@@ -19,7 +19,8 @@
     <preferences>
       <preference id="pref_events"              name="extensions.tabmix.events.selectedTabIndex"
                                                                                               type="int"/>
-      <preference id="pref_loadOnNewTab"        name="extensions.tabmix.loadOnNewTab.type"    type="int"/>
+      <preference id="pref_loadOnNewTab"        name="extensions.tabmix.loadOnNewTab.type"    type="int"
+                  onchange="gEventsPane.newTabUrl(this.parentNode, false, true);"/>
       <preference id="pref_newTabUrl"           name="extensions.tabmix.newtab.url"           type="string"/>
       <preference id="pref_selectLocationBar"   name="extensions.tabmix.selectLocationBar"
                   type="bool" inverted="true"/>
@@ -41,7 +42,8 @@
       <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent"        type="bool"
                   onchange="gEventsPane.disableInverseMiddleClick();"/>
       <preference id="pref_selectTab"           name="browser.tabs.loadInBackground"
-                  type="bool" inverted="true"/>
+                                                                              inverted="true" type="bool"
+                  onchange="if (typeof gMenuPane == 'object') gMenuPane.setInverseLinkLabel();"/>
       <preference id="pref_selectTabUrl"        name="extensions.tabmix.loadUrlInBackground"
                   type="bool" inverted="true"/>
       <preference id="pref_selectDivertedTab"   name="browser.tabs.loadDivertedInBackground"
@@ -66,10 +68,12 @@
       <preference id="pref_warnOnCloseWindow"   name="browser.tabs.warnOnClose"               type="bool"/>
       <preference id="pref_warnOnCloseProtected"
                   name="extensions.tabmix.protectedtabs.warnOnClose"                          type="bool"/>
-      <preference id="pref_keepWindow"          name="browser.tabs.closeWindowWithLastTab"
-                  type="bool" inverted="true"/>
-      <preference id="pref_keeptab"             name="extensions.tabmix.keepLastTab"          type="bool"/>
-      <preference id="pref_replaceLastTabWith"  name="extensions.tabmix.replaceLastTabWith.type"   type="int"/>
+      <preference id="pref_keepWindow"          name="browser.tabs.closeWindowWithLastTab"    type="bool"
+                  onchange="gEventsPane.disabeleRplaceLastTabWith();" inverted="true"/>
+      <preference id="pref_keepLastTab"             name="extensions.tabmix.keepLastTab"          type="bool"
+                  onchange="gEventsPane.disabeleRplaceLastTabWith();"/>
+      <preference id="pref_replaceLastTabWith"  name="extensions.tabmix.replaceLastTabWith.type"   type="int"
+                  onchange="gEventsPane.newTabUrl(this.parentNode, false, true);"/>
       <preference id="pref_newTabUrl_1"         name="extensions.tabmix.replaceLastTabWith.newTabUrl"
                   type="wstring"/>
       <preference id="pref_afterLastTabClosed"  name="extensions.tabmix.selectLocationBar.afterLastTabClosed"
@@ -86,9 +90,10 @@
       <preference id="pref_undoClosepos"        name="extensions.tabmix.undoClosePosition"    type="bool"/>
       <preference id="pref_menuonlybutton"
                   name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
-      <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"/>
-      <preference id="pref_ctrltab.tabPreviews"
-                  name="extensions.tabmix.lasttab.tabPreviews"                                type="bool"/>
+      <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"
+                  onchange="gEventsPane.disabeleShowTabList();"/>
+      <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
+                  onchange="gEventsPane.disabeleShowTabList();"/>
       <preference id="pref_showTabList"         name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
       <preference id="pref_respondToMouse"
                   name="extensions.tabmix.lasttab.respondToMouseInTabList"                    type="bool"/>
@@ -120,7 +125,7 @@
             <hbox align="center">
               <label value="&newtab.label;" control="loadOnNewTab"/>
               <menulist id="loadOnNewTab" preference="pref_loadOnNewTab">
-                <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                <menupopup>
                   <menuitem value="4" label="&newtab.location.1;"/>
                   <menuitem value="0" label="&newtab.blank;"/>
                   <menuitem value="1" label="&newtab.home;"/>
@@ -206,8 +211,7 @@
             <hbox>
               <vbox align="start" id="tabopening2">
                 <!-- select Links -->
-                <checkbox id="selectTab" label="&selectTab.label;" preference="pref_selectTab"
-                          oncommand="TM_Options.selectTab();"/>
+                <checkbox id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
                 <!-- Select Diverted Windows -->
                 <checkbox id="selectDivertedTab" label="&selectDivertedTab.label;"
                           preference="pref_selectDivertedTab"/>
@@ -258,18 +262,16 @@
           <groupbox flex="1">
             <caption label="&lasttab.caption.label;"/>
             <checkbox id="keepWindow" label="&keepWindow.label.3.1;"
-                      preference="pref_keepWindow"
-                      oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
+                      preference="pref_keepWindow"/>
             <!-- Don't close the last tab -->
-            <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keeptab"
-                      oncommand="TM_Options.setDisabeled_replaceLastTabWith();"/>
+            <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keepLastTab"/>
             <vbox>
               <!-- Replace Last Tab With -->
               <hbox align="center">
                 <label value="&replaceLastTabWith.label;:" observes="obs_replaceLastTabWith"/>
                   <menulist id="replaceLastTabWith" preference="pref_replaceLastTabWith" idnum="_1"
                     observes="obs_replaceLastTabWith">
-                    <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                    <menupopup>
                       <menuitem value="4" label="&newtab.location.1;"/>
                       <menuitem value="0" label="&newtab.blank;"/>
                       <menuitem value="1" label="&newtab.home;"/>
@@ -278,6 +280,7 @@
                     </menupopup>
                   </menulist>
               </hbox>
+<!-- NEED to update babelzilla -->
               <hbox class="indent" align="center" flex="1">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
@@ -287,7 +290,7 @@
                           preference="pref_newTabUrl_1"/>
               </hbox>
               <checkbox class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
-                          preference="pref_afterLastTabClosed"/>
+                        preference="pref_afterLastTabClosed" observes="obs_replaceLastTabWith"/>
             </vbox>
           </groupbox>
           <groupbox flex="1">
@@ -337,25 +340,23 @@
         <tabpanel>
           <groupbox>
             <vbox align="start">
-              <!-- Enable Undo Close Tab -->
-              <checkbox id="undoClose" label="&undoClose.label;" preference="pref_undoClose"
-                        oncommand="gEventsPane.setUndoCloseCache(this);"/>
+              <!-- Enable Undo Close Tab
+                   gTMPprefObserver.observe control changes in these preference -->
+              <checkbox id="undoClose" label="&undoClose.label;" preference="pref_undoClose"/>
               <vbox align="start" class="indent">
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
                   <textbox id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
-                           type="number" observes="obs_undoClose"
-                           onblur="gEventsPane.setUndoClose(this); event.stopPropagation();"/>
+                           type="number" observes="obs_undoClose"/>
                 </hbox>
                 <checkbox id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
               </vbox>
             </vbox>
             <separator class="groove"/>
-            <checkbox id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"
-                      oncommand="gEventsPane.setShowTabList();"/>
+            <checkbox id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"/>
             <checkbox id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
-                      observes="obs_ctrltab" oncommand="gEventsPane.setShowTabList();"/>
+                      observes="obs_ctrltab"/>
             <checkbox id="showTabList" label="&ctrltab.popup;" preference="pref_showTabList"/>
             <checkbox id="respondToMouse" class="indent" label="&tabpopup.mouse;" preference="pref_respondToMouse"
                       observes="obs_showTabList"/>

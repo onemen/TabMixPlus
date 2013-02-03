@@ -38,9 +38,9 @@ var gEventsPane = {
     TM_Options.initBroadcasters("paneEvents", true);
     TM_Options.disabled("undoClose", true); // set "obs_undoClose" global observer
     this.disableInverseMiddleClick();
-    TM_Options.newTabUrl($("loadOnNewTab"), false, false);
-    TM_Options.setDisabeled_replaceLastTabWith();
-    this.setShowTabList();
+    this.newTabUrl($("loadOnNewTab"), false, false);
+    this.disabeleRplaceLastTabWith();
+    this.disabeleShowTabList();
 
     var direction = window.getComputedStyle($("paneEvents"), null).direction;
     if (direction == "rtl") {
@@ -63,51 +63,37 @@ var gEventsPane = {
     gCommon.setPaneWidth("paneEvents");
   },
 
-  setUndoCloseCache: function (item) {
-    var undoCloseCache = $("undoCloseCache");
-    var currentValue = undoCloseCache.value;
-    var newValue = item.checked ? 10 : 0;
-    if (newValue != currentValue) {
-      var preference = $("pref_undoCloseCache");
-      preference.value = newValue;
-//XXX TODO check this
-//      updateApplyData(undoCloseCache, newValue);
-    }
-  },
-
-  setUndoClose: function (item) {
-// look like we don't need this....
-    if (item.value == "") {
-      var preference = $(item.getAttribute("preference"));
-      preference.batching = true;
-      preference.value = 0;
-      preference.batching = false;
-    }
-
-    if (item.value == 0) {
-      var undoClose = $("undoClose");
-      undoClose.checked = false;
-      TM_Options.disabled(undoClose);
-      this.setUndoCloseCache(undoClose);
-    }
-//XXX TODO
-// need to save pref to file;
-  },
-
-  setShowTabList: function () {
-    var disableShowTabList = $("ctrltab").checked &&
-                              $("ctrltab.tabPreviews").checked;
+  disabeleShowTabList: function () {
+    var disableShowTabList = $("pref_ctrltab").value &&
+                             $("pref_ctrltab.tabPreviews").value;
     TM_Options.setDisabled("showTabList", disableShowTabList);
     if (!$("obs_showTabList").hasAttribute("disabled"))
       TM_Options.setDisabled("respondToMouse", disableShowTabList);
   },
 
+  disabeleRplaceLastTabWith: function() {
+    // we disable replaceLastTabWith if one of this test is true
+    // browser.tabs.closeWindowWithLastTab = true OR
+    // extensions.tabmix.keepLastTab = true
+    var disable = !$("pref_keepWindow").value || $("pref_keepLastTab").value;
+    TM_Options.setDisabled("obs_replaceLastTabWith", disable);
+    this.newTabUrl($("replaceLastTabWith"), disable, !disable);
+  },
+
+  newTabUrl: function(item, disable, setFocus) {
+    var showTabUrlBox = item.selectedItem.value == 4;
+    var idnum = item.getAttribute("idnum") || "" ;
+    TM_Options.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
+    TM_Options.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
+    if (setFocus && showTabUrlBox)
+      $("newTabUrl" + idnum).focus();
+  },
+
   _newTabUrl: "about:blank",
   syncFromNewTabUrlPref: function (item) {
-    let pref_newTabUrl = $("pref_newTabUrl");
     var preference = $(item.getAttribute("preference"));
-
-    // If the pref is set to the default, set the value to "" to show the placeholder text
+    // If the pref is set to the default, set the value to ""
+    // to show the placeholder text
     let value = preference.value;
     if (value && value.toLowerCase() == this._newTabUrl)
       return "";

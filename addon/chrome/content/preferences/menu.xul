@@ -53,6 +53,9 @@
       <preference id="pref_lockTabMenu"        name="extensions.tabmix.lockTabMenu"        type="bool"/>
       <preference id="pref_showBmkTabs"        name="extensions.tabmix.bookmarkTabsMenu"   type="bool"/>
       <preference id="pref_showLinkHere"       name="extensions.tabmix.openLinkHere"       type="bool"/>
+      <preference id="pref_selectTab1"         name="browser.tabs.loadInBackground"
+                                                                           inverted="true" type="bool"
+                  onchange="if (typeof gEventsPane == 'undefined') gMenuPane.setInverseLinkLabel();"/>
       <preference id="pref_showInverseLink"    name="extensions.tabmix.openInverseLink"    type="bool"/>
       <preference id="pref_openAllLinks"       name="extensions.tabmix.openAllLinks"       type="bool"/>
       <preference id="pref_linkWithHist"       name="extensions.tabmix.linkWithHistory"    type="bool"/>

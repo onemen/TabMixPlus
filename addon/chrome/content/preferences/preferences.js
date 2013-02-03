@@ -223,46 +223,6 @@ try {
     }
   },
 
-  // update item showInverseLink label in menu pane
-  // when "Links" in Events > Tab Focus changed
-  selectTab: function() {
-try {
-    var showInverseLink = $("showInverseLink");
-    if (!showInverseLink)  // menu pane not loaded... noting to do
-      return;
-    var selectTab = $("selectTab");
-    // selectTab item is inverted
-    var focusType = selectTab ? selectTab.checked : !Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-    var val = showInverseLink.getAttribute((focusType ? "bg" : "fg") + "label");
-    showInverseLink.setAttribute("label", val);
-} catch (ex) {Tabmix.assert(ex);}
-  },
-
-  newTabUrl: function(item, disable, setFocus) {
-    var showTabUrlBox = item.selectedItem.value == 4;
-    var idnum = item.getAttribute("idnum") || "" ;
-    this.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
-    this.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
-    if (setFocus && showTabUrlBox)
-      $("newTabUrl" + idnum).focus();
-  },
-
-  setDisabeled_replaceLastTabWith: function() {
-    // we disable replaceLastTabWith if one of this test is true
-    // browser.tabs.closeWindowWithLastTab == true OR
-    // extensions.tabmix.keepLastTab = true OR
-///    // extensions.tabmix.hideTabbar != 0
-    // when we enable the item we need to set the disable state for newTabUrl_1
-    var keepLastTab = $("keepLastTab");
-    // when we call this function from hideTabbar oncommand make sure "keepLastTab" exist
-    if (!keepLastTab) // events pane not loaded... noting to do
-      return;
-    var closeWindow = !$("keepWindow").checked // inverted pref;
-    var disable = closeWindow || keepLastTab.checked;
-    this.setDisabled("obs_replaceLastTabWith", disable);
-    this.newTabUrl($("replaceLastTabWith"), disable, !disable);
-  },
-
    // Set given attribute of specified item.
    // If the value is null, then it removes the attribute
    // (which works nicely for the disabled attribute).
