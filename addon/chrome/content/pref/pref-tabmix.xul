@@ -114,7 +114,7 @@
                   <menuitem value="-1" label="&linkTarget.tab;">
                     <observes element="generalWindowOpen" attribute="label"/>
                   </menuitem>
-                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow1"/>
+                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow"/>
                   <menuitem value="3" label="&linkTarget.tab;"/>
                   <menuitem value="1" label="&linkTarget.current;"/>
                 </menupopup>
