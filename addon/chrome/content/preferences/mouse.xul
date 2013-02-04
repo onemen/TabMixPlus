@@ -77,13 +77,6 @@
                 <textbox id="tabFlipDelay" size="4" maxlength="4" preference="pref_tabFlipDelay" type="number" observes="obs_tabFlip"/>
                 <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
               </hbox>
-              <hbox align="center">
-                <!-- Tabbar Scrolling -->
-                <checkbox id="tabbarscrolling" label="&enabletabbarscrolling.label;" preference="pref_tabbarscrolling"/>
-              </hbox>
-              <hbox align="center" class="indent">
-                <checkbox id="reversescrolling" label="&reverseScroll.label;" preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
-              </hbox>
               <vbox align="start">
                 <!-- Drag tabs -->
                 <checkbox id="mouseDownSelect" label="&clickFocus.label;" preference="pref_mouseDownSelect"/>
@@ -103,6 +96,19 @@
                          src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
                 </radiogroup>
               </hbox>
+            </groupbox>
+            <!-- Tabbar Scrolling -->
+            <groupbox align="start" flex="1">
+              <caption label="&tabbarscrolling.caption;"/>
+              <separator class="thin"/>
+              <label value="&tabbarscrolling.holdShift.label;"/>
+              <radiogroup id="tabbarscrolling" boolean="true" orient="horizontal"
+                          preference="pref_tabbarscrolling">
+                <radio value="0" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"/>
+                <radio value="1" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"/>
+              </radiogroup>
+              <checkbox id="reversescrolling" label="&tabbarscrolling.inverse.label;"
+                        preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
             </groupbox>
           </tabpanel>
           <tabpanel orient="vertical" align="start">
@@ -130,7 +136,7 @@
                             <menuitem value="3" label="&clicktab.duplicatetab;" />
                             <menuitem value="14" label="&clicktab.duplicatetabw;" observes="obs_singleWindow"/>
                             <menuitem value="27" label="&clicktab.detachtab;" observes="obs_singleWindow"/>
-                            <menuitem value="31" label="&pinAppTab.label;"/>
+                            <menuitem value="31" id="ClickTabPinTab"/>
                                <menuseparator/>
                             <menuitem value="5" label="&clicktab.protecttab;" />
                             <menuitem value="6" label="&clicktab.locktab;" />

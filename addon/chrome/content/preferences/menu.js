@@ -2,6 +2,8 @@ var gMenuPane = {
   init: function () {
     gSetTabIndex.init('menu');
 
+    $("pinTab").label = gCommon.pinTabLabel;
+
     var browserWindow = Tabmix.getTopWin();
 //XXX we can drop it !!!!
     // check if bookmark item in tab context menu

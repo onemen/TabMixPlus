@@ -11,6 +11,8 @@ var gMousePane = {
 
     this._inited = true;
 
+    $("ClickTabPinTab").label = gCommon.pinTabLabel;
+
     var browserWindow = Tabmix.getTopWin();
     // update tabclicking items that aren't change by tabmix
     TM_Options.setItem("snapBack", "hidden", !(browserWindow.SessionSaver && browserWindow.SessionSaver.snapBackTab));

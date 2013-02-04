@@ -1,6 +1,15 @@
 //var gCount = 0;
 var firstPane = true;
 var gCommon = {
+  get pinTabLabel() {
+    delete this.pinTabLabel;
+    // firefox 18 (bug 769101) changed browser.dtd pinAppTab.label to pinTab.label
+    let win = Tabmix.getTopWin();
+    let label = win.document.getElementById("context_pinTab").getAttribute("label") + "/"
+              + win.document.getElementById("context_unpinTab").getAttribute("label");
+    return this.pinTabLabel = label;
+  },
+
   incompatibleList: [],
   init: function() {
     var browserWindow = Tabmix.getTopWin();

@@ -110,7 +110,7 @@
                      <!-- Merge Windows -->
                      <checkbox id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
                      <!-- pin/unpin tabs -->
-                     <checkbox id="pinTab" label="&pinAppTab.label;" preference="pref_pinTab"/>
+                     <checkbox id="pinTab" preference="pref_pinTab"/>
                      <!-- move to group -->
                      <checkbox id="moveToGroup" label="&moveToGroup.label;" preference="pref_showMoveToGroup"/>
                      <!-- Rename tab -->
@@ -186,7 +186,7 @@
                      <!-- link in duplicate tab -->
                      <checkbox id="linkWithHist" label="&linkwithhistory.label;" preference="pref_linkWithHist"/>
                      <!-- reload every -->
-                     <checkbox id="autoreloadTab" label="&autoReload.label;" preference="pref_autoreloadTab"/>
+                     <checkbox id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
                      <!-- Close tab -->
                      <checkbox id="closetab" label="&closeTab.label;" preference="pref_closetab"/>
                      <!-- Duplicate tab -->
