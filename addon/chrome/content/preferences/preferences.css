@@ -172,6 +172,20 @@ tabpanels#tabpanId[Mac] .tabs-hidden > tab {
   -moz-margin-end: 3px;
 }
 
+.clicktab-popup {
+  -moz-binding: url("chrome://global/content/bindings/popup.xml#popup");
+  -moz-box-orient: vertical;
+}
+
+.clicktab-popup > * > .arrowscrollbox-scrollbox {
+  overflow: auto !important;
+}
+
+.clicktab-popup > * > .autorepeatbutton-up,
+.clicktab-popup > * > .autorepeatbutton-down {
+  display: none !important;
+}
+
 ._textbox {
   margin: 2px 4px;
   border: 1px solid ThreeDShadow;
