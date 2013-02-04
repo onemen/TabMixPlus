@@ -9,6 +9,8 @@
 %tabBrowserDTD;
 <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
 %browserDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+%shortcutsDTD;
 ]>
 
 <overlay id="MenuPaneOverlay"
@@ -18,6 +20,7 @@
 
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/menu.js"/>
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/shortcuts.js"/>
 
     <!-- preferences - list all preferences in this pane -->
     <preferences>
@@ -78,6 +81,11 @@
       <preference id="pref_optionsToolsMenu"   name="extensions.tabmix.optionsToolMenu"     type="bool"/>
       <preference id="pref_sessionToolsMenu"   name="extensions.tabmix.sessionToolsMenu"    type="bool"/>
       <preference id="pref_closedWinToolsMenu" name="extensions.tabmix.closedWinToolsMenu"  type="bool"/>
+      <preference id="pref_shortcuts"          name="extensions.tabmix.shortcuts"           type="string"
+                  onchange="gMenuPane.initializeShortcuts();"/>
+      <preference id="pref_sessionManager1"
+                  name="extensions.tabmix.sessions.manager"                                 type="bool"
+                  onchange="if (typeof gSessionPane == 'undefined') gMenuPane.updateSessionShortcuts();"/>
    </preferences>
 
 
@@ -88,6 +96,7 @@
         <tab label="&context.tab;" class="subtabs" helpTopic="Menu_-_Tab_Context_Menu"/>
         <tab label="&context.main;" class="subtabs" helpTopic="Menu_-_Main_Context_Menu"/>
         <tab label="&context.tools;" class="subtabs" helpTopic="Menu_-_Tools_Menu"/>
+        <tab label="&shortcuts.label;" class="subtabs" helpTopic="Menu_-_Shortcuts"/>
       </tabs>
       <tabpanels flex="1">
         <tabpanel orient="vertical">
@@ -240,6 +249,68 @@
                 </row>
               </rows>
             </grid>
+          </groupbox>
+        </tabpanel>
+        <tabpanel id="shortcuts-panel" orient="vertical" hide-shortcut-warning="true"
+              hide-unused-shortcuts="false" usedKeys="false"
+              persist="hide-shortcut-warning hide-unused-shortcuts"
+              onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
+                  var editBox = this.editBox || null;
+                  if (editBox) {editBox.blur(); this.editBox = null;}">
+          <hbox flex="1">
+            <label value="&shortcuts.edit;" flex="1"/>
+            <label value="&shortcuts.hideUnused;" show="&shortcuts.showAll;" hide="&shortcuts.hideUnused;"
+                   class="text-link" id="hide-unused-shortcuts" persist="value"
+                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+          </hbox>
+          <hbox class="global-warning shortcut-warning-container">
+            <vbox>
+              <image class="warning-icon"/>
+            </vbox>
+            <description style="width: 24em;" class="global-warning-text" flex="1">
+              &shortcuts.warning;.
+            </description>
+            <label value="&shortcuts.showDetails;" show="&shortcuts.showDetails;" hide="&shortcuts.hideDetails;"
+                   class="text-link" id="hide-shortcut-warning" persist="value"
+                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+          </hbox>
+          <groupbox id="shortcut-group" style="overflow: auto; height:24em;">
+            <shortcut id="newTab"          label="&clicktab.addtab;"/>
+            <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
+            <shortcut id="dupTabToWin"     label="&clicktab.duplicatetabw;"/>
+            <shortcut id="detachTab"       label="&clicktab.detachtab;"/>
+            <shortcut id="togglePinTab"/>
+            <shortcut id="protecttab"      label="&clicktab.protecttab;"/>
+            <shortcut id="locktab"         label="&clicktab.locktab;"/>
+            <shortcut id="freezetab"       label="&clicktab.freezetab;"/>
+            <shortcut id="renametab"       label="&clicktab.renametab;"/>
+            <shortcut id="copyTabUrl"      label="&clicktab.copyTabUrl;"/>
+            <shortcut id="pasteTabUrl"     label="&clicktab.copyUrlFromClipboard;"/>
+            <shortcut id="selectMerge"     label="&clicktab.selectMerge;"/>
+            <shortcut id="mergeWin"        label="&clicktab.mergeTabs;"/>
+            <shortcut id="addBookmark"     label="&clicktab.bookTab;"/>
+            <shortcut id="bookmarkAllTabs" label="&clicktab.bookTabs;"/>
+            <shortcut id="reload"          label="&clicktab.reloadtab;"/>
+            <shortcut id="browserReload"   label="&clicktab.reloadtab;*"/>
+            <shortcut id="reloadtabs"      label="&clicktab.reloadtabs;"/>
+            <shortcut id="reloadothertabs" label="&clicktab.reloadothertabs;"/>
+            <shortcut id="reloadlefttabs"  label="&clicktab.reloadlefttabs;"/>
+            <shortcut id="reloadrighttabs" label="&clicktab.reloadrighttabs;"/>
+            <shortcut id="autoReloadTab"   label="&clicktab.autoReloadTab;"/>
+            <shortcut id="close"           label="&closeTab.label;"/>
+            <shortcut id="removeall"       label="&clicktab.removeall;"/>
+            <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
+            <shortcut id="removeother"     label="&clicktab.removeother;"/>
+            <shortcut id="removeleft"      label="&clicktab.removeleft;"/>
+            <shortcut id="removeright"     label="&clicktab.removeright;"/>
+            <shortcut id="undoClose"       label="&clicktab.uctab;"/>
+            <shortcut id="undoCloseTab"    label="&clicktab.uctab;*"/>
+            <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
+            <shortcut id="saveWindow"      label="&saveWindow.label;"/>
+            <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
+            <shortcut id="slideShow"       label="&shortcuts.slideshow;"/>
+            <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
+                      tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
           </groupbox>
         </tabpanel>
       </tabpanels>

@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+%shortcutsDTD;
+]>
+
+<bindings id="tmp_shortcuts"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="shortcut">
+    <content>
+      <xul:hbox align="center" class="shortcut-content">
+        <xul:label xbl:inherits="value=label,disabled=blocked" style="width:255px;"/>
+        <xul:textbox class="shortcut-edit-box" anonid="editBox" flex="1"
+                     xbl:inherits="value,disabled=blocked" context=" "
+                     placeholder="&shortcuts.placeholder;"
+                     onkeydown="handleKeyEvents(event);"
+                     onkeypress="handleKeyEvents(event);"
+                     onfocus="updateFocus(true);"
+                     onblur="updateFocus(false);"
+                     onmousedown="event.stopPropagation(); event.preventDefault(); this.select();"
+                     onchange="event.stopPropagation();">
+          <xul:image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true"
+                     onclick="resetKey();"/>
+          <xul:image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
+                     onclick="disableKey();"/>
+        </xul:textbox>
+      </xul:hbox>
+      <xul:vbox anonid="notificationbox" class="shortcut-notificationbox"
+                inuse="&shortcuts.inuse;" flex="1"/>
+    </content>
+    <implementation>
+
+      <method name="valueFromPreferences">
+        <parameter name="aKeyData"/>
+        <body><![CDATA[
+          if (!aKeyData.value && !this._key)
+            return false;
+          this.key = Shortcuts.keyParse(aKeyData.value);
+          // trigger this.defaultPref getter on first run
+          this.setAttribute("default", this.defaultPref == aKeyData.value && !this.disabled);
+          return this.updateNotification();
+        ]]></body>
+      </method>
+
+      <method name="updateFocus">
+        <parameter name="onFocus"/>
+        <body><![CDATA[
+          if (onFocus) {
+            this.editBox.select();
+            $('shortcuts-panel').editBox = this.editBox;
+          }
+          this.setAttribute("focused", onFocus);
+        ]]></body>
+      </method>
+
+      <method name="applyNewValue">
+        <parameter name="aNewValue"/>
+        <parameter name="aDisabled"/>
+        <body><![CDATA[
+          let newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
+          if (newValue != Shortcuts.keyStringify(this.key)) {
+            let newKey = Shortcuts.keyParse(newValue)
+            newKey.disabled = aDisabled;
+            this.key = newKey;
+            this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
+            this.parentNode.keys[this.id] = newValue;
+            this.parentNode.value = Tabmix.JSON.stringify(this.parentNode.keys);
+            Shortcuts.prefsChangedByTabmix = true;
+            $("pref_shortcuts").value = this.parentNode.value;
+            Shortcuts.prefsChangedByTabmix = false;
+            let callBack = function(shortcut) shortcut.updateNotification();
+            gMenuPane.updateShortcuts(this.parentNode, callBack);
+          }
+          this.editBox.select();
+        ]]></body>
+      </method>
+
+      <method name="resetKey">
+        <body><![CDATA[
+          this.applyNewValue(this.defaultPref, false);
+        ]]></body>
+      </method>
+
+      <method name="disableKey">
+        <body><![CDATA[
+          if (!this.disabled)
+            this.applyNewValue("", true);
+        ]]></body>
+      </method>
+
+      <method name="updateNotification">
+        <body><![CDATA[
+          let shortcut = !this.disabled && getFormattedKey(this.key);
+          let usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
+          let box = this.notificationbox;
+          while (box.hasChildNodes())
+            box.removeChild(box.firstChild);
+          if (usedKey) {
+            let msg = (box.getAttribute("inuse") + ":\n" + usedKey).split("\n");
+            for (let i = 0, l = msg.length; i < l; i++) {
+              let node = document.createElement("description");
+              node.setAttribute("value", msg[i]);
+              box.appendChild(node);
+            }
+            if (!this.hasAttribute("used"))
+              this.setAttribute("used", true);
+          }
+          else
+            this.removeAttribute("used");
+          return usedKey;
+        ]]></body>
+      </method>
+
+      <method name="handleKeyEvents">
+        <parameter name="event"/>
+        <body><![CDATA[
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+
+          if (event.type == "keydown")
+            return;
+
+          let key = {modifiers: "", key: "", keycode: ""};
+          key.modifiers =
+            ["ctrl","meta","alt","shift"].filter(function(mod) event[mod+"Key"]).
+            join(",").replace("ctrl", "control");
+
+          if (!key.modifiers) {
+            let ns = Ci.nsIDOMKeyEvent;
+            // Retuen and Esc blur the edit box
+            if (event.keyCode == ns.DOM_VK_RETURN ||
+                event.keyCode == ns.DOM_VK_ESCAPE) {
+              this.editBox.blur();
+              return;
+            }
+
+            // Delete and Backspace disable the key
+            if (event.keyCode == ns.DOM_VK_DELETE ||
+                event.keyCode == ns.DOM_VK_BACK_SPACE) {
+              this.disableKey();
+              return;
+            }
+          }
+          // when current modifier is accel replcae new modifier with accel
+          // if it match ui.key.accelKey
+          else if (this.key && this.key.modifiers.indexOf("accel") > -1)
+            key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
+
+          if (event.charCode == Ci.nsIDOMKeyEvent.DOM_VK_SPACE)
+            key.keycode = "VK_SPACE";
+          else if (event.charCode)
+            key.key = String.fromCharCode(event.charCode).toUpperCase();
+          else {
+            let eKeyCode = event.keyCode;
+            if (eKeyCode == 8)
+              key.keycode = "VK_BACK";
+            else for (let [keycode, val] in Iterator(Ci.nsIDOMKeyEvent)) {
+              if (val == eKeyCode) {
+                key.keycode = keycode.replace("DOM_","");
+                break;
+              }
+            }
+            if (!key.keycode)
+              return;
+          }
+
+          let newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);
+          this.applyNewValue(newValue, false);
+        ]]></body>
+      </method>
+
+      <property name="keyid" readonly="true" onget="return Shortcuts.keys[this.id].id || 'key_tm_' + this.id;"/>
+      <property name="blocked" onget="return this.hasAttribute('blocked');">
+        <setter><![CDATA[
+          if (val != this.blocked) {
+            if (val)
+              this.setAttribute("blocked", "true");
+            else
+              this.removeAttribute("blocked");
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="disabled" onget="return !this._key || this._key.disabled;">
+        <setter><![CDATA[
+          this._key.disabled = val;
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="value" onget="return this.getAttribute('value');">
+        <setter><![CDATA[
+          if (this.value != val)
+            this.setAttribute("value", val);
+          return val;
+        ]]></setter>
+      </property>
+
+      <field name="_key">null</field>
+      <property name="key" onget="return this._key;">
+        <setter><![CDATA[
+          this._key = val;
+          this.value = val.disabled ? "" : getFormattedKey(val);
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="defaultPref" readonly="true">
+        <getter><![CDATA[
+          let defaultPref = Shortcuts.keys[this.id].default || "";
+          if (defaultPref) {
+            let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
+            resetButton.hidden = false;
+            let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultPref));
+            resetButton.setAttribute("tooltiptext",
+                resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
+          }
+          this.__defineGetter__("defaultPref",  function() defaultPref);
+          return defaultPref;
+        ]]></getter>
+      </property>
+
+      <field name="notificationbox">document.getAnonymousElementByAttribute(this, "anonid", "notificationbox");</field>
+      <field name="editBox">document.getAnonymousElementByAttribute(this, "anonid", "editBox");</field>
+    </implementation>
+  </binding>
+
+</bindings>

@@ -39,12 +39,17 @@ var gSessionPane = {
     }
   },
 
+  updateSessionShortcuts: function() {
+    if (typeof gMenuPane == "object")
+      gMenuPane.updateSessionShortcuts();
+  },
+
   isSessionStoreEnabled: function (checkService) {
     var browserWindow = Tabmix.getTopWin();
     if (checkService)
       browserWindow.TMP_SessionStore.setService(2, false, window);
 
-///    if ("gSessionManager" in browserWindow)
+    this.updateSessionShortcuts();
     if (this.gSessionManager)
       return;
 
@@ -63,6 +68,8 @@ var gSessionPane = {
     $("paneSession-tabbox").selectedIndex = item.checked ? 1 : 2;
     $(id).checked = item.checked;
     $(id).focus();
+
+    this.updateSessionShortcuts();
 
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);

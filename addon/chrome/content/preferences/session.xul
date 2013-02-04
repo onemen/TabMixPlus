@@ -20,7 +20,8 @@
                   type="int"/>
 
       <preference id="pref_sessionManager"
-                  name="extensions.tabmix.sessions.manager"                  type="bool"/>
+                  name="extensions.tabmix.sessions.manager"                  type="bool"
+                  onchange="gSessionPane.updateSessionShortcuts();"/>
       <preference id="pref_sessionCrashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"            type="bool"/>
 
@@ -38,7 +39,6 @@
                   name="browser.sessionstore.privacy_level"                  type="int"/>
       <preference id="pref_ss_postdatabytes"
                   name="browser.sessionstore.postdata"                       type="int"/>
-
       <preference id="pref_onStart"
                   name="extensions.tabmix.sessions.onStart"                  type="int"/>
       <preference id="pref_onClose"
