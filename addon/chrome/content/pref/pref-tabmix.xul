@@ -6,7 +6,7 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/prefs.css" type="text/css"?>
 
-<!DOCTYPE shortcutsDTD [
+<!DOCTYPE dialog [
 <!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd" >
 %tabsDTD;
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
