@@ -243,26 +243,26 @@ try {
 }
 
 // other settings not in the main option dialog
-var otherPref = ["sessions.onStart.sessionpath",
-                  "filetype","boldUnread","italicUnread","underlineUnread",
-                  "boldCurrent","italicCurrent","underlineCurrent","unreadColorCode",
-                  "currentColorCode","progressColorCode","useCurrentColor",
-                 "useUnreadColor","useProgressColor","sessions.menu.showext",
-                  "disableIncompatible","hideIcons"];
+var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
+                  "filetype","sessions.menu.showext","disableIncompatible","hideIcons",
+                  "styles.currentTab","styles.unloadedTab",
+                  "styles.unreadTab","styles.otherTab","styles.progressMeter"];
 
 function TM_defaultSetting () {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
+  Shortcuts.prefsChangedByTabmix = true;
   TM_setElements(true);
-
-  TM_disableApply();
+  Shortcuts.prefsChangedByTabmix = false;
+  TMP_setButtons(true, true);
 
   // reset other settings to default
   for (var i = 0; i < otherPref.length; ++i )
     if (Tabmix.prefs.prefHasUserValue(otherPref[i])) Tabmix.prefs.clearUserPref(otherPref[i]);
 
   Tabmix.prefs.clearUserPref("setDefault");
+  TM_Options.isSessionStoreEnabled(true);
   callUpdateSettings();
 
   Services.prefs.savePrefFile(null); // store the pref immediately
@@ -339,29 +339,49 @@ gPrefs = document.documentElement.getElementsByAttribute("prefstring", "*");
    TM_Options.initBroadcasters(start);
 }
 
+// other settings not in extensions.tabmix. branch that we save
+var otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
+  "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
+  "browser.link.open_newwindow.restriction","browser.newtab.url",
+  "browser.search.context.loadInBackground","browser.search.openintab",
+  "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
+  "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
+  "browser.sessionstore.resume_from_crash","browser.startup.page",
+  "browser.startup.page","browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
+  "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
+  "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
+  "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
+  "browser.tabs.warnOnClose","browser.warnOnQuit","browser.warnOnRestart",
+  "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
+
+__defineGetter__("preferenceList", function() {
+  delete this.preferenceList;
+  let prefs = Services.prefs.getDefaultBranch("");
+  let fn = {0: "", 32: "getCharPref", 64: "getIntPref", 128: "getBoolPref"};
+  let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
+  // filter out preference without default value
+  tabmixPrefs = tabmixPrefs.filter(function(pref){
+    try {
+      return prefs[fn[prefs.getPrefType(pref)]](pref) != undefined;
+    } catch (ex) { }
+    return false;
+  });
+  return this.preferenceList = otherPrefs.concat(tabmixPrefs);
+});
+
 function exportData() {
-
-  TM_EMsave();
-
-  var patterns = new Array;
-  patterns[0] = "tabmixplus";
-  var z = 1, pref;
-
-  for (var i = 0; i < gPrefs.length; ++i ) {
-     pref = gPrefs[i].getAttribute("prefstring");
-     patterns[z++] = pref + "=" + getPrefByType(pref);
+  let docElt = document.documentElement;
+  if (!docElt.instantApply) {
+    docElt._fireEvent("dialogaccept", docElt);
+    gCommon._applyButton.disabled = true;
   }
 
-  // more pref to save
-  for (i = 0; i < otherPref.length; ++i ){
-    pref = "extensions.tabmix." + otherPref[i];
-    patterns[z++] = pref + "=" + getPrefByType(pref);
-  }
+  let patterns = this.preferenceList.map(function(pref) {
+    return pref + "=" + getPrefByType(pref, true) + "\n";
+  });
+  patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
+  patterns.unshift("tabmixplus\n");
 
-  saveToFile(patterns);
-}
-
-function saveToFile (patterns) {
   const nsIFilePicker = Ci.nsIFilePicker;
   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
   var fpCallback = function fpCallback_done(aResult) {
@@ -375,10 +395,8 @@ function saveToFile (patterns) {
       let stream = Cc["@mozilla.org/network/file-output-stream;1"].
                    createInstance(Ci.nsIFileOutputStream);
       stream.init(file, 0x02, 0x200, null);
-      for (let i = 0; i < patterns.length ; i++) {
-        patterns[i]=patterns[i]+"\n";
+      for (let i = 0; i < patterns.length ; i++)
         stream.write(patterns[i], patterns[i].length);
-      }
       stream.close();
     }
   }
@@ -390,6 +408,7 @@ function saveToFile (patterns) {
   fp.open(fpCallback);
 }
 
+var oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
 function importData () {
    const nsIFilePicker = Ci.nsIFilePicker;
    var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
@@ -411,7 +430,10 @@ function importData () {
 
    fp.init(window, null, nsIFilePicker.modeOpen);
    fp.appendFilters(nsIFilePicker.filterText);
-   fp.open(fpCallback);
+   if (Tabmix.isVersion(180))
+      fp.open(fpCallback);
+   else
+      fpCallback(fp.show());
 }
 
 function loadData (pattern) {
@@ -432,6 +454,7 @@ function loadData (pattern) {
    Services.prefs.savePrefFile(null);
 
    var prefName, prefValue;
+   Shortcuts.prefsChangedByTabmix = true;
    for (let i = 1; i < pattern.length; i++){
       var index = pattern[i].indexOf("=");
       if (index > 0){
@@ -440,8 +463,15 @@ function loadData (pattern) {
          setPrefByType(prefName, prefValue, true);
       }
    }
+   Shortcuts.prefsChangedByTabmix = false;
    var browserWindow = Tabmix.getTopWin();
    browserWindow.gTMPprefObserver.updateTabClickingOptions();
+   if (oldStylePrefs.found) {
+      browserWindow.gTMPprefObserver.converOldStylePrefs("currentTab", oldStylePrefs.currentTab);
+      browserWindow.gTMPprefObserver.converOldStylePrefs("unreadTab", oldStylePrefs.unreadTab);
+      browserWindow.gTMPprefObserver.converOldStylePrefs("progressMeter", oldStylePrefs.progressMeter);
+      oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
+   }
    Tabmix.prefs.clearUserPref("setDefault");
 
    TM_setElements(false);
