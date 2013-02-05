@@ -83,6 +83,7 @@
       <preference id="pref_closedWinToolsMenu" name="extensions.tabmix.closedWinToolsMenu"  type="bool"/>
       <preference id="pref_shortcuts"          name="extensions.tabmix.shortcuts"           type="string"
                   onchange="gMenuPane.initializeShortcuts();"/>
+      <preference id="pref_slideshow"          name="extensions.tabmix.slideDelay"          type="int"/>
       <preference id="pref_sessionManager1"
                   name="extensions.tabmix.sessions.manager"                                 type="bool"
                   onchange="if (typeof gSessionPane == 'undefined') gMenuPane.updateSessionShortcuts();"/>
@@ -308,9 +309,16 @@
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
             <shortcut id="saveWindow"      label="&saveWindow.label;"/>
             <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
-            <shortcut id="slideShow"       label="&shortcuts.slideshow;"/>
             <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
                       tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
+            <shortcut id="slideShow"       label="&shortcuts.slideshow;"
+                                          _label="&activateSlideshow.label;"/>
+            <hbox align="center" class="indent">
+              <label id="slideDelayLabel" observes="obs_slideDelay"/>
+              <textbox id="slideshow.time" maxlength="3" size="3" preference="pref_slideshow"
+                       observes="obs_slideDelay" type="number"/>
+              <label value="&seconds.label;" observes="obs_slideDelay" class="timelabel"/>
+            </hbox>
           </groupbox>
         </tabpanel>
       </tabpanels>
@@ -318,6 +326,7 @@
 
     <broadcasterset >
       <broadcaster id="bmMenu" hidden="false"/>
+      <broadcaster id="obs_slideDelay"/>
     </broadcasterset >
 
   </prefpane>

@@ -114,17 +114,11 @@ var gEventsPane = {
     TM_Options.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
   },
 
-///XXX TODO - finish after shortcut panel is ready
-  syncSlideShowControl: function () {
-    let tabRotation = $("tabRotation"), slideShow = $("slideShow");
-    if (tabRotation.hasAttribute("_label")) {
-      let label = tabRotation.getAttribute("_label").split("#1");
-      tabRotation.label = label[0];
-      $("slideshow.labelEnd").value = label[1];
-      tabRotation.removeAttribute("_label");
-    }
-    $("slideshow.link").value = getFormattedKey(slideShow.key) || "???";
-    tabRotation.checked = !slideShow.disabled;
-    TM_Options.disabled(tabRotation);
+  editSlideShowKey: function () {
+    document.documentElement.showPane($("paneMenu"));
+    if (typeof gMenuPane == "object")
+      gMenuPane.editSlideShowKey();
+    else
+      $("paneMenu").setAttribute("editSlideShowKey", true);
   }
 }

@@ -18,12 +18,18 @@ var gMenuPane = {
       $("browserReload").hidden = true;
     this.initializeShortcuts();
     this.updateSessionShortcuts();
+    this.setSlideShowLabel();
+    let paneMenu = $("paneMenu");
+    if (paneMenu.hasAttribute("editSlideShowKey")) {
+      paneMenu.removeAttribute("editSlideShowKey")
+      setTimeout(function(self) {self.editSlideShowKey();},0, this);
+    }
 
     gCommon.setPaneWidth("paneMenu");
   },
 
   initializeShortcuts: function() {
-    if (Shortcuts.updatingShortcuts)
+    if (Shortcuts.prefsChangedByTabmix)
       return;
 
     let newValue = $("pref_shortcuts").value;
@@ -32,15 +38,36 @@ var gMenuPane = {
       return;
     shortcuts.value = newValue;
     shortcuts.keys = Tabmix.JSON.parse(newValue);
-    let callBack = function(shortcut) shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
+    let callBack = function(shortcut) shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
     this.updateShortcuts(shortcuts, callBack)
   },
 
+  _slideShow: "",
   updateShortcuts: function (aShortcuts, aCallBack) {
     let boxes = Array.filter(aShortcuts.childNodes, aCallBack);
     $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
-    if (typeof gEventsPane == "object")
-      gEventsPane.syncSlideShowControl();
+    if (this._slideShow != $("shortcut-group").keys.slideShow) {
+      this._slideShow = $("shortcut-group").keys.slideShow;
+      this.setSlideShowLabel();
+    }
+  },
+
+  setSlideShowLabel: function () {
+    let slideShow = $("slideShow");
+    let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
+    $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
+    TM_Options.setItem("obs_slideDelay", "disabled", slideShow.disabled || null);
+  },
+
+  editSlideShowKey: function () {
+    $("menu").selectedIndex = 3;
+    let slideShow = $("slideShow");
+    let item = $("hide-unused-shortcuts");
+    if (!slideShow.hasAttribute("value") &&
+        $("shortcuts-panel").getAttribute(item.id) == "true")
+      this.toggleLinkLabel(item);
+    slideShow.editBox.focus();
+    $("slideshow.time").scrollIntoView();
   },
 
   updateSessionShortcuts: function() {

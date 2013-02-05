@@ -100,6 +100,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
   margin-bottom: 0px;
 }
 
+#shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) + hbox,
 #shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) {
   visibility: collapse;
 }

@@ -5,6 +5,8 @@
 %tabsDTD;
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+%shortcutsDTD;
 ]>
 
 <overlay id="EventsPaneOverlay"
@@ -97,9 +99,6 @@
       <preference id="pref_showTabList"         name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
       <preference id="pref_respondToMouse"
                   name="extensions.tabmix.lasttab.respondToMouseInTabList"                    type="bool"/>
-      <preference id="pref_tabRotation"         name="extensions.tabmix.disableF8Key"
-                  type="bool" inverted="true"/>
-      <preference id="pref_slideshow"           name="extensions.tabmix.slideDelay"           type="int"/>
       <preference id="pref_disableTabsAnimate"  name="browser.tabs.animate"   type="bool" inverted="true"/>
       <preference id="pref_reloadEvery.matchAddress"
                   name="extensions.tabmix.reload_match_address"               type="bool" inverted="true"/>
@@ -362,11 +361,7 @@
                       observes="obs_showTabList"/>
             <separator class="groove"/>
             <vbox align="start">
-              <hbox align="center">
-                <checkbox id="tabRotation" label="***Pressing F8 rotates tabs every" preference="pref_tabRotation"/>
-                <textbox id="slideshow" maxlength="3" size="3" preference="pref_slideshow" observes="obs_tabRotation" type="number"/>
-                <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
-              </hbox>
+              <label value="&shortcuts.slideshow;" class="indent text-link" onclick="gEventsPane.editSlideShowKey();"/>
               <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
             </vbox>
          </groupbox>
@@ -389,7 +384,6 @@
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>
       <broadcaster id="obs_showTabList"/>
-      <broadcaster id="obs_tabRotation"/>
   </broadcasterset>
 
   <broadcasterset>

@@ -72,7 +72,7 @@
             Shortcuts.prefsChangedByTabmix = true;
             $("pref_shortcuts").value = this.parentNode.value;
             Shortcuts.prefsChangedByTabmix = false;
-            let callBack = function(shortcut) shortcut.updateNotification();
+            let callBack = function(shortcut) shortcut.id && shortcut.updateNotification();
             gMenuPane.updateShortcuts(this.parentNode, callBack);
           }
           this.editBox.select();
