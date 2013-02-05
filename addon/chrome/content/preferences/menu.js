@@ -13,7 +13,6 @@ var gMenuPane = {
     TM_Options.initSingleWindowBroadcaster();
     this.setInverseLinkLabel();
 
-    Components.utils.import("resource://tabmixplus/Shortcuts.jsm");
     if (!Shortcuts.keys.browserReload.id)
       $("browserReload").hidden = true;
     this.initializeShortcuts();

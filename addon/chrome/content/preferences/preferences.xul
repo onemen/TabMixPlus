@@ -101,7 +101,7 @@ zh-TW            style="width: 36.4em; min-height: 41.2em;"
 
   <popupset>
     <menupopup id="tm-settings" position="before_start">
-      <menuitem id="tm-defaults" label="&settings.default;" oncommand="TM_defaultSetting();"/>
+      <menuitem id="tm-defaults" label="&settings.default;" oncommand="defaultSetting();"/>
       <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
       <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
     </menupopup>

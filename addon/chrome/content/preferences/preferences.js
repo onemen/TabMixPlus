@@ -242,32 +242,6 @@ try {
 
 }
 
-// other settings not in the main option dialog
-var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
-                  "filetype","sessions.menu.showext","disableIncompatible","hideIcons",
-                  "styles.currentTab","styles.unloadedTab",
-                  "styles.unreadTab","styles.otherTab","styles.progressMeter"];
-
-function TM_defaultSetting () {
-  // set flag to prevent TabmixTabbar.updateSettings from run for each change
-  Tabmix.prefs.setBoolPref("setDefault", true);
-
-  Shortcuts.prefsChangedByTabmix = true;
-  TM_setElements(true);
-  Shortcuts.prefsChangedByTabmix = false;
-  TMP_setButtons(true, true);
-
-  // reset other settings to default
-  for (var i = 0; i < otherPref.length; ++i )
-    if (Tabmix.prefs.prefHasUserValue(otherPref[i])) Tabmix.prefs.clearUserPref(otherPref[i]);
-
-  Tabmix.prefs.clearUserPref("setDefault");
-  TM_Options.isSessionStoreEnabled(true);
-  callUpdateSettings();
-
-  Services.prefs.savePrefFile(null); // store the pref immediately
-}
-
 function getPrefByType(prefName, save) {
    try {
       switch (Services.prefs.getPrefType(prefName)) {
@@ -368,6 +342,23 @@ __defineGetter__("preferenceList", function() {
   });
   return this.preferenceList = otherPrefs.concat(tabmixPrefs);
 });
+
+function defaultSetting() {
+  // set flag to prevent TabmixTabbar.updateSettings from run for each change
+  Tabmix.prefs.setBoolPref("setDefault", true);
+  Shortcuts.prefsChangedByTabmix = true;
+  this.preferenceList.forEach(function(pref) {
+    if (Services.prefs.prefHasUserValue(pref))
+      Services.prefs.clearUserPref(pref);
+  });
+  Shortcuts.prefsChangedByTabmix = false;
+  Tabmix.prefs.clearUserPref("setDefault");
+  Services.prefs.savePrefFile(null);
+
+///XXX TODO finish this later
+///  TMP_setButtons(true, true);
+///  TM_Options.isSessionStoreEnabled(true);
+}
 
 function exportData() {
   let docElt = document.documentElement;
@@ -672,3 +663,5 @@ function openHelp(aPageaddress) {
   recentWindow.loadURI(helpUrl, null, null, false);
   tabBrowser.selectedBrowser.focus();
 }
+
+Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
