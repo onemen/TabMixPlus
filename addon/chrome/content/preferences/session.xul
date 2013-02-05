@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
 ]>
 
@@ -18,13 +18,11 @@
     <preferences>
       <preference id="pref_session"             name="extensions.tabmix.session.selectedTabIndex"
                   type="int"/>
-
       <preference id="pref_sessionManager"
                   name="extensions.tabmix.sessions.manager"                  type="bool"
                   onchange="gSessionPane.updateSessionShortcuts();"/>
       <preference id="pref_sessionCrashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"            type="bool"/>
-
       <preference id="pref_browser.warnOnRestart"
                   name="browser.warnOnRestart"                               type="bool"/>
       <preference id="pref_browser.warnOnQuit"
@@ -36,7 +34,8 @@
       <preference id="pref_ss_timeinterval"
                   name="browser.sessionstore.interval"                       type="int"/>
       <preference id="pref_ss_postdata"
-                  name="browser.sessionstore.privacy_level"                  type="int"/>
+                  name="browser.sessionstore.privacy_level"                  type="int"
+                  onchange="TM_Options.setDisabled('obs_ss_postdata', this.value == 2);"/>
       <preference id="pref_ss_postdatabytes"
                   name="browser.sessionstore.postdata"                       type="int"/>
       <preference id="pref_onStart"
@@ -73,10 +72,6 @@
                   name="extensions.tabmix.sessions.save.closedtabs"          type="bool"/>
     </preferences>
 
-    <!-- stringbundles
-    <stringbundle id="tmp-string-bundle" src="chrome://tabmixplus/locale/tabmix.properties" />
--->
-
     <!-- pane content -->
     <tabbox id="paneSession-tabbox" flex="1">
       <tabs class="tabs-hidden">
@@ -96,7 +91,7 @@
                 <description> &sm.extension.description3;.</description>
               </vbox>
               <spacer flex="1"/>
-                  <button style="min-width: 0px;" id="sessionmanager_button"
+              <button style="min-width: 0px;" id="sessionmanager_button"
                       oncommand="gSessionPane.sessionManagerOptions();"/>
             </hbox>
             <separator class="groove"/>
@@ -114,22 +109,20 @@
         </tabpanel>
         <!-- Buikd-in SessionStore -->
         <tabpanel>
-          <groupbox>
-            <vbox align="start">
-              <checkbox id="sessionstore_0" label="&ss.enable.label;"
-                        tooltiptext="&ss.enable.tooltip;"
-                        oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_1');"/>
-              <separator/>
-              <label value="&sm.start;" control="browserStartupPage"/>
-              <menulist id="browserStartupPage" class="indent" preference="pref_browserStartupPage">
-                <menupopup>
-                  <menuitem label="&startupHomePage.label;"     value="1"/>
-                  <menuitem label="&startupBlankPage.label;"    value="0"/>
-                  <menuitem label="&startupLastSession.label;"  value="3"/>
-                </menupopup>
-              </menulist>
-              <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash"/>
-            </vbox>
+          <groupbox align="start">
+            <checkbox id="sessionstore_0" label="&ss.enable.label;"
+                      tooltiptext="&ss.enable.tooltip;"
+                      oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_1');"/>
+            <separator class="thin"/>
+            <label value="&sm.start;" control="browserStartupPage"/>
+            <menulist id="browserStartupPage" class="indent" preference="pref_browserStartupPage">
+              <menupopup>
+                <menuitem label="&startupHomePage.label;"     value="1"/>
+                <menuitem label="&startupBlankPage.label;"    value="0"/>
+                <menuitem label="&startupLastSession.label;"  value="3"/>
+              </menupopup>
+            </menulist>
+            <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash"/>
           </groupbox>
           <groupbox orient="horizontal" flex="1">
             <vbox>
@@ -145,8 +138,7 @@
               <label control="ss_postdata" value="&ss.privacy_level;:"/>
               <hbox pack="end">
                 <menulist id="ss_postdata" preference="pref_ss_postdata">
-                  <menupopup
-                    oncommand="TM_Options.setDisabled('obs_ss_postdata', this.parentNode.value == 2);">
+                  <menupopup>
                     <menuitem label="&ss.privacy_level.allsites;"    value="0"/>
                     <menuitem label="&ss.privacy_level.unencrypted;" value="1"/>
                     <menuitem label="&ss.privacy_level.nosites;"     value="2"/>
@@ -165,15 +157,13 @@
         <!-- Tabmix Session manager -->
         <tabpanel>
           <groupbox>
-            <vbox align="start">
-              <checkbox id="sessionstore_1" label="&ss.enable.label;"
-                        tooltiptext="&ss.enable.tooltip;"
-                        oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_0');"/>
-              <separator/>
-              <checkbox id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"/>
-              <separator style="height: 18px;"/>
-              <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery"/>
-            </vbox>
+            <checkbox id="sessionstore_1" label="&ss.enable.label;"
+                      tooltiptext="&ss.enable.tooltip;"
+                      oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_0');"/>
+            <separator/>
+            <checkbox id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"/>
+            <separator id="sessionManager-separator"/>
+            <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery"/>
           </groupbox>
           <tabbox id="session" class="groupbox-tabbox" flex="1"
                   onselect="gSetTabIndex.tabSelectionChanged(event);">
@@ -182,7 +172,7 @@
               <tab label="&sm.restore;" class="subtabs" helpTopic="Session_-_Restore"/>
               <tab label="&sm.preserve;" class="subtabs" helpTopic="Session_-_Preserve"/>
             </tabs>
-            <tabpanels flex="1" class="groupbox-panels">
+            <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels">
               <tabpanel>
                 <hbox>
                   <groupbox style="min-width: 14.6em">
@@ -217,26 +207,33 @@
                       </menupopup>
                     </menulist>
                   </hbox>
-                  <hbox align="center" class="indent">
-                    <checkbox id="onStart.empty" label="&sm.chooseifempty;" preference="pref_onStart.empty"/>
+                  <checkbox id="onStart.empty" class="indent" label="&sm.chooseifempty;"
+                            preference="pref_onStart.empty"/>
+                  <separator class="thin"/>
+                  <hbox align="center">
+                    <label value="&sm.notrestore.label;:" control="browserStartupPage1"/>
+                    <menulist id="browserStartupPage1" preference="pref_browserStartupPage">
+                      <menupopup>
+                        <menuitem label="&startupHomePage.label;"     value="1"/>
+                        <menuitem label="&startupBlankPage.label;"    value="0"/>
+                      </menupopup>
+                    </menulist>
                   </hbox>
                 </groupbox>
               </tabpanel>
               <tabpanel>
                 <groupbox>
                   <caption label="&sm.restore.options;"/>
-                  <vbox align="start">
-                    <hbox>
-                      <checkbox id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
-                                preference="pref_onRestore.overwritewindows"/>
-                      <checkbox id="onRestore.overwritetabs" label="&sm.restore.overwriteTabs;"
-                                preference="pref_onRestore.overwritetabs" observes="obs_onRestore.overwritewindows"/>
-                    </hbox>
-                    <checkbox id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
-                              preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
-                    <checkbox id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
-                    <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
-                  </vbox>
+                  <hbox>
+                    <checkbox id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
+                              preference="pref_onRestore.overwritewindows"/>
+                    <checkbox id="onRestore.overwritetabs" label="&sm.restore.overwriteTabs;"
+                              preference="pref_onRestore.overwritetabs" observes="obs_onRestore.overwritewindows"/>
+                  </hbox>
+                  <checkbox id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
+                            preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
+                  <checkbox id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
+                  <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
                 </groupbox>
               </tabpanel>
               <tabpanel>

@@ -227,3 +227,32 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
 .groupbox-tabbox:not([selectedIndex="0"]) .checkbox_dblClickTabbar {
   visibility: hidden;
 }
+
+#TabMIxPreferences:not([direct2dDisabled]) #sessionManager-panels {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#TabMIxPreferences[direct2dDisabled] #sessionManager-panels {
+  padding-top: 0px;
+  padding-bottom: 4px;
+}
+
+#TabMIxPreferences:not([direct2dDisabled]) #sessionManager-separator {
+  height: 14px;
+}
+
+#TabMIxPreferences[direct2dDisabled] #sessionManager-separator {
+  height: 12px;
+}
+
+#sessionManager-panels[linux] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+#sessionManager-panels[linux] groupbox {
+  margin: 2px 5px;
+  padding: 0 5px;
+}

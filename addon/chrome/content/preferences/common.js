@@ -63,6 +63,14 @@ var gCommon = {
 //      window.addEventListener("change", this, false);
       window.addEventListener("beforeaccept", this, false);
     }
+
+    // there are heights diffrenet in our dialog window when Firefox starts with
+    // gfx.direct2d.disabled true or false
+    if (TabmixSvc.direct2dDisabled) {
+///XXX check this again later
+      document.documentElement.setAttribute("minheight", 483);
+      docElt.setAttribute("direct2dDisabled", true);
+    }
   },
 
   deinit: function() {
