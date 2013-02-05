@@ -262,7 +262,7 @@ pref("extensions.tabmix.sessions.onStart", 2);
 pref("extensions.tabmix.sessions.onStart.askifempty", true);
 pref("extensions.tabmix.sessions.onStart.loadsession", -1);
 pref("extensions.tabmix.sessions.onStart.sessionpath", "");
-pref("extensions.tabmix.sessions.version", "");
+//pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
 
 pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
