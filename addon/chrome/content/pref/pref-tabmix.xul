@@ -1167,7 +1167,7 @@
                   <separator/>
                   <checkbox id="sessionManager" label="&sessionManger.enable;" prefstring="extensions.tabmix.sessions.manager"
                             oncommand="TM_Options.updateSessionShortcuts();"/>
-                  <separator id="sessionManager-separator" style="height: 13px;"/>
+                  <separator id="sessionManager-separator" style="height: 14px;"/>
                   <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" prefstring="extensions.tabmix.sessions.crashRecovery"/>
               </groupbox>
               <tabbox subtub="true" value="5" class="groupbox-tabbox" flex="1">

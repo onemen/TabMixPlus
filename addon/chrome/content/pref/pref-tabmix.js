@@ -56,7 +56,7 @@ function before_Init() {
   if (TabmixSvc.direct2dDisabled) {
     document.documentElement.setAttribute("minheight", 483);
     $("sessionManager-panels").setAttribute("style", "padding-bottom: 4px;");
-    $("sessionManager-separator").setAttribute("style", "height: 11px;");
+    $("sessionManager-separator").setAttribute("style", "height: 12px;");
   }
   if (Tabmix.isPlatform("Linux"))
     $("sessionManager-panels").setAttribute("linux", "true");
