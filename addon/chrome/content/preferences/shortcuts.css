@@ -42,6 +42,7 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
 
 .shortcut-image[anonid="disable"] {
   list-style-image: url("chrome://tabmixplus/skin/disabled.png");
+  margin-right: -2px;
 }
 
 .shortcut-image[anonid="reset"] {
