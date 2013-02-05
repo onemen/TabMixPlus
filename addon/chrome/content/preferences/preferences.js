@@ -5,6 +5,12 @@ const pBranch = Ci.nsIPrefBranch;
 
 function $(id) document.getElementById(id);
 
+// Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
+// for support firefox 4.0-11.0
+XPCOMUtils.defineLazyGetter(window, "newTabURLpref", function() {
+  return Tabmix.getTopWin().Tabmix.newTabURLpref;
+});
+
 var gSetTabIndex = {
   _inited: [],
   tabSelectionChanged: function (event) {
@@ -261,38 +267,214 @@ function getPrefByType(prefName, save) {
 }
 
 function setPrefByType(prefName, newValue, atImport) {
-   try {
-      switch (Services.prefs.getPrefType(prefName)) {
-         case pBranch.PREF_BOOL:
-            if (atImport)
-               newValue = /true/i.test(newValue);
-            Services.prefs.setBoolPref(prefName, newValue);
-            break;
-         case pBranch.PREF_INT:
-            Services.prefs.setIntPref(prefName, newValue);
-            break;
-         case pBranch.PREF_STRING:
-            // in prev version we use " " for to export string to file
-            if (atImport && newValue.indexOf('"') == 0)
-               newValue = newValue.substring(1,newValue.length-1);
-            Services.prefs.setCharPref(prefName, newValue);
-            break;
-         default:
-            if (!atImport)
-               break;
-            // we need to check when import from saved file
-            // in 0.3.0.605 we changed tab color from old pref to new pref
-            // old pref "extensions.tabmix.currentColor" type integer
-            // new pref "extensions.tabmix.currentColorCode" type string
-            if (prefName == "extensions.tabmix.currentColor" ||
-                prefName == "extensions.tabmix.unreadColor" ||
-                prefName == "extensions.tabmix.progressColor") {
-                var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
-                                   "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"]
-                Services.prefs.setCharPref(prefName + "Code", colorCodes[newValue]);
-            }
+  try {
+    _setPrefByType(prefName, newValue, atImport)
+  } catch (ex) {
+    Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " +
+        Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);
+  }
+}
+function _setPrefByType(prefName, newValue, atImport) {
+  let prefType = Services.prefs.getPrefType(prefName);
+  // when we import from old saved file, we need to replace old pref that are not in use.
+  // we also check for locked pref for the case user locked pref that we replaced
+  if (atImport && (prefType == Services.prefs.PREF_INVALID ||
+      Services.prefs.prefIsLocked(prefName))) {
+    switch (prefName) {
+    // in 0.3.0.605 we changed tab color from old pref to new pref
+    // old pref "extensions.tabmix.currentColor" type integer
+    // new pref "extensions.tabmix.currentColorCode" type string
+    case "extensions.tabmix.currentColor":
+    case "extensions.tabmix.unreadColor":
+    case "extensions.tabmix.progressColor":
+      var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
+        "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"]
+      newValue = colorCodes[newValue];
+      prefName = prefName + "Code";
+    // in 0.3.7.4 2008-12-24 we combined all style pref into one per type
+    // extensions.tabmix.styles.[TYPE NAME]
+    case "extensions.tabmix.boldUnread":
+    case "extensions.tabmix.italicUnread":
+    case "extensions.tabmix.underlineUnread":
+    case "extensions.tabmix.boldCurrent":
+    case "extensions.tabmix.italicCurrent":
+    case "extensions.tabmix.underlineCurrent":
+    case "extensions.tabmix.unreadColorCode":
+    case "extensions.tabmix.currentColorCode":
+    case "extensions.tabmix.progressColorCode":
+    case "extensions.tabmix.useCurrentColor":
+    case "extensions.tabmix.useUnreadColor":
+    case "extensions.tabmix.useProgressColor":
+      var pref = prefName.toLowerCase().replace(/extensions.tabmix.|color/g,"")
+                        .replace(/italic|bold|underline/g, ",$&,")
+                        .replace("use", ",text,")
+                        .replace("code", ",textColor,")
+                        .split(",");
+      var styleName, attrib;
+      [styleName, attrib] = prefName.indexOf("Code") > -1 ? [pref[0], pref[1]] : [pref[2], pref[1]];
+      if (styleName == "progress") {
+        attrib = attrib.replace("text", "bg");
+        styleName += "Meter"
       }
-   } catch (e) {Tabmix.log("error in setPrefByType " + "\n" + "caller " + setPrefByType.caller.name + "\n"+ prefName + "\n" + newValue + "\n" + e);}
+      else
+        styleName += "Tab";
+      oldStylePrefs[styleName][attrib] = newValue;
+      oldStylePrefs.found = true;
+      return;
+    // changed at 2008-02-26
+    case "extensions.tabmix.undoCloseCache":
+      Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
+      return;
+    // changed at 2008-08-17
+    case "extensions.tabmix.opentabfor.search":
+      Services.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
+      return;
+    // changed at 2008-09-23
+    case "extensions.tabmix.keepWindow":
+      Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
+      return;
+    // changed at 2008-09-28
+    case "browser.ctrlTab.mostRecentlyUsed":
+    case "extensions.tabmix.lasttab.handleCtrlTab":
+      Services.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
+      return;
+    // 2008-11-29
+    case "extensions.tabmix.maxWidth":
+    case "extensions.tabmix.tabMaxWidth": // 2012-06-22
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", newValue);
+      return;
+    // 2008-11-29
+    case "extensions.tabmix.minWidth":
+    case "extensions.tabmix.tabMinWidth": // 2012-06-22
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", newValue);
+      return;
+    // 2009-01-31
+    case "extensions.tabmix.newTabButton.leftside":
+      Tabmix.prefs.setIntPref("newTabButton.position", /true/i.test(newValue) ? 0 : 2);
+      return;
+    // 2009-10-10
+    case "extensions.tabmix.windows.warnOnClose":
+      Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
+      Services.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
+      return;
+    // 2010-03-07
+    case "extensions.tabmix.extraIcons":
+      Services.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
+      Services.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
+      return;
+    // 2010-06-05
+    case "extensions.tabmix.tabXMode":
+      // in old version we use tabXMode = 0 to disable the button
+      if (newValue < 1 || newValue > 5)
+        newValue = 1;
+      Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
+      return;
+    case "extensions.tabmix.tabXMode.enable":
+      Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", /true/i.test(newValue));
+      return;
+    case "extensions.tabmix.tabXLeft":
+      Tabmix.prefs.setBoolPref("tabs.closeButtons.onLeft", /true/i.test(newValue));
+      return;
+    case "extensions.tabmix.tabXDelay":
+      Tabmix.prefs.setIntPref("tabs.closeButtons.delay", newValue);
+      return;
+    // 2010-09-16
+    case "extensions.tabmix.speLink":
+      Tabmix.prefs.setIntPref("opentabforLinks", newValue);
+      return;
+    // 2011-01-26
+    case "extensions.tabmix.mouseDownSelect":
+      Tabmix.prefs.setBoolPref("selectTabOnMouseDown", /true/i.test(newValue));
+      return;
+    // 2011-10-11
+    case "browser.link.open_external":
+      if (newValue == $("generalWindowOpen").value)
+        newValue = -1;
+      Services.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
+      return;
+    // 2011-11-26
+    case "extensions.tabmix.clickToScroll.scrollDelay":
+      Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
+      return;
+    // 2012-01-26
+    case "extensions.tabmix.newTabUrl":
+      setNewTabUrl(newTabURLpref, newValue);
+      return;
+    case "extensions.tabmix.newTabUrl_afterLastTab":
+      setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
+      return;
+      // 2012-03-21
+    case "extensions.tabmix.loadOnNewTab":
+      Tabmix.prefs.setIntPref("loadOnNewTab.type", newValue);
+      return;
+    case "extensions.tabmix.replaceLastTabWith":
+      Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
+      return;
+      // 2012-04-12
+    case "browser.tabs.loadFolderAndReplace":
+      Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
+      return;
+    // 2013-01-18
+    case "extensions.tabmix.disableF8Key":
+    case "extensions.tabmix.disableF9Key":
+      let disabled = /true/i.test(newValue) ? "d&" : "";
+      let isF8 = /disableF8Key$/.test(prefName);
+      let key = isF8 ? "slideShow" : "toggleFLST";
+      $("shortcut-group").keys[key] = disabled + (isF8 ? "VK_F8" : "VK_F9");
+      Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify($("shortcut-group").keys));
+      return;
+    }
+  }
+  switch (prefType) {
+  case pBranch.PREF_BOOL:
+    if (atImport) {
+      newValue = /true/i.test(newValue);
+      // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
+      if (prefName == "browser.tabs.autoHide") {
+        newValue = newValue ? 1 : 0;
+        Tabmix.prefs.setIntPref("hideTabbar", newValue);
+        return;
+      }
+    }
+    Services.prefs.setBoolPref(prefName, newValue);
+    break;
+  case pBranch.PREF_INT:
+    if (prefName == "browser.tabs.closeButtons") {
+      // we use browser.tabs.closeButtons only in 0.3.8.3
+      if (newValue < 0 || newValue > 6)
+        newValue = 6;
+      newValue = [3,5,1,1,2,4,1][newValue];
+      Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
+      return;
+    }
+    Services.prefs.setIntPref(prefName, newValue);
+    break;
+  case pBranch.PREF_STRING:
+    // in prev version we use " " for to export string to file
+    if (atImport && newValue.indexOf('"') == 0)
+      newValue = newValue.substring(1,newValue.length-1);
+    if (newTabURLpref == "browser.newtab.url") {
+      if (prefName == "extensions.tabmix.newtab.url") {
+        setNewTabUrl("browser.newtab.url", newValue);
+        break;
+      }
+      if (prefName == "extensions.tabmix.replaceLastTabWith.newTabUrl") {
+        setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", newValue);
+        break;
+      }
+    }
+    Services.prefs.setCharPref(prefName, newValue);
+    break;
+  }
+}
+
+function setNewTabUrl(newPref, newValue) {
+  if (newValue != "") {
+    let nsISupportsString = Ci.nsISupportsString;
+    let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+    str.data = newValue;
+    Services.prefs.setComplexValue(newPref, nsISupportsString, str);
+  }
 }
 
 function TM_setElements (restore, start) {
@@ -401,77 +583,78 @@ function exportData() {
 
 var oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
 function importData () {
-   const nsIFilePicker = Ci.nsIFilePicker;
-   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-   var fpCallback = function fpCallback_done(aResult) {
-      if (aResult != nsIFilePicker.returnCancel) {
-         let stream = Cc["@mozilla.org/network/file-input-stream;1"].
-                      createInstance(Ci.nsIFileInputStream);
-         stream.init(fp.file, 0x01, parseInt("0444", 8), null);
-         let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
-                        createInstance(Ci.nsIScriptableInputStream);
-         streamIO.init(stream);
-         let input = streamIO.read(stream.available());
-         streamIO.close();
-         stream.close();
-         if (input)
-           loadData(input.replace(/\r\n/g, "\n").split("\n"));
-      }
-   }
+  const nsIFilePicker = Ci.nsIFilePicker;
+  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+  var fpCallback = function fpCallback_done(aResult) {
+    if (aResult != nsIFilePicker.returnCancel) {
+      let stream = Cc["@mozilla.org/network/file-input-stream;1"].
+                  createInstance(Ci.nsIFileInputStream);
+      stream.init(fp.file, 0x01, parseInt("0444", 8), null);
+      let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
+                  createInstance(Ci.nsIScriptableInputStream);
+      streamIO.init(stream);
+      let input = streamIO.read(stream.available());
+      streamIO.close();
+      stream.close();
+      if (input)
+        loadData(input.replace(/\r\n/g, "\n").split("\n"));
+    }
+  }
 
-   fp.init(window, null, nsIFilePicker.modeOpen);
-   fp.appendFilters(nsIFilePicker.filterText);
-   if (Tabmix.isVersion(180))
-      fp.open(fpCallback);
-   else
-      fpCallback(fp.show());
+  fp.init(window, null, nsIFilePicker.modeOpen);
+  fp.appendFilters(nsIFilePicker.filterText);
+  if (Tabmix.isVersion(180))
+    fp.open(fpCallback);
+  else
+    fpCallback(fp.show());
 }
 
 function loadData (pattern) {
-   if (pattern[0]!="tabmixplus") {
-      //  Can not import because it is not a valid file.
-      alert(TabmixSvc.getString("tmp.importPref.error1"));
-      return;
-   }
+  if (pattern[0]!="tabmixplus") {
+    //  Can not import because it is not a valid file.
+    alert(TabmixSvc.getString("tmp.importPref.error1"));
+    return;
+  }
 
-   // set flag to prevent TabmixTabbar.updateSettings from run for each change
-   Tabmix.prefs.setBoolPref("setDefault", true);
+  // set flag to prevent TabmixTabbar.updateSettings from run for each change
+  Tabmix.prefs.setBoolPref("setDefault", true);
 
-   // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-   Tabmix.prefs.setBoolPref("sessions.manager", false);
-   Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
-   Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
-   Services.prefs.setIntPref("browser.startup.page", false);
-   Services.prefs.savePrefFile(null);
+  // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
+  Tabmix.prefs.setBoolPref("sessions.manager", false);
+  Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
+  Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
+  Services.prefs.setIntPref("browser.startup.page", false);
+  Services.prefs.savePrefFile(null);
 
-   var prefName, prefValue;
-   Shortcuts.prefsChangedByTabmix = true;
-   for (let i = 1; i < pattern.length; i++){
-      var index = pattern[i].indexOf("=");
-      if (index > 0){
-         prefName  = pattern[i].substring(0,index);
-         prefValue = pattern[i].substring(index+1,pattern[i].length);
-         setPrefByType(prefName, prefValue, true);
-      }
-   }
-   Shortcuts.prefsChangedByTabmix = false;
-   var browserWindow = Tabmix.getTopWin();
-   browserWindow.gTMPprefObserver.updateTabClickingOptions();
-   if (oldStylePrefs.found) {
-      browserWindow.gTMPprefObserver.converOldStylePrefs("currentTab", oldStylePrefs.currentTab);
-      browserWindow.gTMPprefObserver.converOldStylePrefs("unreadTab", oldStylePrefs.unreadTab);
-      browserWindow.gTMPprefObserver.converOldStylePrefs("progressMeter", oldStylePrefs.progressMeter);
-      oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
-   }
-   Tabmix.prefs.clearUserPref("setDefault");
+  var prefName, prefValue;
+  Shortcuts.prefsChangedByTabmix = true;
+  for (let i = 1; i < pattern.length; i++){
+    var index = pattern[i].indexOf("=");
+    if (index > 0){
+      prefName  = pattern[i].substring(0,index);
+      prefValue = pattern[i].substring(index+1,pattern[i].length);
+      setPrefByType(prefName, prefValue, true);
+    }
+  }
+  Shortcuts.prefsChangedByTabmix = false;
+  var browserWindow = Tabmix.getTopWin();
+  browserWindow.gTMPprefObserver.updateTabClickingOptions();
+  if (oldStylePrefs.found) {
+    browserWindow.gTMPprefObserver.converOldStylePrefs("currentTab", oldStylePrefs.currentTab);
+    browserWindow.gTMPprefObserver.converOldStylePrefs("unreadTab", oldStylePrefs.unreadTab);
+    browserWindow.gTMPprefObserver.converOldStylePrefs("progressMeter", oldStylePrefs.progressMeter);
+    oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
+  }
+  Tabmix.prefs.clearUserPref("setDefault");
+/*
+///XXX TODO finish this later
+  TM_setElements(false);
+  TMP_setButtons(true, true);
 
-   TM_setElements(false);
-   TMP_setButtons(true, true);
-
-   TM_Options.isSessionStoreEnabled(true);
-   callUpdateSettings();
-
-   Services.prefs.savePrefFile(null); // store the pref immediately
+  TM_Options.isSessionStoreEnabled(true);
+  callUpdateSettings();
+*/
+  Services.prefs.savePrefFile(null);
 }
 
 var applyData = [];
