@@ -86,6 +86,9 @@ var TabmixTabbar = {
       Tabmix.setItem("tabmixScrollBox", "collapsed", null);
 
       tabBar._positionPinnedTabs();
+      if (Tabmix.isVersion(170) && isMultiRow && TMP_tabDNDObserver.paddingLeft)
+        TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");
+
       if (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
             tabBar.hasAttribute("defaultScrollButtons")) {
         tabBar.removeAttribute("defaultScrollButtons");
