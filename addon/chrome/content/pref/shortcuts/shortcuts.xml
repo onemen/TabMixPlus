@@ -211,7 +211,7 @@
 
       <property name="defaultPref" readonly="true">
         <getter><![CDATA[
-          let defaultPref = Shortcuts.keys[this.id].default || "";
+          let defaultPref = Shortcuts.keys[this.id].default.replace(/^d&/, "") || "";
           if (defaultPref) {
             let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
             resetButton.hidden = false;
