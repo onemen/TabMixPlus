@@ -327,7 +327,7 @@
             <checkbox id="popupNextToOpener" label="&popupNextToOpener.label;"
                       preference="pref_popupNextToOpener" class="indent" observes="obs_mergePopups"/>
           </groupbox>
-          <groupbox align="start">
+          <groupbox>
             <caption label="&mergeTabSelection.label;"/>
               <!-- Close on Merge -->
               <checkbox id="closeOnMerge" label="&closeOnMerge.label;" preference="pref_closeOnMerge"/>
@@ -337,7 +337,7 @@
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel>
-          <groupbox>
+          <groupbox flex="1">
             <vbox align="start">
               <!-- Enable Undo Close Tab
                    gTMPprefObserver.observe control changes in these preference -->
@@ -365,7 +365,7 @@
               <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
             </vbox>
          </groupbox>
-         <groupbox flex="1" align="start">
+         <groupbox flex="1">
            <caption label="&extraIcons.autoreload;"/>
            <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
                      prefstring="extensions.tabmix.reload_match_address" inverted="true"

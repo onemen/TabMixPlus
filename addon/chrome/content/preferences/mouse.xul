@@ -58,8 +58,8 @@
         <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
       </tabs>
       <tabpanels flex="1">
-        <tabpanel orient="vertical">
-          <groupbox orient="vertical" flex="1">
+        <tabpanel>
+          <groupbox flex="1">
             <hbox align="center">
               <checkbox id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                         preference="pref_mouseHoverSelect"/>
@@ -81,7 +81,7 @@
             <checkbox id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;"
                       preference="pref_lockTabSizingOnClose" align="start" flexlabel="1"/>
           </groupbox>
-          <groupbox align="start" flex="1">
+          <groupbox flex="1">
             <!-- drop indicator -->
             <checkbox id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"/>
             <!-- drop indicator -->
@@ -97,7 +97,7 @@
             </hbox>
           </groupbox>
           <!-- Tabbar Scrolling -->
-          <groupbox align="start" flex="1">
+          <groupbox flex="1">
             <caption label="&tabbarscrolling.caption;"/>
             <separator class="thin"/>
             <label value="&tabbarscrolling.holdShift.label;"/>
@@ -110,7 +110,7 @@
                       preference="pref_reversescrolling"/>
           </groupbox>
         </tabpanel>
-        <tabpanel orient="vertical" align="start">
+        <tabpanel align="start">
           <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
           <spacer style="height: 1em;"/>
           <tabbox id="tabclick" class="groupbox-tabbox">
@@ -123,7 +123,7 @@
               <tab label="&alt.label;"    linkedpanel="_tabpanel" class="subtabs"/>
             </tabs>
             <tabpanels class="groupbox-panels">
-              <tabpanel id="_tabpanel" orient="vertical">
+              <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
                 <label value="&ontab.label;" control="ClickTab" align="center" flex="1"/>

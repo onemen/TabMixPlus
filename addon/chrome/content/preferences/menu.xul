@@ -100,7 +100,7 @@
         <tab label="&shortcuts.label;" class="subtabs" helpTopic="Menu_-_Shortcuts"/>
       </tabs>
       <tabpanels flex="1">
-        <tabpanel orient="vertical">
+        <tabpanel>
           <groupbox flex="1">
             <caption label="&showtabBarContext.label;"/>
             <grid flex="1" style="overflow: auto; height:18em;">
@@ -177,8 +177,8 @@
             </grid>
           </groupbox>
         </tabpanel>
-        <tabpanel orient="vertical">
-          <groupbox orient="vertical" flex="1">
+        <tabpanel>
+          <groupbox flex="1">
             <caption label="&showContentAreaContext.label;"/>
             <grid flex="1" style="overflow: auto; height:18em;">
               <columns>
@@ -228,8 +228,8 @@
             </grid>
           </groupbox>
         </tabpanel>
-        <tabpanel orient="vertical">
-          <groupbox orient="vertical" flex="1">
+        <tabpanel>
+          <groupbox flex="1">
             <caption label="&showToolsMenu.label;"/>
             <!-- tab mix options in Tools Menu -->
             <grid flex="1" style="overflow: auto; height:18em;">
@@ -252,7 +252,7 @@
             </grid>
           </groupbox>
         </tabpanel>
-        <tabpanel id="shortcuts-panel" orient="vertical" hide-shortcut-warning="true"
+        <tabpanel id="shortcuts-panel" hide-shortcut-warning="true"
               hide-unused-shortcuts="false" usedKeys="false"
               persist="hide-shortcut-warning hide-unused-shortcuts"
               onmousedown="if (event.originalTarget.className == 'shortcut-image') return;

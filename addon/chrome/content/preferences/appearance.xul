@@ -244,12 +244,12 @@
               <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>
-            <groupbox align="start" id="onToolbar">
+            <groupbox id="onToolbar">
               <caption label="&toolbar.visible.caption;"/>
               <label value="&toolbar.novisible.label;" class="indent"/>
             </groupbox>
             <spacer flex="1"/>
-            <groupbox align="start" id="onPlate">
+            <groupbox id="onPlate">
               <caption label="&toolbar.hidden.caption;"/>
               <label value="&toolbar.nohidden.label;" class="indent"/>
               <hbox class="tabmixbuttons">

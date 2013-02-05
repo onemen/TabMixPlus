@@ -86,7 +86,7 @@
       </tabs>
       <tabpanels flex="1">
         <!-- Session Manager Extension -->
-        <tabpanel orient="vertical">
+        <tabpanel>
           <!-- Open Session Manager Extension Options -->
           <groupbox id="sessionmanager_ext">
             <hbox align="end">
@@ -113,13 +113,7 @@
           </groupbox>
         </tabpanel>
         <!-- Buikd-in SessionStore -->
-        <tabpanel orient="vertical">
-<!--
-Fix in all places
-we don't need to put <vbox align="start"> inside groupbox
-just set <groupbox align="start">
-also we don't need to set orient="vertical" to groupbox, vertical is the default
--->
+        <tabpanel>
           <groupbox>
             <vbox align="start">
               <checkbox id="sessionstore_0" label="&ss.enable.label;"
@@ -169,7 +163,7 @@ also we don't need to set orient="vertical" to groupbox, vertical is the default
           </groupbox>
         </tabpanel>
         <!-- Tabmix Session manager -->
-        <tabpanel orient="vertical">
+        <tabpanel>
           <groupbox>
             <vbox align="start">
               <checkbox id="sessionstore_1" label="&ss.enable.label;"
@@ -189,7 +183,7 @@ also we don't need to set orient="vertical" to groupbox, vertical is the default
               <tab label="&sm.preserve;" class="subtabs" helpTopic="Session_-_Preserve"/>
             </tabs>
             <tabpanels flex="1" class="groupbox-panels">
-              <tabpanel orient="vertical">
+              <tabpanel>
                 <hbox>
                   <groupbox style="min-width: 14.6em">
                     <caption label="&sm.start;"/>
@@ -228,7 +222,7 @@ also we don't need to set orient="vertical" to groupbox, vertical is the default
                   </hbox>
                 </groupbox>
               </tabpanel>
-              <tabpanel orient="vertical">
+              <tabpanel>
                 <groupbox>
                   <caption label="&sm.restore.options;"/>
                   <vbox align="start">
@@ -245,7 +239,7 @@ also we don't need to set orient="vertical" to groupbox, vertical is the default
                   </vbox>
                 </groupbox>
               </tabpanel>
-              <tabpanel orient="vertical">
+              <tabpanel>
                 <groupbox>
                   <caption label="&sm.preserve.options;"/>
                   <hbox>
