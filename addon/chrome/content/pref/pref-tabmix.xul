@@ -1281,8 +1281,8 @@
       <tabpanel id="incompatible_panel" orient="vertical">
         <tabbox flex="1">
           <tabs class="tabs-hidden">
-            <tab/>
-            <tab/>
+            <tab label="tab"/>
+            <tab label="tab"/>
           </tabs>
           <tabpanels flex="1">
             <groupbox align="stretch">
