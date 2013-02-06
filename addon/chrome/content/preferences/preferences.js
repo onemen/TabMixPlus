@@ -488,8 +488,9 @@ gPrefs = document.documentElement.getElementsByAttribute("prefstring", "*");
    TM_Options.initBroadcasters(start);
 }
 
-// other settings not in extensions.tabmix. branch that we save
-var otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
+XPCOMUtils.defineLazyGetter(window, "preferenceList", function() {
+  // other settings not in extensions.tabmix. branch that we save
+  let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
   "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
   "browser.link.open_newwindow.restriction","browser.newtab.url",
   "browser.search.context.loadInBackground","browser.search.openintab",
@@ -503,8 +504,6 @@ var otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
   "browser.tabs.warnOnClose","browser.warnOnQuit","browser.warnOnRestart",
   "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
 
-__defineGetter__("preferenceList", function() {
-  delete this.preferenceList;
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
@@ -514,7 +513,7 @@ __defineGetter__("preferenceList", function() {
     } catch (ex) { }
     return false;
   });
-  return this.preferenceList = otherPrefs.concat(tabmixPrefs);
+  return otherPrefs.concat(tabmixPrefs);
 });
 
 function defaultSetting() {
