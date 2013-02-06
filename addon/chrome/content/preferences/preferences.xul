@@ -84,20 +84,6 @@ zh-TW            style="width: 36.4em; min-height: 41.2em;"
             src="chrome://tabmixplus/content/preferences/session.xul"/>
   <prefpane id="paneIncompatible" label="Error"
             src="chrome://tabmixplus/content/preferences/incompatible.xul"/>
-<!--
-<prefpane id="paneIncompatible" label="Error">
-   <groupbox id="_incompatible" align="stretch" collapsed="true">
-      <hbox align="center">
-         <description style="width: 24em;" class="header">
-            Some of your Extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.
-         </description>
-         <spacer flex="1"/>
-         <button class="header" label="Show List…" oncommand="showIncompatible();"/>
-      </hbox >
-   </groupbox>
-   <separator/>
-</prefpane>
--->
 
   <popupset>
     <menupopup id="tm-settings" position="before_start">

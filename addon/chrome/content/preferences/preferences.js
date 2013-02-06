@@ -656,4 +656,49 @@ function openHelp() {
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
+var gIncompatiblePane = {
+  lastSelected: "paneLinks",
+
+  init: function (docElt) {
+    this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
+    let radioGroup = this.paneButton.parentNode;
+    radioGroup.addEventListener("command", this, false);
+    this.checkForIncompatible(false);
+  },
+
+  deinit: function() {
+    let radioGroup = this.paneButton.parentNode;
+    radioGroup.removeEventListener("command", this, false);
+  },
+
+  handleEvent: function (aEvent) {
+    if (aEvent.type != "command")
+      return;
+    let prefWindow = document.documentElement;
+    if (prefWindow.lastSelected != "paneIncompatible")
+      this.lastSelected = prefWindow.lastSelected;
+  },
+
+  checkForIncompatible: function (aShowList) {
+     let tmp = { };
+     Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+     new tmp.CompatibilityCheck(window, aShowList, true);
+  },
+
+  // call back function from CompatibilityCheck.jsm
+  hide_IncompatibleNotice: function (aHide, aFocus) {
+    if (this.paneButton.collapsed != aHide) {
+      this.paneButton.collapsed = aHide;
+      $("paneIncompatible").collapsed = aHide;
+    }
+
+    if (aHide && document.documentElement.lastSelected == "paneIncompatible")
+      document.documentElement.showPane($(this.lastSelected));
+
+    if (aFocus)
+      window.focus();
+  }
+
+}
+
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");

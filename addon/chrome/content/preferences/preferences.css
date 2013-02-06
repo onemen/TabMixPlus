@@ -33,10 +33,6 @@ radio[pane=paneIncompatible] {
   -moz-image-region: auto; /* cut off inheritance */
 }
 
-radio[pane=paneIncompatible]:not([show=true]) {
-  visibility: collapse;
-}
-
 .dialog-button[icon="help"] {
   list-style-image: url("chrome://global/skin/icons/question-16.png");
 }

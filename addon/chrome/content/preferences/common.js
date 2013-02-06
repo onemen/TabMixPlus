@@ -16,13 +16,12 @@ var gCommon = {
     // verify that all the prefs exist .....
     browserWindow.gTMPprefObserver.addMissingPrefs();
 
-    gIncompatiblePane.checkForIncompatible(false);
+    var docElt = document.documentElement;
+    gIncompatiblePane.init(docElt);
 
     // prevent TMP_SessionStore.setService from reseting Session preference
     // we control changeing these from here
 //    browserWindow.tabmix_setSession = true;
-
-    var docElt = document.documentElement;
 
     if (docElt.instantApply)
       docElt.getButton("extra1").hidden = true;
@@ -78,8 +77,7 @@ var gCommon = {
         this._applyButton.userchangedWidth) {
       gAppearancePane.changeTabsWidth();
     }
-//    gIncompatiblePane.paneButton.removeEventListener("click", gIncompatiblePane.onPaneSelect, false);
-    gIncompatiblePane.paneButton.parentNode.removeEventListener("select", gIncompatiblePane.onPaneSelect, false);
+    gIncompatiblePane.deinit();
 //    window.removeEventListener("command", this.updateObservers, false);
 //    window.removeEventListener("command", this, false);
     window.removeEventListener("change", this, false);
@@ -310,85 +308,4 @@ alert("aPaneID " + aPaneID + " " + maxDiff);
     }
     alert(outStr);
   }
-}
-
-// call back function from tabmix_checkCompatibility
-function hide_IncompatibleNotice(aHide, aFocus) {
-//  var button = document.documentElement.getElementsByAttribute("pane", "paneIncompatible")[0];
-//  var button = $("TabMIxPreferences").getElementsByAttribute("pane", "paneIncompatible")[0];
-  var button = document.getAnonymousElementByAttribute(document.documentElement, "pane", "paneIncompatible");
-//  Tabmix.log("aHide " + aHide + "\nbutton.collapsed " + button.collapsed);
-
-  if (button.collapsed != aHide) {
-    button.collapsed = aHide;
-    $("paneIncompatible").collapsed = aHide;
-  }
-
-  let prefWindow= document.documentElement;
-//Tabmix.log("prefWindow.lastSelected " + prefWindow.lastSelected
-//+"\ngIncompatiblePane.lastSelected " + gIncompatiblePane.lastSelected);
-
-  if (aHide && prefWindow.lastSelected == "paneIncompatible")
-    prefWindow.showPane($(gIncompatiblePane.lastSelected));
-
-  if (aFocus)
-    window.focus();
-}
-
-
-var gIncompatiblePane = {
-  lastSelected: "paneLinks",
-  _paneButton: null,
-
-  get paneButton() {
-    if (!this._paneButton) {
-      this._paneButton = document.getAnonymousElementByAttribute(document.documentElement, "pane", "paneIncompatible");
-      this._paneButton.parentNode.addEventListener("select", gIncompatiblePane.onPaneSelect, false);
-    }
-    return this._paneButton;
-  },
-/*
-  init: function () {
-    $("paneIncompatible").collapsed = this.paneButton.collapsed;
-  },
-*/
-
-  onPaneSelect: function () {
-    let prefWindow= document.documentElement;
-//Tabmix.log("onPaneSelect \nprefWindow.lastSelected " + prefWindow.lastSelected
-// + "\nprefWindow.currentPane.id " + prefWindow.currentPane.id    );
-//Tabmix.log('$("paneIncompatible").collapsed ' + $("paneIncompatible").collapsed);
-    if (prefWindow.lastSelected != "paneIncompatible")
-      gIncompatiblePane.lastSelected = prefWindow.lastSelected;
-  },
-
-  checkForIncompatible: function (aShowList) {
-///    Tabmix.getTopWin().tabmix_checkCompatibility.start(window, aShowList, true);
-     let tmp = { };
-     Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-     new tmp.CompatibilityCheck(window, aShowList, true);
-  },
-
-///  // call back function from tabmix_checkCompatibility
-  // call back function from CompatibilityCheck.jsm
-  hide_IncompatibleNotice: function (aHide, aFocus) {
-    this.paneButton.setAttribute("show", !aHide);
-
-///XXXX - need to disable the button also whe it is hide to prevent it selected with pgup/down or left rightr arrow
-
-/*
-    var button = this.paneButton;
-    if (button.collapsed != aHide)
-      button.collapsed = aHide;
-*/
-    if (aHide) {
-      let prefWindow= document.documentElement;
-      if (prefWindow.lastSelected == "paneIncompatible")
-        prefWindow.showPane($(this.lastSelected));
-    }
-
-    if (aFocus)
-      window.focus();
-  }
-
 }
