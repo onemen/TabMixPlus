@@ -623,41 +623,31 @@ function toolbarButtons(aWindow) {
   TM_Options.disabled("newTabButton", !enablePosition);
 }
 
-function openHelp(aPageaddress) {
-  var helpTopic = aPageaddress || document.documentElement.currentPane.helpTopic;
-  if (document.documentElement.currentPane.id == "paneSession" ) {
-    if (helpTopic == "tabmix") {
-      var box = document.documentElement.currentPane.getElementsByTagName("tabbox");
-      helpTopic = box[1].selectedTab.getAttribute("helpTopic");
-    }
-    else
-      helpTopic = "";
-  }
+function openHelp() {
   var helpPage = "http://tmp.garyr.net/help/#"
-  var helpUrl = helpPage + helpTopic;
-  var tabToSelect;
-  // Check if the help page already open
+  // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
-  for (var i = 0; i < tabBrowser.browsers.length; i++) {
-    if (tabBrowser.browsers[i].currentURI.spec.indexOf(helpPage) == 0) {
-      tabToSelect = tabBrowser.tabs[i];
-      break;
+  function selectHelpPage() {
+    let browsers = tabBrowser.browsers;
+    for (let i = 0; i < browsers.length; i++) {
+      let browser = browsers[i];
+      if (browser.currentURI.spec.indexOf(helpPage) == 0) {
+        tabBrowser.tabContainer.selectedIndex = i;
+        return true;
+      }
     }
+    return false;
   }
-  if (!tabToSelect) {
-    if (tabBrowser.tabContainer.isBlankNotBusyTab(tabBrowser.mCurrentTab))
-      tabToSelect = tabBrowser.mCurrentTab
-    else
-      tabToSelect = tabBrowser.addTab("about:blank");
-  }
-  tabToSelect.linkedBrowser.stop();
-  tabBrowser.selectedTab = tabToSelect;
-  tabBrowser.selectedBrowser.userTypedValue = helpUrl;
-  // allow to load in current tab
-  tabBrowser.selectedBrowser.tabmix_allowLoad = true;
-  recentWindow.loadURI(helpUrl, null, null, false);
-  tabBrowser.selectedBrowser.focus();
+  var where = selectHelpPage() ||
+    recentWindow.isTabEmpty(tabBrowser.selectedTab) ? "current" : "tab";
+
+  var currentPane = document.documentElement.currentPane;
+  var helpTopic = currentPane.helpTopic;
+  if (currentPane.id == "paneSession" && helpTopic == "tabmix")
+      helpTopic = $("session").selectedTab.getAttribute("helpTopic");
+
+  recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");

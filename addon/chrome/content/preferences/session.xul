@@ -75,8 +75,8 @@
     <!-- pane content -->
     <tabbox id="paneSession-tabbox" flex="1">
       <tabs class="tabs-hidden">
-        <tab id="sessionmanager_ext_tab" hidden="true" helpTopic="session_manager_extension"/>
-        <tab id="sessionStore_tab" helpTopic="sessionStore"/>
+        <tab id="sessionmanager_ext_tab" hidden="true" helpTopic=" "/>
+        <tab id="sessionStore_tab" helpTopic=" "/>
         <tab id="tabmix_tab" helpTopic="tabmix"/>
       </tabs>
       <tabpanels flex="1">
