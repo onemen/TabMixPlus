@@ -303,8 +303,6 @@
             return true;
 
           var [start, end] = this._startEndProps;
-          if (this.orient != "vertical" && Tabmix.rtl)
-            [end, start] = [start, end];
           var rect = this.scrollClientRect;
           var containerStart = rect[start];
           var containerEnd = rect[end];
