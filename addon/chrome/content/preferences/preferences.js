@@ -31,124 +31,6 @@ var gSetTabIndex = {
   }
 }
 
-var gPrefs;
-var radiogroups;
-
-// load all preferences into the dialog
-function TM_EMinit()
-{
-   gPrefs =  document.getElementsByAttribute("prefstring", "*");
-   radiogroups = document.getElementsByTagName("radiogroup");
-
-   getTab();
-  // show groupbox if incompatible extensions exist in this profile
-  if (prevWindow.getExtensions().length == 0)
-    $("incompatible").collapsed = true;
-
-  // add EventListener when we start
-  window.addEventListener("command", TM_enableApply, false);
-  window.addEventListener("input", TM_enableApply, false);
-
-  // prevent non intiger key in int text box
-  window.addEventListener("keypress", keyPressInText, false);
-
-  // create saved Session popup menu
-  var popup = $("onStart.popup");
-    TabmixSessionManager.createMenuForDialog(popup);
-
-  // update tabclicking items that aren't change by tabmix
-  TM_Options.setItem("snapBack", "hidden", !(prevWindow.SessionSaver && prevWindow.SessionSaver.snapBackTab));
-  TM_Options.setItem("ieView", "hidden", !(prevWindow.IeView && prevWindow.IeView.ieViewLaunch));
-
-  // check if book mark item in tab context menu
-  TM_Options.setItem("bmMenu", "hidden", !(prevWindow.document.getElementById("tm-bookmarkAllTabs")));
-  // check if book "Browser:BookmarkAllTabs" command exist
-  TM_Options.setItem("bmTabsCommand", "hidden", !(prevWindow.document.getElementById("Browser:BookmarkAllTabs")));
-
-  // update pref for 'places'
-  if (prevWindow.gIsPlaces) {
-    $("openBookmarks").setAttribute("label", $("selectTabBH").getAttribute("label"));
-    $("openHistory").hidden = true;
-  }
-
-  TM_setElements(false, true);
-}
-
-// save all preferences entered into the dialog
-function TM_EMsave(onApply)
-{
-  // we only need to save if apply is enabled
-  if (!onApply && document.documentElement.getButton("extra1").disabled)
-    return true;
-
-  // set flag to prevent TabmixTabbar.updateSettings from run for each change
-  Tabmix.prefs.setBoolPref("setDefault", true);
-
-  TM_Options.singleWindow( $("singleWindow").checked );
-  TM_verifyWidth();
-
-  document.documentElement.getButton('accept').focus()
-  document.documentElement.getButton("extra1").disabled = true;
-
-  if (!("undefined" in applyData)) {
-    for (var _pref in applyData)
-      setPrefByType(_pref, applyData[_pref]);
-  }
-  else {
-    // this part is only if the applayData fail for some unknown reason
-    // we don't supposed to get here
-    for (var i = 0; i < gPrefs.length; ++i )
-      setPrefByType(gPrefs[i].getAttribute("prefstring"), gPrefs[i].value);
-  }
-
-  // set saved sessionpath if loadsession >=0
-  var val = Tabmix.prefs.getIntPref("sessions.onStart.loadsession");
-  var popup = $("onStart.popup");
-  var pref = "sessions.onStart.sessionpath";
-  Tabmix.prefs.setCharPref(pref, popup.getElementsByAttribute("value", val)[0].getAttribute("session"));
-
-  applyData = [];
-  Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
-
-  callUpdateSettings();
-
-  Services.prefs.savePrefFile(null); // store the pref immediately
-  return true;
-}
-
-function callUpdateSettings() {
-  var pref = "PrefObserver.error";
-  if (Tabmix.prefs.prefHasUserValue(pref) && Tabmix.prefs.getBoolPref(pref)) {
-    var wnd, enumerator = Tabmix.windowEnumerator();
-    while (enumerator.hasMoreElements()) {
-      wnd = enumerator.getNext();
-      wnd.TabmixTabbar.updateSettings();
-    }
-  }
-}
-
-function TM_verifyWidth() {
-   var minWidth = $("minWidth");
-   var maxWidth = $("maxWidth");
-
-   var minValue = minWidth.value;
-   var maxValue = maxWidth.value;
-
-   if (maxValue - minValue < 0) {
-      minWidth.value = maxValue;
-      maxWidth.value = minValue;
-   }
-
-   if (minWidth.value < 22)
-     minWidth.value = 30;
-
-   if (minValue != minWidth.value)
-      updateApplyData(minWidth);
-
-   if (maxValue != maxWidth.value)
-      updateApplyData(maxWidth);
-}
-
 var TM_Options = {
 
    setRadioFromBoolPref: function(prefId)
@@ -470,24 +352,6 @@ function setNewTabUrl(newPref, newValue) {
   }
 }
 
-function TM_setElements (restore, start) {
-gPrefs = document.documentElement.getElementsByAttribute("prefstring", "*");
-   for (var i = 0; i < gPrefs.length; ++i ) {
-      var pref = gPrefs[i].getAttribute("prefstring");
-      if (restore && Services.prefs.prefHasUserValue(pref))
-         Services.prefs.clearUserPref(pref);
-
-      gPrefs[i].value = getPrefByType(pref);
-   }
-
-   radiogroups = document.documentElement.getElementsByTagName("radiogroup");
-   // this is for compatible with ff 1.0.x
-   // radiogroup not set selectedIndex selectedItem by value set
-   for (i = 0; i < radiogroups.length; i++)
-      radiogroups[i].selectedItem.value = radiogroups[i].value;
-   TM_Options.initBroadcasters(start);
-}
-
 XPCOMUtils.defineLazyGetter(window, "preferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
@@ -677,22 +541,6 @@ Tabmix.log("",true)
    }
 }
 
-//XXXX check if we need to use inverted on the value
-function getValue(item) {
-   if (item.localName == "checkbox")
-      return $("pref_" + item.id).hasAttribute("inverted") ? !item.checked : item.checked;
-
-   return item.value;
-}
-
-// set value to item
-function setValue(item, newValue) {
-   if (item.localName == "checkbox")
-      item.checked = $("pref_" + item.id).hasAttribute("inverted") ? !newValue : newValue;
-   else
-      item.value = newValue;
-}
-
 //function updateApplyData(item, newValue) {
 function updateApplyData(item) {
    var newValue = item.value;
@@ -718,32 +566,6 @@ function updateApplyData(item) {
 function TM_disableApply() {
  document.documentElement.getButton("extra1").disabled = true;
  applyData = [];
-}
-
-function setLastTab() {
-   Tabmix.prefs.setIntPref("selected_tab", $("tabMixTabBox").selectedIndex);
-
-   var subtabs = document.getElementsByAttribute("subtub", "true");
-   var subTab = "selected_sub_tab";
-   for (var i = 0; i < subtabs.length; i++)
-      Tabmix.prefs.setIntPref(subtabs[i].getAttribute("value"), subtabs[i].selectedIndex);
-
-   // remove EventListener when we exit
-   window.removeEventListener("command", TM_enableApply, false);
-   window.removeEventListener("input", TM_enableApply, false);
-   window.removeEventListener("keypress", keyPressInText, false);
-}
-
-function getTab() {
-   var selTabindex = Tabmix.getIntPref("selected_tab" , 0, true);
-   TM_selectTab(selTabindex);
-
-   var subtabs = document.getElementsByAttribute("subtub", true);
-   var subTab = "extensions.tabmix.selected_sub_tab";
-   for (var i = 0; i < subtabs.length; i++) {
-      var val = Tabmix.getIntPref(subTab + subtabs[i].getAttribute("value"), 0);
-      subtabs[i].selectedIndex = val;
-   }
 }
 
 // this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
