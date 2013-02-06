@@ -23,14 +23,14 @@ var gEventsPane = {
     }
 
     // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-    if (browserWindow.Tabmix.newTabURLpref == "browser.newtab.url") {
+    if (newTabURLpref != "browser.newtab.url") {
       let pref_newTabUrl = $("pref_newTabUrl");
-      pref_newTabUrl.name = "browser.newtab.url";
-      this._newTabUrl = "about:newtab";
+      pref_newTabUrl.name = newTabURLpref;
+      this._newTabUrl = "about:blank";
       pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
 
       pref_newTabUrl = $("pref_newTabUrl_1");
-      pref_newTabUrl.name = "extensions.tabmix.replaceLastTabWith.newtab.url";
+      pref_newTabUrl.name = replaceLastTabWithNewTabURLpref;
       pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
     }
 
@@ -90,7 +90,7 @@ var gEventsPane = {
       $("newTabUrl" + idnum).focus();
   },
 
-  _newTabUrl: "about:blank",
+  _newTabUrl: "about:newtab",
   syncFromNewTabUrlPref: function (item) {
     var preference = $(item.getAttribute("preference"));
     // If the pref is set to the default, set the value to ""

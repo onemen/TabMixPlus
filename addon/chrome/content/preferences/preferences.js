@@ -12,6 +12,12 @@ XPCOMUtils.defineLazyGetter(window, "newTabURLpref", function() {
   return Tabmix.getTopWin().Tabmix.newTabURLpref;
 });
 
+XPCOMUtils.defineLazyGetter(window, "replaceLastTabWithNewTabURLpref", function() {
+  let pref = "extensions.tabmix.replaceLastTabWith.";
+  return newTabURLpref == "browser.newtab.url" ?
+    pref + "newtab.url" : pref + "newTabUrl";
+});
+
 var gSetTabIndex = {
   _inited: [],
   tabSelectionChanged: function (event) {
