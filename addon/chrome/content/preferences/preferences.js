@@ -18,6 +18,36 @@ XPCOMUtils.defineLazyGetter(window, "replaceLastTabWithNewTabURLpref", function(
     pref + "newtab.url" : pref + "newTabUrl";
 });
 
+var gPrefwindow = {
+  init: function() {
+    /*XXX TODO on init:
+      check on mac if i need to set
+      tabpanels#tabpanId[Mac] .tabs-hidden > tab {
+        margin-top: 2px;
+      }
+    */
+
+    /* Chromifox theme force button height to 25px */
+    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    if (skin == "cfxec")
+      $("TabMIxPreferences").setAttribute("chromifox", true);
+
+    /* we don't need to fix tabpanels border in ubuntu */
+    if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
+      $("TabMIxPreferences").setAttribute("ubuntu", true);
+
+///XXX check this later, look in gcommon.init
+///  TMP_setButtons(true, true, true);
+  },
+
+  removeChild: function(id) {
+    let child = $(id);
+    child.parentNode.removeChild(child);
+  },
+
+  end: null
+}
+
 var gSetTabIndex = {
   _inited: [],
   tabSelectionChanged: function (event) {

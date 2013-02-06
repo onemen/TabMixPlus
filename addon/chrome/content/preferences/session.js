@@ -24,10 +24,8 @@ var gSessionPane = {
     TM_Options.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(false);
 
-    if (Tabmix.isVersion(200)) {
-      let preference = $("pref_browser.warnOnRestart");
-      preference.parentNode.removeChild(preference);
-    }
+    if (Tabmix.isVersion(200))
+      gPrefwindow.removeChild("pref_browser.warnOnRestart");
 
     gCommon.setPaneWidth("paneSession");
   },

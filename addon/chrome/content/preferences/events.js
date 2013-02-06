@@ -18,8 +18,8 @@ var gEventsPane = {
     var browserWindow = Tabmix.getTopWin();
     let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {
-      let tabPreviews = $("ctrltab.tabPreviews");
-      tabPreviews.parentNode.removeChild(tabPreviews);
+      gPrefwindow.removeChild("pref_ctrltab.tabPreviews");
+      gPrefwindow.removeChild("ctrltab.tabPreviews");
     }
 
     // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)

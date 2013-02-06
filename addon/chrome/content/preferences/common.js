@@ -49,11 +49,6 @@ var gCommon = {
     }
 */
 
-    /* Chromifox theme force button height to 25px */
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin == "cfxec")
-      $("pref-tabmix").setAttribute("chromifox", true);
-
 //    window.addEventListener("command", this.updateObservers, false);
 //    window.addEventListener("command", this, false);
       window.addEventListener("change", this, false);

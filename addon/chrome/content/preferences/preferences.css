@@ -100,7 +100,7 @@ tabpanel {
 }
 
 /* Chromifox theme force button height to 25px */
-#pref-tabmix[chromifox=true] .spinbuttons-button {
+#TabMIxPreferences[chromifox=true] .spinbuttons-button {
   max-height: 11px !important;
 }
 
@@ -130,7 +130,7 @@ tabpanel {
   padding-right: 4px;
 }
 
-.groupbox-panels {
+.groupbox-panels:not([ubuntu]) {
   -moz-appearance: groupbox;
   padding: 3px 3px 6px 3px;
 }
@@ -142,10 +142,6 @@ tabpanel {
 /* hide top tabbox tabs for link and session panel */
 .tabs-hidden > tab {
   visibility: hidden;
-}
-
-tabpanels#tabpanId[Mac] .tabs-hidden > tab {
-  margin-top: 2px;
 }
 
 #extraIcons-locked .checkbox-icon {
