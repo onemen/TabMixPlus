@@ -371,13 +371,13 @@ XPCOMUtils.defineLazyGetter(window, "preferenceList", function() {
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
-  tabmixPrefs = tabmixPrefs.filter(function(pref){
+  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref){
     try {
       return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) != undefined;
     } catch (ex) { }
     return false;
   });
-  return otherPrefs.concat(tabmixPrefs);
+  return tabmixPrefs;
 });
 
 function defaultSetting() {

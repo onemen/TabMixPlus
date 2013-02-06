@@ -24,6 +24,11 @@ var gSessionPane = {
     TM_Options.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(false);
 
+    if (Tabmix.isVersion(200)) {
+      let preference = $("pref_browser.warnOnRestart");
+      preference.parentNode.removeChild(preference);
+    }
+
     gCommon.setPaneWidth("paneSession");
   },
 
@@ -70,7 +75,9 @@ var gSessionPane = {
 
     // sessionstore pref
     function sessionstorePrefs() {
-      updatePrefs("browser.warnOnRestart", !useSessionManager);
+      // browser.warnOnRestart remove on Firefox 20
+      if (!Tabmix.isVersion(200))
+        updatePrefs("browser.warnOnRestart", !useSessionManager);
       updatePrefs("browser.warnOnQuit", !useSessionManager);
       updatePrefs("resume_from_crash", !useSessionManager);
       // "browser.startup.page"
