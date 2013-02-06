@@ -38,7 +38,7 @@ var gEventsPane = {
     TM_Options.initBroadcasters("paneEvents", true);
     TM_Options.disabled("undoClose", true); // set "obs_undoClose" global observer
     this.disableInverseMiddleClick();
-    this.newTabUrl($("loadOnNewTab"), false, false);
+    this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();
     this.disabeleShowTabList();
 
@@ -77,11 +77,12 @@ var gEventsPane = {
     // extensions.tabmix.keepLastTab = true
     var disable = !$("pref_keepWindow").value || $("pref_keepLastTab").value;
     TM_Options.setDisabled("obs_replaceLastTabWith", disable);
-    this.newTabUrl($("replaceLastTabWith"), disable, !disable);
+    this.newTabUrl($("pref_replaceLastTabWith"), disable, !disable);
   },
 
-  newTabUrl: function(item, disable, setFocus) {
-    var showTabUrlBox = item.selectedItem.value == 4;
+  newTabUrl: function(preference, disable, setFocus) {
+    var showTabUrlBox = preference.value == 4;
+    var item = $(preference.id.replace("pref_", ""));
     var idnum = item.getAttribute("idnum") || "" ;
     TM_Options.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
     TM_Options.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
