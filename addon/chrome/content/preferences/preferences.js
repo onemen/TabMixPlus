@@ -2,6 +2,7 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
+const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 function $(id) document.getElementById(id);
 
@@ -248,32 +249,24 @@ try {
 
 }
 
-function getPrefByType(prefName, save) {
-   try {
-      switch (Services.prefs.getPrefType(prefName)) {
-         case pBranch.PREF_BOOL:
-            var  val = Services.prefs.getBoolPref(prefName);
-            return save ? val : val ? 1 : 0;
-            break;
-         case pBranch.PREF_INT:
-            return Services.prefs.getIntPref(prefName);
-            break;
-         case pBranch.PREF_STRING:
-            return Services.prefs.getCharPref(prefName);
-            break;
-      }
-   } catch (e) {Tabmix.log("error in getPrefByType " + "\n" + "caller " + getPrefByType.caller.name + "\n"+ prefName + "\n" + e);}
-   return null;
+function getPrefByType(prefName) {
+  try {
+    var fn = PrefFn[Services.prefs.getPrefType(prefName)];
+    return Services.prefs["get" + fn](prefName);
+  } catch (ex) {
+    Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
+  }
+  return null;
 }
 
 function setPrefByType(prefName, newValue, atImport) {
   try {
     _setPrefByType(prefName, newValue, atImport)
   } catch (ex) {
-    Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " +
-        Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);
+    Tabmix.log("can't write preference " + prefName + "\nvalue " + newValue, true);
   }
 }
+
 function _setPrefByType(prefName, newValue, atImport) {
   let prefType = Services.prefs.getPrefType(prefName);
   // when we import from old saved file, we need to replace old pref that are not in use.
@@ -513,12 +506,11 @@ var otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
 __defineGetter__("preferenceList", function() {
   delete this.preferenceList;
   let prefs = Services.prefs.getDefaultBranch("");
-  let fn = {0: "", 32: "getCharPref", 64: "getIntPref", 128: "getBoolPref"};
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
   tabmixPrefs = tabmixPrefs.filter(function(pref){
     try {
-      return prefs[fn[prefs.getPrefType(pref)]](pref) != undefined;
+      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) != undefined;
     } catch (ex) { }
     return false;
   });
@@ -550,7 +542,7 @@ function exportData() {
   }
 
   let patterns = this.preferenceList.map(function(pref) {
-    return pref + "=" + getPrefByType(pref, true) + "\n";
+    return pref + "=" + getPrefByType(pref) + "\n";
   });
   patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
   patterns.unshift("tabmixplus\n");
