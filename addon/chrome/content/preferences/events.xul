@@ -368,8 +368,7 @@
          <groupbox flex="1">
            <caption label="&extraIcons.autoreload;"/>
            <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
-                     prefstring="extensions.tabmix.reload_match_address" inverted="true"
-                     preference="pref_reloadEvery.matchAddress"/>
+                     preference="pref_reloadEvery.matchAddress" inverted="true"/>
            <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
                      preference="pref_reloadEvery.onReloadButton"/>
          </groupbox>
