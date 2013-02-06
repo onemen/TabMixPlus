@@ -63,7 +63,9 @@ var gSessionPane = {
 
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);
+      preference.batching = true;
       preference.value = aValue;
+      preference.batching = false;
     }
 
     // TMP session pref
@@ -92,6 +94,9 @@ var gSessionPane = {
       sessionPrefs();
       sessionstorePrefs()
     }
+
+    if (document.documentElement.instantApply)
+      Services.prefs.savePrefFile(null);
   },
 
   sessionManagerOptions: function () {
