@@ -463,6 +463,9 @@ var TMP_eventListener = {
         tabBar.setAttribute("backgroundrepeat" , true);
       }
       switch (skin) {
+        case "Australis":
+          tabBar.setAttribute("australis", true);
+          break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
           tabBar.setAttribute("tabmix_skin" , "cfxec");

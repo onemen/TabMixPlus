@@ -67,6 +67,9 @@ function before_Init() {
   $("ClickTabPinTab").label = pinTabLabel;
   $("togglePinTab").setAttribute("label", pinTabLabel);
   $("pinTab").label = pinTabLabel;
+
+  if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Australis")
+    $("TM_ButtonBox").setAttribute("australis", true);
 }
 
 // load all preferences into the dialog

@@ -2,6 +2,15 @@
   list-style-image: url(tmpoptions.png);
   padding: 5px 3px 1px;
 }
+
+#TM_ButtonBox[australis] {
+  -moz-binding: url("chrome://global/content/bindings/radio.xml#radiogroup");
+}
+
+#TM_ButtonBox[australis] > radio[pane] {
+  -moz-box-orient: vertical !important;
+}
+
 #buttontabMixGeneralPrefs {
    -moz-image-region: rect(0px, 24px,  24px, 0px);
 }
