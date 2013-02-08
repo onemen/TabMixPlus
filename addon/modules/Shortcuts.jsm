@@ -132,6 +132,8 @@ try {
         if (!win.closed)
           this.updateWindowKeys(win, changedKeys);
       }
+      if (this.keyConfigInstalled)
+        KeyConfig.syncToKeyConfig(changedKeys, true);
     }
 
     this.updatingShortcuts = false;
@@ -376,11 +378,11 @@ try {
       if (key.getAttribute("keycode") != "VK_F5")
         return false;
       if (!this.keys.browserReload.id) {
-        if (!key.id) {
-          let index = Array.slice(key.parentNode.childNodes).indexOf(key);
-          key.id = "xxx_key#_Browser:Reload".replace("#", index);
-        }
-        this.keys.browserReload.id = key.id;
+        let index = 1, id;
+        do {
+         id = "xxx_key#_Browser:Reload".replace("#", index++);
+        } while (aWindow.document.getElementById(id));
+        this.keys.browserReload.id = key.id = id;
       }
       else
         key.id = this.keys.browserReload.id;
@@ -391,30 +393,38 @@ try {
 }
 
 let KeyConfig = {
-  // when keyConfig extension installed and user change one of our keys
-  // update our preference according to keyConfig preference and clear
-  // keyConfig preference for that key
+  prefsChangedByTabmix: false,
+  // when keyConfig extension installed sync the preference
+  // user may change shortcuts in both extensions
   init: function(aWindow) {
-    this.prefs = Services.prefs.getBranch("keyconfig.main.");
-    if (!TabmixSvc.version(130))
-      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
-    this.prefs.addObserver("", this, false);
-
     this.keyIdsMap = {};
+    // keyConfig use index number for its ids
+    let oldReloadId = "xxx_key29_Browser:Reload";
+    this.keyIdsMap[oldReloadId] = "browserReload";
     for (let [key, keyData] in Iterator(Shortcuts.keys))
       this.keyIdsMap[keyData.id || "key_tm_" + key] = key;
 
+    this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
-    let prefs = this.prefs.getChildList("").filter(function(pref) {
-      let key = this.keyIdsMap[pref];
-      return key && this.resetPref(key, pref, shortcuts);
-    }, this);
-    if (prefs.length > 0) {
-      // we are here before onWindowOpen call updateWindowKeys
-      // so we don't need to do anything else here
-      Shortcuts.prefBackup = shortcuts;
-      Shortcuts.setShortcutsPref();
+    // sync non defualt shortcuts
+    if (Object.keys(shortcuts).length > 0)
+      this.syncToKeyConfig(shortcuts);
+    else {
+      let prefs = this.prefs.getChildList("").filter(function(pref) {
+        let key = this.keyIdsMap[pref];
+        return key && this.syncFromKeyConfig(key, pref, shortcuts);
+      }, this);
+      if (prefs.length > 0) {
+        // we are here before onWindowOpen call updateWindowKeys
+        // so we don't need to do anything else here
+        Shortcuts.prefBackup = shortcuts;
+        Shortcuts.setShortcutsPref();
+      }
     }
+    this.resetPref(oldReloadId);
+    if (!TabmixSvc.version(130))
+      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
+    this.prefs.addObserver("", this, false);
   },
 
   deinit: function() {
@@ -422,30 +432,28 @@ let KeyConfig = {
   },
 
   observe: function(aSubject, aTopic, aData) {
+    if (this.prefsChangedByTabmix)
+      return;
     let key = this.keyIdsMap[aData];
     if (aTopic == "nsPref:changed" && key) {
       let shortcuts = Shortcuts.prefBackup || Shortcuts._getShortcutsPref();
-      if (this.resetPref(key, aData, shortcuts)) {
+      if (this.syncFromKeyConfig(key, aData, shortcuts)) {
         // keyConfig extension code updates the DOM key, we don't need to do it
         Shortcuts.prefBackup = shortcuts;
         Shortcuts.setShortcutsPref();
-        if (shortcuts[key])
-          Shortcuts.keys[key].value = shortcuts[key];
+        Shortcuts.keys[key].value = shortcuts[key] || Shortcuts.keys[key].default;
       }
     }
   },
 
-  resetPref: function(aKey, aPrefName, aShortcuts) {
-    let prefValue;
+  syncFromKeyConfig: function(aKey, aPrefName, aShortcuts) {
+    let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
       prefValue = this.prefs.getCharPref(aPrefName).split("][");
-      this.prefs.clearUserPref(aPrefName);
     } catch (ex) { }
     if (!prefValue)
-      return;
-
-    let newValue, keyData = Shortcuts.keys[aKey];
-    if (prefValue[0] == "!")
+      newValue = keyData.default;
+    else if (prefValue[0] == "!")
       newValue = "d&";
     else {
       let newKey = {modifiers: prefValue[0].replace(" ", ","),
@@ -462,6 +470,30 @@ let KeyConfig = {
       return true;
     }
     return false;
+  },
+
+  syncToKeyConfig: function(aChangedKeys, onChange) {
+    for (let [key, prefVal] in Iterator(aChangedKeys)) {
+      this.prefsChangedByTabmix = true;
+      if (onChange)
+        prefVal = prefVal.value;
+      let id = Shortcuts.keys[key].id || "key_tm_" + key;
+      if (!prefVal || prefVal == Shortcuts.keys[key].default)
+        this.resetPref(id);
+      else {
+        let obj = Shortcuts.keyParse(prefVal);
+        let newValue = obj.disabled ? ["!", "", ""] :
+          [obj.modifiers.replace(",", " "), obj.key, obj.keycode].join("][");
+        this.prefs.setCharPref(id, newValue);
+      }
+      this.prefsChangedByTabmix = false;
+    }
+  },
+
+  resetPref: function (prefName) {
+    // we need this check for Firefox 4.0-5.0
+    if (this.prefs.prefHasUserValue(prefName))
+      this.prefs.clearUserPref(prefName);
   }
 
 }
