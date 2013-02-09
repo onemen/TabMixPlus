@@ -160,8 +160,8 @@ function TM_EMinit() {
   hbox = $("tabScroll-box");
   label = $("tabScroll.label").boxObject.width;
   var menulist = $("tabScroll");
-  var ident = 23; // we have class="ident"
-  if (hbox.boxObject.width > label + menulist.boxObject.width - ident) {
+  var indent = 23; // we have class="indent"
+  if (hbox.boxObject.width > label + menulist.boxObject.width - indent) {
     menulist.parentNode.removeAttribute("pack");
     menulist.parentNode.removeAttribute("class");
     hbox.setAttribute("orient", "horizontal");
