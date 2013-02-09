@@ -1,11 +1,28 @@
-function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
-  this.name = aObjectName;
-  this.value = aCodeString;
-  this.needUpdate = aForceUpdate || false;
+function Tabmix_ChangeCode(aParams, aCodeString, aForceUpdate) {
+  if (aParams && typeof aParams == "object") {
+    this.obj = aParams.obj;
+    this.fnName = aParams.fnName;
+    this.name = aParams.fullName;
+
+    if (typeof this.obj[this.fnName] == "function")
+      this.value = this.obj[this.fnName].toString();
+    else
+      this.errMsg = "\n" + this.name + " is undefined.";
+
+    let options = aParams.options;
+    this.needUpdate = options && options.forceUpdate || false;
+  }
+  else {
+    this.name = aParams;
+    this.value = aCodeString;
+    this.needUpdate = aForceUpdate || false;
+  }
   this.notFound = [];
 }
 
 Tabmix_ChangeCode.prototype = {
+  obj: null, fnName: null,
+  value: "", errMsg: "",
   _replace: function TMP_utils__replace(substr ,newString, aParams) {
     var silent;
     if (typeof aParams != "undefined") {
@@ -51,19 +68,19 @@ Tabmix_ChangeCode.prototype = {
             ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.name) + '");}}';
       }
       if (this.isValidToChange(aName))
-        Tabmix.toCode(aObj, aName || this.name, this.value);
+        Tabmix.toCode(aObj || this.obj, aName || this.fnName || this.name, this.value);
       if (aShow)
-        this.show(aObj, aName);
+        this.show(aObj || this.obj, aName || this.fnName || this.name);
     } catch (ex) {
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
   },
 
   show: function(aObj, aName) {
-    if (this.name != null)
+    if (aObj && aName in aObj)
+      Tabmix.show({obj: aObj, name: aName, fullName: this.name || aName});
+    else if (this.name != null)
       Tabmix.show(this.name);
-    else if (aObj && aName in aObj)
-      Tabmix.clog(aObj[aName].toString());
   },
 
   isValidToChange: function(aName) {
@@ -75,7 +92,7 @@ Tabmix_ChangeCode.prototype = {
     if (notFoundCount) {
       let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
       Tabmix.clog(caller + " was unable to change " + fnName + "."
-        + "\ncan't find string" +str + this.notFound.join("\n    ")
+        + (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    "))
         + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
         + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
       if (Tabmix._debugMode)
@@ -89,10 +106,25 @@ Tabmix_ChangeCode.prototype = {
 
 var Tabmix = {
   newCode: function(aObjectName, aObject, aForceUpdate) {
+if (aForceUpdate)
+Tabmix.log(aObjectName, true);
     try {
       return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
     } catch (ex) {
       this.log("aObjectName " + aObjectName + "\n" + ex);
+      if (Tabmix._debugMode)
+        this.obj(aObject, "aObject");
+    }
+    return null;
+  },
+///XXX need to fix this for getter/setter
+  changeCode: function(aParent, aName, aOptions) {
+    let fnName = aName.split(".").pop();
+    try {
+      return new Tabmix_ChangeCode({obj: aParent, fnName: fnName,
+        fullName: aName, options: aOptions});
+    } catch (ex) {
+      this.clog(Tabmix.callerName() + " failed to change " + aName + "\nError: " + ex.message);
       if (Tabmix._debugMode)
         this.obj(aObject, "aObject");
     }
@@ -138,11 +170,12 @@ this.log(aMethod)
       if (typeof(aDelay) == "undefined")
         aDelay = 500;
 
-      var self = this;
       let logMethod = function _logMethod() {
-        let result = self.getObject(aMethod, rootID).toString();
-        self.clog(aMethod + " = " + result);
-      }
+        let isObj = typeof aMethod == "object";
+        let result = isObj ? aMethod.obj[aMethod.name] :
+                this.getObject(aMethod, rootID).toString();
+        this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result);
+      }.bind(this);
 
       if (aDelay >= 0)
         setTimeout(function () {logMethod();}, aDelay);
@@ -354,9 +387,18 @@ options = {
 
   toCode: function(aObj, aName, aCodeString) {
     if (aObj)
-      aObj[aName] = eval("(" + aCodeString + ")");
+      this.setNewFunction(aObj, aName, eval("(" + aCodeString + ")"));
     else
       eval(aName + " = " + aCodeString);
+  },
+
+  setNewFunction: function(aObj, aName, aCode) {
+    if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
+      Object.defineProperty(aObj, aName, {value: aCode,
+                                          writable: true, configurable: true});
+    }
+    else
+      aObj[aName] = aCode;
   },
 
   getBoolPref: function(aPrefName, aDefault, aUseTabmixBranch) {

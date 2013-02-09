@@ -28,8 +28,7 @@ var TMP_tabDNDObserver = {
       //   is before (for dragging left) or after (for dragging right)
       //   the middle of a background tab, the dragged tab would take that
       //   tab's position when dropped.
-      Tabmix.newCode("gBrowser.tabContainer._animateTabMove",
-          tabBar._animateTabMove)._replace(
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
         'this.selectedItem = draggedTab;',
         'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
               $&\n\
@@ -53,8 +52,7 @@ var TMP_tabDNDObserver = {
         'rtl ? $& : draggingRight && newIndex > -1'
       ).toCode();
 
-      Tabmix.newCode("gBrowser.tabContainer._finishAnimateTabMove",
-          tabBar._finishAnimateTabMove)._replace(
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
         /(\})(\)?)$/,
         '\n\
           this.removeAttribute("movingBackgroundTab");\n\
@@ -1178,13 +1176,13 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       gURLBar.setAttribute("onblur", blur + "Tabmix.urlBarOnBlur();")
 
+    let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
-    let fn;
     let _Omnibar = "Omnibar" in window;
     if (_Omnibar && "intercepted_handleCommand" in gURLBar) {
       fn = "intercepted_handleCommand";
-      Tabmix.newCode("gURLBar.handleCommand", gURLBar.handleCommand)._replace(
+      Tabmix.changeCode(gURLBar, "gURLBar.handleCommand")._replace(
         'O.handleSearchQuery',
         'window.Omnibar.handleSearchQuery', {silent: true}
       ).toCode();
@@ -1194,14 +1192,13 @@ Tabmix.navToolbox = {
     else
       fn = "handleCommand"
 
-    let _handleCommand;
     // Fix incompatibility with https://addons.mozilla.org/en-US/firefox/addon/url-fixer/
     if ("urlfixerOldHandler" in gURLBar.handleCommand) {
       _handleCommand = gURLBar.handleCommand.urlfixerOldHandler.toString();
-      fn = "handleCommand.urlfixerOldHandler";
+      obj = gURLBar.handleCommand;
+      fn = "urlfixerOldHandler";
     }
-    else
-      _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
+    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.browserLoadURL";
 
     // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
     // instantfox uses pre-Firefox 10 version of handleCommand
@@ -1219,7 +1216,7 @@ Tabmix.navToolbox = {
 
     // set altDisabled if Suffix extension installed
     // dont use it for Firefox 6.0+ until new Suffix extension is out
-    let fixedHandleCommand = Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
+    let fixedHandleCommand = Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
       '{',
       '{ var _data, altDisabled = false; \
        if (gBrowser.tabmix_tab) {\
@@ -1287,9 +1284,9 @@ Tabmix.navToolbox = {
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZhandleSearch" :
-                                         "document.getElementById('searchbar').handleSearchCommand";
-      Tabmix.newCode(functionName,  _handleSearchCommand)._replace(
+      let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
+                                      [searchbar, "handleSearchCommand"];
+      Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
         '$& \
         var forceNewTab = where == "current" && textBox._prefBranch.getBoolPref("browser.search.openintab"); \
@@ -1298,18 +1295,11 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    let _doSearch;
-    if (searchLoadExt)
-      _doSearch = esteban_torres.searchLoad_Options.MOZdoSearch.toString()
-    else
-      _doSearch = organizeSE ? window.organizeSE.doSearch.toString() : searchbar.doSearch.toString();
-
-    if (_doSearch.indexOf("tabmixArg") > -1)
+    let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
+                                    [organizeSE || searchbar, "doSearch"];
+    if (obj[fn].toString().indexOf("tabmixArg") > -1)
       return;
-
-    let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZdoSearch" :
-                       (organizeSE ? "window.organizeSE.doSearch" : "document.getElementById('searchbar').doSearch");
-    Tabmix.newCode(functionName,  _doSearch)._replace(
+    Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       /(openUILinkIn[^\(]*\([^\)]+)(\))/,
       '$1, null, tabmixArg$2'
     )._replace(
@@ -1354,7 +1344,8 @@ Tabmix.navToolbox = {
 
       // alltabs-popup fix visibility for multi-row
       if (Tabmix.isVersion(70))
-        alltabsPopup._updateTabsVisibilityStatus = TabmixAllTabs._updateTabsVisibilityStatus;
+        Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
+          TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },
 

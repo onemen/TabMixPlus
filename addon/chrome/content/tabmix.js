@@ -324,7 +324,7 @@ var TMP_eventListener = {
     // we can't use TabPinned.
     // gBrowser.pinTab call adjustTabstrip that call updateScrollStatus
     // before it dispatch TabPinned event.
-    Tabmix.newCode("gBrowser.pinTab", gBrowser.pinTab)._replace(
+    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
       'this.tabContainer.adjustTabstrip();',
       '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
       '    aTab.removeAttribute("width");' +
@@ -547,7 +547,7 @@ var TMP_eventListener = {
     gTMPprefObserver.addWidthRules();
     TabmixSessionManager.updateSettings();
 
-    tabBar.adjustTabstrip = Tabmix.adjustTabstrip;
+    Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
   },
 

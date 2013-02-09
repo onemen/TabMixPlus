@@ -23,7 +23,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   // so we don't need to check for locked tabs only for blanks tabs
   var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
   if (autoComplete) {
-    this.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
+    this.changeCode(autoComplete, "PopupAutoCompleteRichResult.onPopupClick")._replace(
       'openUILink(url, aEvent);',
       'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
       'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +

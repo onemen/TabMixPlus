@@ -1895,7 +1895,7 @@ var TabmixProgressListener = {
     // check the current window.  if we're in a popup, don't init this progressListener
     if (window.document.documentElement.getAttribute("chromehidden"))
       return;
-    Tabmix.newCode("gBrowser.setTabTitleLoading", tabBrowser.setTabTitleLoading)._replace(
+    Tabmix.changeCode(gBrowser, "gBrowser.setTabTitleLoading")._replace(
       'aTab.label = this.mStringBundle.getString("tabs.connecting");',
       'if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width")) \
          aTab.setAttribute("width", aTab.getBoundingClientRect().width); \

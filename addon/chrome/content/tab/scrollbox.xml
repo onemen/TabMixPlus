@@ -127,7 +127,7 @@
 
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
           this.offsetRatio = document.getBindingParent(this).closeButtonsEnabled ? 0.70 : 0.50;
-          Tabmix.newCode(null, this.ensureElementIsVisible)._replace(
+          Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
             'var amountToScroll',
             '$&, offset = true'
           )._replace(
@@ -142,40 +142,40 @@
             '$& \
              if (offset) {\
                amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);}'
-          ).toCode(false, this, "ensureElementIsVisible");
+          ).toCode();
 
-          Tabmix.newCode(null, this._distanceScroll)._replace(
+          Tabmix.changeCode(this, "scrollbox._distanceScroll")._replace(
             '{',
             '{ if (aEvent.button && aEvent.button == 2) return;'
-          ).toCode(false, this, "_distanceScroll");
+          ).toCode();
 
-          Tabmix.newCode(null, this._smoothScrollByPixels)._replace(
+          Tabmix.changeCode(this, "scrollbox._smoothScrollByPixels")._replace(
             '{',
             '$& \
              amountToScroll = this._distanceToRow(amountToScroll);'
-          ).toCode(false, this, "_smoothScrollByPixels");
+          ).toCode();
 
           if (Tabmix.isVersion(70)) {
             // we divide scrollDelta by the ratio between tab width and tab height
             let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
-            Tabmix.newCode(null, this._arrowScrollAnim[fnName])._replace(
+            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim." + fnName)._replace(
               '0.5 * timePassed * scrollIndex',
               'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
-            ).toCode(false, this._arrowScrollAnim, fnName);
+            ).toCode();
           }
           else {
-            Tabmix.newCode(null, this.notify)._replace(
+            Tabmix.changeCode(this, "scrollbox.notify")._replace(
               'this.scrollByPixels(25 * this._scrollIndex);',
               'this.scrollByPixels((TabmixTabbar.isMultiRow ? this._smoothVerticalScroll : 25) * this._scrollIndex, true);'
-            ).toCode(false, this, "notify");
+            ).toCode();
           }
 
           // the ratio between tab width and tab height is approximately 6
           // we multiply here the distance to get same animation effect.
-          Tabmix.newCode(null, this._scrollAnim.start)._replace(
+          Tabmix.changeCode(this._scrollAnim, "scrollbox._scrollAnim.start")._replace(
             'Math.abs(distance)',
             'Math.abs(distance * (TabmixTabbar.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
-          ).toCode(false, this._scrollAnim, "start");
+          ).toCode();
 
           this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
