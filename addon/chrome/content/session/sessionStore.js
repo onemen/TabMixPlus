@@ -683,7 +683,7 @@ var TabmixConvertSession = {
       extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
       extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
       extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
-      if (Tabmix.isVersion(70))
+      if (!Tabmix.isVersion(100))
         extData["tabview-last-session-group-name"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-last-session-group-name", "");
       state.extData = extData;
       return state;

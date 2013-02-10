@@ -2419,8 +2419,7 @@ try{
           tabview.UI._save();
           tabview.GroupItems.saveAll();
           tabview.TabItems.saveAll();
-          // saveActiveGroupName exist since Firefox 7.0
-          if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
+          if (!Tabmix.isVersion(100))
             tabview.Storage.saveActiveGroupName(window);
         }
       }
@@ -2437,7 +2436,7 @@ try{
       updateTabviewData("tabview-visibility");
       updateTabviewData("tabview-groups");
       updateTabviewData("tabview-group");
-      if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
+      if (!Tabmix.isVersion(100))
         updateTabviewData("tabview-last-session-group-name");
       if (aBackup)
         this.saveStateDelayed();
@@ -3758,7 +3757,7 @@ try{
     this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
     this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
 
-    if (Tabmix.isVersion(70) && !Tabmix.isVersion(100)) {
+    if (!Tabmix.isVersion(100)) {
       let type = "tabview-last-session-group-name";
       this._lastSessionGroupName = this.getLiteralValue(aWindow, type, "");
     }
@@ -3855,7 +3854,7 @@ try{
   },
 
   _updateLastSessionGroupName: function SM__updateLastSessionGroupName() {
-    if (!Tabmix.isVersion(70) || Tabmix.isVersion(100))
+    if (Tabmix.isVersion(100))
       return;
 
     // keep current name

@@ -137,17 +137,15 @@ var TMP_tabDNDObserver = {
     let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37
     dt.setDragImage(canvas, 0, offset);
 
-    if (Tabmix.isVersion(70)) {
-      // _dragOffsetX/Y give the coordinates that the mouse should be
-      // positioned relative to the corner of the new window created upon
-      // dragend such that the mouse appears to have the same position
-      // relative to the corner of the dragged tab.
-      let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
-      let tabOffsetX = clientX(tab) -
-                       clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
-      tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
-      tab._dragOffsetY = event.screenY - window.screenY;
-    }
+    // _dragOffsetX/Y give the coordinates that the mouse should be
+    // positioned relative to the corner of the new window created upon
+    // dragend such that the mouse appears to have the same position
+    // relative to the corner of the dragged tab.
+    let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
+    let tabOffsetX = clientX(tab) -
+                      clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
+    tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
+    tab._dragOffsetY = event.screenY - window.screenY;
 
     event.stopPropagation();
   },
@@ -422,10 +420,8 @@ var TMP_tabDNDObserver = {
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
-      if (Tabmix.isVersion(70)) {
-        delete draggedTab._dragOffsetX;
-        delete draggedTab._dragOffsetY;
-      }
+      delete draggedTab._dragOffsetX;
+      delete draggedTab._dragOffsetY;
       draggedTab.removeAttribute("dragged", true);
     }
   },
@@ -1321,8 +1317,7 @@ Tabmix.navToolbox = {
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
       // alltabs-popup fix visibility for multi-row
-      if (Tabmix.isVersion(70))
-        Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
+      Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
           TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },

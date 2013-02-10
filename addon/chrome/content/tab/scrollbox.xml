@@ -155,20 +155,12 @@
              amountToScroll = this._distanceToRow(amountToScroll);'
           ).toCode();
 
-          if (Tabmix.isVersion(70)) {
-            // we divide scrollDelta by the ratio between tab width and tab height
-            let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
-            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim." + fnName)._replace(
-              '0.5 * timePassed * scrollIndex',
-              'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
-            ).toCode();
-          }
-          else {
-            Tabmix.changeCode(this, "scrollbox.notify")._replace(
-              'this.scrollByPixels(25 * this._scrollIndex);',
-              'this.scrollByPixels((TabmixTabbar.isMultiRow ? this._smoothVerticalScroll : 25) * this._scrollIndex, true);'
-            ).toCode();
-          }
+          // we divide scrollDelta by the ratio between tab width and tab height
+          let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
+          Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim." + fnName)._replace(
+            '0.5 * timePassed * scrollIndex',
+            'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
+          ).toCode();
 
           // the ratio between tab width and tab height is approximately 6
           // we multiply here the distance to get same animation effect.
