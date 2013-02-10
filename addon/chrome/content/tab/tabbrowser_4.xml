@@ -9,7 +9,7 @@
 %tabBrowserDTD;
 ]>
 
-<bindings id="tabmixbindings_40"
+<bindings id="tabmixbindings"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
@@ -348,9 +348,7 @@
 
           Tabmix.rtl = window.getComputedStyle(tabbrowser, null).direction == "rtl";
           Tabmix.ltr = !Tabmix.rtl;
-          Tabmix._rtl50 = Tabmix.isVersion(50) && Tabmix.rtl;
 
-          this._isRTLScrollbox = Tabmix._rtl50 ? false : this.orient != "vertical" && Tabmix.rtl;
           this.setAttribute("closebuttons-side", Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft") ? "left" : "right");
           this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
           this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
@@ -780,9 +778,6 @@
       </method>
       <property name="lastTabVisible" readonly="true">
         <getter><![CDATA[
-          if (this._isRTLScrollbox && !this.hasAttribute("multibar"))
-            return this.mTabstrip.isElementVisible(this.visibleTabsFirstChild._tPos);
-
           return this.mTabstrip.isElementVisible(this.visibleTabsLastChild);
         ]]></getter>
       </property>

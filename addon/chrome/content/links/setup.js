@@ -194,7 +194,7 @@ function TMP_TBP_Startup() {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
         new tmp.CompatibilityCheck(aWindow, true);
-      }, Tabmix.isVersion(40) ? 0 : 3000, window);
+      }, 0, window);
     }
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize

@@ -456,7 +456,7 @@
           }
         }
         else {
-          if (Tabmix.isVersion(50) && tabs._lastTabClosedByMouse)
+          if (tabs._lastTabClosedByMouse)
             tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
           tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
                                                 tabs.tabbrowser);
@@ -514,8 +514,7 @@
           this._enterVerticalMode();
 
         let tabBar = document.getBindingParent(this);
-        if (Tabmix.isVersion(50))
-          tabBar._unlockTabSizing();
+        tabBar._unlockTabSizing();
 
         if (TabmixTabbar.isMultiRow && tabBar.firstChild.pinned)
           this.setFirstTabInRow(true);

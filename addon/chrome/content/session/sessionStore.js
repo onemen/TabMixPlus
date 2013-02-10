@@ -210,7 +210,7 @@ var TMP_SessionStore = {
       // When we close all browser windows without exit (non browser windows are opened)
       // Firefox restore current session when a browser window opens
       if (Tabmix.numberOfWindows(false, null) > 1) {
-         if (Tabmix.isVersion(50) && (Tabmix.prefs.getBoolPref("sessions.manager") ||
+         if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
               Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
               TabmixSvc.ss.getClosedWindowCount() > 0) {
            Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);

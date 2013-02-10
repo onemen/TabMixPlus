@@ -301,7 +301,6 @@ var tablib = {
       'this.tabContainer.updateVisibility();',  ''
     ).toCode();
 
-    if (Tabmix.isVersion(50)) {
       tabBar.TMP_inSingleRow = function Tabmix_inSingleRow(visibleTabs) {
         if (!this.hasAttribute("multibar"))
           return true;
@@ -366,7 +365,6 @@ var tablib = {
         '  }' +
         '  $1$2'
       ).toCode();
-    }
 
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
