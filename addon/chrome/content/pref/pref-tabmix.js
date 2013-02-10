@@ -89,9 +89,6 @@ function TM_EMinit() {
   window.addEventListener("input", userChangedValue, false);
   window.addEventListener("change", userChangedValue, false);
 
-  if (!Tabmix.isVersion(90))
-    TM_Options.setItem("unloadedTab", "style", "visibility: hidden;");
-
   if (Tabmix.isVersion(130)) {
     let cmSearch = $("contextMenuSearch");
     cmSearch.hidden = false;

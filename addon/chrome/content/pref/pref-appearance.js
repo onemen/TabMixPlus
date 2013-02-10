@@ -6,8 +6,6 @@ var TMPstyles = {
     catch (ex) { index = 0; }
     document.getElementById("stylestabs").selectedIndex = index;
 
-    document.getElementById("_unloadedTab").hidden = !Tabmix.isVersion(90);
-
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")

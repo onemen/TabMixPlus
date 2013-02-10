@@ -20,6 +20,6 @@
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$n83In3"
                    NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   NS1:minVersion="8.0"
+                   NS1:minVersion="9.0"
                    NS1:maxVersion="21.0a1" />
 </RDF:RDF>

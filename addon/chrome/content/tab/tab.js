@@ -1203,9 +1203,6 @@ var gTMPprefObserver = {
 
   tabStylePrefs: {},
   setTabStyles: function TMP_PO_setTabStyles(prefName, start) {
-    if (!Tabmix.isVersion(90) && prefName == "extensions.tabmix.styles.unloadedTab")
-      return;
-
     var ruleName = prefName.split(".").pop();
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
@@ -1331,9 +1328,6 @@ var gTMPprefObserver = {
   },
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
-    if (!Tabmix.isVersion(90) && prefName == "unloadedTab")
-      return;
-
     var ruleName = prefName.split(".").pop();
 
     var attrib = (ruleName.charAt(0).toUpperCase() + ruleName.substr(1)).replace("Tab","");
