@@ -393,7 +393,7 @@ var tablib = {
   },
 
   change_utility: function change_utility() {
-    Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
+    Tabmix.changeCode(FullScreen, "FullScreen.mouseoverToggle")._replace(
       'this._isChromeCollapsed = !aShow;',
       '  $&' +
       '  if (aShow)' +
@@ -404,7 +404,7 @@ var tablib = {
     ).toCode();
 
   //XXX consider to replace handleDroppedLink not use eval here
-    Tabmix.newCode("handleDroppedLink", handleDroppedLink)._replace(
+    Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
       'tablib.contentAreaOnDrop(event, url, postData.value);'
     ).toCode();
@@ -412,7 +412,7 @@ var tablib = {
     gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
 
     // we prevent sessionStore.duplicateTab from moving the tab
-    Tabmix.newCode("duplicateTabIn", duplicateTabIn)._replace(
+    Tabmix.changeCode(window, "duplicateTabIn")._replace(
       'switch (where)',
       '  if (where == "window") {' +
       '    if (Tabmix.getSingleWindowMode())' +
@@ -435,7 +435,7 @@ var tablib = {
        if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(110)}
     ).toCode();
 
-    Tabmix.newCode("BrowserCloseTabOrWindow", BrowserCloseTabOrWindow)._replace(
+    Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
       'tablib.closeLastTab();', {check: Tabmix.isPlatform("Mac"), flags: "g"}
     )._replace(
@@ -445,14 +445,14 @@ var tablib = {
 
     // hide open link in window in single window mode
     if ("nsContextMenu" in window && "initOpenItems" in nsContextMenu.prototype) {
-      Tabmix.newCode("nsContextMenu.prototype.initOpenItems", nsContextMenu.prototype.initOpenItems)._replace(
+      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
         /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
       )._replace(
         /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&', {check: Tabmix.isVersion(200)}
       ).toCode();
 
       if (Tabmix.isVersion(200)) {
-        Tabmix.newCode("nsContextMenu.prototype.openLinkInPrivateWindow", nsContextMenu.prototype.openLinkInPrivateWindow)._replace(
+        Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
           'openLinkIn(this.linkURL, "window",',
           'var [win, where] = [window, "window"];\
            if (Tabmix.singleWindowMode) {\
@@ -474,7 +474,7 @@ var tablib = {
      * we don't check isUrlForDownload for external links,
      * it is not likely that link in other application opened Firefox for downloading data
      */
-    var _openURI = Tabmix.newCode("nsBrowserAccess.prototype.openURI", nsBrowserAccess.prototype.openURI);
+    var _openURI = Tabmix.changeCode(nsBrowserAccess.prototype, "nsBrowserAccess.prototype.openURI");
     _openURI = _openURI._replace(
       'win.gBrowser.getBrowserForTab(tab);',
       '  $&' +
@@ -532,10 +532,10 @@ var tablib = {
 
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    let [fnName, fnCode] = TMP_Places.getXnotifierFunction("openNewTabWith");
+    let [fnObj, fnName] = TMP_Places.getXnotifierFunction("openNewTabWith");
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
-    Tabmix.newCode(fnName, fnCode)._replace(
+    Tabmix.changeCode(fnObj, fnName)._replace(
       'var originCharset = aDocument && aDocument.characterSet;',
       '  var loadInBackground = false;' +
       '  if (aEvent) {' +
@@ -552,7 +552,7 @@ var tablib = {
       'where'
     ).toCode();
 
-    Tabmix.newCode("FillHistoryMenu", FillHistoryMenu)._replace(
+    Tabmix.changeCode(window, "FillHistoryMenu")._replace(
       'entry.title',
       'tablib.menuItemTitle(entry)', {flags: "g"}
     ).toCode();
@@ -561,8 +561,8 @@ var tablib = {
     if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
       let loader = "FdTabLoader" in window && "BrowserGoHome" in FdTabLoader;
       let obj = loader ? FdTabLoader : window;
-      let fnName = loader ? "FdTabLoader.BrowserGoHome" : "BrowserGoHome";
-      Tabmix.newCode(fnName , obj.BrowserGoHome)._replace(
+      let fnName = loader ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
+      Tabmix.changeCode(obj, fnName)._replace(
         'var where = whereToOpenLink(aEvent, false, true);',
         '$& \ if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(
@@ -572,7 +572,7 @@ var tablib = {
       ).toCode();
     }
 
-    Tabmix.newCode("newWindowButtonObserver.onDragOver", newWindowButtonObserver.onDragOver)._replace(
+    Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDragOver")._replace(
       '{',
       '{ \
        if (Tabmix.singleWindowMode) { \
@@ -582,12 +582,12 @@ var tablib = {
        }'
     ).toCode();
 
-    Tabmix.newCode("newWindowButtonObserver.onDrop", newWindowButtonObserver.onDrop)._replace(
+    Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDrop")._replace(
       '{',
       '{if (Tabmix.singleWindowMode) return;'
     ).toCode();
 
-    Tabmix.newCode("warnAboutClosingWindow", warnAboutClosingWindow)._replace(
+    Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
       'return gBrowser.warnAboutClosingTabs(true);',
       'return tablib.closeWindow(true);', {flags: "g"}
     )._replace(
@@ -596,7 +596,7 @@ var tablib = {
        $&'
     ).toCode();
 
-    Tabmix.newCode("WindowIsClosing", WindowIsClosing)._replace(
+    Tabmix.changeCode(window, "WindowIsClosing")._replace(
       '{',
       '{window.tabmix_warnedBeforeClosing = false;'
     )._replace(
@@ -612,7 +612,7 @@ var tablib = {
        if (!reallyClose)', {check: Tabmix.isVersion(170)}
     ).toCode();
 
-    Tabmix.newCode("goQuitApplication", goQuitApplication)._replace(
+    Tabmix.changeCode(window, "goQuitApplication")._replace(
       'var appStartup',
       'let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");' +
       'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
@@ -622,7 +622,7 @@ var tablib = {
 
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the current window
-    Tabmix.newCode("undoCloseWindow", undoCloseWindow)._replace(
+    Tabmix.changeCode(window, "undoCloseWindow")._replace(
       'window = ss.undoCloseWindow(aIndex || 0);',
       '{if (Tabmix.singleWindowMode) {\
         window = Tabmix.getTopWin();\
@@ -638,7 +638,7 @@ var tablib = {
     ).toCode();
 
     // disable undo closed window when single window mode is on
-    Tabmix.newCode("HistoryMenu.prototype.toggleRecentlyClosedWindows", HistoryMenu.prototype.toggleRecentlyClosedWindows)._replace(
+    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRecentlyClosedWindows")._replace(
       'if (this._ss.getClosedWindowCount() == 0)',
       'if (this._ss.getClosedWindowCount() == 0 || Tabmix.singleWindowMode)'
     ).toCode();
@@ -659,13 +659,13 @@ var tablib = {
       TMP_Places.historyMenu(aEvent);
     }
 
-    Tabmix.newCode("HistoryMenu.prototype._onPopupShowing", HistoryMenu.prototype._onPopupShowing)._replace(
+    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype._onPopupShowing")._replace(
       'this.toggleRecentlyClosedWindows();',
       '$& \
        TMP_Places.historyMenuItemsTitle(aEvent);'
     ).toCode();
 
-    Tabmix.newCode("HistoryMenu.prototype.populateUndoWindowSubmenu", HistoryMenu.prototype.populateUndoWindowSubmenu)._replace(
+    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
       'JSON.parse(this._ss.getClosedWindowData());',
       '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : Tabmix.JSON.parse(this._ss.getClosedWindowData());'
     )._replace(
@@ -710,7 +710,7 @@ var tablib = {
     if (popup)
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
-    Tabmix.newCode("switchToTabHavingURI", switchToTabHavingURI)._replace(
+    Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '{$& \
        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'

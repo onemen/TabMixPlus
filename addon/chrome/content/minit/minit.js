@@ -932,7 +932,7 @@ var TMP_TabView = {
 
   _patchBrowserTabview: function SM__patchBrowserTabview() {
     // we need to stop tabs slideShow before Tabview starts
-    Tabmix.newCode("TabView.toggle", TabView.toggle)._replace(
+    Tabmix.changeCode(TabView, "TabView.toggle")._replace(
       'this.show();',
       '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
        $&}'
@@ -975,7 +975,7 @@ var TMP_TabView = {
     if (Tabmix.isVersion(80)) {
       // Firefox 8.0 use strict mode - we need to map global variable
       TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-      Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
+      Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
         '"use strict";',
         '$&' +
         'let win = TabView._window;' +
@@ -1020,7 +1020,7 @@ var TMP_TabView = {
 
     // add tab to the new group on tabs order not tabItem order
     TabView._window.UI._original_reset = TabView._window.UI.reset;
-    Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
+    Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
       '"use strict";',
       '$&' +
       'let win = TabView._window;' +
@@ -1266,7 +1266,7 @@ Tabmix.navToolbox = {
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
     if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
-      Tabmix.newCode("Omnibar.intercepted_handleCommand", Omnibar.intercepted_handleCommand)._replace(
+      Tabmix.changeCode(Omnibar, "Omnibar.intercepted_handleCommand")._replace(
         'Omnibar.handleSearchQuery',
         'false && Omnibar.handleSearchQuery', {silent: true}
       ).toCode();

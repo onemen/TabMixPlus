@@ -1,7 +1,7 @@
 
 Tabmix.contentAreaClick = {
   init: function TMP_CA_init() {
-    Tabmix.newCode("contentAreaClick", contentAreaClick)._replace(
+    Tabmix.changeCode(window, "contentAreaClick")._replace(
       'if (linkNode &&',
       'var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);' +
       'var [where, suppressTabsOnFileDownload] =' +
@@ -40,7 +40,7 @@ Tabmix.contentAreaClick = {
      * event.__where = default from contentAreaClick or
      * Tabmix.contentAreaClick.contentLinkClick
      */
-    Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
+    Tabmix.changeCode(window, "handleLinkClick")._replace(
       'whereToOpenLink(event);',
       '$&' +
       '  if (event && event.__where && event.__where != "default" &&' +

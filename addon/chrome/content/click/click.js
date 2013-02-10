@@ -268,7 +268,7 @@ var TabmixContext = {
     if ("gIeTab" in window) {
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
-        Tabmix.newCode("IeTab.prototype." + aFunction, IeTab.prototype[aFunction])._replace(
+        Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
              'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
              'separator = document.getElementById("tm-separator-3"); $&'
         ).toCode();

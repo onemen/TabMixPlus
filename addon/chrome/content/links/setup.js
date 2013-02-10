@@ -115,7 +115,7 @@ function TMP_TBP_Startup() {
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
     else
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
-    var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
+    var bowserStartup = Tabmix.changeCode(fnContainer, TMP_BrowserStartup);
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
@@ -166,14 +166,14 @@ function TMP_TBP_Startup() {
         'TabsOnTop.init();', {silent: true}
       );
     }
-    bowserStartup.toCode(false, fnContainer, TMP_BrowserStartup);
+    bowserStartup.toCode();
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [name, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
-          ["gBrowserInit._delayedStartup", gBrowserInit._delayedStartup] :
-          ["delayedStartup", delayedStartup];
-    Tabmix.newCode(name, fn)._replace(
+    var [obj, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
+          [gBrowserInit, "gBrowserInit._delayedStartup"] :
+          [window, "delayedStartup"];
+    Tabmix.changeCode(obj, fn)._replace(
       '{',
       '{' +
       'try {' +

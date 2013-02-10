@@ -19,7 +19,7 @@ var gTabMix_preferencesOverlay = {
 
       this.onPaneLoad(prefWindow.lastSelected);
 
-      Tabmix.newCode(null, prefWindow.showPane)._replace(
+      Tabmix.changeCode(prefWindow, "prefWindow.showPane")._replace(
         'if (!aPaneElement.loaded) {', ''
       )._replace(
         'OverlayLoadObserver.prototype',
@@ -29,9 +29,9 @@ var gTabMix_preferencesOverlay = {
         'this._outer._selectPane(this._pane);',
         '$& \
          gTabMix_preferencesOverlay.onPaneLoad(this._pane.id);'
-      ).toCode(false, prefWindow, "showPane");
+      ).toCode();
 
-      Tabmix.newCode("openLinkIn", openLinkIn)._replace(
+      Tabmix.changeCode(window, "openLinkIn")._replace(
         'var w = getTopWin();',
         '$& \
          if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
@@ -110,12 +110,12 @@ var gTabMix_preferencesOverlay = {
        return;
 
      if (!Tabmix.isVersion(180))
-     Tabmix.newCode(null, gMainPane.showAddonsMgr)._replace(
+     Tabmix.changeCode(gMainPane, "gMainPane.showAddonsMgr")._replace(
        'openUILinkIn("about:addons", "window");',
        'var w = Tabmix.getTopWin();\
        if (w) w.BrowserOpenAddonsMgr();\
        else $&', {silent: true}
-     ).toCode(false, gMainPane, "showAddonsMgr");
+     ).toCode();
 
      button = document.createElement("button");
      button.id = "tabmixSessionManager";

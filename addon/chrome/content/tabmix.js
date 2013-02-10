@@ -302,7 +302,7 @@ var TMP_eventListener = {
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
-      Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
+      Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
@@ -341,7 +341,7 @@ var TMP_eventListener = {
     // prevent faviconize use its own adjustTabstrip
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
     if ("faviconize" in window && "override" in faviconize) {
-      Tabmix.newCode("TMP_TabView.checkTabs", TMP_TabView.checkTabs)._replace(
+      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
         '!tab.pinned',
         '$& && !tab.hasAttribute("faviconized")'
       ).toCode();
@@ -624,7 +624,7 @@ var TMP_eventListener = {
         addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
         if (Tabmix.isVersion(120)) {
-          Tabmix.newCode("FullScreen.sample", FullScreen.sample)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
             'gNavToolbox.style.marginTop = "";',
             'TMP_eventListener._updateMarginBottom("");\
              $&'
@@ -635,7 +635,7 @@ var TMP_eventListener = {
           ).toCode();
         }
         else {
-          Tabmix.newCode("FullScreen._animateUp", FullScreen._animateUp)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen._animateUp")._replace(
             'gNavToolbox.style.marginTop = "";',
             'TMP_eventListener._updateMarginBottom("");\
              $&'
@@ -647,7 +647,7 @@ var TMP_eventListener = {
         }
 
         if (Tabmix.isVersion(100)) {
-          Tabmix.newCode("FullScreen.enterDomFullScreen", FullScreen.enterDomFullScreen)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
             /(\})(\)?)$/,
             '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
             '  if (fullScrToggler) {' +

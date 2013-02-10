@@ -13,33 +13,33 @@ var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
 let TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow, tabBar) {
-    this.newCode("TMP_eventListener.onTabOpen", aWindow.TMP_eventListener.onTabOpen)._replace(
+    this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
       /(\})(\)?)$/,
       'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) {Tabmix.log(e);}\
        $1$2'
     ).toCode();
 
     // in Firefox 4.0 we call TabGroupsManager.eventListener.onTabClose regardless of browser.tabs.animate
-    this.newCode("TMP_eventListener.onTabClose", aWindow.TMP_eventListener.onTabClose)._replace(
+    this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabClose")._replace(
       'this.onTabClose_updateTabBar(tab);',
       'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) {Tabmix.log(e);}'
     )._replace(
       '!Services.prefs.getBoolPref("browser.tabs.animate")', 'true'
     ).toCode();
 
-    this.newCode("TMP_tabDNDObserver.onDragExit", aWindow.TMP_tabDNDObserver.onDragExit)._replace(
+    this.changeCode(aWindow.TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragExit")._replace(
       'if (target)',
       'if (target && !(/^TabGroupsManager/.test(target.id)))'
     ).toCode();
 
-    this.newCode("TMP_TabView.checkTabs", aWindow.TMP_TabView.checkTabs)._replace(
+    this.changeCode(aWindow.TMP_TabView, "TMP_TabView.checkTabs")._replace(
       '!tab.collapsed',
       '!tab.hidden && $&'
     ).toCode();
 
     // **************************** for Session Manager ****************************
 
-    this.newCode("TabmixSessionData.getTabProperties", aWindow.TabmixSessionData.getTabProperties)._replace(
+    this.changeCode(aWindow.TabmixSessionData, "TabmixSessionData.getTabProperties")._replace(
       'return tabProperties;',
       'if (aTab.group && aTab.group.id) \
          tabProperties += " tabgroups-data=" + encodeURI(aTab.group.id + " " + aTab.group.name); \
@@ -50,13 +50,13 @@ let TMP_TabGroupsManager = {
     ).toCode();
 
     let sessionManager = aWindow.TabmixSessionManager;
-    this.newCode("TabmixSessionManager.saveOneWindow", sessionManager.saveOneWindow)._replace(
+    this.changeCode(sessionManager, "TabmixSessionManager.saveOneWindow")._replace(
       'if (caller == "windowbackup")',
       '  this.saveAllGroupsData(null, rdfNodeThisWindow);' +
       '  $&'
     ).toCode();
 
-    this.newCode("TabmixSessionManager.loadOneWindow", sessionManager.loadOneWindow)._replace(
+    this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
       // get saved group data and repalce ids with new one
       'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
       '$&' +
@@ -92,7 +92,7 @@ let TMP_TabGroupsManager = {
       '  $&'
     ).toCode();
 
-    this.newCode("TabmixSessionManager.loadOneTab", sessionManager.loadOneTab)._replace(
+    this.changeCode(sessionManager, "TabmixSessionManager.loadOneTab")._replace(
       'var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);',
       '  $&' +
       '  try {' +
@@ -108,7 +108,7 @@ let TMP_TabGroupsManager = {
       '  } catch (ex) {Tabmix.assert(ex);}'
     ).toCode();
 
-    this.newCode("TabmixSessionManager.setNC_TM", sessionManager.setNC_TM)._replace(
+    this.changeCode(sessionManager, "TabmixSessionManager.setNC_TM")._replace(
       'for',
       'rdfLabels.push("tgm_jsonText");\
        $&'
@@ -116,6 +116,7 @@ let TMP_TabGroupsManager = {
 
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
     aWindow.TMP_TabGroupsManager = {}
+///XXX need to fix this - this is with force = true
     this.newCode("window.TMP_TabGroupsManager.tabmixSessionsManager", this.tabmixSessionsManager, true).toCode();
 
     this.newCode("TabmixSessionManager.saveAllGroupsData", this._saveAllGroupsData, true).toCode();

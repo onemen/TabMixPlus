@@ -5,13 +5,13 @@
 var TMP_Sage = {
    OPEN_TAB_FOR_SAGE:"extensions.tabmix.opentabfor.sage",
    init: function () {
-      Tabmix.newCode("updateItemContextMenu", updateItemContextMenu)._replace(
+      Tabmix.changeCode(window, "updateItemContextMenu")._replace(
          'readStateController.onCommandUpdate();',
          '$& TMP_Sage.buildContextMenu();'
       ).toCode();
 
       if ("bookmarksTreeClick" in window) // for older sage version
-      Tabmix.newCode("bookmarksTreeClick", bookmarksTreeClick)._replace(
+      Tabmix.changeCode(window, "bookmarksTreeClick")._replace(
          'const BOOKMARK_SEPARATOR',
          'var where = TMP_Places.fixWhereToOpen(aEvent, CreateHTML._tabbed ? "tab" : "current", TMP_Sage.openTabPref); \
           CreateHTML.tabbed = where == "tab"; \
@@ -19,7 +19,7 @@ var TMP_Sage = {
       ).toCode();
 
       if ("bookmarksOpen" in window) // for older sage version
-      Tabmix.newCode("bookmarksOpen", bookmarksOpen)._replace(
+      Tabmix.changeCode(window, "bookmarksOpen")._replace(
          'getContentBrowser().loadURI(lastResource.url);',
          'if (CreateHTML._tabbed) getContentBrowser().addTab(lastResource.url); \
           else $&'
@@ -27,14 +27,14 @@ var TMP_Sage = {
 
       var fn = openURI.toString();
       if (fn.indexOf("switch (windowType)") > -1) {
-        Tabmix.newCode("openURI", fn)._replace(
+        Tabmix.changeCode(window, "openURI")._replace(
            'switch (windowType)',
            'windowType = TMP_Places.fixWhereToOpen((oType instanceof Event)? oType : null, !windowType ? "current" : windowType, TMP_Sage.openTabPref); \
             $&'
         ).toCode();
       }
       else {
-        Tabmix.newCode("openURI", fn)._replace(
+        Tabmix.changeCode(window, "openURI")._replace(
            'switch (getWindowType(aEvent))',
            'var windowType = getWindowType(aEvent);\
             windowType = TMP_Places.fixWhereToOpen(aEvent, typeof(windowType) != "string" || !windowType ? "current" : windowType, TMP_Sage.openTabPref); \
