@@ -172,9 +172,7 @@ var TMP_Places = {
 
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       function updateOpenTabset() {
-        var openDialogCode = '$1openDialog($2getBrowserURL(), "_blank", "chrome,all,dialog=no", urls.join("|"));';
         var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, replaceCurrentTab);"
-        openDialogCode = openDialogCode.replace("$1", "aWindow.").replace("$2", "aWindow.");
         loadTabsCode = loadTabsCode.replace("$1", "gBrowser");
         if (Tabmix.isVersion(80))
           loadTabsCode = loadTabsCode.replace("replaceCurrentTab", "false");
@@ -190,13 +188,9 @@ var TMP_Places = {
           'urls.push(item.uri);',
           '$& ids.push(item.id);', {check: !treeStyleTab}
         )._replace(
-          openDialogCode,
-          'let newWin = $& \
-           newWin.bookMarkIds = ids.join("|");', {check: !Tabmix.isVersion(60)}
-        )._replace(
           '"chrome,dialog=no,all", args);',
           '$&\
-           browserWindow.bookMarkIds = ids.join("|");', {check: Tabmix.isVersion(60)}
+           browserWindow.bookMarkIds = ids.join("|");'
         )._replace(
           /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
           '$& behavior =', {check: treeStyleTab}

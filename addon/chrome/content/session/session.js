@@ -2418,7 +2418,7 @@ try{
         else {
           tabview.UI._save();
           tabview.GroupItems.saveAll();
-          tabview.TabItems.saveAll(TabView.isVisible()); // isVisible here for Firefox 4.0-5.0
+          tabview.TabItems.saveAll();
           // saveActiveGroupName exist since Firefox 7.0
           if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
             tabview.Storage.saveActiveGroupName(window);
@@ -3003,9 +3003,6 @@ try{
          // remove extra tabs
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
-            // workaround to prevent entring Tabview when we remove last item from a group
-            if (!Tabmix.isVersion(60))
-               tab._tabViewTabIsRemovedAfterRestore = true;
             gBrowser.removeTab(tab);
          }
          newIndex = 0;
@@ -3039,9 +3036,6 @@ try{
          var blankTab;
          while (blankTabs.length > newtabsCount) {
             blankTab = blankTabs.pop();
-            // workaround to prevent entring Tabview when we remove last item from a group
-            if (!Tabmix.isVersion(60))
-              blankTab._tabViewTabIsRemovedAfterRestore = true;
             if (blankTab)
                gBrowser.removeTab(blankTab);
          }
@@ -3798,10 +3792,6 @@ try{
       if (!Tabmix.isVersion(140)) {
         data.url = aEntry.currentURI;
         data.title = aEntry.label;
-      }
-      if (!Tabmix.isVersion(60)) {
-        // fake bounds, panorama check for bounds in TabItem__reconnect
-        data.bounds = {left:0, top:0, width:160, height:120};
       }
       parsedData = data;
       return Tabmix.JSON.stringify(data);

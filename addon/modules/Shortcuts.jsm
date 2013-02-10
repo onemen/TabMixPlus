@@ -491,9 +491,7 @@ let KeyConfig = {
   },
 
   resetPref: function (prefName) {
-    // we need this check for Firefox 4.0-5.0
-    if (this.prefs.prefHasUserValue(prefName))
-      this.prefs.clearUserPref(prefName);
+    this.prefs.clearUserPref(prefName);
   }
 
 }

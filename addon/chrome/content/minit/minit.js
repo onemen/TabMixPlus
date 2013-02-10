@@ -942,12 +942,6 @@ var TMP_TabView = {
     if (Tabmix.extensions.sessionManager)
       return;
 
-    // add missing function for compatibility
-    if (!Tabmix.isVersion(60)) {
-      TabView.updateGroupNumberBroadcaster = function TMP_updateGroupNumberBroadcaster(groupCount) {
-        Tabmix.setItem("tabviewGroupsNumber", "groups", groupCount);
-      }
-    }
     // add our function to the TabView initFrameCallbacks
     // we don't need our patch for the first run
     let self = this;
@@ -960,15 +954,8 @@ var TMP_TabView = {
 
     if (TabView._window)
       callback();
-    else if (Tabmix.isVersion(60))
+    else
       TabView._initFrameCallbacks.push(callback);
-    else {
-      // for firefox 4.0 - 5.0.x
-      window.addEventListener("tabviewframeinitialized", function tabmix_onInit() {
-        window.removeEventListener("tabviewframeinitialized", tabmix_onInit, false);
-        callback();
-      }, false);
-    }
   },
 
   _patchTabviewFrame: function SM__patchTabviewFrame(){
@@ -1218,10 +1205,6 @@ Tabmix.navToolbox = {
          delete gBrowser.tabmix_tab;\
          delete gBrowser.tabmix_userTypedValue;\
        }'
-    )._replace(
-      'this._canonizeURL(aTriggeringEvent);',
-      '_data = $& \
-       altDisabled = _data.length == 3;', {check: !Tabmix.isVersion(60)}
     )._replace(
       testVersionString,
       'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\

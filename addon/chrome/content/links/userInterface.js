@@ -151,7 +151,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
        }
      } catch (ex) {/* no pref - do noting */}
    }
-   if ((TabmixTabbar.widthFitTitle || !Tabmix.isVersion(60)) && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
+   if (TabmixTabbar.widthFitTitle && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
    var loadBlank = Tabmix.isBlankPageURL(url);
