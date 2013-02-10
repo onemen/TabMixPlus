@@ -4,13 +4,17 @@ function Tabmix_ChangeCode(aParams, aCodeString, aForceUpdate) {
     this.fnName = aParams.fnName;
     this.name = aParams.fullName;
 
-    if (typeof this.obj[this.fnName] == "function")
+    let options = aParams.options;
+    this.needUpdate = options && options.forceUpdate || false;
+
+    if (options && (options.setter || options.getter)) {
+      let type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
+      this.value = this.obj[type](this.fnName).toString();
+    }
+    else if (typeof this.obj[this.fnName] == "function")
       this.value = this.obj[this.fnName].toString();
     else
       this.errMsg = "\n" + this.name + " is undefined.";
-
-    let options = aParams.options;
-    this.needUpdate = options && options.forceUpdate || false;
   }
   else {
     this.name = aParams;
@@ -106,7 +110,6 @@ Tabmix_ChangeCode.prototype = {
 
 var Tabmix = {
   newCode: function(aObjectName, aObject, aForceUpdate) {
-if (aForceUpdate)
 Tabmix.log(aObjectName, true);
     try {
       return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
@@ -117,7 +120,8 @@ Tabmix.log(aObjectName, true);
     }
     return null;
   },
-///XXX need to fix this for getter/setter
+
+  // aOptions can be: getter, setter or forceUpdate
   changeCode: function(aParent, aName, aOptions) {
     let fnName = aName.split(".").pop();
     try {
@@ -383,6 +387,15 @@ options = {
     let type = aType == "setter" ? "__defineSetter__" : "__defineGetter__";
     let fn = eval("(" + aCodeString + ")");
     aObj[type](aName, fn);
+  },
+
+  defineProperty: function(aObj, aName, aCode) {
+    for (let [type, val] in Iterator(aCode)) {
+      if (typeof val == "string")
+        aCode[type] = eval("(" + val + ")");
+    }
+    Object.defineProperty(aObj, aName, {get: aCode.getter, set: aCode.setter,
+                          enumerable: true, configurable: true});
   },
 
   toCode: function(aObj, aName, aCodeString) {

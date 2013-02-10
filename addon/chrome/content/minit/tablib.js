@@ -376,9 +376,7 @@ var tablib = {
       '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("' + callerName + '")) return;'
     ).toCode();
 
-    let _setter = gBrowser.tabContainer.__lookupSetter__("visible");
-    gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
-    Tabmix.newCode(null,  _setter)._replace(
+    let _setter = Tabmix.changeCode(tabBar,  "gBrowser.tabContainer.visible", {setter: true})._replace(
       'this._container.collapsed = !val;',
       '  if (TabmixTabbar.hideMode == 2)' +
       '    val = false;' +
@@ -388,7 +386,11 @@ var tablib = {
       '    bottomToolbox.collapsed = !val;' +
       '    gTMPprefObserver.updateTabbarBottomPosition();' +
       '  }'
-    ).toSetter(gBrowser.tabContainer, "visible");
+    );
+    Tabmix.defineProperty(tabBar, "visible", {
+      getter: tabBar.__lookupGetter__("visible"),
+      setter: _setter.value
+    });
 
   },
 

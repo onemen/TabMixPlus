@@ -73,16 +73,6 @@ var TMP_extensionsCompatibility = {
       });
     }
 
-    // https://addons.mozilla.org/en-US/firefox/addon/fox-splitter-formerly-split-br/
-    if ("SplitBrowser" in window) {
-      let _getter = SplitBrowser.__lookupGetter__("tabbedBrowsingEnabled");
-      if (_getter.toString().indexOf("TM_init") != -1) {
-        Tabmix.newCode(null,  _getter)._replace(
-          'TM_init', 'Tabmix.startup'
-        ).toGetter(SplitBrowser, "tabbedBrowsingEnabled");
-      }
-    }
-
     // fix bug in backgroundsaver extension
     // that extension use function with the name getBoolPref
     // we replace it back here

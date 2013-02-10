@@ -116,19 +116,18 @@ let TMP_TabGroupsManager = {
 
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
     aWindow.TMP_TabGroupsManager = {}
-///XXX need to fix this - this is with force = true
-    this.newCode("window.TMP_TabGroupsManager.tabmixSessionsManager", this.tabmixSessionsManager, true).toCode();
-
-    this.newCode("TabmixSessionManager.saveAllGroupsData", this._saveAllGroupsData, true).toCode();
+    aWindow.TMP_TabGroupsManager.tabmixSessionsManager = this.tabmixSessionsManager.bind(aWindow);
+    aWindow.TabmixSessionManager.saveAllGroupsData = this._saveAllGroupsData.bind(aWindow.TabmixSessionManager);
   },
 
   // for TabGroupsManager use - don't change function name
   tabmixSessionsManager: function () {
-    if (!Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in window)
+    // this here reffer to the top browser window
+    if (!this.Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in this)
       return false;
 
-    return Tabmix.prefs.getBoolPref("sessions.manager") &&
-        (!Tabmix.isWindowAfterSessionRestore || "tabmixdata" in window)
+    return this.Tabmix.prefs.getBoolPref("sessions.manager") &&
+        (!Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this)
   },
 
   // for TabGroupsManager use

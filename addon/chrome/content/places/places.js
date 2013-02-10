@@ -39,12 +39,13 @@ var TMP_Places = {
             /(webNav\.document\.)*title \|\| url\.spec;/,
             'TMP_Places.getTabFixedTitle(aBrowser, url) || $&'
          ).toCode();
-///XXX need fix for getter
-         Tabmix.newCode(null,  PlacesCommandHook.__lookupGetter__("uniqueCurrentPages"))._replace(
+
+         let getter = Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
            'URIs.push(tab.linkedBrowser.currentURI);',
            'let uri = tab.linkedBrowser.currentURI; \
             URIs.push({uri: uri, title: TMP_Places.getTabFixedTitle(tab.linkedBrowser, uri)});'
-         ).toGetter(PlacesCommandHook, "uniqueCurrentPages");
+         );
+         Tabmix.defineProperty(PlacesCommandHook, "uniqueCurrentPages", {getter: getter.value});
       }
 
       if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
@@ -149,13 +150,12 @@ var TMP_Places = {
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       // we enter getURLsForContainerNode into TMP_Places to prevent leakes from PlacesUtils
       if (!this.getURLsForContainerNode && !treeStyleTab) {
-///XXX need to fix this....
-        Tabmix.newCode("TMP_Places.getURLsForContainerNode", PlacesUtils.getURLsForContainerNode)._replace(
+        Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
           '{uri: child.uri,',
           '{id: child.itemId, uri: child.uri,', {flags: "g"}
         )._replace(
           'this.',  'PlacesUtils.', {flags: "g"}
-        ).toCode();
+        ).toCode(false, TMP_Places, "getURLsForContainerNode");
       }
 
       if (!forceInit) {
