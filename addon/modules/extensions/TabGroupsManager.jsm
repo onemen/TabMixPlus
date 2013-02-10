@@ -93,7 +93,7 @@ let TMP_TabGroupsManager = {
     ).toCode();
 
     this.newCode("TabmixSessionManager.loadOneTab", sessionManager.loadOneTab)._replace(
-      'var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory);',
+      'var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);',
       '  $&' +
       '  try {' +
       '    let tabgroupsData = TMP_SessionStore._getAttribute({xultab: tabProperties}, "tabgroups-data");' +
