@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "快捷键">
+<!ENTITY shortcuts.edit "编辑键盘快捷键">
+<!ENTITY shortcuts.showAll "全部显示">
+<!ENTITY shortcuts.hideUnused "隐藏未使用的">
+<!ENTITY shortcuts.warning "您的部分快捷键已被占用">
+<!ENTITY shortcuts.showDetails "显示详情">
+<!ENTITY shortcuts.hideDetails "隐藏详情">
+<!ENTITY shortcuts.slideshow "切换标签页幻灯片显示">
+<!ENTITY shortcuts.toggleFLST "切换关闭当前标签页后的焦点">
+<!ENTITY shortcuts.toggleFLST.tooltip "切换激活右侧标签页或上次选中的标签页">
+<!ENTITY shortcuts.placeholder "输入辅助键及主按键">
+<!ENTITY shortcuts.reset "重置">
+<!ENTITY shortcuts.clear "清除">
+<!ENTITY shortcuts.inuse "该快捷键所占用的命令为：">

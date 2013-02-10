@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "現在のウィンドウと直前にフォーカスされたウィンドウだけをマージする">
 <!ENTITY mergePopups.label "ポップアップウィンドウもマージする">
 <!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "#1 キーでタブをローテーション表示させる">
 <!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
 <!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
 <!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
@@ -158,7 +158,7 @@
 <!ENTITY extraIcons.protected "保護">
 <!ENTITY extraIcons.autoreload "自動再読み込み">
 <!ENTITY progressMeter.label "プログレスメーター（タブ）">
-<!ENTITY showTabX.labelBegin "[タブを閉じる] ボタンの表示位置の指定">
+<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（下のドロップダウンで表示条件を指定）">
 <!ENTITY showTabX.left "左端に表示">
 <!ENTITY showTabX.rtl "右端に表示">
 <!ENTITY milliseconds.label "ミリ秒">

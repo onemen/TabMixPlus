@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "锁定标签页">
 <!ENTITY lockNewTabs.label "锁定新标签页">
 <!ENTITY lockAppTabs.label "锁定应用程序标签页">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "更改应用到打开的标签页">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
 <!ENTITY openBookmarks.label "书签">
 <!ENTITY openBMKGroups.label "书签群组">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "只合并当前窗口和最后被选中的窗口">
 <!ENTITY mergePopups.label "同时合并弹出窗口">
 <!ENTITY popupNextToOpener.label "弹出窗口紧邻其父窗口">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "按 #1 循环滚动标签页，每隔">
 <!ENTITY toggleAnimation.label "禁用打开/关闭标签页动态效果">
 <!ENTITY reloadEvery.matchAddress.label "忽略地址重新载入标签页">
 <!ENTITY reloadEvery.onReloadButton.label "在重新载入按钮上显示设定刷新时间间隔的菜单">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "两侧额外空间">
 <!ENTITY tabBarSpace.tooltip "是用于在标签栏点击或拖放某项">
 <!ENTITY tabbar.label "只打开单个标签页时隐藏标签栏">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "拖动标签页时直接移动到">
 <!ENTITY dropIndicator.label "拖放指示器">
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "和标签页">
 <!ENTITY sm.restore.closedWinList "把关闭的窗口保存在已关闭的窗口列表中">
 <!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "还原时跳过缓存">
 <!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
 <!ENTITY sm.preserve.options "保持标签页的：">
 <!ENTITY sm.preserve.history "历史">

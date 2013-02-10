@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "Blokowanie kart">
 <!ENTITY lockNewTabs.label "Blokuj nowe karty">
 <!ENTITY lockAppTabs.label "Blokuj karty programów">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
 <!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
 <!ENTITY openBookmarks.label "zakładek">
 <!ENTITY openBMKGroups.label "grup zakładek">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Łącz tylko aktywne okno z poprzednio aktywnym">
 <!ENTITY mergePopups.label "Dołączaj także wyskakujące okienka">
 <!ENTITY popupNextToOpener.label "Umieszczaj wyskakujące okna za oknami, z których są one wywoływane">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Naciśnięcie klawisza 1 powoduje rotację kart co">
 <!ENTITY toggleAnimation.label "Wyłącz przełączanie animacji kart">
 <!ENTITY reloadEvery.matchAddress.label "Odświeżaj kartę bez względu na jej adres">
 <!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odśwież co… w przycisku narzędziowym Odśwież">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "Dodatkową przestrzeń po obu stronach paska kart">
 <!ENTITY tabBarSpace.tooltip "Gdy jest otwartych dużo kart, przestrzeń ta służy dla przeciągania i kliknięć na pasku kart">
 <!ENTITY tabbar.label "Nie wyświetlaj paska kart, gdy jest otwarta tylko jedna karta">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Podczas przeciągania karty przenoś ją go bezpośrednio">
 <!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
 <!ENTITY dropIndicator-native.label "natywny styl">
 <!ENTITY dropIndicator-builtin.label "wbudowany styl">
@@ -207,35 +207,35 @@
 <!ENTITY clicktab.label "Wybierz działanie jakie zostanie wykonane po kliknięciu na etykiecie karty/pasku kart">
 <!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie.">
 <!ENTITY clicktab.nothing "brak reakcji">
-<!ENTITY clicktab.addtab "otwiera nową kartę">
-<!ENTITY clicktab.duplicatetab "powiela kartę">
-<!ENTITY clicktab.duplicatetabw "powiela kartę w nowym oknie">
-<!ENTITY clicktab.detachtab "przenosi kartę do nowego okna">
-<!ENTITY clicktab.protecttab "zabezpiecza kartę">
-<!ENTITY clicktab.locktab "blokuje kartę">
-<!ENTITY clicktab.freezetab "zamraża kartę">
-<!ENTITY clicktab.renametab "pozwala na zmianę nazwy karty">
-<!ENTITY clicktab.copyTabUrl "kopiuje adres URL karty do schowka">
-<!ENTITY clicktab.copyUrlFromClipboard "wczytuje adres URL ze schowka">
-<!ENTITY clicktab.selectMerge "zaznacza kartę do połączenia">
-<!ENTITY clicktab.mergeTabs "łączy okna">
-<!ENTITY clicktab.bookTab "dodaje zakładkę do karty">
-<!ENTITY clicktab.bookTabs "dodaje zakładki do wszystkich kart">
-<!ENTITY clicktab.reloadtab "odświeża kartę">
-<!ENTITY clicktab.reloadtabs "odświeża wszystkie karty">
-<!ENTITY clicktab.reloadothertabs "odświeża pozostałe karty">
-<!ENTITY clicktab.reloadlefttabs "odświeża karty po lewej stronie">
-<!ENTITY clicktab.reloadrighttabs "odświeża karty po prawej stronie">
-<!ENTITY clicktab.autoReloadTab "uaktywnia/dezaktywuje automatyczne odświeżanie kart">
-<!ENTITY clicktab.removeall "zamyka wszystkie karty">
-<!ENTITY clicktab.removeother "zamyka inne karty">
-<!ENTITY clicktab.removesimilar "zamyka karty pochodzące z tej samej domeny">
-<!ENTITY clicktab.removeleft "zamyka karty po lewej stronie">
-<!ENTITY clicktab.removeright "zamyka karty po prawej stronie">
-<!ENTITY clicktab.uctab "przywraca zamkniętą kartę">
-<!ENTITY clicktab.ucatab "przywraca wszystkie zamknięte karty">
-<!ENTITY clicktab.snapback "powraca do poprzednio aktywnej karty">
-<!ENTITY clicktab.ietab "otwiera kartę w IE">
+<!ENTITY clicktab.addtab "Otwórz nową kartę">
+<!ENTITY clicktab.duplicatetab "Powiel kartę">
+<!ENTITY clicktab.duplicatetabw "Powiel kartę w nowym oknie">
+<!ENTITY clicktab.detachtab "Przenieś kartę do nowego okna">
+<!ENTITY clicktab.protecttab "Zabezpiecz kartę">
+<!ENTITY clicktab.locktab "Blokuj kartę">
+<!ENTITY clicktab.freezetab "Zamroź kartę">
+<!ENTITY clicktab.renametab "Pozwól na zmianę nazwy karty">
+<!ENTITY clicktab.copyTabUrl "Kopiuj adres URL karty do schowka">
+<!ENTITY clicktab.copyUrlFromClipboard "Wczytaj adres URL ze schowka">
+<!ENTITY clicktab.selectMerge "Zaznacz kartę do połączenia">
+<!ENTITY clicktab.mergeTabs "Połącz okna">
+<!ENTITY clicktab.bookTab "Dodaj zakładkę do karty">
+<!ENTITY clicktab.bookTabs "Dodaj zakładki do wszystkich kart">
+<!ENTITY clicktab.reloadtab "Odśwież kartę">
+<!ENTITY clicktab.reloadtabs "Odśwież wszystkie karty">
+<!ENTITY clicktab.reloadothertabs "Odśwież pozostałe karty">
+<!ENTITY clicktab.reloadlefttabs "Odśwież karty po lewej stronie">
+<!ENTITY clicktab.reloadrighttabs "Odśwież karty po prawej stronie">
+<!ENTITY clicktab.autoReloadTab "Uaktywnij/dezaktywuj automatyczne odświeżanie kart">
+<!ENTITY clicktab.removeall "Zamknij wszystkie karty">
+<!ENTITY clicktab.removeother "Zamknij inne karty">
+<!ENTITY clicktab.removesimilar "Zamknij karty pochodzące z tej samej domeny">
+<!ENTITY clicktab.removeleft "Zamknij karty po lewej stronie">
+<!ENTITY clicktab.removeright "Zamknij karty po prawej stronie">
+<!ENTITY clicktab.uctab "Przywróć zamkniętą kartę">
+<!ENTITY clicktab.ucatab "Przywróć wszystkie zamknięte karty">
+<!ENTITY clicktab.snapback "Powróć do poprzednio aktywnej karty">
+<!ENTITY clicktab.ietab "Otwórz kartę w IE">
 <!ENTITY contentLoad "Kliknięcie ś.p.m. wczytuje adres URL ze schowka">
 <!ENTITY context.tab "Menu kontekstowe kart">
 <!ENTITY context.main "Główne menu kontekstowe">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "i karty">
 <!ENTITY sm.restore.closedWinList "Zapisuj istniejące okna na liście zamkniętych okien">
 <!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
 <!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
 <!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
 <!ENTITY sm.preserve.history "historię">

@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "Заключване на подпрозорци">
 <!ENTITY lockNewTabs.label "Заключване на нови подпрозорци">
 <!ENTITY lockAppTabs.label "Заключване на прикрепени подпрозорци">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Прилагане на измененията за текущите отворени подпрозорци">
 <!ENTITY openNewTab.label "Отваряне в нови подпрозорци на:">
 <!ENTITY openBookmarks.label "Отметки">
 <!ENTITY openBMKGroups.label "Групи отметки">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Обединяване само на текущия и на последно активния прозорци">
 <!ENTITY mergePopups.label "Обединяване също така и на изскачащи прозорци">
 <!ENTITY popupNextToOpener.label "Разполагане на изскачащите прозорци непосредствено до подпрозорците, които са ги отворили">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Натискането на #1 превърта подпрозорците на всеки">
 <!ENTITY toggleAnimation.label "Изключване на анимацията при отваряне/затваряне на подпрозорци">
 <!ENTITY reloadEvery.matchAddress.label "Презареждане на подпрозорец независимо от адреса му">
 <!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "Празни полета по краищата на лентата с подпрозорци">
 <!ENTITY tabBarSpace.tooltip "Използват се за щракване и за пускане на различни елементи върху лентата с подпрозорци">
 <!ENTITY tabbar.label "Скриване на лентата с подпрозорци, когато има само един отворен">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Незабавно преместване на подпрозорец при плъзгането му">
 <!ENTITY dropIndicator.label "Индикатор за пускане">
 <!ENTITY dropIndicator-native.label "Стандартен стил">
 <!ENTITY dropIndicator-builtin.label "Вграден стил">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "и подпрозорци">
 <!ENTITY sm.restore.closedWinList "Запис на прозорците в списъка на затворени прозорци">
 <!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
 <!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
 <!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
 <!ENTITY sm.preserve.history "Историята">

@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "鎖定分頁">
 <!ENTITY lockNewTabs.label "鎖定新分頁">
 <!ENTITY lockAppTabs.label "鎖定應用程式分頁">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "變更套用到已開啟的分頁">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
 <!ENTITY openBookmarks.label "書籤">
 <!ENTITY openBMKGroups.label "書籤群組">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "合併目前視窗的分頁至上次選取的視窗">
 <!ENTITY mergePopups.label "亦合併其彈出視窗">
 <!ENTITY popupNextToOpener.label "將彈出視窗置於其開啟者旁邊">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "按 #1 鍵來啟用/停用「自動輪換分頁」，每隔">
 <!ENTITY toggleAnimation.label "停用「開啟/關閉分頁的動畫」">
 <!ENTITY reloadEvery.matchAddress.label "自動更新時不考慮目前分頁的網址">
 <!ENTITY reloadEvery.onReloadButton.label "在重新載入按鈕上顯示「自動更新」的選單">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "兩側額外空間">
 <!ENTITY tabBarSpace.tooltip "當分頁數量很多時，方便滑鼠拖曳或點擊分頁標籤列之用">
 <!ENTITY tabbar.label "僅有一個分頁時隱藏分頁標籤列">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "拖曳分頁時立即移動分頁位置">
 <!ENTITY dropIndicator.label "分頁標籤拖曳指標">
 <!ENTITY dropIndicator-native.label "原始樣式">
 <!ENTITY dropIndicator-builtin.label "內建樣式">
@@ -176,7 +176,7 @@
 <!ENTITY bookastitle.label "使用書籤名稱做為分頁標題">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
-<!ENTITY toolbar.description "你可以自訂工具列顯示那些 Tab Mix Plus 按鈕">
+<!ENTITY toolbar.description "您可以自訂工具列顯示那些 Tab Mix Plus 按鈕">
 <!ENTITY toolbar.button.label "自訂">
 <!ENTITY toolbar.visible.caption "顯示的按鈕">
 <!ENTITY toolbar.novisible.label "目前沒有任何顯示的按鈕">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "及分頁">
 <!ENTITY sm.restore.closedWinList "先備份目前的瀏覽狀態至 [已關閉視窗列表]">
 <!ENTITY sm.restore.merge "自動合併所有視窗">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "還原時不使用快取的資料">
 <!ENTITY sm.notrestore.label "當關閉啟動時還原功能">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">

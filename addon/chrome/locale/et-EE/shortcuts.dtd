@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Kiirklahvid">
+<!ENTITY shortcuts.edit "Muuda klahvikombinatsioone">
+<!ENTITY shortcuts.showAll "Näita kõike">
+<!ENTITY shortcuts.hideUnused "Peida kasutamata">
+<!ENTITY shortcuts.warning "Osasid kiirklahve kasutab mõni muu käak">
+<!ENTITY shortcuts.showDetails "Näita üksikasju">
+<!ENTITY shortcuts.hideDetails "Peida üksikasjad">
+<!ENTITY shortcuts.slideshow "Lülita kaartide slaidiseanss sisse/välja">
+<!ENTITY shortcuts.toggleFLST "Muuda kaardi sulgemisjärgset fookustamist">
+<!ENTITY shortcuts.toggleFLST.tooltip "muuda, kas aktiivse kaardi sulgemisel näidatakse parempoolset või viimati valitud kaarti">
+<!ENTITY shortcuts.placeholder "Sisesta muuteklahv(id) ja klahv">
+<!ENTITY shortcuts.reset "Algseadista">
+<!ENTITY shortcuts.clear "Puhasta">
+<!ENTITY shortcuts.inuse "Seda kiirklahvi juba kasutab">

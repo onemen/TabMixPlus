@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Объединение только текущего окна с последним активным">
 <!ENTITY mergePopups.label "Также объединять всплывающие окна">
 <!ENTITY popupNextToOpener.label "Размещать всплывающие окна рядом с окнами, которые их открывали">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Нажатие на клавишу #1 переключает вкладки каждые">
 <!ENTITY toggleAnimation.label "Отключить анимацию открытия/закрытия вкладки">
 <!ENTITY reloadEvery.matchAddress.label "Обновлять вкладку независимо от её адреса">
 <!ENTITY reloadEvery.onReloadButton.label "Показывать меню &apos;Обновлять вкладку каждые...&apos; для кнопки Обновить">

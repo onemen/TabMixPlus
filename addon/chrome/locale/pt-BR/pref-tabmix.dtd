@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Unir somente a janela atual com a última selecionada">
 <!ENTITY mergePopups.label "Unir também janelas &quot;popup&quot;">
 <!ENTITY popupNextToOpener.label "Posicionar popups próximos aos seus iniciadores">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Pressionar #1 gira abas cada">
 <!ENTITY toggleAnimation.label "Desativar a animação abrir/fechar na aba">
 <!ENTITY reloadEvery.matchAddress.label "Recarregar uma aba independente do seu endereço">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar menu &quot;Recarregar aba a cada&quot; no botão &quot;Atualizar a página&quot;">

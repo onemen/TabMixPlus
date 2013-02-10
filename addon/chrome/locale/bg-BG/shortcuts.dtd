@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Клавишни комбинации">
+<!ENTITY shortcuts.edit "Редактиране на клавишните комбинации">
+<!ENTITY shortcuts.showAll "Показване на всички">
+<!ENTITY shortcuts.hideUnused "Скриване на">
+<!ENTITY shortcuts.warning "Някои от клавишните комбинации се използват за други команди">
+<!ENTITY shortcuts.showDetails "Подробности">
+<!ENTITY shortcuts.hideDetails "Без подробности">
+<!ENTITY shortcuts.slideshow "Включване/изключване на слайдшоуто на подпрозорци">
+<!ENTITY shortcuts.toggleFLST "Превключване на фокуса след затваряне на текущия подпрозорец">
+<!ENTITY shortcuts.toggleFLST.tooltip "превключвайте между фокусиране върху десния или върху последно избрания подпрозорец">
+<!ENTITY shortcuts.placeholder "Задайте модификатори и клавиш">
+<!ENTITY shortcuts.reset "Заводски настройки">
+<!ENTITY shortcuts.clear "Изчистване">
+<!ENTITY shortcuts.inuse "Клавишната комбинация вече се използва за:">

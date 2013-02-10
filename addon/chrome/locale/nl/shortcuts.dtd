@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Snelkoppelingen">
+<!ENTITY shortcuts.edit "Toetsenbord snelkoppelingen wijzigen">
+<!ENTITY shortcuts.showAll "Alles weergeven">
+<!ENTITY shortcuts.hideUnused "Niet gebruikte verbergen">
+<!ENTITY shortcuts.warning "Enkele snelkoppelingen zijn door andere opdrachten in gebruik">
+<!ENTITY shortcuts.showDetails "Details weergeven">
+<!ENTITY shortcuts.hideDetails "Details verbergen">
+<!ENTITY shortcuts.slideshow "Doorlopende weergave tabbladen schakelen">
+<!ENTITY shortcuts.toggleFLST "Focus na sluiten huidige tabblad schakelen">
+<!ENTITY shortcuts.toggleFLST.tooltip "schakelen tussen focus naar rechts of laatst geselecteerde tabblad">
+<!ENTITY shortcuts.placeholder "Soort wijziging &amp; sleutel">
+<!ENTITY shortcuts.reset "Herstellen">
+<!ENTITY shortcuts.clear "Wissen">
+<!ENTITY shortcuts.inuse "Deze snelkoppeling is al in gebruik door">

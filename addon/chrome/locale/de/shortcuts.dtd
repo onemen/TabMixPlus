@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Tastaturkürzel">
+<!ENTITY shortcuts.edit "Tastaturkürzel bearbeiten">
+<!ENTITY shortcuts.showAll "Alles anzeigen">
+<!ENTITY shortcuts.hideUnused "Nicht verwendete ausblenden">
+<!ENTITY shortcuts.warning "Einige Ihrer Tastaturkürzel werden bereits anderweitig verwendet">
+<!ENTITY shortcuts.showDetails "Details anzeigen">
+<!ENTITY shortcuts.hideDetails "Details ausblenden">
+<!ENTITY shortcuts.slideshow "Automatischen Tabwechsel deaktivieren">
+<!ENTITY shortcuts.toggleFLST "Fokussierung nach schließen des aktuellen Tabs entfernen">
+<!ENTITY shortcuts.toggleFLST.tooltip "Tab-Fokussierung umschalten zwischen, Tab auf rechten Seite oder den zuletzt gewählten Tab">
+<!ENTITY shortcuts.placeholder "Typ Modifizierung &amp; Schlüsselworte">
+<!ENTITY shortcuts.reset "Zurücksetzen">
+<!ENTITY shortcuts.clear "Löschen">
+<!ENTITY shortcuts.inuse "Dieses Tastaturkürzel wird bereits verwendet!">

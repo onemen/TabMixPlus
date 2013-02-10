@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Atajos">
+<!ENTITY shortcuts.edit "Editar atajos de teclado">
+<!ENTITY shortcuts.showAll "Mostrar todos">
+<!ENTITY shortcuts.hideUnused "Ocultar lo no usados">
+<!ENTITY shortcuts.warning "Algunos de sus atajos los usan otros comandos">
+<!ENTITY shortcuts.showDetails "Mostrar detalles">
+<!ENTITY shortcuts.hideDetails "Ocultar detalles">
+<!ENTITY shortcuts.slideshow "Conmutar barra de pestañas">
+<!ENTITY shortcuts.toggleFLST "Conmutar foco tras cerrar pestaña actual">
+<!ENTITY shortcuts.toggleFLST.tooltip "conmutar foco en pestaña derecha o en última seleccionada">
+<!ENTITY shortcuts.placeholder "Introduzca modificador y tecla">
+<!ENTITY shortcuts.reset "Reiniciar">
+<!ENTITY shortcuts.clear "Borrar">
+<!ENTITY shortcuts.inuse "Este atajo está siendo usado por">

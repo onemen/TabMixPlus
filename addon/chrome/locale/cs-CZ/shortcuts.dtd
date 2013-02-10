@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Klávesové zkratky">
+<!ENTITY shortcuts.edit "Upravit klávesové zkratky">
+<!ENTITY shortcuts.showAll "Zobrazit vše">
+<!ENTITY shortcuts.hideUnused "Skrýt nepoužívané">
+<!ENTITY shortcuts.warning "Některé klávesové zkratky jsou již používány jinými příkazy">
+<!ENTITY shortcuts.showDetails "Zobrazit podrobnosti">
+<!ENTITY shortcuts.hideDetails "Skrýt podrobnosti">
+<!ENTITY shortcuts.slideshow "Přepínat panely">
+<!ENTITY shortcuts.toggleFLST "Při zavření aktuálního panelu přepnout na jiný panel">
+<!ENTITY shortcuts.toggleFLST.tooltip "Při zavření aktuálního panelu přepnout na panel napravo od něj nebo na naposledy vybraný panel">
+<!ENTITY shortcuts.placeholder "Zadat modifikátory a klíč">
+<!ENTITY shortcuts.reset "Obnovit">
+<!ENTITY shortcuts.clear "Vymazat">
+<!ENTITY shortcuts.inuse "Tato klávesová zkratka je již používána:">

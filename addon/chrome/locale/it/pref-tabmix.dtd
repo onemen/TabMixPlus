@@ -108,9 +108,9 @@
 <!ENTITY mergelastfocused.label "Incorporare tutte le finestre insieme anziché solo l&apos;ultima in primo piano">
 <!ENTITY mergePopups.label "Incorpora anche i pop-up">
 <!ENTITY popupNextToOpener.label "Posiziona i pop-up accanto alle schede che li aprono">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Avvia/ferma la rotazione delle schede premendo #1 ogni">
 <!ENTITY toggleAnimation.label "Disattiva l&apos;animazione di apertura/chiusura delle schede">
-<!ENTITY reloadEvery.matchAddress.label "Ricarica la scheda indipendentemente dal suo indirizzo web">
+<!ENTITY reloadEvery.matchAddress.label "Ricarica le schede indipendentemente dal loro indirizzo web">
 <!ENTITY reloadEvery.onReloadButton.label "Mostra il menu a discesa per ricaricare automaticamente le pagine web nel pulsante Ricarica">
 <!ENTITY seconds.label "secondi">
 <!ENTITY minutes.label "minuti">
@@ -164,7 +164,6 @@
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
-
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -179,7 +178,6 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
-
 -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">

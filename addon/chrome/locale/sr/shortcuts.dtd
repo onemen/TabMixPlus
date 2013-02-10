@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Пречице">
+<!ENTITY shortcuts.edit "Уреди пречице на тастатури">
+<!ENTITY shortcuts.showAll "Прикажи све">
+<!ENTITY shortcuts.hideUnused "Сакриј неискоришћене">
+<!ENTITY shortcuts.warning "Неке од ваших наредби се већ користе">
+<!ENTITY shortcuts.showDetails "Прикажи детаље">
+<!ENTITY shortcuts.hideDetails "Сакриј детаље">
+<!ENTITY shortcuts.slideshow "Почни/заустави пројекцију језичака">
+<!ENTITY shortcuts.toggleFLST "Промени фокус након затварања тренутног језичка">
+<!ENTITY shortcuts.toggleFLST.tooltip "Промени фокусирање на десно или последњи изабрани језичак">
+<!ENTITY shortcuts.placeholder "Унесите модификаторе и кључ">
+<!ENTITY shortcuts.reset "Врати почетно">
+<!ENTITY shortcuts.clear "Очисти">
+<!ENTITY shortcuts.inuse "Ова пречица се већ користи за">

@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "Zamknout panely">
 <!ENTITY lockNewTabs.label "Zamknout nové panely">
 <!ENTITY lockAppTabs.label "Zamknout panely aplikací">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Změny použít na otevřené panely">
 <!ENTITY openNewTab.label "Otevřít panely z(e):">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openBMKGroups.label "Skupina záložek">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Sloučit současné okno s naposledy používaným">
 <!ENTITY mergePopups.label "Přidat také vyskakovací okna">
 <!ENTITY popupNextToOpener.label "Umístit vyskakovací okna vedle jejich otvíračů">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Stisknutím #1 se budou panely přepínat každých">
 <!ENTITY toggleAnimation.label "Zakázat animaci otevírání či zavírání panelu">
 <!ENTITY reloadEvery.matchAddress.label "Znovu načíst panel bez ohledu na adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku Obnovit každých XY sekund/minut u tlačítka Obnovit">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "Místo navíc na obou stranách">
 <!ENTITY tabBarSpace.tooltip "Pro umístění něčeho na lištu s panely v případě velkého množství panelů">
 <!ENTITY tabbar.label "Schovat lištu panelů, je-li otevřen jen jeden panel">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Při přetahování panelu jej přesunout přímo">
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavný styl">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "A panely">
 <!ENTITY sm.restore.closedWinList "Uložit okna do seznamu zavřených oken">
 <!ENTITY sm.restore.merge "Sloučit hromadná okna do jednoho">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Při obnově stránky obejít vyrovnávací paměť">
 <!ENTITY sm.notrestore.label "Pokud nedojde k obnově po startu">
 <!ENTITY sm.preserve.options "Uchovat panely:">
 <!ENTITY sm.preserve.history "Historie">

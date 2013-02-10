@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Scorciatoie da tastiera">
+<!ENTITY shortcuts.edit "Modifica le scorciatoie da tastiera">
+<!ENTITY shortcuts.showAll "Mostra tutte">
+<!ENTITY shortcuts.hideUnused "Nascondi scorciatoie da tastiera non utilizzate">
+<!ENTITY shortcuts.warning "Alcune scorciatoie da tastiera vengono utilizzate da altri comandi">
+<!ENTITY shortcuts.showDetails "Mostra i dettagli">
+<!ENTITY shortcuts.hideDetails "Nascondi i dettagli">
+<!ENTITY shortcuts.slideshow "Attiva/disattiva la rotazione delle schede">
+<!ENTITY shortcuts.toggleFLST "Attiva/disattiva il portar in primo piano dopo la chiusura della scheda attuale">
+<!ENTITY shortcuts.toggleFLST.tooltip "Attiva/disattiva il portar in primo piano scheda a destra / ultima selezionata">
+<!ENTITY shortcuts.placeholder "Digita modificatori e chiavi">
+<!ENTITY shortcuts.reset "Ripristina">
+<!ENTITY shortcuts.clear "Elimina">
+<!ENTITY shortcuts.inuse "la scorciatoia da tastiera viene già utilizzata da">

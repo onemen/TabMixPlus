@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importēt iestatījumus">
 <!ENTITY settings.default "Atjaunot noklusējumus">
 <!ENTITY generalWindowOpen.label "Saites, kas atveras jaunā logā, atvērt:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Saitēm no citām lietotnēm izmantot atsevišķu iestatījumu">
 <!ENTITY externalLinkTarget.label "Saites no citām lietotnēm atvērt:">
 <!ENTITY linkTarget.tab "Jaunā cilnē">
 <!ENTITY linkTarget.window "Jaunā logā">
@@ -41,9 +41,9 @@
 <!ENTITY newtab.home "Mājas lapu">
 <!ENTITY newtab.current "Pašreizējo lapu">
 <!ENTITY newtab.duplicate "Dublikāta lapu">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY location.label.1 "Address">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY newtab.location.1 "Jaunas cilnes lapa">
+<!ENTITY location.label.1 "Adrese">
+<!ENTITY focusContent.label "Ielādējot ne-tukšu lapu, fokusēties uz saturu">
 <!ENTITY openTabNext.label "Jaunas cilnes atvērt pēc pašreizējās">
 <!ENTITY openOtherTabNext.label "Citas cilnes atvērt pēc pašreizējās">
 <!ENTITY relatedAfterCurrent.label "Tikai, ja attiecas uz pašreizējo cilni">
