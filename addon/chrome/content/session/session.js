@@ -3818,8 +3818,6 @@ try{
             try {
               TabmixSvc.ss.deleteTabValue(tabData.tab, id);
             } catch (ex) { }
-            if (!Tabmix.isVersion(80))
-              tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
           }
           return;
         }
@@ -3831,19 +3829,6 @@ try{
           parsedData.groupID = update.IDs[parsedData.groupID];
           data = Tabmix.JSON.stringify(parsedData);
         }
-      }
-    }
-
-    // force Panorama to reconnect all reused tabs
-    // in Firefox 8.0 + we do it from _patchTabviewFrame
-    if (!Tabmix.isVersion(80)) {
-      let tabItem = tabData.tab._tabViewTabItem;
-      if (tabItem) {
-        let tabData = parsedData || Tabmix.JSON.parse(data);
-        let groupId = tabItem.parent ? tabItem.parent.id : null;
-        if (!tabData || tabData.groupID != groupId)
-          tabItem._reconnected = false;
-          tabItem.__tabmix_reconnected = false;
       }
     }
 

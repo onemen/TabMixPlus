@@ -172,11 +172,8 @@ var TMP_Places = {
 
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       function updateOpenTabset() {
-        var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, replaceCurrentTab);"
+        var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, false);"
         loadTabsCode = loadTabsCode.replace("$1", "gBrowser");
-        if (Tabmix.isVersion(80))
-          loadTabsCode = loadTabsCode.replace("replaceCurrentTab", "false");
-
         var openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
         Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
           'urls = []',

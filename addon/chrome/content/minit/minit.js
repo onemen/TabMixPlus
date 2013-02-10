@@ -955,51 +955,49 @@ var TMP_TabView = {
   },
 
   _patchTabviewFrame: function SM__patchTabviewFrame(){
-    if (Tabmix.isVersion(80)) {
-      // Firefox 8.0 use strict mode - we need to map global variable
-      TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-      Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
-        '"use strict";',
-        '$&' +
-        'let win = TabView._window;' +
-        'let GroupItem = win.GroupItem;' +
-        'let iQ = win.iQ;' +
-        'let UI = win.UI;' +
-        'let Utils = win.Utils;' +
-        'let GroupItems = win.GroupItems;' +
-        'let Storage = win.Storage;', {check: Tabmix.isVersion(80)}
-      )._replace(
-        'this.',
-        'GroupItems.', {flags: "g"}
-      )._replace(
-        // This group is re-used by session restore
-        // make sure all of its children still belong to this group.
-        // Do it before setBounds trigger data save that will overwrite
-        // session restore data.
-        // We call TabItems.resumeReconnecting later to reconnect the tabItem.
-        'groupItem.userSize = data.userSize;',
-        'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
-        '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
-        '  if (!tabData || tabData.groupID != data.id) {' +
-        '    tabItem._reconnected = false;' +
-        '  }' +
-        '});' +
-        '$&'
-      )._replace(
-        // All remaining children in to-be-closed groups are re-used by
-        // session restore. Mark them for recconct later by UI.reset
-        // or TabItems.resumeReconnecting.
-        //
-        // we don't want tabItem without storage data to _reconnect at
-        // this moment. Calling GroupItems.newTab before we set the
-        // active group, can reconnect the tabItem to the wrong group!
-        // also calling this.parent.remove form tabItem._reconnect
-        // without dontArrange flag can cause unnecessary groupItem
-        // and children arrang (we are about to close this group).
-        'tabItem._reconnect();',
-        '', {check: !Tabmix.isVersion(110)}
-      ).toCode();
-    }
+    // Firefox 8.0 use strict mode - we need to map global variable
+    TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
+    Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
+      '"use strict";',
+      '$&' +
+      'let win = TabView._window;' +
+      'let GroupItem = win.GroupItem;' +
+      'let iQ = win.iQ;' +
+      'let UI = win.UI;' +
+      'let Utils = win.Utils;' +
+      'let GroupItems = win.GroupItems;' +
+      'let Storage = win.Storage;'
+    )._replace(
+      'this.',
+      'GroupItems.', {flags: "g"}
+    )._replace(
+      // This group is re-used by session restore
+      // make sure all of its children still belong to this group.
+      // Do it before setBounds trigger data save that will overwrite
+      // session restore data.
+      // We call TabItems.resumeReconnecting later to reconnect the tabItem.
+      'groupItem.userSize = data.userSize;',
+      'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
+      '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
+      '  if (!tabData || tabData.groupID != data.id) {' +
+      '    tabItem._reconnected = false;' +
+      '  }' +
+      '});' +
+      '$&'
+    )._replace(
+      // All remaining children in to-be-closed groups are re-used by
+      // session restore. Mark them for recconct later by UI.reset
+      // or TabItems.resumeReconnecting.
+      //
+      // we don't want tabItem without storage data to _reconnect at
+      // this moment. Calling GroupItems.newTab before we set the
+      // active group, can reconnect the tabItem to the wrong group!
+      // also calling this.parent.remove form tabItem._reconnect
+      // without dontArrange flag can cause unnecessary groupItem
+      // and children arrang (we are about to close this group).
+      'tabItem._reconnect();',
+      '', {check: !Tabmix.isVersion(110)}
+    ).toCode();
 
     // add tab to the new group on tabs order not tabItem order
     TabView._window.UI._original_reset = TabView._window.UI.reset;
@@ -1013,10 +1011,10 @@ var TMP_TabView = {
       'let Rect = win.Rect;' +
       'let GroupItems = win.GroupItems;' +
       'let GroupItem = win.GroupItem;' +
-      'let UI = win.UI;', {check: Tabmix.isVersion(80)}
+      'let UI = win.UI;'
     )._replace(
       'this.',
-      'UI.', {flags: "g", silent: true, check: Tabmix.isVersion(80)}
+      'UI.', {flags: "g", silent: true}
     )._replace(
       'items = TabItems.getItems();',
       'items = gBrowser.tabs;'
@@ -1060,10 +1058,8 @@ var TMP_TabView = {
 
   _resetTabviewFrame: function SM__resetTabviewFrame(){
     if (!Tabmix.extensions.sessionManager && TabView._window) {
-      if (Tabmix.isVersion(80)) {
-        TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
-        delete TabView._window.GroupItems._original_reconstitute;
-      }
+      TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
+      delete TabView._window.GroupItems._original_reconstitute;
       TabView._window.UI.reset = TabView._window.UI._original_reset;
       TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
       delete TabView._window.UI._original_reset;
