@@ -447,7 +447,7 @@
         else
           tabs.overflow = false;
 
-        if (Tabmix.isVersion(50) && tabs._lastTabClosedByMouse)
+        if (Tabmix.isVersion(50) && tabs._lastTabClosedByMouse && !Tabmix.isVersion(210))
           tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
 
         tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
