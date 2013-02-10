@@ -272,8 +272,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  * @return              Nothing.
  *
  *
- * we call this function from urlbar.handleCommand up to Firefox 10
- * and from extensions.js for objURLsuffix.
+ * we call this function from urlbar.handleCommand when instantfox installed
  *
  */
 Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {

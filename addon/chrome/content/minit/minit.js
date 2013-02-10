@@ -1177,7 +1177,7 @@ Tabmix.navToolbox = {
     // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
     // instantfox uses pre-Firefox 10 version of handleCommand
     var testVersionString = "if (aTriggeringEvent instanceof MouseEvent) {";
-    var pre10Version = !Tabmix.isVersion(100) || typeof(InstantFox) == "object" &&
+    var pre10Version = typeof(InstantFox) == "object" &&
         _handleCommand.indexOf(testVersionString) > -1;
     var TMP_fn = !pre10Version ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
 

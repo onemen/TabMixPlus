@@ -2419,8 +2419,6 @@ try{
           tabview.UI._save();
           tabview.GroupItems.saveAll();
           tabview.TabItems.saveAll();
-          if (!Tabmix.isVersion(100))
-            tabview.Storage.saveActiveGroupName(window);
         }
       }
 
@@ -2436,8 +2434,6 @@ try{
       updateTabviewData("tabview-visibility");
       updateTabviewData("tabview-groups");
       updateTabviewData("tabview-group");
-      if (!Tabmix.isVersion(100))
-        updateTabviewData("tabview-last-session-group-name");
       if (aBackup)
         this.saveStateDelayed();
    },
@@ -3708,8 +3704,6 @@ try{
     if (!aOverwriteTabs)
       this._groupItems = this._tabviewData["tabview-group"];
 
-    this._updateLastSessionGroupName();
-
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
     var groupCount = parsedData.totalNumber || 1;
     TabView.updateGroupNumberBroadcaster(groupCount);
@@ -3756,11 +3750,6 @@ try{
 
     this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
     this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
-
-    if (!Tabmix.isVersion(100)) {
-      let type = "tabview-last-session-group-name";
-      this._lastSessionGroupName = this.getLiteralValue(aWindow, type, "");
-    }
   },
 
   _saveTabviewData: function SM__saveTabviewData() {
@@ -3836,27 +3825,6 @@ try{
     TabmixSvc.ss.setTabValue(tabData.tab, id, data);
     if (this.enableBackup)
       this.setLiteral(this.getNodeForTab(tabData.tab), id, data);
-  },
-
-  _updateLastSessionGroupName: function SM__updateLastSessionGroupName() {
-    if (Tabmix.isVersion(100))
-      return;
-
-    // keep current name
-    if (this.groupUpdates.hideSessionActiveGroup && TabView._lastSessionGroupName != null)
-      return;
-
-    // when we don't show last group name on startup set empty string
-    if (this.groupUpdates.hideSessionActiveGroup)
-      this._lastSessionGroupName = "";
-
-    let title = TabView._lastSessionGroupName = this._lastSessionGroupName;
-    gBrowser.updateTitlebar();
-
-    let id = "tabview-last-session-group-name";
-    TabmixSvc.ss.setWindowValue(window, id, title);
-    if (this.enableBackup)
-      this.setLiteral(this.gThisWin, id, title);
   },
 
   isEmptyObject: function SM_isEmptyObject(obj) {

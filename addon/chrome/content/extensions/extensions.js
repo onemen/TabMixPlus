@@ -282,28 +282,6 @@ var TMP_extensionsCompatibility = {
       }
     } catch (ex) {}
 
-    // make URL Suffix extension compatible with tabmix
-    if ("objURLsuffix" in window && !Tabmix.isVersion(100)) {
-      if ("handleURLBarCommand" in objURLsuffix) {
-        Tabmix.changeCode(objURLsuffix, "objURLsuffix.handleURLBarCommand")._replace(
-          'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);',
-          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, altDisabled);'
-        )._replace(
-          'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value);',
-          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, true);'
-        ).toCode();
-
-        window.handleURLBarCommand = objURLsuffix.handleURLBarCommand;
-      }
-
-      if ("canonizeUrl" in objURLsuffix) {
-        Tabmix.changeCode(objURLsuffix, "objURLsuffix.canonizeUrl")._replace(
-          'return [gURLBar.value, aPostDataRef];',
-          'return [gURLBar.value, aPostDataRef, true];'
-        ).toCode();
-      }
-    }
-
     try {
       if ("TreeStyleTabService" in window)
         this.treeStyleTab.onWindowLoaded();

@@ -487,17 +487,6 @@ var tablib = {
       else $&'
     );
 
-    /** patch after Bug 324164 - Unify Single Window Mode Preferences,
-     *  and before Bug 509664 - Restore hidden pref browser.link.open_newwindow.override.external
-     */
-    _openURI = _openURI._replace(
-      'aWhere = gPrefService.getIntPref("browser.link.open_newwindow");',
-      'if (isExternal) {\
-       aWhere = gPrefService.getIntPref("browser.link.open_newwindow.override.external");\
-       if (aWhere == -1 ) $&\
-       } else $&', {check: !Tabmix.isVersion(100)}
-    );
-
     _openURI = _openURI._replace(
       'switch (aWhere) {',
       '  if (Tabmix.singleWindowMode &&' +

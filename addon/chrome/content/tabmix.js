@@ -649,17 +649,15 @@ var TMP_eventListener = {
           ).toCode();
         }
 
-        if (Tabmix.isVersion(100)) {
-          Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
-            /(\})(\)?)$/,
-            '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
-            '  if (fullScrToggler) {' +
-            '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-            '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
-            '  }' +
-            '$1$2'
-          ).toCode();
-        }
+        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
+          /(\})(\)?)$/,
+          '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
+          '  if (fullScrToggler) {' +
+          '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
+          '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
+          '  }' +
+          '$1$2'
+        ).toCode();
       }
       if (aPositionChanged) {
         this.mouseoverToggle(false);

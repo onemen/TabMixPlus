@@ -31,12 +31,9 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
       'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
       'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
       'var pref = "extensions.tabmix.loadUrlInBackground";' +
-      'if (Tabmix.isVersion(100))' +
-      '  openUILinkIn(url, where, {' +
-      '         inBackground: Services.prefs.getBoolPref(pref),' +
-      '         initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});' +
-      'else' +
-      '  openUILinkIn(url, where, false, null, null, {backgroundPref: pref});'
+      'openUILinkIn(url, where, {' +
+      '       inBackground: Services.prefs.getBoolPref(pref),' +
+      '       initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});'
     ).toCode();
   }
 

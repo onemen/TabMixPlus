@@ -80,26 +80,20 @@ var TMP_Places = {
         'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
       ).toCode();
 
-      let inBackground = Tabmix.isVersion(100) ?
-          'if ("backgroundPref" in tabmixArg) params.inBackground = getBoolPref(tabmixArg.backgroundPref);' :
-          'params.backgroundPref = "backgroundPref" in tabmixArg ? tabmixArg.backgroundPref : null;';
-
       Tabmix.changeCode(window, "openUILinkIn")._replace(
         'params.fromChrome = true;',
-        '$&\
-         var tabmixArg = arguments.length > 5 ? arguments[5] : null; \
-         if (tabmixArg) { \
-           params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;'
-         + inBackground + '}'
+        '$&' +
+        ' var tabmixArg = arguments.length > 5 ? arguments[5] : null;' +
+        ' if (tabmixArg) {' +
+        '   params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;' +
+        '   if ("backgroundPref" in tabmixArg)' +
+        '     params.inBackground = getBoolPref(tabmixArg.backgroundPref);' +
+        ' }'
       ).toCode();
 
       // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
       // in case it warp the function in its object
       let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
-
-      var _loadURI = Tabmix.isVersion(100) ?
-            "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
-            "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
       Tabmix.changeCode(fnObj, fnName)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
@@ -123,7 +117,7 @@ var TMP_Places = {
         'aFromChrome ?',
         '$& getBoolPref(backgroundPref) ||', {check: Tabmix.isVersion(110)}
       )._replace(
-        _loadURI,
+        'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
         '$&\
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
@@ -647,10 +641,7 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        if (Tabmix.isVersion(100))
-          PlacesUtils.addLazyBookmarkObserver(this);
-        else
-          PlacesUtils.bookmarks.addObserver(this, false);
+        PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
       } catch(ex) {
         Components.utils.reportError("Tabmix failed adding a bookmarks observer: " + ex);
@@ -660,10 +651,7 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      if (Tabmix.isVersion(100))
-        PlacesUtils.removeLazyBookmarkObserver(this);
-      else
-        PlacesUtils.bookmarks.removeObserver(this);
+      PlacesUtils.removeLazyBookmarkObserver(this);
       this._hasBookmarksObserver = false;
     }
   },
