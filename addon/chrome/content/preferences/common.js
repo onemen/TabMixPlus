@@ -11,62 +11,6 @@ var gCommon = {
   },
 
   incompatibleList: [],
-  init: function() {
-    var browserWindow = Tabmix.getTopWin();
-    // verify that all the prefs exist .....
-    browserWindow.gTMPprefObserver.addMissingPrefs();
-
-    var docElt = document.documentElement;
-    gIncompatiblePane.init(docElt);
-
-    // prevent TMP_SessionStore.setService from reseting Session preference
-    // we control changeing these from here
-//    browserWindow.tabmix_setSession = true;
-
-    if (docElt.instantApply)
-      docElt.getButton("extra1").hidden = true;
-
-    // always init the apply button for the case user change tab width
-    this._applyButton = docElt.getButton("extra1");
-    this._applyButton.disabled = !docElt.instantApply;
-    this._applyButton.data = [];
-
-    var settingsButton = docElt.getButton("extra2");
-    settingsButton.setAttribute("popup","tm-settings");
-    settingsButton.setAttribute("dir","reverse");
-    settingsButton.setAttribute("image","chrome://tabmixplus/skin/arrow.png");
-
-/*
-    this.incompatibleList = Tabmix.getTopWin();.getExtensions();
-    if (this.incompatibleList.length != 0) {
-      const kXULNS =
-           "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-      var prefpane = document.createElementNS(kXULNS, "prefpane");
-      prefpane.setAttribute("id", "paneIncompatible");
-      prefpane.setAttribute("label", "Error");
-      prefpane.setAttribute("src", "chrome://tabmixplus/content/preferences/incompatible.xul");
-      docElt.addPane(prefpane);
-    }
-*/
-
-//    window.addEventListener("command", this.updateObservers, false);
-//    window.addEventListener("command", this, false);
-      window.addEventListener("change", this, false);
-    if (!docElt.instantApply) {
-//      window.addEventListener("change", this.updateApplyButton, false);
-//      window.addEventListener("change", this, false);
-      window.addEventListener("beforeaccept", this, false);
-    }
-
-    // there are heights diffrenet in our dialog window when Firefox starts with
-    // gfx.direct2d.disabled true or false
-    if (TabmixSvc.direct2dDisabled) {
-///XXX check this again later
-      document.documentElement.setAttribute("minheight", 483);
-      docElt.setAttribute("direct2dDisabled", true);
-    }
-  },
-
   deinit: function() {
     if (document.documentElement.instantApply &&
         this._applyButton.userchangedWidth) {

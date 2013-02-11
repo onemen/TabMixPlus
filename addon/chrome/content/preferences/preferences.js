@@ -18,7 +18,7 @@ XPCOMUtils.defineLazyGetter(window, "replaceLastTabWithNewTabURLpref", function(
     pref + "newtab.url" : pref + "newTabUrl";
 });
 
-var gPrefwindow = {
+var gPrefWindow = {
   init: function() {
     /*XXX TODO on init:
       check on mac if i need to set
@@ -38,6 +38,39 @@ var gPrefwindow = {
 
 ///XXX check this later, look in gcommon.init
 ///  TMP_setButtons(true, true, true);
+
+    var browserWindow = Tabmix.getTopWin();
+    var docElt = document.documentElement;
+      gIncompatiblePane.init(docElt);
+
+    window.addEventListener("change", gCommon, false);
+    if (!docElt.instantApply)
+      window.addEventListener("beforeaccept", gCommon, false);
+
+///XXX init button
+    if (docElt.instantApply)
+      docElt.getButton("extra1").hidden = true;
+
+    // always init the apply button for the case user change tab width
+    gCommon._applyButton = docElt.getButton("extra1");
+    gCommon._applyButton.disabled = !docElt.instantApply;
+    gCommon._applyButton.data = [];
+
+    var settingsButton = docElt.getButton("extra2");
+    settingsButton.setAttribute("popup","tm-settings");
+    settingsButton.setAttribute("dir","reverse");
+    settingsButton.setAttribute("image","chrome://tabmixplus/skin/arrow.png");
+
+    // there are heights diffrenet in our dialog window when Firefox starts with
+    // gfx.direct2d.disabled true or false
+    if (TabmixSvc.direct2dDisabled) {
+///XXX check if we need minheight later
+      document.documentElement.setAttribute("minheight", 483);
+      docElt.setAttribute("direct2dDisabled", true);
+    }
+///XXX test this on Linux
+    if (Tabmix.isPlatform("Linux"))
+      sizeToContent();
   },
 
   removeChild: function(id) {

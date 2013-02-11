@@ -25,7 +25,7 @@ var gSessionPane = {
     this.isSessionStoreEnabled(false);
 
     if (Tabmix.isVersion(200))
-      gPrefwindow.removeChild("pref_browser.warnOnRestart");
+      gPrefWindow.removeChild("pref_browser.warnOnRestart");
 
     gCommon.setPaneWidth("paneSession");
   },

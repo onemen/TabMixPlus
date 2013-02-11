@@ -25,7 +25,7 @@
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
-            onload="gCommon.init();"
+            onload="gPrefWindow.init();"
             ondialogaccept="gCommon.deinit();"
             ondialogcancel="gCommon.deinit();"
             ondialogextra1="gCommon.onApply();"

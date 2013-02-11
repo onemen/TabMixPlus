@@ -2,8 +2,10 @@ var gEventsPane = {
   init: function () {
     gSetTabIndex.init('events');
 
-    if (!Tabmix.isVersion(130))
-      $("contextMenuSearch").hidden = true;
+    if (!Tabmix.isVersion(130)) {
+      gPrefWindow.removeChild("pref_contextMenuSearch");
+      gPrefWindow.removeChild("contextMenuSearch");
+    }
 
     // for locals with long labels
     var hbox = $("focusTab-box");
@@ -18,8 +20,8 @@ var gEventsPane = {
     var browserWindow = Tabmix.getTopWin();
     let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {
-      gPrefwindow.removeChild("pref_ctrltab.tabPreviews");
-      gPrefwindow.removeChild("ctrltab.tabPreviews");
+      gPrefWindow.removeChild("pref_ctrltab.tabPreviews");
+      gPrefWindow.removeChild("ctrltab.tabPreviews");
     }
 
     // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
