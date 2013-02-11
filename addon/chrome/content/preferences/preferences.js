@@ -637,62 +637,6 @@ function loadData (pattern) {
   Services.prefs.savePrefFile(null);
 }
 
-var applyData = [];
-function TM_enableApply(event) {
-Tabmix.log("",true)
-   // if we fail once no neet to continue and we keep the apply button enable
-   if ("undefined" in applyData)
-      return;
-
-   var item = event.target;
-   var n = item.localName;
-
-   // only allow event from this item to go on....
-   if (item.parentNode.id == "tm-settings")
-      return;
-   if (n != "radio" && n != "menuitem" &&
-              n != "checkbox" && n != "textbox" && n != "tabclicking")
-      return;
-   while(item.id != "pref-tabmix" && !item.hasAttribute("prefstring"))
-      item = item.parentNode;
-
-   if (item.hasAttribute("prefstring"))
-      updateApplyData(item);
-   else {
-      Tabmix.log("erorr in tabmix options, item.id " + event.target.id + "\n has no prefstring");
-      applyData["undefined"] = true;
-      document.documentElement.getButton("extra1").disabled = false;
-      return;
-   }
-}
-
-//function updateApplyData(item, newValue) {
-function updateApplyData(item) {
-   var newValue = item.value;
-   var savedValue = getPrefByType(item);
-   var pref = item.getAttribute("prefstring");
-
-   if (savedValue != newValue)
-      applyData[pref] = newValue;
-   else if (pref in applyData)
-      delete applyData[pref];
-
-   var applyCount = 0;
-   for (var n in applyData) {
-      if (++applyCount > 0)
-         break;
-   }
-
-   var applyButton = document.documentElement.getButton("extra1");
-   if (applyButton.disabled != (applyCount == 0))
-      applyButton.disabled = applyCount == 0;
-}
-
-function TM_disableApply() {
- document.documentElement.getButton("extra1").disabled = true;
- applyData = [];
-}
-
 // this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
 function TM_selectTab(aSelTab) {
   var tabbox = $("tabMixTabBox");
@@ -704,23 +648,6 @@ function TM_selectTab(aSelTab) {
   for(var i = 0; i < catButtons.length; i++)
     if(catButtons[i].getAttribute('group', 'categories'))
       catButtons[i].setAttribute('checked', (catButtons[i].id == 'button' + tabId));
-}
-
-function showIncompatible() {
-   var topwin = Tabmix.getTopWin();
-   if (topwin) {
-      var result = topwin.disableExtensions(this);
-      if (result) {
-         $("incompatible").collapsed = true;
-         sizeToContent();
-      }
-      this.focus();
-   }
-   else {
-///XXX do we have locals entry for this ?
-      Services.prompt.alert(window, "Tabmix Error", "You must have one browser window to use TabMix Options");
-      window.close();
-   }
 }
 
 //XXX TODO check if we can move this to appearance.js
