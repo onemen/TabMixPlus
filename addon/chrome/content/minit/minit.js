@@ -984,19 +984,6 @@ var TMP_TabView = {
       '  }' +
       '});' +
       '$&'
-    )._replace(
-      // All remaining children in to-be-closed groups are re-used by
-      // session restore. Mark them for recconct later by UI.reset
-      // or TabItems.resumeReconnecting.
-      //
-      // we don't want tabItem without storage data to _reconnect at
-      // this moment. Calling GroupItems.newTab before we set the
-      // active group, can reconnect the tabItem to the wrong group!
-      // also calling this.parent.remove form tabItem._reconnect
-      // without dontArrange flag can cause unnecessary groupItem
-      // and children arrang (we are about to close this group).
-      'tabItem._reconnect();',
-      '', {check: !Tabmix.isVersion(110)}
     ).toCode();
 
     // add tab to the new group on tabs order not tabItem order

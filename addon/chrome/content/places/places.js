@@ -110,12 +110,9 @@ var TMP_Places = {
       )._replace(
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
-       )._replace(
-        '"browser.tabs.loadBookmarksInBackground"',
-        'backgroundPref || $&', {check: !Tabmix.isVersion(110)}
       )._replace( // we probably don't need this since Firefox 10
         'aFromChrome ?',
-        '$& getBoolPref(backgroundPref) ||', {check: Tabmix.isVersion(110)}
+        '$& getBoolPref(backgroundPref) ||'
       )._replace(
         'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
         '$&\
@@ -231,13 +228,9 @@ var TMP_Places = {
          if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
          $&'
       )._replace(
-        'aWindow.openUILinkIn(aNode.uri, aWhere);',
-        'aWindow.openUILinkIn(aNode.uri, aWhere, null, null, null, {bookMarkId: aNode.itemId});',
-        {check: !Tabmix.isVersion(110)}
-      )._replace(
         'inBackground:',
         'bookMarkId: aNode.itemId, initiatingDoc: null,\
-         $&', {check: Tabmix.isVersion(110)}
+         $&'
       ).toCode();
    },
 
