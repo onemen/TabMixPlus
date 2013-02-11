@@ -495,11 +495,8 @@ function defaultSetting() {
 }
 
 function exportData() {
-  let docElt = document.documentElement;
-  if (!docElt.instantApply) {
-    docElt._fireEvent("dialogaccept", docElt);
-    gCommon._applyButton.disabled = true;
-  }
+  // save all pending changes
+  gCommon.onApply();
 
   let patterns = this.preferenceList.map(function(pref) {
     return pref + "=" + getPrefByType(pref) + "\n";
