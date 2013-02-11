@@ -11,27 +11,6 @@ var gCommon = {
   },
 
   incompatibleList: [],
-  deinit: function() {
-    if (document.documentElement.instantApply &&
-        this._applyButton.userchangedWidth) {
-      gAppearancePane.changeTabsWidth();
-    }
-    gIncompatiblePane.deinit();
-//    window.removeEventListener("command", this.updateObservers, false);
-//    window.removeEventListener("command", this, false);
-    window.removeEventListener("change", this, false);
-    if (!document.documentElement.instantApply) {
-//      window.removeEventListener("change", this.updateApplyButton, false);
-//      window.removeEventListener("change", this, false);
-      window.removeEventListener("beforeaccept", this, false);
-      delete Tabmix.getTopWin().tabmix_setSession;
-    }
-//    if ("gMousePane" in window)
-//      gMousePane.deinit()
-//    delete Tabmix.getTopWin().tabmix_setSession;
-  },
-
-
 //XXX not in use - we only need it if wee like to set new height
   // for links and session panels
   // we use this hack to hide the tabs at the to but leave the bottom border visible
@@ -41,27 +20,6 @@ var gCommon = {
 //    let height = tabs.boxObject.height;
 //    tabs.style.setProperty("height", height + "px", "");
     tabs.setAttribute("class", "tabs-hidden");
-  },
-
-  handleEvent: function(aEvent) {
-    switch (aEvent.type) {
-/*
-      case "command":
-        this.updateObservers(aEvent);
-        break;
-*/
-      case "change":
-        this.updateObservers(aEvent);
-        if (!document.documentElement.instantApply)
-          this.updateApplyButton(aEvent);
-        break;
-      case "beforeaccept":
-//alert("beforeaccept");
-        // prevent TMP_SessionStore.setService from runing
-        if (!document.documentElement.instantApply)
-          Tabmix.getTopWin().tabmix_setSession = true;
-        break;
-    }
   },
 
   updateObservers: function(aEvent) {

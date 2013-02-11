@@ -43,18 +43,19 @@ var gPrefWindow = {
     var docElt = document.documentElement;
       gIncompatiblePane.init(docElt);
 
-    window.addEventListener("change", gCommon, false);
-    if (!docElt.instantApply)
-      window.addEventListener("beforeaccept", gCommon, false);
-
-///XXX init button
-    if (docElt.instantApply)
-      docElt.getButton("extra1").hidden = true;
+    this.instantApply = docElt.instantApply;
+    window.addEventListener("change", this, false);
+    window.addEventListener("beforeaccept", this, false);
 
     // always init the apply button for the case user change tab width
     gCommon._applyButton = docElt.getButton("extra1");
-    gCommon._applyButton.disabled = !docElt.instantApply;
     gCommon._applyButton.data = [];
+
+///XXX init button - maybe i can use css rule
+    if (this.instantApply)
+      gCommon._applyButton.hidden = true;
+    else
+      gCommon._applyButton.disabled = true;
 
     var settingsButton = docElt.getButton("extra2");
     settingsButton.setAttribute("popup","tm-settings");
@@ -71,6 +72,33 @@ var gPrefWindow = {
 ///XXX test this on Linux
     if (Tabmix.isPlatform("Linux"))
       sizeToContent();
+  },
+
+  deinit: function() {
+    window.removeEventListener("change", this, false);
+    window.removeEventListener("beforeaccept", this, false);
+    delete Tabmix.getTopWin().tabmix_setSession;
+    gIncompatiblePane.deinit();
+  },
+
+  handleEvent: function(aEvent) {
+    switch (aEvent.type) {
+    case "change":
+///XXX
+      gCommon.updateObservers(aEvent);
+      if (!this.instantApply)
+///XXX
+        gCommon.updateApplyButton(aEvent);
+      break;
+    case "beforeaccept":
+      if (this.instantApply) {
+        if (gCommon._applyButton.userchangedWidth)
+          gAppearancePane.changeTabsWidth();
+      }
+      else // prevent TMP_SessionStore.setService from runing
+        Tabmix.getTopWin().tabmix_setSession = true;
+      break;
+    }
   },
 
   removeChild: function(id) {
