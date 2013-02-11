@@ -28,7 +28,7 @@
             onload="gPrefWindow.init();"
             ondialogaccept="gPrefWindow.deinit();"
             ondialogcancel="gPrefWindow.deinit();"
-            ondialogextra1="gCommon.onApply();"
+            ondialogextra1="gPrefWindow.onApply();"
             ondialoghelp="openHelp();"
             buttons="accept,cancel,extra1,extra2"
             buttonlabelextra1="&apply.label;"

@@ -87,34 +87,31 @@ var gAppearancePane = {
     Tabmix.getTopWin().BrowserCustomizeToolbar();
   },
 
-  // bloxk width cange on instantApply
+  // block width cange on instantApply
   // user is force to hit apply
   userchangedWidth: function(item) {
+    this.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
+                        $("maxWidth").value != $("pref_maxWidth").valueFromPreferences
     let docElt = document.documentElement;
-    if (!document.documentElement.instantApply)
+    if (!docElt.instantApply)
       return undefined;
-
-    let showButton = $("pref_minWidth").value != $("minWidth").value ||
-                     $("pref_maxWidth").value != $("maxWidth").value;
-    docElt.getButton("accept").hidden = !showButton;
-    docElt.getButton("extra1").hidden = !showButton;
-    docElt.getButton("extra1").userchangedWidth = showButton;
-
+    docElt.getButton("accept").hidden = !this.widthChanged;
+    docElt.getButton("extra1").hidden = !this.widthChanged;
     // block the change by returning the preference own value
     return $(item.getAttribute("preference")).value;
   },
 
   changeTabsWidth: function() {
+    if (!this.widthChanged)
+      return;
+    this.widthChanged = false;
     let docElt = document.documentElement;
-    docElt.getButton("accept").hidden = true;
-    docElt.getButton("extra1").hidden = true;
-    docElt.getButton("extra1").userchangedWidth = false;
-    let [min, max] = [$("minWidth"), $("maxWidth")];
-    let [minWidth, maxWidth] = [parseInt(min.value), parseInt(max.value)];
+    docElt.getButton("accept").hidden = docElt.instantApply;
+    docElt.getButton("extra1").hidden = docElt.instantApply;
+    let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
     if (minWidth > maxWidth)
       [minWidth, maxWidth] = [maxWidth, minWidth];
     [$("pref_minWidth").value, $("pref_maxWidth").value] = [minWidth, maxWidth];
-    [min.value, max.value] = [minWidth, maxWidth];
   },
 
   openAdvanceAppearance: function() {

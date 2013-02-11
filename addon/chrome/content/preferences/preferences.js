@@ -36,9 +36,6 @@ var gPrefWindow = {
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
       $("TabMIxPreferences").setAttribute("ubuntu", true);
 
-///XXX check this later, look in gcommon.init
-///  TMP_setButtons(true, true, true);
-
     var browserWindow = Tabmix.getTopWin();
     var docElt = document.documentElement;
       gIncompatiblePane.init(docElt);
@@ -48,14 +45,11 @@ var gPrefWindow = {
     window.addEventListener("beforeaccept", this, false);
 
     // always init the apply button for the case user change tab width
-    gCommon._applyButton = docElt.getButton("extra1");
-    gCommon._applyButton.data = [];
-
-///XXX init button - maybe i can use css rule
+    this.applyButton = docElt.getButton("extra1");
     if (this.instantApply)
-      gCommon._applyButton.hidden = true;
+      this.applyButton.hidden = true;
     else
-      gCommon._applyButton.disabled = true;
+      this.applyButton.disabled = true;
 
     var settingsButton = docElt.getButton("extra2");
     settingsButton.setAttribute("popup","tm-settings");
@@ -78,27 +72,64 @@ var gPrefWindow = {
     window.removeEventListener("change", this, false);
     window.removeEventListener("beforeaccept", this, false);
     delete Tabmix.getTopWin().tabmix_setSession;
+    Shortcuts.prefsChangedByTabmix = false;
     gIncompatiblePane.deinit();
   },
 
   handleEvent: function(aEvent) {
     switch (aEvent.type) {
     case "change":
+      if (aEvent.target.localName != "preference")
+        return;
 ///XXX
       gCommon.updateObservers(aEvent);
       if (!this.instantApply)
-///XXX
-        gCommon.updateApplyButton(aEvent);
+        this.updateApplyButton(aEvent);
       break;
     case "beforeaccept":
-      if (this.instantApply) {
-        if (gCommon._applyButton.userchangedWidth)
-          gAppearancePane.changeTabsWidth();
-      }
-      else // prevent TMP_SessionStore.setService from runing
+      gAppearancePane.changeTabsWidth();
+      if (!this.instantApply) {
+        // prevent TMP_SessionStore.setService from runing
         Tabmix.getTopWin().tabmix_setSession = true;
+        Shortcuts.prefsChangedByTabmix = true;
+      }
       break;
     }
+  },
+
+  changes: [],
+  updateApplyButton: function(aEvent) {
+    var item = aEvent.target;
+    if (item.localName != "preference")
+      return;
+    let valueChanged = item.value != item.valueFromPreferences;
+    let index = this.changes.indexOf(item);
+    if (valueChanged && index == -1)
+      this.changes.push(item);
+    else if (!valueChanged && index > -1)
+      this.changes.splice(index, 1);
+    this.applyButton.disabled = !this.changes.length;
+  },
+
+  onApply: function() {
+    gAppearancePane.changeTabsWidth();
+    if (this.instantApply)
+      return;
+
+    // set flag to prevent TabmixTabbar.updateSettings from run for each change
+    Tabmix.prefs.setBoolPref("setDefault", true);
+    Shortcuts.prefsChangedByTabmix = true;
+    // Write all values to preferences.
+    while (this.changes.length) {
+      var preference = this.changes.shift();
+      preference.batching = true;
+      preference.valueFromPreferences = preference.value;
+      preference.batching = false;
+    }
+    Shortcuts.prefsChangedByTabmix = false;
+    Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
+    Services.prefs.savePrefFile(null);
+    this.applyButton.disabled = true;
   },
 
   removeChild: function(id) {
@@ -496,7 +527,7 @@ function defaultSetting() {
 
 function exportData() {
   // save all pending changes
-  gCommon.onApply();
+  gPrefWindow.onApply();
 
   let patterns = this.preferenceList.map(function(pref) {
     return pref + "=" + getPrefByType(pref) + "\n";
