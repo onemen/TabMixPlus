@@ -31,6 +31,10 @@ radio[pane=paneSession] {
 radio[pane=paneIncompatible] {
   list-style-image: url("chrome://global/skin/icons/Error.png") !important;
   -moz-image-region: auto; /* cut off inheritance */
+  visibility: collapse;
+}
+radio[pane=paneIncompatible][show=true] {
+  visibility: visible;
 }
 
 .dialog-button[icon="help"] {

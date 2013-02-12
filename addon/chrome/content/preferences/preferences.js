@@ -636,6 +636,7 @@ var gIncompatiblePane = {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;
     }
+    Tabmix.setItem(this.paneButton, "show", !aHide)
 
     if (aHide && document.documentElement.lastSelected == "paneIncompatible")
       document.documentElement.showPane($(this.lastSelected));
