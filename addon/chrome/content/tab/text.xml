@@ -9,6 +9,8 @@
     <implementation>
       <constructor>
         <![CDATA[
+           if (Tabmix.isVersion(200))
+             return;
            eval("this.open ="+this.open.toString().replace(
              'if (uri)',
              'if (typeof win.Tabmix_openURL != "function") win.Tabmix_openURL = Tabmix.getTopWin().Tabmix.openURL.bind(Tabmix); if (uri)'
