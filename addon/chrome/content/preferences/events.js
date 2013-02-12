@@ -64,8 +64,9 @@ var gEventsPane = {
   },
 
   disabeleShowTabList: function () {
+    var ctrlTabPv = $("pref_ctrltab.tabPreviews");
     var disableShowTabList = $("pref_ctrltab").value &&
-                             $("pref_ctrltab.tabPreviews").value;
+                             ctrlTabPv && ctrlTabPv.value;
     gPrefWindow.setDisabled("showTabList", disableShowTabList);
     if (!$("obs_showTabList").hasAttribute("disabled"))
       gPrefWindow.setDisabled("respondToMouse", disableShowTabList);
