@@ -44,8 +44,7 @@ var gAppearancePane = {
       hbox.setAttribute("align","center");
     }
 
-//XXX TODO check if we can move this to appearance.js
-    toolbarButtons(browserWindow);
+    this.toolbarButtons(browserWindow);
 //XXX TODO check how to work with width and height change
     gCommon.setPaneWidth("paneAppearance");
   },
@@ -83,8 +82,40 @@ var gAppearancePane = {
   },
 
   tabmixCustomizeToolbar: function() {
-    window._tabmixCustomizeToolbar = true;
+    this._tabmixCustomizeToolbar = true;
     Tabmix.getTopWin().BrowserCustomizeToolbar();
+  },
+
+  toolbarButtons: function(aWindow) {
+    // Display > Toolbar
+    var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
+    var onToolbar = $("onToolbar");
+    var onPlate = $("onPlate");
+    for (let i = 0; i < buttons.length; ++i ) {
+      let button = aWindow.document.getElementById(buttons[i]);
+      let optionButton = $("_" + buttons[i]).parentNode;
+      if (button)
+        onToolbar.appendChild(optionButton);
+      else
+        onPlate.appendChild(optionButton);
+    }
+    onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
+    onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
+
+    // Display > Tab bar
+    function updateDisabledState(buttonID, itemID) {
+      let button = aWindow.document.getElementById(buttonID);
+      let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
+      TM_Options.setDisabled(itemID, !enablePosition || null);
+      TM_Options.setDisabled("obs_" + itemID, !enablePosition || null);
+    }
+    updateDisabledState("new-tab-button", "newTabButton");
+    updateDisabledState("alltabs-button", "hideAllTabsButton");
+
+    if (this._tabmixCustomizeToolbar) {
+      delete this._tabmixCustomizeToolbar;
+      window.focus();
+    }
   },
 
   // block width cange on instantApply

@@ -201,11 +201,7 @@ alert("don't use this");
 try {
     var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
 //XXX if item not exist ????
-    var val;
-    if (item.hasAttribute("disableObserver"))
-      val = true;
-    else
-      val = item.getAttribute("inverseDependency") ? item.checked : !item.checked;
+    var val = item.getAttribute("inverseDependency") ? item.checked : !item.checked;
     if (start && !val)
       return;
     this.setDisabled("obs_" + item.id, val);
@@ -610,31 +606,6 @@ function TM_selectTab(aSelTab) {
   for(var i = 0; i < catButtons.length; i++)
     if(catButtons[i].getAttribute('group', 'categories'))
       catButtons[i].setAttribute('checked', (catButtons[i].id == 'button' + tabId));
-}
-
-//XXX TODO check if we can move this to appearance.js
-// we call this also from browser window when BrowserCustomizeToolbar finish
-// look at Tabmix.delayedStartup in setup.js
-function toolbarButtons(aWindow) {
-  // Display > Toolbar
-  var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
-  var onToolbar = $("onToolbar");
-  var onPlate = $("onPlate");
-  for (var i = 0; i < buttons.length; ++i ) {
-    var button = aWindow.document.getElementById(buttons[i]);
-    var optionButton = $("_" + buttons[i]).parentNode;
-    if (button)
-      onToolbar.appendChild(optionButton);
-    else
-      onPlate.appendChild(optionButton);
-  }
-  onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
-  onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
-  let newTabButton = aWindow.document.getElementById("new-tab-button");
-  let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
-
-  Tabmix.setItem("newTabButton", "disableObserver", !enablePosition || null);
-  TM_Options.disabled("newTabButton", !enablePosition);
 }
 
 function openHelp() {
