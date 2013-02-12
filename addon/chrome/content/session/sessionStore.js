@@ -187,7 +187,8 @@ var TMP_SessionStore = {
       // when user start new profile or update from firefox 2.0 profile browser.warnOnRestart and browser.warnOnQuit are both true on default
       else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
                 !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-         Services.prefs.setBoolPref("browser.warnOnRestart", false);
+         if (!Tabmix.isVersion(200))
+           Services.prefs.setBoolPref("browser.warnOnRestart", false);
          Services.prefs.setBoolPref("browser.warnOnQuit", false);
          delete window.tabmix_setSession;
       }

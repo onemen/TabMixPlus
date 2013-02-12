@@ -70,6 +70,11 @@ function before_Init() {
 
   if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Australis")
     $("TM_ButtonBox").setAttribute("australis", true);
+
+  if (Tabmix.isVersion(200)) {
+    let item = $("browser.warnOnRestart");
+    item.parentNode.removeChild(item);
+  }
 }
 
 // load all preferences into the dialog
@@ -478,7 +483,8 @@ var TM_Options = {
 
       // sessionstore pref
       function sessionstorePrefs() {
-         updatePrefs("browser.warnOnRestart", !useSessionManager);
+         if (!Tabmix.isVersion(200))
+           updatePrefs("browser.warnOnRestart", !useSessionManager);
          updatePrefs("browser.warnOnQuit", !useSessionManager);
          updatePrefs("resume_from_crash", !useSessionManager);
          // "browser.startup.page"
