@@ -14,9 +14,11 @@ var gTabMix_preferencesOverlay = {
     document.getElementById("startupGroup").setAttribute("incontent", true);
   },
 
+   lastSelected: "",
+   currentPane: "",
    init: function gTabMix_preferencesOverlay_init(aEvent) {
       var prefWindow = aEvent.target.documentElement;
-
+      this.currentPane = prefWindow.lastSelected;
       this.onPaneLoad(prefWindow.lastSelected);
 
       Tabmix.changeCode(prefWindow, "prefWindow.showPane")._replace(
@@ -40,6 +42,7 @@ var gTabMix_preferencesOverlay = {
    },
 
    onPaneLoad: function gTabMix_preferencesOverlay_onPaneLoad(aPaneID) {
+      this.lastSelected = this.currentPane;
       switch (aPaneID) {
          case "paneTabs":
             this.loadOverlay();
@@ -76,8 +79,15 @@ var gTabMix_preferencesOverlay = {
       var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
       if (singleWindowMode)
          document.getElementById("linkTargetWindow").disabled = true;
-      if (document.getElementById('BrowserPreferences')._shouldAnimate)
-         window.sizeToContent();
+      var docElt = document.documentElement;
+      if (docElt._shouldAnimate) {
+         if (this.lastSelected == "paneTabs")
+            window.sizeToContent();
+         else {
+            docElt.lastSelected = this.lastSelected;
+            docElt._selectPane(document.getElementById("paneTabs"));
+         }
+      }
    },
 
    showTabmixOptions: function (panel) {
