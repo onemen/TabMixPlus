@@ -7,7 +7,7 @@ var gMenuPane = {
 
     var browserWindow = Tabmix.getTopWin();
     // check if bookmark item in tab context menu
-    TM_Options.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
+    Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
 
     TM_Options.initUndoCloseBroadcaster();
     TM_Options.initSingleWindowBroadcaster();
@@ -55,7 +55,7 @@ var gMenuPane = {
     let slideShow = $("slideShow");
     let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
     $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
-    TM_Options.setItem("obs_slideDelay", "disabled", slideShow.disabled || null);
+    TM_Options.setDisabled("obs_slideDelay", slideShow.disabled);
   },
 
   editSlideShowKey: function () {

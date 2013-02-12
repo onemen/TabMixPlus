@@ -213,36 +213,10 @@ try {
   },
 
   setDisabled: function(id, val) {
-    if (val == true)
-      this.setItem(id, "disabled" , val);
-    else {
-      // remove disabled from all observers,
-      // we can't edit textbox-input with disabled=null or disabled=false
-      // textbox-input inherits the dislabled attribute from the textbox
-
-      // all broadcaster has no disabled attribute at startup
-      var aBroadcaster = $(id);
-      if (aBroadcaster.hasAttribute("disabled")) {
-        aBroadcaster.removeAttribute("disabled");
-      }
-    }
-  },
-
-   // Set given attribute of specified item.
-   // If the value is null, then it removes the attribute
-   // (which works nicely for the disabled attribute).
-  setItem: function (id, attrib, val) {
-    var item = $(id);
-    if (val == null) {
-      item.removeAttribute(attrib);
-      return;
-    }
-
-    if (typeof(val) == "boolean")
-      val = val ? "true" : "false";
-
-    if (item.getAttribute(attrib) != val)
-      item.setAttribute(attrib, val);
+    // remove disabled from all observers,
+    // we can't edit textbox-input with disabled=null or disabled=false
+    // textbox-input inherits the dislabled attribute from the textbox
+    Tabmix.setItem(id, "disabled" , val || null);
   }
 
 }
@@ -659,7 +633,7 @@ function toolbarButtons(aWindow) {
   let newTabButton = aWindow.document.getElementById("new-tab-button");
   let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
 
-  TM_Options.setItem("newTabButton", "disableObserver", !enablePosition || null);
+  Tabmix.setItem("newTabButton", "disableObserver", !enablePosition || null);
   TM_Options.disabled("newTabButton", !enablePosition);
 }
 

@@ -5,12 +5,12 @@ var gAppearancePane = {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.extensions.verticalTabBar) {
-      TM_Options.setItem("treeStyleTab.msg", "hidden", null);
-      TM_Options.setItem("tabBarDisplay", "TSTinstalled", true);
-      TM_Options.setItem("tabBarPosition", "disabled", true);
-      TM_Options.setItem("tabsScroll", "disabled", true);
-      TM_Options.setItem("scrollDelay", "disabled", true);
-      TM_Options.setItem("smoothScroll", "disabled", true);
+      Tabmix.setItem("treeStyleTab.msg", "hidden", null);
+      Tabmix.setItem("tabBarDisplay", "TSTinstalled", true);
+      Tabmix.setItem("tabBarPosition", "disabled", true);
+      Tabmix.setItem("tabsScroll", "disabled", true);
+      Tabmix.setItem("scrollDelay", "disabled", true);
+      Tabmix.setItem("smoothScroll", "disabled", true);
     }
 
     // rtl update
@@ -52,8 +52,8 @@ var gAppearancePane = {
 
   tabCloseButtonChanged: function() {
     var tabCbValue = $("pref_tabCloseButton").value;
-    TM_Options.setItem("tabXdelaycheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
-    TM_Options.setItem("tabXwidthBox", "hidden", tabCbValue != 5);
+    Tabmix.setItem("tabXdelaycheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
+    Tabmix.setItem("tabXwidthBox", "hidden", tabCbValue != 5);
   },
 
   setTabCloseButtonUI: function() {
@@ -62,7 +62,7 @@ var gAppearancePane = {
       let tabCbUI = $("tabCloseButton");
       if (tabCbUI.selectedItem.value == 5) {
         tabCbUI.value = 1;
-        TM_Options.setItem("tabXwidthBox", "hidden", true);
+        Tabmix.setItem("tabXwidthBox", "hidden", true);
       }
     }
     else
