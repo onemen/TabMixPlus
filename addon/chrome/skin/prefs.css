@@ -12,25 +12,23 @@
 }
 
 #buttontabMixGeneralPrefs {
-   -moz-image-region: rect(0px, 24px,  24px, 0px);
+  -moz-image-region: rect(0px, 24px,  24px, 0px);
 }
 #buttontabMixEventsPrefs {
-   -moz-image-region: rect(0px, 48px,  24px, 24px)
+  -moz-image-region: rect(0px, 48px,  24px, 24px)
 }
 #buttontabMixAppearancePrefs {
-   -moz-image-region: rect(0px, 72px,  24px, 48px)
+  -moz-image-region: rect(0px, 72px,  24px, 48px)
 }
 #buttontabMixMousePrefs {
-   -moz-image-region: rect(0px, 96px,  24px, 72px)
+  -moz-image-region: rect(0px, 96px,  24px, 72px)
 }
 #buttontabMixMenuPrefs {
-   -moz-image-region: rect(0px, 120px, 24px, 96px)
+  -moz-image-region: rect(0px, 120px, 24px, 96px)
 }
 #buttontabMixSessionPrefs {
-   list-style-image: url(sessionmanager.png)
-}
-#buttontabMixSessionPrefs {
-   -moz-image-region: rect(0 24px 24px 0);
+  list-style-image: url(sessionmanager.png) !important;
+  -moz-image-region: rect(0 24px 24px 0);
 }
 
 #buttonIncompatible {
