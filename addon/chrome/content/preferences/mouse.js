@@ -38,12 +38,7 @@ var gMousePane = {
     gSetTabIndex.init('mouse');
     gSetTabIndex.init('tabclick');
 
-
-//XXX improve this.....
-    gPrefWindow.initBroadcasters("paneMouse", true);
-    gPrefWindow.initUndoCloseBroadcaster();
-    gPrefWindow.initSingleWindowBroadcaster();
-
+    gPrefWindow.initBroadcasters("paneMouse");
     gCommon.setPaneWidth("paneMouse");
   },
 

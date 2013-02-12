@@ -87,7 +87,6 @@
                   name="extensions.tabmix.placePopupNextToOpener"                             type="bool"/>
       <preference id="pref_closeOnMerge"        name="extensions.tabmix.closeOnSelect"        type="bool"/>
       <preference id="pref_warnOnMerge"         name="extensions.tabmix.warnOnclose"          type="bool"/>
-      <preference id="pref_undoClose"           name="extensions.tabmix.undoClose"            type="bool"/>
       <preference id="pref_undoCloseCache"      name="browser.sessionstore.max_tabs_undo"     type="int"/>
       <preference id="pref_undoClosepos"        name="extensions.tabmix.undoClosePosition"    type="bool"/>
       <preference id="pref_menuonlybutton"
@@ -201,9 +200,8 @@
             </hbox>
             <spacer flex="1"/>
             <separator class="groove"/>
-            <checkbox id="midcurrent" inverseDependency="true"
-                      label="&middlecurrent1.label;" tooltiptext="&middlecurrent.tooltip;"
-                      preference="pref_midcurrent"/>
+            <checkbox id="midcurrent" label="&middlecurrent1.label;"
+                      tooltiptext="&middlecurrent.tooltip;" preference="pref_midcurrent"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&tabFocus.caption;"/>
@@ -378,7 +376,7 @@
 
    <broadcasterset id="paneEvents:Broadcaster">
       <broadcaster id="obs_openTabNext"/>
-      <broadcaster id="obs_midcurrent"/>
+      <broadcaster id="obs_midcurrent" inverseDependency="true"/>
       <broadcaster id="obs_mergePopups"/>
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>

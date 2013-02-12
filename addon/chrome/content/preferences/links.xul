@@ -24,8 +24,6 @@
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
                   onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();"/>
-      <preference id="pref_singleWindow"       name="extensions.tabmix.singleWindow"   type="bool"
-                  onchange="gLinksPane.singleWindow(this.value);"/>
     </preferences>
 
     <tabbox flex="1">
@@ -100,8 +98,7 @@
               </menulist>
             </hbox>
             <!-- Enable Single Window Mode -->
-            <checkbox id="singleWindow" label="&singleWindow.label;" inverseDependency="true"
-                      preference="pref_singleWindow"/>
+            <checkbox id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
           </groupbox>
         </tabpanel>
       </tabpanels>
@@ -109,6 +106,9 @@
 
     <broadcasterset id="paneLinks:Broadcaster">
       <broadcaster id="obs_filetypeEnable"/>
+    </broadcasterset>
+
+    <broadcasterset>
       <broadcaster id="obs_externalLink"/>
     </broadcasterset>
 

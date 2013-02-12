@@ -150,8 +150,7 @@
             </hbox>
             <checkbox id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
                       preference="pref_offsetAmountToScroll" style="height: 22px;"/>
-            <checkbox id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"
-                      inverseDependency="true"/>
+            <checkbox id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
               <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
@@ -232,8 +231,7 @@
                        onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
               <label value="&widthPixels.label;"/>
             </hbox>
-            <checkbox id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"
-                      inverseDependency="true"/>
+            <checkbox id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
             <checkbox id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
           </groupbox>
         </tabpanel>
@@ -279,7 +277,7 @@
       <broadcaster id="obs_newTabButton"/>
       <broadcaster id="obs_hideAllTabsButton"/>
       <broadcaster id="obs_showTabX"/>
-      <broadcaster id="obs_smoothScroll"/>
+      <broadcaster id="obs_smoothScroll" inverseDependency="true"/>
     </broadcasterset>
 
   </prefpane>

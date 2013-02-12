@@ -1,10 +1,11 @@
 var gLinksPane = {
   init: function () {
     let singleWindow = $("singleWindow");
+    $("pref_singleWindow").setAttribute("onchange", "gLinksPane.singleWindow(this.value);");
     this.singleWindow(singleWindow.checked);
-    gPrefWindow.disabled(singleWindow, true);
+    gLinksPane.externalLinkValue($("externalLink").checked);
 
-    gPrefWindow.initBroadcasters("paneLinks", true);
+    gPrefWindow.initBroadcasters("paneLinks");
     gCommon.setPaneWidth("paneLinks");
   },
 

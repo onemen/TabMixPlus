@@ -27,7 +27,7 @@ var gAppearancePane = {
       tabXLeft.label = tabXLeft.getAttribute("rtlLabel");
     }
 
-    gPrefWindow.initBroadcasters("paneAppearance", true);
+    gPrefWindow.initBroadcasters("paneAppearance");
     this.tabCloseButtonChanged();
     this.setTabCloseButtonUI();
     this.tabsScrollChanged();

@@ -36,9 +36,7 @@ var gEventsPane = {
       pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
     }
 
-//XXXX TODO fix it
-    gPrefWindow.initBroadcasters("paneEvents", true);
-    gPrefWindow.disabled("undoClose", true); // set "obs_undoClose" global observer
+    gPrefWindow.initBroadcasters("paneEvents");
     this.disableInverseMiddleClick();
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();

@@ -13,16 +13,6 @@ var gCommon = {
     tabs.setAttribute("class", "tabs-hidden");
   },
 
-  updateObservers: function(aEvent) {
-//try {
-//   var item = aEvent.target;
-   var item = $(aEvent.target.id.replace("pref_", ""));
-//alert("updateObservers item.id " + item.id);
-   if (item && item.localName == "checkbox" && $("obs_" + item.id))
-     gPrefWindow.disabled(item);
-//} catch (ex) {Tabmix.assert(ex);}
-  },
-
   targetWidth: function(aPaneElement) {
     var targetWidth = parseInt(window.getComputedStyle(aPaneElement.content, "").width);
     targetWidth += parseInt(window.getComputedStyle(aPaneElement.content, "").marginRight);

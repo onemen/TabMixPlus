@@ -54,6 +54,11 @@ var gPrefWindow = {
 ///XXX test this on Linux
     if (Tabmix.isPlatform("Linux"))
       sizeToContent();
+
+    this.initBroadcasters("main");
+    // hide broadcasters pane button
+    var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
+    paneButton.collapsed = true;
   },
 
   deinit: function() {
@@ -69,8 +74,7 @@ var gPrefWindow = {
     case "change":
       if (aEvent.target.localName != "preference")
         return;
-///XXX
-      gCommon.updateObservers(aEvent);
+      this.updateBroadcasters(aEvent.target);
       if (!this.instantApply)
         this.updateApplyButton(aEvent);
       break;
@@ -135,46 +139,31 @@ var gPrefWindow = {
     return radiogroupItem.value == 1;
   },
 
-  initBroadcasters: function(paneID, start) {
-///XXX TODO fix me
-    var broadcasters = $(paneID + ":Broadcaster");
-    for (var i = 0; i < broadcasters.childNodes.length; ++i ) {
-      var _id = broadcasters.childNodes[i].id.replace("obs_", "");
-      this.disabled(_id, start);
+  initBroadcasters: function(paneID) {
+    var broadcasters = $(paneID + ":Broadcaster").childNodes;
+    if (!broadcasters)
+      return;
+    for (let i = 0; i < broadcasters.length; ++i ) {
+      let preference = $(broadcasters[i].id.replace("obs", "pref"));
+      if (preference)
+        this.setDisabled(broadcasters[i], !preference.value);
     }
   },
 
-  // init broadcaster for obs_undoClose if events pane did not loaded yet
-  // we call it from panes : session, menu, mouse
-  initUndoCloseBroadcaster: function() {
-    if (!$("undoClose") && !Tabmix.prefs.getBoolPref("undoClose"))
-      this.setDisabled("obs_undoClose", true);
-  },
-
-  // init broadcaster for obs_singleWindow if links pane did not loaded yet
-  // we call it from panes : menu, mouse
-  initSingleWindowBroadcaster: function() {
-    // we use inverseDependency in singleWindow
-    if (!$("singleWindow") && Tabmix.prefs.getBoolPref("singleWindow"))
-      this.setDisabled("obs_singleWindow", true);
-  },
-
-  disabled: function(itemOrId, start) {
-try {
-    var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
-//XXX if item not exist ????
-    var val = item.getAttribute("inverseDependency") ? item.checked : !item.checked;
-    if (start && !val)
+  updateBroadcasters: function(aPreference) {
+    if (aPreference.type != "bool")
       return;
-    this.setDisabled("obs_" + item.id, val);
-} catch (ex) {Tabmix.assert(ex);}
+    let obs = $(aPreference.id.replace("pref_", "obs_"));
+    if (obs)
+      this.setDisabled(obs, !aPreference.value);
   },
 
-  setDisabled: function(id, val) {
-    // remove disabled from all observers,
-    // we can't edit textbox-input with disabled=null or disabled=false
-    // textbox-input inherits the dislabled attribute from the textbox
-    Tabmix.setItem(id, "disabled" , val || null);
+  setDisabled: function(itemOrId, val) {
+    var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
+    if (item.hasAttribute("inverseDependency"))
+      val = !val;
+    // remove disabled when the value is false
+    Tabmix.setItem(item, "disabled" , val || null);
   },
 
   end: null

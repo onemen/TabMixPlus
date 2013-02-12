@@ -9,8 +9,6 @@ var gMenuPane = {
     // check if bookmark item in tab context menu
     Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
 
-    gPrefWindow.initUndoCloseBroadcaster();
-    gPrefWindow.initSingleWindowBroadcaster();
     this.setInverseLinkLabel();
 
     if (!Shortcuts.keys.browserReload.id)

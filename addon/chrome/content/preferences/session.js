@@ -19,8 +19,7 @@ var gSessionPane = {
 
     gSetTabIndex.init('session');
 
-    gPrefWindow.initBroadcasters("paneSession", true);
-    gPrefWindow.initUndoCloseBroadcaster();
+    gPrefWindow.initBroadcasters("paneSession");
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(false);
 
