@@ -126,6 +126,9 @@ var gPrefWindow = {
 
   removeChild: function(id) {
     let child = $(id);
+    // override preferences getter before we remove the preference
+    if (child.localName == "preference")
+      Object.defineProperty(child, "preferences", {value: child.parentNode});
     child.parentNode.removeChild(child);
   },
 
