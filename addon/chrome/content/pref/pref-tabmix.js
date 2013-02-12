@@ -137,7 +137,7 @@ function TM_EMinit() {
   browserWindow.gTMPprefObserver.addMissingPrefs();
 
   TM_setElements(false, true);
-  toolbarButtons(browserWindow);
+  gAppearancePane.toolbarButtons(browserWindow);
   // check if apply is on
   // apply changes if we set single window mode status
   TM_EMsave();
@@ -1177,7 +1177,7 @@ try {
 function getTab() {
 try {
    var selTabindex = Tabmix.getIntPref("selected_tab" , 0, true);
-   TM_selectTab(selTabindex);
+   showPane(selTabindex);
 
    var subtabs = document.getElementsByAttribute("subtub", true);
    var subTab = "extensions.tabmix.selected_sub_tab";
@@ -1189,7 +1189,7 @@ try {
 }
 
 // this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
-function TM_selectTab(aSelTab) {
+function showPane(aSelTab) {
   var tabbox = $("tabMixTabBox");
   tabbox.lastselectedIndex = tabbox.selectedIndex;
   tabbox.selectedIndex = (aSelTab) ? aSelTab : 0;
@@ -1213,7 +1213,7 @@ var gIncompatiblePane = {
 
     var tabbox = $("tabMixTabBox")
     if (aHide && tabbox.selectedIndex == 6)
-      TM_selectTab(tabbox.lastselectedIndex);
+      showPane(tabbox.lastselectedIndex);
 
     if (aFocus)
       window.focus();
@@ -1246,12 +1246,13 @@ function _ensureElementIsVisible(aPopup) {
   scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
 }
 
-function tabmixCustomizeToolbar() {
-  window._tabmixCustomizeToolbar = true;
+let gAppearancePane = {}
+gAppearancePane.tabmixCustomizeToolbar = function tabmixCustomizeToolbar() {
+  this._tabmixCustomizeToolbar = true;
   Tabmix.getTopWin().BrowserCustomizeToolbar();
 }
 
-function toolbarButtons(aWindow) {
+gAppearancePane.toolbarButtons = function toolbarButtons(aWindow) {
   // Display > Toolbar
   var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
   var onToolbar = $("onToolbar");
@@ -1278,6 +1279,11 @@ function toolbarButtons(aWindow) {
   }
   updateDisabledState("new-tab-button", "newTabButton");
   updateDisabledState("alltabs-button", "hideAllTabsButton");
+
+  if (this._tabmixCustomizeToolbar) {
+    delete this._tabmixCustomizeToolbar;
+    window.focus();
+  }
 }
 
 function openHelp(aPageaddress) {

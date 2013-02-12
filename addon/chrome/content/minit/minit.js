@@ -1148,13 +1148,8 @@ Tabmix.navToolbox = {
 
     // if tabmix option dialog is open update visible buttons and set focus if needed
     var optionWindow = Services.wm.getMostRecentWindow("mozilla:tabmixopt");
-    if (optionWindow) {
-      optionWindow.toolbarButtons(window);
-      if ("_tabmixCustomizeToolbar" in optionWindow) {
-        delete optionWindow._tabmixCustomizeToolbar;
-        optionWindow.focus();
-      }
-    }
+    if (optionWindow && optionWindow.gAppearancePane)
+      optionWindow.gAppearancePane.toolbarButtons(window);
   },
 
   updateToolboxItems: function TMP_navToolbox_updateToolboxItems() {

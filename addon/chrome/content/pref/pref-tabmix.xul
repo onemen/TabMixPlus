@@ -54,19 +54,19 @@
    <vbox flex="1" id="TMBox">
       <radiogroup id="TM_ButtonBox" class="paneSelector chromeclass-toolbar" orient="horizontal">
          <radio id="buttontabMixGeneralPrefs" pane="paneLinks"
-            group="categories" label="&tab.links;" oncommand="TM_selectTab(0);" />
+            group="categories" label="&tab.links;" oncommand="showPane(0);" />
          <radio id="buttontabMixEventsPrefs" pane="paneEvents"
-            group="categories" label="&tab.events;"  oncommand="TM_selectTab(1);" />
+            group="categories" label="&tab.events;"  oncommand="showPane(1);" />
          <radio id="buttontabMixAppearancePrefs" pane="paneAppearance"
-            group="categories" label="&tab.appearance;" oncommand="TM_selectTab(2);" />
+            group="categories" label="&tab.appearance;" oncommand="showPane(2);" />
          <radio id="buttontabMixMousePrefs" pane="paneMouse"
-            group="categories" label="&tab.mouse;" oncommand="TM_selectTab(3);" />
+            group="categories" label="&tab.mouse;" oncommand="showPane(3);" />
          <radio id="buttontabMixMenuPrefs" pane="paneMenu"
-            group="categories" label="&tab.menu;"  oncommand="TM_selectTab(4);" />
+            group="categories" label="&tab.menu;"  oncommand="showPane(4);" />
          <radio id="buttontabMixSessionPrefs" pane="paneSession"
-            group="categories" label="&tab.session;"  oncommand="TM_selectTab(5);" />
+            group="categories" label="&tab.session;"  oncommand="showPane(5);" />
          <radio id="buttonIncompatible" collapsed="true" pane="paneIncompatible"
-            group="categories" label="&tab.incompatible;"  oncommand="TM_selectTab(6);" />
+            group="categories" label="&tab.incompatible;"  oncommand="showPane(6);" />
       </radiogroup>
 
   <tabbox flex="1" id="tabMixTabBox" chromedir="&locale.dir;">
@@ -452,7 +452,7 @@
                            oncommand="if (this.checked) $('slideShow').resetKey();
                                       else $('slideShow').disableKey();"/>
                  <label id="slideshow.link" class="text-link" style="margin:0;"
-                        onclick="TM_selectTab(4);
+                        onclick="showPane(4);
                                  $('tabMixTabBox').selectedPanel.firstChild.selectedIndex=3;
                                  $('slideShow').editBox.focus();"/>
                  <label id="slideshow.labelEnd" style="margin:0 5px 0;"/>
@@ -499,7 +499,7 @@
                     <menuitem value="2" id="newTabButton.posiotion.afterlast" label="&newTabButton.posiotion.afterlast.label;"/>
                   </menupopup>
                 </menulist>
-                <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="tabmixCustomizeToolbar();"
+                <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"
                               tooltiptext="&dragNewTabButton.tooltip;"/>
               </hbox>
               <vbox align="start">
@@ -659,7 +659,7 @@
             <groupbox flex="1">
                 <hbox align="start">
                   <description class="header" style="width: &toolbar.description.width;">&toolbar.description;</description>
-                  <button label="&toolbar.button.label;…" oncommand="tabmixCustomizeToolbar();"/>
+                  <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
                 </hbox>
               <spacer flex="1"/>
               <groupbox align="start" id="onToolbar">

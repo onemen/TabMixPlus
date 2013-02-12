@@ -18,7 +18,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     var promptWin = windowMediator.getMostRecentWindow("mozilla:tabmixprompt");
 
     if (panel > -1 && !appearanceWin && !filetypeWin && !promptWin)
-      tabmixOptionsWin.TM_selectTab(panel);
+      tabmixOptionsWin.showPane(panel);
 
     tabmixOptionsWin.gIncompatiblePane.checkForIncompatible(false);
 
