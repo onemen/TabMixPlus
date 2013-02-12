@@ -425,13 +425,13 @@
                         oncommand="TM_Options.setUndoCloseCache(this);"/>
                 <vbox align="start" class="indent">
                   <hbox align="center">
-                    <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
+                    <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose_checkbox"/>
                     <textbox id="undoCloseCache" maxlength="3" size="2" prefstring="browser.sessionstore.max_tabs_undo"
-                             type="number" observes="obs_undoClose"
+                             type="number" observes="obs_undoClose_checkbox"
                              onblur="TM_Options.setUndoClose(this); event.stopPropagation();"/>
                   </hbox>
-                  <checkbox id="undoClosepos" label="&undoClosepos.label;" prefstring="extensions.tabmix.undoClosePosition" observes="obs_undoClose"/>
-                  <checkbox id="menuonlybutton" label="&menuonlybutton.label;" prefstring="extensions.tabmix.undoCloseButton.menuonly" observes="obs_undoClose"/>
+                  <checkbox id="undoClosepos" label="&undoClosepos.label;" prefstring="extensions.tabmix.undoClosePosition" observes="obs_undoClose_checkbox"/>
+                  <checkbox id="menuonlybutton" label="&menuonlybutton.label;" prefstring="extensions.tabmix.undoCloseButton.menuonly" observes="obs_undoClose_checkbox"/>
                 </vbox>
             </vbox>
             <separator class="groove" />
@@ -817,8 +817,8 @@
                          <menuitem value="17" label="&clicktab.removeleft;" />
                          <menuitem value="18" label="&clicktab.removeright;" />
                             <menuseparator/>
-                         <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose"/>
-                         <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose"/>
+                         <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose_checkbox"/>
+                         <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose_checkbox"/>
                          <menuitem value="12" label="&clicktab.snapback;"/>
                          <menuitem value="21" label="&clicktab.ietab;"/>
                       </menupopup>
@@ -893,9 +893,9 @@
                   </vbox>
                   <vbox align="start">
                      <!-- Undo close tabs -->
-                     <checkbox id="showUndoClose" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabMenu" observes="obs_undoClose"/>
+                     <checkbox id="showUndoClose" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabMenu" observes="obs_undoClose_checkbox"/>
                      <!-- Closed tabs list -->
-                     <checkbox id="showUndoCloseList" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListMenu" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseList" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListMenu" observes="obs_undoClose_checkbox"/>
                      <!-- Close tabs -->
                      <checkbox id="showCloseTab" label="&closeTab.label;" prefstring="extensions.tabmix.closeTabMenu"/>
                      <!-- Close all tabs -->
@@ -969,9 +969,9 @@
                      <!-- Opened tabs list -->
                      <checkbox id="tabsList" label="&tabsList.label;" prefstring="extensions.tabmix.tabsList" />
                      <!-- Closed tabs list -->
-                     <checkbox id="showUndoCloseListContent" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListContent" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseListContent" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListContent" observes="obs_undoClose_checkbox"/>
                      <!-- Undo close tabs -->
-                     <checkbox id="showUndoCloseContent" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabContent" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseContent" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabContent" observes="obs_undoClose_checkbox"/>
                   </vbox>
                </row>
              </rows>
@@ -1266,7 +1266,7 @@
                       <caption label="&sm.restore.winOptions;"/>
                       <hbox align="center">
                         <checkbox id="session.SelectedTab" label="&sm.restore.selectedTab;" prefstring="extensions.tabmix.sessions.save.selectedtab"/>
-                        <checkbox id="session.closedtabs" label="&sm.restore.closedTabs;" prefstring="extensions.tabmix.sessions.save.closedtabs" observes="obs_undoClose"/>
+                        <checkbox id="session.closedtabs" label="&sm.restore.closedTabs;" prefstring="extensions.tabmix.sessions.save.closedtabs" observes="obs_undoClose_checkbox"/>
                       </hbox>
                     </groupbox>
                   </tabpanel>
