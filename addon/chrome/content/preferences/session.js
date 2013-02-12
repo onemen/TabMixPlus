@@ -19,9 +19,9 @@ var gSessionPane = {
 
     gSetTabIndex.init('session');
 
-    TM_Options.initBroadcasters("paneSession", true);
-    TM_Options.initUndoCloseBroadcaster();
-    TM_Options.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
+    gPrefWindow.initBroadcasters("paneSession", true);
+    gPrefWindow.initUndoCloseBroadcaster();
+    gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(false);
 
     if (Tabmix.isVersion(200))

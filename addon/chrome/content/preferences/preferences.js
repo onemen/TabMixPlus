@@ -125,53 +125,15 @@ var gPrefWindow = {
     child.parentNode.removeChild(child);
   },
 
-  end: null
-}
-
-var gSetTabIndex = {
-  _inited: [],
-  tabSelectionChanged: function (event) {
-    var tabbox = event.target.parentNode;
-    if (event.target.localName != "tabs" || !this._inited[tabbox.id])
-      return;
-    var preference = $("pref_" + tabbox.id);
-    preference.valueFromPreferences = tabbox.selectedIndex;
+  setRadioFromBoolPref: function(prefId) {
+    var preference = $(prefId);
+    return preference.value ? 1 : 0;
   },
 
-  init: function (id) {
-    var tabbox = $(id);
-    var preference = $("pref_" + tabbox.id);
-    if (preference.value !== null)
-      tabbox.selectedIndex = preference.value;
-    this._inited[id] = true;
-  }
-}
-
-var TM_Options = {
-
-   setRadioFromBoolPref: function(prefId)
-   {
-//Tabmix.log("setRadioFromBoolPref " + prefId)
-      var preference = $(prefId);
-      return preference.value ? 1 : 0;
-   },
-
-   setBoolPrefFromRadio: function(itemId)
-   {
-//Tabmix.log("setBoolPrefFromRadio " + itemId);
-      var radiogroupItem = $(itemId);
-      return radiogroupItem.value == 1;
-   },
-
-   _prefs: null,
-   get prefs() {
-alert("don't use this");
-      if (!this._prefs)
-         this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                            .getService(Components.interfaces.nsIPrefBranch);
-
-      return this._prefs;
-   },
+  setBoolPrefFromRadio: function(itemId) {
+    var radiogroupItem = $(itemId);
+    return radiogroupItem.value == 1;
+  },
 
   initBroadcasters: function(paneID, start) {
 ///XXX TODO fix me
@@ -213,8 +175,28 @@ try {
     // we can't edit textbox-input with disabled=null or disabled=false
     // textbox-input inherits the dislabled attribute from the textbox
     Tabmix.setItem(id, "disabled" , val || null);
-  }
+  },
 
+  end: null
+}
+
+var gSetTabIndex = {
+  _inited: [],
+  tabSelectionChanged: function (event) {
+    var tabbox = event.target.parentNode;
+    if (event.target.localName != "tabs" || !this._inited[tabbox.id])
+      return;
+    var preference = $("pref_" + tabbox.id);
+    preference.valueFromPreferences = tabbox.selectedIndex;
+  },
+
+  init: function (id) {
+    var tabbox = $(id);
+    var preference = $("pref_" + tabbox.id);
+    if (preference.value !== null)
+      tabbox.selectedIndex = preference.value;
+    this._inited[id] = true;
+  }
 }
 
 function getPrefByType(prefName) {
@@ -477,10 +459,6 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = false;
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
-
-///XXX TODO finish this later
-///  TMP_setButtons(true, true);
-///  TM_Options.isSessionStoreEnabled(true);
 }
 
 function exportData() {
@@ -584,14 +562,6 @@ function loadData (pattern) {
     oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
   }
   Tabmix.prefs.clearUserPref("setDefault");
-/*
-///XXX TODO finish this later
-  TM_setElements(false);
-  TMP_setButtons(true, true);
-
-  TM_Options.isSessionStoreEnabled(true);
-  callUpdateSettings();
-*/
   Services.prefs.savePrefFile(null);
 }
 

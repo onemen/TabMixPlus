@@ -40,9 +40,9 @@ var gMousePane = {
 
 
 //XXX improve this.....
-    TM_Options.initBroadcasters("paneMouse", true);
-    TM_Options.initUndoCloseBroadcaster();
-    TM_Options.initSingleWindowBroadcaster();
+    gPrefWindow.initBroadcasters("paneMouse", true);
+    gPrefWindow.initUndoCloseBroadcaster();
+    gPrefWindow.initSingleWindowBroadcaster();
 
     gCommon.setPaneWidth("paneMouse");
   },

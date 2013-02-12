@@ -27,7 +27,7 @@ var gAppearancePane = {
       tabXLeft.label = tabXLeft.getAttribute("rtlLabel");
     }
 
-    TM_Options.initBroadcasters("paneAppearance", true);
+    gPrefWindow.initBroadcasters("paneAppearance", true);
     this.tabCloseButtonChanged();
     this.setTabCloseButtonUI();
     this.tabsScrollChanged();
@@ -106,8 +106,8 @@ var gAppearancePane = {
     function updateDisabledState(buttonID, itemID) {
       let button = aWindow.document.getElementById(buttonID);
       let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
-      TM_Options.setDisabled(itemID, !enablePosition || null);
-      TM_Options.setDisabled("obs_" + itemID, !enablePosition || null);
+      gPrefWindow.setDisabled(itemID, !enablePosition || null);
+      gPrefWindow.setDisabled("obs_" + itemID, !enablePosition || null);
     }
     updateDisabledState("new-tab-button", "newTabButton");
     updateDisabledState("alltabs-button", "hideAllTabsButton");

@@ -35,7 +35,7 @@
                   name="browser.sessionstore.interval"                       type="int"/>
       <preference id="pref_ss_postdata"
                   name="browser.sessionstore.privacy_level"                  type="int"
-                  onchange="TM_Options.setDisabled('obs_ss_postdata', this.value == 2);"/>
+                  onchange="gPrefWindow.setDisabled('obs_ss_postdata', this.value == 2);"/>
       <preference id="pref_ss_postdatabytes"
                   name="browser.sessionstore.postdata"                       type="int"/>
       <preference id="pref_onStart"

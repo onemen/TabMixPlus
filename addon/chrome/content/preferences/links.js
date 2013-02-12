@@ -2,9 +2,9 @@ var gLinksPane = {
   init: function () {
     let singleWindow = $("singleWindow");
     this.singleWindow(singleWindow.checked);
-    TM_Options.disabled(singleWindow, true);
+    gPrefWindow.disabled(singleWindow, true);
 
-    TM_Options.initBroadcasters("paneLinks", true);
+    gPrefWindow.initBroadcasters("paneLinks", true);
     gCommon.setPaneWidth("paneLinks");
   },
 
@@ -17,7 +17,7 @@ var gLinksPane = {
       preference.value = $("generalWindowOpen").value;
 
     external.firstChild.firstChild.hidden = checked;
-    TM_Options.setDisabled("obs_externalLink", !checked);
+    gPrefWindow.setDisabled("obs_externalLink", !checked);
   },
 
   updateExternalLinkCeckbox: function (external) {
@@ -29,7 +29,7 @@ var gLinksPane = {
     if (checkbox.checked != checked) {
       checkbox.checked = checked;
       external.firstChild.firstChild.hidden = checked;
-      TM_Options.setDisabled("obs_externalLink", !checked);
+      gPrefWindow.setDisabled("obs_externalLink", !checked);
     }
   },
 

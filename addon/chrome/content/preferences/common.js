@@ -19,7 +19,7 @@ var gCommon = {
    var item = $(aEvent.target.id.replace("pref_", ""));
 //alert("updateObservers item.id " + item.id);
    if (item && item.localName == "checkbox" && $("obs_" + item.id))
-     TM_Options.disabled(item);
+     gPrefWindow.disabled(item);
 //} catch (ex) {Tabmix.assert(ex);}
   },
 

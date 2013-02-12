@@ -37,8 +37,8 @@ var gEventsPane = {
     }
 
 //XXXX TODO fix it
-    TM_Options.initBroadcasters("paneEvents", true);
-    TM_Options.disabled("undoClose", true); // set "obs_undoClose" global observer
+    gPrefWindow.initBroadcasters("paneEvents", true);
+    gPrefWindow.disabled("undoClose", true); // set "obs_undoClose" global observer
     this.disableInverseMiddleClick();
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();
@@ -68,9 +68,9 @@ var gEventsPane = {
   disabeleShowTabList: function () {
     var disableShowTabList = $("pref_ctrltab").value &&
                              $("pref_ctrltab.tabPreviews").value;
-    TM_Options.setDisabled("showTabList", disableShowTabList);
+    gPrefWindow.setDisabled("showTabList", disableShowTabList);
     if (!$("obs_showTabList").hasAttribute("disabled"))
-      TM_Options.setDisabled("respondToMouse", disableShowTabList);
+      gPrefWindow.setDisabled("respondToMouse", disableShowTabList);
   },
 
   disabeleRplaceLastTabWith: function() {
@@ -78,7 +78,7 @@ var gEventsPane = {
     // browser.tabs.closeWindowWithLastTab = true OR
     // extensions.tabmix.keepLastTab = true
     var disable = !$("pref_keepWindow").value || $("pref_keepLastTab").value;
-    TM_Options.setDisabled("obs_replaceLastTabWith", disable);
+    gPrefWindow.setDisabled("obs_replaceLastTabWith", disable);
     this.newTabUrl($("pref_replaceLastTabWith"), disable, !disable);
   },
 
@@ -86,8 +86,8 @@ var gEventsPane = {
     var showTabUrlBox = preference.value == 4;
     var item = $(preference.id.replace("pref_", ""));
     var idnum = item.getAttribute("idnum") || "" ;
-    TM_Options.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
-    TM_Options.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
+    gPrefWindow.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
+    gPrefWindow.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
     if (setFocus && showTabUrlBox)
       $("newTabUrl" + idnum).focus();
   },
@@ -114,7 +114,7 @@ var gEventsPane = {
 
   disableInverseMiddleClick: function() {
     var val = ($("pref_opentabforLinks") || $("pref_opentabforLinks1")).value;
-    TM_Options.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
+    gPrefWindow.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
   },
 
   editSlideShowKey: function () {
