@@ -129,16 +129,6 @@ var gPrefWindow = {
     child.parentNode.removeChild(child);
   },
 
-  setRadioFromBoolPref: function(prefId) {
-    var preference = $(prefId);
-    return preference.value ? 1 : 0;
-  },
-
-  setBoolPrefFromRadio: function(itemId) {
-    var radiogroupItem = $(itemId);
-    return radiogroupItem.value == 1;
-  },
-
   initBroadcasters: function(paneID) {
     var broadcasters = $(paneID + ":Broadcaster").childNodes;
     if (!broadcasters)
