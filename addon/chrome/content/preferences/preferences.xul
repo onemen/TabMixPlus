@@ -9,11 +9,11 @@
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/shortcuts.css"?>
 
 <!DOCTYPE prefwindow [
-<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd" >
+<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd">
 %tabsDTD;
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
 %tabmixDTD;
 <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
 %globalDTD;

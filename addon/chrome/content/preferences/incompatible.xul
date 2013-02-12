@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
 ]>
 

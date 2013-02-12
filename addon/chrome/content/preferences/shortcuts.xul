@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
 %tabmixDTD;
-<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
 %browserDTD;
-<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd">
 %shortcutsDTD;
 ]>
 

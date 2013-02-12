@@ -5,7 +5,7 @@
 %tabsDTD;
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd">
 %shortcutsDTD;
 ]>
 
