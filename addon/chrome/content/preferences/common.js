@@ -1,15 +1,6 @@
 //var gCount = 0;
 var firstPane = true;
 var gCommon = {
-  get pinTabLabel() {
-    delete this.pinTabLabel;
-    // firefox 18 (bug 769101) changed browser.dtd pinAppTab.label to pinTab.label
-    let win = Tabmix.getTopWin();
-    let label = win.document.getElementById("context_pinTab").getAttribute("label") + "/"
-              + win.document.getElementById("context_unpinTab").getAttribute("label");
-    return this.pinTabLabel = label;
-  },
-
   incompatibleList: [],
 //XXX not in use - we only need it if wee like to set new height
   // for links and session panels

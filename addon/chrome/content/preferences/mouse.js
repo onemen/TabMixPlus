@@ -15,7 +15,7 @@ var gMousePane = {
       gPrefWindow.removeChild("moveTabOnDragging");
     }
 
-    $("ClickTabPinTab").label = gCommon.pinTabLabel;
+    $("ClickTabPinTab").label = gPrefWindow.pinTabLabel;
 
     var browserWindow = Tabmix.getTopWin();
 
