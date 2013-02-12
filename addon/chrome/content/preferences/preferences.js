@@ -595,17 +595,13 @@ function loadData (pattern) {
   Services.prefs.savePrefFile(null);
 }
 
-// this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
-function TM_selectTab(aSelTab) {
-  var tabbox = $("tabMixTabBox");
-  tabbox.lastselectedIndex = tabbox.selectedIndex;
-  tabbox.selectedIndex = (aSelTab) ? aSelTab : 0;
-  var tabId = document.getElementsByTagName("tab")[aSelTab].id;
-  var catButtons = $("TM_ButtonBox").childNodes;
-
-  for(var i = 0; i < catButtons.length; i++)
-    if(catButtons[i].getAttribute('group', 'categories'))
-      catButtons[i].setAttribute('checked', (catButtons[i].id == 'button' + tabId));
+// this function is called from Tabmix.openOptionsDialog if the dialog already opened
+function showPane(paneToLoad) {
+  let docElt = document.documentElement;
+  paneToLoad = paneToLoad > -1 ?
+    document.getElementsByTagName("prefpane")[paneToLoad] :
+    $(docElt.lastSelected);
+  docElt.showPane(paneToLoad);
 }
 
 function openHelp() {
