@@ -1291,7 +1291,7 @@ Tabmix.navToolbox = {
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
-                                    [organizeSE || searchbar, "doSearch"];
+                                    [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if (obj[fn].toString().indexOf("tabmixArg") > -1)
       return;
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
