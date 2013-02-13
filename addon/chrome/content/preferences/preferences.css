@@ -115,13 +115,13 @@ tabpanel {
    we change the border from 2px to none so
    we need also to change the padding
 */
-#TabMIxPreferences[chromedir="ltr"] tab[beforeselected="true"],
-#TabMIxPreferences[chromedir="rtl"] tab[selected="true"] + tab {
+#TabMIxPreferences:-moz-locale-dir(ltr) tab[beforeselected="true"],
+#TabMIxPreferences:-moz-locale-dir(rtl) tab[selected="true"] + tab {
   padding-right: 2px ;
 }
 
-#TabMIxPreferences[chromedir="ltr"] tab[selected="true"] + tab,
-#TabMIxPreferences[chromedir="rtl"] tab[beforeselected="true"] {
+#TabMIxPreferences:-moz-locale-dir(ltr) tab[selected="true"] + tab,
+#TabMIxPreferences:-moz-locale-dir(rtl) tab[beforeselected="true"] {
   padding-left: 2px ;
 }
 

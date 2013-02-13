@@ -34,7 +34,6 @@
             buttonlabelextra1="&apply.label;"
             buttonlabelextra2="&settings.label;"
             _style="width: 36.5em; min-height: 43.2em;"
-            chromedir="&locale.dir;"
             persist="screenX screenY">
 
 <!--
