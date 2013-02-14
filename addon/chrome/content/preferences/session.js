@@ -26,7 +26,7 @@ var gSessionPane = {
     if (Tabmix.isVersion(200))
       gPrefWindow.removeChild("pref_browser.warnOnRestart");
 
-    gCommon.setPaneWidth("paneSession");
+    gPrefWindow.initPane("paneSession");
   },
 
   updateSessionShortcuts: function() {

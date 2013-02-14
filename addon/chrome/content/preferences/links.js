@@ -6,7 +6,7 @@ var gLinksPane = {
     gLinksPane.externalLinkValue($("externalLink").checked);
 
     gPrefWindow.initBroadcasters("paneLinks");
-    gCommon.setPaneWidth("paneLinks");
+    gPrefWindow.initPane("paneLinks");
   },
 
   externalLinkValue: function(checked) {

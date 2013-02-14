@@ -22,7 +22,7 @@ var gMenuPane = {
       setTimeout(function(self) {self.editSlideShowKey();},0, this);
     }
 
-    gCommon.setPaneWidth("paneMenu");
+    gPrefWindow.initPane("paneMenu");
   },
 
   initializeShortcuts: function() {

@@ -148,6 +148,11 @@ tabpanel {
   visibility: hidden;
 }
 
+/* for locals with wide tabs, align right end with tabpanels */
+tabbox > tabs {
+  -moz-margin-end: 2px;
+}
+
 #extraIcons-locked .checkbox-icon {
   list-style-image: url(chrome://tabmixplus/skin/locked.png);
   -moz-image-region: rect(0 9px 9px 0);

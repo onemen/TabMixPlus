@@ -39,7 +39,7 @@ var gMousePane = {
     gSetTabIndex.init('tabclick');
 
     gPrefWindow.initBroadcasters("paneMouse");
-    gCommon.setPaneWidth("paneMouse");
+    gPrefWindow.initPane("paneMouse");
   },
 
   tabSelectionChanged: function (aEvent) {

@@ -7,7 +7,9 @@ const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 function $(id) document.getElementById(id);
 
 var gPrefWindow = {
+  _initialized: false,
   init: function() {
+    this._initialized = true;
     /*XXX TODO on init:
       check on mac if i need to set
       tabpanels#tabpanId[Mac] .tabs-hidden > tab {
@@ -65,6 +67,23 @@ var gPrefWindow = {
     // hide broadcasters pane button
     var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
     paneButton.collapsed = true;
+  },
+
+  initPane: function(aPaneID) {
+    // let _selectPane method set width for first prefpane
+    if (!this._initialized) {
+      this.init();
+      return;
+    }
+    let aPaneElement = $(aPaneID), diff = 0;
+    let content = document.getAnonymousElementByAttribute(aPaneElement, "class", "content-box");
+    let style = window.getComputedStyle(content, "");
+    let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
+                       parseInt(style.marginLeft);
+    Array.slice(aPaneElement.getElementsByTagName("tabbox")).forEach(function(tabbox) {
+      diff = Math.max(diff, tabbox.boxObject.width - contentWidth);
+    });
+    window.innerWidth += diff;
   },
 
   deinit: function() {

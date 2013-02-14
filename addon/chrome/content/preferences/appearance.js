@@ -45,8 +45,7 @@ var gAppearancePane = {
     }
 
     this.toolbarButtons(browserWindow);
-//XXX TODO check how to work with width and height change
-    gCommon.setPaneWidth("paneAppearance");
+    gPrefWindow.initPane("paneAppearance");
   },
 
   tabCloseButtonChanged: function() {

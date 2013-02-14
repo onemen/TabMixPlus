@@ -74,7 +74,7 @@
                   </menupopup>
                 </menulist>
             </hbox>
-            <description style="max-width: 50em;">&divertedWindows.comment;</description>
+            <description>&divertedWindows.comment;</description>
             <separator/>
             <!-- Force link with target attribute to open in current tab -->
             <checkbox id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"/>

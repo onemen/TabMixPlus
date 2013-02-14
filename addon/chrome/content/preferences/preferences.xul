@@ -21,7 +21,6 @@
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
-            onload="gPrefWindow.init();"
             ondialogaccept="gPrefWindow.deinit();"
             ondialogcancel="gPrefWindow.deinit();"
             ondialogextra1="gPrefWindow.onApply();"
@@ -29,36 +28,7 @@
             buttons="accept,cancel,extra1,extra2"
             buttonlabelextra1="&apply.label;"
             buttonlabelextra2="&settings.label;"
-            _style="width: 36.5em; min-height: 43.2em;"
             persist="screenX screenY">
-
-<!--
-for new set the height and width the same as the old options window
-
-cs-CZ            style="width: 56.5em; min-height: 41.2em;"
-da-DK            style="width: 48.9em; min-height: 41.2em;"
-de-DE            style="width: 48.9em; min-height: 41.2em;"
-el-GR            style="width: 61.5em; min-height: 41.2em;"
-en-US            style="width: 36.5em; min-height: 41.2em;"
-es-ES            style="width: 48.8em; min-height: 41.2em;"
-fa-IR            style="width: 43.0em; min-height: 41.2em;"
-fr-FR            style="width: 56.1em; min-height: 41.2em;"
-hr-HR            style="width: 46.3em; min-height: 41.2em;"
-hu-HU            style="width: 45.9em; min-height: 41.2em;"
-it-IT            style="width: 56.0em; min-height: 41.2em;"
-ja-JP            style="width: 51.4em; min-height: 41.2em;"
-ko-KR            style="width: 39.7em; min-height: 41.2em;"
-nl-NL            style="width: 51.5em; min-height: 41.2em;"
-pl-PL            style="width: 47.5em; min-height: 41.2em;"
-pt-BR            style="width: 48.5em; min-height: 41.2em;"
-ru-RU            style="width: 50.0em; min-height: 41.2em;"
-sk-SK            style="width: 43.2em; min-height: 41.2em;"
-sv-SE            style="width: 37.4em; min-height: 41.2em;"
-zh-CN            style="width: 41.9em; min-height: 41.2em;"
-zh-TW            style="width: 36.4em; min-height: 41.2em;"
-
--->
-
 
   <!-- scripts -->
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>

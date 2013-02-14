@@ -60,7 +60,7 @@ var gEventsPane = {
     vbox2.style.setProperty("width", max + "px", "important");
     vbox3.style.setProperty("width", max + "px", "important");
 
-    gCommon.setPaneWidth("paneEvents");
+    gPrefWindow.initPane("paneEvents");
   },
 
   disabeleShowTabList: function () {
