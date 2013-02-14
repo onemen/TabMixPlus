@@ -26,7 +26,13 @@ var gPrefWindow = {
 
     var browserWindow = Tabmix.getTopWin();
     var docElt = document.documentElement;
-      gIncompatiblePane.init(docElt);
+
+    // don't use browser.preferences.animateFadeIn
+    Object.defineProperty(docElt, "_shouldAnimate", {value: false,
+                          writable: true, configurable: true});
+    docElt.setAttribute("animated", "false");
+
+    gIncompatiblePane.init(docElt);
 
     this.instantApply = docElt.instantApply;
     window.addEventListener("change", this, false);
