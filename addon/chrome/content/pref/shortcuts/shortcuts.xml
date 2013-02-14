@@ -12,9 +12,9 @@
 
   <binding id="shortcut">
     <content>
-      <xul:hbox align="center" class="shortcut-content">
-        <xul:label xbl:inherits="value=label,disabled=blocked" style="width:255px;"/>
-        <xul:textbox class="shortcut-edit-box" anonid="editBox" flex="1"
+      <xul:hbox align="start" class="shortcut-content">
+        <xul:description xbl:inherits="disabled=blocked" flex="1"/>
+        <xul:textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;"
                      xbl:inherits="value,disabled=blocked" context=" "
                      placeholder="&shortcuts.placeholder;"
                      onkeydown="handleKeyEvents(event);"
@@ -37,6 +37,7 @@
       <method name="valueFromPreferences">
         <parameter name="aKeyData"/>
         <body><![CDATA[
+          this.editBox.previousSibling.textContent = this.getAttribute("label");
           if (!aKeyData.value && !this._key)
             return false;
           this.key = Shortcuts.keyParse(aKeyData.value);

@@ -349,3 +349,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 #shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) {
   visibility: collapse;
 }
+
+.shortcut-content > description[disabled] {
+  color: GrayText;
+}
