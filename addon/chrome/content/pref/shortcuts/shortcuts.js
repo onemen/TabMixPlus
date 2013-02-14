@@ -39,8 +39,8 @@ function getKeysForShortcut(shortcut, id, win) {
 function _getKeyName(win, aKey) {
   let doc = win.document;
   let command, val;
-  let fButton = !doc.getElementById("titlebar").hidden;
-  let val = fButton && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
+  let fButton = doc.getElementById("titlebar");
+  let val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
       _getLabel(doc.getElementById("main-menubar"), "key", aKey.id) ||
       _getLabel(doc.getElementById("mainPopupSet"), "key", aKey.id) ||
       _getLabel(doc, "key", aKey.id);
