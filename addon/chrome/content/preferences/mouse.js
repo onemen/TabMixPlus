@@ -31,23 +31,21 @@ var gMousePane = {
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
 
-//XXXX check this again
-///XXX change tab label on Mac. trigger onselect before broadcaster is set
-    this.updatePanelPrefs($("tabclicking_tabs").selectedIndex);
-
-    gSetTabIndex.init('mouse');
-    gSetTabIndex.init('tabclick');
-
     gPrefWindow.initBroadcasters("paneMouse");
     gPrefWindow.initPane("paneMouse");
+
+    let selectedIndex = $("tabclick").selectedIndex;
+    if (selectedIndex == 0)
+      this.updatePanelPrefs(selectedIndex);
   },
 
   tabSelectionChanged: function (aEvent) {
-    if (aEvent.target.localName != "tabs" || !this._inited)
+    if (aEvent.target.localName != "tabs")
       return;
-    gSetTabIndex.tabSelectionChanged(aEvent);
+    gPrefWindow.tabSelectionChanged(aEvent);
 
-    this.updatePanelPrefs(aEvent.target.parentNode.selectedIndex);
+    if (this._inited)
+      this.updatePanelPrefs(aEvent.target.selectedIndex);
   },
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],

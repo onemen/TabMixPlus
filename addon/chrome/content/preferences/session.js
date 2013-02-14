@@ -17,8 +17,6 @@ var gSessionPane = {
     else
       TabmixSessionManager.createMenuForDialog($("onStart.popup"));
 
-    gSetTabIndex.init('session');
-
     gPrefWindow.initBroadcasters("paneSession");
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(false);

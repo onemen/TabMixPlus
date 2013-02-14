@@ -1,7 +1,5 @@
 var gMenuPane = {
   init: function () {
-    gSetTabIndex.init('menu');
-
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
 

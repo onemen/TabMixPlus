@@ -51,9 +51,9 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox id="mouse" flex="1"
-            onselect="gSetTabIndex.tabSelectionChanged(event);">
-      <tabs>
+    <tabbox flex="1">
+      <tabs id="mouse"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&mouseGesture.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Gestures"/>
         <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
       </tabs>
@@ -113,8 +113,8 @@
         <tabpanel align="start">
           <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
           <spacer style="height: 1em;"/>
-          <tabbox id="tabclick" class="groupbox-tabbox">
-            <tabs id="tabclicking_tabs"
+          <tabbox class="groupbox-tabbox">
+            <tabs id="tabclick"
                   onselect="gMousePane.tabSelectionChanged(event);">
               <tab label="&double.label;" linkedpanel="_tabpanel" class="subtabs"/>
               <tab label="&middle.label;" linkedpanel="_tabpanel" class="subtabs"/>

@@ -184,25 +184,18 @@ var gPrefWindow = {
     Tabmix.setItem(item, "disabled" , val || null);
   },
 
-  end: null
-}
-
-var gSetTabIndex = {
-  _inited: [],
-  tabSelectionChanged: function (event) {
-    var tabbox = event.target.parentNode;
-    if (event.target.localName != "tabs" || !this._inited[tabbox.id])
+  tabSelectionChanged: function(event) {
+    var tabs = event.target;
+    if (tabs.localName != "tabs" || !tabs.hasAttribute("onselect"))
       return;
-    var preference = $("pref_" + tabbox.id);
-    preference.valueFromPreferences = tabbox.selectedIndex;
-  },
-
-  init: function (id) {
-    var tabbox = $(id);
-    var preference = $("pref_" + tabbox.id);
-    if (preference.value !== null)
-      tabbox.selectedIndex = preference.value;
-    this._inited[id] = true;
+    let preference = $("pref_" + tabs.id);
+    if (!tabs._inited) {
+      tabs._inited = true;
+      if (preference.value != null)
+        tabs.selectedIndex = preference.value;
+    }
+    else if (preference.value != tabs.selectedIndex)
+      preference.valueFromPreferences = tabs.selectedIndex;
   }
 }
 

@@ -165,9 +165,9 @@
             <separator id="sessionManager-separator"/>
             <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery"/>
           </groupbox>
-          <tabbox id="session" class="groupbox-tabbox" flex="1"
-                  onselect="gSetTabIndex.tabSelectionChanged(event);">
-            <tabs>
+          <tabbox class="groupbox-tabbox" flex="1">
+            <tabs id="session"
+                  onselect="gPrefWindow.tabSelectionChanged(event);">
               <tab label="&sm.StartExit;" class="subtabs" helpTopic="Session_-_StartExit"/>
               <tab label="&sm.restore;" class="subtabs" helpTopic="Session_-_Restore"/>
               <tab label="&sm.preserve;" class="subtabs" helpTopic="Session_-_Preserve"/>

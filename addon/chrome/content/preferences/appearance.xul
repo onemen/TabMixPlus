@@ -64,9 +64,9 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox id="appearance"
-            onselect="gSetTabIndex.tabSelectionChanged(event);">
-      <tabs>
+    <tabbox>
+      <tabs id="appearance"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&tabBarAppearance.label;" class="subtabs" helpTopic="Display_-_Tab_bar"/>
         <tab label="&tabAppearance.label;" class="subtabs" helpTopic="Display_-_Tab"/>
         <tab label="&toolBarAppearance.label;" class="subtabs" helpTopic="Display_-_ToolBar"/>

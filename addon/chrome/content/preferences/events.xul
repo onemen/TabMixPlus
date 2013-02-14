@@ -106,9 +106,9 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox id="events"
-            onselect="gSetTabIndex.tabSelectionChanged(event);">
-      <tabs>
+    <tabbox>
+      <tabs id="events"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&newTabs.label;"    class="subtabs" helpTopic="Events_-_New_Tabs"/>
         <tab label="&tabOpen.label;"    class="subtabs" helpTopic="Events_-_tab_opening"/>
         <tab label="&tabClose.label;"   class="subtabs" helpTopic="Events_-_Tab_Closing"/>

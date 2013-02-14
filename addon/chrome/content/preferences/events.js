@@ -1,7 +1,5 @@
 var gEventsPane = {
   init: function () {
-    gSetTabIndex.init('events');
-
     if (!Tabmix.isVersion(130)) {
       gPrefWindow.removeChild("pref_contextMenuSearch");
       gPrefWindow.removeChild("contextMenuSearch");

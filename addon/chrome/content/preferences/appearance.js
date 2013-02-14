@@ -1,7 +1,5 @@
 var gAppearancePane = {
   init: function () {
-    gSetTabIndex.init("appearance");
-
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.extensions.verticalTabBar) {

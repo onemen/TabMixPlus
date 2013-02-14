@@ -91,9 +91,9 @@
 
 
     <!-- pane content -->
-    <tabbox id="menu" flex="1"
-            onselect="gSetTabIndex.tabSelectionChanged(event);">
-      <tabs>
+    <tabbox flex="1">
+      <tabs id="menu"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&context.tab;" class="subtabs" helpTopic="Menu_-_Tab_Context_Menu"/>
         <tab label="&context.main;" class="subtabs" helpTopic="Menu_-_Main_Context_Menu"/>
         <tab label="&context.tools;" class="subtabs" helpTopic="Menu_-_Tools_Menu"/>
