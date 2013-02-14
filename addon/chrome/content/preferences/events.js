@@ -34,7 +34,6 @@ var gEventsPane = {
       pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
     }
 
-    gPrefWindow.initBroadcasters("paneEvents");
     this.disableInverseMiddleClick();
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();

@@ -5,7 +5,6 @@ var gLinksPane = {
     this.singleWindow(singleWindow.checked);
     gLinksPane.externalLinkValue($("externalLink").checked);
 
-    gPrefWindow.initBroadcasters("paneLinks");
     gPrefWindow.initPane("paneLinks");
   },
 

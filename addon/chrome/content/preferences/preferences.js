@@ -70,6 +70,7 @@ var gPrefWindow = {
   },
 
   initPane: function(aPaneID) {
+    this.initBroadcasters(aPaneID);
     // let _selectPane method set width for first prefpane
     if (!this._initialized) {
       this.init();
@@ -158,14 +159,14 @@ var gPrefWindow = {
   },
 
   initBroadcasters: function(paneID) {
-    var broadcasters = $(paneID + ":Broadcaster").childNodes;
+    var broadcasters = $(paneID + ":Broadcaster");
     if (!broadcasters)
       return;
-    for (let i = 0; i < broadcasters.length; ++i ) {
-      let preference = $(broadcasters[i].id.replace("obs", "pref"));
+    Array.forEach(broadcasters.childNodes, function (broadcaster) {
+      let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
-        this.setDisabled(broadcasters[i], !preference.value);
-    }
+        this.setDisabled(broadcaster, !preference.value);
+    }, this);
   },
 
   updateBroadcasters: function(aPreference) {
