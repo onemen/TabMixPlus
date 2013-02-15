@@ -96,7 +96,8 @@ var gPrefWindow = {
         this.updateApplyButton(aEvent);
       break;
     case "beforeaccept":
-      gAppearancePane.changeTabsWidth();
+      if (typeof gAppearancePane == "object")
+        gAppearancePane.changeTabsWidth();
       if (!this.instantApply) {
         // prevent TMP_SessionStore.setService from runing
         Tabmix.getTopWin().tabmix_setSession = true;
@@ -121,7 +122,8 @@ var gPrefWindow = {
   },
 
   onApply: function() {
-    gAppearancePane.changeTabsWidth();
+    if (typeof gAppearancePane == "object")
+      gAppearancePane.changeTabsWidth();
     if (this.instantApply)
       return;
 
