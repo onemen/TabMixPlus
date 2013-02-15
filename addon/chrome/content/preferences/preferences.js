@@ -137,7 +137,7 @@ var gPrefWindow = {
       preference.valueFromPreferences = preference.value;
       preference.batching = false;
     }
-    Shortcuts.prefsChangedByTabmix = false;
+    gPrefWindow.afterShortcutsChanged();
     Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
     Services.prefs.savePrefFile(null);
     this.applyButton.disabled = true;
@@ -190,6 +190,13 @@ var gPrefWindow = {
     }
     else if (preference.value != tabs.selectedIndex)
       preference.valueFromPreferences = tabs.selectedIndex;
+  },
+
+  afterShortcutsChanged: function() {
+    Shortcuts.prefsChangedByTabmix = false;
+    if (typeof gMenuPane == "object" &&
+        $("pref_shortcuts").value != $("shortcut-group").value)
+      gMenuPane.initializeShortcuts();
   }
 }
 
@@ -454,7 +461,7 @@ function defaultSetting() {
     if (Services.prefs.prefHasUserValue(pref))
       Services.prefs.clearUserPref(pref);
   });
-  Shortcuts.prefsChangedByTabmix = false;
+  gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
 }
@@ -550,7 +557,7 @@ function loadData (pattern) {
       setPrefByType(prefName, prefValue, true);
     }
   }
-  Shortcuts.prefsChangedByTabmix = false;
+  gPrefWindow.afterShortcutsChanged();
   var browserWindow = Tabmix.getTopWin();
   browserWindow.gTMPprefObserver.updateTabClickingOptions();
   if (oldStylePrefs.found) {
