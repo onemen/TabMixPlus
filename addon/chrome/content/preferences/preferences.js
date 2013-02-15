@@ -49,19 +49,6 @@ var gPrefWindow = {
 
     var settingsButton = docElt.getButton("extra2");
     settingsButton.setAttribute("popup","tm-settings");
-    settingsButton.setAttribute("dir","reverse");
-    settingsButton.setAttribute("image","chrome://tabmixplus/skin/arrow.png");
-
-    // there are heights diffrenet in our dialog window when Firefox starts with
-    // gfx.direct2d.disabled true or false
-    if (TabmixSvc.direct2dDisabled) {
-///XXX check if we need minheight later
-      document.documentElement.setAttribute("minheight", 483);
-      docElt.setAttribute("direct2dDisabled", true);
-    }
-///XXX test this on Linux
-    if (Tabmix.isPlatform("Linux"))
-      sizeToContent();
 
     this.initBroadcasters("main");
     // hide broadcasters pane button

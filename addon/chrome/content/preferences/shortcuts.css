@@ -5,8 +5,10 @@ shortcut {
 
 .shortcut-edit-box {
   margin: 0 4px;
-  padding-bottom: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   font-weight: normal;
+  height: 24px;
 }
 
 .shortcut-image {

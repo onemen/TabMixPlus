@@ -42,7 +42,25 @@ radio[pane=paneIncompatible][show=true] {
 }
 
 .dialog-button[icon="help"] .button-icon {
- margin-right: 6px;
+  display: -moz-box !important; /* for Linux */
+  margin-right: 6px;
+}
+
+.dialog-button[icon="help"][disabled=true] .button-icon{
+  opacity: 0.4;
+}
+
+.dialog-button[dlgtype="extra2"] {
+  list-style-image: url("chrome://tabmixplus/skin/arrow.png");
+  -moz-box-direction: reverse;
+}
+
+.dialog-button[dlgtype="extra2"] .button-icon {
+  display: -moz-box; /* for Linux */
+}
+
+.dialog-button {
+  margin: 2px;
 }
 
 tabpanel {
@@ -91,18 +109,6 @@ tabpanel {
   -moz-image-region: rect(0 24px 24px 0);
 }
 
-#helpButton .button-icon {
- margin-right: 6px;
-}
-
-#helpButton[disabled=true] .button-icon{
-  opacity: 0.4;
-}
-
-.dialog-button {
-  margin: 2px;
-}
-
 /* Chromifox theme force button height to 25px */
 #TabMIxPreferences[chromifox=true] .spinbuttons-button {
   max-height: 11px !important;
@@ -134,7 +140,7 @@ tabpanel {
   padding-right: 4px;
 }
 
-.groupbox-panels:not([ubuntu]) {
+#TabMIxPreferences:not([ubuntu]) .groupbox-panels {
   -moz-appearance: groupbox;
   padding: 3px 3px 6px 3px;
 }

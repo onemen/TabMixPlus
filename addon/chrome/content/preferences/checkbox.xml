@@ -17,4 +17,18 @@
     </implementation>
   </binding>
 
+  <binding id="checkbox-with-spacing" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+    <content>
+      <xul:hbox class="checkbox-spacer-box">
+        <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
+      </xul:hbox>
+      <xul:hbox class="checkbox-label-center-box" xbl:inherits="flex=flexlabel">
+        <xul:hbox class="checkbox-label-box" xbl:inherits="flex=flexlabel">
+          <xul:image class="checkbox-icon" xbl:inherits="src"/>
+          <xul:label class="checkbox-label" xbl:inherits="xbl:text=label,accesskey,crop,flex=flexlabel"/>
+        </xul:hbox>
+      </xul:hbox>
+    </content>
+  </binding>
+
 </bindings>
