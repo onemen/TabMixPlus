@@ -357,8 +357,12 @@ function _setPrefByType(prefName, newValue, atImport) {
       let disabled = /true/i.test(newValue) ? "d&" : "";
       let isF8 = /disableF8Key$/.test(prefName);
       let key = isF8 ? "slideShow" : "toggleFLST";
-      $("shortcut-group").keys[key] = disabled + (isF8 ? "VK_F8" : "VK_F9");
-      Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify($("shortcut-group").keys));
+      newValue = disabled + (isF8 ? "VK_F8" : "VK_F9");
+      let shortcuts = Tabmix.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"))
+      if (!shortcuts[key] || shortcuts[key] != newValue) {
+        shortcuts[key] = newValue;
+        Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify(shortcuts));
+      }
       return;
     }
   }
