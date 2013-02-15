@@ -54,6 +54,10 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
   margin: 3px 0 1px;
 }
 
+#TabMIxPreferences[linux] .shortcut-image[anonid="reset"] {
+  margin: 1px 0;
+}
+
 .shortcut-content {
   height: 24px;
   margin: 1px 0px;
