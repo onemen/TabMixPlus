@@ -1011,8 +1011,9 @@
                onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
                   var editBox = this.editBox || null;
                   if (editBox) {editBox.blur(); this.editBox = null;}">
-           <hbox flex="1">
+           <hbox>
              <label value="&shortcuts.edit;" flex="1"/>
+             <spacer flex="1"/>
              <label value="&shortcuts.hideUnused;" show="&shortcuts.showAll;" hide="&shortcuts.hideUnused;"
                     class="text-link" id="hide-unused-shortcuts" persist="value"
                     onmousedown="TM_Options.toggleLinkLabel(this);"/>
@@ -1028,7 +1029,7 @@
                     class="text-link" id="hide-shortcut-warning" persist="value"
                     onmousedown="TM_Options.toggleLinkLabel(this);"/>
            </hbox>
-           <groupbox id="shortcut-group" style="overflow: auto; height:24em;"
+           <groupbox id="shortcut-group" style="overflow: auto; height:18em;" flex="1"
                      prefstring="extensions.tabmix.shortcuts">
              <shortcut id="newTab"          label="&clicktab.addtab;"/>
              <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
