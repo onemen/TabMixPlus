@@ -1,9 +1,9 @@
 
-#TabMIxPreferences:not([ubuntu]) checkbox {
+#TabMIxPreferences:not([linux]) checkbox {
   -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox") !important;
 }
 
-#TabMIxPreferences[ubuntu] checkbox {
+#TabMIxPreferences[linux] checkbox {
   -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox-with-spacing") !important;
 }
 

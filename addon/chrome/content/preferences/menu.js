@@ -62,7 +62,8 @@ var gMenuPane = {
         $("shortcuts-panel").getAttribute(item.id) == "true")
       this.toggleLinkLabel(item);
     slideShow.editBox.focus();
-    $("slideshow.time").scrollIntoView();
+    let shortcuts = $("shortcut-group");
+    shortcuts.scrollTop = shortcuts.scrollHeight - shortcuts.clientHeight;
   },
 
   updateSessionShortcuts: function() {

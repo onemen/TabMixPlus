@@ -276,7 +276,7 @@
                    class="text-link" id="hide-shortcut-warning" persist="value"
                    onmousedown="gMenuPane.toggleLinkLabel(this);"/>
           </hbox>
-          <groupbox id="shortcut-group" style="overflow: auto; height:24em;">
+          <groupbox id="shortcut-group" style="overflow: auto; height:18em;" flex="1">
             <shortcut id="newTab"          label="&clicktab.addtab;"/>
             <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
             <shortcut id="dupTabToWin"     label="&clicktab.duplicatetabw;"/>

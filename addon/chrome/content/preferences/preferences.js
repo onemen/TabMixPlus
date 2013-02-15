@@ -17,14 +17,18 @@ var gPrefWindow = {
       }
     */
 
+    var prefWindow = $("TabMIxPreferences");
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
-      $("TabMIxPreferences").setAttribute("chromifox", true);
+      prefWindow.setAttribute("chromifox", true);
+
+    if (Tabmix.isPlatform("Linux"))
+      prefWindow.setAttribute("linux", true);
 
     /* we don't need to fix tabpanels border in ubuntu */
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
-      $("TabMIxPreferences").setAttribute("ubuntu", true);
+      prefWindow.setAttribute("ubuntu", true);
 
     var browserWindow = Tabmix.getTopWin();
     var docElt = document.documentElement;
