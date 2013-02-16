@@ -21,7 +21,8 @@ var gSessionPane = {
       TabmixSessionManager.createMenuForDialog($("onStart.popup"));
 
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
-    this.isSessionStoreEnabled(false);
+    this.isSessionStoreEnabled(true);
+    this.updateSessionShortcuts();
 
     if (Tabmix.isVersion(200))
       gPrefWindow.removeChild("pref_browser.warnOnRestart");
@@ -34,18 +35,14 @@ var gSessionPane = {
       gMenuPane.updateSessionShortcuts();
   },
 
-  isSessionStoreEnabled: function (checkService) {
-    var browserWindow = Tabmix.getTopWin();
-    if (checkService)
-      browserWindow.TMP_SessionStore.setService(2, false, window);
-
-    this.updateSessionShortcuts();
+  isSessionStoreEnabled: function (onStart) {
     if (this.gSessionManager)
       return;
 
-    var sessionStoreEnabled = browserWindow.TMP_SessionStore.isSessionStoreEnabled();
+    var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
+        Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
     var currentState = $("sessionstore_0").checked;
-    if (currentState != sessionStoreEnabled || (!checkService && !sessionStoreEnabled)) {
+    if (onStart || currentState != sessionStoreEnabled) {
       $("sessionstore_0").checked = sessionStoreEnabled;
       $("sessionstore_1").checked = sessionStoreEnabled;
       $("paneSession-tabbox").selectedIndex = sessionStoreEnabled ? 1 : 2;
@@ -69,8 +66,7 @@ var gSessionPane = {
     let sessionPrefs = function() {
       updatePrefs("sessionManager", useSessionManager);
       updatePrefs("sessionCrashRecovery", useSessionManager);
-      this.updateSessionShortcuts();
-    }.bind(this);
+    }
 
     // sessionstore pref
     function sessionstorePrefs() {
