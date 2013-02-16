@@ -39,6 +39,8 @@ var gSessionPane = {
         Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
     $("sessionsOptions").checked = sessionStoreEnabled;
     $("sesionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
+    if (!onStart || sessionStoreEnabled)
+      $("session").selectedIndex = sessionStoreEnabled ? 2 : 0;
   },
 
   setSessionsOptions: function (item) {

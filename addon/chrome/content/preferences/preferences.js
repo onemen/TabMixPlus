@@ -597,7 +597,7 @@ function openHelp() {
   var currentPane = document.documentElement.currentPane;
   var helpTopic = currentPane.helpTopic;
   if (currentPane.id == "paneSession" && helpTopic == "tabmix")
-      helpTopic = $("session").selectedTab.getAttribute("helpTopic");
+      helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
 
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }

@@ -129,45 +129,16 @@
             <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
             <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
           </groupbox>
-          <!-- Build-in SessionStore -->
-          <groupbox orient="horizontal" flex="1" class="firefox">
-            <vbox>
-              <label value="&ss.advanced_setting;" class="header"
-                     style="text-decoration: underline;color: #CC0000;"/>
-              <description class="header">&ss.advanced_setting.warning;</description>
-              <label control="ss_timeinterval" value="&ss.interval;"/>
-              <hbox align="center" pack="end">
-                <label control="ss_timeinterval" value="&ss.interval.seconds;:"/>
-                <textbox id="ss_timeinterval" preference="pref_ss_timeinterval"
-                         maxlength="6" size="6" type="number"/>
-              </hbox>
-              <label control="ss_postdata" value="&ss.privacy_level;:"/>
-              <hbox pack="end">
-                <menulist id="ss_postdata" preference="pref_ss_postdata">
-                  <menupopup>
-                    <menuitem label="&ss.privacy_level.allsites;"    value="0"/>
-                    <menuitem label="&ss.privacy_level.unencrypted;" value="1"/>
-                    <menuitem label="&ss.privacy_level.nosites;"     value="2"/>
-                  </menupopup>
-                </menulist>
-              </hbox>
-              <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
-              <hbox align="center" pack="end">
-                <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
-                <textbox id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
-                         maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
-              </hbox>
-            </vbox>
-          </groupbox>
-          <!-- Tabmix Session manager -->
-          <tabbox class="groupbox-tabbox tabmix" flex="1">
+          <tabbox class="groupbox-tabbox" flex="1">
             <tabs id="session"
                   onselect="gPrefWindow.tabSelectionChanged(event);">
-              <tab label="&sm.StartExit;" class="subtabs" helpTopic="Session_-_StartExit"/>
-              <tab label="&sm.restore;" class="subtabs" helpTopic="Session_-_Restore"/>
-              <tab label="&sm.preserve;" class="subtabs" helpTopic="Session_-_Preserve"/>
+              <tab label="&sm.StartExit;" class="subtabs tabmix" helpTopic="Session_-_StartExit"/>
+              <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_Restore"/>
+              <tab label="tab" class="firefox" helpTopic=" "/>
+              <tab label="&sm.preserve;" class="subtabs tabmix" helpTopic="Session_-_Preserve"/>
             </tabs>
             <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels">
+              <!-- Tabmix Session manager - start/exit -->
               <tabpanel>
                 <hbox>
                   <groupbox style="min-width: 14.6em">
@@ -216,6 +187,7 @@
                   </hbox>
                 </groupbox>
               </tabpanel>
+              <!-- Tabmix Session manager - restore -->
               <tabpanel>
                 <groupbox>
                   <caption label="&sm.restore.options;"/>
@@ -231,6 +203,37 @@
                   <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
                 </groupbox>
               </tabpanel>
+              <!-- Build-in SessionStore (we hide thid panel, don't put it in first or last tab)-->
+              <tabpanel orient="horizontal" flex="1">
+                <vbox>
+                  <label value="&ss.advanced_setting;" class="header"
+                         style="text-decoration: underline;color: #CC0000;"/>
+                  <description class="header">&ss.advanced_setting.warning;</description>
+                  <label control="ss_timeinterval" value="&ss.interval;"/>
+                  <hbox align="center" pack="end">
+                    <label control="ss_timeinterval" value="&ss.interval.seconds;:"/>
+                    <textbox id="ss_timeinterval" preference="pref_ss_timeinterval"
+                             maxlength="6" size="6" type="number"/>
+                  </hbox>
+                  <label control="ss_postdata" value="&ss.privacy_level;:"/>
+                  <hbox pack="end">
+                    <menulist id="ss_postdata" preference="pref_ss_postdata">
+                      <menupopup>
+                        <menuitem label="&ss.privacy_level.allsites;"    value="0"/>
+                        <menuitem label="&ss.privacy_level.unencrypted;" value="1"/>
+                        <menuitem label="&ss.privacy_level.nosites;"     value="2"/>
+                      </menupopup>
+                    </menulist>
+                  </hbox>
+                  <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
+                  <hbox align="center" pack="end">
+                    <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
+                    <textbox id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
+                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
+                  </hbox>
+                </vbox>
+              </tabpanel>
+              <!-- Tabmix Session manager - preserve -->
               <tabpanel>
                 <groupbox>
                   <caption label="&sm.preserve.options;"/>

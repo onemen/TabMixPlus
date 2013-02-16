@@ -154,6 +154,10 @@ tabpanel {
   margin: 3px;
 }
 
+#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox > tabs {
+  margin-bottom: -2px;
+}
+
 /* hide top tabbox tabs for link and session panel */
 .tabs-hidden > tab {
   visibility: hidden;
@@ -244,6 +248,10 @@ prefpane > tabbox > tabpanels {
 }
 
 /* for Mac */
+#TabMIxPreferences[mac] .groupbox-tabbox {
+  margin: 3px 5px;
+}
+
 #TabMIxPreferences[mac] groupbox {
   margin-top: 3px;
   margin-bottom: 1px;
@@ -256,6 +264,8 @@ prefpane > tabbox > tabpanels {
   margin-bottom: 2px;
 }
 
+/* session panel */
+#sesionsPanel:not([manager]),
 #sesionsPanel[manager=tabmix] .firefox,
 #sesionsPanel[manager=firefox] .tabmix {
   display: none;
@@ -269,4 +279,8 @@ prefpane > tabbox > tabpanels {
   -moz-appearance: groupbox;
   padding-top: 2px;
   margin-bottom: 2px;
+}
+
+#sesionsPanel[manager=firefox] tab.firefox {
+  visibility: hidden;
 }
