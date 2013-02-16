@@ -4,16 +4,12 @@ var gSessionPane = {
     if (Tabmix.isPlatform("Linux"))
       $("sessionManager-panels").setAttribute("linux", "true");
 
-    if (TabmixSvc.direct2dDisabled)
-      document.documentElement.setAttribute("direct2dDisabled", true);
-
     // disable TMP session manager setting if session manager extension is install
     this.gSessionManager = Tabmix.getTopWin().Tabmix.extensions.sessionManager;
     if (this.gSessionManager) {
       $("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
       $("sessionmanager_ext_tab").hidden = false;
       $("sessionStore_tab").hidden = true;
-      $("tabmix_tab").hidden = true;
       $("paneSession-tabbox").selectedIndex = 0;
       $("chooseFile").selectedIndex = 1;
     }
@@ -41,19 +37,13 @@ var gSessionPane = {
 
     var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
         Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
-    var currentState = $("sessionstore_0").checked;
-    if (onStart || currentState != sessionStoreEnabled) {
-      $("sessionstore_0").checked = sessionStoreEnabled;
-      $("sessionstore_1").checked = sessionStoreEnabled;
-      $("paneSession-tabbox").selectedIndex = sessionStoreEnabled ? 1 : 2;
-    }
+    $("sessionsOptions").checked = sessionStoreEnabled;
+    $("sesionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
   },
 
-  setSessionsOptions: function (item, id) {
+  setSessionsOptions: function (item) {
     var useSessionManager = !item.checked;
-    $("paneSession-tabbox").selectedIndex = item.checked ? 1 : 2;
-    $(id).checked = item.checked;
-    $(id).focus();
+    $("sesionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
 
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);

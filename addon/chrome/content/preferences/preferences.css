@@ -207,27 +207,7 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
   visibility: hidden;
 }
 
-#TabMIxPreferences:not([direct2dDisabled]) #sessionManager-panels {
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
-#TabMIxPreferences[direct2dDisabled] #sessionManager-panels {
-  padding-top: 0px;
-  padding-bottom: 4px;
-}
-
-#TabMIxPreferences:not([direct2dDisabled]) #sessionManager-separator {
-  height: 14px;
-}
-
-#TabMIxPreferences[direct2dDisabled] #sessionManager-separator {
-  height: 12px;
-}
-
-/*
-  rules to make the new option window look the same as the old one
-*/
+/* rules to make the new option window look the same as the old one */
 radio[pane] > image {
   width: 24px;
   height: 24px;
@@ -274,6 +254,15 @@ prefpane > tabbox > tabpanels {
   background-image: none;
   padding-top: 2px;
   margin-bottom: 2px;
+}
+
+#sesionsPanel[manager=tabmix] .firefox,
+#sesionsPanel[manager=firefox] .tabmix {
+  display: none;
+}
+
+#sesionsPanel > groupbox > vbox {
+  height: 55px;
 }
 
 #TabMIxPreferences[mac] prefpane .groupbox-body {

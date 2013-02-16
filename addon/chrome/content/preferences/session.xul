@@ -75,11 +75,10 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox id="paneSession-tabbox">
+    <tabbox id="paneSession-tabbox" selectedIndex="1">
       <tabs class="tabs-hidden">
         <tab id="sessionmanager_ext_tab" hidden="true" label="tab" helpTopic=" "/>
-        <tab id="sessionStore_tab" label="tab" helpTopic=" "/>
-        <tab id="tabmix_tab" label="tab" helpTopic="tabmix"/>
+        <tab id="sessionStore_tab" label="tab" helpTopic="tabmix"/>
       </tabs>
       <tabpanels>
         <!-- Session Manager Extension -->
@@ -109,24 +108,29 @@
             </radiogroup>
           </groupbox>
         </tabpanel>
-        <!-- Buikd-in SessionStore -->
-        <tabpanel>
+        <tabpanel id="sesionsPanel">
           <groupbox align="start">
-            <checkbox id="sessionstore_0" label="&ss.enable.label;"
+            <checkbox id="sessionsOptions" label="&ss.enable.label;"
                       tooltiptext="&ss.enable.tooltip;"
-                      oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_1');"/>
+                      oncommand="gSessionPane.setSessionsOptions(this);"/>
             <separator class="thin"/>
-            <label value="&sm.start;" control="browserStartupPage"/>
-            <menulist id="browserStartupPage" class="indent" preference="pref_browserStartupPage">
-              <menupopup>
-                <menuitem label="&startupHomePage.label;"     value="1"/>
-                <menuitem label="&startupBlankPage.label;"    value="0"/>
-                <menuitem label="&startupLastSession.label;"  value="3"/>
-              </menupopup>
-            </menulist>
-            <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash"/>
+            <vbox>
+              <label value="&sm.start;" control="browserStartupPage" class="firefox"/>
+              <menulist id="browserStartupPage" class="indent firefox" preference="pref_browserStartupPage">
+                <menupopup>
+                  <menuitem label="&startupHomePage.label;"     value="1"/>
+                  <menuitem label="&startupBlankPage.label;"    value="0"/>
+                  <menuitem label="&startupLastSession.label;"  value="3"/>
+                </menupopup>
+              </menulist>
+              <checkbox id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"
+                        class="tabmix" style="margin-top: 15px;"/>
+            </vbox>
+            <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
+            <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
           </groupbox>
-          <groupbox orient="horizontal" flex="1">
+          <!-- Build-in SessionStore -->
+          <groupbox orient="horizontal" flex="1" class="firefox">
             <vbox>
               <label value="&ss.advanced_setting;" class="header"
                      style="text-decoration: underline;color: #CC0000;"/>
@@ -155,19 +159,8 @@
               </hbox>
             </vbox>
           </groupbox>
-        </tabpanel>
-        <!-- Tabmix Session manager -->
-        <tabpanel>
-          <groupbox>
-            <checkbox id="sessionstore_1" label="&ss.enable.label;"
-                      tooltiptext="&ss.enable.tooltip;"
-                      oncommand="gSessionPane.setSessionsOptions(this, 'sessionstore_0');"/>
-            <separator/>
-            <checkbox id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"/>
-            <separator id="sessionManager-separator"/>
-            <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery"/>
-          </groupbox>
-          <tabbox class="groupbox-tabbox" flex="1">
+          <!-- Tabmix Session manager -->
+          <tabbox class="groupbox-tabbox tabmix" flex="1">
             <tabs id="session"
                   onselect="gPrefWindow.tabSelectionChanged(event);">
               <tab label="&sm.StartExit;" class="subtabs" helpTopic="Session_-_StartExit"/>
