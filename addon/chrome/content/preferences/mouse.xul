@@ -51,13 +51,13 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox flex="1">
+    <tabbox>
       <tabs id="mouse"
             onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&mouseGesture.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Gestures"/>
         <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
         <tabpanel>
           <groupbox flex="1">
             <hbox align="center">
@@ -122,7 +122,7 @@
               <tab label="&shift.label;"  linkedpanel="_tabpanel" class="subtabs"/>
               <tab label="&alt.label;"    linkedpanel="_tabpanel" class="subtabs"/>
             </tabs>
-            <tabpanels class="groupbox-panels">
+            <tabpanels class="groupbox-panels" flex="0">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->

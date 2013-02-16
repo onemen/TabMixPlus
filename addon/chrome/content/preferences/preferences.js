@@ -10,21 +10,17 @@ var gPrefWindow = {
   _initialized: false,
   init: function() {
     this._initialized = true;
-    /*XXX TODO on init:
-      check on mac if i need to set
-      tabpanels#tabpanId[Mac] .tabs-hidden > tab {
-        margin-top: 2px;
-      }
-    */
 
     var prefWindow = $("TabMIxPreferences");
+    if (Tabmix.isPlatform("Mac"))
+      prefWindow.setAttribute("mac", true);
+    else if (Tabmix.isPlatform("Linux"))
+      prefWindow.setAttribute("linux", true);
+
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
       prefWindow.setAttribute("chromifox", true);
-
-    if (Tabmix.isPlatform("Linux"))
-      prefWindow.setAttribute("linux", true);
 
     /* we don't need to fix tabpanels border in ubuntu */
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)

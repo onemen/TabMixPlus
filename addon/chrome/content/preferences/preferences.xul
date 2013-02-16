@@ -5,7 +5,6 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
 
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences.css"?>
-<?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences-1.css"?>
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/shortcuts.css"?>
 
 <!DOCTYPE prefwindow [
@@ -28,7 +27,7 @@
             buttons="accept,cancel,extra1,extra2"
             buttonlabelextra1="&apply.label;"
             buttonlabelextra2="&settings.label;"
-            minwidth="527"
+            minwidth="527" minheight="559"
             persist="screenX screenY">
 
   <!-- scripts -->

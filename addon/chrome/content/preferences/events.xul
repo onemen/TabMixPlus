@@ -115,7 +115,7 @@
         <tab label="&tabMerge.label;"   class="subtabs" helpTopic="Events_-_Tab_Merging"/>
         <tab label="&tabFeature.label;" class="subtabs" helpTopic="Events_-_Tab_Features"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
 <!-- ======================================================== -->
         <tabpanel>
           <groupbox flex="1">

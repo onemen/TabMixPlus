@@ -71,7 +71,7 @@
         <tab label="&tabAppearance.label;" class="subtabs" helpTopic="Display_-_Tab"/>
         <tab label="&toolBarAppearance.label;" class="subtabs" helpTopic="Display_-_ToolBar"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
         <tabpanel>
           <groupbox flex="1">
             <caption label="&show.ontabbar.label;"/>

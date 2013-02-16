@@ -26,13 +26,13 @@
                   onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();"/>
     </preferences>
 
-    <tabbox flex="1">
+    <tabbox>
       <tabs class="tabs-hidden">
         <!-- dummy label for Ubuntu default theme -->
         <tab label="tab"/>
         <tab label="tab"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
         <tabpanel>
           <groupbox flex="1">
             <hbox align="center">

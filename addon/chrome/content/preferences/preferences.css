@@ -1,4 +1,12 @@
 
+#TabMIxPreferences:not([linux]) checkbox {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox") !important;
+}
+
+#TabMIxPreferences[linux] checkbox {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox-with-spacing") !important;
+}
+
 /* Global Styles */
 radio[pane] {
   list-style-image: url("chrome://tabmixplus/skin/tmpoptions.png");
@@ -217,6 +225,33 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
   height: 12px;
 }
 
+/*
+  rules to make the new option window look the same as the old one
+*/
+radio[pane] > image {
+  width: 24px;
+  height: 24px;
+}
+
+prefpane {
+  padding: 3px 1px 1px 1px;
+}
+
+tabbox {
+  -moz-box-flex: 1;
+  padding: 0px 1px;
+}
+
+tabbox > tabpanels {
+  -moz-box-flex: 1;
+}
+
+prefpane > tabbox > tabpanels {
+  width: 520px;
+  height: 436px;
+}
+
+/* for Linux */
 #sessionManager-panels[linux] {
   border-left: none !important;
   border-right: none !important;
@@ -226,4 +261,23 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
 #sessionManager-panels[linux] groupbox {
   margin: 2px 5px;
   padding: 0 5px;
+}
+
+/* for Mac */
+#TabMIxPreferences[mac] groupbox {
+  margin-top: 3px;
+  margin-bottom: 1px;
+  padding-top: 2px;
+}
+
+#TabMIxPreferences[mac] prefpane .groupbox-title {
+  background-image: none;
+  padding-top: 2px;
+  margin-bottom: 2px;
+}
+
+#TabMIxPreferences[mac] prefpane .groupbox-body {
+  -moz-appearance: groupbox;
+  padding-top: 2px;
+  margin-bottom: 2px;
 }

@@ -91,7 +91,7 @@
 
 
     <!-- pane content -->
-    <tabbox flex="1">
+    <tabbox>
       <tabs id="menu"
             onselect="gPrefWindow.tabSelectionChanged(event);">
         <tab label="&context.tab;" class="subtabs" helpTopic="Menu_-_Tab_Context_Menu"/>
@@ -99,7 +99,7 @@
         <tab label="&context.tools;" class="subtabs" helpTopic="Menu_-_Tools_Menu"/>
         <tab label="&shortcuts.label;" class="subtabs" helpTopic="Menu_-_Shortcuts"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
         <tabpanel>
           <groupbox flex="1">
             <caption label="&showtabBarContext.label;"/>

@@ -73,13 +73,13 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox id="paneSession-tabbox" flex="1">
+    <tabbox id="paneSession-tabbox">
       <tabs class="tabs-hidden">
         <tab id="sessionmanager_ext_tab" hidden="true" label="tab" helpTopic=" "/>
         <tab id="sessionStore_tab" label="tab" helpTopic=" "/>
         <tab id="tabmix_tab" label="tab" helpTopic="tabmix"/>
       </tabs>
-      <tabpanels flex="1">
+      <tabpanels>
         <!-- Session Manager Extension -->
         <tabpanel>
           <!-- Open Session Manager Extension Options -->
