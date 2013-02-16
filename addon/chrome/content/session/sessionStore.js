@@ -791,7 +791,7 @@ var TabmixConvertSession = {
   sessionManagerOptions: function SM_sessionManagerOptions() {
     if ("com" in window && com.morac &&
         com.morac.SessionManagerAddon) {
-      com.morac.SessionManagerAddon.gSessionManager.openOptions();
+      com.morac.SessionManagerAddon.gSessionManagerWindowObject.openOptions();
     }
   }
 }
