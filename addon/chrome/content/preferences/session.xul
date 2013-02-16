@@ -28,9 +28,11 @@
       <preference id="pref_browser.warnOnQuit"
                   name="browser.warnOnQuit"                                  type="bool"/>
       <preference id="pref_browserStartupPage"
-                  name="browser.startup.page"                                type="int"/>
+                  name="browser.startup.page"                                type="int"
+                  onchange="gSessionPane.isSessionStoreEnabled();"/>
       <preference id="pref_resume_from_crash"
-                  name="browser.sessionstore.resume_from_crash"              type="bool"/>
+                  name="browser.sessionstore.resume_from_crash"              type="bool"
+                  onchange="gSessionPane.isSessionStoreEnabled();"/>
       <preference id="pref_ss_timeinterval"
                   name="browser.sessionstore.interval"                       type="int"/>
       <preference id="pref_ss_postdata"
