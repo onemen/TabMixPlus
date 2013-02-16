@@ -4,6 +4,9 @@ var gSessionPane = {
     if (Tabmix.isPlatform("Linux"))
       $("sessionManager-panels").setAttribute("linux", "true");
 
+    if (TabmixSvc.direct2dDisabled)
+      document.documentElement.setAttribute("direct2dDisabled", true);
+
     // disable TMP session manager setting if session manager extension is install
     this.gSessionManager = Tabmix.getTopWin().Tabmix.extensions.sessionManager;
     if (this.gSessionManager) {
