@@ -221,6 +221,11 @@ prefpane {
   padding: 3px 1px 1px 1px;
 }
 
+prefpane > tabbox {
+  width: 525px;
+  height: 446px;
+}
+
 tabbox {
   -moz-box-flex: 1;
   padding: 0px 1px;
@@ -228,11 +233,6 @@ tabbox {
 
 tabbox > tabpanels {
   -moz-box-flex: 1;
-}
-
-prefpane > tabbox > tabpanels {
-  width: 520px;
-  height: 436px;
 }
 
 /* for Linux */
@@ -248,6 +248,10 @@ prefpane > tabbox > tabpanels {
 }
 
 /* for Mac */
+#TabMIxPreferences[mac] prefpane > tabbox {
+  height: 468px;
+}
+
 #TabMIxPreferences[mac] .groupbox-tabbox {
   margin: 3px 5px;
 }

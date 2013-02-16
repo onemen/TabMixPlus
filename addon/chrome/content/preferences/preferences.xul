@@ -27,7 +27,7 @@
             buttons="accept,cancel,extra1,extra2"
             buttonlabelextra1="&apply.label;"
             buttonlabelextra2="&settings.label;"
-            minwidth="527" minheight="559"
+            minwidth="527"
             persist="screenX screenY">
 
   <!-- scripts -->
