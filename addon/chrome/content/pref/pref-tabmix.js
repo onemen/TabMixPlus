@@ -78,6 +78,14 @@ function before_Init() {
 
 // load all preferences into the dialog
 function TM_EMinit() {
+  // browser.allTabs.previews
+  if (Tabmix.isVersion(210)) { // can't remove broadcaster in before_Init
+    let item = $("obs_hideAllTabsButton");
+    item.parentNode.removeChild(item);
+    item = $("allTabsPpreviews");
+    item.parentNode.removeChild(item);
+  }
+
   var browserWindow = Tabmix.getTopWin();
 
   getTab();
