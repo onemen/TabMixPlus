@@ -24,14 +24,6 @@ pref("extensions.tabmix.loadFolderAndReplace", true);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
-/* 2012-01-26
-  from firefox 12 we use "browser.newtab.url" instead of extensions.tabmix.newtab.url
-  and extensions.tabmix.replaceLastTabWith.newtab.url
-*/
-pref("extensions.tabmix.newtab.url", "about:blank"); // for firefox 4-11
-pref("extensions.tabmix.replaceLastTabWith.newTabUrl", "about:blank"); // for firefox 4-11
-pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab"); // for firefox 12+
-
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);

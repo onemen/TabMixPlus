@@ -1870,29 +1870,20 @@ try { // user report about bug here ... ?
     }
   },
 
-  // we call this function also from pref-tabmix.js
   addMissingPrefs: function() {
-    const pBranch = Components.interfaces.nsIPrefBranch;
-    function _setPref(aType, aPref, aDefault) {
-      if (Services.prefs.prefHasUserValue(aPref)) {
-        if (Services.prefs.getPrefType(aPref) == aType)
-          return;
-        else
-          Services.prefs.clearUserPref(aPref);
-      }
-      switch (aType) {
-        case pBranch.PREF_BOOL:
-          Tabmix.getBoolPref(aPref, aDefault);
-          break;
-        case pBranch.PREF_INT:
-          Tabmix.getIntPref(aPref, aDefault);
-          break;
-        case pBranch.PREF_STRING:
-          Tabmix.getCharPref(aPref, aDefault);
-          break;
-      }
+    // add missing preference to the default branch
+    let prefs = Services.prefs.getDefaultBranch("");
+
+    /* 2012-01-26
+      from firefox 12 we use "browser.newtab.url" instead of extensions.tabmix.newtab.url
+      and extensions.tabmix.replaceLastTabWith.newtab.url
+    */
+    if (Tabmix.isVersion(120))
+      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
+    else {
+      prefs.setCharPref("extensions.tabmix.newtab.url", "about:blank");
+      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newTabUrl", "about:blank");
     }
-    _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
   }
 
 }
