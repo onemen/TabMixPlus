@@ -423,8 +423,7 @@ var TabmixSessionManager = {
          else if (this.enableManager)
             this.openFirstWindow(false);
 
-         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
+         Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
       }
       else if (this.enableManager && "tabmixdata" in window) {
          path = window.tabmixdata.path;
@@ -599,11 +598,10 @@ var TabmixSessionManager = {
                this.deleteSubtree(this.gSessionPath[0]);
          }
          // clean-up....
-         if (this.enableBackup) this.deleteSession(this.gSessionPath[3]);
-         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
-         if (this.prefBranch.prefHasUserValue("crashed"))
-            this.prefBranch.clearUserPref("crashed"); // we use this in setup.js;
+         if (this.enableBackup)
+           this.deleteSession(this.gSessionPath[3]);
+         Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
+         this.prefBranch.clearUserPref("crashed"); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "stopped");
          if (!this.enableManager && !this.enableBackup)
@@ -1855,7 +1853,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          if (loadsession > -1 && contents != 1 && loadsession != popup.parentNode.sessionIndex) {
             this.prefBranch.setIntPref("onStart.loadsession", popup.parentNode.sessionIndex);
             var pref = "onStart.sessionpath";
-            if (popup.parentNode.sessionIndex < 0 && this.prefBranch.prefHasUserValue(pref))
+            if (popup.parentNode.sessionIndex < 0)
                this.prefBranch.clearUserPref(pref);
          }
       }

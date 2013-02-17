@@ -596,8 +596,8 @@ function TM_defaultSetting () {
   TMP_setButtons(true, true);
 
   // reset other settings to default
-  for (var i = 0; i < otherPref.length; ++i )
-    if (Tabmix.prefs.prefHasUserValue(otherPref[i])) Tabmix.prefs.clearUserPref(otherPref[i]);
+  for (let i = 0; i < otherPref.length; ++i)
+    Tabmix.prefs.clearUserPref(otherPref[i]);
 
   Tabmix.prefs.clearUserPref("setDefault");
   TM_Options.isSessionStoreEnabled(true);
@@ -697,16 +697,8 @@ function TM_setElements (restore, start) {
       var item = gPrefs[i];
       var pref = item.getAttribute("prefstring");
 
-      if (restore) {
-        switch (pref) {
-           case "browser.link.open_newwindow.override.external": // exist from firefox 10.0
-             Services.prefs.setIntPref(pref, -1);
-              break;
-           default:
-             if (Services.prefs.prefHasUserValue(pref))
-               Services.prefs.clearUserPref(pref);
-        }
-      }
+      if (restore)
+        Services.prefs.clearUserPref(pref);
 
       var prefValue = getPrefByType(pref);
       switch (item.localName) {

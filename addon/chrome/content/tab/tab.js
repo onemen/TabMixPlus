@@ -477,13 +477,8 @@ var TabmixTabbar = {
 var gTMPprefObserver = {
   preventUpdate: false,
   init: function() {
-    var pref = "setDefault"
-    if (Tabmix.prefs.prefHasUserValue(pref))
-      Tabmix.prefs.clearUserPref(pref)
-    pref = "PrefObserver.error";
-    if (Tabmix.prefs.prefHasUserValue(pref))
-      Tabmix.prefs.clearUserPref(pref)
-
+    Tabmix.prefs.clearUserPref("setDefault");
+    Tabmix.prefs.clearUserPref("PrefObserver.error")
     if (Tabmix.isVersion(120)) {
       this.OBSERVING.push("browser.tabs.onTop");
       if (!Tabmix.isVersion(130))
@@ -497,7 +492,7 @@ var gTMPprefObserver = {
     }
     catch(e) {
       Tabmix.log("prefs-Observer failed to attach:" + "\n" + e);
-      Tabmix.prefs.setBoolPref(pref, true);
+      Tabmix.prefs.setBoolPref("PrefObserver.error", true);
     }
   },
 
@@ -1268,8 +1263,7 @@ var gTMPprefObserver = {
         } catch (e) {
            Tabmix.log('Error in preference "' + prefName + '", value was reset to default');
            Tabmix.assert(e);
-           if (Services.prefs.prefHasUserValue(prefName))
-             Services.prefs.clearUserPref(prefName);
+           Services.prefs.clearUserPref(prefName);
            // set prev value to default so we can continue with this function
            currentPrefValues = defaultPrefValues;
         }
@@ -1782,8 +1776,7 @@ try {
     // 2013-01-21 - lock hideIcons to true in mac
     if (Services.appinfo.OS == "Darwin" && !Tabmix.prefs.prefIsLocked("hideIcons")) {
       Tabmix.defaultPrefs.setBoolPref("hideIcons", true);
-      if (Tabmix.prefs.prefHasUserValue("hideIcons"))
-        Tabmix.prefs.clearUserPref("hideIcons");
+      Tabmix.prefs.clearUserPref("hideIcons");
       Tabmix.prefs.lockPref("hideIcons");
     }
 
@@ -1813,8 +1806,7 @@ try {
         Tabmix.prefs.clearUserPref("tabs.closeButtons");
     }
     // 2011-01-22 - verify sessionstore enabled
-    if (Services.prefs.prefHasUserValue("browser.sessionstore.enabled"))
-      Services.prefs.clearUserPref("browser.sessionstore.enabled");
+    Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
 try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {

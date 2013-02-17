@@ -144,8 +144,7 @@
           }
 
           var pref = this.prefName;
-          if (Services.prefs.prefHasUserValue(pref))
-            Services.prefs.clearUserPref(pref);
+          Services.prefs.clearUserPref(pref);
           this._initPrefValues = Services.prefs.getCharPref(this.prefName);
           this._getPrefs(this._initPrefValues);
         ]]></body>
