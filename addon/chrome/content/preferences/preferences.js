@@ -313,8 +313,7 @@ function defaultSetting() {
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
   this.preferenceList.forEach(function(pref) {
-    if (Services.prefs.prefHasUserValue(pref))
-      Services.prefs.clearUserPref(pref);
+    Services.prefs.clearUserPref(pref);
   });
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
