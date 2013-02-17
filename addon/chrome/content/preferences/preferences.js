@@ -237,16 +237,6 @@ function setPrefAfterImport(aPref) {
     aPref.value = [3,5,1,1,2,4,1][aPref.value];
     Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
     return true;
-  case "extensions.tabmix.newtab.url":
-    if (newTabURLpref == "browser.newtab.url") {
-      setNewTabUrl("browser.newtab.url", aPref.value);
-      return true;
-    }
-  case "extensions.tabmix.replaceLastTabWith.newTabUrl":
-    if (newTabURLpref == "browser.newtab.url") {
-      setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", aPref.value);
-      return true;
-    }
   }
 
   // don't do anythis if user locked a preference
