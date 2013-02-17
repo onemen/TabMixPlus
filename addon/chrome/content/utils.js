@@ -378,39 +378,6 @@ options = {
       aObj[aName] = aCode;
   },
 
-  getBoolPref: function(aPrefName, aDefault, aUseTabmixBranch) {
-    var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
-    try {
-      return Services.prefs.getBoolPref(branch + aPrefName);
-    }
-    catch(er) {
-      Services.prefs.setBoolPref(branch + aPrefName, aDefault);
-      return aDefault;
-    }
-  },
-
-  getIntPref: function(aPrefName, aDefault, aUseTabmixBranch) {
-    var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
-    try {
-      return Services.prefs.getIntPref(branch + aPrefName);
-    }
-    catch(er) {
-      Services.prefs.setIntPref(branch + aPrefName, aDefault);
-      return aDefault;
-    }
-  },
-
-  getCharPref: function(aPrefName, aDefault, aUseTabmixBranch) {
-    var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
-    try {
-      return Services.prefs.getCharPref(branch + aPrefName);
-    }
-    catch(er) {
-      Services.prefs.setCharPref(branch + aPrefName, aDefault);
-      return aDefault;
-    }
-  },
-
   getTopWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },

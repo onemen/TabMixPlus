@@ -1001,14 +1001,16 @@ try {
 }
 
 function getTab() {
+  function getPrefValue(pref) Tabmix.prefs.prefHasUserValue(pref) ?
+              Tabmix.prefs.getIntPref(pref) : 0
 try {
-   var selTabindex = Tabmix.getIntPref("selected_tab" , 0, true);
+   var selTabindex = getPrefValue("selected_tab");
    showPane(selTabindex);
 
    var subtabs = document.getElementsByAttribute("subtub", true);
-   var subTab = "extensions.tabmix.selected_sub_tab";
+   var subTab = "selected_sub_tab";
    for (var i = 0; i < subtabs.length; i++) {
-      var val = Tabmix.getIntPref(subTab + subtabs[i].getAttribute("value"), 0);
+      let val = getPrefValue(subTab + subtabs[i].getAttribute("value"));
       subtabs[i].selectedIndex = val;
    }
 } catch(ex) {Tabmix.log(ex);}

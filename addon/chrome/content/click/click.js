@@ -108,12 +108,8 @@ var TabmixTabClickOptions = {
   // call action function from click on tabs or tabbar
   clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, action) {
     if (!pref) return; // just in case we missed something
-    var defaultPref = {middleClickTab:2, middleClickTabbar:10, shiftClickTab:5, shiftClickTabbar:0,
-                       altClickTab:6, altClickTabbar:0, ctrlClickTab:22, ctrlClickTabbar:0,
-                       dblClickTab:0, dblClickTabbar:1};
-
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
-    var command = Tabmix.getIntPref(pref, defaultPref[pref], true);
+    var command = Tabmix.prefs.getIntPref(pref);
     this.doCommand(command, aTab, clickOutTabs);
   },
 
