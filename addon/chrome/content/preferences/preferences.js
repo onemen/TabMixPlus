@@ -317,6 +317,10 @@ function defaultSetting() {
   this.preferenceList.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
+  // we enable our session manager on default
+  // set resume_from_crash to false
+  Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
+
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
