@@ -45,9 +45,9 @@ function before_Init() {
   newTabURLpref = topWindow.Tabmix.newTabURLpref;
   replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newTabUrl";
   if (newTabURLpref == "browser.newtab.url") {
-    TM_Options.setItem("newTabUrl", "prefstring", newTabURLpref);
+    Tabmix.setItem("newTabUrl", "prefstring", newTabURLpref);
     replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newtab.url";
-    TM_Options.setItem("newTabUrl_1", "prefstring", replaceLastTabWithNewTabURLpref);
+    Tabmix.setItem("newTabUrl_1", "prefstring", replaceLastTabWithNewTabURLpref);
   }
 
   // there are heights diffrenet in our dialog window when Firefox starts with
@@ -116,12 +116,12 @@ function TM_EMinit() {
   // disable options for position the tabbar and scroll mode if TreeStyleTab extension
   // or other vertical tabs extensions installed
   if (browserWindow.Tabmix.extensions.verticalTabBar) {
-    TM_Options.setItem("treeStyleTab.msg", "hidden", null);
-    TM_Options.setItem("tabBarDisplay", "TSTinstalled", true);
-    TM_Options.setItem("tabBarPosition", "disabled", true);
-    TM_Options.setItem("tabScroll", "disabled", true);
-    TM_Options.setItem("scrollDelay", "disabled", true);
-    TM_Options.setItem("smoothScroll", "disabled", true);
+    Tabmix.setItem("treeStyleTab.msg", "hidden", null);
+    Tabmix.setItem("tabBarDisplay", "TSTinstalled", true);
+    Tabmix.setItem("tabBarPosition", "disabled", true);
+    Tabmix.setItem("tabScroll", "disabled", true);
+    Tabmix.setItem("scrollDelay", "disabled", true);
+    Tabmix.setItem("smoothScroll", "disabled", true);
   }
 
   // Init tabclicking options
@@ -321,19 +321,8 @@ var TM_Options = {
    },
 
    setDisabled: function(id, val) {
-      if (val == true)
-         this.setItem(id, "disabled" , val);
-      else {
-         // remove disabled from all observers,
-         // we can't edit textbox-input with disabled=null or disabled=false
-         // textbox-input inherits the dislabled attribute from the textbox
-
-         // all broadcaster has no disabled attribute at startup
-         var aBroadcaster = $(id);
-         if (aBroadcaster.hasAttribute("disabled")) {
-            aBroadcaster.removeAttribute("disabled");
-         }
-      }
+      // remove disabled when the value is false
+      Tabmix.setItem(id, "disabled" , val || null);
    },
 
    externalLinkValue: function(checked) {
@@ -371,8 +360,8 @@ var TM_Options = {
 
    addTabXUI: function() {
       var tabXValue = $("addTabXUI").selectedItem.value;
-      this.setItem("tabXdelaycheck", "hidden", tabXValue != 2 && tabXValue != 4);
-      this.setItem("tabXwidthBox", "hidden", tabXValue != 5);
+      Tabmix.setItem("tabXdelaycheck", "hidden", tabXValue != 2 && tabXValue != 4);
+      Tabmix.setItem("tabXwidthBox", "hidden", tabXValue != 5);
    },
 
    setTabXUI: function() {
@@ -381,7 +370,7 @@ var TM_Options = {
          var tabXUI = $("addTabXUI");
          if ( tabXUI.selectedItem.value == 5) {
             updateApplyData(tabXUI, 1);
-            this.setItem("tabXwidthBox", "hidden", true);
+            Tabmix.setItem("tabXwidthBox", "hidden", true);
          }
       }
       else
@@ -398,7 +387,7 @@ var TM_Options = {
    selectTab: function() {
       var focusType = $("selectTab").checked ? "bg":"fg";
       var val = $("showInverseLink").getAttribute(focusType+"label");
-      this.setItem("showInverseLink", "label", val);
+      Tabmix.setItem("showInverseLink", "label", val);
    },
 
    tabScroll: function() {
@@ -559,25 +548,7 @@ var TM_Options = {
       var wasShow = panel.getAttribute(item.id) == 'false';
       item.value = item.getAttribute(wasShow ? 'show' : 'hide');
       panel.setAttribute(item.id, wasShow);
-   },
-
-   // Set given attribute of specified item.
-   // If the value is null, then it removes the attribute
-   // (which works nicely for the disabled attribute).
-   setItem: function (id, attrib, val) {
-      var item = $(id);
-      if (val == null) {
-        item.removeAttribute(attrib);
-        return;
-      }
-
-      if (typeof(val) == "boolean")
-        val = val ? "true" : "false";
-
-      if (item.getAttribute(attrib) != val)
-        item.setAttribute(attrib, val);
    }
-
 }
 
 // other settings not in the main option dialog
@@ -1133,8 +1104,8 @@ gAppearancePane.toolbarButtons = function toolbarButtons(aWindow) {
     let button = aWindow.document.getElementById(buttonID);
     let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
 
-    TM_Options.setItem(itemID, "disableObserver", !enablePosition || null);
-    TM_Options.setItem(itemID, "disabled", !enablePosition || null);
+    Tabmix.setItem(itemID, "disableObserver", !enablePosition || null);
+    Tabmix.setItem(itemID, "disabled", !enablePosition || null);
     TM_Options.disabled(itemID, !enablePosition);
   }
   updateDisabledState("new-tab-button", "newTabButton");
