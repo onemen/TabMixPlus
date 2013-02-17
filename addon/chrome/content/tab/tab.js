@@ -1783,9 +1783,9 @@ try {
     }
     if (useF8Key || useF9Key) {
       let shortcuts = Tabmix.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
-      if (!shortcuts.slideShow)
+      if (useF8Key)
         shortcuts.slideShow = "VK_F8";
-      if (!shortcuts.toggleFLST)
+      if (useF9Key)
         shortcuts.toggleFLST = "VK_F9";
       Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify(shortcuts));
     }
