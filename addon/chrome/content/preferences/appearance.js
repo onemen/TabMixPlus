@@ -11,6 +11,13 @@ var gAppearancePane = {
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
 
+    // browser.allTabs.previews
+    if (Tabmix.isVersion(210)) {
+      gPrefWindow.removeChild("pref_allTabsPpreviews");
+      gPrefWindow.removeChild("obs_hideAllTabsButton");
+      gPrefWindow.removeChild("allTabsPpreviews");
+    }
+
     // rtl update
     var direction = window.getComputedStyle($("appearance"), null).direction;
     if (direction == "rtl") {

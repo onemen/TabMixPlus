@@ -167,6 +167,8 @@ var gPrefWindow = {
 
   setDisabled: function(itemOrId, val) {
     var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
+    if (!item)
+      return;
     if (item.hasAttribute("inverseDependency"))
       val = !val;
     // remove disabled when the value is false
