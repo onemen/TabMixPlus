@@ -1,7 +1,6 @@
 /***** Preference Dialog Functions *****/
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const pBranch = Ci.nsIPrefBranch;
 var gPrefs, newTabURLpref, replaceLastTabWithNewTabURLpref;
 var instantApply;
 Components.utils.import("resource://tabmixplus/Shortcuts.jsm");
@@ -607,215 +606,81 @@ function TM_defaultSetting () {
   Services.prefs.savePrefFile(null); // store the pref immediately
 }
 
+const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 function getPrefByType(prefName) {
-   try {
-      switch (Services.prefs.getPrefType(prefName)) {
-         case pBranch.PREF_BOOL:
-            return Services.prefs.getBoolPref(prefName);
-         case pBranch.PREF_INT:
-            return Services.prefs.getIntPref(prefName);
-         case pBranch.PREF_STRING:
-            return Services.prefs.getCharPref(prefName);
-      }
-   } catch (ex) {Tabmix.assert(ex, "error in getPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName);}
-   return null;
+  try {
+    var fn = PrefFn[Services.prefs.getPrefType(prefName)];
+    return Services.prefs["get" + fn](prefName);
+  } catch (ex) {
+    Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
+  }
+  return null;
 }
 
 function setPrefByType(prefName, newValue, atImport) {
-   try {
-      let prefType = Services.prefs.getPrefType(prefName);
-      // when we import from old saved file, we need to replace old pref that are not in use.
-      // we also check for locked pref for the case user locked pref that we replaced
-      if (atImport && (prefType == Services.prefs.PREF_INVALID || Services.prefs.prefIsLocked(prefName))) {
-         switch (prefName) {
-            // in 0.3.0.605 we changed tab color from old pref to new pref
-            // old pref "extensions.tabmix.currentColor" type integer
-            // new pref "extensions.tabmix.currentColorCode" type string
-            case "extensions.tabmix.currentColor":
-            case "extensions.tabmix.unreadColor":
-            case "extensions.tabmix.progressColor":
-               var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
-                                "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"]
-               newValue = colorCodes[newValue];
-               prefName = prefName + "Code";
-            // in 0.3.7.4 2008-12-24 we combined all style pref into one per type
-            // extensions.tabmix.styles.[TYPE NAME]
-            case "extensions.tabmix.boldUnread":
-            case "extensions.tabmix.italicUnread":
-            case "extensions.tabmix.underlineUnread":
-            case "extensions.tabmix.boldCurrent":
-            case "extensions.tabmix.italicCurrent":
-            case "extensions.tabmix.underlineCurrent":
-            case "extensions.tabmix.unreadColorCode":
-            case "extensions.tabmix.currentColorCode":
-            case "extensions.tabmix.progressColorCode":
-            case "extensions.tabmix.useCurrentColor":
-            case "extensions.tabmix.useUnreadColor":
-            case "extensions.tabmix.useProgressColor":
-               var pref = prefName.toLowerCase().replace(/extensions.tabmix.|color/g,"")
-                                       .replace(/italic|bold|underline/g, ",$&,")
-                                       .replace("use", ",text,")
-                                       .replace("code", ",textColor,")
-                                       .split(",");
-               var styleName, attrib;
-               [styleName, attrib] = prefName.indexOf("Code") > -1 ? [pref[0], pref[1]] : [pref[2], pref[1]];
-               if (styleName == "progress") {
-                 attrib = attrib.replace("text", "bg");
-                 styleName += "Meter"
-               }
-               else
-                 styleName += "Tab";
-               oldStylePrefs[styleName][attrib] = newValue;
-               oldStylePrefs.found = true;
-               return;
-            // changed at 2008-02-26
-            case "extensions.tabmix.undoCloseCache":
-               Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
-               return;
-            // changed at 2008-08-17
-            case "extensions.tabmix.opentabfor.search":
-               Services.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
-               return;
-            // changed at 2008-09-23
-            case "extensions.tabmix.keepWindow":
-               Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
-               return;
-            // changed at 2008-09-28
-            case "browser.ctrlTab.mostRecentlyUsed":
-            case "extensions.tabmix.lasttab.handleCtrlTab":
-               Services.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
-               return;
-            // 2008-11-29
-            case "extensions.tabmix.maxWidth":
-            case "extensions.tabmix.tabMaxWidth": // 2012-06-22
-               Services.prefs.setIntPref("browser.tabs.tabMaxWidth", newValue);
-               return;
-            // 2008-11-29
-            case "extensions.tabmix.minWidth":
-            case "extensions.tabmix.tabMinWidth": // 2012-06-22
-               Services.prefs.setIntPref("browser.tabs.tabMinWidth", newValue);
-               return;
-            // 2009-01-31
-            case "extensions.tabmix.newTabButton.leftside":
-               Tabmix.prefs.setIntPref("newTabButton.position", /true/i.test(newValue) ? 0 : 2);
-               return;
-            // 2009-10-10
-            case "extensions.tabmix.windows.warnOnClose":
-               Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
-               Services.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
-               return;
-            // 2010-03-07
-            case "extensions.tabmix.extraIcons":
-               Services.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
-               Services.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
-               return;
-            // 2010-06-05
-            case "extensions.tabmix.tabXMode":
-               // in old version we use tabXMode = 0 to disable the button
-               if (newValue < 1 || newValue > 5)
-                  newValue = 1;
-               Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
-               return;
-            case "extensions.tabmix.tabXMode.enable":
-               Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", /true/i.test(newValue));
-               return;
-            case "extensions.tabmix.tabXLeft":
-               Tabmix.prefs.setBoolPref("tabs.closeButtons.onLeft", /true/i.test(newValue));
-               return;
-            case "extensions.tabmix.tabXDelay":
-               Tabmix.prefs.setIntPref("tabs.closeButtons.delay", newValue);
-               return;
-            // 2010-09-16
-            case "extensions.tabmix.speLink":
-               Tabmix.prefs.setIntPref("opentabforLinks", newValue);
-               return;
-            // 2011-01-26
-            case "extensions.tabmix.mouseDownSelect":
-               Tabmix.prefs.setBoolPref("selectTabOnMouseDown", /true/i.test(newValue));
-               return;
-            // 2011-10-11
-            case "browser.link.open_external":
-               if (newValue == $("generalWindowOpen").value)
-                 newValue = -1;
-               Services.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
-               return;
-            // 2011-11-26
-            case "extensions.tabmix.clickToScroll.scrollDelay":
-               Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
-               return;
-            // 2012-01-26
-            case "extensions.tabmix.newTabUrl":
-               setNewTabUrl(newTabURLpref, newValue);
-               return;
-            case "extensions.tabmix.newTabUrl_afterLastTab":
-               setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
-               return;
-            // 2012-03-21
-            case "extensions.tabmix.loadOnNewTab":
-               Tabmix.prefs.setIntPref("loadOnNewTab.type", newValue);
-               return;
-            case "extensions.tabmix.replaceLastTabWith":
-               Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
-               return;
-            // 2012-04-12
-            case "browser.tabs.loadFolderAndReplace":
-               Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
-               return;
-            // 2013-01-18
-            case "extensions.tabmix.disableF8Key":
-            case "extensions.tabmix.disableF9Key":
-               let disabled = /true/i.test(newValue) ? "d&" : "";
-               let isF8 = /disableF8Key$/.test(prefName);
-               let key = isF8 ? "slideShow" : "toggleFLST";
-               $("shortcut-group").keys[key] = disabled + (isF8 ? "VK_F8" : "VK_F9");
-               Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify($("shortcut-group").keys));
-               return;
-         }
-      }
-      switch (prefType) {
-         case pBranch.PREF_BOOL:
-            if (atImport) {
-               newValue = /true/i.test(newValue);
-               // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
-               if (prefName == "browser.tabs.autoHide") {
-                  newValue = newValue ? 1 : 0;
-                  Tabmix.prefs.setIntPref("hideTabbar", newValue);
-                  return;
-               }
-            }
-            Services.prefs.setBoolPref(prefName, newValue);
-            break;
-         case pBranch.PREF_INT:
-            if (prefName == "browser.tabs.closeButtons") {
-               // we use browser.tabs.closeButtons only in 0.3.8.3
-               if (newValue < 0 || newValue > 6)
-                  newValue = 6;
-               newValue = [3,5,1,1,2,4,1][newValue];
-               Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
-               return;
-            }
-            Services.prefs.setIntPref(prefName, newValue);
-            break;
-         case pBranch.PREF_STRING:
-            // in prev version we use " " for to export string to file
-            if (atImport && newValue.indexOf('"') == 0)
-               newValue = newValue.substring(1,newValue.length-1);
+  let pref = {name: prefName, value: newValue,
+              type: Services.prefs.getPrefType(prefName)}
+  try {
+    if (atImport && setPrefAfterImport(pref))
+      return;
+    Services.prefs["set" + PrefFn[pref.type]](prefName, pref.value);
+  } catch (ex) {
+    Tabmix.log("can't write preference " + prefName + "\nvalue " + pref.value +
+      "\n" + ex, true);
+  }
+}
 
-            if (newTabURLpref == "browser.newtab.url") {
-              if (prefName == "extensions.tabmix.newtab.url") {
-                setNewTabUrl("browser.newtab.url", newValue);
-                break;
-              }
-              if (prefName == "extensions.tabmix.replaceLastTabWith.newTabUrl") {
-                setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", newValue);
-                break;
-              }
-            }
+function setPrefAfterImport(aPref) {
+  // in prev version we use " " for to export string to file
+  aPref.value = aPref.value.replace(/^"*|"*$/g, "");
 
-            Services.prefs.setCharPref(prefName, newValue);
-            break;
-      }
-   } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}
+  // preference that exist in the defaulbranch but no longer in use by Tabmix
+  switch (aPref.name) {
+  case "browser.tabs.autoHide":
+    // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
+    Tabmix.prefs.setIntPref("hideTabbar", aPref.value ? 1 : 0);
+    return true;
+  case "browser.tabs.closeButtons":
+    // we use browser.tabs.closeButtons only in 0.3.8.3
+    if (aPref.value < 0 || aPref.value > 6)
+      aPref.value = 6;
+    aPref.value = [3,5,1,1,2,4,1][aPref.value];
+    Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
+    return true;
+  case "extensions.tabmix.newtab.url":
+    if (newTabURLpref == "browser.newtab.url") {
+      setNewTabUrl("browser.newtab.url", aPref.value);
+      return true;
+    }
+  case "extensions.tabmix.replaceLastTabWith.newTabUrl":
+    if (newTabURLpref == "browser.newtab.url") {
+      setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", aPref.value);
+      return true;
+    }
+  }
+
+  // don't do anythis if user locked a preference
+  if (Services.prefs.prefIsLocked(aPref.name))
+    return true;
+  // replace old preference by setting new value to it
+  // and call gTMPprefObserver.updateSettings to replace it.
+  if (aPref.type == Services.prefs.PREF_INVALID) {
+    let type = parseInt(aPref.value) ? 64 : /true|false/i.test(aPref.value) ? 128 : 32;
+    if (type == 128)
+      aPref.value = /true/i.test(aPref.value);
+    let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
+    prefsUtil.preventUpdate = true;
+    Services.prefs["set" + PrefFn[type]](aPref.name, aPref.value);
+    prefsUtil.preventUpdate = false;
+    prefsUtil.updateSettings();
+    // remove the preference in case updateSettings did not handle it
+    Services.prefs.clearUserPref(aPref.name);
+    return true;
+  }
+  if (aPref.type == Services.prefs.PREF_BOOL)
+    aPref.value = /true/i.test(aPref.value);
+
+  return false;
 }
 
 function setNewTabUrl(newPref, newValue) {

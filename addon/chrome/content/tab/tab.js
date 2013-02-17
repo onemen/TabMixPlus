@@ -16,7 +16,7 @@ var TabmixTabbar = {
   },
 
   updateSettings: function TMP_updateSettings(start) {
-    if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault") || gTMPprefObserver.preventUpdate == true)
+    if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
 
     var tabBar = gBrowser.tabContainer;
@@ -530,6 +530,8 @@ var gTMPprefObserver = {
   * topic: "changed"
   */
   observe: function TMP_pref_observer(subject, topic, prefName) {
+    if (this.preventUpdate)
+      return;
     // if we don't have a valid window (closed)
     if ( !(typeof(document) == 'object' && document) ) {
       this.removeObservers(); // remove the observer..
@@ -1601,7 +1603,6 @@ var gTMPprefObserver = {
 
   // we replace some Tabmix settings with Firefox settings
   updateSettings: function() {
-    this.preventUpdate = true;
     if (Tabmix.prefs.prefHasUserValue("undoCloseCache")) {
        var max_tabs_undo = Tabmix.prefs.getIntPref("undoCloseCache");
        Tabmix.prefs.clearUserPref("undoCloseCache");
@@ -1859,7 +1860,6 @@ try { // user report about bug here ... ?
 
     // verify that all the prefs exist .....
     this.addMissingPrefs();
-    this.preventUpdate = false;
   },
 
   updateTabClickingOptions: function() {
