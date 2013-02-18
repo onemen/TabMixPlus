@@ -1,40 +1,44 @@
-var EXPORTED_SYMBOLS = ["_log"];
+var EXPORTED_SYMBOLS = ["log"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
-var _log = {
-  getObject: function (aMethod, rootID) {
-    var methodsList = aMethod.split(".");
+let log = {
+  getObject: function(aWindow, aMethod) {
+    var rootID, methodsList = aMethod.split(".");
     if (methodsList[0] == "window")
       methodsList.shift();
     else if (methodsList[0] == "document") {
       methodsList.shift();
       rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
     }
-    var obj = rootID ? TabmixSvc.topWin().document.getElementById(rootID) : (window || TabmixSvc.topWin());
-    methodsList.forEach(function(aFn) {
-      obj = obj[aFn];
-    });
-    return obj;
+    try {
+      // this.window is only defined when we import this function into Tabmix
+      var obj = aWindow || this.window;
+      if (rootID)
+        obj = obj.document.getElementById(rootID);
+      methodsList.forEach(function(aFn) {
+        obj = obj[aFn];
+      });
+    } catch (ex) { }
+    return obj || {toString: function() "undefined"};
   },
 
-  show: function(aMethod, rootID, aDelay) {
+  show: function(aMethod, aDelay, aWindow) {
     try {
       if (typeof(aDelay) == "undefined")
         aDelay = 500;
 
-      var self = this;
-      var logMethod = function () {
-        let result = self.getObject(aMethod, rootID).toString();
-        self.log(aMethod + " = " + result);
-        if (self.timer) {
-          self.timer.cancel();
-          self.timer = null;
+      let logMethod = function _logMethod() {
+        let isObj = typeof aMethod == "object";
+        let result = isObj ? aMethod.obj[aMethod.name] :
+                this.getObject(aWindow, aMethod);
+        this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result.toString());
+        if (this.timer) {
+          this.timer.cancel();
+          this.timer = null;
         }
-      }
+      }.bind(this);
 
       if (aDelay >= 0) {
         this.timer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
@@ -46,11 +50,11 @@ var _log = {
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
   },
 
-  clog: function TMP_log_clog(aMessage) {
+  clog: function TMP_clog(aMessage) {
     TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
-  log: function TMP_log_log(aMessage, aShowCaller, offset) {
+  log: function TMP_log(aMessage, aShowCaller, offset) {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
@@ -65,7 +69,7 @@ var _log = {
     else
       stack = stack.split("\n");
     // cut the secound if it is from our utils
-    if (stack[0].indexOf("TMP_log_") == 0)
+    if (stack[0].indexOf("TMP_") == 0)
       stack.splice(0, 1);
     if (!aCount)
       aCount = 1;
@@ -80,7 +84,7 @@ var _log = {
 
   // get the name of the function that is in the nth place in Error().stack
   // don't include this function in the count
-  _getCallerNameByIndex: function TMP_log_getCallerNameByIndex(aPlace) {
+  _getCallerNameByIndex: function TMP_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
     let fn = stack[aPlace + 1];
 
@@ -107,13 +111,28 @@ var _log = {
     return name;
   },
 
-  callerName: function () {
+/*
+  _nameFromComponentsStack: function(Cs) {
+    return Cs.name ||
+           Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
+  },
+
+  callerName: function() {
+///    return this._getCallerNameByIndex(2);
+    try {
+      var name = this._nameFromComponentsStack(Components.stack.caller.caller);
+    } catch (ex) { }
+    return name || "";
+  },
+*/
+
+  callerName: function() {
     return this._getCallerNameByIndex(2);
   },
 
   // return true if the caller name of the calling function is in the
   // arguments list
-  isCallerInList: function () {
+  isCallerInList: function() {
     if (!arguments.length) {
       this.assert("no arguments in Tabmix.isCallerInList");
       return false;
@@ -124,10 +143,10 @@ var _log = {
       if (!callerName)
         return false;
       if (typeof arguments[0] == "object")
-        return arguments[0].indexOf(callerName);
+        return arguments[0].indexOf(callerName) > -1;
 
       let args = Array.prototype.slice.call(arguments);
-      return args.indexOf(callerName)
+      return args.indexOf(callerName) > -1;
 
     } catch (ex) {
       this.assert(ex, "Error we can't check for caller name");
@@ -135,6 +154,15 @@ var _log = {
     return false;
   },
 
+/*
+options = {
+  msg: msg
+  log: true / false; default true
+  function: true / false default false
+  deep: true / false default false
+  offset; for internal use only true / false default false
+}
+*/
   obj: function(aObj, aMessage, aDisallowLog, level) {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
@@ -177,7 +205,7 @@ var _log = {
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + aError.stack;
+    let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
     TabmixSvc.console.logStringMessage(assertionText + stackText);
   },
 

@@ -119,216 +119,10 @@ var Tabmix = {
     return TabmixSvc.version(aVersionNo);
   },
 
-  getObject: function (aMethod, rootID) {
-try {
-    var methodsList = aMethod.split(".");
-    if (methodsList[0] == "window")
-      methodsList.shift();
-    else if (methodsList[0] == "document") {
-      methodsList.shift();
-      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
-    }
-    var obj = rootID ? document.getElementById(rootID) : (window || this.getTopWin());
-    methodsList.forEach(function(aFn) {
-      obj = obj[aFn];
-    });
-    return obj;
-} catch (ex) {
-this.log(aMethod)
-}
-   return null;
-  },
-
-  show: function(aMethod, rootID, aDelay) {
-    try {
-      if (typeof(aDelay) == "undefined")
-        aDelay = 500;
-
-      let logMethod = function _logMethod() {
-        let isObj = typeof aMethod == "object";
-        let result = isObj ? aMethod.obj[aMethod.name] :
-                this.getObject(aMethod, rootID).toString();
-        this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result);
-      }.bind(this);
-
-      if (aDelay >= 0)
-        setTimeout(function () {logMethod();}, aDelay);
-      else
-        logMethod();
-
-    } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
-  },
-
   // for debug
   debug: function TMP_utils_debug(aMessage, aShowCaller) {
     if (this._debug)
       this.log(aMessage, aShowCaller);
-  },
-
-  clog: function TMP_utils_clog(aMessage) {
-    Services.console.logStringMessage("TabMix :\n" + aMessage);
-  },
-
-  log: function TMP_utils_log(aMessage, aShowCaller, offset) {
-    offset = !offset ? 0 : 1;
-    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
-    let callerName = names[offset+0];
-    let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
-    Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
-  },
-
-  // get functions names from Error().stack
-  _getNames: function(aCount, stack) {
-    if (!stack)
-      stack = Error().stack.split("\n").slice(1);
-    else
-      stack = stack.split("\n");
-    // cut the secound if it is from our utils
-    if (stack[0].indexOf("TMP_utils_") == 0)
-      stack.splice(0, 1);
-    if (!aCount)
-      aCount = 1;
-    else if (aCount < 0)
-      aCount = stack.length;
-    let names = [];
-    for (let i = 0; i < aCount; i++)
-      names.push(this._name(stack[i]));
-
-    return names;
-  },
-
-  // get the name of the function that is in the nth place in Error().stack
-  // don't include this function in the count
-  _getCallerNameByIndex: function TMP_utils_getCallerNameByIndex(aPlace) {
-    let stack = Error().stack.split("\n");
-    let fn = stack[aPlace + 1];
-
-    if (fn)
-      return this._name(fn);
-    return null;
-  },
-
-  // Bug 744842 - don't include actual args in error.stack.toString()
-  // since Bug 744842 landed the stack string don't have (arg1, arg2....)
-  // so we can get the name from the start of the string until @
-  get _char() {
-    delete this._char;
-    return this._char = this.isVersion(140) ? "@" : "(";
-  },
-
-  _name: function(fn) {
-    let name = fn.substr(0, fn.indexOf(this._char))
-    if (!name) {
-      // get file name and line number
-      let lastIndexOf = fn.lastIndexOf("/");
-      name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
-    }
-    return name;
-  },
-
-/*
-  _nameFromComponentsStack: function (Cs) {
-    return Cs.name ||
-           Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
-  },
-
-  callerName: function () {
-///    return this._getCallerNameByIndex(2);
-    try {
-      var name = this._nameFromComponentsStack(Components.stack.caller.caller);
-    } catch (ex) { }
-    return name || "";
-  },
-*/
-  callerName: function () {
-    return this._getCallerNameByIndex(2);
-  },
-
-  // return true if the caller name of the calling function is in the
-  // arguments list
-  isCallerInList: function () {
-    if (!arguments.length) {
-      this.assert("no arguments in Tabmix.isCallerInList");
-      return false;
-    }
-
-    try {
-      let callerName = this._getCallerNameByIndex(2);
-      if (!callerName)
-        return false;
-      if (typeof arguments[0] == "object")
-        return arguments[0].indexOf(callerName) > -1;
-
-      let args = Array.prototype.slice.call(arguments);
-      return args.indexOf(callerName) > -1;
-
-    } catch (ex) {
-      this.assert(ex, "Error we can't check for caller name");
-    }
-    return false;
-  },
-
-///XXX add new arg as options as object
-/*
-options = {
-  msg: msg
-  log: true / false; defaul true
-  function: true / false defaul false
-  deep: true / false defaul false
-  offset; for intenal use only true / false defaul false
-}
-*/
-  obj: function(aObj, aMessage, aDisallowLog, level) {
-    var offset = typeof level == "string" ? "  " : "";
-    aMessage = aMessage ? offset + aMessage + "\n" : "";
-    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
-    objS +=  ":\n"
-
-    for (let prop in aObj) {
-      try {
-        let val = aObj[prop];
-        let type = typeof val;
-        if (type == "string")
-          val = "\'" + val + "\'";
-        if (type == "function" && typeof level == "string") {
-          val = val.toString();
-          let code = val.toString().indexOf("native code") > -1 ?
-            "[native code]" : "[code]"
-          val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
-        }
-        objS += offset + prop + "[" + type + "]" + " =  " + val + "\n";
-        if (type == "object" && val != null && level && typeof level == "boolean")
-          objS += this.obj(val, "", true, "deep") + "\n";
-      } catch (ex) {
-        objS += offset + prop + " =  " + "[!!error retrieving property]" + "\n";
-      }
-    }
-    if (aDisallowLog)
-      objS = aMessage + "======================\n" + objS;
-    else
-      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true, 1);
-    return objS;
-  },
-
-  assert: function TMP_utils_assert(aError, aMsg) {
-    if (typeof aError.stack != "string") {
-      this.trace((aMsg || "") + "\n" + aError, 2);
-      return;
-    }
-
-    let names = this._getNames(1, aError.stack);
-    let errAt = " at " + names[0];
-    let location = aError.location ? "\n" + aError.location : "";
-    let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
-    Services.console.logStringMessage(assertionText + stackText);
-  },
-
-  trace: function(aMsg, slice) {
-    // cut off the first line of the stack trace, because that's just this function.
-    let stack = Error().stack.split("\n").slice(slice || 1);
-
-    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   },
 
   // Show/hide one item (specified via name or the item element itself).
@@ -420,7 +214,7 @@ options = {
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aOldName, function() {
       self.informAboutChangeInTabmix(aOldName, aNewName);
-      return self.getObject(aNewName);
+      return self.getObject(window, aNewName);
     });
   },
 
@@ -514,6 +308,10 @@ options = {
     return navigator.platform.indexOf(aPlatform) == 0;
   },
 
+  get window() {
+    return window;
+  },
+
   // some extensions override native JSON so we use nsIJSON
   JSON: {
     nsIJSON: null,
@@ -551,6 +349,12 @@ options = {
       XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
                  "resource:///modules/RecentWindow.jsm");
     }
+
+    let tmp = {};
+    Components.utils.import("resource://tabmixplus/log.jsm", tmp);
+    for (let [fnName, value] in Iterator(tmp.log))
+      this[fnName] = typeof value == "function" ? value.bind(this) : value;
+
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);
       this.destroy();
@@ -561,6 +365,7 @@ options = {
   destroy: function TMP_utils_destroy() {
     this.toCode = null;
     this.originalFunctions = null;
+    delete this.window;
   }
 }
 
