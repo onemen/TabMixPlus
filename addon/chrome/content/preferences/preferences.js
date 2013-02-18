@@ -363,7 +363,6 @@ function exportData() {
   fp.open(fpCallback);
 }
 
-var oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
 function importData () {
   const nsIFilePicker = Ci.nsIFilePicker;
   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
@@ -421,12 +420,6 @@ function loadData (pattern) {
   gPrefWindow.afterShortcutsChanged();
   var browserWindow = Tabmix.getTopWin();
   browserWindow.gTMPprefObserver.updateTabClickingOptions();
-  if (oldStylePrefs.found) {
-    browserWindow.gTMPprefObserver.converOldStylePrefs("currentTab", oldStylePrefs.currentTab);
-    browserWindow.gTMPprefObserver.converOldStylePrefs("unreadTab", oldStylePrefs.unreadTab);
-    browserWindow.gTMPprefObserver.converOldStylePrefs("progressMeter", oldStylePrefs.progressMeter);
-    oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
-  }
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
 }
