@@ -312,29 +312,6 @@ var Tabmix = {
     return window;
   },
 
-  // some extensions override native JSON so we use nsIJSON
-  JSON: {
-    nsIJSON: null,
-    parse: function TMP_parse(str) {
-      try {
-        return JSON.parse(str);
-      } catch(ex) {
-        try {
-          return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch(ex) {return null}
-      }
-    },
-    stringify: function TMP_stringify(obj) {
-      try {
-        return JSON.stringify(obj);
-      } catch(ex) {
-        try {
-          return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch(ex) {return null}
-      }
-    }
-  },
-
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
@@ -342,9 +319,6 @@ var Tabmix = {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
     this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-    XPCOMUtils.defineLazyGetter(this.JSON, "nsIJSON", function() {
-      return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
-    });
     if (this.isVersion(200)) {
       XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
                  "resource:///modules/RecentWindow.jsm");

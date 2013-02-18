@@ -1186,7 +1186,7 @@ var gTMPprefObserver = {
     if (Services.prefs.prefHasUserValue(prefName)) {
       let prefString = Services.prefs.getCharPref(prefName);
       try {
-        var currentPrefValues = Tabmix.JSON.parse(prefString);
+        var currentPrefValues = TabmixSvc.JSON.parse(prefString);
       }
       catch (ex) {
         try {
@@ -1194,7 +1194,7 @@ var gTMPprefObserver = {
           // we do it only one time when user update Tabmix from old version
           currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
                               new Components.utils.Sandbox("about:blank"));
-          Services.prefs.setCharPref(prefName, Tabmix.JSON.stringify(currentPrefValues));
+          Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(currentPrefValues));
         } catch (e) {
            Tabmix.log('Error in preference "' + prefName + '", value was reset to default');
            Tabmix.assert(e);
@@ -1225,7 +1225,7 @@ var gTMPprefObserver = {
           prefValues[item] = value;
       }
       if (currentPrefValues != prefValues)
-        Services.prefs.setCharPref(prefName, Tabmix.JSON.stringify(prefValues));
+        Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(prefValues));
     }
     else
       prefValues = defaultPrefValues;
@@ -1726,12 +1726,12 @@ try {
       Tabmix.prefs.clearUserPref("disableF9Key");
     }
     if (useF8Key || useF9Key) {
-      let shortcuts = Tabmix.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
+      let shortcuts = TabmixSvc.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
       if (useF8Key)
         shortcuts.slideShow = "VK_F8";
       if (useF9Key)
         shortcuts.toggleFLST = "VK_F9";
-      Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify(shortcuts));
+      Tabmix.prefs.setCharPref("shortcuts", TabmixSvc.JSON.stringify(shortcuts));
     }
 
     // verify valid value

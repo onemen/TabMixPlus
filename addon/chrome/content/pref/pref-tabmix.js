@@ -690,7 +690,7 @@ function TM_setElements (restore, start) {
    if (start && !Shortcuts.keys.browserReload.id)
       $("browserReload").hidden = true;
    let shortcuts = $("shortcut-group");
-   shortcuts.keys = Tabmix.JSON.parse(shortcuts.value);
+   shortcuts.keys = TabmixSvc.JSON.parse(shortcuts.value);
    let callBack = function(shortcut) shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
    TM_Options.updateShortcuts(shortcuts, callBack)
 }

@@ -266,7 +266,7 @@ var TabmixSessionData = {
       var tabData = TabmixSvc.ss.getTabValue(tab, id);
       if (tabData != "" && tabData != "{}" && tabData != "null") {
         if (parse)
-          existingData = Tabmix.JSON.parse(tabData);
+          existingData = TabmixSvc.JSON.parse(tabData);
         else
           existingData = tabData;
       }
@@ -281,7 +281,7 @@ var TabmixSessionData = {
       var data = TabmixSvc.ss.getWindowValue(win, id);
       if (data) {
         if (parse)
-          existingData = Tabmix.JSON.parse(data);
+          existingData = TabmixSvc.JSON.parse(data);
         else
           existingData = data;
       }
@@ -1272,13 +1272,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // if aIndex is not > 0 we just past empy list to setWindowState
       // it's like remove all closed tabs from the list
       if (aIndex >= 0) {
-         state._closedWindows = Tabmix.JSON.parse(TabmixSvc.ss.getClosedWindowData());
+         state._closedWindows = TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedWindowData());
          // purge closed window at aIndex
          closedWindow = state._closedWindows.splice(aIndex, 1).shift();
       }
       // replace existing _closedWindows
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       } catch (ex) {Tabmix.assert(ex);}
 
       return closedWindow;
@@ -3263,7 +3263,7 @@ try{
          let state = { windows: [], _firstTabs: true };
          state.windows[0] = { _closedTabs: [] };
          state.windows[0]._closedTabs = TabmixConvertSession.getClosedTabsState(this.getResource(fromPath, "closedtabs"));
-         TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       }
    },
 
@@ -3735,7 +3735,7 @@ try{
     function _fixData(id, parse, def) {
       let data = self.getLiteralValue(aWindow, id);
       if (data && data != "null")
-        return parse ? Tabmix.JSON.parse(data) : data;
+        return parse ? TabmixSvc.JSON.parse(data) : data;
       return def;
     }
 
@@ -3746,7 +3746,7 @@ try{
     this._tabviewData["tabview-groups"] = groupsData;
     this.groupUpdates.lastActiveGroupId = groupsData.activeGroupId;
 
-    this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
+    this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, TabmixSvc.JSON.stringify({}));
     this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
   },
 
@@ -3758,7 +3758,7 @@ try{
 
   _setTabviewData: function SM__setTabviewData(id, data) {
     if (typeof(data) != "string")
-      data = Tabmix.JSON.stringify(data);
+      data = TabmixSvc.JSON.stringify(data);
     TabmixSvc.ss.setWindowValue(window, id, data);
     if (!this.enableBackup)
       return;
@@ -3780,7 +3780,7 @@ try{
         data.title = aEntry.label;
       }
       parsedData = data;
-      return Tabmix.JSON.stringify(data);
+      return TabmixSvc.JSON.stringify(data);
     }
 
     var update = this.groupUpdates;
@@ -3811,10 +3811,10 @@ try{
       }
 
       if (update.IDs) {
-        parsedData = Tabmix.JSON.parse(data);
+        parsedData = TabmixSvc.JSON.parse(data);
         if (parsedData.groupID in update.IDs) {
           parsedData.groupID = update.IDs[parsedData.groupID];
-          data = Tabmix.JSON.stringify(parsedData);
+          data = TabmixSvc.JSON.stringify(parsedData);
         }
       }
     }
@@ -3933,7 +3933,7 @@ try{
             data.url = tab.linkedBrowser.currentURI.spec;
             data.title = tab.label;
           }
-          data = Tabmix.JSON.stringify(data);
+          data = TabmixSvc.JSON.stringify(data);
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)
             this.setLiteral(this.getNodeForTab(tab), "tabview-tab", data);

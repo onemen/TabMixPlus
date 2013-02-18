@@ -69,7 +69,7 @@
             this.key = newKey;
             this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
             this.parentNode.keys[this.id] = newValue;
-            this.parentNode.value = Tabmix.JSON.stringify(this.parentNode.keys);
+            this.parentNode.value = TabmixSvc.JSON.stringify(this.parentNode.keys);
             updateApplyData(this.parentNode);
             let callBack = function(shortcut) shortcut.updateNotification();
             TM_Options.updateShortcuts(this.parentNode, callBack);

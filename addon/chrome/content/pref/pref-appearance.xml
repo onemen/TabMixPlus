@@ -154,7 +154,7 @@
         <parameter name="aPrefString"/>
         <body><![CDATA[
           try {
-            this._prefValues = Tabmix.JSON.parse(aPrefString)
+            this._prefValues = TabmixSvc.JSON.parse(aPrefString)
           }
           catch (er) {
             this._resetDefault(true);
@@ -207,7 +207,7 @@
                 break;
             }
           }
-          Services.prefs.setCharPref(this.prefName, Tabmix.JSON.stringify(newPrefSValue));
+          Services.prefs.setCharPref(this.prefName, TabmixSvc.JSON.stringify(newPrefSValue));
         ]]></body>
       </method>
 

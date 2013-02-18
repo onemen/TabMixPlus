@@ -311,7 +311,7 @@ var TMP_ClosedTabs = {
     * Get closed tabs data
     */
    get getClosedTabData() {
-      return Tabmix.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
+      return TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
    },
 
    getUrl: function ct_getUrl(aTabData) {
@@ -484,7 +484,7 @@ var TMP_ClosedTabs = {
 
       // replace existing _closedTabs
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       } catch (e) {}
 
       this.setButtonDisableState();
@@ -552,7 +552,7 @@ var TMP_ClosedTabs = {
       if (aTabToRemove)
          gBrowser.removeTab(aTabToRemove);
       // add restored tab to current window
-      TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabData.state));
+      TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
       TabView.afterUndoCloseTab();
 
@@ -678,7 +678,7 @@ var TabmixConvertSession = {
 
       // save panorama data if exist
       let extData = {};
-      let emptyGroup = Tabmix.JSON.stringify({})
+      let emptyGroup = TabmixSvc.JSON.stringify({})
       extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
       extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
       extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);

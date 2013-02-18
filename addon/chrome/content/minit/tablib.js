@@ -606,7 +606,7 @@ var tablib = {
       '{if (Tabmix.singleWindowMode) {\
         window = Tabmix.getTopWin();\
         let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
-        state = Tabmix.JSON.stringify(state);\
+        state = TabmixSvc.JSON.stringify(state);\
         ss.setWindowState(window, state, false);\
       }\
       else $&}'
@@ -646,7 +646,7 @@ var tablib = {
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
       'JSON.parse(this._ss.getClosedWindowData());',
-      '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : Tabmix.JSON.parse(this._ss.getClosedWindowData());'
+      '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : TabmixSvc.JSON.parse(this._ss.getClosedWindowData());'
     )._replace(
       'this._ss',
       'TabmixSvc.ss', {flags: "g"}
@@ -772,7 +772,7 @@ var tablib = {
       }
       try {
         var newTab, tabState;
-        tabState = aTabData ? aTabData.state : Tabmix.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+        tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         newTab = this.addTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
@@ -780,7 +780,7 @@ var tablib = {
           newTab.linkedBrowser.addEventListener("load", updateNewHistoryTitle, true);
         }
         tabState.pinned = false;
-        TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabState));
+        TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
       } catch (ex) {Tabmix.assert(ex);}
 
       return newTab;
