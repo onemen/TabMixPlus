@@ -94,21 +94,6 @@ pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underl
 pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
-/* 2008-12-24 change all style prefs into one
-pref("extensions.tabmix.boldUnread", false);
-pref("extensions.tabmix.italicUnread", true);
-pref("extensions.tabmix.underlineUnread", false);
-pref("extensions.tabmix.boldCurrent", false);
-pref("extensions.tabmix.italicCurrent", false);
-pref("extensions.tabmix.underlineCurrent", false);
-pref("extensions.tabmix.unreadColorCode", "#CC0000");
-pref("extensions.tabmix.currentColorCode", "#000000");
-pref("extensions.tabmix.progressColorCode", "#AAAAFF");
-pref("extensions.tabmix.useCurrentColor", false);
-pref("extensions.tabmix.useUnreadColor", true);
-pref("extensions.tabmix.useProgressColor", true);
-*/
-
 pref("extensions.tabmix.flexTabs", false);
 
 pref("extensions.tabmix.titlefrombookmark", false);
@@ -117,7 +102,6 @@ pref("extensions.tabmix.tabs.closeButtons.enable", true);
 pref("extensions.tabmix.tabs.closeButtons", 1);
 pref("extensions.tabmix.tabs.closeButtons.onLeft", false);
 pref("extensions.tabmix.tabs.closeButtons.delay", 50);
-
 
 pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);

@@ -69,7 +69,6 @@ function TMP_TBP_Startup() {
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
-    gTMPprefObserver.updateOldStylePrefs();
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
 
