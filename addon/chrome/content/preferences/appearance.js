@@ -126,11 +126,9 @@ var gAppearancePane = {
   userchangedWidth: function(item) {
     this.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
                         $("maxWidth").value != $("pref_maxWidth").valueFromPreferences
-    let docElt = document.documentElement;
-    if (!docElt.instantApply)
+    if (!gPrefWindow.instantApply)
       return undefined;
-    docElt.getButton("accept").hidden = !this.widthChanged;
-    docElt.getButton("extra1").hidden = !this.widthChanged;
+    gPrefWindow.setButtons(!this.widthChanged);
     // block the change by returning the preference own value
     return $(item.getAttribute("preference")).value;
   },
@@ -139,9 +137,6 @@ var gAppearancePane = {
     if (!this.widthChanged)
       return;
     this.widthChanged = false;
-    let docElt = document.documentElement;
-    docElt.getButton("accept").hidden = docElt.instantApply;
-    docElt.getButton("extra1").hidden = docElt.instantApply;
     let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
     if (minWidth > maxWidth)
       [minWidth, maxWidth] = [maxWidth, minWidth];

@@ -39,15 +39,11 @@ var gPrefWindow = {
     window.addEventListener("change", this, false);
     window.addEventListener("beforeaccept", this, false);
 
-    // always init the apply button for the case user change tab width
-    this.applyButton = docElt.getButton("extra1");
-    if (this.instantApply)
-      this.applyButton.hidden = true;
-    else
-      this.applyButton.disabled = true;
-
-    var settingsButton = docElt.getButton("extra2");
-    settingsButton.setAttribute("popup","tm-settings");
+    // init buttons extra1, extra2, accept, cancel
+    docElt.getButton("extra1").setAttribute("icon", "apply");
+    docElt.getButton("extra2").setAttribute("popup","tm-settings");
+    docElt.setAttribute("cancelbuttonlabel", docElt.mStrBundle.GetStringFromName("button-cancel"));
+    this.setButtons(true);
 
     this.initBroadcasters("main");
     // hide broadcasters pane button
@@ -113,10 +109,11 @@ var gPrefWindow = {
       this.changes.push(item);
     else if (!valueChanged && index > -1)
       this.changes.splice(index, 1);
-    this.applyButton.disabled = !this.changes.length;
+    this.setButtons(!this.changes.length);
   },
 
   onApply: function() {
+    this.setButtons(true);
     if (typeof gAppearancePane == "object")
       gAppearancePane.changeTabsWidth();
     if (this.instantApply)
@@ -135,7 +132,21 @@ var gPrefWindow = {
     gPrefWindow.afterShortcutsChanged();
     Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
     Services.prefs.savePrefFile(null);
-    this.applyButton.disabled = true;
+  },
+
+  setButtons: function(disable) {
+    var docElt = document.documentElement;
+    // when in instantApply mode apply and accept buttons are hidden except when user
+    // change min/max width value
+    var applyButton = docElt.getButton("extra1");
+    applyButton.disabled = disable;
+    applyButton.hidden = this.instantApply && disable;
+    docElt.getButton("accept").hidden = disable;
+
+    var action = disable ? "close" : "cancel"
+    var cancelButton = docElt.getButton("cancel");
+    cancelButton.label = docElt.getAttribute(action + "buttonlabel");
+    cancelButton.setAttribute("icon", action);
   },
 
   removeChild: function(id) {
