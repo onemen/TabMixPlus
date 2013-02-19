@@ -1,3 +1,5 @@
+"use strict";
+
 var gEventsPane = {
   init: function () {
     if (!Tabmix.isVersion(130)) {

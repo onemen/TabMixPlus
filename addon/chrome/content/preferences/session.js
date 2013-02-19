@@ -1,3 +1,5 @@
+"use strict";
+
 var gSessionPane = {
   gSessionManager: null,
   init: function () {

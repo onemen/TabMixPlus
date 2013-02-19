@@ -1,3 +1,5 @@
+"use strict";
+
 var gLinksPane = {
   init: function () {
     let singleWindow = $("singleWindow");

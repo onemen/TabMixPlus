@@ -1,3 +1,5 @@
+"use strict";
+
 var gAppearancePane = {
   init: function () {
     var browserWindow = Tabmix.getTopWin();

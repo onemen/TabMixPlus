@@ -1,3 +1,5 @@
+"use strict";
+
 /***** Preference Dialog Functions *****/
 const Cc = Components.classes;
 const Ci = Components.interfaces;

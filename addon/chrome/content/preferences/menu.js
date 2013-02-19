@@ -1,3 +1,5 @@
+"use strict";
+
 var gMenuPane = {
   init: function () {
     $("pinTab").label = gPrefWindow.pinTabLabel;

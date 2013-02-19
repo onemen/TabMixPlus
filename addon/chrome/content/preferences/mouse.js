@@ -1,3 +1,5 @@
+"use strict";
+
 var gMousePane = {
   _inited: false,
   clickTab: null,
