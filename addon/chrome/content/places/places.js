@@ -129,7 +129,7 @@ var TMP_Places = {
       )._replace(
         /(\})(\)?)$/,
         'var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
-         TMP_Places.setTabtitle(tab, url, bookMarkId); \
+         w.TMP_Places.setTabtitle(tab, url, bookMarkId); \
          $1$2'
       ).toCode();
 
