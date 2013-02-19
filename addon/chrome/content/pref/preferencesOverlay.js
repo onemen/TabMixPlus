@@ -1,3 +1,5 @@
+"use strict";
+
 var gTabMix_preferencesOverlay = {
   id: function(id) {return document.getElementById(id);},
   incontentInit: function gTabMix_preferencesOverlay_incontentInit(aEvent) {

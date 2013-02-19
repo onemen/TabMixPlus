@@ -1,3 +1,5 @@
+"use strict";
+
 var EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const Cc = Components.classes;

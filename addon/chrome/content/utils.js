@@ -1,3 +1,4 @@
+"use strict";
 
 var Tabmix = {
   // aOptions can be: getter, setter or forceUpdate

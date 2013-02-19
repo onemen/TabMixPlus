@@ -1,3 +1,5 @@
+"use strict";
+
 var TabmixTabClickOptions = {
   onDoubleClick: false,
   _blockDblClick: false,

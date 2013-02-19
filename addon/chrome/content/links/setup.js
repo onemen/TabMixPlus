@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * chrome://tabmixplus/content/links/setup.js
  *

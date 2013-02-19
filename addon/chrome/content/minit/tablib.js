@@ -1,3 +1,5 @@
+"use strict";
+
 if (!window.tablib || tablib.version != "tabmixplus")
 var tablib = {
   version : "tabmixplus",

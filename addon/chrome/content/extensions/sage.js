@@ -1,3 +1,5 @@
+"use strict";
+
 // prevent Sage from load pages in locked tabs
 // code by onemen
 

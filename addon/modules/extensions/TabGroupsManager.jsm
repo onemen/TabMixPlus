@@ -1,3 +1,5 @@
+"use strict";
+
 /**
 XXX not working good
 

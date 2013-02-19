@@ -1,3 +1,5 @@
+"use strict";
+
 var EXPORTED_SYMBOLS = ["log"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;

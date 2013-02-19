@@ -1,3 +1,5 @@
+"use strict";
+
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
   visibleRows: 1,

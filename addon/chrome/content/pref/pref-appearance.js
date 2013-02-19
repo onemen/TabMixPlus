@@ -1,3 +1,5 @@
+"use strict";
+
 var TMPstyles = {
   init: function () {
     try {

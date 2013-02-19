@@ -1,3 +1,5 @@
+"use strict";
+
 Tabmix.setSanitizer = {
   addSanitizeItem: function () {
     if (typeof Sanitizer != 'function')

@@ -1,3 +1,5 @@
+"use strict";
+
 Tabmix.BUTTON_OK = 0;
 Tabmix.BUTTON_CANCEL = 1;
 Tabmix.BUTTON_EXTRA1 = 2;

@@ -1,3 +1,5 @@
+"use strict";
+
 var EXPORTED_SYMBOLS = ["AutoReload"];
 
 const Cc = Components.classes;

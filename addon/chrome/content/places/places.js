@@ -1,3 +1,5 @@
+"use strict";
+
 // code by onemen
 var TMP_Places = {
    prefHistory: "extensions.tabmix.opentabfor.history",

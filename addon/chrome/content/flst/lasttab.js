@@ -1,3 +1,5 @@
+"use strict";
+
 /*////////////////////////////////////////////////////////////////////
 // The Original Code is the "LastTab" extension for Mozilla Firefox.//
 // version 1.5 - October 26, 2005                                   //
