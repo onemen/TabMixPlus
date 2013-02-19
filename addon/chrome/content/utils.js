@@ -573,22 +573,28 @@ options = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  _init: function() {
+    Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+    Components.utils.import("resource://gre/modules/Services.jsm");
+    this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
+    XPCOMUtils.defineLazyGetter(this.JSON, "nsIJSON", function() {
+      return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+    });
+    if (this.isVersion(200)) {
+      XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+                 "resource:///modules/RecentWindow.jsm");
+    }
+    window.addEventListener("unload", function tabmix_destroy() {
+      window.removeEventListener("unload", tabmix_destroy, false);
+      this.destroy();
+    }.bind(this), false);
+  },
+
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this.toCode = null;
     this.originalFunctions = null;
-    window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/Services.jsm");
-Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
-  return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
-});
-if (Tabmix.isVersion(200)) {
-  XPCOMUtils.defineLazyModuleGetter(Tabmix, "RecentWindow",
-             "resource:///modules/RecentWindow.jsm");
-}
-window.addEventListener("unload", Tabmix.destroy, false);
+Tabmix._init();
