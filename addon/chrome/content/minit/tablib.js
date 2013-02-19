@@ -760,8 +760,8 @@ var tablib = {
           tabState.index++;
         } catch (ex) {Tabmix.assert(ex);}
       }
-        // we need to update history title after the new page loaded for use in back/forword button
-        var self = this;
+      // we need to update history title after the new page loaded for use in back/forword button
+      var self = this;
       function updateNewHistoryTitle(aEvent) {
         try {
           this.removeEventListener("load", updateNewHistoryTitle, true);

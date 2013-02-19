@@ -280,9 +280,9 @@ var TMP_tabDNDObserver = {
     if ( replaceTab || hideIndicator || !canDrop) {
       this.clearDragmark();
       return;
-   }
+    }
 
-   this.setDragmark(newIndex, left_right);
+    this.setDragmark(newIndex, left_right);
   },
 
   onDrop: function minit_onDrop(event) {
@@ -656,8 +656,8 @@ var TMP_tabDNDObserver = {
       else
          newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0) - this.paddingLeft;
 
-///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
-///XXX look like the same is happen with Firefox
+      ///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
+      ///XXX look like the same is happen with Firefox
       var newMarginY;
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
@@ -718,7 +718,7 @@ var TMP_tabDNDObserver = {
     if (dt.mozItemCount > 1)
       return dt.effectAllowed = "none";
 
-   var types = dt.mozTypesAt(0);
+    var types = dt.mozTypesAt(0);
     // move or copy tab
     if (types[0] == this.TAB_DROP_TYPE) {
       let sourceNode = dt.mozGetDataAt(this.TAB_DROP_TYPE, 0);
