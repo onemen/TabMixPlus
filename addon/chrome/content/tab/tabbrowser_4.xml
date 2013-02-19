@@ -324,8 +324,16 @@
 
       <constructor>
         <![CDATA[
-          // add dragover event handler to TabsToolbar to capture dragging over tabbar margin area
-          this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          // add dragover event handler to TabsToolbar to capture dragging over
+          // tabbar margin area filter out events that are out of the tabbar
+          this.parentNode.tabmix_handleDragover = function (aEvent) {
+            let target = aEvent.target.localName;
+            if (target != "tab" && target != "tabs")
+              return;
+            if (gBrowser.tabContainer.useTabmixDnD(aEvent))
+              TMP_tabDNDObserver.onDragOver(aEvent);
+          }
+          this.parentNode.addEventListener("dragover", this.parentNode.tabmix_handleDragover, true);
           Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
@@ -388,7 +396,7 @@
       <destructor>
         <![CDATA[
           if (this.parentNode)
-            this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+            this.parentNode.removeEventListener("dragover", this.parentNode.tabmix_handleDragover, true);
           delete this.tabstripInnerbox;
         ]]>
       </destructor>

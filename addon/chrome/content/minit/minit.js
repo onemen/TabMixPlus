@@ -97,12 +97,6 @@ var TMP_tabDNDObserver = {
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
-  _handleDragover: function (aEvent) {
-    var tabBar = gBrowser.tabContainer;
-    if (tabBar.useTabmixDnD(aEvent))
-      TMP_tabDNDObserver.onDragOver(aEvent);
-  },
-
   onDragStart: function (event) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
