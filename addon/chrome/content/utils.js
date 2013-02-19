@@ -340,6 +340,10 @@ var Tabmix = {
     this.toCode = null;
     this.originalFunctions = null;
     delete this.window;
+    for (let [id, timer] in Iterator(this._timers)) {
+      timer.cancel();
+      delete this._timers[id];
+    }
   }
 }
 

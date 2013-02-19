@@ -24,6 +24,8 @@ let log = {
     return obj || {toString: function() "undefined"};
   },
 
+  _nextID: 0,
+  _timers: {},
   show: function(aMethod, aDelay, aWindow) {
     try {
       if (typeof(aDelay) == "undefined")
@@ -34,15 +36,17 @@ let log = {
         let result = isObj ? aMethod.obj[aMethod.name] :
                 this.getObject(aWindow, aMethod);
         this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result.toString());
-        if (this.timer) {
-          this.timer.cancel();
-          this.timer = null;
-        }
       }.bind(this);
 
       if (aDelay >= 0) {
-        this.timer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-        this.timer.initWithCallback(logMethod, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
+        let timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+        let timerID = this._nextID++;
+        this._timers[timerID] = timer;
+        timer.initWithCallback(function() {
+          if (timerID in this._timers && this._timers[timerID] === timer)
+            delete this._timers[timerID];
+          logMethod();
+        }.bind(this), aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
       }
       else
         logMethod();
