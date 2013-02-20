@@ -900,6 +900,7 @@ var TabmixSessionManager = {
       var rdfLabels = ["tabs","closedtabs","index","history","properties","selectedIndex",
                "timestamp","title","url","dontLoad","reOpened","name","nameExt","session",
                "status","tabPos","image","scroll","winFeatures"];
+      // keep tabview data from existing session event if the user don't have Tabview installed
       rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
       for (var i = 0; i < rdfLabels.length; i++) {
          this.NC_TM[rdfLabels[i]] = this.RDFService.GetResource(this.NC_NS + rdfLabels[i]);
@@ -1115,7 +1116,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       switch (aTopic) {
          case "quit-application-requested":
             // TabView
-            if (TabView._window) {
+            if (this.tabViewInstalled && TabView._window) {
               if (TabView.isVisible())
                 this.setLiteral(this.gThisWin, "tabview-visibility", "true");
               else
@@ -2321,7 +2322,7 @@ try{
 
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
-      TabView.init();
+      TMP_TabView.init();
    },
 
    getSessionList: function SM_getSessionList(flag) {
@@ -2405,7 +2406,7 @@ try{
    saveTabViewData: function SM_saveTabViewData(aWin, aBackup) {
       if (aBackup && !this.enableBackup)
         return;
-      let tabview = TabView._window;
+      let tabview = this.tabViewInstalled && TabView._window;
       if (tabview) {
         // update all tabs when we exit panorama (tabviewhidden)
         if (aBackup) {
@@ -3102,8 +3103,9 @@ try{
         this.node = rdfTab;
         this.properties = self.getLiteralValue(rdfTab, "properties");
         let attrib = {xultab: this.properties};
-        this.hidden = self.groupUpdates.hideSessionActiveGroup ||
-                      TMP_SessionStore._getAttribute(attrib, "hidden") == "true";
+        // Don't hide tabs when TabView is not installed
+        this.hidden = self.tabViewInstalled && (self.groupUpdates.hideSessionActiveGroup ||
+                      TMP_SessionStore._getAttribute(attrib, "hidden") == "true");
         this.index = self.getIntValue(rdfTab, "tabPos");
         this.pinned = TMP_SessionStore._getAttribute(attrib, "pinned") == "true";
 
@@ -3681,6 +3683,11 @@ try{
 
   /* ............... TabView Data ............... */
 
+  get tabViewInstalled() {
+    delete this.tabViewInstalled;
+    return this.tabViewInstalled = typeof TabView == "object";
+  },
+
   _sendWindowStateEvent: function SM__sendWindowStateEvent(aType) {
     let event = document.createEvent("Events");
     event.initEvent("SSWindowState" + aType, true, false);
@@ -3706,7 +3713,7 @@ try{
 
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
     var groupCount = parsedData.totalNumber || 1;
-    TabView.updateGroupNumberBroadcaster(groupCount);
+    TMP_TabView.updateGroupNumberBroadcaster(groupCount);
 
     // show notification
     if (showNotification && (aOverwriteTabs && groupCount > 1 || groupCount > this._groupCount))
@@ -3717,7 +3724,7 @@ try{
       this._setUIpageBounds();
 
     this._sendWindowStateEvent("Ready");
-    if (TabView._window && !aOverwriteTabs) {
+    if (this.tabViewInstalled && TabView._window && !aOverwriteTabs) {
       // when we don't overwriting tabs try to rearrange the groupItems
       // when TabView._window is false we call this function after tabviewframeinitialized event
       this._groupItemPushAway();
@@ -3733,6 +3740,8 @@ try{
 
   // aWindow: rdfNodeWindow to read from
   _getdSessionTabviewData: function SM__getdSessionTabviewData(aWindow) {
+    if (!this.tabViewInstalled)
+      return;
     let self = this;
     function _fixData(id, parse, def) {
       let data = self.getLiteralValue(aWindow, id);
@@ -3828,9 +3837,7 @@ try{
   },
 
   isEmptyObject: function SM_isEmptyObject(obj) {
-    for (let name in obj)
-      return false;
-    return true;
+    return Object.keys(obj).length == 0;
   },
 
   // return true if there are no visible tabs that are not in the exclude array
@@ -3895,8 +3902,8 @@ try{
   * blankTabs: remaining blank tabs in this windows
   */
   _preperTabviewData: function SM__preperTabviewData(loadOnStartup, blankTabs) {
-    let newGroupItems = this._tabviewData["tabview-group"];
-    let groupItems = TabmixSessionData.getWindowValue(window, "tabview-group", true);
+    let newGroupItems = this.tabViewInstalled ? this._tabviewData["tabview-group"] : {};
+    let groupItems = this.tabViewInstalled ? TabmixSessionData.getWindowValue(window, "tabview-group", true) : {};
     let newGroupItemsIsEmpty = this.isEmptyObject(newGroupItems);
     let groupItemsIsEmpty = this.isEmptyObject(groupItems);
 
@@ -4030,7 +4037,7 @@ try{
 
   // update page bounds when we overwrite tabs
   _setUIpageBounds: function SM__setUIpageBounds() {
-    if (TabView._window) {
+    if (this.tabViewInstalled && TabView._window) {
       let data = TabView._window.Storage.readUIData(window);
       if (this.isEmptyObject(data))
         return;

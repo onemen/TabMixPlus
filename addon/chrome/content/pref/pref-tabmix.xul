@@ -873,7 +873,7 @@
                      <!-- pin/unpin tabs -->
                      <checkbox id="pinTab" prefstring="extensions.tabmix.pinTabMenu"/>
                      <!-- move to group -->
-                     <checkbox id="moveToGroup" label="&moveToGroup.label;" prefstring="extensions.tabmix.moveToGroup"/>
+                     <checkbox id="moveToGroup" prefstring="extensions.tabmix.moveToGroup"/>
                      <!-- Rename tab -->
                      <checkbox id="showRenametab" label="&renametab.label;" prefstring="extensions.tabmix.renameTabMenu" />
                      <!-- Copy tab Url -->

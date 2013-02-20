@@ -863,6 +863,23 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 }
 
 var TMP_TabView = {
+  __noSuchMethod__: function(id, args) {
+    if (!this.installed)
+      return;
+    if (typeof TabView[id] == "function")
+      TabView[id].apply(TabView, args);
+    else
+      Tabmix.log("Error " + id + " is not exist in TabView", true);
+  },
+
+  get installed() {
+    delete this.installed;
+    let installed = typeof TabView == "object";
+    if (installed)
+      Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js");
+    return this.installed = installed;
+  },
+
   checkTabs: function (tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
@@ -913,141 +930,6 @@ var TMP_TabView = {
 
   getIndexInVisibleTabsFrom_tPos: function (aIndex) {
     return this.getIndexInVisibleTabsFromTab(gBrowser.tabs.item(aIndex));
-  },
-
-  /* ............... TabView Code Fix  ............... */
-
-  /*
-   * this code is fixes some bugs in Panorama code when restoring sessions
-   *
-   */
-
-  _patchBrowserTabview: function SM__patchBrowserTabview() {
-    // we need to stop tabs slideShow before Tabview starts
-    Tabmix.changeCode(TabView, "TabView.toggle")._replace(
-      'this.show();',
-      '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
-       $&}'
-    ).toCode();
-
-    // don't do anything if Session Manager extension installed
-    if (Tabmix.extensions.sessionManager)
-      return;
-
-    // add our function to the TabView initFrameCallbacks
-    // we don't need our patch for the first run
-    let self = this;
-    var callback = function callback_TMP_TabView_patchTabviewFrame() {
-      try {
-        TabmixSessionManager._groupItemPushAway();
-        self._patchTabviewFrame();
-      } catch (ex) { Tabmix.assert(ex);}
-    }
-
-    if (TabView._window)
-      callback();
-    else
-      TabView._initFrameCallbacks.push(callback);
-  },
-
-  _patchTabviewFrame: function SM__patchTabviewFrame(){
-    // Firefox 8.0 use strict mode - we need to map global variable
-    TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-    Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
-      '"use strict";',
-      '$&' +
-      'let win = TabView._window;' +
-      'let GroupItem = win.GroupItem;' +
-      'let iQ = win.iQ;' +
-      'let UI = win.UI;' +
-      'let Utils = win.Utils;' +
-      'let GroupItems = win.GroupItems;' +
-      'let Storage = win.Storage;'
-    )._replace(
-      'this.',
-      'GroupItems.', {flags: "g"}
-    )._replace(
-      // This group is re-used by session restore
-      // make sure all of its children still belong to this group.
-      // Do it before setBounds trigger data save that will overwrite
-      // session restore data.
-      // We call TabItems.resumeReconnecting later to reconnect the tabItem.
-      'groupItem.userSize = data.userSize;',
-      'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
-      '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
-      '  if (!tabData || tabData.groupID != data.id) {' +
-      '    tabItem._reconnected = false;' +
-      '  }' +
-      '});' +
-      '$&'
-    ).toCode();
-
-    // add tab to the new group on tabs order not tabItem order
-    TabView._window.UI._original_reset = TabView._window.UI.reset;
-    Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
-      '"use strict";',
-      '$&' +
-      'let win = TabView._window;' +
-      'let Trenches = win.Trenches;' +
-      'let Items = win.Items;' +
-      'let iQ = win.iQ;' +
-      'let Rect = win.Rect;' +
-      'let GroupItems = win.GroupItems;' +
-      'let GroupItem = win.GroupItem;' +
-      'let UI = win.UI;'
-    )._replace(
-      'this.',
-      'UI.', {flags: "g", silent: true}
-    )._replace(
-      'items = TabItems.getItems();',
-      'items = gBrowser.tabs;'
-    )._replace(
-      /items\.forEach\(function\s*\(item\)\s*{/,
-      'Array.forEach(items, function(tab) { \
-       if (tab.pinned) return;\
-       let item = tab._tabViewTabItem;'
-    )._replace(
-      'groupItem.add(item, {immediately: true});',
-      'item._reconnected = true; \
-       $&'
-    )._replace(
-      /(\})(\)?)$/,
-      '  GroupItems.groupItems.forEach(function(group) {' +
-      '    if (group != groupItem)' +
-      '      group.close();' +
-      '  });' +
-      ' $1$2'
-    ).toCode();
-
-    TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
-    TabView._window.TabItems.resumeReconnecting = function TabItems_resumeReconnecting() {
-      let TabItems = TabView._window.TabItems;
-      let Utils = TabView._window.Utils;
-      Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
-      TabItems._reconnectingPaused = false;
-      Array.forEach(gBrowser.tabs, function (tab){
-        if (tab.pinned)
-          return;
-        let item = tab._tabViewTabItem;
-        if ("__tabmix_reconnected" in item && !item.__tabmix_reconnected) {
-          item._reconnected = false;
-          delete item.__tabmix_reconnected;
-        }
-        if (!item._reconnected)
-          item._reconnect();
-      });
-    }
-  },
-
-  _resetTabviewFrame: function SM__resetTabviewFrame(){
-    if (!Tabmix.extensions.sessionManager && TabView._window) {
-      TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
-      delete TabView._window.GroupItems._original_reconstitute;
-      TabView._window.UI.reset = TabView._window.UI._original_reset;
-      TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
-      delete TabView._window.UI._original_reset;
-      delete TabView._window.TabItems._original_resumeReconnecting;
-    }
   }
 }
 

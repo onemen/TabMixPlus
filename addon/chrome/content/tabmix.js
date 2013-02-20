@@ -210,37 +210,6 @@ var TMP_eventListener = {
       case "fullscreen":
         this.onFullScreen(false);
         break;
-      /**
-       * for Tabview
-       */
-      case "tabviewshown":
-        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
-        break;
-      case "tabviewhidden":
-        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
-        TMP_LastTab.tabs = null;
-        if (TabmixTabbar.hideMode != 2)
-          setTimeout(function () {gBrowser.tabContainer.adjustTabstrip()}, 0);
-        break;
-      case "TabShow":
-        if (!gBrowser.tabContainer._onDelayTabShow) {
-          // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function (aEvent) {
-            gBrowser.tabContainer._onDelayTabShow = null;
-            TMP_eventListener.onTabOpen_delayUpdateTabBar(aEvent.target);
-          }, 0, aEvent);
-        }
-        break;
-      case "TabHide":
-        if (!gBrowser.tabContainer._onDelayTabHide) {
-          // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
-            gBrowser.tabContainer._onDelayTabHide = null;
-            let tab = aEvent.target;
-            TMP_eventListener.onTabClose_updateTabBar(tab, true);
-          }, 0, aEvent);
-        }
-        break;
     }
   },
 
@@ -320,7 +289,8 @@ var TMP_eventListener = {
     }
 
     try {
-      TMP_TabView._patchBrowserTabview();
+      if (TMP_TabView.installed)
+        TMP_TabView._patchBrowserTabview();
     } catch (ex) {Tabmix.assert(ex);}
 
     // we can't use TabPinned.
@@ -367,14 +337,6 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);
-
-    var tabView = document.getElementById("tab-view-deck");
-    if (tabView) {
-      tabView.addEventListener("tabviewhidden", this, true);
-      tabView.addEventListener("tabviewshown", this, true);
-      tabBar.addEventListener("TabShow", this, true);
-      tabBar.addEventListener("TabHide", this, true);
-    }
 
     try {
       TabmixProgressListener.startup(gBrowser);
@@ -980,14 +942,7 @@ var TMP_eventListener = {
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
-    var tabView = document.getElementById("tab-view-deck");
-    if (tabView) {
-      tabView.removeEventListener("tabviewhidden", this, false);
-      tabView.removeEventListener("tabviewshown", this, false);
-      gBrowser.tabContainer.removeEventListener("TabShow", this, true);
-      gBrowser.tabContainer.removeEventListener("TabHide", this, true);
-      TMP_TabView._resetTabviewFrame();
-    }
+    TMP_TabView._resetTabviewFrame();
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version

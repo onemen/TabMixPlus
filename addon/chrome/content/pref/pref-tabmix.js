@@ -76,6 +76,15 @@ function before_Init() {
     let item = $("browser.warnOnRestart");
     item.parentNode.removeChild(item);
   }
+
+  // if Tabview exist copy its menu label
+  let moveToGroup = $("moveToGroup");
+  if (topWindow.TMP_TabView.installed) {
+    let label = topWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
+    moveToGroup.label = label;
+  }
+  else
+    moveToGroup.parentNode.removeChild(moveToGroup);
 }
 
 // load all preferences into the dialog
