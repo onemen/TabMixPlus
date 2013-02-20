@@ -175,7 +175,7 @@ var tablib = {
        if (newIndex > -1) {\
          let tabs = TMP_TabView.currentGroup();\
          tab = tabs[newIndex];\
-         if (tab && this._removingTabs.indexOf(tab) == -1) {\
+         if (tab && !tab.closing) {\
            this.selectedTab = tab;\
            return;\
          }\
@@ -1148,7 +1148,7 @@ since we can have tab hidden or remove the index can change....
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.filter(this.tabContainer.getElementsByAttribute("flst_id", "*"),
-          function(tab) {return !tab.hidden && this._removingTabs.indexOf(tab) == -1;
+          function(tab) {return !tab.hidden && !tab.closing;
       }, this);
       for (var i = 0; i < items.length; ++i ) {
         temp_id = items[i].getAttribute("flst_id");

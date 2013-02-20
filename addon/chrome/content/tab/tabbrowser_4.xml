@@ -536,8 +536,7 @@
           var tabs = this.childNodes;
           for (let i = 0; i < tabs.length; i++){
             let tab = tabs[i];
-///XXX in Firefox 7.0+ we can use !tab.closing change this on constructoe !???
-            if (!tab.hidden && this.tabbrowser._removingTabs.indexOf(tab) == -1)
+            if (!tab.hidden && !tab.closing)
               return tab;
           }
           return this.mCurrentTab;
@@ -551,7 +550,7 @@
           var tabs = this.childNodes;
           for (let i = tabs.length - 1; i >= 0; i--){
             let tab = tabs[i];
-            if (!tab.hidden && this.tabbrowser._removingTabs.indexOf(tab) == -1)
+            if (!tab.hidden && !tab.closing)
               return tab;
           }
           return this.mCurrentTab;
@@ -641,7 +640,7 @@
             if (!tab.pinned)
               break;
 
-            if (this.tabbrowser._removingTabs.indexOf(tab) == -1)
+            if (!tab.closing)
                count++;
           }
           return count;

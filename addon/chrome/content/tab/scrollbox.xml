@@ -370,7 +370,7 @@
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            if (tabBar.tabbrowser._removingTabs.indexOf(tab) != -1) {
+            if (!tab.closing) {
               tab.removeAttribute("tabmix-firstTabInRow");
               continue;
             }
