@@ -1,5 +1,4 @@
 content   tabmixplus                 chrome/content/
-skin      tabmixplus   classic/1.0   chrome/skin/
 resource  tabmixplus                 modules/
 
 locale    tabmixplus   ar            chrome/locale/ar/
@@ -67,23 +66,16 @@ overlay   chrome://sage/content/sage.xul                            chrome://tab
 overlay   chrome://wizzrss/content/wizzrss.xul                      chrome://tabmixplus/content/extensions/wizzrss.xul
 overlay   chrome://wizzrss/content/feedster.xul                     chrome://tabmixplus/content/extensions/wizzrss.xul
 
+skin      tabmixplus   classic/1.0   chrome/skin/
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/win/   os=WINNT
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/mac/   os=Darwin
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/linux/ os=Linux
+
+style     chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsr_17.css                                  appversion>=17
+style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp15.css os=WINNT osversion<6 appversion<16
+style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css os=WINNT osversion<6 appversion>=16
+
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferences.css
-
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay4.css      appversion<17
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay17.css     appversion>=17
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp15.css appversion<16  os=WINNT osversion<6
-style   chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css appversion>=16 os=WINNT osversion<6
-
-#skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/4.0/                  appversion>=4.0b7pre
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/win/                      os=WINNT
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/mac/                      os=Darwin
-#skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/linux/                    os=Linux
-
-skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/win/               os=WINNT
-skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/mac/               os=Darwin
-skin    tabmix-os                 tabmixplus   chrome://tabmixplus/skin/app_version/4.0/linux/             os=Linux
-
-style   chrome://browser/content/browser.xul   chrome://tabmix-os/skin/browser.css
 
 manifest  test.manifest

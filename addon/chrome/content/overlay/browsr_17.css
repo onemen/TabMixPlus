@@ -4,9 +4,6 @@
  *
  **/
 
-@import url("chrome://tabmixplus/content/overlay/browsroverlay_base.css");
-@import url("chrome://tabmixplus/content/overlay/browsroverlay4.css");
-
 /* for the case user drag background tab
    when selectTabOnMouseDown is false */
 .tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {

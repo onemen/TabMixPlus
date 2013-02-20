@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
+<?xml-stylesheet href="chrome://tabmixplus/content/overlay/browsr.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
+<?xml-stylesheet href="chrome://tabmix-os/skin/browser.css" type="text/css"?>
 
 <?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xul"?>
 <?xul-overlay href="chrome://tabmixplus/content/pref/shortcuts/shortcuts.xul"?>
