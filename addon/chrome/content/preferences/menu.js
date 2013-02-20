@@ -6,6 +6,16 @@ var gMenuPane = {
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
 
     var browserWindow = Tabmix.getTopWin();
+    // if Tabview exist copy its menu label
+    if (browserWindow.TMP_TabView.installed) {
+      let label = browserWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
+      $("moveToGroup").label = label;
+    }
+    else {
+      gPrefWindow.removeChild("pref_showMoveToGroup");
+      gPrefWindow.removeChild("moveToGroup");
+    }
+
     // check if bookmark item in tab context menu
     Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
 
