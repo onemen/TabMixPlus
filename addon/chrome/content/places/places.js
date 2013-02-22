@@ -684,13 +684,15 @@ var TMP_Places = {
     // set title at startup
     // when we are not using session manager
     // startup page(s) or home page(s) load before bookmarks service
-    for (let i = 0; i < gBrowser.tabs.length ; i++) {
-      let browser = gBrowser.getBrowserAtIndex(i);
-      let bookMarkName = this.getTitleFromBookmark(browser.currentURI.spec);
+    Array.forEach(gBrowser.tabs, function(tab) {
+      let browser = tab.linkedBrowser;
+      let url = browser.currentURI.spec;
+      if (this.isUserRenameTab(tab, url))
+        return;
+      let bookMarkName = this.getTitleFromBookmark(url);
       if (bookMarkName && browser.contentDocument.title != bookMarkName)
         browser.contentDocument.title = bookMarkName;
-    }
-
+    }, this)
     this.startObserver();
   },
 

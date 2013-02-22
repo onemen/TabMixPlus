@@ -569,7 +569,10 @@ var TMP_eventListener = {
             browser.__SS_data && browser.__SS_data._tabStillLoading;
         if (url && tabStillLoading) {
           this._tabStillLoading++;
-          let title = TMP_SessionStore._getTitle(browser.__SS_data, url, tab.label);
+          let data = browser.__SS_data;
+          if (data && data.attributes && data.attributes["label-uri"])
+            tab.setAttribute("label-uri", data.attributes["label-uri"]);
+          let title = TMP_SessionStore._getTitle(data, url, tab.label);
           if (title != tab.label) {
             if (setWidth) {
               tab.removeAttribute("width");
