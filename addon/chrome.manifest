@@ -72,6 +72,8 @@ style     chrome://browser/content/preferences/preferences.xul      chrome://tab
 
 style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay4.css      appversion<17
 style   chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsroverlay17.css     appversion>=17
+style   chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp15.css appversion<16  os=WINNT osversion<6
+style   chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css appversion>=16 os=WINNT osversion<6
 
 #skin    tabmix-app-version        tabmixplus   chrome://tabmixplus/skin/app_version/4.0/                  appversion>=4.0b7pre
 #skin    tabmix-os                 tabmixplus   chrome://tabmix-app-version/skin/win/                      os=WINNT

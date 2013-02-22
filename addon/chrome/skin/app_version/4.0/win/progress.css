@@ -42,25 +42,4 @@
   border-top: 1px solid rgba(100,100,100,.1);
   border-bottom: 1px solid rgba(0,0,0,.2);
   background-color: Highlight;
-  background-image: -moz-linear-gradient(left, rgba(255,255,255,.1) 50%,
-                                               rgba(255,255,255,.4) 90%,
-                                               rgba(255,255,255,.8));
 }
-
-.tab-progress > .progress-bar:-moz-locale-dir(rtl) {
-  background-image: -moz-linear-gradient(right, rgba(255,255,255,.1) 50%,
-                                                rgba(255,255,255,.4) 90%,
-                                                rgba(255,255,255,.8));
-}
-
-/*
-.tab-progress > .progress-remainder {
-  border-top: 1px solid rgba(100,100,100,.1);
-  border-bottom: 1px solid rgba(0,0,0,.2);
-  background-image: -moz-linear-gradient(right, ThreeDShadow 80%, ThreeDLightShadow);
-}
-
-.tab-progress > .progress-remainder:-moz-locale-dir(rtl){
-  background-image: -moz-linear-gradient(left, ThreeDShadow 80%, ThreeDLightShadow);
-}
-*/

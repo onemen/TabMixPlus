@@ -865,10 +865,16 @@ var gTMPprefObserver = {
 
   dynamicRules: {},
   createColorRules: function TMP_PO_createColorRules() {
-    var ss = this.tabStyleSheet;
+    var bottomBorder, ss = this.tabStyleSheet;
     this.gradients = { };
-    this.gradients.body = "-moz-linear-gradient(#colorCode, #colorCode)";
-    let bottomBorder = "-moz-linear-gradient(bottom, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
+    if (Tabmix.isVersion(160)) {
+      this.gradients.body = "linear-gradient(#colorCode, #colorCode)";
+      bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
+    }
+    else {
+      this.gradients.body = "-moz-linear-gradient(#colorCode, #colorCode)";
+      bottomBorder = "-moz-linear-gradient(bottom, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
+    }
     this.gradients.tab = Tabmix.isMac ? this.gradients.body : (bottomBorder + "," + this.gradients.body);
     var backgroundRule = "{-moz-appearance: none; background-image: " + this.gradients.tab + " !important;}"
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
@@ -965,18 +971,33 @@ var gTMPprefObserver = {
     let index = ss.insertRule(marginStart, ss.cssRules.length);
     this.dynamicRules["tabmix-firstTabInRow"] = ss.cssRules[index];
 
+    // rule for progress-bar background-image
+    // move it back to css file when we drop support for Firefox 11-15
+    let backgroundImage = ".tab-progress > .progress-bar:-moz-locale-dir(#1) {" +
+        "background-image: linear-gradient(#2, rgba(255,255,255,.1) 50%," +
+                                              "rgba(255,255,255,.4) 90%,"+
+                                              "rgba(255,255,255,.8));}"
+    backgroundImage = backgroundImage.replace("#1", Tabmix.ltr ? "ltr" : "rtl");
+    if (Tabmix.isVersion(160))
+      backgroundImage = backgroundImage.replace("#2", Tabmix.ltr ? "to right" : "to left");
+    else {
+      backgroundImage = backgroundImage.replace("#2", Tabmix.ltr ? "left" : "rigth").
+          replace("linear-gradient", "-moz-linear-gradient");
+    }
+    ss.insertRule(backgroundImage, ss.cssRules.length);
+
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
-      let padding = parseInt(window.getComputedStyle(gBrowser.tabs[0], null).paddingBottom) || 0;
+      let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
       let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = ss.insertRule(newRule, ss.cssRules.length);
       newRule = ss.cssRules[index];
       gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
         gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
-        let padding = parseInt(window.getComputedStyle(aEvent.target, null).paddingBottom) || 0;
+        let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
     }

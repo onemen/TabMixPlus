@@ -915,7 +915,8 @@ var TabmixAllTabs = {
     if (typeof colorfulTabs == "object") {
       if (colorfulTabs.clrAllTabsPopPref) {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
-        mi.style.setProperty('background-image','-moz-linear-gradient(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),-moz-linear-gradient(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
+        let gradient = Tabmix.isVersion(160) ? "linear-gradient" : "-moz-linear-gradient";
+        mi.style.setProperty('background-image', gradient + '(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),' + gradient + '(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
       }
       else
         mi.style.setProperty('background-image','none','important');
