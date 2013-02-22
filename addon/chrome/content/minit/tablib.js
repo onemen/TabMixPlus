@@ -917,17 +917,17 @@ var tablib = {
         warning = "All_onExit";
       }
       if (this.warnAboutClosingTabs(warning)) {
-        var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           this.tabContainer.updateVerticalTabStrip(true)
-        this.moveTabTo(this.mCurrentTab, 0);
-        for (var i = childNodes.length - 1; i >= 0; --i) {
-          if (!childNodes[i].pinned)
-            this.removeTab(childNodes[i], {animate: false});
-        }
+        let tabs = this.visibleTabs.slice();
+        // remove current tab last
         if (!this.mCurrentTab.pinned)
-          this.removeTab(this.mCurrentTab, {animate: animate});
-          // _handleTabSelect will call mTabstrip.ensureElementIsVisible
+          tabs.unshift(tabs.splice(tabs.indexOf(this.mCurrentTab), 1)[0]);
+        tabs.reverse().forEach(function TMP_removeTab(tab) {
+          if (!tab.pinned)
+            this.removeTab(tab, {animate: false});
+        }, this);
+        // _handleTabSelect will call mTabstrip.ensureElementIsVisible
       }
     }
 
