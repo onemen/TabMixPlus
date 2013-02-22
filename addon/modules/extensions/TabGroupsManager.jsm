@@ -117,7 +117,7 @@ let TMP_TabGroupsManager = {
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
     aWindow.TMP_TabGroupsManager = {}
     aWindow.TMP_TabGroupsManager.tabmixSessionsManager = this.tabmixSessionsManager.bind(aWindow);
-    aWindow.TabmixSessionManager.saveAllGroupsData = this._saveAllGroupsData.bind(aWindow.TabmixSessionManager);
+    aWindow.Tabmix.toCode(sessionManager, "saveAllGroupsData", this._saveAllGroupsData.toString());
   },
 
   // for TabGroupsManager use - don't change function name
@@ -127,7 +127,7 @@ let TMP_TabGroupsManager = {
       return false;
 
     return this.Tabmix.prefs.getBoolPref("sessions.manager") &&
-        (!Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this)
+        (!this.Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this)
   },
 
   // for TabGroupsManager use
