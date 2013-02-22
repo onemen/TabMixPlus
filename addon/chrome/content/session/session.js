@@ -57,7 +57,7 @@ Tabmix.Sanitizer = {
 // XXX need to add test if we fail to delete then alert the user or ....?
    sanitize: function TMP_SN_sanitize() {
       // get file references
-      var sessionFile = Services.dirsvc.get("ProfD", Components.interfaces.nsILocalFile);
+      var sessionFile = TabmixSvc.FileUtils.getDir("ProfD", []);
       var sessionFileBackup = sessionFile.clone();
       var sessionsBackupDir = sessionFile.clone()
       sessionFile.append("session.rdf");
@@ -878,7 +878,7 @@ var TabmixSessionManager = {
    },
 
    get profileDir() {
-      return Services.dirsvc.get("ProfD", Components.interfaces.nsILocalFile);
+      return TabmixSvc.FileUtils.getDir("ProfD", []);
    },
 
    getAnonymousId: function() {
