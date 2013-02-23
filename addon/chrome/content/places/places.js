@@ -90,7 +90,9 @@ var TMP_Places = {
         '   params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;' +
         '   if ("backgroundPref" in tabmixArg)' +
         '     params.inBackground = getBoolPref(tabmixArg.backgroundPref);' +
-        ' }'
+        ' }' +
+        ' else if (Tabmix.isCallerInList("BG_observe"))' +
+        '   params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
       ).toCode();
 
       // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
