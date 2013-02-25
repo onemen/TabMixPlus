@@ -146,8 +146,8 @@ var gAppearancePane = {
   },
 
   openAdvanceAppearance: function() {
-    let url = "chrome://tabmixplus/content/pref/pref-appearance.xul";
-    window.openDialog(url, "advanceAppearanceDialog", "modal,titlebar,toolbar");
+    let url = "chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xul";
+    window.openDialog(url, "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
   }
 
 }
