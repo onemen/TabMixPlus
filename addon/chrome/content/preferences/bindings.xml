@@ -31,4 +31,19 @@
     </content>
   </binding>
 
+  <binding id="preference" extends="chrome://global/content/bindings/preferences.xml#preference">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          Tabmix.changeCode(this, "_setValue")._replace(
+            'return aValue;',
+            'else if (!this.instantApply && aUpdate && this.value === aValue) {' +
+            '  gPrefWindow.updateApplyButton({target: this});}' +
+            '$&'
+          ).toCode();
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
 </bindings>

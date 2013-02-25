@@ -1,10 +1,14 @@
 
+preference {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#preference") !important;
+}
+
 #TabMIxPreferences:not([linux]) checkbox {
-  -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox") !important;
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox") !important;
 }
 
 #TabMIxPreferences[linux] checkbox {
-  -moz-binding: url("chrome://tabmixplus/content/preferences/checkbox.xml#checkbox-with-spacing") !important;
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox-with-spacing") !important;
 }
 
 /* Global Styles */
