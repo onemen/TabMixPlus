@@ -40,8 +40,8 @@ locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
 
-overlay   about:preferences                                         chrome://tabmixplus/content/pref/incontentPreferences.xul
-overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/pref/preferencesOverlay.xul
+overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul
+overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferencesOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul    appversion>=13.0a1
 
@@ -59,8 +59,8 @@ overlay   chrome://browser/content/places/places.xul                chrome://tab
 overlay   chrome://browser/content/places/bookmarkProperties.xul    chrome://tabmixplus/content/places/bookmarkProperties.xul
 overlay   chrome://browser/content/places/bookmarkProperties2.xul   chrome://tabmixplus/content/places/bookmarkProperties.xul
 
-overlay   chrome://browser/content/preferences/sanitize.xul         chrome://tabmixplus/content/pref/overlaySanitizeUI.xul
-overlay   chrome://browser/content/sanitize.xul                     chrome://tabmixplus/content/pref/overlaySanitizeUI.xul
+overlay   chrome://browser/content/preferences/sanitize.xul         chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
+overlay   chrome://browser/content/sanitize.xul                     chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
 
 overlay   chrome://sage/content/sage.xul                            chrome://tabmixplus/content/extensions/sage.xul
 overlay   chrome://wizzrss/content/wizzrss.xul                      chrome://tabmixplus/content/extensions/wizzrss.xul
