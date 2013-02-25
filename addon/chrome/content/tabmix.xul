@@ -5,7 +5,7 @@
 <?xml-stylesheet href="chrome://tabmix-os/skin/browser.css" type="text/css"?>
 
 <?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xul"?>
-<?xul-overlay href="chrome://tabmixplus/content/pref/shortcuts/shortcuts.xul"?>
+<?xul-overlay href="chrome://tabmixplus/content/preferences/shortcuts.xul"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
