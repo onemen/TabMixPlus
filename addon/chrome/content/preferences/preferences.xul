@@ -16,7 +16,7 @@
 
 <prefwindow type="prefwindow"
             id="TabMIxPreferences"
-            windowtype="mozilla:tabmixopt1"
+            windowtype="mozilla:tabmixopt"
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
