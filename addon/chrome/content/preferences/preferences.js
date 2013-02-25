@@ -435,7 +435,7 @@ function showPane(paneToLoad) {
   docElt.showPane(paneToLoad);
 }
 
-function openHelp() {
+function openHelp(helpTopic) {
   var helpPage = "http://tmp.garyr.net/help/#"
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
@@ -454,10 +454,12 @@ function openHelp() {
   var where = selectHelpPage() ||
     recentWindow.isTabEmpty(tabBrowser.selectedTab) ? "current" : "tab";
 
-  var currentPane = document.documentElement.currentPane;
-  var helpTopic = currentPane.helpTopic;
-  if (currentPane.id == "paneSession" && helpTopic == "tabmix")
+  if (!helpTopic) {
+    var currentPane = document.documentElement.currentPane;
+    helpTopic = currentPane.helpTopic;
+    if (currentPane.id == "paneSession" && helpTopic == "tabmix")
       helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
+  }
 
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
