@@ -42,6 +42,7 @@
                   name="extensions.tabmix.offsetAmountToScroll"                                 type="bool"/>
       <preference id="pref_currentTab"        name="extensions.tabmix.currentTab"               type="bool"/>
       <preference id="pref_unreadTab"         name="extensions.tabmix.unreadTab"                type="bool"/>
+      <preference id="pref_unreadTabreload"   name="extensions.tabmix.unreadTabreload"          type="bool"/>
       <preference id="pref_unloadedTab"       name="extensions.tabmix.unloadedTab"              type="bool"/>
       <preference id="pref_otherTab"          name="extensions.tabmix.otherTab"                 type="bool"/>
       <preference id="pref_lockedIcon"        name="extensions.tabmix.extraIcons.locked"        type="bool"/>
@@ -160,24 +161,28 @@
           </groupbox>
         </tabpanel>
         <tabpanel>
-          <groupbox id="tabappearance" flex="1" orient="horizontal">
+          <groupbox id="tabappearance" flex="1">
             <caption label="&highlight.label;"/>
-            <vbox flex="1">
-              <!-- Hightlight Current tab -->
-              <checkbox id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
-              <!-- Highlight unread tabs -->
-              <checkbox id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
-            </vbox>
-            <vbox flex="1">
-              <!-- Hightlight Unloaded tabs -->
-              <checkbox id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
-              <!-- Highlight other tabs -->
-              <checkbox id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
-            </vbox>
-            <vbox flex="1" align="end">
-              <button id="advancedAppearance" label="&setstyles.label;…"
-                      oncommand="gAppearancePane.openAdvanceAppearance();"/>
-            </vbox>
+            <hbox>
+              <vbox flex="1">
+                <!-- Hightlight Current tab -->
+                <checkbox id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
+                <!-- Highlight unread tabs -->
+                <checkbox id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
+              </vbox>
+              <vbox flex="1">
+                <!-- Hightlight Unloaded tabs -->
+                <checkbox id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
+                <!-- Highlight other tabs -->
+                <checkbox id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
+              </vbox>
+              <vbox flex="1" align="end">
+                <button id="advancedAppearance" label="&setstyles.label;…"
+                        oncommand="gAppearancePane.openAdvanceAppearance();"/>
+              </vbox>
+            </hbox>
+            <checkbox id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
+                      preference="pref_unreadTabreload" observes="obs_unreadTab"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&show.ontab.label;"/>
@@ -276,8 +281,9 @@
     <broadcasterset id="paneAppearance:Broadcaster">
       <broadcaster id="obs_newTabButton"/>
       <broadcaster id="obs_hideAllTabsButton"/>
-      <broadcaster id="obs_showTabX"/>
       <broadcaster id="obs_smoothScroll" inverseDependency="true"/>
+      <broadcaster id="obs_unreadTab"/>
+      <broadcaster id="obs_showTabX"/>
     </broadcasterset>
 
   </prefpane>
