@@ -25,15 +25,15 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (autoComplete) {
     this.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
       'openUILink(url, aEvent);',
-      <![CDATA[
-      var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
-      var where = isBlankTab ? "current" : whereToOpenLink(aEvent);
-      var pref = "extensions.tabmix.loadUrlInBackground";
-      if (Tabmix.isVersion(100))
-        openUILinkIn(url, where, {inBackground: Services.prefs.getBoolPref(pref)});
-      else
-        openUILinkIn(url, where, false, null, null, {backgroundPref: pref});
-      ]]>
+      'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
+      'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
+      'var pref = "extensions.tabmix.loadUrlInBackground";' +
+      'if (Tabmix.isVersion(100))' +
+      '  openUILinkIn(url, where, {' +
+      '         inBackground: Services.prefs.getBoolPref(pref),' +
+      '         initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});' +
+      'else' +
+      '  openUILinkIn(url, where, false, null, null, {backgroundPref: pref});'
     ).toCode();
   }
 
@@ -63,7 +63,17 @@ function TMP_TBP_Startup() {
     gTMPprefObserver.init();
     // force-call the observer once, in order to kill new windows faster
     if (Tabmix.singleWindowMode)
-      TMP_DOMWindowOpenObserver.onObserve(window, TMP_DOMWindowOpenObserver);
+      TMP_DOMWindowOpenObserver.onObserve(window);
+
+    var SM = TabmixSessionManager;
+    if (Tabmix.isVersion(200)) {
+      SM._inPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+    }
+    else {
+      let pbs = Cc["@mozilla.org/privatebrowsing;1"].
+                getService(Ci.nsIPrivateBrowsingService);
+      SM._inPrivateBrowsing = pbs.privateBrowsingEnabled;
+    }
 
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
@@ -75,29 +85,27 @@ function TMP_TBP_Startup() {
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
     var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
 
-    var pbs = Cc["@mozilla.org/privatebrowsing;1"].
-              getService(Ci.nsIPrivateBrowsingService);
-    TabmixSessionManager._inPrivateBrowsing = pbs.privateBrowsingEnabled;
-    bowserStartup = bowserStartup._replace(
-      'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);',
-      <![CDATA[
-       var remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;
-       var url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;
-       gBrowser.tabContainer.adjustTabstrip(true, url);
-       if (!Tabmix.singleWindowMode) {
-         window.tabmix_afterTabduplicated = true;
-         TabmixSessionManager.init();
-         $&
-       }
-      ]]>
-    );
+    // Bug 756313 - Don't load homepage URI before first paint
+    // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
+    var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
+    var swapNewCode =
+      ' if (!Tabmix.singleWindowMode) {' +
+      '   window.tabmix_afterTabduplicated = true;' +
+      '   TabmixSessionManager.init();' +
+      '   let remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
+      '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
+      '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
+      '   $&' +
+      ' }'
+    if (!Tabmix.isVersion(190))
+      bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var windowOpeneByTabmix = "tabmixdata" in window;
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
 
     var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = TabmixSessionManager._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+    var disAllow = SM._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
@@ -113,6 +121,7 @@ function TMP_TBP_Startup() {
          (firstWindow && sessionManager && restoreOrAsk))) {
       // make sure sessionstore is init without restornig pinned tabs
       TabmixSvc.ss.init(null);
+      SM._notifyWindowsRestored = true;
 
       // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
       // maybe all tabs in the last session were pinned, we leet firefox to load the hompages
@@ -122,16 +131,15 @@ function TMP_TBP_Startup() {
       );
       bowserStartup = bowserStartup._replace(
         'if (window.opener && !window.opener.closed) {',
-        <![CDATA[
-          if (uriToLoad && uriToLoad != "about:blank") {
-            for (var i = 0; i < gBrowser.tabs.length ; i++) {
-              gBrowser.tabs[i].loadOnStartup = true;
-            }
-          }
-          if (uriToLoad == "about:blank" || "tabmixdata" in window) {
-            gBrowser.selectedBrowser.stop();
-          }
-        $&]]>
+        '  if (uriToLoad && uriToLoad != "about:blank") {' +
+        '    for (var i = 0; i < gBrowser.tabs.length ; i++) {' +
+        '      gBrowser.tabs[i].loadOnStartup = true;' +
+        '    }' +
+        '  }' +
+        '  if (uriToLoad == "about:blank" || "tabmixdata" in window) {' +
+        '    gBrowser.selectedBrowser.stop();' +
+        '  }' +
+        '$&'
       );
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
@@ -150,13 +158,14 @@ function TMP_TBP_Startup() {
           ["delayedStartup", delayedStartup];
     Tabmix.newCode(name, fn)._replace(
       '{',
-      <![CDATA[{
-      try {
-        if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);
-        Tabmix.getNewTabButtonWidth();
-        TabmixSessionManager.init();
-      } catch (ex) {Tabmix.assert(ex);}
-      ]]>
+      '{' +
+      'try {' +
+      '  if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);' +
+      '  Tabmix.getNewTabButtonWidth();' +
+      '  TabmixSessionManager.init();' +
+      '} catch (ex) {Tabmix.assert(ex);}'
+    )._replace(
+      swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
@@ -229,9 +238,9 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
 
     tabBrowser.getTabForLastPanel = function () {
-      let browser = this.mPanelContainer.lastChild.firstChild.firstChild;
-      if (Tabmix.isVersion(150)) // changed by Bug 749628
-        browser = browser.firstChild;
+      let notificationbox = this.mPanelContainer.lastChild;
+      let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
+      let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
       return this._getTabForContentWindow(browser.contentWindow);
     }
 

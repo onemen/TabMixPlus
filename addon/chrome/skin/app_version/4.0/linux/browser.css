@@ -19,10 +19,6 @@
   margin-bottom: -4px !important;
 }
 
-.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
-  pointer-events: auto;
-}
-
 #TabsToolbar[tabmix_skin][multibar] > .toolbarbutton-1,
 #TabsToolbar[tabmix_skin][multibar] > #tabs-closebutton,
 #TabsToolbar[tabmix_skin][multibar] > #appmenu-toolbar-button {

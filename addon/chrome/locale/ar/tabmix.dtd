@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "الألسنة المغلقة">
+<!ENTITY closedtabsbtn.tooltip "عرض قائمة الألسنة المغلقة">
+<!ENTITY sessionbtn.tooltip "عرض وإدارة جلساتك">
+<!ENTITY tabslistbtn.label "الألسنة المفتوحة">
+<!ENTITY tabslistbtn.tooltip "عرض قائمة الألسنة المفتوحة">
+<!ENTITY closedwindowsbtn.label "النوافذ المغلقة">
+<!ENTITY closedwindowsbtn.tooltip "عرض قائمة النوافذ المغلقة">
+<!ENTITY page.header.title "Tab Mix Plus Options">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY session.Tools "Session Manager">
+<!ENTITY closedWin.label "قائمة النوافذ المغلقة">
+<!ENTITY duplicateTabMenu.label "كرّر اللسان">
+<!ENTITY duplicateTabMenu.accesskey "ر">
+<!ENTITY duplicateinWin.label "كرّر في نافذة جديدة">
+<!ENTITY duplicateinWin.accesskey "ف">
+<!ENTITY detachTab.label "انقل إلى نافذة جديدة">
+<!ENTITY detachTab.accesskey "ذ">
+<!ENTITY mergeContext.label "دمج النوافذ">
+<!ENTITY mergeContext.accesskey "ج">
+<!ENTITY renametab.label "غيّر تسمية اللسان">
+<!ENTITY renametab.accesskey "س">
+<!ENTITY copytaburl.label "انسخ رابط اللسان">
+<!ENTITY copytaburl.accesskey "خ">
+<!ENTITY reloadother.label "أعِد تحميل الألسنة الأخرى">
+<!ENTITY reloadother.accesskey "م">
+<!ENTITY reloadleft.label "أعِد تحميل الألسنة اليسرى">
+<!ENTITY reloadleft.accesskey "س">
+<!ENTITY reloadright.label "أعِد تحميل الألسنة اليمنى">
+<!ENTITY reloadright.accesskey "م">
+<!ENTITY autoReloadTab.label "أعِد تحميل اللسان كل">
+<!ENTITY autoReloadTab.accesskey "ك">
+<!ENTITY autoReloadSite.label "أعِد تحميل هذا الموقع كل">
+<!ENTITY autoReloadSite.accesskey "ك">
+<!ENTITY afterthis.label "بعد هذا اللسان">
+<!ENTITY bookmarktab.label "علّم هذا اللسان">
+<!ENTITY undoCloseListMenu.label "قائمة الألسنة المغلقة">
+<!ENTITY undoCloseListMenu.accesskey "ق">
+<!ENTITY closeAllTabsMenu.label "أغلق كل الألسنة">
+<!ENTITY closeall.accesskey "غ">
+<!ENTITY closeSimilarTab.label "أغلق الألسنة المشابهة">
+<!ENTITY closeSimilarTab.accesskey "ش">
+<!ENTITY closeLeftTabsMenu.label "أغلق الألسنة اليسرى">
+<!ENTITY closeleft.accesskey "س">
+<!ENTITY closeRightTabsMenu.label "أغلق الألسنة اليمنى">
+<!ENTITY closeright.accesskey "م">
+<!ENTITY docShellMenu.label "الأذونات">
+<!ENTITY docShellMenu.accesskey "ذ">
+<!ENTITY freezeTabMenu.label "جمّد اللسان">
+<!ENTITY freezeTabMenu.accesskey "ج">
+<!ENTITY protectTabMenu.label "Protect Tab">
+<!ENTITY protectTabMenu.tooltip "Protect tabs from being closed">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Lock Tab">
+<!ENTITY lockTabMenu.tooltip "All links open in new tab">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "علّم كل الألسنة">
+<!ENTITY linkhere.label "افتح الرابط في هذا اللسان">
+<!ENTITY linkhere.accesskey "ف">
+<!ENTITY linkBackgroundTab.label "Open Link in Background Tab">
+<!ENTITY linkForegroundTab.label "Open Link in Foreground Tab">
+<!ENTITY linkBackgroundTab.accesskey "B">
+<!ENTITY linkForegroundTab.accesskey "F">
+<!ENTITY openalllinks.label "افتح الروابط في ألسنة جديدة">
+<!ENTITY openalllinks.accesskey "ج">
+<!ENTITY linkwithhistory.label "افتح الرابط في اللسان المكرّر">
+<!ENTITY linkwithhistory.accesskey "ك">
+<!ENTITY tabsList.label "قائمة الألسنة المفتوحة">
+<!ENTITY tabsList.accesskey "م">
+<!ENTITY allowImage.label "Image">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirect">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Restore to Current Tab">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "Restore to New Window">
+<!ENTITY restoreinwin.accesskey "W">
+<!ENTITY restoreintab.label "Restore to New Tab">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Restore Tab">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "علّم هذا الرابط...">
+<!ENTITY bookmark.accesskey "ع">
+<!ENTITY deletelist.label "احذف من القائمة">
+<!ENTITY deletelist.accesskey "ح">
+<!ENTITY settings.label "إعدادات">
+<!ENTITY saveWindow.label "Save This Window">
+<!ENTITY saveAllWindows.label "Save All Windows">
+<!ENTITY sm.context.overwrite "Restore, Overwrite Existing Window(s)">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Restore to New Window(s)">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Replace, With This Window">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Replace, With All Windows">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Add This Window">
+<!ENTITY sm.context.add.key "W">
+<!ENTITY sm.context.addall "Add All Windows">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Save">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Rename">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.delete "Delete">
+<!ENTITY sm.context.delete.key "D">
+<!ENTITY sm.context.deleteall "Delete All">
+<!ENTITY sm.context.deleteall.key "L">
+<!ENTITY sm.context.startup "Set as Startup Session">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Show Counters, Date and Time in Session Menu">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "M">
+<!ENTITY sortedTabs.label "Sorted Tabs">
+<!ENTITY sortedTabs.tooltip "Check to show the list sorted alphabetically">
+<!ENTITY enable.label "Enable">
+<!ENTITY custom.label "Custom">
+<!ENTITY enableTabs.label "Enable All Tabs">
+<!ENTITY disableTabs.label "Disable All Tabs">
+<!ENTITY seconds.label "seconds">
+<!ENTITY minutes.label "minutes">
+<!ENTITY minute.label "minute">
+<!ENTITY hideTabBar.label "Hide the tab bar">
+<!ENTITY hideTabBar.never.label "Never">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.onOneTab.label "When I have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "Always">
+<!ENTITY hideTabBar.always.key "A">

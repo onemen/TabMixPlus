@@ -69,7 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
 <!ENTITY selectTabCommand.label "Neuen Tab">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Kontextmenü Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
 <!ENTITY inversefocus1.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
@@ -109,7 +109,7 @@
 <!ENTITY popupNextToOpener.label "Pop-ups direkt neben ihrem Ursprungs-Tab einfügen">
 <!ENTITY slideshow.label "Mit F8 automatischen Tab-Wechsel starten mit einem Intervall von">
 <!ENTITY toggleAnimation.label "Tab-Animation beim Öffnen/Schließen deaktivieren">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Tab unabhängig von der Adresse neu laden">
 <!ENTITY reloadEvery.onReloadButton.label "Kontextmenü für automatisches Neuladen zur Schaltfläche &quot;Neu laden&quot; hinzufügen">
 <!ENTITY seconds.label "Sekunde(n)">
 <!ENTITY minutes.label "Minute(n)">
@@ -142,12 +142,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "mit Pfeilschaltflächen auf der linken Seite scrollen">
 <!ENTITY tabScroll.multibar "mehrzeilig anzeigen">
 <!ENTITY maxrow.label "Maximale Zeilenanzahl:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Beim Scrollen einen Teil des nächsten Tabs zeigen">
 <!ENTITY smoothScroll.label "Sanftes Scrollen verwenden">
 <!ENTITY scrolldelay.label "Mausrad-Verzögerung (Intervall zwischen Scroll-Schritten)">
 <!ENTITY highlight.label "Hervorheben">
 <!ENTITY currenttab.style.label "Aktiven Tab">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Nichtgeladene Tabs">
 <!ENTITY unreadtabs.style.label "Ungelesene Tabs">
 <!ENTITY othertabs.style.label "Andere Tabs">
 <!ENTITY setstyles.label "Aussehen anpassen">
@@ -189,11 +189,11 @@
 <!ENTITY removeEntries.label "Mit Mittelklick Einträge aus den Listenmenüs entfernen">
 <!ENTITY lockTabSizingOnClose.label "Beim Schließen von Tabs die Größe anderer Tabs nicht verändern, bis der Mauszeiger die Tableiste verlassen hat.">
 <!ENTITY removeEntries.tooltip "Betrifft die Listen für geschlossene Tabs und Fenster sowie gesicherte Sitzungen">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Beim scrollen durch die Tableiste">
+<!ENTITY tabbarscrolling.holdShift.label "Umschalttaste gedrückt halten, um zwischen den einzelnen Optionen zu wechseln">
+<!ENTITY tabbarscrolling.selectTab.label "aktiven Tab zu wechseln">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "alle Tabs scrollen">
+<!ENTITY tabbarscrolling.inverse.label "Scrollrichtung umkehren">
 <!ENTITY double.label "Doppelklick">
 <!ENTITY middle.label "Mittelklick">
 <!ENTITY ctrl.label "Strg+Klick">

@@ -326,7 +326,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
 
   if (gBrowser.localName != "tabbrowser") {
     loadURI(aURI, null, aPostData, aAllowThirdPartyFixup);
-    content.focus();
+    window.focus();
     return;
   }
   else {
@@ -338,7 +338,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
   if (aNewTabPref && !(/^ *javascript:/.test(aURI))) {
     if (gURLBar)
       gURLBar.handleRevert();
-    content.focus();
+    window.focus();
     try {
       // open new tab in 2 step, this prevent focus problem with forms field
       var newTab = gBrowser.addTab("about:blank");
@@ -363,7 +363,7 @@ Tabmix.__loadURLBar = function __TMP_LoadBarURL(aURI, aEvent, aNewTabPref, aLoad
       flags |= Ci.nsIWebNavigation.LOAD_FLAGS_DISALLOW_INHERIT_OWNER;
     }
     gBrowser.loadURIWithFlags(aURI, flags, null, null, aPostData);
-    gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+    gBrowser.ensureTabIsVisible(gBrowser.selectedTab)
   }
 
   gBrowser.selectedBrowser.focus();
@@ -394,19 +394,20 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       source = code[1];
     else
       return; // nothing we can do
+    /* don't open blank tab when we are about to add new livemark */
     this.newCode("openUILink", openUILink)._replace(
+      'aIgnoreAlt = params.ignoreAlt;',
+      'aIgnoreAlt = params.ignoreAlt || null;', {check: Tabmix.isVersion(140)}
+    )._replace(
       source,
-      <![CDATA[
-        var win = getTopWin();
-        if (win && where == "current") {
-          // don't open blank tab when we are about to add new livemark
-          let _addLivemark = /^feed:/.test(url) &&
-             Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";
-          if (!_addLivemark)
-            where = win.Tabmix.checkCurrent(url);
-        }
-        try {$&}  catch (ex) {  }
-      ]]>
+      '  var win = getTopWin();' +
+      '  if (win && where == "current") {' +
+      '    let _addLivemark = /^feed:/.test(url) &&' +
+      '       Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";' +
+      '    if (!_addLivemark)' +
+      '      where = win.Tabmix.checkCurrent(url);' +
+      '  }' +
+      '  try {$&}  catch (ex) {  }'
     )._replace( // fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}

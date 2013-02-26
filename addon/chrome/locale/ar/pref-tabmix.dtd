@@ -1,0 +1,300 @@
+<!ENTITY tab.links "الروابط">
+<!ENTITY tab.events "الأحداث">
+<!ENTITY tab.mouse "الفأرة">
+<!ENTITY tab.appearance "العرض">
+<!ENTITY tab.menu "القوائم">
+<!ENTITY tab.session "الجلسة">
+<!ENTITY tab.incompatible "خطأ">
+<!ENTITY apply.label "طبّق">
+<!ENTITY settings.export "صدّر الإعدادات">
+<!ENTITY settings.import "استورد الإعدادات">
+<!ENTITY settings.default "استعد الإعدادات المبدئية">
+<!ENTITY generalWindowOpen.label "فتح الروابط التي تُفتح في نافذة جديدة في:">
+<!ENTITY externalLink.useSeparate.label "استخدام تفضيل منفصل للروابط القادمة من تطبيقات أخرى">
+<!ENTITY externalLinkTarget.label "فتح الروابط القادمة من تطبيقات أخرى في:">
+<!ENTITY linkTarget.tab "لسان جديد">
+<!ENTITY linkTarget.window "نافذة جديدة">
+<!ENTITY linkTarget.current "اللسان الحالي">
+<!ENTITY linkTarget.accesskey "ح">
+<!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
+<!ENTITY divertedWindows.comment "More Javascript &amp; Popup preferences are controlled from main Options">
+<!ENTITY divertedWindowOpen.all "فتح جميع النوافذ المنبثقة في ألسنة">
+<!ENTITY divertedWindowOpen.some "السماح بتحجيم النوافذ المنبثقة">
+<!ENTITY divertedWindowOpen.none "السماح بجميع النوافذ المنبثقة">
+<!ENTITY linkTarget.label "Open links with a target attribute in current tab">
+<!ENTITY download.label "منع الألسنة الفارغة عند تنزيل ملفات">
+<!ENTITY edit.label "عدّل">
+<!ENTITY speLink.label "الإجبار على الفتح في لسان جديد:">
+<!ENTITY speLink.none "لا شيء">
+<!ENTITY speLink.allLinks "جميع الروابط">
+<!ENTITY speLink.external "الروابط المؤدية لمواقع أخرى">
+<!ENTITY singleWindow.label "تفعيل نمط النافذة الموحدة">
+<!ENTITY newTabs.label "الألسنة الجديدة">
+<!ENTITY tabOpen.label "فتح الألسنة">
+<!ENTITY tabFocus.label "Tab Focus">
+<!ENTITY tabClose.label "إغلاق الألسنة">
+<!ENTITY tabMerge.label "دمج الألسنة">
+<!ENTITY tabFeature.label "ميزات الألسنة">
+<!ENTITY newtab.label "تحميل في اللسان الجديد:">
+<!ENTITY replaceLastTabWith.label "عندما أقوم بإغلاق آخر لسان استبدله بـ">
+<!ENTITY newtab.blank "صفحة فارغة">
+<!ENTITY newtab.home "صفحة بداية فيرفكس">
+<!ENTITY newtab.current "الصفحة المُختارة">
+<!ENTITY newtab.duplicate "تكرار الصفحة المختارة مع تأريخها">
+<!ENTITY newtab.location.1 "صفحة لسان جديد">
+<!ENTITY location.label.1 "العنوان">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "فتح اللسان الجديد بجوار اللسان المختار">
+<!ENTITY openOtherTabNext.label "فتح الألسنة الأخرى بجوار اللسان المختار">
+<!ENTITY relatedAfterCurrent.label "فقط إذا كان له علاقة باللسان المختار">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "فتح الألسنة المكرّرة بجوار الأصلية">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "تغيير ترتيب الفتح">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "فتح اللسان الجديد بجوار اللسان المفتوح مؤخرا من اللسان الحالي">
+<!ENTITY lockTabs.label "إيصاد الألسنة">
+<!ENTITY lockNewTabs.label "إيصاد الألسنة الجديدة">
+<!ENTITY lockAppTabs.label "إيصاد الألسنة المُثبّتة">
+<!ENTITY openNewTab.label "فتح ألسنة من:">
+<!ENTITY openBookmarks.label "العلامات">
+<!ENTITY openBMKGroups.label "مجموعات من العلامات">
+<!ENTITY openBMKGroups.tooltip "عدم تجاهل ألسنة عند فتح مجموعة من العلامات">
+<!ENTITY openHistory.label "التأريخ">
+<!ENTITY openUrl.label "شريط العنوان">
+<!ENTITY openSearch.label "شريط البحث">
+<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY middlecurrent.tooltip "Only for bookmarks, history, links forced to open in new tab">
+<!ENTITY tabFocus.caption "Focus/Select tabs that open from:">
+<!ENTITY selectTab.label "الروابط">
+<!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectTabCommand.label "New tab commands">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "العلامات/التأريخ">
+<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY warning.caption.label "التنبيه">
+<!ENTITY warnOnCloseProtected.label "نبهني عند إغلاق نافذة تحتوي ألسنة محمية">
+<!ENTITY warnOnCloseWindow.label "نبهني عند إغلاق نافذة تحتوي ألسنة متعددة">
+<!ENTITY lasttab.caption.label "إغلاق اللسان الأخير">
+<!ENTITY keepWindow.label.3.1 "لا تغلق النافذة عند إغلاق اللسان الأخير">
+<!ENTITY keeptab.label "منع اللسان الأخير من الانغلاق">
+<!ENTITY closeOnMerge.label "إغلاق النوافذ بمجرد دمجها">
+<!ENTITY warnOnMerge.label "التنبيه عند إغلاق ألسنة غير مُدمجة">
+<!ENTITY currenttab.caption.label "إغلاق اللسان الحالي">
+<!ENTITY focusTab.labelBegin "عند إغلاق اللسان الحالي، انتقل إلى:">
+<!ENTITY focusTab.firstTab "اللسان الأول">
+<!ENTITY focusTab.leftTab "اللسان الأيسر">
+<!ENTITY focusTab.rightTab "اللسان الأيمن">
+<!ENTITY focusTab.lastTab "اللسان الأخير">
+<!ENTITY focusTab.lastSelectedTab "آخر لسان مختار">
+<!ENTITY focusTab.openerTab "Opener/right tab">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "أخر لسان مفتوح">
+<!ENTITY undoClose.label "Enable undo close tabs">
+<!ENTITY undoCloseCache.label "Max number of closed tabs to remember:">
+<!ENTITY undoClosepos.label "Restore the tab&apos;s original position">
+<!ENTITY menuonlybutton.label "Make the toolbar button display only a list">
+<!ENTITY ctrltab.label "Ctrl-Tab navigates tabs in the most recently used order">
+<!ENTITY cmdtab.label "Cmd-Tab navigates tabs in the most recently used order">
+<!ENTITY ctrltab.tabPreviews "Show tab previews">
+<!ENTITY ctrltab.popup "Ctrl-Tab displays a tab list popup menu">
+<!ENTITY cmdtab.popup "Cmd-Tab displays a tab list popup menu">
+<!ENTITY tabpopup.mouse "Tab list responds to the mouse">
+<!ENTITY mergeNoTabSelection.label "Merge windows when no tabs are selected">
+<!ENTITY mergeTabSelection.label "Merging after selecting tabs">
+<!ENTITY mergeall.label "Merge all windows into one">
+<!ENTITY mergelastfocused.label "Merge only current window with last focused">
+<!ENTITY mergePopups.label "Also take popup windows">
+<!ENTITY popupNextToOpener.label "Place popups next to their openers">
+<!ENTITY slideshow.label "Pressing F8 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY seconds.label "seconds">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "شريط الألسنة">
+<!ENTITY tabAppearance.label "اللسان">
+<!ENTITY toolBarAppearance.label "شريط الأدوات">
+<!ENTITY show.ontabbar.label "اعرض في شريط الألسنة">
+<!ENTITY show.ontab.label "اعرض في اللسان">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "زر غلق اللسان">
+<!ENTITY newTabButton.label "زر فتح لسان جديد">
+<!ENTITY newTabButton.posiotion.left.label "في الجانب الأيسر">
+<!ENTITY newTabButton.posiotion.right.label "في الجانب الأيمن">
+<!ENTITY newTabButton.posiotion.afterlast.label "بعد اللسان الأخير">
+<!ENTITY allTabsButton.label "جميع أزرار الألسنة">
+<!ENTITY tabBarSpace.label "مساحة إضافية في كلا الجانبين">
+<!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
+<!ENTITY tabbar.label "Hide tab bar when only one tab is open">
+<!ENTITY dropIndicator.label "Drop indicator">
+<!ENTITY dropIndicator-native.label "Native style">
+<!ENTITY dropIndicator-builtin.label "Built-in style">
+<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY tabBarPosition.label "الموضع:">
+<!ENTITY tabBarPosition.top.label "علوي (فوق المحتوى)">
+<!ENTITY tabBarPosition.bottom.label "سفلي (تحت المحتوى)">
+<!ENTITY tabScroll.label "عندما لا تلائم الألسنة العرض:">
+<!ENTITY tabScroll.none "يمكن تمريرها دون ظهور أزرار">
+<!ENTITY tabScroll.leftRightButtons "يمكن تمريرها مع ظهور أزرار">
+<!ENTITY tabScroll.rightButtons "يمكن تمريرها مع ظهور أزرار على اليمين">
+<!ENTITY tabScroll.rightButtons.rtl "يمكن تمريرها مع ظهور أزرار على اليسار">
+<!ENTITY tabScroll.multibar "أظهر الألسنة في صفوف متعددة">
+<!ENTITY maxrow.label "أقصى عدد صفوف يمكن عرضه:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "تفعيل التمرير السلس">
+<!ENTITY scrolldelay.label "مُهلة التمرير (الوقت بين تكرار التمرير)">
+<!ENTITY highlight.label "الإبراز والتمييز">
+<!ENTITY currenttab.style.label "اللسان المختار">
+<!ENTITY unloadedtabs.style.label "الألسنة غير المحملة">
+<!ENTITY unreadtabs.style.label "الألسنة غير المقروءة">
+<!ENTITY othertabs.style.label "الألسنة الأخرى">
+<!ENTITY setstyles.label "تخصيص الأنماط">
+<!ENTITY extraIcons.label1 "أيقونات">
+<!ENTITY extraIcons.locked "القفل">
+<!ENTITY extraIcons.protected "الحماية">
+<!ENTITY extraIcons.autoreload "إعادة التحميل التلقائي">
+<!ENTITY progressMeter.label "شريط التحميل على الألسنة">
+<!ENTITY showTabX.labelBegin "زر إغلاق اللسان">
+<!ENTITY showTabX.left "إظهار زر الإغلاق في اليسار">
+<!ENTITY showTabX.rtl "إظهار زر الإغلاق في اليمين">
+<!ENTITY milliseconds.label "مللي ثانية">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "على الكل">
+<!ENTITY showTabX.current "على المختار">
+<!ENTITY showTabX.hover "on pointed for">
+<!ENTITY showTabX.alwaysExeption "on all tabs wider than">
+<!ENTITY showTabX.currentHover "on current &amp; pointed for">
+<!ENTITY minWidth.label "عرض اللسان:">
+<!ENTITY widthTo.label "إلى">
+<!ENTITY widthPixels.label "بكسل">
+<!ENTITY flexTabs.label "عرض اللسان يلائم عنوان اللسان">
+<!ENTITY bookastitle.label "استخدام اسم العلامة كعنوان للسان">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
+<!ENTITY toolbar.button.label "تخصيص">
+<!ENTITY toolbar.visible.caption "الأزرار الظاهرة">
+<!ENTITY toolbar.novisible.label "ليس هناك أزرار ظاهرة">
+<!ENTITY toolbar.hidden.caption "الأزرار المخفية">
+<!ENTITY toolbar.nohidden.label "ليس هناك أزرار مخفية">
+<!ENTITY mouseGesture.label "إيماءات الفأرة">
+<!ENTITY mouseClick.label "النقر بالفأرة">
+<!ENTITY mouseHoverSelect.labelBegin "Select tab pointed for">
+<!ENTITY tabFlip.label "Switch to last selected tab when clicking current one">
+<!ENTITY tabFlip.delay "Use a delay of">
+<!ENTITY clickFocus.label "Mouse click (down and release) to select a tab">
+<!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "عكس اتجاه التمرير">
+<!ENTITY double.label "نقر مزدوج">
+<!ENTITY middle.label "نقر بالزر الأوسط">
+<!ENTITY ctrl.label "Ctrl-click">
+<!ENTITY cmd.label "Cmd-Click">
+<!ENTITY shift.label "Shift-click">
+<!ENTITY alt.label "Alt-Click">
+<!ENTITY ontab.label "on a tab:">
+<!ENTITY ontabbar.label "on the tabbar:">
+<!ENTITY clicktab.label "Choose command to perform when clicking on tab or tabbar">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY clicktab.nothing "Does nothing">
+<!ENTITY clicktab.addtab "Open a new tab">
+<!ENTITY clicktab.duplicatetab "Duplicates the tab">
+<!ENTITY clicktab.duplicatetabw "Duplicates the tab in a new window">
+<!ENTITY clicktab.detachtab "Move the tab to a new window">
+<!ENTITY clicktab.protecttab "Protects the tab">
+<!ENTITY clicktab.locktab "Locks the tab">
+<!ENTITY clicktab.freezetab "Protects and Locks the tab">
+<!ENTITY clicktab.renametab "Renames the tab">
+<!ENTITY clicktab.copyTabUrl "Copies the tab&apos;s URL to the clipboard">
+<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.selectMerge "Selects the tab for merging">
+<!ENTITY clicktab.mergeTabs "Merges windows together">
+<!ENTITY clicktab.bookTab "Bookmarks the tab">
+<!ENTITY clicktab.bookTabs "Bookmarks all tabs">
+<!ENTITY clicktab.reloadtab "Reloads the tab">
+<!ENTITY clicktab.reloadtabs "Reloads all tabs">
+<!ENTITY clicktab.reloadothertabs "Reloads other tabs">
+<!ENTITY clicktab.reloadlefttabs "Reloads left tabs">
+<!ENTITY clicktab.reloadrighttabs "Reloads right tabs">
+<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.removeall "Close all tabs">
+<!ENTITY clicktab.removeother "Close other tabs">
+<!ENTITY clicktab.removesimilar "Close tabs from similar domain">
+<!ENTITY clicktab.removeleft "Close left tabs">
+<!ENTITY clicktab.removeright "Close right tabs">
+<!ENTITY clicktab.uctab "Reopens last closed tab">
+<!ENTITY clicktab.ucatab "Reopens all closed tabs">
+<!ENTITY clicktab.snapback "SnapBack Tab">
+<!ENTITY clicktab.ietab "Opens the tab in IE">
+<!ENTITY contentLoad "Middle-click loads url from clipboard">
+<!ENTITY context.tab "Tab Context Menu">
+<!ENTITY context.main "Main Context Menu">
+<!ENTITY context.tools "Tools Menu">
+<!ENTITY showtabBarContext.label "Show in Tab Context Menu">
+<!ENTITY showContentAreaContext.label "Show in Main Context Menu">
+<!ENTITY showToolsMenu.label "Show in Tools Menu">
+<!ENTITY startupHomePage.label "Show my home page">
+<!ENTITY startupBlankPage.label "Show a blank page">
+<!ENTITY startupLastSession.label "Show my windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
+<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
+<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
+<!ENTITY sm.extension.description4 "Convert My sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Convert">
+<!ENTITY sm.extension.chooseFile.label0 "Let me choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
+<!ENTITY ss.enable.label "Use Firefox&apos;s built-in Session Restore feature">
+<!ENTITY ss.enable.tooltip "Uncheck to allow the use with Tab Mix Plus Session Manager">
+<!ENTITY ss.advanced_setting "Advanced Setting">
+<!ENTITY ss.advanced_setting.warning "Don&apos;t change these, unless you know what you&apos;re doing">
+<!ENTITY ss.interval "Minimum time interval between two state saves">
+<!ENTITY ss.interval.seconds "(in milliseconds)">
+<!ENTITY ss.privacy_level "Save sensitive data (form data, POSTDATA and cookies) for">
+<!ENTITY ss.privacy_level.allsites "All sites">
+<!ENTITY ss.privacy_level.unencrypted "Unencrypted sites only">
+<!ENTITY ss.privacy_level.nosites "No sites at all">
+<!ENTITY ss.postdata.label1 "Maximum amount of POSTDATA to be stored">
+<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
+<!ENTITY sessionManger.enable "Enable Session Manager">
+<!ENTITY crashRecovery.enable "Enable Crash Recovery">
+<!ENTITY sm.StartExit "Start/Exit">
+<!ENTITY sm.restore "Restore">
+<!ENTITY sm.preserve "Preserve">
+<!ENTITY sm.start "When Browser Starts:">
+<!ENTITY sm.start.restore "Restore">
+<!ENTITY sm.start.ask "Ask Before Restoring">
+<!ENTITY sm.start.nothing "Don&apos;t Restore">
+<!ENTITY sm.exit "When Browser Exits:">
+<!ENTITY sm.exit.save "Save Session">
+<!ENTITY sm.exit.ask "Ask Before Saving">
+<!ENTITY sm.exit.nothing "Don&apos;t Save">
+<!ENTITY sm.startup "Startup Session:">
+<!ENTITY sm.lastsession "Last Session">
+<!ENTITY sm.previouslast "Previous to Last">
+<!ENTITY sm.chooseifempty "Choose another if empty">
+<!ENTITY sm.restore.options "When Restoring Sessions:">
+<!ENTITY sm.restore.overwrite "Overwrite existing windows">
+<!ENTITY sm.restore.overwriteTabs "And tabs">
+<!ENTITY sm.restore.closedWinList "Save windows in closed windows list">
+<!ENTITY sm.restore.merge "Join multiple windows into one">
+<!ENTITY sm.restore.reloadall "Reload all tabs">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.preserve.options "Preserve Tabs:">
+<!ENTITY sm.preserve.history "History">
+<!ENTITY sm.preserve.protect "Protect Status">
+<!ENTITY sm.preserve.locked "Lock Status">
+<!ENTITY sm.preserve.permission "Permissions">
+<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.restore.winOptions "Preserve Windows:">
+<!ENTITY sm.restore.selectedTab "Selected tab">
+<!ENTITY sm.restore.closedTabs "Closed tabs list">
+<!ENTITY incompatible.extensions "Some of your extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.">
+<!ENTITY incompatible.button.label "Show List">

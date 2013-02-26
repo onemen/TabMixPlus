@@ -330,6 +330,16 @@ var TabmixSessionManager = {
          return;
       this._inited = true;
 
+      this._init();
+      if (Tabmix.isFirstWindow && this._notifyWindowsRestored) {
+        // restart-less extensions observers for this notification on startup
+        // notify observers things are complete.
+        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+        this._notifyWindowsRestored = false;
+      }
+   },
+
+   _init: function SM__init() {
       // just in case tablib isn't init yet
       // when Webmail Notifier extension istalled and user have master password
       // we can get here before the browser window is loaded
@@ -794,7 +804,7 @@ var TabmixSessionManager = {
           delete aBrowser.contentDocument.tabmix_loading;
         }
         if (!gBrowser.isBlankBrowser(aBrowser))
-          content.focus();
+          window.focus();
       }
 
       var homePage = gHomeButton.getHomePage();
@@ -2319,10 +2329,6 @@ try{
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
       TabView.init();
-
-      // some extensions observers for this notification on startup
-      // notify observers things are complete.
-      Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
    },
 
    getSessionList: function SM_getSessionList(flag) {
@@ -3081,7 +3087,7 @@ try{
 
       gBrowser._lastRelatedTab = null;
       // call mTabstrip.ensureElementIsVisible before and after we reload the tab
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
       gBrowser.tabsToLoad = newtabsCount;
       this.setStripVisibility(newtabsCount);
 
@@ -3437,7 +3443,7 @@ try{
       }
 
       // call mTabstrip.ensureElementIsVisible for the current tab
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
       // check if we restore all tabs
       if (--gBrowser.tabsToLoad == 0) {
          delete gBrowser.tabsToLoad;

@@ -72,6 +72,8 @@ var TMP_LastTab = {
    },
 
    deinit : function() {
+      if (!this._inited)
+        return;
       var browser = document.documentElement;
       browser.removeEventListener("keydown", this, true);
       browser.removeEventListener("keypress", this, true);

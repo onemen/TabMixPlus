@@ -16,15 +16,22 @@ var TMP_DOMWindowOpenObserver = {
     *                  additionally not a popup window.
     */
     getBrowserWindow: function(aExclude) {
-      var windows = Services.wm.getEnumerator('navigator:browser');
+      // on per-window private browsing mode,
+      // allow to open one private window in single window mode
+      var checkPrivacy = Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
+      function isSuitableBrowserWindow(win) {
+        return (!win.closed && win.document.readyState == "complete" &&
+                !TabmixSessionManager.checkForPopup(win) &&
+                 win != aExclude &&
+                (!checkPrivacy ||
+                 PrivateBrowsingUtils.isWindowPrivate(win)));
+      }
+
+      var windows = Services.wm.getEnumerator("navigator:browser");
       while (windows.hasMoreElements()) {
-        let win = windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
-        if (TabmixSessionManager.checkForPopup(win))
-            continue;
-
-        // this returns the first window that we find; it is not exhaustive
-        if (win != aExclude)
+        let win = windows.getNext()
+        if (isSuitableBrowserWindow(win))
           return win;
       }
       return null;
@@ -41,7 +48,7 @@ var TMP_DOMWindowOpenObserver = {
         if (!existingWindow)
           return;
 
-        existingWindow.content.focus();
+        existingWindow.focus();
         // save dimensions
         var win = aWindow.document.documentElement;
         aWindow.__winRect = {
@@ -61,8 +68,7 @@ var TMP_DOMWindowOpenObserver = {
         win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
     },
 
-    onObserve : function(aSubject, aThis) {
-        var newWindow = aSubject;
+    onObserve : function(newWindow) {
         var existingWindow = this.getBrowserWindow(newWindow);
         // no navigator:browser window open yet?
         if (!existingWindow)
@@ -70,7 +76,7 @@ var TMP_DOMWindowOpenObserver = {
 
         // if the href is missing, try again later (xxx)
         if (!newWindow.location.href) {
-            existingWindow.setTimeout(aThis.onObserve, 0, newWindow, aThis);
+            existingWindow.setTimeout(this.onObserve, 0, newWindow);
             return;
         }
 
@@ -106,7 +112,7 @@ var TMP_DOMWindowOpenObserver = {
            urls = [uriToLoad];
         }
         else
-          urls = uriToLoad.split("|");
+          urls = uriToLoad ? uriToLoad.split("|") : [];
         try {
           // open the tabs in current window
           if (urls.length) {
@@ -136,13 +142,15 @@ var TMP_DOMWindowOpenObserver = {
           setTimeout(function () {
             // restore window dimensions, to prevent flickring in the next restart
             var win = newWindow.document.documentElement;
-            for (let attr in newWindow.__winRect)
-              win.setAttribute(attr, newWindow.__winRect[attr]);
+            if (typeof newWindow.__winRect == "object") {
+              for (let attr in newWindow.__winRect)
+                win.setAttribute(attr, newWindow.__winRect[attr]);
+            }
             newWindow.close();
             if (firstTabAdded)
               existingBrowser.selectedTab = firstTabAdded;
             // for the case the window is minimized or not in focus
-            existingWindow.content.focus();
+            existingWindow.focus();
           },0)
         }  catch(ex) { existingWindow.Tabmix.obj(ex); }
     }
@@ -153,53 +161,50 @@ Tabmix.contentAreaClick = {
   init: function TMP_CA_init() {
     Tabmix.newCode("contentAreaClick", contentAreaClick)._replace(
       'if (linkNode &&',
-      <![CDATA[
-      var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);
-      var [where, suppressTabsOnFileDownload] =
-            Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);
-      if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-      else if (event.__href) href = event.__href;
-      $&]]>
+      'var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);' +
+      'var [where, suppressTabsOnFileDownload] =' +
+      '      Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);' +
+      'if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +
+      'else if (event.__href) href = event.__href;' +
+      '$&'
     )._replace(
       'if (linkNode.getAttribute("onclick")',
       'if (where == "default") $&'
     )._replace(
-      'loadURI(url, null, postData.value, false);',
-      <![CDATA[
-        if (where == "tab" || where == "tabshifted") {
-          let doc = event.target.ownerDocument;
-          openLinkIn(url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,
-                    suppressTabsOnFileDownload: suppressTabsOnFileDownload});
-        }
-        else $&
-      ]]>
+      'loadURI(',
+      '  if (where == "tab" || where == "tabshifted") {' +
+      '    let doc = event.target.ownerDocument;' +
+      '    let _url = Tabmix.isVersion(190) ? href : url;' +
+      '    openLinkIn(_url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
+      '              initiatingDoc: doc,' +
+      '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});' +
+      '  }' +
+      '  else $&'
     )._replace(
+      // force handleLinkClick to use openLinkIn by replace "current"
+      // with " current", we later use trim() before handleLinkClick call openLinkIn
       'handleLinkClick(event, href, linkNode);',
-      <![CDATA[
-        if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {
-          href = event.__href;
-          where = "tab";
-        }
-        // force handleLinkClick to use openLinkIn by replace "current"
-        // with " current", we later use trim() before handleLinkClick call openLinkIn
-        event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;
-        event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;
-        var result = $&
-        if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);
-      ]]>
+      '  if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {' +
+      '    href = event.__href;' +
+      '    where = "tab";' +
+      '  }' +
+      '  event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;' +
+      '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;' +
+      '  var result = $&' +
+      '  if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
     ).toCode();
 
+    /* don't change where if it is save, window, or we passed
+     * event.__where = default from contentAreaClick or
+     * Tabmix.contentAreaClick.contentLinkClick
+     */
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
       'whereToOpenLink(event);',
-      <![CDATA[$&
-        // don't change where if it is save, window, or we passed
-        // event.__where = default from contentAreaClick or
-        // Tabmix.contentAreaClick.contentLinkClick
-        if (event && event.__where && event.__where != "default" &&
-            ["tab","tabshifted","current"].indexOf(where) != -1) {
-          where = event.__where;
-        }
-      ]]>
+      '$&' +
+      '  if (event && event.__where && event.__where != "default" &&' +
+      '      ["tab","tabshifted","current"].indexOf(where) != -1) {' +
+      '    where = event.__where;' +
+      '  }'
     )._replace(
       'var doc = event.target.ownerDocument;',
       'where = where.trim();\
@@ -266,7 +271,8 @@ Tabmix.contentAreaClick = {
     // Check if link refers to external domain.
     // Get current page url
     // if user click a link while the page is reloading linkNode.ownerDocument.location can be null
-    var curpage = linkNode.ownerDocument.location ? linkNode.ownerDocument.location.href : gBrowser.currentURI.spec;
+    var location = linkNode.ownerDocument.location;
+    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
     var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
     var targetDomain = domain.target;
     var currentDomain = domain.current;
@@ -354,7 +360,7 @@ Tabmix.contentAreaClick = {
     }
 
     // don't do anything on mail.google or google.com/reader
-    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/www.google.com\/reader/.test(currentHref);
+    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
     if (isGmail)
       return;
 
@@ -400,7 +406,8 @@ Tabmix.contentAreaClick = {
      * Get current page url
      * if user click a link when the psage is reloading linkNode.ownerDocument.location can be null
      */
-    var curpage = linkNode.ownerDocument.location ? linkNode.ownerDocument.location.href : gBrowser.currentURI.spec;
+    var location = linkNode.ownerDocument.location;
+    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
     var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
     var targetDomain = domain.target;
     var currentDomain = domain.current;
@@ -484,7 +491,7 @@ Tabmix.contentAreaClick = {
    */
   suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload(event, href, linkNode, suppressTabs) {
     // if we are in google search don't prevent new tab
-    if (/www.google.(\D+)\/search?/.test(gBrowser.currentURI.spec))
+    if (/\w+\.google\.\D+\/search?/.test(gBrowser.currentURI.spec))
       return false;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
@@ -755,11 +762,11 @@ Tabmix.contentAreaClick = {
    * @brief Test if target link is special Google.com link preferences , advanced_search ...
    *
    * @param linkNode         The DOM node containing the URL to be opened.
-   * @returns true is it is Google special link false for all other links
+   * @returns true it is Google special link false for all other links
    */
   GoogleComLink: function TMP_GoogleComLink(linkNode) {
     var location = gBrowser.currentURI.spec;
-    var currentIsnGoogle = /(www|profiles|accounts|groups).google./.test(location);
+    var currentIsnGoogle = /\/\w+\.google\.\D+\//.test(location);
     if (!currentIsnGoogle)
       return false;
 
@@ -816,6 +823,13 @@ Tabmix.contentAreaClick = {
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
     function switchIfURIInWindow(aWindow) {
+      // Only switch to the tab if both source and desination are
+      // private or non-private.
+      if (Tabmix.isVersion(200) &&
+          PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aWindow)) {
+        return false;
+      }
       if (!("gBrowser" in aWindow))
         return false;
       let browsers = aWindow.gBrowser.browsers;

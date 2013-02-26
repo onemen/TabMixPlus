@@ -61,7 +61,7 @@ var _log = {
   // get functions names from Error().stack
   _getNames: function(aCount, stack) {
     if (!stack)
-      stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset);
+      stack = Error().stack.split("\n").slice(1);
     else
       stack = stack.split("\n");
     // cut the secound if it is from our utils
@@ -82,7 +82,7 @@ var _log = {
   // don't include this function in the count
   _getCallerNameByIndex: function TMP_log_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
-    let fn = stack[TabmixSvc.stackOffset + aPlace];
+    let fn = stack[aPlace + 1];
 
     if (fn)
       return this._name(fn);
@@ -94,7 +94,7 @@ var _log = {
   // so we can get the name from the start of the string until @
   get _char() {
     delete this._char;
-    return this._char = TabmixSvc.version["is140"] ? "@" : "(";
+    return this._char = TabmixSvc.version(140) ? "@" : "(";
   },
 
   _name: function(fn) {

@@ -485,8 +485,8 @@ var TMP_ClosedTabs = {
 
    SSS_restoreToNewWindow: function ct_restoreToNewWindow(aIndex) {
       var tabData = this.getClosedTabAtIndex(aIndex);
-      // we pass the current tab as reference to this window
-      return gBrowser.duplicateInWindow(gBrowser.mCurrentTab, null, tabData);
+      // we pass the current tab as a place holder for tabData
+      return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, tabData);
    },
 
    SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
@@ -560,7 +560,7 @@ var TMP_ClosedTabs = {
       }
 
       if (aSelectRestoredTab) {
-         content.focus();
+         window.focus();
          gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
       }
       return newTab;
@@ -607,17 +607,20 @@ var TabmixConvertSession = {
    selectFile: function cs_selectFile(aWindow) {
       const nsIFilePicker = Ci.nsIFilePicker;
       var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+      var fpCallback = function fpCallback_done(aResult) {
+         if (aResult == nsIFilePicker.returnOK)
+            this.convertFile(fp.fileURL.spec);
+      }.bind(this);
 
       fp.init(aWindow, this.getString("selectfile"), nsIFilePicker.modeOpen);
       fp.defaultString="session.rdf";
       fp.appendFilter(this.getString("rdffiles"), "*.rdf");
       fp.appendFilter(this.getString("sessionfiles"), "*session*.*");
       fp.appendFilters(nsIFilePicker.filterText | nsIFilePicker.filterAll);
-
-      if (fp.show() != nsIFilePicker.returnOK)
-         return;
-
-      this.convertFile(fp.fileURL.spec);
+      if (Tabmix.isVersion(180))
+        fp.open(fpCallback);
+      else
+        fpCallback(fp.show());
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {

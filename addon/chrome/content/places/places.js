@@ -36,8 +36,8 @@ var TMP_Places = {
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
          Tabmix.newCode("PlacesCommandHook.bookmarkPage", PlacesCommandHook.bookmarkPage)._replace(
-            'title = webNav.document.title || url.spec;',
-            'title = TMP_Places.getTabFixedTitle(aBrowser, url) || webNav.document.title || url.spec;'
+            /(webNav\.document\.)*title \|\| url\.spec;/,
+            'TMP_Places.getTabFixedTitle(aBrowser, url) || $&'
          ).toCode();
 
          Tabmix.newCode(null,  PlacesCommandHook.__lookupGetter__("uniqueCurrentPages"))._replace(
@@ -47,11 +47,18 @@ var TMP_Places = {
          ).toGetter(PlacesCommandHook, "uniqueCurrentPages");
       }
 
-      // LiveClick and Boox extensions change this function we can't use it
-      if (!("LiveClick" in window) && "PlacesViewBase" in window && PlacesViewBase.prototype) {
+      if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
+         // LiveClick and Boox extensions change this function we can't use it
+         if (!("LiveClick" in window) && !Tabmix.isVersion(130))
          Tabmix.newCode("PlacesViewBase.prototype._mayAddCommandsItems", PlacesViewBase.prototype._mayAddCommandsItems)._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);", {silent: true}
+         ).toCode();
+
+         if (Tabmix.isVersion(130))
+         Tabmix.newCode("PlacesViewBase.prototype._setLivemarkSiteURIMenuItem", PlacesViewBase.prototype._setLivemarkSiteURIMenuItem)._replace(
+            "openUILink(this.getAttribute('targetURI'), event);",
+            "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
          ).toCode();
       }
 
@@ -85,48 +92,9 @@ var TMP_Places = {
          + inBackground + '}'
       ).toCode();
 
-      let [fnName, fnCode] = ["openLinkIn", openLinkIn];
-      try {
-        if (com.tobwithu && com.tobwithu.wmn &&
-            typeof(com.tobwithu.wmn.openLinkIn) == "function") {
-          // update com.tobwithu.wmn.openLinkIn to work with Tabmix's
-          // loadInBackground prerfs and add tabmix_bookmarkId
-          // to the new tab
-          [fnName, fnCode] = ["com.tobwithu.wmn.openLinkIn", com.tobwithu.wmn.openLinkIn];
-          Tabmix.newCode("openLinkIn", openLinkIn)._replace(
-            '{',
-            '{var tab;\
-             if (where == "window" && getTopWin() && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
-          )._replace(
-            'com.tobwithu.wmn.openURL',
-            'tab = $&', {flags: "g"}
-          )._replace(
-            'getBoolPref("browser.tabs.loadInBackground");',
-            <![CDATA[
-              params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&
-            ]]>, {check: !Tabmix.isVersion(100), flags: "g"}
-          )._replace(
-            'getBoolPref("browser.tabs.loadInBackground");',
-            <![CDATA[
-              params.inBackground;
-              if (bg == null)
-                bg = params.fromChrome ? getBoolPref(params.backgroundPref || "browser.tabs.loadBookmarksInBackground") : $&
-            ]]>, {check: Tabmix.isVersion(100), flags: "g"}
-          )._replace(
-            /(\})(\)?)$/,
-            <![CDATA[
-              // if we are after openLinkIn we don't need this
-              // we already add this attribute in openLinkIn
-              if (tab && params.bookMarkId) {
-                // com.tobwithu.wmn.openURL return tab or window
-                if (tab.localName != "tab")
-                  tab = tab.gBrowser.getTabForLastPanel();
-                tab.setAttribute("tabmix_bookmarkId", params.bookMarkId);
-              }
-            $1$2]]>
-          ).toCode();
-        }
-      } catch(ex) {}
+      // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+      // in case it warp the function in its object
+      let [fnName, fnCode] = this.getXnotifierFunction("openLinkIn");
 
       var _loadURI = Tabmix.isVersion(100) ?
             "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
@@ -135,7 +103,7 @@ var TMP_Places = {
       Tabmix.newCode(fnName, fnCode)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
         '$& \
-         var newWin, bookMarkId = params.bookMarkId; \
+         var bookMarkId = params.bookMarkId; \
          var backgroundPref = params.backgroundPref;'
       )._replace(
         'where == "current" && w.gBrowser.selectedTab.pinned',
@@ -143,15 +111,11 @@ var TMP_Places = {
       )._replace(
         'var w = getTopWin();',
         '$& \
-         if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
+         if (w && where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) where = "tab";'
       )._replace(
-        'Services.ww.openWindow',
-        'newWin = $&'
-      )._replace(
-        /let loadInBackground|var loadInBackground/,
-        'if (newWin && bookMarkId) newWin.bookMarkIds = bookMarkId;\
-         $&'
-      )._replace(
+        /Services.ww.openWindow[^;]*;/,
+        'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
+       )._replace(
         '"browser.tabs.loadBookmarksInBackground"',
         'backgroundPref || $&', {check: !Tabmix.isVersion(110)}
       )._replace( // we probably don't need this since Firefox 10
@@ -160,7 +124,7 @@ var TMP_Places = {
       )._replace(
         _loadURI,
         '$&\
-         w.gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(w.gBrowser.selectedTab);'
+         w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
         'if (bookMarkId) { \
@@ -262,8 +226,7 @@ var TMP_Places = {
       }
 
       Tabmix.newCode("PlacesUIUtils.openNodeWithEvent", PlacesUIUtils.openNodeWithEvent)._replace(
-         'window.whereToOpenLink(aEvent), window);',
-         'window.whereToOpenLink(aEvent), window, aEvent);'
+         /whereToOpenLink\(aEvent[,\s\w]*\), window/, '$&, aEvent'
       ).toCode();
 
       // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
@@ -289,7 +252,7 @@ var TMP_Places = {
         {check: !Tabmix.isVersion(110)}
       )._replace(
         'inBackground:',
-        'bookMarkId: aNode.itemId,\
+        'bookMarkId: aNode.itemId, initiatingDoc: null,\
          $&', {check: Tabmix.isVersion(110)}
       ).toCode();
    },
@@ -323,6 +286,20 @@ var TMP_Places = {
 
    getURLsForContainerNode: null,
    _first_instance: false,
+
+  // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+  // object name wmn replace with xnotifier for version 3.0+
+  getXnotifierFunction: function(aName) {
+    if (typeof com == "object" && typeof com.tobwithu == "object") {
+      let fn = ["wmn", "xnotifier"].filter(function(f) {
+        return typeof com.tobwithu[f] == "object" &&
+          typeof com.tobwithu[f][aName] == "function";
+      });
+      if (fn.length)
+        return ["com.tobwithu." + fn[0] + "." + aName, com.tobwithu[fn[0]][aName]];
+    }
+    return [aName, window[aName]];
+  },
 
    buildContextMenu: function TMP_PC_buildContextMenu() {
       var _open = document.getElementById("placesContext_open");
@@ -386,7 +363,8 @@ var TMP_Places = {
      if (where == "current")
        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
      openUILinkIn(aUrl, where, {
-        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
+        initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
      });
    },
 
@@ -401,7 +379,8 @@ var TMP_Places = {
          if (where == "current")
            Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
          openUILinkIn(node.uri, where, {
-           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground")
+           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
+           initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
          });
       }
    },
@@ -425,7 +404,10 @@ var TMP_Places = {
       var _pref = w.Services.prefs;
       if ((_pref.getBoolPref(aPref) || aTab.hasAttribute("locked"))) {
          if (aEvent && _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
-               (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))
+               ((aEvent instanceof MouseEvent &&
+                (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey))) ||
+                (aEvent instanceof XULCommandEvent &&
+                 typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey))))
             aWhere = "current";
          else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
             aWhere = "tab";
@@ -536,8 +518,8 @@ var TMP_Places = {
       }
     }
 
-    // and focus the content
-    content.focus();
+    // and focus selectedBrowser
+    gBrowser.selectedBrowser.focus();
 
     // Close any remaining open tabs or blank tabs that are left over.
     while (removeTabs.length > 0) {
@@ -645,7 +627,7 @@ var TMP_Places = {
         if (scrollPosition < 100)
           tabstrip.scrollPosition = 0;
       }
-      tabstrip.ensureElementIsVisible(this.currentTab, false);
+      gBrowser.ensureTabIsVisible(this.currentTab, false);
       this.currentTab = null;
     }
   },
@@ -676,7 +658,7 @@ var TMP_Places = {
   },
 
   onDelayedStartup: function () {
-    if (!this._titlefrombookmark)
+    if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
     // set title at startup

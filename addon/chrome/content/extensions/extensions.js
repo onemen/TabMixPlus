@@ -16,7 +16,8 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false, verticalTabBar: false};
+    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false,
+        verticalTabBar: false, ieTab2: false};
     try {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
@@ -91,13 +92,20 @@ var TMP_extensionsCompatibility = {
     // fix bug in backgroundsaver extension
     // that extension use function with the name getBoolPref
     // we replace it back here
-    if ("bgSaverInit" in window && "getBoolPref" in window &&
-            getBoolPref.toString().indexOf("return bgSaverPref.prefHasUserValue(sName)") != -1) {
+    if (typeof bgSaverInit == "function" && typeof getBoolPref == "function" &&
+            getBoolPref.toString().indexOf("bgSaverPref.prefHasUserValue(sName)") != -1) {
       window.getBoolPref = function getBoolPref ( prefname, def ) {
         try {
           return Services.prefs.getBoolPref(prefname);
         }
-        catch(er) { return def; }
+        catch(ex) {
+          try {
+            return (bgSaverPref.prefHasUserValue(prefname) &&
+                    bgSaverPref.getBoolPref(prefname));
+          }
+          catch(e) {}
+        }
+        return def;
       }
     }
 
@@ -137,14 +145,13 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
     if ("foxTab" in window) {
       let loadNewInBackground = '$& var loadNewInBackground = Tabmix.prefs.getBoolPref("loadNewInBackground");';
-      let newCode = <![CDATA[
-        if (Tabmix.prefs.getBoolPref("openNewTabNext"))
-          f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);
-        if (!loadNewInBackground) {
-          f.gBrowser.TMP_selectNewForegroundTab(newTab, false);
-          TMP_LastTab.PushSelectedTab();
-        }
-      ]]>
+      let newCode =
+        'if (Tabmix.prefs.getBoolPref("openNewTabNext"))' +
+        '  f.gBrowser.moveTabTo(newTab, f.gBrowser.selectedTab._tPos + 1);' +
+        'if (!loadNewInBackground) {' +
+        '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
+        '  TMP_LastTab.PushSelectedTab();' +
+        '}'
       if (typeof(foxTab.openNewTab) == "function") {
         Tabmix.newCode("foxTab.openNewTab", foxTab.openNewTab)._replace(
           '{', loadNewInBackground
@@ -170,6 +177,22 @@ var TMP_extensionsCompatibility = {
       }
       window.BrowserOpenTab = TMP_BrowserOpenTab;
       foxTab.defaultBrowserOpenTab = TMP_BrowserOpenTab;
+    }
+
+    // https://addons.mozilla.org/en-US/firefox/addon/ie-tab-2-ff-36/
+    // for version IE Tab V2 4.12.6.1
+    if (typeof window.IeTab2 == "function" &&
+          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") == 0) {
+      Tabmix.extensions.ieTab2 = true;
+      Tabmix.newCode("IeTab2.prototype.hookCodeAll", IeTab2.prototype.hookCodeAll)._replace(
+        /(var )?oldAddTab/g, 'Tabmix.originalFunctions.oldAddTab'
+      )._replace(
+        /(var )?oldSetTabTitle/g, 'Tabmix.originalFunctions.oldSetTabTitle'
+      )._replace(
+        /(var )?oldHandleCommand/g, 'Tabmix.originalFunctions.oldHandleCommand'
+      )._replace(
+        /return;\n/, 'return null;\n'
+      ).toCode();
     }
   },
 
@@ -236,13 +259,11 @@ var TMP_extensionsCompatibility = {
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.newCode("faviconize.toggle", faviconize.toggle)._replace(
         /(\})(\)?)$/,
-        <![CDATA[
-          tab.removeAttribute("minwidth");
-          tab.removeAttribute("maxwidth");
-          TabmixTabbar.updateScrollStatus();
-          TabmixTabbar.updateBeforeAndAfter();
-          $1$2
-        ]]>
+        '  tab.removeAttribute("minwidth");' +
+        '  tab.removeAttribute("maxwidth");' +
+        '  TabmixTabbar.updateScrollStatus();' +
+        '  TabmixTabbar.updateBeforeAndAfter();' +
+        '  $1$2'
       ).toCode();
     }
 
@@ -381,7 +402,7 @@ var TMP_extensionsCompatibility = {
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      aioDupWindow = function() { gBrowser.duplicateInWindow(gBrowser.mCurrentTab); };
+      aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
@@ -439,7 +460,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
        if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
        else
-         window._content.document.location.href = this.href;
+         window.content.document.location.href = this.href;
      }
      else if (target == "window") {
        if (Tabmix.singleWindowMode)
@@ -527,7 +548,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'source[1].replace',
         '" ".replace'
       )._replace(
-        'eval("tablib.init',
+        /eval\(["|']tablib\.init/,
         'if (false) $&'
       ).toCode();
     }
@@ -605,7 +626,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
       Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit",
           TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit)._replace(
-        'eval("window.TMP_howToOpen',
+        /eval\(["|']window\.TMP_howToOpen/,
         'if (false) $&'
       ).toCode();
     }
@@ -614,7 +635,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
       Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsDelayed",
           TreeStyleTabWindowHelper.overrideExtensionsDelayed)._replace(
-        'eval("gBrowser.TMP_openTabNext',
+        /eval\(["|']gBrowser\.TMP_openTabNext/,
         'if (false) $&'
       ).toCode();
     }
@@ -637,28 +658,23 @@ TMP_extensionsCompatibility.treeStyleTab = {
       '{if (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
     )._replace(
       'index = prevTab._tPos + 1;',
-      <![CDATA[
-        index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));
-        if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);
-          index = index ? index._tPos : (prevTab._tPos + 1);
-      ]]>
+      '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
+      '  if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);' +
+      '    index = index ? index._tPos : (prevTab._tPos + 1);'
     )._replace(
       'prevTab = aTab;',
-      <![CDATA[
-        $&
-        if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {
-          TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));
-        }
-      ]]>
+      '  $&' +
+      '  if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {' +
+      '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
+      '  }'
     )._replace(
       /(\})(\)?)$/,
-      <![CDATA[
-        if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)
-          TreeStyleTabService.stopToOpenChildTab(tabToSelect);
-      $1$2]]>
+      '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
+      '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
+      '$1$2'
     ).toCode();
 
-    if (TreeStyleTabService.getTreePref('compatibility.TMP')) {
+    if (Services.prefs.getBoolPref("extensions.treestyletab.compatibility.TMP")) {
       // Added 2010-04-10
       // TST look for aTab.removeAttribute("tabxleft")
       Tabmix.newCode("window.TabmixTabbar.updateSettings", TabmixTabbar.updateSettings)._replace(

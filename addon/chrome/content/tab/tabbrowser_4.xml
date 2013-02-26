@@ -82,12 +82,6 @@
       <![CDATA[
         if ("tabmix_inited" in this)
           return;
-
-        Tabmix.newCode(null, this.doMouseHoverSelect)._replace(
-          'document.getBindingParent(aTab.parentNode);',
-          'aTab.parentNode.tabbrowser;'
-        ).toCode(false, this, "doMouseHoverSelect");
-
         this.tabmix_inited = true;
       ]]>
     </constructor>
@@ -175,7 +169,7 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        var b = document.getBindingParent(aTab.parentNode);
+        var b = aTab.parentNode.tabbrowser;
         if (b.hasAttribute("preventMouseHoverSelect"))
             b.removeAttribute("preventMouseHoverSelect");
         else if (aTab.mIsHover)
@@ -223,6 +217,10 @@
 
         if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
           aTab.removeAttribute("showbutton");
+          // we use this in Linux to prevent underflow
+          // that trigger by hidding the close button
+          aTab.setAttribute("showbutton_removed", true);
+          setTimeout(function(tab) {tab.removeAttribute("showbutton_removed");}, 50, aTab);
           if (aTab == aTab.parentNode.__showbuttonTab)
             delete aTab.parentNode.__showbuttonTab;
         }
@@ -326,7 +324,8 @@
 
       <constructor>
         <![CDATA[
-          this.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          // add dragover event handler to TabsToolbar to capture dragging over tabbar margin area
+          this.parentNode.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
@@ -363,11 +362,14 @@
            */
           this._newTabButtonWidth = 22;
 
-          this.firstChild.setAttribute("flst_id", new Date().getTime());
-          this.firstChild.setAttribute("visited", true);
+          let tab = this.firstChild;
+          tab.setAttribute("flst_id", new Date().getTime());
+          tab.setAttribute("visited", true);
           TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
-          if (TabmixTabbar.lockallTabs)
-            this.firstChild.setAttribute("locked", true);
+          if (TabmixTabbar.lockallTabs) {
+            tab.setAttribute("locked", true);
+            tab.tabmix_allowLoad = false;
+          }
 
           if (Tabmix.prefs.getBoolPref("extraIcons.autoreload"))
             this.setAttribute("extraIcons-autoreload", true);
@@ -377,7 +379,7 @@
             this.setAttribute("extraIcons-locked", true);
 
           if ("linkedBrowser" in this.firstChild)
-            tablib.setLoadURIWithFlags(this.firstChild.linkedBrowser);
+            tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
           try {
             Tabmix.beforeStartup(tabbrowser, this);
@@ -387,7 +389,8 @@
 
       <destructor>
         <![CDATA[
-          this.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
+          if (this.parentNode)
+            this.parentNode.removeEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
           delete this.tabstripInnerbox;
         ]]>
       </destructor>
@@ -423,11 +426,13 @@
           if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode || FullScreen._isChromeCollapsed ||
               !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
+          if (this._inUpdateVerticalTabStrip)
+            return this.gasAttribute("multibar");
+          this._inUpdateVerticalTabStrip = true;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
           // this.lastTabRowNumber is null when we hide the tabbar
           let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
-          let currentRows = TabmixTabbar.visibleRows;
 
           let currentMultibar = this.getAttribute("multibar") || null;
           let maxRow = this.maxRow;
@@ -469,6 +474,7 @@
           else
             this.adjustNewtabButtonvisibility();
 
+          this._inUpdateVerticalTabStrip = false;
           return multibar;
         ]]></body>
       </method>
@@ -669,6 +675,14 @@
 
       <method name="initializeTabmixUI">
         <body><![CDATA[
+          // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+          // verticalTabs 0.9.1+ is restartless.
+          if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+            Tabmix.extensions.verticalTabs = true;
+            Tabmix.extensions.verticalTabBar = true;
+            TabmixTabbar.updateSettings();
+          }
+
           // tabbrowser-tabs constructor reset first tab label to New Tab
           this.tabbrowser.setTabTitle(this.firstChild);
           let position = Tabmix.prefs.getIntPref("newTabButton.position");
@@ -718,7 +732,8 @@
             if (!selected ||
                 !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
                  TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.height) {
-              this.mTabstrip.ensureElementIsVisible(aTab);
+              if (this.overflow)
+                this.mTabstrip.ensureElementIsVisible(aTab);
               return;
             }
 

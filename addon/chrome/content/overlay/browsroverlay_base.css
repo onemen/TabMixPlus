@@ -17,6 +17,10 @@ label.text-link, label[onclick] {
   display: none;
 }
 
+.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
+  pointer-events: auto;
+}
+
 /*  we don't use .tabbrowser-tab > .tab-close-button[button_side="right"] here
     because in some theme the buttons are inside tab-middle
 */

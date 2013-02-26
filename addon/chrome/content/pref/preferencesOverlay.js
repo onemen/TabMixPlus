@@ -109,6 +109,7 @@ var gTabMix_preferencesOverlay = {
      if (button)
        return;
 
+     if (!Tabmix.isVersion(180))
      Tabmix.newCode(null, gMainPane.showAddonsMgr)._replace(
        'openUILinkIn("about:addons", "window");',
        'var w = Tabmix.getTopWin();\

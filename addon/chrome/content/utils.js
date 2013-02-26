@@ -1,11 +1,11 @@
 function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
   this.name = aObjectName;
   this.value = aCodeString;
-  this.needUpdate = aForceUpdate;
+  this.needUpdate = aForceUpdate || false;
+  this.notFound = [];
 }
 
 Tabmix_ChangeCode.prototype = {
-  needUpdate: false,
   _replace: function TMP_utils__replace(substr ,newString, aParams) {
     var silent;
     if (typeof aParams != "undefined") {
@@ -29,21 +29,18 @@ Tabmix_ChangeCode.prototype = {
       this.value = this.value.replace(substr, newString);
       this.needUpdate = true;
     }
-    else if (!silent) {
-      Tabmix.clog(Tabmix.callerName() + " can't find string: " + substr
-          + "\nin " + this.name + "."
-          + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
-          + "\n\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/"
-      );
-    }
+    else if (!silent)
+      this.notFound.push(substr);
     return this;
   },
 
   toSetter: function(aObj, aName) {
+    this.isValidToChange(aName);
     Tabmix._define("setter", aObj, aName, this.value);
   },
 
   toGetter: function(aObj, aName) {
+    this.isValidToChange(aName);
     Tabmix._define("getter", aObj, aName, this.value);
   },
 
@@ -53,10 +50,8 @@ Tabmix_ChangeCode.prototype = {
         this.value = this.value.replace("{", "{try {") +
             ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.name) + '");}}';
       }
-      if (this.needUpdate)
+      if (this.isValidToChange(aName))
         Tabmix.toCode(aObj, aName || this.name, this.value);
-      else if (Tabmix._debugMode)
-        Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);
     } catch (ex) {
@@ -69,8 +64,27 @@ Tabmix_ChangeCode.prototype = {
       Tabmix.show(this.name);
     else if (aObj && aName in aObj)
       Tabmix.clog(aObj[aName].toString());
-  }
+  },
 
+  isValidToChange: function(aName) {
+    var notFoundCount = this.notFound.length;
+    if (this.needUpdate && !notFoundCount)
+      return true;
+    var caller = Tabmix._getCallerNameByIndex(2);
+    var fnName = aName || this.name;
+    if (notFoundCount) {
+      let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
+      Tabmix.clog(caller + " was unable to change " + fnName + "."
+        + "\ncan't find string" +str + this.notFound.join("\n    ")
+        + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
+        + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
+      if (Tabmix._debugMode)
+        Tabmix.clog(caller + "\nfunction " + fnName + " = " + this.value);
+    }
+    else if (!this.needUpdate && Tabmix._debugMode)
+      Tabmix.clog(caller + " no update needed to " + fnName);
+    return false;
+  }
 }
 
 var Tabmix = {
@@ -91,11 +105,7 @@ var Tabmix = {
   },
 
   isVersion: function(aVersionNo) {
-    let ver = "is" + aVersionNo;
-    if (ver in TabmixSvc.version)
-      return TabmixSvc.version[ver];
-
-    throw (Components.returnCode = "INVALID version number " + aVersionNo);
+    return TabmixSvc.version(aVersionNo);
   },
 
   getObject: function (aMethod, rootID) {
@@ -158,7 +168,7 @@ this.log(aMethod)
   // get functions names from Error().stack
   _getNames: function(aCount, stack) {
     if (!stack)
-      stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset);
+      stack = Error().stack.split("\n").slice(1);
     else
       stack = stack.split("\n");
     // cut the secound if it is from our utils
@@ -179,7 +189,7 @@ this.log(aMethod)
   // don't include this function in the count
   _getCallerNameByIndex: function TMP_utils_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
-    let fn = stack[TabmixSvc.stackOffset + aPlace];
+    let fn = stack[aPlace + 1];
 
     if (fn)
       return this._name(fn);
@@ -389,6 +399,13 @@ options = {
     return Tabmix.prefs.getBoolPref("singleWindow");
   },
 
+  isNewWindowAllow: function(isPrivate) {
+    // allow to open new window if not in single window mode or
+    // allow to open new private window if there is no private window
+    return !this.getSingleWindowMode() ||
+           this.isVersion(200) && isPrivate && !this.RecentWindow.getMostRecentBrowserWindow({ private: true });
+  },
+
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
       this[aModule + "Initialized"] = false;
@@ -419,7 +436,7 @@ options = {
   informAboutChangeInTabmix: function(aOldName, aNewName) {
     let err = Error(aOldName + " is deprecated in Tabmix since version 0.3.8.5pre.110123a use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
-    let stack = Error().stack.split("\n").slice(TabmixSvc.stackOffset+2);
+    let stack = Error().stack.split("\n").slice(3);
     let file = stack[0] ? stack[0].split(":") : null;
     if (file) {
       let [chrome, path, line] = file;
@@ -535,4 +552,8 @@ Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
 });
+if (Tabmix.isVersion(200)) {
+  XPCOMUtils.defineLazyModuleGetter(Tabmix, "RecentWindow",
+             "resource:///modules/RecentWindow.jsm");
+}
 window.addEventListener("unload", Tabmix.destroy, false);

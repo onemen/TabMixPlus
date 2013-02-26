@@ -6,6 +6,27 @@
 **/
 
 /* :::: progress bar on tabs :::: */
+.tabbrowser-tabs[australis] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-progress-container > .tab-progress {
+  margin-top: 2px;
+}
+
+.tabbrowser-tabs[australis] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-progress-container > .tab-progress {
+  margin-top: 1px;
+  -moz-margin-start: 4px;
+}
+
+.tabbrowser-tabs[australis] > .tabbrowser-tab > .tab-stack > .tab-background {
+  -moz-box-ordinal-group: 10;
+}
+
+.tabbrowser-tabs[australis] > .tabbrowser-tab > .tab-stack > .tab-content {
+  -moz-box-ordinal-group: 20;
+}
+
+.tabbrowser-tabs[australis] > .tabbrowser-tab > .tab-stack > .tab-progress-container {
+  -moz-box-ordinal-group: 100;
+}
+
 .tab-progress {
   -moz-appearance: none;
   min-height: 0px;

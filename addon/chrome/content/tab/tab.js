@@ -5,6 +5,7 @@ var TabmixTabbar = {
   _heights: [],
   _rowHeight: null,
   hideMode: 0,
+  position: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
   SCROLL_BUTTONS_LEFT_RIGHT: 1,
   SCROLL_BUTTONS_MULTIROW: 2,
@@ -150,7 +151,7 @@ var TabmixTabbar = {
 
     window.setTimeout( function TMP_updateSettings_adjustScroll(_currentVisible) {
         if (_currentVisible)
-          tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);
+          gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
         self.updateBeforeAndAfter();
     }, 50, currentVisible);
   },
@@ -357,19 +358,19 @@ var TabmixTabbar = {
 
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
-    if (TabmixTabbar.isMultiRow) {
+    if (this.isMultiRow) {
       tabBar.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical")
         tabBar.mTabstrip._enterVerticalMode();
       else
         tabBar.updateVerticalTabStrip();
 
-      if (TabmixTabbar.position == 1)
+      if (this.position == 1)
         setTimeout(function(){tabBar.updateVerticalTabStrip();},0);
     }
     ///maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
-        (window.windowState != window.STATE_MAXIMIZED || TabmixTabbar.position == 1) ? "start_before" : "after_end");
+        (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
   // Update beforeselected and afterselected attribute when we are in multi-row mode
@@ -470,6 +471,7 @@ var TabmixTabbar = {
 // Function to catch changes to Tab Mix preferences and update existing windows and tabs
 //
 var gTMPprefObserver = {
+  preventUpdate: false,
   init: function() {
     var pref = "setDefault"
     if (Tabmix.prefs.prefHasUserValue(pref))
@@ -543,19 +545,30 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.lockallTabs":
         TabmixTabbar.lockallTabs = Services.prefs.getBoolPref(prefName);
+      case "extensions.tabmix.lockAppTabs":
+        if (!Tabmix.prefs.getBoolPref("updateOpenedTabsLockState"))
+          break;
+        let updatePinned = prefName == "extensions.tabmix.lockAppTabs";
+        let lockAppTabs = Tabmix.prefs.getBoolPref("lockAppTabs")
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
+          if (tab.pinned != updatePinned)
+            continue; // only update for the appropriate tabs type
           // when user change settings to lock all tabs we always lock all tabs
           // regardless if they were lock and unlocked before by the user
-          if (TabmixTabbar.lockallTabs) {
+          if (updatePinned ? lockAppTabs : TabmixTabbar.lockallTabs) {
             tab.setAttribute("locked", "true");
-            tab.removeAttribute("_locked");
           }
-          // don't unlock pinned tab if lockAppTabs is true
-          else if (!tab.hasAttribute("pinned") || !Tabmix.prefs.getBoolPref("lockAppTabs")) {
+          else {
             tab.removeAttribute("locked");
-            tab.removeAttribute("_locked");
           }
+          if (updatePinned) {
+            tab.removeAttribute("_lockedAppTabs");
+            tab.setAttribute("_locked", tab.hasAttribute("locked"));
+          }
+          else
+            tab.removeAttribute("_locked");
+          tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
         }
         break;
       case "extensions.tabmix.extraIcons.autoreload":
@@ -637,16 +650,16 @@ var gTMPprefObserver = {
         }
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
-        if (typeof this._tabWidthCahnged == "undefined") {
+        if (typeof this._tabWidthChanged == "undefined") {
           let self = this;
-          this._tabWidthCahnged = true;
+          this._tabWidthChanged = true;
           [50, 100, 250, 500].forEach(function (timeout) {
-            setTimeout(function TMP_tabWidthCahnged() {
+            setTimeout(function TMP_tabWidthChanged() {
               if (currentVisible)
-                tabStrip.ensureElementIsVisible(gBrowser.mCurrentTab);
+                gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
               TabmixTabbar.updateScrollStatus();
               if (timeout == 500)
-                delete self._tabWidthCahnged;
+                delete self._tabWidthChanged;
             }, timeout);
           });
         }
@@ -1050,9 +1063,17 @@ var gTMPprefObserver = {
     if (!icon)
       return; // nothing to do....
 
-    // set right margin to text stack when close button is not right to it
     let style = window.getComputedStyle(icon, null);
+    let marginStart = style.getPropertyValue(sMarginStart);
     let marginEnd = style.getPropertyValue(sMarginEnd);
+    // swap button margin-left margin-right for button on the left side
+    if (marginStart != marginEnd) {
+      let newRule = '.tab-close-button[button_side="left"] {' +
+                    '-moz-margin-start: %PX !important;'.replace("%PX", marginEnd) +
+                    '-moz-margin-end: %PX !important;}'.replace("%PX", marginStart);
+      ss.insertRule(newRule, ss.cssRules.length);
+    }
+    // set right margin to text stack when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
@@ -1387,24 +1408,22 @@ var gTMPprefObserver = {
 
   // code for Single Window Mode...
   // disable the "Open New Window action
-  //disable & hides some menuitem
+  // disable & hides some menuitem
   setSingleWindowUI: function() {
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     var newWindowButton = document.getElementById("new-window-button");
     if (newWindowButton)
       newWindowButton.setAttribute("disabled", Tabmix.singleWindowMode);
 
-    var menuItem;
-    var menuFile = document.getElementById("menu_FilePopup");
-    if (menuFile) {
-      menuItem = menuFile.getElementsByAttribute("command", "cmd_newNavigator")[0];
-      if (menuItem)
-        menuItem.setAttribute("hidden", Tabmix.singleWindowMode);
+    var items = document.getElementsByAttribute("command", "cmd_newNavigator");
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].localName == 'menuitem')
+        items[i].setAttribute("hidden", Tabmix.singleWindowMode);
     }
 
     var frameMenu = document.getElementById("frame");
     if (frameMenu) {
-      menuItem = frameMenu.getElementsByAttribute("oncommand", "gContextMenu.openFrame();")[0];
+      let menuItem = frameMenu.getElementsByAttribute("oncommand", "gContextMenu.openFrame();")[0];
       if (menuItem)
         menuItem.setAttribute("hidden", Tabmix.singleWindowMode);
     }
@@ -1446,7 +1465,7 @@ var gTMPprefObserver = {
       let moreThenOneTab = gBrowser.tabs.length > 1;
       gBrowser.tabContainer.visible = moreThenOneTab || TabmixTabbar.hideMode == 0;
       if (moreThenOneTab) {
-        gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
+        gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
         TabmixTabbar.updateBeforeAndAfter();
       }
     }
@@ -1795,8 +1814,12 @@ try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {
       var currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
       var oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
-      if (currentVersion != oldVersion) {
+      var subs = function(str) str.substring(0, str.length-1);
+      if (currentVersion != oldVersion)
         Tabmix.prefs.setCharPref("version", currentVersion);
+      var showNewVersionTab = currentVersion != oldVersion &&
+        (!isNaN(currentVersion.substr(-1)) || subs(currentVersion) != subs(oldVersion))
+      if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(function() {
           var defaultChanged = "";

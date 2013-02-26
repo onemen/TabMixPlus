@@ -47,7 +47,7 @@ var TabmixTabClickOptions = {
           if (!self.onDoubleClick) {
             gBrowser.previousTab(aTab);
             gBrowser.stopMouseHoverSelect(aTab);
-            content.focus();
+            gBrowser.selectedBrowser.focus();
           }
         }
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
@@ -116,7 +116,7 @@ var TabmixTabClickOptions = {
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
     var action = Tabmix.getIntPref(pref, defaultPref[pref], true);
 
-    content.focus();
+    gBrowser.selectedBrowser.focus();
 
     switch ( action ) {
       case 0 :
@@ -163,7 +163,7 @@ var TabmixTabClickOptions = {
         TMP_ClosedTabs.restoreTab("original", -2);
         break;
       case 14:
-        gBrowser.duplicateInWindow(aTab, false);
+        gBrowser.duplicateTabToWindow(aTab, false);
         break;
       case 15:
         gBrowser.freezeTab(aTab);
@@ -215,7 +215,7 @@ var TabmixTabClickOptions = {
         PlacesCommandHook.bookmarkCurrentPages();
         break;
       case 27:
-        gBrowser.duplicateInWindow(aTab, true);
+        gBrowser.duplicateTabToWindow(aTab, true);
         break;
       case 28:
         gBrowser.copyTabUrl(aTab);
@@ -595,7 +595,7 @@ var TabmixContext = {
   openMultipleLinks: function TMP_openMultipleLinks(check) {
     var focusedWindow = document.commandDispatcher.focusedWindow;
     if (focusedWindow == window)
-      focusedWindow = _content;
+      focusedWindow = content;
 
     var nsISelectionObject = focusedWindow.getSelection();
     if (nsISelectionObject.isCollapsed) // nothing selected
@@ -634,7 +634,7 @@ var TabmixContext = {
     }
 
     var range = nsISelectionObject.getRangeAt(0);
-    var treeWalker = window._content.document.createTreeWalker(
+    var treeWalker = window.content.document.createTreeWalker(
          range.cloneContents(),
          NodeFilter.SHOW_ELEMENT,
          myNodeFilter,
@@ -958,7 +958,7 @@ var TabmixAllTabs = {
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
     if (gBrowser.selectedTab == aTab)
-      gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(aTab);
+      gBrowser.ensureTabIsVisible(aTab);
     else
       // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible
       gBrowser.selectedTab = aTab;

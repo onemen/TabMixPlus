@@ -162,6 +162,7 @@
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -176,6 +177,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
