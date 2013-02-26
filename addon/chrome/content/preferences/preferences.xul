@@ -4,7 +4,7 @@
 <?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
 
-<?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/shortcuts.css"?>
 
 <!DOCTYPE prefwindow [
