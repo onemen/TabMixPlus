@@ -285,7 +285,7 @@ function setNewTabUrl(newPref, newValue) {
   }
 }
 
-XPCOMUtils.defineLazyGetter(window, "preferenceList", function() {
+XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
   "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
@@ -317,7 +317,7 @@ function defaultSetting() {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
-  this.preferenceList.forEach(function(pref) {
+  gPreferenceList.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
   // we enable our session manager on default
@@ -333,7 +333,7 @@ function exportData() {
   // save all pending changes
   gPrefWindow.onApply();
 
-  let patterns = this.preferenceList.map(function(pref) {
+  let patterns = gPreferenceList.map(function(pref) {
     return pref + "=" + getPrefByType(pref) + "\n";
   });
   patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
