@@ -21,7 +21,7 @@
         persist="screenX screenY">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-   <script type="application/javascript" src="chrome://tabmixplus/content/pref/pref-filetype.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
    <groupbox>
         <listbox id="filetypeList" rows="10" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>

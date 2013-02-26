@@ -30,7 +30,8 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     if(panel > -1)
       Tabmix.prefs.setIntPref("selected_tab", panel);
 
-    window.openDialog("chrome://tabmixplus/content/pref/pref-tabmix.xul", "Tab Mix Plus", "chrome,titlebar,toolbar,close,dialog=no");
+    window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
+        "chrome,titlebar,toolbar,close,dialog=no,centerscreen");
   }
 }
 

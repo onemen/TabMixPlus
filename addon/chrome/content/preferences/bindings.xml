@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<bindings id="preference-bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="checkbox" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+    <content>
+      <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
+      <xul:hbox class="checkbox-label-box" xbl:inherits="flex=flexlabel">
+        <xul:image class="checkbox-icon" xbl:inherits="src"/>
+        <xul:label class="checkbox-label" xbl:inherits="xbl:text=label,accesskey,crop,flex=flexlabel"/>
+      </xul:hbox>
+    </content>
+    <implementation>
+    </implementation>
+  </binding>
+
+  <binding id="checkbox-with-spacing" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+    <content>
+      <xul:hbox class="checkbox-spacer-box">
+        <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
+      </xul:hbox>
+      <xul:hbox class="checkbox-label-center-box" xbl:inherits="flex=flexlabel">
+        <xul:hbox class="checkbox-label-box" xbl:inherits="flex=flexlabel">
+          <xul:image class="checkbox-icon" xbl:inherits="src"/>
+          <xul:label class="checkbox-label" xbl:inherits="xbl:text=label,accesskey,crop,flex=flexlabel"/>
+        </xul:hbox>
+      </xul:hbox>
+    </content>
+  </binding>
+
+  <binding id="preference" extends="chrome://global/content/bindings/preferences.xml#preference">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          Tabmix.changeCode(this, "_setValue")._replace(
+            'return aValue;',
+            'else if (!this.instantApply && aUpdate && this.value === aValue) {' +
+            '  gPrefWindow.updateApplyButton({target: this});}' +
+            '$&'
+          ).toCode();
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+</bindings>
