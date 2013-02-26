@@ -24,7 +24,7 @@ let TMP_TabGroupsManager = {
       'this.onTabClose_updateTabBar(tab);',
       'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) {Tabmix.log(e);}'
     )._replace(
-      '!TabmixSvc.prefs.getBoolPref("browser.tabs.animate")', 'true'
+      '!Services.prefs.getBoolPref("browser.tabs.animate")', 'true'
     ).toCode();
 
     this.newCode("TMP_tabDNDObserver.onDragExit", aWindow.TMP_tabDNDObserver.onDragExit)._replace(
@@ -136,7 +136,7 @@ let TMP_TabGroupsManager = {
     if (!Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in window)
       return false;
 
-    return TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.manager") &&
+    return Tabmix.prefs.getBoolPref("sessions.manager") &&
         (!Tabmix.isWindowAfterSessionRestore || "tabmixdata" in window)
   },
 

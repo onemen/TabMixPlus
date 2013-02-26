@@ -19,15 +19,17 @@ pref("extensions.tabmix.loadUrlInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("browser.tabs.loadFolderAndReplace", true); // remove from firefox 4.0 2009-10-17
+pref("extensions.tabmix.loadFolderAndReplace", true);
 
-pref("extensions.tabmix.loadOnNewTab", 0);
+pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
+pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
 /* 2012-01-26
-  we use "browser.newtab.url" from firefox 12
-  pref("extensions.tabmix.newTabUrl", "");
+  from firefox 12 we use "browser.newtab.url" instead of extensions.tabmix.newtab.url
+  and extensions.tabmix.replaceLastTabWith.newtab.url
 */
-pref("extensions.tabmix.replaceLastTabWith", 0);
-pref("extensions.tabmix.newTabUrl_afterLastTab", "");
+pref("extensions.tabmix.newtab.url", "about:blank"); // for firefox 4-11
+pref("extensions.tabmix.replaceLastTabWith.newTabUrl", "about:blank"); // for firefox 4-11
+pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab"); // for firefox 12+
 
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
@@ -55,6 +57,7 @@ pref("extensions.tabmix.keepLastTab", false);
 
 pref("extensions.tabmix.tabBarMode", 1);
 pref("extensions.tabmix.tabBarMaxRow", 3);
+pref("extensions.tabmix.offsetAmountToScroll", false);
 pref("extensions.tabmix.tabBarSpace", false);
 pref("extensions.tabmix.hideTabBarButton", true);
 pref("extensions.tabmix.hideAllTabsButton", false);
@@ -76,7 +79,6 @@ pref("extensions.tabmix.hideTabbar", 1); // default to browser.tabs.autoHide == 
 pref("extensions.tabmix.hideTabbar", 0); // default to browser.tabs.autoHide == false
 pref("extensions.tabmix.tabBarPosition", 0);
 
-pref("extensions.tabmix.progressMeter", true);
 /*
 2010-03-07
 replaced with .locked and .protected
@@ -85,12 +87,16 @@ pref("extensions.tabmix.extraIcons", true);
 pref("extensions.tabmix.extraIcons.locked", true);
 pref("extensions.tabmix.extraIcons.protected", true);
 pref("extensions.tabmix.extraIcons.autoreload", true);
+
+pref("extensions.tabmix.currentTab", false);
+pref("extensions.tabmix.unloadedTab", true);
 pref("extensions.tabmix.unreadTab", true);
 pref("extensions.tabmix.unreadTabreload", true);
-pref("extensions.tabmix.currentTab", false);
-
 pref("extensions.tabmix.otherTab", false);
+pref("extensions.tabmix.progressMeter", true);
+
 pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
@@ -110,16 +116,8 @@ pref("extensions.tabmix.useUnreadColor", true);
 pref("extensions.tabmix.useProgressColor", true);
 */
 
-/*
-2008-11-29
-replaced with browser.tabs.tabMaxWidth
-*/
-//pref("extensions.tabmix.minWidth", 100);
-/*
-2008-11-29
-replaced with browser.tabs.tabMaxWidth
-*/
-// pref("extensions.tabmix.maxWidth", 250);
+pref("extensions.tabmix.tabMinWidth", 100);
+pref("extensions.tabmix.tabMaxWidth", 250);
 pref("extensions.tabmix.flexTabs", false);
 
 pref("extensions.tabmix.titlefrombookmark", false);
@@ -276,7 +274,3 @@ pref("extensions.tabmix.reload_time", 15);
 // -1: unlimited
 //  0: no backups created (and deletes all existing backups)
 pref("extensions.tabmix.sessions.max_backups", 7);
-
-// removed from Firefox 4.0+
-pref("browser.tabs.tabMinWidth", 100);
-pref("browser.tabs.tabMaxWidth", 250);

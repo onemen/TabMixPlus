@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Началната страница">
 <!ENTITY newtab.current "Текущата страница">
 <!ENTITY newtab.duplicate "Дублирана страница">
-<!ENTITY newtab.location "По избор">
-<!ENTITY location.label "Адрес">
+<!ENTITY newtab.location.1 "Нов подпрозорец">
+<!ENTITY location.label.1 "Адрес">
 <!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
 <!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
 <!ENTITY openOtherTabNext.label "Отваряне на други подпрозорци непосредствено до текущия">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прелистване чрез бутони, разположени отляво">
 <!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
 <!ENTITY maxrow.label "Максимален брой редове:">
+<!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
 <!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
 <!ENTITY highlight.label "Открояване на:">
 <!ENTITY currenttab.style.label "Текущия подпрозорец">
+<!ENTITY unloadedtabs.style.label "Незаредените подпрозорци">
 <!ENTITY unreadtabs.style.label "Непрочетените подпрозорци">
 <!ENTITY othertabs.style.label "Другите подпрозорци">
 <!ENTITY setstyles.label "Настройка на стиловете">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Показване на подпрозореца при задържане курсора на мишката върху него за">
 <!ENTITY tabFlip.label "Превключване към последно избрания подпрозорец при щракване върху текущия">
 <!ENTITY tabFlip.delay "Забавяне:">
-<!ENTITY addTabDrag.label "Плъзгане на подпрозорци за промяна на поредността им">
-<!ENTITY enabletabbarscrolling.label "Прелистване на подпрозорци посредством колелото на мишката">
-<!ENTITY reverseScroll.label "Обръщане на посоката, в която биват избирани подпрозорците">
 <!ENTITY clickFocus.label "Избиране на подпрозорец чрез щракване върху него">
 <!ENTITY removeEntries.label "Изтриване на пунктове от списъците на Тab Mix Plus посредством щракване със среден бутон">
 <!ENTITY lockTabSizingOnClose.label "При затваряне на един подпрозорец, останалите не трябва да изменят ширината си, докато показалецът на мишката не напусне областта на лентата с инструменти">
 <!ENTITY removeEntries.tooltip "Това включва затворени подпрозорци, затворени прозорци и записани сесии">
+<!ENTITY tabbarscrolling.caption "При прелистване върху лентата с подпрозорци">
+<!ENTITY tabbarscrolling.holdShift.label "Задържането на Shift при прелистване превключва между тези опции:">
+<!ENTITY tabbarscrolling.selectTab.label "Промяна на избрания подпрозорец">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Прелистване на всички подпрозорци">
+<!ENTITY tabbarscrolling.inverse.label "Промяна посоката на прелистване">
 <!ENTITY double.label "Двукратно щракване">
 <!ENTITY middle.label "Щракване със среден бутон">
 <!ENTITY ctrl.label "CTRL+щракване">

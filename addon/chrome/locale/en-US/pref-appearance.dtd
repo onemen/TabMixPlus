@@ -1,7 +1,8 @@
 <!ENTITY styles.label "Customize Styles">
 <!ENTITY currentTab.label "Current Tab">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Unread Tabs">
-<!ENTITY otherTabs.label "Other tabs">
+<!ENTITY otherTabs.label "Other Tabs">
 <!ENTITY italic.label "Italic">
 <!ENTITY bold.label "Bold">
 <!ENTITY underline.label "Underline">

@@ -46,6 +46,7 @@ overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tab
 overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul
 overlay   chrome://browser/content/syncSetup.xul                    chrome://tabmixplus/content/links/text_link.xul appversion<13.0a1
 overlay   chrome://browser/content/sync/setup.xul                   chrome://tabmixplus/content/links/text_link.xul appversion>=13.0a1
+overlay   chrome://mozapps/content/update/history.xul               chrome://tabmixplus/content/links/text_link.xul
 
 overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul

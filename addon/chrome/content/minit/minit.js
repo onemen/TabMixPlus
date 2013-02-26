@@ -28,15 +28,17 @@ var TMP_tabDNDObserver = {
     ind.clientTop;
   },
 
+  verticalTreeStyleTab: false,
   setDragEvents: function TMP_setDragEvents(atStart) {
     // we only set Tabmix events at start if Tree Style Tab is not in vertical mode
     var useDefaultDnD = false;
     if ("TreeStyleTabBrowser" in window) {
       try {
-        var tabbarPosition = TabmixSvc.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
+        var tabbarPosition = Services.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
       }
       catch (er) {};
       useDefaultDnD = tabbarPosition == "left" || tabbarPosition == "right";
+      this.verticalTreeStyleTab = useDefaultDnD;
     }
 
     if (atStart && useDefaultDnD) {
@@ -322,7 +324,6 @@ var TMP_tabDNDObserver = {
 
       gBrowser.moveTabTo(newTab, newIndex + left_right);
 
-      Tabmix.copyTabData(newTab, draggedTab);
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
 
       // We need to set selectedTab after we've done
@@ -340,7 +341,7 @@ var TMP_tabDNDObserver = {
 
       var bgLoad = true;
       try {
-        bgLoad = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+        bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
       }
       catch (e) { }
 
@@ -589,7 +590,7 @@ var TMP_tabDNDObserver = {
 
    this.clearDragmark();// clear old dragmark if one exist
 
-   if (!TabmixSvc.TMPprefs.getBoolPref("useFirefoxDragmark")) {
+   if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var sameRow = newIndex != 0 && newIndex != gBrowser.tabs.length &&
             TabmixTabbar.inSameRow(gBrowser.tabs[newIndex-1], gBrowser.tabs[newIndex]);
       if (sameRow || left_right==0)
@@ -610,7 +611,7 @@ var TMP_tabDNDObserver = {
                         scrollMode == TabmixTabbar.SCROLL_BUTTONS_HIDDEN ||
                         scrollMode == TabmixTabbar.SCROLL_BUTTONS_MULTIROW ||
                         (scrollMode == TabmixTabbar.SCROLL_BUTTONS_RIGHT &&
-                         !TabmixSvc.TMPprefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
+                         !Tabmix.prefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
       minMargin = scrollRect.left - rect.left - paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
       if (!ltr)
@@ -650,7 +651,7 @@ var TMP_tabDNDObserver = {
     if (this.dragmarkindex == null)
       return;
 
-    if (!TabmixSvc.TMPprefs.getBoolPref("useFirefoxDragmark")) {
+    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var index = this.dragmarkindex.newIndex;
       if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
          this.removetDragmarkAttribute(gBrowser.tabs[index]);
@@ -777,7 +778,7 @@ Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
 }
 
 Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
-  let bgLoad = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+  let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
   try {
     gBrowser.loadTabs(aURIs, bgLoad, aReplace);
   } catch (ex) { }
@@ -788,7 +789,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
    var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
    var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
-   var openTabPref = typeof(pref) == "string" ? TabmixSvc.prefs.getBoolPref(pref) : pref;
+   var openTabPref = typeof(pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
    if (typeof(altKey) != "undefined") {
       // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
       if (altKey && !openTabPref)
@@ -806,6 +807,7 @@ Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
   try {
     return parseInt(window.getComputedStyle(aObj, null)[aStyle]) || 0;
   } catch (ex) {this.assert(ex);}
+  return 0;
 }
 
 // sometimes context popup stay "open", we hide it manually.
@@ -934,6 +936,7 @@ var TMP_TabView = {
         let UI = win.UI;
         let Utils = win.Utils;
         let GroupItems = win.GroupItems;
+        let Storage = win.Storage;
         ]]>, {check: Tabmix.isVersion(80)}
       )._replace(
         'this.',
@@ -1101,7 +1104,7 @@ Tabmix.navToolbox = {
     }
 
     // if tabmix option dialog is open update visible buttons and set focus if needed
-    var optionWindow = TabmixSvc.wm.getMostRecentWindow("mozilla:tabmixopt");
+    var optionWindow = Services.wm.getMostRecentWindow("mozilla:tabmixopt");
     if (optionWindow) {
       optionWindow.toolbarButtons(window);
       if ("_tabmixCustomizeToolbar" in optionWindow) {
@@ -1208,7 +1211,7 @@ Tabmix.navToolbox = {
         '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
       )._replace(
         'openUILinkIn(url, where, params);',
-        'params.inBackground = TabmixSvc.TMPprefs.getBoolPref("loadUrlInBackground");\
+        'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
          $&'
       );
     }
@@ -1271,22 +1274,22 @@ Tabmix.navToolbox = {
       $&]]>
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
-      'var loadInBackground = TabmixSvc.prefs.getBoolPref("extensions.tabmix.loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
+      'var loadInBackground = Tabmix.prefs.getBoolPref("loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
     ).toCode();
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     if (TabmixSessionManager.enableManager == null) {
       let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
-      TabmixSessionManager.enableManager = TabmixSvc.SMprefs.getBoolPref("manager") && !inPrivateBrowsing;
-      TabmixSessionManager.enableBackup = TabmixSvc.SMprefs.getBoolPref("crashRecovery") && !inPrivateBrowsing;
+      TabmixSessionManager.enableManager = Tabmixc.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
+      TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
     }
     Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !TabmixSessionManager.enableManager);
     TabmixSessionManager.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();
 
-    gTMPprefObserver.changeNewTabButtonSide(TabmixSvc.TMPprefs.getIntPref("newTabButton.position"));
+    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
   },
 
   initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {

@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Domovská stránka">
 <!ENTITY newtab.current "Současná stránka">
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
-<!ENTITY newtab.location "Uživatelské umístění">
-<!ENTITY location.label "Umístění">
+<!ENTITY newtab.location.1 "Stránka nového panelu">
+<!ENTITY location.label.1 "Adresa">
 <!ENTITY focusContent.label "Přepnout na obsah při načítání neprázdné stránky">
 <!ENTITY openTabNext.label "Otevřít nové panely vedle současného panelu">
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle současného">
@@ -137,13 +137,15 @@
 <!ENTITY tabScroll.none "Posuvná lišta panelů">
 <!ENTITY tabScroll.leftRightButtons "Posuvná lišta panelů s tlačítky nalevo i napravo">
 <!ENTITY tabScroll.rightButtons "Posuvná lišta panelů s tlačítky napravo">
-<!ENTITY tabScroll.rightButtons.rtl "Posuvný s tlačítky nalevo">
+<!ENTITY tabScroll.rightButtons.rtl "Posuvná s tlačítky nalevo">
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
+<!ENTITY offsetAmountToScroll.label "Při posouvání zobrazit část dalšího panelu">
 <!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
 <!ENTITY highlight.label "Zvýraznit:">
 <!ENTITY currenttab.style.label "Současný panel">
+<!ENTITY unloadedtabs.style.label "Nenačtené panely">
 <!ENTITY unreadtabs.style.label "Nepřečtené panely">
 <!ENTITY othertabs.style.label "Ostatní panely">
 <!ENTITY setstyles.label "Přizpůsobit si styly">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Zobrazit panel při přejetí myši přes něj">
 <!ENTITY tabFlip.label "Přepnout na naposledy používaný panel klepnutím na současný">
 <!ENTITY tabFlip.delay "Se spožděním">
-<!ENTITY addTabDrag.label "Změnit pořadí panelů jejich přetažením">
-<!ENTITY enabletabbarscrolling.label "Pomocí skrolování přepínat mezi panely">
-<!ENTITY reverseScroll.label "Pomocí skrolování nazpátek přepínat doprava">
 <!ENTITY clickFocus.label "Klepnutí myší okamžitě vybere panel">
 <!ENTITY removeEntries.label "Pomocí prostředního tlačítka odebrat položky seznamu v menu Tab Mix Plus">
 <!ENTITY lockTabSizingOnClose.label "Neměnit velikost ostatních panelů při zavírání panelu, dokud je kurzor v oblasti panelu nástrojů.">
 <!ENTITY removeEntries.tooltip "Včetně zavřených panelů, oken a uložených relací">
+<!ENTITY tabbarscrolling.caption "Při posouvání na panelu nástrojů">
+<!ENTITY tabbarscrolling.holdShift.label "Chcete-li přepínat mezi těmito volbami, posouvejte stránku se stisknutým tlačítkem Shift">
+<!ENTITY tabbarscrolling.selectTab.label "Změnit vybraný panel">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Přepínat mezi všemi panely">
+<!ENTITY tabbarscrolling.inverse.label "Opačný směr přepínání">
 <!ENTITY double.label "Dvojklepnutí">
 <!ENTITY middle.label "Prostřední tlačítko">
 <!ENTITY ctrl.label "Ctrl+klepnutí">

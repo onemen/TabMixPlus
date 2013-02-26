@@ -16,7 +16,7 @@ var TMP_DOMWindowOpenObserver = {
     *                  additionally not a popup window.
     */
     getBrowserWindow: function(aExclude) {
-      var windows = TabmixSvc.wm.getEnumerator('navigator:browser');
+      var windows = Services.wm.getEnumerator('navigator:browser');
 
       while (windows.hasMoreElements()) {
         let win = windows.getNext().QueryInterface(Components.interfaces.nsIDOMWindow);
@@ -31,7 +31,7 @@ var TMP_DOMWindowOpenObserver = {
     },
 
     newWindow : function(aWindow) {
-        Tabmix.singleWindowMode = TabmixSvc.TMPprefs.getBoolPref("singleWindow");
+        Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
         gTMPprefObserver.setLink_openPrefs();
         if (!Tabmix.singleWindowMode)
           return;
@@ -123,7 +123,7 @@ var TMP_DOMWindowOpenObserver = {
           newWindow.PlacesStarButton.updateState = function() {};
           newWindow.PlacesStarButton.uninit = function() {};
           newWindow.OfflineApps.uninit = function() {};
-          var obs = TabmixSvc.obs;
+          var obs = Services.obs;
           obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
           obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
           IndexedDBPromptHelper.init();
@@ -217,9 +217,9 @@ Tabmix.contentAreaClick = {
       return where == "tabshifted" ? "tabshifted" : "tab";
     }
 
-    var targetPref = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
-    var linkTarget = TabmixSvc.prefs.getBoolPref("extensions.tabmix.linkTarget");
-    var suppressTabs = TabmixSvc.prefs.getBoolPref("extensions.tabmix.enablefiletype");
+    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
+    var linkTarget = Tabmix.prefs.getBoolPref("linkTarget");
+    var suppressTabs = Tabmix.prefs.getBoolPref("enablefiletype");
 
 ///XXX check again how SubmitToTab work
     if (typeof(SubmitToTab) != 'undefined') {
@@ -261,7 +261,6 @@ Tabmix.contentAreaClick = {
         let isHttps = /^https/.test(href);
         if (isGmail || isHttps)
            return ["default", true];
-
         return ["current", true];
     }
 
@@ -277,7 +276,7 @@ Tabmix.contentAreaClick = {
      * are true. See the function comment for more details.
      */
     if (this.divertMiddleClick(event, linkNode, gBrowser.mCurrentTab, currentDomain, targetDomain,
-                              targetPref, TabmixSvc.prefs.getBoolPref("extensions.tabmix.middlecurrent"))) {
+                              targetPref, Tabmix.prefs.getBoolPref("middlecurrent"))) {
       return ["current"];
     }
 
@@ -327,7 +326,7 @@ Tabmix.contentAreaClick = {
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
 
-    var targetPref = TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks");
+    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
     var tabLocked = gBrowser.mCurrentTab.hasAttribute("locked");
     if (!tabLocked && targetPref == 0)
       return;
@@ -391,7 +390,7 @@ Tabmix.contentAreaClick = {
      * portions were taken from disable target for downloads by cusser
      */
     if (this.suppressTabsOnFileDownload(aEvent, href, linkNode,
-           TabmixSvc.prefs.getBoolPref("extensions.tabmix.enablefiletype")))
+           Tabmix.prefs.getBoolPref("enablefiletype")))
       return;
 
     /*
@@ -410,7 +409,7 @@ Tabmix.contentAreaClick = {
                               document.commandDispatcher.focusedWindow.top.frames,
                               gBrowser.mCurrentTab, currentDomain, targetDomain,
                               targetPref,
-                              TabmixSvc.prefs.getBoolPref("extensions.tabmix.linkTarget")))
+                              Tabmix.prefs.getBoolPref("linkTarget")))
       return;
 
     // open links to other sites in a tab only if certain conditions are met. See the
@@ -522,7 +521,7 @@ Tabmix.contentAreaClick = {
     if (linkHref.indexOf("mailto:") == 0)
       return true;
 
-    var filetype = TabmixSvc.prefs.getCharPref("extensions.tabmix.filetype");
+    var filetype = Tabmix.prefs.getCharPref("filetype");
     filetype = filetype.toLowerCase();
     filetype = filetype.split(" ");
     var linkHrefExt = "";
@@ -686,7 +685,7 @@ Tabmix.contentAreaClick = {
    *
    */
   openExSiteLink: function TMP_openExSiteLink(linkNode, currentDomain, targetDomain, targetPref) {
-    if (targetPref != 2 || Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+    if (targetPref != 2 || Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
 ///XXX if we check this in every function do it one time at the start
@@ -716,7 +715,7 @@ Tabmix.contentAreaClick = {
               false to load link in current tab
    */
   openTabfromLink: function TMP_openTabfromLink(event, linkNode, href) {
-    if (Tabmix.isBlankPageURL(gBrowser.currentURI.spec))
+    if (Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
     if (this.GoogleComLink(linkNode))
@@ -761,7 +760,7 @@ Tabmix.contentAreaClick = {
    */
   GoogleComLink: function TMP_GoogleComLink(linkNode) {
     var location = gBrowser.currentURI.spec;
-    var currentIsnGoogle = /www.google./.test(location);
+    var currentIsnGoogle = /(www|profiles|accounts|groups).google./.test(location);
     if (!currentIsnGoogle)
       return false;
 
@@ -778,7 +777,7 @@ Tabmix.contentAreaClick = {
     if (testPathname)
       return true;
 
-    let _host = ["profiles.google.com", "accounts.google.com"];
+    let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
     let testHost = _host.indexOf(linkNode.host) > -1;
     if (testHost)
       return true;
@@ -814,8 +813,8 @@ Tabmix.contentAreaClick = {
    *
    */
   selectExistingTab: function TMP_selectExistingTab(href) {
-    if (TabmixSvc.prefs.getIntPref("extensions.tabmix.opentabforLinks") != 0 ||
-        TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground"))
+    if (Tabmix.prefs.getIntPref("opentabforLinks") != 0 ||
+        Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
     function switchIfURIInWindow(aWindow) {
       if (!("gBrowser" in aWindow))
@@ -878,11 +877,11 @@ Tabmix.contentAreaClick = {
         return "local_file";
 
       if (url.match(/^http/)) {
-        url = TabmixSvc.io.newURI(url, null, null);
+        url = Services.io.newURI(url, null, null);
 
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
-          url = TabmixSvc.io.newURI(url.path.substr("/r/?".length), null, null);
+          url = Services.io.newURI(url.path.substr("/r/?".length), null, null);
 /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need

@@ -1,5 +1,6 @@
 <!ENTITY styles.label "カスタマイズ">
 <!ENTITY currentTab.label "現在のタブ">
+<!ENTITY unloadedTabs.label "未読込のタブ">
 <!ENTITY unreadTab.label "未読のタブ">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">

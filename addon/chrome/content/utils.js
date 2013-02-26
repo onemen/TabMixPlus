@@ -41,12 +41,10 @@ Tabmix_ChangeCode.prototype = {
 
   toSetter: function(aObj, aName) {
     Tabmix._define("setter", aObj, aName, this.value);
-    delete this;
   },
 
   toGetter: function(aObj, aName) {
     Tabmix._define("getter", aObj, aName, this.value);
-    delete this;
   },
 
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
@@ -61,7 +59,6 @@ Tabmix_ChangeCode.prototype = {
         Tabmix.clog("in " + Tabmix.callerName() + " no update needed to " + (aName || this.name));
       if (aShow)
         this.show(aObj, aName);
-      delete this;
     } catch (ex) {
       Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
     }
@@ -85,6 +82,12 @@ var Tabmix = {
       if (Tabmix._debugMode)
         this.obj(aObject, "aObject");
     }
+    return null;
+  },
+
+  get prefs() {
+    delete this.prefs;
+    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
   },
 
   isVersion: function(aVersionNo) {
@@ -112,6 +115,7 @@ try {
 } catch (ex) {
 this.log(aMethod)
 }
+   return null;
   },
 
   show: function(aMethod, rootID, aDelay) {
@@ -140,7 +144,7 @@ this.log(aMethod)
   },
 
   clog: function TMP_utils_clog(aMessage) {
-    TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
+    Services.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
   log: function TMP_utils_log(aMessage, aShowCaller, offset) {
@@ -148,7 +152,7 @@ this.log(aMethod)
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
-    TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+    Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -182,8 +186,16 @@ this.log(aMethod)
     return null;
   },
 
+  // Bug 744842 - don't include actual args in error.stack.toString()
+  // since Bug 744842 landed the stack string don't have (arg1, arg2....)
+  // so we can get the name from the start of the string until @
+  get _char() {
+    delete this._char;
+    return this._char = this.isVersion(140) ? "@" : "(";
+  },
+
   _name: function(fn) {
-    let name = fn.substr(0, fn.indexOf("("));
+    let name = fn.substr(0, fn.indexOf(this._char))
     if (!name) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
@@ -286,7 +298,7 @@ XXX fix this when there is no stack go directly to trace
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
     let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
     if (stackText)
-      TabmixSvc.console.logStringMessage(assertionText + stackText);
+      Services.console.logStringMessage(assertionText + stackText);
     else
       this.trace(assertionText, 2);
   },
@@ -295,7 +307,7 @@ XXX fix this when there is no stack go directly to trace
     // cut off the first line of the stack trace, because that's just this function.
     let stack = Error().stack.split("\n").slice(slice || 1);
 
-    TabmixSvc.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
+    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   },
 
   // Show/hide one item (specified via name or the item element itself).
@@ -336,10 +348,10 @@ XXX fix this when there is no stack go directly to trace
   getBoolPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getBoolPref(branch + aPrefName);
+      return Services.prefs.getBoolPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setBoolPref(branch + aPrefName, aDefault);
+      Services.prefs.setBoolPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
@@ -347,10 +359,10 @@ XXX fix this when there is no stack go directly to trace
   getIntPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getIntPref(branch + aPrefName);
+      return Services.prefs.getIntPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setIntPref(branch + aPrefName, aDefault);
+      Services.prefs.setIntPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
@@ -358,16 +370,16 @@ XXX fix this when there is no stack go directly to trace
   getCharPref: function(aPrefName, aDefault, aUseTabmixBranch) {
     var branch = aUseTabmixBranch ? "extensions.tabmix." : "";
     try {
-      return TabmixSvc.prefs.getCharPref(branch + aPrefName);
+      return Services.prefs.getCharPref(branch + aPrefName);
     }
     catch(er) {
-      TabmixSvc.prefs.setCharPref(branch + aPrefName, aDefault);
+      Services.prefs.setCharPref(branch + aPrefName, aDefault);
       return aDefault;
     }
   },
 
   getTopWin: function() {
-    return TabmixSvc.wm.getMostRecentWindow("navigator:browser");
+    return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
   getSingleWindowMode: function TMP_getSingleWindowMode() {
@@ -375,12 +387,13 @@ XXX fix this when there is no stack go directly to trace
     // so we can open new window
     if (!this.getTopWin())
       return false;
-    return TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
+    return Tabmix.prefs.getBoolPref("singleWindow");
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
-      Tabmix[aModule + "Initialized"] = false;
+      this[aModule + "Initialized"] = false;
+    var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, function() {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/"+aModule+".jsm", tmp);
@@ -388,7 +401,7 @@ XXX fix this when there is no stack go directly to trace
       if ("init" in obj)
         obj.init.apply(obj, aArg);
       if (aFlag)
-        window.Tabmix[aModule + "Initialized"] = true;
+        self[aModule + "Initialized"] = true;
       return obj;
     });
   },
@@ -397,9 +410,10 @@ XXX fix this when there is no stack go directly to trace
     if (aOldName in aObject)
       return;
 
+    var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aOldName, function() {
-      Tabmix.informAboutChangeInTabmix(aOldName, aNewName);
-      return Tabmix.getObject(aNewName);
+      self.informAboutChangeInTabmix(aOldName, aNewName);
+      return self.getObject(aNewName);
     });
   },
 
@@ -413,13 +427,13 @@ XXX fix this when there is no stack go directly to trace
       let index = path.indexOf("/", 2) - 3;
       let extensionName = index > -1 ?
          path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
-      Tabmix.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
+      this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\n" + "file: " + "chrome:" + path + "\nline: " + line
                  + "\n\nPlease inform Tabmix Plus developer"
                  + (extensionName ? ( " and " + extensionName + "developer.") : "."));
     }
     else
-      Tabmix.clog(err.message + "\n\n" + stack);
+      this.clog(err.message + "\n\n" + stack);
   },
 
   promptService: function(intParam, strParam, aWindow, aCallBack) {
@@ -464,7 +478,7 @@ XXX fix this when there is no stack go directly to trace
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
     if (typeof(aWindowtype) == "undefined")
       aWindowtype = "navigator:browser";
-    return TabmixSvc.wm.getEnumerator(aWindowtype);
+    return Services.wm.getEnumerator(aWindowtype);
   },
 
   numberOfWindows: function Tabmix_numberOfWindows(all, aWindowtype) {
@@ -507,10 +521,10 @@ XXX fix this when there is no stack go directly to trace
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
-  destroy: function() {
+  destroy: function TMP_utils_destroy() {
     this._define = null;
     this.toCode = null;
-    window.removeEventListener("unload", Tabmix.destroy, false);
+    window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }
 

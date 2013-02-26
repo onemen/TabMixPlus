@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Načítať na pozadí">
 <!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Upraviť názov karty">
+<!ENTITY renametab.reset.label "Resetovať na predvolený názov">
 <!ENTITY title.label "Názov">
-<!ENTITY rename_all.label "Premenovať všetky stránky s rovnakou adresou">
-<!ENTITY rename_permanently.label "Premenovať túto kartu permanentne pre všetky adresy">
-<!ENTITY doctitle.label "Použiť názov dokumentu">
+<!ENTITY default.label "Predvolený">
+<!ENTITY renametab.permanently.label "Premenovať túto kartu bez ohľadu na jej adresu">
+<!ENTITY renametab.permanently.tooltip "karta s históriou - nový názov zostane pri zmene adresy">
 <!ENTITY forum.label "Fórum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Pomocník">

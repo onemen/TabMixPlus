@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "ホームページを表示">
 <!ENTITY newtab.current "現在のページを表示">
 <!ENTITY newtab.duplicate "現在のページを複製して表示">
-<!ENTITY newtab.location "指定のページを表示">
-<!ENTITY location.label "指定ページ">
+<!ENTITY newtab.location.1 "指定ページを表示">
+<!ENTITY location.label.1 "アドレス">
 <!ENTITY focusContent.label "空白ページ以外を読み込むときはコンテンツにフォーカスする">
 <!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
 <!ENTITY openOtherTabNext.label "他のタブを現在のタブの直後に開く">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "スクロール可能にし、左にボタンを表示">
 <!ENTITY tabScroll.multibar "多段表示にする">
 <!ENTITY maxrow.label "バーの最大表示段数:">
+<!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
 <!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">
 <!ENTITY highlight.label "ハイライト:">
 <!ENTITY currenttab.style.label "現在のタブ">
+<!ENTITY unloadedtabs.style.label "未読込のタブ">
 <!ENTITY unreadtabs.style.label "未読のタブ">
 <!ENTITY othertabs.style.label "他のタブ">
 <!ENTITY setstyles.label "スタイルをカスタマイズ">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "マウスオーバーでタブを選択　ディレイ時間:">
 <!ENTITY tabFlip.label "現在のタブをクリックしたとき、直前にフォーカスしていたタブにフォーカスを移す">
 <!ENTITY tabFlip.delay "ディレイ時間:">
-<!ENTITY addTabDrag.label "ドラッグ＆ドロップでタブを並び替え">
-<!ENTITY enabletabbarscrolling.label "タブバー上をホイールスクロールでタブ切り替え">
-<!ENTITY reverseScroll.label "スクロール方向を逆にする">
 <!ENTITY clickFocus.label "クリックでタブを選択する場合、ボタンを離すまで選択しない">
 <!ENTITY removeEntries.label "中クリックで Tab Mix Plus のメニューリスト項目を削除する">
 <!ENTITY lockTabSizingOnClose.label "タブを閉じてもカーソルがツールバー上にある間は他のタブをリサイズしない">
 <!ENTITY removeEntries.tooltip "[最近閉じたタブ][最近閉じたウィンドウ][保存されたセッション] の各リストを含む">
+<!ENTITY tabbarscrolling.caption "タブバー上でのスクロール動作">
+<!ENTITY tabbarscrolling.holdShift.label "Shift キーを併用することで、オプションを一時的に切り替えることができる">
+<!ENTITY tabbarscrolling.selectTab.label "タブ選択をスクロール">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "全タブをスクロール">
+<!ENTITY tabbarscrolling.inverse.label "スクロール方向を反転">
 <!ENTITY double.label "ダブルクリック">
 <!ENTITY middle.label "中クリック">
 <!ENTITY ctrl.label "Ctrl + クリック">

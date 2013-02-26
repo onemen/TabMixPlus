@@ -98,14 +98,28 @@ tabpanels#tabpanId tabbox {
 }
 
 #helpButton .button-icon {
- margin-right: 6px;
+  display: -moz-box; /* for Linux */
+  margin-right: 6px;
 }
 
 #helpButton[disabled=true] .button-icon{
   opacity: 0.4;
 }
 
-.tabmix-button {
+#helpButton {
+  list-style-image: url("chrome://global/skin/icons/question-16.png");
+}
+
+.dialog-button[dlgtype="extra2"] {
+  list-style-image: url("chrome://tabmixplus/skin/arrow.png");
+  -moz-box-direction: reverse;
+}
+
+.dialog-button[dlgtype="extra2"] .button-icon {
+  display: -moz-box; /* for Linux */
+}
+
+.dialog-button {
   margin: 2px;
 }
 
@@ -204,4 +218,19 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
 
 #inverseother > .checkbox-check {
   margin-top:2px;
+}
+
+.uri-element[disabled="true"] .textbox-input {
+  visibility: collapse;
+}
+
+#sessionManager-panels[linux] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+#sessionManager-panels[linux] groupbox {
+  margin: 2px 5px;
+  padding: 0 5px;
 }

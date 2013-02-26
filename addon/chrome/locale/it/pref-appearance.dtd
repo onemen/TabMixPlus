@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Personalizzazione degli stili">
 <!ENTITY currentTab.label "Scheda attuale">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Schede non lette">
 <!ENTITY otherTabs.label "Altre schede">
 <!ENTITY italic.label "Corsivo">

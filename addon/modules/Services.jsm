@@ -49,7 +49,16 @@ let TabmixSvc = {
   },
 
   topWin: function() {
-    return this.wm.getMostRecentWindow("navigator:browser");
+    return Services.wm.getMostRecentWindow("navigator:browser");
+  },
+  
+  get direct2dDisabled() {
+    delete this.direct2dDisabled;
+    try {
+      // this pref exist only in windows
+      return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
+    } catch(ex) {}
+    return this.direct2dDisabled = false;
   }
 }
 
@@ -69,12 +78,15 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
   v.is100 = comparator.compare(version, "10.0a1") >= 0;
   v.is110 = comparator.compare(version, "11.0a1") >= 0;
   v.is120 = comparator.compare(version, "12.0a1") >= 0;
+  v.is130 = comparator.compare(version, "13.0a1") >= 0;
+  v.is140 = comparator.compare(version, "14.0a1") >= 0;
+  v.is150 = comparator.compare(version, "15.0a1") >= 0;
   return v;
 });
 
 /**
  * Lazily define services
- * Getters for common services, this should be replaced by Services.jsm in future
+ * Getters for common services, use Services.jsm where possible
  */
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
@@ -83,9 +95,8 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
 
-// some prefs branches
-XPCOMUtils.defineLazyGetter(TabmixSvc, "TMPprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.")});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.sessions.")});
+// Tabmix preference branch
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {return Services.prefs.getBranch("extensions.tabmix.")});
 // string bundle
 XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";

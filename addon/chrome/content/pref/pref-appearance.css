@@ -29,6 +29,10 @@ tabmix-rgbcontrol {
 }
 
 .rgbcontrol {
- margin-left: -1px;
- margin-right: 0px;
+  margin-left: -1px;
+  margin-right: 0px;
+}
+
+.rgbcontrol > .textbox-input-box > .numberbox-input {
+  max-width: 3em;
 }

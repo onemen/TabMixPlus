@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Personalizar apariencia">
 <!ENTITY currentTab.label "Pestaña seleccionada">
+<!ENTITY unloadedTabs.label "Pestañas no cargadas">
 <!ENTITY unreadTab.label "Pestañas no leídas">
 <!ENTITY otherTabs.label "Otras pestañas">
 <!ENTITY italic.label "Cursiva">

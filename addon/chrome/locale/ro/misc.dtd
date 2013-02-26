@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Încarcă în fundal">
 <!ENTITY searchTabFocus.accesskey "f">
+<!ENTITY renametab.panel.title "Editare titlu filă">
+<!ENTITY renametab.reset.label "Restabilește titlul inițial">
 <!ENTITY title.label "Titlu">
-<!ENTITY rename_all.label "Redenumește toate paginile cu aceeași adresă">
-<!ENTITY rename_permanently.label "Redenumește permanent această filă pentru toate adresele">
-<!ENTITY doctitle.label "Utilizează titlul implicit">
+<!ENTITY default.label "Inițial">
+<!ENTITY renametab.permanently.label "Menține noul titlu indiferent de adresa filei">
+<!ENTITY renametab.permanently.tooltip "Filă cu memorie - noul titlu va fi menținut chiar dacă adresa se schimbă">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "Întrebări și răspunsuri">
 <!ENTITY help.label "Ajutor">

@@ -2,7 +2,8 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
-var gPrefs;
+var gPrefs, newTabURLpref, replaceLastTabWithNewTabURLpref;
+var instantApply;
 
 function before_Init() {
   if (Tabmix.isPlatform("Mac")) {
@@ -20,7 +21,7 @@ function before_Init() {
   }
 
   /* Chromifox theme force button height to 25px */
-  var skin = TabmixSvc.prefs.getCharPref("general.skins.selectedSkin");
+  var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
   if (skin == "cfxec")
     document.getElementById("pref-tabmix").setAttribute("chromifox", true);
 
@@ -34,13 +35,28 @@ function before_Init() {
 
   gIncompatiblePane.checkForIncompatible(false);
 
-  var cancelButton = document.documentElement.getButton("cancel");
-  cancelButton.setAttribute("closebuttonlabel", document.documentElement.getAttribute("closebuttonlabel"));
-  cancelButton.setAttribute("cancelbuttonlabel", cancelButton.label);
-  TMP_setButtons(true, true);
+  instantApply = document.documentElement.instantApply ||
+     Services.prefs.getBoolPref("browser.preferences.instantApply");
+  TMP_setButtons(true, true, true);
 
   // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-  TM_Options.setItem("newTabUrl", "prefstring", topWindow.Tabmix.newTabURLpref);
+  newTabURLpref = topWindow.Tabmix.newTabURLpref;
+  replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newTabUrl";
+  if (newTabURLpref == "browser.newtab.url") {
+    TM_Options.setItem("newTabUrl", "prefstring", newTabURLpref);
+    replaceLastTabWithNewTabURLpref = "extensions.tabmix.replaceLastTabWith.newtab.url";
+    TM_Options.setItem("newTabUrl_1", "prefstring", replaceLastTabWithNewTabURLpref);
+  }
+
+  // there are heights diffrenet in our dialog window when Firefox starts with
+  // gfx.direct2d.disabled true or false
+  if (TabmixSvc.direct2dDisabled) {
+    document.documentElement.setAttribute("minheight", 483);
+    document.getElementById("sessionManager-panels").setAttribute("style", "padding-bottom: 4px;");
+    document.getElementById("sessionManager-separator").setAttribute("style", "height: 11px;");
+  }
+  if (Tabmix.isPlatform("Linux"))
+    document.getElementById("sessionManager-panels").setAttribute("linux", "true");
 }
 
 // load all preferences into the dialog
@@ -52,8 +68,12 @@ function TM_EMinit() {
 
   // add EventListener when we start
   window.addEventListener("unload", setLastTab, false);
-  window.addEventListener("command", TM_enableApply, false);
-  window.addEventListener("input", TM_enableApply, false);
+  window.addEventListener("command", userChangedValue, false);
+  window.addEventListener("input", userChangedValue, false);
+  window.addEventListener("change", userChangedValue, false);
+
+  if (!Tabmix.isVersion(90))
+    TM_Options.setItem("unloadedTab", "style", "visibility: hidden;");
 
   // disable TMP session manager setting if session manager extension is install
   if (browserWindow.Tabmix.extensions.sessionManager) {
@@ -129,14 +149,14 @@ function TM_EMinit() {
   // rtl update
   var direction = window.getComputedStyle(document.getElementById("pref-tabmix"), null).direction;
   if (direction == "rtl") {
-    let rigth = document.getElementById("newTabButton.posiotion.right");
+    let right = document.getElementById("newTabButton.posiotion.right");
     let left = document.getElementById("newTabButton.posiotion.left");
-    let [rigthLabel, leftLabel] = [rigth.label, left.label];
-    [rigth.label, left.label] = [leftLabel, rigthLabel];
+    let [rightLabel, leftLabel] = [right.label, left.label];
+    [right.label, left.label] = [leftLabel, rightLabel];
 
     let focusTab = document.getElementById("focusTab").firstChild.childNodes;
-    [rigthLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
-    [focusTab[2].label, focusTab[1].label] = [leftLabel, rigthLabel];
+    [rightLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
+    [focusTab[2].label, focusTab[1].label] = [leftLabel, rightLabel];
     // "opener/left"
     focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
 
@@ -169,7 +189,7 @@ function TM_EMsave(onApply) {
     return true;
 
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
-  TabmixSvc.prefs.setBoolPref("extensions.tabmix.setDefault", true);
+  Tabmix.prefs.setBoolPref("setDefault", true);
 
   TM_Options.singleWindow( document.getElementById("singleWindow").checked );
   TM_Options.setTabXUI();
@@ -190,28 +210,19 @@ function TM_EMsave(onApply) {
       setPrefByType(gPrefs[i].getAttribute("prefstring"), getValue(gPrefs[i]));
   }
 
-  // set saved sessionpath if loadsession >=0
-  var TMP_manager_enabled = TabmixSvc.prefs.getBoolPref("extensions.tabmix.sessions.manager");
-  if (TMP_manager_enabled) {
-    var val = TabmixSvc.prefs.getIntPref("extensions.tabmix.sessions.onStart.loadsession");
-    var popup = document.getElementById("onStart.popup");
-    var pref = "extensions.tabmix.sessions.onStart.sessionpath";
-    TabmixSvc.prefs.setCharPref(pref, popup.getElementsByAttribute("value", val)[0].getAttribute("session"));
-  }
-
   applyData = [];
-  TabmixSvc.prefs.clearUserPref("extensions.tabmix.setDefault"); // this trigger TabmixTabbar.updateSettings
+  Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
   TM_Options.isSessionStoreEnabled(true);
 
   callUpdateSettings();
 
-  TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+  Services.prefs.savePrefFile(null); // store the pref immediately
   return true;
 }
 
 function callUpdateSettings() {
-  var pref = "extensions.tabmix.PrefObserver.error";
-  if (TabmixSvc.prefs.prefHasUserValue(pref) && TabmixSvc.prefs.getBoolPref(pref)) {
+  var pref = "PrefObserver.error";
+  if (Tabmix.prefs.prefHasUserValue(pref) && Tabmix.prefs.getBoolPref(pref)) {
     var wnd, enumerator = Tabmix.windowEnumerator();
     while (enumerator.hasMoreElements()) {
       wnd = enumerator.getNext();
@@ -304,7 +315,7 @@ var TM_Options = {
      let external = document.getElementById("externalLinkTarget");
      let node = document.getElementById("generalWindowOpen");
      if (checked) {
-       let prefValue = TabmixSvc.prefs.getIntPref("browser.link.open_newwindow.override.external");
+       let prefValue = Services.prefs.getIntPref("browser.link.open_newwindow.override.external");
        external.value = prefValue > -1 ? prefValue : node.value;
      }
      else
@@ -367,9 +378,9 @@ var TM_Options = {
    },
 
    tabScroll: function() {
-      var selectedValue = document.getElementById("tabScroll").value;
-      var vis = selectedValue == 2 ? "visibility: visible" : "visibility: hidden";
-      this.setItem("maxbar", "style", vis);
+      var multiRow = document.getElementById("tabScroll").value == 2;
+      document.getElementById("maxbar").hidden = !multiRow;
+      document.getElementById("offsetAmountToScroll").hidden = multiRow;
    },
 
    speLink: function() {
@@ -429,16 +440,36 @@ var TM_Options = {
       }
 
       // TMP session pref
-      updatePrefs("sessionManager", useSessionManager);
-      updatePrefs("sessionCrashRecovery", useSessionManager);
+      function sessionPrefs() {
+         updatePrefs("sessionManager", useSessionManager);
+         updatePrefs("sessionCrashRecovery", useSessionManager);
+      }
 
       // sessionstore pref
-      updatePrefs("browser.warnOnRestart", !useSessionManager);
-      updatePrefs("browser.warnOnQuit", !useSessionManager);
-      updatePrefs("resume_from_crash", !useSessionManager);
-      // "browser.startup.page"
-      updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
-      updatePrefs("browserStartupPage1", useSessionManager ? 1 : 3);
+      function sessionstorePrefs() {
+         updatePrefs("browser.warnOnRestart", !useSessionManager);
+         updatePrefs("browser.warnOnQuit", !useSessionManager);
+         updatePrefs("resume_from_crash", !useSessionManager);
+         // "browser.startup.page"
+         updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
+         updatePrefs("browserStartupPage1", useSessionManager ? 1 : 3);
+      }
+
+      if (useSessionManager) {
+        sessionstorePrefs();
+        sessionPrefs();
+      }
+      else {
+        sessionPrefs();
+        sessionstorePrefs()
+      }
+   },
+
+   setSessionpath: function (popup) {
+      var val = popup.parentNode.selectedItem.value;
+      var sessionpath = document.getElementById("sessionpath");
+      sessionpath.value = popup.getElementsByAttribute("value", val)[0].getAttribute("session");
+      updateApplyData(sessionpath);
    },
 
    setUndoCloseCache: function (item) {
@@ -490,38 +521,37 @@ var TM_Options = {
 }
 
 // other settings not in the main option dialog
-var otherPref = ["sessions.onStart.sessionpath","unreadTabreload","reload_time","custom_reload_time",
+var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
                   "filetype","sessions.menu.showext","disableIncompatible","hideIcons","disableF9Key",
                   "styles.currentTab","styles.unreadTab","styles.otherTab","styles.progressMeter"];
 
 function TM_defaultSetting () {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
-  TabmixSvc.prefs.setBoolPref("extensions.tabmix.setDefault", true);
+  Tabmix.prefs.setBoolPref("setDefault", true);
 
   TM_setElements(true);
   TMP_setButtons(true, true);
 
   // reset other settings to default
-  var tmpPref = "extensions.tabmix.";
   for (var i = 0; i < otherPref.length; ++i )
-    if (TabmixSvc.prefs.prefHasUserValue(tmpPref+otherPref[i])) TabmixSvc.prefs.clearUserPref(tmpPref+otherPref[i]);
+    if (Tabmix.prefs.prefHasUserValue(otherPref[i])) Tabmix.prefs.clearUserPref(otherPref[i]);
 
-  TabmixSvc.prefs.clearUserPref("extensions.tabmix.setDefault");
+  Tabmix.prefs.clearUserPref("setDefault");
   TM_Options.isSessionStoreEnabled(true);
   callUpdateSettings();
 
-  TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+  Services.prefs.savePrefFile(null); // store the pref immediately
 }
 
 function getPrefByType(prefName) {
    try {
-      switch (TabmixSvc.prefs.getPrefType(prefName)) {
+      switch (Services.prefs.getPrefType(prefName)) {
          case pBranch.PREF_BOOL:
-            return TabmixSvc.prefs.getBoolPref(prefName);
+            return Services.prefs.getBoolPref(prefName);
          case pBranch.PREF_INT:
-            return TabmixSvc.prefs.getIntPref(prefName);
+            return Services.prefs.getIntPref(prefName);
          case pBranch.PREF_STRING:
-            return TabmixSvc.prefs.getCharPref(prefName);
+            return Services.prefs.getCharPref(prefName);
       }
    } catch (ex) {Tabmix.assert(ex, "error in getPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName);}
    return null;
@@ -529,35 +559,47 @@ function getPrefByType(prefName) {
 
 function setPrefByType(prefName, newValue, atImport) {
    try {
-      switch (TabmixSvc.prefs.getPrefType(prefName)) {
+      switch (Services.prefs.getPrefType(prefName)) {
          case pBranch.PREF_BOOL:
             if (atImport) {
                newValue = /true/i.test(newValue);
                // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
                if (prefName == "browser.tabs.autoHide") {
                   newValue = newValue ? 1 : 0;
-                  TabmixSvc.prefs.setIntPref("extensions.tabmix.hideTabbar", newValue);
+                  Tabmix.prefs.setIntPref("hideTabbar", newValue);
                   return;
                }
             }
-            TabmixSvc.prefs.setBoolPref(prefName, newValue);
+            Services.prefs.setBoolPref(prefName, newValue);
             break;
          case pBranch.PREF_INT:
             if (prefName == "browser.tabs.closeButtons") {
                // we use browser.tabs.closeButtons only in 0.3.8.3
                if (newValue < 0 || newValue > 6)
                   newValue = 6;
-               var newValue = [3,5,1,1,2,4,1][newValue];
-               TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", newValue);
+               newValue = [3,5,1,1,2,4,1][newValue];
+               Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
                return;
             }
-            TabmixSvc.prefs.setIntPref(prefName, newValue);
+            Services.prefs.setIntPref(prefName, newValue);
             break;
          case pBranch.PREF_STRING:
             // in prev version we use " " for to export string to file
             if (atImport && newValue.indexOf('"') == 0)
                newValue = newValue.substring(1,newValue.length-1);
-            TabmixSvc.prefs.setCharPref(prefName, newValue);
+
+            if (newTabURLpref == "browser.newtab.url") {
+              if (prefName == "extensions.tabmix.newtab.url") {
+                setNewTabUrl("browser.newtab.url", newValue);
+                break;
+              }
+              if (prefName == "extensions.tabmix.replaceLastTabWith.newTabUrl") {
+                setNewTabUrl("extensions.tabmix.replaceLastTabWith.newtab.url", newValue);
+                break;
+              }
+            }
+
+            Services.prefs.setCharPref(prefName, newValue);
             break;
          default:
             if (!atImport)
@@ -606,89 +648,109 @@ function setPrefByType(prefName, newValue, atImport) {
                   break;
                // changed at 2008-02-26
                case "extensions.tabmix.undoCloseCache":
-                  TabmixSvc.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
+                  Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", newValue);
                   break;
                // changed at 2008-08-17
                case "extensions.tabmix.opentabfor.search":
-                  TabmixSvc.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
+                  Services.prefs.setBoolPref("browser.search.openintab", /true/i.test(newValue));
                   break;
                // changed at 2008-09-23
                case "extensions.tabmix.keepWindow":
-                  TabmixSvc.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
+                  Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !(/true/i.test(newValue)));
                   break;
                // changed at 2008-09-28
                case "browser.ctrlTab.mostRecentlyUsed":
                case "extensions.tabmix.lasttab.handleCtrlTab":
-                  TabmixSvc.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
+                  Services.prefs.setBoolPref("browser.ctrlTab.previews", /true/i.test(newValue));
                   break;
                // 2008-11-29
                case "extensions.tabmix.maxWidth":
-                  TabmixSvc.prefs.setIntPref("browser.tabs.tabMaxWidth", newValue);
+               case "browser.tabs.tabMaxWidth":
+                  Tabmix.prefs.setIntPref("tabMaxWidth", newValue);
                   break;
                // 2008-11-29
                case "extensions.tabmix.minWidth":
-                  TabmixSvc.prefs.setIntPref("browser.tabs.tabMinWidth", newValue);
+               case "browser.tabs.tabMinWidth":
+                  Tabmix.prefs.setIntPref("tabMinWidth", newValue);
                   break;
                // 2009-01-31
                case "extensions.tabmix.newTabButton.leftside":
-                  TabmixSvc.prefs.setIntPref("extensions.tabmix.newTabButton.position", /true/i.test(newValue) ? 0 : 2);
+                  Tabmix.prefs.setIntPref("newTabButton.position", /true/i.test(newValue) ? 0 : 2);
                   break;
                // 2009-10-10
                case "extensions.tabmix.windows.warnOnClose":
-                  TabmixSvc.prefs.setBoolPref("extensions.tabmix.tabs.warnOnClose", TabmixSvc.prefs.getBoolPref("browser.tabs.warnOnClose"));
-                  TabmixSvc.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
+                  Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
+                  Services.prefs.setBoolPref("browser.tabs.warnOnClose", /true/i.test(newValue));
                   break;
                // 2010-03-07
                case "extensions.tabmix.extraIcons":
-                  TabmixSvc.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
-                  TabmixSvc.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
+                  Services.prefs.setBoolPref(prefName + ".locked", /true/i.test(newValue));
+                  Services.prefs.setBoolPref(prefName + ".protected", /true/i.test(newValue));
                   break;
                // 2010-06-05
                case "extensions.tabmix.tabXMode":
                   // in old version we use tabXMode = 0 to disable the button
                   if (newValue < 1 || newValue > 5)
                      newValue = 1;
-                  TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons", newValue);
+                  Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
                   break;
                case "extensions.tabmix.tabXMode.enable":
-                  TabmixSvc.prefs.setBoolPref("extensions.tabmix.tabs.closeButtons.enable", /true/i.test(newValue));
+                  Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", /true/i.test(newValue));
                   break;
                case "extensions.tabmix.tabXLeft":
-                  TabmixSvc.prefs.setBoolPref("extensions.tabmix.tabs.closeButtons.onLeft", /true/i.test(newValue));
+                  Tabmix.prefs.setBoolPref("tabs.closeButtons.onLeft", /true/i.test(newValue));
                   break;
                case "extensions.tabmix.tabXDelay":
-                  TabmixSvc.prefs.setIntPref("extensions.tabmix.tabs.closeButtons.delay", newValue);
+                  Tabmix.prefs.setIntPref("tabs.closeButtons.delay", newValue);
                   break;
                // 2010-09-16
                case "extensions.tabmix.speLink":
-                  TabmixSvc.prefs.setIntPref("extensions.tabmix.opentabforLinks", newValue);
+                  Tabmix.prefs.setIntPref("opentabforLinks", newValue);
                   break;
                // 2011-01-26
                case "extensions.tabmix.mouseDownSelect":
-                  TabmixSvc.prefs.setBoolPref("extensions.tabmix.selectTabOnMouseDown", /true/i.test(newValue));
+                  Tabmix.prefs.setBoolPref("selectTabOnMouseDown", /true/i.test(newValue));
                   break;
                // 2011-10-11
                case "browser.link.open_external":
                   if (newValue == document.getElementById("generalWindowOpen").value)
                     newValue = -1;
-                  TabmixSvc.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
+                  Services.prefs.setIntPref("browser.link.open_newwindow.override.external", newValue);
                   break;
                // 2011-11-26
                case "extensions.tabmix.clickToScroll.scrollDelay":
-                  TabmixSvc.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
+                  Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", newValue);
                   break;
                // 2012-01-26
                case "extensions.tabmix.newTabUrl":
-                  if (Tabmix.getTopWin().Tabmix.newTabURLpref == "browser.newtab.url" && newValue != "") {
-                    let nsISupportsString = Components.interfaces.nsISupportsString;
-                    var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-                    str.data = newValue;
-                    TabmixSvc.prefs.setComplexValue("browser.newtab.url", nsISupportsString, str);
-                  }
+                  setNewTabUrl(newTabURLpref, newValue);
+                  break;
+               case "extensions.tabmix.newTabUrl_afterLastTab":
+                  setNewTabUrl(replaceLastTabWithNewTabURLpref, newValue);
+                  break;
+               // 2012-03-21
+               case "extensions.tabmix.loadOnNewTab":
+                  Tabmix.prefs.setIntPref("loadOnNewTab.type", newValue);
+                  break;
+               case "extensions.tabmix.replaceLastTabWith":
+                  Tabmix.prefs.setIntPref("replaceLastTabWith.type", newValue);
+                  break;
+               // 2012-04-12
+               case "browser.tabs.loadFolderAndReplace":
+                  Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
                   break;
             }
       }
    } catch (ex) {Tabmix.assert(ex, "error in setPrefByType " + "\n" + "caller " + Tabmix.callerName() + "\n"+ prefName + "\n" + newValue);}
+}
+
+function setNewTabUrl(newPref, newValue) {
+  if (newValue != "") {
+    let nsISupportsString = Ci.nsISupportsString;
+    let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
+    str.data = newValue;
+    Services.prefs.setComplexValue(newPref, nsISupportsString, str);
+  }
 }
 
 function TM_setElements (restore, start) {
@@ -699,11 +761,11 @@ function TM_setElements (restore, start) {
       if (restore) {
         switch (pref) {
            case "browser.link.open_newwindow.override.external": // exist from firefox 10.0
-             TabmixSvc.prefs.setIntPref(pref, -1);
+             Services.prefs.setIntPref(pref, -1);
               break;
            default:
-             if (TabmixSvc.prefs.prefHasUserValue(pref))
-               TabmixSvc.prefs.clearUserPref(pref);
+             if (Services.prefs.prefHasUserValue(pref))
+               Services.prefs.clearUserPref(pref);
         }
       }
 
@@ -793,14 +855,14 @@ function importData () {
    }
 
    // set flag to prevent TabmixTabbar.updateSettings from run for each change
-   TabmixSvc.prefs.setBoolPref("extensions.tabmix.setDefault", true);
+   Tabmix.prefs.setBoolPref("setDefault", true);
 
    // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-   TabmixSvc.SMprefs.setBoolPref("manager", false);
-   TabmixSvc.SMprefs.setBoolPref("crashRecovery", false);
-   TabmixSvc.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
-   TabmixSvc.prefs.setIntPref("browser.startup.page", false);
-   TabmixSvc.prefs.savePrefFile(null);
+   Tabmix.prefs.setBoolPref("sessions.manager", false);
+   Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
+   Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
+   Services.prefs.setIntPref("browser.startup.page", false);
+   Services.prefs.savePrefFile(null);
 
    var prefName, prefValue;
    for (i=1; i<pattern.length; i++){
@@ -819,7 +881,7 @@ function importData () {
       browserWindow.gTMPprefObserver.converOldStylePrefs("progressMeter", oldStylePrefs.progressMeter);
       oldStylePrefs = {currentTab: {}, unreadTab: {}, progressMeter: {}, found: false};
    }
-   TabmixSvc.prefs.clearUserPref("extensions.tabmix.setDefault");
+   Tabmix.prefs.clearUserPref("setDefault");
 
    TM_setElements(false);
    TMP_setButtons(true, true);
@@ -827,7 +889,7 @@ function importData () {
    TM_Options.isSessionStoreEnabled(true);
    callUpdateSettings();
 
-   TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+   Services.prefs.savePrefFile(null); // store the pref immediately
 
    return true;
 }
@@ -871,7 +933,7 @@ function convertSession() {
 }
 
 var applyData = [];
-function TM_enableApply(aEvent) {
+function userChangedValue(aEvent) {
    var item = aEvent.target;
 
    // only allow event from this item to go on....
@@ -905,17 +967,6 @@ function TM_enableApply(aEvent) {
        item = document.getElementById(itemId);
        item.value = aEvent.target.value; // we don't use this for checkbox
      }
-   }
-
-   // fix "-" in ss_postdatabytes to allow "-1"
-   if (item.id == "ss_postdatabytes" && item.value.length > 1) {
-      var val = item.value;
-
-      if (val.length == 2 && val.indexOf("-") == 0 && val != "-1")
-         aEvent.target.value = "-1";
-
-      if (val.length > 2 && val.indexOf("-") == 0)
-         aEvent.target.value = val.substr(2);
    }
 
    if (item.hasAttribute("prefstring"))
@@ -954,8 +1005,16 @@ function updateApplyData(item, newValue) {
    var pref = item.getAttribute("prefstring");
    var savedValue = getPrefByType(pref);
 
-   if (savedValue != newValue)
+   if (savedValue != newValue) {
+     // instant apply except when user change min/max width value
+     if (instantApply && item.id != "minWidth" && item.id != "maxWidth") {
+       setPrefByType(pref, newValue);
+       Services.prefs.savePrefFile(null);
+       return;
+     }
+     else
       applyData[pref] = newValue;
+   }
    else if (pref in applyData)
       delete applyData[pref];
 
@@ -969,36 +1028,70 @@ function updateApplyData(item, newValue) {
      TMP_setButtons(applyDataIsEmpty);
 }
 
-function TMP_setButtons(disable, clearData) {
+function TMP_setButtons(disable, clearData, start) {
    var docElt = document.documentElement;
    var applyButton = docElt.getButton("extra1");
+   var acceptButton = docElt.getButton("accept");
+   var cancelButton = docElt.getButton("cancel");
+   if (start) {
+      let settingsButton = docElt.getButton("extra2");
+      settingsButton.id = "myExtra2";
+      settingsButton.className += " tabmix-button";
+      settingsButton.label = docElt.getAttribute("setingsbuttonlabel");
+      settingsButton.setAttribute("popup", "tm-settings");
+
+      let helpButton = docElt.getButton("help");
+      helpButton.className += " tabmix-button";
+      helpButton.id = "helpButton";
+
+      acceptButton.id = "myAccept";
+      acceptButton.className += " tabmix-button";
+
+      applyButton.id = "myApply";
+      applyButton.className += " tabmix-button";
+      applyButton.setAttribute("icon", "apply");
+
+      cancelButton.id = "myCancel";
+      cancelButton.className += " tabmix-button";
+      docElt.setAttribute("cancelbuttonlabel", cancelButton.label);
+
+      var spacer = document.getAnonymousElementByAttribute(docElt, "anonid", "spacer");
+      spacer.hidden = false;
+   }
+
+   // when in instantApply mode apply and accept buttons are hidden except when user
+   // change min/max width value
    applyButton.disabled = disable;
-  var acceptButton = docElt.getButton("accept");
-  acceptButton.hidden = disable;
-  var cancelButton = docElt.getButton("cancel");
-   if (disable)
-     cancelButton.label = cancelButton.getAttribute("closebuttonlabel");
-   else
-     cancelButton.label = cancelButton.getAttribute("cancelbuttonlabel");
+   applyButton.hidden = instantApply && disable;
+   acceptButton.hidden = disable;
+
+   // no buttons on Mac except Help in instantApply mode
+   cancelButton.hidden = Tabmix.isPlatform("Mac") && instantApply && disable;
+
+   var action = disable ? "close" : "cancel"
+   cancelButton.label = docElt.getAttribute(action + "buttonlabel");
+   cancelButton.setAttribute("icon", action);
+
    if (clearData)
-     applyData = [];
+      applyData = [];
 }
 
 function setLastTab(event) {
 try {
    // remove EventListener when we exit
    window.removeEventListener("unload", setLastTab, false);
-   window.removeEventListener("command", TM_enableApply, false);
-   window.removeEventListener("input", TM_enableApply, false);
+   window.removeEventListener("command", userChangedValue, false);
+   window.removeEventListener("input", userChangedValue, false);
+   window.removeEventListener("change", userChangedValue, false);
    document.getElementById("tabclicking_tabs").removeEventListener("select", tabSelectionChanged, false);
 
-   TabmixSvc.prefs.setIntPref("extensions.tabmix.selected_tab", document.getElementById("tabMixTabBox").selectedIndex);
+   Tabmix.prefs.setIntPref("selected_tab", document.getElementById("tabMixTabBox").selectedIndex);
    var subtabs = document.getElementsByAttribute("subtub", "true");
-   var subTab = "extensions.tabmix.selected_sub_tab";
+   var subTab = "selected_sub_tab";
    for (var i = 0; i < subtabs.length; i++)
-      TabmixSvc.prefs.setIntPref(subTab + subtabs[i].getAttribute("value"), subtabs[i].selectedIndex);
+      Tabmix.prefs.setIntPref(subTab + subtabs[i].getAttribute("value"), subtabs[i].selectedIndex);
 
-  TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+  Services.prefs.savePrefFile(null); // store the pref immediately
 
 } catch(ex) {}
 }
@@ -1095,13 +1188,18 @@ function toolbarButtons(aWindow) {
   }
   onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
   onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
-  // Display > Tab bar
-  let newTabButton = aWindow.document.getElementById("new-tab-button");
-  let enablePosition =  newTabButton && newTabButton.parentNode == aWindow.gBrowser.tabContainer._container;
 
-  TM_Options.setItem("newTabButton", "disableObserver", !enablePosition || null);
-  TM_Options.setItem("newTabButton", "disabled", !enablePosition || null);
-  TM_Options.disabled("newTabButton", !enablePosition);
+  // Display > Tab bar
+  function updateDisabledState(buttonID, itemID) {
+    let button = aWindow.document.getElementById(buttonID);
+    let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
+
+    TM_Options.setItem(itemID, "disableObserver", !enablePosition || null);
+    TM_Options.setItem(itemID, "disabled", !enablePosition || null);
+    TM_Options.disabled(itemID, !enablePosition);
+  }
+  updateDisabledState("new-tab-button", "newTabButton");
+  updateDisabledState("alltabs-button", "hideAllTabsButton");
 }
 
 function openHelp(aPageaddress) {

@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Aussehen anpassen">
 <!ENTITY currentTab.label "Aktiver Tab">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Ungelesene Tabs">
 <!ENTITY otherTabs.label "Andere Tabs">
 <!ENTITY italic.label "Kursiv">

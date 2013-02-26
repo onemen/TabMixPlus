@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Прилагоди стилове">
 <!ENTITY currentTab.label "Текућа картица">
+<!ENTITY unloadedTabs.label "Неучитане картице">
 <!ENTITY unreadTab.label "Непрочитане картице">
 <!ENTITY otherTabs.label "Остале картице">
 <!ENTITY italic.label "Искошено">

@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Trang nhà">
 <!ENTITY newtab.current "Trang hiện tại">
 <!ENTITY newtab.duplicate "Trang bản sao">
-<!ENTITY newtab.location "Địa chỉ Người dùng">
-<!ENTITY location.label "Địa chỉ">
+<!ENTITY newtab.location.1 "Mở một thẻ mới">
+<!ENTITY location.label.1 "Địa chỉ">
 <!ENTITY focusContent.label "Chuyển trỏ chuột tới nội dung khi tải trang trắng">
 <!ENTITY openTabNext.label "Mở thẻ mới kế bên thẻ hiện tại">
 <!ENTITY openOtherTabNext.label "Mở thẻ khác kế bên thẻ hiện tại">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Có thể cuộn với các nút ở phía bên trái">
 <!ENTITY tabScroll.multibar "Nhiều hàng">
 <!ENTITY maxrow.label "Số lượng hàng tối đa:">
+<!ENTITY offsetAmountToScroll.label "Hiển thị phần không nhìn thấy của thẻ tiếp theo khi cuộn">
 <!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
 <!ENTITY highlight.label "Tô sáng:">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">
+<!ENTITY unloadedtabs.style.label "Các Thẻ chưa tải">
 <!ENTITY unreadtabs.style.label "Thẻ chưa đọc">
 <!ENTITY othertabs.style.label "Thẻ khác">
 <!ENTITY setstyles.label "Tùy biến Kiểu">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Chọn thẻ khi rê chuột trên thẻ đó trong">
 <!ENTITY tabFlip.label "Chuyển qua thẻ được chọn khi nhấn lên thẻ hiện tại">
 <!ENTITY tabFlip.delay "Sử dụng độ trễ">
-<!ENTITY addTabDrag.label "Kéo thẻ để thay đổi thứ tự của chúng">
-<!ENTITY enabletabbarscrolling.label "Cho phép cuộn để chọn thẻ">
-<!ENTITY reverseScroll.label "Đảo ngược hướng thẻ được chọn">
 <!ENTITY clickFocus.label "Nhấn chuột (xuống và thả ra) để chọn một thẻ">
 <!ENTITY removeEntries.label "Xóa các mục trong danh sách trình đơn Tab Mix Plus bằng chuột giữa">
 <!ENTITY lockTabSizingOnClose.label "Khi đóng một thẻ, các thẻ khác không được thay đổi kích thước cho tới khi trỏ chuột rời khỏi thanh công cụ">
 <!ENTITY removeEntries.tooltip "Bao gồm thẻ đã đóng, cửa sổ đã đóng, và phiên làm việc đã lưu">
+<!ENTITY tabbarscrolling.caption "Khi cuộn trên thanh chứa thẻ">
+<!ENTITY tabbarscrolling.holdShift.label "Giữ phím SHIFT khi cuộn để chuyển đổi giữa những tùy chọn này.">
+<!ENTITY tabbarscrolling.selectTab.label "Chuyển thẻ được chọn">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Cuộn tất cả các thẻ">
+<!ENTITY tabbarscrolling.inverse.label "Đảo ngược hướng cuộn">
 <!ENTITY double.label "Nhấp đôi">
 <!ENTITY middle.label "Chuột giữa">
 <!ENTITY ctrl.label "Ctrl-nhấn chuột">

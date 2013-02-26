@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Tilrettet stil">
 <!ENTITY currentTab.label "Nuværende faneblad">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Ulæste faneblade">
 <!ENTITY otherTabs.label "Andre faneblade">
 <!ENTITY italic.label "Kursiv">

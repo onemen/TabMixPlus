@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "主页">
 <!ENTITY newtab.current "当前的页面">
 <!ENTITY newtab.duplicate "复制的页面">
-<!ENTITY newtab.location "用户指定的页面">
-<!ENTITY location.label "指定的页面">
+<!ENTITY newtab.location.1 "新标签页面">
+<!ENTITY location.label.1 "地址">
 <!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
 <!ENTITY tabScroll.multibar "多行标签页">
 <!ENTITY maxrow.label "最多显示的行数：">
+<!ENTITY offsetAmountToScroll.label "滚动鼠标时显示隐藏的下一个标签页">
 <!ENTITY smoothScroll.label "启用平滑滚动">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
 <!ENTITY highlight.label "高亮：">
 <!ENTITY currenttab.style.label "当前标签页">
+<!ENTITY unloadedtabs.style.label "未加载的标签页">
 <!ENTITY unreadtabs.style.label "未读标签页">
 <!ENTITY othertabs.style.label "其他标签页">
 <!ENTITY setstyles.label "定制样式">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "选中鼠标指向的标签页">
 <!ENTITY tabFlip.label "点击当前标签页时切换到上次被选中的标签页">
 <!ENTITY tabFlip.delay "并延迟">
-<!ENTITY addTabDrag.label "鼠标拖拽标签页以改变次序">
-<!ENTITY enabletabbarscrolling.label "允许鼠标滚轮切换标签页">
-<!ENTITY reverseScroll.label "鼠标向上滚动时切换到右边的标签页">
 <!ENTITY clickFocus.label "鼠标点击并释放时才选择标签页">
 <!ENTITY removeEntries.label "鼠标中键点击时清除 Tab Mix Plus 菜单列表项">
 <!ENTITY lockTabSizingOnClose.label "标签页关闭时，其他标签页需在鼠标离开工具栏区域后更改宽度">
 <!ENTITY removeEntries.tooltip "包括已关闭的标签页、窗口和已保存的浏览进程">
+<!ENTITY tabbarscrolling.caption "在标签栏滚动鼠标时">
+<!ENTITY tabbarscrolling.holdShift.label "按住 Shift 并滚动鼠标可在这些选项之间切换">
+<!ENTITY tabbarscrolling.selectTab.label "切换所选的标签页">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "在全部标签页中滚动切换">
+<!ENTITY tabbarscrolling.inverse.label "以反方向滚动">
 <!ENTITY double.label "双击左键">
 <!ENTITY middle.label "单击鼠标中键">
 <!ENTITY ctrl.label "Ctrl键+鼠标单击">

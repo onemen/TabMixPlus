@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Stijlen aanpassen">
 <!ENTITY currentTab.label "Huidig tabblad">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Ongelezen tabbladen">
 <!ENTITY otherTabs.label "Overige tabbladen">
 <!ENTITY italic.label "Cursief">

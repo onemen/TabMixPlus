@@ -39,6 +39,8 @@
         ondialogextra1="TM_EMsave(true);"
         ondialoghelp="openHelp();"
         closebuttonlabel="&preferencesCloseButton.label;"
+        setingsbuttonlabel="&settings.label;"
+        minheight="501"
         persist="screenX screenY">
 
 
@@ -189,20 +191,20 @@
               <!-- Load on new tab -->
               <hbox align="center">
                 <label value="&newtab.label;" control="loadOnNewTab" />
-                  <menulist id="loadOnNewTab" prefstring="extensions.tabmix.loadOnNewTab">
+                  <menulist id="loadOnNewTab" prefstring="extensions.tabmix.loadOnNewTab.type">
                     <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                      <menuitem value="4" label="&newtab.location.1;" />
                       <menuitem value="0" label="&newtab.blank;" />
                       <menuitem value="1" label="&newtab.home;" />
                       <menuitem value="2" label="&newtab.current;" />
                       <menuitem value="3" label="&newtab.duplicate;" />
-                      <menuitem value="4" label="&newtab.location;" />
                     </menupopup>
                   </menulist>
               </hbox>
               <hbox class="indent" align="center" flex="1">
-                 <label id="newTabUrlLabel" value="&location.label;:" control="newTabUrl"/>
+                 <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
                  <textbox id="newTabUrl" class="padded uri-element" flex="1"
-                          prefstring="extensions.tabmix.newTabUrl" />
+                          prefstring="extensions.tabmix.newtab.url" />
               </hbox>
               <hbox align="center">
                 <checkbox id="selectLocationBar" label="&focusContent.label;"
@@ -254,7 +256,7 @@
                             prefstring="extensions.tabmix.opentabfor.bookmarks"/>
                   <!-- Bookmark Groups open in new tab -->
                   <checkbox id="openBMKGroups" label="&openBMKGroups.label;" tooltiptext="&openBMKGroups.tooltip;"
-                            prefstring="browser.tabs.loadFolderAndReplace" inverted="true"/>
+                            prefstring="extensions.tabmix.loadFolderAndReplace" inverted="true"/>
                   <!-- History opens in new tab -->
                   <checkbox id="openHistory" label="&openHistory.label;"
                             prefstring="extensions.tabmix.opentabfor.history" />
@@ -344,21 +346,21 @@
               <hbox align="center">
                 <label value="&replaceLastTabWith.label;:"
                        control="replaceLastTabWith" observes="obs_replaceLastTabWith"/>
-                  <menulist id="replaceLastTabWith" prefstring="extensions.tabmix.replaceLastTabWith" idnum="_1"
+                  <menulist id="replaceLastTabWith" prefstring="extensions.tabmix.replaceLastTabWith.type" idnum="_1"
                             observes="obs_replaceLastTabWith">
                     <menupopup oncommand="TM_Options.newTabUrl(this.parentNode, false, true);">
+                      <menuitem value="4" label="&newtab.location.1;" />
                       <menuitem value="0" label="&newtab.blank;" />
                       <menuitem value="1" label="&newtab.home;" />
                       <menuitem value="2" label="&newtab.current;" />
                       <menuitem value="3" label="&newtab.duplicate;" />
-                      <menuitem value="4" label="&newtab.location;" />
                     </menupopup>
                   </menulist>
               </hbox>
               <hbox class="indent" align="center" flex="1">
-                 <label id="newTabUrlLabel_1" value="&location.label;:" control="newTabUrl_1"/>
+                 <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
-                          prefstring="extensions.tabmix.newTabUrl_afterLastTab" />
+                          prefstring="extensions.tabmix.replaceLastTabWith.newTabUrl" />
               </hbox>
               <checkbox class="indent" align="center" id="selectLocationBar.afterLastTabClosed" label="&focusContent.label;"
                         prefstring="extensions.tabmix.selectLocationBar.afterLastTabClosed" inverted="true"/>
@@ -492,8 +494,7 @@
                           tooltiptext="&tabBarSpace.tooltip;" />
               </vbox>
             </groupbox>
-            <groupbox flex="1" orient="horizontal" id="tabBarDisplay">
-             <vbox>
+            <groupbox flex="1" id="tabBarDisplay">
               <!-- show/hide the tabbar -->
               <hbox align="center">
                 <label value="&hideTabBar.label;:"/>
@@ -528,7 +529,7 @@
                 </hbox>
                 <hbox pack="end" class="indent">
                   <menulist id="tabScroll" prefstring="extensions.tabmix.tabBarMode">
-                    <menupopup onpopuphidden="TM_Options.tabScroll();">
+                    <menupopup oncommand="TM_Options.tabScroll();">
                       <menuitem value="0" label="&tabScroll.none;"/>
                       <menuitem value="1" label="&tabScroll.leftRightButtons;"/>
                       <menuitem value="3" label="&tabScroll.rightButtons;" rtlLabel="&tabScroll.rightButtons.rtl;"/>
@@ -537,35 +538,41 @@
                   </menulist>
                 </hbox>
               </box>
-              <hbox align="center" id="maxbar">
-                <label value="&maxrow.label;" />
-                <textbox id="maxrow" size="2" maxlength="2" prefstring="extensions.tabmix.tabBarMaxRow" type="number" min="2"/>
-              </hbox>
-              <checkbox id="smoothScroll" label="&smoothScroll.label;" prefstring="toolkit.scrollbox.smoothScroll"
-                        inverseDependency="true"/>
+              <vbox align="start">
+                <hbox align="center" id="maxbar">
+                  <label value="&maxrow.label;" />
+                  <textbox id="maxrow" size="2" maxlength="2" type="number" min="2"
+                           prefstring="extensions.tabmix.tabBarMaxRow"/>
+                </hbox>
+                <checkbox id="offsetAmountToScroll" label="&offsetAmountToScroll.label;" style="height: 22px;"
+                          prefstring="extensions.tabmix.offsetAmountToScroll"/>
+                <checkbox id="smoothScroll" label="&smoothScroll.label;" inverseDependency="true"
+                          prefstring="toolkit.scrollbox.smoothScroll"/>
+              </vbox>
               <hbox align="center" id="clickToScroll.scrollDelay">
                 <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
                 <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
                          prefstring="toolkit.scrollbox.clickToScroll.scrollDelay" type="number"/>
                 <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
               </hbox>
-             </vbox>
             </groupbox>
           </tabpanel>
           <tabpanel orient="vertical">
             <groupbox id="tabappearance" flex="1" orient="horizontal">
               <caption label="&highlight.label;"/>
-              <vbox align="start">
+              <vbox flex="1">
                 <!-- Hightlight Current tab -->
                 <checkbox id="currentTab" label="&currenttab.style.label;" prefstring="extensions.tabmix.currentTab"/>
-                <hbox>
-                  <!-- Highlight unread tabs -->
-                  <checkbox id="unreadTab" label="&unreadtabs.style.label;" prefstring="extensions.tabmix.unreadTab"/>
-                  <!-- Highlight other tabs -->
-                  <checkbox id="otherTab" label="&othertabs.style.label;" prefstring="extensions.tabmix.otherTab"/>
-                </hbox>
+                <!-- Highlight unread tabs -->
+                <checkbox id="unreadTab" label="&unreadtabs.style.label;" prefstring="extensions.tabmix.unreadTab"/>
               </vbox>
-              <vbox style="-moz-margin-start: 3em;">
+              <vbox>
+                <!-- Hightlight Unloaded tabs -->
+                <checkbox id="unloadedTab" label="&unloadedtabs.style.label;" prefstring="extensions.tabmix.unloadedTab"/>
+                <!-- Highlight other tabs -->
+                <checkbox id="otherTab" label="&othertabs.style.label;" prefstring="extensions.tabmix.otherTab"/>
+              </vbox>
+              <vbox flex="1" align="end">
                 <button id="advancedAppearance" label="&setstyles.label;…"
                         oncommand="window.openDialog('chrome://tabmixplus/content/pref/pref-appearance.xul', 'advanceAppearanceDialog', 'modal,titlebar,toolbar');"/>
               </vbox>
@@ -616,9 +623,9 @@
               <!-- Tab width -->
               <hbox align="center">
                 <label value="&minWidth.label;" />
-                <textbox id="minWidth" size="3" maxlength="3" prefstring="browser.tabs.tabMinWidth" type="number"/>
+                <textbox id="minWidth" size="3" maxlength="3" prefstring="extensions.tabmix.tabMinWidth" type="number"/>
                 <label value="&widthTo.label;" />
-                <textbox id="maxWidth" size="4" maxlength="4" prefstring="browser.tabs.tabMaxWidth" type="number"/>
+                <textbox id="maxWidth" size="4" maxlength="4" prefstring="extensions.tabmix.tabMaxWidth" type="number"/>
                 <label value="&widthPixels.label;" />
               </hbox>
               <vbox align="start">
@@ -692,13 +699,6 @@
                 <textbox id="tabFlipDelay" size="4" maxlength="4" prefstring="extensions.tabmix.tabFlipDelay" type="number" observes="obs_tabFlip"/>
                 <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
               </hbox>
-              <hbox align="center">
-                <!-- Tabbar Scrolling -->
-                <checkbox id="tabbarscrolling" label="&enabletabbarscrolling.label;" prefstring="extensions.tabmix.enableScrollSwitch"/>
-              </hbox>
-              <hbox align="center" class="indent">
-                <checkbox id="reversescrolling" label="&reverseScroll.label;" prefstring="extensions.tabmix.reversedScroll" observes="obs_tabbarscrolling"/>
-              </hbox>
               <vbox align="start">
                 <!-- Drag tabs -->
                 <checkbox id="mouseDownSelect" label="&clickFocus.label;" prefstring="extensions.tabmix.selectTabOnMouseDown" inverted="true"/>
@@ -718,6 +718,18 @@
                          src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
                 </radiogroup>
               </hbox>
+            </groupbox>
+            <!-- Tabbar Scrolling -->
+            <groupbox align="start" flex="1">
+              <caption label="&tabbarscrolling.caption;"/>
+              <separator class="thin"/>
+              <label value="&tabbarscrolling.holdShift.label;"/>
+              <radiogroup id="tabbarscrolling" boolean="true" orient="horizontal"
+                          prefstring="extensions.tabmix.enableScrollSwitch">
+                <radio value="0" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"/>
+                <radio value="1" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"/>
+              </radiogroup>
+              <checkbox id="reversescrolling" label="&tabbarscrolling.inverse.label;" prefstring="extensions.tabmix.reversedScroll"/>
             </groupbox>
           </tabpanel>
           <tabpanel orient="vertical" align="start">
@@ -1014,8 +1026,7 @@
             <tabpanel orient="vertical">
               <checkbox id="browser.warnOnRestart"   prefstring="browser.warnOnRestart" hidden="true"/>
               <checkbox id="browser.warnOnQuit"      prefstring="browser.warnOnQuit"    hidden="true"/>
-              <groupbox>
-                <vbox align="start">
+              <groupbox align="start">
                   <checkbox id="sessionstore_0" label="&ss.enable.label;" prefstring_item="no_prefstring"
                             tooltiptext="&ss.enable.tooltip;"
                             oncommand="TM_Options.setSessionsOptions(this, 'sessionstore_1');"/>
@@ -1029,10 +1040,8 @@
                     </menupopup>
                   </menulist>
                   <checkbox id="resume_from_crash" label="&crashRecovery.enable;" prefstring="browser.sessionstore.resume_from_crash"/>
-                </vbox>
               </groupbox>
-              <groupbox orient="horizontal" flex="1">
-                <vbox>
+              <groupbox flex="1">
                   <label value="&ss.advanced_setting;" class="header"
                          style="text-decoration: underline;color: #CC0000;"/>
                   <description style="max-width: 50em;" class="header">
@@ -1058,23 +1067,21 @@
                   <hbox align="center" pack="end">
                     <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
                     <textbox id="ss_postdatabytes"  prefstring="browser.sessionstore.postdata"
-                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
+                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"
+                             oninput="if (this.inputField.value.indexOf('-') != -1) this.inputField.value = -1;"/>
                   </hbox>
-                </vbox>
               </groupbox>
             </tabpanel>
             <!-- Tabmix Session manager -->
             <tabpanel orient="vertical">
-              <groupbox>
-                <vbox align="start">
+              <groupbox align="start">
                   <checkbox id="sessionstore_1" label="&ss.enable.label;" prefstring_item="no_prefstring"
                             tooltiptext="&ss.enable.tooltip;"
                             oncommand="TM_Options.setSessionsOptions(this, 'sessionstore_0');"/>
                   <separator/>
                   <checkbox id="sessionManager" label="&sessionManger.enable;" prefstring="extensions.tabmix.sessions.manager"/>
-                  <separator style="height: 7px;"/>
+                  <separator id="sessionManager-separator" style="height: 13px;"/>
                   <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" prefstring="extensions.tabmix.sessions.crashRecovery"/>
-                </vbox>
               </groupbox>
               <tabbox subtub="true" value="5" class="groupbox-tabbox" flex="1">
                 <tabs>
@@ -1082,7 +1089,8 @@
                   <tab label="&sm.restore;" class="subtabs"/>
                   <tab label="&sm.preserve;" class="subtabs"/>
                 </tabs>
-                <tabpanels flex="1" class="groupbox-panels">
+                <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels"
+                           style="padding-bottom: 0px; padding-top: 0px;">
                   <tabpanel orient="vertical">
                     <hbox>
                       <groupbox style="min-width: 14.6em">
@@ -1105,11 +1113,13 @@
                     </hbox>
                     <groupbox>
                       <!--<caption label="&sm.startup.caption;"/>-->
+                      <label id="sessionpath" prefstring="extensions.tabmix.sessions.onStart.sessionpath" hidden="true"/>
                       <hbox align="center">
                         <label value="&sm.startup;"/>
                         <menulist id="onStart.loadsession" sizetopopup="none" style="width: 15em;"
                                   prefstring="extensions.tabmix.sessions.onStart.loadsession">
                           <menupopup id="onStart.popup"
+                                     oncommand="TM_Options.setSessionpath(this);"
                                      onpopupshowing="TabmixSessionManager.createMenuForDialog(this);">
                             <menuseparator id="onStart.loadsession-startSeparator" hidden="true"/>
                             <menuseparator id="onStart.loadsession-endSeparator" hidden="true"/>
@@ -1202,16 +1212,6 @@
       </tabpanel>
     </tabpanels>
   </tabbox>
-
-  <hbox>
-    <button class="tabmix-button" dlgtype="extra2" id="myExtra2" label="&settings.label;" popup="tm-settings"
-            dir="reverse" image="chrome://tabmixplus/skin/arrow.png"/>
-    <button class="tabmix-button" dlgtype="help" id="helpButton" image="chrome://tabmixplus/skin/help.png"/>
-    <spacer flex="1" />
-    <button class="tabmix-button" dlgtype="accept" id="myAccept" />
-    <button class="tabmix-button" dlgtype="extra1" id="myApply" disabled="true"/>
-    <button class="tabmix-button" dlgtype="cancel" id="myCancel" />
-  </hbox>
  </vbox>
   <popupset prefstring_item="no_prefstring">
     <menupopup id="tm-settings" position="before_start">
@@ -1235,7 +1235,6 @@
     <broadcaster id="obs_showTabX"/>
     <broadcaster id="obs_flexTabs"/>
     <broadcaster id="obs_tabFlip"/>
-    <broadcaster id="obs_tabbarscrolling"/>
     <broadcaster id="obs_midcurrent"/>
     <broadcaster id="obs_filetypeEnable"/>
     <broadcaster id="obs_closeOnMerge"/>

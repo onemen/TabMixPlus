@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Stiilide muutmine">
 <!ENTITY currentTab.label "Praegune kaart">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Lugemata kaardid">
 <!ENTITY otherTabs.label "Teised kaardid">
 <!ENTITY italic.label "Kaldkiri">

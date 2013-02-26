@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Stilleri Özelleştir">
 <!ENTITY currentTab.label "Geçerli sekme">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Bakılmamış sekmeler">
 <!ENTITY otherTabs.label "Diğer sekmeler">
 <!ENTITY italic.label "İtalik">

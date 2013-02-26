@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Otwórz w tle">
 <!ENTITY searchTabFocus.accesskey "T">
+<!ENTITY renametab.panel.title "Edytuj tytuł karty">
+<!ENTITY renametab.reset.label "Przywróć domyślny tytuł">
 <!ENTITY title.label "Tytuł">
-<!ENTITY rename_all.label "Zmień nazwy wszystkich stron o takim samym adresie">
-<!ENTITY rename_permanently.label "Zmieniaj nazwę tej karty dla wszystkich adresów">
-<!ENTITY doctitle.label "Użyj tytułu dokumentu">
+<!ENTITY default.label "Domyślny">
+<!ENTITY renametab.permanently.label "Zmień nazwę tej karty bez względu na jej adres">
+<!ENTITY renametab.permanently.tooltip "Karta z historii - nowa nazwa pozostanie, gdy adres zostanie zmieniony">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Pomoc">

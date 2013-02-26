@@ -1,0 +1,70 @@
+
+<!DOCTYPE overlay [
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+<!ENTITY % miscDTD SYSTEM "chrome://tabmixplus/locale/misc.dtd" >
+%miscDTD;
+]>
+
+<?xml-stylesheet href="chrome://tabmixplus/skin/renameTab.css" type="text/css"?>
+
+<overlay id="renameTabOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <panel id="tabmixRenametab_panel"
+         onpopupshown="Tabmix.renameTab.onpopupshown(event);"
+         onpopuphidden="Tabmix.renameTab.onpopuphidden(event);"
+         orient="vertical" type="arrow" hidden="true"
+         noautofocus="true" level="top" minwidth="330">
+    <row align="center">
+      <vbox align="center">
+        <image id="tabmixRenametab_icon"/>
+      </vbox>
+      <vbox>
+        <label id="tabmixRenametab_title" value="&renametab.panel.title;"/>
+        <hbox>
+          <button id="tabmixRenametab_resetButton"
+                  label="&renametab.reset.label;"
+                  class="editBookmarkPanelHeaderButton"
+                  oncommand="Tabmix.renameTab.resetTitle();"/>
+        </hbox>
+      </vbox>
+     </row>
+    <spacer/>
+    <grid flex="1">
+      <columns>
+        <column/>
+        <column flex="1"/>
+      </columns>
+      <rows>
+        <row align="center">
+          <label control="tabmixRenametab_titleField" value="&title.label;:"/>
+          <textbox id="tabmixRenametab_titleField" oninput="Tabmix.renameTab.onNewTitle(this.value);"/>
+        </row>
+        <row align="center" id="tabmixRenametab_defaultRow">
+          <label control="tabmixRenametab_defaultField" value="&default.label;:"/>
+          <textbox id="tabmixRenametab_defaultField"
+                   readonly="true" plain="true"/>
+        </row>
+      </rows>
+    </grid>
+    <spacer/>
+    <checkbox id="tabmixRenametab_checkbox" label="&renametab.permanently.label;"
+              align="center" checked="true"
+              tooltiptext="&renametab.permanently.tooltip;"
+              oncommand="Tabmix.renameTab.data.permanently = this.checked;"/>
+    <spacer/>
+    <hbox id="tabmixRenametab_buttons" pack="end">
+      <button id="tabmixRenametab_doneButton"
+              class="editBookmarkPanelBottomButton"
+              label="&editBookmark.done.label;"
+              default="true"
+              oncommand="Tabmix.renameTab.update();"/>
+      <button id="tabmixRenametab_deleteButton"
+              class="editBookmarkPanelBottomButton"
+              label="&editBookmark.cancel.label;"
+              oncommand="Tabmix.renameTab.hidePopup();"/>
+    </hbox>
+  </panel>
+
+</overlay>

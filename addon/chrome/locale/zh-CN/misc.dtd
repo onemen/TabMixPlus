@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "在后台载入标签页">
 <!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "编辑标签页标题">
+<!ENTITY renametab.reset.label "恢复为默认标题">
 <!ENTITY title.label "标题">
-<!ENTITY rename_all.label "用相同的地址重命名所有页面">
-<!ENTITY rename_permanently.label "固定重命名该标签页，而无论是何地址">
-<!ENTITY doctitle.label "使用文档标题">
+<!ENTITY default.label "默认">
+<!ENTITY renametab.permanently.label "重命名该标签页（不根据其地址）">
+<!ENTITY renametab.permanently.tooltip "对于包含历史记录的标签页，即使网页地址变化，重命名后的名称仍会保留">
 <!ENTITY forum.label "论坛">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Help">

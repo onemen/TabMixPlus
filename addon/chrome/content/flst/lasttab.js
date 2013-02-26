@@ -196,7 +196,8 @@ var TMP_LastTab = {
                  if (!this._timer) {
                    this._timer = setTimeout(function (self) {
                      self._timer = null;
-                     self.DisplayTabList();
+                     if (!self.TabListLock)
+                       self.DisplayTabList();
                    }, 200, this);
                  }
                  else
@@ -310,11 +311,11 @@ var TMP_LastTab = {
 
    ReadPreferences : function() {
       // when Build-in tabPreviews is on we disable our own function
-      var mostRecentlyUsed = TabmixSvc.prefs.getBoolPref("browser.ctrlTab.previews");
+      var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
       var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
       if (tabPreviews) {
          var tabPreviewsCurentStatus = ctrlTab._recentlyUsedTabs ? true : false;
-         tabPreviews = mostRecentlyUsed && TabmixSvc.TMPprefs.getBoolPref("lasttab.tabPreviews");
+         tabPreviews = mostRecentlyUsed && Tabmix.prefs.getBoolPref("lasttab.tabPreviews");
          if (tabPreviewsCurentStatus != tabPreviews) {
             if (tabPreviews) {
                ctrlTab.init();
@@ -329,8 +330,8 @@ var TMP_LastTab = {
       }
 
       this.handleCtrlTab = !tabPreviews && mostRecentlyUsed;
-      this.showTabList = !tabPreviews && TabmixSvc.TMPprefs.getBoolPref("lasttab.showTabList");
-      this.respondToMouseInTabList = TabmixSvc.TMPprefs.getBoolPref("lasttab.respondToMouseInTabList");
+      this.showTabList = !tabPreviews && Tabmix.prefs.getBoolPref("lasttab.showTabList");
+      this.respondToMouseInTabList = Tabmix.prefs.getBoolPref("lasttab.respondToMouseInTabList");
    },
 
    inverseIndex : function(index) {

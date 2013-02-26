@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Página inicio">
 <!ENTITY newtab.current "Página actual">
 <!ENTITY newtab.duplicate "Duplicar página">
-<!ENTITY newtab.location "Ubicación de usuario">
-<!ENTITY location.label "Ubicación">
+<!ENTITY newtab.location.1 "Nueva página de pestaña">
+<!ENTITY location.label.1 "Dirección">
 <!ENTITY focusContent.label "Enfocar al cargar página con contenido">
 <!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
 <!ENTITY openOtherTabNext.label "Abrir otras pestañas junto a la actual">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
 <!ENTITY tabScroll.multibar "se muestran en filas">
 <!ENTITY maxrow.label "Máximo de filas a mostrar:">
+<!ENTITY offsetAmountToScroll.label "Al rotar mostrar parte de la siguiente pestaña no visible">
 <!ENTITY smoothScroll.label "Activar rotación suave">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
 <!ENTITY highlight.label "Resaltar:">
 <!ENTITY currenttab.style.label "Pestaña actual">
+<!ENTITY unloadedtabs.style.label "Pestañas no cargadas">
 <!ENTITY unreadtabs.style.label "Pestañas no leídas">
 <!ENTITY othertabs.style.label "Otras pestañas">
 <!ENTITY setstyles.label "Personalizar estilos">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Seleccionar pestaña señalada con puntero para">
 <!ENTITY tabFlip.label "Cambiar a última pestaña seleccionada al hacer clic en la actual">
 <!ENTITY tabFlip.delay "Usar una retardo de">
-<!ENTITY addTabDrag.label "Agarrar pestañas para reordenarlas">
-<!ENTITY enabletabbarscrolling.label "Rotar pestañas con desplazamiento de rueda">
-<!ENTITY reverseScroll.label "Moverse a derechas al desplazar rueda hacia atrás">
 <!ENTITY clickFocus.label "Hacer clic de ratón (pulsar y liberar) para seleccionar una pestaña">
 <!ENTITY removeEntries.label "Para eliminar elementos del menú de Tab Mix Plus use clic central">
 <!ENTITY lockTabSizingOnClose.label "Al cerrar una pestaña las otras no cambian de tamaño hasta que el cursor no se aleja de la barra de herramientas.">
 <!ENTITY removeEntries.tooltip "Incluye ventanas y pestañas cerradas y sesiones guardadas">
+<!ENTITY tabbarscrolling.caption "Al rotar la barra de pestañas">
+<!ENTITY tabbarscrolling.holdShift.label "Pulse Mayúsculas al desplazar la rueda para cambiar de opción">
+<!ENTITY tabbarscrolling.selectTab.label "Cambiar la pestaña seleccionada">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rotar todas las pestañas">
+<!ENTITY tabbarscrolling.inverse.label "Invertir la dirección de rotación">
 <!ENTITY double.label "Doble-clic">
 <!ENTITY middle.label "Clic-central">
 <!ENTITY ctrl.label "Ctrl-clic">

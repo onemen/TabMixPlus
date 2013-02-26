@@ -13,7 +13,7 @@ var gTabMix_preferencesOverlay = {
       Tabmix.newCode("openLinkIn", openLinkIn)._replace(
         'var w = getTopWin();',
         '$& \
-         if (w && where == "window" && TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow")) where = "tab";'
+         if (w && where == "window" && Tabmix.prefs.getBoolPref("singleWindow")) where = "tab";'
       ).toCode();
 
    },
@@ -52,7 +52,7 @@ var gTabMix_preferencesOverlay = {
       document.getElementById("warnCloseMultiple").checked = document.getElementById("extensions.tabmix.tabs.warnOnClose").value;
       document.getElementById("warnOnCloseWindow").checked = document.getElementById("browser.tabs.warnOnClose").value;
       document.getElementById("warnOnCloseProtected").checked = document.getElementById("extensions.tabmix.protectedtabs.warnOnClose").value;
-      var singleWindowMode = TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
+      var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
       if (singleWindowMode)
          document.getElementById("linkTargetWindow").disabled = true;
       if (document.getElementById('BrowserPreferences')._shouldAnimate)
@@ -60,7 +60,7 @@ var gTabMix_preferencesOverlay = {
    },
 
    showTabmixOptions: function (panel) {
-      var windowMediator = TabmixSvc.wm;
+      var windowMediator = Services.wm;
       var browserWindow = windowMediator.getMostRecentWindow('navigator:browser');
 
       if (!browserWindow) {
@@ -69,7 +69,7 @@ var gTabMix_preferencesOverlay = {
             tabmixopt.close();
          let title = TabmixSvc.getString("tabmixoption.error.title");
          let msg = TabmixSvc.getString("tabmixoption.error.msg");
-         TabmixSvc.prompt.alert(window, title, msg);
+         Services.prompt.alert(window, title, msg);
       }
       else
          browserWindow.Tabmix.openOptionsDialog(panel == null ? -1 : panel);

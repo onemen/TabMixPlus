@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Personnaliser les styles">
 <!ENTITY currentTab.label "Onglet courant">
+<!ENTITY unloadedTabs.label "Onglets non chargés">
 <!ENTITY unreadTab.label "Onglets non lus">
 <!ENTITY otherTabs.label "Autres onglets">
 <!ENTITY italic.label "Italique">

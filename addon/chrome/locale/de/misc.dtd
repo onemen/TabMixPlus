@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Im Hintergrund laden">
 <!ENTITY searchTabFocus.accesskey "H">
+<!ENTITY renametab.panel.title "Tab-Titel bearbeiten">
+<!ENTITY renametab.reset.label "Auf Standardtitel zurücksetzen">
 <!ENTITY title.label "Name">
-<!ENTITY rename_all.label "Alle Seiten gleicher Adresse umbenennen">
-<!ENTITY rename_permanently.label "Diesen Tab dauerhaft für alle Adressen umbenennen">
-<!ENTITY doctitle.label "Seitentitel verwenden">
+<!ENTITY default.label "Standard">
+<!ENTITY renametab.permanently.label "Diesen Tab unabhängig der Adresse umbenennen">
+<!ENTITY renametab.permanently.tooltip "Tab mit Chronik - Der neue Name bleibt auch, wenn die Adresse sich ändert">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Hilfe (engl.)">

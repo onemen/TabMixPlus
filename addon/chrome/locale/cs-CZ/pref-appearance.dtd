@@ -1,5 +1,6 @@
 <!ENTITY styles.label "Upravit styly">
 <!ENTITY currentTab.label "Současný panel">
+<!ENTITY unloadedTabs.label "Nenačtené panely">
 <!ENTITY unreadTab.label "Nepřečtené panely">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">

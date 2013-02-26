@@ -40,7 +40,7 @@ var TabmixTabClickOptions = {
     // for tab flip
     if (!clickOutTabs && aEvent.button == 0 && tab.hasAttribute("clickOnCurrent")) {
       tab.removeAttribute("clickOnCurrent");
-      let tabFlip = TabmixSvc.TMPprefs.getBoolPref("tabFlip");
+      let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
       if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey){
         let self = this;
         var selectPreviousTab = function (aTab) {
@@ -50,7 +50,7 @@ var TabmixTabClickOptions = {
             content.focus();
           }
         }
-        let tabFlipDelay = TabmixSvc.TMPprefs.getIntPref("tabFlipDelay");
+        let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
         setTimeout(function (aTab) {selectPreviousTab(aTab);}, tabFlipDelay, tab);
         return;
       }
@@ -152,7 +152,7 @@ var TabmixTabClickOptions = {
         TMP_ClosedTabs.undoCloseTab();
         break;
       case 11:
-        gBrowser.renameTab(aTab);
+        Tabmix.renameTab.editTitle(aTab);
         break;
       case 12: //taken from tco
         if (SessionSaver && SessionSaver.snapBackTab)
@@ -373,8 +373,8 @@ var TabmixContext = {
     // 'this' here refer to tabContextMenu
 //XXX test if we need this on FF 3.5+
     // Undo close tab Commands - firefox 3.0 toggle this menu item also when submneu is show
-    var undoClose = TabmixSvc.TMPprefs.getBoolPref("undoClose");
-    Tabmix.showItem("context_undoCloseTab", TabmixSvc.TMPprefs.getBoolPref("undoCloseTabMenu") && undoClose);
+    var undoClose = Tabmix.prefs.getBoolPref("undoClose");
+    Tabmix.showItem("context_undoCloseTab", Tabmix.prefs.getBoolPref("undoCloseTabMenu") && undoClose);
 
     if (event.originalTarget != gBrowser.tabContextMenu)
       return true;
@@ -391,7 +391,7 @@ var TabmixContext = {
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 
     var newTab = document.getElementById("context_newTab");
-    Tabmix.showItem(newTab, TabmixSvc.TMPprefs.getBoolPref("newTabMenu"));
+    Tabmix.showItem(newTab, Tabmix.prefs.getBoolPref("newTabMenu"));
     if (clickOutTabs) {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
@@ -402,55 +402,55 @@ var TabmixContext = {
     }
 
     // Duplicate Commands
-    Tabmix.showItem("tm-duplicateTab", TabmixSvc.TMPprefs.getBoolPref("duplicateMenu"));
-    Tabmix.showItem("tm-duplicateinWin", TabmixSvc.TMPprefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
-    Tabmix.showItem("context_openTabInWindow", TabmixSvc.TMPprefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
-    var show = TabmixSvc.TMPprefs.getBoolPref("pinTabMenu");
+    Tabmix.showItem("tm-duplicateTab", Tabmix.prefs.getBoolPref("duplicateMenu"));
+    Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
+    Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
+    var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
     Tabmix.showItem("context_unpinTab", show && aTab.pinned);
     // context_tabViewMenu exist from Firefox 4.0b4
-    Tabmix.showItem("context_tabViewMenu", TabmixSvc.TMPprefs.getBoolPref("moveToGroup") && !aTab.pinned);
-    Tabmix.showItem("tm-mergeWindowsTab", TabmixSvc.TMPprefs.getBoolPref("showMergeWindow") && (!Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow)));
-    var showRenameTabMenu = TabmixSvc.TMPprefs.getBoolPref("renameTabMenu");
+    Tabmix.showItem("context_tabViewMenu", Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
+    Tabmix.showItem("tm-mergeWindowsTab", Tabmix.prefs.getBoolPref("showMergeWindow") && (!Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow)));
+    var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
-    Tabmix.showItem("tm-copyTabUrl", TabmixSvc.TMPprefs.getBoolPref("copyTabUrlMenu"));
+    Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));
 
     //  ---------------- menuseparator ---------------- //
 
     // Reload Commands
-    Tabmix.showItem("context_reloadTab", TabmixSvc.TMPprefs.getBoolPref("reloadTabMenu"));
-    Tabmix.showItem("context_reloadAllTabs", TabmixSvc.TMPprefs.getBoolPref("reloadAllMenu"));
-    Tabmix.showItem("tm-autoreloadTab_menu", TabmixSvc.TMPprefs.getBoolPref("autoReloadMenu"));
-    Tabmix.showItem("tm-reloadRight", TabmixSvc.TMPprefs.getBoolPref("reloadRightMenu"));
-    Tabmix.showItem("tm-reloadLeft", TabmixSvc.TMPprefs.getBoolPref("reloadLeftMenu"));
-    Tabmix.showItem("tm-reloadOther", TabmixSvc.TMPprefs.getBoolPref("reloadOtherMenu"));
+    Tabmix.showItem("context_reloadTab", Tabmix.prefs.getBoolPref("reloadTabMenu"));
+    Tabmix.showItem("context_reloadAllTabs", Tabmix.prefs.getBoolPref("reloadAllMenu"));
+    Tabmix.showItem("tm-autoreloadTab_menu", Tabmix.prefs.getBoolPref("autoReloadMenu"));
+    Tabmix.showItem("tm-reloadRight", Tabmix.prefs.getBoolPref("reloadRightMenu"));
+    Tabmix.showItem("tm-reloadLeft", Tabmix.prefs.getBoolPref("reloadLeftMenu"));
+    Tabmix.showItem("tm-reloadOther", Tabmix.prefs.getBoolPref("reloadOtherMenu"));
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("tm-undoCloseList", TabmixSvc.TMPprefs.getBoolPref("undoCloseListMenu") && undoClose);
+    Tabmix.showItem("tm-undoCloseList", Tabmix.prefs.getBoolPref("undoCloseListMenu") && undoClose);
 
     //  ---------------- menuseparator ---------------- //
 
     // Close tab Commands
     var pinnedTab = TabContextMenu.contextTab.pinned;
-    Tabmix.showItem("context_closeTab", TabmixSvc.TMPprefs.getBoolPref("closeTabMenu"));
-    Tabmix.showItem("tm-closeAllTabs", TabmixSvc.TMPprefs.getBoolPref("closeAllMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeSimilar", TabmixSvc.TMPprefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
-    Tabmix.showItem("context_closeOtherTabs", TabmixSvc.TMPprefs.getBoolPref("closeOtherMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeLeftTabs", TabmixSvc.TMPprefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeRightTabs", TabmixSvc.TMPprefs.getBoolPref("closeRightMenu") && !pinnedTab);
+    Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
+    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && !pinnedTab);
+    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
+    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && !pinnedTab);
+    Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
+    Tabmix.showItem("tm-closeRightTabs", Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("tm-docShell", TabmixSvc.TMPprefs.getBoolPref("docShellMenu"));
-    Tabmix.showItem("tm-freezeTab", TabmixSvc.TMPprefs.getBoolPref("freezeTabMenu"));
-    Tabmix.showItem("tm-protectTab", TabmixSvc.TMPprefs.getBoolPref("protectTabMenu"));
-    Tabmix.showItem("tm-lockTab", TabmixSvc.TMPprefs.getBoolPref("lockTabMenu"));
+    Tabmix.showItem("tm-docShell", Tabmix.prefs.getBoolPref("docShellMenu"));
+    Tabmix.showItem("tm-freezeTab", Tabmix.prefs.getBoolPref("freezeTabMenu"));
+    Tabmix.showItem("tm-protectTab", Tabmix.prefs.getBoolPref("protectTabMenu"));
+    Tabmix.showItem("tm-lockTab", Tabmix.prefs.getBoolPref("lockTabMenu"));
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("context_bookmarkTab", TabmixSvc.TMPprefs.getBoolPref("bookmarkTabMenu"));
-    Tabmix.showItem("context_bookmarkAllTabs", TabmixSvc.TMPprefs.getBoolPref("bookmarkTabsMenu"));
+    Tabmix.showItem("context_bookmarkTab", Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
+    Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
 
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
     TabmixContext.tabContextMenuShown(event);
@@ -460,8 +460,8 @@ var TabmixContext = {
       let titleNotReady;
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
-        let url = browser.contentDocument.baseURI || browser.currentURI.spec;
-        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, aTab.getAttribute("tabmix_bookmarkId"));
+        let url = browser.currentURI.spec;
+        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, null, aTab);
         if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
           titleNotReady = true;
       }
@@ -476,7 +476,7 @@ var TabmixContext = {
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
-    var keepLastTab = tabsCount == 1 && TabmixSvc.TMPprefs.getBoolPref("keepLastTab");
+    var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || unpinnedTabs <= 1);
     Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabs <= 1);
@@ -575,64 +575,64 @@ var TabmixContext = {
       * we cahck if gContextMenu.linkURL contain URL
       */
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
-      Tabmix.showItem("context-openlinkincurrent", TabmixSvc.TMPprefs.getBoolPref("openLinkHere") && onLink);
+      Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
-      Tabmix.showItem(inverseLink, TabmixSvc.TMPprefs.getBoolPref("openInverseLink") && onLink);
+      Tabmix.showItem(inverseLink, Tabmix.prefs.getBoolPref("openInverseLink") && onLink);
       if (!inverseLink.hidden){
-        let bgPref = TabmixSvc.prefs.getBoolPref("browser.tabs.loadInBackground");
+        let bgPref = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
         let focusType = bgPref ? "fg":"bg";
         inverseLink.setAttribute("label", inverseLink.getAttribute(focusType+"label"));
         inverseLink.setAttribute("accesskey", inverseLink.getAttribute(focusType+"accesskey"));
       }
-      Tabmix.showItem("tm-linkWithhistory", TabmixSvc.TMPprefs.getBoolPref("linkWithHistory") && onLink);
+      Tabmix.showItem("tm-linkWithhistory", Tabmix.prefs.getBoolPref("linkWithHistory") && onLink);
       var closeTabMenu = document.getElementById("tm-content-closetab");
-      Tabmix.showItem(closeTabMenu, !contentClick && TabmixSvc.TMPprefs.getBoolPref("closeTabContent"));
-      var keepLastTab = tabsCount == 1 && TabmixSvc.TMPprefs.getBoolPref("keepLastTab");
+      Tabmix.showItem(closeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("closeTabContent"));
+      var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
       Tabmix.setItem(closeTabMenu, "disabled", protectedTab || keepLastTab);
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");
-      Tabmix.showItem(freezeTabMenu, !contentClick && TabmixSvc.TMPprefs.getBoolPref("freezeTabContent"));
+      Tabmix.showItem(freezeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("freezeTabContent"));
       Tabmix.setItem(freezeTabMenu, "checked", protectedTab && lockedTab);
 
       var lockTabMenu = document.getElementById("tm-content-lockTab");
-      Tabmix.showItem(lockTabMenu, !contentClick && TabmixSvc.TMPprefs.getBoolPref("lockTabContent"));
+      Tabmix.showItem(lockTabMenu, !contentClick && Tabmix.prefs.getBoolPref("lockTabContent"));
       Tabmix.setItem(lockTabMenu, "checked", lockedTab);
 
       var protectTabMenu = document.getElementById("tm-content-protectTab");
-      Tabmix.showItem(protectTabMenu, !contentClick && TabmixSvc.TMPprefs.getBoolPref("protectTabContent"));
+      Tabmix.showItem(protectTabMenu, !contentClick && Tabmix.prefs.getBoolPref("protectTabContent"));
       Tabmix.setItem(protectTabMenu, "checked", protectedTab);
 
       var duplicateTabMenu = document.getElementById("tm-duplicateTabContext");
       Tabmix.showItem(duplicateTabMenu, !contentClick && !gContextMenu.isTextSelected &&
-                     TabmixSvc.TMPprefs.getBoolPref("duplicateTabContent"));
+                     Tabmix.prefs.getBoolPref("duplicateTabContent"));
 
       Tabmix.showItem("tm-detachTabContext", !contentClick && !gContextMenu.isTextSelected && !Tabmix.singleWindowMode &&
-                     TabmixSvc.TMPprefs.getBoolPref("detachTabContent"));
+                     Tabmix.prefs.getBoolPref("detachTabContent"));
 
       var duplicateWinMenu = document.getElementById("tm-duplicateinWinContext");
       Tabmix.showItem(duplicateWinMenu, !contentClick && !gContextMenu.isTextSelected && !Tabmix.singleWindowMode &&
-                     TabmixSvc.TMPprefs.getBoolPref("duplicateWinContent"));
+                     Tabmix.prefs.getBoolPref("duplicateWinContent"));
 
       var tabsListMenu = document.getElementById("tm-tabsList");
-      Tabmix.showItem(tabsListMenu, !contentClick && TabmixSvc.TMPprefs.getBoolPref("tabsList"));
+      Tabmix.showItem(tabsListMenu, !contentClick && Tabmix.prefs.getBoolPref("tabsList"));
 
       var undoCloseTabMenu = document.getElementById("tm-content-undoCloseTab");
-      var undoClose = TabmixSvc.TMPprefs.getBoolPref("undoClose");
+      var undoClose = Tabmix.prefs.getBoolPref("undoClose");
       Tabmix.showItem(undoCloseTabMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
-                     TabmixSvc.TMPprefs.getBoolPref("undoCloseTabContent"));
+                     Tabmix.prefs.getBoolPref("undoCloseTabContent"));
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
       Tabmix.showItem(undoCloseListMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
-                     TabmixSvc.TMPprefs.getBoolPref("undoCloseListContent"));
+                     Tabmix.prefs.getBoolPref("undoCloseListContent"));
 
       var isOneWindow = Tabmix.numberOfWindows() == 1;
       var mergeMenu = document.getElementById("tm-mergeWindows");
-      Tabmix.showItem(mergeMenu, !contentClick && !isOneWindow && TabmixSvc.TMPprefs.getBoolPref("mergeWindowContent"));
+      Tabmix.showItem(mergeMenu, !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent"));
 
       Tabmix.showItem("tm-autoreload_menu", !contentClick && !gContextMenu.isTextSelected &&
-                     TabmixSvc.TMPprefs.getBoolPref("autoReloadContent"));
+                     Tabmix.prefs.getBoolPref("autoReloadContent"));
 
-      Tabmix.showItem("tm-openAllLinks", TabmixSvc.TMPprefs.getBoolPref("openAllLinks") && !TabmixContext.openMultipleLinks(true));
+      Tabmix.showItem("tm-openAllLinks", Tabmix.prefs.getBoolPref("openAllLinks") && !TabmixContext.openMultipleLinks(true));
 
       // show/hide menuseparator
       var undoCloseSep = document.getElementById("tm-content-undoCloseSep");
@@ -798,7 +798,7 @@ var TabmixAllTabs = {
   },
 
   removeTabFromList: function TMP_removeTabFromList(event, popup, aType) {
-    if (!TabmixSvc.TMPprefs.getBoolPref("middleclickDelete"))
+    if (!Tabmix.prefs.getBoolPref("middleclickDelete"))
       return;
 
     if (event.target.id == "btn_tabslistSorted")
@@ -851,7 +851,7 @@ var TabmixAllTabs = {
     return true;
   },
 
-  beforeCommonList: function TMP_beforeCommonList(popup) {
+  beforeCommonList: function TMP_beforeCommonList(popup, aCloseTabsPopup) {
     var item = popup.parentNode;
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.removeAttribute("tooltiptext");
@@ -865,8 +865,10 @@ var TabmixAllTabs = {
       popup.removeChild(menuItem);
     }
 
-    gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
-    gBrowser.tabContainer.addEventListener("TabClose", this, false);
+    if (!aCloseTabsPopup) {
+      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
+      gBrowser.tabContainer.addEventListener("TabClose", this, false);
+    }
     popup.addEventListener("DOMMenuItemActive", this, false);
     popup.addEventListener("DOMMenuItemInactive", this, false);
   },

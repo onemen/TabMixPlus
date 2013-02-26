@@ -297,7 +297,7 @@
         <menuitem id="tm-mergeWindowsTab" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
                  oncommand="Tabmix.MergeWindows.mergeWindows();"/>
         <menuitem id="tm-renameTab" label="&renametab.label;" accesskey="&renametab.accesskey;"
-                 oncommand="gBrowser.renameTab(TabContextMenu.contextTab);"/>
+                 oncommand="Tabmix.renameTab.editTitle(TabContextMenu.contextTab);"/>
         <menuitem id="tm-copyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
                  oncommand="gBrowser.copyTabUrl(TabContextMenu.contextTab);"/>
         <menuitem id="tm-closeAllTabs" label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"
@@ -431,7 +431,7 @@
                  oncommand="TabmixAllTabs._tabsListOncommand(event);"
                  onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       <!-- popup for show\hide the tabbar -->
-      <menupopup id="hideTabbar_context" oncommand="TabmixSvc.TMPprefs.setIntPref('hideTabbar', event.originalTarget.value);"
+      <menupopup id="hideTabbar_context" oncommand="Tabmix.prefs.setIntPref('hideTabbar', event.originalTarget.value);"
                  onpopupshowing="this.childNodes[TabmixTabbar.hideMode+2].setAttribute('checked' ,'true');">
         <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator/>

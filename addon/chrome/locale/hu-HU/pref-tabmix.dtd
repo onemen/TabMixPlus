@@ -41,8 +41,8 @@
 <!ENTITY newtab.home "Kezdőlap">
 <!ENTITY newtab.current "Aktuális oldal">
 <!ENTITY newtab.duplicate "Lap megkettőzése">
-<!ENTITY newtab.location "Hely">
-<!ENTITY location.label "Hely">
+<!ENTITY newtab.location.1 "Új lapok oldal">
+<!ENTITY location.label.1 "Webcím">
 <!ENTITY focusContent.label "Fókusz a tartalomra nem üres oldal esetén">
 <!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
 <!ENTITY openOtherTabNext.label "Lapok megnyitása az aktuális után">
@@ -140,10 +140,12 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY highlight.label "Kijelölés">
 <!ENTITY currenttab.style.label "Aktuális lap">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Olvasatlan lapok">
 <!ENTITY othertabs.style.label "Egyéb lapok">
 <!ENTITY setstyles.label "Testreszabott stílusok">
@@ -181,13 +183,15 @@
 <!ENTITY mouseHoverSelect.labelBegin "Mutatott lap kiválasztása, ennyi idő után:">
 <!ENTITY tabFlip.label "Visszaváltás a legutolsó lapra, ha az aktuálisra kattint">
 <!ENTITY tabFlip.delay "Késleltetéssel">
-<!ENTITY addTabDrag.label "Lapok áthelyezése húzással">
-<!ENTITY enabletabbarscrolling.label "Görgetés a kiválasztott laphoz">
-<!ENTITY reverseScroll.label "Mozgatás jobbra, ha visszafelé görget">
 <!ENTITY clickFocus.label "Egérkattintás kiválasztja a lapot">
 <!ENTITY removeEntries.label "Középső kattintással a Tab Mix Plus menüelemek nem jelennek meg">
 <!ENTITY lockTabSizingOnClose.label "Lap bezárásakor, a további lapokat nem méretezi át, amíg a kurzor a eszköztár területét el nem hagyja">
 <!ENTITY removeEntries.tooltip "Nem jelennek meg továbbá a Bezárt lapok listája, a Bezárt ablakok és az elmentett munkamenetek sem">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
 <!ENTITY double.label "Dupla kattintás">
 <!ENTITY middle.label "Középső gombbal kattintás">
 <!ENTITY ctrl.label "Ctrl-kattintás">

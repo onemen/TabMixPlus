@@ -1,7 +1,8 @@
 <!ENTITY styles.label "سفارشی کردن استایل ها">
 <!ENTITY currentTab.label "تب فعلی">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "تب خوانده نشده">
-<!ENTITY otherTabs.label "Other tabs">
+<!ENTITY otherTabs.label "Other Tabs">
 <!ENTITY italic.label "کج">
 <!ENTITY bold.label "پررنگ">
 <!ENTITY underline.label "زیر خط دار">

@@ -95,6 +95,19 @@ so display: none !important; is not hide the button */
   opacity: 0;
 }
 
+/*
+ When the tabbar is in display:block hiding this items on a tab collapses the
+ height when the is no close button on the tab
+*/
+.tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
+.tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
+.tabbrowser-tabs[flowing=multibar] .tab-icon-image:not([fadein]):not([pinned]),
+.tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
+  display: -moz-box !important;
+  visibility: collapse !important;
+  width: 0px !important;
+}
+
 /* we don't remove top and bottom borders to prevent tab height from shrinking */
 .tabbrowser-tab:not([fadein]):not([pinned]) {
   border-left: none;
@@ -163,4 +176,9 @@ so display: none !important; is not hide the button */
 #tabmix-bottom-toolbox {
   min-width: 1px;
   min-height: 1px;
+}
+
+/* Firefox 12+ hide alltabs-button when it is after the tabbar and tabs are not overflow */
+#tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
+ visibility: visible !important;
 }

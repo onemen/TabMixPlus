@@ -1,5 +1,6 @@
 <!ENTITY styles.label "스타일 설정">
 <!ENTITY currentTab.label "현재 탭">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "읽지 않은 탭">
 <!ENTITY otherTabs.label "다른 탭">
 <!ENTITY italic.label "기울임꼴">

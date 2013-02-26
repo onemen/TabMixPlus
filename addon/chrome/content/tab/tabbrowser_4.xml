@@ -31,13 +31,13 @@
           <xul:progressmeter class="tab-progress" mode="normal"
                              xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
         </xul:vbox>
-        <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
                   class="tab-background">
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
                     class="tab-background-start"/>
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
                     class="tab-background-middle"/>
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
                     class="tab-background-end"/>
         </xul:hbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
@@ -116,7 +116,7 @@
     <property name="mouseHoverSelect" readonly="true">
       <getter><![CDATA[
         try {
-          return TabmixSvc.prefs.getBoolPref("extensions.tabmix.mouseOverSelect");
+          return Tabmix.prefs.getBoolPref("mouseOverSelect");
         }
         catch(e) {
           return false;
@@ -126,7 +126,7 @@
     <property name="mouseDownSelect" readonly="true">
       <getter><![CDATA[
         try {
-          return TabmixSvc.prefs.getBoolPref("extensions.tabmix.selectTabOnMouseDown");
+          return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
         }
         catch(e) {
           return false;
@@ -136,7 +136,7 @@
     <property name="mouseHoverSelectDelay" readonly="true">
       <getter><![CDATA[
         try {
-          return TabmixSvc.prefs.getIntPref("extensions.tabmix.mouseOverSelectDelay");
+          return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
         }
         catch(e) {
           return 250;
@@ -146,7 +146,7 @@
     <property name="tabXDelay" readonly="true">
       <getter><![CDATA[
         try {
-          return TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons.delay");
+          return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
         }
         catch(e) {
         return 0;
@@ -191,7 +191,7 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        let pref = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons");
+        let pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
         if (pref != 2 && pref != 4)
           return;
 
@@ -237,8 +237,21 @@
         if ( this == this.parentNode.selectedItem ) {
           this.setAttribute("clickOnCurrent","true");
         }
-        // don't allow mouse click with modifiers to select tab
-        else if (!aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
+        // don't allow mouse click/down with modifiers to select tab
+        else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+          aEvent.stopPropagation();
+        else if (Tabmix.isVersion(150)) {
+          this.parentNode._selectNewTab(this);
+          let isTabFocused = false;
+          try {
+            isTabFocused = (document.commandDispatcher.focusedElement == this);
+          } catch (e) {}
+          if (!isTabFocused) {
+            this.setAttribute("ignorefocus", "true");
+            this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
+          }
+        }
+        else {
           this.mSelect = setTimeout(function TMP_onMouseCommand(tab) {
             if (tab.parentNode)
               tab.parentNode._selectNewTab(tab);
@@ -290,8 +303,6 @@
         if (this.mOverCloseButton)
           event.stopPropagation();
         else {
-          this.style.MozUserFocus = 'ignore';
-          this.clientTop; // just using this to flush style updates
           if (this.mouseDownSelect)
             this.onMouseCommand(event);
           else
@@ -318,7 +329,7 @@
       <constructor>
         <![CDATA[
           this.addEventListener("dragover", TMP_tabDNDObserver._handleDragover, true);
-          TabmixSvc.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
+          Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
             Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
@@ -343,10 +354,10 @@
           Tabmix._rtl50 = Tabmix.isVersion(50) && Tabmix.rtl;
 
           this._isRTLScrollbox = Tabmix._rtl50 ? false : this.orient != "vertical" && Tabmix.rtl;
-          this.setAttribute("closebuttons-side", TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.onLeft") ? "left" : "right");
-          this._keepLastTab = TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab");
-          this.closeButtonsEnabled = TabmixSvc.prefs.getBoolPref("extensions.tabmix.tabs.closeButtons.enable");
-          this.mCloseButtons = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabs.closeButtons");
+          this.setAttribute("closebuttons-side", Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft") ? "left" : "right");
+          this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
+          this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
+          this.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
 
           /**
            * if we set this in field[s] they will reset each time the tabbar binding construct
@@ -356,15 +367,15 @@
 
           this.firstChild.setAttribute("flst_id", new Date().getTime());
           this.firstChild.setAttribute("visited", true);
-          TabmixTabbar.lockallTabs = TabmixSvc.TMPprefs.getBoolPref("lockallTabs");
+          TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
           if (TabmixTabbar.lockallTabs)
             this.firstChild.setAttribute("locked", true);
 
-          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.autoreload"))
+          if (Tabmix.prefs.getBoolPref("extraIcons.autoreload"))
             this.setAttribute("extraIcons-autoreload", true);
-          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.protected"))
+          if (Tabmix.prefs.getBoolPref("extraIcons.protected"))
             this.setAttribute("extraIcons-protected", true);
-          if (TabmixSvc.TMPprefs.getBoolPref("extraIcons.locked"))
+          if (Tabmix.prefs.getBoolPref("extraIcons.locked"))
             this.setAttribute("extraIcons-locked", true);
 
           if ("linkedBrowser" in this.firstChild)
@@ -451,7 +462,7 @@
             this.overflow = multibar == "scrollbar";
 
           // prevent new-tab-button on the right from flickering when new tabs animate is on.
-          if (this.disAllowNewtabbutton && TabmixSvc.prefs.getBoolPref("browser.tabs.animate")) {
+          if (this.disAllowNewtabbutton && Services.prefs.getBoolPref("browser.tabs.animate")) {
             this.disAllowNewtabbutton = false;
             let self = this;
             // after 300ms new tab is fully opened
@@ -504,7 +515,7 @@
 
       <property name="maxRow" readonly="true">
         <getter><![CDATA[
-          var row = TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMaxRow");
+          var row = Tabmix.prefs.getIntPref("tabBarMaxRow");
           Tabmix.setItem(this.mTabstrip._scrollButtonDown, "notonbottom", (row > 2) || null);
           return row;
         ]]></getter>
@@ -548,8 +559,8 @@
 
           if (!this._checkNewtabButtonVisibility) {
             this.disAllowNewtabbutton = this.getAttribute("flowing") == "singlebar" &&
-                TabmixSvc.TMPprefs.getBoolPref("newTabButton") &&
-                TabmixSvc.TMPprefs.getIntPref("newTabButton.position") == 2 &&
+                Tabmix.prefs.getBoolPref("newTabButton") &&
+                Tabmix.prefs.getIntPref("newTabButton.position") == 2 &&
                 this.overflow;
             return;
           }
@@ -646,7 +657,7 @@
 /*XXX we can use aTab.getBoundingClientRect().top if we do the same in topTabY */
           var height = aTab ? aTab.boxObject.height : 0;
           if (height == 0) // don't panic
-            return;
+            return 1;
           // some theme add marginTop/marginBottom to tabs
           var cStyle = window.getComputedStyle(aTab, null);
           var marginTop = parseInt(cStyle["marginTop"]) || 0;
@@ -662,7 +673,7 @@
         <body><![CDATA[
           // tabbrowser-tabs constructor reset first tab label to New Tab
           this.tabbrowser.setTabTitle(this.firstChild);
-          let position = TabmixSvc.TMPprefs.getIntPref("newTabButton.position");
+          let position = Tabmix.prefs.getIntPref("newTabButton.position");
           if (position != 0)
             gTMPprefObserver.changeNewTabButtonSide(position);
 
@@ -775,7 +786,7 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if (TabmixSvc.TMPprefs.getBoolPref("dblClickTabbar_changesize") &&
+        if (Tabmix.prefs.getBoolPref("dblClickTabbar_changesize") &&
             !Tabmix.isPlatform("Mac") && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
           if (TabsInTitlebar.enabled ||

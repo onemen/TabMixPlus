@@ -1,9 +1,11 @@
 <!ENTITY searchTabFocus.label "Charger en arrière-plan">
 <!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Renommer l'onglet">
+<!ENTITY renametab.reset.label "Renommer avec le titre d'origine">
 <!ENTITY title.label "Titre">
-<!ENTITY rename_all.label "Renommer toutes les pages avec la même adresse">
-<!ENTITY rename_permanently.label "Renommer cet onglet de manière permanente pour toutes les adresses">
-<!ENTITY doctitle.label "Utiliser le titre du document">
+<!ENTITY default.label "Titre d'origine">
+<!ENTITY renametab.permanently.label "Renommer cet onglet sans tenir compte de l'adresse">
+<!ENTITY renametab.permanently.tooltip "onglet avec un historique - le nouveau nom reste même lorsque l'adresse change">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Aide">

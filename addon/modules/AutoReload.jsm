@@ -4,7 +4,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
-Components.utils.import("resource://tabmixplus/log.jsm");
 
 let AutoReload = {
   init: function() {
@@ -14,7 +13,7 @@ let AutoReload = {
   initTab: function(aTab) {
     aTab.autoReloadEnabled = false;
     aTab.removeAttribute("_reload");
-    aTab.autoReloadTime = TabmixSvc.TMPprefs.getIntPref("reload_time");
+    aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
     aTab.autoReloadTimerID = null;
     aTab.postDataAcceptedByUser = false;
   },
@@ -66,7 +65,7 @@ let AutoReload = {
     if (aPopup._tab.autoReloadEnabled == null)
       this.initTab(aPopup._tab);
 
-    var customReloadTime = TabmixSvc.TMPprefs.getIntPref("custom_reload_time");
+    var customReloadTime = TabmixSvc.prefBranch.getIntPref("custom_reload_time");
     var customMenu = menuItems[5];
     customMenu.setAttribute("value", customReloadTime);
     setLabel(customMenu, customReloadTime);
@@ -85,7 +84,7 @@ let AutoReload = {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     aTab.autoReloadTime = aReloadTime;
-    TabmixSvc.TMPprefs.setIntPref("reload_time", aTab.autoReloadTime);
+    TabmixSvc.prefBranch.setIntPref("reload_time", aTab.autoReloadTime);
     this._enable(aTab);
   },
 
@@ -96,7 +95,7 @@ let AutoReload = {
     var win = _getWindow(aTab.linkedBrowser.contentWindow);
     win.openDialog('chrome://tabmixplus/content/minit/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
-      aTab.autoReloadTime = TabmixSvc.TMPprefs.getIntPref("custom_reload_time");
+      aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("custom_reload_time");
       this._enable(aTab);
     }
   },
