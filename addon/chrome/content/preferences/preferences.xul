@@ -5,7 +5,7 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
 
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/preferences.css"?>
-<?xml-stylesheet href="chrome://tabmixplus/content/preferences/shortcuts.css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/shortcuts.css"?>
 
 <!DOCTYPE prefwindow [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
