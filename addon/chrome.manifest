@@ -76,6 +76,6 @@ style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_ve
 style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css os=WINNT osversion<6 appversion>=16
 
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
-style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferences.css
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css
 
 manifest  test.manifest
