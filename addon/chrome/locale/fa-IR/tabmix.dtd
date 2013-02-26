@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "ر">
 <!ENTITY autoReloadTab.label "بارگذاری دوباره برگه هر">
 <!ENTITY autoReloadTab.accesskey "ه">
-<!ENTITY autoReload.label "بارگذاری دوباره هر">
-<!ENTITY autoReload.accesskey "ر">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "پس از این برگه">
 <!ENTITY bookmarktab.label "نشانه گذاری این برگه">
 <!ENTITY undoCloseListMenu.label "لیست برگه های بسته شده">

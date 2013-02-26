@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "R">
 <!ENTITY autoReloadTab.label "Tabblad vernieuwen na">
 <!ENTITY autoReloadTab.accesskey "N">
-<!ENTITY autoReload.label "Vernieuwen na">
-<!ENTITY autoReload.accesskey "A">
+<!ENTITY autoReloadSite.label "Deze site vernieuwen, elke">
+<!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "Na dit tabblad">
 <!ENTITY bookmarktab.label "Tabblad als bladwijzer opslaan">
 <!ENTITY undoCloseListMenu.label "Lijst van afgesloten tabbladen">

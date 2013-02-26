@@ -124,7 +124,7 @@ this.log(aMethod)
         aDelay = 500;
 
       var self = this;
-      function logMethod() {
+      let logMethod = function _logMethod() {
         let result = self.getObject(aMethod, rootID).toString();
         self.clog(aMethod + " = " + result);
       }
@@ -231,7 +231,7 @@ this.log(aMethod)
     }
 
     try {
-      let callerName = Components.stack.caller.caller.name;
+      let callerName = this._getCallerNameByIndex(2);
       if (!callerName)
         return false;
       if (typeof arguments[0] == "object")
@@ -289,18 +289,17 @@ options = {
   },
 
   assert: function TMP_utils_assert(aError, aMsg) {
-/*
-XXX fix this when there is no stack go directly to trace
-*/
+    if (typeof aError.stack != "string") {
+      this.trace((aMsg || "") + "\n" + aError, 2);
+      return;
+    }
+
     let names = this._getNames(1, aError.stack);
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "stack" in aError ? "\nStack Trace: \n" + aError.stack : "";
-    if (stackText)
-      Services.console.logStringMessage(assertionText + stackText);
-    else
-      this.trace(assertionText, 2);
+    let stackText = "\nStack Trace: \n" + aError.stack;
+    Services.console.logStringMessage(assertionText + stackText);
   },
 
   trace: function(aMsg, slice) {
@@ -521,9 +520,11 @@ XXX fix this when there is no stack go directly to trace
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this._define = null;
     this.toCode = null;
+    this.originalFunctions = null;
     window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }

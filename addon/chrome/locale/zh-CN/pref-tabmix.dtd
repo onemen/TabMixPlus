@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "链接">
 <!ENTITY selectDivertedTab.label "更改方式的窗口">
 <!ENTITY selectTabCommand.label "新建的标签页">
+<!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">
 <!ENTITY duplicateTab.label "复制的标签页">
 <!ENTITY inversefocus1.label "中键点击或 Ctrl-点击时已相反方式打开以下项目：">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "同时合并弹出窗口">
 <!ENTITY popupNextToOpener.label "弹出窗口紧邻其父窗口">
 <!ENTITY slideshow.label "按F8键每隔">
-<!ENTITY reloadEvery.onReloadButton.label "在重新载入按钮上显示设定刷新时间间隔的菜单">
 <!ENTITY toggleAnimation.label "禁用打开/关闭标签页动态效果">
+<!ENTITY reloadEvery.matchAddress.label "忽略地址重新载入标签页">
+<!ENTITY reloadEvery.onReloadButton.label "在重新载入按钮上显示设定刷新时间间隔的菜单">
 <!ENTITY seconds.label "秒自动轮换一个标签页">
 <!ENTITY minutes.label "分钟">
 <!ENTITY tabBarAppearance.label "标签栏外观">

@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "P">
 <!ENTITY autoReloadTab.label "Obnovit panel každých">
 <!ENTITY autoReloadTab.accesskey "B">
-<!ENTITY autoReload.label "Obnovit každých">
-<!ENTITY autoReload.accesskey "O">
+<!ENTITY autoReloadSite.label "Znovu načíst tuto stránku každých">
+<!ENTITY autoReloadSite.accesskey "K">
 <!ENTITY afterthis.label "Po tomto panelu">
 <!ENTITY bookmarktab.label "Přidat panel do záložek">
 <!ENTITY undoCloseListMenu.label "Seznam zavřených panelů">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "링크">
 <!ENTITY selectDivertedTab.label "전환된 창">
 <!ENTITY selectTabCommand.label "&apos;새 탭 열기&apos;로 연 탭">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "북마크/방문 기록">
 <!ENTITY duplicateTab.label "복제된 탭">
 <!ENTITY inversefocus1.label "가운데 클릭이나 Ctrl 클릭하면 활성화 안할 것:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "팝업 창도 합치기">
 <!ENTITY popupNextToOpener.label "팝업을 부모 페이지의 옆에 두기">
 <!ENTITY slideshow.label "F8로 탭을 회전시킬 기간">
-<!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
 <!ENTITY seconds.label "초">
 <!ENTITY minutes.label "분">
 <!ENTITY tabBarAppearance.label "탭 도구 모음">

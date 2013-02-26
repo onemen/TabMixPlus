@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Linkek">
 <!ENTITY selectDivertedTab.label "Eltérített ablakok">
 <!ENTITY selectTabCommand.label "Új lap parancsai">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">
 <!ENTITY duplicateTab.label "Lap megkettőzése">
 <!ENTITY inversefocus1.label "Inverz középső kattintás vagy a Control-kattintás fókusza:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Előugró ablakokat is">
 <!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
 <!ENTITY slideshow.label "Az F8 gomb lenyomásával a lapok körkapcsolása">
-<!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
 <!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
 <!ENTITY seconds.label "másodpercenként">
 <!ENTITY minutes.label "percenként">
 <!ENTITY tabBarAppearance.label "Lapok eszköztár">
@@ -145,7 +147,7 @@
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY highlight.label "Kijelölés">
 <!ENTITY currenttab.style.label "Aktuális lap">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Kiürített lapok">
 <!ENTITY unreadtabs.style.label "Olvasatlan lapok">
 <!ENTITY othertabs.style.label "Egyéb lapok">
 <!ENTITY setstyles.label "Testreszabott stílusok">

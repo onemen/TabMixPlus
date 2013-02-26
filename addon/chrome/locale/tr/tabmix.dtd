@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "a">
 <!ENTITY autoReloadTab.label "Sekmeyi otomatik tazele">
 <!ENTITY autoReloadTab.accesskey "S">
-<!ENTITY autoReload.label "Otomatik tazele">
-<!ENTITY autoReload.accesskey "O">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Bu sekmeden sonra">
 <!ENTITY bookmarktab.label "Yer İmlerine ekle">
 <!ENTITY undoCloseListMenu.label "Kapatılmış sekmeler listesi">

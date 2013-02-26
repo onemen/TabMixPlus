@@ -297,6 +297,8 @@
                   <checkbox id="selectTabUrl" label="&openUrl.label;" prefstring="extensions.tabmix.loadUrlInBackground" inverted="true"/>
                   <!-- Select from Search Bar-->
                   <checkbox id="selectTabSearch" label="&openSearch.label;" prefstring="extensions.tabmix.loadSearchInBackground" inverted="true"/>
+                  <!-- Select from Context menu search-->
+                  <checkbox id="contextMenuSearch" label="&contextMenuSearch.label;…" inverted="true" hidden="true"/>
                   <!-- Select Bookmarks or history -->
                   <checkbox id="selectTabBH" label="&selectTabBH.label;" prefstring="browser.tabs.loadBookmarksInBackground" inverted="true"/>
                   <!-- Select first tab from Bookmark Groups -->
@@ -411,7 +413,7 @@
           </groupbox>
         </tabpanel>
         <tabpanel orient="vertical">
-         <groupbox orient="vertical" flex="1">
+         <groupbox>
             <vbox align="start">
               <!-- Enable Undo Close Tab -->
               <checkbox id="undoClose" label="&undoClose.label;" prefstring="extensions.tabmix.undoClose"
@@ -444,9 +446,15 @@
                  <textbox id="slideshow" maxlength="3" size="3" prefstring="extensions.tabmix.slideDelay" observes="obs_tabRotation" type="number"/>
                  <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
                </hbox>
-               <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;" prefstring="extensions.tabmix.reloadEvery.onReloadButton"/>
                <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" prefstring="browser.tabs.animate" inverted="true"/>
             </vbox>
+         </groupbox>
+         <groupbox flex="1" align="start">
+           <caption label="&extraIcons.autoreload;"/>
+           <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
+                     prefstring="extensions.tabmix.reload_match_address" inverted="true"/>
+           <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
+                     prefstring="extensions.tabmix.reloadEvery.onReloadButton"/>
          </groupbox>
         </tabpanel>
       </tabpanels>
@@ -498,8 +506,7 @@
               <!-- show/hide the tabbar -->
               <hbox align="center">
                 <label value="&hideTabBar.label;:"/>
-                <menulist id="hideTabbar" oncommand="TM_Options.setDisabled('obs_' + this.id, this.value != 0); TM_Options.setDisabeled_replaceLastTabWith();"
-                          prefstring="extensions.tabmix.hideTabbar">
+                <menulist id="hideTabbar" prefstring="extensions.tabmix.hideTabbar">
                   <menupopup>
                     <menuitem value="0" id="hideTabbar.never"  label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
                     <menuitem value="1" id="hideTabbar.onetab" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
@@ -623,9 +630,9 @@
               <!-- Tab width -->
               <hbox align="center">
                 <label value="&minWidth.label;" />
-                <textbox id="minWidth" size="3" maxlength="3" prefstring="extensions.tabmix.tabMinWidth" type="number"/>
+                <textbox id="minWidth" size="3" maxlength="3" prefstring="browser.tabs.tabMinWidth" type="number"/>
                 <label value="&widthTo.label;" />
-                <textbox id="maxWidth" size="4" maxlength="4" prefstring="extensions.tabmix.tabMaxWidth" type="number"/>
+                <textbox id="maxWidth" size="4" maxlength="4" prefstring="browser.tabs.tabMaxWidth" type="number"/>
                 <label value="&widthPixels.label;" />
               </hbox>
               <vbox align="start">
@@ -924,7 +931,7 @@
                      <!-- link in duplicate tab -->
                      <checkbox id="linkWithHist" label="&linkwithhistory.label;" prefstring="extensions.tabmix.linkWithHistory"/>
                      <!-- reload every -->
-                     <checkbox id="autoreloadTab" label="&autoReload.label;" prefstring="extensions.tabmix.autoReloadContent"/>
+                     <checkbox id="autoreloadTab" label="&autoReloadTab.label;" prefstring="extensions.tabmix.autoReloadContent"/>
                      <!-- Close tab -->
                      <checkbox id="closetab" label="&closeTab.label;" prefstring="extensions.tabmix.closeTabContent"/>
                      <!-- Duplicate tab -->

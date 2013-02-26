@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Enllaços">
 <!ENTITY selectDivertedTab.label "Pàgines redirigides">
 <!ENTITY selectTabCommand.label "Ordres de pestanya nova">
+<!ENTITY contextMenuSearch.label "Menú contextual «Cerca a»">
 <!ENTITY selectTabBH.label "Adreces d&apos;interès/Historial">
 <!ENTITY duplicateTab.label "Pestanya duplicada">
 <!ENTITY inversefocus1.label "En obrir amb el botó del mig o amb Ctrl-clic, inverteix l&apos;enfocament de:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Fusiona també les finestres emergents">
 <!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l'ha obert">
 <!ENTITY slideshow.label "En prémer F8, automàticament canvia de pestanya cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
 <!ENTITY toggleAnimation.label "Inhabilita l'animació en obrir/tancar la pestanya">
+<!ENTITY reloadEvery.matchAddress.label "Torna a carregar una pestanya independentment de l'adreça">
+<!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
 <!ENTITY seconds.label "segons">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barra de pestanyes">
@@ -145,7 +147,7 @@
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">
 <!ENTITY highlight.label "Ressalta:">
 <!ENTITY currenttab.style.label "Pestanya actual">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Pestanyes no carregades">
 <!ENTITY unreadtabs.style.label "Pestanyes pendents de llegir">
 <!ENTITY othertabs.style.label "Altres pestanyes">
 <!ENTITY setstyles.label "Personalitza els estils">

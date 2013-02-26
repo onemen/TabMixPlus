@@ -48,6 +48,11 @@ var tablib = {
       _addTab = "origAddTab7c3de167ed6f494aa652f11a71ecb40c";
 
     Tabmix.newCode("gBrowser." + _addTab, gBrowser[_addTab])._replace(
+      'params = arguments[1];',
+      '$&\
+       let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
+       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;});'
+    )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle ? this.mStringBundle.getString("tabs.connecting") : aURI);'
     )._replace(
@@ -91,8 +96,8 @@ var tablib = {
     ).toCode();
 
     gBrowser.TMP_blockedCallers = ["tabbrowser_SSS_duplicateTab",
-                                   "sss_restoreWindow",
-                                   "sss_duplicateTab",
+                                   "sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
+                                   "sss_duplicateTab", "ssi_duplicateTab", // ssi_duplicateTab from Firefox 16+
                                    "ct_SSS_undoCloseTab",
                                    "TMP_BrowserOpenTab",
                                    "TMP_PC_openGroup",
@@ -222,10 +227,11 @@ var tablib = {
        $1$2'
     ).toCode();
 
-    Tabmix.newCode("gBrowser.swapBrowsersAndCloseOther", gBrowser.swapBrowsersAndCloseOther)._replace(
-      '{', '{\
-       Tabmix.copyTabData(aOurTab, aOtherTab);'
-    ).toCode();
+    Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
+    gBrowser.swapBrowsersAndCloseOther = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
+      Tabmix.copyTabData(aOurTab, aOtherTab);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -243,7 +249,7 @@ var tablib = {
         'this.resetFirstTabInRow();\
          $&'
       )._replace(
-        'this.mTabstrip._scrollButtonDown.scrollWidth',
+        /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
@@ -254,7 +260,7 @@ var tablib = {
             for (let i = 0; i < numPinned; i++) {
               let tab = this.childNodes[i];
               tab.style.MozMarginStart = width + "px";
-              width += tab.scrollWidth;
+              width += tab.getBoundingClientRect().width;
             }
             if (width != this.firstTabInRowMargin) {
               this.firstTabInRowMargin = width;
@@ -297,7 +303,7 @@ var tablib = {
 
       Tabmix.newCode("gBrowser.tabContainer._lockTabSizing", gBrowser.tabContainer._lockTabSizing)._replace(
         '{',
-        '{if (!Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
+        '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
         /var isEndTab =|faviconize.o_lockTabSizing/,
         <![CDATA[
@@ -352,12 +358,13 @@ var tablib = {
       ).toCode();
     }
 
-    if (!Tabmix.isVersion(150)) {
-      Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
-        '{',
-        '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("setTab")) return;'
-      ).toCode();
-    }
+    // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
+    // before our mousedown handler can prevent it
+    var callerName = Tabmix.isVersion(150) ? "onxblmousedown" : "setTab";
+    Tabmix.newCode("gBrowser.tabContainer._selectNewTab", gBrowser.tabContainer._selectNewTab)._replace(
+      '{',
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("' + callerName + '")) return;'
+    ).toCode();
 
     let _setter = gBrowser.tabContainer.__lookupSetter__("visible");
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
@@ -570,12 +577,6 @@ var tablib = {
       '{if (Tabmix.singleWindowMode) return;'
     ).toCode();
 
-    // fix webSearch to open new tab if tab is lock
-    Tabmix.newCode("BrowserSearch.webSearch", BrowserSearch.webSearch)._replace(
-      'openUILinkIn(Services.search.defaultEngine.searchForm, "current");',
-      'gBrowser.TMP_openURI(Services.search.defaultEngine.searchForm);', {check: typeof(Omnibar) == "undefined"}
-    ).toCode();
-
     Tabmix.newCode("warnAboutClosingWindow", warnAboutClosingWindow)._replace(
       'return gBrowser.warnAboutClosingTabs(true);',
       'return tablib.closeWindow(true);', {flags: "g"}
@@ -751,25 +752,28 @@ var tablib = {
 
     gBrowser.SSS_duplicateTab = function tabbrowser_SSS_duplicateTab(aTab, aHref, aTabData) {
       var newTab = null;
-      try {
-        var newTab, tabState;
-        // add new history entry after current index
-        function addNewHistoryEntry() {
+      // add new history entry after current index
+      function addNewHistoryEntry() {
+        try {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
           var newEntry = { url: aHref }; // we don't know the page title at this moment
           tabState.entries.splice(activeIndex + 1 , entriesToRemove, newEntry);
           tabState.index++;
-        }
+        } catch (ex) {Tabmix.assert(ex);}
+      }
         // we need to update history title after the new page loaded for use in back/forword button
         var self = this;
-        function updateNewHistoryTitle(aEvent) {
+      function updateNewHistoryTitle(aEvent) {
+        try {
           this.removeEventListener("load", updateNewHistoryTitle, true);
           var history = this.webNavigation.sessionHistory;
           var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
           shEntry.setTitle(self.getTabForBrowser(this).label);
-        }
-
+        } catch (ex) {Tabmix.assert(ex);}
+      }
+      try {
+        var newTab, tabState;
         tabState = aTabData ? aTabData.state : Tabmix.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         newTab = this.addTab("about:blank");
         newTab.linkedBrowser.stop();
@@ -1340,7 +1344,8 @@ since we can have tab hidden or remove the index can change....
           break;
       }
 
-      if (tabsToClose == numTabs && Tabmix.prefs.getBoolPref("keepLastTab"))
+      if (whatToClose != "All_onExit" && tabsToClose == numTabs &&
+          Tabmix.prefs.getBoolPref("keepLastTab"))
         tabsToClose--;
 
       if (tabsToClose <= 1 && shouldPrompt < 2)
@@ -1484,7 +1489,7 @@ since we can have tab hidden or remove the index can change....
     // we use this flag in WindowIsClosing
     window.tabmix_warnedBeforeClosing = true;
 
-    // since that some pref can changed by _onQuitRequest we catch is fisrt
+    // since that some pref can changed by _onQuitRequest we catch it fisrt
     // by observe browser-lastwindow-close-requested
     function getSavedPref(aPrefName, type) {
       let returnVal = {saved: false};

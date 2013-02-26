@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "P">
 <!ENTITY autoReloadTab.label "Kaardi automaatne uuestilaadimine">
 <!ENTITY autoReloadTab.accesskey "D">
-<!ENTITY autoReload.label "Automaatne uuestilaadimine">
-<!ENTITY autoReload.accesskey "N">
+<!ENTITY autoReloadSite.label "Selle saidi automaatne uuestilaadimine">
+<!ENTITY autoReloadSite.accesskey "M">
 <!ENTITY afterthis.label "Praeguse kaardi järele">
 <!ENTITY bookmarktab.label "Lisa see kaart järjehoidjatesse">
 <!ENTITY undoCloseListMenu.label "Suletud kaardid">

@@ -10,16 +10,17 @@
 }
 
 #startupGroup > separator {
-  height: 2px;
+  height: 6px;
 }
 
-#startupGroup:not([tabmixbutton="true"]) > separator {
-  margin-bottom: 4px;
+#startupGroup[tabmixbutton="true"]:not([incontent]) > caption+hbox > label {
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
-#startupGroup[tabmixbutton="true"] > caption+hbox > label {
+#startupGroup[tabmixbutton="true"][incontent] > caption+hbox > label {
   margin-top: 5px;
-  margin-bottom: 9px;
+  margin-bottom: 5px;
 }
 
 #startupGroup > hbox > .tabmixplus-button {

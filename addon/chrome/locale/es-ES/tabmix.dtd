@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "d">
 <!ENTITY autoReloadTab.label "Recargar pestaña cada">
 <!ENTITY autoReloadTab.accesskey "g">
-<!ENTITY autoReload.label "Recargar cada">
-<!ENTITY autoReload.accesskey "e">
+<!ENTITY autoReloadSite.label "Recargar sitio cada">
+<!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "Tras esta pestaña">
 <!ENTITY bookmarktab.label "Añadir pestaña a marcadores">
 <!ENTITY undoCloseListMenu.label "Lista pestañas cerradas">

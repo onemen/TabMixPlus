@@ -215,7 +215,9 @@ CompatibilityCheck.prototype = {
     guid_list['remove-new-tab-button@forerunnerdesigns.com'] = true;//   Remove new tab button
     guid_list['last-tab-close-button@victor.sacharin'] = true;    //   Last tab close button
     // 2010-09-15
-    guid_list['tabutils@ithinc.cn'] = true;    //   Tab Utilities
+    guid_list['tabutils@ithinc.cn'] = true;                       //   Tab Utilities
+    // 2012-05-23
+    guid_list['tab-width@design-noir.de'] = true;                 //   Custom Tab Width
     return guid_list;
   }
 }

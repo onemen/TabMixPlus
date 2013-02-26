@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<overlay id="tabmixplus-newtab-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/places/places.js"/>
+
+  <script type="application/javascript">
+  <![CDATA[
+    function updateTitle() {
+      gGrid.cells.forEach(function (cell) {
+        let site = cell.site;
+        let url = site.url;
+        let title = site.title || url;
+        if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
+          title = TMP_Places.getTitleFromBookmark(url, title);
+        let tooltip = (title == url ? title : title + "\n" + url);
+        let link = site._querySelector(".newtab-link");
+        link.setAttribute("title", tooltip);
+        site._querySelector(".newtab-title").textContent = title;
+      });
+    }
+
+    XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils", "resource://gre/modules/PlacesUtils.jsm");
+    Services.prefs.addObserver("extensions.tabmix.titlefrombookmark", updateTitle, false);
+    window.addEventListener("unload", function TMP_removeObserver(aEvent) {
+      aEvent.currentTarget.removeEventListener("unload", TMP_removeObserver, false);
+      Services.prefs.removeObserver("extensions.tabmix.titlefrombookmark", updateTitle);
+    }, false);
+
+    if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
+      updateTitle();
+  ]]>
+  </script>
+
+</overlay>

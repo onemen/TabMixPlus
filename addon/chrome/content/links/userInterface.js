@@ -130,7 +130,9 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          else
            prefName = Tabmix.newTabURLpref;
          try {
-            url = Services.prefs.getComplexValue(prefName, Components.interfaces.nsISupportsString).data;
+            url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+            if (newTabUrl == "about:privatebrowsing" && url == "about:newtab")
+              url = "about:privatebrowsing";
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
          if (!url)
@@ -156,7 +158,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var _url = loadBlank ? url : "about:blank";
    var newTab = replaceLastTab ? gBrowser.addTab(_url, {skipAnimation: true}) : gBrowser.addTab(_url);
    if (replaceLastTab) {
-     newTab.__newLastTab = true;
+     newTab.__newLastTab = url;
      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
        gBrowser.selectedTab = newTab;
        gBrowser.updateCurrentBrowser();
@@ -222,7 +224,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
 }
 
 /**
- * @brief In TMP_BrowserOpenTab we empty and fucos the urlbar
+ * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
  *        if the user or onload from a page blur the urlbar befroe user typed new value
  *        we restore the current url
  */
@@ -461,4 +463,8 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       aTab.removeAttribute("tabmix_bookmarkId");
     }
   }
+
+  // make sure other extensions don't set minwidth maxwidth
+  aTab.removeAttribute("minwidth");
+  aTab.removeAttribute("maxwidth");
 }

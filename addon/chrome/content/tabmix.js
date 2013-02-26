@@ -14,9 +14,9 @@ Tabmix.startup = function TMP_startup() {
     // multi-rows total heights can be diffrent when tabs are on top
     // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
-    TabsOnTop.tabmix_originaltoggle = TabsOnTop.toggle;
+    Tabmix.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
     TabsOnTop.toggle = function TabsOnTop_toggle() {
-      this.tabmix_originaltoggle.apply(this, arguments);
+      Tabmix.originalFunctions.tabsOnTop_toggle.apply(this, arguments);
       if (TabmixTabbar.visibleRows > 1) {
         TabmixTabbar.setHeight(1, true);
         gBrowser.tabContainer.updateVerticalTabStrip();
@@ -24,7 +24,7 @@ Tabmix.startup = function TMP_startup() {
     }
   }
 
-  document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
+  TabmixContext.toggleEventListener(true);
 
   // add call to Tabmix.Sanitizer
   // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
@@ -36,20 +36,24 @@ Tabmix.startup = function TMP_startup() {
   window.undoCloseTab = function ct_window_undoCloseTab(aIndex, aWhere) {
     return TMP_ClosedTabs.undoCloseTab(aIndex, aWhere);
   };
+}
 
+// we call this at the start of gBrowserInit._delayedStartup
+// if we call it erlier we get this warning:
+// XUL box for _moz_generated_content_before element contained an inline #text child
+Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible;
+    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !tabBar.visible;
     if (stripIsHidden)
-      gBrowser.tabContainer.visible = true;
-    this.setItem("TabsToolbar", "onStartNewTabButton", true);
+      tabBar.visible = true;
+    this.setItem("TabsToolbar", "tabmix-visible", true);
     // save mTabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
     tabBar._newTabButtonWidth = lwtheme ? 31 : tabBar.mTabsNewtabButton.getBoundingClientRect().width;
-    this.setItem("TabsToolbar", "onStartNewTabButton", null);
+    this.setItem("TabsToolbar", "tabmix-visible", null);
     if (stripIsHidden)
-      gBrowser.tabContainer.visible = false;
-
+      tabBar.visible = false;
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     if (Tabmix.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
       tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
@@ -88,8 +92,9 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   Tabmix.navToolbox.init();
 
   // set option to Prevent double click on Tab-bar from changing window size.
+  var tabsToolbar = document.getElementById("TabsToolbar");
   if (!Tabmix.prefs.getBoolPref("dblClickTabbar_changesize"))
-    document.getElementById("TabsToolbar")._dragBindingAlive = false;
+    tabsToolbar._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
   try {
@@ -98,13 +103,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
   delete gTMPprefObserver.tabStyleSheet;
-  if ("__felxedTab" in Tabmix) {
-    let tab = Tabmix.__felxedTab;
-    tab.removeAttribute("flex");
-    if (!tab.hasAttribute("busy"))
-      tab.removeAttribute("width");
-    delete Tabmix.__felxedTab;
-  }
 
   gTMPprefObserver.setMenuIcons();
 
@@ -117,6 +115,15 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   try {
     TMP_LastTab.init();
   } catch (ex) {this.assert(ex);}
+
+ /*
+  * We add minheight to the tab bar to prevent it from shrinking when we
+  * enter/exit private browsing without new tab button after tabs and animation on.
+  * The last tab is removed before the new tab is fully visible, so the tab
+  * bar height is drop below normal height.
+  */
+  if (!TMP_tabDNDObserver.verticalTreeStyleTab)
+    Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height / TabmixTabbar.visibleRows);
 }
 
 var TMP_eventListener = {
@@ -259,15 +266,26 @@ var TMP_eventListener = {
     Tabmix.contentAreaClick.init();
 
     // initialize our gURLBar.handleCommand function early before other extensions change
-    // gURLBar.handleCommand by replacing the original function
+    // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
     // url-fixer also prevent the use of eval changes by using closure in the replcaed function
     Tabmix.navToolbox.initializeURLBar();
+    Tabmix.navToolbox.initializeSearchbar();
+
+    // fix webSearch to open new tab if tab is lock
+    // Searchbar Autosizer extension wrap this function before "load" event
+    Tabmix.newCode("BrowserSearch.webSearch", BrowserSearch.webSearch)._replace(
+      'openUILinkIn(Services.search.defaultEngine.searchForm, "current");',
+      'gBrowser.TMP_openURI(Services.search.defaultEngine.searchForm);', {check: typeof(Omnibar) == "undefined"}
+    ).toCode();
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
+      )._replace(
+        'function rect(ele)',
+        'let rect = function _rect(ele)' // for strict mode
       )._replace(
         /(\})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
@@ -308,7 +326,7 @@ var TMP_eventListener = {
         '$& && !tab.hasAttribute("faviconized")'
       ).toCode();
 
-      // chage adjustTabstrip
+      // change adjustTabstrip
       faviconize.override.adjustTabstrip = function() { };
     }
   },
@@ -345,9 +363,7 @@ var TMP_eventListener = {
     // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
     if (typeof isBlankPageURL == "function") {
       Tabmix.isBlankPageURL = isBlankPageURL;
-      XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
-        return BROWSER_NEW_TAB_URL;
-      });
+      Tabmix.__defineGetter__("newTabURL", function() BROWSER_NEW_TAB_URL);
       Tabmix.newTabURLpref = "browser.newtab.url";
     }
     else {
@@ -464,15 +480,6 @@ var TMP_eventListener = {
       gTMPprefObserver.createColorRules();
     } catch (ex) {Tabmix.assert(ex);}
 
-   /*
-    * We add minheight to the tab bar to prevent it from shrinking when we
-    * enter/exit private browsing without new tab button after tabs and animation on.
-    * The last tab is removed before the new tab is fully visible, so the tab
-    * bar height is drop below normal height.
-    */
-    if (!TMP_tabDNDObserver.verticalTreeStyleTab)
-      Tabmix.setItem(tabsToolbar, "minheight", tabsToolbar.getBoundingClientRect().height);
-
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
     gTMPprefObserver.changeNewTabButtonSide(position);
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
@@ -512,17 +519,11 @@ var TMP_eventListener = {
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
-    // without this when Firefox starts with many tabs, tabbar can enter multi-row
-    // before tab width fit to title, and selected tab from last session not always visible
-    gTMPprefObserver.replaceContentBrowserRules();
+    gTMPprefObserver.addWidthRules();
     TabmixSessionManager.updateSettings();
 
     tabBar.adjustTabstrip = Tabmix.adjustTabstrip;
     delete Tabmix.adjustTabstrip;
-    // no need to updtae updateScrollStatus
-    tabBar.adjustTabstrip(true);
-    // style flush to prevent the window from flicker
-    tabBar.mTabstrip.clientTop;
   },
 
   _tabStillLoading: 0,
@@ -928,10 +929,7 @@ var TMP_eventListener = {
     }
 
     TabmixSessionManager.onWindowClose(isLastWindow);
-
-    document.getElementById("contentAreaContextMenu").removeEventListener("popupshowing", TabmixContext.updateMainContextMenu, false);
-    gBrowser.tabContextMenu.removeEventListener("popupshowing", TabmixContext.updateTabContextMenu, false);
-    gBrowser.tabContextMenu.removeEventListener("popupshown", TabmixContext.tabContextMenuShown, false);
+    TabmixContext.toggleEventListener(false);
 
     TMP_Places.deinit();
     TMP_LastTab.deinit();
@@ -973,6 +971,7 @@ var TMP_eventListener = {
       gBrowser.tabContainer.removeEventListener('DOMNodeInserted', tabxTabAdded, true);
 
     gTMPprefObserver.removeObservers();
+    gTMPprefObserver.dynamicRules = null;
 
     TabmixProgressListener.listener.mTabBrowser = null;
     gBrowser.removeTabsProgressListener(TabmixProgressListener.listener);

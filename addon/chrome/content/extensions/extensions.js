@@ -236,7 +236,13 @@ var TMP_extensionsCompatibility = {
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.newCode("faviconize.toggle", faviconize.toggle)._replace(
         /(\})(\)?)$/,
-        'TabmixTabbar.updateScrollStatus(); TabmixTabbar.updateBeforeAndAfter(); $1$2'
+        <![CDATA[
+          tab.removeAttribute("minwidth");
+          tab.removeAttribute("maxwidth");
+          TabmixTabbar.updateScrollStatus();
+          TabmixTabbar.updateBeforeAndAfter();
+          $1$2
+        ]]>
       ).toCode();
     }
 
@@ -391,6 +397,13 @@ var TMP_extensionsCompatibility = {
 
     // check if Greasemonkey installed
     Tabmix.contentAreaClick.isGreasemonkeyInstalled();
+
+    if (typeof MouseControl == "object" && MouseControl.newTab) {
+      Tabmix.newCode("MouseControl.newTab" , MouseControl.newTab)._replace(
+        'gBrowser.moveTabTo',
+        'if (!Tabmix.prefs.getBoolPref("openNewTabNext")) $&'
+      ).toCode();
+    }
   }
 
 }

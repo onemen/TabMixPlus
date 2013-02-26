@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Omdirigerede vinduer">
 <!ENTITY selectTabCommand.label "Nyt faneblad-kommandoer">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bogmærker/Historik">
 <!ENTITY duplicateTab.label "Dupliker faneblad">
 <!ENTITY inversefocus1.label "Modsat midterklik eller Ctrl-klik fokus på:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Tag også popup-vinduer">
 <!ENTITY popupNextToOpener.label "Placér popups ved siden af deres oprindelsesvindue">
 <!ENTITY slideshow.label "Tryk på F8 roterer faneblade hver">
-<!ENTITY reloadEvery.onReloadButton.label "Vis Genindlæs hver-menu på Genindlæs-knap">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Vis Genindlæs hver-menu på Genindlæs-knap">
 <!ENTITY seconds.label "sek.">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Fanebladslinje">

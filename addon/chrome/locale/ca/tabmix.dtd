@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "D">
 <!ENTITY autoReloadTab.label "Torna a carregar la pestanya cada">
 <!ENTITY autoReloadTab.accesskey "C">
-<!ENTITY autoReload.label "Torna a carregar cada">
-<!ENTITY autoReload.accesskey "E">
+<!ENTITY autoReloadSite.label "Torna a carregar aquest lloc cada">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Després d&apos;aquesta pestanya">
 <!ENTITY bookmarktab.label "Afegeix a les adreces d&apos;interès aquesta pestanya">
 <!ENTITY undoCloseListMenu.label "Llista de pestanyes tancades">

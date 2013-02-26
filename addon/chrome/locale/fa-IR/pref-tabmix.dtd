@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "لینک ها">
 <!ENTITY selectDivertedTab.label "پنجره های منتقل شده">
 <!ENTITY selectTabCommand.label "دستورهای تب جدید">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "نشانه گذاری شده ها/تاریخچه">
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "همراه با پنجره های باز شدنی">
 <!ENTITY popupNextToOpener.label "قرار دادن پنجره های باز شدنی در کنار پنجره اصلی آنها">
 <!ENTITY slideshow.label "ثانیه می چرخاند">
-<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
 <!ENTITY seconds.label "تب ها را هر F8 فشردن کلید">
 <!ENTITY minutes.label "دقیقه">
 <!ENTITY tabBarAppearance.label "نوار تب ها">
@@ -152,7 +154,7 @@
 <!ENTITY extraIcons.label1 "Icons for">
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
-<!ENTITY extraIcons.autoreload "Auto-Reload">
+<!ENTITY extraIcons.autoreload "Auto Reload">
 <!ENTITY progressMeter.label "نمایش وضعیت پیشرفت روی تب ها">
 <!ENTITY showTabX.labelBegin "کلید بستن تب">
 <!ENTITY showTabX.left "نمایش در سمت چپ">

@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "D">
 <!ENTITY autoReloadTab.label "Recarregar aba a cada">
 <!ENTITY autoReloadTab.accesskey "B">
-<!ENTITY autoReload.label "Recarregar a cada">
-<!ENTITY autoReload.accesskey "G">
+<!ENTITY autoReloadSite.label "Recarregar esse site a cada">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Depois dessa aba">
 <!ENTITY bookmarktab.label "Adicionar aba aos favoritos">
 <!ENTITY undoCloseListMenu.label "Lista de abas fechadas">

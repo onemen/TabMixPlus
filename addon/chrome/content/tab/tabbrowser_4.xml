@@ -45,7 +45,6 @@
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
                              tabindex="-1" button_side="left"
-                             clickthrough="never"
                              class="tab-close-button always-left"/>
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
@@ -65,13 +64,12 @@
                          role="presentation"/>
               <xul:hbox class="showhover-box">
                 <xul:toolbarbutton anonid="tmp-close-button"
-                                   tabindex="-1" clickthrough="never" class="showhover tabs-closebutton"/>
+                                   tabindex="-1" class="showhover tabs-closebutton"/>
               </xul:hbox>
             </xul:stack>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
                              tabindex="-1" button_side="right"
-                             clickthrough="never"
                              class="tab-close-button always-right"/>
         </xul:hbox>
       </xul:stack>

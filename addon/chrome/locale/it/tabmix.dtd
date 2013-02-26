@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "e">
 <!ENTITY autoReloadTab.label "Ricarica scheda ogni">
 <!ENTITY autoReloadTab.accesskey "o">
-<!ENTITY autoReload.label "Ricarica ogni">
-<!ENTITY autoReload.accesskey "c">
+<!ENTITY autoReloadSite.label "Ricarica il sito ogni">
+<!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "Dopo questa">
 <!ENTITY bookmarktab.label "Questa scheda in un segnalibro…">
 <!ENTITY undoCloseListMenu.label "Lista delle schede chiuse">

@@ -175,7 +175,8 @@ let AutoReload = {
     if (aTab.autoReloadTimerID)
       _clearTimeout(aTab, win);
 
-    if (aTab.autoReloadURI == aBrowser.currentURI.spec) {
+    if (!TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
+        aTab.autoReloadURI == aBrowser.currentURI.spec) {
       if (aBrowser.curScrollX || aBrowser.curScrollY)
         aBrowser.contentWindow.scrollTo(aBrowser.curScrollX, aBrowser.curScrollY);
 

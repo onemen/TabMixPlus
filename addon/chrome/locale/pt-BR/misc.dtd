@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Carregar no plano de fundo">
 <!ENTITY searchTabFocus.accesskey "P">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Editar o títuo da aba">
+<!ENTITY renametab.reset.label "Voltar ao título padrão">
 <!ENTITY title.label "Título">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "Padrão">
+<!ENTITY renametab.permanently.label "Renomear esta aba independente do seu endereço">
+<!ENTITY renametab.permanently.tooltip "aba com histórico - o novo nome permanecerá quando o endereço for alterado">
 <!ENTITY forum.label "Fórum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Ajuda">

@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
+<!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
 <!ENTITY selectTabBH.label "Marque-pages ou Historique">
 <!ENTITY duplicateTab.label "Dupliquer l&apos;onglet">
 <!ENTITY inversefocus1.label "Inverser ce comportement en cas de clic-milieu ou Ctrl-clic pour les :">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
 <!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
-<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
 <!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
+<!ENTITY reloadEvery.matchAddress.label "Actualiser un onglet sans tenir compte de son adresse">
+<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
 <!ENTITY seconds.label "secondes">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barre d'onglets">

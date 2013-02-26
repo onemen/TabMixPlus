@@ -116,8 +116,6 @@ pref("extensions.tabmix.useUnreadColor", true);
 pref("extensions.tabmix.useProgressColor", true);
 */
 
-pref("extensions.tabmix.tabMinWidth", 100);
-pref("extensions.tabmix.tabMaxWidth", 250);
 pref("extensions.tabmix.flexTabs", false);
 
 pref("extensions.tabmix.titlefrombookmark", false);
@@ -269,8 +267,13 @@ pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
 pref("extensions.tabmix.custom_reload_time", 90);
 pref("extensions.tabmix.reload_time", 15);
+pref("extensions.tabmix.reload_match_address", false);
 // The maximum number of daily sessions backups to
 // keep in <profile>/sessionbackups. Special values:
 // -1: unlimited
 //  0: no backups created (and deletes all existing backups)
 pref("extensions.tabmix.sessions.max_backups", 7);
+
+// removed from Firefox 4.0+, some other extensions may use this pref
+pref("browser.tabs.tabMinWidth", 100);
+pref("browser.tabs.tabMaxWidth", 250);

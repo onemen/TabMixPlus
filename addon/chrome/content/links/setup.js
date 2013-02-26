@@ -66,8 +66,14 @@ function TMP_TBP_Startup() {
       TMP_DOMWindowOpenObserver.onObserve(window, TMP_DOMWindowOpenObserver);
 
     // make tabmix compatible with ezsidebar extension
-    var TMP_BrowserStartup = "__ezsidebar__BrowserStartup" in window ? "__ezsidebar__BrowserStartup" : "BrowserStartup";
-    var bowserStartup = Tabmix.newCode("window."+TMP_BrowserStartup, window[TMP_BrowserStartup]);
+    var fnContainer, TMP_BrowserStartup;
+    if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
+      [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
+    else if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+      [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
+    else
+      [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
+    var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
 
     var pbs = Cc["@mozilla.org/privatebrowsing;1"].
               getService(Ci.nsIPrivateBrowsingService);
@@ -136,15 +142,19 @@ function TMP_TBP_Startup() {
         'TabsOnTop.init();', {silent: true}
       );
     }
-    bowserStartup.toCode();
+    bowserStartup.toCode(false, fnContainer, TMP_BrowserStartup);
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    Tabmix.newCode("delayedStartup", delayedStartup)._replace(
+    var [name, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
+          ["gBrowserInit._delayedStartup", gBrowserInit._delayedStartup] :
+          ["delayedStartup", delayedStartup];
+    Tabmix.newCode(name, fn)._replace(
       '{',
       '{\
        try {\
          if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true); \
+         Tabmix.getNewTabButtonWidth();\
          TabmixSessionManager.init();\
        } catch (ex) {Tabmix.assert(ex);}'
     ).toCode();
@@ -161,7 +171,8 @@ function TMP_TBP_Startup() {
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    window[TMP_BrowserStartup]();
+    TMP_BrowserStartup = fnContainer[TMP_BrowserStartup].bind(fnContainer);
+    TMP_BrowserStartup();
 
   } catch (ex) {Tabmix.assert(ex);}
 }
@@ -177,11 +188,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        return true;
     }
 
-    //XXX isTabEmpty exist in Firefox 4.0
     tabBrowser.isBlankTab = function(aTab) {
       return this.isBlankBrowser(this.getBrowserForTab(aTab));
     }
 
+    //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
+    // isTabEmpty don't check for Tabmix.isNewTabUrls
     if (("loadTabsProgressively" in window)) {
       tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
          // loadTabsProgressively add pending attribute to pending tab when it stop the tab
@@ -217,37 +229,31 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
 
     tabBrowser.getTabForLastPanel = function () {
-       return this._getTabForContentWindow(this.mPanelContainer.lastChild.firstChild.firstChild.contentWindow);
+      let browser = this.mPanelContainer.lastChild.firstChild.firstChild;
+      if (Tabmix.isVersion(150)) // changed by Bug 749628
+        browser = browser.firstChild;
+      return this._getTabForContentWindow(browser.contentWindow);
     }
 
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
                        document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
 
     TMP_eventListener.init(tabContainer);
-
     // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
     // so we initialize this before start
     // mTabMaxWidth not exist from firefox 4.0
-    var max = Math.max(16, Tabmix.prefs.getIntPref("tabMaxWidth"));
-    var min = Math.max(16, Tabmix.prefs.getIntPref("tabMinWidth"));
+    var max = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
+    var min = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
     if (max < min) {
-      Tabmix.prefs.setIntPref("tabMaxWidth", min);
-      Tabmix.prefs.setIntPref("tabMinWidth", max);
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", max);
       [min, max] = [max, min];
     }
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
     TabmixTabbar.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") && (max != min);
-    if (TabmixTabbar.widthFitTitle) {
+    if (TabmixTabbar.widthFitTitle)
       this.setItem(tabContainer, "widthFitTitle", true);
-      // we only change the rule that set flex=100 and width=0 at delayedStartup.
-      let tab = tabContainer.firstChild;
-      tabBrowser.setTabTitleLoading(tab);
-      tab.setAttribute("flex", "0");
-      tab.setAttribute("width", tab.boxObject.width);
-      tab.clientTop;
-      this.__felxedTab = tab;
-    }
 
     var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
@@ -329,18 +335,21 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   *  TreeStyleTabe add some code at the end
   */
   if (tabsCount == 1) {
+    let tab = this.selectedItem;
     if (!aUrl) {
-        var currentURI = tabbrowser.currentURI;
+        let currentURI = tabbrowser.currentURI;
         aUrl = currentURI ? currentURI.spec : null;
     }
     if (this._keepLastTab ||
-        (!aUrl || aUrl == "about:blank") &&
-        tabbrowser.isBlankNotBusyTab(this.selectedItem, true)) {
-        this.setAttribute("closebuttons", "noclose");
-        this.removeAttribute("closebuttons-hover");
+        Tabmix.isBlankPageURL(tab.__newLastTab || null) ||
+       (!aUrl || Tabmix.isBlankPageURL(aUrl)) &&
+        tabbrowser.isBlankNotBusyTab(tab)) {
+      this.setAttribute("closebuttons", "noclose");
+      this.removeAttribute("closebuttons-hover");
     }
   }
-  else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) {
+  else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
+           ("faviconize" in window && Tabmix.callerName() == "onxbltransitionend")) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }

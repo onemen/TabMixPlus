@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "I">
 <!ENTITY autoReloadTab.label "自動更新分頁">
 <!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReload.label "自動更新頁面">
-<!ENTITY autoReload.accesskey "E">
+<!ENTITY autoReloadSite.label "自動更新">
+<!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "緊鄰">
 <!ENTITY bookmarktab.label "將本頁加入書籤">
 <!ENTITY undoCloseListMenu.label "已關閉分頁列表">

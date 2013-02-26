@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Liên kết">
 <!ENTITY selectDivertedTab.label "Cửa sổ chuyển hướng">
 <!ENTITY selectTabCommand.label "Lệnh mở thẻ mới">
+<!ENTITY contextMenuSearch.label "Tìm kiếm trình đơn ngữ cành">
 <!ENTITY selectTabBH.label "Trang đánh dấu / Lược sử">
 <!ENTITY duplicateTab.label "Tạo bản sao của Thẻ">
 <!ENTITY inversefocus1.label "Đảo ngược sự tập trung của Chuột giữa hoặc Ctrl-nhấp chuột của:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Cũng trộn luôn cửa sổ popup">
 <!ENTITY popupNextToOpener.label "Đặt popup kế bên trang đã mở chúng">
 <!ENTITY slideshow.label "Nhấn F8 để xoay vòng thẻ mỗi">
-<!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">
 <!ENTITY toggleAnimation.label "Tắt hiệu ứng động khi mở/đóng thẻ">
+<!ENTITY reloadEvery.matchAddress.label "Tải lại một thẻ bất chấp địa chỉ của nó">
+<!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">
 <!ENTITY seconds.label "giây">
 <!ENTITY minutes.label "phút">
 <!ENTITY tabBarAppearance.label "Thanh Thẻ">

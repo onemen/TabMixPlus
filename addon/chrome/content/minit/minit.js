@@ -7,7 +7,6 @@ var TMP_tabDNDObserver = {
   lastTime: 0,
   dragmarkindex: null,
   marginBottom: 0,
-  paddingLeft: 0,
   LinuxMarginEnd: 0,
   _dragTime: 0,
   _dragOverDelay: 350,
@@ -17,6 +16,11 @@ var TMP_tabDNDObserver = {
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
 
+  get paddingLeft() {
+    delete this.paddingLeft;
+    return this.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
+  },
+
   init: function TMP_tabDNDObserver_init() {
     this.setDragEvents(true);
     this.draglink = TabmixSvc.getString("droplink.label");
@@ -24,8 +28,6 @@ var TMP_tabDNDObserver = {
     // without this the Indicator is not visible on the first drag
     var ind = gBrowser.tabContainer._tabDropIndicator;
     ind.style.MozTransform = "translate(0px, 0px)";
-    // style flush to prevent the window from flicker on startup
-    ind.clientTop;
   },
 
   verticalTreeStyleTab: false,
@@ -51,7 +53,6 @@ var TMP_tabDNDObserver = {
     }
     gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
     this._dragOverDelay = gBrowser.tabContainer._dragOverDelay;
-    this.paddingLeft  = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
   },
 
   _handleDragover: function (aEvent) {
@@ -98,7 +99,7 @@ var TMP_tabDNDObserver = {
       // positioned relative to the corner of the new window created upon
       // dragend such that the mouse appears to have the same position
       // relative to the corner of the dragged tab.
-      function clientX(ele) ele.getBoundingClientRect().left;
+      let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
       let tabOffsetX = clientX(tab) -
                        clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
       tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
@@ -1233,9 +1234,11 @@ Tabmix.navToolbox = {
       return;
 
     let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
-    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() : searchbar.handleSearchCommand.toString();
+    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() :
+                                               searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
-    if (_handleSearchCommand.indexOf("forceNewTab") == -1) {
+    if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
+          _handleSearchCommand.indexOf("forceNewTab") == -1) {
       let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZhandleSearch" :
                                          "document.getElementById('searchbar').handleSearchCommand";
       Tabmix.newCode(functionName,  _handleSearchCommand)._replace(
@@ -1281,10 +1284,9 @@ Tabmix.navToolbox = {
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     if (TabmixSessionManager.enableManager == null) {
       let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
-      TabmixSessionManager.enableManager = Tabmixc.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
+      TabmixSessionManager.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
       TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
     }
-    Tabmix.setItem("tmp_sessionmanagerButton", "disabled", !TabmixSessionManager.enableManager);
     TabmixSessionManager.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();

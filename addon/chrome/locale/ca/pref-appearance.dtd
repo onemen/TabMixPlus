@@ -1,6 +1,6 @@
 <!ENTITY styles.label "Personalitza els estils">
 <!ENTITY currentTab.label "Pestanya actual">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Pestanyes no carregades">
 <!ENTITY unreadTab.label "Pestanyes pendents de llegir">
 <!ENTITY otherTabs.label "Altres pestanyes">
 <!ENTITY italic.label "Cursiva">

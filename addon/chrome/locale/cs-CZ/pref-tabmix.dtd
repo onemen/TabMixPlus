@@ -48,7 +48,7 @@
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle současného">
 <!ENTITY relatedAfterCurrent.label "Pouze pokud je ve vztahu k současnému panelu">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openDuplicateNext.label "Otevírat duplikované panely vedle originálních">
+<!ENTITY openDuplicateNext.label "Otevírat duplikované panely vedle původních">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
 <!ENTITY openTabNextInverse.label "Změnit pořadí otevíraných panelů">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Odchýlená okna">
 <!ENTITY selectTabCommand.label "Příkazy pro nový panel">
+<!ENTITY contextMenuSearch.label "Hledat v místní nabídce výraz">
 <!ENTITY selectTabBH.label "Záložky/Historie">
 <!ENTITY duplicateTab.label "Duplikovat panel">
 <!ENTITY inversefocus1.label "Kliknutí prostředním tlačítkem myši přepnuté pro levou ruku či CTRL+kliknutí se zaměří na:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Přidat také vyskakovací okna">
 <!ENTITY popupNextToOpener.label "Umístit vyskakovací okna vedle jejich otvíračů">
 <!ENTITY slideshow.label "Klávesa F8 přepíná mezi panely každých">
-<!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku Obnovit každých XY sekund/minut u tlačítka Obnovit">
 <!ENTITY toggleAnimation.label "Zakázat animaci otevírání či zavírání panelu">
+<!ENTITY reloadEvery.matchAddress.label "Znovu načíst panel bez ohledu na adresu">
+<!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku Obnovit každých XY sekund/minut u tlačítka Obnovit">
 <!ENTITY seconds.label "sekund">
 <!ENTITY minutes.label "minut">
 <!ENTITY tabBarAppearance.label "Lišta panelů">
@@ -287,8 +289,8 @@
 <!ENTITY sm.notrestore.label "Pokud nedojde k obnově po startu">
 <!ENTITY sm.preserve.options "Uchovat panely:">
 <!ENTITY sm.preserve.history "Historie">
-<!ENTITY sm.preserve.protect "Status chránit">
-<!ENTITY sm.preserve.locked "Status zamknout">
+<!ENTITY sm.preserve.protect "Stav Chránit">
+<!ENTITY sm.preserve.locked "Stav Zamknout">
 <!ENTITY sm.preserve.permission "Práva">
 <!ENTITY sm.preserve.scroll1 "Pozice posuvníku">
 <!ENTITY sm.restore.winOptions "Uchovat okna:">

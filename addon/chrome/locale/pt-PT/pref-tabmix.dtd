@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "Ligações">
 <!ENTITY selectDivertedTab.label "Janelas diversas">
 <!ENTITY selectTabCommand.label "Comandos de novo separador">
+<!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Marcadores/histórico">
 <!ENTITY duplicateTab.label "Duplicar separador">
 <!ENTITY inversefocus1.label "Clique central inverso ou  Control clique foca:">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "Juntar também janelas de popup">
 <!ENTITY popupNextToOpener.label "Colocar popups ao pé das janelas que o abriram">
 <!ENTITY slideshow.label "Carregar em F8 roda separadores a cada">
-<!ENTITY reloadEvery.onReloadButton.label "Mostrar recarregar todos os menus no botão recarregar">
 <!ENTITY toggleAnimation.label "Desactivar Abrir/Fechar a animação do separador">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar recarregar todos os menus no botão recarregar">
 <!ENTITY seconds.label "segundos">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barra de separadores">

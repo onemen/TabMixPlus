@@ -69,6 +69,7 @@
 <!ENTITY selectTab.label "リンクから開いたタブ">
 <!ENTITY selectDivertedTab.label "新しいウィンドウに開くはずだったタブ">
 <!ENTITY selectTabCommand.label "[新しいタブ] コマンドで開いたタブ">
+<!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">
 <!ENTITY duplicateTab.label "複製したタブ">
 <!ENTITY inversefocus1.label "以下を中クリックまたは Ctrl + クリックで開いたとき、フォーカスを移動する：">
@@ -107,8 +108,9 @@
 <!ENTITY mergePopups.label "ポップアップウィンドウもマージする">
 <!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
 <!ENTITY slideshow.label "F8 を押すとタブを自動的に">
-<!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
 <!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
+<!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
+<!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
 <!ENTITY seconds.label "秒間隔で切り替える">
 <!ENTITY minutes.label "分">
 <!ENTITY tabBarAppearance.label "タブバー">

@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "д">
 <!ENTITY autoReloadTab.label "Поново учитај картицу сваких">
 <!ENTITY autoReloadTab.accesskey "в">
-<!ENTITY autoReload.label "Поново учитај сваких">
-<!ENTITY autoReload.accesskey "П">
+<!ENTITY autoReloadSite.label "Поново учитај ову страницу сваких">
+<!ENTITY autoReloadSite.accesskey "П">
 <!ENTITY afterthis.label "После ове картице">
 <!ENTITY bookmarktab.label "Обележи ову картицу">
 <!ENTITY undoCloseListMenu.label "Листа затворених картица">
