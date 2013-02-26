@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "J">
 <!ENTITY autoReloadTab.label "Minden lap újratöltése">
 <!ENTITY autoReloadTab.accesskey "M">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
-<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY autoReloadSite.label "Webhely újratöltése">
+<!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "ezen lapok után">
 <!ENTITY bookmarktab.label "Könyvjelzőt erre a lapra">
 <!ENTITY undoCloseListMenu.label "Bezárt lapok listája">

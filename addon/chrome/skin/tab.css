@@ -239,7 +239,7 @@ toolbar[iconsize=small] #btn_tabslist, #tm-tabsList > .menu-iconic-left{ -moz-im
 toolbar[iconsize=small] #btn_tabslist:hover, #tm-tabsList:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #btn_tabslist[disabled=true], #tm-tabsList[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
-#tabmix-menu , #btn-sm-settings, .tabmix-menu-icon {
+#btn-sm-settings, .tabmix-menu-icon {
    list-style-image: url(tmpsmall.png);
 }
 .tabmix-menu-icon .menu-iconic-left { -moz-image-region: rect(0 16px 16px 0)!important; }

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lapok zárolása">
 <!ENTITY lockNewTabs.label "Új lapok zárolása">
 <!ENTITY lockAppTabs.label "Alkalmazás lapok zárolása">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
 <!ENTITY openBookmarks.label "Könyvjelzők">
 <!ENTITY openBMKGroups.label "Könyvjelzők csoportja">
@@ -69,7 +70,7 @@
 <!ENTITY selectTab.label "Linkek">
 <!ENTITY selectDivertedTab.label "Eltérített ablakok">
 <!ENTITY selectTabCommand.label "Új lap parancsai">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Keresés a helyi menüben">
 <!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">
 <!ENTITY duplicateTab.label "Lap megkettőzése">
 <!ENTITY inversefocus1.label "Inverz középső kattintás vagy a Control-kattintás fókusza:">
@@ -107,9 +108,9 @@
 <!ENTITY mergelastfocused.label "Csak az aktuális balak összefűzése az utoljára kiválasztottal">
 <!ENTITY mergePopups.label "Előugró ablakokat is">
 <!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
-<!ENTITY slideshow.label "Az F8 gomb lenyomásával a lapok körkapcsolása">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Lapok újratöltése a címtől függetlenül">
 <!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
 <!ENTITY seconds.label "másodpercenként">
 <!ENTITY minutes.label "percenként">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Nagyobb hely mindkét oldalon">
 <!ENTITY tabBarSpace.tooltip "A Lapok eszköztáron történő kattintás és ejtés megkönnyítésére, amikor már túl sok lap van megnyitva">
 <!ENTITY tabbar.label "Mindig jelenjen meg a Lapok eszköztár">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Ejtés jelző">
 <!ENTITY dropIndicator-native.label "Egyedi stílus">
 <!ENTITY dropIndicator-builtin.label "Beépített stílus">
@@ -142,7 +144,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY highlight.label "Kijelölés">
@@ -189,11 +191,11 @@
 <!ENTITY removeEntries.label "Középső kattintással a Tab Mix Plus menüelemek nem jelennek meg">
 <!ENTITY lockTabSizingOnClose.label "Lap bezárásakor, a további lapokat nem méretezi át, amíg a kurzor a eszköztár területét el nem hagyja">
 <!ENTITY removeEntries.tooltip "Nem jelennek meg továbbá a Bezárt lapok listája, a Bezárt ablakok és az elmentett munkamenetek sem">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Gördítés a Lapok eszköztáron">
+<!ENTITY tabbarscrolling.holdShift.label "Görgetés közben a Shift gombot lenyomva válthat ezen lehetőségek között">
+<!ENTITY tabbarscrolling.selectTab.label "Kiválasztott lap megváltoztatása">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Összes lap görgetése">
+<!ENTITY tabbarscrolling.inverse.label "Inverz görgetés">
 <!ENTITY double.label "Dupla kattintás">
 <!ENTITY middle.label "Középső gombbal kattintás">
 <!ENTITY ctrl.label "Ctrl-kattintás">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "és lapokat">
 <!ENTITY sm.restore.closedWinList "Bezárt ablakok listájának mentése">
 <!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
-<!ENTITY sm.restore.reloadall "Összes lap újratöltése">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
 <!ENTITY sm.preserve.options "Védett lapok">
 <!ENTITY sm.preserve.history "Előzmények">

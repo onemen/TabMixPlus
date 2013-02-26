@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Блокирование вкладок">
 <!ENTITY lockNewTabs.label "Блокировать новые вкладки">
 <!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">
+<!ENTITY updateLockState.label "Применить изменения к открытым вкладкам">
 <!ENTITY openNewTab.label "Открывать в новых вкладках:">
 <!ENTITY openBookmarks.label "Закладки">
 <!ENTITY openBMKGroups.label "Группы закладок">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Объединение только текущего окна с последним активным">
 <!ENTITY mergePopups.label "Также объединять всплывающие окна">
 <!ENTITY popupNextToOpener.label "Размещать всплывающие окна рядом с окнами, которые их открывали">
-<!ENTITY slideshow.label "С помощью F8 циклически листать вкладки каждые">
+<!ENTITY activateSlideshow.label "Нажатие на клавишу #1 переключает вкладки каждые">
 <!ENTITY toggleAnimation.label "Отключить анимацию открытия/закрытия вкладки">
 <!ENTITY reloadEvery.matchAddress.label "Обновлять вкладку независимо от её адреса">
 <!ENTITY reloadEvery.onReloadButton.label "Показывать меню &apos;Обновлять вкладку каждые...&apos; для кнопки Обновить">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Пустые поля по краям панели вкладок">
 <!ENTITY tabBarSpace.tooltip "Пустые поля для перетаскивания вкладок по панели и щелчков мышью">
 <!ENTITY tabbar.label "Прятать панель вкладок, если открыта только одна вкладка">
+<!ENTITY moveTabOnDragging.label "Немедленно выполнять перетаскивание вкладки">
 <!ENTITY dropIndicator.label "Индикатор перетаскивания">
 <!ENTITY dropIndicator-native.label "Встроенный стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "... и вкладки">
 <!ENTITY sm.restore.closedWinList "Сохранять окна в списке закрытых">
 <!ENTITY sm.restore.merge "Объединять несколько окон в одно">
-<!ENTITY sm.restore.reloadall "Обновлять все вкладки">
+<!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
 <!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">

@@ -126,6 +126,8 @@ pref("extensions.tabmix.tabs.closeButtons", 1);
 pref("extensions.tabmix.tabs.closeButtons.onLeft", false);
 pref("extensions.tabmix.tabs.closeButtons.delay", 50);
 
+
+pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);
 pref("extensions.tabmix.enableScrollSwitch", false);
 pref("extensions.tabmix.reversedScroll", false);
@@ -234,8 +236,6 @@ pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc 
 pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");
 
 pref("extensions.tabmix.hideIcons", false);
-pref("extensions.tabmix.disableF9Key", true); // 2009-08-28: default changed to true
-pref("extensions.tabmix.disableF8Key", true);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 
 // session manager pref
@@ -262,7 +262,7 @@ pref("extensions.tabmix.sessions.onStart", 2);
 pref("extensions.tabmix.sessions.onStart.askifempty", true);
 pref("extensions.tabmix.sessions.onStart.loadsession", -1);
 pref("extensions.tabmix.sessions.onStart.sessionpath", "");
-pref("extensions.tabmix.sessions.version", "");
+//pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
 
 pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
@@ -278,3 +278,5 @@ pref("extensions.tabmix.sessions.max_backups", 7);
 // removed from Firefox 4.0+, some other extensions may use this pref
 pref("browser.tabs.tabMinWidth", 100);
 pref("browser.tabs.tabMaxWidth", 250);
+
+pref("extensions.tabmix.shortcuts", '{}');

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Zamknúť karty">
 <!ENTITY lockNewTabs.label "Zamknúť nové karty">
 <!ENTITY lockAppTabs.label "Zamknúť karty aplikácie">
+<!ENTITY updateLockState.label "Aplikovať zmeny na otvorených záložkách">
 <!ENTITY openNewTab.label "Otvoriť karty z:">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openBMKGroups.label "Skupiny záložiek">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Zlúčiť len aktuálne okno">
 <!ENTITY mergePopups.label "Tiež zachytiť vyskakovacie okná">
 <!ENTITY popupNextToOpener.label "Umiestniť vyskakovacie okná vedľa ich otváračov">
-<!ENTITY slideshow.label "Klávesa F8 prepína medzi kartami každých">
+<!ENTITY activateSlideshow.label "Stlačením #1 mení karty každé">
 <!ENTITY toggleAnimation.label "Vypnúť animáciu Otvoriť/Zatvoriť kartu">
 <!ENTITY reloadEvery.matchAddress.label "Načítať znovu kartu bez ohľadu na jej adresu">
 <!ENTITY reloadEvery.onReloadButton.label "Zobraziť ponuku Opäť načítať každých na tlačidle Opäť načítať">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Miesto naviac na oboch stranách">
 <!ENTITY tabBarSpace.tooltip "Pre kliknutie a zhodenie niečoho na lištu s kartami">
 <!ENTITY tabbar.label "Skryť panel karty ak je otvorená len jedna karta">
+<!ENTITY moveTabOnDragging.label "Pri preťahovaní kartu presunúť priamo">
 <!ENTITY dropIndicator.label "Klapka">
 <!ENTITY dropIndicator-native.label "Pôvodný štýl">
 <!ENTITY dropIndicator-builtin.label "Zabudovaný štýl">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "a karty">
 <!ENTITY sm.restore.closedWinList "Uložiť okno do zoznamu zatvorených okien">
 <!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
-<!ENTITY sm.restore.reloadall "Obnoviť všetky karty">
+<!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
 <!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
 <!ENTITY sm.preserve.options "Zachovať karty:">
 <!ENTITY sm.preserve.history "História">

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Khóa thẻ">
 <!ENTITY lockNewTabs.label "Khóa các thẻ mới">
 <!ENTITY lockAppTabs.label "Khóa các thẻ ứng dụng">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Mở thẻ từ:">
 <!ENTITY openBookmarks.label "Trang đánh dấu">
 <!ENTITY openBMKGroups.label "Nhóm trang đánh dấu">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Chỉ trộn cửa sổ hiện tại với cửa sổ được chú ý cuối cùng">
 <!ENTITY mergePopups.label "Cũng trộn luôn cửa sổ popup">
 <!ENTITY popupNextToOpener.label "Đặt popup kế bên trang đã mở chúng">
-<!ENTITY slideshow.label "Nhấn F8 để xoay vòng thẻ mỗi">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Tắt hiệu ứng động khi mở/đóng thẻ">
 <!ENTITY reloadEvery.matchAddress.label "Tải lại một thẻ bất chấp địa chỉ của nó">
 <!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Thêm khoảng trống ở cả hai bên">
 <!ENTITY tabBarSpace.tooltip "Khi nhấn và thả thứ nào đó trên thanh thẻ">
 <!ENTITY tabbar.label "Ẩn thanh thẻ khi chỉ có một thẻ được mở">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Dấu chỉ báo việc thả">
 <!ENTITY dropIndicator-native.label "Kiểu địa phương">
 <!ENTITY dropIndicator-builtin.label "Kiểu cài sẵn">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Và thẻ">
 <!ENTITY sm.restore.closedWinList "Lưu cửa sổ trong danh sách cửa sổ đã đóng">
 <!ENTITY sm.restore.merge "Trộn nhiều cửa sổ lại thành một">
-<!ENTITY sm.restore.reloadall "Tải lại tất cả các thẻ">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Khi không khôi phục lúc khởi động">
 <!ENTITY sm.preserve.options "Bảo toàn các Thẻ:">
 <!ENTITY sm.preserve.history "Lược sử">

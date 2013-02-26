@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Otvori kartice iz:">
 <!ENTITY openBookmarks.label "Zabilješki">
 <!ENTITY openBMKGroups.label "Grupa zabilješki">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Spoji samo trenutni prozor sa zadnje fokusiranim">
 <!ENTITY mergePopups.label "Također povuci i skočne prozore">
 <!ENTITY popupNextToOpener.label "Smjesti skočne prozore do onih koji su ih otvorili">
-<!ENTITY slideshow.label "Pritiskanje F8 rotira kartice svakih">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Višak mjesta na obje strane">
 <!ENTITY tabBarSpace.tooltip "Za klikanje i ispuštanje nečega na traku kartica">
 <!ENTITY tabbar.label "Sakrij traku kartica kada je otvorena samo jedna kartica">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Pokazivač ispuštanja">
 <!ENTITY dropIndicator-native.label "Prirodan način">
 <!ENTITY dropIndicator-builtin.label "Ugrađeni način">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "I kartice">
 <!ENTITY sm.restore.closedWinList "Sačuvaj prozore u popisu zatvorenih prozora">
 <!ENTITY sm.restore.merge "Spoji više prozora u jedan">
-<!ENTITY sm.restore.reloadall "Ponovno učitaj sve kartice">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "Sačuvaj kartice:">
 <!ENTITY sm.preserve.history "Povijesti">

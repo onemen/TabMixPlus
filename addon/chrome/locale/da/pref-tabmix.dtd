@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Åbn faneblade fra:">
 <!ENTITY openBookmarks.label "Bogmærker">
 <!ENTITY openBMKGroups.label "Grupper af bogmærker">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Læg kun nuværende vindue sammen med sidst fokuserede">
 <!ENTITY mergePopups.label "Tag også popup-vinduer">
 <!ENTITY popupNextToOpener.label "Placér popups ved siden af deres oprindelsesvindue">
-<!ENTITY slideshow.label "Tryk på F8 roterer faneblade hver">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Vis Genindlæs hver-menu på Genindlæs-knap">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Ekstra mellemrum til begge sider">
 <!ENTITY tabBarSpace.tooltip "For at klikke og slippe noget på fanebladslinje">
 <!ENTITY tabbar.label "Skjuler fanebladslinje når der kun er ét faneblad åbent">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Slip-indikator">
 <!ENTITY dropIndicator-native.label "Medfødt stil">
 <!ENTITY dropIndicator-builtin.label "Indbygget stil">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Og faneblade">
 <!ENTITY sm.restore.closedWinList "Gem vinduer i lukkede vinduer-listen">
 <!ENTITY sm.restore.merge "Foren flere vinduer til et">
-<!ENTITY sm.restore.reloadall "Genindlæs alle faneblade">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Når der ikke genetableres ved start">
 <!ENTITY sm.preserve.options "Bevar faneblade:">
 <!ENTITY sm.preserve.history "Historik">

@@ -35,28 +35,29 @@ var TMP_Places = {
       // use tab label for bookmark name when user renamed the tab
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
-         Tabmix.newCode("PlacesCommandHook.bookmarkPage", PlacesCommandHook.bookmarkPage)._replace(
+         Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
             /(webNav\.document\.)*title \|\| url\.spec;/,
             'TMP_Places.getTabFixedTitle(aBrowser, url) || $&'
          ).toCode();
 
-         Tabmix.newCode(null,  PlacesCommandHook.__lookupGetter__("uniqueCurrentPages"))._replace(
+         let getter = Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
            'URIs.push(tab.linkedBrowser.currentURI);',
            'let uri = tab.linkedBrowser.currentURI; \
             URIs.push({uri: uri, title: TMP_Places.getTabFixedTitle(tab.linkedBrowser, uri)});'
-         ).toGetter(PlacesCommandHook, "uniqueCurrentPages");
+         );
+         Tabmix.defineProperty(PlacesCommandHook, "uniqueCurrentPages", {getter: getter.value});
       }
 
       if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
          // LiveClick and Boox extensions change this function we can't use it
          if (!("LiveClick" in window) && !Tabmix.isVersion(130))
-         Tabmix.newCode("PlacesViewBase.prototype._mayAddCommandsItems", PlacesViewBase.prototype._mayAddCommandsItems)._replace(
+         Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._mayAddCommandsItems")._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);", {silent: true}
          ).toCode();
 
          if (Tabmix.isVersion(130))
-         Tabmix.newCode("PlacesViewBase.prototype._setLivemarkSiteURIMenuItem", PlacesViewBase.prototype._setLivemarkSiteURIMenuItem)._replace(
+         Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._setLivemarkSiteURIMenuItem")._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
          ).toCode();
@@ -65,7 +66,7 @@ var TMP_Places = {
       // fix small bug when the event is not mouse event
       // inverse focus of middle/ctrl/meta clicked bookmarks/history
       // when we are in single window mode set the function to retuen "tab"
-      Tabmix.newCode("whereToOpenLink", whereToOpenLink)._replace(
+      Tabmix.changeCode(window, "whereToOpenLink")._replace(
         'var middle = !ignoreButton && e.button == 1;',
         'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
       )._replace(
@@ -83,7 +84,7 @@ var TMP_Places = {
           'if ("backgroundPref" in tabmixArg) params.inBackground = getBoolPref(tabmixArg.backgroundPref);' :
           'params.backgroundPref = "backgroundPref" in tabmixArg ? tabmixArg.backgroundPref : null;';
 
-      Tabmix.newCode("openUILinkIn", openUILinkIn)._replace(
+      Tabmix.changeCode(window, "openUILinkIn")._replace(
         'params.fromChrome = true;',
         '$&\
          var tabmixArg = arguments.length > 5 ? arguments[5] : null; \
@@ -94,13 +95,13 @@ var TMP_Places = {
 
       // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
       // in case it warp the function in its object
-      let [fnName, fnCode] = this.getXnotifierFunction("openLinkIn");
+      let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
 
       var _loadURI = Tabmix.isVersion(100) ?
             "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
             "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
-      Tabmix.newCode(fnName, fnCode)._replace(
+      Tabmix.changeCode(fnObj, fnName)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
         '$& \
          var bookMarkId = params.bookMarkId; \
@@ -127,10 +128,8 @@ var TMP_Places = {
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
-        'if (bookMarkId) { \
-           var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
-           tab.setAttribute("tabmix_bookmarkId", bookMarkId); \
-         } \
+        'var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
+         w.TMP_Places.setTabtitle(tab, url, bookMarkId); \
          $1$2'
       ).toCode();
 
@@ -139,7 +138,7 @@ var TMP_Places = {
       if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
           docURI == "chrome://browser/content/history/history-panel.xul") {
         let fn = "setMouseoverURL" in SidebarUtils ? "setMouseoverURL" : "clearURLFromStatusBar";
-        Tabmix.newCode("SidebarUtils."+fn, SidebarUtils[fn])._replace(
+        Tabmix.changeCode(SidebarUtils, "SidebarUtils." + fn)._replace(
            '{',
            '{if (window.top.XULBrowserWindow == null) return;'
         ).toCode();
@@ -151,12 +150,12 @@ var TMP_Places = {
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       // we enter getURLsForContainerNode into TMP_Places to prevent leakes from PlacesUtils
       if (!this.getURLsForContainerNode && !treeStyleTab) {
-        Tabmix.newCode("TMP_Places.getURLsForContainerNode", PlacesUtils.getURLsForContainerNode)._replace(
+        Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
           '{uri: child.uri,',
           '{id: child.itemId, uri: child.uri,', {flags: "g"}
         )._replace(
           'this.',  'PlacesUtils.', {flags: "g"}
-        ).toCode();
+        ).toCode(false, TMP_Places, "getURLsForContainerNode");
       }
 
       if (!forceInit) {
@@ -181,7 +180,7 @@ var TMP_Places = {
           loadTabsCode = loadTabsCode.replace("replaceCurrentTab", "false");
 
         var openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
-        Tabmix.newCode("PlacesUIUtils._openTabset", PlacesUIUtils._openTabset)._replace(
+        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
           'urls = []',
           'behavior, $&', {check: treeStyleTab}
         )._replace(
@@ -214,25 +213,25 @@ var TMP_Places = {
       else { // TreeStyleTab not installed
         updateOpenTabset();
 
-        Tabmix.newCode("PlacesUIUtils.openURINodesInTabs", PlacesUIUtils.openURINodesInTabs)._replace(
+        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(
           'push({uri: aNodes[i].uri,',
           'push({id: aNodes[i].itemId, uri: aNodes[i].uri,'
         ).toCode();
 
-        Tabmix.newCode("PlacesUIUtils.openContainerNodeInTabs", PlacesUIUtils.openContainerNodeInTabs)._replace(
+        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openContainerNodeInTabs")._replace(
           'PlacesUtils.getURLsForContainerNode(aNode)',
           'TMP_Places.getURLsForContainerNode(aNode)'
         ).toCode();
       }
 
-      Tabmix.newCode("PlacesUIUtils.openNodeWithEvent", PlacesUIUtils.openNodeWithEvent)._replace(
+      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeWithEvent")._replace(
          /whereToOpenLink\(aEvent[,\s\w]*\), window/, '$&, aEvent'
       ).toCode();
 
       // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
       // we disable the open menu when the tab is lock
       // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-      Tabmix.newCode("PlacesUIUtils._openNodeIn", PlacesUIUtils._openNodeIn)._replace(
+      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
         /(function[^\(]*\([^\)]+)(\))/,
         '$1, TMP_Event$2'
       )._replace(
@@ -296,9 +295,9 @@ var TMP_Places = {
           typeof com.tobwithu[f][aName] == "function";
       });
       if (fn.length)
-        return ["com.tobwithu." + fn[0] + "." + aName, com.tobwithu[fn[0]][aName]];
+        return [com.tobwithu[fn[0]], aName];
     }
-    return [aName, window[aName]];
+    return [window, aName];
   },
 
    buildContextMenu: function TMP_PC_buildContextMenu() {
@@ -470,25 +469,26 @@ var TMP_Places = {
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     for (i = 0; i < bmGroup.length ; i++) {
+       let url = bmGroup[i];
        try { // bug 300911
           if (i < reuseTabs.length) {
              aTab = reuseTabs[i];
              let browser = gBrowser.getBrowserForTab(aTab);
-             browser.userTypedValue = bmGroup[i];
-             browser.loadURI(bmGroup[i]);
+             browser.userTypedValue = url;
+             browser.loadURI(url);
              // setTabTitle will call TabmixTabbar.updateScrollStatus for us
              aTab.collapsed = false;
              // reset visited & flst_id attribute
-             if (aTab != gBrowser.mCurrentTab) {
+             if (!aTab.selected) {
                 aTab.removeAttribute("visited");
                 aTab.removeAttribute("flst_id");
              } else
                 aTab.setAttribute("reloadcurrent", true);
           }
           else
-             aTab = gBrowser.addTab(bmGroup[i], {skipAnimation: multiple});
-          if (bmIds[i] && bmIds[i] > -1)
-             aTab.setAttribute("tabmix_bookmarkId", bmIds[i]);
+             aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
+
+          this.setTabtitle(aTab, url, bmIds[i]);
        } catch (er) {  }
 
        if (!tabToSelect)
@@ -528,6 +528,25 @@ var TMP_Places = {
 
   },
 
+  setTabtitle: function TMP_PC_setTabtitle(aTab, aUrl, aID) {
+    if (!aTab || !aTab.parentNode)
+      return;
+    if (aID && aID > -1)
+       aTab.setAttribute("tabmix_bookmarkId", aID);
+    if (!this._titlefrombookmark)
+      return;
+    let title = this.getTitleFromBookmark(aUrl, aTab.label, -1, aTab);
+    if (title != aTab.label) {
+      aTab.label = title;
+      aTab.crop = "center";
+      gBrowser._tabAttrModified(aTab);
+      if (aTab.selected)
+        gBrowser.updateTitlebar();
+      if (!aTab.hasAttribute("faviconized"))
+        aTab.removeAttribute("width");
+    }
+  },
+
    getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aItemId, aTab) {
       if (aTab)
         aItemId = aTab.getAttribute("tabmix_bookmarkId");
@@ -550,7 +569,8 @@ var TMP_Places = {
          aTab.removeAttribute("tabmix_bookmarkId");
          // get title for pending tab from SessionStore
          if (aTab.hasAttribute("pending") && aTab.linkedBrowser.__SS_restoreState &&
-             aTab.linkedBrowser.__SS_restoreState == 1)
+             aTab.linkedBrowser.__SS_restoreState == 1 &&
+             typeof aTab.linkedBrowser.__SS_data == "object")
            return TMP_SessionStore.getActiveEntryData(aTab.linkedBrowser.__SS_data).title || null;
       }
       return null;
@@ -664,13 +684,15 @@ var TMP_Places = {
     // set title at startup
     // when we are not using session manager
     // startup page(s) or home page(s) load before bookmarks service
-    for (let i = 0; i < gBrowser.tabs.length ; i++) {
-      let browser = gBrowser.getBrowserAtIndex(i);
-      let bookMarkName = this.getTitleFromBookmark(browser.currentURI.spec);
+    Array.forEach(gBrowser.tabs, function(tab) {
+      let browser = tab.linkedBrowser;
+      let url = browser.currentURI.spec;
+      if (this.isUserRenameTab(tab, url))
+        return;
+      let bookMarkName = this.getTitleFromBookmark(url);
       if (bookMarkName && browser.contentDocument.title != bookMarkName)
         browser.contentDocument.title = bookMarkName;
-    }
-
+    }, this)
     this.startObserver();
   },
 

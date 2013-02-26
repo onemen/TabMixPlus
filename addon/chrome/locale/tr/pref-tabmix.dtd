@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Sekmeleri kilitle">
 <!ENTITY lockNewTabs.label "Yeni sekmeleri kilitle">
 <!ENTITY lockAppTabs.label "Uygulama sekmelerini kilitlme">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Bunlardan bağlantıları yeni sekmelerde aç:">
 <!ENTITY openBookmarks.label "Yer imleri">
 <!ENTITY openBMKGroups.label "Yer imi grupları">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Yalnızca geçerli pencereyi önceki pencereyle birleştir">
 <!ENTITY mergePopups.label "Açılır pencereleri de içer">
 <!ENTITY popupNextToOpener.label "Açılır pencereleri açanın sağına yerleştir">
-<!ENTITY slideshow.label "F8&apos;e basınca her">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Sekme aç/kapa animasyonunu kaldır">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Tazele butonunda otomatik tazeleme menüsünü göster">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "İki yanda fazladan boşluklar">
 <!ENTITY tabBarSpace.tooltip "Tıklama ve sekme çubuğuna herhangi bir şey bırakmak için boşluklar">
 <!ENTITY tabbar.label "Tek sekme açıksa sekme çubuğunu gizle">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Bırakma göstergesi">
 <!ENTITY dropIndicator-native.label "Yerel stil">
 <!ENTITY dropIndicator-builtin.label "Dahili stil">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Sekmelerin de">
 <!ENTITY sm.restore.closedWinList "Kapatılan pencereler listesine kaydet">
 <!ENTITY sm.restore.merge "Pencereleri tek pencerede birleştir">
-<!ENTITY sm.restore.reloadall "Tüm sekmeleri tazele">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Başlangıçta geriyüklenmediğinde">
 <!ENTITY sm.preserve.options "Sekmelerde muhafaza et:">
 <!ENTITY sm.preserve.history "Geçmişi">

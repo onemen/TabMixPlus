@@ -3,6 +3,7 @@
 <?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
 
 <?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xul"?>
+<?xul-overlay href="chrome://tabmixplus/content/pref/shortcuts/shortcuts.xul"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
@@ -36,6 +37,13 @@
   <window id="main-window"
     onload="TMP_TBP_Startup();" />
 
+  <commandset id="mainCommandSet">
+    <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"
+             oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
+    <command id="TabmixSessionUtils:SaveAllWindow" observes="tmp_disableSave"
+             oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+  </commandset>
+
    <!-- Menu in Firefox App Menu -->
    <vbox id="appmenuPrimaryPane">
       <menu id="appmenu-sessionmanager" label="&session.Tools;" tmp_iconic="menu-iconic sessionmanager-icon" insertafter="appmenu_webDeveloper"
@@ -45,7 +53,7 @@
 
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
-      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic"
+      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"
          oncommand="Tabmix.openOptionsDialog(-1);"/>
       <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
          <menupopup id="tm-sessionmanager_menu"
@@ -67,9 +75,9 @@
                </menupopup>
             </menu>
             <menuitem id="tm-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
-                  oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
+                  command="TabmixSessionUtils:SaveThisWindow"/>
             <menuitem id="tm-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall" observes="tmp_menu_AllWindows"
-                  oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+                  command="TabmixSessionUtils:SaveAllWindow"/>
             <menuseparator/>
             <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
                <menupopup
@@ -120,7 +128,7 @@
          oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, false);" insertbefore="context-sep-stop"/>
       <menuitem id="tm-detachTabContext" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
          oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);" insertbefore="context-sep-stop"/>
-      <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows();" insertbefore="context-sep-stop" />
+      <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows(window);" insertbefore="context-sep-stop" />
       <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser.mCurrentTab);"
          insertbefore="context-sep-stop" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;"/>
       <menuitem id="tm-content-protectTab" type="checkbox"
@@ -203,9 +211,9 @@
                </menupopup>
             </menu>
             <menuitem id="btn-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
-                  oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
+                  command="TabmixSessionUtils:SaveThisWindow"/>
             <menuitem id="btn-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall"  observes="tmp_menu_AllWindows"
-                  oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+                  command="TabmixSessionUtils:SaveAllWindow"/>
             <menuseparator/>
             <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
                <menupopup
@@ -351,7 +359,7 @@
         <menuitem id="tm-sm-AddAll" label="&sm.context.addall;" accesskey="&sm.context.addall.key;" observes="tmp_contextmenu_AllWindows"
                   oncommand="TabmixSessionManager.addWinToSession('saveallwindows', this.parentNode.triggerNode.session);"/>
         <menuseparator observes="tmp_contextmenu_AllWindows"/>
-        <menuitem id="tm-sm-Save" label="&sm.context.save;" accesskey="&sm.context.save.key;"
+        <menuitem id="tm-sm-Save" label="&sm.context.save;" accesskey="&sm.context.save.key;" observes="tmp_disableSave"
                   oncommand="TabmixSessionManager.saveClosedSession(this.parentNode.triggerNode);"/>
         <menuitem id="tm-sm-Rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;"
                   oncommand="TabmixSessionManager.renameSession(this.parentNode.triggerNode.session);"/>
@@ -389,18 +397,6 @@
    <!-- hide Tab groups context menu in all-tabs list button -->
    <menuitem id="menu_tabview" context=""/>
 
-  <!-- Tabmix Plus KEYS -->
-  <keyset id="mainKeyset">
-    <key id="key_tm_toggleFLST" label="Toggle FLST" keycode="VK_F9" TM_oncommand="Tabmix.flst.toggle();" />
-    <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
-    <key id="key_tm_slideShow" label="Toggle tab slide show" keycode="VK_F8" TM_oncommand="Tabmix.flst.toggleSlideshow();"/>
-    <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" />
-    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);"/>
-    <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows();" />
-    <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');"/>
-    <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');"/>
-  </keyset>
-
   <!-- Tabmix Plus broadcasterset -->
   <broadcasterset id="mainBroadcasterSet">
     <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
@@ -409,6 +405,7 @@
     <broadcaster id="tmp_closedwindows"/>
     <broadcaster id="tmp_undocloseButton"/>
     <broadcaster id="tmp_sessionmanagerButton"/>
+    <broadcaster id="tmp_disableSave"/>
   </broadcasterset>
 
 </overlay>

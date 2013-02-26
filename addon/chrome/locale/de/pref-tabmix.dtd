@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Tabs sperren">
 <!ENTITY lockNewTabs.label "Neue Tabs sperren">
 <!ENTITY lockAppTabs.label "App-Tabs sperren">
+<!ENTITY updateLockState.label "Änderungen auf geöffnete Tabs anwenden">
 <!ENTITY openNewTab.label "In neuen Tabs öffnen">
 <!ENTITY openBookmarks.label "Lesezeichen">
 <!ENTITY openBMKGroups.label "Lesezeichengruppen">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Nur das aktuelle Fenster mit dem zuletzt aktiven zusammenführen">
 <!ENTITY mergePopups.label "Pop-up-Fenster ebenfalls einbeziehen">
 <!ENTITY popupNextToOpener.label "Pop-ups direkt neben ihrem Ursprungs-Tab einfügen">
-<!ENTITY slideshow.label "Mit F8 automatischen Tab-Wechsel starten mit einem Intervall von">
+<!ENTITY activateSlideshow.label "Mit #1 Tab wechseln alle">
 <!ENTITY toggleAnimation.label "Tab-Animation beim Öffnen/Schließen deaktivieren">
 <!ENTITY reloadEvery.matchAddress.label "Tab unabhängig von der Adresse neu laden">
 <!ENTITY reloadEvery.onReloadButton.label "Kontextmenü für automatisches Neuladen zur Schaltfläche &quot;Neu laden&quot; hinzufügen">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Abstände auf beiden Seiten der Tab-Leiste">
 <!ENTITY tabBarSpace.tooltip "Für Klicks sowie Ziehen &amp; Ablegen auf die Tab-Leiste">
 <!ENTITY tabbar.label "Die Tab-Leiste ausblenden, wenn nur ein Tab offen ist">
+<!ENTITY moveTabOnDragging.label "Tab beim Verschieben, direkt bewegen.">
 <!ENTITY dropIndicator.label "Platzierungsanzeige beim Verschieben von Tabs">
 <!ENTITY dropIndicator-native.label "Firefox-Stil">
 <!ENTITY dropIndicator-builtin.label "TMP-Stil">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Tabs ebenfalls überschreiben">
 <!ENTITY sm.restore.closedWinList "Überschriebene Fenster in der Liste geschlossener Fenster speichern">
 <!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
-<!ENTITY sm.restore.reloadall "Alle Tabs neu laden">
+<!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
 <!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">

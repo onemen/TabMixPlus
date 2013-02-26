@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lukusta kaardid">
 <!ENTITY lockNewTabs.label "Lukusta uued kaardid">
 <!ENTITY lockAppTabs.label "Lukusta püsikaardid">
+<!ENTITY updateLockState.label "Rakenda muudatused avatud kaartidele">
 <!ENTITY openNewTab.label "Ava uuel kaardil järgnevate kaudu avatud leht:">
 <!ENTITY openBookmarks.label "Järjehoidjad">
 <!ENTITY openBMKGroups.label "Järjehoidjate grupid">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Ühenda ainult praegune aken viimati näidatud aknaga">
 <!ENTITY mergePopups.label "Võta kaasa ka hüpikaknad">
 <!ENTITY popupNextToOpener.label "Aseta hüpikaknad nende peremees-akende kõrvale">
-<!ENTITY slideshow.label "F8 vajutamisel vahetatakse kaarte automaatselt selle ajavahemikuga:">
+<!ENTITY activateSlideshow.label "Klahvi #1 vajutamine vahetab kaarte ajavahega">
 <!ENTITY toggleAnimation.label "Keela kaardi avamise/sulgemise animatsioon">
 <!ENTITY reloadEvery.matchAddress.label "Laadi kaart uuesti, sõltumata selle aadressist">
 <!ENTITY reloadEvery.onReloadButton.label "Näita uuestilaadimise nupul Automaatse Uuestilaadimise menüüd">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Lisaruumi mõlemal pool">
 <!ENTITY tabBarSpace.tooltip "Millegi lohistamiseks kaartide ribale">
 <!ENTITY tabbar.label "Peida kaartide riba, kui lahti on ainult üks kaart">
+<!ENTITY moveTabOnDragging.label "Kaardi lohistamisel kasuta liigutamise animatsiooni">
 <!ENTITY dropIndicator.label "Lahtilaskmise tähis">
 <!ENTITY dropIndicator-native.label "Algupärane">
 <!ENTITY dropIndicator-builtin.label "Sisseehitatud">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Ja kaardid">
 <!ENTITY sm.restore.closedWinList "Salvesta suletud akende loendis olevad aknad">
 <!ENTITY sm.restore.merge "Ühenda kõik aknad">
-<!ENTITY sm.restore.reloadall "Laadi kõik kaardid uuesti">
+<!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
 <!ENTITY sm.notrestore.label "Kui käivitumisel ei taastata seanssi, siis">
 <!ENTITY sm.preserve.options "Jäta meelde kaartide:">
 <!ENTITY sm.preserve.history "Ajalugu">

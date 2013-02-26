@@ -97,3 +97,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
 });
 // sessionStore
 XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessionstore;1", "nsISessionStore");
+
+XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
+  "resource://gre/modules/FileUtils.jsm");

@@ -73,9 +73,6 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
     this.setItem("TabsToolbar", "tabmix-visible", null);
     if (stripIsHidden)
       tabBar.visible = false;
-    // height shrink to actual size when the tabbar is in display: block (multi-row)
-    if (this.isVersion(120) && Services.prefs.getCharPref("general.skins.selectedSkin") != "classic/1.0")
-      tabBar.mTabsNewtabButton.height = tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
   }
 }
 
@@ -116,16 +113,19 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     tabsToolbar._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
-  try {
-    gTMPprefObserver.replaceBrowserRules();
-  } catch (ex) {this.assert(ex);}
 
   gTMPprefObserver.setMenuIcons();
 
   TabmixTabbar.updateSettings(true);
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
-  delete gTMPprefObserver.tabStyleSheet;
+  gTMPprefObserver.miscellaneousRules();
+  if (!gTMPprefObserver._tabStyleSheet ||
+      gTMPprefObserver._tabStyleSheet.href != "chrome://tabmixplus/skin/tab.css") {
+    Tabmix.log("can't load dynamic styles into tabmixplus/skin/tab.css");
+  }
+  gTMPprefObserver._tabStyleSheet = null;
+
   if ("_failedToEnterVerticalMode" in TabmixTabbar) {
     delete TabmixTabbar._failedToEnterVerticalMode;
     gBrowser.tabContainer.mTabstrip._enterVerticalMode();
@@ -134,11 +134,20 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   try {
     TMP_LastTab.init();
   } catch (ex) {this.assert(ex);}
+
+  // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
+  // in gBrowser.tabContainer._positionPinnedTabs
+  TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
 }
 
 var TMP_eventListener = {
   init: function TMP_EL_init(aTabContainer) {
-    TMP_DOMWindowOpenObserver.newWindow(window);
+    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+    if (Tabmix.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      tmp.SingleWindowModeUtils.newWindow(window);
+    }
     window.addEventListener("DOMContentLoaded", this, false);
   },
 
@@ -255,10 +264,14 @@ var TMP_eventListener = {
 
     window.addEventListener("load", this, false);
 
+    Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
+    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
+
     try {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
       */
+      Tabmix.lazy_import(Tabmix, "Shortcuts", "Shortcuts", "Shortcuts", true);
       Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
@@ -266,9 +279,9 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabrEvents = ["SSTabRestoring", "SSTabClosing",
+    this._tabEvents = ["SSTabRestoring", "SSTabClosing",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
-    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, true);
+    this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -289,7 +302,7 @@ var TMP_eventListener = {
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
-      Tabmix.newCode("TabsInTitlebar._update", TabsInTitlebar._update)._replace(
+      Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
@@ -311,7 +324,7 @@ var TMP_eventListener = {
     // we can't use TabPinned.
     // gBrowser.pinTab call adjustTabstrip that call updateScrollStatus
     // before it dispatch TabPinned event.
-    Tabmix.newCode("gBrowser.pinTab", gBrowser.pinTab)._replace(
+    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
       'this.tabContainer.adjustTabstrip();',
       '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
       '    aTab.removeAttribute("width");' +
@@ -328,7 +341,7 @@ var TMP_eventListener = {
     // prevent faviconize use its own adjustTabstrip
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
     if ("faviconize" in window && "override" in faviconize) {
-      Tabmix.newCode("TMP_TabView.checkTabs", TMP_TabView.checkTabs)._replace(
+      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
         '!tab.pinned',
         '$& && !tab.hasAttribute("faviconized")'
       ).toCode();
@@ -450,6 +463,9 @@ var TMP_eventListener = {
         tabBar.setAttribute("backgroundrepeat" , true);
       }
       switch (skin) {
+        case "Australis":
+          tabBar.setAttribute("australis", true);
+          break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
           tabBar.setAttribute("tabmix_skin" , "cfxec");
@@ -484,8 +500,7 @@ var TMP_eventListener = {
     if (Tabmix.singleWindowMode)
       gTMPprefObserver.setSingleWindowUI();
 
-    gTMPprefObserver.toggleKey("key_tm_slideShow", "extensions.tabmix.disableF8Key");
-    gTMPprefObserver.toggleKey("key_tm_toggleFLST", "extensions.tabmix.disableF9Key");
+    Tabmix.Shortcuts.onWindowOpen(window);
 
     try {
       gTMPprefObserver.createColorRules();
@@ -532,7 +547,7 @@ var TMP_eventListener = {
     gTMPprefObserver.addWidthRules();
     TabmixSessionManager.updateSettings();
 
-    tabBar.adjustTabstrip = Tabmix.adjustTabstrip;
+    Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
   },
 
@@ -554,7 +569,10 @@ var TMP_eventListener = {
             browser.__SS_data && browser.__SS_data._tabStillLoading;
         if (url && tabStillLoading) {
           this._tabStillLoading++;
-          let title = TMP_SessionStore._getTitle(browser.__SS_data, url, tab.label);
+          let data = browser.__SS_data;
+          if (data && data.attributes && data.attributes["label-uri"])
+            tab.setAttribute("label-uri", data.attributes["label-uri"]);
+          let title = TMP_SessionStore._getTitle(data, url, tab.label);
           if (title != tab.label) {
             if (setWidth) {
               tab.removeAttribute("width");
@@ -609,7 +627,7 @@ var TMP_eventListener = {
         addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
         if (Tabmix.isVersion(120)) {
-          Tabmix.newCode("FullScreen.sample", FullScreen.sample)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
             'gNavToolbox.style.marginTop = "";',
             'TMP_eventListener._updateMarginBottom("");\
              $&'
@@ -620,7 +638,7 @@ var TMP_eventListener = {
           ).toCode();
         }
         else {
-          Tabmix.newCode("FullScreen._animateUp", FullScreen._animateUp)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen._animateUp")._replace(
             'gNavToolbox.style.marginTop = "";',
             'TMP_eventListener._updateMarginBottom("");\
              $&'
@@ -632,7 +650,7 @@ var TMP_eventListener = {
         }
 
         if (Tabmix.isVersion(100)) {
-          Tabmix.newCode("FullScreen.enterDomFullScreen", FullScreen.enterDomFullScreen)._replace(
+          Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
             /(\})(\)?)$/,
             '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
             '  if (fullScrToggler) {' +
@@ -927,6 +945,7 @@ var TMP_eventListener = {
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this, false);
 
+    // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() == 0;
     // we close tabmix dialog windows on exit
     if (isLastWindow) {
@@ -954,7 +973,7 @@ var TMP_eventListener = {
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
     }
 
-    this.toggleEventListener(gBrowser.tabContainer, this._tabrEvents, false);
+    this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)

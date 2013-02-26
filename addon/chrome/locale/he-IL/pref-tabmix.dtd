@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "נעל לשוניות">
 <!ENTITY lockNewTabs.label "נעל לשוניות חדשות">
 <!ENTITY lockAppTabs.label "נעל לשוניות יישום">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "פתח לשוניות מ:">
 <!ENTITY openBookmarks.label "סימניות">
 <!ENTITY openBMKGroups.label "קבוצת סימניות">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "מזג רק חלון נוכחי עם החלון שמוקד אחרון">
 <!ENTITY mergePopups.label "מזג גם חלונות קופצים">
 <!ENTITY popupNextToOpener.label "מקם חלונות קופצים ליד החלונות שפתחו אותן">
-<!ENTITY slideshow.label "חלצן F8 עושה סבב לשוניות כל...">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "נטרל פתיחה/סגור לשונית מונפשת">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "הצג תפריט &quot;טעינה חוזרת&quot; בכפתור טען">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "רווח נוסף משני הצדדים">
 <!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">
 <!ENTITY tabbar.label "החבא את סרגל הלשוניות כשיש רק לשונית אחת פתוחה">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "ולשוניות">
 <!ENTITY sm.restore.closedWinList "שמור חלון ברשימת חלונות שנסגרו">
 <!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
-<!ENTITY sm.restore.reloadall "טען מחדש את כל הלשוניות">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "שימור לשוניות:">
 <!ENTITY sm.preserve.history "היסטוריה">

@@ -23,6 +23,8 @@
 %globalDTD;
 <!ENTITY % preferencesDTD SYSTEM "chrome://global/locale/preferences.dtd">
 %preferencesDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd" >
+%shortcutsDTD;
 ]>
 <!-- tab mix options dialog box -->
 
@@ -45,25 +47,26 @@
 
 
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/pref/shortcuts/shortcuts.js"/>
   <script type="application/javascript" src="pref-tabmix.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/session/session.js"/>
 
    <vbox flex="1" id="TMBox">
       <radiogroup id="TM_ButtonBox" class="paneSelector chromeclass-toolbar" orient="horizontal">
          <radio id="buttontabMixGeneralPrefs" pane="paneLinks"
-            group="categories" label="&tab.links;" oncommand="TM_selectTab(0);" />
+            group="categories" label="&tab.links;" oncommand="showPane(0);" />
          <radio id="buttontabMixEventsPrefs" pane="paneEvents"
-            group="categories" label="&tab.events;"  oncommand="TM_selectTab(1);" />
+            group="categories" label="&tab.events;"  oncommand="showPane(1);" />
          <radio id="buttontabMixAppearancePrefs" pane="paneAppearance"
-            group="categories" label="&tab.appearance;" oncommand="TM_selectTab(2);" />
+            group="categories" label="&tab.appearance;" oncommand="showPane(2);" />
          <radio id="buttontabMixMousePrefs" pane="paneMouse"
-            group="categories" label="&tab.mouse;" oncommand="TM_selectTab(3);" />
+            group="categories" label="&tab.mouse;" oncommand="showPane(3);" />
          <radio id="buttontabMixMenuPrefs" pane="paneMenu"
-            group="categories" label="&tab.menu;"  oncommand="TM_selectTab(4);" />
+            group="categories" label="&tab.menu;"  oncommand="showPane(4);" />
          <radio id="buttontabMixSessionPrefs" pane="paneSession"
-            group="categories" label="&tab.session;"  oncommand="TM_selectTab(5);" />
+            group="categories" label="&tab.session;"  oncommand="showPane(5);" />
          <radio id="buttonIncompatible" collapsed="true" pane="paneIncompatible"
-            group="categories" label="&tab.incompatible;"  oncommand="TM_selectTab(6);" />
+            group="categories" label="&tab.incompatible;"  oncommand="showPane(6);" />
       </radiogroup>
 
   <tabbox flex="1" id="tabMixTabBox" chromedir="&locale.dir;">
@@ -111,7 +114,7 @@
                   <menuitem value="-1" label="&linkTarget.tab;">
                     <observes element="generalWindowOpen" attribute="label"/>
                   </menuitem>
-                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow1"/>
+                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow"/>
                   <menuitem value="3" label="&linkTarget.tab;"/>
                   <menuitem value="1" label="&linkTarget.current;"/>
                 </menupopup>
@@ -243,8 +246,7 @@
                 <!-- Look App Tabs -->
                 <checkbox id="lockAppTabs" align="center" label="&lockAppTabs.label;" prefstring="extensions.tabmix.lockAppTabs"/>
                 <spacer style="height: 1em;"/>
-<!-- NEED to update babelzilla -->
-                <checkbox id="updateLockState" align="center" label="Apply changes to open tabs"
+                <checkbox id="updateLockState" align="center" label="&updateLockState.label;"
                           prefstring="extensions.tabmix.updateOpenedTabsLockState"/>
             </groupbox>
 <!-- ======================================================== -->
@@ -419,17 +421,17 @@
          <groupbox>
             <vbox align="start">
               <!-- Enable Undo Close Tab -->
-              <checkbox id="undoClose" label="&undoClose.label;" prefstring="extensions.tabmix.undoClose"
+              <checkbox id="undoClose_checkbox" label="&undoClose.label;" prefstring="extensions.tabmix.undoClose"
                         oncommand="TM_Options.setUndoCloseCache(this);"/>
                 <vbox align="start" class="indent">
                   <hbox align="center">
-                    <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
+                    <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose_checkbox"/>
                     <textbox id="undoCloseCache" maxlength="3" size="2" prefstring="browser.sessionstore.max_tabs_undo"
-                             type="number" observes="obs_undoClose"
+                             type="number" observes="obs_undoClose_checkbox"
                              onblur="TM_Options.setUndoClose(this); event.stopPropagation();"/>
                   </hbox>
-                  <checkbox id="undoClosepos" label="&undoClosepos.label;" prefstring="extensions.tabmix.undoClosePosition" observes="obs_undoClose"/>
-                  <checkbox id="menuonlybutton" label="&menuonlybutton.label;" prefstring="extensions.tabmix.undoCloseButton.menuonly" observes="obs_undoClose"/>
+                  <checkbox id="undoClosepos" label="&undoClosepos.label;" prefstring="extensions.tabmix.undoClosePosition" observes="obs_undoClose_checkbox"/>
+                  <checkbox id="menuonlybutton" label="&menuonlybutton.label;" prefstring="extensions.tabmix.undoCloseButton.menuonly" observes="obs_undoClose_checkbox"/>
                 </vbox>
             </vbox>
             <separator class="groove" />
@@ -445,8 +447,16 @@
             <separator class="groove" />
             <vbox align="start">
                <hbox align="center">
-                 <checkbox id="tabRotation" label="&slideshow.label;" prefstring="extensions.tabmix.disableF8Key" inverted="true"/>
-                 <textbox id="slideshow" maxlength="3" size="3" prefstring="extensions.tabmix.slideDelay" observes="obs_tabRotation" type="number"/>
+                 <checkbox id="tabRotation" _label="&activateSlideshow.label;" prefstring_item="no_prefstring"
+                           style="margin-right:0;"
+                           oncommand="if (this.checked) $('slideShow').resetKey();
+                                      else $('slideShow').disableKey();"/>
+                 <label id="slideshow.link" class="text-link" style="margin:0;"
+                        onclick="showPane(4);
+                                 $('tabMixTabBox').selectedPanel.firstChild.selectedIndex=3;
+                                 $('slideShow').editBox.focus();"/>
+                 <label id="slideshow.labelEnd" style="margin:0 5px 0;"/>
+                 <textbox id="slideshow_textbox" maxlength="3" size="2" prefstring="extensions.tabmix.slideDelay" observes="obs_tabRotation" type="number"/>
                  <label value="&seconds.label;" observes="obs_tabRotation" class="timelabel"/>
                </hbox>
                <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" prefstring="browser.tabs.animate" inverted="true"/>
@@ -489,7 +499,7 @@
                     <menuitem value="2" id="newTabButton.posiotion.afterlast" label="&newTabButton.posiotion.afterlast.label;"/>
                   </menupopup>
                 </menulist>
-                <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="tabmixCustomizeToolbar();"
+                <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"
                               tooltiptext="&dragNewTabButton.tooltip;"/>
               </hbox>
               <vbox align="start">
@@ -604,7 +614,7 @@
                 <checkbox id="tabXLeft" label="&showTabX.left;" rtlLabel="&showTabX.rtl;"
                           prefstring="extensions.tabmix.tabs.closeButtons.onLeft" observes="obs_showTabX" />
               </hbox>
-              <hbox id="tabxDependant" class="indent" align="center" style="height: 28px;">
+              <hbox id="tabxDependant" class="indent" align="center">
                 <menulist id="addTabXUI" prefstring="extensions.tabmix.tabs.closeButtons"
                           style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
                   <menupopup oncommand="TM_Options.addTabXUI();"
@@ -649,7 +659,7 @@
             <groupbox flex="1">
                 <hbox align="start">
                   <description class="header" style="width: &toolbar.description.width;">&toolbar.description;</description>
-                  <button label="&toolbar.button.label;…" oncommand="tabmixCustomizeToolbar();"/>
+                  <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
                 </hbox>
               <spacer flex="1"/>
               <groupbox align="start" id="onToolbar">
@@ -693,7 +703,7 @@
          </tabs>
          <tabpanels flex="1">
           <tabpanel orient="vertical">
-            <groupbox orient="vertical" flex="1">
+            <groupbox align="start" flex="1">
               <hbox align="center">
                 <checkbox id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                           prefstring="extensions.tabmix.mouseOverSelect"/>
@@ -716,8 +726,10 @@
                 <checkbox id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;" prefstring="extensions.tabmix.lockTabSizingOnClose"
                           align="start" style="width: 30em;"/>
               </vbox>
-              <separator class="groove"/>
+            </groupbox>
+            <groupbox align="start" flex="1">
               <!-- drop indicator -->
+              <checkbox id="moveTabOnDragging" label="&moveTabOnDragging.label;" prefstring="extensions.tabmix.moveTabOnDragging"/>
               <hbox id="dropIndicator">
                 <label value="&dropIndicator.label;:"/>
                 <radiogroup id="dropIndicatorType" boolean="true"
@@ -805,8 +817,8 @@
                          <menuitem value="17" label="&clicktab.removeleft;" />
                          <menuitem value="18" label="&clicktab.removeright;" />
                             <menuseparator/>
-                         <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose"/>
-                         <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose"/>
+                         <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose_checkbox"/>
+                         <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose_checkbox"/>
                          <menuitem value="12" label="&clicktab.snapback;"/>
                          <menuitem value="21" label="&clicktab.ietab;"/>
                       </menupopup>
@@ -834,6 +846,7 @@
          <tab label="&context.tab;" class="subtabs"/>
          <tab label="&context.main;" class="subtabs"/>
          <tab label="&context.tools;" class="subtabs"/>
+         <tab label="&shortcuts.label;" class="subtabs"/>
        </tabs>
         <tabpanels flex="1">
          <tabpanel orient="vertical">
@@ -880,9 +893,9 @@
                   </vbox>
                   <vbox align="start">
                      <!-- Undo close tabs -->
-                     <checkbox id="showUndoClose" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabMenu" observes="obs_undoClose"/>
+                     <checkbox id="showUndoClose" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabMenu" observes="obs_undoClose_checkbox"/>
                      <!-- Closed tabs list -->
-                     <checkbox id="showUndoCloseList" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListMenu" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseList" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListMenu" observes="obs_undoClose_checkbox"/>
                      <!-- Close tabs -->
                      <checkbox id="showCloseTab" label="&closeTab.label;" prefstring="extensions.tabmix.closeTabMenu"/>
                      <!-- Close all tabs -->
@@ -934,7 +947,7 @@
                      <!-- link in duplicate tab -->
                      <checkbox id="linkWithHist" label="&linkwithhistory.label;" prefstring="extensions.tabmix.linkWithHistory"/>
                      <!-- reload every -->
-                     <checkbox id="autoreloadTab" label="&autoReloadTab.label;" prefstring="extensions.tabmix.autoReloadContent"/>
+                     <checkbox id="autoReloadContent" label="&autoReloadTab.label;" prefstring="extensions.tabmix.autoReloadContent"/>
                      <!-- Close tab -->
                      <checkbox id="closetab" label="&closeTab.label;" prefstring="extensions.tabmix.closeTabContent"/>
                      <!-- Duplicate tab -->
@@ -956,9 +969,9 @@
                      <!-- Opened tabs list -->
                      <checkbox id="tabsList" label="&tabsList.label;" prefstring="extensions.tabmix.tabsList" />
                      <!-- Closed tabs list -->
-                     <checkbox id="showUndoCloseListContent" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListContent" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseListContent" label="&undoCloseListMenu.label;" prefstring="extensions.tabmix.undoCloseListContent" observes="obs_undoClose_checkbox"/>
                      <!-- Undo close tabs -->
-                     <checkbox id="showUndoCloseContent" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabContent" observes="obs_undoClose"/>
+                     <checkbox id="showUndoCloseContent" label="&undoCloseTab.label;" prefstring="extensions.tabmix.undoCloseTabContent" observes="obs_undoClose_checkbox"/>
                   </vbox>
                </row>
              </rows>
@@ -990,7 +1003,71 @@
              </rows>
             </grid>
            </groupbox>
+         </tabpanel>
 
+         <tabpanel id="shortcuts-panel" orient="vertical" hide-shortcut-warning="true"
+               hide-unused-shortcuts="false" usedKeys="false"
+               persist="hide-shortcut-warning hide-unused-shortcuts"
+               onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
+                  var editBox = this.editBox || null;
+                  if (editBox) {editBox.blur(); this.editBox = null;}">
+           <hbox>
+             <label value="&shortcuts.edit;" flex="1"/>
+             <spacer flex="1"/>
+             <label value="&shortcuts.hideUnused;" show="&shortcuts.showAll;" hide="&shortcuts.hideUnused;"
+                    class="text-link" id="hide-unused-shortcuts" persist="value"
+                    onmousedown="TM_Options.toggleLinkLabel(this);"/>
+           </hbox>
+           <hbox class="global-warning shortcut-warning-container">
+             <vbox>
+               <image class="warning-icon"/>
+             </vbox>
+             <description style="width: 24em;" class="global-warning-text" flex="1">
+               &shortcuts.warning;.
+             </description>
+             <label value="&shortcuts.showDetails;" show="&shortcuts.showDetails;" hide="&shortcuts.hideDetails;"
+                    class="text-link" id="hide-shortcut-warning" persist="value"
+                    onmousedown="TM_Options.toggleLinkLabel(this);"/>
+           </hbox>
+           <groupbox id="shortcut-group" style="overflow: auto; height:18em;" flex="1"
+                     prefstring="extensions.tabmix.shortcuts">
+             <shortcut id="newTab"          label="&clicktab.addtab;"/>
+             <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
+             <shortcut id="dupTabToWin"     label="&clicktab.duplicatetabw;"/>
+             <shortcut id="detachTab"       label="&clicktab.detachtab;"/>
+             <shortcut id="togglePinTab"/>
+             <shortcut id="protecttab"      label="&clicktab.protecttab;"/>
+             <shortcut id="locktab"         label="&clicktab.locktab;"/>
+             <shortcut id="freezetab"       label="&clicktab.freezetab;"/>
+             <shortcut id="renametab"       label="&clicktab.renametab;"/>
+             <shortcut id="copyTabUrl"      label="&clicktab.copyTabUrl;"/>
+             <shortcut id="pasteTabUrl"     label="&clicktab.copyUrlFromClipboard;"/>
+             <shortcut id="selectMerge"     label="&clicktab.selectMerge;"/>
+             <shortcut id="mergeWin"        label="&clicktab.mergeTabs;"/>
+             <shortcut id="addBookmark"     label="&clicktab.bookTab;"/>
+             <shortcut id="bookmarkAllTabs" label="&clicktab.bookTabs;"/>
+             <shortcut id="reload"          label="&clicktab.reloadtab;"/>
+             <shortcut id="browserReload"   label="&clicktab.reloadtab;*"/>
+             <shortcut id="reloadtabs"      label="&clicktab.reloadtabs;"/>
+             <shortcut id="reloadothertabs" label="&clicktab.reloadothertabs;"/>
+             <shortcut id="reloadlefttabs"  label="&clicktab.reloadlefttabs;"/>
+             <shortcut id="reloadrighttabs" label="&clicktab.reloadrighttabs;"/>
+             <shortcut id="autoReloadTab"   label="&clicktab.autoReloadTab;"/>
+             <shortcut id="close"           label="&closeTab.label;"/>
+             <shortcut id="removeall"       label="&clicktab.removeall;"/>
+             <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
+             <shortcut id="removeother"     label="&clicktab.removeother;"/>
+             <shortcut id="removeleft"      label="&clicktab.removeleft;"/>
+             <shortcut id="removeright"     label="&clicktab.removeright;"/>
+             <shortcut id="undoClose"       label="&clicktab.uctab;"/>
+             <shortcut id="undoCloseTab"    label="&clicktab.uctab;*"/>
+             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
+             <shortcut id="saveWindow"      label="&saveWindow.label;"/>
+             <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
+             <shortcut id="slideShow"       label="&shortcuts.slideshow;"/>
+             <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
+                       tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
+           </groupbox>
          </tabpanel>
        </tabpanels>
       </tabbox>
@@ -1089,8 +1166,9 @@
                             tooltiptext="&ss.enable.tooltip;"
                             oncommand="TM_Options.setSessionsOptions(this, 'sessionstore_0');"/>
                   <separator/>
-                  <checkbox id="sessionManager" label="&sessionManger.enable;" prefstring="extensions.tabmix.sessions.manager"/>
-                  <separator id="sessionManager-separator" style="height: 13px;"/>
+                  <checkbox id="sessionManager" label="&sessionManger.enable;" prefstring="extensions.tabmix.sessions.manager"
+                            oncommand="TM_Options.updateSessionShortcuts();"/>
+                  <separator id="sessionManager-separator" style="height: 14px;"/>
                   <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" prefstring="extensions.tabmix.sessions.crashRecovery"/>
               </groupbox>
               <tabbox subtub="true" value="5" class="groupbox-tabbox" flex="1">
@@ -1166,7 +1244,7 @@
                         <checkbox id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
                                   prefstring="extensions.tabmix.sessions.restore.saveoverwrite" observes="obs_onRestore.overwritewindows"/>
                         <checkbox id="onRestore.concatenate" label="&sm.restore.merge;" prefstring="extensions.tabmix.sessions.restore.concatenate"/>
-                        <checkbox id="onRestore.reloadall" label="&sm.restore.reloadall;" prefstring="extensions.tabmix.sessions.restore.reloadall"/>
+                        <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" prefstring="extensions.tabmix.sessions.restore.reloadall"/>
                       </vbox>
                     </groupbox>
                   </tabpanel>
@@ -1189,7 +1267,7 @@
                       <caption label="&sm.restore.winOptions;"/>
                       <hbox align="center">
                         <checkbox id="session.SelectedTab" label="&sm.restore.selectedTab;" prefstring="extensions.tabmix.sessions.save.selectedtab"/>
-                        <checkbox id="session.closedtabs" label="&sm.restore.closedTabs;" prefstring="extensions.tabmix.sessions.save.closedtabs" observes="obs_undoClose"/>
+                        <checkbox id="session.closedtabs" label="&sm.restore.closedTabs;" prefstring="extensions.tabmix.sessions.save.closedtabs" observes="obs_undoClose_checkbox"/>
                       </hbox>
                     </groupbox>
                   </tabpanel>
@@ -1204,8 +1282,8 @@
       <tabpanel id="incompatible_panel" orient="vertical">
         <tabbox flex="1">
           <tabs class="tabs-hidden">
-            <tab/>
-            <tab/>
+            <tab label="tab"/>
+            <tab label="tab"/>
           </tabs>
           <tabpanels flex="1">
             <groupbox align="stretch">
@@ -1223,7 +1301,7 @@
     </tabpanels>
   </tabbox>
  </vbox>
-  <popupset prefstring_item="no_prefstring">
+  <popupset id="mainPopupSet" prefstring_item="no_prefstring">
     <menupopup id="tm-settings" position="before_start">
         <menuitem id="tm-defaults" label="&settings.default;" oncommand="TM_defaultSetting();"/>
         <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
@@ -1239,7 +1317,7 @@
   <broadcasterset id="disabled:Broadcaster">
     <broadcaster id="obs_externalLink"/>
     <broadcaster id="obs_singleWindow"/>
-    <broadcaster id="obs_undoClose"/>
+    <broadcaster id="obs_undoClose_checkbox"/>
     <broadcaster id="obs_openTabNext"/>
     <broadcaster id="obs_mouseHoverSelect"/>
     <broadcaster id="obs_showTabX"/>

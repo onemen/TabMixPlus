@@ -60,7 +60,7 @@ var TMP_SessionStore = {
          return;
 
       var aTab = gBrowser.tabContainer.firstChild;
-      if (aTab != gBrowser.mCurrentTab) {
+      if (!aTab.selected) {
          aTab.removeAttribute("visited");
          aTab.removeAttribute("flst_id");
       };
@@ -187,7 +187,8 @@ var TMP_SessionStore = {
       // when user start new profile or update from firefox 2.0 profile browser.warnOnRestart and browser.warnOnQuit are both true on default
       else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
                 !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-         Services.prefs.setBoolPref("browser.warnOnRestart", false);
+         if (!Tabmix.isVersion(200))
+           Services.prefs.setBoolPref("browser.warnOnRestart", false);
          Services.prefs.setBoolPref("browser.warnOnQuit", false);
          delete window.tabmix_setSession;
       }
@@ -201,14 +202,21 @@ var TMP_SessionStore = {
    afterSwitchThemes: false,
    // we call this only one time on window load
    // and store the value in Tabmix.isWindowAfterSessionRestore
+   // we call this from onContentLoaded before nsSessionStore run its onLoad
    _isAfterSessionRestored: function () {
       if (!Tabmix.isFirstWindow)
          return false;
 
       // When we close all browser windows without exit (non browser windows are opened)
       // Firefox restore current session when a browser window opens
-      if (Tabmix.numberOfWindows(false, null) > 1)
+      if (Tabmix.numberOfWindows(false, null) > 1) {
+         if (Tabmix.isVersion(50) && (Tabmix.prefs.getBoolPref("sessions.manager") ||
+              Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
+              TabmixSvc.ss.getClosedWindowCount() > 0) {
+           Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
+         }
          return true;
+      }
 
       var ss = Cc["@mozilla.org/browser/sessionstartup;1"].
                     getService(Ci.nsISessionStartup);
@@ -537,7 +545,7 @@ var TMP_ClosedTabs = {
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
 
-      var newTab = aTabToRemove || skipAnimation ? gBrowser.addTab("about:blank", {skipAnimation: true}) : gBrowser.addTab("about:blank");
+      var newTab = gBrowser.addTab("about:blank", {skipAnimation: aTabToRemove || skipAnimation, dontMove: true});
       newTab.linkedBrowser.stop();
       // if tababr is hidden when there is only one tab and
       // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveale
@@ -551,7 +559,7 @@ var TMP_ClosedTabs = {
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
       var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
-      if ( aWhere == "current" || (aWhere == "original" && restorePosition) ) {
+      if (aWhere == "current" || (aWhere == "original" && restorePosition)) {
          gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
       }
       else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
@@ -624,10 +632,7 @@ var TabmixConvertSession = {
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
-      if (typeof com.morac.SessionManagerAddon == "object")
-        com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
-      else
-        com.morac.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
+      com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
    },
 
    confirm: function cs_confirm(aMsg, aCallBack) {
@@ -785,10 +790,8 @@ var TabmixConvertSession = {
 
   sessionManagerOptions: function SM_sessionManagerOptions() {
     if ("com" in window && com.morac &&
-        com.morac.gSessionManager) {
-      com.morac.gSessionManager.openOptions();
+        com.morac.SessionManagerAddon) {
+      com.morac.SessionManagerAddon.gSessionManagerWindowObject.openOptions();
     }
-    else
-      gSessionManager.openOptions();
   }
 }

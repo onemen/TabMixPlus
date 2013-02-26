@@ -4,6 +4,7 @@ const Ci = Components.interfaces;
 const pBranch = Ci.nsIPrefBranch;
 var gPrefs, newTabURLpref, replaceLastTabWithNewTabURLpref;
 var instantApply;
+Components.utils.import("resource://tabmixplus/Shortcuts.jsm");
 
 function $(id) document.getElementById(id);
 
@@ -55,7 +56,7 @@ function before_Init() {
   if (TabmixSvc.direct2dDisabled) {
     document.documentElement.setAttribute("minheight", 483);
     $("sessionManager-panels").setAttribute("style", "padding-bottom: 4px;");
-    $("sessionManager-separator").setAttribute("style", "height: 11px;");
+    $("sessionManager-separator").setAttribute("style", "height: 12px;");
   }
   if (Tabmix.isPlatform("Linux"))
     $("sessionManager-panels").setAttribute("linux", "true");
@@ -64,7 +65,16 @@ function before_Init() {
   var pinTabLabel = topWindow.document.getElementById("context_pinTab").getAttribute("label") + "/"
                   + topWindow.document.getElementById("context_unpinTab").getAttribute("label");
   $("ClickTabPinTab").label = pinTabLabel;
+  $("togglePinTab").setAttribute("label", pinTabLabel);
   $("pinTab").label = pinTabLabel;
+
+  if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Australis")
+    $("TM_ButtonBox").setAttribute("australis", true);
+
+  if (Tabmix.isVersion(200)) {
+    let item = $("browser.warnOnRestart");
+    item.parentNode.removeChild(item);
+  }
 }
 
 // load all preferences into the dialog
@@ -87,6 +97,9 @@ function TM_EMinit() {
     cmSearch.hidden = false;
     cmSearch.setAttribute("prefstring", "browser.search.context.loadInBackground");
   }
+  if (!Tabmix.isVersion(170))
+    $("moveTabOnDragging").hidden = true;
+
   gPrefs =  document.getElementsByAttribute("prefstring", "*");
 
   // disable TMP session manager setting if session manager extension is install
@@ -129,7 +142,7 @@ function TM_EMinit() {
   browserWindow.gTMPprefObserver.addMissingPrefs();
 
   TM_setElements(false, true);
-  toolbarButtons(browserWindow);
+  gAppearancePane.toolbarButtons(browserWindow);
   // check if apply is on
   // apply changes if we set single window mode status
   TM_EMsave();
@@ -152,8 +165,8 @@ function TM_EMinit() {
   hbox = $("tabScroll-box");
   label = $("tabScroll.label").boxObject.width;
   var menulist = $("tabScroll");
-  var ident = 23; // we have class="ident"
-  if (hbox.boxObject.width > label + menulist.boxObject.width - ident) {
+  var indent = 23; // we have class="indent"
+  if (hbox.boxObject.width > label + menulist.boxObject.width - indent) {
     menulist.parentNode.removeAttribute("pack");
     menulist.parentNode.removeAttribute("class");
     hbox.setAttribute("orient", "horizontal");
@@ -213,6 +226,7 @@ function TM_EMsave(onApply) {
   document.documentElement.getButton("accept").focus();
   TMP_setButtons(true, false);
 
+  Shortcuts.prefsChangedByTabmix = true;
   if (!("undefined" in applyData)) {
     for (var _pref in applyData)
       setPrefByType(_pref, applyData[_pref]);
@@ -223,6 +237,7 @@ function TM_EMsave(onApply) {
     for (var i = 0; i < gPrefs.length; ++i )
       setPrefByType(gPrefs[i].getAttribute("prefstring"), getValue(gPrefs[i]));
   }
+  Shortcuts.prefsChangedByTabmix = false;
 
   applyData = [];
   Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
@@ -424,11 +439,18 @@ var TM_Options = {
       }
    },
 
+   updateSessionShortcuts: function() {
+      let block = !$("sessionManager").checked || Shortcuts.permanentPrivateBrowsing;
+      $("saveWindow").blocked = block;
+      $("saveSession").blocked = block;
+   },
+
    isSessionStoreEnabled: function (checkService) {
       var browserWindow = Tabmix.getTopWin();
       if (checkService)
         browserWindow.TMP_SessionStore.setService(2, false, window);
 
+      this.updateSessionShortcuts();
       if (browserWindow.Tabmix.extensions.sessionManager)
         return;
 
@@ -453,14 +475,16 @@ var TM_Options = {
       }
 
       // TMP session pref
-      function sessionPrefs() {
+      let sessionPrefs = function() {
          updatePrefs("sessionManager", useSessionManager);
          updatePrefs("sessionCrashRecovery", useSessionManager);
-      }
+         this.updateSessionShortcuts();
+      }.bind(this);
 
       // sessionstore pref
       function sessionstorePrefs() {
-         updatePrefs("browser.warnOnRestart", !useSessionManager);
+         if (!Tabmix.isVersion(200))
+           updatePrefs("browser.warnOnRestart", !useSessionManager);
          updatePrefs("browser.warnOnQuit", !useSessionManager);
          updatePrefs("resume_from_crash", !useSessionManager);
          // "browser.startup.page"
@@ -499,7 +523,7 @@ var TM_Options = {
         item.value = 0;
 
       if (item.value == 0) {
-        var undoClose = $("undoClose");
+        var undoClose = $("undoClose_checkbox");
         undoClose.checked = false;
         this.disabled(undoClose);
         this.setUndoCloseCache(undoClose);
@@ -512,6 +536,33 @@ var TM_Options = {
       this.setDisabled("showTabList", disableShowTabList);
       if (!$("obs_showTabList").hasAttribute("disabled"))
         this.setDisabled("respondToMouse", disableShowTabList);
+   },
+
+   updateShortcuts: function (aShortcuts, aCallBack) {
+      let boxes = Array.filter(aShortcuts.childNodes, aCallBack);
+      $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
+      TM_Options.syncSlideShowControl();
+   },
+
+   syncSlideShowControl: function () {
+     let tabRotation = $("tabRotation"), slideShow = $("slideShow");
+     if (tabRotation.hasAttribute("_label")) {
+       let label = tabRotation.getAttribute("_label").split("#1");
+       tabRotation.label = label[0];
+       $("slideshow.labelEnd").value = label[1];
+       tabRotation.removeAttribute("_label");
+     }
+     $("slideshow.link").value = getFormattedKey(slideShow.key) || "???";
+     tabRotation.checked = !slideShow.disabled;
+     TM_Options.disabled(tabRotation);
+   },
+
+   // for shortcuts panel
+   toggleLinkLabel: function(item) {
+      var panel = $("shortcuts-panel");
+      var wasShow = panel.getAttribute(item.id) == 'false';
+      item.value = item.getAttribute(wasShow ? 'show' : 'hide');
+      panel.setAttribute(item.id, wasShow);
    },
 
    // Set given attribute of specified item.
@@ -535,14 +586,17 @@ var TM_Options = {
 
 // other settings not in the main option dialog
 var otherPref = ["unreadTabreload","reload_time","custom_reload_time",
-                  "filetype","sessions.menu.showext","disableIncompatible","hideIcons","disableF9Key",
-                  "styles.currentTab","styles.unreadTab","styles.otherTab","styles.progressMeter"];
+                  "filetype","sessions.menu.showext","disableIncompatible","hideIcons",
+                  "styles.currentTab","styles.unloadedTab",
+                  "styles.unreadTab","styles.otherTab","styles.progressMeter"];
 
 function TM_defaultSetting () {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
+  Shortcuts.prefsChangedByTabmix = true;
   TM_setElements(true);
+  Shortcuts.prefsChangedByTabmix = false;
   TMP_setButtons(true, true);
 
   // reset other settings to default
@@ -710,6 +764,15 @@ function setPrefByType(prefName, newValue, atImport) {
             case "browser.tabs.loadFolderAndReplace":
                Tabmix.prefs.setBoolPref("loadFolderAndReplace", /true/i.test(newValue));
                return;
+            // 2013-01-18
+            case "extensions.tabmix.disableF8Key":
+            case "extensions.tabmix.disableF9Key":
+               let disabled = /true/i.test(newValue) ? "d&" : "";
+               let isF8 = /disableF8Key$/.test(prefName);
+               let key = isF8 ? "slideShow" : "toggleFLST";
+               $("shortcut-group").keys[key] = disabled + (isF8 ? "VK_F8" : "VK_F9");
+               Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify($("shortcut-group").keys));
+               return;
          }
       }
       switch (prefType) {
@@ -802,6 +865,14 @@ function TM_setElements (restore, start) {
 
    setSelectedIndex($("tabclicking_tabs").selectedIndex);
    TM_Options.checkDependant(start);
+
+   // initialize shortcuts
+   if (start && !Shortcuts.keys.browserReload.id)
+      $("browserReload").hidden = true;
+   let shortcuts = $("shortcut-group");
+   shortcuts.keys = Tabmix.JSON.parse(shortcuts.value);
+   let callBack = function(shortcut) shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
+   TM_Options.updateShortcuts(shortcuts, callBack)
 }
 
 function exportData() {
@@ -904,6 +975,7 @@ function loadData (pattern) {
    Services.prefs.savePrefFile(null);
 
    var prefName, prefValue;
+   Shortcuts.prefsChangedByTabmix = true;
    for (let i = 1; i < pattern.length; i++){
       var index = pattern[i].indexOf("=");
       if (index > 0){
@@ -912,6 +984,7 @@ function loadData (pattern) {
          setPrefByType(prefName, prefValue, true);
       }
    }
+   Shortcuts.prefsChangedByTabmix = false;
    var browserWindow = Tabmix.getTopWin();
    browserWindow.gTMPprefObserver.updateTabClickingOptions();
    if (oldStylePrefs.found) {
@@ -955,9 +1028,8 @@ function userChangedValue(aEvent) {
    if (n == "radio" && item.hasAttribute("pane"))
       return;
 
-   if (n != "radio" && n != "menuitem" &&
-              n != "checkbox" && n != "textbox")
-      return;
+   if (["radio","menuitem","checkbox","textbox"].indexOf(n) == -1)
+     return;
 
    if (n == "checkbox" && $("obs_" + item.id))
      TM_Options.disabled(item);
@@ -970,11 +1042,11 @@ function userChangedValue(aEvent) {
    if (n == "menuitem")
      item = item.parentNode.parentNode;
    // set item for radio
-   if (n == "radio")
+   else if (n == "radio")
      item = item.parentNode;
 
    if (item.hasAttribute("prefstring_item")) {
-     var itemId = item.getAttribute("prefstring_item");
+     let itemId = item.getAttribute("prefstring_item");
      if (itemId == "no_prefstring")
        return;
      else {
@@ -1022,8 +1094,10 @@ function updateApplyData(item, newValue) {
    if (savedValue != newValue) {
      // instant apply except when user change min/max width value
      if (instantApply && item.id != "minWidth" && item.id != "maxWidth") {
+       Shortcuts.prefsChangedByTabmix = true;
        setPrefByType(pref, newValue);
        Services.prefs.savePrefFile(null);
+       Shortcuts.prefsChangedByTabmix = false;
        return;
      }
      else
@@ -1032,11 +1106,7 @@ function updateApplyData(item, newValue) {
    else if (pref in applyData)
       delete applyData[pref];
 
-   var applyDataIsEmpty = true;
-   for (let n in applyData) {
-      applyDataIsEmpty = false;
-      break;
-   }
+   var applyDataIsEmpty = Object.keys(applyData).length == 0;
    var applyButton = document.documentElement.getButton("extra1");
    if (applyButton.disabled != applyDataIsEmpty)
      TMP_setButtons(applyDataIsEmpty);
@@ -1113,7 +1183,7 @@ try {
 function getTab() {
 try {
    var selTabindex = Tabmix.getIntPref("selected_tab" , 0, true);
-   TM_selectTab(selTabindex);
+   showPane(selTabindex);
 
    var subtabs = document.getElementsByAttribute("subtub", true);
    var subTab = "extensions.tabmix.selected_sub_tab";
@@ -1125,7 +1195,7 @@ try {
 }
 
 // this function is called from here and from Tabmix.openOptionsDialog if the dialog already opened
-function TM_selectTab(aSelTab) {
+function showPane(aSelTab) {
   var tabbox = $("tabMixTabBox");
   tabbox.lastselectedIndex = tabbox.selectedIndex;
   tabbox.selectedIndex = (aSelTab) ? aSelTab : 0;
@@ -1149,7 +1219,7 @@ var gIncompatiblePane = {
 
     var tabbox = $("tabMixTabBox")
     if (aHide && tabbox.selectedIndex == 6)
-      TM_selectTab(tabbox.lastselectedIndex);
+      showPane(tabbox.lastselectedIndex);
 
     if (aFocus)
       window.focus();
@@ -1182,12 +1252,13 @@ function _ensureElementIsVisible(aPopup) {
   scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
 }
 
-function tabmixCustomizeToolbar() {
-  window._tabmixCustomizeToolbar = true;
+let gAppearancePane = {}
+gAppearancePane.tabmixCustomizeToolbar = function tabmixCustomizeToolbar() {
+  this._tabmixCustomizeToolbar = true;
   Tabmix.getTopWin().BrowserCustomizeToolbar();
 }
 
-function toolbarButtons(aWindow) {
+gAppearancePane.toolbarButtons = function toolbarButtons(aWindow) {
   // Display > Toolbar
   var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
   var onToolbar = $("onToolbar");
@@ -1214,6 +1285,11 @@ function toolbarButtons(aWindow) {
   }
   updateDisabledState("new-tab-button", "newTabButton");
   updateDisabledState("alltabs-button", "hideAllTabsButton");
+
+  if (this._tabmixCustomizeToolbar) {
+    delete this._tabmixCustomizeToolbar;
+    window.focus();
+  }
 }
 
 function openHelp(aPageaddress) {
@@ -1222,7 +1298,7 @@ function openHelp(aPageaddress) {
                      {id:"Events",  tabs:["New_Tabs", "tab_opening", "Tab_Closing", "Tab_Merging", "Tab_Features"]},  // 1
                      {id:"Display", tabs:["Tab_bar", "Tab" , "ToolBar"]},                                             // 2
                      {id:"Mouse",   tabs:["Mouse_Gestures", "Mouse_Clicking"]},                                       // 3 //sub sub tab 6
-                     {id:"Menu",    tabs:["Tab_Context_Menu", "Main_Context_Menu", "Tools_Menu"]},                    // 4
+                     {id:"Menu",    tabs:["Tab_Context_Menu", "Main_Context_Menu", "Tools_Menu", "Shortcuts"]},       // 4
                      {id:"Session", tabs:["StartExit", "Restore" , "Preserve"]},                                      // 5
                     ];
     // get curent tab index and sub tab if there is one

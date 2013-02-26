@@ -18,7 +18,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     var promptWin = windowMediator.getMostRecentWindow("mozilla:tabmixprompt");
 
     if (panel > -1 && !appearanceWin && !filetypeWin && !promptWin)
-      tabmixOptionsWin.TM_selectTab(panel);
+      tabmixOptionsWin.showPane(panel);
 
     tabmixOptionsWin.gIncompatiblePane.checkForIncompatible(false);
 
@@ -156,7 +156,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
 
    var loadBlank = Tabmix.isBlankPageURL(url);
    var _url = loadBlank ? url : "about:blank";
-   var newTab = replaceLastTab ? gBrowser.addTab(_url, {skipAnimation: true}) : gBrowser.addTab(_url);
+   var newTab = gBrowser.addTab(_url, {skipAnimation: replaceLastTab, dontMove: true});
    if (replaceLastTab) {
      newTab.__newLastTab = url;
      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
@@ -199,7 +199,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    // focus the address bar on new tab
    var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-       loadBlank;
+       url == "about:blank" || url == "about:newtab" || url == "about:privatebrowsing";
    if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url);
 
@@ -215,7 +215,8 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
     gBrowser.tabmix_userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
   }
-  if (aTab == gBrowser.mCurrentTab) {
+  // don't try to focus urlbar on popup
+  if (aTab.selected && window.toolbar.visible) {
     if (aTimeOut)
       setTimeout(function () {focusAndSelectUrlBar();}, 30);
     else
@@ -234,7 +235,7 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (!gBrowser.tabmix_tab)
     return;
 
-  var isCurrentTab = gBrowser.tabmix_tab == gBrowser.mCurrentTab;
+  var isCurrentTab = gBrowser.tabmix_tab.selected;
   var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
   var url = gBrowser.tabmix_userTypedValue;
   if (!Tabmix.isBlankPageURL(url))
@@ -395,7 +396,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
     else
       return; // nothing we can do
     /* don't open blank tab when we are about to add new livemark */
-    this.newCode("openUILink", openUILink)._replace(
+    this.changeCode(window, "openUILink")._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;', {check: Tabmix.isVersion(140)}
     )._replace(

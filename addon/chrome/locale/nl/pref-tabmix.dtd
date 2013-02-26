@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Tabbladen op slot zetten">
 <!ENTITY lockNewTabs.label "Nieuwe tabbladen op slot zetten">
 <!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
+<!ENTITY updateLockState.label "Wijzigingen op openstaande tabbladen toepassen">
 <!ENTITY openNewTab.label "Tabbladen openen vanuit:">
 <!ENTITY openBookmarks.label "Bladwijzers">
 <!ENTITY openBMKGroups.label "Groep(en) bladwijzers">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Alleen huidige venster met laatst geselecteerde samenvoegen">
 <!ENTITY mergePopups.label "Ook pop-upvensters meenemen">
 <!ENTITY popupNextToOpener.label "Pop-ups naast hun openers zetten">
-<!ENTITY slideshow.label "F8 roteert tabbladen elke">
+<!ENTITY activateSlideshow.label "Door #1 in te drukken, roteren de tabbladen elke">
 <!ENTITY toggleAnimation.label "Animatie bij openen/sluiten tabbladen uitschakelen">
 <!ENTITY reloadEvery.matchAddress.label "Een tabblad herladen ongeacht het webadres">
 <!ENTITY reloadEvery.onReloadButton.label "Menu ‘Tabblad vernieuwen na…’ op knop Vernieuwen weergeven">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Extra ruimte aan beide zijden">
 <!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
 <!ENTITY tabbar.label "Tabbladenbalk verbergen als maar één tabblad open staat">
+<!ENTITY moveTabOnDragging.label "Bij slepen van tabblad direct verplaatsen">
 <!ENTITY dropIndicator.label "Indicator laten vallen">
 <!ENTITY dropIndicator-native.label "Logische stijl">
 <!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "ook tabbladen overschrijven">
 <!ENTITY sm.restore.closedWinList "Vensters in lijst met gesloten vensters bewaren">
 <!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
-<!ENTITY sm.restore.reloadall "Alle tabbladen vernieuwen">
+<!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
 <!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">

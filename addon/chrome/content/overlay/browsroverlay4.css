@@ -56,15 +56,12 @@
   width: 0px;
   border: none;
   margin: 0px;
+  vertical-align: bottom;
 }
 
 #TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >
    #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   visibility: visible;
-}
-
-#tabbrowser-tabs[flowing="multibar"]:not([multibar]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
-  vertical-align: bottom;
 }
 
 #TabsToolbar[tabmix-visible] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */

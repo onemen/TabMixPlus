@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Öppna ny flik från:">
 <!ENTITY openBookmarks.label "Bokmärke">
 <!ENTITY openBMKGroups.label "Mapp med bokmärken">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Slå endast ihop nuvarande fönster med det senast fokuserade">
 <!ENTITY mergePopups.label "Inkludera popup-fönster">
 <!ENTITY popupNextToOpener.label "Placera popup-fönster intill källsidan">
-<!ENTITY slideshow.label "F8 cirkulerar flik var">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Extra mellanrum på båda sidorna">
 <!ENTITY tabBarSpace.tooltip "Vid klickning eller när något släpps på flikfältet">
 <!ENTITY tabbar.label "Göm flikfält när bara en flik är öppen">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Symbol för dra-och-släpp">
 <!ENTITY dropIndicator-native.label "Standard">
 <!ENTITY dropIndicator-builtin.label "Ingyggd">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Och flikar">
 <!ENTITY sm.restore.closedWinList "Spara fönster i listan &apos;Stängda fönster&apos;">
 <!ENTITY sm.restore.merge "Slå ihop flera fönster till ett">
-<!ENTITY sm.restore.reloadall "Uppdatera alla flikar">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
 <!ENTITY sm.preserve.options "Skydda flikar:">
 <!ENTITY sm.preserve.history "Historik">

@@ -23,7 +23,10 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   // so we don't need to check for locked tabs only for blanks tabs
   var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
   if (autoComplete) {
-    this.newCode("document.getElementById('PopupAutoCompleteRichResult').onPopupClick", autoComplete.onPopupClick)._replace(
+    // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
+    let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
+        "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
+    this.changeCode(autoComplete, fn)._replace(
       'openUILink(url, aEvent);',
       'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
       'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
@@ -55,25 +58,57 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
  *        window[onload="TMP_TBP_Startup()"]
  */
 function TMP_TBP_Startup() {
+  // don't start Tabmix at all if our tabbrowser_4.xml didn't start
+  // when ImTranslator extension installed
+  if (!Tabmix.initialized) {
+    Tabmix.initialized = true;
+    if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+      gBrowserInit.onLoad();
+    else
+      BrowserStartup();
+    return;
+  }
+
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
     gTMPprefObserver.updateOldStylePrefs();
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
-    // force-call the observer once, in order to kill new windows faster
-    if (Tabmix.singleWindowMode)
-      TMP_DOMWindowOpenObserver.onObserve(window);
 
     var SM = TabmixSessionManager;
     if (Tabmix.isVersion(200)) {
-      SM._inPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+      SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      // isPrivateWindow is fix boolean for this window, user can't change private status of a window
+      SM.isPrivateWindow = SM.isWindowPrivate(window);
+      SM.__defineGetter__("isPrivateSession", function() {
+        return this.globalPrivateBrowsing || !TabmixSvc.saveSession;
+      });
+      // set this flag to true if user opens in a session at least one non-private window
+      if (!TabmixSvc.saveSession && !SM.isPrivateWindow)
+        TabmixSvc.saveSession = true;
     }
     else {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
                 getService(Ci.nsIPrivateBrowsingService);
-      SM._inPrivateBrowsing = pbs.privateBrowsingEnabled;
+      SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
+      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) SM.globalPrivateBrowsing;
+      SM.__defineGetter__("isPrivateWindow", function() this.globalPrivateBrowsing);
+      SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
+
+    var windowOpeneByTabmix = "tabmixdata" in window;
+    var firstWindow = Tabmix.isFirstWindow;
+    var disAllow = Tabmix.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+                   Tabmix.extensions.sessionManager ||
+                   Tabmix.isWindowAfterSessionRestore;
+    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
+    var afterRestart = false;
+
+    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
+    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
@@ -83,7 +118,7 @@ function TMP_TBP_Startup() {
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
     else
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
-    var bowserStartup = Tabmix.newCode(null, fnContainer[TMP_BrowserStartup]);
+    var bowserStartup = Tabmix.changeCode(fnContainer, TMP_BrowserStartup);
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
@@ -99,21 +134,6 @@ function TMP_TBP_Startup() {
       ' }'
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
-
-    var windowOpeneByTabmix = "tabmixdata" in window;
-    Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
-    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
-
-    var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = SM._inPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.extensions.sessionManager ||
-                   Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
-    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-    var afterRestart = false;
-
-    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
-    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
     // don't load home page on first window if session manager or crash recovery is enabled
     if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
@@ -149,14 +169,14 @@ function TMP_TBP_Startup() {
         'TabsOnTop.init();', {silent: true}
       );
     }
-    bowserStartup.toCode(false, fnContainer, TMP_BrowserStartup);
+    bowserStartup.toCode();
 
     // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [name, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
-          ["gBrowserInit._delayedStartup", gBrowserInit._delayedStartup] :
-          ["delayedStartup", delayedStartup];
-    Tabmix.newCode(name, fn)._replace(
+    var [obj, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
+          [gBrowserInit, "gBrowserInit._delayedStartup"] :
+          [window, "delayedStartup"];
+    Tabmix.changeCode(obj, fn)._replace(
       '{',
       '{' +
       'try {' +
@@ -187,7 +207,9 @@ function TMP_TBP_Startup() {
 }
 
 // this must run before all
+Tabmix.initialized = false;
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
+    Tabmix.initialized = true;
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {

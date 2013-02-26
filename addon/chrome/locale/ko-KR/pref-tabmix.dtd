@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "새 탭으로 열 것:">
 <!ENTITY openBookmarks.label "북마크">
 <!ENTITY openBMKGroups.label "북마크 폴더">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "현재 창과 마지막으로 활성화된 창만 합치기">
 <!ENTITY mergePopups.label "팝업 창도 합치기">
 <!ENTITY popupNextToOpener.label "팝업을 부모 페이지의 옆에 두기">
-<!ENTITY slideshow.label "F8로 탭을 회전시킬 기간">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "양쪽 끝에 빈 공간">
 <!ENTITY tabBarSpace.tooltip "탭 도구 모음에 무언가를 떨어뜨리거나 탭 도구 모음을 클릭하기 위한 공간">
 <!ENTITY tabbar.label "탭이 하나만 열려 있을 때 탭 도구 모음을 숨기기">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "떨어뜨릴 곳 표시기">
 <!ENTITY dropIndicator-native.label "원래 스타일">
 <!ENTITY dropIndicator-builtin.label "붙박이 스타일">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "탭에 덮어 씌우기">
 <!ENTITY sm.restore.closedWinList "닫은 창 목록에 저장하기">
 <!ENTITY sm.restore.merge "하나의 창에 여러개의 창 연결하기">
-<!ENTITY sm.restore.reloadall "모든 탭 다시 읽기">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "시작할 때 복구 안하기">
 <!ENTITY sm.preserve.options "탭 상태 중 보존할 것:">
 <!ENTITY sm.preserve.history "방문 기록">

@@ -15,49 +15,91 @@ var TMP_tabDNDObserver = {
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
-
-  get paddingLeft() {
-    delete this.paddingLeft;
-    return this.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
-  },
+  paddingLeft: 0,
 
   init: function TMP_tabDNDObserver_init() {
-    this.setDragEvents(true);
+    var tabBar = gBrowser.tabContainer;
+    if (Tabmix.isVersion(170)) {
+      tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+      // Determine what tab we're dragging over.
+      // * In tabmix tabs can have diffrent width
+      // * Point of reference is the start of the dragged tab when
+      //   draging left and the end when draging right. If that point
+      //   is before (for dragging left) or after (for dragging right)
+      //   the middle of a background tab, the dragged tab would take that
+      //   tab's position when dropped.
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+        'this.selectedItem = draggedTab;',
+        'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
+              $&\n\
+            else if (!draggedTab.selected) {\n\
+              this.setAttribute("movingBackgroundTab", true);\n\
+              draggedTab.setAttribute("dragged", true);\n\
+            }'
+      )._replace(
+        'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
+        'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
+      )._replace(
+        'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
+        'let halfWidth = boxObject.width / 2;\n\
+            let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
+                          getTabShift(tabs[mid], oldIndex);'
+      )._replace(
+        'screenX + boxObject.width < tabCenter',
+        'screenX + halfWidth < tabCenter'
+      )._replace(
+        'newIndex >= oldIndex',
+        'rtl ? $& : draggingRight && newIndex > -1'
+      ).toCode();
+
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
+        /(\})(\)?)$/,
+        '\n\
+          this.removeAttribute("movingBackgroundTab");\n\
+          let tabs = this.getElementsByAttribute("dragged", "*");\n\
+          Array.slice(tabs).forEach(function(tab) tab.removeAttribute("dragged"));\n\
+        $1$2'
+      ).toCode();
+
+      tabBar.useTabmixDragstart = function(aEvent) {
+        if (TMP_tabDNDObserver.draggedTab) {
+          delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
+          TMP_tabDNDObserver.draggedTab = null;
+        }
+        return this.orient == "horizontal" &&
+          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+          aEvent.altKey);
+      }
+      tabBar.useTabmixDnD = function(aEvent) {
+        function checkTab(dt) {
+          let tab = TMP_tabDNDObserver.getSourceNode(dt);
+          return !tab || "__tabmixDragStart" in tab;
+        }
+
+        return this.orient == "horizontal" &&
+          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+          checkTab(aEvent.dataTransfer));
+      }
+    }
+    else {
+      tabBar.useTabmixDragstart = function() {
+        return this.orient == "horizontal";
+      }
+      tabBar.useTabmixDnD = function() {
+        return this.orient == "horizontal"
+      }
+    }
+
+    this._dragOverDelay = tabBar._dragOverDelay;
     this.draglink = TabmixSvc.getString("droplink.label");
 
     // without this the Indicator is not visible on the first drag
-    var ind = gBrowser.tabContainer._tabDropIndicator;
-    ind.style.MozTransform = "translate(0px, 0px)";
-  },
-
-  verticalTreeStyleTab: false,
-  setDragEvents: function TMP_setDragEvents(atStart) {
-    // we only set Tabmix events at start if Tree Style Tab is not in vertical mode
-    var useDefaultDnD = false;
-    if ("TreeStyleTabBrowser" in window) {
-      try {
-        var tabbarPosition = Services.prefs.getCharPref("extensions.treestyletab.tabbar.position").toLowerCase();
-      }
-      catch (er) {};
-      useDefaultDnD = tabbarPosition == "left" || tabbarPosition == "right";
-      this.verticalTreeStyleTab = useDefaultDnD;
-    }
-
-    if (atStart && useDefaultDnD) {
-      gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
-      return; // nothing to do here;
-    }
-
-    if ("tabmix_useDefaultDnD" in gBrowser.tabContainer && gBrowser.tabContainer.tabmix_useDefaultDnD == useDefaultDnD) {
-      return; // nothing to do here;
-    }
-    gBrowser.tabContainer.tabmix_useDefaultDnD = useDefaultDnD;
-    this._dragOverDelay = gBrowser.tabContainer._dragOverDelay;
+    tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
   _handleDragover: function (aEvent) {
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.tabmix_useDefaultDnD && tabBar.orient == "horizontal")
+    if (tabBar.useTabmixDnD(aEvent))
       TMP_tabDNDObserver.onDragOver(aEvent);
   },
 
@@ -73,6 +115,7 @@ var TMP_tabDNDObserver = {
     if (!tab)
       return;
 
+    tab.__tabmixDragStart = true;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
     gBrowser.tabContainer.removeShowButtonAttr();
@@ -171,7 +214,8 @@ var TMP_tabDNDObserver = {
     }
     // if we don't set effectAllowed to none then the drop indicator stay
     else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
-               gBrowser.tabs[0].pinned && event.screenX < gBrowser.tabs[0].boxObject.screenX) {
+        gBrowser.tabs[0].pinned &&
+        Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)) {
       canDrop = false;
       dt.effectAllowed = "none";
     }
@@ -232,8 +276,7 @@ var TMP_tabDNDObserver = {
     }
 
     if (draggeType == this.DRAG_LINK) {
-      let tab;
-      tab = tabBar._getDragTargetTab(event);
+      let tab = tabBar._getDragTargetTab(event);
       if (tab) {
         if (!this._dragTime)
           this._dragTime = Date.now();
@@ -375,7 +418,7 @@ var TMP_tabDNDObserver = {
           Tabmix.log("load\n" + ex);
         }
       }
-      if (gBrowser.mCurrentTab != tab)
+      if (!tab.selected)
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
@@ -388,16 +431,17 @@ var TMP_tabDNDObserver = {
   },
 
   onDragEnd: function minit_onDragEnd(aEvent) {
+    if (this.draggedTab) {
+      delete this.draggedTab.__tabmixDragStart;
+      this.draggedTab.removeAttribute("dragged", true);
+      this.draggedTab = null;
+    }
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
     if (dt.mozUserCancelled || dt.dropEffect != "none")
       return;
 
     this.clearDragmark(aEvent);
-    if (this.draggedTab) {
-      this.draggedTab.removeAttribute("dragged", true);
-      this.draggedTab = null;
-    }
 
     // don't allow to open new window in single window mode
     if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
@@ -481,6 +525,7 @@ var TMP_tabDNDObserver = {
 
     this.clearDragmark();
     if (this.draggedTab) {
+      delete this.draggedTab.__tabmixDragStart;
       this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }
@@ -610,21 +655,16 @@ var TMP_tabDNDObserver = {
       let scrollRect = gBrowser.tabContainer.mTabstrip.scrollClientRect;
       let rect = gBrowser.tabContainer.getBoundingClientRect();
       let scrollMode = TabmixTabbar.scrollButtonsMode;
-      let paddingLeft = !gBrowser.tabContainer.overflow ||
-                        scrollMode == TabmixTabbar.SCROLL_BUTTONS_HIDDEN ||
-                        scrollMode == TabmixTabbar.SCROLL_BUTTONS_MULTIROW ||
-                        (scrollMode == TabmixTabbar.SCROLL_BUTTONS_RIGHT &&
-                         !Tabmix.prefs.getBoolPref("tabBarSpace")) ? this.paddingLeft : 0;
-      minMargin = scrollRect.left - rect.left - paddingLeft;
+      minMargin = scrollRect.left - rect.left - this.paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
       if (!ltr)
          [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
 
       tabRect = gBrowser.tabs[index].getBoundingClientRect();
       if (ltr)
-         newMargin = tabRect.left - rect.left  + (left_right == 1 ? tabRect.width + this.LinuxMarginEnd: 0) - paddingLeft;
+         newMargin = tabRect.left - rect.left  + (left_right == 1 ? tabRect.width + this.LinuxMarginEnd: 0) - this.paddingLeft;
       else
-         newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0);
+         newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0) - this.paddingLeft;
 
 ///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
 ///XXX look like the same is happen with Firefox
@@ -892,7 +932,7 @@ var TMP_TabView = {
 
   _patchBrowserTabview: function SM__patchBrowserTabview() {
     // we need to stop tabs slideShow before Tabview starts
-    Tabmix.newCode("TabView.toggle", TabView.toggle)._replace(
+    Tabmix.changeCode(TabView, "TabView.toggle")._replace(
       'this.show();',
       '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
        $&}'
@@ -935,7 +975,7 @@ var TMP_TabView = {
     if (Tabmix.isVersion(80)) {
       // Firefox 8.0 use strict mode - we need to map global variable
       TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-      Tabmix.newCode("TabView._window.GroupItems.reconstitute", TabView._window.GroupItems.reconstitute)._replace(
+      Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
         '"use strict";',
         '$&' +
         'let win = TabView._window;' +
@@ -980,7 +1020,7 @@ var TMP_TabView = {
 
     // add tab to the new group on tabs order not tabItem order
     TabView._window.UI._original_reset = TabView._window.UI.reset;
-    Tabmix.newCode("TabView._window.UI.reset", TabView._window.UI.reset)._replace(
+    Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
       '"use strict";',
       '$&' +
       'let win = TabView._window;' +
@@ -1108,13 +1148,8 @@ Tabmix.navToolbox = {
 
     // if tabmix option dialog is open update visible buttons and set focus if needed
     var optionWindow = Services.wm.getMostRecentWindow("mozilla:tabmixopt");
-    if (optionWindow) {
-      optionWindow.toolbarButtons(window);
-      if ("_tabmixCustomizeToolbar" in optionWindow) {
-        delete optionWindow._tabmixCustomizeToolbar;
-        optionWindow.focus();
-      }
-    }
+    if (optionWindow && optionWindow.gAppearancePane)
+      optionWindow.gAppearancePane.toolbarButtons(window);
   },
 
   updateToolboxItems: function TMP_navToolbox_updateToolboxItems() {
@@ -1136,13 +1171,13 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       gURLBar.setAttribute("onblur", blur + "Tabmix.urlBarOnBlur();")
 
+    let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
-    let fn;
     let _Omnibar = "Omnibar" in window;
     if (_Omnibar && "intercepted_handleCommand" in gURLBar) {
       fn = "intercepted_handleCommand";
-      Tabmix.newCode("gURLBar.handleCommand", gURLBar.handleCommand)._replace(
+      Tabmix.changeCode(gURLBar, "gURLBar.handleCommand")._replace(
         'O.handleSearchQuery',
         'window.Omnibar.handleSearchQuery', {silent: true}
       ).toCode();
@@ -1152,14 +1187,13 @@ Tabmix.navToolbox = {
     else
       fn = "handleCommand"
 
-    let _handleCommand;
     // Fix incompatibility with https://addons.mozilla.org/en-US/firefox/addon/url-fixer/
     if ("urlfixerOldHandler" in gURLBar.handleCommand) {
       _handleCommand = gURLBar.handleCommand.urlfixerOldHandler.toString();
-      fn = "handleCommand.urlfixerOldHandler";
+      obj = gURLBar.handleCommand;
+      fn = "urlfixerOldHandler";
     }
-    else
-      _handleCommand = fn in gURLBar ? gURLBar[fn].toString() : "Tabmix.browserLoadURL";
+    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.browserLoadURL";
 
     // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
     // instantfox uses pre-Firefox 10 version of handleCommand
@@ -1177,7 +1211,7 @@ Tabmix.navToolbox = {
 
     // set altDisabled if Suffix extension installed
     // dont use it for Firefox 6.0+ until new Suffix extension is out
-    let fixedHandleCommand = Tabmix.newCode("gURLBar." + fn,  _handleCommand)._replace(
+    let fixedHandleCommand = Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
       '{',
       '{ var _data, altDisabled = false; \
        if (gBrowser.tabmix_tab) {\
@@ -1227,7 +1261,7 @@ Tabmix.navToolbox = {
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
     if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
-      Tabmix.newCode("Omnibar.intercepted_handleCommand", Omnibar.intercepted_handleCommand)._replace(
+      Tabmix.changeCode(Omnibar, "Omnibar.intercepted_handleCommand")._replace(
         'Omnibar.handleSearchQuery',
         'false && Omnibar.handleSearchQuery', {silent: true}
       ).toCode();
@@ -1245,9 +1279,9 @@ Tabmix.navToolbox = {
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZhandleSearch" :
-                                         "document.getElementById('searchbar').handleSearchCommand";
-      Tabmix.newCode(functionName,  _handleSearchCommand)._replace(
+      let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
+                                      [searchbar, "handleSearchCommand"];
+      Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
         '$& \
         var forceNewTab = where == "current" && textBox._prefBranch.getBoolPref("browser.search.openintab"); \
@@ -1256,18 +1290,11 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    let _doSearch;
-    if (searchLoadExt)
-      _doSearch = esteban_torres.searchLoad_Options.MOZdoSearch.toString()
-    else
-      _doSearch = organizeSE ? window.organizeSE.doSearch.toString() : searchbar.doSearch.toString();
-
-    if (_doSearch.indexOf("tabmixArg") > -1)
+    let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
+                                    [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+    if (obj[fn].toString().indexOf("tabmixArg") > -1)
       return;
-
-    let functionName = searchLoadExt ? "esteban_torres.searchLoad_Options.MOZdoSearch" :
-                       (organizeSE ? "window.organizeSE.doSearch" : "document.getElementById('searchbar').doSearch");
-    Tabmix.newCode(functionName,  _doSearch)._replace(
+    Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       /(openUILinkIn[^\(]*\([^\)]+)(\))/,
       '$1, null, tabmixArg$2'
     )._replace(
@@ -1287,12 +1314,12 @@ Tabmix.navToolbox = {
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
-    if (TabmixSessionManager.enableManager == null) {
-      let inPrivateBrowsing = TabmixSessionManager._inPrivateBrowsing;
-      TabmixSessionManager.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !inPrivateBrowsing;
-      TabmixSessionManager.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !inPrivateBrowsing;
+    let SM = TabmixSessionManager;
+    if (SM.enableManager == null) {
+      SM.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !SM.globalPrivateBrowsing;
+      SM.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !SM.isPrivateWindow;
     }
-    TabmixSessionManager.toggleRecentlyClosedWindowsButton();
+    SM.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();
 
@@ -1312,7 +1339,8 @@ Tabmix.navToolbox = {
 
       // alltabs-popup fix visibility for multi-row
       if (Tabmix.isVersion(70))
-        alltabsPopup._updateTabsVisibilityStatus = TabmixAllTabs._updateTabsVisibilityStatus;
+        Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
+          TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },
 

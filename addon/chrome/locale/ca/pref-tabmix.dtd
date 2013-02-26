@@ -48,55 +48,56 @@
 <!ENTITY openOtherTabNext.label "Obre les altres pestanyes al costat de l'actual">
 <!ENTITY relatedAfterCurrent.label "Només si estan relacionades amb la pestanya actual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openDuplicateNext.label "Obre les pestanyes duplicades al costat de l&apos;original">
+<!ENTITY openDuplicateNext.label "Obre les pestanyes duplicades al costat de l'original">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Canvia l&apos;ordre d&apos;obertura">
+<!ENTITY openTabNextInverse.label "Canvia l'ordre d'obertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Obre la pestanya nova al costat de l&apos;última pestanya oberta des de la pestanya actual (des que s&apos;ha seleccionat per darrera vegada)">
+<!ENTITY openTabNextInverse.tooltip1 "Obre la pestanya nova al costat de l'última pestanya oberta des de la pestanya actual (des que s'ha seleccionat per darrera vegada)">
 <!ENTITY lockTabs.label "Bloca les pestanyes">
 <!ENTITY lockNewTabs.label "Bloca les pestanyes noves">
-<!ENTITY lockAppTabs.label "Bloca les pestanyes d&apos;aplicació">
+<!ENTITY lockAppTabs.label "Bloca les pestanyes d'aplicació">
+<!ENTITY updateLockState.label "Aplica els canvis a les pestanyes obertes">
 <!ENTITY openNewTab.label "Obre pestanyes des de:">
-<!ENTITY openBookmarks.label "Adreces d&apos;interès">
-<!ENTITY openBMKGroups.label "Grups d&apos;adreces d&apos;interès">
-<!ENTITY openBMKGroups.tooltip "No substitueix les pestanyes en obrir un grup d&apos;adreces d&apos;interès">
+<!ENTITY openBookmarks.label "Adreces d'interès">
+<!ENTITY openBMKGroups.label "Grups d'adreces d'interès">
+<!ENTITY openBMKGroups.tooltip "No substitueix les pestanyes en obrir un grup d'adreces d'interès">
 <!ENTITY openHistory.label "Historial">
-<!ENTITY openUrl.label "Barra d&apos;adreces">
+<!ENTITY openUrl.label "Barra d'adreces">
 <!ENTITY openSearch.label "Barra de cerca">
 <!ENTITY middlecurrent1.label "Un clic amb el botó del mig o Ctrl-clic obre els elements a la pestanya actual">
-<!ENTITY middlecurrent.tooltip "Només per a les adreces d&apos;interès, l&apos;historial i els enllaços forçats a obrir-se en una finestra nova">
+<!ENTITY middlecurrent.tooltip "Només per a les adreces d'interès, l'historial i els enllaços forçats a obrir-se en una finestra nova">
 <!ENTITY tabFocus.caption "Enfoca/selecciona les pestanyes obertes des de:">
 <!ENTITY selectTab.label "Enllaços">
 <!ENTITY selectDivertedTab.label "Pàgines redirigides">
 <!ENTITY selectTabCommand.label "Ordres de pestanya nova">
 <!ENTITY contextMenuSearch.label "Menú contextual «Cerca a»">
-<!ENTITY selectTabBH.label "Adreces d&apos;interès/Historial">
+<!ENTITY selectTabBH.label "Adreces d'interès/Historial">
 <!ENTITY duplicateTab.label "Pestanya duplicada">
-<!ENTITY inversefocus1.label "En obrir amb el botó del mig o amb Ctrl-clic, inverteix l&apos;enfocament de:">
+<!ENTITY inversefocus1.label "En obrir amb el botó del mig o amb Ctrl-clic, inverteix l'enfocament de:">
 <!ENTITY warning.caption.label "Avís">
-<!ENTITY warnOnCloseProtected.label "Avisa&apos;m en tancar una finestra que conté pestanyes blocades">
-<!ENTITY warnOnCloseWindow.label "Avisa&apos;m en tancar una finestra amb diverses pestanyes">
-<!ENTITY lasttab.caption.label "En tancar l&apos;última pestanya">
-<!ENTITY keepWindow.label.3.1 "No tanquis la finestra en tancar l&apos;última pestanya">
-<!ENTITY keeptab.label "Impedeix que es tanqui l&apos;última pestanya">
+<!ENTITY warnOnCloseProtected.label "Avisa'm en tancar una finestra que conté pestanyes blocades">
+<!ENTITY warnOnCloseWindow.label "Avisa'm en tancar una finestra amb diverses pestanyes">
+<!ENTITY lasttab.caption.label "En tancar l'última pestanya">
+<!ENTITY keepWindow.label.3.1 "No tanquis la finestra en tancar l'última pestanya">
+<!ENTITY keeptab.label "Impedeix que es tanqui l'última pestanya">
 <!ENTITY closeOnMerge.label "Tanca les finestres un cop fusionades">
-<!ENTITY warnOnMerge.label "Avisa&apos;m en tancar pestanyes que no es fusionaran">
+<!ENTITY warnOnMerge.label "Avisa'm en tancar pestanyes que no es fusionaran">
 <!ENTITY currenttab.caption.label "En tancar la pestanya actual">
 <!ENTITY focusTab.labelBegin "En tancar la pestanya actual, selecciona:">
 <!ENTITY focusTab.firstTab "Primera pestanya">
-<!ENTITY focusTab.leftTab "Pestanya de l&apos;esquerra">
+<!ENTITY focusTab.leftTab "Pestanya de l'esquerra">
 <!ENTITY focusTab.rightTab "Pestanya de la dreta">
 <!ENTITY focusTab.lastTab "Última pestanya">
 <!ENTITY focusTab.lastSelectedTab "Última pestanya seleccionada">
-<!ENTITY focusTab.openerTab "Pestanya des d&apos;on s&apos;havia obert/de la dreta">
-<!ENTITY focusTab.openerTab.rtl "Pestanya des d&apos;on s&apos;havia obert/de l&apos;esquerra">
+<!ENTITY focusTab.openerTab "Pestanya des d'on s'havia obert/de la dreta">
+<!ENTITY focusTab.openerTab.rtl "Pestanya des d'on s'havia obert/de l'esquerra">
 <!ENTITY focusTab.lastOpenedTab "Última pestanya oberta">
-<!ENTITY undoClose.label "Habilita l&apos;opció de desfer tancar pestanyes">
+<!ENTITY undoClose.label "Habilita l'opció de desfer tancar pestanyes">
 <!ENTITY undoCloseCache.label "Nombre màxim de pestanyes tancades que es recordarà:">
 <!ENTITY undoClosepos.label "Restaura la posició original de la pestanya">
-<!ENTITY menuonlybutton.label "Fes que el botó de la barra d&apos;eines només mostri la llista">
-<!ENTITY ctrltab.label "Ctrl-Tab navega per les pestanyes per ordre d&apos;última pestanya activa">
-<!ENTITY cmdtab.label "Cmd-Tab navega per les pestanyes per ordre d&apos;última pestanya activa">
+<!ENTITY menuonlybutton.label "Fes que el botó de la barra d'eines només mostri la llista">
+<!ENTITY ctrltab.label "Ctrl-Tab navega per les pestanyes per ordre d'última pestanya activa">
+<!ENTITY cmdtab.label "Cmd-Tab navega per les pestanyes per ordre d'última pestanya activa">
 <!ENTITY ctrltab.tabPreviews "Mostra previsualitzacions de les pestanyes">
 <!ENTITY ctrltab.popup "Ctrl-Tab mostra un menú emergent amb una llista de pestanyes">
 <!ENTITY cmdtab.popup "Cmd-Tab mostra un menú emergent amb una llista de pestanyes">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Fusiona només la finestra actual amb l'última seleccionada">
 <!ENTITY mergePopups.label "Fusiona també les finestres emergents">
 <!ENTITY popupNextToOpener.label "Col·loca cada finestra emergent al costat de la finestra que l'ha obert">
-<!ENTITY slideshow.label "En prémer F8, automàticament canvia de pestanya cada">
+<!ENTITY activateSlideshow.label "En prémer #1, roda entre les pestanyes cada">
 <!ENTITY toggleAnimation.label "Inhabilita l'animació en obrir/tancar la pestanya">
 <!ENTITY reloadEvery.matchAddress.label "Torna a carregar una pestanya independentment de l'adreça">
 <!ENTITY reloadEvery.onReloadButton.label "Mostra el menú «Torna a carregar cada» al botó «Actualitza»">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espai addicional a tots dos costats">
 <!ENTITY tabBarSpace.tooltip "Per poder-hi fer clic i deixar anar pestanyes a la barra de pestanyes">
 <!ENTITY tabbar.label "Amaga la barra quan només hi hagi una pestanya oberta">
+<!ENTITY moveTabOnDragging.label "En arrossegar una pestanya, mou-la directament">
 <!ENTITY dropIndicator.label "Indicador de deixar anar">
 <!ENTITY dropIndicator-native.label "Estil nadiu">
 <!ENTITY dropIndicator-builtin.label "Estil integrat">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "I les pestanyes">
 <!ENTITY sm.restore.closedWinList "Desa les finestres a la llista de finestres tancades">
 <!ENTITY sm.restore.merge "Uneix diverses finestres en una">
-<!ENTITY sm.restore.reloadall "Torna a carregar totes les pestanyes">
+<!ENTITY sm.restore.bypassCache "Omet la memòria cau en restaurar">
 <!ENTITY sm.notrestore.label "Quan no es restaura a l&apos;inici">
 <!ENTITY sm.preserve.options "Conserva les pestanyes:">
 <!ENTITY sm.preserve.history "Historial">

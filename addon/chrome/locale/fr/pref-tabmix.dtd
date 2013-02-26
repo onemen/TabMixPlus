@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Verrouiller les onglets">
 <!ENTITY lockNewTabs.label "Verrouiller les nouveaux onglets">
 <!ENTITY lockAppTabs.label "Verrouiller les onglets des applications">
+<!ENTITY updateLockState.label "Appliquer les changements aux onglets ouverts">
 <!ENTITY openNewTab.label "Ouvrir des onglets depuis :">
 <!ENTITY openBookmarks.label "Les marque-pages">
 <!ENTITY openBMKGroups.label "Les groupes de marque-pages">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Fusionner seulement la fenêtre courante avec la dernière sélectionnée">
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
 <!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
-<!ENTITY slideshow.label "Touche F8 : Changer d'onglet toutes les">
+<!ENTITY activateSlideshow.label "Presser #1 alterne les onglets toutes les">
 <!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
 <!ENTITY reloadEvery.matchAddress.label "Actualiser un onglet sans tenir compte de son adresse">
 <!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d'autre de la barre d'onglets">
 <!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d'onglets">
 <!ENTITY tabbar.label "Cacher la barre d'onglets quand un seul onglet est ouvert">
+<!ENTITY moveTabOnDragging.label "Lors d'un glisser d'onglet, faire le déplacement immédiatement">
 <!ENTITY dropIndicator.label "Indicateur de déplacement">
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
@@ -246,16 +248,16 @@
 <!ENTITY startupLastSession.label "Afficher mes fenêtres et onglets de la session précédente">
 <!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l&apos;extension Session Manager est installée">
 <!ENTITY sm.extension.description2 "Le gestionnaire de session Tax Mix Plus est désactivé">
-<!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l&apos;extension Session Manager">
-<!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l&apos;extension Session Manager">
+<!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l'extension Session Manager">
+<!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l'extension Session Manager">
 <!ENTITY sm.extension.convert.label "Convertir">
 <!ENTITY sm.extension.chooseFile.label0 "Me laisser choisir quel fichier de données convertir">
 <!ENTITY sm.extension.chooseFile.label1 "Convertir les sessions Tab Mix Plus du profil courant">
 <!ENTITY ss.enable.label "Utiliser la fonctionnalité de restauration de sessions intégrée">
-<!ENTITY ss.enable.tooltip "Décocher pour autoriser l&apos;utilisation avec le gestionnaire de sessions de Tabmix">
+<!ENTITY ss.enable.tooltip "Décocher pour autoriser l'utilisation avec le gestionnaire de sessions de Tabmix">
 <!ENTITY ss.advanced_setting "Réglages avancés">
-<!ENTITY ss.advanced_setting.warning "Ne les modifiez pas, à moins d&apos;être certain de ce que vous faites">
-<!ENTITY ss.interval "Intervalle minimum de temps entre deux sauvegardes d&apos;état">
+<!ENTITY ss.advanced_setting.warning "Ne les modifiez pas, à moins d'être certain de ce que vous faites">
+<!ENTITY ss.interval "Intervalle minimum de temps entre deux sauvegardes d'état">
 <!ENTITY ss.interval.seconds "(en millisecondes)">
 <!ENTITY ss.privacy_level "Enregistrer les données sensibles (données de formulaire, POSTDATA et cookies) pour">
 <!ENTITY ss.privacy_level.allsites "Tous les sites">
@@ -274,7 +276,7 @@
 <!ENTITY sm.start.nothing "Ne pas restaurer">
 <!ENTITY sm.exit "Quand le navigateur est fermé :">
 <!ENTITY sm.exit.save "Enregistrer la session">
-<!ENTITY sm.exit.ask "Demander avant d&apos;enregistrer la session">
+<!ENTITY sm.exit.ask "Demander avant d'enregistrer la session">
 <!ENTITY sm.exit.nothing "Ne pas enregistrer">
 <!ENTITY sm.startup "Session de démarrage :">
 <!ENTITY sm.lastsession "Dernière session">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "Et les onglets">
 <!ENTITY sm.restore.closedWinList "Enregistrer les fenêtres dans la liste des fenêtres fermées">
 <!ENTITY sm.restore.merge "Regrouper plusieurs fenêtres en une seule">
-<!ENTITY sm.restore.reloadall "Actualiser tous les onglets">
+<!ENTITY sm.restore.bypassCache "Ne pas utiliser le cache lors d'une restauration">
 <!ENTITY sm.notrestore.label "En cas de non restauration au démarrage">
 <!ENTITY sm.preserve.options "Conserver dans les onglets :">
 <!ENTITY sm.preserve.history "Historique">
@@ -294,7 +296,7 @@
 <!ENTITY sm.preserve.permission "Permissions">
 <!ENTITY sm.preserve.scroll1 "Position de défilement">
 <!ENTITY sm.restore.winOptions "Conserver dans les fenêtres :">
-<!ENTITY sm.restore.selectedTab "L&apos;onglet sélectionné">
+<!ENTITY sm.restore.selectedTab "L'onglet sélectionné">
 <!ENTITY sm.restore.closedTabs "La liste des onglets récemment fermés">
 <!ENTITY incompatible.extensions "Certaines de vos extensions sont incompatibles avec Tab Mix Plus, il est recommandé de désactiver ou désinstaller ces extensions.">
 <!ENTITY incompatible.button.label "Afficher la liste">

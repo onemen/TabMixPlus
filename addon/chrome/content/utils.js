@@ -1,11 +1,24 @@
-function Tabmix_ChangeCode(aObjectName, aCodeString, aForceUpdate) {
-  this.name = aObjectName;
-  this.value = aCodeString;
-  this.needUpdate = aForceUpdate || false;
+function Tabmix_ChangeCode(aParams) {
+  this.obj = aParams.obj;
+  this.fnName = aParams.fnName;
+  this.fullName = aParams.fullName;
+
+  let options = aParams.options;
+  this.needUpdate = options && options.forceUpdate || false;
+
+  if (options && (options.setter || options.getter)) {
+    let type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
+    this.value = this.obj[type](this.fnName).toString();
+  }
+  else if (typeof this.obj[this.fnName] == "function")
+    this.value = this.obj[this.fnName].toString();
+  else
+    this.errMsg = "\n" + this.fullName + " is undefined.";
   this.notFound = [];
 }
 
 Tabmix_ChangeCode.prototype = {
+  value: "", errMsg: "",
   _replace: function TMP_utils__replace(substr ,newString, aParams) {
     var silent;
     if (typeof aParams != "undefined") {
@@ -34,36 +47,27 @@ Tabmix_ChangeCode.prototype = {
     return this;
   },
 
-  toSetter: function(aObj, aName) {
-    this.isValidToChange(aName);
-    Tabmix._define("setter", aObj, aName, this.value);
-  },
-
-  toGetter: function(aObj, aName) {
-    this.isValidToChange(aName);
-    Tabmix._define("getter", aObj, aName, this.value);
-  },
-
   toCode: function TMP_utils_toCode(aShow, aObj, aName) {
     try {
       if (Tabmix._debugMode) {
         this.value = this.value.replace("{", "{try {") +
-            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.name) + '");}}';
+            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}}';
       }
-      if (this.isValidToChange(aName))
-        Tabmix.toCode(aObj, aName || this.name, this.value);
+      let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
+      if (this.isValidToChange(fnName))
+        Tabmix.toCode(obj, fnName, this.value);
       if (aShow)
-        this.show(aObj, aName);
+        this.show(obj, fnName);
     } catch (ex) {
-      Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.name + "\nError: " + ex.message);
+      Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.fullName + "\nError: " + ex.message);
     }
   },
 
   show: function(aObj, aName) {
-    if (this.name != null)
-      Tabmix.show(this.name);
-    else if (aObj && aName in aObj)
-      Tabmix.clog(aObj[aName].toString());
+    if (aObj && aName in aObj)
+      Tabmix.show({obj: aObj, name: aName, fullName: this.fullName});
+    else if (this.fullName != null)
+      Tabmix.show(this.fullName);
   },
 
   isValidToChange: function(aName) {
@@ -71,28 +75,30 @@ Tabmix_ChangeCode.prototype = {
     if (this.needUpdate && !notFoundCount)
       return true;
     var caller = Tabmix._getCallerNameByIndex(2);
-    var fnName = aName || this.name;
     if (notFoundCount) {
       let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
-      Tabmix.clog(caller + " was unable to change " + fnName + "."
-        + "\ncan't find string" +str + this.notFound.join("\n    ")
+      Tabmix.clog(caller + " was unable to change " + aName + "."
+        + (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    "))
         + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
         + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
       if (Tabmix._debugMode)
-        Tabmix.clog(caller + "\nfunction " + fnName + " = " + this.value);
+        Tabmix.clog(caller + "\nfunction " + aName + " = " + this.value);
     }
     else if (!this.needUpdate && Tabmix._debugMode)
-      Tabmix.clog(caller + " no update needed to " + fnName);
+      Tabmix.clog(caller + " no update needed to " + aName);
     return false;
   }
 }
 
 var Tabmix = {
-  newCode: function(aObjectName, aObject, aForceUpdate) {
+  // aOptions can be: getter, setter or forceUpdate
+  changeCode: function(aParent, aName, aOptions) {
+    let fnName = aName.split(".").pop();
     try {
-      return new Tabmix_ChangeCode(aObjectName, aObject.toString(), aForceUpdate);
+      return new Tabmix_ChangeCode({obj: aParent, fnName: fnName,
+        fullName: aName, options: aOptions});
     } catch (ex) {
-      this.log("aObjectName " + aObjectName + "\n" + ex);
+      this.clog(Tabmix.callerName() + " failed to change " + aName + "\nError: " + ex.message);
       if (Tabmix._debugMode)
         this.obj(aObject, "aObject");
     }
@@ -102,6 +108,11 @@ var Tabmix = {
   get prefs() {
     delete this.prefs;
     return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+  },
+
+  get defaultPrefs() {
+    delete this.defaultPrefs;
+    return this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix.");
   },
 
   isVersion: function(aVersionNo) {
@@ -133,11 +144,12 @@ this.log(aMethod)
       if (typeof(aDelay) == "undefined")
         aDelay = 500;
 
-      var self = this;
       let logMethod = function _logMethod() {
-        let result = self.getObject(aMethod, rootID).toString();
-        self.clog(aMethod + " = " + result);
-      }
+        let isObj = typeof aMethod == "object";
+        let result = isObj ? aMethod.obj[aMethod.name] :
+                this.getObject(aMethod, rootID).toString();
+        this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result);
+      }.bind(this);
 
       if (aDelay >= 0)
         setTimeout(function () {logMethod();}, aDelay);
@@ -294,7 +306,7 @@ options = {
     if (aDisallowLog)
       objS = aMessage + "======================\n" + objS;
     else
-      this.clog(aMessage + "=============== Object Properties ===============\n" + objS);
+      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true, 1);
     return objS;
   },
 
@@ -308,7 +320,7 @@ options = {
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + aError.stack;
+    let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
     Services.console.logStringMessage(assertionText + stackText);
   },
 
@@ -341,17 +353,29 @@ options = {
     }
   },
 
-  _define: function(aType, aObj, aName, aCodeString) {
-    let type = aType == "setter" ? "__defineSetter__" : "__defineGetter__";
-    let fn = eval("(" + aCodeString + ")");
-    aObj[type](aName, fn);
+  defineProperty: function(aObj, aName, aCode) {
+    for (let [type, val] in Iterator(aCode)) {
+      if (typeof val == "string")
+        aCode[type] = eval("(" + val + ")");
+    }
+    Object.defineProperty(aObj, aName, {get: aCode.getter, set: aCode.setter,
+                          enumerable: true, configurable: true});
   },
 
   toCode: function(aObj, aName, aCodeString) {
     if (aObj)
-      aObj[aName] = eval("(" + aCodeString + ")");
+      this.setNewFunction(aObj, aName, eval("(" + aCodeString + ")"));
     else
       eval(aName + " = " + aCodeString);
+  },
+
+  setNewFunction: function(aObj, aName, aCode) {
+    if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
+      Object.defineProperty(aObj, aName, {value: aCode,
+                                          writable: true, configurable: true});
+    }
+    else
+      aObj[aName] = aCode;
   },
 
   getBoolPref: function(aPrefName, aDefault, aUseTabmixBranch) {
@@ -511,6 +535,14 @@ options = {
     return count;
   },
 
+  get isSingleBrowserWindow() {
+    return this.numberOfWindows(false, "navigator:browser") == 1;
+  },
+
+  get isLastBrowserWindow() {
+    return this.isSingleBrowserWindow;
+  },
+
   isPlatform: function(aPlatform) {
     return navigator.platform.indexOf(aPlatform) == 0;
   },
@@ -522,14 +554,18 @@ options = {
       try {
         return JSON.parse(str);
       } catch(ex) {
-        return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+        try {
+          return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+        } catch(ex) {return null}
       }
     },
     stringify: function TMP_stringify(obj) {
       try {
         return JSON.stringify(obj);
       } catch(ex) {
-        return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+        try {
+          return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+        } catch(ex) {return null}
       }
     }
   },
@@ -537,23 +573,28 @@ options = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  _init: function() {
+    Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+    Components.utils.import("resource://gre/modules/Services.jsm");
+    this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
+    XPCOMUtils.defineLazyGetter(this.JSON, "nsIJSON", function() {
+      return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+    });
+    if (this.isVersion(200)) {
+      XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+                 "resource:///modules/RecentWindow.jsm");
+    }
+    window.addEventListener("unload", function tabmix_destroy() {
+      window.removeEventListener("unload", tabmix_destroy, false);
+      this.destroy();
+    }.bind(this), false);
+  },
+
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
-    this._define = null;
     this.toCode = null;
     this.originalFunctions = null;
-    window.removeEventListener("unload", TMP_utils_destroy, false);
   }
 }
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/Services.jsm");
-Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
-  return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
-});
-if (Tabmix.isVersion(200)) {
-  XPCOMUtils.defineLazyModuleGetter(Tabmix, "RecentWindow",
-             "resource:///modules/RecentWindow.jsm");
-}
-window.addEventListener("unload", Tabmix.destroy, false);
+Tabmix._init();

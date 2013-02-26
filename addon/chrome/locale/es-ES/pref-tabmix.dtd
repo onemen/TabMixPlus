@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Bloquear pestañas">
 <!ENTITY lockNewTabs.label "Bloquear nuevas pestañas">
 <!ENTITY lockAppTabs.label "Bloquear pestañas de aplicación">
+<!ENTITY updateLockState.label "Aplicar cambios a pestañas abiertas">
 <!ENTITY openNewTab.label "Abrir pestañas desde:">
 <!ENTITY openBookmarks.label "Marcadores">
 <!ENTITY openBMKGroups.label "Grupos de marcadores">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Sólo fusionar la ventana actual con la última enfocada">
 <!ENTITY mergePopups.label "También fusionar ventanas emergentes">
 <!ENTITY popupNextToOpener.label "Situar las ventanas emergentes junto a las de apertura">
-<!ENTITY slideshow.label "Pulsando F8 las pestañas rotan cada">
+<!ENTITY activateSlideshow.label "Pulsando #1 las pestañas rotan cada">
 <!ENTITY toggleAnimation.label "Desactivar animación de Abrir/Cerrar pestaña">
 <!ENTITY reloadEvery.matchAddress.label "Recargar pestaña sin importar su dirección">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de Recargar cada… en botón de recarga">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Espacios extra a ambos lados">
 <!ENTITY tabBarSpace.tooltip "Para hacer clic y arrastrar algo a la barra de pestañas">
 <!ENTITY tabbar.label "Esconder la barra de pestañas cuando hay sólo una abierta">
+<!ENTITY moveTabOnDragging.label "Al arrastrar una pestaña moverla directamente">
 <!ENTITY dropIndicator.label "Indicador de arrastre">
 <!ENTITY dropIndicator-native.label "Estilo original">
 <!ENTITY dropIndicator-builtin.label "Estilo añadido">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "y pestañas">
 <!ENTITY sm.restore.closedWinList "Guardar ventanas en lista de ventanas cerradas">
 <!ENTITY sm.restore.merge "Combinar varias ventanas en una">
-<!ENTITY sm.restore.reloadall "Recargar todas las pestañas">
+<!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
 <!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
 <!ENTITY sm.preserve.options "Conservar para pestañas:">
 <!ENTITY sm.preserve.history "Historial">

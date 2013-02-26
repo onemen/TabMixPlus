@@ -1,6 +1,6 @@
 var TabmixTabClickOptions = {
   onDoubleClick: false,
-  _blockButtonDblClick: false,
+  _blockDblClick: false,
 
   // Single click on tab/tabbar
   onTabClick: function TMP_onTabClick(aEvent) {
@@ -9,15 +9,16 @@ var TabmixTabClickOptions = {
     if (aEvent.button == 2)
       return; // right click
 
+    if (aEvent.button == 0 && aEvent.detail > 1) {
+      if (this._blockDblClick)
+        setTimeout(function(self) {self._blockDblClick = false;}, 0, this);
+      return; // double click (with left button)
+    }
+
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
-    if (target == gBrowser.tabContainer.mTabsNewtabButton)
-      this._blockButtonDblClick = true;
-    else if (this._blockButtonDblClick)
-      setTimeout(function() {TabmixTabClickOptions._blockButtonDblClick = false; }, 0);
-
-    if (aEvent.button == 0 && aEvent.detail > 1)
-      return; // double click (with left button)
+    this._blockDblClick = aEvent.button == 0 && anonid == "tmp-close-button" ||
+                              target == gBrowser.tabContainer.mTabsNewtabButton;
 
     // don't do anything if user left click on close tab button , or on any other button on tab or tabbar
     if (aEvent.button == 0 && (anonid == "tmp-close-button" || target.localName == "toolbarbutton"))
@@ -84,20 +85,18 @@ var TabmixTabClickOptions = {
 
   // Double click on tab/tabbar
   onTabBarDblClick: function TMP_onTabBarDblClick(aEvent) {
-    if (this._blockButtonDblClick)
-      return;
-
     if ( !aEvent || aEvent.button != 0 || aEvent.ctrlKey || aEvent.shiftKey || aEvent.altKey || aEvent.metaKey )
       return;
     this.onDoubleClick = true;
-    var node = aEvent.originalTarget;
 
     // don't do anything if user click on close tab button , or on any other button on tab or tabbar
-    if (node.getAttribute("anonid") == "tmp-close-button" || node.localName == "toolbarbutton")
+    var target = aEvent.originalTarget;
+    if (target.getAttribute("anonid") == "tmp-close-button" || target.localName == "toolbarbutton")
       return;
 
     // See hack note in the tabbrowser-close-tab-button binding
-    if (gBrowser.tabContainer._blockDblClick)
+    // if we are here the target is not closeTabButton or newtabButton
+    if (gBrowser.tabContainer._blockDblClick || this._blockDblClick)
       return;
 
     var clickOutTabs = aEvent.target.localName == "tabs";
@@ -107,18 +106,20 @@ var TabmixTabClickOptions = {
   },
 
   // call action function from click on tabs or tabbar
-  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab) {
+  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, action) {
     if (!pref) return; // just in case we missed something
     var defaultPref = {middleClickTab:2, middleClickTabbar:10, shiftClickTab:5, shiftClickTabbar:0,
                        altClickTab:6, altClickTabbar:0, ctrlClickTab:22, ctrlClickTabbar:0,
                        dblClickTab:0, dblClickTabbar:1};
 
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
-    var action = Tabmix.getIntPref(pref, defaultPref[pref], true);
+    var command = Tabmix.getIntPref(pref, defaultPref[pref], true);
+    this.doCommand(command, aTab, clickOutTabs);
+  },
 
+  doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
     gBrowser.selectedBrowser.focus();
-
-    switch ( action ) {
+    switch (command) {
       case 0 :
         break;
       case 1 :
@@ -190,7 +191,7 @@ var TabmixTabClickOptions = {
           IeView.ieViewLaunch("Internet Explorer.lnk", href);
         }
         else if (window.gIeTab && window.gIeTab.switchTabEngine) {
-          if (gBrowser.selectedTab != aTab)
+          if (!aTab.selected)
             gBrowser.selectedTab = aTab;
           gIeTab.switchTabEngine(aTab, gIeTab.getBoolPref("ietab.alwaysNewTab", false));
         }
@@ -203,7 +204,7 @@ var TabmixTabClickOptions = {
         gBrowser.SelectToMerge(aTab);
         break;
       case 23:
-        Tabmix.MergeWindows.mergeWindows();
+        Tabmix.MergeWindows.mergeWindows(window);
         break;
       case 24:
         gBrowser.closeGroupTabs(aTab);
@@ -230,7 +231,7 @@ var TabmixTabClickOptions = {
         middleMousePaste(event);
         if (opennewTab) {
           let tab = gBrowser.getTabForLastPanel();
-          if (tab != gBrowser.mCurrentTab)
+          if (!tab.selected)
             gBrowser.selectedTab = tab;
         }
         break;
@@ -267,7 +268,7 @@ var TabmixContext = {
     if ("gIeTab" in window) {
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
-        Tabmix.newCode("IeTab.prototype." + aFunction, IeTab.prototype[aFunction])._replace(
+        Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
              'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
              'separator = document.getElementById("tm-separator-3"); $&'
         ).toCode();
@@ -758,7 +759,7 @@ var TabmixAllTabs = {
 
     if (event.button == 1) {
       let aTab = event.originalTarget.tab;
-      if (popup.parentNode.id == "tm-tabsList" && (gBrowser.mCurrentTab == aTab || gBrowser.isBlankTab(gBrowser.mCurrentTab))) {
+      if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser.mCurrentTab))) {
         popup.hidePopup();
         gBrowser.removeTab(aTab, {animate: true});
         return;
@@ -914,7 +915,8 @@ var TabmixAllTabs = {
     if (typeof colorfulTabs == "object") {
       if (colorfulTabs.clrAllTabsPopPref) {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
-        mi.style.setProperty('background-image','-moz-linear-gradient(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),-moz-linear-gradient(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
+        let gradient = Tabmix.isVersion(160) ? "linear-gradient" : "-moz-linear-gradient";
+        mi.style.setProperty('background-image', gradient + '(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),' + gradient + '(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
       }
       else
         mi.style.setProperty('background-image','none','important');
@@ -957,7 +959,7 @@ var TabmixAllTabs = {
   },
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
-    if (gBrowser.selectedTab == aTab)
+    if (aTab.selected)
       gBrowser.ensureTabIsVisible(aTab);
     else
       // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible

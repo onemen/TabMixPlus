@@ -25,7 +25,7 @@ var TMP_extensionsCompatibility = {
         window.TMP_TabGroupsManager.tabmixSessionsManager = function () {};
         let tmp = {};
         Components.utils.import("resource://tabmixplus/extensions/TabGroupsManager.jsm", tmp);
-        tmp.TMP_TabGroupsManager.newCode = Tabmix.newCode;
+        tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
     } catch (ex) {Tabmix.assert(ex, "error in TabGroupsManager.jsm");}
@@ -38,7 +38,7 @@ var TMP_extensionsCompatibility = {
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
       func.forEach(function(aFn) {
         if (aFn in GlaxChrome) {
-          Tabmix.newCode("GlaxChrome.CLT.DragDropManager." + aFn , GlaxChrome[aFn])._replace(
+          Tabmix.changeCode(GlaxChrome, "GlaxChrome.CLT.DragDropManager." + aFn)._replace(
             '{', '{var TabDNDObserver = TMP_tabDNDObserver;', {check: GlaxChrome[aFn].toString().indexOf("TabDNDObserver") != -1}
           )._replace(
             'TM_init', 'Tabmix.startup', {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
@@ -48,14 +48,8 @@ var TMP_extensionsCompatibility = {
     }
 
     if ("com" in window && com.morac &&
-        com.morac.gSessionManagerSessionBrowser ||
-        "gSessionManager" in window) {
+        com.morac.SessionManagerAddon) {
       Tabmix.extensions.sessionManager = true;
-      // temp fix
-      Tabmix.gSessionPath = TabmixSessionManager.gSessionPath;
-      Tabmix.SessionManager = TabmixSessionManager;
-      Tabmix.SessionData = TabmixSessionData;
-      Tabmix.convertSession = TabmixConvertSession
     }
 
     try {
@@ -72,21 +66,11 @@ var TMP_extensionsCompatibility = {
       let SSB = SecondSearchBrowser.prototype;
       func.forEach(function(aFn) {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
-          Tabmix.newCode("SecondSearchBrowser.prototype." + aFn , SSB[aFn])._replace(
+          Tabmix.changeCode(SSB, "SecondSearchBrowser.prototype." + aFn)._replace(
             'TM_init', 'Tabmix.startup'
           ).toCode();
         }
       });
-    }
-
-    // https://addons.mozilla.org/en-US/firefox/addon/fox-splitter-formerly-split-br/
-    if ("SplitBrowser" in window) {
-      let _getter = SplitBrowser.__lookupGetter__("tabbedBrowsingEnabled");
-      if (_getter.toString().indexOf("TM_init") != -1) {
-        Tabmix.newCode(null,  _getter)._replace(
-          'TM_init', 'Tabmix.startup'
-        ).toGetter(SplitBrowser, "tabbedBrowsingEnabled");
-      }
     }
 
     // fix bug in backgroundsaver extension
@@ -130,7 +114,7 @@ var TMP_extensionsCompatibility = {
     /*
     // https://addons.mozilla.org/en-US/firefox/addon/tab-flick/
     if ("TabFlick" in window && typeof(TabFlick.openPanel) == "function") {
-      Tabmix.newCode("TMP_tabDNDObserver.onDragEnd", TMP_tabDNDObserver.onDragEnd)._replace(
+      Tabmix.changeCode(TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragEnd")._replace(
         'gBrowser.replaceTabWithWindow(draggedTab);',
         'gBrowser.selectedTab = draggedTab; TabFlick.openPanel(aEvent);'
       ).toCode();
@@ -153,7 +137,7 @@ var TMP_extensionsCompatibility = {
         '  TMP_LastTab.PushSelectedTab();' +
         '}'
       if (typeof(foxTab.openNewTab) == "function") {
-        Tabmix.newCode("foxTab.openNewTab", foxTab.openNewTab)._replace(
+        Tabmix.changeCode(foxTab, "foxTab.openNewTab")._replace(
           '{', loadNewInBackground
         )._replace(
           'f.isFlashOpen',
@@ -169,7 +153,7 @@ var TMP_extensionsCompatibility = {
         ).toCode();
       }
       if (typeof(foxTab.showNewTabMessage) == "function") {
-        Tabmix.newCode("foxTab.showNewTabMessage", foxTab.showNewTabMessage)._replace(
+        Tabmix.changeCode(foxTab, "foxTab.showNewTabMessage")._replace(
           '{', loadNewInBackground
         )._replace(
           'f.gBrowser.selectedTab = newTab', newCode
@@ -184,7 +168,7 @@ var TMP_extensionsCompatibility = {
     if (typeof window.IeTab2 == "function" &&
           Services.vc.compare(window.gIeTab2Version, "4.12.6.1") == 0) {
       Tabmix.extensions.ieTab2 = true;
-      Tabmix.newCode("IeTab2.prototype.hookCodeAll", IeTab2.prototype.hookCodeAll)._replace(
+      Tabmix.changeCode(IeTab2.prototype, "IeTab2.prototype.hookCodeAll")._replace(
         /(var )?oldAddTab/g, 'Tabmix.originalFunctions.oldAddTab'
       )._replace(
         /(var )?oldSetTabTitle/g, 'Tabmix.originalFunctions.oldSetTabTitle'
@@ -215,7 +199,7 @@ var TMP_extensionsCompatibility = {
       this.RSSTICKER.init();
 
     if ("PersonaController" in window && typeof(window.PersonaController) == "object") {
-      Tabmix.newCode('PersonaController._applyPersona', PersonaController._applyPersona)._replace(
+      Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
         /(\})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = this._footer.style.backgroundImage; \
@@ -224,7 +208,7 @@ var TMP_extensionsCompatibility = {
          $1$2'
       ).toCode();
 
-      Tabmix.newCode('PersonaController._applyDefault', PersonaController._applyDefault)._replace(
+      Tabmix.changeCode(PersonaController, "PersonaController._applyDefault")._replace(
         /(\})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = ""; \
@@ -237,7 +221,7 @@ var TMP_extensionsCompatibility = {
     // Firefox sync
     // fix bug in firefox sync that add new menu itep from each popupshowing
     if ("gFxWeaveGlue" in window) {
-      Tabmix.newCode('gFxWeaveGlue.handleEvent', gFxWeaveGlue.handleEvent)._replace(
+      Tabmix.changeCode(gFxWeaveGlue, "gFxWeaveGlue.handleEvent")._replace(
         'else if (this.getPageIndex() == -1)',
         'else if ((event.target.id == "alltabs-popup" || event.target.getAttribute("anonid") == "alltabs-popup") && this.getPageIndex() == -1)',
         {check: gFxWeaveGlue.handleEvent.toString().indexOf("else if (this.getPageIndex() == -1)") != -1}
@@ -246,7 +230,7 @@ var TMP_extensionsCompatibility = {
 
     // linkification extension
     if ("objLinkify" in window && "ClickLink" in objLinkify) {
-      Tabmix.newCode("objLinkify.ClickLink", objLinkify.ClickLink)._replace(
+      Tabmix.changeCode(objLinkify, "objLinkify.ClickLink")._replace(
         'if (bOpenWindow)',
         'if (bOpenWindow && !Tabmix.singleWindowMode)'
       )._replace(
@@ -257,7 +241,7 @@ var TMP_extensionsCompatibility = {
 
     // trigger tabmix function when user change tab width with faviconize extension
     if ("faviconize" in window && "toggle" in faviconize) {
-      Tabmix.newCode("faviconize.toggle", faviconize.toggle)._replace(
+      Tabmix.changeCode(faviconize, "faviconize.toggle")._replace(
         /(\})(\)?)$/,
         '  tab.removeAttribute("minwidth");' +
         '  tab.removeAttribute("maxwidth");' +
@@ -270,7 +254,7 @@ var TMP_extensionsCompatibility = {
     // make ChromaTabs extension compatible with Tabmix Plus
     // we can drop this soon version 2.3 from 2010-01 not use this code anymore
     if ("CHROMATABS" in window) {
-      Tabmix.newCode("CHROMATABS.colorizeTab", CHROMATABS.colorizeTab)._replace(
+      Tabmix.changeCode(CHROMATABS, "CHROMATABS.colorizeTab")._replace(
         'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-left");',
         'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-left tab-startcap tab-left tab-left-border");', {silent: true}
       )._replace(
@@ -288,7 +272,7 @@ var TMP_extensionsCompatibility = {
     // fix bug in superDargandGo
     try {
       if ("superDrag" in window && "contentAreaDNDObserver" in window) {
-        Tabmix.newCode("contentAreaDNDObserver.onDrop", contentAreaDNDObserver.onDrop)._replace(
+        Tabmix.changeCode(contentAreaDNDObserver, "contentAreaDNDObserver.onDrop")._replace(
           'document.firstChild.getAttribute("windowtype")',
           'window.document.documentElement.getAttribute("windowtype")'
         )._replace(
@@ -301,7 +285,7 @@ var TMP_extensionsCompatibility = {
     // make URL Suffix extension compatible with tabmix
     if ("objURLsuffix" in window && !Tabmix.isVersion(100)) {
       if ("handleURLBarCommand" in objURLsuffix) {
-        Tabmix.newCode("objURLsuffix.handleURLBarCommand", objURLsuffix.handleURLBarCommand)._replace(
+        Tabmix.changeCode(objURLsuffix, "objURLsuffix.handleURLBarCommand")._replace(
           'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);',
           'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, altDisabled);'
         )._replace(
@@ -313,7 +297,7 @@ var TMP_extensionsCompatibility = {
       }
 
       if ("canonizeUrl" in objURLsuffix) {
-        Tabmix.newCode("objURLsuffix.canonizeUrl", objURLsuffix.canonizeUrl)._replace(
+        Tabmix.changeCode(objURLsuffix, "objURLsuffix.canonizeUrl")._replace(
           'return [gURLBar.value, aPostDataRef];',
           'return [gURLBar.value, aPostDataRef, true];'
         ).toCode();
@@ -327,7 +311,7 @@ var TMP_extensionsCompatibility = {
 
     /* fast dial FdUtils*/
     if ("FdUtils" in window && FdUtils.whereToOpenLink) {
-      Tabmix.newCode("FdUtils.whereToOpenLink", FdUtils.whereToOpenLink)._replace(
+      Tabmix.changeCode(FdUtils, "FdUtils.whereToOpenLink")._replace(
         'if (e.ctrlKey)',
         'if (e.ctrlKey || Tabmix.whereToOpen(null).lock)'
       ).toCode();
@@ -337,17 +321,17 @@ var TMP_extensionsCompatibility = {
     if (typeof(Local_Install) == "object") {
       // don't open trober in current tab when tab is locked
       // or trober is to diffrent site then the current
-      Tabmix.newCode("Local_Install.openThrobber", Local_Install.openThrobber)._replace(
+      Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
         'local_common.openURL(local_common.getThrobberURL(), inNewTab);',
         'var url = local_common.getThrobberURL(); \
          local_common.openURL(url, inNewTab ? inNewTab : Tabmix.checkCurrent(url) == "tab");'
       ).toCode();
       // add name to closeallOverlay.onUnload we use it in goQuitApplication
       if ("closeallOverlay" in window && "onUnload" in closeallOverlay) {
-        Tabmix.newCode(null, closeallOverlay.onUnload)._replace(
+        Tabmix.changeCode(closeallOverlay, "closeallOverlay.onUnload")._replace(
           /function(\s+)\(/,
           "function toolkitCloseallOnUnload("
-        ).toCode(false, closeallOverlay, "onUnload");
+        ).toCode();
       }
     }
 
@@ -357,7 +341,7 @@ var TMP_extensionsCompatibility = {
       let performAction = FireGestures._performAction.toString();
       let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);"
       if (performAction.indexOf(codeToReplace) != -1) {
-        Tabmix.newCode("FireGestures._performAction", performAction)._replace(
+        Tabmix.changeCode(FireGestures, "FireGestures._performAction")._replace(
           codeToReplace, 'gBrowser.moveTabTo(newTab, orgTab._tPos + 1);'
         ).toCode();
       }
@@ -380,7 +364,7 @@ var TMP_extensionsCompatibility = {
 
     // https://addons.mozilla.org/en-us/firefox/addon/mouse-gestures-redox/
     if ("mgBuiltInFunctions" in window) {
-      Tabmix.newCode("mgBuiltInFunctions.mgNewBrowserWindow", mgBuiltInFunctions.mgNewBrowserWindow)._replace(
+      Tabmix.changeCode(mgBuiltInFunctions, "mgBuiltInFunctions.mgNewBrowserWindow")._replace(
         'window.open();',
         'if (!Tabmix.singleWindowMode) window.open();'
       ).toCode();
@@ -388,7 +372,7 @@ var TMP_extensionsCompatibility = {
 
     // Redirect Remover 2.6.4
     if ("rdrb" in window && rdrb.delayedInit) {
-      Tabmix.newCode("TabmixContext.openMultipleLinks", TabmixContext.openMultipleLinks)._replace(
+      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
         'if (links_urlSecurityCheck(url))',
         'url = rdrb.cleanLink(url);\
          $&'
@@ -420,7 +404,7 @@ var TMP_extensionsCompatibility = {
     Tabmix.contentAreaClick.isGreasemonkeyInstalled();
 
     if (typeof MouseControl == "object" && MouseControl.newTab) {
-      Tabmix.newCode("MouseControl.newTab" , MouseControl.newTab)._replace(
+      Tabmix.changeCode(MouseControl, "MouseControl.newTab")._replace(
         'gBrowser.moveTabTo',
         'if (!Tabmix.prefs.getBoolPref("openNewTabNext")) $&'
       ).toCode();
@@ -431,7 +415,7 @@ var TMP_extensionsCompatibility = {
 
 TMP_extensionsCompatibility.RSSTICKER = {
    init : function ()  {
-     Tabmix.newCode("RSSTICKER.writeFeed", RSSTICKER.writeFeed)._replace(
+     Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
        'tbb.setAttribute("onclick"',
        'tbb.setAttribute("onclick", "this.onClick(event);");\
         tbb.setAttribute("_onclick"'
@@ -491,7 +475,7 @@ TMP_extensionsCompatibility.wizzrss = {
 
     _functions.forEach(function(_function) {
       if (_function in window)
-        Tabmix.newCode("window." + _function, window[_function])._replace(codeToReplace,newCode).toCode();
+        Tabmix.changeCode(window, _function)._replace(codeToReplace, newCode).toCode();
     });
   },
 
@@ -512,7 +496,7 @@ TMP_extensionsCompatibility.wizzrss = {
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
    init : function ()  {
-      Tabmix.newCode("openNewsfox", openNewsfox)._replace(
+      Tabmix.changeCode(window, "openNewsfox")._replace(
          /if \(newTab\) {/,
          'newTab = newTab || Tabmix.whereToOpen(null).lock; \
          $&'
@@ -538,8 +522,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
   preInit: function () {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
-      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsPreInit",
-          TreeStyleTabWindowHelper.overrideExtensionsPreInit)._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsPreInit")._replace(
         // fix typo in TST - this typo fixed on TST 0.13.2011121501
         'SessionData.tabTSTProperties',
         'sessionData.tabTSTProperties', {silent: true}
@@ -561,7 +544,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         // TabDNDObserver replaced with TMP_tabDNDObserver
         // tabBarScrollStatus replaced with TabmixTabbar.updateScrollStatus
 
-        Tabmix.newCode("TreeStyleTabService.overrideExtensionsOnInitAfter", TreeStyleTabService.overrideExtensionsOnInitAfter)._replace(
+        Tabmix.changeCode(TreeStyleTabService, "TreeStyleTabService.overrideExtensionsOnInitAfter")._replace(
           '{', '{var TabDNDObserver = TMP_tabDNDObserver;'
         )._replace(
           'this.updateTabDNDObserver(TabDNDObserver);',
@@ -597,7 +580,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
       if ('piro.sakura.ne.jp' in window && "tabsDragUtils" in window['piro.sakura.ne.jp']) {
         let tabsDragUtils = window['piro.sakura.ne.jp'].tabsDragUtils;
-        Tabmix.newCode("tabsDragUtils._delayedInit", tabsDragUtils._delayedInit)._replace(
+        Tabmix.changeCode(tabsDragUtils, "tabsDragUtils._delayedInit")._replace(
           'if ("TabDNDObserver" in window)',
           'this.initTabDNDObserver(TMP_tabDNDObserver);\
            $&'
@@ -610,7 +593,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if ("TreeStyleTabBrowser" in window) {
       let fn = TreeStyleTabBrowser.prototype.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
-        Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
+        Tabmix.changeCode(TreeStyleTabBrowser.prototype, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
           'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
           'let newTabButton = document.getElementById("new-tab-button"); \
            if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
@@ -624,8 +607,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_howToOpen function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
-      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit",
-          TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit)._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit")._replace(
         /eval\(["|']window\.TMP_howToOpen/,
         'if (false) $&'
       ).toCode();
@@ -633,8 +615,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_openTabNext function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
-      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsDelayed",
-          TreeStyleTabWindowHelper.overrideExtensionsDelayed)._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed")._replace(
         /eval\(["|']gBrowser\.TMP_openTabNext/,
         'if (false) $&'
       ).toCode();
@@ -650,7 +631,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
      *  we only call this functiom from browserWindow so we don't need to call it for
      *  other places windows
      */
-    Tabmix.newCode("TMP_Places.openGroup", TMP_Places.openGroup)._replace(
+    Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
       /(function[^\(]*\([^\)]+)(\))/,
       '$1, TSTOpenGroupBookmarkBehavior$2'
     )._replace(
@@ -677,21 +658,21 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if (Services.prefs.getBoolPref("extensions.treestyletab.compatibility.TMP")) {
       // Added 2010-04-10
       // TST look for aTab.removeAttribute("tabxleft")
-      Tabmix.newCode("window.TabmixTabbar.updateSettings", TabmixTabbar.updateSettings)._replace(
+      Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateSettings")._replace(
         'TabmixSessionManager.updateTabProp(aTab);',
         '$& \
          gBrowser.treeStyleTab.initTabAttributes(aTab);\
          gBrowser.treeStyleTab.initTabContentsOrder(aTab);'
       ).toCode();
       // Added 2010-04-10
-      Tabmix.newCode("TMP_eventListener.onTabOpen", TMP_eventListener.onTabOpen)._replace(
+      Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
         /(\})(\)?)$/,
         'gBrowser.treeStyleTab.initTabAttributes(tab); \
          gBrowser.treeStyleTab.initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
       // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
-      Tabmix.newCode("TabmixContext.openMultipleLinks", TabmixContext.openMultipleLinks)._replace(
+      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
         /(Tabmix.loadTabs\([^\)]+\);)/g,
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();

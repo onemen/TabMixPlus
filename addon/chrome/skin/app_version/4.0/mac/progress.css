@@ -27,7 +27,6 @@
 }
 
 #tabbrowser-tabs[tabsontop="true"] .tab-progress {
-/*  margin: 3px 2px 0px 2px;*/
   margin: 3px 2px;
 }
 
@@ -42,39 +41,8 @@
   border-bottom: 1px solid rgba(0,0,0,.3);
   background-origin: border-box;
   background-color: Highlight;
-/*  background-image: -moz-linear-gradient(left, rgb(107,160,193), rgb(169,223,251));*/
-  background-image: -moz-linear-gradient(left, rgba(255,255,255,.1) 50%,
-                                               rgba(255,255,255,.4) 90%,
-                                               rgba(255,255,255,.8));
 }
 
-/* remove this for now
-.tab-progress > .progress-bar:-moz-window-inactive {
-  border-top: 1px solid rgba(0,0,0,.2);
-  border-bottom: 1px solid rgba(0,0,0,.1);
-  background-image: -moz-linear-gradient(left, rgb(150,150,150), rgb(210,210,210));
-}
-*/
-
-.tab-progress > .progress-bar:-moz-locale-dir(rtl) {
-/*  background-image: -moz-linear-gradient(right, rgb(107,160,193), rgb(169,223,251));*/
-  background-image: -moz-linear-gradient(right, rgba(255,255,255,.1) 50%,
-                                                rgba(255,255,255,.4) 90%,
-                                                rgba(255,255,255,.8));
-}
-/* remove this for now
-.tab-progress > .progress-bar:-moz-window-inactive:-moz-locale-dir(rtl) {
-  background-image: -moz-linear-gradient(right, rgb(150,150,150), rgb(210,210,210));
-}
-*/
-
-/*
-.tab-progress > .progress-remainder {
-  border-top: 1px solid rgba(0,0,0,.1);
-  border-bottom: 1px solid rgba(0,0,0,.1);
-  background-color: rgba(0,0,0,.3);
-}
-*/
 .tab-progress > .progress-bar:-moz-window-inactive {
   opacity: 0.6 !important;
 }

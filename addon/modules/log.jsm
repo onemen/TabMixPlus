@@ -163,7 +163,7 @@ var _log = {
     if (aDisallowLog)
       objS = aMessage + "======================\n" + objS;
     else
-      this.clog(aMessage + "=============== Object Properties ===============\n" + objS);
+      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true, 1);
     return objS;
   },
 

@@ -56,6 +56,7 @@
 <!ENTITY lockTabs.label "Κλείδωμα καρτελών">
 <!ENTITY lockNewTabs.label "Κλείδωμα νέων καρτελών">
 <!ENTITY lockAppTabs.label "Κλείδωμα πρωτευόντων καρτελών">
+<!ENTITY updateLockState.label "Εφαρμογή των αλλαγών στις ανοιχτές καρτέλες">
 <!ENTITY openNewTab.label "Άνοιγμα καρτελών από:">
 <!ENTITY openBookmarks.label "Σελιδοδείκτες">
 <!ENTITY openBMKGroups.label "Ομάδες σελιδοδεικτών">
@@ -107,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Σύμπτυξη μόνο του τρέχοντος παραθύρου με το πιο πρόσφατα εστιασμένο">
 <!ENTITY mergePopups.label "Σύμπτυξη και των αναδυόμενων παραθύρων">
 <!ENTITY popupNextToOpener.label "Τοποθέτηση αναδυόμενων δίπλα από τις πηγές τους">
-<!ENTITY slideshow.label "Πατώντας το F8 περιστρέφονται οι καρτέλες κάθε">
+<!ENTITY activateSlideshow.label "Το πάτημα του #1 γυρνάει τις καρτέλες κάθε">
 <!ENTITY toggleAnimation.label "Απενεργοποίηση εφέ ανοίγματος/κλεισίματος καρτέλας">
 <!ENTITY reloadEvery.matchAddress.label "Ανανέωση καρτέλας άσχετα με τη διεύθυνση της.">
 <!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">
@@ -128,6 +129,7 @@
 <!ENTITY tabBarSpace.label "Επιπλέον διαστήματα και στις δύο πλευρές">
 <!ENTITY tabBarSpace.tooltip "Για κλικ και εναπόθεση στοιχείου στην εργαλειοθήκη καρτελών">
 <!ENTITY tabbar.label "Απόκρυψη της εργαλειοθήκης καρτελών όταν μόνο μια καρτέλα είναι ανοικτή">
+<!ENTITY moveTabOnDragging.label "Μετακίνησης καρτέλας κατά το σύρσιμο της">
 <!ENTITY dropIndicator.label "Δείκτης απόθεσης">
 <!ENTITY dropIndicator-native.label "Εγγενές στυλ">
 <!ENTITY dropIndicator-builtin.label "Ενσωματωμένο στυλ">
@@ -196,7 +198,7 @@
 <!ENTITY tabbarscrolling.inverse.label "Αντιστροφή κατεύθυνσης κύλισης">
 <!ENTITY double.label "Διπλό κλικ">
 <!ENTITY middle.label "Μεσαίο κλικ">
-<!ENTITY ctrl.label "Ctrl-click">
+<!ENTITY ctrl.label "Ctrl-κλικ">
 <!ENTITY cmd.label "Cmd-κλικ">
 <!ENTITY shift.label "Shift-κλικ">
 <!ENTITY alt.label "Alt-κλικ">
@@ -285,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "και καρτελών">
 <!ENTITY sm.restore.closedWinList "Αποθήκευση παραθύρων της λίστας κλεισμένων παραθύρων">
 <!ENTITY sm.restore.merge "Συνένωση όλων των παραθύρων σε ένα">
-<!ENTITY sm.restore.reloadall "Ανανέωση όλων των καρτελών">
+<!ENTITY sm.restore.bypassCache "Παράκαμψη λανθάνουσας κατά την επαναφορά">
 <!ENTITY sm.notrestore.label "Όταν δεν γίνεται επαναφορά κατά την εκκίνηση">
 <!ENTITY sm.preserve.options "Διατήρηση καρτελών:">
 <!ENTITY sm.preserve.history "Ιστορικό">

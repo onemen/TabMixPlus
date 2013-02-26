@@ -1,7 +1,7 @@
 <!ENTITY styles.label "Personalizează stilurile">
-<!ENTITY currentTab.label "Fila curentă">
-<!ENTITY unloadedTabs.label "Filele neîncărcate">
-<!ENTITY unreadTab.label "Filele nevizualizate">
+<!ENTITY currentTab.label "Filă curentă">
+<!ENTITY unloadedTabs.label "File neîncărcate">
+<!ENTITY unreadTab.label "File nevizualizate">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">
 <!ENTITY bold.label "Aldin">
