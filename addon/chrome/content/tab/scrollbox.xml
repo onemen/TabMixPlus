@@ -300,7 +300,8 @@
             this.blockUnderflow = true;
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
-            tabBar.updateVerticalTabStrip();
+            if (tabBar.updateVerticalTabStrip() == null)
+              TabmixTabbar._failedToEnterVerticalMode = true;
           }
         ]]></body>
       </method>

@@ -10,7 +10,7 @@ Tabmix.startup = function TMP_startup() {
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
   cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (Tabmix.isVersion(120)) {
+  if (!Tabmix.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
     // since this is not trigger any other event that we can listen to
     // we force to add here a call to reset tabbar height
@@ -133,6 +133,10 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setMenuIcons();
 
   TabmixTabbar.updateSettings(true);
+  if ("_failedToEnterVerticalMode" in TabmixTabbar) {
+    delete TabmixTabbar._failedToEnterVerticalMode;
+    gBrowser.tabContainer.mTabstrip._enterVerticalMode();
+  }
 
   try {
     TMP_LastTab.init();
@@ -269,6 +273,7 @@ var TMP_eventListener = {
     tabContainer.addEventListener("TabClose", this, true);
     tabContainer.addEventListener("TabSelect", this, true);
     tabContainer.addEventListener("TabMove", this, true);
+    tabContainer.addEventListener("TabUnpinned", this, true);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -276,7 +281,10 @@ var TMP_eventListener = {
 
     Tabmix.contentAreaClick.init();
 
-    tabContainer.addEventListener("TabUnpinned", this, true);
+    // initialize our gURLBar.handleCommand function early before other extensions change
+    // gURLBar.handleCommand by replacing the original function
+    // url-fixer also prevent the use of eval changes by using closure in the replcaed function
+    Tabmix.navToolbox.initializeURLBar();
 
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
@@ -342,9 +350,6 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);
-    // add event for mouse scrolling on tab bar, necessary for linux
-    if (Tabmix.isPlatform("Linux"))
-       document.getElementById("navigator-toolbox").addEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if  (tabView) {
@@ -364,7 +369,7 @@ var TMP_eventListener = {
     if (typeof isBlankPageURL == "function") {
       Tabmix.isBlankPageURL = isBlankPageURL;
       XPCOMUtils.defineLazyGetter(Tabmix, "newTabURL", function () {
-        return Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
+        return BROWSER_NEW_TAB_URL;
       });
       Tabmix.newTabUrls.shift();
       Tabmix.newTabUrls.unshift(Tabmix.newTabURL);
@@ -605,17 +610,8 @@ var TMP_eventListener = {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
         fullScrToggler.collapsed = true;
-        let box = document.getElementById("tabmix-bottom-toolbox");
-        box.parentNode.insertBefore(fullScrToggler, box);
-
-        Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
-          'gNavToolbox.style.marginTop',
-          <![CDATA[
-            if (TabmixTabbar.position == 1) {
-              TMP_eventListener.mouseoverToggle(aShow);
-            }
-          $&]]>
-        ).toCode();
+        let addonBar = document.getElementById("addon-bar");
+        addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
         if (Tabmix.isVersion(120)) {
           Tabmix.newCode("FullScreen.sample", FullScreen.sample)._replace(
@@ -668,6 +664,8 @@ var TMP_eventListener = {
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
     }
+    if (fullScreen)
+      TMP_eventListener._updateMultiRow();
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
@@ -683,6 +681,7 @@ var TMP_eventListener = {
   },
 
   mouseoverToggle: function (aShow) {
+    document.getElementById("fullscr-bottom-toggler").collapsed = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
@@ -694,6 +693,14 @@ var TMP_eventListener = {
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
+    }
+  },
+
+  updateMultiRow: function () {
+    if (TabmixTabbar.isMultiRow) {
+      gBrowser.tabContainer.updateVerticalTabStrip();
+      gBrowser.tabContainer.setFirstTabInRow();
+      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -948,8 +955,6 @@ var TMP_eventListener = {
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
-    if (Tabmix.isPlatform("Linux"))
-       document.getElementById("navigator-toolbox").removeEventListener("DOMMouseScroll", this, true);
 
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {

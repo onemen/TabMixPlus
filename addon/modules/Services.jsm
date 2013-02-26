@@ -54,13 +54,11 @@ let TabmixSvc = {
 }
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
-  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
-                          .getService(Ci.nsIXULAppInfo);
-  var comparator = Cc["@mozilla.org/xpcom/version-comparator;1"]
-                          .getService(Ci.nsIVersionComparator);
-  var version = appInfo.version;
+  var comparator = Services.vc;
+  var version = Services.appinfo.version;
   let v = {value:version};
   v.is40 = comparator.compare(version, "4.0b4") >= 0;
   v.is50 = comparator.compare(version, "5.0a1") >= 0;
@@ -78,7 +76,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
  * Lazily define services
  * Getters for common services, this should be replaced by Services.jsm in future
  */
-Components.utils.import("resource://gre/modules/Services.jsm");
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "console", function () {return Services.console});
@@ -90,9 +87,13 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.pr
 XPCOMUtils.defineLazyGetter(TabmixSvc, "TMPprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.")});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SMprefs", function () {return TabmixSvc.prefs.getBranch("extensions.tabmix.sessions.")});
 // string bundle
-XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {return Cc["@mozilla.org/intl/stringbundle;1"]
-    .getService(Ci.nsIStringBundleService).createBundle("chrome://tabmixplus/locale/tabmix.properties");});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {return Cc["@mozilla.org/intl/stringbundle;1"]
-    .getService(Ci.nsIStringBundleService).createBundle("chrome://tabmixplus/locale/session-manager.properties");});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
+  let properties = "chrome://tabmixplus/locale/tabmix.properties";
+  return Services.strings.createBundle(properties);
+});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
+  let properties = "chrome://tabmixplus/locale/session-manager.properties";
+  return Services.strings.createBundle(properties);
+});
 // sessionStore
 XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessionstore;1", "nsISessionStore");

@@ -4,7 +4,7 @@ var TMPstyles = {
     if (!this._prefsSvc) {
       this._prefsSvc =  Components.classes["@mozilla.org/preferences-service;1"]
              .getService(Components.interfaces.nsIPrefService)
-             .QueryInterface(Components.interfaces.nsIPrefBranch2);
+             .QueryInterface(Components.interfaces.nsIPrefBranch);
     }
     return this._prefsSvc;
   },

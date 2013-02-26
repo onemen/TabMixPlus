@@ -20,37 +20,26 @@ var TMP_LastTab = {
    DisplayTabList : function() {
       var element = document.documentElement;
       var tablist = this.TabList;
-      var menuitem, tab, imageUrl, x, y, i, activeIndex;
 
       TabmixAllTabs.createCommonList(tablist, this.handleCtrlTab ? 3 : 2);
       var item = this.tabs[this.TabIndex].mCorrespondingMenuitem;
       item.setAttribute("_moz-menuactive", "true");
       TabmixAllTabs.updateMenuItemActive(null, item);
 
-      // moveTo() method introduces anomalies,
-      // e.g. hovering over location bar moves the popup
-      // hiding and showing the popup works better
-      x = -element.boxObject.screenX;
-      y = 10000;
-      tablist.showPopup(element, x, y, "popup", null, null); //show offscreen to get popup measurements
-      x = Math.round((window.outerWidth - tablist.boxObject.width) / 2) - (element.boxObject.screenX - window.screenX);
-      y = Math.round((window.outerHeight - tablist.boxObject.height) / 2) - (element.boxObject.screenY - window.screenY);
-      if(x + element.boxObject.screenX < 0)
-         x = -element.boxObject.screenX;
-      else if(x + element.boxObject.screenX + tablist.boxObject.width > window.screen.availWidth)
-         x = window.screen.availWidth - tablist.boxObject.width - element.boxObject.screenX;
-      if(y + element.boxObject.screenY < 0)
-         y = -element.boxObject.screenY;
-      else if(y + element.boxObject.screenY + tablist.boxObject.height > window.screen.availHeight)
-         y = window.screen.availHeight - tablist.boxObject.height - element.boxObject.screenY;
-      if(x == -1 && y == -1) //workaround special status of -1, -1 position in showPopup() method
-         x = y = 0;
+      // show offscreen to get popup measurements
+      tablist.showPopup(element, -element.boxObject.screenX, 10000, "popup", null, null);
+      var width = tablist.boxObject.width;
+      var height = tablist.boxObject.height;
       this.SuppressTabListReset = true;
       tablist.hidePopup();
       this.SuppressTabListReset = false;
-      tablist.showPopup(element, x, y, "popup", null, null);
 
-      var ietab = "chrome://ietab/content/reloaded.html?url="
+      // show at the center of the screen
+      tablist.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
+                                screen.availTop + (screen.availHeight - height) / 2,
+                                false);
+
+      var ietab = "chrome://ietab/content/reloaded.html?url=";
       if (gBrowser.currentURI.spec.indexOf(ietab) == 0)
          tablist.focus();
 

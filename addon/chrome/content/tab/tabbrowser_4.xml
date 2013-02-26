@@ -411,7 +411,7 @@
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
-          if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
+          if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode || FullScreen._isChromeCollapsed ||
               !this.visible && TabmixTabbar.visibleRows == 1)
             return null;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber

@@ -141,8 +141,8 @@ var tablib = {
     )._replace(
       // we call focusAndSelectUrlBar from Tabmix.clearUrlBar
       // see TMP_BrowserOpenTab
-      'if (aNewTab)',
-      'if (false && aNewTab)'
+      'focusAndSelectUrlBar();',
+      ''
     )._replace(
       'this.tabContainer.adjustTabstrip();',
       'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
@@ -355,11 +355,9 @@ var tablib = {
     gBrowser.tabContainer.__defineGetter__("visible", gBrowser.tabContainer.__lookupGetter__("visible"));
     Tabmix.newCode(null,  _setter)._replace(
       'this._container.collapsed = !val;',
-      'if (TabmixTabbar.hideMode == 2) val = false;\
-       $&'
-    )._replace(
-      'this._container.collapsed = !val;',
       <![CDATA[
+        if (TabmixTabbar.hideMode == 2)
+          val = false;
         $&
         let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
         if (bottomToolbox) {
@@ -372,6 +370,17 @@ var tablib = {
   },
 
   change_utility: function change_utility() {
+    Tabmix.newCode("FullScreen.mouseoverToggle", FullScreen.mouseoverToggle)._replace(
+      'this._isChromeCollapsed = !aShow;',
+      <![CDATA[$&
+        if (aShow)
+          TMP_eventListener.updateMultiRow();
+        if (TabmixTabbar.position == 1) {
+          TMP_eventListener.mouseoverToggle(aShow);
+        }
+      ]]>
+    ).toCode();
+
   //XXX consider to replace handleDroppedLink not use eval here
     Tabmix.newCode("handleDroppedLink", handleDroppedLink)._replace(
       'loadURI(uri, null, postData.value, false);',
@@ -701,9 +710,7 @@ var tablib = {
       // try to have SessionStore duplicate the given tab
 
       if (!aHref && !aTabData) {
-        newTab = Cc["@mozilla.org/browser/sessionstore;1"]
-                    .getService(Ci.nsISessionStore)
-                    .duplicateTab(window, aTab);
+        newTab = TabmixSvc.ss.duplicateTab(window, aTab);
       }
       else
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
@@ -1358,7 +1365,7 @@ since we can have tab hidden or remove the index can change....
           tabsToClose = numTabs - numProtected;
           break;
         case "All_onExit":
-          tabsToClose = numTabs;
+          tabsToClose = numTabs - this._removingTabs.length;
           break;
         case "AllBut":
           if (protectedTab)

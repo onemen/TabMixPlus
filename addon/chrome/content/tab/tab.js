@@ -232,7 +232,8 @@ var TabmixTabbar = {
   setHeight: function TMP_setHeight(aRows, aReset) {
     // don't do anything when the tabbar is hidden
     // by Print preview or others...
-    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible)
+    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible ||
+        FullScreen._isChromeCollapsed)
       return;
 
     var tabsPosition = this.getTabsPosition();
@@ -362,6 +363,9 @@ var TabmixTabbar = {
         tabBar.mTabstrip._enterVerticalMode();
       else
         tabBar.updateVerticalTabStrip();
+
+      if (TabmixTabbar.position == 1)
+        setTimeout(function(){tabBar.updateVerticalTabStrip();},0);
     }
     ///maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
@@ -645,15 +649,15 @@ var gTMPprefObserver = {
           else
             tabMinWidth = tabMaxWidth;
         }
-
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
-        let [rule, val] = prefName == "browser.tabs.tabMaxWidth" ? ["max-width", tabMaxWidth] : ["min-width", tabMinWidth];
-        this.dynamicRules["width"].style.setProperty(rule, val + "px", null);
+        this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", null);
+        this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", null);
         let skin = TabmixSvc.prefs.getCharPref("general.skins.selectedSkin");
         if (skin != "classic/1.0") {
           let important = skin == "classiccompact" ? "important" : null;
-          this.dynamicRules["width1"].style.setProperty(rule, val + "px", important);
+          this.dynamicRules["width1"].style.setProperty("max-width", tabMaxWidth + "px", important);
+          this.dynamicRules["width1"].style.setProperty("min-width", tabMinWidth + "px", important);
         }
         TabmixTabbar.updateSettings(false);
 ///check if we need to call update 4 times after changing tab width
@@ -1501,7 +1505,7 @@ var gTMPprefObserver = {
     }
     var tabsToolbar = document.getElementById("TabsToolbar");
     var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-    Tabmix.setItem(tabsToolbar, "tabbaronbuttom", TabmixTabbar.position == 1 || null);
+    Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
     if (TabmixTabbar.position == 1) {// bottom
       if (!bottomToolbox) {
         bottomToolbox = document.createElement("toolbox");

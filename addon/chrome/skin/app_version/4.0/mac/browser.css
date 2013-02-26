@@ -8,9 +8,9 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
 
-/* :::: tabbar on buttom ::::
+/* :::: tabbar on bottom ::::
   we leave the default background-image on mac
-#TabsToolbar[tabbaronbuttom] {
+#TabsToolbar[tabbaronbottom] {
   background-image: none !important;
 }
 */
@@ -94,4 +94,12 @@
 
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
+}
+
+#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme) {
+  background-color: rgb(190, 190, 190);
+}
+
+#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme):-moz-window-inactive {
+  background-color: rgb(228, 228, 228);
 }

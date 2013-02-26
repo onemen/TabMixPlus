@@ -322,17 +322,13 @@ XXX fix this when there is no stack go directly to trace
 
   _define: function(aType, aObj, aName, aCodeString) {
     let type = aType == "setter" ? "__defineSetter__" : "__defineGetter__";
-    let fn = new Function();
-    eval("fn = " + aCodeString);
+    let fn = eval("(" + aCodeString + ")");
     aObj[type](aName, fn);
   },
 
   toCode: function(aObj, aName, aCodeString) {
-    if (aObj) {
-      let fn = new Function();
-      eval("fn = " + aCodeString);
-      aObj[aName] = fn;
-    }
+    if (aObj)
+      aObj[aName] = eval("(" + aCodeString + ")");
     else
       eval(aName + " = " + aCodeString);
   },
@@ -372,6 +368,14 @@ XXX fix this when there is no stack go directly to trace
 
   getTopWin: function() {
     return TabmixSvc.wm.getMostRecentWindow("navigator:browser");
+  },
+
+  getSingleWindowMode: function TMP_getSingleWindowMode() {
+    // if we don't have any browser window opened return false
+    // so we can open new window
+    if (!this.getTopWin())
+      return false;
+    return TabmixSvc.prefs.getBoolPref("extensions.tabmix.singleWindow");
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
@@ -440,8 +444,6 @@ XXX fix this when there is no stack go directly to trace
     for (i = 0; i < strParam.length; i++)
       dpb.SetString(i, strParam[i]);
 
-    var ww = Cc["@mozilla.org/embedcomp/window-watcher;1"]
-                        .getService(Ci.nsIWindowWatcher);
     if (typeof(aWindow) == "undefined") {
       try { aWindow = window;
       }
@@ -450,7 +452,7 @@ XXX fix this when there is no stack go directly to trace
     }
 
     // we add dependent to features to make this dialog float over the window on start
-    var dialog = ww.openWindow(aWindow,
+    var dialog = Services.ww.openWindow(aWindow,
            "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +(modal ? ",modal" : ",dependent") ,dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
@@ -513,6 +515,7 @@ XXX fix this when there is no stack go directly to trace
 }
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
 XPCOMUtils.defineLazyGetter(Tabmix.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);

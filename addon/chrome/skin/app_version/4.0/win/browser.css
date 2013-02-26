@@ -10,8 +10,8 @@
 @import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
 @import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
 
-/* :::: tabbar on buttom :::: */
-#TabsToolbar[tabbaronbuttom] {
+/* :::: tabbar on bottom :::: */
+#TabsToolbar[tabbaronbottom] {
   background-image: none !important;
 }
 
@@ -51,7 +51,7 @@
   background-color: transparent;
 }
 
-#TabsToolbar[tabbaronbuttom][tabmix_aero]:not(:-moz-lwtheme) {
+#TabsToolbar[tabbaronbottom][tabmix_aero]:not(:-moz-lwtheme) {
   -moz-appearance: none;
   border-style: none;
 }
