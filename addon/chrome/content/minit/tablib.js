@@ -69,7 +69,7 @@ var tablib = {
          $&\
        }'
     )._replace(
-      'this._lastRelatedTab || this.selectedTab', 'this._lastRelatedTab || _selectedTab'
+      'this.selectedTab)._tPos + 1', '_selectedTab)._tPos + 1'
     )._replace(
       /*
         replace Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")
@@ -92,7 +92,7 @@ var tablib = {
       }
       ]]>
     )._replace( //  new tab can trigger selection change by some extensions (divX HiQ)
-      't.owner = this.selectedTab;', 't.owner = _selectedTab'
+      't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
     gBrowser.TMP_blockedCallers = ["tabbrowser_SSS_duplicateTab",
@@ -151,7 +151,7 @@ var tablib = {
       // we call focusAndSelectUrlBar from Tabmix.clearUrlBar
       // see TMP_BrowserOpenTab
       'focusAndSelectUrlBar();',
-      ''
+      '{/* see TMP_BrowserOpenTab */}'
     )._replace(
       'this.tabContainer.adjustTabstrip();',
       'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
@@ -328,7 +328,7 @@ var tablib = {
           if (!this.TMP_inSingleRow(tabs))
             return;
           this._tabDefaultMaxWidth = this.mTabMaxWidth
-        $&]]>
+          $&]]>
       ).toCode();
 
       Tabmix.newCode("gBrowser.tabContainer._expandSpacerBy", gBrowser.tabContainer._expandSpacerBy)._replace(
@@ -437,7 +437,6 @@ var tablib = {
       'gBrowser.removeCurrentTab({animate: true})',
       'tablib.closeLastTab();'
     ).toCode();
-
 
     // hide open link in window in single window mode
     if ("nsContextMenu" in window && "initOpenItems" in nsContextMenu.prototype) {
@@ -657,7 +656,7 @@ var tablib = {
       'this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0];',
       'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] : document.getElementById(arguments[0]);'
     )._replace(
-      'var undoPopup = undoMenu.firstChild;',
+      'undoPopup = undoMenu.firstChild;',
       '$&\
       if (!undoPopup.hasAttribute("context")) undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");'
     )._replace(
@@ -679,7 +678,7 @@ var tablib = {
       '$& \
       m.setAttribute("value", -2);'
     )._replace(
-      'var m = undoPopup.appendChild(document.createElement("menuitem"));',
+      'm = undoPopup.appendChild(document.createElement("menuitem"));',
       '$& \
        m.id = "menu_clearClosedWindowsList"; \
        m.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label")); \
@@ -694,8 +693,8 @@ var tablib = {
 
     Tabmix.newCode("switchToTabHavingURI", switchToTabHavingURI)._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
-      '$& \
-       gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);'
+      '{$& \
+       gBrowser.tabContainer.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab);}'
     ).toCode();
 
   },

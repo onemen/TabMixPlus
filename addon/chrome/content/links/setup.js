@@ -122,17 +122,16 @@ function TMP_TBP_Startup() {
       );
       bowserStartup = bowserStartup._replace(
         'if (window.opener && !window.opener.closed) {',
-        'if (uriToLoad && uriToLoad != "about:blank")\
-           for (var i = 0; i < gBrowser.tabs.length ; i++)\
-             gBrowser.tabs[i].loadOnStartup = true;\
-         $&'
-      );
-      bowserStartup = bowserStartup._replace(
-        'if (window.opener && !window.opener.closed) {',
-        'if (uriToLoad == "about:blank" || "tabmixdata" in window) {\
-          gBrowser.selectedBrowser.stop();\
-        }\
-        $&'
+        <![CDATA[
+          if (uriToLoad && uriToLoad != "about:blank") {
+            for (var i = 0; i < gBrowser.tabs.length ; i++) {
+              gBrowser.tabs[i].loadOnStartup = true;
+            }
+          }
+          if (uriToLoad == "about:blank" || "tabmixdata" in window) {
+            gBrowser.selectedBrowser.stop();
+          }
+        $&]]>
       );
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
@@ -151,12 +150,13 @@ function TMP_TBP_Startup() {
           ["delayedStartup", delayedStartup];
     Tabmix.newCode(name, fn)._replace(
       '{',
-      '{\
-       try {\
-         if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true); \
-         Tabmix.getNewTabButtonWidth();\
-         TabmixSessionManager.init();\
-       } catch (ex) {Tabmix.assert(ex);}'
+      <![CDATA[{
+      try {
+        if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);
+        Tabmix.getNewTabButtonWidth();
+        TabmixSessionManager.init();
+      } catch (ex) {Tabmix.assert(ex);}
+      ]]>
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix

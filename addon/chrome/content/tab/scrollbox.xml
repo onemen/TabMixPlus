@@ -128,13 +128,13 @@
             'STOP_DISTANCE = TabmixTabbar.isMultiRow ? 3 : 15;'
           )._replace(
             'amountToScroll = this._isScrolling * STOP_DISTANCE;',
-            '$& \
-             offset = false;'
+            '{$& \
+             offset = false;}'
           )._replace(
             'this._stopSmoothScroll();',
             '$& \
-             if (offset) \
-               amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);'
+             if (offset) {\
+               amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);}'
           ).toCode(false, this, "ensureElementIsVisible");
 
           Tabmix.newCode(null, this._distanceScroll)._replace(

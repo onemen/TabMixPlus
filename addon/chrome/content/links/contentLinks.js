@@ -190,9 +190,8 @@ Tabmix.contentAreaClick = {
     ).toCode();
 
     Tabmix.newCode("handleLinkClick", handleLinkClick)._replace(
-      'whereToOpenLink(event)',
-      <![CDATA[
-        $&
+      'whereToOpenLink(event);',
+      <![CDATA[$&
         // don't change where if it is save, window, or we passed
         // event.__where = default from contentAreaClick or
         // Tabmix.contentAreaClick.contentLinkClick
@@ -767,7 +766,7 @@ Tabmix.contentAreaClick = {
     if (/calendar\/render/.test(location))
       return true;
 
-    if (/\/intl\/\D{2,}\/options\//.test(linkNode.pathname))
+    if (/\/intl\/\D{2,}\/options\/|search/.test(linkNode.pathname))
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",

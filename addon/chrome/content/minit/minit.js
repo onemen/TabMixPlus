@@ -887,8 +887,8 @@ var TMP_TabView = {
     // we need to stop tabs slideShow before Tabview starts
     Tabmix.newCode("TabView.toggle", TabView.toggle)._replace(
       'this.show();',
-      'if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
-       $&'
+      '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
+       $&}'
     ).toCode();
 
     // don't do anything if Session Manager extension installed

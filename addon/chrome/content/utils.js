@@ -312,7 +312,7 @@ options = {
   // Show/hide one item (specified via name or the item element itself).
   showItem: function(aItemOrId, aShow) {
     var item = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
-    if (item)
+    if (item && item.hidden == aShow)
       item.hidden = !aShow;
   },
 

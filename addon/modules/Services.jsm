@@ -51,7 +51,7 @@ let TabmixSvc = {
   topWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
-  
+
   get direct2dDisabled() {
     delete this.direct2dDisabled;
     try {
@@ -82,6 +82,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "version", function () {
   v.is140 = comparator.compare(version, "14.0a1") >= 0;
   v.is150 = comparator.compare(version, "15.0a1") >= 0;
   v.is160 = comparator.compare(version, "16.0a1") >= 0;
+  v.is170 = comparator.compare(version, "17.0a1") >= 0;
   return v;
 });
 
