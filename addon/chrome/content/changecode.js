@@ -117,3 +117,7 @@ Tabmix.setNewFunction = function(aObj, aName, aCode) {
   else
     aObj[aName] = aCode;
 }
+
+Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
+  aObj[aFn].apply(aObj, aArg || []);
+}

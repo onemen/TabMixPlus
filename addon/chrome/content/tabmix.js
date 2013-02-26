@@ -262,8 +262,10 @@ var TMP_eventListener = {
 
     // make sure AVG Security Toolbar initialized
     // before we change gURLBar.handleCommand to prevent too much recursion from gURLBar.handleCommand
-    if (window.InitializeOverlay_avg && typeof InitializeOverlay_avg.Init == "function")
-      InitializeOverlay_avg.Init();
+    if (window.InitializeOverlay_avg && typeof InitializeOverlay_avg.Init == "function") {
+      // avg.Init uses arguments.callee, so i can't call it from strict mode
+      Tabmix.nonStrictMode(InitializeOverlay_avg, "Init");
+    }
 
     // initialize our gURLBar.handleCommand function early before other extensions change
     // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
