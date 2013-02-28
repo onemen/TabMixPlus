@@ -45,7 +45,10 @@
       <preference id="pref_onClose"
                   name="extensions.tabmix.sessions.onClose"                  type="int"/>
       <preference id="pref_onStart.loadsession"
-                  name="extensions.tabmix.sessions.onStart.loadsession"      type="int"/>
+                  name="extensions.tabmix.sessions.onStart.loadsession"      type="int"
+                  onchange="gSessionPane.setSessionpath(this.value);"/>
+      <preference id="pref_sessionpath"
+                  name="extensions.tabmix.sessions.onStart.sessionpath"      type="string"/>
       <preference id="pref_onStart.empty"
                   name="extensions.tabmix.sessions.onStart.askifempty"       type="bool"/>
       <preference id="pref_onRestore.overwritewindows"

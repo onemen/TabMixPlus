@@ -15,8 +15,10 @@ var gSessionPane = {
       $("paneSession-tabbox").selectedIndex = 0;
       $("chooseFile").selectedIndex = 1;
     }
-    else
+    else {
       TabmixSessionManager.createMenuForDialog($("onStart.popup"));
+      $("onStart.loadsession").value = $("pref_onStart.loadsession").value;
+    }
 
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
@@ -84,6 +86,11 @@ var gSessionPane = {
 
     if (document.documentElement.instantApply)
       Services.prefs.savePrefFile(null);
+  },
+
+  setSessionpath: function (val) {
+    var menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
+    $("pref_sessionpath").value = menuItem.getAttribute("session");
   },
 
   sessionManagerOptions: function () {
