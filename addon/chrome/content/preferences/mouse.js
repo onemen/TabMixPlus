@@ -32,12 +32,9 @@ var gMousePane = {
     }
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
+    this.updatePanelPrefs($("tabclick").selectedIndex);
 
     gPrefWindow.initPane("paneMouse");
-
-    let selectedIndex = $("tabclick").selectedIndex;
-    if (selectedIndex == 0)
-      this.updatePanelPrefs(selectedIndex);
   },
 
   tabSelectionChanged: function (aEvent) {
