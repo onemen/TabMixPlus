@@ -98,7 +98,7 @@ function TMP_TBP_Startup() {
 
     var windowOpeneByTabmix = "tabmixdata" in window;
     var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = Tabmix.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+    var disAllow = SM.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
