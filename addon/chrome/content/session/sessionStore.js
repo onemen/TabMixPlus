@@ -92,6 +92,7 @@ var TMP_SessionStore = {
     * @brief         make sure that we don't enable both sessionStore and session manager
     *
     * @param msgNo   a Integer value - msg no. to show.
+    *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
     *
     * @param start   a Boolean value - true if we call this function before startup.
     *
@@ -120,7 +121,7 @@ var TMP_SessionStore = {
 
       window.tabmix_setSession = true;
       // if session manager extension is install disable TMP session manager
-      if (Tabmix.extensions.sessionManager) {
+      if (msgNo == -1 || Tabmix.extensions.sessionManager) {
          // update session manager settings accourding to current tabmix settings
          if (TMP_manager_enabled) {
             Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
@@ -227,7 +228,8 @@ var TMP_SessionStore = {
    },
 
    setSessionRestore: function (aEnable) {
-      Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
+     if (!Tabmix.isVersion(200))
+        Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
       Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
       Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
       if (aEnable)
@@ -790,9 +792,7 @@ var TabmixConvertSession = {
    },
 
   sessionManagerOptions: function SM_sessionManagerOptions() {
-    if ("com" in window && com.morac &&
-        com.morac.SessionManagerAddon) {
+    if (Tabmix.extensions.sessionManager)
       com.morac.SessionManagerAddon.gSessionManagerWindowObject.openOptions();
-    }
   }
 }

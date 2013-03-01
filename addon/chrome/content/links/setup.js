@@ -178,9 +178,7 @@ function TMP_TBP_Startup() {
       '{',
       '{' +
       'try {' +
-      '  if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);' +
-      '  Tabmix.getNewTabButtonWidth();' +
-      '  TabmixSessionManager.init();' +
+      '  Tabmix.beforeDelayedStartup();' +
       '} catch (ex) {Tabmix.assert(ex);}'
     )._replace(
       swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}

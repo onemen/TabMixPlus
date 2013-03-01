@@ -75,7 +75,9 @@
       TabView._initFrameCallbacks.push(callback);
   },
 
-  TMP_TabView._patchTabviewFrame = function SM__patchTabviewFrame(){
+  TMP_TabView._patchInitialized = false;
+  TMP_TabView._patchTabviewFrame = function SM__patchTabviewFrame() {
+    this._patchInitialized = true;
     // Firefox 8.0 use strict mode - we need to map global variable
     TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
     Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
@@ -173,7 +175,7 @@
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
     }
 
-    if (!Tabmix.extensions.sessionManager && TabView._window) {
+    if (this._patchInitialized) {
       TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
       delete TabView._window.GroupItems._original_reconstitute;
       TabView._window.UI.reset = TabView._window.UI._original_reset;

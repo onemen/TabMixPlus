@@ -59,6 +59,17 @@ Tabmix.startup = function TMP_startup() {
   };
 }
 
+// we call this function when gBrowserInit._delayedStartup start, see setup.js
+Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
+  if (this.isFirstWindow) {
+    let tmp = {};
+    Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
+    TMP_SessionStore.setService(1, true);
+  }
+  this.getNewTabButtonWidth();
+  TabmixSessionManager.init();
+}
+
 // we call this at the start of gBrowserInit._delayedStartup
 // if we call it erlier we get this warning:
 // XUL box for _moz_generated_content_before element contained an inline #text child
