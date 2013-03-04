@@ -1189,8 +1189,11 @@ var gTMPprefObserver = {
       let prefString = Services.prefs.getCharPref(prefName);
       try {
         var currentPrefValues = TabmixSvc.JSON.parse(prefString);
+        if (currentPrefValues == null)
+          throw Error(prefName + " value is invalid\n" + prefString)
       }
       catch (ex) {
+        Tabmix.log(ex);
         try {
           // convert old format to JSON string
           // we do it only one time when user update Tabmix from old version
@@ -1210,9 +1213,9 @@ var gTMPprefObserver = {
       // if item is missing set it to default
       for (let item in defaultPrefValues) {
         let value = currentPrefValues[item];
-        if (item.indexOf("Color") > -1) {
-         let opacity = item.replace("Color", "Opacity");
-         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
+        if (value && item.indexOf("Color") > -1) {
+          let opacity = item.replace("Color", "Opacity");
+          let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
           value = getRGBcolor(value, opacityValue);
         }
         else if (value != null && typeof(value) != "boolean") {
