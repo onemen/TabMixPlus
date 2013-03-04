@@ -78,14 +78,15 @@ function TMP_TBP_Startup() {
     if (Tabmix.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
       SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
-      // isPrivateWindow is fix boolean for this window, user can't change private status of a window
+      // isPrivateWindow is boolean property of this window, user can't change private status of a window
       SM.isPrivateWindow = SM.isWindowPrivate(window);
       SM.__defineGetter__("isPrivateSession", function() {
-        return this.globalPrivateBrowsing || !TabmixSvc.saveSession;
+        return this.globalPrivateBrowsing || TabmixSvc.sm.private;
       });
-      // set this flag to true if user opens in a session at least one non-private window
-      if (!TabmixSvc.saveSession && !SM.isPrivateWindow)
-        TabmixSvc.saveSession = true;
+      // set this flag to false if user opens in a session at least one non-private window
+      SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
+      if (SM.firstNonPrivateWindow)
+        TabmixSvc.sm.private = false;
     }
     else {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
@@ -97,8 +98,8 @@ function TMP_TBP_Startup() {
     }
 
     var windowOpeneByTabmix = "tabmixdata" in window;
-    var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = SM.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+    var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
+    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");

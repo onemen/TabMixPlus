@@ -104,6 +104,7 @@ Tabmix.Sanitizer = {
 
       // set flag for next start
       Tabmix.prefs.setBoolPref("sessions.sanitized" , true);
+      TabmixSvc.sm.sanitized = true;
    },
 
    clearDisk: function (aFile) {
@@ -318,9 +319,11 @@ var TabmixSessionManager = {
     windowClosed: false,
 
     afterCrash: false,
+    lastSessionWasEmpty: false,
 
     // whether we are in private browsing mode
     globalPrivateBrowsing: false,
+    firstNonPrivateWindow: false,
 
    get prefBranch() {
       delete this.prefBranch;
@@ -334,7 +337,7 @@ var TabmixSessionManager = {
       this._inited = true;
 
       this._init();
-      if (Tabmix.isFirstWindow && this._notifyWindowsRestored) {
+      if (this._notifyWindowsRestored) {
         // restart-less extensions observers for this notification on startup
         // notify observers things are complete.
         Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
@@ -349,7 +352,7 @@ var TabmixSessionManager = {
       tablib.init();
 
       var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
-      var isFirstWindow = Tabmix.isFirstWindow && !_afterTabduplicated;
+      var isFirstWindow = (Tabmix.isFirstWindow || this.firstNonPrivateWindow) && !_afterTabduplicated;
 
       let obs = Services.obs;
       obs.addObserver(this, "browser-window-change-state", true);
@@ -363,13 +366,14 @@ var TabmixSessionManager = {
       }
 
       this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;
-      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery") && !this.isPrivateWindow;
+      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery");
       this.enableSaveHistory = this.prefBranch.getBoolPref("save.history");
       this.saveClosedtabs = this.prefBranch.getBoolPref("save.closedtabs") &&
                              Tabmix.prefs.getBoolPref("undoClose");
       this._lastSaveTime = Date.now();
+      var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
       // check if we need to backup
-      if (isFirstWindow && this.enableManager && !this.prefBranch.prefHasUserValue("sanitized")) {
+      if (!TabmixSvc.sm.initialized && this.enableManager && !sanitized) {
          try {
            this.archiveSessions();
          }
@@ -386,25 +390,45 @@ var TabmixSessionManager = {
       if (!this.DATASource)
          this.initService();
 
-      if (this.globalPrivateBrowsing) {
+      // If sessionStore restore the session after restart we do not need to do anything
+      // when all tabs are pinned, session resore add the home page on restart
+      var afterRestart = Tabmix.isWindowAfterSessionRestore &&
+            !gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
+      // prepare history sessions
+      if (!TabmixSvc.sm.initialized && !this.globalPrivateBrowsing &&
+            !sanitized && !afterRestart) {
+         let status, crashed;
+         if (this.enableBackup) {
+            let path = this._rdfRoot + "/closedSession/thisSession";
+            status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
+            crashed = TabmixSvc.sm.crashed = status.indexOf("crash") != -1;
+         }
+         if (this.enableManager || crashed) {
+            if (crashed)
+               this.preparAfterCrash(status);
+            this.prepareSavedSessions();
+         }
+      }
+      TabmixSvc.sm.initialized = true;
+
+      if (this.isPrivateWindow) {
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
+         this.enableBackup = false;
          return;
       }
 
-      var path, status, caller, crashed;
       if (isFirstWindow) {
-         path = this._rdfRoot + "/closedSession/thisSession";
-         status = this.getLiteralValue(path, "status");
-         crashed = status.indexOf("crash") != -1;
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
+         let path = this._rdfRoot + "/closedSession/thisSession";
          this.setLiteral(path, "status", "crash");
 
          // if we after sanitize, we have no data to restore
-         if (this.enableManager && this.prefBranch.prefHasUserValue("sanitized")) {
+         if (sanitized) {
             this.prefBranch.clearUserPref("sanitized");
+            TabmixSvc.sm.sanitized = false;
             this.loadHomePage();
             this.saveStateDelayed();
             return;
@@ -414,22 +438,18 @@ var TabmixSessionManager = {
             return;
          }
 
-         // If sessionStore restore the session after restart we do not need to do anything
-         // when all tabs are pinned, session resore add the home page on restart
-         let tabmixLoading = gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
-         let afterRestart = !tabmixLoading && Tabmix.isWindowAfterSessionRestore;
          if (afterRestart)
             this.onSessionRestored();
-         else if (crashed)
-            this.openAfterCrash(status);
+         else if (TabmixSvc.sm.crashed && this.enableBackup)
+            this.openAfterCrash(TabmixSvc.sm.status);
          else if (this.enableManager)
-            this.openFirstWindow(false);
+            this.openFirstWindow(TabmixSvc.sm.crashed);
 
          Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
       }
       else if (this.enableManager && "tabmixdata" in window) {
-         path = window.tabmixdata.path;
-         caller = window.tabmixdata.caller;
+         let path = window.tabmixdata.path;
+         let caller = window.tabmixdata.caller;
 
          if (caller == "concatenatewindows")
             this.loadSession(path, caller, false);
@@ -2039,8 +2059,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    // call by init on first window load after crash
-   openAfterCrash: function SM_openAfterCrash(status) {
-      this.afterCrash = true;
+   preparAfterCrash: function SM_preparAfterCrash(status) {
       var sessionContainer = this.initContainer(this.gSessionPath[0]);
       if (this.enableBackup) {
          var path = this._rdfRoot + "/closedSession/thisSession";
@@ -2070,7 +2089,14 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          } // if firefox was crashed in middle of crash Recovery try again to restore the same data
          else if (!this.containerEmpty(this.gSessionPath[0]))
             this.deleteWithProp(sessionContainer);
+      }
+      else if (!this.containerEmpty(this.gSessionPath[0]))
+         // crash recovery is off, delete any remains from the crashed session
+         this.deleteWithProp(sessionContainer);
+   },
 
+   openAfterCrash: function SM_openAfterCrash(status) {
+         this.afterCrash = true;
          var title = TabmixSvc.getSMString("sm.afterCrash.title");
          var msg;
          if (status != "crash2")
@@ -2138,11 +2164,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
             }
          }
-      } else { // crash recovery is off, delete any remains from the crashed session
-         if (!this.containerEmpty(this.gSessionPath[0])) this.deleteWithProp(sessionContainer);
-         if (this.enableManager) this.openFirstWindow(true); // openFirstWindow with flag openAfterCrash
-         //  else BrowserHome(); // we never get to here...
-      }
    },
 
    afterCrashPromptCallBack: function SM_afterCrashPromptCallBack(aResult) {
@@ -2168,8 +2189,18 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       delete this.callBackData;
    },
 
-   // call by init or by openAfterCrash on first window load
-   openFirstWindow: function SM_openFirstWindow(afterCrash) {
+   prepareSavedSessions: function SM_prepareSavedSessions() {
+      // make sure we delete closed windows that may exist if we exit Firefox
+      // from private browsing mode. we skip this command in windowIsClosing
+      // when entring private browsing mode
+      this.deleteWithProp(this.initContainer(this.gSessionPath[0]), "dontLoad");
+
+      // don't remove oldest session if last session was empty
+      if (this.containerEmpty(this.gSessionPath[0])) {
+        this.lastSessionWasEmpty = true;
+        return;
+      }
+
       var path = this._rdfRoot + "/closedSession/";
       var sessionType = ["thisSession", "lastSession", "previoustolastSession", "crashedsession"];
       // swap 0 --> 1 --> 2 --> 0
@@ -2192,12 +2223,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       this.gThisWin = this.gSessionPath[0] + "/" + gBrowser.windowID;
       this.gThisWinTabs = this.gThisWin + "/tabs";
       this.gThisWinClosedtabs = this.gThisWin + "/closedtabs";
+   },
 
-      // make sure we delete closed windows that may exist if we exit Firefox
-      // from private browsing mode. we skip this command in windowIsClosing
-      // when entring private browsing mode
-      this.deleteWithProp(this.initContainer(this.gSessionPath[1]), "dontLoad");
-
+   openFirstWindow: function SM_openFirstWindow(afterCrash) {
       // When Firefox Starts:
       //       pref "onStart"
       //       0 - Restore
@@ -2276,7 +2304,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case -1:
             var indx = -1 * loadSession;
             thisPath = this.gSessionPath[indx];
-            if (this.containerEmpty(this.gSessionPath[indx])) startupEmpty = true;
+            if (indx == 1 && this.lastSessionWasEmpty ||
+                  this.containerEmpty(this.gSessionPath[indx])) {
+               startupEmpty = true;
+            }
             sessionIndex = sessionPath.length + indx - 3;
             break;
       }
@@ -2314,7 +2345,7 @@ try{
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
       this.enableCrashRecovery(aResult);
       if (aResult.button == Tabmix.BUTTON_OK)
-         this.loadSession(aResult.label, "firstwindowopen");
+         this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
       else
          this.loadHomePage();
 
@@ -2685,6 +2716,7 @@ try{
       // clear sanitized flag
       if (this.prefBranch.prefHasUserValue("sanitized")) {
          this.prefBranch.clearUserPref("sanitized");
+         TabmixSvc.sm.sanitized = false;
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "crash");
       }
 

@@ -92,6 +92,17 @@ let TabmixSvc = {
         } catch(ex) {return null}
       }
     }
+  },
+
+  sm: {
+    initialized: false,
+    status: "",
+    crashed: false,
+    get sanitized() {
+      delete this.sanitized;
+      return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
+    },
+    private: true
   }
 }
 
