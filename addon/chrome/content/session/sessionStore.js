@@ -637,7 +637,15 @@ var TabmixConvertSession = {
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
-      com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
+      if (window.gSessionManagerAddon) {
+         let tmp = {}
+         Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp)
+         tmp.SessionConverter.convertTMP(aFileUri, aSilent);
+      }
+      else {
+         let sm = com.morac.SessionManagerAddon.gSessionManagerWindowObject;
+         sm.doTMPConvertFile(aFileUri, aSilent);
+      }
    },
 
    confirm: function cs_confirm(aMsg, aCallBack) {
@@ -789,10 +797,5 @@ var TabmixConvertSession = {
          entries.push(entry);
       }
       return entries;
-   },
-
-  sessionManagerOptions: function SM_sessionManagerOptions() {
-    if (Tabmix.extensions.sessionManager)
-      com.morac.SessionManagerAddon.gSessionManagerWindowObject.openOptions();
-  }
+   }
 }

@@ -6,19 +6,7 @@ var gSessionPane = {
     if (Tabmix.isPlatform("Linux"))
       $("sessionManager-panels").setAttribute("linux", "true");
 
-    // disable TMP session manager setting if session manager extension is install
-    this.gSessionManager = Tabmix.getTopWin().Tabmix.extensions.sessionManager;
-    if (this.gSessionManager) {
-      $("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
-      $("sessionmanager_ext_tab").hidden = false;
-      $("sessionStore_tab").hidden = true;
-      $("paneSession-tabbox").selectedIndex = 0;
-      $("chooseFile").selectedIndex = 1;
-    }
-    else {
-      TabmixSessionManager.createMenuForDialog($("onStart.popup"));
-      $("onStart.loadsession").value = $("pref_onStart.loadsession").value;
-    }
+    this.setVisiblecontent(!!this.sessionManagerAddon, true);
 
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
@@ -93,9 +81,35 @@ var gSessionPane = {
     $("pref_sessionpath").value = menuItem.getAttribute("session");
   },
 
+  get sessionManagerAddon() {
+    var win = Tabmix.getTopWin();
+    let sm = win.gSessionManagerAddon ||
+        win.com && win.com.morac && win.com.morac.SessionManagerAddon;
+    return sm && sm.gSessionManager || sm;
+  },
+
+  setVisiblecontent: function (sessionManagerInstalled, onStart) {
+    if (typeof sessionManagerInstalled != "boolean")
+      return;
+
+    // disable TMP session manager setting if session manager extension is install
+    $("sessionmanager_ext_tab").hidden = !sessionManagerInstalled;
+    $("sessionStore_tab").hidden = sessionManagerInstalled;
+    $("paneSession-tabbox").selectedIndex = sessionManagerInstalled ? 0 : 1;
+    if (sessionManagerInstalled) {
+      $("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
+      if (onStart)
+        $("chooseFile").selectedIndex = 1;
+    }
+    else {
+      this.isSessionStoreEnabled(onStart);
+      TabmixSessionManager.createMenuForDialog($("onStart.popup"));
+      $("onStart.loadsession").value = $("pref_onStart.loadsession").value;
+    }
+  },
+
   sessionManagerOptions: function () {
-    var browserWindow = Tabmix.getTopWin();
-    browserWindow.TabmixConvertSession.sessionManagerOptions();
+    this.sessionManagerAddon.openOptions();
   },
 
   convertSession: function () {
@@ -103,7 +117,7 @@ var gSessionPane = {
     if ($("chooseFile").selectedItem.value == 0)
       browserWindow.TabmixConvertSession.selectFile(window);
     else
-     browserWindow.TabmixConvertSession.convertFile();
+      browserWindow.TabmixConvertSession.convertFile();
 
     window.focus();
   }

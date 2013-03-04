@@ -24,6 +24,7 @@ let TabmixListener = {
     let win = TabmixSvc.topWin();
     if (win)
       win.TMP_SessionStore.setService(-1);
+    this.notify(true);
   },
   onDisabled: function(addon) {
     if (addon.id != this.id)
@@ -35,12 +36,19 @@ let TabmixListener = {
       TabmixSvc.prefBranch.setBoolPref("sessions.manager", this.manager_enabled);
       TabmixSvc.prefBranch.setBoolPref("sessions.crashRecovery", this.crashRecovery_enabled);
     }
+    this.notify(false);
   },
   onInstalled: function(addon) {
     if (addon.id != this.id ||
         !addon.isActive || addon.userDisabled || addon.appDisabled)
       return;
     this.onEnabled(addon);
+  },
+  notify: function(isActive) {
+    // in preference/session.js we only care when the preference is boolean
+    let pref = "sessionManagerAddon.isActive";
+    TabmixSvc.prefBranch.setBoolPref(pref, isActive);
+    TabmixSvc.prefBranch.clearUserPref(pref);
   }
 }
 

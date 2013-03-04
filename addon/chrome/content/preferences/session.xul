@@ -18,6 +18,9 @@
     <preferences>
       <preference id="pref_session"             name="extensions.tabmix.session.selectedTabIndex"
                   type="int"/>
+      <preference id="pref_sessionManagerAddon"
+                  name="extensions.tabmix.sessionManagerAddon.isActive"      type="bool"
+                  onchange="gSessionPane.setVisiblecontent(this.value);"/>
       <preference id="pref_sessionManager"
                   name="extensions.tabmix.sessions.manager"                  type="bool"
                   onchange="gSessionPane.updateSessionShortcuts();"/>
