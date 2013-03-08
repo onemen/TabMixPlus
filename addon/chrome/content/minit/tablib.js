@@ -602,11 +602,15 @@ var tablib = {
     ).toCode();
 
     // if user changed mode to single window mode while having closed window
-    // make sure that undoCloseWindow will open the closed window in the current window
+    // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
       'window = ss.undoCloseWindow(aIndex || 0);',
       '{if (Tabmix.singleWindowMode) {\
-        window = Tabmix.getTopWin();\
+         window = TabmixSvc.version(200) ?\
+            Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false}) :\
+            Tabmix.getTopWin();\
+       }\
+       if (window) {\
         let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
         state = TabmixSvc.JSON.stringify(state);\
         ss.setWindowState(window, state, false);\
@@ -616,12 +620,6 @@ var tablib = {
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\
        $&'
-    ).toCode();
-
-    // disable undo closed window when single window mode is on
-    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRecentlyClosedWindows")._replace(
-      'if (this._ss.getClosedWindowCount() == 0)',
-      'if (this._ss.getClosedWindowCount() == 0 || Tabmix.singleWindowMode)'
     ).toCode();
 
     if (document.getElementById("appmenu_recentlyClosedTabsMenu")) {
