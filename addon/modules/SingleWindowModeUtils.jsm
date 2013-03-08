@@ -31,15 +31,15 @@ let SingleWindowModeUtils = {
   */
   getBrowserWindow: function(aExclude) {
     // on per-window private browsing mode,
-    // allow to open one private window in single window mode
-    var checkPrivacy = TabmixSvc.version(200) &&
-      PrivateBrowsingUtils.isWindowPrivate(aExclude);
+    // allow to open one normal window and one private window in single window mode
+    var checkPrivacy = TabmixSvc.version(200);
+    var isPrivate = checkPrivacy && PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
       return (!win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
               (!checkPrivacy ||
-                PrivateBrowsingUtils.isWindowPrivate(win)));
+                PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate));
     }
 
     var windows = Services.wm.getEnumerator("navigator:browser");

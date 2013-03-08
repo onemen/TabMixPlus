@@ -7,20 +7,18 @@
  */
 
 Tabmix.startup = function TMP_startup() {
-  // disable the Open New Window action in Single Window Mode...
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
-  cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
-
-  // Open New Private Window in Single Window Mode only if there is no other private window
-  // otherwise open new tab in most recent private window
+  // Firefox 20+ implemented per-window Private Browsing
+  // When in single window mode allow one normal window and one private window.
+  // otherwise open new tab in most recent window of the appropriate type
   if (this.isVersion(200)) {
-    this._openPrivateBrowsing = function () {
+    this._openNewTab = function (aPrivate) {
       if (this.singleWindowMode) {
-        let pbWindow = this.RecentWindow.getMostRecentBrowserWindow({ private: true });
-        if (pbWindow) {
-          pbWindow.focus();
-          pbWindow.BrowserOpenTab();
+        let win = this.RecentWindow.getMostRecentBrowserWindow({ private: aPrivate });
+        if (win) {
+          win.focus();
+          win.BrowserOpenTab();
           return false;
         }
       }
@@ -28,8 +26,11 @@ Tabmix.startup = function TMP_startup() {
     }
     let command = document.getElementById("Tools:PrivateBrowsing");
     let originalCode = command.getAttribute("oncommand");
-    command.setAttribute("oncommand","if (Tabmix._openPrivateBrowsing()) {" + originalCode + "}");
+    command.setAttribute("oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+    cmdNewWindow.setAttribute("oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
   }
+  else
+    cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
   if (!this.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
