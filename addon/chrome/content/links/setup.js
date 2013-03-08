@@ -232,22 +232,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
     // isTabEmpty don't check for Tabmix.isNewTabUrls
-    if (("loadTabsProgressively" in window)) {
-      tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-         // loadTabsProgressively add pending attribute to pending tab when it stop the tab
-         if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
-            return false;
+    tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
+      if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
+        return false;
 
-         return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-      }
-    }
-    else {
-      tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-         if (aTab.hasAttribute("busy"))
-            return false;
-
-         return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-      }
+      return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
     }
 
     tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
