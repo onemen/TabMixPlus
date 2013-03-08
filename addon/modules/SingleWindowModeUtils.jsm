@@ -70,7 +70,7 @@ let SingleWindowModeUtils = {
     var existingWindow = this.getBrowserWindow(aWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)
-      return;
+      return false;
 
     existingWindow.focus();
     // save dimensions
@@ -90,6 +90,8 @@ let SingleWindowModeUtils = {
     win.setAttribute("height" , 0);
     win.setAttribute("screenX" , aWindow.screen.availWidth + 10);
     win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
+
+    return true;
   },
 
   onLoad: function(newWindow) {

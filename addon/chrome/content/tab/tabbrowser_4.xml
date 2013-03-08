@@ -343,8 +343,6 @@
           }
           this.tabmix_inited = true;
 
-          Services.obs.addObserver(TMP_eventListener.observe, "browser-delayed-startup-finished", false);
-
           // ODFReader change Cc to something else maybe some other extensions do that too !!!
           if ("Cc" in window && Cc != Components.classes)
             Cc = Components.classes;

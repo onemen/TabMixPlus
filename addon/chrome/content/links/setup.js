@@ -206,7 +206,17 @@ function TMP_TBP_Startup() {
 // this must run before all
 Tabmix.initialized = false;
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-    Tabmix.initialized = true;
+    this.singleWindowMode = this.prefs.getBoolPref("singleWindow");
+    if (this.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      // don't initialize Tabmix functions for a window that is about to
+      // close by SingleWindowModeUtils
+      if (tmp.SingleWindowModeUtils.newWindow(window))
+        return;
+    }
+
+    this.initialized = true;
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {
@@ -279,16 +289,16 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
-    TabmixTabbar.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") && (max != min);
+    TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && (max != min);
     if (TabmixTabbar.widthFitTitle)
       this.setItem(tabContainer, "widthFitTitle", true);
 
-    var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
+    var tabscroll = this.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
       tabscroll = 1;
     if (tabscroll < 0 || tabscroll > 3 ||
         (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
-      Tabmix.prefs.setIntPref("tabBarMode", 1);
+      this.prefs.setIntPref("tabBarMode", 1);
       tabscroll = 1;
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
@@ -303,8 +313,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     TMP_extensionsCompatibility.preInit();
 
-    if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
-        Tabmix.prefs.getBoolPref("enableDebug")) {
+    if (this.prefs.prefHasUserValue("enableDebug") &&
+        this.prefs.getBoolPref("enableDebug")) {
       this._debugMode = true;
     }
 }
