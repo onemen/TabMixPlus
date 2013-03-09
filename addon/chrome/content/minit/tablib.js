@@ -67,7 +67,7 @@ var tablib = {
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
-       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;}); \
+       props.forEach(function(prop){if (typeof params[prop] == "undefined") params[prop] = null;}); \
        dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
