@@ -309,7 +309,7 @@ var tablib = {
         '{',
         '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
-        /var isEndTab =|faviconize.o_lockTabSizing/,
+        /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
         '    let tab, tabs = this.tabbrowser.visibleTabs;' +
         '    for (let t = aTab._tPos+1, l = this.childNodes.length; t < l; t++) {' +
@@ -334,16 +334,24 @@ var tablib = {
         '  $&'
       ).toCode();
 
-      if (!Tabmix.isVersion(210))
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
-        '{',
-        '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
-      ).toCode();
+      var newString;
+      if (Tabmix.isVersion(210))
+        newString = 'this.hasAttribute("dontresize") || this._closingTabsSpacer.style.minWidth';
+      else {
+        Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
+          '{',
+          '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
+        ).toCode();
 
-      var newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
-                                              'this._usingClosingTabsSpacer';
+        newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
+                                            'this._usingClosingTabsSpacer';
+      }
+
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
         '{','{var updateScrollStatus = ' + newString + ' || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+      )._replace(
+        'this.hasAttribute("overflow")', // this apply only to single row
+        '!this.hasAttribute("multibar") && $&', {check: Tabmix.isVersion(210)}
       )._replace(
         /(\})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +

@@ -113,7 +113,7 @@ label.text-link, label[onclick] {
 
 .tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
 .tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
-  visibility: collapse;
+  visibility: collapse !important;
 }
 
 #TabsToolbar:not([tabstripoverflow]) > #tabmixScrollBox,
