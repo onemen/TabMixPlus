@@ -709,7 +709,7 @@ var tablib = {
       }
     }
 
-    let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocuseUrlBar) {
+    let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -741,7 +741,7 @@ var tablib = {
       var bgPref = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
       if (!disallowSelect && !bgPref) {
         newTab.owner = copyToNewWindow ? null : aTab;
-        let url = !dontFocuseUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
+        let url = !dontFocusUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
         this.TMP_selectNewForegroundTab(newTab, bgPref, url, false);
       }
 
