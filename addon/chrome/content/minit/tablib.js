@@ -611,6 +611,7 @@ var tablib = {
             Tabmix.getTopWin();\
        }\
        if (window) {\
+        window.focus();\
         let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
         state = TabmixSvc.JSON.stringify(state);\
         ss.setWindowState(window, state, false);\
