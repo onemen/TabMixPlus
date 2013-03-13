@@ -30,6 +30,7 @@ var TMP_tabDNDObserver = {
       //   is before (for dragging left) or after (for dragging right)
       //   the middle of a background tab, the dragged tab would take that
       //   tab's position when dropped.
+      if (!Tabmix.extensions.treeStyleTab)
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
         'this.selectedItem = draggedTab;',
         'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
