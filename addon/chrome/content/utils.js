@@ -219,7 +219,7 @@ var Tabmix = {
       this.destroy();
     }.bind(this), false);
 
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
   },
 
   originalFunctions: {},

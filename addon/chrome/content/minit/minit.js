@@ -877,7 +877,7 @@ var TMP_TabView = {
     delete this.installed;
     let installed = typeof TabView == "object";
     if (installed)
-      Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js");
+      Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js", window);
     return this.installed = installed;
   },
 
