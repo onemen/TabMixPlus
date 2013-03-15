@@ -370,7 +370,7 @@
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            if (!tab.closing) {
+            if (tab.closing) {
               tab.removeAttribute("tabmix-firstTabInRow");
               continue;
             }
