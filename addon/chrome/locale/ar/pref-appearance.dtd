@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "اللسان المختار">
 <!ENTITY unloadedTabs.label "الألسنة غير المحمّلة">
 <!ENTITY unreadTab.label "الألسنة غير المقروءة">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "الألسنة الأخرى">
 <!ENTITY italic.label "مائل">
 <!ENTITY bold.label "عريض">

@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Τρέχουσα καρτέλα">
 <!ENTITY unloadedTabs.label "Μη φορτωμένες καρτέλες">
 <!ENTITY unreadTab.label "Μη αναγνωσμένες καρτέλες">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">
 <!ENTITY bold.label "Έντονα">

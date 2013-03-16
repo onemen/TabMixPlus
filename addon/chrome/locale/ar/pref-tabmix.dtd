@@ -76,7 +76,7 @@
 <!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
 <!ENTITY warning.caption.label "التنبيه">
 <!ENTITY warnOnCloseProtected.label "نبهني عند إغلاق نافذة تحتوي ألسنة محمية">
-<!ENTITY warnOnCloseWindow.label "نبهني عند إغلاق نافذة تحتوي ألسنة متعددة">
+<!ENTITY warnOnCloseWindow.label "نبهني عند إغلاق نافذة تحتوي عدة ألسنة">
 <!ENTITY lasttab.caption.label "إغلاق اللسان الأخير">
 <!ENTITY keepWindow.label.3.1 "لا تغلق النافذة عند إغلاق اللسان الأخير">
 <!ENTITY keeptab.label "منع اللسان الأخير من الانغلاق">
@@ -98,22 +98,22 @@
 <!ENTITY menuonlybutton.label "Make the toolbar button display only a list">
 <!ENTITY ctrltab.label "Ctrl-Tab navigates tabs in the most recently used order">
 <!ENTITY cmdtab.label "Cmd-Tab navigates tabs in the most recently used order">
-<!ENTITY ctrltab.tabPreviews "Show tab previews">
+<!ENTITY ctrltab.tabPreviews "عرض معاينة للسان">
 <!ENTITY ctrltab.popup "Ctrl-Tab displays a tab list popup menu">
 <!ENTITY cmdtab.popup "Cmd-Tab displays a tab list popup menu">
 <!ENTITY tabpopup.mouse "Tab list responds to the mouse">
 <!ENTITY mergeNoTabSelection.label "Merge windows when no tabs are selected">
 <!ENTITY mergeTabSelection.label "Merging after selecting tabs">
-<!ENTITY mergeall.label "Merge all windows into one">
-<!ENTITY mergelastfocused.label "Merge only current window with last focused">
+<!ENTITY mergeall.label "دمج جميع النوافذ في نافذة واحدة">
+<!ENTITY mergelastfocused.label "دمج النافذة الحالية فقط مع آخر نافذة مختارة">
 <!ENTITY mergePopups.label "Also take popup windows">
 <!ENTITY popupNextToOpener.label "Place popups next to their openers">
 <!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
 <!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
 <!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
 <!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
-<!ENTITY seconds.label "seconds">
-<!ENTITY minutes.label "min">
+<!ENTITY seconds.label "ثانية\ثوان">
+<!ENTITY minutes.label "دقيقة\دقائق">
 <!ENTITY tabBarAppearance.label "شريط الألسنة">
 <!ENTITY tabAppearance.label "اللسان">
 <!ENTITY toolBarAppearance.label "شريط الأدوات">

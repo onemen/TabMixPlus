@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Aktiver Tab">
 <!ENTITY unloadedTabs.label "Nichtgeladene Tabs">
 <!ENTITY unreadTab.label "Ungelesene Tabs">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Andere Tabs">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fett">

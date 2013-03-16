@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Se îmbină numai fereastra curentă cu ultimele ferestre selectate">
 <!ENTITY mergePopups.label "Se îmbină, de asemena, și ferestrele instantanee">
 <!ENTITY popupNextToOpener.label "Se plasează ferestrele instantanee lângă sursele lor">
-<!ENTITY activateSlideshow.label "Cu tasta #1 se comută circular filele la fiecare">
+<!ENTITY activateSlideshow.label "Cu tasta #1 se activează succedarea automată a filelor la fiecare">
 <!ENTITY toggleAnimation.label "Se dezactivează animarea închiderii/deschiderii filelor">
 <!ENTITY reloadEvery.matchAddress.label "Se reîncarcă o filă indiferent de adresa sa">
 <!ENTITY reloadEvery.onReloadButton.label "Se afișează meniul „Reîncarcă fila la fiecare” sub butonul „Reîncarcă”">

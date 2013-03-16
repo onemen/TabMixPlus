@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Onglet courant">
 <!ENTITY unloadedTabs.label "Onglets non chargés">
 <!ENTITY unreadTab.label "Onglets non lus">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Autres onglets">
 <!ENTITY italic.label "Italique">
 <!ENTITY bold.label "Gras">

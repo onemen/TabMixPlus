@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Aktuell flik">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Olästa flikar">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Andra flikar">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fet">

@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Trenutna kartica">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Nepročitane kartice">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Other Tabs">
 <!ENTITY italic.label "Nakošeno">
 <!ENTITY bold.label "Podebljano">

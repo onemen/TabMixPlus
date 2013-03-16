@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Nykyinen välilehti">
 <!ENTITY unloadedTabs.label "Suljetut välilehdet">
 <!ENTITY unreadTab.label "Lukemamattoman välilehdet">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Muut välilehdet">
 <!ENTITY italic.label "Kursiivi">
 <!ENTITY bold.label "Lihavoitu">

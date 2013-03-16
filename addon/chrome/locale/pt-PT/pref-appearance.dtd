@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Separador actual">
 <!ENTITY unloadedTabs.label "Separadores não carregados">
 <!ENTITY unreadTab.label "Separadores não lidos">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Outros separadores">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">

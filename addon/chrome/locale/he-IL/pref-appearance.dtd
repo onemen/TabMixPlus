@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "לשונית נוכחית">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "לשוניות שלא נקראו">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "לשוניות אחרות">
 <!ENTITY italic.label "נטוי">
 <!ENTITY bold.label "מודגש">

@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Pestanya actual">
 <!ENTITY unloadedTabs.label "Pestanyes no carregades">
 <!ENTITY unreadTab.label "Pestanyes pendents de llegir">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Altres pestanyes">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negreta">
