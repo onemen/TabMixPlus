@@ -1120,7 +1120,8 @@ var gTMPprefObserver = {
   },
 
   addWidthRules: function TMP_PO_addWidthRules() {
-    let newRule = ".tabbrowser-tab[fadein]:not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
+    let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
+    let newRule = ".tabbrowser-tab[fadein]" + tst + ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
