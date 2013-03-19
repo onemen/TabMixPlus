@@ -330,11 +330,10 @@ var tablib = {
         '  }' +
         '  if (!this.TMP_inSingleRow(tabs))' +
         '    return;' +
-        (Tabmix.isVersion(210) ? "" : '  this._tabDefaultMaxWidth = this.mTabMaxWidth;') +
+        '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
         '  $&'
       ).toCode();
 
-      if (!Tabmix.isVersion(210))
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
         '{',
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
