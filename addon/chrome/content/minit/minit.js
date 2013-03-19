@@ -363,13 +363,9 @@ var TMP_tabDNDObserver = {
       newBrowser.docShell;
 
       gBrowser.moveTabTo(newTab, newIndex + left_right);
-
-      gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
-
-      // We need to set selectedTab after we've done
-      // swapBrowsersAndCloseOther, so that the updateCurrentBrowser
-      // it triggers will correctly update our URL bar.
       gBrowser.selectedTab = newTab;
+      gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
+      gBrowser.updateCurrentBrowser(true);
     }
     else {
       var url = browserDragAndDrop.drop(event, { });
