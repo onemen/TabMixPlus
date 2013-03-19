@@ -334,24 +334,16 @@ var tablib = {
         '  $&'
       ).toCode();
 
-      var newString;
-      if (Tabmix.isVersion(210))
-        newString = 'this.hasAttribute("dontresize") || this._closingTabsSpacer.style.minWidth';
-      else {
-        Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
-          '{',
-          '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
-        ).toCode();
+      if (!Tabmix.isVersion(210))
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
+        '{',
+        '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
+      ).toCode();
 
-        newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
-                                            'this._usingClosingTabsSpacer';
-      }
-
+      var newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
+                                              'this._usingClosingTabsSpacer';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
         '{','{var updateScrollStatus = ' + newString + ' || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
-      )._replace(
-        'this.hasAttribute("overflow")', // this apply only to single row
-        '!this.hasAttribute("multibar") && $&', {check: Tabmix.isVersion(210)}
       )._replace(
         /(\})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
