@@ -427,8 +427,7 @@
         }
 
         var tabs = document.getBindingParent(this);
-        var multibar = tabs.hasAttribute("multibar");
-        if (multibar) {
+        if (tabs.hasAttribute("multibar")) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
@@ -436,25 +435,15 @@
                !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
             tabs.updateVerticalTabStrip();
         }
+        else
+          tabs.overflow = false;
 
-        if (Tabmix.isVersion(210)) {
-          tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
-                                                tabs.tabbrowser);
-          if (!tabs.hasAttribute("dontresize") && !tabs._closingTabsSpacer.style.minWidth) {
-            if (!multibar)
-              tabs.overflow = false;
-            tabs._positionPinnedTabs();
-          }
-        }
-        else {
-          if (tabs._lastTabClosedByMouse)
-            tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
-          tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
-                                                tabs.tabbrowser);
-          if (!multibar)
-            tabs.overflow = false;
-          tabs._positionPinnedTabs();
-        }
+        if (tabs._lastTabClosedByMouse)
+          tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
+
+        tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
+                                              tabs.tabbrowser);
+        tabs._positionPinnedTabs();
       ]]></handler>
 
       <handler event="overflow"><![CDATA[
