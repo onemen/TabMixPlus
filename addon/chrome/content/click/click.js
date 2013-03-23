@@ -793,6 +793,13 @@ var TabmixAllTabs = {
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
 
+    // for firefox 22+ when layout.css.devPixelsPerPx > 1
+    // and user middle-click to close last visible tab
+    if (popup.id == "btn_tabslist_menu" && gBrowser.visibleTabs.length == 1) {
+      popup.setAttribute("minheight", popup.boxObject.height);
+      popup.setAttribute("minwidth", popup.boxObject.width);
+    }
+
     gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
     this._popup = popup;
     if (!this._popup._updateTabsVisibilityStatus)
@@ -979,6 +986,11 @@ var TabmixAllTabs = {
     var item = popup.parentNode;
     if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
       item.setAttribute('tooltiptext', item.getAttribute('_tooltiptext'));
+
+    if (popup.id == "btn_tabslist_menu") {
+      popup.removeAttribute("minheight");
+      popup.removeAttribute("minwidth");
+    }
 
     gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
     gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
