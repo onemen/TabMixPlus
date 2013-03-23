@@ -848,6 +848,15 @@ var TMP_eventListener = {
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
     var tab = aEvent.target;
+
+    // workaround for bug 852952
+    // transitionend is not fired if the new tab is move before transitionend
+    // fixed by bug 850163 - Firefox 23
+    if (Tabmix.isVersion(210) && tab.getAttribute("fadein") == "true" &&
+        !tab._fullyOpen && !tab.closing) {
+      gBrowser.tabContainer._handleNewTab(tab);
+    }
+
     // moveTabTo call _positionPinnedTabs when pinned tab moves
     if (!tab.pinned)
       gBrowser.tabContainer.setFirstTabInRow();
