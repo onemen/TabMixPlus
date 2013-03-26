@@ -2064,11 +2064,12 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (this.enableBackup) {
          var path = this._rdfRoot + "/closedSession/thisSession";
          this.setLiteral(path, "status", "crash2");
-         // restore to were we was before the crash
-         var crashedContainer = this.initContainer(this.gSessionPath[3]);
          if (status != "crash2") {
+            // restore to were we was before the crash
+            let crashedContainer = this.initContainer(this.gSessionPath[3]);
             // delete old crash data
-            if (!this.containerEmpty(this.gSessionPath[3])) this.deleteWithProp(crashedContainer);
+            if (!this.containerEmpty(this.gSessionPath[3]))
+               this.deleteWithProp(crashedContainer);
             var windowEnum = sessionContainer.GetElements();
             var nodeToDelete = [];
             while (windowEnum.hasMoreElements()) {
@@ -2114,7 +2115,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var callBack = function (aResult) {TabmixSessionManager.afterCrashPromptCallBack(aResult);}
          this.callBackData = {label: null, whattoLoad: "session"}
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
-            var count = this.countWinsAndTabs(crashedContainer);
+            let crashedContainer = this.initContainer(this.gSessionPath[3]);
+            let count = this.countWinsAndTabs(crashedContainer);
             this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
             if (this.enableManager && !isAllEmpty) {
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
