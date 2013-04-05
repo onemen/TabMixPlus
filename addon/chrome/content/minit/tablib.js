@@ -293,8 +293,16 @@ var tablib = {
       'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
       'break;'
     )._replace(
-      'this.tabContainer.updateVisibility();',  ''
+      'this.tabContainer.updateVisibility();',  '', {check: !Tabmix.isVersion(230)}
     ).toCode();
+
+
+    if (Tabmix.isVersion(230)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
+        'window.toolbar.visible',
+        '$& && TabmixTabbar.hideMode == 0'
+      ).toCode();
+    }
 
       tabBar.TMP_inSingleRow = function Tabmix_inSingleRow(visibleTabs) {
         if (!this.hasAttribute("multibar"))

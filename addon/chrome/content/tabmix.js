@@ -77,7 +77,7 @@ Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
 Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !tabBar.visible;
+    let stripIsHidden = TabmixTabbar.hideMode != 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
     this.setItem("TabsToolbar", "tabmix-visible", true);
@@ -489,7 +489,8 @@ var TMP_eventListener = {
     *  extensions.tabmix.hideTabbar default is 0 "Never Hide tabbar"
     *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar is set to 1 "Hide tabbar when i have only one tab":
     */
-    if (Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
+    if (!Tabmix.isVersion(230) &&
+        Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
       TabmixTabbar.hideMode = 1;
       Tabmix.prefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
     }
@@ -750,12 +751,15 @@ var TMP_eventListener = {
     TMP_LastTab.detachTab(tab);
     var tabBar = gBrowser.tabContainer;
 
-    // if we close the 2nd tab and browser.tabs.autoHide is true reset all scroll and multi-row parameter
+    // if we close the 2nd tab and tabbar is hide when there is only one tab
+    // reset all scroll and multi-row parameter
     // strip already collapsed at this point
-    var tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
-    if (tabsCount == 2 && Services.prefs.getBoolPref("browser.tabs.autoHide")) {
-      TabmixTabbar.setHeight(1);
-      tabBar.removeAttribute("multibar");
+    if (TabmixTabbar.hideMode == 1) {
+      let tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
+      if (tabsCount == 2) {
+        TabmixTabbar.setHeight(1);
+        tabBar.removeAttribute("multibar");
+      }
     }
 
     // when browser.tabs.animate is true gBrowser._endRemoveTab calls

@@ -3252,7 +3252,8 @@ try{
 
    setStripVisibility: function(tabCount) {
       // unhide the tab bar
-      if (tabCount > 1 && Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible) {
+      if (tabCount > 1 && Tabmix.prefs.getIntPref("hideTabbar") != 2
+            && !gBrowser.tabContainer.visible) {
         gBrowser.tabContainer.visible = true;
       }
    },

@@ -486,6 +486,8 @@ var gTMPprefObserver = {
       if (!Tabmix.isVersion(130))
         this.OBSERVING.push("browser.newtab.url");
     }
+    if (!Tabmix.isVersion(230))
+      this.OBSERVING.push("browser.tabs.autoHide");
 
     try {
       // add Observer
@@ -500,7 +502,6 @@ var gTMPprefObserver = {
 
   OBSERVING: ["extensions.tabmix.",
               "browser.tabs.closeButtons",
-              "browser.tabs.autoHide",
               "browser.tabs.tabMinWidth",
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
@@ -1366,6 +1367,10 @@ var gTMPprefObserver = {
 
   setAutoHidePref: function() {
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
+    if (Tabmix.isVersion(230)) {// after Bug 855370
+      gBrowser.tabContainer.updateVisibility();
+      return;
+    }
     var autoHide = TabmixTabbar.hideMode != 0;
     if (autoHide != Services.prefs.getBoolPref("browser.tabs.autoHide")) {
       Services.prefs.setBoolPref("browser.tabs.autoHide", autoHide);
