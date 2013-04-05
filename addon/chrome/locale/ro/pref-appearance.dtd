@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Filă curentă">
 <!ENTITY unloadedTabs.label "File neîncărcate">
 <!ENTITY unreadTab.label "File nevizualizate">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">
 <!ENTITY bold.label "Aldin">

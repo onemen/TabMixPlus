@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Текущая вкладка">
 <!ENTITY unloadedTabs.label "Незагруженные вкладки">
 <!ENTITY unreadTab.label "Непрочитанные вкладки">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "отметить вкладку как непрочитанную после её обновления">
 <!ENTITY otherTabs.label "Другие вкладки">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Полужирный">

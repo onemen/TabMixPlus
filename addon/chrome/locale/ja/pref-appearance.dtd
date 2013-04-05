@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "現在のタブ">
 <!ENTITY unloadedTabs.label "未読込のタブ">
 <!ENTITY unreadTab.label "未読のタブ">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "再読み込み後はタブを未読にする">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">
 <!ENTITY bold.label "太字">

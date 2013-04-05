@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Aba atual">
 <!ENTITY unloadedTabs.label "Abas descarregadas">
 <!ENTITY unreadTab.label "Abas não lidas">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">
