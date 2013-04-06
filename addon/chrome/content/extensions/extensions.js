@@ -23,7 +23,7 @@ var TMP_extensionsCompatibility = {
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", function() {
-      return typeof gSessionManagerAddon == "object" ||
+      return TabmixSvc.sessionManagerAddonInstalled ||
         "com" in window && com.morac &&
         typeof com.morac.SessionManagerAddon == "object"
     });

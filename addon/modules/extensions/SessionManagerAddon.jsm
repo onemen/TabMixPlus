@@ -20,6 +20,7 @@ let TabmixListener = {
   onEnabled: function(addon) {
     if (addon.id != this.id)
       return;
+    TabmixSvc.sessionManagerAddonInstalled = true;
     this.saveTabmixPrefs();
     let win = TabmixSvc.topWin();
     if (win)
@@ -29,6 +30,7 @@ let TabmixListener = {
   onDisabled: function(addon) {
     if (addon.id != this.id)
       return;
+    TabmixSvc.sessionManagerAddonInstalled = false;
     if (this.manager_enabled || this.crashRecovery_enabled) {
       let win = TabmixSvc.topWin();
       if (win)
@@ -60,6 +62,15 @@ let SessionManagerAddon = {
     this.initialized = true;
     TabmixListener.saveTabmixPrefs();
     AddonManager.addAddonListener(TabmixListener);
+
+    try {
+      let tmp = {}
+      Cu.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
+      TabmixSvc.sessionManagerAddonInstalled = true;
+    }
+    catch (ex) {
+      TabmixSvc.sessionManagerAddonInstalled = false;
+    }
   }
 }
 

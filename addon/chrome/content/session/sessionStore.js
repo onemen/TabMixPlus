@@ -637,7 +637,7 @@ var TabmixConvertSession = {
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
-      if (window.gSessionManagerAddon) {
+      if (TabmixSvc.sessionManagerAddonInstalled) {
          let tmp = {}
          Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp)
          tmp.SessionConverter.convertTMP(aFileUri, aSilent);

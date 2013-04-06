@@ -82,9 +82,13 @@ var gSessionPane = {
   },
 
   get sessionManagerAddon() {
-    var win = Tabmix.getTopWin();
-    let sm = win.gSessionManagerAddon ||
-        win.com && win.com.morac && win.com.morac.SessionManagerAddon;
+    if (TabmixSvc.sessionManagerAddonInstalled) {
+      let tmp = {}
+      Components.utils.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
+      return tmp.gSessionManager;
+    }
+    let win = Tabmix.getTopWin();
+    let sm = win.com && win.com.morac && win.com.morac.SessionManagerAddon;
     return sm && sm.gSessionManager || sm;
   },
 
