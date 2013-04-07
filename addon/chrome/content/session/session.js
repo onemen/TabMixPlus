@@ -358,9 +358,9 @@ var TabmixSessionManager = {
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "sessionstore-windows-restored", true);
       obs.addObserver(this, "sessionstore-browser-state-restored", true);
+      obs.addObserver(this, "quit-application-requested", true);
+      obs.addObserver(this, "browser-lastwindow-close-requested", true);
       if (!Tabmix.isVersion(200)) {
-        obs.addObserver(this, "quit-application-requested", true);
-        obs.addObserver(this, "browser-lastwindow-close-requested", true);
         obs.addObserver(this, "private-browsing", true);
         obs.addObserver(this, "private-browsing-change-granted", true);
       }
@@ -699,9 +699,9 @@ var TabmixSessionManager = {
       obs.removeObserver(this, "browser-window-change-state");
       obs.removeObserver(this, "sessionstore-windows-restored");
       obs.removeObserver(this, "sessionstore-browser-state-restored");
+      obs.removeObserver(this, "quit-application-requested");
+      obs.removeObserver(this, "browser-lastwindow-close-requested");
       if (!Tabmix.isVersion(200)) {
-        obs.removeObserver(this, "quit-application-requested");
-        obs.removeObserver(this, "browser-lastwindow-close-requested");
         obs.removeObserver(this, "private-browsing");
         obs.removeObserver(this, "private-browsing-change-granted");
       }

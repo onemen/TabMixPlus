@@ -576,8 +576,8 @@ var tablib = {
     ).toCode();
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'return gBrowser.warnAboutClosingTabs(true);',
-      'return tablib.closeWindow(true);', {flags: "g"}
+      'gBrowser.warnAboutClosingTabs(true);',
+      'tablib.closeWindow(true);', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
       'if (!Tabmix.isPlatform("Mac") && !tablib.closeWindow(true)) return false;\
