@@ -14,7 +14,7 @@
  <overlay id="tabmix-sanitize-ui" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-   <script type="application/javascript" src="chrome://tabmixplus/content/pref/overlaySanitizeUI.js"/>
+   <script type="application/javascript" src="overlaySanitizeUI.js"/>
    <script type="application/javascript">
     Tabmix.setSanitizer._label = "&sanitizer.entry;";
     Tabmix.setSanitizer._accesskey = "&sanitizer.entry.accesskey;";

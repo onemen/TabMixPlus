@@ -1,3 +1,5 @@
+"use strict";
+
 if (!window.tablib || tablib.version != "tabmixplus")
 var tablib = {
   version : "tabmixplus",
@@ -17,18 +19,14 @@ var tablib = {
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
     Tabmix.changeCode(aBrowser, "browser.loadURIWithFlags")._replace(
-      // equalsExceptRef exist only from Firefox 6.0
-      // we are about to drop support for Firefox 4.0-5.0
       '{',
       '$&' +
       '  var newURI, allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
       '  try  {' +
       '    if (!allowLoad) {' +
       '      newURI = Services.io.newURI(aURI, null, null);' +
-      '      allowLoad = this.currentURI.equals(newURI);' +
-      '    }' +
-      '    if (Tabmix.isVersion(60) && !allowLoad)' +
       '      allowLoad = this.currentURI.equalsExceptRef(newURI);' +
+      '    }' +
       '  } catch (ex) {}'+
       '  var tabbrowser = document.getBindingParent(this);' +
       '  var tab = tabbrowser.getTabForBrowser(this);' +
@@ -69,7 +67,7 @@ var tablib = {
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
-       props.forEach(function(prop){if(params[prop]) return; params[prop] = null;}); \
+       props.forEach(function(prop){if (typeof params[prop] == "undefined") params[prop] = null;}); \
        dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
@@ -140,7 +138,7 @@ var tablib = {
     ).toCode();
 
     // changed by bug #563337
-    if (Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager) {
+    if (!Tabmix.extensions.tabGroupManager) {
       let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true});';
       let aboutNewtab = 'this.addTab(BROWSER_NEW_TAB_URL, {skipAnimation: true});';
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
@@ -151,9 +149,6 @@ var tablib = {
     }
 
     Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")._replace(
-      'this.addTab("about:blank", {skipAnimation: true});',
-      'TMP_BrowserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager}
-    )._replace(
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \
        if (Services.prefs.getBoolPref("browser.tabs.animate")) { \
@@ -180,7 +175,7 @@ var tablib = {
        if (newIndex > -1) {\
          let tabs = TMP_TabView.currentGroup();\
          tab = tabs[newIndex];\
-         if (tab && this._removingTabs.indexOf(tab) == -1) {\
+         if (tab && !tab.closing) {\
            this.selectedTab = tab;\
            return;\
          }\
@@ -298,10 +293,17 @@ var tablib = {
       'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
       'break;'
     )._replace(
-      'this.tabContainer.updateVisibility();',  ''
+      'this.tabContainer.updateVisibility();',  '', {check: !Tabmix.isVersion(230)}
     ).toCode();
 
-    if (Tabmix.isVersion(50)) {
+
+    if (Tabmix.isVersion(230)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
+        'window.toolbar.visible',
+        '$& && TabmixTabbar.hideMode == 0'
+      ).toCode();
+    }
+
       tabBar.TMP_inSingleRow = function Tabmix_inSingleRow(visibleTabs) {
         if (!this.hasAttribute("multibar"))
           return true;
@@ -315,7 +317,7 @@ var tablib = {
         '{',
         '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
-        /var isEndTab =|faviconize.o_lockTabSizing/,
+        /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
         '    let tab, tabs = this.tabbrowser.visibleTabs;' +
         '    for (let t = aTab._tPos+1, l = this.childNodes.length; t < l; t++) {' +
@@ -336,11 +338,10 @@ var tablib = {
         '  }' +
         '  if (!this.TMP_inSingleRow(tabs))' +
         '    return;' +
-        (Tabmix.isVersion(210) ? "" : '  this._tabDefaultMaxWidth = this.mTabMaxWidth;') +
+        '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
         '  $&'
       ).toCode();
 
-      if (!Tabmix.isVersion(210))
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
         '{',
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
@@ -366,7 +367,6 @@ var tablib = {
         '  }' +
         '  $1$2'
       ).toCode();
-    }
 
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
@@ -426,15 +426,12 @@ var tablib = {
       '  }' +
       '  $&'
     )._replace(
-      'browser.tabs.loadBookmarksInBackground',
-      'extensions.tabmix.loadDuplicateInBackground', {check: !Tabmix.isVersion(110)}
-    )._replace(
       'gBrowser.selectedTab = newTab;',
-      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) $&', {check: Tabmix.isVersion(110)}
+      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) $&'
     )._replace(
       'case "tabshifted":',
       '$&\
-       if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;', {check: Tabmix.isVersion(110)}
+       if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;'
     ).toCode();
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
@@ -494,17 +491,6 @@ var tablib = {
       'win.BrowserOpenTab()',
       'if (currentIsBlank) tablib.setURLBarFocus(); \
       else $&'
-    );
-
-    /** patch after Bug 324164 - Unify Single Window Mode Preferences,
-     *  and before Bug 509664 - Restore hidden pref browser.link.open_newwindow.override.external
-     */
-    _openURI = _openURI._replace(
-      'aWhere = gPrefService.getIntPref("browser.link.open_newwindow");',
-      'if (isExternal) {\
-       aWhere = gPrefService.getIntPref("browser.link.open_newwindow.override.external");\
-       if (aWhere == -1 ) $&\
-       } else $&', {check: !Tabmix.isVersion(100)}
     );
 
     _openURI = _openURI._replace(
@@ -590,8 +576,8 @@ var tablib = {
     ).toCode();
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'return gBrowser.warnAboutClosingTabs(true);',
-      'return tablib.closeWindow(true);', {flags: "g"}
+      'gBrowser.warnAboutClosingTabs(true);',
+      'tablib.closeWindow(true);', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
       'if (!Tabmix.isPlatform("Mac") && !tablib.closeWindow(true)) return false;\
@@ -623,13 +609,18 @@ var tablib = {
     ).toCode();
 
     // if user changed mode to single window mode while having closed window
-    // make sure that undoCloseWindow will open the closed window in the current window
+    // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
       'window = ss.undoCloseWindow(aIndex || 0);',
       '{if (Tabmix.singleWindowMode) {\
-        window = Tabmix.getTopWin();\
+         window = TabmixSvc.version(200) ?\
+            Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false}) :\
+            Tabmix.getTopWin();\
+       }\
+       if (window) {\
+        window.focus();\
         let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
-        state = Tabmix.JSON.stringify(state);\
+        state = TabmixSvc.JSON.stringify(state);\
         ss.setWindowState(window, state, false);\
       }\
       else $&}'
@@ -637,12 +628,6 @@ var tablib = {
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\
        $&'
-    ).toCode();
-
-    // disable undo closed window when single window mode is on
-    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRecentlyClosedWindows")._replace(
-      'if (this._ss.getClosedWindowCount() == 0)',
-      'if (this._ss.getClosedWindowCount() == 0 || Tabmix.singleWindowMode)'
     ).toCode();
 
     if (document.getElementById("appmenu_recentlyClosedTabsMenu")) {
@@ -669,7 +654,7 @@ var tablib = {
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
       'JSON.parse(this._ss.getClosedWindowData());',
-      '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : Tabmix.JSON.parse(this._ss.getClosedWindowData());'
+      '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : TabmixSvc.JSON.parse(this._ss.getClosedWindowData());'
     )._replace(
       'this._ss',
       'TabmixSvc.ss', {flags: "g"}
@@ -731,7 +716,7 @@ var tablib = {
       }
     }
 
-    let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocuseUrlBar) {
+    let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -763,7 +748,7 @@ var tablib = {
       var bgPref = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
       if (!disallowSelect && !bgPref) {
         newTab.owner = copyToNewWindow ? null : aTab;
-        let url = !dontFocuseUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
+        let url = !dontFocusUrlBar ? aHref || this.getBrowserForTab(aTab).currentURI.spec : null;
         this.TMP_selectNewForegroundTab(newTab, bgPref, url, false);
       }
 
@@ -783,8 +768,8 @@ var tablib = {
           tabState.index++;
         } catch (ex) {Tabmix.assert(ex);}
       }
-        // we need to update history title after the new page loaded for use in back/forword button
-        var self = this;
+      // we need to update history title after the new page loaded for use in back/forword button
+      var self = this;
       function updateNewHistoryTitle(aEvent) {
         try {
           this.removeEventListener("load", updateNewHistoryTitle, true);
@@ -795,7 +780,7 @@ var tablib = {
       }
       try {
         var newTab, tabState;
-        tabState = aTabData ? aTabData.state : Tabmix.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+        tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         newTab = this.addTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
@@ -803,7 +788,7 @@ var tablib = {
           newTab.linkedBrowser.addEventListener("load", updateNewHistoryTitle, true);
         }
         tabState.pinned = false;
-        TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabState));
+        TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
       } catch (ex) {Tabmix.assert(ex);}
 
       return newTab;
@@ -1169,7 +1154,7 @@ since we can have tab hidden or remove the index can change....
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.filter(this.tabContainer.getElementsByAttribute("flst_id", "*"),
-          function(tab) {return !tab.hidden && this._removingTabs.indexOf(tab) == -1;
+          function(tab) {return !tab.hidden && !tab.closing;
       }, this);
       for (var i = 0; i < items.length; ++i ) {
         temp_id = items[i].getAttribute("flst_id");
@@ -1449,20 +1434,7 @@ since we can have tab hidden or remove the index can change....
       let pendingTab = !copy && aOtherTab.hasAttribute("pending");
       if (typeof copy == "object" || pendingTab) {
         let tabData = copy ? copy.data : null;
-        // we pass the current tab as reference to this window
-        // when we use tabData
-        let tab = tabData ? aOurTab : aOtherTab;
-        let newTab = this.duplicateTab(tab, null, tabData, true, true);
-        if (aOurTab.pinned)
-          this.pinTab(newTab);
-        // force the new tab to skip animation
-        if (Services.prefs.getBoolPref("browser.tabs.animate"))
-          newTab.setAttribute("fadein", "true");
-        this.moveTabTo(newTab, aOurTab._tPos + 1);
-        if (aOurTab.selected)
-          this.selectedTab = newTab;
-        this.selectedBrowser.focus();
-        this.removeTab(aOurTab, {animate: false});
+        TabmixSvc.ss.setTabState(aOurTab, tabData || TabmixSvc.ss.getTabState(aOtherTab));
         // Workarounds for bug 817947
         // Move a background unloaded tab to New Window fails
         if (pendingTab) {

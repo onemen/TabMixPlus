@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * original code by onemen
  */

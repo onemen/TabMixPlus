@@ -1,3 +1,5 @@
+"use strict";
+
 ///////////////////////////////////////////////////////////////////////////
 //// Drag and Drop observers
 var TMP_tabDNDObserver = {
@@ -28,6 +30,7 @@ var TMP_tabDNDObserver = {
       //   is before (for dragging left) or after (for dragging right)
       //   the middle of a background tab, the dragged tab would take that
       //   tab's position when dropped.
+      if (!Tabmix.extensions.treeStyleTab)
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
         'this.selectedItem = draggedTab;',
         'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -97,12 +100,6 @@ var TMP_tabDNDObserver = {
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
-  _handleDragover: function (aEvent) {
-    var tabBar = gBrowser.tabContainer;
-    if (tabBar.useTabmixDnD(aEvent))
-      TMP_tabDNDObserver.onDragOver(aEvent);
-  },
-
   onDragStart: function (event) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
@@ -137,17 +134,15 @@ var TMP_tabDNDObserver = {
     let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37
     dt.setDragImage(canvas, 0, offset);
 
-    if (Tabmix.isVersion(70)) {
-      // _dragOffsetX/Y give the coordinates that the mouse should be
-      // positioned relative to the corner of the new window created upon
-      // dragend such that the mouse appears to have the same position
-      // relative to the corner of the dragged tab.
-      let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
-      let tabOffsetX = clientX(tab) -
-                       clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
-      tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
-      tab._dragOffsetY = event.screenY - window.screenY;
-    }
+    // _dragOffsetX/Y give the coordinates that the mouse should be
+    // positioned relative to the corner of the new window created upon
+    // dragend such that the mouse appears to have the same position
+    // relative to the corner of the dragged tab.
+    let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
+    let tabOffsetX = clientX(tab) -
+                      clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
+    tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
+    tab._dragOffsetY = event.screenY - window.screenY;
 
     event.stopPropagation();
   },
@@ -288,9 +283,9 @@ var TMP_tabDNDObserver = {
     if ( replaceTab || hideIndicator || !canDrop) {
       this.clearDragmark();
       return;
-   }
+    }
 
-   this.setDragmark(newIndex, left_right);
+    this.setDragmark(newIndex, left_right);
   },
 
   onDrop: function minit_onDrop(event) {
@@ -368,13 +363,9 @@ var TMP_tabDNDObserver = {
       newBrowser.docShell;
 
       gBrowser.moveTabTo(newTab, newIndex + left_right);
-
-      gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
-
-      // We need to set selectedTab after we've done
-      // swapBrowsersAndCloseOther, so that the updateCurrentBrowser
-      // it triggers will correctly update our URL bar.
       gBrowser.selectedTab = newTab;
+      gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
+      gBrowser.updateCurrentBrowser(true);
     }
     else {
       var url = browserDragAndDrop.drop(event, { });
@@ -422,10 +413,8 @@ var TMP_tabDNDObserver = {
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
-      if (Tabmix.isVersion(70)) {
-        delete draggedTab._dragOffsetX;
-        delete draggedTab._dragOffsetY;
-      }
+      delete draggedTab._dragOffsetX;
+      delete draggedTab._dragOffsetY;
       draggedTab.removeAttribute("dragged", true);
     }
   },
@@ -666,8 +655,8 @@ var TMP_tabDNDObserver = {
       else
          newMargin = rect.right - tabRect.left - (left_right == 0 ? tabRect.width + this.LinuxMarginEnd : 0) - this.paddingLeft;
 
-///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
-///XXX look like the same is happen with Firefox
+      ///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
+      ///XXX look like the same is happen with Firefox
       var newMarginY;
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
@@ -728,7 +717,7 @@ var TMP_tabDNDObserver = {
     if (dt.mozItemCount > 1)
       return dt.effectAllowed = "none";
 
-   var types = dt.mozTypesAt(0);
+    var types = dt.mozTypesAt(0);
     // move or copy tab
     if (types[0] == this.TAB_DROP_TYPE) {
       let sourceNode = dt.mozGetDataAt(this.TAB_DROP_TYPE, 0);
@@ -871,6 +860,23 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 }
 
 var TMP_TabView = {
+  __noSuchMethod__: function(id, args) {
+    if (!this.installed)
+      return;
+    if (typeof TabView[id] == "function")
+      TabView[id].apply(TabView, args);
+    else
+      Tabmix.log("Error " + id + " is not exist in TabView", true);
+  },
+
+  get installed() {
+    delete this.installed;
+    let installed = typeof TabView == "object";
+    if (installed)
+      Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js", window);
+    return this.installed = installed;
+  },
+
   checkTabs: function (tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
@@ -921,171 +927,6 @@ var TMP_TabView = {
 
   getIndexInVisibleTabsFrom_tPos: function (aIndex) {
     return this.getIndexInVisibleTabsFromTab(gBrowser.tabs.item(aIndex));
-  },
-
-  /* ............... TabView Code Fix  ............... */
-
-  /*
-   * this code is fixes some bugs in Panorama code when restoring sessions
-   *
-   */
-
-  _patchBrowserTabview: function SM__patchBrowserTabview() {
-    // we need to stop tabs slideShow before Tabview starts
-    Tabmix.changeCode(TabView, "TabView.toggle")._replace(
-      'this.show();',
-      '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
-       $&}'
-    ).toCode();
-
-    // don't do anything if Session Manager extension installed
-    if (Tabmix.extensions.sessionManager)
-      return;
-
-    // add missing function for compatibility
-    if (!Tabmix.isVersion(60)) {
-      TabView.updateGroupNumberBroadcaster = function TMP_updateGroupNumberBroadcaster(groupCount) {
-        Tabmix.setItem("tabviewGroupsNumber", "groups", groupCount);
-      }
-    }
-    // add our function to the TabView initFrameCallbacks
-    // we don't need our patch for the first run
-    let self = this;
-    var callback = function callback_TMP_TabView_patchTabviewFrame() {
-      try {
-        TabmixSessionManager._groupItemPushAway();
-        self._patchTabviewFrame();
-      } catch (ex) { Tabmix.assert(ex);}
-    }
-
-    if (TabView._window)
-      callback();
-    else if (Tabmix.isVersion(60))
-      TabView._initFrameCallbacks.push(callback);
-    else {
-      // for firefox 4.0 - 5.0.x
-      window.addEventListener("tabviewframeinitialized", function tabmix_onInit() {
-        window.removeEventListener("tabviewframeinitialized", tabmix_onInit, false);
-        callback();
-      }, false);
-    }
-  },
-
-  _patchTabviewFrame: function SM__patchTabviewFrame(){
-    if (Tabmix.isVersion(80)) {
-      // Firefox 8.0 use strict mode - we need to map global variable
-      TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-      Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
-        '"use strict";',
-        '$&' +
-        'let win = TabView._window;' +
-        'let GroupItem = win.GroupItem;' +
-        'let iQ = win.iQ;' +
-        'let UI = win.UI;' +
-        'let Utils = win.Utils;' +
-        'let GroupItems = win.GroupItems;' +
-        'let Storage = win.Storage;', {check: Tabmix.isVersion(80)}
-      )._replace(
-        'this.',
-        'GroupItems.', {flags: "g"}
-      )._replace(
-        // This group is re-used by session restore
-        // make sure all of its children still belong to this group.
-        // Do it before setBounds trigger data save that will overwrite
-        // session restore data.
-        // We call TabItems.resumeReconnecting later to reconnect the tabItem.
-        'groupItem.userSize = data.userSize;',
-        'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
-        '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
-        '  if (!tabData || tabData.groupID != data.id) {' +
-        '    tabItem._reconnected = false;' +
-        '  }' +
-        '});' +
-        '$&'
-      )._replace(
-        // All remaining children in to-be-closed groups are re-used by
-        // session restore. Mark them for recconct later by UI.reset
-        // or TabItems.resumeReconnecting.
-        //
-        // we don't want tabItem without storage data to _reconnect at
-        // this moment. Calling GroupItems.newTab before we set the
-        // active group, can reconnect the tabItem to the wrong group!
-        // also calling this.parent.remove form tabItem._reconnect
-        // without dontArrange flag can cause unnecessary groupItem
-        // and children arrang (we are about to close this group).
-        'tabItem._reconnect();',
-        '', {check: !Tabmix.isVersion(110)}
-      ).toCode();
-    }
-
-    // add tab to the new group on tabs order not tabItem order
-    TabView._window.UI._original_reset = TabView._window.UI.reset;
-    Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
-      '"use strict";',
-      '$&' +
-      'let win = TabView._window;' +
-      'let Trenches = win.Trenches;' +
-      'let Items = win.Items;' +
-      'let iQ = win.iQ;' +
-      'let Rect = win.Rect;' +
-      'let GroupItems = win.GroupItems;' +
-      'let GroupItem = win.GroupItem;' +
-      'let UI = win.UI;', {check: Tabmix.isVersion(80)}
-    )._replace(
-      'this.',
-      'UI.', {flags: "g", silent: true, check: Tabmix.isVersion(80)}
-    )._replace(
-      'items = TabItems.getItems();',
-      'items = gBrowser.tabs;'
-    )._replace(
-      /items\.forEach\(function\s*\(item\)\s*{/,
-      'Array.forEach(items, function(tab) { \
-       if (tab.pinned) return;\
-       let item = tab._tabViewTabItem;'
-    )._replace(
-      'groupItem.add(item, {immediately: true});',
-      'item._reconnected = true; \
-       $&'
-    )._replace(
-      /(\})(\)?)$/,
-      '  GroupItems.groupItems.forEach(function(group) {' +
-      '    if (group != groupItem)' +
-      '      group.close();' +
-      '  });' +
-      ' $1$2'
-    ).toCode();
-
-    TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
-    TabView._window.TabItems.resumeReconnecting = function TabItems_resumeReconnecting() {
-      let TabItems = TabView._window.TabItems;
-      let Utils = TabView._window.Utils;
-      Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
-      TabItems._reconnectingPaused = false;
-      Array.forEach(gBrowser.tabs, function (tab){
-        if (tab.pinned)
-          return;
-        let item = tab._tabViewTabItem;
-        if ("__tabmix_reconnected" in item && !item.__tabmix_reconnected) {
-          item._reconnected = false;
-          delete item.__tabmix_reconnected;
-        }
-        if (!item._reconnected)
-          item._reconnect();
-      });
-    }
-  },
-
-  _resetTabviewFrame: function SM__resetTabviewFrame(){
-    if (!Tabmix.extensions.sessionManager && TabView._window) {
-      if (Tabmix.isVersion(80)) {
-        TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
-        delete TabView._window.GroupItems._original_reconstitute;
-      }
-      TabView._window.UI.reset = TabView._window.UI._original_reset;
-      TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
-      delete TabView._window.UI._original_reset;
-      delete TabView._window.TabItems._original_resumeReconnecting;
-    }
   }
 }
 
@@ -1198,7 +1039,7 @@ Tabmix.navToolbox = {
     // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
     // instantfox uses pre-Firefox 10 version of handleCommand
     var testVersionString = "if (aTriggeringEvent instanceof MouseEvent) {";
-    var pre10Version = !Tabmix.isVersion(100) || typeof(InstantFox) == "object" &&
+    var pre10Version = typeof(InstantFox) == "object" &&
         _handleCommand.indexOf(testVersionString) > -1;
     var TMP_fn = !pre10Version ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
 
@@ -1218,10 +1059,6 @@ Tabmix.navToolbox = {
          delete gBrowser.tabmix_tab;\
          delete gBrowser.tabmix_userTypedValue;\
        }'
-    )._replace(
-      'this._canonizeURL(aTriggeringEvent);',
-      '_data = $& \
-       altDisabled = _data.length == 3;', {check: !Tabmix.isVersion(60)}
     )._replace(
       testVersionString,
       'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
@@ -1338,8 +1175,7 @@ Tabmix.navToolbox = {
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
 
       // alltabs-popup fix visibility for multi-row
-      if (Tabmix.isVersion(70))
-        Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
+      Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
           TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },

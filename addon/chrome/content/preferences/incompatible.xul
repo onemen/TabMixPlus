@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+]>
+
+<overlay id="IncompatiblePaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneIncompatible" helpTopic="paneIncompatible">
+
+    <tabbox>
+      <tabs class="tabs-hidden">
+        <tab label="tab"/>
+        <tab label="tab"/>
+      </tabs>
+      <tabpanels flex="1">
+        <groupbox align="stretch" flex="1">
+          <hbox align="center">
+            <description style="width: 24em;" class="header">
+              &incompatible.extensions;
+            </description>
+            <spacer flex="1"/>
+            <button class="header" label="&incompatible.button.label;…"
+                    oncommand="gIncompatiblePane.checkForIncompatible(true);"/>
+          </hbox >
+        </groupbox>
+      </tabpanels>
+    </tabbox>
+
+  </prefpane>
+
+</overlay>

@@ -1,3 +1,5 @@
+"use strict";
+
 // code by onemen
 var TMP_Places = {
    prefHistory: "extensions.tabmix.opentabfor.history",
@@ -80,26 +82,22 @@ var TMP_Places = {
         'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
       ).toCode();
 
-      let inBackground = Tabmix.isVersion(100) ?
-          'if ("backgroundPref" in tabmixArg) params.inBackground = getBoolPref(tabmixArg.backgroundPref);' :
-          'params.backgroundPref = "backgroundPref" in tabmixArg ? tabmixArg.backgroundPref : null;';
-
       Tabmix.changeCode(window, "openUILinkIn")._replace(
         'params.fromChrome = true;',
-        '$&\
-         var tabmixArg = arguments.length > 5 ? arguments[5] : null; \
-         if (tabmixArg) { \
-           params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;'
-         + inBackground + '}'
+        '$&' +
+        ' var tabmixArg = arguments.length > 5 ? arguments[5] : null;' +
+        ' if (tabmixArg) {' +
+        '   params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;' +
+        '   if ("backgroundPref" in tabmixArg)' +
+        '     params.inBackground = getBoolPref(tabmixArg.backgroundPref);' +
+        ' }' +
+        ' else if (Tabmix.isCallerInList("BG_observe"))' +
+        '   params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
       ).toCode();
 
       // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
       // in case it warp the function in its object
       let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
-
-      var _loadURI = Tabmix.isVersion(100) ?
-            "w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);" :
-            "w.loadURI(url, aReferrerURI, aPostData, aAllowThirdPartyFixup);";
 
       Tabmix.changeCode(fnObj, fnName)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
@@ -116,14 +114,11 @@ var TMP_Places = {
       )._replace(
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
-       )._replace(
-        '"browser.tabs.loadBookmarksInBackground"',
-        'backgroundPref || $&', {check: !Tabmix.isVersion(110)}
       )._replace( // we probably don't need this since Firefox 10
         'aFromChrome ?',
-        '$& getBoolPref(backgroundPref) ||', {check: Tabmix.isVersion(110)}
+        '$& getBoolPref(backgroundPref) ||'
       )._replace(
-        _loadURI,
+        'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
         '$&\
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
@@ -172,13 +167,8 @@ var TMP_Places = {
 
       var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       function updateOpenTabset() {
-        var openDialogCode = '$1openDialog($2getBrowserURL(), "_blank", "chrome,all,dialog=no", urls.join("|"));';
-        var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, replaceCurrentTab);"
-        openDialogCode = openDialogCode.replace("$1", "aWindow.").replace("$2", "aWindow.");
+        var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, false);"
         loadTabsCode = loadTabsCode.replace("$1", "gBrowser");
-        if (Tabmix.isVersion(80))
-          loadTabsCode = loadTabsCode.replace("replaceCurrentTab", "false");
-
         var openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
         Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
           'urls = []',
@@ -190,13 +180,9 @@ var TMP_Places = {
           'urls.push(item.uri);',
           '$& ids.push(item.id);', {check: !treeStyleTab}
         )._replace(
-          openDialogCode,
-          'let newWin = $& \
-           newWin.bookMarkIds = ids.join("|");', {check: !Tabmix.isVersion(60)}
-        )._replace(
           '"chrome,dialog=no,all", args);',
           '$&\
-           browserWindow.bookMarkIds = ids.join("|");', {check: Tabmix.isVersion(60)}
+           browserWindow.bookMarkIds = ids.join("|");'
         )._replace(
           /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
           '$& behavior =', {check: treeStyleTab}
@@ -246,13 +232,9 @@ var TMP_Places = {
          if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
          $&'
       )._replace(
-        'aWindow.openUILinkIn(aNode.uri, aWhere);',
-        'aWindow.openUILinkIn(aNode.uri, aWhere, null, null, null, {bookMarkId: aNode.itemId});',
-        {check: !Tabmix.isVersion(110)}
-      )._replace(
         'inBackground:',
         'bookMarkId: aNode.itemId, initiatingDoc: null,\
-         $&', {check: Tabmix.isVersion(110)}
+         $&'
       ).toCode();
    },
 
@@ -656,10 +638,7 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        if (Tabmix.isVersion(100))
-          PlacesUtils.addLazyBookmarkObserver(this);
-        else
-          PlacesUtils.bookmarks.addObserver(this, false);
+        PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
       } catch(ex) {
         Components.utils.reportError("Tabmix failed adding a bookmarks observer: " + ex);
@@ -669,10 +648,7 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      if (Tabmix.isVersion(100))
-        PlacesUtils.removeLazyBookmarkObserver(this);
-      else
-        PlacesUtils.bookmarks.removeObserver(this);
+      PlacesUtils.removeLazyBookmarkObserver(this);
       this._hasBookmarksObserver = false;
     }
   },

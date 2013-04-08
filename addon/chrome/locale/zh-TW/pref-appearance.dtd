@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "目前的分頁">
 <!ENTITY unloadedTabs.label "未載入的分頁">
 <!ENTITY unreadTab.label "未讀的分頁">
+<!ENTITY unreadAfterReload.label "重新載入後將分頁設定為未讀取">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">
 <!ENTITY bold.label "粗體">

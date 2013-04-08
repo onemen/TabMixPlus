@@ -56,7 +56,7 @@
 <!ENTITY lockTabs.label "Lapok zárolása">
 <!ENTITY lockNewTabs.label "Új lapok zárolása">
 <!ENTITY lockAppTabs.label "Alkalmazás lapok zárolása">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Változtatások alkalmazása a nyitott lapokra">
 <!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
 <!ENTITY openBookmarks.label "Könyvjelzők">
 <!ENTITY openBMKGroups.label "Könyvjelzők csoportja">
@@ -108,7 +108,7 @@
 <!ENTITY mergelastfocused.label "Csak az aktuális balak összefűzése az utoljára kiválasztottal">
 <!ENTITY mergePopups.label "Előugró ablakokat is">
 <!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "#1 lenyomásával lapok körkapcsolása">
 <!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
 <!ENTITY reloadEvery.matchAddress.label "Lapok újratöltése a címtől függetlenül">
 <!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
@@ -129,7 +129,7 @@
 <!ENTITY tabBarSpace.label "Nagyobb hely mindkét oldalon">
 <!ENTITY tabBarSpace.tooltip "A Lapok eszköztáron történő kattintás és ejtés megkönnyítésére, amikor már túl sok lap van megnyitva">
 <!ENTITY tabbar.label "Mindig jelenjen meg a Lapok eszköztár">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Áthelyezés a lap húzásakor">
 <!ENTITY dropIndicator.label "Ejtés jelző">
 <!ENTITY dropIndicator-native.label "Egyedi stílus">
 <!ENTITY dropIndicator-builtin.label "Beépített stílus">
@@ -245,7 +245,7 @@
 <!ENTITY showToolsMenu.label "Megjelenítés az Eszközök menüben">
 <!ENTITY startupHomePage.label "Kezdőlap megjelenítése">
 <!ENTITY startupBlankPage.label "Üres oldal megjelenítése">
-<!ENTITY startupLastSession.label "A múltkori ablakok és lapok megjelenítése">
+<!ENTITY startupLastSession.label "A legutóbbi ablakok és lapok megjelenítése">
 <!ENTITY sm.extension.description1 "A Tab Mix Plus úgy érzékeli, hogy a Munkamenet-kezelő kiterjesztés telepítve van">
 <!ENTITY sm.extension.description2 "A Tab Mix Plus munkamenet-kezelője ilyen esetben letiltásra kerül">
 <!ENTITY sm.extension.description3 "A jobb oldali gombra kattintva megnyithatja a Munkamenet-kezelő Beállítások párbeszédablakot">
@@ -287,7 +287,7 @@
 <!ENTITY sm.restore.overwriteTabs "és lapokat">
 <!ENTITY sm.restore.closedWinList "Bezárt ablakok listájának mentése">
 <!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Gyorsítótár figyelmen kívül hagyása visszaállításkor">
 <!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
 <!ENTITY sm.preserve.options "Védett lapok">
 <!ENTITY sm.preserve.history "Előzmények">

@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * chrome://tabmixplus/content/links/setup.js
  *
@@ -31,12 +33,9 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
       'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
       'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
       'var pref = "extensions.tabmix.loadUrlInBackground";' +
-      'if (Tabmix.isVersion(100))' +
-      '  openUILinkIn(url, where, {' +
-      '         inBackground: Services.prefs.getBoolPref(pref),' +
-      '         initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});' +
-      'else' +
-      '  openUILinkIn(url, where, false, null, null, {backgroundPref: pref});'
+      'openUILinkIn(url, where, {' +
+      '       inBackground: Services.prefs.getBoolPref(pref),' +
+      '       initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});'
     ).toCode();
   }
 
@@ -72,7 +71,6 @@ function TMP_TBP_Startup() {
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
-    gTMPprefObserver.updateOldStylePrefs();
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
 
@@ -80,14 +78,15 @@ function TMP_TBP_Startup() {
     if (Tabmix.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
       SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
-      // isPrivateWindow is fix boolean for this window, user can't change private status of a window
+      // isPrivateWindow is boolean property of this window, user can't change private status of a window
       SM.isPrivateWindow = SM.isWindowPrivate(window);
       SM.__defineGetter__("isPrivateSession", function() {
-        return this.globalPrivateBrowsing || !TabmixSvc.saveSession;
+        return this.globalPrivateBrowsing || TabmixSvc.sm.private;
       });
-      // set this flag to true if user opens in a session at least one non-private window
-      if (!TabmixSvc.saveSession && !SM.isPrivateWindow)
-        TabmixSvc.saveSession = true;
+      // set this flag to false if user opens in a session at least one non-private window
+      SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
+      if (SM.firstNonPrivateWindow)
+        TabmixSvc.sm.private = false;
     }
     else {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
@@ -99,8 +98,8 @@ function TMP_TBP_Startup() {
     }
 
     var windowOpeneByTabmix = "tabmixdata" in window;
-    var firstWindow = Tabmix.isFirstWindow;
-    var disAllow = Tabmix.globalPrivateBrowsing || TMP_SessionStore.isSessionStoreEnabled() ||
+    var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
+    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
@@ -180,9 +179,7 @@ function TMP_TBP_Startup() {
       '{',
       '{' +
       'try {' +
-      '  if (Tabmix.isFirstWindow) TMP_SessionStore.setService(1, true);' +
-      '  Tabmix.getNewTabButtonWidth();' +
-      '  TabmixSessionManager.init();' +
+      '  Tabmix.beforeDelayedStartup();' +
       '} catch (ex) {Tabmix.assert(ex);}'
     )._replace(
       swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
@@ -194,7 +191,7 @@ function TMP_TBP_Startup() {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
         new tmp.CompatibilityCheck(aWindow, true);
-      }, Tabmix.isVersion(40) ? 0 : 3000, window);
+      }, 0, window);
     }
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
@@ -209,7 +206,17 @@ function TMP_TBP_Startup() {
 // this must run before all
 Tabmix.initialized = false;
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-    Tabmix.initialized = true;
+    this.singleWindowMode = this.prefs.getBoolPref("singleWindow");
+    if (this.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      // don't initialize Tabmix functions for a window that is about to
+      // close by SingleWindowModeUtils
+      if (tmp.SingleWindowModeUtils.newWindow(window))
+        return;
+    }
+
+    this.initialized = true;
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {
@@ -225,22 +232,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
     // isTabEmpty don't check for Tabmix.isNewTabUrls
-    if (("loadTabsProgressively" in window)) {
-      tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-         // loadTabsProgressively add pending attribute to pending tab when it stop the tab
-         if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
-            return false;
+    tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
+      if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
+        return false;
 
-         return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-      }
-    }
-    else {
-      tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-         if (aTab.hasAttribute("busy"))
-            return false;
-
-         return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-      }
+      return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
     }
 
     tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
@@ -282,16 +278,16 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     tabContainer.mTabMaxWidth = max;
     tabContainer.mTabMinWidth = min;
-    TabmixTabbar.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") && (max != min);
+    TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && (max != min);
     if (TabmixTabbar.widthFitTitle)
       this.setItem(tabContainer, "widthFitTitle", true);
 
-    var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
+    var tabscroll = this.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
       tabscroll = 1;
     if (tabscroll < 0 || tabscroll > 3 ||
         (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
-      Tabmix.prefs.setIntPref("tabBarMode", 1);
+      this.prefs.setIntPref("tabBarMode", 1);
       tabscroll = 1;
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
@@ -306,8 +302,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     TMP_extensionsCompatibility.preInit();
 
-    if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
-        Tabmix.prefs.getBoolPref("enableDebug")) {
+    if (this.prefs.prefHasUserValue("enableDebug") &&
+        this.prefs.getBoolPref("enableDebug")) {
       this._debugMode = true;
     }
 }

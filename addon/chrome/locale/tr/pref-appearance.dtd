@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Geçerli sekme">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Bakılmamış sekmeler">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Diğer sekmeler">
 <!ENTITY italic.label "İtalik">
 <!ENTITY bold.label "Kalın">

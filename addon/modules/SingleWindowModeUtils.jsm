@@ -1,3 +1,4 @@
+"use strict";
 
 var EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
@@ -30,15 +31,15 @@ let SingleWindowModeUtils = {
   */
   getBrowserWindow: function(aExclude) {
     // on per-window private browsing mode,
-    // allow to open one private window in single window mode
-    var checkPrivacy = TabmixSvc.version(200) &&
-      PrivateBrowsingUtils.isWindowPrivate(aExclude);
+    // allow to open one normal window and one private window in single window mode
+    var checkPrivacy = TabmixSvc.version(200);
+    var isPrivate = checkPrivacy && PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
       return (!win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
               (!checkPrivacy ||
-                PrivateBrowsingUtils.isWindowPrivate(win)));
+                PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate));
     }
 
     var windows = Services.wm.getEnumerator("navigator:browser");
@@ -69,7 +70,7 @@ let SingleWindowModeUtils = {
     var existingWindow = this.getBrowserWindow(aWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)
-      return;
+      return false;
 
     existingWindow.focus();
     // save dimensions
@@ -89,6 +90,8 @@ let SingleWindowModeUtils = {
     win.setAttribute("height" , 0);
     win.setAttribute("screenX" , aWindow.screen.availWidth + 10);
     win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
+
+    return true;
   },
 
   onLoad: function(newWindow) {

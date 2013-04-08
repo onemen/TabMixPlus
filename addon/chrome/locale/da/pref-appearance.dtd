@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Nuværende faneblad">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Ulæste faneblade">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Andre faneblade">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fed">

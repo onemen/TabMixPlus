@@ -1,3 +1,4 @@
+"use strict";
 
 var EXPORTED_SYMBOLS = ["Shortcuts"];
 
@@ -137,7 +138,7 @@ try {
     }
 
     this.updatingShortcuts = false;
-} catch (ex) {_log.assert(ex);}
+} catch (ex) {log.assert(ex);}
   },
 
   /* ........ Window Event Handlers .............. */
@@ -158,7 +159,7 @@ try {
     let win = aKey.ownerDocument.defaultView;
     let command = this.keys[aKey._id].command;
     win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
-} catch (ex) {_log.assert(ex);}
+} catch (ex) {log.assert(ex);}
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
@@ -268,7 +269,7 @@ try {
       shortcuts = JSON.parse(this.prefs.getCharPref("shortcuts"));
     } catch (ex) {}
     if (shortcuts == null) {
-      _log.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
+      log.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;
     }
@@ -491,9 +492,7 @@ let KeyConfig = {
   },
 
   resetPref: function (prefName) {
-    // we need this check for Firefox 4.0-5.0
-    if (this.prefs.prefHasUserValue(prefName))
-      this.prefs.clearUserPref(prefName);
+    this.prefs.clearUserPref(prefName);
   }
 
 }

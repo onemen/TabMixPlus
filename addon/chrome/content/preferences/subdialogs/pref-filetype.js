@@ -1,3 +1,5 @@
+"use strict";
+
 var list, entry, edit, del, add;
 
 function Init()

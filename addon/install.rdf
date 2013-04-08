@@ -10,7 +10,7 @@
                    NS1:description="Tab browsing with an added boost."
                    NS1:iconURL="chrome://tabmixplus/skin/tmp.png"
                    NS1:homepageURL="http://tmp.garyr.net"
-                   NS1:optionsURL="chrome://tabmixplus/content/pref/pref-tabmix.xul"
+                   NS1:optionsURL="chrome://tabmixplus/content/preferences/preferences.xul"
                    NS1:aboutURL="chrome://tabmixplus/content/about.xul"
                    NS1:creator="ONEMEN (tabmix.onemen@gmail.com)"
                    NS1:developer="ONEMEN">

@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * tabmix.js
  *
@@ -5,20 +7,18 @@
  */
 
 Tabmix.startup = function TMP_startup() {
-  // disable the Open New Window action in Single Window Mode...
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
-  cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
-
-  // Open New Private Window in Single Window Mode only if there is no other private window
-  // otherwise open new tab in most recent private window
+  // Firefox 20+ implemented per-window Private Browsing
+  // When in single window mode allow one normal window and one private window.
+  // otherwise open new tab in most recent window of the appropriate type
   if (this.isVersion(200)) {
-    this._openPrivateBrowsing = function () {
+    this._openNewTab = function (aPrivate) {
       if (this.singleWindowMode) {
-        let pbWindow = this.RecentWindow.getMostRecentBrowserWindow({ private: true });
-        if (pbWindow) {
-          pbWindow.focus();
-          pbWindow.BrowserOpenTab();
+        let win = this.RecentWindow.getMostRecentBrowserWindow({ private: aPrivate });
+        if (win) {
+          win.focus();
+          win.BrowserOpenTab();
           return false;
         }
       }
@@ -26,8 +26,11 @@ Tabmix.startup = function TMP_startup() {
     }
     let command = document.getElementById("Tools:PrivateBrowsing");
     let originalCode = command.getAttribute("oncommand");
-    command.setAttribute("oncommand","if (Tabmix._openPrivateBrowsing()) {" + originalCode + "}");
+    command.setAttribute("oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+    cmdNewWindow.setAttribute("oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
   }
+  else
+    cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
   if (!this.isVersion(120)) {
     // multi-rows total heights can be diffrent when tabs are on top
@@ -57,13 +60,24 @@ Tabmix.startup = function TMP_startup() {
   };
 }
 
+// we call this function when gBrowserInit._delayedStartup start, see setup.js
+Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
+  if (this.isFirstWindow) {
+    let tmp = {};
+    Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
+    TMP_SessionStore.setService(1, true);
+  }
+  this.getNewTabButtonWidth();
+  TabmixSessionManager.init();
+}
+
 // we call this at the start of gBrowserInit._delayedStartup
 // if we call it erlier we get this warning:
 // XUL box for _moz_generated_content_before element contained an inline #text child
 Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = Services.prefs.getBoolPref("browser.tabs.autoHide") && !tabBar.visible;
+    let stripIsHidden = TabmixTabbar.hideMode != 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
     this.setItem("TabsToolbar", "tabmix-visible", true);
@@ -141,13 +155,8 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 }
 
 var TMP_eventListener = {
-  init: function TMP_EL_init(aTabContainer) {
-    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
-    if (Tabmix.singleWindowMode) {
-      let tmp = { };
-      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
-      tmp.SingleWindowModeUtils.newWindow(window);
-    }
+  init: function TMP_EL_init() {
+    Services.obs.addObserver(this, "browser-delayed-startup-finished", false);
     window.addEventListener("DOMContentLoaded", this, false);
   },
 
@@ -208,37 +217,6 @@ var TMP_eventListener = {
       case "fullscreen":
         this.onFullScreen(false);
         break;
-      /**
-       * for Tabview
-       */
-      case "tabviewshown":
-        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
-        break;
-      case "tabviewhidden":
-        TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
-        TMP_LastTab.tabs = null;
-        if (TabmixTabbar.hideMode != 2)
-          setTimeout(function () {gBrowser.tabContainer.adjustTabstrip()}, 0);
-        break;
-      case "TabShow":
-        if (!gBrowser.tabContainer._onDelayTabShow) {
-          // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function (aEvent) {
-            gBrowser.tabContainer._onDelayTabShow = null;
-            TMP_eventListener.onTabOpen_delayUpdateTabBar(aEvent.target);
-          }, 0, aEvent);
-        }
-        break;
-      case "TabHide":
-        if (!gBrowser.tabContainer._onDelayTabHide) {
-          // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
-            gBrowser.tabContainer._onDelayTabHide = null;
-            let tab = aEvent.target;
-            TMP_eventListener.onTabClose_updateTabBar(tab, true);
-          }, 0, aEvent);
-        }
-        break;
     }
   },
 
@@ -291,8 +269,10 @@ var TMP_eventListener = {
 
     // make sure AVG Security Toolbar initialized
     // before we change gURLBar.handleCommand to prevent too much recursion from gURLBar.handleCommand
-    if (window.InitializeOverlay_avg && typeof InitializeOverlay_avg.Init == "function")
-      InitializeOverlay_avg.Init();
+    if (window.InitializeOverlay_avg && typeof InitializeOverlay_avg.Init == "function") {
+      // avg.Init uses arguments.callee, so i can't call it from strict mode
+      Tabmix.nonStrictMode(InitializeOverlay_avg, "Init");
+    }
 
     // initialize our gURLBar.handleCommand function early before other extensions change
     // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
@@ -318,7 +298,8 @@ var TMP_eventListener = {
     }
 
     try {
-      TMP_TabView._patchBrowserTabview();
+      if (TMP_TabView.installed)
+        TMP_TabView._patchBrowserTabview();
     } catch (ex) {Tabmix.assert(ex);}
 
     // we can't use TabPinned.
@@ -365,14 +346,6 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);
-
-    var tabView = document.getElementById("tab-view-deck");
-    if (tabView) {
-      tabView.addEventListener("tabviewhidden", this, true);
-      tabView.addEventListener("tabviewshown", this, true);
-      tabBar.addEventListener("TabShow", this, true);
-      tabBar.addEventListener("TabHide", this, true);
-    }
 
     try {
       TabmixProgressListener.startup(gBrowser);
@@ -516,7 +489,8 @@ var TMP_eventListener = {
     *  extensions.tabmix.hideTabbar default is 0 "Never Hide tabbar"
     *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar is set to 1 "Hide tabbar when i have only one tab":
     */
-    if (Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
+    if (!Tabmix.isVersion(230) &&
+        Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode == 0) {
       TabmixTabbar.hideMode = 1;
       Tabmix.prefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
     }
@@ -565,8 +539,7 @@ var TMP_eventListener = {
         let tab = gBrowser.tabs[i];
         let browser = tab.linkedBrowser;
         let url = browser.userTypedValue;
-        let tabStillLoading = Tabmix.isVersion(110) ? "__SS_tabStillLoading" in browser && browser.__SS_tabStillLoading :
-            browser.__SS_data && browser.__SS_data._tabStillLoading;
+        let tabStillLoading = "__SS_tabStillLoading" in browser && browser.__SS_tabStillLoading;
         if (url && tabStillLoading) {
           this._tabStillLoading++;
           let data = browser.__SS_data;
@@ -649,17 +622,15 @@ var TMP_eventListener = {
           ).toCode();
         }
 
-        if (Tabmix.isVersion(100)) {
-          Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
-            /(\})(\)?)$/,
-            '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
-            '  if (fullScrToggler) {' +
-            '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-            '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
-            '  }' +
-            '$1$2'
-          ).toCode();
-        }
+        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
+          /(\})(\)?)$/,
+          '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
+          '  if (fullScrToggler) {' +
+          '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
+          '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
+          '  }' +
+          '$1$2'
+        ).toCode();
       }
       if (aPositionChanged) {
         this.mouseoverToggle(false);
@@ -780,12 +751,15 @@ var TMP_eventListener = {
     TMP_LastTab.detachTab(tab);
     var tabBar = gBrowser.tabContainer;
 
-    // if we close the 2nd tab and browser.tabs.autoHide is true reset all scroll and multi-row parameter
+    // if we close the 2nd tab and tabbar is hide when there is only one tab
+    // reset all scroll and multi-row parameter
     // strip already collapsed at this point
-    var tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
-    if (tabsCount == 2 && Services.prefs.getBoolPref("browser.tabs.autoHide")) {
-      TabmixTabbar.setHeight(1);
-      tabBar.removeAttribute("multibar");
+    if (TabmixTabbar.hideMode == 1) {
+      let tabsCount = tabBar.childNodes.length - gBrowser._removingTabs.length;
+      if (tabsCount == 2) {
+        TabmixTabbar.setHeight(1);
+        tabBar.removeAttribute("multibar");
+      }
     }
 
     // when browser.tabs.animate is true gBrowser._endRemoveTab calls
@@ -878,6 +852,15 @@ var TMP_eventListener = {
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
     var tab = aEvent.target;
+
+    // workaround for bug 852952
+    // transitionend is not fired if the new tab is move before transitionend
+    // fixed by bug 850163 - Firefox 23
+    if (Tabmix.isVersion(210) && tab.getAttribute("fadein") == "true" &&
+        !tab._fullyOpen && !tab.closing) {
+      gBrowser.tabContainer._handleNewTab(tab);
+    }
+
     // moveTabTo call _positionPinnedTabs when pinned tab moves
     if (!tab.pinned)
       gBrowser.tabContainer.setFirstTabInRow();
@@ -981,14 +964,7 @@ var TMP_eventListener = {
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
-    var tabView = document.getElementById("tab-view-deck");
-    if (tabView) {
-      tabView.removeEventListener("tabviewhidden", this, false);
-      tabView.removeEventListener("tabviewshown", this, false);
-      gBrowser.tabContainer.removeEventListener("TabShow", this, true);
-      gBrowser.tabContainer.removeEventListener("TabHide", this, true);
-      TMP_TabView._resetTabviewFrame();
-    }
+    TMP_TabView._resetTabviewFrame();
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version

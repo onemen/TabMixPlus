@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Aktuális lap">
 <!ENTITY unloadedTabs.label "Lapok kiürítése">
 <!ENTITY unreadTab.label "Olvasatlan lap">
+<!ENTITY unreadAfterReload.label "újratöltéskor a lap olvasatlanná válik">
 <!ENTITY otherTabs.label "Egyéb lapok">
 <!ENTITY italic.label "Dőlt">
 <!ENTITY bold.label "Félkövér">

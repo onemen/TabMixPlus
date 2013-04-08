@@ -1,3 +1,5 @@
+"use strict";
+
    const TMP_BUTTON_OK = 0;
    const TMP_BUTTON_CANCEL = 1;
    const TMP_BUTTON_EXTRA1 = 2;

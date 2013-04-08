@@ -1,0 +1,29 @@
+.tabmixplus-button {
+  list-style-image: url(tmpsmall.png);
+}
+
+.tabmixplus-button .button-icon {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  -moz-margin-start: 0px;
+  -moz-margin-end: 5px;
+}
+
+#startupGroup > separator {
+  height: 6px;
+}
+
+#startupGroup[tabmixbutton="true"]:not([incontent]) > caption+hbox > label {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+#startupGroup[tabmixbutton="true"][incontent] > caption+hbox > label {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#startupGroup > hbox > .tabmixplus-button {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

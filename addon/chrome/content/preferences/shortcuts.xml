@@ -69,10 +69,12 @@
             this.key = newKey;
             this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
             this.parentNode.keys[this.id] = newValue;
-            this.parentNode.value = Tabmix.JSON.stringify(this.parentNode.keys);
-            updateApplyData(this.parentNode);
-            let callBack = function(shortcut) shortcut.updateNotification();
-            TM_Options.updateShortcuts(this.parentNode, callBack);
+            this.parentNode.value = TabmixSvc.JSON.stringify(this.parentNode.keys);
+            Shortcuts.prefsChangedByTabmix = true;
+            $("pref_shortcuts").value = this.parentNode.value;
+            Shortcuts.prefsChangedByTabmix = false;
+            let callBack = function(shortcut) shortcut.id && shortcut.updateNotification();
+            gMenuPane.updateShortcuts(this.parentNode, callBack);
           }
           this.editBox.select();
         ]]></body>

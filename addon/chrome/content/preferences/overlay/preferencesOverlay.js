@@ -1,3 +1,5 @@
+"use strict";
+
 var gTabMix_preferencesOverlay = {
   id: function(id) {return document.getElementById(id);},
   incontentInit: function gTabMix_preferencesOverlay_incontentInit(aEvent) {
@@ -67,7 +69,7 @@ var gTabMix_preferencesOverlay = {
          }
       };
       var obs = new OverlayLoadObserver();
-      document.loadOverlay("chrome://tabmixplus/content/pref/tab_panel.xul", obs);
+      document.loadOverlay("chrome://tabmixplus/content/preferences/overlay/tab_panel.xul", obs);
    },
 
    _afterOverlayLoaded: function () {

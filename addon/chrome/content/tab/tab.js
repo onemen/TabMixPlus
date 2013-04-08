@@ -1,3 +1,5 @@
+"use strict";
+
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
   visibleRows: 1,
@@ -16,7 +18,7 @@ var TabmixTabbar = {
   },
 
   updateSettings: function TMP_updateSettings(start) {
-    if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault") || gTMPprefObserver.preventUpdate == true)
+    if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
 
     var tabBar = gBrowser.tabContainer;
@@ -477,18 +479,15 @@ var TabmixTabbar = {
 var gTMPprefObserver = {
   preventUpdate: false,
   init: function() {
-    var pref = "setDefault"
-    if (Tabmix.prefs.prefHasUserValue(pref))
-      Tabmix.prefs.clearUserPref(pref)
-    pref = "PrefObserver.error";
-    if (Tabmix.prefs.prefHasUserValue(pref))
-      Tabmix.prefs.clearUserPref(pref)
-
+    Tabmix.prefs.clearUserPref("setDefault");
+    Tabmix.prefs.clearUserPref("PrefObserver.error")
     if (Tabmix.isVersion(120)) {
       this.OBSERVING.push("browser.tabs.onTop");
       if (!Tabmix.isVersion(130))
         this.OBSERVING.push("browser.newtab.url");
     }
+    if (!Tabmix.isVersion(230))
+      this.OBSERVING.push("browser.tabs.autoHide");
 
     try {
       // add Observer
@@ -497,13 +496,12 @@ var gTMPprefObserver = {
     }
     catch(e) {
       Tabmix.log("prefs-Observer failed to attach:" + "\n" + e);
-      Tabmix.prefs.setBoolPref(pref, true);
+      Tabmix.prefs.setBoolPref("PrefObserver.error", true);
     }
   },
 
   OBSERVING: ["extensions.tabmix.",
               "browser.tabs.closeButtons",
-              "browser.tabs.autoHide",
               "browser.tabs.tabMinWidth",
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
@@ -530,6 +528,8 @@ var gTMPprefObserver = {
   * topic: "changed"
   */
   observe: function TMP_pref_observer(subject, topic, prefName) {
+    if (this.preventUpdate)
+      return;
     // if we don't have a valid window (closed)
     if ( !(typeof(document) == 'object' && document) ) {
       this.removeObservers(); // remove the observer..
@@ -880,60 +880,60 @@ var gTMPprefObserver = {
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
     var styleRules = {
-      currentTab:    { text:  '.tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"]' + tabTextRule,
-                       bg  :  '.tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],'+
-                              '.tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' + backgroundRule},
-      unloadedTab:   { text:  '.tabbrowser-tabs[useUnloadedColor] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
-                       bg:    '.tabbrowser-tabs[useUnloadedBGColor] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
-      unreadTab:     { text:  '.tabbrowser-tabs[useUnreadColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
-                              '.tabbrowser-tabs[useUnreadColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
-                       bg:    '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]),' +
-                              '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
-      otherTab:      { text:  '.tabbrowser-tabs[useOtherColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
-                              '.tabbrowser-tabs[useOtherColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
-                              '.tabbrowser-tabs[useOtherColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
-                              '.tabbrowser-tabs[useOtherColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
-                       bg:    '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
-                              '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
-                              '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
-                              '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
-      progressMeter: { bg:    '.tabbrowser-tabs[useProgressColor] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
+      currentTab:    { text:  '#tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"]' + tabTextRule,
+                       bg  :  '#tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],'+
+                              '#tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' + backgroundRule},
+      unloadedTab:   { text:  '#tabbrowser-tabs[useUnloadedColor] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
+                       bg:    '#tabbrowser-tabs[useUnloadedBGColor] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
+      unreadTab:     { text:  '#tabbrowser-tabs[useUnreadColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
+                              '#tabbrowser-tabs[useUnreadColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
+                       bg:    '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]),' +
+                              '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
+      otherTab:      { text:  '#tabbrowser-tabs[useOtherColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
+                              '#tabbrowser-tabs[useOtherColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
+                              '#tabbrowser-tabs[useOtherColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
+                              '#tabbrowser-tabs[useOtherColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
+                       bg:    '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
+                              '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
+                              '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
+                              '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
+      progressMeter: { bg:    '#tabbrowser-tabs[useProgressColor] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
     }
 
     if (Tabmix.isMac) {
       styleRules.currentTab.bg =
-        '.tabbrowser-tabs[useCurrentBGColor] .tab-background-start[selected="true"],' +
-        '.tabbrowser-tabs[useCurrentBGColor] .tab-background-middle[selected="true"],' +
-        '.tabbrowser-tabs[useCurrentBGColor] .tab-background-end[selected="true"]' + backgroundRule;
+        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-start[selected="true"],' +
+        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-middle[selected="true"],' +
+        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-end[selected="true"]' + backgroundRule;
       styleRules.unloadedTab.bg =
-        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-start:not([selected="true"])[pending],' +
-        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-middle:not([selected="true"])[pending],' +
-        '.tabbrowser-tabs[useUnloadedBGColor] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
+        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-start:not([selected="true"])[pending],' +
+        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-middle:not([selected="true"])[pending],' +
+        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
       styleRules.unreadTab.bg =
-        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-start:not([visited]),' +
-        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-middle:not([visited]),' +
-        '.tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-end:not([visited]),' +
-        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
-        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
-        '.tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
+        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-start:not([visited]),' +
+        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-middle:not([visited]),' +
+        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-end:not([visited]),' +
+        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
+        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
+        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
       styleRules.otherTab.bg =
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-start:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-middle:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-end:not([selected="true"]),' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
-        '.tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
-        '.tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-start:not([selected="true"]),' +
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-middle:not([selected="true"]),' +
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-end:not([selected="true"]),' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
+        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
     }
     else {
       styleRules.currentTab.bgTabsontop =
-        '#TabsToolbar[tabsontop=true] > .tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],' +
-        '#TabsToolbar[tabsontop=true] > .tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' +
+        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],' +
+        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' +
         "{background-image: " + this.gradients.body + " !important;}";
     }
 
@@ -1121,78 +1121,14 @@ var gTMPprefObserver = {
   },
 
   addWidthRules: function TMP_PO_addWidthRules() {
-    let newRule = ".tabbrowser-tab[fadein]:not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
+    let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
+    let newRule = ".tabbrowser-tab[fadein]" + tst + ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
     let ss = this.tabStyleSheet;
     let index = ss.insertRule(newRule, ss.cssRules.length);
     this.dynamicRules["width"] = ss.cssRules[index];
-  },
-
-/*XXX move this and all the code from tabmix dialog to import prefs into mudel file */
-  updateOldStylePrefs: function TMP_PO_updateOldStylePrefs() {
-    // in 0.3.0.605 we changed tab color from old pref to new pref
-    // old pref "extensions.tabmix.currentColor" type integer
-    // new pref "extensions.tabmix.currentColorCode" type string
-    //
-    // in 0.3.7.4 2008-12-24 we combined all style prefs into one per type
-    // extensions.tabmix.styles.[TYPE NAME]
-    var rules = ["currentTab", "unreadTab", "otherTab", "progressMeter"];
-    const pBranch = Ci.nsIPrefBranch;
-    for (let i = 0; i < rules.length; i++) {
-      let rule = rules[i];
-      this.preventUpdate = true;
-      let ruleName = rule.replace(/Tab|Meter/,"");
-      let attrib = ruleName.charAt(0).toUpperCase() + ruleName.substr(1);
-      let oldPrefs = {italic: "italic" + attrib, bold: "bold" + attrib, underline: "underline" + attrib,
-                       text: "use"+ attrib + "Color", textColor: ruleName + "ColorCode", textColorOLD: ruleName + "Color"}
-      let needToUpdatePref = false;
-      let prefsToChange = {};
-      for (var oldPref in oldPrefs) {
-        var prefName = oldPrefs[oldPref] ,prefValue = null;
-        if (Tabmix.prefs.prefHasUserValue(prefName)) {
-          switch (Tabmix.prefs.getPrefType(prefName)) {
-            case pBranch.PREF_BOOL:
-              prefValue = Tabmix.prefs.getBoolPref(prefName);
-              break;
-            case pBranch.PREF_INT:
-              var colorCodes = ["#CF1919", "#0E36EF", "#DDDF0D", "#3F8F3E", "#E066FF", "#86E7EF",
-                                 "#FFFFFF", "#7F7F7F", "#000000", "#EF952C", "#FF82AB", "#7F4C0F", "#AAAAFF"];
-              var _value = Tabmix.prefs.getIntPref(prefName);
-              if (_value >= 0 && _value < 13)
-                prefValue = colorCodes[_value];
-              break;
-            case pBranch.PREF_STRING:
-              prefValue = Tabmix.prefs.getCharPref(prefName);
-              break;
-          }
-          Tabmix.prefs.clearUserPref(prefName);
-          if (prefValue != null) {
-            needToUpdatePref = true;
-            if (rule == "progressMeter")
-              oldPref = oldPref.replace("text", "bg");
-            prefsToChange[oldPref.replace("OLD", "")] = prefValue;
-          }
-        }
-      }
-      this.preventUpdate = false;
-      if (needToUpdatePref == true) {
-        this.converOldStylePrefs(rule, prefsToChange);
-      }
-    }
-  },
-
-  converOldStylePrefs: function TMP_PO_converOldStylePrefs(prefName, oldPrefs) {
-    var prefString = Tabmix.prefs.getCharPref("styles." + prefName);
-    try {
-      let prefValues = Tabmix.JSON.parse(prefString);
-      for (let item in oldPrefs)
-        prefValues[item] = oldPrefs[item];
-      let newprefString = Tabmix.JSON.stringify(prefValues);
-      if (newprefString != prefString)
-        Tabmix.prefs.setCharPref("styles." + prefName, newprefString);
-    } catch (ex) { return; } // nothing we can do
   },
 
   defaultStylePrefs: {    currentTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
@@ -1203,9 +1139,6 @@ var gTMPprefObserver = {
 
   tabStylePrefs: {},
   setTabStyles: function TMP_PO_setTabStyles(prefName, start) {
-    if (!Tabmix.isVersion(90) && prefName == "extensions.tabmix.styles.unloadedTab")
-      return;
-
     var ruleName = prefName.split(".").pop();
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
@@ -1257,20 +1190,22 @@ var gTMPprefObserver = {
     if (Services.prefs.prefHasUserValue(prefName)) {
       let prefString = Services.prefs.getCharPref(prefName);
       try {
-        var currentPrefValues = Tabmix.JSON.parse(prefString);
+        var currentPrefValues = TabmixSvc.JSON.parse(prefString);
+        if (currentPrefValues == null)
+          throw Error(prefName + " value is invalid\n" + prefString)
       }
       catch (ex) {
+        Tabmix.log(ex);
         try {
           // convert old format to JSON string
           // we do it only one time when user update Tabmix from old version
           currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
                               new Components.utils.Sandbox("about:blank"));
-          Services.prefs.setCharPref(prefName, Tabmix.JSON.stringify(currentPrefValues));
+          Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(currentPrefValues));
         } catch (e) {
            Tabmix.log('Error in preference "' + prefName + '", value was reset to default');
            Tabmix.assert(e);
-           if (Services.prefs.prefHasUserValue(prefName))
-             Services.prefs.clearUserPref(prefName);
+           Services.prefs.clearUserPref(prefName);
            // set prev value to default so we can continue with this function
            currentPrefValues = defaultPrefValues;
         }
@@ -1280,9 +1215,9 @@ var gTMPprefObserver = {
       // if item is missing set it to default
       for (let item in defaultPrefValues) {
         let value = currentPrefValues[item];
-        if (item.indexOf("Color") > -1) {
-         let opacity = item.replace("Color", "Opacity");
-         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
+        if (value && item.indexOf("Color") > -1) {
+          let opacity = item.replace("Color", "Opacity");
+          let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
           value = getRGBcolor(value, opacityValue);
         }
         else if (value != null && typeof(value) != "boolean") {
@@ -1297,7 +1232,7 @@ var gTMPprefObserver = {
           prefValues[item] = value;
       }
       if (currentPrefValues != prefValues)
-        Services.prefs.setCharPref(prefName, Tabmix.JSON.stringify(prefValues));
+        Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(prefValues));
     }
     else
       prefValues = defaultPrefValues;
@@ -1331,9 +1266,6 @@ var gTMPprefObserver = {
   },
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
-    if (!Tabmix.isVersion(90) && prefName == "unloadedTab")
-      return;
-
     var ruleName = prefName.split(".").pop();
 
     var attrib = (ruleName.charAt(0).toUpperCase() + ruleName.substr(1)).replace("Tab","");
@@ -1435,6 +1367,10 @@ var gTMPprefObserver = {
 
   setAutoHidePref: function() {
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
+    if (Tabmix.isVersion(230)) {// after Bug 855370
+      gBrowser.tabContainer.updateVisibility();
+      return;
+    }
     var autoHide = TabmixTabbar.hideMode != 0;
     if (autoHide != Services.prefs.getBoolPref("browser.tabs.autoHide")) {
       Services.prefs.setBoolPref("browser.tabs.autoHide", autoHide);
@@ -1607,7 +1543,6 @@ var gTMPprefObserver = {
 
   // we replace some Tabmix settings with Firefox settings
   updateSettings: function() {
-    this.preventUpdate = true;
     if (Tabmix.prefs.prefHasUserValue("undoCloseCache")) {
        var max_tabs_undo = Tabmix.prefs.getIntPref("undoCloseCache");
        Tabmix.prefs.clearUserPref("undoCloseCache");
@@ -1787,8 +1722,7 @@ try {
     // 2013-01-21 - lock hideIcons to true in mac
     if (Services.appinfo.OS == "Darwin" && !Tabmix.prefs.prefIsLocked("hideIcons")) {
       Tabmix.defaultPrefs.setBoolPref("hideIcons", true);
-      if (Tabmix.prefs.prefHasUserValue("hideIcons"))
-        Tabmix.prefs.clearUserPref("hideIcons");
+      Tabmix.prefs.clearUserPref("hideIcons");
       Tabmix.prefs.lockPref("hideIcons");
     }
 
@@ -1803,12 +1737,12 @@ try {
       Tabmix.prefs.clearUserPref("disableF9Key");
     }
     if (useF8Key || useF9Key) {
-      let shortcuts = Tabmix.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
+      let shortcuts = TabmixSvc.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
       if (useF8Key)
         shortcuts.slideShow = "VK_F8";
       if (useF9Key)
         shortcuts.toggleFLST = "VK_F9";
-      Tabmix.prefs.setCharPref("shortcuts", Tabmix.JSON.stringify(shortcuts));
+      Tabmix.prefs.setCharPref("shortcuts", TabmixSvc.JSON.stringify(shortcuts));
     }
 
     // verify valid value
@@ -1818,8 +1752,7 @@ try {
         Tabmix.prefs.clearUserPref("tabs.closeButtons");
     }
     // 2011-01-22 - verify sessionstore enabled
-    if (Services.prefs.prefHasUserValue("browser.sessionstore.enabled"))
-      Services.prefs.clearUserPref("browser.sessionstore.enabled");
+    Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
 try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {
@@ -1865,7 +1798,6 @@ try { // user report about bug here ... ?
 
     // verify that all the prefs exist .....
     this.addMissingPrefs();
-    this.preventUpdate = false;
   },
 
   updateTabClickingOptions: function() {
@@ -1884,29 +1816,20 @@ try { // user report about bug here ... ?
     }
   },
 
-  // we call this function also from pref-tabmix.js
   addMissingPrefs: function() {
-    const pBranch = Components.interfaces.nsIPrefBranch;
-    function _setPref(aType, aPref, aDefault) {
-      if (Services.prefs.prefHasUserValue(aPref)) {
-        if (Services.prefs.getPrefType(aPref) == aType)
-          return;
-        else
-          Services.prefs.clearUserPref(aPref);
-      }
-      switch (aType) {
-        case pBranch.PREF_BOOL:
-          Tabmix.getBoolPref(aPref, aDefault);
-          break;
-        case pBranch.PREF_INT:
-          Tabmix.getIntPref(aPref, aDefault);
-          break;
-        case pBranch.PREF_STRING:
-          Tabmix.getCharPref(aPref, aDefault);
-          break;
-      }
+    // add missing preference to the default branch
+    let prefs = Services.prefs.getDefaultBranch("");
+
+    /* 2012-01-26
+      from firefox 12 we use "browser.newtab.url" instead of extensions.tabmix.newtab.url
+      and extensions.tabmix.replaceLastTabWith.newtab.url
+    */
+    if (Tabmix.isVersion(120))
+      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
+    else {
+      prefs.setCharPref("extensions.tabmix.newtab.url", "about:blank");
+      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newTabUrl", "about:blank");
     }
-    _setPref(pBranch.PREF_INT, "browser.link.open_newwindow.override.external", -1);       // exist from firefox 10.0
   }
 
 }

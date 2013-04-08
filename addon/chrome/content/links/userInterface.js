@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * chrome://tabmixplus/content/links/userInterface.js
  *
@@ -28,7 +30,8 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     if(panel > -1)
       Tabmix.prefs.setIntPref("selected_tab", panel);
 
-    window.openDialog("chrome://tabmixplus/content/pref/pref-tabmix.xul", "Tab Mix Plus", "chrome,titlebar,toolbar,close,dialog=no");
+    window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
+        "chrome,titlebar,toolbar,close,dialog=no,centerscreen");
   }
 }
 
@@ -151,7 +154,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
        }
      } catch (ex) {/* no pref - do noting */}
    }
-   if ((TabmixTabbar.widthFitTitle || !Tabmix.isVersion(60)) && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
+   if (TabmixTabbar.widthFitTitle && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
    var loadBlank = Tabmix.isBlankPageURL(url);
@@ -272,8 +275,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  * @return              Nothing.
  *
  *
- * we call this function from urlbar.handleCommand up to Firefox 10
- * and from extensions.js for objURLsuffix.
+ * we call this function from urlbar.handleCommand when instantfox installed
  *
  */
 Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisabled, aUrl, mayInheritPrincipal) {

@@ -1,3 +1,5 @@
+"use strict";
+
 /*////////////////////////////////////////////////////////////////////
 // The Original Code is the "LastTab" extension for Mozilla Firefox.//
 // version 1.5 - October 26, 2005                                   //
@@ -157,7 +159,7 @@ var TMP_LastTab = {
        return this._tabs;
      let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;
      this._tabs = Array.filter(list, function(tab) {
-       return !tab.hidden && gBrowser._removingTabs.indexOf(tab) == -1;
+       return !tab.hidden && !tab.closing;
      });
      return this._tabs;
    },

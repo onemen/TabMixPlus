@@ -1,3 +1,5 @@
+"use strict";
+
 var EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const Cc = Components.classes;
@@ -67,11 +69,49 @@ let TabmixSvc = {
       return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
     } catch(ex) {}
     return this.direct2dDisabled = false;
+  },
+
+  // some extensions override native JSON so we use nsIJSON
+  JSON: {
+    nsIJSON: null,
+    parse: function TMP_parse(str) {
+      try {
+        return JSON.parse(str);
+      } catch(ex) {
+        try {
+          return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
+        } catch(ex) {return null}
+      }
+    },
+    stringify: function TMP_stringify(obj) {
+      try {
+        return JSON.stringify(obj);
+      } catch(ex) {
+        try {
+          return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
+        } catch(ex) {return null}
+      }
+    }
+  },
+
+  sm: {
+    initialized: false,
+    status: "",
+    crashed: false,
+    get sanitized() {
+      delete this.sanitized;
+      return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
+    },
+    private: true
   }
 }
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
+  return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+});
 
 /**
  * Lazily define services

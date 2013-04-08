@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * original code by onemen
  */
@@ -16,8 +18,16 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false,
+    Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
         verticalTabBar: false, ieTab2: false};
+
+    // sessionManager extension is restartless since version 0.8
+    Tabmix.extensions.__defineGetter__("sessionManager", function() {
+      return TabmixSvc.sessionManagerAddonInstalled ||
+        "com" in window && com.morac &&
+        typeof com.morac.SessionManagerAddon == "object"
+    });
+
     try {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
@@ -45,11 +55,6 @@ var TMP_extensionsCompatibility = {
           ).toCode();
         }
       });
-    }
-
-    if ("com" in window && com.morac &&
-        com.morac.SessionManagerAddon) {
-      Tabmix.extensions.sessionManager = true;
     }
 
     try {
@@ -281,28 +286,6 @@ var TMP_extensionsCompatibility = {
         ).toCode();
       }
     } catch (ex) {}
-
-    // make URL Suffix extension compatible with tabmix
-    if ("objURLsuffix" in window && !Tabmix.isVersion(100)) {
-      if ("handleURLBarCommand" in objURLsuffix) {
-        Tabmix.changeCode(objURLsuffix, "objURLsuffix.handleURLBarCommand")._replace(
-          'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value, altDisabled);',
-          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, altDisabled);'
-        )._replace(
-          'objURLsuffix.BrowserLoadURL(aTriggeringEvent, postData.value);',
-          'Tabmix.browserLoadURL(aTriggeringEvent, postData.value, true);'
-        ).toCode();
-
-        window.handleURLBarCommand = objURLsuffix.handleURLBarCommand;
-      }
-
-      if ("canonizeUrl" in objURLsuffix) {
-        Tabmix.changeCode(objURLsuffix, "objURLsuffix.canonizeUrl")._replace(
-          'return [gURLBar.value, aPostDataRef];',
-          'return [gURLBar.value, aPostDataRef, true];'
-        ).toCode();
-      }
-    }
 
     try {
       if ("TreeStyleTabService" in window)

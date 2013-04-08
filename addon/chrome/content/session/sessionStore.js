@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * chrome://tabmixplus/content/session/sessionStore.js
  *
@@ -90,6 +92,7 @@ var TMP_SessionStore = {
     * @brief         make sure that we don't enable both sessionStore and session manager
     *
     * @param msgNo   a Integer value - msg no. to show.
+    *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
     *
     * @param start   a Boolean value - true if we call this function before startup.
     *
@@ -118,7 +121,7 @@ var TMP_SessionStore = {
 
       window.tabmix_setSession = true;
       // if session manager extension is install disable TMP session manager
-      if (Tabmix.extensions.sessionManager) {
+      if (msgNo == -1 || Tabmix.extensions.sessionManager) {
          // update session manager settings accourding to current tabmix settings
          if (TMP_manager_enabled) {
             Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
@@ -208,9 +211,9 @@ var TMP_SessionStore = {
          return false;
 
       // When we close all browser windows without exit (non browser windows are opened)
-      // Firefox restore current session when a browser window opens
+      // Firefox reopen last closed window when a browser window opens
       if (Tabmix.numberOfWindows(false, null) > 1) {
-         if (Tabmix.isVersion(50) && (Tabmix.prefs.getBoolPref("sessions.manager") ||
+         if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
               Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
               TabmixSvc.ss.getClosedWindowCount() > 0) {
            Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
@@ -225,7 +228,8 @@ var TMP_SessionStore = {
    },
 
    setSessionRestore: function (aEnable) {
-      Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
+     if (!Tabmix.isVersion(200))
+        Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
       Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
       Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
       if (aEnable)
@@ -311,7 +315,7 @@ var TMP_ClosedTabs = {
     * Get closed tabs data
     */
    get getClosedTabData() {
-      return Tabmix.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
+      return TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
    },
 
    getUrl: function ct_getUrl(aTabData) {
@@ -484,7 +488,7 @@ var TMP_ClosedTabs = {
 
       // replace existing _closedTabs
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       } catch (e) {}
 
       this.setButtonDisableState();
@@ -494,7 +498,8 @@ var TMP_ClosedTabs = {
    SSS_restoreToNewWindow: function ct_restoreToNewWindow(aIndex) {
       var tabData = this.getClosedTabAtIndex(aIndex);
       // we pass the current tab as a place holder for tabData
-      return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, tabData);
+      var state = tabData = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
+      return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
    },
 
    SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
@@ -540,7 +545,7 @@ var TMP_ClosedTabs = {
       else if (typeof(aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
          aTabToRemove = cTab;
 
-      TabView.prepareUndoCloseTab(aTabToRemove);
+      TMP_TabView.prepareUndoCloseTab(aTabToRemove);
 
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
@@ -552,9 +557,9 @@ var TMP_ClosedTabs = {
       if (aTabToRemove)
          gBrowser.removeTab(aTabToRemove);
       // add restored tab to current window
-      TabmixSvc.ss.setTabState(newTab, Tabmix.JSON.stringify(tabData.state));
+      TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
-      TabView.afterUndoCloseTab();
+      TMP_TabView.afterUndoCloseTab();
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
@@ -632,7 +637,15 @@ var TabmixConvertSession = {
    },
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
-      com.morac.SessionManagerAddon.gSessionManagerWindowObject.doTMPConvertFile(aFileUri, aSilent);
+      if (TabmixSvc.sessionManagerAddonInstalled) {
+         let tmp = {}
+         Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp)
+         tmp.SessionConverter.convertTMP(aFileUri, aSilent);
+      }
+      else {
+         let sm = com.morac.SessionManagerAddon.gSessionManagerWindowObject;
+         sm.doTMPConvertFile(aFileUri, aSilent);
+      }
    },
 
    confirm: function cs_confirm(aMsg, aCallBack) {
@@ -678,13 +691,11 @@ var TabmixConvertSession = {
 
       // save panorama data if exist
       let extData = {};
-      let emptyGroup = Tabmix.JSON.stringify({})
+      let emptyGroup = TabmixSvc.JSON.stringify({})
       extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
       extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
       extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
       extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
-      if (Tabmix.isVersion(70))
-        extData["tabview-last-session-group-name"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-last-session-group-name", "");
       state.extData = extData;
       return state;
    },
@@ -786,12 +797,5 @@ var TabmixConvertSession = {
          entries.push(entry);
       }
       return entries;
-   },
-
-  sessionManagerOptions: function SM_sessionManagerOptions() {
-    if ("com" in window && com.morac &&
-        com.morac.SessionManagerAddon) {
-      com.morac.SessionManagerAddon.gSessionManagerWindowObject.openOptions();
-    }
-  }
+   }
 }

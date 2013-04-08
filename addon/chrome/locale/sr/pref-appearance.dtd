@@ -2,6 +2,7 @@
 <!ENTITY currentTab.label "Текућа картица">
 <!ENTITY unloadedTabs.label "Неучитане картице">
 <!ENTITY unreadTab.label "Непрочитане картице">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY otherTabs.label "Остале картице">
 <!ENTITY italic.label "Искошено">
 <!ENTITY bold.label "Подебљано">

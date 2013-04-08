@@ -1,5 +1,5 @@
 #stylespanels > tabpanel {
-  -moz-binding: url(chrome://tabmixplus/content/pref/pref-appearance.xml#tabstylepanel);
+  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabstylepanel);
 }
 
 .tabStyles_underline span {
@@ -25,7 +25,7 @@ checkbox[anonid="useThis"][disabled] {
 }
 
 tabmix-rgbcontrol {
-  -moz-binding: url(chrome://tabmixplus/content/pref/pref-appearance.xml#tabmix-rgbcontrol);
+  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabmix-rgbcontrol);
 }
 
 .rgbcontrol {

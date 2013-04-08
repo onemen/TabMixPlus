@@ -1,3 +1,5 @@
+"use strict";
+
 Tabmix.BUTTON_OK = 0;
 Tabmix.BUTTON_CANCEL = 1;
 Tabmix.BUTTON_EXTRA1 = 2;
@@ -102,6 +104,7 @@ Tabmix.Sanitizer = {
 
       // set flag for next start
       Tabmix.prefs.setBoolPref("sessions.sanitized" , true);
+      TabmixSvc.sm.sanitized = true;
    },
 
    clearDisk: function (aFile) {
@@ -266,7 +269,7 @@ var TabmixSessionData = {
       var tabData = TabmixSvc.ss.getTabValue(tab, id);
       if (tabData != "" && tabData != "{}" && tabData != "null") {
         if (parse)
-          existingData = Tabmix.JSON.parse(tabData);
+          existingData = TabmixSvc.JSON.parse(tabData);
         else
           existingData = tabData;
       }
@@ -281,7 +284,7 @@ var TabmixSessionData = {
       var data = TabmixSvc.ss.getWindowValue(win, id);
       if (data) {
         if (parse)
-          existingData = Tabmix.JSON.parse(data);
+          existingData = TabmixSvc.JSON.parse(data);
         else
           existingData = data;
       }
@@ -316,9 +319,11 @@ var TabmixSessionManager = {
     windowClosed: false,
 
     afterCrash: false,
+    lastSessionWasEmpty: false,
 
     // whether we are in private browsing mode
     globalPrivateBrowsing: false,
+    firstNonPrivateWindow: false,
 
    get prefBranch() {
       delete this.prefBranch;
@@ -332,7 +337,7 @@ var TabmixSessionManager = {
       this._inited = true;
 
       this._init();
-      if (Tabmix.isFirstWindow && this._notifyWindowsRestored) {
+      if (this._notifyWindowsRestored) {
         // restart-less extensions observers for this notification on startup
         // notify observers things are complete.
         Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
@@ -347,27 +352,28 @@ var TabmixSessionManager = {
       tablib.init();
 
       var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
-      var isFirstWindow = Tabmix.isFirstWindow && !_afterTabduplicated;
+      var isFirstWindow = (Tabmix.isFirstWindow || this.firstNonPrivateWindow) && !_afterTabduplicated;
 
       let obs = Services.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "sessionstore-windows-restored", true);
       obs.addObserver(this, "sessionstore-browser-state-restored", true);
+      obs.addObserver(this, "quit-application-requested", true);
+      obs.addObserver(this, "browser-lastwindow-close-requested", true);
       if (!Tabmix.isVersion(200)) {
-        obs.addObserver(this, "quit-application-requested", true);
-        obs.addObserver(this, "browser-lastwindow-close-requested", true);
         obs.addObserver(this, "private-browsing", true);
         obs.addObserver(this, "private-browsing-change-granted", true);
       }
 
       this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;
-      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery") && !this.isPrivateWindow;
+      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery");
       this.enableSaveHistory = this.prefBranch.getBoolPref("save.history");
       this.saveClosedtabs = this.prefBranch.getBoolPref("save.closedtabs") &&
                              Tabmix.prefs.getBoolPref("undoClose");
       this._lastSaveTime = Date.now();
+      var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
       // check if we need to backup
-      if (isFirstWindow && this.enableManager && !this.prefBranch.prefHasUserValue("sanitized")) {
+      if (!TabmixSvc.sm.initialized && this.enableManager && !sanitized) {
          try {
            this.archiveSessions();
          }
@@ -384,25 +390,45 @@ var TabmixSessionManager = {
       if (!this.DATASource)
          this.initService();
 
-      if (this.globalPrivateBrowsing) {
+      // If sessionStore restore the session after restart we do not need to do anything
+      // when all tabs are pinned, session resore add the home page on restart
+      var afterRestart = Tabmix.isWindowAfterSessionRestore &&
+            !gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
+      // prepare history sessions
+      if (!TabmixSvc.sm.initialized && !this.globalPrivateBrowsing &&
+            !sanitized && !afterRestart) {
+         let status, crashed;
+         if (this.enableBackup) {
+            let path = this._rdfRoot + "/closedSession/thisSession";
+            status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
+            crashed = TabmixSvc.sm.crashed = status.indexOf("crash") != -1;
+         }
+         if (this.enableManager || crashed) {
+            if (crashed)
+               this.preparAfterCrash(status);
+            this.prepareSavedSessions();
+         }
+      }
+      TabmixSvc.sm.initialized = true;
+
+      if (this.isPrivateWindow) {
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
+         this.enableBackup = false;
          return;
       }
 
-      var path, status, caller, crashed;
       if (isFirstWindow) {
-         path = this._rdfRoot + "/closedSession/thisSession";
-         status = this.getLiteralValue(path, "status");
-         crashed = status.indexOf("crash") != -1;
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
+         let path = this._rdfRoot + "/closedSession/thisSession";
          this.setLiteral(path, "status", "crash");
 
          // if we after sanitize, we have no data to restore
-         if (this.enableManager && this.prefBranch.prefHasUserValue("sanitized")) {
+         if (sanitized) {
             this.prefBranch.clearUserPref("sanitized");
+            TabmixSvc.sm.sanitized = false;
             this.loadHomePage();
             this.saveStateDelayed();
             return;
@@ -412,23 +438,18 @@ var TabmixSessionManager = {
             return;
          }
 
-         // If sessionStore restore the session after restart we do not need to do anything
-         // when all tabs are pinned, session resore add the home page on restart
-         let tabmixLoading = gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
-         let afterRestart = !tabmixLoading && Tabmix.isWindowAfterSessionRestore;
          if (afterRestart)
             this.onSessionRestored();
-         else if (crashed)
-            this.openAfterCrash(status);
+         else if (TabmixSvc.sm.crashed && this.enableBackup)
+            this.openAfterCrash(TabmixSvc.sm.status);
          else if (this.enableManager)
-            this.openFirstWindow(false);
+            this.openFirstWindow(TabmixSvc.sm.crashed);
 
-         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
+         Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
       }
       else if (this.enableManager && "tabmixdata" in window) {
-         path = window.tabmixdata.path;
-         caller = window.tabmixdata.caller;
+         let path = window.tabmixdata.path;
+         let caller = window.tabmixdata.caller;
 
          if (caller == "concatenatewindows")
             this.loadSession(path, caller, false);
@@ -599,11 +620,10 @@ var TabmixSessionManager = {
                this.deleteSubtree(this.gSessionPath[0]);
          }
          // clean-up....
-         if (this.enableBackup) this.deleteSession(this.gSessionPath[3]);
-         if (Tabmix.prefs.prefHasUserValue("warnAboutClosingTabs.timeout"))
-            Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
-         if (this.prefBranch.prefHasUserValue("crashed"))
-            this.prefBranch.clearUserPref("crashed"); // we use this in setup.js;
+         if (this.enableBackup)
+           this.deleteSession(this.gSessionPath[3]);
+         Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
+         this.prefBranch.clearUserPref("crashed"); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "stopped");
          if (!this.enableManager && !this.enableBackup)
@@ -679,9 +699,9 @@ var TabmixSessionManager = {
       obs.removeObserver(this, "browser-window-change-state");
       obs.removeObserver(this, "sessionstore-windows-restored");
       obs.removeObserver(this, "sessionstore-browser-state-restored");
+      obs.removeObserver(this, "quit-application-requested");
+      obs.removeObserver(this, "browser-lastwindow-close-requested");
       if (!Tabmix.isVersion(200)) {
-        obs.removeObserver(this, "quit-application-requested");
-        obs.removeObserver(this, "browser-lastwindow-close-requested");
         obs.removeObserver(this, "private-browsing");
         obs.removeObserver(this, "private-browsing-change-granted");
       }
@@ -900,6 +920,7 @@ var TabmixSessionManager = {
       var rdfLabels = ["tabs","closedtabs","index","history","properties","selectedIndex",
                "timestamp","title","url","dontLoad","reOpened","name","nameExt","session",
                "status","tabPos","image","scroll","winFeatures"];
+      // keep tabview data from existing session event if the user don't have Tabview installed
       rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
       for (var i = 0; i < rdfLabels.length; i++) {
          this.NC_TM[rdfLabels[i]] = this.RDFService.GetResource(this.NC_NS + rdfLabels[i]);
@@ -1115,7 +1136,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       switch (aTopic) {
          case "quit-application-requested":
             // TabView
-            if (TabView._window) {
+            if (this.tabViewInstalled && TabView._window) {
               if (TabView.isVisible())
                 this.setLiteral(this.gThisWin, "tabview-visibility", "true");
               else
@@ -1274,13 +1295,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // if aIndex is not > 0 we just past empy list to setWindowState
       // it's like remove all closed tabs from the list
       if (aIndex >= 0) {
-         state._closedWindows = Tabmix.JSON.parse(TabmixSvc.ss.getClosedWindowData());
+         state._closedWindows = TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedWindowData());
          // purge closed window at aIndex
          closedWindow = state._closedWindows.splice(aIndex, 1).shift();
       }
       // replace existing _closedWindows
       try {
-        TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       } catch (ex) {Tabmix.assert(ex);}
 
       return closedWindow;
@@ -1855,7 +1876,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          if (loadsession > -1 && contents != 1 && loadsession != popup.parentNode.sessionIndex) {
             this.prefBranch.setIntPref("onStart.loadsession", popup.parentNode.sessionIndex);
             var pref = "onStart.sessionpath";
-            if (popup.parentNode.sessionIndex < 0 && this.prefBranch.prefHasUserValue(pref))
+            if (popup.parentNode.sessionIndex < 0)
                this.prefBranch.clearUserPref(pref);
          }
       }
@@ -2038,17 +2059,17 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    // call by init on first window load after crash
-   openAfterCrash: function SM_openAfterCrash(status) {
-      this.afterCrash = true;
+   preparAfterCrash: function SM_preparAfterCrash(status) {
       var sessionContainer = this.initContainer(this.gSessionPath[0]);
       if (this.enableBackup) {
          var path = this._rdfRoot + "/closedSession/thisSession";
          this.setLiteral(path, "status", "crash2");
-         // restore to were we was before the crash
-         var crashedContainer = this.initContainer(this.gSessionPath[3]);
          if (status != "crash2") {
+            // restore to were we was before the crash
+            let crashedContainer = this.initContainer(this.gSessionPath[3]);
             // delete old crash data
-            if (!this.containerEmpty(this.gSessionPath[3])) this.deleteWithProp(crashedContainer);
+            if (!this.containerEmpty(this.gSessionPath[3]))
+               this.deleteWithProp(crashedContainer);
             var windowEnum = sessionContainer.GetElements();
             var nodeToDelete = [];
             while (windowEnum.hasMoreElements()) {
@@ -2069,7 +2090,14 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          } // if firefox was crashed in middle of crash Recovery try again to restore the same data
          else if (!this.containerEmpty(this.gSessionPath[0]))
             this.deleteWithProp(sessionContainer);
+      }
+      else if (!this.containerEmpty(this.gSessionPath[0]))
+         // crash recovery is off, delete any remains from the crashed session
+         this.deleteWithProp(sessionContainer);
+   },
 
+   openAfterCrash: function SM_openAfterCrash(status) {
+         this.afterCrash = true;
          var title = TabmixSvc.getSMString("sm.afterCrash.title");
          var msg;
          if (status != "crash2")
@@ -2087,7 +2115,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var callBack = function (aResult) {TabmixSessionManager.afterCrashPromptCallBack(aResult);}
          this.callBackData = {label: null, whattoLoad: "session"}
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
-            var count = this.countWinsAndTabs(crashedContainer);
+            let crashedContainer = this.initContainer(this.gSessionPath[3]);
+            let count = this.countWinsAndTabs(crashedContainer);
             this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
             if (this.enableManager && !isAllEmpty) {
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
@@ -2137,11 +2166,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
             }
          }
-      } else { // crash recovery is off, delete any remains from the crashed session
-         if (!this.containerEmpty(this.gSessionPath[0])) this.deleteWithProp(sessionContainer);
-         if (this.enableManager) this.openFirstWindow(true); // openFirstWindow with flag openAfterCrash
-         //  else BrowserHome(); // we never get to here...
-      }
    },
 
    afterCrashPromptCallBack: function SM_afterCrashPromptCallBack(aResult) {
@@ -2167,8 +2191,18 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       delete this.callBackData;
    },
 
-   // call by init or by openAfterCrash on first window load
-   openFirstWindow: function SM_openFirstWindow(afterCrash) {
+   prepareSavedSessions: function SM_prepareSavedSessions() {
+      // make sure we delete closed windows that may exist if we exit Firefox
+      // from private browsing mode. we skip this command in windowIsClosing
+      // when entring private browsing mode
+      this.deleteWithProp(this.initContainer(this.gSessionPath[0]), "dontLoad");
+
+      // don't remove oldest session if last session was empty
+      if (this.containerEmpty(this.gSessionPath[0])) {
+        this.lastSessionWasEmpty = true;
+        return;
+      }
+
       var path = this._rdfRoot + "/closedSession/";
       var sessionType = ["thisSession", "lastSession", "previoustolastSession", "crashedsession"];
       // swap 0 --> 1 --> 2 --> 0
@@ -2191,12 +2225,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       this.gThisWin = this.gSessionPath[0] + "/" + gBrowser.windowID;
       this.gThisWinTabs = this.gThisWin + "/tabs";
       this.gThisWinClosedtabs = this.gThisWin + "/closedtabs";
+   },
 
-      // make sure we delete closed windows that may exist if we exit Firefox
-      // from private browsing mode. we skip this command in windowIsClosing
-      // when entring private browsing mode
-      this.deleteWithProp(this.initContainer(this.gSessionPath[1]), "dontLoad");
-
+   openFirstWindow: function SM_openFirstWindow(afterCrash) {
       // When Firefox Starts:
       //       pref "onStart"
       //       0 - Restore
@@ -2275,7 +2306,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case -1:
             var indx = -1 * loadSession;
             thisPath = this.gSessionPath[indx];
-            if (this.containerEmpty(this.gSessionPath[indx])) startupEmpty = true;
+            if (indx == 1 && this.lastSessionWasEmpty ||
+                  this.containerEmpty(this.gSessionPath[indx])) {
+               startupEmpty = true;
+            }
             sessionIndex = sessionPath.length + indx - 3;
             break;
       }
@@ -2313,7 +2347,7 @@ try{
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
       this.enableCrashRecovery(aResult);
       if (aResult.button == Tabmix.BUTTON_OK)
-         this.loadSession(aResult.label, "firstwindowopen");
+         this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
       else
          this.loadHomePage();
 
@@ -2321,7 +2355,7 @@ try{
 
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
-      TabView.init();
+      TMP_TabView.init();
    },
 
    getSessionList: function SM_getSessionList(flag) {
@@ -2405,7 +2439,7 @@ try{
    saveTabViewData: function SM_saveTabViewData(aWin, aBackup) {
       if (aBackup && !this.enableBackup)
         return;
-      let tabview = TabView._window;
+      let tabview = this.tabViewInstalled && TabView._window;
       if (tabview) {
         // update all tabs when we exit panorama (tabviewhidden)
         if (aBackup) {
@@ -2418,10 +2452,7 @@ try{
         else {
           tabview.UI._save();
           tabview.GroupItems.saveAll();
-          tabview.TabItems.saveAll(TabView.isVisible()); // isVisible here for Firefox 4.0-5.0
-          // saveActiveGroupName exist since Firefox 7.0
-          if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
-            tabview.Storage.saveActiveGroupName(window);
+          tabview.TabItems.saveAll();
         }
       }
 
@@ -2437,8 +2468,6 @@ try{
       updateTabviewData("tabview-visibility");
       updateTabviewData("tabview-groups");
       updateTabviewData("tabview-group");
-      if (Tabmix.isVersion(70) && !Tabmix.isVersion(100))
-        updateTabviewData("tabview-last-session-group-name");
       if (aBackup)
         this.saveStateDelayed();
    },
@@ -2689,6 +2718,7 @@ try{
       // clear sanitized flag
       if (this.prefBranch.prefHasUserValue("sanitized")) {
          this.prefBranch.clearUserPref("sanitized");
+         TabmixSvc.sm.sanitized = false;
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "crash");
       }
 
@@ -3003,9 +3033,6 @@ try{
          // remove extra tabs
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
-            // workaround to prevent entring Tabview when we remove last item from a group
-            if (!Tabmix.isVersion(60))
-               tab._tabViewTabIsRemovedAfterRestore = true;
             gBrowser.removeTab(tab);
          }
          newIndex = 0;
@@ -3039,21 +3066,20 @@ try{
          var blankTab;
          while (blankTabs.length > newtabsCount) {
             blankTab = blankTabs.pop();
-            // workaround to prevent entring Tabview when we remove last item from a group
-            if (!Tabmix.isVersion(60))
-              blankTab._tabViewTabIsRemovedAfterRestore = true;
             if (blankTab)
                gBrowser.removeTab(blankTab);
          }
 
          // reuse blank tabs and move tabs to the right place
          var openTabNext = Tabmix.getOpenTabNextPref();
-         // fix and merge session Tabview data with current window Tabview data
-         this._preperTabviewData(loadOnStartup, blankTabs);
-         if (this.groupUpdates.hideSessionActiveGroup) {
-           restoreSelect = false;
-           lastSelectedIndex = 0;
-           openTabNext = false;
+         if (this.tabViewInstalled) {
+            // fix and merge session Tabview data with current window Tabview data
+            this._preperTabviewData(loadOnStartup, blankTabs);
+            if (this.groupUpdates.hideSessionActiveGroup) {
+              restoreSelect = false;
+              lastSelectedIndex = 0;
+              openTabNext = false;
+            }
          }
 
          blankTabsCount = blankTabs.length;
@@ -3113,8 +3139,9 @@ try{
         this.node = rdfTab;
         this.properties = self.getLiteralValue(rdfTab, "properties");
         let attrib = {xultab: this.properties};
-        this.hidden = self.groupUpdates.hideSessionActiveGroup ||
-                      TMP_SessionStore._getAttribute(attrib, "hidden") == "true";
+        // Don't hide tabs when TabView is not installed
+        this.hidden = self.tabViewInstalled && (self.groupUpdates.hideSessionActiveGroup ||
+                      TMP_SessionStore._getAttribute(attrib, "hidden") == "true");
         this.index = self.getIntValue(rdfTab, "tabPos");
         this.pinned = TMP_SessionStore._getAttribute(attrib, "pinned") == "true";
 
@@ -3225,7 +3252,8 @@ try{
 
    setStripVisibility: function(tabCount) {
       // unhide the tab bar
-      if (tabCount > 1 && Services.prefs.getBoolPref("browser.tabs.autoHide") && !gBrowser.tabContainer.visible) {
+      if (tabCount > 1 && Tabmix.prefs.getIntPref("hideTabbar") != 2
+            && !gBrowser.tabContainer.visible) {
         gBrowser.tabContainer.visible = true;
       }
    },
@@ -3276,7 +3304,7 @@ try{
          let state = { windows: [], _firstTabs: true };
          state.windows[0] = { _closedTabs: [] };
          state.windows[0]._closedTabs = TabmixConvertSession.getClosedTabsState(this.getResource(fromPath, "closedtabs"));
-         TabmixSvc.ss.setWindowState(window, Tabmix.JSON.stringify(state), false);
+         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       }
    },
 
@@ -3411,7 +3439,8 @@ try{
          return;
       }
 
-      this._setTabviewTab(tabData, savedHistory);
+      if (this.tabViewInstalled)
+         this._setTabviewTab(tabData, savedHistory);
 
       try {
          let self = this;
@@ -3692,427 +3721,23 @@ try{
 
   /* ............... TabView Data ............... */
 
+  get tabViewInstalled() {
+    delete this.tabViewInstalled;
+    return this.tabViewInstalled = typeof TabView == "object";
+  },
+
   _sendWindowStateEvent: function SM__sendWindowStateEvent(aType) {
     let event = document.createEvent("Events");
     event.initEvent("SSWindowState" + aType, true, false);
     window.dispatchEvent(event);
   },
 
-  // aWindow: rdfNodeWindow to read from
-  _setWindowStateBusy: function SM__setWindowStateBusy(aWindow) {
-    TMP_SessionStore.initService();
+  _setWindowStateBusy: function() {
     this._sendWindowStateEvent("Busy");
-    this._getdSessionTabviewData(aWindow);
-
-    // save group count before we start the restore
-    var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
-    this._groupCount = parsedData.totalNumber || 1;
-    this._updateUIpageBounds = false;
   },
 
-  _setWindowStateReady: function SM__setWindowStateReady(aOverwriteTabs, showNotification) {
-    this._saveTabviewData();
-    if (!aOverwriteTabs)
-      this._groupItems = this._tabviewData["tabview-group"];
-
-    this._updateLastSessionGroupName();
-
-    var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
-    var groupCount = parsedData.totalNumber || 1;
-    TabView.updateGroupNumberBroadcaster(groupCount);
-
-    // show notification
-    if (showNotification && (aOverwriteTabs && groupCount > 1 || groupCount > this._groupCount))
-      this.showNotification();
-
-    // update page bounds when we overwrite tabs
-    if (aOverwriteTabs || this._updateUIpageBounds)
-      this._setUIpageBounds();
-
+  _setWindowStateReady: function() {
     this._sendWindowStateEvent("Ready");
-    if (TabView._window && !aOverwriteTabs) {
-      // when we don't overwriting tabs try to rearrange the groupItems
-      // when TabView._window is false we call this function after tabviewframeinitialized event
-      this._groupItemPushAway();
-    }
-
-    this.groupUpdates = {};
-    this._tabviewData = {};
-  },
-
-  groupUpdates: {},
-  _tabviewData: {},
-  _groupItems: null,
-
-  // aWindow: rdfNodeWindow to read from
-  _getdSessionTabviewData: function SM__getdSessionTabviewData(aWindow) {
-    let self = this;
-    function _fixData(id, parse, def) {
-      let data = self.getLiteralValue(aWindow, id);
-      if (data && data != "null")
-        return parse ? Tabmix.JSON.parse(data) : data;
-      return def;
-    }
-
-    let groupItems = _fixData("tabview-group", true, {});
-    let groupsData = _fixData("tabview-groups", true, {});
-    this._validateGroupsData(groupItems, groupsData);
-    this._tabviewData["tabview-group"] = groupItems;
-    this._tabviewData["tabview-groups"] = groupsData;
-    this.groupUpdates.lastActiveGroupId = groupsData.activeGroupId;
-
-    this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, Tabmix.JSON.stringify({}));
-    this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
-
-    if (Tabmix.isVersion(70) && !Tabmix.isVersion(100)) {
-      let type = "tabview-last-session-group-name";
-      this._lastSessionGroupName = this.getLiteralValue(aWindow, type, "");
-    }
-  },
-
-  _saveTabviewData: function SM__saveTabviewData() {
-    for (let id in this._tabviewData) {
-      this._setTabviewData(id, this._tabviewData[id]);
-    }
-  },
-
-  _setTabviewData: function SM__setTabviewData(id, data) {
-    if (typeof(data) != "string")
-      data = Tabmix.JSON.stringify(data);
-    TabmixSvc.ss.setWindowValue(window, id, data);
-    if (!this.enableBackup)
-      return;
-    if (data != "" && data != "{}")
-      this.setLiteral(this.gThisWin, id, data);
-    else
-      this.removeAttribute(this.gThisWin, id);
-  },
-
-  _setTabviewTab: function SM__setTabviewTab(tabData, aEntry){
-    if (tabData.tab.pinned)
-      return;
-
-    let parsedData;
-    function setData(id) {
-      let data = { groupID: id };
-      if (!Tabmix.isVersion(140)) {
-        data.url = aEntry.currentURI;
-        data.title = aEntry.label;
-      }
-      if (!Tabmix.isVersion(60)) {
-        // fake bounds, panorama check for bounds in TabItem__reconnect
-        data.bounds = {left:0, top:0, width:160, height:120};
-      }
-      parsedData = data;
-      return Tabmix.JSON.stringify(data);
-    }
-
-    var update = this.groupUpdates;
-    var id = "tabview-tab";
-    var data;
-    if (update.newGroupID) {
-      // We are here only when the restored session did not have tabview data
-      // we creat new group and fill all the data
-      data = setData(update.newGroupID);
-    }
-    else {
-      data = this.getLiteralValue(tabData.node, id);
-      // make sure data is not "null"
-      if (!data || data == "null") {
-        if (update.lastActiveGroupId)
-          data = setData(update.lastActiveGroupId);
-        else {
-          // force Panorama to reconnect all reused tabs
-          if (tabData.tab._tabViewTabItem) {
-            // remove any old data
-            tabData.tab._tabViewTabItem._reconnected = false;
-            try {
-              TabmixSvc.ss.deleteTabValue(tabData.tab, id);
-            } catch (ex) { }
-            if (!Tabmix.isVersion(80))
-              tabData.tab._tabViewTabItem.__tabmix_reconnected = false;
-          }
-          return;
-        }
-      }
-
-      if (update.IDs) {
-        parsedData = Tabmix.JSON.parse(data);
-        if (parsedData.groupID in update.IDs) {
-          parsedData.groupID = update.IDs[parsedData.groupID];
-          data = Tabmix.JSON.stringify(parsedData);
-        }
-      }
-    }
-
-    // force Panorama to reconnect all reused tabs
-    // in Firefox 8.0 + we do it from _patchTabviewFrame
-    if (!Tabmix.isVersion(80)) {
-      let tabItem = tabData.tab._tabViewTabItem;
-      if (tabItem) {
-        let tabData = parsedData || Tabmix.JSON.parse(data);
-        let groupId = tabItem.parent ? tabItem.parent.id : null;
-        if (!tabData || tabData.groupID != groupId)
-          tabItem._reconnected = false;
-          tabItem.__tabmix_reconnected = false;
-      }
-    }
-
-    // save data
-    TabmixSvc.ss.setTabValue(tabData.tab, id, data);
-    if (this.enableBackup)
-      this.setLiteral(this.getNodeForTab(tabData.tab), id, data);
-  },
-
-  _updateLastSessionGroupName: function SM__updateLastSessionGroupName() {
-    if (!Tabmix.isVersion(70) || Tabmix.isVersion(100))
-      return;
-
-    // keep current name
-    if (this.groupUpdates.hideSessionActiveGroup && TabView._lastSessionGroupName != null)
-      return;
-
-    // when we don't show last group name on startup set empty string
-    if (this.groupUpdates.hideSessionActiveGroup)
-      this._lastSessionGroupName = "";
-
-    let title = TabView._lastSessionGroupName = this._lastSessionGroupName;
-    gBrowser.updateTitlebar();
-
-    let id = "tabview-last-session-group-name";
-    TabmixSvc.ss.setWindowValue(window, id, title);
-    if (this.enableBackup)
-      this.setLiteral(this.gThisWin, id, title);
-  },
-
-  isEmptyObject: function SM_isEmptyObject(obj) {
-    for (let name in obj)
-      return false;
-    return true;
-  },
-
-  // return true if there are no visible tabs that are not in the exclude array
-  _noNormalTabs: function SM__noNormalTabs(excludeTabs) {
-    if (!excludeTabs)
-      excludeTabs = [];
-
-    return !Array.some(gBrowser.tabs, function(tab){
-      if (!tab.pinned && !tab.hidden && !tab.closing && excludeTabs.indexOf(tab) == -1) {
-        return true;
-      }
-      return false;
-    });
-  },
-
-  _addGroupItem: function SM__addGroupItem(aGroupItems, aGroupsData, setAsActive) {
-    let groupID = aGroupsData.nextID++;
-    if (setAsActive) {
-      aGroupsData.activeGroupId = groupID;
-      this._lastSessionGroupName = "";
-    }
-    let bounds = {left:0, top:0, width:350, height:300};
-    aGroupItems[groupID] = {bounds:bounds, userSize:null, title:"", id:groupID, newItem: true};
-    aGroupsData.totalNumber = Object.keys(aGroupItems).length;
-    this._tabviewData["tabview-group"] = aGroupItems;
-    this._tabviewData["tabview-groups"] = aGroupsData;
-  },
-
-   // Remove current active group only when it's empty and have no title
-  _deleteActiveGroup: function SM__deleteActiveGroup(aGroupItems, activeGroupId) {
-    let activeGroup = aGroupItems[activeGroupId];
-    if (activeGroup && activeGroup.title == "") {
-      delete aGroupItems[activeGroupId];
-      this._tabviewData["tabview-group"] = aGroupItems;
-    }
-  },
-
-  // just in case.... and add totalNumber to firefox 4.0 - 5.0.x
-  _validateGroupsData: function SM__validateGroupsData(aGroupItems, aGroupsData) {
-    if (this.isEmptyObject(aGroupItems))
-      return;
-
-    if (aGroupsData.nextID && aGroupsData.activeGroupId && aGroupsData.totalNumber)
-      return;
-    let keys = Object.keys(aGroupItems);
-    if (!aGroupsData.nextID) {
-      let nextID = 0;
-      keys.forEach(function (key) {
-        nextID = Math.max(aGroupItems[key].id, nextID);
-      })
-      aGroupsData.nextID = nextID++;
-    }
-    if (!aGroupsData.activeGroupId)
-      aGroupsData.activeGroupId = aGroupItems[keys[0]].id;
-    if (!aGroupsData.totalNumber)
-      aGroupsData.totalNumber = keys.length;
-  },
-
- /**
-  * when we append tab to this window we merge group data from the session into the curent group data
-  * loadOnStartup: array of tabs that load on startup from application
-  * blankTabs: remaining blank tabs in this windows
-  */
-  _preperTabviewData: function SM__preperTabviewData(loadOnStartup, blankTabs) {
-    let newGroupItems = this._tabviewData["tabview-group"];
-    let groupItems = TabmixSessionData.getWindowValue(window, "tabview-group", true);
-    let newGroupItemsIsEmpty = this.isEmptyObject(newGroupItems);
-    let groupItemsIsEmpty = this.isEmptyObject(groupItems);
-
-    if (newGroupItemsIsEmpty && groupItemsIsEmpty) {
-      // just to be on the safe side
-      // Tabview will force to add all tabs in one group
-      this._tabviewData["tabview-group"] = {};
-      this._tabviewData["tabview-groups"] = {};
-      return;
-    }
-
-    var noNormalVisibleTabs = this._noNormalTabs(blankTabs.concat(loadOnStartup));
-    if (!noNormalVisibleTabs)
-      this.groupUpdates.hideSessionActiveGroup = true;
-
-    // newGroupItems is not empty
-    if (groupItemsIsEmpty) {
-      // we can get here also on startup before we set any data to current window
-
-      if (noNormalVisibleTabs)
-        // nothing else to do we use this._tabviewData as is.
-        this._updateUIpageBounds = true;
-      else {
-        // Tabview did not started
-        // add all normal tabs to new group with the proper id
-        let newGroupsData = this._tabviewData["tabview-groups"];
-        this._addGroupItem(newGroupItems, newGroupsData, true);
-
-        // update tabs data
-        let groupID = newGroupsData.activeGroupId;
-        Array.forEach(gBrowser.tabs, function(tab){
-          if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
-            return;
-          let data = { groupID: groupID };
-          if (!Tabmix.isVersion(140)) {
-            data.url = tab.linkedBrowser.currentURI.spec;
-            data.title = tab.label;
-          }
-          data = Tabmix.JSON.stringify(data);
-          TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
-          if (this.enableBackup)
-            this.setLiteral(this.getNodeForTab(tab), "tabview-tab", data);
-        }, TabmixSessionManager);
-      }
-      return;
-    }
-
-    // groupItems is not empty
-    let groupsData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
-    // just in case data was corrupted
-    this._validateGroupsData(groupItems, groupsData);
-
-    if (newGroupItemsIsEmpty) {
-      let createNewGroup = true;
-      if (noNormalVisibleTabs) {
-        // if active group is empty without title reuse it for
-        // the tabs from the session.
-        let activeGroup = groupItems[groupsData.activeGroupId];
-        if (activeGroup && activeGroup.title == "") {
-          createNewGroup = false;
-          this.groupUpdates.newGroupID = groupsData.activeGroupId;
-          this._tabviewData["tabview-group"] = groupItems;
-          this._tabviewData["tabview-groups"] = groupsData;
-        }
-      }
-
-      if (createNewGroup) {
-        // We create new group here, and set it as active if there is no normal
-        // tabs in this window, later we will create "tabview-tab" data in
-        // SM__setTabviewTab for each normal tab.
-        this.groupUpdates.newGroupID = groupsData.nextID;
-        this._addGroupItem(groupItems, groupsData, noNormalVisibleTabs);
-      }
-
-      this._tabviewData["tabview-ui"] = TabmixSessionData.getWindowValue(window, "tabview-ui");
-      return;
-    }
-
-    // both current window and the session that we are restoring have group data
-
-    let IDs = {};
-    for (let id in newGroupItems) {
-      newGroupItems[id].newItem = true;
-      // change group id if already used in this window
-      if (id in groupItems) {
-        let newID = groupsData.nextID++;
-        groupItems[newID] = newGroupItems[id];
-        groupItems[newID].id = newID;
-        // we will update tabview-tab data later
-        IDs[id] = newID;
-      }
-      else {
-        groupItems[id] = newGroupItems[id];
-        if (id > groupsData.nextID)
-          groupsData.nextID = id;
-      }
-    }
-
-    // When current active group is empty,
-    // change active group to the active group from the session we are restoring.
-    if (noNormalVisibleTabs) {
-      this._deleteActiveGroup(groupItems, groupsData.activeGroupId);
-      // set new activeGroupId
-      let activeID = this._tabviewData["tabview-groups"].activeGroupId;
-      groupsData.activeGroupId = activeID in IDs ? IDs[activeID] : activeID;
-      this._updateUIpageBounds = true;
-    }
-
-    if (Object.keys(IDs).length > 0) {
-      let id = this.groupUpdates.lastActiveGroupId;
-      this.groupUpdates.lastActiveGroupId = IDs[id] || id;
-      this.groupUpdates.IDs = IDs;
-    }
-
-    // update totalNumber
-    groupsData.totalNumber = Object.keys(groupItems).length;
-    // save data
-    this._tabviewData["tabview-group"] = groupItems;
-    this._tabviewData["tabview-groups"] = groupsData;
-  },
-
-  showNotification: function SM_showNotification() {
-    var msg = TabmixSvc.getSMString("sm.tabview.hiddengroups")
-    try {
-      let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-      alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
-    } catch (e) { }
-  },
-
-  /* ............... TabView Code Fix  ............... */
-
-  // update page bounds when we overwrite tabs
-  _setUIpageBounds: function SM__setUIpageBounds() {
-    if (TabView._window) {
-      let data = TabView._window.Storage.readUIData(window);
-      if (this.isEmptyObject(data))
-        return;
-
-      TabView._window.UI._storageSanity(data);
-      if (data && data.pageBounds)
-        TabView._window.UI._pageBounds = data.pageBounds;
-    }
-  },
-
-  // when not overwriting tabs try to rearrange the groupItems
-  _groupItemPushAway: function SM__groupItemPushAway() {
-    if (!this._groupItems)
-      return;
-
-    let GroupItems = TabView._window.GroupItems;
-    for each(let data in this._groupItems) {
-      if (data.newItem) {
-        if (GroupItems.groupItemStorageSanity(data)) {
-          GroupItems.groupItem(data.id).pushAway(true);
-        }
-      }
-    }
-    this._groupItems = null;
   }
 };
 

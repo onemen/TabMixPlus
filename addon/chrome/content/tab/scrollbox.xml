@@ -155,20 +155,11 @@
              amountToScroll = this._distanceToRow(amountToScroll);'
           ).toCode();
 
-          if (Tabmix.isVersion(70)) {
-            // we divide scrollDelta by the ratio between tab width and tab height
-            let fnName = Tabmix.isVersion(110) ? "sample" : "handleEvent";
-            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim." + fnName)._replace(
-              '0.5 * timePassed * scrollIndex',
-              'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
-            ).toCode();
-          }
-          else {
-            Tabmix.changeCode(this, "scrollbox.notify")._replace(
-              'this.scrollByPixels(25 * this._scrollIndex);',
-              'this.scrollByPixels((TabmixTabbar.isMultiRow ? this._smoothVerticalScroll : 25) * this._scrollIndex, true);'
-            ).toCode();
-          }
+          // we divide scrollDelta by the ratio between tab width and tab height
+          Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
+            '0.5 * timePassed * scrollIndex',
+            'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
+          ).toCode();
 
           // the ratio between tab width and tab height is approximately 6
           // we multiply here the distance to get same animation effect.
@@ -379,7 +370,7 @@
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            if (tabBar.tabbrowser._removingTabs.indexOf(tab) != -1) {
+            if (tab.closing) {
               tab.removeAttribute("tabmix-firstTabInRow");
               continue;
             }
@@ -436,8 +427,7 @@
         }
 
         var tabs = document.getBindingParent(this);
-        var multibar = tabs.hasAttribute("multibar");
-        if (multibar) {
+        if (tabs.hasAttribute("multibar")) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
@@ -445,25 +435,15 @@
                !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
             tabs.updateVerticalTabStrip();
         }
+        else
+          tabs.overflow = false;
 
-        if (Tabmix.isVersion(210)) {
-          tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
-                                                tabs.tabbrowser);
-          if (!tabs.hasAttribute("dontresize") && !tabs._closingTabsSpacer.style.minWidth) {
-            if (!multibar)
-              tabs.overflow = false;
-            tabs._positionPinnedTabs();
-          }
-        }
-        else {
-          if (Tabmix.isVersion(50) && tabs._lastTabClosedByMouse)
-            tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
-          tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
-                                                tabs.tabbrowser);
-          if (!multibar)
-            tabs.overflow = false;
-          tabs._positionPinnedTabs();
-        }
+        if (tabs._lastTabClosedByMouse)
+          tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
+
+        tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
+                                              tabs.tabbrowser);
+        tabs._positionPinnedTabs();
       ]]></handler>
 
       <handler event="overflow"><![CDATA[
@@ -514,8 +494,7 @@
           this._enterVerticalMode();
 
         let tabBar = document.getBindingParent(this);
-        if (Tabmix.isVersion(50))
-          tabBar._unlockTabSizing();
+        tabBar._unlockTabSizing();
 
         if (TabmixTabbar.isMultiRow && tabBar.firstChild.pinned)
           this.setFirstTabInRow(true);

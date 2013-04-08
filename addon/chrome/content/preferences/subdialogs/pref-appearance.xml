@@ -57,18 +57,18 @@
     <implementation>
       <constructor>
         <![CDATA[
-          this._initUseThisPref = {prefvalue: Services.prefs.getBoolPref("extensions.tabmix." + this.id)};
-          this._initPrefValues = Services.prefs.getCharPref(this.prefName);
+          var checked = Tabmix.prefs.getBoolPref(this.id);
+          this._initUseThisPref = {prefvalue: checked, optionvalue: checked};
+          this._initPrefValues = Tabmix.prefs.getCharPref(this.prefName);
 
-          var checked;
-          var tabmixOptionsWindow = this._tabmixOptions;
-          if (tabmixOptionsWindow) {
-            this._initUseThisPref.optionvalue = checked = this._tabmixOptionsItem.checked;
-            Services.prefs.setBoolPref("extensions.tabmix." + this.id, checked);
-            tabmixOptionsWindow.updateApplyData(this._tabmixOptionsItem, checked);
+          if (!Services.prefs.getBoolPref("browser.preferences.instantApply")) {
+            this._item = window.opener &&
+                window.opener.document.getElementById("pref_" + this.id);
+            if (this._item) {
+              this._initUseThisPref.optionvalue = checked = this._item.value;
+              Tabmix.prefs.setBoolPref(this.id, checked);
+            }
           }
-          else
-            checked = this._initUseThisPref.prefvalue;
 
           var useThis = this._getElementById("useThis");
           useThis.checked = checked;
@@ -80,24 +80,14 @@
         ]]>
       </constructor>
 
+      <field name="_item">null</field>
       <field name="_initUseThisPref">null</field>
       <field name="_initPrefValue">null</field>
       <field name="_prefValues">null</field>
 
       <property name="prefName"
-                onget="return 'extensions.tabmix.styles.' + this.id;"
+                onget="return 'styles.' + this.id;"
                 readonly="true"/>
-
-      <field name="_tabmixOptionsItem">null</field>
-      <property name="_tabmixOptions" readonly="true">
-        <getter>
-          <![CDATA[
-            var win = window.opener;
-            this._tabmixOptionsItem = win.document.getElementById(this.id);
-            return win;
-          ]]>
-        </getter>
-      </property>
 
       <property name="disabled"
         onget="return this.getAttribute('disabled');">
@@ -121,11 +111,7 @@
       <method name="_updateUseThisState">
         <parameter name="aEnabled"/>
         <body><![CDATA[
-          Services.prefs.setBoolPref("extensions.tabmix." + this.id, aEnabled);
-          var tabmixOptionsWindow = this._tabmixOptions;
-          if (tabmixOptionsWindow)
-            this._tabmixOptionsItem.checked = aEnabled;
-
+          Tabmix.prefs.setBoolPref(this.id, aEnabled);
           this.disabled = !aEnabled
           this._setColorpicker("bg");
           if ("text" in this._prefValues)
@@ -136,17 +122,15 @@
       <method name="_resetDefault">
         <parameter name="aResetOnlyStyle"/>
         <body><![CDATA[
-          if (!aResetOnlyStyle && Services.prefs.prefHasUserValue("extensions.tabmix." + this.id)) {
+          if (!aResetOnlyStyle && Tabmix.prefs.prefHasUserValue(this.id)) {
             var useThis = this._getElementById("useThis");
             useThis.checked = !useThis.checked;
             this._updateUseThisState(useThis.checked);
             this._initUseThisPref.prefvalue = this._initUseThisPref.optionvalue = useThis.checked;
           }
 
-          var pref = this.prefName;
-          if (Services.prefs.prefHasUserValue(pref))
-            Services.prefs.clearUserPref(pref);
-          this._initPrefValues = Services.prefs.getCharPref(this.prefName);
+          Tabmix.prefs.clearUserPref(this.prefName);
+          this._initPrefValues = Tabmix.prefs.getCharPref(this.prefName);
           this._getPrefs(this._initPrefValues);
         ]]></body>
       </method>
@@ -155,7 +139,7 @@
         <parameter name="aPrefString"/>
         <body><![CDATA[
           try {
-            this._prefValues = Tabmix.JSON.parse(aPrefString)
+            this._prefValues = TabmixSvc.JSON.parse(aPrefString)
           }
           catch (er) {
             this._resetDefault(true);
@@ -208,17 +192,16 @@
                 break;
             }
           }
-          Services.prefs.setCharPref(this.prefName, Tabmix.JSON.stringify(newPrefSValue));
+          Tabmix.prefs.setCharPref(this.prefName, TabmixSvc.JSON.stringify(newPrefSValue));
         ]]></body>
       </method>
 
       <method name="_ondialogcancel">
         <body><![CDATA[
-          Services.prefs.setCharPref(this.prefName, this._initPrefValues);
-          Services.prefs.setBoolPref("extensions.tabmix." + this.id, this._initUseThisPref.prefvalue);
-          var tabmixOptionsWindow = this._tabmixOptions;
-          if (tabmixOptionsWindow)
-            tabmixOptionsWindow.updateApplyData(this._tabmixOptionsItem, this._initUseThisPref.optionvalue);
+          Tabmix.prefs.setCharPref(this.prefName, this._initPrefValues);
+          Tabmix.prefs.setBoolPref(this.id, this._initUseThisPref.prefvalue);
+          if (this._item)
+            this._item.value = this._initUseThisPref.optionvalue;
         ]]></body>
       </method>
 
