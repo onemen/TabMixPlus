@@ -2283,7 +2283,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             if (this.prefBranch.prefHasUserValue("onStart.sessionpath")) {
                thisPath = this.prefBranch.getCharPref("onStart.sessionpath");
                // check if sessionpath is valid
-               for (i = 0; i < sessionPath.length; i++) {
+               for (let i = 0; i < sessionPath.length; i++) {
                   if (sessionPath[i] == thisPath) {
                      sessionIndex = i;
                      break;
