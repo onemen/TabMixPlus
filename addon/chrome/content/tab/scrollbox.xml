@@ -71,7 +71,7 @@
     <handlers>
       <handler event="dragover"><![CDATA[
         let tabBar = gBrowser.tabContainer;
-        if (tabBar.useTabmixDnD(aEvent))
+        if (tabBar.useTabmixDnD(event))
           TMP_tabDNDObserver.onDragOver(event);
       ]]></handler>
 
