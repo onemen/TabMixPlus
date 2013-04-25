@@ -191,7 +191,7 @@
             <hbox align="center" class="indent">
               <checkbox id="extraIcons-locked" label="&extraIcons.locked;" class="extraIcons" preference="pref_lockedIcon"/>
               <checkbox id="extraIcons-protected" label="&extraIcons.protected;" class="extraIcons" preference="pref_protectedIcon"/>
-              <checkbox id="extraIcons-autoreload" label="&extraIcons.autoreload;" class="extraIcons" cpreference="pref_autoreloadIcon"/>
+              <checkbox id="extraIcons-autoreload" label="&extraIcons.autoreload;" class="extraIcons" preference="pref_autoreloadIcon"/>
             </hbox>
             <!-- Progress Meter-->
             <checkbox id="progressMeter" label="&progressMeter.label;" preference="pref_progressMeter"/>
