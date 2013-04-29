@@ -12,16 +12,19 @@ var gPrefWindow = {
   init: function() {
     this._initialized = true;
 
-    var prefWindow = $("TabMIxPreferences");
-    if (Tabmix.isPlatform("Mac"))
-      prefWindow.setAttribute("mac", true);
-    else if (Tabmix.isPlatform("Linux"))
-      prefWindow.setAttribute("linux", true);
-
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
       prefWindow.setAttribute("chromifox", true);
+
+    var prefWindow = $("TabMIxPreferences");
+    if (Tabmix.isPlatform("Mac"))
+      prefWindow.setAttribute("mac", true);
+    else if (Tabmix.isPlatform("Linux")) {
+      prefWindow.setAttribute("linux", true);
+      if (skin == "ftdeepdark")
+        prefWindow.setAttribute("ftdeepdark", true);
+    }
 
     /* we don't need to fix tabpanels border in ubuntu */
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)

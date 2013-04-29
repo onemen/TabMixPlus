@@ -3,11 +3,12 @@ preference {
   -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#preference") !important;
 }
 
-#TabMIxPreferences:not([linux]) checkbox {
+#TabMIxPreferences:not([linux]) checkbox,
+#TabMIxPreferences[linux][ftdeepdark=true] checkbox {
   -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox") !important;
 }
 
-#TabMIxPreferences[linux] checkbox {
+#TabMIxPreferences[linux]:not([ftdeepdark=true]) checkbox {
   -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox-with-spacing") !important;
 }
 
