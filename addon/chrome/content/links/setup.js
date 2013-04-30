@@ -73,7 +73,9 @@ function TMP_TBP_Startup() {
     // we must call this before any other tabmix function
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
+  } catch (ex) {Tabmix.assert(ex);}
 
+  try {
     var SM = TabmixSessionManager;
     if (Tabmix.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
