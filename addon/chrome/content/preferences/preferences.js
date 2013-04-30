@@ -261,7 +261,9 @@ function setPrefAfterImport(aPref) {
   // replace old preference by setting new value to it
   // and call gTMPprefObserver.updateSettings to replace it.
   if (aPref.type == Services.prefs.PREF_INVALID) {
-    let type = parseInt(aPref.value) ? 64 : /true|false/i.test(aPref.value) ? 128 : 32;
+    let val = parseInt(aPref.value);
+    let type = typeof val == "number" && !isNaN(val) ?
+               64 : /true|false/i.test(aPref.value) ? 128 : 32;
     if (type == 128)
       aPref.value = /true/i.test(aPref.value);
     let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;

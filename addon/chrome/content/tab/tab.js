@@ -1543,9 +1543,25 @@ var gTMPprefObserver = {
 
   // we replace some Tabmix settings with Firefox settings
   updateSettings: function() {
+    function getPrefByType(prefName, aDefault, aType) {
+      let PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+      let fn = PrefFn[Services.prefs.getPrefType(prefName)];
+      try {
+        var val = Services.prefs["get" + fn](prefName);
+        // bug in version 0.4.1.0 import old int pref with zero (0)
+        // value into string pref
+        if (aType == "IntPref" && fn != aType)
+          val = parseInt(val);
+      } catch (ex) {
+        Tabmix.log("gTMPprefObserver.updateSettings can't read preference " + prefName + "\n" + ex);
+        val = typeof aDefault == "undefined" ? null : aDefault;
+      }
+      Services.prefs.clearUserPref(prefName);
+      return val;
+    }
+
     if (Tabmix.prefs.prefHasUserValue("undoCloseCache")) {
-       var max_tabs_undo = Tabmix.prefs.getIntPref("undoCloseCache");
-       Tabmix.prefs.clearUserPref("undoCloseCache");
+       var max_tabs_undo = getPrefByType("extensions.tabmix.undoCloseCache", 5, "IntPref");
        Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", max_tabs_undo);
     }
     // remove disp=attd&view=att it's make problem with gMail
@@ -1576,13 +1592,13 @@ var gTMPprefObserver = {
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("maxWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", Tabmix.prefs.getIntPref("maxWidth"));
-       Tabmix.prefs.clearUserPref("maxWidth");
+       let val = getPrefByType("extensions.tabmix.maxWidth", 250, "IntPref");
+       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("minWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMinWidth", Tabmix.prefs.getIntPref("minWidth"));
-       Tabmix.prefs.clearUserPref("minWidth");
+       let val = getPrefByType("extensions.tabmix.minWidth", 100, "IntPref");
+       Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
     }
     // 2009-01-31
     if (Tabmix.prefs.prefHasUserValue("newTabButton.leftside")) {
@@ -1605,19 +1621,18 @@ var gTMPprefObserver = {
     }
     // 2010-06-05
     if (Tabmix.prefs.prefHasUserValue("tabXMode")) {
-      Tabmix.prefs.setIntPref("tabs.closeButtons", Tabmix.prefs.getIntPref("tabXMode"));
-      Tabmix.prefs.clearUserPref("tabXMode");
+      let val = getPrefByType("extensions.tabmix.tabXMode", 1, "IntPref");
+      Tabmix.prefs.setIntPref("tabs.closeButtons", val);
     }
     // partly fix a bug from version 0.3.8.3
     else if (Services.prefs.prefHasUserValue("browser.tabs.closeButtons") && !Tabmix.prefs.prefHasUserValue("version") &&
              !Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
-      let value = Services.prefs.getIntPref("browser.tabs.closeButtons");
+      let value = getPrefByType("browser.tabs.closeButtons", 1, "IntPref");
       // these value are from 0.3.8.3. we don't know if 0,1 are also from 0.3.8.3 so we don't use 0,1.
       if (value > 1 && value <= 6) {
         let newValue = [3,5,1,1,2,4,1][value];
         Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
       }
-      Services.prefs.clearUserPref("browser.tabs.closeButtons");
     }
     if (Tabmix.prefs.prefHasUserValue("tabXMode.enable")) {
       Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", Tabmix.prefs.getBoolPref("tabXMode.enable"));
@@ -1628,15 +1643,14 @@ var gTMPprefObserver = {
       Tabmix.prefs.clearUserPref("tabXLeft");
     }
     if (Tabmix.prefs.prefHasUserValue("tabXDelay")) {
-      Tabmix.prefs.setIntPref("tabs.closeButtons.delay", Tabmix.prefs.getIntPref("tabXDelay"));
-      Tabmix.prefs.clearUserPref("tabXDelay");
+      let val = getPrefByType("extensions.tabmix.tabXDelay", 50, "IntPref");
+      Tabmix.prefs.setIntPref("tabs.closeButtons.delay", val);
     }
     // 2010-09-16
     if (Tabmix.prefs.prefHasUserValue("speLink")) {
-      let val = Tabmix.prefs.getIntPref("speLink");
+      let val = getPrefByType("extensions.tabmix.speLink", 0, "IntPref");
       Tabmix.prefs.setIntPref("opentabforLinks", val);
       Tabmix.prefs.setBoolPref("lockallTabs", val == 1);
-      Tabmix.prefs.clearUserPref("speLink");
     }
     // 2010-10-12
     if (Tabmix.prefs.prefHasUserValue("hideurlbarprogress")) {
@@ -1649,19 +1663,29 @@ var gTMPprefObserver = {
     }
     // 2011-10-11
     if (Services.prefs.prefHasUserValue("browser.link.open_external")) {
-      let val = Services.prefs.getIntPref("browser.link.open_external");
-      if (val == Services.prefs.getIntPref("browser.link.open_newwindow"))
+      let val = getPrefByType("browser.link.open_external", 3, "IntPref");
+      let val1 = getPrefByType("browser.link.open_newwindow", 3, "IntPref");
+      if (val == val1)
         val = -1;
       Services.prefs.setIntPref("browser.link.open_newwindow.override.external", val);
-      Services.prefs.clearUserPref("browser.link.open_external");
     }
     // 2011-11-26
     if (Tabmix.prefs.prefHasUserValue("clickToScroll.scrollDelay")) {
-      let val = Tabmix.prefs.getIntPref("clickToScroll.scrollDelay");
+      let val = getPrefByType("extensions.tabmix.clickToScroll.scrollDelay", 150, "IntPref");
       Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
-      Tabmix.prefs.clearUserPref("clickToScroll.scrollDelay");
     }
     // 2012-03-21
+    var _loadOnNewTab = true, _replaceLastTabWith = true;
+    if (Tabmix.prefs.prefHasUserValue("loadOnNewTab")) {
+      let val = getPrefByType("extensions.tabmix.loadOnNewTab", 4, "IntPref");
+      Tabmix.prefs.setIntPref("loadOnNewTab.type", val);
+      _loadOnNewTab = false;
+    }
+    if (Tabmix.prefs.prefHasUserValue("replaceLastTabWith")) {
+      let val = getPrefByType("extensions.tabmix.replaceLastTabWith", 4, "IntPref");
+      Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
+      _replaceLastTabWith = false;
+    }
     // Changing our preference to use New Tab Page as default starting from Firefox 12
     function _setNewTabUrl(oldPref, newPref, controlPref) {
       if (Services.prefs.prefHasUserValue(oldPref)) {
@@ -1677,30 +1701,17 @@ var gTMPprefObserver = {
       }
     }
     if (typeof isBlankPageURL != "function") {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab.type");
       _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith");
+                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith.type");
     }
     else {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab.type");
       _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith");
+                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
       _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
       _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
                     "extensions.tabmix.replaceLastTabWith.newtab.url");
-    }
-    var _loadOnNewTab = true, _replaceLastTabWith = true;
-    if (Tabmix.prefs.prefHasUserValue("loadOnNewTab")) {
-      let val = Tabmix.prefs.getIntPref("loadOnNewTab");
-      Tabmix.prefs.setIntPref("loadOnNewTab.type", val);
-      Tabmix.prefs.clearUserPref("loadOnNewTab");
-      _loadOnNewTab = false;
-    }
-    if (Tabmix.prefs.prefHasUserValue("replaceLastTabWith")) {
-      let val = Tabmix.prefs.getIntPref("replaceLastTabWith");
-      Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
-      Tabmix.prefs.clearUserPref("replaceLastTabWith");
-      _replaceLastTabWith = false;
     }
     // 2012-04-12
     if (Services.prefs.prefHasUserValue("browser.tabs.loadFolderAndReplace")) {
@@ -1711,11 +1722,12 @@ try {
     // 2012-06-22 - remove the use of extensions.tabmix.tabMinWidth/tabMaxWidth
     // other extensions still use browser.tabs.tabMinWidth/tabMaxWidth
     if (Tabmix.prefs.prefHasUserValue("tabMinWidth")) {
-      Services.prefs.setIntPref("browser.tabs.tabMinWidth", Tabmix.prefs.getIntPref("tabMinWidth"));
-      Tabmix.prefs.clearUserPref("tabMinWidth");
+      let val = getPrefByType("extensions.tabmix.tabMinWidth", 100, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
     }
     if (Tabmix.prefs.prefHasUserValue("tabMaxWidth")) {
-      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", Tabmix.prefs.getIntPref("tabMaxWidth"));
+      let val = getPrefByType("extensions.tabmix.tabMaxWidth", 250, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
       Tabmix.prefs.clearUserPref("tabMaxWidth");
     }
 } catch (ex) {Tabmix.assert(ex);}
