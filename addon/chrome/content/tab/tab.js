@@ -1397,16 +1397,33 @@ var gTMPprefObserver = {
     tabBar._checkNewtabButtonVisibility = false;
     let newTabButton = document.getElementById("new-tab-button");
     if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) {
+      let sideChanged, tabsToolbar = document.getElementById("TabsToolbar");
+      let cSet = tabsToolbar.getAttribute("currentset").split(",");
+      let tabsIndex = cSet.indexOf("tabbrowser-tabs");
+      let buttonIndex = cSet.indexOf("new-tab-button");
       if (aPosition == 0) {
         Tabmix.setItem("TabsToolbar", "newtab_side", "left");
-        newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
+        if (buttonIndex > tabsIndex) {
+          newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
+          sideChanged = true;
+        }
       }
       else {
         Tabmix.setItem("TabsToolbar", "newtab_side", aPosition == 1 ? "right" : null);
-        let before = gBrowser.tabContainer.nextSibling;
-        if (document.getElementById("tabmixScrollBox"))
-          before = before.nextSibling
-        newTabButton.parentNode.insertBefore(newTabButton, before);
+        if (buttonIndex < tabsIndex) {
+          let before = gBrowser.tabContainer.nextSibling;
+          if (document.getElementById("tabmixScrollBox"))
+            before = before.nextSibling;
+          newTabButton.parentNode.insertBefore(newTabButton, before);
+          if (cSet.indexOf("tabmixScrollBox") >  -1)
+            tabsIndex++;
+          sideChanged = true;
+        }
+      }
+      if (sideChanged) {
+        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0]);
+        tabsToolbar.setAttribute("currentset", cSet.join(","));
+        document.persist("TabsToolbar", "currentset");
       }
       tabBar._checkNewtabButtonVisibility = TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("newTabButton") && aPosition == 2;
       Tabmix.setItem("TabsToolbar", "newTabButton", Tabmix.prefs.getBoolPref("newTabButton"));
