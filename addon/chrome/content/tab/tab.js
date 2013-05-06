@@ -173,7 +173,7 @@ var TabmixTabbar = {
     let tabStrip  = gBrowser.tabContainer.mTabstrip;
     if (newBox || (useTabmixButtons && insertAfterTabs)) {
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset");
+      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
       // remove existing tabmixScrollBox item
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
       let index = cSet.indexOf("tabbrowser-tabs");
@@ -1398,30 +1398,32 @@ var gTMPprefObserver = {
     let newTabButton = document.getElementById("new-tab-button");
     if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) {
       let sideChanged, tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset").split(",");
-      let tabsIndex = cSet.indexOf("tabbrowser-tabs");
-      let buttonIndex = cSet.indexOf("new-tab-button");
+      let toolBar = Array.slice(tabsToolbar.childNodes);
+      let buttonIndex = toolBar.indexOf(newTabButton);
+      let tabsIndex = toolBar.indexOf(gBrowser.tabContainer);
       if (aPosition == 0) {
-        Tabmix.setItem("TabsToolbar", "newtab_side", "left");
+        Tabmix.setItem(tabsToolbar, "newtab_side", "left");
         if (buttonIndex > tabsIndex) {
           newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
           sideChanged = true;
         }
       }
       else {
-        Tabmix.setItem("TabsToolbar", "newtab_side", aPosition == 1 ? "right" : null);
+        Tabmix.setItem(tabsToolbar, "newtab_side", aPosition == 1 ? "right" : null);
         if (buttonIndex < tabsIndex) {
           let before = gBrowser.tabContainer.nextSibling;
-          if (document.getElementById("tabmixScrollBox"))
+          if (document.getElementById("tabmixScrollBox")) {
             before = before.nextSibling;
-          newTabButton.parentNode.insertBefore(newTabButton, before);
-          if (cSet.indexOf("tabmixScrollBox") >  -1)
             tabsIndex++;
+          }
+          newTabButton.parentNode.insertBefore(newTabButton, before);
           sideChanged = true;
         }
       }
       if (sideChanged) {
-        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0]);
+        let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
+        cSet = cSet.split(",");
+        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0] || "new-tab-button");
         tabsToolbar.setAttribute("currentset", cSet.join(","));
         document.persist("TabsToolbar", "currentset");
       }

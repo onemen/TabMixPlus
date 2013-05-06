@@ -1187,7 +1187,7 @@ Tabmix.navToolbox = {
     if (box && box != gBrowser.tabContainer.nextSibling) {
       // update currentset
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset");
+      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
       // remove existing tabmixScrollBox item
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
       let index = cSet.indexOf("tabbrowser-tabs");
