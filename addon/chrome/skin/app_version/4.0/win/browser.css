@@ -56,7 +56,7 @@
 /*  scrollbutton arrow - fix borders  */
 #tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
 #tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
-  height: 26px;
+  height: 25px;
 }
 
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
