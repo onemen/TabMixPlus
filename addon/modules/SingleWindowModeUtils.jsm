@@ -55,6 +55,9 @@ let SingleWindowModeUtils = {
     if (!aWindow.Tabmix.singleWindowMode)
       return;
 
+    if (!aWindow.arguments || aWindow.arguments.length == 0)
+      return;
+
     this.initService();
     var _this = this;
     aWindow.addEventListener("load", function _onLoad(aEvent) {
@@ -80,7 +83,7 @@ let SingleWindowModeUtils = {
       width: win.getAttribute("width"),
       height: win.getAttribute("height"),
       screenX: win.getAttribute("screenX"),
-      screenY: win.getAttribute("screenY"),
+      screenY: win.getAttribute("screenY")
     }
     // hide the new window
     aWindow.resizeTo(10, 10);
@@ -100,7 +103,7 @@ let SingleWindowModeUtils = {
     if (!existingWindow)
       return;
 
-    if (!('arguments' in newWindow) || newWindow.arguments.length == 0)
+    if (!newWindow.arguments || newWindow.arguments.length == 0)
       return;
     var args = newWindow.arguments;
 
