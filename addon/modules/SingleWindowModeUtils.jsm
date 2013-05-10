@@ -119,7 +119,7 @@ let SingleWindowModeUtils = {
         urls.push(urisstring.data);
       }
     }
-    else if (uriToLoad instanceof newWindow.XULElement) {
+    else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window
@@ -132,6 +132,7 @@ let SingleWindowModeUtils = {
     }
     else
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
+
     try {
       // open the tabs in current window
       if (urls.length) {
@@ -145,8 +146,10 @@ let SingleWindowModeUtils = {
       // if we don't add this here BrowserShutdown fails
       newWindow.FullZoom.init = function() {};
       newWindow.FullZoom.destroy = function() {};
-      newWindow.PlacesStarButton.updateState = function() {};
-      newWindow.PlacesStarButton.uninit = function() {};
+      if (!TabmixSvc.version(230)) {
+        newWindow.PlacesStarButton.updateState = function() {};
+        newWindow.PlacesStarButton.uninit = function() {};
+      }
       newWindow.OfflineApps.uninit = function() {};
       var obs = Services.obs;
       obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
