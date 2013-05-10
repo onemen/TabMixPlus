@@ -826,7 +826,7 @@
       ]]></handler>
 
       <handler event="dragend" phase="capturing"><![CDATA[
-        if (this.useTabmixDnD(event))
+        if (this.orient == "horizontal")
           TMP_tabDNDObserver.onDragEnd(event);
       ]]></handler>
 
