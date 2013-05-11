@@ -637,6 +637,8 @@ var TMP_Places = {
   startObserver: function TMP_PC_startObserver() {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
+      if (!Tabmix.isVersion(210))
+        this.onBeforeItemRemoved = function () {};
       try {
         PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
@@ -794,7 +796,6 @@ var TMP_Places = {
       this.currentTab = null;
   },
 
-  onBeforeItemRemoved: function () {},
   onItemVisited: function () {},
   onItemMoved: function () {}
 }
