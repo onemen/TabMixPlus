@@ -124,7 +124,7 @@ var TMP_Places = {
       )._replace(
         /(\})(\)?)$/,
         'var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
-         w.TMP_Places.setTabtitle(tab, url, bookMarkId); \
+         w.TMP_Places.setTabTitle(tab, url, bookMarkId); \
          $1$2'
       ).toCode();
 
@@ -470,7 +470,7 @@ var TMP_Places = {
           else
              aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
 
-          this.setTabtitle(aTab, url, bmIds[i]);
+          this.setTabTitle(aTab, url, bmIds[i]);
        } catch (er) {  }
 
        if (!tabToSelect)
@@ -510,14 +510,12 @@ var TMP_Places = {
 
   },
 
-  setTabtitle: function TMP_PC_setTabtitle(aTab, aUrl, aID) {
+  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID) {
     if (!aTab || !aTab.parentNode)
-      return;
+      return false;
     if (aID && aID > -1)
        aTab.setAttribute("tabmix_bookmarkId", aID);
-    if (!this._titlefrombookmark)
-      return;
-    let title = this.getTitleFromBookmark(aUrl, aTab.label, -1, aTab);
+    let title = this.getTabTitle(aTab, aUrl, aTab.label);
     if (title != aTab.label) {
       aTab.label = title;
       aTab.crop = "center";
@@ -526,7 +524,19 @@ var TMP_Places = {
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))
         aTab.removeAttribute("width");
+      return true;
     }
+    return false;
+  },
+
+  getTabTitle: function TMP_PC_getTabTitle(aTab, url, title) {
+    if (aTab.hasAttribute("pending"))
+      url = aTab.linkedBrowser.userTypedValue;
+    if (this.isUserRenameTab(aTab, url))
+      title = aTab.getAttribute("fixed-label");
+    else
+      title = this.getTitleFromBookmark(url, title, -1, aTab);
+    return title;
   },
 
    getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aItemId, aTab) {
@@ -547,14 +557,8 @@ var TMP_Places = {
            return PlacesUtils.bookmarks.getItemTitle(aItemId);
          }
       } catch (ex) { }
-      if (aTab) {
+      if (aTab && aTab.hasAttribute("tabmix_bookmarkId"))
          aTab.removeAttribute("tabmix_bookmarkId");
-         // get title for pending tab from SessionStore
-         if (aTab.hasAttribute("pending") && aTab.linkedBrowser.__SS_restoreState &&
-             aTab.linkedBrowser.__SS_restoreState == 1 &&
-             typeof aTab.linkedBrowser.__SS_data == "object")
-           return TMP_SessionStore.getActiveEntryData(aTab.linkedBrowser.__SS_data).title || null;
-      }
       return null;
    },
 
@@ -682,6 +686,8 @@ var TMP_Places = {
       try {
         let uri = tab.linkedBrowser.currentURI;
         let id = PlacesUtils.getMostRecentBookmarkForURI(uri);
+///XXX need to fix this for the case we uncheck use bookmark name and the tab is pending
+///XXX - in this case we need to get the title for sessionStore ?
         if (id > -1)
           gBrowser.setTabTitle(tab);
       } catch (ex) { }

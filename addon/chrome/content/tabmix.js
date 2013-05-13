@@ -525,46 +525,8 @@ var TMP_eventListener = {
     delete Tabmix.adjustTabstrip;
   },
 
-  _tabStillLoading: 0,
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
-   /**
-    * set tab title to user defined name or bookmark title when sessionStore restore tabs
-    * sessionStore prepare all the tabs before it starts real loading
-    * catch the first SSTabRestoring and prepare as well
-    */
-    if (this._tabStillLoading == 0) {
-      let tabWidthChanged;
-      let setWidth = TabmixTabbar.widthFitTitle && TabmixTabbar.hideMode != 2;
-      for (let i = 0; i < gBrowser.tabs.length; i++) {
-        let tab = gBrowser.tabs[i];
-        let browser = tab.linkedBrowser;
-        let url = browser.userTypedValue;
-        let tabStillLoading = "__SS_tabStillLoading" in browser && browser.__SS_tabStillLoading;
-        if (url && tabStillLoading) {
-          this._tabStillLoading++;
-          let data = browser.__SS_data;
-          if (data && data.attributes && data.attributes["label-uri"])
-            tab.setAttribute("label-uri", data.attributes["label-uri"]);
-          let title = TMP_SessionStore._getTitle(data, url, tab.label);
-          if (title != tab.label) {
-            if (setWidth) {
-              tab.removeAttribute("width");
-              tabWidthChanged = true;
-            }
-            tab.label = title;
-          }
-        }
-      }
-      if (tabWidthChanged) {
-        TabmixTabbar.updateScrollStatus();
-        TabmixTabbar.updateBeforeAndAfter();
-      }
-    }
-
     var tab = aEvent.target;
-    if (this._tabStillLoading > 0)
-      this._tabStillLoading--;
-
     Tabmix.restoreTabState(tab);
 
     // don't mark new tab as unread

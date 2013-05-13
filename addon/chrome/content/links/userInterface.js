@@ -469,13 +469,11 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     aTab.autoReloadTime = reloadData[1];
   }
 
-  if (aTab.hasAttribute("tabmix_bookmarkId")) {
-    // make sure the id exist before using it
-    let bmitemid = aTab.getAttribute("tabmix_bookmarkId");
-    try {
-      let title = PlacesUtils.bookmarks.getItemTitle(bmitemid);
-    } catch (ex) {
-      aTab.removeAttribute("tabmix_bookmarkId");
+  if (aTab.hasAttribute("pending")) {
+    let tabTitleChanged = TMP_Places.setTabTitle(aTab);
+    if (tabTitleChanged) {
+      TabmixTabbar.updateScrollStatus();
+      TabmixTabbar.updateBeforeAndAfter();
     }
   }
 

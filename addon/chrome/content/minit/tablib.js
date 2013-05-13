@@ -1477,11 +1477,7 @@ since we can have tab hidden or remove the index can change....
       if (tabBar.mTabstrip.isElementVisible(tab))
        TMP_Places.currentTab = tab;
     }
-    if (TMP_Places.isUserRenameTab(aTab, url))
-      title = aTab.getAttribute("fixed-label");
-    else
-      title = TMP_Places.getTitleFromBookmark(url, title, null, aTab);
-    return title;
+    return TMP_Places.getTabTitle(aTab, url, title);
   },
 
   onTabTitleChanged: function TMP_onTabTitleChanged(aTab, isUrlTitle) {
