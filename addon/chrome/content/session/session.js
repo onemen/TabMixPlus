@@ -2916,7 +2916,7 @@ try{
       switch ( caller ) {
          case "firstwindowopen":
                if (window.arguments && window.arguments.length > 0) {
-                  let uriToLoad = window.arguments[0];
+                  let uriToLoad = !gBrowser.selectedTab.loadOnStartup && window.arguments[0];
                   let isLoadingBlank = uriToLoad == "about:blank";
                   overwrite = isLoadingBlank || uriToLoad == gHomeButton.getHomePage() ? true : false;
                   if (!overwrite && !isLoadingBlank)
@@ -3096,7 +3096,7 @@ try{
          // move blank tabs to new position
          for (let t = 0; t < blankTabs.length ; t++) {
             blankTab = blankTabs[t];
-            tabPos = blankTab._tPos < newPos ? newPos - 1 : newPos;
+            let tabPos = blankTab._tPos < newPos ? newPos - 1 : newPos;
             gBrowser.moveTabTo(blankTab, tabPos);
          }
 

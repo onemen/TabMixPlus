@@ -1803,6 +1803,7 @@ try { // user report about bug here ... ?
             defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
           b.selectedTab = b.addTab("http://tmp.garyr.net/version_update2.htm?version=" + currentVersion + defaultChanged);
+          b.selectedTab.loadOnStartup = true;
         },1000);
         // noting more to do at the moment
       }
