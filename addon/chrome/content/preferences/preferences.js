@@ -344,52 +344,56 @@ function exportData() {
   patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
   patterns.unshift("tabmixplus\n");
 
-  const nsIFilePicker = Ci.nsIFilePicker;
-  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  var fpCallback = function fpCallback_done(aResult) {
-    if (aResult != nsIFilePicker.returnCancel) {
-      let file = fp.file;
-      if (!/\.txt$/.test(file.leafName.toLowerCase()))
-        file.leafName += ".txt";
-      if (file.exists())
-        file.remove(true);
-      file.create(file.NORMAL_FILE_TYPE, parseInt("0666", 8));
-      let stream = Cc["@mozilla.org/network/file-output-stream;1"].
-                   createInstance(Ci.nsIFileOutputStream);
-      stream.init(file, 0x02, 0x200, null);
-      for (let i = 0; i < patterns.length ; i++)
-        stream.write(patterns[i], patterns[i].length);
-      stream.close();
-    }
+  function exportCallback(aFile) {
+    if (!/\.txt$/.test(aFile.leafName.toLowerCase()))
+      aFile.leafName += ".txt";
+    if (aFile.exists())
+      aFile.remove(true);
+    aFile.create(aFile.NORMAL_FILE_TYPE, parseInt("0666", 8));
+    let stream = Cc["@mozilla.org/network/file-output-stream;1"].
+                  createInstance(Ci.nsIFileOutputStream);
+    stream.init(aFile, 0x02, 0x200, null);
+    for (let i = 0; i < patterns.length ; i++)
+      stream.write(patterns[i], patterns[i].length);
+    stream.close();
   }
-
-  fp.init(window, null, nsIFilePicker.modeSave);
-  fp.defaultExtension = "txt";
-  fp.defaultString = "TMPpref";
-  fp.appendFilters(nsIFilePicker.filterText);
-  fp.open(fpCallback);
+  showFilePicker("save", exportCallback);
 }
 
 function importData () {
-  const nsIFilePicker = Ci.nsIFilePicker;
-  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  var fpCallback = function fpCallback_done(aResult) {
-    if (aResult != nsIFilePicker.returnCancel) {
-      let stream = Cc["@mozilla.org/network/file-input-stream;1"].
-                  createInstance(Ci.nsIFileInputStream);
-      stream.init(fp.file, 0x01, parseInt("0444", 8), null);
-      let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
-                  createInstance(Ci.nsIScriptableInputStream);
-      streamIO.init(stream);
-      let input = streamIO.read(stream.available());
-      streamIO.close();
-      stream.close();
-      if (input)
-        loadData(input.replace(/\r\n/g, "\n").split("\n"));
-    }
+  function importCallback(aFile) {
+    let stream = Cc["@mozilla.org/network/file-input-stream;1"].
+                createInstance(Ci.nsIFileInputStream);
+    stream.init(aFile, 0x01, parseInt("0444", 8), null);
+    let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
+                createInstance(Ci.nsIScriptableInputStream);
+    streamIO.init(stream);
+    let input = streamIO.read(stream.available());
+    streamIO.close();
+    stream.close();
+    if (input)
+      loadData(input.replace(/\r\n/g, "\n").split("\n"));
   }
 
-  fp.init(window, null, nsIFilePicker.modeOpen);
+  showFilePicker("open", importCallback);
+}
+
+function showFilePicker(mode, callback) {
+  const nsIFilePicker = Ci.nsIFilePicker;
+  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+  function fpCallback(aResult) {
+    if (aResult != nsIFilePicker.returnCancel)
+      callback(fp.file);
+  }
+
+  if (mode == "open")
+    mode = nsIFilePicker.modeOpen;
+  else {
+    fp.defaultExtension = "txt";
+    fp.defaultString = "TMPpref";
+    mode = nsIFilePicker.modeSave;
+  }
+  fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
   if (Tabmix.isVersion(180))
     fp.open(fpCallback);
