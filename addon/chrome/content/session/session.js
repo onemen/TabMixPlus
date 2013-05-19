@@ -2735,7 +2735,7 @@ try{
       var data = {
          index: this.enableSaveHistory ? index : 0,
          pos: aTab._tPos + offset,
-         image: aTab.getAttribute("image"),
+         image: gBrowser.getIcon(aTab),
          properties: TabmixSessionData.getTabProperties(aTab, true),
          history: this.saveTabHistory(sessionHistory),
          scroll: bContent.scrollX + "," + bContent.scrollY + "," + zoomFactor

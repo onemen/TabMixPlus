@@ -937,7 +937,7 @@ var TabmixAllTabs = {
       aMenuitem.removeAttribute("image");
     }
     else {
-      aMenuitem.setAttribute("image", aTab.getAttribute("image"));
+      aMenuitem.setAttribute("image", gBrowser.getIcon(aTab));
       aMenuitem.removeAttribute("busy");
     }
 

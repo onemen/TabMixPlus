@@ -180,9 +180,6 @@ var TMP_eventListener = {
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent);
         break;
-      case "SSTabClosing":
-        this.onSSTabClosing(aEvent);
-        break;
       case "TabOpen":
         this.onTabOpen(aEvent);
         break;
@@ -257,7 +254,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabEvents = ["SSTabRestoring", "SSTabClosing",
+    this._tabEvents = ["SSTabRestoring",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
@@ -533,20 +530,6 @@ var TMP_eventListener = {
     var url = tab.linkedBrowser.currentURI.spec;
     if (url == "about:blank" || url == "about:newtab")
       tab.setAttribute("visited", true);
-  },
-
-  onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
-    var tab = aEvent.target;
-/// test if we need this for FF 4.0
-    var browser = tab.linkedBrowser;
-    var iconURL = browser.mIconURL;
-    if (tab.hasAttribute("busy") || tab.getAttribute("image") != iconURL) {
-      tab.removeAttribute("busy");
-      if (iconURL)
-        tab.setAttribute("image", iconURL);
-      else if (browser.currentURI && !(/^https?:/.test(browser.currentURI.spec)))
-        gBrowser.useDefaultIcon(tab);
-    }
   },
 
   onFullScreen: function TMP_EL_onFullScreen(aPositionChanged) {
