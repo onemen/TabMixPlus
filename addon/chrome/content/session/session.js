@@ -439,7 +439,7 @@ var TabmixSessionManager = {
          }
 
          if (afterRestart)
-            this.onSessionRestored();
+           setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
          else if (TabmixSvc.sm.crashed && this.enableBackup)
             this.openAfterCrash(TabmixSvc.sm.status);
          else if (this.enableManager)
@@ -480,7 +480,7 @@ var TabmixSessionManager = {
       }
 
       // we keep the old session after restart.
-      // just remove the restore session from close window list
+      // just remove the restored session from close window list
       // if we are not exiting private browsing mode
       var sessionContainer = this.initContainer(this.gSessionPath[0]);
       if (!aKeepClosedWindows)
