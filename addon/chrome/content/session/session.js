@@ -414,7 +414,12 @@ var TabmixSessionManager = {
       if (this.isPrivateWindow) {
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
+         this.setLiteral(this.gThisWin, "private", "true");
          this.enableBackup = false;
+         // initialize closed window list broadcaster
+         var disabled = this.enableManager ? isFirstWindow || this.isPrivateSession || this.isClosedWindowsEmpty() :
+            TabmixSvc.ss.getClosedWindowCount() == 0;
+         Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
          return;
       }
 
@@ -584,6 +589,10 @@ var TabmixSessionManager = {
 
    windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
         aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
+
+      if (Tabmix.isVersion(200) && this.isPrivateWindow)
+         this.removeSession(this.gThisWin, this.gSessionPath[0]);
+
       if (this.windowClosed || this.isPrivateSession)
          return;
 
@@ -919,7 +928,7 @@ var TabmixSessionManager = {
    setNC_TM: function() {
       var rdfLabels = ["tabs","closedtabs","index","history","properties","selectedIndex",
                "timestamp","title","url","dontLoad","reOpened","name","nameExt","session",
-               "status","tabPos","image","scroll","winFeatures"];
+               "status","tabPos","image","scroll","winFeatures", "private"];
       // keep tabview data from existing session event if the user don't have Tabview installed
       rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
       for (var i = 0; i < rdfLabels.length; i++) {
@@ -1922,7 +1931,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var closedWinList = parentId.indexOf("closedwindows") != -1;
       while(containerEnum.hasMoreElements()) {
          node = containerEnum.getNext();
-         if (this.nodeHasArc(node, "status") &&
+         if (this.nodeHasArc(node, "private") || this.nodeHasArc(node, "status") &&
                this.getLiteralValue(node, "status") != "saved") continue;
          nodes.push(node);
       }
