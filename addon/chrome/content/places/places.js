@@ -153,6 +153,16 @@ var TMP_Places = {
         ).toCode(false, TMP_Places, "getURLsForContainerNode");
       }
 
+      try {
+        let test = PlacesUIUtils._openTabset.toString();
+      } catch (ex) {
+        if (window.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
+          Tabmix.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions."
+            + "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
+        }
+        return;
+      }
+
       if (!forceInit) {
          if (PlacesUIUtils.tabmix_inited) {
             PlacesUIUtils.tabmix_inited++;
