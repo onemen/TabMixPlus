@@ -876,7 +876,7 @@ var tablib = {
       return newTab;
     }
 
-///XXX why we add this to window ?
+  ///XXX why we add this to window ?
     window.isValidUrl = function (aUrl) {
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
@@ -1142,14 +1142,14 @@ var tablib = {
       clipboard.copyString(URL);
     }
 
-/** XXX need to fix this functions:
-previousTabIndex
-previousTab
-selectIndexAfterRemove
+  /** XXX need to fix this functions:
+    previousTabIndex
+    previousTab
+    selectIndexAfterRemove
 
-to return tab instead of index
-since we can have tab hidden or remove the index can change....
-*/
+    to return tab instead of index
+    since we can have tab hidden or remove the index can change....
+  */
     gBrowser.previousTabIndex = function _previousTabIndex(aTab, aTabs) {
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
