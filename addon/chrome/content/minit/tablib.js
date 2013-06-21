@@ -894,13 +894,13 @@ var tablib = {
 
       // when we close window with last tab and we don't have protected tabs
       // we need to warn the user with the proper warning
-      var warning = "All";
+      var warning = this.closingTabsEnum.ALL;
       if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
             !Tabmix.prefs.getBoolPref("keepLastTab") &&
             this.tabContainer.getElementsByAttribute("protected", true).length == 0 &&
             (!("permaTabs" in window) || this.tabContainer.getElementsByAttribute("isPermaTab", true).length == 0) &&
             this._numPinnedTabs == 0) {
-        warning = "All_onExit";
+        warning = this.closingTabsEnum.ALL_ONEXIT;
       }
       if (this.warnAboutClosingTabs(warning)) {
         if (TabmixTabbar.visibleRows > 1)
@@ -925,7 +925,7 @@ var tablib = {
       var matches = URL.match(/(^.*\/)(.*)/);
       var aDomain = matches ?  matches[1] : URL;
 
-      if (this.warnAboutClosingTabs("Group", null, null, aDomain)) {
+      if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
@@ -957,13 +957,13 @@ var tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      var childNodes = this.visibleTabs;
-      var tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
-      if (this.warnAboutClosingTabs("Right", tabPos)) {
+      if (this.warnAboutClosingTabs(this.closingTabsEnum.TO_END, aTab)) {
         if (aTab._tPos < this.mCurrentTab._tPos)
           this.selectedTab = aTab;
 
-        for (var i = childNodes.length - 1; i > tabPos; i--) {
+        let childNodes = this.visibleTabs;
+        let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        for (let i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
@@ -974,15 +974,15 @@ var tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      var childNodes = this.visibleTabs;
-      var tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
-      if (this.warnAboutClosingTabs("Left", tabPos)) {
+      if (this.warnAboutClosingTabs(this.closingTabsEnum.TO_START, aTab)) {
         if (aTab._tPos > this.mCurrentTab._tPos) {
           this.selectedTab = aTab;
         }
         this.ensureTabIsVisible(this.selectedTab);
 
-        for (var i = tabPos - 1; i >= 0; i--) {
+        let childNodes = this.visibleTabs;
+        let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        for (let i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
@@ -993,7 +993,7 @@ var tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      if (this.warnAboutClosingTabs("AllBut", null, aTab._isProtected)) {
+      if (this.warnAboutClosingTabs(this.closingTabsEnum.OTHER, aTab)) {
         if (aTab != this.mCurrentTab)
           this.selectedTab = aTab;
         this.ensureTabIsVisible(this.selectedTab);
@@ -1250,37 +1250,19 @@ var tablib = {
        }
     }
 
-    let warnAboutClosingTabs = function (whatToClose, tabPos, protectedTab, aDomain) {
-      var whatToCloseType = typeof whatToClose;
-      // see tablib.closeWindow comment that apply to firefox 4.0+
-      if (whatToCloseType != "string" && Tabmix.isCallerInList("BG__onQuitRequest"))
-        return true;
-      // try to cach call from other extensions to warnAboutClosingTabs
-      if (whatToCloseType == "boolean") {
-        if (!whatToClose)
-          protectedTab = this.mCurrentTab._isProtected;
-        whatToClose = whatToClose ? "All_onExit" : "AllBut";
-      }
-      else if (Tabmix.isVersion(240) && whatToCloseType == "number") {
-        switch (whatToClose) {
-          case this.closingTabsEnum.ALL:
-            whatToClose = "All_onExit";
-            break;
-          case this.closingTabsEnum.OTHER:
-            whatToClose = "AllBut";
-            break;
-          case this.closingTabsEnum.TO_END:
-            if (!tabPos)
-              throw new Error("Required argument missing: aTab");
-            whatToClose = "Right";
-            tabPos = this.visibleTabs.indexOf(this.tabs.item(tabPos._tPos));
-            break;
-          default:
-            throw new Error("Invalid argument: " + whatToClose);
-        }
-      }
+    Object.defineProperty(gBrowser, "closingTabsEnum",
+      {value: { ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5 }, writable: false});
 
-      var onExit = whatToClose == "All_onExit"
+    let warnAboutClosingTabs = function (whatToClose, aTab, aDomain) {
+      // see tablib.closeWindow comment
+      if (Tabmix.isCallerInList("BG__onQuitRequest"))
+        return true;
+      var closing = this.closingTabsEnum;
+      // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
+      if (typeof(whatToClose) == "boolean")
+        whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
+
+      var onExit = whatToClose == closing.ALL_ONEXIT;
       var tabs = !onExit ? this.visibleTabs : this.tabs;
       var numTabs = tabs.length;
       // calc the number of tab to close when there is protected tabs.
@@ -1316,7 +1298,7 @@ var tablib = {
           shouldPrompt = 3;
       }
       else if (numTabs > 1) {
-        if (whatToClose == "Group" &&
+        if (whatToClose == closing.GROUP &&
             Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
             !Tabmix.prefs.getBoolPref("keepLastTab") &&
             Services.prefs.getBoolPref(prefs[2]))
@@ -1328,20 +1310,22 @@ var tablib = {
       if (shouldPrompt == 0)
         return true;
 
-      var i, tabsToClose = 0;
+      var i, tabPos, tabsToClose = 0;
       switch (whatToClose) {
-        case "All":
+        case closing.ALL:
           tabsToClose = numTabs - numProtected;
           break;
-        case "All_onExit":
+        case closing.ALL_ONEXIT:
           tabsToClose = numTabs - this._removingTabs.length;
           break;
-        case "AllBut":
-          if (protectedTab)
+        case closing.OTHER:
+          if (!aTab)
+            aTab = this.mCurrentTab;
+          if (aTab._isProtected)
             --numProtected;
           tabsToClose = numTabs - 1 - numProtected;
           break;
-        case "Group":
+        case closing.GROUP:
           for ( i = numTabs - 1; i > -1; --i) {
             let tab = tabs[i];
             if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
@@ -1357,7 +1341,10 @@ var tablib = {
               return true;
           }
           break;
-        case "Right":
+        case closing.TO_END:
+          if (!aTab)
+            throw new Error("Required argument missing: aTab");
+          tabPos = tabs.indexOf(this.tabs.item(aTab._tPos));
           for ( i = 0; i < protectedTabs.length; i++ ) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index <= tabPos)
@@ -1365,7 +1352,10 @@ var tablib = {
           }
           tabsToClose = numTabs - tabPos - 1 - numProtected;
           break;
-        case "Left":
+        case closing.TO_START:
+          if (!aTab)
+            throw new Error("Required argument missing: aTab");
+          tabPos = tabs.indexOf(this.tabs.item(aTab._tPos));
           for ( i = 0; i < protectedTabs.length; i++ ) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index >= tabPos)
@@ -1373,9 +1363,11 @@ var tablib = {
           }
           tabsToClose = tabPos - numProtected;
           break;
+        default:
+          throw new Error("Invalid argument: " + whatToClose);
       }
 
-      if (whatToClose != "All_onExit" && tabsToClose == numTabs &&
+      if (whatToClose != closing.ALL_ONEXIT && tabsToClose == numTabs &&
           Tabmix.prefs.getBoolPref("keepLastTab"))
         tabsToClose--;
 
@@ -1634,7 +1626,7 @@ var tablib = {
       var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
-      canClose = gBrowser.warnAboutClosingTabs("All_onExit");
+      canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
       Services.prefs.setCharPref(pref, oldTime*1 + (new Date().valueOf() - startTime));
     }
 
