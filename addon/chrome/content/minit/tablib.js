@@ -576,8 +576,9 @@ var tablib = {
     ).toCode();
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'gBrowser.warnAboutClosingTabs(true);',
-      'tablib.closeWindow(true);', {flags: "g"}
+      Tabmix.isVersion(240) ? 'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)' :
+                              'gBrowser.warnAboutClosingTabs(true)',
+      'tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
       'if (!Tabmix.isPlatform("Mac") && !tablib.closeWindow(true)) return false;\
@@ -1250,15 +1251,33 @@ var tablib = {
     }
 
     let warnAboutClosingTabs = function (whatToClose, tabPos, protectedTab, aDomain) {
+      var whatToCloseType = typeof whatToClose;
+      // see tablib.closeWindow comment that apply to firefox 4.0+
+      if (whatToCloseType != "string" && Tabmix.isCallerInList("BG__onQuitRequest"))
+        return true;
       // try to cach call from other extensions to warnAboutClosingTabs
-      if (typeof(whatToClose) == "boolean") {
-        // see tablib.closeWindow comment that apply to firefox 4.0+
-        if (Tabmix.isCallerInList("BG__onQuitRequest"))
-          return true;
-
+      if (whatToCloseType == "boolean") {
         if (!whatToClose)
           protectedTab = this.mCurrentTab._isProtected;
         whatToClose = whatToClose ? "All_onExit" : "AllBut";
+      }
+      else if (Tabmix.isVersion(240) && whatToCloseType == "number") {
+        switch (whatToClose) {
+          case this.closingTabsEnum.ALL:
+            whatToClose = "All_onExit";
+            break;
+          case this.closingTabsEnum.OTHER:
+            whatToClose = "AllBut";
+            break;
+          case this.closingTabsEnum.TO_END:
+            if (!tabPos)
+              throw new Error("Required argument missing: aTab");
+            whatToClose = "Right";
+            tabPos = this.visibleTabs.indexOf(this.tabs.item(tabPos._tPos));
+            break;
+          default:
+            throw new Error("Invalid argument: " + whatToClose);
+        }
       }
 
       var onExit = whatToClose == "All_onExit"

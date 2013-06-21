@@ -249,6 +249,7 @@ var TabmixTabClickOptions = {
 }
 
 var TabmixContext = {
+  _closeRightTabs: "tm-closeRightTabs",
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = function(id) document.getElementById(id);
@@ -276,6 +277,14 @@ var TabmixContext = {
     // fix conflict with CookiePie extension
     if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
       cookiepieContextMenu.init();
+
+    // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
+    if (Tabmix.isVersion(240)) {
+      tabContextMenu.insertBefore($id("context_closeTabsToTheEnd"), $id("tm-closeRightTabs"));
+      $id("context_closeTabsToTheEnd").setAttribute("oncommand","gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+      tabContextMenu.removeChild($id("tm-closeRightTabs"))
+      this._closeRightTabs = "context_closeTabsToTheEnd";
+    }
   },
 
   toggleEventListener: function(enable) {
@@ -373,7 +382,7 @@ var TabmixContext = {
     Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
     Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && !pinnedTab);
     Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeRightTabs", Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
+    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
 
     //  ---------------- menuseparator ---------------- //
 
@@ -415,7 +424,7 @@ var TabmixContext = {
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || unpinnedTabs <= 1);
     Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabs <= 1);
-    Tabmix.setItem("tm-closeRightTabs", "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
+    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
     Tabmix.setItem("tm-closeLeftTabs", "disabled", cIndex == 0 || unpinnedTabs <= 1);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
