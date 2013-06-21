@@ -321,7 +321,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   let oldValue = this.getAttribute("closebuttons");
   var tabbrowser = this.tabbrowser;
   var tabs = tabbrowser.visibleTabs;
-  var tabsCount = tabs.length;
+  var tabsCount = tabs.length - tabbrowser._removingTabs.length;
   switch (this.closeButtonsEnabled ? this.mCloseButtons : 0) {
   case 0:
     this.removeAttribute("closebuttons-hover");
@@ -345,9 +345,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     break;
   case 5:
     this.removeAttribute("closebuttons-hover");
-    if (tabsCount < 2) {
+    if (tabsCount < 3)
       this.setAttribute("closebuttons", "alltabs");
-    }
     else {
       // make sure not to check collapsed, hidden or pinned tabs for width
       let tab = TMP_TabView.checkTabs(tabs);
