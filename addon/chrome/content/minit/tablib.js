@@ -889,9 +889,6 @@ var tablib = {
     }
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
-      // fix bug in TGM when closeing all tabs in a group with animation
-      var animate = !("TMP_TabGroupsManager" in window);
-
       // when we close window with last tab and we don't have protected tabs
       // we need to warn the user with the proper warning
       var warning = this.closingTabsEnum.ALL;
