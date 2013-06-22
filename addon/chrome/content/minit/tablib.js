@@ -889,17 +889,7 @@ var tablib = {
     }
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
-      // when we close window with last tab and we don't have protected tabs
-      // we need to warn the user with the proper warning
-      var warning = this.closingTabsEnum.ALL;
-      if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-            !Tabmix.prefs.getBoolPref("keepLastTab") &&
-            this.tabContainer.getElementsByAttribute("protected", true).length == 0 &&
-            (!("permaTabs" in window) || this.tabContainer.getElementsByAttribute("isPermaTab", true).length == 0) &&
-            this._numPinnedTabs == 0) {
-        warning = this.closingTabsEnum.ALL_ONEXIT;
-      }
-      if (this.warnAboutClosingTabs(warning)) {
+      if (this.warnAboutClosingTabs(this.closingTabsEnum.ALL)) {
         if (TabmixTabbar.visibleRows > 1)
           this.tabContainer.updateVerticalTabStrip(true)
         let tabs = this.visibleTabs.slice();
@@ -1288,20 +1278,27 @@ var tablib = {
                   "extensions.tabmix.protectedtabs.warnOnClose",
                   "browser.tabs.warnOnClose"];
       if (onExit) {
-        if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
-          shouldPrompt = 2;
-
         if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
+        else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
+          shouldPrompt = 2;
       }
       else if (numTabs > 1) {
-        if (whatToClose == closing.GROUP &&
-            Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-            !Tabmix.prefs.getBoolPref("keepLastTab") &&
-            Services.prefs.getBoolPref(prefs[2]))
-          shouldPrompt = -1;
-        else if (Services.prefs.getBoolPref(prefs[0]))
+        if (Services.prefs.getBoolPref(prefs[0]))
           shouldPrompt = 1;
+        // when we close window with last tab and we don't have protected tabs
+        // we need to warn the user with the proper warning
+        if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+            !Tabmix.prefs.getBoolPref("keepLastTab") &&
+            Services.prefs.getBoolPref(prefs[2])) {
+          if (whatToClose == closing.GROUP)
+            shouldPrompt = -1;
+          else if (whatToClose == closing.ALL && numProtected == 0 &&
+              numTabs == this.tabs.length) {
+            whatToClose = closing.ALL_ONEXIT
+            shouldPrompt = 3;
+          }
+        }
       }
 
       if (shouldPrompt == 0)
@@ -1330,7 +1327,7 @@ var tablib = {
               tabsToClose++;
           }
           if (shouldPrompt == -1) {
-            if (tabsToClose == numTabs)
+            if (tabsToClose == this.tabs.length)
               shouldPrompt = 3;
             else if (Services.prefs.getBoolPref(prefs[0]))
               shouldPrompt = 1;
