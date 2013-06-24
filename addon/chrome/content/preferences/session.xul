@@ -116,7 +116,7 @@
         </tabpanel>
         <tabpanel id="sesionsPanel">
           <groupbox align="start">
-            <checkbox id="sessionsOptions" label="&ss.enable.label;"
+            <checkbox_tmp id="sessionsOptions" label="&ss.enable.label;"
                       tooltiptext="&ss.enable.tooltip;"
                       oncommand="gSessionPane.setSessionsOptions(this);"/>
             <separator class="thin"/>
@@ -129,11 +129,11 @@
                   <menuitem label="&startupLastSession.label;"  value="3"/>
                 </menupopup>
               </menulist>
-              <checkbox id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"
+              <checkbox_tmp id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"
                         class="tabmix" style="margin-top: 15px;"/>
             </vbox>
-            <checkbox id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
-            <checkbox id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
+            <checkbox_tmp id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
+            <checkbox_tmp id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
           </groupbox>
           <tabbox class="groupbox-tabbox" flex="1">
             <tabs id="session"
@@ -179,7 +179,7 @@
                       </menupopup>
                     </menulist>
                   </hbox>
-                  <checkbox id="onStart.empty" class="indent" label="&sm.chooseifempty;"
+                  <checkbox_tmp id="onStart.empty" class="indent" label="&sm.chooseifempty;"
                             preference="pref_onStart.empty"/>
                   <separator class="thin"/>
                   <hbox align="center">
@@ -198,15 +198,15 @@
                 <groupbox>
                   <caption label="&sm.restore.options;"/>
                   <hbox>
-                    <checkbox id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
+                    <checkbox_tmp id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
                               preference="pref_onRestore.overwritewindows"/>
-                    <checkbox id="onRestore.overwritetabs" label="&sm.restore.overwriteTabs;"
+                    <checkbox_tmp id="onRestore.overwritetabs" label="&sm.restore.overwriteTabs;"
                               preference="pref_onRestore.overwritetabs" observes="obs_onRestore.overwritewindows"/>
                   </hbox>
-                  <checkbox id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
+                  <checkbox_tmp id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
                             preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
-                  <checkbox id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
-                  <checkbox id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
+                  <checkbox_tmp id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
+                  <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
                 </groupbox>
               </tabpanel>
               <!-- Build-in SessionStore (we hide thid panel, don't put it in first or last tab)-->
@@ -245,21 +245,21 @@
                   <caption label="&sm.preserve.options;"/>
                   <hbox>
                     <vbox align="start">
-                      <checkbox id="session.History" label="&sm.preserve.history;" preference="pref_session.History"/>
-                      <checkbox id="session.Permissions" label="&sm.preserve.permission;" preference="pref_session.Permissions"/>
-                      <checkbox id="session.ScrollPosition" label="&sm.preserve.scroll1;" preference="pref_session.ScrollPosition"/>
+                      <checkbox_tmp id="session.History" label="&sm.preserve.history;" preference="pref_session.History"/>
+                      <checkbox_tmp id="session.Permissions" label="&sm.preserve.permission;" preference="pref_session.Permissions"/>
+                      <checkbox_tmp id="session.ScrollPosition" label="&sm.preserve.scroll1;" preference="pref_session.ScrollPosition"/>
                     </vbox>
                     <vbox align="start">
-                      <checkbox id="session.Protect" label="&sm.preserve.protect;" preference="pref_session.Protect"/>
-                      <checkbox id="session.Lock" label="&sm.preserve.locked;" preference="pref_session.Lock"/>
+                      <checkbox_tmp id="session.Protect" label="&sm.preserve.protect;" preference="pref_session.Protect"/>
+                      <checkbox_tmp id="session.Lock" label="&sm.preserve.locked;" preference="pref_session.Lock"/>
                     </vbox>
                   </hbox>
                 </groupbox>
                 <groupbox>
                   <caption label="&sm.restore.winOptions;"/>
                   <hbox align="center">
-                    <checkbox id="session.SelectedTab" label="&sm.restore.selectedTab;" preference="pref_session.SelectedTab"/>
-                    <checkbox id="session.closedtabs" label="&sm.restore.closedTabs;" preference="pref_session.closedtabs" observes="obs_undoClose"/>
+                    <checkbox_tmp id="session.SelectedTab" label="&sm.restore.selectedTab;" preference="pref_session.SelectedTab"/>
+                    <checkbox_tmp id="session.closedtabs" label="&sm.restore.closedTabs;" preference="pref_session.closedtabs" observes="obs_undoClose"/>
                   </hbox>
                 </groupbox>
               </tabpanel>

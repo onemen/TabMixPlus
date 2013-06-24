@@ -78,7 +78,7 @@
             <caption label="&show.ontabbar.label;"/>
             <!-- new tab button on tabbar -->
             <hbox align="center">
-              <checkbox id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
+              <checkbox_tmp id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
               <!-- new tab button on tabbar position -->
               <menulist id="newTabButton.posiotion"
                         preference="pref_newTabButton.posiotion" observes="obs_newTabButton">
@@ -92,14 +92,14 @@
                       tooltiptext="&dragNewTabButton.tooltip;"/>
             </hbox>
             <!-- tab-close-button on tabbar -->
-            <checkbox id="hideTabBarButton" label="&hideTabBarButton.label;" preference="pref_hideTabBarButton"/>
+            <checkbox_tmp id="hideTabBarButton" label="&hideTabBarButton.label;" preference="pref_hideTabBarButton"/>
             <!-- all-tabs-button on tabbar -->
             <hbox align="center">
-              <checkbox id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
-              <checkbox id="allTabsPpreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPpreviews" observes="obs_hideAllTabsButton"/>
+              <checkbox_tmp id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
+              <checkbox_tmp id="allTabsPpreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPpreviews" observes="obs_hideAllTabsButton"/>
             </hbox>
             <!-- Space on tabbar -->
-            <checkbox id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
+            <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
                       tooltiptext="&tabBarSpace.tooltip;"/>
           </groupbox>
           <groupbox flex="1" id="tabBarDisplay">
@@ -149,9 +149,9 @@
               <label value="&maxrow.label;"/>
               <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
             </hbox>
-            <checkbox id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
+            <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
                       preference="pref_offsetAmountToScroll" style="height: 22px;"/>
-            <checkbox id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
+            <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
               <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
@@ -166,22 +166,22 @@
             <hbox>
               <vbox flex="1">
                 <!-- Hightlight Current tab -->
-                <checkbox id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
+                <checkbox_tmp id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
                 <!-- Highlight unread tabs -->
-                <checkbox id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
+                <checkbox_tmp id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
               </vbox>
               <vbox flex="1">
                 <!-- Hightlight Unloaded tabs -->
-                <checkbox id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
+                <checkbox_tmp id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
                 <!-- Highlight other tabs -->
-                <checkbox id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
+                <checkbox_tmp id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
               </vbox>
               <vbox flex="1" align="end">
                 <button id="advancedAppearance" label="&setstyles.label;…"
                         oncommand="gAppearancePane.openAdvanceAppearance();"/>
               </vbox>
             </hbox>
-            <checkbox id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
+            <checkbox_tmp id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
                       preference="pref_unreadTabreload" observes="obs_unreadTab"/>
           </groupbox>
           <groupbox flex="1">
@@ -189,16 +189,16 @@
             <!-- Extra icons-->
             <label value="&extraIcons.label1;:"/>
             <hbox align="center" class="indent">
-              <checkbox id="extraIcons-locked" label="&extraIcons.locked;" class="extraIcons" preference="pref_lockedIcon"/>
-              <checkbox id="extraIcons-protected" label="&extraIcons.protected;" class="extraIcons" preference="pref_protectedIcon"/>
-              <checkbox id="extraIcons-autoreload" label="&extraIcons.autoreload;" class="extraIcons" preference="pref_autoreloadIcon"/>
+              <checkbox_tmp id="extraIcons-locked" label="&extraIcons.locked;" class="extraIcons" preference="pref_lockedIcon"/>
+              <checkbox_tmp id="extraIcons-protected" label="&extraIcons.protected;" class="extraIcons" preference="pref_protectedIcon"/>
+              <checkbox_tmp id="extraIcons-autoreload" label="&extraIcons.autoreload;" class="extraIcons" preference="pref_autoreloadIcon"/>
             </hbox>
             <!-- Progress Meter-->
-            <checkbox id="progressMeter" label="&progressMeter.label;" preference="pref_progressMeter"/>
+            <checkbox_tmp id="progressMeter" label="&progressMeter.label;" preference="pref_progressMeter"/>
             <!-- user interface for close button on tabs -->
             <hbox align="center">
-              <checkbox id="showTabX" label="&showTabX.labelBegin;" preference="pref_showTabX"/>
-              <checkbox id="tabXLeft" label="&showTabX.left;" rtlLabel="&showTabX.rtl;"
+              <checkbox_tmp id="showTabX" label="&showTabX.labelBegin;" preference="pref_showTabX"/>
+              <checkbox_tmp id="tabXLeft" label="&showTabX.left;" rtlLabel="&showTabX.rtl;"
                         preference="pref_tabXLeft" observes="obs_showTabX"/>
             </hbox>
             <hbox id="tabxDependant" class="indent" align="center">
@@ -236,8 +236,8 @@
                        onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
               <label value="&widthPixels.label;"/>
             </hbox>
-            <checkbox id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
-            <checkbox id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
+            <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
+            <checkbox_tmp id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
           </groupbox>
         </tabpanel>
         <tabpanel>

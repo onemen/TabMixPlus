@@ -141,34 +141,34 @@
                        placeholder="Default New Tab Page"
                        preference="pref_newTabUrl"/>
             </hbox>
-            <checkbox id="selectLocationBar" label="&focusContent.label;"
+            <checkbox_tmp id="selectLocationBar" label="&focusContent.label;"
                       preference="pref_selectLocationBar"/>
-            <checkbox id="openNewTabNext" label="&openTabNext.label;"
+            <checkbox_tmp id="openNewTabNext" label="&openTabNext.label;"
                       tooltiptext="&openTabNext.tooltip1;"
                       preference="pref_openNewTabNext"/>
           </groupbox>
           <groupbox flex="1">
             <!-- Open links next to current tab -->
-            <checkbox id="openTabNext" label="&openOtherTabNext.label;"
+            <checkbox_tmp id="openTabNext" label="&openOtherTabNext.label;"
                       tooltiptext="&openTabNext.tooltip;"
                       preference="pref_openTabNext"/>
-            <checkbox class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;"
+            <checkbox_tmp class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;"
                       preference="pref_relatedAfterCurrent" observes="obs_openTabNext"/>
-            <checkbox class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;"
+            <checkbox_tmp class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;"
                       preference="pref_openTabNextInverse"  observes="obs_openTabNext"
                       tooltiptext="&openTabNextInverse.tooltip1; &openTabNextInverse.tooltip;"/>
             <separator class="groove"/>
-            <checkbox id="openDuplicateNext" label="&openDuplicateNext.label;"
+            <checkbox_tmp id="openDuplicateNext" label="&openDuplicateNext.label;"
                       preference="pref_openDuplicateNext"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&lockTabs.label;"/>
             <!-- Look All Tabs -->
-            <checkbox id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
+            <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
             <!-- Look App Tabs -->
-            <checkbox id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
+            <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
             <spacer style="height: 1em;"/>
-            <checkbox id="updateLockState" align="center" label="&updateLockState.label;"
+            <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
                       preference="pref_updateLockState"/>
           </groupbox>
         </tabpanel>
@@ -179,28 +179,28 @@
             <hbox>
               <vbox align="start" id="tabopening1">
                 <!-- Bookmarks open in new tab -->
-                <checkbox id="openBookmarks" label="&openBookmarks.label;"
+                <checkbox_tmp id="openBookmarks" label="&openBookmarks.label;"
                           preference="pref_openBookmarks"/>
                 <!-- Bookmark Groups open in new tab -->
-                <checkbox id="openBMKGroups" label="&openBMKGroups.label;"
+                <checkbox_tmp id="openBMKGroups" label="&openBMKGroups.label;"
                           tooltiptext="&openBMKGroups.tooltip;"
                           preference="pref_openBMKGroups" inverted="true"/>
                 <!-- History opens in new tab -->
-                <checkbox id="openHistory" label="&openHistory.label;"
+                <checkbox_tmp id="openHistory" label="&openHistory.label;"
                           preference="pref_openHistory"/>
               </vbox>
               <vbox>
                 <!-- URL open in new tab -->
-                <checkbox id="openUrl" label="&openUrl.label;"
+                <checkbox_tmp id="openUrl" label="&openUrl.label;"
                           preference="pref_openUrl"/>
                 <!-- Search results open in new tab -->
-                <checkbox id="openSearch" label="&openSearch.label;"
+                <checkbox_tmp id="openSearch" label="&openSearch.label;"
                           preference="pref_openSearch"/>
               </vbox>
             </hbox>
             <spacer flex="1"/>
             <separator class="groove"/>
-            <checkbox id="midcurrent" label="&middlecurrent1.label;"
+            <checkbox_tmp id="midcurrent" label="&middlecurrent1.label;"
                       tooltiptext="&middlecurrent.tooltip;" preference="pref_midcurrent"/>
           </groupbox>
           <groupbox flex="1">
@@ -208,26 +208,26 @@
             <hbox>
               <vbox align="start" id="tabopening2">
                 <!-- select Links -->
-                <checkbox id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
+                <checkbox_tmp id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
                 <!-- Select Diverted Windows -->
-                <checkbox id="selectDivertedTab" label="&selectDivertedTab.label;"
+                <checkbox_tmp id="selectDivertedTab" label="&selectDivertedTab.label;"
                           preference="pref_selectDivertedTab"/>
                 <!-- new tab commands -->
-                <checkbox id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>
+                <checkbox_tmp id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>
                 <!-- duplicate tab -->
-                <checkbox id="selectDuplicate" label="&duplicateTab.label;" preference="pref_selectDuplicate"/>
+                <checkbox_tmp id="selectDuplicate" label="&duplicateTab.label;" preference="pref_selectDuplicate"/>
               </vbox>
               <vbox align="start">
                 <!-- Select from url bar -->
-                <checkbox id="selectTabUrl" label="&openUrl.label;" preference="pref_selectTabUrl"/>
+                <checkbox_tmp id="selectTabUrl" label="&openUrl.label;" preference="pref_selectTabUrl"/>
                 <!-- Select from Search Bar-->
-                <checkbox id="selectTabSearch" label="&openSearch.label;" preference="pref_selectTabSearch"/>
+                <checkbox_tmp id="selectTabSearch" label="&openSearch.label;" preference="pref_selectTabSearch"/>
                 <!-- Select from Context menu search-->
-                <checkbox id="contextMenuSearch" label="&contextMenuSearch.label;…" preference="pref_contextMenuSearch"/>
+                <checkbox_tmp id="contextMenuSearch" label="&contextMenuSearch.label;…" preference="pref_contextMenuSearch"/>
                 <!-- Select Bookmarks or history -->
-                <checkbox id="selectTabBH" label="&selectTabBH.label;" preference="pref_selectTabBH"/>
+                <checkbox_tmp id="selectTabBH" label="&selectTabBH.label;" preference="pref_selectTabBH"/>
                 <!-- Select first tab from Bookmark Groups -->
-                <checkbox id="selectBMKGroups" label="&openBMKGroups.label;" preference="pref_selectBMKGroups"/>
+                <checkbox_tmp id="selectBMKGroups" label="&openBMKGroups.label;" preference="pref_selectBMKGroups"/>
               </vbox>
             </hbox>
             <spacer flex="1"/>
@@ -235,10 +235,10 @@
             <label value="&inversefocus1.label;"/>
             <hbox align="start">
               <vbox id="tabopening3">
-                <checkbox id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
+                <checkbox_tmp id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
               </vbox>
-              <checkbox id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
-                        style="width: 19em" flexlabel="1" align="start"
+              <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
+                        style="width: 19em" align="start"
                         preference="pref_inverseother" observes="obs_midcurrent"/>
             </hbox>
           </groupbox>
@@ -249,19 +249,19 @@
             <caption label="&warning.caption.label;"/>
             <vbox align="start">
               <!-- Warn when closing multiple tabs -->
-              <checkbox id="warnOnClose" label="&warnCloseMultipleTabs.label;" preference="pref_warnOnClose"/>
+              <checkbox_tmp id="warnOnClose" label="&warnCloseMultipleTabs.label;" preference="pref_warnOnClose"/>
               <!-- Warn when closing window with tabs -->
-              <checkbox id="warnOnCloseWindow" label="&warnOnCloseWindow.label;" preference="pref_warnOnCloseWindow"/>
+              <checkbox_tmp id="warnOnCloseWindow" label="&warnOnCloseWindow.label;" preference="pref_warnOnCloseWindow"/>
               <!-- Warn when closing window with protected tabs -->
-              <checkbox id="warnOnCloseProtected" label="&warnOnCloseProtected.label;" preference="pref_warnOnCloseProtected"/>
+              <checkbox_tmp id="warnOnCloseProtected" label="&warnOnCloseProtected.label;" preference="pref_warnOnCloseProtected"/>
             </vbox>
           </groupbox>
           <groupbox flex="1">
             <caption label="&lasttab.caption.label;"/>
-            <checkbox id="keepWindow" label="&keepWindow.label.3.1;"
+            <checkbox_tmp id="keepWindow" label="&keepWindow.label.3.1;"
                       preference="pref_keepWindow"/>
             <!-- Don't close the last tab -->
-            <checkbox id="keepLastTab" label="&keeptab.label;" preference="pref_keepLastTab"/>
+            <checkbox_tmp id="keepLastTab" label="&keeptab.label;" preference="pref_keepLastTab"/>
             <vbox>
               <!-- Replace Last Tab With -->
               <hbox align="center">
@@ -286,7 +286,7 @@
                           placeholder="Default New Tab Page"
                           preference="pref_newTabUrl_1"/>
               </hbox>
-              <checkbox class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
+              <checkbox_tmp class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
                         preference="pref_afterLastTabClosed" observes="obs_replaceLastTabWith"/>
             </vbox>
           </groupbox>
@@ -321,16 +321,16 @@
               <radio value="true" id="merge-allwindows" label="&mergeall.label;"/>
               <radio value="false" id="merge-lastwindow" label="&mergelastfocused.label;"/>
             </radiogroup>
-            <checkbox id="mergePopups" label="&mergePopups.label;" preference="pref_mergePopups"/>
-            <checkbox id="popupNextToOpener" label="&popupNextToOpener.label;"
+            <checkbox_tmp id="mergePopups" label="&mergePopups.label;" preference="pref_mergePopups"/>
+            <checkbox_tmp id="popupNextToOpener" label="&popupNextToOpener.label;"
                       preference="pref_popupNextToOpener" class="indent" observes="obs_mergePopups"/>
           </groupbox>
           <groupbox>
             <caption label="&mergeTabSelection.label;"/>
               <!-- Close on Merge -->
-              <checkbox id="closeOnMerge" label="&closeOnMerge.label;" preference="pref_closeOnMerge"/>
+              <checkbox_tmp id="closeOnMerge" label="&closeOnMerge.label;" preference="pref_closeOnMerge"/>
               <!-- Warn when closing non merged tabs -->
-              <checkbox id="warnOnMerge" class="indent" label="&warnOnMerge.label;" preference="pref_warnOnMerge" observes="obs_closeOnMerge"/>
+              <checkbox_tmp id="warnOnMerge" class="indent" label="&warnOnMerge.label;" preference="pref_warnOnMerge" observes="obs_closeOnMerge"/>
           </groupbox>
         </tabpanel>
 <!-- ======================================================== -->
@@ -339,35 +339,35 @@
             <vbox align="start">
               <!-- Enable Undo Close Tab
                    gTMPprefObserver.observe control changes in these preference -->
-              <checkbox id="undoClose" label="&undoClose.label;" preference="pref_undoClose"/>
+              <checkbox_tmp id="undoClose" label="&undoClose.label;" preference="pref_undoClose"/>
               <vbox align="start" class="indent">
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
                   <textbox id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
                            type="number" observes="obs_undoClose"/>
                 </hbox>
-                <checkbox id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
-                <checkbox id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
+                <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
+                <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
               </vbox>
             </vbox>
             <separator class="groove"/>
-            <checkbox id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"/>
-            <checkbox id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
+            <checkbox_tmp id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"/>
+            <checkbox_tmp id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
                       observes="obs_ctrltab"/>
-            <checkbox id="showTabList" label="&ctrltab.popup;" preference="pref_showTabList"/>
-            <checkbox id="respondToMouse" class="indent" label="&tabpopup.mouse;" preference="pref_respondToMouse"
+            <checkbox_tmp id="showTabList" label="&ctrltab.popup;" preference="pref_showTabList"/>
+            <checkbox_tmp id="respondToMouse" class="indent" label="&tabpopup.mouse;" preference="pref_respondToMouse"
                       observes="obs_showTabList"/>
             <separator class="groove"/>
             <vbox align="start">
               <label value="&shortcuts.slideshow;" class="indent text-link" onclick="gEventsPane.editSlideShowKey();"/>
-              <checkbox id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
+              <checkbox_tmp id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
             </vbox>
          </groupbox>
          <groupbox flex="1">
            <caption label="&extraIcons.autoreload;"/>
-           <checkbox id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
+           <checkbox_tmp id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
                      preference="pref_reloadEvery.matchAddress" inverted="true"/>
-           <checkbox id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
+           <checkbox_tmp id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
                      preference="pref_reloadEvery.onReloadButton"/>
          </groupbox>
         </tabpanel>
