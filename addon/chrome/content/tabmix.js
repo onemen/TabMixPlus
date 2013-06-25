@@ -999,7 +999,7 @@ var TMP_eventListener = {
       leftButton.setAttribute("clickthrough", "never");
     if (rightButton)
       rightButton.setAttribute("clickthrough", "never");
-    updateAttrib("class", "showhover tabs-closebutton", "clickthrough", "never");
+    updateAttrib("class", "showhover tabs-closebutton close-icon", "clickthrough", "never");
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
   }

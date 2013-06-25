@@ -1077,7 +1077,7 @@ var gTMPprefObserver = {
     var ss = this.tabStyleSheet;
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
     var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "button_side", "right") ||
-               document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button always-right");
+               document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button close-icon always-right");
     if (!icon)
       return; // nothing to do....
 
