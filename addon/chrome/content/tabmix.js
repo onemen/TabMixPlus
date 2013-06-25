@@ -213,7 +213,7 @@ var TMP_eventListener = {
         this.onWindowClose(aEvent);
         break;
       case "fullscreen":
-        this.onFullScreen(false);
+        this.onFullScreen(!window.fullScreen);
         break;
     }
   },
@@ -533,11 +533,10 @@ var TMP_eventListener = {
       tab.setAttribute("visited", true);
   },
 
-  onFullScreen: function TMP_EL_onFullScreen(aPositionChanged) {
+  onFullScreen: function TMP_EL_onFullScreen(enterFS) {
     // add fullscr-bottom-toggler when tabbar is on the bottom
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-    var fullScreen = window.fullScreen || document.mozFullScreen;
-    if (TabmixTabbar.position == 1 && (!fullScreen || aPositionChanged)) {
+    if (enterFS && TabmixTabbar.position == 1) {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
@@ -551,6 +550,8 @@ var TMP_eventListener = {
             'TMP_eventListener._updateMarginBottom("");\
              $&'
           )._replace(
+            Tabmix.isVersion(170) ?
+            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
             'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
             '$&\
              TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
@@ -568,18 +569,15 @@ var TMP_eventListener = {
           ).toCode();
         }
 
-        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
+        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
           /(\})(\)?)$/,
-          '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
-          '  if (fullScrToggler) {' +
-          '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-          '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
+          '  let bottomToggler = document.getElementById("fullscr-bottom-toggler");' +
+          '  if (bottomToggler) {' +
+          '    bottomToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
+          '    bottomToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
           '  }' +
           '$1$2'
         ).toCode();
-      }
-      if (aPositionChanged) {
-        this.mouseoverToggle(false);
       }
       if (!document.mozFullScreen) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
@@ -587,13 +585,13 @@ var TMP_eventListener = {
         fullScrToggler.collapsed = false;
       }
     }
-    else if (fullScrToggler && fullScreen) {
+    else if (fullScrToggler && !enterFS) {
       this._updateMarginBottom("");
       fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
     }
-    if (fullScreen)
+    if (!enterFS)
       this.updateMultiRow();
   },
 

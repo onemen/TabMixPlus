@@ -708,8 +708,11 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.tabBarPosition":
          if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
-           if (window.fullScreen)
+           if (window.fullScreen) {
              TMP_eventListener.onFullScreen(true);
+             if (TabmixTabbar.position == 1)
+               TMP_eventListener.mouseoverToggle(false);
+           }
            TabmixTabbar.updateSettings(false);
          }
         break;
