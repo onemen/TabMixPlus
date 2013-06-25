@@ -65,7 +65,6 @@ Tabmix.contentAreaClick = {
     }
 
     var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
-    var linkTarget = Tabmix.prefs.getBoolPref("linkTarget");
     var suppressTabs = Tabmix.prefs.getBoolPref("enablefiletype");
 
 ///XXX check again how SubmitToTab work
@@ -141,7 +140,8 @@ Tabmix.contentAreaClick = {
     if (this.divertTargetedLink(event, linkNode, targetAttr,
                                document.commandDispatcher.focusedWindow.top.frames,
                                gBrowser.mCurrentTab, currentDomain, targetDomain,
-                               targetPref, linkTarget)) {
+                               targetPref,
+                               Tabmix.prefs.getBoolPref("linkTarget"))) {
       return ["current"];
     }
 
@@ -453,15 +453,14 @@ Tabmix.contentAreaClick = {
    * This function forces a link with a target attribute to open in the
    * current tab if the following conditions are true:
    *
-   * - linkTarget is set
+   * - divertPref is set
    * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
    *   AND it is not present in the document frame pool
-   * - links to other sites are not configured to open in new tabs AND the domain name
-   *   of the current page and the domain name of the target page do not match
+   * - all links are not forced to open in new tabs.
+   * - links to other sites are not configured to open in new tabs OR the domain name
+   *   of the current page and the domain name of the target page match
    * - the current tab is not locked
-   * - the  domain name of the current page and the domain name of the target page
-   *   do not match
    * - the target of the event has an onclick attribute that does not contain the
    *   function call 'window.open' or the function call 'return top.js.OpenExtLink'
    *
@@ -474,15 +473,14 @@ Tabmix.contentAreaClick = {
    * @param targetDomain     The domain name of the website URL to be loaded.
    * @param targetPref       An integer value that specifies whether or not links should
    *                         be forced into new tabs.
-   * @param linkTarget       An integer value that specifies how normal links
-   *                         that spawn new windows are handled.
+   * @param divertPref       A boolean value that controls if user wants to divert links with trarget.
    * @returns                true if the function handled the click, false if it didn't.
    *
    */
   divertTargetedLink: function TMP_divertTargetedLink(event, linkNode, targetAttr, frames,
                                   currentTab, currentDomain, targetDomain,
-                                targetPref, linkTarget) {
-    if (!linkTarget) return false;
+                                targetPref, divertPref) {
+    if (!divertPref) return false;
     if (this.checkAttr(linkNode.toString(), "javascript:") || // 2005-11-28 some link in Bloglines start with javascript
         this.checkAttr(linkNode.toString(), "data:"))
       return false;
@@ -495,9 +493,8 @@ Tabmix.contentAreaClick = {
 
     if (this.existsFrameName(frames, targetAttr)) return false;
 
-    if (targetPref == 2 && targetDomain && targetDomain != currentDomain) return false;
+    if (targetPref == 1 || targetPref == 2 && targetDomain && targetDomain != currentDomain) return false;
     if (currentTab.hasAttribute("locked")) return false;
-    if (targetDomain && targetDomain == currentDomain) return false;
 
     if (linkNode.hasAttribute("onclick")) {
       let onclick = linkNode.getAttribute("onclick");
