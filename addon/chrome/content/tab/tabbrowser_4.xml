@@ -802,8 +802,9 @@
         if (Tabmix.prefs.getBoolPref("dblClickTabbar_changesize") &&
             !Tabmix.isPlatform("Mac") && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
+          let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
           if (TabsInTitlebar.enabled ||
-              (displayAppButton && TabsOnTop.enabled && this.parentNode._dragBindingAlive))
+              (displayAppButton && tabsOnTop && this.parentNode._dragBindingAlive))
             return;
         }
         TabmixTabClickOptions.onTabBarDblClick(event);

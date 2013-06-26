@@ -815,6 +815,10 @@ var gTMPprefObserver = {
           gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
         break;
       case "browser.tabs.onTop":
+        if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
+          Services.prefs.setBoolPref(prefName, false);
+          return;
+        }
         // multi-rows total heights can be diffrent when tabs are on top
         if (TabmixTabbar.visibleRows > 1) {
           TabmixTabbar.setHeight(1, true);
@@ -1450,20 +1454,14 @@ var gTMPprefObserver = {
 
     TabmixTabbar.position = aPosition;
     gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
-    // save TabsOnTop status
-    function setTabsOnTopCmd (aVisible) {
-      // hide/show TabsOnTop menu & menuseparator
-      let toggleTabsOnTop = document.getElementsByAttribute("command", "cmd_ToggleTabsOnTop");
-      for (let i = 0; i < toggleTabsOnTop.length; i++) {
-        let cmd = toggleTabsOnTop[i];
-        cmd.hidden = !aVisible;
-        if (cmd.nextSibling && cmd.nextSibling.localName == "menuseparator")
-          cmd.nextSibling.hidden = !aVisible;
-      }
-    }
     var tabsToolbar = document.getElementById("TabsToolbar");
     var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
+
+    // TabsOnTop removed by bug 755593
+    if (window.TabsOnTop)
+      this.setTabsOnTop(TabmixTabbar.position == 1);
+
     if (TabmixTabbar.position == 1) {// bottom
       if (!bottomToolbox) {
         bottomToolbox = document.createElement("toolbox");
@@ -1476,11 +1474,6 @@ var gTMPprefObserver = {
         let warningContainer = document.getElementById("full-screen-warning-container");
         warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
       }
-      setTabsOnTopCmd(false);
-      if (TabsOnTop.enabled) {
-        gNavToolbox.tabmix_tabsontop = true;
-        TabsOnTop.enabled = false;
-      }
       if (gBrowser.tabContainer.visible)
         this.updateTabbarBottomPosition();
       else {
@@ -1492,11 +1485,6 @@ var gTMPprefObserver = {
       }
     }
     else {// top
-      setTabsOnTopCmd(true);
-      if (gNavToolbox.tabmix_tabsontop) {
-        TabsOnTop.enabled = true;
-        gNavToolbox.tabmix_tabsontop = false;
-      }
       this._bottomRect = {top:null, width:null, height:null};
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
@@ -1505,6 +1493,30 @@ var gTMPprefObserver = {
     // force TabmixTabbar.setHeight to set tabbar height
     TabmixTabbar.visibleRows = 1;
     return true;
+  },
+
+  // TabsOnTop removed by bug 755593
+  setTabsOnTop: function(onBottom) {
+    // hide/show TabsOnTop menu & menuseparator
+    let toggleTabsOnTop = document.getElementsByAttribute("command", "cmd_ToggleTabsOnTop");
+    for (let i = 0; i < toggleTabsOnTop.length; i++) {
+      let cmd = toggleTabsOnTop[i];
+      cmd.hidden = onBottom;
+      if (cmd.nextSibling && cmd.nextSibling.localName == "menuseparator")
+        cmd.nextSibling.hidden = onBottom;
+    }
+
+    if (onBottom) {
+      // save TabsOnTop status
+      if (TabsOnTop.enabled) {
+        gNavToolbox.tabmix_tabsontop = true;
+        TabsOnTop.enabled = false;
+      }
+    }
+    else if (gNavToolbox.tabmix_tabsontop) {
+      TabsOnTop.enabled = true;
+      gNavToolbox.tabmix_tabsontop = false;
+    }
   },
 
   _bottomRect: {top:null, width:null, height:null},
