@@ -1473,8 +1473,8 @@ var gTMPprefObserver = {
           bottomToolbox.setAttribute("tabmix_aero", true);
         // if we decide to move this box into browser-bottombox
         // remember to fix background css rules for all platform
-        let browser = document.getElementById("browser");
-        browser.parentNode.insertBefore(bottomToolbox, browser.nextSibling);
+        let warningContainer = document.getElementById("full-screen-warning-container");
+        warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
       }
       setTabsOnTopCmd(false);
       if (TabsOnTop.enabled) {
