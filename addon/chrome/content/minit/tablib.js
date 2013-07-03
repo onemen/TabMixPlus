@@ -405,10 +405,12 @@ var tablib = {
       '  }'
     ).toCode();
 
-  //XXX consider to replace handleDroppedLink not use eval here
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
-      'tablib.contentAreaOnDrop(event, url, postData.value);'
+      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: !Tabmix.isVersion(250)}
+    )._replace(
+      'loadURI(data.url, null, data.postData, false);',
+      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: Tabmix.isVersion(250)}
     ).toCode();
     // update current browser
     gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
