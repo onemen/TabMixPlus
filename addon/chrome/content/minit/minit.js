@@ -370,24 +370,21 @@ var TMP_tabDNDObserver = {
       gBrowser.updateCurrentBrowser(true);
     }
     else {
-      var url = browserDragAndDrop.drop(event, { });
-      // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
-      // Also disallow dropping javascript: or data: urls--bail out
-      if (!url || !url.length || url.indexOf(" ", 0) != -1 ||
-         /^\s*(javascript|data):/.test(url))
-         return;
-
-      var bgLoad = true;
+      // Pass true to disallow dropping javascript: or data: urls
+      let url;
       try {
-        bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-      }
-      catch (e) { }
+        url = browserDragAndDrop.drop(event, { }, true);
+      } catch (ex) {}
+
+      if (!url)
+        return;
+
+      let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
 
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      url = getShortcutOrURI(url);
-      var tab = null;
+      let tab = null;
       if (left_right > -1 && !Tabmix.contentAreaClick.isUrlForDownload(url)) {
         // We're adding a new tab.
          try {
