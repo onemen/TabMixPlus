@@ -604,6 +604,9 @@ var tablib = {
     ).toCode();
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
+      'canQuitApplication()',
+      '$& || (Tabmix.isLastBrowserWindow && !tablib.closeWindow(true))'
+    )._replace(
       'var appStartup',
       'let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");' +
       'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
