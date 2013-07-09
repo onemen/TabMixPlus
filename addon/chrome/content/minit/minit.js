@@ -438,10 +438,13 @@ var TMP_tabDNDObserver = {
     this.clearDragmark(aEvent);
 
     // don't allow to open new window in single window mode
-    if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
+    // respect bug489729 extension preference
+    if (window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab") ||
+        Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
       aEvent.stopPropagation();
       return;
     }
+
     // Disable detach within the browser toolbox
     var eX = aEvent.screenX;
     var eY = aEvent.screenY;
