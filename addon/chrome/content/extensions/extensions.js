@@ -392,6 +392,14 @@ var TMP_extensionsCompatibility = {
         'if (!Tabmix.prefs.getBoolPref("openNewTabNext")) $&'
       ).toCode();
     }
+
+    if (typeof SpeedDial == "object" && SpeedDial.originalBrowserOpenTab) {
+      Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
+        'SpeedDial.originalBrowserOpenTab(event);',
+        'SpeedDial.originalBrowserOpenTab(event, arguments.length > 1 && arguments[1]);'
+      ).toCode();
+      window.BrowserOpenTab = TMP_BrowserOpenTab;
+    }
   }
 
 }

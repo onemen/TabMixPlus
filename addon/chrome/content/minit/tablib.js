@@ -139,12 +139,12 @@ var tablib = {
 
     // changed by bug #563337
     if (!Tabmix.extensions.tabGroupManager) {
-      let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true});';
-      let aboutNewtab = 'this.addTab(BROWSER_NEW_TAB_URL, {skipAnimation: true});';
+      let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true})';
+      let aboutNewtab = 'this.addTab(BROWSER_NEW_TAB_URL, {skipAnimation: true})';
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
                  aboutNewtab : aboutBlank;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
-        code, 'TMP_BrowserOpenTab(null, true);'
+        code, 'TMP_BrowserOpenTab(null, true)'
       ).toCode();
     }
 
