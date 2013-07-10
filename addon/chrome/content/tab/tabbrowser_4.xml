@@ -382,7 +382,7 @@
           if (Tabmix.prefs.getBoolPref("extraIcons.locked"))
             this.setAttribute("extraIcons-locked", true);
 
-          if ("linkedBrowser" in this.firstChild)
+          if ("linkedBrowser" in tab)
             tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
           try {
