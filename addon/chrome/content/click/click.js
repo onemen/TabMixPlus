@@ -748,6 +748,9 @@ var TabmixAllTabs = {
     event.stopPropagation();
     event.preventDefault();
 
+    if (event.target.disabled)
+      return;
+
     var tablist =  document.getElementById("tabslist");
 
     this.beforeCommonList(tablist);
