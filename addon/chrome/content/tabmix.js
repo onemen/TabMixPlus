@@ -995,11 +995,6 @@ var TMP_eventListener = {
 
     aTab.setAttribute("context", gBrowser.tabContextMenu.id);
 
-    if (leftButton)
-      leftButton.setAttribute("clickthrough", "never");
-    if (rightButton)
-      rightButton.setAttribute("clickthrough", "never");
-    updateAttrib("class", "showhover tabs-closebutton close-icon", "clickthrough", "never");
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
   }
