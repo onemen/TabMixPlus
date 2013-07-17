@@ -909,7 +909,7 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
     TMP_TabView._resetTabviewFrame();
-    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version
     // we call removeEventListener again here in case user close the window without opening new tabs
