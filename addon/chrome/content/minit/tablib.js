@@ -230,6 +230,14 @@ var tablib = {
       'this.tabContainer.visible = aShow;',
       'if (!aShow || TabmixTabbar.hideMode != 2) $&'
     ).toCode();
+
+    // Follow up bug 887515 - add ability to restore multiple tabs
+    if (Tabmix.isVersion(250)) {
+      Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
+        'ss.setNumberOfTabsClosedLast(window, numberOfTabsToClose);',
+        'this.setNumberOfTabsClosedLast();'
+      ).toCode();
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -901,10 +909,12 @@ var tablib = {
         // remove current tab last
         if (!this.mCurrentTab.pinned)
           tabs.unshift(tabs.splice(tabs.indexOf(this.mCurrentTab), 1)[0]);
+        this.startCountingClosedTabs();
         tabs.reverse().forEach(function TMP_removeTab(tab) {
           if (!tab.pinned)
             this.removeTab(tab, {animate: false});
         }, this);
+        this.setNumberOfTabsClosedLast();
         // _handleTabSelect will call mTabstrip.ensureElementIsVisible
       }
     }
@@ -919,6 +929,7 @@ var tablib = {
 
       if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
+        this.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
               this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
@@ -928,6 +939,7 @@ var tablib = {
           this.removeTab(aTab, {animate: true});
           this.ensureTabIsVisible(this.selectedTab);
         }
+        this.setNumberOfTabsClosedLast();
       }
     }
 
@@ -955,10 +967,12 @@ var tablib = {
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        this.startCountingClosedTabs();
         for (let i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
+        this.setNumberOfTabsClosedLast();
       }
     }
 
@@ -974,10 +988,12 @@ var tablib = {
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        this.startCountingClosedTabs();
         for (let i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
+        this.setNumberOfTabsClosedLast();
       }
     }
 
@@ -992,10 +1008,12 @@ var tablib = {
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           this.tabContainer.updateVerticalTabStrip(true)
+        this.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
+        this.setNumberOfTabsClosedLast();
       }
     });
 
@@ -1465,6 +1483,36 @@ var tablib = {
     gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
       if (this.tabContainer.overflow)
         this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
+    }
+
+    // Follow up bug 887515 - add ability to restore multiple tabs
+    if (Tabmix.isVersion(250)) {
+      gBrowser.startCountingClosedTabs = function() {
+        this.shouldCountClosedTabs = true;
+        this.numberOfTabsClosedLast = 0;
+      }
+      gBrowser.setNumberOfTabsClosedLast = function(aNum) {
+        TabmixSvc.ss.setNumberOfTabsClosedLast(window, aNum || this.numberOfTabsClosedLast);
+        this.shouldCountClosedTabs = false;
+        this.numberOfTabsClosedLast = 0;
+      }
+      gBrowser.countClosedTabs = function(aTab) {
+        if (!this.shouldCountClosedTabs ||
+            Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") == 0)
+          return;
+        var tabState = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+        if (!tabState.entries || tabState.entries.length == 1 &&
+           (tabState.entries[0].url == "about:blank" ||
+            tabState.entries[0].url == "about:newtab") &&
+            !tabState.userTypedValue)
+          return;
+        this.numberOfTabsClosedLast++;
+      }
+    }
+    else {
+      gBrowser.startCountingClosedTabs = function() { }
+      gBrowser.setNumberOfTabsClosedLast = function() { }
+      gBrowser.countClosedTabs = function() { }
     }
 
     /** DEPRECATED **/

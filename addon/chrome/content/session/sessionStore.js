@@ -444,16 +444,19 @@ var TMP_ClosedTabs = {
          case "original":
             if (aIndex == -1) {
                this.getClosedTabAtIndex(aIndex);
-               return;
+               break;
             }
             else if (aIndex == -2) {
-               this.SSS_restoerAllClosedTabs();
-               return;
+               this.SSS_restoerClosedTabs(this.count);
+               break;
             }
             // else do the default
          default:
             this.SSS_undoCloseTab(aIndex, aWhere, true);
       }
+
+      // Reset the number of tabs closed last time to the default.
+      gBrowser.setNumberOfTabsClosedLast(1);
    },
 
   /**
@@ -502,25 +505,24 @@ var TMP_ClosedTabs = {
       return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
    },
 
-   SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
-      var closedTabCount = this.count;
+   SSS_restoerClosedTabs: function ct_SSS_restoerClosedTabs(closedTabCount) {
       if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
-         return;
+         return null;
 
       this.setButtonDisableState(true);
 
       var aTab, blankTab;
-      // catch blank tab
+      // catch blank tabs
       var blankTabs = [];
-      for (var i = 0; i < gBrowser.tabs.length ; i++) {
+      for (let i = 0; i < gBrowser.tabs.length ; i++) {
          if (gBrowser.isBlankNotBusyTab(gBrowser.tabs[i]))
             blankTabs.push(gBrowser.tabs[i]);
       }
 
-      var multiple = closedTabCount > 1;
-      for (i = 0; i < closedTabCount; i++) {
+      var tab, multiple = closedTabCount > 1;
+      for (let i = 0; i < closedTabCount; i++) {
          blankTab = blankTabs.pop();
-         this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
+         tab = this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
       }
 
       // remove unused blank tabs
@@ -529,6 +531,8 @@ var TMP_ClosedTabs = {
          blankTab.collapsed = true;
          gBrowser.removeTab(blankTab);
       }
+
+      return tab;
    },
 
    SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {
@@ -576,11 +580,28 @@ var TMP_ClosedTabs = {
          window.focus();
          gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
       }
+
       return newTab;
    },
 
    undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-      return this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
+      let tab, numberOfTabsToUndoClose = 1;
+      if (Number.isInteger(aIndex)) {
+        if (aIndex > this.count - 1)
+          return tab;
+      }
+      else if (Tabmix.isVersion(250))
+        numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
+
+      if (numberOfTabsToUndoClose > 1)
+        tab = this.SSS_restoerClosedTabs(numberOfTabsToUndoClose);
+      else
+        tab = this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
+
+      // Reset the number of tabs closed last time to the default.
+      gBrowser.setNumberOfTabsClosedLast(1);
+
+      return tab;
    }
 
 }
