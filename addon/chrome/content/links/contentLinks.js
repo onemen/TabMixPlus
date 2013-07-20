@@ -90,7 +90,7 @@ Tabmix.contentAreaClick = {
       '$&' +
       '  if (event && event.__where && event.__where != "default" &&' +
       '      ["tab","tabshifted","current"].indexOf(where) != -1) {' +
-      '    where = event.__where;' +
+      '    where = event.__where.split(".")[0];' +
       '  }'
     )._replace(
       'var doc = event.target.ownerDocument;',
@@ -154,13 +154,19 @@ Tabmix.contentAreaClick = {
         return ["current", true];
     }
 
+    // don't mess with links that have onclick inside iFrame
+    let onClickInFrame = this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
+
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
      * are true. See the function comment for more details.
      */
     if (this.divertMiddleClick()) {
-      return ["current"];
+      return [onClickInFrame ? "current.frame" : "current"];
     }
+
+    if (onClickInFrame)
+      return ["default"];
 
     // catch other middle & right click
     if (event.button != 0)
@@ -270,6 +276,10 @@ Tabmix.contentAreaClick = {
      * portions were taken from disable target for downloads by cusser
      */
     if (this.suppressTabsOnFileDownload())
+      return;
+
+    // don't mess with links that have onclick inside iFrame
+    if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
       return;
 
     /*
