@@ -428,8 +428,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   else if (opentabforLinks == 2) {
     // Get current page url
     let curpage = gBrowser.currentURI.spec;
-    let domain = this.contentAreaClick.checkDomain(curpage, url);
-    if (domain.current && domain.target && domain.target != domain.current)
+    if (this.contentAreaClick.isLinkToExternalDomain(curpage, url))
       return "tab";
   }
   return "current";

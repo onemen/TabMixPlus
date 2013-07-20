@@ -1,12 +1,56 @@
 "use strict";
 
 Tabmix.contentAreaClick = {
+  _data: null,
+  getPref: function() {
+    XPCOMUtils.defineLazyGetter(this, "targetPref", function() {
+      return Tabmix.prefs.getIntPref("opentabforLinks");
+    });
+    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", function() {
+      return gBrowser.mCurrentTab.hasAttribute("locked");
+    });
+  },
+
+  /*
+   * @param event            A valid event union.
+   * @param href             href string.
+   * @param linkNode         The DOM node containing the URL to be opened.
+   * @param targetAttr       The target attribute of the link node.
+   */
+  getData: function(event, href, linkNode, targetAttr) {
+    let self = this;
+    function LinkData() {
+      this.event = event;
+      this.href = href;
+      this.linkNode = linkNode;
+      this.targetAttr = targetAttr;
+      XPCOMUtils.defineLazyGetter(this, "onclick", function() {
+        if (linkNode.hasAttribute("onclick"))
+          return linkNode.getAttribute("onclick");
+        return null;
+      });
+      XPCOMUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
+       /*
+        * Check if link refers to external domain.
+        * Get current page url
+        * if user click a link while the page is reloading linkNode.ownerDocument.location can be null
+        */
+        let location = linkNode.ownerDocument.location;
+        let curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
+        return self.isLinkToExternalDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
+      });
+    }
+
+    this._data = new LinkData();
+  },
+
   init: function TMP_CA_init() {
     Tabmix.changeCode(window, "contentAreaClick")._replace(
       'if (linkNode &&',
       'var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);' +
       'var [where, suppressTabsOnFileDownload] =' +
       '      Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);' +
+      'Tabmix.contentAreaClick._data = null;' +
       'if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +
       'else if (event.__href) href = event.__href;' +
       '$&'
@@ -64,10 +108,7 @@ Tabmix.contentAreaClick = {
       return where == "tabshifted" ? "tabshifted" : "tab";
     }
 
-    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
-    var suppressTabs = Tabmix.prefs.getBoolPref("enablefiletype");
-
-///XXX check again how SubmitToTab work
+  ///XXX check again how SubmitToTab work
     if (typeof(SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
@@ -81,6 +122,9 @@ Tabmix.contentAreaClick = {
     if (!linkNode)
       return ["default"];
 
+    this.getPref();
+    this.getData(event, href, linkNode, targetAttr);
+
     /*
      * prevents tab form opening when clicking Greasemonkey script
      */
@@ -88,7 +132,7 @@ Tabmix.contentAreaClick = {
       return ["default"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
-    if (linkNode.hasAttribute("onclick") && gBrowser.contentDocument.location.href != document.commandDispatcher.focusedWindow.top.location.href)
+    if (this._data.onclick && gBrowser.contentDocument.location.href != document.commandDispatcher.focusedWindow.top.location.href)
       return ["default"];
 
     if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
@@ -100,7 +144,7 @@ Tabmix.contentAreaClick = {
      * prevent tabs from opening if left-clicked link ends with given filetype or matches regexp;
      * portions were taken from disable target for downloads by cusser
      */
-    if (this.suppressTabsOnFileDownload(event, href, linkNode, suppressTabs)) {
+    if (this.suppressTabsOnFileDownload()) {
         // don't do anything if we are on gmail and let gmail take care of the download
         let url = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
         let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
@@ -110,20 +154,11 @@ Tabmix.contentAreaClick = {
         return ["current", true];
     }
 
-    // Check if link refers to external domain.
-    // Get current page url
-    // if user click a link while the page is reloading linkNode.ownerDocument.location can be null
-    var location = linkNode.ownerDocument.location;
-    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
-    var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
-    var targetDomain = domain.target;
-    var currentDomain = domain.current;
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
      * are true. See the function comment for more details.
      */
-    if (this.divertMiddleClick(event, linkNode, gBrowser.mCurrentTab, currentDomain, targetDomain,
-                              targetPref, Tabmix.prefs.getBoolPref("middlecurrent"))) {
+    if (this.divertMiddleClick()) {
       return ["current"];
     }
 
@@ -137,11 +172,7 @@ Tabmix.contentAreaClick = {
      * open targeted links in the current tab only if certain conditions are met.
      * See the function comment for more details.
      */
-    if (this.divertTargetedLink(event, linkNode, targetAttr,
-                               document.commandDispatcher.focusedWindow.top.frames,
-                               gBrowser.mCurrentTab, currentDomain, targetDomain,
-                               targetPref,
-                               Tabmix.prefs.getBoolPref("linkTarget"))) {
+    if (this.divertTargetedLink()) {
       return ["current"];
     }
 
@@ -149,12 +180,12 @@ Tabmix.contentAreaClick = {
      * open links to other sites in a tab only if certain conditions are met. See the
      * function comment for more details.
      */
-    if (this.openExSiteLink(linkNode, currentDomain, targetDomain, targetPref)) {
+    if (this.openExSiteLink()) {
       return [TMP_tabshifted(event)];
     }
 
-    if (gBrowser.mCurrentTab.hasAttribute("locked") || targetPref == 1) { // tab is locked
-      let openNewTab = this.openTabfromLink(event, linkNode, href);
+    if (this.currentTabLocked || this.targetPref == 1) { // tab is locked
+      let openNewTab = this.openTabfromLink();
       if (openNewTab != null)
         return [openNewTab ? TMP_tabshifted(event) : "current"];
     }
@@ -168,15 +199,15 @@ Tabmix.contentAreaClick = {
    */
   _contentLinkClick: function TMP__contentLinkClick(aEvent) {
     Tabmix.contentAreaClick.contentLinkClick(aEvent);
+    Tabmix.contentAreaClick._data = null;
   },
 
   contentLinkClick: function TMP_contentLinkClick(aEvent) {
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
 
-    var targetPref = Tabmix.prefs.getIntPref("opentabforLinks");
-    var tabLocked = gBrowser.mCurrentTab.hasAttribute("locked");
-    if (!tabLocked && targetPref == 0)
+    this.getPref();
+    if (!this.currentTabLocked && targetPref == 0)
       return;
 
     let [href, linkNode] = hrefAndLinkNodeForClickEvent(aEvent);
@@ -184,6 +215,7 @@ Tabmix.contentAreaClick = {
       return;
 
     let targetAttr = this.getTargetAttr(linkNode);
+    this.getData(aEvent, href, linkNode, targetAttr);
 
     var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
     try {
@@ -193,8 +225,8 @@ Tabmix.contentAreaClick = {
     if (!blocked) {
       // replace onclick function with the form javascript:top.location.href = url
       // if the tab is locked or we force new tab from link
-      if ((tabLocked || targetPref == 1) && linkNode.hasAttribute("onclick")) {
-        let onclick = linkNode.getAttribute("onclick");
+      let {onclick} = this._data;
+      if ((this.currentTabLocked || targetPref == 1) && onclick) {
         let code = "javascript:top.location.href="
         if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
           linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
@@ -237,39 +269,25 @@ Tabmix.contentAreaClick = {
      * prevent tabs from opening if left-clicked link ends with given filetype or matches regexp;
      * portions were taken from disable target for downloads by cusser
      */
-    if (this.suppressTabsOnFileDownload(aEvent, href, linkNode,
-           Tabmix.prefs.getBoolPref("enablefiletype")))
+    if (this.suppressTabsOnFileDownload())
       return;
 
     /*
      * open targeted links in the current tab only if certain conditions are met.
      * See the function comment for more details.
-     *
-     * Check if link refers to external domain.
-     * Get current page url
-     * if user click a link when the psage is reloading linkNode.ownerDocument.location can be null
      */
-    var location = linkNode.ownerDocument.location;
-    var curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
-    var domain = this.checkDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
-    var targetDomain = domain.target;
-    var currentDomain = domain.current;
-    if (this.divertTargetedLink(aEvent, linkNode, targetAttr,
-                              document.commandDispatcher.focusedWindow.top.frames,
-                              gBrowser.mCurrentTab, currentDomain, targetDomain,
-                              targetPref,
-                              Tabmix.prefs.getBoolPref("linkTarget")))
+    if (this.divertTargetedLink())
       return;
 
     // open links to other sites in a tab only if certain conditions are met. See the
     // function comment for more details.
     var openNewTab = null;
-    if (this.openExSiteLink(linkNode, currentDomain, targetDomain, targetPref))
+    if (this.openExSiteLink())
       openNewTab = true;
     // when a tab is locked or preference is to open in new tab
     // we check that link is not a Javascript or have a onclick function
-    else if (tabLocked || targetPref == 1)
-      openNewTab = this.openTabfromLink(aEvent, linkNode, href);
+    else if (this.currentTabLocked || targetPref == 1)
+      openNewTab = this.openTabfromLink();
 
     if (openNewTab) {
       let where = whereToOpenLink(aEvent);
@@ -324,45 +342,46 @@ Tabmix.contentAreaClick = {
    *
    * This code borrows from Cusser's Disable Targets for Downloads extension.
    *
-   * @param event         A valid event union.
-   * @param href          href string.
-   * @param target        The target of the event.
-   * @param linkNode      The DOM node containing the URL to be opened.
-   * @param suppressTabs  A Boolean value that controls controlling how the link should be opened.
    * @returns             true if the link was handled by this function.
    *
    */
-  suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload(event, href, linkNode, suppressTabs) {
+  suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload() {
     // if we are in google search don't prevent new tab
     if (/\w+\.google\.\D+\/search?/.test(gBrowser.currentURI.spec))
       return false;
 
+    let {event, linkNode} = this._data;
+    linkNode = linkNode.toString();
+
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
     if (event.button != 2 && typeof(custombuttons) !='undefined'){
-      if (this.checkAttr(linkNode.toString(), "custombutton://"))
+      if (this.checkAttr(linkNode, "custombutton://"))
         return true;
     }
 
-    if (event.button != 0 || event.ctrlKey || event.metaKey || !suppressTabs)
+    if (!Tabmix.prefs.getBoolPref("enablefiletype"))
+      return false;
+
+    if (event.button != 0 || event.ctrlKey || event.metaKey)
       return false;
 
     // lets try not to look into links that start with javascript (from 2006-09-02)
-    if (this.checkAttr(href, "javascript:"))
+    if (this.checkAttr(this._data.href, "javascript:"))
       return false;
 
-    if (linkNode.hasAttribute("onclick")) {
-      let onclick = linkNode.getAttribute("onclick");
+    if (this._data.onclick) {
+      let {onclick} = this._data;
       if (this.checkAttr(onclick, "return install") ||
-         this.checkAttr(onclick, "return installTheme") ||
+          this.checkAttr(onclick, "return installTheme") ||
           this.checkAttr(onclick, "return note") || this.checkAttr(onclick, "return log")) // click on link in http://tinderbox.mozilla.org/showbuilds.cgi
         return true;
     }
 
     // prevent links in tinderbox.mozilla.org with linkHref to *.gz from open in this function
-    if (this.checkAttr(linkNode.toString() , "http://tinderbox.mozilla.org/showlog") ||
-      this.checkAttr(linkNode.toString() , "http://tinderbox.mozilla.org/addnote")) return false;
+    if (this.checkAttr(linkNode , "http://tinderbox.mozilla.org/showlog") ||
+      this.checkAttr(linkNode , "http://tinderbox.mozilla.org/addnote")) return false;
 
-    return this.isUrlForDownload(href);
+    return this.isUrlForDownload(this._data.href);
   },
 
   isUrlForDownload: function TMP_isUrlForDownload(linkHref) {
@@ -419,28 +438,20 @@ Tabmix.contentAreaClick = {
    *   mouse button was pressed OR the left mouse button and one of the Ctrl/Meta keys
    *   was pressed
    *
-   * @param event          A valid event union.
-   * @param linkNode       The DOM node containing the URL to open.
-   * @param currentTab     A scripted tab object from the tabbrowser.
-   * @param currentDomain  The domain name of the website URL in the current tab.
-   * @param targetDomain   The domain name of the website URL in the link node.
-   * @param targetPref     An integer value that specifies whether or not links should
-   *                       be forced into new tabs.
-   * @param middlePref     A Boolean value that controls how middle clicks are handled.
    * @returns              true if the function handled the click, false if it didn't.
    *
    */
-  divertMiddleClick: function TMP_divertMiddleClick(event, linkNode, currentTab, currentDomain, targetDomain,
-                                 targetPref, middlePref) {
-    if (!middlePref)
+  divertMiddleClick: function TMP_divertMiddleClick() {
+    // middlecurrent - A Boolean value that controls how middle clicks are handled.
+    if (!Tabmix.prefs.getBoolPref("middlecurrent"))
       return false;
 
-    var isTabLocked = targetPref == 1 || currentTab.hasAttribute("locked");
-    var isDifDomain = targetPref == 2 && targetDomain &&
-                      targetDomain != currentDomain;
+    var isTabLocked = this.targetPref == 1 || this.currentTabLocked;
+    var isDifDomain = this.targetPref == 2 && this._data.isLinkToExternalDomain;
     if (!isTabLocked && !isDifDomain)
       return false;
 
+    let {event} = this._data;
     if (event.button == 1 || event.button == 0 && (event.ctrlKey || event.metaKey))
       return true;
 
@@ -453,7 +464,7 @@ Tabmix.contentAreaClick = {
    * This function forces a link with a target attribute to open in the
    * current tab if the following conditions are true:
    *
-   * - divertPref is set
+   * - extensions.tabmix.linkTarget is true
    * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
    *   AND it is not present in the document frame pool
@@ -464,46 +475,35 @@ Tabmix.contentAreaClick = {
    * - the target of the event has an onclick attribute that does not contain the
    *   function call 'window.open' or the function call 'return top.js.OpenExtLink'
    *
-   * @param event            A valid event union.
-   * @param linkNode         The DOM node containing the URL to be opened.
-   * @param targetAttr       The target attribute of the link node.
-   * @param frames           The frame pool of the current document.
-   * @param currentTab       A scripted tab object from the tabbrowser.
-   * @param currentDomain    The domain name of the website URL loaded in the current tab.
-   * @param targetDomain     The domain name of the website URL to be loaded.
-   * @param targetPref       An integer value that specifies whether or not links should
-   *                         be forced into new tabs.
-   * @param divertPref       A boolean value that controls if user wants to divert links with trarget.
    * @returns                true if the function handled the click, false if it didn't.
    *
    */
-  divertTargetedLink: function TMP_divertTargetedLink(event, linkNode, targetAttr, frames,
-                                  currentTab, currentDomain, targetDomain,
-                                targetPref, divertPref) {
-    if (!divertPref) return false;
-    if (this.checkAttr(linkNode.toString(), "javascript:") || // 2005-11-28 some link in Bloglines start with javascript
-        this.checkAttr(linkNode.toString(), "data:"))
+  divertTargetedLink: function TMP_divertTargetedLink() {
+    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
+  ///XXX - check if we need to use here href
+    let linkNode = this._data.linkNode.toString();
+    if (this.checkAttr(linkNode, "javascript:") || // 2005-11-28 some link in Bloglines start with javascript
+        this.checkAttr(linkNode, "data:"))
       return false;
 
+    let {event} = this._data;
     if (event.ctrlKey || event.metaKey) return false;
 
+    let {targetAttr} = this._data;
     if (!targetAttr) return false;
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
     if (targetString.test(targetAttr.toLowerCase())) return false;
 
+    let frames = document.commandDispatcher.focusedWindow.top.frames;
     if (this.existsFrameName(frames, targetAttr)) return false;
 
-    if (targetPref == 1 || targetPref == 2 && targetDomain && targetDomain != currentDomain) return false;
-    if (currentTab.hasAttribute("locked")) return false;
+    if (this.currentTabLocked) return false;
+    if (this.targetPref == 1 ||
+        this.targetPref == 2 && this._data.isLinkToExternalDomain)
+      return false;
 
-    if (linkNode.hasAttribute("onclick")) {
-      let onclick = linkNode.getAttribute("onclick");
-      if (this.checkAttr(onclick, "window.open") ||
-          this.checkAttr(onclick, "NewWindow") ||
-          this.checkAttr(onclick, "PopUpWin") ||
-          this.checkAttr(onclick, "return "))
-        return false;
-    }
+    if (this.checkOnClick())
+      return false;
 
     return true;
   },
@@ -520,31 +520,19 @@ Tabmix.contentAreaClick = {
    * - the domain name of the current page and the domain name of the target page do not match
    *   OR the link node has an 'onmousedown' attribute that contains the text 'return rwt'
    *
-   * @param event            A valid event union.
-   * @param linkNode         The DOM node containing the URL to be opened.
-   * @param currentDomain    The domain name of the website URL loaded in the current tab.
-   * @param targetDomain     The domain name of the website URL to be loaded.
-   * @param targetPref       An integer value that specifies whether or not links should
-   *                         be forced into new tabs.
    * @returns                true to load link in new tab
    *                         false to load link in current tab
    *
    */
-  openExSiteLink: function TMP_openExSiteLink(linkNode, currentDomain, targetDomain, targetPref) {
-    if (targetPref != 2 || Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
+  openExSiteLink: function TMP_openExSiteLink() {
+    if (this.targetPref != 2 || Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
-///XXX if we check this in every function do it one time at the start
-    if (linkNode.hasAttribute("onclick")) {
-      let onclick = linkNode.getAttribute("onclick");
-      if (this.checkAttr(onclick, "window.open") ||
-          this.checkAttr(onclick, "NewWindow") ||
-          this.checkAttr(onclick, "PopUpWin") ||
-          this.checkAttr(onclick, "return "))
-        return false;
-    }
-    if (targetDomain && targetDomain != currentDomain ||
-        this.checkAttr(linkNode.getAttribute("onmousedown"), "return rwt"))
+    if (this.checkOnClick())
+      return false;
+
+    if (this._data.isLinkToExternalDomain ||
+        this.checkAttr(this._data.linkNode.getAttribute("onmousedown"), "return rwt"))
       return true;
 
     return false;
@@ -553,42 +541,30 @@ Tabmix.contentAreaClick = {
   /**
    * @brief Open links in new tabs when tab is lock or preference is to always opne tab from links.
    *
-   * @param event            A valid event union.
-   * @param linkNode         The DOM node containing the URL to be opened.
-   * @param href             href string.
    * @returns null if the caller need to handled the click,
               true to load link in new tab
               false to load link in current tab
    */
-  openTabfromLink: function TMP_openTabfromLink(event, linkNode, href) {
+  openTabfromLink: function TMP_openTabfromLink() {
     if (Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
       return false;
 
-    if (this.GoogleComLink(linkNode))
+    if (this.GoogleComLink())
       return null;
 
-    var onclick = null;
+    let {href, linkNode, onclick} = this._data;
     if (href)
       href = href.toLowerCase();
-
-    if (linkNode.hasAttribute("onclick"))
-      onclick = linkNode.getAttribute("onclick");
 
     // we replcae in contentLinkClick the onclick javascript:top.location.href = url
     // with var __tabmix.href = url
     if (this.checkAttr(onclick, "var __tabmix.href=") &&
-        this.getHrefFromOnClick(event, href, linkNode, "var __tabmix.href="))
+        this.getHrefFromOnClick(this._data.event, href, linkNode, "var __tabmix.href="))
       return "tab";
 
     if (this.checkAttr(href, "javascript:") ||
         this.checkAttr(href, "data:") ||
-        this.checkAttr(onclick, "window.open") ||
-        this.checkAttr(onclick, "openit") ||
-        this.checkAttr(onclick, "NewWindow") ||
-        this.checkAttr(onclick, "PopUpWin") ||
-        (onclick && onclick.indexOf('this.target="_Blank"') != -1) ||
-        (onclick && onclick.indexOf("return false") != -1) ||
-        this.checkAttr(onclick, "return "))
+        this.checkOnClick(true))
       // javascript links, do nothing!
       return null;
     else
@@ -601,10 +577,9 @@ Tabmix.contentAreaClick = {
   /**
    * @brief Test if target link is special Google.com link preferences , advanced_search ...
    *
-   * @param linkNode         The DOM node containing the URL to be opened.
    * @returns true it is Google special link false for all other links
    */
-  GoogleComLink: function TMP_GoogleComLink(linkNode) {
+  GoogleComLink: function TMP_GoogleComLink() {
     var location = gBrowser.currentURI.spec;
     var currentIsnGoogle = /\/\w+\.google\.\D+\//.test(location);
     if (!currentIsnGoogle)
@@ -613,6 +588,7 @@ Tabmix.contentAreaClick = {
     if (/calendar\/render/.test(location))
       return true;
 
+    var {linkNode} = this._data;
     if (/\/intl\/\D{2,}\/options\/|search/.test(linkNode.pathname))
       return true;
 
@@ -709,8 +685,9 @@ Tabmix.contentAreaClick = {
   *
   */
   checkAttr: function TMP_checkAttr(attr, string) {
-    if (typeof(attr) == "string") return attr.indexOf(string) == 0;
-      return false;
+    if (typeof(attr) == "string")
+      return attr.indexOf(string) == 0;
+    return false;
   },
 
   get uriFixup() {
@@ -723,10 +700,10 @@ Tabmix.contentAreaClick = {
   *
   * @param target    The target link.
   * @param curpage   The current page url
-  * @returns         current domain and target domain
+  * @returns         true when curpage and target are in diffrent domains
   *
   */
-  checkDomain: function TMP_checkDomain(curpage, target) {
+  isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     var self = this;
     function getDomain(url) {
       if (typeof(url) != "string")
@@ -746,13 +723,13 @@ Tabmix.contentAreaClick = {
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
           url = Services.io.newURI(url.path.substr("/r/?".length), null, null);
-/* DONT DELETE
+    /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
       while (host.length > 2)
         host.shift();
       return host.join(".");
-*/
+    */
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
           var level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
@@ -766,7 +743,29 @@ Tabmix.contentAreaClick = {
       }
       return null;
     }
-    return {current: getDomain(curpage), target: getDomain(target)};
+
+    let targetDomain = getDomain(target);
+    return targetDomain && targetDomain != getDomain(curpage);
+  },
+
+  /**
+   * @brief check if the link contain special onclick function.
+   */
+  checkOnClick: function TMP_checkOnClick(more) {
+    let {onclick} = this._data;
+    if (onclick) {
+      if (this.checkAttr(onclick, "window.open") ||
+          this.checkAttr(onclick, "NewWindow") ||
+          this.checkAttr(onclick, "PopUpWin") ||
+          this.checkAttr(onclick, "return "))
+        return true;
+
+      if (more && (this.checkAttr(onclick, "openit") ||
+          onclick.indexOf('this.target="_Blank"') != -1 ||
+          onclick.indexOf("return false") != -1))
+        return true;
+    }
+    return false;
   },
 
   getTargetAttr: function TMP_getTargetAttr(linkNode) {
