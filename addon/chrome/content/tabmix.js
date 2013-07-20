@@ -478,7 +478,13 @@ var TMP_eventListener = {
     } catch (ex) {Tabmix.assert(ex);}
 
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
-    gTMPprefObserver.changeNewTabButtonSide(position);
+    if (Tabmix.extensions.treeStyleTab) {
+      setTimeout(function() {
+        gTMPprefObserver.changeNewTabButtonSide(position);
+      }, 0);
+    }
+    else
+      gTMPprefObserver.changeNewTabButtonSide(position);
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
 
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");

@@ -652,8 +652,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
       Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateSettings")._replace(
         'TabmixSessionManager.updateTabProp(aTab);',
         '$& \
-         gBrowser.treeStyleTab.initTabAttributes(aTab);\
-         gBrowser.treeStyleTab.initTabContentsOrder(aTab);'
+         if (!start) {\
+           gBrowser.treeStyleTab.initTabAttributes(aTab);\
+           gBrowser.treeStyleTab.initTabContentsOrder(aTab);\
+         }'
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
