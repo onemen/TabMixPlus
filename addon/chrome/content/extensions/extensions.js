@@ -579,9 +579,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
       }
     }
 
-    // we don't need this in the new version since we change the tabs-frame place
-    // keep it here for non default theme that uses old Tabmix binding
     if ("TreeStyleTabBrowser" in window) {
+      // we don't need this in the new version since we change the tabs-frame place
+      // keep it here for non default theme that uses old Tabmix binding
       let fn = TreeStyleTabBrowser.prototype.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
         Tabmix.changeCode(TreeStyleTabBrowser.prototype, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
@@ -593,6 +593,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
           'newTabBox.orient',
           'if (newTabBox) $&', {flags: "g"}
         ).toCode();
+      }
+      TreeStyleTabBrowser.prototype.getTabClosebox = function(aTab) {
+        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon always-right');
       }
     }
 
@@ -652,10 +655,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
       Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateSettings")._replace(
         'TabmixSessionManager.updateTabProp(aTab);',
         '$& \
-         if (!start) {\
-           gBrowser.treeStyleTab.initTabAttributes(aTab);\
-           gBrowser.treeStyleTab.initTabContentsOrder(aTab);\
-         }'
+         gBrowser.treeStyleTab.initTabAttributes(aTab);\
+         gBrowser.treeStyleTab.initTabContentsOrder(aTab);'
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
