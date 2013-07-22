@@ -213,7 +213,7 @@ Tabmix.contentAreaClick = {
       return;
 
     this.getPref();
-    if (!this.currentTabLocked && targetPref == 0)
+    if (!this.currentTabLocked && this.targetPref == 0)
       return;
 
     let [href, linkNode] = hrefAndLinkNodeForClickEvent(aEvent);
@@ -233,7 +233,7 @@ Tabmix.contentAreaClick = {
       // replace onclick function with the form javascript:top.location.href = url
       // if the tab is locked or we force new tab from link
       let {onclick} = this._data;
-      if ((this.currentTabLocked || targetPref == 1) && onclick) {
+      if ((this.currentTabLocked || this.targetPref == 1) && onclick) {
         let code = "javascript:top.location.href="
         if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
           linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
@@ -297,7 +297,7 @@ Tabmix.contentAreaClick = {
       openNewTab = true;
     // when a tab is locked or preference is to open in new tab
     // we check that link is not a Javascript or have a onclick function
-    else if (this.currentTabLocked || targetPref == 1)
+    else if (this.currentTabLocked || this.targetPref == 1)
       openNewTab = this.openTabfromLink();
 
     if (openNewTab) {
