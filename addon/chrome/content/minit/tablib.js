@@ -966,7 +966,7 @@ var tablib = {
           this.selectedTab = aTab;
 
         let childNodes = this.visibleTabs;
-        let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        let tabPos = childNodes.indexOf(aTab);
         this.startCountingClosedTabs();
         for (let i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
@@ -987,7 +987,7 @@ var tablib = {
         this.ensureTabIsVisible(this.selectedTab);
 
         let childNodes = this.visibleTabs;
-        let tabPos = childNodes.indexOf(this.tabs.item(aTab._tPos));
+        let tabPos = childNodes.indexOf(aTab);
         this.startCountingClosedTabs();
         for (let i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
@@ -1037,7 +1037,8 @@ var tablib = {
       var childNodes = this.visibleTabs;
       if ( aTab._tPos > this.mCurrentTab._tPos )
         this.selectedTab = aTab;
-      for (var i = aTab._tPos - 1; i >= 0; i-- ) {
+      let tabPos = childNodes.indexOf(aTab);
+      for (let i = tabPos - 1; i >= 0; i-- ) {
         try {
           this.getBrowserForTab(childNodes[i]).reload();
         } catch (e) {  }
@@ -1050,7 +1051,8 @@ var tablib = {
       var childNodes = this.visibleTabs;
       if ( aTab._tPos < this.mCurrentTab._tPos )
         this.selectedTab = aTab;
-      for (var i = childNodes.length - 1; i > aTab._tPos; i-- ) {
+      let tabPos = childNodes.indexOf(aTab);
+      for (let i = childNodes.length - 1; i > tabPos; i-- ) {
         try {
           this.getBrowserForTab(childNodes[i]).reload();
         } catch (e) {  }
@@ -1361,7 +1363,7 @@ var tablib = {
         case closing.TO_END:
           if (!aTab)
             throw new Error("Required argument missing: aTab");
-          tabPos = tabs.indexOf(this.tabs.item(aTab._tPos));
+          tabPos = tabs.indexOf(aTab);
           for ( i = 0; i < protectedTabs.length; i++ ) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index <= tabPos)
@@ -1372,7 +1374,7 @@ var tablib = {
         case closing.TO_START:
           if (!aTab)
             throw new Error("Required argument missing: aTab");
-          tabPos = tabs.indexOf(this.tabs.item(aTab._tPos));
+          tabPos = tabs.indexOf(aTab);
           for ( i = 0; i < protectedTabs.length; i++ ) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index >= tabPos)
