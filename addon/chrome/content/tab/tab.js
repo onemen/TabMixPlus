@@ -826,7 +826,8 @@ var gTMPprefObserver = {
         }
         break;
       case "browser.newtab.url": // just for Firefox 12
-        BROWSER_NEW_TAB_URL = Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
+        value =  Services.prefs.getComplexValue("browser.newtab.url", Ci.nsISupportsString).data;
+        BROWSER_NEW_TAB_URL =  value || "about:blank";
         break;
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
