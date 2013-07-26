@@ -101,8 +101,8 @@ function TMP_TBP_Startup() {
 
     var windowOpenedByTabmix = "tabmixdata" in window;
     var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
-    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.extensions.sessionManager ||
+    var disAllow = TabmixSvc.sm.initialized || Tabmix.extensions.sessionManager ||
+                   SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.isWindowAfterSessionRestore;
     var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
     var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
@@ -136,13 +136,10 @@ function TMP_TBP_Startup() {
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
-    if (!disAllow && ((sessionManager && windowOpenedByTabmix) ||
+    SM.doRestore = !disAllow && ((sessionManager && windowOpenedByTabmix) ||
          (firstWindow && crashRecovery && afterCrash) ||
-         (firstWindow && sessionManager && restoreOrAsk))) {
-      // make sure sessionstore is init without restornig pinned tabs
-      TabmixSvc.ss.init(null);
-      SM._notifyWindowsRestored = true;
-
+         (firstWindow && sessionManager && restoreOrAsk));
+    if (SM.doRestore) {
       // Prevent the default homepage from loading if we're going to restore a session
       if (Tabmix.isVersion(250)) {
         Tabmix.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(

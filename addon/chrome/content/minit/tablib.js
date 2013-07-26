@@ -64,6 +64,10 @@ var tablib = {
       '{','{ \
        var dontMove;'
     )._replace(
+      '{','{\n\
+       if (!TabmixSvc.sm.initialized && !this.tabs[0].loadOnStartup && Tabmix.callerName() == "ssi_restoreWindow")\n\
+         return this.tabs[0];\n', {check: Tabmix.isVersion(250) && TabmixSessionManager.doRestore}
+    )._replace(
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\

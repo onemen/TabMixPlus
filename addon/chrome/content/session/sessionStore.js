@@ -10,7 +10,7 @@ var TMP_SessionStore = {
    // make sure sessionstore is init
    _ssInited: null,
    initService: function TMP_ss_start() {
-     if (this._ssInited)
+     if (Tabmix.isVersion(250) || this._ssInited)
        return;
      try {
        TabmixSvc.ss.init(window);

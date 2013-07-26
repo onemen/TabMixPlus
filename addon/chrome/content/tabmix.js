@@ -71,6 +71,23 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
   TabmixSessionManager.init();
 }
 
+// after TabmixSessionManager and SessionStore initialized
+Tabmix.sessionInitialized = function() {
+  var tab = gBrowser.tabContainer.firstChild;
+  if (!tab.selected) {
+    tab.removeAttribute("visited");
+    tab.removeAttribute("flst_id");
+  }
+
+  TMP_SessionStore.persistTabAttribute();
+
+  TMP_ClosedTabs.setButtonDisableState();
+  TabmixSessionManager.toggleRecentlyClosedWindowsButton();
+
+  // convert session.rdf to SessionManager extension format
+  TabmixConvertSession.startup();
+}
+
 // we call this at the start of gBrowserInit._delayedStartup
 // if we call it erlier we get this warning:
 // XUL box for _moz_generated_content_before element contained an inline #text child
@@ -92,13 +109,6 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
 
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
-
-  TMP_SessionStore.persistTabAttribute();
-
-  TMP_ClosedTabs.setButtonDisableState();
-  TabmixSessionManager.toggleRecentlyClosedWindowsButton();
-  // convert session.rdf to SessionManager extension format
-  TabmixConvertSession.startup();
 
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle

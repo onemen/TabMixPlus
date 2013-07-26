@@ -336,13 +336,25 @@ var TabmixSessionManager = {
          return;
       this._inited = true;
 
-      this._init();
-      if (this._notifyWindowsRestored) {
+      let forceInit = !Tabmix.isVersion(250) && this.doRestore;
+      let initializeSM = function() {
+        // make sure sessionstore initialize without restornig pinned tabs
+        // for Firefox 25+ we block new tab in gbrowser.addtab
+        if (forceInit)
+          TabmixSvc.ss.init(null);
+        this._init();
+        Tabmix.sessionInitialized();
         // restart-less extensions observers for this notification on startup
-        // notify observers things are complete.
-        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-        this._notifyWindowsRestored = false;
-      }
+        // notify observers things are complete when we call SessionStore.init
+        // with null.
+        if (forceInit)
+          Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+      }.bind(this);
+
+      if (Tabmix.isVersion(250))
+        SessionStore.promiseInitialized.then(initializeSM);
+      else
+        initializeSM();
    },
 
    _init: function SM__init() {
@@ -2993,6 +3005,8 @@ try{
         // remove tabmix attribute
         aTab.removeAttribute("fixed-label");
         aTab.removeAttribute("label-uri");
+        aTab.removeAttribute("tabmix_bookmarkId");
+        aTab.removeAttribute("pending");
         // reset pinned and hidden tabs
         aTab.removeAttribute("hidden");
         if (aTab.pinned)
