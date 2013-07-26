@@ -2739,7 +2739,7 @@ try{
       try {
          var curHistory = sessionHistory.getEntryAtIndex(index, false);
          curHistory.QueryInterface(Ci.nsISHEntry).setScrollPosition(bContent.scrollX, bContent.scrollY);
-      } catch (e) {Tabmix.assert(ex, "saveTab error at index " + sessionHistory.index);}
+      } catch (ex) {Tabmix.assert(ex, "saveTab error at index " + sessionHistory.index);}
       var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
       var data = {
          index: this.enableSaveHistory ? index : 0,
