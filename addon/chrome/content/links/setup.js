@@ -151,7 +151,7 @@ function TMP_TBP_Startup() {
         'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? "about:blank" : window.arguments[0];'
       );
       bowserStartup = bowserStartup._replace(
-        'if (window.opener && !window.opener.closed) {',
+        'if (window.opener && !window.opener.closed',
         '  if (uriToLoad && uriToLoad != "about:blank") {' +
         '    for (var i = 0; i < gBrowser.tabs.length ; i++) {' +
         '      gBrowser.tabs[i].loadOnStartup = true;' +
