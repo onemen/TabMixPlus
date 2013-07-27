@@ -375,6 +375,29 @@ var TMP_extensionsCompatibility = {
     if (typeof aioCloseWindow == 'function')
       aioCloseWindow = BrowserTryToCloseWindow;
 
+    // Tile Tabs 10.0
+    // https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/
+    if (typeof tileTabs == "object") {
+      let newCode = 'title = TMP_Places.getTabTitle(tab, tab.linkedBrowser.currentURI.spec, title);' +
+        'if (tab.hasAttribute("mergeselected"))' +
+        '  title = "(*) " + title;' +
+        '$&';
+
+      let func = {styleTiledTabs: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        showProperties: 'if (tab.hasAttribute("image"))',
+        onTabAttrModified: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        showTabList: /menuItem\.setAttribute\("label",\s*title\);/,
+        showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
+      }
+
+      for (let [fnName, oldCode] in Iterator(func)) {
+        if (typeof tileTabs[fnName] == "function") {
+          Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
+            oldCode, newCode
+          ).toCode();
+        }
+      }
+    }
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
