@@ -9,6 +9,8 @@
   <script type="application/javascript">
   <![CDATA[
     function updateTitle() {
+      if (!gGrid.cells)
+        return;
       gGrid.cells.forEach(function (cell) {
         let site = cell.site;
         let url = site.url;
