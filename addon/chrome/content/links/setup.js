@@ -124,7 +124,7 @@ function TMP_TBP_Startup() {
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
     var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
-    var swapNewCode =
+    var loadOnStartup, swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
       '   window.tabmix_afterTabduplicated = true;' +
       '   TabmixSessionManager.init();' +
@@ -150,10 +150,11 @@ function TMP_TBP_Startup() {
         'uriToLoad = window.arguments[0];',
         'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? "about:blank" : window.arguments[0];'
       );
-      bowserStartup = bowserStartup._replace(
-        'if (window.opener && !window.opener.closed',
+
+      // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
+      loadOnStartup =
         '  if (uriToLoad && uriToLoad != "about:blank") {' +
-        '    for (var i = 0; i < gBrowser.tabs.length ; i++) {' +
+        '    for (let i = 0; i < gBrowser.tabs.length ; i++) {' +
         '      gBrowser.tabs[i].loadOnStartup = true;' +
         '    }' +
         '  }' +
@@ -161,7 +162,12 @@ function TMP_TBP_Startup() {
         '    gBrowser.selectedBrowser.stop();' +
         '  }' +
         '$&'
-      );
+
+      if (!Tabmix.isVersion(190)) {
+        bowserStartup = bowserStartup._replace(
+          'if (window.opener && !window.opener.closed', loadOnStartup
+        );
+      }
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
     if (Tabmix.isVersion(120) && typeof aios_dominitSidebar == "function") {
@@ -172,17 +178,19 @@ function TMP_TBP_Startup() {
     }
     bowserStartup.toCode();
 
-    // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
     var [obj, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
           [gBrowserInit, "gBrowserInit._delayedStartup"] :
           [window, "delayedStartup"];
+
     Tabmix.changeCode(obj, fn)._replace(
-      '{',
-      '{' +
+      'Services.obs.addObserver', loadOnStartup, {check: Tabmix.isVersion(190) && !!loadOnStartup}
+    )._replace(
+      'Services.obs.addObserver',
       'try {' +
-      '  Tabmix.beforeDelayedStartup();' +
-      '} catch (ex) {Tabmix.assert(ex);}'
+      '  Tabmix.beforeSessionStoreInit();' +
+      '} catch (ex) {Tabmix.assert(ex);}' +
+      '$&'
     )._replace(
       swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
     ).toCode();

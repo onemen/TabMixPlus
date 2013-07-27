@@ -60,8 +60,8 @@ Tabmix.startup = function TMP_startup() {
   };
 }
 
-// we call this function when gBrowserInit._delayedStartup start, see setup.js
-Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
+// we call this function from gBrowserInit._delayedStartup, see setup.js
+Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
   if (this.isFirstWindow) {
     let tmp = {};
     Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
