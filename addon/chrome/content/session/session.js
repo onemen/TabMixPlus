@@ -459,7 +459,7 @@ var TabmixSessionManager = {
          if (caller == "concatenatewindows")
             this.loadSession(path, caller, false);
          else
-            this.loadOneWindow(path, "windowopenebytabmix");
+            this.loadOneWindow(path, "windowopenedbytabmix");
       }
       // sync rdf list with sessionstore closed tab after restart
       // we need it when we delete/restore close tab
@@ -2934,7 +2934,7 @@ try{
                else
                  overwrite = false;
             break;
-         case "windowopenebytabmix":
+         case "windowopenedbytabmix":
          case "concatenatewindows":
                overwrite = true;
             break;
@@ -2955,7 +2955,7 @@ try{
          pages that are not the home page append the new tab to the end.
          simple solution is to set browser.startup.page = 0 , when we activate session manager, in this case if we
          have any tabs in the first window we don't overwrite.
-      2. when open window by session manager other than the first window (caller = "windowopenebytabmix" and tabmix in the name) overwrite=true
+      2. when open window by session manager other than the first window (caller = "windowopenedbytabmix" and tabmix in the name) overwrite=true
       3. when loadOneWindow call by openclosedwindow or loadSession we reuse window check user pref for overwrite.
       4. if we open all closed windows to one window append tab to the end and select the selected tab from first window
          in the session.
@@ -3130,7 +3130,7 @@ try{
                gBrowser.moveTabTo(cTab, newPos + lastSelectedIndex);
             }
             else
-              this.updateSelected(newPos + lastSelectedIndex, caller=="firstwindowopen" || caller=="windowopenebytabmix");
+              this.updateSelected(newPos + lastSelectedIndex, caller=="firstwindowopen" || caller=="windowopenedbytabmix");
          }
          newIndex = newPos;
       }

@@ -99,7 +99,7 @@ function TMP_TBP_Startup() {
       SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
 
-    var windowOpeneByTabmix = "tabmixdata" in window;
+    var windowOpenedByTabmix = "tabmixdata" in window;
     var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
     var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
                    Tabmix.extensions.sessionManager ||
@@ -137,7 +137,7 @@ function TMP_TBP_Startup() {
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     // don't load home page on first window if session manager or crash recovery is enabled
-    if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
+    if (!disAllow && ((sessionManager && windowOpenedByTabmix) ||
          (firstWindow && crashRecovery && afterCrash) ||
          (firstWindow && sessionManager && restoreOrAsk))) {
       // make sure sessionstore is init without restornig pinned tabs
