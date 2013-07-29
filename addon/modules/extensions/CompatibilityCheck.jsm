@@ -12,8 +12,7 @@
  */
 var EXPORTED_SYMBOLS = ["CompatibilityCheck"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 const TMP_BUTTON_OK = 0;
 const TMP_BUTTON_CANCEL = 1;
@@ -31,14 +30,19 @@ const TMP_SHOW_CLOSED_WINDOW_LIST = 3;
 const TMP_DLG_SAVE = 0;
 const TMP_DLG_RENAME = 1;
 
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/AddonManager.jsm");
+
+var _initialized = false;
 
 function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
+  if (_initialized && !aCallbackDialog)
+    return;
+  _initialized = true;
   this.window = aWindow;
   this.showList = aShowList;
   this.callbackDialog = aCallbackDialog;
   this.list = [];
-  Components.utils.import("resource://gre/modules/AddonManager.jsm");
   this.getIncompatibleList();
 }
 
