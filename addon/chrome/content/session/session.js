@@ -1151,7 +1151,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case "sessionstore-browser-state-restored":
             // session restored update buttons state
             TMP_ClosedTabs.setButtonDisableState();
-            delete TMP_eventListener.tabsPrepared;
          case "browser-window-change-state":
             this.toggleRecentlyClosedWindowsButton();
             break;
