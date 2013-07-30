@@ -392,11 +392,9 @@ var TabmixSessionManager = {
 
       // If sessionStore restore the session after restart we do not need to do anything
       // when all tabs are pinned, session resore add the home page on restart
-      var afterRestart = Tabmix.isWindowAfterSessionRestore &&
-            !gBrowser.tabs[0].linkedBrowser.contentDocument.tabmix_loading;
       // prepare history sessions
       if (!TabmixSvc.sm.initialized && !this.globalPrivateBrowsing &&
-            !sanitized && !afterRestart) {
+            !sanitized && !Tabmix.isWindowAfterSessionRestore) {
          let status, crashed;
          if (this.enableBackup) {
             let path = this._rdfRoot + "/closedSession/thisSession";
@@ -443,7 +441,7 @@ var TabmixSessionManager = {
             return;
          }
 
-         if (afterRestart)
+         if (Tabmix.isWindowAfterSessionRestore)
            setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
          else if (TabmixSvc.sm.crashed && this.enableBackup)
             this.openAfterCrash(TabmixSvc.sm.status);
@@ -814,12 +812,8 @@ var TabmixSessionManager = {
 
    loadHomePage: function SM_loadHomePage() {
       function afterLoad(aBrowser) {
-        if ("tabmix_loading" in aBrowser.contentDocument) {
-          aBrowser.reload();
-          delete aBrowser.contentDocument.tabmix_loading;
-        }
         if (!gBrowser.isBlankBrowser(aBrowser))
-          window.focus();
+          aBrowser.focus();
       }
 
       var homePage = gHomeButton.getHomePage();
@@ -830,10 +824,6 @@ var TabmixSessionManager = {
         if (homePage != "") {
           browser.addEventListener("load", function TMP_onLoad_homePage(aEvent) {
             aEvent.currentTarget.removeEventListener("load", TMP_onLoad_homePage, false);
-            if ("tabmix_loading" in browser.contentDocument) {
-              browser.reload();
-              delete browser.contentDocument.tabmix_loading;
-            }
           }, false);
           // This function throws for certain malformed URIs, so use exception handling
           // so that we don't disrupt startup
@@ -847,10 +837,6 @@ var TabmixSessionManager = {
       else if (gBrowser.mCurrentTab.loadOnStartup) {
         for (var i = 0; i < gBrowser.tabs.length ; i++)
           delete gBrowser.tabs[i].loadOnStartup;
-      }
-      else if ("tabmix_loading" in gBrowser.selectedBrowser.contentDocument) {
-        gBrowser.selectedBrowser.reload();
-        delete gBrowser.selectedBrowser.contentDocument.tabmix_loading;
       }
    },
 
@@ -2966,11 +2952,6 @@ try{
       var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
       if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || this.containerEmpty(rdfNodeTabs)) {
          alert(TabmixSvc.getSMString("sm.restoreError.msg0") + "\n"  + TabmixSvc.getSMString("sm.restoreError.msg1"));
-         let tabmix_loading = gBrowser.selectedBrowser.contentDocument.tabmix_loading;
-         if (tabmix_loading) {
-            gBrowser.selectedBrowser.reload();
-            delete gBrowser.selectedBrowser.contentDocument.tabmix_loading;
-         }
          return;
       }
 
