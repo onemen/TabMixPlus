@@ -551,8 +551,7 @@
       return;
 
     let GroupItems = TabView._window.GroupItems;
-    for (let id of Object.keys(this._groupItems)) {
-      let data = this._groupItems[id];
+    for (let data in Iterator(this._groupItems, true)) {
       if (data.newItem) {
         if (GroupItems.groupItemStorageSanity(data)) {
           GroupItems.groupItem(data.id).pushAway(true);
