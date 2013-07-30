@@ -93,13 +93,7 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
-  /* Add attribute to nsSessionStore persistTabAttribute after delay
-     we call this after nsSessionStore.init
-     we add this also when we use TMP session manager.
-     we use Firefox SessionStore closed tab service and for restore after restart
-  */
-  if (this.isFirstWindow)
-    TMP_SessionStore.persistTabAttribute();
+  TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
   TabmixSessionManager.toggleRecentlyClosedWindowsButton();

@@ -96,6 +96,8 @@ let TabmixSvc = {
 
   sm: {
     initialized: false,
+    converted: false,
+    persistTabAttributeSet: false,
     status: "",
     crashed: false,
     get sanitized() {

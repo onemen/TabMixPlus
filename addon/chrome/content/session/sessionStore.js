@@ -52,20 +52,15 @@ var TMP_SessionStore = {
    /**
     * @brief       - Add attribute to nsSessionStore persistTabAttribute.
     *
-    * @param doInit   a Boolean value - true when we need to init nsISessionStore.
+    *   we call this after nsSessionStore.init
+    *   we add this also when we use TMP session manager.
+    *   we use Firefox SessionStore closed tab service and for restore after restart
     *
     * @returns        Nothing.
     */
-   _persistTabAttributeSet: null,
    persistTabAttribute: function TMP_ss_persistTabAttribute() {
-      if (this._persistTabAttributeSet)
-         return;
-
-      var aTab = gBrowser.tabContainer.firstChild;
-      if (!aTab.selected) {
-         aTab.removeAttribute("visited");
-         aTab.removeAttribute("flst_id");
-      };
+      if (TabmixSvc.sm.persistTabAttributeSet)
+        return;
 
       try {
         /*
@@ -82,7 +77,7 @@ var TMP_SessionStore = {
             TabmixSvc.ss.persistTabAttribute(aAttr);
          });
 
-         this._persistTabAttributeSet = true;
+         TabmixSvc.sm.persistTabAttributeSet = true;
       } catch(ex) {
          Tabmix.log("nsSessionStore could not add Attribute to persistTabAttribute: " + ex + "\n");
       }
@@ -616,8 +611,13 @@ var TabmixConvertSession = {
    },
 
    startup: function cs_startup() {
+      if (TabmixSvc.sm.converted)
+        return;
+
       if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
         return;
+
+      TabmixSvc.sm.converted = true;
 
       var sessions = TabmixSessionManager.getSessionList();
       if (!sessions)
