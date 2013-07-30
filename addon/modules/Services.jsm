@@ -95,6 +95,7 @@ let TabmixSvc = {
   },
 
   sm: {
+    lastSessionPath: null,
     initialized: false,
     converted: false,
     persistTabAttributeSet: false,

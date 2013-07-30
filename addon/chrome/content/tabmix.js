@@ -73,6 +73,35 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  var SM = TabmixSessionManager;
+  if (SM.enableManager) {
+    window.restoreLastSession = function restoreLastSession() {
+      TabmixSessionManager.restoreLastSession();
+    }
+    if (Tabmix.isVersion(200)) {
+      Tabmix.setItem("Browser:RestoreLastSession", "disabled",
+        !SM.canRestoreLastSession || SM.isPrivateWindow);
+    }
+    else {
+      Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
+        'this._ss', 'TabmixSessionManager'
+      ).toCode();
+    }
+
+    Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
+      'ss.canRestoreLastSession',
+      'TabmixSessionManager.canRestoreLastSession'
+    ).toCode();
+
+    let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
+                                                [window, "window.BrowserOnClick"];
+    Tabmix.changeCode(obj, FnName)._replace(
+      'if (ss.canRestoreLastSession)',
+      'ss = TabmixSessionManager;\
+       $&'
+    ).toCode();
+  }
+
   var tab = gBrowser.tabContainer.firstChild;
   if (!tab.selected) {
     tab.removeAttribute("visited");
@@ -82,7 +111,7 @@ Tabmix.sessionInitialized = function() {
   TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
-  TabmixSessionManager.toggleRecentlyClosedWindowsButton();
+  SM.toggleRecentlyClosedWindowsButton();
 
   // convert session.rdf to SessionManager extension format
   TabmixConvertSession.startup();

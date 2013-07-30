@@ -2805,7 +2805,32 @@ try{
       } return "0,0";
    },
 
+   get canRestoreLastSession() {
+      return this.enableManager ? TabmixSvc.sm.lastSessionPath && !this.containerEmpty(TabmixSvc.sm.lastSessionPath) :
+                                  TabmixSvc.ss.canRestoreLastSession;
+   },
+
+   restoreLastSession: function SM_restoreLastSession() {
+      if (!this.canRestoreLastSession)
+        return;
+
+      if (this.enableManager)
+         this.loadSession(TabmixSvc.sm.lastSessionPath, "sessionrestore", false);
+      else
+        TabmixSvc.ss.restoreLastSession();
+   },
+
    loadSession: function SM_loadSession(path, caller, overwriteWindows) {
+      let lastSession = this.gSessionPath[1];
+      if (caller == "firstwindowopen") {
+         if (path != lastSession)
+            TabmixSvc.sm.lastSessionPath = lastSession;
+      }
+      else if (path == lastSession) {
+         TabmixSvc.sm.lastSessionPath = null;
+         Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
+      }
+
       var sessionContainer = this.initContainer(path);
       var sessionEnum = sessionContainer.GetElements();
       var sessionCount = 0, concatenate;

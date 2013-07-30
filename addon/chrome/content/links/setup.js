@@ -195,6 +195,9 @@ function TMP_TBP_Startup() {
       '$&'
     )._replace(
       swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
+    )._replace(
+      'SessionStore.canRestoreLastSession',
+      'TabmixSessionManager.canRestoreLastSession', {check: Tabmix.isVersion(250) && sessionManager}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix

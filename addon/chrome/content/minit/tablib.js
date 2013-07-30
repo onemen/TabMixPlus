@@ -668,6 +668,12 @@ var tablib = {
       'this.toggleRecentlyClosedWindows();',
       '$& \
        TMP_Places.historyMenuItemsTitle(aEvent);'
+    )._replace(
+      'this.toggleRecentlyClosedWindows();',
+      '$& \
+       let SM = TabmixSessionManager;\
+       Tabmix.setItem("Browser:RestoreLastSession", "disabled", !SM.canRestoreLastSession || SM.isPrivateWindow);',
+       {check: Tabmix.isVersion(200) && Tabmix.prefs.getBoolPref("sessions.manager")}
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
