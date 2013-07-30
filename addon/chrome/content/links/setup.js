@@ -136,7 +136,6 @@ function TMP_TBP_Startup() {
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
-    // don't load home page on first window if session manager or crash recovery is enabled
     if (!disAllow && ((sessionManager && windowOpenedByTabmix) ||
          (firstWindow && crashRecovery && afterCrash) ||
          (firstWindow && sessionManager && restoreOrAsk))) {
@@ -144,12 +143,18 @@ function TMP_TBP_Startup() {
       TabmixSvc.ss.init(null);
       SM._notifyWindowsRestored = true;
 
-      // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
-      // maybe all tabs in the last session were pinned, we leet firefox to load the hompages
-      bowserStartup = bowserStartup._replace(
-        'uriToLoad = window.arguments[0];',
-        'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? "about:blank" : window.arguments[0];'
-      );
+      // Prevent the default homepage from loading if we're going to restore a session
+      if (Tabmix.isVersion(250)) {
+        Tabmix.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
+          'sessionStartup.willOverrideHomepage', 'true'
+        ).toCode();
+      }
+      else {
+        bowserStartup = bowserStartup._replace(
+          'uriToLoad = window.arguments[0];',
+          'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? null : window.arguments[0];'
+        );
+      }
 
       // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
       loadOnStartup =
