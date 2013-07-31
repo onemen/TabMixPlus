@@ -834,9 +834,6 @@ var TabmixSessionManager = {
         this.setStripVisibility(URIs.length);
         let browser = gBrowser.selectedBrowser;
         if (homePage != "") {
-          browser.addEventListener("load", function TMP_onLoad_homePage(aEvent) {
-            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_homePage, false);
-          }, false);
           // This function throws for certain malformed URIs, so use exception handling
           // so that we don't disrupt startup
           try {
