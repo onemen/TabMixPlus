@@ -454,11 +454,21 @@ var TabmixSessionManager = {
          }
 
          if (Tabmix.isWindowAfterSessionRestore)
-           setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
-         else if (TabmixSvc.sm.crashed && this.enableBackup)
-            this.openAfterCrash(TabmixSvc.sm.status);
-         else if (this.enableManager)
-            this.openFirstWindow(TabmixSvc.sm.crashed);
+            setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
+         else {
+           // hide extra tab that was opened by SessionStore if last session
+           // contained pinned tab(s).
+           let tab = gBrowser.tabs[0];
+           if (Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
+              this.resetTab(tab);
+              if (!tab.selected)
+                 gBrowser.removeTab(tab);
+           }
+           if (TabmixSvc.sm.crashed && this.enableBackup)
+              this.openAfterCrash(TabmixSvc.sm.status);
+           else if (this.enableManager)
+              this.openFirstWindow(TabmixSvc.sm.crashed);
+         }
 
          Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout")
       }
@@ -3003,51 +3013,13 @@ try{
         return newTab;
       }
 
-      // make sure to reset the attributes, in case this tab gets reused
-      function TMP_resetAttributes(aTab) {
-        let browser = gBrowser.getBrowserForTab(aTab);
-        browser.stop();
-        // reset old history
-        let history = browser.webNavigation.sessionHistory;
-        if (history.count > 0)
-          history.PurgeHistory(history.count);
-        history.QueryInterface(Ci.nsISHistoryInternal);
-
-        if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
-         aTab.setAttribute("width", aTab.getBoundingClientRect().width);
-
-        // remove selected and flst_id from all tabs but the current
-        if (aTab != cTab) {
-          aTab.removeAttribute("visited");
-          aTab.removeAttribute("flst_id");
-        }
-        // if we need to remove extra tabs make sure they are not protected
-        if (aTab.hasAttribute("protected"))
-          aTab.removeAttribute("protected");
-        // remove tabmix attribute
-        aTab.removeAttribute("fixed-label");
-        aTab.removeAttribute("label-uri");
-        aTab.removeAttribute("tabmix_bookmarkId");
-        aTab.removeAttribute("pending");
-        // reset pinned and hidden tabs
-        aTab.removeAttribute("hidden");
-        if (aTab.pinned)
-          gBrowser.unpinTab(aTab);
-
-        // Make sure that set/getTabValue will set/read the correct data by
-        // wiping out any current value in tab.__SS_extdata.
-        delete aTab.__SS_extdata;
-        // delete any sesionRestore data
-        delete browser.__SS_data;
-      }
-
       var tabContainer = this.initContainer(rdfNodeTabs);
       var newtabsCount = tabContainer.GetCount();
       var newIndex, aTab, loadOnStartup = [];
       if (newtabsCount > 0 && overwrite) {
          // unpinned tabs reorder tabs, so we loob backward
          for (let i = gBrowser.tabs.length - 1 ; i >= 0; i--) {
-           TMP_resetAttributes(gBrowser.tabs[i]);
+           this.resetTab(gBrowser.tabs[i]);
          }
          while (newtabsCount > gBrowser.tabs.length) {
             let newTab = TMP_addTab();
@@ -3076,7 +3048,7 @@ try{
             else if (caller == "firstwindowopen" || // overwrite all tabs that are not from apps on first window
                  gBrowser.isBlankTab(aTab) && (aTab.hasAttribute("tabmix_busy") || !aTab.hasAttribute("busy"))) {
                aTab.removeAttribute("tabmix_busy");
-               TMP_resetAttributes(aTab);
+               this.resetTab(aTab);
                blankTabs.push(aTab);
             }
          }
@@ -3261,6 +3233,41 @@ try{
             this.updateClosedWindowsMenu("check");
          }
       }
+   },
+
+   // reset tab's attributes and history
+   resetTab: function TMP_resetAttributes(aTab) {
+      let browser = gBrowser.getBrowserForTab(aTab);
+      browser.stop();
+      // reset old history
+      let history = browser.webNavigation.sessionHistory;
+      if (history.count > 0)
+        history.PurgeHistory(history.count);
+      history.QueryInterface(Ci.nsISHistoryInternal);
+
+      if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
+        aTab.setAttribute("width", aTab.getBoundingClientRect().width);
+
+      // if we need to remove extra tabs make sure they are not protected
+      let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
+                       "pending", "hidden", "image"];
+      // remove visited and flst_id from all tabs but the current
+      if (aTab != gBrowser.mCurrentTab)
+        attributes = attributes.concat(["visited", "flst_id"]);
+
+      attributes.forEach(function(attrib) {
+        if (aTab.hasAttribute(attrib))
+          aTab.removeAttribute(attrib);
+      });
+
+      if (aTab.pinned)
+        gBrowser.unpinTab(aTab);
+
+      // Make sure that set/getTabValue will set/read the correct data by
+      // wiping out any current value in tab.__SS_extdata.
+      delete aTab.__SS_extdata;
+      // delete any sesionRestore data
+      delete browser.__SS_data;
    },
 
    updateSelected: function(newIndex, removeAttribute) {
