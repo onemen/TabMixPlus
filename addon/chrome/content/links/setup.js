@@ -68,6 +68,8 @@ function TMP_TBP_Startup() {
     return;
   }
 
+  TabmixSvc.windowStartup.init(window);
+
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
@@ -99,18 +101,6 @@ function TMP_TBP_Startup() {
       SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
 
-    var windowOpenedByTabmix = "tabmixdata" in window;
-    var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
-    var disAllow = TabmixSvc.sm.initialized || Tabmix.extensions.sessionManager ||
-                   SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
-    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-    var afterRestart = false;
-
-    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
-    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
-
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
@@ -136,9 +126,17 @@ function TMP_TBP_Startup() {
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
-    SM.doRestore = !disAllow && ((sessionManager && windowOpenedByTabmix) ||
-         (firstWindow && crashRecovery && afterCrash) ||
-         (firstWindow && sessionManager && restoreOrAsk));
+    var firstWindow = Tabmix.firstWindowInSession || SM.firstNonPrivateWindow;
+    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
+                   Tabmix.extensions.sessionManager ||
+                   Tabmix.isWindowAfterSessionRestore;
+    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+    var resumeSession  = sessionManager &&
+                         Tabmix.prefs.getIntPref("sessions.onStart") < 2;
+    var recoverSession = Tabmix.prefs.getBoolPref("sessions.crashRecovery") &&
+                         Tabmix.prefs.prefHasUserValue("sessions.crashed");
+
+    SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
     if (SM.doRestore) {
       // Prevent the default homepage from loading if we're going to restore a session
       if (Tabmix.isVersion(250)) {
@@ -201,7 +199,7 @@ function TMP_TBP_Startup() {
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
-    if (firstWindow && Tabmix.prefs.getBoolPref("disableIncompatible")) {
+    if (Tabmix.firstWindowInSession && Tabmix.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);

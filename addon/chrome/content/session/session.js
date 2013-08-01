@@ -335,25 +335,26 @@ var TabmixSessionManager = {
          return;
       this._inited = true;
 
-      let forceInit = !Tabmix.isVersion(250) && this.doRestore;
-      let initializeSM = function() {
-        // make sure sessionstore initialize without restornig pinned tabs
+      if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized) {
+        let initializeSM = function() {
+          TabmixSvc.sm.promiseInitialized = true;
+          this._init();
+        }.bind(this);
+        SessionStore.promiseInitialized.then(initializeSM);
+      }
+      else {
+        let forceInit = !Tabmix.isVersion(250) && this.doRestore
+        // make sure sessionstore initialize without restoring pinned tabs
         // for Firefox 25+ we block new tab in gbrowser.addtab
         if (forceInit)
           TabmixSvc.ss.init(null);
         this._init();
-        Tabmix.sessionInitialized();
         // restart-less extensions observers for this notification on startup
         // notify observers things are complete when we call SessionStore.init
         // with null.
         if (forceInit)
           Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-      }.bind(this);
-
-      if (Tabmix.isVersion(250))
-        SessionStore.promiseInitialized.then(initializeSM);
-      else
-        initializeSM();
+      }
    },
 
    _init: function SM__init() {
@@ -384,7 +385,7 @@ var TabmixSessionManager = {
       this._lastSaveTime = Date.now();
       var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
       // check if we need to backup
-      if (!TabmixSvc.sm.initialized && this.enableManager && !sanitized) {
+      if (Tabmix.firstWindowInSession && this.enableManager && !sanitized) {
          try {
            this.archiveSessions();
          }
@@ -404,7 +405,7 @@ var TabmixSessionManager = {
       // If sessionStore restore the session after restart we do not need to do anything
       // when all tabs are pinned, session resore add the home page on restart
       // prepare history sessions
-      if (!TabmixSvc.sm.initialized && !this.globalPrivateBrowsing &&
+      if (Tabmix.firstWindowInSession && !this.globalPrivateBrowsing &&
             !sanitized && !Tabmix.isWindowAfterSessionRestore) {
          let status, crashed;
          if (this.enableBackup) {
@@ -418,7 +419,6 @@ var TabmixSessionManager = {
             this.prepareSavedSessions();
          }
       }
-      TabmixSvc.sm.initialized = true;
 
       if (this.isPrivateWindow) {
          this.updateSettings();

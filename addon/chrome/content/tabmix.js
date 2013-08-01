@@ -139,6 +139,11 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
+  if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
+    SessionStore.promiseInitialized.then(this.sessionInitialized.bind(this));
+  else
+    Tabmix.sessionInitialized();
+
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
   if ("bookMarkIds" in window) {

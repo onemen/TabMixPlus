@@ -96,9 +96,21 @@ let TabmixSvc = {
     }
   },
 
+  windowStartup: {
+    _initialized: false,
+    init: function(aWindow) {
+      // windowStartup must only be called once for each window
+      if ("firstWindowInSession" in aWindow.Tabmix)
+        return;
+      aWindow.Tabmix.firstWindowInSession = !this._initialized;
+      if (this._initialized)
+        return;
+      this._initialized = true;
+    }
+  },
+
   sm: {
     lastSessionPath: null,
-    initialized: false,
     persistTabAttributeSet: false,
     status: "",
     crashed: false,
