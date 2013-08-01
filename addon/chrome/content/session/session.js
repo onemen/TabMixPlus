@@ -297,7 +297,7 @@ var TabmixSessionData = {
 var TabmixSessionManager = {
     _rdfRoot: "rdf://tabmix",
     HSitems: 3,
-    NC_TM:[],
+    NC_TM: {},
     gSessionPath: ["", "", "", ""],
     gThisWin: null,
     gThisWinTabs: null,
@@ -308,7 +308,6 @@ var TabmixSessionManager = {
     IOService: null,
     overwriteWindow: false,
     saveThisWindow: true,
-    NC_NS : "http://home.netscape.com/NC-rdf#",
     enableBackup: null,
     enableManager: null,
     enableSaveHistory: null,
@@ -865,7 +864,6 @@ var TabmixSessionManager = {
                        .getService(Components.interfaces.nsIRDFService);
       this.CONUtils = Components.classes["@mozilla.org/rdf/container-utils;1"]
                            .getService(Components.interfaces.nsIRDFContainerUtils);
-      this.setNC_TM();
       this.initDATASource();
    },
 
@@ -930,15 +928,11 @@ var TabmixSessionManager = {
       return id;
    },
 
-   setNC_TM: function() {
-      var rdfLabels = ["tabs","closedtabs","index","history","properties","selectedIndex",
-               "timestamp","title","url","dontLoad","reOpened","name","nameExt","session",
-               "status","tabPos","image","scroll","winFeatures", "private"];
-      // keep tabview data from existing session event if the user don't have Tabview installed
-      rdfLabels = rdfLabels.concat(["tabview-visibility", "tabview-group", "tabview-groups", "tabview-tab", "tabview-ui", "tabview-last-session-group-name"]);
-      for (var i = 0; i < rdfLabels.length; i++) {
-         this.NC_TM[rdfLabels[i]] = this.RDFService.GetResource(this.NC_NS + rdfLabels[i]);
-      }
+   getNC: function(arc) {
+      if (arc in this.NC_TM)
+         return this.NC_TM[arc];
+      const NC_NS = "http://home.netscape.com/NC-rdf#";
+      return this.NC_TM[arc] = this.RDFService.GetResource(NC_NS + arc);
    },
 
    deleteNode: function(rdfNode) {
@@ -1002,7 +996,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    getValue: function(node, label, typeID, def) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      label = this.NC_TM[label];
+      label = this.getNC(label);
       var rdfNode = this.DATASource.GetTarget(node, label, true);
       return (rdfNode instanceof Components.interfaces[typeID]) ? rdfNode.Value : def;
    },
@@ -1054,33 +1048,33 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    getResource: function(node, arc) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      arc = this.NC_TM[arc];
+      arc = this.getNC(arc);
       return this.DATASource.GetTarget(node, arc, true);
    },
 
    nodeHasArc: function(node, arc) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      arc = this.NC_TM[arc];
+      arc = this.getNC(arc);
       return this.DATASource.hasArcOut(node, arc);
    },
 
    setLiteral: function SM_setLiteral(node, arc, value) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      arc = this.NC_TM[arc];
+      arc = this.getNC(arc);
       value = this.RDFService.GetLiteral(value);
       this.changeValue(node, arc, value);
    },
 
    setIntLiteral: function(node, arc, value) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      arc = this.NC_TM[arc];
+      arc = this.getNC(arc);
       value = this.RDFService.GetIntLiteral(value);
       this.changeValue(node, arc, value);
    },
 
    setResource: function(node, arc, value) {
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
-      arc = this.NC_TM[arc];
+      arc = this.getNC(arc);
       if (typeof(value) == "string") value = this.RDFService.GetResource(value);
       this.changeValue(node, arc, value);
    },
@@ -1097,7 +1091,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
       if (this.nodeHasArc(node, arc)) {
          var value = this.getLiteralValue(node, arc);
-         this.DATASource.Unassert(node, this.NC_TM[arc], this.RDFService.GetLiteral(value));
+         this.DATASource.Unassert(node, this.getNC(arc), this.RDFService.GetLiteral(value));
          return true;
       }
       return false; // arc not found
@@ -1430,7 +1424,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
          node = this.RDFService.GetResource(path + extID);
          container.InsertElementAt(node, 1, true);
-         this.DATASource.Unassert(node, this.NC_TM["dontLoad"], this.RDFService.GetLiteral("true"));
+         this.DATASource.Unassert(node, this.getNC("dontLoad"), this.RDFService.GetLiteral("true"));
       }
       var count = this.countWinsAndTabs(container); // we need it just to fix the date
       if (!session.saveClosedTabs)

@@ -110,12 +110,6 @@ let TMP_TabGroupsManager = {
       '  } catch (ex) {Tabmix.assert(ex);}'
     ).toCode();
 
-    this.changeCode(sessionManager, "TabmixSessionManager.setNC_TM")._replace(
-      'for',
-      'rdfLabels.push("tgm_jsonText");\
-       $&'
-    ).toCode();
-
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
     aWindow.TMP_TabGroupsManager = {}
     aWindow.TMP_TabGroupsManager.tabmixSessionsManager = this.tabmixSessionsManager.bind(aWindow);
