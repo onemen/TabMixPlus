@@ -682,12 +682,12 @@ var TabmixConvertSession = {
       var _windows = [], tabsCount = 0;
       var sessionEnum = TabmixSessionManager.initContainer(aPath).GetElements();
       while (sessionEnum.hasMoreElements()) {
-         var rdfNodeWindow = sessionEnum.getNext();
+         let rdfNodeWindow = sessionEnum.getNext();
          if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
-            var windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
+            let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
             if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
                continue;
-            var aWindowState = this.getWindowState(rdfNodeWindow);
+            let aWindowState = this.getWindowState(rdfNodeWindow);
             if (aWindowState) {// don't save empty windows
                _windows.push(aWindowState);
                tabsCount += aWindowState.tabs.length;
@@ -712,12 +712,24 @@ var TabmixConvertSession = {
 
       // save panorama data if exist
       let extData = {};
-      let emptyGroup = TabmixSvc.JSON.stringify({})
-      extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
-      extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
-      extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
-      extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
-      state.extData = extData;
+      function setExtData(id) {
+         let data = TabmixSessionManager.getLiteralValue(rdfNodeWindow, id, null);
+         if (data)
+            extData[id] = data;
+      }
+      let tabview = ["tabview-groups", "tabview-group", "tabview-ui"];
+      tabview.forEach(setExtData);
+      // only save tabview-visibility if tabview-groups exist
+      if (extData["tabview-groups"])
+         setExtData("tabview-visibility");
+
+      // save TabGroupsManagerAllGroupsData
+      let jsonText = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tgm_jsonText");
+      if (jsonText)
+         extData.TabGroupsManagerAllGroupsData = TabmixSessionManager.getDecodedLiteralValue(null, jsonText);
+
+      if (Object.keys(extData).length)
+         state.extData = extData;
       return state;
    },
 
@@ -748,9 +760,9 @@ var TabmixConvertSession = {
       var _tabs = [];
       var tabsEnum = TabmixSessionManager.initContainer(rdfNodeTabs).GetElements();
       while (tabsEnum.hasMoreElements()) {
-         var rdfNodeTab = tabsEnum.getNext();
+         let rdfNodeTab = tabsEnum.getNext();
          if (rdfNodeTab instanceof Ci.nsIRDFResource) {
-            var closedTab = {};
+            let closedTab = {};
             closedTab.state = this.getTabState(rdfNodeTab, true);
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
@@ -763,7 +775,7 @@ var TabmixConvertSession = {
    },
 
    getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
-      var tabData = {entries:[], index: 0, zoom: 1, disallow:"", extData: null, text:""};
+      var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
       tabData.index = TabmixSessionManager.getIntValue(rdfNodeTab, "index") + 1;
       tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
@@ -773,7 +785,7 @@ var TabmixConvertSession = {
       var booleanAttrLength = TabmixSessionData.tabAttribute.length + TabmixSessionData.docShellItems.length;
       var tabProperties = properties.substr(0, booleanAttrLength);
       var disallow = [];
-      for (var j = 0; j < tabAttribute.length; j++ ) {
+      for (let j = 0; j < tabAttribute.length; j++) {
          if (tabProperties.charAt(j+2) != "1")
             disallow.push(tabAttribute[j]);
       }
@@ -784,22 +796,58 @@ var TabmixConvertSession = {
       if (properties.indexOf("_locked=") == -1)
          tabData.attributes["_locked"] = (tabProperties.charAt(1) == "1");
 
+      var extData = {};
       if (properties.length > booleanAttrLength) {
-         properties = properties.substr(booleanAttrLength + 1).split(" ");
-         properties.forEach(function(aAttr) {
-           if (/^([^\s=]+)=(.*)/.test(aAttr)) {
-             tabData.attributes[RegExp.$1] = RegExp.$2;
-           }
-         });
+        // TST add data to our properties with "|" separator
+        let TSTProps = properties.split('|');
+        properties = TSTProps.shift();
+        let PREFIX = "tmp-session-data-";
+        TSTProps.forEach(function(aProp) {
+          if (/^([^\s=]+)=(.*)/.test(aProp) &&
+              RegExp.$1.indexOf(PREFIX) == 0 && RegExp.$2)
+            extData[RegExp.$1.substr(PREFIX.length)] = decodeURIComponent(RegExp.$2);
+        });
+        properties = properties.substr(booleanAttrLength + 1).split(" ");
+        properties.forEach(function(aAttr) {
+          aAttr = TabmixSessionManager.getDecodedLiteralValue(null, aAttr);
+          if (!/^([^\s=]+)=(.*)/.test(aAttr))
+            return;
+          let isTrue = RegExp.$2 == "true";
+          switch (RegExp.$1) {
+            case "tabgroups-data":
+              // TGM data
+              let [groupId, groupName] = RegExp.$2.split(" ");
+              extData.TabGroupsManagerGroupId = groupId;
+              extData.TabGroupsManagerGroupName = groupName;
+              break;
+            case "faviconized":
+              if (isTrue)
+                extData.faviconized = true;
+            case "pinned":
+            case "hidden":
+              if (isTrue)
+                tabData[RegExp.$1] = true;
+              break;
+            // colorfulTabs data
+            case "ctreadonly":
+              extData.ctreadonly = RegExp.$2;
+              break;
+            case "tabClr":
+              extData.tabClr = RegExp.$2;
+              break;
+            default:
+              tabData.attributes[RegExp.$1] = RegExp.$2;
+          }
+        });
       }
       // save panorama data if exist
       if (!aClosedTab) {
         let data = TabmixSessionManager.getLiteralValue(rdfNodeTab, "tabview-tab");
-        if (data != "") {
-          tabData.extData = {};
-          tabData.extData["tabview-tab"] = data;
-        }
+        if (data != "")
+          extData["tabview-tab"] = data;
       }
+      if (Object.keys(extData).length)
+        tabData.extData = extData;
       return tabData;
    },
 
@@ -809,9 +857,9 @@ var TabmixConvertSession = {
       var historyData = tmpData.join("|-|").split(sep);
       var historyCount = historyData.length/3;
       var entries = [];
-      for ( var i = 0; i < historyCount; i++ ){
-         var entry = { url:"", children:[], ID: 0};
-         var index = i * 3;
+      for (let i = 0; i < historyCount; i++) {
+         let entry = { url:"", children:[], ID: 0};
+         let index = i * 3;
          entry.url = historyData[index + 1];
          entry.title = historyData[index];
          entry.scroll = historyData[index + 2];

@@ -1023,9 +1023,11 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
        try {
          // we defined lazy gette for _decode to import from Decode.jsm module
          decodedString = this._decode.unescape(encodedString);
-       } catch (err) {
-         Components.utils.reportError("Tabmix is unable to decode " + key + " from "
-               + node.QueryInterface(Ci.nsIRDFResource).Value + "\n" + err);
+       } catch (ex) {
+         let msg = "Tabmix is unable to decode " + key; + " from ";
+         if (node)
+            msg += " from " + node.QueryInterface(Ci.nsIRDFResource).Value;
+         Components.utils.reportError(msg + "\n" + ex);
          return "";
        }
        if (node && key) {
