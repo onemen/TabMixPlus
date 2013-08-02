@@ -611,13 +611,11 @@ var TabmixConvertSession = {
    },
 
    startup: function cs_startup() {
-      if (TabmixSvc.sm.converted)
+      if (Tabmix.firstWindowInSession)
         return;
 
       if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
         return;
-
-      TabmixSvc.sm.converted = true;
 
       var sessions = TabmixSessionManager.getSessionList();
       if (!sessions)
