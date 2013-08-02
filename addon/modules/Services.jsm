@@ -97,6 +97,7 @@ let TabmixSvc = {
   },
 
   windowStartup: {
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
     _initialized: false,
     init: function(aWindow) {
       // windowStartup must only be called once for each window
@@ -106,6 +107,18 @@ let TabmixSvc = {
       if (this._initialized)
         return;
       this._initialized = true;
+
+      Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
+    },
+
+    observe: function(aSubject, aTopic, aData) {
+      switch (aTopic) {
+        case "browser-delayed-startup-finished":
+          try {
+            aSubject.TMP_eventListener.browserDelayedStartupFinished();
+          } catch (ex) {log.assert(ex);}
+          break;
+      }
     }
   },
 
@@ -153,3 +166,6 @@ XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessio
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "log",
+  "resource://tabmixplus/log.jsm");

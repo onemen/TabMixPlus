@@ -195,23 +195,15 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
-    Services.obs.addObserver(this, "browser-delayed-startup-finished", false);
     window.addEventListener("DOMContentLoaded", this, false);
   },
 
-  observe: function TMP_EL_observe(aSubject, aTopic, aData) {
-    switch (aTopic) {
-      case "browser-delayed-startup-finished":
-        Services.obs.removeObserver(this, "browser-delayed-startup-finished");
-        try {
-          // master password dialog can popup before startup when Gmail-manager try to login
-          // it can cause load event to fire late, so we get here before onWindowOpen run
-          if (!TMP_eventListener._windowInitialized)
-            TMP_eventListener.onWindowOpen();
-          Tabmix.delayedStartup();
-        } catch (ex) {Tabmix.assert(ex);}
-        break;
-    }
+  browserDelayedStartupFinished: function TMP_EL_browserDelayedStartupFinished() {
+    // master password dialog can popup before startup when Gmail-manager try to login
+    // it can cause load event to fire late, so we get here before onWindowOpen run
+    if (!TMP_eventListener._windowInitialized)
+      TMP_eventListener.onWindowOpen();
+    Tabmix.delayedStartup();
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
