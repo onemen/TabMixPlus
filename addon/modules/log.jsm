@@ -3,7 +3,8 @@
 var EXPORTED_SYMBOLS = ["log"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
-Components.utils.import("resource://tabmixplus/Services.jsm");
+
+Cu.import("resource://tabmixplus/Services.jsm");
 
 let log = {
   getObject: function(aWindow, aMethod) {

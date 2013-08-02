@@ -2,8 +2,10 @@
 
 var EXPORTED_SYMBOLS = ["TabmixSvc"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 let TabmixSvc = {
   _version: {},
@@ -108,9 +110,6 @@ let TabmixSvc = {
     private: true
   }
 }
-
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);

@@ -2,11 +2,10 @@
 
 var EXPORTED_SYMBOLS = ["MergeWindows"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Components.utils.import("resource://gre/modules/Services.jsm");
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://tabmixplus/Services.jsm");
 
 /*////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//

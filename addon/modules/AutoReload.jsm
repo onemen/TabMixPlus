@@ -2,10 +2,9 @@
 
 var EXPORTED_SYMBOLS = ["AutoReload"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://tabmixplus/Services.jsm");
 
 let AutoReload = {
   init: function() {
