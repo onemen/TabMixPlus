@@ -455,13 +455,15 @@ var TabmixSessionManager = {
          if (Tabmix.isWindowAfterSessionRestore)
             setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
          else {
-           // hide extra tab that was opened by SessionStore if last session
+           // remove extra tab that was opened by SessionStore if last session
            // contained pinned tab(s).
            let tab = gBrowser.tabs[0];
            if (Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
               this.resetTab(tab);
-              if (!tab.selected)
-                 gBrowser.removeTab(tab);
+              gBrowser.removeTab(tab);
+              try {
+                 TabmixSvc.ss.forgetClosedTab(window, 0);
+              } catch(ex) {}
            }
            if (TabmixSvc.sm.crashed && this.enableBackup)
               this.openAfterCrash(TabmixSvc.sm.status);
