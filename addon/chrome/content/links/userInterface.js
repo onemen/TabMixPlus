@@ -19,7 +19,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     var filetypeWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt-filetype");
     var promptWin = windowMediator.getMostRecentWindow("mozilla:tabmixprompt");
 
-    if (panel > -1 && !appearanceWin && !filetypeWin && !promptWin)
+    if (panel && !appearanceWin && !filetypeWin && !promptWin)
       tabmixOptionsWin.showPane(panel);
 
     tabmixOptionsWin.gIncompatiblePane.checkForIncompatible(false);
@@ -27,11 +27,8 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
   }
   else {
-    if(panel > -1)
-      Tabmix.prefs.setIntPref("selected_tab", panel);
-
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
-        "chrome,titlebar,toolbar,close,dialog=no,centerscreen");
+        "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
 }
 

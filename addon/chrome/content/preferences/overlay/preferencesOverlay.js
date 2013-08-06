@@ -105,7 +105,7 @@ var gTabMix_preferencesOverlay = {
          Services.prompt.alert(window, title, msg);
       }
       else
-         browserWindow.Tabmix.openOptionsDialog(panel == null ? -1 : panel);
+         browserWindow.Tabmix.openOptionsDialog(panel);
    },
 
 /* ........ panePrivacy .............. */
@@ -132,7 +132,7 @@ var gTabMix_preferencesOverlay = {
      button = document.createElement("button");
      button.id = "tabmixSessionManager";
      button.setAttribute("label", tabmixButton_label);
-     button.setAttribute("oncommand", "gTabMix_preferencesOverlay.showTabmixOptions(5);");
+     button.setAttribute("oncommand", "gTabMix_preferencesOverlay.showTabmixOptions('paneSession');");
      button.setAttribute("class", "tabmixplus-button");
      var menuList = document.getElementById("browserStartupPage");
      var hBox = menuList.parentNode;

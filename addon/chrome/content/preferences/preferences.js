@@ -436,11 +436,11 @@ function loadData (pattern) {
 }
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened
-function showPane(paneToLoad) {
+function showPane(paneID) {
   let docElt = document.documentElement;
-  paneToLoad = paneToLoad > -1 ?
-    document.getElementsByTagName("prefpane")[paneToLoad] :
-    $(docElt.lastSelected);
+  let paneToLoad = document.getElementById(paneID);
+  if(!paneToLoad || paneToLoad.nodeName != "prefpane")
+    paneToLoad = $(docElt.lastSelected);
   docElt.showPane(paneToLoad);
 }
 

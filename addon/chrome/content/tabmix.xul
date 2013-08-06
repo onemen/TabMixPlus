@@ -56,7 +56,7 @@
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
       <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"
-         oncommand="Tabmix.openOptionsDialog(-1);"/>
+         oncommand="Tabmix.openOptionsDialog();"/>
       <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
          <menupopup id="tm-sessionmanager_menu"
                   context="tm_sessionmanagerContextMenu"
@@ -64,7 +64,7 @@
                   oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
                   onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
             <menuitem label="&settings.label;…" tmp_iconic="menuitem-iconic tabmix-menu-icon"
-                  oncommand="Tabmix.openOptionsDialog(5); event.stopPropagation();"/>
+                  oncommand="Tabmix.openOptionsDialog('paneSession'); event.stopPropagation();"/>
             <menuseparator/>
             <menu id="tm-sm-closedwindows2" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
                <menupopup id="tm-sm-closedwindows_menu2"
@@ -199,7 +199,7 @@
                   oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
                   onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
             <menuitem id="btn-sm-settings" label="&settings.label;…" tmp_iconic="menuitem-iconic"
-                  oncommand="Tabmix.openOptionsDialog(5); event.stopPropagation();"/>
+                  oncommand="Tabmix.openOptionsDialog('paneSession'); event.stopPropagation();"/>
             <menuseparator/>
             <menu id="tm-sm-closedwindows1" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
                <menupopup id="tm-sm-closedwindows_menu1"
