@@ -131,7 +131,7 @@
          else dialogParams.SetString(5, document.getElementById("tm_textbox").value);
       }
       // if we are not a modal use a callback function
-      if ("_callBackFunction" in window) {
+      if (typeof window._callBackFunction == "function") {
         if (window.opener && !window.opener.closed) {
           let returnData  = {button: dialogParams.GetInt(4),
                              checked: (dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED),
