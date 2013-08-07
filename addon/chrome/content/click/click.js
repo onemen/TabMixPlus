@@ -941,6 +941,9 @@ var TabmixAllTabs = {
   },
 
   _setMenuitemAttributes: function TMP__setMenuitemAttributes(aMenuitem, aTab) {
+    if (!aMenuitem)
+      return
+
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
     aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
 
