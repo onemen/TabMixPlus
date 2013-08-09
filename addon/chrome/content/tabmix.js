@@ -88,18 +88,25 @@ Tabmix.sessionInitialized = function() {
       ).toCode();
     }
 
-    Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
-      'ss.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession'
-    ).toCode();
+    if (Tabmix.isVersion(260))
+      SessionStore.canRestoreLastSession = false;
+    else {
+      Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
+        'function updateSearchEngine',
+        'let updateSearchEngine = function _updateSearchEngine', {silent: true}
+      )._replace(
+        'ss.canRestoreLastSession',
+        'TabmixSessionManager.canRestoreLastSession'
+      ).toCode();
 
-    let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
-                                                [window, "window.BrowserOnClick"];
-    Tabmix.changeCode(obj, FnName)._replace(
-      'if (ss.canRestoreLastSession)',
-      'ss = TabmixSessionManager;\
-       $&'
-    ).toCode();
+      let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
+                                                  [window, "window.BrowserOnClick"];
+      Tabmix.changeCode(obj, FnName)._replace(
+        'if (ss.canRestoreLastSession)',
+        'ss = TabmixSessionManager;\
+         $&'
+      ).toCode();
+    }
   }
 
   var tab = gBrowser.tabContainer.firstChild;
