@@ -487,25 +487,37 @@ var tablib = {
      * we don't check isUrlForDownload for external links,
      * it is not likely that link in other application opened Firefox for downloading data
      */
-    var _openURI = Tabmix.changeCode(nsBrowserAccess.prototype, "nsBrowserAccess.prototype.openURI");
+    let fnObj = nsBrowserAccess.prototype, fnName, arg;
+    [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
+                                            ["openURI", "isExternal"];
+    var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
     _openURI = _openURI._replace(
-      'win.gBrowser.getBrowserForTab(tab);',
-      '  $&' +
-      '  if (currentIsBlank && aURI) {' +
-      '    let loadflags = isExternal ?' +
-      '        Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
-      '        Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
-      '    browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);' +
-      '  }'
-    )._replace(
-      'if (isExternal && (!aURI || aURI.spec == "about:blank")) {',
+      'if (#1 && (!aURI || aURI.spec == "about:blank")) {'.replace("#1", arg),
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
        $&'
     )._replace(
       'win.BrowserOpenTab()',
       'if (currentIsBlank) tablib.setURLBarFocus(); \
       else $&'
+    )._replace(
+      'win.gBrowser.loadOneTab',
+      'currentIsBlank ? win.gBrowser.mCurrentTab : $&'
+    )._replace(
+      'win.gBrowser.getBrowserForTab(tab);',
+      '$&' +
+      'if (currentIsBlank && aURI) {' +
+      '  let loadflags = #1 ?'.replace("#1", arg) +
+      '      Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
+      '      Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
+      '  browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);' +
+      '  browser.focus();' +
+      '}'
     );
+
+    if (Tabmix.isVersion(260)) {
+      _openURI.toCode();
+      _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype.openURI");
+    }
 
     _openURI = _openURI._replace(
       'switch (aWhere) {',
@@ -521,20 +533,12 @@ var tablib = {
       '      }' +
       '  }' +
       '  $&'
-    )._replace(
-      'win.gBrowser.loadOneTab',
-      'currentIsBlank ? win.gBrowser.mCurrentTab : $&'
-    )._replace(
-      'if (needToFocusWin',
-      'if (currentIsBlank && !loadInBackground) \
-         win.focus();\
-       $&'
     );
     _openURI.toCode();
 
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    let [fnObj, fnName] = TMP_Places.getXnotifierFunction("openNewTabWith");
+    [fnObj, fnName] = TMP_Places.getXnotifierFunction("openNewTabWith");
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.changeCode(fnObj, fnName)._replace(
