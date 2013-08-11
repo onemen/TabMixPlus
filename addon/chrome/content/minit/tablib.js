@@ -354,6 +354,8 @@ var tablib = {
         '  $&'
       ).toCode();
 
+      // _expandSpacerBy not exsit in Firefox 21
+      if (typeof tabBar._expandSpacerBy == "function")
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
         '{',
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
