@@ -68,7 +68,7 @@
 <!ENTITY middlecurrent.tooltip "Only for bookmarks, history, links forced to open in new tab">
 <!ENTITY tabFocus.caption "Focus/Select tabs that open from:">
 <!ENTITY selectTab.label "Links">
-<!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectDivertedTab1.label "Other applications">
 <!ENTITY selectTabCommand.label "New tab commands">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bookmarks/History">

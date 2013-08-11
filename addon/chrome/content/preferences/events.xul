@@ -210,7 +210,7 @@
                 <!-- select Links -->
                 <checkbox_tmp id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
                 <!-- Select Diverted Windows -->
-                <checkbox_tmp id="selectDivertedTab" label="&selectDivertedTab.label;"
+                <checkbox_tmp id="selectDivertedTab" label="&selectDivertedTab1.label;"
                           preference="pref_selectDivertedTab"/>
                 <!-- new tab commands -->
                 <checkbox_tmp id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>

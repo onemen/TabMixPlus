@@ -500,6 +500,10 @@ var tablib = {
       'if (currentIsBlank) tablib.setURLBarFocus(); \
       else $&'
     )._replace(
+      '.loadDivertedInBackground"',
+      '." + (#1 ? "loadDivertedInBackground" : "loadInBackground")'.replace("#1", arg),
+      {check: Tabmix.isVersion(260)}
+    )._replace(
       'win.gBrowser.loadOneTab',
       'currentIsBlank ? win.gBrowser.mCurrentTab : $&'
     )._replace(
@@ -519,7 +523,7 @@ var tablib = {
       _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype.openURI");
     }
 
-    _openURI = _openURI._replace(
+    _openURI._replace(
       'switch (aWhere) {',
       '  if (Tabmix.singleWindowMode &&' +
       '      aWhere == Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW) {' +
@@ -533,8 +537,10 @@ var tablib = {
       '      }' +
       '  }' +
       '  $&'
-    );
-    _openURI.toCode();
+    )._replace(
+      '.loadDivertedInBackground"',
+      '." + (isExternal ? "loadDivertedInBackground" : "loadInBackground")', {flags: "g"}
+    ).toCode();
 
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
