@@ -3,10 +3,12 @@
 // prevent Sage from load pages in locked tabs
 // code by onemen
 
-// last updated for sage version 1.4.9 - 2011-01-09
+// last updated for sage version 1.5.2 - 2013-08-12
 var TMP_Sage = {
    OPEN_TAB_FOR_SAGE:"extensions.tabmix.opentabfor.sage",
    init: function () {
+      TMP_Places.contextMenu.toggleEventListener(true);
+
       Tabmix.changeCode(window, "updateItemContextMenu")._replace(
          'readStateController.onCommandUpdate();',
          '$& TMP_Sage.buildContextMenu();'
@@ -50,7 +52,7 @@ var TMP_Sage = {
       var _open = document.getElementById("rssOpenItem");
       var _openInWindow = document.getElementById("rssOpenNewWindowItem");
       var _openInTab = document.getElementById("rssOpenNewTabItem");
-      TMP_Places.updateContextMenu(_open, _openInWindow, _openInTab, this.openTabPref);
+      TMP_Places.contextMenu.update(_open, _openInWindow, _openInTab, this.openTabPref);
    },
 
    get openTabPref() {

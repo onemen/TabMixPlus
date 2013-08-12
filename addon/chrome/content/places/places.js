@@ -25,14 +25,7 @@ var TMP_Places = {
 
    init: function TMP_PC_init() {
       this.initPlacesUIUtils();
-      PlacesController.prototype.beforeTabMixPLusBuildContextMenu = PlacesController.prototype.buildContextMenu;
-      PlacesController.prototype.buildContextMenu = function(aPopup) {
-         var anyVisible = this.beforeTabMixPLusBuildContextMenu(aPopup);
-         if (anyVisible)
-            TMP_Places.buildContextMenu();
-
-         return(anyVisible);
-      }
+      this.contextMenu.toggleEventListener(true);
 
       // use tab label for bookmark name when user renamed the tab
       // PlacesCommandHook exist on browser window
@@ -269,9 +262,6 @@ var TMP_Places = {
         }
       }
 
-      PlacesController.prototype.buildContextMenu = PlacesController.prototype.beforeTabMixPLusBuildContextMenu;
-      PlacesController.prototype.beforeTabMixPLusBuildContextMenu = null;
-
       this.stopObserver();
    },
 
@@ -291,44 +281,6 @@ var TMP_Places = {
     }
     return [window, aName];
   },
-
-   buildContextMenu: function TMP_PC_buildContextMenu() {
-      var _open = document.getElementById("placesContext_open");
-      var _openInWindow = document.getElementById("placesContext_open:newwindow");
-      var _openInTab = document.getElementById("placesContext_open:newtab");
-      this.updateContextMenu(_open, _openInWindow, _openInTab, this.getPrefByDocumentURI(window));
-   },
-
-   // update context menu for bookmarks manager and sidebar
-   // for bookmarks/places, history, sage and more.....
-   updateContextMenu: function TMP_updateContextMenu(open, openInWindow, openInTab, pref) {
-     // if all 3 was hidden ... probably "Open all in Tabs" is visible
-     if (open.hidden && openInWindow.hidden && openInTab.hidden)
-       return;
-
-     var w = Tabmix.getTopWin();
-     if (w) {
-       var where = w.Tabmix.whereToOpen(pref);
-
-       if (!openInWindow.hidden && w.Tabmix.singleWindowMode)
-         openInWindow.hidden = true;
-       else if (openInWindow.hasAttribute("default"))
-         openInWindow.removeAttribute("default");
-
-       Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
-
-       if (open.hidden != where.lock)
-         open.hidden = where.lock;
-       if (!open.hidden)
-         Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
-     }
-     else {
-       open.hidden = true;
-       openInTab.hidden = true;
-       openInWindow.hidden = false;
-       openInWindow.setAttribute("default", true);
-     }
-   },
 
    historyMenuItemsTitle: function TMP_PC_historyMenuItemsTitle(aEvent) {
       if (!this._titlefrombookmark)
@@ -814,4 +766,61 @@ var TMP_Places = {
 
   onItemVisited: function () {},
   onItemMoved: function () {}
+}
+
+TMP_Places.contextMenu = {
+  toggleEventListener: function(enable) {
+    var eventListener = enable ? "addEventListener" : "removeEventListener";
+    window[eventListener]("unload", this, false);
+    document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
+  },
+
+  handleEvent: function (aEvent) {
+    switch (aEvent.type) {
+      case "popupshowing":
+        this.buildContextMenu();
+        break;
+      case "unload":
+        this.toggleEventListener(false);
+        break;
+    }
+  },
+
+  buildContextMenu: function TMP_PC_buildContextMenu() {
+    var _open = document.getElementById("placesContext_open");
+    var _openInWindow = document.getElementById("placesContext_open:newwindow");
+    var _openInTab = document.getElementById("placesContext_open:newtab");
+    this.update(_open, _openInWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
+  },
+
+  // update context menu for bookmarks manager and sidebar
+  // for bookmarks/places, history, sage and more.....
+  update: function TMP_contextMenu_update(open, openInWindow, openInTab, pref) {
+    // if all 3 was hidden ... probably "Open all in Tabs" is visible
+    if (open.hidden && openInWindow.hidden && openInTab.hidden)
+      return;
+
+    var w = Tabmix.getTopWin();
+    if (w) {
+      var where = w.Tabmix.whereToOpen(pref);
+
+      if (!openInWindow.hidden && w.Tabmix.singleWindowMode)
+        openInWindow.hidden = true;
+      else if (openInWindow.hasAttribute("default"))
+        openInWindow.removeAttribute("default");
+
+      Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
+
+      if (open.hidden != where.lock)
+        open.hidden = where.lock;
+      if (!open.hidden)
+        Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
+    }
+    else {
+      open.hidden = true;
+      openInTab.hidden = true;
+      openInWindow.hidden = false;
+      openInWindow.setAttribute("default", true);
+    }
+  }
 }

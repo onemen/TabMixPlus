@@ -63,6 +63,7 @@ overlay   chrome://browser/content/preferences/sanitize.xul         chrome://tab
 overlay   chrome://browser/content/sanitize.xul                     chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
 
 overlay   chrome://sage/content/sage.xul                            chrome://tabmixplus/content/extensions/sage.xul
+overlay   chrome://sage/content/sidebar.xul                         chrome://tabmixplus/content/extensions/sage.xul
 overlay   chrome://wizzrss/content/wizzrss.xul                      chrome://tabmixplus/content/extensions/wizzrss.xul
 overlay   chrome://wizzrss/content/feedster.xul                     chrome://tabmixplus/content/extensions/wizzrss.xul
 
