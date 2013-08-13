@@ -481,13 +481,15 @@ var gTMPprefObserver = {
   init: function() {
     Tabmix.prefs.clearUserPref("setDefault");
     Tabmix.prefs.clearUserPref("PrefObserver.error")
-    if (Tabmix.isVersion(120)) {
-      this.OBSERVING.push("browser.tabs.onTop");
-      if (!Tabmix.isVersion(130))
-        this.OBSERVING.push("browser.newtab.url");
-    }
-    if (!Tabmix.isVersion(230))
-      this.OBSERVING.push("browser.tabs.autoHide");
+
+    let addObserver = function(pref, condition) {
+      if (condition)
+        this.OBSERVING.push(pref);
+    }.bind(this);
+    addObserver("browser.tabs.onTop",     Tabmix.isVersion(120));
+    addObserver("browser.newtab.url",    !Tabmix.isVersion(130));
+    addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
+    addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
 
     try {
       // add Observer
@@ -506,7 +508,6 @@ var gTMPprefObserver = {
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
               "browser.sessionstore.max_tabs_undo",
-              "browser.warnOnRestart",
               "browser.warnOnQuit",
               "browser.sessionstore.resume_from_crash",
               "browser.startup.page",

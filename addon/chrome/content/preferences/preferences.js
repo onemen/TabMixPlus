@@ -303,8 +303,11 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
   "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
   "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
-  "browser.tabs.warnOnClose","browser.warnOnQuit","browser.warnOnRestart",
+  "browser.tabs.warnOnClose","browser.warnOnQuit",
   "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
+
+  if (!Tabmix.isVersion(200))
+    otherPrefs.push("browser.warnOnRestart");
 
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
