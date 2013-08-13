@@ -189,9 +189,7 @@ var tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
-      'var url = this.currentURI.spec; \
-       if (TMP_Places.isUserRenameTab(this.mCurrentTab, url)) docTitle = this.mCurrentTab.getAttribute("fixed-label"); \
-       else docTitle = TMP_Places.getTitleFromBookmark(url, docTitle, null, this.mCurrentTab); \
+      'docTitle = TMP_Places.getTabTitle(this.getTabForBrowser(aBrowser), aBrowser.currentURI.spec, docTitle);\
        $&'
     ).toCode();
 
