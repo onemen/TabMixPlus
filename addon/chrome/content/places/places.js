@@ -549,12 +549,12 @@ var TMP_Places = {
     if (!this._titlefrombookmark || !aUrl)
       return aTitle;
 
-    var url = aUrl.split("#")[0];
-    var title = this.getBookmarkTitle(url, aItemId, aTab);
+    var title = this.getBookmarkTitle(aUrl, aItemId, aTab);
     if (title)
       return title;
-    if (url != aUrl)
-      title = this.getBookmarkTitle(aUrl, aItemId, aTab);
+
+    if (aUrl.indexOf("#") > -1)
+      title = this.getBookmarkTitle(aUrl.split("#")[0], aItemId, aTab);
 
     var ieTab = "gIeTab" in window;
     if (title || !ieTab)
