@@ -19,10 +19,13 @@ let RenameTab = {
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
     var browser = gBrowser.getBrowserForTab(aTab);
+    let docTitle = aTab.hasAttribute("pending") ?
+          this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
+          browser.contentDocument.title;
     this.data.url = browser.currentURI.spec;
-    var title = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
-        browser.contentDocument.title, null, aTab);
-    this.data.docTitle = title || gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+    docTitle = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
+        docTitle, null, aTab);
+    this.data.docTitle = docTitle || gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
     this.data.modified = aTab.getAttribute("label-uri") || null;
     if (this.data.modified == this.data.url || this.data.modified == "*")
       this.data.value = aTab.getAttribute("fixed-label");
