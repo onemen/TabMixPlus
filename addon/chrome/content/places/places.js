@@ -501,26 +501,23 @@ var TMP_Places = {
     return title;
   },
 
-   getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aItemId, aTab) {
+   getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aTab, aID) {
       if (aTab)
-        aItemId = aTab.getAttribute("tabmix_bookmarkId");
+        aID.value = aTab.getAttribute("tabmix_bookmarkId");
+      let aItemId = aID.value || -1;
       try {
-         if (aItemId && aItemId > -1) {
+         if (aItemId > -1) {
            var _URI = PlacesUtils.bookmarks.getBookmarkURI(aItemId);
            if (_URI && _URI.spec == aUrl)
              return PlacesUtils.bookmarks.getItemTitle(aItemId);
          }
       } catch (ex) { }
       try {
-         aItemId = PlacesUtils.getMostRecentBookmarkForURI(Services.io.newURI(aUrl, null, null));
-         if (aItemId > -1) {
-           if (aTab)
-             aTab.setAttribute("tabmix_bookmarkId", aItemId);
+         let uri = Services.io.newURI(aUrl, null, null);
+         aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
+         if (aItemId > -1)
            return PlacesUtils.bookmarks.getItemTitle(aItemId);
-         }
       } catch (ex) { }
-      if (aTab && aTab.hasAttribute("tabmix_bookmarkId"))
-         aTab.removeAttribute("tabmix_bookmarkId");
       return null;
    },
 
@@ -535,7 +532,7 @@ var TMP_Places = {
 
       // use bookmark title if exist and used as tab title
       if (this._titlefrombookmark && tab.hasAttribute("tabmix_bookmarkId"))
-        return this.getBookmarkTitle(aURI.spec, null, tab);
+        return this.getBookmarkTitle(aURI.spec, tab, {});
 
       return null;
    },
@@ -549,27 +546,36 @@ var TMP_Places = {
     if (!this._titlefrombookmark || !aUrl)
       return aTitle;
 
-    var title = this.getBookmarkTitle(aUrl, aItemId, aTab);
-    if (title)
+    var title, oID = {value: aItemId};
+    var getTitle = function(url) {
+      title = this.getBookmarkTitle(url, aTab, oID);
+      if (title && aTab)
+        Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
       return title;
+    }.bind(this);
 
-    if (aUrl.indexOf("#") > -1)
-      title = this.getBookmarkTitle(aUrl.split("#")[0], aItemId, aTab);
+    function removebookmarkIdAtt() {
+      if (aTab && aTab.hasAttribute("tabmix_bookmarkId"))
+         aTab.removeAttribute("tabmix_bookmarkId");
+    }
 
-    var ieTab = "gIeTab" in window;
-    if (title || !ieTab)
-      return title || aTitle;
+    if (getTitle(aUrl) ||
+        aUrl.indexOf("#") > -1 && getTitle(aUrl.split("#")[0]))
+      return title;
 
     // IE Tab is installed try to find url with or without the prefix
     var ietab = "chrome://ietab/content/reloaded.html?url="
-    if (aUrl == ietab)
+    if (typeof window.gIeTab != "object" || aUrl == ietab) {
+      removebookmarkIdAtt();
       return aTitle;
-    if (aUrl.indexOf(ietab) == 0)
-      title = this.getBookmarkTitle(aUrl.replace(ietab, ""), aItemId, aTab);
-    else
-      title = this.getBookmarkTitle(ietab + aUrl, aItemId, aTab);
+    }
 
-    return title || aTitle;
+    let url = aUrl.indexOf(ietab) == 0 ? aUrl.replace(ietab, "") : ietab + aUrl;
+    if (getTitle(url))
+      return title;
+
+    removebookmarkIdAtt();
+    return aTitle;
   },
 
   isUserRenameTab: function (aTab, aUrl) {
