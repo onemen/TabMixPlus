@@ -49,6 +49,12 @@ var TMP_SessionStore = {
      return aData.entries[activeIndex] || {};
    },
 
+   getTitleFromTabState: function(aTab) {
+     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+     let activePageData = this.getActiveEntryData(tabData);
+     return activePageData.title || activePageData.url;
+   },
+
    /**
     * @brief       - Add attribute to nsSessionStore persistTabAttribute.
     *
