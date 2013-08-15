@@ -13,6 +13,8 @@
         return;
       gGrid.cells.forEach(function (cell) {
         let site = cell.site;
+        if (!site)
+          return;
         let url = site.url;
         let title = site.title || url;
         if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
