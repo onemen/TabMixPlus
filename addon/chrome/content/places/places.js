@@ -503,9 +503,7 @@ var TMP_Places = {
     return newTitle || title;
   },
 
-   getBookmarkTitle: function TMP_PC_getBookmarkTitle(aUrl, aTab, aID) {
-      if (aTab)
-        aID.value = aTab.getAttribute("tabmix_bookmarkId");
+   _getBookmarkTitle: function (aUrl, aID) {
       let aItemId = aID.value || -1;
       try {
          if (aItemId > -1) {
@@ -520,6 +518,7 @@ var TMP_Places = {
          if (aItemId > -1)
            return PlacesUtils.bookmarks.getItemTitle(aItemId);
       } catch (ex) { }
+      aID.value = null;
       return null;
    },
 
@@ -528,40 +527,37 @@ var TMP_Places = {
     return this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
   },
 
+  applyCallBackOnUrl: function (aUrl, aCallBack) {
+ ///XXX need to work with nsURI
+    let hasHref = aUrl.indexOf("#") > -1;
+    let result = aCallBack.apply(this, [aUrl]) ||
+                 hasHref && aCallBack.apply(this, aUrl.split("#"));
+    // when IE Tab is installed try to find url with or without the prefix
+    let ietab = Tabmix.extensions.gIeTab;
+    if (!result && ietab) {
+      let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url="
+      if (aUrl != prefix) {
+        let url = aUrl.indexOf(prefix) == 0 ?
+            aUrl.replace(prefix, "") : prefix + aUrl;
+        result = aCallBack.apply(this, [url]) ||
+                 hasHref && aCallBack.apply(this, url.split("#"));
+      }
+    }
+    return result;
+  },
+
   getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
     if (!this._titlefrombookmark || !aUrl)
       return aTitle;
 
-    var title, oID = {value: aItemId};
-    var getTitle = function(url) {
-      title = this.getBookmarkTitle(url, aTab, oID);
-      if (title && aTab)
-        Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
-      return title;
-    }.bind(this);
+    var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
+    var getTitle = function(url) this._getBookmarkTitle(url, oID);
+    var title = this.applyCallBackOnUrl(aUrl, getTitle);
+    // setItem check if aTab exist and remove the attribute if
+    // oID.value is null
+    Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
 
-    function removebookmarkIdAtt() {
-      if (aTab && aTab.hasAttribute("tabmix_bookmarkId"))
-         aTab.removeAttribute("tabmix_bookmarkId");
-    }
-
-    if (getTitle(aUrl) ||
-        aUrl.indexOf("#") > -1 && getTitle(aUrl.split("#")[0]))
-      return title;
-
-    // IE Tab is installed try to find url with or without the prefix
-    var ietab = "chrome://ietab/content/reloaded.html?url="
-    if (typeof window.gIeTab != "object" || aUrl == ietab) {
-      removebookmarkIdAtt();
-      return aTitle;
-    }
-
-    let url = aUrl.indexOf(ietab) == 0 ? aUrl.replace(ietab, "") : ietab + aUrl;
-    if (getTitle(url))
-      return title;
-
-    removebookmarkIdAtt();
-    return aTitle;
+    return title || aTitle;
   },
 
   isUserRenameTab: function (aTab, aUrl) {
@@ -674,13 +670,12 @@ var TMP_Places = {
     else if (!Array.isArray(aItemId))
       [aItemId, aUrl] = [[aItemId], [aUrl]];
 
+    let getIndex = function(url) aUrl.indexOf(url) + 1;
     Array.forEach(gBrowser.tabs, function(tab) {
       let url = tab.linkedBrowser.currentURI.spec;
-      let index = aUrl.indexOf(url);
-      if (index == -1 && url.indexOf("#") > -1)
-        index = aUrl.indexOf(url.split("#")[0]);
-      if (index > -1 && !this.isUserRenameTab(tab, url)) {
-        tab.setAttribute("tabmix_bookmarkId", aItemId[index]);
+      let index = this.applyCallBackOnUrl(url, getIndex);
+      if (index && !this.isUserRenameTab(tab, url)) {
+        tab.setAttribute("tabmix_bookmarkId", aItemId[index-1]);
         this.setTabTitle(tab, url);
       }
     }, this);
@@ -697,10 +692,14 @@ var TMP_Places = {
     Array.slice(tabs).forEach(function(tab) {
       if (!batch ||
           aItemId.indexOf(parseInt(tab.getAttribute(ID)))) {
-        if (!this.isUserRenameTab(tab, tab.linkedBrowser.currentURI.spec))
-          gBrowser.setTabTitle(tab);
-        else if (aRemoved)
-          tab.removeAttribute(ID);
+        tab.removeAttribute(ID);
+        let url = tab.linkedBrowser.currentURI.spec;
+        if (!this.isUserRenameTab(tab, url)) {
+          if (tab.hasAttribute("pending"))
+            this.setTabTitle(tab, url);
+          else
+            gBrowser.setTabTitle(tab);
+        }
       }
     }, this);
   },

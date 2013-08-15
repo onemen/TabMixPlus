@@ -188,10 +188,14 @@ var TabmixTabClickOptions = {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
           IeView.ieViewLaunch("Internet Explorer.lnk", href);
         }
-        else if (window.gIeTab && window.gIeTab.switchTabEngine) {
-          if (!aTab.selected)
-            gBrowser.selectedTab = aTab;
-          gIeTab.switchTabEngine(aTab, gIeTab.getBoolPref("ietab.alwaysNewTab", false));
+        else if (Tabmix.extensions.gIeTab) {
+          let ieTab = Tabmix.extensions.gIeTab;
+          let gIeTabObj = window[ieTab.obj];
+          if (typeof gIeTabObj.switchTabEngine == "function") {
+            if (!aTab.selected)
+              gBrowser.selectedTab = aTab;
+            gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
+          }
         }
         else if(window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
@@ -264,7 +268,7 @@ var TabmixContext = {
     $id("context_undoCloseTab").removeAttribute("command");
 
     // insret IE Tab menu-items before Bookmakrs menu-items
-    if ("gIeTab" in window) {
+    if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(

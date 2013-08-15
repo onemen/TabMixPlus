@@ -4,13 +4,13 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-  <script type="application/javascript" src="chrome://tabmixplus/content/places/places.js"/>
 
   <script type="application/javascript">
   <![CDATA[
     function updateTitle() {
       if (!gGrid.cells)
         return;
+      let win = Tabmix.getTopWin();
       gGrid.cells.forEach(function (cell) {
         let site = cell.site;
         if (!site)
@@ -18,7 +18,7 @@
         let url = site.url;
         let title = site.title || url;
         if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
-          title = TMP_Places.getTitleFromBookmark(url, title);
+          title = win.TMP_Places.getTitleFromBookmark(url, title);
         let tooltip = (title == url ? title : title + "\n" + url);
         let link = site._querySelector(".newtab-link");
         link.setAttribute("title", tooltip);

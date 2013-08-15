@@ -1833,7 +1833,7 @@ try { // user report about bug here ... ?
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab))
       this.blockedValues.push(12);
     var isIE = ("IeView" in window && window.IeView.ieViewLaunch) ||
-               ("gIeTab" in window && window.gIeTab.switchTabEngine) ||
+               (Tabmix.extensions.gIeTab && window[Tabmix.extensions.gIeTab.obj].switchTabEngine) ||
                ("ieview" in window && window.ieview.launch);
     if (!isIE)
       this.blockedValues.push(21);

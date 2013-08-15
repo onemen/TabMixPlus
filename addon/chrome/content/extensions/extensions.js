@@ -19,7 +19,8 @@ var TMP_extensionsCompatibility = {
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
-        verticalTabBar: false, ieTab2: false};
+        verticalTabBar: false, ieTab2: false,
+        gIeTab: false /* for ieTab and ieTab2 */};
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", function() {
@@ -183,6 +184,11 @@ var TMP_extensionsCompatibility = {
         /return;\n/, 'return null;\n'
       ).toCode();
     }
+
+    if (typeof window.gIeTab2 == "object")
+      Tabmix.extensions.gIeTab = {obj: "gIeTab2", folder: "ietab2"};
+    else if (typeof window.gIeTab == "object")
+      Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {

@@ -279,8 +279,8 @@ Tabmix.browserLoadURL = function TMP_BrowserLoadURL(theEvent, aPostData, altDisa
   var newTabPref = Tabmix.prefs.getBoolPref("opentabfor.urlbar");
   var theBGPref  = Tabmix.prefs.getBoolPref("loadUrlInBackground");
   var theURI = aUrl || gURLBar.value;
-  if ("gIeTab" in window)
-     theURI = gIeTab.getHandledURL(theURI, gURLBar.isModeIE);
+  if (Tabmix.extensions.gIeTab)
+     theURI = window[Tabmix.extensions.gIeTab.obj].getHandledURL(theURI, gURLBar.isModeIE);
 
   var middleClick = theEvent instanceof MouseEvent && (theEvent.button == 1 || theEvent.ctrlKey || theEvent.metaKey);
   if (middleClick) {
