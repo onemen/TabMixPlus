@@ -45,14 +45,6 @@ Tabmix.Sanitizer = {
         this.sanitize();
         return true;
       }
-
-      // History sanitize remove closed tab data from session restore
-      // we need to update closed tab button state
-      var _windows = Tabmix.windowEnumerator();
-      while (_windows.hasMoreElements()) {
-         _windows.getNext().TMP_ClosedTabs.setButtonDisableState();
-      }
-
       return false;
    },
 
@@ -372,6 +364,7 @@ var TabmixSessionManager = {
       obs.addObserver(this, "sessionstore-browser-state-restored", true);
       obs.addObserver(this, "quit-application-requested", true);
       obs.addObserver(this, "browser-lastwindow-close-requested", true);
+      obs.addObserver(this, "browser:purge-session-history", true);
       if (!Tabmix.isVersion(200)) {
         obs.addObserver(this, "private-browsing", true);
         obs.addObserver(this, "private-browsing-change-granted", true);
@@ -432,6 +425,7 @@ var TabmixSessionManager = {
          return;
       }
 
+      Tabmix.setItem("tmp_closedwindows", "disabled", this.enableManager);
       if (isFirstWindow) {
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
@@ -490,7 +484,7 @@ var TabmixSessionManager = {
          this.copyClosedTabsToRDF(this.gThisWin);
       }
       // initialize closed window list broadcaster
-      var disabled = this.enableManager ? this.isClosedWindowsEmpty() : TabmixSvc.ss.getClosedWindowCount() == 0;
+      var disabled = this.enableManager ? Tabmix.firstWindowInSession || this.isClosedWindowsEmpty() : TabmixSvc.ss.getClosedWindowCount() == 0;
       Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
       this.saveStateDelayed();
@@ -709,8 +703,6 @@ var TabmixSessionManager = {
    onWindowClose: function SM_onWindowClose(isLastWindow) {
     // check if we need to sanitize on exit without prompt to user
     try {
-      // if tryToSanitize is false and privacy.sanitize.promptOnSanitize is true
-      // we call Tabmix.Sanitizer.sanitize from Firefox Sanitizer
       var tabmixSanitized = isLastWindow &&
           Services.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") &&
           Tabmix.Sanitizer.tryToSanitize(true);
@@ -731,6 +723,7 @@ var TabmixSessionManager = {
       obs.removeObserver(this, "sessionstore-browser-state-restored");
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
+      obs.removeObserver(this, "browser:purge-session-history", true);
       if (!Tabmix.isVersion(200)) {
         obs.removeObserver(this, "private-browsing");
         obs.removeObserver(this, "private-browsing-change-granted");
@@ -1170,6 +1163,21 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             TMP_ClosedTabs.setButtonDisableState();
          case "browser-window-change-state":
             this.toggleRecentlyClosedWindowsButton();
+            break;
+         case "browser:purge-session-history": // catch sanitization
+            // curently we don't do anything on exit
+            // if user set privacy.clearOnShutdown.history
+            // we have an option not to save on exit
+            if (this.enableManager || this.enableBackup) {
+               // remove closed windows and tabs
+               this.deleteWinClosedtabs(this.gThisWin);
+               this.removeAllClosedWindows();
+               this.saveState();
+            }
+            setTimeout(function(){
+              TMP_ClosedTabs.setButtonDisableState();
+              this.toggleRecentlyClosedWindowsButton();
+            }.bind(this), 0);
             break;
          case "private-browsing-change-granted":
             // Whether we restore the session upon resume will be determined by the
@@ -1784,12 +1792,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          msg = TabmixSvc.getSMString("sm.removeAll.msg2");
          result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                         [title, msg, "", "", buttons]);
-         if (result.button == Tabmix.BUTTON_OK) {
-            var sessionContainer = this.initContainer(this.gSessionPath[0]);
-            this.deleteWithProp(sessionContainer, "status", "saved");
-            this.updateClosedWindowsMenu(true);
-            this.saveStateDelayed();
-         }
+         if (result.button == Tabmix.BUTTON_OK)
+           this.removeAllClosedWindows();
       }
    },
 
@@ -1812,6 +1816,16 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          if (!this.containerEmpty(this.gSessionPath[i])) this.deleteWithProp(container);
          if (!container.GetCount()) this.deleteNode(rdfNode);
       }
+   },
+
+   removeAllClosedWindows: function() {
+     var currenSession = this.gSessionPath[0];
+     if (!this.containerEmpty(currenSession)) {
+       let sessionContainer = this.initContainer(currenSession);
+       this.deleteWithProp(sessionContainer, "status", "saved");
+       this.updateClosedWindowsMenu(true);
+       this.saveStateDelayed();
+     }
    },
 
    deleteSession: function SM_deleteSession(nodLabel, prop, value) {

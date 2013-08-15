@@ -49,9 +49,6 @@ var gTabMix_preferencesOverlay = {
          case "paneTabs":
             this.loadOverlay();
          break;
-         case "panePrivacy":
-            this.onPanePrivacyLoad();
-         break;
          case "paneMain":
             this.onPaneMainLoad();
          break;
@@ -106,13 +103,6 @@ var gTabMix_preferencesOverlay = {
       }
       else
          browserWindow.Tabmix.openOptionsDialog(panel);
-   },
-
-/* ........ panePrivacy .............. */
-   onPanePrivacyLoad: function () {
-       var clearDataNow = document.getElementById("clearDataNow");
-       if (clearDataNow)
-          clearDataNow.setAttribute("oncommand", clearDataNow.getAttribute("oncommand") + " Tabmix.Sanitizer.tryToSanitize();");
    },
 
 /* ........ paneMain .............. */
