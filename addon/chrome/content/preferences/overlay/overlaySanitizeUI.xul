@@ -21,8 +21,7 @@
     Tabmix.setSanitizer._confirm = "&sanitizer.entry.confirm;";
     window.addEventListener("load", function TMP_onLoad_sanitizeOverlay(aEvent) {
       aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sanitizeOverlay, true);
-      Tabmix.setSanitizer.addSanitizeItem();
-      Tabmix.setSanitizer.addMenuItem();
+      Tabmix.setSanitizer.init();
     }, true);
    </script>
 
