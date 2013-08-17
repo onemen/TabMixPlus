@@ -586,22 +586,23 @@ var TMP_ClosedTabs = {
    },
 
    undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-      let tab, numberOfTabsToUndoClose = 1;
-      if (Number.isInteger(aIndex)) {
-        if (aIndex > this.count - 1)
-          return tab;
-      }
-      else if (Tabmix.isVersion(250))
-        numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
+      let numberOfTabsToUndoClose = 1;
+      let index = Number(aIndex);
+      if (isNaN(index)) {
+        index = 0;
+        if (Tabmix.isVersion(250))
+          numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
+      } else if (0 > index || index >= this.count)
+        return null;
 
+      let tab = null;
       if (numberOfTabsToUndoClose > 1)
         tab = this.SSS_restoerClosedTabs(numberOfTabsToUndoClose);
       else
-        tab = this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
+        tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
 
       // Reset the number of tabs closed last time to the default.
       gBrowser.setNumberOfTabsClosedLast(1);
-
       return tab;
    }
 
