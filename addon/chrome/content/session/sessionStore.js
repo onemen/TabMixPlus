@@ -373,7 +373,7 @@ var TMP_ClosedTabs = {
          }
          m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
          m.setAttribute("value", i);
-         m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + "); event.stopPropagation();");
+         m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + ");");
          m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
          if (i == 0)
             m.setAttribute("key", "key_undoCloseTab");
@@ -386,14 +386,14 @@ var TMP_ClosedTabs = {
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
       m.setAttribute("value", -1);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1); event.stopPropagation();");
+      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1);");
 
       // "Restore All Tabs"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "restoreAllClosedTabs");
       m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2); event.stopPropagation();");
+      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2);");
       return true;
    },
 
@@ -401,21 +401,18 @@ var TMP_ClosedTabs = {
       if (aEvent.button != 1)
          return;
 
-      aEvent.stopPropagation();
       var index = aEvent.originalTarget.value;
       if (index < 0)
          return;
 
-      var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
-      TMP_ClosedTabs.restoreTab(where, index);
-      var popup = aEvent.originalTarget.parentNode;
-      if (TMP_ClosedTabs.count > 0)
-         TMP_ClosedTabs.populateUndoSubmenu(popup);
-      else {
-         popup.hidePopup();
-         if (popup.parentNode.id != "btn_undoclose")
-            popup.parentNode.parentNode.hidePopup();
+      let deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
+      TMP_ClosedTabs.restoreTab(deleteItem ? "delete" : "tab", index);
+      if (deleteItem && TMP_ClosedTabs.count > 0) {
+        aEvent.stopPropagation();
+        TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
       }
+      else
+         closeMenus(aEvent.target);
    },
 
    addBookmarks: function ct_addBookmarks(index) {

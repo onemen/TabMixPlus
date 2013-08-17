@@ -153,9 +153,7 @@
          insertbefore="context-sep-stop">
         <menupopup id="tm-content-undoCloseList-menu" class="fix-bookmark-item"
           onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this);"
-          onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-          oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
-          onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+          onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </menu>
       <menuseparator id="tm-content-textSep" insertbefore="context-sep-undo"/>
       <menu id="tm-autoreload_menu" insertafter="context-reload"
@@ -168,7 +166,6 @@
     <toolbarpalette id="BrowserToolbarPalette">
       <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional"
               observes="tmp_undocloseButton"
-              oncommand="if (!TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
               onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
               onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
               ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
@@ -181,9 +178,7 @@
         <menupopup id="btn_undoclose_menu"
               context="tm_undocloseContextMenu"
               onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
-              onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-              oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
-              onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+              onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </toolbarbutton>
 
       <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true" class="toolbarbutton-1 chromeclass-toolbar-additional"
@@ -285,9 +280,7 @@
       <menupopup id="historyUndoPopup" class="fix-bookmark-item"
               context="tm_undocloseContextMenu"
               onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
-              onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-              oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
-              onclick="TMP_ClosedTabs.checkForMiddleClick(event); event.stopPropagation();"/>
+              onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
     </menu>
 
     <popupset id="mainPopupSet">
