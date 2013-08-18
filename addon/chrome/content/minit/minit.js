@@ -1040,15 +1040,9 @@ Tabmix.navToolbox = {
       obj = gURLBar.handleCommand;
       fn = "urlfixerOldHandler";
     }
-    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.browserLoadURL";
 
-    // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
-    // instantfox uses pre-Firefox 10 version of handleCommand
-    var testVersionString = "if (aTriggeringEvent instanceof MouseEvent) {";
-    var pre10Version = typeof(InstantFox) == "object" &&
-        _handleCommand.indexOf(testVersionString) > -1;
-    var TMP_fn = !pre10Version ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
-
+    let TMP_fn = "Tabmix.whereToOpen";
+    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.whereToOpen";
     if (_handleCommand.indexOf(TMP_fn) > -1)
       return;
 
@@ -1056,9 +1050,8 @@ Tabmix.navToolbox = {
       Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
         return;
 
-    // set altDisabled if Suffix extension installed
-    // dont use it for Firefox 6.0+ until new Suffix extension is out
-    let fixedHandleCommand = Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
+    // we don't do anything regarding IeTab and URL Suffix extensions
+    Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
       '{',
       '{ var _data, altDisabled = false; \
        if (gBrowser.tabmix_tab) {\
@@ -1066,40 +1059,26 @@ Tabmix.navToolbox = {
          delete gBrowser.tabmix_userTypedValue;\
        }'
     )._replace(
-      testVersionString,
-      'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
-       Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, url, _mayInheritPrincipal); \
-       return; \
-       $&', {check: pre10Version}
-    );
-
-   /* Starting with firefx 10 we are not using Tabmix.browserLoadURL
-    * we don't do anything regarding IeTab and URL Suffix extensions
-    */
-    if (!pre10Version) {
-      fixedHandleCommand = fixedHandleCommand._replace(
-        'if (isMouseEvent || altEnter) {',
-        'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
-         if (isMouseEvent || altEnter || loadNewTab) {'
-      )._replace(
-        // always check whereToOpenLink except for alt to catch also ctrl/meta
-        'if (isMouseEvent)',
-        'if (isMouseEvent || aTriggeringEvent && !altEnter)'
-      )._replace(
-        'where = whereToOpenLink(aTriggeringEvent, false, false);',
-        '$&\
-         if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
-           where = "tab";'
-      )._replace(
-        '(where == "current")',
-        '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
-      )._replace(
-        'openUILinkIn(url, where, params);',
-        'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
-         $&'
-      );
-    }
-    fixedHandleCommand.toCode();
+      'if (isMouseEvent || altEnter) {',
+      'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+       if (isMouseEvent || altEnter || loadNewTab) {'
+    )._replace(
+      // always check whereToOpenLink except for alt to catch also ctrl/meta
+      'if (isMouseEvent)',
+      'if (isMouseEvent || aTriggeringEvent && !altEnter)'
+    )._replace(
+      'where = whereToOpenLink(aTriggeringEvent, false, false);',
+      '$&\
+       if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
+         where = "tab";'
+    )._replace(
+      '(where == "current")',
+      '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
+    )._replace(
+      'openUILinkIn(url, where, params);',
+      'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
+       $&'
+    ).toCode();
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
     if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
