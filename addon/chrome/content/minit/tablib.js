@@ -500,8 +500,8 @@ var tablib = {
       'if (currentIsBlank) tablib.setURLBarFocus(); \
       else $&'
     )._replace(
-      '.loadDivertedInBackground"',
-      '." + (#1 ? "loadDivertedInBackground" : "loadInBackground")'.replace("#1", arg),
+      '"browser.tabs.loadDivertedInBackground"',
+      '#1 ? "extensions.tabmix.loadExternalInBackground" : $&'.replace("#1", arg),
       {check: Tabmix.isVersion(260)}
     )._replace(
       'win.gBrowser.loadOneTab',
@@ -538,8 +538,8 @@ var tablib = {
       '  }' +
       '  $&'
     )._replace(
-      '.loadDivertedInBackground"',
-      '." + (isExternal ? "loadDivertedInBackground" : "loadInBackground")', {flags: "g"}
+      '"browser.tabs.loadDivertedInBackground"',
+      'isExternal ? "extensions.tabmix.loadExternalInBackground" : $&', {flags: "g"}
     ).toCode();
 
     // fix after Bug 606678

@@ -50,6 +50,8 @@
                   type="bool" inverted="true"/>
       <preference id="pref_selectDivertedTab"   name="browser.tabs.loadDivertedInBackground"
                   type="bool" inverted="true"/>
+      <preference id="pref_selectTabFromExternal"   name="extensions.tabmix.loadExternalInBackground"
+                  type="bool" inverted="true"/>
       <preference id="pref_selectTabSearch"     name="extensions.tabmix.loadSearchInBackground"
                   type="bool" inverted="true"/>
       <preference id="pref_contextMenuSearch"   name="browser.search.context.loadInBackground"
@@ -210,8 +212,11 @@
                 <!-- select Links -->
                 <checkbox_tmp id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
                 <!-- Select Diverted Windows -->
-                <checkbox_tmp id="selectDivertedTab" label="&selectDivertedTab1.label;"
+                <checkbox_tmp id="selectDivertedTab" label="&selectDivertedTab.label;"
                           preference="pref_selectDivertedTab"/>
+                <!-- Select form Other Applications -->
+                <checkbox_tmp id="selectTabFromExternal" label="&selectTabFromExternal.label;"
+                          preference="pref_selectTabFromExternal"/>
                 <!-- new tab commands -->
                 <checkbox_tmp id="NewinBG" label="&selectTabCommand.label;" preference="pref_NewinBG"/>
                 <!-- duplicate tab -->

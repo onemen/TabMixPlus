@@ -1802,20 +1802,28 @@ try {
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
-try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {
-      var currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
-      var oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
-      var subs = function(str) str.substring(0, str.length-1);
+      let currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
+      let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
+
+      let vCompare = function(a, b) Services.vc.compare(a, b) <= 0;
+      if (oldVersion) {
+        // 2013-08-18
+        if (vCompare(oldVersion, "0.4.1.1pre.130817a") &&
+            Services.prefs.prefHasUserValue("browser.tabs.loadDivertedInBackground"))
+          Tabmix.prefs.setBoolPref("loadExternalInBackground", true);
+      }
+
+      let subs = function(str) str.substring(0, str.length-1);
       if (currentVersion != oldVersion)
         Tabmix.prefs.setCharPref("version", currentVersion);
-      var showNewVersionTab = currentVersion != oldVersion &&
+      let showNewVersionTab = currentVersion != oldVersion &&
         (!isNaN(currentVersion.substr(-1)) || subs(currentVersion) != subs(oldVersion))
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(function() {
-          var defaultChanged = "";
-          var showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
+          let defaultChanged = "";
+          let showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
             defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
@@ -1826,8 +1834,12 @@ try { // user report about bug here ... ?
       }
     }
     const Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
-    Application.getExtensions(getVersion);
-} catch (ex) {Tabmix.assert(ex);}
+    let wrappedGetVersion = function(extensions) {
+      try {
+        getVersion(extensions);
+      } catch (ex) {Tabmix.assert(ex);}
+    }
+    Application.getExtensions(wrappedGetVersion);
     // block item in tabclicking options that are not in use
     this.blockedValues = [];
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab))

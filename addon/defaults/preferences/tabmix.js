@@ -17,6 +17,7 @@ pref("extensions.tabmix.inversefocusOther", false);
 
 pref("extensions.tabmix.loadNewInBackground", false);
 pref("extensions.tabmix.loadUrlInBackground", false);
+pref("extensions.tabmix.loadExternalInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
