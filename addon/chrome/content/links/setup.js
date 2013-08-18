@@ -42,10 +42,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   window.BrowserOpenTab = TMP_BrowserOpenTab;
 
   this.openUILink_init();
-
-  // for dotCOMplete extensoin
-  if ("dotCOMplete" in window)
-     window.dotCOMplete.realBrowserLoadURL = this.browserLoadURL;
 }
 
 /**
