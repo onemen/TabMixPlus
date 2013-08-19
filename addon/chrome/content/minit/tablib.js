@@ -128,7 +128,7 @@ var tablib = {
     Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
       '{',
       '{ \
-       if (aTab.hasAttribute("protected")) return;\
+       if (aTab.hasAttribute("protected") || TabmixSessionManager._protectAllTabs && Tabmix.callerName() == "ssi_restoreWindow") return;\
        if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
     )._replace(
       '{',
@@ -647,11 +647,14 @@ var tablib = {
        }\
        if (window) {\
         window.focus();\
-        let state = {windows: [TabmixSessionManager.getClosedWindowAtIndex(aIndex || 0)]};\
-        state = TabmixSvc.JSON.stringify(state);\
+        let index = aIndex || 0;\
+        let closedWindows = TabmixSvc.JSON.parse(ss.getClosedWindowData());\
+        ss.forgetClosedWindow(index);\
+        let state = closedWindows.splice(index, 1).shift();\
+        state = TabmixSvc.JSON.stringify({windows: [state]});\
         ss.setWindowState(window, state, false);\
-      }\
-      else $&}'
+       }\
+       else $&}'
     )._replace(
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\

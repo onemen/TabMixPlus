@@ -441,7 +441,7 @@ var TMP_ClosedTabs = {
             break;
          case "original":
             if (aIndex == -1) {
-               this.getClosedTabAtIndex(aIndex);
+               this.removeAllClosedTabs();
                break;
             }
             else if (aIndex == -2) {
@@ -457,41 +457,30 @@ var TMP_ClosedTabs = {
       gBrowser.setNumberOfTabsClosedLast(1);
    },
 
+   removeAllClosedTabs: function () {
+      // update our session data
+      var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
+      if (updateRDF)
+        TabmixSessionManager.deleteWinClosedtabs(TabmixSessionManager.gThisWin);
+      while (this.count)
+        TabmixSvc.ss.forgetClosedTab(window, 0);
+      this.setButtonDisableState(true);
+   },
+
   /**
    * @brief           fetch the data of closed tab, while removing it from the array
    * @param aIndex    a Integer value - 0 or grater index to remove
-   *                  other value empty the list.
    * @returns         closed tab data at aIndex.
-   *
-   * we can use ss.forgetClosedTab(window, index) from Firefox ? after ?
-   *
    */
    getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
+      if (0 > aIndex || aIndex >= this.count)
+        return null;
       // update our session data
-      var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
-      if (updateRDF) {
-        if (aIndex >= 0)
-           TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
-        else
-           TabmixSessionManager.deleteWinClosedtabs(TabmixSessionManager.gThisWin);
-      }
+      if (TabmixSessionManager.enableBackup)
+        TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
 
-      var closedTab;
-      var state = { windows: [], _firstTabs: true };
-      state.windows[0] = {tabs:[], _closedTabs: [] };
-      // if aIndex is not > 0 we just past empy list to setWindowState
-      // it's like remove all closed tabs from the list
-      if (aIndex >= 0) {
-         state.windows[0]._closedTabs = this.getClosedTabData;
-         // purge closed tab at aIndex
-         closedTab = state.windows[0]._closedTabs.splice(aIndex, 1).shift();
-      }
-
-      // replace existing _closedTabs
-      try {
-        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
-      } catch (e) {}
-
+      var closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
+      TabmixSvc.ss.forgetClosedTab(window, aIndex);
       this.setButtonDisableState();
       return closedTab;
    },

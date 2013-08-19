@@ -1232,7 +1232,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                     }, 100);
                     break;
                   }
-                  TMP_ClosedTabs.getClosedTabAtIndex(-1); // to be on the safe side...
+                  TMP_ClosedTabs.removeAllClosedTabs(); // to be on the safe side...
                   this.removeSession(this.gThisWin, this.gSessionPath[0]);
                   window.setTimeout(function () {TMP_ClosedTabs.setButtonDisableState(); }, 0);
                   this.afterExitPrivateBrowsing = window.setTimeout(function (self) {
@@ -1299,31 +1299,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      else
        TabmixSvc.ss.forgetClosedWindow(aIndex);
      this.notifyClosedWindowsChanged();
-   },
-
-  /**
-   * @brief           fetch the data of closed window, while removing it from the array
-   * @param aIndex    a Integer value - 0 or grater index to remove
-   *                  other value empty the list.
-   * @returns         closed window data at aIndex.
-   *
-   */
-   getClosedWindowAtIndex: function SM_getClosedWindowAtIndex(aIndex) {
-      var closedWindow;
-      var state = { windows: [{tabs:[]}], _firstTabs: false , _closedWindows:[]};
-      // if aIndex is not > 0 we just past empy list to setWindowState
-      // it's like remove all closed tabs from the list
-      if (aIndex >= 0) {
-         state._closedWindows = TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedWindowData());
-         // purge closed window at aIndex
-         closedWindow = state._closedWindows.splice(aIndex, 1).shift();
-      }
-      // replace existing _closedWindows
-      try {
-        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
-      } catch (ex) {Tabmix.assert(ex);}
-
-      return closedWindow;
    },
 
    notifyClosedWindowsChanged: function SM_notifyClosedWindowsChanged() {
@@ -3025,6 +3000,9 @@ try{
         return newTab;
       }
 
+      // init the new container before we start to load new data
+      this.initSession(this.gSessionPath[0], this.gThisWin);
+
       var tabContainer = this.initContainer(rdfNodeTabs);
       var newtabsCount = tabContainer.GetCount();
       var newIndex, aTab, loadOnStartup = [];
@@ -3037,13 +3015,15 @@ try{
             let newTab = TMP_addTab();
          }
          cTab.setAttribute("inrestore", "true");
-         // move selected tab to place
-         gBrowser.moveTabTo(cTab, lastSelectedIndex);
          // remove extra tabs
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
             gBrowser.removeTab(tab);
          }
+         // sessionStore will move selected tab (since Firefox 26)
+         this.copyClosedTabsToSessionStore(path, true);
+         // move selected tab to place
+         gBrowser.moveTabTo(cTab, lastSelectedIndex);
          newIndex = 0;
       }
       else if (newtabsCount > 0 && !overwrite) { // we use this in TGM and panorama (TabViewe)
@@ -3078,6 +3058,8 @@ try{
             if (blankTab)
                gBrowser.removeTab(blankTab);
          }
+
+         this.copyClosedTabsToSessionStore(path, false);
 
          // reuse blank tabs and move tabs to the right place
          var openTabNext = Tabmix.getOpenTabNextPref();
@@ -3170,8 +3152,6 @@ try{
       // sort the tab by tabsData.index see _tabData
       function sortbyIndex(a, b) {return a - b;}
 
-      // init the new container before we start to load new data
-      this.initSession(this.gSessionPath[0], this.gThisWin);
       if (tabsData.length > 0) {
         // make sure rdf tabs are in order
         tabsData.sort(sortbyIndex);
@@ -3224,12 +3204,6 @@ try{
         Array.forEach(loadOnStartup, function(aTab) {
           gBrowser.moveTabTo(aTab, lastPlace);
         });
-      }
-
-      // load closed tabs from saved session and save to current backup.
-      if (this.saveClosedtabs) {
-         this.saveClosedTabs(path, this.gThisWin, "closedtabs");
-         this.copyClosedTabsToSessionStore(path, true);
       }
 
       TMP_ClosedTabs.setButtonDisableState();
@@ -3342,14 +3316,20 @@ try{
       }
    },
 
-   copyClosedTabsToSessionStore: function SM_copyClosedTabsToRDF(fromPath, updateClosedTabsList) {
-      // if we after restart we get closed data from FF sessionRestore
-      if (updateClosedTabsList && !Tabmix.isWindowAfterSessionRestore) {
-         let state = { windows: [], _firstTabs: true };
-         state.windows[0] = { _closedTabs: [] };
-         state.windows[0]._closedTabs = TabmixConvertSession.getClosedTabsState(this.getResource(fromPath, "closedtabs"));
-         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
-      }
+   copyClosedTabsToSessionStore: function (aPath, aOverwrite) {
+      if (!this.saveClosedtabs)
+        return;
+      this.saveClosedTabs(aPath, this.gThisWin, "closedtabs");
+      let closedTabsData = TabmixConvertSession.getClosedTabsState(this.getResource(aPath, "closedtabs"));
+      if (!aOverwrite)
+         closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
+      closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
+      let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
+      // prevent sessionStore from removing existing tabs
+      this._protectAllTabs = true;
+      TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), Tabmix.isVersion(260));
+      this._protectAllTabs = false;
+      TMP_ClosedTabs.setButtonDisableState();
    },
 
    copyClosedTabsToRDF: function SM_copyClosedTabsToRDF(winPath) {
