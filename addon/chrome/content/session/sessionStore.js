@@ -508,7 +508,7 @@ var TMP_ClosedTabs = {
 
       var tab, multiple = closedTabCount > 1;
       for (let i = 0; i < closedTabCount; i++) {
-         blankTab = blankTabs.pop();
+         blankTab = blankTabs.pop() || null;
          tab = this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
       }
 
