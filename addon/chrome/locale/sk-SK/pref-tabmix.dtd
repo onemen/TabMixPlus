@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Prepnúť/Vybrať karty ak sa otvárajú z:">
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Rozptýlené okná">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Príkazy nová karta">
 <!ENTITY contextMenuSearch.label "Kontextová ponuka vyhľadávania pre">
 <!ENTITY selectTabBH.label "Záložky/História">

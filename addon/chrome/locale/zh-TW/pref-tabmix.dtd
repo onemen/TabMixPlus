@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "開啟下列項目時切換至該分頁">
 <!ENTITY selectTab.label "一般鏈結">
 <!ENTITY selectDivertedTab.label "彈出視窗">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "空白分頁">
 <!ENTITY contextMenuSearch.label "右鍵搜尋">
 <!ENTITY selectTabBH.label "書籤、瀏覽記錄">

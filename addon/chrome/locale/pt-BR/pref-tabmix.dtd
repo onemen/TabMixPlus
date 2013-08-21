@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Focar/Selecionar abas abertas por:">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Janelas desviadas">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Comandos de abrir nova aba">
 <!ENTITY contextMenuSearch.label "Buscar pelo menu de contexto por">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">

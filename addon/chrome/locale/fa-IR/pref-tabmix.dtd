@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "متمرکز کردن/انتخاب تب هایی که از ... باز می شوند">
 <!ENTITY selectTab.label "لینک ها">
 <!ENTITY selectDivertedTab.label "پنجره های منتقل شده">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "دستورهای تب جدید">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "نشانه گذاری شده ها/تاریخچه">

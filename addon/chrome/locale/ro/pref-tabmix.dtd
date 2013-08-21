@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Se activează/selectează filele care se deschid din:">
 <!ENTITY selectTab.label "Legături">
 <!ENTITY selectDivertedTab.label "Ferestre redirecționate">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Comenzi cu parametru „filă nouă”">
 <!ENTITY contextMenuSearch.label "Căutari din meniul contextual">
 <!ENTITY selectTabBH.label "Semne de carte / istoric">

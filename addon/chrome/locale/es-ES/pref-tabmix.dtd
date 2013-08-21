@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Enfocar/seleccionar pestañas abiertas por:">
 <!ENTITY selectTab.label "Enlaces">
 <!ENTITY selectDivertedTab.label "Otras ventanas">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Comando nueva pestaña">
 <!ENTITY contextMenuSearch.label "Búsqueda en menú contextual">
 <!ENTITY selectTabBH.label "Marcadores/Historial">

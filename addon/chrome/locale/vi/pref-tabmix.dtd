@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Chú ý / Chọn các thẻ mở từ:">
 <!ENTITY selectTab.label "Liên kết">
 <!ENTITY selectDivertedTab.label "Cửa sổ chuyển hướng">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Lệnh mở thẻ mới">
 <!ENTITY contextMenuSearch.label "Tìm kiếm trình đơn ngữ cành">
 <!ENTITY selectTabBH.label "Trang đánh dấu / Lược sử">

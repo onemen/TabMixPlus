@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "以下のタブにフォーカス:">
 <!ENTITY selectTab.label "リンクから開いたタブ">
 <!ENTITY selectDivertedTab.label "新しいウィンドウに開くはずだったタブ">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "[新しいタブ] コマンドで開いたタブ">
 <!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">

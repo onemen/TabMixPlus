@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Фокусиране/активиране на подпрозорците, които се отварят от:">
 <!ENTITY selectTab.label "Връзки">
 <!ENTITY selectDivertedTab.label "Вместо прозорци">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "При команда за създаване на нов подпрозорец">
 <!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
 <!ENTITY selectTabBH.label "Отметки/История">

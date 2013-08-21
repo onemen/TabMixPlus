@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Honelako fitxa berriak gainean jarri/hautatu:">
 <!ENTITY selectTab.label "Linkak">
 <!ENTITY selectDivertedTab.label "Leiho besteratuak">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "&quot;Fitxa berri&quot; komandoak">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Lastermarkak/Historia">

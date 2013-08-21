@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Focus/Select tabs that open from:">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "New tab commands">
 <!ENTITY contextMenuSearch.label "Ponnahdusvalikkohaku:">
 <!ENTITY selectTabBH.label "Bookmarks/History">

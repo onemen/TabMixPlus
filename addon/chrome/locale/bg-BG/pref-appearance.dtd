@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Текущ подпрозорец">
 <!ENTITY unloadedTabs.label "Незаредени подпрозорци">
 <!ENTITY unreadTab.label "Непрочетени подпрозорци">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "след презареждане, подпрозорецът да се маркира като непрочетен">
 <!ENTITY otherTabs.label "Други подпрозорци">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Удебелен">

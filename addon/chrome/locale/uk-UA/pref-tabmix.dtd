@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Робити активними вкладки, що відкриваються:">
 <!ENTITY selectTab.label "По посиланнях">
 <!ENTITY selectDivertedTab.label "Замість вікон">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "По команді створення нової вкладки">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "З журналу / закладок">

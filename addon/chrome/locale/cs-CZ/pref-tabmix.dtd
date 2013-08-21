@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Přepnout/vybrat panely, které se otevírají z(e):">
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Odchýlená okna">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Příkazy pro nový panel">
 <!ENTITY contextMenuSearch.label "Hledat v místní nabídce výraz">
 <!ENTITY selectTabBH.label "Záložky/Historie">

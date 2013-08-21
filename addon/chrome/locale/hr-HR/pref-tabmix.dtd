@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Fokusiraj/Odaberi kartice koji se otvaraju iz:">
 <!ENTITY selectTab.label "Poveznica">
 <!ENTITY selectDivertedTab.label "Preusmjerenih prozora">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Naredbe Nova kartica">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Zabilješke/Povijest">

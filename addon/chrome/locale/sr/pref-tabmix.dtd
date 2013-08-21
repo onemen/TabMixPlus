@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Пребаци на/означи картице које се отварају из:">
 <!ENTITY selectTab.label "Веза">
 <!ENTITY selectDivertedTab.label "Преусмерених прозора">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Команди за нову картицу ----">
 <!ENTITY contextMenuSearch.label "Приручним менијем потражи">
 <!ENTITY selectTabBH.label "Обележивача/историјата">

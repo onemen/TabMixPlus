@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Näita kohe kaarte, mis avati järgnevate kaudu:">
 <!ENTITY selectTab.label "Lingid">
 <!ENTITY selectDivertedTab.label "Mujale suunatud aknad">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Uue kaardi käsud">
 <!ENTITY contextMenuSearch.label "Kontekstimenüü kaudu otsimine">
 <!ENTITY selectTabBH.label "Järjehoidjad/Ajalugu">

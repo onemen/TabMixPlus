@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "탭으로 열 때 탭을 활성화할 것:">
 <!ENTITY selectTab.label "링크">
 <!ENTITY selectDivertedTab.label "전환된 창">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "&apos;새 탭 열기&apos;로 연 탭">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "북마크/방문 기록">
