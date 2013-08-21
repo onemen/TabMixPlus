@@ -322,6 +322,12 @@ var TMP_extensionsCompatibility = {
           "function toolkitCloseallOnUnload("
         ).toCode();
       }
+      gBrowser.getTabForBrowser = function (aBrowser) {
+        if (this._browsers &&
+            typeof this._browsers[this._browsers.length - 1] == "undefined")
+          this._browsers = null;
+        return this._getTabForContentWindow(aBrowser.contentWindow);
+      }
     }
 
     if ("FireGestures" in window) {
