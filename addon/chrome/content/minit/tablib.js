@@ -50,7 +50,9 @@ var tablib = {
 
   change_gBrowser: function change_gBrowser() {
     var obj, fnName;
-    if (Tabmix.extensions.ieTab2)
+    if (typeof Fd == "object" && typeof Fd.addTab == "function")
+      [obj, fnName] = [Fd, "Fd.addTab"];
+    else if (Tabmix.extensions.ieTab2)
       [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
     // NRA-ILA toolbar extension raplce the original addTab function
     else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
