@@ -166,8 +166,10 @@
     <toolbarpalette id="BrowserToolbarPalette">
       <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional"
               observes="tmp_undocloseButton"
+              oncommand="if (event.target == this &amp;&amp; !TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
               onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
               onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
+              onmouseup="if (event.target == this) setTimeout(function(b) {b.removeAttribute('afterctrlclick')}, 0, this);"
               ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
               ondragenter="TMP_undocloseTabButtonObserver.onDragOver(event);"
               ondrop="TMP_undocloseTabButtonObserver.onDrop(event);"
