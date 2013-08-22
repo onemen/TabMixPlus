@@ -11,14 +11,15 @@
       if (!gGrid.cells)
         return;
       let win = Tabmix.getTopWin();
+      if (win)
+        win.TMP_Places._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
       gGrid.cells.forEach(function (cell) {
         let site = cell.site;
         if (!site)
           return;
         let url = site.url;
         let title = site.title || url;
-        if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
-          title = win.TMP_Places.getTitleFromBookmark(url, title);
+        title = win.TMP_Places.getTitleFromBookmark(url, title);
         let tooltip = (title == url ? title : title + "\n" + url);
         let link = site._querySelector(".newtab-link");
         link.setAttribute("title", tooltip);
@@ -26,7 +27,6 @@
       });
     }
 
-    XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils", "resource://gre/modules/PlacesUtils.jsm");
     Services.prefs.addObserver("extensions.tabmix.titlefrombookmark", updateTitle, false);
     window.addEventListener("unload", function TMP_removeObserver(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", TMP_removeObserver, false);
