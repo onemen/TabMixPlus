@@ -483,6 +483,7 @@ var TMP_Places = {
     if (title != aTab.label) {
       aTab.label = title;
       aTab.crop = title != aUrl || aUrl == "about:blank" ? "end" : "center";
+      aTab.setAttribute("tabmix_changed_label", title);
       gBrowser._tabAttrModified(aTab);
       if (aTab.selected)
         gBrowser.updateTitlebar();

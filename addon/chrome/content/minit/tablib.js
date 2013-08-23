@@ -77,7 +77,7 @@ var tablib = {
        dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle ? this.mStringBundle.getString("tabs.connecting") : aURI);'
+      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);'
     )._replace(
       't.className = "tabbrowser-tab";',
       '$&\
@@ -191,7 +191,11 @@ var tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
-      'docTitle = TMP_Places.getTabTitle(this.getTabForBrowser(aBrowser), aBrowser.currentURI.spec, docTitle);\
+      'let tab = this.getTabForBrowser(aBrowser);\
+       if (tab.hasAttribute("tabmix_changed_label"))\
+         docTitle = tab.getAttribute("tabmix_changed_label");\
+       else\
+         docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
        $&'
     ).toCode();
 
@@ -222,6 +226,11 @@ var tablib = {
       'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
+       if (aTab.hasAttribute("tabmix_changed_label")) {\
+         aTab.removeAttribute("tabmix_changed_label");\
+         if (aTab.label == title && aTab.crop == crop)\
+           tablib.onTabTitleChanged(aTab, title == urlTitle);\
+       }\
        $&'
     )._replace(
       'aTab.crop = crop;',
