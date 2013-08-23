@@ -1585,12 +1585,12 @@ var tablib = {
       let width = aTab.boxObject.width;
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
-        TMP_Places.afterTabTitleChanged();
+        TMP_Places.afterTabTitleChanged(true);
       if (aTab.hasAttribute("newtab"))
         aTab.removeAttribute("newtab");
     }
     else if (aTab.hasAttribute("fadein"))
-      TMP_Places.afterTabTitleChanged();
+      TMP_Places.afterTabTitleChanged(true);
     // don't keep unnecessary reference to current tab
     if (!TMP_Places.inUpdateBatch)
       TMP_Places.currentTab = null;

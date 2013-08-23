@@ -489,6 +489,7 @@ var TMP_Places = {
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))
         aTab.removeAttribute("width");
+      this._tabTitleChanged = true;
       return true;
     }
     return false;
@@ -570,11 +571,14 @@ var TMP_Places = {
     return false;
   },
 
-  afterTabTitleChanged: function TMP_PC_afterTabTitleChanged() {
+  afterTabTitleChanged: function TMP_PC_afterTabTitleChanged(aChanged) {
+    if (!aChanged && !this._tabTitleChanged)
+      return;
     if (this.inUpdateBatch) {
       this._tabTitleChanged = true;
       return;
     }
+    this._tabTitleChanged = false;
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
     if (this.currentTab) {
@@ -649,6 +653,7 @@ var TMP_Places = {
       }, this);
       this.stopObserver();
     }
+    this.afterTabTitleChanged();
   },
 
   _hasBookmarksObserver: false,
@@ -680,6 +685,7 @@ var TMP_Places = {
         this.setTabTitle(tab, url);
       }
     }, this);
+    this.afterTabTitleChanged();
   },
 
   updateTitleonTabs: function TMP_PC_updateTitleonTabs(aItemId, aRemoved) {
@@ -703,6 +709,7 @@ var TMP_Places = {
         }
       }
     }, this);
+    this.afterTabTitleChanged();
   },
 
   onItemAdded: function TMP_PC_onItemAdded(aItemId, aFolder, aIndex, aItemType, aURI) {
@@ -750,12 +757,8 @@ var TMP_Places = {
 
     this._batchData = {updateIDs:[], add:{ids:[], urls:[]}};
 
-    if (this._tabTitleChanged) {
-      this._tabTitleChanged = false;
-      this.afterTabTitleChanged(this.currentTab);
-    }
-    else
-      this.currentTab = null;
+    this.afterTabTitleChanged();
+    this.currentTab = null;
   },
 
   onItemVisited: function () {},
