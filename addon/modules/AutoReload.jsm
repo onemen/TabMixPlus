@@ -260,7 +260,8 @@ function  _observe(aSubject, aTopic, aData) {
   if (aTopic == "common-dialog-loaded") {
     TabmixSvc.obs.removeObserver(_observe, "common-dialog-loaded");
     let icon = aSubject.document.getElementById("info.icon");
-    icon.className = icon.className.replace("question-icon" ,"alert-icon");
+    icon.classList.add("alert-icon");
+    icon.classList.remove("question-icon");
   }
 }
 

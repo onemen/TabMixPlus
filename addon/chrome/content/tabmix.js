@@ -799,16 +799,16 @@ var TMP_eventListener = {
     // and mTabstrip.ensureElementIsVisible
     // this class change tab height (by changing the borders)
     if (typeof colorfulTabs == "object" && colorfulTabs.standout &&
-        tab.className.indexOf("standout") == -1) {
+        !tab.classList.contains("standout")) {
       for (let i = 0; i < gBrowser.tabs.length; i++) {
         let _tab = gBrowser.tabs[i];
-        if (_tab.className.indexOf("standout") > -1) {
-          _tab.className = _tab.className.replace(" standout", "");
+        if (_tab.classList.contains("standout")) {
+          _tab.classList.remove("standout");
           break;
         }
 
       }
-      tab.className = tab.className + " standout";
+      tab.classList.add("standout");
     }
 
     // update this functions after new tab select

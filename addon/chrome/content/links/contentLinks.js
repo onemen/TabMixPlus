@@ -246,17 +246,15 @@ Tabmix.contentAreaClick = {
     if (isGmail)
       return;
 
-    // don't interrupt with noscript
-    if ("className" in linkNode && linkNode.className.indexOf("__noscriptPlaceholder__") > -1)
-      return;
+    if ("className" in linkNode) {
+      // don't interrupt with noscript
+      if (linkNode.className.indexOf("__noscriptPlaceholder__") > -1)
+        return;
 
-    // fix donwload button on page - http://get.adobe.com/reader/
-    if ("className" in linkNode && /download.button/.test(linkNode.className))
-      return;
-
-    // need to find a way to work here only on links
-    if ("className" in linkNode && /button/.test(linkNode.className.toLowerCase()))
-      return;
+      // need to find a way to work here only on links
+      if (/button/.test(linkNode.className.toLowerCase()))
+        return;
+    }
 
     // don't interrupt with fastdial links
     if ("ownerDocument" in linkNode && Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
