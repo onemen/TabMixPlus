@@ -452,7 +452,7 @@ var TMP_eventListener = {
         Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
         // check if australis tab shape is implemented in window (bug 738491)
-        let australis = document.getElementById("tab-clip-path-outer");
+        let australis = document.getElementById("tab-curve-clip-path-start");
         if (australis)
           tabBar.setAttribute("australis", true);
       }
