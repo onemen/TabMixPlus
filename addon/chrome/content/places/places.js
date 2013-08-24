@@ -78,9 +78,9 @@ var TMP_Places = {
       Tabmix.changeCode(window, "openUILinkIn")._replace(
         'params.fromChrome = true;',
         '$&' +
+        /* only in use when openUILinkIn called from searchbar.doSearch */
         ' var tabmixArg = arguments.length > 5 ? arguments[5] : null;' +
         ' if (tabmixArg) {' +
-        '   params.bookMarkId = "bookMarkId" in tabmixArg && tabmixArg.bookMarkId > -1 ? tabmixArg.bookMarkId : null;' +
         '   if ("backgroundPref" in tabmixArg)' +
         '     params.inBackground = getBoolPref(tabmixArg.backgroundPref);' +
         ' }' +
@@ -95,8 +95,7 @@ var TMP_Places = {
       Tabmix.changeCode(fnObj, fnName)._replace(
         /aRelatedToCurrent\s*= params.relatedToCurrent;/,
         '$& \
-         var bookMarkId = params.bookMarkId; \
-         var backgroundPref = params.backgroundPref;'
+         var bookMarkId = params.bookMarkId;'
       )._replace(
         'where == "current" && w.gBrowser.selectedTab.pinned',
         '$& && !params.suppressTabsOnFileDownload'
@@ -107,9 +106,6 @@ var TMP_Places = {
       )._replace(
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
-      )._replace( // we probably don't need this since Firefox 10
-        'aFromChrome ?',
-        '$& getBoolPref(backgroundPref) ||'
       )._replace(
         'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
         '$&\
@@ -168,11 +164,8 @@ var TMP_Places = {
         PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
       });
 
-      var treeStyleTab = "TreeStyleTabBookmarksService" in window;
       function updateOpenTabset() {
-        var loadTabsCode = "browserWindow.$1.loadTabs(urls, loadInBackground, false);"
-        loadTabsCode = loadTabsCode.replace("$1", "gBrowser");
-        var openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
+        let openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
         Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
           'urls = []',
           'behavior, $&', {check: treeStyleTab}
@@ -190,7 +183,7 @@ var TMP_Places = {
           /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
           '$& behavior =', {check: treeStyleTab}
         )._replace(
-          loadTabsCode,
+          'browserWindow.gBrowser.loadTabs(urls, loadInBackground, false);',
           'var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem"; \
            if (changeWhere) where = "current";'
            + openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
