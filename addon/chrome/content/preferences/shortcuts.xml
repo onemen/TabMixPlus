@@ -133,7 +133,7 @@
 
           if (!key.modifiers) {
             let ns = Ci.nsIDOMKeyEvent;
-            // Retuen and Esc blur the edit box
+            // Return and Esc blur the edit box
             if (event.keyCode == ns.DOM_VK_RETURN ||
                 event.keyCode == ns.DOM_VK_ESCAPE) {
               this.editBox.blur();

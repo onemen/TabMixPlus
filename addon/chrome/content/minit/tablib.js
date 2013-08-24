@@ -773,7 +773,7 @@ var tablib = {
 
       // sessionstore duplicateTab failed
       if (!newTab)
-        retuen;
+        return;
 
       this.selectedBrowser.focus();
 

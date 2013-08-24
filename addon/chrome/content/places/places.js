@@ -60,7 +60,7 @@ var TMP_Places = {
 
       // fix small bug when the event is not mouse event
       // inverse focus of middle/ctrl/meta clicked bookmarks/history
-      // when we are in single window mode set the function to retuen "tab"
+      // when we are in single window mode set the function to return "tab"
       Tabmix.changeCode(window, "whereToOpenLink")._replace(
         'var middle = !ignoreButton && e.button == 1;',
         'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
