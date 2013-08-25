@@ -1,20 +1,6 @@
 "use strict";
 
 var Tabmix = {
-  // aOptions can be: getter, setter or forceUpdate
-  changeCode: function(aParent, aName, aOptions) {
-    let fnName = aName.split(".").pop();
-    try {
-      return new Tabmix_ChangeCode({obj: aParent, fnName: fnName,
-        fullName: aName, options: aOptions});
-    } catch (ex) {
-      this.clog(Tabmix.callerName() + " failed to change " + aName + "\nError: " + ex.message);
-      if (Tabmix._debugMode)
-        this.obj(aObject, "aObject");
-    }
-    return null;
-  },
-
   get prefs() {
     delete this.prefs;
     return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
@@ -66,7 +52,7 @@ var Tabmix = {
     // so we can open new window
     if (!this.getTopWin())
       return false;
-    return Tabmix.prefs.getBoolPref("singleWindow");
+    return this.prefs.getBoolPref("singleWindow");
   },
 
   isNewWindowAllow: function(isPrivate) {

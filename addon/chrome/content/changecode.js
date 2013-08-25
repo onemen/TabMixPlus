@@ -54,7 +54,10 @@ Tabmix_ChangeCode.prototype = {
     try {
       if (Tabmix._debugMode) {
         this.value = this.value.replace("{", "{try {") +
-            ' catch (ex) {Tabmix.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}}';
+          ' catch (ex) {' +
+          '   let win = Services.wm.getMostRecentWindow("navigator:browser");' +
+          '   win.Tabmix.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}' +
+          ' }';
       }
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       if (this.isValidToChange(fnName))
@@ -91,6 +94,20 @@ Tabmix_ChangeCode.prototype = {
       Tabmix.clog(caller + " no update needed to " + aName);
     return false;
   }
+}
+
+// aOptions can be: getter, setter or forceUpdate
+Tabmix.changeCode = function(aParent, aName, aOptions) {
+  let fnName = aName.split(".").pop();
+  try {
+    return new Tabmix_ChangeCode({obj: aParent, fnName: fnName,
+      fullName: aName, options: aOptions});
+  } catch (ex) {
+    this.clog(this.callerName() + " failed to change " + aName + "\nError: " + ex.message);
+    if (this._debugMode)
+      this.obj(aObject, "aObject");
+  }
+  return null;
 }
 
 Tabmix.defineProperty = function(aObj, aName, aCode) {

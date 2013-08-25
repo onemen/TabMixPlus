@@ -24,7 +24,6 @@ var TMP_Places = {
    },
 
    init: function TMP_PC_init() {
-      this.initPlacesUIUtils();
       this.contextMenu.toggleEventListener(true);
 
       // use tab label for bookmark name when user renamed the tab
@@ -129,137 +128,9 @@ var TMP_Places = {
       }
    },
 
-   functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "_openNodeIn"],
-   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(forceInit) {
-      var treeStyleTab = "TreeStyleTabBookmarksService" in window;
-      // we enter getURLsForContainerNode into TMP_Places to prevent leakes from PlacesUtils
-      if (!this.getURLsForContainerNode && !treeStyleTab) {
-        Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
-          '{uri: child.uri,',
-          '{id: child.itemId, uri: child.uri,', {flags: "g"}
-        )._replace(
-          'this.',  'PlacesUtils.', {flags: "g"}
-        ).toCode(false, TMP_Places, "getURLsForContainerNode");
-      }
-
-      try {
-        let test = PlacesUIUtils._openTabset.toString();
-      } catch (ex) {
-        if (window.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
-          Tabmix.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions."
-            + "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
-        }
-        return;
-      }
-
-      if (!forceInit) {
-         if (PlacesUIUtils.tabmix_inited) {
-            PlacesUIUtils.tabmix_inited++;
-            return;
-         }
-         PlacesUIUtils.tabmix_inited = 1;
-      }
-      this._first_instance = true;
-      this.functions.forEach(function(aFn) {
-        PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
-      });
-
-      function updateOpenTabset() {
-        let openGroup = "browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
-        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
-          'urls = []',
-          'behavior, $&', {check: treeStyleTab}
-        )._replace(
-          'var urls = [];',
-          '$& var ids = [];', {check: !treeStyleTab}
-        )._replace(
-          'urls.push(item.uri);',
-          '$& ids.push(item.id);', {check: !treeStyleTab}
-        )._replace(
-          '"chrome,dialog=no,all", args);',
-          '$&\
-           browserWindow.bookMarkIds = ids.join("|");'
-        )._replace(
-          /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
-          '$& behavior =', {check: treeStyleTab}
-        )._replace(
-          'browserWindow.gBrowser.loadTabs(urls, loadInBackground, false);',
-          'var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem"; \
-           if (changeWhere) where = "current";'
-           + openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
-        ).toCode();
-      }
-      if (treeStyleTab) {
-        window.setTimeout(function () {updateOpenTabset();}, 0);
-      }
-      else { // TreeStyleTab not installed
-        updateOpenTabset();
-
-        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(
-          'push({uri: aNodes[i].uri,',
-          'push({id: aNodes[i].itemId, uri: aNodes[i].uri,'
-        ).toCode();
-
-        Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openContainerNodeInTabs")._replace(
-          'PlacesUtils.getURLsForContainerNode(aNode)',
-          'window.TMP_Places.getURLsForContainerNode(aNode)'
-        ).toCode();
-      }
-
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeWithEvent")._replace(
-         /whereToOpenLink\(aEvent[,\s\w]*\), window/, '$&, aEvent'
-      ).toCode();
-
-      // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
-      // we disable the open menu when the tab is lock
-      // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
-        /(function[^\(]*\([^\)]+)(\))/,
-        '$1, TMP_Event$2' /* event argument exist when this function called from openNodeWithEvent */
-      )._replace(
-        'aWindow.openUILinkIn',
-        'if (TMP_Event) aWhere = aWindow.TMP_Places.isBookmarklet(aNode.uri) ? "current" : '
-                     + 'aWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere); \
-         else if (aWhere == "current" && !aWindow.TMP_Places.isBookmarklet(aNode.uri)) {\
-           let caller = aWindow.Tabmix._getCallerNameByIndex(2);\
-           if (caller != "PC_doCommand")\
-             aWhere = aWindow.TMP_Places.fixWhereToOpen(null, aWhere);\
-         }\
-         if (aWhere == "current") aWindow.gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
-         $&'
-      )._replace(
-        'inBackground:',
-        'bookMarkId: aNode.itemId, initiatingDoc: null,\
-         $&'
-      ).toCode();
-   },
-
    deinit: function TMP_PC_deinit() {
-      let placesCount = --PlacesUIUtils.tabmix_inited;
-      if (this._first_instance || placesCount == 0) {
-        this.functions.forEach(function(aFn) {
-           PlacesUIUtils[aFn] = PlacesUIUtils["tabmix_" + aFn];
-           delete PlacesUIUtils["tabmix_" + aFn];
-        });
-        this.getURLsForContainerNode = null;
-        delete PlacesUIUtils.tabmix_inited;
-      }
-
-      // when we close the window from which we run eval on PlacesUIUtils
-      // we need to do it again on the new window, or else PlacesUtils will be undefined in PlacesUIUtils
-      if (this._first_instance) {
-        let win = Tabmix.getTopWin() || Services.wm.getMostRecentWindow("Places:Organizer");
-        if (win) {
-          PlacesUIUtils.tabmix_inited = placesCount;
-          win.TMP_Places.initPlacesUIUtils(true);
-        }
-      }
-
       this.stopObserver();
    },
-
-   getURLsForContainerNode: null,
-   _first_instance: false,
 
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
   // object name wmn replace with xnotifier for version 3.0+

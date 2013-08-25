@@ -109,6 +109,10 @@ let TabmixSvc = {
       this._initialized = true;
 
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
+
+      let tmp = {};
+      Cu.import("resource://tabmixplus/Places.jsm", tmp);
+      tmp.TabmixPlacesUtils.init(aWindow);
     },
 
     observe: function(aSubject, aTopic, aData) {
