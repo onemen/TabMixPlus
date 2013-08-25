@@ -202,7 +202,7 @@ var TMP_Places = {
 
         Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openContainerNodeInTabs")._replace(
           'PlacesUtils.getURLsForContainerNode(aNode)',
-          'TMP_Places.getURLsForContainerNode(aNode)'
+          'window.TMP_Places.getURLsForContainerNode(aNode)'
         ).toCode();
       }
 
@@ -215,17 +215,17 @@ var TMP_Places = {
       // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
         /(function[^\(]*\([^\)]+)(\))/,
-        '$1, TMP_Event$2'
+        '$1, TMP_Event$2' /* event argument exist when this function called from openNodeWithEvent */
       )._replace(
         'aWindow.openUILinkIn',
-        'if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" : '
+        'if (TMP_Event) aWhere = aWindow.TMP_Places.isBookmarklet(aNode.uri) ? "current" : '
                      + 'aWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere); \
-         else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\
-           let caller = Tabmix._getCallerNameByIndex(2);\
+         else if (aWhere == "current" && !aWindow.TMP_Places.isBookmarklet(aNode.uri)) {\
+           let caller = aWindow.Tabmix._getCallerNameByIndex(2);\
            if (caller != "PC_doCommand")\
              aWhere = aWindow.TMP_Places.fixWhereToOpen(null, aWhere);\
          }\
-         if (aWhere == "current") Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
+         if (aWhere == "current") aWindow.gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\
          $&'
       )._replace(
         'inBackground:',
