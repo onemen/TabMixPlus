@@ -691,7 +691,7 @@ var TMP_Places = {
     let tabs = gBrowser.tabContainer.getElementsByAttribute(ID, batch ? "*" : aItemId);
     Array.slice(tabs).forEach(function(tab) {
       if (!batch ||
-          aItemId.indexOf(parseInt(tab.getAttribute(ID)))) {
+          aItemId.indexOf(parseInt(tab.getAttribute(ID))) > -1) {
         tab.removeAttribute(ID);
         let url = tab.linkedBrowser.currentURI.spec;
         if (!this.isUserRenameTab(tab, url)) {
