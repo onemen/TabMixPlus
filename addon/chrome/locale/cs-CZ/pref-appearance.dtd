@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Současný panel">
 <!ENTITY unloadedTabs.label "Nenačtené panely">
 <!ENTITY unreadTab.label "Nepřečtené panely">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučně">

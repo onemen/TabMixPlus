@@ -90,7 +90,7 @@ let TMP_TabGroupsManager = {
     )._replace(
       'if (this.saveClosedtabs)',
       '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
-      '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenebytabmix");' +
+      '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
     ).toCode();
 
@@ -108,12 +108,6 @@ let TMP_TabGroupsManager = {
       '    aTab.removeAttribute("hidden");' +
       '    TabGroupsManager.session.moveTabToGroupBySessionStore(aTab);' +
       '  } catch (ex) {Tabmix.assert(ex);}'
-    ).toCode();
-
-    this.changeCode(sessionManager, "TabmixSessionManager.setNC_TM")._replace(
-      'for',
-      'rdfLabels.push("tgm_jsonText");\
-       $&'
     ).toCode();
 
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager

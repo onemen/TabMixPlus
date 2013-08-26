@@ -36,13 +36,21 @@ var gSessionPane = {
   },
 
   setSessionsOptions: function (item) {
+    let instantApply = document.documentElement.instantApply
     var useSessionManager = !item.checked;
     $("sesionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
 
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);
       preference.batching = true;
-      preference.value = aValue;
+      if (instantApply)
+        preference.value = aValue;
+      else {
+        preference.valueFromPreferences = aValue;
+        let index = gPrefWindow.changes.indexOf(preference);
+        if (index > -1)
+          gPrefWindow.changes.splice(index, 1);
+      }
       preference.batching = false;
     }
 
@@ -72,8 +80,10 @@ var gSessionPane = {
       sessionstorePrefs()
     }
 
-    if (document.documentElement.instantApply)
+    if (instantApply)
       Services.prefs.savePrefFile(null);
+    else
+      gPrefWindow.setButtons(!gPrefWindow.changes.length);
   },
 
   setSessionpath: function (val) {

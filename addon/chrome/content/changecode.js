@@ -27,14 +27,14 @@ Tabmix_ChangeCode.prototype = {
     if (typeof aParams != "undefined") {
       let doReplace, flags;
       if (typeof aParams == "object") {
-        doReplace = aParams.check;
+        doReplace = "check" in aParams ? aParams.check : true;
         flags = aParams.flags;
         silent = aParams.silent
       }
       else if (typeof aParams == "boolean") {
         doReplace = aParams;
       }
-      if (doReplace == false)
+      if (!doReplace)
         return this;
       if (flags && typeof substr == "string")
         substr = new RegExp(substr.replace(/[{[(\\^.$|?*+\/)\]}]/g, "\\$&"), flags);

@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Fokus på flik som öppnas från:">
 <!ENTITY selectTab.label "Länkar">
 <!ENTITY selectDivertedTab.label "Omdirigerade fönster">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Kommandot &apos;Ny flik&apos;">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bokmärken/Historik">

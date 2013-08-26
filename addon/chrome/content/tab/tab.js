@@ -173,7 +173,7 @@ var TabmixTabbar = {
     let tabStrip  = gBrowser.tabContainer.mTabstrip;
     if (newBox || (useTabmixButtons && insertAfterTabs)) {
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset");
+      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
       // remove existing tabmixScrollBox item
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
       let index = cSet.indexOf("tabbrowser-tabs");
@@ -481,13 +481,15 @@ var gTMPprefObserver = {
   init: function() {
     Tabmix.prefs.clearUserPref("setDefault");
     Tabmix.prefs.clearUserPref("PrefObserver.error")
-    if (Tabmix.isVersion(120)) {
-      this.OBSERVING.push("browser.tabs.onTop");
-      if (!Tabmix.isVersion(130))
-        this.OBSERVING.push("browser.newtab.url");
-    }
-    if (!Tabmix.isVersion(230))
-      this.OBSERVING.push("browser.tabs.autoHide");
+
+    let addObserver = function(pref, condition) {
+      if (condition)
+        this.OBSERVING.push(pref);
+    }.bind(this);
+    addObserver("browser.tabs.onTop",     Tabmix.isVersion(120));
+    addObserver("browser.newtab.url",    !Tabmix.isVersion(130));
+    addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
+    addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
 
     try {
       // add Observer
@@ -506,7 +508,6 @@ var gTMPprefObserver = {
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
               "browser.sessionstore.max_tabs_undo",
-              "browser.warnOnRestart",
               "browser.warnOnQuit",
               "browser.sessionstore.resume_from_crash",
               "browser.startup.page",
@@ -708,8 +709,11 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.tabBarPosition":
          if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
-           if (window.fullScreen)
+           if (window.fullScreen) {
              TMP_eventListener.onFullScreen(true);
+             if (TabmixTabbar.position == 1)
+               TMP_eventListener.mouseoverToggle(false);
+           }
            TabmixTabbar.updateSettings(false);
          }
         break;
@@ -812,6 +816,10 @@ var gTMPprefObserver = {
           gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
         break;
       case "browser.tabs.onTop":
+        if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
+          Services.prefs.setBoolPref(prefName, false);
+          return;
+        }
         // multi-rows total heights can be diffrent when tabs are on top
         if (TabmixTabbar.visibleRows > 1) {
           TabmixTabbar.setHeight(1, true);
@@ -819,7 +827,8 @@ var gTMPprefObserver = {
         }
         break;
       case "browser.newtab.url": // just for Firefox 12
-        BROWSER_NEW_TAB_URL = Services.prefs.getCharPref("browser.newtab.url") || "about:blank";
+        value =  Services.prefs.getComplexValue("browser.newtab.url", Ci.nsISupportsString).data;
+        BROWSER_NEW_TAB_URL =  value || "about:blank";
         break;
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
@@ -1074,7 +1083,7 @@ var gTMPprefObserver = {
     var ss = this.tabStyleSheet;
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
     var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "button_side", "right") ||
-               document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button always-right");
+               document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button close-icon always-right");
     if (!icon)
       return; // nothing to do....
 
@@ -1397,16 +1406,35 @@ var gTMPprefObserver = {
     tabBar._checkNewtabButtonVisibility = false;
     let newTabButton = document.getElementById("new-tab-button");
     if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) {
+      let sideChanged, tabsToolbar = document.getElementById("TabsToolbar");
+      let toolBar = Array.slice(tabsToolbar.childNodes);
+      let buttonIndex = toolBar.indexOf(newTabButton);
+      let tabsIndex = toolBar.indexOf(gBrowser.tabContainer);
       if (aPosition == 0) {
-        Tabmix.setItem("TabsToolbar", "newtab_side", "left");
-        newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
+        Tabmix.setItem(tabsToolbar, "newtab_side", "left");
+        if (buttonIndex > tabsIndex) {
+          newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
+          sideChanged = true;
+        }
       }
       else {
-        Tabmix.setItem("TabsToolbar", "newtab_side", aPosition == 1 ? "right" : null);
-        let before = gBrowser.tabContainer.nextSibling;
-        if (document.getElementById("tabmixScrollBox"))
-          before = before.nextSibling
-        newTabButton.parentNode.insertBefore(newTabButton, before);
+        Tabmix.setItem(tabsToolbar, "newtab_side", aPosition == 1 ? "right" : null);
+        if (buttonIndex < tabsIndex) {
+          let before = gBrowser.tabContainer.nextSibling;
+          if (document.getElementById("tabmixScrollBox")) {
+            before = before.nextSibling;
+            tabsIndex++;
+          }
+          newTabButton.parentNode.insertBefore(newTabButton, before);
+          sideChanged = true;
+        }
+      }
+      if (sideChanged) {
+        let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
+        cSet = cSet.split(",");
+        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0] || "new-tab-button");
+        tabsToolbar.setAttribute("currentset", cSet.join(","));
+        document.persist("TabsToolbar", "currentset");
       }
       tabBar._checkNewtabButtonVisibility = TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("newTabButton") && aPosition == 2;
       Tabmix.setItem("TabsToolbar", "newTabButton", Tabmix.prefs.getBoolPref("newTabButton"));
@@ -1428,20 +1456,14 @@ var gTMPprefObserver = {
 
     TabmixTabbar.position = aPosition;
     gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
-    // save TabsOnTop status
-    function setTabsOnTopCmd (aVisible) {
-      // hide/show TabsOnTop menu & menuseparator
-      let toggleTabsOnTop = document.getElementsByAttribute("command", "cmd_ToggleTabsOnTop");
-      for (let i = 0; i < toggleTabsOnTop.length; i++) {
-        let cmd = toggleTabsOnTop[i];
-        cmd.hidden = !aVisible;
-        if (cmd.nextSibling && cmd.nextSibling.localName == "menuseparator")
-          cmd.nextSibling.hidden = !aVisible;
-      }
-    }
     var tabsToolbar = document.getElementById("TabsToolbar");
     var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
+
+    // TabsOnTop removed by bug 755593
+    if (window.TabsOnTop)
+      this.setTabsOnTop(TabmixTabbar.position == 1);
+
     if (TabmixTabbar.position == 1) {// bottom
       if (!bottomToolbox) {
         bottomToolbox = document.createElement("toolbox");
@@ -1451,13 +1473,8 @@ var gTMPprefObserver = {
           bottomToolbox.setAttribute("tabmix_aero", true);
         // if we decide to move this box into browser-bottombox
         // remember to fix background css rules for all platform
-        let browser = document.getElementById("browser");
-        browser.parentNode.insertBefore(bottomToolbox, browser.nextSibling);
-      }
-      setTabsOnTopCmd(false);
-      if (TabsOnTop.enabled) {
-        gNavToolbox.tabmix_tabsontop = true;
-        TabsOnTop.enabled = false;
+        let warningContainer = document.getElementById("full-screen-warning-container");
+        warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
       }
       if (gBrowser.tabContainer.visible)
         this.updateTabbarBottomPosition();
@@ -1470,11 +1487,6 @@ var gTMPprefObserver = {
       }
     }
     else {// top
-      setTabsOnTopCmd(true);
-      if (gNavToolbox.tabmix_tabsontop) {
-        TabsOnTop.enabled = true;
-        gNavToolbox.tabmix_tabsontop = false;
-      }
       this._bottomRect = {top:null, width:null, height:null};
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
@@ -1483,6 +1495,30 @@ var gTMPprefObserver = {
     // force TabmixTabbar.setHeight to set tabbar height
     TabmixTabbar.visibleRows = 1;
     return true;
+  },
+
+  // TabsOnTop removed by bug 755593
+  setTabsOnTop: function(onBottom) {
+    // hide/show TabsOnTop menu & menuseparator
+    let toggleTabsOnTop = document.getElementsByAttribute("command", "cmd_ToggleTabsOnTop");
+    for (let i = 0; i < toggleTabsOnTop.length; i++) {
+      let cmd = toggleTabsOnTop[i];
+      cmd.hidden = onBottom;
+      if (cmd.nextSibling && cmd.nextSibling.localName == "menuseparator")
+        cmd.nextSibling.hidden = onBottom;
+    }
+
+    if (onBottom) {
+      // save TabsOnTop status
+      if (TabsOnTop.enabled) {
+        gNavToolbox.tabmix_tabsontop = true;
+        TabsOnTop.enabled = false;
+      }
+    }
+    else if (gNavToolbox.tabmix_tabsontop) {
+      TabsOnTop.enabled = true;
+      gNavToolbox.tabmix_tabsontop = false;
+    }
   },
 
   _bottomRect: {top:null, width:null, height:null},
@@ -1543,9 +1579,25 @@ var gTMPprefObserver = {
 
   // we replace some Tabmix settings with Firefox settings
   updateSettings: function() {
+    function getPrefByType(prefName, aDefault, aType) {
+      let PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+      let fn = PrefFn[Services.prefs.getPrefType(prefName)];
+      try {
+        var val = Services.prefs["get" + fn](prefName);
+        // bug in version 0.4.1.0 import old int pref with zero (0)
+        // value into string pref
+        if (aType == "IntPref" && fn != aType)
+          val = parseInt(val);
+      } catch (ex) {
+        Tabmix.log("gTMPprefObserver.updateSettings can't read preference " + prefName + "\n" + ex);
+        val = typeof aDefault == "undefined" ? null : aDefault;
+      }
+      Services.prefs.clearUserPref(prefName);
+      return val;
+    }
+
     if (Tabmix.prefs.prefHasUserValue("undoCloseCache")) {
-       var max_tabs_undo = Tabmix.prefs.getIntPref("undoCloseCache");
-       Tabmix.prefs.clearUserPref("undoCloseCache");
+       var max_tabs_undo = getPrefByType("extensions.tabmix.undoCloseCache", 5, "IntPref");
        Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", max_tabs_undo);
     }
     // remove disp=attd&view=att it's make problem with gMail
@@ -1576,13 +1628,13 @@ var gTMPprefObserver = {
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("maxWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", Tabmix.prefs.getIntPref("maxWidth"));
-       Tabmix.prefs.clearUserPref("maxWidth");
+       let val = getPrefByType("extensions.tabmix.maxWidth", 250, "IntPref");
+       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("minWidth")) {
-       Services.prefs.setIntPref("browser.tabs.tabMinWidth", Tabmix.prefs.getIntPref("minWidth"));
-       Tabmix.prefs.clearUserPref("minWidth");
+       let val = getPrefByType("extensions.tabmix.minWidth", 100, "IntPref");
+       Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
     }
     // 2009-01-31
     if (Tabmix.prefs.prefHasUserValue("newTabButton.leftside")) {
@@ -1605,19 +1657,18 @@ var gTMPprefObserver = {
     }
     // 2010-06-05
     if (Tabmix.prefs.prefHasUserValue("tabXMode")) {
-      Tabmix.prefs.setIntPref("tabs.closeButtons", Tabmix.prefs.getIntPref("tabXMode"));
-      Tabmix.prefs.clearUserPref("tabXMode");
+      let val = getPrefByType("extensions.tabmix.tabXMode", 1, "IntPref");
+      Tabmix.prefs.setIntPref("tabs.closeButtons", val);
     }
     // partly fix a bug from version 0.3.8.3
     else if (Services.prefs.prefHasUserValue("browser.tabs.closeButtons") && !Tabmix.prefs.prefHasUserValue("version") &&
              !Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
-      let value = Services.prefs.getIntPref("browser.tabs.closeButtons");
+      let value = getPrefByType("browser.tabs.closeButtons", 1, "IntPref");
       // these value are from 0.3.8.3. we don't know if 0,1 are also from 0.3.8.3 so we don't use 0,1.
       if (value > 1 && value <= 6) {
         let newValue = [3,5,1,1,2,4,1][value];
         Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
       }
-      Services.prefs.clearUserPref("browser.tabs.closeButtons");
     }
     if (Tabmix.prefs.prefHasUserValue("tabXMode.enable")) {
       Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", Tabmix.prefs.getBoolPref("tabXMode.enable"));
@@ -1628,15 +1679,14 @@ var gTMPprefObserver = {
       Tabmix.prefs.clearUserPref("tabXLeft");
     }
     if (Tabmix.prefs.prefHasUserValue("tabXDelay")) {
-      Tabmix.prefs.setIntPref("tabs.closeButtons.delay", Tabmix.prefs.getIntPref("tabXDelay"));
-      Tabmix.prefs.clearUserPref("tabXDelay");
+      let val = getPrefByType("extensions.tabmix.tabXDelay", 50, "IntPref");
+      Tabmix.prefs.setIntPref("tabs.closeButtons.delay", val);
     }
     // 2010-09-16
     if (Tabmix.prefs.prefHasUserValue("speLink")) {
-      let val = Tabmix.prefs.getIntPref("speLink");
+      let val = getPrefByType("extensions.tabmix.speLink", 0, "IntPref");
       Tabmix.prefs.setIntPref("opentabforLinks", val);
       Tabmix.prefs.setBoolPref("lockallTabs", val == 1);
-      Tabmix.prefs.clearUserPref("speLink");
     }
     // 2010-10-12
     if (Tabmix.prefs.prefHasUserValue("hideurlbarprogress")) {
@@ -1649,19 +1699,29 @@ var gTMPprefObserver = {
     }
     // 2011-10-11
     if (Services.prefs.prefHasUserValue("browser.link.open_external")) {
-      let val = Services.prefs.getIntPref("browser.link.open_external");
-      if (val == Services.prefs.getIntPref("browser.link.open_newwindow"))
+      let val = getPrefByType("browser.link.open_external", 3, "IntPref");
+      let val1 = getPrefByType("browser.link.open_newwindow", 3, "IntPref");
+      if (val == val1)
         val = -1;
       Services.prefs.setIntPref("browser.link.open_newwindow.override.external", val);
-      Services.prefs.clearUserPref("browser.link.open_external");
     }
     // 2011-11-26
     if (Tabmix.prefs.prefHasUserValue("clickToScroll.scrollDelay")) {
-      let val = Tabmix.prefs.getIntPref("clickToScroll.scrollDelay");
+      let val = getPrefByType("extensions.tabmix.clickToScroll.scrollDelay", 150, "IntPref");
       Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
-      Tabmix.prefs.clearUserPref("clickToScroll.scrollDelay");
     }
     // 2012-03-21
+    var _loadOnNewTab = true, _replaceLastTabWith = true;
+    if (Tabmix.prefs.prefHasUserValue("loadOnNewTab")) {
+      let val = getPrefByType("extensions.tabmix.loadOnNewTab", 4, "IntPref");
+      Tabmix.prefs.setIntPref("loadOnNewTab.type", val);
+      _loadOnNewTab = false;
+    }
+    if (Tabmix.prefs.prefHasUserValue("replaceLastTabWith")) {
+      let val = getPrefByType("extensions.tabmix.replaceLastTabWith", 4, "IntPref");
+      Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
+      _replaceLastTabWith = false;
+    }
     // Changing our preference to use New Tab Page as default starting from Firefox 12
     function _setNewTabUrl(oldPref, newPref, controlPref) {
       if (Services.prefs.prefHasUserValue(oldPref)) {
@@ -1677,30 +1737,17 @@ var gTMPprefObserver = {
       }
     }
     if (typeof isBlankPageURL != "function") {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab.type");
       _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith");
+                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith.type");
     }
     else {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab");
+      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab.type");
       _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith");
+                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
       _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
       _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
                     "extensions.tabmix.replaceLastTabWith.newtab.url");
-    }
-    var _loadOnNewTab = true, _replaceLastTabWith = true;
-    if (Tabmix.prefs.prefHasUserValue("loadOnNewTab")) {
-      let val = Tabmix.prefs.getIntPref("loadOnNewTab");
-      Tabmix.prefs.setIntPref("loadOnNewTab.type", val);
-      Tabmix.prefs.clearUserPref("loadOnNewTab");
-      _loadOnNewTab = false;
-    }
-    if (Tabmix.prefs.prefHasUserValue("replaceLastTabWith")) {
-      let val = Tabmix.prefs.getIntPref("replaceLastTabWith");
-      Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
-      Tabmix.prefs.clearUserPref("replaceLastTabWith");
-      _replaceLastTabWith = false;
     }
     // 2012-04-12
     if (Services.prefs.prefHasUserValue("browser.tabs.loadFolderAndReplace")) {
@@ -1711,11 +1758,12 @@ try {
     // 2012-06-22 - remove the use of extensions.tabmix.tabMinWidth/tabMaxWidth
     // other extensions still use browser.tabs.tabMinWidth/tabMaxWidth
     if (Tabmix.prefs.prefHasUserValue("tabMinWidth")) {
-      Services.prefs.setIntPref("browser.tabs.tabMinWidth", Tabmix.prefs.getIntPref("tabMinWidth"));
-      Tabmix.prefs.clearUserPref("tabMinWidth");
+      let val = getPrefByType("extensions.tabmix.tabMinWidth", 100, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
     }
     if (Tabmix.prefs.prefHasUserValue("tabMaxWidth")) {
-      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", Tabmix.prefs.getIntPref("tabMaxWidth"));
+      let val = getPrefByType("extensions.tabmix.tabMaxWidth", 250, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
       Tabmix.prefs.clearUserPref("tabMaxWidth");
     }
 } catch (ex) {Tabmix.assert(ex);}
@@ -1754,37 +1802,50 @@ try {
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
-try { // user report about bug here ... ?
     let getVersion = function _getVersion(extensions) {
-      var currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
-      var oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
-      var subs = function(str) str.substring(0, str.length-1);
+      let currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
+      let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
+
+      let vCompare = function(a, b) Services.vc.compare(a, b) <= 0;
+      if (oldVersion) {
+        // 2013-08-18
+        if (vCompare(oldVersion, "0.4.1.1pre.130817a") &&
+            Services.prefs.prefHasUserValue("browser.tabs.loadDivertedInBackground"))
+          Tabmix.prefs.setBoolPref("loadExternalInBackground", true);
+      }
+
+      let subs = function(str) str.substring(0, str.length-1);
       if (currentVersion != oldVersion)
         Tabmix.prefs.setCharPref("version", currentVersion);
-      var showNewVersionTab = currentVersion != oldVersion &&
+      let showNewVersionTab = currentVersion != oldVersion &&
         (!isNaN(currentVersion.substr(-1)) || subs(currentVersion) != subs(oldVersion))
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(function() {
-          var defaultChanged = "";
-          var showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
+          let defaultChanged = "";
+          let showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
             defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
           b.selectedTab = b.addTab("http://tmp.garyr.net/version_update2.htm?version=" + currentVersion + defaultChanged);
+          b.selectedTab.loadOnStartup = true;
         },1000);
         // noting more to do at the moment
       }
     }
     const Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
-    Application.getExtensions(getVersion);
-} catch (ex) {Tabmix.assert(ex);}
+    let wrappedGetVersion = function(extensions) {
+      try {
+        getVersion(extensions);
+      } catch (ex) {Tabmix.assert(ex);}
+    }
+    Application.getExtensions(wrappedGetVersion);
     // block item in tabclicking options that are not in use
     this.blockedValues = [];
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab))
       this.blockedValues.push(12);
     var isIE = ("IeView" in window && window.IeView.ieViewLaunch) ||
-               ("gIeTab" in window && window.gIeTab.switchTabEngine) ||
+               (Tabmix.extensions.gIeTab && window[Tabmix.extensions.gIeTab.obj].switchTabEngine) ||
                ("ieview" in window && window.ieview.launch);
     if (!isIE)
       this.blockedValues.push(21);

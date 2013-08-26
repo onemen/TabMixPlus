@@ -254,6 +254,11 @@ so display: none !important; is not hide the button */
 */
 }
 
+/* for tabbar on bottom with australis */
+#TabsToolbar[tabbaronbottom] .titlebar-placeholder {
+  display: none;
+}
+
 /* this will trigger resize if we exit hidden tabbar mode before
    we set width or height to this box
 */

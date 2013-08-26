@@ -29,7 +29,7 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar > #tabs-closebutton,
+#TabsToolbar[multibar] > #tabs-closebutton,
 #TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
 #TabsToolbar[multibar] {
   -moz-box-align: start;

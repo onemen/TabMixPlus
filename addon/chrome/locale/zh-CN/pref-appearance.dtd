@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "当前标签页">
 <!ENTITY unloadedTabs.label "未加载的标签页">
 <!ENTITY unreadTab.label "未读标签页">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "重新载入标签页后将其设为未读">
 <!ENTITY otherTabs.label "其他标签页">
 <!ENTITY italic.label "斜体">
 <!ENTITY bold.label "加粗">

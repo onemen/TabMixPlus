@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Enfoca/selecciona les pestanyes obertes des de:">
 <!ENTITY selectTab.label "Enllaços">
 <!ENTITY selectDivertedTab.label "Pàgines redirigides">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Ordres de pestanya nova">
 <!ENTITY contextMenuSearch.label "Menú contextual «Cerca a»">
 <!ENTITY selectTabBH.label "Adreces d'interès/Historial">

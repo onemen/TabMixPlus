@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Uaktywniaj karty otwierane z:">
 <!ENTITY selectTab.label "odnośników">
 <!ENTITY selectDivertedTab.label "przekierowanych okien">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "poleceń nowych kart">
 <!ENTITY contextMenuSearch.label "menu kontekstowego „Szukaj w…”">
 <!ENTITY selectTabBH.label "zakładek/historii">

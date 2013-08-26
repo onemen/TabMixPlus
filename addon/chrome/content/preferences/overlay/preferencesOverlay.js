@@ -49,9 +49,6 @@ var gTabMix_preferencesOverlay = {
          case "paneTabs":
             this.loadOverlay();
          break;
-         case "panePrivacy":
-            this.onPanePrivacyLoad();
-         break;
          case "paneMain":
             this.onPaneMainLoad();
          break;
@@ -105,14 +102,7 @@ var gTabMix_preferencesOverlay = {
          Services.prompt.alert(window, title, msg);
       }
       else
-         browserWindow.Tabmix.openOptionsDialog(panel == null ? -1 : panel);
-   },
-
-/* ........ panePrivacy .............. */
-   onPanePrivacyLoad: function () {
-       var clearDataNow = document.getElementById("clearDataNow");
-       if (clearDataNow)
-          clearDataNow.setAttribute("oncommand", clearDataNow.getAttribute("oncommand") + " Tabmix.Sanitizer.tryToSanitize();");
+         browserWindow.Tabmix.openOptionsDialog(panel);
    },
 
 /* ........ paneMain .............. */
@@ -132,7 +122,7 @@ var gTabMix_preferencesOverlay = {
      button = document.createElement("button");
      button.id = "tabmixSessionManager";
      button.setAttribute("label", tabmixButton_label);
-     button.setAttribute("oncommand", "gTabMix_preferencesOverlay.showTabmixOptions(5);");
+     button.setAttribute("oncommand", "gTabMix_preferencesOverlay.showTabmixOptions('paneSession');");
      button.setAttribute("class", "tabmixplus-button");
      var menuList = document.getElementById("browserStartupPage");
      var hBox = menuList.parentNode;

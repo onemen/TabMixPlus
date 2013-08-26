@@ -188,10 +188,14 @@ var TabmixTabClickOptions = {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
           IeView.ieViewLaunch("Internet Explorer.lnk", href);
         }
-        else if (window.gIeTab && window.gIeTab.switchTabEngine) {
-          if (!aTab.selected)
-            gBrowser.selectedTab = aTab;
-          gIeTab.switchTabEngine(aTab, gIeTab.getBoolPref("ietab.alwaysNewTab", false));
+        else if (Tabmix.extensions.gIeTab) {
+          let ieTab = Tabmix.extensions.gIeTab;
+          let gIeTabObj = window[ieTab.obj];
+          if (typeof gIeTabObj.switchTabEngine == "function") {
+            if (!aTab.selected)
+              gBrowser.selectedTab = aTab;
+            gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
+          }
         }
         else if(window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
@@ -249,6 +253,7 @@ var TabmixTabClickOptions = {
 }
 
 var TabmixContext = {
+  _closeRightTabs: "tm-closeRightTabs",
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = function(id) document.getElementById(id);
@@ -263,7 +268,7 @@ var TabmixContext = {
     $id("context_undoCloseTab").removeAttribute("command");
 
     // insret IE Tab menu-items before Bookmakrs menu-items
-    if ("gIeTab" in window) {
+    if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
@@ -276,6 +281,21 @@ var TabmixContext = {
     // fix conflict with CookiePie extension
     if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
       cookiepieContextMenu.init();
+
+    // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
+    if (Tabmix.isVersion(240)) {
+      tabContextMenu.insertBefore($id("context_closeTabsToTheEnd"), $id("tm-closeRightTabs"));
+      $id("context_closeTabsToTheEnd").setAttribute("oncommand","gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+      tabContextMenu.removeChild($id("tm-closeRightTabs"))
+      this._closeRightTabs = "context_closeTabsToTheEnd";
+    }
+
+    if (Tabmix.isVersion(250)) {
+      let multipletablabel = $id("context_undoCloseTab").getAttribute("multipletablabel")
+      let undoCloseTabMenu = $id("tm-content-undoCloseTab");
+      undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
+      undoCloseTabMenu.setAttribute("multipletablabel", multipletablabel);
+    }
   },
 
   toggleEventListener: function(enable) {
@@ -373,7 +393,7 @@ var TabmixContext = {
     Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
     Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && !pinnedTab);
     Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeRightTabs", Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
+    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
 
     //  ---------------- menuseparator ---------------- //
 
@@ -415,7 +435,7 @@ var TabmixContext = {
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || unpinnedTabs <= 1);
     Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabs <= 1);
-    Tabmix.setItem("tm-closeRightTabs", "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
+    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
     Tabmix.setItem("tm-closeLeftTabs", "disabled", cIndex == 0 || unpinnedTabs <= 1);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
@@ -555,6 +575,9 @@ var TabmixContext = {
       var undoClose = Tabmix.prefs.getBoolPref("undoClose");
       Tabmix.showItem(undoCloseTabMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
                      Tabmix.prefs.getBoolPref("undoCloseTabContent"));
+      let closedTabCount = Tabmix.isVersion(250) ? TabmixSvc.ss.getNumberOfTabsClosedLast(window) : 1;
+      let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
+      undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
       Tabmix.showItem(undoCloseListMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
@@ -738,6 +761,9 @@ var TabmixAllTabs = {
   createScrollButtonTabsList: function TMP_createScrollButtonTabsList(event, side) {
     event.stopPropagation();
     event.preventDefault();
+
+    if (event.target.disabled)
+      return;
 
     var tablist =  document.getElementById("tabslist");
 
@@ -929,6 +955,9 @@ var TabmixAllTabs = {
   },
 
   _setMenuitemAttributes: function TMP__setMenuitemAttributes(aMenuitem, aTab) {
+    if (!aMenuitem)
+      return
+
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
     aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
 
@@ -937,7 +966,7 @@ var TabmixAllTabs = {
       aMenuitem.removeAttribute("image");
     }
     else {
-      aMenuitem.setAttribute("image", aTab.getAttribute("image"));
+      aMenuitem.setAttribute("image", gBrowser.getIcon(aTab));
       aMenuitem.removeAttribute("busy");
     }
 

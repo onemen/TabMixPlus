@@ -134,15 +134,17 @@ var TMP_tabDNDObserver = {
     let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37
     dt.setDragImage(canvas, 0, offset);
 
-    // _dragOffsetX/Y give the coordinates that the mouse should be
+    // _dragData.offsetX/Y give the coordinates that the mouse should be
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
     let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
     let tabOffsetX = clientX(tab) -
                       clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
-    tab._dragOffsetX = event.screenX - window.screenX - tabOffsetX;
-    tab._dragOffsetY = event.screenY - window.screenY;
+    tab._dragData = {
+      offsetX: event.screenX - window.screenX - tabOffsetX,
+      offsetY: event.screenY - window.screenY
+    };
 
     event.stopPropagation();
   },
@@ -368,24 +370,21 @@ var TMP_tabDNDObserver = {
       gBrowser.updateCurrentBrowser(true);
     }
     else {
-      var url = browserDragAndDrop.drop(event, { });
-      // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
-      // Also disallow dropping javascript: or data: urls--bail out
-      if (!url || !url.length || url.indexOf(" ", 0) != -1 ||
-         /^\s*(javascript|data):/.test(url))
-         return;
-
-      var bgLoad = true;
+      // Pass true to disallow dropping javascript: or data: urls
+      let url;
       try {
-        bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-      }
-      catch (e) { }
+        url = browserDragAndDrop.drop(event, { }, true);
+      } catch (ex) {}
+
+      if (!url)
+        return;
+
+      let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
 
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      url = getShortcutOrURI(url);
-      var tab = null;
+      let tab = null;
       if (left_right > -1 && !Tabmix.contentAreaClick.isUrlForDownload(url)) {
         // We're adding a new tab.
          try {
@@ -413,13 +412,16 @@ var TMP_tabDNDObserver = {
         gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
-      delete draggedTab._dragOffsetX;
-      delete draggedTab._dragOffsetY;
+      delete draggedTab._dragData;
       draggedTab.removeAttribute("dragged", true);
     }
   },
 
   onDragEnd: function minit_onDragEnd(aEvent) {
+    var tabBar = gBrowser.tabContainer;
+    if (Tabmix.isVersion(170) && !tabBar.useTabmixDnD(aEvent))
+      tabBar._finishAnimateTabMove();
+
     if (this.draggedTab) {
       delete this.draggedTab.__tabmixDragStart;
       this.draggedTab.removeAttribute("dragged", true);
@@ -427,28 +429,33 @@ var TMP_tabDNDObserver = {
     }
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
-    if (dt.mozUserCancelled || dt.dropEffect != "none")
+    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+    if (dt.mozUserCancelled || dt.dropEffect != "none") {
+      delete draggedTab._dragData;
       return;
+    }
 
     this.clearDragmark(aEvent);
 
     // don't allow to open new window in single window mode
-    if (Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
+    // respect bug489729 extension preference
+    if (window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab") ||
+        Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
       aEvent.stopPropagation();
       return;
     }
+
     // Disable detach within the browser toolbox
     var eX = aEvent.screenX;
+    var eY = aEvent.screenY;
     var wX = window.screenX;
     // check if the drop point is horizontally within the window
     if (eX > wX && eX < (wX + window.outerWidth)) {
       // also avoid detaching if the the tab was dropped too close to
       // the tabbar (half a tab)
-      var tabBar = gBrowser.tabContainer;
       var bo = tabBar.mTabstrip.scrollBoxObject;
       var rowHeight = TabmixTabbar.singleRowHeight;
       var endScreenY = bo.screenY + bo.height + 0.5 * rowHeight;
-      var eY = aEvent.screenY;
       if (TabmixTabbar.position == 0) {// tabbar on the top
         if (eY < endScreenY && eY > window.screenY) {
           aEvent.stopPropagation();
@@ -468,7 +475,7 @@ var TMP_tabDNDObserver = {
 
     // we copy this code from gBrowser.tabContainer dragend handler
     // for the case tabbar is on the bottom
-    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+
     // screen.availLeft et. al. only check the screen that this window is on,
     // but we want to look at the screen the tab is being dropped onto.
     var sX = {}, sY = {}, sWidth = {}, sHeight = {};
@@ -479,13 +486,12 @@ var TMP_tabDNDObserver = {
     // ensure new window entirely within screen
     var winWidth = Math.min(window.outerWidth, sWidth.value);
     var winHeight = Math.min(window.outerHeight, sHeight.value);
-    var left = Math.min(Math.max(eX - draggedTab._dragOffsetX, sX.value),
+    var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, sX.value),
                           sX.value + sWidth.value - winWidth);
-    var top = Math.min(Math.max(eY - draggedTab._dragOffsetY, sY.value),
+    var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, sY.value),
                         sY.value + sHeight.value - winHeight);
 
-    delete draggedTab._dragOffsetX;
-    delete draggedTab._dragOffsetY;
+    delete draggedTab._dragData;
 
     if (gBrowser.tabs.length == 1) {
       // resize _before_ move to ensure the window fits the new screen.  if
@@ -1034,15 +1040,9 @@ Tabmix.navToolbox = {
       obj = gURLBar.handleCommand;
       fn = "urlfixerOldHandler";
     }
-    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.browserLoadURL";
 
-    // fix incompability with https://addons.mozilla.org/en-US/firefox/addon/instantfox/
-    // instantfox uses pre-Firefox 10 version of handleCommand
-    var testVersionString = "if (aTriggeringEvent instanceof MouseEvent) {";
-    var pre10Version = typeof(InstantFox) == "object" &&
-        _handleCommand.indexOf(testVersionString) > -1;
-    var TMP_fn = !pre10Version ? "Tabmix.whereToOpen" : "Tabmix.browserLoadURL";
-
+    let TMP_fn = "Tabmix.whereToOpen";
+    let _handleCommand = fn in obj ? obj[fn].toString() : "Tabmix.whereToOpen";
     if (_handleCommand.indexOf(TMP_fn) > -1)
       return;
 
@@ -1050,9 +1050,8 @@ Tabmix.navToolbox = {
       Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
         return;
 
-    // set altDisabled if Suffix extension installed
-    // dont use it for Firefox 6.0+ until new Suffix extension is out
-    let fixedHandleCommand = Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
+    // we don't do anything regarding IeTab and URL Suffix extensions
+    Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
       '{',
       '{ var _data, altDisabled = false; \
        if (gBrowser.tabmix_tab) {\
@@ -1060,40 +1059,26 @@ Tabmix.navToolbox = {
          delete gBrowser.tabmix_userTypedValue;\
        }'
     )._replace(
-      testVersionString,
-      'let _mayInheritPrincipal = typeof(mayInheritPrincipal) == "boolean" ? mayInheritPrincipal : true;\
-       Tabmix.browserLoadURL(aTriggeringEvent, postData, altDisabled, url, _mayInheritPrincipal); \
-       return; \
-       $&', {check: pre10Version}
-    );
-
-   /* Starting with firefx 10 we are not using Tabmix.browserLoadURL
-    * we don't do anything regarding IeTab and URL Suffix extensions
-    */
-    if (!pre10Version) {
-      fixedHandleCommand = fixedHandleCommand._replace(
-        'if (isMouseEvent || altEnter) {',
-        'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
-         if (isMouseEvent || altEnter || loadNewTab) {'
-      )._replace(
-        // always check whereToOpenLink except for alt to catch also ctrl/meta
-        'if (isMouseEvent)',
-        'if (isMouseEvent || aTriggeringEvent && !altEnter)'
-      )._replace(
-        'where = whereToOpenLink(aTriggeringEvent, false, false);',
-        '$&\
-         if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
-           where = "tab";'
-      )._replace(
-        '(where == "current")',
-        '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
-      )._replace(
-        'openUILinkIn(url, where, params);',
-        'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
-         $&'
-      );
-    }
-    fixedHandleCommand.toCode();
+      'if (isMouseEvent || altEnter) {',
+      'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+       if (isMouseEvent || altEnter || loadNewTab) {'
+    )._replace(
+      // always check whereToOpenLink except for alt to catch also ctrl/meta
+      'if (isMouseEvent)',
+      'if (isMouseEvent || aTriggeringEvent && !altEnter)'
+    )._replace(
+      'where = whereToOpenLink(aTriggeringEvent, false, false);',
+      '$&\
+       if (loadNewTab && where == "current" || !isMouseEvent && where == "window")\
+         where = "tab";'
+    )._replace(
+      '(where == "current")',
+      '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
+    )._replace(
+      'openUILinkIn(url, where, params);',
+      'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
+       $&'
+    ).toCode();
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
     if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
@@ -1152,11 +1137,8 @@ Tabmix.navToolbox = {
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     let SM = TabmixSessionManager;
-    if (SM.enableManager == null) {
-      SM.enableManager = Tabmix.prefs.getBoolPref("sessions.manager") && !SM.globalPrivateBrowsing;
-      SM.enableBackup = Tabmix.prefs.getBoolPref("sessions.crashRecovery") && !SM.isPrivateWindow;
-    }
-    SM.toggleRecentlyClosedWindowsButton();
+    if (SM.enableManager != null)
+      SM.toggleRecentlyClosedWindowsButton();
 
     gTMPprefObserver.showReloadEveryOnReloadButton();
 
@@ -1187,7 +1169,7 @@ Tabmix.navToolbox = {
     if (box && box != gBrowser.tabContainer.nextSibling) {
       // update currentset
       let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset");
+      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
       // remove existing tabmixScrollBox item
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
       let index = cSet.indexOf("tabbrowser-tabs");

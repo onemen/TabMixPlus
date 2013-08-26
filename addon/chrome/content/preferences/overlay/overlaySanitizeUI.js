@@ -1,6 +1,19 @@
 "use strict";
 
 Tabmix.setSanitizer = {
+  init: function () {
+    this.isPromptDialog = typeof window.gSanitizePromptDialog == "object";
+    this.addSanitizeItem();
+    this.addMenuItem();
+    if (this.isPromptDialog) {
+      Tabmix.changeCode(gSanitizePromptDialog, "gSanitizePromptDialog.selectByTimespan")._replace(
+        'if (this.selectedTimespan',
+        'Tabmix.setSanitizer.disableMenuItem();\
+         $&'
+      ).toCode();
+    }
+  },
+
   addSanitizeItem: function () {
     if (typeof Sanitizer != 'function')
       return;
@@ -15,7 +28,8 @@ Tabmix.setSanitizer = {
         }
       },
       get canClear() {
-        return true;
+        // only sanitize when user selects to sanitize everything
+        return !this.range;
       }
     }
   },
@@ -34,9 +48,9 @@ Tabmix.setSanitizer = {
       let prefName;
       let cpd = _item.getAttribute("preference").indexOf("privacy.cpd.") != -1;
       if (cpd)
-        prefName = "privacy.cpd.extensions-tabmix";
+        prefName = this.prefName = "privacy.cpd.extensions-tabmix";
       else
-        prefName = "privacy.clearOnShutdown.extensions-tabmix";
+        prefName = this.prefName = "privacy.clearOnShutdown.extensions-tabmix";
 
       let pref = document.createElement("preference");
       pref.setAttribute("id", prefName);
@@ -45,23 +59,37 @@ Tabmix.setSanitizer = {
       prefs.appendChild(pref);
 
       let check = document.createElement(itemList ? "listitem" : "checkbox");
+      check.setAttribute("id", "extensions-tabmix");
       check.setAttribute("label", this._label);
       check.setAttribute("accesskey", this._accesskey);
       check.setAttribute("preference", prefName);
       check.setAttribute("oncommand", "Tabmix.setSanitizer.confirm(this);");
       if (Services.prefs.prefHasUserValue(prefName))
-        check.setAttribute("checked", Services.prefs.getBoolPref(prefName));
+        this.checked = Services.prefs.getBoolPref(prefName);
       if (itemList) {
         check.setAttribute("type", "checkbox");
         check.setAttribute("noduration", "true");
-        itemList.setAttribute("rows", "7");
+        itemList.setAttribute("rows", parseInt(itemList.getAttribute("rows")) + 1);
       }
       _item.parentNode.insertBefore(check, null);
 
-      if (typeof(gSanitizePromptDialog) == "object") {
+      if (this.isPromptDialog) {
+        Tabmix.setSanitizer.disableMenuItem();
         pref.setAttribute("readonly", "true");
-        check.setAttribute("onsyncfrompreference", "return gSanitizePromptDialog.onReadGeneric();");
+        check.setAttribute("onsyncfrompreference", "Tabmix.setSanitizer.checked = this.checked; return gSanitizePromptDialog.onReadGeneric();");
       }
+    }
+  },
+
+  checked: false,
+  disableMenuItem: function () {
+    let disabled = gSanitizePromptDialog.selectedTimespan !== Sanitizer.TIMESPAN_EVERYTHING;
+    let checkbox = document.getElementById("extensions-tabmix");
+    checkbox.setAttribute("disabled", disabled);
+    if (this.checked) {
+      checkbox.setAttribute("checked", !disabled);
+      document.getElementById(this.prefName).disabled = disabled;
+      gSanitizePromptDialog.onReadGeneric();
     }
   },
 

@@ -2,8 +2,10 @@
 
 var EXPORTED_SYMBOLS = ["TabmixSvc"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 let TabmixSvc = {
   _version: {},
@@ -94,8 +96,35 @@ let TabmixSvc = {
     }
   },
 
+  windowStartup: {
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
+    _initialized: false,
+    init: function(aWindow) {
+      // windowStartup must only be called once for each window
+      if ("firstWindowInSession" in aWindow.Tabmix)
+        return;
+      aWindow.Tabmix.firstWindowInSession = !this._initialized;
+      if (this._initialized)
+        return;
+      this._initialized = true;
+
+      Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
+    },
+
+    observe: function(aSubject, aTopic, aData) {
+      switch (aTopic) {
+        case "browser-delayed-startup-finished":
+          try {
+            aSubject.TMP_eventListener.browserDelayedStartupFinished();
+          } catch (ex) {log.assert(ex);}
+          break;
+      }
+    }
+  },
+
   sm: {
-    initialized: false,
+    lastSessionPath: null,
+    persistTabAttributeSet: false,
     status: "",
     crashed: false,
     get sanitized() {
@@ -105,9 +134,6 @@ let TabmixSvc = {
     private: true
   }
 }
-
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
@@ -140,3 +166,6 @@ XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessio
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "log",
+  "resource://tabmixplus/log.jsm");

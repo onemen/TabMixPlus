@@ -73,9 +73,7 @@
           <menupopup id="tm-undoCloseList-menu" class="fix-bookmark-item"
             onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this); event.stopPropagation();"
             onpopupshown="event.stopPropagation();"
-            onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-            oncommand="TMP_ClosedTabs.restoreTab('original', event.originalTarget.value); event.stopPropagation();"
-            onclick="TMP_ClosedTabs.checkForMiddleClick(event);"/>
+            onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
         </menu>
         <menuseparator id="tm-separator-1" insertbefore="context_closeTab" type="tabmix"/>
 <!--

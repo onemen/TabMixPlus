@@ -19,7 +19,8 @@ var TMP_extensionsCompatibility = {
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
-        verticalTabBar: false, ieTab2: false};
+        verticalTabBar: false, ieTab2: false,
+        gIeTab: false /* for ieTab and ieTab2 */};
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", function() {
@@ -183,6 +184,11 @@ var TMP_extensionsCompatibility = {
         /return;\n/, 'return null;\n'
       ).toCode();
     }
+
+    if (typeof window.gIeTab2 == "object")
+      Tabmix.extensions.gIeTab = {obj: "gIeTab2", folder: "ietab2"};
+    else if (typeof window.gIeTab == "object")
+      Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
@@ -316,6 +322,12 @@ var TMP_extensionsCompatibility = {
           "function toolkitCloseallOnUnload("
         ).toCode();
       }
+      gBrowser.getTabForBrowser = function (aBrowser) {
+        if (this._browsers &&
+            typeof this._browsers[this._browsers.length - 1] == "undefined")
+          this._browsers = null;
+        return this._getTabForContentWindow(aBrowser.contentWindow);
+      }
     }
 
     if ("FireGestures" in window) {
@@ -375,6 +387,29 @@ var TMP_extensionsCompatibility = {
     if (typeof aioCloseWindow == 'function')
       aioCloseWindow = BrowserTryToCloseWindow;
 
+    // Tile Tabs 10.0
+    // https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/
+    if (typeof tileTabs == "object") {
+      let newCode = 'title = TMP_Places.getTabTitle(tab, tab.linkedBrowser.currentURI.spec, title);' +
+        'if (tab.hasAttribute("mergeselected"))' +
+        '  title = "(*) " + title;' +
+        '$&';
+
+      let func = {styleTiledTabs: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        showProperties: 'if (tab.hasAttribute("image"))',
+        onTabAttrModified: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        showTabList: /menuItem\.setAttribute\("label",\s*title\);/,
+        showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
+      }
+
+      for (let [fnName, oldCode] in Iterator(func)) {
+        if (typeof tileTabs[fnName] == "function") {
+          Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
+            oldCode, newCode
+          ).toCode();
+        }
+      }
+    }
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
@@ -391,6 +426,14 @@ var TMP_extensionsCompatibility = {
         'gBrowser.moveTabTo',
         'if (!Tabmix.prefs.getBoolPref("openNewTabNext")) $&'
       ).toCode();
+    }
+
+    if (typeof SpeedDial == "object" && SpeedDial.originalBrowserOpenTab) {
+      Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
+        'SpeedDial.originalBrowserOpenTab(event);',
+        'SpeedDial.originalBrowserOpenTab(event, arguments.length > 1 && arguments[1]);'
+      ).toCode();
+      window.BrowserOpenTab = TMP_BrowserOpenTab;
     }
   }
 
@@ -571,9 +614,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
       }
     }
 
-    // we don't need this in the new version since we change the tabs-frame place
-    // keep it here for non default theme that uses old Tabmix binding
     if ("TreeStyleTabBrowser" in window) {
+      // we don't need this in the new version since we change the tabs-frame place
+      // keep it here for non default theme that uses old Tabmix binding
       let fn = TreeStyleTabBrowser.prototype.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
         Tabmix.changeCode(TreeStyleTabBrowser.prototype, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
@@ -585,6 +628,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
           'newTabBox.orient',
           'if (newTabBox) $&', {flags: "g"}
         ).toCode();
+      }
+      TreeStyleTabBrowser.prototype.getTabClosebox = function(aTab) {
+        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon always-right');
       }
     }
 

@@ -12,16 +12,19 @@ var gPrefWindow = {
   init: function() {
     this._initialized = true;
 
-    var prefWindow = $("TabMIxPreferences");
-    if (Tabmix.isPlatform("Mac"))
-      prefWindow.setAttribute("mac", true);
-    else if (Tabmix.isPlatform("Linux"))
-      prefWindow.setAttribute("linux", true);
-
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
       prefWindow.setAttribute("chromifox", true);
+
+    var prefWindow = $("TabMIxPreferences");
+    if (Tabmix.isPlatform("Mac"))
+      prefWindow.setAttribute("mac", true);
+    else if (Tabmix.isPlatform("Linux")) {
+      prefWindow.setAttribute("linux", true);
+      if (skin == "ftdeepdark")
+        prefWindow.setAttribute("ftdeepdark", true);
+    }
 
     /* we don't need to fix tabpanels border in ubuntu */
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
@@ -258,7 +261,9 @@ function setPrefAfterImport(aPref) {
   // replace old preference by setting new value to it
   // and call gTMPprefObserver.updateSettings to replace it.
   if (aPref.type == Services.prefs.PREF_INVALID) {
-    let type = parseInt(aPref.value) ? 64 : /true|false/i.test(aPref.value) ? 128 : 32;
+    let val = parseInt(aPref.value);
+    let type = typeof val == "number" && !isNaN(val) ?
+               64 : /true|false/i.test(aPref.value) ? 128 : 32;
     if (type == 128)
       aPref.value = /true/i.test(aPref.value);
     let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
@@ -298,8 +303,11 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
   "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
   "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
-  "browser.tabs.warnOnClose","browser.warnOnQuit","browser.warnOnRestart",
+  "browser.tabs.warnOnClose","browser.warnOnQuit",
   "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
+
+  if (!Tabmix.isVersion(200))
+    otherPrefs.push("browser.warnOnRestart");
 
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
@@ -339,52 +347,56 @@ function exportData() {
   patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
   patterns.unshift("tabmixplus\n");
 
-  const nsIFilePicker = Ci.nsIFilePicker;
-  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  var fpCallback = function fpCallback_done(aResult) {
-    if (aResult != nsIFilePicker.returnCancel) {
-      let file = fp.file;
-      if (!/\.txt$/.test(file.leafName.toLowerCase()))
-        file.leafName += ".txt";
-      if (file.exists())
-        file.remove(true);
-      file.create(file.NORMAL_FILE_TYPE, parseInt("0666", 8));
-      let stream = Cc["@mozilla.org/network/file-output-stream;1"].
-                   createInstance(Ci.nsIFileOutputStream);
-      stream.init(file, 0x02, 0x200, null);
-      for (let i = 0; i < patterns.length ; i++)
-        stream.write(patterns[i], patterns[i].length);
-      stream.close();
-    }
+  function exportCallback(aFile) {
+    if (!/\.txt$/.test(aFile.leafName.toLowerCase()))
+      aFile.leafName += ".txt";
+    if (aFile.exists())
+      aFile.remove(true);
+    aFile.create(aFile.NORMAL_FILE_TYPE, parseInt("0666", 8));
+    let stream = Cc["@mozilla.org/network/file-output-stream;1"].
+                  createInstance(Ci.nsIFileOutputStream);
+    stream.init(aFile, 0x02, 0x200, null);
+    for (let i = 0; i < patterns.length ; i++)
+      stream.write(patterns[i], patterns[i].length);
+    stream.close();
   }
-
-  fp.init(window, null, nsIFilePicker.modeSave);
-  fp.defaultExtension = "txt";
-  fp.defaultString = "TMPpref";
-  fp.appendFilters(nsIFilePicker.filterText);
-  fp.open(fpCallback);
+  showFilePicker("save", exportCallback);
 }
 
 function importData () {
-  const nsIFilePicker = Ci.nsIFilePicker;
-  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  var fpCallback = function fpCallback_done(aResult) {
-    if (aResult != nsIFilePicker.returnCancel) {
-      let stream = Cc["@mozilla.org/network/file-input-stream;1"].
-                  createInstance(Ci.nsIFileInputStream);
-      stream.init(fp.file, 0x01, parseInt("0444", 8), null);
-      let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
-                  createInstance(Ci.nsIScriptableInputStream);
-      streamIO.init(stream);
-      let input = streamIO.read(stream.available());
-      streamIO.close();
-      stream.close();
-      if (input)
-        loadData(input.replace(/\r\n/g, "\n").split("\n"));
-    }
+  function importCallback(aFile) {
+    let stream = Cc["@mozilla.org/network/file-input-stream;1"].
+                createInstance(Ci.nsIFileInputStream);
+    stream.init(aFile, 0x01, parseInt("0444", 8), null);
+    let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
+                createInstance(Ci.nsIScriptableInputStream);
+    streamIO.init(stream);
+    let input = streamIO.read(stream.available());
+    streamIO.close();
+    stream.close();
+    if (input)
+      loadData(input.replace(/\r\n/g, "\n").split("\n"));
   }
 
-  fp.init(window, null, nsIFilePicker.modeOpen);
+  showFilePicker("open", importCallback);
+}
+
+function showFilePicker(mode, callback) {
+  const nsIFilePicker = Ci.nsIFilePicker;
+  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+  function fpCallback(aResult) {
+    if (aResult != nsIFilePicker.returnCancel)
+      callback(fp.file);
+  }
+
+  if (mode == "open")
+    mode = nsIFilePicker.modeOpen;
+  else {
+    fp.defaultExtension = "txt";
+    fp.defaultString = "TMPpref";
+    mode = nsIFilePicker.modeSave;
+  }
+  fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
   if (Tabmix.isVersion(180))
     fp.open(fpCallback);
@@ -427,11 +439,11 @@ function loadData (pattern) {
 }
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened
-function showPane(paneToLoad) {
+function showPane(paneID) {
   let docElt = document.documentElement;
-  paneToLoad = paneToLoad > -1 ?
-    document.getElementsByTagName("prefpane")[paneToLoad] :
-    $(docElt.lastSelected);
+  let paneToLoad = document.getElementById(paneID);
+  if(!paneToLoad || paneToLoad.nodeName != "prefpane")
+    paneToLoad = $(docElt.lastSelected);
   docElt.showPane(paneToLoad);
 }
 

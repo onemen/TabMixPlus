@@ -2,11 +2,10 @@
 
 var EXPORTED_SYMBOLS = ["flst"];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://tabmixplus/Services.jsm");
 
 function flst() {
   this.flstOn = TabmixSvc.getString("flstOn.label");

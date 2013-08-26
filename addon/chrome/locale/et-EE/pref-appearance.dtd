@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Praegune kaart">
 <!ENTITY unloadedTabs.label "Laadimata kaardid">
 <!ENTITY unreadTab.label "Lugemata kaardid">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "pärast uuestilaadimist muuda kaart lugemata kaardiks">
 <!ENTITY otherTabs.label "Teised kaardid">
 <!ENTITY italic.label "Kaldkiri">
 <!ENTITY bold.label "Paks">

@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Εστίαση/επιλογή καρτελών που ανοίγουν από:">
 <!ENTITY selectTab.label "Δεσμούς">
 <!ENTITY selectDivertedTab.label "Παράθυρα που έχουν παρακαμφθεί">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Εντολές νέων καρτελών">
 <!ENTITY contextMenuSearch.label "Αναζήτηση στο μενού περιεχομένου">
 <!ENTITY selectTabBH.label "Σελιδοδείκτες/Ιστορικό">

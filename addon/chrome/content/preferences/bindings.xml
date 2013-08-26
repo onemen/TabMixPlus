@@ -5,6 +5,21 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
 
+  <binding id="checkbox_tmp" display="xul:hbox">
+    <content preference-editable="true">
+      <xul:checkbox anonid="checkbox" xbl:inherits="label,align,style,accesskey,crop,flex,disabled"/>
+    </content>
+    <implementation>
+      <field name="_checkbox">document.getAnonymousElementByAttribute(this, "anonid", "checkbox");</field>
+      <property name="label" onget="return this._checkbox.label;"
+                            onset="return this._checkbox.label = val;"/>
+      <property name="value" onget="return this._checkbox.checked;"
+                            onset="return this.checked = val;"/>
+      <property name="checked" onget="return this._checkbox.checked;"
+                            onset="return this._checkbox.checked = val;"/>
+    </implementation>
+  </binding>
+
   <binding id="checkbox" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
     <content>
       <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
@@ -15,20 +30,6 @@
     </content>
     <implementation>
     </implementation>
-  </binding>
-
-  <binding id="checkbox-with-spacing" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
-    <content>
-      <xul:hbox class="checkbox-spacer-box">
-        <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
-      </xul:hbox>
-      <xul:hbox class="checkbox-label-center-box" xbl:inherits="flex=flexlabel">
-        <xul:hbox class="checkbox-label-box" xbl:inherits="flex=flexlabel">
-          <xul:image class="checkbox-icon" xbl:inherits="src"/>
-          <xul:label class="checkbox-label" xbl:inherits="xbl:text=label,accesskey,crop,flex=flexlabel"/>
-        </xul:hbox>
-      </xul:hbox>
-    </content>
   </binding>
 
   <binding id="preference" extends="chrome://global/content/bindings/preferences.xml#preference">

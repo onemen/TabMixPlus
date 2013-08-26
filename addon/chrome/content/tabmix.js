@@ -48,20 +48,14 @@ Tabmix.startup = function TMP_startup() {
 
   TabmixContext.toggleEventListener(true);
 
-  // add call to Tabmix.Sanitizer
-  // nsBrowserGlue.js use loadSubScript to load Sanitizer so we need to add this here
-  var cmd = document.getElementById("Tools:Sanitize");
-  if (cmd)
-    cmd.setAttribute("oncommand", cmd.getAttribute("oncommand") + " Tabmix.Sanitizer.tryToSanitize();");
-
   // if sessionStore disabled use TMP command
   window.undoCloseTab = function ct_window_undoCloseTab(aIndex, aWhere) {
     return TMP_ClosedTabs.undoCloseTab(aIndex, aWhere);
   };
 }
 
-// we call this function when gBrowserInit._delayedStartup start, see setup.js
-Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
+// we call this function from gBrowserInit._delayedStartup, see setup.js
+Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
   if (this.isFirstWindow) {
     let tmp = {};
     Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
@@ -69,6 +63,59 @@ Tabmix.beforeDelayedStartup = function TMP_beforeDelayedStartup() {
   }
   this.getNewTabButtonWidth();
   TabmixSessionManager.init();
+}
+
+// after TabmixSessionManager and SessionStore initialized
+Tabmix.sessionInitialized = function() {
+  var SM = TabmixSessionManager;
+  if (SM.enableManager) {
+    window.restoreLastSession = function restoreLastSession() {
+      TabmixSessionManager.restoreLastSession();
+    }
+    if (Tabmix.isVersion(200)) {
+      Tabmix.setItem("Browser:RestoreLastSession", "disabled",
+        !SM.canRestoreLastSession || SM.isPrivateWindow);
+    }
+    else {
+      Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
+        'this._ss', 'TabmixSessionManager'
+      ).toCode();
+    }
+
+    if (Tabmix.isVersion(260))
+      SessionStore.canRestoreLastSession = false;
+    else {
+      Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
+        'function updateSearchEngine',
+        'let updateSearchEngine = function _updateSearchEngine', {silent: true}
+      )._replace(
+        'ss.canRestoreLastSession',
+        'TabmixSessionManager.canRestoreLastSession'
+      ).toCode();
+
+      let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
+                                                  [window, "window.BrowserOnClick"];
+      Tabmix.changeCode(obj, FnName)._replace(
+        'if (ss.canRestoreLastSession)',
+        'ss = TabmixSessionManager;\
+         $&'
+      ).toCode();
+    }
+  }
+
+  var tab = gBrowser.tabContainer.firstChild;
+  if (!tab.selected) {
+    tab.removeAttribute("visited");
+    tab.removeAttribute("flst_id");
+  }
+
+  TMP_SessionStore.persistTabAttribute();
+
+  TMP_ClosedTabs.setButtonDisableState();
+  SM.toggleRecentlyClosedWindowsButton();
+
+  // convert session.rdf to SessionManager extension format
+  TabmixConvertSession.startup();
 }
 
 // we call this at the start of gBrowserInit._delayedStartup
@@ -93,18 +140,10 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
-  /* Add attribute to nsSessionStore persistTabAttribute after delay
-     we call this after nsSessionStore.init
-     we add this also when we use TMP session manager.
-     we use Firefox SessionStore closed tab service and for restore after restart
-  */
-  if (this.isFirstWindow)
-    TMP_SessionStore.persistTabAttribute();
-
-  TMP_ClosedTabs.setButtonDisableState();
-  TabmixSessionManager.toggleRecentlyClosedWindowsButton();
-  // convert session.rdf to SessionManager extension format
-  TabmixConvertSession.startup();
+  if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
+    SessionStore.promiseInitialized.then(this.sessionInitialized.bind(this));
+  else
+    Tabmix.sessionInitialized();
 
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
@@ -115,6 +154,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
         gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
     }
     delete window.bookMarkIds;
+    gBrowser._lastRelatedTab = null;
   }
 
   TMP_Places.onDelayedStartup();
@@ -156,32 +196,21 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
-    Services.obs.addObserver(this, "browser-delayed-startup-finished", false);
     window.addEventListener("DOMContentLoaded", this, false);
   },
 
-  observe: function TMP_EL_observe(aSubject, aTopic, aData) {
-    switch (aTopic) {
-      case "browser-delayed-startup-finished":
-        Services.obs.removeObserver(this, "browser-delayed-startup-finished");
-        try {
-          // master password dialog can popup before startup when Gmail-manager try to login
-          // it can cause load event to fire late, so we get here before onWindowOpen run
-          if (!TMP_eventListener._windowInitialized)
-            TMP_eventListener.onWindowOpen();
-          Tabmix.delayedStartup();
-        } catch (ex) {Tabmix.assert(ex);}
-        break;
-    }
+  browserDelayedStartupFinished: function TMP_EL_browserDelayedStartupFinished() {
+    // master password dialog can popup before startup when Gmail-manager try to login
+    // it can cause load event to fire late, so we get here before onWindowOpen run
+    if (!TMP_eventListener._windowInitialized)
+      TMP_eventListener.onWindowOpen();
+    Tabmix.delayedStartup();
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
     switch (aEvent.type) {
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent);
-        break;
-      case "SSTabClosing":
-        this.onSSTabClosing(aEvent);
         break;
       case "TabOpen":
         this.onTabOpen(aEvent);
@@ -215,7 +244,7 @@ var TMP_eventListener = {
         this.onWindowClose(aEvent);
         break;
       case "fullscreen":
-        this.onFullScreen(false);
+        this.onFullScreen(!window.fullScreen);
         break;
     }
   },
@@ -257,7 +286,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabEvents = ["SSTabRestoring", "SSTabClosing",
+    this._tabEvents = ["SSTabRestoring",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
@@ -423,7 +452,7 @@ var TMP_eventListener = {
         Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
         // check if australis tab shape is implemented in window (bug 738491)
-        let australis = document.getElementById("winstripe-tab-clip-path");
+        let australis = document.getElementById("tab-clip-path-outer");
         if (australis)
           tabBar.setAttribute("australis", true);
       }
@@ -480,7 +509,13 @@ var TMP_eventListener = {
     } catch (ex) {Tabmix.assert(ex);}
 
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
-    gTMPprefObserver.changeNewTabButtonSide(position);
+    if (Tabmix.extensions.treeStyleTab) {
+      setTimeout(function() {
+        gTMPprefObserver.changeNewTabButtonSide(position);
+      }, 0);
+    }
+    else
+      gTMPprefObserver.changeNewTabButtonSide(position);
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
 
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
@@ -525,46 +560,8 @@ var TMP_eventListener = {
     delete Tabmix.adjustTabstrip;
   },
 
-  _tabStillLoading: 0,
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
-   /**
-    * set tab title to user defined name or bookmark title when sessionStore restore tabs
-    * sessionStore prepare all the tabs before it starts real loading
-    * catch the first SSTabRestoring and prepare as well
-    */
-    if (this._tabStillLoading == 0) {
-      let tabWidthChanged;
-      let setWidth = TabmixTabbar.widthFitTitle && TabmixTabbar.hideMode != 2;
-      for (let i = 0; i < gBrowser.tabs.length; i++) {
-        let tab = gBrowser.tabs[i];
-        let browser = tab.linkedBrowser;
-        let url = browser.userTypedValue;
-        let tabStillLoading = "__SS_tabStillLoading" in browser && browser.__SS_tabStillLoading;
-        if (url && tabStillLoading) {
-          this._tabStillLoading++;
-          let data = browser.__SS_data;
-          if (data && data.attributes && data.attributes["label-uri"])
-            tab.setAttribute("label-uri", data.attributes["label-uri"]);
-          let title = TMP_SessionStore._getTitle(data, url, tab.label);
-          if (title != tab.label) {
-            if (setWidth) {
-              tab.removeAttribute("width");
-              tabWidthChanged = true;
-            }
-            tab.label = title;
-          }
-        }
-      }
-      if (tabWidthChanged) {
-        TabmixTabbar.updateScrollStatus();
-        TabmixTabbar.updateBeforeAndAfter();
-      }
-    }
-
     var tab = aEvent.target;
-    if (this._tabStillLoading > 0)
-      this._tabStillLoading--;
-
     Tabmix.restoreTabState(tab);
 
     // don't mark new tab as unread
@@ -573,25 +570,10 @@ var TMP_eventListener = {
       tab.setAttribute("visited", true);
   },
 
-  onSSTabClosing: function TMP_EL_onSSTabClosing(aEvent) {
-    var tab = aEvent.target;
-/// test if we need this for FF 4.0
-    var browser = tab.linkedBrowser;
-    var iconURL = browser.mIconURL;
-    if (tab.hasAttribute("busy") || tab.getAttribute("image") != iconURL) {
-      tab.removeAttribute("busy");
-      if (iconURL)
-        tab.setAttribute("image", iconURL);
-      else if (browser.currentURI && !(/^https?:/.test(browser.currentURI.spec)))
-        gBrowser.useDefaultIcon(tab);
-    }
-  },
-
-  onFullScreen: function TMP_EL_onFullScreen(aPositionChanged) {
+  onFullScreen: function TMP_EL_onFullScreen(enterFS) {
     // add fullscr-bottom-toggler when tabbar is on the bottom
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-    var fullScreen = window.fullScreen || document.mozFullScreen;
-    if (TabmixTabbar.position == 1 && (!fullScreen || aPositionChanged)) {
+    if (enterFS && TabmixTabbar.position == 1) {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
@@ -605,6 +587,8 @@ var TMP_eventListener = {
             'TMP_eventListener._updateMarginBottom("");\
              $&'
           )._replace(
+            Tabmix.isVersion(170) ?
+            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
             'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
             '$&\
              TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
@@ -622,18 +606,15 @@ var TMP_eventListener = {
           ).toCode();
         }
 
-        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullScreen")._replace(
+        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
           /(\})(\)?)$/,
-          '  fullScrToggler = document.getElementById("fullscr-bottom-toggler");' +
-          '  if (fullScrToggler) {' +
-          '    fullScrToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-          '    fullScrToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
+          '  let bottomToggler = document.getElementById("fullscr-bottom-toggler");' +
+          '  if (bottomToggler) {' +
+          '    bottomToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
+          '    bottomToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
           '  }' +
           '$1$2'
         ).toCode();
-      }
-      if (aPositionChanged) {
-        this.mouseoverToggle(false);
       }
       if (!document.mozFullScreen) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
@@ -641,13 +622,13 @@ var TMP_eventListener = {
         fullScrToggler.collapsed = false;
       }
     }
-    else if (fullScrToggler && fullScreen) {
+    else if (fullScrToggler && !enterFS) {
       this._updateMarginBottom("");
       fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
       fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
       fullScrToggler.collapsed = true;
     }
-    if (fullScreen)
+    if (!enterFS)
       this.updateMultiRow();
   },
 
@@ -778,6 +759,8 @@ var TMP_eventListener = {
 
     if (updateNow)
       this.onTabClose_updateTabBar(tab);
+
+    gBrowser.countClosedTabs(tab);
   },
 
   // TGM extension use it
@@ -965,7 +948,7 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
     TMP_TabView._resetTabviewFrame();
-    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // TreeStyleTab extension add this to be compatible with old tabmix version
     // we call removeEventListener again here in case user close the window without opening new tabs
@@ -1051,11 +1034,6 @@ var TMP_eventListener = {
 
     aTab.setAttribute("context", gBrowser.tabContextMenu.id);
 
-    if (leftButton)
-      leftButton.setAttribute("clickthrough", "never");
-    if (rightButton)
-      rightButton.setAttribute("clickthrough", "never");
-    updateAttrib("class", "showhover tabs-closebutton", "clickthrough", "never");
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
   }

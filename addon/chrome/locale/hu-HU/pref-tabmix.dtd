@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Megnyitott lapra fókuszálás és kiválasztás, ha megnyitva:">
 <!ENTITY selectTab.label "Linkek">
 <!ENTITY selectDivertedTab.label "Eltérített ablakok">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Új lap parancsai">
 <!ENTITY contextMenuSearch.label "Keresés a helyi menüben">
 <!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">

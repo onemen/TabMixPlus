@@ -46,7 +46,7 @@
 <!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
-<!ENTITY relatedAfterCurrent.label "仅当紧邻当前标签页">
+<!ENTITY relatedAfterCurrent.label "仅当与当前标签页有关">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "紧邻原来页面打开复制的标签页">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "激活/选择来自以下位置的链接所新建的标签页">
 <!ENTITY selectTab.label "链接">
 <!ENTITY selectDivertedTab.label "更改方式的窗口">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "新建的标签页">
 <!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">

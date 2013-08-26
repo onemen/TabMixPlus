@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "התמקד בלשוניות שנפתחו מ:">
 <!ENTITY selectTab.label "קישורים">
 <!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "פקודת לשונית חדשה">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "סימניות/היסטוריה">

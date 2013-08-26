@@ -46,7 +46,7 @@
                 </menupopup>
               </menulist>
             </hbox>
-            <checkbox id="externalLink" label="&externalLink.useSeparate.label;"
+            <checkbox_tmp id="externalLink" label="&externalLink.useSeparate.label;"
                       oncommand="gLinksPane.externalLinkValue(this.checked);"/>
             <hbox align="center" class="indent">
               <!-- Open external links in: New Window, New Tab, Current Browser -->
@@ -77,9 +77,9 @@
             <description>&divertedWindows.comment;</description>
             <separator/>
             <!-- Force link with target attribute to open in current tab -->
-            <checkbox id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"/>
+            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"/>
             <hbox align="center">
-              <checkbox id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
+              <checkbox_tmp id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
               <spacer flex="1"/>
               <button id="advancedSetting" label="&edit.label;…" observes="obs_filetypeEnable"
                       oncommand="gLinksPane.openFiletypeEditor();"/>
@@ -98,7 +98,7 @@
               </menulist>
             </hbox>
             <!-- Enable Single Window Mode -->
-            <checkbox id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
+            <checkbox_tmp id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
           </groupbox>
         </tabpanel>
       </tabpanels>

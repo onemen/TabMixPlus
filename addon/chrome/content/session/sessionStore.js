@@ -10,7 +10,7 @@ var TMP_SessionStore = {
    // make sure sessionstore is init
    _ssInited: null,
    initService: function TMP_ss_start() {
-     if (this._ssInited)
+     if (Tabmix.isVersion(250) || this._ssInited)
        return;
      try {
        TabmixSvc.ss.init(window);
@@ -49,23 +49,24 @@ var TMP_SessionStore = {
      return aData.entries[activeIndex] || {};
    },
 
+   getTitleFromTabState: function(aTab) {
+     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+     let activePageData = this.getActiveEntryData(tabData);
+     return activePageData.title || activePageData.url;
+   },
+
    /**
     * @brief       - Add attribute to nsSessionStore persistTabAttribute.
     *
-    * @param doInit   a Boolean value - true when we need to init nsISessionStore.
+    *   we call this after nsSessionStore.init
+    *   we add this also when we use TMP session manager.
+    *   we use Firefox SessionStore closed tab service and for restore after restart
     *
     * @returns        Nothing.
     */
-   _persistTabAttributeSet: null,
    persistTabAttribute: function TMP_ss_persistTabAttribute() {
-      if (this._persistTabAttributeSet)
-         return;
-
-      var aTab = gBrowser.tabContainer.firstChild;
-      if (!aTab.selected) {
-         aTab.removeAttribute("visited");
-         aTab.removeAttribute("flst_id");
-      };
+      if (TabmixSvc.sm.persistTabAttributeSet)
+        return;
 
       try {
         /*
@@ -82,7 +83,7 @@ var TMP_SessionStore = {
             TabmixSvc.ss.persistTabAttribute(aAttr);
          });
 
-         this._persistTabAttributeSet = true;
+         TabmixSvc.sm.persistTabAttributeSet = true;
       } catch(ex) {
          Tabmix.log("nsSessionStore could not add Attribute to persistTabAttribute: " + ex + "\n");
       }
@@ -372,7 +373,7 @@ var TMP_ClosedTabs = {
          }
          m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
          m.setAttribute("value", i);
-         m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + "); event.stopPropagation();");
+         m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + ");");
          m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
          if (i == 0)
             m.setAttribute("key", "key_undoCloseTab");
@@ -385,14 +386,14 @@ var TMP_ClosedTabs = {
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
       m.setAttribute("value", -1);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1); event.stopPropagation();");
+      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1);");
 
       // "Restore All Tabs"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "restoreAllClosedTabs");
       m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2); event.stopPropagation();");
+      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2);");
       return true;
    },
 
@@ -400,21 +401,18 @@ var TMP_ClosedTabs = {
       if (aEvent.button != 1)
          return;
 
-      aEvent.stopPropagation();
       var index = aEvent.originalTarget.value;
       if (index < 0)
          return;
 
-      var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
-      TMP_ClosedTabs.restoreTab(where, index);
-      var popup = aEvent.originalTarget.parentNode;
-      if (TMP_ClosedTabs.count > 0)
-         TMP_ClosedTabs.populateUndoSubmenu(popup);
-      else {
-         popup.hidePopup();
-         if (popup.parentNode.id != "btn_undoclose")
-            popup.parentNode.parentNode.hidePopup();
+      let deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
+      TMP_ClosedTabs.restoreTab(deleteItem ? "delete" : "tab", index);
+      if (deleteItem && TMP_ClosedTabs.count > 0) {
+        aEvent.stopPropagation();
+        TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
       }
+      else
+         closeMenus(aEvent.target);
    },
 
    addBookmarks: function ct_addBookmarks(index) {
@@ -443,54 +441,46 @@ var TMP_ClosedTabs = {
             break;
          case "original":
             if (aIndex == -1) {
-               this.getClosedTabAtIndex(aIndex);
-               return;
+               this.removeAllClosedTabs();
+               break;
             }
             else if (aIndex == -2) {
-               this.SSS_restoerAllClosedTabs();
-               return;
+               this.SSS_restoerClosedTabs(this.count);
+               break;
             }
             // else do the default
          default:
             this.SSS_undoCloseTab(aIndex, aWhere, true);
       }
+
+      // Reset the number of tabs closed last time to the default.
+      gBrowser.setNumberOfTabsClosedLast(1);
+   },
+
+   removeAllClosedTabs: function () {
+      // update our session data
+      var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
+      if (updateRDF)
+        TabmixSessionManager.deleteWinClosedtabs(TabmixSessionManager.gThisWin);
+      while (this.count)
+        TabmixSvc.ss.forgetClosedTab(window, 0);
+      this.setButtonDisableState(true);
    },
 
   /**
    * @brief           fetch the data of closed tab, while removing it from the array
    * @param aIndex    a Integer value - 0 or grater index to remove
-   *                  other value empty the list.
    * @returns         closed tab data at aIndex.
-   *
-   * we can use ss.forgetClosedTab(window, index) from Firefox ? after ?
-   *
    */
    getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
+      if (0 > aIndex || aIndex >= this.count)
+        return null;
       // update our session data
-      var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
-      if (updateRDF) {
-        if (aIndex >= 0)
-           TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
-        else
-           TabmixSessionManager.deleteWinClosedtabs(TabmixSessionManager.gThisWin);
-      }
+      if (TabmixSessionManager.enableBackup)
+        TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
 
-      var closedTab;
-      var state = { windows: [], _firstTabs: true };
-      state.windows[0] = {tabs:[], _closedTabs: [] };
-      // if aIndex is not > 0 we just past empy list to setWindowState
-      // it's like remove all closed tabs from the list
-      if (aIndex >= 0) {
-         state.windows[0]._closedTabs = this.getClosedTabData;
-         // purge closed tab at aIndex
-         closedTab = state.windows[0]._closedTabs.splice(aIndex, 1).shift();
-      }
-
-      // replace existing _closedTabs
-      try {
-        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
-      } catch (e) {}
-
+      var closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
+      TabmixSvc.ss.forgetClosedTab(window, aIndex);
       this.setButtonDisableState();
       return closedTab;
    },
@@ -502,25 +492,24 @@ var TMP_ClosedTabs = {
       return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
    },
 
-   SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
-      var closedTabCount = this.count;
+   SSS_restoerClosedTabs: function ct_SSS_restoerClosedTabs(closedTabCount) {
       if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
-         return;
+         return null;
 
       this.setButtonDisableState(true);
 
       var aTab, blankTab;
-      // catch blank tab
+      // catch blank tabs
       var blankTabs = [];
-      for (var i = 0; i < gBrowser.tabs.length ; i++) {
+      for (let i = 0; i < gBrowser.tabs.length ; i++) {
          if (gBrowser.isBlankNotBusyTab(gBrowser.tabs[i]))
             blankTabs.push(gBrowser.tabs[i]);
       }
 
-      var multiple = closedTabCount > 1;
-      for (i = 0; i < closedTabCount; i++) {
-         blankTab = blankTabs.pop();
-         this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
+      var tab, multiple = closedTabCount > 1;
+      for (let i = 0; i < closedTabCount; i++) {
+         blankTab = blankTabs.pop() || null;
+         tab = this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
       }
 
       // remove unused blank tabs
@@ -529,6 +518,8 @@ var TMP_ClosedTabs = {
          blankTab.collapsed = true;
          gBrowser.removeTab(blankTab);
       }
+
+      return tab;
    },
 
    SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {
@@ -576,11 +567,29 @@ var TMP_ClosedTabs = {
          window.focus();
          gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
       }
+
       return newTab;
    },
 
    undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-      return this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
+      let numberOfTabsToUndoClose = 1;
+      let index = Number(aIndex);
+      if (isNaN(index)) {
+        index = 0;
+        if (Tabmix.isVersion(250))
+          numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
+      } else if (0 > index || index >= this.count)
+        return null;
+
+      let tab = null;
+      if (numberOfTabsToUndoClose > 1)
+        tab = this.SSS_restoerClosedTabs(numberOfTabsToUndoClose);
+      else
+        tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
+
+      // Reset the number of tabs closed last time to the default.
+      gBrowser.setNumberOfTabsClosedLast(1);
+      return tab;
    }
 
 }
@@ -595,6 +604,9 @@ var TabmixConvertSession = {
    },
 
    startup: function cs_startup() {
+      if (Tabmix.firstWindowInSession)
+        return;
+
       if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
         return;
 
@@ -661,12 +673,12 @@ var TabmixConvertSession = {
       var _windows = [], tabsCount = 0;
       var sessionEnum = TabmixSessionManager.initContainer(aPath).GetElements();
       while (sessionEnum.hasMoreElements()) {
-         var rdfNodeWindow = sessionEnum.getNext();
+         let rdfNodeWindow = sessionEnum.getNext();
          if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
-            var windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
+            let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
             if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
                continue;
-            var aWindowState = this.getWindowState(rdfNodeWindow);
+            let aWindowState = this.getWindowState(rdfNodeWindow);
             if (aWindowState) {// don't save empty windows
                _windows.push(aWindowState);
                tabsCount += aWindowState.tabs.length;
@@ -691,12 +703,24 @@ var TabmixConvertSession = {
 
       // save panorama data if exist
       let extData = {};
-      let emptyGroup = TabmixSvc.JSON.stringify({})
-      extData["tabview-groups"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-groups", emptyGroup);
-      extData["tabview-group"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-group", emptyGroup);
-      extData["tabview-ui"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-ui", emptyGroup);
-      extData["tabview-visibility"] = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tabview-visibility", false);
-      state.extData = extData;
+      function setExtData(id) {
+         let data = TabmixSessionManager.getLiteralValue(rdfNodeWindow, id, null);
+         if (data)
+            extData[id] = data;
+      }
+      let tabview = ["tabview-groups", "tabview-group", "tabview-ui"];
+      tabview.forEach(setExtData);
+      // only save tabview-visibility if tabview-groups exist
+      if (extData["tabview-groups"])
+         setExtData("tabview-visibility");
+
+      // save TabGroupsManagerAllGroupsData
+      let jsonText = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "tgm_jsonText");
+      if (jsonText)
+         extData.TabGroupsManagerAllGroupsData = TabmixSessionManager.getDecodedLiteralValue(null, jsonText);
+
+      if (Object.keys(extData).length)
+         state.extData = extData;
       return state;
    },
 
@@ -727,9 +751,9 @@ var TabmixConvertSession = {
       var _tabs = [];
       var tabsEnum = TabmixSessionManager.initContainer(rdfNodeTabs).GetElements();
       while (tabsEnum.hasMoreElements()) {
-         var rdfNodeTab = tabsEnum.getNext();
+         let rdfNodeTab = tabsEnum.getNext();
          if (rdfNodeTab instanceof Ci.nsIRDFResource) {
-            var closedTab = {};
+            let closedTab = {};
             closedTab.state = this.getTabState(rdfNodeTab, true);
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
@@ -742,7 +766,7 @@ var TabmixConvertSession = {
    },
 
    getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
-      var tabData = {entries:[], index: 0, zoom: 1, disallow:"", extData: null, text:""};
+      var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
       tabData.index = TabmixSessionManager.getIntValue(rdfNodeTab, "index") + 1;
       tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
@@ -752,7 +776,7 @@ var TabmixConvertSession = {
       var booleanAttrLength = TabmixSessionData.tabAttribute.length + TabmixSessionData.docShellItems.length;
       var tabProperties = properties.substr(0, booleanAttrLength);
       var disallow = [];
-      for (var j = 0; j < tabAttribute.length; j++ ) {
+      for (let j = 0; j < tabAttribute.length; j++) {
          if (tabProperties.charAt(j+2) != "1")
             disallow.push(tabAttribute[j]);
       }
@@ -763,22 +787,58 @@ var TabmixConvertSession = {
       if (properties.indexOf("_locked=") == -1)
          tabData.attributes["_locked"] = (tabProperties.charAt(1) == "1");
 
+      var extData = {};
       if (properties.length > booleanAttrLength) {
-         properties = properties.substr(booleanAttrLength + 1).split(" ");
-         properties.forEach(function(aAttr) {
-           if (/^([^\s=]+)=(.*)/.test(aAttr)) {
-             tabData.attributes[RegExp.$1] = RegExp.$2;
-           }
-         });
+        // TST add data to our properties with "|" separator
+        let TSTProps = properties.split('|');
+        properties = TSTProps.shift();
+        let PREFIX = "tmp-session-data-";
+        TSTProps.forEach(function(aProp) {
+          if (/^([^\s=]+)=(.*)/.test(aProp) &&
+              RegExp.$1.indexOf(PREFIX) == 0 && RegExp.$2)
+            extData[RegExp.$1.substr(PREFIX.length)] = decodeURIComponent(RegExp.$2);
+        });
+        properties = properties.substr(booleanAttrLength + 1).split(" ");
+        properties.forEach(function(aAttr) {
+          aAttr = TabmixSessionManager.getDecodedLiteralValue(null, aAttr);
+          if (!/^([^\s=]+)=(.*)/.test(aAttr))
+            return;
+          let isTrue = RegExp.$2 == "true";
+          switch (RegExp.$1) {
+            case "tabgroups-data":
+              // TGM data
+              let [groupId, groupName] = RegExp.$2.split(" ");
+              extData.TabGroupsManagerGroupId = groupId;
+              extData.TabGroupsManagerGroupName = groupName;
+              break;
+            case "faviconized":
+              if (isTrue)
+                extData.faviconized = true;
+            case "pinned":
+            case "hidden":
+              if (isTrue)
+                tabData[RegExp.$1] = true;
+              break;
+            // colorfulTabs data
+            case "ctreadonly":
+              extData.ctreadonly = RegExp.$2;
+              break;
+            case "tabClr":
+              extData.tabClr = RegExp.$2;
+              break;
+            default:
+              tabData.attributes[RegExp.$1] = RegExp.$2;
+          }
+        });
       }
       // save panorama data if exist
       if (!aClosedTab) {
         let data = TabmixSessionManager.getLiteralValue(rdfNodeTab, "tabview-tab");
-        if (data != "") {
-          tabData.extData = {};
-          tabData.extData["tabview-tab"] = data;
-        }
+        if (data != "")
+          extData["tabview-tab"] = data;
       }
+      if (Object.keys(extData).length)
+        tabData.extData = extData;
       return tabData;
    },
 
@@ -788,9 +848,9 @@ var TabmixConvertSession = {
       var historyData = tmpData.join("|-|").split(sep);
       var historyCount = historyData.length/3;
       var entries = [];
-      for ( var i = 0; i < historyCount; i++ ){
-         var entry = { url:"", children:[], ID: 0};
-         var index = i * 3;
+      for (let i = 0; i < historyCount; i++) {
+         let entry = { url:"", children:[], ID: 0};
+         let index = i * 3;
          entry.url = historyData[index + 1];
          entry.title = historyData[index];
          entry.scroll = historyData[index + 2];

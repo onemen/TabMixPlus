@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Focussen op/selecteren van tabbladen die openen vanuit:">
 <!ENTITY selectTab.label "Koppelingen">
 <!ENTITY selectDivertedTab.label "Omgeleide vensters">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Nieuwe tabbladopdrachten">
 <!ENTITY contextMenuSearch.label "Context menu zoeken naar">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">

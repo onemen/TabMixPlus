@@ -42,10 +42,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   window.BrowserOpenTab = TMP_BrowserOpenTab;
 
   this.openUILink_init();
-
-  // for dotCOMplete extensoin
-  if ("dotCOMplete" in window)
-     window.dotCOMplete.realBrowserLoadURL = this.browserLoadURL;
 }
 
 /**
@@ -68,12 +64,16 @@ function TMP_TBP_Startup() {
     return;
   }
 
+  TabmixSvc.windowStartup.init(window);
+
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
+  } catch (ex) {Tabmix.assert(ex);}
 
+  try {
     var SM = TabmixSessionManager;
     if (Tabmix.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
@@ -97,18 +97,6 @@ function TMP_TBP_Startup() {
       SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
 
-    var windowOpeneByTabmix = "tabmixdata" in window;
-    var firstWindow = Tabmix.isFirstWindow || SM.firstNonPrivateWindow;
-    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.extensions.sessionManager ||
-                   Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
-    var crashRecovery = Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-    var afterRestart = false;
-
-    var restoreOrAsk = Tabmix.prefs.getIntPref("sessions.onStart") < 2 || afterRestart;
-    var afterCrash = Tabmix.prefs.prefHasUserValue("sessions.crashed");
-
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
@@ -122,7 +110,7 @@ function TMP_TBP_Startup() {
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
     var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
-    var swapNewCode =
+    var loadOnStartup, swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
       '   window.tabmix_afterTabduplicated = true;' +
       '   TabmixSessionManager.init();' +
@@ -134,24 +122,35 @@ function TMP_TBP_Startup() {
     if (!Tabmix.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
-    // don't load home page on first window if session manager or crash recovery is enabled
-    if (!disAllow && ((sessionManager && windowOpeneByTabmix) ||
-         (firstWindow && crashRecovery && afterCrash) ||
-         (firstWindow && sessionManager && restoreOrAsk))) {
-      // make sure sessionstore is init without restornig pinned tabs
-      TabmixSvc.ss.init(null);
-      SM._notifyWindowsRestored = true;
+    var firstWindow = Tabmix.firstWindowInSession || SM.firstNonPrivateWindow;
+    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
+                   Tabmix.extensions.sessionManager ||
+                   Tabmix.isWindowAfterSessionRestore;
+    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+    var resumeSession  = sessionManager &&
+                         Tabmix.prefs.getIntPref("sessions.onStart") < 2;
+    var recoverSession = Tabmix.prefs.getBoolPref("sessions.crashRecovery") &&
+                         Tabmix.prefs.prefHasUserValue("sessions.crashed");
 
-      // in firefox if we are here and gHomeButton.getHomePage() == window.arguments[0] then
-      // maybe all tabs in the last session were pinned, we leet firefox to load the hompages
-      bowserStartup = bowserStartup._replace(
-        'uriToLoad = window.arguments[0];',
-        'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? "about:blank" : window.arguments[0];'
-      );
-      bowserStartup = bowserStartup._replace(
-        'if (window.opener && !window.opener.closed) {',
+    SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
+    if (SM.doRestore) {
+      // Prevent the default homepage from loading if we're going to restore a session
+      if (Tabmix.isVersion(250)) {
+        Tabmix.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
+          'sessionStartup.willOverrideHomepage', 'true'
+        ).toCode();
+      }
+      else {
+        bowserStartup = bowserStartup._replace(
+          'uriToLoad = window.arguments[0];',
+          'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? null : window.arguments[0];'
+        );
+      }
+
+      // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
+      loadOnStartup =
         '  if (uriToLoad && uriToLoad != "about:blank") {' +
-        '    for (var i = 0; i < gBrowser.tabs.length ; i++) {' +
+        '    for (let i = 0; i < gBrowser.tabs.length ; i++) {' +
         '      gBrowser.tabs[i].loadOnStartup = true;' +
         '    }' +
         '  }' +
@@ -159,7 +158,12 @@ function TMP_TBP_Startup() {
         '    gBrowser.selectedBrowser.stop();' +
         '  }' +
         '$&'
-      );
+
+      if (!Tabmix.isVersion(190)) {
+        bowserStartup = bowserStartup._replace(
+          'if (window.opener && !window.opener.closed', loadOnStartup
+        );
+      }
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
     if (Tabmix.isVersion(120) && typeof aios_dominitSidebar == "function") {
@@ -170,23 +174,28 @@ function TMP_TBP_Startup() {
     }
     bowserStartup.toCode();
 
-    // call TMP_SessionStore.setService before delayedStartup, so this will run before sessionStore.init
     // At the moment we must init TabmixSessionManager before sessionStore.init
     var [obj, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
           [gBrowserInit, "gBrowserInit._delayedStartup"] :
           [window, "delayedStartup"];
+
     Tabmix.changeCode(obj, fn)._replace(
-      '{',
-      '{' +
+      'Services.obs.addObserver', loadOnStartup, {check: Tabmix.isVersion(190) && !!loadOnStartup}
+    )._replace(
+      'Services.obs.addObserver',
       'try {' +
-      '  Tabmix.beforeDelayedStartup();' +
-      '} catch (ex) {Tabmix.assert(ex);}'
+      '  Tabmix.beforeSessionStoreInit();' +
+      '} catch (ex) {Tabmix.assert(ex);}' +
+      '$&'
     )._replace(
       swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
+    )._replace(
+      'SessionStore.canRestoreLastSession',
+      'TabmixSessionManager.canRestoreLastSession', {check: Tabmix.isVersion(250) && sessionManager}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
-    if (firstWindow && Tabmix.prefs.getBoolPref("disableIncompatible")) {
+    if (Tabmix.firstWindowInSession && Tabmix.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
@@ -319,7 +328,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   let oldValue = this.getAttribute("closebuttons");
   var tabbrowser = this.tabbrowser;
   var tabs = tabbrowser.visibleTabs;
-  var tabsCount = tabs.length;
+  var tabsCount = tabs.length - tabbrowser._removingTabs.length;
   switch (this.closeButtonsEnabled ? this.mCloseButtons : 0) {
   case 0:
     this.removeAttribute("closebuttons-hover");
@@ -343,9 +352,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     break;
   case 5:
     this.removeAttribute("closebuttons-hover");
-    if (tabsCount < 2) {
+    if (tabsCount < 3)
       this.setAttribute("closebuttons", "alltabs");
-    }
     else {
       // make sure not to check collapsed, hidden or pinned tabs for width
       let tab = TMP_TabView.checkTabs(tabs);

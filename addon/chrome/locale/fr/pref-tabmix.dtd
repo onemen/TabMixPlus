@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Sélectionner les onglets provenant de :">
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
 <!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
 <!ENTITY selectTabBH.label "Marque-pages ou Historique">

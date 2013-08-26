@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "In Tabs im Vordergrund öffnen">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Neuen Tab">
 <!ENTITY contextMenuSearch.label "Kontextmenü Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">

@@ -69,6 +69,7 @@
 <!ENTITY tabFocus.caption "Buralardan açılan sekmelere odaklan/seç:">
 <!ENTITY selectTab.label "Bağlantılardan">
 <!ENTITY selectDivertedTab.label "Ayrılmış pencerelerden">
+<!ENTITY selectTabFromExternal.label "Other applications">
 <!ENTITY selectTabCommand.label "Yeni sekme komutundan">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Yer imi/Geçmişten">
