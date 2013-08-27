@@ -88,7 +88,7 @@ let TMP_TabGroupsManager = {
       '}' +
       'if (false) {'
     )._replace(
-      'if (this.saveClosedtabs)',
+      'TMP_ClosedTabs.setButtonDisableState();',
       '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
