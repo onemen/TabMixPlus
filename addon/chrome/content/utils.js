@@ -83,14 +83,18 @@ var Tabmix = {
       return;
 
     var self = this;
-    XPCOMUtils.defineLazyGetter(aObject, aOldName, function() {
-      self.informAboutChangeInTabmix(aOldName, aNewName);
-      return self.getObject(window, aNewName);
+    Object.defineProperty(aObject, aOldName, {
+      get: function () {
+        self.informAboutChangeInTabmix(aOldName, aNewName);
+        delete aObject[aOldName];
+        return aObject[aOldName] = self.getObject(window, aNewName);
+      },
+      configurable: true
     });
   },
 
   informAboutChangeInTabmix: function(aOldName, aNewName) {
-    let err = Error(aOldName + " is deprecated in Tabmix since version 0.3.8.5pre.110123a use " + aNewName + " instead.");
+    let err = Error(aOldName + " is deprecated in Tabmix, use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
     let stack = Error().stack.split("\n").slice(3);
     let file = stack[0] ? stack[0].split(":") : null;
