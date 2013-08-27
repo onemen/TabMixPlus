@@ -197,14 +197,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 var TMP_eventListener = {
   init: function TMP_EL_init() {
     window.addEventListener("DOMContentLoaded", this, false);
-  },
-
-  browserDelayedStartupFinished: function TMP_EL_browserDelayedStartupFinished() {
-    // master password dialog can popup before startup when Gmail-manager try to login
-    // it can cause load event to fire late, so we get here before onWindowOpen run
-    if (!TMP_eventListener._windowInitialized)
-      TMP_eventListener.onWindowOpen();
-    Tabmix.delayedStartup();
+    window.addEventListener("load", this, false);
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
@@ -231,14 +224,8 @@ var TMP_eventListener = {
         this.onTabBarScroll(aEvent);
         break;
       case "DOMContentLoaded":
-        try {
-          this.onContentLoaded(aEvent);
-        } catch (ex) {Tabmix.assert(ex);}
-        break;
       case "load":
-        try {
-          this.onWindowOpen(aEvent);
-        } catch (ex) {Tabmix.assert(ex);}
+        this._onLoad(aEvent.type);
         break;
       case "unload":
         this.onWindowClose(aEvent);
@@ -257,20 +244,18 @@ var TMP_eventListener = {
     }, handler);
   },
 
- /*
-  *  we use this event to run this code before load event
-  *  until TMP version 0.3.8.3 we used to run this code from Tabmix.beforeStartup
-  *  that called from tabcontainer constractur
-  */
+  // ignore non-browser windows
+  _onLoad: function TMP_EL_onContentLoaded(aType) {
+    window.removeEventListener(aType, this, false);
+    let wintype = window.document.documentElement.getAttribute("windowtype");
+    if (wintype == "navigator:browser")
+      Tabmix.initialization.run(aType == "load" ? "onWindowOpen" :
+                                              "onContentLoaded");
+    else if (aType != "load")
+      window.removeEventListener("load", this, false);
+  },
+
   onContentLoaded: function TMP_EL_onContentLoaded() {
-    window.removeEventListener("DOMContentLoaded", this, false);
-    // don't load tabmix into undock sidebar opened by ezsidebar extension
-    var wintype = window.document.documentElement.getAttribute("windowtype");
-    if (wintype == "mozilla:sidebar")
-      return;
-
-    window.addEventListener("load", this, false);
-
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
 
@@ -361,14 +346,7 @@ var TMP_eventListener = {
     }
   },
 
-  _windowInitialized: false,
   onWindowOpen: function TMP_EL_onWindowOpen() {
-    if (this._windowInitialized)
-      return;
-
-    this._windowInitialized = true;
-    window.removeEventListener("load", this, false);
-
     window.addEventListener("unload", this, false);
     window.addEventListener("fullscreen", this, true);
 
@@ -1039,3 +1017,74 @@ var TMP_eventListener = {
   }
 
 }
+
+/**
+ * other extensions can cause delay to some of the events Tabmix uses for
+ * initialization, for each phase call all previous phases that are not
+ * initialized yet
+ */
+Tabmix.initialization = {
+  beforeStartup:           {id: 0, obj: "Tabmix"},
+  onContentLoaded:         {id: 1, obj: "TMP_eventListener"},
+  beforeBrowserInitOnLoad: {id: 2, obj: "Tabmix"},
+  onWindowOpen:            {id: 3, obj: "TMP_eventListener"},
+  delayedStartup:          {id: 4, obj: "Tabmix"},
+
+  get isValidWindow() {
+    /**
+      * don't initialize Tabmix functions on this window if one of this is true:
+      *  - the window is a popup window
+      *  - the window is about to close by SingleWindowModeUtils
+      *  - tabbrowser-tabs binding didn't start (i onlly saw it happened
+      *       when ImTranslator extension installed)
+      */
+    let chromehidden = document.documentElement.getAttribute("chromehidden");
+    let stopInitialization = chromehidden.indexOf("extrachrome") > -1 ||
+                             chromehidden.indexOf("toolbar") > -1;
+    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+    if (!stopInitialization && Tabmix.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
+    }
+
+    if (!stopInitialization) {
+      let tabBrowser = arguments.length > 1 ? arguments[1] : gBrowser;
+      stopInitialization = typeof tabBrowser.tabContainer.setFirstTabInRow != "function";
+    }
+
+    if (stopInitialization) {
+      this.run = function() {}
+      window.removeEventListener("DOMContentLoaded", TMP_eventListener, false);
+      window.removeEventListener("load", TMP_eventListener, false);
+    }
+
+    delete this.isValidWindow;
+    Object.defineProperty(this, "run", {enumerable: false});
+    Object.defineProperty(this, "isValidWindow", {value: !stopInitialization,
+                                                  enumerable: false});
+    return this.isValidWindow;
+  },
+
+  run: function tabmix_initialization_run(aPhase) {
+    if (!this.isValidWindow)
+      return null;
+    let result, currentPhase = this[aPhase].id;
+    for (let [name, phase] in Iterator(this)) {
+      if (phase.id > currentPhase)
+        break;
+      if (!phase.initialized) {
+        phase.initialized = true;
+        try {
+          let obj = window[phase.obj];
+          result = obj[name].apply(obj, Array.slice(arguments, 1));
+        } catch (ex) {
+          Tabmix.assert(ex, phase.obj + "." + name + " failed");
+        }
+      }
+    }
+    return result;
+  }
+}
+
+TMP_eventListener.init();

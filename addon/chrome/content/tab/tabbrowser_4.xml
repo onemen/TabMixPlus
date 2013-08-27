@@ -385,9 +385,7 @@
           if ("linkedBrowser" in tab)
             tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
-          try {
-            Tabmix.beforeStartup(tabbrowser, this);
-          } catch (ex) {Tabmix.assert(ex);}
+          Tabmix.initialization.run("beforeStartup", tabbrowser, this);
         ]]>
       </constructor>
 

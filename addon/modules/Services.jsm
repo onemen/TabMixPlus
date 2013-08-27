@@ -119,7 +119,7 @@ let TabmixSvc = {
       switch (aTopic) {
         case "browser-delayed-startup-finished":
           try {
-            aSubject.TMP_eventListener.browserDelayedStartupFinished();
+            aSubject.Tabmix.initialization.run("delayedStartup");
           } catch (ex) {log.assert(ex);}
           break;
       }

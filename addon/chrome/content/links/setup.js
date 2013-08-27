@@ -45,37 +45,34 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
 }
 
 /**
- * @brief Force-call the window observer at least one time.
- *
- * @returns  Nothing.
- *
  * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
  *        window[onload="TMP_TBP_Startup()"]
  */
 function TMP_TBP_Startup() {
-  // don't start Tabmix at all if our tabbrowser_4.xml didn't start
-  // when ImTranslator extension installed
-  if (!Tabmix.initialized) {
-    Tabmix.initialized = true;
-    if (Tabmix.isVersion(160) && "gBrowserInit" in window)
-      gBrowserInit.onLoad();
-    else
-      BrowserStartup();
-    return;
-  }
+  let onLoad = Tabmix.initialization.run("beforeBrowserInitOnLoad");
+  if (onLoad)
+    onLoad();
+  else if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+    gBrowserInit.onLoad();
+  else
+    BrowserStartup();
+}
 
-  TabmixSvc.windowStartup.init(window);
+Tabmix.beforeBrowserInitOnLoad = function() {
+  try {
+    TabmixSvc.windowStartup.init(window);
+  } catch (ex) {this.assert(ex);}
 
   try {
     // replace old Settings.
     // we must call this before any other tabmix function
     gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
-  } catch (ex) {Tabmix.assert(ex);}
+  } catch (ex) {this.assert(ex);}
 
   try {
     var SM = TabmixSessionManager;
-    if (Tabmix.isVersion(200)) {
+    if (this.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
       SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
       // isPrivateWindow is boolean property of this window, user can't change private status of a window
@@ -101,11 +98,11 @@ function TMP_TBP_Startup() {
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
       [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
-    else if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+    else if (this.isVersion(160) && "gBrowserInit" in window)
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
     else
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
-    var bowserStartup = Tabmix.changeCode(fnContainer, TMP_BrowserStartup);
+    var bowserStartup = this.changeCode(fnContainer, TMP_BrowserStartup);
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
@@ -119,24 +116,24 @@ function TMP_TBP_Startup() {
       '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
       '   $&' +
       ' }'
-    if (!Tabmix.isVersion(190))
+    if (!this.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
-    var firstWindow = Tabmix.firstWindowInSession || SM.firstNonPrivateWindow;
+    var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   Tabmix.extensions.sessionManager ||
-                   Tabmix.isWindowAfterSessionRestore;
-    var sessionManager = Tabmix.prefs.getBoolPref("sessions.manager");
+                   this.extensions.sessionManager ||
+                   this.isWindowAfterSessionRestore;
+    var sessionManager = this.prefs.getBoolPref("sessions.manager");
     var resumeSession  = sessionManager &&
-                         Tabmix.prefs.getIntPref("sessions.onStart") < 2;
-    var recoverSession = Tabmix.prefs.getBoolPref("sessions.crashRecovery") &&
-                         Tabmix.prefs.prefHasUserValue("sessions.crashed");
+                         this.prefs.getIntPref("sessions.onStart") < 2;
+    var recoverSession = this.prefs.getBoolPref("sessions.crashRecovery") &&
+                         this.prefs.prefHasUserValue("sessions.crashed");
 
     SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
     if (SM.doRestore) {
       // Prevent the default homepage from loading if we're going to restore a session
-      if (Tabmix.isVersion(250)) {
-        Tabmix.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
+      if (this.isVersion(250)) {
+        this.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
           'sessionStartup.willOverrideHomepage', 'true'
         ).toCode();
       }
@@ -159,14 +156,14 @@ function TMP_TBP_Startup() {
         '  }' +
         '$&'
 
-      if (!Tabmix.isVersion(190)) {
+      if (!this.isVersion(190)) {
         bowserStartup = bowserStartup._replace(
           'if (window.opener && !window.opener.closed', loadOnStartup
         );
       }
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
-    if (Tabmix.isVersion(120) && typeof aios_dominitSidebar == "function") {
+    if (this.isVersion(120) && typeof aios_dominitSidebar == "function") {
       bowserStartup = bowserStartup._replace(
         'TabsOnTop.syncCommand();',
         'TabsOnTop.init();', {silent: true}
@@ -175,12 +172,12 @@ function TMP_TBP_Startup() {
     bowserStartup.toCode();
 
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [obj, fn] = Tabmix.isVersion(160) && "gBrowserInit" in window ?
+    var [obj, fn] = this.isVersion(160) && "gBrowserInit" in window ?
           [gBrowserInit, "gBrowserInit._delayedStartup"] :
           [window, "delayedStartup"];
 
-    Tabmix.changeCode(obj, fn)._replace(
-      'Services.obs.addObserver', loadOnStartup, {check: Tabmix.isVersion(190) && !!loadOnStartup}
+    this.changeCode(obj, fn)._replace(
+      'Services.obs.addObserver', loadOnStartup, {check: this.isVersion(190) && !!loadOnStartup}
     )._replace(
       'Services.obs.addObserver',
       'try {' +
@@ -188,14 +185,14 @@ function TMP_TBP_Startup() {
       '} catch (ex) {Tabmix.assert(ex);}' +
       '$&'
     )._replace(
-      swapOldCode, swapNewCode, {check: Tabmix.isVersion(190)}
+      swapOldCode, swapNewCode, {check: this.isVersion(190)}
     )._replace(
       'SessionStore.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession', {check: Tabmix.isVersion(250) && sessionManager}
+      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(250) && sessionManager}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
-    if (Tabmix.firstWindowInSession && Tabmix.prefs.getBoolPref("disableIncompatible")) {
+    if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
@@ -206,26 +203,18 @@ function TMP_TBP_Startup() {
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    TMP_BrowserStartup = fnContainer[TMP_BrowserStartup].bind(fnContainer);
-    TMP_BrowserStartup();
+    return fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
-  } catch (ex) {Tabmix.assert(ex);}
+  } catch (ex) {this.assert(ex);}
+
+  return null;
 }
 
 // this must run before all
-Tabmix.initialized = false;
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-    this.singleWindowMode = this.prefs.getBoolPref("singleWindow");
-    if (this.singleWindowMode) {
-      let tmp = { };
-      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
-      // don't initialize Tabmix functions for a window that is about to
-      // close by SingleWindowModeUtils
-      if (tmp.SingleWindowModeUtils.newWindow(window))
-        return;
-    }
+    if (typeof tabBrowser == "undefined")
+      tabBrowser = gBrowser;
 
-    this.initialized = true;
     // return true if all tabs in the window are blank
     tabBrowser.isBlankWindow = function() {
        for (var i = 0; i < this.tabs.length; i++) {
@@ -274,7 +263,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
                        document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
 
-    TMP_eventListener.init(tabContainer);
     // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
     // so we initialize this before start
     // mTabMaxWidth not exist from firefox 4.0

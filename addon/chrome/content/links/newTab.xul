@@ -27,14 +27,16 @@
       });
     }
 
-    Services.prefs.addObserver("extensions.tabmix.titlefrombookmark", updateTitle, false);
-    window.addEventListener("unload", function TMP_removeObserver(aEvent) {
-      aEvent.currentTarget.removeEventListener("unload", TMP_removeObserver, false);
-      Services.prefs.removeObserver("extensions.tabmix.titlefrombookmark", updateTitle);
-    }, false);
-
-    if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
-      updateTitle();
+    let win = Tabmix.getTopWin()
+    if (win && win.Tabmix && win.Tabmix.initialization.onWindowOpen.initialized) {
+      Services.prefs.addObserver("extensions.tabmix.titlefrombookmark", updateTitle, false);
+      window.addEventListener("unload", function TMP_removeObserver(aEvent) {
+        aEvent.currentTarget.removeEventListener("unload", TMP_removeObserver, false);
+        Services.prefs.removeObserver("extensions.tabmix.titlefrombookmark", updateTitle);
+      }, false);
+      if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
+        updateTitle();
+    }
   ]]>
   </script>
 
