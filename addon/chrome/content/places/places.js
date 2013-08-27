@@ -543,8 +543,10 @@ var TMP_Places = {
     let getIndex = function(url) aUrl.indexOf(url) + 1;
     Array.forEach(gBrowser.tabs, function(tab) {
       let url = tab.linkedBrowser.currentURI.spec;
+      if (this.isUserRenameTab(tab, url))
+        return;
       let index = this.applyCallBackOnUrl(url, getIndex);
-      if (index && !this.isUserRenameTab(tab, url)) {
+      if (index) {
         tab.setAttribute("tabmix_bookmarkId", aItemId[index-1]);
         this.setTabTitle(tab, url);
       }
