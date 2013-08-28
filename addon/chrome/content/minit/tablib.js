@@ -247,7 +247,12 @@ var tablib = {
     // Follow up bug 887515 - add ability to restore multiple tabs
     if (Tabmix.isVersion(250)) {
       Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
-        'ss.setNumberOfTabsClosedLast(window, numberOfTabsToClose);',
+        'let tabs = this.getTabsToTheEndFrom(aTab);',
+        '$&\n'+
+        '              this.startCountingClosedTabs();'
+      )._replace(
+        '#1.setNumberOfTabsClosedLast(window, numberOfTabsToClose);'.
+         replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
         'this.setNumberOfTabsClosedLast();'
       ).toCode();
     }
@@ -650,7 +655,8 @@ var tablib = {
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
-      'window = ss.undoCloseWindow(aIndex || 0);',
+      'window = #1.undoCloseWindow(aIndex || 0);'.
+       replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
          window = TabmixSvc.version(200) ?\
             Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false}) :\
@@ -659,13 +665,13 @@ var tablib = {
        if (window) {\
         window.focus();\
         let index = aIndex || 0;\
-        let closedWindows = TabmixSvc.JSON.parse(ss.getClosedWindowData());\
-        ss.forgetClosedWindow(index);\
+        let closedWindows = TabmixSvc.JSON.parse(#1.getClosedWindowData());\
+        #1.forgetClosedWindow(index);\
         let state = closedWindows.splice(index, 1).shift();\
         state = TabmixSvc.JSON.stringify({windows: [state]});\
-        ss.setWindowState(window, state, false);\
+        #1.setWindowState(window, state, false);\
        }\
-       else $&}'
+       else $&}'.replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss", "g")
     )._replace(
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\
