@@ -862,7 +862,8 @@ var tablib = {
       else {
         aTab._tabmixCopyToWindow = {data: aTabData};
         // replaceTabWithWindow not working if there is only one tab in the the window
-        window.openDialog(getBrowserURL(), "_blank", "chrome,dialog=no,all", aTab);
+        window.openDialog("chrome://browser/content/browser.xul",
+            "_blank", "chrome,dialog=no,all", aTab);
       }
     }
 

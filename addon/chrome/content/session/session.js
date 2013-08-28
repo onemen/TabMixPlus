@@ -2932,7 +2932,8 @@ try{
       var features = "chrome,all,dialog=no";
       if (Tabmix.isVersion(200))
          features += aPrivate ? ",private" : ",non-private";
-      var newWindow = window.openDialog( getBrowserURL(), "_blank", features, null);
+      var newWindow = window.openDialog("chrome://browser/content/browser.xul",
+          "_blank", features, null);
       newWindow.tabmixdata = { path: aPath, caller: aCaller };
    },
 

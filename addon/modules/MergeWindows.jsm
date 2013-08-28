@@ -102,7 +102,8 @@ let MergeWindows = {
     var features = "chrome,all,dialog=no";
     if (TabmixSvc.version(200))
         features += aPrivate ? ",private" : ",non-private";
-    var newWindow = aWindows[0].openDialog(aWindows[0].getBrowserURL(), "_blank", features, null);
+    var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
+        "_blank", features, null);
     let mergePopUps = function _mergePopUps(aEvent) {
       newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
       this.concatTabsAndMerge(newWindow, aWindows);
