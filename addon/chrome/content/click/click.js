@@ -575,9 +575,11 @@ var TabmixContext = {
       var undoClose = Tabmix.prefs.getBoolPref("undoClose");
       Tabmix.showItem(undoCloseTabMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
                      Tabmix.prefs.getBoolPref("undoCloseTabContent"));
-      let closedTabCount = Tabmix.isVersion(250) ? TabmixSvc.ss.getNumberOfTabsClosedLast(window) : 1;
-      let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
-      undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
+      if (Tabmix.isVersion(250)) {
+        let closedTabCount = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
+        let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
+        undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
+      }
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
       Tabmix.showItem(undoCloseListMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
