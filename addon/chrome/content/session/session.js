@@ -446,8 +446,10 @@ var TabmixSessionManager = {
             return;
          }
 
-         if (Tabmix.isWindowAfterSessionRestore)
-            setTimeout(function(){this.onSessionRestored()}.bind(this), 0);
+         if (Tabmix.isWindowAfterSessionRestore) {
+            let self = this;
+            setTimeout(function(){self.onSessionRestored()}, 0);
+         }
          else {
            // remove extra tab that was opened by SessionStore if last session
            // contained pinned tab(s).
@@ -1174,10 +1176,11 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                this.removeAllClosedWindows();
                this.saveState();
             }
+            let slef = this;
             setTimeout(function(){
               TMP_ClosedTabs.setButtonDisableState();
-              this.toggleRecentlyClosedWindowsButton();
-            }.bind(this), 0);
+              slef.toggleRecentlyClosedWindowsButton();
+            }, 0);
             break;
          case "private-browsing-change-granted":
             // Whether we restore the session upon resume will be determined by the
