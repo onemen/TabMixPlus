@@ -97,7 +97,8 @@ let TabmixSvc = {
   },
 
   windowStartup: {
-    QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
+                                           Ci.nsISupportsWeakReference]),
     _initialized: false,
     init: function(aWindow) {
       // windowStartup must only be called once for each window
@@ -109,14 +110,19 @@ let TabmixSvc = {
       this._initialized = true;
 
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
+      Services.obs.addObserver(this, "quit-application", true);
 
-      let tmp = {};
-      Cu.import("resource://tabmixplus/Places.jsm", tmp);
-      tmp.TabmixPlacesUtils.init(aWindow);
+      Cu.import("resource://tabmixplus/Places.jsm");
+      TabmixPlacesUtils.init(aWindow);
     },
 
     observe: function(aSubject, aTopic, aData) {
       switch (aTopic) {
+        case "quit-application":
+          TabmixPlacesUtils.onQuitApplication();
+          for (let [id, timer] in Iterator(TabmixSvc.console._timers))
+            timer.cancel();
+          break;
         case "browser-delayed-startup-finished":
           try {
             aSubject.Tabmix.initialization.run("delayedStartup");

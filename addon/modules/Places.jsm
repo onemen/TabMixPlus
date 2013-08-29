@@ -29,6 +29,10 @@ XPCOMUtils.defineLazyModuleGetter(this,
 this.TabmixPlacesUtils = {
   init: function(aWindow) {
     PlacesUtilsInternal.init(aWindow);
+  },
+
+  onQuitApplication: function() {
+    PlacesUtilsInternal.onQuitApplication();
   }
 }
 Object.freeze(TabmixPlacesUtils);
@@ -48,18 +52,7 @@ let PlacesUtilsInternal = {
     Tabmix._debugMode = aWindow.Tabmix._debugMode;
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", global);
 
-    Services.obs.addObserver(this, "quit-application", true);
     this.initPlacesUIUtils(aWindow);
-  },
-
-  QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
-
-  observe: function(aSubject, aTopic, aData) {
-    switch (aTopic) {
-      case "quit-application":
-        this.onQuitApplication();
-        break;
-    }
   },
 
   onQuitApplication: function () {
