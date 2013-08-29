@@ -3,6 +3,9 @@
 
 // aOptions can be: getter, setter or forceUpdate
 Tabmix.changeCode = function(aParent, aName, aOptions) {
+  let console = TabmixSvc.console;
+  let debugMode = Tabmix._debugMode;
+
   function ChangeCode(aParams) {
     this.obj = aParams.obj;
     this.fnName = aParams.fnName;
@@ -54,7 +57,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     toCode: function TMP_utils_toCode(aShow, aObj, aName) {
       try {
-        if (Tabmix._debugMode) {
+        if (debugMode) {
           this.value = this.value.replace("{", "{try {") +
             ' catch (ex) {' +
             '   let win = Services.wm.getMostRecentWindow("navigator:browser");' +
@@ -71,7 +74,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         if (aShow)
           this.show(obj, fnName);
       } catch (ex) {
-        Components.utils.reportError("Tabmix " + Tabmix.callerName() + " failed to change " + this.fullName + "\nError: " + ex.message);
+        Components.utils.reportError("Tabmix " + console.callerName() + " failed to change " + this.fullName + "\nError: " + ex.message);
       }
     },
 
@@ -102,27 +105,29 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     show: function(aObj, aName) {
       if (aObj && aName in aObj)
-        Tabmix.show({obj: aObj, name: aName, fullName: this.fullName});
-      else if (this.fullName != null)
-        Tabmix.show(this.fullName);
+        console.show({obj: aObj, name: aName, fullName: this.fullName});
+      else if (this.fullName != null) {
+        let win = typeof window != "undefined" ? window : undefined;
+        console.show(this.fullName, 500, win);
+      }
     },
 
     isValidToChange: function(aName) {
       var notFoundCount = this.notFound.length;
       if (this.needUpdate && !notFoundCount)
         return true;
-      var caller = Tabmix.getCallerNameByIndex(2);
+      var caller = console.getCallerNameByIndex(2);
       if (notFoundCount) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
-        Tabmix.clog(caller + " was unable to change " + aName + "."
+        console.clog(caller + " was unable to change " + aName + "."
           + (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    "))
           + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
           + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
-        if (Tabmix._debugMode)
-          Tabmix.clog(caller + "\nfunction " + aName + " = " + this.value);
+        if (debugMode)
+          console.clog(caller + "\nfunction " + aName + " = " + this.value);
       }
-      else if (!this.needUpdate && Tabmix._debugMode)
-        Tabmix.clog(caller + " no update needed to " + aName);
+      else if (!this.needUpdate && debugMode)
+        console.clog(caller + " no update needed to " + aName);
       return false;
     }
   }
@@ -132,9 +137,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     return new ChangeCode({obj: aParent, fnName: fnName,
       fullName: aName, options: aOptions});
   } catch (ex) {
-    this.clog(this.callerName() + " failed to change " + aName + "\nError: " + ex.message);
-    if (this._debugMode)
-      this.obj(aObject, "aObject");
+    console.clog(console.callerName() + " failed to change " + aName + "\nError: " + ex.message);
+    if (debugMode)
+      console.obj(aObject, "aObject");
   }
   return null;
 }

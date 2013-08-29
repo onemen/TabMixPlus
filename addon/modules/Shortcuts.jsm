@@ -6,7 +6,6 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
-Cu.import("resource://tabmixplus/log.jsm");
 
 let Shortcuts = {
   keys: {
@@ -138,7 +137,7 @@ try {
     }
 
     this.updatingShortcuts = false;
-} catch (ex) {log.assert(ex);}
+} catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   /* ........ Window Event Handlers .............. */
@@ -159,7 +158,7 @@ try {
     let win = aKey.ownerDocument.defaultView;
     let command = this.keys[aKey._id].command;
     win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
-} catch (ex) {log.assert(ex);}
+} catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
@@ -269,7 +268,7 @@ try {
       shortcuts = JSON.parse(this.prefs.getCharPref("shortcuts"));
     } catch (ex) {}
     if (shortcuts == null) {
-      log.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
+      TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;
     }

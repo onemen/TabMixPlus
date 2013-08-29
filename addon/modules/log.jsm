@@ -1,13 +1,25 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["log"];
+var EXPORTED_SYMBOLS = ["console"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-let log = {
+let gNextID = 1;
+
+let console = {
   getObject: function(aWindow, aMethod) {
+    let msg = "";
+    if (!aWindow)
+      msg += "aWindow is undefined";
+    if (typeof aMethod != "string")
+      msg += (msg ? "\n" : "") + "aMethod need to be a string";
+    if (msg) {
+      this.assert(msg);
+      return {toString: function() msg};
+    }
     var rootID, methodsList = aMethod.split(".");
     if (methodsList[0] == "window")
       methodsList.shift();
@@ -16,8 +28,7 @@ let log = {
       rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
     }
     try {
-      // this.window is only defined when we import this function into Tabmix
-      var obj = aWindow || this.window;
+      var obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
       methodsList.forEach(function(aFn) {
@@ -27,7 +38,6 @@ let log = {
     return obj || {toString: function() "undefined"};
   },
 
-  _nextID: 0,
   _timers: {},
   show: function(aMethod, aDelay, aWindow) {
     try {
@@ -42,14 +52,24 @@ let log = {
       }.bind(this);
 
       if (aDelay >= 0) {
-        let timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-        let timerID = this._nextID++;
+        let timer = {};
+        timer.__proto__ = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+        let timerID = gNextID++;
         this._timers[timerID] = timer;
-        timer.initWithCallback(function() {
-          if (timerID in this._timers && this._timers[timerID] === timer)
+        timer.clear = function() {
+          if (timerID in this._timers)
             delete this._timers[timerID];
+          timer.cancel();
+        }.bind(this);
+        if (aWindow) {
+          aWindow.addEventListener("unload", function unload() {
+            timer.clear();
+          }, false);
+        }
+        timer.initWithCallback(function() {
+          timer.clear();
           logMethod();
-        }.bind(this), aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
+        }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
       }
       else
         logMethod();
@@ -58,7 +78,7 @@ let log = {
   },
 
   clog: function TMP_clog(aMessage) {
-    TabmixSvc.console.logStringMessage("TabMix :\n" + aMessage);
+    Services.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
   log: function TMP_log(aMessage, aShowCaller, offset) {
@@ -66,7 +86,7 @@ let log = {
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
-    TabmixSvc.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+    Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -213,13 +233,13 @@ options = {
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
     let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
-    TabmixSvc.console.logStringMessage(assertionText + stackText);
+    Services.console.logStringMessage(assertionText + stackText);
   },
 
   trace: function(aMsg, slice) {
     // cut off the first line of the stack trace, because that's just this function.
     let stack = Error().stack.split("\n").slice(slice || 1);
 
-    TabmixSvc.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
+    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
   }
 }

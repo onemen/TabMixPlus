@@ -45,10 +45,7 @@ let PlacesUtilsInternal = {
       return;
     this._initialized = true;
 
-    let tmp = {};
-    Cu.import("resource://tabmixplus/log.jsm", tmp);
-    for (let [fnName, value] in Iterator(tmp.log))
-      Tabmix[fnName] = typeof value == "function" ? value.bind(Tabmix) : value;
+    Tabmix._debugMode = aWindow.Tabmix._debugMode;
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", global);
 
     Services.obs.addObserver(this, "quit-application", true);
@@ -82,7 +79,7 @@ let PlacesUtilsInternal = {
       let test = PlacesUIUtils._openTabset.toString();
     } catch (ex) {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
-        Tabmix.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions."
+        TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions."
           + "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
       }
       return;

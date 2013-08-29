@@ -190,11 +190,20 @@ var Tabmix = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  show: function(aMethod, aDelay, aWindow) {
+    TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
+  },
+
   __noSuchMethod__: function(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
       this.installeChangecode;
       return this[id].apply(this, args);
     }
+    if (typeof TabmixSvc.console[id] == "function") {
+      return TabmixSvc.console[id].apply(TabmixSvc.console, args);
+    }
+    TabmixSvc.console.trace("unexpected method " + id);
+    return null;
   },
 
   get installeChangecode() {
@@ -213,11 +222,6 @@ var Tabmix = {
                  resource + "modules/RecentWindow.jsm");
     }
 
-    let tmp = {};
-    Components.utils.import("resource://tabmixplus/log.jsm", tmp);
-    for (let [fnName, value] in Iterator(tmp.log))
-      this[fnName] = typeof value == "function" ? value.bind(this) : value;
-
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);
       this.destroy();
@@ -229,10 +233,6 @@ var Tabmix = {
     this.toCode = null;
     this.originalFunctions = null;
     delete this.window;
-    for (let [id, timer] in Iterator(this._timers)) {
-      timer.cancel();
-      delete this._timers[id];
-    }
   }
 }
 

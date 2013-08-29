@@ -120,7 +120,7 @@ let TabmixSvc = {
         case "browser-delayed-startup-finished":
           try {
             aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {log.assert(ex);}
+          } catch (ex) {this.console.assert(ex);}
           break;
       }
     }
@@ -149,7 +149,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
  */
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "console", function () {return Services.console});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
@@ -171,5 +170,5 @@ XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessio
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "log",
+XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
