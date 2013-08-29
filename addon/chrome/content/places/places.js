@@ -34,12 +34,11 @@ var TMP_Places = {
             'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
          ).toCode();
 
-         let getter = Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
+         Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
            'URIs.push(tab.linkedBrowser.currentURI);',
            'let uri = tab.linkedBrowser.currentURI; \
             URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});'
-         );
-         Tabmix.defineProperty(PlacesCommandHook, "uniqueCurrentPages", {getter: getter.value});
+         ).defineProperty();
       }
 
       if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
