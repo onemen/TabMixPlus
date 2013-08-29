@@ -190,6 +190,19 @@ var Tabmix = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  __noSuchMethod__: function(id, args) {
+    if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
+      this.installeChangecode;
+      return this[id].apply(this, args);
+    }
+  },
+
+  get installeChangecode() {
+    delete this.installeChangecode;
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
+    return this.installeChangecode = true;
+  },
+
   _init: function() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
@@ -209,8 +222,6 @@ var Tabmix = {
       window.removeEventListener("unload", tabmix_destroy, false);
       this.destroy();
     }.bind(this), false);
-
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
   },
 
   originalFunctions: {},
