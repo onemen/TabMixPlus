@@ -1802,8 +1802,7 @@ try {
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
-    let getVersion = function _getVersion(extensions) {
-      let currentVersion = extensions.get("{dc572301-7619-498c-a57d-39143191b318}").version;
+    let getVersion = function _getVersion(currentVersion) {
       let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
 
       let vCompare = function(a, b) Services.vc.compare(a, b) <= 0;
@@ -1833,13 +1832,12 @@ try {
         // noting more to do at the moment
       }
     }
-    const Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
-    let wrappedGetVersion = function(extensions) {
+    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", function(aAddon) {
       try {
-        getVersion(extensions);
+        getVersion(aAddon.version);
       } catch (ex) {Tabmix.assert(ex);}
-    }
-    Application.getExtensions(wrappedGetVersion);
+    })
+
     // block item in tabclicking options that are not in use
     this.blockedValues = [];
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab))
