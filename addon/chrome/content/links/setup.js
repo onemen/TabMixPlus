@@ -298,11 +298,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       TMP_SessionStore.afterSwitchThemes = true;
 
     TMP_extensionsCompatibility.preInit();
-
-    if (this.prefs.prefHasUserValue("enableDebug") &&
-        this.prefs.getBoolPref("enableDebug")) {
-      this._debugMode = true;
-    }
 }
 
 Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {

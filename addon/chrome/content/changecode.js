@@ -57,11 +57,18 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     toCode: function TMP_utils_toCode(aShow, aObj, aName) {
       try {
-        if (debugMode) {
+        // list of function that we don't warp with try-catch
+        let dontDebug = ["gBrowser.tabContainer._animateTabMove"];
+        if (debugMode && dontDebug.indexOf(this.fullName) == -1) {
+          let excludeReturn = ["TabsInTitlebar._update", "gBrowser._blurTab"];
+          let addReturn = "", re = new RegExp("//.*", "g");
+          if (excludeReturn.indexOf(this.fullName) == -1 &&
+              /return\s.+/.test(this.value.replace(re, "")))
+            addReturn = "\nreturn null\n";
           this.value = this.value.replace("{", "{try {") +
             ' catch (ex) {' +
-            '   let win = Services.wm.getMostRecentWindow("navigator:browser");' +
-            '   win.Tabmix.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}' +
+            '   TabmixSvc.console.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}' +
+            addReturn +
             ' }';
         }
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];

@@ -382,6 +382,11 @@
           if (Tabmix.prefs.getBoolPref("extraIcons.locked"))
             this.setAttribute("extraIcons-locked", true);
 
+          if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
+                Tabmix.prefs.getBoolPref("enableDebug")) {
+            Tabmix._debugMode = true;
+          }
+
           if ("linkedBrowser" in tab)
             tablib.setLoadURIWithFlags(tab.linkedBrowser);
 

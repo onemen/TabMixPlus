@@ -748,6 +748,9 @@ var tablib = {
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
     Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
+      'function switchIfURIInWindow',
+      'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
+    )._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '{$& \
        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
