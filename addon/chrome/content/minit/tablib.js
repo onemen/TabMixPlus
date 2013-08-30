@@ -703,11 +703,8 @@ var tablib = {
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
-      'JSON.parse(this._ss.getClosedWindowData());',
-      '"parse" in JSON ? JSON.parse(this._ss.getClosedWindowData()) : TabmixSvc.JSON.parse(this._ss.getClosedWindowData());'
-    )._replace(
       'this._ss',
-      'TabmixSvc.ss', {flags: "g"}
+      'TabmixSvc.ss', {check: !Tabmix.isVersion(260), flags: "g"}
     )._replace(
       'this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0];',
       'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] : document.getElementById(arguments[0]);'
