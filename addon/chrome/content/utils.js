@@ -194,7 +194,9 @@ var Tabmix = {
     TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
   },
 
-  __noSuchMethod__: function(id, args) {
+  // console._removeInternal use this function name to remove it from
+  // caller list
+  __noSuchMethod__: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
       this.installeChangecode;
       return this[id].apply(this, args);

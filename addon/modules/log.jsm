@@ -77,11 +77,11 @@ let console = {
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
   },
 
-  clog: function TMP_clog(aMessage) {
+  clog: function(aMessage) {
     Services.console.logStringMessage("TabMix :\n" + aMessage);
   },
 
-  log: function TMP_log(aMessage, aShowCaller, offset) {
+  log: function TMP_console_log(aMessage, aShowCaller, offset) {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
@@ -90,14 +90,9 @@ let console = {
   },
 
   // get functions names from Error().stack
+  // excluding any internal caller (name start with TMP_console_)
   _getNames: function(aCount, stack) {
-    if (!stack)
-      stack = Error().stack.split("\n").slice(1);
-    else
-      stack = stack.split("\n");
-    // cut the secound if it is from our utils
-    if (stack[0].indexOf("TMP_") == 0)
-      stack.splice(0, 1);
+    stack = this._getStackExcludingInternal(stack);
     if (!aCount)
       aCount = 1;
     else if (aCount < 0)
@@ -110,14 +105,24 @@ let console = {
   },
 
   // get the name of the function that is in the nth place in Error().stack
-  // don't include this function in the count
-  getCallerNameByIndex: function TMP_getCallerNameByIndex(aPlace) {
-    let stack = Error().stack.split("\n");
-    let fn = stack[aPlace + 1];
-
+  // excluding any internal caller in the count
+  getCallerNameByIndex: function(aIndex) {
+    let fn = this._getStackExcludingInternal()[aIndex];
     if (fn)
       return this._name(fn);
     return null;
+  },
+
+  _getStackExcludingInternal: function(stack) {
+    if (!stack)
+      stack = Error().stack.split("\n").slice(2);
+    else
+      stack = stack.split("\n");
+    // cut internal callers
+    let re = /TMP_console_.*/;
+    while (stack.length && stack[0].match(re))
+      stack.splice(0, 1);
+    return stack;
   },
 
   // Bug 744842 - don't include actual args in error.stack.toString()
@@ -145,7 +150,6 @@ let console = {
   },
 
   callerName: function() {
-///    return this.getCallerNameByIndex(2);
     try {
       var name = this._nameFromComponentsStack(Components.stack.caller.caller);
     } catch (ex) { }
@@ -153,20 +157,20 @@ let console = {
   },
 */
 
-  callerName: function() {
-    return this.getCallerNameByIndex(2);
+  callerName: function TMP_console_callerName() {
+    return this.getCallerNameByIndex(1);
   },
 
   // return true if the caller name of the calling function is in the
   // arguments list
-  isCallerInList: function() {
+  isCallerInList: function TMP_console_isCallerInList() {
     if (!arguments.length) {
       this.assert("no arguments in Tabmix.isCallerInList");
       return false;
     }
 
     try {
-      let callerName = this.getCallerNameByIndex(2);
+      let callerName = this.getCallerNameByIndex(1);
       if (!callerName)
         return false;
       if (typeof arguments[0] == "object")
@@ -190,7 +194,7 @@ options = {
   offset; for internal use only true / false default false
 }
 */
-  obj: function(aObj, aMessage, aDisallowLog, level) {
+  obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
     var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
@@ -222,7 +226,7 @@ options = {
     return objS;
   },
 
-  assert: function TMP_utils_assert(aError, aMsg) {
+  assert: function TMP_console_assert(aError, aMsg) {
     if (typeof aError.stack != "string") {
       this.trace((aMsg || "") + "\n" + aError, 2);
       return;
