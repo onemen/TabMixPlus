@@ -1700,7 +1700,7 @@ var tablib = {
     // we always show our prompt on Mac
     var showPrompt = Tabmix.isPlatform("Mac") || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
-    var quitType = Tabmix._getCallerNameByIndex(2);
+    var quitType = Tabmix.getCallerNameByIndex(2);
     var askBeforSave = quitType != "restartApp" && quitType != "restart";
     var isLastWindow = Tabmix.isLastBrowserWindow;
     var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);

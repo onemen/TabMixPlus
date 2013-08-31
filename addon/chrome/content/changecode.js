@@ -111,7 +111,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
       var notFoundCount = this.notFound.length;
       if (this.needUpdate && !notFoundCount)
         return true;
-      var caller = Tabmix._getCallerNameByIndex(2);
+      var caller = Tabmix.getCallerNameByIndex(2);
       if (notFoundCount) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         Tabmix.clog(caller + " was unable to change " + aName + "."

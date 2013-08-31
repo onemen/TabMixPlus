@@ -91,7 +91,7 @@ let log = {
 
   // get the name of the function that is in the nth place in Error().stack
   // don't include this function in the count
-  _getCallerNameByIndex: function TMP_getCallerNameByIndex(aPlace) {
+  getCallerNameByIndex: function TMP_getCallerNameByIndex(aPlace) {
     let stack = Error().stack.split("\n");
     let fn = stack[aPlace + 1];
 
@@ -125,7 +125,7 @@ let log = {
   },
 
   callerName: function() {
-///    return this._getCallerNameByIndex(2);
+///    return this.getCallerNameByIndex(2);
     try {
       var name = this._nameFromComponentsStack(Components.stack.caller.caller);
     } catch (ex) { }
@@ -134,7 +134,7 @@ let log = {
 */
 
   callerName: function() {
-    return this._getCallerNameByIndex(2);
+    return this.getCallerNameByIndex(2);
   },
 
   // return true if the caller name of the calling function is in the
@@ -146,7 +146,7 @@ let log = {
     }
 
     try {
-      let callerName = this._getCallerNameByIndex(2);
+      let callerName = this.getCallerNameByIndex(2);
       if (!callerName)
         return false;
       if (typeof arguments[0] == "object")
