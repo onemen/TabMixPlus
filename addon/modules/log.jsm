@@ -226,6 +226,24 @@ options = {
     return objS;
   },
 
+  _formatStack: function(stack) {
+    let lines = [], _char = this._char;
+    stack.forEach(function(line) {
+      let atIndex = line.indexOf("@");
+      let columnIndex = line.lastIndexOf(":");
+      let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
+      if (fileName) {
+        let lineNumber = parseInt(line.slice(columnIndex + 1));
+        let atIndex = line.indexOf(_char);
+        let name = line.slice(0, atIndex).split("(").shift() || "null";
+        lines.push('  File "' + fileName + '", line ' +
+            lineNumber + ', in ' + name);
+      }
+    });
+
+    return lines.join("\n");
+  },
+
   assert: function TMP_console_assert(aError, aMsg) {
     if (typeof aError.stack != "string") {
       this.trace((aMsg || "") + "\n" + aError, 2);
@@ -236,14 +254,12 @@ options = {
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + decodeURI(aError.stack);
+    let stackText = "\nStack Trace: \n" + this._formatStack(aError.stack.split("\n"));
     Services.console.logStringMessage(assertionText + stackText);
   },
 
-  trace: function(aMsg, slice) {
-    // cut off the first line of the stack trace, because that's just this function.
-    let stack = Error().stack.split("\n").slice(slice || 1);
-
-    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack.join("\n"));
+  trace: function TMP_console_trace(aMsg) {
+    let stack = this._formatStack(this._getStackExcludingInternal());
+    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
   }
 }
