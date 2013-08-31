@@ -45,10 +45,13 @@ let console = {
         aDelay = 500;
 
       let logMethod = function _logMethod() {
-        let isObj = typeof aMethod == "object";
-        let result = isObj ? aMethod.obj[aMethod.name] :
+        let result = "", isObj = typeof aMethod == "object";
+        if (typeof aMethod != "function") {
+          result = isObj ? aMethod.obj[aMethod.name] :
                 this.getObject(aWindow, aMethod);
-        this.clog((isObj ? aMethod.fullName : aMethod) + " = " + result.toString());
+          result = " = " + result.toString()
+        }
+        this.clog((isObj ? aMethod.fullName : aMethod) + result);
       }.bind(this);
 
       if (aDelay >= 0) {
