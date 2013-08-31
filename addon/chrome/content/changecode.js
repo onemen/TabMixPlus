@@ -1,3 +1,6 @@
+Tabmix._eval = function(name, code) name ? eval(name + " = " + code) : eval("(" + code + ")");
+// Tabmix._eval is on the first line to help us get the right line number
+
 // don't use strict for this file
 // so we don't evaluat all code as strict mode code
 
@@ -74,9 +77,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
         if (this.isValidToChange(fnName)) {
           if (obj)
-            Tabmix.setNewFunction(obj, fnName, eval("(" + this.value + ")"));
+            Tabmix.setNewFunction(obj, fnName, Tabmix._eval(null, this.value));
           else
-            eval(fnName + " = " + this.value);
+            Tabmix._eval(fnName, this.value);
         }
         if (aShow)
           this.show(obj, fnName);
@@ -99,7 +102,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
                    this.type == fnType ? this.value : obj[fnType](fnName);
 
         if (typeof code == "string")
-          descriptor[type] = eval("(" + code + ")");
+          descriptor[type] = Tabmix._eval(null, code);
         else if (typeof code != "undefined")
           descriptor[type] = code;
       }.bind(this);
