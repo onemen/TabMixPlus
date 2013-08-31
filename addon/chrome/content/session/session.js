@@ -1498,7 +1498,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    isValidtoSave: function() {
       if ( !this.enableManager ) return false;
-      if (gBrowser.isBlankWindow()) {
+      if (!this.isWindowValidtoSave()) {
          var title = TabmixSvc.getSMString("sm.title");
          var msg = TabmixSvc.getSMString("sm.dontSaveBlank.msg");
          var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
@@ -1506,6 +1506,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          return false;
       }
       return true;
+   },
+
+   isWindowValidtoSave: function() {
+     if (gBrowser.isBlankWindow())
+       return false;
+      return typeof privateTab != "object" ||
+        Array.some(gBrowser.tabs, function(tab) !privateTab.isTabPrivate(tab));
    },
 
    saveOneOrAll: function(action, path, saveClosedTabs) {
@@ -2477,7 +2484,7 @@ try{
 
    saveOneWindow: function SM_saveOneWindow(path, caller, overwriteWindow, saveClosedTabs) {
       // don't save private window or window without any tab
-      if (this.isPrivateWindow || gBrowser.isBlankWindow())
+      if (this.isPrivateWindow || !this.isWindowValidtoSave())
         return 0;
       if (!path) path = this.gSessionPath[0];
       if (!caller) caller = "";
@@ -2574,7 +2581,8 @@ try{
    // xxx need to fix this to save only history, image and history index
    // and save the rest when tab added
    tabLoaded: function SM_tabLoaded(aTab) {
-      if (!this._inited || !this.enableBackup || aTab.hasAttribute("inrestore"))
+      if (!this._inited || !this.enableBackup ||
+           aTab.hasAttribute("inrestore") || this.isTabPrivate(aTab))
         return;
       if (gBrowser.isBlankTab(aTab)) return;
       // if this window is not in the container add it to the last place
@@ -2590,7 +2598,7 @@ try{
       if (!add0_1) add0_1 = 0;
       for (var i = aTab._tPos + add0_1; i < gBrowser.tabs.length; i++) {
          tab = gBrowser.tabs[i];
-         node = (typeof(label) == "undefined") ? this.getNodeForTab(tab) : label + "/" + tab.linkedPanel;
+         node = (typeof(label) != "string") ? this.getNodeForTab(tab) : label + "/" + tab.linkedPanel;
          this.setIntLiteral(node, "tabPos", tab._tPos);
       }
    },
@@ -2603,8 +2611,10 @@ try{
       var tabContainer = this.initContainer(this.gThisWinTabs);
       var panelPath = this.getNodeForTab(aTab);
       var nodeToClose = this.RDFService.GetResource(panelPath);
-      this.updateTabPos(aTab); // update _tPos for the tab right to the deleted tab
-      if (this.saveClosedtabs) {
+      var privateTab = this.isTabPrivate(aTab);
+      // update _tPos for the tab right to the deleted tab
+      this.updateTabPos(aTab, null, privateTab ? 1 : 0);
+      if (!privateTab && this.saveClosedtabs) {
          // move closedtabs to closedtabs container
          var closedTabContainer = this.initContainer(this.gThisWinClosedtabs);
          var tabExist = true;
@@ -2633,15 +2643,18 @@ try{
       // we dont need this function to run before sessionmanager init
       if (!this._inited || !this.enableBackup || aTab.hasAttribute("inrestore"))
         return;
-      if (gBrowser.isBlankTab(aTab))
-        return; // dont write blank tab to the file
+      // dont write private or blank tab to the file
+      if (this.isTabPrivate(aTab) || gBrowser.isBlankTab(aTab))
+        return;
       this.initSession(this.gSessionPath[0], this.gThisWin);
       this.setLiteral(this.getNodeForTab(aTab), "properties", TabmixSessionData.getTabProperties(aTab, true));
       this.saveStateDelayed();
    },
 
    tabMoved: function SM_tabMoved(aTab, oldPos, newPos) {
-      if (!this.enableBackup || aTab.hasAttribute("inrestore")) return;
+      if (!this.enableBackup || aTab.hasAttribute("inrestore") ||
+            this.isTabPrivate(aTab))
+         return;
       this.initSession(this.gSessionPath[0], this.gThisWin);
       // can't use aTab._tPos after group of tab delete
       // we pass old position and new position from TabMove event
@@ -2664,7 +2677,9 @@ try{
 
    // xxx need to find the right event to trigger this function..
    tabScrolled: function SM_tabScrolled(aTab) {
-      if (!this.enableBackup || aTab.hasAttribute("inrestore")) return;
+      if (!this.enableBackup || aTab.hasAttribute("inrestore") ||
+            this.isTabPrivate(aTab))
+         return;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return;
       var bContent = aBrowser.contentWindow;
@@ -2673,7 +2688,11 @@ try{
    },
 
    tabSelected: function(needFlush) {
-      if (!this.enableBackup || gBrowser.mCurrentTab.hasAttribute("inrestore")) return;
+      if (!this.enableBackup)
+         return;
+      let tab = gBrowser.mCurrentTab;
+      if (tab.hasAttribute("inrestore") || this.isTabPrivate(tab))
+         return;
       if (typeof(needFlush) == "undefined") needFlush = false;
       this.initSession(this.gSessionPath[0], this.gThisWin);
       this.setTabsScroll(); // until i find proper event to update tab scroll do it from here
@@ -2697,6 +2716,22 @@ try{
       return this.gThisWinTabs + "/" + aTab.linkedPanel;
    },
 
+   isTabPrivate: function(aTab) {
+     return typeof privateTab == "object" && privateTab.isTabPrivate(aTab);
+   },
+
+   privateTabChanged: function(aEvent) {
+     if (!this.enableBackup || typeof privateTab != "object")
+        return;
+
+     // aEvent.detail: 1 == private, 0 == non-private
+     let tab = aEvent.target;
+     if (aEvent.detail)
+        this.tabClosed(tab);
+     else
+        this.tabLoaded(tab);
+      },
+
    saveAllTab: function SM_saveAllTab(winPath, offset, saveBusy) {
       var savedTabs = 0 ;
       var rdfNodeTabs = this.getResource(winPath, "tabs");
@@ -2715,6 +2750,8 @@ try{
    // call from tabloaded, tabClosed, saveAllTab
 // xxx add flag what to save : all, history, property, scrollPosition
    saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend, offset) {
+      if (this.isTabPrivate(aTab))
+         return;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return false;
 
@@ -2755,6 +2792,9 @@ try{
    },
 
    saveTabviewTab: function SM_saveTabviewTab(aNode, aTab) {
+      if (!this.enableBackup || aTab.hasAttribute("inrestore") ||
+            this.isTabPrivate(aTab))
+         return;
       let data = TabmixSessionData.getTabValue(aTab, "tabview-tab");
       if (data != "" && data != "{}")
         this.setLiteral(aNode, "tabview-tab", data);

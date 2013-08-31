@@ -233,6 +233,9 @@ var TMP_eventListener = {
       case "fullscreen":
         this.onFullScreen(!window.fullScreen);
         break;
+      case "PrivateTab:PrivateChanged":
+        TabmixSessionManager.privateTabChanged(aEvent);
+        break;
     }
   },
 
@@ -271,7 +274,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabEvents = ["SSTabRestoring",
+    this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 

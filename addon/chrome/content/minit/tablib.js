@@ -19,8 +19,7 @@ var tablib = {
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
     Tabmix.changeCode(aBrowser, "browser.loadURIWithFlags")._replace(
-      '{',
-      '$&' +
+      'if (!aURI)',
       '  var newURI, allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
       '  try  {' +
       '    if (!allowLoad) {' +
@@ -39,9 +38,14 @@ var tablib = {
       '    browser.stop();' +
       '    browser.tabmix_allowLoad = true;' +
       '    browser.loadURIWithFlags(aURI, aFlags, aReferrerURI, aCharset, aPostData);' +
-      '    return;' +
+      '    return newTab;' +
       '  }' +
-      '  this.tabmix_allowLoad = aURI == "about:blank" || !isLockedTab;'
+      '  this.tabmix_allowLoad = aURI == "about:blank" || !isLockedTab;\n' +
+      '  $&'
+    )._replace(
+      /(\})(\)?)$/,
+      'return null;\
+      $1$2'
     )._replace(
       'this.webNavigation.LOAD_FLAGS_FROM_EXTERNAL',
       'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL', {check: "loadTabsProgressively" in window }
