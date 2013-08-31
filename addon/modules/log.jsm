@@ -226,13 +226,22 @@ options = {
     return objS;
   },
 
+  // RegExp to remove path/to/profile/extensions from filename
+  get _pathRegExp() {
+    delete this._pathRegExp;
+    let folder = TabmixSvc.FileUtils.getDir("ProfD", ["extensions"]);
+    let path = folder.path.replace("\\", "/", "g") + "/";
+    return this._pathRegExp = new RegExp("jar:|file:///|" + path, "g");
+  },
+
   _formatStack: function(stack) {
-    let lines = [], _char = this._char;
+    let lines = [], _char = this._char, re = this._pathRegExp;
     stack.forEach(function(line) {
       let atIndex = line.indexOf("@");
       let columnIndex = line.lastIndexOf(":");
       let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
       if (fileName) {
+        fileName = decodeURI(fileName).replace(re, "");
         let lineNumber = parseInt(line.slice(columnIndex + 1));
         let atIndex = line.indexOf(_char);
         let name = line.slice(0, atIndex).split("(").shift() || "null";
