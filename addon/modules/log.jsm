@@ -88,7 +88,7 @@ let console = {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
-    let callerCallerName = aShowCaller ? " (caller was " + names[offset+1] + ")" : "";
+    let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
     Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
@@ -101,7 +101,7 @@ let console = {
     else if (aCount < 0)
       aCount = stack.length;
     let names = [];
-    for (let i = 0; i < aCount; i++)
+    for (let i = 0, l = Math.min(aCount, stack.length); i < l; i++)
       names.push(this._name(stack[i]));
 
     return names;
@@ -138,7 +138,7 @@ let console = {
 
   _name: function(fn) {
     let name = fn.substr(0, fn.indexOf(this._char))
-    if (!name) {
+    if (fn && !name) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
       name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
@@ -225,7 +225,7 @@ options = {
     if (aDisallowLog)
       objS = aMessage + "======================\n" + objS;
     else
-      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true, 1);
+      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true);
     return objS;
   },
 
