@@ -676,7 +676,8 @@ var TabmixContext = {
       if (links_urlSecurityCheck(url)) {
         if (check)
           return false;
-        urls.push(url);
+        if (urls.indexOf(url) == -1)
+          urls.push(url);
       }
       nextEpisode = treeWalker.nextNode();
     }
