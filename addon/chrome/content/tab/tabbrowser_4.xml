@@ -438,6 +438,7 @@
           this._inUpdateVerticalTabStrip = true;
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
+          let visibleRows = TabmixTabbar.visibleRows;
           // this.lastTabRowNumber is null when we hide the tabbar
           let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
 
@@ -473,10 +474,17 @@
 
           // prevent new-tab-button on the right from flickering when new tabs animate is on.
           if (this.disAllowNewtabbutton && Services.prefs.getBoolPref("browser.tabs.animate")) {
-            this.disAllowNewtabbutton = false;
-            let self = this;
             // after 300ms new tab is fully opened
-            setTimeout(function() {self.adjustNewtabButtonvisibility();}, 300);
+            if (!this.adjustNewtabButtonTimeout) {
+              // Don't reset adjustNewtabButtonvisibility if multibar or rows didn't changed
+              if (multibar != currentMultibar || rows != visibleRows)
+                this.disAllowNewtabbutton = false;
+              let self = this;
+              this.adjustNewtabButtonTimeout = setTimeout(function() {
+                self.adjustNewtabButtonvisibility();
+                self.adjustNewtabButtonTimeout = null;
+              }, 300);
+            }
           }
           else
             this.adjustNewtabButtonvisibility();
