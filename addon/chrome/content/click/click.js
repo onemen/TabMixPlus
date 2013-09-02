@@ -20,7 +20,7 @@ var TabmixTabClickOptions = {
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
     this._blockDblClick = aEvent.button == 0 && anonid == "tmp-close-button" ||
-                              target == gBrowser.tabContainer.mTabsNewtabButton;
+                              target.classList.contains("tabs-newtab-button");
 
     // don't do anything if user left click on close tab button , or on any other button on tab or tabbar
     if (aEvent.button == 0 && (anonid == "tmp-close-button" || target.localName == "toolbarbutton"))

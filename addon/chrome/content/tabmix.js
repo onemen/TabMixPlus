@@ -130,7 +130,20 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
     this.setItem("TabsToolbar", "tabmix-visible", true);
     // save mTabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
-    tabBar._newTabButtonWidth = lwtheme ? 31 : tabBar.mTabsNewtabButton.getBoundingClientRect().width;
+    let openNewTabRect = tabBar.mTabsNewtabButton.getBoundingClientRect();
+    tabBar._newTabButtonWidth = lwtheme ? 31 : openNewTabRect.width;
+///XXX need to fix this for the case user enable/disable the extension during the session
+    // when privateTab extension installed add its new tab button width
+    // for the use of adjustNewtabButtonvisibility set mTabsNewtabButton to be
+    // the right button
+    let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
+    if (openNewPrivateTab) {
+      let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
+      tabBar._newTabButtonWidth += openNewPrivateTabRect.width;
+      if (openNewPrivateTabRect.right > openNewTabRect.right)
+        tabBar.mTabsNewtabButton = openNewPrivateTab;
+    }
+
     this.setItem("TabsToolbar", "tabmix-visible", null);
     if (stripIsHidden)
       tabBar.visible = false;

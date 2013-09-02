@@ -127,10 +127,12 @@ label.text-link, label[onclick] {
  * we set newtab_side only for left ot right side afterlast position rules are set by Firefox
  *
  ***/
+#TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #tabbrowser-tabs:not([tabmix-visible])[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
 #TabsToolbar:not([tabmix-visible])[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
 #TabsToolbar:not([tabmix-visible])[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
 #TabsToolbar:not([tabmix-visible])[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  /* using visibility: hidden !important; don't collapse the width and don't collapse padding and border height */
   visibility: collapse;
   height: 0px !important;
   width: 0px;
@@ -160,6 +162,20 @@ label.text-link, label[onclick] {
   visibility: collapse;
 }
 
+/* Private-tab compatibility */
+#TabsToolbar:not([tabmix-visible])[newtab_side] .tabbrowser-arrowscrollbox:not([flowing=multibar]) > .tabs-newtab-button {
+  display: none;
+}
+
+#privateTab-afterTabs-openNewPrivateTab {
+  vertical-align: bottom;
+}
+
+#TabsToolbar[newTabButton=true][disAllowNewtabbutton]:not([tabstripoverflow]):not([newtab_side]) > #privateTab-toolbar-openNewPrivateTab,
+#TabsToolbar[newTabButton=true][newtab_side] > #privateTab-toolbar-openNewPrivateTab {
+  visibility: visible;
+}
+
 /***  Tab opening animation  ***/
 .tab-progress-container > .tab-progress:not([fadein]):not([pinned]),
 .tab-icon:not([fadein]):not([pinned]) > .tab-protect-icon,
@@ -169,7 +185,7 @@ label.text-link, label[onclick] {
    display: none !important;
 }
 
-/* we have display: -moz-box !important; in browsroverlay_base.css
+/* we use display: -moz-box !important;
 so display: none !important; is not hide the button */
 .tab-close-button:not([fadein]) {
   opacity: 0;

@@ -1125,7 +1125,7 @@ var gTMPprefObserver = {
     let newHeight = gBrowser.tabContainer.visibleTabsFirstChild.getBoundingClientRect().height;
     let newRule = '#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
-                  ' > .tabs-newtab-button {height: #px;}'.replace("#", newHeight);
+                  ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
     this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
   },
 
