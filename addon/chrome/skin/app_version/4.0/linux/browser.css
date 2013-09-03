@@ -26,7 +26,7 @@
 }
 
 /* set on linux we need to set vertical alogn even if the button is hidden*/
-.tabbrowser-tabs[multibar] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+.tabbrowser-tabs[multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 

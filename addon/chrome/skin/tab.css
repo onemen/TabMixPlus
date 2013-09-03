@@ -323,14 +323,14 @@ toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon
 }
 
 /* CrystalFox_Qute-BigRedBrent */
-.tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+.tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }
 
 /* BlackFox_V1-Blue */
-.tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-.tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+.tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+.tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }
 

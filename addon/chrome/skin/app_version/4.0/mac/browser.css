@@ -31,7 +31,7 @@
   margin-top: 1px !important;
 }
 
-.tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+.tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
