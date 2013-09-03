@@ -318,10 +318,6 @@
         document.getAnonymousElementByAttribute(this.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
 
-      <field name="mTabsNewtabButton">
-        document.getAnonymousElementByAttribute(this, "class", "tabs-newtab-button");
-      </field>
-
       <constructor>
         <![CDATA[
           // add dragover event handler to TabsToolbar to capture dragging over
@@ -364,7 +360,9 @@
            * if we set this in field[s] they will reset each time the tabbar binding construct
            * by tabbar position change
            */
-          this._newTabButtonWidth = 22;
+          Tabmix.newTabButtonWidth = 22;
+          Tabmix.tabsNewtabButton =
+            document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
 
           let tab = this.firstChild;
           tab.setAttribute("flst_id", new Date().getTime());
@@ -583,15 +581,20 @@
             return;
           }
 
+          // when Private-tab enabled/disable we need to reset
+          // tabsNewtabButton and newTabButtonWidth
+          if (!Tabmix.tabsNewtabButton)
+            Tabmix.getNewTabButtonWidth();
+
          var lastTab = this.visibleTabsLastChild;
          // button is visible
          //         A: last tab and the button are in the same row - check if we have room for the button in this row
          //         B: last tab and the button are NOT in the same row  - NG - hide the button
          if (!this.disAllowNewtabbutton) {
-           let sameRow = TabmixTabbar.inSameRow(lastTab, this.mTabsNewtabButton);
+           let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
            if (sameRow) {
              let tabstripEnd = this.mTabstrip.scrollBoxObject.screenX + this.mTabstrip.scrollBoxObject.width;
-             let buttonEnd = this.mTabsNewtabButton.boxObject.screenX + this.mTabsNewtabButton.boxObject.width
+             let buttonEnd = Tabmix.tabsNewtabButton.boxObject.screenX + Tabmix.tabsNewtabButton.boxObject.width
              this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
            }
            else
@@ -612,7 +615,7 @@
            let tsbo = this.mTabstrip.scrollBoxObject;
            let tsboEnd = tsbo.screenX + tsbo.width + (this._rightNewTabButton ? this._rightNewTabButton.boxObject.width: 0);
            if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + this._newTabButtonWidth;
+             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + Tabmix.newTabButtonWidth;
              this.disAllowNewtabbutton = buttonEnd > tsboEnd;
              return;
            }
@@ -623,7 +626,7 @@
              if (lastTabEnd > tsboEnd)
                this.disAllowNewtabbutton = false;
              else
-               this.disAllowNewtabbutton = lastTabEnd + this._newTabButtonWidth > tsboEnd;
+               this.disAllowNewtabbutton = lastTabEnd + Tabmix.newTabButtonWidth > tsboEnd;
              return;
            }
          }

@@ -1183,5 +1183,11 @@ Tabmix.navToolbox = {
         tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = false;
       }
     }
+
+    // reset tabsNewtabButton and newTabButtonWidth
+    if (typeof privateTab == "object") {
+      Tabmix.tabsNewtabButton = null;
+      TMP_eventListener.updateMultiRow();
+    }
   }
 }

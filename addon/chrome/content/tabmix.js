@@ -58,7 +58,7 @@ Tabmix.startup = function TMP_startup() {
 Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
   if (this.isFirstWindow) {
     let tmp = {};
-    Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
+    Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
   this.getNewTabButtonWidth();
@@ -128,20 +128,21 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
     if (stripIsHidden)
       tabBar.visible = true;
     this.setItem("TabsToolbar", "tabmix-visible", true);
-    // save mTabsNewtabButton width
+    // save tabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
-    let openNewTabRect = tabBar.mTabsNewtabButton.getBoundingClientRect();
-    tabBar._newTabButtonWidth = lwtheme ? 31 : openNewTabRect.width;
-///XXX need to fix this for the case user enable/disable the extension during the session
+    this.tabsNewtabButton =
+      document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
+    let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
+    this.newTabButtonWidth = lwtheme ? 31 : openNewTabRect.width;
     // when privateTab extension installed add its new tab button width
-    // for the use of adjustNewtabButtonvisibility set mTabsNewtabButton to be
+    // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
       let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
-      tabBar._newTabButtonWidth += openNewPrivateTabRect.width;
+      this.newTabButtonWidth += openNewPrivateTabRect.width;
       if (openNewPrivateTabRect.right > openNewTabRect.right)
-        tabBar.mTabsNewtabButton = openNewPrivateTab;
+        this.tabsNewtabButton = openNewPrivateTab;
     }
 
     this.setItem("TabsToolbar", "tabmix-visible", null);

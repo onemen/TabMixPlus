@@ -73,6 +73,22 @@ let TabmixSvc = {
     return this.direct2dDisabled = false;
   },
 
+  /**
+   * call a callback for all currently opened browser windows
+   * (might miss the most recent one)
+   * @param aFunc
+   *        Callback each window is passed to
+   */
+  forEachBrowserWindow: function(aFunc) {
+    let windowsEnum = Services.wm.getEnumerator("navigator:browser");
+    while (windowsEnum.hasMoreElements()) {
+      let window = windowsEnum.getNext();
+      if (!window.closed) {
+        aFunc.call(null, window);
+      }
+    }
+  },
+
   // some extensions override native JSON so we use nsIJSON
   JSON: {
     nsIJSON: null,
