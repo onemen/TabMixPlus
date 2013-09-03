@@ -139,7 +139,7 @@ label.text-link, label[onclick] {
   vertical-align: bottom;
 }
 
-#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >
+#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]):not([customizing="true"]) >
    #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   visibility: visible;
 }
