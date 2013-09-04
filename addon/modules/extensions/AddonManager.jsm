@@ -19,15 +19,14 @@ function log(msg) {
 let PrivateTab = {
   id: "privateTab@infocatcher",
   onEnabled: function() {
-    this.resetNewTabButton();
+    this._resetNewTabButton();
   },
   onDisabled: function() {
-    this.resetNewTabButton();
+    this._resetNewTabButton();
   },
-  resetNewTabButton: function() {
+  _resetNewTabButton: function() {
     TabmixSvc.forEachBrowserWindow(function(aWindow) {
-      aWindow.Tabmix.tabsNewtabButton = null;
-      aWindow.TMP_eventListener.updateMultiRow();
+      aWindow.TMP_eventListener.updateMultiRow(true);
     });
   }
 }
@@ -78,10 +77,10 @@ let SessionManager = {
 
 let TabmixListener = {
   onChange: function(aAddon, aAction) {
-    let addon = aAddon.id
-    if (aAddon.id == SessionManager.id)
+    let id = aAddon.id
+    if (id == SessionManager.id)
       SessionManager[aAction]();
-    else if (aAddon.id == PrivateTab.id) {
+    else if (id == PrivateTab.id) {
       PrivateTab[aAction]();
     }
   },

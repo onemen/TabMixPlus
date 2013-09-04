@@ -1185,9 +1185,7 @@ Tabmix.navToolbox = {
     }
 
     // reset tabsNewtabButton and newTabButtonWidth
-    if (typeof privateTab == "object") {
-      Tabmix.tabsNewtabButton = null;
-      TMP_eventListener.updateMultiRow();
-    }
+    if (typeof privateTab == "object")
+      TMP_eventListener.updateMultiRow(true);
   }
 }

@@ -658,7 +658,9 @@ var TMP_eventListener = {
     }
   },
 
-  updateMultiRow: function () {
+  updateMultiRow: function (aReset) {
+    if (aReset)
+      Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
       gBrowser.tabContainer.updateVerticalTabStrip();
       gBrowser.tabContainer.setFirstTabInRow();

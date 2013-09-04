@@ -581,7 +581,7 @@
             return;
           }
 
-          // when Private-tab enabled/disable we need to reset
+          // when Private-tab enabled/disabled we need to reset
           // tabsNewtabButton and newTabButtonWidth
           if (!Tabmix.tabsNewtabButton)
             Tabmix.getNewTabButtonWidth();
