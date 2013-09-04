@@ -2751,7 +2751,7 @@ try{
 // xxx add flag what to save : all, history, property, scrollPosition
    saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend, offset) {
       if (this.isTabPrivate(aTab))
-         return;
+         return false;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return false;
 
