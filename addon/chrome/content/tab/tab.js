@@ -873,8 +873,16 @@ var gTMPprefObserver = {
   },
 
   dynamicRules: {},
+  insertRule: function(cssText, name) {
+    let index = this.tabStyleSheet.insertRule(cssText,
+        this.tabStyleSheet.cssRules.length);
+    if (name)
+      this.dynamicRules[name] = this.tabStyleSheet.cssRules[index];
+    return index;
+  },
+
   createColorRules: function TMP_PO_createColorRules() {
-    var bottomBorder, ss = this.tabStyleSheet;
+    var bottomBorder;
     this.gradients = { };
     if (Tabmix.isVersion(160)) {
       this.gradients.body = "linear-gradient(#colorCode, #colorCode)";
@@ -946,39 +954,30 @@ var gTMPprefObserver = {
         "{background-image: " + this.gradients.body + " !important;}";
     }
 
-    // Charter Toolbar extension add Object.prototype.toJSONString
-    // that break the use      "for (var rule in styleRules)"
-    var rules = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
-    for (let j = 0; j < rules.length; j++) {
-      let rule = rules[j];
+    for (let rule in Iterator(styleRules, true)) {
       this.setTabStyles("extensions.tabmix.styles." + rule, true);
       var prefValues = this.tabStylePrefs[rule];
       if (!prefValues)
         continue;
 
-      var newRule, index;
       if (rule !=  "progressMeter") {
-        newRule = styleRules[rule].text.replace("#colorCode",prefValues.textColor);
-        index = ss.insertRule(newRule, ss.cssRules.length);
-        this.dynamicRules[rule] = ss.cssRules[index];
+        let newRule = styleRules[rule].text.replace("#colorCode",prefValues.textColor);
+        this.insertRule(newRule, rule);
       }
-      newRule = styleRules[rule].bg.replace(/#colorCode/g,prefValues.bgColor);
-      index = ss.insertRule(newRule, ss.cssRules.length);
-      this.dynamicRules[rule + "bg"] = ss.cssRules[index];
+      let newRule = styleRules[rule].bg.replace(/#colorCode/g,prefValues.bgColor);
+      this.insertRule(newRule, rule + "bg");
       if (rule != "progressMeter")
         this.toggleTabStyles(rule);
     }
     if ("bgTabsontop" in styleRules.currentTab) {
       // bottom border for selected tab on top is diffrent
       let newRule = styleRules.currentTab.bgTabsontop.replace(/#colorCode/g, this.tabStylePrefs["currentTab"].bgColor);
-      let index = ss.insertRule(newRule, ss.cssRules.length);
-      this.dynamicRules["currentTab" + "bgTabsontop"] = ss.cssRules[index];
+      this.insertRule(newRule, "currentTab" + "bgTabsontop");
     }
 
     // rule for controling moz-margin-start when we have pinned tab in multi-row
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
-    let index = ss.insertRule(marginStart, ss.cssRules.length);
-    this.dynamicRules["tabmix-firstTabInRow"] = ss.cssRules[index];
+    this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     // rule for progress-bar background-image
     // move it back to css file when we drop support for Firefox 11-15
@@ -993,7 +992,7 @@ var gTMPprefObserver = {
       backgroundImage = backgroundImage.replace("#2", Tabmix.ltr ? "left" : "rigth").
           replace("linear-gradient", "-moz-linear-gradient");
     }
-    ss.insertRule(backgroundImage, ss.cssRules.length);
+    this.insertRule(backgroundImage);
 
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
@@ -1002,8 +1001,8 @@ var gTMPprefObserver = {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
       let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
-      let index = ss.insertRule(newRule, ss.cssRules.length);
-      newRule = ss.cssRules[index];
+      let index = this.insertRule(newRule);
+      newRule = this._tabStyleSheet.cssRules[index];
       gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
         gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
         let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
@@ -1013,7 +1012,6 @@ var gTMPprefObserver = {
   },
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
-    var ss = this.tabStyleSheet;
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
     var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-icon-image");
     if (!icon)
@@ -1038,7 +1036,7 @@ var gTMPprefObserver = {
                            selector + '.tab-reload-icon,' +
                            selector + '.tab-lock-icon {' +
                            '-moz-margin-start: %S; -moz-margin-end: %S;}'.replace("%S", marginStart).replace("%S", marginEnd);
-    ss.insertRule(iconRule, ss.cssRules.length);
+    this.insertRule(iconRule);
     icon.setAttribute("pinned", true);
     let _marginStart = style.getPropertyValue(sMarginStart);
     let _marginEnd = style.getPropertyValue(sMarginEnd);
@@ -1047,7 +1045,7 @@ var gTMPprefObserver = {
                          _selector + '.tab-reload-icon,' +
                          _selector + '.tab-lock-icon {' +
                          '-moz-margin-start: %S; -moz-margin-end: %S;}'.replace("%S", _marginStart).replace("%S", _marginEnd);
-    ss.insertRule(_iconRule, ss.cssRules.length);
+    this.insertRule(_iconRule);
     if (!pinned)
       icon.removeAttribute("pinned");
 
@@ -1060,9 +1058,9 @@ var gTMPprefObserver = {
 
     function tabmix_setRule(aRule) {
       let newRule = aRule.replace(/%S/g, "tab-icon-image").replace("%PX", marginEnd);
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
       newRule = aRule.replace(/%S/g, "tab-lock-icon").replace("%PX", marginEnd);
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
     }
     iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                       '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {'+
@@ -1080,7 +1078,6 @@ var gTMPprefObserver = {
   },
 
   setCloseButtonMargin: function TMP_PO_setCloseButtonMargin() {
-    var ss = this.tabStyleSheet;
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
     var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "button_side", "right") ||
                document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button close-icon always-right");
@@ -1095,7 +1092,7 @@ var gTMPprefObserver = {
       let newRule = '.tab-close-button[button_side="left"] {' +
                     '-moz-margin-start: %PX !important;'.replace("%PX", marginEnd) +
                     '-moz-margin-end: %PX !important;}'.replace("%PX", marginStart);
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
     }
     // set right margin to text stack when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
@@ -1108,15 +1105,15 @@ var gTMPprefObserver = {
                             '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])').replace(/%faviconized%/g, '').replace(/%faviconized1%/g, ':not([faviconized="true"])');
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
       newRule = iconRule.replace(/%favhideclose%/g, '[favhideclose="true"]').replace(/%faviconized%/g, ':not([faviconized="true"])').replace(/%faviconized1%/g, ':not([faviconized="true"])');
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
       newRule = '.tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {max-width: 36px !important;}';
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
     }
     else {
       let newRule = iconRule.replace(/%favhideclose%/g, '').replace(/%faviconized%/g, '').replace(/%faviconized1%/g, '');
-      ss.insertRule(newRule, ss.cssRules.length);
+      this.insertRule(newRule);
     }
   },
 
@@ -1126,13 +1123,13 @@ var gTMPprefObserver = {
     let newRule = '#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
-    this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
+    this.insertRule(newRule);
 
     if (!Tabmix.isPlatform("Mac") && !Tabmix.isPlatform("Linux")) {
       let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
                     '#TabsToolbar[multibar] > #tabs-closebutton {' +
                     '  height: #px;}'.replace("#", newHeight);
-      this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
+      this.insertRule(newRule);
     }
   },
 
@@ -1142,9 +1139,7 @@ var gTMPprefObserver = {
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
-    let ss = this.tabStyleSheet;
-    let index = ss.insertRule(newRule, ss.cssRules.length);
-    this.dynamicRules["width"] = ss.cssRules[index];
+    this.insertRule(newRule, "width");
   },
 
   defaultStylePrefs: {    currentTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
