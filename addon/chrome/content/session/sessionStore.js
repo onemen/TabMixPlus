@@ -99,8 +99,8 @@ var TMP_SessionStore = {
     *
     * @returns       Nothing.
     */
-   setService: function TMP_ss_setSessionService(msgNo, start, win) {
-      if ("tabmix_setSession" in window || Tabmix.prefs.prefHasUserValue("setDefault"))
+   setService: function TMP_ss_setSessionService(msgNo, start) {
+      if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
          return;
      /*
       * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
@@ -120,7 +120,7 @@ var TMP_SessionStore = {
          return;
       }
 
-      window.tabmix_setSession = true;
+      TabmixSvc.sm.settingPreference = true;
       // if session manager extension is install disable TMP session manager
       if (msgNo == -1 || Tabmix.extensions.sessionManager) {
          // update session manager settings accourding to current tabmix settings
@@ -151,7 +151,7 @@ var TMP_SessionStore = {
             Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
             Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", true);
          }
-         delete window.tabmix_setSession;
+         TabmixSvc.sm.settingPreference = false;
       }
       else if (this.isSessionStoreEnabled()) {
          // ask the user to choose between TMP session manager and sessionstore
@@ -181,10 +181,10 @@ var TMP_SessionStore = {
               Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
               Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
            }
-           delete window.tabmix_setSession;
+           TabmixSvc.sm.settingPreference = false;
          }
          let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-               [title, msg, "", "", buttons], win || window, start ? callBack : null);
+               [title, msg, "", "", buttons], window, start ? callBack : null);
          if (!start)
            callBack(result);
       }
@@ -194,7 +194,7 @@ var TMP_SessionStore = {
          if (!Tabmix.isVersion(200))
            Services.prefs.setBoolPref("browser.warnOnRestart", false);
          Services.prefs.setBoolPref("browser.warnOnQuit", false);
-         delete window.tabmix_setSession;
+         TabmixSvc.sm.settingPreference = false;
       }
    },
 

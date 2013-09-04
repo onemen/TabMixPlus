@@ -71,6 +71,7 @@ var gSessionPane = {
       updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
     }
 
+    TabmixSvc.sm.settingPreference = true;
     if (useSessionManager) {
       sessionstorePrefs();
       sessionPrefs();
@@ -79,6 +80,7 @@ var gSessionPane = {
       sessionPrefs();
       sessionstorePrefs()
     }
+    TabmixSvc.sm.settingPreference = false;
 
     if (instantApply)
       Services.prefs.savePrefFile(null);

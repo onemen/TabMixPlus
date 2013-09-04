@@ -157,7 +157,8 @@ let TabmixSvc = {
       delete this.sanitized;
       return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
     },
-    private: true
+    private: true,
+    settingPreference: false,
   }
 }
 
