@@ -36,9 +36,8 @@
   padding-bottom: 3px;
 }
 
-#TabsToolbar[multibar] > .toolbarbutton-1,
 #TabsToolbar[multibar] > #tabs-closebutton {
-  height: 26px;
+  padding-top: 5px;
 }
 
 /* for TabsToolbar on bottom with windows 7 */

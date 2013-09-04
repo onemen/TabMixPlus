@@ -1127,6 +1127,13 @@ var gTMPprefObserver = {
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
     this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
+
+    if (!Tabmix.isPlatform("Mac") && !Tabmix.isPlatform("Linux")) {
+      let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
+                    '#TabsToolbar[multibar] > #tabs-closebutton {' +
+                    '  height: #px;}'.replace("#", newHeight);
+      this.tabStyleSheet.insertRule(newRule, this.tabStyleSheet.cssRules.length);
+    }
   },
 
   addWidthRules: function TMP_PO_addWidthRules() {
