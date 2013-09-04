@@ -106,7 +106,13 @@ pref("extensions.tabmix.tabs.closeButtons.delay", 50);
 
 pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);
+/*
 pref("extensions.tabmix.enableScrollSwitch", false);
+ replaced by scrollTabs: 0 - scrool tabbar on overflow - default
+                         1 - scroll change selected tab
+                         2 - disable scroll over tabs
+*/
+pref("extensions.tabmix.scrollTabs", 0);
 pref("extensions.tabmix.reversedScroll", false);
 
 pref("extensions.tabmix.dblClickTab", 0);

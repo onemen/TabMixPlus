@@ -28,7 +28,8 @@
                   name="extensions.tabmix.mouseOverSelectDelay" type="int"/>
       <preference id="pref_tabFlip"           name="extensions.tabmix.tabFlip"            type="bool"/>
       <preference id="pref_tabFlipDelay"      name="extensions.tabmix.tabFlipDelay"       type="int"/>
-      <preference id="pref_tabbarscrolling"   name="extensions.tabmix.enableScrollSwitch" type="bool"/>
+      <preference id="pref_tabbarscrolling"   name="extensions.tabmix.scrollTabs"         type="int"
+                  onchange="gMousePane.updateBroadcaster(this.value)"/>
       <preference id="pref_reversescrolling"  name="extensions.tabmix.reversedScroll"     type="bool"/>
       <preference id="pref_mouseDownSelect"   name="extensions.tabmix.selectTabOnMouseDown"
                   type="bool" inverted="true"/>
@@ -98,16 +99,25 @@
           </groupbox>
           <!-- Tabbar Scrolling -->
           <groupbox flex="1">
-            <caption label="&tabbarscrolling.caption;"/>
+            <caption>
+               <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
+                             preference="pref_tabbarscrolling"
+                             onsyncfrompreference="return $('pref_tabbarscrolling').value != 2"
+                             onsynctopreference="var val = this.checked ? this.tabbarscrolling : 2;
+                                this.tabbarscrolling = $('tabbarscrolling').value;
+                                return val;"/>
+            </caption>
             <separator class="thin"/>
-            <label value="&tabbarscrolling.holdShift.label;"/>
-            <radiogroup id="tabbarscrolling" boolean="true" orient="horizontal"
+            <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>
+            <radiogroup id="tabbarscrolling" orient="horizontal"
                         preference="pref_tabbarscrolling">
-              <radio value="true" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"/>
-              <radio value="false" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"/>
+              <radio value="0" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"
+                     observes="obs_tabbarscrolling"/>
+              <radio value="1" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"
+                     observes="obs_tabbarscrolling"/>
             </radiogroup>
             <checkbox_tmp id="reversescrolling" label="&tabbarscrolling.inverse.label;"
-                      preference="pref_reversescrolling"/>
+                      preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
           </groupbox>
         </tabpanel>
         <tabpanel align="start">
@@ -186,6 +196,10 @@
     <broadcasterset id="paneMouse:Broadcaster">
       <broadcaster id="obs_mouseHoverSelect"/>
       <broadcaster id="obs_tabFlip"/>
+    </broadcasterset>
+
+    <broadcasterset>
+      <broadcaster id="obs_tabbarscrolling"/>
     </broadcasterset>
 
   </prefpane>

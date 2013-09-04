@@ -863,10 +863,16 @@ var TMP_eventListener = {
   },
 
   onTabBarScroll: function TMP_EL_onTabBarScroll(aEvent) {
+    var scrollTabs = Tabmix.prefs.getIntPref("scrollTabs");
+    if (scrollTabs > 1) {
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+      return;
+    }
     var tabBar = gBrowser.tabContainer;
     tabBar.removeShowButtonAttr();
 
-    var shouldMoveFocus = Tabmix.prefs.getBoolPref("enableScrollSwitch");
+    let shouldMoveFocus = scrollTabs == 1;
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
     var direction = aEvent.detail;

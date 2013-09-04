@@ -1799,6 +1799,12 @@ try {
         shortcuts.toggleFLST = "VK_F9";
       Tabmix.prefs.setCharPref("shortcuts", TabmixSvc.JSON.stringify(shortcuts));
     }
+    // 2013-09-04
+    if (Tabmix.prefs.prefHasUserValue("enableScrollSwitch")) {
+      // enableScrollSwitch non-default value was true that is now 1
+      Tabmix.prefs.setIntPref("scrollTabs", 1);
+      Tabmix.prefs.clearUserPref("enableScrollSwitch");
+    }
 
     // verify valid value
     if (Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
