@@ -150,7 +150,7 @@
               <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
             </hbox>
             <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
-                      preference="pref_offsetAmountToScroll" style="height: 22px; margin: 2px;"/>
+                      preference="pref_offsetAmountToScroll" style="height: 26px;"/>
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
