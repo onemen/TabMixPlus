@@ -50,8 +50,10 @@ var gAppearancePane = {
       hbox.setAttribute("align","center");
     }
 
-    this.toolbarButtons(browserWindow);
     gPrefWindow.initPane("paneAppearance");
+    // call this function after initPane
+    // we update some broadcaster that initPane may reset
+    this.toolbarButtons(browserWindow);
   },
 
   tabCloseButtonChanged: function() {
@@ -108,14 +110,14 @@ var gAppearancePane = {
     onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
 
     // Display > Tab bar
-    function updateDisabledState(buttonID, itemID) {
+    function updateDisabledState(buttonID, itemID, aEnable) {
       let button = aWindow.document.getElementById(buttonID);
       let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
-      gPrefWindow.setDisabled("obs_" + itemID, !enablePosition || null);
+      gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }
-    updateDisabledState("new-tab-button", "newTabButton");
-    updateDisabledState("alltabs-button", "hideAllTabsButton");
+    updateDisabledState("new-tab-button", "newTabButton", $("pref_newTabButton").value);
+    updateDisabledState("alltabs-button", "hideAllTabsButton", true);
 
     if (this._tabmixCustomizeToolbar) {
       delete this._tabmixCustomizeToolbar;
