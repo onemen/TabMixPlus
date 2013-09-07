@@ -308,14 +308,14 @@ var TMP_ClosedTabs = {
     * Get closed tabs count
     */
    get count() {
-      return TabmixSvc.ss.getClosedTabCount(window);
+      return window.__SSi ? TabmixSvc.ss.getClosedTabCount(window) : 0;
    },
 
   /**
     * Get closed tabs data
     */
    get getClosedTabData() {
-      return TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
+      return window.__SSi ? TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window)) : {};
    },
 
    getUrl: function ct_getUrl(aTabData) {
