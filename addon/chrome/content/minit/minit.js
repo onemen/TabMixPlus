@@ -1178,9 +1178,10 @@ Tabmix.navToolbox = {
       // update physical position
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
-      if (useTabmixButtons && document.getElementById("TabsToolbar").hasAttribute("tabstripoverflow")) {
-        let tabStrip = gBrowser.tabContainer.mTabstrip;
-        tabStrip._scrollButtonUp.collapsed = tabStrip._scrollButtonDown.collapsed = false;
+      let tabBar = gBrowser.tabContainer;
+      if (useTabmixButtons && tabBar.overflow) {
+        tabBar.mTabstrip._scrollButtonUp.collapsed = false;
+        tabBar.mTabstrip._scrollButtonDown.collapsed = false;
       }
     }
 

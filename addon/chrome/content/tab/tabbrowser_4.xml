@@ -529,7 +529,6 @@
               this.setAttribute("overflow", "true");
             else
               this.removeAttribute("overflow");
-            Tabmix.setItem("TabsToolbar", "tabstripoverflow", val || null);
             Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
                 val ? "right-side" : Tabmix._show_newtabbutton);
           }

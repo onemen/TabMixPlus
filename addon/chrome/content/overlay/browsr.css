@@ -116,7 +116,7 @@ label.text-link, label[onclick] {
   visibility: collapse !important;
 }
 
-#TabsToolbar:not([tabstripoverflow]) > #tabmixScrollBox,
+#tabbrowser-tabs:not([overflow="true"]) ~ #tabmixScrollBox,
 #tabmixScrollBox[flowing="singlebar"],
 #tabmixScrollBox[defaultScrollButtons] {
   visibility: collapse;
@@ -145,13 +145,12 @@ label.text-link, label[onclick] {
   visibility: visible !important;
 }
 
-#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"][tabstripoverflow] > #new-tab-button,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] > #new-tab-button {
   visibility: visible;
 }
 
 /* In vertical tabbar the default rules from chrome://browser/content/browser.css are sufficient */
-#TabsToolbar:not([orient="vertical"]):not([tabstripoverflow]):not([tabmix-show-newtabbutton*="side"]) > #new-tab-button,
+#TabsToolbar:not([orient="vertical"])[tabmix-show-newtabbutton*="aftertabs"] > #new-tab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) > #new-tab-button {
   visibility: collapse;
 }
@@ -171,12 +170,12 @@ label.text-link, label[onclick] {
   display: none; /* override privateTab visibility: visible !important; */
 }
 
-#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([tabstripoverflow])
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]
     > #privateTab-toolbar-openNewPrivateTab {
   visibility: collapse; /* missing rule form privateTab */
 }
 
-#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([tabstripoverflow]):not([customizing="true"])
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([customizing="true"])
     > #tabbrowser-tabs > .tabbrowser-arrowscrollbox > #privateTab-afterTabs-openNewPrivateTab,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
   visibility: visible;
