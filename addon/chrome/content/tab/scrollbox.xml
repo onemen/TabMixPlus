@@ -427,7 +427,7 @@
         }
 
         var tabs = document.getBindingParent(this);
-        if (tabs.hasAttribute("multibar")) {
+        if (tabs.hasAttribute("multibar") && tabs.overflow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||

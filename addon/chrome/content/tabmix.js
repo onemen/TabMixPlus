@@ -686,20 +686,22 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
-    let tabBar = gBrowser.tabContainer;
-    let self = this, newTime = new Date().getTime();
-    if (tabBar.overflow || newTime - this.lastTimeTabOpened > 200) {
+    let newTime = Date.now();
+    if (gBrowser.tabContainer.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
     }
-    else if (!tabBar.TMP_onOpenTimeout) {
-      tabBar.TMP_onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
-        if (tabBar.TMP_onOpenTimeout) {
-          clearTimeout(tabBar.TMP_onOpenTimeout);
-          tabBar.TMP_onOpenTimeout = null;
+    else if (!this._onOpenTimeout) {
+      let self = this;
+      let timeout = gBrowser.tabContainer.disAllowNewtabbutton &&
+          Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
+      this._onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
+        if (self._onOpenTimeout) {
+          clearTimeout(self._onOpenTimeout);
+          self._onOpenTimeout = null;
         }
         self.onTabOpen_updateTabBar(tab);
-      }, 200, aTab);
+      }, timeout, aTab);
     }
   },
 
