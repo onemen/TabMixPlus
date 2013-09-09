@@ -360,9 +360,10 @@
            * if we set this in field[s] they will reset each time the tabbar binding construct
            * by tabbar position change
            */
-          Tabmix.newTabButtonWidth = 22;
+          Tabmix.afterTabsButtonsWidth = [22];
           Tabmix.tabsNewtabButton =
             document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
+          Tabmix._show_newtabbutton = "aftertabs";
 
           let tab = this.firstChild;
           tab.setAttribute("flst_id", new Date().getTime());
@@ -470,22 +471,32 @@
           if (this.mTabstrip.orient == "vertical")
             this.overflow = multibar == "scrollbar";
 
-          // prevent new-tab-button on the right from flickering when new tabs animate is on.
-          if (this.disAllowNewtabbutton && Services.prefs.getBoolPref("browser.tabs.animate")) {
-            // after 300ms new tab is fully opened
-            if (!this.adjustNewtabButtonTimeout) {
-              // Don't reset adjustNewtabButtonvisibility if multibar or rows didn't changed
-              if (multibar != currentMultibar || rows != visibleRows)
-                this.disAllowNewtabbutton = false;
-              let self = this;
-              this.adjustNewtabButtonTimeout = setTimeout(function() {
-                self.adjustNewtabButtonvisibility();
-                self.adjustNewtabButtonTimeout = null;
-              }, 300);
+          if (!this.overflow) {
+            // prevent new-tab-button on the right from flickering when new tabs animate is on.
+            if (this.disAllowNewtabbutton && Services.prefs.getBoolPref("browser.tabs.animate")) {
+              // after 250ms new tab is fully opened
+              if (!this.adjustNewtabButtonTimeout) {
+                let timeout = 250, callerName = Tabmix.callerName();
+                if (callerName == "onxbloverflow") {
+                  let timeFromLastTabOpenedTime = Date.now() - Tabmix._lastTabOpenedTime;
+                  if (timeFromLastTabOpenedTime < 250)
+                    timeout = 0;
+                }
+                // Don't reset adjustNewtabButtonvisibility if multibar or rows
+                // didn't changed or when we get here from _enterVerticalMode
+                if (callerName != "_enterVerticalMode" &&
+                     (multibar != currentMultibar || rows != visibleRows))
+                  this.disAllowNewtabbutton = false;
+                let self = this;
+                this.adjustNewtabButtonTimeout = setTimeout(function() {
+                  self.adjustNewtabButtonvisibility();
+                  self.adjustNewtabButtonTimeout = null;
+                }, timeout);
+              }
             }
+            else
+              this.adjustNewtabButtonvisibility();
           }
-          else
-            this.adjustNewtabButtonvisibility();
 
           this._inUpdateVerticalTabStrip = false;
           return multibar;
@@ -519,6 +530,8 @@
             else
               this.removeAttribute("overflow");
             Tabmix.setItem("TabsToolbar", "tabstripoverflow", val || null);
+            Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
+                val ? "right-side" : Tabmix._show_newtabbutton);
           }
           return val;
         ]]></setter>
@@ -574,17 +587,15 @@
             return;
 
           if (!this._checkNewtabButtonVisibility) {
-            this.disAllowNewtabbutton = this.getAttribute("flowing") == "singlebar" &&
-                Tabmix.prefs.getBoolPref("newTabButton") &&
-                Tabmix.prefs.getIntPref("newTabButton.position") == 2 &&
-                this.overflow;
+            Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
+                this.overflow ? "right-side" : Tabmix._show_newtabbutton);
             return;
           }
 
           // when Private-tab enabled/disabled we need to reset
-          // tabsNewtabButton and newTabButtonWidth
+          // tabsNewtabButton and afterTabsButtonsWidth
           if (!Tabmix.tabsNewtabButton)
-            Tabmix.getNewTabButtonWidth();
+            Tabmix.getAfterTabsButtonsWidth();
 
          var lastTab = this.visibleTabsLastChild;
          // button is visible
@@ -612,10 +623,20 @@
              this.disAllowNewtabbutton = false;
              return;
            }
+
+           // buttons that are not on TabsToolbar or not visible are null
+           let newTabButtonWidth = function(aOnSide) {
+             let width = 0, privatTabButton = TabmixTabbar.newPrivateTabButton();
+             if (privatTabButton)
+               width += aOnSide ? privatTabButton.boxObject.width : Tabmix.afterTabsButtonsWidth[1];
+             if (Tabmix.sideNewTabButton)
+               width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width : Tabmix.afterTabsButtonsWidth[0];
+             return width;
+           }
            let tsbo = this.mTabstrip.scrollBoxObject;
-           let tsboEnd = tsbo.screenX + tsbo.width + (this._rightNewTabButton ? this._rightNewTabButton.boxObject.width: 0);
+           let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
            if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + Tabmix.newTabButtonWidth;
+             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + newTabButtonWidth();
              this.disAllowNewtabbutton = buttonEnd > tsboEnd;
              return;
            }
@@ -626,7 +647,7 @@
              if (lastTabEnd > tsboEnd)
                this.disAllowNewtabbutton = false;
              else
-               this.disAllowNewtabbutton = lastTabEnd + Tabmix.newTabButtonWidth > tsboEnd;
+               this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
              return;
            }
          }
@@ -635,11 +656,11 @@
 
       <property name="disAllowNewtabbutton">
         <getter><![CDATA[
-          return document.getElementById("TabsToolbar").hasAttribute("disAllowNewtabbutton");
+          return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
         ]]></getter>
         <setter><![CDATA[
-          if (val != this.disAllowNewtabbutton)
-            Tabmix.setItem("TabsToolbar", "disAllowNewtabbutton", val || null);
+          Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
+              val ? "temporary-right-side" : Tabmix._show_newtabbutton);
           return val;
         ]]></setter>
       </property>

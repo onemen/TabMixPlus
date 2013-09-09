@@ -122,16 +122,11 @@ label.text-link, label[onclick] {
   visibility: collapse;
 }
 
-/*** hide tabs-newtab-button that we don't use
- *
- * we set newtab_side only for left ot right side afterlast position rules are set by Firefox
- *
- ***/
+/*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
-#tabbrowser-tabs:not([tabmix-visible])[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar:not([tabmix-visible])[newTabButton=false] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar:not([tabmix-visible])[disAllowNewtabbutton] .tabbrowser-arrowscrollbox > .tabs-newtab-button,
-#TabsToolbar:not([tabmix-visible])[newtab_side] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+#tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar:not([tabmix-show-newtabbutton]) .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"],
+#TabsToolbar[tabmix-show-newtabbutton*="side"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   /* using visibility: hidden !important; don't collapse the width and don't collapse padding and border height */
   visibility: collapse;
   height: 0px !important;
@@ -141,38 +136,49 @@ label.text-link, label[onclick] {
   vertical-align: bottom;
 }
 
-#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]):not([customizing="true"]) >
-   #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) >
+   #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
   visibility: visible;
 }
 
-#TabsToolbar[tabmix-visible] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
+#TabsToolbar[tabmix-show-newtabbutton="afterTabs-force"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
   visibility: visible !important;
 }
 
-#TabsToolbar[newTabButton=true][tabstripoverflow] > #new-tab-button,
-#TabsToolbar[newTabButton=true][disAllowNewtabbutton]:not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
-#TabsToolbar[newTabButton=true][newtab_side] > #new-tab-button {
+#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"][tabstripoverflow] > #new-tab-button,
+#TabsToolbar[tabmix-show-newtabbutton*="side"] > #new-tab-button {
   visibility: visible;
 }
 
 /* In vertical tabbar the default rules from chrome://browser/content/browser.css are sufficient */
-#TabsToolbar:not([orient="vertical"]):not([disAllowNewtabbutton]):not([tabstripoverflow]):not([newtab_side]) > #new-tab-button,
-#TabsToolbar[newTabButton=false] > #new-tab-button {
+#TabsToolbar:not([orient="vertical"]):not([tabstripoverflow]):not([tabmix-show-newtabbutton*="side"]) > #new-tab-button,
+#TabsToolbar:not([tabmix-show-newtabbutton]) > #new-tab-button {
   visibility: collapse;
 }
 
-/* Private-tab compatibility */
-#TabsToolbar:not([tabmix-visible])[newtab_side] .tabbrowser-arrowscrollbox:not([flowing=multibar]) > .tabs-newtab-button {
-  display: none;
-}
-
+/*** Private-tab compatibility ***/
 #privateTab-afterTabs-openNewPrivateTab {
   vertical-align: bottom;
 }
 
-#TabsToolbar[newTabButton=true][disAllowNewtabbutton]:not([tabstripoverflow]):not([newtab_side]) > #privateTab-toolbar-openNewPrivateTab,
-#TabsToolbar[newTabButton=true][newtab_side] > #privateTab-toolbar-openNewPrivateTab {
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
+    > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  display: none; /* override privateTab visibility: visible !important; */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
+    > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  display: none; /* override privateTab visibility: visible !important; */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([tabstripoverflow])
+    > #privateTab-toolbar-openNewPrivateTab {
+  visibility: collapse; /* missing rule form privateTab */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([tabstripoverflow]):not([customizing="true"])
+    > #tabbrowser-tabs > .tabbrowser-arrowscrollbox > #privateTab-afterTabs-openNewPrivateTab,
+#TabsToolbar[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
   visibility: visible;
 }
 

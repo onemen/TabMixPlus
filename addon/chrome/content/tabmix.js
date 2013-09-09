@@ -61,7 +61,7 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
     Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
-  this.getNewTabButtonWidth();
+  this.getAfterTabsButtonsWidth();
   TabmixSessionManager.init();
 }
 
@@ -121,31 +121,34 @@ Tabmix.sessionInitialized = function() {
 // we call this at the start of gBrowserInit._delayedStartup
 // if we call it erlier we get this warning:
 // XUL box for _moz_generated_content_before element contained an inline #text child
-Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
+Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
     let stripIsHidden = TabmixTabbar.hideMode != 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this.setItem("TabsToolbar", "tabmix-visible", true);
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    let showButton = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
+    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", "aftertabs-force");
     // save tabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
     let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
-    this.newTabButtonWidth = lwtheme ? 31 : openNewTabRect.width;
+    this.afterTabsButtonsWidth = [];
+    this.afterTabsButtonsWidth.push(lwtheme ? 31 : openNewTabRect.width);
     // when privateTab extension installed add its new tab button width
     // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
       let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
-      this.newTabButtonWidth += openNewPrivateTabRect.width;
+      this.afterTabsButtonsWidth.push(openNewPrivateTabRect.width);
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
 
-    this.setItem("TabsToolbar", "tabmix-visible", null);
+    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
     if (stripIsHidden)
       tabBar.visible = false;
   }
@@ -671,6 +674,7 @@ var TMP_eventListener = {
   // Function to catch when new tabs are created and update tab icons if needed
   // In addition clicks and doubleclick events are trapped.
   onTabOpen: function TMP_EL_onTabOpen(aEvent) {
+    Tabmix._lastTabOpenedTime = Date.now();
     var tab = aEvent.target;
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;

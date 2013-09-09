@@ -17,6 +17,16 @@ var TabmixTabbar = {
     return gBrowser.tabContainer.getAttribute("flowing") == "multibar";
   },
 
+  isButtonOnTabsToolBar: function(button) {
+    return button && button.parentNode == gBrowser.tabContainer._container;
+  },
+
+  // get privateTab-toolbar-openNewPrivateTab, when the button is on the tabbar
+  newPrivateTabButton: function() {
+    let button = document.getElementById("privateTab-toolbar-openNewPrivateTab");
+    return this.isButtonOnTabsToolBar(button) ? button : null;
+  },
+
   updateSettings: function TMP_updateSettings(start) {
     if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
@@ -132,20 +142,14 @@ var TabmixTabbar = {
       tabBar.adjustTabstrip(true);
 
     // show on tabbar
-    var showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
-    let toolBar = gBrowser.tabContainer._container;
     let tabstripClosebutton = document.getElementById("tabs-closebutton");
-    if (tabstripClosebutton && tabstripClosebutton.parentNode == toolBar)
+    if (this.isButtonOnTabsToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
-    if (allTabsButton && allTabsButton.parentNode == toolBar)
+    if (this.isButtonOnTabsToolBar(allTabsButton))
       allTabsButton.collapsed = Tabmix.prefs.getBoolPref("hideAllTabsButton");
-
-    let newTabButton = document.getElementById("new-tab-button");
-    showNewTabButton =  showNewTabButton && newTabButton && newTabButton.parentNode == toolBar;
-    Tabmix.setItem("TabsToolbar", "newTabButton", showNewTabButton || false);
     Tabmix.setItem(tabBar, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
-    tabBar._checkNewtabButtonVisibility = isMultiRow && showNewTabButton && Tabmix.prefs.getIntPref("newTabButton.position") == 2;
+    this.setShowNewTabButtonAttr();
 
     var self = this;
     if (start)
@@ -158,6 +162,14 @@ var TabmixTabbar = {
           gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
         self.updateBeforeAndAfter();
     }, 50, currentVisible);
+  },
+
+  setShowNewTabButtonAttr: function() {
+    let newTabButton = document.getElementById("new-tab-button");
+    let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton") &&
+        this.isButtonOnTabsToolBar(newTabButton);
+    let position = Tabmix.prefs.getIntPref("newTabButton.position");
+    gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
   setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
@@ -1120,7 +1132,7 @@ var gTMPprefObserver = {
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     let newHeight = gBrowser.tabContainer.visibleTabsFirstChild.getBoundingClientRect().height;
-    let newRule = '#TabsToolbar:not([newTabButton=false]):not([disAllowNewtabbutton]):not([newtab_side]) >' +
+    let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
     this.insertRule(newRule);
@@ -1404,26 +1416,23 @@ var gTMPprefObserver = {
   },
 
   changeNewTabButtonSide: function(aPosition) {
-    var tabBar = gBrowser.tabContainer;
-    tabBar._checkNewtabButtonVisibility = false;
-    let newTabButton = document.getElementById("new-tab-button");
-    if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) {
-      let sideChanged, tabsToolbar = document.getElementById("TabsToolbar");
+    function $(id) document.getElementById(id);
+    let newTabButton = $("new-tab-button");
+    if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
+      let sideChanged, tabsToolbar = $("TabsToolbar");
       let toolBar = Array.slice(tabsToolbar.childNodes);
       let buttonIndex = toolBar.indexOf(newTabButton);
       let tabsIndex = toolBar.indexOf(gBrowser.tabContainer);
       if (aPosition == 0) {
-        Tabmix.setItem(tabsToolbar, "newtab_side", "left");
         if (buttonIndex > tabsIndex) {
           newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
           sideChanged = true;
         }
       }
       else {
-        Tabmix.setItem(tabsToolbar, "newtab_side", aPosition == 1 ? "right" : null);
         if (buttonIndex < tabsIndex) {
           let before = gBrowser.tabContainer.nextSibling;
-          if (document.getElementById("tabmixScrollBox")) {
+          if ($("tabmixScrollBox")) {
             before = before.nextSibling;
             tabsIndex++;
           }
@@ -1438,14 +1447,50 @@ var gTMPprefObserver = {
         tabsToolbar.setAttribute("currentset", cSet.join(","));
         document.persist("TabsToolbar", "currentset");
       }
-      tabBar._checkNewtabButtonVisibility = TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("newTabButton") && aPosition == 2;
-      Tabmix.setItem("TabsToolbar", "newTabButton", Tabmix.prefs.getBoolPref("newTabButton"));
-      tabBar._rightNewTabButton = newTabButton;
+      let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
+      this.setShowNewTabButtonAttr(showNewTabButton, aPosition);
+      Tabmix.sideNewTabButton = newTabButton;
     }
     else {
-      Tabmix.setItem("TabsToolbar", "newTabButton", false);
-      tabBar._rightNewTabButton = null;
+      this.setShowNewTabButtonAttr(false);
+      Tabmix.sideNewTabButton = null;
     }
+  },
+
+  setShowNewTabButtonAttr: function(aShow, aPosition) {
+    // check new tab button visibility when we are in multi-row and the
+    // preference is to show new-tab-button after last tab
+    gBrowser.tabContainer._checkNewtabButtonVisibility =
+                  TabmixTabbar.isMultiRow && ((aShow && aPosition == 2) ||
+                  !!TabmixTabbar.newPrivateTabButton());
+
+   /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
+    *  aftertabs       - show the button after tabs
+    *  aftertabs-force - force the button after tabs to be visible, only to
+    *                  - make it possible to catch the button width
+    *                   (Tabmix.getAfterTabsButtonsWidth)
+    *  temporary-right-side
+    *                  - show the button on right side when there is no place
+    *                    for the button aftertabs in multi-row mode
+    *  rigth-side      - show the button on right side
+    *  left-side       - show the button on left side
+    */
+    let attrValue;
+    if (!aShow)
+      attrValue = null;
+    else if (aPosition == 0)
+      attrValue = "left-side";
+    else if (aPosition == 1)
+      attrValue = "right-side";
+    else
+      attrValue = "aftertabs";
+    // we use this value in disAllowNewtabbutton and overflow setters
+    Tabmix._show_newtabbutton = attrValue;
+    if (gBrowser.tabContainer.overflow)
+      attrValue = "right-side";
+    else if (gBrowser.tabContainer.disAllowNewtabbutton)
+      attrValue = "temporary-right-side";
+    Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
   },
 
   tabBarPositionChanged: function(aPosition) {
