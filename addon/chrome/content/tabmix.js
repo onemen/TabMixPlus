@@ -766,7 +766,7 @@ var TMP_eventListener = {
     if (updateNow)
       this.onTabClose_updateTabBar(tab);
 
-    gBrowser.countClosedTabs(tab);
+    Tabmix.countClosedTabs(tab);
   },
 
   // TGM extension use it

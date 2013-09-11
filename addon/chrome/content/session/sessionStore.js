@@ -453,7 +453,7 @@ var TMP_ClosedTabs = {
       }
 
       // Reset the number of tabs closed last time to the default.
-      gBrowser.setNumberOfTabsClosedLast(1);
+      Tabmix.setNumberOfTabsClosedLast(1);
    },
 
    removeAllClosedTabs: function () {
@@ -575,7 +575,7 @@ var TMP_ClosedTabs = {
       let index = Number(aIndex);
       if (isNaN(index)) {
         index = 0;
-        if (Tabmix.isVersion(250))
+        if (Tabmix._restoreMultipleTabs)
           numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
       } else if (0 > index || index >= this.count)
         return null;
@@ -587,7 +587,7 @@ var TMP_ClosedTabs = {
         tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
 
       // Reset the number of tabs closed last time to the default.
-      gBrowser.setNumberOfTabsClosedLast(1);
+      Tabmix.setNumberOfTabsClosedLast(1);
       return tab;
    }
 
