@@ -159,7 +159,7 @@ let PlacesUtilsInternal = {
       '        if (caller != "PC_doCommand")\n' +
       '          aWhere = aWindow.TMP_Places.fixWhereToOpen(null, aWhere);\n' +
       '      }\n' +
-      '      if (aWhere == "current") aWindow.gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\n' +
+      '      if (aWhere == "current") TabmixSvc.topWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\n' +
       '      $&'
     )._replace(
       'inBackground:',
