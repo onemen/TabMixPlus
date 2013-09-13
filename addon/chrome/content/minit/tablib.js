@@ -8,7 +8,6 @@ var tablib = {
     if (this._inited)
       return;
     this._inited = true;
-    Tabmix._restoreMultipleTabs = typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function";
     this.change_gBrowser();
     this.change_tabContainer();
     this.change_utility();

@@ -372,3 +372,9 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     TabmixTabbar.updateBeforeAndAfter();
   }
 }
+
+// temporary property for Aurora 25.0a2 users with version before 2013-09-12
+// replace it with Tabmix.isVersion(260) once Firefox 25.0 is out
+XPCOMUtils.defineLazyGetter(Tabmix, "_restoreMultipleTabs", function() {
+  return typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function"
+});
