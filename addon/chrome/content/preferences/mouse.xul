@@ -111,9 +111,9 @@
             <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>
             <radiogroup id="tabbarscrolling" orient="horizontal"
                         preference="pref_tabbarscrolling">
-              <radio value="0" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"
+              <radio value="1" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"
                      observes="obs_tabbarscrolling"/>
-              <radio value="1" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"
+              <radio value="0" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"
                      observes="obs_tabbarscrolling"/>
             </radiogroup>
             <checkbox_tmp id="reversescrolling" label="&tabbarscrolling.inverse.label;"
