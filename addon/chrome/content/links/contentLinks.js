@@ -154,6 +154,11 @@ Tabmix.contentAreaClick = {
         return ["current", true];
     }
 
+    // check this after we check for suppressTabsOnFileDownload
+    // for the case the link have a matche in our list
+    if (typeof event.tabmix_openLinkWithHistory == "boolean")
+      return ["current"];
+
     // don't mess with links that have onclick inside iFrame
     let onClickInFrame = this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
 
@@ -209,6 +214,9 @@ Tabmix.contentAreaClick = {
   },
 
   contentLinkClick: function TMP_contentLinkClick(aEvent) {
+    if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
+      return;
+
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
 

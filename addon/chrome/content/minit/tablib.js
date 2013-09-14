@@ -905,8 +905,9 @@ var tablib = {
           }
 
           var event = document.createEvent("Events");
-          event.initEvent("click", true, true);
-          event.getPreventDefault = function () { return false; }
+          event.initEvent("click", true, false);
+          event.tabmix_openLinkWithHistory = true;
+          event.button = 0;
           gContextMenu.target.dispatchEvent(event);
 
           newTab = aTab;
