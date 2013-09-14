@@ -172,6 +172,13 @@ var TabmixTabbar = {
     gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
+  showNewTabButtonOnSide: function(aCondition, aValue) {
+    if (Tabmix._show_newtabbutton) {
+      Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
+        aCondition ? aValue : Tabmix._show_newtabbutton);
+    }
+  },
+
   setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
     let newBox, box = document.getElementById("tabmixScrollBox");
     if (useTabmixButtons && !box) {
@@ -1486,10 +1493,12 @@ var gTMPprefObserver = {
       attrValue = "aftertabs";
     // we use this value in disAllowNewtabbutton and overflow setters
     Tabmix._show_newtabbutton = attrValue;
-    if (gBrowser.tabContainer.overflow)
-      attrValue = "right-side";
-    else if (gBrowser.tabContainer.disAllowNewtabbutton)
-      attrValue = "temporary-right-side";
+    if (aShow) {
+      if (gBrowser.tabContainer.overflow)
+        attrValue = "right-side";
+      else if (gBrowser.tabContainer.disAllowNewtabbutton)
+        attrValue = "temporary-right-side";
+    }
     Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
   },
 

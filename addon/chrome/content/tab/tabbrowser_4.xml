@@ -529,8 +529,7 @@
               this.setAttribute("overflow", "true");
             else
               this.removeAttribute("overflow");
-            Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-                val ? "right-side" : Tabmix._show_newtabbutton);
+            TabmixTabbar.showNewTabButtonOnSide(val, "right-side");
           }
           return val;
         ]]></setter>
@@ -586,8 +585,7 @@
             return;
 
           if (!this._checkNewtabButtonVisibility) {
-            Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-                this.overflow ? "right-side" : Tabmix._show_newtabbutton);
+            TabmixTabbar.showNewTabButtonOnSide(this.overflow, "right-side");
             return;
           }
 
@@ -658,8 +656,7 @@
           return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
         ]]></getter>
         <setter><![CDATA[
-          Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-              val ? "temporary-right-side" : Tabmix._show_newtabbutton);
+          TabmixTabbar.showNewTabButtonOnSide(val, "temporary-right-side");
           return val;
         ]]></setter>
       </property>
