@@ -152,14 +152,17 @@ let PlacesUtilsInternal = {
       '$1, TMP_Event$2' /* event argument exist when this function called from openNodeWithEvent */
     )._replace(
       'aWindow.openUILinkIn',
-      'if (TMP_Event) aWhere = aWindow.TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
-      '                     aWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
-      '      else if (aWhere == "current" && !aWindow.TMP_Places.isBookmarklet(aNode.uri)) {\n' +
-      '        let caller = aWindow.Tabmix.getCallerNameByIndex(2);\n' +
-      '        if (caller != "PC_doCommand")\n' +
-      '          aWhere = aWindow.TMP_Places.fixWhereToOpen(null, aWhere);\n' +
+      'let browserWindow = this._getTopBrowserWin();\n' +
+      '      if (browserWindow && typeof browserWindow.TMP_Places == "object") {\n' +
+      '        if (TMP_Event) aWhere = browserWindow.TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
+      '                       browserWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
+      '        else if (aWhere == "current" && !browserWindow.TMP_Places.isBookmarklet(aNode.uri)) {\n' +
+      '          let caller = browserWindow.Tabmix.getCallerNameByIndex(2);\n' +
+      '          if (caller != "PC_doCommand")\n' +
+      '            aWhere = browserWindow.TMP_Places.fixWhereToOpen(null, aWhere);\n' +
+      '        }\n' +
       '      }\n' +
-      '      if (aWhere == "current") TabmixSvc.topWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\n' +
+      '      if (browserWindow && aWhere == "current") browserWindow.gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\n' +
       '      $&'
     )._replace(
       'inBackground:',
