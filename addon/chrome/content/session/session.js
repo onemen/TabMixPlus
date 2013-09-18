@@ -456,7 +456,8 @@ var TabmixSessionManager = {
               this.resetTab(tab);
               gBrowser.removeTab(tab);
               try {
-                 TabmixSvc.ss.forgetClosedTab(window, 0);
+                 if (TMP_ClosedTabs.count)
+                   TabmixSvc.ss.forgetClosedTab(window, 0);
               } catch(ex) {}
            }
            if (TabmixSvc.sm.crashed && this.enableBackup)
