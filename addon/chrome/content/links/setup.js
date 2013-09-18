@@ -135,7 +135,7 @@ function TMP_TBP_Startup() {
     SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
     if (SM.doRestore) {
       // Prevent the default homepage from loading if we're going to restore a session
-      if (Tabmix.isVersion(250)) {
+      if (Tabmix.isVersion(240)) {
         Tabmix.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
           'sessionStartup.willOverrideHomepage', 'true'
         ).toCode();

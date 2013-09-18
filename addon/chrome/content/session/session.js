@@ -335,7 +335,7 @@ var TabmixSessionManager = {
         SessionStore.promiseInitialized.then(initializeSM);
       }
       else {
-        let forceInit = !Tabmix.isVersion(250) && this.doRestore
+        let forceInit = !Tabmix.isVersion(250) && this.doRestore;
         // make sure sessionstore initialize without restoring pinned tabs
         // for Firefox 25+ we block new tab in gbrowser.addtab
         if (forceInit)
