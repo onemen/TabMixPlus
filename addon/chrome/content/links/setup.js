@@ -132,7 +132,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
     if (SM.doRestore) {
       // Prevent the default homepage from loading if we're going to restore a session
-      if (this.isVersion(250)) {
+      if (this.isVersion(240)) {
         this.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
           'sessionStartup.willOverrideHomepage', 'true'
         ).toCode();
