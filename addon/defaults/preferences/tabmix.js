@@ -176,7 +176,7 @@ pref("extensions.tabmix.closeTabMenu", true);
 pref("extensions.tabmix.closeTabContent", false);
 pref("extensions.tabmix.closeAllMenu", false);
 pref("extensions.tabmix.closeOtherMenu", true);
-pref("extensions.tabmix.closeRightMenu", false);
+pref("extensions.tabmix.closeRightMenu", true);
 pref("extensions.tabmix.closeLeftMenu", false);
 pref("extensions.tabmix.undoCloseTabMenu", true);
 pref("extensions.tabmix.undoCloseListMenu", true);

@@ -16,6 +16,13 @@ var gMenuPane = {
       gPrefWindow.removeChild("moveToGroup");
     }
 
+    // use "Close Tabs to the Right" (for non-english locals)
+    if (Tabmix.isVersion(240)) {
+      let item = browserWindow.document.getElementById("context_closeTabsToTheEnd");
+      if (item)
+        $("showCloseRight").setAttribute("label", item.getAttribute("label"));
+    }
+
     // check if bookmark item in tab context menu
     Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
 
