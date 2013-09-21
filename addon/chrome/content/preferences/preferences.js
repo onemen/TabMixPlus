@@ -54,6 +54,8 @@ var gPrefWindow = {
     // hide broadcasters pane button
     var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
     paneButton.collapsed = true;
+
+    $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
   },
 
   initPane: function(aPaneID) {
@@ -299,7 +301,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
   "browser.sessionstore.resume_from_crash","browser.startup.page",
-  "browser.startup.page","browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
+  "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
   "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
   "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
@@ -334,6 +336,16 @@ function defaultSetting() {
 
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
+  Services.prefs.savePrefFile(null);
+}
+
+function toggleSyncPreference() {
+  const sync = "services.sync.prefs.sync.";
+  let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
+  Tabmix.prefs[fn]("syncPrefs", true);
+  gPreferenceList.forEach(function(pref) {
+    Services.prefs[fn](sync + pref, true);
+  });
   Services.prefs.savePrefFile(null);
 }
 

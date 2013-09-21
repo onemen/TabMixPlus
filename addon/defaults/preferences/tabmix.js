@@ -263,3 +263,4 @@ pref("browser.tabs.tabMinWidth", 100);
 pref("browser.tabs.tabMaxWidth", 250);
 
 pref("extensions.tabmix.shortcuts", '{}');
+pref("extensions.tabmix.syncPrefs", false);

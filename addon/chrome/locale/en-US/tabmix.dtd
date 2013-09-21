@@ -85,7 +85,7 @@
 <!ENTITY bookmark.accesskey "B">
 <!ENTITY deletelist.label "Delete from the list">
 <!ENTITY deletelist.accesskey "D">
-<!ENTITY settings.label "Settings">
+<!ENTITY settings.label "Preferences">
 <!ENTITY saveWindow.label "Save This Window">
 <!ENTITY saveAllWindows.label "Save All Windows">
 <!ENTITY sm.context.overwrite "Restore, Overwrite Existing Window(s)">

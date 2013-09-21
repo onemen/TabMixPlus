@@ -6,8 +6,9 @@
 <!ENTITY tab.session "Session">
 <!ENTITY tab.incompatible "Error">
 <!ENTITY apply.label "Apply">
-<!ENTITY settings.export "Export Settings">
-<!ENTITY settings.import "Import Settings">
+<!ENTITY settings.export "Export Preferences">
+<!ENTITY settings.import "Import Preferences">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restore Defaults">
 <!ENTITY generalWindowOpen.label "Open links that open in a new window in:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
