@@ -454,7 +454,7 @@ var TabmixSessionManager = {
            // remove extra tab that was opened by SessionStore if last session
            // contained pinned tab(s).
            let tab = gBrowser.tabs[0];
-           if (Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
+           if (this.doRestore && Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
               this.resetTab(tab);
               gBrowser.removeTab(tab);
               try {
