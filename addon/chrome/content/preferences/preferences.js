@@ -283,15 +283,6 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
-function setNewTabUrl(newPref, newValue) {
-  if (newValue != "") {
-    let nsISupportsString = Ci.nsISupportsString;
-    let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-    str.data = newValue;
-    Services.prefs.setComplexValue(newPref, nsISupportsString, str);
-  }
-}
-
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
