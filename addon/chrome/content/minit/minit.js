@@ -1007,6 +1007,7 @@ Tabmix.navToolbox = {
     this.initializeScrollButtons();
   },
 
+  urlBarInitialized: false,
   initializeURLBar: function TMP_navToolbox_initializeURLBar() {
     if (!gURLBar ||
         document.documentElement.getAttribute("chromehidden").indexOf("location") != -1 ||
@@ -1047,11 +1048,11 @@ Tabmix.navToolbox = {
       return;
 
     if (Tabmix.extensions.ieTab2 && Tabmix.originalFunctions.oldHandleCommand &&
-      Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
-        return;
+        Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
+      return;
 
     // we don't do anything regarding IeTab and URL Suffix extensions
-    Tabmix.changeCode(obj, "gURLBar." + fn)._replace(
+    Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(
       '{',
       '{ var _data, altDisabled = false; \
        if (gBrowser.tabmix_tab) {\
@@ -1079,6 +1080,11 @@ Tabmix.navToolbox = {
       'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
        $&'
     ).toCode();
+
+    // don't call ChangeCode.isValidToChange after urlbar initialized,
+    // we can only lost our changes if user customized the toolbar and remove urlbar
+    if (!this.urlBarInitialized && fn in obj)
+      this.urlBarInitialized = obj[fn].toString().indexOf(TMP_fn) > -1;
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
     if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {

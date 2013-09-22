@@ -16,6 +16,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     let options = aParams.options;
     this.needUpdate = options && options.forceUpdate || false;
+    this.silent = options && options.silent || false;
 
     if (options && (options.setter || options.getter)) {
       this.type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
@@ -127,7 +128,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
       if (this.needUpdate && !notFoundCount)
         return true;
       var caller = console.getCallerNameByIndex(2);
-      if (notFoundCount) {
+      if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         console.clog(caller + " was unable to change " + aName + "."
           + (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    "))
