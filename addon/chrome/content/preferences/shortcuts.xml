@@ -17,7 +17,6 @@
         <xul:textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;"
                      xbl:inherits="value,disabled=blocked" context=" "
                      placeholder="&shortcuts.placeholder;"
-                     onkeydown="handleKeyEvents(event);"
                      onkeypress="handleKeyEvents(event);"
                      onfocus="updateFocus(true);"
                      onblur="updateFocus(false);"
@@ -122,9 +121,6 @@
           event.preventDefault();
           event.stopPropagation();
           event.stopImmediatePropagation();
-
-          if (event.type == "keydown")
-            return;
 
           let key = {modifiers: "", key: "", keycode: ""};
           key.modifiers =
