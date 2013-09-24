@@ -51,7 +51,7 @@ var TMP_SessionStore = {
 
    getTitleFromTabState: function(aTab) {
      let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-     return this.getActiveEntryData(tabData).title;
+     return this.getActiveEntryData(tabData).title || null;
    },
 
    /**
