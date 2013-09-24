@@ -191,14 +191,14 @@ label.text-link, label[onclick] {
 }
 
 /* we use display: -moz-box !important;
-so display: none !important; is not hide the button */
+so display: none !important; does not hide the button */
 .tab-close-button:not([fadein]) {
-  opacity: 0;
+  visibility: hidden;
 }
 
 /*
  When the tabbar is in display:block hiding this items on a tab collapses the
- height when the is no close button on the tab
+ height when there is no close button on the tab
 */
 .tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
 .tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
