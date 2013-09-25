@@ -56,6 +56,12 @@ Tabmix.startup = function TMP_startup() {
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js
 Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
+  // when gBrowserInit._delayedStartup broke by extension we don't get
+  // "browser-delayed-startup-finished" notification
+  setTimeout(function() {
+    Tabmix.initialization.run("delayedStartup");
+  }, 25);
+
   if (this.isFirstWindow) {
     let tmp = {};
     Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
