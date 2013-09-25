@@ -1051,10 +1051,13 @@ Tabmix.navToolbox = {
         Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
       return;
 
+    // InstantFox extension uses old version of gURLBar.handleCommand until Firefox 25
+    let instantFox = !Tabmix.isVersion(250) && typeof InstantFox == "object";
+
     // we don't do anything regarding IeTab and URL Suffix extensions
-    Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(
+    _handleCommand = Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(
       '{',
-      '{ var _data, altDisabled = false; \
+      '{\
        if (gBrowser.tabmix_tab) {\
          delete gBrowser.tabmix_tab;\
          delete gBrowser.tabmix_userTypedValue;\
@@ -1062,11 +1065,11 @@ Tabmix.navToolbox = {
     )._replace(
       'if (isMouseEvent || altEnter) {',
       'let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
-       if (isMouseEvent || altEnter || loadNewTab) {'
+       if (isMouseEvent || altEnter || loadNewTab) {', {check: !instantFox}
     )._replace(
       // always check whereToOpenLink except for alt to catch also ctrl/meta
       'if (isMouseEvent)',
-      'if (isMouseEvent || aTriggeringEvent && !altEnter)'
+      'if (isMouseEvent || aTriggeringEvent && !altEnter)', {check: !instantFox}
     )._replace(
       'where = whereToOpenLink(aTriggeringEvent, false, false);',
       '$&\
@@ -1078,8 +1081,29 @@ Tabmix.navToolbox = {
     )._replace(
       'openUILinkIn(url, where, params);',
       'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
-       $&'
-    ).toCode();
+       $&', {check: !instantFox}
+    );
+
+    if (instantFox) {
+      _handleCommand._replace(
+        'if (aTriggeringEvent instanceof MouseEvent) {',
+        'let isMouseEvent = aTriggeringEvent instanceof MouseEvent;\
+         let altEnter = !isMouseEvent && aTriggeringEvent && aTriggeringEvent.altKey && !isTabEmpty(gBrowser.selectedTab);\
+         let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+         let inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
+         $&'
+      )._replace(
+        'allowThirdPartyFixup: true, postData: postData',
+        '$&, inBackground: inBackground'
+      )._replace(
+        '} else if (aTriggeringEvent && aTriggeringEvent.altKey && !isTabEmpty(gBrowser.selectedTab)) {',
+        '} else if (loadNewTab) {'
+      )._replace(
+        'inBackground: false',
+        'inBackground: inBackground'
+      )
+    }
+    _handleCommand.toCode();
 
     // don't call ChangeCode.isValidToChange after urlbar initialized,
     // we can only lost our changes if user customized the toolbar and remove urlbar
