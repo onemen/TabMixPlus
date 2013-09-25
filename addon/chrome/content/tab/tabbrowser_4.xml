@@ -50,8 +50,9 @@
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
                          role="presentation"/>
-              <xul:image xbl:inherits="validate,src=image,fadein,pinned,selected"
+              <xul:image xbl:inherits="src=image,fadein,pinned,selected"
                          class="tab-icon-image"
+                         validate="never"
                          role="presentation"/>
               <xul:image class="tab-protect-icon" />
               <xul:image class="tab-lock-icon"/>
