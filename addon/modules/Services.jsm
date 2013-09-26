@@ -142,7 +142,7 @@ let TabmixSvc = {
         case "browser-delayed-startup-finished":
           try {
             aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {this.console.assert(ex);}
+          } catch (ex) {TabmixSvc.console.assert(ex);}
           break;
       }
     }
