@@ -425,7 +425,6 @@ var TabmixSessionManager = {
          return;
       }
 
-      Tabmix.setItem("tmp_closedwindows", "disabled", this.enableManager);
       if (isFirstWindow) {
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
