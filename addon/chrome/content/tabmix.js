@@ -78,20 +78,20 @@ Tabmix.sessionInitialized = function() {
     window.restoreLastSession = function restoreLastSession() {
       TabmixSessionManager.restoreLastSession();
     }
-    if (Tabmix.isVersion(200)) {
-      Tabmix.setItem("Browser:RestoreLastSession", "disabled",
+    if (this.isVersion(200)) {
+      this.setItem("Browser:RestoreLastSession", "disabled",
         !SM.canRestoreLastSession || SM.isPrivateWindow);
     }
     else {
-      Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
+      this.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
         'this._ss', 'TabmixSessionManager'
       ).toCode();
     }
 
-    if (Tabmix.isVersion(260))
+    if (this.isVersion(260))
       SessionStore.canRestoreLastSession = false;
     else {
-      Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
+      this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
         'function updateSearchEngine',
         'let updateSearchEngine = function _updateSearchEngine', {silent: true}
       )._replace(
@@ -99,9 +99,9 @@ Tabmix.sessionInitialized = function() {
         'TabmixSessionManager.canRestoreLastSession'
       ).toCode();
 
-      let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
+      let [obj, FnName] = this.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
                                                   [window, "window.BrowserOnClick"];
-      Tabmix.changeCode(obj, FnName)._replace(
+      this.changeCode(obj, FnName)._replace(
         'if (ss.canRestoreLastSession)',
         'ss = TabmixSessionManager;\
          $&'
@@ -163,10 +163,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
-  if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
+  if (this.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
     SessionStore.promiseInitialized.then(this.sessionInitialized.bind(this));
   else
-    Tabmix.sessionInitialized();
+    this.sessionInitialized();
 
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
@@ -199,7 +199,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.miscellaneousRules();
   if (!gTMPprefObserver._tabStyleSheet ||
       gTMPprefObserver._tabStyleSheet.href != "chrome://tabmixplus/skin/tab.css") {
-    Tabmix.log("can't load dynamic styles into tabmixplus/skin/tab.css");
+    this.log("can't load dynamic styles into tabmixplus/skin/tab.css");
   }
   gTMPprefObserver._tabStyleSheet = null;
 
@@ -214,7 +214,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
-  TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
+  TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 }
 
 var TMP_eventListener = {
