@@ -265,7 +265,7 @@ try {
   _getShortcutsPref: function TMP_SC__getShortcutsPref() {
     let shortcuts = null, updatePreference = false;
     try {
-      shortcuts = JSON.parse(this.prefs.getCharPref("shortcuts"));
+      shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
     } catch (ex) {}
     if (shortcuts == null) {
       TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
@@ -327,7 +327,7 @@ try {
 
   setShortcutsPref: function() {
     this.updatingShortcuts = true;
-    this.prefs.setCharPref("shortcuts", JSON.stringify(this.prefBackup));
+    setPref("extensions.tabmix.shortcuts", JSON.stringify(this.prefBackup));
     this.updatingShortcuts = false;
   },
 
@@ -449,7 +449,7 @@ let KeyConfig = {
   syncFromKeyConfig: function(aKey, aPrefName, aShortcuts) {
     let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
-      prefValue = this.prefs.getCharPref(aPrefName).split("][");
+      prefValue = getPref("keyconfig.main." + aPrefName).split("][");
     } catch (ex) { }
     if (!prefValue)
       newValue = keyData.default;
@@ -484,7 +484,7 @@ let KeyConfig = {
         let obj = Shortcuts.keyParse(prefVal);
         let newValue = obj.disabled ? ["!", "", ""] :
           [obj.modifiers.replace(",", " "), obj.key, obj.keycode].join("][");
-        this.prefs.setCharPref(id, newValue);
+        setPref("keyconfig.main." + id, newValue);
       }
       this.prefsChangedByTabmix = false;
     }
@@ -494,4 +494,14 @@ let KeyConfig = {
     this.prefs.clearUserPref(prefName);
   }
 
+}
+
+function getPref(name) {
+  return Services.prefs.getComplexValue(name, Ci.nsISupportsString).data;
+}
+
+function setPref(name, value) {
+  let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+  str.data = value;
+  Services.prefs.setComplexValue(name, Ci.nsISupportsString, str);
 }

@@ -218,7 +218,10 @@ var gPrefWindow = {
 function getPrefByType(prefName) {
   try {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
-    return Services.prefs["get" + fn](prefName);
+    if (fn == "CharPref")
+      return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+    else
+      return Services.prefs["get" + fn](prefName);
   } catch (ex) {
     Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
   }
@@ -229,13 +232,23 @@ function setPrefByType(prefName, newValue, atImport) {
   let pref = {name: prefName, value: newValue,
               type: Services.prefs.getPrefType(prefName)}
   try {
-    if (atImport && setPrefAfterImport(pref))
-      return;
-    Services.prefs["set" + PrefFn[pref.type]](prefName, pref.value);
+    if (!atImport || !setPrefAfterImport(pref))
+      setPref(pref);
   } catch (ex) {
     Tabmix.log("can't write preference " + prefName + "\nvalue " + pref.value +
       "\n" + ex, true);
   }
+}
+
+function setPref(aPref) {
+  let fn = PrefFn[aPref.type];
+  if (fn == "CharPref") {
+    let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+    str.data = aPref.value;
+    Services.prefs.setComplexValue(aPref.name, Ci.nsISupportsString, str);
+  }
+  else
+    Services.prefs["set" + fn](aPref.name, aPref.value);
 }
 
 function setPrefAfterImport(aPref) {
@@ -257,20 +270,20 @@ function setPrefAfterImport(aPref) {
     return true;
   }
 
-  // don't do anythis if user locked a preference
+  // don't do anything if user locked a preference
   if (Services.prefs.prefIsLocked(aPref.name))
     return true;
   // replace old preference by setting new value to it
   // and call gTMPprefObserver.updateSettings to replace it.
   if (aPref.type == Services.prefs.PREF_INVALID) {
     let val = parseInt(aPref.value);
-    let type = typeof val == "number" && !isNaN(val) ?
+    aPref.type = typeof val == "number" && !isNaN(val) ?
                64 : /true|false/i.test(aPref.value) ? 128 : 32;
-    if (type == 128)
+    if (aPref.type == 128)
       aPref.value = /true/i.test(aPref.value);
     let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
     prefsUtil.preventUpdate = true;
-    Services.prefs["set" + PrefFn[type]](aPref.name, aPref.value);
+    setPref(aPref);
     prefsUtil.preventUpdate = false;
     prefsUtil.updateSettings();
     // remove the preference in case updateSettings did not handle it
