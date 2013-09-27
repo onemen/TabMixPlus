@@ -413,6 +413,7 @@ var TabmixSessionManager = {
          }
       }
 
+      this.toggleRecentlyClosedWindowsButton();
       if (this.isPrivateWindow) {
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");

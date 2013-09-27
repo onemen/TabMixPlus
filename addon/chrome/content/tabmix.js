@@ -118,7 +118,8 @@ Tabmix.sessionInitialized = function() {
   TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
-  SM.toggleRecentlyClosedWindowsButton();
+  if (this.firstWindowInSession)
+    SM.toggleRecentlyClosedWindowsButton();
 
   // convert session.rdf to SessionManager extension format
   TabmixConvertSession.startup();
