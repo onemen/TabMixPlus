@@ -2018,11 +2018,26 @@ var TabmixProgressListener = {
       }
       else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
+        let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
+        // Suppress tabs that may be created by downloading a file.
+        // forward the request to the selected tab
+        if (Tabmix.prefs.getBoolPref("enablefiletype") &&
+            aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
+            uri != "about:blank" && aStatus == 0) {
+          if (this.mTabBrowser.isBlankTab(tab)) {
+            aBrowser.stop();
+            this.mTabBrowser.removeTab(tab, {animate: false});
+            let b = this.mTabBrowser.selectedBrowser;
+            b.tabmix_allowLoad = true;
+            b.loadURI(uri);
+            return;
+          }
+        }
+
         let tabsCount = this.mTabBrowser.visibleTabs.length;
         if (tabsCount == 1)
           this.mTabBrowser.tabContainer.adjustTabstrip(true);
         tab.removeAttribute("tab-progress");
-        let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         if (!Tabmix.isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
