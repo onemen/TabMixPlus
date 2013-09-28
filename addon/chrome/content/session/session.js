@@ -3521,9 +3521,11 @@ try{
            aEvent.currentTarget.removeEventListener("load", TMP_onLoad_oneTab, true);
            self.afterTabLoad(aEvent.currentTarget, rdfNodeSession);
          }, true);
-         browser.webNavigation.sessionHistory.getEntryAtIndex(savedHistory.index, true);
-         browser.webNavigation.sessionHistory.reloadCurrentEntry();
-      } catch (e) {Tabmix.log("error in loadOneTab gotoIndex ? ");}
+         let sh = browser.webNavigation.sessionHistory;
+         if (savedHistory.index != sh.index)
+           sh.getEntryAtIndex(savedHistory.index, true);
+         sh.reloadCurrentEntry();
+      } catch (ex) {Tabmix.log("error in loadOneTab\n" + ex)};
    }, // end of "loadOneTab : function(...............)"
 
    afterTabLoad: function SM_afterTabLoad(aBrowser, aNodeSession) {
@@ -3649,7 +3651,10 @@ try{
       }
       if (!aTab.hasAttribute("faviconized"))
          aTab.removeAttribute("width");
-      if (!this.enableSaveHistory) sessionIndex = 0;
+      if (!this.enableSaveHistory)
+        sessionIndex = 0;
+      else
+        sessionIndex = Math.min(sessionIndex, sHistoryInternal.count - 1);
       return {history: sHistoryInternal, index: sessionIndex, currentURI: currentURI, label: currentTitle};
    },
 
