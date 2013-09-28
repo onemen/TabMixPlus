@@ -8,6 +8,7 @@
 <!ENTITY apply.label "적용">
 <!ENTITY settings.export "설정 내보내기">
 <!ENTITY settings.import "설정 가져오기">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "설정 초기화">
 <!ENTITY generalWindowOpen.label "새 창으로 열리는 링크를 열 곳:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

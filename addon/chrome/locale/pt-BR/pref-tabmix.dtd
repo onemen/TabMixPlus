@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar Configurações">
 <!ENTITY settings.import "Importar Configurações">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restaurar Padrões">
 <!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferência separada para links de outros aplicativos">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Focar/Selecionar abas abertas por:">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Janelas desviadas">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Outros aplicativos">
 <!ENTITY selectTabCommand.label "Comandos de abrir nova aba">
 <!ENTITY contextMenuSearch.label "Buscar pelo menu de contexto por">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">

@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar predisposiciones">
 <!ENTITY settings.import "Importar predisposiciones">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restaurar predeterminadas">
 <!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
 <!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">

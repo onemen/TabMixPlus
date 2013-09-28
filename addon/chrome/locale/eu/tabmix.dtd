@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Itxi antzeko fitxak">
 <!ENTITY closeSimilarTab.accesskey "Z">
 <!ENTITY closeLeftTabsMenu.label "Itxi ezkerreko fitxak">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "E">
 <!ENTITY closeRightTabsMenu.label "Itxi eskuineko fitxak">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Baimenak">
 <!ENTITY docShellMenu.accesskey "P">

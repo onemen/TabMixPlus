@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Alkalmaz">
 <!ENTITY settings.export "Beállítások exportálása">
 <!ENTITY settings.import "Beállítások importálása">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Alapállapot">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
 <!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">

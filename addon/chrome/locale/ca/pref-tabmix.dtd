@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplica">
 <!ENTITY settings.export "Exporta els paràmetres">
 <!ENTITY settings.import "Importa els paràmetres">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
 <!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
 <!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d'altres aplicacions">

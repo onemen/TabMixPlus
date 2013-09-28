@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar definições">
 <!ENTITY settings.import "Importar definições">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "restaurar pré-definições">
 <!ENTITY generalWindowOpen.label "Abrir ligações que abren numa nova janela em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferências separadas para ligações de outras aplicações">

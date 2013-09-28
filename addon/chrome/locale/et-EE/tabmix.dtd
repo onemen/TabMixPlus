@@ -23,9 +23,9 @@
 <!ENTITY copytaburl.accesskey "O">
 <!ENTITY reloadother.label "Laadi teised kaardid uuesti">
 <!ENTITY reloadother.accesskey "U">
-<!ENTITY reloadleft.label "Laadi uuesti vasakpoolsed kaardid">
+<!ENTITY reloadleft.label "Laadi uuesti vasakule jäävad kaardid">
 <!ENTITY reloadleft.accesskey "V">
-<!ENTITY reloadright.label "Laadi uuesti parempoolsed kaardid">
+<!ENTITY reloadright.label "Laadi uuesti paremale jäävad kaardid">
 <!ENTITY reloadright.accesskey "P">
 <!ENTITY autoReloadTab.label "Kaardi automaatne uuestilaadimine">
 <!ENTITY autoReloadTab.accesskey "D">
@@ -39,9 +39,11 @@
 <!ENTITY closeall.accesskey "Õ">
 <!ENTITY closeSimilarTab.label "Sulge sarnased kaardid">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Sulge vasakpoolsed kaardid">
+<!ENTITY closeLeftTabsMenu.label "Sulge vasakule jäävad kaardid">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "V">
-<!ENTITY closeRightTabsMenu.label "Sulge parempoolsed kaardid">
+<!ENTITY closeRightTabsMenu.label "Sulge paremale jäävad kaardid">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "P">
 <!ENTITY docShellMenu.label "Luba kasutada">
 <!ENTITY docShellMenu.accesskey "B">

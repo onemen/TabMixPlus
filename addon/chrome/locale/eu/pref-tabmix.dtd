@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplikatu">
 <!ENTITY settings.export "Exportatze Aukerak">
 <!ENTITY settings.import "Importatze Aukerak">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Berrezarri lehenetsiak">
 <!ENTITY generalWindowOpen.label "Ireki &quot;leiho berri&quot; linkak horrela:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

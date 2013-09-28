@@ -8,6 +8,7 @@
 <!ENTITY apply.label "اعمال کردن">
 <!ENTITY settings.export "اکسپورت تنظیمات">
 <!ENTITY settings.import "ایمپورت تنظیمات">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "بازگردانی پیشفرض ها">
 <!ENTITY generalWindowOpen.label "لینک هایی را که در پنجره جدید باز می شوند را باز کن در">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

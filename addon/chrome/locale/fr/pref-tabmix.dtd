@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Appliquer">
 <!ENTITY settings.export "Exporter les réglages">
 <!ENTITY settings.import "Importer les réglages">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restaurer les réglages par défaut">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
 <!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d&apos;autres applications">

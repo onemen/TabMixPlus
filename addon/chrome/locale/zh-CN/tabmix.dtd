@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "关闭相似的标签页">
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeLeftTabsMenu.label "关闭左边的标签页">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
 <!ENTITY closeRightTabsMenu.label "关闭右边的标签页">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "网页许可">
 <!ENTITY docShellMenu.accesskey "P">

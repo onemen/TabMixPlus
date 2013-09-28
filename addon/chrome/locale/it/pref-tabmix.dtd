@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Applica">
 <!ENTITY settings.export "Esportale in file txt">
 <!ENTITY settings.import "Importale da file txt">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Ripristina predefinite">
 <!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
 <!ENTITY externalLink.useSeparate.label "Utilizza impostazioni distinte per i link provenienti da altre applicazioni">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Selezionare gli elementi il cui caricamento avverrà in schede in primo piano">
 <!ENTITY selectTab.label "Altri link in generale">
 <!ENTITY selectDivertedTab.label "Link che aprono nuove finestre">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Altre applicazioni">
 <!ENTITY selectTabCommand.label "Comandi delle nuove schede">
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Segnalibri o cronologia">
@@ -166,6 +167,7 @@
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -180,6 +182,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 -->
 <!ENTITY toolbar.description.width "21em">

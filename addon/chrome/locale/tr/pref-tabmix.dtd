@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Uygula">
 <!ENTITY settings.export "Ayarları dosyaya kaydet">
 <!ENTITY settings.import "Ayarları dosyadan al">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Varsayılanlara dön">
 <!ENTITY generalWindowOpen.label "Yeni pencerede açılacak bağlatıları burada aç:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

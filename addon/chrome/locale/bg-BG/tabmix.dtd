@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Затваряне на подобните подпрозорци">
 <!ENTITY closeSimilarTab.accesskey "б">
 <!ENTITY closeLeftTabsMenu.label "Затваряне на подпрозорците отляво">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "л">
 <!ENTITY closeRightTabsMenu.label "Затваряне на подпрозорците отдясно">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "д">
 <!ENTITY docShellMenu.label "Разрешения">
 <!ENTITY docShellMenu.accesskey "Р">

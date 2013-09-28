@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "סגור לשוניות זהות">
 <!ENTITY closeSimilarTab.accesskey "ז">
 <!ENTITY closeLeftTabsMenu.label "סגור לשונית שמאלית">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "ש">
 <!ENTITY closeRightTabsMenu.label "סגור לשונית ימנית">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "י">
 <!ENTITY docShellMenu.label "הרשאות">
 <!ENTITY docShellMenu.accesskey "ה">

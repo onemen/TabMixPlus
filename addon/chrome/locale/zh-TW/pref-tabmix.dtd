@@ -8,6 +8,7 @@
 <!ENTITY apply.label "套用">
 <!ENTITY settings.export "匯出設定值">
 <!ENTITY settings.import "匯入設定值">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "還原預設值">
 <!ENTITY generalWindowOpen.label "將開啟新視窗的鏈結開啟於：">
 <!ENTITY externalLink.useSeparate.label "外部程序啟動的鏈結使用不同的設定">

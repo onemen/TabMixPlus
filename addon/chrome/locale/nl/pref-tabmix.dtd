@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Toepassen">
 <!ENTITY settings.export "Instellingen exporteren">
 <!ENTITY settings.import "Instellingen importeren">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Standaardwaarden herstellen">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
 <!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">

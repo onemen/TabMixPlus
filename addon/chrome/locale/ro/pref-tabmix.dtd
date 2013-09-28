@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Aplică">
 <!ENTITY settings.export "Exportă…">
 <!ENTITY settings.import "Importă…">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Inițializează…">
 <!ENTITY generalWindowOpen.label "Se deschid legăturile cu deschidere într-o fereastră nouă în:">
 <!ENTITY externalLink.useSeparate.label "Se folosesc opțiuni separate pentru legăturile din alte aplicații">

@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Verkställ">
 <!ENTITY settings.export "Exportera inställningar">
 <!ENTITY settings.import "Importera inställningar">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Återställ standard">
 <!ENTITY generalWindowOpen.label "Öppna länk som öppnas i nytt fönster i:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

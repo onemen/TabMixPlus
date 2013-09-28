@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Käytä">
 <!ENTITY settings.export "Vie asetukset">
 <!ENTITY settings.import "Tuo asetukset">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Palauta oletusasetukset">
 <!ENTITY generalWindowOpen.label "Avaa uusissa ikkunoissa avautuvat linkit:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

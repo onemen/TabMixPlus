@@ -39,9 +39,11 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Close Similar Tabs">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Close Left Tabs">
+<!ENTITY closeLeftTabsMenu.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Close Right Tabs">
+<!ENTITY closeRightTabsMenu.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Permissions">
 <!ENTITY docShellMenu.accesskey "P">
@@ -83,7 +85,7 @@
 <!ENTITY bookmark.accesskey "B">
 <!ENTITY deletelist.label "Delete from the list">
 <!ENTITY deletelist.accesskey "D">
-<!ENTITY settings.label "Settings">
+<!ENTITY settings.label "Preferences">
 <!ENTITY saveWindow.label "Save This Window">
 <!ENTITY saveAllWindows.label "Save All Windows">
 <!ENTITY sm.context.overwrite "Restore, Overwrite Existing Window(s)">

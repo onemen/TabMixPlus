@@ -8,6 +8,7 @@
 <!ENTITY apply.label "החל">
 <!ENTITY settings.export "יצא הגדרות">
 <!ENTITY settings.import "יבא הגדרות">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "שחזר ברירת מחדל">
 <!ENTITY generalWindowOpen.label "פתח קישור שנפתח בחלון חדש ב:">
 <!ENTITY externalLink.useSeparate.label "השתמש בהגדרות נפרדות לקישורים מיישומים אחרים">

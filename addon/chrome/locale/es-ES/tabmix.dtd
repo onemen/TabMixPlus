@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Cerrar pestañas similares">
 <!ENTITY closeSimilarTab.accesskey "s">
 <!ENTITY closeLeftTabsMenu.label "Cerrar pestañas a la izquierda">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "i">
 <!ENTITY closeRightTabsMenu.label "Cerrar pestañas a la derecha">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permisos">
 <!ENTITY docShellMenu.accesskey "P">

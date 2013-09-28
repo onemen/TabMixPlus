@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Εφαρμογή">
 <!ENTITY settings.export "Εξαγωγή ρυθμίσεων">
 <!ENTITY settings.import "Εισαγωγή ρυθμίσεων">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Επαναφορά αρχικών">
 <!ENTITY generalWindowOpen.label "Άνοιγμα δεσμών που ανοίγουν σε νέο παράθυρο σε:">
 <!ENTITY externalLink.useSeparate.label "Χρήση ξεχωριστών προτιμήσεων για δεσμούς από άλλες εφαρμογές">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Εστίαση/επιλογή καρτελών που ανοίγουν από:">
 <!ENTITY selectTab.label "Δεσμούς">
 <!ENTITY selectDivertedTab.label "Παράθυρα που έχουν παρακαμφθεί">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Άλλες εφαρμογές">
 <!ENTITY selectTabCommand.label "Εντολές νέων καρτελών">
 <!ENTITY contextMenuSearch.label "Αναζήτηση στο μενού περιεχομένου">
 <!ENTITY selectTabBH.label "Σελιδοδείκτες/Ιστορικό">

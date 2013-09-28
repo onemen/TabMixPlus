@@ -8,6 +8,7 @@
 <!ENTITY apply.label "应用">
 <!ENTITY settings.export "导出设置">
 <!ENTITY settings.import "导入设置">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "恢复默认">
 <!ENTITY generalWindowOpen.label "新窗口链接打开于：">
 <!ENTITY externalLink.useSeparate.label "对其他应用程序的链接使用区别的首选项">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "激活/选择来自以下位置的链接所新建的标签页">
 <!ENTITY selectTab.label "链接">
 <!ENTITY selectDivertedTab.label "更改方式的窗口">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "其他应用程序">
 <!ENTITY selectTabCommand.label "新建的标签页">
 <!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">

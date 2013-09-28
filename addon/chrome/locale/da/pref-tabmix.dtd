@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Anvend">
 <!ENTITY settings.export "Eksporter indstillinger">
 <!ENTITY settings.import "Importer indstillinger">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Genetabler standarder">
 <!ENTITY generalWindowOpen.label "Åbn links der åbner i et nyt vindue i:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Potvrdiť">
 <!ENTITY settings.export "Exportovanie nastavení">
 <!ENTITY settings.import "Importovanie nastavení">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Pôvodné nastavenie">
 <!ENTITY generalWindowOpen.label "Odkazy otvárajúce nové okno otvoriť do:">
 <!ENTITY externalLink.useSeparate.label "Použiť rozdielne nastavenia pre odkazy z iných aplikácií">

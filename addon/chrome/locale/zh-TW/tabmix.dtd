@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "關閉相同網站的分頁">
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeLeftTabsMenu.label "關閉左側分頁">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
 <!ENTITY closeRightTabsMenu.label "關閉右側分頁">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "網頁內容允許">
 <!ENTITY docShellMenu.accesskey "P">

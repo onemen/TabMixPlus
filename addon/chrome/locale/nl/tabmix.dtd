@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Gelijksoortige tabbladen sluiten">
 <!ENTITY closeSimilarTab.accesskey "G">
 <!ENTITY closeLeftTabsMenu.label "Linker tabbladen sluiten">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
 <!ENTITY closeRightTabsMenu.label "Rechter tabbladen sluiten">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Toestemmingen">
 <!ENTITY docShellMenu.accesskey "T">

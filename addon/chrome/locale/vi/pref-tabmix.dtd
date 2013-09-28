@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Áp dụng">
 <!ENTITY settings.export "Xuất các Thiết lập">
 <!ENTITY settings.import "Nhập các Thiết lập">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Khôi phục Mặc định">
 <!ENTITY generalWindowOpen.label "Mở liên kết vốn sẽ được mở trong một cửa sổ mới trong:">
 <!ENTITY externalLink.useSeparate.label "Sử dụng thiết đặt riêng cho các liên kết từ các ứng dụng khác">

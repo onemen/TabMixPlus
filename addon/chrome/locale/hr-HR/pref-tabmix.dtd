@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Prihvati">
 <!ENTITY settings.export "Izvezi postavke">
 <!ENTITY settings.import "Uvezi postavke">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Vrati zadano">
 <!ENTITY generalWindowOpen.label "Otvori poveznice koje se otvaraju u novom prozoru u:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">

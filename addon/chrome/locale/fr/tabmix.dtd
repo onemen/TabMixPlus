@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Fermer les onglets identiques">
 <!ENTITY closeSimilarTab.accesskey "i">
 <!ENTITY closeLeftTabsMenu.label "Fermer les onglets de gauche">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "g">
 <!ENTITY closeRightTabsMenu.label "Fermer les onglets de droite">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permissions">
 <!ENTITY docShellMenu.accesskey "P">

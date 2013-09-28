@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Übernehmen">
 <!ENTITY settings.export "Einstellungen exportieren…">
 <!ENTITY settings.import "Einstellungen importieren…">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Standardeinstellungen">
 <!ENTITY generalWindowOpen.label "Links, die ein neues Fenster erzwingen, öffnen in:">
 <!ENTITY externalLink.useSeparate.label "Für Links aus anderen Anwendungen eigene Einstellungen verwenden">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "In Tabs im Vordergrund öffnen">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Andere Anwendungen">
 <!ENTITY selectTabCommand.label "Neuen Tab">
 <!ENTITY contextMenuSearch.label "Kontextmenü Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">

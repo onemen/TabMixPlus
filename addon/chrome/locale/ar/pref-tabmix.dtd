@@ -8,6 +8,7 @@
 <!ENTITY apply.label "طبّق">
 <!ENTITY settings.export "صدّر الإعدادات">
 <!ENTITY settings.import "استورد الإعدادات">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "استعد الإعدادات المبدئية">
 <!ENTITY generalWindowOpen.label "فتح الروابط التي تُفتح في نافذة جديدة في:">
 <!ENTITY externalLink.useSeparate.label "استخدام تفضيل منفصل للروابط القادمة من تطبيقات أخرى">

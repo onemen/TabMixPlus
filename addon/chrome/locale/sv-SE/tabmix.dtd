@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Stäng liknande flikar">
 <!ENTITY closeSimilarTab.accesskey "l">
 <!ENTITY closeLeftTabsMenu.label "Stäng flikar till vänster">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "v">
 <!ENTITY closeRightTabsMenu.label "Stäng flikar till höger">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "h">
 <!ENTITY docShellMenu.label "Rättigheter">
 <!ENTITY docShellMenu.accesskey "R">

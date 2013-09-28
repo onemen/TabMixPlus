@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Použít">
 <!ENTITY settings.export "Exportovat nastavení">
 <!ENTITY settings.import "Importovat nastavení">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Obnovit výchozí nastavení">
 <!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevřít do:">
 <!ENTITY externalLink.useSeparate.label "Použít vlastní nastavení pro odkazy z jiných aplikací">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Přepnout/vybrat panely, které se otevírají z(e):">
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Odchýlená okna">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Ostatní aplikace">
 <!ENTITY selectTabCommand.label "Příkazy pro nový panel">
 <!ENTITY contextMenuSearch.label "Hledat v místní nabídce výraz">
 <!ENTITY selectTabBH.label "Záložky/Historie">

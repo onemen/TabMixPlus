@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Pielietot">
 <!ENTITY settings.export "Eksportēt iestatījumus">
 <!ENTITY settings.import "Importēt iestatījumus">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Atjaunot noklusējumus">
 <!ENTITY generalWindowOpen.label "Saites, kas atveras jaunā logā, atvērt:">
 <!ENTITY externalLink.useSeparate.label "Saitēm no citām lietotnēm izmantot atsevišķu iestatījumu">

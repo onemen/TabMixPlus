@@ -40,8 +40,10 @@
 <!ENTITY closeSimilarTab.label "Закрыть схожие вкладки">
 <!ENTITY closeSimilarTab.accesskey "ж">
 <!ENTITY closeLeftTabsMenu.label "Закрыть вкладки слева">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "л">
 <!ENTITY closeRightTabsMenu.label "Закрыть вкладки справа">
+<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "п">
 <!ENTITY docShellMenu.label "Установить разрешения">
 <!ENTITY docShellMenu.accesskey "р">

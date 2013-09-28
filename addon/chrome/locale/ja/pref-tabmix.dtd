@@ -8,6 +8,7 @@
 <!ENTITY apply.label "適用">
 <!ENTITY settings.export "設定をエクスポート">
 <!ENTITY settings.import "設定をインポート">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "既定値に戻す">
 <!ENTITY generalWindowOpen.label "[新しいウィンドウに開く] リンクの開く場所:">
 <!ENTITY externalLink.useSeparate.label "他のアプリケーションから開くリンクは以下の設定を適用">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "以下のタブにフォーカス:">
 <!ENTITY selectTab.label "リンクから開いたタブ">
 <!ENTITY selectDivertedTab.label "新しいウィンドウに開くはずだったタブ">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "他のアプリケーション">
 <!ENTITY selectTabCommand.label "[新しいタブ] コマンドで開いたタブ">
 <!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">

@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Применить">
 <!ENTITY settings.export "Экспорт настроек">
 <!ENTITY settings.import "Импорт настроек">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "По умолчанию">
 <!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
 <!ENTITY externalLink.useSeparate.label "Использовать отдельные настройки для ссылок из других приложений">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Делать активными вкладки, открываемые:">
 <!ENTITY selectTab.label "Ссылки">
 <!ENTITY selectDivertedTab.label "Вместо окон">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Другие приложения">
 <!ENTITY selectTabCommand.label "По команде создания новой вкладки">
 <!ENTITY contextMenuSearch.label "Поиск по контекстному меню">
 <!ENTITY selectTabBH.label "Закладки / Журнал посещений">
