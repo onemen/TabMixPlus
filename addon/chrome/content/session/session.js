@@ -2820,7 +2820,7 @@ try{
       for (j = historyStart; j < historyEnd; j++) {
          try {
             historyEntry = sessionHistory.getEntryAtIndex(j, false).QueryInterface(Ci.nsISHEntry);
-            history.push(encodeURI(historyEntry.title));
+            history.push(historyEntry.title);
             history.push(historyEntry.URI.spec);
             history.push(this.getScrollPosHs(historyEntry)); // not in use yet
          } catch (ex) {Tabmix.assert(ex, "saveTabHistory error at index " + j); }
@@ -2832,7 +2832,7 @@ try{
             separator += extraSeparator;
       }
       // insert the separator to history so we can extract it in loadTabHistory
-      return separator + "|-|" + history.join(separator);
+      return separator + "|-|" + encodeURI(history.join(separator));
    },
 
    getScrollPosHs: function(historyEntry) {
@@ -3414,7 +3414,7 @@ try{
       for (j = historyStart; j < historyEnd; j++) {
          try {
             historyEntry = tabState.entries[j];
-            history.push(encodeURI(historyEntry.title || ""));
+            history.push(historyEntry.title || "");
             history.push(historyEntry.url);
             history.push(historyEntry.scroll || "0,0"); // not in use yet
          } catch (ex) {Tabmix.assert(ex, "saveTabHistory error at index " + j); }
@@ -3426,7 +3426,7 @@ try{
             separator += extraSeparator;
       }
       // insert the separator to history so we can extract it in loadTabHistory
-      aTabData.history = separator + "|-|" + history.join(separator);
+      aTabData.history = separator + "|-|" + encodeURI(history.join(separator));
       aTabData.index = this.enableSaveHistory ? activeIndex : 0,
 
       aTabData.scroll = this.prefBranch.getBoolPref("save.scrollposition") ?
@@ -3522,8 +3522,7 @@ try{
            self.afterTabLoad(aEvent.currentTarget, rdfNodeSession);
          }, true);
          let sh = browser.webNavigation.sessionHistory;
-         if (savedHistory.index != sh.index)
-           sh.getEntryAtIndex(savedHistory.index, true);
+         sh.getEntryAtIndex(savedHistory.index, true);
          sh.reloadCurrentEntry();
       } catch (ex) {Tabmix.log("error in loadOneTab\n" + ex)};
    }, // end of "loadOneTab : function(...............)"
@@ -3597,8 +3596,7 @@ try{
    },
 
    loadTabHistory: function(rdfNodeSession, sHistoryInternal, aTab) {
-      var history = this.getLiteralValue(rdfNodeSession, "history");
-      var tmpData = history.split("|-|");
+      var tmpData = this.getDecodedLiteralValue(rdfNodeSession, "history").split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
       var historyData = tmpData.join("|-|").split(sep);
       if (historyData.length < this.HSitems) {
@@ -3617,7 +3615,7 @@ try{
          if (!this.enableSaveHistory && sessionIndex != i) continue;
          let historyEntry = Components.classes["@mozilla.org/browser/session-history-entry;1"]
                            .createInstance(Ci.nsISHEntry);
-         let entryTitle = this.getDecodedLiteralValue(null, historyData[index]);
+         let entryTitle = historyData[index];
          let uriStr = historyData[index + 1];
          if (uriStr == "") uriStr = "about:blank";
          let newURI = Services.io.newURI(uriStr, null, null);
@@ -3626,8 +3624,9 @@ try{
          historyEntry.saveLayoutStateFlag = true;
          if (this.prefBranch.getBoolPref("save.scrollposition")) {
             if (historyData[index + 2] != "0,0") {
-               let XY = historyData[index + 2].split(",");
-               historyEntry.setScrollPosition(XY[0], XY[1]); // XY is array [x,y]
+               let scrollPos = historyData[index + 2].split(",");
+               scrollPos = [parseInt(scrollPos[0]) || 0, parseInt(scrollPos[1]) || 0];
+               historyEntry.setScrollPosition(scrollPos[0], scrollPos[1]);
             }
          }
          sHistoryInternal.addEntry(historyEntry, true);
