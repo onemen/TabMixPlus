@@ -31,7 +31,7 @@ var TMP_Places = {
       if ("PlacesCommandHook" in window) {
          Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
             /(webNav\.document\.)*title \|\| url\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
+            'TMP_Places.getTabTitle(gBrowser._getTabForBrowser(aBrowser), url.spec) || $&'
          ).toCode();
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
@@ -691,5 +691,5 @@ TMP_Places.contextMenu = {
 TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
   let win = aBrowser.ownerDocument.defaultView;
   Tabmix.log("TMP_Places.getTabFixedTitle was deprecated\nuse TMP_Places.getTabTitle(tab, url)")
-  return win.TMP_Places.getTabTitle(win.gBrowser.getTabForBrowser(aBrowser), aUri);
+  return win.TMP_Places.getTabTitle(win.gBrowser._getTabForBrowser(aBrowser), aUri);
 }

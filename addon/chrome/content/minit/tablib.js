@@ -28,7 +28,7 @@ var tablib = {
       '    }' +
       '  } catch (ex) {}'+
       '  var tabbrowser = document.getBindingParent(this);' +
-      '  var tab = tabbrowser.getTabForBrowser(this);' +
+      '  var tab = tabbrowser._getTabForBrowser(this);' +
       '  var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);' +
       '  var isLockedTab = tab.hasAttribute("locked");' +
       '  if (!allowLoad && !isBlankTab && isLockedTab) {' +
@@ -195,7 +195,7 @@ var tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
-      'let tab = this.getTabForBrowser(aBrowser);\
+      'let tab = this._getTabForBrowser(aBrowser);\
        if (tab.hasAttribute("tabmix_changed_label"))\
          docTitle = tab.getAttribute("tabmix_changed_label");\
        else\
@@ -827,7 +827,7 @@ var tablib = {
           this.removeEventListener("load", updateNewHistoryTitle, true);
           var history = this.webNavigation.sessionHistory;
           var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
-          shEntry.setTitle(self.getTabForBrowser(this).label);
+          shEntry.setTitle(self._getTabForBrowser(this).label);
         } catch (ex) {Tabmix.assert(ex);}
       }
       try {
@@ -1729,7 +1729,7 @@ var tablib = {
     var where;
     var browser = gBrowser.mCurrentBrowser;
     if (aUri != browser.currentURI.spec) {
-      let tab = gBrowser.getTabForBrowser(browser);
+      let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ? (aEvent.dataTransfer.dropEffect == "copy") : (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
                     !gBrowser.isBlankNotBusyTab(tab) && !Tabmix.contentAreaClick.isUrlForDownload(aUri)) {

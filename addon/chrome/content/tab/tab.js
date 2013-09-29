@@ -1988,11 +1988,11 @@ var TabmixProgressListener = {
         return;
       var percentage = Math.ceil((aCurTotalProgress * 100) / aMaxTotalProgress);
       if (percentage > 0 && percentage < 100)
-        this.mTabBrowser.getTabForBrowser(aBrowser).setAttribute("tab-progress", percentage);
+        this.mTabBrowser._getTabForBrowser(aBrowser).setAttribute("tab-progress", percentage);
     },
 
     onStateChange: function TMP_onStateChange(aBrowser, aWebProgress, aRequest, aStateFlags, aStatus) {
-      let tab = this.mTabBrowser.getTabForBrowser(aBrowser);
+      let tab = this.mTabBrowser._getTabForBrowser(aBrowser);
       const nsIWebProgressListener = Ci.nsIWebProgressListener;
       if (tab.hasAttribute("_tabmix_load_bypass_cache") &&
           (aStateFlags & nsIWebProgressListener.STATE_START)) {

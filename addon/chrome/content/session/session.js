@@ -3528,7 +3528,7 @@ try{
    }, // end of "loadOneTab : function(...............)"
 
    afterTabLoad: function SM_afterTabLoad(aBrowser, aNodeSession) {
-      var tab = gBrowser.getTabForBrowser(aBrowser);
+      var tab = gBrowser._getTabForBrowser(aBrowser);
       var tabExist = tab && tab.parentNode; // make sure tab was not removed
 
       // don't mark new tab as unread

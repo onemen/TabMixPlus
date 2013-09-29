@@ -249,15 +249,22 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        } catch (ex) {Tabmix.assert(ex); return true;}
     }
 
-    tabBrowser.getTabForBrowser = function (aBrowser) {
-      return this._getTabForContentWindow(aBrowser.contentWindow);
+    // gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+    if (typeof tabBrowser._getTabForBrowser != "function") {
+       tabBrowser._getTabForBrowser = function (aBrowser) {
+          for (let i = 0; i < this.tabs.length; i++) {
+            if (this.tabs[i].linkedBrowser == aBrowser)
+              return this.tabs[i];
+          }
+          return null;
+       }
     }
 
     tabBrowser.getTabForLastPanel = function () {
       let notificationbox = this.mPanelContainer.lastChild;
       let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
       let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
-      return this._getTabForContentWindow(browser.contentWindow);
+      return this._getTabForBrowser(browser);
     }
 
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
