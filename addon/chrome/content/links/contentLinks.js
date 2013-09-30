@@ -481,10 +481,11 @@ Tabmix.contentAreaClick = {
    * This function forces a link with a target attribute to open in the
    * current tab if the following conditions are true:
    *
+   * - traget attribute exist and point to frame in the document frame pool
+   * or
    * - extensions.tabmix.linkTarget is true
    * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
-   *   AND it is not present in the document frame pool
    * - all links are not forced to open in new tabs.
    * - links to other sites are not configured to open in new tabs OR the domain name
    *   of the current page and the domain name of the target page match
@@ -496,23 +497,24 @@ Tabmix.contentAreaClick = {
    *
    */
   divertTargetedLink: function TMP_divertTargetedLink() {
-    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
   ///XXX - check if we need to use here href
     let linkNode = this._data.linkNode.toString();
     if (this.checkAttr(linkNode, "javascript:") || // 2005-11-28 some link in Bloglines start with javascript
         this.checkAttr(linkNode, "data:"))
       return false;
 
-    let {event} = this._data;
+    let {event, targetAttr} = this._data;
     if (event.ctrlKey || event.metaKey) return false;
 
-    let {targetAttr} = this._data;
     if (!targetAttr) return false;
+    let content = document.commandDispatcher.focusedWindow.top;
+    if (this.existsFrameName(content, targetAttr))
+      return true;
+
+    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
+
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
     if (targetString.test(targetAttr.toLowerCase())) return false;
-
-    let frames = document.commandDispatcher.focusedWindow.top.frames;
-    if (this.existsFrameName(frames, targetAttr)) return false;
 
     if (this.currentTabLocked) return false;
     if (this.targetPref == 1 ||
@@ -628,21 +630,17 @@ Tabmix.contentAreaClick = {
    * @brief Check a document's frame pool and determine if
    * |targetFrame| is located inside of it.
    *
-   * @param containerFrame    The frame pool of the current document.
+   * @param content           is a frame reference
    * @param targetFrame       The name of the frame that we are seeking.
    * @returns                 true if the frame exists within the given frame pool,
    *                          false if it does not.
    */
-  existsFrameName: function TMP_existsFrameName(containerFrame, targetFrame) {
-    for (var i = 0; i < containerFrame.length; ++i) {
-      if (containerFrame[i].name == targetFrame) return true;
-      if (containerFrame[i].frames.length)
-        var return_var = this.existsFrameName(containerFrame[i].frames,targetFrame);
+  existsFrameName: function TMP_existsFrameName(content, targetFrame) {
+    for (let i = 0; i < content.frames.length; i++) {
+      let frame = content.frames[i];
+      if (frame.name == targetFrame || this.existsFrameName(frame, targetFrame))
+        return true;
     }
-
-    if (return_var)
-      return return_var;
-
     return false;
   },
 
