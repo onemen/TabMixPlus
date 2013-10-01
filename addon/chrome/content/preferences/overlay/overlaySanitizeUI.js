@@ -45,7 +45,7 @@ Tabmix.setSanitizer = {
       _item = _item[_item.length - 1];
     }
     if (prefs && _item) {// if this isn't true we are lost :)
-      let prefName;
+      let prefName, container = _item.parentNode;
       let cpd = _item.getAttribute("preference").indexOf("privacy.cpd.") != -1;
       if (cpd)
         prefName = this.prefName = "privacy.cpd.extensions-tabmix";
@@ -71,7 +71,13 @@ Tabmix.setSanitizer = {
         check.setAttribute("noduration", "true");
         itemList.setAttribute("rows", parseInt(itemList.getAttribute("rows")) + 1);
       }
-      _item.parentNode.insertBefore(check, null);
+      else if (container.childNodes.length > 1) {
+        // don't add our checkbox to a row that already have 2 items
+        let row = document.createElement("row");
+        container.parentNode.appendChild(row);
+        container = row;
+      }
+      container.appendChild(check);
 
       if (this.isPromptDialog) {
         Tabmix.setSanitizer.disableMenuItem();
