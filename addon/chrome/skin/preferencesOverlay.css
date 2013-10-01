@@ -27,3 +27,7 @@
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+.incontent_paneGeneral separator {
+  height: 8px;
+}
