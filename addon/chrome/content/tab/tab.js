@@ -2025,11 +2025,15 @@ var TabmixProgressListener = {
             aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
             uri != "about:blank" && aStatus == 0) {
           if (this.mTabBrowser.isBlankTab(tab)) {
-            aBrowser.stop();
-            this.mTabBrowser.removeTab(tab, {animate: false});
+            aRequest.cancel(Components.results.NS_BINDING_ABORTED);
+            if (tab.selected)
+              this.mTabBrowser.previousTab(tab);
+            tab.collapsed = true;
             let b = this.mTabBrowser.selectedBrowser;
             b.tabmix_allowLoad = true;
             b.loadURI(uri);
+            aBrowser.stop();
+            this.mTabBrowser.removeTab(tab, {animate: false});
             return;
           }
         }
