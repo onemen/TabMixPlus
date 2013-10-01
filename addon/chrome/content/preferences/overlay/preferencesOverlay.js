@@ -25,7 +25,6 @@ var gTabMix_preferencesOverlay = {
     }
 
     this.onPaneMainLoad();
-    document.getElementById("startupGroup").setAttribute("incontent", true);
   },
 
    lastSelected: "",
@@ -142,6 +141,7 @@ var gTabMix_preferencesOverlay = {
      spacer.setAttribute("flex", "1");
      hBox.insertBefore(spacer, menuList);
      hBox.insertBefore(button, menuList);
+     hBox.classList.add("whenBrowserStartBox")
 
      var preferences = document.getElementById("mainPreferences");
      var preference = document.createElement("preference");

@@ -9,18 +9,12 @@
   -moz-margin-end: 5px;
 }
 
+.whenBrowserStartBox {
+  height: 33px;
+}
+
 #startupGroup > separator {
   height: 6px;
-}
-
-#startupGroup[tabmixbutton="true"]:not([incontent]) > caption+hbox > label {
-  margin-top: 7px;
-  margin-bottom: 7px;
-}
-
-#startupGroup[tabmixbutton="true"][incontent] > caption+hbox > label {
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 
 #startupGroup > hbox > .tabmixplus-button {
