@@ -2023,19 +2023,17 @@ var TabmixProgressListener = {
         // forward the request to the selected tab
         if (Tabmix.prefs.getBoolPref("enablefiletype") &&
             aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
-            uri != "about:blank" && aStatus == 0) {
-          if (this.mTabBrowser.isBlankTab(tab)) {
-            aRequest.cancel(Components.results.NS_BINDING_ABORTED);
-            if (tab.selected)
-              this.mTabBrowser.previousTab(tab);
-            tab.collapsed = true;
-            let b = this.mTabBrowser.selectedBrowser;
-            b.tabmix_allowLoad = true;
-            b.loadURI(uri);
-            aBrowser.stop();
-            this.mTabBrowser.removeTab(tab, {animate: false});
-            return;
-          }
+            uri != "about:blank" && aStatus == 0 &&
+            this.mTabBrowser.isBlankTab(tab)) {
+          if (tab.selected)
+            this.mTabBrowser.previousTab(tab);
+          tab.setAttribute("tabmix_hide", true);
+          TabmixTabbar.updateScrollStatus();
+          // let to unknownContentType dialog or nsIFilePicker time to open
+          tab._tabmix_downloadingTimeout = tab.ownerDocument.defaultView.setTimeout(function(self) {
+            tab._tabmix_downloadingTimeout = null;
+            self.mTabBrowser.removeTab(tab, {animate: false});
+          }, 500, this);
         }
 
         let tabsCount = this.mTabBrowser.visibleTabs.length;

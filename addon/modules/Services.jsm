@@ -128,6 +128,7 @@ let TabmixSvc = {
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
+      Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
       Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
     },
