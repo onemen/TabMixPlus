@@ -572,6 +572,9 @@ var TMP_eventListener = {
     var tab = aEvent.target;
     Tabmix.restoreTabState(tab);
 
+    if (!gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+
     // don't mark new tab as unread
     var url = tab.linkedBrowser.currentURI.spec;
     if (url == "about:blank" || url == "about:newtab")
