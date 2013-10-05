@@ -169,8 +169,8 @@
                     <menuitem value="9" label="&clicktab.removeall;"/>
                     <menuitem value="24" label="&clicktab.removesimilar;"/>
                     <menuitem value="8" label="&clicktab.removeother;"/>
-                    <menuitem value="17" label="&clicktab.removeleft;"/>
-                    <menuitem value="18" label="&clicktab.removeright;"/>
+                    <menuitem value="17" label="&clicktab.removetoLeft;"/>
+                    <menuitem value="18" label="&clicktab.removetoRight;"/>
                       <menuseparator/>
                     <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose"/>
                     <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose"/>

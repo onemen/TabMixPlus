@@ -47,8 +47,8 @@
       sc.removeall = "&clicktab.removeall;";
       sc.removesimilar = "&clicktab.removesimilar;";
       sc.removeother = "&clicktab.removeother;";
-      sc.removeleft = "&clicktab.removeleft;";
-      sc.removeright = "&clicktab.removeright;";
+      sc.removeleft = "&clicktab.removetoLeft;";
+      sc.removeright = "&clicktab.removetoRight;";
       sc.undoClose = "&clicktab.uctab;";
       sc.ucatab = "&clicktab.ucatab;";
     }

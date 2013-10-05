@@ -234,8 +234,8 @@
 <!ENTITY clicktab.removeall "Close all tabs">
 <!ENTITY clicktab.removeother "Close other tabs">
 <!ENTITY clicktab.removesimilar "Close tabs from similar domain">
-<!ENTITY clicktab.removeleft "Close left tabs">
-<!ENTITY clicktab.removeright "Close right tabs">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Reopens last closed tab">
 <!ENTITY clicktab.ucatab "Reopens all closed tabs">
 <!ENTITY clicktab.snapback "SnapBack Tab">
