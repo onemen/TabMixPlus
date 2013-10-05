@@ -81,6 +81,7 @@ pref("extensions.tabmix.extraIcons", true);
 pref("extensions.tabmix.extraIcons.locked", true);
 pref("extensions.tabmix.extraIcons.protected", true);
 pref("extensions.tabmix.extraIcons.autoreload", true);
+pref("extensions.tabmix.extraIcons.notpinned", true);
 
 pref("extensions.tabmix.currentTab", false);
 pref("extensions.tabmix.unloadedTab", true);

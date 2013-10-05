@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
 <!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Progress meter on tabs">
 <!ENTITY showTabX.labelBegin "Close tab button">
 <!ENTITY showTabX.left "Place on left side">

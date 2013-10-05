@@ -375,12 +375,10 @@
             tab.tabmix_allowLoad = false;
           }
 
-          if (Tabmix.prefs.getBoolPref("extraIcons.autoreload"))
-            this.setAttribute("extraIcons-autoreload", true);
-          if (Tabmix.prefs.getBoolPref("extraIcons.protected"))
-            this.setAttribute("extraIcons-protected", true);
-          if (Tabmix.prefs.getBoolPref("extraIcons.locked"))
-            this.setAttribute("extraIcons-locked", true);
+          let attr = ["notpinned", "autoreload", "protected", "locked"]
+            .filter(function(att) Tabmix.prefs.getBoolPref("extraIcons." + att));
+          if (attr.length)
+            this.setAttribute("tabmix_icons", attr.join(" "));
 
           if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
                 Tabmix.prefs.getBoolPref("enableDebug")) {

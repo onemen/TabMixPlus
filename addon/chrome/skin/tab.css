@@ -155,10 +155,16 @@
   width: 16px;
 }
 
-.tabbrowser-tabs[extraIcons-autoreload] .tabbrowser-tab[_reload] .tab-reload-icon ,
-.tabbrowser-tabs[extraIcons-protected] .tabbrowser-tab[protected] .tab-protect-icon ,
-.tabbrowser-tabs[extraIcons-locked] .tabbrowser-tab[locked] .tab-lock-icon {
+.tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
+.tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
+.tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
   display: -moz-box;
+}
+
+.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-reload-icon,
+.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-protect-icon,
+.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-lock-icon {
+  display: none;
 }
 
 /* ::::: new tab button on tab context menu ::::: */

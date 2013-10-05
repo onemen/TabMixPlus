@@ -43,6 +43,21 @@ var Tabmix = {
     }
   },
 
+  setAttributeList: function(aItemOrId, aAttr, aValue, aAdd) {
+    let elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    let att = elem.getAttribute(aAttr);
+    let array = att ? att.split(" ") : [];
+    let index = array.indexOf(aValue);
+    if (aAdd && index == -1)
+      array.push(aValue);
+    else if (!aAdd && index != -1)
+      array.splice(index, 1);
+    if (array.length)
+      elem.setAttribute(aAttr, array.join(" "));
+    else
+      elem.removeAttribute(aAttr);
+  },
+
   getTopWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },

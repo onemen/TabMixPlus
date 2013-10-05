@@ -593,13 +593,12 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.extraIcons.autoreload":
-        Tabmix.setItem(gBrowser.tabContainer, "extraIcons-autoreload", Services.prefs.getBoolPref(prefName) || null);
-        break;
       case "extensions.tabmix.extraIcons.protected":
-        Tabmix.setItem(gBrowser.tabContainer, "extraIcons-protected", Services.prefs.getBoolPref(prefName) || null);
-        break;
       case "extensions.tabmix.extraIcons.locked":
-        Tabmix.setItem(gBrowser.tabContainer, "extraIcons-locked", Services.prefs.getBoolPref(prefName) || null);
+      case "extensions.tabmix.extraIcons.notpinned":
+        let addAtt = Services.prefs.getBoolPref(prefName);
+        let name = prefName.substr(prefName.lastIndexOf(".") + 1);
+        Tabmix.setAttributeList(gBrowser.tabContainer, "tabmix_icons", name, addAtt);
         break;
       case "extensions.tabmix.dblClickTab":
       case "extensions.tabmix.middleClickTab":
