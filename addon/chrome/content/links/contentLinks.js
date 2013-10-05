@@ -154,6 +154,9 @@ Tabmix.contentAreaClick = {
         return ["current", true];
     }
 
+    if (!/^(http|about)/.test(linkNode.protocol))
+      return ["default"];
+
     // check this after we check for suppressTabsOnFileDownload
     // for the case the link have a matche in our list
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
@@ -225,7 +228,7 @@ Tabmix.contentAreaClick = {
       return;
 
     let [href, linkNode] = hrefAndLinkNodeForClickEvent(aEvent);
-    if (!linkNode)
+    if (!linkNode || !/^(http|about)/.test(linkNode.protocol))
       return;
 
     let targetAttr = this.getTargetAttr(linkNode);
