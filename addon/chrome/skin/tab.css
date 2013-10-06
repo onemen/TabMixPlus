@@ -66,70 +66,70 @@
 }
 
 /* :::: For current, unloaded, unread and other tab styles :::: */
-.tabbrowser-tabs[boldUnloaded=true] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[boldUnread=true]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[boldUnread=true][unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[boldCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tabs[tabmix_unloadedTab~="bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_currentTab~="bold"] .tabbrowser-tab[selected="true"] .tab-text {
   font-weight: bold !important;
 }
 
-.tabbrowser-tabs[boldCurrent=false] .tabbrowser-tab[selected="true"] .tab-text,
-.tabbrowser-tabs[boldUnloaded=false] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[boldUnread=false]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[boldUnread=false][unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[boldOther=false]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[boldOther=false]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[boldOther=false][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[boldOther=false][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tabs[tabmix_currentTab~="not-bold"] .tabbrowser-tab[selected="true"] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="not-bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="not-bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="not-bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
   font-weight: normal !important;
 }
 
-.tabbrowser-tabs[italicUnloaded=true] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[italicUnread=true]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[italicUnread=true][unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[italicCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tabs[tabmix_unloadedTab~="italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_currentTab~="italic"] .tabbrowser-tab[selected="true"] .tab-text {
   font-style: italic !important;
 }
 
-.tabbrowser-tabs[italicUnloaded=false] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[italicUnread=false]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[italicUnread=false][unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[italicCurrent=false] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tabs[tabmix_unloadedTab~="not-italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="not-italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="not-italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_currentTab~="not-italic"] .tabbrowser-tab[selected="true"] .tab-text {
   font-style: normal !important;
 }
 
-.tabbrowser-tabs[underlineUnloaded=true] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[underlineUnread=true]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[underlineUnread=true][unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[underlineCurrent=true] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tabs[tabmix_unloadedTab~="underline"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="underline"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
+.tabbrowser-tabs[tabmix_unreadTab~="underline"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_currentTab~="underline"] .tabbrowser-tab[selected="true"] .tab-text {
   text-decoration: underline !important;
 }
 
-.tabbrowser-tabs[boldOther=true]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[boldOther=true]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[boldOther=true][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[boldOther=true][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
   font-weight: bold !important;
 }
 
-.tabbrowser-tabs[italicOther=true]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[italicOther=true]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[italicOther=true][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[italicOther=true][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
   font-style: italic !important;
 }
 
-.tabbrowser-tabs[italicOther=false]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[italicOther=false]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[italicOther=false][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[italicOther=false][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
   font-style: normal !important;
 }
 
-.tabbrowser-tabs[underlineOther=true]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[underlineOther=true]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[underlineOther=true][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[underlineOther=true][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
+.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
   text-decoration: underline !important;
 }
 

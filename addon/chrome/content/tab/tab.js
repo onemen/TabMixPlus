@@ -915,60 +915,60 @@ var gTMPprefObserver = {
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
     var styleRules = {
-      currentTab:    { text:  '#tabbrowser-tabs[useCurrentColor] .tabbrowser-tab[selected="true"]' + tabTextRule,
-                       bg  :  '#tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],'+
-                              '#tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' + backgroundRule},
-      unloadedTab:   { text:  '#tabbrowser-tabs[useUnloadedColor] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
-                       bg:    '#tabbrowser-tabs[useUnloadedBGColor] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
-      unreadTab:     { text:  '#tabbrowser-tabs[useUnreadColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
-                              '#tabbrowser-tabs[useUnreadColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
-                       bg:    '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tabbrowser-tab:not([visited]),' +
-                              '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
-      otherTab:      { text:  '#tabbrowser-tabs[useOtherColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
-                              '#tabbrowser-tabs[useOtherColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
-                              '#tabbrowser-tabs[useOtherColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
-                              '#tabbrowser-tabs[useOtherColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
-                       bg:    '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
-                              '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
-                              '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
-                              '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
-      progressMeter: { bg:    '#tabbrowser-tabs[useProgressColor] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
+      currentTab:    { text:  '#tabbrowser-tabs[tabmix_currentTab~="textColor"] .tabbrowser-tab[selected="true"]' + tabTextRule,
+                       bg  :  '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tabbrowser-tab[selected="true"],'+
+                              '#tabbrowser-tabs[tabmix_currentTab~="bgColor"][tabonbottom] .tabs-bottom' + backgroundRule},
+      unloadedTab:   { text:  '#tabbrowser-tabs[tabmix_unloadedTab~="textColor"] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
+                       bg:    '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
+      unreadTab:     { text:  '#tabbrowser-tabs[tabmix_unreadTab~="textColor"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
+                              '#tabbrowser-tabs[tabmix_unreadTab~="textColor"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
+                       bg:    '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]),' +
+                              '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
+      otherTab:      { text:  '#tabbrowser-tabs[tabmix_otherTab~="textColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
+                       bg:    '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
+                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
+      progressMeter: { bg:    '#tabbrowser-tabs[tabmix_progressMeter="userColor"] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
     }
 
     if (Tabmix.isMac) {
       styleRules.currentTab.bg =
-        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-start[selected="true"],' +
-        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-middle[selected="true"],' +
-        '#tabbrowser-tabs[useCurrentBGColor] .tab-background-end[selected="true"]' + backgroundRule;
+        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"],' +
+        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-middle[selected="true"],' +
+        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-end[selected="true"]' + backgroundRule;
       styleRules.unloadedTab.bg =
-        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-start:not([selected="true"])[pending],' +
-        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-middle:not([selected="true"])[pending],' +
-        '#tabbrowser-tabs[useUnloadedBGColor] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
+        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-start:not([selected="true"])[pending],' +
+        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-middle:not([selected="true"])[pending],' +
+        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
       styleRules.unreadTab.bg =
-        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-start:not([visited]),' +
-        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-middle:not([visited]),' +
-        '#tabbrowser-tabs[useUnreadBGColor]:not([unloadedTab]) .tab-background-end:not([visited]),' +
-        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
-        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
-        '#tabbrowser-tabs[useUnreadBGColor][unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-start:not([visited]),' +
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-middle:not([visited]),' +
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-end:not([visited]),' +
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
+        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
       styleRules.otherTab.bg =
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-start:not([selected="true"]),' +
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-middle:not([selected="true"]),' +
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab]):not([unloadedTab]) .tab-background-end:not([selected="true"]),' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab]:not([unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[useOtherBGColor]:not([unreadTab])[unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
-        '#tabbrowser-tabs[useOtherBGColor][unreadTab][unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-start:not([selected="true"]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-middle:not([selected="true"]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-end:not([selected="true"]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
+        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
     }
     else {
       styleRules.currentTab.bgTabsontop =
-        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[useCurrentBGColor] .tabbrowser-tab[selected="true"],' +
-        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[useCurrentBGColor][tabonbottom] .tabs-bottom' +
+        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tabbrowser-tab[selected="true"],' +
+        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[tabmix_currentTab~="bgColor"][tabonbottom] .tabs-bottom' +
         "{background-image: " + this.gradients.body + " !important;}";
     }
 
@@ -1295,29 +1295,23 @@ var gTMPprefObserver = {
   },
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
-    var ruleName = prefName.split(".").pop();
-
-    var attrib = (ruleName.charAt(0).toUpperCase() + ruleName.substr(1)).replace("Tab","");
-    var tabBar = gBrowser.tabContainer;
-    var currentBoldStyle = tabBar.getAttribute("bold" + attrib) == "true";
-    var prefValues = this.tabStylePrefs[ruleName];
-
-    var control = Tabmix.prefs.getBoolPref(ruleName);
-    // we need to set unreadTab & unloadedTab when they are on
-    // in order to control other tabs that aren't read or unloaded
-    if (ruleName == "unreadTab" || ruleName == "unloadedTab")
-      Tabmix.setItem(tabBar, ruleName,                control || null);
-
-    // set bold, italic and underline only wehn we control the sytle
-    // to override theme default rule if exist
-    Tabmix.setItem(tabBar, "bold" + attrib,           control ? prefValues.bold : null);
-    Tabmix.setItem(tabBar, "italic" + attrib,         control ? prefValues.italic : null);
-    Tabmix.setItem(tabBar, "underline" + attrib,      control ? prefValues.underline : null);
-
-    Tabmix.setItem(tabBar, "use"+ attrib + "Color",   control && prefValues.text || null);
-    Tabmix.setItem(tabBar, "use"+ attrib + "BGColor", control && prefValues.bg || null);
-
-    // changeing bold attribute can change tab width and effect tabBar scroll status
+    let attribValue = null, ruleName = prefName.split(".").pop();
+    if (Tabmix.prefs.getBoolPref(ruleName)) {
+      let prefValues = this.tabStylePrefs[ruleName];
+      // set bold, italic and underline only when we control the sytle
+      // to override theme default rule if exist
+      attribValue = [prefValues.bold ? "bold" : "not-bold",
+               prefValues.italic ? "italic" : "not-italic",
+               prefValues.underline ? "underline" : "not-underline"
+      ]
+      if (prefValues.text)
+        attribValue.push("textColor");
+      if (prefValues.bg)
+        attribValue.push("bgColor");
+      attribValue = attribValue.join(" ");
+    }
+    Tabmix.setItem(gBrowser.tabContainer, "tabmix_" + ruleName, attribValue);
+    // changing bold attribute can change tab width and effect tabBar scroll status
     // also when we turn off unloaded, unread and other style diffrent style can take
     // control with a diffrent bold attribute
     TabmixTabbar.updateScrollStatus();
@@ -1325,10 +1319,11 @@ var gTMPprefObserver = {
   },
 
   setProgressMeter: function () {
-    // we don't change attribute to be compatible with theme that maybe use this values
     var showOnTabs = Tabmix.prefs.getBoolPref("progressMeter");
-    Tabmix.setItem(gBrowser.tabContainer, "useProgressColor", showOnTabs && this.tabStylePrefs["progressMeter"].bg || null);
-    Tabmix.setItem(gBrowser.tabContainer, "progressMeter", showOnTabs || null);
+    var attribValue = null;
+    if (showOnTabs)
+      attribValue = this.tabStylePrefs["progressMeter"].bg ? "userColor" : "defaultColor";
+    Tabmix.setItem(gBrowser.tabContainer, "tabmix_progressMeter", attribValue);
     TabmixProgressListener.listener.showProgressOnTab = showOnTabs;
   },
 

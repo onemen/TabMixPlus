@@ -244,7 +244,7 @@ so display: none !important; does not hide the button */
   display: none;
 }
 
-.tabbrowser-tabs[progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
+.tabbrowser-tabs[tabmix_progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
   display: -moz-box;
 }
 
