@@ -8,7 +8,7 @@
 <!ENTITY apply.label "应用">
 <!ENTITY settings.export "导出设置">
 <!ENTITY settings.import "导入设置">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "同步首选项">
 <!ENTITY settings.default "恢复默认">
 <!ENTITY generalWindowOpen.label "新窗口链接打开于：">
 <!ENTITY externalLink.useSeparate.label "对其他应用程序的链接使用区别的首选项">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "已锁定标签">
 <!ENTITY extraIcons.protected "受保护标签">
 <!ENTITY extraIcons.autoreload "自动重新载入">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "在标签页上显示载入进度">
 <!ENTITY showTabX.labelBegin "标签页关闭按钮">
 <!ENTITY showTabX.left "在左侧显示">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "关闭所有标签页">
 <!ENTITY clicktab.removeother "关闭其它标签页">
 <!ENTITY clicktab.removesimilar "关闭来自相似域的标签页">
-<!ENTITY clicktab.removeleft "关闭左边的标签页">
-<!ENTITY clicktab.removeright "关闭右边的标签页">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "重新打开已关闭的标签页">
 <!ENTITY clicktab.ucatab "重新打开所有已关闭的标签页">
 <!ENTITY clicktab.snapback "回现标签页">

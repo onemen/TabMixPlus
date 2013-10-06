@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "נעול">
 <!ENTITY extraIcons.protected "מוגן">
 <!ENTITY extraIcons.autoreload "טעינה אוטומטית">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "מד התקדמות בלשונית">
 <!ENTITY showTabX.labelBegin "לחצן סגור לשונית">
 <!ENTITY showTabX.left "מקם בצד שמאל (ימין למשתמשי ממשק עברי)">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "סגור את על הלשוניות">
 <!ENTITY clicktab.removeother "סגור את שאר הלשוניות">
 <!ENTITY clicktab.removesimilar "סגור לשוניות מ">
-<!ENTITY clicktab.removeleft "סגור לשונית משמאל (מימין לממשק עברי)">
-<!ENTITY clicktab.removeright "סגור לשונית מימין (שמאל לממשק עברי)">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "פתח מחדש לשונית שנסגרה">
 <!ENTITY clicktab.ucatab "פתח מחדש את כל הלשוניות שנסגרו">
 <!ENTITY clicktab.snapback "SnapBack Tab">

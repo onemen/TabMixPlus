@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar Configurações">
 <!ENTITY settings.import "Importar Configurações">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Preferências de sincronização">
 <!ENTITY settings.default "Restaurar Padrões">
 <!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferência separada para links de outros aplicativos">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Travada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Auto-carregar">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Barra de progresso nas abas">
 <!ENTITY showTabX.labelBegin "Botão &quot;Fechar Aba&quot;">
 <!ENTITY showTabX.left "Colocar no lado esquerdo">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Fecha todas as abas">
 <!ENTITY clicktab.removeother "Fecha as outras abas">
 <!ENTITY clicktab.removesimilar "Fecha abas de domínio semelhante">
-<!ENTITY clicktab.removeleft "Fecha abas à esquerda">
-<!ENTITY clicktab.removeright "Fecha abas à direita">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Reabre a aba fechada">
 <!ENTITY clicktab.ucatab "Reabre todas as abas fechadas">
 <!ENTITY clicktab.snapback "&quot;SnapBack&quot;">

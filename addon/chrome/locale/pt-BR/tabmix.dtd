@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Fechar abas semelhantes">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Fechar abas à esquerda">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Fechar abas para a esquerda">
 <!ENTITY closeleft.accesskey "Q">
-<!ENTITY closeRightTabsMenu.label "Fechar abas à direita">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Fechar abas para a direita">
 <!ENTITY closeright.accesskey "T">
 <!ENTITY docShellMenu.label "Permissões">
 <!ENTITY docShellMenu.accesskey "P">

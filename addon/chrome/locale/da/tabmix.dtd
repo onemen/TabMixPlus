@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "a">
 <!ENTITY closeSimilarTab.label "Luk ens faneblade">
 <!ENTITY closeSimilarTab.accesskey "k">
-<!ENTITY closeLeftTabsMenu.label "Luk faneblade til venstre">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Luk faneblade til højre">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "r">
 <!ENTITY docShellMenu.label "Tilladelser">

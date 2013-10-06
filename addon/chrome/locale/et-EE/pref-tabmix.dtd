@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Rakenda">
 <!ENTITY settings.export "Ekspordi sätted">
 <!ENTITY settings.import "Impordi sätted">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sätted sünkroonitakse">
 <!ENTITY settings.default "Taasta vaikimisi sätted">
 <!ENTITY generalWindowOpen.label "Uues aknas avanevate linkide avamise asukoht:">
 <!ENTITY externalLink.useSeparate.label "Kasuta teistest rakendustest pärit linkide jaoks eraldi eelistust">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Lukustatud">
 <!ENTITY extraIcons.protected "Kaitstud">
 <!ENTITY extraIcons.autoreload "Automaatne uuestilaadimine">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Edenemise riba kaartidel">
 <!ENTITY showTabX.labelBegin "Kaardi sulgemise nuppu">
 <!ENTITY showTabX.left "Aseta kaardi vasakule poolele">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Sulgeb kõik kaardid">
 <!ENTITY clicktab.removeother "Sulgeb teised kaardid">
 <!ENTITY clicktab.removesimilar "Sulgeb sarnase domeeniga kaardid">
-<!ENTITY clicktab.removeleft "Sulgeb vasakule jäävad kaardid">
-<!ENTITY clicktab.removeright "Sulgeb paremale jäävad kaardid">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Taasavab suletud kaardi">
 <!ENTITY clicktab.ucatab "Taasavab kõik suletud kaardid">
 <!ENTITY clicktab.snapback "Lisab kaardile SnapBack'i">

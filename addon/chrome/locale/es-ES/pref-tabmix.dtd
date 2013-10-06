@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar predisposiciones">
 <!ENTITY settings.import "Importar predisposiciones">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sincronizar preferencias">
 <!ENTITY settings.default "Restaurar predeterminadas">
 <!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
 <!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Enfocar/seleccionar pestañas abiertas por:">
 <!ENTITY selectTab.label "Enlaces">
 <!ENTITY selectDivertedTab.label "Otras ventanas">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Otras aplicaciones">
 <!ENTITY selectTabCommand.label "Comando nueva pestaña">
 <!ENTITY contextMenuSearch.label "Búsqueda en menú contextual">
 <!ENTITY selectTabBH.label "Marcadores/Historial">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Bloqueada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Recarga automática">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Indicador de progreso en pestañas">
 <!ENTITY showTabX.labelBegin "Botón de cerrar pestaña">
 <!ENTITY showTabX.left "Situado a la izquierda">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Cierra todas las pestañas">
 <!ENTITY clicktab.removeother "Cierra las otras pestañas">
 <!ENTITY clicktab.removesimilar "Cierra pestañas de ese dominio web">
-<!ENTITY clicktab.removeleft "Cierra pestañas izquierda">
-<!ENTITY clicktab.removeright "Cierra pestañas derecha">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Reabre pestaña cerrada">
 <!ENTITY clicktab.ucatab "Reabre todas las pestañas cerradas">
 <!ENTITY clicktab.snapback "Pestaña SnapBack">

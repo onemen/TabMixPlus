@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Κλειδωμένες καρτέλες">
 <!ENTITY extraIcons.protected "Προστατευμένες καρτέλες">
 <!ENTITY extraIcons.autoreload "Αυτόματη ανανέωση">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Ένδειξη προόδου στις καρτέλες">
 <!ENTITY showTabX.labelBegin "Κουμπί κλεισίματος καρτέλας">
 <!ENTITY showTabX.left "Στην αριστερή πλευρά">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Κλείνει όλες τις καρτέλες">
 <!ENTITY clicktab.removeother "Κλείνει τις υπόλοιπες καρτέλες">
 <!ENTITY clicktab.removesimilar "Κλείνει καρτέλες από τον ίδιο ιστότοπο">
-<!ENTITY clicktab.removeleft "Κλείνει τις αριστερές καρτέλες">
-<!ENTITY clicktab.removeright "Κλείνει τις δεξιές καρτέλες">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Ξανανοίγει την κλεισμένη καρτέλα">
 <!ENTITY clicktab.ucatab "Ξανανοίγει όλες τις κλεισμένες καρτέλες">
 <!ENTITY clicktab.snapback "Καρτέλα SnapBack">

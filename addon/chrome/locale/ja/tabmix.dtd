@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "類似したドメインのタブをすべて閉じる">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "左側のタブをすべて閉じる">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "左側のタブをすべて閉じる">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "右側のタブをすべて閉じる">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "右側のタブをすべて閉じる">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "機能の許可">
 <!ENTITY docShellMenu.accesskey "P">

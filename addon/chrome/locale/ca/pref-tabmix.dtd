@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Blocada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Recàrrega automàtica">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Indicador de progrés a les pestanyes">
 <!ENTITY showTabX.labelBegin "Botó per tancar la pestanya">
 <!ENTITY showTabX.left "Col·loca'l a la part esquerra">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Tanca totes les pestanyes">
 <!ENTITY clicktab.removeother "Tanca les altres les pestanyes">
 <!ENTITY clicktab.removesimilar "Tanca les pestanyes amb domini semblant">
-<!ENTITY clicktab.removeleft "Tanca les pestanyes de l&apos;esquerra">
-<!ENTITY clicktab.removeright "Tanca les pestanyes de la dreta">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Torna a obrir la pestanya tancada">
 <!ENTITY clicktab.ucatab "Torna a obrir totes les pestanyes">
 <!ENTITY clicktab.snapback "Defineix pestanya com a SnapBack">

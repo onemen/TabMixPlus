@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "Õ">
 <!ENTITY closeSimilarTab.label "Sulge sarnased kaardid">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Sulge vasakule jäävad kaardid">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Sulge vasakule jäävad kaardid">
 <!ENTITY closeleft.accesskey "V">
-<!ENTITY closeRightTabsMenu.label "Sulge paremale jäävad kaardid">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Sulge paremale jäävad kaardid">
 <!ENTITY closeright.accesskey "P">
 <!ENTITY docShellMenu.label "Luba kasutada">
 <!ENTITY docShellMenu.accesskey "B">

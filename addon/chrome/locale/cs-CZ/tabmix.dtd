@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "Z">
 <!ENTITY closeSimilarTab.label "Zavřít podobné panely">
 <!ENTITY closeSimilarTab.accesskey "A">
-<!ENTITY closeLeftTabsMenu.label "Zavřít panely nalevo">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Zavřít panely nalevo">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Zavřít panely napravo">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Zavřít panely napravo">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Práva">
 <!ENTITY docShellMenu.accesskey "P">

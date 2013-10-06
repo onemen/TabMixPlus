@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Aplică">
 <!ENTITY settings.export "Exportă…">
 <!ENTITY settings.import "Importă…">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sincronizează opțiunile">
 <!ENTITY settings.default "Inițializează…">
 <!ENTITY generalWindowOpen.label "Se deschid legăturile cu deschidere într-o fereastră nouă în:">
 <!ENTITY externalLink.useSeparate.label "Se folosesc opțiuni separate pentru legăturile din alte aplicații">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Se activează/selectează filele care se deschid din:">
 <!ENTITY selectTab.label "Legături">
 <!ENTITY selectDivertedTab.label "Ferestre redirecționate">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Alte aplicații">
 <!ENTITY selectTabCommand.label "Comenzi cu parametru „filă nouă”">
 <!ENTITY contextMenuSearch.label "Căutari din meniul contextual">
 <!ENTITY selectTabBH.label "Semne de carte / istoric">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Blocat">
 <!ENTITY extraIcons.protected "Protejat">
 <!ENTITY extraIcons.autoreload "Reîncărcare automată">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Indicatorul de progres">
 <!ENTITY showTabX.labelBegin "Butonul de închidere">
 <!ENTITY showTabX.left "Se plasează butonul în partea stângă">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Închide toate filele">
 <!ENTITY clicktab.removeother "Închide celelalte file">
 <!ENTITY clicktab.removesimilar "Închide filele din același domeniu">
-<!ENTITY clicktab.removeleft "Închide filele din stânga">
-<!ENTITY clicktab.removeright "Închide filele din dreapta">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Redeschide ultima filă închisă">
 <!ENTITY clicktab.ucatab "Redeschide toate filele închise">
 <!ENTITY clicktab.snapback "Relansează fila">

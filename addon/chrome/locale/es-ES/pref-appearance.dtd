@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Pestaña seleccionada">
 <!ENTITY unloadedTabs.label "Pestañas no cargadas">
 <!ENTITY unreadTab.label "Pestañas no leídas">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "establecer como no leída tras recargar">
 <!ENTITY otherTabs.label "Otras pestañas">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negrita">

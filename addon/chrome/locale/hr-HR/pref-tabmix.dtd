@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
 <!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Oznaku napretka na karticama">
 <!ENTITY showTabX.labelBegin "Gumb Zatvori karticu">
 <!ENTITY showTabX.left "Smjesti ga na lijevu stranu">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zatvara sve kartice">
 <!ENTITY clicktab.removeother "Zatvara druge kartice">
 <!ENTITY clicktab.removesimilar "Zatvara kartice sa sličnih domena">
-<!ENTITY clicktab.removeleft "Zatvara kartice ulijevo">
-<!ENTITY clicktab.removeright "Zatvara kartice udesno">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Ponovno otvara zatvorenu karticu">
 <!ENTITY clicktab.ucatab "Ponovno otvara sve zatvorene kartice">
 <!ENTITY clicktab.snapback "Vraća karticu">

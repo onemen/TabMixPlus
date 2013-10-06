@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Đã khóa">
 <!ENTITY extraIcons.protected "Đã bảo vệ">
 <!ENTITY extraIcons.autoreload "Tự động Tải lại">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Thanh đo tiến trình trên thẻ">
 <!ENTITY showTabX.labelBegin "Nút đóng thẻ">
 <!ENTITY showTabX.left "Đặt ở bên trái">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Đóng tất cả các thẻ">
 <!ENTITY clicktab.removeother "Đóng các thẻ khác">
 <!ENTITY clicktab.removesimilar "Đóng các thẻ cùng tên miền">
-<!ENTITY clicktab.removeleft "Đóng các thẻ bên trái">
-<!ENTITY clicktab.removeright "Đóng các thẻ bên phải">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Mở lại các thẻ đã đóng">
 <!ENTITY clicktab.ucatab "Mở lại tất cả các thẻ đã đóng">
 <!ENTITY clicktab.snapback "QuayLại Thẻ">

@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "t">
 <!ENTITY closeSimilarTab.label "Fechar separadores parecidos">
 <!ENTITY closeSimilarTab.accesskey "h">
-<!ENTITY closeLeftTabsMenu.label "Fechar separadores da esquerda">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Fechar os separadores à esquerda">
 <!ENTITY closeleft.accesskey "q">
-<!ENTITY closeRightTabsMenu.label "Fechar separadores da direita">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Fechar os separadores à direita">
 <!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permissões">
 <!ENTITY docShellMenu.accesskey "P">

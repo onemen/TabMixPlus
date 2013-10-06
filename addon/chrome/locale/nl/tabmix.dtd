@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Gelijksoortige tabbladen sluiten">
 <!ENTITY closeSimilarTab.accesskey "G">
-<!ENTITY closeLeftTabsMenu.label "Linker tabbladen sluiten">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Tabbladen links afsluiten">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Rechter tabbladen sluiten">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Tabbladen rechts afsluiten">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Toestemmingen">
 <!ENTITY docShellMenu.accesskey "T">

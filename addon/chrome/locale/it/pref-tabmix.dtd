@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Applica">
 <!ENTITY settings.export "Esportale in file txt">
 <!ENTITY settings.import "Importale da file txt">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Opzioni di sincronizzazione">
 <!ENTITY settings.default "Ripristina predefinite">
 <!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
 <!ENTITY externalLink.useSeparate.label "Utilizza impostazioni distinte per i link provenienti da altre applicazioni">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Schede bloccate">
 <!ENTITY extraIcons.protected "Schede protette">
 <!ENTITY extraIcons.autoreload "Schede con autoricaricamento">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Progressione del caricamento">
 <!ENTITY showTabX.labelBegin "Pulsante di chiusura delle schede">
 <!ENTITY showTabX.left "sulla parte sinistra">
@@ -166,7 +167,6 @@
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
-
 
 -->
 <!ENTITY showTabX.popup.width "13em">
@@ -182,7 +182,6 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
-
 
 -->
 <!ENTITY toolbar.description.width "21em">
@@ -240,8 +239,8 @@
 <!ENTITY clicktab.removeall "Chiudi tutte le schede">
 <!ENTITY clicktab.removeother "Chiudi le altre schede">
 <!ENTITY clicktab.removesimilar "Chiudi le schede con un dominio simile">
-<!ENTITY clicktab.removeleft "Chiudi schede a sinistra">
-<!ENTITY clicktab.removeright "Chiudi schede a destra">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Riapri la scheda chiusa">
 <!ENTITY clicktab.ucatab "Riapri tutte le schede chiuse">
 <!ENTITY clicktab.snapback "Riapri la scheda">

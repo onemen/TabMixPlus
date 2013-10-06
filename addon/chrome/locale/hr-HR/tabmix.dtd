@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "s">
 <!ENTITY closeSimilarTab.label "Zatvori slične kartice">
 <!ENTITY closeSimilarTab.accesskey "č">
-<!ENTITY closeLeftTabsMenu.label "Zatvori lijeve kartice">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "l">
-<!ENTITY closeRightTabsMenu.label "Zatvori desne kartice">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Dopuštenja">

@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Aktywna karta">
 <!ENTITY unloadedTabs.label "Niewczytane karty">
 <!ENTITY unreadTab.label "Nieobejrzane karty">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "Po odświeżeniu ustaw karty jako nieprzeczytane">
 <!ENTITY otherTabs.label "Inne karty">
 <!ENTITY italic.label "Kursywa">
 <!ENTITY bold.label "Pogrubienie">

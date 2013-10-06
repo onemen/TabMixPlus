@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Kilitli">
 <!ENTITY extraIcons.protected "Korumalı">
 <!ENTITY extraIcons.autoreload "Otomatik-yenilemeli">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Sekmelerde ilerleme göstergesi">
 <!ENTITY showTabX.labelBegin "Sekmeyi kapat düğmesi">
 <!ENTITY showTabX.left "Sol tarafta">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Tüm sekmeleri kapat">
 <!ENTITY clicktab.removeother "Diğer sekmeleri kapat">
 <!ENTITY clicktab.removesimilar "Aynı siteye ait sekmeleri kapat">
-<!ENTITY clicktab.removeleft "Soldaki sekmeleri kapat">
-<!ENTITY clicktab.removeright "Sağdaki sekmeleri kapat">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Kapatılan son sekmeyi geri aç">
 <!ENTITY clicktab.ucatab "Kapatılan tüm sekmeleri geri aç">
 <!ENTITY clicktab.snapback "Sekmeyi geri ayır">

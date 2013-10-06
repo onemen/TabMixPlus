@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "T">
 <!ENTITY closeSimilarTab.label "Benzer sekmeleri kapat">
 <!ENTITY closeSimilarTab.accesskey "B">
-<!ENTITY closeLeftTabsMenu.label "Soldaki sekmeleri kapat">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "O">
-<!ENTITY closeRightTabsMenu.label "Sağdaki sekmeleri kapat">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "Ğ">
 <!ENTITY docShellMenu.label "İzinler">

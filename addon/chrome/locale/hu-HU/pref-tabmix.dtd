@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Zárolva">
 <!ENTITY extraIcons.protected "Védve">
 <!ENTITY extraIcons.autoreload "Automatikus újratöltés">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Állapotjelző">
 <!ENTITY showTabX.labelBegin "Lap bezárása gomb">
 <!ENTITY showTabX.left "Elhelyezés bal oldalon">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "bezárja az összes lapot">
 <!ENTITY clicktab.removeother "bezárja a többi lapot">
 <!ENTITY clicktab.removesimilar "Azonos webhelyrol származó lapok bezárása">
-<!ENTITY clicktab.removeleft "Bal oldali lapok bezárása">
-<!ENTITY clicktab.removeright "Jobb oldali lapok bezárása">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "újranyitja az összes bezárt lapot">
 <!ENTITY clicktab.ucatab "Bezárt lapok újranyitása">
 <!ENTITY clicktab.snapback "lap visszazárása">

@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Zatvoriť rovnaké karty">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Zatvoriť karty naľavo">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Zatvoriť karty naľavo">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Zatvoriť karty napravo">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Zatvoriť karty napravo">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Oprávnenia">
 <!ENTITY docShellMenu.accesskey "P">

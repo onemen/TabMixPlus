@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Sulje samankaltaiset ikkunat">
 <!ENTITY closeSimilarTab.accesskey "M">
-<!ENTITY closeLeftTabsMenu.label "Sulje vasenmanpuoleiset välilehdet">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "V">
-<!ENTITY closeRightTabsMenu.label "Sulje oikeanpuoleiset välilehdet">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "O">
 <!ENTITY docShellMenu.label "Oikeudet">

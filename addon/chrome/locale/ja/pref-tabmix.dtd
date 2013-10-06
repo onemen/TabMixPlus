@@ -8,7 +8,7 @@
 <!ENTITY apply.label "適用">
 <!ENTITY settings.export "設定をエクスポート">
 <!ENTITY settings.import "設定をインポート">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sync 設定">
 <!ENTITY settings.default "既定値に戻す">
 <!ENTITY generalWindowOpen.label "[新しいウィンドウに開く] リンクの開く場所:">
 <!ENTITY externalLink.useSeparate.label "他のアプリケーションから開くリンクは以下の設定を適用">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "ロック">
 <!ENTITY extraIcons.protected "保護">
 <!ENTITY extraIcons.autoreload "自動再読み込み">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "プログレスメーター（タブ）">
 <!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（ドロップダウンリストで表示条件を指定）">
 <!ENTITY showTabX.left "左端に表示">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "すべてのタブを閉じる">
 <!ENTITY clicktab.removeother "他のタブをすべて閉じる">
 <!ENTITY clicktab.removesimilar "類似したドメインのタブをすべて閉じる">
-<!ENTITY clicktab.removeleft "左側のタブをすべて閉じる">
-<!ENTITY clicktab.removeright "右側のタブをすべて閉じる">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "最後に閉じたタブを開く">
 <!ENTITY clicktab.ucatab "[最近閉じたタブ] をすべて開く">
 <!ENTITY clicktab.snapback "直前にフォーカスしていたタブにフォーカス">

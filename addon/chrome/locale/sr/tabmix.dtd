@@ -39,11 +39,9 @@
 <!ENTITY closeall.accesskey "к">
 <!ENTITY closeSimilarTab.label "Затвори сличне картице">
 <!ENTITY closeSimilarTab.accesskey "с">
-<!ENTITY closeLeftTabsMenu.label "Затвори картице са леве стране">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Затвори картице са леве стране">
 <!ENTITY closeleft.accesskey "л">
-<!ENTITY closeRightTabsMenu.label "Затвори картице са десне стране">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Затвори картице са десне стране">
 <!ENTITY closeright.accesskey "д">
 <!ENTITY docShellMenu.label "Дозволе">
 <!ENTITY docShellMenu.accesskey "в">

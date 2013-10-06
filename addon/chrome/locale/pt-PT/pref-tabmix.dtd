@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Aplicar">
 <!ENTITY settings.export "Exportar definições">
 <!ENTITY settings.import "Importar definições">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Preferências do sync">
 <!ENTITY settings.default "restaurar pré-definições">
 <!ENTITY generalWindowOpen.label "Abrir ligações que abren numa nova janela em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferências separadas para ligações de outras aplicações">
@@ -57,7 +57,7 @@
 <!ENTITY lockTabs.label "Bloquear separadores">
 <!ENTITY lockNewTabs.label "Bloquear novos separadores">
 <!ENTITY lockAppTabs.label "Bloquear separadores de aplicações">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY updateLockState.label "Aplicar alterações a separadores abertos">
 <!ENTITY openNewTab.label "Abrir separadores de:">
 <!ENTITY openBookmarks.label "Marcadores">
 <!ENTITY openBMKGroups.label "Grupos de marcadores">
@@ -70,9 +70,9 @@
 <!ENTITY tabFocus.caption "Focar/seleccionar separadores que abrem de:">
 <!ENTITY selectTab.label "Ligações">
 <!ENTITY selectDivertedTab.label "Janelas diversas">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Outras aplicações">
 <!ENTITY selectTabCommand.label "Comandos de novo separador">
-<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY contextMenuSearch.label "Pesquisa do menú de contexto para">
 <!ENTITY selectTabBH.label "Marcadores/histórico">
 <!ENTITY duplicateTab.label "Duplicar separador">
 <!ENTITY inversefocus1.label "Clique central inverso ou  Control clique foca:">
@@ -110,9 +110,9 @@
 <!ENTITY mergelastfocused.label "Juntar apenas a última janela com a última apresentada">
 <!ENTITY mergePopups.label "Juntar também janelas de popup">
 <!ENTITY popupNextToOpener.label "Colocar popups ao pé das janelas que o abriram">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY activateSlideshow.label "Pressionar #1 roda os separadores a cada">
 <!ENTITY toggleAnimation.label "Desactivar Abrir/Fechar a animação do separador">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.matchAddress.label "Recarregar um separador ignorando o seu endereço">
 <!ENTITY reloadEvery.onReloadButton.label "Mostrar recarregar todos os menus no botão recarregar">
 <!ENTITY seconds.label "segundos">
 <!ENTITY minutes.label "min">
@@ -131,7 +131,7 @@
 <!ENTITY tabBarSpace.label "Espaços extra em ambos os lados">
 <!ENTITY tabBarSpace.tooltip "Para clicar e deixar algo na barra de separadores">
 <!ENTITY tabbar.label "Ocultar barra de separadores apenas quando um separador está aberto">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Ao arrastar um separador movê-lo diretamente">
 <!ENTITY dropIndicator.label "Indicador">
 <!ENTITY dropIndicator-native.label "Estilo nativo">
 <!ENTITY dropIndicator-builtin.label "Estilo embutido">
@@ -146,7 +146,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Deslocável com botões no lateral esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas colunas">
 <!ENTITY maxrow.label "Número máximo de colunas a mostrar:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Ao deslocar mostrar a parte do próximo separador">
 <!ENTITY smoothScroll.label "Ativar deslocamento suave">
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
 <!ENTITY highlight.label "Destacar:">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Bloqueado">
 <!ENTITY extraIcons.protected "Protegido">
 <!ENTITY extraIcons.autoreload "Recarregar auto">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Medidor de progresso nos separadores">
 <!ENTITY showTabX.labelBegin "Botão de fechar separador">
 <!ENTITY showTabX.left "Colocar no lado direito">
@@ -193,8 +194,8 @@
 <!ENTITY removeEntries.label "Remover a entrada da lista de menu do Tab Mix Plus usando o clique central">
 <!ENTITY lockTabSizingOnClose.label "Ao fechar o separador, outros separadores não devem redimensionar até o cursor deixar a região da barra de ferramentas">
 <!ENTITY removeEntries.tooltip "Inclui separadores fechados, janelas fechadas e sessões guardadas">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.caption "Ao deslocar sobre a barra de separadores">
+<!ENTITY tabbarscrolling.holdShift.label "Carregue em Shift ao deslocar para trocar entre estas opções">
 <!ENTITY tabbarscrolling.selectTab.label "mudar o separador selecionado">
 <!ENTITY tabbarscrolling.scrollAllTabs.label "Rolar todos os separadores">
 <!ENTITY tabbarscrolling.inverse.label "Inverter seleção ao rolar">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Encerrar todos os separadores">
 <!ENTITY clicktab.removeother "Encerar outros separadores">
 <!ENTITY clicktab.removesimilar "Fechar separadores de domínios semelhantes">
-<!ENTITY clicktab.removeleft "Encerrar separador da esquerda">
-<!ENTITY clicktab.removeright "Encerrar separadores da direita">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Reabri último separador encerrado">
 <!ENTITY clicktab.ucatab "Reabre todos os separadores fechados">
 <!ENTITY clicktab.snapback "Separador SnapBack">
@@ -289,7 +290,7 @@
 <!ENTITY sm.restore.overwriteTabs "E separadores">
 <!ENTITY sm.restore.closedWinList "Guardar janelas na lista de janelas encerradas">
 <!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.restore.bypassCache "Bypass cache ao restaurar">
 <!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
 <!ENTITY sm.preserve.options "Preservar separadores:">
 <!ENTITY sm.preserve.history "Histórico">

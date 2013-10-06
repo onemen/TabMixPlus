@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
 <!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Förloppsmätare på flik">
 <!ENTITY showTabX.labelBegin "Knapp för stäng flik">
 <!ENTITY showTabX.left "På vänster sida">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Stäng alla flikar">
 <!ENTITY clicktab.removeother "Stäng andra flikar">
 <!ENTITY clicktab.removesimilar "Stäng flikar från liknande domän">
-<!ENTITY clicktab.removeleft "Stäng flikar till vänster">
-<!ENTITY clicktab.removeright "Stäng flikar till höger">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Återställ stängd flik">
 <!ENTITY clicktab.ucatab "Återställ alla stängda flikar">
 <!ENTITY clicktab.snapback "SnapBack flik">

@@ -2,7 +2,7 @@
 <!ENTITY currentTab.label "Aktuálna karta">
 <!ENTITY unloadedTabs.label "Nenačítané karty">
 <!ENTITY unreadTab.label "Neprečítané karty">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "po znovu načítaní nastaviť kartu ako neprečítanú">
 <!ENTITY otherTabs.label "Ostatné karty">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučné">

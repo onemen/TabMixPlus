@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Použít">
 <!ENTITY settings.export "Exportovat nastavení">
 <!ENTITY settings.import "Importovat nastavení">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Synchronizovat nastavení">
 <!ENTITY settings.default "Obnovit výchozí nastavení">
 <!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevřít do:">
 <!ENTITY externalLink.useSeparate.label "Použít vlastní nastavení pro odkazy z jiných aplikací">
@@ -22,7 +22,7 @@
 <!ENTITY divertedWindowOpen.all "Otevírat všechna vyskakovací okna do panelů">
 <!ENTITY divertedWindowOpen.some "Povolit vyskakovací okna neměnící velikost">
 <!ENTITY divertedWindowOpen.none "Povolit vyskakovací okna">
-<!ENTITY linkTarget.label "Odkazy s atributem &apos;target&apos; otevřít do současného panelu">
+<!ENTITY linkTarget.label "Odkazy s atributem 'target' otevřít do současného panelu">
 <!ENTITY download.label "Neotevírat prázdný panel při stahování souborů">
 <!ENTITY edit.label "Úpravy">
 <!ENTITY speLink.label "Vždy otevřít v novém panelu:">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Uzamčeno">
 <!ENTITY extraIcons.protected "Chráněno">
 <!ENTITY extraIcons.autoreload "Automaticky obnovit">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Ukazatel průběhu na panelu">
 <!ENTITY showTabX.labelBegin "Tlačítko zavřít panel">
 <!ENTITY showTabX.left "Umístit nalevo">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zavřít všechny panely">
 <!ENTITY clicktab.removeother "Zavřít ostatní panely">
 <!ENTITY clicktab.removesimilar "Zavřít panely z podobné domény">
-<!ENTITY clicktab.removeleft "Zavřít panely nalevo">
-<!ENTITY clicktab.removeright "Zavřít panely napravo">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Vrátit zavřený panel">
 <!ENTITY clicktab.ucatab "Vrátit všechny zavřené panely">
 <!ENTITY clicktab.snapback "Panel SnapBack">

@@ -8,7 +8,7 @@
 <!ENTITY apply.label "套用">
 <!ENTITY settings.export "匯出設定值">
 <!ENTITY settings.import "匯入設定值">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "同步設定值">
 <!ENTITY settings.default "還原預設值">
 <!ENTITY generalWindowOpen.label "將開啟新視窗的鏈結開啟於：">
 <!ENTITY externalLink.useSeparate.label "外部程序啟動的鏈結使用不同的設定">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "開啟下列項目時切換至該分頁">
 <!ENTITY selectTab.label "一般鏈結">
 <!ENTITY selectDivertedTab.label "彈出視窗">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "外部程序">
 <!ENTITY selectTabCommand.label "空白分頁">
 <!ENTITY contextMenuSearch.label "右鍵搜尋">
 <!ENTITY selectTabBH.label "書籤、瀏覽記錄">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "鎖定的分頁">
 <!ENTITY extraIcons.protected "保護的分頁">
 <!ENTITY extraIcons.autoreload "自動更新的分頁">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "在分頁標籤上顯示載入進度">
 <!ENTITY showTabX.labelBegin "快速關閉按鈕">
 <!ENTITY showTabX.left "置於左側">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "關閉全部分頁">
 <!ENTITY clicktab.removeother "關閉其他分頁">
 <!ENTITY clicktab.removesimilar "關閉相同網站的分頁">
-<!ENTITY clicktab.removeleft "關閉左側分頁">
-<!ENTITY clicktab.removeright "關閉右側分頁">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "復原上次關閉的分頁">
 <!ENTITY clicktab.ucatab "復原全部已關閉的分頁">
 <!ENTITY clicktab.snapback "立即復原">

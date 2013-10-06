@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Примени">
 <!ENTITY settings.export "Извези подешавања">
 <!ENTITY settings.import "Увези подешавања">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Подешавања усклађивања">
 <!ENTITY settings.default "Врати подразумеване вредности">
 <!ENTITY generalWindowOpen.label "Везе који се иначе отварају у новом прозору отварај у:">
 <!ENTITY externalLink.useSeparate.label "Користи посебне поставке за везе из других програма">
@@ -68,14 +68,14 @@
 <!ENTITY middlecurrent1.label "Средњи клик или Control-клик отварају ставке у тренутној картици">
 <!ENTITY middlecurrent.tooltip "Само за обележиваче, историјат, везе које се приморано отварају у новој картици">
 <!ENTITY tabFocus.caption "Пребаци на/означи картице које се отварају из:">
-<!ENTITY selectTab.label "Веза">
-<!ENTITY selectDivertedTab.label "Преусмерених прозора">
-<!ENTITY selectTabFromExternal.label "Other applications">
-<!ENTITY selectTabCommand.label "Команди за нову картицу ----">
+<!ENTITY selectTab.label "веза">
+<!ENTITY selectDivertedTab.label "преусмерених прозора">
+<!ENTITY selectTabFromExternal.label "других апликација">
+<!ENTITY selectTabCommand.label "Наредбе за нову картицу">
 <!ENTITY contextMenuSearch.label "Приручним менијем потражи">
 <!ENTITY selectTabBH.label "Обележивача/историјата">
 <!ENTITY duplicateTab.label "Дуплирај картицу">
-<!ENTITY inversefocus1.label "Обрни средњи клик или Control-клик пребацивање за:">
+<!ENTITY inversefocus1.label "Обрни средњи клик или ктрл+клик пребацивање за:">
 <!ENTITY warning.caption.label "Упозорење">
 <!ENTITY warnOnCloseProtected.label "Упозори ме приликом затварања прозора са заштићеним картицама">
 <!ENTITY warnOnCloseWindow.label "Упозори ме при затварању прозора са више картица">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Закључано">
 <!ENTITY extraIcons.protected "Заштићено">
 <!ENTITY extraIcons.autoreload "Аутоматско учутавање">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Линије напретка на картицама">
 <!ENTITY showTabX.labelBegin "Дугме за затварање картице">
 <!ENTITY showTabX.left "смести  на леву страну">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Затварање свих картица">
 <!ENTITY clicktab.removeother "Затварање осталих картица">
 <!ENTITY clicktab.removesimilar "Затварање картица из сличног домена">
-<!ENTITY clicktab.removeleft "Затварање картица лево">
-<!ENTITY clicktab.removeright "Затварање картица десно">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Поновно отварање затворене картице">
 <!ENTITY clicktab.ucatab "Поновно отварање свих затворених картица">
 <!ENTITY clicktab.snapback "SnapBack картица">

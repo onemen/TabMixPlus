@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Tanca les pestanyes semblants">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeLeftTabsMenu.label "Tanca les pestanyes de l&apos;esquerra">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeRightTabsMenu.label "Tanca les pestanyes de la dreta">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Permisos">

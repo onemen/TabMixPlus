@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Toepassen">
 <!ENTITY settings.export "Instellingen exporteren">
 <!ENTITY settings.import "Instellingen importeren">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sync-voorkeuren">
 <!ENTITY settings.default "Standaardwaarden herstellen">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
 <!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Focussen op/selecteren van tabbladen die openen vanuit:">
 <!ENTITY selectTab.label "Koppelingen">
 <!ENTITY selectDivertedTab.label "Omgeleide vensters">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Overige toepassingen">
 <!ENTITY selectTabCommand.label "Nieuwe tabbladopdrachten">
 <!ENTITY contextMenuSearch.label "Context menu zoeken naar">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "gesloten">
 <!ENTITY extraIcons.protected "beschermd">
 <!ENTITY extraIcons.autoreload "automatisch vernieuwen">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Voortgangsmeter op tabbladen">
 <!ENTITY showTabX.labelBegin "Knop Tabblad sluiten">
 <!ENTITY showTabX.left "Aan de linkerkant plaatsen">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Alle tabbladen sluiten">
 <!ENTITY clicktab.removeother "De overige tabbladen sluiten">
 <!ENTITY clicktab.removesimilar "Tabbladen van ditzelfde domein sluiten">
-<!ENTITY clicktab.removeleft "Linker tabbladen sluiten">
-<!ENTITY clicktab.removeright "Rechter tabbladen sluiten">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Het laatst gesloten tabblad heropenen">
 <!ENTITY clicktab.ucatab "Alle gesloten tabbladen heropenen">
 <!ENTITY clicktab.snapback "SnapBack tabblad">

@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Potvrdiť">
 <!ENTITY settings.export "Exportovanie nastavení">
 <!ENTITY settings.import "Importovanie nastavení">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Nastavenia Synch">
 <!ENTITY settings.default "Pôvodné nastavenie">
 <!ENTITY generalWindowOpen.label "Odkazy otvárajúce nové okno otvoriť do:">
 <!ENTITY externalLink.useSeparate.label "Použiť rozdielne nastavenia pre odkazy z iných aplikácií">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Prepnúť/Vybrať karty ak sa otvárajú z:">
 <!ENTITY selectTab.label "Odkazy">
 <!ENTITY selectDivertedTab.label "Rozptýlené okná">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Ostatné aplikácie">
 <!ENTITY selectTabCommand.label "Príkazy nová karta">
 <!ENTITY contextMenuSearch.label "Kontextová ponuka vyhľadávania pre">
 <!ENTITY selectTabBH.label "Záložky/História">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Uzamknuté">
 <!ENTITY extraIcons.protected "Chránené">
 <!ENTITY extraIcons.autoreload "Automaticky načítané">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Ukazovateľ priebehu na kartách">
 <!ENTITY showTabX.labelBegin "Tlačidlo zatvoriť kartu">
 <!ENTITY showTabX.left "Naľavo">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zatvoriť všetky karty">
 <!ENTITY clicktab.removeother "Zatvoriť ostatné karty">
 <!ENTITY clicktab.removesimilar "Zatvoriť karty z podobnej domény">
-<!ENTITY clicktab.removeleft "Zatvoriť karty naľavo">
-<!ENTITY clicktab.removeright "Zatvoriť karty napravo">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Vrátiť zatvorenú kartu">
 <!ENTITY clicktab.ucatab "Vrátiť všetky zatvorené karty">
 <!ENTITY clicktab.snapback "Karta SnapBack">

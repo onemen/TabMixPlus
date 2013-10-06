@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Appliquer">
 <!ENTITY settings.export "Exporter les réglages">
 <!ENTITY settings.import "Importer les réglages">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Préférences de synchronisation">
 <!ENTITY settings.default "Restaurer les réglages par défaut">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
 <!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d&apos;autres applications">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Sélectionner les onglets provenant de :">
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Autres applications">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
 <!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
 <!ENTITY selectTabBH.label "Marque-pages ou Historique">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Verrouillé">
 <!ENTITY extraIcons.protected "Protégé">
 <!ENTITY extraIcons.autoreload "Actualisation automatique">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Barre de progression sur les onglets">
 <!ENTITY showTabX.labelBegin "Bouton de fermeture">
 <!ENTITY showTabX.left "placé sur le côté gauche">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Ferme tous les onglets">
 <!ENTITY clicktab.removeother "Ferme les autres onglets">
 <!ENTITY clicktab.removesimilar "Ferme les onglets de même domaine">
-<!ENTITY clicktab.removeleft "Ferme les onglets de gauche">
-<!ENTITY clicktab.removeright "Ferme les onglets de droite">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Réouvre le dernier onglet fermé">
 <!ENTITY clicktab.ucatab "Réouvre tous les onglets fermés">
 <!ENTITY clicktab.snapback "Relance l&apos;onglet">

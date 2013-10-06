@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Låst">
 <!ENTITY extraIcons.protected "Beskyttet">
 <!ENTITY extraIcons.autoreload "Auto-genindlæs">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Fremskridts-måler på faneblade">
 <!ENTITY showTabX.labelBegin "Luk faneblad knap">
 <!ENTITY showTabX.left "Placer på venstre side">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Lukker alle faneblade">
 <!ENTITY clicktab.removeother "Lukker andre faneblade">
 <!ENTITY clicktab.removesimilar "Lukker faneblade fra lignende domæne">
-<!ENTITY clicktab.removeleft "Lukker faneblade til venstre">
-<!ENTITY clicktab.removeright "Lukker faneblade til højre">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Genåbner det lukkede faneblad">
 <!ENTITY clicktab.ucatab "Genåbner alle lukkede faneblade">
 <!ENTITY clicktab.snapback "SnapTilbage faneblad">

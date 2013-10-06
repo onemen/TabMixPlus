@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Прилагане">
 <!ENTITY settings.export "Експортиране на настройките">
 <!ENTITY settings.import "Импортиране на настройките">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Настройка на Sync">
 <!ENTITY settings.default "Възстановяване на настройките по подразбиране">
 <!ENTITY generalWindowOpen.label "Връзките, които се отварят в нов прозорец, да се отварят в:">
 <!ENTITY externalLink.useSeparate.label "Използване на отделни настройки за връзки от други приложения">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Фокусиране/активиране на подпрозорците, които се отварят от:">
 <!ENTITY selectTab.label "Връзки">
 <!ENTITY selectDivertedTab.label "Вместо прозорци">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Други приложения">
 <!ENTITY selectTabCommand.label "При команда за създаване на нов подпрозорец">
 <!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
 <!ENTITY selectTabBH.label "Отметки/История">
@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Заключен">
 <!ENTITY extraIcons.protected "Защитен">
 <!ENTITY extraIcons.autoreload "Автоматично презареждащ се">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Индикатор за активност">
 <!ENTITY showTabX.labelBegin "Бутон за затваряне">
 <!ENTITY showTabX.left "бутонът е отляво">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Затваряне на всички подпрозорци">
 <!ENTITY clicktab.removeother "Затваряне на останалите подпрозорци">
 <!ENTITY clicktab.removesimilar "Затваряне на подпрозорците от този домейн">
-<!ENTITY clicktab.removeleft "Затваряне на подпрозорците отляво">
-<!ENTITY clicktab.removeright "Затваряне на подпрозорците отдясно">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Възстановяване на последно затворения подпрозорец">
 <!ENTITY clicktab.ucatab "Възстановяване на всички затворени подпрозорци">
 <!ENTITY clicktab.snapback "Възстановяване на подпрозорец">

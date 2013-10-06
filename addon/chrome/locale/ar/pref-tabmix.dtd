@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "القفل">
 <!ENTITY extraIcons.protected "الحماية">
 <!ENTITY extraIcons.autoreload "إعادة التحميل التلقائي">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "شريط التحميل على الألسنة">
 <!ENTITY showTabX.labelBegin "زر إغلاق اللسان">
 <!ENTITY showTabX.left "إظهار زر الإغلاق في اليسار">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Close all tabs">
 <!ENTITY clicktab.removeother "Close other tabs">
 <!ENTITY clicktab.removesimilar "Close tabs from similar domain">
-<!ENTITY clicktab.removeleft "Close left tabs">
-<!ENTITY clicktab.removeright "Close right tabs">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Reopens last closed tab">
 <!ENTITY clicktab.ucatab "Reopens all closed tabs">
 <!ENTITY clicktab.snapback "SnapBack Tab">

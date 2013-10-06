@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "잠김">
 <!ENTITY extraIcons.protected "보호됨">
 <!ENTITY extraIcons.autoreload "자동 새로 고침">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "탭의 진행 상황 표시 막대">
 <!ENTITY showTabX.labelBegin "탭 닫기 버튼">
 <!ENTITY showTabX.left "왼쪽에 놓기">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "탭 모두 닫기">
 <!ENTITY clicktab.removeother "다른 탭 모두 닫기">
 <!ENTITY clicktab.removesimilar "도메인이 비슷한 탭 닫기">
-<!ENTITY clicktab.removeleft "왼쪽 탭 닫기">
-<!ENTITY clicktab.removeright "오른쪽 탭 닫기">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "닫은 탭 다시 열기">
 <!ENTITY clicktab.ucatab "모든 닫은 탭 다시 열기">
 <!ENTITY clicktab.snapback "바로 전에 본 탭 선택하기">

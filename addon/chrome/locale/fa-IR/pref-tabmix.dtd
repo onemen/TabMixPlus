@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
 <!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "نمایش وضعیت پیشرفت روی تب ها">
 <!ENTITY showTabX.labelBegin "کلید بستن تب">
 <!ENTITY showTabX.left "نمایش در سمت چپ">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "بستن تمام تب ها">
 <!ENTITY clicktab.removeother "بستن سایر تب ها">
 <!ENTITY clicktab.removesimilar "بستن پنجره های یک سایت">
-<!ENTITY clicktab.removeleft "بستن تب های سمت چپ">
-<!ENTITY clicktab.removeright "بستن تب های سمت راست">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "باز کردن مجدد تب بسته شده">
 <!ENTITY clicktab.ucatab "باز کردن مجدد تمام تب های بسته شده">
 <!ENTITY clicktab.snapback "بهبودی سریع تب">

@@ -39,10 +39,8 @@
 <!ENTITY closeall.accesskey "م">
 <!ENTITY closeSimilarTab.label "بستن برگه های مشابه">
 <!ENTITY closeSimilarTab.accesskey "ی">
-<!ENTITY closeLeftTabsMenu.label "بستن برگه های سمت چپ">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "ی">
-<!ENTITY closeRightTabsMenu.label "بستن برگه های سمت راست">
 <!ENTITY closeTabstoRight.label "Close Tabs to the Right">
 <!ENTITY closeright.accesskey "ر">
 <!ENTITY docShellMenu.label "مجوزها">

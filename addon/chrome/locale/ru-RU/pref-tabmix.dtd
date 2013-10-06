@@ -159,6 +159,7 @@
 <!ENTITY extraIcons.locked "Заблокированных">
 <!ENTITY extraIcons.protected "Защищённых">
 <!ENTITY extraIcons.autoreload "Автообновляемых">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Индикатор процесса открытия страницы">
 <!ENTITY showTabX.labelBegin "Кнопка закрытия на каждой вкладке">
 <!ENTITY showTabX.left "... слева">
@@ -232,8 +233,8 @@
 <!ENTITY clicktab.removeall "Закрыть все вкладки">
 <!ENTITY clicktab.removeother "Закрыть другие вкладки">
 <!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
-<!ENTITY clicktab.removeleft "Закрыть вкладки слева">
-<!ENTITY clicktab.removeright "Закрыть вкладки справа">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Восстановить закрытую вкладку">
 <!ENTITY clicktab.ucatab "Восстановить все закрытые вкладки">
 <!ENTITY clicktab.snapback "Восстановить вкладку">
