@@ -1877,11 +1877,15 @@ try {
         }
       }
 
-      let subs = function(str) str.substring(0, str.length-1);
-      if (currentVersion != oldVersion)
+      let showNewVersionTab;
+      if (currentVersion != oldVersion) {
         Tabmix.prefs.setCharPref("version", currentVersion);
-      let showNewVersionTab = currentVersion != oldVersion &&
-        (!isNaN(currentVersion.substr(-1)) || subs(currentVersion) != subs(oldVersion))
+        // show the new version page if versions are different after excluding
+        // all characters from last alphabet character to the end
+        let re = /([A-Za-z]*)\d*$/;
+        let subs = function(obj) obj[1] ? obj.input.substring(0, obj.index) : obj.input;
+        showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));
+      }
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(function() {
