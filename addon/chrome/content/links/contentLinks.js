@@ -183,20 +183,25 @@ Tabmix.contentAreaClick = {
     // the rest of the code if for left-click only
 
     /*
+     * don't change default behavior for links that point to exiting frame
+     * in the current page
+     */
+    if (this.targetIsFrame())
+      return ["default"];
+
+    /*
      * open targeted links in the current tab only if certain conditions are met.
      * See the function comment for more details.
      */
-    if (this.divertTargetedLink()) {
+    if (this.divertTargetedLink())
       return ["current"];
-    }
 
     /*
      * open links to other sites in a tab only if certain conditions are met. See the
      * function comment for more details.
      */
-    if (this.openExSiteLink()) {
+    if (this.openExSiteLink())
       return [TMP_tabshifted(event)];
-    }
 
     if (this.currentTabLocked || this.targetPref == 1) { // tab is locked
       let openNewTab = this.openTabfromLink();
@@ -290,6 +295,13 @@ Tabmix.contentAreaClick = {
 
     // don't mess with links that have onclick inside iFrame
     if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
+      return;
+
+    /*
+     * don't change default behavior for links that point to exiting frame
+     * in the current page
+     */
+    if (this.targetIsFrame())
       return;
 
     /*
@@ -478,14 +490,26 @@ Tabmix.contentAreaClick = {
     return false;
   },
 
+ /**
+  * @brief check if traget attribute exist and point to frame in the document
+  *        frame pool
+  */
+  targetIsFrame: function() {
+    let {targetAttr} = this._data;
+    if (targetAttr) {
+      let content = document.commandDispatcher.focusedWindow.top;
+      if (this.existsFrameName(content, targetAttr))
+        return true;
+    }
+    return false;
+  },
+
   /**
    * @brief Divert links that contain targets to the current tab.
    *
    * This function forces a link with a target attribute to open in the
    * current tab if the following conditions are true:
    *
-   * - traget attribute exist and point to frame in the document frame pool
-   * or
    * - extensions.tabmix.linkTarget is true
    * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
@@ -507,13 +531,7 @@ Tabmix.contentAreaClick = {
       return false;
 
     let {event, targetAttr} = this._data;
-    if (event.ctrlKey || event.metaKey) return false;
-
-    if (!targetAttr) return false;
-    let content = document.commandDispatcher.focusedWindow.top;
-    if (this.existsFrameName(content, targetAttr))
-      return true;
-
+    if (!targetAttr || event.ctrlKey || event.metaKey) return false;
     if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
 
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
