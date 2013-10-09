@@ -1088,8 +1088,10 @@ Tabmix.navToolbox = {
       _handleCommand._replace(
         'if (aTriggeringEvent instanceof MouseEvent) {',
         'let isMouseEvent = aTriggeringEvent instanceof MouseEvent;\
-         let altEnter = !isMouseEvent && aTriggeringEvent && aTriggeringEvent.altKey && !isTabEmpty(gBrowser.selectedTab);\
-         let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
+         let tabEmpty = !isTabEmpty(gBrowser.selectedTab);\
+         let altEnter = !isMouseEvent && aTriggeringEvent && aTriggeringEvent.altKey && !tabEmpty;\
+         let loadNewTab = InstantFoxModule.currentQuery && InstantFoxModule.openSearchInNewTab && !tabEmpty ||\
+                          Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar", altEnter).inNew && !(/^ *javascript:/.test(url));\
          let inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
          $&'
       )._replace(
