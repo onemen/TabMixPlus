@@ -821,12 +821,17 @@ var gTMPprefObserver = {
           }
           // maxRow changed
           if (TabmixTabbar.isMultiRow) {
-            // we hide the button to see if tabs have rome without the scroll buttons
+            let currentVisible = tabBar.mTabstrip.isElementVisible(gBrowser.mCurrentTab);
+            // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
             if (tabBar.overflow && row > TabmixTabbar.visibleRows)
               tabBar.overflow = false;
             // after we update the height check if we are still in overflow
-            if (tabBar.updateVerticalTabStrip() == "scrollbar")
+            if (tabBar.updateVerticalTabStrip() == "scrollbar") {
               tabBar.overflow = true;
+              tabBar.mTabstrip._updateScrollButtonsDisabledState();
+              if (currentVisible)
+                gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+            }
           }
           TabmixTabbar.updateBeforeAndAfter();
         break;
