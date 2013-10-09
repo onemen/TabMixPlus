@@ -2025,7 +2025,7 @@ var TabmixProgressListener = {
             this.mTabBrowser.isBlankTab(tab)) {
           if (tab.selected)
             this.mTabBrowser.previousTab(tab);
-          tab.setAttribute("tabmix_hide", true);
+          this.mTabBrowser.hideTab(tab);
           TabmixTabbar.updateScrollStatus();
           // let to unknownContentType dialog or nsIFilePicker time to open
           tab._tabmix_downloadingTimeout = tab.ownerDocument.defaultView.setTimeout(function(self) {
