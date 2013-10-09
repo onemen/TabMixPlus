@@ -158,7 +158,7 @@
           // we divide scrollDelta by the ratio between tab width and tab height
           Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
             '0.5 * timePassed * scrollIndex',
-            'TabmixTabbar.isMultiRow ? Math.ceil(0.5 * timePassed / this.scrollbox._verticalAnimation) * scrollIndex : $&'
+            'TabmixTabbar.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
           ).toCode();
 
           // the ratio between tab width and tab height is approximately 6
@@ -250,7 +250,7 @@
         ]]></body>
       </method>
 
-      <field name="_verticalAnimation">6</field>
+      <field name="_verticalAnimation">4</field>
       <field name="_smoothVerticalScroll">6</field>
       <field name="_singleRowHeight">null</field>
 
