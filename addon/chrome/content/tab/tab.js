@@ -2030,7 +2030,8 @@ var TabmixProgressListener = {
           // let to unknownContentType dialog or nsIFilePicker time to open
           tab._tabmix_downloadingTimeout = tab.ownerDocument.defaultView.setTimeout(function(self) {
             tab._tabmix_downloadingTimeout = null;
-            self.mTabBrowser.removeTab(tab, {animate: false});
+            if (self && self.mTabBrowser && tab && tab.parentNode)
+              self.mTabBrowser.removeTab(tab, {animate: false});
           }, 500, this);
         }
 

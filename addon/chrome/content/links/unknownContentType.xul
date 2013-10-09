@@ -3,7 +3,6 @@
 <overlay id="tabmixplus-unknownContentType-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
   <script type="application/javascript">
   <![CDATA[
     let nav = dialog.mContext.QueryInterface(Ci.nsIInterfaceRequestor)
@@ -26,8 +25,9 @@
         tab._tabmix_downloadingTimeout = null;
         window.addEventListener("unload", function _unload(aEvent) {
           aEvent.currentTarget.removeEventListener("unload", _unload, false);
-          win.setTimeout(function() {
-            win.gBrowser.removeTab(tab, {animate: false});
+          win && !win.closed && win.setTimeout(function() {
+            if (win && win.gBrowser && tab && tab.parentNode)
+              win.gBrowser.removeTab(tab, {animate: false});
           }, 250);
         }, false);
       }
