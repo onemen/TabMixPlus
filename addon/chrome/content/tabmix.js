@@ -572,7 +572,8 @@ var TMP_eventListener = {
     var tab = aEvent.target;
     Tabmix.restoreTabState(tab);
 
-    if (!gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
+    if (gBrowser.tabContainer.overflow &&
+        !gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
       gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
