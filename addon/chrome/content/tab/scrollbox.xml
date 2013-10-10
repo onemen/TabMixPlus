@@ -487,6 +487,8 @@
           tabs.overflow = true;
 
         tabs._positionPinnedTabs();
+        if (Tabmix.isVersion(190))
+          tabs._handleTabSelect(false);
       ]]></handler>
 
       <handler event="scroll"><![CDATA[
