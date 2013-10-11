@@ -134,7 +134,7 @@ var tablib = {
     Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
       '{',
       '{ \
-       if (aTab.hasAttribute("protected") || TabmixSessionManager._protectAllTabs && Tabmix.callerName() == "ssi_restoreWindow") return;\
+       if (aTab.hasAttribute("protected")) return;\
        if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
     )._replace(
       '{',

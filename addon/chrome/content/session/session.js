@@ -3067,10 +3067,7 @@ try{
             let tab = gBrowser.tabContainer.lastChild;
             gBrowser.removeTab(tab);
          }
-         // sessionStore will move selected tab (since Firefox 26)
          this.copyClosedTabsToSessionStore(path, true);
-         // move selected tab to place
-         gBrowser.moveTabTo(cTab, lastSelectedIndex);
          newIndex = 0;
       }
       else if (newtabsCount > 0 && !overwrite) { // we use this in TGM and panorama (TabViewe)
@@ -3371,11 +3368,14 @@ try{
       if (!aOverwrite)
          closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
       closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
-      let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
-      // prevent sessionStore from removing existing tabs
-      this._protectAllTabs = true;
-      TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), Tabmix.isVersion(260));
-      this._protectAllTabs = false;
+      if (Tabmix.isVersion(260)) {
+        let global = Cu.getGlobalForObject(TabmixSvc.ss);
+        global.SessionStoreInternal._windows[window.__SSi]._closedTabs = closedTabsData;
+      }
+      else {
+        let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
+        TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
+      }
       TMP_ClosedTabs.setButtonDisableState();
    },
 
