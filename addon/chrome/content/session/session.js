@@ -3060,6 +3060,8 @@ try{
             let newTab = TMP_addTab();
          }
          cTab.setAttribute("inrestore", "true");
+         // move selected tab to place
+         gBrowser.moveTabTo(cTab, lastSelectedIndex);
          // remove extra tabs
          while (newtabsCount < gBrowser.tabs.length) {
             let tab = gBrowser.tabContainer.lastChild;
