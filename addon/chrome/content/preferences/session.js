@@ -33,6 +33,8 @@ var gSessionPane = {
     $("sesionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
     if (!onStart || sessionStoreEnabled)
       $("session").selectedIndex = sessionStoreEnabled ? 2 : 0;
+    else if ($("session").selectedIndex == 2)
+      $("session").selectedIndex = 0;
   },
 
   setSessionsOptions: function (item) {
