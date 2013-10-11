@@ -740,8 +740,11 @@ var TabmixConvertSession = {
          }
       }
       tabsData.sort(function (a, b) {return a - b;});
-      for (let i = 0; i < tabsData.length ; i++)
-         _tabs.push(this.getTabState(tabsData[i].node));
+      for (let i = 0; i < tabsData.length ; i++) {
+         let tab = this.getTabState(tabsData[i].node);
+         if (tab)
+            _tabs.push(tab);
+      }
 
       return _tabs;
    },
@@ -751,9 +754,11 @@ var TabmixConvertSession = {
       var tabsEnum = TabmixSessionManager.initContainer(rdfNodeTabs).GetElements();
       while (tabsEnum.hasMoreElements()) {
          let rdfNodeTab = tabsEnum.getNext();
-         if (rdfNodeTab instanceof Ci.nsIRDFResource) {
+         let state = rdfNodeTab instanceof Ci.nsIRDFResource &&
+                       this.getTabState(rdfNodeTab, true);
+         if (state) {
             let closedTab = {};
-            closedTab.state = this.getTabState(rdfNodeTab, true);
+            closedTab.state = state;
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
@@ -767,7 +772,10 @@ var TabmixConvertSession = {
    getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
       var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
-      tabData.index = TabmixSessionManager.getIntValue(rdfNodeTab, "index") + 1;
+      if (!tabData.entries.length)
+        return null;
+      let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
+      tabData.index = Math.min(index + 1, tabData.entries.length);
       tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
