@@ -149,6 +149,17 @@ let TabmixSvc = {
     }
   },
 
+  get ss() {
+    delete this.ss;
+    if (this.version(260)) {
+      let tmp = {}
+      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+      return this.ss = tmp.SessionStore;
+    }
+    return this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
+                     getService(Ci.nsISessionStore);
+  },
+
   sm: {
     lastSessionPath: null,
     persistTabAttributeSet: false,
@@ -188,8 +199,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
-// sessionStore
-XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessionstore;1", "nsISessionStore");
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
