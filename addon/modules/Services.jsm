@@ -7,14 +7,18 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-let TabmixSvc = {
-  _version: {},
-  version: function(aVersionNo) {
-    if (typeof this._version[aVersionNo] == "boolean")
-      return this._version[aVersionNo];
+let _versions = {};
+function isVersion(aVersionNo) {
+  if (typeof _versions[aVersionNo] == "boolean")
+    return _versions[aVersionNo];
 
-    let v = Services.appinfo.version;
-    return this._version[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+  let v = Services.appinfo.version;
+  return _versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+}
+
+let TabmixSvc = {
+  version: function(aVersionNo) {
+    return isVersion(aVersionNo);
   },
 
   getString: function(aStringKey) {
@@ -151,7 +155,7 @@ let TabmixSvc = {
 
   get ss() {
     delete this.ss;
-    if (this.version(260)) {
+    if (isVersion(260)) {
       let tmp = {}
       Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
       return this.ss = tmp.SessionStore;
