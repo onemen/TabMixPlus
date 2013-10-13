@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Uzamčeno">
 <!ENTITY extraIcons.protected "Chráněno">
 <!ENTITY extraIcons.autoreload "Automaticky obnovit">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Skrýt na připnutém panelu">
 <!ENTITY progressMeter.label "Ukazatel průběhu na panelu">
 <!ENTITY showTabX.labelBegin "Tlačítko zavřít panel">
 <!ENTITY showTabX.left "Umístit nalevo">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zavřít všechny panely">
 <!ENTITY clicktab.removeother "Zavřít ostatní panely">
 <!ENTITY clicktab.removesimilar "Zavřít panely z podobné domény">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Zavřít panely nalevo">
+<!ENTITY clicktab.removetoRight "Zavřít panely napravo">
 <!ENTITY clicktab.uctab "Vrátit zavřený panel">
 <!ENTITY clicktab.ucatab "Vrátit všechny zavřené panely">
 <!ENTITY clicktab.snapback "Panel SnapBack">

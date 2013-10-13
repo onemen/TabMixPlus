@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Aplica">
 <!ENTITY settings.export "Exporta els paràmetres">
 <!ENTITY settings.import "Importa els paràmetres">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sincronitza les preferències">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
 <!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
 <!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d'altres aplicacions">
@@ -70,7 +70,7 @@
 <!ENTITY tabFocus.caption "Enfoca/selecciona les pestanyes obertes des de:">
 <!ENTITY selectTab.label "Enllaços">
 <!ENTITY selectDivertedTab.label "Pàgines redirigides">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Altres aplicacions">
 <!ENTITY selectTabCommand.label "Ordres de pestanya nova">
 <!ENTITY contextMenuSearch.label "Menú contextual «Cerca a»">
 <!ENTITY selectTabBH.label "Adreces d'interès/Historial">
@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Blocada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Recàrrega automàtica">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Amaga en pestanyes fixes">
 <!ENTITY progressMeter.label "Indicador de progrés a les pestanyes">
 <!ENTITY showTabX.labelBegin "Botó per tancar la pestanya">
 <!ENTITY showTabX.left "Col·loca'l a la part esquerra">
@@ -207,7 +207,7 @@
 <!ENTITY alt.label "Alt-Clic">
 <!ENTITY ontab.label "En una pestanya:">
 <!ENTITY ontabbar.label "A la barra de pestanyes:">
-<!ENTITY clicktab.label "Seleccioneu l&apos;ordre que s&apos;executarà en fer clic en una pestanya o a la barra de pestanyes">
+<!ENTITY clicktab.label "Seleccioneu l'ordre que s'executarà en fer clic en una pestanya o a la barra de pestanyes">
 <!ENTITY ontabbar.dblClick.label "Evita que un doble clic a la barra de pestanyes canviï la mida de la finestra.">
 <!ENTITY clicktab.nothing "No facis res">
 <!ENTITY clicktab.addtab "Obre una nova pestanya">
@@ -218,35 +218,35 @@
 <!ENTITY clicktab.locktab "Bloca la pestanya">
 <!ENTITY clicktab.freezetab "Protegeix o bloca la pestanya">
 <!ENTITY clicktab.renametab "Reanomena la pestanya">
-<!ENTITY clicktab.copyTabUrl "Copia l&apos;adreça URL de la pestanya al porta-retalls">
-<!ENTITY clicktab.copyUrlFromClipboard "Carrega l&apos;adreça URL des del porta-retalls">
+<!ENTITY clicktab.copyTabUrl "Copia l'adreça URL de la pestanya al porta-retalls">
+<!ENTITY clicktab.copyUrlFromClipboard "Carrega l'adreça URL des del porta-retalls">
 <!ENTITY clicktab.selectMerge "Selecciona la pestanya per fusionar-la">
 <!ENTITY clicktab.mergeTabs "Fusiona les finestres en una">
-<!ENTITY clicktab.bookTab "Afegeix a les adreces d&apos;interès la pestanya">
-<!ENTITY clicktab.bookTabs "Afegeix a les adreces d&apos;interès totes les pestanyes">
+<!ENTITY clicktab.bookTab "Afegeix a les adreces d'interès la pestanya">
+<!ENTITY clicktab.bookTabs "Afegeix a les adreces d'interès totes les pestanyes">
 <!ENTITY clicktab.reloadtab "Torna a carregar la pestanya">
 <!ENTITY clicktab.reloadtabs "Torna a carregar totes les pestanyes">
 <!ENTITY clicktab.reloadothertabs "Torna a carregar les altres pestanyes">
-<!ENTITY clicktab.reloadlefttabs "Torna a carregar les pestanyes de l&apos;esquerra">
+<!ENTITY clicktab.reloadlefttabs "Torna a carregar les pestanyes de l'esquerra">
 <!ENTITY clicktab.reloadrighttabs "Torna a carregar les pestanyes de la dreta">
 <!ENTITY clicktab.autoReloadTab "Activa/desactiva la recàrrega automàtica de la pestanya">
 <!ENTITY clicktab.removeall "Tanca totes les pestanyes">
 <!ENTITY clicktab.removeother "Tanca les altres les pestanyes">
 <!ENTITY clicktab.removesimilar "Tanca les pestanyes amb domini semblant">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Tanca les pestanyes de l'esquerra">
+<!ENTITY clicktab.removetoRight "Tanca les pestanyes de la dreta">
 <!ENTITY clicktab.uctab "Torna a obrir la pestanya tancada">
 <!ENTITY clicktab.ucatab "Torna a obrir totes les pestanyes">
 <!ENTITY clicktab.snapback "Defineix pestanya com a SnapBack">
-<!ENTITY clicktab.ietab "Obre la pestanya amb l&apos;IE">
-<!ENTITY contentLoad "Clic amb el botó del mig carrega l&apos;adreça URL del porta-retalls">
+<!ENTITY clicktab.ietab "Obre la pestanya amb l'IE">
+<!ENTITY contentLoad "Clic amb el botó del mig carrega l'adreça URL del porta-retalls">
 <!ENTITY context.tab "Menú contextual de la pestanya">
 <!ENTITY context.main "Menú contextual principal">
 <!ENTITY context.tools "Menú Eines">
 <!ENTITY showtabBarContext.label "Mostra al menú contextual de la pestanya:">
 <!ENTITY showContentAreaContext.label "Mostra al menú contextual principal">
 <!ENTITY showToolsMenu.label "Mostra al menú Eines:">
-<!ENTITY startupHomePage.label "Mostra la meva pàgina d&apos;inici">
+<!ENTITY startupHomePage.label "Mostra la meva pàgina d'inici">
 <!ENTITY startupBlankPage.label "Mostra una pàgina en blanc">
 <!ENTITY startupLastSession.label "Mostra les finestres i pestanyes de la darrera vegada">
 <!ENTITY sm.extension.description1 "El Tab Mix Plus ha detectat que teniu instal·lat el complement Session Manager">

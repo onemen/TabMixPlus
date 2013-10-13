@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Lukustatud">
 <!ENTITY extraIcons.protected "Kaitstud">
 <!ENTITY extraIcons.autoreload "Automaatne uuestilaadimine">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Peida püsikaartidel">
 <!ENTITY progressMeter.label "Edenemise riba kaartidel">
 <!ENTITY showTabX.labelBegin "Kaardi sulgemise nuppu">
 <!ENTITY showTabX.left "Aseta kaardi vasakule poolele">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Sulgeb kõik kaardid">
 <!ENTITY clicktab.removeother "Sulgeb teised kaardid">
 <!ENTITY clicktab.removesimilar "Sulgeb sarnase domeeniga kaardid">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Sulge vasakule jäävad kaardid">
+<!ENTITY clicktab.removetoRight "Sulge paremale jäävad kaardid">
 <!ENTITY clicktab.uctab "Taasavab suletud kaardi">
 <!ENTITY clicktab.ucatab "Taasavab kõik suletud kaardid">
 <!ENTITY clicktab.snapback "Lisab kaardile SnapBack'i">

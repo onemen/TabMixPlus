@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Заключен">
 <!ENTITY extraIcons.protected "Защитен">
 <!ENTITY extraIcons.autoreload "Автоматично презареждащ се">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Скриване ако подпрозорците са забодени">
 <!ENTITY progressMeter.label "Индикатор за активност">
 <!ENTITY showTabX.labelBegin "Бутон за затваряне">
 <!ENTITY showTabX.left "бутонът е отляво">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Затваряне на всички подпрозорци">
 <!ENTITY clicktab.removeother "Затваряне на останалите подпрозорци">
 <!ENTITY clicktab.removesimilar "Затваряне на подпрозорците от този домейн">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Затваряне на левите подпрозорци">
+<!ENTITY clicktab.removetoRight "Затваряне на десните подпрозорци">
 <!ENTITY clicktab.uctab "Възстановяване на последно затворения подпрозорец">
 <!ENTITY clicktab.ucatab "Възстановяване на всички затворени подпрозорци">
 <!ENTITY clicktab.snapback "Възстановяване на подпрозорец">

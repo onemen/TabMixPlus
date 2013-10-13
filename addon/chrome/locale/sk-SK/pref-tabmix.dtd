@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Uzamknuté">
 <!ENTITY extraIcons.protected "Chránené">
 <!ENTITY extraIcons.autoreload "Automaticky načítané">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Skryť na pripnutej karte">
 <!ENTITY progressMeter.label "Ukazovateľ priebehu na kartách">
 <!ENTITY showTabX.labelBegin "Tlačidlo zatvoriť kartu">
 <!ENTITY showTabX.left "Naľavo">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zatvoriť všetky karty">
 <!ENTITY clicktab.removeother "Zatvoriť ostatné karty">
 <!ENTITY clicktab.removesimilar "Zatvoriť karty z podobnej domény">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Zatvoriť karty naľavo">
+<!ENTITY clicktab.removetoRight "Zatvoriť karty napravo">
 <!ENTITY clicktab.uctab "Vrátiť zatvorenú kartu">
 <!ENTITY clicktab.ucatab "Vrátiť všetky zatvorené karty">
 <!ENTITY clicktab.snapback "Karta SnapBack">

@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Travada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Auto-carregar">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Esconder abas fixadas">
 <!ENTITY progressMeter.label "Barra de progresso nas abas">
 <!ENTITY showTabX.labelBegin "Botão &quot;Fechar Aba&quot;">
 <!ENTITY showTabX.left "Colocar no lado esquerdo">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Fecha todas as abas">
 <!ENTITY clicktab.removeother "Fecha as outras abas">
 <!ENTITY clicktab.removesimilar "Fecha abas de domínio semelhante">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Fechar abas para a esquerda">
+<!ENTITY clicktab.removetoRight "Fechar abas para a direita">
 <!ENTITY clicktab.uctab "Reabre a aba fechada">
 <!ENTITY clicktab.ucatab "Reabre todas as abas fechadas">
 <!ENTITY clicktab.snapback "&quot;SnapBack&quot;">

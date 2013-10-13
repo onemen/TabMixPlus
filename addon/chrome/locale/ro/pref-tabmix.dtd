@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Blocat">
 <!ENTITY extraIcons.protected "Protejat">
 <!ENTITY extraIcons.autoreload "Reîncărcare automată">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Se ascund pictogramele pe filele fixate pe bară">
 <!ENTITY progressMeter.label "Indicatorul de progres">
 <!ENTITY showTabX.labelBegin "Butonul de închidere">
 <!ENTITY showTabX.left "Se plasează butonul în partea stângă">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Închide toate filele">
 <!ENTITY clicktab.removeother "Închide celelalte file">
 <!ENTITY clicktab.removesimilar "Închide filele din același domeniu">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Închide filele din stânga">
+<!ENTITY clicktab.removetoRight "Închide filele din dreapta">
 <!ENTITY clicktab.uctab "Redeschide ultima filă închisă">
 <!ENTITY clicktab.ucatab "Redeschide toate filele închise">
 <!ENTITY clicktab.snapback "Relansează fila">

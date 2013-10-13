@@ -146,7 +146,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "rendi scorrevole la barra delle schede con pulsanti a sinistra">
 <!ENTITY tabScroll.multibar "disponi su molteplici file la barra delle schede">
 <!ENTITY maxrow.label "Numero massimo di file da visualizzare:">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY offsetAmountToScroll.label "Durante lo scorrimento mostra parte della prossima out-of-sight scheda">
 <!ENTITY smoothScroll.label "Attiva lo scorrimento continuo">
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
 <!ENTITY highlight.label "Da differenziare">
@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Schede bloccate">
 <!ENTITY extraIcons.protected "Schede protette">
 <!ENTITY extraIcons.autoreload "Schede con autoricaricamento">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Nascondi sulle schede pinned">
 <!ENTITY progressMeter.label "Progressione del caricamento">
 <!ENTITY showTabX.labelBegin "Pulsante di chiusura delle schede">
 <!ENTITY showTabX.left "sulla parte sinistra">
@@ -167,7 +167,6 @@
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
-
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -182,7 +181,6 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
-
 -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
@@ -239,8 +237,8 @@
 <!ENTITY clicktab.removeall "Chiudi tutte le schede">
 <!ENTITY clicktab.removeother "Chiudi le altre schede">
 <!ENTITY clicktab.removesimilar "Chiudi le schede con un dominio simile">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Chiudi schede a sinistra">
+<!ENTITY clicktab.removetoRight "Chiudi schede a destra">
 <!ENTITY clicktab.uctab "Riapri la scheda chiusa">
 <!ENTITY clicktab.ucatab "Riapri tutte le schede chiuse">
 <!ENTITY clicktab.snapback "Riapri la scheda">

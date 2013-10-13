@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Gesperrt">
 <!ENTITY extraIcons.protected "Geschützt">
 <!ENTITY extraIcons.autoreload "Automatisch neu laden">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Bei angehefteten Tabs ausblenden">
 <!ENTITY progressMeter.label "Fortschrittsanzeige">
 <!ENTITY showTabX.labelBegin "&quot;Tab schließen&quot;-Schaltfläche">
 <!ENTITY showTabX.left "auf der linken Tab-Seite platzieren">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Alle Tabs schließen">
 <!ENTITY clicktab.removeother "Andere Tabs schließen">
 <!ENTITY clicktab.removesimilar "Ähnliche Tabs schließen">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Linke Tabs schließen">
+<!ENTITY clicktab.removetoRight "Rechte Tabs schließen">
 <!ENTITY clicktab.uctab "Geschlossenen Tab wiederherstellen">
 <!ENTITY clicktab.ucatab "Alle geschlossenen Tabs wiederherstellen">
 <!ENTITY clicktab.snapback "Tab-SnapBack (SessionSaver)">

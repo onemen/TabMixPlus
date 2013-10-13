@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "鎖定的分頁">
 <!ENTITY extraIcons.protected "保護的分頁">
 <!ENTITY extraIcons.autoreload "自動更新的分頁">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "釘選的分頁不顯示">
 <!ENTITY progressMeter.label "在分頁標籤上顯示載入進度">
 <!ENTITY showTabX.labelBegin "快速關閉按鈕">
 <!ENTITY showTabX.left "置於左側">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "關閉全部分頁">
 <!ENTITY clicktab.removeother "關閉其他分頁">
 <!ENTITY clicktab.removesimilar "關閉相同網站的分頁">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "關閉左側分頁">
+<!ENTITY clicktab.removetoRight "關閉右側分頁">
 <!ENTITY clicktab.uctab "復原上次關閉的分頁">
 <!ENTITY clicktab.ucatab "復原全部已關閉的分頁">
 <!ENTITY clicktab.snapback "立即復原">

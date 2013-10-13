@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Закључано">
 <!ENTITY extraIcons.protected "Заштићено">
 <!ENTITY extraIcons.autoreload "Аутоматско учутавање">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Сакриј на скупљеним картицама">
 <!ENTITY progressMeter.label "Линије напретка на картицама">
 <!ENTITY showTabX.labelBegin "Дугме за затварање картице">
 <!ENTITY showTabX.left "смести  на леву страну">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Затварање свих картица">
 <!ENTITY clicktab.removeother "Затварање осталих картица">
 <!ENTITY clicktab.removesimilar "Затварање картица из сличног домена">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Затварање картица слева">
+<!ENTITY clicktab.removetoRight "Затварање картица здесна">
 <!ENTITY clicktab.uctab "Поновно отварање затворене картице">
 <!ENTITY clicktab.ucatab "Поновно отварање свих затворених картица">
 <!ENTITY clicktab.snapback "SnapBack картица">

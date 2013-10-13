@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "zablokowana">
 <!ENTITY extraIcons.protected "zabezpieczona">
 <!ENTITY extraIcons.autoreload "Automatyczne odświeżanie">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Ukryj przypięte karty">
 <!ENTITY progressMeter.label "Pasek postępu na etykietach kart">
 <!ENTITY showTabX.labelBegin "Przycisk zamykania karty">
 <!ENTITY showTabX.left "umieszczaj po lewej stronie etykiety">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Zamknij wszystkie karty">
 <!ENTITY clicktab.removeother "Zamknij inne karty">
 <!ENTITY clicktab.removesimilar "Zamknij karty pochodzące z tej samej domeny">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Zamknij karty po lewej stronie">
+<!ENTITY clicktab.removetoRight "Zamknij karty po prawej stronie">
 <!ENTITY clicktab.uctab "Przywróć zamkniętą kartę">
 <!ENTITY clicktab.ucatab "Przywróć wszystkie zamknięte karty">
 <!ENTITY clicktab.snapback "Powróć do poprzednio aktywnej karty">

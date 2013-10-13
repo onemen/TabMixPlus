@@ -1,8 +1,8 @@
 <!ENTITY styles.label "Pielāgot stilus">
 <!ENTITY currentTab.label "Pašreizējā cilne">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Neielādētās cilnes">
 <!ENTITY unreadTab.label "Nelasītās cilnes">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY unreadAfterReload.label "pēc pārlādēšanas iestatīt cilni kā nelasītu">
 <!ENTITY otherTabs.label "Citas cilnes">
 <!ENTITY italic.label "Slīpraksts">
 <!ENTITY bold.label "Treknraksts">

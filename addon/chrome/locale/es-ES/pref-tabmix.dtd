@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Bloqueada">
 <!ENTITY extraIcons.protected "Protegida">
 <!ENTITY extraIcons.autoreload "Recarga automática">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Ocultar en pestañas fijas">
 <!ENTITY progressMeter.label "Indicador de progreso en pestañas">
 <!ENTITY showTabX.labelBegin "Botón de cerrar pestaña">
 <!ENTITY showTabX.left "Situado a la izquierda">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Cierra todas las pestañas">
 <!ENTITY clicktab.removeother "Cierra las otras pestañas">
 <!ENTITY clicktab.removesimilar "Cierra pestañas de ese dominio web">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Cerrar pestañas a la izquierda">
+<!ENTITY clicktab.removetoRight "Cerrar pestañas a la derecha">
 <!ENTITY clicktab.uctab "Reabre pestaña cerrada">
 <!ENTITY clicktab.ucatab "Reabre todas las pestañas cerradas">
 <!ENTITY clicktab.snapback "Pestaña SnapBack">

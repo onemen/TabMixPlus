@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Применить">
 <!ENTITY settings.export "Экспорт настроек">
 <!ENTITY settings.import "Импорт настроек">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Настройки синхронизации">
 <!ENTITY settings.default "По умолчанию">
 <!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
 <!ENTITY externalLink.useSeparate.label "Использовать отдельные настройки для ссылок из других приложений">
@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Заблокированных">
 <!ENTITY extraIcons.protected "Защищённых">
 <!ENTITY extraIcons.autoreload "Автообновляемых">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Прикреплённых">
 <!ENTITY progressMeter.label "Индикатор процесса открытия страницы">
 <!ENTITY showTabX.labelBegin "Кнопка закрытия на каждой вкладке">
 <!ENTITY showTabX.left "... слева">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Закрыть все вкладки">
 <!ENTITY clicktab.removeother "Закрыть другие вкладки">
 <!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Закрыть вкладки слева">
+<!ENTITY clicktab.removetoRight "Закрыть вкладки справа">
 <!ENTITY clicktab.uctab "Восстановить закрытую вкладку">
 <!ENTITY clicktab.ucatab "Восстановить все закрытые вкладки">
 <!ENTITY clicktab.snapback "Восстановить вкладку">

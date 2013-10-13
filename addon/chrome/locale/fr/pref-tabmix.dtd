@@ -159,7 +159,7 @@
 <!ENTITY extraIcons.locked "Verrouillé">
 <!ENTITY extraIcons.protected "Protégé">
 <!ENTITY extraIcons.autoreload "Actualisation automatique">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Cacher sur les onglets épinglés">
 <!ENTITY progressMeter.label "Barre de progression sur les onglets">
 <!ENTITY showTabX.labelBegin "Bouton de fermeture">
 <!ENTITY showTabX.left "placé sur le côté gauche">
@@ -233,8 +233,8 @@
 <!ENTITY clicktab.removeall "Ferme tous les onglets">
 <!ENTITY clicktab.removeother "Ferme les autres onglets">
 <!ENTITY clicktab.removesimilar "Ferme les onglets de même domaine">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Fermer les onglets de gauche">
+<!ENTITY clicktab.removetoRight "Fermer les onglets de droite">
 <!ENTITY clicktab.uctab "Réouvre le dernier onglet fermé">
 <!ENTITY clicktab.ucatab "Réouvre tous les onglets fermés">
 <!ENTITY clicktab.snapback "Relance l&apos;onglet">

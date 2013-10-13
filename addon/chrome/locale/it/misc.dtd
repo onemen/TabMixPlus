@@ -5,7 +5,7 @@
 <!ENTITY title.label "Titolo">
 <!ENTITY default.label "Predefinito">
 <!ENTITY renametab.permanently.label "Rinomina la scheda sempre per tutti gli indirizzi">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY renametab.permanently.tooltip "Rinomina la scheda sempre: il nome della scheda rimarrà invariato anche se l'indirizzo web cambia">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "FAQ">
 <!ENTITY help.label "Contenuti guida">

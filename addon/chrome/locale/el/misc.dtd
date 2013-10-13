@@ -12,6 +12,6 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Επιλέξτε χρόνο από τη λίστα ή εισάγετε την προσωπική σας επιλογή.">
 <!ENTITY specifyreload.label "Καθορίστε τον χρόνο ανανέωσης">
-<!ENTITY sanitizer.entry "Ιστορικό Tab Mix Plus">
+<!ENTITY sanitizer.entry "Αποθηκευμένες συνεδρίες Tab Mix Plus">
 <!ENTITY sanitizer.entry.accesskey "Τ">
 <!ENTITY sanitizer.entry.confirm "Θέλετε σίγουρα να διαγραφούν όλα τα δεδομένα συνεδριών, συμπεριλαμβανομένων και των αντιγράφων ασφαλείας;">
