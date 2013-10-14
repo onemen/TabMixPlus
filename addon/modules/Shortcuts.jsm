@@ -285,7 +285,7 @@ let Shortcuts = {
         shortcuts[key] = "d&";
         updatePreference = true;
       }
-      else if (!this.prefBackup) {
+      else if (val != "d&" && !this.prefBackup) {
         // make sure user didn't changed the preference in prefs.js
         let newValue = this._userChangedKeyPref(val) || keyData.value;
         if (newValue != val) {
@@ -453,7 +453,7 @@ let KeyConfig = {
     } catch (ex) { }
     if (!prefValue)
       newValue = keyData.default;
-    else if (prefValue[0] == "!")
+    else if (/^!/.test(prefValue))
       newValue = "d&";
     else {
       let newKey = {modifiers: prefValue[0].replace(" ", ","),
@@ -483,8 +483,8 @@ let KeyConfig = {
       else {
         let obj = Shortcuts.keyParse(prefVal);
         let newValue = obj.disabled ? ["!", "", ""] :
-          [obj.modifiers.replace(",", " "), obj.key, obj.keycode].join("][");
-        setPref("keyconfig.main." + id, newValue);
+          [obj.modifiers.replace(",", " "), obj.key, obj.keycode];
+        setPref("keyconfig.main." + id, newValue.join("]["));
       }
       this.prefsChangedByTabmix = false;
     }
