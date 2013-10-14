@@ -113,7 +113,7 @@ let Shortcuts = {
   },
 
   onPrefChange: function TMP_SC_onPrefChange(aData) {
-try {
+   try {
     if (this.updatingShortcuts ||
         aData != "shortcuts" && aData != "sessions.manager")
       return;
@@ -137,7 +137,7 @@ try {
     }
 
     this.updatingShortcuts = false;
-} catch (ex) {TabmixSvc.console.assert(ex);}
+   } catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   /* ........ Window Event Handlers .............. */
@@ -154,11 +154,11 @@ try {
   },
 
   onCommand: function TMP_SC_onCommand(aKey) {
-try {
+   try {
     let win = aKey.ownerDocument.defaultView;
     let command = this.keys[aKey._id].command;
     win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
-} catch (ex) {TabmixSvc.console.assert(ex);}
+   } catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
