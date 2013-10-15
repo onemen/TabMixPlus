@@ -29,7 +29,7 @@
       <preference id="pref_tabFlip"           name="extensions.tabmix.tabFlip"            type="bool"/>
       <preference id="pref_tabFlipDelay"      name="extensions.tabmix.tabFlipDelay"       type="int"/>
       <preference id="pref_tabbarscrolling"   name="extensions.tabmix.scrollTabs"         type="int"
-                  onchange="gMousePane.updateBroadcaster(this.value)"/>
+                  onchange="gMousePane.updateBroadcaster('tabbarscrolling');"/>
       <preference id="pref_reversescrolling"  name="extensions.tabmix.reversedScroll"     type="bool"/>
       <preference id="pref_mouseDownSelect"   name="extensions.tabmix.selectTabOnMouseDown"
                   type="bool" inverted="true"/>
@@ -49,6 +49,8 @@
       <preference id="pref_altClickTabbar"    name="extensions.tabmix.altClickTabbar"     type="int"/>
       <preference id="pref_dblClickTabbar_changesize"    name="extensions.tabmix.dblClickTabbar_changesize"
                   type="bool" inverted="true"/>
+      <preference id="pref_disableMoveTab"    name="extensions.tabmix.tabBarMode"         type="int"
+                  onchange="gMousePane.updateBroadcaster('disableMoveTab');"/>
     </preferences>
 
     <!-- pane content -->
@@ -84,7 +86,8 @@
           </groupbox>
           <groupbox flex="1">
             <!-- drop indicator -->
-            <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"/>
+            <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"
+                          observes="obs_disableMoveTab"/>
             <!-- drop indicator -->
             <hbox id="dropIndicator">
               <label value="&dropIndicator.label;:"/>
@@ -200,6 +203,7 @@
 
     <broadcasterset>
       <broadcaster id="obs_tabbarscrolling"/>
+      <broadcaster id="obs_disableMoveTab"/>
     </broadcasterset>
 
   </prefpane>
