@@ -260,6 +260,7 @@
                _tooltiptext="&closedwindowsbtn.tooltip;"
                tooltiptext="&closedwindowsbtn.tooltip;">
          <menupopup id="btn_closedwindows_menu"
+               placespopup="true" tooltip="bhTooltip"
                context="tm_sessionmanagerContextMenu"
                onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
                onpopuphidden="this.parentNode.setAttribute('tooltiptext', this.parentNode.getAttribute('_tooltiptext'));"

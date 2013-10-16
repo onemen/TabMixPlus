@@ -711,35 +711,9 @@ var tablib = {
       'this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0];',
       'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] : document.getElementById(arguments[0]);'
     )._replace(
-      'undoPopup = undoMenu.firstChild;',
-      '$&\
-      if (!undoPopup.hasAttribute("context")) undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");'
-    )._replace(
-      'let otherTabsCount = undoItem.tabs.length - 1;',
-      '$&\
-      if (otherTabsCount < 0) continue;'
-    )._replace(
-      'let menuLabel = label.replace("#1", undoItem.title)',
-      'TMP_SessionStore.getTitleForClosedWindow(undoItem);\
-      $&'
-    )._replace( // m.fileName for new Tabmix.Sessions (look in updateSessionMenu)
-      'undoPopup.appendChild(m)',
-      'm.setAttribute("value", i);\
-       m.fileName = "closedwindow";\
-       m.addEventListener("click", TabmixSessionManager.checkForMiddleClick, false);\
-       $&'
-    )._replace(
-      'm.id = "menu_restoreAllWindows";',
-      '$& \
-      m.setAttribute("value", -2);'
-    )._replace(
-      'm = undoPopup.appendChild(document.createElement("menuitem"));',
-      '$& \
-       m.id = "menu_clearClosedWindowsList"; \
-       m.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label")); \
-       m.setAttribute("value", -1); \
-       m.setAttribute("oncommand", "TabmixSessionManager.forgetClosedWindow(-1);"); \
-       m = undoPopup.appendChild(document.createElement("menuitem"));'
+      /(\})(\)?)$/,
+      '  tablib.populateUndoWindowSubmenu(undoPopup);\n'+
+      '$1$2'
     ).toCode();
 
     var popup = document.getElementById("historyUndoWindowPopup");
@@ -755,6 +729,39 @@ var tablib = {
        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
     ).toCode();
 
+  },
+
+  populateUndoWindowSubmenu: function(undoPopup) {
+    if (!undoPopup.hasAttribute("context"))
+      undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
+    let undoItems = JSON.parse(TabmixSvc.ss.getClosedWindowData());
+    let menuLabelString = gNavigatorBundle.getString("menuUndoCloseWindowLabel");
+    let menuLabelStringSingleTab =
+      gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel");
+    for (let i = 0; i < undoPopup.childNodes.length; i++) {
+      let m = undoPopup.childNodes[i];
+      let undoItem = undoItems[i];
+      if (undoItem && m.hasAttribute("targetURI")) {
+        let otherTabsCount = undoItem.tabs.length - 1;
+        let label = (otherTabsCount == 0) ? menuLabelStringSingleTab
+                                          : PluralForm.get(otherTabsCount, menuLabelString);
+        TMP_SessionStore.getTitleForClosedWindow(undoItem);
+        let menuLabel = label.replace("#1", undoItem.title)
+                             .replace("#2", otherTabsCount);
+        m.setAttribute("label", menuLabel);
+        m.setAttribute("value", i);
+        m.fileName = "closedwindow";
+        m.addEventListener("click", TabmixSessionManager.checkForMiddleClick, false);
+      }
+    }
+    let restoreAllWindows = undoPopup.lastChild;
+    restoreAllWindows.setAttribute("value", -2);
+    let clearList = undoPopup.appendChild(document.createElement("menuitem"));
+    clearList.id = "menu_clearClosedWindowsList";
+    clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
+    clearList.setAttribute("value", -1);
+    clearList.setAttribute("oncommand", "TabmixSessionManager.forgetClosedWindow(-1);");
+    undoPopup.insertBefore(clearList, restoreAllWindows);
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
