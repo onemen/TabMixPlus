@@ -89,14 +89,16 @@ var gTabMix_preferencesOverlay = {
       var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
       if (singleWindowMode)
          document.getElementById("linkTargetWindow").disabled = true;
+
+      // fix panel height
       var docElt = document.documentElement;
-      if (docElt._shouldAnimate) {
-         if (this.lastSelected == "paneTabs")
-            window.sizeToContent();
-         else {
-            docElt.lastSelected = this.lastSelected;
-            docElt._selectPane(document.getElementById("paneTabs"));
-         }
+      if (docElt._shouldAnimate && this.lastSelected == "paneTabs")
+        window.sizeToContent();
+      else {
+        let paneTabs = document.getElementById("paneTabs");
+        paneTabs._content.style.height = "";
+        docElt.lastSelected = this.lastSelected;
+        docElt._selectPane(paneTabs);
       }
    },
 
