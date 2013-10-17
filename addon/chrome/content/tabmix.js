@@ -55,7 +55,7 @@ Tabmix.startup = function TMP_startup() {
 }
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js
-Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
+Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
   // when gBrowserInit._delayedStartup broke by extension we don't get
   // "browser-delayed-startup-finished" notification
   setTimeout(function() {
@@ -68,11 +68,12 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
     TMP_SessionStore.setService(1, true);
   }
   this.getAfterTabsButtonsWidth();
-  TabmixSessionManager.init();
+  TabmixSessionManager.init(aPromise);
 }
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  this.ssPromise = null;
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
@@ -164,8 +165,8 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
-  if (this.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
-    SessionStore.promiseInitialized.then(this.sessionInitialized.bind(this));
+  if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
+    this.ssPromise.then(this.sessionInitialized.bind(this), Cu.reportError);
   else
     this.sessionInitialized();
 

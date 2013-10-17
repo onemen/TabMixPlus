@@ -321,8 +321,8 @@ var TabmixSessionManager = {
       return this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions.");
    },
 
-   // call by Tabmix.startup
-   init: function SM_init() {
+   // call by Tabmix.beforeSessionStoreInit
+   init: function SM_init(aPromise) {
       if (this._inited)
          return;
       this._inited = true;
@@ -332,7 +332,8 @@ var TabmixSessionManager = {
           TabmixSvc.sm.promiseInitialized = true;
           this._init();
         }.bind(this);
-        SessionStore.promiseInitialized.then(initializeSM);
+        Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
+        Tabmix.ssPromise.then(initializeSM, Cu.reportError);
       }
       else {
         let forceInit = !Tabmix.isVersion(250) && this.doRestore;

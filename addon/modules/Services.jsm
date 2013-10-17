@@ -156,7 +156,7 @@ let TabmixSvc = {
 
   get ss() {
     delete this.ss;
-    if (isVersion(260)) {
+    if (isVersion(250)) {
       let tmp = {}
       Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
       return this.ss = tmp.SessionStore;

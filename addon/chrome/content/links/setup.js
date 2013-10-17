@@ -153,8 +153,8 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '  }' +
         '  if (uriToLoad == "about:blank" || "tabmixdata" in window) {' +
         '    gBrowser.selectedBrowser.stop();' +
-        '  }' +
-        '$&'
+        '  }\n' +
+        '    $&'
 
       if (!this.isVersion(190)) {
         bowserStartup = bowserStartup._replace(
@@ -176,19 +176,28 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           [gBrowserInit, "gBrowserInit._delayedStartup"] :
           [window, "delayedStartup"];
 
+    let insertionPoint, ssPromise = "";
+    if (this.isVersion(250)) {
+      insertionPoint = "PlacesToolbarHelper.init();";
+      if (!this.isVersion(270))
+        ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
+    }
+    else
+      insertionPoint = 'Services.obs.addObserver';
+
     this.changeCode(obj, fn)._replace(
       'Services.obs.addObserver', loadOnStartup, {check: this.isVersion(190) && !!loadOnStartup}
     )._replace(
-      'Services.obs.addObserver',
+      insertionPoint,
       'try {' +
-      '  Tabmix.beforeSessionStoreInit();' +
-      '} catch (ex) {Tabmix.assert(ex);}' +
-      '$&'
+      '  Tabmix.beforeSessionStoreInit(' + ssPromise + ');' +
+      '} catch (ex) {Tabmix.assert(ex);}\n' +
+      '    $&'
     )._replace(
       swapOldCode, swapNewCode, {check: this.isVersion(190)}
     )._replace(
       'SessionStore.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(250) && sessionManager}
+      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(270) && sessionManager}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
