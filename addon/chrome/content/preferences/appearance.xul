@@ -32,7 +32,7 @@
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
-      <preference id="pref_tabsScroll"         name="extensions.tabmix.tabBarMode"               type="int"
+      <preference id="pref_tabsScroll"        name="extensions.tabmix.tabBarMode"               type="int"
                   onchange="gAppearancePane.tabsScrollChanged();"/>
       <preference id="pref_smoothScroll"      name="toolkit.scrollbox.smoothScroll"             type="bool"/>
       <preference id="pref_scrollDelay"
@@ -48,11 +48,11 @@
       <preference id="pref_lockedIcon"        name="extensions.tabmix.extraIcons.locked"        type="bool"/>
       <preference id="pref_protectedIcon"     name="extensions.tabmix.extraIcons.protected"     type="bool"/>
       <preference id="pref_autoreloadIcon"    name="extensions.tabmix.extraIcons.autoreload"    type="bool"/>
-      <preference id="pref_hideIconsonpinned"    name="extensions.tabmix.extraIcons.notpinned"    type="bool"/>
+      <preference id="pref_hideIconsonpinned" name="extensions.tabmix.extraIcons.notpinned"     type="bool"/>
       <preference id="pref_progressMeter"     name="extensions.tabmix.progressMeter"            type="bool"/>
       <preference id="pref_showTabX"          name="extensions.tabmix.tabs.closeButtons.enable" type="bool"/>
       <preference id="pref_tabXLeft"          name="extensions.tabmix.tabs.closeButtons.onLeft" type="bool"/>
-      <preference id="pref_tabCloseButton"         name="extensions.tabmix.tabs.closeButtons"        type="int"
+      <preference id="pref_tabCloseButton"    name="extensions.tabmix.tabs.closeButtons"        type="int"
                   onchange="gAppearancePane.tabCloseButtonChanged();"/>
       <preference id="pref_tabXDelay"         name="extensions.tabmix.tabs.closeButtons.delay"  type="int"/>
       <preference id="pref_tabClipWidth"      name="browser.tabs.tabClipWidth"                  type="int"/>
