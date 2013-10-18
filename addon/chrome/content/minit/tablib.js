@@ -1269,7 +1269,10 @@ var tablib = {
           tabs.forEach(function(tab, index) {
             if (tab == oldTab)
               return;
-            let id = parseInt(tab.linkedPanel.replace('panel', ''));
+            let linkedPanel = tab.linkedPanel.replace('panel', '');
+            if (Tabmix.isVersion(260))
+              linkedPanel = linkedPanel.substr(linkedPanel.lastIndexOf("-") + 1);
+            let id = parseInt(linkedPanel);
             if (id > maxID) {
               maxID = id;
               lastTabIndex = index;
