@@ -1079,12 +1079,12 @@ var gTMPprefObserver = {
     if (parseInt(marginStart) < parseInt(marginEnd))
       return;
 
-    function tabmix_setRule(aRule) {
+    let tabmix_setRule = function(aRule) {
       let newRule = aRule.replace(/%S/g, "tab-icon-image").replace("%PX", marginEnd);
       this.insertRule(newRule);
       newRule = aRule.replace(/%S/g, "tab-lock-icon").replace("%PX", marginEnd);
       this.insertRule(newRule);
-    }
+    }.bind(this);
     iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                       '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {'+
                       '-moz-margin-start: %PX !important;}'

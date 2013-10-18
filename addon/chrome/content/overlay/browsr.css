@@ -25,13 +25,20 @@ label.text-link, label[onclick] {
 /*  we don't use .tabbrowser-tab > .tab-close-button[button_side="right"] here
     because in some theme the buttons are inside tab-middle
 */
-.tabbrowser-tabs[closebuttons-side="left"] > .tabbrowser-tab .tab-close-button[button_side="right"],
-.tabbrowser-tabs[closebuttons-side="right"] > .tabbrowser-tab .tab-close-button[button_side="left"] {
-  display: none;
+
+/* use both selected and not selected to override specific rules from other extensions */
+.tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button,
+.tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab[selected="true"] .tab-close-button {
+  display: none !important;
+}
+
+.tabbrowser-tabs:not([closebuttons="noclose"])[closebuttons-side="left"] > .tabbrowser-tab .tab-close-button[button_side="right"],
+.tabbrowser-tabs:not([closebuttons="noclose"])[closebuttons-side="right"] > .tabbrowser-tab .tab-close-button[button_side="left"] {
+  display: none !important;
 }
 
 .tabbrowser-tab[protected] .tab-close-button {
-  display: none;
+  display: none !important;
 }
 
 .tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button[button_side="left"],
