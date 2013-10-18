@@ -36,24 +36,24 @@
 }
 
 /* tabmix color on tab - for inactive window */
-.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-start[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-middle[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-end[selected="true"]:-moz-window-inactive {
+.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"]:-moz-window-inactive,
+.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-middle[selected="true"]:-moz-window-inactive,
+.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-end[selected="true"]:-moz-window-inactive {
   opacity: 0.5 !important;
 }
-.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-start:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-middle:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-end:not([selected="true"]):not([visited]):-moz-window-inactive {
+.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-start:not([selected="true"])[pending]:-moz-window-inactive,
+.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-middle:not([selected="true"])[pending]:-moz-window-inactive,
+.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-end:not([selected="true"])[pending]:-moz-window-inactive {
   opacity: 0.5 !important;
 }
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-start:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-middle:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-end:not([selected="true"]):-moz-window-inactive{
+.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-start:not([selected="true"]):not([visited]):-moz-window-inactive,
+.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-middle:not([selected="true"]):not([visited]):-moz-window-inactive,
+.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-end:not([selected="true"]):not([visited]):-moz-window-inactive {
   opacity: 0.5 !important;
 }
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-start:not([selected="true"])[visited]:-moz-window-inactive,
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-middle:not([selected="true"])[visited]:-moz-window-inactive,
-.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-end:not([selected="true"])[visited]:-moz-window-inactive {
+.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-start:not([selected="true"]):-moz-window-inactive,
+.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-middle:not([selected="true"]):-moz-window-inactive,
+.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-end:not([selected="true"]):-moz-window-inactive{
   opacity: 0.5 !important;
 }
 
