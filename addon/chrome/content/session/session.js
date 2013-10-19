@@ -3282,9 +3282,9 @@ try{
       // if we need to remove extra tabs make sure they are not protected
       let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
                        "pending", "hidden", "image"];
-      // remove visited and flst_id from all tabs but the current
+      // remove visited and tabmix_selectedID from all tabs but the current
       if (aTab != gBrowser.mCurrentTab)
-        attributes = attributes.concat(["visited", "flst_id"]);
+        attributes = attributes.concat(["visited", "tabmix_selectedID"]);
 
       attributes.forEach(function(attrib) {
         if (aTab.hasAttribute(attrib))
@@ -3308,7 +3308,7 @@ try{
         gBrowser.selectedTab = tabs[newIndex];
         if (removeAttribute) {
           tabs[oldIndex].removeAttribute("visited");
-          tabs[oldIndex].removeAttribute("flst_id");
+          tabs[oldIndex].removeAttribute("tabmix_selectedID");
         }
       }
    },

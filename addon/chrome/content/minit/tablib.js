@@ -897,15 +897,15 @@ var tablib = {
           if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) {
             this.selectedTab = newTab;
             aTab.removeAttribute("visited");
-            aTab.removeAttribute("flst_id");
+            aTab.removeAttribute("tabmix_selectedID");
           }
           else {
             aTab.owner = newTab;
             this.selectedTab = aTab;
-            newTab.setAttribute("flst_id", new Date().getTime());
+            newTab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
             newTab.setAttribute("visited", true);
             newTab.setAttribute("dontremovevisited", true);
-            aTab.setAttribute("flst_id", new Date().getTime());
+            aTab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           }
 
           var event = document.createEvent("Events");
@@ -1213,11 +1213,11 @@ var tablib = {
     gBrowser.previousTabIndex = function _previousTabIndex(aTab, aTabs) {
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
-      var items = Array.filter(this.tabContainer.getElementsByAttribute("flst_id", "*"),
+      var items = Array.filter(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
           function(tab) {return !tab.hidden && !tab.closing;
       }, this);
       for (var i = 0; i < items.length; ++i ) {
-        temp_id = items[i].getAttribute("flst_id");
+        temp_id = items[i].getAttribute("tabmix_selectedID");
         if (aTab && items[i] == aTab)
           continue;
         if ( temp_id && temp_id > max_id ) {
@@ -1235,7 +1235,7 @@ var tablib = {
         return;
       var tempIndex = this.previousTabIndex(aTab);
 
-      // if no flst_id go to previous tab, from first tab go to the next tab
+      // if no tabmix_selectedID go to previous tab, from first tab go to the next tab
       if (tempIndex == -1)
         this.selectedTab = aTab == tabs[0] ? TMP_TabView.nextVisibleSibling(aTab) :
                                              TMP_TabView.previousVisibleSibling(aTab);

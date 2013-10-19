@@ -113,7 +113,7 @@ Tabmix.sessionInitialized = function() {
   var tab = gBrowser.tabContainer.firstChild;
   if (!tab.selected) {
     tab.removeAttribute("visited");
-    tab.removeAttribute("flst_id");
+    tab.removeAttribute("tabmix_selectedID");
   }
 
   TMP_SessionStore.persistTabAttribute();
@@ -830,7 +830,7 @@ var TMP_eventListener = {
     }
 
     // update this functions after new tab select
-    tab.setAttribute("flst_id", new Date().getTime());
+    tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
     TMP_LastTab.OnSelect();

@@ -366,8 +366,9 @@
             document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
           Tabmix._show_newtabbutton = "aftertabs";
 
+          Tabmix._nextSelectedID = 0;
           let tab = this.firstChild;
-          tab.setAttribute("flst_id", new Date().getTime());
+          tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
           TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
           if (TabmixTabbar.lockallTabs) {

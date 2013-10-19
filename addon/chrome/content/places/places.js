@@ -240,7 +240,7 @@ var TMP_Places = {
   // fixed: reuse all blank tab not just in the end
   // fixed: if "extensions.tabmix.loadFolderAndReplace" is true don't reuse locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
-  // fixed: remove "selected" and "flst_id" from reuse tab
+  // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
   //
   //TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
@@ -285,10 +285,10 @@ var TMP_Places = {
              browser.loadURI(url);
              // setTabTitle will call TabmixTabbar.updateScrollStatus for us
              aTab.collapsed = false;
-             // reset visited & flst_id attribute
+             // reset visited & tabmix_selectedID attribute
              if (!aTab.selected) {
                 aTab.removeAttribute("visited");
-                aTab.removeAttribute("flst_id");
+                aTab.removeAttribute("tabmix_selectedID");
              } else
                 aTab.setAttribute("reloadcurrent", true);
           }
@@ -321,7 +321,7 @@ var TMP_Places = {
         old.removeAttribute("reloadcurrent");
       if (reloadCurrent && old != tabToSelect) {
         old.removeAttribute("visited");
-        old.removeAttribute("flst_id");
+        old.removeAttribute("tabmix_selectedID");
       }
     }
 
