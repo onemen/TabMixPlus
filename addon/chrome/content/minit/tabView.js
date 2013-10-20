@@ -187,12 +187,6 @@
 
   /* ............... TabmixSessionManager TabView Data ............... */
 
-  TabmixSessionManager._sendWindowStateEvent = function SM__sendWindowStateEvent(aType) {
-    let event = document.createEvent("Events");
-    event.initEvent("SSWindowState" + aType, true, false);
-    window.dispatchEvent(event);
-  }
-
   // aWindow: rdfNodeWindow to read from
   TabmixSessionManager._setWindowStateBusy = function SM__setWindowStateBusy(aWindow) {
     TMP_SessionStore.initService();

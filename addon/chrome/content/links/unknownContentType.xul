@@ -1,35 +1,38 @@
 <?xml version="1.0"?>
 
 <overlay id="tabmixplus-unknownContentType-overlay"
-   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-   <script type="application/javascript"
-          src="chrome://browser/content/utilityOverlay.js"/>
-   <script type="application/javascript">
-   <![CDATA[
-      let win = getTopWin();
-      if (win && win.gTabmixPrefs.getBoolPref("extensions.tabmix.enablefiletype")) {
-        window._tabBrowser = win.gBrowser;
-        let tabToRemove = _tabBrowser.getTabForLastPanel();
-        if (_tabBrowser.browsers.length > 1 && _tabBrowser.isBlankNotBusyTab(tabToRemove)) {
-          if (tabToRemove.selected) {
-            let newIndex = _tabBrowser.selectIndexAfterRemove(tabToRemove);
-            if (newIndex > -1) {
-              let tab = _tabBrowser.tabs.item(newIndex);
-              if (tab)
-                _tabBrowser.selectedTab = tab;
-            }
-          }
-          window._tabToRemove = tabToRemove;
-          window.addEventListener("unload", function TMP_onLoad_unknownContentType(aEvent) {
-            aEvent.currentTarget.removeEventListener("unload", TMP_onLoad_unknownContentType, false);
-            window._tabBrowser.removeTab(window._tabToRemove);
-            delete window._tabToRemove;
-            delete window._tabBrowser;
-          }, false);
-        }
+  <script type="application/javascript">
+  <![CDATA[
+    let nav = dialog.mContext.QueryInterface(Ci.nsIInterfaceRequestor)
+                  .getInterface(Ci.nsIWebNavigation);
+    let win = nav.QueryInterface(Ci.nsIDocShellTreeItem)
+                  .rootTreeItem
+                  .QueryInterface(Ci.nsIInterfaceRequestor)
+                  .getInterface(Ci.nsIDOMWindow)
+                  .wrappedJSObject;
+    let doc = nav.document;
+    if (win && doc) {
+      let b = win.gBrowser.getBrowserForDocument(doc);
+      let tab = b && win.gBrowser._getTabForBrowser(b);
+      // wait 250 ms after this window closed before removing mContext tab
+      // nsHelperAppDlg.js promptForSaveToFileAsync look for dialog.mContext
+      // before it opens nsIFilePicker.
+      // see cooment in our DownloadLastDir.jsm
+      if (tab && tab._tabmix_downloadingTimeout) {
+        win.clearTimeout(tab._tabmix_downloadingTimeout);
+        tab._tabmix_downloadingTimeout = null;
+        window.addEventListener("unload", function _unload(aEvent) {
+          aEvent.currentTarget.removeEventListener("unload", _unload, false);
+          win && !win.closed && win.setTimeout(function() {
+            if (win && win.gBrowser && tab && tab.parentNode)
+              win.gBrowser.removeTab(tab, {animate: false});
+          }, 250);
+        }, false);
       }
-   ]]>
-   </script>
+    }
+  ]]>
+  </script>
 
 </overlay>

@@ -156,9 +156,9 @@
                     <!-- Close other tabs -->
                     <checkbox_tmp id="showCloseOther" label="&closeOtherTabs.label;" preference="pref_showCloseOther"/>
                     <!-- Close left tabs -->
-                    <checkbox_tmp id="showCloseLeft" label="&closeLeftTabsMenu.label;" preference="pref_showCloseLeft"/>
+                    <checkbox_tmp id="showCloseLeft" label="&closeTabsToLeft.label;" preference="pref_showCloseLeft"/>
                     <!-- Close right tabs -->
-                    <checkbox_tmp id="showCloseRight" label="&closeRightTabsMenu.label;" preference="pref_showCloseRight"/>
+                    <checkbox_tmp id="showCloseRight" label="&closeTabstoRight.label;" preference="pref_showCloseRight"/>
                     <!-- docShell -->
                     <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
                     <!-- freeze tab -->
@@ -303,8 +303,8 @@
             <shortcut id="removeall"       label="&clicktab.removeall;"/>
             <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
             <shortcut id="removeother"     label="&clicktab.removeother;"/>
-            <shortcut id="removeleft"      label="&clicktab.removeleft;"/>
-            <shortcut id="removeright"     label="&clicktab.removeright;"/>
+            <shortcut id="removeleft"      label="&clicktab.removetoLeft;"/>
+            <shortcut id="removeright"     label="&clicktab.removetoRight;"/>
             <shortcut id="undoClose"       label="&clicktab.uctab;"/>
             <shortcut id="undoCloseTab"    label="&clicktab.uctab;*"/>
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>

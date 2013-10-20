@@ -33,6 +33,8 @@ var gSessionPane = {
     $("sesionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
     if (!onStart || sessionStoreEnabled)
       $("session").selectedIndex = sessionStoreEnabled ? 2 : 0;
+    else if ($("session").selectedIndex == 2)
+      $("session").selectedIndex = 0;
   },
 
   setSessionsOptions: function (item) {
@@ -71,6 +73,7 @@ var gSessionPane = {
       updatePrefs("browserStartupPage", useSessionManager ? 1 : 3);
     }
 
+    TabmixSvc.sm.settingPreference = true;
     if (useSessionManager) {
       sessionstorePrefs();
       sessionPrefs();
@@ -79,6 +82,7 @@ var gSessionPane = {
       sessionPrefs();
       sessionstorePrefs()
     }
+    TabmixSvc.sm.settingPreference = false;
 
     if (instantApply)
       Services.prefs.savePrefFile(null);

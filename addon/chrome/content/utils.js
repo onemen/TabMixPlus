@@ -1,20 +1,6 @@
 "use strict";
 
 var Tabmix = {
-  // aOptions can be: getter, setter or forceUpdate
-  changeCode: function(aParent, aName, aOptions) {
-    let fnName = aName.split(".").pop();
-    try {
-      return new Tabmix_ChangeCode({obj: aParent, fnName: fnName,
-        fullName: aName, options: aOptions});
-    } catch (ex) {
-      this.clog(Tabmix.callerName() + " failed to change " + aName + "\nError: " + ex.message);
-      if (Tabmix._debugMode)
-        this.obj(aObject, "aObject");
-    }
-    return null;
-  },
-
   get prefs() {
     delete this.prefs;
     return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
@@ -57,6 +43,21 @@ var Tabmix = {
     }
   },
 
+  setAttributeList: function(aItemOrId, aAttr, aValue, aAdd) {
+    let elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    let att = elem.getAttribute(aAttr);
+    let array = att ? att.split(" ") : [];
+    let index = array.indexOf(aValue);
+    if (aAdd && index == -1)
+      array.push(aValue);
+    else if (!aAdd && index != -1)
+      array.splice(index, 1);
+    if (array.length)
+      elem.setAttribute(aAttr, array.join(" "));
+    else
+      elem.removeAttribute(aAttr);
+  },
+
   getTopWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
@@ -66,7 +67,7 @@ var Tabmix = {
     // so we can open new window
     if (!this.getTopWin())
       return false;
-    return Tabmix.prefs.getBoolPref("singleWindow");
+    return this.prefs.getBoolPref("singleWindow");
   },
 
   isNewWindowAllow: function(isPrivate) {
@@ -97,14 +98,18 @@ var Tabmix = {
       return;
 
     var self = this;
-    XPCOMUtils.defineLazyGetter(aObject, aOldName, function() {
-      self.informAboutChangeInTabmix(aOldName, aNewName);
-      return self.getObject(window, aNewName);
+    Object.defineProperty(aObject, aOldName, {
+      get: function () {
+        self.informAboutChangeInTabmix(aOldName, aNewName);
+        delete aObject[aOldName];
+        return aObject[aOldName] = self.getObject(window, aNewName);
+      },
+      configurable: true
     });
   },
 
   informAboutChangeInTabmix: function(aOldName, aNewName) {
-    let err = Error(aOldName + " is deprecated in Tabmix since version 0.3.8.5pre.110123a use " + aNewName + " instead.");
+    let err = Error(aOldName + " is deprecated in Tabmix, use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
     let stack = Error().stack.split("\n").slice(3);
     let file = stack[0] ? stack[0].split(":") : null;
@@ -200,6 +205,30 @@ var Tabmix = {
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
   itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
 
+  show: function(aMethod, aDelay, aWindow) {
+    TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
+  },
+
+  // console._removeInternal use this function name to remove it from
+  // caller list
+  __noSuchMethod__: function TMP_console_wrapper(id, args) {
+    if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
+      this.installeChangecode;
+      return this[id].apply(this, args);
+    }
+    if (typeof TabmixSvc.console[id] == "function") {
+      return TabmixSvc.console[id].apply(TabmixSvc.console, args);
+    }
+    TabmixSvc.console.trace("unexpected method " + id);
+    return null;
+  },
+
+  get installeChangecode() {
+    delete this.installeChangecode;
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
+    return this.installeChangecode = true;
+  },
+
   _init: function() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
@@ -210,17 +239,10 @@ var Tabmix = {
                  resource + "modules/RecentWindow.jsm");
     }
 
-    let tmp = {};
-    Components.utils.import("resource://tabmixplus/log.jsm", tmp);
-    for (let [fnName, value] in Iterator(tmp.log))
-      this[fnName] = typeof value == "function" ? value.bind(this) : value;
-
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);
       this.destroy();
     }.bind(this), false);
-
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
   },
 
   originalFunctions: {},
@@ -228,10 +250,6 @@ var Tabmix = {
     this.toCode = null;
     this.originalFunctions = null;
     delete this.window;
-    for (let [id, timer] in Iterator(this._timers)) {
-      timer.cancel();
-      delete this._timers[id];
-    }
   }
 }
 

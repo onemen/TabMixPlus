@@ -6,7 +6,6 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
-Cu.import("resource://tabmixplus/log.jsm");
 
 let Shortcuts = {
   keys: {
@@ -114,7 +113,7 @@ let Shortcuts = {
   },
 
   onPrefChange: function TMP_SC_onPrefChange(aData) {
-try {
+   try {
     if (this.updatingShortcuts ||
         aData != "shortcuts" && aData != "sessions.manager")
       return;
@@ -138,7 +137,7 @@ try {
     }
 
     this.updatingShortcuts = false;
-} catch (ex) {log.assert(ex);}
+   } catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   /* ........ Window Event Handlers .............. */
@@ -155,11 +154,11 @@ try {
   },
 
   onCommand: function TMP_SC_onCommand(aKey) {
-try {
+   try {
     let win = aKey.ownerDocument.defaultView;
     let command = this.keys[aKey._id].command;
     win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
-} catch (ex) {log.assert(ex);}
+   } catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
@@ -266,10 +265,10 @@ try {
   _getShortcutsPref: function TMP_SC__getShortcutsPref() {
     let shortcuts = null, updatePreference = false;
     try {
-      shortcuts = JSON.parse(this.prefs.getCharPref("shortcuts"));
+      shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
     } catch (ex) {}
     if (shortcuts == null) {
-      log.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
+      TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;
     }
@@ -286,7 +285,7 @@ try {
         shortcuts[key] = "d&";
         updatePreference = true;
       }
-      else if (!this.prefBackup) {
+      else if (val != "d&" && !this.prefBackup) {
         // make sure user didn't changed the preference in prefs.js
         let newValue = this._userChangedKeyPref(val) || keyData.value;
         if (newValue != val) {
@@ -328,7 +327,7 @@ try {
 
   setShortcutsPref: function() {
     this.updatingShortcuts = true;
-    this.prefs.setCharPref("shortcuts", JSON.stringify(this.prefBackup));
+    setPref("extensions.tabmix.shortcuts", JSON.stringify(this.prefBackup));
     this.updatingShortcuts = false;
   },
 
@@ -450,11 +449,11 @@ let KeyConfig = {
   syncFromKeyConfig: function(aKey, aPrefName, aShortcuts) {
     let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
-      prefValue = this.prefs.getCharPref(aPrefName).split("][");
+      prefValue = getPref("keyconfig.main." + aPrefName).split("][");
     } catch (ex) { }
     if (!prefValue)
       newValue = keyData.default;
-    else if (prefValue[0] == "!")
+    else if (/^!/.test(prefValue))
       newValue = "d&";
     else {
       let newKey = {modifiers: prefValue[0].replace(" ", ","),
@@ -484,8 +483,8 @@ let KeyConfig = {
       else {
         let obj = Shortcuts.keyParse(prefVal);
         let newValue = obj.disabled ? ["!", "", ""] :
-          [obj.modifiers.replace(",", " "), obj.key, obj.keycode].join("][");
-        this.prefs.setCharPref(id, newValue);
+          [obj.modifiers.replace(",", " "), obj.key, obj.keycode];
+        setPref("keyconfig.main." + id, newValue.join("]["));
       }
       this.prefsChangedByTabmix = false;
     }
@@ -495,4 +494,14 @@ let KeyConfig = {
     this.prefs.clearUserPref(prefName);
   }
 
+}
+
+function getPref(name) {
+  return Services.prefs.getComplexValue(name, Ci.nsISupportsString).data;
+}
+
+function setPref(name, value) {
+  let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+  str.data = value;
+  Services.prefs.setComplexValue(name, Ci.nsISupportsString, str);
 }

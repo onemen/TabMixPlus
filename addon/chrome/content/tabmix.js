@@ -55,37 +55,44 @@ Tabmix.startup = function TMP_startup() {
 }
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js
-Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
+Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
+  // when gBrowserInit._delayedStartup broke by extension we don't get
+  // "browser-delayed-startup-finished" notification
+  setTimeout(function() {
+    Tabmix.initialization.run("delayedStartup");
+  }, 25);
+
   if (this.isFirstWindow) {
     let tmp = {};
-    Cu.import("resource://tabmixplus/extensions/SessionManagerAddon.jsm", tmp);
+    Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
-  this.getNewTabButtonWidth();
-  TabmixSessionManager.init();
+  this.getAfterTabsButtonsWidth();
+  TabmixSessionManager.init(aPromise);
 }
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  this.ssPromise = null;
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
       TabmixSessionManager.restoreLastSession();
     }
-    if (Tabmix.isVersion(200)) {
-      Tabmix.setItem("Browser:RestoreLastSession", "disabled",
+    if (this.isVersion(200)) {
+      this.setItem("Browser:RestoreLastSession", "disabled",
         !SM.canRestoreLastSession || SM.isPrivateWindow);
     }
     else {
-      Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
+      this.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
         'this._ss', 'TabmixSessionManager'
       ).toCode();
     }
 
-    if (Tabmix.isVersion(260))
+    if (this.isVersion(260))
       SessionStore.canRestoreLastSession = false;
     else {
-      Tabmix.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
+      this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
         'function updateSearchEngine',
         'let updateSearchEngine = function _updateSearchEngine', {silent: true}
       )._replace(
@@ -93,9 +100,9 @@ Tabmix.sessionInitialized = function() {
         'TabmixSessionManager.canRestoreLastSession'
       ).toCode();
 
-      let [obj, FnName] = Tabmix.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
+      let [obj, FnName] = this.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
                                                   [window, "window.BrowserOnClick"];
-      Tabmix.changeCode(obj, FnName)._replace(
+      this.changeCode(obj, FnName)._replace(
         'if (ss.canRestoreLastSession)',
         'ss = TabmixSessionManager;\
          $&'
@@ -106,13 +113,14 @@ Tabmix.sessionInitialized = function() {
   var tab = gBrowser.tabContainer.firstChild;
   if (!tab.selected) {
     tab.removeAttribute("visited");
-    tab.removeAttribute("flst_id");
+    tab.removeAttribute("tabmix_selectedID");
   }
 
   TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
-  SM.toggleRecentlyClosedWindowsButton();
+  if (this.firstWindowInSession)
+    SM.toggleRecentlyClosedWindowsButton();
 
   // convert session.rdf to SessionManager extension format
   TabmixConvertSession.startup();
@@ -121,17 +129,34 @@ Tabmix.sessionInitialized = function() {
 // we call this at the start of gBrowserInit._delayedStartup
 // if we call it erlier we get this warning:
 // XUL box for _moz_generated_content_before element contained an inline #text child
-Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
+Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
     let stripIsHidden = TabmixTabbar.hideMode != 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this.setItem("TabsToolbar", "tabmix-visible", true);
-    // save mTabsNewtabButton width
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    let showButton = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
+    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", "aftertabs-force");
+    // save tabsNewtabButton width
     let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
-    tabBar._newTabButtonWidth = lwtheme ? 31 : tabBar.mTabsNewtabButton.getBoundingClientRect().width;
-    this.setItem("TabsToolbar", "tabmix-visible", null);
+    this.tabsNewtabButton =
+      document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
+    let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
+    this.afterTabsButtonsWidth = [];
+    this.afterTabsButtonsWidth.push(lwtheme ? 31 : openNewTabRect.width);
+    // when privateTab extension installed add its new tab button width
+    // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
+    // the right button
+    let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
+    if (openNewPrivateTab) {
+      let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
+      this.afterTabsButtonsWidth.push(openNewPrivateTabRect.width);
+      if (openNewPrivateTabRect.right > openNewTabRect.right)
+        this.tabsNewtabButton = openNewPrivateTab;
+    }
+
+    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
     if (stripIsHidden)
       tabBar.visible = false;
   }
@@ -140,10 +165,10 @@ Tabmix.getNewTabButtonWidth = function TMP_getNewTabButtonWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
-  if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized)
-    SessionStore.promiseInitialized.then(this.sessionInitialized.bind(this));
+  if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
+    this.ssPromise.then(this.sessionInitialized.bind(this), Cu.reportError);
   else
-    Tabmix.sessionInitialized();
+    this.sessionInitialized();
 
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
@@ -176,7 +201,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.miscellaneousRules();
   if (!gTMPprefObserver._tabStyleSheet ||
       gTMPprefObserver._tabStyleSheet.href != "chrome://tabmixplus/skin/tab.css") {
-    Tabmix.log("can't load dynamic styles into tabmixplus/skin/tab.css");
+    this.log("can't load dynamic styles into tabmixplus/skin/tab.css");
   }
   gTMPprefObserver._tabStyleSheet = null;
 
@@ -191,20 +216,13 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
-  TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(gBrowser.tabContainer, "paddingLeft");
+  TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 }
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
     window.addEventListener("DOMContentLoaded", this, false);
-  },
-
-  browserDelayedStartupFinished: function TMP_EL_browserDelayedStartupFinished() {
-    // master password dialog can popup before startup when Gmail-manager try to login
-    // it can cause load event to fire late, so we get here before onWindowOpen run
-    if (!TMP_eventListener._windowInitialized)
-      TMP_eventListener.onWindowOpen();
-    Tabmix.delayedStartup();
+    window.addEventListener("load", this, false);
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
@@ -231,20 +249,17 @@ var TMP_eventListener = {
         this.onTabBarScroll(aEvent);
         break;
       case "DOMContentLoaded":
-        try {
-          this.onContentLoaded(aEvent);
-        } catch (ex) {Tabmix.assert(ex);}
-        break;
       case "load":
-        try {
-          this.onWindowOpen(aEvent);
-        } catch (ex) {Tabmix.assert(ex);}
+        this._onLoad(aEvent.type);
         break;
       case "unload":
         this.onWindowClose(aEvent);
         break;
       case "fullscreen":
         this.onFullScreen(!window.fullScreen);
+        break;
+      case "PrivateTab:PrivateChanged":
+        TabmixSessionManager.privateTabChanged(aEvent);
         break;
     }
   },
@@ -257,22 +272,20 @@ var TMP_eventListener = {
     }, handler);
   },
 
- /*
-  *  we use this event to run this code before load event
-  *  until TMP version 0.3.8.3 we used to run this code from Tabmix.beforeStartup
-  *  that called from tabcontainer constractur
-  */
+  // ignore non-browser windows
+  _onLoad: function TMP_EL_onContentLoaded(aType) {
+    window.removeEventListener(aType, this, false);
+    let wintype = window.document.documentElement.getAttribute("windowtype");
+    if (wintype == "navigator:browser")
+      Tabmix.initialization.run(aType == "load" ? "onWindowOpen" :
+                                              "onContentLoaded");
+    else if (aType != "load")
+      window.removeEventListener("load", this, false);
+  },
+
   onContentLoaded: function TMP_EL_onContentLoaded() {
-    window.removeEventListener("DOMContentLoaded", this, false);
-    // don't load tabmix into undock sidebar opened by ezsidebar extension
-    var wintype = window.document.documentElement.getAttribute("windowtype");
-    if (wintype == "mozilla:sidebar")
-      return;
-
-    window.addEventListener("load", this, false);
-
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
-    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
+    TMP_SessionStore.setAfterSessionRestored();
 
     try {
       /**
@@ -286,7 +299,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
     } catch (ex) {Tabmix.assert(ex);}
 
-    this._tabEvents = ["SSTabRestoring",
+    this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
@@ -312,6 +325,9 @@ var TMP_eventListener = {
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
+        'function $(id)',
+        'let $ = $&', {check: Tabmix._debugMode}
+      )._replace(
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
@@ -361,14 +377,7 @@ var TMP_eventListener = {
     }
   },
 
-  _windowInitialized: false,
   onWindowOpen: function TMP_EL_onWindowOpen() {
-    if (this._windowInitialized)
-      return;
-
-    this._windowInitialized = true;
-    window.removeEventListener("load", this, false);
-
     window.addEventListener("unload", this, false);
     window.addEventListener("fullscreen", this, true);
 
@@ -452,7 +461,7 @@ var TMP_eventListener = {
         Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
         // check if australis tab shape is implemented in window (bug 738491)
-        let australis = document.getElementById("tab-clip-path-outer");
+        let australis = document.getElementById("tab-curve-clip-path-start");
         if (australis)
           tabBar.setAttribute("australis", true);
       }
@@ -564,6 +573,10 @@ var TMP_eventListener = {
     var tab = aEvent.target;
     Tabmix.restoreTabState(tab);
 
+    if (gBrowser.tabContainer.overflow &&
+        !gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+
     // don't mark new tab as unread
     var url = tab.linkedBrowser.currentURI.spec;
     if (url == "about:blank" || url == "about:newtab")
@@ -660,7 +673,9 @@ var TMP_eventListener = {
     }
   },
 
-  updateMultiRow: function () {
+  updateMultiRow: function (aReset) {
+    if (aReset)
+      Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
       gBrowser.tabContainer.updateVerticalTabStrip();
       gBrowser.tabContainer.setFirstTabInRow();
@@ -671,6 +686,7 @@ var TMP_eventListener = {
   // Function to catch when new tabs are created and update tab icons if needed
   // In addition clicks and doubleclick events are trapped.
   onTabOpen: function TMP_EL_onTabOpen(aEvent) {
+    Tabmix._lastTabOpenedTime = Date.now();
     var tab = aEvent.target;
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;
@@ -686,20 +702,22 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
-    let tabBar = gBrowser.tabContainer;
-    let self = this, newTime = new Date().getTime();
-    if (tabBar.overflow || newTime - this.lastTimeTabOpened > 200) {
+    let newTime = Date.now();
+    if (gBrowser.tabContainer.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
     }
-    else if (!tabBar.TMP_onOpenTimeout) {
-      tabBar.TMP_onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
-        if (tabBar.TMP_onOpenTimeout) {
-          clearTimeout(tabBar.TMP_onOpenTimeout);
-          tabBar.TMP_onOpenTimeout = null;
+    else if (!this._onOpenTimeout) {
+      let self = this;
+      let timeout = gBrowser.tabContainer.disAllowNewtabbutton &&
+          Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
+      this._onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
+        if (self._onOpenTimeout) {
+          clearTimeout(self._onOpenTimeout);
+          self._onOpenTimeout = null;
         }
         self.onTabOpen_updateTabBar(tab);
-      }, 200, aTab);
+      }, timeout, aTab);
     }
   },
 
@@ -760,7 +778,7 @@ var TMP_eventListener = {
     if (updateNow)
       this.onTabClose_updateTabBar(tab);
 
-    gBrowser.countClosedTabs(tab);
+    Tabmix.countClosedTabs(tab);
   },
 
   // TGM extension use it
@@ -799,20 +817,20 @@ var TMP_eventListener = {
     // and mTabstrip.ensureElementIsVisible
     // this class change tab height (by changing the borders)
     if (typeof colorfulTabs == "object" && colorfulTabs.standout &&
-        tab.className.indexOf("standout") == -1) {
+        !tab.classList.contains("standout")) {
       for (let i = 0; i < gBrowser.tabs.length; i++) {
         let _tab = gBrowser.tabs[i];
-        if (_tab.className.indexOf("standout") > -1) {
-          _tab.className = _tab.className.replace(" standout", "");
+        if (_tab.classList.contains("standout")) {
+          _tab.classList.remove("standout");
           break;
         }
 
       }
-      tab.className = tab.className + " standout";
+      tab.classList.add("standout");
     }
 
     // update this functions after new tab select
-    tab.setAttribute("flst_id", new Date().getTime());
+    tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
     TMP_LastTab.OnSelect();
@@ -863,10 +881,16 @@ var TMP_eventListener = {
   },
 
   onTabBarScroll: function TMP_EL_onTabBarScroll(aEvent) {
+    var scrollTabs = Tabmix.prefs.getIntPref("scrollTabs");
+    if (scrollTabs > 1) {
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+      return;
+    }
     var tabBar = gBrowser.tabContainer;
     tabBar.removeShowButtonAttr();
 
-    var shouldMoveFocus = Tabmix.prefs.getBoolPref("enableScrollSwitch");
+    let shouldMoveFocus = scrollTabs == 1;
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
     var direction = aEvent.detail;
@@ -1039,3 +1063,74 @@ var TMP_eventListener = {
   }
 
 }
+
+/**
+ * other extensions can cause delay to some of the events Tabmix uses for
+ * initialization, for each phase call all previous phases that are not
+ * initialized yet
+ */
+Tabmix.initialization = {
+  beforeStartup:           {id: 0, obj: "Tabmix"},
+  onContentLoaded:         {id: 1, obj: "TMP_eventListener"},
+  beforeBrowserInitOnLoad: {id: 2, obj: "Tabmix"},
+  onWindowOpen:            {id: 3, obj: "TMP_eventListener"},
+  delayedStartup:          {id: 4, obj: "Tabmix"},
+
+  get isValidWindow() {
+    /**
+      * don't initialize Tabmix functions on this window if one of this is true:
+      *  - the window is a popup window
+      *  - the window is about to close by SingleWindowModeUtils
+      *  - tabbrowser-tabs binding didn't start (i onlly saw it happened
+      *       when ImTranslator extension installed)
+      */
+    let chromehidden = document.documentElement.getAttribute("chromehidden");
+    let stopInitialization = chromehidden.indexOf("extrachrome") > -1 ||
+                             chromehidden.indexOf("toolbar") > -1;
+    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+    if (!stopInitialization && Tabmix.singleWindowMode) {
+      let tmp = { };
+      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
+    }
+
+    if (!stopInitialization) {
+      let tabBrowser = arguments.length > 1 ? arguments[1] : gBrowser;
+      stopInitialization = typeof tabBrowser.tabContainer.setFirstTabInRow != "function";
+    }
+
+    if (stopInitialization) {
+      this.run = function() {}
+      window.removeEventListener("DOMContentLoaded", TMP_eventListener, false);
+      window.removeEventListener("load", TMP_eventListener, false);
+    }
+
+    delete this.isValidWindow;
+    Object.defineProperty(this, "run", {enumerable: false});
+    Object.defineProperty(this, "isValidWindow", {value: !stopInitialization,
+                                                  enumerable: false});
+    return this.isValidWindow;
+  },
+
+  run: function tabmix_initialization_run(aPhase) {
+    if (!this.isValidWindow)
+      return null;
+    let result, currentPhase = this[aPhase].id;
+    for (let [name, phase] in Iterator(this)) {
+      if (phase.id > currentPhase)
+        break;
+      if (!phase.initialized) {
+        phase.initialized = true;
+        try {
+          let obj = window[phase.obj];
+          result = obj[name].apply(obj, Array.slice(arguments, 1));
+        } catch (ex) {
+          Tabmix.assert(ex, phase.obj + "." + name + " failed");
+        }
+      }
+    }
+    return result;
+  }
+}
+
+TMP_eventListener.init();

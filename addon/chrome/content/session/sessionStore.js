@@ -51,8 +51,7 @@ var TMP_SessionStore = {
 
    getTitleFromTabState: function(aTab) {
      let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-     let activePageData = this.getActiveEntryData(tabData);
-     return activePageData.title || activePageData.url;
+     return this.getActiveEntryData(tabData).title || null;
    },
 
    /**
@@ -99,8 +98,8 @@ var TMP_SessionStore = {
     *
     * @returns       Nothing.
     */
-   setService: function TMP_ss_setSessionService(msgNo, start, win) {
-      if ("tabmix_setSession" in window || Tabmix.prefs.prefHasUserValue("setDefault"))
+   setService: function TMP_ss_setSessionService(msgNo, start) {
+      if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
          return;
      /*
       * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
@@ -120,7 +119,7 @@ var TMP_SessionStore = {
          return;
       }
 
-      window.tabmix_setSession = true;
+      TabmixSvc.sm.settingPreference = true;
       // if session manager extension is install disable TMP session manager
       if (msgNo == -1 || Tabmix.extensions.sessionManager) {
          // update session manager settings accourding to current tabmix settings
@@ -151,7 +150,7 @@ var TMP_SessionStore = {
             Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
             Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", true);
          }
-         delete window.tabmix_setSession;
+         TabmixSvc.sm.settingPreference = false;
       }
       else if (this.isSessionStoreEnabled()) {
          // ask the user to choose between TMP session manager and sessionstore
@@ -181,10 +180,10 @@ var TMP_SessionStore = {
               Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
               Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
            }
-           delete window.tabmix_setSession;
+           TabmixSvc.sm.settingPreference = false;
          }
          let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-               [title, msg, "", "", buttons], win || window, start ? callBack : null);
+               [title, msg, "", "", buttons], window, start ? callBack : null);
          if (!start)
            callBack(result);
       }
@@ -194,7 +193,7 @@ var TMP_SessionStore = {
          if (!Tabmix.isVersion(200))
            Services.prefs.setBoolPref("browser.warnOnRestart", false);
          Services.prefs.setBoolPref("browser.warnOnQuit", false);
-         delete window.tabmix_setSession;
+         TabmixSvc.sm.settingPreference = false;
       }
    },
 
@@ -207,25 +206,35 @@ var TMP_SessionStore = {
    // we call this only one time on window load
    // and store the value in Tabmix.isWindowAfterSessionRestore
    // we call this from onContentLoaded before nsSessionStore run its onLoad
-   _isAfterSessionRestored: function () {
+   setAfterSessionRestored: function () {
+      let afterSessionRestore;
       if (!Tabmix.isFirstWindow)
-         return false;
-
+         afterSessionRestore = false;
       // When we close all browser windows without exit (non browser windows are opened)
       // Firefox reopen last closed window when a browser window opens
-      if (Tabmix.numberOfWindows(false, null) > 1) {
+      else if (Tabmix.numberOfWindows(false, null) > 1) {
          if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
               Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
               TabmixSvc.ss.getClosedWindowCount() > 0) {
            Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
          }
-         return true;
+         afterSessionRestore = true;
       }
+      else if (this.afterSwitchThemes)
+         afterSessionRestore = true;
 
-      var ss = Cc["@mozilla.org/browser/sessionstartup;1"].
-                    getService(Ci.nsISessionStartup);
-      // when TMP session manager is enabled ss.doRestore is true only after restart
-      return ss.doRestore() || this.afterSwitchThemes;
+      if (typeof afterSessionRestore == "boolean")
+        Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
+      else {
+         // calling doRestore before sessionstartup finished to read
+         // sessionstroe.js file force syncRead
+         XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
+            let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
+                          getService(Ci.nsISessionStartup);
+            // when TMP session manager is enabled ss.doRestore is true only after restart
+            return ss.doRestore();
+         })
+      }
    },
 
    setSessionRestore: function (aEnable) {
@@ -309,14 +318,14 @@ var TMP_ClosedTabs = {
     * Get closed tabs count
     */
    get count() {
-      return TabmixSvc.ss.getClosedTabCount(window);
+      return window.__SSi ? TabmixSvc.ss.getClosedTabCount(window) : 0;
    },
 
   /**
     * Get closed tabs data
     */
    get getClosedTabData() {
-      return TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window));
+      return window.__SSi ? TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window)) : {};
    },
 
    getUrl: function ct_getUrl(aTabData) {
@@ -454,7 +463,7 @@ var TMP_ClosedTabs = {
       }
 
       // Reset the number of tabs closed last time to the default.
-      gBrowser.setNumberOfTabsClosedLast(1);
+      Tabmix.setNumberOfTabsClosedLast(1);
    },
 
    removeAllClosedTabs: function () {
@@ -576,7 +585,7 @@ var TMP_ClosedTabs = {
       let index = Number(aIndex);
       if (isNaN(index)) {
         index = 0;
-        if (Tabmix.isVersion(250))
+        if (Tabmix._restoreMultipleTabs)
           numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
       } else if (0 > index || index >= this.count)
         return null;
@@ -588,7 +597,7 @@ var TMP_ClosedTabs = {
         tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
 
       // Reset the number of tabs closed last time to the default.
-      gBrowser.setNumberOfTabsClosedLast(1);
+      Tabmix.setNumberOfTabsClosedLast(1);
       return tab;
    }
 
@@ -741,8 +750,11 @@ var TabmixConvertSession = {
          }
       }
       tabsData.sort(function (a, b) {return a - b;});
-      for (let i = 0; i < tabsData.length ; i++)
-         _tabs.push(this.getTabState(tabsData[i].node));
+      for (let i = 0; i < tabsData.length ; i++) {
+         let tab = this.getTabState(tabsData[i].node);
+         if (tab)
+            _tabs.push(tab);
+      }
 
       return _tabs;
    },
@@ -752,9 +764,11 @@ var TabmixConvertSession = {
       var tabsEnum = TabmixSessionManager.initContainer(rdfNodeTabs).GetElements();
       while (tabsEnum.hasMoreElements()) {
          let rdfNodeTab = tabsEnum.getNext();
-         if (rdfNodeTab instanceof Ci.nsIRDFResource) {
+         let state = rdfNodeTab instanceof Ci.nsIRDFResource &&
+                       this.getTabState(rdfNodeTab, true);
+         if (state) {
             let closedTab = {};
-            closedTab.state = this.getTabState(rdfNodeTab, true);
+            closedTab.state = state;
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
@@ -768,7 +782,10 @@ var TabmixConvertSession = {
    getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
       var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
-      tabData.index = TabmixSessionManager.getIntValue(rdfNodeTab, "index") + 1;
+      if (!tabData.entries.length)
+        return null;
+      let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
+      tabData.index = Math.min(index + 1, tabData.entries.length);
       tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];

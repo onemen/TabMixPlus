@@ -54,7 +54,7 @@ let TMP_TabGroupsManager = {
     let sessionManager = aWindow.TabmixSessionManager;
     this.changeCode(sessionManager, "TabmixSessionManager.saveOneWindow")._replace(
       'if (caller == "windowbackup")',
-      '  this.saveAllGroupsData(null, rdfNodeThisWindow);' +
+      '  try{this.saveAllGroupsData(null, rdfNodeThisWindow);} catch(ex) {Tabmix.assert(ex);}' +
       '  $&'
     ).toCode();
 
@@ -113,7 +113,8 @@ let TMP_TabGroupsManager = {
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
     aWindow.TMP_TabGroupsManager = {}
     aWindow.TMP_TabGroupsManager.tabmixSessionsManager = this.tabmixSessionsManager.bind(aWindow);
-    aWindow.Tabmix.toCode(sessionManager, "saveAllGroupsData", this._saveAllGroupsData.toString());
+    this.changeCode(this, "TMP_TabGroupsManager._saveAllGroupsData", {forceUpdate: true})
+        .toCode(false, aWindow.TabmixSessionManager, "saveAllGroupsData");
   },
 
   // for TabGroupsManager use - don't change function name

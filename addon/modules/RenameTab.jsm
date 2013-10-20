@@ -23,9 +23,11 @@ let RenameTab = {
           this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
           browser.contentDocument.title;
     this.data.url = browser.currentURI.spec;
-    docTitle = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
+    this.data.docTitle = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
         docTitle, null, aTab);
-    this.data.docTitle = docTitle || gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+    if (!this.data.docTitle)
+      this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
+        gBrowser.mStringBundle.getString("tabs.emptyTabTitle") : this.data.url;
     this.data.modified = aTab.getAttribute("label-uri") || null;
     if (this.data.modified == this.data.url || this.data.modified == "*")
       this.data.value = aTab.getAttribute("fixed-label");

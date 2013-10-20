@@ -280,14 +280,14 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // fix bug in superDargandGo
+    // fix bug in superDargandGo https://addons.mozilla.org/he/firefox/addon/super-dragandgo/
     try {
       if ("superDrag" in window && "contentAreaDNDObserver" in window) {
         Tabmix.changeCode(contentAreaDNDObserver, "contentAreaDNDObserver.onDrop")._replace(
           'document.firstChild.getAttribute("windowtype")',
           'window.document.documentElement.getAttribute("windowtype")'
         )._replace(
-          'preventBubble()',
+          'preventBubble()', /* fix bug in superDargandGo */
           'stopPropagation()'
         ).toCode();
       }
@@ -321,12 +321,6 @@ var TMP_extensionsCompatibility = {
           /function(\s+)\(/,
           "function toolkitCloseallOnUnload("
         ).toCode();
-      }
-      gBrowser.getTabForBrowser = function (aBrowser) {
-        if (this._browsers &&
-            typeof this._browsers[this._browsers.length - 1] == "undefined")
-          this._browsers = null;
-        return this._getTabForContentWindow(aBrowser.contentWindow);
       }
     }
 

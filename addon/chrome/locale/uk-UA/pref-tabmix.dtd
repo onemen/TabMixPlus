@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Застосувати">
 <!ENTITY settings.export "Експорт налаштувань">
 <!ENTITY settings.import "Імпорт налаштувань">
+<!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "За замовчуванням">
 <!ENTITY generalWindowOpen.label "Відкривати посилання, що створюють нові вікна:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
@@ -158,6 +159,7 @@
 <!ENTITY extraIcons.locked "Locked">
 <!ENTITY extraIcons.protected "Protected">
 <!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
 <!ENTITY progressMeter.label "Індикатор процесу відкриття сторінки">
 <!ENTITY showTabX.labelBegin "Кнопка закриття на кожній вкладці">
 <!ENTITY showTabX.left "... ліворуч">
@@ -231,8 +233,8 @@
 <!ENTITY clicktab.removeall "Закрити всі вкладки">
 <!ENTITY clicktab.removeother "Закрити інші вкладки">
 <!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
-<!ENTITY clicktab.removeleft "Закрити вкладки ліворуч">
-<!ENTITY clicktab.removeright "Закрити вкладки праворуч">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
 <!ENTITY clicktab.uctab "Відновити закриту вкладку">
 <!ENTITY clicktab.ucatab "Відновити всі закриті вкладки">
 <!ENTITY clicktab.snapback "Відновити вкладку">

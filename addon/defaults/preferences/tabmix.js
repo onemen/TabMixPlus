@@ -81,6 +81,7 @@ pref("extensions.tabmix.extraIcons", true);
 pref("extensions.tabmix.extraIcons.locked", true);
 pref("extensions.tabmix.extraIcons.protected", true);
 pref("extensions.tabmix.extraIcons.autoreload", true);
+pref("extensions.tabmix.extraIcons.notpinned", false);
 
 pref("extensions.tabmix.currentTab", false);
 pref("extensions.tabmix.unloadedTab", true);
@@ -106,7 +107,13 @@ pref("extensions.tabmix.tabs.closeButtons.delay", 50);
 
 pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);
+/*
 pref("extensions.tabmix.enableScrollSwitch", false);
+ replaced by scrollTabs: 0 - scrool tabbar on overflow - default
+                         1 - scroll change selected tab
+                         2 - disable scroll over tabs
+*/
+pref("extensions.tabmix.scrollTabs", 0);
 pref("extensions.tabmix.reversedScroll", false);
 
 pref("extensions.tabmix.dblClickTab", 0);
@@ -170,7 +177,7 @@ pref("extensions.tabmix.closeTabMenu", true);
 pref("extensions.tabmix.closeTabContent", false);
 pref("extensions.tabmix.closeAllMenu", false);
 pref("extensions.tabmix.closeOtherMenu", true);
-pref("extensions.tabmix.closeRightMenu", false);
+pref("extensions.tabmix.closeRightMenu", true);
 pref("extensions.tabmix.closeLeftMenu", false);
 pref("extensions.tabmix.undoCloseTabMenu", true);
 pref("extensions.tabmix.undoCloseListMenu", true);
@@ -257,3 +264,4 @@ pref("browser.tabs.tabMinWidth", 100);
 pref("browser.tabs.tabMaxWidth", 250);
 
 pref("extensions.tabmix.shortcuts", '{}');
+pref("extensions.tabmix.syncPrefs", false);

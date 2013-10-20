@@ -54,6 +54,8 @@ var gPrefWindow = {
     // hide broadcasters pane button
     var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
     paneButton.collapsed = true;
+
+    $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
   },
 
   initPane: function(aPaneID) {
@@ -216,7 +218,10 @@ var gPrefWindow = {
 function getPrefByType(prefName) {
   try {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
-    return Services.prefs["get" + fn](prefName);
+    if (fn == "CharPref")
+      return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+    else
+      return Services.prefs["get" + fn](prefName);
   } catch (ex) {
     Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
   }
@@ -227,13 +232,23 @@ function setPrefByType(prefName, newValue, atImport) {
   let pref = {name: prefName, value: newValue,
               type: Services.prefs.getPrefType(prefName)}
   try {
-    if (atImport && setPrefAfterImport(pref))
-      return;
-    Services.prefs["set" + PrefFn[pref.type]](prefName, pref.value);
+    if (!atImport || !setPrefAfterImport(pref))
+      setPref(pref);
   } catch (ex) {
     Tabmix.log("can't write preference " + prefName + "\nvalue " + pref.value +
       "\n" + ex, true);
   }
+}
+
+function setPref(aPref) {
+  let fn = PrefFn[aPref.type];
+  if (fn == "CharPref") {
+    let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+    str.data = aPref.value;
+    Services.prefs.setComplexValue(aPref.name, Ci.nsISupportsString, str);
+  }
+  else
+    Services.prefs["set" + fn](aPref.name, aPref.value);
 }
 
 function setPrefAfterImport(aPref) {
@@ -255,20 +270,20 @@ function setPrefAfterImport(aPref) {
     return true;
   }
 
-  // don't do anythis if user locked a preference
+  // don't do anything if user locked a preference
   if (Services.prefs.prefIsLocked(aPref.name))
     return true;
   // replace old preference by setting new value to it
   // and call gTMPprefObserver.updateSettings to replace it.
   if (aPref.type == Services.prefs.PREF_INVALID) {
     let val = parseInt(aPref.value);
-    let type = typeof val == "number" && !isNaN(val) ?
+    aPref.type = typeof val == "number" && !isNaN(val) ?
                64 : /true|false/i.test(aPref.value) ? 128 : 32;
-    if (type == 128)
+    if (aPref.type == 128)
       aPref.value = /true/i.test(aPref.value);
     let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
     prefsUtil.preventUpdate = true;
-    Services.prefs["set" + PrefFn[type]](aPref.name, aPref.value);
+    setPref(aPref);
     prefsUtil.preventUpdate = false;
     prefsUtil.updateSettings();
     // remove the preference in case updateSettings did not handle it
@@ -281,15 +296,6 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
-function setNewTabUrl(newPref, newValue) {
-  if (newValue != "") {
-    let nsISupportsString = Ci.nsISupportsString;
-    let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-    str.data = newValue;
-    Services.prefs.setComplexValue(newPref, nsISupportsString, str);
-  }
-}
-
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
@@ -299,7 +305,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
   "browser.sessionstore.resume_from_crash","browser.startup.page",
-  "browser.startup.page","browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
+  "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
   "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
   "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
@@ -334,6 +340,16 @@ function defaultSetting() {
 
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
+  Services.prefs.savePrefFile(null);
+}
+
+function toggleSyncPreference() {
+  const sync = "services.sync.prefs.sync.";
+  let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
+  Tabmix.prefs[fn]("syncPrefs", true);
+  gPreferenceList.forEach(function(pref) {
+    Services.prefs[fn](sync + pref, true);
+  });
   Services.prefs.savePrefFile(null);
 }
 

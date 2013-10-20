@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Применить">
 <!ENTITY settings.export "Экспорт настроек">
 <!ENTITY settings.import "Импорт настроек">
+<!ENTITY settings.sync "Настройки синхронизации">
 <!ENTITY settings.default "По умолчанию">
 <!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
 <!ENTITY externalLink.useSeparate.label "Использовать отдельные настройки для ссылок из других приложений">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "Делать активными вкладки, открываемые:">
 <!ENTITY selectTab.label "Ссылки">
 <!ENTITY selectDivertedTab.label "Вместо окон">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Другие приложения">
 <!ENTITY selectTabCommand.label "По команде создания новой вкладки">
 <!ENTITY contextMenuSearch.label "Поиск по контекстному меню">
 <!ENTITY selectTabBH.label "Закладки / Журнал посещений">
@@ -158,6 +159,7 @@
 <!ENTITY extraIcons.locked "Заблокированных">
 <!ENTITY extraIcons.protected "Защищённых">
 <!ENTITY extraIcons.autoreload "Автообновляемых">
+<!ENTITY extraIcons.hideonpinned "Прикреплённых">
 <!ENTITY progressMeter.label "Индикатор процесса открытия страницы">
 <!ENTITY showTabX.labelBegin "Кнопка закрытия на каждой вкладке">
 <!ENTITY showTabX.left "... слева">
@@ -231,8 +233,8 @@
 <!ENTITY clicktab.removeall "Закрыть все вкладки">
 <!ENTITY clicktab.removeother "Закрыть другие вкладки">
 <!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
-<!ENTITY clicktab.removeleft "Закрыть вкладки слева">
-<!ENTITY clicktab.removeright "Закрыть вкладки справа">
+<!ENTITY clicktab.removetoLeft "Закрыть вкладки слева">
+<!ENTITY clicktab.removetoRight "Закрыть вкладки справа">
 <!ENTITY clicktab.uctab "Восстановить закрытую вкладку">
 <!ENTITY clicktab.ucatab "Восстановить все закрытые вкладки">
 <!ENTITY clicktab.snapback "Восстановить вкладку">

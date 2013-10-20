@@ -32,7 +32,7 @@
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
-      <preference id="pref_tabsScroll"         name="extensions.tabmix.tabBarMode"               type="int"
+      <preference id="pref_tabsScroll"        name="extensions.tabmix.tabBarMode"               type="int"
                   onchange="gAppearancePane.tabsScrollChanged();"/>
       <preference id="pref_smoothScroll"      name="toolkit.scrollbox.smoothScroll"             type="bool"/>
       <preference id="pref_scrollDelay"
@@ -48,10 +48,11 @@
       <preference id="pref_lockedIcon"        name="extensions.tabmix.extraIcons.locked"        type="bool"/>
       <preference id="pref_protectedIcon"     name="extensions.tabmix.extraIcons.protected"     type="bool"/>
       <preference id="pref_autoreloadIcon"    name="extensions.tabmix.extraIcons.autoreload"    type="bool"/>
+      <preference id="pref_hideIconsonpinned" name="extensions.tabmix.extraIcons.notpinned"     type="bool"/>
       <preference id="pref_progressMeter"     name="extensions.tabmix.progressMeter"            type="bool"/>
       <preference id="pref_showTabX"          name="extensions.tabmix.tabs.closeButtons.enable" type="bool"/>
       <preference id="pref_tabXLeft"          name="extensions.tabmix.tabs.closeButtons.onLeft" type="bool"/>
-      <preference id="pref_tabCloseButton"         name="extensions.tabmix.tabs.closeButtons"        type="int"
+      <preference id="pref_tabCloseButton"    name="extensions.tabmix.tabs.closeButtons"        type="int"
                   onchange="gAppearancePane.tabCloseButtonChanged();"/>
       <preference id="pref_tabXDelay"         name="extensions.tabmix.tabs.closeButtons.delay"  type="int"/>
       <preference id="pref_tabClipWidth"      name="browser.tabs.tabClipWidth"                  type="int"/>
@@ -150,7 +151,7 @@
               <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
             </hbox>
             <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
-                      preference="pref_offsetAmountToScroll" style="height: 22px; margin: 2px;"/>
+                      preference="pref_offsetAmountToScroll" style="height: 26px;"/>
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
@@ -193,6 +194,7 @@
               <checkbox_tmp id="extraIcons-protected" label="&extraIcons.protected;" class="extraIcons" preference="pref_protectedIcon"/>
               <checkbox_tmp id="extraIcons-autoreload" label="&extraIcons.autoreload;" class="extraIcons" preference="pref_autoreloadIcon"/>
             </hbox>
+            <checkbox_tmp id="extraIcons-onpinned" class="indent" label="&extraIcons.hideonpinned;" preference="pref_hideIconsonpinned"/>
             <!-- Progress Meter-->
             <checkbox_tmp id="progressMeter" label="&progressMeter.label;" preference="pref_progressMeter"/>
             <!-- user interface for close button on tabs -->

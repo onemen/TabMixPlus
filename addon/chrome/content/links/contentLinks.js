@@ -154,6 +154,14 @@ Tabmix.contentAreaClick = {
         return ["current", true];
     }
 
+    if (!/^(http|about)/.test(linkNode.protocol))
+      return ["default"];
+
+    // check this after we check for suppressTabsOnFileDownload
+    // for the case the link have a matche in our list
+    if (typeof event.tabmix_openLinkWithHistory == "boolean")
+      return ["current"];
+
     // don't mess with links that have onclick inside iFrame
     let onClickInFrame = this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
 
@@ -175,20 +183,25 @@ Tabmix.contentAreaClick = {
     // the rest of the code if for left-click only
 
     /*
+     * don't change default behavior for links that point to exiting frame
+     * in the current page
+     */
+    if (this.targetIsFrame())
+      return ["default"];
+
+    /*
      * open targeted links in the current tab only if certain conditions are met.
      * See the function comment for more details.
      */
-    if (this.divertTargetedLink()) {
+    if (this.divertTargetedLink())
       return ["current"];
-    }
 
     /*
      * open links to other sites in a tab only if certain conditions are met. See the
      * function comment for more details.
      */
-    if (this.openExSiteLink()) {
+    if (this.openExSiteLink())
       return [TMP_tabshifted(event)];
-    }
 
     if (this.currentTabLocked || this.targetPref == 1) { // tab is locked
       let openNewTab = this.openTabfromLink();
@@ -209,6 +222,9 @@ Tabmix.contentAreaClick = {
   },
 
   contentLinkClick: function TMP_contentLinkClick(aEvent) {
+    if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
+      return;
+
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
 
@@ -217,7 +233,7 @@ Tabmix.contentAreaClick = {
       return;
 
     let [href, linkNode] = hrefAndLinkNodeForClickEvent(aEvent);
-    if (!linkNode)
+    if (!linkNode || !/^(http|about)/.test(linkNode.protocol))
       return;
 
     let targetAttr = this.getTargetAttr(linkNode);
@@ -227,7 +243,7 @@ Tabmix.contentAreaClick = {
     try {
       // for the moment just do it for Google and Yahoo....
       // and tvguide.com - added 2013-07-20
-      var blocked = /tvguide.com|google|yahoo.com\/search/.test(currentHref);
+      var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
     } catch (ex) {blocked = false;}
     if (!blocked) {
       // replace onclick function with the form javascript:top.location.href = url
@@ -246,17 +262,15 @@ Tabmix.contentAreaClick = {
     if (isGmail)
       return;
 
-    // don't interrupt with noscript
-    if ("className" in linkNode && linkNode.className.indexOf("__noscriptPlaceholder__") > -1)
-      return;
+    if ("className" in linkNode) {
+      // don't interrupt with noscript
+      if (linkNode.className.indexOf("__noscriptPlaceholder__") > -1)
+        return;
 
-    // fix donwload button on page - http://get.adobe.com/reader/
-    if ("className" in linkNode && /download.button/.test(linkNode.className))
-      return;
-
-    // need to find a way to work here only on links
-    if ("className" in linkNode && /button/.test(linkNode.className.toLowerCase()))
-      return;
+      // need to find a way to work here only on links
+      if (/button/.test(linkNode.className.toLowerCase()))
+        return;
+    }
 
     // don't interrupt with fastdial links
     if ("ownerDocument" in linkNode && Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
@@ -281,6 +295,13 @@ Tabmix.contentAreaClick = {
 
     // don't mess with links that have onclick inside iFrame
     if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
+      return;
+
+    /*
+     * don't change default behavior for links that point to exiting frame
+     * in the current page
+     */
+    if (this.targetIsFrame())
       return;
 
     /*
@@ -469,6 +490,20 @@ Tabmix.contentAreaClick = {
     return false;
   },
 
+ /**
+  * @brief check if traget attribute exist and point to frame in the document
+  *        frame pool
+  */
+  targetIsFrame: function() {
+    let {targetAttr} = this._data;
+    if (targetAttr) {
+      let content = document.commandDispatcher.focusedWindow.top;
+      if (this.existsFrameName(content, targetAttr))
+        return true;
+    }
+    return false;
+  },
+
   /**
    * @brief Divert links that contain targets to the current tab.
    *
@@ -478,7 +513,6 @@ Tabmix.contentAreaClick = {
    * - extensions.tabmix.linkTarget is true
    * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
-   *   AND it is not present in the document frame pool
    * - all links are not forced to open in new tabs.
    * - links to other sites are not configured to open in new tabs OR the domain name
    *   of the current page and the domain name of the target page match
@@ -490,23 +524,18 @@ Tabmix.contentAreaClick = {
    *
    */
   divertTargetedLink: function TMP_divertTargetedLink() {
-    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
   ///XXX - check if we need to use here href
     let linkNode = this._data.linkNode.toString();
     if (this.checkAttr(linkNode, "javascript:") || // 2005-11-28 some link in Bloglines start with javascript
         this.checkAttr(linkNode, "data:"))
       return false;
 
-    let {event} = this._data;
-    if (event.ctrlKey || event.metaKey) return false;
+    let {event, targetAttr} = this._data;
+    if (!targetAttr || event.ctrlKey || event.metaKey) return false;
+    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
 
-    let {targetAttr} = this._data;
-    if (!targetAttr) return false;
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
     if (targetString.test(targetAttr.toLowerCase())) return false;
-
-    let frames = document.commandDispatcher.focusedWindow.top.frames;
-    if (this.existsFrameName(frames, targetAttr)) return false;
 
     if (this.currentTabLocked) return false;
     if (this.targetPref == 1 ||
@@ -622,21 +651,17 @@ Tabmix.contentAreaClick = {
    * @brief Check a document's frame pool and determine if
    * |targetFrame| is located inside of it.
    *
-   * @param containerFrame    The frame pool of the current document.
+   * @param content           is a frame reference
    * @param targetFrame       The name of the frame that we are seeking.
    * @returns                 true if the frame exists within the given frame pool,
    *                          false if it does not.
    */
-  existsFrameName: function TMP_existsFrameName(containerFrame, targetFrame) {
-    for (var i = 0; i < containerFrame.length; ++i) {
-      if (containerFrame[i].name == targetFrame) return true;
-      if (containerFrame[i].frames.length)
-        var return_var = this.existsFrameName(containerFrame[i].frames,targetFrame);
+  existsFrameName: function TMP_existsFrameName(content, targetFrame) {
+    for (let i = 0; i < content.frames.length; i++) {
+      let frame = content.frames[i];
+      if (frame.name == targetFrame || this.existsFrameName(frame, targetFrame))
+        return true;
     }
-
-    if (return_var)
-      return return_var;
-
     return false;
   },
 

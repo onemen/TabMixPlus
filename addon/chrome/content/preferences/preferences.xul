@@ -65,6 +65,7 @@
       <menuitem id="tm-defaults" label="&settings.default;" oncommand="defaultSetting();"/>
       <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
       <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
+      <menuitem id="syncPrefs" label="&settings.sync;" oncommand="toggleSyncPreference(); this.checked=!this.checked;" type="checkbox"/>
     </menupopup>
   </popupset>
 

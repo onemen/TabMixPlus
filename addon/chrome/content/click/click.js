@@ -20,7 +20,7 @@ var TabmixTabClickOptions = {
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
     this._blockDblClick = aEvent.button == 0 && anonid == "tmp-close-button" ||
-                              target == gBrowser.tabContainer.mTabsNewtabButton;
+                              target.classList.contains("tabs-newtab-button");
 
     // don't do anything if user left click on close tab button , or on any other button on tab or tabbar
     if (aEvent.button == 0 && (anonid == "tmp-close-button" || target.localName == "toolbarbutton"))
@@ -290,7 +290,7 @@ var TabmixContext = {
       this._closeRightTabs = "context_closeTabsToTheEnd";
     }
 
-    if (Tabmix.isVersion(250)) {
+    if (Tabmix._restoreMultipleTabs) {
       let multipletablabel = $id("context_undoCloseTab").getAttribute("multipletablabel")
       let undoCloseTabMenu = $id("tm-content-undoCloseTab");
       undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
@@ -575,7 +575,7 @@ var TabmixContext = {
       var undoClose = Tabmix.prefs.getBoolPref("undoClose");
       Tabmix.showItem(undoCloseTabMenu, !contentClick && !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
                      Tabmix.prefs.getBoolPref("undoCloseTabContent"));
-      if (Tabmix.isVersion(250)) {
+      if (Tabmix._restoreMultipleTabs) {
         let closedTabCount = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
         let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
         undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
@@ -676,7 +676,8 @@ var TabmixContext = {
       if (links_urlSecurityCheck(url)) {
         if (check)
           return false;
-        urls.push(url);
+        if (urls.indexOf(url) == -1)
+          urls.push(url);
       }
       nextEpisode = treeWalker.nextNode();
     }

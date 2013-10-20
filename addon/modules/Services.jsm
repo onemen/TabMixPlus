@@ -7,14 +7,18 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-let TabmixSvc = {
-  _version: {},
-  version: function(aVersionNo) {
-    if (typeof this._version[aVersionNo] == "boolean")
-      return this._version[aVersionNo];
+let _versions = {};
+function isVersion(aVersionNo) {
+  if (typeof _versions[aVersionNo] == "boolean")
+    return _versions[aVersionNo];
 
-    let v = Services.appinfo.version;
-    return this._version[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+  let v = Services.appinfo.version;
+  return _versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+}
+
+let TabmixSvc = {
+  version: function(aVersionNo) {
+    return isVersion(aVersionNo);
   },
 
   getString: function(aStringKey) {
@@ -73,6 +77,22 @@ let TabmixSvc = {
     return this.direct2dDisabled = false;
   },
 
+  /**
+   * call a callback for all currently opened browser windows
+   * (might miss the most recent one)
+   * @param aFunc
+   *        Callback each window is passed to
+   */
+  forEachBrowserWindow: function(aFunc) {
+    let windowsEnum = Services.wm.getEnumerator("navigator:browser");
+    while (windowsEnum.hasMoreElements()) {
+      let window = windowsEnum.getNext();
+      if (!window.closed) {
+        aFunc.call(null, window);
+      }
+    }
+  },
+
   // some extensions override native JSON so we use nsIJSON
   JSON: {
     nsIJSON: null,
@@ -97,7 +117,8 @@ let TabmixSvc = {
   },
 
   windowStartup: {
-    QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
+                                           Ci.nsISupportsWeakReference]),
     _initialized: false,
     init: function(aWindow) {
       // windowStartup must only be called once for each window
@@ -109,17 +130,39 @@ let TabmixSvc = {
       this._initialized = true;
 
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
+      Services.obs.addObserver(this, "quit-application", true);
+
+      if (isVersion(190))
+        Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+      Cu.import("resource://tabmixplus/Places.jsm");
+      TabmixPlacesUtils.init(aWindow);
     },
 
     observe: function(aSubject, aTopic, aData) {
       switch (aTopic) {
+        case "quit-application":
+          TabmixPlacesUtils.onQuitApplication();
+          for (let [id, timer] in Iterator(TabmixSvc.console._timers))
+            timer.cancel();
+          break;
         case "browser-delayed-startup-finished":
           try {
-            aSubject.TMP_eventListener.browserDelayedStartupFinished();
-          } catch (ex) {log.assert(ex);}
+            aSubject.Tabmix.initialization.run("delayedStartup");
+          } catch (ex) {TabmixSvc.console.assert(ex);}
           break;
       }
     }
+  },
+
+  get ss() {
+    delete this.ss;
+    if (isVersion(250)) {
+      let tmp = {}
+      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+      return this.ss = tmp.SessionStore;
+    }
+    return this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
+                     getService(Ci.nsISessionStore);
   },
 
   sm: {
@@ -131,7 +174,8 @@ let TabmixSvc = {
       delete this.sanitized;
       return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
     },
-    private: true
+    private: true,
+    settingPreference: false,
   }
 }
 
@@ -145,7 +189,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
  */
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "console", function () {return Services.console});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
@@ -161,11 +204,9 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
-// sessionStore
-XPCOMUtils.defineLazyServiceGetter(TabmixSvc, "ss", "@mozilla.org/browser/sessionstore;1", "nsISessionStore");
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "log",
+XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");

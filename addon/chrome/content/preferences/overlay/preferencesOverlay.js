@@ -9,11 +9,22 @@ var gTabMix_preferencesOverlay = {
     var warnOnCloseWindow = this.id("warnOnCloseWindow");
     warnOnCloseWindow.parentNode.insertBefore(this.id("warnCloseMultiple"), warnOnCloseWindow);
 
-    box = this.id("showTabsInTaskbar").nextSibling;
-    box.parentNode.insertBefore(this.id("_hideTabbar").parentNode, box);
+    box = this.id("showTabsInTaskbar") || this.id("switchToNewTabs");
+    box.parentNode.appendChild(this.id("hideTabbarBox"));
+
+    if (Tabmix.isVersion(260)) {
+      let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
+                   "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
+      boxes.forEach(function(id) {
+        let item = this.id(id);
+        item.removeAttribute("data-category");
+        item.hidden = false;
+        item.classList.remove("indent")
+        item.classList.add("incontent_paneGeneral")
+      }, this)
+    }
 
     this.onPaneMainLoad();
-    document.getElementById("startupGroup").setAttribute("incontent", true);
   },
 
    lastSelected: "",
@@ -78,14 +89,16 @@ var gTabMix_preferencesOverlay = {
       var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
       if (singleWindowMode)
          document.getElementById("linkTargetWindow").disabled = true;
+
+      // fix panel height
       var docElt = document.documentElement;
-      if (docElt._shouldAnimate) {
-         if (this.lastSelected == "paneTabs")
-            window.sizeToContent();
-         else {
-            docElt.lastSelected = this.lastSelected;
-            docElt._selectPane(document.getElementById("paneTabs"));
-         }
+      if (docElt._shouldAnimate && this.lastSelected == "paneTabs")
+        window.sizeToContent();
+      else {
+        let paneTabs = document.getElementById("paneTabs");
+        paneTabs._content.style.height = "";
+        docElt.lastSelected = this.lastSelected;
+        docElt._selectPane(paneTabs);
       }
    },
 
@@ -130,6 +143,7 @@ var gTabMix_preferencesOverlay = {
      spacer.setAttribute("flex", "1");
      hBox.insertBefore(spacer, menuList);
      hBox.insertBefore(button, menuList);
+     hBox.classList.add("whenBrowserStartBox")
 
      var preferences = document.getElementById("mainPreferences");
      var preference = document.createElement("preference");

@@ -8,6 +8,7 @@
 <!ENTITY apply.label "Übernehmen">
 <!ENTITY settings.export "Einstellungen exportieren…">
 <!ENTITY settings.import "Einstellungen importieren…">
+<!ENTITY settings.sync "Einstellungen synchronisieren">
 <!ENTITY settings.default "Standardeinstellungen">
 <!ENTITY generalWindowOpen.label "Links, die ein neues Fenster erzwingen, öffnen in:">
 <!ENTITY externalLink.useSeparate.label "Für Links aus anderen Anwendungen eigene Einstellungen verwenden">
@@ -69,7 +70,7 @@
 <!ENTITY tabFocus.caption "In Tabs im Vordergrund öffnen">
 <!ENTITY selectTab.label "Links">
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "Andere Anwendungen">
 <!ENTITY selectTabCommand.label "Neuen Tab">
 <!ENTITY contextMenuSearch.label "Kontextmenü Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
@@ -158,6 +159,7 @@
 <!ENTITY extraIcons.locked "Gesperrt">
 <!ENTITY extraIcons.protected "Geschützt">
 <!ENTITY extraIcons.autoreload "Automatisch neu laden">
+<!ENTITY extraIcons.hideonpinned "Bei angehefteten Tabs ausblenden">
 <!ENTITY progressMeter.label "Fortschrittsanzeige">
 <!ENTITY showTabX.labelBegin "&quot;Tab schließen&quot;-Schaltfläche">
 <!ENTITY showTabX.left "auf der linken Tab-Seite platzieren">
@@ -231,8 +233,8 @@
 <!ENTITY clicktab.removeall "Alle Tabs schließen">
 <!ENTITY clicktab.removeother "Andere Tabs schließen">
 <!ENTITY clicktab.removesimilar "Ähnliche Tabs schließen">
-<!ENTITY clicktab.removeleft "Linke Tabs schließen">
-<!ENTITY clicktab.removeright "Rechte Tabs schließen">
+<!ENTITY clicktab.removetoLeft "Linke Tabs schließen">
+<!ENTITY clicktab.removetoRight "Rechte Tabs schließen">
 <!ENTITY clicktab.uctab "Geschlossenen Tab wiederherstellen">
 <!ENTITY clicktab.ucatab "Alle geschlossenen Tabs wiederherstellen">
 <!ENTITY clicktab.snapback "Tab-SnapBack (SessionSaver)">

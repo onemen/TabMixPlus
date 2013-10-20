@@ -23,21 +23,21 @@
       }, true);
   </script>
 
-  <preferences id="tabsPreferences">
-    <preference id="extensions.tabmix.hideTabbar"
-                name="extensions.tabmix.hideTabbar"                type="int"/>
-    <preference id="extensions.tabmix.tabs.warnOnClose"
-                name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
-    <preference id="extensions.tabmix.protectedtabs.warnOnClose"
-                name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
-  </preferences>
+  <prefpane id="mainPrefPane">
+    <preferences id="tabsPreferences" hidden="true">
+      <preference id="extensions.tabmix.hideTabbar"
+                  name="extensions.tabmix.hideTabbar"                type="int"/>
+      <preference id="extensions.tabmix.tabs.warnOnClose"
+                  name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
+      <preference id="extensions.tabmix.protectedtabs.warnOnClose"
+                  name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
+    </preferences>
 
-  <vbox>
     <vbox id="tabmixplusBox" data-category="paneTabs" hidden="true" align="start">
       <button id="btn_tabmixplus" class="tabmixplus-button indent" style="height: 27px;"
               label="&page.header.title;…" oncommand="gTabMix_preferencesOverlay.showTabmixOptions();"/>
         <separator/>
-      <hbox align="center" class="indent">
+      <hbox id="generalWindowOpenBox" align="center" class="indent">
         <!-- General Open New Windows Setting -->
         <label value="&generalWindowOpen.label;" control="generalWindowOpen"/>
         <menulist id="generalWindowOpen" preference="browser.link.open_newwindow">
@@ -50,7 +50,7 @@
       </hbox>
 
       <separator/>
-          <!-- Warn when closing window with tabs -->
+      <!-- Warn when closing window with tabs -->
       <checkbox id="warnOnCloseWindow" label="&warnOnCloseWindow.label;" class="indent"
                 preference="browser.tabs.warnOnClose"/>
       <!-- Warn when closing window with protected tabs -->
@@ -59,7 +59,8 @@
       <separator/>
     </vbox>
 
-      <vbox align="start" class="indent" data-category="paneTabs" hidden="true" pack="start">
+      <vbox id="hideTabbarBox" align="start" class="indent"
+            data-category="paneTabs" hidden="true" pack="start">
         <separator/>
         <label value="&hideTabBar.label;:" style="font-size: 12px;"/>
         <radiogroup id="_hideTabbar" orient="horizontal"
@@ -69,7 +70,7 @@
           <radio value="2" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
         </radiogroup>
       </vbox>
-  </vbox>
+  </prefpane>
 
   <checkbox id="linkTargeting" style="visibility: collapse;"/>
   <!-- Warn when closing multiple tabs -->

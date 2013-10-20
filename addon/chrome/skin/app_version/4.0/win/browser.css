@@ -21,12 +21,12 @@
 }
 
 /*  new tab button after last tab on firefox 4.0  aero */
-#TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+#TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
 /* enable this rule after bug 738491 australis-tabs-win lands, and move it to diffrent file
-#tabbrowser-tabs[flowing="multibar"]:not([multibar]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+#tabbrowser-tabs[flowing="multibar"]:not([multibar]) > .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 */
@@ -36,9 +36,8 @@
   padding-bottom: 3px;
 }
 
-#TabsToolbar[multibar] > .toolbarbutton-1,
 #TabsToolbar[multibar] > #tabs-closebutton {
-  height: 26px;
+  padding-top: 5px;
 }
 
 /* for TabsToolbar on bottom with windows 7 */
