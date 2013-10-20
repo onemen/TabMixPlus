@@ -206,25 +206,35 @@ var TMP_SessionStore = {
    // we call this only one time on window load
    // and store the value in Tabmix.isWindowAfterSessionRestore
    // we call this from onContentLoaded before nsSessionStore run its onLoad
-   _isAfterSessionRestored: function () {
+   setAfterSessionRestored: function () {
+      let afterSessionRestore;
       if (!Tabmix.isFirstWindow)
-         return false;
-
+         afterSessionRestore = false;
       // When we close all browser windows without exit (non browser windows are opened)
       // Firefox reopen last closed window when a browser window opens
-      if (Tabmix.numberOfWindows(false, null) > 1) {
+      else if (Tabmix.numberOfWindows(false, null) > 1) {
          if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
               Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
               TabmixSvc.ss.getClosedWindowCount() > 0) {
            Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
          }
-         return true;
+         afterSessionRestore = true;
       }
+      else if (this.afterSwitchThemes)
+         afterSessionRestore = true;
 
-      var ss = Cc["@mozilla.org/browser/sessionstartup;1"].
-                    getService(Ci.nsISessionStartup);
-      // when TMP session manager is enabled ss.doRestore is true only after restart
-      return ss.doRestore() || this.afterSwitchThemes;
+      if (typeof afterSessionRestore == "boolean")
+        Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
+      else {
+         // calling doRestore before sessionstartup finished to read
+         // sessionstroe.js file force syncRead
+         XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
+            let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
+                          getService(Ci.nsISessionStartup);
+            // when TMP session manager is enabled ss.doRestore is true only after restart
+            return ss.doRestore();
+         })
+      }
    },
 
    setSessionRestore: function (aEnable) {

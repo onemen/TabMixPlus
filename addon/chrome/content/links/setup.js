@@ -122,7 +122,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
                    this.extensions.sessionManager ||
-                   this.isWindowAfterSessionRestore;
+                   !this.isVersion(250) && this.isWindowAfterSessionRestore;
     var sessionManager = this.prefs.getBoolPref("sessions.manager");
     var resumeSession  = sessionManager &&
                          this.prefs.getIntPref("sessions.onStart") < 2;

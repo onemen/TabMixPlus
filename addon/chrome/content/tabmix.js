@@ -285,7 +285,7 @@ var TMP_eventListener = {
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
-    Tabmix.isWindowAfterSessionRestore = TMP_SessionStore._isAfterSessionRestored();
+    TMP_SessionStore.setAfterSessionRestored();
 
     try {
       /**
