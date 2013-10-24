@@ -1217,9 +1217,9 @@ var tablib = {
           function(tab) {return !tab.hidden && !tab.closing;
       }, this);
       for (var i = 0; i < items.length; ++i ) {
-        temp_id = items[i].getAttribute("tabmix_selectedID");
         if (aTab && items[i] == aTab)
           continue;
+        temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
         if ( temp_id && temp_id > max_id ) {
           max_id = temp_id;
           tempIndex = tabs.indexOf(items[i]);
