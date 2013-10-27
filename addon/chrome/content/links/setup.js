@@ -161,6 +161,13 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           'if (window.opener && !window.opener.closed', loadOnStartup
         );
       }
+
+      if (Tabmix.isVersion(270) && sessionManager) {
+        this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
+          'SessionStore.canRestoreLastSession',
+          'TabmixSessionManager.canRestoreLastSession'
+        ).toCode();
+      }
     }
     // All-in-One Sidebar 0.7.14 brake Firefox 12.0
     if (this.isVersion(120) && typeof aios_dominitSidebar == "function") {
@@ -197,7 +204,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       swapOldCode, swapNewCode, {check: this.isVersion(190)}
     )._replace(
       'SessionStore.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(270) && sessionManager}
+      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(260) && sessionManager, silent: true}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix

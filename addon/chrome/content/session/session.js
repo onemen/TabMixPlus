@@ -2868,6 +2868,8 @@ try{
       else if (path == lastSession) {
          TabmixSvc.sm.lastSessionPath = null;
          Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
+         if (Tabmix.isVersion(270))
+           Services.obs.notifyObservers(null, "sessionstore-last-session-cleared", null);
       }
 
       var sessionContainer = this.initContainer(path);
