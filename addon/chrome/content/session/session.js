@@ -457,7 +457,7 @@ var TabmixSessionManager = {
            let tab = gBrowser.tabs[0];
            if (this.doRestore && Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
               this.resetTab(tab);
-              gBrowser.removeTab(tab);
+              this.removeTab(tab);
               try {
                  if (TMP_ClosedTabs.count)
                    TabmixSvc.ss.forgetClosedTab(window, 0);
@@ -1136,7 +1136,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      for (var i = protectedTabs.length - 1 ; i >= 0; i--) {
        var tab = protectedTabs[i];
        tab.removeAttribute("protected");
-       gBrowser.removeTab(tab);
+       this.removeTab(tab);
      }
    },
 
@@ -3509,7 +3509,7 @@ try{
       var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);
       if (savedHistory == null) {
          Tabmix.log("loadOneTab() - tab at index " + aTab._tPos + " failed to load data from the saved session");
-         gBrowser.removeTab(aTab);
+         this.removeTab(aTab);
          return;
       }
 
@@ -3671,6 +3671,14 @@ try{
       else
         sessionIndex = Math.min(sessionIndex, sHistoryInternal.count - 1);
       return {history: sHistoryInternal, index: sessionIndex, currentURI: currentURI, label: currentTitle};
+   },
+
+   removeTab: function (aTab) {
+      // add blank tab before removing last tab to prevent browser closing with last tab
+      // and the default replacing last tab option
+      if (gBrowser.tabs.length == 1)
+        gBrowser.selectedTab = gBrowser.addTab("about.blank");
+      gBrowser.removeTab(aTab);
    },
 
   /* ............... Back up and archive sessions ............... */
