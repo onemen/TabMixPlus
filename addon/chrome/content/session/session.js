@@ -457,7 +457,7 @@ var TabmixSessionManager = {
            let tab = gBrowser.tabs[0];
            if (this.doRestore && Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
               this.resetTab(tab);
-              gBrowser.removeTab(tab);
+              this.removeTab(tab);
               try {
                  if (TMP_ClosedTabs.count)
                    TabmixSvc.ss.forgetClosedTab(window, 0);
@@ -1136,7 +1136,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      for (var i = protectedTabs.length - 1 ; i >= 0; i--) {
        var tab = protectedTabs[i];
        tab.removeAttribute("protected");
-       gBrowser.removeTab(tab);
+       this.removeTab(tab);
      }
    },
 
@@ -2868,6 +2868,8 @@ try{
       else if (path == lastSession) {
          TabmixSvc.sm.lastSessionPath = null;
          Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
+         if (Tabmix.isVersion(270))
+           Services.obs.notifyObservers(null, "sessionstore-last-session-cleared", null);
       }
 
       var sessionContainer = this.initContainer(path);
@@ -3507,7 +3509,7 @@ try{
       var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);
       if (savedHistory == null) {
          Tabmix.log("loadOneTab() - tab at index " + aTab._tPos + " failed to load data from the saved session");
-         gBrowser.removeTab(aTab);
+         this.removeTab(aTab);
          return;
       }
 
@@ -3599,9 +3601,19 @@ try{
    },
 
    loadTabHistory: function(rdfNodeSession, sHistoryInternal, aTab) {
-      var tmpData = this.getDecodedLiteralValue(rdfNodeSession, "history").split("|-|");
+      let decodeData = function(data, decode) {
+        return decode ? this.getDecodedLiteralValue(null, data) : data;
+      }.bind(this);
+      var history = this.getLiteralValue(rdfNodeSession, "history");
+      var tmpData = history.split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
-      var historyData = tmpData.join("|-|").split(sep);
+      tmpData = tmpData.join("|-|");
+      // if all history data was encoded (file saved with version
+      // 0.4.1.2pre.131006a1 or newer, changeset 684a4b2302e4)
+      // decode it now, else decode each entry separately
+      let newFormat = tmpData.indexOf(sep) == -1;
+      tmpData = decodeData(tmpData, newFormat);
+      var historyData = tmpData.split(sep);
       if (historyData.length < this.HSitems) {
          Tabmix.log("error in loadTabHistory" + "\n" + "historyData.length " + historyData.length + "\n" + "historyData " + historyData + "\n" + "history " + history);
          return null; // if it less then 3 no data !!
@@ -3618,7 +3630,7 @@ try{
          if (!this.enableSaveHistory && sessionIndex != i) continue;
          let historyEntry = Components.classes["@mozilla.org/browser/session-history-entry;1"]
                            .createInstance(Ci.nsISHEntry);
-         let entryTitle = historyData[index];
+         let entryTitle = decodeData(historyData[index], !newFormat);
          let uriStr = historyData[index + 1];
          if (uriStr == "") uriStr = "about:blank";
          let newURI = Services.io.newURI(uriStr, null, null);
@@ -3626,8 +3638,9 @@ try{
          historyEntry.setURI(newURI);
          historyEntry.saveLayoutStateFlag = true;
          if (this.prefBranch.getBoolPref("save.scrollposition")) {
-            if (historyData[index + 2] != "0,0") {
-               let scrollPos = historyData[index + 2].split(",");
+            let scrollData = historyData[index + 2];
+            if (scrollData != "0,0") {
+               let scrollPos = scrollData.split(",");
                scrollPos = [parseInt(scrollPos[0]) || 0, parseInt(scrollPos[1]) || 0];
                historyEntry.setScrollPosition(scrollPos[0], scrollPos[1]);
             }
@@ -3658,6 +3671,14 @@ try{
       else
         sessionIndex = Math.min(sessionIndex, sHistoryInternal.count - 1);
       return {history: sHistoryInternal, index: sessionIndex, currentURI: currentURI, label: currentTitle};
+   },
+
+   removeTab: function (aTab) {
+      // add blank tab before removing last tab to prevent browser closing with last tab
+      // and the default replacing last tab option
+      if (gBrowser.tabs.length == 1)
+        gBrowser.selectedTab = gBrowser.addTab("about.blank");
+      gBrowser.removeTab(aTab);
    },
 
   /* ............... Back up and archive sessions ............... */
