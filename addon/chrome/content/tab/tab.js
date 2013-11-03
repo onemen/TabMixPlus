@@ -1473,7 +1473,7 @@ var gTMPprefObserver = {
    /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
     *  aftertabs       - show the button after tabs
     *  aftertabs-force - force the button after tabs to be visible, only to
-    *                  - make it possible to catch the button width
+    *                    make it possible to catch the button width
     *                   (Tabmix.getAfterTabsButtonsWidth)
     *  temporary-right-side
     *                  - show the button on right side when there is no place

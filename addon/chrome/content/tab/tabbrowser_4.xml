@@ -656,7 +656,8 @@
           return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
         ]]></getter>
         <setter><![CDATA[
-          TabmixTabbar.showNewTabButtonOnSide(val, "temporary-right-side");
+          if (val || !this.overflow)
+            TabmixTabbar.showNewTabButtonOnSide(val, "temporary-right-side");
           return val;
         ]]></setter>
       </property>
