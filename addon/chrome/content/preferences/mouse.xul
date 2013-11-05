@@ -139,9 +139,10 @@
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
-                <label value="&ontab.label;" control="ClickTab" align="center" flex="1"/>
-                <menulist id="ClickTab" class="indent">
+                <checkbox_tmp label="&ontab.label;" control="ClickTab" align="center" flex="1" oncommand="gMousePane.resetPreference(this);"/>
+                <menulist id="ClickTab" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);">
                   <menupopup class="clicktab-popup" onpopupshown="gMousePane.ensureElementIsVisible(this);">
+                    <menuitem value="-1" label="&clicktab.default;" hidden="true"/>
                     <menuitem value="0" label="&clicktab.nothing;"/>
                       <menuseparator/>
                     <menuitem value="1" label="&clicktab.addtab;"/>
@@ -183,9 +184,9 @@
                 </menulist>
                 <spacer style="height: 16px;"/>
                 <!-- click on a tabbar -->
-                <label value="&ontabbar.label;" control="ClickTabbar"/>
+                <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" oncommand="gMousePane.resetPreference(this);"/>
                 <!-- we will clone the menupopup from ClickTab on startup -->
-                <menulist id="ClickTabbar" class="indent"/>
+                <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);"/>
                 <spacer style="height: 8px;"/>
                 <checkbox_tmp id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label;" class="checkbox_dblClickTabbar"
                           preference="pref_dblClickTabbar_changesize"/>

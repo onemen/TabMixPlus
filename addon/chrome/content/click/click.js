@@ -78,11 +78,8 @@ var TabmixTabClickOptions = {
     else if (aEvent.button == 0 && (aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey)
       prefName = "ctrl";
 
-    if (prefName) {
-      this.clickAction(prefName, clickOutTabs, tab);
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
-    }
+    if (prefName)
+      this.clickAction(prefName, clickOutTabs, tab, aEvent);
   },
 
   // Double click on tab/tabbar
@@ -104,15 +101,18 @@ var TabmixTabClickOptions = {
     var clickOutTabs = aEvent.target.localName == "tabs";
 
     var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
-    this.clickAction("dbl", clickOutTabs, tab);
+    this.clickAction("dbl", clickOutTabs, tab, aEvent);
   },
 
   // call action function from click on tabs or tabbar
-  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, action) {
+  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, event) {
     if (!pref) return; // just in case we missed something
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
     var command = Tabmix.prefs.getIntPref(pref);
-    this.doCommand(command, aTab, clickOutTabs);
+    if (command > -1 && this.doCommand(command, aTab, clickOutTabs)) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   },
 
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
@@ -248,7 +248,10 @@ var TabmixTabClickOptions = {
         else
           gBrowser.pinTab(aTab);
         break;
+      default:
+        return false;
     }
+    return true;
   }
 }
 

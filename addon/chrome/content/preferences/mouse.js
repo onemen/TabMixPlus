@@ -71,6 +71,21 @@ var gMousePane = {
   updateBroadcaster: function (id) {
     let preference = $("pref_" + id);
     Tabmix.setItem("obs_" + id, "disabled", preference.value == 2 || null);
+  },
+
+  resetPreference: function (checkbox) {
+    let menulist = $(checkbox.getAttribute("control"));
+    let prefID = menulist.getAttribute("preference");
+    $(prefID).valueFromPreferences = checkbox.checked ? (menulist[prefID] || undefined) : -1;
+  },
+
+  setCheckedState: function (menulist) {
+    let prefID = menulist.getAttribute("preference");
+    let val = $(prefID).value;
+    if (val != -1)
+      menulist[prefID] = val;
+    menulist.disabled = val == -1;
+    menulist.previousSibling.checked = !menulist.disabled;
   }
 
 }

@@ -840,8 +840,6 @@
             return;
         }
         TabmixTabClickOptions.onTabBarDblClick(event);
-        event.stopPropagation();
-        event.preventDefault();
       ]]></handler>
 
       <handler event="click" phase="capturing"><![CDATA[
