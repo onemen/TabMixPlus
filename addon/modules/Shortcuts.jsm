@@ -4,6 +4,7 @@ var EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
@@ -179,6 +180,11 @@ let Shortcuts = {
 
     aWindow.addEventListener("unload", this, false);
 
+    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", function() {
+      let document = aWindow.document;
+      return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
+    });
+
     let [changedKeys, needUpdate] = this._getChangedKeys({onOpen: true});
     if (needUpdate)
       this.updateWindowKeys(aWindow, changedKeys);
@@ -199,6 +205,7 @@ let Shortcuts = {
     let keyAtt = this.keyParse(aKeyData.value || "d&");
     if (aKeyData.sessionKey && aKeyData.blocked)
       keyAtt.disabled = true;
+    let disabled = keyAtt.disabled;
     let id = aKeyData.id || "key_tm_" + aKey;
     let keyItem = document.getElementById(id);
     if (keyItem) {
@@ -206,11 +213,17 @@ let Shortcuts = {
         return;
       for (let att in Iterator(keyAtt, true))
         keyItem.removeAttribute(att);
+      // disabled shortcuts, like new tab and close tab, can mess the whole keyset
+      // so we move those to a different node
+      if (disabled)
+        aWindow.Tabmix.removedShortcuts.appendChild(keyItem);
+      else if (keyItem.parentNode.localName == "tabmix_shortcuts")
+        document.getElementById("mainKeyset").appendChild(keyItem);
     }
     else {
       let parentNode = document.getElementById("mainKeyset");
       // don't add disabled key
-      if (!parentNode || keyAtt.disabled)
+      if (!parentNode || disabled)
         return;
       keyItem = document.createElementNS(NS_XUL, "key");
       keyItem.setAttribute("id", id);
@@ -225,14 +238,13 @@ let Shortcuts = {
       if (val)
         keyItem.setAttribute(att, val);
     }
-    let disabled = keyAtt.disabled;
     // remove existing acceltext from menus
     let items = document.getElementsByAttribute("key", keyItem.id);
     for (let i = 0, l = items.length; i < l; i++)
       items[i].setAttribute("acceltext", disabled ? " " : "");
 
     // turn off slideShow if need to
-    if (aKey == "slideShow" && keyAtt.disabled &&
+    if (aKey == "slideShow" && disabled &&
         aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
         aWindow.Tabmix.flst.cancel();
     }
