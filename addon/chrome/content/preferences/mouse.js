@@ -33,6 +33,8 @@ var gMousePane = {
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
+    $("dblClickTabbar_changesize").setAttribute("style",
+        "width: #px;".replace("#", $("mouseClick_tabbox").boxObject.width));
     this.updateBroadcaster('tabbarscrolling');
     this.updateBroadcaster('disableMoveTab');
 

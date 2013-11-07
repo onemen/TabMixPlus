@@ -201,11 +201,6 @@ groupbox[TSTinstalled] label[TSTdisabled="true"] {
   color: GrayText;
 }
 
-/* show the checkbox only on Dbl click panel */
-.groupbox-tabbox:not([selectedIndex="0"]) .checkbox_dblClickTabbar {
-  visibility: hidden;
-}
-
 /* rules to make the new option window look the same as the old one */
 radio[pane] > image {
   width: 24px;

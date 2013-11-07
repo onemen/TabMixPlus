@@ -126,7 +126,7 @@
         <tabpanel align="start">
           <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
           <spacer style="height: 1em;"/>
-          <tabbox class="groupbox-tabbox">
+          <tabbox id="mouseClick_tabbox" class="groupbox-tabbox" flex="0">
             <tabs id="tabclick"
                   onselect="gMousePane.tabSelectionChanged(event);">
               <tab label="&double.label;" linkedpanel="_tabpanel" class="subtabs"/>
@@ -187,12 +187,14 @@
                 <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" oncommand="gMousePane.resetPreference(this);"/>
                 <!-- we will clone the menupopup from ClickTab on startup -->
                 <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);"/>
-                <spacer style="height: 8px;"/>
-                <checkbox_tmp id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label;" class="checkbox_dblClickTabbar"
-                          preference="pref_dblClickTabbar_changesize"/>
+                <!-- place holder to set tabbox width -->
+                <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
               </tabpanel>
             </tabpanels>
           </tabbox>
+          <spacer style="height: 12px;"/>
+          <checkbox_tmp id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label; &ontabbar.click.label;"
+                        preference="pref_dblClickTabbar_changesize"/>
         </tabpanel>
       </tabpanels>
     </tabbox>

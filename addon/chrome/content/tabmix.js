@@ -323,13 +323,9 @@ var TMP_eventListener = {
     Tabmix.navToolbox.initializeSearchbar();
 
     if ("_update" in TabsInTitlebar) {
-      // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
         'function $(id)',
         'let $ = $&', {check: Tabmix._debugMode}
-      )._replace(
-        'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
       )._replace(
         'function rect(ele)',
         'let rect = function _rect(ele)' // for strict mode
