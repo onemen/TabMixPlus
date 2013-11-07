@@ -22,7 +22,7 @@
   </binding>
 
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
-            extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tab">
+            extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tab-proxy">
     <content context="tabContextMenu" closetabtext="&closeTab.label;">
       <xul:hbox class="tab-image-left tab-startcap tab-left tab-left-border" xbl:inherits="selected,hover"/>
       <xul:hbox class="tab-drag-indicator-left"/>
@@ -312,7 +312,7 @@
 
   <!-- tabbrowser-tabs bindings for Firefox 4.0+ -->
   <binding id="tabmix-tabbrowser-tabs"
-           extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tabs">
+           extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tabs-proxy">
     <implementation implements="nsIDOMEventListener">
 
       <field name="tabstripInnerbox" readonly="true">
