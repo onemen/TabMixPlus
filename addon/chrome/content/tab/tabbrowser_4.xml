@@ -237,7 +237,7 @@
         // don't allow mouse click/down with modifiers to select tab
         else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
           aEvent.stopPropagation();
-        else if (Tabmix.isVersion(150)) {
+        else {
           this.parentNode._selectNewTab(this);
           let isTabFocused = false;
           try {
@@ -247,12 +247,6 @@
             this.setAttribute("ignorefocus", "true");
             this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
           }
-        }
-        else {
-          this.mSelect = setTimeout(function TMP_onMouseCommand(tab) {
-            if (tab.parentNode)
-              tab.parentNode._selectNewTab(tab);
-          }, 0, this);
         }
       ]]></body>
     </method>

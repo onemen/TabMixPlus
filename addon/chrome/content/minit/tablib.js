@@ -400,10 +400,9 @@ var tablib = {
 
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
-    var callerName = Tabmix.isVersion(150) ? "onxblmousedown" : "setTab";
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
       '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("' + callerName + '")) return;'
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
     ).toCode();
 
     Tabmix.changeCode(tabBar,  "gBrowser.tabContainer.visible", {setter: true})._replace(
