@@ -255,6 +255,18 @@ so display: none !important; does not hide the button */
   display: -moz-box;
 }
 
+.tab-progress > .progress-bar:-moz-locale-dir(ltr) {
+  background-image: linear-gradient(to right, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
+}
+
+.tab-progress > .progress-bar:-moz-locale-dir(rtl) {
+  background-image: linear-gradient(to left, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
+}
+
 /* :::: multi-row :::: */
 .tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > scrollbox > .scrollbox-innerbox {
   display: block !important;

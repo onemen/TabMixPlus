@@ -902,14 +902,8 @@ var gTMPprefObserver = {
   createColorRules: function TMP_PO_createColorRules() {
     var bottomBorder;
     this.gradients = { };
-    if (Tabmix.isVersion(160)) {
-      this.gradients.body = "linear-gradient(#colorCode, #colorCode)";
-      bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
-    }
-    else {
-      this.gradients.body = "-moz-linear-gradient(#colorCode, #colorCode)";
-      bottomBorder = "-moz-linear-gradient(bottom, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
-    }
+    this.gradients.body = "linear-gradient(#colorCode, #colorCode)";
+    bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
     this.gradients.tab = Tabmix.isMac ? this.gradients.body : (bottomBorder + "," + this.gradients.body);
     var backgroundRule = "{-moz-appearance: none; background-image: " + this.gradients.tab + " !important;}"
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
@@ -996,21 +990,6 @@ var gTMPprefObserver = {
     // rule for controling moz-margin-start when we have pinned tab in multi-row
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
     this.insertRule(marginStart, "tabmix-firstTabInRow");
-
-    // rule for progress-bar background-image
-    // move it back to css file when we drop support for Firefox 11-15
-    let backgroundImage = ".tab-progress > .progress-bar:-moz-locale-dir(#1) {" +
-        "background-image: linear-gradient(#2, rgba(255,255,255,.1) 50%," +
-                                              "rgba(255,255,255,.4) 90%,"+
-                                              "rgba(255,255,255,.8));}"
-    backgroundImage = backgroundImage.replace("#1", Tabmix.ltr ? "ltr" : "rtl");
-    if (Tabmix.isVersion(160))
-      backgroundImage = backgroundImage.replace("#2", Tabmix.ltr ? "to right" : "to left");
-    else {
-      backgroundImage = backgroundImage.replace("#2", Tabmix.ltr ? "left" : "rigth").
-          replace("linear-gradient", "-moz-linear-gradient");
-    }
-    this.insertRule(backgroundImage);
 
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
