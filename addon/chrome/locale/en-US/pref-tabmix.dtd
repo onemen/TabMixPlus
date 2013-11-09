@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Current Page">
 <!ENTITY newtab.duplicate "Duplicate Tab with history">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Open new tabs next to current one">

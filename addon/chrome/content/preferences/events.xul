@@ -136,11 +136,10 @@
             </hbox>
             <hbox class="indent" align="center" flex="1">
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
-<!-- NEED to update babelzilla -->
               <textbox id="newTabUrl" class="padded uri-element" flex="1"
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                        onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
-                       placeholder="Default New Tab Page"
+                       placeholder="&newtab.placeholder.label;"
                        preference="pref_newTabUrl"/>
             </hbox>
             <checkbox_tmp id="selectLocationBar" label="&focusContent.label;"
@@ -282,13 +281,12 @@
                     </menupopup>
                   </menulist>
               </hbox>
-<!-- NEED to update babelzilla -->
               <hbox class="indent" align="center" flex="1">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                           onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
-                          placeholder="Default New Tab Page"
+                          placeholder="&newtab.placeholder.label;"
                           preference="pref_newTabUrl_1"/>
               </hbox>
               <checkbox_tmp class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
