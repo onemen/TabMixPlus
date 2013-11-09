@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Pašreizējo lapu">
 <!ENTITY newtab.duplicate "Dublikāta lapu">
 <!ENTITY newtab.location.1 "Jaunas cilnes lapa">
+<!ENTITY newtab.placeholder.label "Noklusētā jaunas cilnes lapa">
 <!ENTITY location.label.1 "Adrese">
 <!ENTITY focusContent.label "Ielādējot ne-tukšu lapu, fokusēties uz saturu">
 <!ENTITY openTabNext.label "Jaunas cilnes atvērt pēc pašreizējās">
@@ -152,108 +153,110 @@
 <!ENTITY highlight.label "Izcelšana">
 <!ENTITY currenttab.style.label "Pašreizējā cilne">
 <!ENTITY unloadedtabs.style.label "Neielādētās cilnes">
-<!ENTITY unreadtabs.style.label "Unread tabs">
-<!ENTITY othertabs.style.label "Other tabs">
-<!ENTITY setstyles.label "Customize Styles">
-<!ENTITY extraIcons.label1 "Icons for">
-<!ENTITY extraIcons.locked "Locked">
-<!ENTITY extraIcons.protected "Protected">
-<!ENTITY extraIcons.autoreload "Auto Reload">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
-<!ENTITY progressMeter.label "Progress meter on tabs">
-<!ENTITY showTabX.labelBegin "Close tab button">
-<!ENTITY showTabX.left "Place on left side">
-<!ENTITY showTabX.rtl "Place on right side">
-<!ENTITY milliseconds.label "msec">
+<!ENTITY unreadtabs.style.label "Nelasītās cilnes">
+<!ENTITY othertabs.style.label "Citas cilnes">
+<!ENTITY setstyles.label "Pielāgot stilus">
+<!ENTITY extraIcons.label1 "Ikonas priekš">
+<!ENTITY extraIcons.locked "Slēgts">
+<!ENTITY extraIcons.protected "Aizsargāts">
+<!ENTITY extraIcons.autoreload "Automātiski pārlādēt">
+<!ENTITY extraIcons.hideonpinned "Uz piespraustām cilnēm paslēpt">
+<!ENTITY progressMeter.label "Progresa josla uz cilnēm">
+<!ENTITY showTabX.labelBegin "Cilnes aizvēršanas poga">
+<!ENTITY showTabX.left "Novietot kreisajā pusē">
+<!ENTITY showTabX.rtl "Novietot labajā pusē">
+<!ENTITY milliseconds.label "msek.">
 <!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
-<!ENTITY showTabX.always "on all">
-<!ENTITY showTabX.current "on current">
-<!ENTITY showTabX.hover "on pointed for">
-<!ENTITY showTabX.alwaysExeption "on all tabs wider than">
-<!ENTITY showTabX.currentHover "on current &amp; pointed for">
-<!ENTITY minWidth.label "Tab Width:">
-<!ENTITY widthTo.label "to">
-<!ENTITY widthPixels.label "pixels">
-<!ENTITY flexTabs.label "Tab width fits to tab title">
-<!ENTITY bookastitle.label "Use bookmark name as tab title">
+<!ENTITY showTabX.always "uz visām">
+<!ENTITY showTabX.current "uz pašreizējās">
+<!ENTITY showTabX.hover "zem kursora esošās">
+<!ENTITY showTabX.alwaysExeption "uz visām cilnēm, kas platākas nekā">
+<!ENTITY showTabX.currentHover "uz pašreizējās un zem kursora esošās">
+<!ENTITY minWidth.label "Cilnes platums:">
+<!ENTITY widthTo.label "līdz">
+<!ENTITY widthPixels.label "pikseļi">
+<!ENTITY flexTabs.label "Cilnes platums pielāgojas cilnes nosaukumam">
+<!ENTITY bookastitle.label "Lietot grāmatzīmju nosaukumu kā cilnes nosaukumu">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
-<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
-<!ENTITY toolbar.button.label "Customize">
-<!ENTITY toolbar.visible.caption "Visible buttons">
-<!ENTITY toolbar.novisible.label "There are no visible buttons">
-<!ENTITY toolbar.hidden.caption "Hidden buttons">
-<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
-<!ENTITY mouseGesture.label "Mouse Gestures">
-<!ENTITY mouseClick.label "Mouse Clicking">
-<!ENTITY mouseHoverSelect.labelBegin "Select tab pointed for">
-<!ENTITY tabFlip.label "Switch to last selected tab when clicking current one">
-<!ENTITY tabFlip.delay "Use a delay of">
-<!ENTITY clickFocus.label "Mouse click (down and release) to select a tab">
-<!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
-<!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
-<!ENTITY double.label "Double-click">
-<!ENTITY middle.label "Middle-click">
-<!ENTITY ctrl.label "Ctrl-click">
-<!ENTITY cmd.label "Cmd-Click">
-<!ENTITY shift.label "Shift-click">
-<!ENTITY alt.label "Alt-Click">
-<!ENTITY ontab.label "on a tab:">
-<!ENTITY ontabbar.label "on the tabbar:">
-<!ENTITY clicktab.label "Choose command to perform when clicking on tab or tabbar">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY clicktab.nothing "Does nothing">
-<!ENTITY clicktab.addtab "Open a new tab">
-<!ENTITY clicktab.duplicatetab "Duplicates the tab">
-<!ENTITY clicktab.duplicatetabw "Duplicates the tab in a new window">
-<!ENTITY clicktab.detachtab "Move the tab to a new window">
-<!ENTITY clicktab.protecttab "Protects the tab">
-<!ENTITY clicktab.locktab "Locks the tab">
-<!ENTITY clicktab.freezetab "Protects and Locks the tab">
-<!ENTITY clicktab.renametab "Renames the tab">
-<!ENTITY clicktab.copyTabUrl "Copies the tab&apos;s URL to the clipboard">
-<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
-<!ENTITY clicktab.selectMerge "Selects the tab for merging">
-<!ENTITY clicktab.mergeTabs "Merges windows together">
-<!ENTITY clicktab.bookTab "Bookmarks the tab">
-<!ENTITY clicktab.bookTabs "Bookmarks all tabs">
-<!ENTITY clicktab.reloadtab "Reloads the tab">
-<!ENTITY clicktab.reloadtabs "Reloads all tabs">
-<!ENTITY clicktab.reloadothertabs "Reloads other tabs">
-<!ENTITY clicktab.reloadlefttabs "Reloads left tabs">
-<!ENTITY clicktab.reloadrighttabs "Reloads right tabs">
-<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
-<!ENTITY clicktab.removeall "Close all tabs">
-<!ENTITY clicktab.removeother "Close other tabs">
-<!ENTITY clicktab.removesimilar "Close tabs from similar domain">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
-<!ENTITY clicktab.uctab "Reopens last closed tab">
-<!ENTITY clicktab.ucatab "Reopens all closed tabs">
+<!ENTITY toolbar.description "Varat izvēlēties, kuras Tab Mix Plus pogas rādīt savā rīkjoslā">
+<!ENTITY toolbar.button.label "Pielāgot">
+<!ENTITY toolbar.visible.caption "Redzamas pogas">
+<!ENTITY toolbar.novisible.label "Nav redzamu pogu">
+<!ENTITY toolbar.hidden.caption "Slēptās pogas">
+<!ENTITY toolbar.nohidden.label "Nav slēpto pogu">
+<!ENTITY mouseGesture.label "Peles žesti">
+<!ENTITY mouseClick.label "Peles klikšķināšana">
+<!ENTITY mouseHoverSelect.labelBegin "Izvēlēties zem kursora esošo cilni">
+<!ENTITY tabFlip.label "Pārslēgties uz pēdējo izvēlēto cilni, noklikšķinot uz pašreizējās">
+<!ENTITY tabFlip.delay "Lietot aizturi">
+<!ENTITY clickFocus.label "Peles klikšķis (nospiest un atlaist), lai izvēlētos cilni">
+<!ENTITY removeEntries.label "Izņemt Tab Mix Plus izvēlnes ierakstus, izmantojot vidējo klikšķi">
+<!ENTITY lockTabSizingOnClose.label "Aizverot cilni, citām cilnēm nemainīt izmēru līdz kursors neatstāj rīkjoslas apgabalu">
+<!ENTITY removeEntries.tooltip "Ieskaitot aizvērtās cilnes, aizvērtos logus un saglabātās sesijas">
+<!ENTITY tabbarscrolling.caption "Ritinot virs ciļņu joslas">
+<!ENTITY tabbarscrolling.holdShift.label "Ritinot turiet nospiestu Shift, lai pārslēgtos starp šīm opcijām">
+<!ENTITY tabbarscrolling.selectTab.label "Mainīt izvēlēto cilni">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Ritināt visas cilnes">
+<!ENTITY tabbarscrolling.inverse.label "Apgriezt ritināšanas virzienu">
+<!ENTITY double.label "Dubultklikšķis">
+<!ENTITY middle.label "Vidējais klikšķis">
+<!ENTITY ctrl.label "Ctrl-klikšķis">
+<!ENTITY cmd.label "Cmd-klikšķis">
+<!ENTITY shift.label "Shift-klikšķis">
+<!ENTITY alt.label "Alt-klikšķis">
+<!ENTITY ontab.label "uz cilnes:">
+<!ENTITY ontabbar.label "uz ciļņu joslas:">
+<!ENTITY clicktab.label "Izvēlieties komandu, ko izpildīt, noklikšķinot uz ciļņu joslas">
+<!ENTITY ontabbar.dblClick.label "Neļaut loga izmēra maiņu, kad tiek noklikšķināts uz ciļņu joslas.">
+<!ENTITY ontabbar.click.label "Novērst loga pārnešanu, noklikšķinot uz ciļņu joslas.">
+<!ENTITY clicktab.default "Firefox noklusētais vai cits paplašinājums">
+<!ENTITY clicktab.nothing "Nedara neko">
+<!ENTITY clicktab.addtab "Atvērt jaunu cilni">
+<!ENTITY clicktab.duplicatetab "Dublicē cilni">
+<!ENTITY clicktab.duplicatetabw "Dublicē cilni jaunā logā">
+<!ENTITY clicktab.detachtab "Pārvietot cilni uz jaunu logu">
+<!ENTITY clicktab.protecttab "Aizsargā cilni">
+<!ENTITY clicktab.locktab "Noslēdz cilni">
+<!ENTITY clicktab.freezetab "Aizsargā un noslēdz cilni">
+<!ENTITY clicktab.renametab "Pārdēvē cilni">
+<!ENTITY clicktab.copyTabUrl "Kopē cilnes URL uz starpliktuvi">
+<!ENTITY clicktab.copyUrlFromClipboard "Ielādēt URL no starpliktuves">
+<!ENTITY clicktab.selectMerge "Izvēlas cilni apvienošanai">
+<!ENTITY clicktab.mergeTabs "Apvieno logus">
+<!ENTITY clicktab.bookTab "Pievieno cilni grāmatzīmēm">
+<!ENTITY clicktab.bookTabs "Pievieno gŗāmatzīmēm visas cilnes">
+<!ENTITY clicktab.reloadtab "Pārlādē cilni">
+<!ENTITY clicktab.reloadtabs "Pārlādē visas cilnes">
+<!ENTITY clicktab.reloadothertabs "Pārlādē citas cilnes">
+<!ENTITY clicktab.reloadlefttabs "Pārlādē kreisās cilnes">
+<!ENTITY clicktab.reloadrighttabs "Pārlāde labās cilnes">
+<!ENTITY clicktab.autoReloadTab "Ieslēgt/Atslēgt ciļņu automātisko pārlādēšanu">
+<!ENTITY clicktab.removeall "Aizvērt visas cilnes">
+<!ENTITY clicktab.removeother "Aizvērt citas cilnes">
+<!ENTITY clicktab.removesimilar "Aizvērt cilnes no līdzīga domēna">
+<!ENTITY clicktab.removetoLeft "Aizvērt cilnes pa kreisi">
+<!ENTITY clicktab.removetoRight "Aizvērt cilnes pa labi">
+<!ENTITY clicktab.uctab "Atkārtoti atvērt pēdējo aizvērto cilni">
+<!ENTITY clicktab.ucatab "Atkārtoti atvērt visas aizvērtās cilnes">
 <!ENTITY clicktab.snapback "SnapBack Tab">
-<!ENTITY clicktab.ietab "Opens the tab in IE">
-<!ENTITY contentLoad "Middle-click loads url from clipboard">
-<!ENTITY context.tab "Tab Context Menu">
-<!ENTITY context.main "Main Context Menu">
-<!ENTITY context.tools "Tools Menu">
-<!ENTITY showtabBarContext.label "Show in Tab Context Menu">
-<!ENTITY showContentAreaContext.label "Show in Main Context Menu">
-<!ENTITY showToolsMenu.label "Show in Tools Menu">
-<!ENTITY startupHomePage.label "Show my home page">
-<!ENTITY startupBlankPage.label "Show a blank page">
-<!ENTITY startupLastSession.label "Show my windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
-<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
-<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
-<!ENTITY sm.extension.description4 "Convert My sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Convert">
+<!ENTITY clicktab.ietab "Atver cilni pārlūkā IE">
+<!ENTITY contentLoad "Vidējais klikšķis ielādē cilni no starpliktuves">
+<!ENTITY context.tab "Cilnes konteksta izvēlne">
+<!ENTITY context.main "Galvenā konteksta izvēlne">
+<!ENTITY context.tools "Rīku izvēlne">
+<!ENTITY showtabBarContext.label "Rādīt cilnes konteksta izvēlnē">
+<!ENTITY showContentAreaContext.label "Rādīt galvenajā konteksta izvēlnē">
+<!ENTITY showToolsMenu.label "Rādīt rīku izvēlnē">
+<!ENTITY startupHomePage.label "Rādīt manu mājas lapu">
+<!ENTITY startupBlankPage.label "Rādīt tukšu lapu">
+<!ENTITY startupLastSession.label "Rādīt manus logus un cilnes no iepriekšējās reizes">
+<!ENTITY sm.extension.description1 "Tab Mix Plus konstatēja, ka ir instalēts paplašinājums Session Manager">
+<!ENTITY sm.extension.description2 "Tab Mix Plus sesiju pārvaldnieks tiks atslēgts">
+<!ENTITY sm.extension.description3 "Lai atvērtu Session Manager opciju logu, varat noklikšķināt uz pogas pa labi">
+<!ENTITY sm.extension.description4 "Pārveidot manu sesiju datus no Tab Mix Plus formāta uz Session Manager paplašinājuma formātu">
+<!ENTITY sm.extension.convert.label "Pārveidot">
 <!ENTITY sm.extension.chooseFile.label0 "Ļaut man izvēlēties, kuru datu failu pārveidot">
 <!ENTITY sm.extension.chooseFile.label1 "Pārveidot Tab Mix Plus sesijas no pašreizējā profila">
 <!ENTITY ss.enable.label "Lietot Firefox iebūvēto sesijas atjaunošanas iespēju">
@@ -266,40 +269,40 @@
 <!ENTITY ss.privacy_level.allsites "Visām vietnēm">
 <!ENTITY ss.privacy_level.unencrypted "Tikai nešifrētām vietnēm">
 <!ENTITY ss.privacy_level.nosites "Nevienai vietnei">
-<!ENTITY ss.postdata.label1 "Maximum amount of POSTDATA to be stored">
-<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
-<!ENTITY sessionManger.enable "Enable Session Manager">
-<!ENTITY crashRecovery.enable "Enable Crash Recovery">
-<!ENTITY sm.StartExit "Start/Exit">
-<!ENTITY sm.restore "Restore">
-<!ENTITY sm.preserve "Preserve">
-<!ENTITY sm.start "When Browser Starts:">
-<!ENTITY sm.start.restore "Restore">
-<!ENTITY sm.start.ask "Ask Before Restoring">
-<!ENTITY sm.start.nothing "Don&apos;t Restore">
-<!ENTITY sm.exit "When Browser Exits:">
-<!ENTITY sm.exit.save "Save Session">
-<!ENTITY sm.exit.ask "Ask Before Saving">
-<!ENTITY sm.exit.nothing "Don&apos;t Save">
-<!ENTITY sm.startup "Startup Session:">
-<!ENTITY sm.lastsession "Last Session">
-<!ENTITY sm.previouslast "Previous to Last">
-<!ENTITY sm.chooseifempty "Choose another if empty">
-<!ENTITY sm.restore.options "When Restoring Sessions:">
-<!ENTITY sm.restore.overwrite "Overwrite existing windows">
-<!ENTITY sm.restore.overwriteTabs "And tabs">
-<!ENTITY sm.restore.closedWinList "Save windows in closed windows list">
-<!ENTITY sm.restore.merge "Join multiple windows into one">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.preserve.options "Preserve Tabs:">
-<!ENTITY sm.preserve.history "History">
-<!ENTITY sm.preserve.protect "Protect Status">
-<!ENTITY sm.preserve.locked "Lock Status">
-<!ENTITY sm.preserve.permission "Permissions">
-<!ENTITY sm.preserve.scroll1 "Scroll Position">
-<!ENTITY sm.restore.winOptions "Preserve Windows:">
-<!ENTITY sm.restore.selectedTab "Selected tab">
-<!ENTITY sm.restore.closedTabs "Closed tabs list">
-<!ENTITY incompatible.extensions "Some of your extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.">
-<!ENTITY incompatible.button.label "Show List">
+<!ENTITY ss.postdata.label1 "Maksimālais glabājamais POSTDATA datu apjoms">
+<!ENTITY ss.postdata.label2 "(baitos, -1=visi)">
+<!ENTITY sessionManger.enable "Ieslēgt sesiju pārvaldnieku">
+<!ENTITY crashRecovery.enable "Ieslēgt pēcavārijas atkopšanu">
+<!ENTITY sm.StartExit "Palaist/Iziet">
+<!ENTITY sm.restore "Atjaunot">
+<!ENTITY sm.preserve "Saglabāt">
+<!ENTITY sm.start "Kad tiek palaists pārlūks:">
+<!ENTITY sm.start.restore "Atjaunot">
+<!ENTITY sm.start.ask "Jautāt pirms atjaunošanas">
+<!ENTITY sm.start.nothing "Neatjaunot">
+<!ENTITY sm.exit "Kad pārlūks tiek aizvērts">
+<!ENTITY sm.exit.save "Saglabāt sesiju">
+<!ENTITY sm.exit.ask "Jautāt pirms saglabāšanas">
+<!ENTITY sm.exit.nothing "Nesaglabāt">
+<!ENTITY sm.startup "Palaižamā sesija:">
+<!ENTITY sm.lastsession "Pēdējā sesija">
+<!ENTITY sm.previouslast "Priekšpēdējā">
+<!ENTITY sm.chooseifempty "Izvēlēties citu, jau tukša">
+<!ENTITY sm.restore.options "Atjaunojot sesijas:">
+<!ENTITY sm.restore.overwrite "Pārrakstīt esošos logus">
+<!ENTITY sm.restore.overwriteTabs "Un cilnes">
+<!ENTITY sm.restore.closedWinList "Saglabāt logus aizvērto logu sarakstā">
+<!ENTITY sm.restore.merge "Apvienot vairākus logus vienā">
+<!ENTITY sm.restore.bypassCache "Atjaunojot apiet kešatmiņu">
+<!ENTITY sm.notrestore.label "Kad neatjauno palaižot">
+<!ENTITY sm.preserve.options "Saglabāt ciļņu:">
+<!ENTITY sm.preserve.history "Vēsturi">
+<!ENTITY sm.preserve.protect "Aizsargāšanas statusu">
+<!ENTITY sm.preserve.locked "Noslēgšanas statusu">
+<!ENTITY sm.preserve.permission "Atļaujas">
+<!ENTITY sm.preserve.scroll1 "Ritināšanas pozīciju">
+<!ENTITY sm.restore.winOptions "Saglabāt logu:">
+<!ENTITY sm.restore.selectedTab "Izvēlēto cilni">
+<!ENTITY sm.restore.closedTabs "Aizvērto ciļņu sarakstu">
+<!ENTITY incompatible.extensions "Daži no jūsu paplašinājumiem nav savietojami ar Tab Mix Plus, vēlams šos paplašinājumus atslēgt vai atinstalēt.">
+<!ENTITY incompatible.button.label "Rādīt sarakstu">

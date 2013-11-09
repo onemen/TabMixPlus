@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Pàgina actual">
 <!ENTITY newtab.duplicate "Pàgina duplicada">
 <!ENTITY newtab.location.1 "Pàgina de pestanya nova">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Adreça">
 <!ENTITY focusContent.label "Enfoca el contingut en carregar una pàgina que no sigui en blanc">
 <!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l'actual">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "A la barra de pestanyes:">
 <!ENTITY clicktab.label "Seleccioneu l'ordre que s'executarà en fer clic en una pestanya o a la barra de pestanyes">
 <!ENTITY ontabbar.dblClick.label "Evita que un doble clic a la barra de pestanyes canviï la mida de la finestra.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "No facis res">
 <!ENTITY clicktab.addtab "Obre una nova pestanya">
 <!ENTITY clicktab.duplicatetab "Duplica la pestanya">

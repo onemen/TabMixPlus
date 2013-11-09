@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "aktywną stronę">
 <!ENTITY newtab.duplicate "powielaną stronę">
 <!ENTITY newtab.location.1 "stronę o poniższym adresie">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Adres">
 <!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "Na pasku kart:">
 <!ENTITY clicktab.label "Wybierz działanie jakie zostanie wykonane po kliknięciu na etykiecie karty/pasku kart">
 <!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "brak reakcji">
 <!ENTITY clicktab.addtab "Otwórz nową kartę">
 <!ENTITY clicktab.duplicatetab "Powiel kartę">

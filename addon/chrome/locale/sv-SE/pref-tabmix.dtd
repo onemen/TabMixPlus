@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Aktuell sida">
 <!ENTITY newtab.duplicate "Duplicera sida">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Öppna ny flik intill nuvarande">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "på flikfältet:">
 <!ENTITY clicktab.label "Välj kommande att utföra vid klick på flikar">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Inget">
 <!ENTITY clicktab.addtab "Öppna ny flik">
 <!ENTITY clicktab.duplicatetab "Duplicera flik">

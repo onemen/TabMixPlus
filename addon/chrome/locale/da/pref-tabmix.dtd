@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Nuværende side">
 <!ENTITY newtab.duplicate "Duplikér side">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Åbn nye faneblade ved siden af nuværende">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "på fanebladslinjen:">
 <!ENTITY clicktab.label "Vælg kommando der skal udføres ved klik på faneblad eller fanebladslinje">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Gør ingenting">
 <!ENTITY clicktab.addtab "Åbner et nyt faneblad">
 <!ENTITY clicktab.duplicatetab "Duplikerer fanebladet">

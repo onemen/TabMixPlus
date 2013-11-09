@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "当前的页面">
 <!ENTITY newtab.duplicate "复制的页面">
 <!ENTITY newtab.location.1 "新标签页面">
+<!ENTITY newtab.placeholder.label "默认的新标签页面">
 <!ENTITY location.label.1 "地址">
 <!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "标签栏上:">
 <!ENTITY clicktab.label "选择一个点击标签页或标签栏时要执行的命令">
 <!ENTITY ontabbar.dblClick.label "双击标签栏时不更改窗口尺寸。">
+<!ENTITY ontabbar.click.label "不允许点击标签栏来拖动窗口。">
+<!ENTITY clicktab.default "Firefox 默认值或其他扩展">
 <!ENTITY clicktab.nothing "无动作">
 <!ENTITY clicktab.addtab "打开新标签页">
 <!ENTITY clicktab.duplicatetab "复制当前标签页">

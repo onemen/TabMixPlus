@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "עמוד נוכחי">
 <!ENTITY newtab.duplicate "שכפל עמוד">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "התמקד בתוכן בעת טעינת דף לא ריק">
 <!ENTITY openTabNext.label "פתח לשוניות חדשות ליד הלשוניות הנוכחיות">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "על סרגל הלשוניות:">
 <!ENTITY clicktab.label "בחר פעולה שתתבצע עם לחיצה על הלשונית או על סרגל הלשוניות">
 <!ENTITY ontabbar.dblClick.label "מנע משינוי גודל החלון בלחיצה כפולה">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "לא עושה כלום">
 <!ENTITY clicktab.addtab "פתח לשונית חדשה">
 <!ENTITY clicktab.duplicatetab "שכפל לשונית">

@@ -42,7 +42,8 @@
 <!ENTITY newtab.home "Página inicio">
 <!ENTITY newtab.current "Página actual">
 <!ENTITY newtab.duplicate "Duplicar página">
-<!ENTITY newtab.location.1 "Nueva página de pestaña">
+<!ENTITY newtab.location.1 "Página de nueva pestaña">
+<!ENTITY newtab.placeholder.label "Página de pestaña nueva predeterminada">
 <!ENTITY location.label.1 "Dirección">
 <!ENTITY focusContent.label "Enfocar al cargar página con contenido">
 <!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "en la barra de pestañas:">
 <!ENTITY clicktab.label "Elegir comando a ejecutar al hacer clic en pestaña / barra pestañas">
 <!ENTITY ontabbar.dblClick.label "Impedir que el doble clic en la barra de pestañas cambie el tamaño de ventana.">
+<!ENTITY ontabbar.click.label "Impedir que el clic en la barra de pestañas arrastre la ventana.">
+<!ENTITY clicktab.default "Predeterminado de Firefox u otra extensión">
 <!ENTITY clicktab.nothing "No hace nada">
 <!ENTITY clicktab.addtab "Abre nueva pestaña">
 <!ENTITY clicktab.duplicatetab "Duplica pestaña">

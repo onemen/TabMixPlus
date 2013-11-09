@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "тренутном страницом">
 <!ENTITY newtab.duplicate "дуплираном страницом">
 <!ENTITY newtab.location.1 "Страница новог језичка">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Адреса">
 <!ENTITY focusContent.label "Пређи на садржај кад се учитава страница која није празна">
 <!ENTITY openTabNext.label "Нове картице отварај поред тренутне">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "на линију картица:">
 <!ENTITY clicktab.label "Изаберите команду која ће се извршити када кликнете на картицу или линију картица">
 <!ENTITY ontabbar.dblClick.label "Спречи мењање величине прозора дуплим кликом на траку са језичцима.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Ништа">
 <!ENTITY clicktab.addtab "Отварање нове картице">
 <!ENTITY clicktab.duplicatetab "Дуплирање картице">

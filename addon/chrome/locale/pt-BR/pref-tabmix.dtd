@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Página atual">
 <!ENTITY newtab.duplicate "Duplicar página">
 <!ENTITY newtab.location.1 "Página Nova aba">
+<!ENTITY newtab.placeholder.label "Página Nova Aba padrão">
 <!ENTITY location.label.1 "Endereço">
 <!ENTITY focusContent.label "Destacar conteúdo quando carregar a página não-branco">
 <!ENTITY openTabNext.label "Abrir novas abas ao lado da aba atual">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "sobre a barra de abas:">
 <!ENTITY clicktab.label "Escolher comando a ser executado ao clicar sobre aba ou barra de abas">
 <!ENTITY ontabbar.dblClick.label "Impedir que o duplo-clique na barra de abas altere o tamanho da janela.">
+<!ENTITY ontabbar.click.label "Evite clicar na barra de abas ao arrastar a janela.">
+<!ENTITY clicktab.default "O padrão do Firefox ou outra extensão">
 <!ENTITY clicktab.nothing "Não faz nada">
 <!ENTITY clicktab.addtab "Abre nova aba">
 <!ENTITY clicktab.duplicatetab "Duplica a aba">

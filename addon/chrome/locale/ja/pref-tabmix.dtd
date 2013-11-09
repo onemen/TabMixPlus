@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "現在のページを表示">
 <!ENTITY newtab.duplicate "現在のページを複製して表示">
 <!ENTITY newtab.location.1 "指定ページを表示">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "アドレス">
 <!ENTITY focusContent.label "空白ページ以外を読み込むときはコンテンツにフォーカスする">
 <!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "タブバー:">
 <!ENTITY clicktab.label "タブ／タブバーをクリックしたときに実行するコマンドを選択">
 <!ENTITY ontabbar.dblClick.label "タブバーでダブルクリックしてもウィンドウサイズを変更しない">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "何もしない">
 <!ENTITY clicktab.addtab "新しいタブを開く">
 <!ENTITY clicktab.duplicatetab "タブを複製する">
