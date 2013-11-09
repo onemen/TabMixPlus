@@ -2,11 +2,6 @@
 
 var gEventsPane = {
   init: function () {
-    if (!Tabmix.isVersion(130)) {
-      gPrefWindow.removeChild("pref_contextMenuSearch");
-      gPrefWindow.removeChild("contextMenuSearch");
-    }
-
     // for locals with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;

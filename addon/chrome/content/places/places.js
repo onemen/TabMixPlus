@@ -42,14 +42,6 @@ var TMP_Places = {
       }
 
       if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
-         // LiveClick and Boox extensions change this function we can't use it
-         if (!("LiveClick" in window) && !Tabmix.isVersion(130))
-         Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._mayAddCommandsItems")._replace(
-            "openUILink(this.getAttribute('targetURI'), event);",
-            "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);", {silent: true}
-         ).toCode();
-
-         if (Tabmix.isVersion(130))
          Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._setLivemarkSiteURIMenuItem")._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"

@@ -505,7 +505,6 @@ var gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     }.bind(this);
-    addObserver("browser.newtab.url",    !Tabmix.isVersion(130));
     addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
     addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
 
@@ -848,10 +847,6 @@ var gTMPprefObserver = {
           TabmixTabbar.setHeight(1, true);
           gBrowser.tabContainer.updateVerticalTabStrip();
         }
-        break;
-      case "browser.newtab.url": // just for Firefox 12
-        value =  Services.prefs.getComplexValue("browser.newtab.url", Ci.nsISupportsString).data;
-        BROWSER_NEW_TAB_URL =  value || "about:blank";
         break;
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":

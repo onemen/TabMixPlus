@@ -49,10 +49,7 @@ let Shortcuts = {
 
   get prefs() {
     delete this.prefs;
-    this.prefs = Services.prefs.getBranch("extensions.tabmix.");
-    if (!TabmixSvc.version(130))
-      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
-    return this.prefs;
+    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
   },
 
   prefsChangedByTabmix: false,
@@ -434,8 +431,6 @@ let KeyConfig = {
       }
     }
     this.resetPref(oldReloadId);
-    if (!TabmixSvc.version(130))
-      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
     this.prefs.addObserver("", this, false);
   },
 
