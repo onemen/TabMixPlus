@@ -36,13 +36,6 @@
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
       </field>
 
-      <constructor>
-        if (Tabmix.isVersion(170)) {
-          this._scrollButtonUp.removeAttribute("onmouseover");
-          this._scrollButtonDown.removeAttribute("onmouseover");
-        }
-      </constructor>
-
       <method name="finishScroll">
         <parameter name="aEvent"/>
         <body><![CDATA[
