@@ -277,10 +277,6 @@
     let parsedData;
     function setData(id) {
       let data = { groupID: id };
-      if (!Tabmix.isVersion(140)) {
-        data.url = aEntry.currentURI;
-        data.title = aEntry.label;
-      }
       parsedData = data;
       return TabmixSvc.JSON.stringify(data);
     }
@@ -429,10 +425,6 @@
           if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
             return;
           let data = { groupID: groupID };
-          if (!Tabmix.isVersion(140)) {
-            data.url = tab.linkedBrowser.currentURI.spec;
-            data.title = tab.label;
-          }
           data = TabmixSvc.JSON.stringify(data);
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)

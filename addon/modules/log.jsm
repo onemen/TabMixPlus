@@ -128,14 +128,7 @@ let console = {
     return stack;
   },
 
-  // Bug 744842 - don't include actual args in error.stack.toString()
-  // since Bug 744842 landed the stack string don't have (arg1, arg2....)
-  // so we can get the name from the start of the string until @
-  get _char() {
-    delete this._char;
-    return this._char = TabmixSvc.version(140) ? "@" : "(";
-  },
-
+  _char: "@",
   _name: function(fn) {
     let name = fn.substr(0, fn.indexOf(this._char))
     if (fn && !name) {
