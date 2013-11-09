@@ -86,9 +86,7 @@ Tabmix.sessionInitialized = function() {
         'TabmixSessionManager.canRestoreLastSession'
       ).toCode();
 
-      let [obj, FnName] = this.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
-                                                  [window, "window.BrowserOnClick"];
-      this.changeCode(obj, FnName)._replace(
+      this.changeCode(BrowserOnClick, "BrowserOnClick.onAboutHome")._replace(
         'if (ss.canRestoreLastSession)',
         'ss = TabmixSessionManager;\
          $&'
@@ -567,9 +565,7 @@ var TMP_eventListener = {
           'TMP_eventListener._updateMarginBottom("");\
            $&'
         )._replace(
-          Tabmix.isVersion(170) ?
-          'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
-          'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
+          'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";',
           '$&\
            TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
         ).toCode();

@@ -311,3 +311,15 @@ so display: none !important; does not hide the button */
 #tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
  visibility: visible !important;
 }
+
+/* for the case user drag background tab
+   when selectTabOnMouseDown is false, Firefox 17.0+ */
+.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {
+  position: relative;
+  z-index: 3;
+  pointer-events: none; /* avoid blocking dragover events on scroll buttons */
+}
+
+.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
+  transition: transform 200ms ease-out;
+}

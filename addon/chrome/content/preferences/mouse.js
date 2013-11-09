@@ -12,11 +12,6 @@ var gMousePane = {
       $("tabId").setAttribute("label", label);
     }
 
-    if (!Tabmix.isVersion(170)) {
-      gPrefWindow.removeChild("pref_moveTabOnDragging");
-      gPrefWindow.removeChild("moveTabOnDragging");
-    }
-
     $("ClickTabPinTab").label = gPrefWindow.pinTabLabel;
 
     var browserWindow = Tabmix.getTopWin();

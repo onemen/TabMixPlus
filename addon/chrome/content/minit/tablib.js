@@ -295,18 +295,14 @@ var tablib = {
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("-moz-margin-start", width + "px", null);' +
         '    }' +
-        '    if (Tabmix.isVersion(170)) {' +
-        '      this.style.MozPaddingStart = "";' +
-        '      TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
-        '    }' +
-        '    else' +
-        '      this.style.MozMarginStart = "";' +
+        '    this.style.MozPaddingStart = "";' +
+        '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.mTabstrip.setFirstTabInRow();' +
         '  }' +
         '  else $&'
       )._replace(
         /(\})(\)?)$/,
-        'if (Tabmix.isVersion(170) && TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
+        'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
         '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
         '}' +
         '$1$2'
@@ -626,16 +622,11 @@ var tablib = {
       '{',
       '{window.tabmix_warnedBeforeClosing = false;'
     )._replace(
-      'if (!reallyClose)',
-      'if (reallyClose && !window.tabmix_warnedBeforeClosing)\
-         reallyClose = tablib.closeWindow();\
-       $&', {check: !Tabmix.isVersion(170)}
-    )._replace(
       'if (!closeWindow(false, warnAboutClosingWindow))',
       'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
        if (reallyClose && !window.tabmix_warnedBeforeClosing)\
          reallyClose = tablib.closeWindow();\
-       if (!reallyClose)', {check: Tabmix.isVersion(170)}
+       if (!reallyClose)'
     ).toCode();
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(

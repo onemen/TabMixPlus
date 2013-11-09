@@ -72,9 +72,6 @@ skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/win/   os=WINNT
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/mac/   os=Darwin
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/linux/ os=Linux
 
-style     chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsr_17.css                                  appversion>=17
-style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css os=WINNT osversion<6 appversion>=16
-
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css
 
