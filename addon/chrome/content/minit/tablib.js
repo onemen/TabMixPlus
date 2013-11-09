@@ -770,7 +770,7 @@ var tablib = {
       // try to have SessionStore duplicate the given tab
 
       if (!aHref && !aTabData) {
-        newTab = TabmixSvc.ss.duplicateTab(window, aTab);
+        newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
       }
       else
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
