@@ -169,13 +169,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         ).toCode();
       }
     }
-    // All-in-One Sidebar 0.7.14 brake Firefox 12.0
-    if (this.isVersion(120) && typeof aios_dominitSidebar == "function") {
-      bowserStartup = bowserStartup._replace(
-        'TabsOnTop.syncCommand();',
-        'TabsOnTop.init();', {silent: true}
-      );
-    }
     bowserStartup.toCode();
 
     // At the moment we must init TabmixSessionManager before sessionStore.init
@@ -382,8 +375,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
         aUrl = currentURI ? currentURI.spec : null;
     }
     if (this._keepLastTab ||
-        Tabmix.isBlankPageURL(tab.__newLastTab || null) ||
-       (!aUrl || Tabmix.isBlankPageURL(aUrl)) &&
+        isBlankPageURL(tab.__newLastTab || null) ||
+       (!aUrl || isBlankPageURL(aUrl)) &&
         tabbrowser.isBlankNotBusyTab(tab)) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");

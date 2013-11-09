@@ -505,7 +505,6 @@ var gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     }.bind(this);
-    addObserver("browser.tabs.onTop",     Tabmix.isVersion(120));
     addObserver("browser.newtab.url",    !Tabmix.isVersion(130));
     addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
     addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
@@ -523,6 +522,7 @@ var gTMPprefObserver = {
 
   OBSERVING: ["extensions.tabmix.",
               "browser.tabs.closeButtons",
+              "browser.tabs.onTop",
               "browser.tabs.tabMinWidth",
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",
@@ -1791,19 +1791,12 @@ var gTMPprefObserver = {
         Services.prefs.clearUserPref(oldPref);
       }
     }
-    if (typeof isBlankPageURL != "function") {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "extensions.tabmix.newtab.url", "loadOnNewTab.type");
-      _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newTabUrl", "replaceLastTabWith.type");
-    }
-    else {
-      _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab.type");
-      _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                    "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
-      _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
-      _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
-                    "extensions.tabmix.replaceLastTabWith.newtab.url");
-    }
+    _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab.type");
+    _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
+                  "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
+    _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
+    _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
+                  "extensions.tabmix.replaceLastTabWith.newtab.url");
     // 2012-04-12
     if (Services.prefs.prefHasUserValue("browser.tabs.loadFolderAndReplace")) {
       Tabmix.prefs.setBoolPref("loadFolderAndReplace", Services.prefs.getBoolPref("browser.tabs.loadFolderAndReplace"));
@@ -1949,19 +1942,6 @@ try {
   },
 
   addMissingPrefs: function() {
-    // add missing preference to the default branch
-    let prefs = Services.prefs.getDefaultBranch("");
-
-    /* 2012-01-26
-      from firefox 12 we use "browser.newtab.url" instead of extensions.tabmix.newtab.url
-      and extensions.tabmix.replaceLastTabWith.newtab.url
-    */
-    if (Tabmix.isVersion(120))
-      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
-    else {
-      prefs.setCharPref("extensions.tabmix.newtab.url", "about:blank");
-      prefs.setCharPref("extensions.tabmix.replaceLastTabWith.newTabUrl", "about:blank");
-    }
   }
 
 }
@@ -2044,7 +2024,7 @@ var TabmixProgressListener = {
         if (tabsCount == 1)
           this.mTabBrowser.tabContainer.adjustTabstrip(true);
         tab.removeAttribute("tab-progress");
-        if (!Tabmix.isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
+        if (!isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
                 !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")

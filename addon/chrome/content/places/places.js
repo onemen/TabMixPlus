@@ -581,7 +581,7 @@ var TMP_Places = {
     if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
       return;
     var url = aURI ? aURI.spec : null;
-    if (url && !Tabmix.isBlankPageURL(url))
+    if (url && !isBlankPageURL(url))
       this.addItemIdtoTabsWithUrl(aItemId, url);
   },
 
@@ -597,7 +597,7 @@ var TMP_Places = {
         (aProperty != "uri" && aProperty != "title"))
       return;
 
-    if (aProperty == "uri" && aNewValue && !Tabmix.isBlankPageURL(aNewValue))
+    if (aProperty == "uri" && aNewValue && !isBlankPageURL(aNewValue))
       this.addItemIdtoTabsWithUrl(aItemId, aNewValue);
     this.updateTitleonTabs(aItemId, aProperty == "uri");
   },

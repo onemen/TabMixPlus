@@ -25,6 +25,7 @@ pref("extensions.tabmix.loadFolderAndReplace", true);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
+pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);

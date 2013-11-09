@@ -32,20 +32,6 @@ Tabmix.startup = function TMP_startup() {
   else
     cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (!this.isVersion(120)) {
-    // multi-rows total heights can be diffrent when tabs are on top
-    // since this is not trigger any other event that we can listen to
-    // we force to add here a call to reset tabbar height
-    this.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
-    TabsOnTop.toggle = function TabsOnTop_toggle() {
-      Tabmix.originalFunctions.tabsOnTop_toggle.apply(this, arguments);
-      if (TabmixTabbar.visibleRows > 1) {
-        TabmixTabbar.setHeight(1, true);
-        gBrowser.tabContainer.updateVerticalTabStrip();
-      }
-    }
-  }
-
   TabmixContext.toggleEventListener(true);
 
   // if sessionStore disabled use TMP command
@@ -387,20 +373,6 @@ var TMP_eventListener = {
 
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
-    // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-    if (typeof isBlankPageURL == "function") {
-      Tabmix.isBlankPageURL = isBlankPageURL;
-      Tabmix.__defineGetter__("newTabURL", function() BROWSER_NEW_TAB_URL);
-      Tabmix.newTabURLpref = "browser.newtab.url";
-    }
-    else {
-      Tabmix.isBlankPageURL = function TMP_isBlankPageURL(aURL) {
-        return aURL == "about:blank";
-      }
-      Tabmix.newTabURL = "about:blank";
-      Tabmix.newTabURLpref = "extensions.tabmix.newtab.url";
-    }
-
     // init tabmix functions
     try {
       TMP_extensionsCompatibility.onWindowOpen();
@@ -590,30 +562,17 @@ var TMP_eventListener = {
         let addonBar = document.getElementById("addon-bar");
         addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
-        if (Tabmix.isVersion(120)) {
-          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
-            'gNavToolbox.style.marginTop = "";',
-            'TMP_eventListener._updateMarginBottom("");\
-             $&'
-          )._replace(
-            Tabmix.isVersion(170) ?
-            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
-            'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
-            '$&\
-             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-          ).toCode();
-        }
-        else {
-          Tabmix.changeCode(FullScreen, "FullScreen._animateUp")._replace(
-            'gNavToolbox.style.marginTop = "";',
-            'TMP_eventListener._updateMarginBottom("");\
-             $&'
-          )._replace(
-            'gNavToolbox.style.marginTop = animateFrameAmount * -1 + "px";',
-            '$&\
-             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-          ).toCode();
-        }
+        Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
+          'gNavToolbox.style.marginTop = "";',
+          'TMP_eventListener._updateMarginBottom("");\
+           $&'
+        )._replace(
+          Tabmix.isVersion(170) ?
+          'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
+          'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
+          '$&\
+           TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
+        ).toCode();
 
         Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
           /(\})(\)?)$/,

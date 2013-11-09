@@ -380,10 +380,9 @@ var tablib = {
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
       ).toCode();
 
-      var newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
-                                              'this._usingClosingTabsSpacer';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
-        '{','{var updateScrollStatus = ' + newString + ' || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+        '{', '{' +
+        'var updateScrollStatus = this.hasAttribute("using-closing-tabs-spacer") || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
         /(\})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
@@ -392,11 +391,9 @@ var tablib = {
         '    for (let i = 0; i < tabs.length; i++)' +
         '      tabs[i].style.width = "";' +
         '  }' +
-        '  if (updateScrollStatus) {' +
-        '    if (this.childNodes.length > 1) {' +
-        '      TabmixTabbar.updateScrollStatus();' +
-        '      TabmixTabbar.updateBeforeAndAfter();' +
-        '    }' +
+        '  if (updateScrollStatus && this.childNodes.length > 1) {' +
+        '    TabmixTabbar.updateScrollStatus();' +
+        '    TabmixTabbar.updateBeforeAndAfter();' +
         '  }' +
         '  $1$2'
       ).toCode();

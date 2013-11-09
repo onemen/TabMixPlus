@@ -538,18 +538,6 @@ var gIncompatiblePane = {
 
 }
 
-// Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-// for support firefox 4.0-11.0
-XPCOMUtils.defineLazyGetter(window, "newTabURLpref", function() {
-  return Tabmix.getTopWin().Tabmix.newTabURLpref;
-});
-
-XPCOMUtils.defineLazyGetter(window, "replaceLastTabWithNewTabURLpref", function() {
-  let pref = "extensions.tabmix.replaceLastTabWith.";
-  return newTabURLpref == "browser.newtab.url" ?
-    pref + "newtab.url" : pref + "newTabUrl";
-});
-
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   let win = Tabmix.getTopWin();
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
