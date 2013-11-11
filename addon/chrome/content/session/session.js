@@ -520,6 +520,9 @@ var TabmixSessionManager = {
             continue;
          this.setLiteral(rdfNodeWindow, "dontLoad", "true");
       }
+
+      if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
+         focusAndSelectUrlBar();
    },
 
    // calls from: tablib.closeWindow, this.onWindowClose and this.canQuitApplication
@@ -855,6 +858,8 @@ var TabmixSessionManager = {
         for (var i = 0; i < gBrowser.tabs.length ; i++)
           delete gBrowser.tabs[i].loadOnStartup;
       }
+      else if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
+         focusAndSelectUrlBar();
    },
 
     // init common services
