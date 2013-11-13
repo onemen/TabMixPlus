@@ -175,7 +175,7 @@
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
     }
 
-    if (this._patchInitialized) {
+    if (this._patchInitialized && TabView._window) {
       TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
       delete TabView._window.GroupItems._original_reconstitute;
       TabView._window.UI.reset = TabView._window.UI._original_reset;
