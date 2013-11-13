@@ -682,6 +682,5 @@ TMP_Places.contextMenu = {
 /** DEPRECATED **/
 TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
   let win = aBrowser.ownerDocument.defaultView;
-  Tabmix.log("TMP_Places.getTabFixedTitle was deprecated\nuse TMP_Places.getTabTitle(tab, url)")
-  return win.TMP_Places.getTabTitle(win.gBrowser._getTabForBrowser(aBrowser), aUri);
+  return win.TMP_Places.getTabTitle(win.gBrowser._getTabForBrowser(aBrowser), aUri.spec);
 }
