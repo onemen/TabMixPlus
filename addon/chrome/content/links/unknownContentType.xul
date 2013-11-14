@@ -19,7 +19,7 @@
       // wait 250 ms after this window closed before removing mContext tab
       // nsHelperAppDlg.js promptForSaveToFileAsync look for dialog.mContext
       // before it opens nsIFilePicker.
-      // see cooment in our DownloadLastDir.jsm
+      // see comment in our DownloadLastDir.jsm
       if (tab && tab._tabmix_downloadingTimeout) {
         win.clearTimeout(tab._tabmix_downloadingTimeout);
         tab._tabmix_downloadingTimeout = null;
