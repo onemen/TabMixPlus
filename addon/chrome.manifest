@@ -44,7 +44,8 @@ overlay   about:preferences                                         chrome://tab
 overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferencesOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul
-overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/unknownContentType.xul
+overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/removeBlankTab.xul
+overlay   chrome://mozapps/content/handling/dialog.xul              chrome://tabmixplus/content/links/removeBlankTab.xul
 
 overlay   chrome://mozapps/content/extensions/about.xul             chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://mozapps/content/update/updates.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
