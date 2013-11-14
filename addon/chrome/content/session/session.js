@@ -3682,7 +3682,7 @@ try{
       // add blank tab before removing last tab to prevent browser closing with last tab
       // and the default replacing last tab option
       if (gBrowser.tabs.length == 1)
-        gBrowser.selectedTab = gBrowser.addTab("about.blank");
+        gBrowser.selectedTab = gBrowser.addTab("about:blank");
       gBrowser.removeTab(aTab);
    },
 
