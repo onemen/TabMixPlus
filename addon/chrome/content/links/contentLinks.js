@@ -243,7 +243,8 @@ Tabmix.contentAreaClick = {
     try {
       // for the moment just do it for Google and Yahoo....
       // and tvguide.com - added 2013-07-20
-      var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+      // youtube.com - added 2013-11-15
+      var blocked = /youtube.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
     } catch (ex) {blocked = false;}
     if (!blocked) {
       // replace onclick function with the form javascript:top.location.href = url
