@@ -154,8 +154,8 @@ let TabmixSvc = {
     }
   },
 
-  saveTabAttributes: function(tab) {
-    TabStateCache.saveTabAttributes(tab);
+  saveTabAttributes: function(tab, attrib) {
+    TabStateCache.saveTabAttributes(tab, attrib);
   },
 
   get ss() {
@@ -230,23 +230,33 @@ let TabStateCache = {
     return this.TabStateCache;
   },
 
-  get TabAttributes() {
-    delete this.TabAttributes;
-    if (isVersion(280))
-      Cu.import("resource:///modules/sessionstore/TabAttributes.jsm", this);
-    else
-      this.TabAttributes = Cu.getGlobalForObject(TabmixSvc.ss).TabAttributes;
-    return this.TabAttributes;
-  },
-
-  saveTabAttributes: function(tab) {
+  saveTabAttributes: function(tab, attrib) {
     if (!isVersion(250))
       return;
 
-    let attrib = this.TabAttributes.get(tab);
+    let attribs = attrib.split(",");
+    function update(attributes) {
+      attribs.forEach(function(key) {
+        if (tab.hasAttribute(key))
+          attributes[key] = tab.getAttribute(key);
+        else if (key in attributes)
+          delete attributes[key];
+      })
+    }
+
     let browser = tab.linkedBrowser;
-    if (browser.__SS_data)
-      browser.__SS_data.attributes = attrib;
-    this.TabStateCache[this._update](browser, "attributes", attrib);
+    if (browser.__SS_data) {
+      if (!browser.__SS_data.attributes)
+        browser.__SS_data.attributes = {};
+      update(browser.__SS_data.attributes);
+    }
+
+    let tabHasCache = isVersion(270) ? this.TabStateCache.has(browser) :
+                               this.TabStateCache._data.has(browser);
+    if (tabHasCache) {
+      let attributes = this.TabStateCache.get(browser).attributes || {};
+      update(attributes);
+      this.TabStateCache[this._update](browser, "attributes", attributes);
+    }
   }
 }
