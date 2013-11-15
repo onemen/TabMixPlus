@@ -589,6 +589,7 @@ var gTMPprefObserver = {
           else
             tab.removeAttribute("_locked");
           tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
+          TabmixSvc.saveTabAttributes(tab);
         }
         break;
       case "extensions.tabmix.extraIcons.autoreload":

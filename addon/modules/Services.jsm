@@ -154,6 +154,10 @@ let TabmixSvc = {
     }
   },
 
+  saveTabAttributes: function(tab) {
+    TabStateCache.saveTabAttributes(tab);
+  },
+
   get ss() {
     delete this.ss;
     if (isVersion(250)) {
@@ -210,3 +214,39 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
+
+let TabStateCache = {
+  get _update() {
+    delete this._update;
+    return this._update = isVersion(260) ? "updateField" : "update";
+  },
+
+  get TabStateCache() {
+    delete this.TabStateCache;
+    if (isVersion(270))
+      Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
+    else
+      this.TabStateCache = Cu.getGlobalForObject(TabmixSvc.ss).TabStateCache;
+    return this.TabStateCache;
+  },
+
+  get TabAttributes() {
+    delete this.TabAttributes;
+    if (isVersion(280))
+      Cu.import("resource:///modules/sessionstore/TabAttributes.jsm", this);
+    else
+      this.TabAttributes = Cu.getGlobalForObject(TabmixSvc.ss).TabAttributes;
+    return this.TabAttributes;
+  },
+
+  saveTabAttributes: function(tab) {
+    if (!isVersion(250))
+      return;
+
+    let attrib = this.TabAttributes.get(tab);
+    let browser = tab.linkedBrowser;
+    if (browser.__SS_data)
+      browser.__SS_data.attributes = attrib;
+    this.TabStateCache[this._update](browser, "attributes", attrib);
+  }
+}

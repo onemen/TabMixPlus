@@ -160,6 +160,7 @@ let AutoReload = {
   _update: function(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
     let win = aTab.ownerDocument.defaultView;
+    TabmixSvc.saveTabAttributes(aTab);
     win.TabmixSessionManager.updateTabProp(aTab);
   },
 

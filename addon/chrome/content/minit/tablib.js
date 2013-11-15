@@ -1121,6 +1121,7 @@ var tablib = {
         aTab.setAttribute("_locked", "true");
       }
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
+      TabmixSvc.saveTabAttributes(aTab);
       TabmixSessionManager.updateTabProp(aTab);
     }
 
@@ -1131,6 +1132,7 @@ var tablib = {
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
+      TabmixSvc.saveTabAttributes(aTab);
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
@@ -1153,6 +1155,7 @@ var tablib = {
       // don't keep this flag after user change lock state manually
       aTab.removeAttribute("_lockedAppTabs");
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
+      TabmixSvc.saveTabAttributes(aTab);
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();

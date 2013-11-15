@@ -2,6 +2,8 @@
 
 var EXPORTED_SYMBOLS = ["RenameTab"];
 
+Components.utils.import("resource://tabmixplus/Services.jsm");
+
 let RenameTab = {
   window: null,
   panel: null,
@@ -119,6 +121,7 @@ let RenameTab = {
     var win = this.window;
     win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
     win.Tabmix.setItem(tab, "label-uri", url);
+    TabmixSvc.saveTabAttributes(tab);
     win.TabmixSessionManager.updateTabProp(tab);
 
     if (tab.label != label)
