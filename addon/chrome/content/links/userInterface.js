@@ -333,7 +333,10 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       aTab.removeAttribute("locked");
   }
 
-  // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
+  let pending = aTab.hasAttribute("pending");
+
+  // this function run before tab load, so onTabReloaded will run when
+  // onStateChange get STATE_STOP, unless the tab is pending
   var reloadData = aTab.getAttribute("reload-data");
   if (reloadData) {
     this.autoReload.initTab(aTab);
@@ -342,9 +345,11 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     reloadData = reloadData.split(" ");
     aTab.autoReloadURI = reloadData[0];
     aTab.autoReloadTime = reloadData[1];
+    if (pending)
+      this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
   }
 
-  if (aTab.hasAttribute("pending")) {
+  if (pending) {
     let tabTitleChanged = TMP_Places.setTabTitle(aTab);
     if (tabTitleChanged) {
       TabmixTabbar.updateScrollStatus();

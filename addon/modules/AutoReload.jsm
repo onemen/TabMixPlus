@@ -175,7 +175,8 @@ let AutoReload = {
   },
 
  /**
-  *  called by TabmixProgressListener.listener
+  *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
+  *  for pending tabs
   */
   onTabReloaded: function(aTab, aBrowser) {
     var win = _getWindow(aBrowser.contentWindow);
