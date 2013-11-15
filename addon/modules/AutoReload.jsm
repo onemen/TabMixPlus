@@ -145,7 +145,7 @@ let AutoReload = {
     var win = _getWindow(browser.contentWindow);
     _clearTimeout(aTab, win);
     aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime*1000, aTab);
-    aTab.setAttribute("reload-data", aTab.autoReloadURI + " " + aTab.autoReloadTime);
+    this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
   },
 
   _disable: function(aTab) {
@@ -154,7 +154,13 @@ let AutoReload = {
     aTab.autoReloadURI = null;
     aTab.postDataAcceptedByUser = false;
     _clearTimeout(aTab);
-    aTab.removeAttribute("reload-data");
+    this._update(aTab);
+  },
+
+  _update: function(aTab, aValue) {
+    _setItem(aTab, "reload-data", aValue);
+    let win = aTab.ownerDocument.defaultView;
+    win.TabmixSessionManager.updateTabProp(aTab);
   },
 
   /**
@@ -238,7 +244,7 @@ function _reloadTab(aTab) {
           aTab.autoReloadEnabled = false;
           _setItem(aTab, "_reload", null);
           aTab.autoReloadURI = null;
-          aTab.removeAttribute("reload-data");
+          this._update(aTab);
           return;
         }
       }
