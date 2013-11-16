@@ -38,21 +38,6 @@ let AutoReload = {
   },
 
   onPopupShowing: function(aPopup, aTab) {
-    function setLabel(aItem, aSeconds) {
-      var timeLabel = aItem.getAttribute("_label") + " ";
-      if (aSeconds > 59) {
-        let minutes = parseInt(aSeconds / 60);
-        timeLabel += minutes + " " + (minutes > 1 ? customMenu.getAttribute("minutes") :
-                            customMenu.getAttribute("minute"));
-        aSeconds -= 60*minutes;
-        if (aSeconds)
-          timeLabel += " ";
-      }
-      if (aSeconds || !timeLabel)
-        timeLabel += aSeconds + " " + customMenu.getAttribute("seconds");
-      aItem.setAttribute("label", timeLabel);
-    }
-
     var menuItems = aPopup.childNodes;
     aPopup._tab = null;
     if (aTab.localName != "tab")
@@ -66,19 +51,74 @@ let AutoReload = {
     if (aPopup._tab.autoReloadEnabled == null)
       this.initTab(aPopup._tab);
 
-    var customReloadTime = TabmixSvc.prefBranch.getIntPref("custom_reload_time");
-    var customMenu = menuItems[5];
-    customMenu.setAttribute("value", customReloadTime);
-    setLabel(customMenu, customReloadTime);
-
     var enableItem = menuItems[2];
+    if (!this._labels) {
+      this._labels = {
+        minute:  enableItem.getAttribute("minute"),
+        minutes: enableItem.getAttribute("minutes"),
+        seconds: enableItem.getAttribute("seconds")
+      }
+    }
     enableItem.setAttribute("checked", aPopup._tab.autoReloadEnabled);
-    setLabel(enableItem, aPopup._tab.autoReloadTime);
+    this.setLabel(enableItem, aPopup._tab.autoReloadTime);
+
+    this.updateCustomList(aPopup);
 
     var radio = aPopup.getElementsByAttribute("value" , "*");
     for (let i=0; i<radio.length; i++) {
       _setItem(radio[i], "checked", radio[i].value == aPopup._tab.autoReloadTime || null);
     }
+  },
+
+  updateCustomList: function(aPopup) {
+    let start = aPopup.getElementsByAttribute("anonid", "start_custom_list")[0];
+    let end = aPopup.getElementsByAttribute("anonid", "end_custom_list")[0];
+    while (start.nextSibling && start.nextSibling != end)
+      aPopup.removeChild(start.nextSibling);
+
+    // get the custom list and validate its values
+    function getList() {
+      let prefs = TabmixSvc.prefBranch, pref = "custom_reload_list";
+      let list = prefs.getCharPref(pref).split(",");
+      if (!prefs.prefHasUserValue(pref))
+        return list;
+      if (!list.every(function(val) val==parseInt(val))) {
+        prefs.clearUserPref(pref);
+        return prefs.getCharPref(pref).split(",");
+      }
+      let newList = [];
+      list.forEach(function(val){
+        if (parseInt(val) && newList.indexOf(val) == -1)
+          newList.push(val);
+        if (newList.length > 6 )
+          newList.shift();
+      })
+      prefs.setCharPref(pref, newList);
+      return newList;
+    }
+
+    let doc = aPopup.ownerDocument.defaultView.document;
+    getList().sort(function(a,b) parseInt(a)>parseInt(b)).forEach(function(val) {
+      let mi = doc.createElement("menuitem");
+      this.setLabel(mi, val);
+      mi.setAttribute("type", "radio");
+      mi.setAttribute("value", val);
+      aPopup.insertBefore(mi, end);
+    }, this)
+  },
+
+  setLabel: function(aItem, aSeconds) {
+    var timeLabel = aItem.hasAttribute("_label") ? aItem.getAttribute("_label") + " " : "";
+    if (aSeconds > 59) {
+      let minutes = parseInt(aSeconds / 60);
+      timeLabel += minutes + " " + (this._labels[minutes > 1 ? "minutes" : "minute"]);
+      aSeconds -= 60*minutes;
+      if (aSeconds)
+        timeLabel += " ";
+    }
+    if (aSeconds || !timeLabel)
+      timeLabel += aSeconds + " " + this._labels.seconds;
+    aItem.setAttribute("label", timeLabel);
   },
 
   setTime: function(aTab, aReloadTime) {
@@ -96,7 +136,7 @@ let AutoReload = {
     var win = _getWindow(aTab.linkedBrowser.contentWindow);
     win.openDialog('chrome://tabmixplus/content/minit/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
-      aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("custom_reload_time");
+      aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
       this._enable(aTab);
     }
   },

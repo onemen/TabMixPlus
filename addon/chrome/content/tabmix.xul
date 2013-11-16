@@ -294,21 +294,12 @@
         <menuitem label="&autoReloadTab.label;"  disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator />
         <menuitem _label="&enable.label;:" type="checkbox"
+                  seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"
                   oncommand="Tabmix.autoReload.toggle(this.parentNode._tab); event.stopPropagation();"/>
         <menuseparator />
         <menuitem label="&custom.label;…" oncommand="Tabmix.autoReload.setCustomTime(this.parentNode._tab); event.stopPropagation();"/>
-        <menuitem _label="&custom.label;:" type="radio"
-                  seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"/>
-        <menuseparator />
-        <menuitem label="5  &seconds.label;" type="radio" value="5"/>
-        <menuitem label="15 &seconds.label;" type="radio" value="15"/>
-        <menuitem label="30 &seconds.label;" type="radio" value="30"/>
-        <menuitem label="1  &minute.label;"  type="radio" value="60"/>
-        <menuitem label="2  &minutes.label;" type="radio" value="120"/>
-        <menuitem label="5  &minutes.label;" type="radio" value="300"/>
-        <menuitem label="15 &minutes.label;" type="radio" value="900"/>
-        <menuitem label="30 &minutes.label;" type="radio" value="1800"/>
-        <menuseparator />
+        <menuseparator anonid="start_custom_list"/>
+        <menuseparator anonid="end_custom_list"/>
         <menuitem label="&enableTabs.label;" oncommand="Tabmix.autoReload.enableAllTabs(gBrowser); event.stopPropagation();"/>
         <menuitem label="&disableTabs.label;" oncommand="Tabmix.autoReload.disableAllTabs(gBrowser); event.stopPropagation();"/>
       </menupopup>
