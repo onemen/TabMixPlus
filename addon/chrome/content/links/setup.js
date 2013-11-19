@@ -161,15 +161,15 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           'if (window.opener && !window.opener.closed', loadOnStartup
         );
       }
-
-      if (Tabmix.isVersion(270) && sessionManager) {
-        this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
-          'SessionStore.canRestoreLastSession',
-          'TabmixSessionManager.canRestoreLastSession'
-        ).toCode();
-      }
     }
     bowserStartup.toCode();
+
+    if (Tabmix.isVersion(270) && sessionManager) {
+      this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
+        'SessionStore.canRestoreLastSession',
+        'TabmixSessionManager.canRestoreLastSession'
+      ).toCode();
+    }
 
     // At the moment we must init TabmixSessionManager before sessionStore.init
     var [obj, fn] = "gBrowserInit" in window ?
