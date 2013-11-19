@@ -860,16 +860,26 @@ var TabmixConvertSession = {
    },
 
    getHistoryState: function cs_getHistoryState(rdfNodeTab) {
-      var tmpData = TabmixSessionManager.getDecodedLiteralValue(rdfNodeTab, "history").split("|-|");
+      let decodeData = function(data, decode) {
+        return decode ? TabmixSessionManager.getDecodedLiteralValue(null, data) : data;
+      }
+      var history = TabmixSessionManager.getLiteralValue(rdfNodeTab, "history");
+      var tmpData = history.split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
-      var historyData = tmpData.join("|-|").split(sep);
+      tmpData = tmpData.join("|-|");
+      // if all history data was encoded (file saved with version
+      // 0.4.1.2pre.131006a1 or newer, changeset 684a4b2302e4)
+      // decode it now, else decode each entry separately
+      let newFormat = tmpData.indexOf(sep) == -1;
+      tmpData = decodeData(tmpData, newFormat);
+      var historyData = tmpData.split(sep);
       var historyCount = historyData.length/3;
       var entries = [];
       for (let i = 0; i < historyCount; i++) {
          let entry = { url:"", children:[], ID: 0};
          let index = i * 3;
          entry.url = historyData[index + 1];
-         entry.title = historyData[index];
+         entry.title = decodeData(historyData[index], !newFormat);
          entry.scroll = historyData[index + 2];
          entries.push(entry);
       }
