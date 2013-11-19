@@ -1853,6 +1853,7 @@ try {
       let showNewVersionTab;
       if (currentVersion != oldVersion) {
         Tabmix.prefs.setCharPref("version", currentVersion);
+        Services.prefs.savePrefFile(null);
         // show the new version page if versions are different after excluding
         // all characters from last alphabet character to the end
         let re = /([A-Za-z]*)\d*$/;
