@@ -129,6 +129,9 @@ let TabmixSvc = {
         return;
       this._initialized = true;
 
+      // check if australis tab shape is implemented
+      TabmixSvc.australis = aWindow.document.getElementById("tab-curve-clip-path-start");
+
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 

@@ -430,10 +430,8 @@ var TMP_eventListener = {
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
         platform = "xp40";
-        // check if australis tab shape is implemented in window (bug 738491)
-        let australis = document.getElementById("tab-curve-clip-path-start");
-        if (australis)
-          tabBar.setAttribute("australis", true);
+        if (TabmixSvc.australis)
+          tabBar.setAttribute("tabmix_australis", true);
       }
     }
     else {
@@ -445,7 +443,7 @@ var TMP_eventListener = {
       }
       switch (skin) {
         case "Australis":
-          tabBar.setAttribute("australis", true);
+          tabBar.setAttribute("tabmix_australis", true);
           break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
