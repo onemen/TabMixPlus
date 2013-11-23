@@ -1125,6 +1125,7 @@ var gTMPprefObserver = {
 
     if (!Tabmix.isPlatform("Mac") && !Tabmix.isPlatform("Linux")) {
       let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
+                    '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
                     '#TabsToolbar[multibar] > #tabs-closebutton {' +
                     '  height: #px;}'.replace("#", newHeight);
       this.insertRule(newRule);
