@@ -44,12 +44,13 @@
                   class="tab-content" align="center">
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
-                             tabindex="-1" button_side="left"
+                             button_side="left"
                              class="tab-close-button close-icon always-left"/>
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
-                         role="presentation"/>
+                         role="presentation"
+                         layer="true" />
               <xul:image xbl:inherits="src=image,fadein,pinned,selected"
                          class="tab-icon-image"
                          validate="never"
@@ -70,7 +71,7 @@
             </xul:stack>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
-                             tabindex="-1" button_side="right"
+                             button_side="right"
                              class="tab-close-button close-icon always-right"/>
         </xul:hbox>
       </xul:stack>
