@@ -31,7 +31,7 @@
           <xul:progressmeter class="tab-progress" mode="normal"
                              xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
         </xul:vbox>
-        <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged,fadein,visited,pending"
                   class="tab-background">
           <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
                     class="tab-background-start"/>
