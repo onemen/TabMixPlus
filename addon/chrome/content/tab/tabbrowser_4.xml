@@ -344,8 +344,10 @@
 
           var tabbrowser = this.tabbrowser;
 
-          Tabmix.rtl = window.getComputedStyle(tabbrowser, null).direction == "rtl";
-          Tabmix.ltr = !Tabmix.rtl;
+          XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function () {
+            return window.getComputedStyle(tabbrowser, null).direction == "rtl";
+          });
+          XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function () !Tabmix.rtl);
 
           this.setAttribute("closebuttons-side", Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft") ? "left" : "right");
           this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
