@@ -16,7 +16,7 @@
     <content orient="vertical">
       <xul:hbox align="center">
         <xul:checkbox anonid="useThis" label="&useThis.label;: "
-                      oncommand="_updateUseThisState(this.checked);"/>
+                      oncommand="_updateUseThisState(this.checked); event.stopPropagation();"/>
         <xul:label style="font-weight: bold;"/>
       </xul:hbox>
       <xul:separator class="groove"/>
