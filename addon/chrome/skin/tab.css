@@ -265,7 +265,8 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
 toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
 /* fix dropmarker orient for toolbarbutton[type="menu"] in FF 2.0 + */
-.tabmix_button[type="menu"] {
+#btn_undoclose[type="menu"] ,#btn_closedwindows[type="menu"] ,
+#btn_tabslist[type="menu"] ,#btn_sessionmanager[type="menu"] {
   -moz-box-orient: horizontal;
 }
 

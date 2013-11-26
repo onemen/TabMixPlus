@@ -1130,16 +1130,6 @@ var gTMPprefObserver = {
                     '  height: #px;}'.replace("#", newHeight);
       this.insertRule(newRule);
     }
-    if (TabmixSvc.australis) {
-      // fix toolbar buttons height
-      let newRule = '.tabmix_button[type="menu"] {padding-left: 2px !important; padding-right: 2px !important;}';
-      this.insertRule(newRule);
-      newRule = '.tabmix_button .toolbarbutton-icon {height: 24px;' +
-                '-moz-padding-start: 6px !important; padding-top: 2px !important; padding-bottom: 2px !important;}';
-      this.insertRule(newRule);
-      newRule = '.tabmix_button[type="menu-button"] .toolbarbutton-icon {-moz-padding-end: 6px !important;}';
-      this.insertRule(newRule);
-    }
   },
 
   addWidthRules: function TMP_PO_addWidthRules() {
