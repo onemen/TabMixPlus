@@ -649,6 +649,7 @@ var TMP_eventListener = {
       tab.setAttribute("locked", "true");
       tab.tabmix_allowLoad = false;
     }
+    Tabmix.setTabStyle(tab);
   },
 
   // this function call onTabOpen_updateTabBar after some delay
@@ -786,6 +787,12 @@ var TMP_eventListener = {
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
+
+    let lastSelected = document.getElementsByAttribute("tabmix_tabStyle",
+      Tabmix.tabStyles["current"] || "current")[0];
+    Tabmix.setTabStyle(lastSelected);
+    Tabmix.setTabStyle(tab);
+
     TMP_LastTab.OnSelect();
     TabmixSessionManager.tabSelected(true);
 

@@ -349,15 +349,38 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
   }
 
-  if (pending) {
-    let tabTitleChanged = TMP_Places.setTabTitle(aTab);
-    if (tabTitleChanged) {
-      TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
-    }
+  let tabTitleChanged, styleChanged = Tabmix.setTabStyle(aTab);
+  if (pending)
+    tabTitleChanged = TMP_Places.setTabTitle(aTab);
+  if (tabTitleChanged) {
+    TabmixTabbar.updateScrollStatus();
+    TabmixTabbar.updateBeforeAndAfter();
   }
 
   // make sure other extensions don't set minwidth maxwidth
   aTab.removeAttribute("minwidth");
   aTab.removeAttribute("maxwidth");
+}
+
+Tabmix.setTabStyle = function(aTab) {
+  if (!aTab)
+    return false;
+  let style = "other";
+  if (aTab.selected)
+    style = "current";
+  // if pending tab is blank we don't style it as unload or unread
+  else if (aTab.hasAttribute("pending"))
+    style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
+  else if (!aTab.hasAttribute("visited") && !isTabEmpty(aTab))
+    style = "unread";
+
+  let currentAttrib = aTab.getAttribute("tabmix_tabStyle");
+  let newAttrib = Tabmix.tabStyles[style] || style;
+  this.setItem(aTab, "tabmix_tabStyle", newAttrib);
+
+  let isBold = function(attrib) {
+    attrib = attrib.split(" ");
+    return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
+  }
+  return isBold(newAttrib) != isBold(currentAttrib);
 }

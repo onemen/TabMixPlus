@@ -66,70 +66,23 @@
 }
 
 /* :::: For current, unloaded, unread and other tab styles :::: */
-.tabbrowser-tabs[tabmix_unloadedTab~="bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="bold"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="bold"] .tab-text {
   font-weight: bold !important;
 }
 
-.tabbrowser-tabs[tabmix_currentTab~="not-bold"] .tabbrowser-tab[selected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="not-bold"] .tab-text {
   font-weight: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="italic"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="italic"] .tab-text {
   font-style: italic !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="not-italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="not-italic"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="not-italic"] .tab-text {
   font-style: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="underline"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="underline"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="underline"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="underline"] .tabbrowser-tab[selected="true"] .tab-text {
-  text-decoration: underline !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-weight: bold !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-style: italic !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-style: normal !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="underline"] .tab-text {
   text-decoration: underline !important;
 }
 

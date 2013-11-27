@@ -54,6 +54,19 @@ var TMP_SessionStore = {
      return this.getActiveEntryData(tabData).title || null;
    },
 
+   // check if pending tab has no history or is about:blank
+   isBlankPendingTab: function(aTab) {
+     if (!aTab.hasAttribute("pending"))
+       return false;
+     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+     let entries = tabData && tabData.entries;
+     if (entries && entries.length > 1)
+       return false;
+     if (entries[0] && entries[0].url != "about:blank")
+       return false;
+      return true;
+   },
+
    /**
     * @brief       - Add attribute to nsSessionStore persistTabAttribute.
     *

@@ -910,26 +910,20 @@ var gTMPprefObserver = {
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
     var styleRules = {
-      currentTab:    { text:  '#tabbrowser-tabs[tabmix_currentTab~="textColor"] .tabbrowser-tab[selected="true"]' + tabTextRule,
-                       bg  :  '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tabbrowser-tab[selected="true"],'+
-                              '#tabbrowser-tabs[tabmix_currentTab~="bgColor"][tabonbottom] .tabs-bottom' + backgroundRule},
-      unloadedTab:   { text:  '#tabbrowser-tabs[tabmix_unloadedTab~="textColor"] .tabbrowser-tab:not([selected="true"])[pending]' + tabTextRule,
-                       bg:    '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tabbrowser-tab:not([selected="true"])[pending]' + backgroundRule},
-      unreadTab:     { text:  '#tabbrowser-tabs[tabmix_unreadTab~="textColor"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,' +
-                              '#tabbrowser-tabs[tabmix_unreadTab~="textColor"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' +  tabTextRule,
-                       bg:    '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]),' +
-                              '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending])' + backgroundRule},
-      otherTab:      { text:  '#tabbrowser-tabs[tabmix_otherTab~="textColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="textColor"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + tabTextRule,
-                       bg:    '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]),' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited],' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]),' +
-                              '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending])' + backgroundRule},
-      progressMeter: { bg:    '#tabbrowser-tabs[tabmix_progressMeter="userColor"] .tabbrowser-tab .progress-bar {background-color: #colorCode !important;}'}
+      currentTab:    { text:  '.tabbrowser-tab[tabmix_tabStyle~="current-text"]' + tabTextRule,
+                       bg  :  '.tabbrowser-tab[tabmix_tabStyle~="current-bg"],' +
+                              '.tabbrowser-tab[tabmix_tabStyle~="current-bg"][tabonbottom] .tabs-bottom' + backgroundRule},
+      unloadedTab:   { text:  '.tabbrowser-tab[tabmix_tabStyle~="unloaded-text"]' + tabTextRule,
+                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unloaded-bg"]' + backgroundRule},
+      unreadTab:     { text:  '.tabbrowser-tab[tabmix_tabStyle~="unread-text"]' +  tabTextRule,
+                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
+      otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
+                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
+      progressMeter: { bg:    '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
+                              ' > .progress-bar {background-color: #colorCode !important;}'}
     }
 
+///XXX fix for mac
     if (Tabmix.isMac) {
       styleRules.currentTab.bg =
         '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"],' +
@@ -1277,6 +1271,7 @@ var gTMPprefObserver = {
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
     let attribValue = null, ruleName = prefName.split(".").pop();
+    let styleName = ruleName.replace("Tab", "");
     if (Tabmix.prefs.getBoolPref(ruleName)) {
       let prefValues = this.tabStylePrefs[ruleName];
       // set bold, italic and underline only when we control the sytle
@@ -1286,12 +1281,20 @@ var gTMPprefObserver = {
                prefValues.underline ? "underline" : "not-underline"
       ]
       if (prefValues.text)
-        attribValue.push("textColor");
+        attribValue.push(styleName + "-text");
       if (prefValues.bg)
-        attribValue.push("bgColor");
+        attribValue.push(styleName + "-bg");
       attribValue = attribValue.join(" ");
     }
-    Tabmix.setItem(gBrowser.tabContainer, "tabmix_" + ruleName, attribValue);
+
+    let tabs = document.getElementsByAttribute("tabmix_tabStyle",
+      Tabmix.tabStyles[styleName] || styleName);
+    Tabmix.tabStyles[styleName] = attribValue;
+    // update all tabs that have this style
+    Array.slice(tabs).forEach(function(tab) {
+      Tabmix.setItem(tab, "tabmix_tabStyle", attribValue || styleName);
+    })
+
     // changing bold attribute can change tab width and effect tabBar scroll status
     // also when we turn off unloaded, unread and other style diffrent style can take
     // control with a diffrent bold attribute
@@ -2006,6 +2009,7 @@ var TabmixProgressListener = {
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
                 !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")
             tab.removeAttribute("visited");
+            Tabmix.setTabStyle(tab);
         }
         // see gBrowser.openLinkWithHistory in tablib.js
         if (tab.hasAttribute("dontremovevisited"))

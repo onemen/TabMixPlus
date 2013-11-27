@@ -31,13 +31,13 @@
           <xul:progressmeter class="tab-progress" mode="normal"
                              xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
         </xul:vbox>
-        <xul:hbox xbl:inherits="pinned,selected,titlechanged,fadein,visited,pending"
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged,fadein"
                   class="tab-background">
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                     class="tab-background-start"/>
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                     class="tab-background-middle"/>
-          <xul:hbox xbl:inherits="pinned,selected,titlechanged,visited,pending"
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                     class="tab-background-end"/>
         </xul:hbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
@@ -367,6 +367,8 @@
           let tab = this.firstChild;
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
+          Tabmix.tabStyles = {};
+          Tabmix.setTabStyle(tab);
           TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
           if (TabmixTabbar.lockallTabs) {
             tab.setAttribute("locked", true);
