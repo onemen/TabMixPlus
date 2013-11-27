@@ -531,6 +531,8 @@ var TMP_eventListener = {
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
     gTMPprefObserver.addWidthRules();
+    if (TabmixSvc.australis)
+      gTMPprefObserver.setBgMiddleMargin();
     TabmixSessionManager.updateSettings();
 
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);

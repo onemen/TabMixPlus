@@ -507,6 +507,7 @@ var gTMPprefObserver = {
     }.bind(this);
     addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
     addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
+    addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
 
     try {
       // add Observer
@@ -861,6 +862,9 @@ var gTMPprefObserver = {
       case "extensions.tabmix.moveTabOnDragging":
         gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
         break;
+      case "layout.css.devPixelsPerPx":
+        setTimeout(function(self) {self.setBgMiddleMargin();},0, this);
+        break;
       default:
         break;
     }
@@ -1133,6 +1137,23 @@ var gTMPprefObserver = {
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
     this.insertRule(newRule, "width");
+  },
+
+  setBgMiddleMargin: function () {
+    // Workaround bug 943308 - tab-background not fully overlap the tab curves
+    // when layout.css.devPixelsPerPx is not 1.
+    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
+    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
+    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
+    if (bgMiddleMargin) {
+      bgMiddleMargin.style.MozMarginStart = margin;
+      bgMiddleMargin.style.MozMarginEnd = margin;
+    }
+    else {
+      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
+                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}'
+      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
+    }
   },
 
   defaultStylePrefs: {    currentTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
