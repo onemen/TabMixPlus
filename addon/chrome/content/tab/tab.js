@@ -915,8 +915,7 @@ var gTMPprefObserver = {
 
     var styleRules = {
       currentTab:    { text:  '.tabbrowser-tab[tabmix_tabStyle~="current-text"]' + tabTextRule,
-                       bg  :  '.tabbrowser-tab[tabmix_tabStyle~="current-bg"],' +
-                              '.tabbrowser-tab[tabmix_tabStyle~="current-bg"][tabonbottom] .tabs-bottom' + backgroundRule},
+                       bg  :  '.tabbrowser-tab[tabmix_tabStyle~="current-bg"]' + backgroundRule},
       unloadedTab:   { text:  '.tabbrowser-tab[tabmix_tabStyle~="unloaded-text"]' + tabTextRule,
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="unloaded-bg"]' + backgroundRule},
       unreadTab:     { text:  '.tabbrowser-tab[tabmix_tabStyle~="unread-text"]' +  tabTextRule,
@@ -958,12 +957,6 @@ var gTMPprefObserver = {
         '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
         '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
     }
-    else {
-      styleRules.currentTab.bgTabsontop =
-        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tabbrowser-tab[selected="true"],' +
-        '#TabsToolbar[tabsontop=true] > #tabbrowser-tabs[tabmix_currentTab~="bgColor"][tabonbottom] .tabs-bottom' +
-        "{background-image: " + this.gradients.body + " !important;}";
-    }
 
     for (let rule in Iterator(styleRules, true)) {
       this.setTabStyles("extensions.tabmix.styles." + rule, true);
@@ -979,11 +972,6 @@ var gTMPprefObserver = {
       this.insertRule(newRule, rule + "bg");
       if (rule != "progressMeter")
         this.toggleTabStyles(rule);
-    }
-    if ("bgTabsontop" in styleRules.currentTab) {
-      // bottom border for selected tab on top is diffrent
-      let newRule = styleRules.currentTab.bgTabsontop.replace(/#colorCode/g, this.tabStylePrefs["currentTab"].bgColor);
-      this.insertRule(newRule, "currentTab" + "bgTabsontop");
     }
 
     // rule for controling moz-margin-start when we have pinned tab in multi-row
@@ -1270,10 +1258,6 @@ var gTMPprefObserver = {
         if (ruleName != "progressMeter") {
           let newRule = this.gradients.tab.replace(/#colorCode/g, prefValues.bgColor);
           this.dynamicRules[ruleName + "bg"].style.setProperty("background-image", newRule, "important");
-          if (ruleName + "bgTabsontop" in this.dynamicRules) {
-            newRule = this.gradients.body.replace(/#colorCode/g, prefValues.bgColor);
-            this.dynamicRules[ruleName + "bgTabsontop"].style.setProperty("background-image", newRule, "important");
-          }
         }
         else
           this.dynamicRules[ruleName + "bg"].style.setProperty("background-color", prefValues.bgColor, "important");

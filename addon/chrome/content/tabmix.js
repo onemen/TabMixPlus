@@ -807,10 +807,6 @@ var TMP_eventListener = {
       if ( next && tabRow != tabBar.getTabRowNumber(next, top) )
         next.removeAttribute("afterselected");
     }
-
-    var tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
-    if (tabsBottom)
-      Tabmix.setItem(tabBar, "tabonbottom", tab.baseY >= tabsBottom.boxObject.y || null);
   },
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
