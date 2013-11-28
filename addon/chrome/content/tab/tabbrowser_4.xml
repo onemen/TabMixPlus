@@ -49,8 +49,7 @@
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
-                         role="presentation"
-                         layer="true" />
+                         role="presentation"/>
               <xul:image xbl:inherits="src=image,fadein,pinned,selected"
                          class="tab-icon-image"
                          validate="never"
@@ -66,7 +65,7 @@
                          role="presentation"/>
               <xul:hbox class="showhover-box">
                 <xul:toolbarbutton anonid="tmp-close-button"
-                                   tabindex="-1" class="showhover tabs-closebutton close-icon"/>
+                                   class="showhover tabs-closebutton close-icon"/>
               </xul:hbox>
             </xul:stack>
           <xul:toolbarbutton anonid="tmp-close-button"
