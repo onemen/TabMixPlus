@@ -798,15 +798,13 @@ var TMP_eventListener = {
     TMP_LastTab.OnSelect();
     TabmixSessionManager.tabSelected(true);
 
-    if (tabBar.hasAttribute("multibar")) {
-      let top = tabBar.topTabY;
-      let tabRow = tabBar.getTabRowNumber(tab, top);
-      var prev = TMP_TabView.previousVisibleSibling(tab), next = TMP_TabView.nextVisibleSibling(tab);
-      if ( prev && tabRow != tabBar.getTabRowNumber(prev, top) )
-        prev.removeAttribute("beforeselected");
-      if ( next && tabRow != tabBar.getTabRowNumber(next, top) )
-        next.removeAttribute("afterselected");
-    }
+    // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
+    // TabSelect event. we call updateBeforeAndAfter after a timeout so
+    // _setPositionalAttributes not override our attribute
+    if (Tabmix.isVersion(220))
+      setTimeout(function(){TabmixTabbar.updateBeforeAndAfter();}, 0);
+    else
+      TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
@@ -824,6 +822,8 @@ var TMP_eventListener = {
     if (!tab.pinned)
       gBrowser.tabContainer.setFirstTabInRow();
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
+
+    TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
@@ -922,6 +922,7 @@ var TMP_eventListener = {
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
+    gBrowser.tabContainer._tabmixPositionalTabs = null;
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)

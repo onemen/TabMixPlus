@@ -392,27 +392,67 @@ var TabmixTabbar = {
 
       if (this.position == 1)
         setTimeout(function(){tabBar.updateVerticalTabStrip();},0);
+
+      this.updateBeforeAndAfter();
     }
     ///maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
         (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
-  // Update beforeselected and afterselected attribute when we are in multi-row mode
-  updateBeforeAndAfter: function TMP_updateBeforeAndAfter() {
-    var tabBar = gBrowser.tabContainer;
-    if (!tabBar.hasAttribute("multibar"))
-       return;
+  // Update positional attributes when we are in multi-row mode
+  updateBeforeAndAfter: function TMP_updateBeforeAndAfter(onlyHoverAtt) {
+    let tabBar = gBrowser.tabContainer;
+    let multibar = tabBar.hasAttribute("multibar");
+    let selected = tabBar.selectedItem;
+    let tabRow, top = tabBar.topTabY;
+    // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
+    // include it), we add tabmix-beforeselected-visible here and use it for
+    // Firefox with australis UI
+    let updateAtt = function(tab, type, attrib, visible, prefix) {
+      let removed = "tabmix-removed-" + attrib;
+      let oldTab = tabBar._tabmixPositionalTabs[type];
+      if (oldTab && tab != oldTab) {
+        oldTab.removeAttribute("tabmix-" + attrib + "-visible");
+        oldTab.removeAttribute(removed);
+      }
+      tabBar._tabmixPositionalTabs[type] = tab;
+      if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
+          multibar || tab.hasAttribute(removed))) {
+        let sameRow = multibar ? tabRow == tabBar.getTabRowNumber(tab, top) || null : true;
+        Tabmix.setItem(tab, removed, !sameRow || null);
+        Tabmix.setItem(tab, attrib, sameRow);
+        if (visible)
+          Tabmix.setItem(tab, prefix + attrib + "-visible", sameRow);
+      }
+    }
 
-    var top = tabBar.topTabY;
-    var tab = tabBar.selectedItem, tabRow = tabBar.getTabRowNumber(tab, top);
-    var prev = TMP_TabView.previousVisibleSibling(tab), next = TMP_TabView.nextVisibleSibling(tab);
-    if (prev && prev.localName == "tab") {
-      Tabmix.setItem(prev, "beforeselected", tabRow == tabBar.getTabRowNumber(prev, top) ? true : null);
+    if (tabBar._hoveredTab && !tabBar._hoveredTab.closing) {
+      tabRow = tabBar.getTabRowNumber(tabBar._hoveredTab, top);
+      updateAtt(tabBar._beforeHoveredTab, "beforeHoveredTab", "beforehovered");
+      updateAtt(tabBar._afterHoveredTab, "afterHoveredTab", "afterhovered");
     }
-    if (next && next.localName == "tab") {
-      Tabmix.setItem(next, "afterselected", tabRow == tabBar.getTabRowNumber(next, top) ? true : null);
+
+    if (onlyHoverAtt)
+      return;
+
+    let prev = null, next = null;
+    if (!selected.closing) {
+      let visibleTabs = gBrowser.visibleTabs;
+      if (!visibleTabs.length)
+        return;
+      let selectedIndex = visibleTabs.indexOf(selected);
+      if (selectedIndex > 0)
+        prev = visibleTabs[selectedIndex - 1];
+      if (Tabmix.isVersion(220))
+        next = tabBar._afterSelectedTab;
+      else if (selectedIndex < visibleTabs.length - 1)
+          next = visibleTabs[selectedIndex + 1];
     }
+
+    tabRow = tabBar.getTabRowNumber(selected, top);
+    updateAtt(prev, "beforeSelectedTab", "beforeselected", TabmixSvc.australis, "tabmix-");
+    updateAtt(next, "afterSelectedTab", "afterselected", Tabmix.isVersion(220), "");
   },
 
   getRowHeight: function TMP_getRowHeight(tabsPosition) {

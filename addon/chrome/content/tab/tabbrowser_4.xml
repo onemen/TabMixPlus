@@ -98,6 +98,9 @@
     <field name="mSelect">
       0
     </field>
+    <field name="tabmix_mouseover">
+      0
+    </field>
 
     <property name="_isProtected" readonly="true">
       <getter><![CDATA[
@@ -161,6 +164,13 @@
         this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
         if (this.mouseHoverSelect)
           this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
+
+        if (TabmixSvc.australis) {
+          this.tabmix_mouseover = window.setTimeout(function(self) {
+            clearTimeout(self.tabmix_mouseover);
+            TabmixTabbar.updateBeforeAndAfter(true);
+          }, 0, this);
+        }
       ]]></body>
     </method>
 
@@ -207,6 +217,19 @@
         this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
         if (this.mouseHoverSelect && this.mFocusId)
           clearTimeout(this.mFocusId);
+
+        if (TabmixSvc.australis) {
+          clearTimeout(this.tabmix_mouseover);
+          let positionalTabs = this.parentNode._tabmixPositionalTabs;
+          if (positionalTabs.beforeHoveredTab) {
+            positionalTabs.beforeHoveredTab.removeAttribute("tabmix-removed-beforehovered");
+            positionalTabs.beforeHoveredTab = null;
+          }
+          if (positionalTabs.afterHoveredTab) {
+            positionalTabs.afterHoveredTab.removeAttribute("tabmix-removed-afterhovered");
+            positionalTabs.afterHoveredTab = null;
+          }
+        }
       ]]></body>
     </method>
 
@@ -253,7 +276,7 @@
 
     <method name="clearTimeouts">
       <body><![CDATA[
-        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID"];
+        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
         timeouts.forEach(function(aTimeout) {
           if (aTimeout in this && this[aTimeout]) {
             clearTimeout(this[aTimeout]);
@@ -352,6 +375,8 @@
           this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
           this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
           this.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
+          this._tabmixPositionalTabs = {beforeSelectedTab: null, afterSelectedTab: null,
+                                        beforeHoveredTab: null, afterHoveredTab: null}
 
           /**
            * if we set this in field[s] they will reset each time the tabbar binding construct
