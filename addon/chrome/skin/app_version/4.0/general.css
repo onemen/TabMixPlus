@@ -47,3 +47,123 @@
   -moz-padding-start: 15px;
   -moz-padding-end: 15px;
 }
+
+/* :::: tabs background color for australis [Firefox 28+] :::: */
+.tabbrowser-tab:hover:not([tabmix-beforeselected-visible]):not([selected=true]):not([dragged]) {
+  position: relative;
+  z-index: 1;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background ,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-middle {
+  background-color: transparent !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-start:-moz-locale-dir(ltr)::before,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-end:-moz-locale-dir(rtl)::before {
+  clip-path: url(chrome://browser/content/browser.xul#tab-curve-clip-path-start) !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-end:-moz-locale-dir(ltr)::before,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-start:-moz-locale-dir(rtl)::before {
+  clip-path: url(chrome://browser/content/browser.xul#tab-curve-clip-path-end) !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-start::before,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background > .tab-background-end::before {
+  content: "" !important;  /* this alrady exist for windows check in Mac and Linux*/
+  display: -moz-box !important; /* this alrady exist for windows check in Mac and Linux*/
+  background-color: transparent !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:hover > .tab-stack > .tab-background > .tab-background-start:not([selected=true])::before,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:hover > .tab-stack > .tab-background > .tab-background-end:not([selected=true])::before {
+  min-height: 31px;
+  width: 30px;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:hover > .tab-stack > .tab-background > .tab-background-middle:not([selected=true]) {
+  /* see the same rule for selected tab in chrome://browser/skin/browser.css */
+  background-clip: padding-box !important;
+  background-repeat: repeat-x !important;
+  background-size: auto 100%, auto 100%, auto 100% !important;
+  padding-top: 2px !important;
+  background-position: left bottom, left bottom, right bottom !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):not(:hover) > .tab-stack > .tab-background > .tab-background-start,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):not(:hover) > .tab-stack > .tab-background > .tab-background-end {
+  width: 0px !important;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):not(:hover) > .tab-stack > .tab-background {
+  -moz-margin-start: 0px;
+  -moz-margin-end: 0px;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):not(:hover) > .tab-stack > .tab-background > .tab-background-middle {
+  border: 2px solid transparent;
+  border-bottom: none;
+  -moz-margin-start: -1px;
+  -moz-margin-end: -1px;
+  border-radius: 13.25px 13.25px 0 0;
+}
+
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[first-visible-tab][tabmix_tabStyle*="bg"]:not([selected="true"]):not(:hover) > .tab-stack > .tab-background > .tab-background-middle,
+.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab[last-visible-tab][tabmix_tabStyle*="bg"]:not([selected="true"]):not(:hover) > .tab-stack > .tab-background > .tab-background-middle {
+  -moz-margin-start: -0.5px;
+  -moz-margin-end: -0.5px;
+}
+
+/* fix radios for tabs before and after the selected or hovered tab */
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+  border-bottom-left-radius: 15px;
+}
+
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+  border-bottom-right-radius: 15px;
+}
+
+/* fix for hoverd tab that is before or after selected tab */
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-start,
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-start::before,
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-end,
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-end::before {
+  width: 0px !important;
+}
+
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
+  background-position: left bottom, left bottom, right bottom;
+  background-size: 0% 0%, calc(100% - (1 * 30px)) 100%, 30px 100%;
+  border-radius: 13.25px 0 0 20px;
+  margin-left: 0px;
+}
+
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+  border-left: none;
+  border-radius: 25px 0 0 20px;
+  margin-left: 0px;
+}
+
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
+  background-position: left bottom, 30px bottom, right bottom;
+  background-size: 30px 100%, calc(100% - (1 * 30px)) 100%, 0% 0%;
+  border-radius: 0 13.25px 20px 0;
+  margin-right: 0px;
+}
+
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab]) > .tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+  border-right: none;
+  border-radius: 0 25px 20px 0;
+  margin-right: 0px;
+}

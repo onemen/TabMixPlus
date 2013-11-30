@@ -945,12 +945,11 @@ var gTMPprefObserver = {
   },
 
   createColorRules: function TMP_PO_createColorRules() {
-    var bottomBorder;
-    this.gradients = { };
-    this.gradients.body = "linear-gradient(#colorCode, #colorCode)";
-    bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px)";
-    this.gradients.tab = Tabmix.isMac ? this.gradients.body : (bottomBorder + "," + this.gradients.body);
-    var backgroundRule = "{-moz-appearance: none; background-image: " + this.gradients.tab + " !important;}"
+    this.bgImage = { };
+    this.bgImage.body = "linear-gradient(#colorCode, #colorCode)";
+    var bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),";
+    this.bgImage.bg = Tabmix.isMac ? this.bgImage.body : (bottomBorder + this.bgImage.body);
+    var backgroundRule = "{-moz-appearance: none; background-image: " + this.bgImage.bg + " !important;}"
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
     var styleRules = {
@@ -962,8 +961,42 @@ var gTMPprefObserver = {
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
       otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
-      progressMeter: { bg:    '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
-                              ' > .progress-bar {background-color: #colorCode !important;}'}
+    }
+
+    if (TabmixSvc.australis) {
+      this.bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),' +
+            bottomBorder + this.bgImage.body;
+      this.bgImage.bgselected = 'url("chrome://browser/skin/tabbrowser/tab-active-middle.png"),' +
+            bottomBorder +
+            'linear-gradient(transparent, transparent 2px, #colorCode 2px, #colorCode)';
+      this.bgImage.startEndselected = this.bgImage.bgselected;
+      this.bgImage.bghover = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),' +
+            bottomBorder +
+            'linear-gradient(transparent, transparent 2px, rgba(254, 254, 254, 0.72) 2px,' +
+            ' rgba(254, 254, 254, 0.72) 2px, rgba(250, 250, 250, 0.88) 3px,' +
+            ' rgba(250, 250, 250, 0.88) 3px, rgba(254, 254, 254, 0.72) 4px,' +
+            ' rgba(254, 254, 254, 0.72) 4px, #colorCode)';
+      this.bgImage.startEndhover = this.bgImage.bghover;
+      let _selector = '.tabbrowser-tab#HOVER[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background > ';
+      for (let [rule, style] in Iterator(styleRules)) {
+        delete style.bg;
+        let hover = rule == "currentTab" ? "" : ":hover";
+        let ruleSelector = _selector.replace("#RULE", rule.replace("Tab", ""));
+        let selector = ruleSelector.replace("#HOVER", hover);
+        let type = hover.replace(":", "") || "selected" ;
+        style["bg" + type] =       selector + '.tab-background-middle ' +
+                                   '{background-image: ' + this.bgImage["bg" + type] + '!important;}';
+        style["startEnd" + type] = selector + '.tab-background-start::before,' +
+                                   selector + '.tab-background-end::before ' +
+                                   '{background-image: ' + this.bgImage["startEnd" + type] + '!important;}';
+        if (hover) // i.e. not currentTab style
+          style.bg = ruleSelector.replace("#HOVER", ":not(:hover)") + '.tab-background-middle ' +
+                        '{background-image: ' + this.bgImage.bg + '!important;}';
+      }
+    }
+    styleRules.progressMeter = {
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
+          ' > .progress-bar {background-color: #colorCode !important;}'
     }
 
 ///XXX fix for mac
@@ -1003,15 +1036,12 @@ var gTMPprefObserver = {
       var prefValues = this.tabStylePrefs[rule];
       if (!prefValues)
         continue;
-
-      if (rule !=  "progressMeter") {
+      this.updateBgColorRule(rule, styleRules[rule], prefValues.bgColor, true);
+      if (rule != "progressMeter") {
         let newRule = styleRules[rule].text.replace("#colorCode",prefValues.textColor);
         this.insertRule(newRule, rule);
-      }
-      let newRule = styleRules[rule].bg.replace(/#colorCode/g,prefValues.bgColor);
-      this.insertRule(newRule, rule + "bg");
-      if (rule != "progressMeter")
         this.toggleTabStyles(rule);
+      }
     }
 
     // rule for controling moz-margin-start when we have pinned tab in multi-row
@@ -1294,15 +1324,8 @@ var gTMPprefObserver = {
     this.tabStylePrefs[ruleName] = prefValues;
     if (currentValue && !start) {
       // we get here only when user changed pref value
-      if (currentValue.bgColor != prefValues.bgColor) {
-        if (ruleName != "progressMeter") {
-          let newRule = this.gradients.tab.replace(/#colorCode/g, prefValues.bgColor);
-          this.dynamicRules[ruleName + "bg"].style.setProperty("background-image", newRule, "important");
-        }
-        else
-          this.dynamicRules[ruleName + "bg"].style.setProperty("background-color", prefValues.bgColor, "important");
-      }
-
+      if (currentValue.bgColor != prefValues.bgColor)
+        this.updateBgColorRule(ruleName, this.bgImage, prefValues.bgColor);
       if (ruleName != "progressMeter") {
         if (currentValue.textColor != prefValues.textColor)
           this.dynamicRules[ruleName].style.setProperty("color", prefValues.textColor, "important");
@@ -1312,6 +1335,32 @@ var gTMPprefObserver = {
         this.setProgressMeter();
     }
     delete this[ruleName];
+  },
+
+  updateBgColorRule: function (rule, styleRule, bgColor, start) {
+    let insertRule = function(name, newRule, prop) {
+      if (start ? !newRule : !this.dynamicRules[rule + name])
+        return;
+      newRule = newRule.replace(/#colorCode/g, bgColor);
+      if (start)
+        this.insertRule(newRule, rule + name);
+      else
+        this.dynamicRules[rule + name].style.setProperty(prop || "background-image", newRule, "important");
+    }.bind(this);
+
+    if (rule == "progressMeter") {
+      insertRule("bg", !start ? bgColor : styleRule.bg, "background-color");
+    }
+    else if (TabmixSvc.australis) {
+      for (let [name, style] in Iterator(styleRule)) {
+        if (name != "text")
+          insertRule(name, style);
+      }
+    }
+    else {
+      insertRule("bg", styleRule.bg);
+    }
+
   },
 
   toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
