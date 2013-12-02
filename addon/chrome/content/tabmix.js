@@ -1038,16 +1038,13 @@ Tabmix.initialization = {
   get isValidWindow() {
     /**
       * don't initialize Tabmix functions on this window if one of this is true:
-      *  - the window is a popup window
       *  - the window is about to close by SingleWindowModeUtils
       *  - tabbrowser-tabs binding didn't start (i onlly saw it happened
       *       when ImTranslator extension installed)
       */
-    let chromehidden = document.documentElement.getAttribute("chromehidden");
-    let stopInitialization = chromehidden.indexOf("extrachrome") > -1 ||
-                             chromehidden.indexOf("toolbar") > -1;
+    let stopInitialization = false;
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
-    if (!stopInitialization && Tabmix.singleWindowMode) {
+    if (Tabmix.singleWindowMode) {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
