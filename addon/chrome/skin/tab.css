@@ -120,45 +120,6 @@
   display: none;
 }
 
-/* ::::: new tab button on tab context menu ::::: */
-.newtab-menu-icon:not([platform]) {
-  list-style-image: url("newtab.png");
-}
-
-.newtab-menu-icon[platform=xp],
-.newtab-menu-icon[platform=linux] {
-  list-style-image: url("chrome://browser/skin/Toolbar-small.png");
-}
-
-.newtab-menu-icon[platform=xp] {
-  -moz-image-region: rect(0px 160px 16px 144px);
-}
-.newtab-menu-icon[platform=xp]:hover {
-  -moz-image-region: rect(16px 160px 32px 144px);
-}
-
-.newtab-menu-icon[platform=xp40] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0pt, 180px, 18px, 162px);
-}
-
-.newtab-menu-icon[platform=v4Mac] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0, 220px, 20px, 200px);
-}
-
-.newtab-menu-icon[platform=v36Mac] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0px, 360px, 23px, 324px);
-}
-.newtab-menu-icon[platform=v36Mac]:hover:active {
-  -moz-image-region: rect(46px, 360px, 69px, 324px);
-}
-
-.newtab-menu-icon[platform=linux] {
-  -moz-image-region: rect(0px 64px 16px 48px);
-}
-
 /*  :::::: Tabmix toolbar button :::::: */
 #btn_undoclose, .closedtabs-icon {
   list-style-image: url(undoclosetab.png);

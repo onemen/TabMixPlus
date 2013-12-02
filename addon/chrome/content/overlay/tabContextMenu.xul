@@ -16,7 +16,7 @@
     <menupopup id="tabContextMenu">
         <menuitem id="context_newTab" insertbefore="context_pinTab"
                  label="&tabCmd.label;" _afterthis="(&afterthis.label;)" _newtab="&tabCmd.label;"
-                 tmp_iconic="menuitem-iconic newtab-menu-icon"
+                 tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon"
                  oncommand="BrowserOpenTab();"/>
         <menuitem id="tm-duplicateTab" insertbefore="context_pinTab"
                  key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"

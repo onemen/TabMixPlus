@@ -1186,6 +1186,29 @@ var gTMPprefObserver = {
                     '  height: #px;}'.replace("#", newHeight);
       this.insertRule(newRule);
     }
+
+    // new tab button on tab context menu
+    newRule = '.tabmix-newtab-menu-icon {' +
+              'list-style-image: url("#URL");' +
+              '-moz-image-region: #REGION;}'
+    let url = "chrome://browser/skin/Toolbar.png", region;
+    let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    if (skin=="classic/1.0") {
+      if (Tabmix.isMac)
+        region = "rect(0, 220px, 20px, 200px)";
+      else if (Tabmix.isPlatform("Linux")) {
+        url = "chrome://browser/skin/Toolbar-small.png";
+        region = "rect(0px 64px 16px 48px)";
+      }
+      else if (TabmixSvc.australis)
+        region = "rect(18px, 360px, 36px, 342px)";
+      else
+        region = "rect(0pt, 180px, 18px, 162px)";
+    }
+    else
+      [url, region] = ["newtab.png", "auto"];
+    this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
+
   },
 
   addWidthRules: function TMP_PO_addWidthRules() {

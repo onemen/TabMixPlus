@@ -413,16 +413,11 @@ var TMP_eventListener = {
     }
 
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    var platform;
     if (skin=="classic/1.0") {
-      if (Tabmix.isMac) {
+      if (Tabmix.isMac)
         tabBar.setAttribute("classic", "v4Mac");
-        platform = "v4Mac";
-      }
       else if (Tabmix.isPlatform("Linux")) {
         tabBar.setAttribute("classic", "v3Linux");
-        tabBar.setAttribute("platform", "linux");
-        platform = "linux";
 ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
         Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
@@ -431,7 +426,6 @@ var TMP_eventListener = {
         let version = navigator.oscpu.indexOf("Windows NT 6.1") == 0 ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
-        platform = "xp40";
         if (TabmixSvc.australis)
           tabBar.setAttribute("tabmix_australis", true);
       }
@@ -471,9 +465,6 @@ var TMP_eventListener = {
           break;
       }
     }
-
-    // for new tab icon on context menu
-    Tabmix.setItem("context_newTab", "platform", platform);
 
     // don't remove maybe some themes use this with Tabmix
     tabBar.setAttribute("tabmix_firefox3" , true);
