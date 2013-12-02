@@ -201,6 +201,8 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
+
+  Tabmix.australisUI.init();
 }
 
 var TMP_eventListener = {
@@ -948,6 +950,7 @@ var TMP_eventListener = {
       Tabmix.flst.cancel();
 
     Tabmix.navToolbox.deinit();
+    Tabmix.australisUI.deinit();
   },
 
   // some theme not useing updated Tabmix tab binding
@@ -1021,6 +1024,31 @@ var TMP_eventListener = {
     updateAttrib("class", "tab-text", "role", "presentation");
   }
 
+}
+
+Tabmix.australisUI = {
+  init: function() {
+    if (!TabmixSvc.australis)
+      return;
+    PanelUI.panel.addEventListener("popupshowing", this.updateButtonsState);
+  },
+
+  deinit: function() {
+    if (!TabmixSvc.australis)
+      return;
+    PanelUI.panel.removeEventListener("popupshowing", this.updateButtonsState);
+  },
+
+  updateButtonsState: function() {
+    let $ = function(id) document.getElementById(id);
+    let cwb = $("btn_closedwindows");
+    if (cwb && cwb.parentNode == PanelUI.contents)
+      cwb.disabled = $("tmp_closedwindows").getAttribute("disabled");
+
+    let cwb = $("btn_undoclose");
+    if (cwb && cwb.parentNode == PanelUI.contents)
+      cwb.disabled = $("tmp_undocloseButton").getAttribute("disabled");
+  }
 }
 
 /**
