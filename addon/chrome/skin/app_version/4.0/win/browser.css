@@ -40,6 +40,10 @@
   padding-top: 5px;
 }
 
+.tabbrowser-tabs[tabmix_australis][multibar] ~ #tabs-closebutton {
+  padding-top: 8px !important;
+}
+
 /* for TabsToolbar on bottom with windows 7 */
 #tabmix-bottom-toolbox[tabmix_aero] {
   -moz-appearance: none;
