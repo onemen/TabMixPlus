@@ -349,10 +349,11 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
   }
 
-  let tabTitleChanged, styleChanged = Tabmix.setTabStyle(aTab);
+  let tabTitleChanged, boldChanged = {value: false};
+  Tabmix.setTabStyle(aTab, boldChanged);
   if (pending)
     tabTitleChanged = TMP_Places.setTabTitle(aTab);
-  if (tabTitleChanged) {
+  if (tabTitleChanged || boldChanged.value) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }
@@ -362,25 +363,29 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 }
 
-Tabmix.setTabStyle = function(aTab) {
+Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
-    return false;
+    return;
   let style = "other";
   if (aTab.selected)
     style = "current";
   // if pending tab is blank we don't style it as unload or unread
-  else if (aTab.hasAttribute("pending"))
+  else if (Tabmix.prefs.getBoolPref("unloadedTab") && aTab.hasAttribute("pending"))
     style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
-  else if (!aTab.hasAttribute("visited") && !isTabEmpty(aTab))
+  else if (Tabmix.prefs.getBoolPref("unreadTab") &&
+      !aTab.hasAttribute("visited") && !isTabEmpty(aTab))
     style = "unread";
 
   let currentAttrib = aTab.getAttribute("tabmix_tabStyle");
   let newAttrib = Tabmix.tabStyles[style] || style;
   this.setItem(aTab, "tabmix_tabStyle", newAttrib);
 
+  if (!boldChanged)
+    return;
+
   let isBold = function(attrib) {
     attrib = attrib.split(" ");
     return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
   }
-  return isBold(newAttrib) != isBold(currentAttrib);
+  boldChanged.value = isBold(newAttrib) != isBold(currentAttrib);
 }

@@ -667,7 +667,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.unloadedTab":
       case "extensions.tabmix.unreadTab":
       case "extensions.tabmix.otherTab":
-        this.toggleTabStyles(prefName);
+        this.updateTabsStyle(prefName, true);
         break;
       case "extensions.tabmix.styles.currentTab":
       case "extensions.tabmix.styles.unloadedTab":
@@ -1040,7 +1040,7 @@ var gTMPprefObserver = {
       if (rule != "progressMeter") {
         let newRule = styleRules[rule].text.replace("#colorCode",prefValues.textColor);
         this.insertRule(newRule, rule);
-        this.toggleTabStyles(rule);
+        this.updateTabsStyle(rule);
       }
     }
 
@@ -1329,7 +1329,7 @@ var gTMPprefObserver = {
       if (ruleName != "progressMeter") {
         if (currentValue.textColor != prefValues.textColor)
           this.dynamicRules[ruleName].style.setProperty("color", prefValues.textColor, "important");
-        this.toggleTabStyles(prefName);
+        this.updateTabsStyle(prefName);
       }
       else
         this.setProgressMeter();
@@ -1363,10 +1363,11 @@ var gTMPprefObserver = {
 
   },
 
-  toggleTabStyles: function TMP_PO_toggleTabStyles(prefName) {
+  updateTabsStyle: function(prefName, toggle) {
     let attribValue = null, ruleName = prefName.split(".").pop();
     let styleName = ruleName.replace("Tab", "");
-    if (Tabmix.prefs.getBoolPref(ruleName)) {
+    let enabled = Tabmix.prefs.getBoolPref(ruleName);
+    if (enabled) {
       let prefValues = this.tabStylePrefs[ruleName];
       // set bold, italic and underline only when we control the sytle
       // to override theme default rule if exist
@@ -1381,13 +1382,33 @@ var gTMPprefObserver = {
       attribValue = attribValue.join(" ");
     }
 
-    let tabs = document.getElementsByAttribute("tabmix_tabStyle",
-      Tabmix.tabStyles[styleName] || styleName);
+    let getTabs = function(attrib, val) {
+      return Array.slice(document.getElementsByAttribute(attrib, val));
+    }
+
+    let tabs, attrib = Tabmix.tabStyles[styleName] || styleName;
     Tabmix.tabStyles[styleName] = attribValue;
-    // update all tabs that have this style
-    Array.slice(tabs).forEach(function(tab) {
-      Tabmix.setItem(tab, "tabmix_tabStyle", attribValue || styleName);
-    })
+    /** style on non-selected tab are unloaded, unread or other, unloaded and
+     *  unread are only set on tab if the corresponded preference it on. if user
+     *  changed unloaded or unread preference we need to set the proper tab
+     *  style for each tab
+     */
+    if (toggle && styleName == "unloaded") {
+      tabs = getTabs("pending", "true");
+      tabs.forEach(function(tab) Tabmix.setTabStyle(tab));
+    }
+    else if (toggle && styleName == "unread") {
+      if (enabled)
+        attrib = Tabmix.tabStyles["other"] || "other";
+      tabs = getTabs("tabmix_tabStyle", attrib);
+      tabs.forEach(function(tab) Tabmix.setTabStyle(tab));
+    }
+    else {
+      tabs = getTabs("tabmix_tabStyle", attrib);
+      tabs.forEach(function(tab) {
+        Tabmix.setItem(tab, "tabmix_tabStyle", attribValue || styleName);
+      })
+    }
 
     // changing bold attribute can change tab width and effect tabBar scroll status
     // also when we turn off unloaded, unread and other style diffrent style can take
