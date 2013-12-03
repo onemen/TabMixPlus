@@ -21,6 +21,34 @@
     </handlers>
   </binding>
 
+  <binding id="tabmix-tab-text-stack-28" display="xul:stack">
+    <content>
+      <xul:label flex="1"
+                 anonid="tab-label"
+                 xbl:inherits="value=visibleLabel,crop,accesskey,fadein,pinned,selected"
+                 class="tab-text tab-label"
+                 role="presentation"/>
+      <xul:hbox class="showhover-box">
+        <xul:toolbarbutton anonid="tmp-close-button"
+                 class="showhover tabs-closebutton close-icon"/>
+      </xul:hbox>
+    </content>
+  </binding>
+
+  <binding id="tabmix-tab-text-stack" display="xul:stack">
+    <content>
+      <xul:label flex="1"
+                 anonid="tab-label"
+                 xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
+                 class="tab-text tab-label"
+                 role="presentation"/>
+      <xul:hbox class="showhover-box">
+        <xul:toolbarbutton anonid="tmp-close-button"
+                 class="showhover tabs-closebutton close-icon"/>
+      </xul:hbox>
+    </content>
+  </binding>
+
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
             extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tab-proxy">
     <content context="tabContextMenu" closetabtext="&closeTab.label;">
@@ -58,16 +86,8 @@
               <xul:image class="tab-lock-icon"/>
               <xul:image class="tab-reload-icon"/>
             </xul:stack>
-            <xul:stack class="tab-text-stack" flex="1" xbl:inherits="fadein,pinned,selected">
-              <xul:label flex="1"
-                         xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
-                         class="tab-text tab-label"
-                         role="presentation"/>
-              <xul:hbox class="showhover-box">
-                <xul:toolbarbutton anonid="tmp-close-button"
-                                   class="showhover tabs-closebutton close-icon"/>
-              </xul:hbox>
-            </xul:stack>
+            <xul:stack class="tab-text-stack" flex="1"
+                       xbl:inherits="visibleLabel,label,crop,accesskey,fadein,pinned,selected"/>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
                              button_side="right"
@@ -356,6 +376,10 @@
             return;
           }
           this.tabmix_inited = true;
+
+          let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-text-stack {' +
+              '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-text-stack#VERSION") !important;'
+          gTMPprefObserver.insertRule(newRule.replace("#VERSION", Tabmix.isVersion(280) ? "-28" : ""));
 
           // ODFReader change Cc to something else maybe some other extensions do that too !!!
           if ("Cc" in window && Cc != Components.classes)

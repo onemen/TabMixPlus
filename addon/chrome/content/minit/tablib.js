@@ -81,7 +81,8 @@ var tablib = {
        dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);'
+      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);',
+      {check: !Tabmix.isVersion(280)}
     )._replace(
       't.className = "tabbrowser-tab";',
       '$&\
