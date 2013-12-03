@@ -39,11 +39,16 @@ function getKeysForShortcut(shortcut, id, win) {
 function _getKeyName(win, aKey) {
   let doc = win.document;
   let command, val;
-  let fButton = doc.getElementById("titlebar");
-  let val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
+
+  // don't use dynamic label for key name
+  let skip = ["key_undoCloseTab", "key_undoCloseWindow"];
+  if (skip.indexOf(aKey.id) == -1) {
+    let fButton = doc.getElementById("titlebar");
+    val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
       _getLabel(doc.getElementById("main-menubar"), "key", aKey.id) ||
       _getLabel(doc.getElementById("mainPopupSet"), "key", aKey.id) ||
       _getLabel(doc, "key", aKey.id);
+  }
 
   if (!val && (aKey.hasAttribute("command") || aKey.hasAttribute("observes"))) {
     command = aKey.getAttribute("command") || aKey.getAttribute("observes");
@@ -87,11 +92,8 @@ function _getKeyName(win, aKey) {
 }
 
 function _getLabel(elm, attr, value) {
-  // don't use dynamic label for key name
-  let skip = ["key_undoCloseTab", "key_undoCloseWindow"];
-  if (attr == "key" && skip.indexOf(value) > -1)
+  if (!elm)
     return null;
-
   let items = elm.getElementsByAttribute(attr, value);
   for (let i = 0, l = items.length; i < l; i++) {
     if (items[i].hasAttribute("label")) {
