@@ -963,7 +963,7 @@ var gTMPprefObserver = {
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
     }
 
-    if (TabmixSvc.australis) {
+    if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab) {
       this.bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),' +
             bottomBorder + this.bgImage.body;
       this.bgImage.bgselected = 'url("chrome://browser/skin/tabbrowser/tab-active-middle.png"),' +
