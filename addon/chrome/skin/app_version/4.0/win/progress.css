@@ -6,7 +6,8 @@
 **/
 
 /* :::: progress bar on tabs :::: */
-.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+.tabbrowser-tabs[tabmix_australis]:not([treestyletab-mode="vertical"])
+    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 4px 7px 0px 7px;
 }
 
