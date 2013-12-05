@@ -2122,8 +2122,7 @@ var TabmixProgressListener = {
       else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
-        // Suppress tabs that may be created by downloading a file.
-        // forward the request to the selected tab
+        // remove blank tab that created by downloading a file.
         if (Tabmix.prefs.getBoolPref("enablefiletype") &&
             aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
             uri != "about:blank" && aStatus == 0 &&
