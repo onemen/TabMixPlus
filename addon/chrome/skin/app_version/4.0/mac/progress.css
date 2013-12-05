@@ -16,7 +16,6 @@
 
 .tab-progress-container {
   -moz-appearance: none;
-  pointer-events: none;
   -moz-box-ordinal-group: 100;
 }
 

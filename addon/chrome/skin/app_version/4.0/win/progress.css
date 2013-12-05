@@ -10,18 +10,6 @@
   margin: 4px 7px 0px 7px;
 }
 
-.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab > .tab-stack > .tab-background {
-  -moz-box-ordinal-group: 10;
-}
-
-.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab > .tab-stack > .tab-content {
-  -moz-box-ordinal-group: 20;
-}
-
-.tabbrowser-tabs[tabmix_australis] > .tabbrowser-tab > .tab-stack > .tab-progress-container {
-  -moz-box-ordinal-group: 100;
-}
-
 .tab-progress {
   -moz-appearance: none;
   min-height: 0px;

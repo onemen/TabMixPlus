@@ -247,6 +247,10 @@ so display: none !important; does not hide the button */
   min-width: 0;
 }
 
+.tabbrowser-tab > .tab-stack > .tab-progress-container {
+  pointer-events: none;
+}
+
 .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   display: none;
 }

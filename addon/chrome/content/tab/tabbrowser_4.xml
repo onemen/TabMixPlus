@@ -73,10 +73,6 @@
       <xul:hbox class="tab-image-left tab-startcap tab-left tab-left-border" xbl:inherits="selected,hover"/>
       <xul:hbox class="tab-drag-indicator-left"/>
       <xul:stack class="tab-stack" flex="1">
-        <xul:vbox class="tab-progress-container">
-          <xul:progressmeter class="tab-progress" mode="normal"
-                             xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
-        </xul:vbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged,fadein"
                   class="tab-background">
           <xul:hbox xbl:inherits="pinned,selected,titlechanged"
@@ -86,6 +82,10 @@
           <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                     class="tab-background-end"/>
         </xul:hbox>
+        <xul:vbox class="tab-progress-container">
+          <xul:progressmeter class="tab-progress" mode="normal"
+                             xbl:inherits="value=tab-progress,fadein,pinned,selected"/>
+        </xul:vbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                   class="tab-content" align="center">
           <xul:toolbarbutton anonid="tmp-close-button"
