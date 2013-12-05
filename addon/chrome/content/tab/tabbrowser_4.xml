@@ -49,6 +49,24 @@
     </content>
   </binding>
 
+  <binding id="tabmix-showhover-close-tab-button"
+           extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-image">
+    <handlers>
+      <handler event="click" button="0"><![CDATA[
+        var bindingParent = document.getBindingParent(this).parentNode.parentNode.parentNode;
+        var tabContainer = bindingParent.parentNode;
+        tabContainer.tabbrowser.removeTab(bindingParent, {animate: true, byMouse: true});
+        tabContainer._blockDblClick = true;
+      ]]></handler>
+      <handler event="dblclick" button="0" phase="capturing">
+        event.stopPropagation();
+      </handler>
+      <handler event="dragstart">
+        event.stopPropagation();
+      </handler>
+    </handlers>
+  </binding>
+
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
             extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tab-proxy">
     <content context="tabContextMenu" closetabtext="&closeTab.label;">
