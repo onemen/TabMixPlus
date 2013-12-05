@@ -2108,13 +2108,15 @@ var TabmixProgressListener = {
           tab.removeAttribute("progress");
           this.mTabBrowser.setTabTitle(tab);
         }
-        // this code run after setTabTitleLoading, so we must set tab width on setTabTitleLoading
-        // at this stage only unhide the button if needed.
-        else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING) &&
-              this.mTabBrowser.tabContainer.getAttribute("closebuttons") == "noclose") {
-          let tabsCount = this.mTabBrowser.visibleTabs.length;
-          if (tabsCount == 1)
-            this.mTabBrowser.tabContainer.adjustTabstrip(true, url);
+        else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING)) {
+          Tabmix.setTabStyle(tab);
+          // this code run after setTabTitleLoading, so we must set tab width on setTabTitleLoading
+          // at this stage only unhide the button if needed.
+          if (this.mTabBrowser.tabContainer.getAttribute("closebuttons") == "noclose") {
+            let tabsCount = this.mTabBrowser.visibleTabs.length;
+            if (tabsCount == 1)
+              this.mTabBrowser.tabContainer.adjustTabstrip(true, url);
+          }
         }
       }
       else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
