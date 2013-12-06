@@ -1201,7 +1201,7 @@ var gTMPprefObserver = {
         region = "rect(0px 64px 16px 48px)";
       }
       else if (TabmixSvc.australis)
-        region = "rect(18px, 360px, 36px, 342px)";
+        region = "rect(0px, 360px, 18px, 342px)";
       else
         region = "rect(0pt, 180px, 18px, 162px)";
     }
