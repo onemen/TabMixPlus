@@ -74,6 +74,8 @@
           useThis.checked = checked;
           this.disabled = !checked;
 
+          this.treeStyleTab = window.opener.treeStyleTab && this.id != "progressMeter";
+
           useThis.nextSibling.value = document.getElementById("_" + this.id).label;
           // colorpicker need some time untile its ready
           window.setTimeout( function(self) {self._getPrefs(self._initPrefValues);}, 0, this)
@@ -208,13 +210,16 @@
       <method name="_setColorpicker">
         <parameter name="aID"/>
         <body><![CDATA[
-          var opacity;
-          var enabled = this.disabled ? false : this._getElementById(aID).checked;
-          if (enabled) {
+          var opacity, disableBg = this.treeStyleTab && aID == "bg";
+          var disabled = this.disabled || disableBg ||
+                       !this._getElementById(aID).checked;
+          if (!disabled) {
             this.removeAttribute(aID + "-disabled");
             opacity = this._getElementById(aID + "Opacity").value;
           }
           else {
+            if (disableBg)
+              this._getElementById("bg").disabled = true;
             this.setAttribute(aID + "-disabled", true);
             opacity = 20;
           }
@@ -266,7 +271,7 @@
 
   <binding id="tabmix-rgbcontrol">
     <content align="center">
-        <xul:label value="[RGB]:"/>
+        <xul:label value="[RGB]:" xbl:inherits="disabled"/>
         <xul:textbox anonid="red" class="rgbcontrol" xbl:inherits="disabled"
                      maxlength="3" size="1" type="number" min="0" max="255"/>
         <xul:textbox anonid="green" class="rgbcontrol" xbl:inherits="disabled"

@@ -427,7 +427,7 @@ var TMP_eventListener = {
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
         if (TabmixSvc.australis)
-          tabBar.setAttribute("tabmix_australis", true);
+          tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
       }
     }
     else {
@@ -439,7 +439,7 @@ var TMP_eventListener = {
       }
       switch (skin) {
         case "Australis":
-          tabBar.setAttribute("tabmix_australis", true);
+          tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
           break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":

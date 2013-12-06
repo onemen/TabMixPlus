@@ -1361,6 +1361,8 @@ var gTMPprefObserver = {
   },
 
   updateBgColorRule: function (rule, styleRule, bgColor, start) {
+    if (Tabmix.extensions.treeStyleTab && rule != "progressMeter")
+      return;
     let insertRule = function(name, newRule, prop) {
       if (start ? !newRule : !this.dynamicRules[rule + name])
         return;

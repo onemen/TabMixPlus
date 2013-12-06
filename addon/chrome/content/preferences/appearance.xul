@@ -184,6 +184,9 @@
             </hbox>
             <checkbox_tmp id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
                       preference="pref_unreadTabreload" observes="obs_unreadTab"/>
+            <label id="treeStyleTab.bg.msg" class="header" hidden="true"
+                   value="Our backgroung colors are off when treeStyleTabs installed"
+                   style="text-decoration: underline; color: #CC0000; margin-top: 10px;"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&show.ontab.label;"/>

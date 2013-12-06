@@ -13,6 +13,11 @@ var gAppearancePane = {
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
 
+    if (browserWindow.Tabmix.extensions.treeStyleTab) {
+      Tabmix.setItem("treeStyleTab.bg.msg", "hidden", null);
+      window.treeStyleTab = true;
+    }
+
     // browser.allTabs.previews
     if (Tabmix.isVersion(210)) {
       gPrefWindow.removeChild("pref_allTabsPpreviews");
