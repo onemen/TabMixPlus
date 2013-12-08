@@ -6,31 +6,23 @@
 **/
 
 /* :::: progress bar on tabs :::: */
-.tab-background {
-  -moz-box-ordinal-group: 10;
-}
-
-.tab-content {
-  -moz-box-ordinal-group: 20;
-}
-
-.tab-progress-container {
-  -moz-appearance: none;
-  -moz-box-ordinal-group: 100;
-}
-
 .tab-progress {
   -moz-appearance: none;
   min-height: 0px;
   height: 4px;
 }
 
-#tabbrowser-tabs[tabsontop="true"] .tab-progress {
+#tabbrowser-tabs:not([tabmix_australis])[tabsontop="true"] .tab-progress {
   margin: 3px 2px;
 }
 
-#tabbrowser-tabs:not([tabsontop="true"]) .tab-progress {
+#tabbrowser-tabs:not([tabmix_australis]):not([tabsontop="true"]) .tab-progress {
   margin: 1px 2px;
+}
+
+.tabbrowser-tabs[tabmix_australis]:not([treestyletab-mode="vertical"])
+    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  margin: 4px 7px 0px 7px;
 }
 
 .tab-progress > .progress-bar {
