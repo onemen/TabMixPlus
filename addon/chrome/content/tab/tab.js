@@ -1188,6 +1188,10 @@ var gTMPprefObserver = {
                   '  height: #px;}'.replace("#", newHeight);
     this.insertRule(newRule);
 
+    // we don't show icons on menu on Mac OS X
+    if (Tabmix.isMac)
+      return;
+
     // new tab button on tab context menu
     newRule = '.tabmix-newtab-menu-icon {' +
               'list-style-image: url("#URL");' +
@@ -1195,9 +1199,7 @@ var gTMPprefObserver = {
     let url = "chrome://browser/skin/Toolbar.png", region;
     let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin=="classic/1.0") {
-      if (Tabmix.isMac)
-        region = "rect(0, 220px, 20px, 200px)";
-      else if (Tabmix.isPlatform("Linux"))
+      if (Tabmix.isPlatform("Linux"))
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
                                        "rect(0px, 96px, 24px, 72px)";
       else
