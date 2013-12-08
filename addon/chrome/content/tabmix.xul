@@ -164,7 +164,7 @@
     </popup>
 
     <toolbarpalette id="BrowserToolbarPalette">
-      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
               observes="tmp_undocloseButton"
               oncommand="if (event.target == this &amp;&amp; !TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
               onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
@@ -183,7 +183,8 @@
               onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true"
+                              class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
               observes="tmp_sessionmanagerButton"
               _tooltiptext="&sessionbtn.tooltip;"
               tooltiptext="&sessionbtn.tooltip;"
@@ -233,7 +234,7 @@
          </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
                onclick="if (event.target == this) if (event.button == 1) gBrowser.closeAllTabs();"
                context="hideTabbar_context"
@@ -254,7 +255,7 @@
          </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                observes="tmp_closedwindows"
                label="&closedwindowsbtn.label;"
                _tooltiptext="&closedwindowsbtn.tooltip;"

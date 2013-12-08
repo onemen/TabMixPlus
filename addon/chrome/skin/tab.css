@@ -178,10 +178,13 @@ toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic
 toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
-/* fix dropmarker orient for toolbarbutton[type="menu"] in FF 2.0 + */
-#nav-bar > #btn_undoclose[type="menu"], #nav-bar > #btn_closedwindows[type="menu"],
-#nav-bar > #btn_tabslist[type="menu"], #nav-bar > #btn_sessionmanager[type="menu"] {
+/* fix dropmarker orient for toolbarbutton */
+.tabmix-button[type="menu"]:not([cui-areatype="menu-panel"]) {
   -moz-box-orient: horizontal;
+}
+
+toolbar[mode="full"] .tabmix-button[type="menu"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
 }
 
 /* for hashcoulouredtabs */
