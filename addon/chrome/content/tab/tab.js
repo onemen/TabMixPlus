@@ -949,6 +949,7 @@ var gTMPprefObserver = {
     this.bgImage.body = "linear-gradient(#colorCode, #colorCode)";
     var bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),";
     this.bgImage.bg = Tabmix.isMac ? this.bgImage.body : (bottomBorder + this.bgImage.body);
+///XXX move -moz-appearance: to general rule when style have bg
     var backgroundRule = "{-moz-appearance: none; background-image: " + this.bgImage.bg + " !important;}"
     var tabTextRule = " .tab-text { color: #colorCode !important;}";
 
@@ -961,6 +962,16 @@ var gTMPprefObserver = {
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
       otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
+    }
+
+    if (Tabmix.isMac) {
+      backgroundRule = '.tabbrowser-tab[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background > ' +
+        ':-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
+
+      styleRules.currentTab.bg = backgroundRule.replace("#RULE", "current");
+      styleRules.unloadedTab.bg = backgroundRule.replace("#RULE", "unloaded");
+      styleRules.unreadTab.bg = backgroundRule.replace("#RULE", "unread");
+      styleRules.otherTab.bg = backgroundRule.replace("#RULE", "other");
     }
 
     if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab) {
@@ -997,38 +1008,6 @@ var gTMPprefObserver = {
     styleRules.progressMeter = {
       bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
           ' > .progress-bar {background-color: #colorCode !important;}'
-    }
-
-///XXX fix for mac
-    if (Tabmix.isMac) {
-      styleRules.currentTab.bg =
-        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"],' +
-        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-middle[selected="true"],' +
-        '#tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-end[selected="true"]' + backgroundRule;
-      styleRules.unloadedTab.bg =
-        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-start:not([selected="true"])[pending],' +
-        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-middle:not([selected="true"])[pending],' +
-        '#tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-end:not([selected="true"])[pending]' + backgroundRule;
-      styleRules.unreadTab.bg =
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-start:not([visited]),' +
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-middle:not([visited]),' +
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"]:not([tabmix_unloadedTab]) .tab-background-end:not([visited]),' +
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-start:not([visited]):not([pending]),' +
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-middle:not([visited]):not([pending]),' +
-        '#tabbrowser-tabs[tabmix_unreadTab~="bgColor"][tabmix_unloadedTab] .tab-background-end:not([visited]):not([pending])' + backgroundRule;
-      styleRules.otherTab.bg =
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-start:not([selected="true"]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-middle:not([selected="true"]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tab-background-end:not([selected="true"]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-start:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-middle:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tab-background-end:not([selected="true"])[visited],' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-start:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-middle:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tab-background-end:not([selected="true"]):not([pending]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-start:not([selected="true"])[visited]:not([pending]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-middle:not([selected="true"])[visited]:not([pending]),' +
-        '#tabbrowser-tabs[tabmix_otherTab~="bgColor"][tabmix_unreadTab][tabmix_unloadedTab] .tab-background-end:not([selected="true"])[visited]:not([pending])' + backgroundRule;
     }
 
     for (let rule in Iterator(styleRules, true)) {

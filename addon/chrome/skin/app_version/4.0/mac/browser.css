@@ -31,25 +31,13 @@
   vertical-align: bottom;
 }
 
+.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-content {
+  border-image: none !important;
+}
+
 /* tabmix color on tab - for inactive window */
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-middle[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-end[selected="true"]:-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-start:not([selected="true"])[pending]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-middle:not([selected="true"])[pending]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-end:not([selected="true"])[pending]:-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-start:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-middle:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-end:not([selected="true"]):not([visited]):-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-start:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-middle:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-end:not([selected="true"]):-moz-window-inactive{
+.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background >
+        :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive {
   opacity: 0.5 !important;
 }
 
