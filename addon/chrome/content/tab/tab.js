@@ -1197,14 +1197,12 @@ var gTMPprefObserver = {
     if (skin=="classic/1.0") {
       if (Tabmix.isMac)
         region = "rect(0, 220px, 20px, 200px)";
-      else if (Tabmix.isPlatform("Linux")) {
-        url = "chrome://browser/skin/Toolbar-small.png";
-        region = "rect(0px 64px 16px 48px)";
-      }
-      else if (TabmixSvc.australis)
-        region = "rect(0px, 360px, 18px, 342px)";
+      else if (Tabmix.isPlatform("Linux"))
+        region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
+                                       "rect(0px, 96px, 24px, 72px)";
       else
-        region = "rect(0pt, 180px, 18px, 162px)";
+        region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
+                                       "rect(0pt, 180px, 18px, 162px)";
     }
     else
       [url, region] = ["newtab.png", "auto"];
