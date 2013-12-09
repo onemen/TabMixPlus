@@ -224,12 +224,19 @@ var TabmixTabbar = {
 
   updateScrollStatus: function TMP_updateScrollStatus() {
     var tabBar = gBrowser.tabContainer;
-    if (this.isMultiRow && tabBar.mTabstrip.orient == "vertical") {
+    if (this.isMultiRow) {
       //XXX we only need setFirstTabInRow from here when tab width changed
       // so if widthFitTitle is false we need to call it if we actualy change the width
       // for other chases we need to call it when we change title
-      tabBar.setFirstTabInRow();
-      tabBar.updateVerticalTabStrip();
+      if (tabBar.mTabstrip.orient == "vertical") {
+        tabBar.setFirstTabInRow();
+        tabBar.updateVerticalTabStrip();
+      }
+      // with Australis overflow not always trigger when tab changed width
+      else if (TabmixSvc.australis && !this.widthFitTitle) {
+        tabBar.mTabstrip._enterVerticalMode();
+        tabBar.setFirstTabInRow();
+      }
     }
     else if (!this.isMultiRow)
       tabBar.adjustNewtabButtonvisibility();
