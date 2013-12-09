@@ -412,6 +412,9 @@ var TMP_eventListener = {
       Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
     }
 
+    if (TabmixSvc.australis)
+      tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
+
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin=="classic/1.0") {
       if (Tabmix.isMac)
@@ -426,8 +429,6 @@ var TMP_eventListener = {
         let version = navigator.oscpu.indexOf("Windows NT 6.1") == 0 ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
-        if (TabmixSvc.australis)
-          tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
       }
     }
     else {
