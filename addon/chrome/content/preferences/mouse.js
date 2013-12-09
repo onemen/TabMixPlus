@@ -47,11 +47,17 @@ var gMousePane = {
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],
   updatePanelPrefs: function (aIndex) {
-    let prefID = "pref_" + this._options[aIndex] + "ClickTab";
+    let panel = this._options[aIndex];
+    let prefID = "pref_" + panel + "ClickTab";
     // update "ClickTab" menulist
     this.updatePref(this.clickTab, prefID);
     // update "ClickTabbar" menulist
     this.updatePref(this.clickTabbar, prefID + "bar");
+    // Linux uses alt key down to trigger the top menu on Ubuntu or
+    // start drag window on OpenSuSe
+    let disabled = Tabmix.isPlatform("Linux") && panel == "alt";
+    Tabmix.setItem(this.clickTabbar, "disabled", disabled || null);
+    Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
   },
 
   updatePref: function (element, prefID) {
