@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "Текущую страницу">
 <!ENTITY newtab.duplicate "Клонированную страницу">
 <!ENTITY newtab.location.1 "Страница новой вкладки">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Страница новой вкладки по умолчанию">
 <!ENTITY location.label.1 "Адрес">
 <!ENTITY focusContent.label "Фокусироваться на вкладке, когда она не пустая">
 <!ENTITY openTabNext.label "Размещать новые вкладки сразу после текущей">
@@ -210,8 +210,8 @@
 <!ENTITY ontabbar.label "По панели вкладок:">
 <!ENTITY clicktab.label "Выберите действие при щелчке по вкладке или панели">
 <!ENTITY ontabbar.dblClick.label "Предотвращать изменение размера окна при двойном клике на панели вкладок.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "Предотвращать перетаскивание окна при клике на панели вкладок.">
+<!ENTITY clicktab.default "Firefox по умолчанию или с расширениями">
 <!ENTITY clicktab.nothing "Ничего не предпринимать">
 <!ENTITY clicktab.addtab "Открыть новую вкладку">
 <!ENTITY clicktab.duplicatetab "Клонировать вкладку">

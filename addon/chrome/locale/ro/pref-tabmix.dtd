@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "pagina curentă">
 <!ENTITY newtab.duplicate "o pagină duplicat">
 <!ENTITY newtab.location.1 "o pagină cu adresă specificată">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Pagina implicită pentru o filă nouă">
 <!ENTITY location.label.1 "Adresă">
 <!ENTITY focusContent.label "Se selectează conținutul când se încarcă o pagină nevidă">
 <!ENTITY openTabNext.label "Se deschid filele noi lângă fila curentă">
@@ -208,11 +208,11 @@
 <!ENTITY alt.label "Alt+clic">
 <!ENTITY ontab.label "pe o filă:">
 <!ENTITY ontabbar.label "pe bara de file:">
-<!ENTITY clicktab.label "Comanzi executae la clic pe o filă sau pe bara de file">
-<!ENTITY ontabbar.dblClick.label "Nu se permite redimensionarea ferestrei cu dublu-clic pe bara de file">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
-<!ENTITY clicktab.nothing "Nu se execută nimic">
+<!ENTITY clicktab.label "Acțiuni efectuate cu mausul pe o filă sau pe bara de file">
+<!ENTITY ontabbar.dblClick.label "Nu se permite redimensionarea sau tragerea ferestrei cu dublu-clic sau clic cu mausul pe bara de file">
+<!ENTITY ontabbar.click.label "(atunci când bara de file este suprapusă peste bara de titlu a ferestrei)">
+<!ENTITY clicktab.default "Acțiune implicită a Firefox sau a altui supliment instalat">
+<!ENTITY clicktab.nothing "Nicio acțiune">
 <!ENTITY clicktab.addtab "Deschide o filă nouă">
 <!ENTITY clicktab.duplicatetab "Duplică fila">
 <!ENTITY clicktab.duplicatetabw "Duplică fila într-o fereastră nouă">

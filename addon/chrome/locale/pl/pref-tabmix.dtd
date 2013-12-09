@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "aktywną stronę">
 <!ENTITY newtab.duplicate "powielaną stronę">
 <!ENTITY newtab.location.1 "stronę o poniższym adresie">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Zestaw stron przycisku Nowa karta">
 <!ENTITY location.label.1 "Adres">
 <!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
@@ -193,7 +193,7 @@
 <!ENTITY tabFlip.delay "Opóźnienie wykonania">
 <!ENTITY clickFocus.label "Uaktywniaj kartę po pełnym cyklu kliknięcia przyciskiem myszy (naciśnięcie i puszczenie przycisku)">
 <!ENTITY removeEntries.label "Kliknięcie ś.p.m. usuwa elementy z rozwijanych list Tab Mix Plusa">
-<!ENTITY lockTabSizingOnClose.label "Gdy karta jest zamykana inne etykiety kart nie powinny zmieniać szerokości zanim kursor nie zostanie przesunięty poza obszar paska narzędzi">
+<!ENTITY lockTabSizingOnClose.label "Po zamknięciu karty etykiety innych kart nie zmieniają szerokości, gdy kursor jest na pasku kart">
 <!ENTITY removeEntries.tooltip "Pozwala na usuwanie takich elementów list jak: zamknięte karty, okna i zapisane sesje">
 <!ENTITY tabbarscrolling.caption "Gdy przewijasz nad paskiem kart">
 <!ENTITY tabbarscrolling.holdShift.label "Aby przełączać się pomiędzy tymi opcjami, wciśnij i przytrzymaj klawisz Shift.">
@@ -209,10 +209,10 @@
 <!ENTITY ontab.label "Na etykiecie karty:">
 <!ENTITY ontabbar.label "Na pasku kart:">
 <!ENTITY clicktab.label "Wybierz działanie jakie zostanie wykonane po kliknięciu na etykiecie karty/pasku kart">
-<!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
-<!ENTITY clicktab.nothing "brak reakcji">
+<!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie paska kart.">
+<!ENTITY ontabbar.click.label "Nie zezwalaj na przeciąganie okna po kliknięciu paska kart.">
+<!ENTITY clicktab.default "Domyślne Firefoksa lub innego rozszerzenia">
+<!ENTITY clicktab.nothing "Brak reakcji">
 <!ENTITY clicktab.addtab "Otwórz nową kartę">
 <!ENTITY clicktab.duplicatetab "Powiel kartę">
 <!ENTITY clicktab.duplicatetabw "Powiel kartę w nowym oknie">

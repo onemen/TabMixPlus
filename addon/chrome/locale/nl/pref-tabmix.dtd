@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "Huidige pagina">
 <!ENTITY newtab.duplicate "Pagina dupliceren">
 <!ENTITY newtab.location.1 "Nieuwe tabblad pagina">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Standaard pagina nieuw tabblad">
 <!ENTITY location.label.1 "Webadres">
 <!ENTITY focusContent.label "Inhoud op voorgrond weergeven bij het laden van een niet-lege pagina">
 <!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
@@ -160,7 +160,7 @@
 <!ENTITY extraIcons.locked "gesloten">
 <!ENTITY extraIcons.protected "beschermd">
 <!ENTITY extraIcons.autoreload "automatisch vernieuwen">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Verbergen op vastgezette tabbladen">
 <!ENTITY progressMeter.label "Voortgangsmeter op tabbladen">
 <!ENTITY showTabX.labelBegin "Knop Tabblad sluiten">
 <!ENTITY showTabX.left "Aan de linkerkant plaatsen">
@@ -210,8 +210,8 @@
 <!ENTITY ontabbar.label "op de tabbladenbalk:">
 <!ENTITY clicktab.label "Kies de opdracht om uit te voeren wanneer op een tabblad of op de tabbladenbalk geklikt wordt">
 <!ENTITY ontabbar.dblClick.label "Voorkomen dat door dubbel-klikken op de tabbladenbalk de vensterafmetingen worden gewijzigd.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "Klikken op tabbladbalk voorkomen">
+<!ENTITY clicktab.default "Firefox standaard of andere extensie">
 <!ENTITY clicktab.nothing "Er gebeurt niets">
 <!ENTITY clicktab.addtab "Een nieuw tabblad openen">
 <!ENTITY clicktab.duplicatetab "Het tabblad dupliceren">
@@ -236,8 +236,8 @@
 <!ENTITY clicktab.removeall "Alle tabbladen sluiten">
 <!ENTITY clicktab.removeother "De overige tabbladen sluiten">
 <!ENTITY clicktab.removesimilar "Tabbladen van ditzelfde domein sluiten">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Linker tabbladen sluiten">
+<!ENTITY clicktab.removetoRight "Rechter tabbladen sluiten">
 <!ENTITY clicktab.uctab "Het laatst gesloten tabblad heropenen">
 <!ENTITY clicktab.ucatab "Alle gesloten tabbladen heropenen">
 <!ENTITY clicktab.snapback "SnapBack tabblad">

@@ -8,7 +8,7 @@
 <!ENTITY apply.label "Alkalmaz">
 <!ENTITY settings.export "Beállítások exportálása">
 <!ENTITY settings.import "Beállítások importálása">
-<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.sync "Sync beállítások">
 <!ENTITY settings.default "Alapállapot">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
 <!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">
@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "Aktuális oldal">
 <!ENTITY newtab.duplicate "Lap megkettőzése">
 <!ENTITY newtab.location.1 "Új lapok oldal">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Alapértelmezett új lap oldal">
 <!ENTITY location.label.1 "Webcím">
 <!ENTITY focusContent.label "Fókusz a tartalomra nem üres oldal esetén">
 <!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
@@ -71,7 +71,7 @@
 <!ENTITY tabFocus.caption "Megnyitott lapra fókuszálás és kiválasztás, ha megnyitva:">
 <!ENTITY selectTab.label "Linkek">
 <!ENTITY selectDivertedTab.label "Eltérített ablakok">
-<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabFromExternal.label "További alkalmazások">
 <!ENTITY selectTabCommand.label "Új lap parancsai">
 <!ENTITY contextMenuSearch.label "Keresés a helyi menüben">
 <!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">
@@ -160,7 +160,7 @@
 <!ENTITY extraIcons.locked "Zárolva">
 <!ENTITY extraIcons.protected "Védve">
 <!ENTITY extraIcons.autoreload "Automatikus újratöltés">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY extraIcons.hideonpinned "Elrejtés a rögzített lapokon">
 <!ENTITY progressMeter.label "Állapotjelző">
 <!ENTITY showTabX.labelBegin "Lap bezárása gomb">
 <!ENTITY showTabX.left "Elhelyezés bal oldalon">
@@ -210,8 +210,8 @@
 <!ENTITY ontabbar.label "a Lapok eszköztáron:">
 <!ENTITY clicktab.label "Válasszon egy végrehajtandó műveletet, ha egy lapra vagy a Lapok eszköztárra kattint">
 <!ENTITY ontabbar.dblClick.label "Dupla kattintás a lapokon ne változtassa meg az ablak méretét.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "A lapok eszköztárral ne lehessen elhúzni az ablakot">
+<!ENTITY clicktab.default "Firefox alapértelmezés vagy más kiterjesztés">
 <!ENTITY clicktab.nothing "ne tegyen semmit">
 <!ENTITY clicktab.addtab "új lap megnyitása">
 <!ENTITY clicktab.duplicatetab "lap megkettőzése">
@@ -236,8 +236,8 @@
 <!ENTITY clicktab.removeall "bezárja az összes lapot">
 <!ENTITY clicktab.removeother "bezárja a többi lapot">
 <!ENTITY clicktab.removesimilar "Azonos webhelyrol származó lapok bezárása">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Balra lévő lapok bezárása">
+<!ENTITY clicktab.removetoRight "Jobbra lévő lapok bezárása">
 <!ENTITY clicktab.uctab "újranyitja az összes bezárt lapot">
 <!ENTITY clicktab.ucatab "Bezárt lapok újranyitása">
 <!ENTITY clicktab.snapback "lap visszazárása">

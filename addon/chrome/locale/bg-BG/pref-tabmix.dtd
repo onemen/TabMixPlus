@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "Текущата страница">
 <!ENTITY newtab.duplicate "Дублирана страница">
 <!ENTITY newtab.location.1 "Нов подпрозорец">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Нов подпрозорец по подразбиране">
 <!ENTITY location.label.1 "Адрес">
 <!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
 <!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
@@ -209,9 +209,9 @@
 <!ENTITY ontab.label "върху подпрозорец:">
 <!ENTITY ontabbar.label "върху лентата с подпрозорци:">
 <!ENTITY clicktab.label "Изберете действие при щракване върху подпрозорец/лентата с подпрозорци">
-<!ENTITY ontabbar.dblClick.label "Двукратното щракване върху лентата с подпрозорците НЕ променя размера на прозореца.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.dblClick.label "Двукратното щракване върху лентата с подпрозорците НЕ променя размера на прозореца">
+<!ENTITY ontabbar.click.label "и НЕ позволява преместването му.">
+<!ENTITY clicktab.default "Използване на стандартната команда или на друга добавка">
 <!ENTITY clicktab.nothing "Без никакви последици">
 <!ENTITY clicktab.addtab "Отваряне на нов подпрозорец">
 <!ENTITY clicktab.duplicatetab "Дублиране на подпрозореца">

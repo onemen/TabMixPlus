@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "praegust lehte">
 <!ENTITY newtab.duplicate "lehe koopiat">
 <!ENTITY newtab.location.1 "uue kaardi lehte">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Vaikimisi uue kaardi leht">
 <!ENTITY location.label.1 "Aadress">
 <!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
@@ -210,8 +210,8 @@
 <!ENTITY ontabbar.label "kaartide ribal:">
 <!ENTITY clicktab.label "Vali käsk, mis käivitatakse kaardil või kaartide ribal klõpsates">
 <!ENTITY ontabbar.dblClick.label "Kaartide ribal topeltklõpsates ära muuda akna suurust.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "Keelab kaartide ribal klõpsates akna lohistamise.">
+<!ENTITY clicktab.default "Firefoxi vaikesäte või mõne teise laienduse säte">
 <!ENTITY clicktab.nothing "Ei tee midagi">
 <!ENTITY clicktab.addtab "Avab uue kaardi">
 <!ENTITY clicktab.duplicatetab "Teeb kaardist koopia">
