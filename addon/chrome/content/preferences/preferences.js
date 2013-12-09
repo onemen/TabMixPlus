@@ -437,6 +437,12 @@ function loadData (pattern) {
   Services.prefs.setIntPref("browser.startup.page", false);
   Services.prefs.savePrefFile(null);
 
+  // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
+  let pref = "extensions.tabmix.updateOpenedTabsLockState=";
+  let index = pattern.indexOf(pref + true) + pattern.indexOf(pref + false) + 1;
+  if (index > 0)
+    pattern.splice(1, 0, pattern.splice(index, 1)[0]);
+
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
   for (let i = 1; i < pattern.length; i++){
