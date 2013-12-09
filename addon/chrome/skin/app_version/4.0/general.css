@@ -49,7 +49,7 @@
 }
 
 /* :::: tabs background color for australis [Firefox 28+] :::: */
-.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:hover:not([tabmix-beforeselected-visible]):not([selected=true]):not([dragged]) {
+.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab:hover:not([tabmix-beforeselected-visible]):not([selected=true]):not([dragged]) {
   position: relative;
   z-index: 1;
 }
