@@ -279,13 +279,6 @@
 
     <toolbarbutton id="go-button" onclick="Tabmix.goButtonClick(event);"/>
 
-    <menu id="historyUndoMenu">
-      <menupopup id="historyUndoPopup"
-              context="tm_undocloseContextMenu"
-              onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
-              onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
-    </menu>
-
     <popupset id="mainPopupSet">
       <!-- popup menu for autoreload -->
       <menupopup id="autoreload_popup" oncommand="Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);"

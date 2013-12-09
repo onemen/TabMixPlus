@@ -664,14 +664,12 @@ var tablib = {
        $&'
     ).toCode();
 
-    if (document.getElementById("appmenu_recentlyClosedTabsMenu")) {
-      HistoryMenu.prototype.populateUndoSubmenu = function PHM_populateUndoSubmenu() {
-        var undoMenu = this._rootElt.getElementsByClassName("recentlyClosedTabsMenu")[0];
-        var undoPopup = undoMenu.firstChild;
-        if (!undoPopup.hasAttribute("context"))
-          undoPopup.setAttribute("context", "tm_undocloseContextMenu");
-        TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
-      }
+    HistoryMenu.prototype.populateUndoSubmenu = function PHM_populateUndoSubmenu() {
+      var undoMenu = this._rootElt.getElementsByClassName("recentlyClosedTabsMenu")[0];
+      var undoPopup = undoMenu.firstChild;
+      if (!undoPopup.hasAttribute("context"))
+        undoPopup.setAttribute("context", "tm_undocloseContextMenu");
+      TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
     }
 
     // history menu open in new tab if the curren tab is locked
