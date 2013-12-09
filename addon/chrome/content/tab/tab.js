@@ -1179,13 +1179,14 @@ var gTMPprefObserver = {
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
     this.insertRule(newRule);
 
-    if (!Tabmix.isPlatform("Mac") && !Tabmix.isPlatform("Linux")) {
-      let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
-                    '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
-                    '#TabsToolbar[multibar] > #tabs-closebutton {' +
-                    '  height: #px;}'.replace("#", newHeight);
-      this.insertRule(newRule);
-    }
+    if (Tabmix.isMac && !TabmixSvc.australis)
+      newHeight = 24;
+
+    let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
+                  '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
+                  '#TabsToolbar[multibar] > #tabs-closebutton {' +
+                  '  height: #px;}'.replace("#", newHeight);
+    this.insertRule(newRule);
 
     // new tab button on tab context menu
     newRule = '.tabmix-newtab-menu-icon {' +

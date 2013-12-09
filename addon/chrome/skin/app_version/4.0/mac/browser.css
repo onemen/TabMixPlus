@@ -27,10 +27,6 @@
   background-repeat: repeat;
 }
 
-#TabsToolbar[multibar] .toolbarbutton-1 {
-  margin-top: 1px !important;
-}
-
 .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
@@ -68,11 +64,6 @@
 }
 
 /* :::: scrollbutton arrow - fix borders :::: */
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
-  height: 24px;
-}
-
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up,
 #tabmixScrollBox[flowing=multibar] > .scrollbutton-up {
   -moz-border-end: none;
