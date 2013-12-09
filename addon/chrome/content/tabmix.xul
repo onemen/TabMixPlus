@@ -140,7 +140,7 @@
          oncommand="gBrowser.lockTab(gBrowser.mCurrentTab);"
          insertbefore="context-sep-stop" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;"/>
       <menu id="tm-tabsList" label="&tabsList.label;" accesskey="&tabsList.accesskey;" insertbefore="context-sep-stop" tmp_iconic="menu-iconic">
-        <menupopup id="tm-tabsList-menu" class="fix-bookmark-item"
+        <menupopup id="tm-tabsList-menu"
            onpopupshowing="TabmixAllTabs.createTabsList(this, 2);"
            onpopuphidden="TabmixAllTabs.hideCommonList(this);"
            onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
@@ -151,7 +151,7 @@
          key="key_undoCloseTab" label="&undoCloseTab.label;" accesskey="&undoCloseTab.accesskey;"/>
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="context-sep-stop">
-        <menupopup id="tm-content-undoCloseList-menu" class="fix-bookmark-item"
+        <menupopup id="tm-content-undoCloseList-menu"
           onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this);"
           onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </menu>
@@ -280,7 +280,7 @@
     <toolbarbutton id="go-button" onclick="Tabmix.goButtonClick(event);"/>
 
     <menu id="historyUndoMenu">
-      <menupopup id="historyUndoPopup" class="fix-bookmark-item"
+      <menupopup id="historyUndoPopup"
               context="tm_undocloseContextMenu"
               onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
               onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
