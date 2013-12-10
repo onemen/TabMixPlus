@@ -369,13 +369,17 @@ let Shortcuts = {
     return key ? this.keyStringify(key) : "";
   },
 
+  getFormattedKey: function(key) {
+    return getFormattedKey(key);
+  },
+
+  getFormattedKeyForID: function(id) {
+    let key = this.keyParse(this.keys[id].value)
+    return getFormattedKey(key);
+  },
+
   getPlatformAccel: function() {
-    switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-      case 17:  return "control"; break;
-      case 18:  return "alt"; break;
-      case 224: return "meta"; break;
-    }
-    return Services.appinfo.OS == "Darwin" ? "meta" : "control"
+    return getPlatformAccel();
   },
 
   // add id for key Browser:Reload
@@ -466,7 +470,7 @@ let KeyConfig = {
       let newKey = {modifiers: prefValue[0].replace(" ", ","),
           key: prefValue[1], keycode: prefValue[2]};
       if (keyData.value.indexOf("accel") > -1)
-        newKey.modifiers = newKey.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
+        newKey.modifiers = newKey.modifiers.replace(getPlatformAccel(), "accel");
       newValue = Shortcuts.keyStringify(newKey);
     }
     if (newValue != keyData.value) {
@@ -511,4 +515,59 @@ function setPref(name, value) {
   let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
   str.data = value;
   Services.prefs.setComplexValue(name, Ci.nsISupportsString, str);
+}
+
+function getFormattedKey(key) {
+  if (!key)
+    return "";
+  var val = "";
+
+  if (key.modifiers) {
+    let sep = getPlatformKeys("MODIFIER_SEPARATOR");
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
+      if (/alt|shift|control|meta|accel/.test(mod))
+        val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
+    })
+  }
+
+  if (key.key) {
+    if (key.key == " ") {
+      key.key = ""; key.keycode = "VK_SPACE";
+    }
+    else
+      val += key.key.toUpperCase();
+  }
+  if (key.keycode) try {
+    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
+    val += localeKeys.GetStringFromName(key.keycode);
+  } catch (ex) {
+    val += "<" + key.keycode + ">";
+  }
+  return val;
+}
+
+/*
+ * get platform labels for: alt, shift, control, meta, accel.
+ */
+let gPlatformKeys = {};
+function getPlatformKeys(key) {
+  if (typeof gPlatformKeys[key] == "string")
+    return gPlatformKeys[key];
+
+  let val, platformKeys = Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
+  if (key != "VK_ACCEL")
+    val = platformKeys.GetStringFromName(key);
+  else
+    val = getPlatformKeys("VK_" + getPlatformAccel().toUpperCase());
+
+  return gPlatformKeys[key] = val;
+}
+
+function getPlatformAccel() {
+  switch (Services.prefs.getIntPref("ui.key.accelKey")) {
+    case 17:  return "control"; break;
+    case 18:  return "alt"; break;
+    case 224: return "meta"; break;
+  }
+  return Services.appinfo.OS == "Darwin" ? "meta" : "control"
 }

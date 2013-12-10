@@ -114,48 +114,4 @@ function _getPath(elm){
   return names.join(" > ");
 }
 
-function getFormattedKey(key) {
-  if (!key)
-    return "";
-  var val = "";
-
-  if (key.modifiers) {
-    let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
-      if (/alt|shift|control|meta|accel/.test(mod))
-        val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
-    })
-  }
-
-  if (key.key) {
-    if (key.key == " ") {
-      key.key = ""; key.keycode = "VK_SPACE";
-    }
-    else
-      val += key.key.toUpperCase();
-  }
-  if (key.keycode) try {
-    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
-    val += localeKeys.GetStringFromName(key.keycode);
-  } catch (ex) {
-    val += "<" + key.keycode + ">";
-  }
-  return val;
-}
-
-/*
- * get platform labels for: alt, shift, control, meta, accel.
- */
-let gPlatformKeys = {};
-function getPlatformKeys(key) {
-  if (typeof gPlatformKeys[key] == "string")
-    return gPlatformKeys[key];
-
-  let val, platformKeys = Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
-  if (key != "VK_ACCEL")
-    val = platformKeys.GetStringFromName(key);
-  else
-    val = getPlatformKeys("VK_" + Shortcuts.getPlatformAccel().toUpperCase());
-
-  return gPlatformKeys[key] = val;
-}
+function getFormattedKey(key) Shortcuts.getFormattedKey(key);
