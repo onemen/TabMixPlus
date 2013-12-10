@@ -129,9 +129,6 @@ let TabmixSvc = {
         return;
       this._initialized = true;
 
-      // check if australis tab shape is implemented
-      TabmixSvc.australis = aWindow.document.getElementById("tab-curve-clip-path-start");
-
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
@@ -188,6 +185,12 @@ let TabmixSvc = {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+});
+
+// check if australis tab shape is implemented
+XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
+  return  this.topWin().document.getElementById("tab-curve-clip-path-start") ?
+          true : false;
 });
 
 /**
