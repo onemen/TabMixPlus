@@ -43,8 +43,8 @@ let Shortcuts = {
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
     saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
-    slideShow: {default: "d&VK_F8"},
-    toggleFLST: {default: "d&VK_F9"}
+    slideShow: {id: "key_tm_slideShow", default: "d&VK_F8"},
+    toggleFLST: {id: "key_tm_toggleFLST", default: "d&VK_F9"}
   },
 
   get prefs() {
@@ -199,6 +199,7 @@ let Shortcuts = {
 
   _updateKey: function TMP_SC__updateKey(aWindow, aKey, aKeyData) {
     let document = aWindow.document;
+    let keyset = document.getElementById("mainKeyset");
     let keyAtt = this.keyParse(aKeyData.value || "d&");
     if (aKeyData.sessionKey && aKeyData.blocked)
       keyAtt.disabled = true;
@@ -214,18 +215,17 @@ let Shortcuts = {
       // so we move those to a different node
       if (disabled)
         aWindow.Tabmix.removedShortcuts.appendChild(keyItem);
-      else if (keyItem.parentNode.localName == "tabmix_shortcuts")
-        document.getElementById("mainKeyset").appendChild(keyItem);
+      else if (keyItem.parentNode != keyset)
+        keyset.appendChild(keyItem);
     }
     else {
-      let parentNode = document.getElementById("mainKeyset");
       // don't add disabled key
-      if (!parentNode || disabled)
+      if (!keyset || disabled)
         return;
       keyItem = document.createElementNS(NS_XUL, "key");
       keyItem.setAttribute("id", id);
       keyItem._id = aKey;
-      parentNode.appendChild(keyItem);
+      keyset.appendChild(keyItem);
       keyItem.setAttribute("label", aKeyData.label);
       keyItem.setAttribute("oncommand", "void(0);");
       keyItem.addEventListener("command", this, true);
@@ -255,14 +255,18 @@ let Shortcuts = {
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let [key, keyData] in Iterator(this.keys)) {
-      let currentValue = onOpen ? keyData.default || "" : keyData.value;
-      let newValue = shortcuts[key] || keyData.default || "";
+      let _default = keyData.default || "";
+      let currentValue = onOpen ? _default : keyData.value;
+      let newValue = shortcuts[key] || _default;
       let updatBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
           disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
-      if (currentValue != newValue || updatBlockState) {
+      // on start report disabled by default shortcut as changed so _updateKey
+      // can move these shortcuts to removedShortcuts
+      if (currentValue != newValue || updatBlockState ||
+          onOpen && /^d&/.test(_default)) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
       }
