@@ -1029,26 +1029,6 @@ var gTMPprefObserver = {
         this.updateTabsStyle(rule);
       }
     }
-
-    // rule for controling moz-margin-start when we have pinned tab in multi-row
-    let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
-    this.insertRule(marginStart, "tabmix-firstTabInRow");
-
-    // for ColorfulTabs 8.0+
-    // add new rule to adjust selected tab bottom margin
-    // we add the rule after the first tab added
-    if (typeof colorfulTabs == "object") {
-      let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
-                    ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
-      let index = this.insertRule(newRule);
-      newRule = this._tabStyleSheet.cssRules[index];
-      gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
-        gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
-        let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
-        newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
-      }, true);
-    }
   },
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
@@ -1198,16 +1178,38 @@ var gTMPprefObserver = {
 
   },
 
-  addWidthRules: function TMP_PO_addWidthRules() {
+  addDynamicRules: function() {
+    // tab width rules
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
     let newRule = ".tabbrowser-tab[fadein]" + tst + ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
     this.insertRule(newRule, "width");
-  },
 
-  setBgMiddleMargin: function () {
+    // rule for controling moz-margin-start when we have pinned tab in multi-row
+    let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > .tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
+    this.insertRule(marginStart, "tabmix-firstTabInRow");
+
+    // for ColorfulTabs 8.0+
+    // add new rule to adjust selected tab bottom margin
+    // we add the rule after the first tab added
+    if (typeof colorfulTabs == "object") {
+      let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
+      let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
+                    ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
+      let index = this.insertRule(newRule);
+      newRule = this._tabStyleSheet.cssRules[index];
+      gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
+        gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
+        let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
+        newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
+      }, true);
+    }
+
+    if (!TabmixSvc.australis)
+      return;
+
     // Workaround bug 943308 - tab-background not fully overlap the tab curves
     // when layout.css.devPixelsPerPx is not 1.
     let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
