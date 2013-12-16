@@ -118,6 +118,9 @@
         <parameter name="tabStart"/>
         <parameter name="tabEnd"/>
         <body><![CDATA[
+          if (TabmixTabbar.isMultiRow)
+            return [tabStart, tabEnd];
+
           if (this._tabMarginLeft === null || this._tabMarginRight === null) {
             let tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
             let tabMiddleStyle = window.getComputedStyle(tabMiddle, null);
