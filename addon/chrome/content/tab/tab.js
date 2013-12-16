@@ -674,14 +674,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.unloadedTab":
       case "extensions.tabmix.unreadTab":
       case "extensions.tabmix.otherTab":
-        this.updateTabsStyle(prefName, true);
-        break;
-      case "extensions.tabmix.styles.currentTab":
-      case "extensions.tabmix.styles.unloadedTab":
-      case "extensions.tabmix.styles.unreadTab":
-      case "extensions.tabmix.styles.otherTab":
-      case "extensions.tabmix.styles.progressMeter":
-        this.setTabStyles(prefName);
+        this.updateTabsStyle(prefName.split(".").pop(), true);
         break;
       case "extensions.tabmix.progressMeter":
         this.setProgressMeter();
@@ -951,86 +944,6 @@ var gTMPprefObserver = {
     return index;
   },
 
-  createColorRules: function TMP_PO_createColorRules() {
-    this.bgImage = { };
-    this.bgImage.body = "linear-gradient(#colorCode, #colorCode)";
-    var bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),";
-    this.bgImage.bg = Tabmix.isMac ? this.bgImage.body : (bottomBorder + this.bgImage.body);
-///XXX move -moz-appearance: to general rule when style have bg
-    var backgroundRule = "{-moz-appearance: none; background-image: " + this.bgImage.bg + " !important;}"
-    var tabTextRule = " .tab-text { color: #colorCode !important;}";
-
-    var styleRules = {
-      currentTab:    { text:  '.tabbrowser-tab[tabmix_tabStyle~="current-text"]' + tabTextRule,
-                       bg  :  '.tabbrowser-tab[tabmix_tabStyle~="current-bg"]' + backgroundRule},
-      unloadedTab:   { text:  '.tabbrowser-tab[tabmix_tabStyle~="unloaded-text"]' + tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unloaded-bg"]' + backgroundRule},
-      unreadTab:     { text:  '.tabbrowser-tab[tabmix_tabStyle~="unread-text"]' +  tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
-      otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
-    }
-
-    if (Tabmix.isMac) {
-      backgroundRule = '.tabbrowser-tab[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background > ' +
-        ':-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
-
-      styleRules.currentTab.bg = backgroundRule.replace("#RULE", "current");
-      styleRules.unloadedTab.bg = backgroundRule.replace("#RULE", "unloaded");
-      styleRules.unreadTab.bg = backgroundRule.replace("#RULE", "unread");
-      styleRules.otherTab.bg = backgroundRule.replace("#RULE", "other");
-    }
-
-    if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab) {
-      this.bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),' +
-            bottomBorder + this.bgImage.body;
-      this.bgImage.bgselected = 'url("chrome://browser/skin/tabbrowser/tab-active-middle.png"),' +
-            bottomBorder +
-            'linear-gradient(transparent, transparent 2px, #colorCode 2px, #colorCode)';
-      this.bgImage.startEndselected = this.bgImage.bgselected;
-      this.bgImage.bghover = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),' +
-            bottomBorder +
-            'linear-gradient(transparent, transparent 2px, rgba(254, 254, 254, 0.72) 2px,' +
-            ' rgba(254, 254, 254, 0.72) 2px, rgba(250, 250, 250, 0.88) 3px,' +
-            ' rgba(250, 250, 250, 0.88) 3px, rgba(254, 254, 254, 0.72) 4px,' +
-            ' rgba(254, 254, 254, 0.72) 4px, #colorCode)';
-      this.bgImage.startEndhover = this.bgImage.bghover;
-      let _selector = '.tabbrowser-tab#HOVER[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background > ';
-      for (let [rule, style] in Iterator(styleRules)) {
-        delete style.bg;
-        let hover = rule == "currentTab" ? "" : ":hover";
-        let ruleSelector = _selector.replace("#RULE", rule.replace("Tab", ""));
-        let selector = ruleSelector.replace("#HOVER", hover);
-        let type = hover.replace(":", "") || "selected" ;
-        style["bg" + type] =       selector + '.tab-background-middle ' +
-                                   '{background-image: ' + this.bgImage["bg" + type] + '!important;}';
-        style["startEnd" + type] = selector + '.tab-background-start::before,' +
-                                   selector + '.tab-background-end::before ' +
-                                   '{background-image: ' + this.bgImage["startEnd" + type] + '!important;}';
-        if (hover) // i.e. not currentTab style
-          style.bg = ruleSelector.replace("#HOVER", ":not(:hover)") + '.tab-background-middle ' +
-                        '{background-image: ' + this.bgImage.bg + '!important;}';
-      }
-    }
-    styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
-          ' > .progress-bar {background-color: #colorCode !important;}'
-    }
-
-    for (let rule in Iterator(styleRules, true)) {
-      this.setTabStyles("extensions.tabmix.styles." + rule, true);
-      var prefValues = this.tabStylePrefs[rule];
-      if (!prefValues)
-        continue;
-      this.updateBgColorRule(rule, styleRules[rule], prefValues.bgColor, true);
-      if (rule != "progressMeter") {
-        let newRule = styleRules[rule].text.replace("#colorCode",prefValues.textColor);
-        this.insertRule(newRule, rule);
-        this.updateTabsStyle(rule);
-      }
-    }
-  },
-
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
     var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-icon-image");
@@ -1226,163 +1139,13 @@ var gTMPprefObserver = {
     }
   },
 
-  defaultStylePrefs: {    currentTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
-                          unloadedTab: {italic:true,bold:false,underline:false,text:true,textColor:'rgba(204,0,0,1)',bg:true,bgColor:'rgba(236,233,216,1)'},
-                           unreadTab: {italic:true,bold:false,underline:false,text:true,textColor:'rgba(204,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
-                            otherTab: {italic:false,bold:false,underline:false,text:true,textColor:'rgba(0,0,0,1)',bg:false,bgColor:'rgba(236,233,216,1)'},
-                       progressMeter: {bg:true,bgColor:'rgba(170,170,255,1)'}},
-
-  tabStylePrefs: {},
-  setTabStyles: function TMP_PO_setTabStyles(prefName, start) {
-    var ruleName = prefName.split(".").pop();
-    if (ruleName in this && this[ruleName] == "preventUpdate")
-      return;
-    this[ruleName] = "preventUpdate";
-
-    // Converts a color string in the format "#RRGGBB" to rgba(r,g,b,a).
-    function getRGBcolor(aColorCode, aOpacity) {
-      var newRGB = [];
-      var _length = aColorCode.length;
-      if (/^rgba|rgb/.test(aColorCode)) {
-        newRGB = aColorCode.replace(/rgba|rgb|\(|\)/g,"").split(",").splice(0, 4);
-        if (newRGB.length < 3)
-          return null;
-        for (var i = 0; i < newRGB.length; i++) {
-          if (isNaN(newRGB[i].replace(/[\s]/g,"") * 1))
-            return null ;
-        }
-      }
-      else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {
-        aColorCode = aColorCode.replace("#","");
-        var subLength = _length == 7 ? 2 : 1;
-        var newRGB = [];
-        for (var i = 0; i < 3; i++) {
-          var subS = aColorCode.substr(i*subLength, subLength);
-          if (_length == 4)
-            subS += subS;
-          var newNumber = parseInt(subS, 16);
-          if (isNaN(newNumber))
-            return null;
-          newRGB.push(newNumber);
-        }
-      }
-      else
-        return null;
-
-      if (aOpacity != null)
-        newRGB[3] = aOpacity;
-      else if (newRGB[3] == null || newRGB[3] < 0 || newRGB[3] > 1)
-        newRGB[3] = 1;
-      return "rgba(" + newRGB.join(",") + ")";
-    }
-
-    // styles format: italic:boolean, bold:boolean, underline:boolean,
-    //                text:boolean, textColor:string, textOpacity:string,
-    //                bg:boolean, bgColor:string, bgOpacity:striung
-    // if we don't catch the problem here it can break the rest of tabmix startup
-    var defaultPrefValues = this.defaultStylePrefs[ruleName];
-    var prefValues = {};
-    if (Services.prefs.prefHasUserValue(prefName)) {
-      let prefString = Services.prefs.getCharPref(prefName);
-      try {
-        var currentPrefValues = TabmixSvc.JSON.parse(prefString);
-        if (currentPrefValues == null)
-          throw Error(prefName + " value is invalid\n" + prefString)
-      }
-      catch (ex) {
-        Tabmix.log(ex);
-        try {
-          // convert old format to JSON string
-          // we do it only one time when user update Tabmix from old version
-          currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
-                              new Components.utils.Sandbox("about:blank"));
-          Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(currentPrefValues));
-        } catch (e) {
-           Tabmix.log('Error in preference "' + prefName + '", value was reset to default');
-           Tabmix.assert(e);
-           Services.prefs.clearUserPref(prefName);
-           // set prev value to default so we can continue with this function
-           currentPrefValues = defaultPrefValues;
-        }
-      }
-
-      // make sure we have all the item
-      // if item is missing set it to default
-      for (let item in defaultPrefValues) {
-        let value = currentPrefValues[item];
-        if (value && item.indexOf("Color") > -1) {
-          let opacity = item.replace("Color", "Opacity");
-          let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
-          value = getRGBcolor(value, opacityValue);
-        }
-        else if (value != null && typeof(value) != "boolean") {
-          if (/^true$|^false$/.test(value.replace(/[\s]/g,"")))
-            value = value == "true" ? true : false;
-          else
-            value = null;
-        }
-        if (value == null)
-          prefValues[item] = defaultPrefValues[item];
-        else
-          prefValues[item] = value;
-      }
-      if (currentPrefValues != prefValues)
-        Services.prefs.setCharPref(prefName, TabmixSvc.JSON.stringify(prefValues));
-    }
-    else
-      prefValues = defaultPrefValues;
-
-    var currentValue = this.tabStylePrefs[ruleName];
-    this.tabStylePrefs[ruleName] = prefValues;
-    if (currentValue && !start) {
-      // we get here only when user changed pref value
-      if (currentValue.bgColor != prefValues.bgColor)
-        this.updateBgColorRule(ruleName, this.bgImage, prefValues.bgColor);
-      if (ruleName != "progressMeter") {
-        if (currentValue.textColor != prefValues.textColor)
-          this.dynamicRules[ruleName].style.setProperty("color", prefValues.textColor, "important");
-        this.updateTabsStyle(prefName);
-      }
-      else
-        this.setProgressMeter();
-    }
-    delete this[ruleName];
-  },
-
-  updateBgColorRule: function (rule, styleRule, bgColor, start) {
-    if (Tabmix.extensions.treeStyleTab && rule != "progressMeter")
-      return;
-    let insertRule = function(name, newRule, prop) {
-      if (start ? !newRule : !this.dynamicRules[rule + name])
-        return;
-      newRule = newRule.replace(/#colorCode/g, bgColor);
-      if (start)
-        this.insertRule(newRule, rule + name);
-      else
-        this.dynamicRules[rule + name].style.setProperty(prop || "background-image", newRule, "important");
-    }.bind(this);
-
-    if (rule == "progressMeter") {
-      insertRule("bg", !start ? bgColor : styleRule.bg, "background-color");
-    }
-    else if (TabmixSvc.australis) {
-      for (let [name, style] in Iterator(styleRule)) {
-        if (name != "text")
-          insertRule(name, style);
-      }
-    }
-    else {
-      insertRule("bg", styleRule.bg);
-    }
-
-  },
-
-  updateTabsStyle: function(prefName, toggle) {
-    let attribValue = null, ruleName = prefName.split(".").pop();
+  updateTabsStyle: function(ruleName, toggle) {
+///Tabmix.log("ruleName " + ruleName, true);
+    let attribValue = null;
     let styleName = ruleName.replace("Tab", "");
     let enabled = Tabmix.prefs.getBoolPref(ruleName);
     if (enabled) {
-      let prefValues = this.tabStylePrefs[ruleName];
+      let prefValues = TabmixSvc.tabStylePrefs[ruleName];
       // set bold, italic and underline only when we control the sytle
       // to override theme default rule if exist
       attribValue = [prefValues.bold ? "bold" : "not-bold",
@@ -1435,7 +1198,7 @@ var gTMPprefObserver = {
     var showOnTabs = Tabmix.prefs.getBoolPref("progressMeter");
     var attribValue = null;
     if (showOnTabs)
-      attribValue = this.tabStylePrefs["progressMeter"].bg ? "userColor" : "defaultColor";
+      attribValue = TabmixSvc.tabStylePrefs["progressMeter"].bg ? "userColor" : "defaultColor";
     Tabmix.setItem(gBrowser.tabContainer, "tabmix_progressMeter", attribValue);
     TabmixProgressListener.listener.showProgressOnTab = showOnTabs;
   },

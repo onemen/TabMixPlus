@@ -140,8 +140,14 @@ let TabmixSvc = {
 
       if (isVersion(190))
         Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+
       Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
+
+      TabmixSvc.tabStylePrefs = {};
+      let tmp = {};
+      Cu.import("resource://tabmixplus/DynamicRules.jsm", tmp);
+      tmp.DynamicRules.init(aWindow);
     },
 
     observe: function(aSubject, aTopic, aData) {

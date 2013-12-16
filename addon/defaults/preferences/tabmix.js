@@ -91,10 +91,10 @@ pref("extensions.tabmix.unreadTabreload", true);
 pref("extensions.tabmix.otherTab", false);
 pref("extensions.tabmix.progressMeter", true);
 
-pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
 pref("extensions.tabmix.flexTabs", false);

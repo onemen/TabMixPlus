@@ -37,10 +37,21 @@
                      oncommand="_onOpacityChanged(this);"/>
       </xul:hbox>
       <xul:spacer flex="1" hidden="true" xbl:inherits="hidden=_hidespacer"/>
-      <xul:hbox align="center">
-        <xul:checkbox anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
-                      oncommand="_setColorpicker(this.getAttribute('anonid'))"/>
-        <xul:spacer flex="1" />
+      <xul:checkbox anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
+                    oncommand="_setColorpicker(this.getAttribute('anonid'))"/>
+      <xul:hbox class="bgTop" align="center" xbl:inherits="hidden=_hidebox">
+        <xul:label value="top:" xbl:inherits="disabled=bg-disabled"/>
+        <xul:spacer flex="1"/>
+        <xul:colorpicker anonid="bgTopColor" palettename="standard" type="button" xbl:inherits="disabled=bg-disabled"/>
+        <xul:tabmix-rgbcontrol anonid="bgTopColor-RGBcontrol" xbl:inherits="disabled=bg-disabled"/>
+        <xul:label control="bgTopOpacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled=bg-disabled"/>
+        <xul:textbox anonid="bgTopOpacity" class="opacity" xbl:inherits="disabled=bg-disabled"
+                     maxlength="3" size="1" type="number" min="0" max="100" colorcontrol="bgTop"
+                     oncommand="_onOpacityChanged(this);"/>
+      </xul:hbox>
+      <xul:hbox class="bgBottom" align="center">
+        <xul:label value="bottom:" xbl:inherits="disabled=bg-disabled,hidden=_hidebox"/>
+        <xul:spacer flex="1"/>
         <xul:colorpicker anonid="bgColor" palettename="standard" type="button" xbl:inherits="disabled=bg-disabled"/>
         <xul:tabmix-rgbcontrol anonid="bgColor-RGBcontrol" xbl:inherits="disabled=bg-disabled"/>
         <xul:label control="bgOpacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled=bg-disabled"/>
@@ -174,6 +185,7 @@
           }
           this._setColorpicker("bg");
           this._prefValues["bgOpacity"] = 1;
+          this._prefValues["bgTopOpacity"] = 1;
         ]]></body>
       </method>
 
@@ -210,20 +222,19 @@
       <method name="_setColorpicker">
         <parameter name="aID"/>
         <body><![CDATA[
-          var opacity, disableBg = this.treeStyleTab && aID == "bg";
+          var disableBg = this.treeStyleTab && aID == "bg";
           var disabled = this.disabled || disableBg ||
                        !this._getElementById(aID).checked;
-          if (!disabled) {
+          if (!disabled)
             this.removeAttribute(aID + "-disabled");
-            opacity = this._getElementById(aID + "Opacity").value;
-          }
           else {
             if (disableBg)
               this._getElementById("bg").disabled = true;
             this.setAttribute(aID + "-disabled", true);
-            opacity = 20;
           }
-          this._setOpacity(aID, opacity);
+          this._setOpacity(aID);
+          if (aID == "bg")
+            this._setOpacity("bgTop");
         ]]></body>
       </method>
 
@@ -231,16 +242,17 @@
         <parameter name="aOpacityControl"/>
         <body><![CDATA[
           var colorcontrolID = aOpacityControl.getAttribute("colorcontrol");
-          this._setOpacity(colorcontrolID, aOpacityControl.value);
+          this._setOpacity(colorcontrolID);
         ]]></body>
       </method>
 
       <method name="_setOpacity">
         <parameter name="aID"/>
-        <parameter name="aValue"/>
         <body><![CDATA[
-          var opacity = aValue < 20 ? .20 : aValue/100;
-          var colorpicker = this._getElementById(aID + "Color");
+          let opacityObj = this._getElementById(aID + "Opacity");
+          let colorpicker = this._getElementById(aID + "Color");
+          let opacity  = colorpicker.getAttribute("disabled") ? 0.2 :
+                         Math.max(0.2, opacityObj.value/100);
           colorpicker.setAttribute("style", "opacity: " + opacity);
         ]]></body>
       </method>

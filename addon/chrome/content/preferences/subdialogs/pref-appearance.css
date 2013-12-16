@@ -36,3 +36,7 @@ tabmix-rgbcontrol {
 .rgbcontrol > .textbox-input-box > .numberbox-input {
   max-width: 3em;
 }
+
+.bgBottom, .bgTop {
+  -moz-margin-start: 35px;
+}

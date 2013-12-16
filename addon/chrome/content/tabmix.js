@@ -475,10 +475,6 @@ var TMP_eventListener = {
 
     Tabmix.Shortcuts.onWindowOpen(window);
 
-    try {
-      gTMPprefObserver.createColorRules();
-    } catch (ex) {Tabmix.assert(ex);}
-
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
     if (Tabmix.extensions.treeStyleTab) {
       setTimeout(function() {
@@ -518,6 +514,11 @@ var TMP_eventListener = {
     if (sessionstoreUndoClose != Tabmix.prefs.getBoolPref("undoClose"))
       Tabmix.prefs.setBoolPref("undoClose", sessionstoreUndoClose);
 
+    // apply style on tabs
+    let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
+    styles.forEach(function(ruleName) {
+      gTMPprefObserver.updateTabsStyle(ruleName, true);
+    });
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
 
