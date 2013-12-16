@@ -129,6 +129,12 @@ let TabmixSvc = {
         return;
       this._initialized = true;
 
+      try {
+        // replace old Settings.
+        // we must call this before any other tabmix function
+        aWindow.gTMPprefObserver.updateSettings();
+      } catch (ex) {TabmixSvc.console.assert(ex);}
+
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 

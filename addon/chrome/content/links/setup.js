@@ -64,9 +64,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
   } catch (ex) {this.assert(ex);}
 
   try {
-    // replace old Settings.
-    // we must call this before any other tabmix function
-    gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
   } catch (ex) {this.assert(ex);}
 
