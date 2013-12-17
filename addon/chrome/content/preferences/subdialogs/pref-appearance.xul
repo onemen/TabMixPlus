@@ -14,13 +14,14 @@
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        buttons="accept,cancel,help"
+        buttons="accept,cancel,help,extra2"
         ondialoghelp="tabstyles.openHelp();"
         title="&styles.label;"
-        persist="screenX screenY"
+        persist="screenX screenY hide-RGB"
         onload="tabstyles.init();"
         ondialogcancel="tabstyles.cancel();"
-        ondialogaccept="tabstyles.save();">
+        ondialogaccept="tabstyles.save();"
+        ondialogextra2="tabstyles.toggleRGBvisibility();">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.js"/>
@@ -38,8 +39,9 @@
        <tabpanel id="unloadedTab"/>
        <tabpanel id="unreadTab"/>
        <tabpanel id="otherTab"/>
-       <tabpanel id="progressMeter" _hidebox="true" _hidespacer="false"/>
+       <tabpanel id="progressMeter" _hidebox="true"/>
      </tabpanels>
    </tabbox>
+   <label value="Hide RGB" show="Show RGB" hide="Hide RGB" id="hide-RGB" persist="value" hidden="true"/>
 
 </dialog>

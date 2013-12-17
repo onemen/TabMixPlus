@@ -15,6 +15,10 @@ let tabstyles = {
 
     if (!window.opener && !Tabmix.getTopWin())
       document.documentElement.getButton("help").disabled = true;
+
+    let extra = document.documentElement.getButton("extra2");
+    extra.label = $("hide-RGB").value;
+    extra.classList.add("text-link");
   },
 
   save: function () {
@@ -38,5 +42,14 @@ let tabstyles = {
       win.openHelp("Customize_Styles_-_" + subPage[index]);
     else
       document.documentElement.getButton("help").disabled = true;
+  },
+
+  toggleRGBvisibility: function () {
+    let doc = document.documentElement;
+    let extra = doc.getButton("extra2");
+    let item = $("hide-RGB");
+    var wasShow = doc.getAttribute("hide-RGB") != "true";
+    extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide');
+    doc.setAttribute("hide-RGB", wasShow);
   }
 }

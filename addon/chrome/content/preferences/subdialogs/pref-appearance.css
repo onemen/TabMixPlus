@@ -1,3 +1,7 @@
+checkbox_tmp {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox_tmp") !important;
+}
+
 #stylespanels > tabpanel {
   -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabstylepanel);
 }
@@ -24,8 +28,8 @@ checkbox[anonid="useThis"][disabled] {
   color: black;
 }
 
-tabmix-rgbcontrol {
-  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabmix-rgbcontrol);
+colorbox {
+  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#colorbox);
 }
 
 .rgbcontrol {
@@ -39,4 +43,22 @@ tabmix-rgbcontrol {
 
 .bgBottom, .bgTop {
   -moz-margin-start: 35px;
+}
+
+.dialog-button[dlgtype="extra2"] {
+  -moz-appearance: none;
+}
+
+hbox[_hidebox="true"],
+colorbox[_hidebox="true"],
+label[_hidebox="true"] {
+  visibility: hidden;
+}
+
+dialog[hide-RGB="true"] colorbox > *:not([class="visible"]) {
+  visibility: hidden;
+}
+
+.colorpicker-button-colorbox[disabled] {
+  border-color: rgba(0,0,0,.2);
 }

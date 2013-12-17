@@ -20,44 +20,27 @@
         <xul:label style="font-weight: bold;"/>
       </xul:hbox>
       <xul:separator class="groove"/>
-      <xul:hbox align="center" style="height: 28px;" xbl:inherits="hidden=_hidebox">
+      <xul:hbox align="center" style="height: 28px;" xbl:inherits="_hidebox">
         <xul:checkbox anonid="italic" xbl:inherits="disabled" label="&italic.label;" style="font-style: italic;"/>
         <xul:checkbox anonid="bold" xbl:inherits="disabled" label="&bold.label;" style="font-weight: bold;"/>
         <xul:checkbox anonid="underline" class="tabStyles_underline" xbl:inherits="disabled" label="&underline.label;"/>
       </xul:hbox>
-      <xul:hbox align="center" xbl:inherits="hidden=_hidebox">
-        <xul:checkbox anonid="text" xbl:inherits="disabled" label="&textcolor.label;:"
-                      oncommand="_setColorpicker(this.getAttribute('anonid'))"/>
+      <xul:hbox flex="1">
+        <xul:vbox>
+          <xul:colorbox anonid="textColor" xbl:inherits="disabled=text-disabled,_hidebox">
+            <xul:checkbox anonid="text" class="visible" xbl:inherits="disabled" label="&textcolor.label;:"
+                          oncommand="updateDisableState(this.getAttribute('anonid'))"/>
+          </xul:colorbox>
+          <xul:checkbox_tmp anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
+                        oncommand="updateDisableState(this.getAttribute('anonid'))"/>
+          <xul:colorbox anonid="bgTopColor" class="bgTop" xbl:inherits="disabled=bg-disabled,hidden=_hidebox">
+            <xul:label value="top:"  class="visible" xbl:inherits="disabled=bg-disabled"/>
+          </xul:colorbox>
+          <xul:colorbox anonid="bgColor" class="bgBottom" xbl:inherits="disabled=bg-disabled">
+            <xul:label value="bottom:" class="visible" xbl:inherits="disabled=bg-disabled,_hidebox"/>
+          </xul:colorbox>
+        </xul:vbox>
         <xul:spacer flex="1"/>
-        <xul:colorpicker anonid="textColor" palettename="standard" type="button" xbl:inherits="disabled=text-disabled"/>
-        <xul:tabmix-rgbcontrol anonid="textColor-RGBcontrol" xbl:inherits="disabled=text-disabled"/>
-        <xul:label control="textOpacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled=text-disabled"/>
-        <xul:textbox anonid="textOpacity" class="opacity" xbl:inherits="disabled=text-disabled"
-                     maxlength="3" size="1" type="number" min="0" max="100" colorcontrol="text"
-                     oncommand="_onOpacityChanged(this);"/>
-      </xul:hbox>
-      <xul:spacer flex="1" hidden="true" xbl:inherits="hidden=_hidespacer"/>
-      <xul:checkbox anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
-                    oncommand="_setColorpicker(this.getAttribute('anonid'))"/>
-      <xul:hbox class="bgTop" align="center" xbl:inherits="hidden=_hidebox">
-        <xul:label value="top:" xbl:inherits="disabled=bg-disabled"/>
-        <xul:spacer flex="1"/>
-        <xul:colorpicker anonid="bgTopColor" palettename="standard" type="button" xbl:inherits="disabled=bg-disabled"/>
-        <xul:tabmix-rgbcontrol anonid="bgTopColor-RGBcontrol" xbl:inherits="disabled=bg-disabled"/>
-        <xul:label control="bgTopOpacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled=bg-disabled"/>
-        <xul:textbox anonid="bgTopOpacity" class="opacity" xbl:inherits="disabled=bg-disabled"
-                     maxlength="3" size="1" type="number" min="0" max="100" colorcontrol="bgTop"
-                     oncommand="_onOpacityChanged(this);"/>
-      </xul:hbox>
-      <xul:hbox class="bgBottom" align="center">
-        <xul:label value="bottom:" xbl:inherits="disabled=bg-disabled,hidden=_hidebox"/>
-        <xul:spacer flex="1"/>
-        <xul:colorpicker anonid="bgColor" palettename="standard" type="button" xbl:inherits="disabled=bg-disabled"/>
-        <xul:tabmix-rgbcontrol anonid="bgColor-RGBcontrol" xbl:inherits="disabled=bg-disabled"/>
-        <xul:label control="bgOpacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled=bg-disabled"/>
-        <xul:textbox anonid="bgOpacity" class="opacity" xbl:inherits="disabled=bg-disabled"
-                     maxlength="3" size="1" type="number" min="0" max="100" colorcontrol="bg"
-                     oncommand="_onOpacityChanged(this);"/>
       </xul:hbox>
       <xul:separator class="groove"/>
       <xul:hbox align="center">
@@ -126,9 +109,9 @@
         <body><![CDATA[
           Tabmix.prefs.setBoolPref(this.id, aEnabled);
           this.disabled = !aEnabled
-          this._setColorpicker("bg");
           if ("text" in this._prefValues)
-            this._setColorpicker("text");
+            this.updateDisableState("text");
+          this.updateDisableState("bg");
         ]]></body>
       </method>
 
@@ -165,27 +148,17 @@
                continue;
              switch (item.localName) {
                case "checkbox":
+               case "checkbox_tmp":
                  item.checked = this._prefValues[_id];
                  break;
-               case "colorpicker":
-                  // colorpicker use rgb hexadecimal format
-                  var rgbArray = this._prefValues[_id].replace(/rgba|rgb|\(|\)/g, "").split(",");
-                  var opacity = rgbArray.splice(3, 1);
-                  item.color = "#" + rgbArray.map(function(aInt){return parseInt(aInt).toString(16).replace(/^(.)$/, "0$1")}
-                                     ).join("").toUpperCase();
-                 this._getElementById(_id+"-RGBcontrol").color = item.color;
-                 var controlID = _id.replace("Color", "Opacity");
-                 this._getElementById(controlID).value = (opacity || 1 ) * 100;
-                 break;
+               case "colorbox":
+                 item.color = this._prefValues[_id];
              }
           }
-          if ("text" in this._prefValues) {
-            this._setColorpicker("text");
-            this._prefValues["textOpacity"] = 1;
-          }
-          this._setColorpicker("bg");
-          this._prefValues["bgOpacity"] = 1;
-          this._prefValues["bgTopOpacity"] = 1;
+
+          if ("text" in this._prefValues)
+            this.updateDisableState("text");
+          this.updateDisableState("bg");
         ]]></body>
       </method>
 
@@ -196,13 +169,11 @@
             var item = this._getElementById(_id);
             switch (item.localName) {
               case "checkbox":
+              case "checkbox_tmp":
                 newPrefSValue[_id] = item.checked;
                 break;
-              case "colorpicker":
+              case "colorbox":
                 newPrefSValue[_id] = item.color;
-                break;
-              case "textbox":
-                newPrefSValue[_id] = item.value/100;
                 break;
             }
           }
@@ -219,41 +190,18 @@
         ]]></body>
       </method>
 
-      <method name="_setColorpicker">
+      <method name="updateDisableState">
         <parameter name="aID"/>
         <body><![CDATA[
-          var disableBg = this.treeStyleTab && aID == "bg";
-          var disabled = this.disabled || disableBg ||
-                       !this._getElementById(aID).checked;
-          if (!disabled)
-            this.removeAttribute(aID + "-disabled");
-          else {
-            if (disableBg)
-              this._getElementById("bg").disabled = true;
-            this.setAttribute(aID + "-disabled", true);
-          }
-          this._setOpacity(aID);
+          let disableBg = this.treeStyleTab && aID == "bg";
+          let disabled = this.disabled || disableBg ||
+                           !this._getElementById(aID).checked;
+          if (disableBg)
+            this._getElementById("bg").disabled = true;
+          Tabmix.setItem(this, aID + "-disabled", disabled || null);
+          this._getElementById(aID + "Color").updateColor();
           if (aID == "bg")
-            this._setOpacity("bgTop");
-        ]]></body>
-      </method>
-
-      <method name="_onOpacityChanged">
-        <parameter name="aOpacityControl"/>
-        <body><![CDATA[
-          var colorcontrolID = aOpacityControl.getAttribute("colorcontrol");
-          this._setOpacity(colorcontrolID);
-        ]]></body>
-      </method>
-
-      <method name="_setOpacity">
-        <parameter name="aID"/>
-        <body><![CDATA[
-          let opacityObj = this._getElementById(aID + "Opacity");
-          let colorpicker = this._getElementById(aID + "Color");
-          let opacity  = colorpicker.getAttribute("disabled") ? 0.2 :
-                         Math.max(0.2, opacityObj.value/100);
-          colorpicker.setAttribute("style", "opacity: " + opacity);
+            this._getElementById("bgTopColor").updateColor();
         ]]></body>
       </method>
 
@@ -262,27 +210,14 @@
       <handler event="command">
         this._savePrefs();
       </handler>
-      <handler event="change">
-        let item = event.originalTarget;
-        if (item.localName == "colorpicker") {
-          item.nextSibling.color = item.color;
-          this._savePrefs();
-        }
-      </handler>
-      <handler event="input">
-        var item = event.originalTarget.parentNode.parentNode;
-        if (item.localName == "textbox") {
-          if (item.getAttribute('class') == "opacity") {
-            this._onOpacityChanged(item);
-            this._savePrefs();
-          }
-        }
-      </handler>
     </handlers>
   </binding>
 
-  <binding id="tabmix-rgbcontrol">
+  <binding id="colorbox" display="xul:hbox">
     <content align="center">
+        <children/>
+        <xul:spacer flex="1" class="visible"/>
+        <xul:colorpicker anonid="color" class="visible" palettename="standard" type="button" xbl:inherits="disabled"/>
         <xul:label value="[RGB]:" xbl:inherits="disabled"/>
         <xul:textbox anonid="red" class="rgbcontrol" xbl:inherits="disabled"
                      maxlength="3" size="1" type="number" min="0" max="255"/>
@@ -290,53 +225,94 @@
                      maxlength="3" size="1" type="number" min="0" max="255"/>
         <xul:textbox anonid="blue" class="rgbcontrol" xbl:inherits="disabled"
                      maxlength="3" size="1" type="number" min="0" max="255"/>
+        <xul:label control="opacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled"/>
+        <xul:textbox anonid="opacity" class="opacity" xbl:inherits="disabled"
+                     maxlength="3" size="1" type="number" min="0" max="100"/>
     </content>
     <implementation>
       <field name="_RGB">[]</field>
       <field name="_colorpicker">null</field>
       <field name="_parent">null</field>
+
       <constructor>
         <![CDATA[
-          Array.forEach(["red","green","blue"], function(id) {
+          Array.forEach(["red","green","blue", "opacity"], function(id) {
             this._RGB.push(document.getAnonymousElementByAttribute(this, "anonid", id));
           }, this);
 
-           this._colorpicker = this.previousSibling;
+           this._colorpicker = document.getAnonymousElementByAttribute(this, "anonid", "color");
            this._parent = document.getBindingParent(this);
         ]]>
       </constructor>
-      <property name="color">
-        <getter>
-          <![CDATA[
-            return "#" + this._RGB.map(function(aInt){return parseInt(aInt.value).toString(16).replace(/^(.)$/, "0$1")}
-                                     ).join("").toUpperCase();
-          ]]>
-        </getter>
-        <setter>
-          <![CDATA[
-            let color = val.replace("#","");
-            for (let i = 0; i < 3; i++) {
-              let subS = color.substr(i*2, 2);
-              this._RGB[i].value = parseInt(subS, 16);
-            }
-          ]]>
-        </setter>
+
+      <method name="getColor">
+        <parameter name="format"/>
+        <body><![CDATA[
+          let rgba = this.rgba;
+          if (format) {
+            rgba[3] = this.getAttribute("disabled") ? 0.2 :
+                          Math.max(.2, rgba[3]);
+          }
+          return "rgba(#1)".replace("#1", rgba.join(","));
+        ]]></body>
+      </method>
+
+      <property name="rgba" readonly="true">
+        <getter><![CDATA[
+          let rgba = this._RGB.map(function(c) parseInt(c.value));
+          rgba[3] /= 100;
+          return rgba;
+        ]]></getter>
       </property>
+
+      <property name="color"
+                onget="return this.getColor();">
+        <setter><![CDATA[
+          let color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
+          for (let i = 0; i < 3; i++)
+            this._RGB[i].value = color[i];
+          this._RGB[3].value = (color[3] || 1) * 100;
+          this.updateColor();
+        ]]></setter>
+      </property>
+
+      <method name="updateColor">
+        <body><![CDATA[
+          this._colorpicker.color = this.getColor(true);
+        ]]></body>
+      </method>
+
+      <method name="update">
+        <parameter name="event"/>
+        <body><![CDATA[
+          this.updateColor();
+          this._parent._savePrefs();
+          event.stopPropagation();
+        ]]></body>
+      </method>
+
     </implementation>
+
     <handlers>
-      <handler event="command">
+      <handler event="command"><![CDATA[
         event.stopPropagation();
-      </handler>
-      <handler event="change">
-        this._colorpicker.color = this.color;
-        this._parent._savePrefs();
-        event.stopPropagation();
-      </handler>
-      <handler event="input">
-        this._colorpicker.color = this.color;
-        this._parent._savePrefs();
-        event.stopPropagation();
-      </handler>
+      ]]></handler>
+
+      <handler event="change"><![CDATA[
+        let item = event.originalTarget;
+        if (item.localName == "colorpicker") {
+          // colorpicker use rgb hexadecimal format
+          let color = item.color.replace("#","");
+          for (let i = 0; i < 3; i++) {
+            let subS = color.substr(i*2, 2);
+            this._RGB[i].value = parseInt(subS, 16);
+          }
+        }
+        this.update(event);
+      ]]></handler>
+
+      <handler event="input" action="this.update(event);"/>
+
     </handlers>
   </binding>
 
