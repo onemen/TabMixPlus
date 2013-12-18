@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "目前的分頁">
 <!ENTITY unloadedTabs.label "未載入的分頁">
 <!ENTITY unreadTab.label "未讀的分頁">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "重新載入後將分頁設定為未讀取">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">
 <!ENTITY bold.label "粗體">
 <!ENTITY underline.label "底線">
 <!ENTITY textcolor.label "文字顏色">
 <!ENTITY bgColor.label "背景顏色">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "套用此樣式到">
 <!ENTITY opacity.label "不透明度">

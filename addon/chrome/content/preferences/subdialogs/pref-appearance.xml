@@ -34,10 +34,10 @@
           <xul:checkbox_tmp anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
                         oncommand="updateDisableState(this.getAttribute('anonid'))"/>
           <xul:colorbox anonid="bgTopColor" class="bgTop" xbl:inherits="disabled=bg-disabled,hidden=_hidebox">
-            <xul:label value="top:"  class="visible" xbl:inherits="disabled=bg-disabled"/>
+            <xul:label value="&bgTopColor.label;:"  class="visible" xbl:inherits="disabled=bg-disabled"/>
           </xul:colorbox>
           <xul:colorbox anonid="bgColor" class="bgBottom" xbl:inherits="disabled=bg-disabled">
-            <xul:label value="bottom:" class="visible" xbl:inherits="disabled=bg-disabled,_hidebox"/>
+            <xul:label value="&bgBottomColor.label;:" class="visible" xbl:inherits="disabled=bg-disabled,_hidebox"/>
           </xul:colorbox>
         </xul:vbox>
         <xul:spacer flex="1"/>

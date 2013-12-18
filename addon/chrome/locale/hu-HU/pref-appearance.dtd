@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Aktuális lap">
 <!ENTITY unloadedTabs.label "Lapok kiürítése">
 <!ENTITY unreadTab.label "Olvasatlan lap">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "újratöltéskor a lap olvasatlanná válik">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Egyéb lapok">
 <!ENTITY italic.label "Dőlt">
 <!ENTITY bold.label "Félkövér">
 <!ENTITY underline.label "Aláhúzott">
 <!ENTITY textcolor.label "Szövegszín">
 <!ENTITY bgColor.label "Háttérszín">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "stílus alkalmazása">
 <!ENTITY opacity.label "átlátszatlanság">

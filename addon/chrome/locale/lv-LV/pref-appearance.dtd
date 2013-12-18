@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Pašreizējā cilne">
 <!ENTITY unloadedTabs.label "Neielādētās cilnes">
 <!ENTITY unreadTab.label "Nelasītās cilnes">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "pēc pārlādēšanas iestatīt cilni kā nelasītu">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Citas cilnes">
 <!ENTITY italic.label "Slīpraksts">
 <!ENTITY bold.label "Treknraksts">
 <!ENTITY underline.label "Pasvītrots">
 <!ENTITY textcolor.label "Teksta krāsa">
 <!ENTITY bgColor.label "Fona krāsa">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "izmantot šo stilu priekš">
 <!ENTITY opacity.label "caurspīdība">

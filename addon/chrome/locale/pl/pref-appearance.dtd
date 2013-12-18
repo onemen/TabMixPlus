@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Aktywna karta">
 <!ENTITY unloadedTabs.label "Niewczytane karty">
 <!ENTITY unreadTab.label "Nieobejrzane karty">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "Po odświeżeniu ustaw karty jako nieprzeczytane">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Inne karty">
 <!ENTITY italic.label "Kursywa">
 <!ENTITY bold.label "Pogrubienie">
 <!ENTITY underline.label "Podkreślenie">
 <!ENTITY textcolor.label "Kolor tekstu">
 <!ENTITY bgColor.label "Kolor tła">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "Zastosuj styl dla">
 <!ENTITY opacity.label "Krycie">

@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Huidig tabblad">
 <!ENTITY unloadedTabs.label "Niet geladen tabbladen">
 <!ENTITY unreadTab.label "Ongelezen tabbladen">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "Tabblad als ongelezen instellen na herladen">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Overige tabbladen">
 <!ENTITY italic.label "Cursief">
 <!ENTITY bold.label "Vet">
 <!ENTITY underline.label "Onderstreept">
 <!ENTITY textcolor.label "Tekstkleur">
 <!ENTITY bgColor.label "Achtergrondkleur">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "deze stijl gebruiken voor">
 <!ENTITY opacity.label "Doorzichtigheid">

@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "現在のタブ">
 <!ENTITY unloadedTabs.label "未読込のタブ">
 <!ENTITY unreadTab.label "未読のタブ">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "再読み込み後はタブを未読にする">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">
 <!ENTITY bold.label "太字">
 <!ENTITY underline.label "下線">
 <!ENTITY textcolor.label "文字色">
 <!ENTITY bgColor.label "背景色">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "以下のスタイルを使用　　設定対象">
 <!ENTITY opacity.label "不透明度">

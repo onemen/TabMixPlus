@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Aktuell flik">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "Olästa flikar">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Andra flikar">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fet">
 <!ENTITY underline.label "Understruken">
 <!ENTITY textcolor.label "Textfärg">
 <!ENTITY bgColor.label "Bakgrundsfärg">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "använder denna stil för">
 <!ENTITY opacity.label "genomskinlighet">

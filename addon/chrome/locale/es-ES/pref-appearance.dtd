@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Pestaña seleccionada">
 <!ENTITY unloadedTabs.label "Pestañas no cargadas">
 <!ENTITY unreadTab.label "Pestañas no leídas">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "establecer como no leída tras recargar">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Otras pestañas">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negrita">
 <!ENTITY underline.label "Subrayado">
 <!ENTITY textcolor.label "Color texto">
 <!ENTITY bgColor.label "Color fondo">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "usar este estilo para">
 <!ENTITY opacity.label "opacidad">

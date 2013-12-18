@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Текущ подпрозорец">
 <!ENTITY unloadedTabs.label "Незаредени подпрозорци">
 <!ENTITY unreadTab.label "Непрочетени подпрозорци">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "след презареждане, подпрозорецът да се маркира като непрочетен">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Други подпрозорци">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Удебелен">
 <!ENTITY underline.label "Подчертан">
 <!ENTITY textcolor.label "Цвят на текста">
 <!ENTITY bgColor.label "Цвят на фона">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "Използване на стил за">
 <!ENTITY opacity.label "непрозрачност">

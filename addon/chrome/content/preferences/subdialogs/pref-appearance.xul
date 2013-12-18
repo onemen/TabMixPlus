@@ -42,6 +42,6 @@
        <tabpanel id="progressMeter" _hidebox="true"/>
      </tabpanels>
    </tabbox>
-   <label value="Hide RGB" show="Show RGB" hide="Hide RGB" id="hide-RGB" persist="value" hidden="true"/>
+   <label value="&hideRGB.label;" show="&showRGB.label;" hide="&hideRGB.label;" id="hide-RGB" persist="value" hidden="true"/>
 
 </dialog>

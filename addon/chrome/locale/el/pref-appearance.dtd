@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Τρέχουσα καρτέλα">
 <!ENTITY unloadedTabs.label "Μη φορτωμένες καρτέλες">
 <!ENTITY unreadTab.label "Μη αναγνωσμένες καρτέλες">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "Ορισμός καρτέλας ως μη αναγνωσμένης μετά την ανανέωση">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">
 <!ENTITY bold.label "Έντονα">
 <!ENTITY underline.label "Υπογεγραμμένα">
 <!ENTITY textcolor.label "Χρώμα κειμένου">
 <!ENTITY bgColor.label "Χρώμα φόντου">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "Χρήση αυτού του στυλ για">
 <!ENTITY opacity.label "διαφάνεια">

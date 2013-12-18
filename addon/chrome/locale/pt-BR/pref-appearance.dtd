@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "Aba atual">
 <!ENTITY unloadedTabs.label "Abas descarregadas">
 <!ENTITY unreadTab.label "Abas não lidas">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">
 <!ENTITY underline.label "Sublinhado">
 <!ENTITY textcolor.label "Cor do texto">
 <!ENTITY bgColor.label "Cor do fundo">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "use esse estilo para">
 <!ENTITY opacity.label "opacidade">
