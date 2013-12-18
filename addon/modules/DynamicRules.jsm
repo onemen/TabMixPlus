@@ -73,10 +73,8 @@ this.DynamicRules = {
   onPrefChange: function (data) {
     let prefName = data.split(".").pop();
     if (STYLENAMES.indexOf(prefName) > -1) {
-      if (prefName == data) {
-        this.userChangedStyle(prefName);
-        this.updateOpenedWindows(prefName);
-      }
+      if (prefName == data)
+        this.userChangedStyle(prefName, true);
       else
         this.registerSheet(prefName);
     }
@@ -175,7 +173,7 @@ this.DynamicRules = {
     this.cssTemplates = styleRules;
   },
 
-  userChangedStyle: function (ruleName) {
+  userChangedStyle: function (ruleName, notifyWindows) {
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
 
@@ -202,6 +200,9 @@ this.DynamicRules = {
 
     if (changed)
       this.updateStyles(ruleName, prefObj);
+
+    if (notifyWindows)
+      this.updateOpenedWindows(ruleName);
   },
 
   updateStyles: function (name, prefObj) {

@@ -1140,7 +1140,6 @@ var gTMPprefObserver = {
   },
 
   updateTabsStyle: function(ruleName, toggle) {
-///Tabmix.log("ruleName " + ruleName, true);
     let attribValue = null;
     let styleName = ruleName.replace("Tab", "");
     let enabled = Tabmix.prefs.getBoolPref(ruleName);
