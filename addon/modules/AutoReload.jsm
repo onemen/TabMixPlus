@@ -79,13 +79,15 @@ let AutoReload = {
     // get the custom list and validate its values
     function getList() {
       let prefs = TabmixSvc.prefBranch, pref = "custom_reload_list";
-      let list = prefs.getCharPref(pref).split(",");
       if (!prefs.prefHasUserValue(pref))
-        return list;
+        return [];
+      let list = prefs.getCharPref(pref).split(",");
       if (!list.every(function(val) val==parseInt(val))) {
         prefs.clearUserPref(pref);
-        return prefs.getCharPref(pref).split(",");
+        return [];
       }
+      let defaulList = ["30","60","120","300","900","1800"];
+      list = list.filter(function(val) defaulList.indexOf(val) == -1);
       let newList = [];
       list.forEach(function(val){
         if (parseInt(val) && newList.indexOf(val) == -1)

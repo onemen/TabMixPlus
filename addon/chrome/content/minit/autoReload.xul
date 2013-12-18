@@ -30,8 +30,9 @@ function accept() {
     var customReloadTime = getCustomReloadTime();
     gPref.setIntPref("extensions.tabmix.reload_time", customReloadTime);
     var list = gPref.getCharPref("extensions.tabmix.custom_reload_list");
-    if (list.indexOf(customReloadTime) == -1) {
-      list = list.split(",");
+    list = list ? list.split(",") : [];
+    let defaulList = [30,60,120,300,900,1800];
+    if (list.concat(defaulList).indexOf(customReloadTime) == -1) {
       list.push(customReloadTime);
       if (list.length > 6 )
         list.shift();
