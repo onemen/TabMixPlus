@@ -386,8 +386,12 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   }
 }
 
-// temporary property for Aurora 25.0a2 users with version before 2013-09-12
-// replace it with Tabmix.isVersion(260) once Firefox 25.0 is out
+/**
+ bug 887515 - add ability to restore multiple tabs
+ bug 914258 backout 887515 changes from Firefox 25
+ bug 931891 backout 887515 changes from Firefox 26-29
+*/
 XPCOMUtils.defineLazyGetter(Tabmix, "_restoreMultipleTabs", function() {
-  return typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function"
+  return this.isVersion(290) &&
+         typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function";
 });
