@@ -103,7 +103,9 @@ this.DynamicRules = {
   },
 
   createTemplates: function () {
-    let space20 = ' '.repeat(20), space26 = ' '.repeat(26);
+    // String.prototype.repeat available from Firefox 24.0
+    let space20 = '                    ';
+    let space26 = '                          ';
     let bgImage = { };
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
