@@ -17,6 +17,8 @@
                             onset="return this.checked = val;"/>
       <property name="checked" onget="return this._checkbox.checked;"
                             onset="return this._checkbox.checked = val;"/>
+      <property name="disabled" onget="return this._checkbox.disabled;"
+                            onset="return this._checkbox.disabled = val;"/>
     </implementation>
   </binding>
 
