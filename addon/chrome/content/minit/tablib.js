@@ -460,7 +460,7 @@ var tablib = {
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
-      'tablib.closeLastTab();', {check: Tabmix.isPlatform("Mac"), flags: "g"}
+      'tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
     )._replace(
       'gBrowser.removeCurrentTab({animate: true})',
       'tablib.closeLastTab();'
@@ -615,7 +615,7 @@ var tablib = {
       'tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
-      'if (!Tabmix.isPlatform("Mac") && !tablib.closeWindow(true)) return false;\
+      'if (!TabmixSvc.isMac && !tablib.closeWindow(true)) return false;\
        $&'
     ).toCode();
 
@@ -1621,7 +1621,7 @@ var tablib = {
   },
 
   closeLastTab: function TMP_closeLastTab() {
-    if (Tabmix.isPlatform("Mac") && window.location.href != getBrowserURL()) {
+    if (TabmixSvc.isMac && window.location.href != getBrowserURL()) {
       closeWindow(true);
       return;
     }
@@ -1701,7 +1701,7 @@ var tablib = {
     }
 
     // we always show our prompt on Mac
-    var showPrompt = Tabmix.isPlatform("Mac") || !isAfterFirefoxPrompt();
+    var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
     var quitType = Tabmix.getCallerNameByIndex(2);
     var askBeforSave = quitType != "restartApp" && quitType != "restart";

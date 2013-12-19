@@ -227,6 +227,14 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
   return Services.strings.createBundle(properties);
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function () {
+  return Services.appinfo.OS == "Darwin";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
+  return Services.appinfo.OS == "Linux";
+});
+
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 

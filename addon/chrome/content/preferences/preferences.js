@@ -18,9 +18,9 @@ var gPrefWindow = {
       prefWindow.setAttribute("chromifox", true);
 
     var prefWindow = $("TabMIxPreferences");
-    if (Tabmix.isPlatform("Mac"))
+    if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
-    else if (Tabmix.isPlatform("Linux")) {
+    else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
       if (skin == "ftdeepdark")
         prefWindow.setAttribute("ftdeepdark", true);

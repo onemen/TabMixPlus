@@ -333,7 +333,7 @@ var TabmixTabbar = {
     let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
     let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
-    if (Tabmix.isMac) {
+    if (TabmixSvc.isMac) {
       document.getElementById("TabsToolbar").style.setProperty("height",newTabbarHeight + "px", "important");
     }
     // override fixed height set by theme to .tabbrowser-tabs class
@@ -382,7 +382,7 @@ var TabmixTabbar = {
     }
     if (this._windowStyle.exist)
       Tabmix.setItem(document.getElementById("main-window"), "style", this._windowStyle.value);
-    if (Tabmix.isMac) {
+    if (TabmixSvc.isMac) {
       document.getElementById("TabsToolbar").style.removeProperty("height");
     }
     gTMPprefObserver.updateTabbarBottomPosition();
@@ -1058,7 +1058,7 @@ var gTMPprefObserver = {
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
     this.insertRule(newRule);
 
-    if (Tabmix.isMac && !TabmixSvc.australis)
+    if (TabmixSvc.isMac && !TabmixSvc.australis)
       newHeight = 24;
 
     let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
@@ -1068,7 +1068,7 @@ var gTMPprefObserver = {
     this.insertRule(newRule);
 
     // we don't show icons on menu on Mac OS X
-    if (Tabmix.isMac)
+    if (TabmixSvc.isMac)
       return;
 
     // new tab button on tab context menu
@@ -1078,7 +1078,7 @@ var gTMPprefObserver = {
     let url = "chrome://browser/skin/Toolbar.png", region;
     let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin=="classic/1.0") {
-      if (Tabmix.isPlatform("Linux"))
+      if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
                                        "rect(0px, 96px, 24px, 72px)";
       else

@@ -3,7 +3,7 @@
 var gSessionPane = {
   gSessionManager: null,
   init: function () {
-    if (Tabmix.isPlatform("Linux"))
+    if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
     this.setVisiblecontent(!!this.sessionManagerAddon, true);

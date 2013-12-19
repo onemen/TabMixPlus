@@ -450,7 +450,7 @@
         if (tabs.hasAttribute("multibar") && tabs.overflow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
-          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               (!tabs.visibleTabsLastChild.hasAttribute("showbutton") &&
                !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
             tabs.updateVerticalTabStrip();
@@ -499,7 +499,7 @@
         if (TabmixTabbar.isMultiRow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
-          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               !tabs.visibleTabsLastChild.hasAttribute("showbutton"))
             tabs.updateVerticalTabStrip();
         }

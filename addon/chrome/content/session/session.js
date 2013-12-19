@@ -1957,7 +1957,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          mi.setAttribute("value", i);
          // Ubuntu global menu prevents Session manager menu from working from Tools menu
          // this hack is only for left click, middle click and right click still not working
-         if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+         if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
             mi.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
          mi.value = i;
          if (parentID != "onStart.loadsession") {
@@ -2003,7 +2003,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                menu.setAttribute("label", sLabel + (showNameExt && contents != 1 ? nameExt : ""));
                if (showTooltip) menu.setAttribute("tooltiptext", sLabel + nameExt);
                menu.setAttribute("value", (-1 - i));
-               if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+               if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
                   menu.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
                popup.appendChild (menu);
             }

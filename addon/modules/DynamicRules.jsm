@@ -46,7 +46,6 @@ this.DynamicRules = {
     this._initialized = true;
 
     this.treeStyleTab = aWindow.Tabmix.extensions.treeStyleTab;
-    this.isMac = aWindow.Tabmix.isMac;
 
     Prefs.addObserver("", this, false);
     STYLENAMES.forEach(function(pref){
@@ -108,7 +107,7 @@ this.DynamicRules = {
     let bgImage = { };
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
-    bgImage.bg = this.isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
+    bgImage.bg = TabmixSvc.isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
 ///XXX move -moz-appearance: to general rule when style have bg
     let backgroundRule = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
@@ -124,7 +123,7 @@ this.DynamicRules = {
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
     }
 
-    if (this.isMac) {
+    if (TabmixSvc.isMac) {
       backgroundRule = '.tabbrowser-tab[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >\n' +
         '      :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
 

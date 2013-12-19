@@ -897,7 +897,7 @@
 
       <handler event="dblclick" phase="capturing"><![CDATA[
         if (Tabmix.prefs.getBoolPref("dblClickTabbar_changesize") &&
-            !Tabmix.isPlatform("Mac") && event.target.localName == "tabs") {
+            !TabmixSvc.isMac && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
           let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
           if (TabsInTitlebar.enabled ||

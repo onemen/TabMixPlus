@@ -66,7 +66,7 @@ let RenameTab = {
     this.panel.hidden = false;
 
     // reorder buttons for MacOS & Linux
-    if (this.window.Tabmix.isPlatform("Linux") || this.window.Tabmix.isPlatform("Mac")) {
+    if (TabmixSvc.isLinux || TabmixSvc.isMac) {
       let buttons = this._element("tabmixRenametab_buttons");
       buttons.removeAttribute("pack");
       buttons.setAttribute("dir", "rtl");

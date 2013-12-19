@@ -7,7 +7,7 @@ var gMousePane = {
   init: function () {
     this._inited = true;
 
-    if (Tabmix.isPlatform("Mac")) {
+    if (TabmixSvc.isMac) {
       let label = $("tabId").getAttribute("label2");
       $("tabId").setAttribute("label", label);
     }
@@ -55,7 +55,7 @@ var gMousePane = {
     this.updatePref(this.clickTabbar, prefID + "bar");
     // Linux uses alt key down to trigger the top menu on Ubuntu or
     // start drag window on OpenSuSe
-    let disabled = Tabmix.isPlatform("Linux") && panel == "alt";
+    let disabled = TabmixSvc.isLinux && panel == "alt";
     Tabmix.setItem(this.clickTabbar, "disabled", disabled || null);
     Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
   },
