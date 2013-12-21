@@ -1052,20 +1052,20 @@ var gTMPprefObserver = {
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
     // height shrink to actual size when the tabbar is in display: block (multi-row)
-    let newHeight = gBrowser.tabContainer.visibleTabsFirstChild.getBoundingClientRect().height;
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
-                  ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", newHeight);
+                  ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule);
 
     if (TabmixSvc.isMac && !TabmixSvc.australis)
-      newHeight = 24;
+      Tabmix._buttonsHeight = 24;
 
     let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
                   '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
                   '#TabsToolbar[multibar] > #tabs-closebutton {' +
-                  '  height: #px;}'.replace("#", newHeight);
+                  '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule);
+    delete Tabmix._buttonsHeight;
 
     // we don't show icons on menu on Mac OS X
     if (TabmixSvc.isMac)

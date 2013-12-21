@@ -139,6 +139,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
+    // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
+    // from Tabmix.delayedStartup
+    Tabmix._buttonsHeight =
+            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
 
     this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
     if (stripIsHidden)
