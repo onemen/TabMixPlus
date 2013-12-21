@@ -278,3 +278,7 @@ tabbox > tabpanels {
 #sesionsPanel[manager=firefox] tab.firefox {
   visibility: hidden;
 }
+
+.menu checkbox {
+  padding-top: 0px;
+}

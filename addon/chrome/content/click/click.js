@@ -299,6 +299,19 @@ var TabmixContext = {
       undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
       undoCloseTabMenu.setAttribute("multipletablabel", multipletablabel);
     }
+
+    if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
+      this.updateTabbarContextMenu(true);
+  },
+
+  updateTabbarContextMenu: function(show) {
+    let tabBar = gBrowser.tabContainer;
+    if (show) {
+      this._originalTabbarContextMenu = tabBar.getAttribute("context");
+      tabBar.setAttribute("context", gBrowser.tabContextMenu.id);
+    }
+    else
+      Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
   },
 
   toggleEventListener: function(enable) {

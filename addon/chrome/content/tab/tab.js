@@ -905,6 +905,9 @@ var gTMPprefObserver = {
       case "layout.css.devPixelsPerPx":
         setTimeout(function(self) {self.setBgMiddleMargin();},0, this);
         break;
+      case "extensions.tabmix.showTabContextMenuOnTabbar":
+        TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
+        break;
       default:
         break;
     }
