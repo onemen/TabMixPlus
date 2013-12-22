@@ -363,6 +363,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 }
 
+Tabmix.tabStyles = {}
 Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
