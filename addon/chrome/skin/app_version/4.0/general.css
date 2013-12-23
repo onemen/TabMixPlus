@@ -142,14 +142,14 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, left bottom, right bottom;
   background-size: 0% 0%, calc(100% - (1 * 30px)) 100%, 30px 100%;
-  border-radius: 13.25px 0 0 20px;
+  border-radius: 16px 0 0 20px;
   margin-left: 0px;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
-  border-left: none;
-  border-radius: 25px 0 0 20px;
+  border-left: 2px solid rgba(26 ,26, 26, 0.25);
+  border-radius: 16px 0 0 20px;
   margin-left: 0px;
 }
 
@@ -157,13 +157,13 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, 30px bottom, right bottom;
   background-size: 30px 100%, calc(100% - (1 * 30px)) 100%, 0% 0%;
-  border-radius: 0 13.25px 20px 0;
+  border-radius: 0 16px 20px 0;
   margin-right: 0px;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
 #tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
-  border-right: none;
-  border-radius: 0 25px 20px 0;
+  border-right: 2px solid rgba(26, 26, 26, 0.25);
+  border-radius: 0 16px 20px 0;
   margin-right: 0px;
 }
