@@ -294,10 +294,6 @@
     </implementation>
 
     <handlers>
-      <handler event="command"><![CDATA[
-        event.stopPropagation();
-      ]]></handler>
-
       <handler event="change"><![CDATA[
         let item = event.originalTarget;
         if (item.localName == "colorpicker") {
