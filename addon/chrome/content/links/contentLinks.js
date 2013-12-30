@@ -78,7 +78,7 @@ Tabmix.contentAreaClick = {
       '  event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;' +
       '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;' +
       '  var result = $&' +
-      '  if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
+      '  if (targetAttr && !result) setTimeout(function(){Tabmix.contentAreaClick.selectExistingTab(href, targetAttr);},300);'
     ).toCode();
 
     /* don't change where if it is save, window, or we passed
@@ -672,13 +672,25 @@ Tabmix.contentAreaClick = {
 
   /**
    * @brief Checks to see if handleLinkClick reload an existing tab without
-   *        focusing it for linke with target "_new".
-   *
+   *        focusing it for link with target. Search in the browser content
+   *        and its frames for content with matching name and href
    */
-  selectExistingTab: function TMP_selectExistingTab(href) {
+  selectExistingTab: function TMP_selectExistingTab(href, targetFrame) {
     if (Tabmix.prefs.getIntPref("opentabforLinks") != 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
+
+    function isCurrent(content) {
+      if (content.location.href == href && content.name == targetFrame)
+        return true;
+      for (let i = 0; i < content.frames.length; i++) {
+        let frame = content.frames[i];
+        if (frame.location.href == href && frame.name == targetFrame)
+          return true;
+      }
+      return false;
+    }
+
     function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.
@@ -692,8 +704,7 @@ Tabmix.contentAreaClick = {
       let browsers = aWindow.gBrowser.browsers;
       for (let i = 0; i < browsers.length; i++) {
         let browser = browsers[i];
-        if (browser.currentURI.spec == href &&
-            browser.contentWindow.name == "_new") {
+        if (isCurrent(browser.contentWindow)) {
           gURLBar.handleRevert();
           // Focus the matching window & tab
           aWindow.focus();
