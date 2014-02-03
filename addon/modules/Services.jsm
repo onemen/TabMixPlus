@@ -190,6 +190,10 @@ let TabmixSvc = {
       delete this.sanitized;
       return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
     },
+    set sanitized(val) {
+      delete this.sanitized;
+      return this.sanitized = val;
+    },
     private: true,
     settingPreference: false,
   }
