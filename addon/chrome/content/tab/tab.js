@@ -1779,16 +1779,17 @@ try {
     })
 
     // block item in tabclicking options that are not in use
-    this.blockedValues = [];
+    var blockedValues = [];
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab))
-      this.blockedValues.push(12);
+      blockedValues.push(12);
     var isIE = ("IeView" in window && window.IeView.ieViewLaunch) ||
                (Tabmix.extensions.gIeTab && window[Tabmix.extensions.gIeTab.obj].switchTabEngine) ||
                ("ieview" in window && window.ieview.launch);
     if (!isIE)
-      this.blockedValues.push(21);
+      blockedValues.push(21);
     if (!document.getElementById("Browser:BookmarkAllTabs"))
-      this.blockedValues.push(26);
+      blockedValues.push(26);
+    TabmixSvc.blockedClickingOptions = blockedValues;
     this.updateTabClickingOptions();
 
     // capture gfx.direct2d.disabled value on first window
@@ -1807,7 +1808,7 @@ try {
   },
 
   blockTabClickingOptions: function(prefName) {
-    if (this.blockedValues.indexOf(Services.prefs.getIntPref(prefName)) > -1) {
+    if (TabmixSvc.blockedClickingOptions.indexOf(Services.prefs.getIntPref(prefName)) > -1) {
       if (Services.prefs.prefHasUserValue(prefName))
         Services.prefs.clearUserPref(prefName);
       else

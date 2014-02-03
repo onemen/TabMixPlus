@@ -196,7 +196,9 @@ let TabmixSvc = {
     },
     private: true,
     settingPreference: false,
-  }
+  },
+
+  blockedClickingOptions: []
 }
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {

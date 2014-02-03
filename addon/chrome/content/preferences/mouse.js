@@ -14,13 +14,11 @@ var gMousePane = {
 
     $("ClickTabPinTab").label = gPrefWindow.pinTabLabel;
 
-    var browserWindow = Tabmix.getTopWin();
-
     // Init tabclicking options
     this.clickTab = $("ClickTab");
     var menuPopup = this.clickTab.firstChild;
     // block item in tabclicking options that are not in use
-    var blocked = browserWindow.gTMPprefObserver.blockedValues;
+    var blocked = TabmixSvc.blockedClickingOptions;
     for (let i = 0; i < blocked.length; i++) {
       let item = menuPopup.getElementsByAttribute("value", blocked[i])[0];
       item.hidden = true;
