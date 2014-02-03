@@ -18,10 +18,9 @@
 <!ENTITY linkTarget.current "Current Tab">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
-<!ENTITY divertedWindows.comment "More Javascript &amp; Popup preferences are controlled from main Options">
 <!ENTITY divertedWindowOpen.all "Open all popups in tabs">
-<!ENTITY divertedWindowOpen.some "Allow resized popups">
-<!ENTITY divertedWindowOpen.none "Allow all popups">
+<!ENTITY divertedWindowOpen.some "Allows resized popups">
+<!ENTITY divertedWindowOpen.none "Allows all popups">
 <!ENTITY linkTarget.label "Open links with a target attribute in current tab">
 <!ENTITY download.label "Prevent blank tabs when downloading files">
 <!ENTITY edit.label "Edit">
