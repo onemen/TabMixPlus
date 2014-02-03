@@ -1438,7 +1438,11 @@ var tablib = {
 
       var message, chkBoxLabel;
       if (shouldPrompt == 1 || numProtected == 0) {
-        message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
+        if (Tabmix.isVersion(290))
+          message = PluralForm.get(tabsToClose, bundle.getString("tabs.closeWarningMultiple"))
+                      .replace("#1", tabsToClose);
+        else
+          message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
                                           TabmixSvc.getString("window.closeWarning.1");
       }
