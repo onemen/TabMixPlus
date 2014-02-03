@@ -399,9 +399,10 @@ var TabmixSessionManager = {
       // If sessionStore restore the session after restart we do not need to do anything
       // when all tabs are pinned, session resore add the home page on restart
       // prepare history sessions
+      var crashed;
       if (Tabmix.firstWindowInSession && !this.globalPrivateBrowsing &&
             !sanitized && !Tabmix.isWindowAfterSessionRestore) {
-         let status, crashed;
+         let status;
          if (this.enableBackup) {
             let path = this._rdfRoot + "/closedSession/thisSession";
             status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
