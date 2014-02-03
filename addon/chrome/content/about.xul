@@ -85,6 +85,7 @@
 
       <label id="extensionContributors" class="sectionTitle">&contributors.label;</label>
       <vbox flex="1" id="contributorsBox" class="boxIndent">
+        <label value="Makondo (Forum moderator, troubleshooting and more...)" flex="1" crop="end" class="contributor"/>
         <label value="Bruce Wittmeier (Help page)" flex="1" crop="end" class="contributor"/>
         <label value="SUN Chun-Yen" class="contributor" />
         <label value="Piotr Sielski [graphics]" class="contributor" />
