@@ -283,6 +283,10 @@ let TabStateCache = {
       update(browser.__SS_data.attributes);
     }
 
+    // Bug 905049 fixed by Bug 960903 - Broadcast session history
+    if (isVersion(290))
+      return;
+
     let tabHasCache = isVersion(270) ? this.TabStateCache.has(browser) :
                                this.TabStateCache._data.has(browser);
     if (tabHasCache) {
