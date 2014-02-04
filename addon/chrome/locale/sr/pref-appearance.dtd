@@ -2,17 +2,17 @@
 <!ENTITY currentTab.label "Текућа картица">
 <!ENTITY unloadedTabs.label "Неучитане картице">
 <!ENTITY unreadTab.label "Непрочитане картице">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Сакриј RGB">
+<!ENTITY showRGB.label "Прикажи RGB">
 <!ENTITY unreadAfterReload.label "означи картицу као непрочитану након поновног учитавања">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY squaredTabs.label "Примени боју позадине за квадратне картице">
 <!ENTITY otherTabs.label "Остале картице">
 <!ENTITY italic.label "Искошено">
 <!ENTITY bold.label "Подебљано">
 <!ENTITY underline.label "Подвучено">
 <!ENTITY textcolor.label "Боја слова">
 <!ENTITY bgColor.label "Боја позадине">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgTopColor.label "врх">
+<!ENTITY bgBottomColor.label "дно">
 <!ENTITY useThis.label "користи овај стил за">
 <!ENTITY opacity.label "провидност">

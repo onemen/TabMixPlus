@@ -240,7 +240,7 @@
 <!ENTITY clicktab.removetoRight "Aizvērt cilnes pa labi">
 <!ENTITY clicktab.uctab "Atkārtoti atvērt pēdējo aizvērto cilni">
 <!ENTITY clicktab.ucatab "Atkārtoti atvērt visas aizvērtās cilnes">
-<!ENTITY clicktab.snapback "SnapBack Tab">
+<!ENTITY clicktab.snapback "SnapBack cilne">
 <!ENTITY clicktab.ietab "Atver cilni pārlūkā IE">
 <!ENTITY contentLoad "Vidējais klikšķis ielādē cilni no starpliktuves">
 <!ENTITY context.tab "Cilnes konteksta izvēlne">

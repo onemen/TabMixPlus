@@ -43,7 +43,7 @@
 <!ENTITY newtab.current "Současná stránka">
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
 <!ENTITY newtab.location.1 "Stránka nového panelu">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Výchozí stránka nového panelu">
 <!ENTITY location.label.1 "Adresa">
 <!ENTITY focusContent.label "Přepnout na obsah při načítání neprázdné stránky">
 <!ENTITY openTabNext.label "Otevřít nové panely vedle současného panelu">
@@ -210,8 +210,8 @@
 <!ENTITY ontabbar.label "na lištu panelů:">
 <!ENTITY clicktab.label "Vyberte příkaz, který se má provést při poklepání na panel nebo lištu panelů">
 <!ENTITY ontabbar.dblClick.label "Při dvojím poklikání na lištu s panely nezměnit velikost okna.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "Při kliknutí na lištu s panely okno nepřesunout.">
+<!ENTITY clicktab.default "Výchozí nastavení Firefoxu nebo jiné rozšíření">
 <!ENTITY clicktab.nothing "Bez akce">
 <!ENTITY clicktab.addtab "Otevřít nový panel">
 <!ENTITY clicktab.duplicatetab "Duplikovat panel">

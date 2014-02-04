@@ -2,17 +2,17 @@
 <!ENTITY currentTab.label "Onglet courant">
 <!ENTITY unloadedTabs.label "Onglets non chargés">
 <!ENTITY unreadTab.label "Onglets non lus">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Masquer codes RVB">
+<!ENTITY showRGB.label "Afficher codes RVB">
 <!ENTITY unreadAfterReload.label "Marquer l'onglet comme non lu après rechargement">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY squaredTabs.label "Appliquer la couleur d'arrière-plan sur les onglets rectangulaires">
 <!ENTITY otherTabs.label "Autres onglets">
 <!ENTITY italic.label "Italique">
 <!ENTITY bold.label "Gras">
 <!ENTITY underline.label "Souligné">
 <!ENTITY textcolor.label "Couleur du texte">
-<!ENTITY bgColor.label "Couleur d&apos;arrière-plan">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgColor.label "Couleur d'arrière-plan">
+<!ENTITY bgTopColor.label "en haut">
+<!ENTITY bgBottomColor.label "en bas">
 <!ENTITY useThis.label "utiliser ce style pour">
-<!ENTITY opacity.label "l&apos;opacité">
+<!ENTITY opacity.label "l'opacité">

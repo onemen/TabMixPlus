@@ -2,17 +2,17 @@
 <!ENTITY currentTab.label "Aktuálna karta">
 <!ENTITY unloadedTabs.label "Nenačítané karty">
 <!ENTITY unreadTab.label "Neprečítané karty">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Skryť RGB">
+<!ENTITY showRGB.label "Zobraziť RGB">
 <!ENTITY unreadAfterReload.label "po znovu načítaní nastaviť kartu ako neprečítanú">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY squaredTabs.label "Použiť farbu pozadia pre štvorcové karty">
 <!ENTITY otherTabs.label "Ostatné karty">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučné">
 <!ENTITY underline.label "Podčiarknúť">
 <!ENTITY textcolor.label "Farba textu">
 <!ENTITY bgColor.label "Farba pozadia">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgTopColor.label "navrchu">
+<!ENTITY bgBottomColor.label "naspodku">
 <!ENTITY useThis.label "použiť tento štýl pre">
 <!ENTITY opacity.label "nepriesvitnosť">

@@ -2,17 +2,17 @@
 <!ENTITY currentTab.label "Текущая вкладка">
 <!ENTITY unloadedTabs.label "Незагруженные вкладки">
 <!ENTITY unreadTab.label "Непрочитанные вкладки">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Спрятать RGB">
+<!ENTITY showRGB.label "Показать RGB">
 <!ENTITY unreadAfterReload.label "отметить вкладку как непрочитанную после её обновления">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY squaredTabs.label "Применять цвет фона к квадратным вкладкам">
 <!ENTITY otherTabs.label "Другие вкладки">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Полужирный">
 <!ENTITY underline.label "Подчёркнутый">
 <!ENTITY textcolor.label "Цвет текста">
 <!ENTITY bgColor.label "Цвет фона">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgTopColor.label "наверху">
+<!ENTITY bgBottomColor.label "внизу">
 <!ENTITY useThis.label "использовать стиль для">
 <!ENTITY opacity.label "непрозрачность">

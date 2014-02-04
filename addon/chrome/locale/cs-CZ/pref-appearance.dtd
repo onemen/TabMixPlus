@@ -2,17 +2,17 @@
 <!ENTITY currentTab.label "Současný panel">
 <!ENTITY unloadedTabs.label "Nenačtené panely">
 <!ENTITY unreadTab.label "Nepřečtené panely">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Skrýt RGB">
+<!ENTITY showRGB.label "Zobrazit RGB">
 <!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY squaredTabs.label "Použít barvu pozadí na čtvercové panely">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučně">
 <!ENTITY underline.label "Podtrhnout">
 <!ENTITY textcolor.label "Barva textu">
 <!ENTITY bgColor.label "Barva pozadí">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgTopColor.label "nahoru">
+<!ENTITY bgBottomColor.label "dolů">
 <!ENTITY useThis.label "použít tento styl pro">
 <!ENTITY opacity.label "neprůhlednost">
