@@ -52,7 +52,7 @@ function TMP_TBP_Startup() {
   let onLoad = Tabmix.initialization.run("beforeBrowserInitOnLoad");
   if (onLoad)
     onLoad();
-  else if (Tabmix.isVersion(160) && "gBrowserInit" in window)
+  else if ("gBrowserInit" in window)
     gBrowserInit.onLoad();
   else
     BrowserStartup();
@@ -64,9 +64,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
   } catch (ex) {this.assert(ex);}
 
   try {
-    // replace old Settings.
-    // we must call this before any other tabmix function
-    gTMPprefObserver.updateSettings();
     gTMPprefObserver.init();
   } catch (ex) {this.assert(ex);}
 
@@ -98,9 +95,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     var fnContainer, TMP_BrowserStartup;
     if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
       [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
-    else if (this.isVersion(160) && "gBrowserInit" in window)
+    else if ("gBrowserInit" in window)
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
-    else
+    else // we probably never get here
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
     var bowserStartup = this.changeCode(fnContainer, TMP_BrowserStartup);
 
@@ -161,25 +158,18 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           'if (window.opener && !window.opener.closed', loadOnStartup
         );
       }
-
-      if (Tabmix.isVersion(270) && sessionManager) {
-        this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
-          'SessionStore.canRestoreLastSession',
-          'TabmixSessionManager.canRestoreLastSession'
-        ).toCode();
-      }
-    }
-    // All-in-One Sidebar 0.7.14 brake Firefox 12.0
-    if (this.isVersion(120) && typeof aios_dominitSidebar == "function") {
-      bowserStartup = bowserStartup._replace(
-        'TabsOnTop.syncCommand();',
-        'TabsOnTop.init();', {silent: true}
-      );
     }
     bowserStartup.toCode();
 
+    if (Tabmix.isVersion(270) && sessionManager) {
+      this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
+        'SessionStore.canRestoreLastSession',
+        'TabmixSessionManager.canRestoreLastSession'
+      ).toCode();
+    }
+
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [obj, fn] = this.isVersion(160) && "gBrowserInit" in window ?
+    var [obj, fn] = "gBrowserInit" in window ?
           [gBrowserInit, "gBrowserInit._delayedStartup"] :
           [window, "delayedStartup"];
 
@@ -382,8 +372,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
         aUrl = currentURI ? currentURI.spec : null;
     }
     if (this._keepLastTab ||
-        Tabmix.isBlankPageURL(tab.__newLastTab || null) ||
-       (!aUrl || Tabmix.isBlankPageURL(aUrl)) &&
+        isBlankPageURL(tab.__newLastTab || null) ||
+       (!aUrl || isBlankPageURL(aUrl)) &&
         tabbrowser.isBlankNotBusyTab(tab)) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
@@ -396,8 +386,12 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   }
 }
 
-// temporary property for Aurora 25.0a2 users with version before 2013-09-12
-// replace it with Tabmix.isVersion(260) once Firefox 25.0 is out
+/**
+ bug 887515 - add ability to restore multiple tabs
+ bug 914258 backout 887515 changes from Firefox 25
+ bug 931891 backout 887515 changes from Firefox 26-29
+*/
 XPCOMUtils.defineLazyGetter(Tabmix, "_restoreMultipleTabs", function() {
-  return typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function"
+  return this.isVersion(290) &&
+         typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function";
 });

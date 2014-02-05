@@ -4,6 +4,7 @@ var EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
@@ -42,16 +43,13 @@ let Shortcuts = {
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
     saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
-    slideShow: {default: "d&VK_F8"},
-    toggleFLST: {default: "d&VK_F9"}
+    slideShow: {id: "key_tm_slideShow", default: "d&VK_F8"},
+    toggleFLST: {id: "key_tm_toggleFLST", default: "d&VK_F9"}
   },
 
   get prefs() {
     delete this.prefs;
-    this.prefs = Services.prefs.getBranch("extensions.tabmix.");
-    if (!TabmixSvc.version(130))
-      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
-    return this.prefs;
+    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
   },
 
   prefsChangedByTabmix: false,
@@ -179,6 +177,11 @@ let Shortcuts = {
 
     aWindow.addEventListener("unload", this, false);
 
+    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", function() {
+      let document = aWindow.document;
+      return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
+    });
+
     let [changedKeys, needUpdate] = this._getChangedKeys({onOpen: true});
     if (needUpdate)
       this.updateWindowKeys(aWindow, changedKeys);
@@ -196,9 +199,11 @@ let Shortcuts = {
 
   _updateKey: function TMP_SC__updateKey(aWindow, aKey, aKeyData) {
     let document = aWindow.document;
+    let keyset = document.getElementById("mainKeyset");
     let keyAtt = this.keyParse(aKeyData.value || "d&");
     if (aKeyData.sessionKey && aKeyData.blocked)
       keyAtt.disabled = true;
+    let disabled = keyAtt.disabled;
     let id = aKeyData.id || "key_tm_" + aKey;
     let keyItem = document.getElementById(id);
     if (keyItem) {
@@ -206,16 +211,21 @@ let Shortcuts = {
         return;
       for (let att in Iterator(keyAtt, true))
         keyItem.removeAttribute(att);
+      // disabled shortcuts, like new tab and close tab, can mess the whole keyset
+      // so we move those to a different node
+      if (disabled)
+        aWindow.Tabmix.removedShortcuts.appendChild(keyItem);
+      else if (keyItem.parentNode != keyset)
+        keyset.appendChild(keyItem);
     }
     else {
-      let parentNode = document.getElementById("mainKeyset");
       // don't add disabled key
-      if (!parentNode || keyAtt.disabled)
+      if (!keyset || disabled)
         return;
       keyItem = document.createElementNS(NS_XUL, "key");
       keyItem.setAttribute("id", id);
       keyItem._id = aKey;
-      parentNode.appendChild(keyItem);
+      keyset.appendChild(keyItem);
       keyItem.setAttribute("label", aKeyData.label);
       keyItem.setAttribute("oncommand", "void(0);");
       keyItem.addEventListener("command", this, true);
@@ -225,14 +235,13 @@ let Shortcuts = {
       if (val)
         keyItem.setAttribute(att, val);
     }
-    let disabled = keyAtt.disabled;
     // remove existing acceltext from menus
     let items = document.getElementsByAttribute("key", keyItem.id);
     for (let i = 0, l = items.length; i < l; i++)
       items[i].setAttribute("acceltext", disabled ? " " : "");
 
     // turn off slideShow if need to
-    if (aKey == "slideShow" && keyAtt.disabled &&
+    if (aKey == "slideShow" && disabled &&
         aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
         aWindow.Tabmix.flst.cancel();
     }
@@ -246,14 +255,18 @@ let Shortcuts = {
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let [key, keyData] in Iterator(this.keys)) {
-      let currentValue = onOpen ? keyData.default || "" : keyData.value;
-      let newValue = shortcuts[key] || keyData.default || "";
+      let _default = keyData.default || "";
+      let currentValue = onOpen ? _default : keyData.value;
+      let newValue = shortcuts[key] || _default;
       let updatBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
           disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
-      if (currentValue != newValue || updatBlockState) {
+      // on start report disabled by default shortcut as changed so _updateKey
+      // can move these shortcuts to removedShortcuts
+      if (currentValue != newValue || updatBlockState ||
+          onOpen && /^d&/.test(_default)) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
       }
@@ -360,13 +373,17 @@ let Shortcuts = {
     return key ? this.keyStringify(key) : "";
   },
 
+  getFormattedKey: function(key) {
+    return getFormattedKey(key);
+  },
+
+  getFormattedKeyForID: function(id) {
+    let key = this.keyParse(this.keys[id].value)
+    return getFormattedKey(key);
+  },
+
   getPlatformAccel: function() {
-    switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-      case 17:  return "control"; break;
-      case 18:  return "alt"; break;
-      case 224: return "meta"; break;
-    }
-    return Services.appinfo.OS == "Darwin" ? "meta" : "control"
+    return getPlatformAccel();
   },
 
   // add id for key Browser:Reload
@@ -422,8 +439,6 @@ let KeyConfig = {
       }
     }
     this.resetPref(oldReloadId);
-    if (!TabmixSvc.version(130))
-      this.prefs.QueryInterface(Ci.nsIPrefBranch2);
     this.prefs.addObserver("", this, false);
   },
 
@@ -459,7 +474,7 @@ let KeyConfig = {
       let newKey = {modifiers: prefValue[0].replace(" ", ","),
           key: prefValue[1], keycode: prefValue[2]};
       if (keyData.value.indexOf("accel") > -1)
-        newKey.modifiers = newKey.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
+        newKey.modifiers = newKey.modifiers.replace(getPlatformAccel(), "accel");
       newValue = Shortcuts.keyStringify(newKey);
     }
     if (newValue != keyData.value) {
@@ -504,4 +519,59 @@ function setPref(name, value) {
   let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
   str.data = value;
   Services.prefs.setComplexValue(name, Ci.nsISupportsString, str);
+}
+
+function getFormattedKey(key) {
+  if (!key)
+    return "";
+  var val = "";
+
+  if (key.modifiers) {
+    let sep = getPlatformKeys("MODIFIER_SEPARATOR");
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
+      if (/alt|shift|control|meta|accel/.test(mod))
+        val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
+    })
+  }
+
+  if (key.key) {
+    if (key.key == " ") {
+      key.key = ""; key.keycode = "VK_SPACE";
+    }
+    else
+      val += key.key.toUpperCase();
+  }
+  if (key.keycode) try {
+    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
+    val += localeKeys.GetStringFromName(key.keycode);
+  } catch (ex) {
+    val += "<" + key.keycode + ">";
+  }
+  return val;
+}
+
+/*
+ * get platform labels for: alt, shift, control, meta, accel.
+ */
+let gPlatformKeys = {};
+function getPlatformKeys(key) {
+  if (typeof gPlatformKeys[key] == "string")
+    return gPlatformKeys[key];
+
+  let val, platformKeys = Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
+  if (key != "VK_ACCEL")
+    val = platformKeys.GetStringFromName(key);
+  else
+    val = getPlatformKeys("VK_" + getPlatformAccel().toUpperCase());
+
+  return gPlatformKeys[key] = val;
+}
+
+function getPlatformAccel() {
+  switch (Services.prefs.getIntPref("ui.key.accelKey")) {
+    case 17:  return "control"; break;
+    case 18:  return "alt"; break;
+    case 224: return "meta"; break;
+  }
+  return Services.appinfo.OS == "Darwin" ? "meta" : "control"
 }

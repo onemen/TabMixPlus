@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Aktuálna stránka">
 <!ENTITY newtab.duplicate "Duplikovaná stránka">
 <!ENTITY newtab.location.1 "Nová karta">
+<!ENTITY newtab.placeholder.label "Predvolená stránka Nová karta">
 <!ENTITY location.label.1 "Adresa">
 <!ENTITY focusContent.label "Zamerať obsah pri načítaní nie prázdnej stránky">
 <!ENTITY openTabNext.label "Otvoriť nové karty vedľa aktuálnej karty">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "na panel karty:">
 <!ENTITY clicktab.label "Vyberte príkaz pre kliknutie na kartu alebo panel karty">
 <!ENTITY ontabbar.dblClick.label "Zabránit dvojkliknutiu na paneli záložiek pri zmene veľkosti okna.">
+<!ENTITY ontabbar.click.label "Zabráiť kliknutiu na paneli kariet pretiahnutím okna.">
+<!ENTITY clicktab.default "Predvolené alebo ostatné rozšírenia Firefoxu">
 <!ENTITY clicktab.nothing "Bez akcie">
 <!ENTITY clicktab.addtab "Otvoriť novú kartu">
 <!ENTITY clicktab.duplicatetab "Duplikovať kartu">

@@ -194,10 +194,6 @@ var Tabmix = {
     return this.isSingleBrowserWindow;
   },
 
-  isPlatform: function(aPlatform) {
-    return navigator.platform.indexOf(aPlatform) == 0;
-  },
-
   get window() {
     return window;
   },

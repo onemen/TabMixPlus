@@ -21,76 +21,66 @@ var TMP_tabDNDObserver = {
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
-    if (Tabmix.isVersion(170)) {
-      tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
-      // Determine what tab we're dragging over.
-      // * In tabmix tabs can have diffrent width
-      // * Point of reference is the start of the dragged tab when
-      //   draging left and the end when draging right. If that point
-      //   is before (for dragging left) or after (for dragging right)
-      //   the middle of a background tab, the dragged tab would take that
-      //   tab's position when dropped.
-      if (!Tabmix.extensions.treeStyleTab)
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
-        'this.selectedItem = draggedTab;',
-        'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
-              $&\n\
-            else if (!draggedTab.selected) {\n\
-              this.setAttribute("movingBackgroundTab", true);\n\
-              draggedTab.setAttribute("dragged", true);\n\
-            }'
-      )._replace(
-        'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-        'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
-      )._replace(
-        'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
-        'let halfWidth = boxObject.width / 2;\n\
-            let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
-                          getTabShift(tabs[mid], oldIndex);'
-      )._replace(
-        'screenX + boxObject.width < tabCenter',
-        'screenX + halfWidth < tabCenter'
-      )._replace(
-        'newIndex >= oldIndex',
-        'rtl ? $& : draggingRight && newIndex > -1'
-      ).toCode();
+    tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+    // Determine what tab we're dragging over.
+    // * In tabmix tabs can have diffrent width
+    // * Point of reference is the start of the dragged tab when
+    //   draging left and the end when draging right. If that point
+    //   is before (for dragging left) or after (for dragging right)
+    //   the middle of a background tab, the dragged tab would take that
+    //   tab's position when dropped.
+    if (!Tabmix.extensions.treeStyleTab)
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+      'this.selectedItem = draggedTab;',
+      'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
+            $&\n\
+          else if (!draggedTab.selected) {\n\
+            this.setAttribute("movingBackgroundTab", true);\n\
+            draggedTab.setAttribute("dragged", true);\n\
+          }'
+    )._replace(
+      'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
+      'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
+    )._replace(
+      'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
+      'let halfWidth = boxObject.width / 2;\n\
+          let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
+                        getTabShift(tabs[mid], oldIndex);'
+    )._replace(
+      'screenX + boxObject.width < tabCenter',
+      'screenX + halfWidth < tabCenter'
+    )._replace(
+      'newIndex >= oldIndex',
+      'rtl ? $& : draggingRight && newIndex > -1'
+    ).toCode();
 
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
-        /(\})(\)?)$/,
-        '\n\
-          this.removeAttribute("movingBackgroundTab");\n\
-          let tabs = this.getElementsByAttribute("dragged", "*");\n\
-          Array.slice(tabs).forEach(function(tab) tab.removeAttribute("dragged"));\n\
-        $1$2'
-      ).toCode();
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
+      /(\})(\)?)$/,
+      '\n\
+        this.removeAttribute("movingBackgroundTab");\n\
+        let tabs = this.getElementsByAttribute("dragged", "*");\n\
+        Array.slice(tabs).forEach(function(tab) tab.removeAttribute("dragged"));\n\
+      $1$2'
+    ).toCode();
 
-      tabBar.useTabmixDragstart = function(aEvent) {
-        if (TMP_tabDNDObserver.draggedTab) {
-          delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
-          TMP_tabDNDObserver.draggedTab = null;
-        }
-        return this.orient == "horizontal" &&
-          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-          aEvent.altKey);
+    tabBar.useTabmixDragstart = function(aEvent) {
+      if (TMP_tabDNDObserver.draggedTab) {
+        delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
+        TMP_tabDNDObserver.draggedTab = null;
       }
-      tabBar.useTabmixDnD = function(aEvent) {
-        function checkTab(dt) {
-          let tab = TMP_tabDNDObserver.getSourceNode(dt);
-          return !tab || "__tabmixDragStart" in tab;
-        }
-
-        return this.orient == "horizontal" &&
-          (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-          checkTab(aEvent.dataTransfer));
-      }
+      return this.orient == "horizontal" &&
+        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+        aEvent.altKey);
     }
-    else {
-      tabBar.useTabmixDragstart = function() {
-        return this.orient == "horizontal";
+    tabBar.useTabmixDnD = function(aEvent) {
+      function checkTab(dt) {
+        let tab = TMP_tabDNDObserver.getSourceNode(dt);
+        return !tab || "__tabmixDragStart" in tab;
       }
-      tabBar.useTabmixDnD = function() {
-        return this.orient == "horizontal"
-      }
+
+      return this.orient == "horizontal" &&
+        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+        checkTab(aEvent.dataTransfer));
     }
 
     this._dragOverDelay = tabBar._dragOverDelay;
@@ -200,8 +190,6 @@ var TMP_tabDNDObserver = {
     var hideIndicator = false;
     if (effects == "") {
       this.clearDragmark();
-      if (!Tabmix.isVersion(170))
-        gBrowser.tabContainer._continueScroll(event);
       return;
     }
     canDrop = effects != "none";
@@ -419,7 +407,7 @@ var TMP_tabDNDObserver = {
 
   onDragEnd: function minit_onDragEnd(aEvent) {
     var tabBar = gBrowser.tabContainer;
-    if (Tabmix.isVersion(170) && !tabBar.useTabmixDnD(aEvent))
+    if (!tabBar.useTabmixDnD(aEvent))
       tabBar._finishAnimateTabMove();
 
     if (this.draggedTab) {
@@ -524,8 +512,6 @@ var TMP_tabDNDObserver = {
       this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }
-    if (!Tabmix.isVersion(170))
-      gBrowser.tabContainer._continueScroll(event);
     this.updateStatusField();
   },
 

@@ -140,7 +140,7 @@
          oncommand="gBrowser.lockTab(gBrowser.mCurrentTab);"
          insertbefore="context-sep-stop" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;"/>
       <menu id="tm-tabsList" label="&tabsList.label;" accesskey="&tabsList.accesskey;" insertbefore="context-sep-stop" tmp_iconic="menu-iconic">
-        <menupopup id="tm-tabsList-menu" class="fix-bookmark-item"
+        <menupopup id="tm-tabsList-menu"
            onpopupshowing="TabmixAllTabs.createTabsList(this, 2);"
            onpopuphidden="TabmixAllTabs.hideCommonList(this);"
            onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
@@ -151,7 +151,7 @@
          key="key_undoCloseTab" label="&undoCloseTab.label;" accesskey="&undoCloseTab.accesskey;"/>
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="context-sep-stop">
-        <menupopup id="tm-content-undoCloseList-menu" class="fix-bookmark-item"
+        <menupopup id="tm-content-undoCloseList-menu"
           onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this);"
           onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </menu>
@@ -164,7 +164,7 @@
     </popup>
 
     <toolbarpalette id="BrowserToolbarPalette">
-      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
               observes="tmp_undocloseButton"
               oncommand="if (event.target == this &amp;&amp; !TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
               onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
@@ -183,7 +183,8 @@
               onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true"
+                              class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
               observes="tmp_sessionmanagerButton"
               _tooltiptext="&sessionbtn.tooltip;"
               tooltiptext="&sessionbtn.tooltip;"
@@ -233,7 +234,7 @@
          </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
                onclick="if (event.target == this) if (event.button == 1) gBrowser.closeAllTabs();"
                context="hideTabbar_context"
@@ -254,7 +255,7 @@
          </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional"
+      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                observes="tmp_closedwindows"
                label="&closedwindowsbtn.label;"
                _tooltiptext="&closedwindowsbtn.tooltip;"
@@ -279,13 +280,6 @@
 
     <toolbarbutton id="go-button" onclick="Tabmix.goButtonClick(event);"/>
 
-    <menu id="historyUndoMenu">
-      <menupopup id="historyUndoPopup" class="fix-bookmark-item"
-              context="tm_undocloseContextMenu"
-              onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
-              onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
-    </menu>
-
     <popupset id="mainPopupSet">
       <!-- popup menu for autoreload -->
       <menupopup id="autoreload_popup" oncommand="Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);"
@@ -294,21 +288,18 @@
         <menuitem label="&autoReloadTab.label;"  disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator />
         <menuitem _label="&enable.label;:" type="checkbox"
+                  seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"
                   oncommand="Tabmix.autoReload.toggle(this.parentNode._tab); event.stopPropagation();"/>
         <menuseparator />
-        <menuitem label="&custom.label;…" oncommand="Tabmix.autoReload.setCustomTime(this.parentNode._tab); event.stopPropagation();"/>
-        <menuitem _label="&custom.label;:" type="radio"
-                  seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"/>
-        <menuseparator />
-        <menuitem label="5  &seconds.label;" type="radio" value="5"/>
-        <menuitem label="15 &seconds.label;" type="radio" value="15"/>
-        <menuitem label="30 &seconds.label;" type="radio" value="30"/>
+        <menuitem label="&custom.label;…" anonid="start_custom_list"
+                  oncommand="Tabmix.autoReload.setCustomTime(this.parentNode._tab); event.stopPropagation();"/>
+        <menuseparator anonid="end_custom_list"/>
         <menuitem label="1  &minute.label;"  type="radio" value="60"/>
         <menuitem label="2  &minutes.label;" type="radio" value="120"/>
         <menuitem label="5  &minutes.label;" type="radio" value="300"/>
         <menuitem label="15 &minutes.label;" type="radio" value="900"/>
         <menuitem label="30 &minutes.label;" type="radio" value="1800"/>
-        <menuseparator />
+        <menuseparator anonid="end_custom_list"/>
         <menuitem label="&enableTabs.label;" oncommand="Tabmix.autoReload.enableAllTabs(gBrowser); event.stopPropagation();"/>
         <menuitem label="&disableTabs.label;" oncommand="Tabmix.autoReload.disableAllTabs(gBrowser); event.stopPropagation();"/>
       </menupopup>

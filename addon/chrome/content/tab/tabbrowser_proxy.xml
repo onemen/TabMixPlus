@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<bindings id="tabmixbindings-proxy"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabmix-tabbrowser-tab-proxy"
+            extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tab"/>
+
+  <binding id="tabmix-tabbrowser-tabs-proxy"
+           extends="chrome://browser/content/tabbrowser.xml#tabbrowser-tabs"/>
+
+</bindings>
+

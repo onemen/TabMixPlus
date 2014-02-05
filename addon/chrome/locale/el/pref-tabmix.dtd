@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Τρέχουσας σελίδας">
 <!ENTITY newtab.duplicate "Δημιουργία αντιγράφου σελίδας">
 <!ENTITY newtab.location.1 "Σελίδα νέας καρτέλας">
+<!ENTITY newtab.placeholder.label "Αρχική σελίδα νέας καρτέλας">
 <!ENTITY location.label.1 "Διεύθυνση">
 <!ENTITY focusContent.label "Εστίαση στο περιεχόμενο κατά την φόρτωση μη κενής σελίδας">
 <!ENTITY openTabNext.label "Άνοιγμα νέων καρτελών δίπλα στην τρέχουσα">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "στην εργαλειοθήκη καρτελών:">
 <!ENTITY clicktab.label "Επιλέξτε λειτουργία όταν γίνεται κλικ στην καρτέλα ή στην εργαλειοθήκη καρτελών">
 <!ENTITY ontabbar.dblClick.label "Να μην αλλάζει το μέγεθος παραθύρου με διπλό κλικ στην εργαλειοθήκη καρτελών.">
+<!ENTITY ontabbar.click.label "Να μην σύρεται το παράθυρο όταν γίνεται κλικ στην εργαλειοθήκη καρτελών.">
+<!ENTITY clicktab.default "Αρχική επιλογή του Firefox ή άλλης επέκτασης">
 <!ENTITY clicktab.nothing "Καμία λειτουργία">
 <!ENTITY clicktab.addtab "Ανοίγει νέα καρτέλα">
 <!ENTITY clicktab.duplicatetab "Δημιουργεί αντίγραφο της καρτέλας">

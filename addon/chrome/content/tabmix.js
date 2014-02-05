@@ -32,20 +32,6 @@ Tabmix.startup = function TMP_startup() {
   else
     cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); else {" + originalNewNavigator + "}");
 
-  if (!this.isVersion(120)) {
-    // multi-rows total heights can be diffrent when tabs are on top
-    // since this is not trigger any other event that we can listen to
-    // we force to add here a call to reset tabbar height
-    this.originalFunctions.tabsOnTop_toggle = TabsOnTop.toggle;
-    TabsOnTop.toggle = function TabsOnTop_toggle() {
-      Tabmix.originalFunctions.tabsOnTop_toggle.apply(this, arguments);
-      if (TabmixTabbar.visibleRows > 1) {
-        TabmixTabbar.setHeight(1, true);
-        gBrowser.tabContainer.updateVerticalTabStrip();
-      }
-    }
-  }
-
   TabmixContext.toggleEventListener(true);
 
   // if sessionStore disabled use TMP command
@@ -100,9 +86,7 @@ Tabmix.sessionInitialized = function() {
         'TabmixSessionManager.canRestoreLastSession'
       ).toCode();
 
-      let [obj, FnName] = this.isVersion(170) ? [BrowserOnClick, "BrowserOnClick.onAboutHome"] :
-                                                  [window, "window.BrowserOnClick"];
-      this.changeCode(obj, FnName)._replace(
+      this.changeCode(BrowserOnClick, "BrowserOnClick.onAboutHome")._replace(
         'if (ss.canRestoreLastSession)',
         'ss = TabmixSessionManager;\
          $&'
@@ -155,6 +139,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
+    // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
+    // from Tabmix.delayedStartup
+    Tabmix._buttonsHeight =
+            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
 
     this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
     if (stripIsHidden)
@@ -217,6 +205,8 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
+
+  Tabmix.australisUI.init();
 }
 
 var TMP_eventListener = {
@@ -391,20 +381,6 @@ var TMP_eventListener = {
 
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
-    // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-    if (typeof isBlankPageURL == "function") {
-      Tabmix.isBlankPageURL = isBlankPageURL;
-      Tabmix.__defineGetter__("newTabURL", function() BROWSER_NEW_TAB_URL);
-      Tabmix.newTabURLpref = "browser.newtab.url";
-    }
-    else {
-      Tabmix.isBlankPageURL = function TMP_isBlankPageURL(aURL) {
-        return aURL == "about:blank";
-      }
-      Tabmix.newTabURL = "about:blank";
-      Tabmix.newTabURLpref = "extensions.tabmix.newtab.url";
-    }
-
     // init tabmix functions
     try {
       TMP_extensionsCompatibility.onWindowOpen();
@@ -425,8 +401,7 @@ var TMP_eventListener = {
       TMP_tabDNDObserver.init();
     } catch (ex) {Tabmix.assert(ex);}
 
-    if (Tabmix.isPlatform("Mac")) {
-      Tabmix.isMac = true;
+    if (TabmixSvc.isMac) {
       tabBar.setAttribute("Mac", "true");
       // get Mac drop indicator marginBottom ,   Mac default theme have marginBottom: -24px
       let ind = gBrowser.tabContainer._tabDropIndicator
@@ -440,17 +415,15 @@ var TMP_eventListener = {
       Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
     }
 
+    if (TabmixSvc.australis)
+      tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
+
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    var platform;
     if (skin=="classic/1.0") {
-      if (Tabmix.isMac) {
+      if (TabmixSvc.isMac)
         tabBar.setAttribute("classic", "v4Mac");
-        platform = "v4Mac";
-      }
-      else if (Tabmix.isPlatform("Linux")) {
+      else if (TabmixSvc.isLinux) {
         tabBar.setAttribute("classic", "v3Linux");
-        tabBar.setAttribute("platform", "linux");
-        platform = "linux";
 ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
         Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
@@ -459,11 +432,6 @@ var TMP_eventListener = {
         let version = navigator.oscpu.indexOf("Windows NT 6.1") == 0 ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
-        platform = "xp40";
-        // check if australis tab shape is implemented in window (bug 738491)
-        let australis = document.getElementById("tab-curve-clip-path-start");
-        if (australis)
-          tabBar.setAttribute("australis", true);
       }
     }
     else {
@@ -475,7 +443,7 @@ var TMP_eventListener = {
       }
       switch (skin) {
         case "Australis":
-          tabBar.setAttribute("australis", true);
+          tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
           break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
@@ -502,9 +470,6 @@ var TMP_eventListener = {
       }
     }
 
-    // for new tab icon on context menu
-    Tabmix.setItem("context_newTab", "platform", platform);
-
     // don't remove maybe some themes use this with Tabmix
     tabBar.setAttribute("tabmix_firefox3" , true);
 
@@ -512,10 +477,6 @@ var TMP_eventListener = {
       gTMPprefObserver.setSingleWindowUI();
 
     Tabmix.Shortcuts.onWindowOpen(window);
-
-    try {
-      gTMPprefObserver.createColorRules();
-    } catch (ex) {Tabmix.assert(ex);}
 
     var position = Tabmix.prefs.getIntPref("newTabButton.position");
     if (Tabmix.extensions.treeStyleTab) {
@@ -556,13 +517,18 @@ var TMP_eventListener = {
     if (sessionstoreUndoClose != Tabmix.prefs.getBoolPref("undoClose"))
       Tabmix.prefs.setBoolPref("undoClose", sessionstoreUndoClose);
 
+    // apply style on tabs
+    let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
+    styles.forEach(function(ruleName) {
+      gTMPprefObserver.updateTabsStyle(ruleName, true);
+    });
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
 
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
-    gTMPprefObserver.addWidthRules();
+    gTMPprefObserver.addDynamicRules();
     TabmixSessionManager.updateSettings();
 
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
@@ -594,30 +560,15 @@ var TMP_eventListener = {
         let addonBar = document.getElementById("addon-bar");
         addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
 
-        if (Tabmix.isVersion(120)) {
-          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
-            'gNavToolbox.style.marginTop = "";',
-            'TMP_eventListener._updateMarginBottom("");\
-             $&'
-          )._replace(
-            Tabmix.isVersion(170) ?
-            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";' :
-            'gNavToolbox.style.marginTop = gNavToolbox.boxObject.height * pos * -1 + "px";',
-            '$&\
-             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-          ).toCode();
-        }
-        else {
-          Tabmix.changeCode(FullScreen, "FullScreen._animateUp")._replace(
-            'gNavToolbox.style.marginTop = "";',
-            'TMP_eventListener._updateMarginBottom("");\
-             $&'
-          )._replace(
-            'gNavToolbox.style.marginTop = animateFrameAmount * -1 + "px";',
-            '$&\
-             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-          ).toCode();
-        }
+        Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
+          'gNavToolbox.style.marginTop = "";',
+          'TMP_eventListener._updateMarginBottom("");\
+           $&'
+        )._replace(
+          'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";',
+          '$&\
+           TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
+        ).toCode();
 
         Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
           /(\})(\)?)$/,
@@ -696,6 +647,7 @@ var TMP_eventListener = {
       tab.setAttribute("locked", "true");
       tab.tabmix_allowLoad = false;
     }
+    Tabmix.setTabStyle(tab);
   },
 
   // this function call onTabOpen_updateTabBar after some delay
@@ -833,22 +785,22 @@ var TMP_eventListener = {
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
+
+    let lastSelected = document.getElementsByAttribute("tabmix_tabStyle",
+      Tabmix.tabStyles["current"] || "current")[0];
+    Tabmix.setTabStyle(lastSelected);
+    Tabmix.setTabStyle(tab);
+
     TMP_LastTab.OnSelect();
     TabmixSessionManager.tabSelected(true);
 
-    if (tabBar.hasAttribute("multibar")) {
-      let top = tabBar.topTabY;
-      let tabRow = tabBar.getTabRowNumber(tab, top);
-      var prev = TMP_TabView.previousVisibleSibling(tab), next = TMP_TabView.nextVisibleSibling(tab);
-      if ( prev && tabRow != tabBar.getTabRowNumber(prev, top) )
-        prev.removeAttribute("beforeselected");
-      if ( next && tabRow != tabBar.getTabRowNumber(next, top) )
-        next.removeAttribute("afterselected");
-    }
-
-    var tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
-    if (tabsBottom)
-      Tabmix.setItem(tabBar, "tabonbottom", tab.baseY >= tabsBottom.boxObject.y || null);
+    // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
+    // TabSelect event. we call updateBeforeAndAfter after a timeout so
+    // _setPositionalAttributes not override our attribute
+    if (Tabmix.isVersion(220))
+      setTimeout(function(){TabmixTabbar.updateBeforeAndAfter();}, 0);
+    else
+      TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {
@@ -866,6 +818,8 @@ var TMP_eventListener = {
     if (!tab.pinned)
       gBrowser.tabContainer.setFirstTabInRow();
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
+
+    TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
@@ -964,6 +918,7 @@ var TMP_eventListener = {
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
+    gBrowser.tabContainer._tabmixPositionalTabs = null;
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
@@ -989,6 +944,7 @@ var TMP_eventListener = {
       Tabmix.flst.cancel();
 
     Tabmix.navToolbox.deinit();
+    Tabmix.australisUI.deinit();
   },
 
   // some theme not useing updated Tabmix tab binding
@@ -1064,6 +1020,31 @@ var TMP_eventListener = {
 
 }
 
+Tabmix.australisUI = {
+  init: function() {
+    if (!TabmixSvc.australis)
+      return;
+    PanelUI.panel.addEventListener("popupshowing", this.updateButtonsState);
+  },
+
+  deinit: function() {
+    if (!TabmixSvc.australis)
+      return;
+    PanelUI.panel.removeEventListener("popupshowing", this.updateButtonsState);
+  },
+
+  updateButtonsState: function() {
+    let $ = function(id) document.getElementById(id);
+    let cwb = $("btn_closedwindows");
+    if (cwb && cwb.parentNode == PanelUI.contents)
+      cwb.disabled = $("tmp_closedwindows").getAttribute("disabled");
+
+    let cwb = $("btn_undoclose");
+    if (cwb && cwb.parentNode == PanelUI.contents)
+      cwb.disabled = $("tmp_undocloseButton").getAttribute("disabled");
+  }
+}
+
 /**
  * other extensions can cause delay to some of the events Tabmix uses for
  * initialization, for each phase call all previous phases that are not
@@ -1079,16 +1060,13 @@ Tabmix.initialization = {
   get isValidWindow() {
     /**
       * don't initialize Tabmix functions on this window if one of this is true:
-      *  - the window is a popup window
       *  - the window is about to close by SingleWindowModeUtils
       *  - tabbrowser-tabs binding didn't start (i onlly saw it happened
       *       when ImTranslator extension installed)
       */
-    let chromehidden = document.documentElement.getAttribute("chromehidden");
-    let stopInitialization = chromehidden.indexOf("extrachrome") > -1 ||
-                             chromehidden.indexOf("toolbar") > -1;
+    let stopInitialization = false;
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
-    if (!stopInitialization && Tabmix.singleWindowMode) {
+    if (Tabmix.singleWindowMode) {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);

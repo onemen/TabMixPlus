@@ -2,12 +2,17 @@
 <!ENTITY currentTab.label "تب فعلی">
 <!ENTITY unloadedTabs.label "Unloaded Tabs">
 <!ENTITY unreadTab.label "تب خوانده نشده">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "Other Tabs">
 <!ENTITY italic.label "کج">
 <!ENTITY bold.label "پررنگ">
 <!ENTITY underline.label "زیر خط دار">
 <!ENTITY textcolor.label "رنگ متن">
 <!ENTITY bgColor.label "رنگ پس زمینه">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
 <!ENTITY useThis.label "use this style for">
 <!ENTITY opacity.label "opacity">

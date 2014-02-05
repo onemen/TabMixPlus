@@ -17,7 +17,7 @@
 <!ENTITY detachTab.accesskey "v">
 <!ENTITY mergeContext.label "Incorpora finestre">
 <!ENTITY mergeContext.accesskey "I">
-<!ENTITY renametab.label "Rinomina scheda">
+<!ENTITY renametab.label "Rinomina scheda…">
 <!ENTITY renametab.accesskey "m">
 <!ENTITY copytaburl.label "Copia URL della scheda">
 <!ENTITY copytaburl.accesskey "L">

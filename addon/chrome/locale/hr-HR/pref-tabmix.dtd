@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "Trenutnu stranicu">
 <!ENTITY newtab.duplicate "Dupliciranu stranicu">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Otvori nove kartice do trenutno otvorene">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "na traci kartica:">
 <!ENTITY clicktab.label "Izaberite naredbu koju želite izvršiti klikanjem na karticu ili traku kartica">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Ne radi ništa">
 <!ENTITY clicktab.addtab "Otvara novu karticu">
 <!ENTITY clicktab.duplicatetab "Duplicira karticu">

@@ -37,7 +37,6 @@ this.TabmixPlacesUtils = {
 }
 Object.freeze(TabmixPlacesUtils);
 
-let global = this; // for Firefox 11-14
 let Tabmix = { }
 
 let PlacesUtilsInternal = {
@@ -50,7 +49,7 @@ let PlacesUtilsInternal = {
     this._initialized = true;
 
     Tabmix._debugMode = aWindow.Tabmix._debugMode;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", global);
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
 
     this.initPlacesUIUtils(aWindow);
   },

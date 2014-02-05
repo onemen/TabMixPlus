@@ -42,14 +42,6 @@ var TMP_Places = {
       }
 
       if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
-         // LiveClick and Boox extensions change this function we can't use it
-         if (!("LiveClick" in window) && !Tabmix.isVersion(130))
-         Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._mayAddCommandsItems")._replace(
-            "openUILink(this.getAttribute('targetURI'), event);",
-            "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);", {silent: true}
-         ).toCode();
-
-         if (Tabmix.isVersion(130))
          Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._setLivemarkSiteURIMenuItem")._replace(
             "openUILink(this.getAttribute('targetURI'), event);",
             "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
@@ -581,7 +573,7 @@ var TMP_Places = {
     if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
       return;
     var url = aURI ? aURI.spec : null;
-    if (url && !Tabmix.isBlankPageURL(url))
+    if (url && !isBlankPageURL(url))
       this.addItemIdtoTabsWithUrl(aItemId, url);
   },
 
@@ -597,7 +589,7 @@ var TMP_Places = {
         (aProperty != "uri" && aProperty != "title"))
       return;
 
-    if (aProperty == "uri" && aNewValue && !Tabmix.isBlankPageURL(aNewValue))
+    if (aProperty == "uri" && aNewValue && !isBlankPageURL(aNewValue))
       this.addItemIdtoTabsWithUrl(aItemId, aNewValue);
     this.updateTitleonTabs(aItemId, aProperty == "uri");
   },
@@ -690,6 +682,5 @@ TMP_Places.contextMenu = {
 /** DEPRECATED **/
 TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
   let win = aBrowser.ownerDocument.defaultView;
-  Tabmix.log("TMP_Places.getTabFixedTitle was deprecated\nuse TMP_Places.getTabTitle(tab, url)")
-  return win.TMP_Places.getTabTitle(win.gBrowser._getTabForBrowser(aBrowser), aUri);
+  return win.TMP_Places.getTabTitle(win.gBrowser._getTabForBrowser(aBrowser), aUri.spec);
 }

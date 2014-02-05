@@ -39,9 +39,9 @@
 <!ENTITY closeall.accesskey "s">
 <!ENTITY closeSimilarTab.label "Azonos lapok bezárása">
 <!ENTITY closeSimilarTab.accesskey "z">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Balra lévő lapok bezárása">
 <!ENTITY closeleft.accesskey "a">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Jobbra lévő lapok bezárása">
 <!ENTITY closeright.accesskey "o">
 <!ENTITY docShellMenu.label "Engedélyek">
 <!ENTITY docShellMenu.accesskey "E">

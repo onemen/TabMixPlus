@@ -81,7 +81,8 @@ var tablib = {
        dontMove = params.dontMove || null;'
     )._replace(
       't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);'
+      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);',
+      {check: !Tabmix.isVersion(280)}
     )._replace(
       't.className = "tabbrowser-tab";',
       '$&\
@@ -295,18 +296,14 @@ var tablib = {
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("-moz-margin-start", width + "px", null);' +
         '    }' +
-        '    if (Tabmix.isVersion(170)) {' +
-        '      this.style.MozPaddingStart = "";' +
-        '      TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
-        '    }' +
-        '    else' +
-        '      this.style.MozMarginStart = "";' +
+        '    this.style.MozPaddingStart = "";' +
+        '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.mTabstrip.setFirstTabInRow();' +
         '  }' +
         '  else $&'
       )._replace(
         /(\})(\)?)$/,
-        'if (Tabmix.isVersion(170) && TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
+        'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
         '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
         '}' +
         '$1$2'
@@ -380,10 +377,9 @@ var tablib = {
         '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
       ).toCode();
 
-      var newString = Tabmix.isVersion(120) ? 'this.hasAttribute("using-closing-tabs-spacer")' :
-                                              'this._usingClosingTabsSpacer';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
-        '{','{var updateScrollStatus = ' + newString + ' || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
+        '{', '{' +
+        'var updateScrollStatus = this.hasAttribute("using-closing-tabs-spacer") || this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
         /(\})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
@@ -392,21 +388,18 @@ var tablib = {
         '    for (let i = 0; i < tabs.length; i++)' +
         '      tabs[i].style.width = "";' +
         '  }' +
-        '  if (updateScrollStatus) {' +
-        '    if (this.childNodes.length > 1) {' +
-        '      TabmixTabbar.updateScrollStatus();' +
-        '      TabmixTabbar.updateBeforeAndAfter();' +
-        '    }' +
+        '  if (updateScrollStatus && this.childNodes.length > 1) {' +
+        '    TabmixTabbar.updateScrollStatus();' +
+        '    TabmixTabbar.updateBeforeAndAfter();' +
         '  }' +
         '  $1$2'
       ).toCode();
 
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
-    var callerName = Tabmix.isVersion(150) ? "onxblmousedown" : "setTab";
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
       '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("' + callerName + '")) return;'
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
     ).toCode();
 
     Tabmix.changeCode(tabBar,  "gBrowser.tabContainer.visible", {setter: true})._replace(
@@ -467,7 +460,7 @@ var tablib = {
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
-      'tablib.closeLastTab();', {check: Tabmix.isPlatform("Mac"), flags: "g"}
+      'tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
     )._replace(
       'gBrowser.removeCurrentTab({animate: true})',
       'tablib.closeLastTab();'
@@ -622,7 +615,7 @@ var tablib = {
       'tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
-      'if (!Tabmix.isPlatform("Mac") && !tablib.closeWindow(true)) return false;\
+      'if (!TabmixSvc.isMac && !tablib.closeWindow(true)) return false;\
        $&'
     ).toCode();
 
@@ -630,16 +623,11 @@ var tablib = {
       '{',
       '{window.tabmix_warnedBeforeClosing = false;'
     )._replace(
-      'if (!reallyClose)',
-      'if (reallyClose && !window.tabmix_warnedBeforeClosing)\
-         reallyClose = tablib.closeWindow();\
-       $&', {check: !Tabmix.isVersion(170)}
-    )._replace(
       'if (!closeWindow(false, warnAboutClosingWindow))',
       'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
        if (reallyClose && !window.tabmix_warnedBeforeClosing)\
          reallyClose = tablib.closeWindow();\
-       if (!reallyClose)', {check: Tabmix.isVersion(170)}
+       if (!reallyClose)'
     ).toCode();
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
@@ -676,14 +664,12 @@ var tablib = {
        $&'
     ).toCode();
 
-    if (document.getElementById("appmenu_recentlyClosedTabsMenu")) {
-      HistoryMenu.prototype.populateUndoSubmenu = function PHM_populateUndoSubmenu() {
-        var undoMenu = this._rootElt.getElementsByClassName("recentlyClosedTabsMenu")[0];
-        var undoPopup = undoMenu.firstChild;
-        if (!undoPopup.hasAttribute("context"))
-          undoPopup.setAttribute("context", "tm_undocloseContextMenu");
-        TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
-      }
+    HistoryMenu.prototype.populateUndoSubmenu = function PHM_populateUndoSubmenu() {
+      var undoMenu = this._rootElt.getElementsByClassName("recentlyClosedTabsMenu")[0];
+      var undoPopup = undoMenu.firstChild;
+      if (!undoPopup.hasAttribute("context"))
+        undoPopup.setAttribute("context", "tm_undocloseContextMenu");
+      TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
     }
 
     // history menu open in new tab if the curren tab is locked
@@ -783,7 +769,7 @@ var tablib = {
       // try to have SessionStore duplicate the given tab
 
       if (!aHref && !aTabData) {
-        newTab = TabmixSvc.ss.duplicateTab(window, aTab);
+        newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
       }
       else
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
@@ -1134,6 +1120,7 @@ var tablib = {
         aTab.setAttribute("_locked", "true");
       }
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
+      TabmixSvc.saveTabAttributes(aTab, "_locked");
       TabmixSessionManager.updateTabProp(aTab);
     }
 
@@ -1144,6 +1131,7 @@ var tablib = {
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
+      TabmixSvc.saveTabAttributes(aTab, "protected");
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
@@ -1166,6 +1154,7 @@ var tablib = {
       // don't keep this flag after user change lock state manually
       aTab.removeAttribute("_lockedAppTabs");
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
+      TabmixSvc.saveTabAttributes(aTab, "_locked,protected");
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
@@ -1449,7 +1438,11 @@ var tablib = {
 
       var message, chkBoxLabel;
       if (shouldPrompt == 1 || numProtected == 0) {
-        message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
+        if (Tabmix.isVersion(290))
+          message = PluralForm.get(tabsToClose, bundle.getString("tabs.closeWarningMultiple"))
+                      .replace("#1", tabsToClose);
+        else
+          message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
                                           TabmixSvc.getString("window.closeWarning.1");
       }
@@ -1632,7 +1625,7 @@ var tablib = {
   },
 
   closeLastTab: function TMP_closeLastTab() {
-    if (Tabmix.isPlatform("Mac") && window.location.href != getBrowserURL()) {
+    if (TabmixSvc.isMac && window.location.href != getBrowserURL()) {
       closeWindow(true);
       return;
     }
@@ -1712,7 +1705,7 @@ var tablib = {
     }
 
     // we always show our prompt on Mac
-    var showPrompt = Tabmix.isPlatform("Mac") || !isAfterFirefoxPrompt();
+    var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
     var quitType = Tabmix.getCallerNameByIndex(2);
     var askBeforSave = quitType != "restartApp" && quitType != "restart";

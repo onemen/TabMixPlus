@@ -39,11 +39,16 @@ function getKeysForShortcut(shortcut, id, win) {
 function _getKeyName(win, aKey) {
   let doc = win.document;
   let command, val;
-  let fButton = doc.getElementById("titlebar");
-  let val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
+
+  // don't use dynamic label for key name
+  let skip = ["key_undoCloseTab", "key_undoCloseWindow"];
+  if (skip.indexOf(aKey.id) == -1) {
+    let fButton = doc.getElementById("titlebar");
+    val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
       _getLabel(doc.getElementById("main-menubar"), "key", aKey.id) ||
       _getLabel(doc.getElementById("mainPopupSet"), "key", aKey.id) ||
       _getLabel(doc, "key", aKey.id);
+  }
 
   if (!val && (aKey.hasAttribute("command") || aKey.hasAttribute("observes"))) {
     command = aKey.getAttribute("command") || aKey.getAttribute("observes");
@@ -87,11 +92,8 @@ function _getKeyName(win, aKey) {
 }
 
 function _getLabel(elm, attr, value) {
-  // don't use dynamic label for key name
-  let skip = ["key_undoCloseTab", "key_undoCloseWindow"];
-  if (attr == "key" && skip.indexOf(value) > -1)
+  if (!elm)
     return null;
-
   let items = elm.getElementsByAttribute(attr, value);
   for (let i = 0, l = items.length; i < l; i++) {
     if (items[i].hasAttribute("label")) {
@@ -112,48 +114,4 @@ function _getPath(elm){
   return names.join(" > ");
 }
 
-function getFormattedKey(key) {
-  if (!key)
-    return "";
-  var val = "";
-
-  if (key.modifiers) {
-    let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
-      if (/alt|shift|control|meta|accel/.test(mod))
-        val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
-    })
-  }
-
-  if (key.key) {
-    if (key.key == " ") {
-      key.key = ""; key.keycode = "VK_SPACE";
-    }
-    else
-      val += key.key.toUpperCase();
-  }
-  if (key.keycode) try {
-    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
-    val += localeKeys.GetStringFromName(key.keycode);
-  } catch (ex) {
-    val += "<" + key.keycode + ">";
-  }
-  return val;
-}
-
-/*
- * get platform labels for: alt, shift, control, meta, accel.
- */
-let gPlatformKeys = {};
-function getPlatformKeys(key) {
-  if (typeof gPlatformKeys[key] == "string")
-    return gPlatformKeys[key];
-
-  let val, platformKeys = Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
-  if (key != "VK_ACCEL")
-    val = platformKeys.GetStringFromName(key);
-  else
-    val = getPlatformKeys("VK_" + Shortcuts.getPlatformAccel().toUpperCase());
-
-  return gPlatformKeys[key] = val;
-}
+function getFormattedKey(key) Shortcuts.getFormattedKey(key);

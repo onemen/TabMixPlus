@@ -2,6 +2,8 @@
 
 var EXPORTED_SYMBOLS = ["RenameTab"];
 
+Components.utils.import("resource://tabmixplus/Services.jsm");
+
 let RenameTab = {
   window: null,
   panel: null,
@@ -64,7 +66,7 @@ let RenameTab = {
     this.panel.hidden = false;
 
     // reorder buttons for MacOS & Linux
-    if (this.window.Tabmix.isPlatform("Linux") || this.window.Tabmix.isPlatform("Mac")) {
+    if (TabmixSvc.isLinux || TabmixSvc.isMac) {
       let buttons = this._element("tabmixRenametab_buttons");
       buttons.removeAttribute("pack");
       buttons.setAttribute("dir", "rtl");
@@ -119,6 +121,7 @@ let RenameTab = {
     var win = this.window;
     win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
     win.Tabmix.setItem(tab, "label-uri", url);
+    TabmixSvc.saveTabAttributes(tab, "fixed-label,label-uri");
     win.TabmixSessionManager.updateTabProp(tab);
 
     if (tab.label != label)

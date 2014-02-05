@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "die aktuelle Seite">
 <!ENTITY newtab.duplicate "ein Duplikat der aktuellen Seite">
 <!ENTITY newtab.location.1 "Neue Tab-Seite">
+<!ENTITY newtab.placeholder.label "Standard Neue Tab Seite">
 <!ENTITY location.label.1 "Adresse">
 <!ENTITY focusContent.label "Inhaltsbereich fokussieren, falls keine leere Seite geladen wird">
 <!ENTITY openTabNext.label "Neue Tabs neben dem aktiven Tab öffnen">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "Auf die Tab-Leiste:">
 <!ENTITY clicktab.label "Aktionen bei Klicks auf einen Tab oder die Tab-Leiste auswählen:">
 <!ENTITY ontabbar.dblClick.label "Verhindern, dass ein Doppelklick auf die Tab-Leiste die Fenstergröße verändert">
+<!ENTITY ontabbar.click.label "Beim klicken auf die Tab-Leiste das verschieben des Fensters verhindern.">
+<!ENTITY clicktab.default "Firefox Standard oder andere Erweiterung">
 <!ENTITY clicktab.nothing "Keine Aktion">
 <!ENTITY clicktab.addtab "Neuen Tab öffnen">
 <!ENTITY clicktab.duplicatetab "Tab duplizieren">

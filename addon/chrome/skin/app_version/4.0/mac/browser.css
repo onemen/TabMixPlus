@@ -25,35 +25,20 @@
 
 #TabsToolbar[multibar] {
   background-repeat: repeat;
-}
-
-#TabsToolbar[multibar] .toolbarbutton-1 {
-  margin-top: 1px !important;
+  -moz-appearance: toolbar;
 }
 
 .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
+.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-content {
+  border-image: none !important;
+}
+
 /* tabmix color on tab - for inactive window */
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-start[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-middle[selected="true"]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_currentTab~="bgColor"] .tab-background-end[selected="true"]:-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-start:not([selected="true"])[pending]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-middle:not([selected="true"])[pending]:-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unloadedTab~="bgColor"] .tab-background-end:not([selected="true"])[pending]:-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-start:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-middle:not([selected="true"]):not([visited]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_unreadTab~="bgColor"] .tab-background-end:not([selected="true"]):not([visited]):-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-start:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-middle:not([selected="true"]):-moz-window-inactive,
-.tabbrowser-tabs[tabmix_otherTab~="bgColor"] .tab-background-end:not([selected="true"]):-moz-window-inactive{
+.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background >
+        :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive {
   opacity: 0.5 !important;
 }
 
@@ -68,11 +53,6 @@
 }
 
 /* :::: scrollbutton arrow - fix borders :::: */
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
-  height: 24px;
-}
-
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up,
 #tabmixScrollBox[flowing=multibar] > .scrollbutton-up {
   -moz-border-end: none;
@@ -94,12 +74,4 @@
 
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
-}
-
-#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme) {
-  background-color: rgb(190, 190, 190);
-}
-
-#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme):-moz-window-inactive {
-  background-color: rgb(228, 228, 228);
 }

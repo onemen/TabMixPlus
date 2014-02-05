@@ -41,7 +41,7 @@
 <!ENTITY closeSimilarTab.accesskey "P">
 <!ENTITY closeTabsToLeft.label "Zamknij karty po lewej stronie">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "P">
+<!ENTITY closeTabstoRight.label "Zamknij karty po prawej stronie">
 <!ENTITY closeright.accesskey "S">
 <!ENTITY docShellMenu.label "Zezwolenia">
 <!ENTITY docShellMenu.accesskey "E">

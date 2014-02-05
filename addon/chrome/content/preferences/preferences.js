@@ -18,9 +18,9 @@ var gPrefWindow = {
       prefWindow.setAttribute("chromifox", true);
 
     var prefWindow = $("TabMIxPreferences");
-    if (Tabmix.isPlatform("Mac"))
+    if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
-    else if (Tabmix.isPlatform("Linux")) {
+    else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
       if (skin == "ftdeepdark")
         prefWindow.setAttribute("ftdeepdark", true);
@@ -437,6 +437,12 @@ function loadData (pattern) {
   Services.prefs.setIntPref("browser.startup.page", false);
   Services.prefs.savePrefFile(null);
 
+  // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
+  let pref = "extensions.tabmix.updateOpenedTabsLockState=";
+  let index = pattern.indexOf(pref + true) + pattern.indexOf(pref + false) + 1;
+  if (index > 0)
+    pattern.splice(1, 0, pattern.splice(index, 1)[0]);
+
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
   for (let i = 1; i < pattern.length; i++){
@@ -537,18 +543,6 @@ var gIncompatiblePane = {
   }
 
 }
-
-// Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-// for support firefox 4.0-11.0
-XPCOMUtils.defineLazyGetter(window, "newTabURLpref", function() {
-  return Tabmix.getTopWin().Tabmix.newTabURLpref;
-});
-
-XPCOMUtils.defineLazyGetter(window, "replaceLastTabWithNewTabURLpref", function() {
-  let pref = "extensions.tabmix.replaceLastTabWith.";
-  return newTabURLpref == "browser.newtab.url" ?
-    pref + "newtab.url" : pref + "newTabUrl";
-});
 
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   let win = Tabmix.getTopWin();

@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "la page courante">
 <!ENTITY newtab.duplicate "la page dupliquée">
 <!ENTITY newtab.location.1 "l'adresse spécifiée">
+<!ENTITY newtab.placeholder.label "Page par défaut du nouvel onglet">
 <!ENTITY location.label.1 "Adresse">
 <!ENTITY focusContent.label "À l&apos;ouverture de l&apos;onglet, positionner le curseur dans la page et non dans la barre d&apos;adresse">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l&apos;onglet courant">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "sur la barre d&apos;onglets :">
 <!ENTITY clicktab.label "Choisir la commande à exécuter lors d&apos;un clic sur un onglet ou sur la barre d&apos;onglets">
 <!ENTITY ontabbar.dblClick.label "Empêcher le double clic sur la barre d&apos;onglets de redimensionner la fenêtre.">
+<!ENTITY ontabbar.click.label "Empêcher le clic sur la barre des onglets déplacer la fenêtre.">
+<!ENTITY clicktab.default "comportement par défaut de Firefox ou avec une autre extension">
 <!ENTITY clicktab.nothing "Ne fait rien">
 <!ENTITY clicktab.addtab "Ouvre un nouvel onglet">
 <!ENTITY clicktab.duplicatetab "Duplique l&apos;onglet">

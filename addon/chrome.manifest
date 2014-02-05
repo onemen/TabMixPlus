@@ -39,14 +39,14 @@ overlay   chrome://browser/content/browser.xul                      chrome://tab
 overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul
 overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferencesOverlay.xul
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
-overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul    appversion>=13.0a1
-overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/unknownContentType.xul
+overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul
+overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/removeBlankTab.xul
+overlay   chrome://mozapps/content/handling/dialog.xul              chrome://tabmixplus/content/links/removeBlankTab.xul
 
 overlay   chrome://mozapps/content/extensions/about.xul             chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://mozapps/content/update/updates.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
-overlay   chrome://browser/content/syncSetup.xul                    chrome://tabmixplus/content/links/text_link.xul appversion<13.0a1
 overlay   chrome://browser/content/sync/setup.xul                   chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://mozapps/content/update/history.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 
@@ -68,9 +68,6 @@ skin      tabmixplus   classic/1.0   chrome/skin/
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/win/   os=WINNT
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/mac/   os=Darwin
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/linux/ os=Linux
-style     chrome://browser/content/browser.xul   chrome://tabmixplus/content/overlay/browsr_17.css                                  appversion>=17
-style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp15.css os=WINNT osversion<6 appversion<16
-style     chrome://browser/content/browser.xul   chrome://tabmixplus/skin/app_version/4.0/win/browser_xp16.css os=WINNT osversion<6 appversion>=16
 
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css

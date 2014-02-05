@@ -6,6 +6,8 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Shortcuts",
+  "resource://tabmixplus/Shortcuts.jsm");
 
 function flst() {
   this.flstOn = TabmixSvc.getString("flstOn.label");
@@ -16,8 +18,9 @@ function flst() {
 }
 
 flst.prototype = {
-  showAlert: function(msg) {
+  showAlert: function(msg, id) {
     try {
+      msg = msg.replace(/F8|F9/, Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
     }
@@ -28,11 +31,11 @@ flst.prototype = {
   toggle: function() {
     if (TabmixSvc.prefs.getIntPref("extensions.tabmix.focusTab") != 4) {
       TabmixSvc.prefs.setIntPref("extensions.tabmix.focusTab", 4);
-      this.showAlert(this.flstOn);
+      this.showAlert(this.flstOn, "toggleFLST");
     }
     else {
       TabmixSvc.prefs.setIntPref("extensions.tabmix.focusTab", 2);
-      this.showAlert(this.flstOff);
+      this.showAlert(this.flstOff, "toggleFLST");
     }
   },
 
@@ -45,7 +48,7 @@ flst.prototype = {
       this.slideShowTimer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
                         Ci.nsITimer.TYPE_REPEATING_SLACK);
-      this.showAlert(this.slideshowOn);
+      this.showAlert(this.slideshowOn, "slideShow");
     }
   },
 
@@ -59,7 +62,7 @@ flst.prototype = {
   cancel: function() {
     this.slideShowTimer.cancel();
     this.slideShowTimer = null;
-    this.showAlert(this.slideshowOff);
+    this.showAlert(this.slideshowOff, "slideShow");
   },
 
   get moreThenOneTab() {

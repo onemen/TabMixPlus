@@ -399,9 +399,10 @@ var TabmixSessionManager = {
       // If sessionStore restore the session after restart we do not need to do anything
       // when all tabs are pinned, session resore add the home page on restart
       // prepare history sessions
+      var crashed;
       if (Tabmix.firstWindowInSession && !this.globalPrivateBrowsing &&
             !sanitized && !Tabmix.isWindowAfterSessionRestore) {
-         let status, crashed;
+         let status;
          if (this.enableBackup) {
             let path = this._rdfRoot + "/closedSession/thisSession";
             status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
@@ -520,6 +521,9 @@ var TabmixSessionManager = {
             continue;
          this.setLiteral(rdfNodeWindow, "dontLoad", "true");
       }
+
+      if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
+         focusAndSelectUrlBar();
    },
 
    // calls from: tablib.closeWindow, this.onWindowClose and this.canQuitApplication
@@ -855,6 +859,8 @@ var TabmixSessionManager = {
         for (var i = 0; i < gBrowser.tabs.length ; i++)
           delete gBrowser.tabs[i].loadOnStartup;
       }
+      else if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
+         focusAndSelectUrlBar();
    },
 
     // init common services
@@ -1952,7 +1958,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          mi.setAttribute("value", i);
          // Ubuntu global menu prevents Session manager menu from working from Tools menu
          // this hack is only for left click, middle click and right click still not working
-         if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+         if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
             mi.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
          mi.value = i;
          if (parentID != "onStart.loadsession") {
@@ -1998,7 +2004,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                menu.setAttribute("label", sLabel + (showNameExt && contents != 1 ? nameExt : ""));
                if (showTooltip) menu.setAttribute("tooltiptext", sLabel + nameExt);
                menu.setAttribute("value", (-1 - i));
-               if (Tabmix.isPlatform("Linux") && parentId == "tm-sessionmanager")
+               if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
                   menu.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget); event.stopPropagation();");
                popup.appendChild (menu);
             }
@@ -3677,7 +3683,7 @@ try{
       // add blank tab before removing last tab to prevent browser closing with last tab
       // and the default replacing last tab option
       if (gBrowser.tabs.length == 1)
-        gBrowser.selectedTab = gBrowser.addTab("about.blank");
+        gBrowser.selectedTab = gBrowser.addTab("about:blank");
       gBrowser.removeTab(aTab);
    },
 

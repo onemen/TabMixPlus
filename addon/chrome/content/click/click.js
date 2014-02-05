@@ -78,11 +78,8 @@ var TabmixTabClickOptions = {
     else if (aEvent.button == 0 && (aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey)
       prefName = "ctrl";
 
-    if (prefName) {
-      this.clickAction(prefName, clickOutTabs, tab);
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
-    }
+    if (prefName)
+      this.clickAction(prefName, clickOutTabs, tab, aEvent);
   },
 
   // Double click on tab/tabbar
@@ -104,15 +101,18 @@ var TabmixTabClickOptions = {
     var clickOutTabs = aEvent.target.localName == "tabs";
 
     var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
-    this.clickAction("dbl", clickOutTabs, tab);
+    this.clickAction("dbl", clickOutTabs, tab, aEvent);
   },
 
   // call action function from click on tabs or tabbar
-  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, action) {
+  clickAction: function TMP_clickAction(pref, clickOutTabs, aTab, event) {
     if (!pref) return; // just in case we missed something
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
     var command = Tabmix.prefs.getIntPref(pref);
-    this.doCommand(command, aTab, clickOutTabs);
+    if (command > -1 && this.doCommand(command, aTab, clickOutTabs)) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   },
 
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
@@ -248,7 +248,10 @@ var TabmixTabClickOptions = {
         else
           gBrowser.pinTab(aTab);
         break;
+      default:
+        return false;
     }
+    return true;
   }
 }
 
@@ -296,6 +299,19 @@ var TabmixContext = {
       undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
       undoCloseTabMenu.setAttribute("multipletablabel", multipletablabel);
     }
+
+    if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
+      this.updateTabbarContextMenu(true);
+  },
+
+  updateTabbarContextMenu: function(show) {
+    let tabBar = gBrowser.tabContainer;
+    if (show) {
+      this._originalTabbarContextMenu = tabBar.getAttribute("context");
+      tabBar.setAttribute("context", gBrowser.tabContextMenu.id);
+    }
+    else
+      Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
   },
 
   toggleEventListener: function(enable) {
@@ -947,13 +963,14 @@ var TabmixAllTabs = {
 
     // for ColorfulTabs 6.0+
     if (typeof colorfulTabs == "object") {
+      let rule = "none";
       if (colorfulTabs.clrAllTabsPopPref) {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
-        let gradient = Tabmix.isVersion(160) ? "linear-gradient" : "-moz-linear-gradient";
-        mi.style.setProperty('background-image', gradient + '(rgba(255,255,255,.7),rgba('+tabClr+',.5),rgb('+tabClr+')),' + gradient + '(rgb('+tabClr+'),rgb('+ tabClr+'))','important');
+        if (tabClr)
+          rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
+                 .replace("#1", tabClr, "g");
       }
-      else
-        mi.style.setProperty('background-image','none','important');
+      mi.style.setProperty('background-image', rule, 'important');
     }
   },
 

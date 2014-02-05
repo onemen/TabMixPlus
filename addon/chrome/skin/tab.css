@@ -66,70 +66,23 @@
 }
 
 /* :::: For current, unloaded, unread and other tab styles :::: */
-.tabbrowser-tabs[tabmix_unloadedTab~="bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="bold"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="bold"] .tab-text {
   font-weight: bold !important;
 }
 
-.tabbrowser-tabs[tabmix_currentTab~="not-bold"] .tabbrowser-tab[selected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-bold"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="not-bold"] .tab-text {
   font-weight: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="italic"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="italic"] .tab-text {
   font-style: italic !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="not-italic"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-italic"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="not-italic"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="not-italic"] .tabbrowser-tab[selected="true"] .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="not-italic"] .tab-text {
   font-style: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_unloadedTab~="underline"] .tabbrowser-tab:not([selected="true"])[pending] .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="underline"]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([visited]) .tab-text,
-.tabbrowser-tabs[tabmix_unreadTab~="underline"][tabmix_unloadedTab] .tabbrowser-tab:not([visited]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_currentTab~="underline"] .tabbrowser-tab[selected="true"] .tab-text {
-  text-decoration: underline !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="bold"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-weight: bold !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-style: italic !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="not-italic"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
-  font-style: normal !important;
-}
-
-.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab]):not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"]:not([tabmix_unreadTab])[tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"]):not([pending]) .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab]:not([tabmix_unloadedTab]) .tabbrowser-tab:not([selected="true"])[visited] .tab-text,
-.tabbrowser-tabs[tabmix_otherTab~="underline"][tabmix_unreadTab][tabmix_unloadedTab] .tabbrowser-tab:not([selected="true"])[visited]:not([pending]) .tab-text {
+.tabbrowser-tab[tabmix_tabStyle~="underline"] .tab-text {
   text-decoration: underline !important;
 }
 
@@ -165,45 +118,6 @@
 .tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-protect-icon,
 .tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-lock-icon {
   display: none;
-}
-
-/* ::::: new tab button on tab context menu ::::: */
-.newtab-menu-icon:not([platform]) {
-  list-style-image: url("newtab.png");
-}
-
-.newtab-menu-icon[platform=xp],
-.newtab-menu-icon[platform=linux] {
-  list-style-image: url("chrome://browser/skin/Toolbar-small.png");
-}
-
-.newtab-menu-icon[platform=xp] {
-  -moz-image-region: rect(0px 160px 16px 144px);
-}
-.newtab-menu-icon[platform=xp]:hover {
-  -moz-image-region: rect(16px 160px 32px 144px);
-}
-
-.newtab-menu-icon[platform=xp40] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0pt, 180px, 18px, 162px);
-}
-
-.newtab-menu-icon[platform=v4Mac] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0, 220px, 20px, 200px);
-}
-
-.newtab-menu-icon[platform=v36Mac] {
-  list-style-image: url("chrome://browser/skin/Toolbar.png");
-  -moz-image-region: rect(0px, 360px, 23px, 324px);
-}
-.newtab-menu-icon[platform=v36Mac]:hover:active {
-  -moz-image-region: rect(46px, 360px, 69px, 324px);
-}
-
-.newtab-menu-icon[platform=linux] {
-  -moz-image-region: rect(0px 64px 16px 48px);
 }
 
 /*  :::::: Tabmix toolbar button :::::: */
@@ -264,10 +178,13 @@ toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic
 toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
-/* fix dropmarker orient for toolbarbutton[type="menu"] in FF 2.0 + */
-#btn_undoclose[type="menu"] ,#btn_closedwindows[type="menu"] ,
-#btn_tabslist[type="menu"] ,#btn_sessionmanager[type="menu"] {
+/* fix dropmarker orient for toolbarbutton */
+.tabmix-button[type="menu"]:not([cui-areatype="menu-panel"]) {
   -moz-box-orient: horizontal;
+}
+
+toolbar[mode="full"] .tabmix-button[type="menu"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
 }
 
 /* for hashcoulouredtabs */

@@ -26,6 +26,8 @@
     <preferences>
       <preference id="pref_menu"               name="extensions.tabmix.menu.selectedTabIndex"
                                                                                             type="int"/>
+      <preference id="pref_showOnTabbar"       name="extensions.tabmix.showTabContextMenuOnTabbar"
+                                                                                            type="bool"/>
       <preference id="pref_showMoveToGroup"    name="extensions.tabmix.moveToGroup"         type="bool"/>
       <preference id="pref_showNewTab"         name="extensions.tabmix.newTabMenu"          type="bool"/>
       <preference id="pref_showDuplicate"      name="extensions.tabmix.duplicateMenu"       type="bool"/>
@@ -99,8 +101,9 @@
         <tab label="&context.tools;" class="subtabs" helpTopic="Menu_-_Tools_Menu"/>
         <tab label="&shortcuts.label;" class="subtabs" helpTopic="Menu_-_Shortcuts"/>
       </tabs>
-      <tabpanels>
+      <tabpanels class="menu">
         <tabpanel>
+          <checkbox_tmp id="showOnTabbar" label="Show Tab Context Menu on tabbar" preference="pref_showOnTabbar"/>
           <groupbox flex="1">
             <caption label="&showtabBarContext.label;"/>
             <grid flex="1" style="overflow: auto; height:18em;">

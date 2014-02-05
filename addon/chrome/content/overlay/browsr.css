@@ -115,7 +115,7 @@ label.text-link, label[onclick] {
 
 /* showhover button */
 .showhover-box > .showhover {
- -moz-binding: url("chrome://browser/content/tabbrowser.xml#tabbrowser-close-tab-button");
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-showhover-close-tab-button");
 }
 
 .tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
@@ -247,12 +247,28 @@ so display: none !important; does not hide the button */
   min-width: 0;
 }
 
+.tabbrowser-tab > .tab-stack > .tab-progress-container {
+  pointer-events: none;
+}
+
 .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   display: none;
 }
 
 .tabbrowser-tabs[tabmix_progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
   display: -moz-box;
+}
+
+.tab-progress > .progress-bar:-moz-locale-dir(ltr) {
+  background-image: linear-gradient(to right, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
+}
+
+.tab-progress > .progress-bar:-moz-locale-dir(rtl) {
+  background-image: linear-gradient(to left, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
 }
 
 /* :::: multi-row :::: */
@@ -298,4 +314,16 @@ so display: none !important; does not hide the button */
 /* Firefox 12+ hide alltabs-button when it is after the tabbar and tabs are not overflow */
 #tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
  visibility: visible !important;
+}
+
+/* for the case user drag background tab
+   when selectTabOnMouseDown is false, Firefox 17.0+ */
+.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {
+  position: relative;
+  z-index: 3;
+  pointer-events: none; /* avoid blocking dragover events on scroll buttons */
+}
+
+.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
+  transition: transform 200ms ease-out;
 }

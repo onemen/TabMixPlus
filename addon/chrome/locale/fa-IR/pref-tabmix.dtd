@@ -43,6 +43,7 @@
 <!ENTITY newtab.current "صفحه فعلی">
 <!ENTITY newtab.duplicate "تکثیر صفحه">
 <!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "باز کردن تب جدید بعد از تب های فعال">
@@ -209,6 +210,8 @@
 <!ENTITY ontabbar.label "روی نوار تب ها:">
 <!ENTITY clicktab.label "یک دستور را برای اجرا هنگام کلیک کردن روی تب یا نوار تب ها انتخاب کنید">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "هیچ کاری انجام نده">
 <!ENTITY clicktab.addtab "باز کردن یک تب جدید">
 <!ENTITY clicktab.duplicatetab "کپی کردن تب">

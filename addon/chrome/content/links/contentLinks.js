@@ -78,7 +78,7 @@ Tabmix.contentAreaClick = {
       '  event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;' +
       '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;' +
       '  var result = $&' +
-      '  if (targetAttr == "_new" && !result) Tabmix.contentAreaClick.selectExistingTab(href);'
+      '  if (targetAttr && !result) setTimeout(function(){Tabmix.contentAreaClick.selectExistingTab(href, targetAttr);},300);'
     ).toCode();
 
     /* don't change where if it is save, window, or we passed
@@ -244,6 +244,10 @@ Tabmix.contentAreaClick = {
       // for the moment just do it for Google and Yahoo....
       // and tvguide.com - added 2013-07-20
       var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+      // youtube.com - added 2013-11-15
+      if (!blocked && /youtube.com/.test(currentHref) &&
+         (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
+        blocked = true;
     } catch (ex) {blocked = false;}
     if (!blocked) {
       // replace onclick function with the form javascript:top.location.href = url
@@ -368,6 +372,7 @@ Tabmix.contentAreaClick = {
    *
    */
   isGreasemonkeyScript: function (href) { return false; },
+  isGMEnabled: function () false,
 
   /**
    * @brief Suppress tabs that may be created by downloading a file.
@@ -667,13 +672,25 @@ Tabmix.contentAreaClick = {
 
   /**
    * @brief Checks to see if handleLinkClick reload an existing tab without
-   *        focusing it for linke with target "_new".
-   *
+   *        focusing it for link with target. Search in the browser content
+   *        and its frames for content with matching name and href
    */
-  selectExistingTab: function TMP_selectExistingTab(href) {
+  selectExistingTab: function TMP_selectExistingTab(href, targetFrame) {
     if (Tabmix.prefs.getIntPref("opentabforLinks") != 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
+
+    function isCurrent(content) {
+      if (content.location.href == href && content.name == targetFrame)
+        return true;
+      for (let i = 0; i < content.frames.length; i++) {
+        let frame = content.frames[i];
+        if (frame.location.href == href && frame.name == targetFrame)
+          return true;
+      }
+      return false;
+    }
+
     function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.
@@ -687,8 +704,7 @@ Tabmix.contentAreaClick = {
       let browsers = aWindow.gBrowser.browsers;
       for (let i = 0; i < browsers.length; i++) {
         let browser = browsers[i];
-        if (browser.currentURI.spec == href &&
-            browser.contentWindow.name == "_new") {
+        if (isCurrent(browser.contentWindow)) {
           gURLBar.handleRevert();
           // Focus the matching window & tab
           aWindow.focus();

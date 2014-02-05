@@ -129,13 +129,25 @@ let TabmixSvc = {
         return;
       this._initialized = true;
 
+      try {
+        // replace old Settings.
+        // we must call this before any other tabmix function
+        aWindow.gTMPprefObserver.updateSettings();
+      } catch (ex) {TabmixSvc.console.assert(ex);}
+
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
       if (isVersion(190))
         Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+
       Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
+
+      TabmixSvc.tabStylePrefs = {};
+      let tmp = {};
+      Cu.import("resource://tabmixplus/DynamicRules.jsm", tmp);
+      tmp.DynamicRules.init(aWindow);
     },
 
     observe: function(aSubject, aTopic, aData) {
@@ -152,6 +164,10 @@ let TabmixSvc = {
           break;
       }
     }
+  },
+
+  saveTabAttributes: function(tab, attrib) {
+    TabStateCache.saveTabAttributes(tab, attrib);
   },
 
   get ss() {
@@ -174,13 +190,25 @@ let TabmixSvc = {
       delete this.sanitized;
       return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
     },
+    set sanitized(val) {
+      delete this.sanitized;
+      return this.sanitized = val;
+    },
     private: true,
     settingPreference: false,
-  }
+  },
+
+  blockedClickingOptions: []
 }
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+});
+
+// check if australis tab shape is implemented
+XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
+  return  this.topWin().document.getElementById("tab-curve-clip-path-start") ?
+          true : false;
 });
 
 /**
@@ -205,8 +233,66 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
   return Services.strings.createBundle(properties);
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function () {
+  return Services.appinfo.OS == "Darwin";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
+  return Services.appinfo.OS == "Linux";
+});
+
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
+
+let TabStateCache = {
+  get _update() {
+    delete this._update;
+    return this._update = isVersion(260) ? "updateField" : "update";
+  },
+
+  get TabStateCache() {
+    delete this.TabStateCache;
+    if (isVersion(270))
+      Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
+    else
+      this.TabStateCache = Cu.getGlobalForObject(TabmixSvc.ss).TabStateCache;
+    return this.TabStateCache;
+  },
+
+  saveTabAttributes: function(tab, attrib) {
+    if (!isVersion(250))
+      return;
+
+    let attribs = attrib.split(",");
+    function update(attributes) {
+      attribs.forEach(function(key) {
+        if (tab.hasAttribute(key))
+          attributes[key] = tab.getAttribute(key);
+        else if (key in attributes)
+          delete attributes[key];
+      })
+    }
+
+    let browser = tab.linkedBrowser;
+    if (browser.__SS_data) {
+      if (!browser.__SS_data.attributes)
+        browser.__SS_data.attributes = {};
+      update(browser.__SS_data.attributes);
+    }
+
+    // Bug 905049 fixed by Bug 960903 - Broadcast session history
+    if (isVersion(290))
+      return;
+
+    let tabHasCache = isVersion(270) ? this.TabStateCache.has(browser) :
+                               this.TabStateCache._data.has(browser);
+    if (tabHasCache) {
+      let attributes = this.TabStateCache.get(browser).attributes || {};
+      update(attributes);
+      this.TabStateCache[this._update](browser, "attributes", attributes);
+    }
+  }
+}

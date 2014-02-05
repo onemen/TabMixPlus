@@ -19,26 +19,24 @@
   margin-bottom: -4px !important;
 }
 
-#TabsToolbar[tabmix_skin][multibar] > .toolbarbutton-1,
-#TabsToolbar[tabmix_skin][multibar] > #tabs-closebutton,
+.tabbrowser-tabs[tabmix_australis][multibar] ~ #tabs-closebutton > .toolbarbutton-icon{
+  margin-top: 2px;
+}
+
 #TabsToolbar[tabmix_skin][multibar] > #appmenu-toolbar-button {
   height: 25px;
 }
 
-/* set on linux we need to set vertical alogn even if the button is hidden*/
+/* set on linux we need to set vertical align even if the button is hidden*/
 .tabbrowser-tabs[multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
-.tabbrowser-tabs[classic][multibar] .tabbrowser-tab {
+.tabbrowser-tabs:not([tabmix_australis])[classic][multibar] .tabbrowser-tab {
   height: 25px;
 }
 
 /*  Tab scrollbox arrow buttons - fix border */
-#TabsToolbar[tabmix_skin="classic"] > #tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
-#TabsToolbar[tabmix_skin="classic"] > #tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
-  height: 25px;
-}
 
 /* this rule make hover active on the button
  * the default button don't change on hover, so we add the next rule to hide the eefect

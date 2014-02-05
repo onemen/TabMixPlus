@@ -36,13 +36,6 @@
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
       </field>
 
-      <constructor>
-        if (Tabmix.isVersion(170)) {
-          this._scrollButtonUp.removeAttribute("onmouseover");
-          this._scrollButtonDown.removeAttribute("onmouseover");
-        }
-      </constructor>
-
       <method name="finishScroll">
         <parameter name="aEvent"/>
         <body><![CDATA[
@@ -118,6 +111,32 @@
         ]]></body>
       </method>
 
+      <field name="_tabMarginLeft">null</field>
+      <field name="_tabMarginRight">null</field>
+      <method name="_adjustElementStartAndEnd">
+        <parameter name="aTab"/>
+        <parameter name="tabStart"/>
+        <parameter name="tabEnd"/>
+        <body><![CDATA[
+          if (TabmixTabbar.isMultiRow)
+            return [tabStart, tabEnd];
+
+          if (this._tabMarginLeft === null || this._tabMarginRight === null) {
+            let tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
+            let tabMiddleStyle = window.getComputedStyle(tabMiddle, null);
+            this._tabMarginLeft = parseFloat(tabMiddleStyle.marginLeft);
+            this._tabMarginRight = parseFloat(tabMiddleStyle.marginRight);
+          }
+          if (this._tabMarginLeft < 0) {
+            tabStart = tabStart + this._tabMarginLeft;
+          }
+          if (this._tabMarginRight < 0) {
+            tabEnd = tabEnd - this._tabMarginRight;
+          }
+          return [tabStart, tabEnd];
+        ]]></body>
+      </method>
+
       <constructor>
         <![CDATA[
           if (this.tabmix_inited)
@@ -127,6 +146,7 @@
 
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
           this.offsetRatio = document.getBindingParent(this).closeButtonsEnabled ? 0.70 : 0.50;
+          this.minOffset = TabmixSvc.australis ? 25 : 50;
           Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
             'var amountToScroll',
             '$&, offset = true'
@@ -230,7 +250,7 @@
             else
               tab = TMP_TabView.previousVisibleSibling(element);
             if (tab) {
-              offset = Math.min(50, this.offsetRatio * tab.getBoundingClientRect().width);
+              offset = Math.min(this.minOffset, this.offsetRatio * tab.getBoundingClientRect().width);
               if (!isScrollingLeft)
                 offset = Math.min(this.scrollPosition, offset);
             }
@@ -430,7 +450,7 @@
         if (tabs.hasAttribute("multibar") && tabs.overflow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
-          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               (!tabs.visibleTabsLastChild.hasAttribute("showbutton") &&
                !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
             tabs.updateVerticalTabStrip();
@@ -479,7 +499,7 @@
         if (TabmixTabbar.isMultiRow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
-          if (!Tabmix.isPlatform("Linux") || TabmixTabbar.visibleRows == 1 ||
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               !tabs.visibleTabsLastChild.hasAttribute("showbutton"))
             tabs.updateVerticalTabStrip();
         }

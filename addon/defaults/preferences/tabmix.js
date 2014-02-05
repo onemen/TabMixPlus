@@ -25,6 +25,7 @@ pref("extensions.tabmix.loadFolderAndReplace", true);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
+pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);
@@ -90,10 +91,10 @@ pref("extensions.tabmix.unreadTabreload", true);
 pref("extensions.tabmix.otherTab", false);
 pref("extensions.tabmix.progressMeter", true);
 
-pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
 pref("extensions.tabmix.flexTabs", false);
@@ -109,7 +110,7 @@ pref("extensions.tabmix.moveTabOnDragging", true);
 pref("extensions.tabmix.useFirefoxDragmark", true);
 /*
 pref("extensions.tabmix.enableScrollSwitch", false);
- replaced by scrollTabs: 0 - scrool tabbar on overflow - default
+ replaced by scrollTabs: 0 - scroll tabbar on overflow - default
                          1 - scroll change selected tab
                          2 - disable scroll over tabs
 */
@@ -250,8 +251,8 @@ pref("extensions.tabmix.sessions.onStart.sessionpath", "");
 
 pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
-pref("extensions.tabmix.custom_reload_time", 90);
-pref("extensions.tabmix.reload_time", 15);
+pref("extensions.tabmix.custom_reload_list", "");
+pref("extensions.tabmix.reload_time", 60);
 pref("extensions.tabmix.reload_match_address", false);
 // The maximum number of daily sessions backups to
 // keep in <profile>/sessionbackups. Special values:
@@ -265,3 +266,5 @@ pref("browser.tabs.tabMaxWidth", 250);
 
 pref("extensions.tabmix.shortcuts", '{}');
 pref("extensions.tabmix.syncPrefs", false);
+
+pref("extensions.tabmix.showTabContextMenuOnTabbar", false);

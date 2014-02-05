@@ -102,7 +102,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
                                         Tabmix.prefs.getIntPref("loadOnNewTab.type");
    var url;
-   var newTabUrl = Tabmix.newTabURL;
+   var newTabUrl = BROWSER_NEW_TAB_URL;
    switch (newTabContent) {
       case 0 : // blank tab, by default
          url = "about:blank";
@@ -121,14 +121,8 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          return newTab;
          break;
       case 4 : // user url
-         let prefName;
-         if (replaceLastTab) {
-           prefName = typeof isBlankPageURL == "function" ?
-                "extensions.tabmix.replaceLastTabWith.newtab.url" :
-                "extensions.tabmix.replaceLastTabWith.newTabUrl"
-         }
-         else
-           prefName = Tabmix.newTabURLpref;
+         let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
+                                         "browser.newtab.url";
          try {
             url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
             if (newTabUrl == "about:privatebrowsing" && url == "about:newtab")
@@ -154,7 +148,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    if (TabmixTabbar.widthFitTitle && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
-   var loadBlank = Tabmix.isBlankPageURL(url);
+   var loadBlank = isBlankPageURL(url);
    var _url = loadBlank ? url : "about:blank";
    var newTab = gBrowser.addTab(_url, {skipAnimation: replaceLastTab, dontMove: true});
    if (replaceLastTab) {
@@ -209,7 +203,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
-  if (!Tabmix.isBlankPageURL(aUrl)) {
+  if (!isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user laod about:blank tab
     gBrowser.tabmix_tab = aTab;
     gBrowser.tabmix_userTypedValue = aUrl;
@@ -230,7 +224,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
  *        we restore the current url
  */
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
-  if (Tabmix.isBlankPageURL(gURLBar.value))
+  if (isBlankPageURL(gURLBar.value))
     gURLBar.value = "";
   if (!gBrowser.tabmix_tab)
     return;
@@ -238,7 +232,7 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   var isCurrentTab = gBrowser.tabmix_tab.selected;
   var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
   var url = gBrowser.tabmix_userTypedValue;
-  if (!Tabmix.isBlankPageURL(url))
+  if (!isBlankPageURL(url))
     browser.userTypedValue = url;
   if (isCurrentTab && gBrowser.mIsBusy) {
     browser.addEventListener("load", function TMP_onLoad_urlBarOnBlur(aEvent) {
@@ -253,7 +247,7 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
 
 Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   var url = gBrowser.currentURI.spec;
-  if (url != gURLBar.value && !Tabmix.isBlankPageURL(url)) {
+  if (url != gURLBar.value && !isBlankPageURL(url)) {
     gURLBar.value = gBrowser.userTypedValue = url;
   }
   delete gBrowser.tabmix_tab;
@@ -282,7 +276,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
     /* don't open blank tab when we are about to add new livemark */
     this.changeCode(window, "openUILink")._replace(
       'aIgnoreAlt = params.ignoreAlt;',
-      'aIgnoreAlt = params.ignoreAlt || null;', {check: Tabmix.isVersion(140)}
+      'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
       source,
       '  var win = getTopWin();' +
@@ -339,7 +333,10 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       aTab.removeAttribute("locked");
   }
 
-  // this function run before tab load, so onTabReloaded will run when onStateChange get STATE_STOP
+  let pending = aTab.hasAttribute("pending");
+
+  // this function run before tab load, so onTabReloaded will run when
+  // onStateChange get STATE_STOP, unless the tab is pending
   var reloadData = aTab.getAttribute("reload-data");
   if (reloadData) {
     this.autoReload.initTab(aTab);
@@ -348,17 +345,48 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     reloadData = reloadData.split(" ");
     aTab.autoReloadURI = reloadData[0];
     aTab.autoReloadTime = reloadData[1];
+    if (pending)
+      this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
   }
 
-  if (aTab.hasAttribute("pending")) {
-    let tabTitleChanged = TMP_Places.setTabTitle(aTab);
-    if (tabTitleChanged) {
-      TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
-    }
+  let tabTitleChanged, boldChanged = {value: false};
+  Tabmix.setTabStyle(aTab, boldChanged);
+  if (pending)
+    tabTitleChanged = TMP_Places.setTabTitle(aTab);
+  if (tabTitleChanged || boldChanged.value) {
+    TabmixTabbar.updateScrollStatus();
+    TabmixTabbar.updateBeforeAndAfter();
   }
 
   // make sure other extensions don't set minwidth maxwidth
   aTab.removeAttribute("minwidth");
   aTab.removeAttribute("maxwidth");
+}
+
+Tabmix.tabStyles = {}
+Tabmix.setTabStyle = function(aTab, boldChanged) {
+  if (!aTab)
+    return;
+  let style = "other";
+  if (aTab.selected)
+    style = "current";
+  // if pending tab is blank we don't style it as unload or unread
+  else if (Tabmix.prefs.getBoolPref("unloadedTab") && aTab.hasAttribute("pending"))
+    style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
+  else if (Tabmix.prefs.getBoolPref("unreadTab") &&
+      !aTab.hasAttribute("visited") && !isTabEmpty(aTab))
+    style = "unread";
+
+  let currentAttrib = aTab.getAttribute("tabmix_tabStyle");
+  let newAttrib = Tabmix.tabStyles[style] || style;
+  this.setItem(aTab, "tabmix_tabStyle", newAttrib);
+
+  if (!boldChanged)
+    return;
+
+  let isBold = function(attrib) {
+    attrib = attrib.split(" ");
+    return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
+  }
+  boldChanged.value = isBold(newAttrib) != isBold(currentAttrib);
 }

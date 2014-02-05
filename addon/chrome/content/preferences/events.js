@@ -2,11 +2,6 @@
 
 var gEventsPane = {
   init: function () {
-    if (!Tabmix.isVersion(130)) {
-      gPrefWindow.removeChild("pref_contextMenuSearch");
-      gPrefWindow.removeChild("contextMenuSearch");
-    }
-
     // for locals with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;
@@ -22,18 +17,6 @@ var gEventsPane = {
     if (!ctrlTab) {
       gPrefWindow.removeChild("pref_ctrltab.tabPreviews");
       gPrefWindow.removeChild("ctrltab.tabPreviews");
-    }
-
-    // Bug 455553 - New Tab Page feature - landed on 2012-01-26 (Firefox 12)
-    if (newTabURLpref != "browser.newtab.url") {
-      let pref_newTabUrl = $("pref_newTabUrl");
-      pref_newTabUrl.name = newTabURLpref;
-      this._newTabUrl = "about:blank";
-      pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
-
-      pref_newTabUrl = $("pref_newTabUrl_1");
-      pref_newTabUrl.name = replaceLastTabWithNewTabURLpref;
-      pref_newTabUrl.value = pref_newTabUrl.valueFromPreferences;
     }
 
     this.disableInverseMiddleClick();
@@ -90,21 +73,20 @@ var gEventsPane = {
       $("newTabUrl" + idnum).focus();
   },
 
-  _newTabUrl: "about:newtab",
   syncFromNewTabUrlPref: function (item) {
     var preference = $(item.getAttribute("preference"));
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
     let value = preference.value;
-    if (value && value.toLowerCase() == this._newTabUrl)
+    if (value && value.toLowerCase() == "about:newtab")
       return "";
     return this.syncToNewTabUrlPref(value);
   },
 
   syncToNewTabUrlPref: function (value) {
-    // If the value is "", use about:blank or about:newtab.
+    // If the value is "", use about:newtab.
     if (value == "")
-      return this._newTabUrl;
+      return "about:newtab";
 
     // Otherwise, use the actual textbox value.
     return undefined;
