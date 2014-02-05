@@ -388,6 +388,10 @@ var TMP_extensionsCompatibility = {
         'if (tab.hasAttribute("mergeselected"))' +
         '  title = "(*) " + title;' +
         '$&';
+      let getLabel = 'if (!label) {' +
+        'let labelBox = document.getAnonymousElementByAttribute(tab,"class","tab-text-stack");' +
+        'label = document.getAnonymousElementByAttribute(labelBox,"anonid","tab-label");' +
+      '}\n';
 
       let func = {styleTiledTabs: 'if (tab.hasAttribute("tiletabs-assigned"))',
         showProperties: 'if (tab.hasAttribute("image"))',
@@ -399,7 +403,7 @@ var TMP_extensionsCompatibility = {
       for (let [fnName, oldCode] in Iterator(func)) {
         if (typeof tileTabs[fnName] == "function") {
           Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
-            oldCode, newCode
+            oldCode, fnName == "styleTiledTabs" ? getLabel + newCode : newCode
           ).toCode();
         }
       }
