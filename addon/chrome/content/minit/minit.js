@@ -372,32 +372,29 @@ var TMP_tabDNDObserver = {
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      let tab = null;
       if (left_right > -1 && !Tabmix.contentAreaClick.isUrlForDownload(url)) {
         // We're adding a new tab.
-         try {
-            tab = gBrowser.addTab(url);
-            gBrowser.moveTabTo(tab, newIndex + left_right);
-         } catch(ex) {
-            // Just ignore invalid urls
-            Tabmix.log("addTab\n" + ex);
-         }
+        let newTab = gBrowser.loadOneTab(url, {inBackground: bgLoad, allowThirdPartyFixup: true});
+        gBrowser.moveTabTo(newTab, newIndex + left_right);
       }
       else {
         // Load in an existing tab.
-        tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
+        let tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
         try {
           let browser = tab.linkedBrowser;
           // allow to load in locked tab
           browser.tabmix_allowLoad = true;
-          browser.loadURI(url);
+          let webNav = Ci.nsIWebNavigation;
+          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP |
+                      webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
+          browser.loadURIWithFlags(url, flags);
+          if (!bgLoad)
+            gBrowser.tabContainer.selectedItem = tab;
         } catch(ex) {
           // Just ignore invalid urls
           Tabmix.log("load\n" + ex);
         }
       }
-      if (!tab.selected)
-        gBrowser.TMP_selectNewForegroundTab(tab, bgLoad, url);
     }
     if (draggedTab) {
       delete draggedTab._dragData;
