@@ -38,7 +38,7 @@ var Tabmix = {
       if (typeof(aVal) == "boolean")
         aVal = aVal ? "true" : "false";
 
-      if (elem.getAttribute(aAttr) != aVal)
+      if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
         elem.setAttribute(aAttr, aVal);
     }
   },
