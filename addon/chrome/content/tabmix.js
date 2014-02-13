@@ -274,6 +274,11 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-text-stack {' +
+      '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-text-stack#VERSION") !important;'
+      .replace("#VERSION", Tabmix.isVersion(280) ? "-28" : "");
+    gTMPprefObserver.insertRule(newRule);
+
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     TMP_SessionStore.setAfterSessionRestored();
 

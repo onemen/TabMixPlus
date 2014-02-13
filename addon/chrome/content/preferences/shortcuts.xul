@@ -22,6 +22,8 @@
     <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>
     <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" command="TabmixSessionUtils:SaveThisWindow"/>
     <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" command="TabmixSessionUtils:SaveAllWindow"/>
+    <key id="key_tm_slideShow" label="&shortcuts.slideshow;" keycode="VK_F8" oncommand="Tabmix.flst.toggleSlideshow();" disabled="true"/>
+    <key id="key_tm_toggleFLST" label="&shortcuts.toggleFLST;" keycode="VK_F9" oncommand="Tabmix.flst.toggle();" disabled="true"/>
   </keyset>
 
   <script type="application/javascript">
@@ -49,8 +51,6 @@
       sc.removeright = "&clicktab.removetoRight;";
       sc.undoClose = "&clicktab.uctab;";
       sc.ucatab = "&clicktab.ucatab;";
-      sc.slideShow = "&shortcuts.slideshow;";
-      sc.toggleFLST = "&shortcuts.toggleFLST;";
     }
   </script>
 </overlay>

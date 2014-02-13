@@ -64,8 +64,10 @@ Tabmix.setSanitizer = {
       check.setAttribute("accesskey", this._accesskey);
       check.setAttribute("preference", prefName);
       check.setAttribute("oncommand", "Tabmix.setSanitizer.confirm(this);");
-      if (Services.prefs.prefHasUserValue(prefName))
+      if (Services.prefs.prefHasUserValue(prefName)) {
         this.checked = Services.prefs.getBoolPref(prefName);
+        check.setAttribute("checked", this.checked);
+      }
       if (itemList) {
         check.setAttribute("type", "checkbox");
         check.setAttribute("noduration", "true");
