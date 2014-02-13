@@ -715,6 +715,13 @@ var tablib = {
        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
     ).toCode();
 
+    if (Tabmix.isVersion(300)) {
+      Tabmix.changeCode(window, "BrowserOpenNewTabOrWindow")._replace(
+        'event.shiftKey',
+        '$& && !Tabmix.singleWindowMode'
+      ).toCode();
+    }
+
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
