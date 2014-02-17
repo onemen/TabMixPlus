@@ -1060,10 +1060,17 @@ var gTMPprefObserver = {
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule);
 
+    if (TabmixSvc.australis && !Tabmix.isVersion(310) && !TabmixSvc.isLinux && !TabmixSvc.isMac) {
+      newRule = '#main-window[privatebrowsingmode=temporary] #private-browsing-indicator {' +
+                '  height: #px;'.replace("#", Tabmix._buttonsHeight) +
+                '}';
+      this.insertRule(newRule);
+    }
+
     if (TabmixSvc.isMac && !TabmixSvc.australis)
       Tabmix._buttonsHeight = 24;
 
-    let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
+    newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
                   '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
                   '#TabsToolbar[multibar] > #tabs-closebutton {' +
                   '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
