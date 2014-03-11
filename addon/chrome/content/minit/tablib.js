@@ -712,7 +712,7 @@ var tablib = {
     )._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '{$& \
-       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
+       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}', {check: !Tabmix.isVersion(300)}
     ).toCode();
 
     if (Tabmix.isVersion(300)) {
