@@ -129,6 +129,10 @@ label.text-link, label[onclick] {
   visibility: collapse;
 }
 
+#tabmixScrollBox > toolbarbutton {
+  margin: 0px;
+}
+
 /*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
