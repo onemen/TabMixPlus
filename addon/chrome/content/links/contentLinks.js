@@ -758,6 +758,9 @@ Tabmix.contentAreaClick = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     var self = this;
     function getDomain(url) {
+      if (url.match(/auth\?/))
+        return;
+
       if (typeof(url) != "string")
         url = url.toString();
 
