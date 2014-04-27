@@ -558,16 +558,16 @@ var tablib = {
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.changeCode(fnObj, fnName)._replace(
-      'var originCharset = aDocument && aDocument.characterSet;',
-      '  var loadInBackground = false;' +
-      '  if (aEvent) {' +
-      '    if (aEvent.shiftKey)' +
-      '      loadInBackground = !loadInBackground;' +
-      '    if (getBoolPref("extensions.tabmix.inversefocusLinks")' +
-      '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))' +
-      '      loadInBackground = !loadInBackground;' +
-      '  }' +
-      '  var where = loadInBackground ? "tabshifted" : "tab";' +
+      'openLinkIn(',
+      'var loadInBackground = false;\n' +
+      '  if (aEvent) {\n' +
+      '    if (aEvent.shiftKey)\n' +
+      '      loadInBackground = !loadInBackground;\n' +
+      '    if (getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
+      '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
+      '      loadInBackground = !loadInBackground;\n' +
+      '  }\n' +
+      '  var where = loadInBackground ? "tabshifted" : "tab";\n' +
       '  $&'
     )._replace(
       'aEvent && aEvent.shiftKey ? "tabshifted" : "tab"',
