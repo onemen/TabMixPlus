@@ -386,7 +386,8 @@
               TMP_tabDNDObserver.onDragOver(aEvent);
           }
           this.parentNode.addEventListener("dragover", this.parentNode.tabmix_handleDragover, true);
-          Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
+          if (!Tabmix.isVersion(310))
+            Services.prefs.removeObserver("browser.tabs.closeButtons", this._prefObserver);
 
           if (this.tabmix_inited) {
             Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");

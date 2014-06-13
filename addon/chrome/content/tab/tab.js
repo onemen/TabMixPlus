@@ -179,6 +179,32 @@ var TabmixTabbar = {
     }
   },
 
+  addCloseButton: function () {
+    if (!Tabmix.isVersion(310))
+      return;
+    var button = document.getElementById("tabs-closebutton");
+    if (!button && !Tabmix.prefs.getBoolPref("hideTabBarButton")) {
+      button = document.createElement("toolbarbutton");
+      button.id = "tabs-closebutton";
+      button.className = "tabs-closebutton close-icon toolbarbutton-1 chromeclass-toolbar-additional tabmix";
+      button.setAttribute("command", "cmd_close");
+      button.setAttribute("cui-areatype", "toolbar");
+      var label = gBrowser.selectedTab.getAttribute("closetabtext");
+      button.setAttribute("label", label);
+      button.setAttribute("tooltiptext", label);
+
+      let tabsToolbar = document.getElementById("TabsToolbar");
+      let cSet = (tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset")).split(",");
+      let index = cSet.indexOf("tabs-closebutton");
+      let elm = null;
+      if (index > -1 && index < cSet.length - 1)
+        elm = document.getElementById(cSet[index + 1]);
+      else if (index == -1)
+        tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
+      gBrowser.tabContainer.parentNode.insertBefore(button, elm);
+    }
+  },
+
   setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
     let newBox, box = document.getElementById("tabmixScrollBox");
     if (useTabmixButtons && !box) {
@@ -890,9 +916,10 @@ var gTMPprefObserver = {
           gBrowser.tabContainer.updateVerticalTabStrip();
         }
         break;
+      case "extensions.tabmix.hideTabBarButton":
+        TabmixTabbar.addCloseButton();
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
-      case "extensions.tabmix.hideTabBarButton":
       case "extensions.tabmix.hideAllTabsButton":
       case "extensions.tabmix.newTabButton":
       case "extensions.tabmix.flexTabs":

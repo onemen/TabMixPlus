@@ -317,6 +317,7 @@ var tablib = {
     ).toCode();
 
     // we use our own preferences observer
+    if (!Tabmix.isVersion(310))
     Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
       'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
       'break;'
@@ -706,13 +707,14 @@ var tablib = {
     if (popup)
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
+    if (!Tabmix.isVersion(290))
     Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
       'function switchIfURIInWindow',
       'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
     )._replace(
       'gBrowser.selectedBrowser.loadURI(aURI.spec);',
       '{$& \
-       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}', {check: !Tabmix.isVersion(300)}
+       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
     ).toCode();
 
     if (Tabmix.isVersion(300)) {
