@@ -438,7 +438,7 @@ var TabmixTabbar = {
     let tabBar = gBrowser.tabContainer;
     let multibar = tabBar.hasAttribute("multibar");
     let selected = tabBar.selectedItem;
-    let tabRow, top = tabBar.topTabY;
+    let tabRow, top;
     // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
     // include it), we add tabmix-beforeselected-visible here and use it for
     // Firefox with australis UI
@@ -461,7 +461,10 @@ var TabmixTabbar = {
     }
 
     if (tabBar._hoveredTab && !tabBar._hoveredTab.closing) {
-      tabRow = tabBar.getTabRowNumber(tabBar._hoveredTab, top);
+      if (multibar) {
+        top = tabBar.topTabY;
+        tabRow = tabBar.getTabRowNumber(tabBar._hoveredTab, top);
+      }
       updateAtt(tabBar._beforeHoveredTab, "beforeHoveredTab", "beforehovered");
       updateAtt(tabBar._afterHoveredTab, "afterHoveredTab", "afterhovered");
     }
@@ -483,7 +486,10 @@ var TabmixTabbar = {
           next = visibleTabs[selectedIndex + 1];
     }
 
-    tabRow = tabBar.getTabRowNumber(selected, top);
+    if (multibar) {
+      top = top || tabBar.topTabY;
+      tabRow = tabBar.getTabRowNumber(selected, top);
+    }
     updateAtt(prev, "beforeSelectedTab", "beforeselected", TabmixSvc.australis, "tabmix-");
     updateAtt(next, "afterSelectedTab", "afterselected", Tabmix.isVersion(220), "");
   },
@@ -1126,6 +1132,23 @@ var gTMPprefObserver = {
       [url, region] = ["newtab.png", "auto"];
     this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
 
+    if (!TabmixSvc.australis)
+      return;
+
+    // Workaround bug 943308 - tab-background not fully overlap the tab curves
+    // when layout.css.devPixelsPerPx is not 1.
+    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
+    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
+    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
+    if (bgMiddleMargin) {
+      bgMiddleMargin.style.MozMarginStart = margin;
+      bgMiddleMargin.style.MozMarginEnd = margin;
+    }
+    else {
+      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
+                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}'
+      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
+    }
   },
 
   addDynamicRules: function() {
@@ -1155,24 +1178,6 @@ var gTMPprefObserver = {
         let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
-    }
-
-    if (!TabmixSvc.australis)
-      return;
-
-    // Workaround bug 943308 - tab-background not fully overlap the tab curves
-    // when layout.css.devPixelsPerPx is not 1.
-    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
-    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
-    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
-    if (bgMiddleMargin) {
-      bgMiddleMargin.style.MozMarginStart = margin;
-      bgMiddleMargin.style.MozMarginEnd = margin;
-    }
-    else {
-      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
-                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}'
-      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
     }
   },
 
