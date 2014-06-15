@@ -179,6 +179,32 @@ var TabmixTabbar = {
     }
   },
 
+  addCloseButton: function () {
+    if (!Tabmix.isVersion(310))
+      return;
+    var button = document.getElementById("tabs-closebutton");
+    if (!button && !Tabmix.prefs.getBoolPref("hideTabBarButton")) {
+      button = document.createElement("toolbarbutton");
+      button.id = "tabs-closebutton";
+      button.className = "tabs-closebutton close-icon toolbarbutton-1 chromeclass-toolbar-additional tabmix";
+      button.setAttribute("command", "cmd_close");
+      button.setAttribute("cui-areatype", "toolbar");
+      var label = gBrowser.selectedTab.getAttribute("closetabtext");
+      button.setAttribute("label", label);
+      button.setAttribute("tooltiptext", label);
+
+      let tabsToolbar = document.getElementById("TabsToolbar");
+      let cSet = (tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset")).split(",");
+      let index = cSet.indexOf("tabs-closebutton");
+      let elm = null;
+      if (index > -1 && index < cSet.length - 1)
+        elm = document.getElementById(cSet[index + 1]);
+      else if (index == -1)
+        tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
+      gBrowser.tabContainer.parentNode.insertBefore(button, elm);
+    }
+  },
+
   setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
     let newBox, box = document.getElementById("tabmixScrollBox");
     if (useTabmixButtons && !box) {
@@ -412,7 +438,7 @@ var TabmixTabbar = {
     let tabBar = gBrowser.tabContainer;
     let multibar = tabBar.hasAttribute("multibar");
     let selected = tabBar.selectedItem;
-    let tabRow, top = tabBar.topTabY;
+    let tabRow, top;
     // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
     // include it), we add tabmix-beforeselected-visible here and use it for
     // Firefox with australis UI
@@ -435,7 +461,10 @@ var TabmixTabbar = {
     }
 
     if (tabBar._hoveredTab && !tabBar._hoveredTab.closing) {
-      tabRow = tabBar.getTabRowNumber(tabBar._hoveredTab, top);
+      if (multibar) {
+        top = tabBar.topTabY;
+        tabRow = tabBar.getTabRowNumber(tabBar._hoveredTab, top);
+      }
       updateAtt(tabBar._beforeHoveredTab, "beforeHoveredTab", "beforehovered");
       updateAtt(tabBar._afterHoveredTab, "afterHoveredTab", "afterhovered");
     }
@@ -457,7 +486,10 @@ var TabmixTabbar = {
           next = visibleTabs[selectedIndex + 1];
     }
 
-    tabRow = tabBar.getTabRowNumber(selected, top);
+    if (multibar) {
+      top = top || tabBar.topTabY;
+      tabRow = tabBar.getTabRowNumber(selected, top);
+    }
     updateAtt(prev, "beforeSelectedTab", "beforeselected", TabmixSvc.australis, "tabmix-");
     updateAtt(next, "afterSelectedTab", "afterselected", Tabmix.isVersion(220), "");
   },
@@ -890,9 +922,10 @@ var gTMPprefObserver = {
           gBrowser.tabContainer.updateVerticalTabStrip();
         }
         break;
+      case "extensions.tabmix.hideTabBarButton":
+        TabmixTabbar.addCloseButton();
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
-      case "extensions.tabmix.hideTabBarButton":
       case "extensions.tabmix.hideAllTabsButton":
       case "extensions.tabmix.newTabButton":
       case "extensions.tabmix.flexTabs":
@@ -1060,10 +1093,17 @@ var gTMPprefObserver = {
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule);
 
+    if (TabmixSvc.australis && !Tabmix.isVersion(310) && !TabmixSvc.isLinux && !TabmixSvc.isMac) {
+      newRule = '#main-window[privatebrowsingmode=temporary] #private-browsing-indicator {' +
+                '  height: #px;'.replace("#", Tabmix._buttonsHeight) +
+                '}';
+      this.insertRule(newRule);
+    }
+
     if (TabmixSvc.isMac && !TabmixSvc.australis)
       Tabmix._buttonsHeight = 24;
 
-    let newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
+    newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
                   '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
                   '#TabsToolbar[multibar] > #tabs-closebutton {' +
                   '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
@@ -1092,6 +1132,23 @@ var gTMPprefObserver = {
       [url, region] = ["newtab.png", "auto"];
     this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
 
+    if (!TabmixSvc.australis)
+      return;
+
+    // Workaround bug 943308 - tab-background not fully overlap the tab curves
+    // when layout.css.devPixelsPerPx is not 1.
+    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
+    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
+    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
+    if (bgMiddleMargin) {
+      bgMiddleMargin.style.MozMarginStart = margin;
+      bgMiddleMargin.style.MozMarginEnd = margin;
+    }
+    else {
+      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
+                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}'
+      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
+    }
   },
 
   addDynamicRules: function() {
@@ -1121,24 +1178,6 @@ var gTMPprefObserver = {
         let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
-    }
-
-    if (!TabmixSvc.australis)
-      return;
-
-    // Workaround bug 943308 - tab-background not fully overlap the tab curves
-    // when layout.css.devPixelsPerPx is not 1.
-    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
-    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
-    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
-    if (bgMiddleMargin) {
-      bgMiddleMargin.style.MozMarginStart = margin;
-      bgMiddleMargin.style.MozMarginEnd = margin;
-    }
-    else {
-      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
-                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}'
-      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
     }
   },
 

@@ -129,6 +129,10 @@ label.text-link, label[onclick] {
   visibility: collapse;
 }
 
+#tabmixScrollBox > toolbarbutton {
+  margin: 0px;
+}
+
 /*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
@@ -326,4 +330,13 @@ so display: none !important; does not hide the button */
 
 .tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
   transition: transform 200ms ease-out;
+}
+
+/* Firefox 31+ */
+.tabs-closebutton.tabmix {
+  -moz-appearance: none;
+  height: 16px;
+  width: 16px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
