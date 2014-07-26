@@ -54,7 +54,14 @@ var TMP_LastTab = {
 
       this.TabList = document.getElementById("lasttabTabList");
 
-      gBrowser.mTabBox._eventNode.removeEventListener("keypress", gBrowser.mTabBox, false);
+      let tabBox = gBrowser.mTabBox;
+      if (Tabmix.isVersion(320)) {
+        let els = Cc["@mozilla.org/eventlistenerservice;1"]
+                      .getService(Ci.nsIEventListenerService);
+        els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
+      }
+      else
+        tabBox._eventNode.removeEventListener("keypress", tabBox, false);
       browser.addEventListener("keydown", this, true);
       browser.addEventListener("keypress", this, true);
       browser.addEventListener("keyup", this, true);
@@ -143,8 +150,16 @@ var TMP_LastTab = {
        this.TabHistory.splice(i, 1);
    },
 
+   isCtrlTab : function(event) {
+     return (this.handleCtrlTab || this.showTabList) &&
+             event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB &&
+             event.ctrlKey && !event.altKey && !event.metaKey;
+   },
+
    OnKeyDown : function(event) {
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
+      if (Tabmix.isVersion(320) && !this.isCtrlTab(event))
+        gBrowser.mTabBox.handleEvent(event);
    },
 
    set tabs (val) {
@@ -165,8 +180,8 @@ var TMP_LastTab = {
    },
 
    OnKeyPress : function _LastTab_OnKeyPress(event) {
-      if((this.handleCtrlTab || this.showTabList) && event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB && event.ctrlKey && !event.altKey && !event.metaKey) {
-         var tabCount = this.tabs.length;
+      if (this.isCtrlTab(event)) {
+         let tabCount = this.tabs.length;
          if(!this.KeyLock) {
             if (this.handleCtrlTab) {
                this.TabIndex = tabCount - 1;
