@@ -396,13 +396,6 @@
           }
           this.tabmix_inited = true;
 
-          // ODFReader change Cc to something else maybe some other extensions do that too !!!
-          if ("Cc" in window && Cc != Components.classes)
-            Cc = Components.classes;
-
-          if ("Ci" in window && Ci != Components.interfaces)
-            Ci = Components.interfaces;
-
           var tabbrowser = this.tabbrowser;
 
           XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function () {
