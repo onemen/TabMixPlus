@@ -762,7 +762,7 @@ Tabmix.contentAreaClick = {
         url = url.toString();
 
       if (url.match(/auth\?/))
-        return;
+        return null;
 
       if (url.match(/^file:/))
         return "local_file";
