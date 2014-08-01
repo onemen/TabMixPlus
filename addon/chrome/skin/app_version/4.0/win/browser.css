@@ -20,6 +20,19 @@
   margin: -3px 0px -3px 0px;
 }
 
+/* Tabstrip close button Firefox 31 */
+.tabs-closebutton.tabmix {
+  padding: 4px 2px;
+  margin: 0px;
+  border: none;
+}
+
+.tabs-closebutton.tabmix > .toolbarbutton-icon {
+  -moz-margin-end: 0px !important;
+  -moz-padding-end: 2px !important;
+  -moz-padding-start: 2px !important;
+}
+
 /*  new tab button after last tab on firefox 4.0  aero */
 #TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;

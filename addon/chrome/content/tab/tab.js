@@ -186,7 +186,7 @@ var TabmixTabbar = {
     if (!button && !Tabmix.prefs.getBoolPref("hideTabBarButton")) {
       button = document.createElement("toolbarbutton");
       button.id = "tabs-closebutton";
-      button.className = "tabs-closebutton close-icon toolbarbutton-1 chromeclass-toolbar-additional tabmix";
+      button.className = "tabs-closebutton close-icon tabmix";
       button.setAttribute("command", "cmd_close");
       button.setAttribute("cui-areatype", "toolbar");
       var label = gBrowser.selectedTab.getAttribute("closetabtext");

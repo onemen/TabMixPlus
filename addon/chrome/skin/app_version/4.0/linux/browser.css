@@ -23,6 +23,19 @@
   margin-top: 2px;
 }
 
+/***  Tabstrip close button Firefox 31+ ***/
+.tabs-closebutton.tabmix:not([selected]):not(:hover) {
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 64, 16, 48);
+}
+
+.tabs-closebutton.tabmix:not([selected]):not(:hover):-moz-lwtheme-brighttext {
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 80, 16, 64);
+}
+
+.tabs-closebutton.tabmix:not([selected]):not(:hover):-moz-lwtheme-darktext {
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 96, 16, 80);
+}
+
 #TabsToolbar[tabmix_skin][multibar] > #appmenu-toolbar-button {
   height: 25px;
 }

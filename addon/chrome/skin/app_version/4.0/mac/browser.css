@@ -15,6 +15,18 @@
 }
 */
 
+/* Tabstrip close button Firefox 31+ */
+.tabs-closebutton.tabmix {
+  -moz-padding-end: 4px;
+  border: none;
+}
+
+@media (min-resolution: 2dppx) {
+  .tabs-closebutton.tabmix > .toolbarbutton-icon {
+    width: 16px;
+  }
+}
+
 #TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
   position: static !important;
 }
