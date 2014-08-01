@@ -30,7 +30,7 @@
                  role="presentation"/>
       <xul:hbox class="showhover-box">
         <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon"/>
+                 class="showhover tabs-closebutton close-icon tabmix-showhover"/>
       </xul:hbox>
     </content>
   </binding>

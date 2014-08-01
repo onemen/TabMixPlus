@@ -332,15 +332,6 @@ so display: none !important; does not hide the button */
   transition: transform 200ms ease-out;
 }
 
-/* Firefox 31+ */
-.tabs-closebutton.tabmix {
-  -moz-appearance: none;
-  height: 16px;
-  width: 16px;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-}
-
 /* Firefox 32+ */
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
