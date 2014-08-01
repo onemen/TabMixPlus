@@ -4,13 +4,20 @@ var gTabMix_preferencesOverlay = {
   id: function(id) {return document.getElementById(id);},
   incontentInit: function gTabMix_preferencesOverlay_incontentInit(aEvent) {
     var box = this.id("linkTargeting");
+    box.collapsed = true;
     box.parentNode.insertBefore(this.id("tabmixplusBox"), box);
 
     var warnOnCloseWindow = this.id("warnOnCloseWindow");
-    warnOnCloseWindow.parentNode.insertBefore(this.id("warnCloseMultiple"), warnOnCloseWindow);
+    var warnCloseMultiple = this.id("warnCloseMultiple");
+    warnCloseMultiple.setAttribute("preference", "extensions.tabmix.tabs.warnOnClose");
+    warnOnCloseWindow.parentNode.insertBefore(warnCloseMultiple, warnOnCloseWindow);
 
     box = this.id("showTabsInTaskbar") || this.id("switchToNewTabs");
     box.parentNode.appendChild(this.id("hideTabbarBox"));
+
+    var showTabBar = this.id("showTabBar");
+    if (showTabBar)
+      showTabBar.collapsed = true;
 
     if (Tabmix.isVersion(260)) {
       let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
@@ -25,6 +32,9 @@ var gTabMix_preferencesOverlay = {
     }
 
     this.onPaneMainLoad();
+    setTimeout(function(self) {
+      self.initPaneTabsOptions();
+    }, 0, this);
   },
 
    lastSelected: "",
@@ -81,14 +91,7 @@ var gTabMix_preferencesOverlay = {
    },
 
    _afterOverlayLoaded: function () {
-      document.getElementById("_hideTabbar").value = document.getElementById("extensions.tabmix.hideTabbar").value;
-      document.getElementById("generalWindowOpen").value = document.getElementById("browser.link.open_newwindow").value;
-      document.getElementById("warnCloseMultiple").checked = document.getElementById("extensions.tabmix.tabs.warnOnClose").value;
-      document.getElementById("warnOnCloseWindow").checked = document.getElementById("browser.tabs.warnOnClose").value;
-      document.getElementById("warnOnCloseProtected").checked = document.getElementById("extensions.tabmix.protectedtabs.warnOnClose").value;
-      var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
-      if (singleWindowMode)
-         document.getElementById("linkTargetWindow").disabled = true;
+      this.initPaneTabsOptions();
 
       // fix panel height
       var docElt = document.documentElement;
@@ -100,6 +103,17 @@ var gTabMix_preferencesOverlay = {
         docElt.lastSelected = this.lastSelected;
         docElt._selectPane(paneTabs);
       }
+   },
+
+   initPaneTabsOptions: function () {
+      document.getElementById("_hideTabbar").value = document.getElementById("extensions.tabmix.hideTabbar").value;
+      document.getElementById("generalWindowOpen").value = document.getElementById("browser.link.open_newwindow").value;
+      document.getElementById("warnCloseMultiple").checked = document.getElementById("extensions.tabmix.tabs.warnOnClose").value;
+      document.getElementById("warnOnCloseWindow").checked = document.getElementById("browser.tabs.warnOnClose").value;
+      document.getElementById("warnOnCloseProtected").checked = document.getElementById("extensions.tabmix.protectedtabs.warnOnClose").value;
+      var singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+      if (singleWindowMode)
+         document.getElementById("linkTargetWindow").disabled = true;
    },
 
    showTabmixOptions: function (panel) {

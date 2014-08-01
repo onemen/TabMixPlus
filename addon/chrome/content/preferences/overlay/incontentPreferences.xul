@@ -72,9 +72,4 @@
       </vbox>
   </prefpane>
 
-  <checkbox id="linkTargeting" style="visibility: collapse;"/>
-  <!-- Warn when closing multiple tabs -->
-  <checkbox id="warnCloseMultiple" preference="extensions.tabmix.tabs.warnOnClose" hidden="false"/>
-  <checkbox id="showTabBar" style="visibility: collapse;"/>
-
 </overlay>
