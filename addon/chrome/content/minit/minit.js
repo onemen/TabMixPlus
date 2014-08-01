@@ -933,6 +933,18 @@ Tabmix.navToolbox = {
   deinit: function TMP_navToolbox_deinit() {
     gNavToolbox.removeEventListener("beforecustomization", this, false);
     gNavToolbox.removeEventListener("aftercustomization", this, false);
+
+    // fix bug 1034394 - tab mix plus's tabmixscrollbox is not cleaned up after
+    // uninstalling tab mix plus
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    let cSet = tabsToolbar.getAttribute("currentset");
+    if (cSet.indexOf("tabmixScrollBox") > -1) {
+      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",");
+      tabsToolbar.setAttribute("currentset", cSet);
+      document.persist("TabsToolbar", "currentset");
+      if (Tabmix.isVersion(280))
+        CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
+    }
   },
 
   handleEvent: function TMP_navToolbox_handleEvent(aEvent) {
@@ -1181,19 +1193,10 @@ Tabmix.navToolbox = {
     // Make sure our scroll buttons box is after tabbrowser-tabs
     let id = "tabmixScrollBox";
     let box = document.getElementById(id);
-    if (box && box != gBrowser.tabContainer.nextSibling) {
-      // update currentset
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-      // remove existing tabmixScrollBox item
-      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
-      let index = cSet.indexOf("tabbrowser-tabs");
-      cSet.splice(index + 1, 0, "tabmixScrollBox");
-      tabsToolbar.setAttribute("currentset", cSet.join(","));
-      // update physical position
+    let tabBar = gBrowser.tabContainer;
+    if (box && box != tabBar.nextSibling) {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
-      let tabBar = gBrowser.tabContainer;
       if (!Tabmix.isVersion(320) && useTabmixButtons && tabBar.overflow) {
         tabBar.mTabstrip._scrollButtonUp.collapsed = false;
         tabBar.mTabstrip._scrollButtonDown.collapsed = false;
