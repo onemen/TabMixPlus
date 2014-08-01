@@ -243,8 +243,10 @@ var TabmixTabbar = {
       tabStrip._scrollButtonUp = !useTabmixButtons ?
           tabStrip._scrollButtonUpLeft : tabStrip._scrollButtonUpRight;
       tabStrip._updateScrollButtonsDisabledState();
-      tabStrip._scrollButtonUp.collapsed = !gBrowser.tabContainer.overflow;
-      tabStrip._scrollButtonDown.collapsed = !gBrowser.tabContainer.overflow;
+      if (!Tabmix.isVersion(320)) {
+        tabStrip._scrollButtonUp.collapsed = !gBrowser.tabContainer.overflow;
+        tabStrip._scrollButtonDown.collapsed = !gBrowser.tabContainer.overflow;
+      }
     }
   },
 

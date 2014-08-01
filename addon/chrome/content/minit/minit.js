@@ -1194,7 +1194,7 @@ Tabmix.navToolbox = {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
       let tabBar = gBrowser.tabContainer;
-      if (useTabmixButtons && tabBar.overflow) {
+      if (!Tabmix.isVersion(320) && useTabmixButtons && tabBar.overflow) {
         tabBar.mTabstrip._scrollButtonUp.collapsed = false;
         tabBar.mTabstrip._scrollButtonDown.collapsed = false;
       }

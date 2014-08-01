@@ -9,7 +9,7 @@
            extends="chrome://global/content/bindings/scrollbox.xml#scrollbox-base">
     <content _side="right">
         <xul:toolbarbutton class="scrollbutton-up"
-                           xbl:inherits="orient"
+                           xbl:inherits="orient,disabled=scrolledtostart"
                            oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
                            anonid="scrollbutton-up-right"
                            onclick="gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
@@ -18,7 +18,7 @@
                            onmouseover="gBrowser.tabContainer.mTabstrip._continueScroll(-1);"
                            onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();"/>
         <xul:toolbarbutton class="scrollbutton-down"
-                           xbl:inherits="orient"
+                           xbl:inherits="orient,disabled=scrolledtoend"
                            oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
                            anonid="scrollbutton-down-right"
                            onclick="gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
@@ -187,6 +187,16 @@
             'Math.abs(distance)',
             'Math.abs(distance * (TabmixTabbar.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
           ).toCode();
+
+          if (Tabmix.isVersion(320)) {
+            Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
+              /(\})(\)?)$/,
+              '          let box = document.getElementById("tabmixScrollBox");\n' +
+              '          Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);\n' +
+              '          Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);\n' +
+              '$1$2'
+            ).toCode();
+          }
 
           this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
