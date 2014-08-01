@@ -197,11 +197,19 @@ var TabmixTabbar = {
       let cSet = (tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset")).split(",");
       let index = cSet.indexOf("tabs-closebutton");
       let elm = null;
-      if (index > -1 && index < cSet.length - 1)
-        elm = document.getElementById(cSet[index + 1]);
+      if (index > -1) {
+        while (index < cSet.length - 1) {
+          let item = document.getElementById(cSet[index + 1]);
+          if (item && item.parentNode == tabsToolbar) {
+            elm = item;
+            break;
+          }
+          index++;
+        }
+      }
       else if (index == -1)
         tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
-      gBrowser.tabContainer.parentNode.insertBefore(button, elm);
+      tabsToolbar.insertBefore(button, elm);
     }
   },
 
