@@ -718,6 +718,10 @@ var TMP_tabDNDObserver = {
         return dt.effectAllowed = "none";
       }
 
+      if (Tabmix.isVersion(310) && window.gMultiProcessBrowser !=
+          sourceNode.ownerDocument.defaultView.gMultiProcessBrowser)
+        return dt.effectAllowed = "none";
+
       return dt.effectAllowed = "copyMove";
     }
 
