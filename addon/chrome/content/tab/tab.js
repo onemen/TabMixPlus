@@ -1291,6 +1291,14 @@ var gTMPprefObserver = {
     }
 
     document.getElementById("tmOpenInNewWindow").hidden = Tabmix.singleWindowMode;
+
+    if (Tabmix.isVersion(310)) {
+      let val = Tabmix.singleWindowMode || null;
+      Tabmix.setItem("menu_newRemoteWindow", "hidden", val);
+      Tabmix.setItem("menu_newNonRemoteWindow", "hidden", val);
+      Tabmix.setItem("Tools:RemoteWindow", "disabled", val);
+      Tabmix.setItem("Tools:NonRemoteWindow", "disabled", val);
+    }
   },
 
   setMenuIcons: function() {
