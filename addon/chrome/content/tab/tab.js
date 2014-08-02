@@ -1860,6 +1860,11 @@ try {
   },
 
   addMissingPrefs: function() {
+    // add missing preference to the default branch
+    let prefs = Services.prefs.getDefaultBranch("");
+
+    if (Tabmix.isVersion(320))
+      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
   }
 
 }

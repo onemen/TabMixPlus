@@ -270,6 +270,12 @@ var TabmixContext = {
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
 
+    if (Tabmix.isVersion(320)) {
+      let openNonRemote = $id("context_openNonRemoteWindow");
+      if (openNonRemote)
+        tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
+    }
+
     // insret IE Tab menu-items before Bookmakrs menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
@@ -375,6 +381,9 @@ var TabmixContext = {
     Tabmix.showItem("tm-duplicateTab", Tabmix.prefs.getBoolPref("duplicateMenu"));
     Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
     Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
+    if (Tabmix.isVersion(320))
+      Tabmix.showItem("context_openNonRemoteWindow", Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") && !Tabmix.singleWindowMode && gMultiProcessBrowser);
+
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
     Tabmix.showItem("context_unpinTab", show && aTab.pinned);
