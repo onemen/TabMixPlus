@@ -1294,8 +1294,12 @@ var gTMPprefObserver = {
 
     if (Tabmix.isVersion(310)) {
       let val = Tabmix.singleWindowMode || null;
-      Tabmix.setItem("menu_newRemoteWindow", "hidden", val);
-      Tabmix.setItem("menu_newNonRemoteWindow", "hidden", val);
+      if (val) {
+        Tabmix.setItem("menu_newRemoteWindow", "hidden", true);
+        Tabmix.setItem("menu_newNonRemoteWindow", "hidden", true);
+      }
+      else
+        gRemoteTabsUI.init();
       Tabmix.setItem("Tools:RemoteWindow", "disabled", val);
       Tabmix.setItem("Tools:NonRemoteWindow", "disabled", val);
     }
