@@ -240,27 +240,6 @@ Tabmix.contentAreaClick = {
     this.getData(aEvent, href, linkNode, targetAttr);
 
     var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
-    try {
-      // for the moment just do it for Google and Yahoo....
-      // and tvguide.com - added 2013-07-20
-      var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
-      // youtube.com - added 2013-11-15
-      if (!blocked && /youtube.com/.test(currentHref) &&
-         (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
-        blocked = true;
-    } catch (ex) {blocked = false;}
-    if (!blocked) {
-      // replace onclick function with the form javascript:top.location.href = url
-      // if the tab is locked or we force new tab from link
-      let {onclick} = this._data;
-      if ((this.currentTabLocked || this.targetPref == 1) && onclick) {
-        let code = "javascript:top.location.href="
-        if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
-          linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
-      }
-      return;
-    }
-
     // don't do anything on mail.google or google.com/reader
     var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
     if (isGmail)
@@ -315,23 +294,64 @@ Tabmix.contentAreaClick = {
     if (this.divertTargetedLink())
       return;
 
-    // open links to other sites in a tab only if certain conditions are met. See the
-    // function comment for more details.
     var openNewTab = null;
-    if (this.openExSiteLink())
-      openNewTab = true;
     // when a tab is locked or preference is to open in new tab
     // we check that link is not a Javascript or have a onclick function
-    else if (this.currentTabLocked || this.targetPref == 1)
+    if (this.currentTabLocked || this.targetPref == 1)
       openNewTab = this.openTabfromLink();
+    // open links to other sites in a tab only if certain conditions are met. See the
+    // function comment for more details.
+    else if (this.openExSiteLink())
+      openNewTab = true;
 
     if (openNewTab) {
+      this.preventOnClick(linkNode);
+      try {
+        // for the moment just do it for Google and Yahoo....
+        // and tvguide.com - added 2013-07-20
+        var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+        // youtube.com - added 2013-11-15
+        if (!blocked && /youtube.com/.test(currentHref) &&
+           (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
+          blocked = true;
+      } catch (ex) {blocked = false;}
+      if (!blocked)
+        return;
+
       let where = whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
       handleLinkClick(aEvent, href, linkNode);
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
+  },
+
+  /**
+   * @brief prevent onclick function with the form javascript:top.location.href = url
+   *        or the form window.location = url when we force new tab from link
+   */
+  preventOnClick: function(linkNode) {
+    let {href, onclick} = this._data;
+
+    let removeOnclick = function (node, click) {
+      if (this.checkAttr(click, "window.location=")) {
+        let clickTarget = click.replace("window.location=", "").trim().replace(/^["|']+|["|']+$/g, "");
+        if (href.indexOf(clickTarget) != -1)
+          node.removeAttribute("onclick");
+      }
+    }.bind(this);
+
+    if (onclick) {
+      let code = "javascript:top.location.href="
+      if (this.checkAttr(href, "javascript:void(0)") && this.checkAttr(onclick, code))
+        linkNode.setAttribute("onclick", onclick.replace(code, "var __tabmix.href="));
+      else
+        removeOnclick(linkNode, onclick);
+    }
+
+    let parent = linkNode.parentNode;
+    if (parent.hasAttribute("onclick"))
+      removeOnclick(parent, parent.getAttribute("onclick"));
   },
 
   /**
