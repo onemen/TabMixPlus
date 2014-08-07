@@ -174,10 +174,13 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   this.navToolbox.init();
 
-  // set option to Prevent double click on Tab-bar from changing window size.
-  var tabsToolbar = document.getElementById("TabsToolbar");
-  if (!this.prefs.getBoolPref("dblClickTabbar_changesize"))
-    tabsToolbar._dragBindingAlive = false;
+  // set option to Prevent clicking on Tab-bar from dragging the window.
+  if (this.prefs.getBoolPref("tabbar.click_dragwindow")) {
+    if (!Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize"))
+      TabmixTabClickOptions.toggleEventListener(true);
+  }
+  else
+    document.getElementById("TabsToolbar")._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
 
@@ -325,7 +328,7 @@ var TMP_eventListener = {
         'let $ = $&', {check: Tabmix._debugMode}
       )._replace(
         'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("dblClickTabbar_changesize")'
+        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
       )._replace(
         'function rect(ele)',
         'let rect = function _rect(ele)' // for strict mode
@@ -911,6 +914,7 @@ var TMP_eventListener = {
     }
 
     TabmixSessionManager.onWindowClose(isLastWindow);
+    TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
 
     TMP_Places.deinit();

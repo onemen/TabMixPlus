@@ -1624,6 +1624,14 @@ var tablib = {
 
   // make sure that our function don't break removeTab function
   onRemoveTab: function TMP_onRemoveTab(tab) {
+    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        TabmixTabClickOptions._blockDblClick) {
+      setTimeout(function() {
+        TabmixTabClickOptions._blockDblClick = false;
+        gBrowser.tabContainer._blockDblClick = false;
+      }, 0);
+    }
+
     try {
       TMP_ClosedTabs.setButtonDisableState();
     }

@@ -95,8 +95,10 @@ var TabmixTabClickOptions = {
 
     // See hack note in the tabbrowser-close-tab-button binding
     // if we are here the target is not closeTabButton or newtabButton
-    if (gBrowser.tabContainer._blockDblClick || this._blockDblClick)
+    if (gBrowser.tabContainer._blockDblClick || this._blockDblClick) {
+      aEvent.preventDefault();
       return;
+    }
 
     var clickOutTabs = aEvent.target.localName == "tabs";
 
@@ -252,6 +254,24 @@ var TabmixTabClickOptions = {
         return false;
     }
     return true;
+  },
+
+  toggleEventListener: function(enable) {
+    let eventListener = enable ? "addEventListener" : "removeEventListener";
+    document.getElementById("TabsToolbar")[eventListener]("dblclick", this.blockDblclick, false);
+  },
+
+  /**
+   * block dblclick on TabsToolbar when tabbar.dblclick_changesize is false
+   * and tabbar.click_dragwindow is true
+   */
+  blockDblclick: function(aEvent) {
+    if (aEvent.button != 0 || aEvent.target.localName == "tabs" ||
+        Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
+        !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
+      return;
+
+    aEvent.preventDefault();
   }
 }
 

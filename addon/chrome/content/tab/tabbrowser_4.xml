@@ -901,7 +901,8 @@
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if (Tabmix.prefs.getBoolPref("dblClickTabbar_changesize") &&
+        if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+            Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
           let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;

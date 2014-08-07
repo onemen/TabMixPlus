@@ -128,7 +128,8 @@ pref("extensions.tabmix.shiftClickTabbar", 0);
 pref("extensions.tabmix.altClickTab", 6);
 pref("extensions.tabmix.altClickTabbar", 0);
 
-pref("extensions.tabmix.dblClickTabbar_changesize", true);
+pref("extensions.tabmix.tabbar.dblclick_changesize", true);
+pref("extensions.tabmix.tabbar.click_dragwindow", true);
 
 /*
  2011-01-26

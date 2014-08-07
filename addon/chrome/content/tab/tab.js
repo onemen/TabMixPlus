@@ -644,8 +644,16 @@ var gTMPprefObserver = {
       case "extensions.tabmix.titlefrombookmark":
         TMP_Places.onPreferencChanged(Services.prefs.getBoolPref(prefName));
         break;
-      case "extensions.tabmix.dblClickTabbar_changesize":
+      case "extensions.tabmix.tabbar.click_dragwindow":
         document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
+      case "extensions.tabmix.tabbar.dblclick_changesize":
+        let dragwindow = Tabmix.prefs.getBoolPref("tabbar.click_dragwindow");
+        let changesize = Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize");
+        if (!dragwindow && changesize) {
+          Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", false);
+          changesize = !changesize;
+        }
+        TabmixTabClickOptions.toggleEventListener(dragwindow && !changesize);
         break;
       case "extensions.tabmix.lockallTabs":
         TabmixTabbar.lockallTabs = Services.prefs.getBoolPref(prefName);
@@ -1773,6 +1781,15 @@ try {
       // enableScrollSwitch non-default value was true that is now 1
       Tabmix.prefs.setIntPref("scrollTabs", 1);
       Tabmix.prefs.clearUserPref("enableScrollSwitch");
+    }
+    // 2014-08-07
+    if (Tabmix.prefs.prefHasUserValue("dblClickTabbar_changesize")) {
+      let val = Tabmix.prefs.getBoolPref("dblClickTabbar_changesize");
+      // make sure to set click_dragwindow first, dblclick_changesize depend
+      // on it see gTMPprefObserver.observe.
+      Tabmix.prefs.setBoolPref("tabbar.click_dragwindow", val);
+      Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", val);
+      Tabmix.prefs.clearUserPref("dblClickTabbar_changesize");
     }
 
     // verify valid value
