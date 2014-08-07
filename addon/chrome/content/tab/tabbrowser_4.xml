@@ -815,7 +815,7 @@
           this.mTabstrip._calcTabMargins(aTab);
 
           // DOMRect left/right properties are immutable.
-          tab = {left: tab.left, right: tab.right};
+          tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
 
           if (this.mTabstrip.smoothScroll) {
             let selected = !this.selectedItem.pinned &&
