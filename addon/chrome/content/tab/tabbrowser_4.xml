@@ -896,7 +896,7 @@
 
     <handlers>
       <handler event="MozMouseHittest" button="0"  phase="capturing"><![CDATA[
-        if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.detail > 0)
+        if (Tabmix.keyModifierDown || event.detail > 0)
           event.stopPropagation();
       ]]></handler>
 

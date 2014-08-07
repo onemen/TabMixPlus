@@ -158,6 +158,7 @@ var TMP_LastTab = {
 
    OnKeyDown : function(event) {
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
+      Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
       if (Tabmix.isVersion(320) && !this.isCtrlTab(event))
         gBrowser.mTabBox.handleEvent(event);
    },
@@ -245,6 +246,7 @@ var TMP_LastTab = {
    OnKeyUp : function _LastTab_OnKeyUp(event) {
       var keyReleased = event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_CONTROL;
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
+      Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
       if(!keyReleased)
         return;
       var tabToSelect;
