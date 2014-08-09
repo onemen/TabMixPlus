@@ -1115,10 +1115,11 @@ var gTMPprefObserver = {
     if (TabmixSvc.isMac && !TabmixSvc.australis)
       Tabmix._buttonsHeight = 24;
 
+    let _buttonsHeight = Tabmix.isVersion(310) ? Tabmix._buttonsHeight - 1 : Tabmix._buttonsHeight;
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
                   '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
                   '#TabsToolbar[multibar] > #tabs-closebutton {' +
-                  '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
+                  '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule);
     delete Tabmix._buttonsHeight;
 
