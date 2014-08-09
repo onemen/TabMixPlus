@@ -36,9 +36,6 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/session/sessionStore.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
 
-  <window id="main-window"
-    onload="TMP_TBP_Startup();" />
-
   <commandset id="mainCommandSet">
     <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"
              oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>

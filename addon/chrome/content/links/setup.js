@@ -44,20 +44,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   this.openUILink_init();
 }
 
-/**
- * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
- *        window[onload="TMP_TBP_Startup()"]
- */
-function TMP_TBP_Startup() {
-  let onLoad = Tabmix.initialization.run("beforeBrowserInitOnLoad");
-  if (onLoad)
-    onLoad();
-  else if ("gBrowserInit" in window)
-    gBrowserInit.onLoad();
-  else
-    BrowserStartup();
-}
-
 Tabmix.beforeBrowserInitOnLoad = function() {
   try {
     TabmixSvc.windowStartup.init(window);
@@ -209,11 +195,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    return fnContainer[TMP_BrowserStartup].bind(fnContainer);
+    fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
   } catch (ex) {this.assert(ex);}
-
-  return null;
 }
 
 // this must run before all

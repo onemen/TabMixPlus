@@ -271,8 +271,12 @@ var TMP_eventListener = {
     window.removeEventListener(aType, this, false);
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype == "navigator:browser")
-      Tabmix.initialization.run(aType == "load" ? "onWindowOpen" :
-                                              "onContentLoaded");
+      if (aType != "load") {
+        Tabmix.initialization.run("onContentLoaded");
+        Tabmix.initialization.run("beforeBrowserInitOnLoad");
+      }
+      else
+        Tabmix.initialization.run("onWindowOpen");
     else if (aType != "load")
       window.removeEventListener("load", this, false);
   },
@@ -444,6 +448,12 @@ var TMP_eventListener = {
       }
     }
     else {
+      /**
+       * some theme like Vista-aero 3.0.0.91 and BlueSky 3.0.0.91
+       * use TMP_TBP_Startup in stylesheet window[onload="TMP_TBP_Startup()"]
+       */
+      Tabmix.setItem("main-window", "onload", "TMP_TBP_Startup();");
+
       //XXX need to add theme list here
       var themes = /^(iPoxRemix|Ie8fox|Vfox3)/;
       if (themes.test(skin)) {
