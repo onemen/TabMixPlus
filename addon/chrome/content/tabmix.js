@@ -211,6 +211,27 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 
   Tabmix.australisUI.init();
+
+  // show global notification when debug mode is on
+  let gnb = Tabmix._debugMode &&
+            (document.getElementById("high-priority-global-notificationbox") ||
+            document.getElementById("global-notificationbox"));
+  if (gnb) {
+    let buttons = [{
+      label: "Disable Debug Mode",
+      accessKey: "D",
+      callback: function () {
+        Tabmix.prefs.setBoolPref("enableDebug", false);
+      }
+    }];
+    let msg = "Tab Mix is in debug mode!\n " +
+      "In case it's activated accidentally, click the button to disalbe it " +
+      "or set 'extensions.tabmix.enableDebug' in about:config to false. " +
+      "Once you disable 'Debug Mode' restart your browser."
+    const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
+    gnb.appendNotification(msg, "tabmix-debugmode-enabled",
+        errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
+  }
 }
 
 var TMP_eventListener = {
