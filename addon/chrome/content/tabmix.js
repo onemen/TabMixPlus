@@ -337,6 +337,10 @@ var TMP_eventListener = {
         'function rect(ele)',
         'let rect = function _rect(ele)' // for strict mode
       )._replace(
+        'function verticalMargins(',
+        'let verticalMargins = $&',
+        {check: Tabmix._debugMode && Tabmix.isVersion(280)}
+      )._replace(
         /(\})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         'if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)\
