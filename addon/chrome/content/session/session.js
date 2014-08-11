@@ -2691,8 +2691,7 @@ try{
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return;
       var bContent = aBrowser.contentWindow;
-      var zoomFactor = aBrowser.docShell.contentViewer ? aBrowser.markupDocumentViewer.textZoom : 1;
-      this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY + "," + zoomFactor);
+      this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY);
    },
 
    tabSelected: function(needFlush) {
@@ -2774,7 +2773,6 @@ try{
       var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
       var index = sessionHistory.index < 0 ? 0 : sessionHistory.index;
       var bContent = aBrowser.contentWindow;
-      var zoomFactor = aBrowser.docShell.contentViewer ? aBrowser.markupDocumentViewer.textZoom : 1;
       try {
          var curHistory = sessionHistory.getEntryAtIndex(index, false);
          curHistory.QueryInterface(Ci.nsISHEntry).setScrollPosition(bContent.scrollX, bContent.scrollY);
@@ -2786,7 +2784,7 @@ try{
          image: gBrowser.getIcon(aTab),
          properties: TabmixSessionData.getTabProperties(aTab, true),
          history: this.saveTabHistory(sessionHistory),
-         scroll: bContent.scrollX + "," + bContent.scrollY + "," + zoomFactor
+         scroll: bContent.scrollX + "," + bContent.scrollY
       };
       this.saveTabData(rdfNodeTab, data);
       this.saveTabviewTab(rdfNodeTab, aTab);
@@ -2819,7 +2817,6 @@ try{
       this.setLiteral   (aNode, "scroll",     aData.scroll);
    },
 
-   // xxx save text size (zoom), char type ?
    saveTabHistory: function(sessionHistory) {
       var historyStart = this.enableSaveHistory ? 0 : sessionHistory.index;
       var historyEnd = this.enableSaveHistory ? sessionHistory.count : sessionHistory.index+1;
@@ -3356,7 +3353,7 @@ try{
          data.pos = this.getIntValue(rdfNodeSession, "tabPos");
          data.image = this.getLiteralValue(rdfNodeSession, "image");
          data.properties = this.getLiteralValue(rdfNodeSession, "properties");
-         data.scroll = this.getLiteralValue(rdfNodeSession, "scroll"); // including zoom factor
+         data.scroll = this.getLiteralValue(rdfNodeSession, "scroll");
          if (this.enableBackup) { // save only if backup enabled
             toNew.Container.AppendElement(newNode);
             data.index = this.getIntValue(rdfNodeSession, "index");
@@ -3441,7 +3438,7 @@ try{
       aTabData.index = this.enableSaveHistory ? activeIndex : 0,
 
       aTabData.scroll = this.prefBranch.getBoolPref("save.scrollposition") ?
-                         (tabState.entries[activeIndex].scroll || "0,0") + "," + (aTabData.zoom || 1) : "0,0,1";
+                         (tabState.entries[activeIndex].scroll || "0,0") : "0,0";
       // closed tab can not be protected - set protected to 0
       var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";
       aTabData.properties = "0" + _locked;
@@ -3549,8 +3546,9 @@ try{
 
       // restore scroll position
       if (this.prefBranch.getBoolPref("save.scrollposition")) {
-         let XYZ = this.getLiteralValue(aNodeSession, "scroll", "0,0,1");
-         if (XYZ != "0,0,1") {
+         let XYZ = this.getLiteralValue(aNodeSession, "scroll", "0,0");
+         // until version 0.4.1.5 textZoom was included in scroll data
+         if (XYZ.substr(0,3) != "0,0") {
             XYZ = XYZ.split(",");
             try {
                var sHistory = aBrowser.webNavigation.sessionHistory;
@@ -3558,7 +3556,7 @@ try{
                curHistory.QueryInterface(Ci.nsISHEntry).setScrollPosition(XYZ[0], XYZ[1]);
             } catch (ex) {Tabmix.assert(ex, "loadOneTab error index " + sHistory.index); }
             if (tabExist)
-               this.setScrollPosition(tab, aBrowser, {href: null, _scrollX: XYZ[0], _scrollY: XYZ[1], zoom: XYZ[2] || 1}, 15);
+               this.setScrollPosition(tab, aBrowser, {href: null, _scrollX: XYZ[0], _scrollY: XYZ[1]}, 15);
          }
       }
       if (tabExist) {
@@ -3583,8 +3581,6 @@ try{
    setScrollPosition: function SM_setScrollPosition(aTab, aBrowser, aData, attempts) {
       var bContent = aBrowser.contentWindow;
       var docViewer;
-      // we don't use zoom after we drop support for Firefox 2.0 , so null the value
-      aData.zoom = null;
       if (!aTab.hasAttribute("busy")) {
          if (bContent.scrollX != aData._scrollX || bContent.scrollY != aData._scrollY)
             bContent.scrollTo(aData._scrollX, aData._scrollY);
@@ -3597,7 +3593,7 @@ try{
       } else {
          // if we save this before timeout sometimes scroll is not ready yet
          if (TabmixSessionManager.enableBackup)
-            TabmixSessionManager.setLiteral(TabmixSessionManager.getNodeForTab(aTab), "scroll", aData._scrollX + "," + aData._scrollY + "," + aData.zoom);
+            TabmixSessionManager.setLiteral(TabmixSessionManager.getNodeForTab(aTab), "scroll", aData._scrollX + "," + aData._scrollY);
          // call by openLinkWithHistory
          if (aData.href)
             window.setTimeout( function(aBrowser, aURI) {
