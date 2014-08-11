@@ -23,7 +23,7 @@ let AutoReload = {
   * Popup command
   */
   addClonePopup: function(aPopup, aTab) {
-    var win = _getWindow(aTab.linkedBrowser.contentWindow);
+    var win = aTab.ownerDocument.defaultView;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
     aPopup.setAttribute("onpopuphidden", "this._tab = null;");
@@ -135,7 +135,7 @@ let AutoReload = {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     let result = {ok: false};
-    var win = _getWindow(aTab.linkedBrowser.contentWindow);
+    var win = aTab.ownerDocument.defaultView;
     win.openDialog('chrome://tabmixplus/content/minit/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
       aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
@@ -184,7 +184,7 @@ let AutoReload = {
     aTab.autoReloadEnabled = true;
     _setItem(aTab, "_reload", true);
     aTab.autoReloadURI = url;
-    var win = _getWindow(browser.contentWindow);
+    var win = aTab.ownerDocument.defaultView;
     _clearTimeout(aTab, win);
     aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime*1000, aTab);
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
@@ -222,7 +222,7 @@ let AutoReload = {
   *  for pending tabs
   */
   onTabReloaded: function(aTab, aBrowser) {
-    var win = _getWindow(aBrowser.contentWindow);
+    var win = aTab.ownerDocument.defaultView;
     if (aTab.autoReloadTimerID)
       _clearTimeout(aTab, win);
 
@@ -242,16 +242,6 @@ let AutoReload = {
   }
 }
 
-function _getWindow(aContentWindow) {
-  return aContentWindow.QueryInterface(Ci.nsIInterfaceRequestor)
-                       .getInterface(Ci.nsIWebNavigation)
-                       .QueryInterface(Ci.nsIDocShellTreeItem)
-                       .rootTreeItem
-                       .QueryInterface(Ci.nsIInterfaceRequestor)
-                       .getInterface(Ci.nsIDOMWindow)
-                       .wrappedJSObject;
-}
-
 function _setItem () {}
 
 function _reloadTab(aTab) {
@@ -265,30 +255,28 @@ function _reloadTab(aTab) {
 
   var browser = aTab.linkedBrowser;
   var webNav = browser.webNavigation;
-  var postData, referrer;
+  var sh, postData, referrer;
+  var window = aTab.ownerDocument.defaultView;
 
   try {
-    let sh = webNav.sessionHistory;
+    sh = webNav.sessionHistory;
     if (sh) {
       let entry = sh.getEntryAtIndex(sh.index, false);
       postData = entry.QueryInterface(Ci.nsISHEntry).postData;
       referrer = entry.QueryInterface(Ci.nsISHEntry).referrerURI;
 
-      if (postData == null)
-        webNav = sh.QueryInterface(Ci.nsIWebNavigation);
-      else if (!aTab.postDataAcceptedByUser) {
-        let win = _getWindow(browser.contentWindow)
+      if (postData && !aTab.postDataAcceptedByUser) {
         let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
         let msg = TabmixSvc.getString('confirm_autoreloadPostData');
         TabmixSvc.obs.addObserver(_observe, "common-dialog-loaded", false);
-        let resultOK = TabmixSvc.prompt.confirm(win, title, msg);
+        let resultOK = TabmixSvc.prompt.confirm(window, title, msg);
         if (resultOK)
           aTab.postDataAcceptedByUser = true;
         else {
           aTab.autoReloadEnabled = false;
           _setItem(aTab, "_reload", null);
           aTab.autoReloadURI = null;
-          this._update(aTab);
+          AutoReload._update(aTab);
           return;
         }
       }
@@ -300,10 +288,30 @@ function _reloadTab(aTab) {
   var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
-  if (postData)
-    webNav.loadURI(webNav.currentURI.spec, loadFlags, referrer, postData, null);
-  else
+
+  // This part is based on BrowserReloadWithFlags.
+  let url = webNav.currentURI.spec;
+  let loadURIWithFlags = TabmixSvc.version(330) &&
+      window.gBrowser.updateBrowserRemotenessByURL(browser, url) || postData;
+  if (loadURIWithFlags) {
+    if (!postData)
+      postData = referrer = null;
+    browser.loadURIWithFlags(url, loadFlags, referrer, null, postData);
+    return;
+  }
+
+  if (!TabmixSvc.version(330)) {
+    webNav = sh.QueryInterface(Ci.nsIWebNavigation);
     webNav.reload(loadFlags);
+    return;
+  }
+
+  let windowUtils = window.QueryInterface(Ci.nsIInterfaceRequestor)
+                          .getInterface(Ci.nsIDOMWindowUtils);
+
+  browser.messageManager.sendAsyncMessage("Browser:Reload",
+      { flags: loadFlags,
+        handlingUserInput: windowUtils.isHandlingUserInput });
 }
 
 function  _observe(aSubject, aTopic, aData) {
@@ -318,7 +326,7 @@ function  _observe(aSubject, aTopic, aData) {
 function  _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow)
-      aWindow = _getWindow(aTab.linkedBrowser.contentWindow);
+      aWindow = aTab.ownerDocument.defaultView;
     aWindow.clearTimeout(aTab.autoReloadTimerID);
   }
 }
