@@ -53,7 +53,7 @@ var TMP_Places = {
       // when we are in single window mode set the function to return "tab"
       Tabmix.changeCode(window, "whereToOpenLink")._replace(
         'var middle = !ignoreButton && e.button == 1;',
-        'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
+        'var middle = !ignoreButton && e.button && e.button == 1;'
       )._replace(
         'return shift ? "tabshifted" : "tab";',
         '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
