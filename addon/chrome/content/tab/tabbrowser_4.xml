@@ -611,7 +611,7 @@
             if (!tab.hidden && !tab.closing)
               return tab;
           }
-          return this.mCurrentTab;
+          return this.selectedItem;
         ]]></getter>
       </property>
 
@@ -625,7 +625,7 @@
             if (!tab.hidden && !tab.closing)
               return tab;
           }
-          return this.mCurrentTab;
+          return this.selectedItem;
         ]]></getter>
       </property>
 
