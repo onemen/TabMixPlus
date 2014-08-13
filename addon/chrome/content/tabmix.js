@@ -324,6 +324,8 @@ var TMP_eventListener = {
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
       Tabmix.lazy_import(Tabmix, "renameTab", "RenameTab", "RenameTab");
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
+      Tabmix.lazy_import(Tabmix, "docShellCapabilities",
+        "DocShellCapabilities", "DocShellCapabilities", true, [window]);
     } catch (ex) {Tabmix.assert(ex);}
 
     this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
@@ -1005,6 +1007,8 @@ var TMP_eventListener = {
 
     Tabmix.navToolbox.deinit();
     Tabmix.australisUI.deinit();
+    if (Tabmix.DocShellCapabilitiesInitialized)
+      Tabmix.docShellCapabilities.deinit(window);
   },
 
   // some theme not useing updated Tabmix tab binding

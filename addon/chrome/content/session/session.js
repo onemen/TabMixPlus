@@ -126,10 +126,10 @@ var TabmixSessionData = {
       if (checkPref && !Tabmix.prefs.getBoolPref("sessions.save.permissions"))
         tabProperties += "11111";
       else {
-         var aTabDocShell = gBrowser.getBrowserForTab(aTab).docShell;
-         for ( j = 0; j < this.docShellItems.length; j++ ){
-            tabProperties += aTabDocShell["allow" + this.docShellItems[j]] ? "1" : "0";
-         }
+         let disallow = Tabmix.docShellCapabilities.collect(aTab);
+         this.docShellItems.forEach(function(item) {
+           tabProperties += disallow.indexOf(item) != -1 ? "0" : "1";
+         });
       }
 
       // save fixed label data
@@ -245,14 +245,13 @@ var TabmixSessionData = {
       if (TabmixTabbar.lockallTabs || aTab.hasAttribute("locked"))
          Tabmix.setItem(aTab, "_locked", aTab.hasAttribute("locked"));
 
-      if (checkPref && !Tabmix.prefs.getBoolPref("sessions.save.permissions")) return;
-      var aPermission;
-      var aTabDocShell = gBrowser.getBrowserForTab(aTab).docShell;
-      for ( j = 0; j < this.docShellItems.length; j++ ) {
-         aPermission = tabProperties.charAt(j + k) == "1";
-         if (aTabDocShell["allow" + this.docShellItems[j]] != aPermission)
-            aTabDocShell["allow" + this.docShellItems[j]] = aPermission;
-      }
+      if (checkPref && !Tabmix.prefs.getBoolPref("sessions.save.permissions"))
+        return;
+
+      let disallow = this.docShellItems.filter(function(item, i) {
+        return tabProperties.charAt(i + k) == "0";
+      });
+      Tabmix.docShellCapabilities.restore(aTab, disallow);
    },
 
   getTabValue: function TMP_sData_getTabValue(tab, id, parse) {
@@ -352,6 +351,12 @@ var TabmixSessionManager = {
    },
 
    _init: function SM__init() {
+      if (Tabmix.isVersion(320)) {
+        XPCOMUtils.defineLazyModuleGetter(this, "TabState",
+            "resource:///modules/sessionstore/TabState.jsm");
+        XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
+            "resource:///modules/sessionstore/TabStateCache.jsm");
+      }
       // just in case tablib isn't init yet
       // when Webmail Notifier extension istalled and user have master password
       // we can get here before the browser window is loaded
@@ -3305,6 +3310,15 @@ try{
       delete aTab.__SS_extdata;
       // delete any sesionRestore data
       delete browser.__SS_data;
+
+      // clear TabStateCache
+      if (Tabmix.isVersion(320)) {
+        let data = this.TabStateCache.get(browser) || {};
+        for (let key of Object.keys(data)) {
+          data[key] = null;
+        }
+        this.TabStateCache.update(browser, data);
+      }
    },
 
    updateSelected: function(newIndex, removeAttribute) {
@@ -3533,6 +3547,11 @@ try{
          let sh = browser.webNavigation.sessionHistory;
          sh.getEntryAtIndex(savedHistory.index, true);
          sh.reloadCurrentEntry();
+
+         // Flush all data from the content script synchronously.
+         if (Tabmix.isVersion(320))
+           this.TabState.flush(browser);
+
       } catch (ex) {Tabmix.log("error in loadOneTab\n" + ex)};
    }, // end of "loadOneTab : function(...............)"
 
