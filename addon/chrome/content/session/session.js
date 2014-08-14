@@ -333,7 +333,8 @@ var TabmixSessionManager = {
           this._init();
         }.bind(this);
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
-        Tabmix.ssPromise.then(initializeSM, Cu.reportError);
+        Tabmix.ssPromise.then(initializeSM)
+                        .then(null, Cu.reportError);
       }
       else {
         let forceInit = !Tabmix.isVersion(250) && this.doRestore;
