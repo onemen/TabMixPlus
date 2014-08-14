@@ -599,6 +599,7 @@ var TMP_eventListener = {
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
     var tab = aEvent.target;
     Tabmix.restoreTabState(tab);
+    TabmixSessionManager.restoreHistoryComplete(tab);
 
     if (gBrowser.tabContainer.overflow &&
         !gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
