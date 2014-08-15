@@ -19,6 +19,10 @@ let MessageListener = {
 
   init: function () {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
+
+    // Send a CPOW to the parent so that it can synchronously request
+    // docShell capabilities.
+    sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
   },
 
   receiveMessage: function ({name, data}) {
@@ -36,6 +40,10 @@ let MessageListener = {
       sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
       break;
     }
+  },
+
+  getCapabilities: function() {
+    return DocShellCapabilities.collect(docShell).join(",") || "";
   }
 };
 

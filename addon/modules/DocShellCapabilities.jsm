@@ -16,6 +16,7 @@ this.DocShellCapabilities = {
     this.useFrameScript = TabmixSvc.version(320);
     if (this.useFrameScript) {
       let mm = window.getGroupMessageManager("browsers");
+      mm.addMessageListener("Tabmix:SetSyncHandler", this);
       mm.addMessageListener("Tabmix:restoPermissionsComplete", this);
       mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
     }
@@ -24,29 +25,43 @@ this.DocShellCapabilities = {
   deinit: function(window) {
     if (this.useFrameScript) {
       let mm = window.getGroupMessageManager("browsers");
+      mm.removeMessageListener("Tabmix:SetSyncHandler", this);
       mm.removeMessageListener("Tabmix:restoPermissionsComplete", this);
     }
   },
 
+  _syncHandlers: new WeakMap(),
+
   receiveMessage: function(message) {
-    if (message.name == "Tabmix:restoPermissionsComplete") {
-      let browser = message.target;
-      if (message.data.reload)
-        browser.reload();
-      else {
+    let browser = message.target;
+    switch (message.name) {
+      case "Tabmix:SetSyncHandler":
+        this._syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
+        break;
+      case "Tabmix:restoPermissionsComplete":
         // Update the persistent tab state cache
         TabStateCache.update(browser, {
           disallow: message.data.disallow || null
         });
-      }
+        if (message.data.reload)
+          browser.reload();
+        break;
     }
   },
 
   caps: ["Images","Subframes","MetaRedirects","Plugins","Javascript"],
 
   collect: function(tab) {
-    let state = TabmixSvc.ss.getTabState(tab);
-    return TabmixSvc.JSON.parse(state).disallow || "";
+    let browser = tab.linkedBrowser;
+
+    if (!this.useFrameScript)
+      return this.caps.filter(function(cap) !browser.docShell["allow" + cap]);
+
+    try {
+      let handler = this._syncHandlers.get(browser.permanentKey);
+      return handler.getCapabilities();
+    } catch(ex) { }
+    return "";
   },
 
   restore: function(tab, disallow, reload) {
