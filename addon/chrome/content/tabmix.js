@@ -242,6 +242,9 @@ var TMP_eventListener = {
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
     switch (aEvent.type) {
+      case "TabAttrModified":
+        this.onTabAttrModified(aEvent);
+        break;
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent);
         break;
@@ -324,7 +327,8 @@ var TMP_eventListener = {
     } catch (ex) {Tabmix.assert(ex);}
 
     this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
-      "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned"];
+      "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
+      "TabAttrModified"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
     try {
@@ -577,6 +581,17 @@ var TMP_eventListener = {
 
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
+  },
+
+  onTabAttrModified: function (aEvent) {
+    if (!TabmixTabbar.widthFitTitle)
+      return;
+
+    // catch tab width changed when label attribute changed
+    // or when busy attribute changed hide/show image
+    var tab = aEvent.target;
+    TabmixTabbar.updateScrollStatus();
+    setTimeout(function(){TabmixTabbar.updateScrollStatus();}, 2500);
   },
 
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
