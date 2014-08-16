@@ -3108,7 +3108,7 @@ try{
       this.tabsToLoad = newtabsCount;
       this.setStripVisibility(newtabsCount);
 
-      let tabsData = TabmixConvertSession.getTabsState(rdfNodeTabs);
+      let tabsData = TabmixConvertSession.getTabsState(rdfNodeTabs, true);
       let tabs = [], numVisibleTabs = 0, firstVisibleTab = -1
       let needToReload = this.prefBranch.getBoolPref("restore.reloadall");
       for (let t = 0; t < tabsData.length ; t++) {
@@ -3130,9 +3130,6 @@ try{
           if (!restoreSelect && firstVisibleTab < 0)
             firstVisibleTab = newIndex + t;
         }
-
-///XXX
-/// check TGM compatibilities
 
         this._setTabviewTab(tab, data);
 

@@ -1,14 +1,6 @@
 "use strict";
 
 /**
-XXX not working good
-
-1. when we restore closed windows with group to current window
-2. when restore saved sessions to current window
-
-*/
-
-/**
  * original code by onemen
  */
 var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
@@ -58,6 +50,26 @@ let TMP_TabGroupsManager = {
       '  $&'
     ).toCode();
 
+    /*
+      we have some compatibility issue if we let TabGroupsManager
+      listen to "SSTabRestoring", probably since TGM move tabs around
+      the fix is to call TGM.moveTabToGroupBySessionStore for each tab
+      after the tab restored by SessionStore
+    */
+    sessionManager._moveTabsToGroupByTGM = function(window, tabs) {
+      let sessionStore = window.TabmixSvc.ss;
+      let TGM = window.TabGroupsManager.session;
+      for (let i = 0; i < tabs.length ; i++) {
+        let tab = tabs[i];
+        let data = sessionStore.getTabValue(tab, "__tabmixTGM");
+        let [groupId, groupName] = data ? data.split(" ") : ["-1", ""];
+        sessionStore.setTabValue(tab, "TabGroupsManagerGroupId", groupId);
+        sessionStore.setTabValue(tab, "TabGroupsManagerGroupName", groupName);
+        sessionStore.deleteTabValue(tab, "__tabmixTGM");
+        TGM.moveTabToGroupBySessionStore(tab);
+      }
+    }
+
     this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
       // get saved group data and repalce ids with new one
       'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
@@ -92,22 +104,10 @@ let TMP_TabGroupsManager = {
       '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
-    ).toCode();
-
-    this.changeCode(sessionManager, "TabmixSessionManager.loadOneTab")._replace(
-      'var savedHistory = this.loadTabHistory(rdfNodeSession, webNav.sessionHistory, aTab);',
-      '  $&' +
-      '  try {' +
-      '    let tabgroupsData = TMP_SessionStore._getAttribute({xultab: tabProperties}, "tabgroups-data");' +
-      '    let [groupId, groupName] = ["", ""];' +
-      '    if (tabgroupsData) {' +
-      '      [groupId, groupName] = tabgroupsData.split(" ");' +
-      '    }' +
-      '    TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupId", groupId);' +
-      '    TabmixSvc.ss.setTabValue(aTab, "TabGroupsManagerGroupName", groupName);' +
-      '    aTab.removeAttribute("hidden");' +
-      '    TabGroupsManager.session.moveTabToGroupBySessionStore(aTab);' +
-      '  } catch (ex) {Tabmix.assert(ex);}'
+    )._replace(
+      'SessionStore.restoreTabs(window, tabs, tabsData, 0);',
+      '$&\n' +
+      '      this._moveTabsToGroupByTGM(window, tabs);'
     ).toCode();
 
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
