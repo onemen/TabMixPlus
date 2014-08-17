@@ -419,7 +419,7 @@
             document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
           Tabmix._show_newtabbutton = "aftertabs";
 
-          Tabmix._nextSelectedID = 0;
+          Tabmix._nextSelectedID = 1;
           let tab = this.firstChild;
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
