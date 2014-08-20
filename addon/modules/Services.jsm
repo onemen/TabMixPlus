@@ -17,6 +17,11 @@ function isVersion(aVersionNo) {
 }
 
 let TabmixSvc = {
+  debugMode: function() {
+    return this.prefBranch.prefHasUserValue("enableDebug") &&
+      this.prefBranch.getBoolPref("enableDebug");
+  },
+
   version: function(aVersionNo) {
     return isVersion(aVersionNo);
   },

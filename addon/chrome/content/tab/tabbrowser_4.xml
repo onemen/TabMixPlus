@@ -435,10 +435,7 @@
           if (attr.length)
             this.setAttribute("tabmix_icons", attr.join(" "));
 
-          if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
-                Tabmix.prefs.getBoolPref("enableDebug")) {
-            Tabmix._debugMode = true;
-          }
+          Tabmix._debugMode = TabmixSvc.debugMode();
 
           if ("linkedBrowser" in tab)
             tablib.setLoadURIWithFlags(tab.linkedBrowser);
