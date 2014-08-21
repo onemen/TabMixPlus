@@ -415,6 +415,11 @@ var TMP_eventListener = {
     window.addEventListener("unload", this, false);
     window.addEventListener("fullscreen", this, true);
 
+    if (Tabmix.isVersion(320)) {
+      let mm = window.getGroupMessageManager("browsers");
+      mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
+    }
+
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);

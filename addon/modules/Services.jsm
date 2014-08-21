@@ -146,6 +146,9 @@ let TabmixSvc = {
       if (isVersion(190))
         Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
 
+      if (isVersion(320))
+        Cu.import("resource://tabmixplus/ContentClick.jsm");
+
       Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
 

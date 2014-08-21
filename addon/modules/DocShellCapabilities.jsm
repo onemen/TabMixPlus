@@ -18,7 +18,6 @@ this.DocShellCapabilities = {
       let mm = window.getGroupMessageManager("browsers");
       mm.addMessageListener("Tabmix:SetSyncHandler", this);
       mm.addMessageListener("Tabmix:restoPermissionsComplete", this);
-      mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
     }
   },
 

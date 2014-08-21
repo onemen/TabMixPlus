@@ -1,13 +1,151 @@
 "use strict";
 
-Tabmix.contentAreaClick = {
+var EXPORTED_SYMBOLS = ["TabmixContentClick"];
+
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Services",
+  "resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
+  "resource:///modules/ContentClick.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this,
+  "TabmixSvc", "resource://tabmixplus/Services.jsm");
+
+this.TabmixContentClick = {
+  init: function() {
+    ContentClickInternal.init();
+  },
+
+  onQuitApplication: function() {
+    ContentClickInternal.onQuitApplication();
+  }
+}
+Object.freeze(TabmixContentClick);
+
+let Tabmix = { }
+
+let ContentClickInternal = {
+  _timer: null,
+  _initialized: false,
+
+  init: function() {
+    if (this._initialized)
+      return;
+    this._initialized = true;
+
+    Tabmix._debugMode = TabmixSvc.debugMode();
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
+
+    let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
+    mm.addMessageListener("TabmixContent:Click", this);
+
+    this.initContentAreaClick();
+  },
+
+  onQuitApplication: function () {
+    if (this._timer)
+      this._timer.clear();
+
+    this.functions.forEach(function(aFn) {
+      ContentClick[aFn] = ContentClick["tabmix_" + aFn];
+      delete ContentClick["tabmix_" + aFn];
+    });
+  },
+
+  functions: ["contentAreaClick"],
+  initContentAreaClick: function TMP_initContentAreaClick() {
+    try {
+      let test = ContentClick.contentAreaClick.toString();
+    } catch (ex) { return; }
+
+    this.functions.forEach(function(aFn) {
+      ContentClick["tabmix_" + aFn] = ContentClick[aFn];
+    });
+
+    Tabmix.changeCode(ContentClick, "ContentClick.contentAreaClick")._replace(
+      'var where = window.whereToOpenLink(json);',
+      'var data = json.tabmix || {where: window.whereToOpenLink(json)};\n' +
+      '    var {where, targetAttr, suppressTabsOnFileDownload} = data;\n' +
+      '    if (where == "default" && targetAttr) {\n' +
+      '      window.setTimeout(function(){\n' +
+      '        window.Tabmix.contentAreaClick.selectExistingTab(json.href, targetAttr);\n' +
+      '      },300);\n' +
+      '    }\n'
+    )._replace(
+      'where == "current"',
+      '!json.tabmix && where == "current" || where == "default"'
+    )._replace(
+      'referrerURI: browser.documentURI,',
+      '$&\n' +
+      '                                          suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,'
+    ).toCode();
+  },
+
+  receiveMessage: function (message) {
+    if (message.name != "TabmixContent:Click")
+      return null;
+
+    let {json, href} = message.data;
+    let {node, focusedWindow} = message.objects;
+    let browser = message.target;
+    // return value to the message caller
+    return this.getParamsForLink(json, node, href, browser, focusedWindow, true);
+  },
+
+  getParamsForLink: function(event, node, href, browser, focusedWindow, remote) {
+    this._browser = browser;
+    this._window = this._browser.ownerDocument.defaultView;
+    this._focusedWindow = focusedWindow;
+
+    let targetAttr = this.getTargetAttr(node);
+    let [where, suppressTabsOnFileDownload] =
+        this.whereToOpen(event, node, href, targetAttr);
+
+    if (remote)
+      where = where.split(".")[0];
+    if (where == "current")
+      browser.tabmix_allowLoad = true;
+    else if (event.__href)
+      href = event.__href;
+
+    if (event.button == 1 && this.getHrefFromOnClick(event, href, node)) {
+      href = event.__href;
+      where = "tab";
+    }
+
+    if (remote && /^tab/.test(where))
+      this.preventOnClick(node);
+
+    this.resetData();
+
+    return {
+      where: where,
+      suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,
+      _href: href,
+      targetAttr: targetAttr
+    };
+  },
+
   _data: null,
+  resetData: function() {
+    this._data = null;
+    this._browser = null;
+    this._window = null;
+    this._focusedWindow = null;
+  },
+
   getPref: function() {
     XPCOMUtils.defineLazyGetter(this, "targetPref", function() {
-      return Tabmix.prefs.getIntPref("opentabforLinks");
+      return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
+
+    let tabBrowser = this._window.gBrowser;
     XPCOMUtils.defineLazyGetter(this, "currentTabLocked", function() {
-      return gBrowser.mCurrentTab.hasAttribute("locked");
+      return tabBrowser.selectedTab.hasAttribute("locked");
     });
   },
 
@@ -24,6 +162,9 @@ Tabmix.contentAreaClick = {
       this.href = href;
       this.linkNode = linkNode;
       this.targetAttr = targetAttr;
+      XPCOMUtils.defineLazyGetter(this, "currentURL", function() {
+        return self._browser.currentURI ? self._browser.currentURI.spec : "";
+      });
       XPCOMUtils.defineLazyGetter(this, "onclick", function() {
         if (linkNode.hasAttribute("onclick"))
           return linkNode.getAttribute("onclick");
@@ -35,81 +176,24 @@ Tabmix.contentAreaClick = {
         * Get current page url
         * if user click a link while the page is reloading linkNode.ownerDocument.location can be null
         */
+        ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
         let location = linkNode.ownerDocument.location;
-        let curpage = location ? location.href || location.baseURI : gBrowser.currentURI.spec;
-        return self.isLinkToExternalDomain(curpage, window.XULBrowserWindow.overLink || linkNode);
+        let curpage = location ? location.href || location.baseURI : this._data.currentURL;
+        return self.isLinkToExternalDomain(curpage, self._window.XULBrowserWindow.overLink || linkNode);
       });
     }
 
     this._data = new LinkData();
   },
 
-  init: function TMP_CA_init() {
-    Tabmix.changeCode(window, "contentAreaClick")._replace(
-      'if (linkNode &&',
-      'var targetAttr = Tabmix.contentAreaClick.getTargetAttr(linkNode);' +
-      'var [where, suppressTabsOnFileDownload] =' +
-      '      Tabmix.contentAreaClick.whereToOpen(event, linkNode, href, targetAttr);' +
-      'Tabmix.contentAreaClick._data = null;' +
-      'if (where == "current") gBrowser.mCurrentBrowser.tabmix_allowLoad = true;' +
-      'else if (event.__href) href = event.__href;' +
-      '$&'
-    )._replace(
-      'if (linkNode.getAttribute("onclick")',
-      'if (where == "default") $&'
-    )._replace(
-      'loadURI(',
-      '  if (where == "tab" || where == "tabshifted") {' +
-      '    let doc = event.target.ownerDocument;' +
-      '    let _url = Tabmix.isVersion(190) ? href : url;' +
-      '    openLinkIn(_url, where, {referrerURI: doc.documentURIObject, charset: doc.characterSet,' +
-      '              initiatingDoc: doc,' +
-      '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});' +
-      '  }' +
-      '  else $&'
-    )._replace(
-      // force handleLinkClick to use openLinkIn by replace "current"
-      // with " current", we later use trim() before handleLinkClick call openLinkIn
-      'handleLinkClick(event, href, linkNode);',
-      '  if (event.button == 1 && Tabmix.contentAreaClick.getHrefFromOnClick(event, href, linkNode)) {' +
-      '    href = event.__href;' +
-      '    where = "tab";' +
-      '  }' +
-      '  event.__where = where == "current" && href.indexOf("custombutton://") != 0 ? " " + where : where;' +
-      '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;' +
-      '  var result = $&' +
-      '  if (targetAttr && !result) setTimeout(function(){Tabmix.contentAreaClick.selectExistingTab(href, targetAttr);},300);'
-    ).toCode();
-
-    /* don't change where if it is save, window, or we passed
-     * event.__where = default from contentAreaClick or
-     * Tabmix.contentAreaClick.contentLinkClick
-     */
-    Tabmix.changeCode(window, "handleLinkClick")._replace(
-      'whereToOpenLink(event);',
-      '$&' +
-      '  if (event && event.__where && event.__where != "default" &&' +
-      '      ["tab","tabshifted","current"].indexOf(where) != -1) {' +
-      '    where = event.__where.split(".")[0];' +
-      '  }'
-    )._replace(
-      'var doc = event.target.ownerDocument;',
-      'where = where.trim();\
-       $&'
-    )._replace(
-      'charset: doc.characterSet',
-      '$&, suppressTabsOnFileDownload: event.__suppressTabsOnFileDownload'
-    ).toCode();
-  },
-
-  whereToOpen: function TMP_CA_whereToOpen(event, linkNode, href, targetAttr) {
-    function TMP_tabshifted(event) {
-      var where = whereToOpenLink(event);
+  whereToOpen: function TMP_whereToOpen(event, linkNode, href, targetAttr) {
+    let TMP_tabshifted = function TMP_tabshifted(event) {
+      var where = this._window.whereToOpenLink(event);
       return where == "tabshifted" ? "tabshifted" : "tab";
-    }
+    }.bind(this);
 
   ///XXX check again how SubmitToTab work
-    if (typeof(SubmitToTab) != 'undefined') {
+    if (typeof(this._window.SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
@@ -132,7 +216,7 @@ Tabmix.contentAreaClick = {
       return ["default"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
-    if (this._data.onclick && gBrowser.contentDocument.location.href != document.commandDispatcher.focusedWindow.top.location.href)
+    if (this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
       return ["default"];
 
     if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
@@ -146,7 +230,7 @@ Tabmix.contentAreaClick = {
      */
     if (this.suppressTabsOnFileDownload()) {
         // don't do anything if we are on gmail and let gmail take care of the download
-        let url = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
+        let url = this._data.currentURL;
         let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
         let isHttps = /^https/.test(href);
         if (isGmail || isHttps)
@@ -163,6 +247,7 @@ Tabmix.contentAreaClick = {
       return ["current"];
 
     // don't mess with links that have onclick inside iFrame
+    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
     let onClickInFrame = this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
 
     /*
@@ -213,17 +298,10 @@ Tabmix.contentAreaClick = {
   },
 
   /**
-   * @brief Handle left-clicks on links when preference is to open new tabs from links
+   * @brief For non-remote browser:
+   *        handle left-clicks on links when preference is to open new tabs from links
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
-  _contentLinkClick: function TMP__contentLinkClick(aEvent) {
-    aEvent.tabmix_isRemote = gBrowser.selectedTab.getAttribute("remote") == "true";
-    if (!aEvent.tabmix_isRemote) {
-      Tabmix.contentAreaClick.contentLinkClick(aEvent);
-      Tabmix.contentAreaClick._data = null;
-    }
-  },
-
   contentLinkClick: function TMP_contentLinkClick(aEvent) {
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return;
@@ -235,14 +313,14 @@ Tabmix.contentAreaClick = {
     if (!this.currentTabLocked && this.targetPref == 0)
       return;
 
-    let [href, linkNode] = hrefAndLinkNodeForClickEvent(aEvent);
+    let [href, linkNode] = this._window.hrefAndLinkNodeForClickEvent(aEvent);
     if (!linkNode || !/^(http|about)/.test(linkNode.protocol))
       return;
 
     let targetAttr = this.getTargetAttr(linkNode);
     this.getData(aEvent, href, linkNode, targetAttr);
 
-    var currentHref = gBrowser.currentURI ? gBrowser.currentURI.spec : "";
+    var currentHref = this._data.currentURL;
     // don't do anything on mail.google or google.com/reader
     var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
     if (isGmail)
@@ -259,7 +337,8 @@ Tabmix.contentAreaClick = {
     }
 
     // don't interrupt with fastdial links
-    if ("ownerDocument" in linkNode && Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
+    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
+    if ("ownerDocument" in linkNode && this._window.Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
       return;
 
     if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
@@ -280,6 +359,7 @@ Tabmix.contentAreaClick = {
       return;
 
     // don't mess with links that have onclick inside iFrame
+    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
     if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
       return;
 
@@ -315,15 +395,15 @@ Tabmix.contentAreaClick = {
         var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
-           (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
+           (!this.isGMEnabled() || this._window.decodeURI(href).indexOf("return false;") == -1))
           blocked = true;
       } catch (ex) {blocked = false;}
       if (!blocked)
         return;
 
-      let where = whereToOpenLink(aEvent);
+      let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
-      handleLinkClick(aEvent, href, linkNode);
+      this._window.handleLinkClick(aEvent, href, linkNode);
       aEvent.stopPropagation();
       aEvent.preventDefault();
     }
@@ -351,7 +431,7 @@ Tabmix.contentAreaClick = {
       else
         removeOnclick(linkNode, onclick);
     }
-
+    ///XXX [object CPOW [object HTMLTableCellElement]] linkNode.parentNode
     let parent = linkNode.parentNode;
     if (parent.hasAttribute("onclick"))
       removeOnclick(parent, parent.getAttribute("onclick"));
@@ -364,14 +444,14 @@ Tabmix.contentAreaClick = {
     var GM_function;
     try {
       // Greasemonkey >= 0.9.10
-      Components.utils.import("resource://greasemonkey/util.js");
-      if ('function' == typeof GM_util.getEnabled) {
-        GM_function = GM_util.getEnabled;
+      Cu.import("resource://greasemonkey/util.js");
+      if ('function' == typeof this._window.GM_util.getEnabled) {
+        GM_function = this._window.GM_util.getEnabled;
       }
     } catch (e) {
       // Greasemonkey < 0.9.10
-      if ('function' == typeof GM_getEnabled) {
-        GM_function = GM_getEnabled;
+      if ('function' == typeof this._window.GM_getEnabled) {
+        GM_function = this._window.GM_getEnabled;
       }
     }
 
@@ -407,7 +487,7 @@ Tabmix.contentAreaClick = {
    */
   suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload() {
     // if we are in google search don't prevent new tab
-    if (/\w+\.google\.\D+\/search?/.test(gBrowser.currentURI.spec))
+    if (/\w+\.google\.\D+\/search?/.test(this._data.currentURL))
       return false;
 
     let {event, linkNode} = this._data;
@@ -419,7 +499,7 @@ Tabmix.contentAreaClick = {
         return true;
     }
 
-    if (!Tabmix.prefs.getBoolPref("enablefiletype"))
+    if (!TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
       return false;
 
     if (event.button != 0 || event.ctrlKey || event.metaKey)
@@ -449,7 +529,7 @@ Tabmix.contentAreaClick = {
     if (linkHref.indexOf("mailto:") == 0)
       return true;
 
-    var filetype = Tabmix.prefs.getCharPref("filetype");
+    var filetype = TabmixSvc.prefBranch.getCharPref("filetype");
     filetype = filetype.toLowerCase();
     filetype = filetype.split(" ");
     var linkHrefExt = "";
@@ -503,7 +583,7 @@ Tabmix.contentAreaClick = {
    */
   divertMiddleClick: function TMP_divertMiddleClick() {
     // middlecurrent - A Boolean value that controls how middle clicks are handled.
-    if (!Tabmix.prefs.getBoolPref("middlecurrent"))
+    if (!TabmixSvc.prefBranch.getBoolPref("middlecurrent"))
       return false;
 
     var isTabLocked = this.targetPref == 1 || this.currentTabLocked;
@@ -525,7 +605,7 @@ Tabmix.contentAreaClick = {
   targetIsFrame: function() {
     let {targetAttr} = this._data;
     if (targetAttr) {
-      let content = document.commandDispatcher.focusedWindow.top;
+      let content = this._browser.contentWindow;
       if (this.existsFrameName(content, targetAttr))
         return true;
     }
@@ -560,7 +640,7 @@ Tabmix.contentAreaClick = {
 
     let {event, targetAttr} = this._data;
     if (!targetAttr || event.ctrlKey || event.metaKey) return false;
-    if (!Tabmix.prefs.getBoolPref("linkTarget")) return false;
+    if (!TabmixSvc.prefBranch.getBoolPref("linkTarget")) return false;
 
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
     if (targetString.test(targetAttr.toLowerCase())) return false;
@@ -593,7 +673,7 @@ Tabmix.contentAreaClick = {
    *
    */
   openExSiteLink: function TMP_openExSiteLink() {
-    if (this.targetPref != 2 || Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
+    if (this.targetPref != 2 || this._window.Tabmix.isNewTabUrls(this._data.currentURL))
       return false;
 
     if (this.checkOnClick())
@@ -614,7 +694,7 @@ Tabmix.contentAreaClick = {
               false to load link in current tab
    */
   openTabfromLink: function TMP_openTabfromLink() {
-    if (Tabmix.isNewTabUrls(gBrowser.currentURI.spec))
+    if (this._window.Tabmix.isNewTabUrls(this._data.currentURL))
       return false;
 
     if (this.GoogleComLink())
@@ -637,7 +717,7 @@ Tabmix.contentAreaClick = {
       return null;
     else
       // when the links target is in the same page don't open new tab
-      return gBrowser.currentURI.spec.split("#")[0] != linkNode.toString().split("#")[0];
+      return this._data.currentURL.split("#")[0] != linkNode.toString().split("#")[0];
 
     return null;
   },
@@ -648,7 +728,7 @@ Tabmix.contentAreaClick = {
    * @returns true it is Google special link false for all other links
    */
   GoogleComLink: function TMP_GoogleComLink() {
-    var location = gBrowser.currentURI.spec;
+    var location = this._data.currentURL;
     var currentIsnGoogle = /\/\w+\.google\.\D+\//.test(location);
     if (!currentIsnGoogle)
       return false;
@@ -699,7 +779,7 @@ Tabmix.contentAreaClick = {
    *        and its frames for content with matching name and href
    */
   selectExistingTab: function TMP_selectExistingTab(href, targetFrame) {
-    if (Tabmix.prefs.getIntPref("opentabforLinks") != 0 ||
+    if (TabmixSvc.prefBranch.getIntPref("opentabforLinks") != 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
@@ -717,7 +797,7 @@ Tabmix.contentAreaClick = {
     function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.
-      if (Tabmix.isVersion(200) &&
+      if (TabmixSvc.version(200) &&
           PrivateBrowsingUtils.isWindowPrivate(window) !=
           PrivateBrowsingUtils.isWindowPrivate(aWindow)) {
         return false;
@@ -850,7 +930,7 @@ Tabmix.contentAreaClick = {
     var targetAttr = linkNode && linkNode.target;
     // If link has no target attribute, check if there is a <base> with a target attribute
     if (!targetAttr) {
-      let b = document.commandDispatcher.focusedWindow.document.getElementsByTagName("base");
+      let b = this._focusedWindow.document.getElementsByTagName("base");
       if (b.length > 0)
         targetAttr = b[0].getAttribute("target");
     }
@@ -864,10 +944,12 @@ Tabmix.contentAreaClick = {
       let code = aCode || "javascript:top.location.href=";
       try {
         let str = onclick.substr(code.length).replace(/;|'|"/g, "");
-        event.__href = makeURLAbsolute(linkNode.baseURI, str);
+        event.__href = this._window.makeURLAbsolute(linkNode.baseURI, str);
         return true;
-      } catch (ex) {Tabmix.log(ex)}
+      } catch (ex) {TabmixSvc.console.log(ex)}
     }
     return false;
   }
 }
+
+TabmixContentClick.init();
