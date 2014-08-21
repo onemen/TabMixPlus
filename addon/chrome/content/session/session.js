@@ -3094,8 +3094,7 @@ try{
               delete aTab.loadOnStartup;
             }
             else if (caller == "firstwindowopen" || // overwrite all tabs that are not from apps on first window
-                 gBrowser.isBlankTab(aTab) && (aTab.hasAttribute("tabmix_busy") || !aTab.hasAttribute("busy"))) {
-               aTab.removeAttribute("tabmix_busy");
+                 gBrowser.isBlankTab(aTab) && (!aTab.hasAttribute("inrestore") && !aTab.hasAttribute("busy"))) {
                this.resetTab(aTab);
                blankTabs.push(aTab);
             }
