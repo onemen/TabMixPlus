@@ -2619,7 +2619,7 @@ try{
          return;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return;
-      var bContent = aBrowser.contentWindow;
+      var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
       this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY);
    },
 
@@ -2701,7 +2701,7 @@ try{
       var sessionHistory = aBrowser.webNavigation.sessionHistory;
       var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
       var index = sessionHistory.index < 0 ? 0 : sessionHistory.index;
-      var bContent = aBrowser.contentWindow;
+      var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
       try {
          var curHistory = sessionHistory.getEntryAtIndex(index, false);
          curHistory.QueryInterface(Ci.nsISHEntry).setScrollPosition(bContent.scrollX, bContent.scrollY);

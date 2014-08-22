@@ -855,7 +855,7 @@ let ContentClickInternal = {
       let browsers = aWindow.gBrowser.browsers;
       for (let i = 0; i < browsers.length; i++) {
         let browser = browsers[i];
-        if (isCurrent(browser.contentWindow)) {
+        if (isCurrent(browser[TabmixSvc.contentWindowAsCPOW])) {
           gURLBar.handleRevert();
           // Focus the matching window & tab
           aWindow.focus();

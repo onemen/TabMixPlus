@@ -2002,8 +2002,8 @@ var TabmixProgressListener = {
           Tabmix.autoReload.onTabReloaded(tab, aBrowser);
 
         // disabled name for locked tab, so locked tab don't get reuse
-        if (tab.getAttribute("locked") && aBrowser.contentWindow.name)
-          aBrowser.contentWindow.name = "";
+        if (tab.getAttribute("locked") && aBrowser[TabmixSvc.contentWindowAsCPOW].name)
+          aBrowser[TabmixSvc.contentWindowAsCPOW].name = "";
       }
     }
   }
