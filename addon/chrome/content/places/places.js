@@ -482,8 +482,8 @@ var TMP_Places = {
       if (this.isUserRenameTab(tab, url))
         return;
       let bookMarkName = this.getTitleFromBookmark(url);
-      if (bookMarkName && browser.contentDocument.title != bookMarkName)
-        browser.contentDocument.title = bookMarkName;
+      if (bookMarkName && browser[TabmixSvc.contentDocumentAsCPOW].title != bookMarkName)
+        browser[TabmixSvc.contentDocumentAsCPOW].title = bookMarkName;
     }, this)
     this.startObserver();
   },

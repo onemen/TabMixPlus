@@ -1199,7 +1199,7 @@ var tablib = {
     gBrowser.copyTabUrl = function (aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      var URL = this.getBrowserForTab(aTab).contentDocument.location;
+      var URL = this.getBrowserForTab(aTab)[TabmixSvc.contentDocumentAsCPOW].location;
 
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
                    .getService(Components.interfaces.nsIClipboardHelper);
