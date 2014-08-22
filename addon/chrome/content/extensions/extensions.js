@@ -468,7 +468,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
        if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
        else
-         window.content.document.location.href = this.href;
+         window.gBrowser.selectedBrowser[TabmixSvc.contentDocumentAsCPOW].location.href = this.href;
      }
      else if (target == "window") {
        if (Tabmix.singleWindowMode)
