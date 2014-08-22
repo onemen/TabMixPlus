@@ -6,6 +6,9 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
@@ -22,6 +25,31 @@ this.TabmixContentClick = {
 
   onQuitApplication: function() {
     ContentClickInternal.onQuitApplication();
+  },
+
+  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+    return ContentClickInternal.getParamsForLink(event, linkNode, href, browser, focusedWindow);
+  },
+
+  contentLinkClick: function(event, browser, focusedWindow) {
+    ContentClickInternal.contentLinkClick(event, browser, focusedWindow);
+    ContentClickInternal.resetData();
+  },
+
+  isGreasemonkeyInstalled: function(window) {
+    ContentClickInternal.isGreasemonkeyInstalled(window);
+  },
+
+  isLinkToExternalDomain: function(curpage, url) {
+    return ContentClickInternal.isLinkToExternalDomain(curpage, url);
+  },
+
+  isUrlForDownload: function(url) {
+    return ContentClickInternal.isUrlForDownload(url);
+  },
+
+  selectExistingTab: function(href, targetAttr) {
+    ContentClickInternal.selectExistingTab(href, targetAttr);
   }
 }
 Object.freeze(TabmixContentClick);
@@ -33,7 +61,7 @@ let ContentClickInternal = {
   _initialized: false,
 
   init: function() {
-    if (this._initialized)
+    if (!TabmixSvc.version(320) || this._initialized)
       return;
     this._initialized = true;
 
@@ -49,6 +77,9 @@ let ContentClickInternal = {
   onQuitApplication: function () {
     if (this._timer)
       this._timer.clear();
+
+    if (!this._initialized)
+      return;
 
     this.functions.forEach(function(aFn) {
       ContentClick[aFn] = ContentClick["tabmix_" + aFn];
@@ -72,7 +103,7 @@ let ContentClickInternal = {
       '    var {where, targetAttr, suppressTabsOnFileDownload} = data;\n' +
       '    if (where == "default" && targetAttr) {\n' +
       '      window.setTimeout(function(){\n' +
-      '        window.Tabmix.contentAreaClick.selectExistingTab(json.href, targetAttr);\n' +
+      '        window.Tabmix.ContentClick.selectExistingTab(json.href, targetAttr);\n' +
       '      },300);\n' +
       '    }\n'
     )._replace(
@@ -304,7 +335,15 @@ let ContentClickInternal = {
    *        handle left-clicks on links when preference is to open new tabs from links
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
-  contentLinkClick: function TMP_contentLinkClick(aEvent) {
+  contentLinkClick: function TMP_contentLinkClick(aEvent, aBrowser, aFocusedWindow) {
+    aEvent.tabmix_isRemote = aBrowser.getAttribute("remote") == "true";
+    if (aEvent.tabmix_isRemote)
+      return;
+
+    this._browser = aBrowser;
+    this._window = this._browser.ownerDocument.defaultView;
+    this._focusedWindow = aFocusedWindow;
+
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return;
 
@@ -442,32 +481,25 @@ let ContentClickInternal = {
   /**
    * @brief hock the proper Greasemonkey function into Tabmix.isGMEnabled
    */
-  isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled() {
+  isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled(window) {
     var GM_function;
     try {
       // Greasemonkey >= 0.9.10
       Cu.import("resource://greasemonkey/util.js");
-      if ('function' == typeof this._window.GM_util.getEnabled) {
-        GM_function = this._window.GM_util.getEnabled;
+      if ('function' == typeof window.GM_util.getEnabled) {
+        GM_function = window.GM_util.getEnabled;
       }
     } catch (e) {
       // Greasemonkey < 0.9.10
-      if ('function' == typeof this._window.GM_getEnabled) {
-        GM_function = this._window.GM_getEnabled;
+      if ('function' == typeof window.GM_getEnabled) {
+        GM_function = window.GM_getEnabled;
       }
     }
 
     if (typeof GM_function !=  "function")
       return;
 
-    this.isGMEnabled = GM_function;
-    this.isGreasemonkeyScript = function TMP_isGreasemonkeyScript(href) {
-      if (this.isGMEnabled()) {
-        if (href && href.match(/\.user\.js(\?|$)/i))
-          return true;
-      }
-      return false;
-    }
+    this._GM_function.set(window, GM_function);
   },
 
   /**
@@ -476,8 +508,21 @@ let ContentClickInternal = {
    * @returns             true if the link is a script.
    *
    */
-  isGreasemonkeyScript: function (href) { return false; },
-  isGMEnabled: function () false,
+  isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
+    if (this.isGMEnabled()) {
+      if (href && href.match(/\.user\.js(\?|$)/i))
+        return true;
+    }
+    return false;
+  },
+
+  _GM_function: new WeakMap(),
+
+  isGMEnabled: function() {
+    if (this._GM_function.has(this._window))
+      return this._GM_function.get(this._window)();
+    return false;
+  },
 
   /**
    * @brief Suppress tabs that may be created by downloading a file.
@@ -607,7 +652,7 @@ let ContentClickInternal = {
   targetIsFrame: function() {
     let {targetAttr} = this._data;
     if (targetAttr) {
-      let content = this._browser.contentWindow;
+      let content = this._focusedWindow.top;
       if (this.existsFrameName(content, targetAttr))
         return true;
     }
@@ -796,6 +841,7 @@ let ContentClickInternal = {
       return false;
     }
 
+    let window = this._window;
     function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.

@@ -417,7 +417,7 @@ var TMP_extensionsCompatibility = {
     // this need more testing with other themes
 
     // check if Greasemonkey installed
-    Tabmix.contentAreaClick.isGreasemonkeyInstalled();
+    Tabmix.ContentClick.isGreasemonkeyInstalled(window);
 
     if (typeof MouseControl == "object" && MouseControl.newTab) {
       Tabmix.changeCode(MouseControl, "MouseControl.newTab")._replace(

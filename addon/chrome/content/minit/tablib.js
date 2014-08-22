@@ -1759,7 +1759,7 @@ var tablib = {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ? (aEvent.dataTransfer.dropEffect == "copy") : (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
-                    !gBrowser.isBlankNotBusyTab(tab) && !Tabmix.contentAreaClick.isUrlForDownload(aUri)) {
+                    !gBrowser.isBlankNotBusyTab(tab) && !Tabmix.ContentClick.isUrlForDownload(aUri)) {
         where = "tab";
       }
       else

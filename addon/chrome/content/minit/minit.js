@@ -178,7 +178,7 @@ var TMP_tabDNDObserver = {
               /^\s*(javascript|data):/.test(url))
             url = null;
 
-          var disAllowDrop = url ? !Tabmix.contentAreaClick.isUrlForDownload(url) : true;
+          var disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch (ex) { Tabmix.assert(ex);}
 
         if (disAllowDrop)
@@ -372,7 +372,7 @@ var TMP_tabDNDObserver = {
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      if (left_right > -1 && !Tabmix.contentAreaClick.isUrlForDownload(url)) {
+      if (left_right > -1 && !Tabmix.ContentClick.isUrlForDownload(url)) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {inBackground: bgLoad, allowThirdPartyFixup: true});
         gBrowser.moveTabTo(newTab, newIndex + left_right);
