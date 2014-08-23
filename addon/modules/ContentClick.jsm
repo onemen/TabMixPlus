@@ -105,6 +105,8 @@ let ContentClickInternal = {
     let [where, suppressTabsOnFileDownload] =
         this.whereToOpen(event, node, href, targetAttr);
 
+    // for debug
+    where = where.split("@")[0];
     if (remote)
       where = where.split(".")[0];
     if (where == "current")
@@ -198,13 +200,13 @@ let ContentClickInternal = {
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
         if (SubmitToTab.contentAreaClick(event) == false) {
-          return ["default"];
+          return ["default@1"];
         }
       }
     }
 
     if (!linkNode)
-      return ["default"];
+      return ["default@2"];
 
     this.getPref();
     this.getData(event, href, linkNode, targetAttr);
@@ -213,15 +215,15 @@ let ContentClickInternal = {
      * prevents tab form opening when clicking Greasemonkey script
      */
     if (this.isGreasemonkeyScript(href))
-      return ["default"];
+      return ["default@3"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
     if (this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
-      return ["default"];
+      return ["default@4"];
 
     if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
         href.indexOf("mailto:") > -1) {
-      return ["default"];
+      return ["default@5"];
     }
 
     /*
@@ -234,17 +236,17 @@ let ContentClickInternal = {
         let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
         let isHttps = /^https/.test(href);
         if (isGmail || isHttps)
-           return ["default", true];
-        return ["current", true];
+           return ["default@6", true];
+        return ["current@7", true];
     }
 
     if (!/^(http|about)/.test(linkNode.protocol))
-      return ["default"];
+      return ["default@8"];
 
     // check this after we check for suppressTabsOnFileDownload
     // for the case the link have a matche in our list
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
-      return ["current"];
+      return ["current@9"];
 
     // don't mess with links that have onclick inside iFrame
     ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
@@ -255,15 +257,15 @@ let ContentClickInternal = {
      * are true. See the function comment for more details.
      */
     if (this.divertMiddleClick()) {
-      return [onClickInFrame ? "current.frame" : "current"];
+      return [onClickInFrame ? "current.frame@10" : "current@10"];
     }
 
     if (onClickInFrame)
-      return ["default"];
+      return ["default@11"];
 
     // catch other middle & right click
     if (event.button != 0)
-      return ["default"];
+      return ["default@12"];
 
     // the rest of the code if for left-click only
 
@@ -272,29 +274,29 @@ let ContentClickInternal = {
      * in the current page
      */
     if (this.targetIsFrame())
-      return ["default"];
+      return ["default@13"];
 
     /*
      * open targeted links in the current tab only if certain conditions are met.
      * See the function comment for more details.
      */
     if (this.divertTargetedLink())
-      return ["current"];
+      return ["current@14"];
 
     /*
      * open links to other sites in a tab only if certain conditions are met. See the
      * function comment for more details.
      */
     if (this.openExSiteLink())
-      return [TMP_tabshifted(event)];
+      return [TMP_tabshifted(event) + "@15"];
 
     if (this.currentTabLocked || this.targetPref == 1) { // tab is locked
       let openNewTab = this.openTabfromLink();
       if (openNewTab != null)
-        return [openNewTab ? TMP_tabshifted(event) : "current"];
+        return [(openNewTab ? TMP_tabshifted(event) : "current") + "@16"];
     }
 
-    return ["default"];
+    return ["default@17"];
   },
 
   /**
