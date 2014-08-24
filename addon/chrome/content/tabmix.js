@@ -370,6 +370,10 @@ var TMP_eventListener = {
         'let verticalMargins = $&',
         {check: Tabmix._debugMode && Tabmix.isVersion(280)}
       )._replace(
+        'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
+        'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
+        {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
+      )._replace(
         /(\})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         'if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)\

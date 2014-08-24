@@ -363,15 +363,15 @@ var TabmixTabbar = {
     let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
     let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
-    if (TabmixSvc.isMac) {
-      document.getElementById("TabsToolbar").style.setProperty("height",newTabbarHeight + "px", "important");
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    if (TabmixSvc.isMac && !Tabmix.isVersion(280)) {
+      tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
     }
     // override fixed height set by theme to .tabbrowser-tabs class
     if (tabBar.boxObject.height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
       tabBar.style.setProperty("max-height",newTabbarHeight + "px", "important");
       tabBar.style.setProperty("height",newTabbarHeight + "px", "important");
     }
-    let tabsToolbar = document.getElementById("TabsToolbar");
     if (tabsToolbar.boxObject.height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
       tabsToolbar.style.setProperty("max-height",newTabbarHeight + "px", "important");
       tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
