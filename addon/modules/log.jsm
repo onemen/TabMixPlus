@@ -255,8 +255,8 @@ options = {
   },
 
   assert: function TMP_console_assert(aError, aMsg) {
-    if (typeof aError.stack != "string") {
-      this.trace((aMsg || "") + "\n" + aError, 2);
+    if (!aError || typeof aError.stack != "string") {
+      this.trace((aMsg || "") + "\n" + (aError || ""), 2);
       return;
     }
 
