@@ -662,8 +662,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
       /(function[^\(]*\([^\)]+)(\))/,
       '$1, TSTOpenGroupBookmarkBehavior$2'
     )._replace(
-      '{',
-      '{if (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
+      /"use strict";|{/,
+      '$&\nif (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
     )._replace(
       'index = prevTab._tPos + 1;',
       '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
@@ -704,5 +704,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
+
+    Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
+      'var newTab = gBrowser.addTab',
+      'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
+    ).toCode(true);
   }
 }
