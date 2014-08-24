@@ -2749,10 +2749,12 @@ try{
    saveTabHistory: function(sessionHistory) {
       var historyStart = this.enableSaveHistory ? 0 : sessionHistory.index;
       var historyEnd = this.enableSaveHistory ? sessionHistory.count : sessionHistory.index+1;
-      var j, historyEntry, history = [];
-      for (j = historyStart; j < historyEnd; j++) {
+      var history = [];
+      sessionHistory.QueryInterface(Ci.nsISHistoryInternal);
+      for (let j = historyStart; j < historyEnd; j++) {
          try {
-            historyEntry = sessionHistory.getEntryAtIndex(j, false).QueryInterface(Ci.nsISHEntry);
+            let historyEntry = sessionHistory.getEntryAtIndex(j, false);
+            historyEntry.QueryInterface(Ci.nsISHEntry);
             history.push(historyEntry.title);
             history.push(historyEntry.URI.spec);
             history.push(this.getScrollPosHs(historyEntry)); // not in use yet
@@ -2770,10 +2772,13 @@ try{
 
    getScrollPosHs: function(historyEntry) {
       if (this.prefBranch.getBoolPref("save.scrollposition")) {
-         var x={}, y={};
-         historyEntry.getScrollPosition(x, y);
-         return x.value + "," + y.value;
-      } return "0,0";
+        try {
+          var x={}, y={};
+          historyEntry.getScrollPosition(x, y);
+          return x.value + "," + y.value;
+        } catch (ex) {}
+      }
+      return "0,0";
    },
 
    get canRestoreLastSession() {
