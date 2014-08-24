@@ -73,7 +73,7 @@
 <!ENTITY selectDivertedTab.label "Umgeleitete Fenster">
 <!ENTITY selectTabFromExternal.label "Andere Anwendungen">
 <!ENTITY selectTabCommand.label "Neuen Tab">
-<!ENTITY contextMenuSearch.label "Kontextmenü Suche für">
+<!ENTITY contextMenuSearch.label "Kontextmenü-Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
 <!ENTITY inversefocus1.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
@@ -132,7 +132,7 @@
 <!ENTITY tabBarSpace.label "Abstände auf beiden Seiten der Tab-Leiste">
 <!ENTITY tabBarSpace.tooltip "Für Klicks sowie Ziehen &amp; Ablegen auf die Tab-Leiste">
 <!ENTITY tabbar.label "Die Tab-Leiste ausblenden, wenn nur ein Tab offen ist">
-<!ENTITY moveTabOnDragging.label "Tab beim Verschieben, direkt bewegen.">
+<!ENTITY moveTabOnDragging.label "Tab beim Verschieben direkt bewegen">
 <!ENTITY dropIndicator.label "Platzierungsanzeige beim Verschieben von Tabs">
 <!ENTITY dropIndicator-native.label "Firefox-Stil">
 <!ENTITY dropIndicator-builtin.label "TMP-Stil">
@@ -195,7 +195,7 @@
 <!ENTITY removeEntries.label "Mit Mittelklick Einträge aus den Listenmenüs entfernen">
 <!ENTITY lockTabSizingOnClose.label "Beim Schließen von Tabs die Größe anderer Tabs nicht verändern, bis der Mauszeiger die Tableiste verlassen hat.">
 <!ENTITY removeEntries.tooltip "Betrifft die Listen für geschlossene Tabs und Fenster sowie gesicherte Sitzungen">
-<!ENTITY tabbarscrolling.caption "Beim scrollen durch die Tableiste">
+<!ENTITY tabbarscrolling.caption "Beim Scrollen durch die Tableiste">
 <!ENTITY tabbarscrolling.holdShift.label "Umschalttaste gedrückt halten, um zwischen den einzelnen Optionen zu wechseln">
 <!ENTITY tabbarscrolling.selectTab.label "aktiven Tab zu wechseln">
 <!ENTITY tabbarscrolling.scrollAllTabs.label "alle Tabs scrollen">

@@ -6,7 +6,7 @@
 <!ENTITY closedwindowsbtn.label "Закриті вікна">
 <!ENTITY closedwindowsbtn.tooltip "Показати список закритих вікон">
 <!ENTITY page.header.title "Налаштування Tab Mix Plus">
-<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY options.main.sessionbutton.label "Менеджер Сесій Tab Mix Plus">
 <!ENTITY session.Tools "Менеджер сесій">
 <!ENTITY closedWin.label "Список закритих вікон">
 <!ENTITY duplicateTabMenu.label "Клонувати вкладку">
@@ -29,7 +29,7 @@
 <!ENTITY reloadright.accesskey "I">
 <!ENTITY autoReloadTab.label "Оновляти вкладки кожні">
 <!ENTITY autoReloadTab.accesskey "V">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.label "Оновлювати Цей сайт кожні">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Після цієї вкладки">
 <!ENTITY bookmarktab.label "Закладка для поточної вкладки">
@@ -39,9 +39,9 @@
 <!ENTITY closeall.accesskey "A">
 <!ENTITY closeSimilarTab.label "Закрити схожі вкладки">
 <!ENTITY closeSimilarTab.accesskey "S">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Закрити всі вкладки Ліворуч">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
+<!ENTITY closeTabstoRight.label "Закрити всі вкладки Праворуч">
 <!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Дозволи">
 <!ENTITY docShellMenu.accesskey "P">

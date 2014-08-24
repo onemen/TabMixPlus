@@ -98,7 +98,7 @@
 <!ENTITY undoClose.label "[閉じたタブを復元]の機能を有効にする">
 <!ENTITY undoCloseCache.label "記憶するタブの数:">
 <!ENTITY undoClosepos.label "タブを元の位置に戻す">
-<!ENTITY menuonlybutton.label "ツールバーボタンをリスト表示のみにする">
+<!ENTITY menuonlybutton.label "ツールバーボタンにリストだけ表示させる">
 <!ENTITY ctrltab.label "Ctrl + Tab で最近表示した順にフォーカスを移す">
 <!ENTITY cmdtab.label "Cmd + Tab で最近表示した順にフォーカスを移す">
 <!ENTITY ctrltab.tabPreviews "タブのプレビューを表示する">
@@ -162,7 +162,7 @@
 <!ENTITY extraIcons.autoreload "自動再読み込み">
 <!ENTITY extraIcons.hideonpinned "ピン留めしているタブでは隠す">
 <!ENTITY progressMeter.label "プログレスメーター（タブ）">
-<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（ドロップダウンリストで表示条件を指定）">
+<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（下のドロップダウンで表示条件を指定）">
 <!ENTITY showTabX.left "左端に表示">
 <!ENTITY showTabX.rtl "右端に表示">
 <!ENTITY milliseconds.label "ミリ秒">

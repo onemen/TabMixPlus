@@ -1,18 +1,18 @@
 <!ENTITY styles.label "Налаштування стилів">
 <!ENTITY currentTab.label "Поточна вкладка">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unloadedTabs.label "Незавантажені вкладки">
 <!ENTITY unreadTab.label "Непрочитані вкладки">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
-<!ENTITY otherTabs.label "Other Tabs">
+<!ENTITY hideRGB.label "Приховати RGB">
+<!ENTITY showRGB.label "Показати RGB">
+<!ENTITY unreadAfterReload.label "позначити вкладки непрочитаними після перезавантаження">
+<!ENTITY squaredTabs.label "Застосувати колір фону для квадратних вкладок">
+<!ENTITY otherTabs.label "Інші вкладки">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Напівжирний">
 <!ENTITY underline.label "Підкреслений">
 <!ENTITY textcolor.label "Колір тексту">
 <!ENTITY bgColor.label "Колір тла">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
-<!ENTITY useThis.label "use this style for">
-<!ENTITY opacity.label "opacity">
+<!ENTITY bgTopColor.label "верх">
+<!ENTITY bgBottomColor.label "низ">
+<!ENTITY useThis.label "використовувати цей стиль для">
+<!ENTITY opacity.label "непрозорість">

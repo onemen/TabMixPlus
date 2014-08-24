@@ -1,14 +1,14 @@
-<!ENTITY shortcuts.label "Shortcuts">
-<!ENTITY shortcuts.edit "Edit keyboard shortcuts">
-<!ENTITY shortcuts.showAll "Show all">
-<!ENTITY shortcuts.hideUnused "Hide unused">
-<!ENTITY shortcuts.warning "Some of your shortcuts are in use by other commands">
-<!ENTITY shortcuts.showDetails "Show details">
-<!ENTITY shortcuts.hideDetails "Hide details">
-<!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
-<!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
-<!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">
-<!ENTITY shortcuts.placeholder "Type Modifiers &amp; Key">
-<!ENTITY shortcuts.reset "Reset">
-<!ENTITY shortcuts.clear "Clear">
-<!ENTITY shortcuts.inuse "This shortcut is already in use by">
+<!ENTITY shortcuts.label "Скорочення">
+<!ENTITY shortcuts.edit "Змінити клавіатурні скорочення">
+<!ENTITY shortcuts.showAll "Показати все">
+<!ENTITY shortcuts.hideUnused "Приховати невикористовувані">
+<!ENTITY shortcuts.warning "Деякі з ваших скорочень використовуються іншими командами">
+<!ENTITY shortcuts.showDetails "Показати подробиці">
+<!ENTITY shortcuts.hideDetails "Приховати подробиці">
+<!ENTITY shortcuts.slideshow "Перемкнути показ слайдів-вкладок">
+<!ENTITY shortcuts.toggleFLST "Перемкнути фокус після закриття поточної вкладки">
+<!ENTITY shortcuts.toggleFLST.tooltip "перемикати фокус між останньою обраною вкладкою або праворуч">
+<!ENTITY shortcuts.placeholder "Введіть Змінники та Ключ">
+<!ENTITY shortcuts.reset "Скинути">
+<!ENTITY shortcuts.clear "Очистити">
+<!ENTITY shortcuts.inuse "Це скорочення вже використовується">

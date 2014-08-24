@@ -189,9 +189,9 @@
 <!ENTITY mouseGesture.label "Pohyby myší">
 <!ENTITY mouseClick.label "Tlačítka myši">
 <!ENTITY mouseHoverSelect.labelBegin "Zobrazit panel při přejetí myši přes něj">
-<!ENTITY tabFlip.label "Přepnout na naposledy používaný panel klepnutím na současný">
-<!ENTITY tabFlip.delay "Se spožděním">
-<!ENTITY clickFocus.label "Klepnutí myší okamžitě vybere panel">
+<!ENTITY tabFlip.label "Přepnout na naposledy používaný panel kliknutím na současný">
+<!ENTITY tabFlip.delay "Se zpožděním">
+<!ENTITY clickFocus.label "Kliknutí myší okamžitě vybere panel">
 <!ENTITY removeEntries.label "Pomocí prostředního tlačítka odebrat položky seznamu v menu Tab Mix Plus">
 <!ENTITY lockTabSizingOnClose.label "Neměnit velikost ostatních panelů při zavírání panelu, dokud je kurzor v oblasti panelu nástrojů.">
 <!ENTITY removeEntries.tooltip "Včetně zavřených panelů, oken a uložených relací">
@@ -200,16 +200,16 @@
 <!ENTITY tabbarscrolling.selectTab.label "Změnit vybraný panel">
 <!ENTITY tabbarscrolling.scrollAllTabs.label "Přepínat mezi všemi panely">
 <!ENTITY tabbarscrolling.inverse.label "Opačný směr přepínání">
-<!ENTITY double.label "Dvojklepnutí">
+<!ENTITY double.label "Dvojkliknutí">
 <!ENTITY middle.label "Prostřední tlačítko">
-<!ENTITY ctrl.label "Ctrl+klepnutí">
-<!ENTITY cmd.label "Cmd+klepnutí">
-<!ENTITY shift.label "Shift+klepnutí">
-<!ENTITY alt.label "Alt+klepnutí">
+<!ENTITY ctrl.label "Ctrl+kliknutí">
+<!ENTITY cmd.label "Cmd+kliknutí">
+<!ENTITY shift.label "Shift+kliknutí">
+<!ENTITY alt.label "Alt+kliknutí">
 <!ENTITY ontab.label "na panel:">
 <!ENTITY ontabbar.label "na lištu panelů:">
 <!ENTITY clicktab.label "Vyberte příkaz, který se má provést při poklepání na panel nebo lištu panelů">
-<!ENTITY ontabbar.dblClick.label "Při dvojím poklikání na lištu s panely nezměnit velikost okna.">
+<!ENTITY ontabbar.dblClick.label "Při dvojím poklepání na lištu s panely nezměnit velikost okna.">
 <!ENTITY ontabbar.click.label "Při kliknutí na lištu s panely okno nepřesunout.">
 <!ENTITY clicktab.default "Výchozí nastavení Firefoxu nebo jiné rozšíření">
 <!ENTITY clicktab.nothing "Bez akce">
@@ -262,7 +262,7 @@
 <!ENTITY ss.enable.label "Použít zabudovanou obnovu relací">
 <!ENTITY ss.enable.tooltip "Odznačením pro použití se Správcem relací">
 <!ENTITY ss.advanced_setting "Rozšířené nastavení">
-<!ENTITY ss.advanced_setting.warning "Neměňte, pokud si nejste jisti, co děláte">
+<!ENTITY ss.advanced_setting.warning "Neměňte, pokud si nejste jisti, co děláte.">
 <!ENTITY ss.interval "Minimální časový interval mezi dvěma stavy uložení">
 <!ENTITY ss.interval.seconds "(v milisekundách)">
 <!ENTITY ss.privacy_level "Uložit citlivá data (formulářová data, POSTDATA a cookies) pro">
