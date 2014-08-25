@@ -45,7 +45,9 @@ this.TabmixContentClick = {
   },
 
   isUrlForDownload: function(url) {
-    return ContentClickInternal.isUrlForDownload(url);
+    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
+      return ContentClickInternal.isUrlForDownload(url);
+    return false;
   },
 
   selectExistingTab: function(href, targetAttr) {
