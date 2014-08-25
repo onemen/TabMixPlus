@@ -67,18 +67,19 @@ var tablib = {
       [obj, fnName] = [gBrowser, "addTab"];
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{','{ \
-       var dontMove;'
+      '{','{\n\
+       if (!TabmixSvc.sm.promiseInitialized && !this.tabs[0].loadOnStartup && isRestoringTab && !Tabmix.isWindowAfterSessionRestore)\n\
+         return this.tabs[0];\n', {check: Tabmix.isVersion(250) && TabmixSessionManager.doRestore}
     )._replace(
       '{','{\n\
-       if (!TabmixSvc.sm.promiseInitialized && !this.tabs[0].loadOnStartup && Tabmix.callerName() == "ssi_restoreWindow" && !Tabmix.isWindowAfterSessionRestore)\n\
-         return this.tabs[0];\n', {check: Tabmix.isVersion(250) && TabmixSessionManager.doRestore}
+      let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
        props.forEach(function(prop){if (typeof params[prop] == "undefined") params[prop] = null;}); \
-       dontMove = params.dontMove || null;'
+       dontMove = params.dontMove || null;\
+       isPending = params.isPending || null;'
     )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);',
@@ -87,6 +88,8 @@ var tablib = {
       't.className = "tabbrowser-tab";',
       '$&\
        t.setAttribute("last-tab", "true"); \
+       if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
+         t.setAttribute("tabmix_pending", "true"); \
        var lastChild = this.tabContainer.lastChild; \
        if (lastChild) lastChild.removeAttribute("last-tab"); \
        if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'

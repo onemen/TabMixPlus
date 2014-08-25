@@ -371,7 +371,8 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (aTab.selected)
     style = "current";
   // if pending tab is blank we don't style it as unload or unread
-  else if (Tabmix.prefs.getBoolPref("unloadedTab") && aTab.hasAttribute("pending"))
+  else if (Tabmix.prefs.getBoolPref("unloadedTab") &&
+      (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending")))
     style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   else if (Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab))

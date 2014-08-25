@@ -1944,6 +1944,8 @@ var TabmixProgressListener = {
           this.mTabBrowser.setTabTitle(tab);
         }
         else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING)) {
+          if (tab.hasAttribute("tabmix_pending"))
+            tab.removeAttribute("tabmix_pending");
           Tabmix.setTabStyle(tab);
           // this code run after setTabTitleLoading, so we must set tab width on setTabTitleLoading
           // at this stage only unhide the button if needed.

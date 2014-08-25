@@ -859,6 +859,8 @@ var TMP_eventListener = {
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
 
+    if (tab.hasAttribute("tabmix_pending"))
+      tab.removeAttribute("tabmix_pending");
     let lastSelected = document.getElementsByAttribute("tabmix_tabStyle",
       Tabmix.tabStyles["current"] || "current")[0];
     Tabmix.setTabStyle(lastSelected);

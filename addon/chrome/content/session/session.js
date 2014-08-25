@@ -2976,8 +2976,9 @@ try{
       var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;
       if (lastSelectedIndex < 0 || lastSelectedIndex >= newtabsCount) lastSelectedIndex = 0;
 
+      let pending = Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")
       function TMP_addTab() {
-        let newTab = gBrowser.addTab("about:blank", {skipAnimation: true, dontMove: true});
+        let newTab = gBrowser.addTab("about:blank", {skipAnimation: true, dontMove: true, isPending: pending});
         newTab.setAttribute("tabmix_hide", "true");
         // flag. dont save tab that are in restore phase
         newTab.setAttribute("inrestore", "true");
@@ -3246,6 +3247,9 @@ try{
         if (aTab.hasAttribute(attrib))
           aTab.removeAttribute(attrib);
       });
+      if (Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand"))
+        aTab.setAttribute("tabmix_pending", "true");
+      Tabmix.setTabStyle(aTab);
 
       if (aTab.pinned)
         gBrowser.unpinTab(aTab);
