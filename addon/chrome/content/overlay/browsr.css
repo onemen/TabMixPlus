@@ -240,11 +240,6 @@ so display: none !important; does not hide the button */
   padding-right: 0 !important;
 }
 
-/* hide new tab in session manager */
-.tabbrowser-tab[tabmix_hide] {
-  display: none;
-}
-
 /***  For progressmeter on tab Firefox 4.0+  ***/
 .tab-progress {
   margin: 0;

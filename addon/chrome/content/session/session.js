@@ -2979,7 +2979,6 @@ try{
       let pending = Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")
       function TMP_addTab() {
         let newTab = gBrowser.addTab("about:blank", {skipAnimation: true, dontMove: true, isPending: pending});
-        newTab.setAttribute("tabmix_hide", "true");
         // flag. dont save tab that are in restore phase
         newTab.setAttribute("inrestore", "true");
 
@@ -3120,7 +3119,6 @@ try{
       for (let t = 0; t < tabsData.length ; t++) {
         let data = tabsData[t];
         let tab = gBrowser.tabs[newIndex + t];
-        tab.removeAttribute("tabmix_hide");
         tabs.push(tab);
         // flag. dont save tab that are in restore phase
         if (!tab.hasAttribute("inrestore"))
