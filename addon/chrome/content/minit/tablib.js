@@ -444,22 +444,28 @@ var tablib = {
     // we prevent sessionStore.duplicateTab from moving the tab
     Tabmix.changeCode(window, "duplicateTabIn")._replace(
       'switch (where)',
-      '  if (where == "window") {' +
-      '    if (Tabmix.getSingleWindowMode())' +
-      '      where = "tab";' +
-      '  }' +
-      '  else if (Tabmix.prefs.getBoolPref("openDuplicateNext")) {' +
-      '    let pos = newTab._tPos > aTab._tPos ? 1 : 0;' +
-      '    gBrowser.moveTabTo(newTab, aTab._tPos + pos);' +
-      '  }' +
+      '  if (where == "window") {\n' +
+      '    if (Tabmix.getSingleWindowMode())\n' +
+      '      where = "tab";\n' +
+      '  }\n' +
+      '  else {\n' +
+      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex","BrowserForward","BrowserBack") ?\n' +
+      '               "openTabNext" : "openDuplicateNext";\n' +
+      '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
+      '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
+      '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
+      '    }\n' +
+      '  }\n' +
       '  $&'
     )._replace(
       'gBrowser.selectedTab = newTab;',
-      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) $&'
+      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
+      '        $&'
     )._replace(
       'case "tabshifted":',
-      '$&\
-       if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;'
+      '$&\n' +
+      '      if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
+      '        gBrowser.selectedTab = newTab;'
     ).toCode();
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
