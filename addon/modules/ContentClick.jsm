@@ -438,6 +438,12 @@ let ContentClickInternal = {
         if (!blocked && /youtube.com/.test(currentHref) &&
            (!this.isGMEnabled() || this._window.decodeURI(href).indexOf("return false;") == -1))
           blocked = true;
+        else if (!blocked) {
+          // make sure external links in developer.mozilla.org open new tab
+          let host = this._browser.currentURI.host;
+          blocked = host == "developer.mozilla.org" && linkNode.host != host &&
+                   linkNode.classList.contains("external");
+        }
       } catch (ex) {blocked = false;}
       if (!blocked)
         return;
