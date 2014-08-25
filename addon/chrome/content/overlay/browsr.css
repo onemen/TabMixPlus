@@ -336,4 +336,5 @@ so display: none !important; does not hide the button */
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
   margin-bottom: 0px;
+  visibility: collapse;
 }

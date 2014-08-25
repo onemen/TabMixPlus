@@ -377,6 +377,7 @@
               TabmixTabbar._failedToEnterVerticalMode = true;
             if (blockUnderflow && this.orient == "vertical")
               this.blockUnderflow = true;
+            this.updateOverflow(tabBar.overflow);
           }
         ]]></body>
       </method>
@@ -442,6 +443,32 @@
         ]]></body>
       </method>
 
+      <method name="updateOverflow">
+        <parameter name="overflow"/>
+        <body><![CDATA[
+          // we get here after we update overflow from updateVerticalTabStrip
+          if (this.orient == "horizontal")
+            return;
+
+          Tabmix.setItem(this, "notoverflowing", !overflow || null);
+
+          try {
+            // See bug 341047 and comments in overflow handler as to why
+            // try..catch is needed here
+            this._updateScrollButtonsDisabledState();
+
+            if (!overflow) {
+              let childNodes = this._getScrollableElements();
+              if (childNodes && childNodes.length)
+                this.ensureElementIsVisible(childNodes[0], false);
+            }
+          }
+          catch(e) {
+            Tabmix.setItem(this, "notoverflowing", overflow || null);
+          }
+        ]]></body>
+      </method>
+
     </implementation>
 
     <handlers>
@@ -474,6 +501,8 @@
         }
         else
           tabs.overflow = false;
+
+        this.updateOverflow(tabs.overflow);
 
         if (tabs._lastTabClosedByMouse)
           tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
@@ -522,6 +551,8 @@
         }
         else
           tabs.overflow = true;
+
+        this.updateOverflow(tabs.overflow);
 
         tabs._positionPinnedTabs();
         if (Tabmix.isVersion(190))
