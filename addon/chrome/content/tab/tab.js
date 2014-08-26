@@ -1362,6 +1362,27 @@ var gTMPprefObserver = {
     function $(id) document.getElementById(id);
     let newTabButton = $("new-tab-button");
     if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
+      // update our attribute
+      let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
+      this.setShowNewTabButtonAttr(showNewTabButton, aPosition);
+      Tabmix.sideNewTabButton = newTabButton;
+
+      // move button within TabsToolbar
+      if (Tabmix.isVersion(290)) {
+        let buttonPosition = CustomizableUI.getPlacementOfWidget("new-tab-button").position;
+        let tabsPosition = CustomizableUI.getPlacementOfWidget("tabbrowser-tabs").position;
+        let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
+                          (aPosition == 2 && buttonPosition != tabsPosition + 1 ||
+                           buttonPosition < tabsPosition)
+        if (changePosition) {
+          let newPosition = aPosition == 0 ? 0 : 1;
+          if (newPosition > buttonPosition)
+            newPosition++;
+          CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
+        }
+        return;
+      }
+
       let sideChanged, tabsToolbar = $("TabsToolbar");
       let toolBar = Array.slice(tabsToolbar.childNodes);
       let buttonIndex = toolBar.indexOf(newTabButton);
@@ -1380,7 +1401,6 @@ var gTMPprefObserver = {
           let before = gBrowser.tabContainer.nextSibling;
           if ($("tabmixScrollBox")) {
             before = before.nextSibling;
-            tabsIndex++;
           }
           newTabButton.parentNode.insertBefore(newTabButton, before);
           sideChanged = true;
@@ -1388,14 +1408,12 @@ var gTMPprefObserver = {
       }
       if (sideChanged) {
         let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
+        cSet = cSet.replace("new-tab-button", "").replace(/^,/, "").replace(",,", ",");
         cSet = cSet.split(",");
-        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0] || "new-tab-button");
+        cSet.splice(tabsIndex, 0, "new-tab-button");
         tabsToolbar.setAttribute("currentset", cSet.join(","));
         document.persist("TabsToolbar", "currentset");
       }
-      let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
-      this.setShowNewTabButtonAttr(showNewTabButton, aPosition);
-      Tabmix.sideNewTabButton = newTabButton;
     }
     else {
       this.setShowNewTabButtonAttr(false);

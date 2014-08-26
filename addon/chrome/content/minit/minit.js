@@ -946,7 +946,7 @@ Tabmix.navToolbox = {
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",");
       tabsToolbar.setAttribute("currentset", cSet);
       document.persist("TabsToolbar", "currentset");
-      if (Tabmix.isVersion(280))
+      if (Tabmix.isVersion(290))
         CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
     }
   },
