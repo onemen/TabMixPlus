@@ -1373,7 +1373,10 @@ var gTMPprefObserver = {
         }
       }
       else {
-        if (buttonIndex < tabsIndex) {
+        // When user show the button after last tab, we show it on the side
+        // only on multi-row. place it immediately after gBrowser.tabContainer
+        if (aPosition == 2 && buttonIndex != tabsIndex + 1 ||
+            buttonIndex < tabsIndex) {
           let before = gBrowser.tabContainer.nextSibling;
           if ($("tabmixScrollBox")) {
             before = before.nextSibling;
