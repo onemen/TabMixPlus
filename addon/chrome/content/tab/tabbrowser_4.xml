@@ -414,7 +414,7 @@
            * if we set this in field[s] they will reset each time the tabbar binding construct
            * by tabbar position change
            */
-          Tabmix.afterTabsButtonsWidth = [22];
+          Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 37.2 : 28];
           Tabmix.tabsNewtabButton =
             document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
           Tabmix._show_newtabbutton = "aftertabs";
@@ -488,6 +488,7 @@
           if (this._inUpdateVerticalTabStrip)
             return this.getAttribute("multibar");
           this._inUpdateVerticalTabStrip = true;
+
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
           let visibleRows = TabmixTabbar.visibleRows;
@@ -535,11 +536,15 @@
                   if (timeFromLastTabOpenedTime < 250)
                     timeout = 0;
                 }
+              /**
+                no need to change newTabButton visibility in order to calculate
+                its position
                 // Don't reset adjustNewtabButtonvisibility if multibar or rows
                 // didn't changed or when we get here from _enterVerticalMode
                 if (callerName != "_enterVerticalMode" &&
                      (multibar != currentMultibar || rows != visibleRows))
                   this.disAllowNewtabbutton = false;
+               */
                 let self = this;
                 this.adjustNewtabButtonTimeout = setTimeout(function() {
                   self.adjustNewtabButtonvisibility();
@@ -709,9 +714,9 @@
           return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
         ]]></getter>
         <setter><![CDATA[
-          if (val || !this.overflow)
-            TabmixTabbar.showNewTabButtonOnSide(val, "temporary-right-side");
-          return val;
+          let newVal = this.overflow || val;
+          TabmixTabbar.showNewTabButtonOnSide(this.overflow || val, "temporary-right-side");
+          return newVal;
         ]]></setter>
       </property>
 

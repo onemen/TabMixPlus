@@ -53,8 +53,16 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
     Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
-  this.getAfterTabsButtonsWidth();
+
   TabmixSessionManager.init(aPromise);
+
+  // if we call this functions erlier we get this warning:
+  // XUL box for _moz_generated_content_before element contained an inline #text child
+  // by calling getBoundingClientRect
+  Tabmix.getButtonsHeight();
+  // with Australis build the button is not ready yet at this time
+  if (!this.isVersion(280))
+    this.getAfterTabsButtonsWidth();
 }
 
 // after TabmixSessionManager and SessionStore initialized
@@ -110,9 +118,23 @@ Tabmix.sessionInitialized = function() {
   TabmixConvertSession.startup();
 }
 
-// we call this at the start of gBrowserInit._delayedStartup
-// if we call it erlier we get this warning:
-// XUL box for _moz_generated_content_before element contained an inline #text child
+// we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
+// from Tabmix.delayedStartup
+Tabmix.getButtonsHeight = function() {
+  if (gBrowser.tabContainer.orient == "horizontal") {
+    let tabBar = gBrowser.tabContainer;
+    let stripIsHidden = TabmixTabbar.hideMode != 0 && !tabBar.visible;
+    if (stripIsHidden)
+      tabBar.visible = true;
+    this._buttonsHeight =
+            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
+    if (stripIsHidden)
+      tabBar.visible = false;
+  }
+  else
+    this._buttonsHeight = 24;
+}
+
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
@@ -123,12 +145,19 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     let showButton = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
     this.setItem(tabsToolbar, "tabmix-show-newtabbutton", "aftertabs-force");
     // save tabsNewtabButton width
-    let lwtheme = document.getElementById("main-window").getAttribute("lwtheme");
+    let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
     let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
+    let style = window.getComputedStyle(this.tabsNewtabButton, null);
+    let marginStart = style.getPropertyValue("margin-left");
+    // it doesn't work when marginEnd add to buttonWidth
+    // let marginEnd = style.getPropertyValue("margin-right");
+    // let buttonWidth = openNewTabRect.width + parseFloat(marginStart) + parseFloat(marginEnd);
+    let buttonWidth = openNewTabRect.width + parseFloat(marginStart);
     this.afterTabsButtonsWidth = [];
-    this.afterTabsButtonsWidth.push(lwtheme ? 31 : openNewTabRect.width);
+    this.afterTabsButtonsWidth.push(lwtheme ? 31 : buttonWidth);
+
     // when privateTab extension installed add its new tab button width
     // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
     // the right button
@@ -139,17 +168,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
-    // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
-    // from Tabmix.delayedStartup
-    this._buttonsHeight =
-            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
-
     this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
     if (stripIsHidden)
       tabBar.visible = false;
   }
-  else
-    this._buttonsHeight = 24;
 }
 
 Tabmix.delayedStartup = function TMP_delayedStartup() {
@@ -185,6 +207,9 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     document.getElementById("TabsToolbar")._dragBindingAlive = false;
 
   TMP_extensionsCompatibility.onDelayedStartup();
+
+  if (this.isVersion(280))
+    setTimeout(function() {Tabmix.getAfterTabsButtonsWidth();}, 100);
 
   gTMPprefObserver.setMenuIcons();
 
