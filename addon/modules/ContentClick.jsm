@@ -213,7 +213,7 @@ let ContentClickInternal = {
         */
         ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
         let location = linkNode.ownerDocument.location;
-        let curpage = location ? location.href || location.baseURI : this._data.currentURL;
+        let curpage = location ? location.href || location.baseURI : self._data.currentURL;
         return self.isLinkToExternalDomain(curpage, self._window.XULBrowserWindow.overLink || linkNode);
       });
     }
