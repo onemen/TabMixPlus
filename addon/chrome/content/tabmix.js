@@ -621,6 +621,7 @@ var TMP_eventListener = {
     delete Tabmix.adjustTabstrip;
   },
 
+  tabWidthCache: new WeakMap(),
   onTabAttrModified: function (aEvent) {
     if (!TabmixTabbar.widthFitTitle)
       return;
@@ -628,6 +629,12 @@ var TMP_eventListener = {
     // catch tab width changed when label attribute changed
     // or when busy attribute changed hide/show image
     var tab = aEvent.target;
+    var width = tab.boxObject.width;
+    if (this.tabWidthCache.has(tab) && this.tabWidthCache.get(tab) == width)
+      return;
+
+    this.tabWidthCache.set(tab, width);
+
     TabmixTabbar.updateScrollStatus();
     setTimeout(function(){TabmixTabbar.updateScrollStatus();}, 2500);
   },
