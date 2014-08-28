@@ -12,7 +12,7 @@ Tabmix.contentAreaClick = {
 
     Tabmix.changeCode(window, "contentAreaClick")._replace(
       'if (linkNode &&',
-      'var {where, suppressTabsOnFileDownload, _href, targetAttr} =\n' +
+      'var {where, _href, suppressTabsOnFileDownload, targetAttr} =\n' +
       '      Tabmix.ContentClick.getParamsForLink(event, linkNode, href,\n' +
       '          gBrowser.selectedBrowser, document.commandDispatcher.focusedWindow);\n' +
       '  href = _href;\n\n' +

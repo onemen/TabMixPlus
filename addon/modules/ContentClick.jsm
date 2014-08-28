@@ -130,8 +130,13 @@ let ContentClickInternal = {
   },
 
   getParamsForLink: function(event, node, href, browser, focusedWindow, remote) {
+    // don't change anything when whereToOpenLink return save or window
+    let win = browser.ownerDocument.defaultView;
+    if (/^save|window/.test(win.whereToOpenLink(event)))
+      return {where: "default", _href: href};
+
     this._browser = browser;
-    this._window = this._browser.ownerDocument.defaultView;
+    this._window = win;
     this._focusedWindow = focusedWindow;
 
     let targetAttr = this.getTargetAttr(node);
@@ -159,8 +164,8 @@ let ContentClickInternal = {
 
     return {
       where: where,
-      suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,
       _href: href,
+      suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,
       targetAttr: targetAttr
     };
   },
@@ -342,15 +347,15 @@ let ContentClickInternal = {
     if (aEvent.tabmix_isRemote)
       return;
 
-    this._browser = aBrowser;
-    this._window = this._browser.ownerDocument.defaultView;
-    this._focusedWindow = aFocusedWindow;
-
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return;
 
     if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
       return;
+
+    this._browser = aBrowser;
+    this._window = this._browser.ownerDocument.defaultView;
+    this._focusedWindow = aFocusedWindow;
 
     this.getPref();
     if (!this.currentTabLocked && this.targetPref == 0)
