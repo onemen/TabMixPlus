@@ -67,7 +67,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
    }
 
    var tabBrowser = browserWindow.gBrowser;
-   var originCharset = tabBrowser.selectedBrowser[TabmixSvc.contentDocumentAsCPOW].characterSet;
+   var originCharset = tabBrowser.selectedBrowser.characterSet;
 
    // if the current tab is empty, then do not open a new tab
    if (tabBrowser.currentURI.spec == "about:blank") {
@@ -167,7 +167,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       try { // just in case.....
          let browser = newTab.linkedBrowser;
          browser.stop();
-         let originCharset = gBrowser.selectedBrowser[TabmixSvc.contentDocumentAsCPOW].characterSet;
+         let originCharset = gBrowser.selectedBrowser.characterSet;
          browser.loadURIWithFlags(url, flags, null, originCharset);
          gBrowser.selectedBrowser.focus();
       }
