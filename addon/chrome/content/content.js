@@ -76,8 +76,9 @@ let TabmixClickEventHandler = {
       return;
 
     let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
-    if (!node)
-      return;
+    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
+    // for the case there is no href
+    let onClickNode = !href && this._getNodeWithOnClick(event);
 
     let json = { button: event.button, shiftKey: event.shiftKey,
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
@@ -89,7 +90,8 @@ let TabmixClickEventHandler = {
 
     let result = sendSyncMessage("TabmixContent:Click",
                     {json: json, href: href},
-                    {node: node, focusedWindow: this._getFocusedWindow()});
+                    {node: node, onClickNode: onClickNode,
+                     focusedWindow: this._getFocusedWindow()});
     let data = result[0];
     if (data.where == "default")
       return;
@@ -97,6 +99,9 @@ let TabmixClickEventHandler = {
     // prevent Firefox default action
     event.stopPropagation();
     event.preventDefault();
+
+    if (data.where == "handled")
+      return;
 
     json.tabmix = data;
     href = data._href;
@@ -174,6 +179,20 @@ let TabmixClickEventHandler = {
     let focusedWindow = {};
     let elt = fm.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
+  },
+
+  _getNodeWithOnClick: function(event) {
+    // for safety reason look only 3 level up
+    let i = 0, node = event.target;
+    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
+      node = node.parentNode;
+      i++;
+    }
+
+    if (node && node.hasAttribute && node.hasAttribute("onclick"))
+      return node;
+
+    return null;
   }
 };
 

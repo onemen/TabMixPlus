@@ -125,35 +125,58 @@ let ContentClickInternal = {
       return null;
 
     let {json, href} = message.data;
-    let {node, focusedWindow} = message.objects;
+    let {node, onClickNode, focusedWindow} = message.objects;
     let browser = message.target;
+
     // return value to the message caller
+    if (onClickNode) {
+      let result = this.getHrefFromNodeOnClick(json, browser, focusedWindow, onClickNode);
+      return {where: result ? "handled" : "default"};
+    }
     return this.getParamsForLink(json, node, href, browser, focusedWindow, true);
   },
 
-  getParamsForLink: function(event, node, href, browser, focusedWindow, remote) {
-    // don't change anything when whereToOpenLink return save or window
-    let win = browser.ownerDocument.defaultView;
-    if (/^save|window/.test(win.whereToOpenLink(event)))
-      return {where: "default", _href: href};
+  // for non-link element with onclick that change location.href
+  getHrefFromNodeOnClick: function(event, browser, focusedWindow, onClickNode) {
+    let node = onClickNode || this._getNodeWithOnClick(event);
+    if (!node || !this.getHrefFromOnClick(event, null, node,
+                      node.getAttribute("onclick")))
+      return false;
 
+    let href = event.__hrefFromOnClick;
+    let result = this.getParamsForLink(event, null, href, browser, focusedWindow, true, node);
+    if (result.where == "default") {
+      event.__hrefFromOnClick = null;
+      return false;
+    }
+
+    let win = browser.ownerDocument.defaultView;
+    win.openLinkIn(href, result.where, {
+      referrerURI: browser.documentURI,
+      charset: browser.characterSet,
+      suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
+    });
+
+    return true;
+  },
+
+  getParamsForLink: function(event, node, href, browser, focusedWindow, clean, onClickNode) {
     this._browser = browser;
-    this._window = win;
+    this._window = browser.ownerDocument.defaultView;
     this._focusedWindow = focusedWindow;
 
     let targetAttr = this.getTargetAttr(node);
     let [where, suppressTabsOnFileDownload] =
-        this.whereToOpen(event, node, href, targetAttr);
+        this.whereToOpen(event, node, href, targetAttr, onClickNode);
 
     // for debug
     where = where.split("@")[0];
-    if (remote)
+    // we only use the format where.xxxx in window.contentAreaClick
+    // see contentLinks.js
+    if (clean)
       where = where.split(".")[0];
     if (where == "current")
       browser.tabmix_allowLoad = true;
-
-    if (where == "default" && event.button == 1 && this._data.hrefFromOnClick)
-      where = "tab";
 
     // don't call this._data.hrefFromOnClick
     // if __hrefFromOnClick did not set by now we won't use it
@@ -194,19 +217,22 @@ let ContentClickInternal = {
    * @param href             href string.
    * @param linkNode         The DOM node containing the URL to be opened.
    * @param targetAttr       The target attribute of the link node.
+   * @param onClickNode      DOM node containing onclick, may exist only
+   *                         when linkNode is null.
    */
-  getData: function(event, href, linkNode, targetAttr) {
+  getData: function(event, href, linkNode, targetAttr, onClickNode) {
     let self = this;
     function LinkData() {
       this.event = event;
       this.href = href;
       this.linkNode = linkNode;
+      this.onClickNode = onClickNode || null;
       this.targetAttr = targetAttr;
       XPCOMUtils.defineLazyGetter(this, "currentURL", function() {
         return self._browser.currentURI ? self._browser.currentURI.spec : "";
       });
       XPCOMUtils.defineLazyGetter(this, "onclick", function() {
-        if (linkNode.hasAttribute("onclick"))
+        if (linkNode && linkNode.hasAttribute("onclick"))
           return linkNode.getAttribute("onclick");
         return null;
       });
@@ -219,10 +245,11 @@ let ContentClickInternal = {
         * Get current page url
         * if user click a link while the page is reloading linkNode.ownerDocument.location can be null
         */
+        let node = linkNode || onClickNode;
         ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-        let location = linkNode.ownerDocument.location;
+        let location = node.ownerDocument.location;
         let curpage = location ? location.href || location.baseURI : self._data.currentURL;
-        let href = self._data.hrefFromOnClick || self._window.XULBrowserWindow.overLink || linkNode;
+        let href = self._data.hrefFromOnClick || self._window.XULBrowserWindow.overLink || node;
         return self.isLinkToExternalDomain(curpage, href);
       });
     }
@@ -230,9 +257,10 @@ let ContentClickInternal = {
     this._data = new LinkData();
   },
 
-  whereToOpen: function TMP_whereToOpen(event, linkNode, href, targetAttr) {
+  whereToOpen: function TMP_whereToOpen(event, linkNode, href, targetAttr, onClickNode) {
+    let eventWhere;
     let TMP_tabshifted = function TMP_tabshifted(event) {
-      var where = this._window.whereToOpenLink(event);
+      var where = eventWhere || this._window.whereToOpenLink(event);
       return where == "tabshifted" ? "tabshifted" : "tab";
     }.bind(this);
 
@@ -247,12 +275,19 @@ let ContentClickInternal = {
       }
     }
 
-///XXX TODO: add check if some parent have onclick
-    if (!linkNode)
+    if (!linkNode && !onClickNode)
       return ["default@2"];
 
     this.getPref();
-    this.getData(event, href, linkNode, targetAttr);
+    this.getData(event, href, linkNode, targetAttr, onClickNode);
+
+    // whereToOpenLink return save or window
+    eventWhere = this._window.whereToOpenLink(event);
+    if (/^save|window/.test(eventWhere)) {
+      // make sure to trigger hrefFromOnClick getter
+      this._data.hrefFromOnClick;
+      return [eventWhere + "@2.1"];
+    }
 
     /*
      * prevents tab form opening when clicking Greasemonkey script
@@ -261,10 +296,10 @@ let ContentClickInternal = {
       return ["default@3"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
-    if (this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
+    if (linkNode && this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
       return ["default@4"];
 
-    if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
+    if (linkNode && linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
         href.indexOf("mailto:") > -1) {
       return ["default@5"];
     }
@@ -290,7 +325,8 @@ let ContentClickInternal = {
 
     // don't mess with links that have onclick inside iFrame
     ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-    let onClickInFrame = this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
+    let onClickInFrame = onClickNode && onClickNode.ownerDocument.defaultView.frameElement ||
+        this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
 
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
@@ -306,8 +342,10 @@ let ContentClickInternal = {
       return ["default@11"];
 
     // catch other middle & right click
-    if (event.button != 0)
-      return ["default@12"];
+    if (event.button != 0) {
+      return event.button == 1 && this._data.hrefFromOnClick ?
+              [TMP_tabshifted(event) + "@12"] : ["default@12"]
+    }
 
     // the rest of the code if for left-click only
 
@@ -337,7 +375,6 @@ let ContentClickInternal = {
       if (openNewTab != null)
         return [(openNewTab ? TMP_tabshifted(event) : "current") + "@16"];
     }
-
     return ["default@17"];
   },
 
@@ -354,18 +391,28 @@ let ContentClickInternal = {
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return "2";
 
-    if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+    let win = aBrowser.ownerDocument.defaultView;
+    let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
+    if (!href) {
+      if (this.getHrefFromNodeOnClick(aEvent, aBrowser, aFocusedWindow))
+        aEvent.preventDefault();
+      return "2.1";
+    }
+
+    if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey) {
+      if (/^save|window|tab/.test(win.whereToOpenLink(aEvent)))
+        this.getHrefFromOnClick(aEvent, href, linkNode, linkNode.getAttribute("onclick"));
       return "3";
+    }
 
     this._browser = aBrowser;
-    this._window = this._browser.ownerDocument.defaultView;
+    this._window = win;
     this._focusedWindow = aFocusedWindow;
 
     this.getPref();
     if (!this.currentTabLocked && this.targetPref == 0)
       return "4";
 
-    let [href, linkNode] = this._window.hrefAndLinkNodeForClickEvent(aEvent);
     if (!linkNode)
       return "5";
 
@@ -529,12 +576,12 @@ let ContentClickInternal = {
     if (/\w+\.google\.\D+\/search?/.test(this._data.currentURL))
       return false;
 
-    let {event, linkNode} = this._data;
-    linkNode = linkNode.toString();
+    let {event, href, hrefFromOnClick} = this._data;
+    let href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
     if (event.button != 2 && typeof(custombuttons) !='undefined'){
-      if (this.checkAttr(linkNode, "custombutton://"))
+      if (this.checkAttr(href, "custombutton://"))
         return true;
     }
 
@@ -545,8 +592,8 @@ let ContentClickInternal = {
       return false;
 
     // prevent links in tinderbox.mozilla.org with linkHref to *.gz from open in this function
-    if (this.checkAttr(linkNode, "http://tinderbox.mozilla.org/showlog") ||
-        this.checkAttr(linkNode, "http://tinderbox.mozilla.org/addnote"))
+    if (this.checkAttr(href, "http://tinderbox.mozilla.org/showlog") ||
+        this.checkAttr(href, "http://tinderbox.mozilla.org/addnote"))
       return false;
 
     let onclick = this._data.onclick;
@@ -556,8 +603,6 @@ let ContentClickInternal = {
           this.checkAttr(onclick, "return note") || this.checkAttr(onclick, "return log")) // click on link in http://tinderbox.mozilla.org/showbuilds.cgi
         return true;
     }
-
-    let href = this._data.hrefFromOnClick || this._data.href;
 
     // lets try not to look into links that start with javascript (from 2006-09-02)
     if (this.checkAttr(href, "javascript:"))
@@ -723,7 +768,7 @@ let ContentClickInternal = {
 
     let {href, hrefFromOnClick, isLinkToExternalDomain, linkNode} = this._data;
     if (/^(http|about)/.test(hrefFromOnClick || href) &&
-        (isLinkToExternalDomain ||
+        (isLinkToExternalDomain || linkNode &&
         this.checkAttr(linkNode.getAttribute("onmousedown"), "return rwt")))
       return true;
 
@@ -744,14 +789,13 @@ let ContentClickInternal = {
     if (this.GoogleComLink())
       return null;
 
-    let {href, hrefFromOnClick} = this._data;
+    let {href, hrefFromOnClick, linkNode} = this._data;
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
     if (hrefFromOnClick)
       return this._data.currentURL.split("#")[0] != hrefFromOnClick.split("#")[0];
 
-    let {href, linkNode} = this._data;
     if (href)
       href = href.toLowerCase();
 
@@ -781,19 +825,19 @@ let ContentClickInternal = {
     if (/calendar\/render/.test(location))
       return true;
 
-    var {linkNode} = this._data;
-    if (/\/intl\/\D{2,}\/options\/|search/.test(linkNode.pathname))
+    var node = this._data.linkNode || this._data.onClickNode;
+    if (/\/intl\/\D{2,}\/options\/|search/.test(node.pathname))
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
                  "/accounts/Logout", "/accounts/ServiceLogin"];
 
-    let testPathname = _list.indexOf(linkNode.pathname) > -1;
+    let testPathname = _list.indexOf(node.pathname) > -1;
     if (testPathname)
       return true;
 
     let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
-    let testHost = _host.indexOf(linkNode.host) > -1;
+    let testHost = _host.indexOf(node.host) > -1;
     if (testHost)
       return true;
 
@@ -828,7 +872,7 @@ let ContentClickInternal = {
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
-    function isCurrent(content) {
+    let isCurrent = function isCurrent(content) {
       if (content.location.href == href && content.name == targetFrame)
         return true;
       for (let i = 0; i < content.frames.length; i++) {
@@ -840,7 +884,7 @@ let ContentClickInternal = {
     }
 
     let window = this._window;
-    function switchIfURIInWindow(aWindow) {
+    let switchIfURIInWindow = function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.
       if (TabmixSvc.version(200) &&
@@ -906,7 +950,7 @@ let ContentClickInternal = {
   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     var self = this;
-    function getDomain(url) {
+    let getDomain = function getDomain(url) {
       if (typeof(url) != "string")
         url = url.toString();
 
@@ -1035,6 +1079,20 @@ let ContentClickInternal = {
       return;
 
     result.__hrefFromOnClick = newHref;
+  },
+
+  _getNodeWithOnClick: function(event) {
+    // for safety reason look only 3 level up
+    let i = 0, node = event.target;
+    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
+      node = node.parentNode;
+      i++;
+    }
+
+    if (node && node.hasAttribute && node.hasAttribute("onclick"))
+      return node;
+
+    return null;
   }
 }
 
