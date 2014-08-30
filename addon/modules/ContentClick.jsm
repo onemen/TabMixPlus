@@ -443,7 +443,7 @@ let ContentClickInternal = {
         var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
-           (!this.isGMEnabled() || this._window.decodeURI(href).indexOf("return false;") == -1))
+           (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
           blocked = true;
         else if (!blocked) {
           // make sure external links in developer.mozilla.org open new tab
@@ -937,11 +937,11 @@ let ContentClickInternal = {
       } catch (ex) { }
 
       if (url.match(/^http/)) {
-        url = fixedURI || Services.io.newURI(url, null, null);
+        url = fixedURI || makeURI(url);
 
         // catch redirect
         if (url.path.match(/^\/r\/\?http/))
-          url = Services.io.newURI(url.path.substr("/r/?".length), null, null);
+          url = makeURI(url.path.substr("/r/?".length));
     /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
@@ -1011,6 +1011,10 @@ let ContentClickInternal = {
     }
     return false;
   }
+}
+
+function makeURI(aURL, aOriginCharset, aBaseURI) {
+  return Services.io.newURI(aURL, aOriginCharset, aBaseURI);
 }
 
 TabmixContentClick.init();
