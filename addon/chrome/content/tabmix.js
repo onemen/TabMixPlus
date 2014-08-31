@@ -56,7 +56,7 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
 
   TabmixSessionManager.init(aPromise);
 
-  // if we call this functions erlier we get this warning:
+  // if we call these functions earlier we get this warning:
   // XUL box for _moz_generated_content_before element contained an inline #text child
   // by calling getBoundingClientRect
   Tabmix.getButtonsHeight();
@@ -142,7 +142,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     if (stripIsHidden)
       tabBar.visible = true;
     let tabsToolbar = document.getElementById("TabsToolbar");
-    let showButton = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
+    let currentButtonVisibility = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
     this.setItem(tabsToolbar, "tabmix-show-newtabbutton", "aftertabs-force");
     // save tabsNewtabButton width
     let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
@@ -168,7 +168,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
-    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", showButton);
+    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", currentButtonVisibility || null);
     if (stripIsHidden)
       tabBar.visible = false;
   }
