@@ -385,9 +385,26 @@ var TabmixSessionManager = {
             return;
          }
 
+/**
+//XXX TODO - fix the case that last session contained more then one window
+             with pinned tabs. in this case SessionStore will open more windows
+*/                  
          if (Tabmix.isWindowAfterSessionRestore) {
             let self = this;
-            setTimeout(function(){self.onSessionRestored()}, 0);
+            setTimeout(function(){
+              // remove leftover blank tab if last session contained only pinned tab(s)
+              // we don't selected last session selected tab
+              let last = gBrowser.tabs.length - 1;
+              if (gBrowser._numPinnedTabs == last) {
+                let tab = gBrowser.tabs[last];
+                if (gBrowser.isBlankNotBusyTab(tab, true)) {
+                  gBrowser.removeTab(tab);
+                  setTimeout(function(){
+                    gBrowser.selectedBrowser.focus();
+                  }, 0);
+                }
+              }
+              self.onSessionRestored()}, 0);
          }
          else {
            // remove extra tab that was opened by SessionStore if last session

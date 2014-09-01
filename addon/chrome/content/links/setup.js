@@ -103,17 +103,19 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
-    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   this.extensions.sessionManager ||
-                   !this.isVersion(250) && this.isWindowAfterSessionRestore;
+    var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
+                      this.extensions.sessionManager
     var sessionManager = this.prefs.getBoolPref("sessions.manager");
-    var resumeSession  = sessionManager &&
-                         this.prefs.getIntPref("sessions.onStart") < 2;
-    var recoverSession = this.prefs.getBoolPref("sessions.crashRecovery") &&
-                         this.prefs.prefHasUserValue("sessions.crashed");
-
-    SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
-    if (SM.doRestore) {
+    var willRestore = firstWindow && !disabled && (sessionManager &&
+                      this.prefs.getIntPref("sessions.onStart") <= 1 ||
+                      this.prefs.getBoolPref("sessions.crashRecovery") &&
+                      this.prefs.prefHasUserValue("sessions.crashed"));
+    var notRestore =  firstWindow && !disabled && sessionManager &&
+                      this.prefs.getIntPref("sessions.onStart") > 1;
+    var afterSessionRestore = !this.isVersion(250) && this.isWindowAfterSessionRestore;
+    SM.doRestore = willRestore && !(SM.isPrivateWindow || afterSessionRestore);
+    var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
+    if (willOverrideHomepage) {
       // Prevent the default homepage from loading if we're going to restore a session
       if (this.isVersion(240)) {
         this.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
@@ -126,7 +128,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? null : window.arguments[0];'
         );
       }
+    }
 
+    if (SM.doRestore) {
       // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
       loadOnStartup =
         '  if (uriToLoad && uriToLoad != "about:blank") {' +
