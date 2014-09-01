@@ -363,6 +363,8 @@
           var tabBar = document.getBindingParent(this);
           tabBar.adjustNewtabButtonvisibility();
           let tabs = this._getScrollableElements();
+          if (!tabs.length)
+            return;
           let isFirstTabVisible = this.isElementVisible(tabs[0]);
           let isLastTabVisible = this.isElementVisible(tabs[tabs.length-1]);
           if (!isFirstTabVisible || !isLastTabVisible) {
