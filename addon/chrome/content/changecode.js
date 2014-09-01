@@ -62,9 +62,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     toCode: function TMP_utils_toCode(aShow, aObj, aName) {
       try {
         // list of function that we don't warp with try-catch
-        let dontDebug = ["gBrowser.tabContainer._animateTabMove"];
-        if (TabmixSvc.version(310))
-          dontDebug.push("gURLBar.handleCommand");
+        let dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
         if (debugMode && dontDebug.indexOf(this.fullName) == -1) {
           let excludeReturn = ["TabsInTitlebar._update", "gBrowser._blurTab"];
           let addReturn = "", re = new RegExp("//.*", "g");
