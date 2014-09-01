@@ -385,8 +385,9 @@ var TMP_tabDNDObserver = {
           // allow to load in locked tab
           browser.tabmix_allowLoad = true;
           let webNav = Ci.nsIWebNavigation;
-          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP |
-                      webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
+          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+          if (Tabmix.isVersion(290))
+            flags |= webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
           browser.loadURIWithFlags(url, flags);
           if (!bgLoad)
             gBrowser.tabContainer.selectedItem = tab;
