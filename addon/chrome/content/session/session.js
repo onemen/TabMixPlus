@@ -3159,7 +3159,14 @@ try{
       this._saveTabviewData();
 
       // call internal SessionStore functions to restore tabs
-      let global = Cu.getGlobalForObject(TabmixSvc.ss);
+      let getSSmodule = function() {
+        if (Tabmix.isVersion(250))
+          return TabmixSvc.ss;
+        let tmp = {}
+        Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+        return tmp.SessionStore;
+      }
+      let global = Cu.getGlobalForObject(getSSmodule());
       let SessionStore = global.SessionStoreInternal;
       if (overwrite) {
         for (let i = 0; i < gBrowser.tabs.length; i++) {
@@ -3168,7 +3175,9 @@ try{
             SessionStore._resetTabRestoringState(tab);
         }
       }
-      SessionStore.restoreTabs(window, tabs, tabsData, 0);
+      let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
+                                           "restoreHistoryPrecursor";
+      SessionStore[fnName](window, tabs, tabsData, 0);
 
       // SessionStore.restoreTabs send SSWindowStateReady
       // show notification and clean up our data
