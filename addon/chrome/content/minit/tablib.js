@@ -884,10 +884,7 @@ var tablib = {
       var newTab = this.duplicateTab(aTab, url, null, url == null);
       if (!newTab.selected &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
-        let tmp = {}
-        Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-        let global = Cu.getGlobalForObject(tmp.SessionStore);
-        global.SessionStoreInternal.restoreTabContent(newTab);
+        TabmixSessionManager.SessionStore.restoreTabContent(newTab);
       }
 
       if (!url) {

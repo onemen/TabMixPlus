@@ -243,6 +243,14 @@ var TabmixSessionManager = {
       return this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions.");
    },
 
+  get SessionStore() {
+    delete this.SessionStore;
+    let tmp = {}
+    Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+    let global = Cu.getGlobalForObject(tmp.SessionStore);
+    return this.SessionStore = global.SessionStoreInternal;
+  },
+
    // call by Tabmix.beforeSessionStoreInit
    init: function SM_init(aPromise) {
       if (this._inited)
@@ -3159,25 +3167,16 @@ try{
       this._saveTabviewData();
 
       // call internal SessionStore functions to restore tabs
-      let getSSmodule = function() {
-        if (Tabmix.isVersion(250))
-          return TabmixSvc.ss;
-        let tmp = {}
-        Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-        return tmp.SessionStore;
-      }
-      let global = Cu.getGlobalForObject(getSSmodule());
-      let SessionStore = global.SessionStoreInternal;
       if (overwrite) {
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
           if (gBrowser.browsers[i].__SS_restoreState)
-            SessionStore._resetTabRestoringState(tab);
+            this.SessionStore._resetTabRestoringState(tab);
         }
       }
       let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
                                            "restoreHistoryPrecursor";
-      SessionStore[fnName](window, tabs, tabsData, 0);
+      this.SessionStore[fnName](window, tabs, tabsData, 0);
 
       // SessionStore.restoreTabs send SSWindowStateReady
       // show notification and clean up our data
@@ -3345,10 +3344,8 @@ try{
       if (!aOverwrite)
          closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
       closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
-      if (Tabmix.isVersion(260)) {
-        let global = Cu.getGlobalForObject(TabmixSvc.ss);
-        global.SessionStoreInternal._windows[window.__SSi]._closedTabs = closedTabsData;
-      }
+      if (Tabmix.isVersion(260))
+        this.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
       else {
         let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
