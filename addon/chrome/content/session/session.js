@@ -231,6 +231,7 @@ var TabmixSessionManager = {
     _inited: false,
     windowClosed: false,
     overrideHomepage: null,
+    waitForCallBack: false,
 
     afterCrash: false,
     lastSessionWasEmpty: false,
@@ -262,7 +263,7 @@ var TabmixSessionManager = {
         let initializeSM = function() {
           TabmixSvc.sm.promiseInitialized = true;
           this._init();
-          this.restoreWindowArguments();
+          this._sendRestoreCompletedNotifications(false);
         }.bind(this);
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
@@ -271,15 +272,15 @@ var TabmixSessionManager = {
       else {
         let forceInit = !Tabmix.isVersion(250) && this.doRestore;
         // make sure sessionstore initialize without restoring pinned tabs
-        // for Firefox 25+ we block new tab in gbrowser.addtab
+        // for Firefox 25+ we set SessionStore._loadState = STATE_RUNNING
         if (forceInit)
           TabmixSvc.ss.init(null);
         this._init();
         // restart-less extensions observers for this notification on startup
         // notify observers things are complete when we call SessionStore.init
         // with null.
-        if (forceInit)
-          Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+        if (Tabmix.isVersion(250) && this.firstNonPrivateWindow || forceInit)
+          this._sendRestoreCompletedNotifications(false);
       }
    },
 
@@ -387,26 +388,11 @@ var TabmixSessionManager = {
             return;
          }
 
-/**
-//XXX TODO - fix the case that last session contained more then one window
-             with pinned tabs. in this case SessionStore will open more windows
-*/                  
          if (Tabmix.isWindowAfterSessionRestore) {
             let self = this;
             setTimeout(function(){self.onSessionRestored()}, 0);
          }
          else {
-           // remove extra tab that was opened by SessionStore if last session
-           // contained pinned tab(s).
-           let tab = gBrowser.tabs[0];
-           if (this.doRestore && Tabmix.isVersion(250) && tab.pinned && !tab.loadOnStartup) {
-              this.resetTab(tab);
-              this.removeTab(tab);
-              try {
-                 if (TMP_ClosedTabs.count)
-                   TabmixSvc.ss.forgetClosedTab(window, 0);
-              } catch(ex) {}
-           }
            if (TabmixSvc.sm.crashed && this.enableBackup)
               this.openAfterCrash(TabmixSvc.sm.status);
            else if (this.enableManager)
@@ -1117,7 +1103,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.saveState();
             break;
          case "sessionstore-windows-restored":
-            // before Firefox 25, our session manager run before SessionStore
             // we prevent SessionStore from adding the home page when last
             // session contained only pinned tab(s).
             // SessionStore._isCmdLineEmpty use the arguments to determine if it
@@ -2088,6 +2073,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var isAllEmpty = lastSession && prevtoLast && savedSession;
          var callBack = function (aResult) {TabmixSessionManager.afterCrashPromptCallBack(aResult);}
          this.callBackData = {label: null, whattoLoad: "session"}
+         this.waitForCallBack = true;
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
             let crashedContainer = this.initContainer(this.gSessionPath[3]);
             let count = this.countWinsAndTabs(crashedContainer);
@@ -2163,6 +2149,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          this.loadHomePage();
       this.saveStateDelayed();
       delete this.callBackData;
+
+      this._sendRestoreCompletedNotifications(true);
    },
 
    prepareSavedSessions: function SM_prepareSavedSessions() {
@@ -2242,6 +2230,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             let callBack = function (aResult) {
                              TabmixSessionManager.enableCrashRecovery(aResult);
                            }
+            this.waitForCallBack = true;
             Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
          }
@@ -2300,6 +2289,7 @@ try{
          let callBack = function (aResult) {
                            TabmixSessionManager.onFirstWindowPromptCallBack(aResult);
                         }
+        this.waitForCallBack = true;
          Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
                   [title, msg, "", chkBoxLabel, buttons], window, callBack);
 } catch (ex) {Tabmix.assert(ex);}
@@ -2316,6 +2306,7 @@ try{
         this.prefBranch.setBoolPref("crashRecovery", true); // enable Crash Recovery
         Services.prefs.savePrefFile(null); // store the pref immediately
       }
+      this._sendRestoreCompletedNotifications(true);
    },
 
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
@@ -2330,6 +2321,16 @@ try{
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
       TMP_TabView.init();
+
+      this._sendRestoreCompletedNotifications(true);
+   },
+
+   _sendRestoreCompletedNotifications: function(waitForCallBack) {
+      // notify observers things are complete.
+      if (Tabmix.isVersion(250) && this.waitForCallBack == waitForCallBack) {
+        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+        this.waitForCallBack = false;
+      }
    },
 
    getSessionList: function SM_getSessionList(flag) {

@@ -68,10 +68,6 @@ var tablib = {
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       '{','{\n\
-       if (!TabmixSvc.sm.promiseInitialized && !this.tabs[0].loadOnStartup && isRestoringTab && !Tabmix.isWindowAfterSessionRestore)\n\
-         return this.tabs[0];\n', {check: Tabmix.isVersion(250) && TabmixSessionManager.doRestore}
-    )._replace(
-      '{','{\n\
       let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
       'params = arguments[1];',

@@ -112,6 +112,18 @@ Tabmix.beforeBrowserInitOnLoad = function() {
                       this.prefs.prefHasUserValue("sessions.crashed"));
     var notRestore =  firstWindow && !disabled && sessionManager &&
                       this.prefs.getIntPref("sessions.onStart") > 1;
+
+    // Set SessionStore._loadState to running on first window in the session
+    //  to prevent it from restoring pinned tabs.
+    let setStateRunning = Tabmix.isVersion(250) && (willRestore || notRestore) &&
+        this.firstWindowInSession && !this.isWindowAfterSessionRestore;
+    if (setStateRunning) {
+      let STATE_STOPPED = 0;
+      let STATE_RUNNING = 1;
+      if (SM.SessionStore._loadState == STATE_STOPPED)
+        SM.SessionStore._loadState = STATE_RUNNING;
+    }
+
     var afterSessionRestore = !this.isVersion(250) && this.isWindowAfterSessionRestore;
     SM.doRestore = willRestore && !(SM.isPrivateWindow || afterSessionRestore);
     var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
