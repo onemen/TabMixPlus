@@ -117,16 +117,14 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
     if (willOverrideHomepage) {
       // Prevent the default homepage from loading if we're going to restore a session
-      if (this.isVersion(240)) {
-        this.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
-          'sessionStartup.willOverrideHomepage', 'true'
-        ).toCode();
-      }
-      else {
-        bowserStartup = bowserStartup._replace(
-          'uriToLoad = window.arguments[0];',
-          'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? null : window.arguments[0];'
-        );
+      let hasFirstArgument = window.arguments && window.arguments[0];
+      if (hasFirstArgument) {
+        let defaultArgs = Cc["@mozilla.org/browser/clh;1"].
+                          getService(Ci.nsIBrowserHandler).defaultArgs;
+        if (window.arguments[0] == defaultArgs) {
+          SM.overrideHomepage = window.arguments[0];
+          window.arguments[0] = null;
+        }
       }
     }
 

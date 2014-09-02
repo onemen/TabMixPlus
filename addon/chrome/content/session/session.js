@@ -230,6 +230,7 @@ var TabmixSessionManager = {
     afterTabSwap: false,
     _inited: false,
     windowClosed: false,
+    overrideHomepage: null,
 
     afterCrash: false,
     lastSessionWasEmpty: false,
@@ -261,6 +262,7 @@ var TabmixSessionManager = {
         let initializeSM = function() {
           TabmixSvc.sm.promiseInitialized = true;
           this._init();
+          this.restoreWindowArguments();
         }.bind(this);
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
@@ -391,20 +393,7 @@ var TabmixSessionManager = {
 */                  
          if (Tabmix.isWindowAfterSessionRestore) {
             let self = this;
-            setTimeout(function(){
-              // remove leftover blank tab if last session contained only pinned tab(s)
-              // we don't selected last session selected tab
-              let last = gBrowser.tabs.length - 1;
-              if (gBrowser._numPinnedTabs == last) {
-                let tab = gBrowser.tabs[last];
-                if (gBrowser.isBlankNotBusyTab(tab, true)) {
-                  gBrowser.removeTab(tab);
-                  setTimeout(function(){
-                    gBrowser.selectedBrowser.focus();
-                  }, 0);
-                }
-              }
-              self.onSessionRestored()}, 0);
+            setTimeout(function(){self.onSessionRestored()}, 0);
          }
          else {
            // remove extra tab that was opened by SessionStore if last session
@@ -788,14 +777,19 @@ var TabmixSessionManager = {
       }
    },
 
+   restoreWindowArguments: function() {
+      if (this.overrideHomepage)
+        window.arguments[0] = this.overrideHomepage;
+   },
+
    loadHomePage: function SM_loadHomePage() {
       function afterLoad(aBrowser) {
         if (!gBrowser.isBlankBrowser(aBrowser))
           aBrowser.focus();
       }
 
-      var homePage = gHomeButton.getHomePage();
-      if ("arguments" in window && homePage == window.arguments[0]) {
+      if (this.overrideHomepage) {
+        let homePage = this.overrideHomepage;
         let URIs = homePage.split("|");
         this.setStripVisibility(URIs.length);
         let browser = gBrowser.selectedBrowser;
@@ -808,6 +802,7 @@ var TabmixSessionManager = {
         }
         else
           afterLoad(browser);
+        this.restoreWindowArguments(true);
       }
       else if (gBrowser.mCurrentTab.loadOnStartup) {
         for (var i = 0; i < gBrowser.tabs.length ; i++)
@@ -1122,6 +1117,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.saveState();
             break;
          case "sessionstore-windows-restored":
+            // before Firefox 25, our session manager run before SessionStore
+            // we prevent SessionStore from adding the home page when last
+            // session contained only pinned tab(s).
+            // SessionStore._isCmdLineEmpty use the arguments to determine if it
+            // need to override tab
+            if (!Tabmix.isVersion(250))
+              this.restoreWindowArguments();
          case "sessionstore-browser-state-restored":
             // session restored update buttons state
             TMP_ClosedTabs.setButtonDisableState();
@@ -2950,15 +2952,10 @@ try{
       var overwrite = true, restoreSelect = this.prefBranch.getBoolPref("save.selectedtab");
       switch ( caller ) {
          case "firstwindowopen":
-               if (window.arguments && window.arguments.length > 0) {
-                  let uriToLoad = !gBrowser.selectedTab.loadOnStartup && window.arguments[0];
-                  let isLoadingBlank = uriToLoad == "about:blank";
-                  overwrite = isLoadingBlank || uriToLoad == gHomeButton.getHomePage() ? true : false;
-                  if (!overwrite && !isLoadingBlank)
-                    restoreSelect = false;
-               }
-               else
-                 overwrite = false;
+               overwrite = false;
+               let hasFirstArgument = window.arguments && window.arguments[0];
+               if (hasFirstArgument && this.overrideHomepage == null)
+                 restoreSelect = false;
             break;
          case "windowopenedbytabmix":
          case "concatenatewindows":
