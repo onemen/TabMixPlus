@@ -98,3 +98,9 @@
   background-size: calc(100% - 2px) calc(100% - 2px), 1px calc(100% - 1px), 1px calc(100% - 1px), 100% 1px, 100% 1px;
   background-repeat: no-repeat;
 }
+
+
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]) > .tab-stack > .tab-background > .tab-background-middle {
+  clip-path: none !important;
+}
