@@ -133,15 +133,18 @@ label.text-link, label[onclick] {
   margin: 0px;
 }
 
+
+/* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
+#TabsToolbar > #tabbrowser-tabs > .tabbrowser-arrowscrollbox > .tabs-newtab-button[force-display] {
+  display: -moz-box !important;
+}
+
 /*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[tabmix-show-newtabbutton*="side"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
-  /* using visibility: hidden !important; don't collapse the width and don't collapse padding and border height */
-  visibility: collapse;
-  height: 0px !important;
-  width: 0px;
+  display: none;
   border: none;
   margin: 0px;
   vertical-align: bottom;
@@ -149,11 +152,7 @@ label.text-link, label[onclick] {
 
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) >
    #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
-  visibility: visible;
-}
-
-#TabsToolbar[tabmix-show-newtabbutton="afterTabs-force"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {  /* look in tabmix.js */
-  visibility: visible !important;
+  display: -moz-box;
 }
 
 #TabsToolbar[tabmix-show-newtabbutton*="side"] > #new-tab-button {

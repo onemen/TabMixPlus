@@ -142,12 +142,11 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     if (stripIsHidden)
       tabBar.visible = true;
     let tabsToolbar = document.getElementById("TabsToolbar");
-    let currentButtonVisibility = tabsToolbar.getAttribute("tabmix-show-newtabbutton");
-    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", "aftertabs-force");
     // save tabsNewtabButton width
     let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
+    this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
     let style = window.getComputedStyle(this.tabsNewtabButton, null);
     let marginStart = style.getPropertyValue("margin-left");
@@ -155,8 +154,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // let marginEnd = style.getPropertyValue("margin-right");
     // let buttonWidth = openNewTabRect.width + parseFloat(marginStart) + parseFloat(marginEnd);
     let buttonWidth = openNewTabRect.width + parseFloat(marginStart);
-    this.afterTabsButtonsWidth = [];
-    this.afterTabsButtonsWidth.push(lwtheme ? 31 : buttonWidth);
+    if (buttonWidth > 0) {
+      this.afterTabsButtonsWidth = [];
+      this.afterTabsButtonsWidth.push(lwtheme ? 31 : buttonWidth);
+    }
 
     // when privateTab extension installed add its new tab button width
     // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
@@ -168,7 +169,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
-    this.setItem(tabsToolbar, "tabmix-show-newtabbutton", currentButtonVisibility || null);
+    this.tabsNewtabButton.removeAttribute("force-display", true);
     if (stripIsHidden)
       tabBar.visible = false;
   }
