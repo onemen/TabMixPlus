@@ -94,6 +94,10 @@
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down");
       </field>
 
+      <field name="innerbox" readonly="true">
+        document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
+      </field>
+
       <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
            Override scrollbox.xml method, since our scrollbox's children are
            inherited from the binding parent -->
@@ -197,6 +201,12 @@
 
           if (Tabmix.isVersion(320)) {
             Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
+              // when theme or extension add negative margin-bottom to the tab or
+              // tab content the scrollHeight can be larger than the actual
+              // inner-box height
+              'this.scrollSize',
+              '(this.orient == "vertical" && this.isMultiRow ? this.innerbox.getBoundingClientRect().height : $&)'
+            )._replace(
               /(\})(\)?)$/,
               '          let box = document.getElementById("tabmixScrollBox");\n' +
               '          Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);\n' +
