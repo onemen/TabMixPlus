@@ -588,6 +588,7 @@
             else
               this.removeAttribute("overflow");
             TabmixTabbar.showNewTabButtonOnSide(val, "right-side");
+            this.mTabstrip.updateOverflow(val);
           }
           return val;
         ]]></setter>

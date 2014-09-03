@@ -455,7 +455,8 @@
         <parameter name="overflow"/>
         <body><![CDATA[
           // we get here after we update overflow from updateVerticalTabStrip
-          if (this.orient == "horizontal")
+          if (this.orient == "horizontal" ||
+              this.hasAttribute("notoverflowing") == !overflow)
             return;
 
           Tabmix.setItem(this, "notoverflowing", !overflow || null);
