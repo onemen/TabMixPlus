@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<bindings id="tabmix_preferences_bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabmix-prefwindow"
+           extends="chrome://global/content/bindings/preferences.xml#prefwindow">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          // we call this from here to apply the changes to all dialog windows
+          // that are based on prefwindow
+          try {
+            Components.utils.import("resource://tabmixplus/Services.jsm");
+            window.Tabmix = { };
+            Tabmix._debugMode = false;
+            Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", Tabmix);
+            Tabmix.changeCode(window, "openLinkIn")._replace(
+              'var w = getTopWin();',
+              '$&\n' +
+              '  if (w && where == "window" && w.Tabmix.getSingleWindowMode())\n' +
+              '    where = "tab";\n'
+            ).toCode();
+          } catch(ex) {
+            TabmixSvc.console.log(
+                "TabMix :\n" +
+                "can't change openLinkIn from preferences.xml binding\n" + ex);
+          }
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+</bindings>

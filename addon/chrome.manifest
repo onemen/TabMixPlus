@@ -43,7 +43,10 @@ overlay   chrome://browser/content/browser.xul                      chrome://tab
 overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=WINNT
 overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Darwin
 overlay   about:preferences#general                                 chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Linux
-overlay   chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferencesOverlay.xul
+overlay   chrome://browser/content/preferences/main.xul             chrome://tabmixplus/content/preferences/overlay/main.xul
+overlay   chrome://browser/content/preferences/tabs.xul             chrome://tabmixplus/content/preferences/overlay/tabs.xul
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css
+
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul
 overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/removeBlankTab.xul

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % tabmixplusDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
+%tabmixplusDTD;
+]>
+
+<overlay id="TabmixMainPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="preferencesOverlay.js"/>
+  <script type="application/javascript">
+      window.addEventListener("paneload", function mainPaneload(aEvent) {
+        aEvent.currentTarget.removeEventListener("paneload", mainPaneload, true);
+        gTabMix_preferencesOverlay.initMainPane();
+      }, true);
+  </script>
+
+  <prefpane id="paneMain">
+
+    <preferences id="mainPreferences">
+      <preference id="tabmix.sm"
+                  name="extensions.tabmix.sessions.manager"          type="bool"
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
+      <preference id="tabmix.cr"
+                  name="extensions.tabmix.sessions.crashRecovery"    type="bool"
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
+    </preferences>
+
+    <button id="tabmixSessionManager"
+            label="&options.main.sessionbutton.label;…"
+            oncommand="gTabMix_preferencesOverlay.showTabmixOptions('paneSession');"
+            class="tabmixplus-button"/>
+
+  </prefpane>
+
+</overlay>
