@@ -55,6 +55,10 @@ overlay   chrome://browser/content/pageinfo/pageInfo.xul            chrome://tab
 overlay   chrome://browser/content/aboutDialog.xul                  chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://browser/content/sync/setup.xul                   chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
 overlay   chrome://mozapps/content/update/history.xul               chrome://tabmixplus/content/links/text_link.xul appversion<20.0a1
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/links/text_link.css appversion<20.0a1
+style     about:preferences                                         chrome://tabmixplus/content/links/text_link.css appversion<20.0a1  os=WINNT
+style     about:preferences                                         chrome://tabmixplus/content/links/text_link.css appversion<20.0a1  os=Darwin
+style     about:preferences#general                                 chrome://tabmixplus/content/links/text_link.css appversion<20.0a1  os=Linux
 
 overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul

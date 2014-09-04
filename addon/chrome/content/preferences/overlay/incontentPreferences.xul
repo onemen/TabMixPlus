@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://tabmixplus/content/links/text_link.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferencesOverlay.css" type="text/css"?>
 
 <!DOCTYPE overlay [

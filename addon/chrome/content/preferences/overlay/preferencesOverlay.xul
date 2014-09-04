@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://tabmixplus/content/links/text_link.css" type="text/css"?>
-
 <!DOCTYPE overlay [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
 %pref-tabmixDTD;
