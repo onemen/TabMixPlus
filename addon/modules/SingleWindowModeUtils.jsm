@@ -151,7 +151,8 @@ let SingleWindowModeUtils = {
       newWindow.OfflineApps.uninit = function() {};
       var obs = Services.obs;
       obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
-      obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
+      if (!TabmixSvc.version(340))
+        obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
       newWindow.IndexedDBPromptHelper.init();
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
