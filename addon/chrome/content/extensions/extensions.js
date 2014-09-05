@@ -708,6 +708,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
     Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
       'var newTab = gBrowser.addTab',
       'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
-    ).toCode(true);
+    ).toCode();
   }
 }
