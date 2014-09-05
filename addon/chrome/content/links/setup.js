@@ -111,11 +111,13 @@ Tabmix.beforeBrowserInitOnLoad = function() {
                       this.prefs.getBoolPref("sessions.crashRecovery") &&
                       this.prefs.prefHasUserValue("sessions.crashed"));
     var notRestore =  firstWindow && !disabled && sessionManager &&
-                      this.prefs.getIntPref("sessions.onStart") > 1;
+                      this.prefs.getIntPref("sessions.onStart") > 1 &&
+                      (!this.prefs.getBoolPref("sessions.onStart.restorePinned") ||
+                        this.prefs.getBoolPref("sessions.restore.concatenate"));
 
     // Set SessionStore._loadState to running on first window in the session
-    //  to prevent it from restoring pinned tabs.
-    let setStateRunning = Tabmix.isVersion(250) && (willRestore || notRestore) &&
+    // to prevent it from restoring last session or pinned tabs.
+    let setStateRunning = (willRestore || notRestore) &&
         this.firstWindowInSession && !this.isWindowAfterSessionRestore;
     if (setStateRunning) {
       let STATE_STOPPED = 0;
@@ -126,8 +128,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
-    var afterSessionRestore = !this.isVersion(250) && this.isWindowAfterSessionRestore;
-    SM.doRestore = willRestore && !(SM.isPrivateWindow || afterSessionRestore);
+    var prepareLoadOnStartup = willRestore && !(SM.isPrivateWindow || this.isWindowAfterSessionRestore);
     var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
     if (willOverrideHomepage) {
       // Prevent the default homepage from loading if we're going to restore a session
@@ -142,7 +143,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
-    if (SM.doRestore) {
+    if (prepareLoadOnStartup) {
       // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
       loadOnStartup =
         '  if (uriToLoad && uriToLoad != "about:blank") {' +

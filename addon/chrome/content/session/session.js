@@ -260,29 +260,20 @@ var TabmixSessionManager = {
          return;
       this._inited = true;
 
-      if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized) {
-        let initializeSM = function() {
-          TabmixSvc.sm.promiseInitialized = true;
-          this._init();
+      let initializeSM = function() {
+        TabmixSvc.sm.promiseInitialized = true;
+        this._init();
+        if (this.notifyObservers)
           this._sendRestoreCompletedNotifications(false);
-        }.bind(this);
+      }.bind(this);
+
+      if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized) {
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
                         .then(null, Cu.reportError);
       }
-      else {
-        let forceInit = !Tabmix.isVersion(250) && this.doRestore;
-        // make sure sessionstore initialize without restoring pinned tabs
-        // for Firefox 25+ we set SessionStore._loadState = STATE_RUNNING
-        if (forceInit)
-          TabmixSvc.ss.init(null);
-        this._init();
-        // restart-less extensions observers for this notification on startup
-        // notify observers things are complete when we call SessionStore.init
-        // with null.
-        if (Tabmix.isVersion(250) && this.firstNonPrivateWindow || forceInit)
-          this._sendRestoreCompletedNotifications(false);
-      }
+      else
+        initializeSM();
    },
 
    _init: function SM__init() {
@@ -770,7 +761,7 @@ var TabmixSessionManager = {
       this.overrideHomepage = null;
    },
 
-   loadHomePage: function SM_loadHomePage() {
+   loadHomePage: function SM_loadHomePage(addTab) {
       function afterLoad(aBrowser) {
         if (!gBrowser.isBlankBrowser(aBrowser))
           aBrowser.focus();
@@ -785,7 +776,7 @@ var TabmixSessionManager = {
           // This function throws for certain malformed URIs, so use exception handling
           // so that we don't disrupt startup
           try {
-            gBrowser.loadTabs(URIs, false, true);
+            gBrowser.loadTabs(URIs, false, !addTab);
           } catch (e) { afterLoad(gBrowser.selectedBrowser); }
         }
         else
@@ -2142,7 +2133,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             default:
          }
       } else
-         this.loadHomePage();
+         this.deferredRestore(true);
       this.saveStateDelayed();
       delete this.callBackData;
 
@@ -2200,6 +2191,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // else if loadsession < 0 the session path is saved in this.gSessionPath
       var restoreFlag = this.prefBranch.getIntPref("onStart");
       if (restoreFlag > 1) {
+         // merege pinned tabs from all windows into one, other cases
+         // handled by SessionStore
+         if (this.prefBranch.getBoolPref("restore.concatenate"))
+            this.deferredRestore();
          return; // Don't Restore
       }
       var loadSession = this.prefBranch.getIntPref("onStart.loadsession");
@@ -2310,7 +2305,10 @@ try{
       this.enableCrashRecovery(aResult);
       if (aResult.button == Tabmix.BUTTON_OK)
          this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
+      else if (this.waitForCallBack)
+         this.deferredRestore();
       else
+         // we are here not after a callback only when the stratup file is empty
          this.loadHomePage();
 
       this.saveStateDelayed();
@@ -2321,6 +2319,61 @@ try{
 
       this._sendRestoreCompletedNotifications(true);
    },
+
+ /**
+  * user wants to restore only pinned tabs
+  * use SessionStore functions to prepare and restore
+  */
+  deferredRestore: function(afterCrash) {
+    if (!this.prefBranch.getBoolPref("onStart.restorePinned"))
+      return;
+
+    let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
+    let [iniState, remainingState] = this.SessionStore._prepDataForDeferredRestore(state);
+    let pinnedExist = iniState.windows.length > 0;
+    if (pinnedExist) {
+      // move all tabs and closed tabs into one window
+      if (!afterCrash && (Tabmix.prefs.getBoolPref("singleWindow") ||
+          this.prefBranch.getBoolPref("restore.concatenate"))) {
+        this.mergeWindows(iniState);
+      }
+      let overwrite = this.SessionStore._isCmdLineEmpty(window, iniState);
+      if (Tabmix.isVersion(260)) {
+        let options = {firstWindow: true, overwriteTabs: overwrite};
+        this.SessionStore.restoreWindow(window, iniState, options);
+      }
+      else {
+        iniState._firstTabs = true;
+        this.SessionStore.restoreWindow(window, iniState, overwrite);
+      }
+    }
+    this.loadHomePage(pinnedExist);
+  },
+
+ /**
+  * move all tabs & closed tabs into one window
+  * (original code by Session Manager extension)
+  */
+  mergeWindows: function(state){
+    if (state.windows.length < 2)
+      return;
+    // take off first window
+    let win = state.windows.shift();
+    // make sure toolbars are not hidden on the window
+    delete win.hidden;
+    delete win.isPopup;
+    if (!win._closedTabs)
+      win._closedTabs = [];
+    // Move tabs to first window
+    state.windows.forEach(function(aWindow) {
+      win.tabs = win.tabs.concat(aWindow.tabs);
+      if (aWindow._closedTabs)
+        win._closedTabs = win._closedTabs.concat(aWindow._closedTabs);
+    });
+    win._closedTabs.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
+    // Remove all but first window
+    state.windows = [win];
+  },
 
    _sendRestoreCompletedNotifications: function(waitForCallBack) {
       // notify observers things are complete.

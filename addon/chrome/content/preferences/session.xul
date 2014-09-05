@@ -54,6 +54,8 @@
                   name="extensions.tabmix.sessions.onStart.sessionpath"      type="string"/>
       <preference id="pref_onStart.empty"
                   name="extensions.tabmix.sessions.onStart.askifempty"       type="bool"/>
+      <preference id="pref_onStart.restorePinned"
+                  name="extensions.tabmix.sessions.onStart.restorePinned"       type="bool"/>
       <preference id="pref_onRestore.overwritewindows"
                   name="extensions.tabmix.sessions.restore.overwritewindows" type="bool"/>
       <preference id="pref_onRestore.overwritetabs"
@@ -191,6 +193,8 @@
                       </menupopup>
                     </menulist>
                   </hbox>
+                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="Restore my pinned tabs from last time"
+                            preference="pref_onStart.restorePinned"/>
                 </groupbox>
               </tabpanel>
               <!-- Tabmix Session manager - restore -->
