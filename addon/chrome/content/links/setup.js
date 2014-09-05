@@ -120,8 +120,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (setStateRunning) {
       let STATE_STOPPED = 0;
       let STATE_RUNNING = 1;
-      if (SM.SessionStore._loadState == STATE_STOPPED)
+      if (SM.SessionStore._loadState == STATE_STOPPED) {
         SM.SessionStore._loadState = STATE_RUNNING;
+        SM.notifyObservers = true;
+      }
     }
 
     var afterSessionRestore = !this.isVersion(250) && this.isWindowAfterSessionRestore;

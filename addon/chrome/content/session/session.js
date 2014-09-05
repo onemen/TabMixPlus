@@ -232,6 +232,7 @@ var TabmixSessionManager = {
     windowClosed: false,
     overrideHomepage: null,
     waitForCallBack: false,
+    notifyObservers: false,
 
     afterCrash: false,
     lastSessionWasEmpty: false,
@@ -766,6 +767,7 @@ var TabmixSessionManager = {
    restoreWindowArguments: function() {
       if (this.overrideHomepage)
         window.arguments[0] = this.overrideHomepage;
+      this.overrideHomepage = null;
    },
 
    loadHomePage: function SM_loadHomePage() {
@@ -788,7 +790,7 @@ var TabmixSessionManager = {
         }
         else
           afterLoad(browser);
-        this.restoreWindowArguments(true);
+        this.restoreWindowArguments();
       }
       else if (gBrowser.mCurrentTab.loadOnStartup) {
         for (var i = 0; i < gBrowser.tabs.length ; i++)
@@ -1103,12 +1105,6 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.saveState();
             break;
          case "sessionstore-windows-restored":
-            // we prevent SessionStore from adding the home page when last
-            // session contained only pinned tab(s).
-            // SessionStore._isCmdLineEmpty use the arguments to determine if it
-            // need to override tab
-            if (!Tabmix.isVersion(250))
-              this.restoreWindowArguments();
          case "sessionstore-browser-state-restored":
             // session restored update buttons state
             TMP_ClosedTabs.setButtonDisableState();
@@ -2306,7 +2302,8 @@ try{
         this.prefBranch.setBoolPref("crashRecovery", true); // enable Crash Recovery
         Services.prefs.savePrefFile(null); // store the pref immediately
       }
-      this._sendRestoreCompletedNotifications(true);
+      if (this.waitForCallBack)
+        this._sendRestoreCompletedNotifications(true);
    },
 
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
@@ -2327,10 +2324,20 @@ try{
 
    _sendRestoreCompletedNotifications: function(waitForCallBack) {
       // notify observers things are complete.
-      if (Tabmix.isVersion(250) && this.waitForCallBack == waitForCallBack) {
-        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-        this.waitForCallBack = false;
+      // we send sessionstore-windows-restored notification as soon as _init
+      // function finished, if there are pending call back from one of our
+      // dialog 2nd notification will be send once the call back function finished.
+      if (this.notifyObservers) {
+        this.notifyObservers = false;
+        if (!waitForCallBack)
+          Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+        else if (this.waitForCallBack == waitForCallBack) {
+          Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
+          this.waitForCallBack = false;
+        }
       }
+      if (!this.waitForCallBack)
+        this.restoreWindowArguments();
    },
 
    getSessionList: function SM_getSessionList(flag) {
