@@ -799,7 +799,6 @@ var TabmixConvertSession = {
         return null;
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
       tabData.index = Math.min(index + 1, tabData.entries.length);
-      tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
 
