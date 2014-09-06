@@ -230,11 +230,14 @@ var tablib = {
       'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
+       var noChange = aTab.label == title && aTab.crop == crop;\
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
-         if (aTab.label == title && aTab.crop == crop)\
+         if (noChange)\
            tablib.onTabTitleChanged(aTab, title == urlTitle);\
        }\
+       else if (noChange)\
+         TMP_Places.currentTab = null;\
        $&'
     )._replace(
       'aTab.crop = crop;',
