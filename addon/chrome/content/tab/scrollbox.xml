@@ -458,6 +458,11 @@
             if (tab.hasAttribute("tabmix-firstTabInRow"))
               tab.removeAttribute("tabmix-firstTabInRow");
           }
+
+          // if a smoothScroll is in progress call ensureElementIsVisible again
+          // the amountToScroll changed when we changed firstTabInRow
+          if (this._scrollTarget)
+            this.ensureElementIsVisible(this._scrollTarget, true)
         ]]></body>
       </method>
 

@@ -645,9 +645,7 @@ var TMP_eventListener = {
     Tabmix.restoreTabState(tab);
     TabmixSessionManager.restoreHistoryComplete(tab);
 
-    if (gBrowser.tabContainer.overflow &&
-        !gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.selectedTab))
-      gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+    gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
     var url = tab.linkedBrowser.currentURI.spec;
