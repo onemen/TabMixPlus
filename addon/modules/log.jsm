@@ -234,20 +234,26 @@ options = {
     let lines = [], _char = this._char, re = this._pathRegExp;
     stack.forEach(function(line) {
       let atIndex = line.indexOf("@");
-      let lineString = "", columnIndex = line.lastIndexOf(":");
+      let columnIndex = line.lastIndexOf(":");
       let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
       if (fileName) {
-        if (fileName.indexOf(":") > 7) {
+        let lineNumber = parseInt(line.slice(columnIndex + 1));
+        let colNumber;
+        if (fileName.replace("://", "///").indexOf(":") > -1) {
+          colNumber = lineNumber;
           columnIndex = fileName.lastIndexOf(":");
-          lineString = fileName.slice(columnIndex + 1);
+          lineNumber = parseInt(fileName.slice(columnIndex + 1));
           fileName = fileName.slice(0, columnIndex);
         }
         fileName = decodeURI(fileName).replace(re, "");
-        let lineNumber = parseInt(lineString || line.slice(columnIndex + 1));
         let atIndex = line.indexOf(_char);
-        let name = line.slice(0, atIndex).split("(").shift() || "null";
-        lines.push('  File "' + fileName + '", line ' +
-            lineNumber + ', in ' + name);
+        let name = line.slice(0, atIndex).split("(").shift();
+        let formated = '  File "' + fileName + '", line ' + lineNumber;
+        if (colNumber)
+          formated += ', col ' + colNumber;
+        if (name)
+          formated += ', in ' + name.replace("/<", "");
+        lines.push(formated);
       }
     });
 
