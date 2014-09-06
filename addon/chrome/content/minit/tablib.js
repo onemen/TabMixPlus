@@ -283,7 +283,7 @@ var tablib = {
         'if (doPosition)',
         '  if (doPosition && TabmixTabbar.isMultiRow) {' +
         '    this.setAttribute("positionpinnedtabs", "true");' +
-        '    let width = this.mTabstrip.scrollboxPaddingStart;' +
+        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
         '      tab.style.MozMarginStart = width + "px";' +
