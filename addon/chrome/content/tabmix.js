@@ -661,8 +661,8 @@ var TMP_eventListener = {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
         fullScrToggler.collapsed = true;
-        let addonBar = document.getElementById("addon-bar");
-        addonBar.parentNode.insertBefore(fullScrToggler, addonBar);
+        let bottombox = document.getElementById("browser-bottombox");
+        bottombox.appendChild(fullScrToggler);
 
         Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
           'gNavToolbox.style.marginTop = "";',
