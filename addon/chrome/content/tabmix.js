@@ -238,8 +238,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   // in gBrowser.tabContainer._positionPinnedTabs
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 
-  Tabmix.australisUI.init();
-
   // show global notification when debug mode is on
   let gnb = Tabmix._debugMode &&
             (document.getElementById("high-priority-global-notificationbox") ||
@@ -341,6 +339,10 @@ var TMP_eventListener = {
 
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     TMP_SessionStore.setAfterSessionRestored();
+
+    // turn both broadcasters off, we will set the proper value later
+    Tabmix.setItem("tmp_undocloseButton", "disabled", true);
+    Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
     try {
       /**
@@ -1051,7 +1053,6 @@ var TMP_eventListener = {
       Tabmix.flst.cancel();
 
     Tabmix.navToolbox.deinit();
-    Tabmix.australisUI.deinit();
     if (Tabmix.DocShellCapabilitiesInitialized)
       Tabmix.docShellCapabilities.deinit(window);
   },
@@ -1127,31 +1128,6 @@ var TMP_eventListener = {
     updateAttrib("class", "tab-text", "role", "presentation");
   }
 
-}
-
-Tabmix.australisUI = {
-  init: function() {
-    if (!TabmixSvc.australis)
-      return;
-    PanelUI.panel.addEventListener("popupshowing", this.updateButtonsState);
-  },
-
-  deinit: function() {
-    if (!TabmixSvc.australis)
-      return;
-    PanelUI.panel.removeEventListener("popupshowing", this.updateButtonsState);
-  },
-
-  updateButtonsState: function() {
-    let $ = function(id) document.getElementById(id);
-    let cwb = $("btn_closedwindows");
-    if (cwb && cwb.parentNode == PanelUI.contents)
-      cwb.disabled = $("tmp_closedwindows").getAttribute("disabled");
-
-    let cwb = $("btn_undoclose");
-    if (cwb && cwb.parentNode == PanelUI.contents)
-      cwb.disabled = $("tmp_undocloseButton").getAttribute("disabled");
-  }
 }
 
 /**

@@ -1168,10 +1168,6 @@ Tabmix.navToolbox = {
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
-    let SM = TabmixSessionManager;
-    if (SM.enableManager != null)
-      SM.toggleRecentlyClosedWindowsButton();
-
     gTMPprefObserver.showReloadEveryOnReloadButton();
 
     gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));

@@ -388,8 +388,8 @@
     <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
     <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
     <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>
-    <broadcaster id="tmp_closedwindows" disabled="true"/>
-    <broadcaster id="tmp_undocloseButton" disabled="true"/>
+    <broadcaster id="tmp_closedwindows"/>
+    <broadcaster id="tmp_undocloseButton"/>
     <broadcaster id="tmp_sessionmanagerButton"/>
     <broadcaster id="tmp_disableSave"/>
   </broadcasterset>
