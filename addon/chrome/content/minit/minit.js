@@ -90,6 +90,10 @@ var TMP_tabDNDObserver = {
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
+  get _isCustomizing() {
+    return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
+  },
+
   onDragStart: function (event) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
@@ -99,7 +103,7 @@ var TMP_tabDNDObserver = {
     }
 
     var tab = gBrowser.tabContainer._getDragTargetTab(event);
-    if (!tab)
+    if (!tab || this._isCustomizing)
       return;
 
     tab.__tabmixDragStart = true;
@@ -188,7 +192,7 @@ var TMP_tabDNDObserver = {
 
     var canDrop;
     var hideIndicator = false;
-    if (effects == "") {
+    if (effects == "" || effects == "none" && this._isCustomizing) {
       this.clearDragmark();
       return;
     }
@@ -262,7 +266,7 @@ var TMP_tabDNDObserver = {
 
     if (draggeType == this.DRAG_LINK) {
       let tab = tabBar._getDragTargetTab(event);
-      if (tab) {
+      if (tab && tab.linkedBrowser.currentURI.spec != "about:customizing") {
         if (!this._dragTime)
           this._dragTime = Date.now();
         if (Date.now() >= this._dragTime + this._dragOverDelay)
@@ -416,7 +420,7 @@ var TMP_tabDNDObserver = {
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-    if (dt.mozUserCancelled || dt.dropEffect != "none") {
+    if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
       delete draggedTab._dragData;
       return;
     }
