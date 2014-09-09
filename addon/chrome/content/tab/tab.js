@@ -1372,12 +1372,10 @@ var gTMPprefObserver = {
         let buttonPosition = CustomizableUI.getPlacementOfWidget("new-tab-button").position;
         let tabsPosition = CustomizableUI.getPlacementOfWidget("tabbrowser-tabs").position;
         let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
-                          (aPosition == 2 && buttonPosition != tabsPosition + 1 ||
-                           buttonPosition < tabsPosition)
+                             (aPosition == 1 && buttonPosition < tabsPosition) ||
+                             (aPosition == 2 && buttonPosition != tabsPosition + 1);
         if (changePosition) {
-          let newPosition = aPosition == 0 ? 0 : 1;
-          if (newPosition > buttonPosition)
-            newPosition++;
+          let newPosition = aPosition == 0 ? -1 : tabsPosition + 1;
           CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
         }
         return;
