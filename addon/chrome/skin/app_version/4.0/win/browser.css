@@ -15,22 +15,14 @@
   background-image: none !important;
 }
 
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton {
+  background-image: none !important;
+}
+
 /*  For .tabs-closebutton .showhover */
 .tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
   margin: -3px 0px -3px 0px;
-}
-
-/* Tabstrip close button Firefox 31 */
-.tabs-closebutton.tabmix {
-  padding: 4px 2px;
-  margin: 0px;
-  border: none;
-}
-
-.tabs-closebutton.tabmix > .toolbarbutton-icon {
-  -moz-margin-end: 0px !important;
-  -moz-padding-end: 2px !important;
-  -moz-padding-start: 2px !important;
 }
 
 /*  new tab button after last tab on firefox 4.0  aero */
@@ -43,19 +35,6 @@
   vertical-align: bottom;
 }
 */
-
-/* default value padding-bottom: 4px; make row height 24 insted of 23 */
-#TabsToolbar > #tabs-closebutton {
-  padding-bottom: 3px;
-}
-
-#TabsToolbar[multibar] > #tabs-closebutton {
-  padding-top: 5px;
-}
-
-.tabbrowser-tabs[tabmix_australis][multibar] ~ #tabs-closebutton {
-  padding-top: 8px !important;
-}
 
 /* for TabsToolbar on bottom with windows 7 */
 #tabmix-bottom-toolbox[tabmix_aero] {

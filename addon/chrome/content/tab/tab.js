@@ -1117,8 +1117,7 @@ var gTMPprefObserver = {
 
     let _buttonsHeight = Tabmix.isVersion(310) ? Tabmix._buttonsHeight - 1 : Tabmix._buttonsHeight;
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
-                  '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
-                  '#TabsToolbar[multibar] > #tabs-closebutton {' +
+                  '#tabmixScrollBox[flowing=multibar] > toolbarbutton {' +
                   '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule);
     delete Tabmix._buttonsHeight;

@@ -5,13 +5,17 @@
 
 **/
 
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
+  -moz-padding-end: 0px !important;
+  -moz-padding-start: 0px !important;
+}
+
 /* for tabs close button on Firefox 31+ */
 .tabs-closebutton.tabmix {
   -moz-appearance: none;
   height: 16px;
   width: 16px;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
 }
 
 .tabmix-showhover {
@@ -44,7 +48,6 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] > #tabs-closebutton,
 #TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
 #TabsToolbar[multibar] {
   -moz-box-align: start;

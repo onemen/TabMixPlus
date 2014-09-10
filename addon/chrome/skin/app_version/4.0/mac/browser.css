@@ -15,12 +15,12 @@
 }
 */
 
-/* Tabstrip close button Firefox 31+ */
-.tabs-closebutton.tabmix {
-  -moz-padding-end: 4px;
-  border: none;
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar .tabs-closebutton:not([type="menu-button"]):not([disabled=true]):not([open]):hover {
+  background-image: none !important;
 }
 
+/* Tabstrip close button Firefox 31+ */
 @media (min-resolution: 2dppx) {
   .tabs-closebutton.tabmix > .toolbarbutton-icon {
     width: 16px;

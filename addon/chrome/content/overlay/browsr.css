@@ -109,7 +109,7 @@ label.text-link, label[onclick] {
   -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab") !important;
 }
 
-#TabsToolbar > #tabs-closebutton {
+#TabsToolbar > .tabs-closebutton {
  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabbrowser-close-tab-button")!important;
 }
 
