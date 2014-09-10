@@ -433,6 +433,15 @@ var TMP_extensionsCompatibility = {
       ).toCode();
       window.BrowserOpenTab = TMP_BrowserOpenTab;
     }
+
+    // Classic Theme Restorer
+    // move appmenu-sessionmanager to its position
+    let ctrBox = document.getElementById("ctraddon_appmenubox_developer");
+    if (ctrBox) {
+      let sessionmanager = document.getElementById("appmenu-sessionmanager");
+      if (sessionmanager)
+        ctrBox.parentNode.insertBefore(sessionmanager, ctrBox.nextSibling);
+    }
   }
 
 }
