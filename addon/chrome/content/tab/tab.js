@@ -443,10 +443,30 @@ var TabmixTabbar = {
     let multibar = tabBar.hasAttribute("multibar");
     let selected = tabBar.selectedItem;
     let tabRow, top;
+
+    let numPinnedTabs = gBrowser._numPinnedTabs;
+    let isSpecial = TabmixSvc.australis &&
+        this.scrollButtonsMode != this.SCROLL_BUTTONS_MULTIROW &&
+        numPinnedTabs > 0;
     // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
     // include it), we add tabmix-beforeselected-visible here and use it for
     // Firefox with australis UI
     let updateAtt = function(tab, type, attrib, visible, prefix) {
+      // special case is when scrollButtonsMode is in one row and
+      // selected or hovered tab is last pinned or first non-pinned tab
+      let isSpecialTab = function() {
+        if (!tab || !isSpecial)
+          return false;
+        if (/^before/.test(attrib))
+          return tab._tPos == numPinnedTabs - 1 ? "before" : false;
+        return tab._tPos == numPinnedTabs ? "after" : false;
+      }
+      let getAttVal = function(val, hoverAttr) {
+        if (!specialTab || hoverAttr && visible && /selected/.test(attrib))
+          return val;
+        return val ? "special" : val;
+      }
+
       let removed = "tabmix-removed-" + attrib;
       let oldTab = tabBar._tabmixPositionalTabs[type];
       if (oldTab && tab != oldTab) {
@@ -454,13 +474,14 @@ var TabmixTabbar = {
         oldTab.removeAttribute(removed);
       }
       tabBar._tabmixPositionalTabs[type] = tab;
+      let specialTab = isSpecialTab();
       if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
-          multibar || tab.hasAttribute(removed))) {
+          multibar || tab.hasAttribute(removed) || specialTab)) {
         let sameRow = multibar ? tabRow == tabBar.getTabRowNumber(tab, top) || null : true;
         Tabmix.setItem(tab, removed, !sameRow || null);
-        Tabmix.setItem(tab, attrib, sameRow);
+        Tabmix.setItem(tab, attrib, getAttVal(sameRow, true));
         if (visible)
-          Tabmix.setItem(tab, prefix + attrib + "-visible", sameRow);
+          Tabmix.setItem(tab, prefix + attrib + "-visible", getAttVal(sameRow));
       }
     }
 
