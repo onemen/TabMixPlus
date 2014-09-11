@@ -797,7 +797,7 @@
             TabScope.init();
           }
 
-          this.mTabstrip.setAttribute("flowing", this.getAttribute("flowing"));
+          TabmixTabbar.flowing = this.getAttribute("flowing");
           this.setTabStripOrient();
           let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
           TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);

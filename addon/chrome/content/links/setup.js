@@ -303,9 +303,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
     let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
-    this.setItem(tabContainer, "flowing", flowing);
-    tabContainer.mTabstrip.setAttribute("flowing", flowing);
-    this.setItem("tabmixScrollBox", "flowing", flowing);
+    TabmixTabbar.flowing = flowing;
 
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)

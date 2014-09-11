@@ -13,8 +13,24 @@ var TabmixTabbar = {
   SCROLL_BUTTONS_MULTIROW: 2,
   SCROLL_BUTTONS_RIGHT: 3,
 
+  set flowing(val) {
+    Tabmix.setItem(gBrowser.tabContainer, "flowing", val);
+    Tabmix.setItem(gBrowser.tabContainer.mTabstrip, "flowing", val);
+
+    let tabmixScrollBox = document.getElementById("tabmixScrollBox");
+    Tabmix.setItem(tabmixScrollBox, "flowing", val);
+    // we have to set orient attribute for Linux theme,
+    // maybe other themes need it for display the scroll arrow
+    Tabmix.setItem(tabmixScrollBox, "orient", val == "multibar" ? "vertical" : "horizontal");
+    return val
+  },
+
+  get flowing() {
+    return gBrowser.tabContainer.getAttribute("flowing");
+  },
+
   get isMultiRow() {
-    return gBrowser.tabContainer.getAttribute("flowing") == "multibar";
+    return this.flowing == "multibar";
   },
 
   isButtonOnTabsToolBar: function(button) {
@@ -55,21 +71,6 @@ var TabmixTabbar = {
       let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = tabBar.overflow;
 
-      switch (tabscroll) {
-        case this.SCROLL_BUTTONS_HIDDEN:
-          tabBar.setAttribute("flowing", "singlebar");
-          break;
-        case this.SCROLL_BUTTONS_LEFT_RIGHT:
-          tabBar.setAttribute("defaultScrollButtons", true);
-          Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", true);
-        case this.SCROLL_BUTTONS_RIGHT:
-          tabBar.setAttribute("flowing", "scrollbutton");
-          break;
-        case this.SCROLL_BUTTONS_MULTIROW:
-          tabBar.setAttribute("flowing", "multibar");
-          break;
-      }
-
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
       this.setScrollButtonBox(useTabmixButtons, false, true);
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
@@ -79,9 +80,11 @@ var TabmixTabbar = {
         Tabmix.setItem("tabmixScrollBox", "collapsed", true);
       }
 
-      let flowing = tabBar.getAttribute("flowing");
-      tabStrip.setAttribute("flowing", flowing);
-      Tabmix.setItem("tabmixScrollBox", "flowing", flowing);
+      let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+      this.flowing = flowing;
+      let isDefault = tabscroll == this.SCROLL_BUTTONS_LEFT_RIGHT || null;
+      Tabmix.setItem(tabBar, "defaultScrollButtons", isDefault);
+      Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         tabBar.resetFirstTabInRow();
@@ -100,12 +103,6 @@ var TabmixTabbar = {
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");
-
-      if (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
-            tabBar.hasAttribute("defaultScrollButtons")) {
-        tabBar.removeAttribute("defaultScrollButtons");
-        Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", null);
-      }
     }
 
     this.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") &&
@@ -232,12 +229,6 @@ var TabmixTabbar = {
       tabStrip._scrollButtonUpRight = box._scrollButtonUp;
     }
     if (update) {
-      if (useTabmixButtons) {
-        // we have to set orient attribute for Linux theme
-        // maybe other themes need it for display the scroll arrow
-        box.orient = this.isMultiRow ? "vertical" : "horizontal";
-      }
-
       tabStrip._scrollButtonDown = !useTabmixButtons ?
           tabStrip._scrollButtonDownLeft : tabStrip._scrollButtonDownRight;
       gBrowser.tabContainer._animateElement = tabStrip._scrollButtonDown;
