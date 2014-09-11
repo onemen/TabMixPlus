@@ -1319,43 +1319,38 @@ var gTMPprefObserver = {
       if (Tabmix.isVersion(290)) {
         let buttonPosition = Tabmix.getPlacement("new-tab-button");
         let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
+        let boxPositoin = Tabmix.getPlacement("tabmixScrollBox");
+        let after = boxPositoin == tabsPosition + 1 ? boxPositoin : tabsPosition;
         let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
-                             (aPosition == 1 && buttonPosition < tabsPosition) ||
-                             (aPosition == 2 && buttonPosition != tabsPosition + 1);
+                             (aPosition == 1 && buttonPosition < after) ||
+                             (aPosition == 2 && buttonPosition != after + 1);
         if (changePosition) {
-          let newPosition = aPosition == 0 ? -1 : tabsPosition + 1;
+          let newPosition = aPosition == 0 ? tabsPosition : after + 1;
           CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
         }
         return;
       }
 
-      let sideChanged, tabsToolbar = $("TabsToolbar");
+      let tabsToolbar = $("TabsToolbar");
       let toolBar = Array.slice(tabsToolbar.childNodes);
-      let buttonIndex = toolBar.indexOf(newTabButton);
-      let tabsIndex = toolBar.indexOf(gBrowser.tabContainer);
-      if (aPosition == 0) {
-        if (buttonIndex > tabsIndex) {
-          newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
-          sideChanged = true;
-        }
-      }
-      else {
-        // When user show the button after last tab, we show it on the side
-        // only on multi-row. place it immediately after gBrowser.tabContainer
-        if (aPosition == 2 && buttonIndex != tabsIndex + 1 ||
-            buttonIndex < tabsIndex) {
-          let before = gBrowser.tabContainer.nextSibling;
-          if ($("tabmixScrollBox")) {
-            before = before.nextSibling;
-          }
-          newTabButton.parentNode.insertBefore(newTabButton, before);
-          sideChanged = true;
-        }
-      }
-      if (sideChanged) {
+      let buttonPosition = toolBar.indexOf(newTabButton);
+      let tabsPosition = toolBar.indexOf(gBrowser.tabContainer);
+      let scrollBox = $("tabmixScrollBox");
+      let after = scrollBox && toolBar.indexOf(scrollBox) || tabsPosition;
+      let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
+                           (aPosition == 1 && buttonPosition < after) ||
+                           (aPosition == 2 && buttonPosition != after + 1);
+      if (changePosition) {
+        let newPosition = aPosition == 0 ? tabsPosition : after + 1;
+        tabsToolbar.insertBefore(newTabButton, tabsToolbar.childNodes.item(newPosition));
+        // update currentset
         let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-        cSet = cSet.replace("new-tab-button", "").replace(/^,/, "").replace(",,", ",");
-        cSet = cSet.split(",");
+        cSet = cSet.split(",").filter(function(id) id != "new-tab-button");
+        let tabsIndex = cSet.indexOf("tabbrowser-tabs");
+        if (tabsIndex < 0)
+          return;
+        if (aPosition > 0)
+          tabsIndex++;
         cSet.splice(tabsIndex, 0, "new-tab-button");
         tabsToolbar.setAttribute("currentset", cSet.join(","));
         document.persist("TabsToolbar", "currentset");
