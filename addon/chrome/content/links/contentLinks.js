@@ -48,6 +48,10 @@ Tabmix.contentAreaClick = {
      * Tabmix.contentAreaClick.contentLinkClick
      */
     Tabmix.changeCode(window, "handleLinkClick")._replace(
+      '{', '{\n'+
+      '  if (arguments.length > 3)\n'+
+      '    event.__where = arguments[3] && arguments[3].where;'
+    )._replace(
       'whereToOpenLink(event);',
       '$&\n' +
       '  if (event && event.__where && event.__where != "default" &&\n' +

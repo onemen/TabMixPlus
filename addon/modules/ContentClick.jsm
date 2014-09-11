@@ -508,7 +508,9 @@ let ContentClickInternal = {
 
       let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
-      this._window.handleLinkClick(aEvent, aEvent.__hrefFromOnClick || href, linkNode);
+      // in Firefox 17.0-20.0 we can't pass aEvent.__where to handleLinkClick
+      // add 4th argumens with where value
+      this._window.handleLinkClick(aEvent, aEvent.__hrefFromOnClick || href, linkNode, {where: aEvent.__where});
       aEvent.stopPropagation();
       aEvent.preventDefault();
       return "17";
