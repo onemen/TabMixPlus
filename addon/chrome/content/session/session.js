@@ -2382,7 +2382,6 @@ try{
       // function finished, if there are pending call back from one of our
       // dialog 2nd notification will be send once the call back function finished.
       if (this.notifyObservers) {
-        this.notifyObservers = false;
         if (!waitForCallBack)
           Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
         else if (this.waitForCallBack == waitForCallBack) {
