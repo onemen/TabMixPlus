@@ -215,7 +215,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   gTMPprefObserver.setMenuIcons();
 
   TabmixTabbar.updateSettings(true);
-  TabmixTabbar.addCloseButton();
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
   gTMPprefObserver.miscellaneousRules();

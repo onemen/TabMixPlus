@@ -142,7 +142,9 @@ var TabmixTabbar = {
       tabBar.adjustTabstrip(true);
 
     // show on tabbar
-    let tabstripClosebutton = document.getElementById("tabs-closebutton");
+    let tabstripClosebutton = Tabmix.isVersion(310) ?
+        document.getElementById("tabmix-tabs-closebutton") :
+        document.getElementById("tabs-closebutton");
     if (this.isButtonOnTabsToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
@@ -176,40 +178,6 @@ var TabmixTabbar = {
     if (Tabmix._show_newtabbutton) {
       Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
         aCondition ? aValue : Tabmix._show_newtabbutton);
-    }
-  },
-
-  addCloseButton: function () {
-    if (!Tabmix.isVersion(310))
-      return;
-    var button = document.getElementById("tabs-closebutton");
-    if (!button && !Tabmix.prefs.getBoolPref("hideTabBarButton")) {
-      button = document.createElement("toolbarbutton");
-      button.id = "tabs-closebutton";
-      button.className = "tabs-closebutton close-icon tabmix";
-      button.setAttribute("command", "cmd_close");
-      button.setAttribute("cui-areatype", "toolbar");
-      var label = gBrowser.selectedTab.getAttribute("closetabtext");
-      button.setAttribute("label", label);
-      button.setAttribute("tooltiptext", label);
-
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = (tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset")).split(",");
-      let index = cSet.indexOf("tabs-closebutton");
-      let elm = null;
-      if (index > -1) {
-        while (index < cSet.length - 1) {
-          let item = document.getElementById(cSet[index + 1]);
-          if (item && item.parentNode == tabsToolbar) {
-            elm = item;
-            break;
-          }
-          index++;
-        }
-      }
-      else if (index == -1)
-        tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
-      tabsToolbar.insertBefore(button, elm);
     }
   },
 
@@ -917,7 +885,6 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.hideTabBarButton":
-        TabmixTabbar.addCloseButton();
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
       case "extensions.tabmix.hideAllTabsButton":

@@ -949,6 +949,16 @@ Tabmix.navToolbox = {
       this.cleanCurrentset();
       return;
     }
+    if (Tabmix.isVersion(310)) {
+      // remove tabmix-tabs-closebutton when its position is immediately after
+      // tabmixScrollBox and save its position in preference for future use.
+      let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
+      let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
+      if (buttonPosition == boxPosition + 1) {
+        Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
+        CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
+      }
+    }
     CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
   },
 
@@ -1197,8 +1207,6 @@ Tabmix.navToolbox = {
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     gTMPprefObserver.showReloadEveryOnReloadButton();
-
-    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
   },
 
   initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {
@@ -1219,7 +1227,17 @@ Tabmix.navToolbox = {
   },
 
   tabStripAreaChanged: function() {
+    /**
+     * we need to position three elements in TabsToolbar :
+     * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
+     * we resotre tabmixScrollBox positoin first since its postion is fixed,
+     * to be on the safe side we check tabmixScrollBox positoin again after we
+     * restore tabmix-tabs-closebutton and new-tab-button position.
+     */
     this.setScrollButtons();
+    this.setCloseButtonPosition();
+    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
+    this.setScrollButtons(false, true);
 
     // reset tabsNewtabButton and afterTabsButtonsWidth
     if (typeof privateTab == "object")
@@ -1246,6 +1264,29 @@ Tabmix.navToolbox = {
     if (!onlyPosition) {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+    }
+  },
+
+  setCloseButtonPosition: function() {
+    if (!Tabmix.isVersion(310))
+      return;
+    // if tabmix-tabs-closebutton was positioned immediately after
+    // tabmixScrollBox we removed the button on exit, to avoid bug 1034394.
+    let pref = "tabs-closeButton-position";
+    if (Tabmix.prefs.prefHasUserValue(pref)) {
+      let position = Tabmix.prefs.getIntPref(pref);
+      Tabmix.prefs.clearUserPref(pref);
+      CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
+    }
+    // try to restore button position from tabs-closebutton position
+    // if item with tabs-closebutton id exist, some other extension add it
+    else if (!document.getElementById("tabs-closebutton")) {
+      let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
+      let position = currentset.indexOf("tabs-closebutton");
+      if (position > -1) {
+        CustomizableUI.removeWidgetFromArea("tabs-closebutton");
+        CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
+      }
     }
   }
 

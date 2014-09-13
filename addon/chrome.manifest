@@ -39,6 +39,7 @@ locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 
 overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
+overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/overlay/tabstoolbar.xul appversion>=31.0b1
 
 overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=WINNT
 overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Darwin
