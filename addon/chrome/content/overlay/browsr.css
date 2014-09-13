@@ -153,6 +153,7 @@ label.text-link, label[onclick] {
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) >
    #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: -moz-box;
+  visibility: visible;
 }
 
 #TabsToolbar[tabmix-show-newtabbutton*="side"] > #new-tab-button {

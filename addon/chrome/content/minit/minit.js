@@ -945,14 +945,20 @@ Tabmix.navToolbox = {
 
     // fix bug 1034394 - tab mix plus's tabmixscrollbox is not cleaned up after
     // uninstalling tab mix plus
+    if (!Tabmix.isVersion(290)) {
+      this.cleanCurrentset();
+      return;
+    }
+    CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
+  },
+
+  cleanCurrentset: function() {
     let tabsToolbar = document.getElementById("TabsToolbar");
     let cSet = tabsToolbar.getAttribute("currentset");
     if (cSet.indexOf("tabmixScrollBox") > -1) {
       cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",");
       tabsToolbar.setAttribute("currentset", cSet);
       document.persist("TabsToolbar", "currentset");
-      if (Tabmix.isVersion(290))
-        CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
     }
   },
 
@@ -1026,7 +1032,7 @@ Tabmix.navToolbox = {
     this.initializeSearchbar();
     this.toolbarButtons();
     this.initializeAlltabsPopup();
-    this.initializeScrollButtons();
+    this.tabStripAreaChanged();
   },
 
   urlBarInitialized: false,
@@ -1212,22 +1218,40 @@ Tabmix.navToolbox = {
     }
   },
 
-  initializeScrollButtons: function TMP_navToolbox_initializeScrollButtons() {
-    // Make sure our scroll buttons box is after tabbrowser-tabs
-    let id = "tabmixScrollBox";
-    let box = document.getElementById(id);
-    let tabBar = gBrowser.tabContainer;
-    if (box && box != tabBar.nextSibling) {
-      let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-      TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
-      if (!Tabmix.isVersion(320) && useTabmixButtons && tabBar.overflow) {
-        tabBar.mTabstrip._scrollButtonUp.collapsed = false;
-        tabBar.mTabstrip._scrollButtonDown.collapsed = false;
-      }
-    }
+  tabStripAreaChanged: function() {
+    this.setScrollButtons();
 
     // reset tabsNewtabButton and afterTabsButtonsWidth
     if (typeof privateTab == "object")
       TMP_eventListener.updateMultiRow(true);
+  },
+
+  setScrollButtons: function(reset, onlyPosition) {
+    let box = document.getElementById("tabmixScrollBox");
+    if (!box)
+      return;
+
+    if (!reset && box == gBrowser.tabContainer.nextSibling)
+      return;
+
+    // Make sure our scroll buttons box is after tabbrowser-tabs
+    if (!Tabmix.isVersion(290)) {
+      let next = gBrowser.tabContainer.nextSibling;
+      next.parentNode.insertBefore(box, next);
+      return;
+    }
+    let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
+    CustomizableUI.moveWidgetWithinArea("tabmixScrollBox", tabsPosition + 1);
+
+    if (!onlyPosition) {
+      let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+      gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+    }
   }
+
+}
+
+Tabmix.getPlacement = function(id) {
+  let placement = CustomizableUI.getPlacementOfWidget(id);
+  return placement ? placement.position : null;
 }

@@ -72,19 +72,22 @@ var TabmixTabbar = {
       let overflow = tabBar.overflow;
 
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
-      this.setScrollButtonBox(useTabmixButtons, false, true);
+      let tabmixScrollBox = document.getElementById("tabmixScrollBox");
+      if (tabmixScrollBox) // just in case our box is missing
+        tabBar.mTabstrip.updateScrollButtons(useTabmixButtons);
+
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // temporarily hide vertical scroll button.
         // visible button can interfere with row height calculation.
         // remove the collapsed attribut after updateVerticalTabStrip
-        Tabmix.setItem("tabmixScrollBox", "collapsed", true);
+        Tabmix.setItem(tabmixScrollBox, "collapsed", true);
       }
 
       let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
       this.flowing = flowing;
       let isDefault = tabscroll == this.SCROLL_BUTTONS_LEFT_RIGHT || null;
       Tabmix.setItem(tabBar, "defaultScrollButtons", isDefault);
-      Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", isDefault);
+      Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         tabBar.resetFirstTabInRow();
@@ -98,7 +101,7 @@ var TabmixTabbar = {
         if (tabBar.updateVerticalTabStrip() == "scrollbar")
           tabBar.overflow = true;
       }
-      Tabmix.setItem("tabmixScrollBox", "collapsed", null);
+      Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
@@ -207,39 +210,6 @@ var TabmixTabbar = {
       else if (index == -1)
         tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
       tabsToolbar.insertBefore(button, elm);
-    }
-  },
-
-  setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
-    let newBox, box = document.getElementById("tabmixScrollBox");
-    if (useTabmixButtons && !box) {
-      newBox = true;
-      box = document.createElement("box");
-      box.setAttribute("class", "tabbrowser-arrowscrollbox tabmix_scrollbuttons_box");
-      box.setAttribute("type", "tabmix-box");
-      box.setAttribute("id", "tabmixScrollBox");
-    }
-
-    let tabStrip  = gBrowser.tabContainer.mTabstrip;
-    if (newBox || (useTabmixButtons && insertAfterTabs)) {
-      let tabsToolbar = document.getElementById("TabsToolbar");
-///XXX check if we can do it only on first oveflow
-      tabsToolbar.insertBefore(box, gBrowser.tabContainer.nextSibling);
-      tabStrip._scrollButtonDownRight = box._scrollButtonDown;
-      tabStrip._scrollButtonUpRight = box._scrollButtonUp;
-    }
-    if (update) {
-      tabStrip._scrollButtonDown = !useTabmixButtons ?
-          tabStrip._scrollButtonDownLeft : tabStrip._scrollButtonDownRight;
-      gBrowser.tabContainer._animateElement = tabStrip._scrollButtonDown;
-
-      tabStrip._scrollButtonUp = !useTabmixButtons ?
-          tabStrip._scrollButtonUpLeft : tabStrip._scrollButtonUpRight;
-      tabStrip._updateScrollButtonsDisabledState();
-      if (!Tabmix.isVersion(320)) {
-        tabStrip._scrollButtonUp.collapsed = !gBrowser.tabContainer.overflow;
-        tabStrip._scrollButtonDown.collapsed = !gBrowser.tabContainer.overflow;
-      }
     }
   },
 
@@ -1380,8 +1350,8 @@ var gTMPprefObserver = {
 
       // move button within TabsToolbar
       if (Tabmix.isVersion(290)) {
-        let buttonPosition = CustomizableUI.getPlacementOfWidget("new-tab-button").position;
-        let tabsPosition = CustomizableUI.getPlacementOfWidget("tabbrowser-tabs").position;
+        let buttonPosition = Tabmix.getPlacement("new-tab-button");
+        let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
         let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
                              (aPosition == 1 && buttonPosition < tabsPosition) ||
                              (aPosition == 2 && buttonPosition != tabsPosition + 1);

@@ -36,6 +36,14 @@
         document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
       </field>
 
+      <constructor>
+        <![CDATA[
+          let tabstrip = gBrowser.tabContainer.mTabstrip;
+          tabstrip._scrollButtonDownRight = this._scrollButtonDown;
+          tabstrip._scrollButtonUpRight = this._scrollButtonUp;
+        ]]>
+      </constructor>
+
       <method name="finishScroll">
         <parameter name="aEvent"/>
         <body><![CDATA[
@@ -97,6 +105,24 @@
       <field name="innerbox" readonly="true">
         document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
+
+      <method name="updateScrollButtons">
+        <parameter name="useTabmixButtons"/>
+        <body><![CDATA[
+          this._scrollButtonDown = !useTabmixButtons ?
+              this._scrollButtonDownLeft : this._scrollButtonDownRight;
+          var tabContainer = document.getBindingParent(this);
+          tabContainer._animateElement = this._scrollButtonDown;
+
+          this._scrollButtonUp = !useTabmixButtons ?
+              this._scrollButtonUpLeft : this._scrollButtonUpRight;
+          this._updateScrollButtonsDisabledState();
+          if (!Tabmix.isVersion(320)) {
+            this._scrollButtonUp.collapsed = !tabContainer.overflow;
+            this._scrollButtonDown.collapsed = !tabContainer.overflow;
+          }
+        ]]></body>
+      </method>
 
       <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
            Override scrollbox.xml method, since our scrollbox's children are

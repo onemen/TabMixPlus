@@ -380,8 +380,15 @@
       <tooltip id="tabmix-tooltip"/>
     </popupset>
 
-   <!-- hide Tab groups context menu in all-tabs list button -->
-   <menuitem id="menu_tabview" context=""/>
+    <!-- hide Tab groups context menu in all-tabs list button -->
+    <menuitem id="menu_tabview" context=""/>
+
+    <toolbar id="TabsToolbar">
+      <box id="tabmixScrollBox" insertafter="tabbrowser-tabs"
+                     class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box"
+                     type="tabmix-box"
+                     removable="false"/>
+    </toolbar>
 
   <!-- Tabmix Plus broadcasterset -->
   <broadcasterset id="mainBroadcasterSet">
