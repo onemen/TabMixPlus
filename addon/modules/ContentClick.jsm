@@ -373,7 +373,7 @@ let ContentClickInternal = {
     if (this.currentTabLocked || this.targetPref == 1) { // tab is locked
       let openNewTab = this.openTabfromLink();
       if (openNewTab != null)
-        return [(openNewTab ? TMP_tabshifted(event) : "current") + "@16"];
+        return [(openNewTab ? TMP_tabshifted(event) : "default") + "@16"];
     }
     return ["default@17"];
   },
