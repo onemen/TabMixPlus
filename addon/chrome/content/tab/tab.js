@@ -1516,16 +1516,18 @@ var gTMPprefObserver = {
   // Show Reload Every menu on Reload button
   showReloadEveryOnReloadButton: function() {
     let show = Tabmix.prefs.getBoolPref("reloadEvery.onReloadButton");
-    let reloadButton = document.getElementById("reload-button");
-    if (reloadButton) {
-      Tabmix.setItem(reloadButton, "type", show ? "menu-button" : null);
-      Tabmix.setItem(reloadButton, "context", show ? "autoreload_popup" : null);
-      Tabmix.setItem("stop-button", "context", show ? "autoreload_popup" : null);
-    }
-
+    Tabmix.setItem("reload-button", "type", show ? "menu-button" : null);
     Tabmix.setItem("urlbar-go-button", "context", show ? "autoreload_popup" : null);
-    Tabmix.setItem("urlbar-reload-button", "context", show ? "autoreload_popup" : null);
-    Tabmix.setItem("urlbar-stop-button", "context", show ? "autoreload_popup" : null);
+
+    let setContext = function(command) {
+      let items = document.getElementsByAttribute("command" ,"Browser:" + command);
+      Array.slice(items).forEach(function(item) {
+        if (item.localName == "toolbarbutton")
+          Tabmix.setItem(item, "context", show ? "autoreload_popup" : null);
+      });
+    }
+    setContext("ReloadOrDuplicate");
+    setContext("Stop");
   },
 
   // we replace some Tabmix settings with Firefox settings
