@@ -932,11 +932,33 @@ Tabmix.navToolbox = {
   customizeStarted: false,
   toolboxChanged: false,
   resetUI: false,
+  listener: null,
 
   init: function TMP_navToolbox_init() {
     this.updateToolboxItems();
     gNavToolbox.addEventListener("beforecustomization", this, false);
     gNavToolbox.addEventListener("aftercustomization", this, false);
+
+    if (!Tabmix.isVersion(290))
+      return;
+
+    this.listener = {
+      onWidgetAfterDOMChange: function(aNode, aNextNode, aContainer, aWasRemoval) {
+        if (this.customizeStarted)
+          return;
+        if (aContainer.id == "TabsToolbar") {
+          this.tabStripAreaChanged();
+          TabmixTabbar.updateScrollStatus();
+          TabmixTabbar.updateBeforeAndAfter();
+        }
+        if (!aWasRemoval) {
+          let command = aNode.getAttribute("command");
+          if (/Browser:ReloadOrDuplicate|Browser:Stop/.test(command))
+            gTMPprefObserver.showReloadEveryOnReloadButton();
+        }
+      }.bind(this)
+    }
+    CustomizableUI.addListener(this.listener);
   },
 
   deinit: function TMP_navToolbox_deinit() {
@@ -960,6 +982,8 @@ Tabmix.navToolbox = {
       }
     }
     CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
+    if (Tabmix.isVersion(290))
+      CustomizableUI.removeListener(this.listener);
   },
 
   cleanCurrentset: function() {
@@ -1267,7 +1291,12 @@ Tabmix.navToolbox = {
     }
   },
 
+  _closeButtonInitialized: false,
   setCloseButtonPosition: function() {
+   if (this._closeButtonInitialized)
+      return;
+    this._closeButtonInitialized = true;
+
     if (!Tabmix.isVersion(310))
       return;
     // if tabmix-tabs-closebutton was positioned immediately after
