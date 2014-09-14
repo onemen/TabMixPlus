@@ -430,8 +430,6 @@
           let tab = this.firstChild;
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
-          if (Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand"))
-            tab.setAttribute("tabmix_pending", "true");
           Tabmix.setTabStyle(tab);
           TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
           if (TabmixTabbar.lockallTabs) {
