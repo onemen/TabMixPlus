@@ -1226,11 +1226,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  _tabStripInitialized: false,
   tabStripAreaChanged: function() {
-    if (this._tabStripInitialized)
-      return;
-    this._tabStripInitialized = true;
     /**
      * we need to position three elements in TabsToolbar :
      * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
