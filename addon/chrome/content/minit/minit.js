@@ -1280,6 +1280,10 @@ Tabmix.navToolbox = {
     if (!Tabmix.isVersion(290)) {
       let next = gBrowser.tabContainer.nextSibling;
       next.parentNode.insertBefore(box, next);
+      if (!onlyPosition) {
+        let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+        gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+      }
       return;
     }
     let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
