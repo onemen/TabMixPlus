@@ -1020,13 +1020,6 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("customizationchange", this, false);
     this.toolboxChanged = false;
     this.customizeStarted = true;
-
-    // remove disabled state from our buttons when entring about:customizing tab
-    if (Tabmix.isVersion(280)) {
-      Tabmix.setItem("tmp_undocloseButton", "disabled", null);
-      Tabmix.setItem("tmp_closedwindows", "disabled", null);
-      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", null);
-    }
   },
 
   customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
@@ -1053,17 +1046,6 @@ Tabmix.navToolbox = {
     var optionWindow = Services.wm.getMostRecentWindow("mozilla:tabmixopt");
     if (optionWindow && optionWindow.gAppearancePane)
       optionWindow.gAppearancePane.toolbarButtons(window);
-
-    if (Tabmix.isVersion(280)) {
-      TMP_ClosedTabs.setButtonDisableState();
-      let SM = TabmixSessionManager;
-      let disabled = SM.enableManager || SM.enableBackup ?
-          SM.isClosedWindowsEmpty() : TabmixSvc.ss.getClosedWindowCount() == 0;
-      Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
-      disabled = !Tabmix.prefs.getBoolPref("sessions.manager") ||
-                 SM.globalPrivateBrowsing;
-      Tabmix.setItem("tmp_sessionmanagerButton", "disabled", disabled || null);
-    }
   },
 
   updateToolboxItems: function TMP_navToolbox_updateToolboxItems() {
