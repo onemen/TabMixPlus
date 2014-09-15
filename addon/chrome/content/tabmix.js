@@ -339,10 +339,6 @@ var TMP_eventListener = {
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     TMP_SessionStore.setAfterSessionRestored();
 
-    // turn both broadcasters off, we will set the proper value later
-    Tabmix.setItem("tmp_undocloseButton", "disabled", true);
-    Tabmix.setItem("tmp_closedwindows", "disabled", true);
-
     try {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
@@ -615,6 +611,9 @@ var TMP_eventListener = {
 
     gTMPprefObserver.addDynamicRules();
     TabmixSessionManager.updateSettings();
+    // turn both broadcasters off, we will set the proper value later
+    Tabmix.setItem("tmp_undocloseButton", "disabled", true);
+    Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
