@@ -91,6 +91,10 @@
                   extends="chrome://global/content/bindings/scrollbox.xml#arrowscrollbox-clicktoscroll">
     <implementation>
 
+      <!-- for Vertical Tabs extension -->
+      <property name="_verticalTabs" readonly="true"
+                onget="return this.orient == 'vertical';"/>
+
       <field name="blockUnderflow">false</field>
       <field name="blockOverflow">false</field>
 
@@ -489,6 +493,23 @@
           // the amountToScroll changed when we changed firstTabInRow
           if (this._scrollTarget)
             this.ensureElementIsVisible(this._scrollTarget, true)
+        ]]></body>
+      </method>
+
+      <field name="firstTabInRowMargin">0</field>
+      <method name="resetFirstTabInRow">
+        <body><![CDATA[
+          if (this.firstTabInRowMargin == 0)
+            return;
+          this.firstTabInRowMargin = 0;
+          // getElementsByAttribute return a live nodList
+          // each time we remove the attribute we remove node from the list
+          let tabBar = document.getBindingParent(this);
+          let tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow" , "*");
+          for (let i = 0, num = tabs.length; i < num; i++) {
+            tabs[0].removeAttribute("tabmix-firstTabInRow");
+          }
+          this.firstVisible =  {tab: null, x: 0, y: 0};
         ]]></body>
       </method>
 

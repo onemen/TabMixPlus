@@ -117,7 +117,7 @@ var gAppearancePane = {
     // Display > Tab bar
     function updateDisabledState(buttonID, itemID, aEnable) {
       let button = aWindow.document.getElementById(buttonID);
-      let enablePosition =  button && button.parentNode == aWindow.gBrowser.tabContainer._container;
+      let enablePosition =  button && button.parentNode == aWindow.document.getElementById("TabsToolbar");
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }

@@ -34,7 +34,7 @@ var TabmixTabbar = {
   },
 
   isButtonOnTabsToolBar: function(button) {
-    return button && button.parentNode == gBrowser.tabContainer._container;
+    return button && button.parentNode == document.getElementById("TabsToolbar");
   },
 
   // get privateTab-toolbar-openNewPrivateTab, when the button is on the tabbar
@@ -90,7 +90,7 @@ var TabmixTabbar = {
       Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
-        tabBar.resetFirstTabInRow();
+        tabBar.mTabstrip.resetFirstTabInRow();
         tabBar.updateVerticalTabStrip(true);
       }
       else if (isMultiRow && overflow) {
@@ -188,16 +188,16 @@ var TabmixTabbar = {
       // so if widthFitTitle is false we need to call it if we actualy change the width
       // for other chases we need to call it when we change title
       if (tabBar.mTabstrip.orient == "vertical") {
-        tabBar.setFirstTabInRow();
+        this.setFirstTabInRow();
         tabBar.updateVerticalTabStrip();
       }
       // with Australis overflow not always trigger when tab changed width
       else if (TabmixSvc.australis && !this.widthFitTitle) {
         tabBar.mTabstrip._enterVerticalMode();
-        tabBar.setFirstTabInRow();
+        this.setFirstTabInRow();
       }
     }
-    else if (!this.isMultiRow)
+    else if (!this.isMultiRow && typeof tabBar.adjustNewtabButtonvisibility == "function")
       tabBar.adjustNewtabButtonvisibility();
   },
 
@@ -350,7 +350,7 @@ var TabmixTabbar = {
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
-      tabBar.setFirstTabInRow();
+      this.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical")
         tabBar.mTabstrip._enterVerticalMode();
       else
@@ -522,6 +522,34 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     var top = tabBar.topTabY;
     return tabBar.getTabRowNumber(tab1, top) == tabBar.getTabRowNumber(tab2, top);
+  },
+
+  setFirstTabInRow: function() {
+    var tabBar = gBrowser.tabContainer;
+    // call our tabstrip function only when we are in multi-row and
+    // in overflow with pinned tabs
+    if (this.isMultiRow && tabBar.overflow && tabBar.firstChild.pinned)
+      tabBar.mTabstrip.setFirstTabInRow();
+  },
+
+  removeShowButtonAttr: function() {
+    var tabBar = gBrowser.tabContainer;
+    if ("__showbuttonTab" in tabBar) {
+      tabBar.__showbuttonTab.removeAttribute("showbutton");
+      delete tabBar.__showbuttonTab;
+    }
+  },
+
+  get _real_numPinnedTabs() {
+    var count = 0;
+    for (let i = 0; i < gBrowser.tabs.length; i++) {
+      let tab = gBrowser.tabs[i];
+      if (!tab.pinned)
+        break;
+      if (!tab.closing)
+        count++;
+    }
+    return count;
   }
 
 } // TabmixTabbar end

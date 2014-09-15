@@ -459,31 +459,6 @@
         ]]>
       </destructor>
 
-      <method name="setFirstTabInRow">
-        <body><![CDATA[
-          // call our tabstrip function only when we are in multi-row and
-          // in overflow with pinned tabs
-          if (TabmixTabbar.isMultiRow && this.overflow && this.firstChild.pinned)
-            this.mTabstrip.setFirstTabInRow();
-        ]]></body>
-      </method>
-
-      <field name="firstTabInRowMargin">0</field>
-      <method name="resetFirstTabInRow">
-        <body><![CDATA[
-          if (this.firstTabInRowMargin == 0)
-            return;
-          this.firstTabInRowMargin = 0;
-          // getElementsByAttribute return a live nodList
-          // each time we remove the attribute we remove node from the list
-          let tabs = this.getElementsByAttribute("tabmix-firstTabInRow" , "*");
-          for (let i = 0, num = tabs.length; i < num; i++) {
-            tabs[0].removeAttribute("tabmix-firstTabInRow");
-          }
-          this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};
-        ]]></body>
-      </method>
-
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
@@ -726,21 +701,6 @@
         ]]></setter>
       </property>
 
-     <property name="_real_numPinnedTabs" readonly="true">
-       <getter><![CDATA[
-          var count = 0;
-          for (let i = 0; i < this.childNodes.length; i++) {
-            let tab = this.childNodes[i];
-            if (!tab.pinned)
-              break;
-
-            if (!tab.closing)
-               count++;
-          }
-          return count;
-       ]]></getter>
-     </property>
-
       <property name="topTabY" readonly="true">
         <getter><![CDATA[
           return this.tabstripInnerbox.boxObject.y + Tabmix.getStyle(this.tabstripInnerbox, "paddingTop");
@@ -777,6 +737,7 @@
           // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
           // verticalTabs 0.9.1+ is restartless.
           if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+            Tabmix.setItem("TabsToolbar", "collapsed", null);
             Tabmix.extensions.verticalTabs = true;
             Tabmix.extensions.verticalTabBar = true;
             TabmixTabbar.updateSettings();
@@ -864,15 +825,6 @@
             setTimeout(function (ele) {
               ele.removeAttribute("notifybgtab");
             }, 150, this._animateElement);
-          }
-        ]]></body>
-      </method>
-
-      <method name="removeShowButtonAttr">
-        <body><![CDATA[
-          if ("__showbuttonTab" in this) {
-            this.__showbuttonTab.removeAttribute("showbutton");
-            delete this.__showbuttonTab;
           }
         ]]></body>
       </method>

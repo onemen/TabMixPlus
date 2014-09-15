@@ -731,7 +731,7 @@ var TMP_eventListener = {
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
       gBrowser.tabContainer.updateVerticalTabStrip();
-      gBrowser.tabContainer.setFirstTabInRow();
+      TabmixTabbar.setFirstTabInRow();
       TabmixTabbar.updateBeforeAndAfter();
     }
   },
@@ -920,7 +920,7 @@ var TMP_eventListener = {
 
     // moveTabTo call _positionPinnedTabs when pinned tab moves
     if (!tab.pinned)
-      gBrowser.tabContainer.setFirstTabInRow();
+      TabmixTabbar.setFirstTabInRow();
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
 
     TabmixTabbar.updateBeforeAndAfter();
@@ -946,7 +946,7 @@ var TMP_eventListener = {
       return;
     }
     var tabBar = gBrowser.tabContainer;
-    tabBar.removeShowButtonAttr();
+    TabmixTabbar.removeShowButtonAttr();
 
     let shouldMoveFocus = scrollTabs == 1;
     if (aEvent.shiftKey)
@@ -1155,7 +1155,7 @@ Tabmix.initialization = {
 
     if (!stopInitialization) {
       let tabBrowser = arguments.length > 1 ? arguments[1] : gBrowser;
-      stopInitialization = typeof tabBrowser.tabContainer.setFirstTabInRow != "function";
+      stopInitialization = typeof tabBrowser.tabContainer.updateVerticalTabStrip != "function";
     }
 
     if (stopInitialization) {

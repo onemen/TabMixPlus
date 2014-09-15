@@ -21,6 +21,12 @@ var TMP_tabDNDObserver = {
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
+    if (Tabmix.extensions.verticalTabBar) {
+      tabBar.useTabmixDragstart = function() false;
+      tabBar.useTabmixDnD  = function() false;
+      return;
+    }
+
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have diffrent width
@@ -29,7 +35,6 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    if (!Tabmix.extensions.treeStyleTab)
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -109,7 +114,7 @@ var TMP_tabDNDObserver = {
     tab.__tabmixDragStart = true;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
-    gBrowser.tabContainer.removeShowButtonAttr();
+    TabmixTabbar.removeShowButtonAttr();
 
     let dt = event.dataTransfer;
     dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);

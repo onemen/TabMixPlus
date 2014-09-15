@@ -172,7 +172,7 @@ var tablib = {
       '{/* see TMP_BrowserOpenTab */}'
     )._replace(
       'this.tabContainer.adjustTabstrip();',
-      'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
+      'if (!wasPinned) TabmixTabbar.setFirstTabInRow();\
        $&'
     ).toCode();
 
@@ -277,7 +277,7 @@ var tablib = {
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
-        'this.resetFirstTabInRow();\
+        'this.mTabstrip.resetFirstTabInRow();\
          $&'
       )._replace(
         /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,
@@ -292,8 +292,8 @@ var tablib = {
         '      tab.style.MozMarginStart = width + "px";' +
         '      width += tab.getBoundingClientRect().width;' +
         '    }' +
-        '    if (width != this.firstTabInRowMargin) {' +
-        '      this.firstTabInRowMargin = width;' +
+        '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
+        '      this.mTabstrip.firstTabInRowMargin = width;' +
         '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("-moz-margin-start", width + "px", null);' +
