@@ -307,6 +307,15 @@ var TMP_eventListener = {
     }
   },
 
+  receiveMessage: function(message) {
+    let browser = message.target;
+    switch (message.name) {
+      case "Tabmix:SetSyncHandler":
+        TabmixSvc.syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
+        break;
+    }
+  },
+
   toggleEventListener: function(aObj, aArray, aEnable, aHandler) {
     var handler = aHandler || this;
     var eventListener = aEnable ? "addEventListener" : "removeEventListener";
@@ -446,6 +455,7 @@ var TMP_eventListener = {
 
     if (Tabmix.isVersion(320)) {
       let mm = window.getGroupMessageManager("browsers");
+      mm.addMessageListener("Tabmix:SetSyncHandler", this);
       mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
     }
 
@@ -1050,6 +1060,11 @@ var TMP_eventListener = {
     Tabmix.navToolbox.deinit();
     if (Tabmix.DocShellCapabilitiesInitialized)
       Tabmix.docShellCapabilities.deinit(window);
+
+    if (Tabmix.isVersion(320)) {
+      let mm = window.getGroupMessageManager("browsers");
+      mm.removeMessageListener("Tabmix:SetSyncHandler", this);
+    }
   },
 
   // some theme not useing updated Tabmix tab binding
