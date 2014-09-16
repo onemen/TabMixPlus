@@ -842,6 +842,13 @@ var TMP_eventListener = {
       this.onTabClose_updateTabBar(tab);
 
     Tabmix.countClosedTabs(tab);
+
+    // clean WeakMap
+    let browser = tab.linkedBrowser;
+    if (browser && TabmixSvc.syncHandlers.has(browser.permanentKey))
+      TabmixSvc.syncHandlers.delete(browser.permanentKey);
+    if (this.tabWidthCache.has(tab))
+      this.tabWidthCache.delete(tab);
   },
 
   // TGM extension use it
