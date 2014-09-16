@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "현재 탭">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "자바스크립트 팝업:">
-<!ENTITY divertedWindows.comment "더 많은 자바스크립트 및 팝업에 대한 설정은 브라우저 설정에 의해 제어됩니다.">
 <!ENTITY divertedWindowOpen.all "모든 팝업을 탭으로 열기">
 <!ENTITY divertedWindowOpen.some "크기가 정해진 팝업만 허용">
 <!ENTITY divertedWindowOpen.none "모든 팝업을 허용">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "탭 도구 모음 위:">
 <!ENTITY clicktab.label "탭이나 탭 도구 모음을 클릭하면 실행할 기능 선택">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "안 쓰기">
 <!ENTITY clicktab.addtab "새 탭 열기">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "하나의 창에 여러개의 창 연결하기">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "시작할 때 복구 안하기">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "탭 상태 중 보존할 것:">
 <!ENTITY sm.preserve.history "방문 기록">
 <!ENTITY sm.preserve.protect "보호된 상태">

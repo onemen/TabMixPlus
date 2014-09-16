@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Pašreizējā cilnē">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript uzlecošie logi:">
-<!ENTITY divertedWindows.comment "Citi Javascript un uzlecošo logu iestatījumi tiek kontrolēti galvenajās opcijās">
 <!ENTITY divertedWindowOpen.all "Atvērt visus uzlecošos logus cilnēs">
 <!ENTITY divertedWindowOpen.some "Atļaut uzlecošos logus ar mainītu izmēru">
 <!ENTITY divertedWindowOpen.none "Atļaut visus uzlecošos logus">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Apvienot vairākus logus vienā">
 <!ENTITY sm.restore.bypassCache "Atjaunojot apiet kešatmiņu">
 <!ENTITY sm.notrestore.label "Kad neatjauno palaižot">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Saglabāt ciļņu:">
 <!ENTITY sm.preserve.history "Vēsturi">
 <!ENTITY sm.preserve.protect "Aizsargāšanas statusu">

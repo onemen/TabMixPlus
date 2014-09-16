@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Nuværende faneblad">
 <!ENTITY linkTarget.accesskey "N">
 <!ENTITY divertedWindowOpen.label "JavaScript popups:">
-<!ENTITY divertedWindows.comment "Flere Javascript og Popup præferencer kontrolleres fra hoved-indstillingerne">
 <!ENTITY divertedWindowOpen.all "Åbn alle popups i faneblade">
 <!ENTITY divertedWindowOpen.some "Tillad popups med samme størrelse">
 <!ENTITY divertedWindowOpen.none "Tillad alle popups">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "på fanebladslinjen:">
 <!ENTITY clicktab.label "Vælg kommando der skal udføres ved klik på faneblad eller fanebladslinje">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Gør ingenting">
 <!ENTITY clicktab.addtab "Åbner et nyt faneblad">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Foren flere vinduer til et">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Når der ikke genetableres ved start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bevar faneblade:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Beskyt status">

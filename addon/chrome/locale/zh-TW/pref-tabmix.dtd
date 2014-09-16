@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "目前分頁">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "彈出視窗（Popup）開啟方式：">
-<!ENTITY divertedWindows.comment "若要封鎖彈出視窗（Popup）請至瀏覽器的[工具]-&gt;[選項]-&gt;[內容]進行設定">
 <!ENTITY divertedWindowOpen.all "強制以新分頁開啟">
 <!ENTITY divertedWindowOpen.some "指定屬性者以新視窗開啟">
 <!ENTITY divertedWindowOpen.none "全部以新視窗開啟">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "自動合併所有視窗">
 <!ENTITY sm.restore.bypassCache "還原時不使用快取的資料">
 <!ENTITY sm.notrestore.label "當關閉啟動時還原功能">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">
 <!ENTITY sm.preserve.protect "保護狀態">

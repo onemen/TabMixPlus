@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "تب جاری">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "پنجره های جاوا اسکریپت">
-<!ENTITY divertedWindows.comment "تنظیمات پنجره های تبلیغاتی از صفحه تنظیمات اصلی کنترل می شود">
 <!ENTITY divertedWindowOpen.all "تمام پنجره های تبلیغاتی را در تب های جدید باز کن">
 <!ENTITY divertedWindowOpen.some "اجازه دادن به پنجره های با اندازه ثابت">
 <!ENTITY divertedWindowOpen.none "اجازه به تمام پنجره های تبلیغاتی">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "روی نوار تب ها:">
 <!ENTITY clicktab.label "یک دستور را برای اجرا هنگام کلیک کردن روی تب یا نوار تب ها انتخاب کنید">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "هیچ کاری انجام نده">
 <!ENTITY clicktab.addtab "باز کردن یک تب جدید">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "ترکیب کردن پنجره های">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "نگاه داشتن تب ها:">
 <!ENTITY sm.preserve.history "تاریخچه">
 <!ENTITY sm.preserve.protect "وضعیت محافظت شده">

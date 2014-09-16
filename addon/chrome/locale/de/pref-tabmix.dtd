@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "aktuellem Tab">
 <!ENTITY linkTarget.accesskey "k">
 <!ENTITY divertedWindowOpen.label "JavaScript-Pop-ups:">
-<!ENTITY divertedWindows.comment "Hinweis: Weitere Optionen zu JavaScript &amp; Pop-up-Fenstern finden Sie in den Browser-Einstellungen.">
 <!ENTITY divertedWindowOpen.all "Alle Pop-ups in Tabs öffnen">
 <!ENTITY divertedWindowOpen.some "Nur Pop-ups mit Größenvorgaben als Fenster erlauben">
 <!ENTITY divertedWindowOpen.none "Alle Pop-ups als Fenster erlauben">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
 <!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
 <!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">
 <!ENTITY sm.preserve.protect "den Geschützt-Status">

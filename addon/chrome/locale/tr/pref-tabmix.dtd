@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Geçerli sekmede">
 <!ENTITY linkTarget.accesskey "e">
 <!ENTITY divertedWindowOpen.label "JavaScript açılır pencereleri:">
-<!ENTITY divertedWindows.comment "Javascript ve açılır pencerelerle ilgili diğer tercihleri, Firefox Seçeneklerinde bulabilirsiniz">
 <!ENTITY divertedWindowOpen.all "Tüm açılır pencereleri sekmelerde aç">
 <!ENTITY divertedWindowOpen.some "Yeniden boyutlandırılmış açılır pencerelere izin ver">
 <!ENTITY divertedWindowOpen.none "Tüm açılır pencerelere izin ver">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "Sekme çubuğu üzerine:">
 <!ENTITY clicktab.label "Sekme ya da sekme çubuğuna tıkladığınızda yapılacaklar">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Hiçbir şey yapma">
 <!ENTITY clicktab.addtab "Yeni sekme aç">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Pencereleri tek pencerede birleştir">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Başlangıçta geriyüklenmediğinde">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Sekmelerde muhafaza et:">
 <!ENTITY sm.preserve.history "Geçmişi">
 <!ENTITY sm.preserve.protect "Korunma durumunu">

@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Onglet courant">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "Popups JavaScript :">
-<!ENTITY divertedWindows.comment "Davantage de réglages sont disponibles dans les options générales du navigateur">
 <!ENTITY divertedWindowOpen.all "Ouvrir toutes les popups dans des onglets">
 <!ENTITY divertedWindowOpen.some "Autoriser les popups non redimensionnées">
 <!ENTITY divertedWindowOpen.none "Autoriser toutes les popups à ouvrir une nouvelle fenêtre">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Regrouper plusieurs fenêtres en une seule">
 <!ENTITY sm.restore.bypassCache "Ne pas utiliser le cache lors d'une restauration">
 <!ENTITY sm.notrestore.label "En cas de non restauration au démarrage">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conserver dans les onglets :">
 <!ENTITY sm.preserve.history "Historique">
 <!ENTITY sm.preserve.protect "États de protection">

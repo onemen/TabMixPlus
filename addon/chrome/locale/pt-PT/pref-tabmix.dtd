@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Separador actual">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "JavaScript popups:">
-<!ENTITY divertedWindows.comment "Mais preferências de Javascript e Popup são controladas a partir das opções principais">
 <!ENTITY divertedWindowOpen.all "Abrir popups em separadores">
 <!ENTITY divertedWindowOpen.some "Permitir popups redimensionados">
 <!ENTITY divertedWindowOpen.none "Permitir todos os popups">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "numa barra de separadores:">
 <!ENTITY clicktab.label "Escolha o comando a executar quando clica num separador ou barra de separadores">
 <!ENTITY ontabbar.dblClick.label "Impede que um duplo clique na barra de separadores mude o tamanho da janela.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Não fazer nada">
 <!ENTITY clicktab.addtab "Abrir novo separador">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
 <!ENTITY sm.restore.bypassCache "Bypass cache ao restaurar">
 <!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preservar separadores:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado da protecção">

@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "اللسان الحالي">
 <!ENTITY linkTarget.accesskey "ح">
 <!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
-<!ENTITY divertedWindows.comment "More Javascript &amp; Popup preferences are controlled from main Options">
 <!ENTITY divertedWindowOpen.all "فتح جميع النوافذ المنبثقة في ألسنة">
 <!ENTITY divertedWindowOpen.some "السماح بتحجيم النوافذ المنبثقة">
 <!ENTITY divertedWindowOpen.none "السماح بجميع النوافذ المنبثقة">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "on the tabbar:">
 <!ENTITY clicktab.label "Choose command to perform when clicking on tab or tabbar">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Does nothing">
 <!ENTITY clicktab.addtab "Open a new tab">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Join multiple windows into one">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preserve Tabs:">
 <!ENTITY sm.preserve.history "History">
 <!ENTITY sm.preserve.protect "Protect Status">

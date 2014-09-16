@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Huidig tabblad">
 <!ENTITY linkTarget.accesskey "H">
 <!ENTITY divertedWindowOpen.label "JavaScript pop-ups:">
-<!ENTITY divertedWindows.comment "Verdere JavaScript en pop-upvoorkeuren worden beheerd vanuit de Firefox-opties">
 <!ENTITY divertedWindowOpen.all "Alle pop-ups in tabbladen openen">
 <!ENTITY divertedWindowOpen.some "Pop-ups met gewijzigde afmetingen toestaan">
 <!ENTITY divertedWindowOpen.none "Alle pop-ups toestaan">
@@ -73,7 +72,7 @@
 <!ENTITY selectDivertedTab.label "Omgeleide vensters">
 <!ENTITY selectTabFromExternal.label "Overige toepassingen">
 <!ENTITY selectTabCommand.label "Nieuwe tabbladopdrachten">
-<!ENTITY contextMenuSearch.label "Context menu zoeken naar">
+<!ENTITY contextMenuSearch.label "Contextmenu zoeken naar">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
 <!ENTITY duplicateTab.label "Tabblad dupliceren">
 <!ENTITY inversefocus1.label "Middelklik- of Ctrl-klik-focus omdraaien van:">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
 <!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
 <!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">
 <!ENTITY sm.preserve.protect "Status beschermen">

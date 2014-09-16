@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "В текущей вкладке">
 <!ENTITY linkTarget.accesskey "т">
 <!ENTITY divertedWindowOpen.label "Всплывающие окна JavaScript:">
-<!ENTITY divertedWindows.comment "Дополнительные настройки можно найти в меню браузера">
 <!ENTITY divertedWindowOpen.all "Все всплывающие открывать во вкладках">
 <!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
 <!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Объединять несколько окон в одно">
 <!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
 <!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">
 <!ENTITY sm.preserve.protect "Статус защиты">

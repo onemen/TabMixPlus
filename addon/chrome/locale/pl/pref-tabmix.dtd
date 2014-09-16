@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "aktywnej karcie">
 <!ENTITY linkTarget.accesskey "A">
 <!ENTITY divertedWindowOpen.label "Wyskakujące okna">
-<!ENTITY divertedWindows.comment "Inne opcje skryptów Javascript i wyskakujących okien znajdują się w opcjach przeglądarki">
 <!ENTITY divertedWindowOpen.all "Otwieraj wszystkie wyskakujące okna w kartach">
 <!ENTITY divertedWindowOpen.some "Zezwalaj skryptom na otwieranie wyskakujących okien o zmiennej wielkości">
 <!ENTITY divertedWindowOpen.none "Zezwalaj skryptom na otwieranie wszystkich wyskakujących okien">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
 <!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
 <!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
 <!ENTITY sm.preserve.history "historię">
 <!ENTITY sm.preserve.protect "status zabezpieczenia">

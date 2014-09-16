@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Pestaña actual">
 <!ENTITY linkTarget.accesskey "a">
 <!ENTITY divertedWindowOpen.label "Ventanas emergentes JavaScript:">
-<!ENTITY divertedWindows.comment "Más opciones de Javascript y ventanas emergentes en menú Preferencias">
 <!ENTITY divertedWindowOpen.all "Abrir siempre ventanas emergentes en pestañas">
 <!ENTITY divertedWindowOpen.some "Permitir redimensionar ventanas emergentes">
 <!ENTITY divertedWindowOpen.none "Permitir todas las ventanas emergentes">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Combinar varias ventanas en una">
 <!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
 <!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conservar para pestañas:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Estatus de protección">

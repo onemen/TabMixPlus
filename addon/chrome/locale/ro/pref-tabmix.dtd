@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "fila curentă">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "Restricții JavaScript și ferestre instantanee:">
-<!ENTITY divertedWindows.comment "Mai multe preferințe pot fi controlate din caseta „Opțiuni” a navigatorului">
 <!ENTITY divertedWindowOpen.all "Se deschid toate ferestrele instantanee în file">
 <!ENTITY divertedWindowOpen.some "Se permite redimensionarea ferestrelor instantanee">
 <!ENTITY divertedWindowOpen.none "Se permit toate ferestrele instantanee">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
 <!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
 <!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Se memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
 <!ENTITY sm.preserve.protect "Starea de protecție">

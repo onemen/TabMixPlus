@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "לשונית נוכחית">
 <!ENTITY linkTarget.accesskey "ל">
 <!ENTITY divertedWindowOpen.label "חלונות קופצים של JavaScript:">
-<!ENTITY divertedWindows.comment "עוד הגדרות Javascript &amp; Popup נשלטים מתפריט אפשרויות הראשי.">
 <!ENTITY divertedWindowOpen.all "פתח את כל החלונות הקופצים בלשוניות">
 <!ENTITY divertedWindowOpen.some "אפשר שינוי גודל של חלונות קופצים">
 <!ENTITY divertedWindowOpen.none "אפשר את כל החלונות הקופצים">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "על סרגל הלשוניות:">
 <!ENTITY clicktab.label "בחר פעולה שתתבצע עם לחיצה על הלשונית או על סרגל הלשוניות">
 <!ENTITY ontabbar.dblClick.label "מנע משינוי גודל החלון בלחיצה כפולה">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "לא עושה כלום">
 <!ENTITY clicktab.addtab "פתח לשונית חדשה">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "שימור לשוניות:">
 <!ENTITY sm.preserve.history "היסטוריה">
 <!ENTITY sm.preserve.protect "מצב הגנה">

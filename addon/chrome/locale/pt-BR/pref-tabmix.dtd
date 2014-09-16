@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Aba atual">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "Popups JavaScript:">
-<!ENTITY divertedWindows.comment "Outras configurações de Javascript &amp; Popup na janela de Opções principal">
 <!ENTITY divertedWindowOpen.all "Abrir todos os popups em abas">
 <!ENTITY divertedWindowOpen.some "Permitir popups redimensionáveis">
 <!ENTITY divertedWindowOpen.none "Permitir todos os popups">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
 <!ENTITY sm.restore.bypassCache "Limpar o cache ao restaurar">
 <!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preservar abas:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado de proteção">

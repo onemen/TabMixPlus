@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Thẻ hiện tại">
 <!ENTITY linkTarget.accesskey "T">
 <!ENTITY divertedWindowOpen.label "Popup JavaScript:">
-<!ENTITY divertedWindows.comment "Các tùy chỉnh cho Popup &amp; JavaScript nằm trong “Tùy chọn” chính">
 <!ENTITY divertedWindowOpen.all "Mở tất cả popup trong thẻ">
 <!ENTITY divertedWindowOpen.some "Cho phép popup đã chỉnh kích thước">
 <!ENTITY divertedWindowOpen.none "Cho phép tất cả popup">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "trên thanh thẻ:">
 <!ENTITY clicktab.label "Chọn lệnh để thực hiện khi nhấn chuột lên thẻ hoặc thanh thẻ">
 <!ENTITY ontabbar.dblClick.label "Nhấp đôi trên Thanh Thẻ sẽ không làm thay đổi kích cỡ cửa sổ.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Không làm gì">
 <!ENTITY clicktab.addtab "Mở một thẻ mới">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Trộn nhiều cửa sổ lại thành một">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Khi không khôi phục lúc khởi động">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bảo toàn các Thẻ:">
 <!ENTITY sm.preserve.history "Lược sử">
 <!ENTITY sm.preserve.protect "Bảo vệ Trạng thái">

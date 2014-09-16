@@ -193,7 +193,7 @@
                       </menupopup>
                     </menulist>
                   </hbox>
-                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="Restore my pinned tabs from last time"
+                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="&sm.restorePinned.label;"
                             preference="pref_onStart.restorePinned"/>
                 </groupbox>
               </tabpanel>
