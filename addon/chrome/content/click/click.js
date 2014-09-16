@@ -921,9 +921,9 @@ var TabmixAllTabs = {
   },
 
   createMenuItems: function TMP_createMenuItems(popup, tab, value, aType) {
-    var count, mi = document.createElement("menuitem");
+    let mi = document.createElement("menuitem");
     mi.setAttribute("class", "menuitem-iconic bookmark-item alltabs-item");
-    var url = gBrowser.getBrowserForTab(tab).currentURI.spec;
+    let url = gBrowser.getBrowserForTab(tab).currentURI.spec;
     mi.setAttribute("statustext", url);
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     let count = "";

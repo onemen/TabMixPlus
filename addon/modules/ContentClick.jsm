@@ -579,7 +579,7 @@ let ContentClickInternal = {
       return false;
 
     let {event, href, hrefFromOnClick} = this._data;
-    let href = hrefFromOnClick || href;
+    href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
     if (event.button != 2 && typeof(custombuttons) !='undefined'){
