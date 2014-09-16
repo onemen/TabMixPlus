@@ -1,5 +1,8 @@
 "use strict";
 
+XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",
+  "resource://tabmixplus/ContextMenu.jsm");
+
 var TabmixTabClickOptions = {
   onDoubleClick: false,
   _blockDblClick: false,
@@ -662,74 +665,24 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    var focusedWindow = document.commandDispatcher.focusedWindow;
-    if (focusedWindow == window)
-      focusedWindow = gBrowser.selectedBrowser[TabmixSvc.contentWindowAsCPOW];
-
-    var nsISelectionObject = focusedWindow.getSelection();
-    if (nsISelectionObject.isCollapsed) // nothing selected
-      return true;
-
-    var myNodeFilter = {
-      acceptNode : function(n) {
-        if(n.nodeName == 'A' || n.nodeName == 'li') {
-          return NodeFilter.FILTER_ACCEPT;
-        }
-        else {
-          return NodeFilter.FILTER_SKIP;
-        }
-      }
-    };
-
-    // do urlSecurityCheck for each link in the treeWalker....
-    var _document = focusedWindow.document.documentElement.ownerDocument;
-    const nsIScriptSecurityManager = Components.interfaces.nsIScriptSecurityManager;
-    var secMan = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
-                          .getService(nsIScriptSecurityManager);
-    var flags = nsIScriptSecurityManager.STANDARD;
-    function links_urlSecurityCheck(url) {
-      if (!url)
-        return false;
-
-      if (!_document) // just in case....
-        return true;
-
+    let urls = [], browser = window.gBrowser.selectedBrowser;
+    if (Tabmix.isVersion(320)) {
       try {
-        secMan.checkLoadURIStrWithPrincipal(_document.nodePrincipal, url, flags);
-      } catch (e) {
-        return false;
+        let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
+        urls = handler.getSelectedLinks(check);
+      } catch(ex) {
+        Tabmix.log("unable to get syncHandlers for page " +
+                      browser.currentURI.spec + "\n" + ex);
       }
-      return true;
     }
+    // getSelectedLinks was not implemented for remote tabs before Firefox 32
+    else if (browser.getAttribute("remote") != "true")
+      urls = Tabmix.ContextMenu.getSelectedLinks(content, check);
 
-    var range = nsISelectionObject.getRangeAt(0);
-    var doc = window.gBrowser.selectedBrowser[TabmixSvc.contentDocumentAsCPOW]
-    var treeWalker = doc.createTreeWalker(
-         range.cloneContents(),
-         NodeFilter.SHOW_ELEMENT,
-         myNodeFilter,
-         true);
-    var nextEpisode = treeWalker.nextNode();
-    var urls = [];
-    while (nextEpisode != null) {
-      let url;
-      if (nextEpisode.nodeName == "li") {
-        let node = nextEpisode.firstChild;
-        url = node.nodeName == "p" ? node.firstChild.href : node.href;
-      }
-      else
-        url = nextEpisode.href;
-      if (links_urlSecurityCheck(url)) {
-        if (check)
-          return false;
-        if (urls.indexOf(url) == -1)
-          urls.push(url);
-      }
-      nextEpisode = treeWalker.nextNode();
+    if (!check && urls.length) {
+      Tabmix.loadTabs(urls, false);
     }
-    if (urls.length)
-     Tabmix.loadTabs(urls, false);
-    return true;
+    return urls.length == 0;
   }
 }
 

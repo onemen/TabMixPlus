@@ -359,15 +359,6 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // Redirect Remover 2.6.4
-    if ("rdrb" in window && rdrb.delayedInit) {
-      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        'if (links_urlSecurityCheck(url))',
-        'url = rdrb.cleanLink(url);\
-         $&'
-      ).toCode();
-    }
-
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
@@ -441,6 +432,16 @@ var TMP_extensionsCompatibility = {
       let sessionmanager = document.getElementById("appmenu-sessionmanager");
       if (sessionmanager)
         ctrBox.parentNode.insertBefore(sessionmanager, ctrBox.nextSibling);
+    }
+
+    // Redirect Remover 2.6.4
+    // https://addons.mozilla.org/he/firefox/addon/redirect-remover/
+    if (window.rdrb && typeof rdrb.cleanLink == "function") {
+      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
+        'Tabmix.loadTabs(urls, false);',
+        'urls = urls.map(function(url) rdrb.cleanLink(url));\n' +
+        '      $&'
+      ).toCode(true);
     }
   }
 

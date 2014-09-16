@@ -11,9 +11,12 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
+  "resource://tabmixplus/ContextMenu.jsm");
+
 let global = this;
 
-let TabmixPermissionsListener = {
+let TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",
@@ -46,6 +49,10 @@ let TabmixPermissionsListener = {
 
   getCapabilities: function() {
     return DocShellCapabilities.collect(docShell).join(",") || "";
+  },
+
+  getSelectedLinks: function(check) {
+    return ContextMenu.getSelectedLinks(content, check);
   }
 };
 
@@ -196,5 +203,5 @@ let TabmixClickEventHandler = {
   }
 };
 
-TabmixPermissionsListener.init();
+TabmixContentHandler.init();
 TabmixClickEventHandler.init();
