@@ -754,7 +754,8 @@ var tablib = {
         m.setAttribute("label", menuLabel);
         m.setAttribute("value", i);
         m.fileName = "closedwindow";
-        m.addEventListener("click", TabmixSessionManager.checkForMiddleClick, false);
+        let checkForMiddleClick = function(e) {this.checkForMiddleClick(e);}.bind(TabmixSessionManager);
+        m.addEventListener("click", checkForMiddleClick, false);
       }
     }
     let restoreAllWindows = undoPopup.lastChild;

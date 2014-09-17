@@ -1231,7 +1231,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          return;
 
       var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
-      TabmixSessionManager.restoreWindow(where, index);
+      this.restoreWindow(where, index);
       var popup = aEvent.originalTarget.parentNode;
       if (TabmixSvc.ss.getClosedWindowCount() > 0)
          HistoryMenu.prototype.populateUndoWindowSubmenu(popup.parentNode.id);
@@ -1632,7 +1632,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (!this.enableManager)
          return;
       // call restoreSession after delay to let the popup menu time to hide
-      window.setTimeout( function () { TabmixSessionManager.delayRestoreSession(node, overwriteWindows); }, 0 );
+      window.setTimeout(function() {
+        this.delayRestoreSession(node, overwriteWindows);
+      }.bind(this), 0 );
    },
 
    delayRestoreSession: function(node, overwriteWindows) {
@@ -1674,9 +1676,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    removeFromMenu: function(event, popup, root) {
       if (!Tabmix.prefs.getBoolPref("middleclickDelete")) return;
       if ( event.button == 1 && ("session" in event.target)) {
-         TabmixSessionManager.removeSavedSession(event.target);
+         this.removeSavedSession(event.target);
          if (root == this.gSessionPath[0] && this.isClosedWindowsEmpty()) popup.hidePopup();
-         else TabmixSessionManager.createMenu(popup, root);
+         else this.createMenu(popup, root);
       }
    },
 
@@ -1819,7 +1821,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      popup_menu.id = menu.id + "_menu";
      menu.appendChild(popup_menu);
      popup_menu.childNodes[2].hidden = false;
-     TabmixSessionManager.createMenu(popup_menu, this._rdfRoot+'/windows');
+     this.createMenu(popup_menu, this._rdfRoot+'/windows');
    },
 
    createMenuForDialog: function(popup, contents) {
@@ -2070,7 +2072,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var prevtoLast = this.containerEmpty(this.gSessionPath[2]) // previous to last
          var savedSession = this.containerEmpty(this._rdfRoot+'/windows') // saved session
          var isAllEmpty = lastSession && prevtoLast && savedSession;
-         var callBack = function (aResult) {TabmixSessionManager.afterCrashPromptCallBack(aResult);}
+         var callBack = function(aResult) {
+            this.afterCrashPromptCallBack(aResult);
+         }.bind(this);
          this.callBackData = {label: null, whattoLoad: "session"}
          this.waitForCallBack = true;
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
@@ -2233,9 +2237,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
             buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
             let callBack = function (aResult) {
-               TabmixSessionManager.enableCrashRecovery(aResult);
-               TabmixSessionManager._sendRestoreCompletedNotifications(true);
-            }
+               this.enableCrashRecovery(aResult);
+               this._sendRestoreCompletedNotifications(true);
+            }.bind(this);
             this.waitForCallBack = true;
             Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
@@ -2292,10 +2296,10 @@ try{
          msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
          buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                     TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-         let callBack = function (aResult) {
-                           TabmixSessionManager.onFirstWindowPromptCallBack(aResult);
-                        }
-        this.waitForCallBack = true;
+         let callBack = function(aResult) {
+            this.onFirstWindowPromptCallBack(aResult);
+         }.bind(this);
+         this.waitForCallBack = true;
          Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
                   [title, msg, "", chkBoxLabel, buttons], window, callBack);
 } catch (ex) {Tabmix.assert(ex);}
