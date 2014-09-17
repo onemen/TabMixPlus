@@ -110,11 +110,11 @@ let PlacesUtilsInternal = {
       ).toCode();
     };
     if (treeStyleTab) {
-      // wait until TreeStyleTab to finish change PlacesUIUtils._openTabset
+      // wait until TreeStyleTab changed PlacesUIUtils._openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-      this.__index = 1;
+      this.__index = 0;
       timer.initWithCallback(function() {
-        if (this.__index > 10 || PlacesUIUtils._openTabset.toString().indexOf("GroupBookmarkBehavior") > -1) {
+        if (++this.__index > 10 || PlacesUIUtils._openTabset.toString().indexOf("GroupBookmarkBehavior") > -1) {
           timer.cancel();
           this._timer = null;
           this.__index = null;
