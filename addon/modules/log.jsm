@@ -55,10 +55,8 @@ let console = {
       }.bind(this);
 
       if (aDelay >= 0) {
-        let timer = {};
-        timer.__proto__ = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
         let timerID = gNextID++;
-        this._timers[timerID] = timer;
+        let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
         timer.clear = function() {
           if (timerID in this._timers)
             delete this._timers[timerID];
@@ -69,10 +67,14 @@ let console = {
             timer.clear();
           }, false);
         }
-        timer.initWithCallback(function() {
-          timer.clear();
-          logMethod();
+        timer.initWithCallback({
+          notify: function notify() {
+            timer.clear();
+            logMethod();
+          }
         }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
+
+        this._timers[timerID] = timer;
       }
       else
         logMethod();
