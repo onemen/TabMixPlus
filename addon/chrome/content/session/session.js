@@ -2233,8 +2233,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
             buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
             let callBack = function (aResult) {
-                             TabmixSessionManager.enableCrashRecovery(aResult);
-                           }
+               TabmixSessionManager.enableCrashRecovery(aResult);
+               TabmixSessionManager._sendRestoreCompletedNotifications(true);
+            }
             this.waitForCallBack = true;
             Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
@@ -2311,8 +2312,6 @@ try{
         this.prefBranch.setBoolPref("crashRecovery", true); // enable Crash Recovery
         Services.prefs.savePrefFile(null); // store the pref immediately
       }
-      if (this.waitForCallBack)
-        this._sendRestoreCompletedNotifications(true);
    },
 
    onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
