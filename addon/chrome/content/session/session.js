@@ -291,6 +291,13 @@ var TabmixSessionManager = {
       var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
       var isFirstWindow = (Tabmix.isFirstWindow || this.firstNonPrivateWindow) && !_afterTabduplicated;
 
+      this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;
+      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery");
+      this.enableSaveHistory = this.prefBranch.getBoolPref("save.history");
+      this.saveClosedtabs = this.prefBranch.getBoolPref("save.closedtabs") &&
+                             Tabmix.prefs.getBoolPref("undoClose");
+      this._lastSaveTime = Date.now();
+
       let obs = Services.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "sessionstore-windows-restored", true);
@@ -302,13 +309,12 @@ var TabmixSessionManager = {
         obs.addObserver(this, "private-browsing", true);
         obs.addObserver(this, "private-browsing-change-granted", true);
       }
+      if (Tabmix.isVersion(270)) {
+        if (this.enableBackup && this.canRestoreLastSession)
+          window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
+        obs.addObserver(this, "sessionstore-last-session-cleared", true);
+      }
 
-      this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;
-      this.enableBackup = this.prefBranch.getBoolPref("crashRecovery");
-      this.enableSaveHistory = this.prefBranch.getBoolPref("save.history");
-      this.saveClosedtabs = this.prefBranch.getBoolPref("save.closedtabs") &&
-                             Tabmix.prefs.getBoolPref("undoClose");
-      this._lastSaveTime = Date.now();
       var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
       // check if we need to backup
       if (Tabmix.firstWindowInSession && this.enableManager && !sanitized) {
@@ -657,6 +663,8 @@ var TabmixSessionManager = {
         obs.removeObserver(this, "private-browsing");
         obs.removeObserver(this, "private-browsing-change-granted");
       }
+      if (Tabmix.isVersion(270))
+        obs.removeObserver(this, "sessionstore-last-session-cleared");
       if (this.afterExitPrivateBrowsing) {
         clearTimeout(this.afterExitPrivateBrowsing);
         this.afterExitPrivateBrowsing = null;
@@ -1102,6 +1110,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             gBrowser.ensureTabIsVisible(gBrowser.selectedTab, true);
          case "browser-window-change-state":
             this.toggleRecentlyClosedWindowsButton();
+            break;
+         case "sessionstore-last-session-cleared":
+            TabmixSvc.sm.lastSessionPath = null;
             break;
          case "browser:purge-session-history": // catch sanitization
             // curently we don't do anything on exit
@@ -2196,6 +2207,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          // handled by SessionStore
          if (this.prefBranch.getBoolPref("restore.concatenate"))
             this.deferredRestore();
+         else
+            this.setLastSession();
          return; // Don't Restore
       }
       var loadSession = this.prefBranch.getIntPref("onStart.loadsession");
@@ -2329,7 +2342,7 @@ try{
     if (!this.prefBranch.getBoolPref("onStart.restorePinned"))
       return;
 
-    let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
+    let state = this.setLastSession();
     let [iniState, remainingState] = this.SessionStore._prepDataForDeferredRestore(state);
     let pinnedExist = iniState.windows.length > 0;
     if (pinnedExist) {
@@ -2884,14 +2897,28 @@ try{
         TabmixSvc.ss.restoreLastSession();
    },
 
+   setLastSession: function(){
+      let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
+      TabmixSvc.sm.lastSessionPath = this.gSessionPath[1];
+      if (!Tabmix.isVersion(270))
+         return state;
+      // add __SS_lastSessionWindowID to force SessionStore.restoreLastSession
+      // to open new window
+      window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
+      let tmp = {}
+      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+      let global = Cu.getGlobalForObject(tmp.SessionStore);
+      global.LastSession.setState(state);
+      return state;
+   },
+
    loadSession: function SM_loadSession(path, caller, overwriteWindows) {
       let lastSession = this.gSessionPath[1];
-      if (caller == "firstwindowopen") {
-         if (path != lastSession)
-            TabmixSvc.sm.lastSessionPath = lastSession;
-      }
-      else if (path == lastSession) {
+      if (caller == "firstwindowopen" && path != lastSession)
+         this.setLastSession();
+      if (path == lastSession) {
          TabmixSvc.sm.lastSessionPath = null;
+         TabmixSvc.ss.canRestoreLastSession = false;
          Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
          if (Tabmix.isVersion(270))
            Services.obs.notifyObservers(null, "sessionstore-last-session-cleared", null);

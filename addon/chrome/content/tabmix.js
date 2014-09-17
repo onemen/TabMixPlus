@@ -83,9 +83,7 @@ Tabmix.sessionInitialized = function() {
       ).toCode();
     }
 
-    if (this.isVersion(260))
-      SessionStore.canRestoreLastSession = false;
-    else {
+    if (!this.isVersion(260)) {
       this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
         'function updateSearchEngine',
         'let updateSearchEngine = function _updateSearchEngine', {silent: true}
@@ -100,6 +98,9 @@ Tabmix.sessionInitialized = function() {
          $&'
       ).toCode();
     }
+    // from Firefox 27 SessionStore notify sessionstore-last-session-cleared
+    else if (!this.isVersion(270))
+      SessionStore.canRestoreLastSession = false;
   }
 
   var tab = gBrowser.tabContainer.firstChild;
