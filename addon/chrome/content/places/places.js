@@ -474,18 +474,6 @@ var TMP_Places = {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
-    // set title at startup
-    // when we are not using session manager
-    // startup page(s) or home page(s) load before bookmarks service
-    Array.forEach(gBrowser.tabs, function(tab) {
-      let browser = tab.linkedBrowser;
-      let url = browser.currentURI.spec;
-      if (this.isUserRenameTab(tab, url))
-        return;
-      let bookMarkName = this.getTitleFromBookmark(url);
-      if (bookMarkName && browser.contentTitle != bookMarkName)
-        browser[TabmixSvc.contentDocumentAsCPOW].title = bookMarkName;
-    }, this)
     this.startObserver();
   },
 
