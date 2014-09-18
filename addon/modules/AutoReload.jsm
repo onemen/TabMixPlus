@@ -228,8 +228,11 @@ let AutoReload = {
 
     if (!TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
         aTab.autoReloadURI == aBrowser.currentURI.spec) {
-      if (aBrowser.curScrollX || aBrowser.curScrollY)
-        aBrowser[TabmixSvc.contentWindowAsCPOW].scrollTo(aBrowser.curScrollX, aBrowser.curScrollY);
+      if (aBrowser.__tabmixScrollPosition || null) {
+        let {x, y} = aBrowser.__tabmixScrollPosition;
+        aBrowser[TabmixSvc.contentWindowAsCPOW].scrollTo(x, y);
+        aBrowser.__tabmixScrollPosition = null;
+      }
 
       if (!aTab.autoReloadEnabled)
         aTab.autoReloadEnabled = true;
@@ -283,8 +286,9 @@ function _reloadTab(aTab) {
     }
   } catch (e) { }
 
-  browser.curScrollX = browser[TabmixSvc.contentWindowAsCPOW].scrollX;
-  browser.curScrollY = browser[TabmixSvc.contentWindowAsCPOW].scrollY;
+  let contentWindow = browser[TabmixSvc.contentWindowAsCPOW];
+  browser.__tabmixScrollPosition = {x: contentWindow.scrollX,
+                                    y: contentWindow.scrollY};
   var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
