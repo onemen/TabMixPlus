@@ -200,13 +200,14 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    return newTab;
 }
 
+Tabmix.selectedTab = null;
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (!isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user laod about:blank tab
-    gBrowser.tabmix_tab = aTab;
-    gBrowser.tabmix_userTypedValue = aUrl;
+    this.selectedTab = aTab;
+    this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
   }
   // don't try to focus urlbar on popup
@@ -228,12 +229,14 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (isBlankPageURL(gURLBar.value))
     gURLBar.value = "";
-  if (!gBrowser.tabmix_tab)
+
+  let tab = this.selectedTab;
+  if (!tab)
     return;
 
-  var isCurrentTab = gBrowser.tabmix_tab.selected;
-  var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
-  var url = gBrowser.tabmix_userTypedValue;
+  var isCurrentTab = tab.selected;
+  var browser = gBrowser.getBrowserForTab(tab);
+  var url = this.userTypedValue;
   if (!isBlankPageURL(url))
     browser.userTypedValue = url;
   if (isCurrentTab && gBrowser.mIsBusy) {
@@ -252,8 +255,8 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   if (url != gURLBar.value && !isBlankPageURL(url)) {
     gURLBar.value = gBrowser.userTypedValue = url;
   }
-  delete gBrowser.tabmix_tab;
-  delete gBrowser.tabmix_userTypedValue;
+  this.selectedTab = null;
+  this.userTypedValue = "";
 }
 
 /**

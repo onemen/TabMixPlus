@@ -844,6 +844,11 @@ var TMP_eventListener = {
 
     Tabmix.countClosedTabs(tab);
 
+    if (Tabmix.selectedTab == tab) {
+      Tabmix.selectedTab = null;
+      Tabmix.userTypedValue = "";
+    }
+
     // clean WeakMap
     let browser = tab.linkedBrowser;
     if (browser && TabmixSvc.syncHandlers.has(browser.permanentKey))
