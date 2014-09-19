@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
 <!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
 <!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Restaurează filele fixate ultima dată">
 <!ENTITY sm.preserve.options "Se memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
 <!ENTITY sm.preserve.protect "Starea de protecție">

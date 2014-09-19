@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
 <!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
 <!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Angeheftete Tabs wieder herstellen">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">
 <!ENTITY sm.preserve.protect "den Geschützt-Status">

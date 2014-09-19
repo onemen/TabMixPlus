@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
 <!ENTITY sm.restore.bypassCache "还原时跳过缓存">
 <!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "恢复上一次固定的标签页">
 <!ENTITY sm.preserve.options "保持标签页的：">
 <!ENTITY sm.preserve.history "历史">
 <!ENTITY sm.preserve.protect "保护原状态">

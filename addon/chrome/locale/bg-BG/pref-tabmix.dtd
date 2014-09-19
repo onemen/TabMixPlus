@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
 <!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
 <!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Възстановяване на забодените от предния път подпрозорци">
 <!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
 <!ENTITY sm.preserve.history "Историята">
 <!ENTITY sm.preserve.protect "Статуса на защита">

@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
 <!ENTITY sm.restore.bypassCache "Limpar o cache ao restaurar">
 <!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Restaurar meus abas fixadas a partir da última vez">
 <!ENTITY sm.preserve.options "Preservar abas:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado de proteção">

@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
 <!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
 <!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Obnoviť naposledy pripnuté karty">
 <!ENTITY sm.preserve.options "Zachovať karty:">
 <!ENTITY sm.preserve.history "História">
 <!ENTITY sm.preserve.protect "Chrániť stav">

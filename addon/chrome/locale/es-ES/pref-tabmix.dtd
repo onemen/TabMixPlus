@@ -294,8 +294,8 @@
 <!ENTITY sm.restore.merge "Combinar varias ventanas en una">
 <!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
 <!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
-<!ENTITY sm.preserve.options "Conservar para pestañas:">
+<!ENTITY sm.restorePinned.label "Restaurar pestañas fijas desde la última vez">
+<!ENTITY sm.preserve.options "Conservar pestañas:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Estatus de protección">
 <!ENTITY sm.preserve.locked "Estatus de bloqueo">

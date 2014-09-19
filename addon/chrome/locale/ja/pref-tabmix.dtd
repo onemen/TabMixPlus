@@ -55,9 +55,9 @@
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "新しいタブを現在のタブから最後に開いたタブの直後に開く(最後にフォーカスしたタブに続いて)">
 <!ENTITY lockTabs.label "タブのロック">
-<!ENTITY lockNewTabs.label "新しいタブのロック">
-<!ENTITY lockAppTabs.label "ピン留めしたタブのロック">
-<!ENTITY updateLockState.label "新しいタブに変更を適用">
+<!ENTITY lockNewTabs.label "新しいタブをロックする">
+<!ENTITY lockAppTabs.label "ピン留めしたアプリケーションタブをロックする">
+<!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
 <!ENTITY openBMKGroups.label "ブックマークグループ">
@@ -261,7 +261,7 @@
 <!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
 <!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
 <!ENTITY ss.advanced_setting "拡張設定">
-<!ENTITY ss.advanced_setting.warning "詳細な知識を持たない人は、以下の設定を変更しないでください">
+<!ENTITY ss.advanced_setting.warning "よくわからない場合は、以下の設定を変更しないでください">
 <!ENTITY ss.interval "セッション状態の最小保存間隔">
 <!ENTITY ss.interval.seconds "(ミリ秒):">
 <!ENTITY ss.privacy_level "機密データ(フォームデータ、POSTDATA、Cookie)を">
@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
 <!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "前回ピン留めしていたタブを復元する">
 <!ENTITY sm.preserve.options "タブで状態保持する項目:">
 <!ENTITY sm.preserve.history "履歴">
 <!ENTITY sm.preserve.protect "[タブを保護] の状態">

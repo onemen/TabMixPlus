@@ -293,8 +293,8 @@
 <!ENTITY sm.restore.closedWinList "Salvesta suletud akende loendis olevad aknad">
 <!ENTITY sm.restore.merge "Ühenda kõik aknad">
 <!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
-<!ENTITY sm.notrestore.label "Kui käivitumisel ei taastata seanssi, siis">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.notrestore.label "Kui käivitumisel seanssi ei taastata, siis">
+<!ENTITY sm.restorePinned.label "Taasta viimase seansi püsikaardid">
 <!ENTITY sm.preserve.options "Jäta meelde kaartide:">
 <!ENTITY sm.preserve.history "Ajalugu">
 <!ENTITY sm.preserve.protect "Kaitstuse olek">
