@@ -211,6 +211,8 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
+    if (this.isVersion(340) && gMultiProcessBrowser)
+      aTab._skipContentFocus = true;
     if (aTimeOut)
       setTimeout(function () {focusAndSelectUrlBar();}, 30);
     else
