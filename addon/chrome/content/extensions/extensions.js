@@ -546,13 +546,6 @@ TMP_extensionsCompatibility.newsfox = {
  */
 TMP_extensionsCompatibility.treeStyleTab = {
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
-  // flag for version after 2011.01.13.01
-  isNewVersion: function () {
-    try {
-      return TreeStyleTabService.overrideExtensionsOnInitAfter.toString().indexOf("TabmixTabbar") != -1;
-    } catch (ex) {}
-    return false;
-  },
 
   preInit: function () {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
@@ -572,56 +565,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
   },
 
   onContentLoaded: function () {
-    if (!this.isNewVersion) {
-      if ("overrideExtensionsOnInitAfter" in TreeStyleTabService) {
-        // TMupdateSettings replaced with TabmixTabbar.updateSettings
-        // TabDNDObserver replaced with TMP_tabDNDObserver
-        // tabBarScrollStatus replaced with TabmixTabbar.updateScrollStatus
-
-        Tabmix.changeCode(TreeStyleTabService, "TreeStyleTabService.overrideExtensionsOnInitAfter")._replace(
-          '{', '{var TabDNDObserver = TMP_tabDNDObserver;'
-        )._replace(
-          'this.updateTabDNDObserver(TabDNDObserver);',
-          'this.updateTabDNDObserver(gBrowser);'
-        )._replace( /* we don't need it, tabmix Tabmix.browserHome calls gBrowser.loadTabs */
-          'eval("window.TM_BrowserHome = "',
-          'if (false) $&'
-        )._replace(
-          '"TMupdateSettings" in window', 'true'
-        )._replace(
-          'TMupdateSettings',
-          'TabmixTabbar.updateSettings', {flags: "g"}
-        )._replace(
-          'tabBarScrollStatus()',
-          'TabmixTabbar.updateScrollStatus()'
-        )._replace(
-          'window.tabscroll == 2;',
-          'window.TabmixTabbar.isMultiRow;'
-        )._replace(
-          'getRowHeight',
-          'TabmixTabbar.getRowHeight', {flags: "g"}
-        ).toCode();
-
-        /* for treeStyleTab extension look in treeStyleTab hacks.js
-           we remove tabxTabAdded function and use TMP_eventListener.onTabOpen from 0.3.7pre.080815
-        */
-        window.tabxTabAdded = function _tabxTabAdded() {
-          // remove eventListener added by treeStyleTab on first call to tabxTabAdded
-          gBrowser.tabContainer.removeEventListener('DOMNodeInserted', tabxTabAdded, true);
-          return;
-        }
-      }
-
-      if ('piro.sakura.ne.jp' in window && "tabsDragUtils" in window['piro.sakura.ne.jp']) {
-        let tabsDragUtils = window['piro.sakura.ne.jp'].tabsDragUtils;
-        Tabmix.changeCode(tabsDragUtils, "tabsDragUtils._delayedInit")._replace(
-          'if ("TabDNDObserver" in window)',
-          'this.initTabDNDObserver(TMP_tabDNDObserver);\
-           $&'
-        ).toCode(false, tabsDragUtils, "_delayedInit");
-      }
-    }
-
     if ("TreeStyleTabBrowser" in window) {
       // we don't need this in the new version since we change the tabs-frame place
       // keep it here for non default theme that uses old Tabmix binding
