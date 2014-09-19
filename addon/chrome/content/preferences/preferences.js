@@ -446,7 +446,7 @@ function loadData (pattern) {
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
   for (let i = 1; i < pattern.length; i++){
-    var index = pattern[i].indexOf("=");
+    let index = pattern[i].indexOf("=");
     if (index > 0){
       prefName  = pattern[i].substring(0,index);
       prefValue = pattern[i].substring(index+1,pattern[i].length);

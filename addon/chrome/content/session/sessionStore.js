@@ -746,7 +746,7 @@ var TabmixConvertSession = {
       return state;
    },
 
-   getTabsState: function cs_getTabsState(rdfNodeTabs) {
+   getTabsState: function cs_getTabsState(rdfNodeTabs, internal) {
       var _tabs = [], tabsData = [];
 
       function _tabData(rdfTab) {
@@ -764,7 +764,7 @@ var TabmixConvertSession = {
       }
       tabsData.sort(function (a, b) {return a - b;});
       for (let i = 0; i < tabsData.length ; i++) {
-         let tab = this.getTabState(tabsData[i].node);
+         let tab = this.getTabState(tabsData[i].node, false, internal);
          if (tab)
             _tabs.push(tab);
       }
@@ -792,14 +792,13 @@ var TabmixConvertSession = {
       return _tabs;
    },
 
-   getTabState: function cs_getTabState(rdfNodeTab, aClosedTab) {
+   getTabState: function cs_getTabState(rdfNodeTab, aClosedTab, internal) {
       var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
       if (!tabData.entries.length)
         return null;
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
       tabData.index = Math.min(index + 1, tabData.entries.length);
-      tabData.zoom = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll").split(",")[2];
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
 
@@ -837,6 +836,11 @@ var TabmixConvertSession = {
           switch (RegExp.$1) {
             case "tabgroups-data":
               // TGM data
+              if (internal) {
+                // for Tabmix SessionManager use
+                extData.__tabmixTGM = RegExp.$2;
+                break;
+              }
               let [groupId, groupName] = RegExp.$2.split(" ");
               extData.TabGroupsManagerGroupId = groupId;
               extData.TabGroupsManagerGroupName = groupName;

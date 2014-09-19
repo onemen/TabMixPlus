@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Στο τρέχον παράθυρο">
 <!ENTITY linkTarget.accesskey "Τ">
 <!ENTITY divertedWindowOpen.label "Αναδυόμενα JavaScript">
-<!ENTITY divertedWindows.comment "Περισσότερες επιλογές για τον έλεγχο JavaScript &amp; αναδυόμενων θα βρείτε στις επιλογές του περιηγητή">
 <!ENTITY divertedWindowOpen.all "Άνοιγμα όλων των αναδυόμενων σε καρτέλες">
 <!ENTITY divertedWindowOpen.some "Να επιτρέπονται αναδυόμενα σταθερών διαστάσεων">
 <!ENTITY divertedWindowOpen.none "Να επιτρέπονται όλα τα αναδυόμενα">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Συνένωση όλων των παραθύρων σε ένα">
 <!ENTITY sm.restore.bypassCache "Παράκαμψη λανθάνουσας κατά την επαναφορά">
 <!ENTITY sm.notrestore.label "Όταν δεν γίνεται επαναφορά κατά την εκκίνηση">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Διατήρηση καρτελών:">
 <!ENTITY sm.preserve.history "Ιστορικό">
 <!ENTITY sm.preserve.protect "Κατάσταση προστασίας">

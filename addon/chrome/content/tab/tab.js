@@ -13,12 +13,28 @@ var TabmixTabbar = {
   SCROLL_BUTTONS_MULTIROW: 2,
   SCROLL_BUTTONS_RIGHT: 3,
 
+  set flowing(val) {
+    Tabmix.setItem(gBrowser.tabContainer, "flowing", val);
+    Tabmix.setItem(gBrowser.tabContainer.mTabstrip, "flowing", val);
+
+    let tabmixScrollBox = document.getElementById("tabmixScrollBox");
+    Tabmix.setItem(tabmixScrollBox, "flowing", val);
+    // we have to set orient attribute for Linux theme,
+    // maybe other themes need it for display the scroll arrow
+    Tabmix.setItem(tabmixScrollBox, "orient", val == "multibar" ? "vertical" : "horizontal");
+    return val
+  },
+
+  get flowing() {
+    return gBrowser.tabContainer.getAttribute("flowing");
+  },
+
   get isMultiRow() {
-    return gBrowser.tabContainer.getAttribute("flowing") == "multibar";
+    return this.flowing == "multibar";
   },
 
   isButtonOnTabsToolBar: function(button) {
-    return button && button.parentNode == gBrowser.tabContainer._container;
+    return button && button.parentNode == document.getElementById("TabsToolbar");
   },
 
   // get privateTab-toolbar-openNewPrivateTab, when the button is on the tabbar
@@ -55,36 +71,26 @@ var TabmixTabbar = {
       let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = tabBar.overflow;
 
-      switch (tabscroll) {
-        case this.SCROLL_BUTTONS_HIDDEN:
-          tabBar.setAttribute("flowing", "singlebar");
-          break;
-        case this.SCROLL_BUTTONS_LEFT_RIGHT:
-          tabBar.setAttribute("defaultScrollButtons", true);
-          Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", true);
-        case this.SCROLL_BUTTONS_RIGHT:
-          tabBar.setAttribute("flowing", "scrollbutton");
-          break;
-        case this.SCROLL_BUTTONS_MULTIROW:
-          tabBar.setAttribute("flowing", "multibar");
-          break;
-      }
-
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
-      this.setScrollButtonBox(useTabmixButtons, false, true);
+      let tabmixScrollBox = document.getElementById("tabmixScrollBox");
+      if (tabmixScrollBox) // just in case our box is missing
+        tabBar.mTabstrip.updateScrollButtons(useTabmixButtons);
+
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // temporarily hide vertical scroll button.
         // visible button can interfere with row height calculation.
         // remove the collapsed attribut after updateVerticalTabStrip
-        Tabmix.setItem("tabmixScrollBox", "collapsed", true);
+        Tabmix.setItem(tabmixScrollBox, "collapsed", true);
       }
 
-      let flowing = tabBar.getAttribute("flowing");
-      tabStrip.setAttribute("flowing", flowing);
-      Tabmix.setItem("tabmixScrollBox", "flowing", flowing);
+      let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+      this.flowing = flowing;
+      let isDefault = tabscroll == this.SCROLL_BUTTONS_LEFT_RIGHT || null;
+      Tabmix.setItem(tabBar, "defaultScrollButtons", isDefault);
+      Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
-        tabBar.resetFirstTabInRow();
+        tabBar.mTabstrip.resetFirstTabInRow();
         tabBar.updateVerticalTabStrip(true);
       }
       else if (isMultiRow && overflow) {
@@ -95,17 +101,11 @@ var TabmixTabbar = {
         if (tabBar.updateVerticalTabStrip() == "scrollbar")
           tabBar.overflow = true;
       }
-      Tabmix.setItem("tabmixScrollBox", "collapsed", null);
+      Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");
-
-      if (tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
-            tabBar.hasAttribute("defaultScrollButtons")) {
-        tabBar.removeAttribute("defaultScrollButtons");
-        Tabmix.setItem("tabmixScrollBox", "defaultScrollButtons", null);
-      }
     }
 
     this.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") &&
@@ -142,7 +142,9 @@ var TabmixTabbar = {
       tabBar.adjustTabstrip(true);
 
     // show on tabbar
-    let tabstripClosebutton = document.getElementById("tabs-closebutton");
+    let tabstripClosebutton = Tabmix.isVersion(310) ?
+        document.getElementById("tabmix-tabs-closebutton") :
+        document.getElementById("tabs-closebutton");
     if (this.isButtonOnTabsToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
@@ -179,75 +181,6 @@ var TabmixTabbar = {
     }
   },
 
-  addCloseButton: function () {
-    if (!Tabmix.isVersion(310))
-      return;
-    var button = document.getElementById("tabs-closebutton");
-    if (!button && !Tabmix.prefs.getBoolPref("hideTabBarButton")) {
-      button = document.createElement("toolbarbutton");
-      button.id = "tabs-closebutton";
-      button.className = "tabs-closebutton close-icon toolbarbutton-1 chromeclass-toolbar-additional tabmix";
-      button.setAttribute("command", "cmd_close");
-      button.setAttribute("cui-areatype", "toolbar");
-      var label = gBrowser.selectedTab.getAttribute("closetabtext");
-      button.setAttribute("label", label);
-      button.setAttribute("tooltiptext", label);
-
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = (tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset")).split(",");
-      let index = cSet.indexOf("tabs-closebutton");
-      let elm = null;
-      if (index > -1 && index < cSet.length - 1)
-        elm = document.getElementById(cSet[index + 1]);
-      else if (index == -1)
-        tabsToolbar.setAttribute("currentset", cSet.join(",") + ",tabs-closebutton");
-      gBrowser.tabContainer.parentNode.insertBefore(button, elm);
-    }
-  },
-
-  setScrollButtonBox: function TMP_setScrollButtonBox(useTabmixButtons, insertAfterTabs, update) {
-    let newBox, box = document.getElementById("tabmixScrollBox");
-    if (useTabmixButtons && !box) {
-      newBox = true;
-      box = document.createElement("box");
-      box.setAttribute("class", "tabbrowser-arrowscrollbox tabmix_scrollbuttons_box");
-      box.setAttribute("type", "tabmix-box");
-      box.setAttribute("id", "tabmixScrollBox");
-    }
-
-    let tabStrip  = gBrowser.tabContainer.mTabstrip;
-    if (newBox || (useTabmixButtons && insertAfterTabs)) {
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-      // remove existing tabmixScrollBox item
-      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
-      let index = cSet.indexOf("tabbrowser-tabs");
-      cSet.splice(index + 1, 0, "tabmixScrollBox");
-      tabsToolbar.setAttribute("currentset", cSet.join(","));
-///XXX check if we can do it only on first oveflow
-      tabsToolbar.insertBefore(box, gBrowser.tabContainer.nextSibling);
-      tabStrip._scrollButtonDownRight = box._scrollButtonDown;
-      tabStrip._scrollButtonUpRight = box._scrollButtonUp;
-    }
-    if (update) {
-      if (useTabmixButtons) {
-        // we have to set orient attribute for Linux theme
-        // maybe other themes need it for display the scroll arrow
-        box.orient = this.isMultiRow ? "vertical" : "horizontal";
-      }
-
-      tabStrip._scrollButtonDown = !useTabmixButtons ?
-          tabStrip._scrollButtonDownLeft : tabStrip._scrollButtonDownRight;
-      gBrowser.tabContainer._animateElement = tabStrip._scrollButtonDown;
-
-      tabStrip._scrollButtonUp = !useTabmixButtons ?
-          tabStrip._scrollButtonUpLeft : tabStrip._scrollButtonUpRight;
-      tabStrip._updateScrollButtonsDisabledState();
-      tabStrip._scrollButtonUp.collapsed = !gBrowser.tabContainer.overflow;
-      tabStrip._scrollButtonDown.collapsed = !gBrowser.tabContainer.overflow;
-    }
-  },
-
   updateScrollStatus: function TMP_updateScrollStatus() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
@@ -255,16 +188,16 @@ var TabmixTabbar = {
       // so if widthFitTitle is false we need to call it if we actualy change the width
       // for other chases we need to call it when we change title
       if (tabBar.mTabstrip.orient == "vertical") {
-        tabBar.setFirstTabInRow();
+        this.setFirstTabInRow();
         tabBar.updateVerticalTabStrip();
       }
       // with Australis overflow not always trigger when tab changed width
       else if (TabmixSvc.australis && !this.widthFitTitle) {
         tabBar.mTabstrip._enterVerticalMode();
-        tabBar.setFirstTabInRow();
+        this.setFirstTabInRow();
       }
     }
-    else if (!this.isMultiRow)
+    else if (!this.isMultiRow && typeof tabBar.adjustNewtabButtonvisibility == "function")
       tabBar.adjustNewtabButtonvisibility();
   },
 
@@ -359,15 +292,15 @@ var TabmixTabbar = {
     let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
     let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
-    if (TabmixSvc.isMac) {
-      document.getElementById("TabsToolbar").style.setProperty("height",newTabbarHeight + "px", "important");
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    if (TabmixSvc.isMac && !Tabmix.isVersion(280)) {
+      tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
     }
     // override fixed height set by theme to .tabbrowser-tabs class
     if (tabBar.boxObject.height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
       tabBar.style.setProperty("max-height",newTabbarHeight + "px", "important");
       tabBar.style.setProperty("height",newTabbarHeight + "px", "important");
     }
-    let tabsToolbar = document.getElementById("TabsToolbar");
     if (tabsToolbar.boxObject.height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
       tabsToolbar.style.setProperty("max-height",newTabbarHeight + "px", "important");
       tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
@@ -417,7 +350,7 @@ var TabmixTabbar = {
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
-      tabBar.setFirstTabInRow();
+      this.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical")
         tabBar.mTabstrip._enterVerticalMode();
       else
@@ -439,10 +372,30 @@ var TabmixTabbar = {
     let multibar = tabBar.hasAttribute("multibar");
     let selected = tabBar.selectedItem;
     let tabRow, top;
+
+    let numPinnedTabs = gBrowser._numPinnedTabs;
+    let isSpecial = TabmixSvc.australis &&
+        this.scrollButtonsMode != this.SCROLL_BUTTONS_MULTIROW &&
+        numPinnedTabs > 0;
     // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
     // include it), we add tabmix-beforeselected-visible here and use it for
     // Firefox with australis UI
     let updateAtt = function(tab, type, attrib, visible, prefix) {
+      // special case is when scrollButtonsMode is in one row and
+      // selected or hovered tab is last pinned or first non-pinned tab
+      let isSpecialTab = function() {
+        if (!tab || !isSpecial)
+          return false;
+        if (/^before/.test(attrib))
+          return tab._tPos == numPinnedTabs - 1 ? "before" : false;
+        return tab._tPos == numPinnedTabs ? "after" : false;
+      }
+      let getAttVal = function(val, hoverAttr) {
+        if (!specialTab || hoverAttr && visible && /selected/.test(attrib))
+          return val;
+        return val ? "special" : val;
+      }
+
       let removed = "tabmix-removed-" + attrib;
       let oldTab = tabBar._tabmixPositionalTabs[type];
       if (oldTab && tab != oldTab) {
@@ -450,13 +403,14 @@ var TabmixTabbar = {
         oldTab.removeAttribute(removed);
       }
       tabBar._tabmixPositionalTabs[type] = tab;
+      let specialTab = isSpecialTab();
       if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
-          multibar || tab.hasAttribute(removed))) {
+          multibar || tab.hasAttribute(removed) || specialTab)) {
         let sameRow = multibar ? tabRow == tabBar.getTabRowNumber(tab, top) || null : true;
         Tabmix.setItem(tab, removed, !sameRow || null);
-        Tabmix.setItem(tab, attrib, sameRow);
+        Tabmix.setItem(tab, attrib, getAttVal(sameRow, true));
         if (visible)
-          Tabmix.setItem(tab, prefix + attrib + "-visible", sameRow);
+          Tabmix.setItem(tab, prefix + attrib + "-visible", getAttVal(sameRow));
       }
     }
 
@@ -568,6 +522,34 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     var top = tabBar.topTabY;
     return tabBar.getTabRowNumber(tab1, top) == tabBar.getTabRowNumber(tab2, top);
+  },
+
+  setFirstTabInRow: function() {
+    var tabBar = gBrowser.tabContainer;
+    // call our tabstrip function only when we are in multi-row and
+    // in overflow with pinned tabs
+    if (this.isMultiRow && tabBar.overflow && tabBar.firstChild.pinned)
+      tabBar.mTabstrip.setFirstTabInRow();
+  },
+
+  removeShowButtonAttr: function() {
+    var tabBar = gBrowser.tabContainer;
+    if ("__showbuttonTab" in tabBar) {
+      tabBar.__showbuttonTab.removeAttribute("showbutton");
+      delete tabBar.__showbuttonTab;
+    }
+  },
+
+  get _real_numPinnedTabs() {
+    var count = 0;
+    for (let i = 0; i < gBrowser.tabs.length; i++) {
+      let tab = gBrowser.tabs[i];
+      if (!tab.pinned)
+        break;
+      if (!tab.closing)
+        count++;
+    }
+    return count;
   }
 
 } // TabmixTabbar end
@@ -640,8 +622,16 @@ var gTMPprefObserver = {
       case "extensions.tabmix.titlefrombookmark":
         TMP_Places.onPreferencChanged(Services.prefs.getBoolPref(prefName));
         break;
-      case "extensions.tabmix.dblClickTabbar_changesize":
+      case "extensions.tabmix.tabbar.click_dragwindow":
         document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
+      case "extensions.tabmix.tabbar.dblclick_changesize":
+        let dragwindow = Tabmix.prefs.getBoolPref("tabbar.click_dragwindow");
+        let changesize = Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize");
+        if (!dragwindow && changesize) {
+          Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", false);
+          changesize = !changesize;
+        }
+        TabmixTabClickOptions.toggleEventListener(dragwindow && !changesize);
         break;
       case "extensions.tabmix.lockallTabs":
         TabmixTabbar.lockallTabs = Services.prefs.getBoolPref(prefName);
@@ -923,7 +913,6 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.hideTabBarButton":
-        TabmixTabbar.addCloseButton();
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
       case "extensions.tabmix.hideAllTabsButton":
@@ -1103,10 +1092,10 @@ var gTMPprefObserver = {
     if (TabmixSvc.isMac && !TabmixSvc.australis)
       Tabmix._buttonsHeight = 24;
 
+    let _buttonsHeight = Tabmix.isVersion(310) ? Tabmix._buttonsHeight - 1 : Tabmix._buttonsHeight;
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1,' +
-                  '#tabmixScrollBox[flowing=multibar] > toolbarbutton,' +
-                  '#TabsToolbar[multibar] > #tabs-closebutton {' +
-                  '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
+                  '#tabmixScrollBox[flowing=multibar] > toolbarbutton {' +
+                  '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule);
     delete Tabmix._buttonsHeight;
 
@@ -1287,6 +1276,18 @@ var gTMPprefObserver = {
     }
 
     document.getElementById("tmOpenInNewWindow").hidden = Tabmix.singleWindowMode;
+
+    if (Tabmix.isVersion(310)) {
+      let val = Tabmix.singleWindowMode || null;
+      if (val) {
+        Tabmix.setItem("menu_newRemoteWindow", "hidden", true);
+        Tabmix.setItem("menu_newNonRemoteWindow", "hidden", true);
+      }
+      else
+        gRemoteTabsUI.init();
+      Tabmix.setItem("Tools:RemoteWindow", "disabled", val);
+      Tabmix.setItem("Tools:NonRemoteWindow", "disabled", val);
+    }
   },
 
   setMenuIcons: function() {
@@ -1337,37 +1338,51 @@ var gTMPprefObserver = {
     function $(id) document.getElementById(id);
     let newTabButton = $("new-tab-button");
     if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
-      let sideChanged, tabsToolbar = $("TabsToolbar");
-      let toolBar = Array.slice(tabsToolbar.childNodes);
-      let buttonIndex = toolBar.indexOf(newTabButton);
-      let tabsIndex = toolBar.indexOf(gBrowser.tabContainer);
-      if (aPosition == 0) {
-        if (buttonIndex > tabsIndex) {
-          newTabButton.parentNode.insertBefore(newTabButton, gBrowser.tabContainer);
-          sideChanged = true;
-        }
-      }
-      else {
-        if (buttonIndex < tabsIndex) {
-          let before = gBrowser.tabContainer.nextSibling;
-          if ($("tabmixScrollBox")) {
-            before = before.nextSibling;
-            tabsIndex++;
-          }
-          newTabButton.parentNode.insertBefore(newTabButton, before);
-          sideChanged = true;
-        }
-      }
-      if (sideChanged) {
-        let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-        cSet = cSet.split(",");
-        cSet.splice(tabsIndex, 0, cSet.splice(buttonIndex, 1)[0] || "new-tab-button");
-        tabsToolbar.setAttribute("currentset", cSet.join(","));
-        document.persist("TabsToolbar", "currentset");
-      }
+      // update our attribute
       let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
       this.setShowNewTabButtonAttr(showNewTabButton, aPosition);
       Tabmix.sideNewTabButton = newTabButton;
+
+      // move button within TabsToolbar
+      if (Tabmix.isVersion(290)) {
+        let buttonPosition = Tabmix.getPlacement("new-tab-button");
+        let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
+        let boxPositoin = Tabmix.getPlacement("tabmixScrollBox");
+        let after = boxPositoin == tabsPosition + 1 ? boxPositoin : tabsPosition;
+        let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
+                             (aPosition == 1 && buttonPosition < after) ||
+                             (aPosition == 2 && buttonPosition != after + 1);
+        if (changePosition) {
+          let newPosition = aPosition == 0 ? tabsPosition : after + 1;
+          CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
+        }
+        return;
+      }
+
+      let tabsToolbar = $("TabsToolbar");
+      let toolBar = Array.slice(tabsToolbar.childNodes);
+      let buttonPosition = toolBar.indexOf(newTabButton);
+      let tabsPosition = toolBar.indexOf(gBrowser.tabContainer);
+      let scrollBox = $("tabmixScrollBox");
+      let after = scrollBox && toolBar.indexOf(scrollBox) || tabsPosition;
+      let changePosition = (aPosition == 0 && buttonPosition > tabsPosition) ||
+                           (aPosition == 1 && buttonPosition < after) ||
+                           (aPosition == 2 && buttonPosition != after + 1);
+      if (changePosition) {
+        let newPosition = aPosition == 0 ? tabsPosition : after + 1;
+        tabsToolbar.insertBefore(newTabButton, tabsToolbar.childNodes.item(newPosition));
+        // update currentset
+        let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
+        cSet = cSet.split(",").filter(function(id) id != "new-tab-button");
+        let tabsIndex = cSet.indexOf("tabbrowser-tabs");
+        if (tabsIndex < 0)
+          return;
+        if (aPosition > 0)
+          tabsIndex++;
+        cSet.splice(tabsIndex, 0, "new-tab-button");
+        tabsToolbar.setAttribute("currentset", cSet.join(","));
+        document.persist("TabsToolbar", "currentset");
+      }
     }
     else {
       this.setShowNewTabButtonAttr(false);
@@ -1384,9 +1399,6 @@ var gTMPprefObserver = {
 
    /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
     *  aftertabs       - show the button after tabs
-    *  aftertabs-force - force the button after tabs to be visible, only to
-    *                    make it possible to catch the button width
-    *                   (Tabmix.getAfterTabsButtonsWidth)
     *  temporary-right-side
     *                  - show the button on right side when there is no place
     *                    for the button aftertabs in multi-row mode
@@ -1532,16 +1544,18 @@ var gTMPprefObserver = {
   // Show Reload Every menu on Reload button
   showReloadEveryOnReloadButton: function() {
     let show = Tabmix.prefs.getBoolPref("reloadEvery.onReloadButton");
-    let reloadButton = document.getElementById("reload-button");
-    if (reloadButton) {
-      Tabmix.setItem(reloadButton, "type", show ? "menu-button" : null);
-      Tabmix.setItem(reloadButton, "context", show ? "autoreload_popup" : null);
-      Tabmix.setItem("stop-button", "context", show ? "autoreload_popup" : null);
-    }
-
+    Tabmix.setItem("reload-button", "type", show ? "menu-button" : null);
     Tabmix.setItem("urlbar-go-button", "context", show ? "autoreload_popup" : null);
-    Tabmix.setItem("urlbar-reload-button", "context", show ? "autoreload_popup" : null);
-    Tabmix.setItem("urlbar-stop-button", "context", show ? "autoreload_popup" : null);
+
+    let setContext = function(command) {
+      let items = document.getElementsByAttribute("command" ,"Browser:" + command);
+      Array.slice(items).forEach(function(item) {
+        if (item.localName == "toolbarbutton")
+          Tabmix.setItem(item, "context", show ? "autoreload_popup" : null);
+      });
+    }
+    setContext("ReloadOrDuplicate");
+    setContext("Stop");
   },
 
   // we replace some Tabmix settings with Firefox settings
@@ -1758,6 +1772,15 @@ try {
       Tabmix.prefs.setIntPref("scrollTabs", 1);
       Tabmix.prefs.clearUserPref("enableScrollSwitch");
     }
+    // 2014-08-07
+    if (Tabmix.prefs.prefHasUserValue("dblClickTabbar_changesize")) {
+      let val = Tabmix.prefs.getBoolPref("dblClickTabbar_changesize");
+      // make sure to set click_dragwindow first, dblclick_changesize depend
+      // on it see gTMPprefObserver.observe.
+      Tabmix.prefs.setBoolPref("tabbar.click_dragwindow", val);
+      Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", val);
+      Tabmix.prefs.clearUserPref("dblClickTabbar_changesize");
+    }
 
     // verify valid value
     if (Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
@@ -1856,6 +1879,11 @@ try {
   },
 
   addMissingPrefs: function() {
+    // add missing preference to the default branch
+    let prefs = Services.prefs.getDefaultBranch("");
+
+    if (Tabmix.isVersion(320))
+      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
   }
 
 }
@@ -1905,6 +1933,8 @@ var TabmixProgressListener = {
           this.mTabBrowser.setTabTitle(tab);
         }
         else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING)) {
+          if (tab.hasAttribute("tabmix_pending"))
+            tab.removeAttribute("tabmix_pending");
           Tabmix.setTabStyle(tab);
           // this code run after setTabTitleLoading, so we must set tab width on setTabTitleLoading
           // at this stage only unhide the button if needed.
@@ -1963,8 +1993,8 @@ var TabmixProgressListener = {
           Tabmix.autoReload.onTabReloaded(tab, aBrowser);
 
         // disabled name for locked tab, so locked tab don't get reuse
-        if (tab.getAttribute("locked") && aBrowser.contentWindow.name)
-          aBrowser.contentWindow.name = "";
+        if (tab.getAttribute("locked") && aBrowser[TabmixSvc.contentWindowAsCPOW].name)
+          aBrowser[TabmixSvc.contentWindowAsCPOW].name = "";
       }
     }
   }

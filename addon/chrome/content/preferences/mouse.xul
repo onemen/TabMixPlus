@@ -47,7 +47,10 @@
       <preference id="pref_shiftClickTabbar"  name="extensions.tabmix.shiftClickTabbar"   type="int"/>
       <preference id="pref_altClickTab"       name="extensions.tabmix.altClickTab"        type="int"/>
       <preference id="pref_altClickTabbar"    name="extensions.tabmix.altClickTabbar"     type="int"/>
-      <preference id="pref_dblClickTabbar_changesize"    name="extensions.tabmix.dblClickTabbar_changesize"
+      <preference id="pref_click_dragwindow"       name="extensions.tabmix.tabbar.click_dragwindow"
+                  type="bool" inverted="true"
+                  onchange="gMousePane.updatedblClickTabbar(this);"/>
+      <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
                   type="bool" inverted="true"/>
       <preference id="pref_disableMoveTab"    name="extensions.tabmix.tabBarMode"         type="int"
                   onchange="gMousePane.updateBroadcaster('disableMoveTab');"/>
@@ -193,8 +196,10 @@
             </tabpanels>
           </tabbox>
           <spacer style="height: 12px;"/>
-          <checkbox_tmp id="dblClickTabbar_changesize" label="&ontabbar.dblClick.label; &ontabbar.click.label;"
-                        preference="pref_dblClickTabbar_changesize"/>
+          <checkbox_tmp id="click_dragwindow" label="&ontabbar.click.label;"
+                        preference="pref_click_dragwindow"/>
+          <checkbox_tmp id="dblclick_changesize" label="&ontabbar.dblClick.label;"
+                        preference="pref_dblclick_changesize"/>
         </tabpanel>
       </tabpanels>
     </tabbox>

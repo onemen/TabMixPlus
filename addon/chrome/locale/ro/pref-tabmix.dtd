@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "fila curentă">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "Restricții JavaScript și ferestre instantanee:">
-<!ENTITY divertedWindows.comment "Mai multe preferințe pot fi controlate din caseta „Opțiuni” a navigatorului">
 <!ENTITY divertedWindowOpen.all "Se deschid toate ferestrele instantanee în file">
 <!ENTITY divertedWindowOpen.some "Se permite redimensionarea ferestrelor instantanee">
 <!ENTITY divertedWindowOpen.none "Se permit toate ferestrele instantanee">
@@ -136,7 +135,7 @@
 <!ENTITY dropIndicator.label "Indicator de fixare (când fila nu se deplasează)">
 <!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
 <!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
-<!ENTITY verticalTabbar.description "Se utilizează suplimentele „Tree Style Tab” sau  „VerticalTab” pentru a controla aceste opțiuni.">
+<!ENTITY verticalTabbar.description "Se utilizează extensiile „Tree Style Tab” sau  „VerticalTab” pentru a controla aceste opțiuni.">
 <!ENTITY tabBarPosition.label "Se poziționează bara de file:">
 <!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
 <!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">
@@ -211,7 +210,7 @@
 <!ENTITY clicktab.label "Acțiuni efectuate cu mausul pe o filă sau pe bara de file">
 <!ENTITY ontabbar.dblClick.label "Nu se permite redimensionarea sau tragerea ferestrei cu dublu-clic sau clic cu mausul pe bara de file">
 <!ENTITY ontabbar.click.label "(atunci când bara de file este suprapusă peste bara de titlu a ferestrei)">
-<!ENTITY clicktab.default "Acțiune implicită a Firefox sau a altui supliment instalat">
+<!ENTITY clicktab.default "Acțiune implicită a Firefox sau a altei extensii instalate">
 <!ENTITY clicktab.nothing "Nicio acțiune">
 <!ENTITY clicktab.addtab "Deschide o filă nouă">
 <!ENTITY clicktab.duplicatetab "Duplică fila">
@@ -252,10 +251,10 @@
 <!ENTITY startupHomePage.label "se afișează pagina de start">
 <!ENTITY startupBlankPage.label "se afișează o pagină goală">
 <!ENTITY startupLastSession.label "se afișează ferestrele și filele de dinainte de închidere">
-<!ENTITY sm.extension.description1 "Tab Mix Plus a descoperit că suplimentul „Gestionar de sesiuni” este instalat.">
+<!ENTITY sm.extension.description1 "Tab Mix Plus a descoperit că extensia „Gestionar de sesiuni” este instalată.">
 <!ENTITY sm.extension.description2 "Gestionarul de sesiuni al Tab Mix Plus va fi dezactivat.">
-<!ENTITY sm.extension.description3 "Puteți da clic pe butonul din dreapta pentru a deschide caseta de opțiuni a suplimentului „Gestionar de sesiuni”.">
-<!ENTITY sm.extension.description4 "Conversie de sesiuni din formatul Tab Mix Plus în cel al suplimentului „Gestionarului de sesiuni”">
+<!ENTITY sm.extension.description3 "Puteți da clic pe butonul din partea dreaptă pentru a deschide caseta de opțiuni a extensiei „Gestionar de sesiuni”.">
+<!ENTITY sm.extension.description4 "Conversie de sesiuni din formatul Tab Mix Plus în cel al extensiei „Gestionar de sesiuni”">
 <!ENTITY sm.extension.convert.label "Convertește">
 <!ENTITY sm.extension.chooseFile.label0 "Se convertește fișierul de date specificat">
 <!ENTITY sm.extension.chooseFile.label1 "Se convertesc sesiunile Tab Mix Plus din profilul curent">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
 <!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
 <!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
+<!ENTITY sm.restorePinned.label "Restaurează filele fixate ultima dată">
 <!ENTITY sm.preserve.options "Se memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
 <!ENTITY sm.preserve.protect "Starea de protecție">
@@ -304,5 +304,5 @@
 <!ENTITY sm.restore.winOptions "Se memorează din ferestre:">
 <!ENTITY sm.restore.selectedTab "Filele selectate">
 <!ENTITY sm.restore.closedTabs "Lista filelor închise">
-<!ENTITY incompatible.extensions "Unele suplimente sunt incompatibile cu Tab Mix Plus. Este recomandat să dezactivați sau să dezinstalați aceste suplimente.">
+<!ENTITY incompatible.extensions "Unele extensii sunt incompatibile cu Tab Mix Plus. Este recomandat să dezactivați sau să dezinstalați aceste extensii.">
 <!ENTITY incompatible.button.label "Afișează lista">

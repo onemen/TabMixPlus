@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Aktuálna karta">
 <!ENTITY linkTarget.accesskey "A">
 <!ENTITY divertedWindowOpen.label "Vyskakovacie okná JavaScriptu:">
-<!ENTITY divertedWindows.comment "Ďalšie predvoľby JavaScriptu a vyskakovacích okien nájdete v hlavných možnostiach nastavenia">
 <!ENTITY divertedWindowOpen.all "Otvoriť všetky vyskakovacie okná na kartách">
 <!ENTITY divertedWindowOpen.some "Povoliť zmeny u vyskakovacích okien">
 <!ENTITY divertedWindowOpen.none "Povoliť všetky vyskakovacie okná">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
 <!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
 <!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
+<!ENTITY sm.restorePinned.label "Obnoviť naposledy pripnuté karty">
 <!ENTITY sm.preserve.options "Zachovať karty:">
 <!ENTITY sm.preserve.history "História">
 <!ENTITY sm.preserve.protect "Chrániť stav">

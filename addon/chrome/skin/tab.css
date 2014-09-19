@@ -127,11 +127,11 @@
 
 #btn_undoclose { -moz-image-region: rect(0 24px 24px 0); }
 #btn_undoclose:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#btn_undoclose[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+#main-window:not([customizing]) #btn_undoclose[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
 
 toolbar[iconsize=small] #btn_undoclose, .closedtabs-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
 toolbar[iconsize=small] #btn_undoclose:hover, .closedtabs-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
-toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
 #btn_undoclose[type=menu-button] .toolbarbutton-icon {
    margin-right: 0px;
@@ -147,11 +147,11 @@ toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled
 
 #btn_closedwindows { -moz-image-region: rect(0 24px 24px 0); }
 #btn_closedwindows:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#btn_closedwindows[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+#main-window:not([customizing]) #btn_closedwindows[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
 
 toolbar[iconsize=small] #btn_closedwindows, .closedwindows-icon >.menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
 toolbar[iconsize=small] #btn_closedwindows:hover, .closedwindows-icon:hover >.menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px)!important; }
-toolbar[iconsize=small] #btn_closedwindows[disabled=true], .closedwindows-icon[disabled=true] >.menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px)!important; }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_closedwindows[disabled=true], .closedwindows-icon[disabled=true] >.menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px)!important; }
 
 #btn_tabslist, #tm-tabsList {
   list-style-image: url(tabslist.png);
@@ -163,6 +163,7 @@ toolbar[iconsize=small] #btn_tabslist, #tm-tabsList > .menu-iconic-left{ -moz-im
 toolbar[iconsize=small] #btn_tabslist:hover, #tm-tabsList:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #btn_tabslist[disabled=true], #tm-tabsList[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
+
 #btn-sm-settings, .tabmix-menu-icon {
    list-style-image: url(tmpsmall.png);
 }
@@ -173,10 +174,11 @@ toolbar[iconsize=small] #btn_tabslist[disabled=true], #tm-tabsList[disabled=true
 }
 #btn_sessionmanager { -moz-image-region: rect(0 24px 24px 0); }
 #btn_sessionmanager:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#btn_sessionmanager[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+#main-window:not([customizing]) #btn_sessionmanager[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
 toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
 toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
-toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
 /* fix dropmarker orient for toolbarbutton */
 .tabmix-button[type="menu"]:not([cui-areatype="menu-panel"]) {

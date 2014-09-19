@@ -98,16 +98,15 @@
         <menu id="tm-docShell" insertbefore="context_closeTab"
                 label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
          <menupopup
-                onpopupshowing='for(var i = 0; i != childNodes.length; i++) {childNodes[i].setAttribute("checked",gBrowser.getBrowserForTab(TabContextMenu.contextTab).docShell[childNodes[i].value]);}
-                                event.stopPropagation();'
+                onpopupshowing="Tabmix.docShellCapabilities.onGet(this.childNodes, TabContextMenu.contextTab);
+                                event.stopPropagation();"
                 onpopupshown="event.stopPropagation();"
-                oncommand="var currentDocShell = gBrowser.getBrowserForTab(TabContextMenu.contextTab).docShell; currentDocShell[event.originalTarget.value] = !currentDocShell[event.originalTarget.value];
-                           gBrowser.reloadTab(TabContextMenu.contextTab);">
-           <menuitem label="&allowImage.label;" value="allowImages" class="menuitem-iconic" type="checkbox" checked="true" />
-           <menuitem label="&allowFrame.label;" value="allowSubframes" class="menuitem-iconic" type="checkbox" checked="true" />
-           <menuitem label="&allowRedirect.label;" value="allowMetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
-           <menuitem label="&allowPlugin.label;" value="allowPlugins" class="menuitem-iconic" type="checkbox" checked="true" />
-           <menuitem label="&allowJavascript.label;" value="allowJavascript" class="menuitem-iconic" type="checkbox" checked="true" />
+                oncommand="Tabmix.docShellCapabilities.onSet(TabContextMenu.contextTab,event.originalTarget);">
+           <menuitem label="&allowImage.label;" value="Images" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowFrame.label;" value="Subframes" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowRedirect.label;" value="MetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowPlugin.label;" value="Plugins" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowJavascript.label;" value="Javascript" class="menuitem-iconic" type="checkbox" checked="true" />
          </menupopup>
         </menu>
         <menuitem id="tm-freezeTab" insertbefore="context_closeTab"

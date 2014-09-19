@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://tabmixplus/content/links/text_link.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferencesOverlay.css" type="text/css"?>
 
 <!DOCTYPE overlay [
@@ -13,13 +12,11 @@
 <overlay id="tmp_incontentPreferencesOverlay"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
   <script type="application/javascript" src="preferencesOverlay.js"/>
   <script type="application/javascript">
-      var tabmixButton_label = "&options.main.sessionbutton.label;…";
       window.addEventListener("load", function TMP_onLoad_preverenceOverlay(aEvent) {
         aEvent.currentTarget.removeEventListener("load", TMP_onLoad_preverenceOverlay, true);
-        gTabMix_preferencesOverlay.incontentInit(aEvent);
+        gTabMix_preferencesOverlay.incontentInit();
       }, true);
   </script>
 
@@ -31,7 +28,21 @@
                   name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
       <preference id="extensions.tabmix.protectedtabs.warnOnClose"
                   name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
+      <preference id="extensions.tabmix.singleWindow"
+                  name="extensions.tabmix.singleWindow"              type="bool"
+                  onchange="gTabMix_preferencesOverlay.setSingleWindowUI();"/>
+      <preference id="tabmix.sm"
+                  name="extensions.tabmix.sessions.manager"          type="bool"
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
+      <preference id="tabmix.cr"
+                  name="extensions.tabmix.sessions.crashRecovery"    type="bool"
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
     </preferences>
+
+    <button id="tabmixSessionManager"
+            label="&options.main.sessionbutton.label;…"
+            oncommand="gTabMix_preferencesOverlay.showTabmixOptions('paneSession');"
+            class="tabmixplus-button"/>
 
     <vbox id="tabmixplusBox" data-category="paneTabs" hidden="true" align="start">
       <button id="btn_tabmixplus" class="tabmixplus-button indent" style="height: 27px;"
@@ -71,10 +82,5 @@
         </radiogroup>
       </vbox>
   </prefpane>
-
-  <checkbox id="linkTargeting" style="visibility: collapse;"/>
-  <!-- Warn when closing multiple tabs -->
-  <checkbox id="warnCloseMultiple" preference="extensions.tabmix.tabs.warnOnClose" hidden="false"/>
-  <checkbox id="showTabBar" style="visibility: collapse;"/>
 
 </overlay>

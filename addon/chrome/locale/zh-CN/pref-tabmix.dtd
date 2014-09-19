@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "当前标签页">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript 弹出窗口：">
-<!ENTITY divertedWindows.comment "更多的 JavaScript 和弹出窗口选项可以在主选项中设置">
 <!ENTITY divertedWindowOpen.all "在新标签页打开所有窗口">
 <!ENTITY divertedWindowOpen.some "允许尺寸固定的窗口">
 <!ENTITY divertedWindowOpen.none "允许所有窗口">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
 <!ENTITY sm.restore.bypassCache "还原时跳过缓存">
 <!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
+<!ENTITY sm.restorePinned.label "恢复上一次固定的标签页">
 <!ENTITY sm.preserve.options "保持标签页的：">
 <!ENTITY sm.preserve.history "历史">
 <!ENTITY sm.preserve.protect "保护原状态">

@@ -15,6 +15,11 @@
   background-image: none !important;
 }
 
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton {
+  background-image: none !important;
+}
+
 /*  For .tabs-closebutton .showhover */
 .tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
   margin: -3px 0px -3px 0px;
@@ -30,19 +35,6 @@
   vertical-align: bottom;
 }
 */
-
-/* default value padding-bottom: 4px; make row height 24 insted of 23 */
-#TabsToolbar > #tabs-closebutton {
-  padding-bottom: 3px;
-}
-
-#TabsToolbar[multibar] > #tabs-closebutton {
-  padding-top: 5px;
-}
-
-.tabbrowser-tabs[tabmix_australis][multibar] ~ #tabs-closebutton {
-  padding-top: 8px !important;
-}
 
 /* for TabsToolbar on bottom with windows 7 */
 #tabmix-bottom-toolbox[tabmix_aero] {
@@ -84,4 +76,10 @@
   background-position: 1px 1px, 0pt 0px, 100% 0px, 0px 0pt, 0px 100%;
   background-size: calc(100% - 2px) calc(100% - 2px), 1px calc(100% - 1px), 1px calc(100% - 1px), 100% 1px, 100% 1px;
   background-repeat: no-repeat;
+}
+
+
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]) > .tab-stack > .tab-background > .tab-background-middle {
+  clip-path: none !important;
 }

@@ -14,7 +14,7 @@
 <!ENTITY duplicateinWin.label "Дублиране в нов прозорец">
 <!ENTITY duplicateinWin.accesskey "в">
 <!ENTITY detachTab.label "Преместване в нов прозорец">
-<!ENTITY detachTab.accesskey "Е">
+<!ENTITY detachTab.accesskey "е">
 <!ENTITY mergeContext.label "Обединяване на прозорци">
 <!ENTITY mergeContext.accesskey "О">
 <!ENTITY renametab.label "Преименуване на подпрозореца">

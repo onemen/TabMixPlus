@@ -15,6 +15,18 @@
 }
 */
 
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar .tabs-closebutton:not([type="menu-button"]):not([disabled=true]):not([open]):hover {
+  background-image: none !important;
+}
+
+/* Tabstrip close button Firefox 31+ */
+@media (min-resolution: 2dppx) {
+  .tabs-closebutton.tabmix > .toolbarbutton-icon {
+    width: 16px;
+  }
+}
+
 #TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
   position: static !important;
 }
@@ -74,4 +86,8 @@
 
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
+}
+
+.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):hover > .tab-stack > .tab-background > .tab-background-middle {
+  clip-path: none !important;
 }

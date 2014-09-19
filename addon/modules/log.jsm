@@ -55,10 +55,8 @@ let console = {
       }.bind(this);
 
       if (aDelay >= 0) {
-        let timer = {};
-        timer.__proto__ = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
         let timerID = gNextID++;
-        this._timers[timerID] = timer;
+        let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
         timer.clear = function() {
           if (timerID in this._timers)
             delete this._timers[timerID];
@@ -69,10 +67,14 @@ let console = {
             timer.clear();
           }, false);
         }
-        timer.initWithCallback(function() {
-          timer.clear();
-          logMethod();
+        timer.initWithCallback({
+          notify: function notify() {
+            timer.clear();
+            logMethod();
+          }
         }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
+
+        this._timers[timerID] = timer;
       }
       else
         logMethod();
@@ -237,12 +239,23 @@ options = {
       let columnIndex = line.lastIndexOf(":");
       let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
       if (fileName) {
-        fileName = decodeURI(fileName).replace(re, "");
         let lineNumber = parseInt(line.slice(columnIndex + 1));
+        let colNumber;
+        if (fileName.replace("://", "///").indexOf(":") > -1) {
+          colNumber = lineNumber;
+          columnIndex = fileName.lastIndexOf(":");
+          lineNumber = parseInt(fileName.slice(columnIndex + 1));
+          fileName = fileName.slice(0, columnIndex);
+        }
+        fileName = decodeURI(fileName).replace(re, "");
         let atIndex = line.indexOf(_char);
-        let name = line.slice(0, atIndex).split("(").shift() || "null";
-        lines.push('  File "' + fileName + '", line ' +
-            lineNumber + ', in ' + name);
+        let name = line.slice(0, atIndex).split("(").shift();
+        let formated = '  File "' + fileName + '", line ' + lineNumber;
+        if (colNumber)
+          formated += ', col ' + colNumber;
+        if (name)
+          formated += ', in ' + name.replace("/<", "");
+        lines.push(formated);
       }
     });
 
@@ -250,8 +263,8 @@ options = {
   },
 
   assert: function TMP_console_assert(aError, aMsg) {
-    if (typeof aError.stack != "string") {
-      this.trace((aMsg || "") + "\n" + aError, 2);
+    if (!aError || typeof aError.stack != "string") {
+      this.trace((aMsg || "") + "\n" + (aError || ""), 2);
       return;
     }
 

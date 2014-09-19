@@ -359,15 +359,6 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // Redirect Remover 2.6.4
-    if ("rdrb" in window && rdrb.delayedInit) {
-      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        'if (links_urlSecurityCheck(url))',
-        'url = rdrb.cleanLink(url);\
-         $&'
-      ).toCode();
-    }
-
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
@@ -417,7 +408,7 @@ var TMP_extensionsCompatibility = {
     // this need more testing with other themes
 
     // check if Greasemonkey installed
-    Tabmix.contentAreaClick.isGreasemonkeyInstalled();
+    Tabmix.ContentClick.isGreasemonkeyInstalled(window);
 
     if (typeof MouseControl == "object" && MouseControl.newTab) {
       Tabmix.changeCode(MouseControl, "MouseControl.newTab")._replace(
@@ -432,6 +423,25 @@ var TMP_extensionsCompatibility = {
         'SpeedDial.originalBrowserOpenTab(event, arguments.length > 1 && arguments[1]);'
       ).toCode();
       window.BrowserOpenTab = TMP_BrowserOpenTab;
+    }
+
+    // Classic Theme Restorer
+    // move appmenu-sessionmanager to its position
+    let ctrBox = document.getElementById("ctraddon_appmenubox_developer");
+    if (ctrBox) {
+      let sessionmanager = document.getElementById("appmenu-sessionmanager");
+      if (sessionmanager)
+        ctrBox.parentNode.insertBefore(sessionmanager, ctrBox.nextSibling);
+    }
+
+    // Redirect Remover 2.6.4
+    // https://addons.mozilla.org/he/firefox/addon/redirect-remover/
+    if (window.rdrb && typeof rdrb.cleanLink == "function") {
+      Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
+        'Tabmix.loadTabs(urls, false);',
+        'urls = urls.map(function(url) rdrb.cleanLink(url));\n' +
+        '      $&'
+      ).toCode(true);
     }
   }
 
@@ -468,7 +478,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
        if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
        else
-         window.content.document.location.href = this.href;
+         window.gBrowser.selectedBrowser[TabmixSvc.contentDocumentAsCPOW].location.href = this.href;
      }
      else if (target == "window") {
        if (Tabmix.singleWindowMode)
@@ -662,8 +672,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
       /(function[^\(]*\([^\)]+)(\))/,
       '$1, TSTOpenGroupBookmarkBehavior$2'
     )._replace(
-      '{',
-      '{if (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
+      /"use strict";|{/,
+      '$&\nif (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
     )._replace(
       'index = prevTab._tPos + 1;',
       '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
@@ -704,5 +714,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
+
+    Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
+      'var newTab = gBrowser.addTab',
+      'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
+    ).toCode();
   }
 }

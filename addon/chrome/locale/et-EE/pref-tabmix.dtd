@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Praegune aken">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript hüpikaknad:">
-<!ENTITY divertedWindows.comment "Rohkem JavaScripti ja hüpikakende sätteid saab muuta Firefoxi peamises Sätete aknas">
 <!ENTITY divertedWindowOpen.all "Ava kõik hüpikaknad kaartidel">
 <!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
 <!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
@@ -294,7 +293,8 @@
 <!ENTITY sm.restore.closedWinList "Salvesta suletud akende loendis olevad aknad">
 <!ENTITY sm.restore.merge "Ühenda kõik aknad">
 <!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
-<!ENTITY sm.notrestore.label "Kui käivitumisel ei taastata seanssi, siis">
+<!ENTITY sm.notrestore.label "Kui käivitumisel seanssi ei taastata, siis">
+<!ENTITY sm.restorePinned.label "Taasta viimase seansi püsikaardid">
 <!ENTITY sm.preserve.options "Jäta meelde kaartide:">
 <!ENTITY sm.preserve.history "Ajalugu">
 <!ENTITY sm.preserve.protect "Kaitstuse olek">

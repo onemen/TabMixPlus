@@ -141,7 +141,7 @@ let MergeWindows = {
         // since we merge popup after all other tabs was merged,
         // we only look for opener in the target window
         let popupWindow = aTab.ownerDocument.defaultView;
-        let openerWindow = popupWindow.gBrowser.contentWindow.opener;
+        let openerWindow = popupWindow.gBrowser.selectedBrowser[TabmixSvc.contentWindowAsCPOW].opener;
         let openerTab = openerWindow &&
             tabbrowser._getTabForContentWindow(openerWindow.top);
         if (openerTab)

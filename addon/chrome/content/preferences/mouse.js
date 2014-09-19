@@ -26,10 +26,9 @@ var gMousePane = {
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
-    $("dblClickTabbar_changesize").setAttribute("style",
-        "width: #px;".replace("#", $("mouseClick_tabbox").boxObject.width));
     this.updateBroadcaster('tabbarscrolling');
     this.updateBroadcaster('disableMoveTab');
+    this.updatedblClickTabbar($("pref_click_dragwindow"));
 
     gPrefWindow.initPane("paneMouse");
   },
@@ -87,6 +86,15 @@ var gMousePane = {
       menulist[prefID] = val;
     menulist.disabled = val == -1;
     menulist.previousSibling.checked = !menulist.disabled;
+  },
+
+  updatedblClickTabbar: function (pref) {
+    let dblClickTabbar = $("pref_dblclick_changesize");
+    if (pref.value && !dblClickTabbar.value)
+      dblClickTabbar.value = pref.value;
+    let checkbox = $("dblclick_changesize")._checkbox;
+    let image = document.getAnonymousElementByAttribute(checkbox, "class", "checkbox-check")
+    Tabmix.setItem(image, "disabled", pref.value || null);
   }
 
 }

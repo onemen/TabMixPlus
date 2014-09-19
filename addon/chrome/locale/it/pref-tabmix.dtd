@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "nella scheda attuale">
 <!ENTITY linkTarget.accesskey "a">
 <!ENTITY divertedWindowOpen.label "Forza i pop-up JavaScript ad aprirsi:">
-<!ENTITY divertedWindows.comment "Nota: molte impostazioni di JavaScript e pop-up dipendono dalle opzioni del browser">
 <!ENTITY divertedWindowOpen.all "tutti in nuove schede">
 <!ENTITY divertedWindowOpen.some "quando non ridimensionati">
 <!ENTITY divertedWindowOpen.none "tutti">
@@ -169,6 +168,7 @@
 <!-- LOCALIZATION NOTE
           change this only if you need to change the width 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -183,6 +183,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 -->
 <!ENTITY toolbar.description.width "21em">
@@ -301,6 +302,7 @@
 <!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
 <!ENTITY sm.restore.bypassCache "Bypassa la cache">
 <!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Dati da preservare per le schede">
 <!ENTITY sm.preserve.history "Cronologia">
 <!ENTITY sm.preserve.protect "Stato &apos;protetto&apos;">

@@ -67,18 +67,15 @@ var tablib = {
       [obj, fnName] = [gBrowser, "addTab"];
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{','{ \
-       var dontMove;'
-    )._replace(
       '{','{\n\
-       if (!TabmixSvc.sm.promiseInitialized && !this.tabs[0].loadOnStartup && Tabmix.callerName() == "ssi_restoreWindow" && !Tabmix.isWindowAfterSessionRestore)\n\
-         return this.tabs[0];\n', {check: Tabmix.isVersion(250) && TabmixSessionManager.doRestore}
+      let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
       'params = arguments[1];',
       '$&\
        let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
        props.forEach(function(prop){if (typeof params[prop] == "undefined") params[prop] = null;}); \
-       dontMove = params.dontMove || null;'
+       dontMove = params.dontMove || null;\
+       isPending = params.isPending || null;'
     )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);',
@@ -87,6 +84,8 @@ var tablib = {
       't.className = "tabbrowser-tab";',
       '$&\
        t.setAttribute("last-tab", "true"); \
+       if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
+         t.setAttribute("tabmix_pending", "true"); \
        var lastChild = this.tabContainer.lastChild; \
        if (lastChild) lastChild.removeAttribute("last-tab"); \
        if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'
@@ -173,7 +172,7 @@ var tablib = {
       '{/* see TMP_BrowserOpenTab */}'
     )._replace(
       'this.tabContainer.adjustTabstrip();',
-      'if (!wasPinned) this.tabContainer.setFirstTabInRow();\
+      'if (!wasPinned) TabmixTabbar.setFirstTabInRow();\
        $&'
     ).toCode();
 
@@ -231,11 +230,14 @@ var tablib = {
       'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
+       var noChange = aTab.label == title && aTab.crop == crop;\
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
-         if (aTab.label == title && aTab.crop == crop)\
+         if (noChange)\
            tablib.onTabTitleChanged(aTab, title == urlTitle);\
        }\
+       else if (noChange)\
+         TMP_Places.currentTab = null;\
        $&'
     )._replace(
       'aTab.crop = crop;',
@@ -275,7 +277,7 @@ var tablib = {
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
-        'this.resetFirstTabInRow();\
+        'this.mTabstrip.resetFirstTabInRow();\
          $&'
       )._replace(
         /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,
@@ -284,14 +286,14 @@ var tablib = {
         'if (doPosition)',
         '  if (doPosition && TabmixTabbar.isMultiRow) {' +
         '    this.setAttribute("positionpinnedtabs", "true");' +
-        '    let width = this.mTabstrip.scrollboxPaddingStart;' +
+        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
         '      tab.style.MozMarginStart = width + "px";' +
         '      width += tab.getBoundingClientRect().width;' +
         '    }' +
-        '    if (width != this.firstTabInRowMargin) {' +
-        '      this.firstTabInRowMargin = width;' +
+        '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
+        '      this.mTabstrip.firstTabInRowMargin = width;' +
         '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("-moz-margin-start", width + "px", null);' +
@@ -441,22 +443,28 @@ var tablib = {
     // we prevent sessionStore.duplicateTab from moving the tab
     Tabmix.changeCode(window, "duplicateTabIn")._replace(
       'switch (where)',
-      '  if (where == "window") {' +
-      '    if (Tabmix.getSingleWindowMode())' +
-      '      where = "tab";' +
-      '  }' +
-      '  else if (Tabmix.prefs.getBoolPref("openDuplicateNext")) {' +
-      '    let pos = newTab._tPos > aTab._tPos ? 1 : 0;' +
-      '    gBrowser.moveTabTo(newTab, aTab._tPos + pos);' +
-      '  }' +
+      '  if (where == "window") {\n' +
+      '    if (Tabmix.getSingleWindowMode())\n' +
+      '      where = "tab";\n' +
+      '  }\n' +
+      '  else {\n' +
+      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex","BrowserForward","BrowserBack") ?\n' +
+      '               "openTabNext" : "openDuplicateNext";\n' +
+      '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
+      '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
+      '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
+      '    }\n' +
+      '  }\n' +
       '  $&'
     )._replace(
       'gBrowser.selectedTab = newTab;',
-      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) $&'
+      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
+      '        $&'
     )._replace(
       'case "tabshifted":',
-      '$&\
-       if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) gBrowser.selectedTab = newTab;'
+      '$&\n' +
+      '      if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
+      '        gBrowser.selectedTab = newTab;'
     ).toCode();
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
@@ -746,7 +754,8 @@ var tablib = {
         m.setAttribute("label", menuLabel);
         m.setAttribute("value", i);
         m.fileName = "closedwindow";
-        m.addEventListener("click", TabmixSessionManager.checkForMiddleClick, false);
+        let checkForMiddleClick = function(e) {this.checkForMiddleClick(e);}.bind(TabmixSessionManager);
+        m.addEventListener("click", checkForMiddleClick, false);
       }
     }
     let restoreAllWindows = undoPopup.lastChild;
@@ -875,10 +884,7 @@ var tablib = {
       var newTab = this.duplicateTab(aTab, url, null, url == null);
       if (!newTab.selected &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
-        let tmp = {}
-        Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-        let global = Cu.getGlobalForObject(tmp.SessionStore);
-        global.SessionStoreInternal.restoreTabContent(newTab);
+        TabmixSessionManager.SessionStore.restoreTabContent(newTab);
       }
 
       if (!url) {
@@ -1199,12 +1205,10 @@ var tablib = {
     gBrowser.copyTabUrl = function (aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      var URL = this.getBrowserForTab(aTab).contentDocument.location;
-
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
                    .getService(Components.interfaces.nsIClipboardHelper);
 
-      clipboard.copyString(URL);
+      clipboard.copyString(this.getBrowserForTab(aTab).currentURI.spec);
     }
 
   /** XXX need to fix this functions:
@@ -1624,6 +1628,14 @@ var tablib = {
 
   // make sure that our function don't break removeTab function
   onRemoveTab: function TMP_onRemoveTab(tab) {
+    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        TabmixTabClickOptions._blockDblClick) {
+      setTimeout(function() {
+        TabmixTabClickOptions._blockDblClick = false;
+        gBrowser.tabContainer._blockDblClick = false;
+      }, 0);
+    }
+
     try {
       TMP_ClosedTabs.setButtonDisableState();
     }
@@ -1751,7 +1763,7 @@ var tablib = {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ? (aEvent.dataTransfer.dropEffect == "copy") : (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
-                    !gBrowser.isBlankNotBusyTab(tab) && !Tabmix.contentAreaClick.isUrlForDownload(aUri)) {
+                    !gBrowser.isBlankNotBusyTab(tab) && !Tabmix.ContentClick.isUrlForDownload(aUri)) {
         where = "tab";
       }
       else

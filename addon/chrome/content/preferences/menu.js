@@ -16,6 +16,17 @@ var gMenuPane = {
       gPrefWindow.removeChild("moveToGroup");
     }
 
+    if (Tabmix.isVersion(320)) {
+      let openNonRemote = browserWindow.document.getElementById("context_openNonRemoteWindow");
+      if (openNonRemote) {
+        let item = $("openNonRemoteWindow");
+        item.setAttribute("label", openNonRemote.getAttribute("label"));
+        item.hidden = false;
+        let beforeItem = $("showUndoClose");
+        beforeItem.parentNode.insertBefore($("showReloadOther"), beforeItem);
+      }
+    }
+
     // check if bookmark item in tab context menu
     Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
 

@@ -17,6 +17,11 @@ function isVersion(aVersionNo) {
 }
 
 let TabmixSvc = {
+  debugMode: function() {
+    return this.prefBranch.prefHasUserValue("enableDebug") &&
+      this.prefBranch.getBoolPref("enableDebug");
+  },
+
   version: function(aVersionNo) {
     return isVersion(aVersionNo);
   },
@@ -115,6 +120,8 @@ let TabmixSvc = {
       }
     }
   },
+
+  syncHandlers: new WeakMap(),
 
   windowStartup: {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
@@ -239,6 +246,20 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function () {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
   return Services.appinfo.OS == "Linux";
+});
+
+/**
+ * bug 1051017 - Firefox 34 - change
+ * browser.contentWindow -> browser.contentWindowAsCPOW
+ * browser.contentDocument -> browser.contentDocumentAsCPOW
+ * window.content -> window.gBrowser.selectedBrowser.contentWindowAsCPOW
+ **/
+XPCOMUtils.defineLazyGetter(TabmixSvc, "contentWindowAsCPOW", function () {
+  return isVersion(340) ? "contentWindowAsCPOW" : "contentWindow";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "contentDocumentAsCPOW", function () {
+  return isVersion(340) ? "contentDocumentAsCPOW" : "contentDocument";
 });
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",

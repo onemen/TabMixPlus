@@ -67,7 +67,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
    }
 
    var tabBrowser = browserWindow.gBrowser;
-   var originCharset = tabBrowser.contentDocument.characterSet;
+   var originCharset = tabBrowser.selectedBrowser.characterSet;
 
    // if the current tab is empty, then do not open a new tab
    if (tabBrowser.currentURI.spec == "about:blank") {
@@ -167,7 +167,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       try { // just in case.....
          let browser = newTab.linkedBrowser;
          browser.stop();
-         let originCharset = gBrowser.contentDocument.characterSet;
+         let originCharset = gBrowser.selectedBrowser.characterSet;
          browser.loadURIWithFlags(url, flags, null, originCharset);
          gBrowser.selectedBrowser.focus();
       }
@@ -304,7 +304,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   else if (opentabforLinks == 2) {
     // Get current page url
     let curpage = gBrowser.currentURI.spec;
-    if (this.contentAreaClick.isLinkToExternalDomain(curpage, url))
+    if (this.ContentClick.isLinkToExternalDomain(curpage, url))
       return "tab";
   }
   return "current";
@@ -371,7 +371,8 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (aTab.selected)
     style = "current";
   // if pending tab is blank we don't style it as unload or unread
-  else if (Tabmix.prefs.getBoolPref("unloadedTab") && aTab.hasAttribute("pending"))
+  else if (Tabmix.prefs.getBoolPref("unloadedTab") &&
+      (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending")))
     style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   else if (Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab))

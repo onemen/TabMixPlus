@@ -38,8 +38,10 @@ var gLinksPane = {
   singleWindow: function(enableSingleWindow) {
     function updateStatus(itemId, testVal, test, newVal) {
       var item = $(itemId);
-      if (test ? item.value == testVal : item.value != testVal)
-        item.value = newVal;
+      if (test ? item.value == testVal : item.value != testVal) {
+        let preference = $(item.getAttribute("preference"));
+        preference.value = newVal;
+      }
     }
 
     if (enableSingleWindow) {

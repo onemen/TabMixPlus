@@ -44,20 +44,6 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   this.openUILink_init();
 }
 
-/**
- * @Theme Vista-aero 3.0.0.91 and BlueSky 3.0.0.91 use TMP_TBP_Startup in stylesheet
- *        window[onload="TMP_TBP_Startup()"]
- */
-function TMP_TBP_Startup() {
-  let onLoad = Tabmix.initialization.run("beforeBrowserInitOnLoad");
-  if (onLoad)
-    onLoad();
-  else if ("gBrowserInit" in window)
-    gBrowserInit.onLoad();
-  else
-    BrowserStartup();
-}
-
 Tabmix.beforeBrowserInitOnLoad = function() {
   try {
     TabmixSvc.windowStartup.init(window);
@@ -117,30 +103,47 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
-    var disAllow = SM.isPrivateWindow || TMP_SessionStore.isSessionStoreEnabled() ||
-                   this.extensions.sessionManager ||
-                   !this.isVersion(250) && this.isWindowAfterSessionRestore;
+    var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
+                      this.extensions.sessionManager
     var sessionManager = this.prefs.getBoolPref("sessions.manager");
-    var resumeSession  = sessionManager &&
-                         this.prefs.getIntPref("sessions.onStart") < 2;
-    var recoverSession = this.prefs.getBoolPref("sessions.crashRecovery") &&
-                         this.prefs.prefHasUserValue("sessions.crashed");
+    var willRestore = firstWindow && !disabled && (sessionManager &&
+                      this.prefs.getIntPref("sessions.onStart") <= 1 ||
+                      this.prefs.getBoolPref("sessions.crashRecovery") &&
+                      this.prefs.prefHasUserValue("sessions.crashed"));
+    var notRestore =  firstWindow && !disabled && sessionManager &&
+                      this.prefs.getIntPref("sessions.onStart") > 1 &&
+                      (!this.prefs.getBoolPref("sessions.onStart.restorePinned") ||
+                        this.prefs.getBoolPref("sessions.restore.concatenate"));
 
-    SM.doRestore = !disAllow && firstWindow && (recoverSession || resumeSession);
-    if (SM.doRestore) {
+    // Set SessionStore._loadState to running on first window in the session
+    // to prevent it from restoring last session or pinned tabs.
+    let setStateRunning = (willRestore || notRestore) &&
+        this.firstWindowInSession && !this.isWindowAfterSessionRestore;
+    if (setStateRunning) {
+      let STATE_STOPPED = 0;
+      let STATE_RUNNING = 1;
+      if (SM.SessionStore._loadState == STATE_STOPPED) {
+        SM.SessionStore._loadState = STATE_RUNNING;
+        SM.notifyObservers = true;
+      }
+    }
+
+    var prepareLoadOnStartup = willRestore && !(SM.isPrivateWindow || this.isWindowAfterSessionRestore);
+    var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
+    if (willOverrideHomepage) {
       // Prevent the default homepage from loading if we're going to restore a session
-      if (this.isVersion(240)) {
-        this.changeCode(gBrowserInit, "gBrowserInit._getUriToLoad")._replace(
-          'sessionStartup.willOverrideHomepage', 'true'
-        ).toCode();
+      let hasFirstArgument = window.arguments && window.arguments[0];
+      if (hasFirstArgument) {
+        let defaultArgs = Cc["@mozilla.org/browser/clh;1"].
+                          getService(Ci.nsIBrowserHandler).defaultArgs;
+        if (window.arguments[0] == defaultArgs) {
+          SM.overrideHomepage = window.arguments[0];
+          window.arguments[0] = null;
+        }
       }
-      else {
-        bowserStartup = bowserStartup._replace(
-          'uriToLoad = window.arguments[0];',
-          'uriToLoad = gHomeButton.getHomePage() == window.arguments[0] ? null : window.arguments[0];'
-        );
-      }
+    }
 
+    if (prepareLoadOnStartup) {
       // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
       loadOnStartup =
         '  if (uriToLoad && uriToLoad != "about:blank") {' +
@@ -209,11 +212,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
 
-    return fnContainer[TMP_BrowserStartup].bind(fnContainer);
+    fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
   } catch (ex) {this.assert(ex);}
-
-  return null;
 }
 
 // this must run before all
@@ -302,9 +303,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
     TabmixTabbar.scrollButtonsMode = tabscroll;
     let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
-    this.setItem(tabContainer, "flowing", flowing);
-    tabContainer.mTabstrip.setAttribute("flowing", flowing);
-    this.setItem("tabmixScrollBox", "flowing", flowing);
+    TabmixTabbar.flowing = flowing;
 
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)

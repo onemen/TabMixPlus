@@ -296,6 +296,7 @@
 <!ENTITY sm.restore.merge "Join multiple windows into one">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preserve Tabs:">
 <!ENTITY sm.preserve.history "History">
 <!ENTITY sm.preserve.protect "Protect Status">

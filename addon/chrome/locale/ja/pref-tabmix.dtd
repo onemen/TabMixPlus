@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "現在のタブ">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript ポップアップの設定:">
-<!ENTITY divertedWindows.comment "JavaScript とポップアップの詳細設定はメインオプションからおこなえます">
 <!ENTITY divertedWindowOpen.all "すべてのポップアップをタブに開く">
 <!ENTITY divertedWindowOpen.some "サイズ指定されたポップアップを許可">
 <!ENTITY divertedWindowOpen.none "すべてのポップアップを許可">
@@ -56,9 +55,9 @@
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "新しいタブを現在のタブから最後に開いたタブの直後に開く(最後にフォーカスしたタブに続いて)">
 <!ENTITY lockTabs.label "タブのロック">
-<!ENTITY lockNewTabs.label "新しいタブのロック">
-<!ENTITY lockAppTabs.label "ピン留めしたタブのロック">
-<!ENTITY updateLockState.label "新しいタブに変更を適用">
+<!ENTITY lockNewTabs.label "新しいタブをロックする">
+<!ENTITY lockAppTabs.label "ピン留めしたアプリケーションタブをロックする">
+<!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
 <!ENTITY openBMKGroups.label "ブックマークグループ">
@@ -98,7 +97,7 @@
 <!ENTITY undoClose.label "[閉じたタブを復元]の機能を有効にする">
 <!ENTITY undoCloseCache.label "記憶するタブの数:">
 <!ENTITY undoClosepos.label "タブを元の位置に戻す">
-<!ENTITY menuonlybutton.label "ツールバーボタンをリスト表示のみにする">
+<!ENTITY menuonlybutton.label "ツールバーボタンにリストだけ表示させる">
 <!ENTITY ctrltab.label "Ctrl + Tab で最近表示した順にフォーカスを移す">
 <!ENTITY cmdtab.label "Cmd + Tab で最近表示した順にフォーカスを移す">
 <!ENTITY ctrltab.tabPreviews "タブのプレビューを表示する">
@@ -162,7 +161,7 @@
 <!ENTITY extraIcons.autoreload "自動再読み込み">
 <!ENTITY extraIcons.hideonpinned "ピン留めしているタブでは隠す">
 <!ENTITY progressMeter.label "プログレスメーター（タブ）">
-<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（ドロップダウンリストで表示条件を指定）">
+<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（下のドロップダウンで表示条件を指定）">
 <!ENTITY showTabX.left "左端に表示">
 <!ENTITY showTabX.rtl "右端に表示">
 <!ENTITY milliseconds.label "ミリ秒">
@@ -262,7 +261,7 @@
 <!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
 <!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
 <!ENTITY ss.advanced_setting "拡張設定">
-<!ENTITY ss.advanced_setting.warning "詳細な知識を持たない人は、以下の設定を変更しないでください">
+<!ENTITY ss.advanced_setting.warning "よくわからない場合は、以下の設定を変更しないでください">
 <!ENTITY ss.interval "セッション状態の最小保存間隔">
 <!ENTITY ss.interval.seconds "(ミリ秒):">
 <!ENTITY ss.privacy_level "機密データ(フォームデータ、POSTDATA、Cookie)を">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
 <!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
+<!ENTITY sm.restorePinned.label "前回ピン留めしていたタブを復元する">
 <!ENTITY sm.preserve.options "タブで状態保持する項目:">
 <!ENTITY sm.preserve.history "履歴">
 <!ENTITY sm.preserve.protect "[タブを保護] の状態">

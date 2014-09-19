@@ -7,6 +7,7 @@
                    NS1:name="Tab Mix Plus"
                    NS1:version="0.4.1.4"
                    NS1:type="2"
+                   NS1:multiprocessCompatible="true"
                    NS1:description="Tab browsing with an added boost."
                    NS1:iconURL="chrome://tabmixplus/skin/tmp.png"
                    NS1:homepageURL="http://tmp.garyr.net"

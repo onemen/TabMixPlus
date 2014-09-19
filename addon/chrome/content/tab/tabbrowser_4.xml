@@ -16,6 +16,13 @@
 
   <binding id="tabbrowser-close-tab-button"
            extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          this.classList.add("toolbarbutton-1");
+        ]]>
+      </constructor>
+    </implementation>
     <handlers>
       <handler event="click" button="1" action="TMP_ClosedTabs.undoCloseTab();"/>
     </handlers>
@@ -30,7 +37,7 @@
                  role="presentation"/>
       <xul:hbox class="showhover-box">
         <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon"/>
+                 class="showhover tabs-closebutton close-icon tabmix-showhover"/>
       </xul:hbox>
     </content>
   </binding>
@@ -396,13 +403,6 @@
           }
           this.tabmix_inited = true;
 
-          // ODFReader change Cc to something else maybe some other extensions do that too !!!
-          if ("Cc" in window && Cc != Components.classes)
-            Cc = Components.classes;
-
-          if ("Ci" in window && Ci != Components.interfaces)
-            Ci = Components.interfaces;
-
           var tabbrowser = this.tabbrowser;
 
           XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function () {
@@ -421,12 +421,12 @@
            * if we set this in field[s] they will reset each time the tabbar binding construct
            * by tabbar position change
            */
-          Tabmix.afterTabsButtonsWidth = [22];
+          Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];
           Tabmix.tabsNewtabButton =
             document.getAnonymousElementByAttribute(this, "command", "cmd_newNavigatorTab");
           Tabmix._show_newtabbutton = "aftertabs";
 
-          Tabmix._nextSelectedID = 0;
+          Tabmix._nextSelectedID = 1;
           let tab = this.firstChild;
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
@@ -442,10 +442,7 @@
           if (attr.length)
             this.setAttribute("tabmix_icons", attr.join(" "));
 
-          if (Tabmix.prefs.prefHasUserValue("enableDebug") &&
-                Tabmix.prefs.getBoolPref("enableDebug")) {
-            Tabmix._debugMode = true;
-          }
+          Tabmix._debugMode = TabmixSvc.debugMode();
 
           if ("linkedBrowser" in tab)
             tablib.setLoadURIWithFlags(tab.linkedBrowser);
@@ -462,31 +459,6 @@
         ]]>
       </destructor>
 
-      <method name="setFirstTabInRow">
-        <body><![CDATA[
-          // call our tabstrip function only when we are in multi-row and
-          // in overflow with pinned tabs
-          if (TabmixTabbar.isMultiRow && this.overflow && this.firstChild.pinned)
-            this.mTabstrip.setFirstTabInRow();
-        ]]></body>
-      </method>
-
-      <field name="firstTabInRowMargin">0</field>
-      <method name="resetFirstTabInRow">
-        <body><![CDATA[
-          if (this.firstTabInRowMargin == 0)
-            return;
-          this.firstTabInRowMargin = 0;
-          // getElementsByAttribute return a live nodList
-          // each time we remove the attribute we remove node from the list
-          let tabs = this.getElementsByAttribute("tabmix-firstTabInRow" , "*");
-          for (let i = 0, num = tabs.length; i < num; i++) {
-            tabs[0].removeAttribute("tabmix-firstTabInRow");
-          }
-          this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};
-        ]]></body>
-      </method>
-
       <method name="updateVerticalTabStrip">
         <parameter name="aReset"/>
         <body><![CDATA[
@@ -496,6 +468,7 @@
           if (this._inUpdateVerticalTabStrip)
             return this.getAttribute("multibar");
           this._inUpdateVerticalTabStrip = true;
+
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           this.adjustNewtabButtonvisibility();
           let visibleRows = TabmixTabbar.visibleRows;
@@ -543,11 +516,15 @@
                   if (timeFromLastTabOpenedTime < 250)
                     timeout = 0;
                 }
+              /**
+                no need to change newTabButton visibility in order to calculate
+                its position
                 // Don't reset adjustNewtabButtonvisibility if multibar or rows
                 // didn't changed or when we get here from _enterVerticalMode
                 if (callerName != "_enterVerticalMode" &&
                      (multibar != currentMultibar || rows != visibleRows))
                   this.disAllowNewtabbutton = false;
+               */
                 let self = this;
                 this.adjustNewtabButtonTimeout = setTimeout(function() {
                   self.adjustNewtabButtonvisibility();
@@ -591,6 +568,7 @@
             else
               this.removeAttribute("overflow");
             TabmixTabbar.showNewTabButtonOnSide(val, "right-side");
+            this.mTabstrip.updateOverflow(val);
           }
           return val;
         ]]></setter>
@@ -618,7 +596,7 @@
             if (!tab.hidden && !tab.closing)
               return tab;
           }
-          return this.mCurrentTab;
+          return this.selectedItem;
         ]]></getter>
       </property>
 
@@ -632,7 +610,7 @@
             if (!tab.hidden && !tab.closing)
               return tab;
           }
-          return this.mCurrentTab;
+          return this.selectedItem;
         ]]></getter>
       </property>
 
@@ -717,26 +695,11 @@
           return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
         ]]></getter>
         <setter><![CDATA[
-          if (val || !this.overflow)
-            TabmixTabbar.showNewTabButtonOnSide(val, "temporary-right-side");
-          return val;
+          let newVal = this.overflow || val;
+          TabmixTabbar.showNewTabButtonOnSide(this.overflow || val, "temporary-right-side");
+          return newVal;
         ]]></setter>
       </property>
-
-     <property name="_real_numPinnedTabs" readonly="true">
-       <getter><![CDATA[
-          var count = 0;
-          for (let i = 0; i < this.childNodes.length; i++) {
-            let tab = this.childNodes[i];
-            if (!tab.pinned)
-              break;
-
-            if (!tab.closing)
-               count++;
-          }
-          return count;
-       ]]></getter>
-     </property>
 
       <property name="topTabY" readonly="true">
         <getter><![CDATA[
@@ -774,6 +737,7 @@
           // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
           // verticalTabs 0.9.1+ is restartless.
           if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+            Tabmix.setItem("TabsToolbar", "collapsed", null);
             Tabmix.extensions.verticalTabs = true;
             Tabmix.extensions.verticalTabBar = true;
             TabmixTabbar.updateSettings();
@@ -792,10 +756,9 @@
             TabScope.init();
           }
 
-          this.mTabstrip.setAttribute("flowing", this.getAttribute("flowing"));
+          TabmixTabbar.flowing = this.getAttribute("flowing");
           this.setTabStripOrient();
-          let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-          TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
+          Tabmix.navToolbox.setScrollButtons(true);
 
           // fix incompatibility with Personal Titlebar extension
           // the extensions trigger tabbar binding reset on toolbars customize
@@ -819,10 +782,26 @@
 
           var scrollRect = this.mTabstrip.scrollClientRect;
           var tab = aTab.getBoundingClientRect();
+          this.mTabstrip._calcTabMargins(aTab);
+
+          // DOMRect left/right properties are immutable.
+          tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
 
           if (this.mTabstrip.smoothScroll) {
             let selected = !this.selectedItem.pinned &&
                            this.selectedItem.getBoundingClientRect();
+
+            if (Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
+              if (selected) {
+                selected = {left: selected.left, right: selected.right};
+                // Need to take in to account the width of the left/right margins on tabs.
+                selected.left = selected.left + this.mTabstrip._tabMarginLeft;
+                selected.right = selected.right - this.mTabstrip._tabMarginRight;
+              }
+
+              tab.left += this.mTabstrip._tabMarginLeft;
+              tab.right -= this.mTabstrip._tabMarginRight;
+            }
 
             // Can we make both the new tab and the selected tab completely visible?
             if (!selected ||
@@ -846,15 +825,6 @@
             setTimeout(function (ele) {
               ele.removeAttribute("notifybgtab");
             }, 150, this._animateElement);
-          }
-        ]]></body>
-      </method>
-
-      <method name="removeShowButtonAttr">
-        <body><![CDATA[
-          if ("__showbuttonTab" in this) {
-            this.__showbuttonTab.removeAttribute("showbutton");
-            delete this.__showbuttonTab;
           }
         ]]></body>
       </method>
@@ -887,12 +857,13 @@
 
     <handlers>
       <handler event="MozMouseHittest" button="0"  phase="capturing"><![CDATA[
-        if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.detail > 0)
+        if (Tabmix.keyModifierDown || event.detail > 0)
           event.stopPropagation();
       ]]></handler>
 
       <handler event="dblclick" phase="capturing"><![CDATA[
-        if (Tabmix.prefs.getBoolPref("dblClickTabbar_changesize") &&
+        if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+            Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && event.target.localName == "tabs") {
           let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
           let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;

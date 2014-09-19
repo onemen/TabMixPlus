@@ -10,6 +10,14 @@
 <overlay id="TabsPaneOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+  <script type="application/javascript" src="preferencesOverlay.js"/>
+  <script type="application/javascript">
+      window.addEventListener("paneload", function tabsPaneload(aEvent) {
+        aEvent.currentTarget.removeEventListener("paneload", tabsPaneload, true);
+        gTabMix_preferencesOverlay.initPaneTabsOptions();
+      }, true);
+  </script>
+
   <prefpane id="paneTabs">
 
     <preferences id="tabsPreferences">
@@ -19,6 +27,9 @@
                   name="extensions.tabmix.tabs.warnOnClose"          type="bool"/>
       <preference id="extensions.tabmix.protectedtabs.warnOnClose"
                   name="extensions.tabmix.protectedtabs.warnOnClose" type="bool"/>
+      <preference id="extensions.tabmix.singleWindow"
+                  name="extensions.tabmix.singleWindow"              type="bool"
+                  onchange="gTabMix_preferencesOverlay.setSingleWindowUI();"/>
     </preferences>
 
     <hbox insertafter="tabsPreferences" align="center">

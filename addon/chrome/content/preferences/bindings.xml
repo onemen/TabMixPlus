@@ -38,9 +38,10 @@
     <implementation>
       <constructor>
         <![CDATA[
+          let update = Tabmix.isVersion(320) ? "" : " && aUpdate";
           Tabmix.changeCode(this, "_setValue")._replace(
             'return aValue;',
-            'else if (!this.instantApply && aUpdate && this.value === aValue) {' +
+            'else if (!this.instantApply' + update + ' && this.value === aValue) {' +
             '  gPrefWindow.updateApplyButton({target: this});}' +
             '$&'
           ).toCode();

@@ -23,7 +23,7 @@ let RenameTab = {
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle = aTab.hasAttribute("pending") ?
           this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
-          browser.contentDocument.title;
+          browser.contentTitle;
     this.data.url = browser.currentURI.spec;
     this.data.docTitle = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
         docTitle, null, aTab);

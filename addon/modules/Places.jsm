@@ -100,7 +100,7 @@ let PlacesUtilsInternal = {
         '      browserWindow.bookMarkIds = ids.join("|");'
       )._replace(
         /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
-        '$& behavior =', {check: treeStyleTab}
+        '$& behavior =', {check: treeStyleTab, silent: true}
       )._replace(
         'browserWindow.gBrowser.loadTabs(urls, loadInBackground, false);',
         'var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";\n' +
@@ -110,12 +110,17 @@ let PlacesUtilsInternal = {
       ).toCode();
     };
     if (treeStyleTab) {
+      // wait until TreeStyleTab changed PlacesUIUtils._openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+      this.__index = 0;
       timer.initWithCallback(function() {
-        timer.cancel();
-        this._timer = null;
-        updateOpenTabset();
-      }.bind(this), 50, Ci.nsITimer.TYPE_ONE_SHOT);
+        if (++this.__index > 10 || PlacesUIUtils._openTabset.toString().indexOf("GroupBookmarkBehavior") > -1) {
+          timer.cancel();
+          this._timer = null;
+          this.__index = null;
+          updateOpenTabset();
+        }
+      }.bind(this), 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
     }
     else { // TreeStyleTab not installed
       updateOpenTabset();

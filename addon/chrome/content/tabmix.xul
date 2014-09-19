@@ -36,9 +36,6 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/session/sessionStore.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
 
-  <window id="main-window"
-    onload="TMP_TBP_Startup();" />
-
   <commandset id="mainCommandSet">
     <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"
              oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
@@ -383,16 +380,23 @@
       <tooltip id="tabmix-tooltip"/>
     </popupset>
 
-   <!-- hide Tab groups context menu in all-tabs list button -->
-   <menuitem id="menu_tabview" context=""/>
+    <!-- hide Tab groups context menu in all-tabs list button -->
+    <menuitem id="menu_tabview" context=""/>
+
+    <toolbar id="TabsToolbar">
+      <box id="tabmixScrollBox" insertafter="tabbrowser-tabs"
+                     class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box"
+                     type="tabmix-box"
+                     removable="false"/>
+    </toolbar>
 
   <!-- Tabmix Plus broadcasterset -->
   <broadcasterset id="mainBroadcasterSet">
     <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
     <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
     <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>
-    <broadcaster id="tmp_closedwindows" disabled="true"/>
-    <broadcaster id="tmp_undocloseButton" disabled="true"/>
+    <broadcaster id="tmp_closedwindows"/>
+    <broadcaster id="tmp_undocloseButton"/>
     <broadcaster id="tmp_sessionmanagerButton"/>
     <broadcaster id="tmp_disableSave"/>
   </broadcasterset>

@@ -1,5 +1,8 @@
 "use strict";
 
+XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",
+  "resource://tabmixplus/ContextMenu.jsm");
+
 var TabmixTabClickOptions = {
   onDoubleClick: false,
   _blockDblClick: false,
@@ -95,8 +98,10 @@ var TabmixTabClickOptions = {
 
     // See hack note in the tabbrowser-close-tab-button binding
     // if we are here the target is not closeTabButton or newtabButton
-    if (gBrowser.tabContainer._blockDblClick || this._blockDblClick)
+    if (gBrowser.tabContainer._blockDblClick || this._blockDblClick) {
+      aEvent.preventDefault();
       return;
+    }
 
     var clickOutTabs = aEvent.target.localName == "tabs";
 
@@ -252,6 +257,24 @@ var TabmixTabClickOptions = {
         return false;
     }
     return true;
+  },
+
+  toggleEventListener: function(enable) {
+    let eventListener = enable ? "addEventListener" : "removeEventListener";
+    document.getElementById("TabsToolbar")[eventListener]("dblclick", this.blockDblclick, false);
+  },
+
+  /**
+   * block dblclick on TabsToolbar when tabbar.dblclick_changesize is false
+   * and tabbar.click_dragwindow is true
+   */
+  blockDblclick: function(aEvent) {
+    if (aEvent.button != 0 || aEvent.target.localName == "tabs" ||
+        Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
+        !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
+      return;
+
+    aEvent.preventDefault();
   }
 }
 
@@ -269,6 +292,12 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_closeOtherTabs"), $id("tm-closeLeftTabs"));
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
+
+    if (Tabmix.isVersion(320)) {
+      let openNonRemote = $id("context_openNonRemoteWindow");
+      if (openNonRemote)
+        tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
+    }
 
     // insret IE Tab menu-items before Bookmakrs menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
@@ -375,6 +404,9 @@ var TabmixContext = {
     Tabmix.showItem("tm-duplicateTab", Tabmix.prefs.getBoolPref("duplicateMenu"));
     Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
     Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
+    if (Tabmix.isVersion(320))
+      Tabmix.showItem("context_openNonRemoteWindow", Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") && !Tabmix.singleWindowMode && gMultiProcessBrowser);
+
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
     Tabmix.showItem("context_unpinTab", show && aTab.pinned);
@@ -432,7 +464,7 @@ var TabmixContext = {
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.currentURI.spec;
-        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentDocument.title, null, aTab);
+        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentTitle, null, aTab);
         if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
           titleNotReady = true;
       }
@@ -442,7 +474,7 @@ var TabmixContext = {
     var protectedTab = aTab.hasAttribute("protected");
     var lockedTab = aTab.hasAttribute("locked");
     var tabsCount = gBrowser.visibleTabs.length;
-    var unpinnedTabs = tabsCount - gBrowser.tabContainer._real_numPinnedTabs;
+    var unpinnedTabs = tabsCount - TabmixTabbar._real_numPinnedTabs;
     var cIndex = TMP_TabView.getIndexInVisibleTabsFromTab(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
@@ -633,73 +665,24 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    var focusedWindow = document.commandDispatcher.focusedWindow;
-    if (focusedWindow == window)
-      focusedWindow = content;
-
-    var nsISelectionObject = focusedWindow.getSelection();
-    if (nsISelectionObject.isCollapsed) // nothing selected
-      return true;
-
-    var myNodeFilter = {
-      acceptNode : function(n) {
-        if(n.nodeName == 'A' || n.nodeName == 'li') {
-          return NodeFilter.FILTER_ACCEPT;
-        }
-        else {
-          return NodeFilter.FILTER_SKIP;
-        }
-      }
-    };
-
-    // do urlSecurityCheck for each link in the treeWalker....
-    var _document = focusedWindow.document.documentElement.ownerDocument;
-    const nsIScriptSecurityManager = Components.interfaces.nsIScriptSecurityManager;
-    var secMan = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
-                          .getService(nsIScriptSecurityManager);
-    var flags = nsIScriptSecurityManager.STANDARD;
-    function links_urlSecurityCheck(url) {
-      if (!url)
-        return false;
-
-      if (!_document) // just in case....
-        return true;
-
+    let urls = [], browser = window.gBrowser.selectedBrowser;
+    if (Tabmix.isVersion(320)) {
       try {
-        secMan.checkLoadURIStrWithPrincipal(_document.nodePrincipal, url, flags);
-      } catch (e) {
-        return false;
+        let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
+        urls = handler.getSelectedLinks(check);
+      } catch(ex) {
+        Tabmix.log("unable to get syncHandlers for page " +
+                      browser.currentURI.spec + "\n" + ex);
       }
-      return true;
     }
+    // getSelectedLinks was not implemented for remote tabs before Firefox 32
+    else if (browser.getAttribute("remote") != "true")
+      urls = Tabmix.ContextMenu.getSelectedLinks(content, check);
 
-    var range = nsISelectionObject.getRangeAt(0);
-    var treeWalker = window.content.document.createTreeWalker(
-         range.cloneContents(),
-         NodeFilter.SHOW_ELEMENT,
-         myNodeFilter,
-         true);
-    var nextEpisode = treeWalker.nextNode();
-    var urls = [];
-    while (nextEpisode != null) {
-      let url;
-      if (nextEpisode.nodeName == "li") {
-        let node = nextEpisode.firstChild;
-        url = node.nodeName == "p" ? node.firstChild.href : node.href;
-      }
-      else
-        url = nextEpisode.href;
-      if (links_urlSecurityCheck(url)) {
-        if (check)
-          return false;
-        if (urls.indexOf(url) == -1)
-          urls.push(url);
-      }
-      nextEpisode = treeWalker.nextNode();
+    if (!check && urls.length) {
+      Tabmix.loadTabs(urls, false);
     }
-    if (urls.length)
-     Tabmix.loadTabs(urls, false);
-    return true;
+    return urls.length == 0;
   }
 }
 
@@ -938,9 +921,9 @@ var TabmixAllTabs = {
   },
 
   createMenuItems: function TMP_createMenuItems(popup, tab, value, aType) {
-    var count, mi = document.createElement("menuitem");
+    let mi = document.createElement("menuitem");
     mi.setAttribute("class", "menuitem-iconic bookmark-item alltabs-item");
-    var url = gBrowser.getBrowserForTab(tab).currentURI.spec;
+    let url = gBrowser.getBrowserForTab(tab).currentURI.spec;
     mi.setAttribute("statustext", url);
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     let count = "";

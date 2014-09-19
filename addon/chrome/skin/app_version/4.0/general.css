@@ -5,6 +5,25 @@
 
 **/
 
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
+  -moz-padding-end: 0px !important;
+  -moz-padding-start: 0px !important;
+}
+
+/* for tabs close button on Firefox 31+ */
+.tabs-closebutton.tabmix {
+  -moz-appearance: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tabmix-showhover {
+ -moz-appearance: none;
+  height: 16px;
+  border: none;
+}
+
 /* :::: for miniT drag indicator :::: */
 .tab-drag-indicator-left, .tab-drag-indicator-right {
   visibility: hidden;
@@ -29,7 +48,6 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] > #tabs-closebutton,
 #TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
 #TabsToolbar[multibar] {
   -moz-box-align: start;
@@ -116,53 +134,53 @@
 }
 
 /* fix radios for tabs before and after the selected or hovered tab */
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-bottom-left-radius: 15px;
 }
 
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][beforehovered="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"][afterselected-visible="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterhovered="true"] > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-bottom-right-radius: 15px;
 }
 
 /* fix for hoverd tab that is before or after selected tab */
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-start,
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-start::before,
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-end,
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-end::before {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-start,
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-start::before,
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-end,
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-end::before {
   width: 0px !important;
 }
 
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, left bottom, right bottom;
   background-size: 0% 0%, calc(100% - (1 * 30px)) 100%, 30px 100%;
   border-radius: 16px 0 0 20px;
   margin-left: 0px;
 }
 
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-left: 2px solid rgba(26 ,26, 26, 0.25);
   border-radius: 16px 0 0 20px;
   margin-left: 0px;
 }
 
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, 30px bottom, right bottom;
   background-size: 30px 100%, calc(100% - (1 * 30px)) 100%, 0% 0%;
   border-radius: 0 16px 20px 0;
   margin-right: 0px;
 }
 
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
-#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
+#tabbrowser-tabs:not([movingtab])[tabmix_australis="true"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabStyle*="bg"][afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-right: 2px solid rgba(26, 26, 26, 0.25);
   border-radius: 0 16px 20px 0;
   margin-right: 0px;

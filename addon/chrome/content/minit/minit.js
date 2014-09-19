@@ -21,6 +21,12 @@ var TMP_tabDNDObserver = {
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
+    if (Tabmix.extensions.verticalTabBar) {
+      tabBar.useTabmixDragstart = function() false;
+      tabBar.useTabmixDnD  = function() false;
+      return;
+    }
+
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have diffrent width
@@ -29,7 +35,6 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    if (!Tabmix.extensions.treeStyleTab)
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -90,6 +95,10 @@ var TMP_tabDNDObserver = {
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
   },
 
+  get _isCustomizing() {
+    return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
+  },
+
   onDragStart: function (event) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
@@ -99,13 +108,13 @@ var TMP_tabDNDObserver = {
     }
 
     var tab = gBrowser.tabContainer._getDragTargetTab(event);
-    if (!tab)
+    if (!tab || this._isCustomizing)
       return;
 
     tab.__tabmixDragStart = true;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
-    gBrowser.tabContainer.removeShowButtonAttr();
+    TabmixTabbar.removeShowButtonAttr();
 
     let dt = event.dataTransfer;
     dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
@@ -178,7 +187,7 @@ var TMP_tabDNDObserver = {
               /^\s*(javascript|data):/.test(url))
             url = null;
 
-          var disAllowDrop = url ? !Tabmix.contentAreaClick.isUrlForDownload(url) : true;
+          var disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch (ex) { Tabmix.assert(ex);}
 
         if (disAllowDrop)
@@ -188,7 +197,7 @@ var TMP_tabDNDObserver = {
 
     var canDrop;
     var hideIndicator = false;
-    if (effects == "") {
+    if (effects == "" || effects == "none" && this._isCustomizing) {
       this.clearDragmark();
       return;
     }
@@ -262,7 +271,7 @@ var TMP_tabDNDObserver = {
 
     if (draggeType == this.DRAG_LINK) {
       let tab = tabBar._getDragTargetTab(event);
-      if (tab) {
+      if (tab && tab.linkedBrowser.currentURI.spec != "about:customizing") {
         if (!this._dragTime)
           this._dragTime = Date.now();
         if (Date.now() >= this._dragTime + this._dragOverDelay)
@@ -372,7 +381,7 @@ var TMP_tabDNDObserver = {
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      if (left_right > -1 && !Tabmix.contentAreaClick.isUrlForDownload(url)) {
+      if (left_right > -1 && !Tabmix.ContentClick.isUrlForDownload(url)) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {inBackground: bgLoad, allowThirdPartyFixup: true});
         gBrowser.moveTabTo(newTab, newIndex + left_right);
@@ -385,8 +394,9 @@ var TMP_tabDNDObserver = {
           // allow to load in locked tab
           browser.tabmix_allowLoad = true;
           let webNav = Ci.nsIWebNavigation;
-          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP |
-                      webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
+          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+          if (Tabmix.isVersion(290))
+            flags |= webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
           browser.loadURIWithFlags(url, flags);
           if (!bgLoad)
             gBrowser.tabContainer.selectedItem = tab;
@@ -415,7 +425,7 @@ var TMP_tabDNDObserver = {
     // see comment in gBrowser.tabContainer.dragEnd
     var dt = aEvent.dataTransfer;
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-    if (dt.mozUserCancelled || dt.dropEffect != "none") {
+    if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
       delete draggedTab._dragData;
       return;
     }
@@ -718,6 +728,10 @@ var TMP_tabDNDObserver = {
         return dt.effectAllowed = "none";
       }
 
+      if (Tabmix.isVersion(310) && window.gMultiProcessBrowser !=
+          sourceNode.ownerDocument.defaultView.gMultiProcessBrowser)
+        return dt.effectAllowed = "none";
+
       return dt.effectAllowed = "copyMove";
     }
 
@@ -923,16 +937,68 @@ Tabmix.navToolbox = {
   customizeStarted: false,
   toolboxChanged: false,
   resetUI: false,
+  listener: null,
 
   init: function TMP_navToolbox_init() {
     this.updateToolboxItems();
     gNavToolbox.addEventListener("beforecustomization", this, false);
     gNavToolbox.addEventListener("aftercustomization", this, false);
+
+    if (!Tabmix.isVersion(290))
+      return;
+
+    this.listener = {
+      onWidgetAfterDOMChange: function(aNode, aNextNode, aContainer, aWasRemoval) {
+        if (this.customizeStarted)
+          return;
+        if (aContainer.id == "TabsToolbar") {
+          this.tabStripAreaChanged();
+          TabmixTabbar.updateScrollStatus();
+          TabmixTabbar.updateBeforeAndAfter();
+        }
+        if (!aWasRemoval) {
+          let command = aNode.getAttribute("command");
+          if (/Browser:ReloadOrDuplicate|Browser:Stop/.test(command))
+            gTMPprefObserver.showReloadEveryOnReloadButton();
+        }
+      }.bind(this)
+    }
+    CustomizableUI.addListener(this.listener);
   },
 
   deinit: function TMP_navToolbox_deinit() {
     gNavToolbox.removeEventListener("beforecustomization", this, false);
     gNavToolbox.removeEventListener("aftercustomization", this, false);
+
+    // fix bug 1034394 - tab mix plus's tabmixscrollbox is not cleaned up after
+    // uninstalling tab mix plus
+    if (!Tabmix.isVersion(290)) {
+      this.cleanCurrentset();
+      return;
+    }
+    if (Tabmix.isVersion(310)) {
+      // remove tabmix-tabs-closebutton when its position is immediately after
+      // tabmixScrollBox and save its position in preference for future use.
+      let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
+      let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
+      if (buttonPosition == boxPosition + 1) {
+        Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
+        CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
+      }
+    }
+    CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
+    if (Tabmix.isVersion(290))
+      CustomizableUI.removeListener(this.listener);
+  },
+
+  cleanCurrentset: function() {
+    let tabsToolbar = document.getElementById("TabsToolbar");
+    let cSet = tabsToolbar.getAttribute("currentset");
+    if (cSet.indexOf("tabmixScrollBox") > -1) {
+      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",");
+      tabsToolbar.setAttribute("currentset", cSet);
+      document.persist("TabsToolbar", "currentset");
+    }
   },
 
   handleEvent: function TMP_navToolbox_handleEvent(aEvent) {
@@ -987,7 +1053,7 @@ Tabmix.navToolbox = {
     this.initializeSearchbar();
     this.toolbarButtons();
     this.initializeAlltabsPopup();
-    this.initializeScrollButtons();
+    this.tabStripAreaChanged();
   },
 
   urlBarInitialized: false,
@@ -1151,13 +1217,7 @@ Tabmix.navToolbox = {
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
-    let SM = TabmixSessionManager;
-    if (SM.enableManager != null)
-      SM.toggleRecentlyClosedWindowsButton();
-
     gTMPprefObserver.showReloadEveryOnReloadButton();
-
-    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
   },
 
   initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {
@@ -1177,31 +1237,82 @@ Tabmix.navToolbox = {
     }
   },
 
-  initializeScrollButtons: function TMP_navToolbox_initializeScrollButtons() {
-    // Make sure our scroll buttons box is after tabbrowser-tabs
-    let id = "tabmixScrollBox";
-    let box = document.getElementById(id);
-    if (box && box != gBrowser.tabContainer.nextSibling) {
-      // update currentset
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-      // remove existing tabmixScrollBox item
-      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",").split(",");
-      let index = cSet.indexOf("tabbrowser-tabs");
-      cSet.splice(index + 1, 0, "tabmixScrollBox");
-      tabsToolbar.setAttribute("currentset", cSet.join(","));
-      // update physical position
-      let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-      TabmixTabbar.setScrollButtonBox(useTabmixButtons, true, true);
-      let tabBar = gBrowser.tabContainer;
-      if (useTabmixButtons && tabBar.overflow) {
-        tabBar.mTabstrip._scrollButtonUp.collapsed = false;
-        tabBar.mTabstrip._scrollButtonDown.collapsed = false;
-      }
-    }
+  tabStripAreaChanged: function() {
+    /**
+     * we need to position three elements in TabsToolbar :
+     * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
+     * we resotre tabmixScrollBox positoin first since its postion is fixed,
+     * to be on the safe side we check tabmixScrollBox positoin again after we
+     * restore tabmix-tabs-closebutton and new-tab-button position.
+     */
+    this.setScrollButtons();
+    this.setCloseButtonPosition();
+    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
+    this.setScrollButtons(false, true);
 
     // reset tabsNewtabButton and afterTabsButtonsWidth
     if (typeof privateTab == "object")
       TMP_eventListener.updateMultiRow(true);
+  },
+
+  setScrollButtons: function(reset, onlyPosition) {
+    let box = document.getElementById("tabmixScrollBox");
+    if (!box)
+      return;
+
+    if (!reset && box == gBrowser.tabContainer.nextSibling)
+      return;
+
+    // Make sure our scroll buttons box is after tabbrowser-tabs
+    if (!Tabmix.isVersion(290)) {
+      let next = gBrowser.tabContainer.nextSibling;
+      next.parentNode.insertBefore(box, next);
+      if (!onlyPosition) {
+        let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+        gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+      }
+      return;
+    }
+    let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
+    CustomizableUI.moveWidgetWithinArea("tabmixScrollBox", tabsPosition + 1);
+
+    if (!onlyPosition) {
+      let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
+      gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+    }
+  },
+
+  _closeButtonInitialized: false,
+  setCloseButtonPosition: function() {
+   if (this._closeButtonInitialized)
+      return;
+    this._closeButtonInitialized = true;
+
+    if (!Tabmix.isVersion(310))
+      return;
+    // if tabmix-tabs-closebutton was positioned immediately after
+    // tabmixScrollBox we removed the button on exit, to avoid bug 1034394.
+    let pref = "tabs-closeButton-position";
+    if (Tabmix.prefs.prefHasUserValue(pref)) {
+      let position = Tabmix.prefs.getIntPref(pref);
+      Tabmix.prefs.clearUserPref(pref);
+      CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
+    }
+    // try to restore button position from tabs-closebutton position
+    // if item with tabs-closebutton id exist, some other extension add it
+    else if (!document.getElementById("tabs-closebutton")) {
+      let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
+      let position = currentset.indexOf("tabs-closebutton");
+      if (position > -1) {
+        CustomizableUI.removeWidgetFromArea("tabs-closebutton");
+        CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
+      }
+    }
   }
+
+}
+
+Tabmix.getPlacement = function(id) {
+  let placement = CustomizableUI.getPlacementOfWidget(id);
+  return placement ? placement.position : null;
 }

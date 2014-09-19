@@ -53,7 +53,7 @@ var TMP_Places = {
       // when we are in single window mode set the function to return "tab"
       Tabmix.changeCode(window, "whereToOpenLink")._replace(
         'var middle = !ignoreButton && e.button == 1;',
-        'var middle = e instanceof MouseEvent && !ignoreButton && e.button == 1;'
+        'var middle = !ignoreButton && e.button && e.button == 1;'
       )._replace(
         'return shift ? "tabshifted" : "tab";',
         '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
@@ -102,9 +102,10 @@ var TMP_Places = {
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
-        'var tab = where == "current" ? w.gBrowser.mCurrentTab : w.gBrowser.getTabForLastPanel(); \
-         w.TMP_Places.setTabTitle(tab, url, bookMarkId); \
-         $1$2'
+        '  var tab = where == "current" ? w.gBrowser.mCurrentTab :\n' +
+        '            (Tabmix.isVersion(340) ? newTab : w.gBrowser.getTabForLastPanel());\n' +
+        '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+        '$1$2'
       ).toCode();
 
       // prevent error when closing window with sidbar open
@@ -473,18 +474,6 @@ var TMP_Places = {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
-    // set title at startup
-    // when we are not using session manager
-    // startup page(s) or home page(s) load before bookmarks service
-    Array.forEach(gBrowser.tabs, function(tab) {
-      let browser = tab.linkedBrowser;
-      let url = browser.currentURI.spec;
-      if (this.isUserRenameTab(tab, url))
-        return;
-      let bookMarkName = this.getTitleFromBookmark(url);
-      if (bookMarkName && browser.contentDocument.title != bookMarkName)
-        browser.contentDocument.title = bookMarkName;
-    }, this)
     this.startObserver();
   },
 

@@ -9,17 +9,31 @@
   -moz-margin-end: 5px;
 }
 
-.whenBrowserStartBox {
+#startupGroup > hbox > .tabmixplus-button {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#whenBrowserStartBox {
   height: 33px;
+}
+
+#whenBrowserStartBox[tabmixSession] > #tabmixSessionManager,
+#whenBrowserStartBox:not([tabmixSession]) > #browserStartupPage {
+  display: -moz-box;
+}
+
+#whenBrowserStartBox:not([tabmixSession]) > #tabmixSessionManager,
+#whenBrowserStartBox[tabmixSession] > #browserStartupPage {
+  display: none;
+}
+
+#whenBrowserStartBox[tabmixSession] > label[control="browserStartupPage"] {
+  -moz-box-flex: 1;
 }
 
 #startupGroup > separator {
   height: 6px;
-}
-
-#startupGroup > hbox > .tabmixplus-button {
-  margin-top: 0px;
-  margin-bottom: 0px;
 }
 
 .incontent_paneGeneral separator {

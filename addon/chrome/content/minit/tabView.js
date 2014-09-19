@@ -197,10 +197,10 @@
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
     this._groupCount = parsedData.totalNumber || 1;
     this._updateUIpageBounds = false;
-  },
+  }
 
-  TabmixSessionManager._setWindowStateReady = function SM__setWindowStateReady(aOverwriteTabs, showNotification) {
-    this._saveTabviewData();
+  TabmixSessionManager._aftertWindowStateReady =
+        function SM__aftertWindowStateReady(aOverwriteTabs, showNotification) {
     if (!aOverwriteTabs)
       this._groupItems = this._tabviewData["tabview-group"];
 
@@ -209,6 +209,7 @@
     TMP_TabView.updateGroupNumberBroadcaster(groupCount);
 
     // show notification
+///XXX make sure that we have hidden tabs
     if (showNotification && (aOverwriteTabs && groupCount > 1 || groupCount > this._groupCount))
       this.showNotification();
 
@@ -216,7 +217,6 @@
     if (aOverwriteTabs || this._updateUIpageBounds)
       this._setUIpageBounds();
 
-    this._sendWindowStateEvent("Ready");
     if (TabView._window && !aOverwriteTabs) {
       // when we don't overwriting tabs try to rearrange the groupItems
       // when TabView._window is false we call this function after tabviewframeinitialized event
@@ -270,8 +270,8 @@
       this.removeAttribute(this.gThisWin, id);
   }
 
-  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(tabData, aEntry){
-    if (tabData.tab.pinned)
+  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata){
+    if (tabdata.pinned)
       return;
 
     let parsedData;
@@ -283,44 +283,46 @@
 
     var update = this.groupUpdates;
     var id = "tabview-tab";
-    var data;
+    var tabviewData;
     if (update.newGroupID) {
       // We are here only when the restored session did not have tabview data
       // we creat new group and fill all the data
-      data = setData(update.newGroupID);
+      tabviewData = setData(update.newGroupID);
     }
     else {
-      data = this.getLiteralValue(tabData.node, id);
+      tabviewData = tabdata.extData && tabdata.extData["tabview-tab"] || null;
       // make sure data is not "null"
-      if (!data || data == "null") {
+      if (!tabviewData || tabviewData == "null") {
         if (update.lastActiveGroupId)
-          data = setData(update.lastActiveGroupId);
+          tabviewData = setData(update.lastActiveGroupId);
         else {
           // force Panorama to reconnect all reused tabs
-          if (tabData.tab._tabViewTabItem) {
+          if (aTab._tabViewTabItem) {
             // remove any old data
-            tabData.tab._tabViewTabItem._reconnected = false;
+            aTab._tabViewTabItem._reconnected = false;
             try {
-              TabmixSvc.ss.deleteTabValue(tabData.tab, id);
+              TabmixSvc.ss.deleteTabValue(aTab, id);
             } catch (ex) { }
+            if (tabdata.extData)
+              delete tabdata.extData["tabview-tab"];
           }
           return;
         }
       }
 
       if (update.IDs) {
-        parsedData = TabmixSvc.JSON.parse(data);
+        parsedData = TabmixSvc.JSON.parse(tabviewData);
         if (parsedData.groupID in update.IDs) {
           parsedData.groupID = update.IDs[parsedData.groupID];
-          data = TabmixSvc.JSON.stringify(parsedData);
+          tabviewData = TabmixSvc.JSON.stringify(parsedData);
         }
       }
     }
 
-    // save data
-    TabmixSvc.ss.setTabValue(tabData.tab, id, data);
-    if (this.enableBackup)
-      this.setLiteral(this.getNodeForTab(tabData.tab), id, data);
+    if (tabviewData)
+      tabdata.extData["tabview-tab"] = tabviewData;
+    else
+      delete tabdata.extData["tabview-tab"];
   }
 
   TabmixSessionManager.isEmptyObject = function SM_isEmptyObject(obj) {

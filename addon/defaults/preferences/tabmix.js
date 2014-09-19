@@ -128,7 +128,8 @@ pref("extensions.tabmix.shiftClickTabbar", 0);
 pref("extensions.tabmix.altClickTab", 6);
 pref("extensions.tabmix.altClickTabbar", 0);
 
-pref("extensions.tabmix.dblClickTabbar_changesize", true);
+pref("extensions.tabmix.tabbar.dblclick_changesize", true);
+pref("extensions.tabmix.tabbar.click_dragwindow", true);
 
 /*
  2011-01-26
@@ -216,7 +217,7 @@ pref("extensions.tabmix.middleclickDelete", true);
 pref("extensions.tabmix.optionsToolMenu", true);
 
 pref("extensions.tabmix.enablefiletype", true);
-pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ php\?attachmentid=.* php\?act=Attach&type=post&id=.* /download.(php|asp)\?*/");
+pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ php\?attachmentid=.* php\?act=Attach&type=post&id=.* /download.php\?*/");
 
 pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");
 
@@ -247,6 +248,7 @@ pref("extensions.tabmix.sessions.onStart", 2);
 pref("extensions.tabmix.sessions.onStart.askifempty", true);
 pref("extensions.tabmix.sessions.onStart.loadsession", -1);
 pref("extensions.tabmix.sessions.onStart.sessionpath", "");
+pref("extensions.tabmix.sessions.onStart.restorePinned", true);
 //pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
 
 pref("extensions.tabmix.autoReloadContent", true);

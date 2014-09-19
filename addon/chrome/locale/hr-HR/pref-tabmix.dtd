@@ -18,7 +18,6 @@
 <!ENTITY linkTarget.current "Trenutnoj kartici">
 <!ENTITY linkTarget.accesskey "T">
 <!ENTITY divertedWindowOpen.label "JavaScript skočni prozori:">
-<!ENTITY divertedWindows.comment "Više postavki Javascripta &amp; skočnih prozora mogu se kontrolirati u glavnim Opcijama">
 <!ENTITY divertedWindowOpen.all "Otvori sve skočne prozore u karticama">
 <!ENTITY divertedWindowOpen.some "Dozvoli skočne prozore prilagođenih veličina">
 <!ENTITY divertedWindowOpen.none "Dozvoli sve skočne prozore">
@@ -210,7 +209,7 @@
 <!ENTITY ontabbar.label "na traci kartica:">
 <!ENTITY clicktab.label "Izaberite naredbu koju želite izvršiti klikanjem na karticu ili traku kartica">
 <!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from draging the window.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Ne radi ništa">
 <!ENTITY clicktab.addtab "Otvara novu karticu">
@@ -295,6 +294,7 @@
 <!ENTITY sm.restore.merge "Spoji više prozora u jedan">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
 <!ENTITY sm.preserve.options "Sačuvaj kartice:">
 <!ENTITY sm.preserve.history "Povijesti">
 <!ENTITY sm.preserve.protect "Zaštićenog statusa">
