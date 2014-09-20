@@ -27,8 +27,8 @@ var TMP_SessionStore = {
      // if user already rename this item wo don't use other title
      if (aUndoItem.renamed)
        return;
-     let selectedTab = aUndoItem.tabs[aUndoItem.selected - 1];
-     if (!selectedTab.entries || selectedTab.entries.length == 0)
+     let selectedTab = aUndoItem.selected && aUndoItem.tabs[aUndoItem.selected - 1];
+     if (!selectedTab || !selectedTab.entries || selectedTab.entries.length == 0)
        return;
      let tabData = this.getActiveEntryData(selectedTab);
      let url = selectedTab.attributes["label-uri"];
