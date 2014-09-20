@@ -732,6 +732,15 @@ var tablib = {
       ).toCode();
     }
 
+    Tabmix.changeCode(window, "window.URLBarSetURI")._replace(
+      '{',
+      '{\n' +
+      '  if (Tabmix.selectedTab == gBrowser.selectedTab &&\n' +
+      '      Tabmix.userTypedValue && gBrowser.userTypedValue != "") {\n' +
+      '      gBrowser.userTypedValue = "";\n' +
+      '  }\n'
+    ).toCode();
+
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
