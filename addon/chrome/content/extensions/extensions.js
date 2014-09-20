@@ -549,18 +549,15 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
   preInit: function () {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
-      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsPreInit")._replace(
-        // fix typo in TST - this typo fixed on TST 0.13.2011121501
-        'SessionData.tabTSTProperties',
-        'sessionData.tabTSTProperties', {silent: true}
-      )._replace(
-        // TST look for DEPRECATED gBrowser.restoreTab in tablib.init
-        'source[1].replace',
-        '" ".replace'
-      )._replace(
-        /eval\(["|']tablib\.init/,
-        'if (false) $&'
-      ).toCode();
+      // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
+      tablib._init = tablib.init;
+      tablib.init = function() {
+        this._init();
+        /*
+          var newTab = null
+          gBrowser.restoreTab = return newTab;
+         */
+      }
     }
   },
 
@@ -612,11 +609,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
      *  other places windows
      */
     Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
-      /(function[^\(]*\([^\)]+)(\))/,
-      '$1, TSTOpenGroupBookmarkBehavior$2'
-    )._replace(
-      /"use strict";|{/,
-      '$&\nif (TSTOpenGroupBookmarkBehavior == null) TSTOpenGroupBookmarkBehavior = TreeStyleTabService.openGroupBookmarkBehavior();'
+      'var tabBar = gBrowser.tabContainer;',
+      'let TSTOpenGroupBookmarkBehavior = arguments.length > 3 && arguments[3] ||\n' +
+      '        TreeStyleTabService.openGroupBookmarkBehavior();\n' +
+      '    $&'
     )._replace(
       'index = prevTab._tPos + 1;',
       '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
