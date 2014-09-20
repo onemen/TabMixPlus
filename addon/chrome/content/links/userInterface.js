@@ -271,8 +271,19 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       source = code[1];
     else
       return; // nothing we can do
-    /* don't open blank tab when we are about to add new livemark */
+    /**
+     * don't open blank tab when we are about to add new livemark
+     * divert call from PanelUI-history to our function
+     */
     this.changeCode(window, "openUILink")._replace(
+      '{',
+      '{\n' +
+       '  if (event && event.target && event.target.parentNode &&\n' +
+       '      event.target.parentNode.id == "PanelUI-historyItems") {\n' +
+       '    TMP_Places.openHistoryItem(url, event);\n' +
+       '    return;\n' +
+       '  }', {check: Tabmix.isVersion(280)}
+    )._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
