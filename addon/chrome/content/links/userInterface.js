@@ -251,12 +251,13 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
 }
 
 Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
+  this.selectedTab = null;
+  this.userTypedValue = null;
+
   var url = gBrowser.currentURI.spec;
   if (url != gURLBar.value && !isBlankPageURL(url)) {
-    gURLBar.value = gBrowser.userTypedValue = url;
+    URLBarSetURI();
   }
-  this.selectedTab = null;
-  this.userTypedValue = "";
 }
 
 /**
