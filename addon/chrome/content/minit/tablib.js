@@ -131,13 +131,14 @@ var tablib = {
     // so we don't have to work on the same function twice.
     Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
       '{',
-      '{ \
-       if (aTab.hasAttribute("protected")) return;\
-       if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
-    )._replace(
-      '{',
-      '{var lastTabInGroup = this.visibleTabs.length == 1;\
-       if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab")) return;'
+      '{\n' +
+       '            if (aTab.hasAttribute("protected"))\n' +
+       '              return;\n' +
+       '            let lastTabInGroup = this.visibleTabs.length == 1;\n' +
+       '            if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab"))\n' +
+       '              return;\n' +
+       '            if ("clearTimeouts" in aTab)\n' +
+       '              aTab.clearTimeouts();'
     )._replace(
       // fix bug in TGM when closeing last tab in a group with animation
       'if (aParams)',
