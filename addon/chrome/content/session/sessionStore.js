@@ -240,12 +240,20 @@ var TMP_SessionStore = {
         Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
       else {
          // calling doRestore before sessionstartup finished to read
-         // sessionstroe.js file force syncRead
+         // sessionstroe.js file throw error since Firefox 28, and force
+         // syncRead in Firefox 25-27
          XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
             let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
                           getService(Ci.nsISessionStartup);
             // when TMP session manager is enabled ss.doRestore is true only after restart
-            return ss.doRestore();
+            if (!Tabmix.isVersion(250))
+              return ss.doRestore();
+            ss.onceInitialized.then(function() {
+              Tabmix.isWindowAfterSessionRestore = ss.doRestore();
+            }).then(null, Cu.reportError);
+            // until sessionstartup initialized just return the pref value,
+            // we only use isWindowAfterSessionRestore when our Session Manager enable
+            return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");
          })
       }
    },
