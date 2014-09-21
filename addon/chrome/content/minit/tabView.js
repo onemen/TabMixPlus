@@ -319,9 +319,12 @@
       }
     }
 
-    if (tabviewData)
+    if (tabviewData) {
+      if (!tabdata.extData)
+        tabdata.extData = {};
       tabdata.extData["tabview-tab"] = tabviewData;
-    else
+    }
+    else if (tabdata.extData)
       delete tabdata.extData["tabview-tab"];
   }
 
