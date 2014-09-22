@@ -1108,8 +1108,8 @@ Tabmix.navToolbox = {
       '{',
       '{\
        if (gBrowser.tabmix_tab) {\
-         delete gBrowser.tabmix_tab;\
-         delete gBrowser.tabmix_userTypedValue;\
+         Tabmix.selectedTab = null;\
+         Tabmix.userTypedValue = "";\
        }'
     )._replace(
       'if (isMouseEvent || altEnter) {',

@@ -844,9 +844,14 @@ var TMP_eventListener = {
 
     Tabmix.countClosedTabs(tab);
 
+    if (Tabmix.selectedTab == tab) {
+      Tabmix.selectedTab = null;
+      Tabmix.userTypedValue = "";
+    }
+
     // clean WeakMap
     let browser = tab.linkedBrowser;
-    if (browser && TabmixSvc.syncHandlers.has(browser.permanentKey))
+    if (Tabmix.isVersion(320) && browser && TabmixSvc.syncHandlers.has(browser.permanentKey))
       TabmixSvc.syncHandlers.delete(browser.permanentKey);
     if (this.tabWidthCache.has(tab))
       this.tabWidthCache.delete(tab);
@@ -1050,11 +1055,6 @@ var TMP_eventListener = {
 
     TMP_TabView._resetTabviewFrame();
     gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
-
-    // TreeStyleTab extension add this to be compatible with old tabmix version
-    // we call removeEventListener again here in case user close the window without opening new tabs
-    if ("TreeStyleTabBrowser" in window && "tabxTabAdded" in window)
-      gBrowser.tabContainer.removeEventListener('DOMNodeInserted', tabxTabAdded, true);
 
     gTMPprefObserver.removeObservers();
     gTMPprefObserver.dynamicRules = null;

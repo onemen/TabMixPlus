@@ -71,11 +71,9 @@ var tablib = {
       let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
       'params = arguments[1];',
-      '$&\
-       let props = ["referrerURI","charset","postData","ownerTab","allowThirdPartyFixup","fromExternal","relatedToCurrent","skipAnimation"];\
-       props.forEach(function(prop){if (typeof params[prop] == "undefined") params[prop] = null;}); \
-       dontMove = params.dontMove || null;\
-       isPending = params.isPending || null;'
+      'params = tablib.definedParams(arguments[1]);\n' +
+      '              dontMove              = params.dontMove;\n' +
+      '              isPending             = params.isPending;'
     )._replace(
       't.setAttribute("label", aURI);',
       't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ? this.mStringBundle.getString("tabs.connecting") : aURI);',
@@ -133,13 +131,14 @@ var tablib = {
     // so we don't have to work on the same function twice.
     Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
       '{',
-      '{ \
-       if (aTab.hasAttribute("protected")) return;\
-       if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
-    )._replace(
-      '{',
-      '{var lastTabInGroup = this.visibleTabs.length == 1;\
-       if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab")) return;'
+      '{\n' +
+       '            if (aTab.hasAttribute("protected"))\n' +
+       '              return;\n' +
+       '            let lastTabInGroup = this.visibleTabs.length == 1;\n' +
+       '            if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab"))\n' +
+       '              return;\n' +
+       '            if ("clearTimeouts" in aTab)\n' +
+       '              aTab.clearTimeouts();'
     )._replace(
       // fix bug in TGM when closeing last tab in a group with animation
       'if (aParams)',
@@ -264,6 +263,20 @@ var tablib = {
         'Tabmix.setNumberOfTabsClosedLast();'
       ).toCode();
     }
+
+    Tabmix.changeCode(gBrowser, "gBrowser.loadOneTab")._replace(
+      'var aFromExternal;',
+      '$&\n' +
+      '            var tabmix_dontMove;'
+    )._replace(
+      'params = arguments[1];',
+      'params = tablib.definedParams(arguments[1]);\n' +
+      '              tabmix_dontMove       = params.dontMove;'
+    )._replace(
+      'referrerURI: aReferrerURI,',
+      '$&\n' +
+      '                                  dontMove: tabmix_dontMove,'
+    ).toCode();
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -731,6 +744,15 @@ var tablib = {
         '$& && !Tabmix.singleWindowMode'
       ).toCode();
     }
+
+    Tabmix.changeCode(window, "window.URLBarSetURI")._replace(
+      '{',
+      '{\n' +
+      '  if (Tabmix.selectedTab == gBrowser.selectedTab &&\n' +
+      '      Tabmix.userTypedValue && gBrowser.userTypedValue != "") {\n' +
+      '      gBrowser.userTypedValue = "";\n' +
+      '  }\n'
+    ).toCode();
 
   },
 
@@ -1590,6 +1612,20 @@ var tablib = {
     gBrowser.closeTab = function(aTab) {this.removeTab(aTab);}
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
     gBrowser.renameTab = function(aTab) {Tabmix.renameTab.editTitle(aTab);}
+  },
+
+  // prevent 'ReferenceError: reference to undefined property params'
+  // in gBrowser.addTab and gBrowser.loadOneTab
+  props: ["referrerURI","charset","postData","inBackground","ownerTab",
+          "allowThirdPartyFixup","fromExternal","relatedToCurrent",
+          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending"],
+
+  definedParams: function(params) {
+    this.props.forEach(function(prop){
+      if (typeof params[prop] == "undefined")
+        params[prop] = null;
+    })
+    return params;
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {

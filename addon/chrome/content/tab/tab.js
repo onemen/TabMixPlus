@@ -569,6 +569,8 @@ var gTMPprefObserver = {
     addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
     addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
+    addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
+    addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
 
     try {
       // add Observer
@@ -582,8 +584,6 @@ var gTMPprefObserver = {
   },
 
   OBSERVING: ["extensions.tabmix.",
-              "browser.tabs.closeButtons",
-              "browser.tabs.onTop",
               "browser.tabs.tabMinWidth",
               "browser.tabs.tabMaxWidth",
               "browser.tabs.tabClipWidth",

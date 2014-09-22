@@ -105,7 +105,7 @@ let TMP_TabGroupsManager = {
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
     )._replace(
-      'SessionStore.restoreTabs(window, tabs, tabsData, 0);',
+      'this.SessionStore[fnName](window, tabs, tabsData, 0);',
       '$&\n' +
       '      this._moveTabsToGroupByTGM(window, tabs);'
     ).toCode();

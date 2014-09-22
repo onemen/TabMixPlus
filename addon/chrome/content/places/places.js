@@ -173,15 +173,20 @@ var TMP_Places = {
       var node = aEvent.target._placesNode;
       if (node) {
          PlacesUIUtils.markPageAsTyped(node.uri);
-         var where = this.isBookmarklet(node.uri) ? "current" :
-                      this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
-         if (where == "current")
-           Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
-         openUILinkIn(node.uri, where, {
-           inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
-           initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
-         });
+         this.openHistoryItem(node.uri, aEvent);
       }
+   },
+
+   // open PanelUI-historyItems from history button, diverted from openUILink
+   openHistoryItem: function(aUri, aEvent) {
+      var where = this.isBookmarklet(aUri) ? "current" :
+                   this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
+      if (where == "current")
+        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
+      openUILinkIn(aUri, where, {
+        inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
+        initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
+      });
    },
 
    isBookmarklet: function (url) {

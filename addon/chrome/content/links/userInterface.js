@@ -135,22 +135,26 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       default:
          url = newTabUrl;
    }
-   var flags = nsIWebNavigation.LOAD_FLAGS_NONE;
    // if google.toolbar extension installed check google.toolbar.newtab pref
    if ("GTB_GoogleToolbarOverlay" in window) {
      try {
-       if (Services.prefs.getBoolPref("google.toolbar.newtab")) {
+       if (Services.prefs.getBoolPref("google.toolbar.newtab"))
          url = "chrome://google-toolbar/content/new-tab.html";
-         flags = nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY
-       }
      } catch (ex) {/* no pref - do noting */}
    }
    if (TabmixTabbar.widthFitTitle && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
      gBrowser.mCurrentTab.collapsed = true;
 
+   // always select new tab when replacing last tab
+   var loadInBackground = replaceLastTab ? false :
+                          Tabmix.prefs.getBoolPref("loadNewInBackground");
    var loadBlank = isBlankPageURL(url);
-   var _url = loadBlank ? url : "about:blank";
-   var newTab = gBrowser.addTab(_url, {skipAnimation: replaceLastTab, dontMove: true});
+   var charset = loadBlank ? null : gBrowser.selectedBrowser.characterSet;
+   var newTab = gBrowser.loadOneTab(url, {
+                                    charset: charset,
+                                    inBackground: loadInBackground,
+                                    skipAnimation: replaceLastTab,
+                                    dontMove: true});
    if (replaceLastTab) {
      newTab.__newLastTab = url;
      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
@@ -163,16 +167,6 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
      }
    }
 
-   if (!loadBlank) {
-      try { // just in case.....
-         let browser = newTab.linkedBrowser;
-         browser.stop();
-         let originCharset = gBrowser.selectedBrowser.characterSet;
-         browser.loadURIWithFlags(url, flags, null, originCharset);
-         gBrowser.selectedBrowser.focus();
-      }
-      catch (ex) {}
-   }
    if (aTab && aTab.localName == "tab")
       gBrowser.moveTabTo(newTab, aTab._tPos + 1);
    else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
@@ -180,16 +174,13 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       // and it mess with recently used tabs order
       gBrowser.moveTabTo(newTab, gBrowser.selectedTab._tPos + 1);
    }
-
-   // always select new tab when replacing last tab
-   var loadInBackground  = replaceLastTab ? false : Tabmix.prefs.getBoolPref("loadNewInBackground");
-   gBrowser.TMP_selectNewForegroundTab(newTab, loadInBackground);
    // make sure to update recently used tabs
    // if user open many tabs quickly select event don't have time to fire
    // before new tab select
    if (!loadInBackground)
      TMP_LastTab.PushSelectedTab();
 
+   gBrowser.selectedBrowser.focus();
    // focus the address bar on new tab
    var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
@@ -200,17 +191,21 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    return newTab;
 }
 
+Tabmix.selectedTab = null;
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
   if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
-  if (!isBlankPageURL(aUrl)) {
+  if (aTab.selected && !isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user laod about:blank tab
-    gBrowser.tabmix_tab = aTab;
-    gBrowser.tabmix_userTypedValue = aUrl;
+    this.selectedTab = aTab;
+    this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
+    URLBarSetURI();
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
+    if (this.isVersion(340) && gMultiProcessBrowser)
+      aTab._skipContentFocus = true;
     if (aTimeOut)
       setTimeout(function () {focusAndSelectUrlBar();}, 30);
     else
@@ -226,12 +221,14 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (isBlankPageURL(gURLBar.value))
     gURLBar.value = "";
-  if (!gBrowser.tabmix_tab)
+
+  let tab = this.selectedTab;
+  if (!tab)
     return;
 
-  var isCurrentTab = gBrowser.tabmix_tab.selected;
-  var browser = gBrowser.getBrowserForTab(gBrowser.tabmix_tab);
-  var url = gBrowser.tabmix_userTypedValue;
+  var isCurrentTab = tab.selected;
+  var browser = gBrowser.getBrowserForTab(tab);
+  var url = this.userTypedValue;
   if (!isBlankPageURL(url))
     browser.userTypedValue = url;
   if (isCurrentTab && gBrowser.mIsBusy) {
@@ -246,12 +243,13 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
 }
 
 Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
+  this.selectedTab = null;
+  this.userTypedValue = null;
+
   var url = gBrowser.currentURI.spec;
   if (url != gURLBar.value && !isBlankPageURL(url)) {
-    gURLBar.value = gBrowser.userTypedValue = url;
+    URLBarSetURI();
   }
-  delete gBrowser.tabmix_tab;
-  delete gBrowser.tabmix_userTypedValue;
 }
 
 /**
@@ -273,8 +271,19 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       source = code[1];
     else
       return; // nothing we can do
-    /* don't open blank tab when we are about to add new livemark */
+    /**
+     * don't open blank tab when we are about to add new livemark
+     * divert call from PanelUI-history to our function
+     */
     this.changeCode(window, "openUILink")._replace(
+      '{',
+      '{\n' +
+       '  if (event && event.target && event.target.parentNode &&\n' +
+       '      event.target.parentNode.id == "PanelUI-historyItems") {\n' +
+       '    TMP_Places.openHistoryItem(url, event);\n' +
+       '    return;\n' +
+       '  }', {check: Tabmix.isVersion(280)}
+    )._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(

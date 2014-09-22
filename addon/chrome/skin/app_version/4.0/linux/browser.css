@@ -19,6 +19,10 @@
   margin-bottom: -4px !important;
 }
 
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
+  list-style-image: url("moz-icon://stock/gtk-close?size=menu");
+}
+
 /***  Tabstrip close button Firefox 31+ ***/
 .tabs-closebutton.tabmix:not(:hover) {
   background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 64, 16, 48);

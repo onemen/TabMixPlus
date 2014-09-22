@@ -17,6 +17,7 @@
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton*/
 #TabsToolbar > .tabs-closebutton {
+  list-style-image: url("chrome://global/skin/icons/close.png");
   background-image: none !important;
 }
 

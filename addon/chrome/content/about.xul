@@ -15,32 +15,8 @@
         onload="init();">
 
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/about.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/links/userInterface.js"/>
-  <script type="application/javascript">
-  <![CDATA[
-    function init() {
-      var addon = window.arguments[0];
-      updateLabels(addon)
-    }
-
-    function updateLabels(extensions) {
-      var extensionsStrings = document.getElementById("extensionsStrings");
-      document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);
-      try {
-        var currentVersion = extensions.version;
-        var extensionVersion = document.getElementById("extensionVersion");
-        extensionVersion.value = extensionsStrings.getFormattedString("aboutWindowVersionString", [currentVersion]);
-      } catch(er) {
-        extensionVersion.hidden = true;
-      }
-      var acceptButton = document.documentElement.getButton("accept");
-      acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
-      var descriptionString =  document.getElementById("descriptionString");
-      var extensionDescription = document.getElementById("extensionDescription");
-      extensionDescription.value = extensions.description;
-    }
-  ]]>
-  </script>
 
   <stringbundleset id="aboutSet">
     <stringbundle id="extensionsStrings" src="chrome://mozapps/locale/extensions/extensions.properties"/>
