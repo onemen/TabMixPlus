@@ -103,6 +103,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
                                         Tabmix.prefs.getIntPref("loadOnNewTab.type");
    var url;
    var newTabUrl = BROWSER_NEW_TAB_URL;
+   var selectedTab = gBrowser.selectedTab;
    switch (newTabContent) {
       case 0 : // blank tab, by default
          url = "about:blank";
@@ -116,7 +117,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          break;
       case 3 : // duplicate tab
          let currentUrl = gBrowser.currentURI.spec;
-         let newTab = gBrowser.duplicateTab(gBrowser.mCurrentTab, null, null, null, true);
+         let newTab = gBrowser.duplicateTab(selectedTab, null, null, null, true);
          Tabmix.clearUrlBar(newTab, currentUrl, true);
          return newTab;
          break;
@@ -142,8 +143,8 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          url = "chrome://google-toolbar/content/new-tab.html";
      } catch (ex) {/* no pref - do noting */}
    }
-   if (TabmixTabbar.widthFitTitle && replaceLastTab && !gBrowser.mCurrentTab.collapsed)
-     gBrowser.mCurrentTab.collapsed = true;
+   if (TabmixTabbar.widthFitTitle && replaceLastTab && !selectedTab.collapsed)
+     selectedTab.collapsed = true;
 
    // always select new tab when replacing last tab
    var loadInBackground = replaceLastTab ? false :
@@ -172,7 +173,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
       // we used to move tab after lastRelatedTab but we don't need it on new tabs
       // and it mess with recently used tabs order
-      gBrowser.moveTabTo(newTab, gBrowser.selectedTab._tPos + 1);
+      gBrowser.moveTabTo(newTab, selectedTab._tPos + 1);
    }
    // make sure to update recently used tabs
    // if user open many tabs quickly select event don't have time to fire
