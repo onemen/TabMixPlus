@@ -39,7 +39,7 @@
   margin: 0px;
 }
 
-#TabsToolbar[multibar] {
+#TabsToolbar[multibar]:not(:-moz-lwtheme) {
   background-repeat: repeat;
   -moz-appearance: toolbar;
 }
