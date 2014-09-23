@@ -791,7 +791,7 @@ var TabmixConvertSession = {
             let closedTab = {};
             closedTab.state = state;
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
-            closedTab.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image");
+            closedTab.image = state.image;
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
             // we use revers order in the RDF format
             _tabs.unshift(closedTab);
@@ -805,6 +805,7 @@ var TabmixConvertSession = {
       tabData.entries = this.getHistoryState(rdfNodeTab);
       if (!tabData.entries.length)
         return null;
+      tabData.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image", null);
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
       tabData.index = Math.min(index + 1, tabData.entries.length);
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
