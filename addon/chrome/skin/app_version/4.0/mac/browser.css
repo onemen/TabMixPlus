@@ -15,7 +15,15 @@
 }
 */
 
-/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+/* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
+   in display: block */
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] >
+    #tabbrowser-tabs[flowing="multibar"] > .tabbrowser-arrowscrollbox >
+    .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+  margin: -2px 0px;
+}
+
+/* override some rules for toolbarbutton-1 and tabs-closebutton */
 #TabsToolbar > .tabs-closebutton {
   list-style-image: url("chrome://global/skin/icons/close.png");
 }
