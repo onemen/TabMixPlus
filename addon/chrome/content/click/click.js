@@ -331,6 +331,10 @@ var TabmixContext = {
 
     if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
       this.updateTabbarContextMenu(true);
+
+    // move tm-content-miscSep to its place (Firefox 32+)
+    let sep = $id("tm-content-miscSep");
+    sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
   },
 
   updateTabbarContextMenu: function(show) {
