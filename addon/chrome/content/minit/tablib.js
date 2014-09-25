@@ -70,8 +70,9 @@ var tablib = {
       '{','{\n\
       let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
-      'params = arguments[1];',
-      'params = tablib.definedParams(arguments[1]);\n' +
+      'let params = arguments[1];',
+      '$&\n' +
+      '              params = tablib.definedParams(params);\n' +
       '              dontMove              = params.dontMove;\n' +
       '              isPending             = params.isPending;'
     )._replace(
