@@ -150,12 +150,11 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var loadInBackground = replaceLastTab ? false :
                           Tabmix.prefs.getBoolPref("loadNewInBackground");
    var loadBlank = isBlankPageURL(url);
-   var charset = loadBlank ? null : gBrowser.selectedBrowser.characterSet;
-   var newTab = gBrowser.loadOneTab(url, {
-                                    charset: charset,
-                                    inBackground: loadInBackground,
-                                    skipAnimation: replaceLastTab,
-                                    dontMove: true});
+   var newTab = gBrowser.addTab(url, {
+            charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
+            ownerTab: loadInBackground ? null : selectedTab,
+            skipAnimation: replaceLastTab,
+            dontMove: true});
    if (replaceLastTab) {
      newTab.__newLastTab = url;
      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
@@ -178,8 +177,10 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    // make sure to update recently used tabs
    // if user open many tabs quickly select event don't have time to fire
    // before new tab select
-   if (!loadInBackground)
+   if (!loadInBackground) {
+     gBrowser.selectedTab = newTab;
      TMP_LastTab.PushSelectedTab();
+   }
 
    gBrowser.selectedBrowser.focus();
    // focus the address bar on new tab
