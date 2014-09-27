@@ -5,6 +5,12 @@
 
 **/
 
+/* for privateTab extensions */
+#TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility] >
+    #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] .tabs-newtab-button {
+  vertical-align: bottom;
+}
+
 /* override some rules for toolbarbutton-1 and tabs-closebutton*/
 #TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
   -moz-padding-end: 0px !important;
