@@ -22,10 +22,7 @@
     <caption label="&reloadtime.label1;" />
     <menulist id="autoreload_minutes" editable="true"
              oncommand="disable_OK();"
-             oninput="this.value=parseInt(this.value);
-                      if (this.value=='NaN') this.value='';
-                      if (Number(this.value) &lt; 0) this.value = -this.value;
-                      disable_OK();">
+             oninput="onInput(this);">
              <menupopup>
                   <menuitem value="0" label="0" />
                   <menuitem value="1" label="1" />
@@ -40,11 +37,7 @@
 
     <menulist id="autoreload_seconds" editable="true"
              oncommand="disable_OK();"
-             oninput="this.value=parseInt(this.value);
-                      if (this.value=='NaN') this.value='';
-                      if (Number(this.value) &lt; 0) this.value = -this.value;
-                      if (Number(this.value) &gt; 59) this.value = 59;
-                      disable_OK();">
+             oninput="onInput(this);">
              <menupopup>
                   <menuitem value="0" label="0" />
                   <menuitem value="10" label="10" />
