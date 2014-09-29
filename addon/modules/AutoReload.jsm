@@ -4,6 +4,7 @@ var EXPORTED_SYMBOLS = ["AutoReload"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
 let AutoReload = {
@@ -271,8 +272,8 @@ function _reloadTab(aTab) {
       if (postData && !aTab.postDataAcceptedByUser) {
         let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
         let msg = TabmixSvc.getString('confirm_autoreloadPostData');
-        TabmixSvc.obs.addObserver(_observe, "common-dialog-loaded", false);
-        let resultOK = TabmixSvc.prompt.confirm(window, title, msg);
+        Services.obs.addObserver(_observe, "common-dialog-loaded", false);
+        let resultOK = Services.prompt.confirm(window, title, msg);
         if (resultOK)
           aTab.postDataAcceptedByUser = true;
         else {
@@ -320,7 +321,7 @@ function _reloadTab(aTab) {
 
 function  _observe(aSubject, aTopic, aData) {
   if (aTopic == "common-dialog-loaded") {
-    TabmixSvc.obs.removeObserver(_observe, "common-dialog-loaded");
+    Services.obs.removeObserver(_observe, "common-dialog-loaded");
     let icon = aSubject.document.getElementById("info.icon");
     icon.classList.add("alert-icon");
     icon.classList.remove("question-icon");
