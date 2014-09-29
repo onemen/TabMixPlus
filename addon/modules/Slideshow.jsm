@@ -29,12 +29,12 @@ flst.prototype = {
 
   //toggle flst on/off
   toggle: function() {
-    if (TabmixSvc.prefs.getIntPref("extensions.tabmix.focusTab") != 4) {
-      TabmixSvc.prefs.setIntPref("extensions.tabmix.focusTab", 4);
+    if (TabmixSvc.prefBranch.getIntPref("focusTab") != 4) {
+      TabmixSvc.prefBranch.setIntPref("focusTab", 4);
       this.showAlert(this.flstOn, "toggleFLST");
     }
     else {
-      TabmixSvc.prefs.setIntPref("extensions.tabmix.focusTab", 2);
+      TabmixSvc.prefBranch.setIntPref("focusTab", 2);
       this.showAlert(this.flstOff, "toggleFLST");
     }
   },
@@ -44,7 +44,7 @@ flst.prototype = {
       this.cancel();
     }
     else if (this.moreThenOneTab) {
-      let timerInterval = TabmixSvc.prefs.getIntPref("extensions.tabmix.slideDelay") * 1000;
+      let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
       this.slideShowTimer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
                         Ci.nsITimer.TYPE_REPEATING_SLACK);

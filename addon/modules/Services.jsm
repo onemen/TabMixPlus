@@ -222,7 +222,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
  * Lazily define services
  * Getters for common services, use Services.jsm where possible
  */
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
 XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});

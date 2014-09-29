@@ -102,7 +102,7 @@ CompatibilityCheck.prototype = {
       outStr += " - " + name + " " + list[i]._version + "\n";
     }
 
-    var showatStart = TabmixSvc.prefs.getBoolPref("extensions.tabmix.disableIncompatible")
+    var showatStart = TabmixSvc.prefBranch.getBoolPref("disableIncompatible")
     var chkBoxState = showatStart ? TMP_CHECKBOX_CHECKED : TMP_CHECKBOX_UNCHECKED;
 
     var title = TabmixSvc.getString("incompatible.title");
@@ -129,8 +129,8 @@ CompatibilityCheck.prototype = {
   // we use non modal promptService on startup
   promptCallBack: function TMP_EX_promptCallBack(aResult) {
     if (aResult.checked != aResult.showatStart) {
-      TabmixSvc.prefs.setBoolPref("extensions.tabmix.disableIncompatible", aResult.checked);
-      TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+      TabmixSvc.prefBranch.setBoolPref("disableIncompatible", aResult.checked);
+      Services.prefs.savePrefFile(null); // store the pref immediately
     }
 
     if (aResult.button != this.CANCEL) {
