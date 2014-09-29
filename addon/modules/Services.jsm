@@ -218,6 +218,14 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
           true : false;
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
+  let svc = isVersion(230) ? "resource://gre/modules/Preferences.jsm" :
+                             "resource://services-common/preferences.js";
+  let tmp = {}
+  Cu.import(svc, tmp);
+  return new tmp.Preferences("");
+});
+
 // Tabmix preference branch
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {return Services.prefs.getBranch("extensions.tabmix.")});
 // string bundle
