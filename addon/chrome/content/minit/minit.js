@@ -18,6 +18,7 @@ var TMP_tabDNDObserver = {
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
   paddingLeft: 0,
+  onLastToolbar: false,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -93,6 +94,14 @@ var TMP_tabDNDObserver = {
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
+
+    if (Tabmix.isVersion(280)) {
+      let t = document.getElementById("TabsToolbar").parentNode.getBoundingClientRect();
+      let r = gBrowser.tabContainer.getBoundingClientRect();
+      let c = document.getElementById("content-deck").getBoundingClientRect();
+      this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
+    }
+
   },
 
   get _isCustomizing() {
@@ -656,16 +665,23 @@ var TMP_tabDNDObserver = {
 
       ///XXX fix min/max x margin when in one row the drag mark is visible after the arrow when the last tab is partly visible
       ///XXX look like the same is happen with Firefox
-      var newMarginY;
+      var newMarginY, fixMargin;
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
-        if (document.getElementById("addon-bar").collapsed)
-          ind.style.marginBottom = "0px";
-        else
-          ind.style.removeProperty("margin-bottom");
+        let addOnBar = document.getElementById("addon-bar");
+        fixMargin = newMarginY == 0 &&
+              (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed);
       }
-      else
+      else {
         newMarginY = tabRect.bottom - rect.bottom;
+        fixMargin = newMarginY == 0 && this.onLastToolbar;
+      }
+      // make indicator visible
+      if (fixMargin)
+        ind.style.marginBottom = "1px";
+      else
+        ind.style.removeProperty("margin-bottom");
+
       this.setFirefoxDropIndicator(true);
       newMargin += ind.clientWidth / 2;
       if (!ltr)
