@@ -150,6 +150,11 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var loadInBackground = replaceLastTab ? false :
                           Tabmix.prefs.getBoolPref("loadNewInBackground");
    var loadBlank = isBlankPageURL(url);
+   if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
+        typeof privateTab == "object" && privateTab.isTabPrivate(selectedTab) &&
+        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) == 0) {
+      privateTab.readyToOpenTab(false);
+   }
    var newTab = gBrowser.addTab(url, {
             charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
             ownerTab: loadInBackground ? null : selectedTab,
