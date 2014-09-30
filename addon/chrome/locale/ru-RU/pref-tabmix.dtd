@@ -21,7 +21,7 @@
 <!ENTITY divertedWindowOpen.all "Все всплывающие открывать во вкладках">
 <!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
 <!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
-<!ENTITY linkTarget.label "Открывать ссылки с атрибутом &apos;target&apos; в текущей вкладке">
+<!ENTITY linkTarget.label "Открывать ссылки с атрибутом 'target' в текущей вкладке">
 <!ENTITY download.label "Не открывать пустые вкладки при закачке файлов">
 <!ENTITY edit.label "Типы файлов">
 <!ENTITY speLink.label "Принудительно открывать в новых вкладках:">
@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Объединять несколько окон в одно">
 <!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
 <!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Восстанавливать прикреплённые вкладки">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">
 <!ENTITY sm.preserve.protect "Статус защиты">

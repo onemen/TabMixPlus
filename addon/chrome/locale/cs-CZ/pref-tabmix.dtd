@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Sloučit hromadná okna do jednoho">
 <!ENTITY sm.restore.bypassCache "Při obnově stránky obejít vyrovnávací paměť">
 <!ENTITY sm.notrestore.label "Pokud nedojde k obnově po startu">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Obnovit připnuté panely z minula">
 <!ENTITY sm.preserve.options "Uchovat panely:">
 <!ENTITY sm.preserve.history "Historie">
 <!ENTITY sm.preserve.protect "Stav Chránit">

@@ -97,7 +97,7 @@
 <!ENTITY undoClose.label "啟用分頁復原功能">
 <!ENTITY undoCloseCache.label "最大可復原數：">
 <!ENTITY undoClosepos.label "復原分頁的原始位置">
-<!ENTITY menuonlybutton.label "按下 [已關閉分頁] 按鈕時總是顯示下拉選單">
+<!ENTITY menuonlybutton.label "按下「已關閉分頁」按鈕時總是顯示下拉選單">
 <!ENTITY ctrltab.label "[Ctrl]+[Tab] 以最近瀏覽的順序切換分頁">
 <!ENTITY cmdtab.label "[Cmd]+[Tab] 以最近瀏覽的順序切換分頁">
 <!ENTITY ctrltab.tabPreviews "顯示分頁預覽">
@@ -290,11 +290,11 @@
 <!ENTITY sm.restore.options "還原瀏覽狀態時：">
 <!ENTITY sm.restore.overwrite "還原到目前的視窗">
 <!ENTITY sm.restore.overwriteTabs "及分頁">
-<!ENTITY sm.restore.closedWinList "先備份目前的瀏覽狀態至 [已關閉視窗列表]">
+<!ENTITY sm.restore.closedWinList "先備份目前的瀏覽狀態至「已關閉視窗列表」">
 <!ENTITY sm.restore.merge "自動合併所有視窗">
 <!ENTITY sm.restore.bypassCache "還原時不使用快取的資料">
-<!ENTITY sm.notrestore.label "當關閉啟動時還原功能">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.notrestore.label "當關閉「啟動時還原」功能">
+<!ENTITY sm.restorePinned.label "還原上次釘選的分頁">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">
 <!ENTITY sm.preserve.protect "保護狀態">
