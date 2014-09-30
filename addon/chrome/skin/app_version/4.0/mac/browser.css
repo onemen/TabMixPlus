@@ -15,7 +15,15 @@
 }
 */
 
-/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+/* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
+   in display: block */
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] >
+    #tabbrowser-tabs[flowing="multibar"] > .tabbrowser-arrowscrollbox >
+    .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+  margin: -2px 0px;
+}
+
+/* override some rules for toolbarbutton-1 and tabs-closebutton */
 #TabsToolbar > .tabs-closebutton {
   list-style-image: url("chrome://global/skin/icons/close.png");
 }
@@ -39,7 +47,7 @@
   margin: 0px;
 }
 
-#TabsToolbar[multibar] {
+#TabsToolbar[multibar]:not(:-moz-lwtheme) {
   background-repeat: repeat;
   -moz-appearance: toolbar;
 }
@@ -92,6 +100,6 @@
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
 }
 
-.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]):hover > .tab-stack > .tab-background > .tab-background-middle {
+.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]) > .tab-stack > .tab-background > .tab-background-middle {
   clip-path: none !important;
 }

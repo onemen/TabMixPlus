@@ -19,7 +19,7 @@ var gAppearancePane = {
     }
 
     // browser.allTabs.previews
-    if (Tabmix.isVersion(210)) {
+    if (Tabmix.isVersion(210) && !TabmixSvc.isPaleMoon) {
       gPrefWindow.removeChild("pref_allTabsPpreviews");
       gPrefWindow.removeChild("obs_hideAllTabsButton");
       gPrefWindow.removeChild("allTabsPpreviews");

@@ -248,10 +248,10 @@
 <!ENTITY showtabBarContext.label "Afficher dans le menu contextuel de la barre d&apos;onglets :">
 <!ENTITY showContentAreaContext.label "Afficher dans le menu contextuel principal de la page courante :">
 <!ENTITY showToolsMenu.label "Afficher dans le menu des outils">
-<!ENTITY startupHomePage.label "Afficher ma page d&apos;accueil">
+<!ENTITY startupHomePage.label "Afficher ma page d'accueil">
 <!ENTITY startupBlankPage.label "Afficher une page blanche">
 <!ENTITY startupLastSession.label "Afficher mes fenêtres et onglets de la session précédente">
-<!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l&apos;extension Session Manager est installée">
+<!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l'extension Session Manager est installée">
 <!ENTITY sm.extension.description2 "Le gestionnaire de session Tax Mix Plus est désactivé">
 <!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l'extension Session Manager">
 <!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l'extension Session Manager">
@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Regrouper plusieurs fenêtres en une seule">
 <!ENTITY sm.restore.bypassCache "Ne pas utiliser le cache lors d'une restauration">
 <!ENTITY sm.notrestore.label "En cas de non restauration au démarrage">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Restaurer mes onglets précédemment épinglés">
 <!ENTITY sm.preserve.options "Conserver dans les onglets :">
 <!ENTITY sm.preserve.history "Historique">
 <!ENTITY sm.preserve.protect "États de protection">

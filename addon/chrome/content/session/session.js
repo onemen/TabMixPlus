@@ -2844,7 +2844,7 @@ try{
    saveTabData: function SM_saveTabData(aNode, aData) {
       this.setIntLiteral(aNode, "index",      aData.index);
       this.setIntLiteral(aNode, "tabPos",     aData.pos);
-      this.setLiteral   (aNode, "image",      aData.image || ""); // for use in closed tab list
+      this.setLiteral   (aNode, "image",      aData.image || "");
       this.setLiteral   (aNode, "properties", aData.properties);
       this.setLiteral   (aNode, "history",    aData.history);
       this.setLiteral   (aNode, "scroll",     aData.scroll);

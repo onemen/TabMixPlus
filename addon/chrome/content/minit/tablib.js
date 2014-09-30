@@ -70,8 +70,9 @@ var tablib = {
       '{','{\n\
       let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
-      'params = arguments[1];',
-      'params = tablib.definedParams(arguments[1]);\n' +
+      'let params = arguments[1];',
+      '$&\n' +
+      '              params = tablib.definedParams(params);\n' +
       '              dontMove              = params.dontMove;\n' +
       '              isPending             = params.isPending;'
     )._replace(
@@ -263,20 +264,6 @@ var tablib = {
         'Tabmix.setNumberOfTabsClosedLast();'
       ).toCode();
     }
-
-    Tabmix.changeCode(gBrowser, "gBrowser.loadOneTab")._replace(
-      'var aFromExternal;',
-      '$&\n' +
-      '            var tabmix_dontMove;'
-    )._replace(
-      'params = arguments[1];',
-      'params = tablib.definedParams(arguments[1]);\n' +
-      '              tabmix_dontMove       = params.dontMove;'
-    )._replace(
-      'referrerURI: aReferrerURI,',
-      '$&\n' +
-      '                                  dontMove: tabmix_dontMove,'
-    ).toCode();
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -745,15 +732,14 @@ var tablib = {
       ).toCode();
     }
 
-    Tabmix.changeCode(window, "window.URLBarSetURI")._replace(
-      '{',
-      '{\n' +
-      '  if (Tabmix.selectedTab == gBrowser.selectedTab &&\n' +
-      '      Tabmix.userTypedValue && gBrowser.userTypedValue != "") {\n' +
-      '      gBrowser.userTypedValue = "";\n' +
-      '  }\n'
-    ).toCode();
-
+    Tabmix.originalFunctions.URLBarSetURI = URLBarSetURI;
+    URLBarSetURI = function tabmix_URLBarSetURI(aURI) {
+      if (Tabmix.selectedTab == gBrowser.selectedTab &&
+          Tabmix.userTypedValue && gBrowser.userTypedValue != "") {
+        gBrowser.userTypedValue = "";
+      }
+      Tabmix.originalFunctions.URLBarSetURI.apply(window, arguments);
+    }
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
@@ -1615,8 +1601,8 @@ var tablib = {
   },
 
   // prevent 'ReferenceError: reference to undefined property params'
-  // in gBrowser.addTab and gBrowser.loadOneTab
-  props: ["referrerURI","charset","postData","inBackground","ownerTab",
+  // in gBrowser.addTab
+  props: ["referrerURI","charset","postData","ownerTab",
           "allowThirdPartyFixup","fromExternal","relatedToCurrent",
           "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending"],
 

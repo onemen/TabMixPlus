@@ -14,7 +14,7 @@ function accept() {
   gPref.setIntPref("extensions.tabmix.reload_time", customReloadTime);
   var list = gPref.getCharPref("extensions.tabmix.custom_reload_list");
   list = list ? list.split(",") : [];
-  let defaultList = [30,60,120,300,900,1800];
+  let defaultList = [60,120,300,900,1800];
   if (list.concat(defaultList).indexOf(customReloadTime) == -1) {
     list.push(customReloadTime);
     if (list.length > 6 )
@@ -42,4 +42,17 @@ function getCustomReloadTime() {
 
 function disable_OK() {
   document.documentElement.getButton("accept").disabled = getCustomReloadTime() == 0;
+}
+
+function onInput(item) {
+  item.value = parseInt(item.value);
+  if (item.value == 'NaN')
+    item.value = '';
+  let val = Number(item.value);
+  if (val < 0)
+    item.value = -item.value;
+  if (item.id == "autoreload_seconds" && val > 59)
+    item.value = 59;
+
+  disable_OK();
 }

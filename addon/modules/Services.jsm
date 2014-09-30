@@ -248,6 +248,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
   return Services.appinfo.OS == "Linux";
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function () {
+  return Services.appinfo.name == "Pale Moon";
+});
+
 /**
  * bug 1051017 - Firefox 34 - change
  * browser.contentWindow -> browser.contentWindowAsCPOW
