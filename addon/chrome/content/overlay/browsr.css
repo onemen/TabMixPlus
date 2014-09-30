@@ -150,6 +150,10 @@ label.text-link, label[onclick] {
   vertical-align: bottom;
 }
 
+#main-window[title_normal="Pale Moon"] .tabbrowser-arrowscrollbox[flowing="multibar"] > toolbarbutton {
+  vertical-align: bottom;
+}
+
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) >
    #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: -moz-box;
