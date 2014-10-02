@@ -121,11 +121,18 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // to prevent it from restoring last session or pinned tabs.
     let setStateRunning = (willRestore || notRestore) &&
         this.firstWindowInSession && !this.isWindowAfterSessionRestore;
+    // RunState exist since Firefox 34, bug 1020831
     if (setStateRunning) {
-      let STATE_STOPPED = 0;
-      let STATE_RUNNING = 1;
-      if (SM.SessionStore._loadState == STATE_STOPPED) {
-        SM.SessionStore._loadState = STATE_RUNNING;
+      let RunState = SM.SessionStoreGlobal.RunState || {
+        get isStopped() {
+          return SM.SessionStore._loadState == 0; // STATE_STOPPED
+        },
+        setRunning: function() {
+          SM.SessionStore._loadState = 1; // STATE_RUNNING
+        }
+      }
+      if (RunState.isStopped) {
+        RunState.setRunning();
         SM.notifyObservers = true;
       }
     }

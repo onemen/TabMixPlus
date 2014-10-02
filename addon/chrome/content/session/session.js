@@ -246,12 +246,16 @@ var TabmixSessionManager = {
       return this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions.");
    },
 
-  get SessionStore() {
-    delete this.SessionStore;
+  get SessionStoreGlobal() {
+    delete this.SessionStoreGlobal;
     let tmp = {}
     Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-    let global = Cu.getGlobalForObject(tmp.SessionStore);
-    return this.SessionStore = global.SessionStoreInternal;
+    return this.SessionStoreGlobal = Cu.getGlobalForObject(tmp.SessionStore);
+  },
+
+  get SessionStore() {
+    delete this.SessionStore;
+    return this.SessionStore = this.SessionStoreGlobal.SessionStoreInternal;
   },
 
    // call by Tabmix.beforeSessionStoreInit
@@ -669,6 +673,8 @@ var TabmixSessionManager = {
         clearTimeout(this.afterExitPrivateBrowsing);
         this.afterExitPrivateBrowsing = null;
       }
+      delete this.SessionStoreGlobal;
+      delete this.SessionStore;
     }
    },
 
@@ -2908,10 +2914,7 @@ try{
       // add __SS_lastSessionWindowID to force SessionStore.restoreLastSession
       // to open new window
       window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
-      let tmp = {}
-      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-      let global = Cu.getGlobalForObject(tmp.SessionStore);
-      global.LastSession.setState(state);
+      this.SessionStoreGlobal.LastSession.setState(state);
       return state;
    },
 
