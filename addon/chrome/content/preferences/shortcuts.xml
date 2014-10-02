@@ -17,15 +17,15 @@
         <xul:textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;"
                      xbl:inherits="value,disabled=blocked" context=" "
                      placeholder="&shortcuts.placeholder;"
-                     onkeypress="handleKeyEvents(event);"
-                     onfocus="updateFocus(true);"
-                     onblur="updateFocus(false);"
+                     onkeypress="document.getBindingParent(this).handleKeyEvents(event);"
+                     onfocus="document.getBindingParent(this).updateFocus(true);"
+                     onblur="document.getBindingParent(this).updateFocus(false);"
                      onmousedown="event.stopPropagation(); event.preventDefault(); this.select();"
                      onchange="event.stopPropagation();">
           <xul:image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true"
-                     onclick="resetKey();"/>
+                     onclick="document.getBindingParent(this).resetKey();"/>
           <xul:image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
-                     onclick="disableKey();"/>
+                     onclick="document.getBindingParent(this).disableKey();"/>
         </xul:textbox>
       </xul:hbox>
       <xul:vbox anonid="notificationbox" class="shortcut-notificationbox"
