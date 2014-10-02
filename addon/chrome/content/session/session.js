@@ -3230,6 +3230,8 @@ try{
       this.setStripVisibility(newtabsCount);
 
       let tabsData = TabmixConvertSession.getTabsState(rdfNodeTabs, true);
+      let groups = this._tabviewData["tabview-groups"];
+      let activeGroupId = groups ? groups.activeGroupId : null;
       let tabs = [], numVisibleTabs = 0, firstVisibleTab = -1
       let needToReload = this.prefBranch.getBoolPref("restore.reloadall");
       for (let t = 0; t < tabsData.length ; t++) {
@@ -3242,6 +3244,8 @@ try{
         if (data.pinned)
           gBrowser.pinTab(tab);
 
+        this._setTabviewTab(tab, data, activeGroupId);
+
         if (data.hidden)
           gBrowser.hideTab(tab);
         else {
@@ -3250,8 +3254,6 @@ try{
           if (!restoreSelect && firstVisibleTab < 0)
             firstVisibleTab = newIndex + t;
         }
-
-        this._setTabviewTab(tab, data);
 
         if (needToReload) {
           let url = TMP_SessionStore.getActiveEntryData(data).url || "";

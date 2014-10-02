@@ -270,7 +270,7 @@
       this.removeAttribute(this.gThisWin, id);
   }
 
-  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata){
+  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, activeGroupId){
     if (tabdata.pinned)
       return;
 
@@ -323,6 +323,14 @@
       if (!tabdata.extData)
         tabdata.extData = {};
       tabdata.extData["tabview-tab"] = tabviewData;
+      // we did not saved hidden attribute when we use TGM
+      // hide all tabs that are not in the active group
+      if (!Tabmix.extensions.tabGroupManager && activeGroupId != null) {
+        if (!parsedData)
+          parsedData = TabmixSvc.JSON.parse(tabviewData);
+        if (parsedData.groupID != activeGroupId)
+          tabdata.hidden = true;
+      }
     }
     else if (tabdata.extData)
       delete tabdata.extData["tabview-tab"];
