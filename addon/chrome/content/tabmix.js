@@ -1197,7 +1197,8 @@ Tabmix.initialization = {
     if (!this.isValidWindow)
       return null;
     let result, currentPhase = this[aPhase].id;
-    for (let [name, phase] in Iterator(this)) {
+    for (let name of Object.keys(this)) {
+      let phase = this[name];
       if (phase.id > currentPhase)
         break;
       if (!phase.initialized) {

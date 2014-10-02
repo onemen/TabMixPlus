@@ -391,10 +391,10 @@ var TMP_extensionsCompatibility = {
         showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
       }
 
-      for (let [fnName, oldCode] in Iterator(func)) {
+      for (let fnName of Object.keys(func)) {
         if (typeof tileTabs[fnName] == "function") {
           Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
-            oldCode, fnName == "styleTiledTabs" ? getLabel + newCode : newCode
+            func[fnName], fnName == "styleTiledTabs" ? getLabel + newCode : newCode
           ).toCode();
         }
       }

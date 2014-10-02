@@ -156,7 +156,8 @@
             let eKeyCode = event.keyCode;
             if (eKeyCode == 8)
               key.keycode = "VK_BACK";
-            else for (let [keycode, val] in Iterator(Ci.nsIDOMKeyEvent)) {
+            for (let keycode of Object.keys(Ci.nsIDOMKeyEvent)) {
+              let val = Ci.nsIDOMKeyEvent[keycode];
               if (val == eKeyCode) {
                 key.keycode = keycode.replace("DOM_","");
                 break;

@@ -54,7 +54,7 @@ this.DynamicRules = {
     Services.obs.addObserver(this, "quit-application", false);
 
     this.createTemplates();
-    for (let rule in Iterator(this.cssTemplates, true))
+    for (let rule of Object.keys(this.cssTemplates))
       this.userChangedStyle(rule);
   },
 
@@ -151,7 +151,8 @@ this.DynamicRules = {
             space26 + 'rgba(254, 254, 254, 0.72) 4px, rgba(254, 254, 254, 0.72) 4px, #bottomColor)';
       bgImage.startEndhover = bgImage.bghover;
       let _selector = '.tabbrowser-tab#HOVER[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >';
-      for (let [rule, style] in Iterator(styleRules)) {
+      for (let rule of Object.keys(styleRules)) {
+        let style = styleRules[rule];
         delete style.bg;
         let hover = rule == "currentTab" ? "" : ":hover";
         let ruleSelector = _selector.replace("#RULE", rule.replace("Tab", ""));
@@ -211,7 +212,8 @@ this.DynamicRules = {
       return;
     let templates = this.cssTemplates[name];
     let style = {};
-    for (let [rule, cssText] in Iterator(templates)) {
+    for (let rule of Object.keys(templates)) {
+      let cssText = templates[rule];
       if (rule == "text") {
         if (prefObj.text)
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
@@ -235,12 +237,13 @@ this.DynamicRules = {
     if (!enabled)
       return;
 
-    if (!this.styles[name])
+    let style = this.styles[name];
+    if (!style)
       return;
 
     let cssText = NAMESPACE;
-    for (let [name, rule] in Iterator(this.styles[name]))
-      cssText += "\n" +  rule;
+    for (let rule of Object.keys(style))
+      cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(
       "data:text/css," + encodeURIComponent(cssText), null, null);
 

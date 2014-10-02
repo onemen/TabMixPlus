@@ -161,8 +161,10 @@ let TabmixSvc = {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
-          for (let [id, timer] in Iterator(TabmixSvc.console._timers))
+          for (let id of Object.keys(TabmixSvc.console._timers)) {
+            let timer = TabmixSvc.console._timers[id];
             timer.cancel();
+          }
           break;
         case "browser-delayed-startup-finished":
           try {

@@ -78,7 +78,8 @@ let Shortcuts = {
     labels.togglePinTab =
         aWindow.document.getElementById("context_pinTab").getAttribute("label") + "/" +
         aWindow.document.getElementById("context_unpinTab").getAttribute("label");
-    for (let [key, keyData] in Iterator(this.keys)) {
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       keyData.value = keyData.default || "";
       if (key in labels)
         keyData.label = labels[key];
@@ -162,7 +163,8 @@ let Shortcuts = {
   onUnload: function TMP_SC_onUnload(aWindow) {
     aWindow.removeEventListener("unload", this, false);
     let document = aWindow.document;
-    for (let [key, keyData] in Iterator(this.keys)) {
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       if (keyData.command && keyData.value) {
         let keyItem = document.getElementById(keyData.id || "key_tm_" + key);
         if (keyItem)
@@ -190,8 +192,8 @@ let Shortcuts = {
   /* ........ Window Key Handlers .............. */
 
   updateWindowKeys: function TMP_SC_updateWindowKeys(aWindow, aKeys) {
-    for (let [key, keyData] in Iterator(aKeys))
-      this._updateKey(aWindow, key, keyData);
+    for (let key of Object.keys(aKeys))
+      this._updateKey(aWindow, key, aKeys[key]);
 
     let keyset = aWindow.document.getElementById("mainKeyset");
     keyset.parentNode.insertBefore(keyset, keyset.nextSibling);
@@ -209,7 +211,7 @@ let Shortcuts = {
     if (keyItem) {
       if (!keyItem.parentNode)
         return;
-      for (let att in Iterator(keyAtt, true))
+      for (let att of Object.keys(keyAtt))
         keyItem.removeAttribute(att);
       // disabled shortcuts, like new tab and close tab, can mess the whole keyset
       // so we move those to a different node
@@ -231,7 +233,8 @@ let Shortcuts = {
       keyItem.addEventListener("command", this, true);
     }
 
-    for (let [att, val] in Iterator(keyAtt)) {
+    for (let att of Object.keys(keyAtt)) {
+      let val = keyAtt[att];
       if (val)
         keyItem.setAttribute(att, val);
     }
@@ -254,7 +257,8 @@ let Shortcuts = {
     let disableSessionKeys = this.permanentPrivateBrowsing ||
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
-    for (let [key, keyData] in Iterator(this.keys)) {
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       let _default = keyData.default || "";
       let currentValue = onOpen ? _default : keyData.value;
       let newValue = shortcuts[key] || _default;
@@ -285,7 +289,8 @@ let Shortcuts = {
       shortcuts = {};
       updatePreference = true;
     }
-    for (let [key, val] in Iterator(shortcuts)) {
+    for (let key of Object.keys(shortcuts)) {
+      let val = shortcuts[key];
       // if key in preference is not valid key or its value is not valid
       // or its value equal to default, remove it from the preference
       let keyData = this.keys[key] || null;
@@ -418,8 +423,10 @@ let KeyConfig = {
     // keyConfig use index number for its ids
     let oldReloadId = "xxx_key29_Browser:Reload";
     this.keyIdsMap[oldReloadId] = "browserReload";
-    for (let [key, keyData] in Iterator(Shortcuts.keys))
+    for (let key of Object.keys(Shortcuts.keys)) {
+      let keyData = Shortcuts.keys[key];
       this.keyIdsMap[keyData.id || "key_tm_" + key] = key;
+    }
 
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
@@ -488,7 +495,8 @@ let KeyConfig = {
   },
 
   syncToKeyConfig: function(aChangedKeys, onChange) {
-    for (let [key, prefVal] in Iterator(aChangedKeys)) {
+    for (let key of Object.keys(aChangedKeys)) {
+      let prefVal = aChangedKeys[key];
       this.prefsChangedByTabmix = true;
       if (onChange)
         prefVal = prefVal.value;
