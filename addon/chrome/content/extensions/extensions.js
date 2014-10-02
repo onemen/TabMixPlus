@@ -372,7 +372,7 @@ var TMP_extensionsCompatibility = {
     if (typeof aioCloseWindow == 'function')
       aioCloseWindow = BrowserTryToCloseWindow;
 
-    // Tile Tabs 10.0
+    // Tile Tabs 11.12
     // https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/
     if (typeof tileTabs == "object") {
       let newCode = 'title = TMP_Places.getTabTitle(tab, tab.linkedBrowser.currentURI.spec, title);' +
@@ -384,9 +384,9 @@ var TMP_extensionsCompatibility = {
         'label = document.getAnonymousElementByAttribute(labelBox,"anonid","tab-label");' +
       '}\n';
 
-      let func = {styleTiledTabs: 'if (tab.hasAttribute("tiletabs-assigned"))',
+      let func = {styleTiledTabs: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showProperties: 'if (tab.hasAttribute("image"))',
-        onTabAttrModified: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        onTabAttrModified: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showTabList: /menuItem\.setAttribute\("label",\s*title\);/,
         showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
       }
