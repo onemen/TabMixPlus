@@ -153,6 +153,9 @@ let MergeWindows = {
     }
 
     var tabToSelect = null;
+    // make sure that the tabs will open in the same order
+    let prefVal = this.prefs.getBoolPref("openTabNextInverse");
+    this.prefs.setBoolPref("openTabNextInverse", true);
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       let isPopup = !tab.ownerDocument.defaultView.toolbar.visible;
@@ -170,6 +173,7 @@ let MergeWindows = {
       // see in Tabmix.copyTabData list of attributs we copy to the new tab
       tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
     }
+    this.prefs.setBoolPref("openTabNextInverse", prefVal);
 
     if (notFocused) {
       // select new tab after all other tabs swap to the target window
