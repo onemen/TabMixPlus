@@ -634,7 +634,7 @@ var TabmixConvertSession = {
    },
 
    startup: function cs_startup() {
-      if (Tabmix.firstWindowInSession)
+      if (!Tabmix.firstWindowInSession)
         return;
 
       if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
