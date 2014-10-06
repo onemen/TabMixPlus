@@ -23,7 +23,9 @@
       <preference id="pref_linkTarget"         name="extensions.tabmix.linkTarget"     type="bool"/>
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
-                  onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();"/>
+                  notChecked="0"
+                  onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();
+                            gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
     </preferences>
 
     <tabbox>
@@ -75,8 +77,7 @@
                 </menulist>
             </hbox>
             <separator/>
-            <!-- Force link with target attribute to open in current tab -->
-            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"/>
+            <separator/>
             <hbox align="center">
               <checkbox_tmp id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
               <spacer flex="1"/>
@@ -85,19 +86,22 @@
             </hbox>
             <!-- Special control of links -->
             <separator/>
+            <!-- Force link with target attribute to open in current tab -->
+            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget" observes="obs_opentabforAllLinks"/>
+            <checkbox_tmp id="forceLinkToTab" label="&speLink.label;"
+                          preference="pref_opentabforLinks"
+                          onsyncfrompreference="return $('pref_opentabforLinks').value != 0"
+                          onsynctopreference="var val = this.checked ? this._lastValue || 1 : 0;
+                             this._lastValue = $('opentabforLinks').value;
+                             return val;"/>
+            <radiogroup id="opentabforLinks" align="start" preference="pref_opentabforLinks" class="indent">
+              <radio value="1" label="&speLink.allLinks;" observes="obs_opentabforLinks"/>
+              <radio value="2" label="&speLink.external;" observes="obs_opentabforLinks"/>
+            </radiogroup>
             <separator/>
-            <hbox align="center">
-              <label flex="1" value="&speLink.label;" control="speLink"/>
-              <menulist id="opentabforLinks" preference="pref_opentabforLinks">
-                <menupopup>
-                  <menuitem value="0" label="&speLink.none;"/>
-                  <menuitem value="1" label="&speLink.allLinks;"/>
-                  <menuitem value="2" label="&speLink.external;"/>
-                </menupopup>
-              </menulist>
-            </hbox>
             <!-- Enable Single Window Mode -->
             <checkbox_tmp id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
+
           </groupbox>
         </tabpanel>
       </tabpanels>
@@ -105,10 +109,12 @@
 
     <broadcasterset id="paneLinks:Broadcaster">
       <broadcaster id="obs_filetypeEnable"/>
+      <broadcaster id="obs_opentabforLinks"/>
     </broadcasterset>
 
     <broadcasterset>
       <broadcaster id="obs_externalLink"/>
+      <broadcaster id="obs_opentabforAllLinks"/>
     </broadcasterset>
 
   </prefpane>
