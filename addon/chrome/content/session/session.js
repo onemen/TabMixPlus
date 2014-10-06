@@ -302,6 +302,18 @@ var TabmixSessionManager = {
                              Tabmix.prefs.getBoolPref("undoClose");
       this._lastSaveTime = Date.now();
 
+      var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
+      // check if we need to backup
+      if (Tabmix.firstWindowInSession && this.enableManager && !sanitized) {
+         try {
+           this.archiveSessions();
+         }
+         catch (ex) {Tabmix.assert(ex);}
+      }
+
+      if (!this.DATASource)
+         this.initService();
+
       let obs = Services.obs;
       obs.addObserver(this, "browser-window-change-state", true);
       obs.addObserver(this, "sessionstore-windows-restored", true);
@@ -319,24 +331,12 @@ var TabmixSessionManager = {
         obs.addObserver(this, "sessionstore-last-session-cleared", true);
       }
 
-      var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
-      // check if we need to backup
-      if (Tabmix.firstWindowInSession && this.enableManager && !sanitized) {
-         try {
-           this.archiveSessions();
-         }
-         catch (ex) {Tabmix.assert(ex);}
-      }
-
       if (Tabmix.isVersion(200) && this.isPrivateWindow) {
          // disable saveing or changeing any data on the disk in private window
          document.getElementById("tmp_contextmenu_ThisWindow").setAttribute("disabled", true);
          document.getElementById("tmp_contextmenu_AllWindows").setAttribute("disabled", true);
          document.getElementById("tmp_disableSave").setAttribute("disabled", true);
       }
-
-      if (!this.DATASource)
-         this.initService();
 
       // If sessionStore restore the session after restart we do not need to do anything
       // when all tabs are pinned, session resore add the home page on restart
