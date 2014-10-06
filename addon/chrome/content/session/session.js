@@ -3230,8 +3230,9 @@ try{
       this.setStripVisibility(newtabsCount);
 
       let tabsData = TabmixConvertSession.getTabsState(rdfNodeTabs, true);
-      let groups = this._tabviewData["tabview-groups"];
-      let activeGroupId = groups ? groups.activeGroupId : null;
+      let activeGroupId = null, groups = this._tabviewData["tabview-groups"];
+      if (groups && typeof groups.activeGroupId != "undefined")
+        activeGroupId = groups.activeGroupId;
       let tabs = [], numVisibleTabs = 0, firstVisibleTab = -1
       let needToReload = this.prefBranch.getBoolPref("restore.reloadall");
       for (let t = 0; t < tabsData.length ; t++) {
