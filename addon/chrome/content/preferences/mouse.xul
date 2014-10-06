@@ -29,7 +29,7 @@
       <preference id="pref_tabFlip"           name="extensions.tabmix.tabFlip"            type="bool"/>
       <preference id="pref_tabFlipDelay"      name="extensions.tabmix.tabFlipDelay"       type="int"/>
       <preference id="pref_tabbarscrolling"   name="extensions.tabmix.scrollTabs"         type="int"
-                  onchange="gMousePane.updateBroadcaster('tabbarscrolling');"/>
+                  notChecked="2"/>
       <preference id="pref_reversescrolling"  name="extensions.tabmix.reversedScroll"     type="bool"/>
       <preference id="pref_mouseDownSelect"   name="extensions.tabmix.selectTabOnMouseDown"
                   type="bool" inverted="true"/>
@@ -53,7 +53,7 @@
       <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
                   type="bool" inverted="true"/>
       <preference id="pref_disableMoveTab"    name="extensions.tabmix.tabBarMode"         type="int"
-                  onchange="gMousePane.updateBroadcaster('disableMoveTab');"/>
+                  notChecked="2"/>
     </preferences>
 
     <!-- pane content -->
@@ -109,8 +109,8 @@
                <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
                              preference="pref_tabbarscrolling"
                              onsyncfrompreference="return $('pref_tabbarscrolling').value != 2"
-                             onsynctopreference="var val = this.checked ? this.tabbarscrolling : 2;
-                                this.tabbarscrolling = $('tabbarscrolling').value;
+                             onsynctopreference="var val = this.checked ? this._lastValue || 1 : 2;
+                                this._lastValue = $('tabbarscrolling').value;
                                 return val;"/>
             </caption>
             <separator class="thin"/>
@@ -207,9 +207,6 @@
     <broadcasterset id="paneMouse:Broadcaster">
       <broadcaster id="obs_mouseHoverSelect"/>
       <broadcaster id="obs_tabFlip"/>
-    </broadcasterset>
-
-    <broadcasterset>
       <broadcaster id="obs_tabbarscrolling"/>
       <broadcaster id="obs_disableMoveTab"/>
     </broadcasterset>

@@ -26,8 +26,6 @@ var gMousePane = {
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
-    this.updateBroadcaster('tabbarscrolling');
-    this.updateBroadcaster('disableMoveTab');
     this.updatedblClickTabbar($("pref_click_dragwindow"));
 
     gPrefWindow.initPane("paneMouse");
@@ -66,11 +64,6 @@ var gMousePane = {
   ensureElementIsVisible: function (aPopup) {
     var scrollBox = document.getAnonymousElementByAttribute(aPopup, "class", "popup-internal-box");
     scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
-  },
-
-  updateBroadcaster: function (id) {
-    let preference = $("pref_" + id);
-    Tabmix.setItem("obs_" + id, "disabled", preference.value == 2 || null);
   },
 
   resetPreference: function (checkbox) {

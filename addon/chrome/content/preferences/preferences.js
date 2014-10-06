@@ -89,7 +89,7 @@ var gPrefWindow = {
     case "change":
       if (aEvent.target.localName != "preference")
         return;
-      this.updateBroadcasters(aEvent.target);
+      this.updateBroadcaster(aEvent.target);
       if (!this.instantApply)
         this.updateApplyButton(aEvent);
       break;
@@ -171,16 +171,20 @@ var gPrefWindow = {
     Array.forEach(broadcasters.childNodes, function (broadcaster) {
       let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
-        this.setDisabled(broadcaster, !preference.value);
+        this.updateBroadcaster(preference, broadcaster);
     }, this);
   },
 
-  updateBroadcasters: function(aPreference) {
-    if (aPreference.type != "bool")
+  updateBroadcaster: function(aPreference, aBroadcaster) {
+    if (aPreference.type != "bool" && !aPreference.hasAttribute("notChecked"))
       return;
-    let obs = $(aPreference.id.replace("pref_", "obs_"));
-    if (obs)
-      this.setDisabled(obs, !aPreference.value);
+    let broadcaster = aBroadcaster ||
+                      $(aPreference.id.replace("pref_", "obs_"));
+    if (broadcaster) {
+      let disable = aPreference.type == "bool" ? !aPreference.value :
+          aPreference.value == parseInt(aPreference.getAttribute("notChecked"))
+      this.setDisabled(broadcaster, disable);
+    }
   },
 
   setDisabled: function(itemOrId, val) {
