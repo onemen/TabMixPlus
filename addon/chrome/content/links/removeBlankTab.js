@@ -17,7 +17,7 @@ let TabmixRemoveBlankTab = {
   unknownContentType: function() {
     let {win, b} = this.getWindowAndBrowser(dialog.mContext);
     if (win && b) {
-      let tab = win.gBrowser._getTabForBrowser(b);
+      let tab = win.gBrowser.getTabForBrowser(b);
       // wait 250 ms after this window closed before removing mContext tab
       // nsHelperAppDlg.js promptForSaveToFileAsync look for dialog.mContext
       // before it opens nsIFilePicker.
@@ -42,7 +42,7 @@ let TabmixRemoveBlankTab = {
     if (b && b.currentURI.spec == "about:blank") {
       let uri = window.arguments[8].QueryInterface(Ci.nsIURI);
       if (b.userTypedValue == uri.spec) {
-        let tab = win.gBrowser._getTabForBrowser(b);
+        let tab = win.gBrowser.getTabForBrowser(b);
         if (tab.selected)
           win.gBrowser.previousTab(tab);
         win.gBrowser.hideTab(tab);

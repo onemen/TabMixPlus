@@ -265,9 +265,14 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        } catch (ex) {Tabmix.assert(ex); return true;}
     }
 
-    // gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
-    if (typeof tabBrowser._getTabForBrowser != "function") {
-       tabBrowser._getTabForBrowser = function (aBrowser) {
+    /**
+     * add gBrowser.getTabForBrowser if it is not exist
+     * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
+     * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+     */
+    if (typeof tabBrowser.getTabForBrowser != "function") {
+       // this is _getTabForBrowser version from Firefox 23
+       tabBrowser.getTabForBrowser = function (aBrowser) {
           for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].linkedBrowser == aBrowser)
               return this.tabs[i];
@@ -280,7 +285,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       let notificationbox = this.mPanelContainer.lastChild;
       let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
       let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
-      return this._getTabForBrowser(browser);
+      return this.getTabForBrowser(browser);
     }
 
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
