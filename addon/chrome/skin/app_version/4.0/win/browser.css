@@ -21,11 +21,6 @@
   background-image: none !important;
 }
 
-/*  For .tabs-closebutton .showhover */
-.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
-  margin: -3px 0px -3px 0px;
-}
-
 /*  new tab button after last tab on firefox 4.0  aero */
 #TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;

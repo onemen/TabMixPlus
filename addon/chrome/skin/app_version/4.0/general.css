@@ -24,12 +24,6 @@
   width: 16px;
 }
 
-.tabmix-showhover {
- -moz-appearance: none;
-  height: 16px;
-  border: none;
-}
-
 /* :::: for miniT drag indicator :::: */
 .tab-drag-indicator-left, .tab-drag-indicator-right {
   visibility: hidden;

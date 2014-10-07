@@ -995,6 +995,15 @@ var gTMPprefObserver = {
                            selector + '.tab-lock-icon {' +
                            '-moz-margin-start: %S; -moz-margin-end: %S;}'.replace("%S", marginStart).replace("%S", marginEnd);
     this.insertRule(iconRule);
+
+    /** at the moment we move the button over the title - see setCloseButtonMargin
+    // move left button that show on hover closer to the tab icon
+    iconRule = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-icon,' +
+               '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-icon {' +
+               '-moz-margin-end: %Spx;}'.replace("%S", - parseInt(marginEnd)/2);
+    this.insertRule(iconRule);
+    */
+
     icon.setAttribute("pinned", true);
     let _marginStart = style.getPropertyValue(sMarginStart);
     let _marginEnd = style.getPropertyValue(sMarginEnd);
@@ -1052,14 +1061,24 @@ var gTMPprefObserver = {
                     '-moz-margin-end: %PX !important;}'.replace("%PX", marginStart);
       this.insertRule(newRule);
     }
-    // set right margin to text stack when close button is not right to it
+
+    // move left button that show on hover over tab title
+    icon.style.setProperty("display", "-moz-box", "important");
+    let iconMargin = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"],' +
+                     '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {' +
+                     '-moz-margin-start: 0px !important;' +
+                     '-moz-margin-end: %Spx !important;}'.replace("%S", - icon.getBoundingClientRect().width);
+    icon.style.removeProperty("display");
+    this.insertRule(iconMargin);
+
+    // set right margin to tab-label when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
-    let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-text-stack,' +
-                            '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-text-stack,' +
-                            '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]:not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) .tab-text-stack,' +
-                            '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-text-stack {' +
+    let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+                            '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+                            '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]:not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) .tab-label[tabmix="true"],' +
+                            '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
                             '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])').replace(/%faviconized%/g, '').replace(/%faviconized1%/g, ':not([faviconized="true"])');

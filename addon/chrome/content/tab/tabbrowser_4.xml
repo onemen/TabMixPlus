@@ -28,50 +28,13 @@
     </handlers>
   </binding>
 
-  <binding id="tabmix-tab-text-stack-28" display="xul:stack">
+  <binding id="tabmix-tab-label">
     <content>
       <xul:label flex="1"
-                 anonid="tab-label"
-                 xbl:inherits="value=visibleLabel,crop,accesskey,fadein,pinned,selected"
+                 xbl:inherits="value=labelvalue,crop,accesskey,fadein,pinned,selected"
                  class="tab-text tab-label"
                  role="presentation"/>
-      <xul:hbox class="showhover-box">
-        <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon tabmix-showhover"/>
-      </xul:hbox>
     </content>
-  </binding>
-
-  <binding id="tabmix-tab-text-stack" display="xul:stack">
-    <content>
-      <xul:label flex="1"
-                 anonid="tab-label"
-                 xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
-                 class="tab-text tab-label"
-                 role="presentation"/>
-      <xul:hbox class="showhover-box">
-        <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon"/>
-      </xul:hbox>
-    </content>
-  </binding>
-
-  <binding id="tabmix-showhover-close-tab-button"
-           extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-image">
-    <handlers>
-      <handler event="click" button="0"><![CDATA[
-        var bindingParent = document.getBindingParent(this).parentNode.parentNode.parentNode;
-        var tabContainer = bindingParent.parentNode;
-        tabContainer.tabbrowser.removeTab(bindingParent, {animate: true, byMouse: true});
-        tabContainer._blockDblClick = true;
-      ]]></handler>
-      <handler event="dblclick" button="0" phase="capturing">
-        event.stopPropagation();
-      </handler>
-      <handler event="dragstart">
-        event.stopPropagation();
-      </handler>
-    </handlers>
   </binding>
 
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
@@ -111,8 +74,11 @@
               <xul:image class="tab-lock-icon"/>
               <xul:image class="tab-reload-icon"/>
             </xul:stack>
-            <xul:stack class="tab-text-stack" flex="1"
-                       xbl:inherits="visibleLabel,label,crop,accesskey,fadein,pinned,selected"/>
+          <xul:label flex="1"
+                     anonid="tab-label" tabmix="true"
+                     xbl:inherits="value=visibleLabel,labelvalue=label,crop,accesskey,fadein,pinned,selected"
+                     class="tab-text tab-label"
+                     role="presentation"/>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
                              button_side="right"
@@ -245,6 +211,7 @@
 
         if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
             !aTab.hasAttribute("dragged")) {
+          aTab.style.setProperty("width", aTab.getBoundingClientRect().width + "px", "important");
           aTab.setAttribute("showbutton", "on");
           aTab.parentNode.__showbuttonTab = aTab;
         }
@@ -286,6 +253,7 @@
 
         if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
           aTab.removeAttribute("showbutton");
+          aTab.style.removeProperty("width");
           // we use this in Linux to prevent underflow
           // that trigger by hidding the close button
           aTab.setAttribute("showbutton_removed", true);

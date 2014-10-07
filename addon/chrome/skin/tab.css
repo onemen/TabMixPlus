@@ -5,18 +5,6 @@
 
 **/
 
-/* :::: For .tabs-closebutton .showhover :::: */
-.showhover-box > .tabs-closebutton,
-.showhover-box > .tabs-closebutton > .toolbarbutton-icon {
-  padding: 0px !important;
-}
-
-/* Find a way to eliminate the jump of the tab when tab button display on the tab */
-.tabbrowser-tabs:not([tabmix_skin]):not([Mac]):not([classic=v3]):not([classic40]):not([classic=v3Linux]) .tabbrowser-tab .tabs-closebutton {
-  margin-top: -1px;
-  margin-bottom: -3px;
-}
-
 .tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
   display: none !important;
 }
@@ -205,7 +193,6 @@ toolbar[mode="full"] .tabmix-button[type="menu"] {
  *                                non default theme
 */
 /* Chromifox Extreme */
-.tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tabs-closebutton,
 .tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
   display: none !important;
 }
@@ -213,10 +200,6 @@ toolbar[mode="full"] .tabmix-button[type="menu"] {
 /* Vfox3 */
 .tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
   height: 24px;
-}
-
-.tabbrowser-tabs[tabmix_skin="Vfox3"] > .tabbrowser-tab .tabs-closebutton {
-  margin: -2px 2px -1px 0px;
 }
 
 /* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */

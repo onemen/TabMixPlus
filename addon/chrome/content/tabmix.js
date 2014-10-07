@@ -341,10 +341,11 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
-    let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-text-stack {' +
-      '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-text-stack#VERSION") !important;}'
-      .replace("#VERSION", Tabmix.isVersion(280) ? "-28" : "");
-    gTMPprefObserver.insertRule(newRule);
+    if (!Tabmix.isVersion(280)) {
+      let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-label[tabmix="true"] {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-label") !important;}'
+      gTMPprefObserver.insertRule(newRule);
+    }
 
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     TMP_SessionStore.setAfterSessionRestored();
@@ -920,6 +921,10 @@ var TMP_eventListener = {
     TMP_LastTab.OnSelect();
     TabmixSessionManager.tabSelected(true);
 
+    if (tab.hasAttribute("showbutton") &&
+        tabBar.getAttribute("closebuttons") == "activetab")
+      tab.style.removeProperty("width");
+
     // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
     // TabSelect event. we call updateBeforeAndAfter after a timeout so
     // _setPositionalAttributes not override our attribute
@@ -1095,8 +1100,6 @@ var TMP_eventListener = {
       if (node)
         node.setAttribute(aAtt, aValue);
     }
-
-    updateAttrib("class", "tab-text-container", "class", "tab-text-stack");
 
     let button = document.getAnonymousElementByAttribute(aTab, "button_side", "left");
     if (button)
