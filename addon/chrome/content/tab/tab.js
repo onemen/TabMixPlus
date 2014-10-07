@@ -780,7 +780,8 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.tabs.closeButtons.onLeft":
-        gBrowser.tabContainer.setAttribute("closebuttons-side", Services.prefs.getBoolPref(prefName) ? "left" : "right");
+        let onLeft = Tabmix.defaultCloseButtons && Services.prefs.getBoolPref(prefName);
+        gBrowser.tabContainer.setAttribute("closebuttons-side", onLeft ? "left" : "right");
         break;
       case "extensions.tabmix.tabs.closeButtons.enable":
         prefValue = Services.prefs.getBoolPref(prefName)

@@ -373,7 +373,13 @@
           });
           XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function () !Tabmix.rtl);
 
-          this.setAttribute("closebuttons-side", Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft") ? "left" : "right");
+          // don't set button to left side if it is not inside tab-content
+          let button = document.getAnonymousElementByAttribute(this.firstChild, "anonid", "tmp-close-button") ||
+                       document.getAnonymousElementByAttribute(this.firstChild, "anonid", "close-button");
+          Tabmix.defaultCloseButtons = button && button.parentNode.className == "tab-content";
+          let onLeft = Tabmix.defaultCloseButtons && Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
+          this.setAttribute("closebuttons-side", onLeft ? "left" : "right");
+
           this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
           this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
           this.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");

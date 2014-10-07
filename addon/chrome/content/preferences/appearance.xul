@@ -229,6 +229,8 @@
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
               </hbox>
             </hbox>
+            <label id="onLeftDisabled" value="Can't place button on left side with the current theme" hidden="true"
+                   style="text-decoration: underline; color: #CC0000;"/>
           </groupbox>
           <groupbox flex="1">
             <!-- Tab width -->

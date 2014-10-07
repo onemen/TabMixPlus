@@ -18,6 +18,9 @@ var gAppearancePane = {
       window.treeStyleTab = true;
     }
 
+    Tabmix.setItem("tabXLeft", "disabled", !browserWindow.Tabmix.defaultCloseButtons || null);
+    Tabmix.setItem("onLeftDisabled", "hidden", browserWindow.Tabmix.defaultCloseButtons || null);
+
     // browser.allTabs.previews
     if (Tabmix.isVersion(210) && !TabmixSvc.isPaleMoon) {
       gPrefWindow.removeChild("pref_allTabsPpreviews");
