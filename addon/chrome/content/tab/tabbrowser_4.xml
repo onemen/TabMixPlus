@@ -58,10 +58,6 @@
         </xul:vbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                   class="tab-content" align="center">
-          <xul:toolbarbutton anonid="tmp-close-button"
-                             xbl:inherits="fadein,pinned,selected"
-                             button_side="left"
-                             class="tab-close-button close-icon always-left"/>
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
@@ -81,8 +77,7 @@
                      role="presentation"/>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
-                             button_side="right"
-                             class="tab-close-button close-icon always-right"/>
+                             class="tab-close-button close-icon"/>
         </xul:hbox>
       </xul:stack>
       <xul:hbox class="tab-drag-indicator-right"/>

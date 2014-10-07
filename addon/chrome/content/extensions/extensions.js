@@ -574,7 +574,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         ).toCode();
       }
       TreeStyleTabBrowser.prototype.getTabClosebox = function(aTab) {
-        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon always-right');
+        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
       }
     }
 

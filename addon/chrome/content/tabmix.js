@@ -1080,10 +1080,9 @@ var TMP_eventListener = {
     }
   },
 
-  // some theme not useing updated Tabmix tab binding
+  // some theme not useing up to date Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
-//XXX need to improve this
     let reloadIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
     if (!reloadIcon) {
       let lockIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-lock-icon");
@@ -1100,48 +1099,6 @@ var TMP_eventListener = {
       if (node)
         node.setAttribute(aAtt, aValue);
     }
-
-    let button = document.getAnonymousElementByAttribute(aTab, "button_side", "left");
-    if (button)
-      return;
-
-    let leftButton;
-    let rightButton;
-    let tabMiddle, tabContent;
-    let classString = /tab-middle|box-inherit|tab-image-middle|tab-body/;
-
-    function getCloseButtons(aNodes) {
-      Array.slice(aNodes).forEach(function(aNode) {
-        if (leftButton && rightButton)
-          return;
-        if (/tab-stack/.test(aNode.getAttribute("class")))
-          tabContent = aNode.firstChild;
-        else if (classString.test(aNode.getAttribute("class")))
-          tabMiddle = aNode;
-        else if (aNode.localName == "toolbarbutton" && aNode.getAttribute("anonid") == "tmp-close-button") {
-          if (leftButton) {
-            rightButton = aNode;
-            aNode.setAttribute("button_side", "right");
-          }
-          else {
-            leftButton = aNode;
-            aNode.setAttribute("button_side", "left");
-          }
-        }
-      });
-    }
-
-    // 1st search in tab
-    getCloseButtons(document.getAnonymousNodes(aTab));
-    // 2nd search in tab-content - Firefox 4.0
-    if (!rightButton && !leftButton && tabContent)
-      getCloseButtons(tabContent.childNodes);
-    // 3nd search in tab-middle
-    if (!rightButton && !leftButton && tabMiddle)
-      getCloseButtons(tabMiddle.childNodes);
-    // only one button !
-    if (!rightButton && leftButton)
-      leftButton.setAttribute("button_side", "right");
 
     aTab.setAttribute("context", gBrowser.tabContextMenu.id);
 

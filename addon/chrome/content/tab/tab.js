@@ -1045,27 +1045,15 @@ var gTMPprefObserver = {
   },
 
   setCloseButtonMargin: function TMP_PO_setCloseButtonMargin() {
-    var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
-    var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "button_side", "right") ||
-               document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-close-button close-icon always-right");
+    var sMarginEnd = Tabmix.rtl ? "margin-left" : "margin-right";
+    var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "anonid", "tmp-close-button");
     if (!icon)
       return; // nothing to do....
 
-    let style = window.getComputedStyle(icon, null);
-    let marginStart = style.getPropertyValue(sMarginStart);
-    let marginEnd = style.getPropertyValue(sMarginEnd);
-    // swap button margin-left margin-right for button on the left side
-    if (marginStart != marginEnd) {
-      let newRule = '.tab-close-button[button_side="left"] {' +
-                    '-moz-margin-start: %PX !important;'.replace("%PX", marginEnd) +
-                    '-moz-margin-end: %PX !important;}'.replace("%PX", marginStart);
-      this.insertRule(newRule);
-    }
-
     // move left button that show on hover over tab title
     icon.style.setProperty("display", "-moz-box", "important");
-    let iconMargin = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"],' +
-                     '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {' +
+    let iconMargin = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button,' +
+                     '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
                      '-moz-margin-end: %Spx !important;}'.replace("%S", - icon.getBoundingClientRect().width);
     icon.style.removeProperty("display");
@@ -1073,9 +1061,11 @@ var gTMPprefObserver = {
 
     // set right margin to tab-label when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
+    let style = window.getComputedStyle(icon, null);
+    let marginEnd = style.getPropertyValue(sMarginEnd);
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
-    let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+             let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
                             '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
                             '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]:not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) .tab-label[tabmix="true"],' +
                             '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
