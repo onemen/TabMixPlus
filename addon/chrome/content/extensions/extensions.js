@@ -20,7 +20,16 @@ var TMP_extensionsCompatibility = {
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
         verticalTabBar: false, ieTab2: false,
-        gIeTab: false /* for ieTab and ieTab2 */};
+        gIeTab: false, /* for ieTab and ieTab2 */
+        ctr: false /* classic theme restorer */};
+
+    if (typeof classicthemerestorerjs == "object") {
+      Tabmix.extensions.ctr = true;
+      let onLeft = Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
+      Services.prefs.setBoolPref("extensions.classicthemerestorer.closeonleft", onLeft);
+      // let Classic theme restorer control close tab button placement
+      gBrowser.tabContainer.setAttribute("closebuttons-side", "right");
+    }
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", function() {

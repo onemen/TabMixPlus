@@ -571,6 +571,7 @@ var gTMPprefObserver = {
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
     addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
+    addObserver("extensions.classicthemerestorer.closeonleft", Tabmix.extensions.ctr);
 
     try {
       // add Observer
@@ -780,6 +781,17 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.tabs.closeButtons.onLeft":
+      case "extensions.classicthemerestorer.closeonleft":
+        if (Tabmix.extensions.ctr) {
+          let otherPref = prefName == "extensions.tabmix.tabs.closeButtons.onLeft" ?
+                                      "extensions.classicthemerestorer.closeonleft" :
+                                      "extensions.tabmix.tabs.closeButtons.onLeft"
+          value = Services.prefs.getBoolPref(prefName);
+          if (Services.prefs.getBoolPref(otherPref) != value)
+            Services.prefs.setBoolPref(otherPref, Services.prefs.getBoolPref(prefName));
+          Tabmix.setItem(gBrowser.tabContainer, "closebuttons-side", "right");
+          break;
+        }
         let onLeft = Tabmix.defaultCloseButtons && Services.prefs.getBoolPref(prefName);
         gBrowser.tabContainer.setAttribute("closebuttons-side", onLeft ? "left" : "right");
         break;
