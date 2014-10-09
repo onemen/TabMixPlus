@@ -253,8 +253,7 @@ let ContentClickInternal = {
         */
         let node = linkNode || onClickNode;
         ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-        let location = node.ownerDocument.location;
-        let curpage = location ? location.href || location.baseURI : self._data.currentURL;
+        let curpage = node.ownerDocument.URL || self._data.currentURL;
         let href = self._data.hrefFromOnClick || self._window.XULBrowserWindow.overLink || node;
         return self.isLinkToExternalDomain(curpage, href);
       });
@@ -302,6 +301,7 @@ let ContentClickInternal = {
       return ["default@3"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
+    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
     if (linkNode && this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
       return ["default@4"];
 
