@@ -326,7 +326,7 @@ var TabmixSessionManager = {
         obs.addObserver(this, "private-browsing-change-granted", true);
       }
       if (Tabmix.isVersion(270)) {
-        if (this.enableBackup && this.canRestoreLastSession)
+        if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
           window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
         obs.addObserver(this, "sessionstore-last-session-cleared", true);
       }
@@ -2906,14 +2906,15 @@ try{
         TabmixSvc.ss.restoreLastSession();
    },
 
-   setLastSession: function(){
+   setLastSession: function(restoring) {
       let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
       TabmixSvc.sm.lastSessionPath = this.gSessionPath[1];
       if (!Tabmix.isVersion(270))
          return state;
       // add __SS_lastSessionWindowID to force SessionStore.restoreLastSession
       // to open new window
-      window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
+      if (restoring)
+        window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
       this.SessionStoreGlobal.LastSession.setState(state);
       return state;
    },
@@ -2921,7 +2922,7 @@ try{
    loadSession: function SM_loadSession(path, caller, overwriteWindows) {
       let lastSession = this.gSessionPath[1];
       if (caller == "firstwindowopen" && path != lastSession)
-         this.setLastSession();
+         this.setLastSession(true);
       if (path == lastSession) {
          TabmixSvc.sm.lastSessionPath = null;
          TabmixSvc.ss.canRestoreLastSession = false;
