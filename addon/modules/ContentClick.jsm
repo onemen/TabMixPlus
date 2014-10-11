@@ -115,31 +115,31 @@ let ContentClickInternal = {
     ).toCode();
   },
 
-  receiveMessage: function (message) {
+  receiveMessage: function(message) {
     if (message.name != "TabmixContent:Click")
       return null;
 
-    let {json, href} = message.data;
-    let {node, onClickNode, focusedWindow} = message.objects;
+    let {json, href, node} = message.data;
+    // call getWrappedNode to add attribute functions to the wrapped node
+    let wrappedNode = this.getWrappedNode(node);
     let browser = message.target;
 
     // return value to the message caller
-    if (onClickNode) {
-      let result = this.getHrefFromNodeOnClick(json, browser, focusedWindow, onClickNode);
+    if (!href && wrappedNode) {
+      let result = this.getHrefFromNodeOnClick(json, browser, wrappedNode);
       return {where: result ? "handled" : "default"};
     }
-    return this.getParamsForLink(json, node, href, browser, focusedWindow, true);
+    return this._getParamsForLink(json, wrappedNode, href, browser, true);
   },
 
   // for non-link element with onclick that change location.href
-  getHrefFromNodeOnClick: function(event, browser, focusedWindow, onClickNode) {
-    let node = onClickNode || this._getNodeWithOnClick(event);
-    if (!node || !this.getHrefFromOnClick(event, null, node,
-                      node.getAttribute("onclick")))
+  getHrefFromNodeOnClick: function(event, browser, wrappedOnClickNode) {
+    if (!wrappedOnClickNode || !this.getHrefFromOnClick(event, null, wrappedOnClickNode,
+                      wrappedOnClickNode.getAttribute("onclick")))
       return false;
 
     let href = event.__hrefFromOnClick;
-    let result = this.getParamsForLink(event, null, href, browser, focusedWindow, true, node);
+    let result = this._getParamsForLink(event, null, href, browser, true, wrappedOnClickNode);
     if (result.where == "default") {
       event.__hrefFromOnClick = null;
       return false;
@@ -155,14 +155,17 @@ let ContentClickInternal = {
     return true;
   },
 
-  getParamsForLink: function(event, node, href, browser, focusedWindow, clean, onClickNode) {
+  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+    let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button == 0);
+    return this._getParamsForLink(event, wrappedNode, href, browser);
+  },
+
+  _getParamsForLink: function(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
     this._browser = browser;
     this._window = browser.ownerDocument.defaultView;
-    this._focusedWindow = focusedWindow;
 
-    let targetAttr = this.getTargetAttr(node);
     let [where, suppressTabsOnFileDownload] =
-        this.whereToOpen(event, node, href, targetAttr, onClickNode);
+        this.whereToOpen(event, href, wrappedNode, wrappedOnClickNode);
 
     // for debug
     where = where.split("@")[0];
@@ -173,6 +176,7 @@ let ContentClickInternal = {
     if (where == "current")
       browser.tabmix_allowLoad = true;
 
+    let targetAttr = wrappedNode && wrappedNode.target;
     if (href && browser.getAttribute("remote") == "true" &&
         where == "default" && targetAttr) {
       let win = this._window;
@@ -204,7 +208,6 @@ let ContentClickInternal = {
     this._data = null;
     this._browser = null;
     this._window = null;
-    this._focusedWindow = null;
   },
 
   getPref: function() {
@@ -218,51 +221,70 @@ let ContentClickInternal = {
     });
   },
 
-  /*
+  /**
+   * @param node             json received from message.data, contain wrapped node,
+   *                         or The DOM node containing the URL to be opened.
+   * @param focusedWindow    focused window, see LinkNodeUtils.
+   * @param getTargetIsFrame boolean, if true add targetIsFrame to the wrapped node.
+   *
+   * @return                 wrapped node including attribute functions
+   */
+  getWrappedNode: function(node, focusedWindow, getTargetIsFrame) {
+    function wrapNode(aNode, aGetTargetIsFrame) {
+      let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
+      nObj.hasAttribute = function(att) att in this._attributes;
+      nObj.getAttribute = function(att) this._attributes[att] || null;
+      nObj.parentNode.hasAttribute = function(att) att in this._attributes;
+      nObj.parentNode.getAttribute = function(att) this._attributes[att] || null;
+      return nObj;
+    }
+
+    return node ? wrapNode(node, getTargetIsFrame) : null;
+  },
+
+  /**
    * @param event            A valid event union.
    * @param href             href string.
-   * @param linkNode         The DOM node containing the URL to be opened.
-   * @param targetAttr       The target attribute of the link node.
-   * @param onClickNode      DOM node containing onclick, may exist only
-   *                         when linkNode is null.
+   * @param wrappedNode      wrapped DOM node containing the URL to be opened.
+   * @param wrappedOnClickNode   wrapped DOM node containing onclick, may exist only
+   *                         when link node is null.
    */
-  getData: function(event, href, linkNode, targetAttr, onClickNode) {
+  getData: function(event, href, wrappedNode, wrappedOnClickNode) {
     let self = this;
     function LinkData() {
       this.event = event;
       this.href = href;
-      this.linkNode = linkNode;
-      this.onClickNode = onClickNode || null;
-      this.targetAttr = targetAttr;
+      this.wrappedNode = wrappedNode || null;
+      this.wrappedOnClickNode = wrappedOnClickNode || null;
+      this.targetAttr = wrappedNode && wrappedNode.target;
       XPCOMUtils.defineLazyGetter(this, "currentURL", function() {
         return self._browser.currentURI ? self._browser.currentURI.spec : "";
       });
       XPCOMUtils.defineLazyGetter(this, "onclick", function() {
-        if (linkNode && linkNode.hasAttribute("onclick"))
-          return linkNode.getAttribute("onclick");
+        if (this.wrappedNode && this.wrappedNode.hasAttribute("onclick"))
+          return this.wrappedNode.getAttribute("onclick");
         return null;
       });
       XPCOMUtils.defineLazyGetter(this, "hrefFromOnClick", function() {
-        return self.getHrefFromOnClick(event, href, linkNode, self._data.onclick);
+        return self.getHrefFromOnClick(event, href, this.wrappedNode, this.onclick);
       });
       XPCOMUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
        /*
         * Check if link refers to external domain.
         * Get current page url
-        * if user click a link while the page is reloading linkNode.ownerDocument.location can be null
+        * if user click a link while the page is reloading node.ownerDocument.location can be null
         */
-        let node = linkNode || onClickNode;
-        ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-        let curpage = node.ownerDocument.URL || self._data.currentURL;
-        let href = self._data.hrefFromOnClick || self._window.XULBrowserWindow.overLink || node;
-        return self.isLinkToExternalDomain(curpage, href);
+        let node = this.wrappedNode || this.wrappedOnClickNode;
+        let curpage = node.ownerDocument.URL || this.currentURL;
+        let nodeHref = this.hrefFromOnClick || this.href || self._window.XULBrowserWindow.overLink;
+        return self.isLinkToExternalDomain(curpage, nodeHref);
       });
     }
 
     this._data = new LinkData();
   },
 
-  whereToOpen: function TMP_whereToOpen(event, linkNode, href, targetAttr, onClickNode) {
+  whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
     let TMP_tabshifted = function TMP_tabshifted(event) {
       var where = eventWhere || this._window.whereToOpenLink(event);
@@ -280,11 +302,11 @@ let ContentClickInternal = {
       }
     }
 
-    if (!linkNode && !onClickNode)
+    if (!wrappedNode && !wrappedOnClickNode)
       return ["default@2"];
 
     this.getPref();
-    this.getData(event, href, linkNode, targetAttr, onClickNode);
+    this.getData(event, href, wrappedNode, wrappedOnClickNode);
 
     // whereToOpenLink return save or window
     eventWhere = this._window.whereToOpenLink(event);
@@ -301,11 +323,11 @@ let ContentClickInternal = {
       return ["default@3"];
 
     // Check if new tab already opened from onclick event // 2006-09-26
-    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-    if (linkNode && this._data.onclick && linkNode.ownerDocument.location.href != this._focusedWindow.top.location.href)
+    let {onclick, targetAttr} = this._data;
+    if (wrappedNode && onclick && wrappedNode.ownerDocument.location.href != wrappedNode._focusedWindowHref)
       return ["default@4"];
 
-    if (linkNode && linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
+    if (wrappedNode && wrappedNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
         href.indexOf("mailto:") > -1) {
       return ["default@5"];
     }
@@ -330,9 +352,8 @@ let ContentClickInternal = {
       return ["current@9"];
 
     // don't mess with links that have onclick inside iFrame
-    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
-    let onClickInFrame = onClickNode && onClickNode.ownerDocument.defaultView.frameElement ||
-        this._data.onclick && linkNode.ownerDocument.defaultView.frameElement;
+    let onClickInFrame = wrappedOnClickNode && wrappedOnClickNode.ownerDocument.defaultView.frameElement ||
+        onclick && wrappedNode.ownerDocument.defaultView.frameElement;
 
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
@@ -359,7 +380,7 @@ let ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (this.targetIsFrame())
+    if (wrappedNode && wrappedNode.targetIsFrame)
       return ["default@13"];
 
     /*
@@ -413,7 +434,9 @@ let ContentClickInternal = {
     let win = aBrowser.ownerDocument.defaultView;
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
-      if (this.getHrefFromNodeOnClick(aEvent, aBrowser, aFocusedWindow))
+      let node = this._getNodeWithOnClick(aEvent);
+      let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button == 0);
+      if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
       return "2.1";
     }
@@ -426,7 +449,6 @@ let ContentClickInternal = {
 
     this._browser = aBrowser;
     this._window = win;
-    this._focusedWindow = aFocusedWindow;
 
     this.getPref();
     if (!this.currentTabLocked && this.targetPref == 0)
@@ -435,8 +457,8 @@ let ContentClickInternal = {
     if (!linkNode)
       return "5";
 
-    let targetAttr = this.getTargetAttr(linkNode);
-    this.getData(aEvent, href, linkNode, targetAttr);
+    let wrappedNode = this.getWrappedNode(linkNode, aFocusedWindow, true);
+    this.getData(aEvent, href, wrappedNode);
 
     var currentHref = this._data.currentURL;
     // don't do anything on mail.google or google.com/reader
@@ -455,11 +477,10 @@ let ContentClickInternal = {
     }
 
     // don't interrupt with fastdial links
-    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
     if ("ownerDocument" in linkNode && this._window.Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
       return "9";
 
-    if (linkNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
+    if (linkNode.getAttribute("rel") == "sidebar" || this._data.targetAttr == "_search" ||
           href.indexOf("mailto:") > -1)
       return "10";
 
@@ -477,7 +498,6 @@ let ContentClickInternal = {
       return "12";
 
     // don't mess with links that have onclick inside iFrame
-    ///XXX [object CPOW [object HTMLDocument]] linkNode.ownerDocument
     if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
       return "13";
 
@@ -485,7 +505,7 @@ let ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (this.targetIsFrame())
+    if (wrappedNode && wrappedNode.targetIsFrame)
       return "14";
 
     /*
@@ -706,20 +726,6 @@ let ContentClickInternal = {
     return false;
   },
 
- /**
-  * @brief check if traget attribute exist and point to frame in the document
-  *        frame pool
-  */
-  targetIsFrame: function() {
-    let {targetAttr} = this._data;
-    if (targetAttr) {
-      let content = this._focusedWindow.top;
-      if (this.existsFrameName(content, targetAttr))
-        return true;
-    }
-    return false;
-  },
-
   /**
    * @brief Divert links that contain targets to the current tab.
    *
@@ -727,7 +733,7 @@ let ContentClickInternal = {
    * current tab if the following conditions are true:
    *
    * - extensions.tabmix.linkTarget is true
-   * - neither of the Ctrl/Meta keys were used AND the linkNode has a target attribute
+   * - neither of the Ctrl/Meta keys were used AND the link node has a target attribute
    *   AND the content of the target attribute is not one of the special frame targets
    * - all links are not forced to open in new tabs.
    * - links to other sites are not configured to open in new tabs OR the domain name
@@ -787,10 +793,10 @@ let ContentClickInternal = {
     if (this.checkOnClick())
       return false;
 
-    let {href, hrefFromOnClick, isLinkToExternalDomain, linkNode} = this._data;
+    let {href, hrefFromOnClick, isLinkToExternalDomain, wrappedNode} = this._data;
     if (/^(http|about)/.test(hrefFromOnClick || href) &&
-        (isLinkToExternalDomain || linkNode &&
-        this.checkAttr(linkNode.getAttribute("onmousedown"), "return rwt")))
+        (isLinkToExternalDomain || wrappedNode &&
+        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt")))
       return true;
 
     return false;
@@ -810,7 +816,7 @@ let ContentClickInternal = {
     if (this.GoogleComLink())
       return null;
 
-    let {href, hrefFromOnClick, linkNode} = this._data;
+    let {href, hrefFromOnClick} = this._data;
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
@@ -827,7 +833,7 @@ let ContentClickInternal = {
       return null;
     else
       // when the links target is in the same page don't open new tab
-      return this._data.currentURL.split("#")[0] != linkNode.toString().split("#")[0];
+      return this._data.currentURL.split("#")[0] != href.split("#")[0];
 
     return null;
   },
@@ -846,7 +852,7 @@ let ContentClickInternal = {
     if (/calendar\/render/.test(location))
       return true;
 
-    var node = this._data.linkNode || this._data.onClickNode;
+    var node = this._data.wrappedNode || this._data.wrappedOnClickNode;
     if (/\/intl\/\D{2,}\/options\/|search/.test(node.pathname))
       return true;
 
@@ -862,24 +868,6 @@ let ContentClickInternal = {
     if (testHost)
       return true;
 
-    return false;
-  },
-
-  /**
-   * @brief Check a document's frame pool and determine if
-   * |targetFrame| is located inside of it.
-   *
-   * @param content           is a frame reference
-   * @param targetFrame       The name of the frame that we are seeking.
-   * @returns                 true if the frame exists within the given frame pool,
-   *                          false if it does not.
-   */
-  existsFrameName: function TMP_existsFrameName(content, targetFrame) {
-    for (let i = 0; i < content.frames.length; i++) {
-      let frame = content.frames[i];
-      if (frame.name == targetFrame || this.existsFrameName(frame, targetFrame))
-        return true;
-    }
     return false;
   },
 
@@ -1039,31 +1027,19 @@ let ContentClickInternal = {
     return false;
   },
 
-  getTargetAttr: function TMP_getTargetAttr(linkNode) {
-    var targetAttr = linkNode && linkNode.target;
-    // If link has no target attribute, check if there is a <base> with a target attribute
-    if (!targetAttr) {
-      let b = this._focusedWindow.document.getElementsByTagName("base");
-      if (b.length > 0)
-        targetAttr = b[0].getAttribute("target");
-    }
-    return targetAttr;
-  },
-
   /**
    * @brief prevent onclick function with the form javascript:top.location.href = url
    *        or the form window.location = url when we force new tab from link
    */
-  getHrefFromOnClick: function(event, href, linkNode, onclick) {
+  getHrefFromOnClick: function(event, href, node, onclick) {
     if (typeof event.__hrefFromOnClick != "undefined")
       return event.__hrefFromOnClick;
 
     let result = {__hrefFromOnClick: null};
     if (onclick)
-      this._hrefFromOnClick(href, linkNode, onclick, result);
+      this._hrefFromOnClick(href, node, onclick, result);
     else {
-      ///XXX [object CPOW [object HTMLTableCellElement]] linkNode.parentNode
-      let parent = linkNode.parentNode;
+      let parent = node.parentNode;
       if (parent && parent.hasAttribute("onclick"))
         this._hrefFromOnClick(href, parent, parent.getAttribute("onclick"), result);
     }

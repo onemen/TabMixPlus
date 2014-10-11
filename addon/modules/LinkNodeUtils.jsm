@@ -9,6 +9,8 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
+const attribs = ["onclick", "rel", "onmousedown"];
+
 this.LinkNodeUtils = {
   isFrameInContent: function(content, href, name) {
     if (!content)
@@ -21,5 +23,95 @@ this.LinkNodeUtils = {
         return true;
     }
     return false;
+  },
+
+  wrap: function(node, focusedWindow, getTargetIsFrame) {
+    if (!node || typeof node.__tabmix == "boolean")
+      return node;
+
+    let doc = node.ownerDocument;
+    let wrapper = {
+      __tabmix: true,
+      __noSuchMethod__: function(id) {
+        TabmixSvc.console.log("Error " + id + " is not exist in wrappedNode", true);
+      },
+      baseURI: node.baseURI,
+      host: node.host,
+      pathname: node.pathname,
+      target: getTargetAttr(node.target, focusedWindow),
+      ownerDocument: {
+        __noSuchMethod__: function(id) {
+          TabmixSvc.console.log("Error ownerDocument." + id + " is not exist in wrappedNode", true);
+        },
+        URL: doc.URL,
+        documentURI: doc.documentURI,
+        defaultView: {
+          frameElement: !!doc.defaultView.frameElement
+        },
+        location: {
+          href: doc.location.href
+        }
+      },
+      parentNode: {
+        baseURI: node.parentNode.baseURI,
+        _attributes: getAttributes(node.parentNode, ["onclick"])
+      },
+      _focusedWindowHref: focusedWindow.top.location.href,
+      _attributes: getAttributes(node, attribs)
+    }
+    if (getTargetIsFrame)
+      wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);
+    return wrapper;
   }
+}
+
+function getAttributes(node, attribs) {
+  let wrapper = {};
+  for (let name of attribs) {
+    if (node.hasAttribute(name)) {
+      wrapper[name] = node.getAttribute(name);
+    }
+  }
+  return wrapper;
+}
+
+function getTargetAttr(targetAttr, focusedWindow) {
+  // If link has no target attribute, check if there is a <base> with a target attribute
+  if (!targetAttr) {
+    let b = focusedWindow.document.getElementsByTagName("base");
+    if (b.length > 0)
+      targetAttr = b[0].getAttribute("target");
+  }
+  return targetAttr;
+}
+
+/**
+ * @brief check if traget attribute exist and point to frame in the document
+ *        frame pool
+ */
+function targetIsFrame(targetAttr, focusedWindow) {
+  if (targetAttr) {
+    let content = focusedWindow.top;
+    if (existsFrameName(content, targetAttr))
+      return true;
+  }
+  return false;
+}
+
+/**
+ * @brief Check a document's frame pool and determine if
+ * |targetFrame| is located inside of it.
+ *
+ * @param content           is a frame reference
+ * @param targetFrame       The name of the frame that we are seeking.
+ * @returns                 true if the frame exists within the given frame pool,
+ *                          false if it does not.
+ */
+function existsFrameName(content, targetFrame) {
+  for (let i = 0; i < content.frames.length; i++) {
+    let frame = content.frames[i];
+    if (frame.name == targetFrame || existsFrameName(frame, targetFrame))
+      return true;
+  }
+  return false;
 }

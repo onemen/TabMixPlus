@@ -90,9 +90,6 @@ let TabmixClickEventHandler = {
       return;
 
     let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
-    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
-    // for the case there is no href
-    let onClickNode = !href && this._getNodeWithOnClick(event);
 
     let json = { button: event.button, shiftKey: event.shiftKey,
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
@@ -102,10 +99,15 @@ let TabmixClickEventHandler = {
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
 
+    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
+    // for the case there is no href
+    let linkNode = href ? node : this._getNodeWithOnClick(event);
+    if (linkNode)
+      linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
+                                         href && event.button == 0);
+
     let result = sendSyncMessage("TabmixContent:Click",
-                    {json: json, href: href},
-                    {node: node, onClickNode: onClickNode,
-                     focusedWindow: this._getFocusedWindow()});
+                    {json: json, href: href, node: linkNode});
     let data = result[0];
     if (data.where == "default")
       return;
@@ -187,7 +189,7 @@ let TabmixClickEventHandler = {
     return [href ? makeURI(href, null, baseURI).spec : null, null];
   },
 
-  _getFocusedWindow: function() {
+  get _focusedWindow() {
     let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
 
     let focusedWindow = {};
