@@ -1101,11 +1101,7 @@ var tablib = {
       if ( aTab._tPos > this.mCurrentTab._tPos )
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
-      for (let i = tabPos - 1; i >= 0; i-- ) {
-        try {
-          this.getBrowserForTab(childNodes[i]).reload();
-        } catch (e) {  }
-      }
+      tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
     }
 
     gBrowser.reloadRightTabs = function (aTab) {
@@ -1115,11 +1111,7 @@ var tablib = {
       if ( aTab._tPos < this.mCurrentTab._tPos )
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
-      for (let i = childNodes.length - 1; i > tabPos; i-- ) {
-        try {
-          this.getBrowserForTab(childNodes[i]).reload();
-        } catch (e) {  }
-      }
+      tablib.reloadTabs(childNodes.slice(tabPos + 1));
     }
 
     gBrowser.reloadAllTabsBut = function (aTab) {
@@ -1127,14 +1119,7 @@ var tablib = {
         aTab = this.mCurrentTab;
       else
         this.selectedTab = aTab;
-      var childNodes = this.visibleTabs;
-      for (var i = childNodes.length - 1; i >= 0; --i) {
-        if (childNodes[i] == aTab)
-           continue;
-        try {
-          this.getBrowserForTab(childNodes[i]).reload();
-        } catch (e) {  }
-      }
+      tablib.reloadTabs(this.visibleTabs, aTab);
     }
 
     gBrowser.lockTab = function (aTab) {
@@ -1806,6 +1791,18 @@ var tablib = {
     if (entry.URI)
       return TMP_Places.getTitleFromBookmark(entry.URI.spec, entry.title);
     return entry.title;
+  },
+
+  reloadTabs: function(tabs, skipTab) {
+    let l = tabs.length;
+    for (let i = 0; i < l; i++) {
+      let tab = tabs[i];
+      if (tab == skipTab || tab.linkedBrowser.__SS_restoreState == 2)
+        continue;
+      try {
+        tab.linkedBrowser.reload();
+      } catch (ex) {  }
+    }
   }
 
 } // end tablib

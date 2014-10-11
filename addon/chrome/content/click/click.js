@@ -136,7 +136,8 @@ var TabmixTabClickOptions = {
         gBrowser.duplicateTab(aTab);
         break;
       case 4 :
-        gBrowser.reloadTab(aTab);
+        if (aTab.linkedBrowser.__SS_restoreState != 2)
+          gBrowser.reloadTab(aTab);
         break;
       case 5 :
         gBrowser.protectTab(aTab);
@@ -145,7 +146,7 @@ var TabmixTabClickOptions = {
         gBrowser.lockTab(aTab);
         break;
       case 7 :
-        gBrowser.reloadAllTabs(aTab);
+        tablib.reloadTabs(gBrowser.visibleTabs);
         break;
       case 8:
         gBrowser.removeAllTabsBut(aTab);
