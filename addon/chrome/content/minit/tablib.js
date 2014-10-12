@@ -842,12 +842,21 @@ var tablib = {
       }
       // we need to update history title after the new page loaded for use in back/forword button
       var self = this;
-      function updateNewHistoryTitle(aEvent) {
+      function updateNewHistoryTitle() {
         try {
-          this.removeEventListener("load", updateNewHistoryTitle, true);
-          var history = this.webNavigation.sessionHistory;
+          this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
+          let browser = this.linkedBrowser;
+          var history = browser.webNavigation.sessionHistory;
           var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
-          shEntry.setTitle(self.getTabForBrowser(this).label);
+          shEntry.setTitle(this.label);
+        } catch (ex) {Tabmix.assert(ex);}
+      }
+      function urlForDownload() {
+        try {
+          this.removeEventListener("SSTabRestored", urlForDownload, true);
+          let browser = this.linkedBrowser;
+          browser.tabmix_allowLoad = true;
+          browser.loadURI(aHref);
         } catch (ex) {Tabmix.assert(ex);}
       }
       try {
@@ -856,8 +865,12 @@ var tablib = {
         newTab = this.addTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
-          addNewHistoryEntry();
-          newTab.linkedBrowser.addEventListener("load", updateNewHistoryTitle, true);
+          if (Tabmix.ContentClick.isUrlForDownload(aHref))
+            newTab.addEventListener("SSTabRestored", urlForDownload, true);
+          else {
+            addNewHistoryEntry();
+            newTab.addEventListener("SSTabRestored", updateNewHistoryTitle, true);
+          }
         }
         tabState.pinned = false;
         TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
