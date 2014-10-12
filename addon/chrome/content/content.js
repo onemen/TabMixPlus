@@ -60,6 +60,11 @@ let TabmixContentHandler = {
 
   isFrameInContent: function(href, name) {
     return LinkNodeUtils.isFrameInContent(content, href, name);
+  },
+
+  wrapNode: function(node) {
+    let window = TabmixClickEventHandler._focusedWindow;
+    return LinkNodeUtils.wrap(node, window);
   }
 };
 

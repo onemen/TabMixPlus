@@ -886,83 +886,73 @@ var tablib = {
     }
 
     gBrowser.openLinkWithHistory = function (aTab) {
-      var url = gContextMenu.linkURL;
-      if (!isValidUrl(url))
-         url = null;
+      var {target, linkURL} = gContextMenu;
+      var url = tablib.getValidUrl(aTab, linkURL, target);
+      if (!url)
+        return;
 
-      var newTab = this.duplicateTab(aTab, url, null, url == null);
-      if (!newTab.selected &&
-          Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
-        TabmixSessionManager.SessionStore.restoreTabContent(newTab);
-      }
+      var doc = target.ownerDocument;
+      if (typeof gContextMenu._unremotePrincipal == "function")
+        urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
+      else
+        urlSecurityCheck(url, doc.nodePrincipal);
 
-      if (!url) {
-        try {
-          // flip aTab with newTab
-          // and dispatch click event on the link....
-          newTab.removeAttribute("busy");
-          this.setIcon(newTab, this.getBrowserForTab(aTab).mIconURL);
-          newTab.label = aTab.label;
-          this._tabAttrModified(newTab);
-          newTab.width = aTab.width;
-
-          var index = newTab._tPos;
-          this.moveTabTo(newTab, aTab._tPos);
-          var pos = index > aTab._tPos ? 1 : 0;
-          this.moveTabTo(aTab, index + pos);
-
-          if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground")) {
-            this.selectedTab = newTab;
-            aTab.removeAttribute("visited");
-            aTab.removeAttribute("tabmix_selectedID");
-          }
-          else {
-            aTab.owner = newTab;
-            this.selectedTab = aTab;
-            newTab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
-            newTab.setAttribute("visited", true);
-            newTab.setAttribute("dontremovevisited", true);
-            aTab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
-          }
-
-          var event = document.createEvent("Events");
-          event.initEvent("click", true, false);
-          event.tabmix_openLinkWithHistory = true;
-          event.button = 0;
-          gContextMenu.target.dispatchEvent(event);
-
-          newTab = aTab;
-        }
-        catch (ex) {Tabmix.assert(ex);}
-      }
-
-      return newTab;
+      return this.duplicateTab(aTab, url);
     }
 
-    gBrowser.openInverseLink = function () {
-      var url = gContextMenu.linkURL;
-      if (!isValidUrl(url))
-        return null;
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
+      'charset: doc.characterSet,',
+      '$&\n                 ' +
+      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),'
+    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
-      // aTab is for treeStyleTab extension look in treeStyleTab hacks.js
-      var aTab = this.selectedTab;
+    gBrowser.openInverseLink = function (aTab) {
+      var {target, linkURL} = gContextMenu;
+      var url = tablib.getValidUrl(aTab, linkURL, target);
+      if (!url)
+        return;
 
-      var bgPref = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-      var newTab = this.loadOneTab(url, null, null, null, !bgPref, true);
-      if (url == "about:blank")
-        tablib.setURLBarFocus();
-      return newTab;
+      // the next line is insertion point for treeStyleTab extension look in
+      // treeStyleTab hacks.js
+      var newTab = null;
+
+      gContextMenu.linkURL = url;
+      // originalFunctions.openInverseLink is a copy of original
+      // nsContextMenu.prototype.openLinkInTab
+      Tabmix.originalFunctions.openInverseLink.apply(gContextMenu);
     }
 
-  ///XXX why we add this to window ?
-    window.isValidUrl = function (aUrl) {
+    tablib.openLinkInCurrent = function() {
+      var {target, linkURL} = gContextMenu;
+      var url = tablib.getValidUrl(gBrowser.selectedTab, linkURL, target);
+      if (!url)
+        return;
+
+      gContextMenu.linkURL = url;
+      gBrowser.selectedBrowser.tabmix_allowLoad = true;
+      gContextMenu.openLinkInCurrent();
+    }
+
+    tablib.getValidUrl = function(tab, url, target) {
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
-      if (!aUrl || !aUrl.length || aUrl.indexOf(" ", 0) != -1 ||
-           /^\s*(javascript|data):/.test(aUrl))
-        return false;
+      let isValid = function(aUrl) {
+        if (!aUrl || !aUrl.length || aUrl.indexOf(" ", 0) != -1 ||
+             /^\s*(javascript|data):/.test(aUrl))
+          return false;
+        return true;
+      }
 
-      return true;
+      if (!isValid(url)) {
+        let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
+                    altKey: false, target: {},
+                    tabmix_openLinkWithHistory: true};
+        let result = Tabmix.ContentClick.getParamsForLink(json,
+              target, url,
+              tab.linkedBrowser, document.commandDispatcher.focusedWindow);
+        return result._href && isValid(result._href) ? result._href : null;
+      }
+      return url;
     }
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {

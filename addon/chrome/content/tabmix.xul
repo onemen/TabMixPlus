@@ -110,11 +110,11 @@
 
     <popup id="contentAreaContextMenu">
       <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
-                oncommand="gBrowser.mCurrentBrowser.tabmix_allowLoad = true; gContextMenu.openLinkInCurrent();"/>
+                oncommand="tablib.openLinkInCurrent();"/>
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"
-         oncommand="gBrowser.openInverseLink();"/>
+         oncommand="gBrowser.openInverseLink(gBrowser.mCurrentTab);"/>
       <menuitem id="tm-openAllLinks" label="&openalllinks.label;" accesskey="&openalllinks.accesskey;"
          insertafter="context-openlinkintab" oncommand="TabmixContext.openMultipleLinks();"/>
       <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
