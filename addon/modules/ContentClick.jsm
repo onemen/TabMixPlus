@@ -15,8 +15,11 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
 XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
   "resource:///modules/ContentClick.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/Services.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
+  "resource://tabmixplus/LinkNodeUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
+  "resource://tabmixplus/Services.jsm");
 
 this.TabmixContentClick = {
   init: function() {
@@ -52,8 +55,8 @@ this.TabmixContentClick = {
     return false;
   },
 
-  selectExistingTab: function(href, targetAttr) {
-    ContentClickInternal.selectExistingTab(href, targetAttr);
+  selectExistingTab: function(window, href, targetAttr) {
+    ContentClickInternal.selectExistingTab(window, href, targetAttr);
   }
 }
 Object.freeze(TabmixContentClick);
@@ -104,12 +107,7 @@ let ContentClickInternal = {
     Tabmix.changeCode(ContentClick, "ContentClick.contentAreaClick")._replace(
       'var where = window.whereToOpenLink(json);',
       'var data = json.tabmix || {where: window.whereToOpenLink(json)};\n' +
-      '    var {where, targetAttr, suppressTabsOnFileDownload} = data;\n' +
-      '    if (where == "default" && targetAttr) {\n' +
-      '      window.setTimeout(function(){\n' +
-      '        window.Tabmix.ContentClick.selectExistingTab(json.href, targetAttr);\n' +
-      '      },300);\n' +
-      '    }\n'
+      '    var {where, suppressTabsOnFileDownload} = data;'
     )._replace(
       'where == "current"',
       '!json.tabmix && where == "current" || where == "default"'
@@ -177,6 +175,17 @@ let ContentClickInternal = {
       where = where.split(".")[0];
     if (where == "current")
       browser.tabmix_allowLoad = true;
+
+    if (href && browser.getAttribute("remote") == "true" &&
+        where == "default" && targetAttr) {
+      let win = this._window;
+      win.setTimeout(function() {
+        // don't try to select new tab if the original browser is no longer
+        // the selected browser
+        if (win.gBrowser.selectedBrowser == browser)
+          this.selectExistingTab(win, href, targetAttr);
+      }.bind(this), 300);
+    }
 
     // don't call this._data.hrefFromOnClick
     // if __hrefFromOnClick did not set by now we won't use it
@@ -869,38 +878,39 @@ let ContentClickInternal = {
    *        focusing it for link with target. Search in the browser content
    *        and its frames for content with matching name and href
    */
-  selectExistingTab: function TMP_selectExistingTab(href, targetFrame) {
+  selectExistingTab: function TMP_selectExistingTab(window, href, targetFrame) {
     if (TabmixSvc.prefBranch.getIntPref("opentabforLinks") != 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
-    let isCurrent = function isCurrent(content) {
-      if (content.location.href == href && content.name == targetFrame)
-        return true;
-      for (let i = 0; i < content.frames.length; i++) {
-        let frame = content.frames[i];
-        if (frame.location.href == href && frame.name == targetFrame)
-          return true;
+    let isCurrent = function(browser) {
+      if (TabmixSvc.version(320)) {
+        try {
+          let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
+          return handler.isFrameInContent(href, targetFrame);
+        } catch(ex) {
+          TabmixSvc.console.log("unable to get syncHandlers for page " +
+              browser.currentURI.spec + "\n" + ex);
+          // fall back to use CPOW
+        }
       }
-      return false;
+      return LinkNodeUtils.isFrameInContent(browser[TabmixSvc.contentWindowAsCPOW], href, targetFrame);
     }
 
-    let window = this._window;
     let switchIfURIInWindow = function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
       // private or non-private.
-      if (TabmixSvc.version(200) &&
+      if ((TabmixSvc.version(200) &&
           PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aWindow)) {
+          PrivateBrowsingUtils.isWindowPrivate(aWindow)) ||
+          (TabmixSvc.version(320) &&
+          window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser)) {
         return false;
       }
-      if (!("gBrowser" in aWindow))
-        return false;
       let browsers = aWindow.gBrowser.browsers;
       for (let i = 0; i < browsers.length; i++) {
-        let browser = browsers[i];
-        if (isCurrent(browser[TabmixSvc.contentWindowAsCPOW])) {
-          gURLBar.handleRevert();
+        if (isCurrent(browsers[i])) {
+          aWindow.gURLBar.handleRevert();
           // Focus the matching window & tab
           aWindow.focus();
           aWindow.gBrowser.tabContainer.selectedIndex = i;
@@ -910,7 +920,8 @@ let ContentClickInternal = {
       return false;
     }
 
-    if (switchIfURIInWindow(window))
+    let isBrowserWindow = !!window.gBrowser;
+    if (isBrowserWindow && switchIfURIInWindow(window))
       return;
 
     let winEnum = Services.wm.getEnumerator("navigator:browser");

@@ -11,6 +11,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
+  "resource://tabmixplus/LinkNodeUtils.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
   "resource://tabmixplus/ContextMenu.jsm");
 
@@ -53,6 +56,10 @@ let TabmixContentHandler = {
 
   getSelectedLinks: function(check) {
     return ContextMenu.getSelectedLinks(content, check);
+  },
+
+  isFrameInContent: function(href, name) {
+    return LinkNodeUtils.isFrameInContent(content, href, name);
   }
 };
 

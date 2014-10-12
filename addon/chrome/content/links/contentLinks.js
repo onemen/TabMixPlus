@@ -40,7 +40,7 @@ Tabmix.contentAreaClick = {
       '  event.__suppressTabsOnFileDownload = suppressTabsOnFileDownload;\n' +
       '  var result = $&\n' +
       '  if (targetAttr && !result)\n' +
-      '    setTimeout(function(){Tabmix.ContentClick.selectExistingTab(href, targetAttr);},300);'
+      '    setTimeout(function(){Tabmix.ContentClick.selectExistingTab(window, href, targetAttr);},300);'
     ).toCode();
 
     /* don't change where if it is save, window, or we passed
