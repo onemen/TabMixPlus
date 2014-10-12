@@ -36,9 +36,6 @@ this.TabmixContentClick = {
 
   contentLinkClick: function(event, browser, focusedWindow) {
     ContentClickInternal.contentLinkClick(event, browser, focusedWindow);
-    if (event.__hrefFromOnClick)
-      event.stopImmediatePropagation();
-    ContentClickInternal.resetData();
   },
 
   isGreasemonkeyInstalled: function(window) {
@@ -387,12 +384,25 @@ let ContentClickInternal = {
     return ["default@17"];
   },
 
+  contentLinkClick: function(event, browser, focusedWindow) {
+    this._contentLinkClick(event, browser, focusedWindow);
+    if (event.__hrefFromOnClick) {
+      if (TabmixSvc.version(220))
+        event.stopImmediatePropagation();
+      else {
+        event.stopPropagation();
+        browser.ownerDocument.defaultView.contentAreaClick(event);
+      }
+    }
+    this.resetData();
+  },
+
   /**
    * @brief For non-remote browser:
    *        handle left-clicks on links when preference is to open new tabs from links
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
-  contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
+  _contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
     aEvent.tabmix_isRemote = aBrowser.getAttribute("remote") == "true";
     if (aEvent.tabmix_isRemote)
       return "1";
