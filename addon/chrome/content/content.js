@@ -101,7 +101,7 @@ let TabmixClickEventHandler = {
 
     // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
     // for the case there is no href
-    let linkNode = href ? node : this._getNodeWithOnClick(event);
+    let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode)
       linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
                                          href && event.button == 0);
@@ -195,20 +195,6 @@ let TabmixClickEventHandler = {
     let focusedWindow = {};
     let elt = fm.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
-  },
-
-  _getNodeWithOnClick: function(event) {
-    // for safety reason look only 3 level up
-    let i = 0, node = event.target;
-    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
-      node = node.parentNode;
-      i++;
-    }
-
-    if (node && node.hasAttribute && node.hasAttribute("onclick"))
-      return node;
-
-    return null;
   }
 };
 

@@ -434,7 +434,7 @@ let ContentClickInternal = {
     let win = aBrowser.ownerDocument.defaultView;
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
-      let node = this._getNodeWithOnClick(aEvent);
+      let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
       let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button == 0);
       if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
@@ -1078,20 +1078,6 @@ let ContentClickInternal = {
       return;
 
     result.__hrefFromOnClick = newHref;
-  },
-
-  _getNodeWithOnClick: function(event) {
-    // for safety reason look only 3 level up
-    let i = 0, node = event.target;
-    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
-      node = node.parentNode;
-      i++;
-    }
-
-    if (node && node.hasAttribute && node.hasAttribute("onclick"))
-      return node;
-
-    return null;
   }
 }
 

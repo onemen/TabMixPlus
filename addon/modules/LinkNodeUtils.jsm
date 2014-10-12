@@ -62,6 +62,18 @@ this.LinkNodeUtils = {
     if (getTargetIsFrame)
       wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);
     return wrapper;
+  },
+
+  getNodeWithOnClick: function(node) {
+    // for safety reason look only 3 level up
+    let i = 0;
+    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
+      node = node.parentNode;
+      i++;
+    }
+    if (node && node.hasAttribute && node.hasAttribute("onclick"))
+      return node;
+    return null;
   }
 }
 
