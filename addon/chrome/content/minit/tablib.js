@@ -733,13 +733,14 @@ var tablib = {
     }
 
     Tabmix.originalFunctions.URLBarSetURI = URLBarSetURI;
-    URLBarSetURI = function tabmix_URLBarSetURI(aURI) {
+    let _URLBarSetURI = function tabmix_URLBarSetURI(aURI) {
       if (Tabmix.selectedTab == gBrowser.selectedTab &&
           Tabmix.userTypedValue && gBrowser.userTypedValue != "") {
         gBrowser.userTypedValue = "";
       }
       Tabmix.originalFunctions.URLBarSetURI.apply(window, arguments);
     }
+    Tabmix.setNewFunction(window, "URLBarSetURI", _URLBarSetURI);
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
