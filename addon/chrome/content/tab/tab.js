@@ -1900,12 +1900,30 @@ var TabmixProgressListener = {
        $&'
     ).toCode();
     this.listener.mTabBrowser = tabBrowser;
+    if (!Tabmix.isVersion(340))
+      this.listener._fixTabTitle = function() {};
     tabBrowser.addTabsProgressListener(this.listener);
   },
 
   listener: {
     mTabBrowser: null,
     showProgressOnTab: false,
+
+    _fixTabTitle: function TMP__contentLinkClick(tab, browser, url) {
+      if (browser.getAttribute("remote") != "true" ||
+          browser._contentTitle != "" || this.mTabBrowser.isBlankTab(tab))
+        return;
+      tab.addEventListener("TabLabelModified", function titleChanged(event) {
+        tab.removeEventListener("TabLabelModified", titleChanged, true);
+        let title = browser.contentDocumentAsCPOW.title;
+        if (browser._contentTitle != title) {
+          event.preventDefault();
+          browser._contentTitle = title;
+          tab.visibleLabel = title;
+        }
+      }, true);
+    },
+
     onProgressChange: function (aBrowser, aWebProgress, aRequest,
                                 aCurSelfProgress, aMaxSelfProgress,
                                 aCurTotalProgress, aMaxTotalProgress) {
@@ -1927,6 +1945,7 @@ var TabmixProgressListener = {
       if (aStateFlags & nsIWebProgressListener.STATE_START &&
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
+        this._fixTabTitle(tab, aBrowser, url);
         if (url == "about:blank") {
           tab.removeAttribute("busy");
           tab.removeAttribute("progress");
