@@ -568,11 +568,12 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
   onContentLoaded: function () {
     if ("TreeStyleTabBrowser" in window) {
+      let obj = TreeStyleTabBrowser.prototype;
       // we don't need this in the new version since we change the tabs-frame place
       // keep it here for non default theme that uses old Tabmix binding
-      let fn = TreeStyleTabBrowser.prototype.initTabbar;
+      let fn = obj.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
-        Tabmix.changeCode(TreeStyleTabBrowser.prototype, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
+        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
           'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
           'let newTabButton = document.getElementById("new-tab-button"); \
            if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
@@ -582,9 +583,61 @@ TMP_extensionsCompatibility.treeStyleTab = {
           'if (newTabBox) $&', {flags: "g"}
         ).toCode();
       }
-      TreeStyleTabBrowser.prototype.getTabClosebox = function(aTab) {
+      obj.getTabClosebox = function(aTab) {
         return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
       }
+
+      fn = obj.initTabContentsOrderInternal;
+      if (fn.toString().indexOf("closebuttons-side") == -1) {
+        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabContentsOrderInternal")._replace(
+          'if (this.mTabBrowser.getAttribute(this.kTAB_CONTENTS_INVERTED) == \'true\')',
+          'let button = aNamedNodes.close;\n    ' +
+          'index = nodes.indexOf(button);\n   ' +
+          'if (index > -1) {\n    ' +
+          ' let tabbar = this.mTabBrowser.tabContainer;\n   ' +
+          ' let side = tabbar.getAttribute("closebuttons-side");\n    ' +
+          ' if (side == "left") {\n   ' +
+          '   let before = nodes.indexOf(aNamedNodes.twistyAnchor);\n   ' +
+          '   if (before > -1) {\n    ' +
+          '     nodes.splice(index, 1);\n   ' +
+          '     let mOver = tabbar.mCloseButtons;\n   ' +
+          '     mOver = mOver == 4 && button.getAttribute("selected") != "true" || mOver == 2;\n    ' +
+          '     let offset = mOver ? 1 : 0;\n   ' +
+          '     nodes.splice(before + offset, 0, button);\n   ' +
+          '   }\n   ' +
+          ' }\n   ' +
+          '}\n\n    ' +
+          '$&'
+        )._replace(
+          'let key = \'initTabContentsOrderInternal_\'',
+          'let self = this;\n     ' +
+          '$&'
+        ).toCode();
+
+        let callback = function() {
+          TabmixSvc.forEachBrowserWindow(function(aWindow) {
+            aWindow.gBrowser.treeStyleTab.updateInvertedTabContentsOrder(true);
+          });
+        }
+        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons", callback);
+        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons.onLeft", callback);
+      }
+
+      // update ordinal on previous selected tab when close tab button is on the
+      // left side and CloseButtons preference is 4 - close buttons on hover
+      // and active tabs
+      let ontabselect = function(event) {
+        let tab = gBrowser.tabContainer.getAttribute("closebuttons-side") == "left" &&
+                  gBrowser.tabContainer.mCloseButtons == 4 &&
+                  event.detail && event.detail.previousTab;
+        if (tab)
+          gBrowser.treeStyleTab.initTabContentsOrder(tab);
+      }
+      gBrowser.tabContainer.addEventListener("TabSelect", ontabselect, true);
+      window.addEventListener("unload", function onunload() {
+        window.removeEventListener("unload", onunload, false);
+        gBrowser.tabContainer.removeEventListener("TabSelect", ontabselect, true);
+      }, false);
     }
 
     // we removed TMP_howToOpen function 2011-11-15

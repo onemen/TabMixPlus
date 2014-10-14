@@ -59,6 +59,7 @@ label.text-link, label[onclick] {
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
   -moz-box-ordinal-group: 2 !important;
+  pointer-events: none;
 }
 
 .tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
