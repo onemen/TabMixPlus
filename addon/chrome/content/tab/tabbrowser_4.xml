@@ -397,6 +397,7 @@
 
           Tabmix._nextSelectedID = 1;
           let tab = this.firstChild;
+          TMP_eventListener.setTabAttribute(tab);
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
           Tabmix.setTabStyle(tab);
