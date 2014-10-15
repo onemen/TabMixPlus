@@ -462,8 +462,8 @@ let KeyConfig = {
       if (this.syncFromKeyConfig(key, aData, shortcuts)) {
         // keyConfig extension code updates the DOM key, we don't need to do it
         Shortcuts.prefBackup = shortcuts;
-        Shortcuts.setShortcutsPref();
         Shortcuts.keys[key].value = shortcuts[key] || Shortcuts.keys[key].default;
+        Shortcuts.setShortcutsPref();
       }
     }
   },
