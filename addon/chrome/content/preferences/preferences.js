@@ -300,6 +300,11 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
+let sessionPrefs = ["browser.sessionstore.resume_from_crash",
+                    "browser.startup.page",
+                    "extensions.tabmix.sessions.manager",
+                    "extensions.tabmix.sessions.crashRecovery"];
+
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
@@ -331,11 +336,18 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   return tabmixPrefs;
 });
 
+__defineGetter__("_sminstalled", function() {
+  return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
+});
+
 function defaultSetting() {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
-  gPreferenceList.forEach(function(pref) {
+  let SMinstalled = _sminstalled;
+  let prefs = !SMinstalled ? gPreferenceList :
+      gPreferenceList.map(function(pref) sessionPrefs.indexOf(pref) == -1);
+  prefs.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
   // we enable our session manager on default
@@ -435,11 +447,14 @@ function loadData (pattern) {
   Tabmix.prefs.setBoolPref("setDefault", true);
 
   // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-  Tabmix.prefs.setBoolPref("sessions.manager", false);
-  Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
-  Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
-  Services.prefs.setIntPref("browser.startup.page", false);
-  Services.prefs.savePrefFile(null);
+  let SMinstalled = _sminstalled;
+  if (!SMinstalled) {
+    Tabmix.prefs.setBoolPref("sessions.manager", false);
+    Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
+    Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
+    Services.prefs.setIntPref("browser.startup.page", 0);
+    Services.prefs.savePrefFile(null);
+  }
 
   // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
   let pref = "extensions.tabmix.updateOpenedTabsLockState=";
@@ -453,6 +468,8 @@ function loadData (pattern) {
     let index = pattern[i].indexOf("=");
     if (index > 0){
       prefName  = pattern[i].substring(0,index);
+      if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
+        continue;
       prefValue = pattern[i].substring(index+1,pattern[i].length);
       setPrefByType(prefName, prefValue, true);
     }
