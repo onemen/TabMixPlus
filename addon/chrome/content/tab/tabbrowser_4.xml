@@ -206,7 +206,8 @@
 
         if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
             !aTab.hasAttribute("dragged")) {
-          aTab.style.setProperty("width", aTab.getBoundingClientRect().width + "px", "important");
+          if (TabmixTabbar.widthFitTitle)
+            aTab.style.setProperty("width", aTab.getBoundingClientRect().width + "px", "important");
           aTab.setAttribute("showbutton", "on");
           aTab.parentNode.__showbuttonTab = aTab;
         }
