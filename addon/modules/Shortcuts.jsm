@@ -400,9 +400,9 @@ let Shortcuts = {
       if (key.getAttribute("keycode") != "VK_F5")
         return false;
       if (!this.keys.browserReload.id) {
-        let index = 1, id;
+        let index = 2, id;
         do {
-         id = "xxx_key#_Browser:Reload".replace("#", index++);
+         id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
       }
