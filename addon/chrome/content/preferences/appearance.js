@@ -136,23 +136,29 @@ var gAppearancePane = {
   // block width cange on instantApply
   // user is force to hit apply
   userchangedWidth: function(item) {
-    this.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
+    gPrefWindow.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
                         $("maxWidth").value != $("pref_maxWidth").valueFromPreferences
     if (!gPrefWindow.instantApply)
       return undefined;
-    gPrefWindow.setButtons(!this.widthChanged);
+    gPrefWindow.setButtons(!gPrefWindow.widthChanged);
     // block the change by returning the preference own value
     return $(item.getAttribute("preference")).value;
   },
 
   changeTabsWidth: function() {
-    if (!this.widthChanged)
+    if (!gPrefWindow.widthChanged)
       return;
-    this.widthChanged = false;
+    gPrefWindow.widthChanged = false;
     let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
     if (minWidth > maxWidth)
       [minWidth, maxWidth] = [maxWidth, minWidth];
     [$("pref_minWidth").value, $("pref_maxWidth").value] = [minWidth, maxWidth];
+  },
+
+  resetWidthChange: function() {
+    gPrefWindow.widthChanged = false;
+    $("minWidth").value = $("pref_minWidth").value;
+    $("maxWidth").value = $("pref_maxWidth").value;
   },
 
   openAdvanceAppearance: function() {

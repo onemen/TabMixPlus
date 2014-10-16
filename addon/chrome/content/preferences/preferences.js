@@ -8,6 +8,7 @@ const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 function $(id) document.getElementById(id);
 
 var gPrefWindow = {
+  widthChanged: false,
   _initialized: false,
   init: function() {
     this._initialized = true;
@@ -94,7 +95,7 @@ var gPrefWindow = {
         this.updateApplyButton(aEvent);
       break;
     case "beforeaccept":
-      if (typeof gAppearancePane == "object")
+      if (this.widthChanged)
         gAppearancePane.changeTabsWidth();
       if (!this.instantApply) {
         // prevent TMP_SessionStore.setService from runing
@@ -106,6 +107,21 @@ var gPrefWindow = {
   },
 
   changes: [],
+  resetChanges: function() {
+    // remove all pending changes
+    if (!this.instantApply || this.widthChanged) {
+      if (this.widthChanged)
+        gAppearancePane.resetWidthChange();
+      while (this.changes.length) {
+        let preference = this.changes.shift();
+        preference.value = preference.valueFromPreferences;
+        if (preference.hasAttribute("notChecked"))
+          delete preference._lastValue;
+      }
+      this.setButtons(true);
+    }
+  },
+
   updateApplyButton: function(aEvent) {
     var item = aEvent.target;
     if (item.localName != "preference")
@@ -121,7 +137,7 @@ var gPrefWindow = {
 
   onApply: function() {
     this.setButtons(true);
-    if (typeof gAppearancePane == "object")
+    if (this.widthChanged)
       gAppearancePane.changeTabsWidth();
     if (this.instantApply)
       return;
@@ -357,6 +373,7 @@ __defineGetter__("_sminstalled", function() {
 });
 
 function defaultSetting() {
+  gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
@@ -459,6 +476,7 @@ function loadData (pattern) {
     return;
   }
 
+  gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
