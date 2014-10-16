@@ -108,10 +108,9 @@
             <caption>
                <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
                              preference="pref_tabbarscrolling"
-                             onsyncfrompreference="return $('pref_tabbarscrolling').value != 2"
-                             onsynctopreference="var val = this.checked ? this._lastValue || 1 : 2;
-                                this._lastValue = $('tabbarscrolling').value;
-                                return val;"/>
+                             control="tabbarscrolling"
+                             onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
+                             onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
             </caption>
             <separator class="thin"/>
             <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>

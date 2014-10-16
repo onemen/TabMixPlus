@@ -216,6 +216,22 @@ var gPrefWindow = {
     if (typeof gMenuPane == "object" &&
         $("pref_shortcuts").value != $("shortcut-group").value)
       gMenuPane.initializeShortcuts();
+  },
+
+  // syncfrompreference and synctopreference are for checkbox preference
+  // controlled by int preference
+  syncfrompreference: function(item) {
+    let preference = $(item.getAttribute("preference"));
+    return preference.value != parseInt(preference.getAttribute("notChecked"));
+  },
+
+  synctopreference: function(item, checkedVal) {
+    let preference = $(item.getAttribute("preference"));
+    let control = $(item.getAttribute("control"));
+    let notChecked = parseInt(preference.getAttribute("notChecked"));
+    let val = item.checked ? preference._lastValue || checkedVal : notChecked;
+    preference._lastValue = control.value;
+    return val;
   }
 }
 
