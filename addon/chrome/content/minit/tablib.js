@@ -1830,3 +1830,13 @@ Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
 
   return false;
 }
+
+/*
+Thu Oct 16 2014 09:59:34
+Warning: TypeError: anonymous function does not always return a value
+Source file: chrome://tabmixplus/content/minit/tablib.js
+Line: 913, Column: 6
+Source code:
+      return this.duplicateTab(aTab, url);
+
+*/

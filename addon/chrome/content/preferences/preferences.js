@@ -136,7 +136,7 @@ var gPrefWindow = {
       preference.valueFromPreferences = preference.value;
       preference.batching = false;
     }
-    gPrefWindow.afterShortcutsChanged();
+    this.afterShortcutsChanged();
     Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
     Services.prefs.savePrefFile(null);
   },
