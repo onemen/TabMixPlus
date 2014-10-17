@@ -1053,7 +1053,7 @@ let ContentClickInternal = {
   },
 
   _hrefFromOnClick: function(href, node, onclick, result) {
-    let re = /^(javascript:)?(window\.|top\.)?location(\.href)?=/;
+    let re = /^(javascript:)?(window\.|top\.)?(document\.)?location(\.href)?=/;
     if (!re.test(onclick))
       return;
 
