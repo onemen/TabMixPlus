@@ -270,6 +270,7 @@ so display: none !important; does not hide the button */
 /* look at browser.css for each platform
   background-image: none !important;
 */
+  margin-top: 1px !important;
 }
 
 /* for tabbar on bottom with australis */
