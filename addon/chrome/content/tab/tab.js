@@ -1375,8 +1375,17 @@ var gTMPprefObserver = {
                              (aPosition == 1 && buttonPosition < after) ||
                              (aPosition == 2 && buttonPosition != after + 1);
         if (changePosition) {
+          let tabsToolbar = $("TabsToolbar");
+          tabsToolbar.removeAttribute("tabbaronbottom");
           let newPosition = aPosition == 0 ? tabsPosition : after + 1;
-          CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
+          let doChange = function() {
+            CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
+            Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
+          }
+          if (TabmixTabbar.position == 1)
+            setTimeout(function() doChange(), 15);
+          else
+            doChange();
         }
         return;
       }
