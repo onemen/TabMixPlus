@@ -16,8 +16,11 @@
 }
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton*/
-#TabsToolbar > .tabs-closebutton {
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
   list-style-image: url("chrome://global/skin/icons/close.png");
+}
+
+#TabsToolbar > .tabs-closebutton {
   background-image: none !important;
 }
 
