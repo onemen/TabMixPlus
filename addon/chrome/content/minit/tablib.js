@@ -910,7 +910,7 @@ var tablib = {
       else
         urlSecurityCheck(url, doc.nodePrincipal);
 
-      return this.duplicateTab(aTab, url);
+      this.duplicateTab(aTab, url);
     }
 
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
