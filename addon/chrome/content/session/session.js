@@ -271,7 +271,7 @@ var TabmixSessionManager = {
           this._sendRestoreCompletedNotifications(false);
       }.bind(this);
 
-      if (Tabmix.isVersion(250) && !TabmixSvc.sm.promiseInitialized) {
+      if (Tabmix.isVersion(250, 250) && !TabmixSvc.sm.promiseInitialized) {
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
                         .then(null, Cu.reportError);

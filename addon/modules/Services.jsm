@@ -9,6 +9,13 @@ Cu.import("resource://gre/modules/Services.jsm");
 
 let _versions = {};
 function isVersion(aVersionNo) {
+  if (TabmixSvc.isPaleMoonID) {
+    let paleMoonVer = arguments.length > 1 ? arguments[1] : -1;
+    if (aVersionNo > 240 && paleMoonVer == -1)
+      return false;
+    aVersionNo = paleMoonVer;
+  }
+
   if (typeof _versions[aVersionNo] == "boolean")
     return _versions[aVersionNo];
 
@@ -22,8 +29,8 @@ let TabmixSvc = {
       this.prefBranch.getBoolPref("enableDebug");
   },
 
-  version: function(aVersionNo) {
-    return isVersion(aVersionNo);
+  version: function() {
+    return isVersion.apply(null, arguments);
   },
 
   getString: function(aStringKey) {
@@ -181,7 +188,7 @@ let TabmixSvc = {
 
   get ss() {
     delete this.ss;
-    if (isVersion(250)) {
+    if (isVersion(250, 250)) {
       let tmp = {}
       Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
       return this.ss = tmp.SessionStore;
@@ -250,6 +257,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function () {
   return Services.appinfo.name == "Pale Moon";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function () {
+  return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
 });
 
 /**

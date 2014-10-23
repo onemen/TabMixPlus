@@ -1117,7 +1117,7 @@ Tabmix.navToolbox = {
       return;
 
     // InstantFox extension uses old version of gURLBar.handleCommand until Firefox 25
-    let instantFox = !Tabmix.isVersion(250) && typeof InstantFox == "object";
+    let instantFox = !Tabmix.isVersion(250, 250) && typeof InstantFox == "object";
 
     // we don't do anything regarding IeTab and URL Suffix extensions
     _handleCommand = Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(

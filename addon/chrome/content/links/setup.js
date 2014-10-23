@@ -186,7 +186,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           [window, "delayedStartup"];
 
     let insertionPoint, ssPromise = "";
-    if (this.isVersion(250)) {
+    if (this.isVersion(250, 250)) {
       insertionPoint = "PlacesToolbarHelper.init();";
       if (!this.isVersion(270))
         ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';

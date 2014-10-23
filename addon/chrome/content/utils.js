@@ -11,8 +11,8 @@ var Tabmix = {
     return this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix.");
   },
 
-  isVersion: function(aVersionNo) {
-    return TabmixSvc.version(aVersionNo);
+  isVersion: function() {
+    return TabmixSvc.version.apply(null, arguments);
   },
 
   // for debug

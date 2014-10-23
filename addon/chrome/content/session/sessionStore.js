@@ -10,7 +10,7 @@ var TMP_SessionStore = {
    // make sure sessionstore is init
    _ssInited: null,
    initService: function TMP_ss_start() {
-     if (Tabmix.isVersion(250) || this._ssInited)
+     if (Tabmix.isVersion(250, 250) || this._ssInited)
        return;
      try {
        TabmixSvc.ss.init(window);
@@ -246,7 +246,7 @@ var TMP_SessionStore = {
             let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
                           getService(Ci.nsISessionStartup);
             // when TMP session manager is enabled ss.doRestore is true only after restart
-            if (!Tabmix.isVersion(250))
+            if (!Tabmix.isVersion(250, 250))
               return ss.doRestore();
             ss.onceInitialized.then(function() {
               Tabmix.isWindowAfterSessionRestore = ss.doRestore();
