@@ -3741,6 +3741,7 @@ try{
   _aftertWindowStateReady: function() { },
   _saveTabviewData: function() { },
   _setTabviewTab: function() { },
+  _tabviewData: { },
 
   /* ............... DEPRECATED ............... */
 
