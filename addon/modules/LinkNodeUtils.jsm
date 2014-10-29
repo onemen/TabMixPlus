@@ -49,7 +49,7 @@ this.LinkNodeUtils = {
           frameElement: !!doc.defaultView.frameElement
         },
         location: {
-          href: doc.location.href
+          href: doc.location ? doc.location.href : ""
         }
       },
       parentNode: {
