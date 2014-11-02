@@ -82,8 +82,12 @@ let console = {
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
   },
 
+  logStringMessage: function(aMessage) {
+    Services.console.logStringMessage(aMessage.replace(/\r\n/g, "\n"));
+  },
+
   clog: function(aMessage) {
-    Services.console.logStringMessage("TabMix :\n" + aMessage);
+    this.logStringMessage("TabMix :\n" + aMessage);
   },
 
   log: function TMP_console_log(aMessage, aShowCaller, offset) {
@@ -91,7 +95,7 @@ let console = {
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
-    Services.console.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+    this.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -273,11 +277,11 @@ options = {
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
     let stackText = "\nStack Trace: \n" + this._formatStack(aError.stack.split("\n"));
-    Services.console.logStringMessage(assertionText + stackText);
+    this.logStringMessage(assertionText + stackText);
   },
 
   trace: function TMP_console_trace(aMsg) {
     let stack = this._formatStack(this._getStackExcludingInternal());
-    Services.console.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
+    this.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
   }
 }
