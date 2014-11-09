@@ -14,42 +14,65 @@ var tablib = {
     this.addNewFunctionsTo_gBrowser();
   },
 
+  _loadURIWithFlagsinitialized: false,
   setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
-    Tabmix.changeCode(aBrowser, "browser.loadURIWithFlags")._replace(
-      'if (!aURI)',
-      '  var newURI, allowLoad = this.tabmix_allowLoad != false || aURI.match(/^javascript:/);' +
-      '  try  {' +
-      '    if (!allowLoad) {' +
-      '      newURI = Services.io.newURI(aURI, null, null);' +
-      '      allowLoad = this.currentURI.equalsExceptRef(newURI);' +
-      '    }' +
-      '  } catch (ex) {}'+
-      '  var tabbrowser = document.getBindingParent(this);' +
-      '  var tab = tabbrowser.getTabForBrowser(this);' +
-      '  var isBlankTab = tabbrowser.isBlankNotBusyTab(tab);' +
-      '  var isLockedTab = tab.hasAttribute("locked");' +
-      '  if (!allowLoad && !isBlankTab && isLockedTab) {' +
-      '    var newTab = tabbrowser.addTab();' +
-      '    tabbrowser.selectedTab = newTab;' +
-      '    var browser = newTab.linkedBrowser;' +
-      '    browser.stop();' +
-      '    browser.tabmix_allowLoad = true;' +
-      '    browser.loadURIWithFlags(aURI, aFlags, aReferrerURI, aCharset, aPostData);' +
-      '    return newTab;' +
-      '  }' +
-      '  this.tabmix_allowLoad = aURI == "about:blank" || !isLockedTab;\n' +
-      '  $&'
+
+    // Bug 1075658 - Enable remaining session store tests that are disabled in e10s.
+    // added _loadURIWithFlags to browser.js (Firefox 36+)
+    var obj, name;
+    if (Tabmix.isVersion(360)) {
+      if (this._loadURIWithFlagsinitialized)
+        return;
+      this._loadURIWithFlagsinitialized = true;
+      [obj, name] = [window, "window._loadURIWithFlags"];
+    }
+    else
+      [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
+    Tabmix.changeCode(obj, name)._replace(
+      '{',
+      '$&\n' +
+      '  let args = Array.slice(arguments);\n' +
+      '  if (!Tabmix.isVersion(360))\n' +
+      '    args.unshift(this);\n' +
+      '  var tabmixResult = tablib._loadURIWithFlags.apply(null, args);\n' +
+      '  if (tabmixResult)\n' +
+      '    return tabmixResult;\n'
     )._replace(
       /(\})(\)?)$/,
-      'return null;\
-      $1$2'
+      '  return null;\n' +
+      '$1$2'
     )._replace(
       'this.webNavigation.LOAD_FLAGS_FROM_EXTERNAL',
-      'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL', {check: "loadTabsProgressively" in window }
+      'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL',
+      {check: !Tabmix.isVersion(360) && ("loadTabsProgressively" in window)}
     ).toCode();
+  },
+
+  _loadURIWithFlags: function(browser, uri, flags, referrer, charset, postdata) {
+    var allowLoad = browser.tabmix_allowLoad != false || uri.match(/^javascript:/);
+    if (!allowLoad) {
+      try {
+        let newURI = Services.io.newURI(uri, null, null);
+        allowLoad = browser.currentURI.equalsExceptRef(newURI);
+      } catch (ex) {}
+    }
+    var tab = gBrowser.getTabForBrowser(browser);
+    var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
+    var isLockedTab = tab.hasAttribute("locked");
+    if (!allowLoad && !isBlankTab && isLockedTab) {
+      let newTab = gBrowser.addTab();
+      gBrowser.selectedTab = newTab;
+      let newBrowser = newTab.linkedBrowser;
+      newBrowser.stop();
+      newBrowser.tabmix_allowLoad = true;
+      newBrowser.loadURIWithFlags(uri, flags, referrer, charset, postdata);
+      return newTab;
+    }
+    browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
+    return null;
   },
 
   change_gBrowser: function change_gBrowser() {
@@ -1830,13 +1853,3 @@ Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
 
   return false;
 }
-
-/*
-Thu Oct 16 2014 09:59:34
-Warning: TypeError: anonymous function does not always return a value
-Source file: chrome://tabmixplus/content/minit/tablib.js
-Line: 913, Column: 6
-Source code:
-      return this.duplicateTab(aTab, url);
-
-*/
