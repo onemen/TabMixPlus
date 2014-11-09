@@ -559,7 +559,8 @@ var tablib = {
       '  let loadflags = #1 ?'.replace("#1", arg) +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
-      '  browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);' +
+      '  browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
+        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer")) +
       '  browser.focus();' +
       '}'
     );
