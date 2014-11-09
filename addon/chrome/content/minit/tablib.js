@@ -63,13 +63,17 @@ var tablib = {
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let newTab = gBrowser.addTab();
-      gBrowser.selectedTab = newTab;
-      let newBrowser = newTab.linkedBrowser;
-      newBrowser.stop();
-      newBrowser.tabmix_allowLoad = true;
-      newBrowser.loadURIWithFlags(uri, flags, referrer, charset, postdata);
-      return newTab;
+      let isFlaged = function(flag) !!(flags & Ci.nsIWebNavigation[flag]);
+      let params = {
+        referrerURI: referrer || null,
+        charset: charset  || null,
+        postdata: postdata  || null,
+        inBackground: false,
+        allowThirdPartyFixup: isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP"),
+        fromExternal: isFlaged("LOAD_FLAGS_FROM_EXTERNAL"),
+        allowMixedContent: isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT")
+      }
+      return gBrowser.loadOneTab(uri, params);
     }
     browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
     return null;
