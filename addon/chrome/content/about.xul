@@ -20,7 +20,6 @@
 
   <stringbundleset id="aboutSet">
     <stringbundle id="extensionsStrings" src="chrome://mozapps/locale/extensions/extensions.properties"/>
-    <stringbundle id="descriptionString" src="chrome://tabmixplus/locale/tabmix.properties" />
   </stringbundleset>
 
   <vbox id="clientBox" flex="1">

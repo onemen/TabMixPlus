@@ -13,7 +13,6 @@ function init() {
   }
   var acceptButton = document.documentElement.getButton("accept");
   acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
-  var descriptionString =  document.getElementById("descriptionString");
   var extensionDescription = document.getElementById("extensionDescription");
   extensionDescription.value = addon.description;
 }
