@@ -209,8 +209,7 @@
             <hbox id="tabxDependant" class="indent" align="center">
               <menulist id="tabCloseButton" preference="pref_tabCloseButton"
                         style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
-                <menupopup onpopupshowing="gAppearancePane.setAllTabsItemVisibility(true);"
-                           onpopuphidden="gAppearancePane.setAllTabsItemVisibility(false);">
+                <menupopup>
                   <menuitem value="1" label="&showTabX.always;"/>
                   <menuitem value="5" label="&showTabX.alwaysExeption;" id="alltabsItem"/>
                   <menuitem value="3" label="&showTabX.current;"/>

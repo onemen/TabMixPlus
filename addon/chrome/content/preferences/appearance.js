@@ -83,13 +83,6 @@ var gAppearancePane = {
       $("alltabsItem").disabled = false;
   },
 
-  setAllTabsItemVisibility: function(aShow) {return;
-    if ($("flexTabs").checked)
-      $("alltabsItem").hidden = !aShow;
-    else
-      $("alltabsItem").hidden = false;
-   },
-
   tabsScrollChanged: function() {
     var multiRow = $("pref_tabsScroll").value == 2;
     $("maxbar").hidden = !multiRow;
