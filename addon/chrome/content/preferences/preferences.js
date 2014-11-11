@@ -345,6 +345,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.search.context.loadInBackground","browser.search.openintab",
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
+  "browser.sessionstore.restore_on_demand",
   "browser.sessionstore.resume_from_crash","browser.startup.page",
   "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
