@@ -1211,8 +1211,13 @@ Tabmix.navToolbox = {
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
-    if (obj[fn].toString().indexOf("tabmixArg") > -1)
+    let fnString = obj[fn].toString();
+    if (fnString.indexOf("tabmixArg") > -1)
       return;
+
+    // Personas Interactive Theme Engine 1.6.5
+    let pIte = fnString.indexOf("BTPIServices") > -1;
+
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       /(openUILinkIn[^\(]*\([^\)]+)(\))/,
       '$1, null, tabmixArg$2'
@@ -1229,6 +1234,12 @@ Tabmix.navToolbox = {
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
       'var loadInBackground = Tabmix.prefs.getBoolPref("loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
+    )._replace(
+      /searchbar\.currentEngine/g,
+      'this.currentEngine', {check: pIte}
+    )._replace(
+      /BTPIServices/g,
+      'Services', {check: pIte}
     ).toCode();
   },
 
