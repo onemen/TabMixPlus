@@ -825,7 +825,7 @@ var TabmixSessionManager = {
          var msg = TabmixSvc.getSMString("sm.corrupted.msg0") + "\n"
                   + TabmixSvc.getSMString("sm.corrupted.msg1");
          var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-         Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
+         this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                [title, msg, "", "", buttons], window, function(){});
          Tabmix.assert(e);
          file.moveTo(this.profileDir, "session.old");
@@ -2091,7 +2091,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_CRASH],
+               this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_CRASH],
                      [title, msg, "", "", buttons], window, callBack);
             } else {
                msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg2") + ".....";
@@ -2101,7 +2101,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   msg += "\n" + TabmixSvc.getSMString("sm.afterCrash.msg4");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0.crashed"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
+               this.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
                this.callBackData.label = this.gSessionPath[3];
             }
@@ -2111,7 +2111,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                           + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_DEFAULT],
+               this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_DEFAULT],
                      [title, msg, "", "", buttons], window, callBack);
             } else if (closedWinList != 0) {
                msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg6");
@@ -2123,7 +2123,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                                 + TabmixSvc.getSMString("sm.afterCrash.msg8") + ":";
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
                           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-               Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SHOW_CLOSED_WINDOW_LIST],
+               this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SHOW_CLOSED_WINDOW_LIST],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
                this.callBackData.whattoLoad = "closedwindow";
             } else {// nothing to restore
@@ -2131,7 +2131,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                if (!this.enableManager)
                   msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg3");
                buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-               Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
+               this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                      [title, msg, "", chkBoxLabel, buttons], window, callBack);
             }
          }
@@ -2247,7 +2247,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                this._sendRestoreCompletedNotifications(true);
             }.bind(this);
             this.waitForCallBack = true;
-            Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
+            this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
          }
          this.loadHomePage();
@@ -2306,7 +2306,7 @@ try{
             this.onFirstWindowPromptCallBack(aResult);
          }.bind(this);
          this.waitForCallBack = true;
-         Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
+         this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
                   [title, msg, "", chkBoxLabel, buttons], window, callBack);
 } catch (ex) {Tabmix.assert(ex);}
       }
@@ -2342,6 +2342,13 @@ try{
 
       this._sendRestoreCompletedNotifications(true);
    },
+
+  // Add delay when calling prompt on startup
+  promptService: function(intParam, strParam, aWindow, aCallBack) {
+    setTimeout(function(){
+      Tabmix.promptService(intParam, strParam, aWindow, aCallBack);
+    }, 0);
+  },
 
  /**
   * user wants to restore only pinned tabs
