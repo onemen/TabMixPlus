@@ -55,4 +55,4 @@ var gLinksPane = {
     let url = "chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul";
     window.openDialog(url, "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
   }
-}
+};

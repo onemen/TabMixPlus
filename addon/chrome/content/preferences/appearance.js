@@ -1,6 +1,6 @@
 "use strict";
 
-var gAppearancePane = {
+var gAppearancePane = { // jshint ignore:line
   init: function () {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
@@ -130,7 +130,7 @@ var gAppearancePane = {
   // user is force to hit apply
   userchangedWidth: function(item) {
     gPrefWindow.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
-                        $("maxWidth").value != $("pref_maxWidth").valueFromPreferences
+                        $("maxWidth").value != $("pref_maxWidth").valueFromPreferences;
     if (!gPrefWindow.instantApply)
       return undefined;
     gPrefWindow.setButtons(!gPrefWindow.widthChanged);
@@ -159,4 +159,4 @@ var gAppearancePane = {
     window.openDialog(url, "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
   }
 
-}
+};

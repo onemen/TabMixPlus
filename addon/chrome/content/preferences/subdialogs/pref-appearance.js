@@ -1,8 +1,8 @@
 "use strict";
 
-function $(id) document.getElementById(id);
+function $(id) document.getElementById(id)
 
-let tabstyles = {
+let tabstyles = { // jshint ignore:line
   pref: "appearance_tab",
   init: function () {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
@@ -52,4 +52,4 @@ let tabstyles = {
     extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide');
     doc.setAttribute("hide-RGB", wasShow);
   }
-}
+};

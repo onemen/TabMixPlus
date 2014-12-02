@@ -16,7 +16,7 @@ function getKeysForShortcut(shortcut, id, win) {
   if (isDisabled(ourKey))
     return null;
 
-  let dots = "…"
+  let dots = "…";
   let keys = win.document.getElementsByTagName("key");
   let usedKeys = Array.filter(keys, function(key) {
     if (ourKey == key)
@@ -27,7 +27,7 @@ function getKeysForShortcut(shortcut, id, win) {
       modifiers: key.getAttribute("modifiers"),
       key: key.getAttribute("key"),
       keycode: key.getAttribute("keycode")
-    }
+    };
     if (getFormattedKey(_key) == shortcut)
       return true;
     return false;
@@ -81,7 +81,7 @@ function _getKeyName(win, aKey) {
     goForwardKb2: "goForwardKb",
     get cmd_handleBackspace() this.action < 2 && ["goBackKb", "cmd_scrollPageUp"][this.action],
     get cmd_handleShiftBackspace() this.action < 2 && ["goForwardKb", "cmd_scrollPageDown"][this.action]
-  }
+  };
   if (keyname[id]) {
     let key = doc.getElementById(keyname[id]);
     if (key)
@@ -106,7 +106,8 @@ function _getLabel(elm, attr, value) {
 
 function _getPath(elm){
   let names = [];
-  while (elm && elm.localName && elm.localName != "toolbaritem" && elm.localName != "popupset" && elm.id != "titlebar-content") {
+  while (elm && elm.localName && elm.localName != "toolbaritem" &&
+         elm.localName != "popupset" && elm.id != "titlebar-content") {
     if (elm.hasAttribute("label"))
       names.unshift(elm.getAttribute("label"));
     elm = elm.parentNode;
@@ -114,4 +115,4 @@ function _getPath(elm){
   return names.join(" > ");
 }
 
-function getFormattedKey(key) Shortcuts.getFormattedKey(key);
+function getFormattedKey(key) Shortcuts.getFormattedKey(key)

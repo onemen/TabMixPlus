@@ -1,3 +1,4 @@
+/* global gMenuPane */
 "use strict";
 
 var gEventsPane = {
@@ -85,7 +86,7 @@ var gEventsPane = {
 
   syncToNewTabUrlPref: function (value) {
     // If the value is "", use about:newtab.
-    if (value == "")
+    if (value === "")
       return "about:newtab";
 
     // Otherwise, use the actual textbox value.
@@ -104,4 +105,4 @@ var gEventsPane = {
     else
       $("paneMenu").setAttribute("editSlideShowKey", true);
   }
-}
+};

@@ -34,7 +34,7 @@ function FillData()
 
    items = data.split(' ');
    for (var i = 0; i < items.length; ++i) {
-      if (items[i] == "") continue;
+      if (items[i] === "") continue;
       item = items[i].trim();
       list.appendItem(item, item.toLowerCase());
    }
@@ -128,7 +128,7 @@ function Del()
    var index = list.getIndexOfItem(item);
    // if the list is not empty select next item or if we at the end the last item
    if (list.getRowCount() > 1)
-      SelectItemAt(index == list.getRowCount() - 1  ? index - 1 : index + 1, true)
+      SelectItemAt(index == list.getRowCount() - 1  ? index - 1 : index + 1, true);
    else
       entry.value = null;
    list.removeChild(item);

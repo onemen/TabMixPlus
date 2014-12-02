@@ -1,13 +1,13 @@
+/* globals _sminstalled, gPreferenceList */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci} = Components; // jshint ignore:line
 const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
-function $(id) document.getElementById(id);
+function $(id) document.getElementById(id)
 
-var gPrefWindow = {
+var gPrefWindow = { // jshint ignore:line
   widthChanged: false,
   _initialized: false,
   init: function() {
@@ -31,7 +31,6 @@ var gPrefWindow = {
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
       prefWindow.setAttribute("ubuntu", true);
 
-    var browserWindow = Tabmix.getTopWin();
     var docElt = document.documentElement;
 
     // don't use browser.preferences.animateFadeIn
@@ -166,7 +165,7 @@ var gPrefWindow = {
     applyButton.hidden = this.instantApply && disable;
     docElt.getButton("accept").hidden = disable;
 
-    var action = disable ? "close" : "cancel"
+    var action = disable ? "close" : "cancel";
     var cancelButton = docElt.getButton("cancel");
     cancelButton.label = docElt.getAttribute(action + "buttonlabel");
     cancelButton.setAttribute("icon", action);
@@ -198,7 +197,7 @@ var gPrefWindow = {
                       $(aPreference.id.replace("pref_", "obs_"));
     if (broadcaster) {
       let disable = aPreference.type == "bool" ? !aPreference.value :
-          aPreference.value == parseInt(aPreference.getAttribute("notChecked"))
+          aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
       this.setDisabled(broadcaster, disable);
     }
   },
@@ -220,7 +219,7 @@ var gPrefWindow = {
     let preference = $("pref_" + tabs.id);
     if (!tabs._inited) {
       tabs._inited = true;
-      if (preference.value != null)
+      if (preference.value !== null)
         tabs.selectedIndex = preference.value;
     }
     else if (preference.value != tabs.selectedIndex)
@@ -249,7 +248,7 @@ var gPrefWindow = {
     preference._lastValue = control.value;
     return val;
   }
-}
+};
 
 function getPrefByType(prefName) {
   try {
@@ -266,7 +265,7 @@ function getPrefByType(prefName) {
 
 function setPrefByType(prefName, newValue, atImport) {
   let pref = {name: prefName, value: newValue,
-              type: Services.prefs.getPrefType(prefName)}
+              type: Services.prefs.getPrefType(prefName)};
   try {
     if (!atImport || !setPrefAfterImport(pref))
       setPref(pref);
@@ -362,7 +361,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // filter out preference without default value
   tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref){
     try {
-      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) != undefined;
+      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
     } catch (ex) { }
     return false;
   });
@@ -526,7 +525,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tmp.garyr.net/help/#"
+  var helpPage = "http://tmp.garyr.net/help/#";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -580,7 +579,7 @@ var gIncompatiblePane = {
   checkForIncompatible: function (aShowList) {
      let tmp = { };
      Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-     new tmp.CompatibilityCheck(window, aShowList, true);
+     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm
@@ -589,7 +588,7 @@ var gIncompatiblePane = {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;
     }
-    Tabmix.setItem(this.paneButton, "show", !aHide)
+    Tabmix.setItem(this.paneButton, "show", !aHide);
 
     if (aHide && document.documentElement.lastSelected == "paneIncompatible")
       document.documentElement.showPane($(this.lastSelected));
@@ -598,7 +597,7 @@ var gIncompatiblePane = {
       window.focus();
   }
 
-}
+};
 
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   let win = Tabmix.getTopWin();
