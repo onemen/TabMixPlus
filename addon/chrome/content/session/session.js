@@ -2816,6 +2816,8 @@ try{
       }
 
       var sessionHistory = aBrowser.webNavigation.sessionHistory;
+      if (!sessionHistory)
+        return false;
       var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
       var index = sessionHistory.index < 0 ? 0 : sessionHistory.index;
       var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
@@ -3354,9 +3356,11 @@ try{
       browser.stop();
       // reset old history
       let history = browser.webNavigation.sessionHistory;
-      if (history.count > 0)
-        history.PurgeHistory(history.count);
-      history.QueryInterface(Ci.nsISHistoryInternal);
+      if (history) {
+        if (history.count > 0)
+          history.PurgeHistory(history.count);
+        history.QueryInterface(Ci.nsISHistoryInternal);
+      }
 
       if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
         aTab.setAttribute("width", aTab.getBoundingClientRect().width);
