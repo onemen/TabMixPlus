@@ -1,8 +1,10 @@
 ///"use strict";
 
+/* jshint strict: false */
+
 this.EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -14,7 +16,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 this.TabmixDownloadLastDir = {
   _initialized: false,
-  init: function(aWindow) {
+  init: function() {
     if (this._initialized)
       return;
     this._initialized = true;
@@ -26,7 +28,7 @@ this.TabmixDownloadLastDir = {
       get: function() {
         if (this._window) {
           try {
-            let loadContext = this._window.QueryInterface(Ci.nsIInterfaceRequestor);
+            this._window.QueryInterface(Ci.nsIInterfaceRequestor);
           } catch (ex) {
             let win = Services.wm.getMostRecentWindow("navigator:browser");
             return win ? win.gBrowser.selectedTab.ownerDocument.defaultView : null;
@@ -39,7 +41,7 @@ this.TabmixDownloadLastDir = {
         return val;
       },
       configurable: true, enumerable: true
-    }
+    };
 
     let downloadModule = {};
     Cu.import("resource://gre/modules/DownloadLastDir.jsm", downloadModule);
@@ -47,6 +49,6 @@ this.TabmixDownloadLastDir = {
     Object.defineProperty(obj, "window", descriptor);
     obj._window = null;
   }
-}
+};
 
-TabmixDownloadLastDir.init();
+this.TabmixDownloadLastDir.init();

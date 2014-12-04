@@ -5,12 +5,15 @@
  */
 var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
-let TMP_TabGroupsManager = {
-  init: function TMP_TGM_init(aWindow, tabBar) {
+this.TMP_TabGroupsManager = {
+  init: function TMP_TGM_init(aWindow) {
     this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
       /(\})(\)?)$/,
-      'try {if (TabGroupsManager.apiEnabled) TabGroupsManager.eventListener.onTabOpen(aEvent);} catch(e) {Tabmix.log(e);}\
-       $1$2'
+      '    try {\n' +
+      '      if (TabGroupsManager.apiEnabled)\n' +
+      '        TabGroupsManager.eventListener.onTabOpen(aEvent);\n' +
+      '    } catch(e) {Tabmix.log(e);}\n' +
+      '    $1$2'
     ).toCode();
 
     // in Firefox 4.0 we call TabGroupsManager.eventListener.onTabClose regardless of browser.tabs.animate

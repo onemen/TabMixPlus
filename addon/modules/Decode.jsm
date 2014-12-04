@@ -9,7 +9,7 @@ var EXPORTED_SYMBOLS = ["Decode"];
 
     use unescape if exist, if removed from firefox we use our own function
 */
-let Decode = {
+this.Decode = {
   escape: function(str) {
     // we always use encodeURI
     return encodeURI(str);
@@ -25,9 +25,9 @@ let Decode = {
    //    return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, function(seq) {return self._(seq);});
     return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, getReturnValue);
   }
-}
+};
 
-let escapeHash = {}
+let escapeHash = {};
 
 function getReturnValue (input) {
   var ret = escapeHash[input];

@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["DocShellCapabilities"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -93,4 +93,4 @@ this.DocShellCapabilities = {
     }
     this.restore(tab, disallow, true);
   }
-}
+};

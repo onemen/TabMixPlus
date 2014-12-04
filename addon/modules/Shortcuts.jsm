@@ -49,7 +49,7 @@ let Shortcuts = {
 
   get prefs() {
     delete this.prefs;
-    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+    return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
 
   prefsChangedByTabmix: false,
@@ -65,7 +65,7 @@ let Shortcuts = {
     this.initialized = true;
 
     if (TabmixSvc.version(200)) {
-      let tmp = {}
+      let tmp = {};
       Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
       this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
     }
@@ -106,7 +106,7 @@ let Shortcuts = {
         this.prefs.removeObserver("sessions.manager", this);
         Services.obs.removeObserver(this, "quit-application");
         if (this.keyConfigInstalled)
-          Keyconfig.deinit();
+          KeyConfig.deinit();
         break;
     }
   },
@@ -162,11 +162,11 @@ let Shortcuts = {
 
   onUnload: function TMP_SC_onUnload(aWindow) {
     aWindow.removeEventListener("unload", this, false);
-    let document = aWindow.document;
+    let doc = aWindow.document;
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       if (keyData.command && keyData.value) {
-        let keyItem = document.getElementById(keyData.id || "key_tm_" + key);
+        let keyItem = doc.getElementById(keyData.id || "key_tm_" + key);
         if (keyItem)
           keyItem.removeEventListener("command", this, true);
       }
@@ -294,7 +294,7 @@ let Shortcuts = {
       // if key in preference is not valid key or its value is not valid
       // or its value equal to default, remove it from the preference
       let keyData = this.keys[key] || null;
-      if (!keyData || typeof val != "string" || val == keyData.default || val == "" ||
+      if (!keyData || typeof val != "string" || val == keyData.default || val === "" ||
           (val == "d&" && (!keyData.default || /^d&/.test(keyData.default)))) {
         delete shortcuts[key];
         updatePreference = true;
@@ -383,7 +383,7 @@ let Shortcuts = {
   },
 
   getFormattedKeyForID: function(id) {
-    let key = this.keyParse(this.keys[id].value)
+    let key = this.keyParse(this.keys[id].value);
     return getFormattedKey(key);
   },
 
@@ -412,13 +412,13 @@ let Shortcuts = {
     }, this);
   }
 
-}
+};
 
-let KeyConfig = {
+var KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions
-  init: function(aWindow) {
+  init: function() {
     this.keyIdsMap = {};
     // keyConfig use index number for its ids
     let oldReloadId = "xxx_key29_Browser:Reload";
@@ -517,7 +517,7 @@ let KeyConfig = {
     this.prefs.clearUserPref(prefName);
   }
 
-}
+};
 
 function getPref(name) {
   return Services.prefs.getComplexValue(name, Ci.nsISupportsString).data;
@@ -539,7 +539,7 @@ function getFormattedKey(key) {
     key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
-    })
+    });
   }
 
   if (key.key) {
@@ -549,11 +549,13 @@ function getFormattedKey(key) {
     else
       val += key.key.toUpperCase();
   }
-  if (key.keycode) try {
-    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
-    val += localeKeys.GetStringFromName(key.keycode);
-  } catch (ex) {
-    val += "<" + key.keycode + ">";
+  if (key.keycode) {
+    try {
+      let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
+      val += localeKeys.GetStringFromName(key.keycode);
+    } catch (ex) {
+      val += "<" + key.keycode + ">";
+    }
   }
   return val;
 }
@@ -572,14 +574,14 @@ function getPlatformKeys(key) {
   else
     val = getPlatformKeys("VK_" + getPlatformAccel().toUpperCase());
 
-  return gPlatformKeys[key] = val;
+  return (gPlatformKeys[key] = val);
 }
 
 function getPlatformAccel() {
   switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-    case 17:  return "control"; break;
-    case 18:  return "alt"; break;
-    case 224: return "meta"; break;
+    case 17:  return "control";
+    case 18:  return "alt";
+    case 224: return "meta";
   }
-  return Services.appinfo.OS == "Darwin" ? "meta" : "control"
+  return (Services.appinfo.OS == "Darwin" ? "meta" : "control");
 }

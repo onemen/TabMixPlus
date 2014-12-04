@@ -9,7 +9,7 @@ Cu.import("resource://tabmixplus/Services.jsm");
 
 let gNextID = 1;
 
-let console = {
+this.console = {
   getObject: function(aWindow, aMethod) {
     let msg = "";
     if (!aWindow)
@@ -27,8 +27,9 @@ let console = {
       methodsList.shift();
       rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
     }
+    var obj;
     try {
-      var obj = aWindow;
+      obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
       methodsList.forEach(function(aFn) {
@@ -49,7 +50,7 @@ let console = {
         if (typeof aMethod != "function") {
           result = isObj ? aMethod.obj[aMethod.name] :
                 this.getObject(aWindow, aMethod);
-          result = " = " + result.toString()
+          result = " = " + result.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result);
       }.bind(this);
@@ -136,13 +137,13 @@ let console = {
 
   _char: "@",
   _name: function(fn) {
-    let name = fn.substr(0, fn.indexOf(this._char))
-    if (fn && !name) {
+    let fnName = fn.substr(0, fn.indexOf(this._char));
+    if (fn && !fnName) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
-      name = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
+      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
     }
-    return name;
+    return fnName;
   },
 
 /*
@@ -200,7 +201,7 @@ options = {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
     var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
-    objS +=  ":\n"
+    objS +=  ":\n";
 
     for (let prop in aObj) {
       try {
@@ -211,7 +212,7 @@ options = {
         if (type == "function" && typeof level == "string") {
           val = val.toString();
           let code = val.toString().indexOf("native code") > -1 ?
-            "[native code]" : "[code]"
+            "[native code]" : "[code]";
           val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
         }
         objS += offset + prop + "[" + type + "]" + " =  " + val + "\n";
@@ -233,7 +234,7 @@ options = {
     delete this._pathRegExp;
     let folder = TabmixSvc.FileUtils.getDir("ProfD", ["extensions"]);
     let path = folder.path.replace("\\", "/", "g") + "/";
-    return this._pathRegExp = new RegExp("jar:|file:///|" + path, "g");
+    return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
   _formatStack: function(stack) {
@@ -284,4 +285,4 @@ options = {
     let stack = this._formatStack(this._getStackExcludingInternal());
     this.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
   }
-}
+};

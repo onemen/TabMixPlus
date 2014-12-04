@@ -2,7 +2,7 @@
 
 var EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -58,7 +58,7 @@ this.LinkNodeUtils = {
       },
       _focusedWindowHref: focusedWindow.top.location.href,
       _attributes: getAttributes(node, attribs)
-    }
+    };
     if (getTargetIsFrame)
       wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);
     return wrapper;
@@ -75,13 +75,13 @@ this.LinkNodeUtils = {
       return node;
     return null;
   }
-}
+};
 
 function getAttributes(node, attribs) {
   let wrapper = {};
-  for (let name of attribs) {
-    if (node.hasAttribute(name)) {
-      wrapper[name] = node.getAttribute(name);
+  for (let att of attribs) {
+    if (node.hasAttribute(att)) {
+      wrapper[att] = node.getAttribute(att);
     }
   }
   return wrapper;

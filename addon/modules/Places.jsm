@@ -26,7 +26,7 @@ XPCOMUtils.defineLazyGetter(this, "PlacesUtils", function() {
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "resource://tabmixplus/Services.jsm");
 
-this.TabmixPlacesUtils = {
+this.TabmixPlacesUtils = Object.freeze({
   init: function(aWindow) {
     PlacesUtilsInternal.init(aWindow);
   },
@@ -34,12 +34,11 @@ this.TabmixPlacesUtils = {
   onQuitApplication: function() {
     PlacesUtilsInternal.onQuitApplication();
   }
-}
-Object.freeze(TabmixPlacesUtils);
+});
 
-let Tabmix = { }
+let Tabmix = { };
 
-let PlacesUtilsInternal = {
+var PlacesUtilsInternal = {
   _timer: null,
   _initialized: false,
 
@@ -68,11 +67,11 @@ let PlacesUtilsInternal = {
   functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
     try {
-      let test = PlacesUIUtils._openTabset.toString();
+      PlacesUIUtils._openTabset.toString();
     } catch (ex) {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
-        TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions."
-          + "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
+        TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
+          "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
       }
       return;
     }
@@ -83,7 +82,7 @@ let PlacesUtilsInternal = {
 
     var treeStyleTab = "TreeStyleTabBookmarksService" in aWindow;
     function updateOpenTabset() {
-      let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);"
+      let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);";
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
@@ -108,7 +107,7 @@ let PlacesUtilsInternal = {
         '      where = "current";\n' +
         openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
       ).toCode();
-    };
+    }
     if (treeStyleTab) {
       // wait until TreeStyleTab changed PlacesUIUtils._openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
@@ -175,4 +174,4 @@ let PlacesUtilsInternal = {
       '        $&'
     ).toCode();
   }
-}
+};

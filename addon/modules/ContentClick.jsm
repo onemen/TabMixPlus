@@ -55,12 +55,12 @@ this.TabmixContentClick = {
   selectExistingTab: function(window, href, targetAttr) {
     ContentClickInternal.selectExistingTab(window, href, targetAttr);
   }
-}
+};
 Object.freeze(TabmixContentClick);
 
-let Tabmix = { }
+let Tabmix = { };
 
-let ContentClickInternal = {
+var ContentClickInternal = {
   _timer: null,
   _initialized: false,
 
@@ -94,7 +94,7 @@ let ContentClickInternal = {
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
     try {
-      let test = ContentClick.contentAreaClick.toString();
+      ContentClick.contentAreaClick.toString();
     } catch (ex) { return; }
 
     this.functions.forEach(function(aFn) {
@@ -161,7 +161,7 @@ let ContentClickInternal = {
       let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
       linkNode = handler.wrapNode(linkNode);
     }
-    let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button == 0);
+    let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button === 0);
     return this._getParamsForLink(event, wrappedNode, href, browser);
   },
 
@@ -301,7 +301,7 @@ let ContentClickInternal = {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
-        if (SubmitToTab.contentAreaClick(event) == false) {
+        if (SubmitToTab.contentAreaClick(event) === false) {
           return ["default@1"];
         }
       }
@@ -317,7 +317,7 @@ let ContentClickInternal = {
     eventWhere = this._window.whereToOpenLink(event);
     if (/^save|window/.test(eventWhere)) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick;
+      this._data.hrefFromOnClick; // jshint ignore:line
       return [eventWhere + "@2.1"];
     }
 
@@ -366,7 +366,7 @@ let ContentClickInternal = {
      */
     if (this.divertMiddleClick()) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick;
+      this._data.hrefFromOnClick; // jshint ignore:line
       return [onClickInFrame ? "current.frame@10" : "current@10"];
     }
 
@@ -374,9 +374,9 @@ let ContentClickInternal = {
       return ["default@11"];
 
     // catch other middle & right click
-    if (event.button != 0) {
+    if (event.button !== 0) {
       return event.button == 1 && this._data.hrefFromOnClick ?
-              [TMP_tabshifted(event) + "@12"] : ["default@12"]
+              [TMP_tabshifted(event) + "@12"] : ["default@12"];
     }
 
     // the rest of the code if for left-click only
@@ -440,13 +440,13 @@ let ContentClickInternal = {
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
       let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
-      let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button == 0);
+      let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button === 0);
       if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
       return "2.1";
     }
 
-    if (aEvent.button != 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey) {
+    if (aEvent.button !== 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey) {
       if (/^save|window|tab/.test(win.whereToOpenLink(aEvent)))
         this.getHrefFromOnClick(aEvent, href, linkNode, linkNode.getAttribute("onclick"));
       return "3";
@@ -456,7 +456,7 @@ let ContentClickInternal = {
     this._window = win;
 
     this.getPref();
-    if (!this.currentTabLocked && this.targetPref == 0)
+    if (!this.currentTabLocked && this.targetPref === 0)
       return "4";
 
     if (!linkNode)
@@ -467,7 +467,8 @@ let ContentClickInternal = {
 
     var currentHref = this._data.currentURL;
     // don't do anything on mail.google or google.com/reader
-    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) || /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
+    var isGmail = /^(http|https):\/\/mail.google.com/.test(currentHref) ||
+                  /^(http|https):\/\/\w*.google.com\/reader/.test(currentHref);
     if (isGmail)
       return "6";
 
@@ -532,10 +533,11 @@ let ContentClickInternal = {
       openNewTab = true;
 
     if (openNewTab) {
+      let blocked;
       try {
         // for the moment just do it for Google and Yahoo....
         // and tvguide.com - added 2013-07-20
-        var blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+        blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
            (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
@@ -634,7 +636,7 @@ let ContentClickInternal = {
     if (!TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
       return false;
 
-    if (event.button != 0 || event.ctrlKey || event.metaKey)
+    if (event.button !== 0 || event.ctrlKey || event.metaKey)
       return false;
 
     // prevent links in tinderbox.mozilla.org with linkHref to *.gz from open in this function
@@ -646,7 +648,8 @@ let ContentClickInternal = {
     if (onclick) {
       if (this.checkAttr(onclick, "return install") ||
           this.checkAttr(onclick, "return installTheme") ||
-          this.checkAttr(onclick, "return note") || this.checkAttr(onclick, "return log")) // click on link in http://tinderbox.mozilla.org/showbuilds.cgi
+          // click on link in http://tinderbox.mozilla.org/showbuilds.cgi
+          this.checkAttr(onclick, "return note") || this.checkAttr(onclick, "return log"))
         return true;
     }
 
@@ -684,7 +687,7 @@ let ContentClickInternal = {
         hrefExt = linkHrefExt;
         try {
           // prevent filetype catch if it is in the middle of a word
-          testExt = new RegExp(testString + "[a-z0-9?\.]+", 'i');
+          testExt = new RegExp(testString + "[a-z0-9?.]+", 'i');
           if (testExt.test(hrefExt))
             continue;
         } catch (ex) {}
@@ -725,7 +728,7 @@ let ContentClickInternal = {
       return false;
 
     let {event} = this._data;
-    if (event.button == 1 || event.button == 0 && (event.ctrlKey || event.metaKey))
+    if (event.button == 1 || event.button === 0 && (event.ctrlKey || event.metaKey))
       return true;
 
     return false;
@@ -882,7 +885,7 @@ let ContentClickInternal = {
    *        and its frames for content with matching name and href
    */
   selectExistingTab: function TMP_selectExistingTab(window, href, targetFrame) {
-    if (TabmixSvc.prefBranch.getIntPref("opentabforLinks") != 0 ||
+    if (TabmixSvc.prefBranch.getIntPref("opentabforLinks") !== 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
@@ -898,7 +901,7 @@ let ContentClickInternal = {
         }
       }
       return LinkNodeUtils.isFrameInContent(browser[TabmixSvc.contentWindowAsCPOW], href, targetFrame);
-    }
+    };
 
     let switchIfURIInWindow = function switchIfURIInWindow(aWindow) {
       // Only switch to the tab if both source and desination are
@@ -921,7 +924,7 @@ let ContentClickInternal = {
         }
       }
       return false;
-    }
+    };
 
     let isBrowserWindow = !!window.gBrowser;
     if (isBrowserWindow && switchIfURIInWindow(window))
@@ -953,7 +956,7 @@ let ContentClickInternal = {
 
   get uriFixup() {
     delete this.uriFixup;
-    return this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup);
+    return (this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup));
   },
 
  /**
@@ -976,8 +979,9 @@ let ContentClickInternal = {
       if (url.match(/^file:/))
         return "local_file";
 
+      let fixedURI;
       try {
-        var fixedURI = self.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+        fixedURI = self.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
         url = fixedURI.spec;
       } catch (ex) { }
 
@@ -994,9 +998,10 @@ let ContentClickInternal = {
         host.shift();
       return host.join(".");
     */
+        let level;
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
-          var level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
+          level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
         } catch(e) {
           level = 2;
         }
@@ -1006,7 +1011,7 @@ let ContentClickInternal = {
         return host.join(".");
       }
       return null;
-    }
+    };
 
     let targetDomain = getDomain(target);
     return targetDomain && targetDomain != getDomain(curpage);
@@ -1049,7 +1054,7 @@ let ContentClickInternal = {
         this._hrefFromOnClick(href, parent, parent.getAttribute("onclick"), result);
     }
 
-    return event.__hrefFromOnClick = result.__hrefFromOnClick;
+    return (event.__hrefFromOnClick = result.__hrefFromOnClick);
   },
 
   _hrefFromOnClick: function(href, node, onclick, result) {
@@ -1084,7 +1089,7 @@ let ContentClickInternal = {
 
     result.__hrefFromOnClick = newHref;
   }
-}
+};
 
 function makeURI(aURL, aOriginCharset, aBaseURI) {
   return Services.io.newURI(aURL, aOriginCharset, aBaseURI);
