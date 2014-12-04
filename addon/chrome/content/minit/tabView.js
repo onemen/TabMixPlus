@@ -26,7 +26,7 @@
           gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
             gBrowser.tabContainer._onDelayTabHide = null;
             let tab = aEvent.target;
-            TMP_eventListener.onTabClose_updateTabBar(tab, true);
+            TMP_eventListener.onTabClose_updateTabBar(tab);
           }, 0, aEvent);
         }
         break;

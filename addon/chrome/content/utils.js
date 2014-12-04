@@ -1,14 +1,14 @@
 "use strict";
 
-var Tabmix = {
+var Tabmix = { // jshint ignore:line
   get prefs() {
     delete this.prefs;
-    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+    return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
 
   get defaultPrefs() {
     delete this.defaultPrefs;
-    return this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix.");
+    return (this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix."));
   },
 
   isVersion: function() {
@@ -84,12 +84,14 @@ var Tabmix = {
     XPCOMUtils.defineLazyGetter(aObject, aName, function() {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/"+aModule+".jsm", tmp);
-      let obj = "prototype" in tmp[aSymbol] ? new tmp[aSymbol] : tmp[aSymbol];
-      if ("init" in obj)
-        obj.init.apply(obj, aArg);
+      let Obj = tmp[aSymbol];
+      if ("prototype" in tmp[aSymbol])
+        Obj = new Obj();
+      else if ("init" in Obj)
+        Obj.init.apply(Obj, aArg);
       if (aFlag)
         self[aModule + "Initialized"] = true;
-      return obj;
+      return Obj;
     });
   },
 
@@ -102,7 +104,7 @@ var Tabmix = {
       get: function () {
         self.informAboutChangeInTabmix(aOldName, aNewName);
         delete aObject[aOldName];
-        return aObject[aOldName] = self.getObject(window, aNewName);
+        return (aObject[aOldName] = self.getObject(window, aNewName));
       },
       configurable: true
     });
@@ -114,14 +116,14 @@ var Tabmix = {
     let stack = Error().stack.split("\n").slice(3);
     let file = stack[0] ? stack[0].split(":") : null;
     if (file) {
-      let [chrome, path, line] = file;
+      let [path, line] = file;
       let index = path.indexOf("/", 2) - 3;
       let extensionName = index > -1 ?
          path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\n" + "file: " + "chrome:" + path + "\nline: " + line
-                 + "\n\nPlease inform Tabmix Plus developer"
-                 + (extensionName ? ( " and " + extensionName + "developer.") : "."));
+                 " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
+                 "\n\nPlease inform Tabmix Plus developer" +
+                 (extensionName ? ( " and " + extensionName + "developer.") : "."));
     }
     else
       this.clog(err.message + "\n\n" + stack);
@@ -158,7 +160,8 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +(modal ? ",modal" : ",dependent") ,dpb);
+           "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +
+           (modal ? ",modal" : ",dependent") ,dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
 
@@ -199,7 +202,9 @@ var Tabmix = {
   },
 
   compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
-  itemEnd: function TMP_utils_itemEnd(item, end) {return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);},
+  itemEnd: function TMP_utils_itemEnd(item, end) {
+    return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);
+  },
 
   show: function(aMethod, aDelay, aWindow) {
     TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
@@ -209,7 +214,7 @@ var Tabmix = {
   // caller list
   __noSuchMethod__: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
-      this.installeChangecode;
+      this.installeChangecode();
       return this[id].apply(this, args);
     }
     if (typeof TabmixSvc.console[id] == "function") {
@@ -219,10 +224,9 @@ var Tabmix = {
     return null;
   },
 
-  get installeChangecode() {
-    delete this.installeChangecode;
+  installeChangecode: function() {
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
-    return this.installeChangecode = true;
+    this.installeChangecode = function() {};
   },
 
   _init: function() {
@@ -247,6 +251,6 @@ var Tabmix = {
     this.originalFunctions = null;
     delete this.window;
   }
-}
+};
 
 Tabmix._init();

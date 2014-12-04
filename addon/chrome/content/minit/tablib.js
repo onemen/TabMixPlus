@@ -193,7 +193,7 @@ var tablib = {
       'this._blurTab(aTab);',
       'tablib.onRemoveTab(aTab); \
        if (Services.prefs.getBoolPref("browser.tabs.animate")) { \
-         TMP_eventListener.onTabClose_updateTabBar(aTab, true);\
+         TMP_eventListener.onTabClose_updateTabBar(aTab);\
        } \
        $&'
     )._replace(

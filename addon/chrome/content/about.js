@@ -1,6 +1,6 @@
 "use strict";
 
-function init() {
+function init() { // jshint ignore:line
   var addon = window.arguments[0];
   var extensionsStrings = document.getElementById("extensionsStrings");
   document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);

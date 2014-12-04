@@ -1,6 +1,6 @@
 "use strict";
 
-let {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+let {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
@@ -68,7 +68,7 @@ let TabmixContentHandler = {
   }
 };
 
-let TabmixClickEventHandler = {
+var TabmixClickEventHandler = {
   init: function init() {
     global.addEventListener("click", this, true);
   },
@@ -109,7 +109,7 @@ let TabmixClickEventHandler = {
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode)
       linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
-                                         href && event.button == 0);
+                                         href && event.button === 0);
 
     let result = sendSyncMessage("TabmixContent:Click",
                     {json: json, href: href, node: linkNode});
@@ -131,7 +131,7 @@ let TabmixClickEventHandler = {
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
-        if (event.button == 0 && !event.ctrlKey && !event.shiftKey &&
+        if (event.button === 0 && !event.ctrlKey && !event.shiftKey &&
             !event.altKey && !event.metaKey) {
           json.bookmark = node.getAttribute("rel") == "sidebar";
           if (json.bookmark) {
@@ -198,7 +198,7 @@ let TabmixClickEventHandler = {
     let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
 
     let focusedWindow = {};
-    let elt = fm.getFocusedElementForWindow(content, true, focusedWindow);
+    fm.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
   }
 };
