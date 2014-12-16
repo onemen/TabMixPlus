@@ -166,7 +166,8 @@ let PlacesUtilsInternal = {
       '            aWhere = browserWindow.TMP_Places.fixWhereToOpen(null, aWhere);\n' +
       '        }\n' +
       '      }\n' +
-      '      if (browserWindow && aWhere == "current") browserWindow.gBrowser.mCurrentBrowser.tabmix_allowLoad = true;\n' +
+      '      if (browserWindow && aWhere == "current")\n' +
+      '        browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '      $&'
     )._replace(
       'inBackground:',

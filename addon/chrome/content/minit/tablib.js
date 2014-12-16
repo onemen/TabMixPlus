@@ -465,7 +465,7 @@ var tablib = {
       'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: Tabmix.isVersion(250)}
     ).toCode();
     // update current browser
-    gBrowser.mCurrentBrowser.droppedLinkHandler = handleDroppedLink;
+    gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
 
     // we prevent sessionStore.duplicateTab from moving the tab
     Tabmix.changeCode(window, "duplicateTabIn")._replace(
@@ -1797,7 +1797,7 @@ var tablib = {
 
   contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
     var where;
-    var browser = gBrowser.mCurrentBrowser;
+    var browser = gBrowser.selectedBrowser;
     if (aUri != browser.currentURI.spec) {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ? (aEvent.dataTransfer.dropEffect == "copy") : (aEvent.ctrlKey || aEvent.metaKey);

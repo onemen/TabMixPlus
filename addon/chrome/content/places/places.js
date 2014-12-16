@@ -160,7 +160,7 @@ var TMP_Places = {
    openLivemarkSite: function TMP_PC_openLivemarkSite(aUrl, aEvent) {
      var where = this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent), this.prefBookmark);
      if (where == "current")
-       Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
+       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
      openUILinkIn(aUrl, where, {
         inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
         initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
@@ -182,7 +182,7 @@ var TMP_Places = {
       var where = this.isBookmarklet(aUri) ? "current" :
                    this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
       if (where == "current")
-        Tabmix.getTopWin().gBrowser.mCurrentBrowser.tabmix_allowLoad = true;
+        Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
       openUILinkIn(aUri, where, {
         inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
         initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
