@@ -501,7 +501,7 @@ var TMP_eventListener = {
     }
 
     var tabsToolbar = document.getElementById("TabsToolbar");
-    if (navigator.oscpu.indexOf("Windows NT 6.1") == 0) {
+    if (navigator.oscpu.startsWith("Windows NT 6.1")) {
       Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
     }
 
@@ -519,7 +519,7 @@ var TMP_eventListener = {
         Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
       }
       else {
-        let version = navigator.oscpu.indexOf("Windows NT 6.1") == 0 ? "v40aero" : "v40";
+        let version = navigator.oscpu.startsWith("Windows NT 6.1") ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
       }

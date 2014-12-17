@@ -897,7 +897,7 @@ var TabmixSessionManager = {
       var allElements = this.DATASource.GetAllResources();
       while (allElements.hasMoreElements()) {
          var aResource = allElements.getNext();
-         if ((aResource instanceof Ci.nsIRDFResource) && (aResource.Value.indexOf(labelRoot) == 0))
+         if ((aResource instanceof Ci.nsIRDFResource) && (aResource.Value.startsWith(labelRoot)))
             this.deleteNode(aResource);
       }
    },
@@ -1362,10 +1362,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       container = this.initContainer(path)
       var pathNode, container, extID = "";
       var node = aTriggerNode.parentNode.parentNode;
-      if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows")
+      if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows")
          extID = "/" + id;
       this.copySubtree(oldPath, path + extID);
-      if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
+      if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows") {
          node = this.RDFService.GetResource(path + extID);
          container.InsertElementAt(node, 1, true);
          this.DATASource.Unassert(node, this.getNC("dontLoad"), this.RDFService.GetLiteral("true"));
@@ -1399,7 +1399,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var allElements = this.DATASource.GetAllResources();
       while (allElements.hasMoreElements()) {
          var aResource = allElements.getNext();
-         if ((aResource instanceof Ci.nsIRDFResource) && (aResource.Value.indexOf(oldRoot) == 0)) {
+         if ((aResource instanceof Ci.nsIRDFResource) && (aResource.Value.startsWith(oldRoot))) {
             var newNodeLabel = aResource.Value.replace(oldRoot, newRoot);
             this.copyNode(aResource, this.RDFService.GetResource(newNodeLabel), oldRoot, newRoot);
          }
@@ -1609,7 +1609,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var obsAll = document.getElementById("tmp_contextmenu_AllWindows");
       var obsThis = document.getElementById("tmp_contextmenu_ThisWindow");
       var mSave = document.getElementById("tm-sm-Save");
-      if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows" || mValue <= -1) {
+      if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows" || mValue <= -1) {
          if (obsAll.hidden != true)
             obsAll.hidden = true;
          if (obsThis.hidden != true)
@@ -1700,7 +1700,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             case Tabmix.BUTTON_OK: this.replaceStartupPref(result, "");
             case Tabmix.NO_NEED_TO_REPLACE : this.removeSession(path, this._rdfRoot+'/windows');
          }
-      } else if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
+      } else if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows") {
          this.removeSession(path, this.gSessionPath[0]);
          this.updateClosedWindowsMenu("check");
       }
@@ -1728,7 +1728,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.prefBranch.setIntPref("onStart.loadsession", -1);
             Services.prefs.savePrefFile(null); // store the pref immediately
          }
-      } else if (node.id.indexOf("tm-sm-closedwindows")==0 || node.id == "btn_closedwindows") {
+      } else if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows") {
          title = TabmixSvc.getSMString("sm.removeAll.title.closedwindow");
          msg = TabmixSvc.getSMString("sm.removeAll.msg2");
          result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
@@ -1874,7 +1874,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          parentID = "tm_prompt";
       else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST)
          parentID = popup.parentNode.id;
-      var onClosedWindowsList = parentId.indexOf("tm-sm-closedwindows")==0 || parentId == "btn_closedwindows";
+      var onClosedWindowsList = parentId.startsWith("tm-sm-closedwindows") || parentId == "btn_closedwindows";
       if (onClosedWindowsList)
          menuCommand = "openclosedwindow";
 
@@ -3268,7 +3268,7 @@ try{
 
         if (needToReload) {
           let url = TMP_SessionStore.getActiveEntryData(data).url || "";
-          if (url.indexOf("file:") != 0)
+          if (!url.startsWith("file:"))
             tab.setAttribute("_tabmix_load_bypass_cache", true);
         }
       }

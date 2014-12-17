@@ -42,7 +42,7 @@ var TMP_LastTab = {
                                 false);
 
       var ietab = "chrome://ietab/content/reloaded.html?url=";
-      if (gBrowser.currentURI.spec.indexOf(ietab) == 0)
+      if (gBrowser.currentURI.spec.startsWith(ietab))
          tablist.focus();
 
       this.TabListLock = true;

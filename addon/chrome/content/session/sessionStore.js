@@ -833,7 +833,7 @@ var TabmixConvertSession = {
         let PREFIX = "tmp-session-data-";
         TSTProps.forEach(function(aProp) {
           if (/^([^\s=]+)=(.*)/.test(aProp) &&
-              RegExp.$1.indexOf(PREFIX) == 0 && RegExp.$2)
+              RegExp.$1.startsWith(PREFIX) && RegExp.$2)
             extData[RegExp.$1.substr(PREFIX.length)] = decodeURIComponent(RegExp.$2);
         });
         properties = properties.substr(booleanAttrLength + 1).split(" ");

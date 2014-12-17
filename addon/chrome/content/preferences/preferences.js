@@ -534,7 +534,7 @@ function openHelp(helpTopic) {
     let browsers = tabBrowser.browsers;
     for (let i = 0; i < browsers.length; i++) {
       let browser = browsers[i];
-      if (browser.currentURI.spec.indexOf(helpPage) == 0) {
+      if (browser.currentURI.spec.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
         return true;
       }

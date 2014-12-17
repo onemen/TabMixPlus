@@ -400,7 +400,7 @@ var TMP_Places = {
     if (!result && ietab) {
       let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url="
       if (aUrl != prefix) {
-        let url = aUrl.indexOf(prefix) == 0 ?
+        let url = aUrl.startsWith(prefix) ?
             aUrl.replace(prefix, "") : prefix + aUrl;
         result = aCallBack.apply(this, [url]) ||
                  hasHref && aCallBack.apply(this, url.split("#"));

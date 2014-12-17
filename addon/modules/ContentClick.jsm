@@ -659,7 +659,7 @@ let ContentClickInternal = {
 
   isUrlForDownload: function TMP_isUrlForDownload(linkHref) {
     //we need this check when calling from onDragOver and onDrop
-    if (linkHref.indexOf("mailto:") == 0)
+    if (linkHref.startsWith("mailto:"))
       return true;
 
     var filetype = TabmixSvc.prefBranch.getCharPref("filetype");
@@ -947,7 +947,7 @@ let ContentClickInternal = {
   */
   checkAttr: function TMP_checkAttr(attr, string) {
     if (typeof(attr) == "string")
-      return attr.indexOf(string) == 0;
+      return attr.startsWith(string);
     return false;
   },
 

@@ -1479,7 +1479,7 @@ var gTMPprefObserver = {
         bottomToolbox = document.createElement("toolbox");
         bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
         bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
-        if (navigator.oscpu.indexOf("Windows NT 6.1") == 0)
+        if (navigator.oscpu.startsWith("Windows NT 6.1"))
           bottomToolbox.setAttribute("tabmix_aero", true);
         // if we decide to move this box into browser-bottombox
         // remember to fix background css rules for all platform

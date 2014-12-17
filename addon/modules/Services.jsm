@@ -62,7 +62,7 @@ let TabmixSvc = {
 
   setLabel: function(property) {
     var label, key;
-    if (property.indexOf("sm.") == 0) {
+    if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
       key = this.getSMString(property + ".accesskey");
     }
