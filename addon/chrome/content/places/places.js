@@ -102,8 +102,8 @@ var TMP_Places = {
          w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
-        '  var tab = where == "current" ? w.gBrowser.mCurrentTab :\n' +
-        '            (Tabmix.isVersion(340) ? newTab : w.gBrowser.getTabForLastPanel());\n' +
+        '  var tab = where == "current" ?\n' +
+        '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
         '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
         '$1$2'
       ).toCode();
