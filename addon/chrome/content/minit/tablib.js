@@ -60,6 +60,10 @@ var tablib = {
       } catch (ex) {}
     }
     var tab = gBrowser.getTabForBrowser(browser);
+    if (!tab) {
+      browser.tabmix_allowLoad = true;
+      return null;
+    }
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
