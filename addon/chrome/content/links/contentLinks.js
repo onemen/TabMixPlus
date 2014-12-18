@@ -25,11 +25,11 @@ Tabmix.contentAreaClick = {
       'if (where == "tab" || where == "tabshifted") {\n' +
       '        let doc = event.target.ownerDocument;\n' +
       '        let _url = Tabmix.isVersion(190) ? href : url;\n' +
-      '        openLinkIn(_url, where,\n' +
-      '             {referrerURI: doc.documentURIObject,\n' +
-      '              charset: doc.characterSet,\n' +
-      '              initiatingDoc: doc,\n' +
-      '              suppressTabsOnFileDownload: suppressTabsOnFileDownload});\n' +
+      '        let params = { charset: doc.characterSet, initiatingDoc: doc,\n' +
+      '                       suppressTabsOnFileDownload: suppressTabsOnFileDownload };\n' +
+      '        if (!Tabmix.isVersion(370) || !BrowserUtils.linkHasNoReferrer(linkNode))\n' +
+      '          params.referrerURI = doc.documentURIObject;\n'+
+      '        openLinkIn(_url, where, params);\n' +
       '      }\n' +
       '      else\n        $&'
     )._replace(

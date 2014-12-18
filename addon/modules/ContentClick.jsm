@@ -109,9 +109,9 @@ let ContentClickInternal = {
       'where == "current"',
       '!json.tabmix && where == "current" || where == "default"'
     )._replace(
-      'referrerURI: browser.documentURI,',
-      '$&\n' +
-      '                                          suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,'
+      'charset:',
+      'suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,\n' +
+      '                   $&'
     ).toCode();
   },
 

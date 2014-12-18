@@ -946,9 +946,9 @@ var tablib = {
     }
 
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
-      'charset: doc.characterSet,',
-      '$&\n                 ' +
-      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),'
+      /allowMixedContent:|charset:/,
+      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
+      '      $&'
     ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
     gBrowser.openInverseLink = function (aTab) {
