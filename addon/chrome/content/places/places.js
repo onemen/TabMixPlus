@@ -50,16 +50,23 @@ var TMP_Places = {
 
       // fix small bug when the event is not mouse event
       // inverse focus of middle/ctrl/meta clicked bookmarks/history
+      // don't inverse focus when called from onPopupClick and One-Click Search
+      // Bar Interface is on
       // when we are in single window mode set the function to return "tab"
+      let $LF = '\n  ';
       Tabmix.changeCode(window, "whereToOpenLink")._replace(
         'var middle = !ignoreButton && e.button == 1;',
         'var middle = !ignoreButton && e.button && e.button == 1;'
       )._replace(
         'return shift ? "tabshifted" : "tab";',
         '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
-                 "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";\
-         if(getBoolPref(pref, true)) shift = !shift; \
-         $&}'
+                 "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
+        'Tabmix.log("callerName " + Tabmix.callerName());' + $LF +
+        'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
+        '                        Tabmix.callerName() != "onPopupClick";' + $LF +
+        'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
+        '  shift = !shift;' + $LF +
+        '$&}'
       )._replace(
         'return "window";',
         'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
@@ -67,15 +74,9 @@ var TMP_Places = {
 
       Tabmix.changeCode(window, "openUILinkIn")._replace(
         'params.fromChrome = true;',
-        '$&' +
-        /* only in use when openUILinkIn called from searchbar.doSearch */
-        ' var tabmixArg = arguments.length > 5 ? arguments[5] : null;' +
-        ' if (tabmixArg) {' +
-        '   if ("backgroundPref" in tabmixArg)' +
-        '     params.inBackground = getBoolPref(tabmixArg.backgroundPref);' +
-        ' }' +
-        ' else if (Tabmix.isCallerInList("BG_observe"))' +
-        '   params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
+        '$&\n' +
+        '  if (Tabmix.isCallerInList("BG_observe"))\n' +
+        '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
       ).toCode();
 
       // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+

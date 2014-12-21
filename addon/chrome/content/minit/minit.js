@@ -1187,6 +1187,17 @@ Tabmix.navToolbox = {
     }
   },
 
+  whereToOpenSearch: function(aWhere) {
+    var tab = gBrowser.selectedTab;
+    var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
+    var isLockTab = !isBlankTab && tab.hasAttribute("locked");
+    if (aWhere == "current" && isLockTab)
+      aWhere = "tab";
+    else if (/^tab/.test(aWhere) && isBlankTab)
+      aWhere = "current";
+    return aWhere;
+  },
+
   initializeSearchbar: function TMP_navToolbox_initializeSearchbar() {
     var searchbar = document.getElementById("searchbar");
     if (!searchbar)
@@ -1212,28 +1223,34 @@ Tabmix.navToolbox = {
     let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     let fnString = obj[fn].toString();
-    if (fnString.indexOf("tabmixArg") > -1)
+    if (/Tabmix/.test(fnString))
       return;
 
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
+    let $LF = '\n          ';
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
-      /(openUILinkIn[^\(]*\([^\)]+)(\))/,
-      '$1, null, tabmixArg$2'
-    )._replace(
-      'openUILinkIn',
-      '  var tabmixArg = {backgroundPref: "extensions.tabmix.loadSearchInBackground"};' +
-      '  var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
-      '  var isLockTab = !isBlankTab && gBrowser.mCurrentTab.hasAttribute("locked");' +
-      '  if (aWhere == "current" && isLockTab)' +
-      '    aWhere = "tab";' +
-      '  else if ((/^tab/).test(aWhere) && isBlankTab)' +
-      '    aWhere = "current";' +
+      /let params|openUILinkIn/,
+      'aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);' + $LF +
       '$&'
     )._replace(
+      /openUILinkIn\(.*\);/,
+      'let params = {' + $LF +
+      '  postData: submission.postData,' + $LF +
+      '  inBackground: Tabmix.prefs.getBoolPref("loadSearchInBackground")' + $LF +
+      '};' + $LF +
+      'openUILinkIn(submission.uri.spec, aWhere, params);',
+      {check: !Tabmix.isVersion(350)}
+    )._replace(
+      'inBackground: aWhere == "tab-background"',
+      '$& ||' + $LF +
+      '                Tabmix.prefs.getBoolPref("loadSearchInBackground")',
+      {check: Tabmix.isVersion(350)}
+    )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
-      'var loadInBackground = Tabmix.prefs.getBoolPref("loadSearchInBackground");', {check: !searchLoadExt && organizeSE}
+      'var loadInBackground = aWhere == "tab-background" || Tabmix.prefs.getBoolPref("loadSearchInBackground");',
+      {check: !searchLoadExt && organizeSE}
     )._replace(
       /searchbar\.currentEngine/g,
       'this.currentEngine', {check: pIte}
