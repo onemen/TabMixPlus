@@ -31,7 +31,7 @@
         }
         break;
     }
-  }
+  };
 
   /* ............... TabView Code Fix  ............... */
 
@@ -73,7 +73,7 @@
       callback();
     else
       TabView._initFrameCallbacks.push(callback);
-  },
+  };
 
   TMP_TabView._patchInitialized = false;
   TMP_TabView._patchTabviewFrame = function SM__patchTabviewFrame() {
@@ -163,8 +163,8 @@
         if (!item._reconnected)
           item._reconnect();
       });
-    }
-  },
+    };
+  };
 
   TMP_TabView._resetTabviewFrame = function SM__resetTabviewFrame(){
     var tabView = document.getElementById("tab-view-deck");
@@ -183,7 +183,7 @@
       delete TabView._window.UI._original_reset;
       delete TabView._window.TabItems._original_resumeReconnecting;
     }
-  }
+  };
 
   /* ............... TabmixSessionManager TabView Data ............... */
 
@@ -197,7 +197,7 @@
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
     this._groupCount = parsedData.totalNumber || 1;
     this._updateUIpageBounds = false;
-  }
+  };
 
   TabmixSessionManager._aftertWindowStateReady =
         function SM__aftertWindowStateReady(aOverwriteTabs, showNotification) {
@@ -225,7 +225,7 @@
 
     this.groupUpdates = {};
     this._tabviewData = {};
-  }
+  };
 
   TabmixSessionManager.groupUpdates = {};
   TabmixSessionManager._tabviewData = {};
@@ -250,13 +250,13 @@
 
     this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, TabmixSvc.JSON.stringify({}));
     this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
-  }
+  };
 
   TabmixSessionManager._saveTabviewData = function SM__saveTabviewData() {
-    for (let id in this._tabviewData) {
+    for (let id of Object.keys(this._tabviewData)) {
       this._setTabviewData(id, this._tabviewData[id]);
     }
-  }
+  };
 
   TabmixSessionManager._setTabviewData = function SM__setTabviewData(id, data) {
     if (typeof(data) != "string")
@@ -264,11 +264,11 @@
     TabmixSvc.ss.setWindowValue(window, id, data);
     if (!this.enableBackup)
       return;
-    if (data != "" && data != "{}")
+    if (data !== "" && data != "{}")
       this.setLiteral(this.gThisWin, id, data);
     else
       this.removeAttribute(this.gThisWin, id);
-  }
+  };
 
   TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, activeGroupId){
     if (tabdata.pinned)
@@ -325,7 +325,7 @@
       tabdata.extData["tabview-tab"] = tabviewData;
       // we did not saved hidden attribute when we use TGM
       // hide all tabs that are not in the active group
-      if (!Tabmix.extensions.tabGroupManager && activeGroupId != null) {
+      if (!Tabmix.extensions.tabGroupManager && activeGroupId !== null) {
         if (!parsedData)
           parsedData = TabmixSvc.JSON.parse(tabviewData);
         if (parsedData.groupID != activeGroupId)
@@ -334,11 +334,11 @@
     }
     else if (tabdata.extData)
       delete tabdata.extData["tabview-tab"];
-  }
+  };
 
   TabmixSessionManager.isEmptyObject = function SM_isEmptyObject(obj) {
-    return Object.keys(obj).length == 0;
-  }
+    return Object.keys(obj).length === 0;
+  };
 
   // return true if there are no visible tabs that are not in the exclude array
   TabmixSessionManager._noNormalTabs = function SM__noNormalTabs(excludeTabs) {
@@ -351,7 +351,7 @@
       }
       return false;
     });
-  }
+  };
 
   TabmixSessionManager._addGroupItem = function SM__addGroupItem(aGroupItems, aGroupsData, setAsActive) {
     let groupID = aGroupsData.nextID++;
@@ -364,16 +364,16 @@
     aGroupsData.totalNumber = Object.keys(aGroupItems).length;
     this._tabviewData["tabview-group"] = aGroupItems;
     this._tabviewData["tabview-groups"] = aGroupsData;
-  }
+  };
 
    // Remove current active group only when it's empty and have no title
   TabmixSessionManager._deleteActiveGroup = function SM__deleteActiveGroup(aGroupItems, activeGroupId) {
     let activeGroup = aGroupItems[activeGroupId];
-    if (activeGroup && activeGroup.title == "") {
+    if (activeGroup && activeGroup.title === "") {
       delete aGroupItems[activeGroupId];
       this._tabviewData["tabview-group"] = aGroupItems;
     }
-  }
+  };
 
   // just in case.... and add totalNumber to firefox 4.0 - 5.0.x
   TabmixSessionManager._validateGroupsData = function SM__validateGroupsData(aGroupItems, aGroupsData) {
@@ -387,14 +387,14 @@
       let nextID = 0;
       keys.forEach(function (key) {
         nextID = Math.max(aGroupItems[key].id, nextID);
-      })
+      });
       aGroupsData.nextID = nextID++;
     }
     if (!aGroupsData.activeGroupId)
       aGroupsData.activeGroupId = aGroupItems[keys[0]].id;
     if (!aGroupsData.totalNumber)
       aGroupsData.totalNumber = keys.length;
-  }
+  };
 
  /**
   * when we append tab to this window we merge group data from the session into the curent group data
@@ -458,7 +458,7 @@
         // if active group is empty without title reuse it for
         // the tabs from the session.
         let activeGroup = groupItems[groupsData.activeGroupId];
-        if (activeGroup && activeGroup.title == "") {
+        if (activeGroup && activeGroup.title === "") {
           createNewGroup = false;
           this.groupUpdates.newGroupID = groupsData.activeGroupId;
           this._tabviewData["tabview-group"] = groupItems;
@@ -481,7 +481,7 @@
     // both current window and the session that we are restoring have group data
 
     let IDs = {};
-    for (let id in newGroupItems) {
+    for (let id of Object.keys(newGroupItems)) {
       newGroupItems[id].newItem = true;
       // change group id if already used in this window
       if (id in groupItems) {
@@ -519,15 +519,15 @@
     // save data
     this._tabviewData["tabview-group"] = groupItems;
     this._tabviewData["tabview-groups"] = groupsData;
-  }
+  };
 
   TabmixSessionManager.showNotification = function SM_showNotification() {
-    var msg = TabmixSvc.getSMString("sm.tabview.hiddengroups")
+    var msg = TabmixSvc.getSMString("sm.tabview.hiddengroups");
     try {
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
     } catch (e) { }
-  }
+  };
 
   /* ............... TabView Code Fix  ............... */
 
@@ -542,7 +542,7 @@
       if (data && data.pageBounds)
         TabView._window.UI._pageBounds = data.pageBounds;
     }
-  }
+  };
 
   // when not overwriting tabs try to rearrange the groupItems
   TabmixSessionManager._groupItemPushAway = function SM__groupItemPushAway() {
@@ -559,4 +559,4 @@
       }
     }
     this._groupItems = null;
-  }
+  };

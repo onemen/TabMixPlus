@@ -6,7 +6,7 @@
  * original code by onemen
  *
  */
-var TMP_SessionStore = {
+var TMP_SessionStore = { // jshint ignore:line
    // make sure sessionstore is init
    _ssInited: null,
    initService: function TMP_ss_start() {
@@ -28,7 +28,7 @@ var TMP_SessionStore = {
      if (aUndoItem.renamed)
        return;
      let selectedTab = aUndoItem.selected && aUndoItem.tabs[aUndoItem.selected - 1];
-     if (!selectedTab || !selectedTab.entries || selectedTab.entries.length == 0)
+     if (!selectedTab || !selectedTab.entries || selectedTab.entries.length === 0)
        return;
      let tabData = this.getActiveEntryData(selectedTab);
      let url = selectedTab.attributes["label-uri"];
@@ -119,7 +119,7 @@ var TMP_SessionStore = {
       * we use nsISessionStore service in TMP.
       * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
       *
-      * Bug 449596 – remove the browser.sessionstore.enabled pref
+      * Bug 449596 - remove the browser.sessionstore.enabled pref
       * so here we don't set it to true, we just clear user pref to the default
       * if the pref exist in firefox this set the pref to true
       * if the pref don't exist this will remove the pref
@@ -182,25 +182,27 @@ var TMP_SessionStore = {
          let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
          let self = this;
          let callBack = function (aResult) {
-            if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button == 0))) {
+            if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button === 0))) {
               self.setSessionRestore(false);
               Services.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
               Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, TMP_crashRecovery_enabled);
             }
             else {
               // we don't change any of sessionstore default setting
-              // the user will be ask on exit what to do. (browser.warnOnRestart and browser.warnOnQuit are both true on default)
+              // the user will be ask on exit what to do.
+              // (browser.warnOnRestart and browser.warnOnQuit are both true on default)
               Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
               Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
            }
            TabmixSvc.sm.settingPreference = false;
-         }
+         };
          let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                [title, msg, "", "", buttons], window, start ? callBack : null);
          if (!start)
            callBack(result);
       }
-      // when user start new profile or update from firefox 2.0 profile browser.warnOnRestart and browser.warnOnQuit are both true on default
+      // when user start new profile or update from firefox 2.0 profile
+      // browser.warnOnRestart and browser.warnOnQuit are both true on default
       else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
                 !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
          if (!Tabmix.isVersion(200))
@@ -254,7 +256,7 @@ var TMP_SessionStore = {
             // until sessionstartup initialized just return the pref value,
             // we only use isWindowAfterSessionRestore when our Session Manager enable
             return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");
-         })
+         });
       }
    },
 
@@ -312,9 +314,9 @@ var TMP_SessionStore = {
       return  "";
    }
 
-}
+};
 
-var TMP_ClosedTabs = {
+var TMP_ClosedTabs = { // jshint ignore:line
    _buttonBroadcaster: null,
    get buttonBroadcaster() {
       if (!this._buttonBroadcaster)
@@ -331,7 +333,7 @@ var TMP_ClosedTabs = {
 
    setButtonDisableState: function ct_setButtonDisableState(aState) {
       if (typeof(aState) == "undefined")
-         aState = this.count == 0;
+         aState = this.count === 0;
       Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
    },
 
@@ -367,15 +369,15 @@ var TMP_ClosedTabs = {
 
       // populate menu
       var closedTabs = this.getClosedTabData;
-      var ltr = Tabmix.ltr;
+      var m, ltr = Tabmix.ltr;
       for (let i = 0; i < closedTabs.length; i++) {
-         var m = document.createElement("menuitem");
+         m = document.createElement("menuitem");
          var tabData = closedTabs[i];
          // Grab the title and uri (make the uri friendly text)
          var url = this.getUrl(tabData);
          var title = this.getTitle(tabData, url);
          var _uri = makeURI(url);
-         if ( _uri.scheme == "about" && title == "" )
+         if ( _uri.scheme == "about" && title === "" )
             url = title = "about:blank";
          else try {
             url = _uri.scheme + ":\/\/" + _uri.hostPort + _uri.path;
@@ -405,7 +407,7 @@ var TMP_ClosedTabs = {
          m.setAttribute("value", i);
          m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + ");");
          m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
-         if (i == 0)
+         if (i === 0)
             m.setAttribute("key", "key_undoCloseTab");
          aPopup.appendChild(m);
       }
@@ -479,6 +481,7 @@ var TMP_ClosedTabs = {
                break;
             }
             // else do the default
+            /* falls through */
          default:
             this.SSS_undoCloseTab(aIndex, aWhere, true);
       }
@@ -518,7 +521,7 @@ var TMP_ClosedTabs = {
    SSS_restoreToNewWindow: function ct_restoreToNewWindow(aIndex) {
       var tabData = this.getClosedTabAtIndex(aIndex);
       // we pass the current tab as a place holder for tabData
-      var state = tabData = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
+      var state = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
       return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
    },
 
@@ -528,7 +531,6 @@ var TMP_ClosedTabs = {
 
       this.setButtonDisableState(true);
 
-      var aTab, blankTab;
       // catch blank tabs
       var blankTabs = [];
       for (let i = 0; i < gBrowser.tabs.length ; i++) {
@@ -538,13 +540,13 @@ var TMP_ClosedTabs = {
 
       var tab, multiple = closedTabCount > 1;
       for (let i = 0; i < closedTabCount; i++) {
-         blankTab = blankTabs.pop() || null;
-         tab = this.SSS_undoCloseTab(0, "original", i==0, blankTab, multiple);
+         let blankTab = blankTabs.pop() || null;
+         tab = this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
       }
 
       // remove unused blank tabs
       while(blankTabs.length > 0){
-         blankTab = blankTabs.pop();
+         let blankTab = blankTabs.pop();
          blankTab.collapsed = true;
          gBrowser.removeTab(blankTab);
       }
@@ -553,7 +555,7 @@ var TMP_ClosedTabs = {
    },
 
    SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {
-      if (!Tabmix.prefs.getBoolPref("undoClose") || this.count == 0)
+      if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
          return null;
 
       // get tab data
@@ -622,9 +624,9 @@ var TMP_ClosedTabs = {
       return tab;
    }
 
-}
+};
 
-var TabmixConvertSession = {
+var TabmixConvertSession = { // jshint ignore:line
    get getTitle() {
       return TabmixSvc.getString("incompatible.title") + " - " + TabmixSvc.getSMString("sm.title");
    },
@@ -655,7 +657,7 @@ var TabmixConvertSession = {
                       TabmixConvertSession.convertFile(a, b);
                     }, 0, null, true);
                   }
-                 }
+                 };
       this.confirm(this.getString("msg1") + "\n\n" + this.getString("msg2"), callBack);
    },
 
@@ -680,8 +682,8 @@ var TabmixConvertSession = {
 
    convertFile: function cs_convertFile(aFileUri, aSilent) {
       if (TabmixSvc.sessionManagerAddonInstalled) {
-         let tmp = {}
-         Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp)
+         let tmp = {};
+         Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp);
          tmp.SessionConverter.convertTMP(aFileUri, aSilent);
       }
       else {
@@ -761,7 +763,7 @@ var TabmixConvertSession = {
         this.node = rdfTab;
         this.index = TabmixSessionManager.getIntValue(rdfTab, "tabPos");
       }
-      _tabData.prototype.toString = function() { return this.index; }
+      _tabData.prototype.toString = function() { return this.index; };
 
       var tabsEnum = TabmixSessionManager.initContainer(rdfNodeTabs).GetElements();
       while (tabsEnum.hasMoreElements()) {
@@ -857,6 +859,7 @@ var TabmixConvertSession = {
             case "faviconized":
               if (isTrue)
                 extData.faviconized = true;
+              break;
             case "pinned":
             case "hidden":
               if (isTrue)
@@ -877,7 +880,7 @@ var TabmixConvertSession = {
       // save panorama data if exist
       if (!aClosedTab) {
         let data = TabmixSessionManager.getLiteralValue(rdfNodeTab, "tabview-tab");
-        if (data != "")
+        if (data !== "")
           extData["tabview-tab"] = data;
       }
       if (Object.keys(extData).length)
@@ -888,7 +891,7 @@ var TabmixConvertSession = {
    getHistoryState: function cs_getHistoryState(rdfNodeTab) {
       let decodeData = function(data, decode) {
         return decode ? TabmixSessionManager.getDecodedLiteralValue(null, data) : data;
-      }
+      };
       var history = TabmixSessionManager.getLiteralValue(rdfNodeTab, "history");
       var tmpData = history.split("|-|");
       var sep = tmpData.shift(); // remove seperator from data
@@ -911,4 +914,4 @@ var TabmixConvertSession = {
       }
       return entries;
    }
-}
+};

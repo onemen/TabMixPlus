@@ -89,10 +89,9 @@
       // display the command buttons
       var aButtons, buttons = ["accept", "cancel", "extra1"];
       var btnLabels = dialogParams.GetString(4).split("\n");
-      var maxWidth = 0;
       for (i = 0; i < buttons.length; ++i) {
          aButtons = document.documentElement.getButton(buttons[i]);
-         if (i < btnLabels.length && btnLabels[i] != "") {
+         if (i < btnLabels.length && btnLabels[i] !== "") {
             setLabelForNode(aButtons, btnLabels[i]);
          }
          else aButtons.hidden = true; // hide extra button
@@ -194,11 +193,11 @@
       var description = document.getElementById("tm_info").lastChild.firstChild;
       textBox.value = textBox.value.replace(/^[\s]+/g,"");
       var name = textBox.value.toLowerCase();
-      var msgReplace, validName = 0;
-      if (name == "") validName = 1;
-      if (validName==0) {
+      var validName = 0;
+      if (name === "") validName = 1;
+      if (validName === 0) {
          for (var i = 0; i < gSavedName.length; i++) {
-            if (name == gSavedName[i].toLowerCase() && gSavedName[i] != "" ) {
+            if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "" ) {
                if (dialogParams.GetInt(3) == TMP_DLG_RENAME) {
                   if (gOrigName != name) validName = 2;
                   continue;

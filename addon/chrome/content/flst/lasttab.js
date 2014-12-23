@@ -164,7 +164,7 @@ var TMP_LastTab = {
    },
 
    set tabs (val) {
-     if (val != null)
+     if (val !== null)
        return;
 
      this._tabs = null;
@@ -264,7 +264,7 @@ var TMP_LastTab = {
          }
 
          TabmixAllTabs.updateMenuItemInactive(null);
-         TabmixAllTabs.backupLabel=="";
+         TabmixAllTabs.backupLabel = "";
 
          this.TabList.hidePopup();
          if (tabToSelect)
@@ -359,4 +359,4 @@ var TMP_LastTab = {
       return this.handleCtrlTab ? index : this.tabs.length - 1 - index;
    }
 
-}
+};

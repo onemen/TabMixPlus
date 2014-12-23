@@ -30,7 +30,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
         "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
-}
+};
 
 /**
  * @brief Load URLs from the Extension/Theme Managers, and item with text-link class
@@ -44,7 +44,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
  *
  */
 Tabmix.openURL = function TMP_openURL(aURL, event) {
-   var linkTarget, loadInBackground;
+   var linkTarget;
    try {
             linkTarget = Services.prefs.getIntPref("browser.link.open_newwindow");
    }
@@ -52,7 +52,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
       linkTarget = 1;
    }
 
-   if (aURL == null) aURL = "about:blank";
+   if (aURL === null) aURL = "about:blank";
 
    // check for an existing window and focus it; it's not application modal
    var browserWindow = this.getTopWin();
@@ -94,7 +94,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
       event.stopPropagation();
    }
    return true;
-}
+};
 
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
@@ -120,7 +120,6 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          let newTab = gBrowser.duplicateTab(selectedTab, null, null, null, true);
          Tabmix.clearUrlBar(newTab, currentUrl, true);
          return newTab;
-         break;
       case 4 : // user url
          let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
                                          "browser.newtab.url";
@@ -152,7 +151,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    var loadBlank = isBlankPageURL(url);
    if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
         typeof privateTab == "object" && privateTab.isTabPrivate(selectedTab) &&
-        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) == 0) {
+        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
       privateTab.readyToOpenTab(false);
    }
    var newTab = gBrowser.addTab(url, {
@@ -218,7 +217,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
     else
       focusAndSelectUrlBar();
   }
-}
+};
 
 /**
  * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
@@ -246,8 +245,8 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
     return;
   }
 
-  this.updateUrlBarValue()
-}
+  this.updateUrlBarValue();
+};
 
 Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   this.selectedTab = null;
@@ -257,7 +256,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
   if (url != gURLBar.value && !isBlankPageURL(url)) {
     URLBarSetURI();
   }
-}
+};
 
 /**
  * @brief openUILink handles clicks on UI elements that cause URLs to load
@@ -308,7 +307,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       'window.Omnibar.handleSearchQuery', {silent: true}
     ).toCode();
   }
-}
+};
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
@@ -324,7 +323,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
       return "tab";
   }
   return "current";
-}
+};
 
 /**
  * @brief copy Tabmix data from old tab to new tab.
@@ -339,7 +338,7 @@ Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
   });
 
   this.restoreTabState(newTab);
-}
+};
 
 Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   if (aTab.hasAttribute("_locked")) {
@@ -377,9 +376,9 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   // make sure other extensions don't set minwidth maxwidth
   aTab.removeAttribute("minwidth");
   aTab.removeAttribute("maxwidth");
-}
+};
 
-Tabmix.tabStyles = {}
+Tabmix.tabStyles = {};
 Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
@@ -404,6 +403,6 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   let isBold = function(attrib) {
     attrib = attrib.split(" ");
     return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
-  }
+  };
   boldChanged.value = isBold(newAttrib) != isBold(currentAttrib);
-}
+};

@@ -52,7 +52,7 @@ let TabmixRemoveBlankTab = {
   },
 
   getWindowAndBrowser: function(aContext) {
-    let result = {win: null, b: null}
+    let result = {win: null, b: null};
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
                     .getInterface(Ci.nsIWebNavigation);
@@ -70,12 +70,14 @@ let TabmixRemoveBlankTab = {
   removeTab: function(win, tab) {
     window.addEventListener("unload", function _unload(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
-      win && !win.closed && win.setTimeout(function() {
-        if (win && win.gBrowser && tab && tab.parentNode)
-          win.gBrowser.removeTab(tab, {animate: false});
-      }, 250);
+      if (win && !win.close) {
+        win.setTimeout(function() {
+          if (win && win.gBrowser && tab && tab.parentNode)
+            win.gBrowser.removeTab(tab, {animate: false});
+        }, 250);
+      }
     }, false);
   }
-}
+};
 
 TabmixRemoveBlankTab.initialize();
