@@ -38,6 +38,7 @@ this.LinkNodeUtils = {
       baseURI: node.baseURI,
       host: node.host,
       pathname: node.pathname,
+      className: node.className,
       target: getTargetAttr(node.target, focusedWindow),
       ownerDocument: {
         __noSuchMethod__: function(id) {

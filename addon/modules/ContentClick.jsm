@@ -321,6 +321,9 @@ var ContentClickInternal = {
       return [eventWhere + "@2.1"];
     }
 
+    if (this.miscellaneous(wrappedNode))
+      return ["default@2.2"];
+
     /*
      * prevents tab form opening when clicking Greasemonkey script
      */
@@ -472,19 +475,8 @@ var ContentClickInternal = {
     if (isGmail)
       return "6";
 
-    if ("className" in linkNode) {
-      // don't interrupt with noscript
-      if (linkNode.className.indexOf("__noscriptPlaceholder__") > -1)
-        return "7";
-
-      // need to find a way to work here only on links
-      if (/button/.test(linkNode.className.toLowerCase()))
-        return "8";
-    }
-
-    // don't interrupt with fastdial links
-    if ("ownerDocument" in linkNode && this._window.Tabmix.isNewTabUrls(linkNode.ownerDocument.documentURI))
-      return "9";
+    if (this.miscellaneous(linkNode))
+      return "7";
 
     if (linkNode.getAttribute("rel") == "sidebar" || this._data.targetAttr == "_search" ||
           href.indexOf("mailto:") > -1)
@@ -536,8 +528,9 @@ var ContentClickInternal = {
       let blocked;
       try {
         // for the moment just do it for Google and Yahoo....
-        // and tvguide.com - added 2013-07-20
-        blocked = /tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+        // tvguide.com    - added 2013-07-20
+        // duckduckgo.com - added 2014-12-24
+        blocked = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
            (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
@@ -587,6 +580,25 @@ var ContentClickInternal = {
       return;
 
     this._GM_function.set(window, GM_function);
+  },
+
+  miscellaneous: function(node) {
+    if ("className" in node) {
+      // don't interrupt with noscript
+      if (node.className.indexOf("__noscriptPlaceholder__") > -1)
+        return true;
+
+      // need to find a way to work here only on links
+      if (/button/.test(node.className.toLowerCase()))
+        return true;
+    }
+
+    // don't interrupt with fastdial links
+    if ("ownerDocument" in node &&
+        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI))
+      return true;
+
+    return false;
   },
 
   /**
