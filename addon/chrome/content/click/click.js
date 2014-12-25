@@ -14,7 +14,8 @@ var TabmixTabClickOptions = {
     if (aEvent.button == 2)
       return; // right click
 
-    if (aEvent.button === 0 && aEvent.detail > 1) {
+    var leftClick = aEvent.button === 0;
+    if (leftClick && aEvent.detail > 1) {
       if (this._blockDblClick)
         setTimeout(function(self) {self._blockDblClick = false;}, 0, this);
       return; // double click (with left button)
@@ -22,13 +23,15 @@ var TabmixTabClickOptions = {
 
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
-    this._blockDblClick = aEvent.button === 0 && anonid == "tmp-close-button" ||
-                              target.classList.contains("tabs-newtab-button");
+    // since Firefox 27 (bug 897751) we use tabbrowser binding handler to block
+    // double click on tab close button
+    this._blockDblClick = target.classList.contains("tabs-newtab-button") ||
+      !Tabmix.isVersion(270) && leftClick && anonid == "tmp-close-button";
 
     // don't do anything if user left click on close tab button, or on any
     // other button on tab or tabbar
-    if (aEvent.button === 0 && (anonid == "tmp-close-button" ||
-                                target.localName == "toolbarbutton")) {
+    if (leftClick && (anonid == "tmp-close-button" ||
+                      target.localName == "toolbarbutton")) {
       return;
     }
 
@@ -46,11 +49,11 @@ var TabmixTabClickOptions = {
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.
     // tabcontainer click handler run before tab click handler.
-    if (aEvent.button === 0 && !clickOutTabs &&  !tab.mouseDownSelect)
+    if (leftClick && !clickOutTabs &&  !tab.mouseDownSelect)
       tab.onMouseCommand(aEvent);
 
     // for tab flip
-    if (!clickOutTabs && aEvent.button === 0 && tab.hasAttribute("clickOnCurrent")) {
+    if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {
       tab.removeAttribute("clickOnCurrent");
       let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
       if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey){
@@ -73,12 +76,12 @@ var TabmixTabClickOptions = {
     if (aEvent.button == 1)
       prefName = "middle";
     /* shift click*/
-    else if (aEvent.button === 0 && aEvent.shiftKey && !aEvent.ctrlKey &&
+    else if (leftClick && aEvent.shiftKey && !aEvent.ctrlKey &&
         !aEvent.altKey && !aEvent.metaKey) {
       prefName = "shift";
     }
     /* alt click*/
-    else if (aEvent.button === 0 && aEvent.altKey && !aEvent.ctrlKey &&
+    else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
         !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt";
       window.addEventListener("keyup", function TMP_onKeyup_onTabClick(aEvent) {
@@ -87,7 +90,7 @@ var TabmixTabClickOptions = {
       }, true);
     }
     /* ctrl click*/
-    else if (aEvent.button === 0 && (aEvent.ctrlKey && !aEvent.metaKey ||
+    else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
         !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {
       prefName = "ctrl";
     }

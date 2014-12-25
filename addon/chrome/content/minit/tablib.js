@@ -1676,11 +1676,13 @@ var tablib = {
 
   // make sure that our function don't break removeTab function
   onRemoveTab: function TMP_onRemoveTab(tab) {
+    // Not in use since Firefox 27, see comment in TabmixTabClickOptions
     if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
         TabmixTabClickOptions._blockDblClick) {
       setTimeout(function() {
         TabmixTabClickOptions._blockDblClick = false;
-        gBrowser.tabContainer._blockDblClick = false;
+        if (!Tabmix.isVersion(270))
+          gBrowser.tabContainer._blockDblClick = false;
       }, 0);
     }
 
