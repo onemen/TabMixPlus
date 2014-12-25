@@ -840,8 +840,9 @@ var ContentClickInternal = {
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
+    var currentURL = this._data.currentURL.toLowerCase().split("#")[0];
     if (hrefFromOnClick)
-      return this._data.currentURL.split("#")[0] != hrefFromOnClick.split("#")[0];
+      return currentURL != hrefFromOnClick.toLowerCase().split("#")[0];
 
     if (href)
       href = href.toLowerCase();
@@ -853,7 +854,7 @@ var ContentClickInternal = {
       return null;
     else
       // when the links target is in the same page don't open new tab
-      return this._data.currentURL.split("#")[0] != href.split("#")[0];
+      return currentURL != href.split("#")[0];
 
     return null;
   },
