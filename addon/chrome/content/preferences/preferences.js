@@ -396,8 +396,10 @@ function toggleSyncPreference() {
   const sync = "services.sync.prefs.sync.";
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
+  let exclode = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(function(pref) {
-    Services.prefs[fn](sync + pref, true);
+    if (exclode.indexOf(pref) == -1)
+      Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);
 }

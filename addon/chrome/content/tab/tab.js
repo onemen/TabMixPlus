@@ -1850,6 +1850,9 @@ try {
       Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", val);
       Tabmix.prefs.clearUserPref("dblClickTabbar_changesize");
     }
+    // 2014-12-25
+    // don't synce sessions.onStart.sessionpath
+    Services.prefs.clearUserPref("services.sync.prefs.sync.extensions.tabmix.sessions.onStart.sessionpath");
 
     // verify valid value
     if (Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
