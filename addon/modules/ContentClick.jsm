@@ -877,7 +877,7 @@ var ContentClickInternal = {
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
-                 "/accounts/Logout", "/accounts/ServiceLogin"];
+                 "/accounts/Logout", "/accounts/ServiceLogin","/u/2/stream/all"];
 
     let testPathname = _list.indexOf(node.pathname) > -1;
     if (testPathname)
