@@ -4,7 +4,7 @@ XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",
   "resource://tabmixplus/ContextMenu.jsm");
 
 var TabmixTabClickOptions = {
-  onDoubleClick: false,
+  _tabFlipTimeOut: null,
   _blockDblClick: false,
 
   // Single click on tab/tabbar
@@ -16,6 +16,8 @@ var TabmixTabClickOptions = {
 
     var leftClick = aEvent.button === 0;
     if (leftClick && aEvent.detail > 1) {
+      if (this._tabFlipTimeOut)
+        this.clearTabFlipTimeOut();
       if (this._blockDblClick)
         setTimeout(function(self) {self._blockDblClick = false;}, 0, this);
       return; // double click (with left button)
@@ -42,7 +44,6 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    this.onDoubleClick = false;
     var clickOutTabs = aEvent.target.localName == "tabs";
     var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
 
@@ -58,15 +59,15 @@ var TabmixTabClickOptions = {
       let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
       if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey){
         let self = this;
-        var selectPreviousTab = function (aTab) {
-          if (!self.onDoubleClick) {
-            gBrowser.previousTab(aTab);
-            gBrowser.stopMouseHoverSelect(aTab);
-            gBrowser.selectedBrowser.focus();
-          }
-        };
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
-        setTimeout(function (aTab) {selectPreviousTab(aTab);}, tabFlipDelay, tab);
+        if (this._tabFlipTimeOut)
+          this.clearTabFlipTimeOut();
+        this._tabFlipTimeOut = setTimeout(function selectPreviousTab(aTab) {
+          self.clearTabFlipTimeOut();
+          gBrowser.previousTab(aTab);
+          gBrowser.stopMouseHoverSelect(aTab);
+          gBrowser.selectedBrowser.focus();
+        }, tabFlipDelay, tab);
         return;
       }
     }
@@ -99,13 +100,17 @@ var TabmixTabClickOptions = {
       this.clickAction(prefName, clickOutTabs, tab, aEvent);
   },
 
+  clearTabFlipTimeOut: function() {
+    clearTimeout(this._tabFlipTimeOut);
+    this._tabFlipTimeOut = null;
+  },
+
   // Double click on tab/tabbar
   onTabBarDblClick: function TMP_onTabBarDblClick(aEvent) {
     if (!aEvent || aEvent.button !== 0 || aEvent.ctrlKey || aEvent.shiftKey ||
         aEvent.altKey || aEvent.metaKey) {
       return;
     }
-    this.onDoubleClick = true;
 
     // don't do anything if user click on close tab button , or on any other button on tab or tabbar
     var target = aEvent.originalTarget;

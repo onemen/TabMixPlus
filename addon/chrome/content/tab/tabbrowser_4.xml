@@ -264,7 +264,8 @@
       <parameter name="aEvent"/>
       <body><![CDATA[
         if ( this == this.parentNode.selectedItem ) {
-          this.setAttribute("clickOnCurrent","true");
+          if (aEvent.detail == 1)
+            this.setAttribute("clickOnCurrent","true");
         }
         // don't allow mouse click/down with modifiers to select tab
         else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
