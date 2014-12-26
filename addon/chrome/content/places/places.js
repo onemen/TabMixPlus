@@ -61,7 +61,6 @@ var TMP_Places = {
         'return shift ? "tabshifted" : "tab";',
         '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
                  "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
-        'Tabmix.log("callerName " + Tabmix.callerName());' + $LF +
         'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
         '                        Tabmix.callerName() != "onPopupClick";' + $LF +
         'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
