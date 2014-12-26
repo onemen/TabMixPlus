@@ -757,7 +757,7 @@ var TabmixSessionManager = { // jshint ignore:line
       if (this.enableSaveHistory != enableSaveHistory) {
          this.enableSaveHistory = enableSaveHistory;
          if (crashRecovery) {
-            if (!windowSaved) this.saveAllTab(winPath, 0);
+            if (!windowSaved) this.saveAllTab(winPath);
             if (!closedTabSaved && enableClosedtabs && TMP_ClosedTabs.count > 0 && undoClose) {
                this.initSession(this.gSessionPath[0], winPath);
                this.deleteWinClosedtabs(winPath);
@@ -2572,7 +2572,7 @@ try{
       else winID = this.getAnonymousId();
       var winPath = path + "/" + winID;
       this.initSession(path, winPath);
-      var savedTabs = this.saveAllTab(winPath, 0);
+      var savedTabs = this.saveAllTab(winPath);
       if (caller == "windowclosed" && this.enableBackup) {
          this.setTabsScroll();
       } else {
@@ -2663,7 +2663,7 @@ try{
       // if this window is not in the container add it to the last place
       this.initSession(this.gSessionPath[0], this.gThisWin);
       var tabContainer = this.initContainer(this.gThisWinTabs);
-      var result = this.saveTab(aTab, this.gThisWinTabs, tabContainer, true, 0);
+      var result = this.saveTab(aTab, this.gThisWinTabs, tabContainer, true);
       if (result)
          this.saveStateDelayed();
    },
@@ -2694,7 +2694,7 @@ try{
          var closedTabContainer = this.initContainer(this.gThisWinClosedtabs);
          var tabExist = true;
          if (tabContainer.IndexOf(nodeToClose) == -1) {
-            tabExist = this.saveTab(aTab, this.gThisWinTabs, closedTabContainer, false, 0);
+            tabExist = this.saveTab(aTab, this.gThisWinTabs, closedTabContainer, false);
          } else tabContainer.RemoveElement(nodeToClose, true);
          if (tabExist) {
             closedTabContainer.AppendElement(nodeToClose);
@@ -2806,16 +2806,14 @@ try{
         this.tabLoaded(tab);
       },
 
-   saveAllTab: function SM_saveAllTab(winPath, offset, saveBusy) {
+   saveAllTab: function SM_saveAllTab(winPath) {
       var savedTabs = 0 ;
       var rdfNodeTabs = this.getResource(winPath, "tabs");
       var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
       var tabContainer = this.initContainer(rdfNodeTabs);
       for (var i = 0; i < gBrowser.tabs.length; i++) {
          var aTab = gBrowser.tabs[i];
-         if (saveBusy && !aTab.hasAttribute("busy"))
-           continue; // save only busy tabs
-         if (this.saveTab(aTab, rdfLabelTabs, tabContainer, true, offset))
+         if (this.saveTab(aTab, rdfLabelTabs, tabContainer, true))
            savedTabs ++;
       }
       return savedTabs;
@@ -2823,7 +2821,7 @@ try{
 
    // call from tabloaded, tabClosed, saveAllTab
 // xxx add flag what to save : all, history, property, scrollPosition
-   saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend, offset) {
+   saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend) {
       if (this.isTabPrivate(aTab))
          return false;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
@@ -2849,7 +2847,7 @@ try{
       var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
       var data = {
          index: this.enableSaveHistory ? index : 0,
-         pos: aTab._tPos + offset,
+         pos: aTab._tPos,
          image: gBrowser.getIcon(aTab),
          properties: TabmixSessionData.getTabProperties(aTab, true),
          history: this.saveTabHistory(sessionHistory),
