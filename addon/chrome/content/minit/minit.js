@@ -1133,7 +1133,7 @@ Tabmix.navToolbox = {
     _handleCommand = Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(
       '{',
       '{\
-       if (gBrowser.tabmix_tab) {\
+       if (Tabmix.selectedTab) {\
          Tabmix.selectedTab = null;\
          Tabmix.userTypedValue = "";\
        }'
