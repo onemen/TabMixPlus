@@ -588,8 +588,13 @@ var ContentClickInternal = {
       if (node.className.indexOf("__noscriptPlaceholder__") > -1)
         return true;
 
+      let className = node.className.toLowerCase();
       // need to find a way to work here only on links
-      if (/button/.test(node.className.toLowerCase()))
+      if (/button/.test(className))
+        return true;
+
+      let isAMO = /^(http|https):\/\/addons.mozilla.org/.test(this._data.currentURL);
+      if (isAMO && /flag-review/.test(className))
         return true;
     }
 
