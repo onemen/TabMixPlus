@@ -9,6 +9,8 @@ var gAppearancePane = { // jshint ignore:line
       Tabmix.setItem("tabBarDisplay", "TSTinstalled", true);
       Tabmix.setItem("tabBarPosition", "disabled", true);
       Tabmix.setItem("tabsScroll", "disabled", true);
+      Tabmix.setItem("maxrow", "disabled", true);
+      Tabmix.setItem("offsetAmountToScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
