@@ -77,7 +77,7 @@ function Add()
    // check for data in the textbox
    if (!entry.value) return false;
 
-   var item = list.appendItem(entry.value, entry.value.toLowerCase());
+   list.appendItem(entry.value, entry.value.toLowerCase());
 
    SelectItemAt(list.getRowCount()-1, true);
    setButtonDisable(del, false);
