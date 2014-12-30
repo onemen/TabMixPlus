@@ -263,12 +263,14 @@
     <method name="onMouseCommand">
       <parameter name="aEvent"/>
       <body><![CDATA[
-        if ( this == this.parentNode.selectedItem ) {
-          if (aEvent.detail == 1)
-            this.setAttribute("clickOnCurrent","true");
-        }
+        let isSelected = this == this.parentNode.selectedItem;
+        Tabmix.setItem(this, "clickOnCurrent",
+                       isSelected && aEvent.detail == 1 || null);
+        if (isSelected)
+          return;
+
         // don't allow mouse click/down with modifiers to select tab
-        else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+        if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
           aEvent.stopPropagation();
         else {
           this.parentNode._selectNewTab(this);
