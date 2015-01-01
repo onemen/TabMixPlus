@@ -562,32 +562,6 @@
         ]]></getter>
       </property>
 
-      <property name="visibleTabsFirstChild" readonly="true">
-        <getter><![CDATA[
-          var tabs = this.childNodes;
-          for (let i = 0; i < tabs.length; i++){
-            let tab = tabs[i];
-            if (!tab.hidden && !tab.closing)
-              return tab;
-          }
-          return this.selectedItem;
-        ]]></getter>
-      </property>
-
-      <property name="visibleTabsLastChild" readonly="true">
-        <getter><![CDATA[
-          // we only need the last visible tab,
-          // find it directly instead of using this.visibleTabs
-          var tabs = this.childNodes;
-          for (let i = tabs.length - 1; i >= 0; i--){
-            let tab = tabs[i];
-            if (!tab.hidden && !tab.closing)
-              return tab;
-          }
-          return this.selectedItem;
-        ]]></getter>
-      </property>
-
       <!--
         check that we have enough room to show new tab button after the last tab in the current row
         we don't want the button to be on the next row when the tab is on the current row
@@ -607,7 +581,7 @@
           if (!Tabmix.tabsNewtabButton)
             Tabmix.getAfterTabsButtonsWidth();
 
-         var lastTab = this.visibleTabsLastChild;
+         var lastTab = Tabmix.visibleTabs.last;
          // button is visible
          //         A: last tab and the button are in the same row - check if we have room for the button in this row
          //         B: last tab and the button are NOT in the same row  - NG - hide the button
@@ -628,7 +602,7 @@
          //              after previous to last tab.
          else {
            // ignor the case that this tab width is larger then the tabbar
-           let previousTab = TMP_TabView.previousVisibleSibling(lastTab);
+           let previousTab = Tabmix.visibleTabs.previous(lastTab);
            if (!previousTab) {
              this.disAllowNewtabbutton = false;
              return;
@@ -683,7 +657,7 @@
 
       <property name="lastTabRowNumber" readonly="true">
         <getter><![CDATA[
-          return this.getTabRowNumber(this.visibleTabsLastChild, this.topTabY);
+          return this.getTabRowNumber(Tabmix.visibleTabs.last, this.topTabY);
         ]]></getter>
       </property>
 
@@ -820,7 +794,7 @@
       </method>
       <property name="lastTabVisible" readonly="true">
         <getter><![CDATA[
-          return this.mTabstrip.isElementVisible(this.visibleTabsLastChild);
+          return this.mTabstrip.isElementVisible(Tabmix.visibleTabs.last);
         ]]></getter>
       </property>
 

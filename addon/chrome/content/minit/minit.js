@@ -569,7 +569,7 @@ var TMP_tabDNDObserver = {
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       let i = event.target.localName == "tab" ?
-          TMP_TabView.getIndexInVisibleTabsFromTab(event.target) : 0;
+          Tabmix.visibleTabs.indexOf(event.target) : 0;
       for (; i < numTabs; i++) {
         let tab = tabs[i];
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
@@ -919,22 +919,6 @@ var TMP_TabView = { /* jshint ignore: line */
     return firstTab;
   },
 
-  previousVisibleSibling: function (aTab) {
-    var tabs = gBrowser.visibleTabs;
-    var index = tabs.indexOf(aTab);
-    if (--index > -1)
-      return tabs[index];
-    return null;
-  },
-
-  nextVisibleSibling: function (aTab) {
-    var tabs = gBrowser.visibleTabs;
-    var index = tabs.indexOf(aTab);
-    if (index > -1 && ++index < tabs.length)
-      return tabs[index];
-    return null;
-  },
-
   // includung _removingTabs
   currentGroup: function () {
     return Array.filter(gBrowser.tabs, function(tab) !tab.hidden);
@@ -953,10 +937,6 @@ var TMP_TabView = { /* jshint ignore: line */
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
-  },
-
-  getIndexInVisibleTabsFrom_tPos: function (aIndex) {
-    return this.getIndexInVisibleTabsFromTab(gBrowser.tabs.item(aIndex));
   }
 };
 

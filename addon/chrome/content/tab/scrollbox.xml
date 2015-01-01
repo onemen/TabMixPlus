@@ -303,9 +303,9 @@
               !this.isMultiRow) {
             let tab;
             if (isScrollingLeft)
-              tab = TMP_TabView.nextVisibleSibling(element);
+              tab = Tabmix.visibleTabs.next(element);
             else
-              tab = TMP_TabView.previousVisibleSibling(element);
+              tab = Tabmix.visibleTabs.previous(element);
             if (tab) {
               offset = Math.min(this.minOffset, this.offsetRatio * tab.getBoundingClientRect().width);
               if (!isScrollingLeft)
@@ -566,8 +566,8 @@
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
-              (!tabs.visibleTabsLastChild.hasAttribute("showbutton") &&
-               !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
+              (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
+               !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
             tabs.updateVerticalTabStrip();
         }
         else
@@ -617,7 +617,7 @@
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
-              !tabs.visibleTabsLastChild.hasAttribute("showbutton"))
+              !Tabmix.visibleTabs.last.hasAttribute("showbutton"))
             tabs.updateVerticalTabStrip();
         }
         else

@@ -511,7 +511,7 @@ var TabmixContext = {
     var lockedTab = aTab.hasAttribute("locked");
     var tabsCount = gBrowser.visibleTabs.length;
     var unpinnedTabs = tabsCount - TabmixTabbar._real_numPinnedTabs;
-    var cIndex = TMP_TabView.getIndexInVisibleTabsFromTab(aTab);
+    var cIndex = Tabmix.visibleTabs.indexOf(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 

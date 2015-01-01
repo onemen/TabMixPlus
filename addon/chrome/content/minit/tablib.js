@@ -1281,8 +1281,8 @@ var tablib = {
 
       // if no tabmix_selectedID go to previous tab, from first tab go to the next tab
       if (tempIndex == -1)
-        this.selectedTab = aTab == tabs[0] ? TMP_TabView.nextVisibleSibling(aTab) :
-                                             TMP_TabView.previousVisibleSibling(aTab);
+        this.selectedTab = aTab == tabs[0] ? Tabmix.visibleTabs.next(aTab) :
+                                             Tabmix.visibleTabs.previous(aTab);
       else
         this.selectedTab = tabs[tempIndex];
 

@@ -246,7 +246,6 @@ var TMP_Places = {
   //
   //TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
-    var tabBar = gBrowser.tabContainer;
     var tabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
@@ -277,7 +276,7 @@ var TMP_Places = {
 
     var tabToSelect = null;
     var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < tabs.length - 1) ?
-                  gBrowser.mCurrentTab : tabBar.visibleTabsLastChild;
+                   gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     for (i = 0; i < bmGroup.length ; i++) {

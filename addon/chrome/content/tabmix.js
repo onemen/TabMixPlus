@@ -128,8 +128,7 @@ Tabmix.getButtonsHeight = function() {
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this._buttonsHeight =
-            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
+    this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
     if (stripIsHidden)
       tabBar.visible = false;
   }
@@ -839,8 +838,8 @@ var TMP_eventListener = {
     // we would like to get early respond when row height is going to change.
     var updateNow = !Services.prefs.getBoolPref("browser.tabs.animate");
     if (!updateNow && tabBar.hasAttribute("multibar")) {
-      let lastTab = tabBar.visibleTabsLastChild;
-      if (!TabmixTabbar.inSameRow(lastTab, TMP_TabView.previousVisibleSibling(lastTab))) {
+      let lastTab = Tabmix.visibleTabs.last;
+      if (!TabmixTabbar.inSameRow(lastTab, Tabmix.visibleTabs.previous(lastTab))) {
         updateNow = true;
         // if the removed tab is single in its row hide it
         if (lastTab == tab)
@@ -882,7 +881,7 @@ var TMP_eventListener = {
 
     // workaround when we remove last visible tab
     if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && tabBar.overflow &&
-        aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
+        aTab._tPos >= Tabmix.visibleTabs.last._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 
     if (tabBar.disAllowNewtabbutton)

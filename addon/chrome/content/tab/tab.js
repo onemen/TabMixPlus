@@ -457,7 +457,7 @@ var TabmixTabbar = {
     var tabs = gBrowser.visibleTabs;
 
     var firstTab = tabs[0];
-    var lastTab = tabBar.visibleTabsLastChild;
+    var lastTab = Tabmix.visibleTabs.last;
     var topY = tabBar.topTabY;
     var lastTabRow = tabBar.lastTabRowNumber;
     if (lastTabRow == 1) { // one row
@@ -471,7 +471,7 @@ var TabmixTabbar = {
       if (lastTab.getAttribute("selected") == "true") {
         // check if previous to last tab in the 1st row
         // this happen when the selected tab is the first tab in the 2nd row
-        var prev = TMP_TabView.previousVisibleSibling(lastTab);
+        var prev = Tabmix.visibleTabs.previous(lastTab);
         if (prev && tabBar.getTabRowNumber(prev, topY) == 1)
           return lastTab.boxObject.height;
         else
@@ -480,7 +480,7 @@ var TabmixTabbar = {
       else if (firstTab.getAttribute("selected") == "true") {
         // check if 2nd visible tab is in the 2nd row
         // (not likely that user set tab width to more then half screen width)
-        var next = TMP_TabView.nextVisibleSibling(firstTab);
+        var next = Tabmix.visibleTabs.next(firstTab);
         if (next && tabBar.getTabRowNumber(next, topY) == 2)
           return lastTab.boxObject.height;
         else
@@ -554,6 +554,52 @@ var TabmixTabbar = {
   }
 
 }; // TabmixTabbar end
+
+Tabmix.visibleTabs = {
+  get first() {
+    var tabs = gBrowser.tabs;
+    for (let i = 0; i < tabs.length; i++){
+      let tab = tabs[i];
+      if (!tab.hidden && !tab.closing)
+        return tab;
+    }
+    return gBrowser.selectedTab;
+  },
+
+  get last() {
+    // we only need the last visible tab,
+    // find it directly instead of using gBrowser.tabContainer.visibleTabs
+    var tabs = gBrowser.tabs;
+    for (let i = tabs.length - 1; i >= 0; i--){
+      let tab = tabs[i];
+      if (!tab.hidden && !tab.closing)
+        return tab;
+    }
+    return gBrowser.selectedTab;
+  },
+
+  previous: function (aTab) {
+    var tabs = gBrowser.visibleTabs;
+    var index = tabs.indexOf(aTab);
+    if (--index > -1)
+      return tabs[index];
+    return null;
+  },
+
+  next: function (aTab) {
+    var tabs = gBrowser.visibleTabs;
+    var index = tabs.indexOf(aTab);
+    if (index > -1 && ++index < tabs.length)
+      return tabs[index];
+    return null;
+  },
+
+  indexOf: function (aTab) {
+    if (aTab)
+      return gBrowser.visibleTabs.indexOf(aTab);
+    return -1;
+  }
+};
 
 // Function to catch changes to Tab Mix preferences and update existing windows and tabs
 //
