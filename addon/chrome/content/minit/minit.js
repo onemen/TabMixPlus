@@ -244,7 +244,7 @@ var TMP_tabDNDObserver = {
         let tooltip = document.getElementById("tabmix-tooltip");
         if (tooltip.state == "closed") {
           tooltip.label = this.gMsg;
-          tooltip.openPopup(document.getElementById("browser"), null, -1, -1, false, false);
+          tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
         }
       }
     }
