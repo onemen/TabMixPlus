@@ -407,7 +407,7 @@
             return;
 
           var tabBar = document.getBindingParent(this);
-          tabBar.adjustNewtabButtonvisibility();
+          Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           let tabs = this._getScrollableElements();
           if (!tabs.length)
             return;
@@ -417,7 +417,7 @@
             // show Newtabbutton for the first time
             // for the case last tab in row fill the all strip and the button
             // is on the next row
-            tabBar.disAllowNewtabbutton = false;
+            Tabmix.tabsUtils.disAllowNewtabbutton = false;
             this.orient = "vertical";
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);

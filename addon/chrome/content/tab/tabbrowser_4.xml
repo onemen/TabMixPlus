@@ -365,7 +365,7 @@
           this._inUpdateVerticalTabStrip = true;
 
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
-          this.adjustNewtabButtonvisibility();
+          Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           let visibleRows = TabmixTabbar.visibleRows;
           // this.lastTabRowNumber is null when we hide the tabbar
           let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
@@ -402,7 +402,8 @@
 
           if (!this.overflow) {
             // prevent new-tab-button on the right from flickering when new tabs animate is on.
-            if (this.disAllowNewtabbutton && Services.prefs.getBoolPref("browser.tabs.animate")) {
+            if (Tabmix.tabsUtils.disAllowNewtabbutton &&
+                Services.prefs.getBoolPref("browser.tabs.animate")) {
               // after 250ms new tab is fully opened
               if (!this.adjustNewtabButtonTimeout) {
                 let timeout = 250, callerName = Tabmix.callerName();
@@ -418,17 +419,17 @@
                 // didn't changed or when we get here from _enterVerticalMode
                 if (callerName != "_enterVerticalMode" &&
                      (multibar != currentMultibar || rows != visibleRows))
-                  this.disAllowNewtabbutton = false;
+                  Tabmix.tabsUtils.disAllowNewtabbutton = false;
                */
                 let self = this;
                 this.adjustNewtabButtonTimeout = setTimeout(function() {
-                  self.adjustNewtabButtonvisibility();
+                  Tabmix.tabsUtils.adjustNewtabButtonvisibility();
                   self.adjustNewtabButtonTimeout = null;
                 }, timeout);
               }
             }
             else
-              this.adjustNewtabButtonvisibility();
+              Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           }
 
           this._inUpdateVerticalTabStrip = false;
@@ -463,93 +464,6 @@
 
       <property name="canScrollTabsRight" readonly="true"
                 onget="return !this.mTabstrip._scrollButtonDown.disabled;"/>
-
-      <!--
-        check that we have enough room to show new tab button after the last tab in the current row
-        we don't want the button to be on the next row when the tab is on the current row
-      -->
-      <method name="adjustNewtabButtonvisibility">
-        <body><![CDATA[
-          if (!TabmixTabbar.isMultiRow && this.mTabstrip.orient == "vertical")
-            return;
-
-          if (!this._checkNewtabButtonVisibility) {
-            TabmixTabbar.showNewTabButtonOnSide(this.overflow, "right-side");
-            return;
-          }
-
-          // when Private-tab enabled/disabled we need to reset
-          // tabsNewtabButton and afterTabsButtonsWidth
-          if (!Tabmix.tabsNewtabButton)
-            Tabmix.getAfterTabsButtonsWidth();
-
-         var lastTab = Tabmix.visibleTabs.last;
-         // button is visible
-         //         A: last tab and the button are in the same row - check if we have room for the button in this row
-         //         B: last tab and the button are NOT in the same row  - NG - hide the button
-         if (!this.disAllowNewtabbutton) {
-           let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
-           if (sameRow) {
-             let tabstripEnd = this.mTabstrip.scrollBoxObject.screenX + this.mTabstrip.scrollBoxObject.width;
-             let buttonEnd = Tabmix.tabsNewtabButton.boxObject.screenX + Tabmix.tabsNewtabButton.boxObject.width
-             this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
-           }
-           else
-             this.disAllowNewtabbutton = true;
-           return;
-         }
-         // button is NOT visible
-         //         A: 2 last tabs are in the same row - check if we have room for the button in this row
-         //         B: 2 last tabs are NOT in the same row - check if we have room for the last tab + button
-         //              after previous to last tab.
-         else {
-           // ignor the case that this tab width is larger then the tabbar
-           let previousTab = Tabmix.visibleTabs.previous(lastTab);
-           if (!previousTab) {
-             this.disAllowNewtabbutton = false;
-             return;
-           }
-
-           // buttons that are not on TabsToolbar or not visible are null
-           let newTabButtonWidth = function(aOnSide) {
-             let width = 0, privatTabButton = TabmixTabbar.newPrivateTabButton();
-             if (privatTabButton)
-               width += aOnSide ? privatTabButton.boxObject.width : Tabmix.afterTabsButtonsWidth[1];
-             if (Tabmix.sideNewTabButton)
-               width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width : Tabmix.afterTabsButtonsWidth[0];
-             return width;
-           }
-           let tsbo = this.mTabstrip.scrollBoxObject;
-           let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
-           if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-             let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width + newTabButtonWidth();
-             this.disAllowNewtabbutton = buttonEnd > tsboEnd;
-             return;
-           }
-           else {
-             let lastTabEnd = previousTab.boxObject.screenX + previousTab.boxObject.width
-                                         + lastTab.boxObject.width;
-             // both last tab and new tab button are in the next row
-             if (lastTabEnd > tsboEnd)
-               this.disAllowNewtabbutton = false;
-             else
-               this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
-             return;
-           }
-         }
-        ]]></body>
-      </method>
-
-      <property name="disAllowNewtabbutton">
-        <getter><![CDATA[
-          return document.getElementById("TabsToolbar").getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
-        ]]></getter>
-        <setter><![CDATA[
-          let newVal = this.overflow || val;
-          TabmixTabbar.showNewTabButtonOnSide(this.overflow || val, "temporary-right-side");
-          return newVal;
-        ]]></setter>
-      </property>
 
       <property name="topTabY" readonly="true">
         <getter><![CDATA[

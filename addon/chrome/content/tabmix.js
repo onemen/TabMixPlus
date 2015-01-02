@@ -781,7 +781,7 @@ var TMP_eventListener = {
     }
     else if (!this._onOpenTimeout) {
       let self = this;
-      let timeout = gBrowser.tabContainer.disAllowNewtabbutton &&
+      let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
           Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
       this._onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
@@ -884,8 +884,8 @@ var TMP_eventListener = {
         aTab._tPos >= Tabmix.visibleTabs.last._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 
-    if (tabBar.disAllowNewtabbutton)
-      tabBar.adjustNewtabButtonvisibility();
+    if (Tabmix.tabsUtils.disAllowNewtabbutton)
+      Tabmix.tabsUtils.adjustNewtabButtonvisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
       _updateTabstrip();
       setTimeout(function(){_updateTabstrip();}, 0);

@@ -198,8 +198,8 @@ var TabmixTabbar = {
         this.setFirstTabInRow();
       }
     }
-    else if (!this.isMultiRow && typeof tabBar.adjustNewtabButtonvisibility == "function")
-      tabBar.adjustNewtabButtonvisibility();
+    else
+      Tabmix.tabsUtils.adjustNewtabButtonvisibility();
   },
 
   // in Firefox 4.0+ rowheight can change when TabsInTitlebar or TabsOnTop
@@ -695,6 +695,103 @@ Tabmix.tabsUtils = {
     let tabstrip = this.tabBar.mTabstrip;
     Tabmix.setItem(tabstrip, "orient", vertical ? "vertical" : "horizontal");
     tabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
+  },
+
+  /**
+   * check that we have enough room to show new tab button after the last tab
+   * in the current row. we don't want the button to be on the next row when the
+   * tab is on the current row
+   */
+  adjustNewtabButtonvisibility: function() {
+    if (!TabmixTabbar.isMultiRow && this.tabBar.mTabstrip.orient == "vertical")
+      return;
+
+    if (!this.checkNewtabButtonVisibility) {
+      TabmixTabbar.showNewTabButtonOnSide(this.tabBar.overflow, "right-side");
+      return;
+    }
+
+    // when Private-tab enabled/disabled we need to reset
+    // tabsNewtabButton and afterTabsButtonsWidth
+    if (!Tabmix.tabsNewtabButton)
+      Tabmix.getAfterTabsButtonsWidth();
+
+    var lastTab = Tabmix.visibleTabs.last;
+    // button is visible
+    //         A: last tab and the button are in the same row:
+    //            check if we have room for the button in this row
+    //         B: last tab and the button are NOT in the same row:
+    //            NG - hide the button
+    if (!this.disAllowNewtabbutton) {
+      let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
+      if (sameRow) {
+        let tabstripEnd = this.tabBar.mTabstrip.scrollBoxObject.screenX +
+            this.tabBar.mTabstrip.scrollBoxObject.width;
+        let buttonEnd = Tabmix.tabsNewtabButton.boxObject.screenX +
+            Tabmix.tabsNewtabButton.boxObject.width;
+        this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
+      }
+      else
+        this.disAllowNewtabbutton = true;
+      return;
+    }
+    // button is NOT visible
+    //         A: 2 last tabs are in the same row:
+    //            check if we have room for the button in this row
+    //         B: 2 last tabs are NOT in the same row:
+    //            check if we have room for the last tab + button after
+    //            previous to last tab.
+    else {
+      // ignor the case that this tab width is larger then the tabbar
+      let previousTab = Tabmix.visibleTabs.previous(lastTab);
+      if (!previousTab) {
+        this.disAllowNewtabbutton = false;
+        return;
+      }
+
+      // buttons that are not on TabsToolbar or not visible are null
+      let newTabButtonWidth = function(aOnSide) {
+        let width = 0, privatTabButton = TabmixTabbar.newPrivateTabButton();
+        if (privatTabButton) {
+          width += aOnSide ? privatTabButton.boxObject.width :
+                   Tabmix.afterTabsButtonsWidth[1];
+        }
+        if (Tabmix.sideNewTabButton) {
+          width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width :
+                   Tabmix.afterTabsButtonsWidth[0];
+        }
+        return width;
+      };
+      let tsbo = this.tabBar.mTabstrip.scrollBoxObject;
+      let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
+      if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
+        let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width +
+            newTabButtonWidth();
+        this.disAllowNewtabbutton = buttonEnd > tsboEnd;
+        return;
+      }
+      else {
+        let lastTabEnd = previousTab.boxObject.screenX +
+            previousTab.boxObject.width + lastTab.boxObject.width;
+        // both last tab and new tab button are in the next row
+        if (lastTabEnd > tsboEnd)
+          this.disAllowNewtabbutton = false;
+        else
+          this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
+        return;
+      }
+    }
+  },
+
+  get disAllowNewtabbutton() {
+    let toolbar = document.getElementById("TabsToolbar");
+    return toolbar.getAttribute("tabmix-show-newtabbutton") == "temporary-right-side";
+  },
+
+  set disAllowNewtabbutton(val) {
+    let newVal = this.tabBar.overflow || val;
+    TabmixTabbar.showNewTabButtonOnSide(newVal, "temporary-right-side");
+    return newVal;
   }
 };
 
@@ -1645,7 +1742,7 @@ var gTMPprefObserver = {
   setShowNewTabButtonAttr: function(aShow, aPosition) {
     // check new tab button visibility when we are in multi-row and the
     // preference is to show new-tab-button after last tab
-    gBrowser.tabContainer._checkNewtabButtonVisibility =
+    Tabmix.tabsUtils.checkNewtabButtonVisibility =
                   TabmixTabbar.isMultiRow && ((aShow && aPosition == 2) ||
                   !!TabmixTabbar.newPrivateTabButton());
 
@@ -1671,7 +1768,7 @@ var gTMPprefObserver = {
     if (aShow) {
       if (gBrowser.tabContainer.overflow)
         attrValue = "right-side";
-      else if (gBrowser.tabContainer.disAllowNewtabbutton)
+      else if (Tabmix.tabsUtils.disAllowNewtabbutton)
         attrValue = "temporary-right-side";
     }
     Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
