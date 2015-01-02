@@ -218,7 +218,7 @@ var TabmixTabbar = {
   get singleRowHeight() {
     let heights = this._heights[this._tabsPosition];
     if (typeof(heights) == "undefined")
-      return gBrowser.tabContainer.tabstripInnerbox.getBoundingClientRect().height;
+      return Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
     return heights[2] / 2;
   },
 
@@ -260,8 +260,8 @@ var TabmixTabbar = {
     if (aRows in this._heights[tabsPosition])
       newHeight = this._heights[tabsPosition][aRows];
     else {
-      if (tabBar.tabstripInnerbox) {
-        let height = tabBar.tabstripInnerbox.getBoundingClientRect().height;
+      if (Tabmix.tabsUtils.tabstripInnerbox) {
+        let height = Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
         if (tabBar.getAttribute("multibar") == "scrollbar") {
           // We can get here if we switch to diffrent tabs position while in multibar
           let rowHeight = height/tabBar.lastTabRowNumber;
@@ -563,6 +563,13 @@ Tabmix.tabsUtils = {
     return (this.tabBar = gBrowser.tabContainer);
   },
 
+  get tabstripInnerbox() {
+    delete this.tabstripInnerbox;
+    let elm = document.getAnonymousElementByAttribute(
+      this.tabBar.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+    return (this.tabstripInnerbox = elm);
+  },
+
   init: function() {
     // add dragover event handler to TabsToolbar to capture dragging over
     // tabbar margin area, filter out events that are out of the tabbar
@@ -634,7 +641,7 @@ Tabmix.tabsUtils = {
   onUnload: function() {
     if (this.tabBar.parentNode)
       this.tabBar.parentNode.removeEventListener("dragover", this, true);
-    delete this.tabBar.tabstripInnerbox;
+    delete this.tabstripInnerbox;
     gBrowser.tabContainer._tabmixPositionalTabs = null;
   },
 

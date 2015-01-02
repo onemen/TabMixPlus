@@ -344,10 +344,6 @@
            extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tabs-proxy">
     <implementation implements="nsIDOMEventListener">
 
-      <field name="tabstripInnerbox" readonly="true">
-        document.getAnonymousElementByAttribute(this.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-      </field>
-
       <constructor>
         <![CDATA[
           Tabmix.initialization.run("init", this);
@@ -467,7 +463,8 @@
 
       <property name="topTabY" readonly="true">
         <getter><![CDATA[
-          return this.tabstripInnerbox.boxObject.y + Tabmix.getStyle(this.tabstripInnerbox, "paddingTop");
+          return Tabmix.tabsUtils.tabstripInnerbox.boxObject.y +
+                 Tabmix.getStyle(Tabmix.tabsUtils.tabstripInnerbox, "paddingTop");
         ]]></getter>
       </property>
 
