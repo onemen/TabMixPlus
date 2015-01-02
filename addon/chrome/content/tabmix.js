@@ -637,6 +637,13 @@ var TMP_eventListener = {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
+    // when browser.tabs.animate is true and a new tab is still opening we wait
+    // until onTabOpen_delayUpdateTabBar call updateScrollStatus
+    let lastTab = Services.prefs.getBoolPref("browser.tabs.animate") &&
+        gBrowser.getTabForLastPanel();
+    if (lastTab && !lastTab._fullyOpen)
+      return;
+
     // catch tab width changed when label attribute changed
     // or when busy attribute changed hide/show image
     var tab = aEvent.target;
