@@ -748,7 +748,7 @@ var TMP_eventListener = {
     if (aReset)
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
-      gBrowser.tabContainer.updateVerticalTabStrip();
+      Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
       TabmixTabbar.updateBeforeAndAfter();
     }
@@ -875,7 +875,7 @@ var TMP_eventListener = {
     function _updateTabstrip() {
       if (tabBar.getAttribute("multibar") == "true" &&
           Tabmix.tabsUtils.lastTabRowNumber < TabmixTabbar.visibleRows)
-        tabBar.updateVerticalTabStrip();
+        Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.updateBeforeAndAfter();
     }
 
@@ -1142,11 +1142,6 @@ Tabmix.initialization = {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
-    }
-
-    if (!stopInitialization) {
-      let tabBrowser = arguments.length > 1 ? arguments[1] : gBrowser;
-      stopInitialization = typeof tabBrowser.tabContainer.updateVerticalTabStrip != "function";
     }
 
     if (stopInitialization) {

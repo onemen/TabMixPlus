@@ -422,7 +422,7 @@
             this.orient = "vertical";
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
-            if (tabBar.updateVerticalTabStrip() == null)
+            if (Tabmix.tabsUtils.updateVerticalTabStrip() == null)
               TabmixTabbar._failedToEnterVerticalMode = true;
             if (blockUnderflow && this.orient == "vertical")
               this.blockUnderflow = true;
@@ -569,7 +569,7 @@
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
-            tabs.updateVerticalTabStrip();
+            Tabmix.tabsUtils.updateVerticalTabStrip();
         }
         else
           Tabmix.tabsUtils.overflow = false;
@@ -619,7 +619,7 @@
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               !Tabmix.visibleTabs.last.hasAttribute("showbutton"))
-            tabs.updateVerticalTabStrip();
+            Tabmix.tabsUtils.updateVerticalTabStrip();
         }
         else
           Tabmix.tabsUtils.overflow = true;

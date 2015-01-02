@@ -1009,7 +1009,7 @@ var tablib = {
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
       if (this.warnAboutClosingTabs(this.closingTabsEnum.ALL)) {
         if (TabmixTabbar.visibleRows > 1)
-          this.tabContainer.updateVerticalTabStrip(true);
+          Tabmix.tabsUtils.updateVerticalTabStrip(true);
         let tabs = this.visibleTabs.slice();
         // remove current tab last
         if (!this.mCurrentTab.pinned)
@@ -1112,7 +1112,7 @@ var tablib = {
         this.ensureTabIsVisible(this.selectedTab);
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
-          this.tabContainer.updateVerticalTabStrip(true);
+          Tabmix.tabsUtils.updateVerticalTabStrip(true);
         Tabmix.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
