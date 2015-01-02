@@ -115,10 +115,10 @@ var TabmixTabbar = {
         // Don't change tabstip orient on start before sessionStore ends.
         // if we set orient to vertical before sessionStore finish
         // sessionStore don't select the selected tab from last session.
-        setTimeout(function() {tabBar.setTabStripOrient();}, 0);
+        setTimeout(function() {Tabmix.tabsUtils.setTabStripOrient();}, 0);
       }
       else
-        tabBar.setTabStripOrient();
+        Tabmix.tabsUtils.setTabStripOrient();
     }
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
 
@@ -674,7 +674,7 @@ Tabmix.tabsUtils = {
     }
 
     TabmixTabbar.flowing = this.tabBar.getAttribute("flowing");
-    this.tabBar.setTabStripOrient();
+    this.setTabStripOrient();
     Tabmix.navToolbox.setScrollButtons(true);
 
     // fix incompatibility with Personal Titlebar extension
@@ -685,6 +685,16 @@ Tabmix.tabsUtils = {
       TabmixTabbar.updateSettings(false);
       Tabmix.navToolbox.resetUI = true;
     }
+  },
+
+  setTabStripOrient: function() {
+    // we can't set dispaly:block and orient=vertical when widthFitTitle is false
+    // and we are in one row.
+    let vertical = TabmixTabbar.isMultiRow &&
+        (TabmixTabbar.widthFitTitle || this.tabBar.hasAttribute("multibar"));
+    let tabstrip = this.tabBar.mTabstrip;
+    Tabmix.setItem(tabstrip, "orient", vertical ? "vertical" : "horizontal");
+    tabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
   }
 };
 

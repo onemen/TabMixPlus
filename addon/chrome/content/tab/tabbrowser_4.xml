@@ -394,7 +394,7 @@
             Tabmix.setItem("TabsToolbar", "multibar", multibar);
           }
 
-          this.setTabStripOrient();
+          Tabmix.tabsUtils.setTabStripOrient();
           TabmixTabbar.setHeight(rows, aReset);
 
           if (this.mTabstrip.orient == "vertical")
@@ -433,17 +433,6 @@
 
           this._inUpdateVerticalTabStrip = false;
           return multibar;
-        ]]></body>
-      </method>
-
-      <method name="setTabStripOrient">
-        <body><![CDATA[
-          // we can't set dispaly:block and orient=vertical when widthFitTitle is false
-          // and we are in one row.
-          let vertical = TabmixTabbar.isMultiRow &&
-              (TabmixTabbar.widthFitTitle || this.hasAttribute("multibar"));
-          Tabmix.setItem(this.mTabstrip, "orient", vertical ? "vertical" : "horizontal");
-          this.mTabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
         ]]></body>
       </method>
 
