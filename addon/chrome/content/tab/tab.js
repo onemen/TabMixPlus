@@ -175,13 +175,6 @@ var TabmixTabbar = {
     gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
-  showNewTabButtonOnSide: function(aCondition, aValue) {
-    if (Tabmix._show_newtabbutton) {
-      Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-        aCondition ? aValue : Tabmix._show_newtabbutton);
-    }
-  },
-
   updateScrollStatus: function TMP_updateScrollStatus() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
@@ -609,7 +602,7 @@ Tabmix.tabsUtils = {
     Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];
     Tabmix.tabsNewtabButton =
       document.getAnonymousElementByAttribute(this.tabBar, "command", "cmd_newNavigatorTab");
-    Tabmix._show_newtabbutton = "aftertabs";
+    this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected",
                 "locked"].filter(function(att) {
@@ -783,7 +776,7 @@ Tabmix.tabsUtils = {
       return;
 
     if (!this.checkNewtabButtonVisibility) {
-      TabmixTabbar.showNewTabButtonOnSide(this.overflow, "right-side");
+      this.showNewTabButtonOnSide(this.overflow, "right-side");
       return;
     }
 
@@ -866,7 +859,7 @@ Tabmix.tabsUtils = {
 
   set disAllowNewtabbutton(val) {
     let newVal = this.overflow || val;
-    TabmixTabbar.showNewTabButtonOnSide(newVal, "temporary-right-side");
+    this.showNewTabButtonOnSide(newVal, "temporary-right-side");
     return newVal;
   },
 
@@ -885,10 +878,17 @@ Tabmix.tabsUtils = {
         this.tabBar.setAttribute("overflow", "true");
       else
         this.tabBar.removeAttribute("overflow");
-      TabmixTabbar.showNewTabButtonOnSide(val, "right-side");
+      this.showNewTabButtonOnSide(val, "right-side");
       this.tabBar.mTabstrip.updateOverflow(val);
     }
     return val;
+  },
+
+  showNewTabButtonOnSide: function(aCondition, aValue) {
+    if (this._show_newtabbutton) {
+      Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
+                     aCondition ? aValue : this._show_newtabbutton);
+    }
   },
 
   get topTabY() {
@@ -1893,7 +1893,7 @@ var gTMPprefObserver = {
     else
       attrValue = "aftertabs";
     // we use this value in disAllowNewtabbutton and overflow setters
-    Tabmix._show_newtabbutton = attrValue;
+    Tabmix.tabsUtils._show_newtabbutton = attrValue;
     if (aShow) {
       if (Tabmix.tabsUtils.overflow)
         attrValue = "right-side";
