@@ -822,6 +822,14 @@ Tabmix.tabsUtils = {
 
     var tabBottom = top - marginTop + height;
     return Math.round((tabBottom - aTop)/height);
+  },
+
+  get canScrollTabsLeft() {
+    return !this.tabBar.mTabstrip._scrollButtonUp.disabled;
+  },
+
+  get canScrollTabsRight() {
+    return !this.tabBar.mTabstrip._scrollButtonDown.disabled;
   }
 };
 

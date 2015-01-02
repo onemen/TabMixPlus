@@ -263,12 +263,12 @@ var TMP_tabDNDObserver = {
       switch (targetAnonid) {
         case "scrollbutton-up":
         case "scrollbutton-up-right":
-          if (tabBar.canScrollTabsLeft)
+          if (Tabmix.tabsUtils.canScrollTabsLeft)
             _scroll = -1;
             break;
         case "scrollbutton-down":
         case "scrollbutton-down-right":
-          if (tabBar.canScrollTabsRight)
+          if (Tabmix.tabsUtils.canScrollTabsRight)
             _scroll = 1;
             break;
       }
