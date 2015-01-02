@@ -775,7 +775,7 @@ var TMP_eventListener = {
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
     let newTime = Date.now();
-    if (gBrowser.tabContainer.overflow || newTime - this.lastTimeTabOpened > 200) {
+    if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
     }
@@ -800,7 +800,7 @@ var TMP_eventListener = {
       return;
     }
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.overflow) {
+    if (!Tabmix.tabsUtils.overflow) {
       // we use it as a backup for overflow event and for the case that we have
       // pinned tabs in multi-row
       if (TabmixTabbar.isMultiRow && tabBar.mTabstrip.orient != "vertical")
@@ -880,7 +880,7 @@ var TMP_eventListener = {
     }
 
     // workaround when we remove last visible tab
-    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && tabBar.overflow &&
+    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
         aTab._tPos >= Tabmix.visibleTabs.last._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 

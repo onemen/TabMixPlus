@@ -1580,7 +1580,7 @@ var tablib = {
     // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
     // if the tab strip doesn't overflow to prevent layout flushes
     gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
-      if (this.tabContainer.overflow)
+      if (Tabmix.tabsUtils.overflow)
         this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
     };
 

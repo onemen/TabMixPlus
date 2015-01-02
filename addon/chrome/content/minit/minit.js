@@ -249,7 +249,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (tabBar.overflow) {
+    if (Tabmix.tabsUtils.overflow) {
       let tabStrip = tabBar.mTabstrip;
       let ltr = Tabmix.ltr || tabStrip.orient == "vertical";
       let _scroll, targetAnonid;

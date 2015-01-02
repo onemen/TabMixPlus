@@ -69,7 +69,7 @@ var TabmixTabbar = {
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
       let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
-      let overflow = tabBar.overflow;
+      let overflow = Tabmix.tabsUtils.overflow;
 
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
       let tabmixScrollBox = document.getElementById("tabmixScrollBox");
@@ -99,7 +99,7 @@ var TabmixTabbar = {
         // the height in front.
         tabStrip.orient = "vertical";
         if (tabBar.updateVerticalTabStrip() == "scrollbar")
-          tabBar.overflow = true;
+          Tabmix.tabsUtils.overflow = true;
       }
       Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
@@ -248,7 +248,7 @@ var TabmixTabbar = {
     if (aRows == 1) {
       Tabmix.setItem(tabBar, "multibar", null);
       Tabmix.setItem("TabsToolbar", "multibar", null);
-      tabBar.overflow = false;
+      Tabmix.tabsUtils.overflow = false;
       return;
     }
 
@@ -528,7 +528,7 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     // call our tabstrip function only when we are in multi-row and
     // in overflow with pinned tabs
-    if (this.isMultiRow && tabBar.overflow && tabBar.firstChild.pinned)
+    if (this.isMultiRow && Tabmix.tabsUtils.overflow && tabBar.firstChild.pinned)
       tabBar.mTabstrip.setFirstTabInRow();
   },
 
@@ -713,7 +713,7 @@ Tabmix.tabsUtils = {
       return;
 
     if (!this.checkNewtabButtonVisibility) {
-      TabmixTabbar.showNewTabButtonOnSide(this.tabBar.overflow, "right-side");
+      TabmixTabbar.showNewTabButtonOnSide(this.overflow, "right-side");
       return;
     }
 
@@ -795,9 +795,30 @@ Tabmix.tabsUtils = {
   },
 
   set disAllowNewtabbutton(val) {
-    let newVal = this.tabBar.overflow || val;
+    let newVal = this.overflow || val;
     TabmixTabbar.showNewTabButtonOnSide(newVal, "temporary-right-side");
     return newVal;
+  },
+
+  get overflow() {
+    return this.tabBar.hasAttribute("overflow");
+  },
+
+  set overflow(val) {
+    // don't do anything if other extensions set orient to vertical
+    // when we arn't use it.
+    if (!TabmixTabbar.isMultiRow && this.tabBar.mTabstrip.orient == "vertical")
+      return val;
+
+    if (val != this.overflow) {
+      if (val)
+        this.tabBar.setAttribute("overflow", "true");
+      else
+        this.tabBar.removeAttribute("overflow");
+      TabmixTabbar.showNewTabButtonOnSide(val, "right-side");
+      this.tabBar.mTabstrip.updateOverflow(val);
+    }
+    return val;
   },
 
   get topTabY() {
@@ -1227,11 +1248,11 @@ var gTMPprefObserver = {
           if (TabmixTabbar.isMultiRow) {
             let isVisible = tabBar.mTabstrip.isElementVisible(gBrowser.mCurrentTab);
             // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
-            if (tabBar.overflow && row > TabmixTabbar.visibleRows)
-              tabBar.overflow = false;
+            if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows)
+              Tabmix.tabsUtils.overflow = false;
             // after we update the height check if we are still in overflow
             if (tabBar.updateVerticalTabStrip() == "scrollbar") {
-              tabBar.overflow = true;
+              Tabmix.tabsUtils.overflow = true;
               tabBar.mTabstrip._updateScrollButtonsDisabledState();
               if (isVisible)
                 gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
@@ -1804,7 +1825,7 @@ var gTMPprefObserver = {
     // we use this value in disAllowNewtabbutton and overflow setters
     Tabmix._show_newtabbutton = attrValue;
     if (aShow) {
-      if (gBrowser.tabContainer.overflow)
+      if (Tabmix.tabsUtils.overflow)
         attrValue = "right-side";
       else if (Tabmix.tabsUtils.disAllowNewtabbutton)
         attrValue = "temporary-right-side";

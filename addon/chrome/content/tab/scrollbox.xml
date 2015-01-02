@@ -122,8 +122,9 @@
               this._scrollButtonUpLeft : this._scrollButtonUpRight;
           this._updateScrollButtonsDisabledState();
           if (!Tabmix.isVersion(320)) {
-            this._scrollButtonUp.collapsed = !tabContainer.overflow;
-            this._scrollButtonDown.collapsed = !tabContainer.overflow;
+            let overflow = Tabmix.tabsUtils.overflow;
+            this._scrollButtonUp.collapsed = !overflow;
+            this._scrollButtonDown.collapsed = !overflow;
           }
         ]]></body>
       </method>
@@ -425,7 +426,7 @@
               TabmixTabbar._failedToEnterVerticalMode = true;
             if (blockUnderflow && this.orient == "vertical")
               this.blockUnderflow = true;
-            this.updateOverflow(tabBar.overflow);
+            this.updateOverflow(Tabmix.tabsUtils.overflow);
           }
         ]]></body>
       </method>
@@ -562,7 +563,7 @@
         }
 
         var tabs = document.getBindingParent(this);
-        if (tabs.hasAttribute("multibar") && tabs.overflow) {
+        if (tabs.hasAttribute("multibar") && Tabmix.tabsUtils.overflow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
@@ -571,9 +572,9 @@
             tabs.updateVerticalTabStrip();
         }
         else
-          tabs.overflow = false;
+          Tabmix.tabsUtils.overflow = false;
 
-        this.updateOverflow(tabs.overflow);
+        this.updateOverflow(Tabmix.tabsUtils.overflow);
 
         if (tabs._lastTabClosedByMouse)
           tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
@@ -621,9 +622,9 @@
             tabs.updateVerticalTabStrip();
         }
         else
-          tabs.overflow = true;
+          Tabmix.tabsUtils.overflow = true;
 
-        this.updateOverflow(tabs.overflow);
+        this.updateOverflow(Tabmix.tabsUtils.overflow);
 
         tabs._positionPinnedTabs();
         if (Tabmix.isVersion(190))
