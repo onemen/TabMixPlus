@@ -940,7 +940,7 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.tabBarMaxRow":
           var tabBar = gBrowser.tabContainer;
-          let row = tabBar.maxRow;
+          let row = Tabmix.prefs.getIntPref("tabBarMaxRow");
           if (row < 2) {
             Tabmix.prefs.setIntPref("tabBarMaxRow", 2);
             return;
