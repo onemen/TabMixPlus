@@ -451,7 +451,7 @@
 ///XXX check if we can set the margin with animation when we scroll
           let end = Tabmix.ltr ? "right": "left";
           let containerEnd = this.scrollClientRect[end];
-          let top = tabBar.topTabY;
+          let top = Tabmix.tabsUtils.topTabY;
           let tabs = this._getScrollableElements();
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {

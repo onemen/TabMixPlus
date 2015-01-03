@@ -372,7 +372,7 @@ var tablib = {
         // we get here when we are about to go to single row
         // one tab before the last is in the first row and we are closing one tab
         var tabs = visibleTabs || this.tabbrowser.visibleTabs;
-        return this.getTabRowNumber(tabs[tabs.length-2], this.topTabY) == 1;
+        return Tabmix.tabsUtils.getTabRowNumber(tabs[tabs.length-2], Tabmix.tabsUtils.topTabY) == 1;
       };
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(

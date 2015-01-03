@@ -874,7 +874,7 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
       if (tabBar.getAttribute("multibar") == "true" &&
-          tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
+          Tabmix.tabsUtils.lastTabRowNumber < TabmixTabbar.visibleRows)
         tabBar.updateVerticalTabStrip();
       TabmixTabbar.updateBeforeAndAfter();
     }

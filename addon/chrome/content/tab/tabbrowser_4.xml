@@ -363,8 +363,8 @@
           // we must adjustNewtabButtonvisibility before get lastTabRowNumber
           Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           let visibleRows = TabmixTabbar.visibleRows;
-          // this.lastTabRowNumber is null when we hide the tabbar
-          let rows = aReset || this.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
+          // Tabmix.tabsUtils.lastTabRowNumber is null when we hide the tabbar
+          let rows = aReset || this.childNodes.length == 1 ? 1 : (Tabmix.tabsUtils.lastTabRowNumber || 1);
 
           let currentMultibar = this.getAttribute("multibar") || null;
           let maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
@@ -374,7 +374,7 @@
             // try to scroll all the way up
             this.mTabstrip.scrollByPixels((rows - maxRow) * this.mTabstrip.singleRowHeight);
             // get lastTabRowNumber after the scroll
-            rows = this.lastTabRowNumber;
+            rows = Tabmix.tabsUtils.lastTabRowNumber;
           }
 
           let multibar;
@@ -461,37 +461,6 @@
       <property name="canScrollTabsRight" readonly="true"
                 onget="return !this.mTabstrip._scrollButtonDown.disabled;"/>
 
-      <property name="topTabY" readonly="true">
-        <getter><![CDATA[
-          return Tabmix.tabsUtils.tabstripInnerbox.boxObject.y +
-                 Tabmix.getStyle(Tabmix.tabsUtils.tabstripInnerbox, "paddingTop");
-        ]]></getter>
-      </property>
-
-      <property name="lastTabRowNumber" readonly="true">
-        <getter><![CDATA[
-          return this.getTabRowNumber(Tabmix.visibleTabs.last, this.topTabY);
-        ]]></getter>
-      </property>
-
-      <method name="getTabRowNumber">
-        <parameter name="aTab"/>
-        <parameter name="aTop"/>
-        <body><![CDATA[
-/*XXX we can use aTab.getBoundingClientRect().top if we do the same in topTabY */
-          var height = aTab ? aTab.boxObject.height : 0;
-          if (height == 0) // don't panic
-            return 1;
-          // some theme add marginTop/marginBottom to tabs
-          var cStyle = window.getComputedStyle(aTab, null);
-          var marginTop = parseInt(cStyle["marginTop"]) || 0;
-          var marginBottom = parseInt(cStyle["marginBottom"]) || 0;
-          height += marginTop + marginBottom;
-
-          var tabBottom = aTab.boxObject.y - marginTop + height;
-          return Math.round((tabBottom - aTop)/height);
-        ]]></body>
-      </method>
 
       <method name="_notifyBackgroundTab">
         <parameter name="aTab"/>

@@ -558,7 +558,7 @@ var TMP_tabDNDObserver = {
   },
 
   getNewIndex: function (event) {
-    function getTabRowNumber(tab, top) tab.pinned ? 1 : gBrowser.tabContainer.getTabRowNumber(tab, top)
+    function getTabRowNumber(tab, top) tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top)
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,
@@ -577,7 +577,7 @@ var TMP_tabDNDObserver = {
       }
     }
     else {
-      let topY = tabBar.topTabY;
+      let topY = Tabmix.tabsUtils.topTabY;
       for (let i = 0; i < numTabs; i++) {
         let tab = tabs[i];
         let thisRow = getTabRowNumber(tab, topY);
