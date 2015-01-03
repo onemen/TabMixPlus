@@ -923,6 +923,15 @@ Tabmix.tabsUtils = {
 
   get canScrollTabsRight() {
     return !this.tabBar.mTabstrip._scrollButtonDown.disabled;
+  },
+
+  isSingleRow: function(visibleTabs) {
+    if (!this.tabBar.hasAttribute("multibar"))
+      return true;
+    // we get here when we are about to go to single row
+    // one tab before the last is in the first row and we are closing one tab
+    let tabs = visibleTabs || gBrowser.visibleTabs;
+    return this.getTabRowNumber(tabs[tabs.length - 2], this.topTabY) == 1;
   }
 };
 

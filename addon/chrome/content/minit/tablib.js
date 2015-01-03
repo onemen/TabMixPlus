@@ -366,15 +366,6 @@ var tablib = {
       ).toCode();
     }
 
-      tabBar.TMP_inSingleRow = function Tabmix_inSingleRow(visibleTabs) {
-        if (!this.hasAttribute("multibar"))
-          return true;
-        // we get here when we are about to go to single row
-        // one tab before the last is in the first row and we are closing one tab
-        var tabs = visibleTabs || this.tabbrowser.visibleTabs;
-        return Tabmix.tabsUtils.getTabRowNumber(tabs[tabs.length-2], Tabmix.tabsUtils.topTabY) == 1;
-      };
-
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(
         '{',
         '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
@@ -398,7 +389,7 @@ var tablib = {
         '    }' +
         '    return;' +
         '  }' +
-        '  if (!this.TMP_inSingleRow(tabs))' +
+        '  if (!Tabmix.tabsUtils.isSingleRow(tabs))' +
         '    return;' +
         '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
         '  $&'
@@ -408,7 +399,7 @@ var tablib = {
       if (typeof tabBar._expandSpacerBy == "function")
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
         '{',
-        '{if (TabmixTabbar.widthFitTitle || !this.TMP_inSingleRow()) return;'
+        '{if (TabmixTabbar.widthFitTitle || !Tabmix.tabsUtils.isSingleRow()) return;'
       ).toCode();
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
