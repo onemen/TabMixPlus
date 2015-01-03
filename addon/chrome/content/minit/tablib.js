@@ -308,7 +308,8 @@ var tablib = {
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
-        'this.mTabstrip.resetFirstTabInRow();\
+        'if (typeof this.mTabstrip.resetFirstTabInRow == "function")\
+           this.mTabstrip.resetFirstTabInRow();\
          $&'
       )._replace(
         /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,

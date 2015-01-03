@@ -881,7 +881,8 @@ Tabmix.tabsUtils = {
       else
         this.tabBar.removeAttribute("overflow");
       this.showNewTabButtonOnSide(val, "right-side");
-      this.tabBar.mTabstrip.updateOverflow(val);
+      if (typeof this.tabBar.mTabstrip.updateOverflow == "function")
+        this.tabBar.mTabstrip.updateOverflow(val);
     }
     return val;
   },
