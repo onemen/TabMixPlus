@@ -1305,7 +1305,7 @@ Tabmix.navToolbox = {
       next.parentNode.insertBefore(box, next);
       if (!onlyPosition) {
         let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-        gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
       }
       return;
     }
@@ -1314,7 +1314,7 @@ Tabmix.navToolbox = {
 
     if (!onlyPosition) {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-      gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+      Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
     }
   },
 

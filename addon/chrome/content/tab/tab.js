@@ -74,7 +74,7 @@ var TabmixTabbar = {
       // from Firefox 4.0+ on we add dynamicly scroll buttons on TabsToolbar.
       let tabmixScrollBox = document.getElementById("tabmixScrollBox");
       if (tabmixScrollBox) // just in case our box is missing
-        tabBar.mTabstrip.updateScrollButtons(useTabmixButtons);
+        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
 
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // temporarily hide vertical scroll button.
@@ -932,6 +932,32 @@ Tabmix.tabsUtils = {
     // one tab before the last is in the first row and we are closing one tab
     let tabs = visibleTabs || gBrowser.visibleTabs;
     return this.getTabRowNumber(tabs[tabs.length - 2], this.topTabY) == 1;
+  },
+
+  /**** gBrowser.tabContainer.mTabstrip helpers ****/
+  /**
+   * this function is here for the case restart-less extension override our
+   * override our mTabstrip binding when Tabmix's uses its own scroll buttons
+   */
+  updateScrollButtons: function(useTabmixButtons) {
+    let tabstrip = this.tabBar.mTabstrip;
+    tabstrip._scrollButtonDown = useTabmixButtons ?
+      tabstrip._scrollButtonDownRight :
+      tabstrip._scrollButtonUpLeft || // fall back to original
+      document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-down");
+    this.tabBar._animateElement = tabstrip._scrollButtonDown;
+
+    tabstrip._scrollButtonUp = useTabmixButtons ?
+      tabstrip._scrollButtonUpRight :
+      tabstrip._scrollButtonUpLeft || // fall back to original
+      document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-up");
+    tabstrip._updateScrollButtonsDisabledState();
+
+    if (!Tabmix.isVersion(320)) {
+      let overflow = this.overflow;
+      tabstrip._scrollButtonUp.collapsed = !overflow;
+      tabstrip._scrollButtonDown.collapsed = !overflow;
+    }
   }
 };
 

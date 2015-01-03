@@ -110,25 +110,6 @@
         document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
 
-      <method name="updateScrollButtons">
-        <parameter name="useTabmixButtons"/>
-        <body><![CDATA[
-          this._scrollButtonDown = !useTabmixButtons ?
-              this._scrollButtonDownLeft : this._scrollButtonDownRight;
-          var tabContainer = document.getBindingParent(this);
-          tabContainer._animateElement = this._scrollButtonDown;
-
-          this._scrollButtonUp = !useTabmixButtons ?
-              this._scrollButtonUpLeft : this._scrollButtonUpRight;
-          this._updateScrollButtonsDisabledState();
-          if (!Tabmix.isVersion(320)) {
-            let overflow = Tabmix.tabsUtils.overflow;
-            this._scrollButtonUp.collapsed = !overflow;
-            this._scrollButtonDown.collapsed = !overflow;
-          }
-        ]]></body>
-      </method>
-
       <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
            Override scrollbox.xml method, since our scrollbox's children are
            inherited from the binding parent -->
