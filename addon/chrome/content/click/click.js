@@ -782,7 +782,7 @@ var TabmixAllTabs = {
       let curTabBO = curTab.boxObject;
       if (!curTabBO) // "Tabs From Other Computers" menuitem
         continue;
-      if (tabContainer.mTabstrip.isElementVisible(curTab))
+      if (Tabmix.tabsUtils.isElementVisible(curTab))
         this.childNodes[i].setAttribute("tabIsVisible", "true");
       else
         this.childNodes[i].removeAttribute("tabIsVisible");
@@ -936,7 +936,7 @@ var TabmixAllTabs = {
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];
-          let visible = side && gBrowser.tabContainer.mTabstrip.isElementVisible(tab);
+          let visible = side && Tabmix.tabsUtils.isElementVisible(tab);
           if (visible) {
             if (tab.pinned)
               continue;

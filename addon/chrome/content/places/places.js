@@ -600,7 +600,7 @@ var TMP_Places = {
     this.inUpdateBatch = true;
 
     if (TabmixTabbar.widthFitTitle &&
-         gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.mCurrentTab))
+        Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab))
       this.currentTab = gBrowser.mCurrentTab;
   },
 

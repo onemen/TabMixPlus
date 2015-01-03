@@ -1635,9 +1635,8 @@ var tablib = {
     // return the current tab only if it is visible
     if (TabmixTabbar.widthFitTitle &&
         (!TMP_Places.inUpdateBatch || !TMP_Places.currentTab)) {
-      let tabBar = gBrowser.tabContainer;
       let tab = gBrowser.selectedTab;
-      if (tabBar.mTabstrip.isElementVisible(tab))
+      if (Tabmix.tabsUtils.isElementVisible(tab))
        TMP_Places.currentTab = tab;
     }
     return TMP_Places.getTabTitle(aTab, url, title);

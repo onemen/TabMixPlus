@@ -64,7 +64,7 @@ var TabmixTabbar = {
     this.scrollButtonsMode = tabscroll;
     var isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
 
-    var currentVisible = start ? true : tabStrip.isElementVisible(gBrowser.mCurrentTab);
+    var currentVisible = start ? true : Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
@@ -958,6 +958,32 @@ Tabmix.tabsUtils = {
       tabstrip._scrollButtonUp.collapsed = !overflow;
       tabstrip._scrollButtonDown.collapsed = !overflow;
     }
+  },
+
+  isElementVisible: function(element) {
+    if (!element || !element.parentNode || element.collapsed || element.hidden)
+      return false;
+
+    // pinned tabs are always visible
+    if (element.pinned)
+      return true;
+
+    var [start, end] = this.tabBar.mTabstrip._startEndProps;
+    var rect = this.tabBar.mTabstrip.scrollClientRect;
+    var containerStart = rect[start];
+    var containerEnd = rect[end];
+    rect = element.getBoundingClientRect();
+    var elementStart = rect[start];
+    var elementEnd = rect[end];
+
+    // we don't need the extra check with scrollContentRect
+    // like in ensureElementIsVisible, the element will be invisible anyhow.
+    if (elementStart < containerStart)
+      return false;
+    else if (containerEnd < elementEnd)
+      return false;
+
+    return true;
   }
 };
 
@@ -1159,8 +1185,7 @@ var gTMPprefObserver = {
         break;
       case "browser.tabs.tabMaxWidth":
       case "browser.tabs.tabMinWidth":
-        var tabStrip = gBrowser.tabContainer.mTabstrip;
-        var currentVisible = tabStrip.isElementVisible(gBrowser.mCurrentTab);
+        var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
         let tabMaxWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
         let tabMinWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
         if (tabMaxWidth < tabMinWidth) {
@@ -1353,7 +1378,7 @@ var gTMPprefObserver = {
           }
           // maxRow changed
           if (TabmixTabbar.isMultiRow) {
-            let isVisible = tabBar.mTabstrip.isElementVisible(gBrowser.mCurrentTab);
+            let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
             // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
             if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows)
               Tabmix.tabsUtils.overflow = false;

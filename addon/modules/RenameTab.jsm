@@ -80,7 +80,7 @@ this.RenameTab = {
     popup.addEventListener("keypress", this, false);
     // dock the panel to the tab icon when possible, otherwise show the panel
     // at screen center
-    if (this.window.gBrowser.tabContainer.mTabstrip.isElementVisible(this.data.tab))
+    if (this.window.Tabmix.tabsUtils.isElementVisible(this.data.tab))
       popup.openPopup(this.data.tab, "bottomcenter topleft");
     else {
       let screen = this.window.screen;

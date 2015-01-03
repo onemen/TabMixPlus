@@ -356,7 +356,7 @@
           if (aTab.pinned)
             return;
           // Is the new tab already completely visible?
-          if (this.mTabstrip.isElementVisible(aTab))
+          if (Tabmix.tabsUtils.isElementVisible(aTab))
             return;
 
           var scrollRect = this.mTabstrip.scrollClientRect;
@@ -412,7 +412,7 @@
       <method name="isTabVisible">
         <parameter name="aIndex"/>
         <body><![CDATA[
-          return this.mTabstrip.isElementVisible(this.childNodes.item(aIndex));
+          return Tabmix.tabsUtils.isElementVisible(this.childNodes.item(aIndex));
         ]]></body>
       </method>
       <method name="ensureTabIsVisible">
@@ -425,7 +425,7 @@
       </method>
       <property name="lastTabVisible" readonly="true">
         <getter><![CDATA[
-          return this.mTabstrip.isElementVisible(Tabmix.visibleTabs.last);
+          return Tabmix.tabsUtils.isElementVisible(Tabmix.visibleTabs.last);
         ]]></getter>
       </property>
 
