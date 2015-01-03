@@ -433,51 +433,6 @@
       <property name="realCollapsedTabs" readonly="true" onget="return 0;"/>
 
     </implementation>
-
-    <handlers>
-      <handler event="MozMouseHittest" button="0"  phase="capturing"><![CDATA[
-        if (Tabmix.keyModifierDown || event.detail > 0)
-          event.stopPropagation();
-      ]]></handler>
-
-      <handler event="dblclick" phase="capturing"><![CDATA[
-        if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
-            Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
-            !TabmixSvc.isMac && event.target.localName == "tabs") {
-          let displayAppButton = !(document.getElementById("titlebar") || document.getElementById("appmenu-toolbar-button")).hidden;
-          let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
-          if (TabsInTitlebar.enabled ||
-              (displayAppButton && tabsOnTop && this.parentNode._dragBindingAlive))
-            return;
-        }
-        TabmixTabClickOptions.onTabBarDblClick(event);
-      ]]></handler>
-
-      <handler event="click" phase="capturing"><![CDATA[
-        TabmixTabClickOptions.onTabClick(event);
-      ]]></handler>
-
-      <handler event="dragstart" phase="capturing"><![CDATA[
-        if (this.useTabmixDragstart(event))
-          TMP_tabDNDObserver.onDragStart(event);
-      ]]></handler>
-
-      <handler event="drop" phase="capturing"><![CDATA[
-        if (this.useTabmixDnD(event))
-          TMP_tabDNDObserver.onDrop(event);
-      ]]></handler>
-
-      <handler event="dragend" phase="capturing"><![CDATA[
-        if (this.orient == "horizontal")
-          TMP_tabDNDObserver.onDragEnd(event);
-      ]]></handler>
-
-      <handler event="dragexit" phase="capturing"><![CDATA[
-        if (this.useTabmixDnD(event))
-          TMP_tabDNDObserver.onDragExit(event);
-      ]]></handler>
-    </handlers>
-
   </binding>
 
 </bindings>

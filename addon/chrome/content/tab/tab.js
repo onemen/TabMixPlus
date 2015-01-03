@@ -563,7 +563,11 @@ Tabmix.tabsUtils = {
     return (this.tabstripInnerbox = elm);
   },
 
+  events: ["MozMouseHittest", "dblclick", "click", "dragstart",
+           "drop", "dragend", "dragexit"],
+
   init: function() {
+    TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
     // add dragover event handler to TabsToolbar to capture dragging over
     // tabbar margin area, filter out events that are out of the tabbar
     this.tabBar.parentNode.addEventListener("dragover", this, true);
@@ -633,6 +637,9 @@ Tabmix.tabsUtils = {
   },
 
   onUnload: function() {
+    if (!this.initialized)
+      return;
+    TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
     if (this.tabBar.parentNode)
       this.tabBar.parentNode.removeEventListener("dragover", this, true);
     delete this.tabstripInnerbox;
@@ -641,12 +648,48 @@ Tabmix.tabsUtils = {
 
   handleEvent: function(aEvent) {
     switch (aEvent.type) {
+      case "MozMouseHittest":
+        if (aEvent.button === 0 && (Tabmix.keyModifierDown || aEvent.detail > 0))
+          aEvent.stopPropagation();
+        break;
+      case "dblclick":
+        if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+            Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
+            !TabmixSvc.isMac && aEvent.target.localName == "tabs") {
+          let displayAppButton = !(document.getElementById("titlebar") ||
+                                   document.getElementById("appmenu-toolbar-button")).hidden;
+          let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
+          if (TabsInTitlebar.enabled ||
+              (displayAppButton && tabsOnTop && this.tabBar.parentNode._dragBindingAlive))
+            return;
+        }
+        TabmixTabClickOptions.onTabBarDblClick(aEvent);
+        break;
+      case "click":
+        TabmixTabClickOptions.onTabClick(aEvent);
+        break;
+      case "dragstart":
+        if (this.tabBar.useTabmixDragstart(aEvent))
+          TMP_tabDNDObserver.onDragStart(aEvent);
+        break;
       case "dragover":
         let target = aEvent.target.localName;
         if (target != "tab" && target != "tabs")
           return;
-        if (gBrowser.tabContainer.useTabmixDnD(aEvent))
+        if (this.tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.onDragOver(aEvent);
+        break;
+      case "drop":
+        if (this.tabBar.useTabmixDnD(aEvent))
+          TMP_tabDNDObserver.onDrop(aEvent);
+        break;
+      case "dragend":
+        if (this.tabBar.orient == "horizontal")
+          TMP_tabDNDObserver.onDragEnd(aEvent);
+        break;
+      case "dragexit":
+        if (this.tabBar.useTabmixDnD(aEvent))
+          TMP_tabDNDObserver.onDragExit(aEvent);
         break;
     }
   },
