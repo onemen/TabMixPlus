@@ -367,6 +367,7 @@ var tablib = {
       ).toCode();
     }
 
+    if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(
         '{',
         '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
@@ -421,6 +422,7 @@ var tablib = {
         '  }' +
         '  $1$2'
       ).toCode();
+    }
 
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
