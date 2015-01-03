@@ -228,7 +228,7 @@
 
         if (TabmixSvc.australis) {
           clearTimeout(this.tabmix_mouseover);
-          let positionalTabs = this.parentNode._tabmixPositionalTabs;
+          let positionalTabs = Tabmix.tabsUtils._tabmixPositionalTabs;
           if (positionalTabs.beforeHoveredTab) {
             positionalTabs.beforeHoveredTab.removeAttribute("tabmix-removed-beforehovered");
             positionalTabs.beforeHoveredTab = null;

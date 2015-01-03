@@ -391,12 +391,12 @@ var TabmixTabbar = {
       };
 
       let removed = "tabmix-removed-" + attrib;
-      let oldTab = tabBar._tabmixPositionalTabs[type];
+      let oldTab = Tabmix.tabsUtils._tabmixPositionalTabs[type];
       if (oldTab && tab != oldTab) {
         oldTab.removeAttribute("tabmix-" + attrib + "-visible");
         oldTab.removeAttribute(removed);
       }
-      tabBar._tabmixPositionalTabs[type] = tab;
+      Tabmix.tabsUtils._tabmixPositionalTabs[type] = tab;
       let specialTab = isSpecialTab();
       if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
           multibar || tab.hasAttribute(removed) || specialTab)) {
@@ -549,6 +549,7 @@ var TabmixTabbar = {
 
 Tabmix.tabsUtils = {
   initialized: false,
+  _tabmixPositionalTabs: {},
 
   get tabBar() {
     delete this.tabBar;
@@ -591,10 +592,11 @@ Tabmix.tabsUtils = {
     let onLeft = Tabmix.defaultCloseButtons && Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
     this.tabBar.setAttribute("closebuttons-side", onLeft ? "left" : "right");
 
-    this.tabBar._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
-    this.tabBar.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
+    // mCloseButtons is not in firefox code sinc Firefox 31 bug 865826
     this.tabBar.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
-    this.tabBar._tabmixPositionalTabs = {
+    this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
+    this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
+    this._tabmixPositionalTabs = {
       beforeSelectedTab: null, afterSelectedTab: null,
       beforeHoveredTab: null, afterHoveredTab: null
     };
@@ -634,7 +636,7 @@ Tabmix.tabsUtils = {
     if (this.tabBar.parentNode)
       this.tabBar.parentNode.removeEventListener("dragover", this, true);
     delete this.tabstripInnerbox;
-    gBrowser.tabContainer._tabmixPositionalTabs = null;
+    this._tabmixPositionalTabs = null;
   },
 
   handleEvent: function(aEvent) {
@@ -1162,7 +1164,7 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.adjustTabstrip();
         break;
       case "extensions.tabmix.keepLastTab":
-        gBrowser.tabContainer._keepLastTab = Services.prefs.getBoolPref(prefName);
+        Tabmix.tabsUtils._keepLastTab = Services.prefs.getBoolPref(prefName);
         gBrowser.tabContainer.adjustTabstrip();
         break;
       case "browser.tabs.closeButtons":
@@ -1215,7 +1217,7 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.tabs.closeButtons.enable":
         prefValue = Services.prefs.getBoolPref(prefName);
-        gBrowser.tabContainer.closeButtonsEnabled = prefValue;
+        Tabmix.tabsUtils.closeButtonsEnabled = prefValue;
         gBrowser.tabContainer.mTabstrip.offsetRatio = prefValue ? 0.70 : 0.50;
         gBrowser.tabContainer.adjustTabstrip();
         break;

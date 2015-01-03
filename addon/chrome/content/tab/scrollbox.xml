@@ -187,7 +187,7 @@
           this.tabmix_inited = true;
 
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
-          this.offsetRatio = document.getBindingParent(this).closeButtonsEnabled ? 0.70 : 0.50;
+          this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
           this.minOffset = TabmixSvc.australis ? 25 : 50;
           Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
             'var amountToScroll',
