@@ -815,6 +815,9 @@ var ContentClickInternal = {
     if (this.targetPref != 2 || this._window.Tabmix.isNewTabUrls(this._data.currentURL))
       return false;
 
+    if (this.GoogleComLink())
+      return false;
+
     if (this.checkOnClick())
       return false;
 
