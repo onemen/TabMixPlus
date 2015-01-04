@@ -1057,7 +1057,6 @@ var TMP_eventListener = {
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
-    gBrowser.tabContainer._tabmixPositionalTabs = null;
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
@@ -1085,6 +1084,8 @@ var TMP_eventListener = {
       let mm = window.getGroupMessageManager("browsers");
       mm.removeMessageListener("Tabmix:SetSyncHandler", this);
     }
+
+    Tabmix.tabsUtils.onUnload();
   },
 
   // some theme not useing up to date Tabmix tab binding
@@ -1121,11 +1122,12 @@ var TMP_eventListener = {
  * initialized yet
  */
 Tabmix.initialization = {
-  beforeStartup:           {id: 0, obj: "Tabmix"},
-  onContentLoaded:         {id: 1, obj: "TMP_eventListener"},
-  beforeBrowserInitOnLoad: {id: 2, obj: "Tabmix"},
-  onWindowOpen:            {id: 3, obj: "TMP_eventListener"},
-  delayedStartup:          {id: 4, obj: "Tabmix"},
+  init:                    {id: 0, obj: "Tabmix.tabsUtils"},
+  beforeStartup:           {id: 1, obj: "Tabmix"},
+  onContentLoaded:         {id: 2, obj: "TMP_eventListener"},
+  beforeBrowserInitOnLoad: {id: 3, obj: "Tabmix"},
+  onWindowOpen:            {id: 4, obj: "TMP_eventListener"},
+  delayedStartup:          {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
     /**
@@ -1164,6 +1166,11 @@ Tabmix.initialization = {
     if (!this.isValidWindow)
       return null;
     let result, currentPhase = this[aPhase].id;
+    let getObj = function(list) {
+      let obj = window;
+      list.split(".").forEach(function(prop) {obj = obj[prop];});
+      return obj;
+    };
     for (let key of Object.keys(this)) {
       let phase = this[key];
       if (phase.id > currentPhase)
@@ -1171,7 +1178,7 @@ Tabmix.initialization = {
       if (!phase.initialized) {
         phase.initialized = true;
         try {
-          let obj = window[phase.obj];
+          let obj = getObj(phase.obj);
           result = obj[key].apply(obj, Array.slice(arguments, 1));
         } catch (ex) {
           Tabmix.assert(ex, phase.obj + "." + key + " failed");

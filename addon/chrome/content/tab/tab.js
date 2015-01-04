@@ -555,6 +555,139 @@ var TabmixTabbar = {
 
 }; // TabmixTabbar end
 
+Tabmix.tabsUtils = {
+  initialized: false,
+
+  get tabBar() {
+    delete this.tabBar;
+    return (this.tabBar = gBrowser.tabContainer);
+  },
+
+  init: function() {
+    // add dragover event handler to TabsToolbar to capture dragging over
+    // tabbar margin area, filter out events that are out of the tabbar
+    this.tabBar.parentNode.addEventListener("dragover", this, true);
+    if (!Tabmix.isVersion(310))
+      Services.prefs.removeObserver("browser.tabs.closeButtons", this.tabBar._prefObserver);
+
+    if (this.initialized) {
+      Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
+      this.initializeTabmixUI();
+      return;
+    }
+    this.initialized = true;
+
+    var tabbrowser = this.tabBar.tabbrowser;
+    let tab = this.tabBar.firstChild;
+
+    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function () {
+      return window.getComputedStyle(tabbrowser, null).direction == "rtl";
+    });
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function () {return !Tabmix.rtl;});
+
+    // don't set button to left side if it is not inside tab-content
+    let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
+        document.getAnonymousElementByAttribute(tab, "anonid", "close-button");
+    Tabmix.defaultCloseButtons = button && button.parentNode.className == "tab-content";
+    let onLeft = Tabmix.defaultCloseButtons && Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
+    this.tabBar.setAttribute("closebuttons-side", onLeft ? "left" : "right");
+
+    this.tabBar._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
+    this.tabBar.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
+    this.tabBar.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
+    this.tabBar._tabmixPositionalTabs = {
+      beforeSelectedTab: null, afterSelectedTab: null,
+      beforeHoveredTab: null, afterHoveredTab: null
+    };
+
+    Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];
+    Tabmix.tabsNewtabButton =
+      document.getAnonymousElementByAttribute(this.tabBar, "command", "cmd_newNavigatorTab");
+    Tabmix._show_newtabbutton = "aftertabs";
+
+    let attr = ["notpinned", "autoreload", "protected",
+                "locked"].filter(function(att) {
+                  return Tabmix.prefs.getBoolPref("extraIcons." + att);
+                });
+    if (attr.length)
+      this.tabBar.setAttribute("tabmix_icons", attr.join(" "));
+
+    Tabmix._debugMode = TabmixSvc.debugMode();
+
+    // initialize first tab
+    Tabmix._nextSelectedID = 1;
+    TMP_eventListener.setTabAttribute(tab);
+    tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
+    tab.setAttribute("visited", true);
+    Tabmix.setTabStyle(tab);
+    TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
+    if (TabmixTabbar.lockallTabs) {
+      tab.setAttribute("locked", true);
+      tab.tabmix_allowLoad = false;
+    }
+    if ("linkedBrowser" in tab)
+      tablib.setLoadURIWithFlags(tab.linkedBrowser);
+
+    Tabmix.initialization.run("beforeStartup", tabbrowser, this.tabBar);
+  },
+
+  onUnload: function() {
+    if (this.tabBar.parentNode)
+      this.tabBar.parentNode.removeEventListener("dragover", this, true);
+    delete this.tabBar.tabstripInnerbox;
+    gBrowser.tabContainer._tabmixPositionalTabs = null;
+  },
+
+  handleEvent: function(aEvent) {
+    switch (aEvent.type) {
+      case "dragover":
+        let target = aEvent.target.localName;
+        if (target != "tab" && target != "tabs")
+          return;
+        if (gBrowser.tabContainer.useTabmixDnD(aEvent))
+          TMP_tabDNDObserver.onDragOver(aEvent);
+        break;
+    }
+  },
+
+  initializeTabmixUI: function() {
+    // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+    // verticalTabs 0.9.1+ is restartless.
+    if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+      Tabmix.setItem("TabsToolbar", "collapsed", null);
+      Tabmix.extensions.verticalTabs = true;
+      Tabmix.extensions.verticalTabBar = true;
+      TabmixTabbar.updateSettings();
+    }
+
+    // tabbrowser-tabs constructor reset first tab label to New Tab
+    this.tabBar.tabbrowser.setTabTitle(this.tabBar.firstChild);
+    let position = Tabmix.prefs.getIntPref("newTabButton.position");
+    if (position !== 0)
+      gTMPprefObserver.changeNewTabButtonSide(position);
+
+    // need to add TabScope eventListener
+    // need to find a way to do it for all extensions that add event to the tabstrip
+    if ("TabScope" in window) {
+      window.TabScope.uninit();
+      window.TabScope.init();
+    }
+
+    TabmixTabbar.flowing = this.tabBar.getAttribute("flowing");
+    this.tabBar.setTabStripOrient();
+    Tabmix.navToolbox.setScrollButtons(true);
+
+    // fix incompatibility with Personal Titlebar extension
+    // the extensions trigger tabbar binding reset on toolbars customize
+    // we need to init our ui settings from here and again after customization
+    if (Tabmix.navToolbox.customizeStarted) {
+      TabmixTabbar.visibleRows = 1;
+      TabmixTabbar.updateSettings(false);
+      Tabmix.navToolbox.resetUI = true;
+    }
+  }
+};
+
 Tabmix.visibleTabs = {
   get first() {
     var tabs = gBrowser.tabs;
