@@ -2820,6 +2820,7 @@ try{
    },
 
    // call from tabloaded, tabClosed, saveAllTab
+// xxx add flag what to save : all, history, property, scrollPosition
    saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend) {
       if (this.isTabPrivate(aTab))
          return false;
@@ -2835,16 +2836,23 @@ try{
 
       var sessionHistory = aBrowser.webNavigation.sessionHistory;
       if (!sessionHistory)
-         return false;
+        return false;
       var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
+      var index = sessionHistory.index < 0 ? 0 : sessionHistory.index;
+      var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
+      try {
+         var curHistory = sessionHistory.getEntryAtIndex(index, false);
+         curHistory.QueryInterface(Ci.nsISHEntry).setScrollPosition(bContent.scrollX, bContent.scrollY);
+      } catch (ex) {Tabmix.assert(ex, "saveTab error at index " + sessionHistory.index);}
       var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
-      var tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-      var data = this.serializeHistory(tabState);
-      if (!data)
-         return false;
-      data.pos = aTab._tPos;
-      data.image = tabState.image;
-      data.properties = TabmixSessionData.getTabProperties(aTab, true);
+      var data = {
+         index: this.enableSaveHistory ? index : 0,
+         pos: aTab._tPos,
+         image: gBrowser.getIcon(aTab),
+         properties: TabmixSessionData.getTabProperties(aTab, true),
+         history: this.saveTabHistory(sessionHistory),
+         scroll: bContent.scrollX + "," + bContent.scrollY
+      };
       this.saveTabData(rdfNodeTab, data);
       this.saveTabviewTab(rdfNodeTab, aTab);
 
@@ -2876,39 +2884,19 @@ try{
       this.setLiteral   (aNode, "scroll",     aData.scroll);
    },
 
-  /**
-   * Convert SessionStore tab history state object
-   *
-   * @param state
-   *        SessionStore tab state object
-   * @return object containing history entries, current history index and
-   *                current history scroll position
-   */
-   serializeHistory: function(state) {
-      // Ensure sure that all entries have url
-      var entries = state.entries.filter(function(e) e.url);
-      if (!entries.length)
-        return null;
-      // Ensure the index is in bounds.
-      var index = (state.index || entries.length) - 1;
-      index = Math.min(index, entries.length - 1);
-      index = Math.max(index, 0);
-      var historyStart = this.enableSaveHistory ? 0 : index;
-      var historyEnd = this.enableSaveHistory ? entries.length : index + 1;
+   saveTabHistory: function(sessionHistory) {
+      var historyStart = this.enableSaveHistory ? 0 : sessionHistory.index;
+      var historyEnd = this.enableSaveHistory ? sessionHistory.count : sessionHistory.index+1;
       var history = [];
-
-      var saveScroll = this.prefBranch.getBoolPref("save.scrollposition");
-      var currentScroll = saveScroll && state.scroll ? state.scroll.scroll : "0,0";
-      if (currentScroll != "0,0")
-        entries[index].scroll = currentScroll;
-
+      sessionHistory.QueryInterface(Ci.nsISHistoryInternal);
       for (let j = historyStart; j < historyEnd; j++) {
-        try {
-          let historyEntry = entries[j];
-          history.push(historyEntry.title || "");
-          history.push(historyEntry.url);
-          history.push(saveScroll && historyEntry.scroll || "0,0");
-        } catch (ex) {Tabmix.assert(ex, "serializeHistory error at index " + j); }
+         try {
+            let historyEntry = sessionHistory.getEntryAtIndex(j, false);
+            historyEntry.QueryInterface(Ci.nsISHEntry);
+            history.push(historyEntry.title);
+            history.push(historyEntry.URI.spec);
+            history.push(this.getScrollPosHs(historyEntry)); // not in use yet
+         } catch (ex) {Tabmix.assert(ex, "saveTabHistory error at index " + j); }
       }
       // generate unique separator and combine the array to one string
       var separator = "][", extraSeparator = "@";
@@ -2916,13 +2904,19 @@ try{
          while (history[i].indexOf(separator) > -1)
             separator += extraSeparator;
       }
-      return {
-        // insert the separator to history so we can extract it in
-        // TabmixConvertSession.getHistoryState
-        history: separator + "|-|" + encodeURI(history.join(separator)),
-        index: index,
-        scroll: currentScroll
-      };
+      // insert the separator to history so we can extract it in loadTabHistory
+      return separator + "|-|" + encodeURI(history.join(separator));
+   },
+
+   getScrollPosHs: function(historyEntry) {
+      if (this.prefBranch.getBoolPref("save.scrollposition")) {
+        try {
+          var x={}, y={};
+          historyEntry.getScrollPosition(x, y);
+          return x.value + "," + y.value;
+        } catch (ex) {}
+      }
+      return "0,0";
    },
 
    get canRestoreLastSession() {
@@ -3527,16 +3521,14 @@ try{
       var tabCount = ctabs.length;
       var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
       for (var i = tabCount - 1; i >= 0; i--) {
-         let tabData = ctabs[i];
-         let data = this.getSessionStoreDataForRDF(tabData);
-         if (!data)
-            continue;
-         let uniqueId, rdfLabelSession, newNode;
+         let tabData, uniqueId, rdfLabelSession, newNode;
          uniqueId = "panel" + Date.now() + i;
          rdfLabelSession = rdfLabelTabs + "/" + uniqueId;
          newNode = this.RDFService.GetResource(rdfLabelSession);
          toContainer.AppendElement(newNode);
-         this.saveTabData(newNode, data);
+         tabData = ctabs[i];
+         this.getSessionStoreDataForRDF(tabData);
+         this.saveTabData(newNode, tabData);
 
          // delete old entry if closedTabs container wasn't empty
          if (toContainer.GetCount() > maxTabsUndo)
@@ -3547,33 +3539,51 @@ try{
 
    getSessionStoreDataForRDF: function SM_getSessionStoreDataForRDF(aTabData) {
       var tabState = aTabData.state;
-      var data = this.serializeHistory(tabState);
-      if (!data)
-         return false;
-      data.pos = aTabData.pos;
-      data.image = aTabData.image;
+      var count = tabState.entries.length;
+      var activeIndex = (tabState.index || count) - 1;
+      var historyStart = this.enableSaveHistory ? 0 : activeIndex;
+      var historyEnd = this.enableSaveHistory ? count : activeIndex + 1;
+      var historyEntry, history = [];
+      for (let j = historyStart; j < historyEnd; j++) {
+         try {
+            historyEntry = tabState.entries[j];
+            history.push(historyEntry.title || "");
+            history.push(historyEntry.url);
+            history.push(historyEntry.scroll || "0,0"); // not in use yet
+         } catch (ex) {Tabmix.assert(ex, "saveTabHistory error at index " + j); }
+      }
+      // generate unique separator and combine the array to one string
+      var separator = "][", extraSeparator = "@";
+      for (var i = 0; i < history.length; ++i) {
+         while (history[i].indexOf(separator) > -1)
+            separator += extraSeparator;
+      }
+      // insert the separator to history so we can extract it in loadTabHistory
+      aTabData.history = separator + "|-|" + encodeURI(history.join(separator));
+      aTabData.index = this.enableSaveHistory ? activeIndex : 0;
+      aTabData.scroll = this.prefBranch.getBoolPref("save.scrollposition") ?
+                         (tabState.entries[activeIndex].scroll || "0,0") : "0,0";
       // closed tab can not be protected - set protected to 0
       var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";
-      data.properties = "0" + _locked;
+      aTabData.properties = "0" + _locked;
       if ("disallow" in tabState && tabState.disallow) {
          for (let j = 0; j < TabmixSessionData.docShellItems.length; j++ )
-            data.properties += tabState.disallow.indexOf(TabmixSessionData.docShellItems[j]) == -1 ? "1" : "0";
+            aTabData.properties += tabState.disallow.indexOf(TabmixSessionData.docShellItems[j]) == -1 ? "1" : "0";
       }
       else {
-         data.properties += "11111";
+         aTabData.properties += "11111";
       }
       if ("attributes" in tabState && tabState.attributes) {
          delete tabState.attributes["_locked"];
          for (var name in tabState.attributes) {
-            data.properties += " " + name + "=" + encodeURI(tabState.attributes[name]);
+            aTabData.properties += " " + name + "=" + encodeURI(tabState.attributes[name]);
          }
       }
       if ("xultab" in tabState && tabState.xultab) {
          tabState.xultab = tabState.xultab.replace(" _locked=true", "").replace(" _locked=false", "");
          if (tabState.xultab)
-            data.properties += " " + tabState.xultab;
+            aTabData.properties += " " + tabState.xultab;
       }
-      return data;
    },
 
    deleteAllClosedtabs: function(sessionContainer) { // delete all closed tabs in this session

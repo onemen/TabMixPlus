@@ -809,14 +809,7 @@ var TabmixConvertSession = { // jshint ignore:line
         return null;
       tabData.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image", null);
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
-      tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
-      let scroll = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll", "0,0");
-      // until version 0.4.1.5 textZoom was included in scroll data
-      scroll = scroll.split(",").splice(0, 2).join(",");
-      if (scroll != "0,0") {
-        tabData.scroll = {scroll: scroll};
-      }
-
+      tabData.index = Math.min(index + 1, tabData.entries.length);
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
 
@@ -915,8 +908,6 @@ var TabmixConvertSession = { // jshint ignore:line
          let entry = { url:"", children:[], ID: 0};
          let index = i * 3;
          entry.url = historyData[index + 1];
-         if (!entry.url)
-            continue;
          entry.title = decodeData(historyData[index], !newFormat);
          entry.scroll = historyData[index + 2];
          entries.push(entry);
