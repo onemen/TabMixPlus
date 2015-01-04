@@ -17,7 +17,7 @@
 Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (aWindowType == "Extension:Manager") {
       // we're in the EM
-      openURL = this.openURL;
+      window.openURL = this.openURL;
   }
 
   // for normal click this function calls urlbar.handleCommand
@@ -28,21 +28,23 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
     // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
     let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
         "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
+    let n = '\n            ';
     this.changeCode(autoComplete, fn)._replace(
-      'openUILink(url, aEvent);',
-      'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' +
-      'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' +
-      'var pref = "extensions.tabmix.loadUrlInBackground";' +
-      'openUILinkIn(url, where, {' +
-      '       inBackground: Services.prefs.getBoolPref(pref),' +
-      '       initiatingDoc: aEvent ? aEvent.target.ownerDocument : null});'
+      /openUILink\(url, aEvent.*\);/,
+      'var tabmixOptions = typeof options == "object" ? options : {};' + n +
+      'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
+      'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
+      'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
+      'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
+      'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
+      'openUILinkIn(url, where, tabmixOptions);'
     ).toCode();
   }
 
   window.BrowserOpenTab = TMP_BrowserOpenTab;
 
   this.openUILink_init();
-}
+};
 
 Tabmix.beforeBrowserInitOnLoad = function() {
   try {
@@ -72,7 +74,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
                 getService(Ci.nsIPrivateBrowsingService);
       SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
-      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) SM.globalPrivateBrowsing;
+      SM.isWindowPrivate = function SM_isWindowPrivate() SM.globalPrivateBrowsing;
       SM.__defineGetter__("isPrivateWindow", function() this.globalPrivateBrowsing);
       SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
     }
@@ -98,13 +100,13 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
       '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
       '   $&' +
-      ' }'
+      ' }';
     if (!this.isVersion(190))
       bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
-                      this.extensions.sessionManager
+                      this.extensions.sessionManager;
     var sessionManager = this.prefs.getBoolPref("sessions.manager");
     var willRestore = firstWindow && !disabled && (sessionManager &&
                       this.prefs.getIntPref("sessions.onStart") <= 1 ||
@@ -119,11 +121,18 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // to prevent it from restoring last session or pinned tabs.
     let setStateRunning = (willRestore || notRestore) &&
         this.firstWindowInSession && !this.isWindowAfterSessionRestore;
+    // RunState exist since Firefox 34, bug 1020831
     if (setStateRunning) {
-      let STATE_STOPPED = 0;
-      let STATE_RUNNING = 1;
-      if (SM.SessionStore._loadState == STATE_STOPPED) {
-        SM.SessionStore._loadState = STATE_RUNNING;
+      let RunState = SM.SessionStoreGlobal.RunState || {
+        get isStopped() {
+          return SM.SessionStore._loadState === 0; // STATE_STOPPED
+        },
+        setRunning: function() {
+          SM.SessionStore._loadState = 1; // STATE_RUNNING
+        }
+      };
+      if (RunState.isStopped) {
+        RunState.setRunning();
         SM.notifyObservers = true;
       }
     }
@@ -154,7 +163,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '  if (uriToLoad == "about:blank" || "tabmixdata" in window) {' +
         '    gBrowser.selectedBrowser.stop();' +
         '  }\n' +
-        '    $&'
+        '    $&';
 
       if (!this.isVersion(190)) {
         bowserStartup = bowserStartup._replace(
@@ -177,7 +186,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
           [window, "delayedStartup"];
 
     let insertionPoint, ssPromise = "";
-    if (this.isVersion(250)) {
+    if (this.isVersion(250, 250)) {
       insertionPoint = "PlacesToolbarHelper.init();";
       if (!this.isVersion(270))
         ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
@@ -205,7 +214,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-        new tmp.CompatibilityCheck(aWindow, true);
+        tmp = new tmp.CompatibilityCheck(aWindow, true);
       }, 0, window);
     }
 
@@ -215,7 +224,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
   } catch (ex) {this.assert(ex);}
-}
+};
 
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
@@ -229,11 +238,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
              return false;
        }
        return true;
-    }
+    };
 
     tabBrowser.isBlankTab = function(aTab) {
       return this.isBlankBrowser(this.getBrowserForTab(aTab));
-    }
+    };
 
     //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
     // isTabEmpty don't check for Tabmix.isNewTabUrls
@@ -242,7 +251,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
         return false;
 
       return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-    }
+    };
 
     tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
        try{
@@ -251,28 +260,34 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
           return (!aBrowser.sessionHistory || aBrowser.sessionHistory.index < 0 ||
                   (aBrowser.sessionHistory.count < 2 &&
                   (!aBrowser.currentURI ||
-                  (aboutBlank ? aBrowser.currentURI.spec == "about:blank" : Tabmix.isNewTabUrls(aBrowser.currentURI.spec))
+                  (aboutBlank ? aBrowser.currentURI.spec == "about:blank" :
+                                Tabmix.isNewTabUrls(aBrowser.currentURI.spec))
           )));
        } catch (ex) {Tabmix.assert(ex); return true;}
-    }
+    };
 
-    // gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
-    if (typeof tabBrowser._getTabForBrowser != "function") {
-       tabBrowser._getTabForBrowser = function (aBrowser) {
+    /**
+     * add gBrowser.getTabForBrowser if it is not exist
+     * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
+     * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+     */
+    if (typeof tabBrowser.getTabForBrowser != "function") {
+       // this is _getTabForBrowser version from Firefox 23
+       tabBrowser.getTabForBrowser = function (aBrowser) {
           for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].linkedBrowser == aBrowser)
               return this.tabs[i];
           }
           return null;
-       }
+       };
     }
 
     tabBrowser.getTabForLastPanel = function () {
       let notificationbox = this.mPanelContainer.lastChild;
       let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
       let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
-      return this._getTabForBrowser(browser);
-    }
+      return this.getTabForBrowser(browser);
+    };
 
     var tabContainer = aTabContainer || tabBrowser.tabContainer ||
                        document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
@@ -310,7 +325,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       TMP_SessionStore.afterSwitchThemes = true;
 
     TMP_extensionsCompatibility.preInit();
-}
+};
 
 Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {
   // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
@@ -383,7 +398,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }
-}
+};
 
 /**
  bug 887515 - add ability to restore multiple tabs

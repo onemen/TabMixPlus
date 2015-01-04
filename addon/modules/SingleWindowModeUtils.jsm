@@ -2,14 +2,14 @@
 
 var EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-let SingleWindowModeUtils = {
+this.SingleWindowModeUtils = {
   initialized: false,
-  initService: function(aWindow) {
+  initService: function() {
     if (this.initialized)
       return;
     this.initialized = true;
@@ -42,7 +42,7 @@ let SingleWindowModeUtils = {
 
     var windows = Services.wm.getEnumerator("navigator:browser");
     while (windows.hasMoreElements()) {
-      let win = windows.getNext()
+      let win = windows.getNext();
       if (isSuitableBrowserWindow(win))
         return win;
     }
@@ -53,7 +53,7 @@ let SingleWindowModeUtils = {
     if (!aWindow.Tabmix.singleWindowMode)
       return;
 
-    if (!aWindow.arguments || aWindow.arguments.length == 0)
+    if (!aWindow.arguments || aWindow.arguments.length === 0)
       return;
 
     this.initService();
@@ -82,7 +82,7 @@ let SingleWindowModeUtils = {
       height: win.getAttribute("height"),
       screenX: win.getAttribute("screenX"),
       screenY: win.getAttribute("screenY")
-    }
+    };
     // hide the new window
     aWindow.resizeTo(10, 10);
     aWindow.moveTo(-50, -50);
@@ -101,7 +101,7 @@ let SingleWindowModeUtils = {
     if (!existingWindow)
       return;
 
-    if (!newWindow.arguments || newWindow.arguments.length == 0)
+    if (!newWindow.arguments || newWindow.arguments.length === 0)
       return;
     var args = newWindow.arguments;
 
@@ -112,7 +112,7 @@ let SingleWindowModeUtils = {
     var [referrerURI, postData, allowThirdPartyFixup] = [null, null, false];
     if (uriToLoad instanceof Ci.nsISupportsArray) {
       let count = uriToLoad.Count();
-      for (var i = 0; i < count; i++) {
+      for (let i = 0; i < count; i++) {
         let urisstring = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
         urls.push(urisstring.data);
       }
@@ -171,7 +171,7 @@ let SingleWindowModeUtils = {
           existingBrowser.selectedTab = firstTabAdded;
         // for the case the window is minimized or not in focus
         existingWindow.focus();
-      },0)
+      },0);
     }  catch(ex) {existingWindow.Tabmix.obj(ex);}
   }
-}
+};

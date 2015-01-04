@@ -17,7 +17,7 @@ let TabmixRemoveBlankTab = {
   unknownContentType: function() {
     let {win, b} = this.getWindowAndBrowser(dialog.mContext);
     if (win && b) {
-      let tab = win.gBrowser._getTabForBrowser(b);
+      let tab = win.gBrowser.getTabForBrowser(b);
       // wait 250 ms after this window closed before removing mContext tab
       // nsHelperAppDlg.js promptForSaveToFileAsync look for dialog.mContext
       // before it opens nsIFilePicker.
@@ -42,7 +42,7 @@ let TabmixRemoveBlankTab = {
     if (b && b.currentURI.spec == "about:blank") {
       let uri = window.arguments[8].QueryInterface(Ci.nsIURI);
       if (b.userTypedValue == uri.spec) {
-        let tab = win.gBrowser._getTabForBrowser(b);
+        let tab = win.gBrowser.getTabForBrowser(b);
         if (tab.selected)
           win.gBrowser.previousTab(tab);
         win.gBrowser.hideTab(tab);
@@ -52,7 +52,7 @@ let TabmixRemoveBlankTab = {
   },
 
   getWindowAndBrowser: function(aContext) {
-    let result = {win: null, b: null}
+    let result = {win: null, b: null};
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
                     .getInterface(Ci.nsIWebNavigation);
@@ -70,12 +70,14 @@ let TabmixRemoveBlankTab = {
   removeTab: function(win, tab) {
     window.addEventListener("unload", function _unload(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
-      win && !win.closed && win.setTimeout(function() {
-        if (win && win.gBrowser && tab && tab.parentNode)
-          win.gBrowser.removeTab(tab, {animate: false});
-      }, 250);
+      if (win && !win.close) {
+        win.setTimeout(function() {
+          if (win && win.gBrowser && tab && tab.parentNode)
+            win.gBrowser.removeTab(tab, {animate: false});
+        }, 250);
+      }
     }, false);
   }
-}
+};
 
 TabmixRemoveBlankTab.initialize();

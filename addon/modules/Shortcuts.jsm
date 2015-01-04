@@ -49,7 +49,7 @@ let Shortcuts = {
 
   get prefs() {
     delete this.prefs;
-    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+    return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
 
   prefsChangedByTabmix: false,
@@ -65,7 +65,7 @@ let Shortcuts = {
     this.initialized = true;
 
     if (TabmixSvc.version(200)) {
-      let tmp = {}
+      let tmp = {};
       Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
       this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
     }
@@ -78,7 +78,8 @@ let Shortcuts = {
     labels.togglePinTab =
         aWindow.document.getElementById("context_pinTab").getAttribute("label") + "/" +
         aWindow.document.getElementById("context_unpinTab").getAttribute("label");
-    for (let [key, keyData] in Iterator(this.keys)) {
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       keyData.value = keyData.default || "";
       if (key in labels)
         keyData.label = labels[key];
@@ -105,7 +106,7 @@ let Shortcuts = {
         this.prefs.removeObserver("sessions.manager", this);
         Services.obs.removeObserver(this, "quit-application");
         if (this.keyConfigInstalled)
-          Keyconfig.deinit();
+          KeyConfig.deinit();
         break;
     }
   },
@@ -161,10 +162,11 @@ let Shortcuts = {
 
   onUnload: function TMP_SC_onUnload(aWindow) {
     aWindow.removeEventListener("unload", this, false);
-    let document = aWindow.document;
-    for (let [key, keyData] in Iterator(this.keys)) {
+    let doc = aWindow.document;
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       if (keyData.command && keyData.value) {
-        let keyItem = document.getElementById(keyData.id || "key_tm_" + key);
+        let keyItem = doc.getElementById(keyData.id || "key_tm_" + key);
         if (keyItem)
           keyItem.removeEventListener("command", this, true);
       }
@@ -190,8 +192,8 @@ let Shortcuts = {
   /* ........ Window Key Handlers .............. */
 
   updateWindowKeys: function TMP_SC_updateWindowKeys(aWindow, aKeys) {
-    for (let [key, keyData] in Iterator(aKeys))
-      this._updateKey(aWindow, key, keyData);
+    for (let key of Object.keys(aKeys))
+      this._updateKey(aWindow, key, aKeys[key]);
 
     let keyset = aWindow.document.getElementById("mainKeyset");
     keyset.parentNode.insertBefore(keyset, keyset.nextSibling);
@@ -209,7 +211,7 @@ let Shortcuts = {
     if (keyItem) {
       if (!keyItem.parentNode)
         return;
-      for (let att in Iterator(keyAtt, true))
+      for (let att of Object.keys(keyAtt))
         keyItem.removeAttribute(att);
       // disabled shortcuts, like new tab and close tab, can mess the whole keyset
       // so we move those to a different node
@@ -231,7 +233,8 @@ let Shortcuts = {
       keyItem.addEventListener("command", this, true);
     }
 
-    for (let [att, val] in Iterator(keyAtt)) {
+    for (let att of Object.keys(keyAtt)) {
+      let val = keyAtt[att];
       if (val)
         keyItem.setAttribute(att, val);
     }
@@ -254,7 +257,8 @@ let Shortcuts = {
     let disableSessionKeys = this.permanentPrivateBrowsing ||
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
-    for (let [key, keyData] in Iterator(this.keys)) {
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
       let _default = keyData.default || "";
       let currentValue = onOpen ? _default : keyData.value;
       let newValue = shortcuts[key] || _default;
@@ -285,11 +289,12 @@ let Shortcuts = {
       shortcuts = {};
       updatePreference = true;
     }
-    for (let [key, val] in Iterator(shortcuts)) {
+    for (let key of Object.keys(shortcuts)) {
+      let val = shortcuts[key];
       // if key in preference is not valid key or its value is not valid
       // or its value equal to default, remove it from the preference
       let keyData = this.keys[key] || null;
-      if (!keyData || typeof val != "string" || val == keyData.default || val == "" ||
+      if (!keyData || typeof val != "string" || val == keyData.default || val === "" ||
           (val == "d&" && (!keyData.default || /^d&/.test(keyData.default)))) {
         delete shortcuts[key];
         updatePreference = true;
@@ -378,7 +383,7 @@ let Shortcuts = {
   },
 
   getFormattedKeyForID: function(id) {
-    let key = this.keyParse(this.keys[id].value)
+    let key = this.keyParse(this.keys[id].value);
     return getFormattedKey(key);
   },
 
@@ -395,9 +400,9 @@ let Shortcuts = {
       if (key.getAttribute("keycode") != "VK_F5")
         return false;
       if (!this.keys.browserReload.id) {
-        let index = 1, id;
+        let index = 2, id;
         do {
-         id = "xxx_key#_Browser:Reload".replace("#", index++);
+         id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
       }
@@ -407,19 +412,21 @@ let Shortcuts = {
     }, this);
   }
 
-}
+};
 
-let KeyConfig = {
+var KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions
-  init: function(aWindow) {
+  init: function() {
     this.keyIdsMap = {};
     // keyConfig use index number for its ids
     let oldReloadId = "xxx_key29_Browser:Reload";
     this.keyIdsMap[oldReloadId] = "browserReload";
-    for (let [key, keyData] in Iterator(Shortcuts.keys))
+    for (let key of Object.keys(Shortcuts.keys)) {
+      let keyData = Shortcuts.keys[key];
       this.keyIdsMap[keyData.id || "key_tm_" + key] = key;
+    }
 
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
@@ -455,8 +462,8 @@ let KeyConfig = {
       if (this.syncFromKeyConfig(key, aData, shortcuts)) {
         // keyConfig extension code updates the DOM key, we don't need to do it
         Shortcuts.prefBackup = shortcuts;
-        Shortcuts.setShortcutsPref();
         Shortcuts.keys[key].value = shortcuts[key] || Shortcuts.keys[key].default;
+        Shortcuts.setShortcutsPref();
       }
     }
   },
@@ -488,7 +495,8 @@ let KeyConfig = {
   },
 
   syncToKeyConfig: function(aChangedKeys, onChange) {
-    for (let [key, prefVal] in Iterator(aChangedKeys)) {
+    for (let key of Object.keys(aChangedKeys)) {
+      let prefVal = aChangedKeys[key];
       this.prefsChangedByTabmix = true;
       if (onChange)
         prefVal = prefVal.value;
@@ -509,7 +517,7 @@ let KeyConfig = {
     this.prefs.clearUserPref(prefName);
   }
 
-}
+};
 
 function getPref(name) {
   return Services.prefs.getComplexValue(name, Ci.nsISupportsString).data;
@@ -531,7 +539,7 @@ function getFormattedKey(key) {
     key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
-    })
+    });
   }
 
   if (key.key) {
@@ -541,11 +549,13 @@ function getFormattedKey(key) {
     else
       val += key.key.toUpperCase();
   }
-  if (key.keycode) try {
-    let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
-    val += localeKeys.GetStringFromName(key.keycode);
-  } catch (ex) {
-    val += "<" + key.keycode + ">";
+  if (key.keycode) {
+    try {
+      let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
+      val += localeKeys.GetStringFromName(key.keycode);
+    } catch (ex) {
+      val += "<" + key.keycode + ">";
+    }
   }
   return val;
 }
@@ -564,14 +574,14 @@ function getPlatformKeys(key) {
   else
     val = getPlatformKeys("VK_" + getPlatformAccel().toUpperCase());
 
-  return gPlatformKeys[key] = val;
+  return (gPlatformKeys[key] = val);
 }
 
 function getPlatformAccel() {
   switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-    case 17:  return "control"; break;
-    case 18:  return "alt"; break;
-    case 224: return "meta"; break;
+    case 17:  return "control";
+    case 18:  return "alt";
+    case 224: return "meta";
   }
-  return Services.appinfo.OS == "Darwin" ? "meta" : "control"
+  return (Services.appinfo.OS == "Darwin" ? "meta" : "control");
 }

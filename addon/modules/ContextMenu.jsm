@@ -15,7 +15,7 @@ this.ContextMenu = {
     // get focused window selection
     let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
     let focusedWindow = {};
-    let elt = fm.getFocusedElementForWindow(content, true, focusedWindow);
+    fm.getFocusedElementForWindow(content, true, focusedWindow);
     let selectionObject = focusedWindow.value.getSelection();
     if (selectionObject.isCollapsed) // nothing selected
       return [];
@@ -48,7 +48,7 @@ this.ContextMenu = {
         return false;
       }
       return true;
-    }
+    };
 
     let range = selectionObject.getRangeAt(0).cloneContents();
     let treeWalker = doc.createTreeWalker(range,
@@ -73,4 +73,4 @@ this.ContextMenu = {
     }
     return urls;
   }
-}
+};

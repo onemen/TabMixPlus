@@ -21,7 +21,7 @@
     });
   }
 
-  let win = Tabmix.getTopWin()
+  let win = Tabmix.getTopWin();
   if (win && win.Tabmix && win.Tabmix.initialization.onWindowOpen.initialized) {
     Services.prefs.addObserver("extensions.tabmix.titlefrombookmark", updateTitle, false);
     window.addEventListener("unload", function TMP_removeObserver(aEvent) {
@@ -32,4 +32,4 @@
       updateTitle();
   }
 
-})()
+})();

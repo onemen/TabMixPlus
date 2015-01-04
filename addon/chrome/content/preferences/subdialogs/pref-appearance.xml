@@ -16,7 +16,7 @@
     <content orient="vertical">
       <xul:hbox align="center">
         <xul:checkbox anonid="useThis" label="&useThis.label;: "
-                      oncommand="_updateUseThisState(this.checked); event.stopPropagation();"/>
+                      oncommand="document.getBindingParent(this)._updateUseThisState(this.checked); event.stopPropagation();"/>
         <xul:label style="font-weight: bold;"/>
       </xul:hbox>
       <xul:separator class="groove"/>
@@ -29,12 +29,12 @@
         <xul:vbox>
           <xul:colorbox anonid="textColor" xbl:inherits="disabled=text-disabled,_hidebox">
             <xul:checkbox anonid="text" class="visible" xbl:inherits="disabled" label="&textcolor.label;:"
-                          oncommand="updateDisableState(this.getAttribute('anonid'))"/>
+                          oncommand="document.getBindingParent(this).updateDisableState(this.getAttribute('anonid'))"/>
           </xul:colorbox>
           <xul:checkbox_tmp anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
-                        oncommand="updateDisableState(this.getAttribute('anonid'))"/>
+                        oncommand="document.getBindingParent(this).updateDisableState(this.getAttribute('anonid'))"/>
           <xul:colorbox anonid="bgTopColor" class="bgTop" xbl:inherits="disabled=bg-disabled,hidden=_hidebox">
-            <xul:label value="&bgTopColor.label;:"  class="visible" xbl:inherits="disabled=bg-disabled"/>
+            <xul:label value="&bgTopColor.label;:" class="visible" xbl:inherits="disabled=bg-disabled"/>
           </xul:colorbox>
           <xul:colorbox anonid="bgColor" class="bgBottom" xbl:inherits="disabled=bg-disabled">
             <xul:label value="&bgBottomColor.label;:" class="visible" xbl:inherits="disabled=bg-disabled,_hidebox"/>
@@ -44,7 +44,7 @@
       </xul:hbox>
       <xul:separator class="groove"/>
       <xul:hbox align="center">
-        <xul:button label="&settings.default;" oncommand="_resetDefault();"/>
+        <xul:button label="&settings.default;" oncommand="document.getBindingParent(this)._resetDefault();"/>
       </xul:hbox>
     </content>
 

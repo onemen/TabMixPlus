@@ -11,18 +11,7 @@ label.text-link, label[onclick] {
   -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
 }
 
-/*
- * For close button on tab
- */
-.tabbrowser-tab .tabs-closebutton {
-  display: none;
-}
-
-.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
-  pointer-events: auto;
-}
-
-/*  we don't use .tabbrowser-tab > .tab-close-button[button_side="right"] here
+/*  we don't use .tabbrowser-tab > .tab-close-button here
     because in some theme the buttons are inside tab-middle
 */
 
@@ -32,65 +21,62 @@ label.text-link, label[onclick] {
   display: none !important;
 }
 
-.tabbrowser-tabs:not([closebuttons="noclose"])[closebuttons-side="left"] > .tabbrowser-tab .tab-close-button[button_side="right"],
-.tabbrowser-tabs:not([closebuttons="noclose"])[closebuttons-side="right"] > .tabbrowser-tab .tab-close-button[button_side="left"] {
-  display: none !important;
-}
-
 .tabbrowser-tab[protected] .tab-close-button {
   display: none !important;
 }
 
-.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button[button_side="left"],
-.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button[button_side="right"] {
+.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button {
    display: none !important;
 }
 
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="left"],
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+.tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: -moz-box !important;
 }
 
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="right"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="right"],
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons-side="right"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="right"] {
+.tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+.tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: -moz-box !important;
 }
 
-.tabbrowser-tabs[favhideclose="true"][closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="left"],
-.tabbrowser-tabs[favhideclose="true"][closebuttons-side="left"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="left"] {
+.tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
+.tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
   display: -moz-box !important;
 }
 
-.tabbrowser-tabs[favhideclose="true"][closebuttons-side="right"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button[button_side="right"],
-.tabbrowser-tabs[favhideclose="true"][closebuttons-side="right"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button[button_side="right"] {
-  display: -moz-box !important;
+/* button on the left side */
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon {
+  -moz-box-ordinal-group: 0 !important;
 }
 
-/* some theme use display: none !important;  so we must use !important; */
-.tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tabs-closebutton,
-.tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tabs-closebutton {
-  display: -moz-box !important;
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-icon,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-close-button,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  -moz-box-ordinal-group: 1 !important;
 }
 
-/*  for PermaTab */
-/*  show PermaTab icon only on right side only right  */
-.tabbrowser-tab[isPermaTab="true"] .tabs-closebutton,
-.tabbrowser-tab[isPermaTab="true"] .tab-close-button[button_side="left"] {
-  display: none !important;
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
+  -moz-box-ordinal-group: 2 !important;
+  pointer-events: none;
 }
 
-.tabbrowser-tabs[closebuttons-side="right"] > .tabbrowser-tab .showhover-box {
-  -moz-box-pack: end;
+.tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
+  -moz-box-ordinal-group: 5 !important;
 }
 
-/* for themes that use old tabmix_3.xml version */
-.tabbrowser-tabs[closebuttons-side="left"] > .tabbrowser-tab .showhover-flex {
-  display: none !important;
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
+.tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  direction: rtl;
+  -moz-box-ordinal-group: 0 !important;
 }
 
-/* prevent text box height from changing when we show the button on tab */
+/* for themes that use old tabmix xml version */
+.tab-close-button[button_side="left"],
+.tabbrowser-tab .showhover-box,
 .tabbrowser-tab .showhover-flex {
-  height: 0px;
+  display: none !important;
 }
 
 .tabbrowser-arrowscrollbox[type=tabmix-box] {
@@ -111,11 +97,6 @@ label.text-link, label[onclick] {
 
 #TabsToolbar > .tabs-closebutton {
  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabbrowser-close-tab-button")!important;
-}
-
-/* showhover button */
-.showhover-box > .showhover {
-  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-showhover-close-tab-button");
 }
 
 .tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
@@ -200,8 +181,7 @@ label.text-link, label[onclick] {
 .tab-progress-container > .tab-progress:not([fadein]):not([pinned]),
 .tab-icon:not([fadein]):not([pinned]) > .tab-protect-icon,
 .tab-icon:not([fadein]):not([pinned]) > .tab-lock-icon,
-.tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon,
-.tab-text-stack:not([fadein]):not([pinned]) > .tabs-closebutton {
+.tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon {
    display: none !important;
 }
 
@@ -233,15 +213,6 @@ so display: none !important; does not hide the button */
 /*** backword compatibility with theme that still use old tabmix tab binding ***/
 .tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
   display: none !important;
-}
-
-/***  Pinned Tab  ***/
-.tab-text-stack[pinned] {
-  width: 0;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 /***  For progressmeter on tab Firefox 4.0+  ***/
@@ -299,6 +270,7 @@ so display: none !important; does not hide the button */
 /* look at browser.css for each platform
   background-image: none !important;
 */
+  margin-top: 1px !important;
 }
 
 /* for tabbar on bottom with australis */

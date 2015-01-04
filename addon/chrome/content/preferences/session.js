@@ -38,7 +38,7 @@ var gSessionPane = {
   },
 
   setSessionsOptions: function (item) {
-    let instantApply = document.documentElement.instantApply
+    let instantApply = document.documentElement.instantApply;
     var useSessionManager = !item.checked;
     $("sesionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
 
@@ -60,7 +60,7 @@ var gSessionPane = {
     let sessionPrefs = function() {
       updatePrefs("sessionManager", useSessionManager);
       updatePrefs("sessionCrashRecovery", useSessionManager);
-    }
+    };
 
     // sessionstore pref
     function sessionstorePrefs() {
@@ -80,7 +80,7 @@ var gSessionPane = {
     }
     else {
       sessionPrefs();
-      sessionstorePrefs()
+      sessionstorePrefs();
     }
     TabmixSvc.sm.settingPreference = false;
 
@@ -97,7 +97,7 @@ var gSessionPane = {
 
   get sessionManagerAddon() {
     if (TabmixSvc.sessionManagerAddonInstalled) {
-      let tmp = {}
+      let tmp = {};
       Components.utils.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
       return tmp.gSessionManager;
     }
@@ -132,7 +132,7 @@ var gSessionPane = {
 
   convertSession: function () {
     var browserWindow = Tabmix.getTopWin();
-    if ($("chooseFile").selectedItem.value == 0)
+    if ($("chooseFile").selectedItem.value === 0)
       browserWindow.TabmixConvertSession.selectFile(window);
     else
       browserWindow.TabmixConvertSession.convertFile();
@@ -140,4 +140,4 @@ var gSessionPane = {
     window.focus();
   }
 
-}
+};

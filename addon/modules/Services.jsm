@@ -9,21 +9,28 @@ Cu.import("resource://gre/modules/Services.jsm");
 
 let _versions = {};
 function isVersion(aVersionNo) {
+  if (TabmixSvc.isPaleMoonID) {
+    let paleMoonVer = arguments.length > 1 ? arguments[1] : -1;
+    if (aVersionNo > 240 && paleMoonVer == -1)
+      return false;
+    aVersionNo = paleMoonVer;
+  }
+
   if (typeof _versions[aVersionNo] == "boolean")
     return _versions[aVersionNo];
 
   let v = Services.appinfo.version;
-  return _versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0;
+  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0);
 }
 
-let TabmixSvc = {
+this.TabmixSvc = {
   debugMode: function() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
   },
 
-  version: function(aVersionNo) {
-    return isVersion(aVersionNo);
+  version: function() {
+    return isVersion.apply(null, arguments);
   },
 
   getString: function(aStringKey) {
@@ -55,7 +62,7 @@ let TabmixSvc = {
 
   setLabel: function(property) {
     var label, key;
-    if (property.indexOf("sm.") == 0) {
+    if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
       key = this.getSMString(property + ".accesskey");
     }
@@ -77,9 +84,9 @@ let TabmixSvc = {
     delete this.direct2dDisabled;
     try {
       // this pref exist only in windows
-      return this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled");
+      return (this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled"));
     } catch(ex) {}
-    return this.direct2dDisabled = false;
+    return (this.direct2dDisabled = false);
   },
 
   /**
@@ -107,7 +114,7 @@ let TabmixSvc = {
       } catch(ex) {
         try {
           return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch(ex) {return null}
+        } catch(er) {return null}
       }
     },
     stringify: function TMP_stringify(obj) {
@@ -116,7 +123,7 @@ let TabmixSvc = {
       } catch(ex) {
         try {
           return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch(ex) {return null}
+        } catch(er) {return null}
       }
     }
   },
@@ -157,12 +164,14 @@ let TabmixSvc = {
       tmp.DynamicRules.init(aWindow);
     },
 
-    observe: function(aSubject, aTopic, aData) {
+    observe: function(aSubject, aTopic) {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
-          for (let [id, timer] in Iterator(TabmixSvc.console._timers))
+          for (let id of Object.keys(TabmixSvc.console._timers)) {
+            let timer = TabmixSvc.console._timers[id];
             timer.cancel();
+          }
           break;
         case "browser-delayed-startup-finished":
           try {
@@ -174,18 +183,18 @@ let TabmixSvc = {
   },
 
   saveTabAttributes: function(tab, attrib) {
-    TabStateCache.saveTabAttributes(tab, attrib);
+    tabStateCache.saveTabAttributes(tab, attrib);
   },
 
   get ss() {
     delete this.ss;
-    if (isVersion(250)) {
-      let tmp = {}
+    if (isVersion(250, 250)) {
+      let tmp = {};
       Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-      return this.ss = tmp.SessionStore;
+      return (this.ss = tmp.SessionStore);
     }
-    return this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
-                     getService(Ci.nsISessionStore);
+    return (this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
+                     getService(Ci.nsISessionStore));
   },
 
   sm: {
@@ -195,18 +204,18 @@ let TabmixSvc = {
     crashed: false,
     get sanitized() {
       delete this.sanitized;
-      return this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized");
+      return (this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized"));
     },
     set sanitized(val) {
       delete this.sanitized;
-      return this.sanitized = val;
+      return (this.sanitized = val);
     },
     private: true,
     settingPreference: false,
   },
 
   blockedClickingOptions: []
-}
+};
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
@@ -218,18 +227,18 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
           true : false;
 });
 
-/**
- * Lazily define services
- * Getters for common services, use Services.jsm where possible
- */
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function () {return Services.prefs});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "io", function () {return Services.io});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "wm", function () {return Services.wm});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "obs", function () {return Services.obs});
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prompt", function () {return Services.prompt});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
+  let svc = isVersion(230) ? "resource://gre/modules/Preferences.jsm" :
+                             "resource://services-common/preferences.js";
+  let tmp = {};
+  Cu.import(svc, tmp);
+  return new tmp.Preferences("");
+});
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {return Services.prefs.getBranch("extensions.tabmix.")});
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {
+  return Services.prefs.getBranch("extensions.tabmix.");
+});
 // string bundle
 XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
@@ -252,6 +261,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function () {
   return Services.appinfo.name == "Pale Moon";
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function () {
+  return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+});
+
 /**
  * bug 1051017 - Firefox 34 - change
  * browser.contentWindow -> browser.contentWindowAsCPOW
@@ -272,10 +285,10 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
-let TabStateCache = {
+var tabStateCache = {
   get _update() {
     delete this._update;
-    return this._update = isVersion(260) ? "updateField" : "update";
+    return (this._update = isVersion(260) ? "updateField" : "update");
   },
 
   get TabStateCache() {
@@ -298,7 +311,7 @@ let TabStateCache = {
           attributes[key] = tab.getAttribute(key);
         else if (key in attributes)
           delete attributes[key];
-      })
+      });
     }
 
     let browser = tab.linkedBrowser;
@@ -320,4 +333,4 @@ let TabStateCache = {
       this.TabStateCache[this._update](browser, "attributes", attributes);
     }
   }
-}
+};

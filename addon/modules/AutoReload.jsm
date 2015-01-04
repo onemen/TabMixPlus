@@ -2,8 +2,9 @@
 
 var EXPORTED_SYMBOLS = ["AutoReload"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
 let AutoReload = {
@@ -27,7 +28,8 @@ let AutoReload = {
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
     aPopup.setAttribute("onpopuphidden", "this._tab = null;");
-    aPopup.setAttribute("oncommand", "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
+    aPopup.setAttribute("oncommand",
+                        "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
     for (let i=0; i<popup.childNodes.length; i++)
       aPopup.appendChild(popup.childNodes[i].cloneNode(true));
     if (parent.id != "reload-button") {
@@ -57,7 +59,7 @@ let AutoReload = {
         minute:  enableItem.getAttribute("minute"),
         minutes: enableItem.getAttribute("minutes"),
         seconds: enableItem.getAttribute("seconds")
-      }
+      };
     }
     enableItem.setAttribute("checked", aPopup._tab.autoReloadEnabled);
     this.setLabel(enableItem, aPopup._tab.autoReloadTime);
@@ -94,7 +96,7 @@ let AutoReload = {
           newList.push(val);
         if (newList.length > 6 )
           newList.shift();
-      })
+      });
       prefs.setCharPref(pref, newList);
       return newList;
     }
@@ -106,7 +108,7 @@ let AutoReload = {
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);
       aPopup.insertBefore(mi, end);
-    }, this)
+    }, this);
   },
 
   setLabel: function(aItem, aSeconds) {
@@ -243,7 +245,7 @@ let AutoReload = {
       aTab.autoReloadEnabled = false;
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
   }
-}
+};
 
 function _setItem () {}
 
@@ -251,7 +253,7 @@ function _reloadTab(aTab) {
   if (aTab == null || !aTab.parentNode)
     return;
 
-  if (aTab.autoReloadEnabled == false ) {
+  if (aTab.autoReloadEnabled === false ) {
     aTab.postDataAcceptedByUser = false;
     return;
   }
@@ -271,8 +273,8 @@ function _reloadTab(aTab) {
       if (postData && !aTab.postDataAcceptedByUser) {
         let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
         let msg = TabmixSvc.getString('confirm_autoreloadPostData');
-        TabmixSvc.obs.addObserver(_observe, "common-dialog-loaded", false);
-        let resultOK = TabmixSvc.prompt.confirm(window, title, msg);
+        Services.obs.addObserver(_observe, "common-dialog-loaded", false);
+        let resultOK = Services.prompt.confirm(window, title, msg);
         if (resultOK)
           aTab.postDataAcceptedByUser = true;
         else {
@@ -318,9 +320,9 @@ function _reloadTab(aTab) {
         handlingUserInput: windowUtils.isHandlingUserInput });
 }
 
-function  _observe(aSubject, aTopic, aData) {
+function  _observe(aSubject, aTopic) {
   if (aTopic == "common-dialog-loaded") {
-    TabmixSvc.obs.removeObserver(_observe, "common-dialog-loaded");
+    Services.obs.removeObserver(_observe, "common-dialog-loaded");
     let icon = aSubject.document.getElementById("info.icon");
     icon.classList.add("alert-icon");
     icon.classList.remove("question-icon");

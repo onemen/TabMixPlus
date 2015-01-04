@@ -24,14 +24,14 @@ Tabmix.setSanitizer = {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
         } catch (ex) {
-          try { Components.utils.reportError(ex); } catch(ex) {}
+          try { Components.utils.reportError(ex); } catch(e) {}
         }
       },
       get canClear() {
         // only sanitize when user selects to sanitize everything
         return !this.range;
       }
-    }
+    };
   },
 
   addMenuItem: function () {
@@ -84,7 +84,9 @@ Tabmix.setSanitizer = {
       if (this.isPromptDialog) {
         Tabmix.setSanitizer.disableMenuItem();
         pref.setAttribute("readonly", "true");
-        check.setAttribute("onsyncfrompreference", "Tabmix.setSanitizer.checked = this.checked; return gSanitizePromptDialog.onReadGeneric();");
+        check.setAttribute("onsyncfrompreference",
+                           "Tabmix.setSanitizer.checked = this.checked; " +
+                           "return gSanitizePromptDialog.onReadGeneric();");
       }
     }
   },
@@ -111,10 +113,10 @@ Tabmix.setSanitizer = {
     var buttonPressed = promptService.confirmEx(null,
                     title,
                     msg,
-                    (promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0)
-                    + (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
+                    (promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0) +
+                    (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
                     null, null, null, null, {});
     if (buttonPressed == 1)
       aCheckbox.checked = false;
   }
-}
+};

@@ -1,6 +1,6 @@
 "use strict";
 
-let {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+let {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
@@ -10,6 +10,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
+  "resource://tabmixplus/LinkNodeUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
   "resource://tabmixplus/ContextMenu.jsm");
@@ -53,10 +56,19 @@ let TabmixContentHandler = {
 
   getSelectedLinks: function(check) {
     return ContextMenu.getSelectedLinks(content, check);
+  },
+
+  isFrameInContent: function(href, name) {
+    return LinkNodeUtils.isFrameInContent(content, href, name);
+  },
+
+  wrapNode: function(node) {
+    let window = TabmixClickEventHandler._focusedWindow;
+    return LinkNodeUtils.wrap(node, window);
   }
 };
 
-let TabmixClickEventHandler = {
+var TabmixClickEventHandler = {
   init: function init() {
     global.addEventListener("click", this, true);
   },
@@ -79,13 +91,10 @@ let TabmixClickEventHandler = {
     let ownerDoc = originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (/^about:[certerror|blocked|neterror]/.test(ownerDoc.documentURI))
+    if (!ownerDoc || /^about:[certerror|blocked|neterror]/.test(ownerDoc.documentURI))
       return;
 
     let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
-    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
-    // for the case there is no href
-    let onClickNode = !href && this._getNodeWithOnClick(event);
 
     let json = { button: event.button, shiftKey: event.shiftKey,
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
@@ -95,10 +104,15 @@ let TabmixClickEventHandler = {
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
 
+    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
+    // for the case there is no href
+    let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
+    if (linkNode)
+      linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
+                                         href && event.button === 0);
+
     let result = sendSyncMessage("TabmixContent:Click",
-                    {json: json, href: href},
-                    {node: node, onClickNode: onClickNode,
-                     focusedWindow: this._getFocusedWindow()});
+                    {json: json, href: href, node: linkNode});
     let data = result[0];
     if (data.where == "default")
       return;
@@ -117,7 +131,7 @@ let TabmixClickEventHandler = {
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
-        if (event.button == 0 && !event.ctrlKey && !event.shiftKey &&
+        if (event.button === 0 && !event.ctrlKey && !event.shiftKey &&
             !event.altKey && !event.metaKey) {
           json.bookmark = node.getAttribute("rel") == "sidebar";
           if (json.bookmark) {
@@ -180,26 +194,12 @@ let TabmixClickEventHandler = {
     return [href ? makeURI(href, null, baseURI).spec : null, null];
   },
 
-  _getFocusedWindow: function() {
+  get _focusedWindow() {
     let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
 
     let focusedWindow = {};
-    let elt = fm.getFocusedElementForWindow(content, true, focusedWindow);
+    fm.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
-  },
-
-  _getNodeWithOnClick: function(event) {
-    // for safety reason look only 3 level up
-    let i = 0, node = event.target;
-    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
-      node = node.parentNode;
-      i++;
-    }
-
-    if (node && node.hasAttribute && node.hasAttribute("onclick"))
-      return node;
-
-    return null;
   }
 };
 

@@ -20,13 +20,22 @@ var TMP_extensionsCompatibility = {
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
         verticalTabBar: false, ieTab2: false,
-        gIeTab: false /* for ieTab and ieTab2 */};
+        gIeTab: false, /* for ieTab and ieTab2 */
+        ctr: false /* classic theme restorer */};
+
+    if (typeof classicthemerestorerjs == "object") {
+      Tabmix.extensions.ctr = true;
+      let onLeft = Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
+      Services.prefs.setBoolPref("extensions.classicthemerestorer.closeonleft", onLeft);
+      // let Classic theme restorer control close tab button placement
+      gBrowser.tabContainer.setAttribute("closebuttons-side", "right");
+    }
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", function() {
       return TabmixSvc.sessionManagerAddonInstalled ||
         "com" in window && com.morac &&
-        typeof com.morac.SessionManagerAddon == "object"
+        typeof com.morac.SessionManagerAddon == "object";
     });
 
     try {
@@ -50,9 +59,11 @@ var TMP_extensionsCompatibility = {
       func.forEach(function(aFn) {
         if (aFn in GlaxChrome) {
           Tabmix.changeCode(GlaxChrome, "GlaxChrome.CLT.DragDropManager." + aFn)._replace(
-            '{', '{var TabDNDObserver = TMP_tabDNDObserver;', {check: GlaxChrome[aFn].toString().indexOf("TabDNDObserver") != -1}
+            '{', '{var TabDNDObserver = TMP_tabDNDObserver;',
+            {check: GlaxChrome[aFn].toString().indexOf("TabDNDObserver") != -1}
           )._replace(
-            'TM_init', 'Tabmix.startup', {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
+            'TM_init', 'Tabmix.startup',
+            {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
           ).toCode();
         }
       });
@@ -96,7 +107,7 @@ var TMP_extensionsCompatibility = {
           catch(e) {}
         }
         return def;
-      }
+      };
     }
 
     /*  we don't use this code - leave it here as a reminder.
@@ -141,7 +152,7 @@ var TMP_extensionsCompatibility = {
         'if (!loadNewInBackground) {' +
         '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
         '  TMP_LastTab.PushSelectedTab();' +
-        '}'
+        '}';
       if (typeof(foxTab.openNewTab) == "function") {
         Tabmix.changeCode(foxTab, "foxTab.openNewTab")._replace(
           '{', loadNewInBackground
@@ -172,7 +183,7 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/ie-tab-2-ff-36/
     // for version IE Tab V2 4.12.6.1
     if (typeof window.IeTab2 == "function" &&
-          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") == 0) {
+          Services.vc.compare(window.gIeTab2Version, "4.12.6.1") === 0) {
       Tabmix.extensions.ieTab2 = true;
       Tabmix.changeCode(IeTab2.prototype, "IeTab2.prototype.hookCodeAll")._replace(
         /(var )?oldAddTab/g, 'Tabmix.originalFunctions.oldAddTab'
@@ -328,7 +339,7 @@ var TMP_extensionsCompatibility = {
       // unable to close surce tab after duplicate with FireGestures esextension
       // problem fix in FireGestures 1.5.7 keep this here for users with older versions
       let performAction = FireGestures._performAction.toString();
-      let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);"
+      let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);";
       if (performAction.indexOf(codeToReplace) != -1) {
         Tabmix.changeCode(FireGestures, "FireGestures._performAction")._replace(
           codeToReplace, 'gBrowser.moveTabTo(newTab, orgTab._tPos + 1);'
@@ -340,11 +351,12 @@ var TMP_extensionsCompatibility = {
           gBrowser._closeLeftTabs(gBrowser.mCurrentTab);
         else
           gBrowser._closeRightTabs(gBrowser.mCurrentTab);
-      }
+      };
     }
 
     // fix bug in new tab button on right extension when we use multi row
     if ("newTabButtons" in window) {
+      let tabBar = gBrowser.tabContainer;
       let newbuttonRight = document.getAnonymousElementByAttribute(tabBar, "id", "tabs-newbutton-right");
       let newbuttonEnd = document.getAnonymousElementByAttribute(tabBar, "id", "tabs-newbutton-end");
       if (newbuttonRight && newbuttonEnd)
@@ -362,39 +374,35 @@ var TMP_extensionsCompatibility = {
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
-      aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
+      window.aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
+      window.aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
-      aioCloseWindow = BrowserTryToCloseWindow;
+      window.aioCloseWindow = BrowserTryToCloseWindow;
 
-    // Tile Tabs 10.0
+    // Tile Tabs 11.12
     // https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/
     if (typeof tileTabs == "object") {
       let newCode = 'title = TMP_Places.getTabTitle(tab, tab.linkedBrowser.currentURI.spec, title);' +
         'if (tab.hasAttribute("mergeselected"))' +
         '  title = "(*) " + title;' +
         '$&';
-      let getLabel = 'if (!label) {' +
-        'let labelBox = document.getAnonymousElementByAttribute(tab,"class","tab-text-stack");' +
-        'label = document.getAnonymousElementByAttribute(labelBox,"anonid","tab-label");' +
-      '}\n';
 
-      let func = {styleTiledTabs: 'if (tab.hasAttribute("tiletabs-assigned"))',
+      let func = {styleTiledTabs: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showProperties: 'if (tab.hasAttribute("image"))',
-        onTabAttrModified: 'if (tab.hasAttribute("tiletabs-assigned"))',
+        onTabAttrModified: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showTabList: /menuItem\.setAttribute\("label",\s*title\);/,
         showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
-      }
+      };
 
-      for (let [fnName, oldCode] in Iterator(func)) {
+      for (let fnName of Object.keys(func)) {
         if (typeof tileTabs[fnName] == "function") {
           Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
-            oldCode, fnName == "styleTiledTabs" ? getLabel + newCode : newCode
+            func[fnName], newCode
           ).toCode();
         }
       }
@@ -445,7 +453,7 @@ var TMP_extensionsCompatibility = {
     }
   }
 
-}
+};
 
 TMP_extensionsCompatibility.RSSTICKER = {
    init : function ()  {
@@ -492,7 +500,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
 
      this.markAsRead();
    }
-}
+};
 
 // prevent Wizz RSS from load pages in locked tabs
 TMP_extensionsCompatibility.wizzrss = {
@@ -525,7 +533,7 @@ TMP_extensionsCompatibility.wizzrss = {
     else
       tabBrowser.loadURI(uri);
   }
-}
+};
 
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
@@ -536,7 +544,7 @@ TMP_extensionsCompatibility.newsfox = {
          $&'
       ).toCode();
    }
-}
+};
 
 /**
  * fix incompatibilities with treeStyleTab
@@ -557,17 +565,18 @@ TMP_extensionsCompatibility.treeStyleTab = {
           var newTab = null
           gBrowser.restoreTab = return newTab;
          */
-      }
+      };
     }
   },
 
   onContentLoaded: function () {
     if ("TreeStyleTabBrowser" in window) {
+      let obj = TreeStyleTabBrowser.prototype;
       // we don't need this in the new version since we change the tabs-frame place
       // keep it here for non default theme that uses old Tabmix binding
-      let fn = TreeStyleTabBrowser.prototype.initTabbar;
+      let fn = obj.initTabbar;
       if (fn.toString().indexOf("d = this.document") == -1) {
-        Tabmix.changeCode(TreeStyleTabBrowser.prototype, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
+        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
           'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
           'let newTabButton = document.getElementById("new-tab-button"); \
            if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
@@ -577,9 +586,61 @@ TMP_extensionsCompatibility.treeStyleTab = {
           'if (newTabBox) $&', {flags: "g"}
         ).toCode();
       }
-      TreeStyleTabBrowser.prototype.getTabClosebox = function(aTab) {
-        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon always-right');
+      obj.getTabClosebox = function(aTab) {
+        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
+      };
+
+      fn = obj.initTabContentsOrderInternal;
+      if (fn.toString().indexOf("closebuttons-side") == -1) {
+        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabContentsOrderInternal")._replace(
+          'if (this.mTabBrowser.getAttribute(this.kTAB_CONTENTS_INVERTED) == \'true\')',
+          'let button = aNamedNodes.close;\n    ' +
+          'index = nodes.indexOf(button);\n   ' +
+          'if (index > -1) {\n    ' +
+          ' let tabbar = this.mTabBrowser.tabContainer;\n   ' +
+          ' let side = tabbar.getAttribute("closebuttons-side");\n    ' +
+          ' if (side == "left") {\n   ' +
+          '   let before = nodes.indexOf(aNamedNodes.twistyAnchor);\n   ' +
+          '   if (before > -1) {\n    ' +
+          '     nodes.splice(index, 1);\n   ' +
+          '     let mOver = tabbar.mCloseButtons;\n   ' +
+          '     mOver = mOver == 4 && button.getAttribute("selected") != "true" || mOver == 2;\n    ' +
+          '     let offset = mOver ? 1 : 0;\n   ' +
+          '     nodes.splice(before + offset, 0, button);\n   ' +
+          '   }\n   ' +
+          ' }\n   ' +
+          '}\n\n    ' +
+          '$&'
+        )._replace(
+          'let key = \'initTabContentsOrderInternal_\'',
+          'let self = this;\n     ' +
+          '$&'
+        ).toCode();
+
+        let callback = function() {
+          TabmixSvc.forEachBrowserWindow(function(aWindow) {
+            aWindow.gBrowser.treeStyleTab.updateInvertedTabContentsOrder(true);
+          });
+        };
+        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons", callback);
+        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons.onLeft", callback);
       }
+
+      // update ordinal on previous selected tab when close tab button is on the
+      // left side and CloseButtons preference is 4 - close buttons on hover
+      // and active tabs
+      let ontabselect = function(event) {
+        let tab = gBrowser.tabContainer.getAttribute("closebuttons-side") == "left" &&
+                  gBrowser.tabContainer.mCloseButtons == 4 &&
+                  event.detail && event.detail.previousTab;
+        if (tab)
+          gBrowser.treeStyleTab.initTabContentsOrder(tab);
+      };
+      gBrowser.tabContainer.addEventListener("TabSelect", ontabselect, true);
+      window.addEventListener("unload", function onunload() {
+        window.removeEventListener("unload", onunload, false);
+        gBrowser.tabContainer.removeEventListener("TabSelect", ontabselect, true);
+      }, false);
     }
 
     // we removed TMP_howToOpen function 2011-11-15
@@ -659,4 +720,4 @@ TMP_extensionsCompatibility.treeStyleTab = {
       'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
     ).toCode();
   }
-}
+};

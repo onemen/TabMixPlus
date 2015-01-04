@@ -24,7 +24,7 @@
 }
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton */
-#TabsToolbar > .tabs-closebutton {
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
   list-style-image: url("chrome://global/skin/icons/close.png");
 }
 
@@ -41,10 +41,6 @@
 
 #TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
   position: static !important;
-}
-
-.tabbrowser-tabs[classic="v4Mac"] > .tabbrowser-tab .tabs-closebutton {
-  margin: 0px;
 }
 
 #TabsToolbar[multibar]:not(:-moz-lwtheme) {
@@ -72,7 +68,7 @@
 .tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
 .tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
 .tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-text-stack > .tab-label:not([selected="true"]):-moz-lwtheme {
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
   opacity: .8;
 }
 

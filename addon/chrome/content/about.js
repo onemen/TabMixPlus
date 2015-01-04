@@ -1,6 +1,6 @@
 "use strict";
 
-function init() {
+function init() { // jshint ignore:line
   var addon = window.arguments[0];
   var extensionsStrings = document.getElementById("extensionsStrings");
   document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);
@@ -13,7 +13,6 @@ function init() {
   }
   var acceptButton = document.documentElement.getButton("accept");
   acceptButton.label = extensionsStrings.getString("aboutWindowCloseButton");
-  var descriptionString =  document.getElementById("descriptionString");
   var extensionDescription = document.getElementById("extensionDescription");
   extensionDescription.value = addon.description;
 }

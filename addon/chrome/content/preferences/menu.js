@@ -1,6 +1,6 @@
 "use strict";
 
-var gMenuPane = {
+var gMenuPane = { // jshint ignore:line
   init: function () {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
@@ -39,7 +39,7 @@ var gMenuPane = {
     this.setSlideShowLabel();
     let paneMenu = $("paneMenu");
     if (paneMenu.hasAttribute("editSlideShowKey")) {
-      paneMenu.removeAttribute("editSlideShowKey")
+      paneMenu.removeAttribute("editSlideShowKey");
       setTimeout(function(self) {self.editSlideShowKey();},0, this);
     }
 
@@ -57,7 +57,7 @@ var gMenuPane = {
     shortcuts.value = newValue;
     shortcuts.keys = TabmixSvc.JSON.parse(newValue);
     let callBack = function(shortcut) shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
-    this.updateShortcuts(shortcuts, callBack)
+    this.updateShortcuts(shortcuts, callBack);
   },
 
   _slideShow: "",
@@ -112,4 +112,4 @@ var gMenuPane = {
     var label = showInverseLink.getAttribute((val ? "bg" : "fg") + "label");
     showInverseLink.setAttribute("label", label);
   }
-}
+};

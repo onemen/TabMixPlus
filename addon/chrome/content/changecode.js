@@ -1,5 +1,7 @@
-Tabmix._eval = function(name, code) name ? eval(name + " = " + code) : eval("(" + code + ")");
+Tabmix._eval = function(name, code) name ? eval(name + " = " + code) : eval("(" + code + ")"); // jshint ignore:line
 // Tabmix._eval is on the first line to help us get the right line number
+
+/* jshint strict: false */
 
 // don't use strict for this file
 // so we don't evaluat all code as strict mode code
@@ -38,7 +40,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         if (typeof aParams == "object") {
           doReplace = "check" in aParams ? aParams.check : true;
           flags = aParams.flags;
-          silent = aParams.silent
+          silent = aParams.silent;
         }
         else if (typeof aParams == "boolean") {
           doReplace = aParams;
@@ -85,7 +87,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         if (aShow)
           this.show(obj, fnName);
       } catch (ex) {
-        Components.utils.reportError("Tabmix " + console.callerName() + " failed to change " + this.fullName + "\nError: " + ex.message);
+        Components.utils.reportError("Tabmix " + console.callerName() +
+                                     " failed to change " + this.fullName +
+                                     "\nError: " + ex.message);
       }
     },
 
@@ -94,7 +98,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         throw "Tabmix:\n" +  this.fullName + " don't have setter or getter";
 
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
-      let descriptor = {enumerable: true, configurable: true}
+      let descriptor = {enumerable: true, configurable: true};
 
       let setDescriptor = function(type) {
         let fnType = "__lookup#ter__".replace("#", type);
@@ -130,10 +134,10 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
       var caller = console.getCallerNameByIndex(2);
       if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
-        console.clog(caller + " was unable to change " + aName + "."
-          + (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    "))
-          + "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi,"
-          + "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
+        console.clog(caller + " was unable to change " + aName + "." +
+          (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
+          "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi," +
+          "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
         if (debugMode)
           console.clog(caller + "\nfunction " + aName + " = " + this.value);
       }
@@ -141,7 +145,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         console.clog(caller + " no update needed to " + aName);
       return false;
     }
-  }
+  };
 
   let fnName = aName.split(".").pop();
   try {
@@ -150,10 +154,10 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
   } catch (ex) {
     console.clog(console.callerName() + " failed to change " + aName + "\nError: " + ex.message);
     if (debugMode)
-      console.obj(aObject, "aObject");
+      console.obj(aParent, "aParent");
   }
   return null;
-}
+};
 
 Tabmix.setNewFunction = function(aObj, aName, aCode) {
   if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
@@ -162,8 +166,8 @@ Tabmix.setNewFunction = function(aObj, aName, aCode) {
   }
   else
     aObj[aName] = aCode;
-}
+};
 
 Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
   aObj[aFn].apply(aObj, aArg || []);
-}
+};

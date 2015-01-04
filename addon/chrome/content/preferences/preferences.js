@@ -1,13 +1,14 @@
+/* globals _sminstalled, gPreferenceList */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+const {classes: Cc, interfaces: Ci} = Components; // jshint ignore:line
 const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
-function $(id) document.getElementById(id);
+function $(id) document.getElementById(id)
 
-var gPrefWindow = {
+var gPrefWindow = { // jshint ignore:line
+  widthChanged: false,
   _initialized: false,
   init: function() {
     this._initialized = true;
@@ -30,7 +31,6 @@ var gPrefWindow = {
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
       prefWindow.setAttribute("ubuntu", true);
 
-    var browserWindow = Tabmix.getTopWin();
     var docElt = document.documentElement;
 
     // don't use browser.preferences.animateFadeIn
@@ -89,12 +89,12 @@ var gPrefWindow = {
     case "change":
       if (aEvent.target.localName != "preference")
         return;
-      this.updateBroadcasters(aEvent.target);
+      this.updateBroadcaster(aEvent.target);
       if (!this.instantApply)
         this.updateApplyButton(aEvent);
       break;
     case "beforeaccept":
-      if (typeof gAppearancePane == "object")
+      if (this.widthChanged)
         gAppearancePane.changeTabsWidth();
       if (!this.instantApply) {
         // prevent TMP_SessionStore.setService from runing
@@ -106,6 +106,21 @@ var gPrefWindow = {
   },
 
   changes: [],
+  resetChanges: function() {
+    // remove all pending changes
+    if (!this.instantApply || this.widthChanged) {
+      if (this.widthChanged)
+        gAppearancePane.resetWidthChange();
+      while (this.changes.length) {
+        let preference = this.changes.shift();
+        preference.value = preference.valueFromPreferences;
+        if (preference.hasAttribute("notChecked"))
+          delete preference._lastValue;
+      }
+      this.setButtons(true);
+    }
+  },
+
   updateApplyButton: function(aEvent) {
     var item = aEvent.target;
     if (item.localName != "preference")
@@ -121,7 +136,7 @@ var gPrefWindow = {
 
   onApply: function() {
     this.setButtons(true);
-    if (typeof gAppearancePane == "object")
+    if (this.widthChanged)
       gAppearancePane.changeTabsWidth();
     if (this.instantApply)
       return;
@@ -136,7 +151,7 @@ var gPrefWindow = {
       preference.valueFromPreferences = preference.value;
       preference.batching = false;
     }
-    gPrefWindow.afterShortcutsChanged();
+    this.afterShortcutsChanged();
     Tabmix.prefs.clearUserPref("setDefault"); // this trigger TabmixTabbar.updateSettings
     Services.prefs.savePrefFile(null);
   },
@@ -150,7 +165,7 @@ var gPrefWindow = {
     applyButton.hidden = this.instantApply && disable;
     docElt.getButton("accept").hidden = disable;
 
-    var action = disable ? "close" : "cancel"
+    var action = disable ? "close" : "cancel";
     var cancelButton = docElt.getButton("cancel");
     cancelButton.label = docElt.getAttribute(action + "buttonlabel");
     cancelButton.setAttribute("icon", action);
@@ -171,16 +186,20 @@ var gPrefWindow = {
     Array.forEach(broadcasters.childNodes, function (broadcaster) {
       let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
-        this.setDisabled(broadcaster, !preference.value);
+        this.updateBroadcaster(preference, broadcaster);
     }, this);
   },
 
-  updateBroadcasters: function(aPreference) {
-    if (aPreference.type != "bool")
+  updateBroadcaster: function(aPreference, aBroadcaster) {
+    if (aPreference.type != "bool" && !aPreference.hasAttribute("notChecked"))
       return;
-    let obs = $(aPreference.id.replace("pref_", "obs_"));
-    if (obs)
-      this.setDisabled(obs, !aPreference.value);
+    let broadcaster = aBroadcaster ||
+                      $(aPreference.id.replace("pref_", "obs_"));
+    if (broadcaster) {
+      let disable = aPreference.type == "bool" ? !aPreference.value :
+          aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
+      this.setDisabled(broadcaster, disable);
+    }
   },
 
   setDisabled: function(itemOrId, val) {
@@ -200,7 +219,7 @@ var gPrefWindow = {
     let preference = $("pref_" + tabs.id);
     if (!tabs._inited) {
       tabs._inited = true;
-      if (preference.value != null)
+      if (preference.value !== null)
         tabs.selectedIndex = preference.value;
     }
     else if (preference.value != tabs.selectedIndex)
@@ -212,8 +231,24 @@ var gPrefWindow = {
     if (typeof gMenuPane == "object" &&
         $("pref_shortcuts").value != $("shortcut-group").value)
       gMenuPane.initializeShortcuts();
+  },
+
+  // syncfrompreference and synctopreference are for checkbox preference
+  // controlled by int preference
+  syncfrompreference: function(item) {
+    let preference = $(item.getAttribute("preference"));
+    return preference.value != parseInt(preference.getAttribute("notChecked"));
+  },
+
+  synctopreference: function(item, checkedVal) {
+    let preference = $(item.getAttribute("preference"));
+    let control = $(item.getAttribute("control"));
+    let notChecked = parseInt(preference.getAttribute("notChecked"));
+    let val = item.checked ? preference._lastValue || checkedVal : notChecked;
+    preference._lastValue = control.value;
+    return val;
   }
-}
+};
 
 function getPrefByType(prefName) {
   try {
@@ -230,7 +265,7 @@ function getPrefByType(prefName) {
 
 function setPrefByType(prefName, newValue, atImport) {
   let pref = {name: prefName, value: newValue,
-              type: Services.prefs.getPrefType(prefName)}
+              type: Services.prefs.getPrefType(prefName)};
   try {
     if (!atImport || !setPrefAfterImport(pref))
       setPref(pref);
@@ -296,6 +331,11 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
+let sessionPrefs = ["browser.sessionstore.resume_from_crash",
+                    "browser.startup.page",
+                    "extensions.tabmix.sessions.manager",
+                    "extensions.tabmix.sessions.crashRecovery"];
+
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
@@ -304,6 +344,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   "browser.search.context.loadInBackground","browser.search.openintab",
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
+  "browser.sessionstore.restore_on_demand",
   "browser.sessionstore.resume_from_crash","browser.startup.page",
   "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
   "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
@@ -320,18 +361,26 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // filter out preference without default value
   tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref){
     try {
-      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) != undefined;
+      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
     } catch (ex) { }
     return false;
   });
   return tabmixPrefs;
 });
 
+__defineGetter__("_sminstalled", function() {
+  return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
+});
+
 function defaultSetting() {
+  gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
-  gPreferenceList.forEach(function(pref) {
+  let SMinstalled = _sminstalled;
+  let prefs = !SMinstalled ? gPreferenceList :
+      gPreferenceList.map(function(pref) sessionPrefs.indexOf(pref) == -1);
+  prefs.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
   // we enable our session manager on default
@@ -347,8 +396,10 @@ function toggleSyncPreference() {
   const sync = "services.sync.prefs.sync.";
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
+  let exclode = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(function(pref) {
-    Services.prefs[fn](sync + pref, true);
+    if (exclode.indexOf(pref) == -1)
+      Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);
 }
@@ -427,15 +478,19 @@ function loadData (pattern) {
     return;
   }
 
+  gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
   // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-  Tabmix.prefs.setBoolPref("sessions.manager", false);
-  Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
-  Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
-  Services.prefs.setIntPref("browser.startup.page", false);
-  Services.prefs.savePrefFile(null);
+  let SMinstalled = _sminstalled;
+  if (!SMinstalled) {
+    Tabmix.prefs.setBoolPref("sessions.manager", false);
+    Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
+    Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
+    Services.prefs.setIntPref("browser.startup.page", 0);
+    Services.prefs.savePrefFile(null);
+  }
 
   // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
   let pref = "extensions.tabmix.updateOpenedTabsLockState=";
@@ -449,6 +504,8 @@ function loadData (pattern) {
     let index = pattern[i].indexOf("=");
     if (index > 0){
       prefName  = pattern[i].substring(0,index);
+      if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
+        continue;
       prefValue = pattern[i].substring(index+1,pattern[i].length);
       setPrefByType(prefName, prefValue, true);
     }
@@ -470,7 +527,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tmp.garyr.net/help/#"
+  var helpPage = "http://tmp.garyr.net/help/#";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -478,7 +535,7 @@ function openHelp(helpTopic) {
     let browsers = tabBrowser.browsers;
     for (let i = 0; i < browsers.length; i++) {
       let browser = browsers[i];
-      if (browser.currentURI.spec.indexOf(helpPage) == 0) {
+      if (browser.currentURI.spec.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
         return true;
       }
@@ -524,7 +581,7 @@ var gIncompatiblePane = {
   checkForIncompatible: function (aShowList) {
      let tmp = { };
      Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-     new tmp.CompatibilityCheck(window, aShowList, true);
+     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm
@@ -533,7 +590,7 @@ var gIncompatiblePane = {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;
     }
-    Tabmix.setItem(this.paneButton, "show", !aHide)
+    Tabmix.setItem(this.paneButton, "show", !aHide);
 
     if (aHide && document.documentElement.lastSelected == "paneIncompatible")
       document.documentElement.showPane($(this.lastSelected));
@@ -542,7 +599,7 @@ var gIncompatiblePane = {
       window.focus();
   }
 
-}
+};
 
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   let win = Tabmix.getTopWin();

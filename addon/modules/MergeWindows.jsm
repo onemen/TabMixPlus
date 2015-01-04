@@ -2,7 +2,7 @@
 
 var EXPORTED_SYMBOLS = ["MergeWindows"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
@@ -17,10 +17,10 @@ Cu.import("resource://tabmixplus/Services.jsm");
 // Convert to module and modfied by onemen                          //
 //                                                                  //
 */////////////////////////////////////////////////////////////////////
-let MergeWindows = {
+this.MergeWindows = {
   get prefs() {
     delete this.prefs;
-    return this.prefs = Services.prefs.getBranch("extensions.tabmix.");
+    return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
 
   // merge several windows to one window, or only selected tabs to previous focussed window,
@@ -104,7 +104,7 @@ let MergeWindows = {
         features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
         "_blank", features, null);
-    let mergePopUps = function _mergePopUps(aEvent) {
+    let mergePopUps = function _mergePopUps() {
       newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
       this.concatTabsAndMerge(newWindow, aWindows);
     }.bind(this);
@@ -140,8 +140,7 @@ let MergeWindows = {
       if (placePopupNextToOpener) {
         // since we merge popup after all other tabs was merged,
         // we only look for opener in the target window
-        let popupWindow = aTab.ownerDocument.defaultView;
-        let openerWindow = popupWindow.gBrowser.selectedBrowser[TabmixSvc.contentWindowAsCPOW].opener;
+        let openerWindow = aTab.linkedBrowser[TabmixSvc.contentWindowAsCPOW].opener;
         let openerTab = openerWindow &&
             tabbrowser._getTabForContentWindow(openerWindow.top);
         if (openerTab)
@@ -153,13 +152,16 @@ let MergeWindows = {
     }
 
     var tabToSelect = null;
+    // make sure that the tabs will open in the same order
+    let prefVal = this.prefs.getBoolPref("openTabNextInverse");
+    this.prefs.setBoolPref("openTabNextInverse", true);
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       let isPopup = !tab.ownerDocument.defaultView.toolbar.visible;
       let newTab = tabbrowser.addTab("about:blank", {dontMove: isPopup});
       let newBrowser = newTab.linkedBrowser;
       newBrowser.stop();
-      newBrowser.docShell;
+      newBrowser.docShell; // jshint ignore:line
       if (tab.hasAttribute("_TMP_selectAfterMerege")) {
         tab.removeAttribute("_TMP_selectAfterMerege");
         tabToSelect = newTab;
@@ -170,6 +172,7 @@ let MergeWindows = {
       // see in Tabmix.copyTabData list of attributs we copy to the new tab
       tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
     }
+    this.prefs.setBoolPref("openTabNextInverse", prefVal);
 
     if (notFocused) {
       // select new tab after all other tabs swap to the target window
@@ -185,7 +188,7 @@ let MergeWindows = {
 
   // we use it only for Fireofx 20+, before that always return false
   isWindowPrivate: function() {
-    delete this.isWindowPrivate
+    delete this.isWindowPrivate;
     if (TabmixSvc.version(200)) {
       Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
       this.isWindowPrivate = function(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
@@ -234,7 +237,7 @@ let MergeWindows = {
 
     let windows = [], popUps = [];
     let isWINNT = Services.appinfo.OS == "WINNT";
-    let more = function() !isWINNT || aOptions.multiple || windows.length == 0;
+    let more = function() !isWINNT || aOptions.multiple || windows.length === 0;
     // getEnumerator return windows from oldest to newest, so we use unshift.
     // when OS is WINNT and option is not multiple the loop stops when we find the most
     // recent suitable window
@@ -290,7 +293,7 @@ let MergeWindows = {
       return true;
 
     var promptAgain = { value:true };
-    var canClose = Services.prompt.confirmCheck(aWindow,
+    canClose = Services.prompt.confirmCheck(aWindow,
                    TabmixSvc.getString('tmp.merge.warning.title'),
                    TabmixSvc.getString('tmp.merge.warning.message'),
                    TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
@@ -301,4 +304,4 @@ let MergeWindows = {
 
     return canClose;
   }
-}
+};

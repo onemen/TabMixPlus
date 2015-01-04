@@ -16,6 +16,7 @@ XPCOMUtils.defineLazyGetter(this, "Prefs", function () {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
+let TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", function () {
     let sss = Cc['@mozilla.org/content/style-sheet-service;1']
                         .getService(Ci.nsIStyleSheetService);
@@ -23,7 +24,6 @@ XPCOMUtils.defineLazyGetter(this, "SSS", function () {
     return sss;
 });
 
-let TYPE;
 const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n';
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 
@@ -54,7 +54,7 @@ this.DynamicRules = {
     Services.obs.addObserver(this, "quit-application", false);
 
     this.createTemplates();
-    for (let rule in Iterator(this.cssTemplates, true))
+    for (let rule of Object.keys(this.cssTemplates))
       this.userChangedStyle(rule);
   },
 
@@ -123,7 +123,7 @@ this.DynamicRules = {
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
       otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
                        bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
-    }
+    };
 
     if (TabmixSvc.isMac) {
       backgroundRule = '.tabbrowser-tab[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >\n' +
@@ -151,7 +151,8 @@ this.DynamicRules = {
             space26 + 'rgba(254, 254, 254, 0.72) 4px, rgba(254, 254, 254, 0.72) 4px, #bottomColor)';
       bgImage.startEndhover = bgImage.bghover;
       let _selector = '.tabbrowser-tab#HOVER[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >';
-      for (let [rule, style] in Iterator(styleRules)) {
+      for (let rule of Object.keys(styleRules)) {
+        let style = styleRules[rule];
         delete style.bg;
         let hover = rule == "currentTab" ? "" : ":hover";
         let ruleSelector = _selector.replace("#RULE", rule.replace("Tab", ""));
@@ -167,9 +168,10 @@ this.DynamicRules = {
       }
     }
     styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress' +
-          ' > .progress-bar {\n  background-color: #bottomColor !important;\n}\n'
-    }
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > ' +
+          '.tab-stack > .tab-progress-container > .tab-progress > ' +
+          '.progress-bar {\n  background-color: #bottomColor !important;\n}\n'
+    };
 
     this.cssTemplates = styleRules;
   },
@@ -197,7 +199,7 @@ this.DynamicRules = {
                     val.bgColor != prefObj.bgColor ||           // bgColor changed
                     val.bgTopColor != prefObj.bgTopColor) ||    // bgTopColor changed
                   prefObj.text && (!val.text ||                 // textColor enabled
-                    val.textColor != prefObj.textColor)         // textColor changed
+                    val.textColor != prefObj.textColor);        // textColor changed
 
     if (changed)
       this.updateStyles(ruleName, prefObj);
@@ -211,7 +213,8 @@ this.DynamicRules = {
       return;
     let templates = this.cssTemplates[name];
     let style = {};
-    for (let [rule, cssText] in Iterator(templates)) {
+    for (let rule of Object.keys(templates)) {
+      let cssText = templates[rule];
       if (rule == "text") {
         if (prefObj.text)
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
@@ -235,12 +238,13 @@ this.DynamicRules = {
     if (!enabled)
       return;
 
-    if (!this.styles[name])
+    let style = this.styles[name];
+    if (!style)
       return;
 
     let cssText = NAMESPACE;
-    for (let [name, rule] in Iterator(this.styles[name]))
-      cssText += "\n" +  rule;
+    for (let rule of Object.keys(style))
+      cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(
       "data:text/css," + encodeURIComponent(cssText), null, null);
 
@@ -265,7 +269,7 @@ this.DynamicRules = {
     STYLENAMES.forEach(function(pref){
       defaults[pref] = getDefaultBranch.getCharPref(pref);
     }, this);
-    return this.defaultPrefs = defaults;
+    return (this.defaultPrefs = defaults);
   },
 
   validatePrefValue: function (ruleName) {
@@ -277,12 +281,12 @@ this.DynamicRules = {
     if (!Prefs.prefHasUserValue(ruleName))
       return defaultPrefValues;
 
-    var prefValues = {};
+    var currentPrefValues, prefValues = {};
     let prefString = Prefs.getCharPref(ruleName);
     try {
-      var currentPrefValues = TabmixSvc.JSON.parse(prefString);
+      currentPrefValues = TabmixSvc.JSON.parse(prefString);
       if (currentPrefValues == null)
-        throw Error(ruleName + " value is invalid\n" + prefString)
+        throw Error(ruleName + " value is invalid\n" + prefString);
     }
     catch (ex) {
       TabmixSvc.console.log(ex);
@@ -292,7 +296,7 @@ this.DynamicRules = {
         currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
                             new Components.utils.Sandbox("about:blank"));
         Prefs.setCharPref(ruleName, TabmixSvc.JSON.stringify(currentPrefValues));
-      } catch (ex) {
+      } catch (er) {
           TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
           Prefs.clearUserPref(ruleName);
           // set prev value to default so we can continue with this function
@@ -328,7 +332,7 @@ this.DynamicRules = {
     return prefValues;
   }
 
-}
+};
 
 // Converts a color string in the format "#RRGGBB" to rgba(r,g,b,a).
 function getRGBcolor(aColorCode, aOpacity) {

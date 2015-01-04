@@ -16,14 +16,12 @@
 }
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton*/
-#TabsToolbar > .tabs-closebutton {
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
   list-style-image: url("chrome://global/skin/icons/close.png");
-  background-image: none !important;
 }
 
-/*  For .tabs-closebutton .showhover */
-.tabbrowser-tabs > .tabbrowser-tab .tabs-closebutton {
-  margin: -3px 0px -3px 0px;
+#TabsToolbar > .tabs-closebutton {
+  background-image: none !important;
 }
 
 /*  new tab button after last tab on firefox 4.0  aero */

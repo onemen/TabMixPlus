@@ -14,24 +14,18 @@ var EXPORTED_SYMBOLS = ["CompatibilityCheck"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-const TMP_BUTTON_OK = 0;
 const TMP_BUTTON_CANCEL = 1;
 const TMP_BUTTON_EXTRA1 = 2;
-const TMP_SHOW_MENULIST = 1;
-const TMP_SHOW_TEXTBOX = 0;
 const TMP_HIDE_MENUANDTEXT = 2;
 const TMP_CHECKBOX_UNCHECKED = 0;
 const TMP_CHECKBOX_CHECKED = 1;
 const TMP_HIDE_CHECKBOX = 2;
-const TMP_SELECT_DEFAULT = 0;
-const TMP_SELECT_LASTSESSION = 1;
-const TMP_SELECT_CRASH = 2;
-const TMP_SHOW_CLOSED_WINDOW_LIST = 3;
-const TMP_DLG_SAVE = 0;
-const TMP_DLG_RENAME = 1;
 
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/AddonManager.jsm");
+Cu.import("resource://tabmixplus/Services.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Services",
+  "resource://gre/modules/Services.jsm");
 
 var _initialized = false;
 
@@ -62,16 +56,25 @@ CompatibilityCheck.prototype = {
       return !!(aAddon.pendingOperations & action);
     }
 
+    function AddOn(addon) {
+      this.name = addon.name;
+      this.id =  addon.id;
+      this._version = addon.version;
+    }
+    AddOn.prototype = {
+      toString: function() {return this._name.toLowerCase();}
+    };
+
     var guid_list = this.getList();
     var self = this;
     AddonManager.getAddonsByTypes(["extension"], function(aAddonsList) {
       for (let i = 0; i < aAddonsList.length; i++) {
         let addon = aAddonsList[i];
-        if (addon.id.toLowerCase() in  guid_list) {
+        if (addon.id.toLowerCase() in guid_list) {
           let disabled = addon.userDisabled;
           if ((!disabled && !isPending(addon, "disable") && !isPending(addon, "uninstall")) ||
                   (disabled && isPending(addon, "enable"))) {
-            self.list.push({_name: addon.name, id: addon.id, _version: addon.version, toString:function() {return this._name.toLowerCase();}});
+            self.list.push(new AddOn(addon));
             if (!self.showList)
               break;
           }
@@ -82,7 +85,7 @@ CompatibilityCheck.prototype = {
   },
 
   showResult: function TMP_EX_showResult() {
-    let emptyList = this.list.length == 0;
+    let emptyList = this.list.length === 0;
     if (this.showList && !emptyList)
       this.warnAboutIncompatible();
     else
@@ -102,12 +105,12 @@ CompatibilityCheck.prototype = {
       outStr += " - " + name + " " + list[i]._version + "\n";
     }
 
-    var showatStart = TabmixSvc.prefs.getBoolPref("extensions.tabmix.disableIncompatible")
+    var showatStart = TabmixSvc.prefBranch.getBoolPref("disableIncompatible");
     var chkBoxState = showatStart ? TMP_CHECKBOX_CHECKED : TMP_CHECKBOX_UNCHECKED;
 
     var title = TabmixSvc.getString("incompatible.title");
-    var msg = TabmixSvc.getString("incompatible.msg0") + "\n"
-            + TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
+    var msg = TabmixSvc.getString("incompatible.msg0") + "\n" +
+              TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
     var chkBoxLabel = TabmixSvc.getString("incompatible.chkbox.label");
     var buttons = [TabmixSvc.setLabel("incompatible.button0"),
             TabmixSvc.setLabel("incompatible.button1")];
@@ -129,8 +132,8 @@ CompatibilityCheck.prototype = {
   // we use non modal promptService on startup
   promptCallBack: function TMP_EX_promptCallBack(aResult) {
     if (aResult.checked != aResult.showatStart) {
-      TabmixSvc.prefs.setBoolPref("extensions.tabmix.disableIncompatible", aResult.checked);
-      TabmixSvc.prefs.savePrefFile(null); // store the pref immediately
+      TabmixSvc.prefBranch.setBoolPref("disableIncompatible", aResult.checked);
+      Services.prefs.savePrefFile(null); // store the pref immediately
     }
 
     if (aResult.button != this.CANCEL) {
@@ -145,7 +148,7 @@ CompatibilityCheck.prototype = {
     list.forEach(function(aAddonToDisable) {
       AddonManager.getAddonByID(aAddonToDisable.id, function(aAddon) {
         aAddon.userDisabled = true;
-      })
+      });
     });
   },
 
@@ -158,7 +161,7 @@ CompatibilityCheck.prototype = {
     else {
       let title = TabmixSvc.getString("incompatible.title");
       let msg = TabmixSvc.getString("incompatible.msg2");
-      let button = TabmixSvc.setLabel("sm.button.continue")
+      let button = TabmixSvc.setLabel("sm.button.continue");
       let buttons = ["", button].join("\n");
       // make it not modal on startup
       let callBack = this.callbackDialog ? null : function () {/* nothing to do */};
@@ -226,4 +229,4 @@ CompatibilityCheck.prototype = {
     guid_list['tab-width@design-noir.de'] = true;                 //   Custom Tab Width
     return guid_list;
   }
-}
+};

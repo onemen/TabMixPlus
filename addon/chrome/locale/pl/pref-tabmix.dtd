@@ -294,7 +294,7 @@
 <!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
 <!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
 <!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Odtwórz przypięte karty z poprzedniej sesji">
 <!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
 <!ENTITY sm.preserve.history "historię">
 <!ENTITY sm.preserve.protect "status zabezpieczenia">

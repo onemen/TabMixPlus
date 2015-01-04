@@ -4,7 +4,7 @@ var EXPORTED_SYMBOLS = ["RenameTab"];
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
-let RenameTab = {
+this.RenameTab = {
   window: null,
   panel: null,
   data: {},
@@ -58,7 +58,7 @@ let RenameTab = {
     );
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe: function(aSubject, aTopic) {
     if (aTopic != "xul-overlay-merged")
       return;
 
@@ -163,4 +163,4 @@ let RenameTab = {
   hidePopup: function() {
     this.panel.hidePopup();
   }
-}
+};

@@ -13,12 +13,6 @@
   background-image: none !important;
 }
 
-/***  For .tabs-closebutton .showhover ***/
-.tabbrowser-tabs .tabbrowser-tab .tabs-closebutton {
-  margin-top: -5px !important; /* did not work without !important */
-  margin-bottom: -4px !important;
-}
-
 #TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
   list-style-image: url("moz-icon://stock/gtk-close?size=menu");
 }

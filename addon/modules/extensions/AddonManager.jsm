@@ -6,12 +6,12 @@
 
 var EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/AddonManager.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-function log(msg) {
+function log(msg) { // jshint ignore:line
   TabmixSvc.console.log(msg);
 }
 
@@ -29,14 +29,14 @@ let PrivateTab = {
       aWindow.TMP_eventListener.updateMultiRow(true);
     });
   }
-}
+};
 
 let SessionManager = {
   id: "{1280606b-2510-4fe0-97ef-9b5a22eafe30}",
   init: function() {
     this._saveTabmixPrefs();
     try {
-      let tmp = {}
+      let tmp = {};
       Cu.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
       TabmixSvc.sessionManagerAddonInstalled = true;
     }
@@ -73,11 +73,11 @@ let SessionManager = {
     TabmixSvc.prefBranch.setBoolPref(pref, isActive);
     TabmixSvc.prefBranch.clearUserPref(pref);
   }
-}
+};
 
 let TabmixListener = {
   onChange: function(aAddon, aAction) {
-    let id = aAddon.id
+    let id = aAddon.id;
     if (id == SessionManager.id)
       SessionManager[aAction]();
     else if (id == PrivateTab.id) {
@@ -95,7 +95,7 @@ let TabmixListener = {
       return;
     this.onEnabled(aAddon);
   }
-}
+};
 
 let TabmixAddonManager = {
   initialized: false,
@@ -107,6 +107,6 @@ let TabmixAddonManager = {
     SessionManager.init();
     AddonManager.addAddonListener(TabmixListener);
   }
-}
+};
 
 TabmixAddonManager.init();

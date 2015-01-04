@@ -27,13 +27,13 @@ function accept() {
 
 function getCustomReloadTime() {
   var minutes;
-  if (document.getElementById("autoreload_minutes").value != '')
+  if (document.getElementById("autoreload_minutes").value !== '')
     minutes = parseInt(document.getElementById("autoreload_minutes").value);
   else
     minutes = 0;
 
   var seconds;
-  if (document.getElementById("autoreload_seconds").value != '')
+  if (document.getElementById("autoreload_seconds").value !== '')
     seconds = parseInt(document.getElementById("autoreload_seconds").value);
   else
     seconds = 0;
@@ -41,7 +41,7 @@ function getCustomReloadTime() {
 }
 
 function disable_OK() {
-  document.documentElement.getButton("accept").disabled = getCustomReloadTime() == 0;
+  document.documentElement.getButton("accept").disabled = getCustomReloadTime() === 0;
 }
 
 function onInput(item) {

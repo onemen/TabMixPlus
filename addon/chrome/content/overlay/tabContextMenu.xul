@@ -51,8 +51,9 @@
            <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, TabContextMenu.contextTab);"/>
         </menu>
 <!--
-        <menuitem id="context_reloadAllTabs"/>
+        replace "context_reloadAllTabs" oncommand
 -->
+        <menuitem id="context_reloadAllTabs" oncommand="tablib.reloadTabs(gBrowser.visibleTabs);" />
         <menuitem id="tm-reloadOther" insertafter="context_reloadAllTabs"
                  label="&reloadother.label;" accesskey="&reloadother.accesskey;"
                  oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />

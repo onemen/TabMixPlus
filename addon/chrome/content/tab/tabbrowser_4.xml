@@ -28,50 +28,13 @@
     </handlers>
   </binding>
 
-  <binding id="tabmix-tab-text-stack-28" display="xul:stack">
+  <binding id="tabmix-tab-label">
     <content>
       <xul:label flex="1"
-                 anonid="tab-label"
-                 xbl:inherits="value=visibleLabel,crop,accesskey,fadein,pinned,selected"
+                 xbl:inherits="value=labelvalue,crop,accesskey,fadein,pinned,selected"
                  class="tab-text tab-label"
                  role="presentation"/>
-      <xul:hbox class="showhover-box">
-        <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon tabmix-showhover"/>
-      </xul:hbox>
     </content>
-  </binding>
-
-  <binding id="tabmix-tab-text-stack" display="xul:stack">
-    <content>
-      <xul:label flex="1"
-                 anonid="tab-label"
-                 xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
-                 class="tab-text tab-label"
-                 role="presentation"/>
-      <xul:hbox class="showhover-box">
-        <xul:toolbarbutton anonid="tmp-close-button"
-                 class="showhover tabs-closebutton close-icon"/>
-      </xul:hbox>
-    </content>
-  </binding>
-
-  <binding id="tabmix-showhover-close-tab-button"
-           extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-image">
-    <handlers>
-      <handler event="click" button="0"><![CDATA[
-        var bindingParent = document.getBindingParent(this).parentNode.parentNode.parentNode;
-        var tabContainer = bindingParent.parentNode;
-        tabContainer.tabbrowser.removeTab(bindingParent, {animate: true, byMouse: true});
-        tabContainer._blockDblClick = true;
-      ]]></handler>
-      <handler event="dblclick" button="0" phase="capturing">
-        event.stopPropagation();
-      </handler>
-      <handler event="dragstart">
-        event.stopPropagation();
-      </handler>
-    </handlers>
   </binding>
 
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
@@ -95,10 +58,6 @@
         </xul:vbox>
         <xul:hbox xbl:inherits="pinned,selected,titlechanged"
                   class="tab-content" align="center">
-          <xul:toolbarbutton anonid="tmp-close-button"
-                             xbl:inherits="fadein,pinned,selected"
-                             button_side="left"
-                             class="tab-close-button close-icon always-left"/>
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
                          class="tab-throbber"
@@ -111,12 +70,14 @@
               <xul:image class="tab-lock-icon"/>
               <xul:image class="tab-reload-icon"/>
             </xul:stack>
-            <xul:stack class="tab-text-stack" flex="1"
-                       xbl:inherits="visibleLabel,label,crop,accesskey,fadein,pinned,selected"/>
+          <xul:label flex="1"
+                     anonid="tab-label" tabmix="true"
+                     xbl:inherits="value=visibleLabel,labelvalue=label,crop,accesskey,fadein,pinned,selected"
+                     class="tab-text tab-label"
+                     role="presentation"/>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected"
-                             button_side="right"
-                             class="tab-close-button close-icon always-right"/>
+                             class="tab-close-button close-icon"/>
         </xul:hbox>
       </xul:stack>
       <xul:hbox class="tab-drag-indicator-right"/>
@@ -245,6 +206,8 @@
 
         if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
             !aTab.hasAttribute("dragged")) {
+          if (TabmixTabbar.widthFitTitle)
+            aTab.style.setProperty("width", aTab.getBoundingClientRect().width + "px", "important");
           aTab.setAttribute("showbutton", "on");
           aTab.parentNode.__showbuttonTab = aTab;
         }
@@ -286,6 +249,7 @@
 
         if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
           aTab.removeAttribute("showbutton");
+          aTab.style.removeProperty("width");
           // we use this in Linux to prevent underflow
           // that trigger by hidding the close button
           aTab.setAttribute("showbutton_removed", true);
@@ -300,7 +264,8 @@
       <parameter name="aEvent"/>
       <body><![CDATA[
         if ( this == this.parentNode.selectedItem ) {
-          this.setAttribute("clickOnCurrent","true");
+          if (aEvent.detail == 1)
+            this.setAttribute("clickOnCurrent","true");
         }
         // don't allow mouse click/down with modifiers to select tab
         else if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
@@ -410,7 +375,13 @@
           });
           XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function () !Tabmix.rtl);
 
-          this.setAttribute("closebuttons-side", Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft") ? "left" : "right");
+          // don't set button to left side if it is not inside tab-content
+          let button = document.getAnonymousElementByAttribute(this.firstChild, "anonid", "tmp-close-button") ||
+                       document.getAnonymousElementByAttribute(this.firstChild, "anonid", "close-button");
+          Tabmix.defaultCloseButtons = button && button.parentNode.className == "tab-content";
+          let onLeft = Tabmix.defaultCloseButtons && Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
+          this.setAttribute("closebuttons-side", onLeft ? "left" : "right");
+
           this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
           this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
           this.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
@@ -428,6 +399,7 @@
 
           Tabmix._nextSelectedID = 1;
           let tab = this.firstChild;
+          TMP_eventListener.setTabAttribute(tab);
           tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
           tab.setAttribute("visited", true);
           Tabmix.setTabStyle(tab);

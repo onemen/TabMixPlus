@@ -2,7 +2,7 @@
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
-var gTabMix_preferencesOverlay = {
+var gTabMix_preferencesOverlay = { // jshint ignore:line
   id: function(id) {return document.getElementById(id);},
 
   incontentInit: function gTabMix_preferencesOverlay_incontentInit() {
@@ -29,9 +29,9 @@ var gTabMix_preferencesOverlay = {
         let item = this.id(id);
         item.removeAttribute("data-category");
         item.hidden = false;
-        item.classList.remove("indent")
-        item.classList.add("incontent_paneGeneral")
-      }, this)
+        item.classList.remove("indent");
+        item.classList.add("incontent_paneGeneral");
+      }, this);
     }
 
     this.initMainPane();
@@ -93,4 +93,4 @@ var gTabMix_preferencesOverlay = {
        this.id("whenBrowserStartBox").removeAttribute("tabmixSession");
    }
 
-}
+};

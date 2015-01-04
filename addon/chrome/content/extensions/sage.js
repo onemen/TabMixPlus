@@ -62,4 +62,4 @@ var TMP_Sage = {
          return TMP_Places.prefBookmark;
    }
 
-}
+};
