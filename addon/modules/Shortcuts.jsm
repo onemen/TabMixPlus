@@ -74,17 +74,28 @@ this.Shortcuts = {
           getService(Ci.nsIPrivateBrowsingService).autoStarted;
 
     // update keys initial value and label
-    let labels = aWindow.Tabmix.shortcutsLabels;
+    // get our key labels from shortcutsLabels.xml
+    let $ = function(id) id && aWindow.document.getElementById(id);
+    let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
+    let labels = {};
+    if (container) {
+      let box = aWindow.document.createElement("vbox");
+      box.setAttribute("shortcutsLabels", true);
+      container.appendChild(box);
+      Array.slice(box.attributes).forEach(function(a) labels[a.name] = a.value);
+      container.removeChild(box);
+    }
     labels.togglePinTab =
-        aWindow.document.getElementById("context_pinTab").getAttribute("label") + "/" +
-        aWindow.document.getElementById("context_unpinTab").getAttribute("label");
+      $("context_pinTab").getAttribute("label") + "/" +
+      $("context_unpinTab").getAttribute("label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       keyData.value = keyData.default || "";
-      if (key in labels)
+      if (container && key in labels)
         keyData.label = labels[key];
+      else if (!container && !key.id)
+        keyData.label = "tabmix_key_" + key;
     }
-    delete aWindow.Tabmix.shortcutsLabels;
 
     if (aWindow.keyconfig) {
       this.keyConfigInstalled = true;
