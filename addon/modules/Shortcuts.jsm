@@ -295,7 +295,7 @@ this.Shortcuts = {
     try {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
     } catch (ex) {}
-    if (shortcuts == null) {
+    if (shortcuts === null) {
       TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;

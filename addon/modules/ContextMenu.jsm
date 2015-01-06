@@ -55,7 +55,7 @@ this.ContextMenu = {
                           Ci.nsIDOMNodeFilter.SHOW_ELEMENT, filter, true);
     let nextEpisode = treeWalker.nextNode();
     let urls = [];
-    while (nextEpisode != null) {
+    while (nextEpisode !== null) {
       let url;
       if (nextEpisode.nodeName == "li") {
         let node = nextEpisode.firstChild;
