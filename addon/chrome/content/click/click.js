@@ -269,7 +269,7 @@ var TabmixTabClickOptions = {
         }
         break;
       case 30: // enable/disable AutoReload
-        if (aTab.autoReloadEnabled === null)
+        if (aTab.autoReloadEnabled === undefined)
           Tabmix.autoReload.initTab(aTab);
         Tabmix.autoReload.toggle(aTab);
         break;

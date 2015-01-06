@@ -1555,11 +1555,11 @@ var tablib = {
     Tabmix.setNewFunction(gBrowser, "warnAboutClosingTabs", warnAboutClosingTabs);
 
     gBrowser.TMP_selectNewForegroundTab = function (aTab, aLoadInBackground, aUrl, addOwner) {
-       var bgLoad = (aLoadInBackground !== null) ? aLoadInBackground :
+       var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
                       Services.prefs.getBoolPref("browser.tabs.loadInBackground");
        if (!bgLoad) {
           // set new tab owner
-          addOwner = addOwner !== null ? addOwner : true;
+          addOwner = typeof addOwner == "boolean" ? addOwner : true;
           if (addOwner)
              aTab.owner = this.selectedTab;
           this.selectedTab = aTab;

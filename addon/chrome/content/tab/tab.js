@@ -2300,7 +2300,7 @@ var gTMPprefObserver = {
         let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
         str.data = Services.prefs.getComplexValue(oldPref, nsISupportsString).data;
         // only updtae new preference value if the old control preference is New Tab Page
-        let control = controlPref === null || Tabmix.prefs.prefHasUserValue(controlPref) &&
+        let control = controlPref === undefined || Tabmix.prefs.prefHasUserValue(controlPref) &&
                       Tabmix.prefs.getIntPref(controlPref) == 4;
         if (str.data !== "" && control)
           Services.prefs.setComplexValue(newPref, nsISupportsString, str);

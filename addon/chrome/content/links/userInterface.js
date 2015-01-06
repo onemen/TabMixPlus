@@ -52,7 +52,8 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
       linkTarget = 1;
    }
 
-   if (aURL === null) aURL = "about:blank";
+   if (!aURL)
+     aURL = "about:blank";
 
    // check for an existing window and focus it; it's not application modal
    var browserWindow = this.getTopWin();
