@@ -56,7 +56,12 @@ let TabmixRemoveBlankTab = {
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
                     .getInterface(Ci.nsIWebNavigation);
-      let doc = nav.document;
+      let doc;
+      try {
+        doc = nav.document;
+      } catch(ex) {
+        return result;
+      }
       result.win = nav.QueryInterface(Ci.nsIDocShellTreeItem)
                     .rootTreeItem
                     .QueryInterface(Ci.nsIInterfaceRequestor)
