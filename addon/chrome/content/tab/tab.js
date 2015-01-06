@@ -2562,10 +2562,15 @@ var TabmixProgressListener = {
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         // remove blank tab that created by downloading a file.
-        if (Tabmix.prefs.getBoolPref("enablefiletype") &&
+        let isDownLoading;
+        try {
+          // nsIWebProgress.DOMWindow can throw NS_NOINTERFACE
+          isDownLoading = Tabmix.prefs.getBoolPref("enablefiletype") &&
             aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
             uri != "about:blank" && aStatus === 0 &&
-            this.mTabBrowser.isBlankTab(tab)) {
+            this.mTabBrowser.isBlankTab(tab);
+        } catch(ex) { }
+        if (isDownLoading) {
           if (tab.selected)
             this.mTabBrowser.previousTab(tab);
           this.mTabBrowser.hideTab(tab);
