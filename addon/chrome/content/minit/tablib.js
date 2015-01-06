@@ -52,7 +52,8 @@ var tablib = {
   },
 
   _loadURIWithFlags: function(browser, uri, flags, referrer, charset, postdata) {
-    var allowLoad = browser.tabmix_allowLoad !== false || uri.match(/^javascript:/);
+    var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
+                                       uri.match(/^javascript:/));
     if (!allowLoad) {
       try {
         let newURI = Services.io.newURI(uri, null, null);
@@ -81,6 +82,33 @@ var tablib = {
     }
     browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
     return null;
+  },
+
+  /**
+   * check if we need to override our preference and force to load the url in
+   * the current tab
+   *
+   * current code only check if the caller is in the exception list
+   */
+  isException: function(loadInCurrent) {
+    if (loadInCurrent)
+      return loadInCurrent;
+
+    let exceptionList = {
+      // secureLogin extension expect to execute the login in the current page
+      // https://addons.mozilla.org/en-us/firefox/addon/secure-login/?src=ss
+      secureLogin: "secureLogin.login"
+    };
+    let keys = Object.keys(exceptionList);
+    let isInstalled = keys.some(function(item) {
+      return typeof window[item] == "object";
+    });
+    if (!isInstalled)
+      return loadInCurrent;
+
+    let stack = Error().stack || Components.stack.caller.formattedStack || "";
+    var re = keys.map(function(key) exceptionList[key]);
+    return new RegExp(re.join("|")).test(stack);
   },
 
   change_gBrowser: function change_gBrowser() {
