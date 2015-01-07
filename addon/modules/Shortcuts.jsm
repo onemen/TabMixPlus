@@ -43,6 +43,7 @@ this.Shortcuts = {
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
     saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
+    switchToLast: {command: 32},
     slideShow: {id: "key_tm_slideShow", default: "d&VK_F8"},
     toggleFLST: {id: "key_tm_toggleFLST", default: "d&VK_F9"}
   },

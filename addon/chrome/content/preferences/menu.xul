@@ -317,6 +317,7 @@
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
             <shortcut id="saveWindow"      label="&saveWindow.label;"/>
             <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
+            <shortcut id="switchToLast"    label="Switch to last active tab"/>
             <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
                       tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
             <shortcut id="slideShow"       label="&shortcuts.slideshow;"
