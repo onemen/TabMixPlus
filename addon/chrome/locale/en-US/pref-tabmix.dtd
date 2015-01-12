@@ -35,7 +35,7 @@
 <!ENTITY tabClose.label "Tab Closing">
 <!ENTITY tabMerge.label "Tab Merging">
 <!ENTITY tabFeature.label "Tab Features">
-<!ENTITY newtab.label "Load on new tabs:">
+<!ENTITY newtab.label "Load on New Tab:">
 <!ENTITY replaceLastTabWith.label "When I close last tab replace it with">
 <!ENTITY newtab.blank "Blank Page">
 <!ENTITY newtab.home "Home Page">
@@ -45,7 +45,7 @@
 <!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
-<!ENTITY openTabNext.label "Open new tabs next to current one">
+<!ENTITY openTabNext.label "Open New Tab next to current one">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">
 <!ENTITY relatedAfterCurrent.label "Only if related to current tab">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
