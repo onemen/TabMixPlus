@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Alguns de seus atalhos estão em uso por outros comandos">
 <!ENTITY shortcuts.showDetails "Mostrar detalhes">
 <!ENTITY shortcuts.hideDetails "Ocultar detalhes">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Alternar abas">
 <!ENTITY shortcuts.toggleFLST "Alternar o foco após fechar a aba atual">
 <!ENTITY shortcuts.toggleFLST.tooltip "alternar entre foco para a aba direita ou o último selecionado">

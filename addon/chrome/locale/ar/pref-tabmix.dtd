@@ -10,6 +10,7 @@
 <!ENTITY settings.import "استورد الإعدادات">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "استعد الإعدادات المبدئية">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "فتح الروابط التي تُفتح في نافذة جديدة في:">
 <!ENTITY externalLink.useSeparate.label "استخدام تفضيل منفصل للروابط القادمة من تطبيقات أخرى">
 <!ENTITY externalLinkTarget.label "فتح الروابط القادمة من تطبيقات أخرى في:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "عرض اللسان:">
 <!ENTITY widthTo.label "إلى">
 <!ENTITY widthPixels.label "بكسل">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "عرض اللسان يلائم عنوان اللسان">
 <!ENTITY bookastitle.label "استخدام اسم العلامة كعنوان للسان">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Tab Context Menu">
 <!ENTITY context.main "Main Context Menu">
 <!ENTITY context.tools "Tools Menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Show in Tab Context Menu">
 <!ENTITY showContentAreaContext.label "Show in Main Context Menu">
 <!ENTITY showToolsMenu.label "Show in Tools Menu">

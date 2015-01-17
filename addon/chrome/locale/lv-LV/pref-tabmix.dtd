@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importēt iestatījumus">
 <!ENTITY settings.sync "Sinhronizēt iestatījumus">
 <!ENTITY settings.default "Atjaunot noklusējumus">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Saites, kas atveras jaunā logā, atvērt:">
 <!ENTITY externalLink.useSeparate.label "Saitēm no citām lietotnēm izmantot atsevišķu iestatījumu">
 <!ENTITY externalLinkTarget.label "Saites no citām lietotnēm atvērt:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Cilnes platums:">
 <!ENTITY widthTo.label "līdz">
 <!ENTITY widthPixels.label "pikseļi">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Cilnes platums pielāgojas cilnes nosaukumam">
 <!ENTITY bookastitle.label "Lietot grāmatzīmju nosaukumu kā cilnes nosaukumu">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Cilnes konteksta izvēlne">
 <!ENTITY context.main "Galvenā konteksta izvēlne">
 <!ENTITY context.tools "Rīku izvēlne">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Rādīt cilnes konteksta izvēlnē">
 <!ENTITY showContentAreaContext.label "Rādīt galvenajā konteksta izvēlnē">
 <!ENTITY showToolsMenu.label "Rādīt rīku izvēlnē">

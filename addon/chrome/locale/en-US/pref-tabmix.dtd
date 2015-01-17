@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Import Preferences">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restore Defaults">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Open links that open in a new window in:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Open links from other applications in:">
@@ -176,6 +177,7 @@
 <!ENTITY minWidth.label "Tab Width:">
 <!ENTITY widthTo.label "to">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Tab width fits to tab title">
 <!ENTITY bookastitle.label "Use bookmark name as tab title">
 <!-- LOCALIZATION NOTE:
@@ -247,6 +249,7 @@
 <!ENTITY context.tab "Tab Context Menu">
 <!ENTITY context.main "Main Context Menu">
 <!ENTITY context.tools "Tools Menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Show in Tab Context Menu">
 <!ENTITY showContentAreaContext.label "Show in Main Context Menu">
 <!ENTITY showToolsMenu.label "Show in Tools Menu">

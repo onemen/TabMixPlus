@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "marca les pestanyes com a pendents de llegir en tornar a carregar">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Altres pestanyes">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negreta">

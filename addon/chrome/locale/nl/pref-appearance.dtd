@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "RGB weergeven">
 <!ENTITY unreadAfterReload.label "Tabblad als ongelezen instellen na herladen">
 <!ENTITY squaredTabs.label "Achtergrondkleur voor vierkante tabbladen toepassen">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Overige tabbladen">
 <!ENTITY italic.label "Cursief">
 <!ENTITY bold.label "Vet">

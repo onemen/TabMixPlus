@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "顯示 RGB">
 <!ENTITY unreadAfterReload.label "重新載入後將分頁設定為未讀取">
 <!ENTITY squaredTabs.label "將背景顏色套用到方形分頁標籤">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">
 <!ENTITY bold.label "粗體">

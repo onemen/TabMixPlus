@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Beállítások importálása">
 <!ENTITY settings.sync "Sync beállítások">
 <!ENTITY settings.default "Alapállapot">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
 <!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">
 <!ENTITY externalLinkTarget.label "Más programból a linket nyissa meg:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Szélesség (30~250) minimum:">
 <!ENTITY widthTo.label "maximum:">
 <!ENTITY widthPixels.label "képpont">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Lap optimális kitöltése">
 <!ENTITY bookastitle.label "Könyvjelző nevének felhasználása a lap neveként">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Lap helyi menü">
 <!ENTITY context.main "Fő helyi menü">
 <!ENTITY context.tools "Eszközök menü">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Lapok eszköztáron megjelenő menü:">
 <!ENTITY showContentAreaContext.label "Weboldal-területen megjelenő menü:">
 <!ENTITY showToolsMenu.label "Megjelenítés az Eszközök menüben">

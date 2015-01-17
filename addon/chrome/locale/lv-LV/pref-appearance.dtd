@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Rādīt RGB">
 <!ENTITY unreadAfterReload.label "pēc pārlādēšanas iestatīt cilni kā nelasītu">
 <!ENTITY squaredTabs.label "Pielietot fona krāsu kvadrātveida cilnēm">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Citas cilnes">
 <!ENTITY italic.label "Slīpraksts">
 <!ENTITY bold.label "Treknraksts">

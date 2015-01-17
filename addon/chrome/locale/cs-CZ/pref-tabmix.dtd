@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importovat nastavení">
 <!ENTITY settings.sync "Synchronizovat nastavení">
 <!ENTITY settings.default "Obnovit výchozí nastavení">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevřít do:">
 <!ENTITY externalLink.useSeparate.label "Použít vlastní nastavení pro odkazy z jiných aplikací">
 <!ENTITY externalLinkTarget.label "Odkazy jiných aplikací otevřít do:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Šířka panelu:">
 <!ENTITY widthTo.label "až">
 <!ENTITY widthPixels.label "pixelů">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Panely jsou široké podle svého obsahu">
 <!ENTITY bookastitle.label "Použít jméno záložky jako název panelu">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Místní nabídka panelů">
 <!ENTITY context.main "Hlavní místní nabídka">
 <!ENTITY context.tools "Nabídka Nástroje">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Zobrazit v místní nabídce panelu">
 <!ENTITY showContentAreaContext.label "Zobrazit v hlavní místní nabídce">
 <!ENTITY showToolsMenu.label "Zobrazit v nabídce Nástroje">

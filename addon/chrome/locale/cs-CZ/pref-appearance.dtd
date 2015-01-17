@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Zobrazit RGB">
 <!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
 <!ENTITY squaredTabs.label "Použít barvu pozadí na čtvercové panely">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučně">

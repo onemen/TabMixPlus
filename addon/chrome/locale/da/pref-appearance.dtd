@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Andre faneblade">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fed">

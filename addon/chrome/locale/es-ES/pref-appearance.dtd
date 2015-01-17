@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Mostrar RGB">
 <!ENTITY unreadAfterReload.label "establecer como no leída tras recargar">
 <!ENTITY squaredTabs.label "Aplicar color de fondo a pestañas cuadradas">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Otras pestañas">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negrita">

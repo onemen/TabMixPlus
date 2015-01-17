@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importovanie nastavení">
 <!ENTITY settings.sync "Nastavenia Synch">
 <!ENTITY settings.default "Pôvodné nastavenie">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Odkazy otvárajúce nové okno otvoriť do:">
 <!ENTITY externalLink.useSeparate.label "Použiť rozdielne nastavenia pre odkazy z iných aplikácií">
 <!ENTITY externalLinkTarget.label "Otvoriť odkazy iných aplikácií do:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Šírka kariet:">
 <!ENTITY widthTo.label "až">
 <!ENTITY widthPixels.label "pixelov">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Karty sú široké podľa svojho obsahu">
 <!ENTITY bookastitle.label "Použiť názov záložky ako názov karty">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Panel Kontextová ponuka">
 <!ENTITY context.main "Hlavná kontextová ponuka">
 <!ENTITY context.tools "Nástroje">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Zobraziť v panel Kontextová ponuka:">
 <!ENTITY showContentAreaContext.label "Zobraziť v Hlavná kontextová ponuka:">
 <!ENTITY showToolsMenu.label "Zobraziť v Nástroje:">

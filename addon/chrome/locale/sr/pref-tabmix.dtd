@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Увези подешавања">
 <!ENTITY settings.sync "Подешавања усклађивања">
 <!ENTITY settings.default "Врати подразумеване вредности">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Везе који се иначе отварају у новом прозору отварај у:">
 <!ENTITY externalLink.useSeparate.label "Користи посебне поставке за везе из других програма">
 <!ENTITY externalLinkTarget.label "Везе из других апликација отварај у:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Ширина картице:">
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Ширина картице је пропорционална наслову картице">
 <!ENTITY bookastitle.label "Користи име обележивача као наслов картице">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Садржајни мени картице">
 <!ENTITY context.main "Главни садржајни мени">
 <!ENTITY context.tools "Мени алатки">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Прикажи у садржајном менију картице:">
 <!ENTITY showContentAreaContext.label "Прикажи у главном садржајном менију:">
 <!ENTITY showToolsMenu.label "Прикажи у менију алатки:">

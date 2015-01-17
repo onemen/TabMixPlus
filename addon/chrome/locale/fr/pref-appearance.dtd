@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Afficher codes RVB">
 <!ENTITY unreadAfterReload.label "Marquer l'onglet comme non lu après rechargement">
 <!ENTITY squaredTabs.label "Appliquer la couleur d'arrière-plan sur les onglets rectangulaires">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Autres onglets">
 <!ENTITY italic.label "Italique">
 <!ENTITY bold.label "Gras">

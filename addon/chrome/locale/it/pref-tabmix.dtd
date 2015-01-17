@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importale da file txt">
 <!ENTITY settings.sync "Sincronizzale con Firefox Sync">
 <!ENTITY settings.default "Ripristina predefinite">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
 <!ENTITY externalLink.useSeparate.label "Utilizza impostazioni distinte per i link provenienti da altre applicazioni">
 <!ENTITY externalLinkTarget.label "Forza i link provenienti da altre applicazioni ad aprirsi:">
@@ -169,6 +170,7 @@
           change this only if you need to change the width 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -179,10 +181,12 @@
 <!ENTITY minWidth.label "Larghezza cartellino delle schede (da 22 a 1000). Da">
 <!ENTITY widthTo.label "a">
 <!ENTITY widthPixels.label "pixel">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 -->
@@ -253,6 +257,7 @@
 <!ENTITY context.tab "Contestuale schede">
 <!ENTITY context.main "Contestuale pagine web">
 <!ENTITY context.tools "&apos;Strumenti&apos; del browser">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Elementi da visualizzare nel menu contestuale della barra delle schede">
 <!ENTITY showContentAreaContext.label "Elementi da visualizzare nel menu contestuale delle pagine web">
 <!ENTITY showToolsMenu.label "Elementi da visualizzare nel menu &apos;Strumenti&apos; di Firefox">
@@ -302,7 +307,7 @@
 <!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
 <!ENTITY sm.restore.bypassCache "Bypassa la cache">
 <!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Ripristina le schede applicazione dell'ultima sessione">
 <!ENTITY sm.preserve.options "Dati da preservare per le schede">
 <!ENTITY sm.preserve.history "Cronologia">
 <!ENTITY sm.preserve.protect "Stato &apos;protetto&apos;">

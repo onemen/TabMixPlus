@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importa els paràmetres">
 <!ENTITY settings.sync "Sincronitza les preferències">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
 <!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d'altres aplicacions">
 <!ENTITY externalLinkTarget.label "Obre els enllaços des d'altres aplicacions en:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Amplada de les pestanyes:">
 <!ENTITY widthTo.label "a">
 <!ENTITY widthPixels.label "píxels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Ajusta l'amplada al títol de la pestanya">
 <!ENTITY bookastitle.label "Utilitza el nom de l'adreça d'interès com a títol de la pestanya">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Menú contextual de la pestanya">
 <!ENTITY context.main "Menú contextual principal">
 <!ENTITY context.tools "Menú Eines">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Mostra al menú contextual de la pestanya:">
 <!ENTITY showContentAreaContext.label "Mostra al menú contextual principal">
 <!ENTITY showToolsMenu.label "Mostra al menú Eines:">

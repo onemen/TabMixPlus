@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Nhập các Thiết lập">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Khôi phục Mặc định">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Mở liên kết vốn sẽ được mở trong một cửa sổ mới trong:">
 <!ENTITY externalLink.useSeparate.label "Sử dụng thiết đặt riêng cho các liên kết từ các ứng dụng khác">
 <!ENTITY externalLinkTarget.label "Mở liên kết từ chương trình khác trong:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Độ rộng Thẻ:">
 <!ENTITY widthTo.label "tới">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Độ rộng thẻ vừa khít với tiêu đề thẻ">
 <!ENTITY bookastitle.label "Sử dụng tên trang đánh dấu như là tiêu đề thẻ">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Trình đơn Ngữ cảnh của Thẻ">
 <!ENTITY context.main "Trình đơn Ngữ cảnh Chính">
 <!ENTITY context.tools "Trình đơn Công cụ">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Hiện trong Trình đơn Ngữ cảnh của Thẻ">
 <!ENTITY showContentAreaContext.label "Hiện trong Trình đơn Ngữ cảnh Chính">
 <!ENTITY showToolsMenu.label "Hiện trong Trình đơn Công cụ">

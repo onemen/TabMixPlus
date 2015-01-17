@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importar predisposiciones">
 <!ENTITY settings.sync "Sincronizar preferencias">
 <!ENTITY settings.default "Restaurar predeterminadas">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
 <!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">
 <!ENTITY externalLinkTarget.label "Abrir enlaces de otros programas en:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Ancho de:">
 <!ENTITY widthTo.label "hasta">
 <!ENTITY widthPixels.label "píxeles">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Ajustar ancho pestaña al título">
 <!ENTITY bookastitle.label "Usar nombre marcador como título de pestaña">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Menú contextual de pestañas">
 <!ENTITY context.main "Menú contextual principal">
 <!ENTITY context.tools "Menú herramientas">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Mostrar en menú contextual de pestañas:">
 <!ENTITY showContentAreaContext.label "Mostrar en menú contextual principal:">
 <!ENTITY showToolsMenu.label "Mostrar en menú Herramientas:">

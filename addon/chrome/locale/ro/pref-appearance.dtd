@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Afișează modelul cromatic">
 <!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
 <!ENTITY squaredTabs.label "Aplică culoarea de fundal filelor rectangulare">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">
 <!ENTITY bold.label "Aldin">

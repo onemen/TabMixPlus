@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Enkele snelkoppelingen zijn door andere opdrachten in gebruik">
 <!ENTITY shortcuts.showDetails "Details weergeven">
 <!ENTITY shortcuts.hideDetails "Details verbergen">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Doorlopende weergave tabbladen schakelen">
 <!ENTITY shortcuts.toggleFLST "Focus na sluiten huidige tabblad schakelen">
 <!ENTITY shortcuts.toggleFLST.tooltip "schakelen tussen focus naar rechts of laatst geselecteerde tabblad">

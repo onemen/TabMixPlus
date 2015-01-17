@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Ayarları dosyadan al">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Varsayılanlara dön">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Yeni pencerede açılacak bağlatıları burada aç:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Diğer uygulamalardan bağlantıları burada aç:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Sekme genişliği:">
 <!ENTITY widthTo.label "ile">
 <!ENTITY widthPixels.label "piksel">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Sekme genişliği başlığına uysun">
 <!ENTITY bookastitle.label "Yer imi ismini sekme başlığı olarak kullan">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Sekme Açılır Menüsü">
 <!ENTITY context.main "Ana Açılır Menü">
 <!ENTITY context.tools "Araçlar Menüsü">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Sekme açılır menüsünde göster:">
 <!ENTITY showContentAreaContext.label "Ana açılır menüde göster:">
 <!ENTITY showToolsMenu.label "Araçlar menüsünde göster:">

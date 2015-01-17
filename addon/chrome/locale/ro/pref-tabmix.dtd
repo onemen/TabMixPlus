@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importă…">
 <!ENTITY settings.sync "Sincronizează opțiunile">
 <!ENTITY settings.default "Inițializează…">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Se deschid legăturile cu deschidere într-o fereastră nouă în:">
 <!ENTITY externalLink.useSeparate.label "Se folosesc opțiuni separate pentru legăturile din alte aplicații">
 <!ENTITY externalLinkTarget.label "Se deschid legăturile din alte aplicații în:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Lungime filă:  de la">
 <!ENTITY widthTo.label "la">
 <!ENTITY widthPixels.label "pixeli">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Se adaptează lungimea filei la lungimea titlului ei">
 <!ENTITY bookastitle.label "Se folosește denumirea semnului de carte ca titlu al filei">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Meniu contextual filă">
 <!ENTITY context.main "Meniu contextual principal">
 <!ENTITY context.tools "Meniu Unelte">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Comenzi afișate în meniul contextual al filei:">
 <!ENTITY showContentAreaContext.label "Comenzi afișate în meniul contextual principal:">
 <!ENTITY showToolsMenu.label "Elemente afișate în meniul Unelte:">

@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Näita RGB-mudeli osavärve">
 <!ENTITY unreadAfterReload.label "pärast uuestilaadimist muuda kaart lugemata kaardiks">
 <!ENTITY squaredTabs.label "Rakenda taustavärvi kandilistele kaartidele">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Teised kaardid">
 <!ENTITY italic.label "Kaldkiri">
 <!ENTITY bold.label "Paks">

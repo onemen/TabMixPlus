@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Algunos de sus atajos los usan otros comandos">
 <!ENTITY shortcuts.showDetails "Mostrar detalles">
 <!ENTITY shortcuts.hideDetails "Ocultar detalles">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Conmutar barra de pestañas">
 <!ENTITY shortcuts.toggleFLST "Conmutar foco tras cerrar pestaña actual">
 <!ENTITY shortcuts.toggleFLST.tooltip "conmutar foco en pestaña derecha o en última seleccionada">

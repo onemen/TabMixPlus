@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "بعض الاختصارات قيد الاستخدام من قِبَل أوامر أخرى">
 <!ENTITY shortcuts.showDetails "عرض التفاصيل">
 <!ENTITY shortcuts.hideDetails "إخفاء التفاصيل">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Toggle tabs slideshow">
 <!ENTITY shortcuts.toggleFLST "Toggle focus after closing current tab">
 <!ENTITY shortcuts.toggleFLST.tooltip "toggle between focusing to the right or last selected tab">

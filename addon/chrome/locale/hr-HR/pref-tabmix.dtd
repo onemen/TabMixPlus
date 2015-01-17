@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Uvezi postavke">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Vrati zadano">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Otvori poveznice koje se otvaraju u novom prozoru u:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Otvori poveznice iz drugih programa u:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Širina kartice:">
 <!ENTITY widthTo.label "sa">
 <!ENTITY widthPixels.label "piksela">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Širina kartice se prilagođava širini naslova kartice">
 <!ENTITY bookastitle.label "Koristi naziv iz zabilješki kao naslov kartice">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Kontekstni izbornik kartice">
 <!ENTITY context.main "Glavni kontekstni izbornik">
 <!ENTITY context.tools "Izbornik alata">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Prikaži u kontekstnom izborniku kartice:">
 <!ENTITY showContentAreaContext.label "Prikaži u glavnom kontekstnom izborniku:">
 <!ENTITY showToolsMenu.label "Prikaži u izborniku alata:">

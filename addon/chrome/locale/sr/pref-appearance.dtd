@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Прикажи RGB">
 <!ENTITY unreadAfterReload.label "означи картицу као непрочитану након поновног учитавања">
 <!ENTITY squaredTabs.label "Примени боју позадине за квадратне картице">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Остале картице">
 <!ENTITY italic.label "Искошено">
 <!ENTITY bold.label "Подебљано">

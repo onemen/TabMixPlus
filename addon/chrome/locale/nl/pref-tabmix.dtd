@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Instellingen importeren">
 <!ENTITY settings.sync "Sync-voorkeuren">
 <!ENTITY settings.default "Standaardwaarden herstellen">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
 <!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">
 <!ENTITY externalLinkTarget.label "Koppelingen vanuit andere programma’s openen in:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Breedte:">
 <!ENTITY widthTo.label "tot">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Tabbladbreedte aanpassen aan titellengte">
 <!ENTITY bookastitle.label "Bladwijzernaam als tabbladtitel gebruiken">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Tabbladcontextmenu">
 <!ENTITY context.main "Hoofdcontextmenu">
 <!ENTITY context.tools "Menu Extra">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "In tabbladcontextmenu weergeven:">
 <!ENTITY showContentAreaContext.label "In hoofdcontextmenu weergeven:">
 <!ENTITY showToolsMenu.label "In het menu Extra weergeven:">

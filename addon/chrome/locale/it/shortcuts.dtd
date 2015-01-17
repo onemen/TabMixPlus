@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Alcune scorciatoie da tastiera vengono utilizzate da altri comandi">
 <!ENTITY shortcuts.showDetails "Mostra i dettagli">
 <!ENTITY shortcuts.hideDetails "Nascondi i dettagli">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Attiva/disattiva la rotazione delle schede">
 <!ENTITY shortcuts.toggleFLST "Attiva/disattiva il portar in primo piano dopo la chiusura della scheda attuale">
 <!ENTITY shortcuts.toggleFLST.tooltip "Attiva/disattiva il portar in primo piano scheda a destra / ultima selezionata">

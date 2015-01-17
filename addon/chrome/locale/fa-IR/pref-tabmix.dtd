@@ -10,6 +10,7 @@
 <!ENTITY settings.import "ایمپورت تنظیمات">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "بازگردانی پیشفرض ها">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "لینک هایی را که در پنجره جدید باز می شوند را باز کن در">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "لینک سایر برنامه ها را باز کن در">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "عرض:">
 <!ENTITY widthTo.label "در">
 <!ENTITY widthPixels.label "پیکسل">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "عرض تب با اندازه عنوان تب متناسب شود">
 <!ENTITY bookastitle.label "از نام نشانه گذاری شده برای عنوان تب استفاده کن">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "منو">
 <!ENTITY context.main "منو اصلی کلیک راست">
 <!ENTITY context.tools "منوی ابزارها">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "نمایش در کلیک راست روی تب">
 <!ENTITY showContentAreaContext.label "نمایش در منو اصلی کلیک راست">
 <!ENTITY showToolsMenu.label "نمایش در منوی ابزارها:">

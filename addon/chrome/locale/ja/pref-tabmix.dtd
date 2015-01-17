@@ -10,6 +10,7 @@
 <!ENTITY settings.import "設定をインポート">
 <!ENTITY settings.sync "Sync 設定">
 <!ENTITY settings.default "既定値に戻す">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "[新しいウィンドウに開く] リンクの開く場所:">
 <!ENTITY externalLink.useSeparate.label "他のアプリケーションから開くリンクは以下の設定を適用">
 <!ENTITY externalLinkTarget.label "外部から読み込まれたリンクを開く場所:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "タブ幅:">
 <!ENTITY widthTo.label "から">
 <!ENTITY widthPixels.label "ピクセル">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "タブ幅をページタイトルの長さに合わせて調節する">
 <!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "タブのコンテキストメニュー">
 <!ENTITY context.main "ページのコンテキストメニュー">
 <!ENTITY context.tools "[ツール] メニュー">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "タブのコンテキストメニューに表示する項目:">
 <!ENTITY showContentAreaContext.label "ページのコンテキストメニューに表示する項目:">
 <!ENTITY showToolsMenu.label "[ツール] メニューに表示する項目:">
