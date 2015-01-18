@@ -144,15 +144,19 @@ var PlacesUtilsInternal = {
     }
 
     Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeWithEvent")._replace(
-      /whereToOpenLink\(aEvent[,\s\w]*\), window/, '$&, aEvent'
+      /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
     ).toCode();
 
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
     Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
-      /(function[^\(]*\([^\)]+)(\))/,
-      '$1, TMP_Event$2' /* event argument exist when this function called from openNodeWithEvent */
+      '{', '$&\n' +
+      '    var TMP_Event;\n' +
+      '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
+      '      aWhere = aWhere.where;\n' +
+      '      TMP_Event = aWhere.event;\n' +
+      '    }\n'
     )._replace(
       'aWindow.openUILinkIn',
       'let browserWindow = this._getTopBrowserWin();\n' +

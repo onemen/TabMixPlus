@@ -52,7 +52,7 @@ var TMP_Sage = {
       var _open = document.getElementById("rssOpenItem");
       var _openInWindow = document.getElementById("rssOpenNewWindowItem");
       var _openInTab = document.getElementById("rssOpenNewTabItem");
-      TMP_Places.contextMenu.update(_open, _openInWindow, _openInTab, this.openTabPref);
+      TMP_Places.contextMenu.update(_open, _openInWindow, {hidden: true}, _openInTab, this.openTabPref);
    },
 
    get openTabPref() {
