@@ -666,7 +666,7 @@ TMP_Places.contextMenu = {
       if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true))
         openInPrivateWindow.hidden = true;
 
-      if (!openInWindow.hidden && w.Tabmix.singleWindowMode)
+      if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false))
         openInWindow.hidden = true;
       else if (openInWindow.hasAttribute("default"))
         openInWindow.removeAttribute("default");
