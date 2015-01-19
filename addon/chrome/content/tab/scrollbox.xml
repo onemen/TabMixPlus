@@ -359,7 +359,6 @@
           if (this.orient == "vertical")
             return;
 
-          var tabBar = document.getBindingParent(this);
           Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           let tabs = this._getScrollableElements();
           if (!tabs.length)
@@ -372,6 +371,7 @@
             // is on the next row
             Tabmix.tabsUtils.disAllowNewtabbutton = false;
             this.orient = "vertical";
+            let tabBar = document.getBindingParent(this);
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
             if (Tabmix.tabsUtils.updateVerticalTabStrip() == null)
@@ -400,11 +400,10 @@
 
           this.firstVisibleRow = firstVisibleRow;
 
-          let tabBar = document.getBindingParent(this);
 ///XXX check if we can set the margin with animation when we scroll
           let end = Tabmix.ltr ? "right": "left";
           let containerEnd = this.scrollClientRect[end];
-          let top = Tabmix.tabsUtils.topTabY;
+          let topY = Tabmix.tabsUtils.topTabY;
           let tabs = this._getScrollableElements();
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
@@ -413,7 +412,7 @@
               tab.removeAttribute("tabmix-firstTabInRow");
               continue;
             }
-            let row = tabBar.getTabRowNumber(tab, top);
+            let row = Tabmix.tabsUtils.getTabRowNumber(tab, topY);
             if (row > current) {
               current = row;
               if (!tab.hasAttribute("tabmix-firstTabInRow"))
@@ -445,7 +444,7 @@
           // if a smoothScroll is in progress call ensureElementIsVisible again
           // the amountToScroll changed when we changed firstTabInRow
           if (this._scrollTarget)
-            this.ensureElementIsVisible(this._scrollTarget, true)
+            this.ensureElementIsVisible(this._scrollTarget, true);
         ]]></body>
       </method>
 
