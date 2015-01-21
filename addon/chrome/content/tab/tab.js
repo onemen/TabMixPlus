@@ -1306,7 +1306,10 @@ var gTMPprefObserver = {
         break;
       case "extensions.tabmix.tabs.closeButtons.onLeft":
       case "extensions.classicthemerestorer.closeonleft":
-        if (Tabmix.extensions.ctr) {
+        // let Classic theme restorer control close tab button placement when
+        // the default theme is in use.
+        if (Tabmix.extensions.ctr &&
+            Services.prefs.getCharPref("general.skins.selectedSkin") == "classic/1.0") {
           let otherPref = prefName == "extensions.tabmix.tabs.closeButtons.onLeft" ?
                                       "extensions.classicthemerestorer.closeonleft" :
                                       "extensions.tabmix.tabs.closeButtons.onLeft";
