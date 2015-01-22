@@ -1104,12 +1104,8 @@ var TMP_eventListener = {
 
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
       let node = document.getAnonymousElementByAttribute(aTab, aGetAtt, aGetValue);
-      if (node)
-        node.setAttribute(aAtt, aValue);
+      Tabmix.setItem(node, aAtt, aValue);
     }
-
-    aTab.setAttribute("context", gBrowser.tabContextMenu.id);
-
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
   }
