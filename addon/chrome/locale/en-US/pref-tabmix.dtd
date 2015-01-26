@@ -132,7 +132,7 @@
 <!ENTITY tabBarSpace.label "Extra spaces on both sides">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
 <!ENTITY tabbar.label "Hide tab bar when only one tab is open">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly (applies only when tabs are in single row)">
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
