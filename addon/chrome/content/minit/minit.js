@@ -127,28 +127,43 @@ var TMP_tabDNDObserver = {
 
     let dt = event.dataTransfer;
     dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
-    let uri = gBrowser.getBrowserForTab(tab).currentURI;
-    let spec = uri ? uri.spec : "about:blank";
+    let browser = tab.linkedBrowser;
 
     // We must not set text/x-moz-url or text/plain data here,
     // otherwise trying to deatch the tab by dropping it on the desktop
     // may result in an "internet shortcut"
-    dt.mozSetDataAt("text/x-moz-text-internal", spec, 0);
+    dt.mozSetDataAt("text/x-moz-text-internal", browser.currentURI.spec, 0);
 
     // Set the cursor to an arrow during tab drags.
     dt.mozCursor = "default";
 
-    let canvas = tabPreviews.capture(tab, false);
-    let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37;
-    dt.setDragImage(canvas, 0, offset);
+    // Create a canvas to which we capture the current tab.
+    // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
+    // canvas size (in CSS pixels) to the window's backing resolution in order
+    // to get a full-resolution drag image for use on HiDPI displays.
+    let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
+    let scale = !Tabmix.isVersion(180) ? 1 :
+                windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
+    let canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+    canvas.mozOpaque = true;
+    canvas.width = 160 * scale;
+    canvas.height = 90 * scale;
+    if (!Tabmix.isVersion(340) || !gMultiProcessBrowser) {
+      // Bug 863512 - Make page thumbnails work in e10s
+      let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
+      PageThumbs.captureToCanvas(elm, canvas);
+    }
+    let offset = (TabmixTabbar.visibleRows == 1 ? -16 : -30) * scale;
+    if (TabmixTabbar.position == 1)
+      offset = canvas.height - offset;
+    dt.setDragImage(canvas, -16 * scale, offset);
 
     // _dragData.offsetX/Y give the coordinates that the mouse should be
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
     let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) -
-                      clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
+    let tabOffsetX = clientX(tab) - clientX(gBrowser.tabContainer);
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
       offsetY: event.screenY - window.screenY
