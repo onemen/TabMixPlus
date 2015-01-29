@@ -695,12 +695,12 @@ var TMP_tabDNDObserver = {
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
         let addOnBar = document.getElementById("addon-bar");
-        fixMargin = newMarginY === 0 &&
-              (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed);
+        fixMargin = (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed) &&
+          (Math.abs(newMarginY) < 0.5);
       }
       else {
         newMarginY = tabRect.bottom - rect.bottom;
-        fixMargin = newMarginY === 0 && this.onLastToolbar;
+        fixMargin = this.onLastToolbar && (Math.abs(newMarginY) < 0.5);
       }
       // make indicator visible
       if (fixMargin)
