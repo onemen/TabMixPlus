@@ -65,8 +65,6 @@ var TMP_LastTab = {
       browser.addEventListener("keydown", this, true);
       browser.addEventListener("keypress", this, true);
       browser.addEventListener("keyup", this, true);
-      this.TabList.addEventListener("DOMMenuItemActive", this, true);
-      this.TabList.addEventListener("DOMMenuItemInactive", this, true);
 
       // if session manager select other tab then the first one we need to build
       // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -87,8 +85,6 @@ var TMP_LastTab = {
       browser.removeEventListener("keydown", this, true);
       browser.removeEventListener("keypress", this, true);
       browser.removeEventListener("keyup", this, true);
-      this.TabList.removeEventListener("DOMMenuItemActive", this, true);
-      this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
    },
 
    handleEvent : function(event) {
@@ -279,14 +275,21 @@ var TMP_LastTab = {
       this._tabs = null;
    },
 
-   OnMenuCommand : function _LastTab_OnMenuCommand(event) {
+   onMenuCommand : function(event) {
       if(this.respondToMouseInTabList) {
          TabmixAllTabs._tabSelectedFromList(event.target.tab);
          this.PushSelectedTab();
       }
    },
 
-   OnPopupHidden : function() {
+   onPopupshowing : function() {
+      this.TabList.addEventListener("DOMMenuItemActive", this, true);
+      this.TabList.addEventListener("DOMMenuItemInactive", this, true);
+   },
+
+   onPopuphidden : function() {
+      this.TabList.removeEventListener("DOMMenuItemActive", this, true);
+      this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
       if(!this.SuppressTabListReset) {
          var tablist = this.TabList;
 

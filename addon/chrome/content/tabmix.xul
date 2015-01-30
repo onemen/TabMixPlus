@@ -362,8 +362,9 @@
       </menupopup>
       <!-- menupopup for lasttab -->
       <menupopup id="lasttabTabList" ignorekeys="true" flex="1"
-                  oncommand="TMP_LastTab.OnMenuCommand(event);"
-                  onpopuphidden="TMP_LastTab.OnPopupHidden();" />
+                 oncommand="TMP_LastTab.onMenuCommand(event);"
+                 onpopupshowing="TMP_LastTab.onPopupshowing();"
+                 onpopuphidden="TMP_LastTab.onPopuphidden();" />
       <menupopup id="tabslist"
                  oncommand="TabmixAllTabs._tabsListOncommand(event);"
                  onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
