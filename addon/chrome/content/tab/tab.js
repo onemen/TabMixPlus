@@ -1649,6 +1649,10 @@ var gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    /* tab-icon-overlay added by Bug 1112304, Firefox 38+ */
+    if (!Tabmix.isVersion(380))
+      this.insertRule('.tab-icon-overlay {display: none;}');
+
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
