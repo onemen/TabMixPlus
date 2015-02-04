@@ -2,18 +2,18 @@
 <!ENTITY currentTab.label "Pestanya actual">
 <!ENTITY unloadedTabs.label "Pestanyes no carregades">
 <!ENTITY unreadTab.label "Pestanyes pendents de llegir">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
+<!ENTITY hideRGB.label "Amaga RGB">
+<!ENTITY showRGB.label "Mostra RGB">
 <!ENTITY unreadAfterReload.label "marca les pestanyes com a pendents de llegir en tornar a carregar">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY squaredTabs.label "Aplica el color de fons en les pestanyes quadrades">
+<!ENTITY backgroundDisabled.label "Els colors de fons de les pestanyes estan desactivats si teniu instal·lat el TreeStyleTabs">
 <!ENTITY otherTabs.label "Altres pestanyes">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negreta">
 <!ENTITY underline.label "Subratllat">
 <!ENTITY textcolor.label "Color del text">
 <!ENTITY bgColor.label "Color de fons">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY bgTopColor.label "superior">
+<!ENTITY bgBottomColor.label "inferior">
 <!ENTITY useThis.label "utilitza aquest estil per a">
 <!ENTITY opacity.label "opacitat">

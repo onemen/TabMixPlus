@@ -6,7 +6,7 @@
 <!ENTITY showRGB.label "显示 RGB">
 <!ENTITY unreadAfterReload.label "重新载入标签页后将其设为未读">
 <!ENTITY squaredTabs.label "背景颜色应用到方形标签页">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY backgroundDisabled.label "标签页背景色在安装有 TreeStyleTabs 时会被禁用">
 <!ENTITY otherTabs.label "其他标签页">
 <!ENTITY italic.label "斜体">
 <!ENTITY bold.label "加粗">

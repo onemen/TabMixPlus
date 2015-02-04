@@ -10,7 +10,7 @@
 <!ENTITY settings.import "匯入設定值">
 <!ENTITY settings.sync "同步設定值">
 <!ENTITY settings.default "還原預設值">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "還原">
 <!ENTITY generalWindowOpen.label "將開啟新視窗的鏈結開啟於：">
 <!ENTITY externalLink.useSeparate.label "外部程序啟動的鏈結使用不同的設定">
 <!ENTITY externalLinkTarget.label "外部程序啟動的鏈結開啟於：">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "分頁標籤寬度：">
 <!ENTITY widthTo.label "至">
 <!ENTITY widthPixels.label "像素">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "在目前的主題下無法將按鈕置於左側">
 <!ENTITY flexTabs.label "分頁標籤寬度配合標題文字長度">
 <!ENTITY bookastitle.label "使用書籤名稱做為分頁標題">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "分頁標籤選單">
 <!ENTITY context.main "視窗頁面選單">
 <!ENTITY context.tools "工具選單">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "在分頁標籤列顯示分頁標籤選單">
 <!ENTITY showtabBarContext.label "在分頁標籤右鍵選單中的內容">
 <!ENTITY showContentAreaContext.label "在視窗頁面右鍵選單中的內容">
 <!ENTITY showToolsMenu.label "在主功能表工具選單中的內容">

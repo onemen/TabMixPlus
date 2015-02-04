@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importar Configurações">
 <!ENTITY settings.sync "Preferências de sincronização">
 <!ENTITY settings.default "Restaurar Padrões">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Reverter">
 <!ENTITY generalWindowOpen.label "Abrir links que abrem novas janelas em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferência separada para links de outros aplicativos">
 <!ENTITY externalLinkTarget.label "Abrir links de outros aplicativos em:">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "Tamanho da aba">
 <!ENTITY widthTo.label "para">
 <!ENTITY widthPixels.label "pixels">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "Can&apos;t colocará o botão do lado esquerdo com o tema atual">
 <!ENTITY flexTabs.label "Abas flexíveis">
 <!ENTITY bookastitle.label "Usar nome do Favorito como título da aba">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "Menu de Contexto da Aba">
 <!ENTITY context.main "Menu de Contexto Principal">
 <!ENTITY context.tools "Menu &quot;Ferramentas&quot;">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "Mostrar Menu de contexto da aba na barra de abas">
 <!ENTITY showtabBarContext.label "Mostrar no Menu de Contexto da Aba:">
 <!ENTITY showContentAreaContext.label "Mostrar no Menu de Contexto Principal:">
 <!ENTITY showToolsMenu.label "Mostrar no Menu &quot;Ferramentas&quot;:">

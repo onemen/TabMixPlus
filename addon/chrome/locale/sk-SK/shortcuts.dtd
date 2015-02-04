@@ -5,7 +5,7 @@
 <!ENTITY shortcuts.warning "Niektoré z vašich skratiek sú používané inými príkazmi">
 <!ENTITY shortcuts.showDetails "Zobraziť podrobnosti">
 <!ENTITY shortcuts.hideDetails "Skryť podrobnosti">
-<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.switchToLast "Prepnúť na poslednú aktívnu kartu">
 <!ENTITY shortcuts.slideshow "Prepnúť prezentáciu kariet">
 <!ENTITY shortcuts.toggleFLST "Prepnúť zameranie po zatvorení aktuálnej karty">
 <!ENTITY shortcuts.toggleFLST.tooltip "prepínať medzi zameraním napravo alebo naposledy vybratej karty">

@@ -6,7 +6,7 @@
 <!ENTITY showRGB.label "RGB anzeigen">
 <!ENTITY unreadAfterReload.label "Tab nach dem Neu-laden, als ungelesen markieren">
 <!ENTITY squaredTabs.label "Hintergrundfarbe für rechteckige Tabs  anwenden">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY backgroundDisabled.label "Tab Hintergrundfarben sind deaktiviert, wenn TreeStyleTabs Erweiterung installiert ist">
 <!ENTITY otherTabs.label "Andere Tabs">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fett">

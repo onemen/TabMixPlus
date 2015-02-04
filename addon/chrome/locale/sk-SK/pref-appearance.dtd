@@ -6,7 +6,7 @@
 <!ENTITY showRGB.label "Zobraziť RGB">
 <!ENTITY unreadAfterReload.label "po znovu načítaní nastaviť kartu ako neprečítanú">
 <!ENTITY squaredTabs.label "Použiť farbu pozadia pre štvorcové karty">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY backgroundDisabled.label "Farby pozadia kariet sú vypnuté ak je nainštalované TreeStyleTabs">
 <!ENTITY otherTabs.label "Ostatné karty">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučné">

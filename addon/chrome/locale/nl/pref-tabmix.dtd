@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Instellingen importeren">
 <!ENTITY settings.sync "Sync-voorkeuren">
 <!ENTITY settings.default "Standaardwaarden herstellen">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Terugdraaien">
 <!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
 <!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">
 <!ENTITY externalLinkTarget.label "Koppelingen vanuit andere programma’s openen in:">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "Breedte:">
 <!ENTITY widthTo.label "tot">
 <!ENTITY widthPixels.label "pixels">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "Kan met het huidige thema geen knop links plaatsen">
 <!ENTITY flexTabs.label "Tabbladbreedte aanpassen aan titellengte">
 <!ENTITY bookastitle.label "Bladwijzernaam als tabbladtitel gebruiken">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "Tabbladcontextmenu">
 <!ENTITY context.main "Hoofdcontextmenu">
 <!ENTITY context.tools "Menu Extra">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "Tabblad-contextmenu op tabbalk weergeven">
 <!ENTITY showtabBarContext.label "In tabbladcontextmenu weergeven:">
 <!ENTITY showContentAreaContext.label "In hoofdcontextmenu weergeven:">
 <!ENTITY showToolsMenu.label "In het menu Extra weergeven:">
@@ -297,7 +297,7 @@
 <!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
 <!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
 <!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Mijn vastgezetten tabbladen van de laatste keer herstellen">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">
 <!ENTITY sm.preserve.protect "Status beschermen">

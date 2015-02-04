@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Einstellungen importieren…">
 <!ENTITY settings.sync "Einstellungen synchronisieren">
 <!ENTITY settings.default "Standardeinstellungen">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Zurücksetzen">
 <!ENTITY generalWindowOpen.label "Links, die ein neues Fenster erzwingen, öffnen in:">
 <!ENTITY externalLink.useSeparate.label "Für Links aus anderen Anwendungen eigene Einstellungen verwenden">
 <!ENTITY externalLinkTarget.label "Links aus externen Anwendungen öffnen in:">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "Tabs-Breite:">
 <!ENTITY widthTo.label "bis">
 <!ENTITY widthPixels.label "Pixel">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "Schaltfläche kann mit aktuellem Theme, nicht auf der linken Seite positioniert werden.">
 <!ENTITY flexTabs.label "Breite der Tabs flexibel an die Länge des Titels anpassen">
 <!ENTITY bookastitle.label "Namen der Lesezeichen als Tab-Titel verwenden">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "Tab-Kontextmenü">
 <!ENTITY context.main "Hauptkontextmenü">
 <!ENTITY context.tools "Menü &quot;Extras&quot;">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "Tabkontextmenü bei Tableiste anzeigen">
 <!ENTITY showtabBarContext.label "Einträge im Tab-Kontextmenü anzeigen">
 <!ENTITY showContentAreaContext.label "Einträge im Hauptkontextmenü der Seite anzeigen">
 <!ENTITY showToolsMenu.label "Einträge im Menü &quot;Extras&quot; anzeigen">

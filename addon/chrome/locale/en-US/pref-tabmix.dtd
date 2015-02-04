@@ -132,7 +132,7 @@
 <!ENTITY tabBarSpace.label "Extra spaces on both sides">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
 <!ENTITY tabbar.label "Hide tab bar when only one tab is open">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly (applies only when tabs are in single row)">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
@@ -166,8 +166,7 @@
 <!ENTITY showTabX.left "Place on left side">
 <!ENTITY showTabX.rtl "Place on right side">
 <!ENTITY milliseconds.label "msec">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width -->
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "on all">
 <!ENTITY showTabX.current "on current">
@@ -180,8 +179,7 @@
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Tab width fits to tab title">
 <!ENTITY bookastitle.label "Use bookmark name as tab title">
-<!-- LOCALIZATION NOTE:
-          change this only if you need to change the width -->
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
 <!ENTITY toolbar.button.label "Customize">

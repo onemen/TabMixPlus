@@ -5,7 +5,7 @@
 <!ENTITY shortcuts.warning "Неке од ваших наредби се већ користе">
 <!ENTITY shortcuts.showDetails "Прикажи детаље">
 <!ENTITY shortcuts.hideDetails "Сакриј детаље">
-<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.switchToLast "Пређи на последњу активну картицу">
 <!ENTITY shortcuts.slideshow "Почни/заустави пројекцију језичака">
 <!ENTITY shortcuts.toggleFLST "Промени фокус након затварања тренутног језичка">
 <!ENTITY shortcuts.toggleFLST.tooltip "Промени фокусирање на десно или последњи изабрани језичак">

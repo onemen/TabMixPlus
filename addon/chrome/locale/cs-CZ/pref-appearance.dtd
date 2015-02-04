@@ -1,12 +1,12 @@
 <!ENTITY styles.label "Upravit styly">
-<!ENTITY currentTab.label "Současný panel">
+<!ENTITY currentTab.label "Aktuální panel">
 <!ENTITY unloadedTabs.label "Nenačtené panely">
 <!ENTITY unreadTab.label "Nepřečtené panely">
 <!ENTITY hideRGB.label "Skrýt RGB">
 <!ENTITY showRGB.label "Zobrazit RGB">
 <!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
 <!ENTITY squaredTabs.label "Použít barvu pozadí na čtvercové panely">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY backgroundDisabled.label "Pokud je nainstalován doplněk TreeStyleTabs, je barva pozadí panelů zakázána.">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučně">

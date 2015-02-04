@@ -10,7 +10,7 @@
 <!ENTITY settings.import "导入设置">
 <!ENTITY settings.sync "同步首选项">
 <!ENTITY settings.default "恢复默认">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "回退">
 <!ENTITY generalWindowOpen.label "新窗口链接打开于：">
 <!ENTITY externalLink.useSeparate.label "对其他应用程序的链接使用区别的首选项">
 <!ENTITY externalLinkTarget.label "来自其他程序的链接打开于：">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "标签页宽度:">
 <!ENTITY widthTo.label "至">
 <!ENTITY widthPixels.label "像素">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "无法在当前主题下降按钮放置在左侧">
 <!ENTITY flexTabs.label "标签页宽度适合其标题长度">
 <!ENTITY bookastitle.label "使用书签名作为标签页标题">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "标签页右键菜单">
 <!ENTITY context.main "网页右键菜单">
 <!ENTITY context.tools "工具菜单">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "在标签栏显示标签页右键菜单">
 <!ENTITY showtabBarContext.label "在标签页右键菜单显示:">
 <!ENTITY showContentAreaContext.label "在网页右键菜单显示:">
 <!ENTITY showToolsMenu.label "在工具菜单显示:">

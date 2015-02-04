@@ -2,11 +2,11 @@
 <!ENTITY currentTab.label "Filă curentă">
 <!ENTITY unloadedTabs.label "File neîncărcate">
 <!ENTITY unreadTab.label "File nevizualizate">
-<!ENTITY hideRGB.label "Ascunde modelul cromatic">
-<!ENTITY showRGB.label "Afișează modelul cromatic">
+<!ENTITY hideRGB.label "Ascunde profilul cromatic">
+<!ENTITY showRGB.label "Afișează profilul cromatic">
 <!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
 <!ENTITY squaredTabs.label "Aplică culoarea de fundal filelor rectangulare">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
+<!ENTITY backgroundDisabled.label "Culorile de fundal ale filelor sunt indisponibile când extensia „TreeStyleTabs” este instalată">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">
 <!ENTITY bold.label "Aldin">

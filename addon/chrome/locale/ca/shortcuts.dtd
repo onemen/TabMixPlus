@@ -5,7 +5,7 @@
 <!ENTITY shortcuts.warning "Hi ha altres ordres que ja fan servir algunes de les dreceres">
 <!ENTITY shortcuts.showDetails "Mostra els detalls">
 <!ENTITY shortcuts.hideDetails "Oculta els detalls">
-<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.switchToLast "Canvia a l'última pestanya activa">
 <!ENTITY shortcuts.slideshow "Commuta la rotació entre pestanyes">
 <!ENTITY shortcuts.toggleFLST "Canvia el focus en tancar la pestanya actual">
 <!ENTITY shortcuts.toggleFLST.tooltip "canvia entre enfocar la pestanya de la dreta o l'última seleccionada">

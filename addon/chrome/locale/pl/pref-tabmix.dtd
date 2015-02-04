@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importuj ustawienia">
 <!ENTITY settings.sync "Synchronizuj ustawienia">
 <!ENTITY settings.default "Przywróć ustawienia domyślne">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Odwróć">
 <!ENTITY generalWindowOpen.label "Odnośniki otwierające się w oknach otwieraj w">
 <!ENTITY externalLink.useSeparate.label "Używaj oddzielnych ustawień dla odnośników z innych aplikacji">
 <!ENTITY externalLinkTarget.label "Odnośniki z innych aplikacji otwieraj w">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "Szerokość etykiety karty:">
 <!ENTITY widthTo.label "do">
 <!ENTITY widthPixels.label "pikseli">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "W aktualnie używanym motywie nie można umieścić przycisku po lewej stronie">
 <!ENTITY flexTabs.label "Dopasuj szerokość etykiety karty do tytułu">
 <!ENTITY bookastitle.label "Używaj nazwy zakładki jako tytułu karty">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "Menu kontekstowe kart">
 <!ENTITY context.main "Główne menu kontekstowe">
 <!ENTITY context.tools "Menu Narzędzia">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "Wyświetlaj menu kontekstowe kart na pasku kart">
 <!ENTITY showtabBarContext.label "Wyświetlaj w menu kontekstowym kart elementy:">
 <!ENTITY showContentAreaContext.label "Wyświetlaj w głównym menu kontekstowym elementy:">
 <!ENTITY showToolsMenu.label "Wyświetlaj w menu Narzędzia elementy:">

@@ -5,7 +5,7 @@
 <!ENTITY shortcuts.warning "Certains de vos raccourcis sont utilisés par d'autres commandes">
 <!ENTITY shortcuts.showDetails "Afficher les détails">
 <!ENTITY shortcuts.hideDetails "Masquer les détails">
-<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.switchToLast "Revenir au dernier onglet actif">
 <!ENTITY shortcuts.slideshow "Activer/désactiver la rotation des onglets">
 <!ENTITY shortcuts.toggleFLST "Choix de l'onglet sélectionné après la fermeture de l'onglet courant">
 <!ENTITY shortcuts.toggleFLST.tooltip "bascule entre l'onglet de droite ou le dernier onglet sélectionné">
