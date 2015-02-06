@@ -48,7 +48,7 @@ var gAppearancePane = { // jshint ignore:line
     this.setTabCloseButtonUI();
     this.tabsScrollChanged();
 
-    // for locals with long labels
+    // for locales with long labels
     var hbox = $("tabsScroll-box");
     var label = $("tabsScroll.label").boxObject.width;
     var menulist = $("tabsScroll");
