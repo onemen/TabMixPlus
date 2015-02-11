@@ -91,7 +91,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
-    var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
+    var swapOldCode = this.isVersion(380) ?
+        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, tabToOpen);' :
+        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
     var loadOnStartup, swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
       '   window.tabmix_afterTabduplicated = true;' +
