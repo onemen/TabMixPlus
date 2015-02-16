@@ -987,7 +987,7 @@ Tabmix.tabsUtils = {
     let tabstrip = this.tabBar.mTabstrip;
     tabstrip._scrollButtonDown = useTabmixButtons ?
       tabstrip._scrollButtonDownRight :
-      tabstrip._scrollButtonUpLeft || // fall back to original
+      tabstrip._scrollButtonDownLeft || // fall back to original
       document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-down");
     this.tabBar._animateElement = tabstrip._scrollButtonDown;
 
