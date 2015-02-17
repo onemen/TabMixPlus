@@ -31,7 +31,7 @@ var Tabmix = { // jshint ignore:line
   setItem: function(aItemOrId, aAttr, aVal) {
     var elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
-      if (aVal === null) {
+      if (aVal === null || aVal === undefined) {
         elem.removeAttribute(aAttr);
         return;
       }
