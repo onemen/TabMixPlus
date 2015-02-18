@@ -967,16 +967,23 @@ var tablib = {
     };
 
     gBrowser.openLinkWithHistory = function (aTab) {
-      var {target, linkURL} = gContextMenu;
+      var {target, linkURL, principal} = gContextMenu;
       var url = tablib.getValidUrl(aTab, linkURL, target);
       if (!url)
         return;
 
-      var doc = target.ownerDocument;
-      if (typeof gContextMenu._unremotePrincipal == "function")
+      if (Tabmix.isVersion(380))
+        urlSecurityCheck(url, principal);
+      else if (typeof gContextMenu._unremotePrincipal == "function") {
+        // Firefox 26-37
+        let doc = target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
-      else
+      }
+      else {
+        // Firefox 17-25
+        let doc = target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
+      }
 
       this.duplicateTab(aTab, url);
     };
