@@ -639,10 +639,20 @@ var tablib = {
       'where'
     ).toCode();
 
-    Tabmix.changeCode(window, "FillHistoryMenu")._replace(
-      'entry.title',
-      'tablib.menuItemTitle(entry)', {flags: "g"}
-    ).toCode();
+    Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
+    let fillHistoryMenu = function FillHistoryMenu(aParent) {
+      let rv = Tabmix.originalFunctions.FillHistoryMenu.apply(this, arguments);
+      let l = aParent.childNodes.length;
+      for (let i = 0; i < l; i++) {
+        let item = aParent.childNodes[i];
+        let uri = item.getAttribute("uri");
+        let label = item.getAttribute("label");
+        let title = TMP_Places.getTitleFromBookmark(uri, label);
+        Tabmix.setItem(item, "label", title);
+      }
+      return rv;
+    };
+    Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
 
     // Fix for Fast Dial
     if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
@@ -1851,12 +1861,6 @@ var tablib = {
   setURLBarFocus: function TMP_setURLBarFocus() {
     if (gURLBar)
       gURLBar.focus();
-  },
-
-  menuItemTitle: function TMP_menuItemTitle(entry) {
-    if (entry.URI)
-      return TMP_Places.getTitleFromBookmark(entry.URI.spec, entry.title);
-    return entry.title;
   },
 
   reloadTabs: function(tabs, skipTab) {
