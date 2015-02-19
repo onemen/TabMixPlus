@@ -270,6 +270,10 @@ var TMP_eventListener = {
       case "TabAttrModified":
         this.onTabAttrModified(aEvent);
         break;
+      case "SSWindowClosing":
+        window.removeEventListener("SSWindowClosing", this, false);
+        TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
+        break;
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent);
         break;
@@ -444,6 +448,7 @@ var TMP_eventListener = {
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
     window.addEventListener("unload", this, false);
+    window.addEventListener("SSWindowClosing", this, false);
     window.addEventListener("fullscreen", this, true);
 
     if (Tabmix.isVersion(320)) {
@@ -1016,6 +1021,7 @@ var TMP_eventListener = {
 
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this, false);
+    window.removeEventListener("SSWindowClosing", this, false);
 
     // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() === 0;
@@ -1032,7 +1038,7 @@ var TMP_eventListener = {
       });
     }
 
-    TabmixSessionManager.onWindowClose(isLastWindow);
+    TabmixSessionManager.shutDown(true, isLastWindow, true);
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
 
