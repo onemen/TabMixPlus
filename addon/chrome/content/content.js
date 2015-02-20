@@ -29,6 +29,7 @@ let TabmixContentHandler = {
     "Tabmix:resetContentName",
     "Tabmix:sendDOMTitleChanged",
     "Tabmix:updateHistoryTitle",
+    "Tabmix:collectScrollPosition",
   ],
 
   init: function () {
@@ -66,6 +67,11 @@ let TabmixContentHandler = {
       case "Tabmix:updateHistoryTitle":
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
         TabmixUtils.updateHistoryTitle(history, data.title);
+        break;
+      case "Tabmix:collectScrollPosition":
+        let scroll = {scrollX: content.scrollX,
+                      scrollY: content.scrollY};
+        sendAsyncMessage("Tabmix:updateScrollPosition", { scroll: scroll });
         break;
     }
   },

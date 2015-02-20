@@ -2758,9 +2758,15 @@ try{
          return;
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return;
-      var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
-      if (bContent)
-        this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY);
+      if (Tabmix.isVersion(320))
+        aBrowser.messageManager.sendAsyncMessage("Tabmix:collectScrollPosition");
+      else
+        this.updateScrollPosition(aTab, aBrowser.contentWindow);
+   },
+
+   updateScrollPosition: function(tab, scroll) {
+     if (scroll)
+       this.setLiteral(this.getNodeForTab(tab), "scroll", scroll.scrollX + "," + scroll.scrollY);
    },
 
    tabSelected: function(needFlush) {
@@ -3389,6 +3395,7 @@ try{
       browser.stop();
       // reset old history
       let history = browser.webNavigation.sessionHistory;
+///XXX - unsafe CPOW usage
       if (history) {
         if (history.count > 0)
           history.PurgeHistory(history.count);

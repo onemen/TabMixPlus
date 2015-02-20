@@ -8,6 +8,7 @@ const {interfaces: Ci, utils: Cu} = Components;
 const FMM_MESSAGES = [
   "Tabmix:SetSyncHandler",
   "Tabmix:restorePermissionsComplete",
+  "Tabmix:updateScrollPosition",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -41,6 +42,11 @@ this.TabmixUtils = {
         break;
       case "Tabmix:restorePermissionsComplete":
         DocShellCapabilities.update(browser, message.data);
+        break;
+      case "Tabmix:updateScrollPosition":
+        let win = browser.ownerDocument.defaultView;
+        let tab = win.gBrowser.getTabForBrowser(browser);
+        win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
     }
   },
