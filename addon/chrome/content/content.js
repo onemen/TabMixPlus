@@ -44,7 +44,7 @@ let TabmixContentHandler = {
       case "Tabmix:restorePermissions":
         let disallow = new Set(data.disallow && data.disallow.split(","));
         DocShellCapabilities.restore(docShell, disallow);
-        sendSyncMessage("Tabmix:restoPermissionsComplete", {
+        sendSyncMessage("Tabmix:restorePermissionsComplete", {
           disallow: data.disallow,
           reload: data.reload
         });

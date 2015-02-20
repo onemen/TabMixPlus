@@ -6,6 +6,8 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "TabState",
+  "resource:///modules/sessionstore/TabState.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
   "resource:///modules/sessionstore/TabStateCache.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
@@ -16,21 +18,21 @@ this.DocShellCapabilities = {
     this.useFrameScript = TabmixSvc.version(320);
     if (this.useFrameScript) {
       let mm = window.getGroupMessageManager("browsers");
-      mm.addMessageListener("Tabmix:restoPermissionsComplete", this);
+      mm.addMessageListener("Tabmix:restorePermissionsComplete", this);
     }
   },
 
   deinit: function(window) {
     if (this.useFrameScript) {
       let mm = window.getGroupMessageManager("browsers");
-      mm.removeMessageListener("Tabmix:restoPermissionsComplete", this);
+      mm.removeMessageListener("Tabmix:restorePermissionsComplete", this);
     }
   },
 
   receiveMessage: function(message) {
     let browser = message.target;
     switch (message.name) {
-      case "Tabmix:restoPermissionsComplete":
+      case "Tabmix:restorePermissionsComplete":
         // Update the persistent tab state cache
         TabStateCache.update(browser, {
           disallow: message.data.disallow || null
@@ -48,6 +50,11 @@ this.DocShellCapabilities = {
 
     if (!this.useFrameScript)
       return this.caps.filter(function(cap) !browser.docShell["allow" + cap]);
+
+    if (tab.ownerDocument.defaultView.__SSi) {
+      let tabState = TabState.collect(tab);
+      return tabState.disallow || "";
+    }
 
     try {
       let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
