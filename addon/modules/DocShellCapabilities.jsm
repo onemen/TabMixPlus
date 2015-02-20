@@ -14,33 +14,17 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
 this.DocShellCapabilities = {
-  init: function(window) {
+  init: function() {
     this.useFrameScript = TabmixSvc.version(320);
-    if (this.useFrameScript) {
-      let mm = window.getGroupMessageManager("browsers");
-      mm.addMessageListener("Tabmix:restorePermissionsComplete", this);
-    }
   },
 
-  deinit: function(window) {
-    if (this.useFrameScript) {
-      let mm = window.getGroupMessageManager("browsers");
-      mm.removeMessageListener("Tabmix:restorePermissionsComplete", this);
-    }
-  },
-
-  receiveMessage: function(message) {
-    let browser = message.target;
-    switch (message.name) {
-      case "Tabmix:restorePermissionsComplete":
-        // Update the persistent tab state cache
-        TabStateCache.update(browser, {
-          disallow: message.data.disallow || null
-        });
-        if (message.data.reload)
-          browser.reload();
-        break;
-    }
+  update: function(browser, data) {
+    // Update the persistent tab state cache
+    TabStateCache.update(browser, {
+      disallow: data.disallow || null
+    });
+    if (data.reload)
+      browser.reload();
   },
 
   caps: ["Images","Subframes","MetaRedirects","Plugins","Javascript"],
