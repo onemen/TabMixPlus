@@ -361,6 +361,7 @@ var TMP_eventListener = {
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
       Tabmix.lazy_import(Tabmix, "docShellCapabilities",
         "DocShellCapabilities", "DocShellCapabilities", true, [window]);
+      Tabmix.lazy_import(Tabmix, "Utils", "Utils", "TabmixUtils");
     } catch (ex) {Tabmix.assert(ex);}
 
     this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",

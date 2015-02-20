@@ -17,6 +17,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
   "resource://tabmixplus/ContextMenu.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
+  "resource://tabmixplus/Utils.jsm");
+
 let global = this;
 
 let TabmixContentHandler = {
@@ -24,7 +27,8 @@ let TabmixContentHandler = {
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",
     "Tabmix:resetContentName",
-    "Tabmix:sendDOMTitleChanged"
+    "Tabmix:sendDOMTitleChanged",
+    "Tabmix:updateHistoryTitle",
   ],
 
   init: function () {
@@ -58,6 +62,10 @@ let TabmixContentHandler = {
         let title = content.document.title;
         if (title)
           sendAsyncMessage("DOMTitleChanged", { title: title });
+        break;
+      case "Tabmix:updateHistoryTitle":
+        let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+        TabmixUtils.updateHistoryTitle(history, data.title);
         break;
     }
   },

@@ -914,9 +914,12 @@ var tablib = {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
-          var history = browser.webNavigation.sessionHistory;
-          var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
-          shEntry.setTitle(this.label);
+          if (Tabmix.isVersion(320))
+            browser.messageManager.sendAsyncMessage("Tabmix:updateHistoryTitle", {title: this.label});
+          else {
+            let history = browser.webNavigation.sessionHistory;
+            Tabmix.Utils.updateHistoryTitle(history, this.label);
+          }
         } catch (ex) {Tabmix.assert(ex);}
       }
       function urlForDownload() {
