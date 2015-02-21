@@ -1672,7 +1672,8 @@ var tablib = {
   // in gBrowser.addTab
   props: ["referrerURI","charset","postData","ownerTab",
           "allowThirdPartyFixup","fromExternal","relatedToCurrent",
-          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending"],
+          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending",
+          "aForceNotRemote", "aNoReferrer"],
 
   definedParams: function(params) {
     this.props.forEach(function(prop){
