@@ -7,7 +7,7 @@ const {interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-let AutoReload = {
+this.AutoReload = {
   init: function() {
     _setItem = TabmixSvc.topWin().Tabmix.setItem;
   },
@@ -231,8 +231,15 @@ let AutoReload = {
     if (!TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
         aTab.autoReloadURI == aBrowser.currentURI.spec) {
       if (aBrowser.__tabmixScrollPosition || null) {
-        let {x, y} = aBrowser.__tabmixScrollPosition;
-        aBrowser[TabmixSvc.contentWindowAsCPOW].scrollTo(x, y);
+        if (TabmixSvc.version(330)) {
+          aBrowser.messageManager
+                  .sendAsyncMessage("Tabmix:setScrollPosition",
+                                    aBrowser.__tabmixScrollPosition);
+        }
+        else {
+          let {x, y} = aBrowser.__tabmixScrollPosition;
+          aBrowser.contentWindow.scrollTo(x, y);
+        }
         aBrowser.__tabmixScrollPosition = null;
       }
 
@@ -244,6 +251,36 @@ let AutoReload = {
     else if (aTab.autoReloadEnabled)
       aTab.autoReloadEnabled = false;
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
+  },
+
+  confirm: function(window, tab, isRemote) {
+    if (tab.postDataAcceptedByUser)
+      return true;
+    let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
+    let remote = isRemote ? '_remote' : '';
+    let msg = TabmixSvc.getString('confirm_autoreloadPostData' + remote);
+    Services.obs.addObserver(_observe, "common-dialog-loaded", false);
+    let resultOK = Services.prompt.confirm(window, title, msg);
+    if (resultOK)
+      tab.postDataAcceptedByUser = true;
+    else {
+      tab.autoReloadEnabled = false;
+      _setItem(tab, "_reload", null);
+      tab.autoReloadURI = null;
+      this._update(tab);
+    }
+    return resultOK;
+  },
+
+  reloadRemoteTab: function(browser, data) {
+    var window = browser.ownerDocument.defaultView;
+    let tab = window.gBrowser.getTabForBrowser(browser);
+    // RemoteWebNavigation doesn't accept postdata or headers.
+    if (data.isPostData && !this.confirm(window, tab, true))
+      return;
+
+    data.remote = true;
+    doReloadTab(window, browser, data);
   }
 };
 
@@ -259,55 +296,53 @@ function _reloadTab(aTab) {
   }
 
   var browser = aTab.linkedBrowser;
-  var webNav = browser.webNavigation;
-  var sh, postData, referrer;
+  if (TabmixSvc.version(330) && aTab.getAttribute("remote")) {
+    browser.messageManager.sendAsyncMessage("Tabmix:collectReloadData");
+    return;
+  }
+
+  var data = {};
   var window = aTab.ownerDocument.defaultView;
 
   try {
-    sh = webNav.sessionHistory;
+    let sh = browser.webNavigation.sessionHistory;
     if (sh) {
       let entry = sh.getEntryAtIndex(sh.index, false);
-      postData = entry.QueryInterface(Ci.nsISHEntry).postData;
-      referrer = entry.QueryInterface(Ci.nsISHEntry).referrerURI;
-
-      if (postData && !aTab.postDataAcceptedByUser) {
-        let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
-        let msg = TabmixSvc.getString('confirm_autoreloadPostData');
-        Services.obs.addObserver(_observe, "common-dialog-loaded", false);
-        let resultOK = Services.prompt.confirm(window, title, msg);
-        if (resultOK)
-          aTab.postDataAcceptedByUser = true;
-        else {
-          aTab.autoReloadEnabled = false;
-          _setItem(aTab, "_reload", null);
-          aTab.autoReloadURI = null;
-          AutoReload._update(aTab);
-          return;
-        }
-      }
+      data.postData = entry.QueryInterface(Ci.nsISHEntry).postData;
+      data.referrer = entry.QueryInterface(Ci.nsISHEntry).referrerURI;
+      if (data.postData && !AutoReload.confirm(window, aTab))
+        return;
     }
   } catch (e) { }
 
-  let contentWindow = browser[TabmixSvc.contentWindowAsCPOW];
-  browser.__tabmixScrollPosition = {x: contentWindow.scrollX,
-                                    y: contentWindow.scrollY};
+  let contentWindow = browser.contentWindow;
+  data.scrollX = contentWindow.scrollX;
+  data.scrollY = contentWindow.scrollY;
+  doReloadTab(window, browser, data);
+}
+
+function doReloadTab(window, browser, data) {
+  browser.__tabmixScrollPosition = {x: data.scrollX,
+                                    y: data.scrollY};
   var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
 
   // This part is based on BrowserReloadWithFlags.
-  let url = webNav.currentURI.spec;
+  let url = browser.currentURI.spec;
+  let {postData, referrer, remote} = data;
   let loadURIWithFlags = TabmixSvc.version(330) &&
       window.gBrowser.updateBrowserRemotenessByURL(browser, url) || postData;
   if (loadURIWithFlags) {
-    if (!postData)
+    if (remote || !postData)
       postData = referrer = null;
     browser.loadURIWithFlags(url, loadFlags, referrer, null, postData);
     return;
   }
 
   if (!TabmixSvc.version(330)) {
-    webNav = sh.QueryInterface(Ci.nsIWebNavigation);
+    let webNav = browser.webNavigation.sessionHistory
+                        .QueryInterface(Ci.nsIWebNavigation);
     webNav.reload(loadFlags);
     return;
   }

@@ -9,6 +9,7 @@ const FMM_MESSAGES = [
   "Tabmix:SetSyncHandler",
   "Tabmix:restorePermissionsComplete",
   "Tabmix:updateScrollPosition",
+  "Tabmix:reloadTab",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -19,6 +20,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource://tabmixplus/DocShellCapabilities.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
+  "resource://tabmixplus/AutoReload.jsm");
 
 this.TabmixUtils = {
   initMessageManager: function(window) {
@@ -47,6 +50,9 @@ this.TabmixUtils = {
         let win = browser.ownerDocument.defaultView;
         let tab = win.gBrowser.getTabForBrowser(browser);
         win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
+        break;
+      case "Tabmix:reloadTab":
+        AutoReload.reloadRemoteTab(browser, message.data);
         break;
     }
   },

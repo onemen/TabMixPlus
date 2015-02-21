@@ -30,6 +30,8 @@ let TabmixContentHandler = {
     "Tabmix:sendDOMTitleChanged",
     "Tabmix:updateHistoryTitle",
     "Tabmix:collectScrollPosition",
+    "Tabmix:setScrollPosition",
+    "Tabmix:collectReloadData",
   ],
 
   init: function () {
@@ -72,6 +74,21 @@ let TabmixContentHandler = {
         let scroll = {scrollX: content.scrollX,
                       scrollY: content.scrollY};
         sendAsyncMessage("Tabmix:updateScrollPosition", { scroll: scroll });
+        break;
+      case "Tabmix:setScrollPosition":
+        let {x, y} = data;
+        content.scrollTo(x, y);
+        break;
+      case "Tabmix:collectReloadData":
+        let json = {scrollX: content.scrollX,
+                    scrollY: content.scrollY};
+        let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+        if (sh) {
+          let entry = sh.getEntryAtIndex(sh.index, false);
+          json.isPostData = !!entry.QueryInterface(Ci.nsISHEntry).postData;
+          json.isPostData = true;
+        }
+        sendAsyncMessage("Tabmix:reloadTab", json);
         break;
     }
   },
