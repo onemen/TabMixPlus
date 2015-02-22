@@ -2759,7 +2759,8 @@ try{
       var aBrowser = gBrowser.getBrowserForTab(aTab);
       if (gBrowser.isBlankBrowser(aBrowser)) return;
       var bContent = aBrowser[TabmixSvc.contentWindowAsCPOW];
-      this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY);
+      if (bContent)
+        this.setLiteral(this.getNodeForTab(aTab), "scroll", bContent.scrollX + "," + bContent.scrollY);
    },
 
    tabSelected: function(needFlush) {

@@ -2501,7 +2501,8 @@ var TabmixProgressListener = {
       '$&'
     ).toCode();
     this.listener.mTabBrowser = tabBrowser;
-    if (!Tabmix.isVersion(340))
+    // Bug 1081891 fixed on Firefox 38
+    if (!Tabmix.isVersion(340) || Tabmix.isVersion(380))
       this.listener._fixTabTitle = function() {};
     tabBrowser.addTabsProgressListener(this.listener);
   },
@@ -2510,17 +2511,18 @@ var TabmixProgressListener = {
     mTabBrowser: null,
     showProgressOnTab: false,
 
-    _fixTabTitle: function TMP__contentLinkClick(tab, browser) {
-      if (browser.getAttribute("remote") != "true" ||
+    // Bug 1081891: Calling webNavigation.loadURI with url that trigger
+    // unknownContentType.xul dialog change the tab title to its address
+    // as a workaround we trigger DOMTitleChanged async message
+    _fixTabTitle: function TMP__contentLinkClick(tab, browser, url) {
+      if (browser.getAttribute("remote") != "true" || /^about/.test(url) ||
           browser._contentTitle !== "" || this.mTabBrowser.isBlankTab(tab))
         return;
       tab.addEventListener("TabLabelModified", function titleChanged(event) {
         tab.removeEventListener("TabLabelModified", titleChanged, true);
-        let title = browser.contentDocumentAsCPOW.title;
-        if (browser._contentTitle != title) {
+        if (!browser._contentTitle) {
           event.preventDefault();
-          browser._contentTitle = title;
-          tab.visibleLabel = title;
+          browser.messageManager.sendAsyncMessage("Tabmix:sendDOMTitleChanged");
         }
       }, true);
     },
@@ -2546,7 +2548,7 @@ var TabmixProgressListener = {
       if (aStateFlags & nsIWebProgressListener.STATE_START &&
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
-        this._fixTabTitle(tab, aBrowser);
+        this._fixTabTitle(tab, aBrowser, url);
         if (url == "about:blank") {
           tab.removeAttribute("busy");
           tab.removeAttribute("progress");
@@ -2618,8 +2620,12 @@ var TabmixProgressListener = {
           Tabmix.autoReload.onTabReloaded(tab, aBrowser);
 
         // disabled name for locked tab, so locked tab don't get reuse
-        if (tab.getAttribute("locked") && aBrowser[TabmixSvc.contentWindowAsCPOW].name)
-          aBrowser[TabmixSvc.contentWindowAsCPOW].name = "";
+        if (tab.getAttribute("locked")) {
+          if (Tabmix.isVersion(320))
+            aBrowser.messageManager.sendAsyncMessage("Tabmix:resetContentName");
+          else if (aBrowser.contentWindow.name)
+            aBrowser.contentWindow.name = "";
+        }
       }
     }
   }

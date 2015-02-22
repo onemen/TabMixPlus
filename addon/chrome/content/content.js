@@ -23,6 +23,8 @@ let TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",
+    "Tabmix:resetContentName",
+    "Tabmix:sendDOMTitleChanged"
   ],
 
   init: function () {
@@ -42,11 +44,21 @@ let TabmixContentHandler = {
           disallow: data.disallow,
           reload: data.reload
         });
-      break;
+        break;
       case "Tabmix:collectPermissions":
-      let caps = DocShellCapabilities.collect(docShell).join(",");
-      sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
-      break;
+        let caps = DocShellCapabilities.collect(docShell).join(",");
+        sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
+        break;
+      case "Tabmix:resetContentName":
+        if (content.name)
+          content.name = "";
+        break;
+      case "Tabmix:sendDOMTitleChanged":
+        // workaround for bug 1081891
+        let title = content.document.title;
+        if (title)
+          sendAsyncMessage("DOMTitleChanged", { title: title });
+        break;
     }
   },
 
