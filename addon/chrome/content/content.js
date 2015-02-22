@@ -33,6 +33,7 @@ let TabmixContentHandler = {
     "Tabmix:setScrollPosition",
     "Tabmix:collectReloadData",
     "Tabmix:isFrameInContent",
+    "Tabmix:collectOpener",
   ],
 
   init: function () {
@@ -94,6 +95,9 @@ let TabmixContentHandler = {
       case "Tabmix:isFrameInContent":
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
         sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
+        break;
+      case "Tabmix:collectOpener":
+        sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
         break;
     }
   },

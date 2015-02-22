@@ -10,6 +10,7 @@ const FMM_MESSAGES = [
   "Tabmix:restorePermissionsComplete",
   "Tabmix:updateScrollPosition",
   "Tabmix:reloadTab",
+  "Tabmix:getOpener",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -22,6 +23,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource://tabmixplus/DocShellCapabilities.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
   "resource://tabmixplus/AutoReload.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "MergeWindows",
+  "resource://tabmixplus/MergeWindows.jsm");
 
 this.TabmixUtils = {
   initMessageManager: function(window) {
@@ -39,6 +42,7 @@ this.TabmixUtils = {
 
   receiveMessage: function(message) {
     let browser = message.target;
+    let win, tab;
     switch (message.name) {
       case "Tabmix:SetSyncHandler":
         TabmixSvc.syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
@@ -47,12 +51,17 @@ this.TabmixUtils = {
         DocShellCapabilities.update(browser, message.data);
         break;
       case "Tabmix:updateScrollPosition":
-        let win = browser.ownerDocument.defaultView;
-        let tab = win.gBrowser.getTabForBrowser(browser);
+        win = browser.ownerDocument.defaultView;
+        tab = win.gBrowser.getTabForBrowser(browser);
         win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
       case "Tabmix:reloadTab":
         AutoReload.reloadRemoteTab(browser, message.data);
+        break;
+      case "Tabmix:getOpener":
+        win = browser.ownerDocument.defaultView;
+        tab = win.gBrowser.getTabForBrowser(browser);
+        MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
     }
   },

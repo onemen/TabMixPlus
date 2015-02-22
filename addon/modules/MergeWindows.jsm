@@ -118,6 +118,30 @@ this.MergeWindows = {
     this.swapTabs(aTargetWindow, tabsToMove);
   },
 
+  // tabs from popup windows open after opener or at the end
+  // other tabs open according to our openTabNext preference
+  // and move to place by tabbrowser.addTab
+  moveTabsFromPopups: function(newTab, aTab, openerWindow, tabbrowser) {
+    if (!newTab) {
+      newTab = aTab.__tabmixNewTab;
+      delete aTab.__tabmixNewTab;
+      tabbrowser = newTab.ownerDocument.defaultView.gBrowser;
+    }
+    let index = tabbrowser.tabs.length - 1;
+    if (openerWindow) {
+      // since we merge popup after all other tabs was merged,
+      // we only look for opener in the target window
+      let openerTab = openerWindow &&
+          tabbrowser._getTabForContentWindow(openerWindow.top);
+      if (openerTab)
+        index = openerTab._tPos + 1;
+    }
+    let lastRelatedTab = tabbrowser._lastRelatedTab;
+    tabbrowser.moveTabTo(newTab, index);
+    tabbrowser._lastRelatedTab = lastRelatedTab;
+    tabbrowser.swapBrowsersAndCloseOther(newTab, aTab);
+  },
+
   // move tabs to a window
   swapTabs: function TMP_swapTabs(aWindow, tabs) {
     var currentWindow = TabmixSvc.topWin();
@@ -131,26 +155,7 @@ this.MergeWindows = {
 
     var tabbrowser = aWindow.gBrowser;
 
-    // tabs from popup windows open after opener or at the end
-    // other tabs open according to our openTabNext preference
-    // and move to place by tabbrowser.addTab
     var placePopupNextToOpener = this.prefs.getBoolPref("placePopupNextToOpener");
-    function moveTabsFromPopups(newTab, aTab) {
-      let index = tabbrowser.tabs.length - 1;
-      if (placePopupNextToOpener) {
-        // since we merge popup after all other tabs was merged,
-        // we only look for opener in the target window
-        let openerWindow = aTab.linkedBrowser[TabmixSvc.contentWindowAsCPOW].opener;
-        let openerTab = openerWindow &&
-            tabbrowser._getTabForContentWindow(openerWindow.top);
-        if (openerTab)
-          index = openerTab._tPos + 1;
-      }
-      let lastRelatedTab = tabbrowser._lastRelatedTab;
-      tabbrowser.moveTabTo(newTab, index);
-      tabbrowser._lastRelatedTab = lastRelatedTab;
-    }
-
     var tabToSelect = null;
     // make sure that the tabs will open in the same order
     let prefVal = this.prefs.getBoolPref("openTabNextInverse");
@@ -166,11 +171,23 @@ this.MergeWindows = {
         tab.removeAttribute("_TMP_selectAfterMerege");
         tabToSelect = newTab;
       }
-      if (isPopup)
-        moveTabsFromPopups(newTab, tab);
-      // we don't keep tab attributs: visited, tabmix_selectedID
-      // see in Tabmix.copyTabData list of attributs we copy to the new tab
-      tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
+      if (isPopup) {
+        let openerWindow;
+        if (placePopupNextToOpener) {
+          if (TabmixSvc.version(330) && tab.getAttribute("remote") == "true") {
+            tab.linkedBrowser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
+            tab.__tabmixNewTab = newTab;
+            return;
+          }
+          openerWindow = tab.linkedBrowser.contentWindow.opener;
+        }
+        this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
+      }
+      else {
+        // we don't keep tab attributs: visited, tabmix_selectedID
+        // see in Tabmix.copyTabData list of attributs we copy to the new tab
+        tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
+      }
     }
     this.prefs.setBoolPref("openTabNextInverse", prefVal);
 
