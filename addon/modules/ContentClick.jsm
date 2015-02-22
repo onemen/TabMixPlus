@@ -74,6 +74,7 @@ var ContentClickInternal = {
 
     let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
     mm.addMessageListener("TabmixContent:Click", this);
+    mm.addMessageListener("Tabmix:isFrameInContentResult", this);
 
     this.initContentAreaClick();
   },
@@ -116,6 +117,10 @@ var ContentClickInternal = {
   },
 
   receiveMessage: function(message) {
+    if (message.name == "Tabmix:isFrameInContentResult") {
+      this.isFrameInContent.result(message.target, message.data);
+      return;
+    }
     if (message.name != "TabmixContent:Click")
       return null;
 
@@ -910,54 +915,77 @@ var ContentClickInternal = {
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
-    let isCurrent = function(browser) {
-      if (TabmixSvc.version(320)) {
-        try {
-          let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-          return handler.isFrameInContent(href, targetFrame);
-        } catch(ex) {
-          TabmixSvc.console.log("unable to get syncHandlers for page " +
-              browser.currentURI.spec + "\n" + ex);
-          // fall back to use CPOW
-        }
-      }
-      return LinkNodeUtils.isFrameInContent(browser[TabmixSvc.contentWindowAsCPOW], href, targetFrame);
-    };
-
-    let switchIfURIInWindow = function switchIfURIInWindow(aWindow) {
-      // Only switch to the tab if both source and desination are
-      // private or non-private.
+    let isValidWindow = function(aWindow) {
+      // window is valid only if both source and destination are in the same
+      // privacy state and multiProcess state
       if ((TabmixSvc.version(200) &&
-          PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aWindow)) ||
+           PrivateBrowsingUtils.isWindowPrivate(window) !=
+           PrivateBrowsingUtils.isWindowPrivate(aWindow)) ||
           (TabmixSvc.version(320) &&
-          window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser)) {
+           window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser)) {
         return false;
       }
-      let browsers = aWindow.gBrowser.browsers;
-      for (let i = 0; i < browsers.length; i++) {
-        if (isCurrent(browsers[i])) {
-          aWindow.gURLBar.handleRevert();
-          // Focus the matching window & tab
-          aWindow.focus();
-          aWindow.gBrowser.tabContainer.selectedIndex = i;
-          return true;
-        }
-      }
-      return false;
+      return true;
     };
 
-    let isBrowserWindow = !!window.gBrowser;
-    if (isBrowserWindow && switchIfURIInWindow(window))
-      return;
+    let windows = [];
+    if (!!window.gBrowser && isValidWindow(window))
+      windows.push(window);
 
     let winEnum = Services.wm.getEnumerator("navigator:browser");
     while (winEnum.hasMoreElements()) {
       let browserWin = winEnum.getNext();
       if (browserWin.closed || browserWin == window)
         continue;
-      if (switchIfURIInWindow(browserWin))
-        return;
+      if (isValidWindow(browserWin))
+        windows.push(browserWin);
+    }
+    this.isFrameInContent.start(windows, {href: href, name: targetFrame});
+  },
+
+  isFrameInContent: {
+    start: function(windows, frameData) {
+      this.frameData = frameData;
+      this.windows = windows;
+      let window = this.windows.shift();
+      this.next(window.gBrowser.tabs[0]);
+    },
+    stop: function() {
+      this.frameData = null;
+      this.windows = null;
+    },
+    result: function(browser, data) {
+      let window = browser.ownerDocument.defaultView;
+      let tab = window.gBrowser.getTabForBrowser(browser);
+      if (data.result) {
+        this.stop();
+        window.gURLBar.handleRevert();
+        // Focus the matching window & tab
+        window.focus();
+        window.gBrowser.selectedTab = tab;
+      }
+      else
+        this.next(tab.nextSibling);
+    },
+    next: function(tab) {
+      if (!tab && this.windows.length) {
+        let window = this.windows.shift();
+        tab = window.gBrowser.tabs[0];
+      }
+      if (tab) {
+        let browser = tab.linkedBrowser;
+        if (tab.getAttribute("remote") == "true") {
+          browser.messageManager
+                 .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
+        }
+        else {
+          let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
+                                                      this.frameData.href, this.frameData.name);
+          this.result(browser, {result: result});
+        }
+      }
+      else
+        this.stop();
     }
   },
 

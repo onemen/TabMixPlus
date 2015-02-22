@@ -32,6 +32,7 @@ let TabmixContentHandler = {
     "Tabmix:collectScrollPosition",
     "Tabmix:setScrollPosition",
     "Tabmix:collectReloadData",
+    "Tabmix:isFrameInContent",
   ],
 
   init: function () {
@@ -90,6 +91,10 @@ let TabmixContentHandler = {
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
+      case "Tabmix:isFrameInContent":
+        let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
+        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
+        break;
     }
   },
 
@@ -99,10 +104,6 @@ let TabmixContentHandler = {
 
   getSelectedLinks: function() {
     return ContextMenu.getSelectedLinks(content).join("\n");
-  },
-
-  isFrameInContent: function(href, name) {
-    return LinkNodeUtils.isFrameInContent(content, href, name);
   },
 
   wrapNode: function(node) {
