@@ -451,7 +451,7 @@ var TMP_extensionsCompatibility = {
         'Tabmix.loadTabs(urls, false);',
         'urls = urls.map(function(url) rdrb.cleanLink(url));\n' +
         '      $&'
-      ).toCode(true);
+      ).toCode();
     }
   }
 

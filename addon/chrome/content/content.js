@@ -66,8 +66,8 @@ let TabmixContentHandler = {
     return DocShellCapabilities.collect(docShell).join(",") || "";
   },
 
-  getSelectedLinks: function(check) {
-    return ContextMenu.getSelectedLinks(content, check);
+  getSelectedLinks: function() {
+    return ContextMenu.getSelectedLinks(content).join("\n");
   },
 
   isFrameInContent: function(href, name) {

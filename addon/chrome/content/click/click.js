@@ -719,16 +719,23 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = [], browser = window.gBrowser.selectedBrowser;
-    if (Tabmix.isVersion(320)) {
+    let urls = [];
+    let browser = window.gBrowser.selectedBrowser;
+
+    function getLinks() {
       try {
         let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-        urls = handler.getSelectedLinks(check);
+        let result = handler.getSelectedLinks();
+        gContextMenu.tabmixLinks = result && result.split('\n');
       } catch(ex) {
         Tabmix.log("unable to get syncHandlers for page " +
-                      browser.currentURI.spec + "\n" + ex);
+                   browser.currentURI.spec + "\n" + ex);
       }
+      return gContextMenu.tabmixLinks || [];
     }
+
+    if (Tabmix.isVersion(320))
+      urls = gContextMenu.tabmixLinks || getLinks();
     // getSelectedLinks was not implemented for remote tabs before Firefox 32
     else if (browser.getAttribute("remote") != "true")
       urls = Tabmix.ContextMenu.getSelectedLinks(content, check);
