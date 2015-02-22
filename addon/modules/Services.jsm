@@ -265,20 +265,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function () {
   return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
 });
 
-/**
- * bug 1051017 - Firefox 34 - change
- * browser.contentWindow -> browser.contentWindowAsCPOW
- * browser.contentDocument -> browser.contentDocumentAsCPOW
- * window.content -> window.gBrowser.selectedBrowser.contentWindowAsCPOW
- **/
-XPCOMUtils.defineLazyGetter(TabmixSvc, "contentWindowAsCPOW", function () {
-  return isVersion(340) ? "contentWindowAsCPOW" : "contentWindow";
-});
-
-XPCOMUtils.defineLazyGetter(TabmixSvc, "contentDocumentAsCPOW", function () {
-  return isVersion(340) ? "contentDocumentAsCPOW" : "contentDocument";
-});
-
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
