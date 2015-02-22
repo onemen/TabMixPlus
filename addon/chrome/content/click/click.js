@@ -604,12 +604,13 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
+    var tab = gBrowser.selectedTab;
     try {
       var contentClick = gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage;
       var tabsCount = gBrowser.tabs.length;
       var closeTabsEmpty = TMP_ClosedTabs.count < 1;
-      var protectedTab = gBrowser.mCurrentTab.hasAttribute("protected");
-      var lockedTab = gBrowser.mCurrentTab.hasAttribute("locked");
+      var protectedTab = tab.hasAttribute("protected");
+      var lockedTab = tab.hasAttribute("locked");
 
      /**
       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
@@ -631,6 +632,16 @@ var TabmixContext = {
       Tabmix.showItem(closeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("closeTabContent"));
       var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
       Tabmix.setItem(closeTabMenu, "disabled", protectedTab || keepLastTab);
+
+      // for remote tab get call getValidUrl when it is safe to use CPOWs
+      // getValidUrl may call getParamsForLink
+      if (tab.getAttribute("remote") == "true" &&
+          onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
+                     Tabmix.prefs.getBoolPref("openInverseLink") ||
+                     Tabmix.prefs.getBoolPref("linkWithHistory"))) {
+        let {target, linkURL} = gContextMenu;
+        gContextMenu.tabmixLinkURL = tablib.getValidUrl(linkURL, target);
+      }
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");
       Tabmix.showItem(freezeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("freezeTabContent"));

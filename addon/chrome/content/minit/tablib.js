@@ -969,9 +969,9 @@ var tablib = {
       }
     };
 
-    gBrowser.openLinkWithHistory = function (aTab) {
+    gBrowser.openLinkWithHistory = function () {
       var {target, linkURL, principal} = gContextMenu;
-      var url = tablib.getValidUrl(aTab, linkURL, target);
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
@@ -988,7 +988,7 @@ var tablib = {
         urlSecurityCheck(url, doc.nodePrincipal);
       }
 
-      this.duplicateTab(aTab, url);
+      this.duplicateTab(gBrowser.selectedTab, url);
     };
 
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
@@ -997,9 +997,9 @@ var tablib = {
       '      $&'
     ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
-    gBrowser.openInverseLink = function (aTab) {
+    gBrowser.openInverseLink = function () {
       var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(aTab, linkURL, target);
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
@@ -1017,7 +1017,7 @@ var tablib = {
 
     tablib.openLinkInCurrent = function() {
       var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(gBrowser.selectedTab, linkURL, target);
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
@@ -1026,7 +1026,7 @@ var tablib = {
       gContextMenu.openLinkInCurrent();
     };
 
-    tablib.getValidUrl = function(tab, url, target) {
+    tablib.getValidUrl = function(url, target) {
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
@@ -1035,6 +1035,11 @@ var tablib = {
           return false;
         return true;
       };
+
+      let tab = gBrowser.selectedTab;
+      if (tab.getAttribute("remote") == "true" &&
+          typeof gContextMenu.tabmixLinkURL != "undefined")
+        return gContextMenu.tabmixLinkURL;
 
       if (!isValid(url)) {
         let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
