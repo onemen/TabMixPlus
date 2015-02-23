@@ -81,7 +81,8 @@ var TMP_tabDNDObserver = {
     tabBar.useTabmixDnD = function(aEvent) {
       function checkTab(dt) {
         let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || "__tabmixDragStart" in tab;
+        return !tab || "__tabmixDragStart" in tab ||
+          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
       return this.orient == "horizontal" &&
