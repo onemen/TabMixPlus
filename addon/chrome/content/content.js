@@ -187,6 +187,8 @@ var TabmixClickEventHandler = {
           }
         }
       }
+      if (TabmixSvc.version(370))
+        json.noReferrer = BrowserUtils.linkHasNoReferrer(node);
 
       sendAsyncMessage("Content:Click", json);
       return;

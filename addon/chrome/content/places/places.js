@@ -98,9 +98,9 @@ var TMP_Places = {
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
       )._replace(
-        'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
-        '$&\
-         w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
+        /w\.gBrowser\.loadURIWithFlags\(.*\);/,
+        '$&\n    ' +
+        'w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
       )._replace(
         /(\})(\)?)$/,
         '  var tab = where == "current" ?\n' +
