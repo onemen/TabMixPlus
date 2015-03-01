@@ -145,8 +145,7 @@ var tablib = {
        if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
          t.setAttribute("tabmix_pending", "true"); \
        var lastChild = this.tabContainer.lastChild; \
-       if (lastChild) lastChild.removeAttribute("last-tab"); \
-       if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'
+       if (lastChild) lastChild.removeAttribute("last-tab");'
     )._replace(
       'this._lastRelatedTab = t;',
       'if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {\
@@ -1711,8 +1710,6 @@ var tablib = {
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
         TMP_Places.afterTabTitleChanged(true);
-      if (aTab.hasAttribute("newtab"))
-        aTab.removeAttribute("newtab");
     }
     else if (aTab.hasAttribute("fadein"))
       TMP_Places.afterTabTitleChanged(true);
