@@ -2565,6 +2565,8 @@ var TabmixProgressListener = {
             if (tabsCount == 1)
               this.mTabBrowser.tabContainer.adjustTabstrip(true, url);
           }
+          if (tab.hasAttribute("tabmix_bookmarkId"))
+            TMP_Places.setTabTitle(tab, url);
         }
       }
       else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
