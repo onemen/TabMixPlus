@@ -8,7 +8,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-let Shortcuts = {
+this.Shortcuts = {
   keys: {
     newTab: {id: "key_newNavigatorTab", default: "T accel"},
     dupTab: {default: "T accel,alt"},
@@ -43,6 +43,7 @@ let Shortcuts = {
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
     saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
+    switchToLast: {command: 32},
     slideShow: {id: "key_tm_slideShow", default: "d&VK_F8"},
     toggleFLST: {id: "key_tm_toggleFLST", default: "d&VK_F9"}
   },
@@ -74,17 +75,28 @@ let Shortcuts = {
           getService(Ci.nsIPrivateBrowsingService).autoStarted;
 
     // update keys initial value and label
-    let labels = aWindow.Tabmix.shortcutsLabels;
+    // get our key labels from shortcutsLabels.xml
+    let $ = function(id) id && aWindow.document.getElementById(id);
+    let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
+    let labels = {};
+    if (container) {
+      let box = aWindow.document.createElement("vbox");
+      box.setAttribute("shortcutsLabels", true);
+      container.appendChild(box);
+      Array.slice(box.attributes).forEach(function(a) labels[a.name] = a.value);
+      container.removeChild(box);
+    }
     labels.togglePinTab =
-        aWindow.document.getElementById("context_pinTab").getAttribute("label") + "/" +
-        aWindow.document.getElementById("context_unpinTab").getAttribute("label");
+      $("context_pinTab").getAttribute("label") + "/" +
+      $("context_unpinTab").getAttribute("label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       keyData.value = keyData.default || "";
-      if (key in labels)
+      if (container && key in labels)
         keyData.label = labels[key];
+      else if (!container && !key.id)
+        keyData.label = "tabmix_key_" + key;
     }
-    delete aWindow.Tabmix.shortcutsLabels;
 
     if (aWindow.keyconfig) {
       this.keyConfigInstalled = true;
@@ -284,7 +296,7 @@ let Shortcuts = {
     try {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
     } catch (ex) {}
-    if (shortcuts == null) {
+    if (shortcuts === null) {
       TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;

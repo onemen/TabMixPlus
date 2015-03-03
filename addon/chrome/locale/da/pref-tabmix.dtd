@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importer indstillinger">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Genetabler standarder">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Åbn links der åbner i et nyt vindue i:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Åbn links fra andre programmer i:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Bredde:">
 <!ENTITY widthTo.label "til">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Fanebredde tilpasset fanebladstitlen">
 <!ENTITY bookastitle.label "Brug bogmærkenavn som fanebladstitel">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Faneblad kontekstmenu">
 <!ENTITY context.main "Hoved kontekstmenu">
 <!ENTITY context.tools "Funktioner-menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Vis i faneblad kontekstmenu:">
 <!ENTITY showContentAreaContext.label "Vis i hoved kontekstmenu:">
 <!ENTITY showToolsMenu.label "Vis i Funktioner-menu:">

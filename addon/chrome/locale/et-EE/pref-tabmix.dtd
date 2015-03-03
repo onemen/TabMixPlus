@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Impordi sätted">
 <!ENTITY settings.sync "Sätted sünkroonitakse">
 <!ENTITY settings.default "Taasta vaikimisi sätted">
+<!ENTITY settings.revert "Võta tagasi">
 <!ENTITY generalWindowOpen.label "Uues aknas avanevate linkide avamise asukoht:">
 <!ENTITY externalLink.useSeparate.label "Kasuta teistest rakendustest pärit linkide jaoks eraldi eelistust">
 <!ENTITY externalLinkTarget.label "Teistest rakendustest pärit linkide avamise asukoht:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Kaardi laius:">
 <!ENTITY widthTo.label "kuni">
 <!ENTITY widthPixels.label "pikslit">
+<!ENTITY onLeftDisabled.label "Praeguse teemaga ei saa nuppu vasakule poole paigutada">
 <!ENTITY flexTabs.label "Kaardi laius vastab kaardi pealkirja pikkusele">
 <!ENTITY bookastitle.label "Kasuta kaardi pealkirjana järjehoidja nime">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Kaardi hüpikmenüü">
 <!ENTITY context.main "Peamine hüpikmenüü">
 <!ENTITY context.tools "Tööriistade menüü">
+<!ENTITY showOnTabbar.label "Näita kaartide ribal kaardi kontekstimenüüd">
 <!ENTITY showtabBarContext.label "Kaardi hüpikmenüüs näidatakse:">
 <!ENTITY showContentAreaContext.label "Peamises hüpikmenüüs näidatakse:">
 <!ENTITY showToolsMenu.label "Menüüs 'Tööriistad' näidatakse:">

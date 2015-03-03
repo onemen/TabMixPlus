@@ -56,7 +56,12 @@ let TabmixRemoveBlankTab = {
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
                     .getInterface(Ci.nsIWebNavigation);
-      let doc = nav.document;
+      let doc;
+      try {
+        doc = nav.document;
+      } catch(ex) {
+        return result;
+      }
       result.win = nav.QueryInterface(Ci.nsIDocShellTreeItem)
                     .rootTreeItem
                     .QueryInterface(Ci.nsIInterfaceRequestor)
@@ -70,7 +75,7 @@ let TabmixRemoveBlankTab = {
   removeTab: function(win, tab) {
     window.addEventListener("unload", function _unload(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
-      if (win && !win.close) {
+      if (win && !win.closed) {
         win.setTimeout(function() {
           if (win && win.gBrowser && tab && tab.parentNode)
             win.gBrowser.removeTab(tab, {animate: false});

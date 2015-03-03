@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Увези подешавања">
 <!ENTITY settings.sync "Подешавања усклађивања">
 <!ENTITY settings.default "Врати подразумеване вредности">
+<!ENTITY settings.revert "Опозови">
 <!ENTITY generalWindowOpen.label "Везе који се иначе отварају у новом прозору отварај у:">
 <!ENTITY externalLink.useSeparate.label "Користи посебне поставке за везе из других програма">
 <!ENTITY externalLinkTarget.label "Везе из других апликација отварај у:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Ширина картице:">
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
+<!ENTITY onLeftDisabled.label "Није могуће поставити дугме на левој страни тренутне теме">
 <!ENTITY flexTabs.label "Ширина картице је пропорционална наслову картице">
 <!ENTITY bookastitle.label "Користи име обележивача као наслов картице">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Садржајни мени картице">
 <!ENTITY context.main "Главни садржајни мени">
 <!ENTITY context.tools "Мени алатки">
+<!ENTITY showOnTabbar.label "Прикажи приручни мени у траци са алаткама">
 <!ENTITY showtabBarContext.label "Прикажи у садржајном менију картице:">
 <!ENTITY showContentAreaContext.label "Прикажи у главном садржајном менију:">
 <!ENTITY showToolsMenu.label "Прикажи у менију алатки:">
@@ -294,7 +297,7 @@
 <!ENTITY sm.restore.merge "Споји више прозора у један">
 <!ENTITY sm.restore.bypassCache "Прескочи кеш приликом враћања">
 <!ENTITY sm.notrestore.label "Када се не враћају картице при покретању">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Врати моје закачене картице од прошлог пута">
 <!ENTITY sm.preserve.options "За картице очувај:">
 <!ENTITY sm.preserve.history "Историјат">
 <!ENTITY sm.preserve.protect "Заштићени статус">

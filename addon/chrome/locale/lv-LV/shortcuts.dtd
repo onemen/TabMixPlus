@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Dažas no jūsu saīsnēm jau izmanto citas komandas">
 <!ENTITY shortcuts.showDetails "Rādīt detaļas">
 <!ENTITY shortcuts.hideDetails "Slēpt detaļas">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
 <!ENTITY shortcuts.slideshow "Pārslēgt ciļņu slīdrādi">
 <!ENTITY shortcuts.toggleFLST "Pārslēgt fokusu pēc pašreizējās cilnes aizvēršanas">
 <!ENTITY shortcuts.toggleFLST.tooltip "pārslēgt fokusēšanos uz pa labi esošo vai pēdējo izvēlēto cilni">

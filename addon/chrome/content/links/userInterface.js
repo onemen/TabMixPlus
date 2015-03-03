@@ -52,7 +52,8 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
       linkTarget = 1;
    }
 
-   if (aURL === null) aURL = "about:blank";
+   if (!aURL)
+     aURL = "about:blank";
 
    // check for an existing window and focus it; it's not application modal
    var browserWindow = this.getTopWin();
@@ -192,14 +193,15 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
        url == "about:blank" || url == "about:newtab" || url == "about:privatebrowsing";
    if (clearUrlBar)
-     Tabmix.clearUrlBar(newTab, url);
+     Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
 
    return newTab;
 }
 
 Tabmix.selectedTab = null;
-Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut) {
-  if(/about:home|(www\.)*(google|bing)\./.test(aUrl))
+Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastTab) {
+  // Firefox always call focusAndSelectUrlBar when it replacing last tab
+  if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aTab.selected && !isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user laod about:blank tab

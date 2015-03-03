@@ -121,7 +121,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     show: function(aObj, aName) {
       if (aObj && aName in aObj)
         console.show({obj: aObj, name: aName, fullName: this.fullName});
-      else if (this.fullName != null) {
+      else if (typeof this.fullName == "string") {
         let win = typeof window != "undefined" ? window : undefined;
         console.show(this.fullName, 500, win);
       }

@@ -10,6 +10,7 @@
 <!ENTITY settings.import "설정 가져오기">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "설정 초기화">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "새 창으로 열리는 링크를 열 곳:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "다른 프로그램이 여는 링크를 열 곳:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "탭 너비:">
 <!ENTITY widthTo.label "에서">
 <!ENTITY widthPixels.label "픽셀">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "텝 너비를 탭 제목에 맞추기">
 <!ENTITY bookastitle.label "북마크 이름을 탭 제목으로 사용">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "탭 문맥 메뉴">
 <!ENTITY context.main "페이지 문맥 메뉴">
 <!ENTITY context.tools "도구 메뉴">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "탭 문맥 메뉴에서 보여줄 것:">
 <!ENTITY showContentAreaContext.label "페이지 문맥 메뉴에서 보여줄 것:">
 <!ENTITY showToolsMenu.label "도구 메뉴에서 보여줄 것:">

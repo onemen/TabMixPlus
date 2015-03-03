@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Импортиране на настройките">
 <!ENTITY settings.sync "Настройка на Sync">
 <!ENTITY settings.default "Възстановяване на настройките по подразбиране">
+<!ENTITY settings.revert "Отмяна на промените">
 <!ENTITY generalWindowOpen.label "Връзките, които се отварят в нов прозорец, да се отварят в:">
 <!ENTITY externalLink.useSeparate.label "Използване на отделни настройки за връзки от други приложения">
 <!ENTITY externalLinkTarget.label "Отваряне на връзките от външни приложения в:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Ширина на подпрозореца от">
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
+<!ENTITY onLeftDisabled.label "При сега използваната тема, бутонът не може да бъде разположен отляво">
 <!ENTITY flexTabs.label "Ширината е съобразно дължината на заглавието">
 <!ENTITY bookastitle.label "Използване името на отметката като заглавие на подпрозореца">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Контекстно меню на подпрозореца">
 <!ENTITY context.main "Основно контекстно меню">
 <!ENTITY context.tools "Меню &quot;Инструменти&quot;">
+<!ENTITY showOnTabbar.label "Показване контекстното меню на подпрозореца върху лентата с подпрозорци">
 <!ENTITY showtabBarContext.label "Пунктове в контекстното меню на подпрозореца">
 <!ENTITY showContentAreaContext.label "Пунктове в основното контекстно меню">
 <!ENTITY showToolsMenu.label "Пунктове в меню &quot;Инструменти&quot;">

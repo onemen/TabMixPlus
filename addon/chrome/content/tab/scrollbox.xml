@@ -110,24 +110,6 @@
         document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
 
-      <method name="updateScrollButtons">
-        <parameter name="useTabmixButtons"/>
-        <body><![CDATA[
-          this._scrollButtonDown = !useTabmixButtons ?
-              this._scrollButtonDownLeft : this._scrollButtonDownRight;
-          var tabContainer = document.getBindingParent(this);
-          tabContainer._animateElement = this._scrollButtonDown;
-
-          this._scrollButtonUp = !useTabmixButtons ?
-              this._scrollButtonUpLeft : this._scrollButtonUpRight;
-          this._updateScrollButtonsDisabledState();
-          if (!Tabmix.isVersion(320)) {
-            this._scrollButtonUp.collapsed = !tabContainer.overflow;
-            this._scrollButtonDown.collapsed = !tabContainer.overflow;
-          }
-        ]]></body>
-      </method>
-
       <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
            Override scrollbox.xml method, since our scrollbox's children are
            inherited from the binding parent -->
@@ -186,7 +168,7 @@
           this.tabmix_inited = true;
 
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
-          this.offsetRatio = document.getBindingParent(this).closeButtonsEnabled ? 0.70 : 0.50;
+          this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
           this.minOffset = TabmixSvc.australis ? 25 : 50;
           Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
             'var amountToScroll',
@@ -303,9 +285,9 @@
               !this.isMultiRow) {
             let tab;
             if (isScrollingLeft)
-              tab = TMP_TabView.nextVisibleSibling(element);
+              tab = Tabmix.visibleTabs.next(element);
             else
-              tab = TMP_TabView.previousVisibleSibling(element);
+              tab = Tabmix.visibleTabs.previous(element);
             if (tab) {
               offset = Math.min(this.minOffset, this.offsetRatio * tab.getBoundingClientRect().width);
               if (!isScrollingLeft)
@@ -366,35 +348,6 @@
         ]]></getter>
       </property>
 
-      <method name="isElementVisible">
-        <parameter name="element"/>
-        <body><![CDATA[
-          if (!element || !element.parentNode || element.collapsed || element.hidden)
-            return false;
-
-          // pinned tabs are always visible
-          if (element.pinned)
-            return true;
-
-          var [start, end] = this._startEndProps;
-          var rect = this.scrollClientRect;
-          var containerStart = rect[start];
-          var containerEnd = rect[end];
-          rect = element.getBoundingClientRect();
-          var elementStart = rect[start];
-          var elementEnd = rect[end];
-
-          // we don't need the extra check with scrollContentRect
-          // like in ensureElementIsVisible, the element will be invisible anyhow.
-          if (elementStart < containerStart)
-            return false;
-          else if (containerEnd < elementEnd)
-            return false;
-
-          return true;
-        ]]></body>
-      </method>
-
       <method name="_enterVerticalMode">
         <parameter name="blockUnderflow"/>
         <body><![CDATA[
@@ -406,26 +359,26 @@
           if (this.orient == "vertical")
             return;
 
-          var tabBar = document.getBindingParent(this);
-          tabBar.adjustNewtabButtonvisibility();
+          Tabmix.tabsUtils.adjustNewtabButtonvisibility();
           let tabs = this._getScrollableElements();
           if (!tabs.length)
             return;
-          let isFirstTabVisible = this.isElementVisible(tabs[0]);
-          let isLastTabVisible = this.isElementVisible(tabs[tabs.length-1]);
+          let isFirstTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[0]);
+          let isLastTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[tabs.length-1]);
           if (!isFirstTabVisible || !isLastTabVisible) {
             // show Newtabbutton for the first time
             // for the case last tab in row fill the all strip and the button
             // is on the next row
-            tabBar.disAllowNewtabbutton = false;
+            Tabmix.tabsUtils.disAllowNewtabbutton = false;
             this.orient = "vertical";
+            let tabBar = document.getBindingParent(this);
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
-            if (tabBar.updateVerticalTabStrip() == null)
+            if (Tabmix.tabsUtils.updateVerticalTabStrip() == null)
               TabmixTabbar._failedToEnterVerticalMode = true;
             if (blockUnderflow && this.orient == "vertical")
               this.blockUnderflow = true;
-            this.updateOverflow(tabBar.overflow);
+            this.updateOverflow(Tabmix.tabsUtils.overflow);
           }
         ]]></body>
       </method>
@@ -447,11 +400,10 @@
 
           this.firstVisibleRow = firstVisibleRow;
 
-          let tabBar = document.getBindingParent(this);
 ///XXX check if we can set the margin with animation when we scroll
           let end = Tabmix.ltr ? "right": "left";
           let containerEnd = this.scrollClientRect[end];
-          let top = tabBar.topTabY;
+          let topY = Tabmix.tabsUtils.topTabY;
           let tabs = this._getScrollableElements();
           let index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
@@ -460,7 +412,7 @@
               tab.removeAttribute("tabmix-firstTabInRow");
               continue;
             }
-            let row = tabBar.getTabRowNumber(tab, top);
+            let row = Tabmix.tabsUtils.getTabRowNumber(tab, topY);
             if (row > current) {
               current = row;
               if (!tab.hasAttribute("tabmix-firstTabInRow"))
@@ -492,7 +444,7 @@
           // if a smoothScroll is in progress call ensureElementIsVisible again
           // the amountToScroll changed when we changed firstTabInRow
           if (this._scrollTarget)
-            this.ensureElementIsVisible(this._scrollTarget, true)
+            this.ensureElementIsVisible(this._scrollTarget, true);
         ]]></body>
       </method>
 
@@ -562,18 +514,18 @@
         }
 
         var tabs = document.getBindingParent(this);
-        if (tabs.hasAttribute("multibar") && tabs.overflow) {
+        if (tabs.hasAttribute("multibar") && Tabmix.tabsUtils.overflow) {
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
-              (!tabs.visibleTabsLastChild.hasAttribute("showbutton") &&
-               !tabs.visibleTabsLastChild.hasAttribute("showbutton_removed")))
-            tabs.updateVerticalTabStrip();
+              (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
+               !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
+            Tabmix.tabsUtils.updateVerticalTabStrip();
         }
         else
-          tabs.overflow = false;
+          Tabmix.tabsUtils.overflow = false;
 
-        this.updateOverflow(tabs.overflow);
+        this.updateOverflow(Tabmix.tabsUtils.overflow);
 
         if (tabs._lastTabClosedByMouse)
           tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
@@ -617,13 +569,13 @@
           //XXX don't do anything on Linux when hovering last tab and
           // we show close button on tab on hover
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
-              !tabs.visibleTabsLastChild.hasAttribute("showbutton"))
-            tabs.updateVerticalTabStrip();
+              !Tabmix.visibleTabs.last.hasAttribute("showbutton"))
+            Tabmix.tabsUtils.updateVerticalTabStrip();
         }
         else
-          tabs.overflow = true;
+          Tabmix.tabsUtils.overflow = true;
 
-        this.updateOverflow(tabs.overflow);
+        this.updateOverflow(Tabmix.tabsUtils.overflow);
 
         tabs._positionPinnedTabs();
         if (Tabmix.isVersion(190))

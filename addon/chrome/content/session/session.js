@@ -474,7 +474,7 @@ var TabmixSessionManager = { // jshint ignore:line
          return resultData;
 
       // we set aPopUp only in canQuitApplication
-      if (aPopUp == null)
+      if (aPopUp === undefined)
         aPopUp = !window.toolbar.visible;
 
       this.lastSaveTabsCount = this.saveOnWindowClose();
@@ -1755,7 +1755,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    // xxx need to check if we need all this functions
    removeSession: function SM_removeSession(value, container) {
-      if (value==null) return;
+      if (!value)
+        return;
       var node = this.RDFService.GetResource(value);
       var rdfNodeWindows = this.RDFService.GetResource(container);
       var windowsContainer = this.initContainer(rdfNodeWindows);
@@ -2255,7 +2256,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // get saved session list, we only need to get session path
       var sessionList = this.getSessionList("onlyPath");
       var askifempty = restoreFlag > 1 ? false : this.prefBranch.getBoolPref("onStart.askifempty");
-      if (sessionList == null) {
+      if (sessionList === null) {
          if (((askifempty && afterCrash) || restoreFlag == 1) && !this.corruptedFile) {
             msg = TabmixSvc.getSMString("sm.start.msg0") + "\n" +
                   TabmixSvc.getSMString("sm.afterCrash.msg10");
@@ -2289,7 +2290,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   }
                }
             }
-            if ((thisPath && this.containerEmpty(thisPath)) || sessionIndex == null) {
+            if ((thisPath && this.containerEmpty(thisPath)) || sessionIndex === null) {
                // error in pref.js or in session.rdf ask the user what to do
                loadSessionIsValid = false;
                thisPath = this.gSessionPath[1]; // load last session
@@ -3082,7 +3083,7 @@ try{
          case "firstwindowopen":
                overwrite = false;
                let hasFirstArgument = window.arguments && window.arguments[0];
-               if (hasFirstArgument && this.overrideHomepage == null)
+               if (hasFirstArgument && this.overrideHomepage === null)
                  restoreSelect = false;
             break;
          case "windowopenedbytabmix":

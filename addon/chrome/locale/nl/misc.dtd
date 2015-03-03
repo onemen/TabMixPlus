@@ -1,7 +1,7 @@
 <!ENTITY searchTabFocus.label "In de achtergrond laden">
 <!ENTITY searchTabFocus.accesskey "a">
-<!ENTITY renametab.panel.title "Tabblad titel wijzigen">
-<!ENTITY renametab.reset.label "Herstellen naar standaard titel">
+<!ENTITY renametab.panel.title "Tabbladtitel wijzigen">
+<!ENTITY renametab.reset.label "Herstellen naar standaardtitel">
 <!ENTITY title.label "Titel">
 <!ENTITY default.label "Standaard">
 <!ENTITY renametab.permanently.label "Dit tabblad hernoemen ongeacht het webadres">

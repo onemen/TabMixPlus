@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+]>
+
+<bindings id="tmp_shortcuts_labels"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="shortcut-labels" display="xul:vbox">
+    <content hidden="true"
+             dupTabToWin="&clicktab.duplicatetabw;"
+             protecttab="&clicktab.protecttab;"
+             locktab="&clicktab.locktab;"
+             freezetab="&clicktab.freezetab;"
+             renametab="&clicktab.renametab;"
+             copyTabUrl="&clicktab.copyTabUrl;"
+             pasteTabUrl="&clicktab.copyUrlFromClipboard;"
+             selectMerge="&clicktab.selectMerge;"
+             reload="&clicktab.reloadtab;"
+             reloadtabs="&clicktab.reloadtabs;"
+             reloadothertabs="&clicktab.reloadothertabs;"
+             reloadlefttabs="&clicktab.reloadlefttabs;"
+             reloadrighttabs="&clicktab.reloadrighttabs;"
+             autoReloadTab="&clicktab.autoReloadTab;"
+             removeall="&clicktab.removeall;"
+             removesimilar="&clicktab.removesimilar;"
+             removeother="&clicktab.removeother;"
+             removeleft="&clicktab.removetoLeft;"
+             removeright="&clicktab.removetoRight;"
+             undoClose="&clicktab.uctab;">
+    </content>
+  </binding>
+
+</bindings>

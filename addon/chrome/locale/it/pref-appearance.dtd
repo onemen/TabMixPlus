@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Mostra i valori RGB">
 <!ENTITY unreadAfterReload.label "Imposta le schede come non lette dopo averle ricaricate">
 <!ENTITY squaredTabs.label "Applica il colore di sfondo alle schede squadrate">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Altre schede">
 <!ENTITY italic.label "Corsivo">
 <!ENTITY bold.label "Grassetto">

@@ -9,6 +9,8 @@ var gAppearancePane = { // jshint ignore:line
       Tabmix.setItem("tabBarDisplay", "TSTinstalled", true);
       Tabmix.setItem("tabBarPosition", "disabled", true);
       Tabmix.setItem("tabsScroll", "disabled", true);
+      Tabmix.setItem("maxrow", "disabled", true);
+      Tabmix.setItem("offsetAmountToScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
@@ -46,7 +48,7 @@ var gAppearancePane = { // jshint ignore:line
     this.setTabCloseButtonUI();
     this.tabsScrollChanged();
 
-    // for locals with long labels
+    // for locales with long labels
     var hbox = $("tabsScroll-box");
     var label = $("tabsScroll.label").boxObject.width;
     var menulist = $("tabsScroll");

@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importer les réglages">
 <!ENTITY settings.sync "Préférences de synchronisation">
 <!ENTITY settings.default "Restaurer les réglages par défaut">
+<!ENTITY settings.revert "Annuler">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
 <!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d&apos;autres applications">
 <!ENTITY externalLinkTarget.label "Ouvrir les liens des autres applications dans :">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Largeur :">
 <!ENTITY widthTo.label "à">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Impossible de positionner le bouton sur le côté gauche avec le thème actuel&apos;">
 <!ENTITY flexTabs.label "La largeur de l&apos;onglet s&apos;adapte au titre">
 <!ENTITY bookastitle.label "Utiliser le nom du marque-page comme titre d&apos;onglet">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Menu contextuel des onglets">
 <!ENTITY context.main "Menu contextuel principal">
 <!ENTITY context.tools "Menu des outils">
+<!ENTITY showOnTabbar.label "Afficher le menu contextuel des onglets sur la barre d'onglets">
 <!ENTITY showtabBarContext.label "Afficher dans le menu contextuel de la barre d&apos;onglets :">
 <!ENTITY showContentAreaContext.label "Afficher dans le menu contextuel principal de la page courante :">
 <!ENTITY showToolsMenu.label "Afficher dans le menu des outils">

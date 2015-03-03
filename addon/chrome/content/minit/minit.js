@@ -127,28 +127,43 @@ var TMP_tabDNDObserver = {
 
     let dt = event.dataTransfer;
     dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
-    let uri = gBrowser.getBrowserForTab(tab).currentURI;
-    let spec = uri ? uri.spec : "about:blank";
+    let browser = tab.linkedBrowser;
 
     // We must not set text/x-moz-url or text/plain data here,
     // otherwise trying to deatch the tab by dropping it on the desktop
     // may result in an "internet shortcut"
-    dt.mozSetDataAt("text/x-moz-text-internal", spec, 0);
+    dt.mozSetDataAt("text/x-moz-text-internal", browser.currentURI.spec, 0);
 
     // Set the cursor to an arrow during tab drags.
     dt.mozCursor = "default";
 
-    let canvas = tabPreviews.capture(tab, false);
-    let offset = TabmixTabbar.position == 1 ? canvas.height + 10 : -37;
-    dt.setDragImage(canvas, 0, offset);
+    // Create a canvas to which we capture the current tab.
+    // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
+    // canvas size (in CSS pixels) to the window's backing resolution in order
+    // to get a full-resolution drag image for use on HiDPI displays.
+    let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
+    let scale = !Tabmix.isVersion(180) ? 1 :
+                windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
+    let canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+    canvas.mozOpaque = true;
+    canvas.width = 160 * scale;
+    canvas.height = 90 * scale;
+    if (!Tabmix.isVersion(340) || !gMultiProcessBrowser) {
+      // Bug 863512 - Make page thumbnails work in e10s
+      let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
+      PageThumbs.captureToCanvas(elm, canvas);
+    }
+    let offset = (TabmixTabbar.visibleRows == 1 ? -16 : -30) * scale;
+    if (TabmixTabbar.position == 1)
+      offset = canvas.height - offset;
+    dt.setDragImage(canvas, -16 * scale, offset);
 
     // _dragData.offsetX/Y give the coordinates that the mouse should be
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
     let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) -
-                      clientX(gBrowser.tabs[0].pinned ? gBrowser.tabs[0] : gBrowser.tabContainer);
+    let tabOffsetX = clientX(tab) - clientX(gBrowser.tabContainer);
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
       offsetY: event.screenY - window.screenY
@@ -244,12 +259,12 @@ var TMP_tabDNDObserver = {
         let tooltip = document.getElementById("tabmix-tooltip");
         if (tooltip.state == "closed") {
           tooltip.label = this.gMsg;
-          tooltip.openPopup(document.getElementById("browser"), null, -1, -1, false, false);
+          tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
         }
       }
     }
 
-    if (tabBar.overflow) {
+    if (Tabmix.tabsUtils.overflow) {
       let tabStrip = tabBar.mTabstrip;
       let ltr = Tabmix.ltr || tabStrip.orient == "vertical";
       let _scroll, targetAnonid;
@@ -263,12 +278,12 @@ var TMP_tabDNDObserver = {
       switch (targetAnonid) {
         case "scrollbutton-up":
         case "scrollbutton-up-right":
-          if (tabBar.canScrollTabsLeft)
+          if (Tabmix.tabsUtils.canScrollTabsLeft)
             _scroll = -1;
             break;
         case "scrollbutton-down":
         case "scrollbutton-down-right":
-          if (tabBar.canScrollTabsRight)
+          if (Tabmix.tabsUtils.canScrollTabsRight)
             _scroll = 1;
             break;
       }
@@ -558,7 +573,7 @@ var TMP_tabDNDObserver = {
   },
 
   getNewIndex: function (event) {
-    function getTabRowNumber(tab, top) tab.pinned ? 1 : gBrowser.tabContainer.getTabRowNumber(tab, top)
+    function getTabRowNumber(tab, top) tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top)
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,
@@ -569,7 +584,7 @@ var TMP_tabDNDObserver = {
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       let i = event.target.localName == "tab" ?
-          TMP_TabView.getIndexInVisibleTabsFromTab(event.target) : 0;
+          Tabmix.visibleTabs.indexOf(event.target) : 0;
       for (; i < numTabs; i++) {
         let tab = tabs[i];
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
@@ -577,7 +592,7 @@ var TMP_tabDNDObserver = {
       }
     }
     else {
-      let topY = tabBar.topTabY;
+      let topY = Tabmix.tabsUtils.topTabY;
       for (let i = 0; i < numTabs; i++) {
         let tab = tabs[i];
         let thisRow = getTabRowNumber(tab, topY);
@@ -680,12 +695,12 @@ var TMP_tabDNDObserver = {
       if (TabmixTabbar.position == 1) {
         newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
         let addOnBar = document.getElementById("addon-bar");
-        fixMargin = newMarginY === 0 &&
-              (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed);
+        fixMargin = (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed) &&
+          (Math.abs(newMarginY) < 0.5);
       }
       else {
         newMarginY = tabRect.bottom - rect.bottom;
-        fixMargin = newMarginY === 0 && this.onLastToolbar;
+        fixMargin = this.onLastToolbar && (Math.abs(newMarginY) < 0.5);
       }
       // make indicator visible
       if (fixMargin)
@@ -919,22 +934,6 @@ var TMP_TabView = { /* jshint ignore: line */
     return firstTab;
   },
 
-  previousVisibleSibling: function (aTab) {
-    var tabs = gBrowser.visibleTabs;
-    var index = tabs.indexOf(aTab);
-    if (--index > -1)
-      return tabs[index];
-    return null;
-  },
-
-  nextVisibleSibling: function (aTab) {
-    var tabs = gBrowser.visibleTabs;
-    var index = tabs.indexOf(aTab);
-    if (index > -1 && ++index < tabs.length)
-      return tabs[index];
-    return null;
-  },
-
   // includung _removingTabs
   currentGroup: function () {
     return Array.filter(gBrowser.tabs, function(tab) !tab.hidden);
@@ -953,10 +952,6 @@ var TMP_TabView = { /* jshint ignore: line */
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
-  },
-
-  getIndexInVisibleTabsFrom_tPos: function (aIndex) {
-    return this.getIndexInVisibleTabsFromTab(gBrowser.tabs.item(aIndex));
   }
 };
 
@@ -1325,7 +1320,7 @@ Tabmix.navToolbox = {
       next.parentNode.insertBefore(box, next);
       if (!onlyPosition) {
         let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-        gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
       }
       return;
     }
@@ -1334,7 +1329,7 @@ Tabmix.navToolbox = {
 
     if (!onlyPosition) {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-      gBrowser.tabContainer.mTabstrip.updateScrollButtons(useTabmixButtons);
+      Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
     }
   },
 

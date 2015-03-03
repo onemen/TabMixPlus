@@ -6,10 +6,11 @@
 <!ENTITY showRGB.label "Прикажи RGB">
 <!ENTITY unreadAfterReload.label "означи картицу као непрочитану након поновног учитавања">
 <!ENTITY squaredTabs.label "Примени боју позадине за квадратне картице">
+<!ENTITY backgroundDisabled.label "Боје позадине картица су онемогућене ако је инсталиран TreeStyleTabs">
 <!ENTITY otherTabs.label "Остале картице">
-<!ENTITY italic.label "Искошено">
-<!ENTITY bold.label "Подебљано">
-<!ENTITY underline.label "Подвучено">
+<!ENTITY italic.label "искошено">
+<!ENTITY bold.label "подебљано">
+<!ENTITY underline.label "подвучено">
 <!ENTITY textcolor.label "Боја слова">
 <!ENTITY bgColor.label "Боја позадине">
 <!ENTITY bgTopColor.label "врх">

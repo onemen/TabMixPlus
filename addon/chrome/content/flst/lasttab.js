@@ -50,23 +50,21 @@ var TMP_LastTab = {
 
    init : function() {
       this._inited = true;
-      var browser = document.documentElement;
 
       this.TabList = document.getElementById("lasttabTabList");
 
       let tabBox = gBrowser.mTabBox;
+      let els = Cc["@mozilla.org/eventlistenerservice;1"]
+                    .getService(Ci.nsIEventListenerService);
       if (Tabmix.isVersion(320)) {
-        let els = Cc["@mozilla.org/eventlistenerservice;1"]
-                      .getService(Ci.nsIEventListenerService);
         els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
       }
-      else
+      else {
         tabBox._eventNode.removeEventListener("keypress", tabBox, false);
-      browser.addEventListener("keydown", this, true);
-      browser.addEventListener("keypress", this, true);
-      browser.addEventListener("keyup", this, true);
-      this.TabList.addEventListener("DOMMenuItemActive", this, true);
-      this.TabList.addEventListener("DOMMenuItemInactive", this, true);
+        els.addSystemEventListener(tabBox._eventNode, "keypress", this, false);
+      }
+      els.addSystemEventListener(tabBox._eventNode, "keydown", this, false);
+      els.addSystemEventListener(tabBox._eventNode, "keyup", this, false);
 
       // if session manager select other tab then the first one we need to build
       // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -83,12 +81,14 @@ var TMP_LastTab = {
    deinit : function() {
       if (!this._inited)
         return;
-      var browser = document.documentElement;
-      browser.removeEventListener("keydown", this, true);
-      browser.removeEventListener("keypress", this, true);
-      browser.removeEventListener("keyup", this, true);
-      this.TabList.removeEventListener("DOMMenuItemActive", this, true);
-      this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
+
+      let tabBox = gBrowser.mTabBox;
+      let els = Cc["@mozilla.org/eventlistenerservice;1"]
+                    .getService(Ci.nsIEventListenerService);
+      els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
+      els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
+      if (!Tabmix.isVersion(320))
+         els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
    },
 
    handleEvent : function(event) {
@@ -159,8 +159,8 @@ var TMP_LastTab = {
    OnKeyDown : function(event) {
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
       Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-      if (Tabmix.isVersion(320) && !this.isCtrlTab(event))
-        gBrowser.mTabBox.handleEvent(event);
+      if (Tabmix.isVersion(320))
+         this.OnKeyPress(event);
    },
 
    set tabs (val) {
@@ -279,14 +279,21 @@ var TMP_LastTab = {
       this._tabs = null;
    },
 
-   OnMenuCommand : function _LastTab_OnMenuCommand(event) {
+   onMenuCommand : function(event) {
       if(this.respondToMouseInTabList) {
          TabmixAllTabs._tabSelectedFromList(event.target.tab);
          this.PushSelectedTab();
       }
    },
 
-   OnPopupHidden : function() {
+   onPopupshowing : function() {
+      this.TabList.addEventListener("DOMMenuItemActive", this, true);
+      this.TabList.addEventListener("DOMMenuItemInactive", this, true);
+   },
+
+   onPopuphidden : function() {
+      this.TabList.removeEventListener("DOMMenuItemActive", this, true);
+      this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
       if(!this.SuppressTabListReset) {
          var tablist = this.TabList;
 

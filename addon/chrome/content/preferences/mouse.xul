@@ -52,8 +52,6 @@
                   onchange="gMousePane.updatedblClickTabbar(this);"/>
       <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
                   type="bool" inverted="true"/>
-      <preference id="pref_disableMoveTab"    name="extensions.tabmix.tabBarMode"         type="int"
-                  notChecked="2"/>
     </preferences>
 
     <!-- pane content -->
@@ -90,7 +88,7 @@
           <groupbox flex="1">
             <!-- drop indicator -->
             <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"
-                          observes="obs_disableMoveTab"/>
+                          style="width: 470px;"/>
             <!-- drop indicator -->
             <hbox id="dropIndicator">
               <label value="&dropIndicator.label;:"/>
@@ -207,7 +205,6 @@
       <broadcaster id="obs_mouseHoverSelect"/>
       <broadcaster id="obs_tabFlip"/>
       <broadcaster id="obs_tabbarscrolling"/>
-      <broadcaster id="obs_disableMoveTab"/>
     </broadcasterset>
 
   </prefpane>

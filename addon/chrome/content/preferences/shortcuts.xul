@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
-%pref-tabmixDTD;
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
 %tabmixDTD;
 <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
@@ -26,31 +24,4 @@
     <key id="key_tm_toggleFLST" label="&shortcuts.toggleFLST;" keycode="VK_F9" oncommand="Tabmix.flst.toggle();" disabled="true"/>
   </keyset>
 
-  <script type="application/javascript">
-    // we only need to get the labels one time
-    if (!Tabmix.ShortcutsInitialized) {
-      let sc = Tabmix.shortcutsLabels = {};
-      sc.dupTabToWin = "&clicktab.duplicatetabw;";
-      sc.protecttab = "&clicktab.protecttab;";
-      sc.locktab = "&clicktab.locktab;";
-      sc.freezetab = "&clicktab.freezetab;";
-      sc.renametab = "&clicktab.renametab;";
-      sc.copyTabUrl = "&clicktab.copyTabUrl;";
-      sc.pasteTabUrl = "&clicktab.copyUrlFromClipboard;";
-      sc.selectMerge = "&clicktab.selectMerge;";
-      sc.reload = "&clicktab.reloadtab;";
-      sc.reloadtabs = "&clicktab.reloadtabs;";
-      sc.reloadothertabs = "&clicktab.reloadothertabs;";
-      sc.reloadlefttabs = "&clicktab.reloadlefttabs;";
-      sc.reloadrighttabs = "&clicktab.reloadrighttabs;";
-      sc.autoReloadTab = "&clicktab.autoReloadTab;";
-      sc.removeall = "&clicktab.removeall;";
-      sc.removesimilar = "&clicktab.removesimilar;";
-      sc.removeother = "&clicktab.removeother;";
-      sc.removeleft = "&clicktab.removetoLeft;";
-      sc.removeright = "&clicktab.removetoRight;";
-      sc.undoClose = "&clicktab.uctab;";
-      sc.ucatab = "&clicktab.ucatab;";
-    }
-  </script>
 </overlay>

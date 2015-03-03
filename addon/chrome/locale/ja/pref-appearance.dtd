@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "RGB を表示する">
 <!ENTITY unreadAfterReload.label "再読み込み後はタブを未読にする">
 <!ENTITY squaredTabs.label "タブの背景色を設定する">
+<!ENTITY backgroundDisabled.label "ツリー型タブがインストールされているときはタブの背景色設定を無効にする">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">
 <!ENTITY bold.label "太字">

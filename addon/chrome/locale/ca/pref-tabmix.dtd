@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importa els paràmetres">
 <!ENTITY settings.sync "Sincronitza les preferències">
 <!ENTITY settings.default "Restaura els paràmetres per defecte">
+<!ENTITY settings.revert "Reverteix">
 <!ENTITY generalWindowOpen.label "Obre els enllaços que s'obren en una finestra nova en:">
 <!ENTITY externalLink.useSeparate.label "Utilitza una preferència diferent per als enllaços procedents d'altres aplicacions">
 <!ENTITY externalLinkTarget.label "Obre els enllaços des d'altres aplicacions en:">
@@ -42,7 +43,7 @@
 <!ENTITY newtab.current "Pàgina actual">
 <!ENTITY newtab.duplicate "Pàgina duplicada">
 <!ENTITY newtab.location.1 "Pàgina de pestanya nova">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY newtab.placeholder.label "Pàgina de pestanya nova per defecte">
 <!ENTITY location.label.1 "Adreça">
 <!ENTITY focusContent.label "Enfoca el contingut en carregar una pàgina que no sigui en blanc">
 <!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l'actual">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Amplada de les pestanyes:">
 <!ENTITY widthTo.label "a">
 <!ENTITY widthPixels.label "píxels">
+<!ENTITY onLeftDisabled.label "No es pot col·locar el botó a l&apos;esquerra amb el tema actual">
 <!ENTITY flexTabs.label "Ajusta l'amplada al títol de la pestanya">
 <!ENTITY bookastitle.label "Utilitza el nom de l'adreça d'interès com a títol de la pestanya">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -209,8 +211,8 @@
 <!ENTITY ontabbar.label "A la barra de pestanyes:">
 <!ENTITY clicktab.label "Seleccioneu l'ordre que s'executarà en fer clic en una pestanya o a la barra de pestanyes">
 <!ENTITY ontabbar.dblClick.label "Evita que un doble clic a la barra de pestanyes canviï la mida de la finestra.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY ontabbar.click.label "Evita fer clic a la barra de pestanyes en arrossegar la finestra.">
+<!ENTITY clicktab.default "Per defecte del Firefox o una altra extensió">
 <!ENTITY clicktab.nothing "No facis res">
 <!ENTITY clicktab.addtab "Obre una nova pestanya">
 <!ENTITY clicktab.duplicatetab "Duplica la pestanya">
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Menú contextual de la pestanya">
 <!ENTITY context.main "Menú contextual principal">
 <!ENTITY context.tools "Menú Eines">
+<!ENTITY showOnTabbar.label "Mostra el menú contextual de la pestanya a la barra de pestanyes">
 <!ENTITY showtabBarContext.label "Mostra al menú contextual de la pestanya:">
 <!ENTITY showContentAreaContext.label "Mostra al menú contextual principal">
 <!ENTITY showToolsMenu.label "Mostra al menú Eines:">
@@ -294,7 +297,7 @@
 <!ENTITY sm.restore.merge "Uneix diverses finestres en una">
 <!ENTITY sm.restore.bypassCache "Omet la memòria cau en restaurar">
 <!ENTITY sm.notrestore.label "Quan no es restaura a l&apos;inici">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Restaura les pestanyes fixes de l'última vegada">
 <!ENTITY sm.preserve.options "Conserva les pestanyes:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Protegides">

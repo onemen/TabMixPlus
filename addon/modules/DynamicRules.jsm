@@ -285,7 +285,7 @@ this.DynamicRules = {
     let prefString = Prefs.getCharPref(ruleName);
     try {
       currentPrefValues = TabmixSvc.JSON.parse(prefString);
-      if (currentPrefValues == null)
+      if (currentPrefValues === null)
         throw Error(ruleName + " value is invalid\n" + prefString);
     }
     catch (ex) {
@@ -313,13 +313,13 @@ this.DynamicRules = {
         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
         value = getRGBcolor(value, opacityValue);
       }
-      else if (value != null && typeof(value) != "boolean") {
+      else if (value !== undefined && typeof value != "boolean") {
         if (/^true$|^false$/.test(value.replace(/[\s]/g,"")))
           value = value == "true" ? true : false;
         else
-          value = null;
+          value = undefined;
       }
-      if (value == null)
+      if (value === undefined)
         prefValues[item] = item == "bgTopColor" ? prefValues["bgColor"] :
                                                   defaultPrefValues[item];
       else
@@ -363,9 +363,9 @@ function getRGBcolor(aColorCode, aOpacity) {
   else
     return null;
 
-  if (aOpacity != null)
+  if (aOpacity !== null)
     newRGB[3] = aOpacity;
-  else if (newRGB[3] == null || newRGB[3] < 0 || newRGB[3] > 1)
+  else if (newRGB[3] === undefined || newRGB[3] < 0 || newRGB[3] > 1)
     newRGB[3] = 1;
   return "rgba(" + newRGB.join(",") + ")";
 }

@@ -158,7 +158,7 @@ tabpanel {
   visibility: hidden;
 }
 
-/* for locals with wide tabs, align right end with tabpanels */
+/* for locales with wide tabs, align right end with tabpanels */
 tabbox > tabs {
   -moz-margin-end: 2px;
 }

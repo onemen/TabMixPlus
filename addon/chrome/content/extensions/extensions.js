@@ -27,8 +27,10 @@ var TMP_extensionsCompatibility = {
       Tabmix.extensions.ctr = true;
       let onLeft = Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
       Services.prefs.setBoolPref("extensions.classicthemerestorer.closeonleft", onLeft);
-      // let Classic theme restorer control close tab button placement
-      gBrowser.tabContainer.setAttribute("closebuttons-side", "right");
+      // let Classic theme restorer control close tab button placement when the
+      // default theme is in use.
+      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "classic/1.0")
+        gBrowser.tabContainer.setAttribute("closebuttons-side", "right");
     }
 
     // sessionManager extension is restartless since version 0.8
@@ -670,7 +672,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
      *  other places windows
      */
     Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
-      'var tabBar = gBrowser.tabContainer;',
+      'var tabs = gBrowser.visibleTabs;',
       'let TSTOpenGroupBookmarkBehavior = arguments.length > 3 && arguments[3] ||\n' +
       '        TreeStyleTabService.openGroupBookmarkBehavior();\n' +
       '    $&'

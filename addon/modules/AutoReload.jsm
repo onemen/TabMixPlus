@@ -50,7 +50,7 @@ let AutoReload = {
       this.addClonePopup(aPopup, aTab);
     aPopup._tab = aTab;
 
-    if (aPopup._tab.autoReloadEnabled == null)
+    if (aPopup._tab.autoReloadEnabled === undefined)
       this.initTab(aPopup._tab);
 
     var enableItem = menuItems[2];
@@ -149,7 +149,7 @@ let AutoReload = {
     var tabs = aTabBrowser.visibleTabs;
     for(let i=0; i<tabs.length; i++) {
       let tab = tabs[i];
-      if (tab.autoReloadEnabled == null)
+      if (tab.autoReloadEnabled === undefined)
         this.initTab(tab);
 
       if (!tab.autoReloadEnabled || tab.autoReloadURI != tab.linkedBrowser.currentURI.spec)
@@ -250,7 +250,7 @@ let AutoReload = {
 function _setItem () {}
 
 function _reloadTab(aTab) {
-  if (aTab == null || !aTab.parentNode)
+  if (!aTab || !aTab.parentNode)
     return;
 
   if (aTab.autoReloadEnabled === false ) {

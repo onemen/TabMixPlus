@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Імпорт налаштувань">
 <!ENTITY settings.sync "Налаштування синхронізації">
 <!ENTITY settings.default "За замовчуванням">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Відкривати посилання, що створюють нові вікна:">
 <!ENTITY externalLink.useSeparate.label "Використовувати окремі налаштування для посилань інших додатків">
 <!ENTITY externalLinkTarget.label "Відкривати посилання із зовнішніх програм:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Ширина вкладок: від">
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пікселів (30-1000)">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Вирівнювати ширину вкладок по довжині їх заголовків">
 <!ENTITY bookastitle.label "Використовувати ім&apos;я закладки як заголовка вкладки">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Вкладки">
 <!ENTITY context.main "Сторінки">
 <!ENTITY context.tools "Інструменти">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Склад контекстного меню панелі вкладок:">
 <!ENTITY showContentAreaContext.label "Склад контекстного меню веб-сторінок:">
 <!ENTITY showToolsMenu.label "Додати в меню &apos;Інструменти&apos;:">

@@ -128,8 +128,7 @@ Tabmix.getButtonsHeight = function() {
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this._buttonsHeight =
-            tabBar.visibleTabsFirstChild.getBoundingClientRect().height;
+    this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
     if (stripIsHidden)
       tabBar.visible = false;
   }
@@ -637,6 +636,13 @@ var TMP_eventListener = {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
+    // when browser.tabs.animate is true and a new tab is still opening we wait
+    // until onTabOpen_delayUpdateTabBar call updateScrollStatus
+    let lastTab = Services.prefs.getBoolPref("browser.tabs.animate") &&
+        gBrowser.getTabForLastPanel();
+    if (lastTab && !lastTab._fullyOpen)
+      return;
+
     // catch tab width changed when label attribute changed
     // or when busy attribute changed hide/show image
     var tab = aEvent.target;
@@ -742,7 +748,7 @@ var TMP_eventListener = {
     if (aReset)
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
-      gBrowser.tabContainer.updateVerticalTabStrip();
+      Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
       TabmixTabbar.updateBeforeAndAfter();
     }
@@ -769,13 +775,13 @@ var TMP_eventListener = {
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
     let newTime = Date.now();
-    if (gBrowser.tabContainer.overflow || newTime - this.lastTimeTabOpened > 200) {
+    if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
     }
     else if (!this._onOpenTimeout) {
       let self = this;
-      let timeout = gBrowser.tabContainer.disAllowNewtabbutton &&
+      let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
           Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
       this._onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
@@ -794,7 +800,7 @@ var TMP_eventListener = {
       return;
     }
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.overflow) {
+    if (!Tabmix.tabsUtils.overflow) {
       // we use it as a backup for overflow event and for the case that we have
       // pinned tabs in multi-row
       if (TabmixTabbar.isMultiRow && tabBar.mTabstrip.orient != "vertical")
@@ -832,8 +838,8 @@ var TMP_eventListener = {
     // we would like to get early respond when row height is going to change.
     var updateNow = !Services.prefs.getBoolPref("browser.tabs.animate");
     if (!updateNow && tabBar.hasAttribute("multibar")) {
-      let lastTab = tabBar.visibleTabsLastChild;
-      if (!TabmixTabbar.inSameRow(lastTab, TMP_TabView.previousVisibleSibling(lastTab))) {
+      let lastTab = Tabmix.visibleTabs.last;
+      if (!TabmixTabbar.inSameRow(lastTab, Tabmix.visibleTabs.previous(lastTab))) {
         updateNow = true;
         // if the removed tab is single in its row hide it
         if (lastTab == tab)
@@ -868,18 +874,18 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
       if (tabBar.getAttribute("multibar") == "true" &&
-          tabBar.lastTabRowNumber < TabmixTabbar.visibleRows)
-        tabBar.updateVerticalTabStrip();
+          Tabmix.tabsUtils.lastTabRowNumber < TabmixTabbar.visibleRows)
+        Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.updateBeforeAndAfter();
     }
 
     // workaround when we remove last visible tab
-    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && tabBar.overflow &&
-        aTab._tPos >= tabBar.visibleTabsLastChild._tPos)
+    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
+        aTab._tPos >= Tabmix.visibleTabs.last._tPos)
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 
-    if (tabBar.disAllowNewtabbutton)
-      tabBar.adjustNewtabButtonvisibility();
+    if (Tabmix.tabsUtils.disAllowNewtabbutton)
+      Tabmix.tabsUtils.adjustNewtabButtonvisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
       _updateTabstrip();
       setTimeout(function(){_updateTabstrip();}, 0);
@@ -1051,7 +1057,6 @@ var TMP_eventListener = {
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
-    gBrowser.tabContainer._tabmixPositionalTabs = null;
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
@@ -1079,6 +1084,8 @@ var TMP_eventListener = {
       let mm = window.getGroupMessageManager("browsers");
       mm.removeMessageListener("Tabmix:SetSyncHandler", this);
     }
+
+    Tabmix.tabsUtils.onUnload();
   },
 
   // some theme not useing up to date Tabmix tab binding
@@ -1097,12 +1104,8 @@ var TMP_eventListener = {
 
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
       let node = document.getAnonymousElementByAttribute(aTab, aGetAtt, aGetValue);
-      if (node)
-        node.setAttribute(aAtt, aValue);
+      Tabmix.setItem(node, aAtt, aValue);
     }
-
-    aTab.setAttribute("context", gBrowser.tabContextMenu.id);
-
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
   }
@@ -1115,11 +1118,12 @@ var TMP_eventListener = {
  * initialized yet
  */
 Tabmix.initialization = {
-  beforeStartup:           {id: 0, obj: "Tabmix"},
-  onContentLoaded:         {id: 1, obj: "TMP_eventListener"},
-  beforeBrowserInitOnLoad: {id: 2, obj: "Tabmix"},
-  onWindowOpen:            {id: 3, obj: "TMP_eventListener"},
-  delayedStartup:          {id: 4, obj: "Tabmix"},
+  init:                    {id: 0, obj: "Tabmix.tabsUtils"},
+  beforeStartup:           {id: 1, obj: "Tabmix"},
+  onContentLoaded:         {id: 2, obj: "TMP_eventListener"},
+  beforeBrowserInitOnLoad: {id: 3, obj: "Tabmix"},
+  onWindowOpen:            {id: 4, obj: "TMP_eventListener"},
+  delayedStartup:          {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
     /**
@@ -1134,11 +1138,6 @@ Tabmix.initialization = {
       let tmp = { };
       Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
-    }
-
-    if (!stopInitialization) {
-      let tabBrowser = arguments.length > 1 ? arguments[1] : gBrowser;
-      stopInitialization = typeof tabBrowser.tabContainer.updateVerticalTabStrip != "function";
     }
 
     if (stopInitialization) {
@@ -1158,6 +1157,11 @@ Tabmix.initialization = {
     if (!this.isValidWindow)
       return null;
     let result, currentPhase = this[aPhase].id;
+    let getObj = function(list) {
+      let obj = window;
+      list.split(".").forEach(function(prop) {obj = obj[prop];});
+      return obj;
+    };
     for (let key of Object.keys(this)) {
       let phase = this[key];
       if (phase.id > currentPhase)
@@ -1165,7 +1169,7 @@ Tabmix.initialization = {
       if (!phase.initialized) {
         phase.initialized = true;
         try {
-          let obj = window[phase.obj];
+          let obj = getObj(phase.obj);
           result = obj[key].apply(obj, Array.slice(arguments, 1));
         } catch (ex) {
           Tabmix.assert(ex, phase.obj + "." + key + " failed");

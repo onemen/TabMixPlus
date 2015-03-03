@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Import Preferences">
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restore Defaults">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Open links that open in a new window in:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Open links from other applications in:">
@@ -35,7 +36,7 @@
 <!ENTITY tabClose.label "Tab Closing">
 <!ENTITY tabMerge.label "Tab Merging">
 <!ENTITY tabFeature.label "Tab Features">
-<!ENTITY newtab.label "Load on new tabs:">
+<!ENTITY newtab.label "Load on New Tab:">
 <!ENTITY replaceLastTabWith.label "When I close last tab replace it with">
 <!ENTITY newtab.blank "Blank Page">
 <!ENTITY newtab.home "Home Page">
@@ -45,7 +46,7 @@
 <!ENTITY newtab.placeholder.label "Default New Tab Page">
 <!ENTITY location.label.1 "Address">
 <!ENTITY focusContent.label "Focus content when loading non blank page">
-<!ENTITY openTabNext.label "Open new tabs next to current one">
+<!ENTITY openTabNext.label "Open New Tab next to current one">
 <!ENTITY openOtherTabNext.label "Open other tabs next to current one">
 <!ENTITY relatedAfterCurrent.label "Only if related to current tab">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
@@ -165,8 +166,7 @@
 <!ENTITY showTabX.left "Place on left side">
 <!ENTITY showTabX.rtl "Place on right side">
 <!ENTITY milliseconds.label "msec">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width -->
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "on all">
 <!ENTITY showTabX.current "on current">
@@ -176,10 +176,10 @@
 <!ENTITY minWidth.label "Tab Width:">
 <!ENTITY widthTo.label "to">
 <!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Tab width fits to tab title">
 <!ENTITY bookastitle.label "Use bookmark name as tab title">
-<!-- LOCALIZATION NOTE:
-          change this only if you need to change the width -->
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
 <!ENTITY toolbar.button.label "Customize">
@@ -247,6 +247,7 @@
 <!ENTITY context.tab "Tab Context Menu">
 <!ENTITY context.main "Main Context Menu">
 <!ENTITY context.tools "Tools Menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Show in Tab Context Menu">
 <!ENTITY showContentAreaContext.label "Show in Main Context Menu">
 <!ENTITY showToolsMenu.label "Show in Tools Menu">

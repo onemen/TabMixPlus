@@ -3,7 +3,7 @@
 
 var gEventsPane = {
   init: function () {
-    // for locals with long labels
+    // for locales with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;
     var menulist = $("focusTab");

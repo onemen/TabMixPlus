@@ -31,7 +31,7 @@ var Tabmix = { // jshint ignore:line
   setItem: function(aItemOrId, aAttr, aVal) {
     var elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
-      if (aVal == null) {
+      if (aVal === null || aVal === undefined) {
         elem.removeAttribute(aAttr);
         return;
       }
@@ -71,10 +71,11 @@ var Tabmix = { // jshint ignore:line
   },
 
   isNewWindowAllow: function(isPrivate) {
-    // allow to open new window if not in single window mode or
-    // allow to open new private window if there is no private window
+    // allow to open new window if:
+    //   user are not in single window mode or
+    //   there is no other window with the same privacy type
     return !this.getSingleWindowMode() ||
-           this.isVersion(200) && isPrivate && !this.RecentWindow.getMostRecentBrowserWindow({ private: true });
+      this.isVersion(200) && !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {

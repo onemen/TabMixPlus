@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "definir o separador como não lido após atualizar">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Outros separadores">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">

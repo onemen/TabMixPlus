@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Pokaż ustawienia RGB">
 <!ENTITY unreadAfterReload.label "Po odświeżeniu ustaw karty jako nieprzeczytane">
 <!ENTITY squaredTabs.label "Zastosuj kolor tła dla kart starego typu">
+<!ENTITY backgroundDisabled.label "Kolor tła jest wyłączony, gdy jest zainstalowany dodatek TreeStyleTabs">
 <!ENTITY otherTabs.label "Inne karty">
 <!ENTITY italic.label "Kursywa">
 <!ENTITY bold.label "Pogrubienie">

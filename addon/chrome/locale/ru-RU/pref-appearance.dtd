@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Показать RGB">
 <!ENTITY unreadAfterReload.label "отметить вкладку как непрочитанную после её обновления">
 <!ENTITY squaredTabs.label "Применять цвет фона к квадратным вкладкам">
+<!ENTITY backgroundDisabled.label "Цвет фона вкладки отключен, когда установлен TreeStyleTabs">
 <!ENTITY otherTabs.label "Другие вкладки">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Полужирный">

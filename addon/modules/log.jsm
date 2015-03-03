@@ -216,7 +216,7 @@ options = {
           val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
         }
         objS += offset + prop + "[" + type + "]" + " =  " + val + "\n";
-        if (type == "object" && val != null && level && typeof level == "boolean")
+        if (type == "object" && val !== null && level && typeof level == "boolean")
           objS += this.obj(val, "", true, "deep") + "\n";
       } catch (ex) {
         objS += offset + prop + " =  " + "[!!error retrieving property]" + "\n";

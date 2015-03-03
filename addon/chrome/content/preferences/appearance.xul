@@ -147,7 +147,7 @@
               </hbox>
             </box>
             <hbox align="center" id="maxbar">
-              <label value="&maxrow.label;"/>
+              <label value="&maxrow.label;" TSTdisabled="true"/>
               <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
             </hbox>
             <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
@@ -185,7 +185,7 @@
             <checkbox_tmp id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
                       preference="pref_unreadTabreload" observes="obs_unreadTab"/>
             <label id="treeStyleTab.bg.msg" class="header" hidden="true"
-                   value="Tabs background colors are disabled when TreeStyleTabs is installed"
+                   value="&backgroundDisabled.label;"
                    style="text-decoration: underline; color: #CC0000; margin-top: 10px;"/>
           </groupbox>
           <groupbox flex="1">
@@ -228,7 +228,7 @@
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
               </hbox>
             </hbox>
-            <label id="onLeftDisabled" value="Can't place button on left side with the current theme" hidden="true"
+            <label id="onLeftDisabled" value="&onLeftDisabled.label;" hidden="true"
                    style="text-decoration: underline; color: #CC0000;"/>
           </groupbox>
           <groupbox flex="1">

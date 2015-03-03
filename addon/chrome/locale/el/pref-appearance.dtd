@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Προβολή RGB">
 <!ENTITY unreadAfterReload.label "Ορισμός καρτέλας ως μη αναγνωσμένης μετά την ανανέωση">
 <!ENTITY squaredTabs.label "Εφαρμογή χρώματος παρασκηνίου σε τετραγωνισμένες καρτέλες">
+<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">
 <!ENTITY bold.label "Έντονα">

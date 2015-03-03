@@ -71,7 +71,7 @@ this.TMP_TabGroupsManager = {
         sessionStore.deleteTabValue(tab, "__tabmixTGM");
         TGM.moveTabToGroupBySessionStore(tab);
       }
-    }
+    };
 
     this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
       // get saved group data and repalce ids with new one
@@ -105,7 +105,8 @@ this.TMP_TabGroupsManager = {
     )._replace(
       'TMP_ClosedTabs.setButtonDisableState();',
       '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
-      '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite || caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
+      '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite ||' +
+      '                        caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
     )._replace(
       'this.SessionStore[fnName](window, tabs, tabsData, 0);',
@@ -114,7 +115,7 @@ this.TMP_TabGroupsManager = {
     ).toCode();
 
     // for TabGroupsManager use - don't change function name from tabmixSessionsManager
-    aWindow.TMP_TabGroupsManager = {}
+    aWindow.TMP_TabGroupsManager = {};
     aWindow.TMP_TabGroupsManager.tabmixSessionsManager = this.tabmixSessionsManager.bind(aWindow);
     this.changeCode(this, "TMP_TabGroupsManager._saveAllGroupsData", {forceUpdate: true})
         .toCode(false, aWindow.TabmixSessionManager, "saveAllGroupsData");
@@ -127,7 +128,7 @@ this.TMP_TabGroupsManager = {
       return false;
 
     return this.Tabmix.prefs.getBoolPref("sessions.manager") &&
-        (!this.Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this)
+        (!this.Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this);
   },
 
   // for TabGroupsManager use
@@ -145,4 +146,4 @@ this.TMP_TabGroupsManager = {
     }
   }
 
-}
+};

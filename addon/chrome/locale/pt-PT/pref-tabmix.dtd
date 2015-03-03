@@ -10,6 +10,7 @@
 <!ENTITY settings.import "Importar definições">
 <!ENTITY settings.sync "Preferências do sync">
 <!ENTITY settings.default "restaurar pré-definições">
+<!ENTITY settings.revert "Revert">
 <!ENTITY generalWindowOpen.label "Abrir ligações que abren numa nova janela em:">
 <!ENTITY externalLink.useSeparate.label "Usar preferências separadas para ligações de outras aplicações">
 <!ENTITY externalLinkTarget.label "Abrir ligações de outras aplicações em:">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Largura do separador:">
 <!ENTITY widthTo.label "para">
 <!ENTITY widthPixels.label "picéis">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "A largura do separador encaixa na largura">
 <!ENTITY bookastitle.label "USar nome do marcador como titulo do separador">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Menu de contexto do separador">
 <!ENTITY context.main "Menu de contexto principal">
 <!ENTITY context.tools "Menu Ferramentas">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
 <!ENTITY showtabBarContext.label "Mostrar no menu de contexto do separador:">
 <!ENTITY showContentAreaContext.label "Mostrar no menu de contexto principal:">
 <!ENTITY showToolsMenu.label "Mostrar no">

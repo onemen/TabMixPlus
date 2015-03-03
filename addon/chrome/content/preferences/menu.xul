@@ -105,7 +105,7 @@
       </tabs>
       <tabpanels class="menu">
         <tabpanel>
-          <checkbox_tmp id="showOnTabbar" label="Show Tab Context Menu on tabbar" preference="pref_showOnTabbar"/>
+          <checkbox_tmp id="showOnTabbar" label="&showOnTabbar.label;" preference="pref_showOnTabbar"/>
           <groupbox flex="1">
             <caption label="&showtabBarContext.label;"/>
             <grid flex="1" style="overflow: auto; height:18em;">
@@ -317,6 +317,7 @@
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
             <shortcut id="saveWindow"      label="&saveWindow.label;"/>
             <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
+            <shortcut id="switchToLast"    label="&shortcuts.switchToLast;"/>
             <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
                       tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
             <shortcut id="slideShow"       label="&shortcuts.slideshow;"

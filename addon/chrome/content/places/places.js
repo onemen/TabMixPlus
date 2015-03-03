@@ -246,7 +246,6 @@ var TMP_Places = {
   //
   //TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
-    var tabBar = gBrowser.tabContainer;
     var tabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
@@ -277,7 +276,7 @@ var TMP_Places = {
 
     var tabToSelect = null;
     var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < tabs.length - 1) ?
-                  gBrowser.mCurrentTab : tabBar.visibleTabsLastChild;
+                   gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     for (i = 0; i < bmGroup.length ; i++) {
@@ -601,7 +600,7 @@ var TMP_Places = {
     this.inUpdateBatch = true;
 
     if (TabmixTabbar.widthFitTitle &&
-         gBrowser.tabContainer.mTabstrip.isElementVisible(gBrowser.mCurrentTab))
+        Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab))
       this.currentTab = gBrowser.mCurrentTab;
   },
 
@@ -645,22 +644,29 @@ TMP_Places.contextMenu = {
   buildContextMenu: function TMP_PC_buildContextMenu() {
     var _open = document.getElementById("placesContext_open");
     var _openInWindow = document.getElementById("placesContext_open:newwindow");
+    var _openInPrivateWindow =
+        document.getElementById("placesContext_open:newprivatewindow") || {hidden: true};
     var _openInTab = document.getElementById("placesContext_open:newtab");
-    this.update(_open, _openInWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
+    this.update(_open, _openInWindow, _openInPrivateWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
   },
 
   // update context menu for bookmarks manager and sidebar
   // for bookmarks/places, history, sage and more.....
-  update: function TMP_contextMenu_update(open, openInWindow, openInTab, pref) {
-    // if all 3 was hidden ... probably "Open all in Tabs" is visible
-    if (open.hidden && openInWindow.hidden && openInTab.hidden)
+  update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
+                                           openInTab, pref) {
+    // if all 4 is hidden... probably "Open all in Tabs" is visible
+    if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
+        openInTab.hidden) {
       return;
+    }
 
     var w = Tabmix.getTopWin();
     if (w) {
-      var where = w.Tabmix.whereToOpen(pref);
+      let where = w.Tabmix.whereToOpen(pref);
+      if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true))
+        openInPrivateWindow.hidden = true;
 
-      if (!openInWindow.hidden && w.Tabmix.singleWindowMode)
+      if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false))
         openInWindow.hidden = true;
       else if (openInWindow.hasAttribute("default"))
         openInWindow.removeAttribute("default");

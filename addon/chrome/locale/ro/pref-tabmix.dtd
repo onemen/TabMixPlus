@@ -8,8 +8,9 @@
 <!ENTITY apply.label "Aplică">
 <!ENTITY settings.export "Exportă…">
 <!ENTITY settings.import "Importă…">
-<!ENTITY settings.sync "Sincronizează opțiunile">
+<!ENTITY settings.sync "Sincronizează">
 <!ENTITY settings.default "Inițializează…">
+<!ENTITY settings.revert "Anulează">
 <!ENTITY generalWindowOpen.label "Se deschid legăturile cu deschidere într-o fereastră nouă în:">
 <!ENTITY externalLink.useSeparate.label "Se folosesc opțiuni separate pentru legăturile din alte aplicații">
 <!ENTITY externalLinkTarget.label "Se deschid legăturile din alte aplicații în:">
@@ -119,7 +120,7 @@
 <!ENTITY tabBarAppearance.label "Bară de file">
 <!ENTITY tabAppearance.label "Filă">
 <!ENTITY toolBarAppearance.label "Bară de unelte">
-<!ENTITY show.ontabbar.label "Se afișează în bara de file:">
+<!ENTITY show.ontabbar.label "Se afișează pe bara de file:">
 <!ENTITY show.ontab.label "Se afișează pe filă:">
 <!ENTITY dragNewTabButton.tooltip "Glisați butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
 <!ENTITY hideTabBarButton.label "Butonul „Închidere filă”">
@@ -139,7 +140,7 @@
 <!ENTITY tabBarPosition.label "Se poziționează bara de file:">
 <!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
 <!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">
-<!ENTITY tabScroll.label "Când filele deschise nu încap în bara de file:">
+<!ENTITY tabScroll.label "Când filele deschise nu încap pe bara de file:">
 <!ENTITY tabScroll.none "se derulează cu rozeta mausului">
 <!ENTITY tabScroll.leftRightButtons "se afișează butoane de derulare pe ambele margini">
 <!ENTITY tabScroll.rightButtons "se afișează butoane de derulare pe marginea dreaptă">
@@ -175,6 +176,7 @@
 <!ENTITY minWidth.label "Lungime filă:  de la">
 <!ENTITY widthTo.label "la">
 <!ENTITY widthPixels.label "pixeli">
+<!ENTITY onLeftDisabled.label "Nu se poate plasa butonul în partea stângă în tema curentă">
 <!ENTITY flexTabs.label "Se adaptează lungimea filei la lungimea titlului ei">
 <!ENTITY bookastitle.label "Se folosește denumirea semnului de carte ca titlu al filei">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -194,7 +196,7 @@
 <!ENTITY removeEntries.label "Se elimină elementele meniului Tab Mix Plus folosind clic-mijloc">
 <!ENTITY lockTabSizingOnClose.label "La închiderea unei file, nu se redimensionează celelalte file până când cursorul nu părăsește zona barei de file">
 <!ENTITY removeEntries.tooltip "Se includ filele închise, ferestrele închise și sesiunile salvate">
-<!ENTITY tabbarscrolling.caption "La derulare în bara de file">
+<!ENTITY tabbarscrolling.caption "La derulare pe bara de file">
 <!ENTITY tabbarscrolling.holdShift.label "(ținând apăsată tasta Shift în timpul derulării se schimbă opțiunea implicită)">
 <!ENTITY tabbarscrolling.selectTab.label "Se schimbă fila selectată">
 <!ENTITY tabbarscrolling.scrollAllTabs.label "Se derulează toate filele">
@@ -245,6 +247,7 @@
 <!ENTITY context.tab "Meniu contextual filă">
 <!ENTITY context.main "Meniu contextual principal">
 <!ENTITY context.tools "Meniu Unelte">
+<!ENTITY showOnTabbar.label "Afișează meniul contextual al filei pe bara de file">
 <!ENTITY showtabBarContext.label "Comenzi afișate în meniul contextual al filei:">
 <!ENTITY showContentAreaContext.label "Comenzi afișate în meniul contextual principal:">
 <!ENTITY showToolsMenu.label "Elemente afișate în meniul Unelte:">

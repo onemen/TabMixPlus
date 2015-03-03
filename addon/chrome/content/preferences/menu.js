@@ -23,7 +23,9 @@ var gMenuPane = { // jshint ignore:line
         item.setAttribute("label", openNonRemote.getAttribute("label"));
         item.hidden = false;
         let beforeItem = $("showUndoClose");
-        beforeItem.parentNode.insertBefore($("showReloadOther"), beforeItem);
+        item = $("showReloadOther");
+        beforeItem.parentNode.insertBefore(item, beforeItem);
+        item.checked = $("pref_showReloadOther").value;
       }
     }
 

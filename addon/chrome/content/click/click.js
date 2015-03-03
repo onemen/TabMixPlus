@@ -269,7 +269,7 @@ var TabmixTabClickOptions = {
         }
         break;
       case 30: // enable/disable AutoReload
-        if (aTab.autoReloadEnabled === null)
+        if (aTab.autoReloadEnabled === undefined)
           Tabmix.autoReload.initTab(aTab);
         Tabmix.autoReload.toggle(aTab);
         break;
@@ -278,6 +278,9 @@ var TabmixTabClickOptions = {
           gBrowser.unpinTab(aTab);
         else
           gBrowser.pinTab(aTab);
+        break;
+      case 32:
+          gBrowser.previousTab(gBrowser.selectedTab);
         break;
       default:
         return false;
@@ -511,7 +514,7 @@ var TabmixContext = {
     var lockedTab = aTab.hasAttribute("locked");
     var tabsCount = gBrowser.visibleTabs.length;
     var unpinnedTabs = tabsCount - TabmixTabbar._real_numPinnedTabs;
-    var cIndex = TMP_TabView.getIndexInVisibleTabsFromTab(aTab);
+    var cIndex = Tabmix.visibleTabs.indexOf(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
@@ -782,7 +785,7 @@ var TabmixAllTabs = {
       let curTabBO = curTab.boxObject;
       if (!curTabBO) // "Tabs From Other Computers" menuitem
         continue;
-      if (tabContainer.mTabstrip.isElementVisible(curTab))
+      if (Tabmix.tabsUtils.isElementVisible(curTab))
         this.childNodes[i].setAttribute("tabIsVisible", "true");
       else
         this.childNodes[i].removeAttribute("tabIsVisible");
@@ -936,7 +939,7 @@ var TabmixAllTabs = {
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];
-          let visible = side && gBrowser.tabContainer.mTabstrip.isElementVisible(tab);
+          let visible = side && Tabmix.tabsUtils.isElementVisible(tab);
           if (visible) {
             if (tab.pinned)
               continue;

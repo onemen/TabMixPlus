@@ -91,7 +91,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
-    var swapOldCode = 'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
+    var swapOldCode = this.isVersion(380) ?
+        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, tabToOpen);' :
+        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
     var loadOnStartup, swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
       '   window.tabmix_afterTabduplicated = true;' +
@@ -339,7 +341,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   var tabbrowser = this.tabbrowser;
   var tabs = tabbrowser.visibleTabs;
   var tabsCount = tabs.length - tabbrowser._removingTabs.length;
-  switch (this.closeButtonsEnabled ? this.mCloseButtons : 0) {
+  switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
   case 0:
     this.removeAttribute("closebuttons-hover");
     this.setAttribute("closebuttons", "noclose");
@@ -385,7 +387,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
         let currentURI = tabbrowser.currentURI;
         aUrl = currentURI ? currentURI.spec : null;
     }
-    if (this._keepLastTab ||
+    if (Tabmix.tabsUtils._keepLastTab ||
         isBlankPageURL(tab.__newLastTab || null) ||
        (!aUrl || isBlankPageURL(aUrl)) &&
         tabbrowser.isBlankNotBusyTab(tab)) {

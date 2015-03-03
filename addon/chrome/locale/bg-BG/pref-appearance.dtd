@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Показване на RGB">
 <!ENTITY unreadAfterReload.label "след презареждане, подпрозорецът да се маркира като непрочетен">
 <!ENTITY squaredTabs.label "Стилът на фона да се приложи върху квадратни подпрозорци">
+<!ENTITY backgroundDisabled.label "Липса на фоново оцветяване на подпрозорците при инсталиран TreeStyleTabs">
 <!ENTITY otherTabs.label "Други подпрозорци">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Удебелен">

@@ -6,6 +6,7 @@
 <!ENTITY showRGB.label "Mostra RGB">
 <!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
 <!ENTITY squaredTabs.label "Aplicar a cor de fundo para abas quadradas.">
+<!ENTITY backgroundDisabled.label "Guias de cores de fundo são desativadas quando TreeStyleTabs está instalado">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">

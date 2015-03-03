@@ -5,6 +5,7 @@
 <!ENTITY shortcuts.warning "Osasid kiirklahve kasutab mõni muu käak">
 <!ENTITY shortcuts.showDetails "Näita üksikasju">
 <!ENTITY shortcuts.hideDetails "Peida üksikasjad">
+<!ENTITY shortcuts.switchToLast "Lülitu viimati aktiivsele kaardile">
 <!ENTITY shortcuts.slideshow "Lülita kaartide slaidiseanss sisse/välja">
 <!ENTITY shortcuts.toggleFLST "Muuda kaardi sulgemisjärgset fookustamist">
 <!ENTITY shortcuts.toggleFLST.tooltip "muuda, kas aktiivse kaardi sulgemisel näidatakse paremale jäävat või viimati valitud kaarti">
