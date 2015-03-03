@@ -284,8 +284,12 @@ var ContentClickInternal = {
         * Get current page url
         * if user click a link while the page is reloading node.ownerDocument.location can be null
         */
-        let node = this.wrappedNode || this.wrappedOnClickNode;
-        let curpage = node.ownerDocument.URL || this.currentURL;
+        let youtube = /www\.youtube\.com\/watch\?v\=/;
+        let curpage = this.currentURL;
+        if (!youtube.test(curpage)) {
+          let node = this.wrappedNode || this.wrappedOnClickNode;
+          curpage = node.ownerDocument.URL || this.currentURL;
+        }
         let nodeHref = this.hrefFromOnClick || this.href || self._window.XULBrowserWindow.overLink;
         return self.isLinkToExternalDomain(curpage, nodeHref);
       });
@@ -853,9 +857,19 @@ var ContentClickInternal = {
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
-    var currentURL = this._data.currentURL.toLowerCase().split("#")[0];
-    if (hrefFromOnClick)
-      return currentURL != hrefFromOnClick.toLowerCase().split("#")[0];
+    let current = this._data.currentURL.toLowerCase();
+    let youtube = /www\.youtube\.com\/watch\?v\=/;
+    let isYoutube = function(href) youtube.test(current) && youtube.test(href);
+    let isSamePath = function(href, att) makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
+    let isSame = function(href, att) current.split(att)[0] == href.split(att)[0];
+
+    if (hrefFromOnClick) {
+      hrefFromOnClick = hrefFromOnClick.toLowerCase();
+      if (isYoutube(hrefFromOnClick))
+        return !isSamePath(hrefFromOnClick, '&t=');
+      else
+        return !isSame(hrefFromOnClick, '#');
+    }
 
     if (href)
       href = href.toLowerCase();
@@ -865,9 +879,11 @@ var ContentClickInternal = {
         this.checkOnClick(true))
       // javascript links, do nothing!
       return null;
+    else if (isYoutube(href))
+      return !isSamePath(href, '&t=');
     else
       // when the links target is in the same page don't open new tab
-      return currentURL != href.split("#")[0];
+      return !isSame(href, '#');
 
     return null;
   },
