@@ -257,14 +257,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
     tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
        try{
-          if (!aBrowser)
+          if (!aBrowser || !aBrowser.currentURI)
              return true;
-          return (!aBrowser.sessionHistory || aBrowser.sessionHistory.index < 0 ||
-                  (aBrowser.sessionHistory.count < 2 &&
-                  (!aBrowser.currentURI ||
-                  (aboutBlank ? aBrowser.currentURI.spec == "about:blank" :
-                                Tabmix.isNewTabUrls(aBrowser.currentURI.spec))
-          )));
+          if (aBrowser.canGoForward || aBrowser.canGoBack)
+             return false;
+          return aboutBlank ? aBrowser.currentURI.spec == "about:blank" :
+                 Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
        } catch (ex) {Tabmix.assert(ex); return true;}
     };
 
