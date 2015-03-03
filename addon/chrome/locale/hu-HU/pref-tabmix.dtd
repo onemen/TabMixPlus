@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Beállítások importálása">
 <!ENTITY settings.sync "Sync beállítások">
 <!ENTITY settings.default "Alapállapot">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Visszaállítás">
 <!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
 <!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">
 <!ENTITY externalLinkTarget.label "Más programból a linket nyissa meg:">
@@ -176,7 +176,7 @@
 <!ENTITY minWidth.label "Szélesség (30~250) minimum:">
 <!ENTITY widthTo.label "maximum:">
 <!ENTITY widthPixels.label "képpont">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.label "A jelenlegi témánál nem helyezhet el bal oldalra gombokat">
 <!ENTITY flexTabs.label "Lap optimális kitöltése">
 <!ENTITY bookastitle.label "Könyvjelző nevének felhasználása a lap neveként">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -247,7 +247,7 @@
 <!ENTITY context.tab "Lap helyi menü">
 <!ENTITY context.main "Fő helyi menü">
 <!ENTITY context.tools "Eszközök menü">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showOnTabbar.label "Lapok helyi menü megjelenítése">
 <!ENTITY showtabBarContext.label "Lapok eszköztáron megjelenő menü:">
 <!ENTITY showContentAreaContext.label "Weboldal-területen megjelenő menü:">
 <!ENTITY showToolsMenu.label "Megjelenítés az Eszközök menüben">
@@ -297,7 +297,7 @@
 <!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
 <!ENTITY sm.restore.bypassCache "Gyorsítótár figyelmen kívül hagyása visszaállításkor">
 <!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned.label "Legutóbbi rögzített lapok visszaállítása">
 <!ENTITY sm.preserve.options "Védett lapok">
 <!ENTITY sm.preserve.history "Előzmények">
 <!ENTITY sm.preserve.protect "Védelem állapota">
