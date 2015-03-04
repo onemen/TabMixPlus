@@ -5,7 +5,9 @@ var EXPORTED_SYMBOLS = ["console"];
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "FileUtils",
+  "resource://gre/modules/FileUtils.jsm");
 
 let gNextID = 1;
 
@@ -232,7 +234,7 @@ options = {
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
     delete this._pathRegExp;
-    let folder = TabmixSvc.FileUtils.getDir("ProfD", ["extensions"]);
+    let folder = FileUtils.getDir("ProfD", ["extensions"]);
     let path = folder.path.replace("\\", "/", "g") + "/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
