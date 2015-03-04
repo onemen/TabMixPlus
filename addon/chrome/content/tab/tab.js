@@ -2574,8 +2574,8 @@ var TabmixProgressListener = {
         let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         // remove blank tab that created by downloading a file.
         let isDownLoading = Tabmix.prefs.getBoolPref("enablefiletype") &&
-            this.mTabBrowser.isBlankBrowser(aBrowser) &&
-            uri != "about:blank" && aStatus === 0;
+            this.mTabBrowser.isBlankBrowser(aBrowser, true) &&
+            !/^about/.test(uri) && aStatus === 0;
         if (isDownLoading) {
           if (tab.selected)
             this.mTabBrowser.previousTab(tab);
