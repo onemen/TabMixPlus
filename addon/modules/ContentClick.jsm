@@ -12,9 +12,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
-  "resource:///modules/ContentClick.jsm");
-
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
   "resource://tabmixplus/LinkNodeUtils.jsm");
 
@@ -65,9 +62,17 @@ var ContentClickInternal = {
   _initialized: false,
 
   init: function() {
-    if (!TabmixSvc.version(320) || this._initialized)
+    if (!TabmixSvc.version(380) || this._initialized)
       return;
     this._initialized = true;
+
+    try {
+      Cu.import("resource:///modules/ContentClick.jsm");
+      ContentClick.contentAreaClick.toString();
+    } catch (ex) {
+      this.functions = [];
+      return;
+    }
 
     Tabmix._debugMode = TabmixSvc.debugMode();
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
@@ -94,10 +99,6 @@ var ContentClickInternal = {
 
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
-    try {
-      ContentClick.contentAreaClick.toString();
-    } catch (ex) { return; }
-
     this.functions.forEach(function(aFn) {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });

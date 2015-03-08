@@ -118,7 +118,8 @@ let TabmixContentHandler = {
 
 var TabmixClickEventHandler = {
   init: function init() {
-    global.addEventListener("click", this, true);
+    if (Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
+      global.addEventListener("click", this, true);
   },
 
   handleEvent: function(event) {
