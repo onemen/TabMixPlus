@@ -1298,7 +1298,9 @@ Tabmix.navToolbox = {
      * restore tabmix-tabs-closebutton and new-tab-button position.
      */
     this.setScrollButtons();
-    this.setCloseButtonPosition();
+    try {
+      this.setCloseButtonPosition();
+    } catch(ex) { }
     gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
     this.setScrollButtons(false, true);
 
@@ -1338,7 +1340,6 @@ Tabmix.navToolbox = {
   setCloseButtonPosition: function() {
    if (this._closeButtonInitialized)
       return;
-    this._closeButtonInitialized = true;
 
     if (!Tabmix.isVersion(310))
       return;
@@ -1353,6 +1354,7 @@ Tabmix.navToolbox = {
     // try to restore button position from tabs-closebutton position
     // if item with tabs-closebutton id exist, some other extension add it
     else if (!document.getElementById("tabs-closebutton")) {
+      // will throw if called too early (before placements have been fetched)
       let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
       let position = currentset.indexOf("tabs-closebutton");
       if (position > -1) {
@@ -1360,6 +1362,7 @@ Tabmix.navToolbox = {
         CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
       }
     }
+    this._closeButtonInitialized = true;
   }
 
 };
