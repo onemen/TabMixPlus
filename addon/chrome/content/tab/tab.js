@@ -1649,6 +1649,12 @@ var gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    // with Walnut theme we get wrong height on Firefox 36
+    if (Tabmix._buttonsHeight > 50) {
+      let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+      Tabmix._buttonsHeight = skin == "walnut" ? 19 : 23;
+    }
+
     /* tab-icon-overlay added by Bug 1112304, Firefox 38+ */
     if (!Tabmix.isVersion(380))
       this.insertRule('.tab-icon-overlay {display: none;}');
