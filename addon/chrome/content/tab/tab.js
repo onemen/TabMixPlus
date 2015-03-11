@@ -2033,43 +2033,23 @@ var gTMPprefObserver = {
     TabmixTabbar.position = aPosition;
     gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
     var tabsToolbar = document.getElementById("TabsToolbar");
-    var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    // setting tabbaronbottom attribute trigger updatePosition in our
+    // scrollbox.xml\toolbar binding
     Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
 
     // TabsOnTop removed by bug 755593
     if (window.TabsOnTop)
       this.setTabsOnTop(TabmixTabbar.position == 1);
 
-    if (TabmixTabbar.position == 1) {// bottom
-      if (!bottomToolbox) {
-        bottomToolbox = document.createElement("toolbox");
-        bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
-        bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
-        if (navigator.oscpu.startsWith("Windows NT 6.1"))
-          bottomToolbox.setAttribute("tabmix_aero", true);
-        // if we decide to move this box into browser-bottombox
-        // remember to fix background css rules for all platform
-        let warningContainer = document.getElementById("full-screen-warning-container");
-        warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
-      }
-      if (gBrowser.tabContainer.visible)
-        this.updateTabbarBottomPosition();
-      else {
-        // the tabbar is hidden on startup
-        let height = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
-        bottomToolbox.style.setProperty("height", height + "px", "important");
-        tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
-        tabsToolbar.setAttribute("width", screen.availWidth);
-      }
-    }
-    else {// top
+    if (TabmixTabbar.position === 0) {// top
       this._bottomRect = {top:null, width:null, height:null};
+      let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
       tabsToolbar.removeAttribute("width");
+      // force TabmixTabbar.setHeight to set tabbar height
+      TabmixTabbar.visibleRows = 1;
     }
-    // force TabmixTabbar.setHeight to set tabbar height
-    TabmixTabbar.visibleRows = 1;
     return true;
   },
 
