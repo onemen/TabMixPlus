@@ -2606,7 +2606,7 @@ var TabmixProgressListener = {
         if (tab.getAttribute("locked")) {
           if (Tabmix.isVersion(320))
             aBrowser.messageManager.sendAsyncMessage("Tabmix:resetContentName");
-          else if (aBrowser.contentWindow.name)
+          else if (aBrowser.contentWindow && aBrowser.contentWindow.name)
             aBrowser.contentWindow.name = "";
         }
       }
