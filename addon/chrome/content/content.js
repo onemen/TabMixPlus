@@ -118,7 +118,8 @@ let TabmixContentHandler = {
 
 var TabmixClickEventHandler = {
   init: function init() {
-    if (Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
+    if (TabmixSvc.version(380) &&
+        Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
       global.addEventListener("click", this, true);
   },
 
