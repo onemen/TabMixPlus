@@ -98,14 +98,12 @@ var TMP_Places = {
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
       )._replace(
-        /w\.gBrowser\.loadURIWithFlags\(.*\);/,
-        '$&\n    ' +
-        'w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
-      )._replace(
         /(\})(\)?)$/,
         '  var tab = where == "current" ?\n' +
         '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
         '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+        '  if (where == "current")' +
+        '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);' +
         '$1$2'
       ).toCode();
 

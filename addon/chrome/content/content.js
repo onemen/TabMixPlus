@@ -7,6 +7,8 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
+  "resource://gre/modules/BrowserUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
@@ -150,6 +152,9 @@ var TabmixClickEventHandler = {
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
                  altKey: event.altKey, href: null, title: null,
                  bookmark: false };
+
+    if (TabmixSvc.version(380))
+      json.referrerPolicy = ownerDoc.referrerPolicy;
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;

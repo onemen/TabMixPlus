@@ -51,7 +51,19 @@ var tablib = {
     ).toCode();
   },
 
-  _loadURIWithFlags: function(browser, uri, flags, referrer, charset, postdata) {
+  _loadURIWithFlags: function(browser, uri, params) {
+    let flags;
+    if (!Tabmix.isVersion(380)) {
+      flags = params;
+      params = {
+        referrerURI: arguments[3] || null,
+        charset: arguments[4] || null,
+        postdata: arguments[5] || null,
+      };
+    }
+    else
+      flags = params.flags;
+
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
     if (!allowLoad) {
@@ -69,15 +81,10 @@ var tablib = {
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
       let isFlaged = function(flag) !!(flags & Ci.nsIWebNavigation[flag]);
-      let params = {
-        referrerURI: referrer || null,
-        charset: charset  || null,
-        postdata: postdata  || null,
-        inBackground: false,
-        allowThirdPartyFixup: isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP"),
-        fromExternal: isFlaged("LOAD_FLAGS_FROM_EXTERNAL"),
-        allowMixedContent: isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT")
-      };
+      params.inBackground = false;
+      params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+      params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
+      params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
     browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
@@ -564,6 +571,16 @@ var tablib = {
     [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
                                             ["openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
+
+    var loadURIWithFlags = Tabmix.isVersion(380) ?
+        '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
+        '        flags: loadflags,\n' +
+        '        referrerURI: aReferrer,\n' +
+        '        referrerPolicy: aReferrerPolicy,\n' +
+        '      });' :
+        '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
+        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
+
     _openURI = _openURI._replace(
       'if (#1 && (!aURI || aURI.spec == "about:blank")) {'.replace("#1", arg),
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
@@ -586,8 +603,7 @@ var tablib = {
       '  let loadflags = #1 ?'.replace("#1", arg) +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
-      '  browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
-        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer")) +
+      '\n' + loadURIWithFlags + '\n    ' +
       '  browser.focus();' +
       '}'
     );

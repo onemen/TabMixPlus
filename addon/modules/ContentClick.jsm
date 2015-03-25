@@ -12,6 +12,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
+  "resource://gre/modules/BrowserUtils.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
   "resource://tabmixplus/LinkNodeUtils.jsm");
 
@@ -154,6 +157,8 @@ var ContentClickInternal = {
     let win = browser.ownerDocument.defaultView;
     win.openLinkIn(href, result.where, {
       referrerURI: browser.documentURI,
+      referrerPolicy: event.referrerPolicy,
+      noReferrer: event.noReferrer,
       charset: browser.characterSet,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
     });
@@ -449,11 +454,18 @@ var ContentClickInternal = {
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return "2";
 
-    let win = aBrowser.ownerDocument.defaultView;
+    let ownerDoc = aBrowser.ownerDocument;
+    let win = ownerDoc.defaultView;
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
       let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
       let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button === 0);
+      if (TabmixSvc.version(380)) {
+        aEvent.referrerPolicy = ownerDoc.referrerPolicy;
+      }
+      if (TabmixSvc.version(370)) {
+        aEvent.noReferrer = BrowserUtils.linkHasNoReferrer(node);
+      }
       if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
       return "2.1";
