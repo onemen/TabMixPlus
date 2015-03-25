@@ -32,18 +32,12 @@ this.LinkNodeUtils = {
     let doc = node.ownerDocument;
     let wrapper = {
       __tabmix: true,
-      __noSuchMethod__: function(id) {
-        TabmixSvc.console.log("Error " + id + " is not exist in wrappedNode", true);
-      },
       baseURI: node.baseURI,
       host: node.host,
       pathname: node.pathname,
       className: node.className,
       target: getTargetAttr(node.target, focusedWindow),
       ownerDocument: {
-        __noSuchMethod__: function(id) {
-          TabmixSvc.console.log("Error ownerDocument." + id + " is not exist in wrappedNode", true);
-        },
         URL: doc.URL,
         documentURI: doc.documentURI,
         defaultView: {
