@@ -861,16 +861,6 @@ var tablib = {
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
-    gBrowser.TMP_openURI = function Tabmix_openURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup) {
-      var openNewTab = Tabmix.whereToOpen(true).lock;
-      if (openNewTab)
-        this.loadOneTab(uri, aReferrer, null, aPostData, false, aAllowThirdPartyFixup);
-      else {
-        loadURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup);
-        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
-      }
-    };
-
     let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
