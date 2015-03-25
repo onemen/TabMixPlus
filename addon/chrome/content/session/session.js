@@ -2370,7 +2370,8 @@ try{
 
       // now that we open our tabs init TabView again
       TMP_SessionStore.initService();
-      TMP_TabView.init();
+      if (this.tabViewInstalled)
+         TabView.init();
 
       this._sendRestoreCompletedNotifications(true);
    },
@@ -3781,7 +3782,7 @@ try{
 
   get tabViewInstalled() {
     delete this.tabViewInstalled;
-    return (this.tabViewInstalled = typeof TabView == "object");
+    return (this.tabViewInstalled = TMP_TabView.installed);
   },
 
   _sendWindowStateEvent: function SM__sendWindowStateEvent(aType) {

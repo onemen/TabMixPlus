@@ -568,7 +568,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
       else if (typeof(aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
          aTabToRemove = cTab;
 
-      TMP_TabView.prepareUndoCloseTab(aTabToRemove);
+      if (TMP_TabView.installed)
+         TabView.prepareUndoCloseTab(aTabToRemove);
 
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
@@ -582,7 +583,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
       // add restored tab to current window
       TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
-      TMP_TabView.afterUndoCloseTab();
+      if (TMP_TabView.installed)
+         TabView.afterUndoCloseTab();
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab

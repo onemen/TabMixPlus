@@ -906,15 +906,6 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 };
 
 var TMP_TabView = { /* jshint ignore: line */
-  __noSuchMethod__: function(id, args) {
-    if (!this.installed)
-      return;
-    if (typeof TabView[id] == "function")
-      TabView[id].apply(TabView, args);
-    else
-      Tabmix.log("Error " + id + " is not exist in TabView", true);
-  },
-
   get installed() {
     delete this.installed;
     let installed = typeof TabView == "object";
