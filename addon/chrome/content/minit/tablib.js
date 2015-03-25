@@ -64,6 +64,11 @@ var tablib = {
     else
       flags = params.flags;
 
+    var tab = gBrowser.getTabForBrowser(browser);
+    if (!tab) {
+      browser.tabmix_allowLoad = true;
+      return null;
+    }
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
     if (!allowLoad) {
@@ -71,11 +76,6 @@ var tablib = {
         let newURI = Services.io.newURI(uri, null, null);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
       } catch (ex) {}
-    }
-    var tab = gBrowser.getTabForBrowser(browser);
-    if (!tab) {
-      browser.tabmix_allowLoad = true;
-      return null;
     }
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
