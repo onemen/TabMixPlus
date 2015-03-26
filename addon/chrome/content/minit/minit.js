@@ -775,7 +775,9 @@ var TMP_tabDNDObserver = {
           sourceNode.ownerDocument.defaultView.gMultiProcessBrowser)
         return (dt.effectAllowed = "none");
 
-      return (dt.effectAllowed = "copyMove");
+      let copyModifier = Tabmix.isVersion(390) &&
+          gBrowser.AppConstants.platform == "macosx" ? aEvent.altKey : aEvent.ctrlKey;
+      return (dt.effectAllowed = copyModifier ? "copy" : "move");
     }
 
     if (browserDragAndDrop.canDropLink(aEvent)) {
