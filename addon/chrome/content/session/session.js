@@ -670,8 +670,6 @@ var TabmixSessionManager = { // jshint ignore:line
 
     if (this._inited) {
       let obs = Services.obs;
-      obs.notifyObservers(null, "browser-window-change-state", "closed");
-      obs.removeObserver(this, "browser-window-change-state");
       obs.removeObserver(this, "sessionstore-windows-restored");
       obs.removeObserver(this, "sessionstore-browser-state-restored");
       obs.removeObserver(this, "quit-application-requested");
@@ -1272,8 +1270,12 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      this.notifyClosedWindowsChanged();
    },
 
-   notifyClosedWindowsChanged: function SM_notifyClosedWindowsChanged() {
-     Services.obs.notifyObservers(null, "browser-window-change-state", "changed");
+   notifyClosedWindowsChanged: function SM_notifyClosedWindowsChanged(onClose) {
+     if (!this._inited)
+       return;
+     Services.obs.notifyObservers(null, "browser-window-change-state", onClose ? "closed" : "changed");
+     if (onClose)
+       Services.obs.removeObserver(this, "browser-window-change-state");
    },
 
    // enable/disable the Recently Closed Windows button

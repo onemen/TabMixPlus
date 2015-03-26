@@ -1039,6 +1039,7 @@ var TMP_eventListener = {
     }
 
     TabmixSessionManager.shutDown(true, isLastWindow, true);
+    TabmixSessionManager.notifyClosedWindowsChanged(true);
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
 
