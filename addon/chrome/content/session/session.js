@@ -470,7 +470,8 @@ var TabmixSessionManager = { // jshint ignore:line
       // in closed window list.
       // in the last window if the user pref in not to save we delete the closed window list.
       var resultData = {canClose: true, showMorePrompt: true, saveSession: true, removeClosedTabs: false};
-      if (this.windowClosed || this.isPrivateSession)
+      if (this.windowClosed || this.isPrivateSession ||
+          (!this.enableManager && !this.enableBackup))
          return resultData;
 
       // we set aPopUp only in canQuitApplication
@@ -630,9 +631,11 @@ var TabmixSessionManager = { // jshint ignore:line
         4. return: true if its ok to close
                    false if user cancel quit
       */
-      this.saveAllWindows(this.gSessionPath[0], "windowclosed", true);
+      let enabled = this.enableManager || this.enableBackup;
+      if (enabled)
+         this.saveAllWindows(this.gSessionPath[0], "windowclosed", true);
       // cheack if all open windows are popup
-      var allPopups = !window.toolbar.visible;
+      var allPopups = enabled && !window.toolbar.visible;
       var wnd, enumerator;
       enumerator = Tabmix.windowEnumerator();
       while ( allPopups && enumerator.hasMoreElements() ) {
