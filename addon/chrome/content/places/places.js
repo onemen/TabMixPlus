@@ -30,8 +30,9 @@ var TMP_Places = {
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
          Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-            /(webNav\.document\.)*title \|\| url\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
+            /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
+            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), ' +
+            (Tabmix.isVersion(400) ? "uri" : "url") + '.spec) || $&'
          ).toCode();
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
