@@ -1020,6 +1020,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    setLiteral: function SM_setLiteral(node, arc, value) {
+      if (typeof value == "undefined") {
+         this.removeAttribute(node, arc);
+         return;
+      }
       if (typeof(node) == "string") node = this.RDFService.GetResource(node);
       arc = this.getNC(arc);
       value = this.RDFService.GetLiteral(value);
@@ -2923,7 +2927,7 @@ try{
       var history = [];
 
       var saveScroll = this.prefBranch.getBoolPref("save.scrollposition");
-      var currentScroll = saveScroll && state.scroll ? state.scroll.scroll : "0,0";
+      var currentScroll = saveScroll && state.scroll ? JSON.stringify(state.scroll) : "0,0";
       if (currentScroll != "0,0")
         entries[index].scroll = currentScroll;
 
