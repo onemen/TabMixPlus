@@ -290,18 +290,10 @@ this.DynamicRules = {
     }
     catch (ex) {
       TabmixSvc.console.log(ex);
-      try {
-        // convert old format to JSON string
-        // we do it only one time when user update Tabmix from old version
-        currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
-                            new Components.utils.Sandbox("about:blank"));
-        Prefs.setCharPref(ruleName, TabmixSvc.JSON.stringify(currentPrefValues));
-      } catch (er) {
-          TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
-          Prefs.clearUserPref(ruleName);
-          // set prev value to default so we can continue with this function
-          currentPrefValues = defaultPrefValues;
-      }
+      TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+      Prefs.clearUserPref(ruleName);
+      // set prev value to default so we can continue with this function
+      currentPrefValues = defaultPrefValues;
     }
 
     // make sure we have all the item
