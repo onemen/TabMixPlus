@@ -23,7 +23,7 @@
                                                                                               type="int"/>
       <preference id="pref_loadOnNewTab"        name="extensions.tabmix.loadOnNewTab.type"    type="int"
                   onchange="gEventsPane.newTabUrl(this, false, true);"/>
-      <preference id="pref_newTabUrl"           name="browser.newtab.url"                     type="string"/>
+      <preference id="pref_newTabUrl"                                                         type="string"/>
       <preference id="pref_selectLocationBar"   name="extensions.tabmix.selectLocationBar"
                   type="bool" inverted="true"/>
       <preference id="pref_openNewTabNext"      name="extensions.tabmix.openNewTabNext"       type="bool"/>

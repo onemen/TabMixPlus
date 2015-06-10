@@ -2300,10 +2300,10 @@ var gTMPprefObserver = {
         Services.prefs.clearUserPref(oldPref);
       }
     }
-    _setNewTabUrl("extensions.tabmix.newTabUrl", "browser.newtab.url", "loadOnNewTab.type");
+    _setNewTabUrl("extensions.tabmix.newTabUrl", TabmixSvc.newtabUrl, "loadOnNewTab.type");
     _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
                   "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
-    _setNewTabUrl("extensions.tabmix.newtab.url", "browser.newtab.url");
+    _setNewTabUrl("extensions.tabmix.newtab.url", TabmixSvc.newtabUrl);
     _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
                   "extensions.tabmix.replaceLastTabWith.newtab.url");
     // 2012-04-12

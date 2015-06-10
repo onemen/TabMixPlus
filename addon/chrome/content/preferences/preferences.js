@@ -340,7 +340,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
   "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
-  "browser.link.open_newwindow.restriction","browser.newtab.url",
+  "browser.link.open_newwindow.restriction",TabmixSvc.newtabUrl,
   "browser.search.context.loadInBackground","browser.search.openintab",
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",

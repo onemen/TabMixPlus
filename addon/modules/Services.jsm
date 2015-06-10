@@ -24,6 +24,8 @@ function isVersion(aVersionNo) {
 }
 
 this.TabmixSvc = {
+  newtabUrl: "browser" + ".newtab.url",
+
   debugMode: function() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
