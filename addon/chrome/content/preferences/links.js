@@ -2,9 +2,7 @@
 
 var gLinksPane = {
   init: function () {
-    let singleWindow = $("singleWindow");
-    $("pref_singleWindow").setAttribute("onchange", "gLinksPane.singleWindow(this.value);");
-    this.singleWindow(singleWindow.checked);
+    this.singleWindow($("singleWindow").checked);
     gLinksPane.externalLinkValue($("externalLink").checked);
 
     gPrefWindow.initPane("paneLinks");

@@ -1928,6 +1928,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          nodes.push(node);
       }
       var count = nodes.length;
+      let restoreSession = function(event) {
+        this.restoreSession(event.originalTarget);
+        event.stopPropagation();
+      }.bind(this);
       for (var i = 0; i < count; i++) {
          node = nodes[i];
          name = this.getDecodedLiteralValue(node, "name");
@@ -1942,8 +1946,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          // Ubuntu global menu prevents Session manager menu from working from Tools menu
          // this hack is only for left click, middle click and right click still not working
          if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
-            mi.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget);" +
-                                         " event.stopPropagation();");
+            mi.addEventListener("command", restoreSession);
          mi.value = i;
          if (parentID != "onStart.loadsession") {
             index = closedWinList ? count - 1 - i : i;
@@ -1990,8 +1993,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                if (showTooltip) menu.setAttribute("tooltiptext", sLabel + nameExt);
                menu.setAttribute("value", (-1 - i));
                if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
-                  menu.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget);" +
-                                                 " event.stopPropagation();");
+                  menu.addEventListener("command", restoreSession);
                popup.appendChild (menu);
             }
             if (afterCrash && contents != 1) { // add separator before Crashed menu item

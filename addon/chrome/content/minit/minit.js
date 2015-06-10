@@ -1082,7 +1082,7 @@ Tabmix.navToolbox = {
     // onblur attribut reset each time we exit ToolboxCustomize
     var blur = gURLBar.getAttribute("onblur") || "";
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
-      gURLBar.setAttribute("onblur", blur + "Tabmix.urlBarOnBlur();");
+      Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)

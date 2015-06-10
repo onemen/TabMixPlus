@@ -418,14 +418,18 @@ var TMP_ClosedTabs = { // jshint ignore:line
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
       m.setAttribute("value", -1);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1);");
+      m.addEventListener("command", function() {
+         TMP_ClosedTabs.restoreTab('original', -1);
+      });
 
       // "Restore All Tabs"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "restoreAllClosedTabs");
       m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2);");
+      m.addEventListener("command", function() {
+         TMP_ClosedTabs.restoreTab('original', -2);
+      });
       return true;
    },
 

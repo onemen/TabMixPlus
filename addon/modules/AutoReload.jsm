@@ -27,8 +27,8 @@ this.AutoReload = {
     var win = aTab.ownerDocument.defaultView;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
-    aPopup.setAttribute("onpopuphidden", "this._tab = null;");
-    aPopup.setAttribute("oncommand",
+    win.Tabmix.setItem(aPopup, "onpopuphidden", "this._tab = null;");
+    win.Tabmix.setItem(aPopup, "oncommand",
                         "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
     for (let i=0; i<popup.childNodes.length; i++)
       aPopup.appendChild(popup.childNodes[i].cloneNode(true));

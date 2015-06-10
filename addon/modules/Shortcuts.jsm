@@ -241,7 +241,7 @@ this.Shortcuts = {
       keyItem._id = aKey;
       keyset.appendChild(keyItem);
       keyItem.setAttribute("label", aKeyData.label);
-      keyItem.setAttribute("oncommand", "void(0);");
+      aWindow.Tabmix.setItem(keyItem, "oncommand", "void(0);");
       keyItem.addEventListener("command", this, true);
     }
 

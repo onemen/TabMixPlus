@@ -345,8 +345,9 @@ var TabmixContext = {
 
     // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
     if (Tabmix.isVersion(240)) {
-      tabContextMenu.insertBefore($id("context_closeTabsToTheEnd"), $id("tm-closeRightTabs"));
-      $id("context_closeTabsToTheEnd").setAttribute("oncommand","gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+      let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
+      tabContextMenu.insertBefore(closeTabsToTheEnd, $id("tm-closeRightTabs"));
+      Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
       tabContextMenu.removeChild($id("tm-closeRightTabs"));
       this._closeRightTabs = "context_closeTabsToTheEnd";
     }

@@ -26,11 +26,11 @@ Tabmix.startup = function TMP_startup() {
     };
     let command = document.getElementById("Tools:PrivateBrowsing");
     let originalCode = command.getAttribute("oncommand");
-    command.setAttribute("oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
-    cmdNewWindow.setAttribute("oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
+    Tabmix.setItem(command, "oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
   }
   else
-    cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
+    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
                                           "else {" + originalNewNavigator + "}");
 
   TabmixContext.toggleEventListener(true);

@@ -856,7 +856,9 @@ var tablib = {
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
-    clearList.setAttribute("oncommand", "TabmixSessionManager.forgetClosedWindow(-1);");
+    clearList.addEventListener("command", function() {
+      TabmixSessionManager.forgetClosedWindow(-1);
+    });
     undoPopup.insertBefore(clearList, restoreAllWindows);
   },
 
