@@ -660,7 +660,7 @@ var TMP_eventListener = {
 
     // don't mark new tab as unread
     var url = tab.linkedBrowser.currentURI.spec;
-    if (url == "about:blank" || url == "about:newtab")
+    if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
       tab.setAttribute("visited", true);
   },
 

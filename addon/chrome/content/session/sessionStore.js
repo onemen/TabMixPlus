@@ -36,7 +36,7 @@ var TMP_SessionStore = { // jshint ignore:line
        aUndoItem.title = selectedTab.attributes["fixed-label"];
      else {
        aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
-       if (aUndoItem.title == "about:blank")
+       if (aUndoItem.title == TabmixSvc.aboutBlank)
          aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
      }
    },

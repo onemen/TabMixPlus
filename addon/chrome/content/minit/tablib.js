@@ -87,7 +87,7 @@ var tablib = {
       params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
-    browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
+    browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
     return null;
   },
 
@@ -582,7 +582,7 @@ var tablib = {
         .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
 
     _openURI = _openURI._replace(
-      'if (#1 && (!aURI || aURI.spec == "about:blank")) {'.replace("#1", arg),
+      'if (#1 && (!aURI || aURI.spec == TabmixSvc.aboutBlank)) {'.replace("#1", arg),
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
        $&'
     )._replace(
@@ -1656,8 +1656,8 @@ var tablib = {
           return;
         var tabState = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         if (!tabState.entries || tabState.entries.length == 1 &&
-           (tabState.entries[0].url == "about:blank" ||
-            tabState.entries[0].url == "about:newtab") &&
+           (tabState.entries[0].url == TabmixSvc.aboutBlank ||
+            tabState.entries[0].url == TabmixSvc.aboutNewtab) &&
             !tabState.userTypedValue)
           return;
         this.numberOfTabsClosedLast++;

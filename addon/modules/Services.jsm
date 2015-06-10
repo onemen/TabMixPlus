@@ -24,6 +24,8 @@ function isVersion(aVersionNo) {
 }
 
 this.TabmixSvc = {
+  aboutBlank: "about:blank",
+  aboutNewtab: "about:newtab",
   newtabUrl: "browser" + ".newtab.url",
 
   debugMode: function() {

@@ -39,7 +39,8 @@ let TabmixRemoveBlankTab = {
     *   The nsIInterfaceRequestor of the parent window; may be null
     */
     let {win, b} = this.getWindowAndBrowser(window.arguments[9]);
-    if (b && b.currentURI.spec == "about:blank") {
+    let blank = "about:blank";
+    if (b && b.currentURI.spec == blank) {
       let uri = window.arguments[8].QueryInterface(Ci.nsIURI);
       if (b.userTypedValue == uri.spec) {
         let tab = win.gBrowser.getTabForBrowser(b);

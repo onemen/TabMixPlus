@@ -2535,7 +2535,7 @@ var TabmixProgressListener = {
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         this._fixTabTitle(tab, aBrowser, url);
-        if (url == "about:blank") {
+        if (url == TabmixSvc.aboutBlank) {
           tab.removeAttribute("busy");
           tab.removeAttribute("progress");
           this.mTabBrowser.setTabTitle(tab);

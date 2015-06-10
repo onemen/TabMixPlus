@@ -349,7 +349,7 @@ var TMP_Places = {
     let title = this.getTabTitle(aTab, aUrl, aTab.label);
     if (title != aTab.label) {
       aTab.label = title;
-      aTab.crop = title != aUrl || aUrl == "about:blank" ? "end" : "center";
+      aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
       gBrowser._tabAttrModified(aTab);
       if (aTab.selected)

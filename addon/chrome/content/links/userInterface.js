@@ -71,7 +71,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
    var originCharset = tabBrowser.selectedBrowser.characterSet;
 
    // if the current tab is empty, then do not open a new tab
-   if (tabBrowser.currentURI.spec == "about:blank") {
+   if (tabBrowser.currentURI.spec == TabmixSvc.aboutBlank) {
       // 1: CURRENT_TAB
       linkTarget = 1;
       originCharset = null;
@@ -126,7 +126,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
                                          TabmixSvc.newtabUrl;
          try {
             url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-            if (newTabUrl == "about:privatebrowsing" && url == "about:newtab")
+            if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
               url = "about:privatebrowsing";
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
@@ -191,7 +191,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
    // focus the address bar on new tab
    var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-       url == "about:blank" || url == "about:newtab" || url == "about:privatebrowsing";
+       url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab || url == "about:privatebrowsing";
    if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
 

@@ -85,7 +85,7 @@ var gEventsPane = {
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
     let value = preference.value;
-    if (value && value.toLowerCase() == "about:newtab")
+    if (value && value.toLowerCase() == TabmixSvc.aboutNewtab)
       return "";
     return this.syncToNewTabUrlPref(value);
   },
