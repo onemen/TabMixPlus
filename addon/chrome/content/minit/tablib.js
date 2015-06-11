@@ -582,7 +582,7 @@ var tablib = {
         .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
 
     _openURI = _openURI._replace(
-      'if (#1 && (!aURI || aURI.spec == TabmixSvc.aboutBlank)) {'.replace("#1", arg),
+      'if (#1 && (!aURI || aURI.spec == "'.replace("#1", arg) + TabmixSvc.aboutBlank + '")) {',
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
        $&'
     )._replace(
