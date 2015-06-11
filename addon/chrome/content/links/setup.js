@@ -162,7 +162,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '      gBrowser.tabs[i].loadOnStartup = true;' +
         '    }' +
         '  }' +
-        '  if (uriToLoad == TabmixSvc.aboutNewtab || "tabmixdata" in window) {' +
+        '  if (uriToLoad == TabmixSvc.aboutBlank || "tabmixdata" in window) {' +
         '    gBrowser.selectedBrowser.stop();' +
         '  }\n' +
         '    $&';
@@ -261,7 +261,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
              return true;
           if (aBrowser.canGoForward || aBrowser.canGoBack)
              return false;
-          return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutNewtab :
+          return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
                  Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
        } catch (ex) {Tabmix.assert(ex); return true;}
     };
