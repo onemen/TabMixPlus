@@ -29,11 +29,10 @@ var TMP_Places = {
       // use tab label for bookmark name when user renamed the tab
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
-         if (!Tabmix.isVersion(410))
+         if (!Tabmix.isVersion(400))
          Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
             /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), ' +
-            (Tabmix.isVersion(400) ? "uri" : "url") + '.spec) || $&'
+            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
          ).toCode();
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
