@@ -303,7 +303,12 @@ var TMP_eventListener = {
         this.onWindowClose(aEvent);
         break;
       case "fullscreen":
-        this.onFullScreen(!window.fullScreen);
+        let enterFS = window.fullScreen;
+        // Until Firefox 41 (Bug 1161802 part 2) we get the fullscreen event
+        // before the window transitions into or out of FS mode.
+        if (!Tabmix.isVersion(410))
+          enterFS = !enterFS;
+        this.onFullScreen(enterFS);
         break;
       case "PrivateTab:PrivateChanged":
         TabmixSessionManager.privateTabChanged(aEvent);
@@ -675,6 +680,16 @@ var TMP_eventListener = {
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
 
+        if (Tabmix.isVersion(400)) {
+          let $LF = '\n    ';
+          Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+            'this._isChromeCollapsed = true;',
+            'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+            '$&' + $LF +
+            'TMP_eventListener.toggleTabbarVisibility(false);'
+          ).toCode();
+        }
+        else
         Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
           'gNavToolbox.style.marginTop = "";',
           'TMP_eventListener._updateMarginBottom("");\
@@ -719,11 +734,18 @@ var TMP_eventListener = {
   },
 
   _expandCallback: function TMP_EL__expandCallback() {
-    if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1)
-      FullScreen.mouseoverToggle(true);
+    if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
+      if (Tabmix.isVersion(400))
+        FullScreen.showNavToolbox();
+      else
+        FullScreen.mouseoverToggle(true);
+    }
   },
 
-  mouseoverToggle: function (aShow) {
+  // for tabs bellow content
+  toggleTabbarVisibility: function (aShow) {
+    if (TabmixTabbar.position != 1)
+      return;
     document.getElementById("fullscr-bottom-toggler").collapsed = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
@@ -732,10 +754,13 @@ var TMP_eventListener = {
     }
     else {
       let bottombox = document.getElementById("browser-bottombox");
-      // changing the margin trigger resize event that calls updateTabbarBottomPosition
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
+      // Until Firefox 41 changing the margin trigger resize event that calls
+      // updateTabbarBottomPosition
+      if (Tabmix.isVersion(410))
+        gTMPprefObserver.updateTabbarBottomPosition();
     }
   },
 

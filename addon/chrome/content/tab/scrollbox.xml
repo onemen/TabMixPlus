@@ -629,7 +629,7 @@
 
       <method name="updatePosition">
         <body><![CDATA[
-          let tabBar = gBrowser.tabContainer;
+          let updateFullScreen, tabBar = gBrowser.tabContainer;
           Tabmix.setItem(tabBar.mTabstrip, "flowing", TabmixTabbar.flowing);
           Tabmix.tabsUtils.tabstripInnerbox = document.getAnonymousElementByAttribute(
             tabBar.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
@@ -644,6 +644,7 @@
             // remember to fix background css rules for all platform
             let warningContainer = document.getElementById("full-screen-warning-container");
             warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
+            updateFullScreen = window.fullScreen;
           }
           if (tabBar.visible)
             gTMPprefObserver.updateTabbarBottomPosition();
@@ -657,6 +658,10 @@
           }
           // force TabmixTabbar.setHeight to set tabbar height
           TabmixTabbar.visibleRows = 1;
+          if (updateFullScreen) {
+            TMP_eventListener.toggleTabbarVisibility(false);
+            TabmixTabbar.updateSettings(false);
+          }
         ]]></body>
       </method>
 

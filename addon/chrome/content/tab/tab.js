@@ -1332,8 +1332,9 @@ var gTMPprefObserver = {
          if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
            if (window.fullScreen) {
              TMP_eventListener.onFullScreen(true);
-             if (TabmixTabbar.position == 1)
-               TMP_eventListener.mouseoverToggle(false);
+             let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+             if (bottomToolbox)
+               TMP_eventListener.toggleTabbarVisibility(false);
            }
            TabmixTabbar.updateSettings(false);
          }

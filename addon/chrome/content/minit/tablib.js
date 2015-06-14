@@ -480,13 +480,27 @@ var tablib = {
   },
 
   change_utility: function change_utility() {
+    // FullScreen code related to tabs bellow content initialize by first
+    // fullScreen event, see TMP_eventListener.onFullScreen
+    if (Tabmix.isVersion(400)) {
+      let $LF = '\n    ';
+      Tabmix.changeCode(FullScreen, "FullScreen.showNavToolbox")._replace(
+        'gNavToolbox.style.marginTop = "";',
+        '$&' + $LF +
+        'TMP_eventListener._updateMarginBottom("");' + $LF +
+        'TMP_eventListener.toggleTabbarVisibility(true);' + $LF +
+        'TMP_eventListener.updateMultiRow();' + $LF +
+        'setTimeout(function() {TMP_eventListener.updateMultiRow();},0);'
+      ).toCode();
+    }
+    else
     Tabmix.changeCode(FullScreen, "FullScreen.mouseoverToggle")._replace(
       'this._isChromeCollapsed = !aShow;',
       '  $&' +
       '  if (aShow)' +
       '    TMP_eventListener.updateMultiRow();' +
       '  if (TabmixTabbar.position == 1) {' +
-      '    TMP_eventListener.mouseoverToggle(aShow);' +
+      '    TMP_eventListener.toggleTabbarVisibility(aShow);' +
       '  }'
     ).toCode();
 
