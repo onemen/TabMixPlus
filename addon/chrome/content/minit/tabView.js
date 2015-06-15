@@ -191,7 +191,7 @@
   TabmixSessionManager._setWindowStateBusy = function SM__setWindowStateBusy(aWindow) {
     TMP_SessionStore.initService();
     this._sendWindowStateEvent("Busy");
-    this._getdSessionTabviewData(aWindow);
+    this._getSessionTabviewData(aWindow);
 
     // save group count before we start the restore
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
@@ -206,7 +206,7 @@
 
     var parsedData = TabmixSessionData.getWindowValue(window, "tabview-groups", true);
     var groupCount = parsedData.totalNumber || 1;
-    TMP_TabView.updateGroupNumberBroadcaster(groupCount);
+    TabView.updateGroupNumberBroadcaster(groupCount);
 
     // show notification
 ///XXX make sure that we have hidden tabs
@@ -232,7 +232,7 @@
   TabmixSessionManager._groupItems=  null;
 
   // aWindow: rdfNodeWindow to read from
-  TabmixSessionManager._getdSessionTabviewData = function SM__getdSessionTabviewData(aWindow) {
+  TabmixSessionManager._getSessionTabviewData = function SM__getSessionTabviewData(aWindow) {
     let self = this;
     function _fixData(id, parse, def) {
       let data = self.getLiteralValue(aWindow, id);

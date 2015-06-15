@@ -26,9 +26,12 @@ Tabmix.contentAreaClick = {
       '        let doc = event.target.ownerDocument;\n' +
       '        let _url = Tabmix.isVersion(190) ? href : url;\n' +
       '        let params = { charset: doc.characterSet, initiatingDoc: doc,\n' +
-      '                       suppressTabsOnFileDownload: suppressTabsOnFileDownload };\n' +
-      '        if (!Tabmix.isVersion(370) || !BrowserUtils.linkHasNoReferrer(linkNode))\n' +
-      '          params.referrerURI = doc.documentURIObject;\n'+
+      '                       suppressTabsOnFileDownload: suppressTabsOnFileDownload,\n' +
+      '                       referrerURI: doc.documentURIObject };\n' +
+      '        if (Tabmix.isVersion(370)) {\n' +
+      '          params.referrerPolicy = doc.referrerPolicy;\n' +
+      '          params.noReferrer = BrowserUtils.linkHasNoReferrer(linkNode);\n' +
+      '        }\n' +
       '        openLinkIn(_url, where, params);\n' +
       '      }\n' +
       '      else\n        $&'

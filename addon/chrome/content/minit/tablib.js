@@ -51,7 +51,24 @@ var tablib = {
     ).toCode();
   },
 
-  _loadURIWithFlags: function(browser, uri, flags, referrer, charset, postdata) {
+  _loadURIWithFlags: function(browser, uri, params) {
+    let flags;
+    if (!Tabmix.isVersion(380)) {
+      flags = params;
+      params = {
+        referrerURI: arguments[3] || null,
+        charset: arguments[4] || null,
+        postdata: arguments[5] || null,
+      };
+    }
+    else
+      flags = params.flags;
+
+    var tab = gBrowser.getTabForBrowser(browser);
+    if (!tab) {
+      browser.tabmix_allowLoad = true;
+      return null;
+    }
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
     if (!allowLoad) {
@@ -60,24 +77,14 @@ var tablib = {
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
       } catch (ex) {}
     }
-    var tab = gBrowser.getTabForBrowser(browser);
-    if (!tab) {
-      browser.tabmix_allowLoad = true;
-      return null;
-    }
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
       let isFlaged = function(flag) !!(flags & Ci.nsIWebNavigation[flag]);
-      let params = {
-        referrerURI: referrer || null,
-        charset: charset  || null,
-        postdata: postdata  || null,
-        inBackground: false,
-        allowThirdPartyFixup: isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP"),
-        fromExternal: isFlaged("LOAD_FLAGS_FROM_EXTERNAL"),
-        allowMixedContent: isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT")
-      };
+      params.inBackground = false;
+      params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+      params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
+      params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
     browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
@@ -145,8 +152,7 @@ var tablib = {
        if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
          t.setAttribute("tabmix_pending", "true"); \
        var lastChild = this.tabContainer.lastChild; \
-       if (lastChild) lastChild.removeAttribute("last-tab"); \
-       if (TabmixTabbar.widthFitTitle) t.setAttribute("newtab", true);'
+       if (lastChild) lastChild.removeAttribute("last-tab");'
     )._replace(
       'this._lastRelatedTab = t;',
       'if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {\
@@ -565,6 +571,16 @@ var tablib = {
     [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
                                             ["openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
+
+    var loadURIWithFlags = Tabmix.isVersion(380) ?
+        '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
+        '        flags: loadflags,\n' +
+        '        referrerURI: aReferrer,\n' +
+        '        referrerPolicy: aReferrerPolicy,\n' +
+        '      });' :
+        '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
+        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
+
     _openURI = _openURI._replace(
       'if (#1 && (!aURI || aURI.spec == "about:blank")) {'.replace("#1", arg),
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
@@ -587,8 +603,7 @@ var tablib = {
       '  let loadflags = #1 ?'.replace("#1", arg) +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
-      '  browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
-        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer")) +
+      '\n' + loadURIWithFlags + '\n    ' +
       '  browser.focus();' +
       '}'
     );
@@ -639,10 +654,20 @@ var tablib = {
       'where'
     ).toCode();
 
-    Tabmix.changeCode(window, "FillHistoryMenu")._replace(
-      'entry.title',
-      'tablib.menuItemTitle(entry)', {flags: "g"}
-    ).toCode();
+    Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
+    let fillHistoryMenu = function FillHistoryMenu(aParent) {
+      let rv = Tabmix.originalFunctions.FillHistoryMenu.apply(this, arguments);
+      let l = aParent.childNodes.length;
+      for (let i = 0; i < l; i++) {
+        let item = aParent.childNodes[i];
+        let uri = item.getAttribute("uri");
+        let label = item.getAttribute("label");
+        let title = TMP_Places.getTitleFromBookmark(uri, label);
+        Tabmix.setItem(item, "label", title);
+      }
+      return rv;
+    };
+    Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
 
     // Fix for Fast Dial
     if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
@@ -836,16 +861,6 @@ var tablib = {
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
-    gBrowser.TMP_openURI = function Tabmix_openURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup) {
-      var openNewTab = Tabmix.whereToOpen(true).lock;
-      if (openNewTab)
-        this.loadOneTab(uri, aReferrer, null, aPostData, false, aAllowThirdPartyFixup);
-      else {
-        loadURI(uri, aReferrer, aPostData, aAllowThirdPartyFixup);
-        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
-      }
-    };
-
     let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
@@ -904,9 +919,12 @@ var tablib = {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
-          var history = browser.webNavigation.sessionHistory;
-          var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
-          shEntry.setTitle(this.label);
+          if (Tabmix.isVersion(320))
+            browser.messageManager.sendAsyncMessage("Tabmix:updateHistoryTitle", {title: this.label});
+          else {
+            let history = browser.webNavigation.sessionHistory;
+            Tabmix.Utils.updateHistoryTitle(history, this.label);
+          }
         } catch (ex) {Tabmix.assert(ex);}
       }
       function urlForDownload() {
@@ -956,19 +974,26 @@ var tablib = {
       }
     };
 
-    gBrowser.openLinkWithHistory = function (aTab) {
-      var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(aTab, linkURL, target);
+    gBrowser.openLinkWithHistory = function () {
+      var {target, linkURL, principal} = gContextMenu;
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
-      var doc = target.ownerDocument;
-      if (typeof gContextMenu._unremotePrincipal == "function")
+      if (Tabmix.isVersion(380))
+        urlSecurityCheck(url, principal);
+      else if (typeof gContextMenu._unremotePrincipal == "function") {
+        // Firefox 26-37
+        let doc = target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
-      else
+      }
+      else {
+        // Firefox 17-25
+        let doc = target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
+      }
 
-      this.duplicateTab(aTab, url);
+      this.duplicateTab(gBrowser.selectedTab, url);
     };
 
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
@@ -977,9 +1002,9 @@ var tablib = {
       '      $&'
     ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
-    gBrowser.openInverseLink = function (aTab) {
+    gBrowser.openInverseLink = function () {
       var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(aTab, linkURL, target);
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
@@ -997,7 +1022,7 @@ var tablib = {
 
     tablib.openLinkInCurrent = function() {
       var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(gBrowser.selectedTab, linkURL, target);
+      var url = tablib.getValidUrl(linkURL, target);
       if (!url)
         return;
 
@@ -1006,7 +1031,7 @@ var tablib = {
       gContextMenu.openLinkInCurrent();
     };
 
-    tablib.getValidUrl = function(tab, url, target) {
+    tablib.getValidUrl = function(url, target) {
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
@@ -1015,6 +1040,11 @@ var tablib = {
           return false;
         return true;
       };
+
+      let tab = gBrowser.selectedTab;
+      if (tab.getAttribute("remote") == "true" &&
+          typeof gContextMenu.tabmixLinkURL != "undefined")
+        return gContextMenu.tabmixLinkURL;
 
       if (!isValid(url)) {
         let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
@@ -1652,7 +1682,8 @@ var tablib = {
   // in gBrowser.addTab
   props: ["referrerURI","charset","postData","ownerTab",
           "allowThirdPartyFixup","fromExternal","relatedToCurrent",
-          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending"],
+          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending",
+          "aForceNotRemote", "aNoReferrer"],
 
   definedParams: function(params) {
     this.props.forEach(function(prop){
@@ -1685,8 +1716,6 @@ var tablib = {
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
         TMP_Places.afterTabTitleChanged(true);
-      if (aTab.hasAttribute("newtab"))
-        aTab.removeAttribute("newtab");
     }
     else if (aTab.hasAttribute("fadein"))
       TMP_Places.afterTabTitleChanged(true);
@@ -1851,12 +1880,6 @@ var tablib = {
   setURLBarFocus: function TMP_setURLBarFocus() {
     if (gURLBar)
       gURLBar.focus();
-  },
-
-  menuItemTitle: function TMP_menuItemTitle(entry) {
-    if (entry.URI)
-      return TMP_Places.getTitleFromBookmark(entry.URI.spec, entry.title);
-    return entry.title;
   },
 
   reloadTabs: function(tabs, skipTab) {

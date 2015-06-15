@@ -81,7 +81,8 @@ var TMP_tabDNDObserver = {
     tabBar.useTabmixDnD = function(aEvent) {
       function checkTab(dt) {
         let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || "__tabmixDragStart" in tab;
+        return !tab || "__tabmixDragStart" in tab ||
+          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
       return this.orient == "horizontal" &&
@@ -774,7 +775,9 @@ var TMP_tabDNDObserver = {
           sourceNode.ownerDocument.defaultView.gMultiProcessBrowser)
         return (dt.effectAllowed = "none");
 
-      return (dt.effectAllowed = "copyMove");
+      let copyModifier = Tabmix.isVersion(390) &&
+          gBrowser.AppConstants.platform == "macosx" ? aEvent.altKey : aEvent.ctrlKey;
+      return (dt.effectAllowed = copyModifier ? "copy" : "move");
     }
 
     if (browserDragAndDrop.canDropLink(aEvent)) {
@@ -905,15 +908,6 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 };
 
 var TMP_TabView = { /* jshint ignore: line */
-  __noSuchMethod__: function(id, args) {
-    if (!this.installed)
-      return;
-    if (typeof TabView[id] == "function")
-      TabView[id].apply(TabView, args);
-    else
-      Tabmix.log("Error " + id + " is not exist in TabView", true);
-  },
-
   get installed() {
     delete this.installed;
     let installed = typeof TabView == "object";
@@ -1297,7 +1291,9 @@ Tabmix.navToolbox = {
      * restore tabmix-tabs-closebutton and new-tab-button position.
      */
     this.setScrollButtons();
-    this.setCloseButtonPosition();
+    try {
+      this.setCloseButtonPosition();
+    } catch(ex) { }
     gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
     this.setScrollButtons(false, true);
 
@@ -1337,7 +1333,6 @@ Tabmix.navToolbox = {
   setCloseButtonPosition: function() {
    if (this._closeButtonInitialized)
       return;
-    this._closeButtonInitialized = true;
 
     if (!Tabmix.isVersion(310))
       return;
@@ -1352,6 +1347,7 @@ Tabmix.navToolbox = {
     // try to restore button position from tabs-closebutton position
     // if item with tabs-closebutton id exist, some other extension add it
     else if (!document.getElementById("tabs-closebutton")) {
+      // will throw if called too early (before placements have been fetched)
       let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
       let position = currentset.indexOf("tabs-closebutton");
       if (position > -1) {
@@ -1359,6 +1355,7 @@ Tabmix.navToolbox = {
         CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
       }
     }
+    this._closeButtonInitialized = true;
   }
 
 };

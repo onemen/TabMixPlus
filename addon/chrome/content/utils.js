@@ -213,7 +213,7 @@ var Tabmix = { // jshint ignore:line
 
   // console._removeInternal use this function name to remove it from
   // caller list
-  __noSuchMethod__: function TMP_console_wrapper(id, args) {
+  _getMethod: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
       this.installeChangecode();
       return this[id].apply(this, args);
@@ -235,7 +235,7 @@ var Tabmix = { // jshint ignore:line
     Components.utils.import("resource://gre/modules/Services.jsm");
     this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
     if (this.isVersion(200)) {
-      let resource = this.isVersion(210) ? "resource://app/" : "resource://gre/";
+      let resource = this.isVersion(210) ? "resource:///" : "resource://gre/";
       XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
                  resource + "modules/RecentWindow.jsm");
     }
@@ -244,6 +244,15 @@ var Tabmix = { // jshint ignore:line
       window.removeEventListener("unload", tabmix_destroy, false);
       this.destroy();
     }.bind(this), false);
+
+    var methods = ["changeCode", "setNewFunction", "nonStrictMode",
+                   "getObject", "log", "getCallerNameByIndex", "callerName",
+                   "isCallerInList", "obj", "assert", "trace"];
+    methods.forEach(function(id) {
+      this[id] = function TMP_console_wrapper() {
+        return this._getMethod(id, arguments);
+      };
+    }, this);
   },
 
   originalFunctions: {},

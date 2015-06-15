@@ -30,8 +30,9 @@ var TMP_Places = {
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
          Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-            /(webNav\.document\.)*title \|\| url\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
+            /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
+            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), ' +
+            (Tabmix.isVersion(400) ? "uri" : "url") + '.spec) || $&'
          ).toCode();
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
@@ -98,14 +99,12 @@ var TMP_Places = {
         /Services.ww.openWindow[^;]*;/,
         'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
       )._replace(
-        'w.gBrowser.loadURIWithFlags(url, flags, aReferrerURI, null, aPostData);',
-        '$&\
-         w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);'
-      )._replace(
         /(\})(\)?)$/,
         '  var tab = where == "current" ?\n' +
         '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
         '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+        '  if (where == "current")' +
+        '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);' +
         '$1$2'
       ).toCode();
 

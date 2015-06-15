@@ -270,6 +270,10 @@ var TMP_eventListener = {
       case "TabAttrModified":
         this.onTabAttrModified(aEvent);
         break;
+      case "SSWindowClosing":
+        window.removeEventListener("SSWindowClosing", this, false);
+        TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
+        break;
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent);
         break;
@@ -303,15 +307,6 @@ var TMP_eventListener = {
         break;
       case "PrivateTab:PrivateChanged":
         TabmixSessionManager.privateTabChanged(aEvent);
-        break;
-    }
-  },
-
-  receiveMessage: function(message) {
-    let browser = message.target;
-    switch (message.name) {
-      case "Tabmix:SetSyncHandler":
-        TabmixSvc.syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
         break;
     }
   },
@@ -360,7 +355,8 @@ var TMP_eventListener = {
       Tabmix.lazy_import(Tabmix, "renameTab", "RenameTab", "RenameTab");
       Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
       Tabmix.lazy_import(Tabmix, "docShellCapabilities",
-        "DocShellCapabilities", "DocShellCapabilities", true, [window]);
+        "DocShellCapabilities", "DocShellCapabilities");
+      Tabmix.lazy_import(Tabmix, "Utils", "Utils", "TabmixUtils");
     } catch (ex) {Tabmix.assert(ex);}
 
     this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
@@ -452,12 +448,11 @@ var TMP_eventListener = {
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
     window.addEventListener("unload", this, false);
+    window.addEventListener("SSWindowClosing", this, false);
     window.addEventListener("fullscreen", this, true);
 
     if (Tabmix.isVersion(320)) {
-      let mm = window.getGroupMessageManager("browsers");
-      mm.addMessageListener("Tabmix:SetSyncHandler", this);
-      mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
+      Tabmix.Utils.initMessageManager(window);
     }
 
     var tabBar = gBrowser.tabContainer;
@@ -1026,6 +1021,7 @@ var TMP_eventListener = {
 
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this, false);
+    window.removeEventListener("SSWindowClosing", this, false);
 
     // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() === 0;
@@ -1042,7 +1038,8 @@ var TMP_eventListener = {
       });
     }
 
-    TabmixSessionManager.onWindowClose(isLastWindow);
+    TabmixSessionManager.shutDown(true, isLastWindow, true);
+    TabmixSessionManager.notifyClosedWindowsChanged(true);
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
 
@@ -1077,12 +1074,9 @@ var TMP_eventListener = {
       Tabmix.flst.cancel();
 
     Tabmix.navToolbox.deinit();
-    if (Tabmix.DocShellCapabilitiesInitialized)
-      Tabmix.docShellCapabilities.deinit(window);
 
     if (Tabmix.isVersion(320)) {
-      let mm = window.getGroupMessageManager("browsers");
-      mm.removeMessageListener("Tabmix:SetSyncHandler", this);
+      Tabmix.Utils.deinit(window);
     }
 
     Tabmix.tabsUtils.onUnload();

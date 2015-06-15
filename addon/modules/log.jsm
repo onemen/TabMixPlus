@@ -5,7 +5,9 @@ var EXPORTED_SYMBOLS = ["console"];
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "FileUtils",
+  "resource://gre/modules/FileUtils.jsm");
 
 let gNextID = 1;
 
@@ -83,12 +85,12 @@ this.console = {
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
   },
 
-  logStringMessage: function(aMessage) {
+  _logStringMessage: function(aMessage) {
     Services.console.logStringMessage(aMessage.replace(/\r\n/g, "\n"));
   },
 
   clog: function(aMessage) {
-    this.logStringMessage("TabMix :\n" + aMessage);
+    this._logStringMessage("TabMix :\n" + aMessage);
   },
 
   log: function TMP_console_log(aMessage, aShowCaller, offset) {
@@ -96,7 +98,7 @@ this.console = {
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset+0];
     let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
-    this.logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
+    this._logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -232,7 +234,7 @@ options = {
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
     delete this._pathRegExp;
-    let folder = TabmixSvc.FileUtils.getDir("ProfD", ["extensions"]);
+    let folder = FileUtils.getDir("ProfD", ["extensions"]);
     let path = folder.path.replace("\\", "/", "g") + "/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
@@ -278,11 +280,11 @@ options = {
     let location = aError.location ? "\n" + aError.location : "";
     let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
     let stackText = "\nStack Trace: \n" + this._formatStack(aError.stack.split("\n"));
-    this.logStringMessage(assertionText + stackText);
+    this._logStringMessage(assertionText + stackText);
   },
 
   trace: function TMP_console_trace(aMsg) {
     let stack = this._formatStack(this._getStackExcludingInternal());
-    this.logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
+    this._logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
   }
 };

@@ -568,7 +568,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
       else if (typeof(aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
          aTabToRemove = cTab;
 
-      TMP_TabView.prepareUndoCloseTab(aTabToRemove);
+      if (TMP_TabView.installed)
+         TabView.prepareUndoCloseTab(aTabToRemove);
 
       if (aTabToRemove)
          aTabToRemove.collapsed = true;
@@ -582,7 +583,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
       // add restored tab to current window
       TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
-      TMP_TabView.afterUndoCloseTab();
+      if (TMP_TabView.installed)
+         TabView.afterUndoCloseTab();
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
@@ -809,7 +811,19 @@ var TabmixConvertSession = { // jshint ignore:line
         return null;
       tabData.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image", null);
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
-      tabData.index = Math.min(index + 1, tabData.entries.length);
+      tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
+      var scroll = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll", "0,0");
+      if (scroll.indexOf("{") === 0) {
+        tabData.scroll = JSON.parse(scroll);
+      }
+      else {
+      // until version 0.4.1.5 textZoom was included in scroll data
+        scroll = scroll.split(",").splice(0, 2).join(",");
+        if (scroll != "0,0") {
+          tabData.scroll = {scroll: scroll};
+        }
+      }
+
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
       var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
 
@@ -908,6 +922,8 @@ var TabmixConvertSession = { // jshint ignore:line
          let entry = { url:"", children:[], ID: 0};
          let index = i * 3;
          entry.url = historyData[index + 1];
+         if (!entry.url)
+            continue;
          entry.title = decodeData(historyData[index], !newFormat);
          entry.scroll = historyData[index + 2];
          entries.push(entry);

@@ -154,8 +154,8 @@ var PlacesUtilsInternal = {
       '{', '$&\n' +
       '    var TMP_Event;\n' +
       '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
-      '      aWhere = aWhere.where;\n' +
       '      TMP_Event = aWhere.event;\n' +
+      '      aWhere = aWhere.where;\n' +
       '    }\n'
     )._replace(
       'aWindow.openUILinkIn',

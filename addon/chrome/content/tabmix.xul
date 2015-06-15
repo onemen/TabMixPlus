@@ -114,11 +114,11 @@
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"
-         oncommand="gBrowser.openInverseLink(gBrowser.mCurrentTab);"/>
+         oncommand="gBrowser.openInverseLink();"/>
       <menuitem id="tm-openAllLinks" label="&openalllinks.label;" accesskey="&openalllinks.accesskey;"
          insertafter="context-openlinkintab" oncommand="TabmixContext.openMultipleLinks();"/>
       <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
-         insertafter="context-openlinkintab" oncommand="gBrowser.openLinkWithHistory(gBrowser.mCurrentTab);"/>
+         insertafter="context-openlinkintab" oncommand="gBrowser.openLinkWithHistory();"/>
       <menuseparator id="tm-content-miscSep" insertafter="context-stop"/>
       <menuitem id="tm-content-closetab" label="&closeTab.label;" oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"

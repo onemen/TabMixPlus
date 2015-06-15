@@ -1649,6 +1649,12 @@ var gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    // with Walnut theme we get wrong height on Firefox 36
+    if (Tabmix._buttonsHeight > 50) {
+      let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+      Tabmix._buttonsHeight = skin == "walnut" ? 19 : 23;
+    }
+
     /* tab-icon-overlay added by Bug 1112304, Firefox 38+ */
     if (!Tabmix.isVersion(380))
       this.insertRule('.tab-icon-overlay {display: none;}');
@@ -2027,43 +2033,23 @@ var gTMPprefObserver = {
     TabmixTabbar.position = aPosition;
     gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
     var tabsToolbar = document.getElementById("TabsToolbar");
-    var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    // setting tabbaronbottom attribute trigger updatePosition in our
+    // scrollbox.xml\toolbar binding
     Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
 
     // TabsOnTop removed by bug 755593
     if (window.TabsOnTop)
       this.setTabsOnTop(TabmixTabbar.position == 1);
 
-    if (TabmixTabbar.position == 1) {// bottom
-      if (!bottomToolbox) {
-        bottomToolbox = document.createElement("toolbox");
-        bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
-        bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
-        if (navigator.oscpu.startsWith("Windows NT 6.1"))
-          bottomToolbox.setAttribute("tabmix_aero", true);
-        // if we decide to move this box into browser-bottombox
-        // remember to fix background css rules for all platform
-        let warningContainer = document.getElementById("full-screen-warning-container");
-        warningContainer.parentNode.insertBefore(bottomToolbox, warningContainer);
-      }
-      if (gBrowser.tabContainer.visible)
-        this.updateTabbarBottomPosition();
-      else {
-        // the tabbar is hidden on startup
-        let height = gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
-        bottomToolbox.style.setProperty("height", height + "px", "important");
-        tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
-        tabsToolbar.setAttribute("width", screen.availWidth);
-      }
-    }
-    else {// top
+    if (TabmixTabbar.position === 0) {// top
       this._bottomRect = {top:null, width:null, height:null};
+      let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
       tabsToolbar.removeAttribute("width");
+      // force TabmixTabbar.setHeight to set tabbar height
+      TabmixTabbar.visibleRows = 1;
     }
-    // force TabmixTabbar.setHeight to set tabbar height
-    TabmixTabbar.visibleRows = 1;
     return true;
   },
 
@@ -2501,7 +2487,8 @@ var TabmixProgressListener = {
       '$&'
     ).toCode();
     this.listener.mTabBrowser = tabBrowser;
-    if (!Tabmix.isVersion(340))
+    // Bug 1081891 fixed on Firefox 38
+    if (!Tabmix.isVersion(340) || Tabmix.isVersion(380))
       this.listener._fixTabTitle = function() {};
     tabBrowser.addTabsProgressListener(this.listener);
   },
@@ -2510,17 +2497,18 @@ var TabmixProgressListener = {
     mTabBrowser: null,
     showProgressOnTab: false,
 
-    _fixTabTitle: function TMP__contentLinkClick(tab, browser) {
-      if (browser.getAttribute("remote") != "true" ||
+    // Bug 1081891: Calling webNavigation.loadURI with url that trigger
+    // unknownContentType.xul dialog change the tab title to its address
+    // as a workaround we trigger DOMTitleChanged async message
+    _fixTabTitle: function TMP__contentLinkClick(tab, browser, url) {
+      if (browser.getAttribute("remote") != "true" || /^about/.test(url) ||
           browser._contentTitle !== "" || this.mTabBrowser.isBlankTab(tab))
         return;
       tab.addEventListener("TabLabelModified", function titleChanged(event) {
         tab.removeEventListener("TabLabelModified", titleChanged, true);
-        let title = browser.contentDocumentAsCPOW.title;
-        if (browser._contentTitle != title) {
+        if (!browser._contentTitle) {
           event.preventDefault();
-          browser._contentTitle = title;
-          tab.visibleLabel = title;
+          browser.messageManager.sendAsyncMessage("Tabmix:sendDOMTitleChanged");
         }
       }, true);
     },
@@ -2546,7 +2534,7 @@ var TabmixProgressListener = {
       if (aStateFlags & nsIWebProgressListener.STATE_START &&
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
-        this._fixTabTitle(tab, aBrowser);
+        this._fixTabTitle(tab, aBrowser, url);
         if (url == "about:blank") {
           tab.removeAttribute("busy");
           tab.removeAttribute("progress");
@@ -2563,20 +2551,17 @@ var TabmixProgressListener = {
             if (tabsCount == 1)
               this.mTabBrowser.tabContainer.adjustTabstrip(true, url);
           }
+          if (tab.hasAttribute("tabmix_bookmarkId"))
+            TMP_Places.setTabTitle(tab, url);
         }
       }
       else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         // remove blank tab that created by downloading a file.
-        let isDownLoading;
-        try {
-          // nsIWebProgress.DOMWindow can throw NS_NOINTERFACE
-          isDownLoading = Tabmix.prefs.getBoolPref("enablefiletype") &&
-            aWebProgress.DOMWindow.document.documentURI == "about:blank" &&
-            uri != "about:blank" && aStatus === 0 &&
-            this.mTabBrowser.isBlankTab(tab);
-        } catch(ex) { }
+        let isDownLoading = Tabmix.prefs.getBoolPref("enablefiletype") &&
+            this.mTabBrowser.isBlankBrowser(aBrowser, true) &&
+            !/^about/.test(uri) && aStatus === 0;
         if (isDownLoading) {
           if (tab.selected)
             this.mTabBrowser.previousTab(tab);
@@ -2618,8 +2603,12 @@ var TabmixProgressListener = {
           Tabmix.autoReload.onTabReloaded(tab, aBrowser);
 
         // disabled name for locked tab, so locked tab don't get reuse
-        if (tab.getAttribute("locked") && aBrowser[TabmixSvc.contentWindowAsCPOW].name)
-          aBrowser[TabmixSvc.contentWindowAsCPOW].name = "";
+        if (tab.getAttribute("locked")) {
+          if (Tabmix.isVersion(320))
+            aBrowser.messageManager.sendAsyncMessage("Tabmix:resetContentName");
+          else if (aBrowser.contentWindow && aBrowser.contentWindow.name)
+            aBrowser.contentWindow.name = "";
+        }
       }
     }
   }

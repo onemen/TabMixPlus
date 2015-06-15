@@ -7,6 +7,8 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
+  "resource://gre/modules/BrowserUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
@@ -17,12 +19,23 @@ XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
   "resource://tabmixplus/ContextMenu.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
+  "resource://tabmixplus/Utils.jsm");
+
 let global = this;
 
 let TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",
+    "Tabmix:resetContentName",
+    "Tabmix:sendDOMTitleChanged",
+    "Tabmix:updateHistoryTitle",
+    "Tabmix:collectScrollPosition",
+    "Tabmix:setScrollPosition",
+    "Tabmix:collectReloadData",
+    "Tabmix:isFrameInContent",
+    "Tabmix:collectOpener",
   ],
 
   init: function () {
@@ -38,15 +51,56 @@ let TabmixContentHandler = {
       case "Tabmix:restorePermissions":
         let disallow = new Set(data.disallow && data.disallow.split(","));
         DocShellCapabilities.restore(docShell, disallow);
-        sendSyncMessage("Tabmix:restoPermissionsComplete", {
+        sendSyncMessage("Tabmix:restorePermissionsComplete", {
           disallow: data.disallow,
           reload: data.reload
         });
-      break;
+        break;
       case "Tabmix:collectPermissions":
-      let caps = DocShellCapabilities.collect(docShell).join(",");
-      sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
-      break;
+        let caps = DocShellCapabilities.collect(docShell).join(",");
+        sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
+        break;
+      case "Tabmix:resetContentName":
+        if (content.name)
+          content.name = "";
+        break;
+      case "Tabmix:sendDOMTitleChanged":
+        // workaround for bug 1081891
+        let title = content.document.title;
+        if (title)
+          sendAsyncMessage("DOMTitleChanged", { title: title });
+        break;
+      case "Tabmix:updateHistoryTitle":
+        let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+        TabmixUtils.updateHistoryTitle(history, data.title);
+        break;
+      case "Tabmix:collectScrollPosition":
+        let scroll = {scrollX: content.scrollX,
+                      scrollY: content.scrollY};
+        sendAsyncMessage("Tabmix:updateScrollPosition", { scroll: scroll });
+        break;
+      case "Tabmix:setScrollPosition":
+        let {x, y} = data;
+        content.scrollTo(x, y);
+        break;
+      case "Tabmix:collectReloadData":
+        let json = {scrollX: content.scrollX,
+                    scrollY: content.scrollY};
+        let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+        if (sh) {
+          let entry = sh.getEntryAtIndex(sh.index, false);
+          json.isPostData = !!entry.QueryInterface(Ci.nsISHEntry).postData;
+          json.isPostData = true;
+        }
+        sendAsyncMessage("Tabmix:reloadTab", json);
+        break;
+      case "Tabmix:isFrameInContent":
+        let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
+        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
+        break;
+      case "Tabmix:collectOpener":
+        sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
+        break;
     }
   },
 
@@ -54,12 +108,8 @@ let TabmixContentHandler = {
     return DocShellCapabilities.collect(docShell).join(",") || "";
   },
 
-  getSelectedLinks: function(check) {
-    return ContextMenu.getSelectedLinks(content, check);
-  },
-
-  isFrameInContent: function(href, name) {
-    return LinkNodeUtils.isFrameInContent(content, href, name);
+  getSelectedLinks: function() {
+    return ContextMenu.getSelectedLinks(content).join("\n");
   },
 
   wrapNode: function(node) {
@@ -70,7 +120,9 @@ let TabmixContentHandler = {
 
 var TabmixClickEventHandler = {
   init: function init() {
-    global.addEventListener("click", this, true);
+    if (TabmixSvc.version(380) &&
+        Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
+      global.addEventListener("click", this, true);
   },
 
   handleEvent: function(event) {
@@ -100,6 +152,9 @@ var TabmixClickEventHandler = {
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
                  altKey: event.altKey, href: null, title: null,
                  bookmark: false };
+
+    if (TabmixSvc.version(380))
+      json.referrerPolicy = ownerDoc.referrerPolicy;
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
@@ -139,6 +194,8 @@ var TabmixClickEventHandler = {
           }
         }
       }
+      if (TabmixSvc.version(370))
+        json.noReferrer = BrowserUtils.linkHasNoReferrer(node);
 
       sendAsyncMessage("Content:Click", json);
       return;
