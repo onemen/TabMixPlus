@@ -1086,7 +1086,8 @@ var TMP_eventListener = {
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
-    TMP_TabView._resetTabviewFrame();
+    if (TMP_TabView.installed)
+      TMP_TabView._resetTabviewFrame();
     gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();
