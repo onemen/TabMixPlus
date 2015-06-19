@@ -1223,6 +1223,8 @@ Tabmix.navToolbox = {
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+    if ("__treestyletab__original_doSearch" in searchbar)
+      [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
     let fnString = obj[fn].toString();
     if (/Tabmix/.test(fnString))
       return;
