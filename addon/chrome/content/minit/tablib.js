@@ -1024,12 +1024,6 @@ var tablib = {
       if (!url)
         return;
 
-      // the next line is insertion point for treeStyleTab extension look in
-      // treeStyleTab hacks.js
-      /* jshint ignore:start */
-      var newTab = null;
-      /* jshint ignore:end */
-
       gContextMenu.linkURL = url;
       // originalFunctions.openInverseLink is a copy of original
       // nsContextMenu.prototype.openLinkInTab

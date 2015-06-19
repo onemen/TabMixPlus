@@ -656,6 +656,12 @@ TMP_extensionsCompatibility.treeStyleTab = {
     // we removed TMP_openTabNext function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
       Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed")._replace(
+        'var newTab',
+        'gContextMenu.linkURL = url;'
+      )._replace(
+        'TreeStyleTabService.readyToOpenChildTab(aTab)',
+        'TreeStyleTabService.readyToOpenChildTab(gBrowser.mCurrentTab)'
+      )._replace(
         /eval\(["|']gBrowser\.TMP_openTabNext/,
         'if (false) $&'
       ).toCode();
