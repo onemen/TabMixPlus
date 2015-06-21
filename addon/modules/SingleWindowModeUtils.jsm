@@ -157,7 +157,8 @@ this.SingleWindowModeUtils = {
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
-      obs.addObserver(newWindow.gPluginHandler.pluginCrashed, "plugin-crashed", false);
+      let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
+      obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
       newWindow.gPrivateBrowsingUI.uninit = function() {};
       existingWindow.setTimeout(function () {
         // restore window dimensions, to prevent flickring in the next restart
