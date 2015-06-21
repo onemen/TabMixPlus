@@ -2854,8 +2854,9 @@ try{
    saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend) {
       if (this.isTabPrivate(aTab))
          return false;
-      var aBrowser = gBrowser.getBrowserForTab(aTab);
-      if (gBrowser.isBlankBrowser(aBrowser)) return false;
+      var browser = gBrowser.getBrowserForTab(aTab);
+      if (gBrowser.isBlankBrowser(browser))
+         return false;
 
       // clear sanitized flag
       if (this.prefBranch.prefHasUserValue("sanitized")) {
@@ -2864,18 +2865,24 @@ try{
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "crash");
       }
 
-      var sessionHistory = aBrowser.webNavigation.sessionHistory;
+      var sessionHistory = browser.webNavigation.sessionHistory;
       if (!sessionHistory)
          return false;
-      var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
-      var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
-      var tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      var tabState;
+      try {
+         tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      } catch(ex) {
+         if (!Tabmix.isVersion(280) && browser.userTypedValue == "about:config" && browser.__SS_data)
+            tabState = browser.__SS_data;
+      }
       var data = this.serializeHistory(tabState);
       if (!data)
          return false;
       data.pos = aTab._tPos;
       data.image = tabState.image;
       data.properties = TabmixSessionData.getTabProperties(aTab, true);
+      var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
+      var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
       this.saveTabData(rdfNodeTab, data);
       this.saveTabviewTab(rdfNodeTab, aTab);
 
@@ -2916,6 +2923,8 @@ try{
    *                current history scroll position
    */
    serializeHistory: function(state) {
+      if (!state)
+         return null;
       // Ensure sure that all entries have url
       var entries = state.entries.filter(function(e) e.url);
       if (!entries.length)
