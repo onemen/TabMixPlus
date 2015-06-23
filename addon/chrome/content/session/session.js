@@ -364,14 +364,9 @@ var TabmixSessionManager = { // jshint ignore:line
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
          this.setLiteral(this.gThisWin, "private", "true");
-         // initialize closed window list broadcaster
-         let disabled = this.enableManager ? isFirstWindow || this.isPrivateSession || this.isClosedWindowsEmpty() :
-                                             TabmixSvc.ss.getClosedWindowCount() === 0;
-         Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
-         return;
       }
 
-      if (isFirstWindow) {
+      if (!this.isPrivateWindow && isFirstWindow) {
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
@@ -421,11 +416,13 @@ var TabmixSessionManager = { // jshint ignore:line
          this.copyClosedTabsToRDF(this.gThisWin);
       }
       // initialize closed window list broadcaster
-      var disabled = this.enableManager ? Tabmix.firstWindowInSession || this.isClosedWindowsEmpty() :
+      var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.firstWindowInSession;
+      var disabled = this.enableManager ? status || this.isClosedWindowsEmpty() :
                                           TabmixSvc.ss.getClosedWindowCount() === 0;
       Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
-      this.saveStateDelayed();
+      if (!this.isPrivateWindow)
+         this.saveStateDelayed();
    },
 
    // we call this function after session restored by sessionStore, after restart or after exit private-browsing
