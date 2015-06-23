@@ -360,10 +360,10 @@ var TabmixSessionManager = { // jshint ignore:line
 
       this.toggleRecentlyClosedWindowsButton();
       if (this.isPrivateWindow) {
+         this.enableBackup = false;
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
          this.setLiteral(this.gThisWin, "private", "true");
-         this.enableBackup = false;
          // initialize closed window list broadcaster
          let disabled = this.enableManager ? isFirstWindow || this.isPrivateSession || this.isClosedWindowsEmpty() :
                                              TabmixSvc.ss.getClosedWindowCount() === 0;
@@ -738,7 +738,6 @@ var TabmixSessionManager = { // jshint ignore:line
             windowSaved = true;
          } else { // remove all backup
             this.deleteSession(this.gSessionPath[0], "status", "backup");
-            this.deleteSession(this.gSessionPath[3]);
             this.initSession(this.gSessionPath[0], this.gThisWin);
             this.saveStateDelayed();
          }
@@ -2095,6 +2094,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                  this.setLiteral(rdfNodeWindow, "dontLoad", "true");
             }
             this.deleteArrayNodes(sessionContainer, nodeToDelete, false);
+            let count = this.countWinsAndTabs(crashedContainer);
+            this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
          } // if firefox was crashed in middle of crash Recovery try again to restore the same data
          else if (!this.containerEmpty(this.gSessionPath[0]))
             this.deleteWithProp(sessionContainer);
@@ -2126,9 +2127,11 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          this.callBackData = {label: null, whattoLoad: "session"};
          this.waitForCallBack = true;
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
-            let crashedContainer = this.initContainer(this.gSessionPath[3]);
-            let count = this.countWinsAndTabs(crashedContainer);
-            this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
+            if (!this.nodeHasArc(this.gSessionPath[3], "nameExt")) {
+               let crashedContainer = this.initContainer(this.gSessionPath[3]);
+               let count = this.countWinsAndTabs(crashedContainer);
+               this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
+            }
             if (this.enableManager && !isAllEmpty) {
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
