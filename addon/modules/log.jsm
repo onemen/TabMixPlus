@@ -235,7 +235,7 @@ options = {
   get _pathRegExp() {
     delete this._pathRegExp;
     let folder = FileUtils.getDir("ProfD", ["extensions"]);
-    let path = folder.path.replace("\\", "/", "g") + "/";
+    let path = folder.path.replace(/\\/g, "/") + "/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 

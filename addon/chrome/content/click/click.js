@@ -1026,7 +1026,7 @@ var TabmixAllTabs = {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
-                 .replace("#1", tabClr, "g");
+                 .replace(/#1/g, tabClr);
       }
       mi.style.setProperty('background-image', rule, 'important');
     }

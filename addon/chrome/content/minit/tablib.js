@@ -762,7 +762,7 @@ var tablib = {
         state = TabmixSvc.JSON.stringify({windows: [state]});\
         #1.setWindowState(window, state, false);\
        }\
-       else $&}'.replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss", "g")
+       else $&}'.replace(/#1/g, Tabmix.isVersion(260) ? "SessionStore" : "ss")
     )._replace(
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\
