@@ -1,5 +1,5 @@
 /**
-    Firefox version 4.0
+    Firefox all versions
 
     Windows platform
 
@@ -7,8 +7,7 @@
     to apply rule only to default them add #tabbrowser-tabs[classic40]
 **/
 
-@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
-@import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
 
 /* :::: tabbar on bottom :::: */
 #TabsToolbar[tabbaronbottom] {

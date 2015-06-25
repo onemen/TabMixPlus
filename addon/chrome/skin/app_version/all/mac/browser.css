@@ -1,12 +1,11 @@
 /**
-    Firefox version 4.0
+    Firefox all versions
 
     Mac platform
 
 **/
 
-@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
-@import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/all/mac/progress.css");
 
 /* :::: tabbar on bottom ::::
   we leave the default background-image on mac

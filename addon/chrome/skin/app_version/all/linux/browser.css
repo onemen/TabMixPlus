@@ -1,12 +1,11 @@
 /**
-    Firefox version 4.0
+    Firefox all versions
 
     Linux platform
 
 **/
 
-@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
-@import url("chrome://tabmixplus/skin/app_version/4.0/win/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
 
 /* :::: tabbar on bottom :::: */
 #TabsToolbar[tabbaronbottom] {
