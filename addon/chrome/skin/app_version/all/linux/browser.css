@@ -5,8 +5,6 @@
 
 **/
 
-@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
-
 /* :::: tabbar on bottom :::: */
 #TabsToolbar[tabbaronbottom] {
   background-image: none !important;
@@ -27,11 +25,6 @@
 
 .tabs-closebutton.tabmix:not(:hover):-moz-lwtheme-darktext {
   background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 96, 16, 80);
-}
-
-/***  Tab close button when user set background color ***/
-#TabsToolbar[brighttext] .tabbrowser-tab:not([selected="true"]):not(:hover)[tabmix_tabStyle*="bg"] .tab-close-button {
-  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 16, 16, 0);
 }
 
 #TabsToolbar[tabmix_skin][multibar] > #appmenu-toolbar-button {

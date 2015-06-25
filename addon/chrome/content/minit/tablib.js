@@ -477,6 +477,14 @@ var tablib = {
       '  }'
     ).defineProperty();
 
+    if (Tabmix.isVersion(220)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
+        /(\})(\)?)$/,
+        '          Tabmix.setTabStyle(this.selectedItem);\n' +
+        '          TabmixTabbar.updateBeforeAndAfter();\n' +
+        '$1$2'
+      ).toCode();
+    }
   },
 
   change_utility: function change_utility() {

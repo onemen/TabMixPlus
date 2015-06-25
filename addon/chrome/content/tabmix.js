@@ -286,6 +286,9 @@ var TMP_eventListener = {
       case "TabSelect":
         this.onTabSelect(aEvent);
         break;
+      case "TabSwitchDone":
+        this.onTabSwitchDone(gBrowser.selectedTab);
+        break;
       case "TabMove":
         this.onTabMove(aEvent);
         break;
@@ -460,6 +463,10 @@ var TMP_eventListener = {
       Tabmix.Utils.initMessageManager(window);
     }
 
+    if (Tabmix.isVersion(390)) {
+      gBrowser.addEventListener("TabSwitchDone", this, false);
+    }
+
     var tabBar = gBrowser.tabContainer;
 
     tabBar.addEventListener("DOMMouseScroll", this, true);
@@ -613,7 +620,7 @@ var TMP_eventListener = {
     // apply style on tabs
     let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
     styles.forEach(function(ruleName) {
-      gTMPprefObserver.updateTabsStyle(ruleName, true);
+      gTMPprefObserver.updateTabsStyle(ruleName);
     });
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
@@ -914,7 +921,6 @@ var TMP_eventListener = {
 
   onTabSelect: function TMP_EL_TabSelect(aEvent) {
     var tab = aEvent.target;
-    var tabBar = gBrowser.tabContainer;
 
     // for ColorfulTabs 6.0+
     // ColorfulTabs trapp TabSelect event after we do
@@ -936,29 +942,31 @@ var TMP_eventListener = {
 
     // update this functions after new tab select
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
+
+    if (!Tabmix.isVersion(390)) {
+      this.onTabSwitchDone(tab);
+    }
+
+    TMP_LastTab.OnSelect();
+    TabmixSessionManager.tabSelected(true);
+  },
+
+  onTabSwitchDone: function(tab) {
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
 
     if (tab.hasAttribute("tabmix_pending"))
       tab.removeAttribute("tabmix_pending");
-    let lastSelected = document.getElementsByAttribute("tabmix_tabStyle",
-      Tabmix.tabStyles["current"] || "current")[0];
-    Tabmix.setTabStyle(lastSelected);
     Tabmix.setTabStyle(tab);
 
-    TMP_LastTab.OnSelect();
-    TabmixSessionManager.tabSelected(true);
-
     if (tab.hasAttribute("showbutton") &&
-        tabBar.getAttribute("closebuttons") == "activetab")
+        gBrowser.tabContainer.getAttribute("closebuttons") == "activetab")
       tab.style.removeProperty("width");
 
     // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
-    // TabSelect event. we call updateBeforeAndAfter after a timeout so
-    // _setPositionalAttributes not override our attribute
-    if (Tabmix.isVersion(220))
-      setTimeout(function(){TabmixTabbar.updateBeforeAndAfter();}, 0);
-    else
+    // TabSelect event.
+    // Since Firefox 220 we call updateBeforeAndAfter from _setPositionalAttributes
+    if (!Tabmix.isVersion(220))
       TabmixTabbar.updateBeforeAndAfter();
   },
 
@@ -1083,6 +1091,10 @@ var TMP_eventListener = {
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+
+    if (Tabmix.isVersion(390)) {
+      gBrowser.removeEventListener("TabSwitchDone", this, false);
+    }
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 

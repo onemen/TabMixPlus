@@ -1222,7 +1222,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.unloadedTab":
       case "extensions.tabmix.unreadTab":
       case "extensions.tabmix.otherTab":
-        this.updateTabsStyle(prefName.split(".").pop(), true);
+        this.updateTabsStyle(prefName.split(".").pop());
         break;
       case "extensions.tabmix.progressMeter":
         this.setProgressMeter();
@@ -1757,7 +1757,7 @@ var gTMPprefObserver = {
     }
   },
 
-  updateTabsStyle: function(ruleName, toggle) {
+  updateTabsStyle: function(ruleName) {
     let attribValue = null;
     let styleName = ruleName.replace("Tab", "");
     let enabled = Tabmix.prefs.getBoolPref(ruleName);
@@ -1770,45 +1770,35 @@ var gTMPprefObserver = {
                prefValues.underline ? "underline" : "not-underline"
       ];
       if (prefValues.text)
-        attribValue.push(styleName + "-text");
+        attribValue.push("text");
       if (prefValues.bg)
-        attribValue.push(styleName + "-bg");
+        attribValue.push("bg");
       attribValue = attribValue.join(" ");
     }
 
-    let getTabs = function(attrib, val) {
-      return Array.slice(document.getElementsByAttribute(attrib, val));
-    };
+    let tabBar = gBrowser.tabContainer;
+    let currentAttrib = tabBar.getAttribute("tabmix_" + styleName + "Style") || "";
+    Tabmix.setItem(tabBar, "tabmix_" + styleName + "Style", attribValue);
 
-    let tabs, attrib = Tabmix.tabStyles[styleName] || styleName;
-    Tabmix.tabStyles[styleName] = attribValue;
     /** style on non-selected tab are unloaded, unread or other, unloaded and
      *  unread are only set on tab if the corresponded preference it on. if user
      *  changed unloaded or unread preference we need to set the proper tab
      *  style for each tab
      */
-    if (toggle && styleName == "unloaded") {
-      tabs = getTabs("pending", "true");
-      tabs.forEach(function(tab) Tabmix.setTabStyle(tab));
-    }
-    else if (toggle && styleName == "unread") {
-      if (enabled)
-        attrib = Tabmix.tabStyles["other"] || "other";
-      tabs = getTabs("tabmix_tabStyle", attrib);
-      tabs.forEach(function(tab) Tabmix.setTabStyle(tab));
-    }
-    else {
-      tabs = getTabs("tabmix_tabStyle", attrib);
-      tabs.forEach(function(tab) {
-        Tabmix.setItem(tab, "tabmix_tabStyle", attribValue || styleName);
-      });
-    }
+    if (styleName == "unloaded" || styleName == "unread")
+      Array.forEach(gBrowser.tabs, function(tab) Tabmix.setTabStyle(tab));
 
+    let isBold = function(attrib) {
+      attrib = attrib.split(" ");
+      return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
+    };
     // changing bold attribute can change tab width and effect tabBar scroll status
     // also when we turn off unloaded, unread and other style diffrent style can take
     // control with a diffrent bold attribute
-    TabmixTabbar.updateScrollStatus();
-    TabmixTabbar.updateBeforeAndAfter();
+    if (isBold(attribValue || "") != isBold(currentAttrib)) {
+      TabmixTabbar.updateScrollStatus();
+      TabmixTabbar.updateBeforeAndAfter();
+    }
   },
 
   setProgressMeter: function () {
@@ -2583,7 +2573,7 @@ var TabmixProgressListener = {
         if (!isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
-                !tab.hasAttribute("dontremovevisited") && tab.getAttribute("selected") != "true")
+              !tab.hasAttribute("dontremovevisited") && tab.getAttribute(TabmixSvc.selectedAtt) != "true")
             tab.removeAttribute("visited");
             Tabmix.setTabStyle(tab);
         }

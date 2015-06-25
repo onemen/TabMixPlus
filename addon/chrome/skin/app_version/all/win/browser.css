@@ -7,8 +7,6 @@
     to apply rule only to default them add #tabbrowser-tabs[classic40]
 **/
 
-@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
-
 /* :::: tabbar on bottom :::: */
 #TabsToolbar[tabbaronbottom] {
   background-image: none !important;
@@ -74,10 +72,4 @@
   background-position: 1px 1px, 0pt 0px, 100% 0px, 0px 0pt, 0px 100%;
   background-size: calc(100% - 2px) calc(100% - 2px), 1px calc(100% - 1px), 1px calc(100% - 1px), 100% 1px, 100% 1px;
   background-repeat: no-repeat;
-}
-
-
-#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]) > .tab-stack > .tab-background > .tab-background-middle {
-  clip-path: none !important;
 }

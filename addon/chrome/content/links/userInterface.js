@@ -380,31 +380,27 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 };
 
-Tabmix.tabStyles = {};
 Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
-  let style = "other";
-  if (aTab.selected)
-    style = "current";
+  let style = "null";
+  let isSelected = aTab.getAttribute(TabmixSvc.selectedAtt) == "true";
   // if pending tab is blank we don't style it as unload or unread
-  else if (Tabmix.prefs.getBoolPref("unloadedTab") &&
+  if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
       (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending")))
     style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
-  else if (Tabmix.prefs.getBoolPref("unreadTab") &&
+  else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab))
     style = "unread";
 
-  let currentAttrib = aTab.getAttribute("tabmix_tabStyle");
-  let newAttrib = Tabmix.tabStyles[style] || style;
-  this.setItem(aTab, "tabmix_tabStyle", newAttrib);
+  let currentStyle = aTab.getAttribute("tabmix_tabState") || null;
+  if (style != "unread" && style != "unloaded")
+    style = null;
+  this.setItem(aTab, "tabmix_tabState", style);
 
   if (!boldChanged)
     return;
 
-  let isBold = function(attrib) {
-    attrib = attrib.split(" ");
-    return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
-  };
-  boldChanged.value = isBold(newAttrib) != isBold(currentAttrib);
+  // return true if state changed
+  boldChanged.value = currentStyle != style;
 };

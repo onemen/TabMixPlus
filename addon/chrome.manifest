@@ -80,7 +80,8 @@ overlay   chrome://wizzrss/content/feedster.xul                     chrome://tab
 
 skin      tabmixplus   classic/1.0   chrome/skin/
 
-skin      tabmix-version tabmixplus  chrome/skin/app_version/all/
+skin      tabmix-version tabmixplus  chrome/skin/app_version/before39.0/ appversion<39.0a1
+skin      tabmix-version tabmixplus  chrome/skin/app_version/39.0/       appversion>=39.0a1
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/linux/ os=Linux
