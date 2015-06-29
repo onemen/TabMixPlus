@@ -286,9 +286,6 @@ var TMP_eventListener = {
       case "TabSelect":
         this.onTabSelect(aEvent);
         break;
-      case "TabSwitchDone":
-        this.onTabSwitchDone(gBrowser.selectedTab);
-        break;
       case "TabMove":
         this.onTabMove(aEvent);
         break;
@@ -461,10 +458,6 @@ var TMP_eventListener = {
 
     if (Tabmix.isVersion(320)) {
       Tabmix.Utils.initMessageManager(window);
-    }
-
-    if (Tabmix.isVersion(390)) {
-      gBrowser.addEventListener("TabSwitchDone", this, false);
     }
 
     var tabBar = gBrowser.tabContainer;
@@ -943,15 +936,15 @@ var TMP_eventListener = {
     // update this functions after new tab select
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
 
-    if (!Tabmix.isVersion(390)) {
-      this.onTabSwitchDone(tab);
+    if (!Tabmix.isVersion(390) || !gMultiProcessBrowser) {
+      this.updateDisplay(tab);
     }
 
     TMP_LastTab.OnSelect();
     TabmixSessionManager.tabSelected(true);
   },
 
-  onTabSwitchDone: function(tab) {
+  updateDisplay: function(tab) {
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
 
@@ -1091,10 +1084,6 @@ var TMP_eventListener = {
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited)
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
-
-    if (Tabmix.isVersion(390)) {
-      gBrowser.removeEventListener("TabSwitchDone", this, false);
-    }
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 

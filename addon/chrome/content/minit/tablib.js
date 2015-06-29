@@ -329,6 +329,30 @@ var tablib = {
         'Tabmix.setNumberOfTabsClosedLast();'
       ).toCode();
     }
+
+    if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
+      /*
+       TabSwitchDone event fire late when the tab is busy, we call our
+       functions from updateDisplay only after _visuallySelected was changed
+      */
+      Tabmix.updateSwitcher = function(switcher) {
+        switcher.original_updateDisplay = switcher.updateDisplay;
+        switcher.updateDisplay = function() {
+          let visibleTab = this.visibleTab;
+          this.original_updateDisplay.apply(this, arguments);
+          if (visibleTab !== this.visibleTab) {
+            TMP_eventListener.updateDisplay(this.visibleTab);
+            TabmixTabbar.updateBeforeAndAfter();
+          }
+        };
+      };
+
+      Tabmix.changeCode(gBrowser, "gBrowser._getSwitcher")._replace(
+        'this._switcher = switcher;',
+        'Tabmix.updateSwitcher(switcher);\n' +
+        '$&'
+      ).toCode();
+    }
   },
 
   change_tabContainer: function change_tabContainer() {

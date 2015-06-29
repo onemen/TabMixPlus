@@ -364,7 +364,6 @@ var TabmixTabbar = {
   updateBeforeAndAfter: function TMP_updateBeforeAndAfter(onlyHoverAtt) {
     let tabBar = gBrowser.tabContainer;
     let multibar = tabBar.hasAttribute("multibar");
-    let selected = tabBar.selectedItem;
     let tabRow, topY;
 
     let numPinnedTabs = gBrowser._numPinnedTabs;
@@ -420,6 +419,8 @@ var TabmixTabbar = {
     if (onlyHoverAtt)
       return;
 
+    let selected = Tabmix.isVersion(390) && gBrowser._switcher ?
+        gBrowser._switcher.visibleTab : tabBar.selectedItem;
     let prev = null, next = null;
     if (!selected.closing) {
       let visibleTabs = gBrowser.visibleTabs;
