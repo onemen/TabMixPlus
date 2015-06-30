@@ -28,8 +28,8 @@
   opacity: 0.5 !important;
 }
 
-#tabbrowser-tabs[tabmix_australis="true"][tabmix_unloadedStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
-#tabbrowser-tabs[tabmix_australis="true"][tabmix_unreadStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
-#tabbrowser-tabs[tabmix_australis="true"][tabmix_otherStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
+#tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
+#tabbrowser-tabs[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
+#tabbrowser-tabs[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
   clip-path: none !important;
 }

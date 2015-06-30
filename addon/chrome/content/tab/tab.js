@@ -1771,8 +1771,11 @@ var gTMPprefObserver = {
       ];
       if (prefValues.text)
         attribValue.push("text");
-      if (prefValues.bg)
+      if (prefValues.bg) {
         attribValue.push("bg");
+        if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab)
+          attribValue.push("aus");
+      }
       attribValue = attribValue.join(" ");
     }
 
