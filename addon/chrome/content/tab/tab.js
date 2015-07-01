@@ -982,7 +982,7 @@ Tabmix.tabsUtils = {
   /**** gBrowser.tabContainer.mTabstrip helpers ****/
   /**
    * this function is here for the case restart-less extension override our
-   * override our mTabstrip binding when Tabmix's uses its own scroll buttons
+   * mTabstrip binding when Tabmix's uses its own scroll buttons
    */
   updateScrollButtons: function(useTabmixButtons) {
     let tabstrip = this.tabBar.mTabstrip;
