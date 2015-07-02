@@ -2442,9 +2442,6 @@ try {
     // capture gfx.direct2d.disabled value on first window
     // see getter at TabmixSvc
     var tmp = TabmixSvc.direct2dDisabled; // jshint ignore:line
-
-    // verify that all the prefs exist .....
-    this.addMissingPrefs();
   },
 
   updateTabClickingOptions: function() {
@@ -2461,14 +2458,6 @@ try {
       else
         Services.prefs.setIntPref(prefName, 0);
     }
-  },
-
-  addMissingPrefs: function() {
-    // add missing preference to the default branch
-    let prefs = Services.prefs.getDefaultBranch("");
-
-    if (Tabmix.isVersion(320))
-      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
   }
 
 };

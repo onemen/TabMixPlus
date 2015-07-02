@@ -159,6 +159,8 @@ this.TabmixSvc = {
         aWindow.gTMPprefObserver.updateSettings();
       } catch (ex) {TabmixSvc.console.assert(ex);}
 
+      this.addMissingPrefs();
+
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
@@ -172,6 +174,19 @@ this.TabmixSvc = {
       let tmp = {};
       Cu.import("resource://tabmixplus/DynamicRules.jsm", tmp);
       tmp.DynamicRules.init(aWindow);
+    },
+
+    addMissingPrefs: function() {
+      // add missing preference to the default branch
+      let prefs = Services.prefs.getDefaultBranch("");
+
+      if (isVersion(320))
+        prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
+
+      if (isVersion(410)) {
+        prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
+        Cu.import("resource://tabmixplus/NewTabURL.jsm", {});
+      }
     },
 
     observe: function(aSubject, aTopic) {
