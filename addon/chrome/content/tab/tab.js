@@ -2375,7 +2375,7 @@ try {
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
-    let getVersion = function _getVersion(currentVersion) {
+    let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
 
       let vCompare = function(a, b) Services.vc.compare(a, b) <= 0;
@@ -2398,11 +2398,17 @@ try {
       if (currentVersion != oldVersion) {
         Tabmix.prefs.setCharPref("version", currentVersion);
         Services.prefs.savePrefFile(null);
-        // show the new version page if versions are different after excluding
-        // all characters from last alphabet character to the end
-        let re = /([A-Za-z]*)\d*$/;
-        let subs = function(obj) obj[1] ? obj.input.substring(0, obj.index) : obj.input;
-        showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));
+        // show the new version page for all official versions and for development
+        // versions if auto update is on for Tabmix and the new version is from a
+        // different date then the installed version
+        let isDevBuild = /[A-Za-z]/.test(currentVersion);
+        if (!isDevBuild)
+          showNewVersionTab = true;
+        else if (shouldAutoUpdate || oldVersion === "") {
+          let re = /([A-Za-z]*)\d*$/;
+          let subs = function(obj) obj[1] ? obj.input.substring(0, obj.index) : obj.input;
+          showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));
+        }
       }
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
@@ -2421,7 +2427,8 @@ try {
     };
     AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", function(aAddon) {
       try {
-        getVersion(aAddon.version);
+        let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
+        getVersion(aAddon.version, shouldAutoUpdate);
       } catch (ex) {Tabmix.assert(ex);}
     });
 
