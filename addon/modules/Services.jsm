@@ -312,7 +312,8 @@ var tabStateCache = {
   },
 
   saveTabAttributes: function(tab, attrib) {
-    if (!isVersion(250))
+    // After bug 1166757 - Remove browser.__SS_data, we no longer need this function
+    if (!isVersion(250) || isVersion(410))
       return;
 
     let attribs = attrib.split(",");

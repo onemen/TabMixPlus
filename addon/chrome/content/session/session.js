@@ -3466,7 +3466,8 @@ try{
       // wiping out any current value in tab.__SS_extdata.
       delete aTab.__SS_extdata;
       // delete any sesionRestore data
-      delete browser.__SS_data;
+      if (!Tabmix.isVersion(410))
+         delete browser.__SS_data;
 
       // clear TabStateCache
       if (Tabmix.isVersion(320)) {
