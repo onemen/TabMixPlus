@@ -17,6 +17,7 @@
         <xul:textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;"
                      xbl:inherits="value,disabled=blocked" context=" "
                      placeholder="&shortcuts.placeholder;"
+                     onkeydown="document.getBindingParent(this).onKeyDown(event);"
                      onkeypress="document.getBindingParent(this).handleKeyEvents(event);"
                      onfocus="document.getBindingParent(this).updateFocus(true);"
                      onblur="document.getBindingParent(this).updateFocus(false);"
@@ -115,8 +116,19 @@
         ]]></body>
       </method>
 
+      <method name="onKeyDown">
+        <parameter name="event"/>
+        <body><![CDATA[
+          // handle Ctrl/Command + W
+          let control = !event.shiftKey && (event.ctrlKey || event.metaKey);
+          if (control && event.keyCode == 87)
+            this.handleKeyEvents(event, true);
+        ]]></body>
+      </method>
+
       <method name="handleKeyEvents">
         <parameter name="event"/>
+        <parameter name="ctrl_w"/>
         <body><![CDATA[
           event.preventDefault();
           event.stopPropagation();
@@ -159,7 +171,8 @@
             for (let keycode of Object.keys(Ci.nsIDOMKeyEvent)) {
               let val = Ci.nsIDOMKeyEvent[keycode];
               if (val == eKeyCode) {
-                key.keycode = keycode.replace("DOM_","");
+                let str = ctrl_w ? "DOM_VK_" : "DOM_";
+                key.keycode = keycode.replace(str, "");
                 break;
               }
             }
