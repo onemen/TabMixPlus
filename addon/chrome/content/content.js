@@ -10,6 +10,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
 XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
+  "resource://gre/modules/NetUtil.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
@@ -85,14 +88,25 @@ let TabmixContentHandler = {
         break;
       case "Tabmix:collectReloadData":
         let json = {scrollX: content.scrollX,
-                    scrollY: content.scrollY};
-        let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+                    scrollY: content.scrollY,
+                    postData: null};
+        let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
+                         .QueryInterface(Ci.nsISHistoryInternal);
         if (sh) {
           let entry = sh.getEntryAtIndex(sh.index, false);
-          json.isPostData = !!entry.QueryInterface(Ci.nsISHEntry).postData;
-          json.isPostData = true;
+          let postData = entry.postData;
+          // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
+          if (postData && TabmixSvc.version(420)) {
+            postData = postData.clone();
+            json.postData = NetUtil.readInputStreamToString(postData, postData.available());
+            let referrer = entry.referrerURI;
+            json.referrer = referrer ? referrer.spec : null;
+          }
+          json.isPostData = !!json.postData;
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
+        break;
+      case "Tabmix:setPostData":
         break;
       case "Tabmix:isFrameInContent":
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);

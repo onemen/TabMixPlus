@@ -263,23 +263,19 @@ this.AutoReload = {
     let resultOK = Services.prompt.confirm(window, title, msg);
     if (resultOK)
       tab.postDataAcceptedByUser = true;
-    else {
-      tab.autoReloadEnabled = false;
-      _setItem(tab, "_reload", null);
-      tab.autoReloadURI = null;
-      this._update(tab);
-    }
+    else
+      this._disable(tab);
+
     return resultOK;
   },
 
   reloadRemoteTab: function(browser, data) {
     var window = browser.ownerDocument.defaultView;
     let tab = window.gBrowser.getTabForBrowser(browser);
-    // RemoteWebNavigation doesn't accept postdata or headers.
-    if (data.isPostData && !this.confirm(window, tab, true))
+    // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
+    if (data.isPostData && !this.confirm(window, tab, !TabmixSvc.version(420)))
       return;
 
-    data.remote = true;
     doReloadTab(window, browser, data);
   }
 };
@@ -330,11 +326,11 @@ function doReloadTab(window, browser, data) {
 
   // This part is based on BrowserReloadWithFlags.
   let url = browser.currentURI.spec;
-  let {postData, referrer, remote} = data;
+  let {postData, referrer} = data;
   let loadURIWithFlags = TabmixSvc.version(330) &&
       window.gBrowser.updateBrowserRemotenessByURL(browser, url) || postData;
   if (loadURIWithFlags) {
-    if (remote || !postData)
+    if (!postData)
       postData = referrer = null;
     browser.loadURIWithFlags(url, loadFlags, referrer, null, postData);
     return;
