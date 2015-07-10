@@ -1007,7 +1007,7 @@ var ContentClickInternal = {
       }
       if (tab) {
         let browser = tab.linkedBrowser;
-        if (tab.getAttribute("remote") == "true") {
+        if (browser.getAttribute("remote") == "true") {
           browser.messageManager
                  .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
         }

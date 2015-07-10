@@ -636,7 +636,7 @@ var TabmixContext = {
 
       // for remote tab get call getValidUrl when it is safe to use CPOWs
       // getValidUrl may call getParamsForLink
-      if (tab.getAttribute("remote") == "true" &&
+      if (tab.linkedBrowser.getAttribute("remote") == "true" &&
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {

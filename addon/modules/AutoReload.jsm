@@ -296,7 +296,7 @@ function _reloadTab(aTab) {
   }
 
   var browser = aTab.linkedBrowser;
-  if (TabmixSvc.version(330) && aTab.getAttribute("remote")) {
+  if (TabmixSvc.version(330) && browser.getAttribute("remote")) {
     browser.messageManager.sendAsyncMessage("Tabmix:collectReloadData");
     return;
   }

@@ -1083,8 +1083,8 @@ var tablib = {
         return true;
       };
 
-      let tab = gBrowser.selectedTab;
-      if (tab.getAttribute("remote") == "true" &&
+      let browser = gBrowser.selectedBrowser;
+      if (browser.getAttribute("remote") == "true" &&
           typeof gContextMenu.tabmixLinkURL != "undefined")
         return gContextMenu.tabmixLinkURL;
 
@@ -1093,8 +1093,7 @@ var tablib = {
                     altKey: false, target: {},
                     tabmix_openLinkWithHistory: true};
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, url,
-              tab.linkedBrowser, document.commandDispatcher.focusedWindow);
+              target, url, browser, document.commandDispatcher.focusedWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
       return url;
