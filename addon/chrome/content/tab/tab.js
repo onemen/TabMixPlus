@@ -1715,7 +1715,9 @@ var gTMPprefObserver = {
 
     // Workaround bug 943308 - tab-background not fully overlap the tab curves
     // when layout.css.devPixelsPerPx is not 1.
-    let bgMiddle = document.getAnonymousElementByAttribute(gBrowser.selectedTab, "class", "tab-background-middle");
+    let selectedTab = Tabmix.isVersion(390) && gBrowser._switcher ?
+        gBrowser._switcher.visibleTab : gBrowser.selectedTab;
+    let bgMiddle = document.getAnonymousElementByAttribute(selectedTab, "class", "tab-background-middle");
     let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
     let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
     if (bgMiddleMargin) {
