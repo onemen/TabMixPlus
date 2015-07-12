@@ -237,8 +237,8 @@
 <!ENTITY clicktab.removeall "关闭所有标签页">
 <!ENTITY clicktab.removeother "关闭其它标签页">
 <!ENTITY clicktab.removesimilar "关闭来自相似域的标签页">
-<!ENTITY clicktab.removetoLeft "关闭所有左侧标签页">
-<!ENTITY clicktab.removetoRight "关闭所有右侧标签页">
+<!ENTITY clicktab.removetoLeft "关闭标签页的左边">
+<!ENTITY clicktab.removetoRight "关闭右侧标签页">
 <!ENTITY clicktab.uctab "重新打开已关闭的标签页">
 <!ENTITY clicktab.ucatab "重新打开所有已关闭的标签页">
 <!ENTITY clicktab.snapback "回现标签页">
