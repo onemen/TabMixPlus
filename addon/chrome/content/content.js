@@ -50,6 +50,11 @@ let TabmixContentHandler = {
   },
 
   receiveMessage: function ({name, data}) {
+    // The docShell might be gone. Don't process messages,
+    // that will just lead to errors anyway.
+    if (!docShell) {
+      return;
+    }
     switch (name) {
       case "Tabmix:restorePermissions":
         let disallow = new Set(data.disallow && data.disallow.split(","));
