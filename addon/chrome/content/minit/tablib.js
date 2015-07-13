@@ -142,7 +142,7 @@ var tablib = {
       '              isPending             = params.isPending;'
     )._replace(
       't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ?\n' +
+      't.setAttribute("label", TabmixTabbar.widthFitTitle && !aURI.startsWith("about") ?\n' +
       '                              this.mStringBundle.getString("tabs.connecting") : aURI);',
       {check: !Tabmix.isVersion(280)}
     )._replace(

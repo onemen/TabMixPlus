@@ -817,7 +817,7 @@ var TabmixConvertSession = { // jshint ignore:line
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
       tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
       var scroll = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll", "0,0");
-      if (scroll.indexOf("{") === 0) {
+      if (scroll.startsWith("{")) {
         tabData.scroll = JSON.parse(scroll);
       }
       else {
