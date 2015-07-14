@@ -193,8 +193,7 @@ var TMP_tabDNDObserver = {
       left_right = 1;
     }
 
-    var isCopy;
-    isCopy = dt.dropEffect == "copy";
+    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
     var effects = this._setEffectAllowedForDataTransfer(event, draggeType);
 
     var replaceTab = (left_right == -1);
@@ -320,7 +319,7 @@ var TMP_tabDNDObserver = {
     var dt = event.dataTransfer;
     var sourceNode = this.getSourceNode(dt);
     var draggeType = this.getDragType(sourceNode);
-    var isCopy = dt.dropEffect == "copy";
+    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
     var draggedTab;
     if (draggeType != this.DRAG_LINK) {
       draggedTab = sourceNode;
@@ -791,6 +790,18 @@ var TMP_tabDNDObserver = {
     if (types[0] == this.TAB_DROP_TYPE)
       return aDataTransfer.mozGetDataAt(this.TAB_DROP_TYPE, 0);
     return null;
+  },
+
+  isCopyDropEffect: function(dt, event, type) {
+    let isCopy = dt.dropEffect == "copy";
+    if (isCopy && type == this.DRAG_LINK) {
+      // Dragging bookmark or livemark from the Bookmarks toolbar always have 'copy' dropEffect
+      let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
+      let draggingBookmark = !isCtrlKey && dt.effectAllowed == "copyLink" &&
+          dt.mozSourceNode && dt.mozSourceNode._placesNode;
+      return isCopy && !draggingBookmark;
+    }
+    return isCopy;
   }
 
 }; // TMP_tabDNDObserver end
