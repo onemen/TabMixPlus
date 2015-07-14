@@ -1352,7 +1352,8 @@ var gTMPprefObserver = {
         prefValue = Services.prefs.getIntPref(prefName);
         if (Tabmix.prefs.getBoolPref("undoClose") != (prefValue > 0))
           Tabmix.prefs.setBoolPref("undoClose", prefValue > 0);
-        TMP_ClosedTabs.setButtonDisableState();
+        let state = prefValue === 0 || undefined;
+        TMP_ClosedTabs.setButtonDisableState(state);
         break;
       case "browser.warnOnRestart":
       case "browser.warnOnQuit":
