@@ -223,7 +223,11 @@ var TMP_Places = {
    getPrefByDocumentURI: function (aWindow) {
      switch (aWindow.document.documentURI) {
        case "chrome://browser/content/places/places.xul":
-         if (PlacesOrganizer._places.selectedNode.itemId != PlacesUIUtils.leftPaneQueries["History"])
+         let historyId = PlacesUIUtils.leftPaneQueries["History"];
+         let node = PlacesOrganizer._places.selectedNode;
+         let historySelected = node.itemId == historyId ||
+             node.parent && node.parent.itemId == historyId;
+         if (!historySelected)
            return this.prefBookmark;
          /* falls through */
        case "chrome://browser/content/history/history-panel.xul":

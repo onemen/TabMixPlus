@@ -160,13 +160,14 @@ var PlacesUtilsInternal = {
     )._replace(
       'aWindow.openUILinkIn',
       'let browserWindow = this._getTopBrowserWin();\n' +
-      '      if (browserWindow && typeof browserWindow.TMP_Places == "object") {\n' +
-      '        if (TMP_Event) aWhere = browserWindow.TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
-      '                       browserWindow.TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
-      '        else if (aWhere == "current" && !browserWindow.TMP_Places.isBookmarklet(aNode.uri)) {\n' +
+      '      if (browserWindow && typeof aWindow.TMP_Places == "object") {\n' +
+      '        let TMP_Places = aWindow.TMP_Places;\n' +
+      '        if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
+      '                       TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
+      '        else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\n' +
       '          let caller = browserWindow.Tabmix.getCallerNameByIndex(2);\n' +
       '          if (caller != "PC_doCommand")\n' +
-      '            aWhere = browserWindow.TMP_Places.fixWhereToOpen(null, aWhere);\n' +
+      '            aWhere = TMP_Places.fixWhereToOpen(null, aWhere);\n' +
       '        }\n' +
       '      }\n' +
       '      if (browserWindow && aWhere == "current")\n' +
