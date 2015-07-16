@@ -524,15 +524,6 @@
         }
         else
           Tabmix.tabsUtils.overflow = false;
-
-        this.updateOverflow(Tabmix.tabsUtils.overflow);
-
-        if (tabs._lastTabClosedByMouse)
-          tabs._expandSpacerBy(this._scrollButtonDown.clientWidth);
-
-        tabs.tabbrowser._removingTabs.forEach(tabs.tabbrowser.removeTab,
-                                              tabs.tabbrowser);
-        tabs._positionPinnedTabs();
       ]]></handler>
 
       <handler event="overflow"><![CDATA[
@@ -574,12 +565,6 @@
         }
         else
           Tabmix.tabsUtils.overflow = true;
-
-        this.updateOverflow(Tabmix.tabsUtils.overflow);
-
-        tabs._positionPinnedTabs();
-        if (Tabmix.isVersion(190))
-          tabs._handleTabSelect(false);
       ]]></handler>
 
       <handler event="scroll"><![CDATA[

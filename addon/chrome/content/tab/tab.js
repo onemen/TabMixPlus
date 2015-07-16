@@ -920,13 +920,29 @@ Tabmix.tabsUtils = {
       return val;
 
     if (val != this.overflow) {
+      let tabBar = this.tabBar;
+      let tabstrip = tabBar.mTabstrip;
       if (val)
-        this.tabBar.setAttribute("overflow", "true");
+        tabBar.setAttribute("overflow", "true");
       else
-        this.tabBar.removeAttribute("overflow");
+        tabBar.removeAttribute("overflow");
       this.showNewTabButtonOnSide(val, "right-side");
-      if (typeof this.tabBar.mTabstrip.updateOverflow == "function")
-        this.tabBar.mTabstrip.updateOverflow(val);
+
+      if (typeof tabstrip.updateOverflow == "function") {
+        tabstrip.updateOverflow(val);
+        // overflow/underflow handler from tabbrowser-arrowscrollbox binding
+        if (val) {
+          tabBar._positionPinnedTabs();
+          if (Tabmix.isVersion(190))
+            tabBar._handleTabSelect(false);
+        }
+        else {
+          if (tabBar._lastTabClosedByMouse)
+            tabBar._expandSpacerBy(tabstrip._scrollButtonDown.clientWidth);
+          gBrowser._removingTabs.forEach(gBrowser.removeTab, gBrowser);
+          tabBar._positionPinnedTabs();
+        }
+      }
     }
     return val;
   },
