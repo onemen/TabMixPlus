@@ -37,7 +37,7 @@
                   type="bool"/>
       <preference id="pref_openBookmarks"       name="extensions.tabmix.opentabfor.bookmarks" type="bool"/>
       <preference id="pref_openUrl"             name="extensions.tabmix.opentabfor.urlbar"    type="bool"/>
-      <preference id="pref_openBMKGroups"       name="extensions.tabmix.loadFolderAndReplace"
+      <preference id="pref_openBMKGroups"       name="extensions.tabmix.loadBookmarksAndReplace"
                   type="bool" inverted="true"/>
       <preference id="pref_openSearch"          name="browser.search.openintab"               type="bool"/>
       <preference id="pref_openHistory"         name="extensions.tabmix.opentabfor.history"   type="bool"/>
@@ -182,10 +182,6 @@
                 <!-- Bookmarks open in new tab -->
                 <checkbox_tmp id="openBookmarks" label="&openBookmarks.label;"
                           preference="pref_openBookmarks"/>
-                <!-- Bookmark Groups open in new tab -->
-                <checkbox_tmp id="openBMKGroups" label="&openBMKGroups.label;"
-                          tooltiptext="&openBMKGroups.tooltip;"
-                          preference="pref_openBMKGroups" inverted="true"/>
                 <!-- History opens in new tab -->
                 <checkbox_tmp id="openHistory" label="&openHistory.label;"
                           preference="pref_openHistory"/>
@@ -199,6 +195,10 @@
                           preference="pref_openSearch"/>
               </vbox>
             </hbox>
+            <!-- Groups of Bookmarks/History open in new tabs -->
+            <checkbox_tmp id="openBMKGroups" label="&openPlacesGroups.label;"
+                          preference="pref_openBMKGroups" inverted="true"/>
+            <label class="indent" value="&openPlacesGroups.tooltip;"/>
             <spacer flex="1"/>
             <separator class="groove"/>
             <checkbox_tmp id="midcurrent" label="&middlecurrent1.label;"
@@ -231,7 +231,7 @@
                 <!-- Select Bookmarks or history -->
                 <checkbox_tmp id="selectTabBH" label="&selectTabBH.label;" preference="pref_selectTabBH"/>
                 <!-- Select first tab from Bookmark Groups -->
-                <checkbox_tmp id="selectBMKGroups" label="&openBMKGroups.label;" preference="pref_selectBMKGroups"/>
+                <checkbox_tmp id="selectBMKGroups" label="&openPlacesGroups.label;" preference="pref_selectBMKGroups"/>
               </vbox>
             </hbox>
             <spacer flex="1"/>

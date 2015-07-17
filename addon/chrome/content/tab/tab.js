@@ -2308,9 +2308,10 @@ var gTMPprefObserver = {
     _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
                   "extensions.tabmix.replaceLastTabWith.newtab.url");
     // 2012-04-12
-    if (Services.prefs.prefHasUserValue("browser.tabs.loadFolderAndReplace")) {
-      Tabmix.prefs.setBoolPref("loadFolderAndReplace", Services.prefs.getBoolPref("browser.tabs.loadFolderAndReplace"));
-      Services.prefs.clearUserPref("browser.tabs.loadFolderAndReplace");
+    var pref = "browser.tabs.loadFolderAndReplace";
+    if (Services.prefs.prefHasUserValue(pref)) {
+      Tabmix.prefs.setBoolPref("loadBookmarksAndReplace", Services.prefs.getBoolPref(pref));
+      Services.prefs.clearUserPref(pref);
     }
 try {
     // 2012-06-22 - remove the use of extensions.tabmix.tabMinWidth/tabMaxWidth
@@ -2368,6 +2369,12 @@ try {
     // 2014-12-25
     // don't synce sessions.onStart.sessionpath
     Services.prefs.clearUserPref("services.sync.prefs.sync.extensions.tabmix.sessions.onStart.sessionpath");
+    // 2015-07-15
+    if (Tabmix.prefs.prefHasUserValue("loadFolderAndReplace")) {
+      Tabmix.prefs.setBoolPref("loadBookmarksAndReplace", Tabmix.prefs.getBoolPref("loadFolderAndReplace"));
+      Tabmix.prefs.clearUserPref("loadFolderAndReplace");
+    }
+    // Add new changes before this line
 
     // verify valid value
     if (Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
