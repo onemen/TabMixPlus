@@ -661,7 +661,7 @@ var TabmixConvertSession = { // jshint ignore:line
                   if (aResult.button == Tabmix.BUTTON_OK) {
                     setTimeout(function (a,b) {
                       TabmixConvertSession.convertFile(a, b);
-                    }, 0, null, true);
+                    }, 50, null, true);
                   }
                  };
       this.confirm(this.getString("msg1") + "\n\n" + this.getString("msg2"), callBack);
