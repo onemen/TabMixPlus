@@ -1,11 +1,12 @@
+/* jshint esnext: true */
 /* globals _sminstalled, gPreferenceList */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const {classes: Cc, interfaces: Ci} = Components; // jshint ignore:line
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
-function $(id) document.getElementById(id)
+this.$ = id => document.getElementById(id);
 
 var gPrefWindow = { // jshint ignore:line
   widthChanged: false,
@@ -384,7 +385,7 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = true;
   let SMinstalled = _sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
-      gPreferenceList.map(function(pref) sessionPrefs.indexOf(pref) == -1);
+      gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
   prefs.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
@@ -418,49 +419,37 @@ function exportData() {
   });
   patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
   patterns.unshift("tabmixplus\n");
-
-  function exportCallback(aFile) {
-    if (!/\.txt$/.test(aFile.leafName.toLowerCase()))
-      aFile.leafName += ".txt";
-    if (aFile.exists())
-      aFile.remove(true);
-    aFile.create(aFile.NORMAL_FILE_TYPE, parseInt("0666", 8));
-    let stream = Cc["@mozilla.org/network/file-output-stream;1"].
-                  createInstance(Ci.nsIFileOutputStream);
-    stream.init(aFile, 0x02, 0x200, null);
-    for (let i = 0; i < patterns.length ; i++)
-      stream.write(patterns[i], patterns[i].length);
-    stream.close();
-  }
-  showFilePicker("save", exportCallback);
+  Task.spawn(function* () {
+    let file = yield showFilePicker("save");
+    if (file) {
+      yield OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8"});
+    }
+  }).catch(Tabmix.reportError);
 }
 
 function importData () {
-  function importCallback(aFile) {
-    let stream = Cc["@mozilla.org/network/file-input-stream;1"].
-                createInstance(Ci.nsIFileInputStream);
-    stream.init(aFile, 0x01, parseInt("0444", 8), null);
-    let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
-                createInstance(Ci.nsIScriptableInputStream);
-    streamIO.init(stream);
-    let input = streamIO.read(stream.available());
-    streamIO.close();
-    stream.close();
-    if (input)
-      loadData(input.replace(/\r\n/g, "\n").split("\n"));
-  }
-
-  showFilePicker("open", importCallback);
+  Task.spawn(function* () {
+    let file = yield showFilePicker("open");
+    if (file) {
+      let input = yield OS.File.read(file.path, {encoding: "utf-8"});
+      if (input) {
+        loadData(input.replace(/\r\n/g, "\n").split("\n"));
+      }
+    }
+  }).catch(Tabmix.reportError);
 }
 
-function showFilePicker(mode, callback) {
+/**
+ * Open file picker in open or save mode
+ *
+ * @param mode
+ *        The mode for the file picker: open|save
+ *
+ * @return Promise<{nsILocalFile}>
+ */
+function showFilePicker(mode) {
   const nsIFilePicker = Ci.nsIFilePicker;
   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  function fpCallback(aResult) {
-    if (aResult != nsIFilePicker.returnCancel)
-      callback(fp.file);
-  }
-
   if (mode == "open")
     mode = nsIFilePicker.modeOpen;
   else {
@@ -470,10 +459,10 @@ function showFilePicker(mode, callback) {
   }
   fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
-  if (Tabmix.isVersion(180))
-    fp.open(fpCallback);
-  else
-    fpCallback(fp.show());
+  return AsyncUtils.spawnFn(fp, fp.open).then(aResult => {
+    if (aResult == nsIFilePicker.returnOK)
+      return fp.file;
+  });
 }
 
 function loadData (pattern) {
@@ -611,5 +600,15 @@ XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
          win.document.getElementById("context_unpinTab").getAttribute("label");
 });
+
+XPCOMUtils.defineLazyGetter(this, "OS", () => {
+  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
+});
+
+XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
+                                  "resource://tabmixplus/AsyncUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Task",
+                                  "resource://gre/modules/Task.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
