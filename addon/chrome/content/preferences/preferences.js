@@ -221,6 +221,11 @@ var gPrefWindow = { // jshint ignore:line
       tabs._inited = true;
       if (preference.value !== null)
         tabs.selectedIndex = preference.value;
+      else {
+        let val = preference.valueFromPreferences;
+        if (val !== null)
+          tabs.selectedIndex = val;
+      }
     }
     else if (preference.value != tabs.selectedIndex)
       preference.valueFromPreferences = tabs.selectedIndex;
