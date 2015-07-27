@@ -801,6 +801,8 @@ var TabmixConvertSession = { // jshint ignore:line
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = state.image;
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
+            let closedAt = TabmixSessionManager.getLiteralValue(rdfNodeTab, "closedAt");
+            closedTab.closedAt = parseInt(closedAt) || Date.now();
             // we use revers order in the RDF format
             _tabs.unshift(closedTab);
          }

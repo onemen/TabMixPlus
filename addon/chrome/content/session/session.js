@@ -2721,6 +2721,7 @@ try{
          } else tabContainer.RemoveElement(nodeToClose, true);
          if (tabExist) {
             closedTabContainer.AppendElement(nodeToClose);
+            this.setLiteral(nodeToClose, "closedAt", Date.now());
             if (closedTabContainer.GetCount() > Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))
                this.deleteClosedtabAt(1, this.gThisWin);
          }
@@ -2912,6 +2913,8 @@ try{
       this.setLiteral   (aNode, "properties", aData.properties);
       this.setLiteral   (aNode, "history",    aData.history);
       this.setLiteral   (aNode, "scroll",     aData.scroll);
+      if (aData.closedAt)
+         this.setLiteral(aNode, "closedAt", aData.closedAt);
    },
 
   /**
@@ -3527,6 +3530,8 @@ try{
          var newNode = this.RDFService.GetResource(rdfLabelSession);
          var data = {};
          data.pos = this.getIntValue(rdfNodeSession, "tabPos");
+         let closedAt = this.getLiteralValue(rdfNodeSession, "closedAt");
+         data.closedAt = parseInt(closedAt) || Date.now();
          data.image = this.getLiteralValue(rdfNodeSession, "image");
          data.properties = this.getLiteralValue(rdfNodeSession, "properties");
          data.scroll = this.getLiteralValue(rdfNodeSession, "scroll");
@@ -3594,6 +3599,7 @@ try{
       if (!data)
          return false;
       data.pos = aTabData.pos;
+      data.closedAt = aTabData.closedAt || Date.now();
       data.image = aTabData.image;
       // closed tab can not be protected - set protected to 0
       var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";
