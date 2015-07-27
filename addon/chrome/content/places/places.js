@@ -472,7 +472,7 @@ var TMP_Places = {
         PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
       } catch(ex) {
-        Components.utils.reportError("Tabmix failed adding a bookmarks observer: " + ex);
+        Tabmix.reportError(ex, "Failed to add bookmarks observer:");
       }
     }
   },

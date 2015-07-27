@@ -247,11 +247,11 @@ var Tabmix = { // jshint ignore:line
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
                    "getObject", "log", "getCallerNameByIndex", "callerName",
-                   "clog", "isCallerInList", "obj", "assert", "trace"];
+                   "clog", "isCallerInList", "obj", "assert", "trace", "reportError"];
     methods.forEach(function(id) {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
-      };
+      }.bind(this);
     }, this);
   },
 

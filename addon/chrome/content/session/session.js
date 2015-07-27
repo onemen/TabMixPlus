@@ -275,7 +275,7 @@ var TabmixSessionManager = { // jshint ignore:line
       if (Tabmix.isVersion(250, 250) && !TabmixSvc.sm.promiseInitialized) {
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
-                        .then(null, Cu.reportError);
+                        .then(null, Tabmix.reportError);
       }
       else
         initializeSM();
@@ -982,7 +982,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          let msg = "Tabmix is unable to decode " + key;
          if (node)
             msg += " from " + node.QueryInterface(Ci.nsIRDFResource).Value;
-         Components.utils.reportError(msg + "\n" + er);
+         Tabmix.reportError(msg + "\n" + er);
          return "";
        }
        if (node && key) {

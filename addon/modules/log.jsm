@@ -54,7 +54,7 @@ this.console = {
                 this.getObject(aWindow, aMethod);
           result = " = " + result.toString();
         }
-        this.clog((isObj ? aMethod.fullName : aMethod) + result);
+        this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
       }.bind(this);
 
       if (aDelay >= 0) {
@@ -83,22 +83,6 @@ this.console = {
         logMethod();
 
     } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
-  },
-
-  _logStringMessage: function(aMessage) {
-    Services.console.logStringMessage(aMessage.replace(/\r\n/g, "\n"));
-  },
-
-  clog: function(aMessage) {
-    this._logStringMessage("TabMix :\n" + aMessage);
-  },
-
-  log: function TMP_console_log(aMessage, aShowCaller, offset) {
-    offset = !offset ? 0 : 1;
-    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
-    let callerName = names[offset+0];
-    let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
-    this._logStringMessage("TabMix " + callerName + callerCallerName + " :\n" + aMessage);
   },
 
   // get functions names from Error().stack
@@ -226,8 +210,10 @@ options = {
     }
     if (aDisallowLog)
       objS = aMessage + "======================\n" + objS;
-    else
-      this.log(aMessage + "=============== Object Properties ===============\n" + objS, true);
+    else {
+      let msg = aMessage + "=============== Object Properties ===============\n";
+      this.log(msg + objS, true, false, this.caller);
+    }
     return objS;
   },
 
@@ -269,22 +255,86 @@ options = {
     return lines.join("\n");
   },
 
+  /* logMessage */
+
+  clog: function(aMessage, caller) {
+    this._logMessage(":\n" + aMessage, "infoFlag", caller);
+  },
+
+  log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
+    offset = !offset ? 0 : 1;
+    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
+    let callerName = names[offset+0];
+    let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
+    this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
+  },
+
   assert: function TMP_console_assert(aError, aMsg) {
     if (!aError || typeof aError.stack != "string") {
-      this.trace((aMsg || "") + "\n" + (aError || ""), 2);
+      let msg = aMsg ? aMsg + "\n" : "";
+      this.trace(msg + (aError || ""), "errorFlag", this.caller);
       return;
+    }
+    if (/Error/.test(Object.getPrototypeOf(aError))) {
+      this.reportError(aError, aMsg);
     }
 
     let names = this._getNames(1, aError.stack);
     let errAt = " at " + names[0];
     let location = aError.location ? "\n" + aError.location : "";
-    let assertionText = "Tabmix Plus ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace: \n" + this._formatStack(aError.stack.split("\n"));
-    this._logStringMessage(assertionText + stackText);
+    let assertionText = " ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
+    let stackText = "\nStack Trace:\n" + this._formatStack(aError.stack.split("\n"));
+    this._logMessage(assertionText + stackText, "errorFlag");
   },
 
-  trace: function TMP_console_trace(aMsg) {
+  trace: function TMP_console_trace(aMsg, flag="infoFlag", caller=null) {
     let stack = this._formatStack(this._getStackExcludingInternal());
-    this._logStringMessage("Tabmix Trace: " + (aMsg || "") + '\n' + stack);
-  }
+    let msg = aMsg ? aMsg + "\n" : "";
+    this._logMessage(":\n" + msg + "Stack Trace:\n" + stack, flag, caller);
+  },
+
+  get caller() {
+    let parent = Components.stack.caller;
+    parent = parent.name == "_logMessage" ? parent.caller.caller : parent.caller;
+    if (parent.name == "TMP_console_wrapper")
+      parent = parent.caller.caller;
+    return parent;
+  },
+
+  reportError: function(ex=null, msg="") {
+    if (ex === null) {
+      ex = "reportError was called with null";
+    }
+    msg = ":\n" + (msg ? msg + "\n" : "");
+    if (typeof ex != "object" || ex instanceof OS.File.Error ||
+        typeof ex.message != "string") {
+      this._logMessage(msg + ex.toString(), "errorFlag");
+    }
+    else {
+      if (typeof ex.filename == "undefined") {
+        ex.filename = ex.fileName;
+      }
+      this._logMessage(msg + ex.message, "errorFlag", ex);
+    }
+  },
+
+  _logMessage: function _logMessage(msg, flag="infoFlag", caller=null) {
+    msg = msg.replace(/\r\n/g, "\n");
+    if (typeof Ci.nsIScriptError[flag] == "undefined") {
+      Services.console.logStringMessage("Tabmix" + msg);
+      return;
+    }
+    if (!caller)
+      caller = this.caller;
+    let {filename, lineNumber, columnNumber} = caller;
+    let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
+    consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
+                    Ci.nsIScriptError[flag], "component javascript");
+    Services.console.logMessage(consoleMsg);
+  },
+
 };
+
+(function(self){
+  self.reportError = self.reportError.bind(self);
+}(this.console));

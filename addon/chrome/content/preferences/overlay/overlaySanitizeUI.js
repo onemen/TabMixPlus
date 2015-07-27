@@ -24,7 +24,7 @@ Tabmix.setSanitizer = {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
         } catch (ex) {
-          try { Components.utils.reportError(ex); } catch(e) {}
+          try {Tabmix.reportError(ex);} catch(e) { }
         }
       },
       get canClear() {

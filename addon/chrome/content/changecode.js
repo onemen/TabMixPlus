@@ -84,9 +84,8 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         if (aShow)
           this.show(obj, fnName);
       } catch (ex) {
-        Components.utils.reportError("Tabmix " + console.callerName() +
-                                     " failed to change " + this.fullName +
-                                     "\nError: " + ex.message);
+        console.reportError(ex, console.callerName() + " failed to change " +
+                            this.fullName + "\nError: ");
       }
     },
 

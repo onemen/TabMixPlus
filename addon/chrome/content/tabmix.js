@@ -179,7 +179,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
   if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
-    this.ssPromise.then(this.sessionInitialized.bind(this), Cu.reportError);
+    this.ssPromise.then(this.sessionInitialized.bind(this), Tabmix.reportError);
   else
     this.sessionInitialized();
 

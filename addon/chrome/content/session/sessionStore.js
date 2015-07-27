@@ -252,7 +252,7 @@ var TMP_SessionStore = { // jshint ignore:line
               return ss.doRestore();
             ss.onceInitialized.then(function() {
               Tabmix.isWindowAfterSessionRestore = ss.doRestore();
-            }).then(null, Cu.reportError);
+            }).then(null, Tabmix.reportError);
             // until sessionstartup initialized just return the pref value,
             // we only use isWindowAfterSessionRestore when our Session Manager enable
             return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");
