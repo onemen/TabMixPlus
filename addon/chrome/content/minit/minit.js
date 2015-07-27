@@ -399,7 +399,11 @@ var TMP_tabDNDObserver = {
       // make sure it has a docshell
       newBrowser.docShell; // jshint ignore:line
 
+      let numPinned = gBrowser._numPinnedTabs;
+      if (newIndex < numPinned || draggedTab.pinned && newIndex == numPinned)
+        gBrowser.pinTab(newTab);
       gBrowser.moveTabTo(newTab, newIndex + left_right);
+
       gBrowser.selectedTab = newTab;
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
       gBrowser.updateCurrentBrowser(true);
