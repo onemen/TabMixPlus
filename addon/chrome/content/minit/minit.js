@@ -385,6 +385,15 @@ var TMP_tabDNDObserver = {
       // windows)
       let newTab = gBrowser.addTab("about:blank");
       var newBrowser = gBrowser.getBrowserForTab(newTab);
+      let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
+
+      // If we're an e10s browser window, an exception will be thrown
+      // if we attempt to drag a non-remote browser in, so we need to
+      // ensure that the remoteness of the newly created browser is
+      // appropriate for the URL of the tab being dragged in.
+      gBrowser.updateBrowserRemotenessByURL(newBrowser,
+                                            draggedBrowserURL);
+
       // Stop the about:blank load
       newBrowser.stop();
       // make sure it has a docshell
