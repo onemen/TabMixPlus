@@ -1678,6 +1678,11 @@ var gTMPprefObserver = {
     if (!Tabmix.isVersion(380))
       this.insertRule('.tab-icon-overlay {display: none;}');
 
+    /* tab-icon-sound added by Bug 486262, Firefox 42+ */
+    if (!Tabmix.isVersion(420)) {
+      this.insertRule('.tab-icon-sound {display: none;}');
+    }
+
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +

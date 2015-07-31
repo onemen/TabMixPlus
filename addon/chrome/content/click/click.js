@@ -30,10 +30,10 @@ var TabmixTabClickOptions = {
     this._blockDblClick = target.classList.contains("tabs-newtab-button") ||
       !Tabmix.isVersion(270) && leftClick && anonid == "tmp-close-button";
 
-    // don't do anything if user left click on close tab button, or on any
-    // other button on tab or tabbar
-    if (leftClick && (anonid == "tmp-close-button" ||
-                      target.localName == "toolbarbutton")) {
+    // don't do anything if user left click on tab or tabbar button
+    if (leftClick &&
+        (anonid == "tmp-close-button" || anonid == "soundplaying-icon" ||
+         target.localName == "toolbarbutton")) {
       return;
     }
 
@@ -112,9 +112,10 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    // don't do anything if user click on close tab button , or on any other button on tab or tabbar
     var target = aEvent.originalTarget;
-    if (target.getAttribute("anonid") == "tmp-close-button" ||
+    var anonid = target.getAttribute("anonid");
+    // don't do anything if user left click on tab or tabbar button
+    if (anonid == "tmp-close-button" || anonid == "soundplaying-icon" ||
         target.localName == "toolbarbutton") {
       return;
     }

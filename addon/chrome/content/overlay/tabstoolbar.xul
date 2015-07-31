@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
-%tabBrowserDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
 ]>
 
 <overlay id="tabmix-tabstoolbar-overlay"
