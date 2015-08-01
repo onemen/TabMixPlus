@@ -6,8 +6,10 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "FileUtils",
-  "resource://gre/modules/FileUtils.jsm");
+
+XPCOMUtils.defineLazyGetter(this, "OS", function() {
+  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
+});
 
 let gNextID = 1;
 
@@ -220,8 +222,8 @@ options = {
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
     delete this._pathRegExp;
-    let folder = FileUtils.getDir("ProfD", ["extensions"]);
-    let path = folder.path.replace(/\\/g, "/") + "/";
+    let folder = OS.Path.join(OS.Constants.Path.profileDir, "extensions");
+    let path = folder.replace(/\\/g, "/") + "/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
