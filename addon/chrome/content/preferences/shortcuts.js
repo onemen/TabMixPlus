@@ -4,13 +4,15 @@
 
 "use strict";
 
+var getFormattedKey = key => Shortcuts.getFormattedKey(key);
+
 ///XXX TODO - add black list with shortcut (F1, Ctrl-Tab ....) that don't have DOM key element
 function getKeysForShortcut(shortcut, id, win) {
   if (!win)
     win = Services.wm.getMostRecentWindow("navigator:browser");
 
-  let $ = function(id) id && win.document.getElementById(id);
-  let isDisabled = function(item) item && item.getAttribute("disabled");
+  let $ = id => id && win.document.getElementById(id);
+  let isDisabled = item => item && item.getAttribute("disabled");
 
   let ourKey = $(id);
   if (isDisabled(ourKey))
@@ -31,7 +33,7 @@ function getKeysForShortcut(shortcut, id, win) {
     if (getFormattedKey(_key) == shortcut)
       return true;
     return false;
-  }).map(function(key) "     " + _getKeyName(win, key).replace(dots, ""));
+  }).map(key => "     " + _getKeyName(win, key).replace(dots, ""));
 
   return usedKeys.join("\n");
 }
@@ -79,8 +81,12 @@ function _getKeyName(win, aKey) {
     "BrowserReload();": "key_reload",
     goBackKb2: "goBackKb",
     goForwardKb2: "goForwardKb",
-    get cmd_handleBackspace() this.action < 2 && ["goBackKb", "cmd_scrollPageUp"][this.action],
-    get cmd_handleShiftBackspace() this.action < 2 && ["goForwardKb", "cmd_scrollPageDown"][this.action]
+    get cmd_handleBackspace() {
+      return this.action < 2 && ["goBackKb", "cmd_scrollPageUp"][this.action];
+    },
+    get cmd_handleShiftBackspace() {
+      return this.action < 2 && ["goForwardKb", "cmd_scrollPageDown"][this.action];
+    }
   };
   if (keyname[id]) {
     let key = doc.getElementById(keyname[id]);
@@ -114,5 +120,3 @@ function _getPath(elm){
   }
   return names.join(" > ");
 }
-
-function getFormattedKey(key) Shortcuts.getFormattedKey(key)

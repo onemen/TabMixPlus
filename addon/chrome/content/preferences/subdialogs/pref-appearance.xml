@@ -72,7 +72,7 @@
 
           useThis.nextSibling.value = document.getElementById("_" + this.id).label;
           // colorpicker need some time untile its ready
-          window.setTimeout( function(self) {self._getPrefs(self._initPrefValues);}, 0, this)
+          window.setTimeout(() => {this._getPrefs(this._initPrefValues);}, 0);
         ]]>
       </constructor>
 
@@ -259,7 +259,7 @@
 
       <property name="rgba" readonly="true">
         <getter><![CDATA[
-          let rgba = this._RGB.map(function(c) parseInt(c.value));
+          let rgba = this._RGB.map(c => parseInt(c.value));
           rgba[3] /= 100;
           return rgba;
         ]]></getter>

@@ -32,8 +32,9 @@ this.DocShellCapabilities = {
   collect: function(tab) {
     let browser = tab.linkedBrowser;
 
-    if (!this.useFrameScript)
-      return this.caps.filter(function(cap) !browser.docShell["allow" + cap]);
+    if (!this.useFrameScript) {
+      return this.caps.filter(cap => !browser.docShell["allow" + cap]);
+    }
 
     if (tab.ownerDocument.defaultView.__SSi) {
       let tabState = TabState.collect(tab);

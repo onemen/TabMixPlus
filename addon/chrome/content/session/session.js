@@ -375,8 +375,7 @@ var TabmixSessionManager = { // jshint ignore:line
          }
 
          if (Tabmix.isWindowAfterSessionRestore) {
-            let self = this;
-            setTimeout(function(){self.onSessionRestored()}, 0);
+            setTimeout(() => this.onSessionRestored(), 0);
          }
          else {
            if (TabmixSvc.sm.crashed && this.enableBackup)
@@ -1473,7 +1472,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      if (gBrowser.isBlankWindow())
        return false;
       return typeof privateTab != "object" ||
-        Array.some(gBrowser.tabs, function(tab) !privateTab.isTabPrivate(tab));
+        Array.some(gBrowser.tabs, tab => !privateTab.isTabPrivate(tab));
    },
 
    saveOneOrAll: function(action, path, saveClosedTabs) {
@@ -2915,7 +2914,7 @@ try{
       if (!state)
          return null;
       // Ensure sure that all entries have url
-      var entries = state.entries.filter(function(e) e.url);
+      var entries = state.entries.filter(e => e.url);
       if (!entries.length)
         return null;
       // Ensure the index is in bounds.

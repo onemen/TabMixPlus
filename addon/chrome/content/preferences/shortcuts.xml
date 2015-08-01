@@ -73,7 +73,7 @@
             Shortcuts.prefsChangedByTabmix = true;
             $("pref_shortcuts").value = this.parentNode.value;
             Shortcuts.prefsChangedByTabmix = false;
-            let callBack = function(shortcut) shortcut.id && shortcut.updateNotification();
+            let callBack = shortcut => shortcut.id && shortcut.updateNotification();
             gMenuPane.updateShortcuts(this.parentNode, callBack);
           }
           this.editBox.select();
@@ -136,7 +136,7 @@
 
           let key = {modifiers: "", key: "", keycode: ""};
           key.modifiers =
-            ["ctrl","meta","alt","shift"].filter(function(mod) event[mod+"Key"]).
+            ["ctrl","meta","alt","shift"].filter(mod => event[mod + "Key"]).
             join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
@@ -224,16 +224,16 @@
 
       <property name="defaultPref" readonly="true">
         <getter><![CDATA[
-          let defaultPref = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
-          if (defaultPref) {
+          let defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
+          if (defaultVal) {
             let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
             resetButton.hidden = false;
-            let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultPref));
+            let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
             resetButton.setAttribute("tooltiptext",
                 resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
           }
-          this.__defineGetter__("defaultPref",  function() defaultPref);
-          return defaultPref;
+          this.__defineGetter__("defaultPref", () => defaultVal);
+          return defaultVal;
         ]]></getter>
       </property>
 

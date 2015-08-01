@@ -29,7 +29,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "MergeWindows",
 this.TabmixUtils = {
   initMessageManager: function(window) {
     let mm = window.getGroupMessageManager("browsers");
-    FMM_MESSAGES.forEach(function(msg) mm.addMessageListener(msg, this), this);
+    FMM_MESSAGES.forEach(msg => mm.addMessageListener(msg, this));
 
     // Load the frame script after registering listeners.
     mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
@@ -37,7 +37,7 @@ this.TabmixUtils = {
 
   deinit: function(window) {
     let mm = window.getGroupMessageManager("browsers");
-    FMM_MESSAGES.forEach(function(msg) mm.removeMessageListener(msg, this), this);
+    FMM_MESSAGES.forEach(msg => mm.removeMessageListener(msg, this));
   },
 
   receiveMessage: function(message) {

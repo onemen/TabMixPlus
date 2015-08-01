@@ -59,7 +59,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     var SM = TabmixSessionManager;
     if (this.isVersion(200)) {
       SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
-      SM.isWindowPrivate = function SM_isWindowPrivate(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      SM.isWindowPrivate = function(aWindow) {
+        return PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      };
       // isPrivateWindow is boolean property of this window, user can't change private status of a window
       SM.isPrivateWindow = SM.isWindowPrivate(window);
       SM.__defineGetter__("isPrivateSession", function() {
@@ -74,9 +76,15 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
                 getService(Ci.nsIPrivateBrowsingService);
       SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
-      SM.isWindowPrivate = function SM_isWindowPrivate() SM.globalPrivateBrowsing;
-      SM.__defineGetter__("isPrivateWindow", function() this.globalPrivateBrowsing);
-      SM.__defineGetter__("isPrivateSession", function() this.globalPrivateBrowsing);
+      SM.isWindowPrivate = function() {
+        return SM.globalPrivateBrowsing;
+      };
+      SM.__defineGetter__("isPrivateWindow", function() {
+        return this.globalPrivateBrowsing;
+      });
+      SM.__defineGetter__("isPrivateSession", function() {
+        return this.globalPrivateBrowsing;
+      });
     }
 
     // make tabmix compatible with ezsidebar extension

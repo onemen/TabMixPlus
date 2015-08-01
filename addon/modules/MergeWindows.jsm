@@ -209,10 +209,10 @@ this.MergeWindows = {
     delete this.isWindowPrivate;
     if (TabmixSvc.version(200)) {
       Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-      this.isWindowPrivate = function(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      this.isWindowPrivate = aWindow => PrivateBrowsingUtils.isWindowPrivate(aWindow);
       return this.isWindowPrivate(arguments[0]);
     }
-    this.isWindowPrivate = function() false;
+    this.isWindowPrivate = () => false;
     return false;
   },
 
@@ -255,7 +255,7 @@ this.MergeWindows = {
 
     let windows = [], popUps = [];
     let isWINNT = Services.appinfo.OS == "WINNT";
-    let more = function() !isWINNT || aOptions.multiple || windows.length === 0;
+    let more = () => !isWINNT || aOptions.multiple || windows.length === 0;
     // getEnumerator return windows from oldest to newest, so we use unshift.
     // when OS is WINNT and option is not multiple the loop stops when we find the most
     // recent suitable window

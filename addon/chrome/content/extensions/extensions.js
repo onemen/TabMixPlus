@@ -449,7 +449,7 @@ var TMP_extensionsCompatibility = {
     if (window.rdrb && typeof rdrb.cleanLink == "function") {
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
         'Tabmix.loadTabs(urls, false);',
-        'urls = urls.map(function(url) rdrb.cleanLink(url));\n' +
+        'urls = urls.map(url => rdrb.cleanLink(url));\n' +
         '      $&'
       ).toCode();
     }

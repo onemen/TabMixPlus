@@ -23,8 +23,8 @@ var TMP_tabDNDObserver = {
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
-      tabBar.useTabmixDragstart = function() false;
-      tabBar.useTabmixDnD  = function() false;
+      tabBar.useTabmixDragstart = () => false;
+      tabBar.useTabmixDnD  = () => false;
       return;
     }
 
@@ -65,7 +65,7 @@ var TMP_tabDNDObserver = {
       '\n\
         this.removeAttribute("movingBackgroundTab");\n\
         let tabs = this.getElementsByAttribute("dragged", "*");\n\
-        Array.slice(tabs).forEach(function(tab) tab.removeAttribute("dragged"));\n\
+        Array.slice(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
       $1$2'
     ).toCode();
 
@@ -163,7 +163,7 @@ var TMP_tabDNDObserver = {
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
-    let clientX = function _clientX(ele) ele.getBoundingClientRect().left;
+    let clientX = ele => ele.getBoundingClientRect().left;
     let tabOffsetX = clientX(tab) - clientX(gBrowser.tabContainer);
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
@@ -586,7 +586,7 @@ var TMP_tabDNDObserver = {
   },
 
   getNewIndex: function (event) {
-    function getTabRowNumber(tab, top) tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top)
+    let getTabRowNumber = (tab, top) => tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top);
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,
@@ -954,13 +954,13 @@ var TMP_TabView = { /* jshint ignore: line */
 
   // includung _removingTabs
   currentGroup: function () {
-    return Array.filter(gBrowser.tabs, function(tab) !tab.hidden);
+    return Array.filter(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
   getTabPosInCurrentGroup: function (aTab) {
     if (aTab) {
-      let tabs = Array.filter(gBrowser.tabs, function(tab) !tab.hidden);
+      let tabs = Array.filter(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
     }
     return -1;

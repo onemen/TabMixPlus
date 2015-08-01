@@ -444,7 +444,7 @@ var TMP_Places = {
       return aTitle;
 
     var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
-    var getTitle = function(url) this._getBookmarkTitle(url, oID);
+    var getTitle = url => this._getBookmarkTitle(url, oID);
     var title = this.applyCallBackOnUrl(aUrl, getTitle);
     // setItem check if aTab exist and remove the attribute if
     // oID.value is null
@@ -555,7 +555,7 @@ var TMP_Places = {
     else if (!Array.isArray(aItemId))
       [aItemId, aUrl] = [[aItemId], [aUrl]];
 
-    let getIndex = function(url) aUrl.indexOf(url) + 1;
+    let getIndex = url => aUrl.indexOf(url) + 1;
     Array.forEach(gBrowser.tabs, function(tab) {
       let url = tab.linkedBrowser.currentURI.spec;
       if (this.isUserRenameTab(tab, url))

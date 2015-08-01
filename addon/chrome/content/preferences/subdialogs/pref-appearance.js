@@ -1,6 +1,6 @@
 "use strict";
 
-function $(id) document.getElementById(id)
+let $ = id => document.getElementById(id);
 
 let tabstyles = { // jshint ignore:line
   pref: "appearance_tab",

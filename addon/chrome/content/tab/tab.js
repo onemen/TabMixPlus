@@ -1838,7 +1838,7 @@ var gTMPprefObserver = {
      *  style for each tab
      */
     if (styleName == "unloaded" || styleName == "unread")
-      Array.forEach(gBrowser.tabs, function(tab) Tabmix.setTabStyle(tab));
+      Array.forEach(gBrowser.tabs, tab => Tabmix.setTabStyle(tab));
 
     let isBold = function(attrib) {
       attrib = attrib.split(" ");
@@ -1966,7 +1966,7 @@ var gTMPprefObserver = {
   },
 
   changeNewTabButtonSide: function(aPosition) {
-    function $(id) document.getElementById(id)
+    let $ = id => document.getElementById(id);
     let newTabButton = $("new-tab-button");
     if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
       // update our attribute
@@ -1992,7 +1992,7 @@ var gTMPprefObserver = {
             Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
           };
           if (TabmixTabbar.position == 1)
-            setTimeout(function() doChange(), 15);
+            setTimeout(() => doChange(), 15);
           else
             doChange();
         }
@@ -2013,7 +2013,7 @@ var gTMPprefObserver = {
         tabsToolbar.insertBefore(newTabButton, tabsToolbar.childNodes.item(newPosition));
         // update currentset
         let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-        cSet = cSet.split(",").filter(function(id) id != "new-tab-button");
+        cSet = cSet.split(",").filter(id => id != "new-tab-button");
         let tabsIndex = cSet.indexOf("tabbrowser-tabs");
         if (tabsIndex < 0)
           return;
@@ -2430,7 +2430,7 @@ try {
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
 
-      let vCompare = function(a, b) Services.vc.compare(a, b) <= 0;
+      let vCompare = (a, b) => Services.vc.compare(a, b) <= 0;
       if (oldVersion) {
         // 2013-08-18
         if (vCompare(oldVersion, "0.4.1.1pre.130817a") &&
@@ -2458,7 +2458,7 @@ try {
           showNewVersionTab = true;
         else if (shouldAutoUpdate || oldVersion === "") {
           let re = /([A-Za-z]*)\d*$/;
-          let subs = function(obj) obj[1] ? obj.input.substring(0, obj.index) : obj.input;
+          let subs = obj => obj[1] ? obj.input.substring(0, obj.index) : obj.input;
           showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));
         }
       }

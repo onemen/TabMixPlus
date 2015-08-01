@@ -246,12 +246,20 @@ var ContentClickInternal = {
    * @return                 wrapped node including attribute functions
    */
   getWrappedNode: function(node, focusedWindow, getTargetIsFrame) {
-    function wrapNode(aNode, aGetTargetIsFrame) {
+    let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
       let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
-      nObj.hasAttribute = function(att) att in this._attributes;
-      nObj.getAttribute = function(att) this._attributes[att] || null;
-      nObj.parentNode.hasAttribute = function(att) att in this._attributes;
-      nObj.parentNode.getAttribute = function(att) this._attributes[att] || null;
+      nObj.hasAttribute = function(att) {
+        return att in this._attributes;
+      };
+      nObj.getAttribute = function(att) {
+        return this._attributes[att] || null;
+      };
+      nObj.parentNode.hasAttribute = function(att) {
+        return att in this._attributes;
+      };
+      nObj.parentNode.getAttribute = function(att) {
+        return this._attributes[att] || null;
+      };
       return nObj;
     }
 
@@ -876,9 +884,9 @@ var ContentClickInternal = {
 
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v\=/;
-    let isYoutube = function(href) youtube.test(current) && youtube.test(href);
-    let isSamePath = function(href, att) makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
-    let isSame = function(href, att) current.split(att)[0] == href.split(att)[0];
+    let isYoutube = href => youtube.test(current) && youtube.test(href);
+    let isSamePath = (href, att) => makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
+    let isSame = (href, att) => current.split(att)[0] == href.split(att)[0];
 
     if (hrefFromOnClick) {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();

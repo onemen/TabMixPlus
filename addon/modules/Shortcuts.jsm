@@ -79,14 +79,14 @@ this.Shortcuts = {
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
-    let $ = function(id) id && aWindow.document.getElementById(id);
+    let $ = id => id && aWindow.document.getElementById(id);
     let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
     let labels = {};
     if (container) {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      Array.slice(box.attributes).forEach(function(a) labels[a.name] = a.value);
+      Array.slice(box.attributes).forEach(a => labels[a.name] = a.value);
       container.removeChild(box);
     }
     labels.togglePinTab =
@@ -348,8 +348,9 @@ this.Shortcuts = {
       return "";
     let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"")
           .replace("ctrl", "control").split(",");
-    key.modifiers = ["control","meta","accel","alt","shift"].filter(
-      function(mod) new RegExp(mod).test(modifiers)).join(",");
+    key.modifiers = ["control","meta","accel","alt","shift"].filter(mod => {
+      return new RegExp(mod).test(modifiers);
+    }).join(",");
 
     // make sure that key and keycod are valid
     key.key = key.key.toUpperCase();

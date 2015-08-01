@@ -312,7 +312,7 @@ var TabmixContext = {
   _closeRightTabs: "tm-closeRightTabs",
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
-    var $id = function(id) document.getElementById(id);
+    var $id = id => document.getElementById(id);
 
     var tabContextMenu = $id("tabContextMenu");
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tm-autoreloadTab_menu"));

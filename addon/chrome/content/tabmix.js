@@ -1043,8 +1043,9 @@ var TMP_eventListener = {
       }
       else {
         let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
-        if (tabsSrip._prevMouseScrolls.every(function(prev) {return prev == isVertical}))
+        if (tabsSrip._prevMouseScrolls.every(prev => prev == isVertical)) {
           tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
+        }
 
         if (tabsSrip._prevMouseScrolls.length > 1)
           tabsSrip._prevMouseScrolls.shift();

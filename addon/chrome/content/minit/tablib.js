@@ -80,7 +80,7 @@ var tablib = {
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlaged = function(flag) !!(flags & Ci.nsIWebNavigation[flag]);
+      let isFlaged = flag => !!(flags & Ci.nsIWebNavigation[flag]);
       params.inBackground = false;
       params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
       params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
@@ -114,7 +114,7 @@ var tablib = {
       return loadInCurrent;
 
     let stack = Error().stack || Components.stack.caller.formattedStack || "";
-    var re = keys.map(function(key) exceptionList[key]);
+    var re = keys.map(key => exceptionList[key]);
     return new RegExp(re.join("|")).test(stack);
   },
 

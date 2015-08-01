@@ -84,12 +84,12 @@ this.AutoReload = {
       if (!prefs.prefHasUserValue(pref))
         return [];
       let list = prefs.getCharPref(pref).split(",");
-      if (!list.every(function(val) val==parseInt(val))) {
+      if (!list.every(val => val == parseInt(val))) {
         prefs.clearUserPref(pref);
         return [];
       }
       let defaultList = ["30","60","120","300","900","1800"];
-      list = list.filter(function(val) defaultList.indexOf(val) == -1);
+      list = list.filter(val => defaultList.indexOf(val) == -1);
       let newList = [];
       list.forEach(function(val){
         if (parseInt(val) && newList.indexOf(val) == -1)
@@ -102,13 +102,13 @@ this.AutoReload = {
     }
 
     let doc = aPopup.ownerDocument.defaultView.document;
-    getList().sort(function(a,b) parseInt(a)>parseInt(b)).forEach(function(val) {
+    getList().sort((a,b) => parseInt(a) > parseInt(b)).forEach(val => {
       let mi = doc.createElement("menuitem");
       this.setLabel(mi, val);
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);
       aPopup.insertBefore(mi, end);
-    }, this);
+    });
   },
 
   setLabel: function(aItem, aSeconds) {

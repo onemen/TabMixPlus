@@ -22,7 +22,7 @@ this.console = {
       msg += (msg ? "\n" : "") + "aMethod need to be a string";
     if (msg) {
       this.assert(msg);
-      return {toString: function() msg};
+      return {toString: () => msg};
     }
     var rootID, methodsList = aMethod.split(".");
     if (methodsList[0] == "window")
@@ -36,11 +36,9 @@ this.console = {
       obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
-      methodsList.forEach(function(aFn) {
-        obj = obj[aFn];
-      });
+      methodsList.forEach(aFn => obj = obj[aFn]);
     } catch (ex) { }
-    return obj || {toString: function() "undefined"};
+    return obj || {toString: () => "undefined"};
   },
 
   _timers: {},

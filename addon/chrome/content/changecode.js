@@ -172,6 +172,10 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
   /* jshint moz: true, esnext: false */
   let global = Components.utils.getGlobalForObject(obj);
   let fn = global["ev" + "al"];
-  Tabmix._makeCode = function(name, code) name ?
-    fn(name + " = " + code) : fn("(" + code + ")");
+  Tabmix._makeCode = function(name, code) {
+    if (name) {
+      return fn(name + " = " + code);
+    }
+    return fn("(" + code + ")");
+  };
 })(this);
