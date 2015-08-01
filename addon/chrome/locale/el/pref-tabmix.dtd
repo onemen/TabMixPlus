@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Εφαρμογή των αλλαγών στις ανοιχτές καρτέλες">
 <!ENTITY openNewTab.label "Άνοιγμα καρτελών από:">
 <!ENTITY openBookmarks.label "Σελιδοδείκτες">
-<!ENTITY openBMKGroups.label "Ομάδες σελιδοδεικτών">
-<!ENTITY openBMKGroups.tooltip "Να μην παρακάμπτονται καρτέλες όταν ανοίγει ομάδα σελιδοδεικτών">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Ιστορικό">
 <!ENTITY openUrl.label "Εργαλειοθήκη διευθύνσεων">
 <!ENTITY openSearch.label "Εργαλειοθήκη αναζήτησης">

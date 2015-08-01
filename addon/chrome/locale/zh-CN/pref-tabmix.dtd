@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "更改应用到打开的标签页">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
 <!ENTITY openBookmarks.label "书签">
-<!ENTITY openBMKGroups.label "书签群组">
-<!ENTITY openBMKGroups.tooltip "当打开书签群组时不覆盖当前的标签页">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "历史">
 <!ENTITY openUrl.label "地址栏">
 <!ENTITY openSearch.label "搜索栏">

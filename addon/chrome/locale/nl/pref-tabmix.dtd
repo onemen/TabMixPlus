@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Wijzigingen op openstaande tabbladen toepassen">
 <!ENTITY openNewTab.label "Tabbladen openen vanuit:">
 <!ENTITY openBookmarks.label "Bladwijzers">
-<!ENTITY openBMKGroups.label "Groep(en) bladwijzers">
-<!ENTITY openBMKGroups.tooltip "Tabbladen niet overschrijven wanneer een groep bladwijzers wordt geopend">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Geschiedenis">
 <!ENTITY openUrl.label "Locatiebalk">
 <!ENTITY openSearch.label "Zoekbalk">

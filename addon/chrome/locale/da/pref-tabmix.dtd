@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Åbn faneblade fra:">
 <!ENTITY openBookmarks.label "Bogmærker">
-<!ENTITY openBMKGroups.label "Grupper af bogmærker">
-<!ENTITY openBMKGroups.tooltip "Tilsidesæt ikke faneblade når en gruppe bogmærker åbnes">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historik">
 <!ENTITY openUrl.label "Adresselinjen">
 <!ENTITY openSearch.label "Søgelinjen">

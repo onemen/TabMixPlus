@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Appliquer les changements aux onglets ouverts">
 <!ENTITY openNewTab.label "Ouvrir des onglets depuis :">
 <!ENTITY openBookmarks.label "Les marque-pages">
-<!ENTITY openBMKGroups.label "Les groupes de marque-pages">
-<!ENTITY openBMKGroups.tooltip "L&apos;ouverture d&apos;un groupe de marque-pages n&apos;écrase pas les onglets ouverts">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "L&apos;historique">
 <!ENTITY openUrl.label "La barre d&apos;adresse">
 <!ENTITY openSearch.label "La barre de recherche">

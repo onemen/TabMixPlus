@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Änderungen auf geöffnete Tabs anwenden">
 <!ENTITY openNewTab.label "In neuen Tabs öffnen">
 <!ENTITY openBookmarks.label "Lesezeichen">
-<!ENTITY openBMKGroups.label "Lesezeichengruppen">
-<!ENTITY openBMKGroups.tooltip "Bestehende Tabs werden beim Öffnen einer Lesezeichengruppe nicht überschrieben">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Chronik">
 <!ENTITY openUrl.label "Adresseingaben">
 <!ENTITY openSearch.label "Suchergebnisse">

@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplicar cambios a pestañas abiertas">
 <!ENTITY openNewTab.label "Abrir pestañas desde:">
 <!ENTITY openBookmarks.label "Marcadores">
-<!ENTITY openBMKGroups.label "Grupos de marcadores">
-<!ENTITY openBMKGroups.tooltip "No reemplazar pestañas al abrir un grupo de marcadores">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historial">
 <!ENTITY openUrl.label "Barra direcciones">
 <!ENTITY openSearch.label "Barra búsquedas">

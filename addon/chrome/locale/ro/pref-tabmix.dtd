@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Se aplică modificările la filele deschise">
 <!ENTITY openNewTab.label "Se deschid filele din:">
 <!ENTITY openBookmarks.label "Semne de carte">
-<!ENTITY openBMKGroups.label "Grupuri de semne de carte">
-<!ENTITY openBMKGroups.tooltip "Nu se înlocuiesc filele când se deschide un grup de semne de carte">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Istoric">
 <!ENTITY openUrl.label "Bară de adrese">
 <!ENTITY openSearch.label "Bară de căutare">

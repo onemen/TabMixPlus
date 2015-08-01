@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "فتح ألسنة من:">
 <!ENTITY openBookmarks.label "العلامات">
-<!ENTITY openBMKGroups.label "مجموعات من العلامات">
-<!ENTITY openBMKGroups.tooltip "عدم تجاهل ألسنة عند فتح مجموعة من العلامات">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "التأريخ">
 <!ENTITY openUrl.label "شريط العنوان">
 <!ENTITY openSearch.label "شريط البحث">

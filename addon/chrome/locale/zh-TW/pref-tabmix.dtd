@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "變更套用到已開啟的分頁">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
 <!ENTITY openBookmarks.label "書籤">
-<!ENTITY openBMKGroups.label "書籤群組">
-<!ENTITY openBMKGroups.tooltip "勾選此項，開啟書籤群組時保留目前已開啟的分頁">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "瀏覽記錄">
 <!ENTITY openUrl.label "網址列">
 <!ENTITY openSearch.label "搜尋列">

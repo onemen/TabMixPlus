@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Pielietot izmaiņas atvērtajām cilnēm">
 <!ENTITY openNewTab.label "Atvērt cilnes no:">
 <!ENTITY openBookmarks.label "Grāmatzīmes">
-<!ENTITY openBMKGroups.label "Grāmatzīmju grupas">
-<!ENTITY openBMKGroups.tooltip "Neaizstāt cilnes, kad tiek atvērta grāmatzīmju grupa">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Vēsture">
 <!ENTITY openUrl.label "Adrešu josla">
 <!ENTITY openSearch.label "Meklēšanas josla">

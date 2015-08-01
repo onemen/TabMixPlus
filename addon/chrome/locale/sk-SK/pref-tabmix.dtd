@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplikovať zmeny na otvorených záložkách">
 <!ENTITY openNewTab.label "Otvoriť karty z:">
 <!ENTITY openBookmarks.label "Záložky">
-<!ENTITY openBMKGroups.label "Skupiny záložiek">
-<!ENTITY openBMKGroups.tooltip "Pri otváraní skupiny záložiek nebudú premazané už otvorené karty">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "História">
 <!ENTITY openUrl.label "Adresný riadok">
 <!ENTITY openSearch.label "Panel vyhľadávania">

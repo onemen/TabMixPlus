@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Rakenda muudatused avatud kaartidele">
 <!ENTITY openNewTab.label "Ava uuel kaardil järgnevate kaudu avatud leht:">
 <!ENTITY openBookmarks.label "Järjehoidjad">
-<!ENTITY openBMKGroups.label "Järjehoidjate grupid">
-<!ENTITY openBMKGroups.tooltip "Ära kirjuta järjehoidjate grupi avamisel olemasolevaid kaarte üle">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Ajalugu">
 <!ENTITY openUrl.label "Aadressiriba">
 <!ENTITY openSearch.label "Otsinguriba">

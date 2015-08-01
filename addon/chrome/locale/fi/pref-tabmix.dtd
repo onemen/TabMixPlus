@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Open tabs from:">
 <!ENTITY openBookmarks.label "Bookmarks">
-<!ENTITY openBMKGroups.label "Groups of bookmarks">
-<!ENTITY openBMKGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "History">
 <!ENTITY openUrl.label "Address bar">
 <!ENTITY openSearch.label "Search bar">

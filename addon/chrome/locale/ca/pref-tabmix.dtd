@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplica els canvis a les pestanyes obertes">
 <!ENTITY openNewTab.label "Obre pestanyes des de:">
 <!ENTITY openBookmarks.label "Adreces d'interès">
-<!ENTITY openBMKGroups.label "Grups d'adreces d'interès">
-<!ENTITY openBMKGroups.tooltip "No substitueix les pestanyes en obrir un grup d'adreces d'interès">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historial">
 <!ENTITY openUrl.label "Barra d'adreces">
 <!ENTITY openSearch.label "Barra de cerca">

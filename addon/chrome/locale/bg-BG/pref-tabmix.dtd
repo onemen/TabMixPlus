@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Прилагане на измененията за текущите отворени подпрозорци">
 <!ENTITY openNewTab.label "Отваряне в нови подпрозорци на:">
 <!ENTITY openBookmarks.label "Отметки">
-<!ENTITY openBMKGroups.label "Групи отметки">
-<!ENTITY openBMKGroups.tooltip "Групите отметки се отварят в нови подпрозорци без да използват текущите подпрозорци">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "История">
 <!ENTITY openUrl.label "Адресната лента">
 <!ENTITY openSearch.label "Лентата за търсене">

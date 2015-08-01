@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Ireki fitxak hortik:">
 <!ENTITY openBookmarks.label "Lastermarkak">
-<!ENTITY openBMKGroups.label "Taldekako Lastermarkak">
-<!ENTITY openBMKGroups.tooltip "Ez ezabatu fitxarik taldekako bookmarkak irekitzean">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historia">
 <!ENTITY openUrl.label "Helbide barra">
 <!ENTITY openSearch.label "Bilatzaile barra">

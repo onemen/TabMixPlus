@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Applica le modifiche alle schede aperte">
 <!ENTITY openNewTab.label "Schede in secondo piano">
 <!ENTITY openBookmarks.label "Segnalibri">
-<!ENTITY openBMKGroups.label "Gruppi di segnalibri">
-<!ENTITY openBMKGroups.tooltip "Nota: i gruppi di segnalibri non verranno aperti in schede attualmente aperte">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Cronologia">
 <!ENTITY openUrl.label "URL della barra degli indirizzi">
 <!ENTITY openSearch.label "Risultati della barra di ricerca">
@@ -172,6 +172,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -187,6 +188,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

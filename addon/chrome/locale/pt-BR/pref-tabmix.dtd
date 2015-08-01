@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplicar alterações nas abas abertas">
 <!ENTITY openNewTab.label "Abrir novas abas a partir de:">
 <!ENTITY openBookmarks.label "Favoritos">
-<!ENTITY openBMKGroups.label "Grupos de favoritos">
-<!ENTITY openBMKGroups.tooltip "Abrir novas abas para grupos de favoritos">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Histórico">
 <!ENTITY openUrl.label "Barra de endereços">
 <!ENTITY openSearch.label "Campo de pesquisa">

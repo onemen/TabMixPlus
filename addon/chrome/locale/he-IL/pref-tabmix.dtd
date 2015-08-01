@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "פתח לשוניות מ:">
 <!ENTITY openBookmarks.label "סימניות">
-<!ENTITY openBMKGroups.label "קבוצת סימניות">
-<!ENTITY openBMKGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "היסטוריה">
 <!ENTITY openUrl.label "שורת הכתובת">
 <!ENTITY openSearch.label "תיבת החיפוש">

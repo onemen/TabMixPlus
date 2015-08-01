@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
-<!ENTITY openBMKGroups.label "ブックマークグループ">
-<!ENTITY openBMKGroups.tooltip "ブックマークグループを開くとき、既存のタブに上書きしない">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "履歴">
 <!ENTITY openUrl.label "ロケーションバー">
 <!ENTITY openSearch.label "検索バー">
