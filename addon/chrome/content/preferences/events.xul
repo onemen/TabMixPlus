@@ -140,7 +140,8 @@
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                        onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                        placeholder="&newtab.placeholder.label;"
-                       preference="pref_newTabUrl"/>
+                       preference="pref_newTabUrl"
+                       onkeydown="gEventsPane.onNewTabKeyDown(event);"/>
             </hbox>
             <checkbox_tmp id="selectLocationBar" label="&focusContent.label;"
                       preference="pref_selectLocationBar"/>
@@ -287,7 +288,8 @@
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                           onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                           placeholder="&newtab.placeholder.label;"
-                          preference="pref_newTabUrl_1"/>
+                          preference="pref_newTabUrl_1"
+                          onkeydown="gEventsPane.onNewTabKeyDown(event);"/>
               </hbox>
               <checkbox_tmp class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
                         preference="pref_afterLastTabClosed" observes="obs_replaceLastTabWith"/>

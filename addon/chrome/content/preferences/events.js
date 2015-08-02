@@ -99,6 +99,13 @@ var gEventsPane = {
     return undefined;
   },
 
+  onNewTabKeyDown: function(event) {
+    // block spaces from the user to go to about:newtab preference
+    if (event.keyCode == 32) {
+      event.preventDefault();
+    }
+  },
+
   disableInverseMiddleClick: function() {
     var val = ($("pref_opentabforLinks") || $("pref_opentabforLinks1")).value;
     gPrefWindow.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
