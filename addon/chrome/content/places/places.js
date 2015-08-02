@@ -167,7 +167,7 @@ var TMP_Places = {
       if (aMenuPopup.id != "goPopup" && aMenuPopup.id != "appmenu_historyMenupopup")
          return;
 
-      for (let i = 0; i < aMenuPopup.childNodes.length ; i++) {
+      for (let i = 0; i < aMenuPopup.childNodes.length; i++) {
          let item = aMenuPopup.childNodes[i];
          if ("_placesNode" in item) {
            let bookMarkName = this.getTitleFromBookmark(item._placesNode.uri);
@@ -210,12 +210,12 @@ var TMP_Places = {
       });
    },
 
-   isBookmarklet: function (url) {
+   isBookmarklet: function(url) {
       var jsURL = /^ *javascript:/;
       return jsURL.test(url) ? true : false;
    },
 
-   fixWhereToOpen: function (aEvent, aWhere, aPref) {
+   fixWhereToOpen: function(aEvent, aWhere, aPref) {
       var w = Tabmix.getTopWin();
       if (!w)
          return aWhere;
@@ -241,7 +241,7 @@ var TMP_Places = {
       return aWhere;
    },
 
-   getPrefByDocumentURI: function (aWindow) {
+   getPrefByDocumentURI: function(aWindow) {
      switch (aWindow.document.documentURI) {
        case "chrome://browser/content/places/places.xul":
          let historyId = PlacesUIUtils.leftPaneQueries["History"];
@@ -268,7 +268,7 @@ var TMP_Places = {
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
   //
-  //TODO - try to use sessionStore to add many tabs
+  // TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
     var tabs = gBrowser.visibleTabs;
 
@@ -282,7 +282,7 @@ var TMP_Places = {
     // catch tab for reuse
     var aTab, reuseTabs = [], removeTabs = [], i;
     var tabIsBlank, canReplace;
-    for (i = 0; i < tabs.length ; i++) {
+    for (i = 0; i < tabs.length; i++) {
        aTab = tabs[i];
        tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
        // don't reuse collapsed tab if width fitTitle is set
@@ -303,7 +303,7 @@ var TMP_Places = {
                    gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
-    for (i = 0; i < bmGroup.length ; i++) {
+    for (i = 0; i < bmGroup.length; i++) {
        let url = bmGroup[i];
        try { // bug 300911
           if (i < reuseTabs.length) {
@@ -324,7 +324,7 @@ var TMP_Places = {
              aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
 
           this.setTabTitle(aTab, url, bmIds[i]);
-       } catch (er) {  }
+       } catch (er) { }
 
        if (!tabToSelect)
           tabToSelect = aTab;
@@ -396,7 +396,7 @@ var TMP_Places = {
     return newTitle || title;
   },
 
-   _getBookmarkTitle: function (aUrl, aID) {
+   _getBookmarkTitle: function(aUrl, aID) {
       let aItemId = aID.value || -1;
       try {
          if (aItemId > -1) {
@@ -420,7 +420,7 @@ var TMP_Places = {
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  applyCallBackOnUrl: function (aUrl, aCallBack) {
+  applyCallBackOnUrl: function(aUrl, aCallBack) {
  ///XXX need to work with nsURI
     let hasHref = aUrl.indexOf("#") > -1;
     let result = aCallBack.apply(this, [aUrl]) ||
@@ -453,7 +453,7 @@ var TMP_Places = {
     return title || aTitle;
   },
 
-  isUserRenameTab: function (aTab, aUrl) {
+  isUserRenameTab: function(aTab, aUrl) {
     if (aTab.hasAttribute("label-uri")) {
       let label = aTab.getAttribute("label-uri");
       if (label == aUrl || label == "*")
@@ -488,11 +488,11 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       if (!Tabmix.isVersion(210))
-        this.onBeforeItemRemoved = function () {};
+        this.onBeforeItemRemoved = function() {};
       try {
         PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
-      } catch(ex) {
+      } catch (ex) {
         Tabmix.reportError(ex, "Failed to add bookmarks observer:");
       }
     }
@@ -505,7 +505,7 @@ var TMP_Places = {
     }
   },
 
-  onDelayedStartup: function () {
+  onDelayedStartup: function() {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
@@ -513,7 +513,7 @@ var TMP_Places = {
   },
 
   // extensions.tabmix.titlefrombookmark changed
-  onPreferencChanged: function (aPrefValue) {
+  onPreferencChanged: function(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
@@ -562,7 +562,7 @@ var TMP_Places = {
         return;
       let index = this.applyCallBackOnUrl(url, getIndex);
       if (index) {
-        tab.setAttribute("tabmix_bookmarkId", aItemId[index-1]);
+        tab.setAttribute("tabmix_bookmarkId", aItemId[index - 1]);
         this.setTabTitle(tab, url);
       }
     }, this);
@@ -620,7 +620,7 @@ var TMP_Places = {
   },
 
   onBeginUpdateBatch: function TMP_PC_onBeginUpdateBatch() {
-    this._batchData = {updateIDs:[], add:{ids:[], urls:[]}};
+    this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
     this.inUpdateBatch = true;
 
     if (TabmixTabbar.widthFitTitle &&
@@ -637,14 +637,14 @@ var TMP_Places = {
     if (updateIDs.length)
       this.updateTitleonTabs(updateIDs);
 
-    this._batchData = {updateIDs:[], add:{ids:[], urls:[]}};
+    this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
 
     this.afterTabTitleChanged();
     this.currentTab = null;
   },
 
-  onItemVisited: function () {},
-  onItemMoved: function () {}
+  onItemVisited: function() {},
+  onItemMoved: function() {}
 };
 
 TMP_Places.contextMenu = {
@@ -654,7 +654,7 @@ TMP_Places.contextMenu = {
     document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
   },
 
-  handleEvent: function (aEvent) {
+  handleEvent: function(aEvent) {
     switch (aEvent.type) {
       case "popupshowing":
         this.buildContextMenu();

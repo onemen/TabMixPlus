@@ -2,8 +2,7 @@
 
 var list, entry, edit, del, add;
 
-function Init()
-{
+function Init() {
    // set these once and refer to them later
    list = document.getElementById('filetypeList');
    entry = document.getElementById('filetypeEntry');
@@ -14,10 +13,9 @@ function Init()
    FillData();
 }
 
-function FillData()
-{
-   //remove all the item from the list
-   while(list.hasChildNodes()) {
+function FillData() {
+   // remove all the item from the list
+   while (list.hasChildNodes()) {
     list.removeChild(list.lastChild);
    }
 
@@ -44,8 +42,7 @@ function FillData()
    return true;
 }
 
-function Save()
-{
+function Save() {
    var filetype = [];
    for (var i = 0; i < list.getRowCount(); ++i)
       filetype.push(list.getItemAtIndex(i).getAttribute("label").trim());
@@ -58,8 +55,7 @@ function Save()
 }
 
 // sets the textbox to the currently selected item, if any
-function Select()
-{
+function Select() {
    setButtonDisable(add, true);
    setButtonDisable(edit, true);
 
@@ -72,20 +68,18 @@ function Select()
    return true;
 }
 
-function Add()
-{
+function Add() {
    // check for data in the textbox
    if (!entry.value) return false;
 
    list.appendItem(entry.value, entry.value.toLowerCase());
 
-   SelectItemAt(list.getRowCount()-1, true);
+   SelectItemAt(list.getRowCount() - 1, true);
    setButtonDisable(del, false);
    return true;
 }
 
-function Mod()
-{
+function Mod() {
    // check for data in the textbox
    if (!entry.value) return false;
 
@@ -102,40 +96,37 @@ function Mod()
    return true;
 }
 
-function Input()
-{
+function Input() {
    if (!entry.value) {
-      setButtonDisable(edit ,true);
-      setButtonDisable(add ,true);
+      setButtonDisable(edit, true);
+      setButtonDisable(add, true);
    } else {
       // chack if the input value is in the list
       var items = list.getElementsByAttribute("value", entry.value.toLowerCase());
       if (items.length > 0) {
          SelectItemAt(list.getIndexOfItem(items[0]), false);
-         setButtonDisable(edit ,true);
-         setButtonDisable(add ,true);
+         setButtonDisable(edit, true);
+         setButtonDisable(add, true);
       } else {
-         if (list.selectedItem) setButtonDisable(edit ,false);
-         setButtonDisable(add ,false);
+         if (list.selectedItem) setButtonDisable(edit, false);
+         setButtonDisable(add, false);
       }
    }
 }
 
-function Del()
-{
+function Del() {
    var item = list.selectedItem;
    if (!item) return;
    var index = list.getIndexOfItem(item);
    // if the list is not empty select next item or if we at the end the last item
    if (list.getRowCount() > 1)
-      SelectItemAt(index == list.getRowCount() - 1  ? index - 1 : index + 1, true);
+      SelectItemAt(index == list.getRowCount() - 1 ? index - 1 : index + 1, true);
    else
       entry.value = null;
    list.removeChild(item);
 }
 
-function Restore()
-{
+function Restore() {
    Save();
    var pref = "filetype";
    if (Tabmix.prefs.prefHasUserValue(pref))
@@ -144,17 +135,15 @@ function Restore()
 }
 
 // select new item and focus the list
-function SelectItemAt(index, focus)
-{
+function SelectItemAt(index, focus) {
    list.ensureIndexIsVisible(index);
    list.selectedIndex = index;
    if (focus) list.focus();
 }
 
-function setButtonDisable(button, set)
-{
+function setButtonDisable(button, set) {
    if (set) {
-      button.setAttribute("disabled",true);
+      button.setAttribute("disabled", true);
    } else {
       button.removeAttribute("disabled");
    }

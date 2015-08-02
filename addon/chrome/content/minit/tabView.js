@@ -14,7 +14,7 @@
       case "TabShow":
         if (!gBrowser.tabContainer._onDelayTabShow) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function (aEvent) {
+          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function(aEvent) {
             gBrowser.tabContainer._onDelayTabShow = null;
             TMP_eventListener.onTabOpen_delayUpdateTabBar(aEvent.target);
           }, 0, aEvent);
@@ -23,7 +23,7 @@
       case "TabHide":
         if (!gBrowser.tabContainer._onDelayTabHide) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function (aEvent) {
+          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function(aEvent) {
             gBrowser.tabContainer._onDelayTabHide = null;
             let tab = aEvent.target;
             TMP_eventListener.onTabClose_updateTabBar(tab);
@@ -152,7 +152,7 @@
       let Utils = TabView._window.Utils;
       Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
       TabItems._reconnectingPaused = false;
-      Array.forEach(gBrowser.tabs, function (tab){
+      Array.forEach(gBrowser.tabs, function(tab) {
         if (tab.pinned)
           return;
         let item = tab._tabViewTabItem;
@@ -166,7 +166,7 @@
     };
   };
 
-  TMP_TabView._resetTabviewFrame = function SM__resetTabviewFrame(){
+  TMP_TabView._resetTabviewFrame = function SM__resetTabviewFrame() {
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
       tabView.removeEventListener("tabviewhidden", this, false);
@@ -229,7 +229,7 @@
 
   TabmixSessionManager.groupUpdates = {};
   TabmixSessionManager._tabviewData = {};
-  TabmixSessionManager._groupItems=  null;
+  TabmixSessionManager._groupItems = null;
 
   // aWindow: rdfNodeWindow to read from
   TabmixSessionManager._getSessionTabviewData = function SM__getSessionTabviewData(aWindow) {
@@ -270,13 +270,13 @@
       this.removeAttribute(this.gThisWin, id);
   };
 
-  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, activeGroupId){
+  TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, activeGroupId) {
     if (tabdata.pinned)
       return;
 
     let parsedData;
     function setData(id) {
-      let data = { groupID: id };
+      let data = {groupID: id};
       parsedData = data;
       return TabmixSvc.JSON.stringify(data);
     }
@@ -345,7 +345,7 @@
     if (!excludeTabs)
       excludeTabs = [];
 
-    return !Array.some(gBrowser.tabs, function(tab){
+    return !Array.some(gBrowser.tabs, function(tab) {
       if (!tab.pinned && !tab.hidden && !tab.closing && excludeTabs.indexOf(tab) == -1) {
         return true;
       }
@@ -359,8 +359,8 @@
       aGroupsData.activeGroupId = groupID;
       this._lastSessionGroupName = "";
     }
-    let bounds = {left:0, top:0, width:350, height:300};
-    aGroupItems[groupID] = {bounds:bounds, userSize:null, title:"", id:groupID, newItem: true};
+    let bounds = {left: 0, top: 0, width: 350, height: 300};
+    aGroupItems[groupID] = {bounds: bounds, userSize: null, title: "", id: groupID, newItem: true};
     aGroupsData.totalNumber = Object.keys(aGroupItems).length;
     this._tabviewData["tabview-group"] = aGroupItems;
     this._tabviewData["tabview-groups"] = aGroupsData;
@@ -385,7 +385,7 @@
     let keys = Object.keys(aGroupItems);
     if (!aGroupsData.nextID) {
       let nextID = 0;
-      keys.forEach(function (key) {
+      keys.forEach(function(key) {
         nextID = Math.max(aGroupItems[key].id, nextID);
       });
       aGroupsData.nextID = nextID++;
@@ -434,10 +434,10 @@
 
         // update tabs data
         let groupID = newGroupsData.activeGroupId;
-        Array.forEach(gBrowser.tabs, function(tab){
+        Array.forEach(gBrowser.tabs, function(tab) {
           if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
             return;
-          let data = { groupID: groupID };
+          let data = {groupID: groupID};
           data = TabmixSvc.JSON.stringify(data);
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)

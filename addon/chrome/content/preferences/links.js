@@ -1,7 +1,7 @@
 "use strict";
 
 var gLinksPane = {
-  init: function () {
+  init: function() {
     this.singleWindow($("singleWindow").checked);
     gLinksPane.externalLinkValue($("externalLink").checked);
 
@@ -20,7 +20,7 @@ var gLinksPane = {
     gPrefWindow.setDisabled("obs_externalLink", !checked);
   },
 
-  updateExternalLinkCeckbox: function (external) {
+  updateExternalLinkCeckbox: function(external) {
     let preference = $(external.getAttribute("preference"));
     if (external.value == preference.value)
       return;

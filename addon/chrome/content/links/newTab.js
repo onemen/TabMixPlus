@@ -7,7 +7,7 @@
     let win = Tabmix.getTopWin();
     if (win)
       win.TMP_Places._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
-    gGrid.cells.forEach(function (cell) {
+    gGrid.cells.forEach(function(cell) {
       let site = cell.site;
       if (!site)
         return;

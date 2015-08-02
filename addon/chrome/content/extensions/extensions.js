@@ -4,7 +4,6 @@
  * original code by onemen
  */
 
-
 /**
  *
  * Fix compatibility with other extensions
@@ -44,7 +43,7 @@ var TMP_extensionsCompatibility = {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
         window.TMP_TabGroupsManager = {};
-        window.TMP_TabGroupsManager.tabmixSessionsManager = function () {};
+        window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
         let tmp = {};
         Components.utils.import("resource://tabmixplus/extensions/TabGroupsManager.jsm", tmp);
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
@@ -97,16 +96,16 @@ var TMP_extensionsCompatibility = {
     // we replace it back here
     if (typeof bgSaverInit == "function" && typeof getBoolPref == "function" &&
             getBoolPref.toString().indexOf("bgSaverPref.prefHasUserValue(sName)") != -1) {
-      window.getBoolPref = function getBoolPref ( prefname, def ) {
+      window.getBoolPref = function getBoolPref(prefname, def) {
         try {
           return Services.prefs.getBoolPref(prefname);
         }
-        catch(ex) {
+        catch (ex) {
           try {
             return (bgSaverPref.prefHasUserValue(prefname) &&
                     bgSaverPref.getBoolPref(prefname));
           }
-          catch(e) {}
+          catch (e) {}
         }
         return def;
       };
@@ -140,10 +139,8 @@ var TMP_extensionsCompatibility = {
     }
     */
 
-
     // https://addons.mozilla.org/en-US/firefox/addon/bug489729-disable-detach-and-t//
     // we don't need to do any changes to bug489729 extension version 1.6+
-
 
     // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
     if ("foxTab" in window) {
@@ -458,7 +455,7 @@ var TMP_extensionsCompatibility = {
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {
-   init : function ()  {
+   init: function() {
      Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
        'tbb.setAttribute("onclick"',
        'tbb.setAttribute("onclick", "this.onClick(event);");\
@@ -471,7 +468,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
      ).toCode();
    },
 
-   onClick : function (event) {
+   onClick: function(event) {
      if (event.ctrlKey) {
        this.markAsRead(true);
      }
@@ -483,7 +480,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
      }
    },
 
-   onContextOpen : function (target) {
+   onContextOpen: function(target) {
      if (!target) {
        if (Tabmix.whereToOpen(null).lock)
          this.parent.browser.openInNewTab(this.href);
@@ -507,7 +504,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
 // prevent Wizz RSS from load pages in locked tabs
 TMP_extensionsCompatibility.wizzrss = {
   started: null,
-  init : function ()  {
+  init: function() {
     if (this.started)
       return;
     this.started = true;
@@ -523,7 +520,7 @@ TMP_extensionsCompatibility.wizzrss = {
     });
   },
 
-  openURI : function (uri)  {
+  openURI: function(uri) {
     var w = Tabmix.getTopWin();
     var tabBrowser = w.gBrowser;
 
@@ -539,7 +536,7 @@ TMP_extensionsCompatibility.wizzrss = {
 
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
-   init : function ()  {
+   init: function() {
       Tabmix.changeCode(window, "openNewsfox")._replace(
          /if \(newTab\) {/,
          'newTab = newTab || Tabmix.whereToOpen(null).lock; \
@@ -557,7 +554,7 @@ TMP_extensionsCompatibility.newsfox = {
 TMP_extensionsCompatibility.treeStyleTab = {
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
-  preInit: function () {
+  preInit: function() {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
       // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
       tablib._init = tablib.init;
@@ -571,7 +568,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onContentLoaded: function () {
+  onContentLoaded: function() {
     // workaround, with version 0.15.2015061300a003855
     // gBrowser.treeStyleTab.initTabContentsOrder throw on Firefox 41+
     Tabmix.TST_initTabContentsOrder = function() {
@@ -677,7 +674,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onWindowLoaded: function () {
+  onWindowLoaded: function() {
     /**
      *  TST have eval to TMP_Bookmark.openGroup
      *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830

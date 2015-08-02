@@ -1,7 +1,7 @@
 "use strict";
 
 var gMenuPane = { // jshint ignore:line
-  init: function () {
+  init: function() {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
@@ -43,7 +43,7 @@ var gMenuPane = { // jshint ignore:line
     let paneMenu = $("paneMenu");
     if (paneMenu.hasAttribute("editSlideShowKey")) {
       paneMenu.removeAttribute("editSlideShowKey");
-      setTimeout(function(self) {self.editSlideShowKey();},0, this);
+      setTimeout(function(self) {self.editSlideShowKey();}, 0, this);
     }
 
     gPrefWindow.initPane("paneMenu");
@@ -64,7 +64,7 @@ var gMenuPane = { // jshint ignore:line
   },
 
   _slideShow: "",
-  updateShortcuts: function (aShortcuts, aCallBack) {
+  updateShortcuts: function(aShortcuts, aCallBack) {
     let boxes = Array.filter(aShortcuts.childNodes, aCallBack);
     $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
@@ -73,14 +73,14 @@ var gMenuPane = { // jshint ignore:line
     }
   },
 
-  setSlideShowLabel: function () {
+  setSlideShowLabel: function() {
     let slideShow = $("slideShow");
     let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
     $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
     gPrefWindow.setDisabled("obs_slideDelay", slideShow.disabled);
   },
 
-  editSlideShowKey: function () {
+  editSlideShowKey: function() {
     $("menu").selectedIndex = 3;
     let slideShow = $("slideShow");
     let item = $("hide-unused-shortcuts");

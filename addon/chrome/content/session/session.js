@@ -21,7 +21,7 @@ Tabmix.NO_NEED_TO_REPLACE = -1;
  *  sanitize privte data by delete the files session.rdf session.old
  */
 Tabmix.Sanitizer = {
-   isSanitizeTMPwithoutPrompet: function (aOnExit) {
+   isSanitizeTMPwithoutPrompet: function(aOnExit) {
      /*
       * The behavior is:
       *   - Tools > Clear Recent History... - Always show the UI
@@ -40,7 +40,7 @@ Tabmix.Sanitizer = {
       return sanitizeTabmix;
    },
 
-   tryToSanitize: function (aOnExit) {
+   tryToSanitize: function(aOnExit) {
       if (this.isSanitizeTMPwithoutPrompet(aOnExit)) {
         this.sanitize();
         return true;
@@ -65,7 +65,7 @@ Tabmix.Sanitizer = {
 
       // init new DATASource for all open window
       var enumerator = Tabmix.windowEnumerator();
-      while ( enumerator.hasMoreElements() ) {
+      while (enumerator.hasMoreElements()) {
          let wnd = enumerator.getNext();
 
          // clear DATASource
@@ -96,16 +96,18 @@ Tabmix.Sanitizer = {
       TabmixSessionManager.notifyClosedWindowsChanged();
 
       // set flag for next start
-      Tabmix.prefs.setBoolPref("sessions.sanitized" , true);
+      Tabmix.prefs.setBoolPref("sessions.sanitized", true);
       TabmixSvc.sm.sanitized = true;
    },
 
-   clearDisk: function (aFile) {
+   clearDisk: function(aFile) {
       if (aFile.exists()) {
          try {
             aFile.remove(aFile.isDirectory());
          }
-         catch (ex) { dump(ex + "\n"); Tabmix.assert(ex);} // couldn't remove the file - what now?
+         catch (ex) {
+           dump(ex + "\n"); Tabmix.assert(ex);
+         } // couldn't remove the file - what now?
       }
    }
 
@@ -113,14 +115,14 @@ Tabmix.Sanitizer = {
 
 var TabmixSessionData = { // jshint ignore:line
    docShellItems: ["Images","Subframes","MetaRedirects","Plugins","Javascript"],
-   tabAttribute:  ["protected","locked"],
+   tabAttribute: ["protected","locked"],
 
    getTabProperties: function sData_getTabProperties(aTab, checkPref) {
       if (typeof(checkPref) == "undefined") checkPref = false; // pref check is only for session manager
       var tabProperties = "", temp;
-      for ( var j = 0; j < this.tabAttribute.length; j++ ){
+      for (var j = 0; j < this.tabAttribute.length; j++) {
          temp = aTab.hasAttribute(this.tabAttribute[j]) ? aTab.getAttribute(this.tabAttribute[j]) : "false";
-         tabProperties += (temp=="true") ? "1" : "0";
+         tabProperties += (temp == "true") ? "1" : "0";
       }
       // if save.permissions is false we save all Permissions as on, so if we change this pref after session
       // was saved, the session will load with Permissions as on.
@@ -161,7 +163,7 @@ var TabmixSessionData = { // jshint ignore:line
 
       if ("colorfulTabs" in window) {
         try {
-          let ctreadonly = colorfulTabs.clrSession.getTabValue(aTab,"ctreadonly");
+          let ctreadonly = colorfulTabs.clrSession.getTabValue(aTab, "ctreadonly");
           if (ctreadonly)
             tabProperties += " ctreadonly=" + ctreadonly;
           let tabClr = colorfulTabs.clrSession.getTabValue(aTab, "tabClr");
@@ -356,7 +358,7 @@ var TabmixSessionManager = { // jshint ignore:line
 
       if (!this.isPrivateWindow && isFirstWindow) {
          // if this isn't delete on exit, we know next time that firefox crash
-         this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
+         this.prefBranch.setBoolPref("crashed", true); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
          let path = this._rdfRoot + "/closedSession/thisSession";
          this.setLiteral(path, "status", "crash");
@@ -478,7 +480,7 @@ var TabmixSessionManager = { // jshint ignore:line
           Tabmix.Sanitizer.isSanitizeTMPwithoutPrompet(true))
          return resultData;
 
-      if ( this.enableManager ) {
+      if (this.enableManager) {
          var result = {button: this.prefBranch.getIntPref("onClose"), checked: this.saveClosedtabs};
          if (result.button == 1 && !askBeforSave)
             result.button = Tabmix.BUTTON_OK;
@@ -622,7 +624,7 @@ var TabmixSessionManager = { // jshint ignore:line
       var allPopups = enabled && !window.toolbar.visible;
       var wnd, enumerator;
       enumerator = Tabmix.windowEnumerator();
-      while ( allPopups && enumerator.hasMoreElements() ) {
+      while (allPopups && enumerator.hasMoreElements()) {
          wnd = enumerator.getNext();
          allPopups = !wnd.toolbar.visible;
       }
@@ -631,7 +633,7 @@ var TabmixSessionManager = { // jshint ignore:line
 
       if (result.canClose) {
          enumerator = Tabmix.windowEnumerator();
-         while ( enumerator.hasMoreElements() ) {
+         while (enumerator.hasMoreElements()) {
             wnd = enumerator.getNext();
             wnd.TabmixSessionManager.windowClosed = true;
          }
@@ -793,7 +795,7 @@ var TabmixSessionManager = { // jshint ignore:line
         this.restoreWindowArguments();
       }
       else if (gBrowser.mCurrentTab.loadOnStartup) {
-        for (var i = 0; i < gBrowser.tabs.length ; i++)
+        for (var i = 0; i < gBrowser.tabs.length; i++)
           delete gBrowser.tabs[i].loadOnStartup;
       }
       else if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
@@ -821,7 +823,7 @@ var TabmixSessionManager = { // jshint ignore:line
                    TabmixSvc.getSMString("sm.corrupted.msg1");
          var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
          this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-               [title, msg, "", "", buttons], window, function(){});
+               [title, msg, "", "", buttons], window, function() {});
          Tabmix.assert(e);
          file.moveTo(this.profileDir, "session.old");
          this.DATASource = this.RDFService.GetDataSourceBlocking(uri);
@@ -861,7 +863,7 @@ var TabmixSessionManager = { // jshint ignore:line
         'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' ];
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
       var id = "";
       for (var i = 0; i < 8; ++i) {
@@ -925,7 +927,10 @@ var TabmixSessionManager = { // jshint ignore:line
    wrapContainer: function SM_wrapContainer(path, prop) {
       var root = this.getResource(path, prop);
       var container = this.initContainer(root);
-if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n" + "prop " + prop); return "error"}
+      if (container == "error") {
+          Tabmix.log("wrapContainer error path " + path + "\n" + "prop " + prop);
+          return "error";
+      }
       return {
          Root: root,
          Container: container,
@@ -1068,7 +1073,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      }
    },
 
-   QueryInterface: function _QueryInterface(aIID){
+   QueryInterface: function _QueryInterface(aIID) {
       if (aIID.equals(Components.interfaces.nsIObserver) ||
             aIID.equals(Components.interfaces.nsISupports) ||
             aIID.equals(Components.interfaces.nsISupportsWeakReference))
@@ -1076,16 +1081,16 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       throw Components.results.NS_NOINTERFACE;
    },
 
-   closeProtectedTabs: function(){
+   closeProtectedTabs: function() {
      var protectedTabs = gBrowser.tabContainer.getElementsByAttribute("protected", true);
-     for (var i = protectedTabs.length - 1 ; i >= 0; i--) {
+     for (var i = protectedTabs.length - 1; i >= 0; i--) {
        var tab = protectedTabs[i];
        tab.removeAttribute("protected");
        this.removeTab(tab);
      }
    },
 
-   savedPrefs: { },
+   savedPrefs: {},
    observe: function SM_observe(aSubject, aTopic, aData) {
       switch (aTopic) {
          case "quit-application-requested":
@@ -1130,7 +1135,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                this.saveState();
             }
             let slef = this;
-            setTimeout(function(){
+            setTimeout(function() {
               TMP_ClosedTabs.setButtonDisableState();
               slef.toggleRecentlyClosedWindowsButton();
             }, 0);
@@ -1182,7 +1187,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   if (!this.prefBranch.getBoolPref("manager") && !this.prefBranch.getBoolPref("crashRecovery")) {
                     this.globalPrivateBrowsing = false;
                     var self = this;
-                    window.setTimeout(function () {
+                    window.setTimeout(function() {
                       TMP_ClosedTabs.setButtonDisableState();
                       self.toggleRecentlyClosedWindowsButton();
                     }, 100);
@@ -1190,8 +1195,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                   }
                   TMP_ClosedTabs.removeAllClosedTabs(); // to be on the safe side...
                   this.removeSession(this.gThisWin, this.gSessionPath[0]);
-                  window.setTimeout(function () {TMP_ClosedTabs.setButtonDisableState(); }, 0);
-                  this.afterExitPrivateBrowsing = window.setTimeout(function (self) {
+                  window.setTimeout(function() {TMP_ClosedTabs.setButtonDisableState(); }, 0);
+                  this.afterExitPrivateBrowsing = window.setTimeout(function(self) {
                     self.globalPrivateBrowsing = false;
                     self.windowClosed = false;
                     self.onSessionRestored(true);
@@ -1200,7 +1205,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                     self.saveStateDelayed();
                     self.updateClosedWindowsMenu("check");
                     self.afterExitPrivateBrowsing = null;
-                  },0, this);
+                  }, 0, this);
                   break;
             }
          break;
@@ -1301,10 +1306,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var title, msg, buttons;
       var areYouSure = TabmixSvc.getSMString("sm.areYouSure.msg");
       var chooseStartup = TabmixSvc.getSMString("sm.canChooseStartup.msg");
-      switch ( caller ) {
+      switch (caller) {
          case "addWinToSession":
             title = TabmixSvc.getSMString("sm.addtoStartup.title");
-            var msgType = caller=="addWinToSession" ? "windows" : "tabs";
+            var msgType = caller == "addWinToSession" ? "windows" : "tabs";
             msg = TabmixSvc.getSMString("sm.addtoStartup.msg." + msgType) + "\n" +
                   label + "\n" + areYouSure + "\n\n" + chooseStartup;
             buttons = [TabmixSvc.setLabel("sm.addtoStartup.button0"),
@@ -1400,7 +1405,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       }
    },
 
-   copySubtree: function (oldRoot, newRoot) {
+   copySubtree: function(oldRoot, newRoot) {
       var allElements = this.DATASource.GetAllResources();
       while (allElements.hasMoreElements()) {
          var aResource = allElements.getNext();
@@ -1415,7 +1420,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var sessionpath = !newPath ? "--" : this.prefBranch.getCharPref("onStart.sessionpath");
       this.prefBranch.setIntPref("onStart.loadsession", result.value);
       if (result.value > -1) {
-         if (result.label == sessionpath ) this.prefBranch.setCharPref("onStart.sessionpath", newPath);
+         if (result.label == sessionpath) this.prefBranch.setCharPref("onStart.sessionpath", newPath);
          else this.prefBranch.setCharPref("onStart.sessionpath", result.label);
       }
       Services.prefs.savePrefFile(null); // store the pref immediately
@@ -1434,7 +1439,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var newPath = this._rdfRoot + "/saved/" + id + "/window";
       if (action == "save") {
          // ask the user for new name or for exist name if the user want to replace
-         var session = this.getSessionName("save"+what);
+         var session = this.getSessionName("save" + what);
          if (session.button == Tabmix.BUTTON_CANCEL) return; // user cancel
          else if (session.button == Tabmix.BUTTON_EXTRA1) oldPath = session.path;
          name = session.name;
@@ -1450,13 +1455,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          if (result.button == Tabmix.BUTTON_CANCEL) return; // user cancel
          else if (result.button == Tabmix.BUTTON_OK) this.replaceStartupPref(result, newPath);
       }
-      var count = this.saveOneOrAll("save"+what, newPath, saveClosedTabs);
+      var count = this.saveOneOrAll("save" + what, newPath, saveClosedTabs);
       if (count) this.insertSession(count, name, newPath, oldPath);
       else Tabmix.log("Error in " + action + " " + what);
    },
 
    isValidtoSave: function() {
-      if ( !this.enableManager ) return false;
+      if (!this.enableManager) return false;
       if (!this.isWindowValidtoSave()) {
          var title = TabmixSvc.getSMString("sm.title");
          var msg = TabmixSvc.getSMString("sm.dontSaveBlank.msg");
@@ -1479,7 +1484,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       if (this.isPrivateWindow)
         return false;
       var numTabs, numWindows;
-      switch ( action ) {
+      switch (action) {
          case "savethiswindow":
                numTabs = this.saveOneWindow(path, "", false, saveClosedTabs);
                numWindows = 1;
@@ -1501,10 +1506,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var index = 0;
       if (oldPath !== "") index = container.IndexOf(this.RDFService.GetResource(oldPath));
       var node = this.RDFService.GetResource(path);
-      container.InsertElementAt(node, index+1, true);
+      container.InsertElementAt(node, index + 1, true);
       if (oldPath !== "") { // remove the session we replace
          container.RemoveElementAt(index, true);
-         this.removeSession(oldPath, this._rdfRoot+'/windows');
+         this.removeSession(oldPath, this._rdfRoot + '/windows');
       }
       this.setLiteral(node, "name", name);
       this.setLiteral(node, "nameExt", this.getNameData(count.win, count.tab));
@@ -1522,7 +1527,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var title = TabmixSvc.getSMString("sm.sessionName.title." + action);
       var label, buttons, actionFlag;
       var sessionList = this.getSessionList("saved");
-      if (action=="rename") {
+      if (action == "rename") {
          label = old;
          buttons = [TabmixSvc.setLabel("sm.sessionName.button0"),
                         TabmixSvc.setLabel("sm.sessionName.button1")].join("\n");
@@ -1531,7 +1536,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          label = action == "saveprevious" ? old : gBrowser.mCurrentTab.label;
          buttons = [TabmixSvc.setLabel("sm.askBeforSave.button0"),
                         TabmixSvc.setLabel("sm.askBeforSave.button1"),
-                        TabmixSvc.setLabel("sm.replaceStartup.button0")+"..."].join("\n");
+                        TabmixSvc.setLabel("sm.replaceStartup.button0") + "..."].join("\n");
          actionFlag = Tabmix.DLG_SAVE;
       }
       label = label + "\n" + sessionList.list.join("\n");
@@ -1541,7 +1546,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          case Tabmix.BUTTON_CANCEL: return {button: result.button};
          case Tabmix.BUTTON_OK:
          case Tabmix.BUTTON_EXTRA1 :
-            var trimResult = result.label.replace(/^[\s]+/g,"").replace(/[\s]+$/g,"");
+            var trimResult = result.label.replace(/^[\s]+/g, "").replace(/[\s]+$/g, "");
             return {button: result.button, name: encodeURI(trimResult),
                     path: sessionList.path[result.value], saveClosedTabs: result.checked};
       }
@@ -1568,16 +1573,16 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    getNameData: function(numWindows, numTabs) {
       var d = new Date();
-      var date = [d.getFullYear(), '/', d.getMonth()<9 ? "0":"",
-                  d.getMonth()+1, '/', d.getDate()<10 ? "0":"", d.getDate()].join('');
-      var time = [d.getHours()<10 ? "0":"", d.getHours(), ':',
-                  d.getMinutes()<10 ? "0":"", d.getMinutes(), ':',
-                  d.getSeconds()<10 ? "0":"", d.getSeconds()].join('');
+      var date = [d.getFullYear(), '/', d.getMonth() < 9 ? "0" : "",
+                  d.getMonth() + 1, '/', d.getDate() < 10 ? "0" : "", d.getDate()].join('');
+      var time = [d.getHours() < 10 ? "0" : "", d.getHours(), ':',
+                  d.getMinutes() < 10 ? "0" : "", d.getMinutes(), ':',
+                  d.getSeconds() < 10 ? "0" : "", d.getSeconds()].join('');
       var empty = TabmixSvc.getSMString("sm.session.empty");
       var T = TabmixSvc.getSMString("sm.session.tabs");
       var W = TabmixSvc.getSMString("sm.session.windows");
       if (numWindows === 0) return ", (" + empty + ") (" + date + " " + time + ")";
-      else if (numWindows < 2) return ", (" + numTabs + " "+ T + ") (" + date + " " + time + ")";
+      else if (numWindows < 2) return ", (" + numTabs + " " + T + ") (" + date + " " + time + ")";
       return ", (" + numWindows + " " + W + ", " + numTabs + " " + T + ") (" + date + " " + time + ")";
    },
 
@@ -1587,13 +1592,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
         return false;
 
       var overwriteWindows = this.prefBranch.getBoolPref("restore.overwritewindows") || Tabmix.singleWindowMode;
-      document.getElementById("tm-sm-OpenInCurrenWindow").setAttribute("default",overwriteWindows);
-      document.getElementById("tm-sm-OpenInNewWindow").setAttribute("default",!overwriteWindows);
+      document.getElementById("tm-sm-OpenInCurrenWindow").setAttribute("default", overwriteWindows);
+      document.getElementById("tm-sm-OpenInNewWindow").setAttribute("default", !overwriteWindows);
       document.getElementById("tm-sm-OpenInNewWindow").hidden = Tabmix.singleWindowMode;
 
       var mValue = triggerNode.getAttribute("value");
       if (mValue <= -1)
-         document.getElementById("tm-sm-Rename").setAttribute("disabled",true);
+         document.getElementById("tm-sm-Rename").setAttribute("disabled", true);
       else
          document.getElementById("tm-sm-Rename").removeAttribute("disabled");
 
@@ -1607,7 +1612,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             mItem.removeAttribute("checked");
       } else {
          mItem.removeAttribute("checked");
-         mItem.setAttribute("disabled",true);
+         mItem.setAttribute("disabled", true);
       }
 
       var mShowext = document.getElementById("tm-sm-showext");
@@ -1651,7 +1656,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // call restoreSession after delay to let the popup menu time to hide
       window.setTimeout(function() {
         this.delayRestoreSession(node, overwriteWindows);
-      }.bind(this), 0 );
+      }.bind(this), 0);
    },
 
    delayRestoreSession: function(node, overwriteWindows) {
@@ -1692,7 +1697,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    removeFromMenu: function(event, popup, root) {
       if (!Tabmix.prefs.getBoolPref("middleclickDelete")) return;
-      if ( event.button == 1 && ("session" in event.target)) {
+      if (event.button == 1 && ("session" in event.target)) {
          this.removeSavedSession(event.target);
          if (root == this.gSessionPath[0] && this.isClosedWindowsEmpty()) popup.hidePopup();
          else this.createMenu(popup, root);
@@ -1713,7 +1718,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
               this.replaceStartupPref(result, "");
               /* falls through */
             case Tabmix.NO_NEED_TO_REPLACE:
-              this.removeSession(path, this._rdfRoot+'/windows');
+              this.removeSession(path, this._rdfRoot + '/windows');
          }
       } else if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows") {
          this.removeSession(path, this.gSessionPath[0]);
@@ -1737,8 +1742,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             this.deleteSubtree(this.gSessionPath[1]);
             this.deleteSubtree(this.gSessionPath[2]);
             this.deleteSubtree(this.gSessionPath[3]);
-            this.deleteSubtree(this._rdfRoot+'/saved');
-            this.deleteSubtree(this._rdfRoot+'/windows');
+            this.deleteSubtree(this._rdfRoot + '/saved');
+            this.deleteSubtree(this._rdfRoot + '/windows');
             this.saveStateDelayed();
             this.prefBranch.setIntPref("onStart.loadsession", -1);
             Services.prefs.savePrefFile(null); // store the pref immediately
@@ -1797,7 +1802,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var nodeToDelete = [];
       var noProp = typeof(prop) == "undefined";
       var valueExist = typeof(value) == "string";
-      while(containerEnum.hasMoreElements()) {
+      while (containerEnum.hasMoreElements()) {
          var node = containerEnum.getNext();
          var propExist = noProp ? true : this.nodeHasArc(node, prop);
          if (valueExist && !noProp && propExist && this.getLiteralValue(node, prop) != value) propExist = false;
@@ -1843,7 +1848,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
      popup_menu.id = menu.id + "_menu";
      menu.appendChild(popup_menu);
      popup_menu.childNodes[2].hidden = false;
-     this.createMenu(popup_menu, this._rdfRoot+'/windows');
+     this.createMenu(popup_menu, this._rdfRoot + '/windows');
    },
 
    createMenuForDialog: function(popup, contents) {
@@ -1852,7 +1857,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          this.createMenu(popup, window.opener.this.gSessionPath[0], contents);
       } else {
          // create saved Session popup menu
-         this.createMenu(popup, this._rdfRoot+'/windows', contents);
+         this.createMenu(popup, this._rdfRoot + '/windows', contents);
          // check if sessionpath and loadsessions valid for saved session
          var loadsession = this.prefBranch.getIntPref("onStart.loadsession");
          if (loadsession > -1 && contents != 1 && loadsession != popup.parentNode.sessionIndex) {
@@ -1902,7 +1907,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var sessionpath = this.prefBranch.getCharPref("onStart.sessionpath");
       var showTooltip = sessionmanagerMenu || onClosedWindowsList;
       var closedWinList = parentId.indexOf("closedwindows") != -1;
-      while(containerEnum.hasMoreElements()) {
+      while (containerEnum.hasMoreElements()) {
          node = containerEnum.getNext();
          if (this.nodeHasArc(node, "private") || this.nodeHasArc(node, "status") &&
                this.getLiteralValue(node, "status") != "saved") continue;
@@ -1931,7 +1936,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          mi.value = i;
          if (parentID != "onStart.loadsession") {
             index = closedWinList ? count - 1 - i : i;
-            accessKey = (index > 25) ? "" : String.fromCharCode(65 + index) + "  " ;
+            accessKey = (index > 25) ? "" : String.fromCharCode(65 + index) + "  ";
             mi.setAttribute("accesskey", accessKey);
             mi.setAttribute("label", accessKey + name + (showNameExt ? nameExt : ""));
             if (showTooltip) mi.setAttribute("tooltiptext", accessKey + name + nameExt);
@@ -1941,7 +1946,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          popup.insertBefore(mi, closedWinList ? popup.childNodes[1] : endSeparator);
       }
       var allEmpty = true;
-      switch ( parentID ) {
+      switch (parentID) {
          case "sessionmanagerMenu":
             var observer = document.getElementById("tmp_menu_AllWindows");
             var isOneWindow = Tabmix.isSingleBrowserWindow;
@@ -1959,9 +1964,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
             var menu;
             var empty = ", (" + TabmixSvc.getSMString("sm.session.empty") + ")";
-            for (i = 0; i < sessionLabel.length; i++ ){
+            for (i = 0; i < sessionLabel.length; i++) {
                menu = document.createElement("menuitem");
-               var [sLabel , sessionIndex] = sessionLabel[i].split(" ");
+               var [sLabel, sessionIndex] = sessionLabel[i].split(" ");
                menu.session = this.gSessionPath[sessionIndex];
                menu.command = menuCommand;
                if (this.containerEmpty(menu.session) && contents != 1)
@@ -1975,13 +1980,13 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                menu.setAttribute("value", (-1 - i));
                if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
                   menu.addEventListener("command", restoreSession);
-               popup.appendChild (menu);
+               popup.appendChild(menu);
             }
             if (afterCrash && contents != 1) { // add separator before Crashed menu item
                menu = document.createElement("menuseparator");
                popup.insertBefore(menu, popup.lastChild);
             }
-            if (contents == 1) loadsession = -1; //set "Last Sessoin" as default in the list
+            if (contents == 1) loadsession = -1; // set "Last Sessoin" as default in the list
             this.setDefaultIndex(popup, loadsession, sessionpath);
             break;
          case "onStart.loadsession":
@@ -2003,7 +2008,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
    },
 
    // set defaultIndex, sessionIndex and default Attribute
-   setDefaultIndex : function(popup, loadsession, sessionpath) {
+   setDefaultIndex: function(popup, loadsession, sessionpath) {
       popup.parentNode.defaultIndex = -1; // index with menuseparator
       popup.parentNode.sessionIndex = -1; // index without menuseparator
       var i, item, value, checked;
@@ -2023,9 +2028,9 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
    // update disable/enable to closed window list in tool menu and toolbar
    updateClosedWindowsMenu: function(action) {
-      var disabled = (action == "check") ? this.isClosedWindowsEmpty(): action;
+      var disabled = (action == "check") ? this.isClosedWindowsEmpty() : action;
       var wnd, enumerator = Tabmix.windowEnumerator();
-      while ( enumerator.hasMoreElements() ) {
+      while (enumerator.hasMoreElements()) {
          wnd = enumerator.getNext();
          wnd.Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
       }
@@ -2035,7 +2040,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var node, disabled = true;
       var aContainer = this.initContainer(this.gSessionPath[0]);
       var containerEnum = aContainer.GetElements();
-      while(containerEnum.hasMoreElements()) {
+      while (containerEnum.hasMoreElements()) {
          node = containerEnum.getNext();
          if (this.getLiteralValue(node, "status") == "saved") {
             disabled = false;
@@ -2101,7 +2106,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          var closedWinList = this.initContainer(this.gSessionPath[0]).GetCount();
          var lastSession = this.containerEmpty(this.gSessionPath[1]); // last session
          var prevtoLast = this.containerEmpty(this.gSessionPath[2]); // previous to last
-         var savedSession = this.containerEmpty(this._rdfRoot+'/windows'); // saved session
+         var savedSession = this.containerEmpty(this._rdfRoot + '/windows'); // saved session
          var isAllEmpty = lastSession && prevtoLast && savedSession;
          var callBack = function(aResult) {
             this.afterCrashPromptCallBack(aResult);
@@ -2171,7 +2176,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          this.prefBranch.setBoolPref("manager", true); // enable session manager
          try {
             Services.prefs.savePrefFile(null); // store the pref immediately
-         } catch(ex) { }
+         } catch (ex) { }
       }
       if (aResult.button == Tabmix.BUTTON_OK) {
          switch (this.callBackData.whattoLoad) {
@@ -2206,15 +2211,15 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       // swap 0 --> 1 --> 2 --> 0
       var i;
       var sessions = [], subTree, aSession;
-      for (i = 0; i < sessionType.length-1; i++) {
+      for (i = 0; i < sessionType.length - 1; i++) {
          sessions.push(this.getResource(path + sessionType[i], "session"));
       }
-      for (i = 0; i < sessionType.length-1; i++) {
+      for (i = 0; i < sessionType.length - 1; i++) {
          if (i === 0) { // delete oldest session subtree
-            aSession = sessions[sessionType.length-2];
+            aSession = sessions[sessionType.length - 2];
             subTree = aSession.QueryInterface(Ci.nsIRDFResource).Value;
             this.deleteSubtree(subTree);
-         } else aSession = sessions[i-1];
+         } else aSession = sessions[i - 1];
          this.setResource(path + sessionType[i], "session", aSession);
       }
       for (i = 0; i < sessionType.length; i++) {
@@ -2251,7 +2256,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
       var loadSession = this.prefBranch.getIntPref("onStart.loadsession");
       // after last session end with restart load the last session without any prompt
       // unless we are after crash
-      var startupEmpty = false, savePref = false ;
+      var startupEmpty = false, savePref = false;
       var result = {}, title, msg = "", buttons;
       if (afterCrash)
          title = TabmixSvc.getSMString("sm.afterCrash.title");
@@ -2269,7 +2274,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             if (afterCrash)
                msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
             buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-            let callBack = function (aResult) {
+            let callBack = function(aResult) {
                this.enableCrashRecovery(aResult);
                this._sendRestoreCompletedNotifications(true);
             }.bind(this);
@@ -2283,7 +2288,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
 
       var sessionPath = sessionList.path;
       var loadSessionIsValid = true, sessionIndex, thisPath;
-      switch ( (loadSession > 0) ? 0 : loadSession ) {
+      switch ((loadSession > 0) ? 0 : loadSession) {
          case 0:
             sessionIndex = null;
             if (this.prefBranch.prefHasUserValue("onStart.sessionpath")) {
@@ -2321,7 +2326,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
             break;
       }
       if (restoreFlag > 0 || afterCrash || (startupEmpty && askifempty) || !loadSessionIsValid) {
-try{
+try {
          if (afterCrash)
             msg += TabmixSvc.getSMString("sm.afterCrash.msg0") + " " +
                    TabmixSvc.getSMString("sm.start.msg1");
@@ -2374,7 +2379,7 @@ try{
 
   // Add delay when calling prompt on startup
   promptService: function(intParam, strParam, aWindow, aCallBack) {
-    setTimeout(function(){
+    setTimeout(function() {
       Tabmix.promptService(intParam, strParam, aWindow, aCallBack);
     }, 0);
   },
@@ -2413,7 +2418,7 @@ try{
   * move all tabs & closed tabs into one window
   * (original code by Session Manager extension)
   */
-  mergeWindows: function(state){
+  mergeWindows: function(state) {
     if (state.windows.length < 2)
       return;
     // take off first window
@@ -2453,10 +2458,10 @@ try{
 
    getSessionList: function SM_getSessionList(flag) {
       var aList = [], sessionPath = [];
-      var aContainer = this.initContainer(this._rdfRoot+'/windows');
+      var aContainer = this.initContainer(this._rdfRoot + '/windows');
       var containerEnum = aContainer.GetElements();
       var node, aName;
-      while(containerEnum.hasMoreElements()) {
+      while (containerEnum.hasMoreElements()) {
          node = containerEnum.getNext();
          if (flag != "onlyPath") {
            aName = this.getDecodedLiteralValue(node, "name");
@@ -2487,8 +2492,8 @@ try{
 
    saveAllWindows: function SM_saveAllWindows(path, caller, saveClosedTabs) {
       var enumerator = Tabmix.windowEnumerator();
-      var wnd, savedTabs = 0 , savedWin = 0, thisWin;
-      while ( enumerator.hasMoreElements() ) {
+      var wnd, savedTabs = 0, savedWin = 0, thisWin;
+      while (enumerator.hasMoreElements()) {
          wnd = enumerator.getNext();
          if (this.isWindowPrivate(wnd))
            continue;
@@ -2512,7 +2517,7 @@ try{
          curTime = this.getLiteralValue(thisSession, "timestamp", 0);
       else {
          var pref = "warnAboutClosingTabs.timeout";
-         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref)*1 : 0;
+         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) * 1 : 0;
          curTime = new Date().valueOf() - delay;
       }
       var windowEnum = container.GetElements();
@@ -2524,7 +2529,7 @@ try{
                this.setLiteral(rdfNodeLastWindow, "dontLoad", "true");
          }
       }
-      var count = this.countWinsAndTabs(container,  "dontLoad");
+      var count = this.countWinsAndTabs(container, "dontLoad");
       return count.win > 0 && count.tab > 0;
    },
 
@@ -2624,7 +2629,7 @@ try{
          this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
          this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));
          var pref = "warnAboutClosingTabs.timeout";
-         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref)*1 : 0;
+         var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) * 1 : 0;
          var newTime = new Date().valueOf() - delay;
          this.setLiteral(rdfNodeThisWindow, "timestamp", newTime);
          // if we overwrite window we don't load it again on restart
@@ -2824,14 +2829,14 @@ try{
    },
 
    saveAllTab: function SM_saveAllTab(winPath) {
-      var savedTabs = 0 ;
+      var savedTabs = 0;
       var rdfNodeTabs = this.getResource(winPath, "tabs");
       var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
       var tabContainer = this.initContainer(rdfNodeTabs);
       for (var i = 0; i < gBrowser.tabs.length; i++) {
          var aTab = gBrowser.tabs[i];
          if (this.saveTab(aTab, rdfLabelTabs, tabContainer, true))
-           savedTabs ++;
+           savedTabs++;
       }
       return savedTabs;
    },
@@ -2857,7 +2862,7 @@ try{
       var tabState;
       try {
          tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-      } catch(ex) {
+      } catch (ex) {
          if (!Tabmix.isVersion(280) && browser.userTypedValue == "about:config" && browser.__SS_data)
             tabState = browser.__SS_data;
       }
@@ -2892,12 +2897,12 @@ try{
    },
 
    saveTabData: function SM_saveTabData(aNode, aData) {
-      this.setIntLiteral(aNode, "index",      aData.index);
-      this.setIntLiteral(aNode, "tabPos",     aData.pos);
-      this.setLiteral   (aNode, "image",      aData.image || "");
-      this.setLiteral   (aNode, "properties", aData.properties);
-      this.setLiteral   (aNode, "history",    aData.history);
-      this.setLiteral   (aNode, "scroll",     aData.scroll);
+      this.setIntLiteral(aNode, "index", aData.index);
+      this.setIntLiteral(aNode, "tabPos", aData.pos);
+      this.setLiteral(aNode, "image", aData.image || "");
+      this.setLiteral(aNode, "properties", aData.properties);
+      this.setLiteral(aNode, "history", aData.history);
+      this.setLiteral(aNode, "scroll", aData.scroll);
       if (aData.closedAt)
          this.setLiteral(aNode, "closedAt", aData.closedAt);
    },
@@ -3049,7 +3054,7 @@ try{
                    sessionCount == 1 && saveBeforOverwrite && overwriteTabs) {
                  this.saveOneWindow(this.gSessionPath[0], "", true);
                }
-               var newCaller = (sessionCount != 1) ? caller+"-concatenate" : caller;
+               var newCaller = (sessionCount != 1) ? caller + "-concatenate" : caller;
                this.loadOneWindow(windowPath, newCaller);
             } else {
                let win = windowsList.pop();
@@ -3107,12 +3112,12 @@ try{
          features += aPrivate ? ",private" : ",non-private";
       var newWindow = window.openDialog("chrome://browser/content/browser.xul",
           "_blank", features, null);
-      newWindow.tabmixdata = { path: aPath, caller: aCaller };
+      newWindow.tabmixdata = {path: aPath, caller: aCaller};
    },
 
    loadOneWindow: function SM_loadOneWindow(path, caller) {
       var overwrite = true, restoreSelect = this.prefBranch.getBoolPref("save.selectedtab");
-      switch ( caller ) {
+      switch (caller) {
          case "firstwindowopen":
                overwrite = false;
                let hasFirstArgument = window.arguments && window.arguments[0];
@@ -3152,7 +3157,7 @@ try{
       var rdfNodeWindow = this.RDFService.GetResource(path);
       var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
       if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || this.containerEmpty(rdfNodeTabs)) {
-         alert(TabmixSvc.getSMString("sm.restoreError.msg0") + "\n"  + TabmixSvc.getSMString("sm.restoreError.msg1"));
+         alert(TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" + TabmixSvc.getSMString("sm.restoreError.msg1"));
          return;
       }
 
@@ -3184,7 +3189,7 @@ try{
       var newIndex, aTab, loadOnStartup = [];
       if (newtabsCount > 0 && overwrite) {
          // unpinned tabs reorder tabs, so we loob backward
-         for (let i = gBrowser.tabs.length - 1 ; i >= 0; i--) {
+         for (let i = gBrowser.tabs.length - 1; i >= 0; i--) {
            this.resetTab(gBrowser.tabs[i]);
          }
          while (newtabsCount > gBrowser.tabs.length) {
@@ -3205,7 +3210,7 @@ try{
          // catch blank tab for reuse
          var blankTabs = [], blankTabsCount = 0, currentTabIsBalnk = false;
          // unpinned tabs reorder tabs loob backward
-         for (let i = gBrowser.tabs.length - 1 ; i >= 0; i--) {
+         for (let i = gBrowser.tabs.length - 1; i >= 0; i--) {
             aTab = gBrowser.tabs[i];
             // make sure we not overwrite tab that loads from apps
             if (aTab.loadOnStartup) {
@@ -3259,7 +3264,7 @@ try{
          let needToMove = openTabNext && !concatenate;
          let newPos = needToMove ? cTab._tPos + 1 : lastIndex + 1;
          // move blank tabs to new position
-         for (let t = 0; t < blankTabs.length ; t++) {
+         for (let t = 0; t < blankTabs.length; t++) {
             blankTab = blankTabs[t];
             let tabPos = blankTab._tPos < newPos ? newPos - 1 : newPos;
             gBrowser.moveTabTo(blankTab, tabPos);
@@ -3290,8 +3295,8 @@ try{
                gBrowser.moveTabTo(cTab, newPos + lastSelectedIndex);
             }
             else
-              this.updateSelected(newPos + lastSelectedIndex, caller=="firstwindowopen" ||
-                                  caller=="windowopenedbytabmix");
+              this.updateSelected(newPos + lastSelectedIndex, caller == "firstwindowopen" ||
+                                  caller == "windowopenedbytabmix");
          }
          newIndex = newPos;
       }
@@ -3310,7 +3315,7 @@ try{
         activeGroupId = groups.activeGroupId;
       let tabs = [], numVisibleTabs = 0, firstVisibleTab = -1;
       let needToReload = this.prefBranch.getBoolPref("restore.reloadall");
-      for (let t = 0; t < tabsData.length ; t++) {
+      for (let t = 0; t < tabsData.length; t++) {
         let data = tabsData[t];
         let tab = gBrowser.tabs[newIndex + t];
         tabs.push(tab);
@@ -3371,7 +3376,7 @@ try{
 
       // when resuming at startup: add additionally requested pages to the end
       if (caller == "firstwindowopen" && loadOnStartup.length) {
-        let lastPlace = gBrowser.tabs.length-1;
+        let lastPlace = gBrowser.tabs.length - 1;
         Array.forEach(loadOnStartup, function(aTab) {
           gBrowser.moveTabTo(aTab, lastPlace);
         });
@@ -3384,7 +3389,7 @@ try{
          caller1 = window.tabmixdata.caller;
          delete window.tabmixdata;
       }
-      if (caller == "openclosedwindow" || caller1 == "openclosedwindow"){
+      if (caller == "openclosedwindow" || caller1 == "openclosedwindow") {
          if (this.nodeHasArc(rdfNodeWindow, "reOpened")) {
             this.removeSession(path, this.gSessionPath[0]);
             this.updateClosedWindowsMenu("check");
@@ -3406,7 +3411,7 @@ try{
       if (typeof this.tabsToLoad == "number" && --this.tabsToLoad === 0) {
          delete this.tabsToLoad;
          TabmixTabbar.updateBeforeAndAfter(); // just in case (we do it also in setTabTitle
-         if (this.enableBackup){
+         if (this.enableBackup) {
             var result = this.saveOneWindow(this.gSessionPath[0], "windowbackup");
             if (result > 0)
                this.saveStateDelayed(-1);
@@ -3532,7 +3537,7 @@ try{
       }
    },
 
-   copyClosedTabsToSessionStore: function (aPath, aOverwrite) {
+   copyClosedTabsToSessionStore: function(aPath, aOverwrite) {
       if (!this.saveClosedtabs)
         return;
       this.saveClosedTabs(aPath, this.gThisWin, "closedtabs");
@@ -3543,7 +3548,7 @@ try{
       if (Tabmix.isVersion(260))
         TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
       else {
-        let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
+        let state = {windows: [{_closedTabs: closedTabsData, selected: 0}], _firstTabs: true};
         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
       }
       TMP_ClosedTabs.setButtonDisableState();
@@ -3590,7 +3595,7 @@ try{
       var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";
       data.properties = "0" + _locked;
       if ("disallow" in tabState && tabState.disallow) {
-         for (let j = 0; j < TabmixSessionData.docShellItems.length; j++ )
+         for (let j = 0; j < TabmixSessionData.docShellItems.length; j++)
             data.properties += tabState.disallow.indexOf(TabmixSessionData.docShellItems[j]) == -1 ? "1" : "0";
       }
       else {
@@ -3646,7 +3651,7 @@ try{
       this.saveStateDelayed();
    },
 
-   removeTab: function (aTab) {
+   removeTab: function(aTab) {
       // add blank tab before removing last tab to prevent browser closing with last tab
       // and the default replacing last tab option
       if (gBrowser.tabs.length == 1)
@@ -3671,7 +3676,7 @@ try{
       // "extensions.tabmix.sessions.max_backups";
       try {
         maxBackups = this.prefBranch.getIntPref("max_backups");
-      } catch(ex) { }
+      } catch (ex) { }
 
       this.archiveSessionsFile(maxBackups, false /* don't force */);
     }
@@ -3702,7 +3707,7 @@ try{
         backups.push(entry.leafName);
     }
 
-    if (backups.length ===  0)
+    if (backups.length === 0)
       return null;
 
     backups.sort();
@@ -3733,8 +3738,8 @@ try{
     // Use YYYY-MM-DD (ISO 8601) as it doesn't contain illegal characters
     // and makes the alphabetical order of multiple backup files more useful.
     var d = new Date();
-    var date = [d.getFullYear(), '-', d.getMonth()<9 ? "0":"", d.getMonth()+1, '-',
-                d.getDate()<10 ? "0":"", d.getDate()].join('');
+    var date = [d.getFullYear(), '-', d.getMonth() < 9 ? "0" : "", d.getMonth() + 1, '-',
+                d.getDate() < 10 ? "0" : "", d.getDate()].join('');
     var backupFilename = "tabmix_sessions-" + date + ".rdf";
     var backupFile = null;
     if (!aForceArchive) {
@@ -3810,7 +3815,7 @@ try{
   _aftertWindowStateReady: function() { },
   _saveTabviewData: function() { },
   _setTabviewTab: function() { },
-  _tabviewData: { },
+  _tabviewData: {},
 
   /* ............... DEPRECATED ............... */
 

@@ -4,7 +4,7 @@ var gMousePane = {
   _inited: false,
   clickTab: null,
   clickTabbar: null,
-  init: function () {
+  init: function() {
     this._inited = true;
 
     if (TabmixSvc.isMac) {
@@ -31,7 +31,7 @@ var gMousePane = {
     gPrefWindow.initPane("paneMouse");
   },
 
-  tabSelectionChanged: function (aEvent) {
+  tabSelectionChanged: function(aEvent) {
     if (aEvent.target.localName != "tabs")
       return;
     gPrefWindow.tabSelectionChanged(aEvent);
@@ -41,7 +41,7 @@ var gMousePane = {
   },
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],
-  updatePanelPrefs: function (aIndex) {
+  updatePanelPrefs: function(aIndex) {
     let panel = this._options[aIndex];
     let prefID = "pref_" + panel + "ClickTab";
     // update "ClickTab" menulist
@@ -55,24 +55,24 @@ var gMousePane = {
     Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
   },
 
-  updatePref: function (element, prefID) {
+  updatePref: function(element, prefID) {
     let preference = $(prefID);
     element.setAttribute("preference", prefID);
     preference.setElementValue(element);
   },
 
-  ensureElementIsVisible: function (aPopup) {
+  ensureElementIsVisible: function(aPopup) {
     var scrollBox = document.getAnonymousElementByAttribute(aPopup, "class", "popup-internal-box");
     scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
   },
 
-  resetPreference: function (checkbox) {
+  resetPreference: function(checkbox) {
     let menulist = $(checkbox.getAttribute("control"));
     let prefID = menulist.getAttribute("preference");
     $(prefID).valueFromPreferences = checkbox.checked ? (menulist[prefID] || undefined) : -1;
   },
 
-  setCheckedState: function (menulist) {
+  setCheckedState: function(menulist) {
     let prefID = menulist.getAttribute("preference");
     let val = $(prefID).value;
     if (val != -1)
@@ -81,7 +81,7 @@ var gMousePane = {
     menulist.previousSibling.checked = !menulist.disabled;
   },
 
-  updatedblClickTabbar: function (pref) {
+  updatedblClickTabbar: function(pref) {
     let dblClickTabbar = $("pref_dblclick_changesize");
     if (pref.value && !dblClickTabbar.value)
       dblClickTabbar.value = pref.value;

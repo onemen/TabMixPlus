@@ -12,12 +12,12 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "Prefs", function () {
+XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 let TYPE;
-XPCOMUtils.defineLazyGetter(this, "SSS", function () {
+XPCOMUtils.defineLazyGetter(this, "SSS", function() {
     let sss = Cc['@mozilla.org/content/style-sheet-service;1']
                         .getService(Ci.nsIStyleSheetService);
     TYPE = sss.AGENT_SHEET;
@@ -40,7 +40,7 @@ this.DynamicRules = {
 
   _initialized: false,
 
-  init: function (aWindow) {
+  init: function(aWindow) {
     if (this._initialized)
       return;
     this._initialized = true;
@@ -48,7 +48,7 @@ this.DynamicRules = {
     this.treeStyleTab = aWindow.Tabmix.extensions.treeStyleTab;
 
     Prefs.addObserver("", this, false);
-    STYLENAMES.forEach(function(pref){
+    STYLENAMES.forEach(function(pref) {
       Services.prefs.addObserver("extensions.tabmix." + pref, this, false);
     }, this);
     Services.obs.addObserver(this, "quit-application", false);
@@ -69,7 +69,7 @@ this.DynamicRules = {
     }
   },
 
-  onPrefChange: function (data) {
+  onPrefChange: function(data) {
     let prefName = data.split(".").pop();
     if (STYLENAMES.indexOf(prefName) > -1) {
       if (prefName == data)
@@ -79,16 +79,16 @@ this.DynamicRules = {
     }
   },
 
-  onQuitApplication: function () {
+  onQuitApplication: function() {
     Services.obs.removeObserver(this, "quit-application");
     Prefs.removeObserver("", this);
-    STYLENAMES.forEach(function(pref){
+    STYLENAMES.forEach(function(pref) {
       Services.prefs.removeObserver("extensions.tabmix." + pref, this);
       this.unregisterSheet(pref);
     }, this);
   },
 
-  updateOpenedWindows: function (ruleName) {
+  updateOpenedWindows: function(ruleName) {
     // update all opened windows
     let windowsEnum = Services.wm.getEnumerator("navigator:browser");
     while (windowsEnum.hasMoreElements()) {
@@ -102,11 +102,11 @@ this.DynamicRules = {
     }
   },
 
-  createTemplates: function () {
+  createTemplates: function() {
     // String.prototype.repeat available from Firefox 24.0
     let space20 = '                    ';
     let space26 = '                          ';
-    let bgImage = { };
+    let bgImage = {};
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
     bgImage.bg = TabmixSvc.isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
@@ -130,19 +130,19 @@ this.DynamicRules = {
     let styleRules = {
       currentTab: {
         text: '#tabbrowser-tabs[tabmix_currentStyle~="text"] > .tabbrowser-tab' + tabState.current + tabTextRule,
-        bg:   '#tabbrowser-tabs[tabmix_currentStyle~="bg"] > .tabbrowser-tab' + tabState.current + backgroundRule
+        bg: '#tabbrowser-tabs[tabmix_currentStyle~="bg"] > .tabbrowser-tab' + tabState.current + backgroundRule
       },
       unloadedTab: {
         text: '#tabbrowser-tabs[tabmix_unloadedStyle~="text"] > .tabbrowser-tab' + tabState.unloaded + tabTextRule,
-        bg:   '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab' + tabState.unloaded + backgroundRule
+        bg: '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab' + tabState.unloaded + backgroundRule
       },
       unreadTab: {
         text: '#tabbrowser-tabs[tabmix_unreadStyle~="text"] > .tabbrowser-tab' + tabState.unread + tabTextRule,
-        bg:   '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab' + tabState.unread + backgroundRule
+        bg: '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab' + tabState.unread + backgroundRule
       },
       otherTab: {
         text: '#tabbrowser-tabs[tabmix_otherStyle~="text"] > .tabbrowser-tab' + tabState.other + tabTextRule,
-        bg:   '#tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab' + tabState.other + backgroundRule
+        bg: '#tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab' + tabState.other + backgroundRule
       },
     };
 
@@ -172,7 +172,7 @@ this.DynamicRules = {
         let hover = rule == "currentTab" ? "" : ":hover";
         let selector = ruleSelector.replace("#HOVER", hover);
         let type = hover.replace(":", "") || "selected";
-        style["bg" + type] =       selector + ' .tab-background-middle {\n' +
+        style["bg" + type] = selector + ' .tab-background-middle {\n' +
                                    '  background-image: ' + bgImage["bg" + type] + ' !important;\n}\n';
         style["startEnd" + type] = selector + ' :-moz-any(.tab-background-start, .tab-background-end)::before {\n' +
                                    '  background-image: ' + bgImage["startEnd" + type] + ' !important;\n}\n';
@@ -190,7 +190,7 @@ this.DynamicRules = {
     this.cssTemplates = styleRules;
   },
 
-  userChangedStyle: function (ruleName, notifyWindows) {
+  userChangedStyle: function(ruleName, notifyWindows) {
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
 
@@ -208,12 +208,12 @@ this.DynamicRules = {
     }
 
     // update styles on start or when user changed or enable color
-    let changed = !val ||                                          // on start
-                  prefObj.bg && (!val.bg ||                     // bgColor enabled
-                    val.bgColor != prefObj.bgColor ||           // bgColor changed
-                    val.bgTopColor != prefObj.bgTopColor) ||    // bgTopColor changed
-                  prefObj.text && (!val.text ||                 // textColor enabled
-                    val.textColor != prefObj.textColor);        // textColor changed
+    let changed = !val || // on start
+                  prefObj.bg && (!val.bg || // bgColor enabled
+                    val.bgColor != prefObj.bgColor || // bgColor changed
+                    val.bgTopColor != prefObj.bgTopColor) || // bgTopColor changed
+                  prefObj.text && (!val.text || // textColor enabled
+                    val.textColor != prefObj.textColor); // textColor changed
 
     if (changed)
       this.updateStyles(ruleName, prefObj);
@@ -222,7 +222,7 @@ this.DynamicRules = {
       this.updateOpenedWindows(ruleName);
   },
 
-  updateStyles: function (name, prefObj) {
+  updateStyles: function(name, prefObj) {
     if (this.treeStyleTab && name != "progressMeter")
       return;
     let templates = this.cssTemplates[name];
@@ -280,13 +280,13 @@ this.DynamicRules = {
     delete this.defaultPrefs;
     let defaults = {};
     let getDefaultBranch = Services.prefs.getDefaultBranch("extensions.tabmix.styles.");
-    STYLENAMES.forEach(function(pref){
+    STYLENAMES.forEach(function(pref) {
       defaults[pref] = getDefaultBranch.getCharPref(pref);
     }, this);
     return (this.defaultPrefs = defaults);
   },
 
-  validatePrefValue: function (ruleName) {
+  validatePrefValue: function(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
     //                bg:boolean, bgColor:string, bgOpacity:striung
@@ -320,7 +320,7 @@ this.DynamicRules = {
         value = getRGBcolor(value, opacityValue);
       }
       else if (value !== undefined && typeof value != "boolean") {
-        if (/^true$|^false$/.test(value.replace(/[\s]/g,"")))
+        if (/^true$|^false$/.test(value.replace(/[\s]/g, "")))
           value = value == "true" ? true : false;
         else
           value = undefined;
@@ -345,19 +345,19 @@ function getRGBcolor(aColorCode, aOpacity) {
   let newRGB = [];
   let _length = aColorCode.length;
   if (/^rgba|rgb/.test(aColorCode)) {
-    newRGB = aColorCode.replace(/rgba|rgb|\(|\)/g,"").split(",").splice(0, 4);
+    newRGB = aColorCode.replace(/rgba|rgb|\(|\)/g, "").split(",").splice(0, 4);
     if (newRGB.length < 3)
       return null;
     for (let i = 0; i < newRGB.length; i++) {
-      if (isNaN(newRGB[i].replace(/[\s]/g,"") * 1))
+      if (isNaN(newRGB[i].replace(/[\s]/g, "") * 1))
         return null;
     }
   }
   else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {
-    aColorCode = aColorCode.replace("#","");
+    aColorCode = aColorCode.replace("#", "");
     let subLength = _length == 7 ? 2 : 1;
     for (let i = 0; i < 3; i++) {
-      let subS = aColorCode.substr(i*subLength, subLength);
+      let subS = aColorCode.substr(i * subLength, subLength);
       if (_length == 4)
         subS += subS;
       var newNumber = parseInt(subS, 16);

@@ -14,7 +14,7 @@ function flst() {
   this.flstOff = TabmixSvc.getString("flstOff.label");
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
-  XPCOMUtils.defineLazyGetter(this, "tabContainer", function () {return TabmixSvc.topWin().gBrowser.tabContainer;});
+  XPCOMUtils.defineLazyGetter(this, "tabContainer", function() {return TabmixSvc.topWin().gBrowser.tabContainer;});
 }
 
 flst.prototype = {
@@ -27,7 +27,7 @@ flst.prototype = {
     catch (e) { }
   },
 
-  //toggle flst on/off
+  // toggle flst on/off
   toggle: function() {
     if (TabmixSvc.prefBranch.getIntPref("focusTab") != 4) {
       TabmixSvc.prefBranch.setIntPref("focusTab", 4);
@@ -45,7 +45,7 @@ flst.prototype = {
     }
     else if (this.moreThenOneTab) {
       let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
-      this.slideShowTimer =  Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+      this.slideShowTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
                         Ci.nsITimer.TYPE_REPEATING_SLACK);
       this.showAlert(this.slideshowOn, "slideShow");

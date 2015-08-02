@@ -130,7 +130,7 @@ this.RenameTab = {
     this.hidePopup();
   },
 
-  handleEvent: function (aEvent) {
+  handleEvent: function(aEvent) {
     if (aEvent.type == "keypress" &&
          aEvent.keyCode == Components.interfaces.nsIDOMKeyEvent.DOM_VK_RETURN &&
          aEvent.target.localName != "button")

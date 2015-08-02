@@ -5,8 +5,8 @@
 
 // last updated for sage version 1.5.2 - 2013-08-12
 var TMP_Sage = {
-   OPEN_TAB_FOR_SAGE:"extensions.tabmix.opentabfor.sage",
-   init: function () {
+   OPEN_TAB_FOR_SAGE: "extensions.tabmix.opentabfor.sage",
+   init: function() {
       TMP_Places.contextMenu.toggleEventListener(true);
 
       Tabmix.changeCode(window, "updateItemContextMenu")._replace(
@@ -48,7 +48,7 @@ var TMP_Sage = {
 
    },
 
-   buildContextMenu: function () {
+   buildContextMenu: function() {
       var _open = document.getElementById("rssOpenItem");
       var _openInWindow = document.getElementById("rssOpenNewWindowItem");
       var _openInTab = document.getElementById("rssOpenNewTabItem");

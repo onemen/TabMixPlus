@@ -87,10 +87,10 @@ this.SingleWindowModeUtils = {
     aWindow.resizeTo(10, 10);
     aWindow.moveTo(-50, -50);
     win.removeAttribute("sizemode");
-    win.setAttribute("width" , 0);
-    win.setAttribute("height" , 0);
-    win.setAttribute("screenX" , aWindow.screen.availWidth + 10);
-    win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
+    win.setAttribute("width", 0);
+    win.setAttribute("height", 0);
+    win.setAttribute("screenX", aWindow.screen.availWidth + 10);
+    win.setAttribute("screenY", aWindow.screen.availHeight + 10);
 
     return true;
   },
@@ -159,7 +159,7 @@ this.SingleWindowModeUtils = {
         for (let i = 1; i < urls.length; ++i)
           existingBrowser.addTab(urls[i]);
       }
-    } catch(ex) {  }
+    } catch (ex) { }
     try {
       // we need to close the window after timeout so other extensions don't fail.
       // if we don't add this here BrowserShutdown fails
@@ -181,7 +181,7 @@ this.SingleWindowModeUtils = {
       let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
       obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
       newWindow.gPrivateBrowsingUI.uninit = function() {};
-      existingWindow.setTimeout(function () {
+      existingWindow.setTimeout(function() {
         // restore window dimensions, to prevent flickring in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
@@ -195,7 +195,7 @@ this.SingleWindowModeUtils = {
         }
         // for the case the window is minimized or not in focus
         existingWindow.focus();
-      },0);
-    }  catch(ex) {existingWindow.Tabmix.obj(ex);}
+      }, 0);
+    } catch (ex) {existingWindow.Tabmix.obj(ex);}
   }
 };

@@ -50,14 +50,14 @@ var TabmixTabClickOptions = {
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.
     // tabcontainer click handler run before tab click handler.
-    if (leftClick && !clickOutTabs &&  !tab.mouseDownSelect)
+    if (leftClick && !clickOutTabs && !tab.mouseDownSelect)
       tab.onMouseCommand(aEvent);
 
     // for tab flip
     if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {
       tab.removeAttribute("clickOnCurrent");
       let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
-      if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey){
+      if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
         let self = this;
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
         if (this._tabFlipTimeOut)
@@ -144,7 +144,7 @@ var TabmixTabClickOptions = {
     }
   },
 
-///add option to open new tab after current one
+/// add option to open new tab after current one
 /// convert this switch to object
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
     gBrowser.selectedBrowser.focus();
@@ -186,7 +186,7 @@ var TabmixTabClickOptions = {
       case 11:
         Tabmix.renameTab.editTitle(aTab);
         break;
-      case 12: //taken from tco
+      case 12: // taken from tco
         if (SessionSaver && SessionSaver.snapBackTab)
           SessionSaver.snapBackTab(SessionSaver.snapback_noFX, SessionSaver.snapback_willFocus);
         break;
@@ -229,7 +229,7 @@ var TabmixTabClickOptions = {
             gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
           }
         }
-        else if(window.ieview && window.ieview.launch) {
+        else if (window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
           ieview.launch(href);
         }
@@ -542,15 +542,15 @@ var TabmixContext = {
     Tabmix.setItem("tm-docShell", "disabled", clickOutTabs);
 
     var freezeTabMenu = document.getElementById("tm-freezeTab");
-    if ( !freezeTabMenu.hidden )
+    if (!freezeTabMenu.hidden)
       Tabmix.setItem(freezeTabMenu, "checked", lockedTab && protectedTab);
 
     var lockTabMenu = document.getElementById("tm-lockTab");
-    if ( !lockTabMenu.hidden )
+    if (!lockTabMenu.hidden)
       Tabmix.setItem(lockTabMenu, "checked", lockedTab);
 
     var protectTabMenu = document.getElementById("tm-protectTab");
-    if ( !protectTabMenu.hidden )
+    if (!protectTabMenu.hidden)
       Tabmix.setItem(protectTabMenu, "checked", protectedTab);
 
     return true;
@@ -567,7 +567,7 @@ var TabmixContext = {
       return;
     // don't show 2 menuseparator together
     var hideNextSeparator = true, lastVisible, hideMenu = true;
-    for(var mi = tabContextMenu.firstChild; mi; mi = mi.nextSibling) {
+    for (var mi = tabContextMenu.firstChild; mi; mi = mi.nextSibling) {
       if (mi.localName == "menuseparator") {
         if (!lastVisible || !hideNextSeparator) {
           mi.hidden = hideNextSeparator;
@@ -577,7 +577,7 @@ var TabmixContext = {
           }
         }
         else if (hideNextSeparator) {
-          if (lastVisible.getAttribute("type")=="tabmix" && mi.getAttribute("type")!="tabmix") {
+          if (lastVisible.getAttribute("type") == "tabmix" && mi.getAttribute("type") != "tabmix") {
             mi.hidden = false;
             lastVisible.hidden = true;
             lastVisible = mi;
@@ -586,7 +586,7 @@ var TabmixContext = {
             mi.hidden = true;
         }
       }
-      else if(!mi.hidden && !mi.collapsed) {
+      else if (!mi.hidden && !mi.collapsed) {
         hideNextSeparator = false;
         hideMenu = false;
       }
@@ -623,11 +623,11 @@ var TabmixContext = {
       Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
       Tabmix.showItem(inverseLink, Tabmix.prefs.getBoolPref("openInverseLink") && onLink);
-      if (!inverseLink.hidden){
+      if (!inverseLink.hidden) {
         let bgPref = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-        let focusType = bgPref ? "fg":"bg";
-        inverseLink.setAttribute("label", inverseLink.getAttribute(focusType+"label"));
-        inverseLink.setAttribute("accesskey", inverseLink.getAttribute(focusType+"accesskey"));
+        let focusType = bgPref ? "fg" : "bg";
+        inverseLink.setAttribute("label", inverseLink.getAttribute(focusType + "label"));
+        inverseLink.setAttribute("accesskey", inverseLink.getAttribute(focusType + "accesskey"));
       }
       Tabmix.showItem("tm-linkWithhistory", Tabmix.prefs.getBoolPref("linkWithHistory") && onLink);
       var closeTabMenu = document.getElementById("tm-content-closetab");
@@ -707,10 +707,10 @@ var TabmixContext = {
       var textSep = document.getElementById("tm-content-textSep");
       undoCloseSep.hidden = undoCloseTabMenu.hidden && undoCloseListMenu.hidden ||
           gContextMenu.isTextSelected && closeTabMenu.hidden && lockTabMenu.hidden &&
-          protectTabMenu.hidden && tabsListMenu.hidden  && freezeTabMenu.hidden;
+          protectTabMenu.hidden && tabsListMenu.hidden && freezeTabMenu.hidden;
       miscSep.hidden = mergeMenu.hidden && closeTabMenu.hidden && duplicateTabMenu.hidden &&
           duplicateWinMenu.hidden && lockTabMenu.hidden && protectTabMenu.hidden &&
-          tabsListMenu.hidden  && freezeTabMenu.hidden || gContextMenu.isTextSelected;
+          tabsListMenu.hidden && freezeTabMenu.hidden || gContextMenu.isTextSelected;
       textSep.hidden = !gContextMenu.isTextSelected || mergeMenu.hidden &&
           duplicateTabMenu.hidden && duplicateWinMenu.hidden && closeTabMenu.hidden &&
           lockTabMenu.hidden && protectTabMenu.hidden && tabsListMenu.hidden &&
@@ -740,7 +740,7 @@ var TabmixContext = {
         let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
         let result = handler.getSelectedLinks();
         gContextMenu.tabmixLinks = result && result.split('\n');
-      } catch(ex) {
+      } catch (ex) {
         Tabmix.log("unable to get syncHandlers for page " +
                    browser.currentURI.spec + "\n" + ex);
       }
@@ -841,13 +841,13 @@ var TabmixAllTabs = {
     if (event.target.disabled)
       return;
 
-    var tablist =  document.getElementById("tabslist");
+    var tablist = document.getElementById("tabslist");
 
     this.beforeCommonList(tablist);
     this.createCommonList(tablist, 2, side);
 
     if (tablist.hasChildNodes())
-      tablist.showPopup(event.target, -1, -1, "popup", "bottomleft","topleft");
+      tablist.showPopup(event.target, -1, -1, "popup", "bottomleft", "topleft");
   },
 
   removeTabFromList: function TMP_removeTabFromList(event, popup, aType) {
@@ -879,7 +879,7 @@ var TabmixAllTabs = {
   // show sort/unsort tabs list popup after click on sorted tab menu
   showTabsListPopup: function TMP_showTabsListPopup(event) {
     event.stopPropagation();
-    setTimeout( function (popup){
+    setTimeout(function(popup) {
       popup.showPopup(popup.parentNode, -1, -1, "popup", "bottomleft", "topleft");
     }, 0, event.target.parentNode);
   },
@@ -937,7 +937,7 @@ var TabmixAllTabs = {
     var tabs;
     var i;
 
-    switch(aType) {
+    switch (aType) {
       case 1:
         let TabSorting = function _tabSorting(tab, index) {
           this.Tab = tab;
@@ -991,7 +991,7 @@ var TabmixAllTabs = {
     popup.removeEventListener("popupshown", this, false);
     let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
     let items = Array.slice(popup.childNodes);
-    let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
+    let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
     scrollBox.ensureElementIsVisible(element);
     scrollBox.ensureElementIsVisible(this._selectedItem);
   },
@@ -1004,7 +1004,7 @@ var TabmixAllTabs = {
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     let count = "";
     if (Tabmix.ltr) {
-      count = (value<9 ? "  " : "") + (value + 1) + ": ";
+      count = (value < 9 ? "  " : "") + (value + 1) + ": ";
       mi.setAttribute("count", count);
     }
     this._setMenuitemAttributes(mi, tab);

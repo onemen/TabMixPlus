@@ -29,7 +29,7 @@ this.console = {
       methodsList.shift();
     else if (methodsList[0] == "document") {
       methodsList.shift();
-      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
+      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g, "");
     }
     var obj;
     try {
@@ -127,7 +127,7 @@ this.console = {
     if (fn && !fnName) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
-      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
+      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf + 1) : "?";
     }
     return fnName;
   },
@@ -187,7 +187,7 @@ options = {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
     var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
-    objS +=  ":\n";
+    objS += ":\n";
 
     for (let prop in aObj) {
       try {
@@ -264,8 +264,8 @@ options = {
   log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
-    let callerName = names[offset+0];
-    let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
+    let callerName = names[offset + 0];
+    let callerCallerName = aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
     this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
   },
 
@@ -335,6 +335,6 @@ options = {
 
 };
 
-(function(self){
+(function(self) {
   self.reportError = self.reportError.bind(self);
 }(this.console));

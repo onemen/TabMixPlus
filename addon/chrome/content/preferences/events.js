@@ -2,7 +2,7 @@
 "use strict";
 
 var gEventsPane = {
-  init: function () {
+  init: function() {
     // for locales with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;
@@ -10,7 +10,7 @@ var gEventsPane = {
     if (hbox.boxObject.width > label + menulist.boxObject.width) {
       menulist.parentNode.removeAttribute("pack");
       hbox.setAttribute("orient", "horizontal");
-      hbox.setAttribute("align","center");
+      hbox.setAttribute("align", "center");
     }
 
     var browserWindow = Tabmix.getTopWin();
@@ -52,7 +52,7 @@ var gEventsPane = {
     gPrefWindow.initPane("paneEvents");
   },
 
-  disabeleShowTabList: function () {
+  disabeleShowTabList: function() {
     var ctrlTabPv = $("pref_ctrltab.tabPreviews");
     var disableShowTabList = $("pref_ctrltab").value &&
                              ctrlTabPv && ctrlTabPv.value;
@@ -73,14 +73,14 @@ var gEventsPane = {
   newTabUrl: function(preference, disable, setFocus) {
     var showTabUrlBox = preference.value == 4;
     var item = $(preference.id.replace("pref_", ""));
-    var idnum = item.getAttribute("idnum") || "" ;
+    var idnum = item.getAttribute("idnum") || "";
     gPrefWindow.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
     gPrefWindow.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
     if (setFocus && showTabUrlBox)
       $("newTabUrl" + idnum).focus();
   },
 
-  syncFromNewTabUrlPref: function (item) {
+  syncFromNewTabUrlPref: function(item) {
     var preference = $(item.getAttribute("preference"));
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
@@ -90,7 +90,7 @@ var gEventsPane = {
     return this.syncToNewTabUrlPref(value);
   },
 
-  syncToNewTabUrlPref: function (value) {
+  syncToNewTabUrlPref: function(value) {
     // If the value is "", use about:newtab.
     if (value === "")
       return "about:newtab";
@@ -111,7 +111,7 @@ var gEventsPane = {
     gPrefWindow.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
   },
 
-  editSlideShowKey: function () {
+  editSlideShowKey: function() {
     document.documentElement.showPane($("paneMenu"));
     if (typeof gMenuPane == "object")
       gMenuPane.editSlideShowKey();

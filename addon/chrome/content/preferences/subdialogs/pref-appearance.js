@@ -4,7 +4,7 @@ let $ = id => document.getElementById(id);
 
 let tabstyles = { // jshint ignore:line
   pref: "appearance_tab",
-  init: function () {
+  init: function() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
         Tabmix.prefs.getIntPref(this.pref) : 0;
 
@@ -21,20 +21,20 @@ let tabstyles = { // jshint ignore:line
     extra.classList.add("text-link");
   },
 
-  save: function () {
+  save: function() {
     Tabmix.prefs.setIntPref(this.pref, $("stylestabs").selectedIndex);
     // store the pref immediately
     Services.prefs.savePrefFile(null);
   },
 
-  cancel: function () {
+  cancel: function() {
     Array.forEach($("stylespanels").childNodes, function(panel) {
       $(panel.id)._ondialogcancel();
     });
     this.save();
   },
 
-  openHelp: function () {
+  openHelp: function() {
     var subPage = ["Current_Tab", "Unloaded_tabs", "Unread_tabs", "Other_Tabs", "Progress_meter_on_tabs"];
     var index = $("AppearanceTabBox").selectedIndex;
     var win = window.opener || Tabmix.getTopWin();
@@ -44,7 +44,7 @@ let tabstyles = { // jshint ignore:line
       document.documentElement.getButton("help").disabled = true;
   },
 
-  toggleRGBvisibility: function () {
+  toggleRGBvisibility: function() {
     let doc = document.documentElement;
     let extra = doc.getButton("extra2");
     let item = $("hide-RGB");

@@ -44,7 +44,7 @@ this.DocShellCapabilities = {
     try {
       let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
       return handler.getCapabilities();
-    } catch(ex) { }
+    } catch (ex) { }
     return "";
   },
 

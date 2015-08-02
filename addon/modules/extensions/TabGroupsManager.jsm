@@ -62,7 +62,7 @@ this.TMP_TabGroupsManager = {
     sessionManager._moveTabsToGroupByTGM = function(window, tabs) {
       let sessionStore = window.TabmixSvc.ss;
       let TGM = window.TabGroupsManager.session;
-      for (let i = 0; i < tabs.length ; i++) {
+      for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
         let data = sessionStore.getTabValue(tab, "__tabmixTGM");
         let [groupId, groupName] = data ? data.split(" ") : ["-1", ""];
@@ -122,7 +122,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use - don't change function name
-  tabmixSessionsManager: function () {
+  tabmixSessionsManager: function() {
     // this here reffer to the top browser window
     if (!this.Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in this)
       return false;
@@ -132,7 +132,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use
-  _saveAllGroupsData: function (jsonText, windowNode) {
+  _saveAllGroupsData: function(jsonText, windowNode) {
     if (!this.enableBackup && !windowNode)
       return;
     try {

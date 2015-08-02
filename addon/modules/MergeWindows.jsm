@@ -64,7 +64,7 @@ this.MergeWindows = {
       if (aOptions.tabsSelected) {
         // merge tabs from the popup window into the current window
         // remove or move to new window tabs that wasn't selected
-        for (let i = tabbrowser.tabs.length - 1; i >=0; i--) {
+        for (let i = tabbrowser.tabs.length - 1; i >= 0; i--) {
           let tab = tabbrowser.tabs[i];
           if (tab.hasAttribute("mergeselected")) {
             tab.removeAttribute("mergeselected");
@@ -242,7 +242,7 @@ this.MergeWindows = {
                        "private" in aOptions;
 
     let privateNotMatch = 0;
-    let isSuitableBrowserWindow = function (win) {
+    let isSuitableBrowserWindow = function(win) {
       let suitable = win != aWindow && !win.closed;
       if (!suitable || !checkPrivacy)
         return suitable;
@@ -294,7 +294,7 @@ this.MergeWindows = {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
       let notificationBar = notificationBox.appendNotification(errorMessage,
                                 name, errorimage, priority, null);
-      aWindow.setTimeout(function(){
+      aWindow.setTimeout(function() {
         notificationBox.removeNotification(notificationBar);
       }, 10000);
     }
@@ -310,7 +310,7 @@ this.MergeWindows = {
     if (!shouldPrompt)
       return true;
 
-    var promptAgain = { value:true };
+    var promptAgain = {value: true};
     canClose = Services.prompt.confirmCheck(aWindow,
                    TabmixSvc.getString('tmp.merge.warning.title'),
                    TabmixSvc.getString('tmp.merge.warning.message'),

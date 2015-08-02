@@ -13,9 +13,9 @@ Tabmix.startup = function TMP_startup() {
   // When in single window mode allow one normal window and one private window.
   // otherwise open new tab in most recent window of the appropriate type
   if (this.isVersion(200)) {
-    this._openNewTab = function (aPrivate) {
+    this._openNewTab = function(aPrivate) {
       if (this.singleWindowMode) {
-        let win = this.RecentWindow.getMostRecentBrowserWindow({ private: aPrivate });
+        let win = this.RecentWindow.getMostRecentBrowserWindow({private: aPrivate});
         if (win) {
           win.focus();
           win.BrowserOpenTab();
@@ -26,11 +26,11 @@ Tabmix.startup = function TMP_startup() {
     };
     let command = document.getElementById("Tools:PrivateBrowsing");
     let originalCode = command.getAttribute("oncommand");
-    Tabmix.setItem(command, "oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
-    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
+    Tabmix.setItem(command, "oncommand", "if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+    Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
   }
   else
-    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
+    Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
                                           "else {" + originalNewNavigator + "}");
 
   TabmixContext.toggleEventListener(true);
@@ -187,7 +187,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   // get bookmark itemId and url - for use in getBookmarkTitle
   if ("bookMarkIds" in window) {
     let items = (window.bookMarkIds + "").split("|");
-    for (let i = 0; i < items.length ; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (items[i] && items[i] > -1)
         gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
     }
@@ -245,7 +245,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
     let buttons = [{
       label: "Disable Debug Mode",
       accessKey: "D",
-      callback: function () {
+      callback: function() {
         Tabmix.prefs.setBoolPref("enableDebug", false);
       }
     }];
@@ -508,7 +508,7 @@ var TMP_eventListener = {
       tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
 
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin=="classic/1.0") {
+    if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
         tabBar.setAttribute("classic", "v4Mac");
       else if (TabmixSvc.isLinux) {
@@ -534,7 +534,7 @@ var TMP_eventListener = {
       var themes = /^(iPoxRemix|Ie8fox|Vfox3)/;
       if (themes.test(skin)) {
         // add backgroundrepeat Attribute for theme for use in multi-row
-        tabBar.setAttribute("backgroundrepeat" , true);
+        tabBar.setAttribute("backgroundrepeat", true);
       }
       switch (skin) {
         case "Australis":
@@ -542,31 +542,31 @@ var TMP_eventListener = {
           break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
-          tabBar.setAttribute("tabmix_skin" , "cfxec");
+          tabBar.setAttribute("tabmix_skin", "cfxec");
           break;
         case "Vfox3":
         case "phoenityaura": // Phoenity Aura
-          tabBar.setAttribute("tabmix_skin" , skin);
+          tabBar.setAttribute("tabmix_skin", skin);
           break;
         case "CrystalFox_Qute-BigRedBrent":
-          tabBar.setAttribute("tabmix_skin" , "CrystalFox");
+          tabBar.setAttribute("tabmix_skin", "CrystalFox");
           break;
         case "Vista-aero":
           let rightBox = document.getElementById("myTabBarRightBox");
           if (rightBox)
-            rightBox.setAttribute("vista_aero" , true);
+            rightBox.setAttribute("vista_aero", true);
           break;
         case "classiccompact":
-          tabBar.setAttribute("tabmix_skin" , "classiccompact");
+          tabBar.setAttribute("tabmix_skin", "classiccompact");
           break;
         case "BlackFox_V1-Blue":
-          tabBar.setAttribute("tabmix_skin" , "BlackFox");
+          tabBar.setAttribute("tabmix_skin", "BlackFox");
           break;
       }
     }
 
     // don't remove maybe some themes use this with Tabmix
-    tabBar.setAttribute("tabmix_firefox3" , true);
+    tabBar.setAttribute("tabmix_firefox3", true);
 
     if (Tabmix.singleWindowMode)
       gTMPprefObserver.setSingleWindowUI();
@@ -632,7 +632,7 @@ var TMP_eventListener = {
   },
 
   tabWidthCache: new WeakMap(),
-  onTabAttrModified: function (aEvent) {
+  onTabAttrModified: function(aEvent) {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
@@ -653,7 +653,7 @@ var TMP_eventListener = {
     this.tabWidthCache.set(tab, width);
 
     TabmixTabbar.updateScrollStatus();
-    setTimeout(function(){TabmixTabbar.updateScrollStatus();}, 2500);
+    setTimeout(function() {TabmixTabbar.updateScrollStatus();}, 2500);
   },
 
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
@@ -774,7 +774,7 @@ var TMP_eventListener = {
     }
   },
 
-  updateMultiRow: function (aReset) {
+  updateMultiRow: function(aReset) {
     if (aReset)
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
@@ -813,7 +813,7 @@ var TMP_eventListener = {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
           Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
-      this._onOpenTimeout = window.setTimeout( function TMP_onOpenTimeout(tab) {
+      this._onOpenTimeout = window.setTimeout(function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
           clearTimeout(self._onOpenTimeout);
           self._onOpenTimeout = null;
@@ -918,7 +918,7 @@ var TMP_eventListener = {
       Tabmix.tabsUtils.adjustNewtabButtonvisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
       _updateTabstrip();
-      setTimeout(function(){_updateTabstrip();}, 0);
+      setTimeout(function() {_updateTabstrip();}, 0);
     }
   },
 
@@ -1070,7 +1070,7 @@ var TMP_eventListener = {
           if (aID != "tabmixopt")
             win.close();
           else
-            win.setTimeout(function(){win.close();},0);
+            win.setTimeout(function() {win.close();}, 0);
         }
       });
     }
@@ -1123,9 +1123,9 @@ var TMP_eventListener = {
   // some theme not useing up to date Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
-    let reloadIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
+    let reloadIcon = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
     if (!reloadIcon) {
-      let lockIcon  = document.getAnonymousElementByAttribute(aTab, "class", "tab-lock-icon");
+      let lockIcon = document.getAnonymousElementByAttribute(aTab, "class", "tab-lock-icon");
       if (lockIcon) {
         let XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
         let image = document.createElementNS(XULNS, "image");
@@ -1150,12 +1150,12 @@ var TMP_eventListener = {
  * initialized yet
  */
 Tabmix.initialization = {
-  init:                    {id: 0, obj: "Tabmix.tabsUtils"},
-  beforeStartup:           {id: 1, obj: "Tabmix"},
-  onContentLoaded:         {id: 2, obj: "TMP_eventListener"},
+  init: {id: 0, obj: "Tabmix.tabsUtils"},
+  beforeStartup: {id: 1, obj: "Tabmix"},
+  onContentLoaded: {id: 2, obj: "TMP_eventListener"},
   beforeBrowserInitOnLoad: {id: 3, obj: "Tabmix"},
-  onWindowOpen:            {id: 4, obj: "TMP_eventListener"},
-  delayedStartup:          {id: 5, obj: "Tabmix"},
+  onWindowOpen: {id: 4, obj: "TMP_eventListener"},
+  delayedStartup: {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
     /**
@@ -1167,7 +1167,7 @@ Tabmix.initialization = {
     let stopInitialization = false;
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     if (Tabmix.singleWindowMode) {
-      let tmp = { };
+      let tmp = {};
       Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
     }

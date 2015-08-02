@@ -41,7 +41,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
   },
 
 /* ........ paneTabs .............. */
-   initPaneTabsOptions: function () {
+   initPaneTabsOptions: function() {
       this.id("_hideTabbar").value = this.id("extensions.tabmix.hideTabbar").value;
       this.id("generalWindowOpen").value = this.id("browser.link.open_newwindow").value;
       this.id("warnCloseMultiple").checked = this.id("extensions.tabmix.tabs.warnOnClose").value;
@@ -50,7 +50,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
       this.setSingleWindowUI();
    },
 
-   setSingleWindowUI: function () {
+   setSingleWindowUI: function() {
      var val = TabmixSvc.prefBranch.getBoolPref("singleWindow");
      let item = this.id("linkTargetWindow");
      item.disabled = val;
@@ -60,7 +60,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
        item.removeAttribute("style");
    },
 
-   showTabmixOptions: function (panel) {
+   showTabmixOptions: function(panel) {
       var windowMediator = Services.wm;
       var browserWindow = windowMediator.getMostRecentWindow('navigator:browser');
 
@@ -77,7 +77,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
    },
 
 /* ........ paneMain .............. */
-   initMainPane: function () {
+   initMainPane: function() {
      var menuList = this.id("browserStartupPage");
      var hBox = menuList.parentNode;
      menuList.parentNode.id = "whenBrowserStartBox";
@@ -85,8 +85,8 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
      this.onStartupPrefchanged();
    },
 
-   onStartupPrefchanged: function () {
-     var tabmixSession =  this.id('tabmix.sm').value || this.id('tabmix.cr').value;
+   onStartupPrefchanged: function() {
+     var tabmixSession = this.id('tabmix.sm').value || this.id('tabmix.cr').value;
      if (tabmixSession)
        this.id("whenBrowserStartBox").setAttribute("tabmixSession", true);
      else

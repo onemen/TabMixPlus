@@ -109,7 +109,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       case 0 : // blank tab, by default
          url = "about:blank";
          break;
-      case 1 :  // home page
+      case 1 : // home page
          url = gHomeButton.getHomePage().split("|")[0];
          break;
       case 2 : // current URI
@@ -128,7 +128,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
             url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
             if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
               url = "about:privatebrowsing";
-         } catch (ex) {  Tabmix.assert(ex); }
+         } catch (ex) { Tabmix.assert(ex); }
          // use this if we can't find the pref
          if (!url)
             url = newTabUrl;
@@ -162,7 +162,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
             dontMove: true});
    if (replaceLastTab) {
      newTab.__newLastTab = url;
-     if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero" ) {
+     if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero") {
        gBrowser.selectedTab = newTab;
        gBrowser.updateCurrentBrowser();
      }
@@ -215,7 +215,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
     if (this.isVersion(340) && gMultiProcessBrowser)
       aTab._skipContentFocus = true;
     if (aTimeOut)
-      setTimeout(function () {focusAndSelectUrlBar();}, 30);
+      setTimeout(function() {focusAndSelectUrlBar();}, 30);
     else
       focusAndSelectUrlBar();
   }
@@ -304,7 +304,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       '      where = win.Tabmix.checkCurrent(url);' +
       '  }' +
       '  try {$&}  catch (ex) {  }'
-    )._replace( // fix incompatibility with Omnibar (O is not defined)
+    )._replace(// fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}
     ).toCode();

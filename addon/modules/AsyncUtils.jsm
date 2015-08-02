@@ -14,7 +14,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
                                   "resource://tabmixplus/Services.jsm");
 this.AsyncUtils = {
   /* PromiseUtils.defer exsit since Firefox 39 */
-  defer : function() {
+  defer: function() {
     return new Deferred();
   },
 
@@ -36,7 +36,7 @@ this.AsyncUtils = {
 
       try {
         fn.apply(thisArg, args);
-      } catch(ex) {
+      } catch (ex) {
         deferred.reject(ex);
       }
       return deferred.promise;

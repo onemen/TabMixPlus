@@ -36,7 +36,7 @@ this.TabmixPlacesUtils = Object.freeze({
   }
 });
 
-let Tabmix = { };
+let Tabmix = {};
 
 var PlacesUtilsInternal = {
   _timer: null,
@@ -53,7 +53,7 @@ var PlacesUtilsInternal = {
     this.initPlacesUIUtils(aWindow);
   },
 
-  onQuitApplication: function () {
+  onQuitApplication: function() {
     if (this._timer)
       this._timer.clear();
 
@@ -134,7 +134,7 @@ var PlacesUtilsInternal = {
         '{uri: child.uri,',
         '{id: child.itemId, uri: child.uri,', {flags: "g"}
       )._replace(
-        'this.',  'PlacesUtils.', {flags: "g"}
+        'this.', 'PlacesUtils.', {flags: "g"}
       ).toCode(false, PlacesUIUtils, "tabmix_getURLsForContainerNode");
 
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openContainerNodeInTabs")._replace(

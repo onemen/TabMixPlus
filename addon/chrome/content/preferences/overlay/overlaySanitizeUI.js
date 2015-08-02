@@ -1,7 +1,7 @@
 "use strict";
 
 Tabmix.setSanitizer = {
-  init: function () {
+  init: function() {
     this.isPromptDialog = typeof window.gSanitizePromptDialog == "object";
     this.addSanitizeItem();
     this.addMenuItem();
@@ -14,17 +14,17 @@ Tabmix.setSanitizer = {
     }
   },
 
-  addSanitizeItem: function () {
+  addSanitizeItem: function() {
     if (typeof Sanitizer != 'function')
       return;
     // Sanitizer will execute this
     Sanitizer.prototype.items['extensions-tabmix'] = {
-      clear : function() {
+      clear: function() {
         try {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
         } catch (ex) {
-          try {Tabmix.reportError(ex);} catch(e) { }
+          try {Tabmix.reportError(ex);} catch (e) { }
         }
       },
       get canClear() {
@@ -34,7 +34,7 @@ Tabmix.setSanitizer = {
     };
   },
 
-  addMenuItem: function () {
+  addMenuItem: function() {
     var prefs = document.getElementsByTagName("preferences")[0];
     var _item;
     var itemList = document.getElementById("itemList");
@@ -92,7 +92,7 @@ Tabmix.setSanitizer = {
   },
 
   checked: false,
-  disableMenuItem: function () {
+  disableMenuItem: function() {
     let disabled = gSanitizePromptDialog.selectedTimespan !== Sanitizer.TIMESPAN_EVERYTHING;
     let checkbox = document.getElementById("extensions-tabmix");
     checkbox.setAttribute("disabled", disabled);
@@ -103,7 +103,7 @@ Tabmix.setSanitizer = {
     }
   },
 
-  confirm: function (aCheckbox) {
+  confirm: function(aCheckbox) {
     if (!aCheckbox.checked)
       return;
 

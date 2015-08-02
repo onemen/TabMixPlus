@@ -346,7 +346,7 @@ this.Shortcuts = {
     let key = value && this.keyParse(value);
     if (!key)
       return "";
-    let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"")
+    let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "")
           .replace("ctrl", "control").split(",");
     key.modifiers = ["control","meta","accel","alt","shift"].filter(mod => {
       return new RegExp(mod).test(modifiers);
@@ -355,7 +355,7 @@ this.Shortcuts = {
     // make sure that key and keycod are valid
     key.key = key.key.toUpperCase();
     if (key.key == " ")
-      [key.key , key.keycode] = ["", "VK_SPACE"];
+      [key.key, key.keycode] = ["", "VK_SPACE"];
     else {
       key.keycode = "VK_" + key.keycode.toUpperCase().replace(/^VK_/, "");
       if (key.keycode != "VK_BACK" && !(("DOM_" + key.keycode) in Ci.nsIDOMKeyEvent))
@@ -375,7 +375,7 @@ this.Shortcuts = {
     let disabled = /^d&/.test(value);
     let [keyVal, modifiers] = value.replace(/^d&/, "").split(" ");
     let isKey = keyVal.length == 1;
-    return {modifiers: modifiers || "" ,key: isKey ? keyVal : "" ,keycode: isKey ? "" : keyVal, disabled: disabled};
+    return {modifiers: modifiers || "",key: isKey ? keyVal : "",keycode: isKey ? "" : keyVal, disabled: disabled};
   },
 
   // convert key object {modifiers, key, keycode} into a string with " " separator
@@ -535,7 +535,7 @@ var KeyConfig = {
     }
   },
 
-  resetPref: function (prefName) {
+  resetPref: function(prefName) {
     this.prefs.clearUserPref(prefName);
   }
 
@@ -558,7 +558,7 @@ function getFormattedKey(key) {
 
   if (key.modifiers) {
     let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(function(mod) {
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
     });
@@ -601,8 +601,8 @@ function getPlatformKeys(key) {
 
 function getPlatformAccel() {
   switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-    case 17:  return "control";
-    case 18:  return "alt";
+    case 17: return "control";
+    case 18: return "alt";
     case 224: return "meta";
   }
   return (Services.appinfo.OS == "Darwin" ? "meta" : "control");

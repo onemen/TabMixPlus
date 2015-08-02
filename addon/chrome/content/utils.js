@@ -83,8 +83,8 @@ var Tabmix = { // jshint ignore:line
       this[aModule + "Initialized"] = false;
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, function() {
-      let tmp = { };
-      Components.utils.import("resource://tabmixplus/"+aModule+".jsm", tmp);
+      let tmp = {};
+      Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();
@@ -102,7 +102,7 @@ var Tabmix = { // jshint ignore:line
 
     var self = this;
     Object.defineProperty(aObject, aOldName, {
-      get: function () {
+      get: function() {
         self.informAboutChangeInTabmix(aOldName, aNewName);
         delete aObject[aOldName];
         return (aObject[aOldName] = self.getObject(window, aNewName));
@@ -124,7 +124,7 @@ var Tabmix = { // jshint ignore:line
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
-                 (extensionName ? ( " and " + extensionName + "developer.") : "."));
+                 (extensionName ? (" and " + extensionName + "developer.") : "."));
     }
     else
       this.clog(err.message + "\n\n" + stack);
@@ -161,8 +161,8 @@ var Tabmix = { // jshint ignore:line
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +
-           (modal ? ",modal" : ",dependent") ,dpb);
+           "chrome://tabmixplus/content/session/promptservice.xul", "", "centerscreen" +
+           (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
 

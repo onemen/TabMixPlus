@@ -41,7 +41,7 @@ let TabmixContentHandler = {
     "Tabmix:collectOpener",
   ],
 
-  init: function () {
+  init: function() {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
 
     // Send a CPOW to the parent so that it can synchronously request
@@ -49,7 +49,7 @@ let TabmixContentHandler = {
     sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
   },
 
-  receiveMessage: function ({name, data}) {
+  receiveMessage: function({name, data}) {
     // The docShell might be gone. Don't process messages,
     // that will just lead to errors anyway.
     if (!docShell) {
@@ -76,7 +76,7 @@ let TabmixContentHandler = {
         // workaround for bug 1081891
         let title = content.document.title;
         if (title)
-          sendAsyncMessage("DOMTitleChanged", { title: title });
+          sendAsyncMessage("DOMTitleChanged", {title: title});
         break;
       case "Tabmix:updateHistoryTitle":
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
@@ -85,7 +85,7 @@ let TabmixContentHandler = {
       case "Tabmix:collectScrollPosition":
         let scroll = {scrollX: content.scrollX,
                       scrollY: content.scrollY};
-        sendAsyncMessage("Tabmix:updateScrollPosition", { scroll: scroll });
+        sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
         break;
       case "Tabmix:setScrollPosition":
         let {x, y} = data;
@@ -167,10 +167,10 @@ var TabmixClickEventHandler = {
 
     let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
 
-    let json = { button: event.button, shiftKey: event.shiftKey,
+    let json = {button: event.button, shiftKey: event.shiftKey,
                  ctrlKey: event.ctrlKey, metaKey: event.metaKey,
                  altKey: event.altKey, href: null, title: null,
-                 bookmark: false };
+                 bookmark: false};
 
     if (TabmixSvc.version(380))
       json.referrerPolicy = ownerDoc.referrerPolicy;

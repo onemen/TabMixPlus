@@ -30,7 +30,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
   ChangeCode.prototype = {
     value: "", errMsg: "",
-    _replace: function TMP_utils__replace(substr ,newString, aParams) {
+    _replace: function TMP_utils__replace(substr, newString, aParams) {
       var silent;
       if (typeof aParams != "undefined") {
         let doReplace, flags;
@@ -91,7 +91,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     defineProperty: function(aObj, aName, aCode) {
       if (!this.type)
-        throw "Tabmix:\n" +  this.fullName + " don't have setter or getter";
+        throw "Tabmix:\n" + this.fullName + " don't have setter or getter";
 
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};

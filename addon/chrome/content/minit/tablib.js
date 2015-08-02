@@ -2,9 +2,9 @@
 
 if (!window.tablib || tablib.version != "tabmixplus")
 var tablib = {
-  version : "tabmixplus",
+  version: "tabmixplus",
   _inited: false,
-  init : function TMP_tablib_init () {
+  init: function TMP_tablib_init() {
     if (this._inited)
       return;
     this._inited = true;
@@ -132,7 +132,7 @@ var tablib = {
       [obj, fnName] = [gBrowser, "addTab"];
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{','{\n\
+      '{', '{\n\
       let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
     )._replace(
       'let params = arguments[1];',
@@ -180,13 +180,12 @@ var tablib = {
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
       '    aRelatedToCurrent = true;' +
       '}'
-    )._replace( //  new tab can trigger selection change by some extensions (divX HiQ)
+    )._replace(//  new tab can trigger selection change by some extensions (divX HiQ)
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
     gBrowser.TMP_blockedCallers = ["sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
                                    "sss_duplicateTab", "ssi_duplicateTab"]; // ssi_duplicateTab from Firefox 16+
-
 
     // ContextMenu Extensions raplce the original removeTab function
     var _removeTab = "removeTab";
@@ -321,7 +320,7 @@ var tablib = {
     if (Tabmix._restoreMultipleTabs) {
       Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
         'let tabs = this.getTabsToTheEndFrom(aTab);',
-        '$&\n'+
+        '$&\n' +
         '              Tabmix.startCountingClosedTabs();'
       )._replace(
         '#1.setNumberOfTabsClosedLast(window, numberOfTabsToClose);'.
@@ -419,9 +418,8 @@ var tablib = {
       'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
       'break;'
     )._replace(
-      'this.tabContainer.updateVisibility();',  '', {check: !Tabmix.isVersion(230)}
+      'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
     ).toCode();
-
 
     if (Tabmix.isVersion(230)) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
@@ -494,7 +492,7 @@ var tablib = {
       '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
     ).toCode();
 
-    Tabmix.changeCode(tabBar,  "gBrowser.tabContainer.visible", {setter: true})._replace(
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.visible", {setter: true})._replace(
       'this._container.collapsed = !val;',
       '  if (TabmixTabbar.hideMode == 2)' +
       '    val = false;' +
@@ -844,7 +842,7 @@ var tablib = {
       '                                   document.getElementById(arguments[0]);'
     )._replace(
       /(\})(\)?)$/,
-      '  tablib.populateUndoWindowSubmenu(undoPopup);\n'+
+      '  tablib.populateUndoWindowSubmenu(undoPopup);\n' +
       '$1$2'
     ).toCode();
 
@@ -964,8 +962,8 @@ var tablib = {
         try {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
-          var newEntry = { url: aHref }; // we don't know the page title at this moment
-          tabState.entries.splice(activeIndex + 1 , entriesToRemove, newEntry);
+          var newEntry = {url: aHref}; // we don't know the page title at this moment
+          tabState.entries.splice(activeIndex + 1, entriesToRemove, newEntry);
           tabState.index++;
         } catch (ex) {Tabmix.assert(ex);}
       }
@@ -1011,7 +1009,7 @@ var tablib = {
       return newTab;
     };
 
-    gBrowser.duplicateTabToWindow = function (aTab, aMoveTab, aTabData) {
+    gBrowser.duplicateTabToWindow = function(aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -1030,7 +1028,7 @@ var tablib = {
       }
     };
 
-    gBrowser.openLinkWithHistory = function () {
+    gBrowser.openLinkWithHistory = function() {
       var {target, linkURL, principal} = gContextMenu;
       var url = tablib.getValidUrl(linkURL, target);
       if (!url)
@@ -1058,7 +1056,7 @@ var tablib = {
       '      $&'
     ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
-    gBrowser.openInverseLink = function () {
+    gBrowser.openInverseLink = function() {
       var {target, linkURL} = gContextMenu;
       var url = tablib.getValidUrl(linkURL, target);
       if (!url)
@@ -1131,7 +1129,7 @@ var tablib = {
 
       var URL = this.getBrowserForTab(aTab).currentURI.spec;
       var matches = URL.match(/(^.*\/)(.*)/);
-      var aDomain = matches ?  matches[1] : URL;
+      var aDomain = matches ? matches[1] : URL;
 
       if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
@@ -1149,21 +1147,21 @@ var tablib = {
       }
     };
 
-    gBrowser._closeLeftTabs = function (aTab) {
+    gBrowser._closeLeftTabs = function(aTab) {
       if (Tabmix.ltr)
         this.closeLeftTabs(aTab);
       else
         this.closeRightTabs(aTab);
     };
 
-    gBrowser._closeRightTabs = function (aTab) {
+    gBrowser._closeRightTabs = function(aTab) {
       if (Tabmix.ltr)
         this.closeRightTabs(aTab);
       else
         this.closeLeftTabs(aTab);
     };
 
-    gBrowser.closeRightTabs = function (aTab) {
+    gBrowser.closeRightTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -1223,41 +1221,41 @@ var tablib = {
       }
     });
 
-    gBrowser._reloadLeftTabs = function (aTab) {
+    gBrowser._reloadLeftTabs = function(aTab) {
       if (Tabmix.ltr)
         this.reloadLeftTabs(aTab);
       else
         this.reloadRightTabs(aTab);
     };
 
-    gBrowser._reloadRightTabs = function (aTab) {
+    gBrowser._reloadRightTabs = function(aTab) {
       if (Tabmix.ltr)
         this.reloadRightTabs(aTab);
       else
         this.reloadLeftTabs(aTab);
     };
 
-    gBrowser.reloadLeftTabs = function (aTab) {
+    gBrowser.reloadLeftTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var childNodes = this.visibleTabs;
-      if ( aTab._tPos > this.mCurrentTab._tPos )
+      if (aTab._tPos > this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
     };
 
-    gBrowser.reloadRightTabs = function (aTab) {
+    gBrowser.reloadRightTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var childNodes = this.visibleTabs;
-      if ( aTab._tPos < this.mCurrentTab._tPos )
+      if (aTab._tPos < this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       tablib.reloadTabs(childNodes.slice(tabPos + 1));
     };
 
-    gBrowser.reloadAllTabsBut = function (aTab) {
+    gBrowser.reloadAllTabsBut = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       else
@@ -1265,10 +1263,10 @@ var tablib = {
       tablib.reloadTabs(this.visibleTabs, aTab);
     };
 
-    gBrowser.lockTab = function (aTab) {
+    gBrowser.lockTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( aTab.hasAttribute("locked") ) {
+      if (aTab.hasAttribute("locked")) {
         aTab.removeAttribute("_lockedAppTabs"); // we only have this if we locked AppTab
         aTab.removeAttribute("locked");
         aTab.setAttribute("_locked", "false");
@@ -1282,10 +1280,10 @@ var tablib = {
       TabmixSessionManager.updateTabProp(aTab);
     };
 
-    gBrowser.protectTab = function (aTab) {
+    gBrowser.protectTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( aTab.hasAttribute("protected") )
+      if (aTab.hasAttribute("protected"))
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
@@ -1297,10 +1295,10 @@ var tablib = {
       }
     };
 
-    gBrowser.freezeTab = function (aTab) {
+    gBrowser.freezeTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( !aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")){
+      if (!aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")) {
         aTab.setAttribute("protected", "true");
         aTab.setAttribute("locked", "true");
         aTab.setAttribute("_locked", "true");
@@ -1338,7 +1336,7 @@ var tablib = {
       }
     };
 
-    gBrowser.copyTabUrl = function (aTab) {
+    gBrowser.copyTabUrl = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
@@ -1361,11 +1359,11 @@ var tablib = {
       var items = Array.filter(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
           function(tab) {return !tab.hidden && !tab.closing;
       }, this);
-      for (var i = 0; i < items.length; ++i ) {
+      for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] == aTab)
           continue;
         temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
-        if ( temp_id && temp_id > max_id ) {
+        if (temp_id && temp_id > max_id) {
           max_id = temp_id;
           tempIndex = tabs.indexOf(items[i]);
         }
@@ -1374,7 +1372,7 @@ var tablib = {
       return tempIndex;
     };
 
-    gBrowser.previousTab = function (aTab) {
+    gBrowser.previousTab = function(aTab) {
       var tabs = this.visibleTabs;
       if (tabs.length == 1)
         return;
@@ -1390,20 +1388,20 @@ var tablib = {
       this.selectedBrowser.focus();
     };
 
-    gBrowser.selectIndexAfterRemove = function (oldTab) {
+    gBrowser.selectIndexAfterRemove = function(oldTab) {
       var tabs = TMP_TabView.currentGroup();
       var currentIndex = tabs.indexOf(this.mCurrentTab);
       if (this.mCurrentTab != oldTab)
         return currentIndex;
       var l = tabs.length;
-      if (l==1)
+      if (l == 1)
         return 0;
       var mode = Tabmix.prefs.getIntPref("focusTab");
-      switch ( mode ) {
+      switch (mode) {
         case 0: // first tab
           return currentIndex === 0 ? 1 : 0;
         case 1: // left tab
-          return currentIndex === 0 ? 1 : currentIndex-1 ;
+          return currentIndex === 0 ? 1 : currentIndex - 1;
         case 3: // last tab
           return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
         case 6: // last opened
@@ -1448,7 +1446,7 @@ var tablib = {
        // add extra delay after tab removed or after tab flip before we select by hover
        // to let the user time to move the mouse
        if (aTab.mouseHoverSelect) {
-          this.setAttribute("preventMouseHoverSelect",true);
+          this.setAttribute("preventMouseHoverSelect", true);
           var delay = aTab.mouseHoverSelectDelay + 50;
           setTimeout(function removeDelayAfterClose(browser) {
             browser.removeAttribute("preventMouseHoverSelect");
@@ -1457,9 +1455,9 @@ var tablib = {
     };
 
     Object.defineProperty(gBrowser, "closingTabsEnum",
-      {value: { ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5 }, writable: false});
+      {value: {ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5}, writable: false});
 
-    let warnAboutClosingTabs = function (whatToClose, aTab, aDomain) {
+    let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
       // see tablib.closeWindow comment
       if (Tabmix.isCallerInList("BG__onQuitRequest"))
         return true;
@@ -1474,11 +1472,11 @@ var tablib = {
       // calc the number of tab to close when there is protected tabs.
       let protectedTabs = [];
       function addProtected(tabs) {
-        for (let i = 0; i < tabs.length; i++ ) {
+        for (let i = 0; i < tabs.length; i++) {
           let tab = tabs[i];
           if (!onExit && tab.hidden)
             continue;
-          if (protectedTabs.indexOf(tab) == -1 )
+          if (protectedTabs.indexOf(tab) == -1)
             protectedTabs.push(tabs[i]);
         }
       }
@@ -1539,7 +1537,7 @@ var tablib = {
           tabsToClose = numTabs - 1 - numProtected;
           break;
         case closing.GROUP:
-          for ( i = numTabs - 1; i > -1; --i) {
+          for (i = numTabs - 1; i > -1; --i) {
             let tab = tabs[i];
             if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
                 !tab._isProtected)
@@ -1558,7 +1556,7 @@ var tablib = {
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for ( i = 0; i < protectedTabs.length; i++ ) {
+          for (i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index <= tabPos)
               --numProtected;
@@ -1569,7 +1567,7 @@ var tablib = {
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for ( i = 0; i < protectedTabs.length; i++ ) {
+          for (i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index >= tabPos)
               --numProtected;
@@ -1588,7 +1586,7 @@ var tablib = {
         return true;
 
       // default to true: if it were false, we wouldn't get this far
-      var warnOnClose = { value:true };
+      var warnOnClose = {value: true};
       var bundle = this.mStringBundle;
 
       var message, chkBoxLabel;
@@ -1633,7 +1631,7 @@ var tablib = {
     };
     Tabmix.setNewFunction(gBrowser, "warnAboutClosingTabs", warnAboutClosingTabs);
 
-    gBrowser.TMP_selectNewForegroundTab = function (aTab, aLoadInBackground, aUrl, addOwner) {
+    gBrowser.TMP_selectNewForegroundTab = function(aTab, aLoadInBackground, aUrl, addOwner) {
        var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
                       Services.prefs.getBoolPref("browser.tabs.loadInBackground");
        if (!bgLoad) {
@@ -1718,7 +1716,7 @@ var tablib = {
 
     /** DEPRECATED **/
     // we keep this function to saty compatible with other extensions that use it
-    gBrowser.undoRemoveTab = function () {TMP_ClosedTabs.undoCloseTab();};
+    gBrowser.undoRemoveTab = function() {TMP_ClosedTabs.undoCloseTab();};
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { };
@@ -1735,7 +1733,7 @@ var tablib = {
           "aForceNotRemote", "aNoReferrer"],
 
   definedParams: function(params) {
-    this.props.forEach(function(prop){
+    this.props.forEach(function(prop) {
       if (typeof params[prop] == "undefined")
         params[prop] = null;
     });
@@ -1860,7 +1858,7 @@ var tablib = {
         return false;
 
       // last windows with tabs
-      var windowtype  = aCountOnlyBrowserWindows ? "navigator:browser" : null;
+      var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;
       if (window.gBrowser.browsers.length < 2 || Tabmix.numberOfWindows(false, windowtype) > 1)
         return false;
 
@@ -1896,7 +1894,7 @@ var tablib = {
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
       canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
-      Services.prefs.setCharPref(pref, oldTime*1 + (new Date().valueOf() - startTime));
+      Services.prefs.setCharPref(pref, oldTime * 1 + (new Date().valueOf() - startTime));
     }
 
     TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);
@@ -1939,7 +1937,7 @@ var tablib = {
         continue;
       try {
         tab.linkedBrowser.reload();
-      } catch (ex) {  }
+      } catch (ex) { }
     }
   }
 

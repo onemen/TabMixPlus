@@ -29,7 +29,7 @@ this.Decode = {
 
 let escapeHash = {};
 
-function getReturnValue (input) {
+function getReturnValue(input) {
   var ret = escapeHash[input];
   if (!ret) {
     if (input.length - 1) {

@@ -20,7 +20,7 @@ function isVersion(aVersionNo) {
     return _versions[aVersionNo];
 
   let v = Services.appinfo.version;
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0);
+  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }
 
 this.TabmixSvc = {
@@ -95,7 +95,7 @@ this.TabmixSvc = {
     try {
       // this pref exist only in windows
       return (this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled"));
-    } catch(ex) {}
+    } catch (ex) {}
     return (this.direct2dDisabled = false);
   },
 
@@ -121,19 +121,19 @@ this.TabmixSvc = {
     parse: function TMP_parse(str) {
       try {
         return JSON.parse(str);
-      } catch(ex) {
+      } catch (ex) {
         try {
           return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch(er) {return null}
+        } catch (er) {return null}
       }
     },
     stringify: function TMP_stringify(obj) {
       try {
         return JSON.stringify(obj);
-      } catch(ex) {
+      } catch (ex) {
         try {
           return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch(er) {return null}
+        } catch (er) {return null}
       }
     }
   },
@@ -250,7 +250,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
 
 // check if australis tab shape is implemented
 XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  return  this.topWin().document.getElementById("tab-curve-clip-path-start") ?
+  return this.topWin().document.getElementById("tab-curve-clip-path-start") ?
           true : false;
 });
 
@@ -263,32 +263,32 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
 });
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function() {
   return Services.prefs.getBranch("extensions.tabmix.");
 });
 // string bundle
-XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function() {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
   return Services.strings.createBundle(properties);
 });
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function() {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
   return Services.appinfo.OS == "Darwin";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
   return Services.appinfo.OS == "Linux";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
   return Services.appinfo.name == "Pale Moon";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function() {
   return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
 });
 

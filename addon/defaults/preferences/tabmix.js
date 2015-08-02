@@ -94,8 +94,8 @@ pref("extensions.tabmix.progressMeter", true);
 
 pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unreadTab",  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.otherTab",   '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.unreadTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref("extensions.tabmix.styles.otherTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
 pref("extensions.tabmix.flexTabs", false);
@@ -149,7 +149,7 @@ we replace extensions.tabmix.lasttab.handleCtrlTab
 with firefox pref
 pref("browser.ctrlTab.previews", true);
  */
-//pref("extensions.tabmix.lasttab.handleCtrlTab", true);
+// pref("extensions.tabmix.lasttab.handleCtrlTab", true);
 pref("extensions.tabmix.lasttab.tabPreviews", true); // Firefox 3.1+
 pref("extensions.tabmix.lasttab.respondToMouseInTabList", true);
 pref("extensions.tabmix.lasttab.showTabList", false);
@@ -160,7 +160,7 @@ pref("extensions.tabmix.undoClose", true);
 /*
  * we use browser.sessionstore.max_tabs_undo from 2008-02-26
  */
-//pref("extensions.tabmix.undoCloseCache", 5);
+// pref("extensions.tabmix.undoCloseCache", 5);
 pref("extensions.tabmix.undoClosePosition", true);
 pref("extensions.tabmix.undoCloseButton.menuonly", false);
 
@@ -226,8 +226,8 @@ pref("extensions.tabmix.hideIcons", false);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 
 // session manager pref
-pref("extensions.tabmix.sessionToolsMenu",true);
-pref("extensions.tabmix.closedWinToolsMenu",false);
+pref("extensions.tabmix.sessionToolsMenu", true);
+pref("extensions.tabmix.closedWinToolsMenu", false);
 
 pref("extensions.tabmix.sessions.crashRecovery", true);
 pref("extensions.tabmix.sessions.manager", true);
@@ -250,7 +250,7 @@ pref("extensions.tabmix.sessions.onStart.askifempty", true);
 pref("extensions.tabmix.sessions.onStart.loadsession", -1);
 pref("extensions.tabmix.sessions.onStart.sessionpath", "");
 pref("extensions.tabmix.sessions.onStart.restorePinned", true);
-//pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
+// pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
 
 pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);

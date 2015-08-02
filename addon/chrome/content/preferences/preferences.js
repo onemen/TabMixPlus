@@ -47,7 +47,7 @@ var gPrefWindow = { // jshint ignore:line
 
     // init buttons extra1, extra2, accept, cancel
     docElt.getButton("extra1").setAttribute("icon", "apply");
-    docElt.getButton("extra2").setAttribute("popup","tm-settings");
+    docElt.getButton("extra2").setAttribute("popup", "tm-settings");
     docElt.setAttribute("cancelbuttonlabel", docElt.mStrBundle.GetStringFromName("button-cancel"));
     this.setButtons(true);
 
@@ -184,7 +184,7 @@ var gPrefWindow = { // jshint ignore:line
     var broadcasters = $(paneID + ":Broadcaster");
     if (!broadcasters)
       return;
-    Array.forEach(broadcasters.childNodes, function (broadcaster) {
+    Array.forEach(broadcasters.childNodes, function(broadcaster) {
       let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
         this.updateBroadcaster(preference, broadcaster);
@@ -210,7 +210,7 @@ var gPrefWindow = { // jshint ignore:line
     if (item.hasAttribute("inverseDependency"))
       val = !val;
     // remove disabled when the value is false
-    Tabmix.setItem(item, "disabled" , val || null);
+    Tabmix.setItem(item, "disabled", val || null);
   },
 
   tabSelectionChanged: function(event) {
@@ -365,7 +365,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
-  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref){
+  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref) {
     try {
       return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
     } catch (ex) { }
@@ -426,7 +426,7 @@ function exportData() {
   }).then(null, Tabmix.reportError);
 }
 
-function importData () {
+function importData() {
   showFilePicker("open").then(file => {
     return file && OS.File.read(file.path);
   }).then((input) => {
@@ -464,8 +464,8 @@ function showFilePicker(mode) {
   });
 }
 
-function loadData (pattern) {
-  if (pattern[0]!="tabmixplus") {
+function loadData(pattern) {
+  if (pattern[0] != "tabmixplus") {
     //  Can not import because it is not a valid file.
     alert(TabmixSvc.getString("tmp.importPref.error1"));
     return;
@@ -493,13 +493,13 @@ function loadData (pattern) {
 
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
-  for (let i = 1; i < pattern.length; i++){
+  for (let i = 1; i < pattern.length; i++) {
     let index = pattern[i].indexOf("=");
-    if (index > 0){
-      prefName  = pattern[i].substring(0,index);
+    if (index > 0) {
+      prefName = pattern[i].substring(0, index);
       if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
         continue;
-      prefValue = pattern[i].substring(index+1,pattern[i].length);
+      prefValue = pattern[i].substring(index + 1, pattern[i].length);
       setPrefByType(prefName, prefValue, true);
     }
   }
@@ -514,7 +514,7 @@ function loadData (pattern) {
 function showPane(paneID) {
   let docElt = document.documentElement;
   let paneToLoad = document.getElementById(paneID);
-  if(!paneToLoad || paneToLoad.nodeName != "prefpane")
+  if (!paneToLoad || paneToLoad.nodeName != "prefpane")
     paneToLoad = $(docElt.lastSelected);
   docElt.showPane(paneToLoad);
 }
@@ -551,7 +551,7 @@ function openHelp(helpTopic) {
 var gIncompatiblePane = {
   lastSelected: "paneLinks",
 
-  init: function (docElt) {
+  init: function(docElt) {
     this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this, false);
@@ -563,7 +563,7 @@ var gIncompatiblePane = {
     radioGroup.removeEventListener("command", this, false);
   },
 
-  handleEvent: function (aEvent) {
+  handleEvent: function(aEvent) {
     if (aEvent.type != "command")
       return;
     let prefWindow = document.documentElement;
@@ -571,14 +571,14 @@ var gIncompatiblePane = {
       this.lastSelected = prefWindow.lastSelected;
   },
 
-  checkForIncompatible: function (aShowList) {
-     let tmp = { };
+  checkForIncompatible: function(aShowList) {
+     let tmp = {};
      Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
      tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm
-  hide_IncompatibleNotice: function (aHide, aFocus) {
+  hide_IncompatibleNotice: function(aHide, aFocus) {
     if (this.paneButton.collapsed != aHide) {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;

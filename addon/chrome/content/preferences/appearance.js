@@ -1,7 +1,7 @@
 "use strict";
 
 var gAppearancePane = { // jshint ignore:line
-  init: function () {
+  init: function() {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.extensions.verticalTabBar) {
@@ -57,7 +57,7 @@ var gAppearancePane = { // jshint ignore:line
       menulist.parentNode.removeAttribute("pack");
       menulist.parentNode.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");
-      hbox.setAttribute("align","center");
+      hbox.setAttribute("align", "center");
     }
 
     gPrefWindow.initPane("paneAppearance");
@@ -101,7 +101,7 @@ var gAppearancePane = { // jshint ignore:line
     var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
     var onToolbar = $("onToolbar");
     var onPlate = $("onPlate");
-    for (let i = 0; i < buttons.length; ++i ) {
+    for (let i = 0; i < buttons.length; ++i) {
       let button = aWindow.document.getElementById(buttons[i]);
       let optionButton = $("_" + buttons[i]).parentNode;
       if (button)
@@ -115,7 +115,7 @@ var gAppearancePane = { // jshint ignore:line
     // Display > Tab bar
     function updateDisabledState(buttonID, itemID, aEnable) {
       let button = aWindow.document.getElementById(buttonID);
-      let enablePosition =  button && button.parentNode == aWindow.document.getElementById("TabsToolbar");
+      let enablePosition = button && button.parentNode == aWindow.document.getElementById("TabsToolbar");
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }

@@ -74,7 +74,7 @@ function _getKeyName(win, aKey) {
   gUnicodeConverter.charset = "UTF-8";
   try {
     id = gUnicodeConverter.ConvertToUnicode(id);
-  } catch(ex) { }
+  } catch (ex) { }
 
   let keyname = {
     action: Services.prefs.getIntPref("browser.backspace_action"),
@@ -110,7 +110,7 @@ function _getLabel(elm, attr, value) {
   return null;
 }
 
-function _getPath(elm){
+function _getPath(elm) {
   let names = [];
   while (elm && elm.localName && elm.localName != "toolbaritem" &&
          elm.localName != "popupset" && elm.id != "titlebar-content") {

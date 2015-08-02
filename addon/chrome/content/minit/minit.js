@@ -12,8 +12,8 @@ var TMP_tabDNDObserver = {
   LinuxMarginEnd: 0,
   _dragTime: 0,
   _dragOverDelay: 350,
-  DRAG_LINK              : 0,
-  DRAG_TAB_TO_NEW_WINDOW : 1,
+  DRAG_LINK: 0,
+  DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
@@ -24,7 +24,7 @@ var TMP_tabDNDObserver = {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
       tabBar.useTabmixDragstart = () => false;
-      tabBar.useTabmixDnD  = () => false;
+      tabBar.useTabmixDnD = () => false;
       return;
     }
 
@@ -109,7 +109,7 @@ var TMP_tabDNDObserver = {
     return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart: function (event) {
+  onDragStart: function(event) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
     if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
@@ -207,7 +207,7 @@ var TMP_tabDNDObserver = {
       let disAllowDrop, targetTab = gBrowser.tabs[newIndex];
       if (targetTab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(targetTab)) {
         try {
-          var url = browserDragAndDrop.drop(event, { });
+          var url = browserDragAndDrop.drop(event, {});
           if (!url || !url.length || url.indexOf(" ", 0) != -1 ||
               /^\s*(javascript|data):/.test(url))
             url = null;
@@ -273,7 +273,7 @@ var TMP_tabDNDObserver = {
       // scroll without button
       else if (event.screenX <= tabStrip.scrollBoxObject.screenX)
         targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if(event.screenX >= (tabStrip.scrollBoxObject.screenX + tabStrip.scrollBoxObject.width))
+      else if (event.screenX >= (tabStrip.scrollBoxObject.screenX + tabStrip.scrollBoxObject.width))
         targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
       switch (targetAnonid) {
         case "scrollbutton-up":
@@ -305,7 +305,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if ( replaceTab || hideIndicator || !canDrop) {
+    if (replaceTab || hideIndicator || !canDrop) {
       this.clearDragmark();
       return;
     }
@@ -412,7 +412,7 @@ var TMP_tabDNDObserver = {
       // Pass true to disallow dropping javascript: or data: urls
       let url;
       try {
-        url = browserDragAndDrop.drop(event, { }, true);
+        url = browserDragAndDrop.drop(event, {}, true);
       } catch (ex) {}
 
       if (!url)
@@ -442,7 +442,7 @@ var TMP_tabDNDObserver = {
           browser.loadURIWithFlags(url, flags);
           if (!bgLoad)
             gBrowser.tabContainer.selectedItem = tab;
-        } catch(ex) {
+        } catch (ex) {
           // Just ignore invalid urls
           Tabmix.log("load\n" + ex);
         }
@@ -564,7 +564,7 @@ var TMP_tabDNDObserver = {
     this.updateStatusField();
   },
 
-  updateStatusField: function () {
+  updateStatusField: function() {
     var statusTextFld = document.getElementById("statusbar-display");
     if (statusTextFld && this.statusFieldChanged) {
       statusTextFld.label = "";
@@ -576,7 +576,7 @@ var TMP_tabDNDObserver = {
   },
 
   // get _tPos from group index
-  _getDNDIndex: function (aEvent) {
+  _getDNDIndex: function(aEvent) {
     var indexInGroup = this.getNewIndex(aEvent);
     var tabs = gBrowser.visibleTabs;
     var lastIndex = tabs.length - 1;
@@ -585,7 +585,7 @@ var TMP_tabDNDObserver = {
     return tabs[indexInGroup]._tPos;
   },
 
-  getNewIndex: function (event) {
+  getNewIndex: function(event) {
     let getTabRowNumber = (tab, top) => tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top);
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
@@ -610,19 +610,19 @@ var TMP_tabDNDObserver = {
         let tab = tabs[i];
         let thisRow = getTabRowNumber(tab, topY);
         if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
-          while (i < numTabs - 1 && getTabRowNumber(tabs[i+1], topY) == thisRow)
+          while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
             i++;
         }
         else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
           return i;
-        else if (i == numTabs - 1 || getTabRowNumber(tabs[i+1], topY) != thisRow)
+        else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow)
           return i;
       }
     }
     return numTabs;
   },
 
-  getLeft_Right: function (event, newIndex, oldIndex, draggeType) {
+  getLeft_Right: function(event, newIndex, oldIndex, draggeType) {
    var mX = event.screenX;
    var left_right;
    var tab = gBrowser.tabs[newIndex];
@@ -635,7 +635,7 @@ var TMP_tabDNDObserver = {
    var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
    if ((draggeType == this.DRAG_LINK && lockedTab) || (draggeType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
       left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
-      if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4 )
+      if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4)
          left_right = -1;
    }
    else {
@@ -672,11 +672,11 @@ var TMP_tabDNDObserver = {
 
    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var sameRow = newIndex !== 0 && newIndex != gBrowser.tabs.length &&
-            TabmixTabbar.inSameRow(gBrowser.tabs[newIndex-1], gBrowser.tabs[newIndex]);
+            TabmixTabbar.inSameRow(gBrowser.tabs[newIndex - 1], gBrowser.tabs[newIndex]);
       if (sameRow || left_right === 0)
          this.setDragmarkAttribute(gBrowser.tabs[newIndex], "atLeft");
       if (sameRow || left_right == 1)
-         this.setDragmarkAttribute(gBrowser.tabs[newIndex-1], "atRight");
+         this.setDragmarkAttribute(gBrowser.tabs[newIndex - 1], "atRight");
    }
    else {
       // code for firefox indicator
@@ -693,8 +693,8 @@ var TMP_tabDNDObserver = {
 
       tabRect = gBrowser.tabs[index].getBoundingClientRect();
       if (ltr)
-         newMargin = tabRect.left - rect.left  +
-                     (left_right == 1 ? tabRect.width + this.LinuxMarginEnd: 0) -
+         newMargin = tabRect.left - rect.left +
+                     (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
                      this.paddingLeft;
       else
          newMargin = rect.right - tabRect.left -
@@ -741,8 +741,8 @@ var TMP_tabDNDObserver = {
       var index = this.dragmarkindex.newIndex;
       if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
          this.removetDragmarkAttribute(gBrowser.tabs[index]);
-      if (index !== 0 && gBrowser.tabs[index-1].hasAttribute("dragmark"))
-         this.removetDragmarkAttribute(gBrowser.tabs[index-1]);
+      if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
+         this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
     }
     else
       this.setFirefoxDropIndicator(false);
@@ -750,15 +750,15 @@ var TMP_tabDNDObserver = {
     this.dragmarkindex = null;
   },
 
-  setFirefoxDropIndicator: function (val) {
+  setFirefoxDropIndicator: function(val) {
     gBrowser.tabContainer._tabDropIndicator.collapsed = !val;
   },
 
-  removetDragmarkAttribute: function (tab) {
+  removetDragmarkAttribute: function(tab) {
     tab.removeAttribute("dragmark");
   },
 
-  setDragmarkAttribute: function (tab, markSide) {
+  setDragmarkAttribute: function(tab, markSide) {
     tab.setAttribute("dragmark", markSide);
   },
 
@@ -779,7 +779,7 @@ var TMP_tabDNDObserver = {
         // Do not allow transfering a private tab to a non-private window
         // and vice versa.
         (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
-            PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerDocument.defaultView))){
+            PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerDocument.defaultView))) {
         return (dt.effectAllowed = "none");
       }
 
@@ -820,7 +820,7 @@ var TMP_tabDNDObserver = {
 }; // TMP_tabDNDObserver end
 
 var TMP_undocloseTabButtonObserver = {
-  onDragOver: function (aEvent) {
+  onDragOver: function(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (!sourceNode || sourceNode.localName != "tab") {
@@ -845,7 +845,7 @@ var TMP_undocloseTabButtonObserver = {
     return true;
   },
 
-  onDragExit: function (aEvent) {
+  onDragExit: function(aEvent) {
     if (aEvent.target.hasAttribute("dragover")) {
       var statusTextFld = document.getElementById("statusbar-display");
       if (statusTextFld)
@@ -857,12 +857,12 @@ var TMP_undocloseTabButtonObserver = {
     }
   },
 
-  onDrop: function (aEvent) {
+  onDrop: function(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (sourceNode && sourceNode.localName == "tab")
       // let tabbrowser drag event time to end before we remove the sourceNode
-      setTimeout( function (b, aTab) {b.removeTab(aTab, {animate: true});}, 0, gBrowser, sourceNode);
+      setTimeout(function(b, aTab) {b.removeTab(aTab, {animate: true});}, 0, gBrowser, sourceNode);
 
     this.onDragExit(aEvent);
   },
@@ -909,7 +909,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
       // so here we reverse the pref if user press Alt key
       openTabPref = (altKey ^ openTabPref) == 1;
    }
-   return { inNew: !isBlankTab && (isLockTab || openTabPref), lock: isLockTab };
+   return {inNew: !isBlankTab && (isLockTab || openTabPref), lock: isLockTab};
 };
 
 Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
@@ -940,7 +940,7 @@ var TMP_TabView = { /* jshint ignore: line */
     return (this.installed = installed);
   },
 
-  checkTabs: function (tabs) {
+  checkTabs: function(tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
@@ -953,12 +953,12 @@ var TMP_TabView = { /* jshint ignore: line */
   },
 
   // includung _removingTabs
-  currentGroup: function () {
+  currentGroup: function() {
     return Array.filter(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
-  getTabPosInCurrentGroup: function (aTab) {
+  getTabPosInCurrentGroup: function(aTab) {
     if (aTab) {
       let tabs = Array.filter(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
@@ -966,7 +966,7 @@ var TMP_TabView = { /* jshint ignore: line */
     return -1;
   },
 
-  getIndexInVisibleTabsFromTab: function (aTab) {
+  getIndexInVisibleTabsFromTab: function(aTab) {
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
@@ -1203,7 +1203,7 @@ Tabmix.navToolbox = {
       this.urlBarInitialized = obj[fn].toString().indexOf(TMP_fn) > -1;
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
-    if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function" ) {
+    if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function") {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
       Tabmix.changeCode(Omnibar, "Omnibar.intercepted_handleCommand")._replace(
         'Omnibar.handleSearchQuery',
@@ -1296,7 +1296,7 @@ Tabmix.navToolbox = {
     if (alltabsPopup && !alltabsPopup._tabmix_inited) {
       alltabsPopup._tabmix_inited = true;
       alltabsPopup.setAttribute("context", gBrowser.tabContextMenu.id);
-      alltabsPopup.__ensureElementIsVisible = function () {
+      alltabsPopup.__ensureElementIsVisible = function() {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
         scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
       };
@@ -1319,7 +1319,7 @@ Tabmix.navToolbox = {
     this.setScrollButtons();
     try {
       this.setCloseButtonPosition();
-    } catch(ex) { }
+    } catch (ex) { }
     gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
     this.setScrollButtons(false, true);
 

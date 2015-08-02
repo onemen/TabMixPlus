@@ -122,7 +122,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
                       this.prefs.getIntPref("sessions.onStart") <= 1 ||
                       this.prefs.getBoolPref("sessions.crashRecovery") &&
                       this.prefs.prefHasUserValue("sessions.crashed"));
-    var notRestore =  firstWindow && !disabled && sessionManager &&
+    var notRestore = firstWindow && !disabled && sessionManager &&
                       this.prefs.getIntPref("sessions.onStart") > 1 &&
                       (!this.prefs.getBoolPref("sessions.onStart.restorePinned") ||
                         this.prefs.getBoolPref("sessions.restore.concatenate"));
@@ -222,7 +222,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // look for installed extensions that are incompatible with tabmix
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
-        let tmp = { };
+        let tmp = {};
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
         tmp = new tmp.CompatibilityCheck(aWindow, true);
       }, 0, window);
@@ -264,14 +264,16 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     };
 
     tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
-       try{
+       try {
           if (!aBrowser || !aBrowser.currentURI)
              return true;
           if (aBrowser.canGoForward || aBrowser.canGoBack)
              return false;
           return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
                  Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
-       } catch (ex) {Tabmix.assert(ex); return true;}
+       } catch (ex) {
+Tabmix.assert(ex); return true;
+}
     };
 
     /**
@@ -281,7 +283,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
      */
     if (typeof tabBrowser.getTabForBrowser != "function") {
        // this is _getTabForBrowser version from Firefox 23
-       tabBrowser.getTabForBrowser = function (aBrowser) {
+       tabBrowser.getTabForBrowser = function(aBrowser) {
           for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].linkedBrowser == aBrowser)
               return this.tabs[i];
@@ -290,7 +292,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
        };
     }
 
-    tabBrowser.getTabForLastPanel = function () {
+    tabBrowser.getTabForLastPanel = function() {
       let notificationbox = this.mPanelContainer.lastChild;
       let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
       let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;

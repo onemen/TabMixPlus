@@ -15,7 +15,7 @@ var TMP_SessionStore = { // jshint ignore:line
      try {
        TabmixSvc.ss.init(window);
        this._ssInited = true;
-     } catch(ex) {
+     } catch (ex) {
        dump("nsSessionStore could not be initialized: " + ex + "\n");
        Tabmix.assert(ex);
        return;
@@ -96,7 +96,7 @@ var TMP_SessionStore = { // jshint ignore:line
          });
 
          TabmixSvc.sm.persistTabAttributeSet = true;
-      } catch(ex) {
+      } catch (ex) {
          Tabmix.log("nsSessionStore could not add Attribute to persistTabAttribute: " + ex + "\n");
       }
    },
@@ -146,7 +146,7 @@ var TMP_SessionStore = { // jshint ignore:line
                case 1:
                   Services.prefs.setIntPref("extensions.sessionmanager.startup", 1);
                   break;
-               //default: nothing to do
+               // default: nothing to do
             }
             switch (Tabmix.prefs.getIntPref("sessions.onClose")) {
                case 0:
@@ -181,7 +181,7 @@ var TMP_SessionStore = { // jshint ignore:line
          let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
          let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
          let self = this;
-         let callBack = function (aResult) {
+         let callBack = function(aResult) {
             if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button === 0))) {
               self.setSessionRestore(false);
               Services.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
@@ -212,7 +212,7 @@ var TMP_SessionStore = { // jshint ignore:line
       }
    },
 
-   isSessionStoreEnabled: function () {
+   isSessionStoreEnabled: function() {
      return Services.prefs.getIntPref("browser.startup.page") == 3 ||
             Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
    },
@@ -221,7 +221,7 @@ var TMP_SessionStore = { // jshint ignore:line
    // we call this only one time on window load
    // and store the value in Tabmix.isWindowAfterSessionRestore
    // we call this from onContentLoaded before nsSessionStore run its onLoad
-   setAfterSessionRestored: function () {
+   setAfterSessionRestored: function() {
       let afterSessionRestore;
       if (!Tabmix.isFirstWindow)
          afterSessionRestore = false;
@@ -260,7 +260,7 @@ var TMP_SessionStore = { // jshint ignore:line
       }
    },
 
-   setSessionRestore: function (aEnable) {
+   setSessionRestore: function(aEnable) {
      if (!Tabmix.isVersion(200))
         Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
       Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
@@ -306,12 +306,12 @@ var TMP_SessionStore = { // jshint ignore:line
       // restore attributes from the legacy Firefox 2.0/3.0 format
       if (aTabData.xultab) {
          var xultab = aTabData.xultab.split(" ");
-         for ( var i= 0; i < xultab.length; i++ ){
+         for (var i = 0; i < xultab.length; i++) {
             if (/^([^\s=]+)=(.*)/.test(xultab[i]) && RegExp.$1 == attrib)
                return decodeURI(RegExp.$2);
          }
       }
-      return  "";
+      return "";
    }
 
 };
@@ -377,7 +377,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
          var url = this.getUrl(tabData);
          var title = this.getTitle(tabData, url);
          var _uri = makeURI(url);
-         if ( _uri.scheme == "about" && title === "" )
+         if (_uri.scheme == "about" && title === "")
             url = title = "about:blank";
          else try {
             url = _uri.scheme + ":\/\/" + _uri.hostPort + _uri.path;
@@ -387,10 +387,10 @@ var TMP_ClosedTabs = { // jshint ignore:line
          var label = title ? title : url;
          let count = "";
          if (ltr) {
-            count = (i<9 ? "  " : "") + (i + 1) + ": ";
-            if (i+1 < 10)
-               m.setAttribute("accesskey", i+1);
-            else if (i+1 == 10)
+            count = (i < 9 ? "  " : "") + (i + 1) + ": ";
+            if (i + 1 < 10)
+               m.setAttribute("accesskey", i + 1);
+            else if (i + 1 == 10)
                m.setAttribute("accesskey", 0);
          }
          m.setAttribute("label", count + label);
@@ -501,7 +501,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       Tabmix.setNumberOfTabsClosedLast(1);
    },
 
-   removeAllClosedTabs: function () {
+   removeAllClosedTabs: function() {
       // update our session data
       var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
       if (updateRDF)
@@ -544,7 +544,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
 
       // catch blank tabs
       var blankTabs = [];
-      for (let i = 0; i < gBrowser.tabs.length ; i++) {
+      for (let i = 0; i < gBrowser.tabs.length; i++) {
          if (gBrowser.isBlankNotBusyTab(gBrowser.tabs[i]))
             blankTabs.push(gBrowser.tabs[i]);
       }
@@ -556,7 +556,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       }
 
       // remove unused blank tabs
-      while(blankTabs.length > 0){
+      while (blankTabs.length > 0) {
          let blankTab = blankTabs.pop();
          blankTab.collapsed = true;
          gBrowser.removeTab(blankTab);
@@ -659,14 +659,14 @@ var TabmixConvertSession = { // jshint ignore:line
       if (!sessions)
          return;
 
-      if(TabmixSessionManager.nodeHasArc("rdf:gSessionManager", "status"))
+      if (TabmixSessionManager.nodeHasArc("rdf:gSessionManager", "status"))
          return;
 
       TabmixSessionManager.setLiteral("rdf:gSessionManager", "status", "converted");
       TabmixSessionManager.saveStateDelayed();
-      var callBack = function (aResult) {
+      var callBack = function(aResult) {
                   if (aResult.button == Tabmix.BUTTON_OK) {
-                    setTimeout(function (a,b) {
+                    setTimeout(function(a, b) {
                       TabmixConvertSession.convertFile(a, b);
                     }, 50, null, true);
                   }
@@ -683,7 +683,7 @@ var TabmixConvertSession = { // jshint ignore:line
       }.bind(this);
 
       fp.init(aWindow, this.getString("selectfile"), nsIFilePicker.modeOpen);
-      fp.defaultString="session.rdf";
+      fp.defaultString = "session.rdf";
       fp.appendFilter(this.getString("rdffiles"), "*.rdf");
       fp.appendFilter(this.getString("sessionfiles"), "*session*.*");
       fp.appendFilters(nsIFilePicker.filterText | nsIFilePicker.filterAll);
@@ -730,11 +730,11 @@ var TabmixConvertSession = { // jshint ignore:line
             }
          }
       }
-      return { windows: _windows, tabsCount: tabsCount };
+      return {windows: _windows, tabsCount: tabsCount};
    },
 
    getWindowState: function cs_getWindowState(rdfNodeWindow) {
-      var state = { tabs: [], selected: 0, _closedTabs: [] };
+      var state = {tabs: [], selected: 0, _closedTabs: []};
 
       var rdfNodeTabs = TabmixSessionManager.getResource(rdfNodeWindow, "tabs");
       if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || TabmixSessionManager.containerEmpty(rdfNodeTabs)) {
@@ -785,8 +785,8 @@ var TabmixConvertSession = { // jshint ignore:line
             tabsData.push(new _tabData(rdfNodeTab));
          }
       }
-      tabsData.sort(function (a, b) {return a - b;});
-      for (let i = 0; i < tabsData.length ; i++) {
+      tabsData.sort(function(a, b) {return a - b;});
+      for (let i = 0; i < tabsData.length; i++) {
          let tab = this.getTabState(tabsData[i].node, false, internal);
          if (tab)
             _tabs.push(tab);
@@ -818,7 +818,7 @@ var TabmixConvertSession = { // jshint ignore:line
    },
 
    getTabState: function cs_getTabState(rdfNodeTab, aClosedTab, internal) {
-      var tabData = {entries:[], index: 0, zoom: 1, disallow:"", text:""};
+      var tabData = {entries: [], index: 0, zoom: 1, disallow: "", text: ""};
       tabData.entries = this.getHistoryState(rdfNodeTab);
       if (!tabData.entries.length)
         return null;
@@ -844,7 +844,7 @@ var TabmixConvertSession = { // jshint ignore:line
       var tabProperties = properties.substr(0, booleanAttrLength);
       var disallow = [];
       for (let j = 0; j < tabAttribute.length; j++) {
-         if (tabProperties.charAt(j+2) != "1")
+         if (tabProperties.charAt(j + 2) != "1")
             disallow.push(tabAttribute[j]);
       }
       tabData.disallow = disallow.join(",");
@@ -929,10 +929,10 @@ var TabmixConvertSession = { // jshint ignore:line
       let newFormat = tmpData.indexOf(sep) == -1;
       tmpData = decodeData(tmpData, newFormat);
       var historyData = tmpData.split(sep);
-      var historyCount = historyData.length/3;
+      var historyCount = historyData.length / 3;
       var entries = [];
       for (let i = 0; i < historyCount; i++) {
-         let entry = { url:"", children:[], ID: 0};
+         let entry = {url: "", children: [], ID: 0};
          let index = i * 3;
          entry.url = historyData[index + 1];
          if (!entry.url)

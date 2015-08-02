@@ -3,7 +3,7 @@
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
   visibleRows: 1,
-  _windowStyle: {exist:false, value:null},
+  _windowStyle: {exist: false, value: null},
   _heights: [],
   _rowHeight: null,
   hideMode: 0,
@@ -160,7 +160,7 @@ var TabmixTabbar = {
     else
       this.updateScrollStatus();
 
-    window.setTimeout( function TMP_updateSettings_adjustScroll(_currentVisible) {
+    window.setTimeout(function TMP_updateSettings_adjustScroll(_currentVisible) {
         if (_currentVisible)
           gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
         self.updateBeforeAndAfter();
@@ -248,7 +248,7 @@ var TabmixTabbar = {
 
     var newHeight, fillRowsHeights;
     if (typeof(this._heights[tabsPosition]) == "undefined") {
-      this._heights[tabsPosition] = { };
+      this._heights[tabsPosition] = {};
       fillRowsHeights = true;
     }
     if (aRows in this._heights[tabsPosition])
@@ -258,7 +258,7 @@ var TabmixTabbar = {
         let height = Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
         if (tabBar.getAttribute("multibar") == "scrollbar") {
           // We can get here if we switch to diffrent tabs position while in multibar
-          let rowHeight = height/Tabmix.tabsUtils.lastTabRowNumber;
+          let rowHeight = height / Tabmix.tabsUtils.lastTabRowNumber;
           newHeight = rowHeight * aRows;
         }
         else
@@ -268,7 +268,7 @@ var TabmixTabbar = {
         newHeight = this.getRowHeight(tabsPosition) * aRows;
 
       this._heights[tabsPosition][aRows] = newHeight;
-      if (fillRowsHeights || (aRows > 2 && typeof(this._heights[tabsPosition][aRows-1]) == "undefined")) {
+      if (fillRowsHeights || (aRows > 2 && typeof(this._heights[tabsPosition][aRows - 1]) == "undefined")) {
         let rowHeight = newHeight / aRows;
         for (let row = 2; row < aRows; row++)
           this._heights[tabsPosition][row] = rowHeight * row;
@@ -282,23 +282,23 @@ var TabmixTabbar = {
   setHeightByPixels: function TMP_setHeightByPixels(newHeight) {
     var tabBar = gBrowser.tabContainer;
     var tabstrip = tabBar.mTabstrip._scrollbox;
-    tabstrip.style.setProperty("max-height",newHeight + "px", "important");
-    tabstrip.style.setProperty("height",newHeight + "px", "important");
+    tabstrip.style.setProperty("max-height", newHeight + "px", "important");
+    tabstrip.style.setProperty("height", newHeight + "px", "important");
     let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
     let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
     let tabsToolbar = document.getElementById("TabsToolbar");
     if (TabmixSvc.isMac && !Tabmix.isVersion(280)) {
-      tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
+      tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
     // override fixed height set by theme to .tabbrowser-tabs class
     if (tabBar.boxObject.height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
-      tabBar.style.setProperty("max-height",newTabbarHeight + "px", "important");
-      tabBar.style.setProperty("height",newTabbarHeight + "px", "important");
+      tabBar.style.setProperty("max-height", newTabbarHeight + "px", "important");
+      tabBar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
     if (tabsToolbar.boxObject.height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
-      tabsToolbar.style.setProperty("max-height",newTabbarHeight + "px", "important");
-      tabsToolbar.style.setProperty("height",newTabbarHeight + "px", "important");
+      tabsToolbar.style.setProperty("max-height", newTabbarHeight + "px", "important");
+      tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
 
     // experimental - for theme that put tababr above the menus
@@ -352,11 +352,11 @@ var TabmixTabbar = {
         Tabmix.tabsUtils.updateVerticalTabStrip();
 
       if (this.position == 1)
-        setTimeout(function(){Tabmix.tabsUtils.updateVerticalTabStrip();},0);
+        setTimeout(function() {Tabmix.tabsUtils.updateVerticalTabStrip();}, 0);
 
       this.updateBeforeAndAfter();
     }
-    ///maybe we cad add this to the popupshing / or as css rule ?
+    /// maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
         (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
@@ -490,28 +490,28 @@ var TabmixTabbar = {
     // Just in case we missed something in the above code............
     var i, j;
     i = j = tabs[0]._tPos;
-    if ( tabs[j] && tabs[j].getAttribute("selected") == "true" )
+    if (tabs[j] && tabs[j].getAttribute("selected") == "true")
       j++;
     while (this.inSameRow(tabs.item(i), tabs.item(j)))
       i++;
 
-    if ( !tabs[i] ) // only one row
-      if ( tabs[j] )
+    if (!tabs[i]) // only one row
+      if (tabs[j])
         return tabs[j].boxObject.height;
       else
         return tabs[0].boxObject.height;
 
-    if ( tabs[i].getAttribute("selected") == "true" )
+    if (tabs[i].getAttribute("selected") == "true")
       i++;
-    if ( !tabs[i] )
-      return tabs[i-1].boxObject.height;
+    if (!tabs[i])
+      return tabs[i - 1].boxObject.height;
 
     this._rowHeight[tabsPosition] = tabs[i].baseY - tabs[j].baseY;
     return this._rowHeight[tabsPosition];
   },
 
   inSameRow: function TMP_inSameRow(tab1, tab2) {
-    if ( !tab1 || !tab2 )
+    if (!tab1 || !tab2)
       return false;
 
     var topY = Tabmix.tabsUtils.topTabY;
@@ -590,10 +590,10 @@ Tabmix.tabsUtils = {
     var tabbrowser = this.tabBar.tabbrowser;
     let tab = this.tabBar.firstChild;
 
-    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function () {
+    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function() {
       return window.getComputedStyle(tabbrowser, null).direction == "rtl";
     });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function () {return !Tabmix.rtl;});
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function() {return !Tabmix.rtl;});
 
     // don't set button to left side if it is not inside tab-content
     let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
@@ -981,7 +981,7 @@ Tabmix.tabsUtils = {
     height += marginTop + marginBottom;
 
     var tabBottom = top - marginTop + height;
-    return Math.round((tabBottom - aTop)/height);
+    return Math.round((tabBottom - aTop) / height);
   },
 
   get canScrollTabsLeft() {
@@ -1067,7 +1067,7 @@ Tabmix.tabsUtils = {
 Tabmix.visibleTabs = {
   get first() {
     var tabs = gBrowser.tabs;
-    for (let i = 0; i < tabs.length; i++){
+    for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (!tab.hidden && !tab.closing)
         return tab;
@@ -1079,7 +1079,7 @@ Tabmix.visibleTabs = {
     // we only need the last visible tab,
     // find it directly instead of using gBrowser.tabContainer.visibleTabs
     var tabs = gBrowser.tabs;
-    for (let i = tabs.length - 1; i >= 0; i--){
+    for (let i = tabs.length - 1; i >= 0; i--) {
       let tab = tabs[i];
       if (!tab.hidden && !tab.closing)
         return tab;
@@ -1087,7 +1087,7 @@ Tabmix.visibleTabs = {
     return gBrowser.selectedTab;
   },
 
-  previous: function (aTab) {
+  previous: function(aTab) {
     var tabs = gBrowser.visibleTabs;
     var index = tabs.indexOf(aTab);
     if (--index > -1)
@@ -1095,7 +1095,7 @@ Tabmix.visibleTabs = {
     return null;
   },
 
-  next: function (aTab) {
+  next: function(aTab) {
     var tabs = gBrowser.visibleTabs;
     var index = tabs.indexOf(aTab);
     if (index > -1 && ++index < tabs.length)
@@ -1103,7 +1103,7 @@ Tabmix.visibleTabs = {
     return null;
   },
 
-  indexOf: function (aTab) {
+  indexOf: function(aTab) {
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
@@ -1134,7 +1134,7 @@ var gTMPprefObserver = {
       for (var i = 0; i < this.OBSERVING.length; ++i)
         Services.prefs.addObserver(this.OBSERVING[i], this, false);
     }
-    catch(e) {
+    catch (e) {
       Tabmix.log("prefs-Observer failed to attach:" + "\n" + e);
       Tabmix.prefs.setBoolPref("PrefObserver.error", true);
     }
@@ -1169,9 +1169,9 @@ var gTMPprefObserver = {
     if (this.preventUpdate)
       return;
     // if we don't have a valid window (closed)
-    if ( !(typeof(document) == 'object' && document) ) {
+    if (!(typeof(document) == 'object' && document)) {
       this.removeObservers(); // remove the observer..
-      return;  // ..and don't continue
+      return; // ..and don't continue
     }
 
     var prefValue, value;
@@ -1287,7 +1287,7 @@ var gTMPprefObserver = {
         if (typeof this._tabWidthChanged == "undefined") {
           let self = this;
           this._tabWidthChanged = true;
-          [50, 100, 250, 500].forEach(function (timeout) {
+          [50, 100, 250, 500].forEach(function(timeout) {
             setTimeout(function TMP_tabWidthChanged() {
               if (currentVisible)
                 gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
@@ -1506,7 +1506,7 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
         break;
       case "layout.css.devPixelsPerPx":
-        setTimeout(function(self) {self.setBgMiddleMargin();},0, this);
+        setTimeout(function(self) {self.setBgMiddleMargin();}, 0, this);
         break;
       case "extensions.tabmix.showTabContextMenuOnTabbar":
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
@@ -1649,7 +1649,7 @@ var gTMPprefObserver = {
                      '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                      ':not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
-                     '-moz-margin-end: %Spx !important;}'.replace("%S", - icon.getBoundingClientRect().width);
+                     '-moz-margin-end: %Spx !important;}'.replace("%S", -icon.getBoundingClientRect().width);
     icon.style.removeProperty("display");
     this.insertRule(iconMargin);
 
@@ -1741,7 +1741,7 @@ var gTMPprefObserver = {
               '-moz-image-region: #REGION;}';
     let url = "chrome://browser/skin/Toolbar.png", region;
     let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin=="classic/1.0") {
+    if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
                                        "rect(0px, 96px, 24px, 72px)";
@@ -1781,7 +1781,7 @@ var gTMPprefObserver = {
                   ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
-    newRule = newRule.replace("#1" ,_min).replace("#2" ,_max);
+    newRule = newRule.replace("#1", _min).replace("#2", _max);
     this.insertRule(newRule, "width");
 
     // rule for controling moz-margin-start when we have pinned tab in multi-row
@@ -1853,7 +1853,7 @@ var gTMPprefObserver = {
     }
   },
 
-  setProgressMeter: function () {
+  setProgressMeter: function() {
     var showOnTabs = Tabmix.prefs.getBoolPref("progressMeter");
     var attribValue = null;
     if (showOnTabs)
@@ -1871,7 +1871,7 @@ var gTMPprefObserver = {
         var prefValue = Services.prefs.getIntPref(pref);
         test = test ? prefValue == testVal : prefValue != testVal;
       }
-      catch(e){ test = true; }
+      catch (e) { test = true; }
 
       if (test)
         Services.prefs.setIntPref(pref, newVal);
@@ -2085,7 +2085,7 @@ var gTMPprefObserver = {
       this.setTabsOnTop(TabmixTabbar.position == 1);
 
     if (TabmixTabbar.position === 0) {// top
-      this._bottomRect = {top:null, width:null, height:null};
+      this._bottomRect = {top: null, width: null, height: null};
       let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
@@ -2120,7 +2120,7 @@ var gTMPprefObserver = {
     }
   },
 
-  _bottomRect: {top:null, width:null, height:null},
+  _bottomRect: {top: null, width: null, height: null},
   updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
     if (TabmixTabbar.position != 1 || !gBrowser.tabContainer.visible)
       return;
@@ -2168,7 +2168,7 @@ var gTMPprefObserver = {
     Tabmix.setItem("urlbar-go-button", "context", show ? "autoreload_popup" : null);
 
     let setContext = function(command) {
-      let items = document.getElementsByAttribute("command" ,"Browser:" + command);
+      let items = document.getElementsByAttribute("command", "Browser:" + command);
       Array.slice(items).forEach(function(item) {
         if (item.localName == "toolbarbutton")
           Tabmix.setItem(item, "context", show ? "autoreload_popup" : null);
@@ -2205,7 +2205,7 @@ var gTMPprefObserver = {
     // remove disp=attd&view=att it's make problem with gMail
     if (Tabmix.prefs.prefHasUserValue("filetype")) {
        var filetype = Tabmix.prefs.getCharPref("filetype");
-       filetype = filetype.replace("/disp=attd&view=att/","").replace("  ", " ").trim();
+       filetype = filetype.replace("/disp=attd&view=att/", "").replace("  ", " ").trim();
        Tabmix.prefs.setCharPref("filetype", filetype);
     }
     // 2008-08-17
@@ -2473,7 +2473,7 @@ try {
           b.selectedTab = b.addTab("http://tmp.garyr.net/version_update2.htm?version=" +
                                    currentVersion + defaultChanged);
           b.selectedTab.loadOnStartup = true;
-        },1000);
+        }, 1000);
         // noting more to do at the moment
       }
     };
@@ -2559,7 +2559,7 @@ var TabmixProgressListener = {
       }, true);
     },
 
-    onProgressChange: function (aBrowser, aWebProgress, aRequest,
+    onProgressChange: function(aBrowser, aWebProgress, aRequest,
                                 aCurSelfProgress, aMaxSelfProgress,
                                 aCurTotalProgress, aMaxTotalProgress) {
       if (!this.showProgressOnTab || TabmixTabbar.hideMode == 2 || !aMaxTotalProgress)

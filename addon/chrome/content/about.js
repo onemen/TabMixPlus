@@ -8,7 +8,7 @@ function init() { // jshint ignore:line
     var currentVersion = addon.version;
     var extensionVersion = document.getElementById("extensionVersion");
     extensionVersion.value = extensionsStrings.getFormattedString("aboutWindowVersionString", [currentVersion]);
-  } catch(ex) {
+  } catch (ex) {
     extensionVersion.hidden = true;
   }
   var acceptButton = document.documentElement.getButton("accept");

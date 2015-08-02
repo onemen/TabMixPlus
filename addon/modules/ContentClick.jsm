@@ -58,7 +58,7 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-let Tabmix = { };
+let Tabmix = {};
 
 var ContentClickInternal = {
   _timer: null,
@@ -87,7 +87,7 @@ var ContentClickInternal = {
     this.initContentAreaClick();
   },
 
-  onQuitApplication: function () {
+  onQuitApplication: function() {
     if (this._timer)
       this._timer.clear();
 
@@ -606,7 +606,7 @@ var ContentClickInternal = {
       }
     }
 
-    if (typeof GM_function !=  "function")
+    if (typeof GM_function != "function")
       return;
 
     this._GM_function.set(window, GM_function);
@@ -675,7 +675,7 @@ var ContentClickInternal = {
     href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
-    if (event.button != 2 && typeof(custombuttons) !='undefined'){
+    if (event.button != 2 && typeof(custombuttons) != 'undefined') {
       if (this.checkAttr(href, "custombutton://"))
         return true;
     }
@@ -708,7 +708,7 @@ var ContentClickInternal = {
   },
 
   isUrlForDownload: function TMP_isUrlForDownload(linkHref) {
-    //we need this check when calling from onDragOver and onDrop
+    // we need this check when calling from onDragOver and onDrop
     if (linkHref.startsWith("mailto:"))
       return true;
 
@@ -718,15 +718,15 @@ var ContentClickInternal = {
     var linkHrefExt = "";
     if (linkHref) {
       linkHref = linkHref.toLowerCase();
-      linkHrefExt = linkHref.substring(linkHref.lastIndexOf("/"),linkHref.length);
-      linkHrefExt = linkHrefExt.substring(linkHrefExt.indexOf("."),linkHrefExt.length);
+      linkHrefExt = linkHref.substring(linkHref.lastIndexOf("/"), linkHref.length);
+      linkHrefExt = linkHrefExt.substring(linkHrefExt.indexOf("."), linkHrefExt.length);
     }
 
     var testString, hrefExt, testExt;
     for (var l = 0; l < filetype.length; l++) {
-      if (filetype[l].indexOf("/") != -1){
+      if (filetype[l].indexOf("/") != -1) {
       // add \ before first ?
-        testString = filetype[l].substring(1,filetype[l].length-1).replace(/^\?/,"\\?");
+        testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
         hrefExt = linkHref;
       }
       else {
@@ -1092,7 +1092,7 @@ var ContentClickInternal = {
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
           level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
-        } catch(e) {
+        } catch (e) {
           level = 2;
         }
         var host = url.hostPort.split(".");

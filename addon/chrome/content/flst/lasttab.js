@@ -6,20 +6,20 @@
 // The Initial Developer of the Original Code is Timothy Humphrey.  //
 /*////////////////////////////////////////////////////////////////////
 var TMP_LastTab = {
-   CtrlKey : false,
-   handleCtrlTab : true,
-   KeyboardNavigating : true,
-   KeyLock : false,
-   respondToMouseInTabList : true,
-   showTabList : true,
-   SuppressTabListReset : false,
-   TabHistory : [],
-   TabIndex : 0,
-   TabList : null,
-   TabListLock : false,
+   CtrlKey: false,
+   handleCtrlTab: true,
+   KeyboardNavigating: true,
+   KeyLock: false,
+   respondToMouseInTabList: true,
+   showTabList: true,
+   SuppressTabListReset: false,
+   TabHistory: [],
+   TabIndex: 0,
+   TabList: null,
+   TabListLock: false,
    _inited: false,
 
-   DisplayTabList : function() {
+   DisplayTabList: function() {
       var element = document.documentElement;
       var tablist = this.TabList;
 
@@ -48,7 +48,7 @@ var TMP_LastTab = {
       this.TabListLock = true;
    },
 
-   init : function() {
+   init: function() {
       this._inited = true;
 
       this.TabList = document.getElementById("lasttabTabList");
@@ -78,7 +78,7 @@ var TMP_LastTab = {
       this.ReadPreferences();
    },
 
-   deinit : function() {
+   deinit: function() {
       if (!this._inited)
         return;
 
@@ -91,7 +91,7 @@ var TMP_LastTab = {
          els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
    },
 
-   handleEvent : function(event) {
+   handleEvent: function(event) {
       switch (event.type) {
          case "keydown":
             this.OnKeyDown(event);
@@ -111,25 +111,25 @@ var TMP_LastTab = {
       }
    },
 
-   ItemActive : function(event) {
+   ItemActive: function(event) {
       TabmixAllTabs.updateMenuItemActive(event);
-      if(this.respondToMouseInTabList) {
-         if(this.KeyboardNavigating) {
-            if(event.target.value != this.inverseIndex(this.TabIndex))
+      if (this.respondToMouseInTabList) {
+         if (this.KeyboardNavigating) {
+            if (event.target.value != this.inverseIndex(this.TabIndex))
                this.tabs[this.TabIndex].mCorrespondingMenuitem.setAttribute("_moz-menuactive", "false");
             this.KeyboardNavigating = false;
          }
          this.TabIndex = this.inverseIndex(event.target.value);
       }
       else {
-         if(event.target.value != this.inverseIndex(this.TabIndex))
+         if (event.target.value != this.inverseIndex(this.TabIndex))
             event.target.setAttribute("_moz-menuactive", "false");
       }
    },
 
-   ItemInactive : function(event) {
+   ItemInactive: function(event) {
       TabmixAllTabs.updateMenuItemInactive(event);
-      if(!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex))
+      if (!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex))
          event.target.setAttribute("_moz-menuactive", "true");
    },
 
@@ -150,13 +150,13 @@ var TMP_LastTab = {
        this.TabHistory.splice(i, 1);
    },
 
-   isCtrlTab : function(event) {
+   isCtrlTab: function(event) {
      return (this.handleCtrlTab || this.showTabList) &&
              event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB &&
              event.ctrlKey && !event.altKey && !event.metaKey;
    },
 
-   OnKeyDown : function(event) {
+   OnKeyDown: function(event) {
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
       Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
       if (Tabmix.isVersion(320))
@@ -180,10 +180,10 @@ var TMP_LastTab = {
      return this._tabs;
    },
 
-   OnKeyPress : function _LastTab_OnKeyPress(event) {
+   OnKeyPress: function _LastTab_OnKeyPress(event) {
       if (this.isCtrlTab(event)) {
          let tabCount = this.tabs.length;
-         if(!this.KeyLock) {
+         if (!this.KeyLock) {
             if (this.handleCtrlTab) {
                this.TabIndex = tabCount - 1;
             } else {
@@ -192,29 +192,29 @@ var TMP_LastTab = {
             this.KeyLock = true;
          }
 
-         if(this.TabListLock) {
+         if (this.TabListLock) {
             let tab = this.tabs[this.TabIndex];
             if (tab)
               tab.mCorrespondingMenuitem.setAttribute("_moz-menuactive", "false");
          }
 
-         if((this.handleCtrlTab && event.shiftKey) || (!this.handleCtrlTab && !event.shiftKey)) {
+         if ((this.handleCtrlTab && event.shiftKey) || (!this.handleCtrlTab && !event.shiftKey)) {
             this.TabIndex++;
-            if(this.TabIndex >= tabCount)
+            if (this.TabIndex >= tabCount)
                this.TabIndex = 0;
          }
          else {
             this.TabIndex--;
-            if(this.TabIndex < 0)
+            if (this.TabIndex < 0)
                this.TabIndex = tabCount - 1;
          }
 
-         if(this.showTabList) {
+         if (this.showTabList) {
             this.KeyboardNavigating = true;
-            if(!this.TabListLock) {
-               if(tabCount > 1) {
+            if (!this.TabListLock) {
+               if (tabCount > 1) {
                  if (!this._timer) {
-                   this._timer = setTimeout(function (self) {
+                   this._timer = setTimeout(function(self) {
                      self._timer = null;
                      if (!self.TabListLock)
                        self.DisplayTabList();
@@ -241,30 +241,30 @@ var TMP_LastTab = {
         return;
       }
       else {
-         if(this.TabListLock)
+         if (this.TabListLock)
             this.TabList.hidePopup();
 
          gBrowser.mTabBox.handleEvent(event);
       }
    },
 
-   OnKeyUp : function _LastTab_OnKeyUp(event) {
+   OnKeyUp: function _LastTab_OnKeyUp(event) {
       var keyReleased = event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_CONTROL;
       this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
       Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-      if(!keyReleased)
+      if (!keyReleased)
         return;
       var tabToSelect;
-      if(this._timer) {
+      if (this._timer) {
         clearTimeout(this._timer);
         this._timer = null;
         tabToSelect = this.tabs[this.TabIndex];
         TabmixAllTabs._tabSelectedFromList(tabToSelect);
         this.PushSelectedTab();
       }
-      if(this.TabListLock) {
+      if (this.TabListLock) {
          let tab = this.tabs[this.TabIndex];
-         if(tab && tab.mCorrespondingMenuitem.getAttribute("_moz-menuactive") == "true") {
+         if (tab && tab.mCorrespondingMenuitem.getAttribute("_moz-menuactive") == "true") {
             tabToSelect = tab;
          }
 
@@ -276,7 +276,7 @@ var TMP_LastTab = {
            TabmixAllTabs._tabSelectedFromList(tabToSelect);
          this.PushSelectedTab();
       }
-      if(this.KeyLock) {
+      if (this.KeyLock) {
          this.PushSelectedTab();
          this.TabIndex = 0;
          this.KeyLock = false;
@@ -284,25 +284,25 @@ var TMP_LastTab = {
       this._tabs = null;
    },
 
-   onMenuCommand : function(event) {
-      if(this.respondToMouseInTabList) {
+   onMenuCommand: function(event) {
+      if (this.respondToMouseInTabList) {
          TabmixAllTabs._tabSelectedFromList(event.target.tab);
          this.PushSelectedTab();
       }
    },
 
-   onPopupshowing : function() {
+   onPopupshowing: function() {
       this.TabList.addEventListener("DOMMenuItemActive", this, true);
       this.TabList.addEventListener("DOMMenuItemInactive", this, true);
    },
 
-   onPopuphidden : function() {
+   onPopuphidden: function() {
       this.TabList.removeEventListener("DOMMenuItemActive", this, true);
       this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
-      if(!this.SuppressTabListReset) {
+      if (!this.SuppressTabListReset) {
          var tablist = this.TabList;
 
-         while(tablist.childNodes.length > 0)
+         while (tablist.childNodes.length > 0)
             tablist.removeChild(tablist.childNodes[0]);
 
          this.TabListLock = false;
@@ -319,18 +319,18 @@ var TMP_LastTab = {
          return;
 
       var tabCount = this.TabHistory.length;
-      if(tabCount != gBrowser.tabs.length) {
-         if(tabCount > gBrowser.tabs.length) {
-            if(gBrowser.tabs.length == 1) {
+      if (tabCount != gBrowser.tabs.length) {
+         if (tabCount > gBrowser.tabs.length) {
+            if (gBrowser.tabs.length == 1) {
                this.KeyLock = false;
                this.TabIndex = 0;
             }
          }
          this.PushSelectedTab();
       }
-      else if(!this.KeyLock) {
-         if(this.CtrlKey)
-            this.KeyLock = true; //allow other tab navigation methods to work
+      else if (!this.KeyLock) {
+         if (this.CtrlKey)
+            this.KeyLock = true; // allow other tab navigation methods to work
          else
             this.PushSelectedTab();
       }
@@ -342,7 +342,7 @@ var TMP_LastTab = {
       this.TabHistory.push(selectedTab);
    },
 
-   ReadPreferences : function() {
+   ReadPreferences: function() {
       // when Build-in tabPreviews is on we disable our own function
       var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
       var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
@@ -367,7 +367,7 @@ var TMP_LastTab = {
       this.respondToMouseInTabList = Tabmix.prefs.getBoolPref("lasttab.respondToMouseInTabList");
    },
 
-   inverseIndex : function(index) {
+   inverseIndex: function(index) {
       return this.handleCtrlTab ? index : this.tabs.length - 1 - index;
    }
 

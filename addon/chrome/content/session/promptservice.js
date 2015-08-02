@@ -43,7 +43,7 @@
            window.opener.Tabmix.Sessions.createMenuForDialog(popup, dialogParams.GetInt(3));
          else
            window.opener.TabmixSessionManager.createMenuForDialog(popup, dialogParams.GetInt(3));
-         switch ( dialogParams.GetInt(3) ) {
+         switch (dialogParams.GetInt(3)) {
             case TMP_SELECT_CRASH: index = popup.childNodes.length - 1;
                break;
             case TMP_SHOW_CLOSED_WINDOW_LIST: index = 1; // 0 is menuseparator
@@ -70,7 +70,7 @@
       // display the textBox
       var textBox = document.getElementById("tm_textbox");
       if (gHideElmParam == TMP_SHOW_TEXTBOX) {
-         messageParent.lastChild.setAttribute("style","height:3em");
+         messageParent.lastChild.setAttribute("style", "height:3em");
          gSavedName = dialogParams.GetString(2).split("\n");
          textBox.value = gSavedName.shift();
          gOrigName = textBox.value.toLowerCase();
@@ -132,7 +132,7 @@
       // if we are not a modal use a callback function
       if (typeof window._callBackFunction == "function") {
         if (window.opener && !window.opener.closed) {
-          let returnData  = {button: dialogParams.GetInt(4),
+          let returnData = {button: dialogParams.GetInt(4),
                              checked: (dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED),
                              label: dialogParams.GetString(5),
                              value: dialogParams.GetInt(6)};
@@ -162,9 +162,9 @@
 
      // && is the magic sequence to embed an & in your label.
      aLabel = aLabel.replace(/\&\&/g, "&");
-     if (aIsLabelFlag) {    // Set text for <label> element
+     if (aIsLabelFlag) { // Set text for <label> element
        aNode.setAttribute("value", aLabel);
-     } else {    // Set text for other xul elements
+     } else { // Set text for other xul elements
        aNode.label = aLabel;
      }
 
@@ -191,13 +191,13 @@
       var cLabel = TabmixSvc.setLabel("sm.replaceStartup.button1");
 
       var description = document.getElementById("tm_info").lastChild.firstChild;
-      textBox.value = textBox.value.replace(/^[\s]+/g,"");
+      textBox.value = textBox.value.replace(/^[\s]+/g, "");
       var name = textBox.value.toLowerCase();
       var validName = 0;
       if (name === "") validName = 1;
       if (validName === 0) {
          for (var i = 0; i < gSavedName.length; i++) {
-            if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "" ) {
+            if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "") {
                if (dialogParams.GetInt(3) == TMP_DLG_RENAME) {
                   if (gOrigName != name) validName = 2;
                   continue;
@@ -208,15 +208,15 @@
             }
          }
       }
-      switch ( validName ) {
+      switch (validName) {
          case 0:
             if (btnOK.disabled) btnOK.disabled = false;
             if (btnOK.hidden) btnOK.hidden = false;
             if (!btnExt.hidden) {
                btnExt.hidden = true;
-               if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel,gCancelLabel);
+               if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel, gCancelLabel);
             }
-            description.replaceData(0,description.length, "");
+            description.replaceData(0, description.length, "");
             document.documentElement.defaultButton = "accept";
             break;
          case 1:
@@ -225,16 +225,16 @@
             if (!btnOK.disabled) btnOK.disabled = true;
             if (!btnExt.hidden) {
                btnExt.hidden = true;
-               if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel,gCancelLabel);
+               if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel, gCancelLabel);
             }
             document.documentElement.defaultButton = "cancel";
             break;
          case 3:
             if (!btnOK.hidden) btnOK.hidden = true;
             btnExt.hidden = false;
-            if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel,cLabel);
+            if (dialogParams.GetInt(3) == TMP_DLG_SAVE) setLabelForNode(btnCancel, cLabel);
             document.documentElement.defaultButton = "cancel";
             break;
       }
-      description.replaceData(0,description.length, msg[validName]);
+      description.replaceData(0, description.length, msg[validName]);
    }

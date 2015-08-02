@@ -2,7 +2,7 @@
 
 var gSessionPane = {
   gSessionManager: null,
-  init: function () {
+  init: function() {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
@@ -23,7 +23,7 @@ var gSessionPane = {
       gMenuPane.updateSessionShortcuts();
   },
 
-  isSessionStoreEnabled: function (onStart) {
+  isSessionStoreEnabled: function(onStart) {
     if (this.gSessionManager)
       return;
 
@@ -37,7 +37,7 @@ var gSessionPane = {
       $("session").selectedIndex = 0;
   },
 
-  setSessionsOptions: function (item) {
+  setSessionsOptions: function(item) {
     let instantApply = document.documentElement.instantApply;
     var useSessionManager = !item.checked;
     $("sesionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
@@ -90,7 +90,7 @@ var gSessionPane = {
       gPrefWindow.setButtons(!gPrefWindow.changes.length);
   },
 
-  setSessionpath: function (val) {
+  setSessionpath: function(val) {
     var menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
     $("pref_sessionpath").value = menuItem.getAttribute("session");
   },
@@ -106,7 +106,7 @@ var gSessionPane = {
     return sm && sm.gSessionManager || sm;
   },
 
-  setVisiblecontent: function (sessionManagerInstalled, onStart) {
+  setVisiblecontent: function(sessionManagerInstalled, onStart) {
     if (typeof sessionManagerInstalled != "boolean")
       return;
 
@@ -126,11 +126,11 @@ var gSessionPane = {
     }
   },
 
-  sessionManagerOptions: function () {
+  sessionManagerOptions: function() {
     this.sessionManagerAddon.openOptions();
   },
 
-  convertSession: function () {
+  convertSession: function() {
     var browserWindow = Tabmix.getTopWin();
     if ($("chooseFile").selectedItem.value == "0")
       browserWindow.TabmixConvertSession.selectFile(window);
