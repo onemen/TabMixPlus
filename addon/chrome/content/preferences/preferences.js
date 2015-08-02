@@ -230,6 +230,17 @@ var gPrefWindow = { // jshint ignore:line
     }
     else if (preference.value != tabs.selectedIndex)
       preference.valueFromPreferences = tabs.selectedIndex;
+
+    // workaround the regression from bug 1187219, missing visuallyselected
+    if (Tabmix.isVersion(420)) {
+      for (let tab of tabs.childNodes) {
+        if (!tab.selected && tab.hasAttribute("visuallyselected")) {
+          tab.removeAttribute("visuallyselected");
+          break;
+        }
+      }
+      tabs.selectedItem.setAttribute("visuallyselected", true);
+    }
   },
 
   afterShortcutsChanged: function() {
