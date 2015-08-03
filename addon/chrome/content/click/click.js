@@ -32,7 +32,7 @@ var TabmixTabClickOptions = {
 
     // don't do anything if user left click on tab or tabbar button
     if (leftClick &&
-        (anonid == "tmp-close-button" || anonid == "soundplaying-icon" ||
+        (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
          target.localName == "toolbarbutton")) {
       return;
     }
