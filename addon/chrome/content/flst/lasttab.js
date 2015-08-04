@@ -1,10 +1,10 @@
 "use strict";
 
-/*////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // The Original Code is the "LastTab" extension for Mozilla Firefox.//
 // version 1.5 - October 26, 2005                                   //
 // The Initial Developer of the Original Code is Timothy Humphrey.  //
-/*////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 var TMP_LastTab = {
    CtrlKey: false,
    handleCtrlTab: true,
@@ -121,8 +121,7 @@ var TMP_LastTab = {
          }
          this.TabIndex = this.inverseIndex(event.target.value);
       }
-      else {
-         if (event.target.value != this.inverseIndex(this.TabIndex))
+      else if (event.target.value != this.inverseIndex(this.TabIndex)) {
             event.target.setAttribute("_moz-menuactive", "false");
       }
    },

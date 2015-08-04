@@ -1,7 +1,6 @@
 "use strict";
 
-///////////////////////////////////////////////////////////////////////////
-//// Drag and Drop observers
+/****    Drag and Drop observers    ****/
 var TMP_tabDNDObserver = {
   gBackupLabel: "",
   gMsg: null,
@@ -102,7 +101,6 @@ var TMP_tabDNDObserver = {
       let c = document.getElementById("content-deck").getBoundingClientRect();
       this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
     }
-
   },
 
   get _isCustomizing() {
@@ -331,10 +329,10 @@ var TMP_tabDNDObserver = {
     event.stopPropagation();
 
     document.getElementById("tabmix-tooltip").hidePopup();
-    /* jshint ignore:start */
+    /* jshint ignore:start */ /* eslint-disable */
     // old TreeStyleTab extension version look for isTabReorder in our code
     var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW;
-    /* jshint ignore:end */
+    /* jshint ignore:end */ /* eslint-enable */
     var newIndex = this._getDNDIndex(event);
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;
@@ -365,8 +363,7 @@ var TMP_tabDNDObserver = {
         if (draggedTab.pinned) {
           if (newIndex >= numPinned)
             gBrowser.unpinTab(draggedTab);
-        } else {
-          if (newIndex <= numPinned - 1 || (newIndex == numPinned && dt.__pinTab))
+        } else if (newIndex <= numPinned - 1 || (newIndex == numPinned && dt.__pinTab)) {
             gBrowser.pinTab(draggedTab);
         }
         if (newIndex != draggedTab._tPos)
@@ -397,7 +394,7 @@ var TMP_tabDNDObserver = {
       // Stop the about:blank load
       newBrowser.stop();
       // make sure it has a docshell
-      newBrowser.docShell; // jshint ignore:line
+      void newBrowser.docShell;
 
       let numPinned = gBrowser._numPinnedTabs;
       if (newIndex < numPinned || draggedTab.pinned && newIndex == numPinned)

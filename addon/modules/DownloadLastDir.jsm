@@ -1,6 +1,7 @@
 /// "use strict";
 
 /* jshint strict: false */
+/* eslint strict: 0 */
 
 this.EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 

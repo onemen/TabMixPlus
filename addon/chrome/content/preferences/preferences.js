@@ -469,7 +469,9 @@ function showFilePicker(mode) {
 function loadData(pattern) {
   if (pattern[0] != "tabmixplus") {
     //  Can not import because it is not a valid file.
-    alert(TabmixSvc.getString("tmp.importPref.error1"));
+    let msg = TabmixSvc.getString("tmp.importPref.error1");
+    let title = TabmixSvc.getString("tabmixoption.error.title");
+    Services.prompt.alert(window, title, msg);
     return;
   }
 

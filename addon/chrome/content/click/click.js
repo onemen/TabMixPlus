@@ -715,7 +715,6 @@ var TabmixContext = {
           duplicateTabMenu.hidden && duplicateWinMenu.hidden && closeTabMenu.hidden &&
           lockTabMenu.hidden && protectTabMenu.hidden && tabsListMenu.hidden &&
           freezeTabMenu.hidden && undoCloseTabMenu.hidden && undoCloseListMenu.hidden;
-
     } catch (ex) {Tabmix.assert(ex);}
     return true;
   },

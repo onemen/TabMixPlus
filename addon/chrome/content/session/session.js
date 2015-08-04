@@ -1497,7 +1497,9 @@ var TabmixSessionManager = { // jshint ignore:line
          default: return false;
       }
       if (numTabs > 0) return {win: numWindows, tab: numTabs};
-      alert(TabmixSvc.getSMString("sm.sessoinSave.error"));
+      let msg = TabmixSvc.getSMString("sm.sessoinSave.error");
+      let title = TabmixSvc.getString("sm.title");
+      Services.prompt.alert(window, title, msg);
       return false;
    },
 
@@ -2256,7 +2258,7 @@ var TabmixSessionManager = { // jshint ignore:line
       var loadSession = this.prefBranch.getIntPref("onStart.loadsession");
       // after last session end with restart load the last session without any prompt
       // unless we are after crash
-      var startupEmpty = false, savePref = false;
+      var startupEmpty = false;
       var result = {}, title, msg = "", buttons;
       if (afterCrash)
          title = TabmixSvc.getSMString("sm.afterCrash.title");
@@ -2306,13 +2308,11 @@ var TabmixSessionManager = { // jshint ignore:line
                loadSessionIsValid = false;
                thisPath = this.gSessionPath[1]; // load last session
                this.prefBranch.setIntPref("onStart.loadsession", -1);
-               savePref = true;
             }
             break;
          default: // just in case that somehow onStart.loadsession is invalid
             loadSession = -1;
             this.prefBranch.setIntPref("onStart.loadsession", -1);
-            savePref = true;
             /* falls through */
          case -2:
          case -1:
@@ -3157,7 +3157,10 @@ try {
       var rdfNodeWindow = this.RDFService.GetResource(path);
       var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
       if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || this.containerEmpty(rdfNodeTabs)) {
-         alert(TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" + TabmixSvc.getSMString("sm.restoreError.msg1"));
+         let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
+             TabmixSvc.getSMString("sm.restoreError.msg1");
+         let title = TabmixSvc.getString("sm.title");
+         Services.prompt.alert(window, title, msg);
          return;
       }
 
@@ -3602,7 +3605,7 @@ try {
          data.properties += "11111";
       }
       if ("attributes" in tabState && tabState.attributes) {
-         delete tabState.attributes["_locked"];
+         delete tabState.attributes._locked;
          for (var name in tabState.attributes) {
             data.properties += " " + name + "=" + encodeURI(tabState.attributes[name]);
          }

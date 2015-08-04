@@ -124,7 +124,9 @@ this.TabmixSvc = {
       } catch (ex) {
         try {
           return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch (er) {return null}
+        } catch (er) {
+          return null;
+        }
       }
     },
     stringify: function TMP_stringify(obj) {
@@ -133,7 +135,9 @@ this.TabmixSvc = {
       } catch (ex) {
         try {
           return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch (er) {return null}
+        } catch (er) {
+          return null;
+        }
       }
     }
   },

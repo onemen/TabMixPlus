@@ -25,7 +25,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "resource://tabmixplus/Utils.jsm");
 
-let global = this;
+let self = this;
 
 let TabmixContentHandler = {
   MESSAGES: [
@@ -141,7 +141,7 @@ var TabmixClickEventHandler = {
   init: function init() {
     if (TabmixSvc.version(380) &&
         Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
-      global.addEventListener("click", this, true);
+      self.addEventListener("click", this, true);
   },
 
   handleEvent: function(event) {

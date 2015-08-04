@@ -325,11 +325,12 @@ this.DynamicRules = {
         else
           value = undefined;
       }
-      if (value === undefined)
-        prefValues[item] = item == "bgTopColor" ? prefValues["bgColor"] :
+      if (value === undefined) {
+        prefValues[item] = item == "bgTopColor" ? prefValues.bgColor :
                                                   defaultPrefValues[item];
-      else
+      } else {
         prefValues[item] = value;
+      }
     }
     let newPrefString = TabmixSvc.JSON.stringify(prefValues);
     if (prefString != newPrefString)

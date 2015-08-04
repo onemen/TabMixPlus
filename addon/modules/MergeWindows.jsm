@@ -7,7 +7,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-/*////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
 // extension for Mozilla Firefox.                                   //
 // version 0.5.1                                                    //
@@ -16,7 +16,7 @@ Cu.import("resource://tabmixplus/Services.jsm");
 //                                                                  //
 // Convert to module and modfied by onemen                          //
 //                                                                  //
-*/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 this.MergeWindows = {
   get prefs() {
     delete this.prefs;
@@ -166,7 +166,7 @@ this.MergeWindows = {
       let newTab = tabbrowser.addTab("about:blank", {dontMove: isPopup});
       let newBrowser = newTab.linkedBrowser;
       newBrowser.stop();
-      newBrowser.docShell; // jshint ignore:line
+      void newBrowser.docShell;
       if (tab.hasAttribute("_TMP_selectAfterMerege")) {
         tab.removeAttribute("_TMP_selectAfterMerege");
         tabToSelect = newTab;

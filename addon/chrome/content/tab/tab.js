@@ -976,8 +976,8 @@ Tabmix.tabsUtils = {
       return 1;
     // some theme add marginTop/marginBottom to tabs
     var cStyle = window.getComputedStyle(aTab, null);
-    var marginTop = parseInt(cStyle["marginTop"]) || 0;
-    var marginBottom = parseInt(cStyle["marginBottom"]) || 0;
+    var marginTop = parseInt(cStyle.marginTop) || 0;
+    var marginBottom = parseInt(cStyle.marginBottom) || 0;
     height += marginTop + marginBottom;
 
     var tabBottom = top - marginTop + height;
@@ -1275,8 +1275,8 @@ var gTMPprefObserver = {
         }
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
-        this.dynamicRules["width"].style.setProperty("max-width", tabMaxWidth + "px", "important");
-        this.dynamicRules["width"].style.setProperty("min-width", tabMinWidth + "px", "important");
+        this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
+        this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
         // fix bug in classiccompact
         if (typeof classiccompactoptions == "object" &&
             Services.prefs.getCharPref("general.skins.selectedSkin") == "classiccompact") {
@@ -1514,7 +1514,6 @@ var gTMPprefObserver = {
       default:
         break;
     }
-
   },
 
   getStyleSheets: function TMP_PO_getStyleSheet(aHerf, aFirst) {
@@ -1762,7 +1761,7 @@ var gTMPprefObserver = {
         gBrowser._switcher.visibleTab : gBrowser.selectedTab;
     let bgMiddle = document.getAnonymousElementByAttribute(selectedTab, "class", "tab-background-middle");
     let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
-    let bgMiddleMargin = this.dynamicRules["bgMiddleMargin"];
+    let bgMiddleMargin = this.dynamicRules.bgMiddleMargin;
     if (bgMiddleMargin) {
       bgMiddleMargin.style.MozMarginStart = margin;
       bgMiddleMargin.style.MozMarginEnd = margin;
@@ -1857,7 +1856,7 @@ var gTMPprefObserver = {
     var showOnTabs = Tabmix.prefs.getBoolPref("progressMeter");
     var attribValue = null;
     if (showOnTabs)
-      attribValue = TabmixSvc.tabStylePrefs["progressMeter"].bg ? "userColor" : "defaultColor";
+      attribValue = TabmixSvc.tabStylePrefs.progressMeter.bg ? "userColor" : "defaultColor";
     Tabmix.setItem(gBrowser.tabContainer, "tabmix_progressMeter", attribValue);
     TabmixProgressListener.listener.showProgressOnTab = showOnTabs;
   },
@@ -2500,7 +2499,7 @@ try {
 
     // capture gfx.direct2d.disabled value on first window
     // see getter at TabmixSvc
-    var tmp = TabmixSvc.direct2dDisabled; // jshint ignore:line
+    void TabmixSvc.direct2dDisabled;
   },
 
   updateTabClickingOptions: function() {

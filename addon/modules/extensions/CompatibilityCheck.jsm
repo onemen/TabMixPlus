@@ -176,6 +176,7 @@ CompatibilityCheck.prototype = {
     }
   },
 
+  /* eslint dot-notation: 0 */
   getList: function TMP_EX_getList() {
     var guid_list = {};
     /*

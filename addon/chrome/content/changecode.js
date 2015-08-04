@@ -1,4 +1,5 @@
 /* jshint strict: false */
+/* eslint strict: 0 */
 
 // don't use strict for this file
 // so we don't evaluat all code as strict mode code
@@ -91,7 +92,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     defineProperty: function(aObj, aName, aCode) {
       if (!this.type)
-        throw "Tabmix:\n" + this.fullName + " don't have setter or getter";
+        throw new Error("Tabmix:\n" + this.fullName + " don't have setter or getter");
 
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};
@@ -178,4 +179,4 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
     }
     return fn("(" + code + ")");
   };
-})(this);
+}(this));

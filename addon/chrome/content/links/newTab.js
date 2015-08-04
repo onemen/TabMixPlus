@@ -31,5 +31,4 @@
     if (Tabmix.prefs.getBoolPref("titlefrombookmark"))
       updateTitle();
   }
-
-})();
+}());

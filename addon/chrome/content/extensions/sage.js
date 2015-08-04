@@ -45,7 +45,6 @@ var TMP_Sage = {
             switch (windowType)'
         ).toCode();
       }
-
    },
 
    buildContextMenu: function() {

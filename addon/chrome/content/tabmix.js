@@ -938,7 +938,6 @@ var TMP_eventListener = {
           _tab.classList.remove("standout");
           break;
         }
-
       }
       tab.classList.add("standout");
     }

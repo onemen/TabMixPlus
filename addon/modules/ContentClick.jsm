@@ -123,7 +123,7 @@ var ContentClickInternal = {
   receiveMessage: function(message) {
     if (message.name == "Tabmix:isFrameInContentResult") {
       this.isFrameInContent.result(message.target, message.data);
-      return;
+      return null;
     }
     if (message.name != "TabmixContent:Click")
       return null;
@@ -261,7 +261,7 @@ var ContentClickInternal = {
         return this._attributes[att] || null;
       };
       return nObj;
-    }
+    };
 
     return node ? wrapNode(node, getTargetIsFrame) : null;
   },
@@ -340,7 +340,7 @@ var ContentClickInternal = {
     eventWhere = this._window.whereToOpenLink(event);
     if (/^save|window/.test(eventWhere)) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick; // jshint ignore:line
+      void this._data.hrefFromOnClick;
       return [eventWhere + "@2.1"];
     }
 
@@ -392,7 +392,7 @@ var ContentClickInternal = {
      */
     if (this.divertMiddleClick()) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick; // jshint ignore:line
+      void this._data.hrefFromOnClick;
       return [onClickInFrame ? "current.frame@10" : "current@10"];
     }
 
@@ -596,12 +596,12 @@ var ContentClickInternal = {
     try {
       // Greasemonkey >= 0.9.10
       Cu.import("resource://greasemonkey/util.js");
-      if ('function' == typeof window.GM_util.getEnabled) {
+      if (typeof window.GM_util.getEnabled == 'function') {
         GM_function = window.GM_util.getEnabled;
       }
     } catch (e) {
       // Greasemonkey < 0.9.10
-      if ('function' == typeof window.GM_getEnabled) {
+      if (typeof window.GM_getEnabled == 'function') {
         GM_function = window.GM_getEnabled;
       }
     }

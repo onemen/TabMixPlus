@@ -51,20 +51,19 @@ this.SingleWindowModeUtils = {
 
   newWindow: function(aWindow) {
     if (!aWindow.Tabmix.singleWindowMode)
-      return;
+      return false;
 
     if (!aWindow.arguments || aWindow.arguments.length === 0)
-      return;
+      return false;
 
     this.initService();
-    var _this = this;
     aWindow.addEventListener("load", function _onLoad(aEvent) {
       let win = aEvent.currentTarget;
       win.removeEventListener("load", _onLoad, false);
       let docElement = win.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
-        _this.onLoad(win);
-    }, false);
+        this.onLoad(win);
+    }.bind(this), false);
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 

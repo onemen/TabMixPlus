@@ -17,10 +17,12 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
-        verticalTabBar: false, ieTab2: false,
-        gIeTab: false, /* for ieTab and ieTab2 */
-        ctr: false /* classic theme restorer */};
+    Tabmix.extensions = {
+      treeStyleTab: false, tabGroupManager: false,
+      verticalTabBar: false, ieTab2: false,
+      gIeTab: false, /* for ieTab and ieTab2 */
+      ctr: false/* classic theme restorer */
+    };
 
     if (typeof classicthemerestorerjs == "object") {
       Tabmix.extensions.ctr = true;

@@ -517,7 +517,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
    * @returns         closed tab data at aIndex.
    */
    getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
-      if (0 > aIndex || aIndex >= this.count)
+      if (aIndex < 0 || aIndex >= this.count)
         return null;
       // update our session data
       if (TabmixSessionManager.enableBackup)
@@ -623,7 +623,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
         index = 0;
         if (Tabmix._restoreMultipleTabs)
           numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
-      } else if (0 > index || index >= this.count)
+      } else if (index < 0 || index >= this.count)
         return null;
 
       let tab = null;
@@ -850,9 +850,9 @@ var TabmixConvertSession = { // jshint ignore:line
       tabData.disallow = disallow.join(",");
       tabData.attributes = {};
       if (tabProperties.charAt(0) == "1" && properties.indexOf("protected=") == -1)
-         tabData.attributes["protected"] = "true";
+         tabData.attributes.protected = "true";
       if (properties.indexOf("_locked=") == -1)
-         tabData.attributes["_locked"] = (tabProperties.charAt(1) == "1");
+         tabData.attributes._locked = (tabProperties.charAt(1) == "1");
 
       var extData = {};
       if (properties.length > booleanAttrLength) {

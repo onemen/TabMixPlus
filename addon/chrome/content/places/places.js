@@ -244,7 +244,8 @@ var TMP_Places = {
    getPrefByDocumentURI: function(aWindow) {
      switch (aWindow.document.documentURI) {
        case "chrome://browser/content/places/places.xul":
-         let historyId = PlacesUIUtils.leftPaneQueries["History"];
+         let history = PlacesUIUtils.getString("OrganizerQueryHistory");
+         let historyId = PlacesUIUtils.leftPaneQueries[history];
          let node = PlacesOrganizer._places.selectedNode;
          let historySelected = node.itemId == historyId ||
              node.parent && node.parent.itemId == historyId;
@@ -360,7 +361,6 @@ var TMP_Places = {
     while (removeTabs.length > 0) {
        gBrowser.removeTab(removeTabs.pop());
     }
-
   },
 
   setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID) {
