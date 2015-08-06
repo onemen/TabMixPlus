@@ -413,30 +413,29 @@ function toggleSyncPreference() {
 function exportData() {
   // save all pending changes
   gPrefWindow.onApply();
-
-  let patterns = gPreferenceList.map(function(pref) {
-    return pref + "=" + getPrefByType(pref) + "\n";
-  });
-  patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
-  patterns.unshift("tabmixplus\n");
-  Task.spawn(function* () {
-    let file = yield showFilePicker("save");
+  showFilePicker("save").then(file => {
     if (file) {
-      yield OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8"});
+      let patterns = gPreferenceList.map(function(pref) {
+        return "\n" + pref + "=" + getPrefByType(pref);
+      });
+      patterns.unshift("tabmixplus");
+      return OS.File.writeAtomic(file.path, patterns.join(""), {
+        encoding: "utf-8", tmpPath: file.path + ".tmp"
+      });
     }
-  }).catch(Tabmix.reportError);
+  }).then(null, Tabmix.reportError);
 }
 
 function importData () {
-  Task.spawn(function* () {
-    let file = yield showFilePicker("open");
-    if (file) {
-      let input = yield OS.File.read(file.path, {encoding: "utf-8"});
-      if (input) {
-        loadData(input.replace(/\r\n/g, "\n").split("\n"));
-      }
+  showFilePicker("open").then(file => {
+    return file && OS.File.read(file.path);
+  }).then((input) => {
+    if (input) {
+      let decoder = new TextDecoder();
+      input = decoder.decode(input);
+      loadData(input.replace(/\r\n/g, "\n").split("\n"));
     }
-  }).catch(Tabmix.reportError);
+  }).then(null, Tabmix.reportError);
 }
 
 /**
@@ -460,7 +459,7 @@ function showFilePicker(mode) {
   fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
   return AsyncUtils.spawnFn(fp, fp.open).then(aResult => {
-    if (aResult == nsIFilePicker.returnOK)
+    if (aResult != nsIFilePicker.returnCancel)
       return fp.file;
   });
 }

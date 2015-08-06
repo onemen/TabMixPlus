@@ -45,15 +45,13 @@ this.AsyncUtils = {
 };
 
 function Deferred() {
-  this.resolve = null;
-  this.reject = null;
+  let defer = Promise.defer();
+  this.promise = defer.promise;
+  this.resolve = defer.resolve;
+  this.reject = defer.reject;
   this.callback = (result, error) => {
     if (error)
       return this.reject(error);
     return this.resolve(result);
   };
-  this.promise = new Promise((resolve, reject) => {
-    this.resolve = resolve;
-    this.reject = reject;
-  });
 }
