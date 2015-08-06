@@ -247,18 +247,6 @@ var TabmixSessionManager = { // jshint ignore:line
       return (this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions."));
    },
 
-  get SessionStoreGlobal() {
-    delete this.SessionStoreGlobal;
-    let tmp = {};
-    Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-    return (this.SessionStoreGlobal = Cu.getGlobalForObject(tmp.SessionStore));
-  },
-
-  get SessionStore() {
-    delete this.SessionStore;
-    return (this.SessionStore = this.SessionStoreGlobal.SessionStoreInternal);
-  },
-
    // call by Tabmix.beforeSessionStoreInit
    init: function SM_init(aPromise) {
       if (this._inited)
@@ -685,8 +673,6 @@ var TabmixSessionManager = { // jshint ignore:line
         clearTimeout(this.afterExitPrivateBrowsing);
         this.afterExitPrivateBrowsing = null;
       }
-      delete this.SessionStoreGlobal;
-      delete this.SessionStore;
     }
    },
 
@@ -2403,7 +2389,7 @@ try{
       return;
 
     let state = this.setLastSession();
-    let iniState = this.SessionStore._prepDataForDeferredRestore(state)[0];
+    let iniState = TabmixSvc.SessionStore._prepDataForDeferredRestore(state)[0];
     let pinnedExist = iniState.windows.length > 0;
     if (pinnedExist) {
       // move all tabs and closed tabs into one window
@@ -2411,14 +2397,14 @@ try{
           this.prefBranch.getBoolPref("restore.concatenate"))) {
         this.mergeWindows(iniState);
       }
-      let overwrite = this.SessionStore._isCmdLineEmpty(window, iniState);
+      let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
       if (Tabmix.isVersion(260)) {
         let options = {firstWindow: true, overwriteTabs: overwrite};
-        this.SessionStore.restoreWindow(window, iniState, options);
+        TabmixSvc.SessionStore.restoreWindow(window, iniState, options);
       }
       else {
         iniState._firstTabs = true;
-        this.SessionStore.restoreWindow(window, iniState, overwrite);
+        TabmixSvc.SessionStore.restoreWindow(window, iniState, overwrite);
       }
     }
     this.loadHomePage(pinnedExist);
@@ -2992,7 +2978,7 @@ try{
       // to open new window
       if (restoring)
         window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
-      this.SessionStoreGlobal.LastSession.setState(state);
+      TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
       return state;
    },
 
@@ -3372,12 +3358,12 @@ try{
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
           if (gBrowser.browsers[i].__SS_restoreState)
-            this.SessionStore._resetTabRestoringState(tab);
+            TabmixSvc.SessionStore._resetTabRestoringState(tab);
         }
       }
       let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
                                            "restoreHistoryPrecursor";
-      this.SessionStore[fnName](window, tabs, tabsData, 0);
+      TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
 
       // SessionStore.restoreTabs send SSWindowStateReady
       // show notification and clean up our data
@@ -3556,7 +3542,7 @@ try{
          closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
       closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
       if (Tabmix.isVersion(260))
-        this.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
+        TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
       else {
         let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);

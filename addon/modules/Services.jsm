@@ -197,6 +197,8 @@ this.TabmixSvc = {
             let timer = TabmixSvc.console._timers[id];
             timer.cancel();
           }
+          delete TabmixSvc.SessionStoreGlobal;
+          delete TabmixSvc.SessionStore;
           break;
         case "browser-delayed-startup-finished":
           try {
@@ -207,8 +209,8 @@ this.TabmixSvc = {
     }
   },
 
-  saveTabAttributes: function(tab, attrib) {
-    tabStateCache.saveTabAttributes(tab, attrib);
+  saveTabAttributes: function(tab, attrib, save) {
+    tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
   get ss() {
@@ -296,6 +298,14 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
+  return Cu.getGlobalForObject(this.ss);
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
+  return this.SessionStoreGlobal.SessionStoreInternal;
+});
+
 var tabStateCache = {
   get _update() {
     delete this._update;
@@ -307,13 +317,21 @@ var tabStateCache = {
     if (isVersion(270))
       Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
     else
-      this.TabStateCache = Cu.getGlobalForObject(TabmixSvc.ss).TabStateCache;
+      this.TabStateCache = TabmixSvc.SessionStoreGlobal.TabStateCache;
     return this.TabStateCache;
   },
 
-  saveTabAttributes: function(tab, attrib) {
-    // After bug 1166757 - Remove browser.__SS_data, we no longer need this function
-    if (!isVersion(250) || isVersion(410))
+  saveTabAttributes: function(tab, attrib, save = true) {
+    if (!isVersion(250))
+      return;
+
+    // force Sessionstore to save our persisted tab attributes
+    if (save) {
+      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerDocument.defaultView);
+    }
+
+    // After bug 1166757 - Remove browser.__SS_data, we have nothing more to do.
+    if (isVersion(410))
       return;
 
     let attribs = attrib.split(",");

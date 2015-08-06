@@ -109,7 +109,7 @@ this.TMP_TabGroupsManager = {
       '                        caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
     )._replace(
-      'this.SessionStore[fnName](window, tabs, tabsData, 0);',
+      'TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);',
       '$&\n' +
       '      this._moveTabsToGroupByTGM(window, tabs);'
     ).toCode();

@@ -125,12 +125,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         this.firstWindowInSession && !this.isWindowAfterSessionRestore;
     // RunState exist since Firefox 34, bug 1020831
     if (setStateRunning) {
-      let RunState = SM.SessionStoreGlobal.RunState || {
+      let RunState = TabmixSvc.SessionStoreGlobal.RunState || {
         get isStopped() {
-          return SM.SessionStore._loadState === 0; // STATE_STOPPED
+          return TabmixSvc.SessionStore._loadState === 0; // STATE_STOPPED
         },
         setRunning: function() {
-          SM.SessionStore._loadState = 1; // STATE_RUNNING
+          TabmixSvc.SessionStore._loadState = 1; // STATE_RUNNING
         }
       };
       if (RunState.isStopped) {

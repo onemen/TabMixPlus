@@ -1202,8 +1202,10 @@ var gTMPprefObserver = {
           else
             tab.removeAttribute("_locked");
           tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
-          TabmixSvc.saveTabAttributes(tab, "_locked");
+          TabmixSvc.saveTabAttributes(tab, "_locked", false);
         }
+        // force Sessionstore to save our changes
+        TabmixSvc.SessionStore.saveStateDelayed(window);
         break;
       case "extensions.tabmix.extraIcons.autoreload":
       case "extensions.tabmix.extraIcons.protected":
