@@ -29,11 +29,32 @@ var TMP_Places = {
       // use tab label for bookmark name when user renamed the tab
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
-         if (!Tabmix.isVersion(400))
-         Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-            /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
-         ).toCode();
+         if (Tabmix.isVersion(400)) {
+           if (!Tabmix.originalFunctions.placesBookmarkPage) {
+             Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
+           }
+           PlacesCommandHook.bookmarkPage = function(aBrowser) {
+             let origTitle;
+             let tab = gBrowser.getTabForBrowser(aBrowser);
+             let title = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec);
+             if (typeof title == "string") {
+               origTitle = aBrowser.contentTitle;
+               aBrowser._contentTitle = title;
+             }
+             try {
+               return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
+             } finally {
+               if (origTitle) {
+                 aBrowser._contentTitle = origTitle;
+               }
+             }
+           };
+         } else {
+           Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
+             /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
+             'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
+           ).toCode();
+         }
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
            'URIs.push(tab.linkedBrowser.currentURI);',
