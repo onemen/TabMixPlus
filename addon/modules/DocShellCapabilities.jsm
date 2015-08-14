@@ -27,7 +27,7 @@ this.DocShellCapabilities = {
       browser.reload();
   },
 
-  caps: ["Images","Subframes","MetaRedirects","Plugins","Javascript"],
+  caps: ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"],
 
   collect: function(tab) {
     let browser = tab.linkedBrowser;

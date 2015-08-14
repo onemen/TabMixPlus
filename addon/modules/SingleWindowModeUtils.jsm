@@ -130,7 +130,7 @@ this.SingleWindowModeUtils = {
     else if (args.length >= 3) {
       params.referrerURI = args[2];
       if (TabmixSvc.version(390)) {
-        if (typeof(params.referrerURI) == "string") {
+        if (typeof (params.referrerURI) == "string") {
           try {
             params.referrerURI = existingWindow.makeURI(params.referrerURI);
           } catch (e) {

@@ -41,7 +41,7 @@ var TMP_Sage = {
         Tabmix.changeCode(window, "openURI")._replace(
            'switch (getWindowType(aEvent))',
            'var windowType = getWindowType(aEvent);\
-            windowType = TMP_Places.fixWhereToOpen(aEvent, typeof(windowType) != "string" || !windowType ? "current" : windowType, TMP_Sage.openTabPref); \
+            windowType = TMP_Places.fixWhereToOpen(aEvent, typeof (windowType) != "string" || !windowType ? "current" : windowType, TMP_Sage.openTabPref); \
             switch (windowType)'
         ).toCode();
       }

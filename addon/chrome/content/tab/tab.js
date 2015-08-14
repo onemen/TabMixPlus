@@ -210,7 +210,7 @@ var TabmixTabbar = {
 
   get singleRowHeight() {
     let heights = this._heights[this._tabsPosition];
-    if (typeof(heights) == "undefined")
+    if (typeof (heights) == "undefined")
       return Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
     return heights[2] / 2;
   },
@@ -247,7 +247,7 @@ var TabmixTabbar = {
     }
 
     var newHeight, fillRowsHeights;
-    if (typeof(this._heights[tabsPosition]) == "undefined") {
+    if (typeof (this._heights[tabsPosition]) == "undefined") {
       this._heights[tabsPosition] = {};
       fillRowsHeights = true;
     }
@@ -268,7 +268,7 @@ var TabmixTabbar = {
         newHeight = this.getRowHeight(tabsPosition) * aRows;
 
       this._heights[tabsPosition][aRows] = newHeight;
-      if (fillRowsHeights || (aRows > 2 && typeof(this._heights[tabsPosition][aRows - 1]) == "undefined")) {
+      if (fillRowsHeights || (aRows > 2 && typeof (this._heights[tabsPosition][aRows - 1]) == "undefined")) {
         let rowHeight = newHeight / aRows;
         for (let row = 2; row < aRows; row++)
           this._heights[tabsPosition][row] = rowHeight * row;
@@ -1169,7 +1169,7 @@ var gTMPprefObserver = {
     if (this.preventUpdate)
       return;
     // if we don't have a valid window (closed)
-    if (!(typeof(document) == 'object' && document)) {
+    if (!(typeof (document) == 'object' && document)) {
       this.removeObservers(); // remove the observer..
       return; // ..and don't continue
     }
@@ -2273,7 +2273,7 @@ var gTMPprefObserver = {
       let value = getPrefByType("browser.tabs.closeButtons", 1, "IntPref");
       // these value are from 0.3.8.3. we don't know if 0,1 are also from 0.3.8.3 so we don't use 0,1.
       if (value > 1 && value <= 6) {
-        let newValue = [3,5,1,1,2,4,1][value];
+        let newValue = [3, 5, 1, 1, 2, 4, 1][value];
         Tabmix.prefs.setIntPref("tabs.closeButtons", newValue);
       }
     }

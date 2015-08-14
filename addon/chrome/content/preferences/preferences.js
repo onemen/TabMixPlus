@@ -204,7 +204,7 @@ var gPrefWindow = { // jshint ignore:line
   },
 
   setDisabled: function(itemOrId, val) {
-    var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
+    var item = typeof (itemOrId) == "string" ? $(itemOrId) : itemOrId;
     if (!item)
       return;
     if (item.hasAttribute("inverseDependency"))
@@ -306,7 +306,7 @@ function setPrefAfterImport(aPref) {
     // we use browser.tabs.closeButtons only in 0.3.8.3
     if (aPref.value < 0 || aPref.value > 6)
       aPref.value = 6;
-    aPref.value = [3,5,1,1,2,4,1][aPref.value];
+    aPref.value = [3, 5, 1, 1, 2, 4, 1][aPref.value];
     Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
     return true;
   }
@@ -344,20 +344,22 @@ let sessionPrefs = ["browser.sessionstore.resume_from_crash",
 
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
-  let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
-  "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
-  "browser.link.open_newwindow.restriction",TabmixSvc.newtabUrl,
-  "browser.search.context.loadInBackground","browser.search.openintab",
-  "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
-  "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
-  "browser.sessionstore.restore_on_demand",
-  "browser.sessionstore.resume_from_crash","browser.startup.page",
-  "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
-  "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
-  "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
-  "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
-  "browser.tabs.warnOnClose","browser.warnOnQuit",
-  "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
+  let otherPrefs = [
+    "browser.allTabs.previews", "browser.ctrlTab.previews",
+    "browser.link.open_newwindow", "browser.link.open_newwindow.override.external",
+    "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
+    "browser.search.context.loadInBackground", "browser.search.openintab",
+    "browser.sessionstore.interval", "browser.sessionstore.max_tabs_undo",
+    "browser.sessionstore.postdata", "browser.sessionstore.privacy_level",
+    "browser.sessionstore.restore_on_demand",
+    "browser.sessionstore.resume_from_crash", "browser.startup.page",
+    "browser.tabs.animate", "browser.tabs.closeWindowWithLastTab",
+    "browser.tabs.insertRelatedAfterCurrent", "browser.tabs.loadBookmarksInBackground",
+    "browser.tabs.loadDivertedInBackground", "browser.tabs.loadInBackground",
+    "browser.tabs.tabClipWidth", "browser.tabs.tabMaxWidth", "browser.tabs.tabMinWidth",
+    "browser.tabs.warnOnClose", "browser.warnOnQuit",
+    "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
+  ];
 
   if (!Tabmix.isVersion(200))
     otherPrefs.push("browser.warnOnRestart");

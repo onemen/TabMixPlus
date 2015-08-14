@@ -44,7 +44,7 @@ this.console = {
   _timers: {},
   show: function(aMethod, aDelay, aWindow) {
     try {
-      if (typeof(aDelay) == "undefined")
+      if (typeof (aDelay) == "undefined")
         aDelay = 500;
 
       let logMethod = function _logMethod() {
@@ -186,7 +186,7 @@ options = {
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
-    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
+    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof (aObj);
     objS += ":\n";
 
     for (let prop in aObj) {

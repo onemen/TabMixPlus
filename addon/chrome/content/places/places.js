@@ -223,7 +223,7 @@ var TMP_Places = {
       var tabBrowser = w.gBrowser;
       var aTab = tabBrowser.mCurrentTab;
 
-      if (typeof(aPref) == "undefined")
+      if (typeof (aPref) == "undefined")
          aPref = this.getPrefByDocumentURI(window);
 
       var _pref = w.Services.prefs;

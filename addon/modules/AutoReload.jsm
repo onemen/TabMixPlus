@@ -7,6 +7,8 @@ const {interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+var _setItem = function() {};
+
 this.AutoReload = {
   init: function() {
     _setItem = TabmixSvc.topWin().Tabmix.setItem;
@@ -88,7 +90,7 @@ this.AutoReload = {
         prefs.clearUserPref(pref);
         return [];
       }
-      let defaultList = ["30","60","120","300","900","1800"];
+      let defaultList = ["30", "60", "120", "300", "900", "1800"];
       list = list.filter(val => defaultList.indexOf(val) == -1);
       let newList = [];
       list.forEach(function(val) {
@@ -102,7 +104,7 @@ this.AutoReload = {
     }
 
     let doc = aPopup.ownerDocument.defaultView.document;
-    getList().sort((a,b) => parseInt(a) > parseInt(b)).forEach(val => {
+    getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
       let mi = doc.createElement("menuitem");
       this.setLabel(mi, val);
       mi.setAttribute("type", "radio");
@@ -279,8 +281,6 @@ this.AutoReload = {
     doReloadTab(window, browser, data);
   }
 };
-
-function _setItem() {}
 
 function _reloadTab(aTab) {
   if (!aTab || !aTab.parentNode)

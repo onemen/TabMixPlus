@@ -1463,7 +1463,7 @@ var tablib = {
         return true;
       var closing = this.closingTabsEnum;
       // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
-      if (typeof(whatToClose) == "boolean")
+      if (typeof (whatToClose) == "boolean")
         whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
 
       var onExit = whatToClose == closing.ALL_ONEXIT;
@@ -1727,9 +1727,9 @@ var tablib = {
 
   // prevent 'ReferenceError: reference to undefined property params'
   // in gBrowser.addTab
-  props: ["referrerURI","charset","postData","ownerTab",
-          "allowThirdPartyFixup","fromExternal","relatedToCurrent",
-          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending",
+  props: ["referrerURI", "charset", "postData", "ownerTab",
+          "allowThirdPartyFixup", "fromExternal", "relatedToCurrent",
+          "allowMixedContent", "skipAnimation", "isUTF8", "dontMove", "isPending",
           "aForceNotRemote", "aNoReferrer"],
 
   definedParams: function(params) {
@@ -1962,3 +1962,4 @@ Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
 
   return false;
 };
+

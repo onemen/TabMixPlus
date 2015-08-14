@@ -259,7 +259,7 @@
   };
 
   TabmixSessionManager._setTabviewData = function SM__setTabviewData(id, data) {
-    if (typeof(data) != "string")
+    if (typeof (data) != "string")
       data = TabmixSvc.JSON.stringify(data);
     TabmixSvc.ss.setWindowValue(window, id, data);
     if (!this.enableBackup)

@@ -23,19 +23,19 @@ var Tabmix = { // jshint ignore:line
 
   // Show/hide one item (specified via name or the item element itself).
   showItem: function(aItemOrId, aShow) {
-    var item = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var item = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (item && item.hidden == aShow)
       item.hidden = !aShow;
   },
 
   setItem: function(aItemOrId, aAttr, aVal) {
-    var elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
       if (aVal === null || aVal === undefined) {
         elem.removeAttribute(aAttr);
         return;
       }
-      if (typeof(aVal) == "boolean")
+      if (typeof (aVal) == "boolean")
         aVal = aVal ? "true" : "false";
 
       if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
@@ -44,7 +44,7 @@ var Tabmix = { // jshint ignore:line
   },
 
   setAttributeList: function(aItemOrId, aAttr, aValue, aAdd) {
-    let elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    let elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
@@ -143,7 +143,7 @@ var Tabmix = { // jshint ignore:line
 
     // we use non modal dialog when we call for prompt on startup
     // when we don't have a callBack function use modal dialog
-    let modal = typeof(aCallBack) != "function";
+    let modal = typeof (aCallBack) != "function";
     var i;
     for (i = 0; i < intParam.length; i++)
       dpb.SetInt(i, intParam[i]);
@@ -152,7 +152,7 @@ var Tabmix = { // jshint ignore:line
     for (i = 0; i < strParam.length; i++)
       dpb.SetString(i, strParam[i]);
 
-    if (typeof(aWindow) == "undefined") {
+    if (typeof (aWindow) == "undefined") {
       try { aWindow = window;
       }
       catch (e) { aWindow = null;
@@ -171,7 +171,7 @@ var Tabmix = { // jshint ignore:line
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
-    if (typeof(aWindowtype) == "undefined")
+    if (typeof (aWindowtype) == "undefined")
       aWindowtype = "navigator:browser";
     return Services.wm.getEnumerator(aWindowtype);
   },

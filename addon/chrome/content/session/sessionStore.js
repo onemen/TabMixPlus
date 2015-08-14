@@ -332,7 +332,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
    },
 
    setButtonDisableState: function ct_setButtonDisableState(aState) {
-      if (typeof(aState) == "undefined")
+      if (typeof (aState) == "undefined")
          aState = this.count === 0;
       Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
    },
@@ -576,7 +576,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
          aTabToRemove = cTab;
          tabData.pos = cTab._tPos;
       }
-      else if (typeof(aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
+      else if (typeof (aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
          aTabToRemove = cTab;
 
       if (TMP_TabView.installed)
@@ -838,7 +838,7 @@ var TabmixConvertSession = { // jshint ignore:line
       }
 
       var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
-      var tabAttribute = ["Images","Subframes","MetaRedirects","Plugins","Javascript"];
+      var tabAttribute = ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"];
 
       var booleanAttrLength = TabmixSessionData.tabAttribute.length + TabmixSessionData.docShellItems.length;
       var tabProperties = properties.substr(0, booleanAttrLength);

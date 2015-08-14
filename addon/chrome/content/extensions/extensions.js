@@ -53,9 +53,9 @@ var TMP_extensionsCompatibility = {
 
     // fix for Cluster Tabs - Cluster Tab look for TM_init
     // https://addons.mozilla.org/en-US/firefox/addon/cluster-tabs-for-firefox/
-    if ("GlaxChrome" in window && typeof(window.GlaxChrome) == "object") {
+    if ("GlaxChrome" in window && typeof (window.GlaxChrome) == "object") {
       document.getElementById("main-window").setAttribute("gscltTMPinstalled", true);
-      let func = ["_setupForOtherExtensions","enableCustomDragDropMode"];
+      let func = ["_setupForOtherExtensions", "enableCustomDragDropMode"];
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
       func.forEach(function(aFn) {
         if (aFn in GlaxChrome) {
@@ -80,7 +80,7 @@ var TMP_extensionsCompatibility = {
 
     // https://addons.mozilla.org/en-US/firefox/addon/second-search/
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
-      let func = ["canOpenNewTab","loadForSearch","checkToDoSearch"];
+      let func = ["canOpenNewTab", "loadForSearch", "checkToDoSearch"];
       let SSB = SecondSearchBrowser.prototype;
       func.forEach(function(aFn) {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
@@ -115,7 +115,7 @@ var TMP_extensionsCompatibility = {
 
     // workaround for extensions that look for updateIcon
     // Favicon Picker 2
-    if (typeof(gBrowser.updateIcon) == "undefined") {
+    if (typeof (gBrowser.updateIcon) == "undefined") {
       gBrowser.updateIcon = function updateIcon (aTab) {
         var browser = gBrowser.getBrowserForTab(aTab);
         if ((browser.mIconURL || "") != aTab.getAttribute("image")) {
@@ -131,7 +131,7 @@ var TMP_extensionsCompatibility = {
 
     /*
     // https://addons.mozilla.org/en-US/firefox/addon/tab-flick/
-    if ("TabFlick" in window && typeof(TabFlick.openPanel) == "function") {
+    if ("TabFlick" in window && typeof (TabFlick.openPanel) == "function") {
       Tabmix.changeCode(TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragEnd")._replace(
         'gBrowser.replaceTabWithWindow(draggedTab);',
         'gBrowser.selectedTab = draggedTab; TabFlick.openPanel(aEvent);'
@@ -152,7 +152,7 @@ var TMP_extensionsCompatibility = {
         '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
         '  TMP_LastTab.PushSelectedTab();' +
         '}';
-      if (typeof(foxTab.openNewTab) == "function") {
+      if (typeof (foxTab.openNewTab) == "function") {
         Tabmix.changeCode(foxTab, "foxTab.openNewTab")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -168,7 +168,7 @@ var TMP_extensionsCompatibility = {
           'if( !loadNewInBackground) $&'
         ).toCode();
       }
-      if (typeof(foxTab.showNewTabMessage) == "function") {
+      if (typeof (foxTab.showNewTabMessage) == "function") {
         Tabmix.changeCode(foxTab, "foxTab.showNewTabMessage")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -219,7 +219,7 @@ var TMP_extensionsCompatibility = {
     if ("RSSTICKER" in window)
       this.RSSTICKER.init();
 
-    if ("PersonaController" in window && typeof(window.PersonaController) == "object") {
+    if ("PersonaController" in window && typeof (window.PersonaController) == "object") {
       Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
         /(\})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
@@ -317,7 +317,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // for MR Tech's local install extention
-    if (typeof(Local_Install) == "object") {
+    if (typeof (Local_Install) == "object") {
       // don't open trober in current tab when tab is locked
       // or trober is to diffrent site then the current
       Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
@@ -510,9 +510,9 @@ TMP_extensionsCompatibility.wizzrss = {
     this.started = true;
     var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
     const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
-    var _functions = ["addFeedbase","validate","gohome","tryagain","promptStuff",
-                      "doSearch","viewLog","renderItem","playEnc","renderAllEnc","playAllEnc",
-                      "gotoLink","itemLinkClick","itemListClick"];
+    var _functions = ["addFeedbase", "validate", "gohome", "tryagain", "promptStuff",
+                      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
+                      "gotoLink", "itemLinkClick", "itemListClick"];
 
     _functions.forEach(function(_function) {
       if (_function in window)

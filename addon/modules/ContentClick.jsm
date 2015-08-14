@@ -320,7 +320,7 @@ var ContentClickInternal = {
     }.bind(this);
 
   ///XXX check again how SubmitToTab work
-    if (typeof(this._window.SubmitToTab) != 'undefined') {
+    if (typeof (this._window.SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
@@ -675,7 +675,7 @@ var ContentClickInternal = {
     href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
-    if (event.button != 2 && typeof(custombuttons) != 'undefined') {
+    if (event.button != 2 && typeof (custombuttons) != 'undefined') {
       if (this.checkAttr(href, "custombutton://"))
         return true;
     }
@@ -932,7 +932,7 @@ var ContentClickInternal = {
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
-                 "/accounts/Logout", "/accounts/ServiceLogin","/u/2/stream/all"];
+                 "/accounts/Logout", "/accounts/ServiceLogin", "/u/2/stream/all"];
 
     let testPathname = _list.indexOf(node.pathname) > -1;
     if (testPathname)
@@ -1039,7 +1039,7 @@ var ContentClickInternal = {
   *
   */
   checkAttr: function TMP_checkAttr(attr, string) {
-    if (typeof(attr) == "string")
+    if (typeof (attr) == "string")
       return attr.startsWith(string);
     return false;
   },
@@ -1060,7 +1060,7 @@ var ContentClickInternal = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     var self = this;
     let getDomain = function getDomain(url) {
-      if (typeof(url) != "string")
+      if (typeof (url) != "string")
         url = url.toString();
 
       if (url.match(/auth\?/))

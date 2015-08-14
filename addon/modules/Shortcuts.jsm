@@ -348,7 +348,7 @@ this.Shortcuts = {
       return "";
     let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "")
           .replace("ctrl", "control").split(",");
-    key.modifiers = ["control","meta","accel","alt","shift"].filter(mod => {
+    key.modifiers = ["control", "meta", "accel", "alt", "shift"].filter(mod => {
       return new RegExp(mod).test(modifiers);
     }).join(",");
 
@@ -375,7 +375,7 @@ this.Shortcuts = {
     let disabled = /^d&/.test(value);
     let [keyVal, modifiers] = value.replace(/^d&/, "").split(" ");
     let isKey = keyVal.length == 1;
-    return {modifiers: modifiers || "",key: isKey ? keyVal : "",keycode: isKey ? "" : keyVal, disabled: disabled};
+    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled: disabled};
   },
 
   // convert key object {modifiers, key, keycode} into a string with " " separator

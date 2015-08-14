@@ -163,14 +163,14 @@ var TMP_LastTab = {
          this.OnKeyPress(event);
    },
 
-   set tabs (val) {
+   set tabs(val) {
      if (val !== null)
        return;
 
      this._tabs = null;
    },
 
-   get tabs () {
+   get tabs() {
      if (this._tabs)
        return this._tabs;
      let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;

@@ -898,8 +898,8 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
    var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
    var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
-   var openTabPref = typeof(pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
-   if (typeof(altKey) != "undefined") {
+   var openTabPref = typeof (pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
+   if (typeof (altKey) != "undefined") {
       // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
       if (altKey && !openTabPref)
          isBlankTab = false;
@@ -1203,7 +1203,7 @@ Tabmix.navToolbox = {
       this.urlBarInitialized = obj[fn].toString().indexOf(TMP_fn) > -1;
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
-    if (_Omnibar && typeof(Omnibar.intercepted_handleCommand) == "function") {
+    if (_Omnibar && typeof (Omnibar.intercepted_handleCommand) == "function") {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
       Tabmix.changeCode(Omnibar, "Omnibar.intercepted_handleCommand")._replace(
         'Omnibar.handleSearchQuery',
