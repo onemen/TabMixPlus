@@ -676,7 +676,9 @@ var TMP_eventListener = {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
-        fullScrToggler.collapsed = true;
+        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
+        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
+        fullScrToggler.hidden = true;
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
 
@@ -699,28 +701,14 @@ var TMP_eventListener = {
           '$&\
            TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
         ).toCode();
-
-        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
-          /(\})(\)?)$/,
-          '  let bottomToggler = document.getElementById("fullscr-bottom-toggler");' +
-          '  if (bottomToggler) {' +
-          '    bottomToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-          '    bottomToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
-          '  }' +
-          '$1$2'
-        ).toCode();
       }
       if (!document.mozFullScreen) {
-        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
-        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
-        fullScrToggler.collapsed = false;
+        fullScrToggler.hidden = false;
       }
     }
     else if (fullScrToggler && !enterFS) {
       this._updateMarginBottom("");
-      fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
-      fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
-      fullScrToggler.collapsed = true;
+      fullScrToggler.hidden = true;
     }
     if (!enterFS)
       this.updateMultiRow();
@@ -746,7 +734,8 @@ var TMP_eventListener = {
   toggleTabbarVisibility: function (aShow) {
     if (TabmixTabbar.position != 1)
       return;
-    document.getElementById("fullscr-bottom-toggler").collapsed = aShow;
+    let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
+    fullScrToggler.hidden = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
