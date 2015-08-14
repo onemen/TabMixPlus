@@ -313,3 +313,8 @@ so display: none !important; does not hide the button */
   margin-bottom: 0px;
   visibility: collapse;
 }
+
+#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
+#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
+  visibility: collapse;
+}
