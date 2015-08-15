@@ -572,6 +572,14 @@ TMP_extensionsCompatibility.treeStyleTab = {
   },
 
   onContentLoaded: function () {
+    // workaround, with version 0.15.2015061300a003855
+    // gBrowser.treeStyleTab.initTabContentsOrder throw on Firefox 41+
+    Tabmix.TST_initTabContentsOrder = function() {
+      try {
+        this.initTabContentsOrder.apply(this, arguments);
+      } catch (ex) { }
+    }.bind(gBrowser.treeStyleTab);
+
     if ("TreeStyleTabBrowser" in window) {
       let obj = TreeStyleTabBrowser.prototype;
       // we don't need this in the new version since we change the tabs-frame place
@@ -635,8 +643,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
         let tab = gBrowser.tabContainer.getAttribute("closebuttons-side") == "left" &&
                   gBrowser.tabContainer.mCloseButtons == 4 &&
                   event.detail && event.detail.previousTab;
-        if (tab)
-          gBrowser.treeStyleTab.initTabContentsOrder(tab);
+        if (tab) {
+          Tabmix.TST_initTabContentsOrder(tab);
+        }
       };
       gBrowser.tabContainer.addEventListener("TabSelect", ontabselect, true);
       window.addEventListener("unload", function onunload() {
@@ -707,13 +716,13 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'TabmixSessionManager.updateTabProp(aTab);',
         '$& \
          gBrowser.treeStyleTab.initTabAttributes(aTab);\
-         gBrowser.treeStyleTab.initTabContentsOrder(aTab);'
+         Tabmix.TST_initTabContentsOrder(aTab);'
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
         /(\})(\)?)$/,
         'gBrowser.treeStyleTab.initTabAttributes(tab); \
-         gBrowser.treeStyleTab.initTabContentsOrder(tab); \
+         Tabmix.TST_initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
       // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
