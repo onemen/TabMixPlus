@@ -60,14 +60,36 @@ label.text-link, label[onclick] {
   -moz-box-ordinal-group: 1 !important;
 }
 
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
+  -moz-box-ordinal-group: 2 !important;
+}
+
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
   -moz-box-ordinal-group: 2 !important;
   pointer-events: none;
 }
 
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-sound,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+  -moz-box-ordinal-group: 2 !important;
+}
+
 .tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
   -moz-box-ordinal-group: 5 !important;
+}
+
+.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound) {
+  -moz-box-ordinal-group: 1;
+}
+
+.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+  -moz-box-ordinal-group: 2;
+}
+
+.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  -moz-box-ordinal-group: 3;
 }
 
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
