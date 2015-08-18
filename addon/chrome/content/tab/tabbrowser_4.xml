@@ -255,10 +255,6 @@
         if (anonid == "tmp-close-button") {
           this.mOverCloseButton = aOver;
         }
-        else if ((anonid == "soundplaying-icon") ||
-                 ((anonid == "overlay-icon") && this.hasAttribute("soundplaying"))) {
-          this._overPlayingIcon = aOver;
-        }
         this.mIsHover = aOver;
       ]]></body>
     </method>
