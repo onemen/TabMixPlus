@@ -115,7 +115,7 @@ var TabmixTabClickOptions = {
     var target = aEvent.originalTarget;
     var anonid = target.getAttribute("anonid");
     // don't do anything if user left click on tab or tabbar button
-    if (anonid == "tmp-close-button" || anonid == "soundplaying-icon" ||
+    if (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
         target.localName == "toolbarbutton") {
       return;
     }
