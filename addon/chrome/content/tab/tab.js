@@ -1476,6 +1476,9 @@ var gTMPprefObserver = {
           }
           TabmixTabbar.updateBeforeAndAfter();
         break;
+      case "extensions.tabmix.pinnedTabScroll":
+        gBrowser.tabContainer._positionPinnedTabs();
+        break;
       case "extensions.tabmix.offsetAmountToScroll":
           gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
         break;

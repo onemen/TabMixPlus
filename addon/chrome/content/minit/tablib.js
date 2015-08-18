@@ -364,6 +364,7 @@ var tablib = {
     ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
+      let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
         'if (typeof this.mTabstrip.resetFirstTabInRow == "function")\
@@ -374,6 +375,10 @@ var tablib = {
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
+        'if (doPosition && TabmixTabbar.isMultiRow &&' + $LF +
+        '    Tabmix.prefs.getBoolPref("pinnedTabScroll")) {' + $LF +
+        '  doPosition = false;' + $LF +
+        '}' + $LF +
         '  if (doPosition && TabmixTabbar.isMultiRow) {' +
         '    this.setAttribute("positionpinnedtabs", "true");' +
         '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +

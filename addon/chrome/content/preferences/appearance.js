@@ -87,8 +87,8 @@ var gAppearancePane = { // jshint ignore:line
 
   tabsScrollChanged: function() {
     var multiRow = $("pref_tabsScroll").value == 2;
-    $("maxbar").hidden = !multiRow;
-    $("offsetAmountToScroll").hidden = multiRow;
+    $("multi-rows").hidden = !multiRow;
+    $("one-row").hidden = multiRow;
   },
 
   tabmixCustomizeToolbar: function() {
