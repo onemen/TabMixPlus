@@ -714,6 +714,14 @@ var TMP_eventListener = {
       this.updateMultiRow();
   },
 
+  showNavToolbox: function() {
+    this._updateMarginBottom("");
+    this.toggleTabbarVisibility(true);
+    this.updateMultiRow();
+    setTimeout(() => this.updateMultiRow(), 0);
+    gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+  },
+
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
     if (TabmixTabbar.position == 1) {
       let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");

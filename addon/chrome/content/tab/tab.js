@@ -219,8 +219,9 @@ var TabmixTabbar = {
     // don't do anything when the tabbar is hidden
     // by Print preview or others...
     if (gInPrintPreviewMode || !gBrowser.tabContainer.visible ||
-        FullScreen._isChromeCollapsed)
+        Tabmix.tabsUtils.inDOMFullscreen || FullScreen._isChromeCollapsed) {
       return;
+    }
 
     var tabsPosition = this.getTabsPosition();
     // need to reset height
@@ -564,6 +565,10 @@ Tabmix.tabsUtils = {
     return (this.tabstripInnerbox = elm);
   },
 
+  get inDOMFullscreen() {
+    return document.documentElement.hasAttribute("inDOMFullscreen");
+  },
+
   events: ["MozMouseHittest", "dblclick", "click", "dragstart",
            "drop", "dragend", "dragexit"],
 
@@ -733,7 +738,8 @@ Tabmix.tabsUtils = {
   },
 
   updateVerticalTabStrip: function(aReset) {
-    if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode || FullScreen._isChromeCollapsed ||
+    if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
+        this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         !this.tabBar.visible && TabmixTabbar.visibleRows == 1)
       return null;
     if (this._inUpdateVerticalTabStrip)

@@ -515,14 +515,14 @@ var tablib = {
     // FullScreen code related to tabs bellow content initialize by first
     // fullScreen event, see TMP_eventListener.onFullScreen
     if (Tabmix.isVersion(400)) {
-      let $LF = '\n    ';
       Tabmix.changeCode(FullScreen, "FullScreen.showNavToolbox")._replace(
-        'gNavToolbox.style.marginTop = "";',
-        '$&' + $LF +
-        'TMP_eventListener._updateMarginBottom("");' + $LF +
-        'TMP_eventListener.toggleTabbarVisibility(true);' + $LF +
-        'TMP_eventListener.updateMultiRow();' + $LF +
-        'setTimeout(function() {TMP_eventListener.updateMultiRow();},0);'
+        'if (!this._isChromeCollapsed) {',
+        '$&\n      ' +
+        'TMP_eventListener.showNavToolbox();'
+      )._replace(
+        /(\})(\)?)$/,
+        '  TMP_eventListener.showNavToolbox();\n' +
+        '$1$2'
       ).toCode();
     }
     else
