@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прелистване чрез бутони, разположени отляво">
 <!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
 <!ENTITY maxrow.label "Максимален брой редове:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
 <!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">

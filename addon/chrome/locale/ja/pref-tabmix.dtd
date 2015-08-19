@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "スクロール可能にし、左にボタンを表示">
 <!ENTITY tabScroll.multibar "多段表示にする">
 <!ENTITY maxrow.label "バーの最大表示段数:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
 <!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">

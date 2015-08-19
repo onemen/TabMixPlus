@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Keritav riba nuppudega vasakul">
 <!ENTITY tabScroll.multibar "Mitmerealine">
 <!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
 <!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">

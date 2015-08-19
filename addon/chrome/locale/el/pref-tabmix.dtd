@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
 <!ENTITY tabScroll.multibar "Με πολλές γραμμές">
 <!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Κατά την κύλιση να εμφανίζεται τμήμα της επόμενης μη εμφανούς καρτέλας">
 <!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">

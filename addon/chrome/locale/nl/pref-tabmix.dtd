@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
 <!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">

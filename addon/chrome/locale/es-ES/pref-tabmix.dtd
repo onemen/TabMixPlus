@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
 <!ENTITY tabScroll.multibar "se muestran en filas">
 <!ENTITY maxrow.label "Máximo de filas a mostrar:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Al rotar mostrar parte de la siguiente pestaña no visible">
 <!ENTITY smoothScroll.label "Activar rotación suave">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">

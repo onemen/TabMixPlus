@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Es poden desplaçar amb botons al costat esquerre">
 <!ENTITY tabScroll.multibar "Mostra diverses files">
 <!ENTITY maxrow.label "Nombre màxim de files que es poden mostrar:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "En desplaçar-se, mostra part de la següent pestanya fora de vista">
 <!ENTITY smoothScroll.label "Habilita el desplaçament suau">
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">

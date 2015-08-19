@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Pri rolovaní zobraziť časť ďalšej karty mimo pohľadu">
 <!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">

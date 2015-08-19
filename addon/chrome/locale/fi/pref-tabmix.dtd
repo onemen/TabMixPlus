@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-row">
 <!ENTITY maxrow.label "Max number of rows to display:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Vieritettäessä näytä osa seuraavasta piiloon jäävästä välilehdestä">
 <!ENTITY smoothScroll.label "Käytä pehmeää vieritystä">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">

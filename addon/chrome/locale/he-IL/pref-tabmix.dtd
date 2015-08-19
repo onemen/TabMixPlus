@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "גלול עם הכפתורים בצד שמאל">
 <!ENTITY tabScroll.multibar "מספר שורות">
 <!ENTITY maxrow.label "מספר מקסימלי לשורות:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">

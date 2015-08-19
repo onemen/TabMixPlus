@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Ritināmas ar pogām kreisajā pusē">
 <!ENTITY tabScroll.multibar "Vairākās rindās">
 <!ENTITY maxrow.label "Maksimālais rādāmo rindu skaits:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Ritinot rādīt daļu no nākamās neredzamās cilnes">
 <!ENTITY smoothScroll.label "Ieslēgt gludo ritināšanu">
 <!ENTITY scrolldelay.label "Ritināšanas aizture (laiks starp ritināšanas atkārtošanu)">

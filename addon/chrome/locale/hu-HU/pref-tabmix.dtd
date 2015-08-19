@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">

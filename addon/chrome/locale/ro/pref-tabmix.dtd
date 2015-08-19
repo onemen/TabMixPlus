@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se afișează butoane de derulare pe marginea stângă">
 <!ENTITY tabScroll.multibar "se afișează pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "La derulare, se afișează parțial următoarea filă nevizibilă">
 <!ENTITY smoothScroll.label "Se activează derularea lină">
 <!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării):">

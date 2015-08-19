@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "rendi scorrevole la barra delle schede con pulsanti a sinistra">
 <!ENTITY tabScroll.multibar "disponi su molteplici file la barra delle schede">
 <!ENTITY maxrow.label "Numero massimo di file da visualizzare:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Durante lo scorrimento mostra parte della prossima scheda non visibile">
 <!ENTITY smoothScroll.label "Attiva lo scorrimento continuo">
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
@@ -173,6 +174,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -188,6 +190,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

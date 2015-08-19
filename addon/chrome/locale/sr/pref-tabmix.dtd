@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Омогући померање са дугмадима на левој страни">
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
 <!ENTITY maxrow.label "Највећи број број редова који ће се видети:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Приликом померања прикажи део наредног језичка који се не види у целости">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">

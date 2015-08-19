@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "يمكن تمريرها مع ظهور أزرار على اليسار">
 <!ENTITY tabScroll.multibar "أظهر الألسنة في صفوف متعددة">
 <!ENTITY maxrow.label "أقصى عدد صفوف يمكن عرضه:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "تفعيل التمرير السلس">
 <!ENTITY scrolldelay.label "مُهلة التمرير (الوقت بين تكرار التمرير)">

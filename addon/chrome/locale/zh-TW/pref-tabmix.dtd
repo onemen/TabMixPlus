@@ -41,7 +41,7 @@
 <!ENTITY newtab.blank "空白頁">
 <!ENTITY newtab.home "首頁">
 <!ENTITY newtab.current "目前頁面">
-<!ENTITY newtab.duplicate "複製頁面（包含歷史）">
+<!ENTITY newtab.duplicate "複製頁面（包含瀏覽記錄）">
 <!ENTITY newtab.location.1 "自訂網址…">
 <!ENTITY newtab.placeholder.label "預設新分頁">
 <!ENTITY location.label.1 "網址">
@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "變更套用到已開啟的分頁">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
 <!ENTITY openBookmarks.label "書籤">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "書籤、瀏覽記錄群組">
+<!ENTITY openPlacesGroups.tooltip "勾選此項，開啟書籤、瀏覽記錄群組時保留目前已開啟的分頁">
 <!ENTITY openHistory.label "瀏覽記錄">
 <!ENTITY openUrl.label "網址列">
 <!ENTITY openSearch.label "搜尋列">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "顯示捲動按鈕於分頁列左側">
 <!ENTITY tabScroll.multibar "以多行顯示">
 <!ENTITY maxrow.label "最大顯示的行數：">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "捲動時對將要看不見的分頁標籤只顯示一小部份（關閉分頁按鈕寬度）">
 <!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">

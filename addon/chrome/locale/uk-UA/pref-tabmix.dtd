@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокрутка з клавішами ліворуч">
 <!ENTITY tabScroll.multibar "Розташовувати вкладки в кілька рядків">
 <!ENTITY maxrow.label "Максимальне число рядків:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Прокручуючи частково показувати наступну приховану вкладку">
 <!ENTITY smoothScroll.label "Застосувати плавну прокрутку">
 <!ENTITY scrolldelay.label "Затримка Прокрутки">

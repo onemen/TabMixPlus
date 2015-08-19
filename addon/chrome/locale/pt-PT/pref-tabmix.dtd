@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Deslocável com botões no lateral esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas colunas">
 <!ENTITY maxrow.label "Número máximo de colunas a mostrar:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Ao deslocar mostrar a parte do próximo separador">
 <!ENTITY smoothScroll.label "Ativar deslocamento suave">
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">

@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Rolável com botões no lado esquerdo">
 <!ENTITY tabScroll.multibar "Múltiplas fileiras">
 <!ENTITY maxrow.label "Número máximo de fileiras:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Quando rolagem mostrar parte da próxima guia de out-of-sight">
 <!ENTITY smoothScroll.label "Ativar rolagem suave">
 <!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
