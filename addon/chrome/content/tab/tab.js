@@ -17,11 +17,11 @@ var TabmixTabbar = {
     Tabmix.setItem(gBrowser.tabContainer, "flowing", val);
     Tabmix.setItem(gBrowser.tabContainer.mTabstrip, "flowing", val);
 
-    let tabmixScrollBox = document.getElementById("tabmixScrollBox");
-    Tabmix.setItem(tabmixScrollBox, "flowing", val);
+    // update our broadcaster
+    Tabmix.setItem("tabmix_flowing", "flowing", val);
     // we have to set orient attribute for Linux theme,
     // maybe other themes need it for display the scroll arrow
-    Tabmix.setItem(tabmixScrollBox, "orient", val == "multibar" ? "vertical" : "horizontal");
+    Tabmix.setItem("tabmixScrollBox", "orient", val == "multibar" ? "vertical" : "horizontal");
     return val;
   },
 
@@ -990,6 +990,16 @@ Tabmix.tabsUtils = {
 
   get canScrollTabsRight() {
     return !this.tabBar.mTabstrip._scrollButtonDown.disabled;
+  },
+
+  createTooltip: function(box) {
+    let rows = this.lastTabRowNumber;
+    let active = this.getTabRowNumber(gBrowser.selectedTab, this.topTabY);
+    let rowsStr = TabmixSvc.getString("rowsTooltip.rowscount");
+    let activeStr = TabmixSvc.getString("rowsTooltip.activetab");
+    let tooltip = PluralForm.get(rows, rowsStr).replace("#1", rows) +
+        "\n" + activeStr.replace("#1", active);
+    box.label = tooltip;
   },
 
   isSingleRow: function(visibleTabs) {

@@ -340,3 +340,7 @@ so display: none !important; does not hide the button */
 #main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
   visibility: collapse;
 }
+
+#tabmix-rows-tooltip:not([flowing="multibar"]) {
+  display: none;
+}
