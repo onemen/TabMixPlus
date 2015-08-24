@@ -413,11 +413,17 @@ var TMP_ClosedTabs = { // jshint ignore:line
       }
 
       aPopup.appendChild(document.createElement("menuseparator"));
+      function addKey(item, id) {
+        if (document.getElementById("key_tm_" + id)) {
+          item.setAttribute("key", "key_tm_" + id);
+        }
+      }
       // "Clear Closed Tabs List"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
       m.setAttribute("value", -1);
+      addKey(m, "clearClosedTabs");
       m.addEventListener("command", function() {
          TMP_ClosedTabs.restoreTab('original', -1);
       });
@@ -427,6 +433,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       m.setAttribute("id", "restoreAllClosedTabs");
       m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
+      addKey(m, "ucatab");
       m.addEventListener("command", function() {
          TMP_ClosedTabs.restoreTab('original', -2);
       });

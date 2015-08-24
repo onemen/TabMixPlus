@@ -312,6 +312,7 @@
             <shortcut id="removeright"     label="&clicktab.removetoRight;"/>
             <shortcut id="undoClose"       label="&clicktab.uctab;"/>
             <shortcut id="undoCloseTab"    label="&clicktab.uctab;*"/>
+            <shortcut id="clearClosedTabs"/>
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
             <shortcut id="saveWindow"      label="&saveWindow.label;"/>
             <shortcut id="saveSession"     label="&saveAllWindows.label;"/>

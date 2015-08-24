@@ -4,6 +4,7 @@ var gMenuPane = { // jshint ignore:line
   init: function () {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
+    $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
     var browserWindow = Tabmix.getTopWin();
     // if Tabview exist copy its menu label
