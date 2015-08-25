@@ -387,11 +387,13 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   let isSelected = aTab.getAttribute(TabmixSvc.selectedAtt) == "true";
   // if pending tab is blank we don't style it as unload or unread
   if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
-      (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending")))
-    style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
-  else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
-      !aTab.hasAttribute("visited") && !isTabEmpty(aTab))
+      (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending"))) {
+    style = aTab.hasAttribute("visited") ||
+      TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
+  } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
+      !aTab.hasAttribute("visited") && !isTabEmpty(aTab)) {
     style = "unread";
+  }
 
   let currentStyle = aTab.getAttribute("tabmix_tabState") || null;
   if (style != "unread" && style != "unloaded")
