@@ -75,9 +75,12 @@ overlay   chrome://wizzrss/content/wizzrss.xul                      chrome://tab
 overlay   chrome://wizzrss/content/feedster.xul                     chrome://tabmixplus/content/extensions/wizzrss.xul
 
 skin      tabmixplus   classic/1.0   chrome/skin/
-skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/win/   os=WINNT
-skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/mac/   os=Darwin
-skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/linux/ os=Linux
+
+skin      tabmix-version tabmixplus  chrome/skin/app_version/before39.0/ appversion<39.0a1
+skin      tabmix-version tabmixplus  chrome/skin/app_version/39.0/       appversion>=39.0a1
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/linux/ os=Linux
 
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css

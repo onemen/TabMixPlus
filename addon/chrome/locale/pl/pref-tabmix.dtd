@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
 <!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
 <!ENTITY openBookmarks.label "zakładek">
-<!ENTITY openBMKGroups.label "grup zakładek">
-<!ENTITY openBMKGroups.tooltip "Otwierana grupa zakładek zostanie dodana obok już otwartych kart">
+<!ENTITY openPlacesGroups.label "Grupy zakładek/historii">
+<!ENTITY openPlacesGroups.tooltip "Nie zastępuj kart, gdy jest otwierana grupa zakładek/historii">
 <!ENTITY openHistory.label "historii">
 <!ENTITY openUrl.label "paska adresu">
 <!ENTITY openSearch.label "paska wyszukiwania">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "wyświetlaj przyciski przewijania po lewej stronie paska">
 <!ENTITY tabScroll.multibar "wyświetlaj je w wielu rzędach">
 <!ENTITY maxrow.label "Maksymalna liczba wyświetlanych rzędów etykiet kart:">
+<!ENTITY pinnedTabScroll.label "Zezwalaj na przewijanie przypiętych kart">
 <!ENTITY offsetAmountToScroll.label "Podczas przewijania wyświetlaj część następnej poza zasięgiem wzroku karty">
 <!ENTITY smoothScroll.label "Włącz płynne przewijanie">
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">

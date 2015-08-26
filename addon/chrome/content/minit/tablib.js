@@ -87,7 +87,7 @@ var tablib = {
       params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
-    browser.tabmix_allowLoad = uri == "about:blank" || !isLockedTab;
+    browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
     return null;
   },
 
@@ -142,7 +142,7 @@ var tablib = {
       '              isPending             = params.isPending;'
     )._replace(
       't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && aURI.indexOf("about") != 0 ?\n' +
+      't.setAttribute("label", TabmixTabbar.widthFitTitle && !aURI.startsWith("about") ?\n' +
       '                              this.mStringBundle.getString("tabs.connecting") : aURI);',
       {check: !Tabmix.isVersion(280)}
     )._replace(
@@ -329,6 +329,30 @@ var tablib = {
         'Tabmix.setNumberOfTabsClosedLast();'
       ).toCode();
     }
+
+    if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
+      /*
+       TabSwitchDone event fire late when the tab is busy, we call our
+       functions from updateDisplay only after _visuallySelected was changed
+      */
+      Tabmix.updateSwitcher = function(switcher) {
+        switcher.original_updateDisplay = switcher.updateDisplay;
+        switcher.updateDisplay = function() {
+          let visibleTab = this.visibleTab;
+          this.original_updateDisplay.apply(this, arguments);
+          if (visibleTab !== this.visibleTab) {
+            TMP_eventListener.updateDisplay(this.visibleTab);
+            TabmixTabbar.updateBeforeAndAfter();
+          }
+        };
+      };
+
+      Tabmix.changeCode(gBrowser, "gBrowser._getSwitcher")._replace(
+        'this._switcher = switcher;',
+        'Tabmix.updateSwitcher(switcher);\n' +
+        '$&'
+      ).toCode();
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -340,6 +364,7 @@ var tablib = {
     ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
+      let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
         'if (typeof this.mTabstrip.resetFirstTabInRow == "function")\
@@ -350,6 +375,10 @@ var tablib = {
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
+        'if (doPosition && TabmixTabbar.isMultiRow &&' + $LF +
+        '    Tabmix.prefs.getBoolPref("pinnedTabScroll")) {' + $LF +
+        '  doPosition = false;' + $LF +
+        '}' + $LF +
         '  if (doPosition && TabmixTabbar.isMultiRow) {' +
         '    this.setAttribute("positionpinnedtabs", "true");' +
         '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
@@ -477,16 +506,38 @@ var tablib = {
       '  }'
     ).defineProperty();
 
+    if (Tabmix.isVersion(220)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
+        /(\})(\)?)$/,
+        '          Tabmix.setTabStyle(this.selectedItem);\n' +
+        '          TabmixTabbar.updateBeforeAndAfter();\n' +
+        '$1$2'
+      ).toCode();
+    }
   },
 
   change_utility: function change_utility() {
+    // FullScreen code related to tabs bellow content initialize by first
+    // fullScreen event, see TMP_eventListener.onFullScreen
+    if (Tabmix.isVersion(400)) {
+      Tabmix.changeCode(FullScreen, "FullScreen.showNavToolbox")._replace(
+        'if (!this._isChromeCollapsed) {',
+        '$&\n      ' +
+        'TMP_eventListener.showNavToolbox();'
+      )._replace(
+        /(\})(\)?)$/,
+        '  TMP_eventListener.showNavToolbox();\n' +
+        '$1$2'
+      ).toCode();
+    }
+    else
     Tabmix.changeCode(FullScreen, "FullScreen.mouseoverToggle")._replace(
       'this._isChromeCollapsed = !aShow;',
       '  $&' +
       '  if (aShow)' +
       '    TMP_eventListener.updateMultiRow();' +
       '  if (TabmixTabbar.position == 1) {' +
-      '    TMP_eventListener.mouseoverToggle(aShow);' +
+      '    TMP_eventListener.toggleTabbarVisibility(aShow);' +
       '  }'
     ).toCode();
 
@@ -503,28 +554,31 @@ var tablib = {
     // we prevent sessionStore.duplicateTab from moving the tab
     Tabmix.changeCode(window, "duplicateTabIn")._replace(
       'switch (where)',
-      '  if (where == "window") {\n' +
-      '    if (Tabmix.getSingleWindowMode())\n' +
-      '      where = "tab";\n' +
+      'if (where == "window" && Tabmix.getSingleWindowMode()) {\n' +
+      '    where = "tab";\n' +
       '  }\n' +
-      '  else {\n' +
-      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex","BrowserForward","BrowserBack") ?\n' +
+      '  $&'
+    )._replace(
+      'gBrowser.selectedTab = newTab;',
+      '// check tabmix preference before selecting the new tab'
+    )._replace(
+      /(\})(\)?)$/,
+      '  if (where != window) {\n' +
+      '    let newTab = gBrowser.getTabForLastPanel();\n' +
+      '    let selectNewTab = where == "tab" ?\n' +
+      '        !Tabmix.prefs.getBoolPref("loadDuplicateInBackground") :\n' +
+      '        Tabmix.prefs.getBoolPref("loadDuplicateInBackground");\n' +
+      '    if (selectNewTab) {\n' +
+      '      gBrowser.selectedTab = newTab;\n' +
+      '    }\n' +
+      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?\n' +
       '               "openTabNext" : "openDuplicateNext";\n' +
       '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
       '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
       '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
       '    }\n' +
       '  }\n' +
-      '  $&'
-    )._replace(
-      'gBrowser.selectedTab = newTab;',
-      'if (!Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
-      '        $&'
-    )._replace(
-      'case "tabshifted":',
-      '$&\n' +
-      '      if (Tabmix.prefs.getBoolPref("loadDuplicateInBackground"))\n' +
-      '        gBrowser.selectedTab = newTab;'
+      '$1$2'
     ).toCode();
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
@@ -582,7 +636,7 @@ var tablib = {
         .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
 
     _openURI = _openURI._replace(
-      'if (#1 && (!aURI || aURI.spec == "about:blank")) {'.replace("#1", arg),
+      'if (#1 && (!aURI || aURI.spec == "'.replace("#1", arg) + TabmixSvc.aboutBlank + '")) {',
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
        $&'
     )._replace(
@@ -748,7 +802,7 @@ var tablib = {
         state = TabmixSvc.JSON.stringify({windows: [state]});\
         #1.setWindowState(window, state, false);\
        }\
-       else $&}'.replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss", "g")
+       else $&}'.replace(/#1/g, Tabmix.isVersion(260) ? "SessionStore" : "ss")
     )._replace(
       'return window;',
       'TabmixSessionManager.notifyClosedWindowsChanged();\
@@ -856,7 +910,9 @@ var tablib = {
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
-    clearList.setAttribute("oncommand", "TabmixSessionManager.forgetClosedWindow(-1);");
+    clearList.addEventListener("command", function() {
+      TabmixSessionManager.forgetClosedWindow(-1);
+    });
     undoPopup.insertBefore(clearList, restoreAllWindows);
   },
 
@@ -1008,12 +1064,6 @@ var tablib = {
       if (!url)
         return;
 
-      // the next line is insertion point for treeStyleTab extension look in
-      // treeStyleTab hacks.js
-      /* jshint ignore:start */
-      var newTab = null;
-      /* jshint ignore:end */
-
       gContextMenu.linkURL = url;
       // originalFunctions.openInverseLink is a copy of original
       // nsContextMenu.prototype.openLinkInTab
@@ -1041,8 +1091,8 @@ var tablib = {
         return true;
       };
 
-      let tab = gBrowser.selectedTab;
-      if (tab.getAttribute("remote") == "true" &&
+      let browser = gBrowser.selectedBrowser;
+      if (browser.getAttribute("remote") == "true" &&
           typeof gContextMenu.tabmixLinkURL != "undefined")
         return gContextMenu.tabmixLinkURL;
 
@@ -1051,8 +1101,7 @@ var tablib = {
                     altKey: false, target: {},
                     tabmix_openLinkWithHistory: true};
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, url,
-              tab.linkedBrowser, document.commandDispatcher.focusedWindow);
+              target, url, browser, document.commandDispatcher.focusedWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
       return url;
@@ -1654,8 +1703,8 @@ var tablib = {
           return;
         var tabState = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
         if (!tabState.entries || tabState.entries.length == 1 &&
-           (tabState.entries[0].url == "about:blank" ||
-            tabState.entries[0].url == "about:newtab") &&
+           (tabState.entries[0].url == TabmixSvc.aboutBlank ||
+            tabState.entries[0].url == TabmixSvc.aboutNewtab) &&
             !tabState.userTypedValue)
           return;
         this.numberOfTabsClosedLast++;

@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Änderungen auf geöffnete Tabs anwenden">
 <!ENTITY openNewTab.label "In neuen Tabs öffnen">
 <!ENTITY openBookmarks.label "Lesezeichen">
-<!ENTITY openBMKGroups.label "Lesezeichengruppen">
-<!ENTITY openBMKGroups.tooltip "Bestehende Tabs werden beim Öffnen einer Lesezeichengruppe nicht überschrieben">
+<!ENTITY openPlacesGroups.label "Lesezeichen - Chronikgruppen">
+<!ENTITY openPlacesGroups.tooltip "Bestehende Tabs werden beim Öffnen einer Lesezeichen - Chronikgruppe nicht überschrieben">
 <!ENTITY openHistory.label "Chronik">
 <!ENTITY openUrl.label "Adresseingaben">
 <!ENTITY openSearch.label "Suchergebnisse">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "mit Pfeilschaltflächen auf der linken Seite scrollen">
 <!ENTITY tabScroll.multibar "mehrzeilig anzeigen">
 <!ENTITY maxrow.label "Maximale Zeilenanzahl:">
+<!ENTITY pinnedTabScroll.label "Scrollen durch angeheftete Tabs erlauben">
 <!ENTITY offsetAmountToScroll.label "Beim Scrollen einen Teil des nächsten Tabs zeigen">
 <!ENTITY smoothScroll.label "Sanftes Scrollen verwenden">
 <!ENTITY scrolldelay.label "Mausrad-Verzögerung (Intervall zwischen Scroll-Schritten)">
@@ -211,7 +212,7 @@
 <!ENTITY ontabbar.label "Auf die Tab-Leiste:">
 <!ENTITY clicktab.label "Aktionen bei Klicks auf einen Tab oder die Tab-Leiste auswählen:">
 <!ENTITY ontabbar.dblClick.label "Verhindern, dass ein Doppelklick auf die Tab-Leiste die Fenstergröße verändert">
-<!ENTITY ontabbar.click.label "Beim klicken auf die Tab-Leiste das verschieben des Fensters verhindern.">
+<!ENTITY ontabbar.click.label "Beim Klicken auf die Tab-Leiste das Verschieben des Fensters verhindern.">
 <!ENTITY clicktab.default "Firefox Standard oder andere Erweiterung">
 <!ENTITY clicktab.nothing "Keine Aktion">
 <!ENTITY clicktab.addtab "Neuen Tab öffnen">

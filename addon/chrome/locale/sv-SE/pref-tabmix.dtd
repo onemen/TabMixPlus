@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Öppna ny flik från:">
 <!ENTITY openBookmarks.label "Bokmärke">
-<!ENTITY openBMKGroups.label "Mapp med bokmärken">
-<!ENTITY openBMKGroups.tooltip "Åsidosätt inte flikar när mapp med bokmärken öppnas">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historik">
 <!ENTITY openUrl.label "Adressfält">
 <!ENTITY openSearch.label "Sökfält">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Fler-radig">
 <!ENTITY maxrow.label "Max antal av rader att visa:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">

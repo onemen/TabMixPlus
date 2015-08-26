@@ -26,11 +26,11 @@ Tabmix.startup = function TMP_startup() {
     };
     let command = document.getElementById("Tools:PrivateBrowsing");
     let originalCode = command.getAttribute("oncommand");
-    command.setAttribute("oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
-    cmdNewWindow.setAttribute("oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
+    Tabmix.setItem(command, "oncommand","if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
   }
   else
-    cmdNewWindow.setAttribute("oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
+    Tabmix.setItem(cmdNewWindow, "oncommand","if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
                                           "else {" + originalNewNavigator + "}");
 
   TabmixContext.toggleEventListener(true);
@@ -179,7 +179,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
   if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
-    this.ssPromise.then(this.sessionInitialized.bind(this), Cu.reportError);
+    this.ssPromise.then(this.sessionInitialized.bind(this), Tabmix.reportError);
   else
     this.sessionInitialized();
 
@@ -303,7 +303,12 @@ var TMP_eventListener = {
         this.onWindowClose(aEvent);
         break;
       case "fullscreen":
-        this.onFullScreen(!window.fullScreen);
+        let enterFS = window.fullScreen;
+        // Until Firefox 41 (Bug 1161802 part 2) we get the fullscreen event
+        // before the window transitions into or out of FS mode.
+        if (!Tabmix.isVersion(410))
+          enterFS = !enterFS;
+        this.onFullScreen(enterFS);
         break;
       case "PrivateTab:PrivateChanged":
         TabmixSessionManager.privateTabChanged(aEvent);
@@ -608,7 +613,7 @@ var TMP_eventListener = {
     // apply style on tabs
     let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
     styles.forEach(function(ruleName) {
-      gTMPprefObserver.updateTabsStyle(ruleName, true);
+      gTMPprefObserver.updateTabsStyle(ruleName);
     });
     // progressMeter on tabs
     gTMPprefObserver.setProgressMeter();
@@ -660,7 +665,7 @@ var TMP_eventListener = {
 
     // don't mark new tab as unread
     var url = tab.linkedBrowser.currentURI.spec;
-    if (url == "about:blank" || url == "about:newtab")
+    if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
       tab.setAttribute("visited", true);
   },
 
@@ -671,10 +676,22 @@ var TMP_eventListener = {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
-        fullScrToggler.collapsed = true;
+        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
+        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
+        fullScrToggler.hidden = true;
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
 
+        if (Tabmix.isVersion(400)) {
+          let $LF = '\n    ';
+          Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+            'this._isChromeCollapsed = true;',
+            'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+            '$&' + $LF +
+            'TMP_eventListener.toggleTabbarVisibility(false, aAnimate);'
+          ).toCode();
+        }
+        else
         Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
           'gNavToolbox.style.marginTop = "";',
           'TMP_eventListener._updateMarginBottom("");\
@@ -684,31 +701,25 @@ var TMP_eventListener = {
           '$&\
            TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
         ).toCode();
-
-        Tabmix.changeCode(FullScreen, "FullScreen.enterDomFullscreen")._replace(
-          /(\})(\)?)$/,
-          '  let bottomToggler = document.getElementById("fullscr-bottom-toggler");' +
-          '  if (bottomToggler) {' +
-          '    bottomToggler.removeEventListener("mouseover", TMP_eventListener._expandCallback, false);' +
-          '    bottomToggler.removeEventListener("dragenter", TMP_eventListener._expandCallback, false);' +
-          '  }' +
-          '$1$2'
-        ).toCode();
       }
       if (!document.mozFullScreen) {
-        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
-        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
-        fullScrToggler.collapsed = false;
+        fullScrToggler.hidden = false;
       }
     }
     else if (fullScrToggler && !enterFS) {
       this._updateMarginBottom("");
-      fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
-      fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
-      fullScrToggler.collapsed = true;
+      fullScrToggler.hidden = true;
     }
     if (!enterFS)
       this.updateMultiRow();
+  },
+
+  showNavToolbox: function() {
+    this._updateMarginBottom("");
+    this.toggleTabbarVisibility(true);
+    this.updateMultiRow();
+    setTimeout(() => this.updateMultiRow(), 0);
+    gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
@@ -719,12 +730,20 @@ var TMP_eventListener = {
   },
 
   _expandCallback: function TMP_EL__expandCallback() {
-    if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1)
-      FullScreen.mouseoverToggle(true);
+    if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
+      if (Tabmix.isVersion(400))
+        FullScreen.showNavToolbox();
+      else
+        FullScreen.mouseoverToggle(true);
+    }
   },
 
-  mouseoverToggle: function (aShow) {
-    document.getElementById("fullscr-bottom-toggler").collapsed = aShow;
+  // for tabs bellow content
+  toggleTabbarVisibility: function(aShow, aAnimate) {
+    if (TabmixTabbar.position != 1)
+      return;
+    let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
+    fullScrToggler.hidden = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
@@ -732,10 +751,26 @@ var TMP_eventListener = {
     }
     else {
       let bottombox = document.getElementById("browser-bottombox");
-      // changing the margin trigger resize event that calls updateTabbarBottomPosition
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
+
+      if (Tabmix.isVersion(400) && aAnimate &&
+          Services.prefs.getBoolPref("browser.fullscreen.animate")) {
+        // Hide the fullscreen toggler until the transition ends.
+        let listener = function() {
+          gNavToolbox.removeEventListener("transitionend", listener, true);
+          if (FullScreen._isChromeCollapsed)
+            fullScrToggler.hidden = false;
+        };
+        gNavToolbox.addEventListener("transitionend", listener, true);
+        fullScrToggler.hidden = true;
+      }
+
+      // Until Firefox 41 changing the margin trigger resize event that calls
+      // updateTabbarBottomPosition
+      if (Tabmix.isVersion(410))
+        gTMPprefObserver.updateTabbarBottomPosition();
     }
   },
 
@@ -889,7 +924,6 @@ var TMP_eventListener = {
 
   onTabSelect: function TMP_EL_TabSelect(aEvent) {
     var tab = aEvent.target;
-    var tabBar = gBrowser.tabContainer;
 
     // for ColorfulTabs 6.0+
     // ColorfulTabs trapp TabSelect event after we do
@@ -911,29 +945,31 @@ var TMP_eventListener = {
 
     // update this functions after new tab select
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
+
+    if (!Tabmix.isVersion(390) || !gMultiProcessBrowser) {
+      this.updateDisplay(tab);
+    }
+
+    TMP_LastTab.OnSelect();
+    TabmixSessionManager.tabSelected(true);
+  },
+
+  updateDisplay: function(tab) {
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
 
     if (tab.hasAttribute("tabmix_pending"))
       tab.removeAttribute("tabmix_pending");
-    let lastSelected = document.getElementsByAttribute("tabmix_tabStyle",
-      Tabmix.tabStyles["current"] || "current")[0];
-    Tabmix.setTabStyle(lastSelected);
     Tabmix.setTabStyle(tab);
 
-    TMP_LastTab.OnSelect();
-    TabmixSessionManager.tabSelected(true);
-
     if (tab.hasAttribute("showbutton") &&
-        tabBar.getAttribute("closebuttons") == "activetab")
+        gBrowser.tabContainer.getAttribute("closebuttons") == "activetab")
       tab.style.removeProperty("width");
 
     // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
-    // TabSelect event. we call updateBeforeAndAfter after a timeout so
-    // _setPositionalAttributes not override our attribute
-    if (Tabmix.isVersion(220))
-      setTimeout(function(){TabmixTabbar.updateBeforeAndAfter();}, 0);
-    else
+    // TabSelect event.
+    // Since Firefox 220 we call updateBeforeAndAfter from _setPositionalAttributes
+    if (!Tabmix.isVersion(220))
       TabmixTabbar.updateBeforeAndAfter();
   },
 
@@ -1061,7 +1097,8 @@ var TMP_eventListener = {
 
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
-    TMP_TabView._resetTabviewFrame();
+    if (TMP_TabView.installed)
+      TMP_TabView._resetTabviewFrame();
     gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();

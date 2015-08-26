@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Open tabs from:">
 <!ENTITY openBookmarks.label "Bookmarks">
-<!ENTITY openBMKGroups.label "Groups of bookmarks">
-<!ENTITY openBMKGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "History">
 <!ENTITY openUrl.label "Address bar">
 <!ENTITY openSearch.label "Search bar">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-row">
 <!ENTITY maxrow.label "Max number of rows to display:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">

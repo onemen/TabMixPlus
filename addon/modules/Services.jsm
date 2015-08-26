@@ -24,6 +24,16 @@ function isVersion(aVersionNo) {
 }
 
 this.TabmixSvc = {
+  get selectedAtt() {
+    delete this.selectedAtt;
+    return (this.selectedAtt = isVersion(390) ?
+            "visuallyselected" : "selected");
+  },
+
+  aboutBlank: "about:blank",
+  aboutNewtab: "about:newtab",
+  newtabUrl: "browser" + ".newtab.url",
+
   debugMode: function() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
@@ -149,6 +159,8 @@ this.TabmixSvc = {
         aWindow.gTMPprefObserver.updateSettings();
       } catch (ex) {TabmixSvc.console.assert(ex);}
 
+      this.addMissingPrefs();
+
       Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
@@ -164,6 +176,19 @@ this.TabmixSvc = {
       tmp.DynamicRules.init(aWindow);
     },
 
+    addMissingPrefs: function() {
+      // add missing preference to the default branch
+      let prefs = Services.prefs.getDefaultBranch("");
+
+      if (isVersion(320))
+        prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
+
+      if (isVersion(410)) {
+        prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
+        Cu.import("resource://tabmixplus/NewTabURL.jsm", {});
+      }
+    },
+
     observe: function(aSubject, aTopic) {
       switch (aTopic) {
         case "quit-application":
@@ -172,6 +197,8 @@ this.TabmixSvc = {
             let timer = TabmixSvc.console._timers[id];
             timer.cancel();
           }
+          delete TabmixSvc.SessionStoreGlobal;
+          delete TabmixSvc.SessionStore;
           break;
         case "browser-delayed-startup-finished":
           try {
@@ -182,8 +209,8 @@ this.TabmixSvc = {
     }
   },
 
-  saveTabAttributes: function(tab, attrib) {
-    tabStateCache.saveTabAttributes(tab, attrib);
+  saveTabAttributes: function(tab, attrib, save) {
+    tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
   get ss() {
@@ -271,6 +298,14 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
+  return Cu.getGlobalForObject(this.ss);
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
+  return this.SessionStoreGlobal.SessionStoreInternal;
+});
+
 var tabStateCache = {
   get _update() {
     delete this._update;
@@ -282,12 +317,21 @@ var tabStateCache = {
     if (isVersion(270))
       Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
     else
-      this.TabStateCache = Cu.getGlobalForObject(TabmixSvc.ss).TabStateCache;
+      this.TabStateCache = TabmixSvc.SessionStoreGlobal.TabStateCache;
     return this.TabStateCache;
   },
 
-  saveTabAttributes: function(tab, attrib) {
+  saveTabAttributes: function(tab, attrib, save = true) {
     if (!isVersion(250))
+      return;
+
+    // force Sessionstore to save our persisted tab attributes
+    if (save) {
+      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerDocument.defaultView);
+    }
+
+    // After bug 1166757 - Remove browser.__SS_data, we have nothing more to do.
+    if (isVersion(410))
       return;
 
     let attribs = attrib.split(",");

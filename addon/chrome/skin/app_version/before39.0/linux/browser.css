@@ -1,0 +1,17 @@
+/**
+    Firefox before version 39
+
+    Linux platform
+
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/all/linux/browser.css");
+@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/before39.0/tabStyles.css");
+
+/***  Tab close button when user set background color ***/
+#TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"]:not(:hover) .tab-close-button,
+#TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"]:not(:hover) .tab-close-button,
+#TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState]):not(:hover) > .tab-close-button {
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 16, 16, 0);
+}

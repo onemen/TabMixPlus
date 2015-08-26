@@ -1,12 +1,9 @@
 /**
-    Firefox version 4.0
+    Firefox all versions
 
     Mac platform
 
 **/
-
-@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
-@import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
 
 /* :::: tabbar on bottom ::::
   we leave the default background-image on mac
@@ -52,16 +49,6 @@
   vertical-align: bottom;
 }
 
-.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-content {
-  border-image: none !important;
-}
-
-/* tabmix color on tab - for inactive window */
-.tabbrowser-tab[tabmix_tabStyle*="bg"] > .tab-stack > .tab-background >
-        :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive {
-  opacity: 0.5 !important;
-}
-
 /* for mac - look in pinstripe/browser/browser.css */
 .tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
 .tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
@@ -94,8 +81,4 @@
 
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
   -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
-}
-
-.tabbrowser-tabs[tabmix_australis="true"] > .tabbrowser-tab[tabmix_tabStyle*="bg"]:not([selected=true]) > .tab-stack > .tab-background > .tab-background-middle {
-  clip-path: none !important;
 }

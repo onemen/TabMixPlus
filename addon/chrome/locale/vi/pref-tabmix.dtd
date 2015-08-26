@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Mở thẻ từ:">
 <!ENTITY openBookmarks.label "Trang đánh dấu">
-<!ENTITY openBMKGroups.label "Nhóm trang đánh dấu">
-<!ENTITY openBMKGroups.tooltip "Không ghi đè thẻ khi mở nhóm trang đánh dấu">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Lược sử">
 <!ENTITY openUrl.label "Thanh địa chỉ">
 <!ENTITY openSearch.label "Thanh tìm kiếm">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Có thể cuộn với các nút ở phía bên trái">
 <!ENTITY tabScroll.multibar "Nhiều hàng">
 <!ENTITY maxrow.label "Số lượng hàng tối đa:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Hiển thị phần không nhìn thấy của thẻ tiếp theo khi cuộn">
 <!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">

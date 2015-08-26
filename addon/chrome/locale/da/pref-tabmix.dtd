@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Åbn faneblade fra:">
 <!ENTITY openBookmarks.label "Bogmærker">
-<!ENTITY openBMKGroups.label "Grupper af bogmærker">
-<!ENTITY openBMKGroups.tooltip "Tilsidesæt ikke faneblade når en gruppe bogmærker åbnes">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historik">
 <!ENTITY openUrl.label "Adresselinjen">
 <!ENTITY openSearch.label "Søgelinjen">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Multi-række">
 <!ENTITY maxrow.label "Maks antal rækker der skal vises:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">

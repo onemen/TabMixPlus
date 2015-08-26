@@ -132,7 +132,7 @@ var gSessionPane = {
 
   convertSession: function () {
     var browserWindow = Tabmix.getTopWin();
-    if ($("chooseFile").selectedItem.value === 0)
+    if ($("chooseFile").selectedItem.value == "0")
       browserWindow.TabmixConvertSession.selectFile(window);
     else
       browserWindow.TabmixConvertSession.convertFile();

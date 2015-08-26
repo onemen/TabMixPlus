@@ -71,7 +71,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
    var originCharset = tabBrowser.selectedBrowser.characterSet;
 
    // if the current tab is empty, then do not open a new tab
-   if (tabBrowser.currentURI.spec == "about:blank") {
+   if (tabBrowser.currentURI.spec == TabmixSvc.aboutBlank) {
       // 1: CURRENT_TAB
       linkTarget = 1;
       originCharset = null;
@@ -123,10 +123,10 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
          return newTab;
       case 4 : // user url
          let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
-                                         "browser.newtab.url";
+                                         TabmixSvc.newtabUrl;
          try {
             url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-            if (newTabUrl == "about:privatebrowsing" && url == "about:newtab")
+            if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
               url = "about:privatebrowsing";
          } catch (ex) {  Tabmix.assert(ex); }
          // use this if we can't find the pref
@@ -172,6 +172,13 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
      }
    }
 
+   // make sure to update recently used tabs
+   // if user open many tabs quickly select event don't have time to fire
+   // before new tab select
+   if (!loadInBackground) {
+      gBrowser.selectedTab = newTab;
+      TMP_LastTab.PushSelectedTab();
+   }
    if (aTab && aTab.localName == "tab")
       gBrowser.moveTabTo(newTab, aTab._tPos + 1);
    else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
@@ -179,19 +186,12 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       // and it mess with recently used tabs order
       gBrowser.moveTabTo(newTab, selectedTab._tPos + 1);
    }
-   // make sure to update recently used tabs
-   // if user open many tabs quickly select event don't have time to fire
-   // before new tab select
-   if (!loadInBackground) {
-     gBrowser.selectedTab = newTab;
-     TMP_LastTab.PushSelectedTab();
-   }
 
    gBrowser.selectedBrowser.focus();
    // focus the address bar on new tab
    var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
        replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-       url == "about:blank" || url == "about:newtab" || url == "about:privatebrowsing";
+       url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab || url == "about:privatebrowsing";
    if (clearUrlBar)
      Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
 
@@ -380,31 +380,27 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 };
 
-Tabmix.tabStyles = {};
 Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
-  let style = "other";
-  if (aTab.selected)
-    style = "current";
+  let style = "null";
+  let isSelected = aTab.getAttribute(TabmixSvc.selectedAtt) == "true";
   // if pending tab is blank we don't style it as unload or unread
-  else if (Tabmix.prefs.getBoolPref("unloadedTab") &&
+  if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
       (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending")))
     style = TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
-  else if (Tabmix.prefs.getBoolPref("unreadTab") &&
+  else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab))
     style = "unread";
 
-  let currentAttrib = aTab.getAttribute("tabmix_tabStyle");
-  let newAttrib = Tabmix.tabStyles[style] || style;
-  this.setItem(aTab, "tabmix_tabStyle", newAttrib);
+  let currentStyle = aTab.getAttribute("tabmix_tabState") || null;
+  if (style != "unread" && style != "unloaded")
+    style = null;
+  this.setItem(aTab, "tabmix_tabState", style);
 
   if (!boldChanged)
     return;
 
-  let isBold = function(attrib) {
-    attrib = attrib.split(" ");
-    return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
-  };
-  boldChanged.value = isBold(newAttrib) != isBold(currentAttrib);
+  // return true if state changed
+  boldChanged.value = currentStyle != style;
 };

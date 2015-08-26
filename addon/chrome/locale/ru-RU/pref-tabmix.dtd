@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Применить изменения к открытым вкладкам">
 <!ENTITY openNewTab.label "Открывать в новых вкладках:">
 <!ENTITY openBookmarks.label "Закладки">
-<!ENTITY openBMKGroups.label "Группы закладок">
-<!ENTITY openBMKGroups.tooltip "Не использовать открытые вкладки при открытии группы закладок">
+<!ENTITY openPlacesGroups.label "Группы закладок/журнала">
+<!ENTITY openPlacesGroups.tooltip "Не замещать вкладки при открытии группы закладок/журнала">
 <!ENTITY openHistory.label "Ссылки из журнала">
 <!ENTITY openUrl.label "Из адресной строки">
 <!ENTITY openSearch.label "Из панели поиска">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
 <!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
 <!ENTITY maxrow.label "Максимальное число строк:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Во время прокрутки показывать часть следующей вкладки">
 <!ENTITY smoothScroll.label "Использовать плавную прокрутку">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">

@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Változtatások alkalmazása a nyitott lapokra">
 <!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
 <!ENTITY openBookmarks.label "Könyvjelzők">
-<!ENTITY openBMKGroups.label "Könyvjelzők csoportja">
-<!ENTITY openBMKGroups.tooltip "Ne használjon egyedi beállításokat Könyvjelzők egy csoportjának megnyitásához">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Előzmények">
 <!ENTITY openUrl.label "Hely mező">
 <!ENTITY openSearch.label "Keresés mező">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">

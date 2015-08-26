@@ -29,11 +29,32 @@ var TMP_Places = {
       // use tab label for bookmark name when user renamed the tab
       // PlacesCommandHook exist on browser window
       if ("PlacesCommandHook" in window) {
-         Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-            /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
-            'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), ' +
-            (Tabmix.isVersion(400) ? "uri" : "url") + '.spec) || $&'
-         ).toCode();
+         if (Tabmix.isVersion(400)) {
+           if (!Tabmix.originalFunctions.placesBookmarkPage) {
+             Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
+           }
+           PlacesCommandHook.bookmarkPage = function(aBrowser) {
+             let origTitle;
+             let tab = gBrowser.getTabForBrowser(aBrowser);
+             let title = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec);
+             if (typeof title == "string") {
+               origTitle = aBrowser.contentTitle;
+               aBrowser._contentTitle = title;
+             }
+             try {
+               return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
+             } finally {
+               if (origTitle) {
+                 aBrowser._contentTitle = origTitle;
+               }
+             }
+           };
+         } else {
+           Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
+             /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
+             'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
+           ).toCode();
+         }
 
          Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
            'URIs.push(tab.linkedBrowser.currentURI);',
@@ -223,7 +244,11 @@ var TMP_Places = {
    getPrefByDocumentURI: function (aWindow) {
      switch (aWindow.document.documentURI) {
        case "chrome://browser/content/places/places.xul":
-         if (PlacesOrganizer._places.selectedNode.itemId != PlacesUIUtils.leftPaneQueries["History"])
+         let historyId = PlacesUIUtils.leftPaneQueries["History"];
+         let node = PlacesOrganizer._places.selectedNode;
+         let historySelected = node.itemId == historyId ||
+             node.parent && node.parent.itemId == historyId;
+         if (!historySelected)
            return this.prefBookmark;
          /* falls through */
        case "chrome://browser/content/history/history-panel.xul":
@@ -238,7 +263,7 @@ var TMP_Places = {
    },
 
   // fixed: reuse all blank tab not just in the end
-  // fixed: if "extensions.tabmix.loadFolderAndReplace" is true don't reuse
+  // fixed: if "extensions.tabmix.loadBookmarksAndReplace" is true don't reuse
   //        locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
@@ -248,7 +273,7 @@ var TMP_Places = {
     var tabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-        Tabmix.prefs.getBoolPref("loadFolderAndReplace");
+        Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
         Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
         Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
@@ -348,7 +373,7 @@ var TMP_Places = {
     let title = this.getTabTitle(aTab, aUrl, aTab.label);
     if (title != aTab.label) {
       aTab.label = title;
-      aTab.crop = title != aUrl || aUrl == "about:blank" ? "end" : "center";
+      aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
       gBrowser._tabAttrModified(aTab);
       if (aTab.selected)
@@ -468,7 +493,7 @@ var TMP_Places = {
         PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
       } catch(ex) {
-        Components.utils.reportError("Tabmix failed adding a bookmarks observer: " + ex);
+        Tabmix.reportError(ex, "Failed to add bookmarks observer:");
       }
     }
   },

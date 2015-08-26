@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Otvori kartice iz:">
 <!ENTITY openBookmarks.label "Zabilješki">
-<!ENTITY openBMKGroups.label "Grupa zabilješki">
-<!ENTITY openBMKGroups.tooltip "Ne preuzima kartice prilikom otvaranja grupe zabilješki">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Povijesti">
 <!ENTITY openUrl.label "Adresne trake">
 <!ENTITY openSearch.label "Trake za pretragu">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "Više redova">
 <!ENTITY maxrow.label "Najveći broj redova koji se mogu prikazati:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">

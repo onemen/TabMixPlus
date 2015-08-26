@@ -30,10 +30,10 @@ var TabmixTabClickOptions = {
     this._blockDblClick = target.classList.contains("tabs-newtab-button") ||
       !Tabmix.isVersion(270) && leftClick && anonid == "tmp-close-button";
 
-    // don't do anything if user left click on close tab button, or on any
-    // other button on tab or tabbar
-    if (leftClick && (anonid == "tmp-close-button" ||
-                      target.localName == "toolbarbutton")) {
+    // don't do anything if user left click on tab or tabbar button
+    if (leftClick &&
+        (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
+         target.localName == "toolbarbutton")) {
       return;
     }
 
@@ -112,9 +112,10 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    // don't do anything if user click on close tab button , or on any other button on tab or tabbar
     var target = aEvent.originalTarget;
-    if (target.getAttribute("anonid") == "tmp-close-button" ||
+    var anonid = target.getAttribute("anonid");
+    // don't do anything if user left click on tab or tabbar button
+    if (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
         target.localName == "toolbarbutton") {
       return;
     }
@@ -345,8 +346,9 @@ var TabmixContext = {
 
     // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
     if (Tabmix.isVersion(240)) {
-      tabContextMenu.insertBefore($id("context_closeTabsToTheEnd"), $id("tm-closeRightTabs"));
-      $id("context_closeTabsToTheEnd").setAttribute("oncommand","gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+      let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
+      tabContextMenu.insertBefore(closeTabsToTheEnd, $id("tm-closeRightTabs"));
+      Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
       tabContextMenu.removeChild($id("tm-closeRightTabs"));
       this._closeRightTabs = "context_closeTabsToTheEnd";
     }
@@ -635,7 +637,7 @@ var TabmixContext = {
 
       // for remote tab get call getValidUrl when it is safe to use CPOWs
       // getValidUrl may call getParamsForLink
-      if (tab.getAttribute("remote") == "true" &&
+      if (tab.linkedBrowser.getAttribute("remote") == "true" &&
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {
@@ -1025,7 +1027,7 @@ var TabmixAllTabs = {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
-                 .replace("#1", tabClr, "g");
+                 .replace(/#1/g, tabClr);
       }
       mi.style.setProperty('background-image', rule, 'important');
     }

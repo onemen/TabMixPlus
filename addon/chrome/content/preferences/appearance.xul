@@ -38,6 +38,7 @@
       <preference id="pref_scrollDelay"
                   name="toolkit.scrollbox.clickToScroll.scrollDelay"                            type="int"/>
       <preference id="pref_maxrow"            name="extensions.tabmix.tabBarMaxRow"             type="int"/>
+      <preference id="pref_pinnedTabScroll"   name="extensions.tabmix.pinnedTabScroll"          type="bool"/>
       <preference id="pref_offsetAmountToScroll"
                   name="extensions.tabmix.offsetAmountToScroll"                                 type="bool"/>
       <preference id="pref_currentTab"        name="extensions.tabmix.currentTab"               type="bool"/>
@@ -146,12 +147,18 @@
                 </menulist>
               </hbox>
             </box>
-            <hbox align="center" id="maxbar">
-              <label value="&maxrow.label;" TSTdisabled="true"/>
-              <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
-            </hbox>
-            <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
-                      preference="pref_offsetAmountToScroll" style="height: 26px;"/>
+            <vbox id="multi-rows" class="indent" style="height: 50px;">
+              <hbox align="center" id="maxbar">
+                <label value="&maxrow.label;" TSTdisabled="true"/>
+                <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
+              </hbox>
+              <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
+                            preference="pref_pinnedTabScroll"/>
+            </vbox>
+            <vbox id="one-row" class="indent" style="height: 50px;">
+              <checkbox_tmp id="offsetAmountToScroll" label="&offsetAmountToScroll.label;"
+                        preference="pref_offsetAmountToScroll"/>
+            </vbox>
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>

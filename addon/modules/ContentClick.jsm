@@ -870,6 +870,10 @@ var ContentClickInternal = {
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
+    // don't open new tab from facebook chat settings
+    if (/www\.facebook\.com\/ajax/.test(href))
+      return false;
+
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v\=/;
     let isYoutube = function(href) youtube.test(current) && youtube.test(href);
@@ -1003,7 +1007,7 @@ var ContentClickInternal = {
       }
       if (tab) {
         let browser = tab.linkedBrowser;
-        if (tab.getAttribute("remote") == "true") {
+        if (browser.getAttribute("remote") == "true") {
           browser.messageManager
                  .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
         }

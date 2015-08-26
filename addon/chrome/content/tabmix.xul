@@ -10,8 +10,6 @@
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
 %tabmixDTD;
-<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
-%tabBrowserDTD;
 <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
 %browserDTD;
 ]>
@@ -379,6 +377,11 @@
       </menupopup >
       <!-- tabmix tooltip for button -->
       <tooltip id="tabmix-tooltip"/>
+      <!-- tabmix tooltip for tabmixScrollBox -->
+      <tooltip id="tabmix-rows-tooltip"
+               observes="tabmix_flowing"
+               onpopupshowing="Tabmix.tabsUtils.createTooltip(this);">
+      </tooltip>
     </popupset>
 
     <!-- hide Tab groups context menu in all-tabs list button -->
@@ -387,6 +390,8 @@
     <toolbar id="TabsToolbar">
       <box id="tabmixScrollBox" insertafter="tabbrowser-tabs"
                      class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box"
+                     observes="tabmix_flowing"
+                     tooltip="tabmix-rows-tooltip"
                      type="tabmix-box"
                      removable="false"/>
     </toolbar>
@@ -400,6 +405,7 @@
     <broadcaster id="tmp_undocloseButton"/>
     <broadcaster id="tmp_sessionmanagerButton"/>
     <broadcaster id="tmp_disableSave"/>
+    <broadcaster id="tabmix_flowing"/>
   </broadcasterset>
 
 </overlay>

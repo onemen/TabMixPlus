@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "새 탭으로 열 것:">
 <!ENTITY openBookmarks.label "북마크">
-<!ENTITY openBMKGroups.label "북마크 폴더">
-<!ENTITY openBMKGroups.tooltip "&apos;탭으로 모두 열기&apos;를 할 때 열려 있는 탭에 덮어 씌우지 않습니다.">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "방문 기록">
 <!ENTITY openUrl.label "주소창">
 <!ENTITY openSearch.label "검색창">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
 <!ENTITY tabScroll.multibar "여러 줄로 나누기">
 <!ENTITY maxrow.label "탭 도구 모음의 최대 표시 개수:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "스크롤 지연시간(반복 스크롤 사이의 시간)">

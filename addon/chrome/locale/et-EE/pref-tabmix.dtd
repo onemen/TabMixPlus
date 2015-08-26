@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Rakenda muudatused avatud kaartidele">
 <!ENTITY openNewTab.label "Ava uuel kaardil järgnevate kaudu avatud leht:">
 <!ENTITY openBookmarks.label "Järjehoidjad">
-<!ENTITY openBMKGroups.label "Järjehoidjate grupid">
-<!ENTITY openBMKGroups.tooltip "Ära kirjuta järjehoidjate grupi avamisel olemasolevaid kaarte üle">
+<!ENTITY openPlacesGroups.label "Järjehoidja-/ajaloogrupid">
+<!ENTITY openPlacesGroups.tooltip "Järjehoidja-/ajaloogruppide avamisel ära kirjuta kaarte üle">
 <!ENTITY openHistory.label "Ajalugu">
 <!ENTITY openUrl.label "Aadressiriba">
 <!ENTITY openSearch.label "Otsinguriba">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Keritav riba nuppudega vasakul">
 <!ENTITY tabScroll.multibar "Mitmerealine">
 <!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
+<!ENTITY pinnedTabScroll.label "Luba püsikaartide kerimine">
 <!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
 <!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">

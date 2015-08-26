@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importar predisposiciones">
 <!ENTITY settings.sync "Sincronizar preferencias">
 <!ENTITY settings.default "Restaurar predeterminadas">
-<!ENTITY settings.revert "Deschacer">
+<!ENTITY settings.revert "Deshacer">
 <!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
 <!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">
 <!ENTITY externalLinkTarget.label "Abrir enlaces de otros programas en:">
@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplicar cambios a pestañas abiertas">
 <!ENTITY openNewTab.label "Abrir pestañas desde:">
 <!ENTITY openBookmarks.label "Marcadores">
-<!ENTITY openBMKGroups.label "Grupos de marcadores">
-<!ENTITY openBMKGroups.tooltip "No reemplazar pestañas al abrir un grupo de marcadores">
+<!ENTITY openPlacesGroups.label "Grupos de marcadores/historial">
+<!ENTITY openPlacesGroups.tooltip "No sustituir pestañas al abrir un grupo de marcadores/historial">
 <!ENTITY openHistory.label "Historial">
 <!ENTITY openUrl.label "Barra direcciones">
 <!ENTITY openSearch.label "Barra búsquedas">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
 <!ENTITY tabScroll.multibar "se muestran en filas">
 <!ENTITY maxrow.label "Máximo de filas a mostrar:">
+<!ENTITY pinnedTabScroll.label "Permitir rotar pestañas fijas">
 <!ENTITY offsetAmountToScroll.label "Al rotar mostrar parte de la siguiente pestaña no visible">
 <!ENTITY smoothScroll.label "Activar rotación suave">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">

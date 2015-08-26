@@ -1,11 +1,12 @@
+/* jshint esnext: true */
 /* globals _sminstalled, gPreferenceList */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const {classes: Cc, interfaces: Ci} = Components; // jshint ignore:line
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
-function $(id) document.getElementById(id)
+this.$ = id => document.getElementById(id);
 
 var gPrefWindow = { // jshint ignore:line
   widthChanged: false,
@@ -221,6 +222,11 @@ var gPrefWindow = { // jshint ignore:line
       tabs._inited = true;
       if (preference.value !== null)
         tabs.selectedIndex = preference.value;
+      else {
+        let val = preference.valueFromPreferences;
+        if (val !== null)
+          tabs.selectedIndex = val;
+      }
     }
     else if (preference.value != tabs.selectedIndex)
       preference.valueFromPreferences = tabs.selectedIndex;
@@ -340,7 +346,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
   "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
-  "browser.link.open_newwindow.restriction","browser.newtab.url",
+  "browser.link.open_newwindow.restriction",TabmixSvc.newtabUrl,
   "browser.search.context.loadInBackground","browser.search.openintab",
   "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
   "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
@@ -379,7 +385,7 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = true;
   let SMinstalled = _sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
-      gPreferenceList.map(function(pref) sessionPrefs.indexOf(pref) == -1);
+      gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
   prefs.forEach(function(pref) {
     Services.prefs.clearUserPref(pref);
   });
@@ -407,55 +413,42 @@ function toggleSyncPreference() {
 function exportData() {
   // save all pending changes
   gPrefWindow.onApply();
-
-  let patterns = gPreferenceList.map(function(pref) {
-    return pref + "=" + getPrefByType(pref) + "\n";
-  });
-  patterns[patterns.length-1] = patterns[patterns.length-1].replace(/\n$/, "");
-  patterns.unshift("tabmixplus\n");
-
-  function exportCallback(aFile) {
-    if (!/\.txt$/.test(aFile.leafName.toLowerCase()))
-      aFile.leafName += ".txt";
-    if (aFile.exists())
-      aFile.remove(true);
-    aFile.create(aFile.NORMAL_FILE_TYPE, parseInt("0666", 8));
-    let stream = Cc["@mozilla.org/network/file-output-stream;1"].
-                  createInstance(Ci.nsIFileOutputStream);
-    stream.init(aFile, 0x02, 0x200, null);
-    for (let i = 0; i < patterns.length ; i++)
-      stream.write(patterns[i], patterns[i].length);
-    stream.close();
-  }
-  showFilePicker("save", exportCallback);
+  showFilePicker("save").then(file => {
+    if (file) {
+      let patterns = gPreferenceList.map(function(pref) {
+        return "\n" + pref + "=" + getPrefByType(pref);
+      });
+      patterns.unshift("tabmixplus");
+      return OS.File.writeAtomic(file.path, patterns.join(""), {
+        encoding: "utf-8", tmpPath: file.path + ".tmp"
+      });
+    }
+  }).then(null, Tabmix.reportError);
 }
 
 function importData () {
-  function importCallback(aFile) {
-    let stream = Cc["@mozilla.org/network/file-input-stream;1"].
-                createInstance(Ci.nsIFileInputStream);
-    stream.init(aFile, 0x01, parseInt("0444", 8), null);
-    let streamIO = Cc["@mozilla.org/scriptableinputstream;1"].
-                createInstance(Ci.nsIScriptableInputStream);
-    streamIO.init(stream);
-    let input = streamIO.read(stream.available());
-    streamIO.close();
-    stream.close();
-    if (input)
+  showFilePicker("open").then(file => {
+    return file && OS.File.read(file.path);
+  }).then((input) => {
+    if (input) {
+      let decoder = new TextDecoder();
+      input = decoder.decode(input);
       loadData(input.replace(/\r\n/g, "\n").split("\n"));
-  }
-
-  showFilePicker("open", importCallback);
+    }
+  }).then(null, Tabmix.reportError);
 }
 
-function showFilePicker(mode, callback) {
+/**
+ * Open file picker in open or save mode
+ *
+ * @param mode
+ *        The mode for the file picker: open|save
+ *
+ * @return Promise<{nsILocalFile}>
+ */
+function showFilePicker(mode) {
   const nsIFilePicker = Ci.nsIFilePicker;
   var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  function fpCallback(aResult) {
-    if (aResult != nsIFilePicker.returnCancel)
-      callback(fp.file);
-  }
-
   if (mode == "open")
     mode = nsIFilePicker.modeOpen;
   else {
@@ -465,10 +458,10 @@ function showFilePicker(mode, callback) {
   }
   fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
-  if (Tabmix.isVersion(180))
-    fp.open(fpCallback);
-  else
-    fpCallback(fp.show());
+  return AsyncUtils.spawnFn(fp, fp.open).then(aResult => {
+    if (aResult != nsIFilePicker.returnCancel)
+      return fp.file;
+  });
 }
 
 function loadData (pattern) {
@@ -606,5 +599,15 @@ XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
          win.document.getElementById("context_unpinTab").getAttribute("label");
 });
+
+XPCOMUtils.defineLazyGetter(this, "OS", () => {
+  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
+});
+
+XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
+                                  "resource://tabmixplus/AsyncUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Task",
+                                  "resource://gre/modules/Task.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");

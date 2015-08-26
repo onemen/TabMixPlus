@@ -1,0 +1,19 @@
+/**
+    Firefox version 39+
+
+    Windows platform
+
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/all/win/browser.css");
+@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/39.0/tabStyles.css");
+
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
+  clip-path: none !important;
+}

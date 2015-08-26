@@ -6,11 +6,11 @@
     <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
     <script type="application/javascript">
       Tabmix.changeCode(BookmarkPropertiesPanel, "BookmarkPropertiesPanel._getTransactionsForURIList")._replace(
-        'var title = this._getURITitleFromHistory(uri);',
-        'var uriData = uri; \
+        /(var|let) title = this\._getURITitleFromHistory\(uri\);/,
+        'let uriData = uri; \
          if (!("uri" in uriData)) uriData = {uri: uriData, title: null}; \
          uri = uriData.uri; \
-         var title = uriData.title || this._getURITitleFromHistory(uri);'
+         let title = uriData.title || this._getURITitleFromHistory(uri);'
       ).toCode();
     </script>
 </overlay>

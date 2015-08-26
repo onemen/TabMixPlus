@@ -5,8 +5,6 @@
 %identityDTD;
 <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
 %globalDTD;
-<!ENTITY % tabBrowserDTD SYSTEM "chrome://browser/locale/tabbrowser.dtd" >
-%tabBrowserDTD;
 ]>
 
 <bindings id="tabmixbindings"
@@ -39,7 +37,7 @@
 
   <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
             extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tab-proxy">
-    <content context="tabContextMenu" closetabtext="&closeTab.label;">
+    <content context="tabContextMenu">
       <xul:hbox class="tab-image-left tab-startcap tab-left tab-left-border" xbl:inherits="selected,hover"/>
       <xul:hbox class="tab-drag-indicator-left"/>
       <xul:stack class="tab-stack" flex="1">
@@ -67,17 +65,22 @@
                          class="tab-icon-image"
                          validate="never"
                          role="presentation"/>
-              <xul:image xbl:inherits="crashed,busy"
-                         class="tab-icon-overlay"
-                         role="presentation"/>
               <xul:image class="tab-protect-icon" />
               <xul:image class="tab-lock-icon"/>
               <xul:image class="tab-reload-icon"/>
             </xul:stack>
+          <xul:image xbl:inherits="crashed,busy,soundplaying,pinned,muted"
+                     anonid="overlay-icon"
+                     class="tab-icon-overlay"
+                     role="presentation"/>
           <xul:label flex="1"
                      anonid="tab-label" tabmix="true"
                      xbl:inherits="value=visibleLabel,labelvalue=label,crop,accesskey,fadein,pinned,selected,visuallyselected"
                      class="tab-text tab-label"
+                     role="presentation"/>
+          <xul:image xbl:inherits="soundplaying,pinned,muted"
+                     anonid="soundplaying-icon"
+                     class="tab-icon-sound"
                      role="presentation"/>
           <xul:toolbarbutton anonid="tmp-close-button"
                              xbl:inherits="fadein,pinned,selected,visuallyselected"
@@ -91,8 +94,13 @@
     <implementation>
     <constructor>
       <![CDATA[
-        if ("tabmix_inited" in this)
+        if ('tabmix_inited' in this) {
           return;
+        }
+        if (!Tabmix.isVersion(420)) {
+          let context = document.getElementById('context_closeTab');
+          this.setAttribute('closetabtext', context.getAttribute('label'));
+        }
         this.tabmix_inited = true;
       ]]>
     </constructor>
@@ -167,10 +175,7 @@
     <method name="onMouseOver">
       <parameter name="aEvent"/>
       <body><![CDATA[
-        var anonid = aEvent.originalTarget.getAttribute("anonid");
-        if (anonid == "tmp-close-button")
-          this.mOverCloseButton = true;
-        this.mIsHover = true;
+        this.setHoverState(aEvent, true);
         this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
         if (this.mouseHoverSelect)
           this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
@@ -221,10 +226,7 @@
     <method name="onMouseOut">
       <parameter name="aEvent"/>
       <body><![CDATA[
-        var anonid = aEvent.originalTarget.getAttribute("anonid");
-        if (anonid == "tmp-close-button")
-          this.mOverCloseButton = false;
-        this.mIsHover = false;
+        this.setHoverState(aEvent, false);
         clearTimeout(this.mButtonId);
         this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
         if (this.mouseHoverSelect && this.mFocusId)
@@ -244,6 +246,19 @@
         }
       ]]></body>
     </method>
+
+    <method name="setHoverState">
+      <parameter name="aEvent"/>
+      <parameter name="aOver"/>
+      <body><![CDATA[
+        var anonid = aEvent.originalTarget.getAttribute("anonid");
+        if (anonid == "tmp-close-button") {
+          this.mOverCloseButton = aOver;
+        }
+        this.mIsHover = aOver;
+      ]]></body>
+    </method>
+
 
     <method name="removeShowButton">
       <parameter name="aTab"/>
@@ -330,8 +345,9 @@
           this.clientTop; // just using this to flush style updates
         }
         // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
-        if (this.mOverCloseButton)
+        if (this.mOverCloseButton || this._overPlayingIcon) {
           event.stopPropagation();
+        }
         else {
           if (this.mouseDownSelect)
             this.onMouseCommand(event);

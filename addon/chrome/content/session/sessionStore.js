@@ -36,7 +36,7 @@ var TMP_SessionStore = { // jshint ignore:line
        aUndoItem.title = selectedTab.attributes["fixed-label"];
      else {
        aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
-       if (aUndoItem.title == "about:blank")
+       if (aUndoItem.title == TabmixSvc.aboutBlank)
          aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
      }
    },
@@ -252,7 +252,7 @@ var TMP_SessionStore = { // jshint ignore:line
               return ss.doRestore();
             ss.onceInitialized.then(function() {
               Tabmix.isWindowAfterSessionRestore = ss.doRestore();
-            }).then(null, Cu.reportError);
+            }).then(null, Tabmix.reportError);
             // until sessionstartup initialized just return the pref value,
             // we only use isWindowAfterSessionRestore when our Session Manager enable
             return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");
@@ -418,14 +418,18 @@ var TMP_ClosedTabs = { // jshint ignore:line
       m.setAttribute("id", "clearClosedTabsList");
       m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
       m.setAttribute("value", -1);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -1);");
+      m.addEventListener("command", function() {
+         TMP_ClosedTabs.restoreTab('original', -1);
+      });
 
       // "Restore All Tabs"
       m = aPopup.appendChild(document.createElement("menuitem"));
       m.setAttribute("id", "restoreAllClosedTabs");
       m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
       m.setAttribute("value", -2);
-      m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', -2);");
+      m.addEventListener("command", function() {
+         TMP_ClosedTabs.restoreTab('original', -2);
+      });
       return true;
    },
 
@@ -657,7 +661,7 @@ var TabmixConvertSession = { // jshint ignore:line
                   if (aResult.button == Tabmix.BUTTON_OK) {
                     setTimeout(function (a,b) {
                       TabmixConvertSession.convertFile(a, b);
-                    }, 0, null, true);
+                    }, 50, null, true);
                   }
                  };
       this.confirm(this.getString("msg1") + "\n\n" + this.getString("msg2"), callBack);
@@ -797,6 +801,8 @@ var TabmixConvertSession = { // jshint ignore:line
             closedTab.title = closedTab.state.entries[closedTab.state.index - 1].title;
             closedTab.image = state.image;
             closedTab.pos = TabmixSessionManager.getIntValue(rdfNodeTab, "tabPos");
+            let closedAt = TabmixSessionManager.getLiteralValue(rdfNodeTab, "closedAt");
+            closedTab.closedAt = parseInt(closedAt) || Date.now();
             // we use revers order in the RDF format
             _tabs.unshift(closedTab);
          }
@@ -813,7 +819,7 @@ var TabmixConvertSession = { // jshint ignore:line
       let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
       tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
       var scroll = TabmixSessionManager.getLiteralValue(rdfNodeTab, "scroll", "0,0");
-      if (scroll.indexOf("{") === 0) {
+      if (scroll.startsWith("{")) {
         tabData.scroll = JSON.parse(scroll);
       }
       else {

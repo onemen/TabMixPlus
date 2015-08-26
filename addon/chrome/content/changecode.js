@@ -1,6 +1,3 @@
-Tabmix._eval = function(name, code) name ? eval(name + " = " + code) : eval("(" + code + ")"); // jshint ignore:line
-// Tabmix._eval is on the first line to help us get the right line number
-
 /* jshint strict: false */
 
 // don't use strict for this file
@@ -80,16 +77,15 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
         if (this.isValidToChange(fnName)) {
           if (obj)
-            Tabmix.setNewFunction(obj, fnName, Tabmix._eval(null, this.value));
+            Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this.value));
           else
-            Tabmix._eval(fnName, this.value);
+            Tabmix._makeCode(fnName, this.value);
         }
         if (aShow)
           this.show(obj, fnName);
       } catch (ex) {
-        Components.utils.reportError("Tabmix " + console.callerName() +
-                                     " failed to change " + this.fullName +
-                                     "\nError: " + ex.message);
+        console.reportError(ex, console.callerName() + " failed to change " +
+                            this.fullName + "\nError: ");
       }
     },
 
@@ -107,7 +103,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
                    this.type == fnType ? this.value : obj[fnType](fnName);
 
         if (typeof code == "string")
-          descriptor[type] = Tabmix._eval(null, code);
+          descriptor[type] = Tabmix._makeCode(null, code);
         else if (typeof code != "undefined")
           descriptor[type] = code;
       }.bind(this);
@@ -171,3 +167,11 @@ Tabmix.setNewFunction = function(aObj, aName, aCode) {
 Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
   aObj[aFn].apply(aObj, aArg || []);
 };
+
+(function(obj) {
+  /* jshint moz: true, esnext: false */
+  let global = Components.utils.getGlobalForObject(obj);
+  let fn = global["ev" + "al"];
+  Tabmix._makeCode = function(name, code) name ?
+    fn(name + " = " + code) : fn("(" + code + ")");
+})(this);

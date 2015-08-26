@@ -21,7 +21,7 @@ pref("extensions.tabmix.loadExternalInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("extensions.tabmix.loadFolderAndReplace", true);
+pref("extensions.tabmix.loadBookmarksAndReplace", false);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
@@ -52,6 +52,7 @@ pref("extensions.tabmix.keepLastTab", false);
 
 pref("extensions.tabmix.tabBarMode", 1);
 pref("extensions.tabmix.tabBarMaxRow", 3);
+pref("extensions.tabmix.pinnedTabScroll", false);
 pref("extensions.tabmix.offsetAmountToScroll", false);
 pref("extensions.tabmix.tabBarSpace", false);
 pref("extensions.tabmix.hideTabBarButton", true);

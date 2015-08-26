@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplica els canvis a les pestanyes obertes">
 <!ENTITY openNewTab.label "Obre pestanyes des de:">
 <!ENTITY openBookmarks.label "Adreces d'interès">
-<!ENTITY openBMKGroups.label "Grups d'adreces d'interès">
-<!ENTITY openBMKGroups.tooltip "No substitueix les pestanyes en obrir un grup d'adreces d'interès">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historial">
 <!ENTITY openUrl.label "Barra d'adreces">
 <!ENTITY openSearch.label "Barra de cerca">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Es poden desplaçar amb botons al costat esquerre">
 <!ENTITY tabScroll.multibar "Mostra diverses files">
 <!ENTITY maxrow.label "Nombre màxim de files que es poden mostrar:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "En desplaçar-se, mostra part de la següent pestanya fora de vista">
 <!ENTITY smoothScroll.label "Habilita el desplaçament suau">
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">

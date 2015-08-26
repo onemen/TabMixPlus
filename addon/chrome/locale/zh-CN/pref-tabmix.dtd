@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "更改应用到打开的标签页">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
 <!ENTITY openBookmarks.label "书签">
-<!ENTITY openBMKGroups.label "书签群组">
-<!ENTITY openBMKGroups.tooltip "当打开书签群组时不覆盖当前的标签页">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "历史">
 <!ENTITY openUrl.label "地址栏">
 <!ENTITY openSearch.label "搜索栏">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
 <!ENTITY tabScroll.multibar "多行标签页">
 <!ENTITY maxrow.label "最多显示的行数：">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "滚动鼠标时显示隐藏的下一个标签页">
 <!ENTITY smoothScroll.label "启用平滑滚动">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
@@ -237,8 +238,8 @@
 <!ENTITY clicktab.removeall "关闭所有标签页">
 <!ENTITY clicktab.removeother "关闭其它标签页">
 <!ENTITY clicktab.removesimilar "关闭来自相似域的标签页">
-<!ENTITY clicktab.removetoLeft "关闭所有左侧标签页">
-<!ENTITY clicktab.removetoRight "关闭所有右侧标签页">
+<!ENTITY clicktab.removetoLeft "关闭标签页的左边">
+<!ENTITY clicktab.removetoRight "关闭右侧标签页">
 <!ENTITY clicktab.uctab "重新打开已关闭的标签页">
 <!ENTITY clicktab.ucatab "重新打开所有已关闭的标签页">
 <!ENTITY clicktab.snapback "回现标签页">

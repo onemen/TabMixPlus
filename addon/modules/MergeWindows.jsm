@@ -174,12 +174,13 @@ this.MergeWindows = {
       if (isPopup) {
         let openerWindow;
         if (placePopupNextToOpener) {
-          if (TabmixSvc.version(330) && tab.getAttribute("remote") == "true") {
-            tab.linkedBrowser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
+          let browser = tab.linkedBrowser;
+          if (TabmixSvc.version(330) && browser.getAttribute("remote") == "true") {
+            browser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
             tab.__tabmixNewTab = newTab;
             return;
           }
-          openerWindow = tab.linkedBrowser.contentWindow.opener;
+          openerWindow = browser.contentWindow.opener;
         }
         this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
       }

@@ -125,12 +125,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         this.firstWindowInSession && !this.isWindowAfterSessionRestore;
     // RunState exist since Firefox 34, bug 1020831
     if (setStateRunning) {
-      let RunState = SM.SessionStoreGlobal.RunState || {
+      let RunState = TabmixSvc.SessionStoreGlobal.RunState || {
         get isStopped() {
-          return SM.SessionStore._loadState === 0; // STATE_STOPPED
+          return TabmixSvc.SessionStore._loadState === 0; // STATE_STOPPED
         },
         setRunning: function() {
-          SM.SessionStore._loadState = 1; // STATE_RUNNING
+          TabmixSvc.SessionStore._loadState = 1; // STATE_RUNNING
         }
       };
       if (RunState.isStopped) {
@@ -162,7 +162,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '      gBrowser.tabs[i].loadOnStartup = true;' +
         '    }' +
         '  }' +
-        '  if (uriToLoad == "about:blank" || "tabmixdata" in window) {' +
+        '  if (uriToLoad == TabmixSvc.aboutBlank || "tabmixdata" in window) {' +
         '    gBrowser.selectedBrowser.stop();' +
         '  }\n' +
         '    $&';
@@ -261,7 +261,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
              return true;
           if (aBrowser.canGoForward || aBrowser.canGoBack)
              return false;
-          return aboutBlank ? aBrowser.currentURI.spec == "about:blank" :
+          return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
                  Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
        } catch (ex) {Tabmix.assert(ex); return true;}
     };

@@ -1,9 +1,11 @@
 /**
-    Firefox version 3.5.* - 3.6.* - 4.0+
+    Firefox all versions
 
-    for ALL platform
+    for ALL platforms
 
 **/
+
+@import url("chrome://tabmixplus/skin/general.css");
 
 .tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
   display: none !important;
@@ -51,27 +53,6 @@
 /* For Flowing tabs */
 .tabbrowser-tabs[flowing=multibar] .tabbrowser-tab {
   vertical-align: bottom;
-}
-
-/* :::: For current, unloaded, unread and other tab styles :::: */
-.tabbrowser-tab[tabmix_tabStyle~="bold"] .tab-text {
-  font-weight: bold !important;
-}
-
-.tabbrowser-tab[tabmix_tabStyle~="not-bold"] .tab-text {
-  font-weight: normal !important;
-}
-
-.tabbrowser-tab[tabmix_tabStyle~="italic"] .tab-text {
-  font-style: italic !important;
-}
-
-.tabbrowser-tab[tabmix_tabStyle~="not-italic"] .tab-text {
-  font-style: normal !important;
-}
-
-.tabbrowser-tab[tabmix_tabStyle~="underline"] .tab-text {
-  text-decoration: underline !important;
 }
 
 /* for extra icons */

@@ -112,28 +112,39 @@ this.DynamicRules = {
     bgImage.bg = TabmixSvc.isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
 ///XXX move -moz-appearance: to general rule when style have bg
     let backgroundRule = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
+    if (TabmixSvc.isMac) {
+      backgroundRule = ' > .tab-stack > .tab-background >\n' +
+        '      :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
+    }
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
-    let styleRules = {
-      currentTab:    { text:  '.tabbrowser-tab[tabmix_tabStyle~="current-text"]' + tabTextRule,
-                       bg  :  '.tabbrowser-tab[tabmix_tabStyle~="current-bg"]' + backgroundRule},
-      unloadedTab:   { text:  '.tabbrowser-tab[tabmix_tabStyle~="unloaded-text"]' + tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unloaded-bg"]' + backgroundRule},
-      unreadTab:     { text:  '.tabbrowser-tab[tabmix_tabStyle~="unread-text"]' +  tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="unread-bg"]' + backgroundRule},
-      otherTab:      { text:  '.tabbrowser-tab[tabmix_tabStyle~="other-text"]' + tabTextRule,
-                       bg:    '.tabbrowser-tab[tabmix_tabStyle~="other-bg"]' + backgroundRule},
+    let _selected = TabmixSvc.version(390) ? '[visuallyselected="true"]' : '[selected="true"]';
+    let _notSelected = TabmixSvc.version(390) ? ':not([visuallyselected="true"])' : ':not([selected="true"])';
+    let tabState = {
+      current: _selected,
+      unloaded: '[tabmix_tabState="unloaded"]' + _notSelected,
+      unread: '[tabmix_tabState="unread"]' + _notSelected,
+      other: ':not([tabmix_tabState])' + _notSelected,
     };
 
-    if (TabmixSvc.isMac) {
-      backgroundRule = '.tabbrowser-tab[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >\n' +
-        '      :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
-
-      styleRules.currentTab.bg = backgroundRule.replace("#RULE", "current");
-      styleRules.unloadedTab.bg = backgroundRule.replace("#RULE", "unloaded");
-      styleRules.unreadTab.bg = backgroundRule.replace("#RULE", "unread");
-      styleRules.otherTab.bg = backgroundRule.replace("#RULE", "other");
-    }
+    let styleRules = {
+      currentTab: {
+        text: '#tabbrowser-tabs[tabmix_currentStyle~="text"] > .tabbrowser-tab' + tabState.current + tabTextRule,
+        bg:   '#tabbrowser-tabs[tabmix_currentStyle~="bg"] > .tabbrowser-tab' + tabState.current + backgroundRule
+      },
+      unloadedTab: {
+        text: '#tabbrowser-tabs[tabmix_unloadedStyle~="text"] > .tabbrowser-tab' + tabState.unloaded + tabTextRule,
+        bg:   '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab' + tabState.unloaded + backgroundRule
+      },
+      unreadTab: {
+        text: '#tabbrowser-tabs[tabmix_unreadStyle~="text"] > .tabbrowser-tab' + tabState.unread + tabTextRule,
+        bg:   '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab' + tabState.unread + backgroundRule
+      },
+      otherTab: {
+        text: '#tabbrowser-tabs[tabmix_otherStyle~="text"] > .tabbrowser-tab' + tabState.other + tabTextRule,
+        bg:   '#tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab' + tabState.other + backgroundRule
+      },
+    };
 
     if (TabmixSvc.australis && !this.treeStyleTab) {
       bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),\n' +
@@ -150,12 +161,15 @@ this.DynamicRules = {
             space26 + 'rgba(250, 250, 250, 0.88) 3px, rgba(250, 250, 250, 0.88) 3px,\n' +
             space26 + 'rgba(254, 254, 254, 0.72) 4px, rgba(254, 254, 254, 0.72) 4px, #bottomColor)';
       bgImage.startEndhover = bgImage.bghover;
-      let _selector = '.tabbrowser-tab#HOVER[tabmix_tabStyle~="#RULE-bg"] > .tab-stack > .tab-background >';
+      let _selector = '#tabbrowser-tabs[tabmix_#RULEStyle~="bg"] > ' +
+                      '.tabbrowser-tab#HOVER#STATE > .tab-stack > .tab-background >';
       for (let rule of Object.keys(styleRules)) {
         let style = styleRules[rule];
         delete style.bg;
+        let styleName = rule.replace("Tab", "");
+        let ruleSelector = _selector.replace("#RULE", styleName)
+                                    .replace("#STATE", tabState[styleName]);
         let hover = rule == "currentTab" ? "" : ":hover";
-        let ruleSelector = _selector.replace("#RULE", rule.replace("Tab", ""));
         let selector = ruleSelector.replace("#HOVER", hover);
         let type = hover.replace(":", "") || "selected";
         style["bg" + type] =       selector + ' .tab-background-middle {\n' +
@@ -290,18 +304,10 @@ this.DynamicRules = {
     }
     catch (ex) {
       TabmixSvc.console.log(ex);
-      try {
-        // convert old format to JSON string
-        // we do it only one time when user update Tabmix from old version
-        currentPrefValues = Components.utils.evalInSandbox("({" + prefString  + "})",
-                            new Components.utils.Sandbox("about:blank"));
-        Prefs.setCharPref(ruleName, TabmixSvc.JSON.stringify(currentPrefValues));
-      } catch (er) {
-          TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
-          Prefs.clearUserPref(ruleName);
-          // set prev value to default so we can continue with this function
-          currentPrefValues = defaultPrefValues;
-      }
+      TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+      Prefs.clearUserPref(ruleName);
+      // set prev value to default so we can continue with this function
+      currentPrefValues = defaultPrefValues;
     }
 
     // make sure we have all the item

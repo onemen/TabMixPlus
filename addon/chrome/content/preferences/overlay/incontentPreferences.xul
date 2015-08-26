@@ -73,7 +73,7 @@
       <vbox id="hideTabbarBox" align="start" class="indent"
             data-category="paneTabs" hidden="true" pack="start">
         <separator/>
-        <label value="&hideTabBar.label;:" style="font-size: 12px;"/>
+        <label value="&hideTabBar.label;:"/>
         <radiogroup id="_hideTabbar" orient="horizontal"
                     preference="extensions.tabmix.hideTabbar">
           <radio value="0" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>

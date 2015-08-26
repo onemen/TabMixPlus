@@ -109,7 +109,12 @@ this.SingleWindowModeUtils = {
     existingWindow.tablib.init(); // just in case tablib isn't init yet
     var uriToLoad = args[0];
     var urls = [];
-    var [referrerURI, postData, allowThirdPartyFixup] = [null, null, false];
+    var params = {
+      referrerURI: null,
+      referrerPolicy: TabmixSvc.version(390) && Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT,
+      postData: null,
+      allowThirdPartyFixup: false
+    };
     if (uriToLoad instanceof Ci.nsISupportsArray) {
       let count = uriToLoad.Count();
       for (let i = 0; i < count; i++) {
@@ -123,9 +128,20 @@ this.SingleWindowModeUtils = {
       // just close the new window
     }
     else if (args.length >= 3) {
-      referrerURI = args[2];
-      postData = args[3] || null;
-      allowThirdPartyFixup = args[4] || false;
+      params.referrerURI = args[2];
+      if (TabmixSvc.version(390)) {
+        if (typeof(params.referrerURI) == "string") {
+          try {
+            params.referrerURI = existingWindow.makeURI(params.referrerURI);
+          } catch (e) {
+            params.referrerURI = null;
+          }
+        }
+        if (args[5] !== undefined)
+          params.referrerPolicy = args[5];
+      }
+      params.postData = args[3] || null;
+      params.allowThirdPartyFixup = args[4] || false;
       urls = [uriToLoad];
     }
     else
@@ -134,7 +150,12 @@ this.SingleWindowModeUtils = {
     try {
       // open the tabs in current window
       if (urls.length) {
-        var firstTabAdded = existingBrowser.addTab(urls[0], referrerURI, null, postData, null, allowThirdPartyFixup);
+        var firstTabAdded = existingBrowser.selectedTab;
+        let isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
+        if (isBlankTab)
+          existingWindow.openLinkIn(urls[0], "current", params);
+        else
+          firstTabAdded = existingBrowser.addTab(urls[0], params);
         for (let i = 1; i < urls.length; ++i)
           existingBrowser.addTab(urls[i]);
       }
@@ -157,7 +178,8 @@ this.SingleWindowModeUtils = {
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
       obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
-      obs.addObserver(newWindow.gPluginHandler.pluginCrashed, "plugin-crashed", false);
+      let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
+      obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
       newWindow.gPrivateBrowsingUI.uninit = function() {};
       existingWindow.setTimeout(function () {
         // restore window dimensions, to prevent flickring in the next restart
@@ -167,8 +189,10 @@ this.SingleWindowModeUtils = {
             win.setAttribute(attr, newWindow.__winRect[attr]);
         }
         newWindow.close();
-        if (firstTabAdded)
+        if (firstTabAdded) {
           existingBrowser.selectedTab = firstTabAdded;
+          existingBrowser.ensureTabIsVisible(firstTabAdded);
+        }
         // for the case the window is minimized or not in focus
         existingWindow.focus();
       },0);

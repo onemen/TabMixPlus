@@ -193,8 +193,7 @@ var TMP_tabDNDObserver = {
       left_right = 1;
     }
 
-    var isCopy;
-    isCopy = dt.dropEffect == "copy";
+    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
     var effects = this._setEffectAllowedForDataTransfer(event, draggeType);
 
     var replaceTab = (left_right == -1);
@@ -320,7 +319,7 @@ var TMP_tabDNDObserver = {
     var dt = event.dataTransfer;
     var sourceNode = this.getSourceNode(dt);
     var draggeType = this.getDragType(sourceNode);
-    var isCopy = dt.dropEffect == "copy";
+    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
     var draggedTab;
     if (draggeType != this.DRAG_LINK) {
       draggedTab = sourceNode;
@@ -386,12 +385,25 @@ var TMP_tabDNDObserver = {
       // windows)
       let newTab = gBrowser.addTab("about:blank");
       var newBrowser = gBrowser.getBrowserForTab(newTab);
+      let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
+
+      // If we're an e10s browser window, an exception will be thrown
+      // if we attempt to drag a non-remote browser in, so we need to
+      // ensure that the remoteness of the newly created browser is
+      // appropriate for the URL of the tab being dragged in.
+      gBrowser.updateBrowserRemotenessByURL(newBrowser,
+                                            draggedBrowserURL);
+
       // Stop the about:blank load
       newBrowser.stop();
       // make sure it has a docshell
       newBrowser.docShell; // jshint ignore:line
 
+      let numPinned = gBrowser._numPinnedTabs;
+      if (newIndex < numPinned || draggedTab.pinned && newIndex == numPinned)
+        gBrowser.pinTab(newTab);
       gBrowser.moveTabTo(newTab, newIndex + left_right);
+
       gBrowser.selectedTab = newTab;
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
       gBrowser.updateCurrentBrowser(true);
@@ -791,6 +803,18 @@ var TMP_tabDNDObserver = {
     if (types[0] == this.TAB_DROP_TYPE)
       return aDataTransfer.mozGetDataAt(this.TAB_DROP_TYPE, 0);
     return null;
+  },
+
+  isCopyDropEffect: function(dt, event, type) {
+    let isCopy = dt.dropEffect == "copy";
+    if (isCopy && type == this.DRAG_LINK) {
+      // Dragging bookmark or livemark from the Bookmarks toolbar always have 'copy' dropEffect
+      let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
+      let draggingBookmark = !isCtrlKey && dt.effectAllowed == "copyLink" &&
+          dt.mozSourceNode && dt.mozSourceNode._placesNode;
+      return isCopy && !draggingBookmark;
+    }
+    return isCopy;
   }
 
 }; // TMP_tabDNDObserver end
@@ -1082,7 +1106,7 @@ Tabmix.navToolbox = {
     // onblur attribut reset each time we exit ToolboxCustomize
     var blur = gURLBar.getAttribute("onblur") || "";
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
-      gURLBar.setAttribute("onblur", blur + "Tabmix.urlBarOnBlur();");
+      Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
@@ -1223,6 +1247,8 @@ Tabmix.navToolbox = {
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+    if ("__treestyletab__original_doSearch" in searchbar)
+      [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
     let fnString = obj[fn].toString();
     if (/Tabmix/.test(fnString))
       return;

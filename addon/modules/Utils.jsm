@@ -2,7 +2,7 @@
 
 var EXPORTED_SYMBOLS = ["TabmixUtils"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
@@ -56,6 +56,9 @@ this.TabmixUtils = {
         win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
       case "Tabmix:reloadTab":
+        let postData = message.data.postData;
+        if (postData)
+          message.data.postData = this.makeInputStream(postData);
         AutoReload.reloadRemoteTab(browser, message.data);
         break;
       case "Tabmix:getOpener":
@@ -64,6 +67,13 @@ this.TabmixUtils = {
         MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
     }
+  },
+
+  makeInputStream: function(aString) {
+    let stream = Cc["@mozilla.org/io/string-input-stream;1"].
+    createInstance(Ci.nsISupportsCString);
+    stream.data = aString;
+    return stream;
   },
 
   // change current history title

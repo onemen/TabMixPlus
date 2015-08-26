@@ -247,18 +247,6 @@ var TabmixSessionManager = { // jshint ignore:line
       return (this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions."));
    },
 
-  get SessionStoreGlobal() {
-    delete this.SessionStoreGlobal;
-    let tmp = {};
-    Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-    return (this.SessionStoreGlobal = Cu.getGlobalForObject(tmp.SessionStore));
-  },
-
-  get SessionStore() {
-    delete this.SessionStore;
-    return (this.SessionStore = this.SessionStoreGlobal.SessionStoreInternal);
-  },
-
    // call by Tabmix.beforeSessionStoreInit
    init: function SM_init(aPromise) {
       if (this._inited)
@@ -275,7 +263,7 @@ var TabmixSessionManager = { // jshint ignore:line
       if (Tabmix.isVersion(250, 250) && !TabmixSvc.sm.promiseInitialized) {
         Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
         Tabmix.ssPromise.then(initializeSM)
-                        .then(null, Cu.reportError);
+                        .then(null, Tabmix.reportError);
       }
       else
         initializeSM();
@@ -360,18 +348,13 @@ var TabmixSessionManager = { // jshint ignore:line
 
       this.toggleRecentlyClosedWindowsButton();
       if (this.isPrivateWindow) {
+         this.enableBackup = false;
          this.updateSettings();
          this.setLiteral(this.gThisWin, "dontLoad", "true");
          this.setLiteral(this.gThisWin, "private", "true");
-         this.enableBackup = false;
-         // initialize closed window list broadcaster
-         let disabled = this.enableManager ? isFirstWindow || this.isPrivateSession || this.isClosedWindowsEmpty() :
-                                             TabmixSvc.ss.getClosedWindowCount() === 0;
-         Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
-         return;
       }
 
-      if (isFirstWindow) {
+      if (!this.isPrivateWindow && isFirstWindow) {
          // if this isn't delete on exit, we know next time that firefox crash
          this.prefBranch.setBoolPref("crashed" , true); // we use this in setup.js;
          Services.prefs.savePrefFile(null); // store the pref immediately
@@ -421,11 +404,13 @@ var TabmixSessionManager = { // jshint ignore:line
          this.copyClosedTabsToRDF(this.gThisWin);
       }
       // initialize closed window list broadcaster
-      var disabled = this.enableManager ? Tabmix.firstWindowInSession || this.isClosedWindowsEmpty() :
+      var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.firstWindowInSession;
+      var disabled = this.enableManager ? status || this.isClosedWindowsEmpty() :
                                           TabmixSvc.ss.getClosedWindowCount() === 0;
       Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
-      this.saveStateDelayed();
+      if (!this.isPrivateWindow)
+         this.saveStateDelayed();
    },
 
    // we call this function after session restored by sessionStore, after restart or after exit private-browsing
@@ -688,8 +673,6 @@ var TabmixSessionManager = { // jshint ignore:line
         clearTimeout(this.afterExitPrivateBrowsing);
         this.afterExitPrivateBrowsing = null;
       }
-      delete this.SessionStoreGlobal;
-      delete this.SessionStore;
     }
    },
 
@@ -738,7 +721,6 @@ var TabmixSessionManager = { // jshint ignore:line
             windowSaved = true;
          } else { // remove all backup
             this.deleteSession(this.gSessionPath[0], "status", "backup");
-            this.deleteSession(this.gSessionPath[3]);
             this.initSession(this.gSessionPath[0], this.gThisWin);
             this.saveStateDelayed();
          }
@@ -986,7 +968,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          let msg = "Tabmix is unable to decode " + key;
          if (node)
             msg += " from " + node.QueryInterface(Ci.nsIRDFResource).Value;
-         Components.utils.reportError(msg + "\n" + er);
+         Tabmix.reportError(msg + "\n" + er);
          return "";
        }
        if (node && key) {
@@ -1928,6 +1910,10 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          nodes.push(node);
       }
       var count = nodes.length;
+      let restoreSession = function(event) {
+        this.restoreSession(event.originalTarget);
+        event.stopPropagation();
+      }.bind(this);
       for (var i = 0; i < count; i++) {
          node = nodes[i];
          name = this.getDecodedLiteralValue(node, "name");
@@ -1942,8 +1928,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          // Ubuntu global menu prevents Session manager menu from working from Tools menu
          // this hack is only for left click, middle click and right click still not working
          if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
-            mi.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget);" +
-                                         " event.stopPropagation();");
+            mi.addEventListener("command", restoreSession);
          mi.value = i;
          if (parentID != "onStart.loadsession") {
             index = closedWinList ? count - 1 - i : i;
@@ -1990,8 +1975,7 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                if (showTooltip) menu.setAttribute("tooltiptext", sLabel + nameExt);
                menu.setAttribute("value", (-1 - i));
                if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
-                  menu.setAttribute("oncommand", "TabmixSessionManager.restoreSession(event.originalTarget);" +
-                                                 " event.stopPropagation();");
+                  menu.addEventListener("command", restoreSession);
                popup.appendChild (menu);
             }
             if (afterCrash && contents != 1) { // add separator before Crashed menu item
@@ -2093,6 +2077,8 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
                  this.setLiteral(rdfNodeWindow, "dontLoad", "true");
             }
             this.deleteArrayNodes(sessionContainer, nodeToDelete, false);
+            let count = this.countWinsAndTabs(crashedContainer);
+            this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
          } // if firefox was crashed in middle of crash Recovery try again to restore the same data
          else if (!this.containerEmpty(this.gSessionPath[0]))
             this.deleteWithProp(sessionContainer);
@@ -2124,9 +2110,11 @@ if (container == "error") { Tabmix.log("wrapContainer error path " + path + "\n"
          this.callBackData = {label: null, whattoLoad: "session"};
          this.waitForCallBack = true;
          if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
-            let crashedContainer = this.initContainer(this.gSessionPath[3]);
-            let count = this.countWinsAndTabs(crashedContainer);
-            this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
+            if (!this.nodeHasArc(this.gSessionPath[3], "nameExt")) {
+               let crashedContainer = this.initContainer(this.gSessionPath[3]);
+               let count = this.countWinsAndTabs(crashedContainer);
+               this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
+            }
             if (this.enableManager && !isAllEmpty) {
                msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
                buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
@@ -2401,7 +2389,7 @@ try{
       return;
 
     let state = this.setLastSession();
-    let iniState = this.SessionStore._prepDataForDeferredRestore(state)[0];
+    let iniState = TabmixSvc.SessionStore._prepDataForDeferredRestore(state)[0];
     let pinnedExist = iniState.windows.length > 0;
     if (pinnedExist) {
       // move all tabs and closed tabs into one window
@@ -2409,14 +2397,14 @@ try{
           this.prefBranch.getBoolPref("restore.concatenate"))) {
         this.mergeWindows(iniState);
       }
-      let overwrite = this.SessionStore._isCmdLineEmpty(window, iniState);
+      let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
       if (Tabmix.isVersion(260)) {
         let options = {firstWindow: true, overwriteTabs: overwrite};
-        this.SessionStore.restoreWindow(window, iniState, options);
+        TabmixSvc.SessionStore.restoreWindow(window, iniState, options);
       }
       else {
         iniState._firstTabs = true;
-        this.SessionStore.restoreWindow(window, iniState, overwrite);
+        TabmixSvc.SessionStore.restoreWindow(window, iniState, overwrite);
       }
     }
     this.loadHomePage(pinnedExist);
@@ -2719,6 +2707,7 @@ try{
          } else tabContainer.RemoveElement(nodeToClose, true);
          if (tabExist) {
             closedTabContainer.AppendElement(nodeToClose);
+            this.setLiteral(nodeToClose, "closedAt", Date.now());
             if (closedTabContainer.GetCount() > Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"))
                this.deleteClosedtabAt(1, this.gThisWin);
          }
@@ -2852,8 +2841,9 @@ try{
    saveTab: function SM_saveTab(aTab, rdfLabelTabs, tabContainer, needToAppend) {
       if (this.isTabPrivate(aTab))
          return false;
-      var aBrowser = gBrowser.getBrowserForTab(aTab);
-      if (gBrowser.isBlankBrowser(aBrowser)) return false;
+      var browser = gBrowser.getBrowserForTab(aTab);
+      if (gBrowser.isBlankBrowser(browser))
+         return false;
 
       // clear sanitized flag
       if (this.prefBranch.prefHasUserValue("sanitized")) {
@@ -2862,18 +2852,24 @@ try{
          this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "crash");
       }
 
-      var sessionHistory = aBrowser.webNavigation.sessionHistory;
+      var sessionHistory = browser.webNavigation.sessionHistory;
       if (!sessionHistory)
          return false;
-      var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
-      var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
-      var tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      var tabState;
+      try {
+         tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      } catch(ex) {
+         if (!Tabmix.isVersion(280) && browser.userTypedValue == "about:config" && browser.__SS_data)
+            tabState = browser.__SS_data;
+      }
       var data = this.serializeHistory(tabState);
       if (!data)
          return false;
       data.pos = aTab._tPos;
       data.image = tabState.image;
       data.properties = TabmixSessionData.getTabProperties(aTab, true);
+      var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
+      var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
       this.saveTabData(rdfNodeTab, data);
       this.saveTabviewTab(rdfNodeTab, aTab);
 
@@ -2903,6 +2899,8 @@ try{
       this.setLiteral   (aNode, "properties", aData.properties);
       this.setLiteral   (aNode, "history",    aData.history);
       this.setLiteral   (aNode, "scroll",     aData.scroll);
+      if (aData.closedAt)
+         this.setLiteral(aNode, "closedAt", aData.closedAt);
    },
 
   /**
@@ -2914,6 +2912,8 @@ try{
    *                current history scroll position
    */
    serializeHistory: function(state) {
+      if (!state)
+         return null;
       // Ensure sure that all entries have url
       var entries = state.entries.filter(function(e) e.url);
       if (!entries.length)
@@ -2978,7 +2978,7 @@ try{
       // to open new window
       if (restoring)
         window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
-      this.SessionStoreGlobal.LastSession.setState(state);
+      TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
       return state;
    },
 
@@ -3358,12 +3358,12 @@ try{
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
           if (gBrowser.browsers[i].__SS_restoreState)
-            this.SessionStore._resetTabRestoringState(tab);
+            TabmixSvc.SessionStore._resetTabRestoringState(tab);
         }
       }
       let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
                                            "restoreHistoryPrecursor";
-      this.SessionStore[fnName](window, tabs, tabsData, 0);
+      TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
 
       // SessionStore.restoreTabs send SSWindowStateReady
       // show notification and clean up our data
@@ -3455,7 +3455,8 @@ try{
       // wiping out any current value in tab.__SS_extdata.
       delete aTab.__SS_extdata;
       // delete any sesionRestore data
-      delete browser.__SS_data;
+      if (!Tabmix.isVersion(410))
+         delete browser.__SS_data;
 
       // clear TabStateCache
       if (Tabmix.isVersion(320)) {
@@ -3515,6 +3516,8 @@ try{
          var newNode = this.RDFService.GetResource(rdfLabelSession);
          var data = {};
          data.pos = this.getIntValue(rdfNodeSession, "tabPos");
+         let closedAt = this.getLiteralValue(rdfNodeSession, "closedAt");
+         data.closedAt = parseInt(closedAt) || Date.now();
          data.image = this.getLiteralValue(rdfNodeSession, "image");
          data.properties = this.getLiteralValue(rdfNodeSession, "properties");
          data.scroll = this.getLiteralValue(rdfNodeSession, "scroll");
@@ -3539,7 +3542,7 @@ try{
          closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
       closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
       if (Tabmix.isVersion(260))
-        this.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
+        TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
       else {
         let state = { windows: [{ _closedTabs: closedTabsData, selected: 0 }], _firstTabs: true};
         TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
@@ -3582,6 +3585,7 @@ try{
       if (!data)
          return false;
       data.pos = aTabData.pos;
+      data.closedAt = aTabData.closedAt || Date.now();
       data.image = aTabData.image;
       // closed tab can not be protected - set protected to 0
       var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";

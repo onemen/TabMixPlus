@@ -21,6 +21,12 @@ var gEventsPane = {
     }
 
     this.disableInverseMiddleClick();
+
+    $("pref_newTabUrl").name = TabmixSvc.newtabUrl;
+    let prefValue = $("pref_newTabUrl").valueFromPreferences;
+    if (prefValue != "about:newtab")
+      $("newTabUrl").value = $("pref_newTabUrl").valueFromPreferences;
+
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();
     this.disabeleShowTabList();
@@ -79,7 +85,7 @@ var gEventsPane = {
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
     let value = preference.value;
-    if (value && value.toLowerCase() == "about:newtab")
+    if (value && value.toLowerCase() == TabmixSvc.aboutNewtab)
       return "";
     return this.syncToNewTabUrlPref(value);
   },
@@ -91,6 +97,13 @@ var gEventsPane = {
 
     // Otherwise, use the actual textbox value.
     return undefined;
+  },
+
+  onNewTabKeyDown: function(event) {
+    // block spaces from the user to go to about:newtab preference
+    if (event.keyCode == 32) {
+      event.preventDefault();
+    }
   },
 
   disableInverseMiddleClick: function() {

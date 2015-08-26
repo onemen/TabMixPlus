@@ -1,0 +1,67 @@
+/**
+    Firefox all versions
+
+    ALL platforms
+
+**/
+
+/* for privateTab extensions */
+#TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility] >
+    #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] .tabs-newtab-button {
+  vertical-align: bottom;
+}
+
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
+  -moz-padding-end: 0px !important;
+  -moz-padding-start: 0px !important;
+}
+
+/* for tabs close button on Firefox 31+ */
+.tabs-closebutton.tabmix {
+  -moz-appearance: none;
+  height: 16px;
+  width: 16px;
+}
+
+/* :::: for miniT drag indicator :::: */
+.tab-drag-indicator-left, .tab-drag-indicator-right {
+  visibility: hidden;
+  background: transparent no-repeat 50% 50%;
+}
+
+.tab-drag-indicator-left:-moz-locale-dir(ltr),
+.tab-drag-indicator-right:-moz-locale-dir(rtl) {
+  background-image: url("chrome://tabmixplus/skin/drag-left.png");
+}
+
+.tab-drag-indicator-right:-moz-locale-dir(ltr),
+.tab-drag-indicator-left:-moz-locale-dir(rtl) {
+  background-image: url("chrome://tabmixplus/skin/drag-right.png");
+}
+
+.tabbrowser-tab:not([pinned])[dragmark=atLeft] .tab-drag-indicator-left,
+.tabbrowser-tab:not([pinned])[dragmark=atRight] .tab-drag-indicator-right {
+  visibility: visible;
+  width: 7px;
+  height: 12px;
+}
+
+/* :::: make sure all buttons align to the top row :::: */
+#TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
+#TabsToolbar[multibar] {
+  -moz-box-align: start;
+}
+
+/* ::::  for light weight themes :::: */
+#main-window[tabmix_lwt]:-moz-lwtheme {
+  background-repeat: repeat-y !important;
+}
+
+/* :::: Space on tab bar :::: */
+.tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
+  -moz-margin-start: 0px;
+  -moz-margin-end: 0px;
+  -moz-padding-start: 15px;
+  -moz-padding-end: 15px;
+}

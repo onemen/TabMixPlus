@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplikovat změny na již otevřené panely">
 <!ENTITY openNewTab.label "Otevírat panely z:">
 <!ENTITY openBookmarks.label "Záložky">
-<!ENTITY openBMKGroups.label "Skupiny záložek">
-<!ENTITY openBMKGroups.tooltip "Při otevírání skupiny záložek nebudou přepsány již otevřené panely">
+<!ENTITY openPlacesGroups.label "Seskupit záložky/historii">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historie">
 <!ENTITY openUrl.label "Adresní řádek">
 <!ENTITY openSearch.label "Lišta vyhledávání">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačítky nalevo">
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Při posouvání stránky zobrazit část dalšího panelu">
 <!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">

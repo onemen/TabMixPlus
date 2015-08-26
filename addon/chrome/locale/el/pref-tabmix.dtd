@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Εφαρμογή των αλλαγών στις ανοιχτές καρτέλες">
 <!ENTITY openNewTab.label "Άνοιγμα καρτελών από:">
 <!ENTITY openBookmarks.label "Σελιδοδείκτες">
-<!ENTITY openBMKGroups.label "Ομάδες σελιδοδεικτών">
-<!ENTITY openBMKGroups.tooltip "Να μην παρακάμπτονται καρτέλες όταν ανοίγει ομάδα σελιδοδεικτών">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Ιστορικό">
 <!ENTITY openUrl.label "Εργαλειοθήκη διευθύνσεων">
 <!ENTITY openSearch.label "Εργαλειοθήκη αναζήτησης">
@@ -147,6 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
 <!ENTITY tabScroll.multibar "Με πολλές γραμμές">
 <!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
 <!ENTITY offsetAmountToScroll.label "Κατά την κύλιση να εμφανίζεται τμήμα της επόμενης μη εμφανούς καρτέλας">
 <!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">

@@ -24,7 +24,7 @@ Tabmix.setSanitizer = {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
         } catch (ex) {
-          try { Components.utils.reportError(ex); } catch(e) {}
+          try {Tabmix.reportError(ex);} catch(e) { }
         }
       },
       get canClear() {
@@ -63,7 +63,7 @@ Tabmix.setSanitizer = {
       check.setAttribute("label", this._label);
       check.setAttribute("accesskey", this._accesskey);
       check.setAttribute("preference", prefName);
-      check.setAttribute("oncommand", "Tabmix.setSanitizer.confirm(this);");
+      Tabmix.setItem(check, "oncommand", "Tabmix.setSanitizer.confirm(this);");
       if (Services.prefs.prefHasUserValue(prefName)) {
         this.checked = Services.prefs.getBoolPref(prefName);
         check.setAttribute("checked", this.checked);
@@ -84,7 +84,7 @@ Tabmix.setSanitizer = {
       if (this.isPromptDialog) {
         Tabmix.setSanitizer.disableMenuItem();
         pref.setAttribute("readonly", "true");
-        check.setAttribute("onsyncfrompreference",
+        Tabmix.setItem(check, "onsyncfrompreference",
                            "Tabmix.setSanitizer.checked = this.checked; " +
                            "return gSanitizePromptDialog.onReadGeneric();");
       }

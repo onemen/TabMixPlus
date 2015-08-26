@@ -51,7 +51,8 @@
             src="chrome://tabmixplus/content/preferences/incompatible.xul"/>
   <prefpane id="broadcasters" hidden="true">
     <preferences>
-      <preference id="pref_singleWindow" name="extensions.tabmix.singleWindow" type="bool"/>
+      <preference id="pref_singleWindow" name="extensions.tabmix.singleWindow" type="bool"
+                  onchange="if (typeof gLinksPane == 'object') gLinksPane.singleWindow(this.value);"/>
       <preference id="pref_undoClose"    name="extensions.tabmix.undoClose"    type="bool"/>
     </preferences>
     <broadcasterset id="main:Broadcaster">
