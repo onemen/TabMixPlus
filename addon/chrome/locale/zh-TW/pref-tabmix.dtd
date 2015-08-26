@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "顯示捲動按鈕於分頁列左側">
 <!ENTITY tabScroll.multibar "以多行顯示">
 <!ENTITY maxrow.label "最大顯示的行數：">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "允許捲動釘選的分頁">
 <!ENTITY offsetAmountToScroll.label "捲動時對將要看不見的分頁標籤只顯示一小部份（關閉分頁按鈕寬度）">
 <!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">

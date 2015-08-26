@@ -10,7 +10,7 @@
 <!ENTITY settings.import "Importēt iestatījumus">
 <!ENTITY settings.sync "Sinhronizēt iestatījumus">
 <!ENTITY settings.default "Atjaunot noklusējumus">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.revert "Atgriezt">
 <!ENTITY generalWindowOpen.label "Saites, kas atveras jaunā logā, atvērt:">
 <!ENTITY externalLink.useSeparate.label "Saitēm no citām lietotnēm izmantot atsevišķu iestatījumu">
 <!ENTITY externalLinkTarget.label "Saites no citām lietotnēm atvērt:">
@@ -61,7 +61,7 @@
 <!ENTITY updateLockState.label "Pielietot izmaiņas atvērtajām cilnēm">
 <!ENTITY openNewTab.label "Atvērt cilnes no:">
 <!ENTITY openBookmarks.label "Grāmatzīmes">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Grāmatzījmu/Vēstures grupas">
 <!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Vēsture">
 <!ENTITY openUrl.label "Adrešu josla">

@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Aplikovať zmeny na otvorených záložkách">
 <!ENTITY openNewTab.label "Otvoriť karty z:">
 <!ENTITY openBookmarks.label "Záložky">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Skupiny záložiek/histórie">
+<!ENTITY openPlacesGroups.tooltip "Neprepisovať karty pri otváraní skupiny záložiek/histórie">
 <!ENTITY openHistory.label "História">
 <!ENTITY openUrl.label "Adresný riadok">
 <!ENTITY openSearch.label "Panel vyhľadávania">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Povoliť pripnutým záložkám posúvanie">
 <!ENTITY offsetAmountToScroll.label "Pri rolovaní zobraziť časť ďalšej karty mimo pohľadu">
 <!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">

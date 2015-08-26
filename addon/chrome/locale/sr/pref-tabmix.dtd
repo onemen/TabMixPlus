@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Примени измене на отворене језичке">
 <!ENTITY openNewTab.label "Отварај картице из:">
 <!ENTITY openBookmarks.label "обележивача">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Групе забелешки/историје">
+<!ENTITY openPlacesGroups.tooltip "Не заборављај језичке приликом отварања групе забелешки/историје">
 <!ENTITY openHistory.label "Историјата">
 <!ENTITY openUrl.label "Адресне линије">
 <!ENTITY openSearch.label "Линије за претраживање">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Омогући померање са дугмадима на левој страни">
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
 <!ENTITY maxrow.label "Највећи број број редова који ће се видети:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Дозволи спуштање закачених језичака">
 <!ENTITY offsetAmountToScroll.label "Приликом померања прикажи део наредног језичка који се не види у целости">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">

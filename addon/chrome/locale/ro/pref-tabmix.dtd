@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Se aplică modificările la filele deschise">
 <!ENTITY openNewTab.label "Se deschid filele din:">
 <!ENTITY openBookmarks.label "Semne de carte">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Grupuri de semne de carte / istoric">
+<!ENTITY openPlacesGroups.tooltip "La deschiderea grupurilor, nu se suprascriu alte file">
 <!ENTITY openHistory.label "Istoric">
 <!ENTITY openUrl.label "Bară de adrese">
 <!ENTITY openSearch.label "Bară de căutare">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "se afișează butoane de derulare pe marginea stângă">
 <!ENTITY tabScroll.multibar "se afișează pe mai multe linii">
 <!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Se permite defilarea filelor fixate">
 <!ENTITY offsetAmountToScroll.label "La derulare, se afișează parțial următoarea filă nevizibilă">
 <!ENTITY smoothScroll.label "Se activează derularea lină">
 <!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării):">

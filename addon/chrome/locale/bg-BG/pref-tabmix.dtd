@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Прилагане на измененията за текущите отворени подпрозорци">
 <!ENTITY openNewTab.label "Отваряне в нови подпрозорци на:">
 <!ENTITY openBookmarks.label "Отметки">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Групи от отметки/история">
+<!ENTITY openPlacesGroups.tooltip "При отваряне на група от отметки/история, подпрозорците не се заменят">
 <!ENTITY openHistory.label "История">
 <!ENTITY openUrl.label "Адресната лента">
 <!ENTITY openSearch.label "Лентата за търсене">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прелистване чрез бутони, разположени отляво">
 <!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
 <!ENTITY maxrow.label "Максимален брой редове:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Прелистване на забодените подпрозорци">
 <!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
 <!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">

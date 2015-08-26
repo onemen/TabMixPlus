@@ -61,7 +61,7 @@
 <!ENTITY updateLockState.label "Aplikovat změny na již otevřené panely">
 <!ENTITY openNewTab.label "Otevírat panely z:">
 <!ENTITY openBookmarks.label "Záložky">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Seskupit záložky/historii">
 <!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
 <!ENTITY openHistory.label "Historie">
 <!ENTITY openUrl.label "Adresní řádek">

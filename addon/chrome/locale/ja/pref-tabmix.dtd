@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
 <!ENTITY openBookmarks.label "ブックマーク">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "ブックマークや履歴のグループ">
+<!ENTITY openPlacesGroups.tooltip "ブックマークや履歴のグループを開くとき、既存のタブを上書きしない">
 <!ENTITY openHistory.label "履歴">
 <!ENTITY openUrl.label "ロケーションバー">
 <!ENTITY openSearch.label "検索バー">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "スクロール可能にし、左にボタンを表示">
 <!ENTITY tabScroll.multibar "多段表示にする">
 <!ENTITY maxrow.label "バーの最大表示段数:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "ピン留めしたタブもスクロール">
 <!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
 <!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">

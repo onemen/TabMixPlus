@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Wijzigingen op openstaande tabbladen toepassen">
 <!ENTITY openNewTab.label "Tabbladen openen vanuit:">
 <!ENTITY openBookmarks.label "Bladwijzers">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Groepen bladwijzers/geschiedenis">
+<!ENTITY openPlacesGroups.tooltip "Tabbladen niet overschrijven bij openen van een groep bladwijzers/geschiedenis">
 <!ENTITY openHistory.label "Geschiedenis">
 <!ENTITY openUrl.label "Locatiebalk">
 <!ENTITY openSearch.label "Zoekbalk">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Scrollen van vastgezette tabbladen toestaan">
 <!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
 <!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">

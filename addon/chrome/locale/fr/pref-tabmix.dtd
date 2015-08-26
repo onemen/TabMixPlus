@@ -61,8 +61,8 @@
 <!ENTITY updateLockState.label "Appliquer les changements aux onglets ouverts">
 <!ENTITY openNewTab.label "Ouvrir des onglets depuis :">
 <!ENTITY openBookmarks.label "Les marque-pages">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Groupes de marques-pages/historique">
+<!ENTITY openPlacesGroups.tooltip "Ne pas remplacer les onglets à l'ouverture d'un groupe de marques-pages/historique">
 <!ENTITY openHistory.label "L&apos;historique">
 <!ENTITY openUrl.label "La barre d&apos;adresse">
 <!ENTITY openSearch.label "La barre de recherche">
@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Faire défiler avec les boutons fléchés situés à gauche">
 <!ENTITY tabScroll.multibar "Mettre la barre d'onglets sur plusieurs lignes">
 <!ENTITY maxrow.label "Nombre maximal de lignes à afficher :">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Permettre le défilement pour les onglets épinglés">
 <!ENTITY offsetAmountToScroll.label "En faisant défiler montrer une partie de l'onglet suivant masqué">
 <!ENTITY smoothScroll.label "Activer le défilement doux">
 <!ENTITY scrolldelay.label "Délai de défilement (intervalle avant la reprise du défilement)">
