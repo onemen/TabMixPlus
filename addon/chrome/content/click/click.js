@@ -329,6 +329,13 @@ var TabmixContext = {
         tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
     }
 
+    if (Tabmix.isVersion(430)) {
+      let toggleMuteTab = $id("context_toggleMuteTab");
+      if (toggleMuteTab) {
+        tabContextMenu.insertBefore(toggleMuteTab, $id("context_pinTab"));
+      }
+    }
+
     // insret IE Tab menu-items before Bookmakrs menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
@@ -443,6 +450,10 @@ var TabmixContext = {
       Tabmix.showItem("context_openNonRemoteWindow",
                       Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
                       !Tabmix.singleWindowMode && gMultiProcessBrowser);
+    }
+
+    if (Tabmix.isVersion(430)) {
+      Tabmix.showItem("context_toggleMuteTab", Tabmix.prefs.getBoolPref("muteTabMenu"));
     }
 
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");

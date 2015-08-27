@@ -171,6 +171,7 @@ pref("extensions.tabmix.newTabMenu", true);
 pref("extensions.tabmix.duplicateMenu", true); // 2008-04-12: changed from false to true
 pref("extensions.tabmix.duplicateinWinMenu", false);
 pref("extensions.tabmix.detachTabMenu", false);
+pref("extensions.tabmix.muteTabMenu", true);
 pref("extensions.tabmix.pinTabMenu", true);
 pref("extensions.tabmix.renameTabMenu", false);
 pref("extensions.tabmix.reloadTabMenu", true);

@@ -34,6 +34,7 @@
       <preference id="pref_openNonRemoteWindow"
                            name="extensions.tabmix.tabcontext.openNonRemoteWindow"       type="bool"/>
       <preference id="pref_showMergeWin"       name="extensions.tabmix.showMergeWindow"     type="bool"/>
+      <preference id="pref_muteTab"            name="extensions.tabmix.muteTabMenu"         type="bool"/>
       <preference id="pref_pinTab"             name="extensions.tabmix.pinTabMenu"          type="bool"/>
       <preference id="pref_showRenametab"      name="extensions.tabmix.renameTabMenu"       type="bool"/>
       <preference id="pref_showCopyTabUrl"     name="extensions.tabmix.copyTabUrlMenu"      type="bool"/>
@@ -126,6 +127,8 @@
                     <checkbox_tmp id="openNonRemoteWindow" preference="pref_openNonRemoteWindow" observes="obs_singleWindow" hidden="true"/>
                     <!-- Merge Windows -->
                     <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
+                    <!-- mute/unmute tabs -->
+                    <checkbox_tmp id="muteTab" preference="pref_muteTab"/>
                     <!-- pin/unpin tabs -->
                     <checkbox_tmp id="pinTab" preference="pref_pinTab"/>
                     <!-- move to group -->

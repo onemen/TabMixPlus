@@ -7,6 +7,11 @@ var gMenuPane = { // jshint ignore:line
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
     var browserWindow = Tabmix.getTopWin();
+    if (Tabmix.isVersion(430)) {
+      $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
+        browserWindow.gNavigatorBundle.getString("unmuteTab.label");
+    }
+
     // if Tabview exist copy its menu label
     if (browserWindow.TMP_TabView.installed) {
       let label = browserWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
