@@ -392,17 +392,18 @@ var TMP_eventListener = {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
         'function $(id)',
-        'let $ = $&', {check: Tabmix._debugMode}
+        'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
       )._replace(
         'this._dragBindingAlive',
         '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
       )._replace(
         'function rect(ele)',
-        'let rect = function _rect(ele)' // for strict mode
+        'let rect = function _rect(ele)', // for strict mode
+        {check: !Tabmix.isVersion(440)}
       )._replace(
         'function verticalMargins(',
         'let verticalMargins = $&',
-        {check: Tabmix._debugMode && Tabmix.isVersion(280)}
+        {check: Tabmix._debugMode && Tabmix.isVersion(280) && !Tabmix.isVersion(440)}
       )._replace(
         'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
         'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
