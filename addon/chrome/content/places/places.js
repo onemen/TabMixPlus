@@ -45,7 +45,7 @@ var TMP_Places = {
                return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
              } finally {
                if (origTitle) {
-                 aBrowser._contentTitle = origTitle;
+                 setTimeout(() => aBrowser._contentTitle = origTitle, 100);
                }
              }
            };
