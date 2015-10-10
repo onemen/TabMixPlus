@@ -187,7 +187,7 @@ this.TabmixSvc = {
       if (isVersion(320))
         prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
 
-      if (isVersion(410)) {
+      if (isVersion(410) && !TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         Cu.import("resource://tabmixplus/NewTabURL.jsm", {});
       }
@@ -286,6 +286,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
   return Services.appinfo.OS == "Linux";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", function() {
+  return Services.appinfo.name == "Cyberfox";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
