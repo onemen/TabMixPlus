@@ -7,7 +7,7 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-let _versions = {};
+var _versions = {};
 function isVersion(aVersionNo) {
   if (TabmixSvc.isPaleMoonID) {
     let paleMoonVer = arguments.length > 1 ? arguments[1] : -1;

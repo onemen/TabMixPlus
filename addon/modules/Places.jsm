@@ -36,7 +36,7 @@ this.TabmixPlacesUtils = Object.freeze({
   }
 });
 
-let Tabmix = {};
+var Tabmix = {};
 
 var PlacesUtilsInternal = {
   _timer: null,

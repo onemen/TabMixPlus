@@ -25,9 +25,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "resource://tabmixplus/Utils.jsm");
 
-let self = this;
+var self = this;
 
-let TabmixContentHandler = {
+var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",

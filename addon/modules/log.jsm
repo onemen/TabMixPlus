@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyGetter(this, "OS", function() {
   return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
 });
 
-let gNextID = 1;
+var gNextID = 1;
 
 this.console = {
   getObject: function(aWindow, aMethod) {

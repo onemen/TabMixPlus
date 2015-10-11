@@ -9,7 +9,7 @@
     <implementation>
       <constructor>
         <![CDATA[
-           let topWin = Services.wm.getMostRecentWindow("navigator:browser");
+           var topWin = Services.wm.getMostRecentWindow("navigator:browser");
            if (!topWin || topWin.Tabmix.isVersion(200))
              return;
            eval("this.open ="+this.open.toString().replace(

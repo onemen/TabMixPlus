@@ -62,7 +62,7 @@
         <parameter name="aNewValue"/>
         <parameter name="aDisabled"/>
         <body><![CDATA[
-          let newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
+          var newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
           if (newValue != Shortcuts.keyStringify(this.key)) {
             let newKey = Shortcuts.keyParse(newValue)
             newKey.disabled = aDisabled;
@@ -95,9 +95,9 @@
 
       <method name="updateNotification">
         <body><![CDATA[
-          let shortcut = !this.disabled && getFormattedKey(this.key);
-          let usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
-          let box = this.notificationbox;
+          var shortcut = !this.disabled && getFormattedKey(this.key);
+          var usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
+          var box = this.notificationbox;
           while (box.hasChildNodes())
             box.removeChild(box.firstChild);
           if (usedKey) {
@@ -120,7 +120,7 @@
         <parameter name="event"/>
         <body><![CDATA[
           // handle Ctrl/Command + W
-          let control = !event.shiftKey && (event.ctrlKey || event.metaKey);
+          var control = !event.shiftKey && (event.ctrlKey || event.metaKey);
           if (control && event.keyCode == 87)
             this.handleKeyEvents(event, true);
         ]]></body>
@@ -134,7 +134,7 @@
           event.stopPropagation();
           event.stopImmediatePropagation();
 
-          let key = {modifiers: "", key: "", keycode: ""};
+          var key = {modifiers: "", key: "", keycode: ""};
           key.modifiers =
             ["ctrl","meta","alt","shift"].filter(mod => event[mod + "Key"]).
             join(",").replace("ctrl", "control");
@@ -180,7 +180,7 @@
               return;
           }
 
-          let newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);
+          var newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);
           this.applyNewValue(newValue, false);
         ]]></body>
       </method>
@@ -224,7 +224,7 @@
 
       <property name="defaultPref" readonly="true">
         <getter><![CDATA[
-          let defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
+          var defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
           if (defaultVal) {
             let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
             resetButton.hidden = false;

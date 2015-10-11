@@ -1,6 +1,6 @@
 "use strict";
 
-let TabmixRemoveBlankTab = {
+var TabmixRemoveBlankTab = {
   initialize: function() {
     switch (window.document.documentElement.id) {
       case "unknownContentType":

@@ -1,8 +1,8 @@
 "use strict";
 
-let $ = id => document.getElementById(id);
+var $ = id => document.getElementById(id);
 
-let tabstyles = { // jshint ignore:line
+var tabstyles = { // jshint ignore:line
   pref: "appearance_tab",
   init: function() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?

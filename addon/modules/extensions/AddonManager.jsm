@@ -16,7 +16,7 @@ function log(msg) { // jshint ignore:line
 }
 
 // https://addons.mozilla.org/en-US/firefox/addon/private-tab
-let PrivateTab = {
+var PrivateTab = {
   id: "privateTab@infocatcher",
   onEnabled: function() {
     this._resetNewTabButton();
@@ -31,7 +31,7 @@ let PrivateTab = {
   }
 };
 
-let SessionManager = {
+var SessionManager = {
   id: "{1280606b-2510-4fe0-97ef-9b5a22eafe30}",
   init: function() {
     this._saveTabmixPrefs();
@@ -75,7 +75,7 @@ let SessionManager = {
   }
 };
 
-let TabmixListener = {
+var TabmixListener = {
   onChange: function(aAddon, aAction) {
     let id = aAddon.id;
     if (id == SessionManager.id)
@@ -97,7 +97,7 @@ let TabmixListener = {
   }
 };
 
-let TabmixAddonManager = {
+var TabmixAddonManager = {
   initialized: false,
   init: function() {
     if (this.initialized)

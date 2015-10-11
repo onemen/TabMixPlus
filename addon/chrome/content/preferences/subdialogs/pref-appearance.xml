@@ -193,8 +193,8 @@
       <method name="updateDisableState">
         <parameter name="aID"/>
         <body><![CDATA[
-          let disableBg = this.treeStyleTab && aID == "bg";
-          let disabled = this.disabled || disableBg ||
+          var disableBg = this.treeStyleTab && aID == "bg";
+          var disabled = this.disabled || disableBg ||
                            !this._getElementById(aID).checked;
           if (disableBg)
             this._getElementById("bg").disabled = true;
@@ -248,7 +248,7 @@
       <method name="getColor">
         <parameter name="format"/>
         <body><![CDATA[
-          let rgba = this.rgba;
+          var rgba = this.rgba;
           if (format) {
             rgba[3] = this.getAttribute("disabled") ? 0.2 :
                           Math.max(.2, rgba[3]);
@@ -259,7 +259,7 @@
 
       <property name="rgba" readonly="true">
         <getter><![CDATA[
-          let rgba = this._RGB.map(c => parseInt(c.value));
+          var rgba = this._RGB.map(c => parseInt(c.value));
           rgba[3] /= 100;
           return rgba;
         ]]></getter>
@@ -268,7 +268,7 @@
       <property name="color"
                 onget="return this.getColor();">
         <setter><![CDATA[
-          let color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
+          var color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
           for (let i = 0; i < 3; i++)
             this._RGB[i].value = color[i];
           this._RGB[3].value = (color[3] || 1) * 100;
@@ -295,7 +295,7 @@
 
     <handlers>
       <handler event="change"><![CDATA[
-        let item = event.originalTarget;
+        var item = event.originalTarget;
         if (item.localName == "colorpicker") {
           // colorpicker use rgb hexadecimal format
           let color = item.color.replace("#","");

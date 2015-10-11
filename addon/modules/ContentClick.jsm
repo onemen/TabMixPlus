@@ -58,7 +58,7 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-let Tabmix = {};
+var Tabmix = {};
 
 var ContentClickInternal = {
   _timer: null,

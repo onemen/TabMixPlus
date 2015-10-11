@@ -27,7 +27,7 @@ this.Decode = {
   }
 };
 
-let escapeHash = {};
+var escapeHash = {};
 
 function getReturnValue(input) {
   var ret = escapeHash[input];

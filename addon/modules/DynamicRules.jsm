@@ -16,7 +16,7 @@ XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
-let TYPE;
+var TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", function() {
     let sss = Cc['@mozilla.org/content/style-sheet-service;1']
                         .getService(Ci.nsIStyleSheetService);
