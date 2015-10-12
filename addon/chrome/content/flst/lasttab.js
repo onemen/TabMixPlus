@@ -213,11 +213,11 @@ var TMP_LastTab = {
             if (!this.TabListLock) {
                if (tabCount > 1) {
                  if (!this._timer) {
-                   this._timer = setTimeout(function(self) {
-                     self._timer = null;
-                     if (!self.TabListLock)
-                       self.DisplayTabList();
-                   }, 200, this);
+                   this._timer = setTimeout(() => {
+                     this._timer = null;
+                     if (!this.TabListLock)
+                       this.DisplayTabList();
+                   }, 200);
                  }
                  else
                    this.DisplayTabList();

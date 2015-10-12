@@ -154,16 +154,15 @@ var TabmixTabbar = {
     Tabmix.setItem(tabBar, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
     this.setShowNewTabButtonAttr();
 
-    var self = this;
     if (start)
-      window.setTimeout(function TMP_updateSettings_onstart() {self.updateScrollStatus();}, 0);
+      window.setTimeout(() => this.updateScrollStatus(), 0);
     else
       this.updateScrollStatus();
 
-    window.setTimeout(function TMP_updateSettings_adjustScroll(_currentVisible) {
-        if (_currentVisible)
-          gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
-        self.updateBeforeAndAfter();
+    window.setTimeout(_currentVisible => {
+      if (_currentVisible)
+        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
+      this.updateBeforeAndAfter();
     }, 50, currentVisible);
   },
 
@@ -1506,7 +1505,7 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
         break;
       case "layout.css.devPixelsPerPx":
-        setTimeout(function(self) {self.setBgMiddleMargin();}, 0, this);
+        setTimeout(() => this.setBgMiddleMargin(), 0);
         break;
       case "extensions.tabmix.showTabContextMenuOnTabbar":
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
@@ -2613,10 +2612,10 @@ var TabmixProgressListener = {
           this.mTabBrowser.hideTab(tab);
           TabmixTabbar.updateScrollStatus();
           // let to unknownContentType dialog or nsIFilePicker time to open
-          tab._tabmix_downloadingTimeout = tab.ownerDocument.defaultView.setTimeout(function(self) {
+          tab._tabmix_downloadingTimeout = tab.ownerDocument.defaultView.setTimeout(() => {
             tab._tabmix_downloadingTimeout = null;
-            if (self && self.mTabBrowser && tab && tab.parentNode)
-              self.mTabBrowser.removeTab(tab, {animate: false});
+            if (this && this.mTabBrowser && tab && tab.parentNode)
+              this.mTabBrowser.removeTab(tab, {animate: false});
           }, 500, this);
         }
 

@@ -18,8 +18,9 @@ var TabmixTabClickOptions = {
     if (leftClick && aEvent.detail > 1) {
       if (this._tabFlipTimeOut)
         this.clearTabFlipTimeOut();
-      if (this._blockDblClick)
-        setTimeout(function(self) {self._blockDblClick = false;}, 0, this);
+      if (this._blockDblClick) {
+        setTimeout(() => this._blockDblClick = false, 0);
+      }
       return; // double click (with left button)
     }
 

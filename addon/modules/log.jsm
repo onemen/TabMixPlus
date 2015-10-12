@@ -287,7 +287,7 @@ options = {
     this._logMessage(assertionText + stackText, "errorFlag");
   },
 
-  trace: function TMP_console_trace(aMsg, flag="infoFlag", caller=null) {
+  trace: function TMP_console_trace(aMsg, flag = "infoFlag", caller = null) {
     let stack = this._formatStack(this._getStackExcludingInternal());
     let msg = aMsg ? aMsg + "\n" : "";
     this._logMessage(":\n" + msg + "Stack Trace:\n" + stack, flag, caller);
@@ -301,7 +301,7 @@ options = {
     return parent;
   },
 
-  reportError: function(ex=null, msg="") {
+  reportError: function(ex = null, msg = "") {
     if (ex === null) {
       ex = "reportError was called with null";
     }
@@ -318,7 +318,7 @@ options = {
     }
   },
 
-  _logMessage: function _logMessage(msg, flag="infoFlag", caller=null) {
+  _logMessage: function _logMessage(msg, flag = "infoFlag", caller = null) {
     msg = msg.replace(/\r\n/g, "\n");
     if (typeof Ci.nsIScriptError[flag] == "undefined") {
       Services.console.logStringMessage("Tabmix" + msg);
@@ -335,6 +335,6 @@ options = {
 
 };
 
-(function(self) {
-  self.reportError = self.reportError.bind(self);
+(function(_this) {
+  _this.reportError = _this.reportError.bind(_this);
 }(this.console));

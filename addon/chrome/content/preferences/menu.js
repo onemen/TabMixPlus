@@ -48,7 +48,7 @@ var gMenuPane = { // jshint ignore:line
     let paneMenu = $("paneMenu");
     if (paneMenu.hasAttribute("editSlideShowKey")) {
       paneMenu.removeAttribute("editSlideShowKey");
-      setTimeout(function(self) {self.editSlideShowKey();}, 0, this);
+      setTimeout(() => this.editSlideShowKey(), 0);
     }
 
     gPrefWindow.initPane("paneMenu");

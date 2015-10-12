@@ -35,9 +35,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
     }
 
     this.initMainPane();
-    setTimeout(function(self) {
-      self.initPaneTabsOptions();
-    }, 0, this);
+    setTimeout(() => this.initPaneTabsOptions(), 0);
   },
 
 /* ........ paneTabs .............. */
