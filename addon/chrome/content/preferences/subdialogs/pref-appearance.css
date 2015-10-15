@@ -47,6 +47,7 @@ colorbox {
 
 .dialog-button[dlgtype="extra2"] {
   -moz-appearance: none;
+  border: 1px solid transparent;
 }
 
 hbox[_hidebox="true"],
