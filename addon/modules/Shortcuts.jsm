@@ -129,31 +129,31 @@ this.Shortcuts = {
   },
 
   onPrefChange: function TMP_SC_onPrefChange(aData) {
-   try {
-    if (this.updatingShortcuts ||
-        aData != "shortcuts" && aData != "sessions.manager")
-      return;
-    this.updatingShortcuts = true;
-    // instead of locking the preference just revert any changes user made
-    if (aData == "shortcuts" && !this.prefsChangedByTabmix) {
-      this.setShortcutsPref();
-      return;
-    }
-
-    let [changedKeys, needUpdate] = this._getChangedKeys({onChange: aData == "shortcuts"});
-    if (needUpdate) {
-      let windowsEnum = Services.wm.getEnumerator("navigator:browser");
-      while (windowsEnum.hasMoreElements()) {
-        let win = windowsEnum.getNext();
-        if (!win.closed)
-          this.updateWindowKeys(win, changedKeys);
+    try {
+      if (this.updatingShortcuts ||
+          aData != "shortcuts" && aData != "sessions.manager")
+        return;
+      this.updatingShortcuts = true;
+      // instead of locking the preference just revert any changes user made
+      if (aData == "shortcuts" && !this.prefsChangedByTabmix) {
+        this.setShortcutsPref();
+        return;
       }
-      if (this.keyConfigInstalled)
-        KeyConfig.syncToKeyConfig(changedKeys, true);
-    }
 
-    this.updatingShortcuts = false;
-   } catch (ex) {TabmixSvc.console.assert(ex);}
+      let [changedKeys, needUpdate] = this._getChangedKeys({onChange: aData == "shortcuts"});
+      if (needUpdate) {
+        let windowsEnum = Services.wm.getEnumerator("navigator:browser");
+        while (windowsEnum.hasMoreElements()) {
+          let win = windowsEnum.getNext();
+          if (!win.closed)
+            this.updateWindowKeys(win, changedKeys);
+        }
+        if (this.keyConfigInstalled)
+          KeyConfig.syncToKeyConfig(changedKeys, true);
+      }
+
+      this.updatingShortcuts = false;
+    } catch (ex) {TabmixSvc.console.assert(ex);}
   },
 
   /* ........ Window Event Handlers .............. */
@@ -267,7 +267,7 @@ this.Shortcuts = {
     // turn off slideShow if need to
     if (aKey == "slideShow" && disabled &&
         aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
-        aWindow.Tabmix.flst.cancel();
+      aWindow.Tabmix.flst.cancel();
     }
   },
 
@@ -424,7 +424,7 @@ this.Shortcuts = {
       if (!this.keys.browserReload.id) {
         let index = 2, id;
         do {
-         id = "key_reload#".replace("#", index++);
+          id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
       }

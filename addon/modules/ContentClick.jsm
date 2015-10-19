@@ -368,13 +368,13 @@ var ContentClickInternal = {
      * portions were taken from disable target for downloads by cusser
      */
     if (this.suppressTabsOnFileDownload()) {
-        // don't do anything if we are on gmail and let gmail take care of the download
-        let url = this._data.currentURL;
-        let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
-        let isHttps = /^https/.test(href);
-        if (isGmail || isHttps)
-           return ["default@6", true];
-        return ["current@7", true];
+      // don't do anything if we are on gmail and let gmail take care of the download
+      let url = this._data.currentURL;
+      let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
+      let isHttps = /^https/.test(href);
+      if (isGmail || isHttps)
+        return ["default@6", true];
+      return ["current@7", true];
     }
 
     // check this after we check for suppressTabsOnFileDownload

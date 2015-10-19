@@ -16,8 +16,8 @@
  */
 Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
   if (aWindowType == "Extension:Manager") {
-      // we're in the EM
-      window.openURL = this.openURL;
+    // we're in the EM
+    window.openURL = this.openURL;
   }
 
   // for normal click this function calls urlbar.handleCommand
@@ -238,103 +238,104 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-    if (typeof tabBrowser == "undefined")
-      tabBrowser = gBrowser;
+  if (typeof tabBrowser == "undefined")
+    tabBrowser = gBrowser;
 
-    // return true if all tabs in the window are blank
-    tabBrowser.isBlankWindow = function() {
-       for (var i = 0; i < this.tabs.length; i++) {
-          if (!this.isBlankBrowser(this.getBrowserAtIndex(i)))
-             return false;
-       }
-       return true;
-    };
-
-    tabBrowser.isBlankTab = function(aTab) {
-      return this.isBlankBrowser(this.getBrowserForTab(aTab));
-    };
-
-    //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
-    // isTabEmpty don't check for Tabmix.isNewTabUrls
-    tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-      if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
+  // return true if all tabs in the window are blank
+  tabBrowser.isBlankWindow = function() {
+    for (var i = 0; i < this.tabs.length; i++) {
+      if (!this.isBlankBrowser(this.getBrowserAtIndex(i)))
         return false;
-
-      return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
-    };
-
-    tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
-       try {
-          if (!aBrowser || !aBrowser.currentURI)
-             return true;
-          if (aBrowser.canGoForward || aBrowser.canGoBack)
-             return false;
-          return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
-                 Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
-       } catch (ex) {
-Tabmix.assert(ex); return true;
-}
-    };
-
-    /**
-     * add gBrowser.getTabForBrowser if it is not exist
-     * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
-     * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
-     */
-    if (typeof tabBrowser.getTabForBrowser != "function") {
-       // this is _getTabForBrowser version from Firefox 23
-       tabBrowser.getTabForBrowser = function(aBrowser) {
-          for (let i = 0; i < this.tabs.length; i++) {
-            if (this.tabs[i].linkedBrowser == aBrowser)
-              return this.tabs[i];
-          }
-          return null;
-       };
     }
+    return true;
+  };
 
-    tabBrowser.getTabForLastPanel = function() {
-      let notificationbox = this.mPanelContainer.lastChild;
-      let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
-      let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
-      return this.getTabForBrowser(browser);
+  tabBrowser.isBlankTab = function(aTab) {
+    return this.isBlankBrowser(this.getBrowserForTab(aTab));
+  };
+
+  //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
+  // isTabEmpty don't check for Tabmix.isNewTabUrls
+  tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
+    if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
+      return false;
+
+    return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
+  };
+
+  tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
+    try {
+      if (!aBrowser || !aBrowser.currentURI)
+        return true;
+      if (aBrowser.canGoForward || aBrowser.canGoBack)
+        return false;
+      return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
+      Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
+    } catch (ex) {
+      Tabmix.assert(ex);
+      return true;
+    }
+  };
+
+  /**
+   * add gBrowser.getTabForBrowser if it is not exist
+   * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
+   * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+   */
+  if (typeof tabBrowser.getTabForBrowser != "function") {
+    // this is _getTabForBrowser version from Firefox 23
+    tabBrowser.getTabForBrowser = function(aBrowser) {
+      for (let i = 0; i < this.tabs.length; i++) {
+        if (this.tabs[i].linkedBrowser == aBrowser)
+          return this.tabs[i];
+      }
+      return null;
     };
+  }
 
-    var tabContainer = aTabContainer || tabBrowser.tabContainer ||
-                       document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
+  tabBrowser.getTabForLastPanel = function() {
+    let notificationbox = this.mPanelContainer.lastChild;
+    let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
+    let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
+    return this.getTabForBrowser(browser);
+  };
 
-    // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
-    // so we initialize this before start
-    // mTabMaxWidth not exist from firefox 4.0
-    var max = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
-    var min = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
-    if (max < min) {
-      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
-      Services.prefs.setIntPref("browser.tabs.tabMinWidth", max);
-      [min, max] = [max, min];
-    }
-    tabContainer.mTabMaxWidth = max;
-    tabContainer.mTabMinWidth = min;
-    TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && (max != min);
-    if (TabmixTabbar.widthFitTitle)
-      this.setItem(tabContainer, "widthFitTitle", true);
+  var tabContainer = aTabContainer || tabBrowser.tabContainer ||
+      document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
 
-    var tabscroll = this.prefs.getIntPref("tabBarMode");
-    if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
-      tabscroll = 1;
-    if (tabscroll < 0 || tabscroll > 3 ||
-        (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
-      this.prefs.setIntPref("tabBarMode", 1);
-      tabscroll = 1;
-    }
-    TabmixTabbar.scrollButtonsMode = tabscroll;
-    let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
-    TabmixTabbar.flowing = flowing;
+  // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
+  // so we initialize this before start
+  // mTabMaxWidth not exist from firefox 4.0
+  var max = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
+  var min = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
+  if (max < min) {
+    Services.prefs.setIntPref("browser.tabs.tabMaxWidth", min);
+    Services.prefs.setIntPref("browser.tabs.tabMinWidth", max);
+    [min, max] = [max, min];
+  }
+  tabContainer.mTabMaxWidth = max;
+  tabContainer.mTabMinWidth = min;
+  TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && (max != min);
+  if (TabmixTabbar.widthFitTitle)
+    this.setItem(tabContainer, "widthFitTitle", true);
 
-    // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
-    if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
-      TMP_SessionStore.afterSwitchThemes = true;
+  var tabscroll = this.prefs.getIntPref("tabBarMode");
+  if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
+    tabscroll = 1;
+  if (tabscroll < 0 || tabscroll > 3 ||
+      (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
+    this.prefs.setIntPref("tabBarMode", 1);
+    tabscroll = 1;
+  }
+  TabmixTabbar.scrollButtonsMode = tabscroll;
+  let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+  TabmixTabbar.flowing = flowing;
 
-    TMP_extensionsCompatibility.preInit();
+  // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
+  if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
+    TMP_SessionStore.afterSwitchThemes = true;
+
+  TMP_extensionsCompatibility.preInit();
 };
 
 Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {
@@ -350,39 +351,39 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   var tabs = tabbrowser.visibleTabs;
   var tabsCount = tabs.length - tabbrowser._removingTabs.length;
   switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
-  case 0:
-    this.removeAttribute("closebuttons-hover");
-    this.setAttribute("closebuttons", "noclose");
-    break;
-  case 1:
-    this.removeAttribute("closebuttons-hover");
-    this.setAttribute("closebuttons", "alltabs");
-    break;
-  case 2:
-    this.setAttribute("closebuttons-hover", "alltabs");
-    this.setAttribute("closebuttons", "noclose");
-    break;
-  case 3:
-    this.removeAttribute("closebuttons-hover");
-    this.setAttribute("closebuttons", "activetab");
-    break;
-  case 4:
-    this.setAttribute("closebuttons-hover", "notactivetab");
-    this.setAttribute("closebuttons", "activetab");
-    break;
-  case 5:
-    this.removeAttribute("closebuttons-hover");
-    if (tabsCount < 3)
+    case 0:
+      this.removeAttribute("closebuttons-hover");
+      this.setAttribute("closebuttons", "noclose");
+      break;
+    case 1:
+      this.removeAttribute("closebuttons-hover");
       this.setAttribute("closebuttons", "alltabs");
-    else {
-      // make sure not to check collapsed, hidden or pinned tabs for width
-      let tab = TMP_TabView.checkTabs(tabs);
-      if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)
+      break;
+    case 2:
+      this.setAttribute("closebuttons-hover", "alltabs");
+      this.setAttribute("closebuttons", "noclose");
+      break;
+    case 3:
+      this.removeAttribute("closebuttons-hover");
+      this.setAttribute("closebuttons", "activetab");
+      break;
+    case 4:
+      this.setAttribute("closebuttons-hover", "notactivetab");
+      this.setAttribute("closebuttons", "activetab");
+      break;
+    case 5:
+      this.removeAttribute("closebuttons-hover");
+      if (tabsCount < 3)
         this.setAttribute("closebuttons", "alltabs");
-      else
-        this.setAttribute("closebuttons", "activetab");
-    }
-    break;
+      else {
+        // make sure not to check collapsed, hidden or pinned tabs for width
+        let tab = TMP_TabView.checkTabs(tabs);
+        if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)
+          this.setAttribute("closebuttons", "alltabs");
+        else
+          this.setAttribute("closebuttons", "activetab");
+      }
+      break;
   }
 
  /**
@@ -392,12 +393,12 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {
-        let currentURI = tabbrowser.currentURI;
-        aUrl = currentURI ? currentURI.spec : null;
+      let currentURI = tabbrowser.currentURI;
+      aUrl = currentURI ? currentURI.spec : null;
     }
     if (Tabmix.tabsUtils._keepLastTab ||
         isBlankPageURL(tab.__newLastTab || null) ||
-       (!aUrl || isBlankPageURL(aUrl)) &&
+        (!aUrl || isBlankPageURL(aUrl)) &&
         tabbrowser.isBlankNotBusyTab(tab)) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");

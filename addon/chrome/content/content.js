@@ -146,9 +146,9 @@ var TabmixClickEventHandler = {
 
   handleEvent: function(event) {
     switch (event.type) {
-    case "click":
-      this.contentAreaClick(event);
-      break;
+      case "click":
+        this.contentAreaClick(event);
+        break;
     }
   },
 

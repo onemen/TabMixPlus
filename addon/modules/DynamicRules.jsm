@@ -18,10 +18,10 @@ XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
 
 var TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", function() {
-    let sss = Cc['@mozilla.org/content/style-sheet-service;1']
-                        .getService(Ci.nsIStyleSheetService);
-    TYPE = sss.AGENT_SHEET;
-    return sss;
+  let sss = Cc['@mozilla.org/content/style-sheet-service;1']
+  .getService(Ci.nsIStyleSheetService);
+  TYPE = sss.AGENT_SHEET;
+  return sss;
 });
 
 const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n';
@@ -234,8 +234,8 @@ this.DynamicRules = {
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
       }
       else if (prefObj.bg)
-          style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
-                               .replace(/#topColor/g, prefObj.bgTopColor);
+        style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
+                             .replace(/#topColor/g, prefObj.bgTopColor);
     }
     this.styles[name] = Object.keys(style).length ? style : null;
     this.registerSheet(name);

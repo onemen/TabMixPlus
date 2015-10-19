@@ -101,7 +101,7 @@ this.MergeWindows = {
   mergePopUpsToNewWindow: function(aWindows, aPrivate) {
     var features = "chrome,all,dialog=no";
     if (TabmixSvc.version(200))
-        features += aPrivate ? ",private" : ",non-private";
+      features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
         "_blank", features, null);
     let mergePopUps = function _mergePopUps() {

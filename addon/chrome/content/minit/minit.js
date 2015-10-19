@@ -278,12 +278,12 @@ var TMP_tabDNDObserver = {
         case "scrollbutton-up-right":
           if (Tabmix.tabsUtils.canScrollTabsLeft)
             _scroll = -1;
-            break;
+          break;
         case "scrollbutton-down":
         case "scrollbutton-down-right":
           if (Tabmix.tabsUtils.canScrollTabsRight)
             _scroll = 1;
-            break;
+          break;
       }
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
@@ -364,7 +364,7 @@ var TMP_tabDNDObserver = {
           if (newIndex >= numPinned)
             gBrowser.unpinTab(draggedTab);
         } else if (newIndex <= numPinned - 1 || (newIndex == numPinned && dt.__pinTab)) {
-            gBrowser.pinTab(draggedTab);
+          gBrowser.pinTab(draggedTab);
         }
         if (newIndex != draggedTab._tPos)
           gBrowser.moveTabTo(draggedTab, newIndex);
@@ -620,22 +620,22 @@ var TMP_tabDNDObserver = {
   },
 
   getLeft_Right: function(event, newIndex, oldIndex, draggeType) {
-   var mX = event.screenX;
-   var left_right;
-   var tab = gBrowser.tabs[newIndex];
-   var tabBo = tab.boxObject;
-   var ltr = Tabmix.ltr;
-   var _left = ltr ? 0 : 1;
-   var _right = ltr ? 1 : 0;
+    var mX = event.screenX;
+    var left_right;
+    var tab = gBrowser.tabs[newIndex];
+    var tabBo = tab.boxObject;
+    var ltr = Tabmix.ltr;
+    var _left = ltr ? 0 : 1;
+    var _right = ltr ? 1 : 0;
 
-   var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-   var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
-   if ((draggeType == this.DRAG_LINK && lockedTab) || (draggeType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
+    var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
+    var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
+    if ((draggeType == this.DRAG_LINK && lockedTab) || (draggeType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
       left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
       if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4)
-         left_right = -1;
-   }
-   else {
+        left_right = -1;
+    }
+    else {
       left_right = (mX < tabBo.screenX + tabBo.width / 2) ? _left : _right;
       if (!isCtrlKey && draggeType == this.DRAG_TAB_IN_SAME_WINDOW) {
         if (newIndex == oldIndex - 1)
@@ -643,9 +643,9 @@ var TMP_tabDNDObserver = {
         else if (newIndex == oldIndex + 1)
           left_right = ltr ? _right : _left;
       }
-   }
+    }
 
-   return left_right;
+    return left_right;
   },
 
   getDragType: function minit_getDragType(aSourceNode) {
@@ -665,17 +665,17 @@ var TMP_tabDNDObserver = {
         gBrowser.tabs[this.dragmarkindex.index].pinned == gBrowser.tabs[index].pinned)
       return;
 
-   this.clearDragmark();// clear old dragmark if one exist
+    this.clearDragmark();// clear old dragmark if one exist
 
-   if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
+    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var sameRow = newIndex !== 0 && newIndex != gBrowser.tabs.length &&
-            TabmixTabbar.inSameRow(gBrowser.tabs[newIndex - 1], gBrowser.tabs[newIndex]);
+          TabmixTabbar.inSameRow(gBrowser.tabs[newIndex - 1], gBrowser.tabs[newIndex]);
       if (sameRow || left_right === 0)
-         this.setDragmarkAttribute(gBrowser.tabs[newIndex], "atLeft");
+        this.setDragmarkAttribute(gBrowser.tabs[newIndex], "atLeft");
       if (sameRow || left_right == 1)
-         this.setDragmarkAttribute(gBrowser.tabs[newIndex - 1], "atRight");
-   }
-   else {
+        this.setDragmarkAttribute(gBrowser.tabs[newIndex - 1], "atRight");
+    }
+    else {
       // code for firefox indicator
       var ind = gBrowser.tabContainer._tabDropIndicator;
       var minMargin, maxMargin, newMargin;
@@ -686,17 +686,17 @@ var TMP_tabDNDObserver = {
       minMargin = scrollRect.left - rect.left - this.paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
       if (!ltr)
-         [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
+        [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
 
       tabRect = gBrowser.tabs[index].getBoundingClientRect();
       if (ltr)
-         newMargin = tabRect.left - rect.left +
-                     (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
-                     this.paddingLeft;
+        newMargin = tabRect.left - rect.left +
+          (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
+          this.paddingLeft;
       else
-         newMargin = rect.right - tabRect.left -
-                     (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
-                     this.paddingLeft;
+        newMargin = rect.right - tabRect.left -
+          (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
+          this.paddingLeft;
 
       ///XXX fix min/max x margin when in one row the drag mark is visible after
       ///XXX the arrow when the last tab is partly visible
@@ -737,9 +737,9 @@ var TMP_tabDNDObserver = {
     if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var index = this.dragmarkindex.newIndex;
       if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
-         this.removetDragmarkAttribute(gBrowser.tabs[index]);
+        this.removetDragmarkAttribute(gBrowser.tabs[index]);
       if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
-         this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
+        this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
     }
     else
       this.setFirefoxDropIndicator(false);
@@ -891,22 +891,22 @@ Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
 };
 
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
-   var aTab = gBrowser.mCurrentTab;
-   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
-   var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
+  var aTab = gBrowser.mCurrentTab;
+  var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
+  var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
-   var openTabPref = typeof (pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
-   if (typeof (altKey) != "undefined") {
-      // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
-      if (altKey && !openTabPref)
-         isBlankTab = false;
+  var openTabPref = typeof (pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
+  if (typeof (altKey) != "undefined") {
+    // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
+    if (altKey && !openTabPref)
+      isBlankTab = false;
 
-      // see bug 315034 If search is set to open in a new tab,
-      // Alt+Enter should open the search result in the current tab
-      // so here we reverse the pref if user press Alt key
-      openTabPref = (altKey ^ openTabPref) == 1;
-   }
-   return {inNew: !isBlankTab && (isLockTab || openTabPref), lock: isLockTab};
+    // see bug 315034 If search is set to open in a new tab,
+    // Alt+Enter should open the search result in the current tab
+    // so here we reverse the pref if user press Alt key
+    openTabPref = (altKey ^ openTabPref) == 1;
+  }
+  return {inNew: !isBlankTab && (isLockTab || openTabPref), lock: isLockTab};
 };
 
 Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
@@ -918,14 +918,14 @@ Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
 
 // sometimes context popup stay "open", we hide it manually.
 Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
-   var node = aPopupMenu.triggerNode;
-   while (node && node.localName != "menubar" && node.localName != "toolbar") {
-      if (node.localName == "menupopup" || node.localName == "popup") {
-         if (node.hasAttribute("open")) node.removeAttribute("open");
-         node.hidePopup();
-      }
-      node = node.parentNode;
-   }
+  var node = aPopupMenu.triggerNode;
+  while (node && node.localName != "menubar" && node.localName != "toolbar") {
+    if (node.localName == "menupopup" || node.localName == "popup") {
+      if (node.hasAttribute("open")) node.removeAttribute("open");
+      node.hidePopup();
+    }
+    node = node.parentNode;
+  }
 };
 
 var TMP_TabView = { /* jshint ignore: line */
@@ -1354,7 +1354,7 @@ Tabmix.navToolbox = {
 
   _closeButtonInitialized: false,
   setCloseButtonPosition: function() {
-   if (this._closeButtonInitialized)
+    if (this._closeButtonInitialized)
       return;
 
     if (!Tabmix.isVersion(310))

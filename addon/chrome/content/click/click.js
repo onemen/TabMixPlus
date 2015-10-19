@@ -282,7 +282,7 @@ var TabmixTabClickOptions = {
           gBrowser.pinTab(aTab);
         break;
       case 32:
-          gBrowser.previousTab(gBrowser.selectedTab);
+        gBrowser.previousTab(gBrowser.selectedTab);
         break;
       default:
         return false;

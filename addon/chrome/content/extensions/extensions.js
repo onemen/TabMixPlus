@@ -457,50 +457,50 @@ var TMP_extensionsCompatibility = {
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {
-   init: function() {
-     Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
-       'tbb.setAttribute("onclick"',
-       'tbb.setAttribute("onclick", "this.onClick(event);");\
-        tbb.setAttribute("_onclick"'
-     )._replace(
-       'tbb.onContextOpen =',
-       'tbb.onContextOpen = TMP_extensionsCompatibility.RSSTICKER.onContextOpen; \
-        tbb.onClick = TMP_extensionsCompatibility.RSSTICKER.onClick; \
-        tbb._onContextOpen ='
-     ).toCode();
-   },
+  init: function() {
+    Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
+      'tbb.setAttribute("onclick"',
+      'tbb.setAttribute("onclick", "this.onClick(event);");\
+       tbb.setAttribute("_onclick"'
+    )._replace(
+      'tbb.onContextOpen =',
+      'tbb.onContextOpen = TMP_extensionsCompatibility.RSSTICKER.onContextOpen; \
+       tbb.onClick = TMP_extensionsCompatibility.RSSTICKER.onClick; \
+       tbb._onContextOpen ='
+    ).toCode();
+  },
 
-   onClick: function(event) {
-     if (event.ctrlKey) {
-       this.markAsRead(true);
-     }
-     else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
-       this.onContextOpen("tab");
-     }
-     else if (event.which == 1) {
-       this.onContextOpen();
-     }
-   },
+  onClick: function(event) {
+    if (event.ctrlKey) {
+      this.markAsRead(true);
+    }
+    else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
+      this.onContextOpen("tab");
+    }
+    else if (event.which == 1) {
+      this.onContextOpen();
+    }
+  },
 
-   onContextOpen: function(target) {
-     if (!target) {
-       if (Tabmix.whereToOpen(null).lock)
-         this.parent.browser.openInNewTab(this.href);
-       else
-         window.loadURI(this.href);
-     }
-     else if (target == "window") {
-       if (Tabmix.singleWindowMode)
-         this.parent.browser.openInNewTab(this.href);
-       else
-         window.open(this.href);
-     }
-     else if (target == "tab") {
-       this.parent.browser.openInNewTab(this.href);
-     }
+  onContextOpen: function(target) {
+    if (!target) {
+      if (Tabmix.whereToOpen(null).lock)
+        this.parent.browser.openInNewTab(this.href);
+      else
+        window.loadURI(this.href);
+    }
+    else if (target == "window") {
+      if (Tabmix.singleWindowMode)
+        this.parent.browser.openInNewTab(this.href);
+      else
+        window.open(this.href);
+    }
+    else if (target == "tab") {
+      this.parent.browser.openInNewTab(this.href);
+    }
 
-     this.markAsRead();
-   }
+    this.markAsRead();
+  }
 };
 
 // prevent Wizz RSS from load pages in locked tabs
@@ -538,13 +538,13 @@ TMP_extensionsCompatibility.wizzrss = {
 
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
-   init: function() {
-      Tabmix.changeCode(window, "openNewsfox")._replace(
-         /if \(newTab\) {/,
-         'newTab = newTab || Tabmix.whereToOpen(null).lock; \
-         $&'
-      ).toCode();
-   }
+  init: function() {
+    Tabmix.changeCode(window, "openNewsfox")._replace(
+      /if \(newTab\) {/,
+      'newTab = newTab || Tabmix.whereToOpen(null).lock; \
+       $&'
+    ).toCode();
+  }
 };
 
 /**

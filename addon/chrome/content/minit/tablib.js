@@ -1,7 +1,7 @@
 "use strict";
 
 if (!window.tablib || tablib.version != "tabmixplus")
-var tablib = {
+var tablib = { // eslint-disable-line
   version: "tabmixplus",
   _inited: false,
   init: function TMP_tablib_init() {
@@ -413,13 +413,14 @@ var tablib = {
     ).toCode();
 
     // we use our own preferences observer
-    if (!Tabmix.isVersion(310))
-    Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
-      'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
-      'break;'
-    )._replace(
-      'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
-    ).toCode();
+    if (!Tabmix.isVersion(310)) {
+      Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
+        'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
+        'break;'
+      )._replace(
+        'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(230)) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
@@ -459,11 +460,12 @@ var tablib = {
       ).toCode();
 
       // _expandSpacerBy not exsit in Firefox 21
-      if (typeof tabBar._expandSpacerBy == "function")
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
-        '{',
-        '{if (TabmixTabbar.widthFitTitle || !Tabmix.tabsUtils.isSingleRow()) return;'
-      ).toCode();
+      if (typeof tabBar._expandSpacerBy == "function") {
+        Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
+          '{',
+          '{if (TabmixTabbar.widthFitTitle || !Tabmix.tabsUtils.isSingleRow()) return;'
+        ).toCode();
+      }
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
         '{', '{\n' +
@@ -850,15 +852,16 @@ var tablib = {
     if (popup)
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
-    if (!Tabmix.isVersion(290))
-    Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
-      'function switchIfURIInWindow',
-      'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
-    )._replace(
-      'gBrowser.selectedBrowser.loadURI(aURI.spec);',
-      '{$& \
-       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
-    ).toCode();
+    if (!Tabmix.isVersion(290)) {
+      Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
+        'function switchIfURIInWindow',
+        'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
+      )._replace(
+        'gBrowser.selectedBrowser.loadURI(aURI.spec);',
+        '{$& \
+         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(300)) {
       Tabmix.changeCode(window, "BrowserOpenNewTabOrWindow")._replace(
@@ -1357,8 +1360,7 @@ var tablib = {
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.filter(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
-          function(tab) {return !tab.hidden && !tab.closing;
-      }, this);
+          tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] == aTab)
           continue;
@@ -1443,15 +1445,15 @@ var tablib = {
     };
 
     gBrowser.stopMouseHoverSelect = function(aTab) {
-       // add extra delay after tab removed or after tab flip before we select by hover
-       // to let the user time to move the mouse
-       if (aTab.mouseHoverSelect) {
-          this.setAttribute("preventMouseHoverSelect", true);
-          var delay = aTab.mouseHoverSelectDelay + 50;
-          setTimeout(function removeDelayAfterClose(browser) {
-            browser.removeAttribute("preventMouseHoverSelect");
-          }, delay, this);
-       }
+      // add extra delay after tab removed or after tab flip before we select by hover
+      // to let the user time to move the mouse
+      if (aTab.mouseHoverSelect) {
+        this.setAttribute("preventMouseHoverSelect", true);
+        var delay = aTab.mouseHoverSelectDelay + 50;
+        setTimeout(function removeDelayAfterClose(browser) {
+          browser.removeAttribute("preventMouseHoverSelect");
+        }, delay, this);
+      }
     };
 
     Object.defineProperty(gBrowser, "closingTabsEnum",
@@ -1632,17 +1634,17 @@ var tablib = {
     Tabmix.setNewFunction(gBrowser, "warnAboutClosingTabs", warnAboutClosingTabs);
 
     gBrowser.TMP_selectNewForegroundTab = function(aTab, aLoadInBackground, aUrl, addOwner) {
-       var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
-                      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-       if (!bgLoad) {
-          // set new tab owner
-          addOwner = typeof addOwner == "boolean" ? addOwner : true;
-          if (addOwner)
-             aTab.owner = this.selectedTab;
-          this.selectedTab = aTab;
-          if (aUrl && Tabmix.isNewTabUrls(aUrl))
-            tablib.setURLBarFocus();
-       }
+      var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
+      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
+      if (!bgLoad) {
+        // set new tab owner
+        addOwner = typeof addOwner == "boolean" ? addOwner : true;
+        if (addOwner)
+          aTab.owner = this.selectedTab;
+        this.selectedTab = aTab;
+        if (aUrl && Tabmix.isNewTabUrls(aUrl))
+          tablib.setURLBarFocus();
+      }
     };
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
@@ -1746,7 +1748,7 @@ var tablib = {
         (!TMP_Places.inUpdateBatch || !TMP_Places.currentTab)) {
       let tab = gBrowser.selectedTab;
       if (Tabmix.tabsUtils.isElementVisible(tab))
-       TMP_Places.currentTab = tab;
+        TMP_Places.currentTab = tab;
     }
     return TMP_Places.getTabTitle(aTab, url, title);
   },
@@ -1948,11 +1950,11 @@ Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
 };
 
 Tabmix.newTabUrls = [
-   "about:newtab", "about:blank",
-   "chrome://abouttab/content/text.html",
-   "chrome://abouttab/content/tab.html",
-   "chrome://google-toolbar/content/new-tab.html",
-   "chrome://fastdial/content/fastdial.html"
+  "about:newtab", "about:blank",
+  "chrome://abouttab/content/text.html",
+  "chrome://abouttab/content/tab.html",
+  "chrome://google-toolbar/content/new-tab.html",
+  "chrome://fastdial/content/fastdial.html"
 ];
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {

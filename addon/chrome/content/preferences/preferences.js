@@ -87,22 +87,22 @@ var gPrefWindow = { // jshint ignore:line
 
   handleEvent: function(aEvent) {
     switch (aEvent.type) {
-    case "change":
-      if (aEvent.target.localName != "preference")
-        return;
-      this.updateBroadcaster(aEvent.target);
-      if (!this.instantApply)
-        this.updateApplyButton(aEvent);
-      break;
-    case "beforeaccept":
-      if (this.widthChanged)
-        gAppearancePane.changeTabsWidth();
-      if (!this.instantApply) {
-        // prevent TMP_SessionStore.setService from runing
-        Tabmix.getTopWin().tabmix_setSession = true;
-        Shortcuts.prefsChangedByTabmix = true;
-      }
-      break;
+      case "change":
+        if (aEvent.target.localName != "preference")
+          return;
+        this.updateBroadcaster(aEvent.target);
+        if (!this.instantApply)
+          this.updateApplyButton(aEvent);
+        break;
+      case "beforeaccept":
+        if (this.widthChanged)
+          gAppearancePane.changeTabsWidth();
+        if (!this.instantApply) {
+          // prevent TMP_SessionStore.setService from runing
+          Tabmix.getTopWin().tabmix_setSession = true;
+          Shortcuts.prefsChangedByTabmix = true;
+        }
+        break;
     }
   },
 
@@ -298,17 +298,17 @@ function setPrefAfterImport(aPref) {
 
   // preference that exist in the defaulbranch but no longer in use by Tabmix
   switch (aPref.name) {
-  case "browser.tabs.autoHide":
-    // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
-    Tabmix.prefs.setIntPref("hideTabbar", aPref.value ? 1 : 0);
-    return true;
-  case "browser.tabs.closeButtons":
-    // we use browser.tabs.closeButtons only in 0.3.8.3
-    if (aPref.value < 0 || aPref.value > 6)
-      aPref.value = 6;
-    aPref.value = [3, 5, 1, 1, 2, 4, 1][aPref.value];
-    Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
-    return true;
+    case "browser.tabs.autoHide":
+      // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
+      Tabmix.prefs.setIntPref("hideTabbar", aPref.value ? 1 : 0);
+      return true;
+    case "browser.tabs.closeButtons":
+      // we use browser.tabs.closeButtons only in 0.3.8.3
+      if (aPref.value < 0 || aPref.value > 6)
+        aPref.value = 6;
+      aPref.value = [3, 5, 1, 1, 2, 4, 1][aPref.value];
+      Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
+      return true;
   }
 
   // don't do anything if user locked a preference
@@ -576,9 +576,9 @@ var gIncompatiblePane = {
   },
 
   checkForIncompatible: function(aShowList) {
-     let tmp = {};
-     Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
+    let tmp = {};
+    Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+    tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm

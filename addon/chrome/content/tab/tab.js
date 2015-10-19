@@ -432,7 +432,7 @@ var TabmixTabbar = {
       if (Tabmix.isVersion(220))
         next = tabBar._afterSelectedTab;
       else if (selectedIndex < visibleTabs.length - 1)
-          next = visibleTabs[selectedIndex + 1];
+        next = visibleTabs[selectedIndex + 1];
     }
 
     if (multibar) {
@@ -1246,7 +1246,7 @@ var gTMPprefObserver = {
         TMP_ClosedTabs.setButtonType(Services.prefs.getBoolPref(prefName));
         break;
       case "extensions.tabmix.focusTab":
-          Services.prefs.setBoolPref("browser.tabs.selectOwnerOnClose", Services.prefs.getIntPref(prefName) == 2);
+        Services.prefs.setBoolPref("browser.tabs.selectOwnerOnClose", Services.prefs.getIntPref(prefName) == 2);
         break;
       case "extensions.tabmix.hideIcons":
         this.setMenuIcons();
@@ -1363,15 +1363,15 @@ var gTMPprefObserver = {
         gBrowser.tabContainer.adjustTabstrip();
         break;
       case "extensions.tabmix.tabBarPosition":
-         if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
-           if (window.fullScreen) {
-             TMP_eventListener.onFullScreen(true);
-             let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-             if (bottomToolbox)
-               TMP_eventListener.toggleTabbarVisibility(false);
-           }
-           TabmixTabbar.updateSettings(false);
-         }
+        if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
+          if (window.fullScreen) {
+            TMP_eventListener.onFullScreen(true);
+            let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+            if (bottomToolbox)
+              TMP_eventListener.toggleTabbarVisibility(false);
+          }
+          TabmixTabbar.updateSettings(false);
+        }
         break;
       case "extensions.tabmix.undoClose":
         if (!Tabmix.prefs.getBoolPref("undoClose")) {
@@ -1453,33 +1453,33 @@ var gTMPprefObserver = {
         this.showReloadEveryOnReloadButton();
         break;
       case "extensions.tabmix.tabBarMaxRow":
-          var tabBar = gBrowser.tabContainer;
-          let row = Tabmix.prefs.getIntPref("tabBarMaxRow");
-          if (row < 2) {
-            Tabmix.prefs.setIntPref("tabBarMaxRow", 2);
-            return;
+        var tabBar = gBrowser.tabContainer;
+        let row = Tabmix.prefs.getIntPref("tabBarMaxRow");
+        if (row < 2) {
+          Tabmix.prefs.setIntPref("tabBarMaxRow", 2);
+          return;
+        }
+        // maxRow changed
+        if (TabmixTabbar.isMultiRow) {
+          let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
+          // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
+          if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows)
+            Tabmix.tabsUtils.overflow = false;
+          // after we update the height check if we are still in overflow
+          if (Tabmix.tabsUtils.updateVerticalTabStrip() == "scrollbar") {
+            Tabmix.tabsUtils.overflow = true;
+            tabBar.mTabstrip._updateScrollButtonsDisabledState();
+            if (isVisible)
+              gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
           }
-          // maxRow changed
-          if (TabmixTabbar.isMultiRow) {
-            let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
-            // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
-            if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows)
-              Tabmix.tabsUtils.overflow = false;
-            // after we update the height check if we are still in overflow
-            if (Tabmix.tabsUtils.updateVerticalTabStrip() == "scrollbar") {
-              Tabmix.tabsUtils.overflow = true;
-              tabBar.mTabstrip._updateScrollButtonsDisabledState();
-              if (isVisible)
-                gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
-            }
-          }
-          TabmixTabbar.updateBeforeAndAfter();
+        }
+        TabmixTabbar.updateBeforeAndAfter();
         break;
       case "extensions.tabmix.pinnedTabScroll":
         gBrowser.tabContainer._positionPinnedTabs();
         break;
       case "extensions.tabmix.offsetAmountToScroll":
-          gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
+        gBrowser.tabContainer.mTabstrip.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
         break;
       case "browser.tabs.onTop":
         if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
@@ -1657,16 +1657,16 @@ var gTMPprefObserver = {
     let marginEnd = style.getPropertyValue(sMarginEnd);
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
-             let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
-                            '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
-                            '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
-                            '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
-                            '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
-                            ':not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > ' +
-                            '.tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
-                            '.tab-label[tabmix="true"],' +
-                            '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
-                            '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
+    let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
+        '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
+        '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
+        ':not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > ' +
+        '.tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
+        '.tab-label[tabmix="true"],' +
+        '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
+        '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])')
                             .replace(/%faviconized%/g, '')
@@ -2197,51 +2197,51 @@ var gTMPprefObserver = {
     }
 
     if (Tabmix.prefs.prefHasUserValue("undoCloseCache")) {
-       var max_tabs_undo = getPrefByType("extensions.tabmix.undoCloseCache", 5, "IntPref");
-       Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", max_tabs_undo);
+      var max_tabs_undo = getPrefByType("extensions.tabmix.undoCloseCache", 5, "IntPref");
+      Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", max_tabs_undo);
     }
     // remove disp=attd&view=att it's make problem with gMail
     if (Tabmix.prefs.prefHasUserValue("filetype")) {
-       var filetype = Tabmix.prefs.getCharPref("filetype");
-       filetype = filetype.replace("/disp=attd&view=att/", "").replace("  ", " ").trim();
-       Tabmix.prefs.setCharPref("filetype", filetype);
+      var filetype = Tabmix.prefs.getCharPref("filetype");
+      filetype = filetype.replace("/disp=attd&view=att/", "").replace("  ", " ").trim();
+      Tabmix.prefs.setCharPref("filetype", filetype);
     }
     // 2008-08-17
     if (Tabmix.prefs.prefHasUserValue("opentabfor.search")) {
-       Services.prefs.setBoolPref("browser.search.openintab", Tabmix.prefs.getBoolPref("opentabfor.search"));
-       Tabmix.prefs.clearUserPref("opentabfor.search");
+      Services.prefs.setBoolPref("browser.search.openintab", Tabmix.prefs.getBoolPref("opentabfor.search"));
+      Tabmix.prefs.clearUserPref("opentabfor.search");
     }
     // 2008-09-23
     if (Tabmix.prefs.prefHasUserValue("keepWindow")) {
-       Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !Tabmix.prefs.getBoolPref("keepWindow"));
-       Tabmix.prefs.clearUserPref("keepWindow");
+      Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !Tabmix.prefs.getBoolPref("keepWindow"));
+      Tabmix.prefs.clearUserPref("keepWindow");
     }
     // 2008-09-23
     if (Services.prefs.prefHasUserValue("browser.ctrlTab.mostRecentlyUsed")) {
-       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                  Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
-       Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
+      Services.prefs.setBoolPref("browser.ctrlTab.previews",
+                                 Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
+      Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
     }
     // 2008-09-28
     if (Tabmix.prefs.prefHasUserValue("lasttab.handleCtrlTab")) {
-       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                  Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
-       Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
+      Services.prefs.setBoolPref("browser.ctrlTab.previews",
+                                 Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
+      Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("maxWidth")) {
-       let val = getPrefByType("extensions.tabmix.maxWidth", 250, "IntPref");
-       Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
+      let val = getPrefByType("extensions.tabmix.maxWidth", 250, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
     }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("minWidth")) {
-       let val = getPrefByType("extensions.tabmix.minWidth", 100, "IntPref");
-       Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
+      let val = getPrefByType("extensions.tabmix.minWidth", 100, "IntPref");
+      Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
     }
     // 2009-01-31
     if (Tabmix.prefs.prefHasUserValue("newTabButton.leftside")) {
-       Tabmix.prefs.setIntPref("newTabButton.position", Tabmix.prefs.getBoolPref("newTabButton.leftside") ? 0 : 2);
-       Tabmix.prefs.clearUserPref("newTabButton.leftside");
+      Tabmix.prefs.setIntPref("newTabButton.position", Tabmix.prefs.getBoolPref("newTabButton.leftside") ? 0 : 2);
+      Tabmix.prefs.clearUserPref("newTabButton.leftside");
     }
     // 2009-10-10
     // swap prefs --> warn when closing window "extensions.tabmix.windows.warnOnClose"
@@ -2249,15 +2249,15 @@ var gTMPprefObserver = {
     //                warn when closing tabs "browser.tabs.warnOnClose"
     //                replaced with "extensions.tabmix.tabs.warnOnClose"
     if (Tabmix.prefs.prefHasUserValue("windows.warnOnClose")) {
-       Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
-       Services.prefs.setBoolPref("browser.tabs.warnOnClose", Tabmix.prefs.getBoolPref("windows.warnOnClose"));
-       Tabmix.prefs.clearUserPref("windows.warnOnClose");
+      Tabmix.prefs.setBoolPref("tabs.warnOnClose", Services.prefs.getBoolPref("browser.tabs.warnOnClose"));
+      Services.prefs.setBoolPref("browser.tabs.warnOnClose", Tabmix.prefs.getBoolPref("windows.warnOnClose"));
+      Tabmix.prefs.clearUserPref("windows.warnOnClose");
     }
     // 2010-03-07
     if (Tabmix.prefs.prefHasUserValue("extraIcons")) {
-       Tabmix.prefs.setBoolPref("extraIcons.locked", Tabmix.prefs.getBoolPref("extraIcons"));
-       Tabmix.prefs.setBoolPref("extraIcons.protected", Tabmix.prefs.getBoolPref("extraIcons"));
-       Tabmix.prefs.clearUserPref("extraIcons");
+      Tabmix.prefs.setBoolPref("extraIcons.locked", Tabmix.prefs.getBoolPref("extraIcons"));
+      Tabmix.prefs.setBoolPref("extraIcons.protected", Tabmix.prefs.getBoolPref("extraIcons"));
+      Tabmix.prefs.clearUserPref("extraIcons");
     }
     // 2010-06-05
     if (Tabmix.prefs.prefHasUserValue("tabXMode")) {
@@ -2353,19 +2353,19 @@ var gTMPprefObserver = {
       Tabmix.prefs.setBoolPref("loadBookmarksAndReplace", Services.prefs.getBoolPref(pref));
       Services.prefs.clearUserPref(pref);
     }
-try {
-    // 2012-06-22 - remove the use of extensions.tabmix.tabMinWidth/tabMaxWidth
-    // other extensions still use browser.tabs.tabMinWidth/tabMaxWidth
-    if (Tabmix.prefs.prefHasUserValue("tabMinWidth")) {
-      let val = getPrefByType("extensions.tabmix.tabMinWidth", 100, "IntPref");
-      Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
-    }
-    if (Tabmix.prefs.prefHasUserValue("tabMaxWidth")) {
-      let val = getPrefByType("extensions.tabmix.tabMaxWidth", 250, "IntPref");
-      Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
-      Tabmix.prefs.clearUserPref("tabMaxWidth");
-    }
-} catch (ex) {Tabmix.assert(ex);}
+    try {
+      // 2012-06-22 - remove the use of extensions.tabmix.tabMinWidth/tabMaxWidth
+      // other extensions still use browser.tabs.tabMinWidth/tabMaxWidth
+      if (Tabmix.prefs.prefHasUserValue("tabMinWidth")) {
+        let val = getPrefByType("extensions.tabmix.tabMinWidth", 100, "IntPref");
+        Services.prefs.setIntPref("browser.tabs.tabMinWidth", val);
+      }
+      if (Tabmix.prefs.prefHasUserValue("tabMaxWidth")) {
+        let val = getPrefByType("extensions.tabmix.tabMaxWidth", 250, "IntPref");
+        Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
+        Tabmix.prefs.clearUserPref("tabMaxWidth");
+      }
+    } catch (ex) {Tabmix.assert(ex);}
     // 2013-01-21 - lock hideIcons to true in mac
     if (Services.appinfo.OS == "Darwin" && !Tabmix.prefs.prefIsLocked("hideIcons")) {
       Tabmix.defaultPrefs.setBoolPref("hideIcons", true);
@@ -2628,7 +2628,7 @@ var TabmixProgressListener = {
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
               !tab.hasAttribute("dontremovevisited") && tab.getAttribute(TabmixSvc.selectedAtt) != "true")
             tab.removeAttribute("visited");
-            Tabmix.setTabStyle(tab);
+          Tabmix.setTabStyle(tab);
         }
         // see gBrowser.openLinkWithHistory in tablib.js
         if (tab.hasAttribute("dontremovevisited"))

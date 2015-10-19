@@ -199,8 +199,7 @@
     this._updateUIpageBounds = false;
   };
 
-  TabmixSessionManager._aftertWindowStateReady =
-        function SM__aftertWindowStateReady(aOverwriteTabs, showNotification) {
+  TabmixSessionManager._aftertWindowStateReady = function(aOverwriteTabs, showNotification) {
     if (!aOverwriteTabs)
       this._groupItems = this._tabviewData["tabview-group"];
 
