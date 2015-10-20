@@ -17,3 +17,17 @@
     #tabbrowser-tabs[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
   clip-path: none !important;
 }
+
+/* Override Windows 10 rulse */
+@media not all and (-moz-os-version: windows-xp) {
+  @media not all and (-moz-os-version: windows-vista) {
+    @media not all and (-moz-os-version: windows-win7) {
+      @media not all and (-moz-os-version: windows-win8) {
+        #tabbrowser-tabs[tabmix_currentStyle~="bg"] > .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
+          background-size: auto 100%, auto 100%, auto 100%;
+          background-clip: content-box;
+        }
+      }
+    }
+  }
+}

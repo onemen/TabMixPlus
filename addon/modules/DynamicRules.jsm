@@ -46,6 +46,7 @@ this.DynamicRules = {
     this._initialized = true;
 
     this.treeStyleTab = aWindow.Tabmix.extensions.treeStyleTab;
+    this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     Prefs.addObserver("", this, false);
     STYLENAMES.forEach(function(pref) {
@@ -151,11 +152,11 @@ this.DynamicRules = {
             space20 + bottomBorder +
             space20 + bgImage.body;
       bgImage.bgselected = 'url("chrome://browser/skin/tabbrowser/tab-active-middle.png"),\n' +
-            space20 + bottomBorder +
+            space20 + (this.windows10 ? "none,\n" : bottomBorder) +
             space20 + 'linear-gradient(transparent, transparent 2px, #topColor 2px, #bottomColor)';
       bgImage.startEndselected = bgImage.bgselected;
       bgImage.bghover = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),\n' +
-            space20 + bottomBorder +
+            space20 + (this.windows10 ? "none,\n" : bottomBorder) +
             space20 + 'linear-gradient(transparent, transparent 2px,\n' +
             space26 + 'rgba(254, 254, 254, 0.72) 2px, rgba(254, 254, 254, 0.72) 2px,\n' +
             space26 + 'rgba(250, 250, 250, 0.88) 3px, rgba(250, 250, 250, 0.88) 3px,\n' +
