@@ -10,6 +10,8 @@ var gMenuPane = { // jshint ignore:line
     if (Tabmix.isVersion(430)) {
       $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
         browserWindow.gNavigatorBundle.getString("unmuteTab.label");
+    } else {
+      $("muteTab").hidden = true;
     }
 
     // if Tabview exist copy its menu label
