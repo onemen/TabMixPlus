@@ -120,7 +120,12 @@ var tablib = { // eslint-disable-line
 
   change_gBrowser: function change_gBrowser() {
     var obj, fnName;
-    if (typeof Fd == "object" && typeof Fd.addTab == "function")
+    // RequestPolicy Continued extension https://requestpolicycontinued.github.io
+    var rp = gBrowser.rpcontinuedWrappedFunctions;
+    if (typeof rp == "object" && typeof rp.addTab == "object" &&
+        typeof rp.addTab.main == "function") {
+      [obj, fnName] = [rp.addTab, "rpcontinuedWrappedFunctions.addTab.main"];
+    } else if (typeof Fd == "object" && typeof Fd.addTab == "function")
       [obj, fnName] = [Fd, "Fd.addTab"];
     else if (Tabmix.extensions.ieTab2)
       [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
