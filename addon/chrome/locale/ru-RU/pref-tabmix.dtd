@@ -147,7 +147,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
 <!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
 <!ENTITY maxrow.label "Максимальное число строк:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Разрешить прокручивать прикрепленные вкладки">
 <!ENTITY offsetAmountToScroll.label "Во время прокрутки показывать часть следующей вкладки">
 <!ENTITY smoothScroll.label "Использовать плавную прокрутку">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
