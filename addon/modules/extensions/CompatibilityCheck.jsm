@@ -57,7 +57,7 @@ CompatibilityCheck.prototype = {
     }
 
     function AddOn(addon) {
-      this.name = addon.name;
+      this._name = addon.name;
       this.id = addon.id;
       this._version = addon.version;
     }
