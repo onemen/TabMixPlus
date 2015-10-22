@@ -7,8 +7,15 @@ const {interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
+XPCOMUtils.defineLazyServiceGetter(this, "aboutNewTabService",
+                                   "@mozilla.org/browser/aboutnewtab-service;1",
+                                   "nsIAboutNewTabService");
+
 XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
                                   "resource:///modules/NewTabURL.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
+                                  "resource://tabmixplus/Services.jsm");
 
 const FIREFOX_PREF = "browser" + ".newtab.url";
 const ABOUT_NEW_TAB = "about:newtab";
@@ -21,6 +28,10 @@ this.Tabmix_NewTabURL = {
   ]),
 
   init: function() {
+    if (!TabmixSvc.version(440)) {
+      this.updateNewTabURL = this._updateNewTabURL;
+    }
+
     if (Services.prefs.prefHasUserValue(FIREFOX_PREF))
       this.updateNewTabURL();
 
@@ -36,12 +47,23 @@ this.Tabmix_NewTabURL = {
     }
   },
 
-  updateNewTabURL: function() {
+  // for Firefox 41 - 43
+  _updateNewTabURL: function() {
     let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
     if (value == ABOUT_NEW_TAB)
       NewTabURL.reset();
     else
       NewTabURL.override(value);
+  },
+
+  // for Firefox 44+
+  updateNewTabURL: function() {
+    let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
+    if (value == ABOUT_NEW_TAB) {
+      aboutNewTabService.resetNewTabURL();
+    } else {
+      aboutNewTabService.newTabURL = value;
+    }
   }
 };
 
