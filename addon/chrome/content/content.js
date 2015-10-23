@@ -167,13 +167,24 @@ var TabmixClickEventHandler = {
 
     let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
 
-    let json = {button: event.button, shiftKey: event.shiftKey,
-                 ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-                 altKey: event.altKey, href: null, title: null,
-                 bookmark: false};
+    // get referrer attribute from clicked link and parse it
+    // if per element referrer is enabled, the element referrer overrules
+    // the document wide referrer
+    let referrerPolicy = TabmixSvc.version(380) ? ownerDoc.referrerPolicy : null;
+    if (TabmixSvc.version(420) &&
+        Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
+        node) {
+      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(node.
+                              getAttribute("referrer"));
+      if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
+        referrerPolicy = referrerAttrValue;
+      }
+    }
 
-    if (TabmixSvc.version(380))
-      json.referrerPolicy = ownerDoc.referrerPolicy;
+    let json = {button: event.button, shiftKey: event.shiftKey,
+                ctrlKey: event.ctrlKey, metaKey: event.metaKey,
+                altKey: event.altKey, href: null, title: null,
+                bookmark: false, referrerPolicy: referrerPolicy};
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
@@ -202,6 +213,14 @@ var TabmixClickEventHandler = {
     href = data._href;
 
     if (href) {
+      if (TabmixSvc.version(410)) {
+        try {
+          BrowserUtils.urlSecurityCheck(href, node.ownerDocument.nodePrincipal);
+        } catch (e) {
+          return;
+        }
+      }
+
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
@@ -213,8 +232,7 @@ var TabmixClickEventHandler = {
           }
         }
       }
-      if (TabmixSvc.version(370))
-        json.noReferrer = BrowserUtils.linkHasNoReferrer(node);
+      json.noReferrer = TabmixSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
 
       sendAsyncMessage("Content:Click", json);
       return;
@@ -267,7 +285,7 @@ var TabmixClickEventHandler = {
     // In case of XLink, we don't return the node we got href from since
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
-    return [href ? makeURI(href, null, baseURI).spec : null, null];
+    return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null];
   },
 
   get _focusedWindow() {
