@@ -15,6 +15,7 @@ var TMP_Places = {
       case "load":
         window.removeEventListener("load", this, false);
         this.init();
+        Tabmix.onContentLoaded.change_utilityOverlay();
         break;
       case "unload":
         window.removeEventListener("unload", this, false);
@@ -70,71 +71,6 @@ var TMP_Places = {
       ).toCode();
     }
 
-    // fix small bug when the event is not mouse event
-    // inverse focus of middle/ctrl/meta clicked bookmarks/history
-    // don't inverse focus when called from onPopupClick and One-Click Search
-    // Bar Interface is on
-    // when we are in single window mode set the function to return "tab"
-    let $LF = '\n  ';
-    Tabmix.changeCode(window, "whereToOpenLink")._replace(
-      '{', '{\n' +
-      'if (e && e.tabmixContentClick) {\n' +
-      '  let {where, suppressTabsOnFileDownload} = e.tabmixContentClick;\n' +
-      '  return suppressTabsOnFileDownload ? "current" : where;\n' +
-      '}\n'
-    )._replace(
-      'var middle = !ignoreButton && e.button == 1;',
-      'var middle = !ignoreButton && e.button && e.button == 1;'
-    )._replace(
-      'return shift ? "tabshifted" : "tab";',
-      '{let pref = Tabmix.isCallerInList("openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick") ?\
-            "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
-      'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
-      '                        Tabmix.callerName() != "onPopupClick";' + $LF +
-      'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
-      '  shift = !shift;' + $LF +
-      '$&}'
-    )._replace(
-      'return "window";',
-      'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
-    ).toCode();
-
-    Tabmix.changeCode(window, "openUILinkIn")._replace(
-      'params.fromChrome = true;',
-      '$&\n' +
-      '  if (Tabmix.isCallerInList("BG_observe"))\n' +
-      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
-    ).toCode();
-
-    // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    // in case it warp the function in its object
-    let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
-
-    Tabmix.changeCode(fnObj, fnName)._replace(
-      /aRelatedToCurrent\s*= params.relatedToCurrent;/,
-      '$& \
-       var bookMarkId = params.bookMarkId;'
-    )._replace(
-      'where == "current" && w.gBrowser.selectedTab.pinned',
-      '$& && !params.suppressTabsOnFileDownload'
-    )._replace(
-      'var w = getTopWin();',
-      '$&\n' +
-      '  if (w && where == "window" && !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ?\n' +
-      '                                 aIsPrivate : false)) where = "tab";'
-    )._replace(
-      /Services.ww.openWindow[^;]*;/,
-      'let newWin = $&\n    if (newWin && bookMarkId)\n        newWin.bookMarkIds = bookMarkId;'
-    )._replace(
-      /(\})(\)?)$/,
-      '  var tab = where == "current" ?\n' +
-      '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
-      '  if (where == "current")' +
-      '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);' +
-      '$1$2'
-    ).toCode();
-
     // prevent error when closing window with sidbar open
     var docURI = window.document.documentURI;
     if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
@@ -149,20 +85,6 @@ var TMP_Places = {
 
   deinit: function TMP_PC_deinit() {
     this.stopObserver();
-  },
-
-  // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-  // object name wmn replace with xnotifier for version 3.0+
-  getXnotifierFunction: function(aName) {
-    if (typeof com == "object" && typeof com.tobwithu == "object") {
-      let fn = ["wmn", "xnotifier"].filter(function(f) {
-        return typeof com.tobwithu[f] == "object" &&
-          typeof com.tobwithu[f][aName] == "function";
-      });
-      if (fn.length)
-        return [com.tobwithu[fn[0]], aName];
-    }
-    return [window, aName];
   },
 
   historyMenuItemsTitle: function TMP_PC_historyMenuItemsTitle(aEvent) {
@@ -715,6 +637,160 @@ TMP_Places.contextMenu = {
       openInWindow.setAttribute("default", true);
     }
   }
+};
+
+Tabmix.onContentLoaded = {
+  changeCode: function() {
+    this.change_miscellaneous();
+    this.change_utilityOverlay();
+  },
+
+  change_miscellaneous: function() {
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
+      /allowMixedContent:|charset:/,
+      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
+      '      $&'
+    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
+
+    if ("_update" in TabsInTitlebar) {
+      // set option to Prevent double click on Tab-bar from changing window size.
+      Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
+        'function $(id)',
+        'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
+      )._replace(
+        'this._dragBindingAlive',
+        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
+      )._replace(
+        'function rect(ele)',
+        'let rect = function _rect(ele)', // for strict mode
+        {check: !Tabmix.isVersion(440)}
+      )._replace(
+        'function verticalMargins(',
+        'let verticalMargins = $&',
+        {check: Tabmix._debugMode && Tabmix.isVersion(280) && !Tabmix.isVersion(440)}
+      )._replace(
+        'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
+        'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
+        {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
+      )._replace(
+        /(\})(\)?)$/,
+        // when we get in and out of tabsintitlebar mode call updateScrollStatus
+        '  if (TabmixTabbar._enablePositionCheck &&\n  ' +
+        '      TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition) {\n  ' +
+        '    TabmixTabbar.updateScrollStatus();\n  ' +
+        '  }\n' +
+        '$1$2'
+      ).toCode();
+    }
+
+    // we can't use TabPinned.
+    // gBrowser.pinTab call adjustTabstrip that call updateScrollStatus
+    // before it dispatch TabPinned event.
+    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
+      'this.tabContainer.adjustTabstrip();',
+      '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
+      '    aTab.removeAttribute("width");' +
+      '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
+      '      !aTab.hasAttribute("locked") && "lockTab" in this) {' +
+      '    this.lockTab(aTab);' +
+      '    aTab.setAttribute("_lockedAppTabs", "true");' +
+      '  }' +
+      '  this.tabContainer.adjustTabstrip(true);' +
+      '  TabmixTabbar.updateScrollStatus();' +
+      '  TabmixTabbar.updateBeforeAndAfter();'
+    ).toCode();
+
+  },
+
+  change_utilityOverlay: function() {
+    // fix small bug when the event is not mouse event
+    // inverse focus of middle/ctrl/meta clicked bookmarks/history
+    // don't inverse focus when called from onPopupClick and One-Click Search
+    // Bar Interface is on
+    // when we are in single window mode set the function to return "tab"
+    let $LF = '\n    ';
+    Tabmix.changeCode(window, "whereToOpenLink")._replace(
+      '{', '{\n' +
+      'if (e && e.tabmixContentClick) {\n' +
+      '  let {where, suppressTabsOnFileDownload} = e.tabmixContentClick;\n' +
+      '  return suppressTabsOnFileDownload ? "current" : where;\n' +
+      '}\n'
+    )._replace(
+      'var middle = !ignoreButton && e.button == 1;',
+      'var middle = !ignoreButton && e.button && e.button == 1;'
+    )._replace(
+      'return shift ? "tabshifted" : "tab";',
+      '{' + $LF +
+      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick"];' + $LF +
+      'let pref = Tabmix.isCallerInList(list) ?' + $LF +
+      '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
+      'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
+      '                        Tabmix.callerName() != "onPopupClick";' + $LF +
+      'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
+      '  shift = !shift;' + $LF +
+      '$&' + $LF +
+      '}'
+    )._replace(
+      'return "window";',
+      'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
+    ).toCode();
+
+    Tabmix.changeCode(window, "openUILinkIn")._replace(
+      'params.fromChrome = true;',
+      '$&\n' +
+      '  if (Tabmix.isCallerInList("BG_observe"))\n' +
+      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
+    ).toCode();
+
+    // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+    // in case it warp the function in its object
+    let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
+    Tabmix.changeCode(fnObj, fnName)._replace(
+      /aRelatedToCurrent\s*= params.relatedToCurrent;/,
+      '$&\n' +
+      '  var bookMarkId            = params.bookMarkId;'
+    )._replace(
+      'where == "current" && w.gBrowser.selectedTab.pinned',
+      '$& && !params.suppressTabsOnFileDownload'
+    )._replace(
+      'var w = getTopWin();',
+      '$&\n' +
+      '  if (w && where == "window" &&\n' +
+      '      !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) {\n' +
+      '    where = "tab";\n' +
+      '  }'
+    )._replace(
+      /Services.ww.openWindow[^;]*;/,
+      'let newWin = $&\n' +
+      '    if (newWin && bookMarkId) {\n' +
+      '        newWin.bookMarkIds = bookMarkId;\n' +
+      '    }'
+    )._replace(
+      /(\})(\)?)$/,
+      '  var tab = where == "current" ?\n' +
+      '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
+      '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+      '  if (where == "current") {\n' +
+      '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
+      '  }\n' +
+      '$1$2'
+    ).toCode();
+  },
+
+  // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
+  // object name wmn replace with xnotifier for version 3.0+
+  getXnotifierFunction: function(aName) {
+    if (typeof com == "object" && typeof com.tobwithu == "object") {
+      let fn = ["wmn", "xnotifier"].filter(function(f) {
+        return typeof com.tobwithu[f] == "object" &&
+          typeof com.tobwithu[f][aName] == "function";
+      });
+      if (fn.length)
+        return [com.tobwithu[fn[0]], aName];
+    }
+    return [window, aName];
+  }
+
 };
 
 /** DEPRECATED **/

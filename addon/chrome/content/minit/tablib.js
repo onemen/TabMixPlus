@@ -693,7 +693,7 @@ var tablib = { // eslint-disable-line
 
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    [fnObj, fnName] = TMP_Places.getXnotifierFunction("openNewTabWith");
+    [fnObj, fnName] = Tabmix.onContentLoaded.getXnotifierFunction("openNewTabWith");
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.changeCode(fnObj, fnName)._replace(
@@ -1057,12 +1057,6 @@ var tablib = { // eslint-disable-line
 
       this.duplicateTab(gBrowser.selectedTab, url);
     };
-
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
-      /allowMixedContent:|charset:/,
-      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
-      '      $&'
-    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
     gBrowser.openInverseLink = function() {
       var {target, linkURL} = gContextMenu;
@@ -1969,4 +1963,3 @@ Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
 
   return false;
 };
-

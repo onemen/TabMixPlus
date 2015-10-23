@@ -373,6 +373,10 @@ var TMP_eventListener = {
       TMP_extensionsCompatibility.onContentLoaded();
     } catch (ex) {Tabmix.assert(ex);}
 
+    try {
+      Tabmix.onContentLoaded.changeCode();
+    } catch (ex) {Tabmix.assert(ex);}
+
     Tabmix.contentAreaClick.init();
 
     // make sure AVG Security Toolbar initialized
@@ -388,68 +392,10 @@ var TMP_eventListener = {
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
 
-    if ("_update" in TabsInTitlebar) {
-      // set option to Prevent double click on Tab-bar from changing window size.
-      Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
-        'function $(id)',
-        'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
-      )._replace(
-        'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
-      )._replace(
-        'function rect(ele)',
-        'let rect = function _rect(ele)', // for strict mode
-        {check: !Tabmix.isVersion(440)}
-      )._replace(
-        'function verticalMargins(',
-        'let verticalMargins = $&',
-        {check: Tabmix._debugMode && Tabmix.isVersion(280) && !Tabmix.isVersion(440)}
-      )._replace(
-        'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
-        'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
-        {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
-      )._replace(
-        /(\})(\)?)$/,
-        // when we get in and out of tabsintitlebar mode call updateScrollStatus
-        'if (TabmixTabbar._enablePositionCheck && TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition)\
-           TabmixTabbar.updateScrollStatus();\
-         $1$2'
-      ).toCode();
-    }
-
     try {
       if (TMP_TabView.installed)
         TMP_TabView._patchBrowserTabview();
     } catch (ex) {Tabmix.assert(ex);}
-
-    // we can't use TabPinned.
-    // gBrowser.pinTab call adjustTabstrip that call updateScrollStatus
-    // before it dispatch TabPinned event.
-    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
-      'this.tabContainer.adjustTabstrip();',
-      '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
-      '    aTab.removeAttribute("width");' +
-      '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
-      '      !aTab.hasAttribute("locked") && "lockTab" in this) {' +
-      '    this.lockTab(aTab);' +
-      '    aTab.setAttribute("_lockedAppTabs", "true");' +
-      '  }' +
-      '  this.tabContainer.adjustTabstrip(true);' +
-      '  TabmixTabbar.updateScrollStatus();' +
-      '  TabmixTabbar.updateBeforeAndAfter();'
-    ).toCode();
-
-    // prevent faviconize use its own adjustTabstrip
-    // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
-    if ("faviconize" in window && "override" in window.faviconize) {
-      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
-        '!tab.pinned',
-        '$& && !tab.hasAttribute("faviconized")'
-      ).toCode();
-
-      // change adjustTabstrip
-      window.faviconize.override.adjustTabstrip = function() { };
-    }
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {

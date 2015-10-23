@@ -201,6 +201,18 @@ var TMP_extensionsCompatibility = {
       Tabmix.extensions.gIeTab = {obj: "gIeTab2", folder: "ietab2"};
     else if (typeof window.gIeTab == "object")
       Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
+
+    // prevent faviconize use its own adjustTabstrip
+    // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
+    if ("faviconize" in window && "override" in window.faviconize) {
+      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
+        '!tab.pinned',
+        '$& && !tab.hasAttribute("faviconized")'
+      ).toCode();
+
+      // change adjustTabstrip
+      window.faviconize.override.adjustTabstrip = function() { };
+    }
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
