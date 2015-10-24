@@ -209,7 +209,7 @@ var TabmixClickEventHandler = {
     if (data.where == "handled")
       return;
 
-    json.tabmix = data;
+    json.tabmixContentClick = data;
     href = data._href;
 
     if (href) {

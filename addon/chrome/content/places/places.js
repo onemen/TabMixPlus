@@ -77,6 +77,12 @@ var TMP_Places = {
     // when we are in single window mode set the function to return "tab"
     let $LF = '\n  ';
     Tabmix.changeCode(window, "whereToOpenLink")._replace(
+      '{', '{\n' +
+      'if (e && e.tabmixContentClick) {\n' +
+      '  let {where, suppressTabsOnFileDownload} = e.tabmixContentClick;\n' +
+      '  return suppressTabsOnFileDownload ? "current" : where;\n' +
+      '}\n'
+    )._replace(
       'var middle = !ignoreButton && e.button == 1;',
       'var middle = !ignoreButton && e.button && e.button == 1;'
     )._replace(

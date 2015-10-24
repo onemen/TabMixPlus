@@ -58,8 +58,6 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-var Tabmix = {};
-
 var ContentClickInternal = {
   _timer: null,
   _initialized: false,
@@ -69,16 +67,7 @@ var ContentClickInternal = {
       return;
     this._initialized = true;
 
-    try {
-      Cu.import("resource:///modules/ContentClick.jsm");
-      ContentClick.contentAreaClick.toString();
-    } catch (ex) {
-      this.functions = [];
-      return;
-    }
-
-    Tabmix._debugMode = TabmixSvc.debugMode();
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
+    Cu.import("resource:///modules/ContentClick.jsm");
 
     let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
     mm.addMessageListener("TabmixContent:Click", this);
@@ -106,18 +95,36 @@ var ContentClickInternal = {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });
 
-    Tabmix.changeCode(ContentClick, "ContentClick.contentAreaClick")._replace(
-      'var where = window.whereToOpenLink(json);',
-      'var data = json.tabmix || {where: window.whereToOpenLink(json)};\n' +
-      '    var {where, suppressTabsOnFileDownload} = data;'
-    )._replace(
-      'where == "current"',
-      '!json.tabmix && where == "current" || where == "default"'
-    )._replace(
-      'charset:',
-      'suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,\n' +
-      '                   $&'
-    ).toCode();
+    ContentClick.contentAreaClick = function(json, browser) {
+      this.tabmix_contentAreaClick.apply(this, arguments);
+
+      // we add preventDefault in our content.js when 'where' is not the
+      // 'default', original ContentClick.contentAreaClick handle all casses
+      // except when 'where' equals 'current'
+      if (!json.tabmixContentClick || !json.href || json.bookmark) {
+        return;
+      }
+
+      let window = browser.ownerDocument.defaultView;
+      var where = window.whereToOpenLink(json);
+      if (where != "current") {
+        return;
+      }
+
+      let suppressTabsOnFileDownload =
+          json.tabmixContentClick.suppressTabsOnFileDownload || false;
+      let params = {charset: browser.characterSet,
+                    suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+                    referrerURI: browser.documentURI,
+                    referrerPolicy: json.referrerPolicy,
+                    noReferrer: json.noReferrer};
+      window.openLinkIn(json.href, where, params);
+
+      try {
+        if (!PrivateBrowsingUtils.isWindowPrivate(window))
+          PlacesUIUtils.markPageAsFollowedLink(json.href);
+      } catch (ex) { /* Skip invalid URIs. */ }
+    };
   },
 
   receiveMessage: function(message) {
