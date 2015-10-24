@@ -169,18 +169,22 @@ this.SingleWindowModeUtils = {
         newWindow.PlacesStarButton.uninit = function() {};
       }
       newWindow.OfflineApps.uninit = function() {};
-      var obs = Services.obs;
-      obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
-      if (!TabmixSvc.version(340))
-        obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
       newWindow.IndexedDBPromptHelper.init();
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
-      let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
-      obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
+      var obs = Services.obs;
+      if (!TabmixSvc.version(440)) {
+        obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
+        if (!TabmixSvc.version(340))
+          obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
+        let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
+        obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
+      }
       newWindow.gPrivateBrowsingUI.uninit = function() {};
-      existingWindow.setTimeout(function() {
+    } catch (ex) {existingWindow.Tabmix.obj(ex);}
+    existingWindow.setTimeout(function() {
+      try {
         // restore window dimensions, to prevent flickring in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
@@ -194,7 +198,7 @@ this.SingleWindowModeUtils = {
         }
         // for the case the window is minimized or not in focus
         existingWindow.focus();
-      }, 0);
-    } catch (ex) {existingWindow.Tabmix.obj(ex);}
+      } catch (ex) {existingWindow.Tabmix.obj(ex);}
+    }, 0);
   }
 };
