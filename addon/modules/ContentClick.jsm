@@ -418,8 +418,10 @@ var ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (wrappedNode && wrappedNode.targetIsFrame)
+    if (wrappedNode && wrappedNode.targetIsFrame &&
+        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return ["default@13"];
+    }
 
     /*
      * open targeted links in the current tab only if certain conditions are met.
@@ -540,8 +542,10 @@ var ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (wrappedNode && wrappedNode.targetIsFrame)
+    if (wrappedNode && wrappedNode.targetIsFrame &&
+        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return "14";
+    }
 
     /*
      * open targeted links in the current tab only if certain conditions are met.

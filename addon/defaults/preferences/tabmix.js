@@ -2,6 +2,7 @@
 
 pref("extensions.tabmix.disableIncompatible", true);
 pref("extensions.tabmix.linkTarget", false);
+pref("extensions.tabmix.targetIsFrame", true);
 
 pref("extensions.tabmix.opentabforLinks", 0); // 2010-09-16 we replaced speLink
 pref("extensions.tabmix.lockallTabs", false); // added 2010-09-16

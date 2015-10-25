@@ -21,6 +21,7 @@
       <preference id="pref_divertedWindowOpen"
                   name="browser.link.open_newwindow.restriction"                       type="int"/>
       <preference id="pref_linkTarget"         name="extensions.tabmix.linkTarget"     type="bool"/>
+      <preference id="pref_targetIsFrame"      name="extensions.tabmix.targetIsFrame"  type="bool"/>
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
                   notChecked="0"
@@ -86,8 +87,6 @@
             </hbox>
             <!-- Special control of links -->
             <separator/>
-            <!-- Force link with target attribute to open in current tab -->
-            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget" observes="obs_opentabforAllLinks"/>
             <checkbox_tmp id="forceLinkToTab" label="&speLink.label;"
                           preference="pref_opentabforLinks"
                           control="opentabforLinks"
@@ -97,6 +96,10 @@
               <radio value="1" label="&speLink.allLinks;" observes="obs_opentabforLinks"/>
               <radio value="2" label="&speLink.external;" observes="obs_opentabforLinks"/>
             </radiogroup>
+            <!-- Force link with target attribute to open in current tab -->
+            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"
+                          observes="obs_opentabforAllLinks"/>
+            <checkbox_tmp id="targetIsFrame" label="&targetIsFrame.label;" preference="pref_targetIsFrame"/>
             <separator/>
             <!-- Enable Single Window Mode -->
             <checkbox_tmp id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>

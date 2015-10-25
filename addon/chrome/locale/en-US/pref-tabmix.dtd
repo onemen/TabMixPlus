@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Allows resized popups">
 <!ENTITY divertedWindowOpen.none "Allows all popups">
 <!ENTITY linkTarget.label "Open links with a target attribute in current tab">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Prevent blank tabs when downloading files">
 <!ENTITY edit.label "Edit">
 <!ENTITY speLink.label "Force to open in new tab:">
