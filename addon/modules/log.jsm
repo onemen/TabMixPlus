@@ -275,7 +275,9 @@ options = {
       this.trace(msg + (aError || ""), "errorFlag", this.caller);
       return;
     }
-    if (/Error/.test(Object.getPrototypeOf(aError))) {
+    if (typeof aError == "object" &&
+        (aError instanceof Components.Exception ||
+         aError instanceof Error)) {
       this.reportError(aError, aMsg);
     }
 
