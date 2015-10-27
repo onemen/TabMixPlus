@@ -191,9 +191,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     }
 
     // At the moment we must init TabmixSessionManager before sessionStore.init
-    var [obj, fn] = "gBrowserInit" in window ?
-          [gBrowserInit, "gBrowserInit._delayedStartup"] :
-          [window, "delayedStartup"];
+    var fn;
+    if (typeof gBrowserInit.__treestyletab___delayedStartup == "function") {
+      fn = "gBrowserInit.__treestyletab___delayedStartup";
+    } else {
+      fn = "gBrowserInit._delayedStartup";
+    }
 
     let insertionPoint, ssPromise = "";
     if (this.isVersion(250, 250)) {
@@ -204,7 +207,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     else
       insertionPoint = 'Services.obs.addObserver';
 
-    this.changeCode(obj, fn)._replace(
+    this.changeCode(gBrowserInit, fn)._replace(
       'Services.obs.addObserver', loadOnStartup, {check: this.isVersion(190) && !!loadOnStartup}
     )._replace(
       insertionPoint,
