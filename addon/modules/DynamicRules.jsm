@@ -224,8 +224,6 @@ this.DynamicRules = {
   },
 
   updateStyles: function(name, prefObj) {
-    if (this.treeStyleTab && name != "progressMeter")
-      return;
     let templates = this.cssTemplates[name];
     let style = {};
     for (let rule of Object.keys(templates)) {
@@ -233,10 +231,10 @@ this.DynamicRules = {
       if (rule == "text") {
         if (prefObj.text)
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
-      }
-      else if (prefObj.bg)
+      } else if (prefObj.bg && (!this.treeStyleTab || name == "progressMeter")) {
         style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
                              .replace(/#topColor/g, prefObj.bgTopColor);
+      }
     }
     this.styles[name] = Object.keys(style).length ? style : null;
     this.registerSheet(name);
