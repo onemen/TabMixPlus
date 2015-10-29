@@ -92,6 +92,7 @@ pref("extensions.tabmix.currentTab", false);
 pref("extensions.tabmix.unloadedTab", true);
 pref("extensions.tabmix.unreadTab", true);
 pref("extensions.tabmix.unreadTabreload", true);
+pref("extensions.tabmix.disableBackground", false);
 pref("extensions.tabmix.otherTab", false);
 pref("extensions.tabmix.progressMeter", true);
 

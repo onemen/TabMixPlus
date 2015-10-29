@@ -1261,6 +1261,9 @@ var gTMPprefObserver = {
       case "extensions.tabmix.progressMeter":
         this.setProgressMeter();
         break;
+      case "extensions.tabmix.disableBackground":
+        this.updateStyleAttributes();
+        break;
       case "browser.tabs.tabMaxWidth":
       case "browser.tabs.tabMinWidth":
         var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
@@ -1804,9 +1807,15 @@ var gTMPprefObserver = {
     }
   },
 
-  updateTabsStyle: function(ruleName) {
+  updateStyleAttributes: function() {
+    let styles = ["current", "unloaded", "unread", "other"];
+    styles.forEach(styleName => {
+      this.updateStyleAttribute(styleName + "Tab", styleName);
+    });
+  },
+
+  updateStyleAttribute: function(ruleName, styleName) {
     let attribValue = null;
-    let styleName = ruleName.replace("Tab", "");
     let enabled = Tabmix.prefs.getBoolPref(ruleName);
     if (enabled) {
       let prefValues = TabmixSvc.tabStylePrefs[ruleName];
@@ -1818,7 +1827,7 @@ var gTMPprefObserver = {
       ];
       if (prefValues.text)
         attribValue.push("text");
-      if (prefValues.bg) {
+      if (prefValues.bg && !Tabmix.prefs.getBoolPref("disableBackground")) {
         attribValue.push("bg");
         if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab)
           attribValue.push("aus");
@@ -1826,9 +1835,16 @@ var gTMPprefObserver = {
       attribValue = attribValue.join(" ");
     }
 
-    let tabBar = gBrowser.tabContainer;
-    let currentAttrib = tabBar.getAttribute("tabmix_" + styleName + "Style") || "";
-    Tabmix.setItem(tabBar, "tabmix_" + styleName + "Style", attribValue);
+    let attName = "tabmix_" + styleName + "Style";
+    Tabmix.setItem(gBrowser.tabContainer, attName, attribValue);
+    return attribValue;
+  },
+
+  updateTabsStyle: function(ruleName) {
+    let styleName = ruleName.replace("Tab", "");
+    let attName = "tabmix_" + styleName + "Style";
+    let currentAttrib = gBrowser.tabContainer.getAttribute(attName) || "";
+    let attribValue = this.updateStyleAttribute(ruleName, styleName);
 
     /** style on non-selected tab are unloaded, unread or other, unloaded and
      *  unread are only set on tab if the corresponded preference it on. if user

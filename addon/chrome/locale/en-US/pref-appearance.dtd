@@ -6,6 +6,7 @@
 <!ENTITY hideRGB.label "Hide RGB">
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Other Tabs">

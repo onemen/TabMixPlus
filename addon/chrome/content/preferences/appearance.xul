@@ -46,6 +46,7 @@
       <preference id="pref_unreadTabreload"   name="extensions.tabmix.unreadTabreload"          type="bool"/>
       <preference id="pref_unloadedTab"       name="extensions.tabmix.unloadedTab"              type="bool"/>
       <preference id="pref_otherTab"          name="extensions.tabmix.otherTab"                 type="bool"/>
+      <preference id="pref_disableBackground" name="extensions.tabmix.disableBackground"        type="bool"/>
       <preference id="pref_lockedIcon"        name="extensions.tabmix.extraIcons.locked"        type="bool"/>
       <preference id="pref_protectedIcon"     name="extensions.tabmix.extraIcons.protected"     type="bool"/>
       <preference id="pref_autoreloadIcon"    name="extensions.tabmix.extraIcons.autoreload"    type="bool"/>
@@ -194,6 +195,8 @@
             <label id="treeStyleTab.bg.msg" class="header" hidden="true"
                    value="&backgroundDisabled.label;"
                    style="text-decoration: underline; color: #CC0000; margin-top: 10px;"/>
+            <checkbox_tmp id="disableBackground" label="&disableBackground.label;"
+                          preference="pref_disableBackground"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&show.ontab.label;"/>
