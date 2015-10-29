@@ -26,6 +26,7 @@ XPCOMUtils.defineLazyGetter(this, "SSS", function() {
 
 const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n';
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
+const EXTRAPREFS = ["squaredTabsStyle"];
 
 this.DynamicRules = {
 
@@ -40,27 +41,34 @@ this.DynamicRules = {
 
   _initialized: false,
 
+  get isAustralis() {
+    return TabmixSvc.isAustralisBgStyle(this.orient);
+  },
+
   init: function(aWindow) {
     if (this._initialized)
       return;
     this._initialized = true;
 
-    this.treeStyleTab = aWindow.Tabmix.extensions.treeStyleTab;
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").orient;
+    this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     Prefs.addObserver("", this, false);
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
       Services.prefs.addObserver("extensions.tabmix." + pref, this, false);
     }, this);
+    Services.obs.addObserver(this, "browser-window-before-show", false);
     Services.obs.addObserver(this, "quit-application", false);
 
     this.createTemplates();
-    for (let rule of Object.keys(this.cssTemplates))
-      this.userChangedStyle(rule);
   },
 
   observe: function(subject, topic, data) {
     switch (topic) {
+      case "browser-window-before-show":
+        this.registerMutationObserver(subject);
+        break;
       case "nsPref:changed":
         this.onPrefChange(data);
         break;
@@ -70,6 +78,24 @@ this.DynamicRules = {
     }
   },
 
+  registerMutationObserver: function(window) {
+    function tabsMotate(aMutations) {
+      for (let mutation of aMutations) {
+        if (mutation.attributeName == "orient") {
+          this.orient = mutation.target.orient;
+          this.updateStyleType();
+          return;
+        }
+      }
+    }
+    let Observer = new window.MutationObserver(tabsMotate.bind(this));
+    Observer.observe(window.gBrowser.tabContainer, {attributes: true});
+    window.addEventListener("unload", function unload() {
+      window.removeEventListener("unload", unload);
+      Observer.disconnect();
+    });
+  },
+
   onPrefChange: function(data) {
     let prefName = data.split(".").pop();
     if (STYLENAMES.indexOf(prefName) > -1) {
@@ -77,13 +103,16 @@ this.DynamicRules = {
         this.userChangedStyle(prefName, true);
       else
         this.registerSheet(prefName);
+    } else if (prefName == "squaredTabsStyle") {
+      this.updateStyleType();
     }
   },
 
   onQuitApplication: function() {
+    Services.obs.removeObserver(this, "browser-window-before-show", false);
     Services.obs.removeObserver(this, "quit-application");
     Prefs.removeObserver("", this);
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
       Services.prefs.removeObserver("extensions.tabmix." + pref, this);
       this.unregisterSheet(pref);
     }, this);
@@ -91,16 +120,12 @@ this.DynamicRules = {
 
   updateOpenedWindows: function(ruleName) {
     // update all opened windows
-    let windowsEnum = Services.wm.getEnumerator("navigator:browser");
-    while (windowsEnum.hasMoreElements()) {
-      let window = windowsEnum.getNext();
-      if (!window.closed) {
-        if (ruleName != "progressMeter")
-          window.gTMPprefObserver.updateTabsStyle(ruleName);
-        else
-          window.gTMPprefObserver.setProgressMeter();
-      }
-    }
+    TabmixSvc.forEachBrowserWindow(window => {
+      if (ruleName != "progressMeter")
+        window.gTMPprefObserver.updateTabsStyle(ruleName);
+      else
+        window.gTMPprefObserver.setProgressMeter();
+    });
   },
 
   createTemplates: function() {
@@ -146,7 +171,7 @@ this.DynamicRules = {
       },
     };
 
-    if (TabmixSvc.australis && !this.treeStyleTab) {
+    if (this.isAustralis) {
       bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),\n' +
             space20 + bottomBorder +
             space20 + bgImage.body;
@@ -188,6 +213,9 @@ this.DynamicRules = {
     };
 
     this.cssTemplates = styleRules;
+    for (let rule of Object.keys(this.cssTemplates)) {
+      this.userChangedStyle(rule);
+    }
   },
 
   userChangedStyle: function(ruleName, notifyWindows) {
@@ -230,13 +258,50 @@ this.DynamicRules = {
       if (rule == "text") {
         if (prefObj.text)
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
-      } else if (prefObj.bg && (!this.treeStyleTab || name == "progressMeter")) {
+      } else if (prefObj.bg) {
         style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
                              .replace(/#topColor/g, prefObj.bgTopColor);
       }
     }
     this.styles[name] = Object.keys(style).length ? style : null;
     this.registerSheet(name);
+  },
+
+  // update background type when squaredTabsStyle pref or tabbar
+  // orient changed
+  updateStyleType: function() {
+    let australis = this.isAustralis;
+    if (australis == (this.styleType == "australis")) {
+      return;
+    }
+    this.styleType = australis ? "australis" : "classic";
+
+    TabmixSvc.tabStylePrefs = {};
+    this.createTemplates();
+
+    function updateButtonHeight(Tabmix, rules) {
+      let newHeight = Tabmix.getButtonsHeight();
+      ["new-tab", "pb-indicator", "scrollbutton", "toolbarbutton"].forEach(name => {
+        let rule = rules[name + "-height"];
+        if (typeof rule == "object") {
+          rule.style.setProperty("height", newHeight + "px", "important");
+        }
+      });
+    }
+
+    TabmixSvc.forEachBrowserWindow(window => {
+      let {Tabmix, TabmixTabbar, gBrowser, gTMPprefObserver} = window;
+      gTMPprefObserver.updateStyleAttributes();
+      updateButtonHeight(Tabmix, gTMPprefObserver.dynamicRules);
+
+      // update multi-row heights
+      gBrowser.tabContainer.mTabstrip._singleRowHeight = null;
+      TabmixTabbar._heights = [];
+      TabmixTabbar.visibleRows = 1;
+      Tabmix.tabsUtils.updateVerticalTabStrip();
+      TabmixTabbar.setFirstTabInRow();
+      TabmixTabbar.updateBeforeAndAfter();
+    });
   },
 
   /** create/update styleSheet for type of tab or progressMeter

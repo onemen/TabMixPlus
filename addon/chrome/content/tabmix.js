@@ -134,6 +134,7 @@ Tabmix.getButtonsHeight = function() {
   }
   else
     this._buttonsHeight = 24;
+  return this._buttonsHeight;
 };
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
@@ -451,8 +452,10 @@ var TMP_eventListener = {
       Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
     }
 
-    if (TabmixSvc.australis)
-      tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
+    if (TabmixSvc.australis) {
+      let australis = TabmixSvc.isAustralisBgStyle(tabBar.orient);
+      tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
+    }
 
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "classic/1.0") {
@@ -485,7 +488,7 @@ var TMP_eventListener = {
       }
       switch (skin) {
         case "Australis":
-          tabBar.setAttribute("tabmix_australis", Tabmix.extensions.treeStyleTab ? "tst" : "true");
+          tabBar.setAttribute("tabmix_australis", "true");
           break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":

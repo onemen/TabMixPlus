@@ -68,7 +68,8 @@
           useThis.checked = checked;
           this.disabled = !checked;
 
-          this.treeStyleTab = window.opener.treeStyleTab && this.id != "progressMeter";
+          this.disableBgColor = Tabmix.prefs.getBoolPref("disableBackground") &&
+                                this.id != "progressMeter";
 
           useThis.nextSibling.value = document.getElementById("_" + this.id).label;
           // colorpicker need some time untile its ready
@@ -193,7 +194,7 @@
       <method name="updateDisableState">
         <parameter name="aID"/>
         <body><![CDATA[
-          var disableBg = this.treeStyleTab && aID == "bg";
+          var disableBg = this.disableBgColor && aID == "bg";
           var disabled = this.disabled || disableBg ||
                            !this._getElementById(aID).checked;
           if (disableBg)

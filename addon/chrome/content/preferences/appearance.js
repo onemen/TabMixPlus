@@ -15,9 +15,8 @@ var gAppearancePane = { // jshint ignore:line
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
 
-    if (browserWindow.Tabmix.extensions.treeStyleTab) {
-      Tabmix.setItem("treeStyleTab.bg.msg", "hidden", null);
-      window.treeStyleTab = true;
+    if (!TabmixSvc.australis) {
+      Tabmix.setItem("squaredTabs", "hidden", true);
     }
 
     Tabmix.setItem("tabXLeft", "disabled", !browserWindow.Tabmix.defaultCloseButtons || null);

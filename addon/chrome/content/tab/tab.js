@@ -1710,13 +1710,13 @@ var gTMPprefObserver = {
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'
                   .replace("#", Tabmix._buttonsHeight);
-    this.insertRule(newRule);
+    this.insertRule(newRule, "new-tab-height");
 
     if (TabmixSvc.australis && !Tabmix.isVersion(310) && !TabmixSvc.isLinux && !TabmixSvc.isMac) {
       newRule = '#main-window[privatebrowsingmode=temporary] #private-browsing-indicator {' +
                 '  height: #px;'.replace("#", Tabmix._buttonsHeight) +
                 '}';
-      this.insertRule(newRule);
+      this.insertRule(newRule, "pb-indicator-height");
     }
 
     if (TabmixSvc.isMac && !TabmixSvc.australis)
@@ -1724,12 +1724,12 @@ var gTMPprefObserver = {
 
     newRule = '#tabmixScrollBox[flowing="multibar"] > toolbarbutton {' +
       '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
-    this.insertRule(newRule);
+    this.insertRule(newRule, "scrollbutton-height");
 
     let _buttonsHeight = Tabmix.isVersion(310) ? Tabmix._buttonsHeight - 1 : Tabmix._buttonsHeight;
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1 {' +
       '  height: #px;}'.replace("#", _buttonsHeight);
-    this.insertRule(newRule);
+    this.insertRule(newRule, "toolbarbutton-height");
     delete Tabmix._buttonsHeight;
 
     // we don't show icons on menu on Mac OS X
@@ -1829,8 +1829,9 @@ var gTMPprefObserver = {
         attribValue.push("text");
       if (prefValues.bg && !Tabmix.prefs.getBoolPref("disableBackground")) {
         attribValue.push("bg");
-        if (TabmixSvc.australis && !Tabmix.extensions.treeStyleTab)
+        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.orient)) {
           attribValue.push("aus");
+        }
       }
       attribValue = attribValue.join(" ");
     }

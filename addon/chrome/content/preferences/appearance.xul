@@ -47,6 +47,7 @@
       <preference id="pref_unloadedTab"       name="extensions.tabmix.unloadedTab"              type="bool"/>
       <preference id="pref_otherTab"          name="extensions.tabmix.otherTab"                 type="bool"/>
       <preference id="pref_disableBackground" name="extensions.tabmix.disableBackground"        type="bool"/>
+      <preference id="pref_squaredTabs"       name="extensions.tabmix.squaredTabsStyle"         type="bool"/>
       <preference id="pref_lockedIcon"        name="extensions.tabmix.extraIcons.locked"        type="bool"/>
       <preference id="pref_protectedIcon"     name="extensions.tabmix.extraIcons.protected"     type="bool"/>
       <preference id="pref_autoreloadIcon"    name="extensions.tabmix.extraIcons.autoreload"    type="bool"/>
@@ -192,11 +193,10 @@
             </hbox>
             <checkbox_tmp id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"
                       preference="pref_unreadTabreload" observes="obs_unreadTab"/>
-            <label id="treeStyleTab.bg.msg" class="header" hidden="true"
-                   value="&backgroundDisabled.label;"
-                   style="text-decoration: underline; color: #CC0000; margin-top: 10px;"/>
             <checkbox_tmp id="disableBackground" label="&disableBackground.label;"
                           preference="pref_disableBackground"/>
+            <checkbox_tmp id="squaredTabs" label="&squaredTabs.label;"
+                          preference="pref_squaredTabs" observes="obs_disableBackground"/>
           </groupbox>
           <groupbox flex="1">
             <caption label="&show.ontab.label;"/>
@@ -299,6 +299,7 @@
       <broadcaster id="obs_hideAllTabsButton"/>
       <broadcaster id="obs_smoothScroll" inverseDependency="true"/>
       <broadcaster id="obs_unreadTab"/>
+      <broadcaster id="obs_disableBackground" inverseDependency="true"/>
       <broadcaster id="obs_showTabX"/>
     </broadcasterset>
 

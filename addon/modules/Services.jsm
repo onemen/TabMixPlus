@@ -184,6 +184,10 @@ this.TabmixSvc = {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
+      if (TabmixSvc.australis) {
+        prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
+      }
+
       if (isVersion(320))
         prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
 
@@ -243,6 +247,14 @@ this.TabmixSvc = {
     },
     private: true,
     settingPreference: false,
+  },
+
+  isAustralisBgStyle: function(orient) {
+    if (typeof orient != "string") {
+      throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);
+    }
+    return TabmixSvc.australis && orient == "horizontal" &&
+      !this.prefBranch.getBoolPref("squaredTabsStyle");
   },
 
   blockedClickingOptions: []
