@@ -170,7 +170,7 @@
         </tabpanel>
         <tabpanel>
           <groupbox id="tabappearance" flex="1">
-            <caption label="&highlight.label;"/>
+            <caption label="&tabStyles.label;"/>
             <hbox>
               <vbox flex="1">
                 <!-- Hightlight Current tab -->
