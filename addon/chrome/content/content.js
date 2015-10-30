@@ -27,6 +27,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
 
 var self = this;
 
+var PROCESS_TYPE_CONTENT = TabmixSvc.version(380) &&
+    Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
+
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
@@ -47,6 +50,10 @@ var TabmixContentHandler = {
     // Send a CPOW to the parent so that it can synchronously request
     // docShell capabilities.
     sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
+
+    if (PROCESS_TYPE_CONTENT) {
+      addEventListener("drop", this.onDrop);
+    }
   },
 
   receiveMessage: function({name, data}) {
@@ -134,14 +141,39 @@ var TabmixContentHandler = {
   wrapNode: function(node) {
     let window = TabmixClickEventHandler._focusedWindow;
     return LinkNodeUtils.wrap(node, window);
+  },
+
+  onDrop: function(event) {
+    let uri, name = { };
+    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"].
+    getService(Ci.nsIDroppedLinkHandler);
+    try {
+      // Pass true to prevent the dropping of javascript:/data: URIs
+      uri = linkHandler.dropLink(event, name, true);
+    } catch (ex) {
+      return;
+    }
+    let data = {
+      json: {
+        dataTransfer: {dropEffect: event.dataTransfer.dropEffect},
+        ctrlKey: event.ctrlKey, metaKey: event.metaKey,
+        shiftKey: event.shiftKey, altKey: event.altKey
+      },
+      uri: uri, name: name.value
+    };
+    let result = sendSyncMessage("Tabmix:contentDrop", data);
+    if (result[0]) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 };
 
 var TabmixClickEventHandler = {
   init: function init() {
-    if (TabmixSvc.version(380) &&
-        Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
+    if (PROCESS_TYPE_CONTENT) {
       self.addEventListener("click", this, true);
+    }
   },
 
   handleEvent: function(event) {

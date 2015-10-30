@@ -11,6 +11,7 @@ const FMM_MESSAGES = [
   "Tabmix:updateScrollPosition",
   "Tabmix:reloadTab",
   "Tabmix:getOpener",
+  "Tabmix:contentDrop",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -66,6 +67,20 @@ this.TabmixUtils = {
         tab = win.gBrowser.getTabForBrowser(browser);
         MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
+      case "Tabmix:contentDrop": {
+        let {json, uri, name} = message.data;
+        win = browser.ownerDocument.defaultView;
+        let where = win.tablib.whereToOpenDrop(json, uri);
+        if (where == "tab") {
+          // handleDroppedLink call preventDefault
+          json.preventDefault = function() {};
+          json.tabmixContentDrop = "tab";
+          browser.droppedLinkHandler(json, uri, name);
+          // prevent default
+          return true;
+        }
+        return false;
+      }
     }
   },
 

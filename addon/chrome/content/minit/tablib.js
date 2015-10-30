@@ -1903,22 +1903,28 @@ var tablib = { // eslint-disable-line
     return canClose;
   },
 
-  contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
-    var where;
-    var browser = gBrowser.selectedBrowser;
+  whereToOpenDrop: function(aEvent, aUri) {
+    let browser = gBrowser.selectedBrowser;
+    let where = "current";
     if (aUri != browser.currentURI.spec) {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ?
-                   (aEvent.dataTransfer.dropEffect == "copy") :
-                   (aEvent.ctrlKey || aEvent.metaKey);
+          TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
+          (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
           !gBrowser.isBlankNotBusyTab(tab) &&
           !Tabmix.ContentClick.isUrlForDownload(aUri)) {
         where = "tab";
       }
-      else
-        browser.tabmix_allowLoad = true;
     }
+    if (where == "current") {
+      browser.tabmix_allowLoad = true;
+    }
+    return where;
+  },
+
+  contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
+    let where = aEvent.tabmixContentDrop || this.whereToOpenDrop(aEvent, aUri);
     if (where == "tab")
       gBrowser.loadOneTab(aUri, null, null, aPostData, false, false);
     else
