@@ -115,7 +115,7 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    var tab = gBrowser.tabContainer._getDragTargetTab(event);
+    var tab = gBrowser.tabContainer._getDragTargetTab(event, false);
     if (!tab || this._isCustomizing)
       return;
 
@@ -192,7 +192,7 @@ var TMP_tabDNDObserver = {
     }
 
     var isCopy = this.isCopyDropEffect(dt, event, draggeType);
-    var effects = this._setEffectAllowedForDataTransfer(event, draggeType);
+    var effects = this._getDropEffectForTabDrag(event);
 
     var replaceTab = (left_right == -1);
     /* we don't allow to drop link on lock tab.
@@ -294,7 +294,7 @@ var TMP_tabDNDObserver = {
     }
 
     if (draggeType == this.DRAG_LINK) {
-      let tab = tabBar._getDragTargetTab(event);
+      let tab = tabBar._getDragTargetTab(event, true);
       if (tab && tab.linkedBrowser.currentURI.spec != "about:customizing") {
         if (!this._dragTime)
           this._dragTime = Date.now();
@@ -764,37 +764,12 @@ var TMP_tabDNDObserver = {
   /*
    *  helper functions
    */
-  _setEffectAllowedForDataTransfer: function minit_setEffectAllowed(aEvent, aDraggeType) {
-    var dt = aEvent.dataTransfer;
-    // Disallow dropping multiple items
-    if (dt.mozItemCount > 1)
-      return (dt.effectAllowed = "none");
-
-    var types = dt.mozTypesAt(0);
-    // move or copy tab
-    if (types[0] == this.TAB_DROP_TYPE) {
-      let sourceNode = dt.mozGetDataAt(this.TAB_DROP_TYPE, 0);
-      if ((aDraggeType == this.DRAG_TAB_IN_SAME_WINDOW && aEvent.target == sourceNode) ||
-        // Do not allow transfering a private tab to a non-private window
-        // and vice versa.
-        (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
-            PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerDocument.defaultView))) {
-        return (dt.effectAllowed = "none");
-      }
-
-      if (Tabmix.isVersion(310) && window.gMultiProcessBrowser !=
-          sourceNode.ownerDocument.defaultView.gMultiProcessBrowser)
-        return (dt.effectAllowed = "none");
-
-      let copyModifier = Tabmix.isVersion(390) &&
-          gBrowser.AppConstants.platform == "macosx" ? aEvent.altKey : aEvent.ctrlKey;
-      return (dt.effectAllowed = copyModifier ? "copy" : "move");
+  _getDropEffectForTabDrag: function(event) {
+    let tabBar = gBrowser.tabContainer;
+    if (Tabmix.isVersion(440)) {
+      return tabBar._getDropEffectForTabDrag(event);
     }
-
-    if (browserDragAndDrop.canDropLink(aEvent)) {
-      return (dt.effectAllowed = dt.dropEffect = "link");
-    }
-    return (dt.effectAllowed = "none");
+    return tabBar._setEffectAllowedForDataTransfer(event);
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
@@ -807,11 +782,12 @@ var TMP_tabDNDObserver = {
   isCopyDropEffect: function(dt, event, type) {
     let isCopy = dt.dropEffect == "copy";
     if (isCopy && type == this.DRAG_LINK) {
-      // Dragging bookmark or livemark from the Bookmarks toolbar always have 'copy' dropEffect
+      // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
+      // data from external source, always have 'copy' dropEffect
       let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-      let draggingBookmark = !isCtrlKey && dt.effectAllowed == "copyLink" &&
-          dt.mozSourceNode && dt.mozSourceNode._placesNode;
-      return isCopy && !draggingBookmark;
+      let move = !isCtrlKey && (dt.effectAllowed == "copyLink" &&
+          dt.mozSourceNode && dt.mozSourceNode._placesNode || !dt.mozSourceNode);
+      return !move;
     }
     return isCopy;
   }
