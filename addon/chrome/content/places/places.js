@@ -140,7 +140,7 @@ var TMP_Places = {
 
   isBookmarklet: function(url) {
     var jsURL = /^ *javascript:/;
-    return jsURL.test(url) ? true : false;
+    return jsURL.test(url);
   },
 
   fixWhereToOpen: function(aEvent, aWhere, aPref) {

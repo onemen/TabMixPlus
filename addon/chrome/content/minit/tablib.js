@@ -899,8 +899,8 @@ var tablib = { // eslint-disable-line
       let undoItem = undoItems[i];
       if (undoItem && m.hasAttribute("targetURI")) {
         let otherTabsCount = undoItem.tabs.length - 1;
-        let label = (otherTabsCount === 0) ? menuLabelStringSingleTab
-                                          : PluralForm.get(otherTabsCount, menuLabelString);
+        let label = (otherTabsCount === 0) ?
+            menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
         TMP_SessionStore.getTitleForClosedWindow(undoItem);
         let menuLabel = label.replace("#1", undoItem.title)
                              .replace("#2", otherTabsCount);

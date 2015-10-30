@@ -384,7 +384,7 @@ this.DynamicRules = {
       }
       else if (value !== undefined && typeof value != "boolean") {
         if (/^true$|^false$/.test(value.replace(/[\s]/g, "")))
-          value = value == "true" ? true : false;
+          value = value == "true";
         else
           value = undefined;
       }
