@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permitir popups redimensionáveis">
 <!ENTITY divertedWindowOpen.none "Permitir todos os popups">
 <!ENTITY linkTarget.label "Abrir links com o atributo &quot;target&quot; na aba atual">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Prevenir abas em branco ao fazer downloads de arquivos">
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Forçar para que abram em nova aba:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Quando rolagem mostrar parte da próxima guia de out-of-sight">
 <!ENTITY smoothScroll.label "Ativar rolagem suave">
 <!ENTITY scrolldelay.label "Atraso ao rolar (tempo entre a repetição da rolagem)">
-<!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Aba atual">
 <!ENTITY unloadedtabs.style.label "Abas descarregados">
 <!ENTITY unreadtabs.style.label "Abas não lidas">

@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "カスタマイズ">
 <!ENTITY currentTab.label "現在のタブ">
 <!ENTITY unloadedTabs.label "未読込のタブ">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "RGB を表示しない">
 <!ENTITY showRGB.label "RGB を表示する">
 <!ENTITY unreadAfterReload.label "再読み込み後はタブを未読にする">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "タブの背景色を設定する">
-<!ENTITY backgroundDisabled.label "ツリー型タブがインストールされているときはタブの背景色設定を無効にする">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">
 <!ENTITY bold.label "太字">

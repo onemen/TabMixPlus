@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Дозволи искачуће прозоре прилагођене величине">
 <!ENTITY divertedWindowOpen.none "Дозволи све искачуће прозоре">
 <!ENTITY linkTarget.label "Отвори линкове са циљним атрибутом у текућем прозору">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Спречи празне картице приликом преузимања фајлова">
 <!ENTITY edit.label "Уреди">
 <!ENTITY speLink.label "Присили отварање у новој картици:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Приликом померања прикажи део наредног језичка који се не види у целости">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">
-<!ENTITY highlight.label "Истакни:">
 <!ENTITY currenttab.style.label "тренутни језичак">
 <!ENTITY unloadedtabs.style.label "Неучитани језичци">
 <!ENTITY unreadtabs.style.label "Непрочитане картице">

@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Προσαρμογή στυλ">
 <!ENTITY currentTab.label "Τρέχουσα καρτέλα">
 <!ENTITY unloadedTabs.label "Μη φορτωμένες καρτέλες">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Απόκρυψη RGB">
 <!ENTITY showRGB.label "Προβολή RGB">
 <!ENTITY unreadAfterReload.label "Ορισμός καρτέλας ως μη αναγνωσμένης μετά την ανανέωση">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Εφαρμογή χρώματος παρασκηνίου σε τετραγωνισμένες καρτέλες">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">
 <!ENTITY bold.label "Έντονα">

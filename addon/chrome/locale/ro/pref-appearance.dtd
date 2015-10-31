@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Personalizează stilurile">
 <!ENTITY currentTab.label "Filă curentă">
 <!ENTITY unloadedTabs.label "File neîncărcate">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Ascunde profilul cromatic">
 <!ENTITY showRGB.label "Afișează profilul cromatic">
 <!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Aplică culoarea de fundal filelor rectangulare">
-<!ENTITY backgroundDisabled.label "Culorile de fundal ale filelor sunt indisponibile când extensia „TreeStyleTabs” este instalată">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">
 <!ENTITY bold.label "Aldin">

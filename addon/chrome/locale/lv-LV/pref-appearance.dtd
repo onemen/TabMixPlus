@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Pielāgot stilus">
 <!ENTITY currentTab.label "Pašreizējā cilne">
 <!ENTITY unloadedTabs.label "Neielādētās cilnes">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Paslēpt RGB">
 <!ENTITY showRGB.label "Rādīt RGB">
 <!ENTITY unreadAfterReload.label "pēc pārlādēšanas iestatīt cilni kā nelasītu">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Pielietot fona krāsu kvadrātveida cilnēm">
-<!ENTITY backgroundDisabled.label "Ja ir instalēts TreeStyleTabs, ciļņu fona krāsas tiek atslēgtas">
 <!ENTITY otherTabs.label "Citas cilnes">
 <!ENTITY italic.label "Slīpraksts">
 <!ENTITY bold.label "Treknraksts">

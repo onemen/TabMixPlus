@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Salli kiinteäkokoiset ponnahdusikkunat">
 <!ENTITY divertedWindowOpen.none "Salli kaikki ponnahdusikkunat">
 <!ENTITY linkTarget.label "Avaa linkit, joissa on target-attribuutti, nykyiseen välilehteen">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Estä tyhjät välilehdet tiedostoja ladattaessa">
 <!ENTITY edit.label "Muokkaa">
 <!ENTITY speLink.label "Pakota avaus uuteen välilehteen:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Vieritettäessä näytä osa seuraavasta piiloon jäävästä välilehdestä">
 <!ENTITY smoothScroll.label "Käytä pehmeää vieritystä">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "Highlight">
 <!ENTITY currenttab.style.label "Current tab">
 <!ENTITY unloadedtabs.style.label "Suljetut välilehdet">
 <!ENTITY unreadtabs.style.label "Unread tabs">

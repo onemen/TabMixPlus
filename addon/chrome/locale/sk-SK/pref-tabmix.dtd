@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Povoliť zmeny u vyskakovacích okien">
 <!ENTITY divertedWindowOpen.none "Povoliť všetky vyskakovacie okná">
 <!ENTITY linkTarget.label "Odkazy s atribútom &apos;target&apos; otvoriť na aktuálnej karte">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Blokovať prázdne karty pri sťahovaní súborov">
 <!ENTITY edit.label "Upraviť">
 <!ENTITY speLink.label "Prinútiť otvoriť na novej karte:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Pri rolovaní zobraziť časť ďalšej karty mimo pohľadu">
 <!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
-<!ENTITY highlight.label "Zvýrazniť:">
 <!ENTITY currenttab.style.label "Aktuálna karta">
 <!ENTITY unloadedtabs.style.label "Nenačítané karty">
 <!ENTITY unreadtabs.style.label "Neprečítané karty">

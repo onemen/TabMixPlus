@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permitir redimensionar ventanas emergentes">
 <!ENTITY divertedWindowOpen.none "Permitir todas las ventanas emergentes">
 <!ENTITY linkTarget.label "Abrir enlaces con atributos de archivo en pestaña actual">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Evitar abrir pestañas en blanco al descargar archivos">
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Obligar a abrir en nueva pestaña:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Al rotar mostrar parte de la siguiente pestaña no visible">
 <!ENTITY smoothScroll.label "Activar rotación suave">
 <!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
-<!ENTITY highlight.label "Resaltar:">
 <!ENTITY currenttab.style.label "Pestaña actual">
 <!ENTITY unloadedtabs.style.label "Pestañas no cargadas">
 <!ENTITY unreadtabs.style.label "Pestañas no leídas">

@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "設定樣式">
 <!ENTITY currentTab.label "目前的分頁">
 <!ENTITY unloadedTabs.label "未載入的分頁">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "隱藏 RGB">
 <!ENTITY showRGB.label "顯示 RGB">
 <!ENTITY unreadAfterReload.label "重新載入後將分頁設定為未讀取">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "將背景顏色套用到方形分頁標籤">
-<!ENTITY backgroundDisabled.label "若安裝了 TreeStyleTabs，分頁背景顏色將會被停用">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">
 <!ENTITY bold.label "粗體">

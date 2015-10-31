@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Stílusok">
 <!ENTITY currentTab.label "Aktuális lap">
 <!ENTITY unloadedTabs.label "Lapok kiürítése">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "RGB elrejtése">
 <!ENTITY showRGB.label "RGB megjelenítése">
 <!ENTITY unreadAfterReload.label "újratöltéskor a lap olvasatlanná válik">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Háttérszín alkalmazása a téglalap lapokra">
-<!ENTITY backgroundDisabled.label "A lapok háttérszíne letiltásra kerül, amikor a TreeStyleTabs kiterjesztés telepítve van.">
 <!ENTITY otherTabs.label "Egyéb lapok">
 <!ENTITY italic.label "Dőlt">
 <!ENTITY bold.label "Félkövér">

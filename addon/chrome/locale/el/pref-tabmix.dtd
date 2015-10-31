@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Να επιτρέπονται αναδυόμενα σταθερών διαστάσεων">
 <!ENTITY divertedWindowOpen.none "Να επιτρέπονται όλα τα αναδυόμενα">
 <!ENTITY linkTarget.label "Άνοιγμα δεσμών με καθορισμένη ιδιότητα προορισμού στην τρέχουσα καρτέλα">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Αποτροπή ανοίγματος κενών καρτελών όταν λαμβάνονται αρχεία">
 <!ENTITY edit.label "Επεξεργασία">
 <!ENTITY speLink.label "Υποχρεωτικό άνοιγμα σε νέα καρτέλα:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Κατά την κύλιση να εμφανίζεται τμήμα της επόμενης μη εμφανούς καρτέλας">
 <!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
 <!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">
-<!ENTITY highlight.label "Επισήμανση:">
 <!ENTITY currenttab.style.label "Τρέχουσας καρτέλας">
 <!ENTITY unloadedtabs.style.label "Μη φορτωμένες καρτέλες">
 <!ENTITY unreadtabs.style.label "Μη αναγνωσμένων καρτελών">

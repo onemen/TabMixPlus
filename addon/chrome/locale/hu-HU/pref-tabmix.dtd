@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "átméretezett felugró ablakok megnyitása új ablakban">
 <!ENTITY divertedWindowOpen.none "minden felugró ablak megnyitása új ablakban">
 <!ENTITY linkTarget.label "Cél tulajdonsággal rendelkező linkek vagy a fájlok az aktuális lapon nyíljanak meg">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Fájlletöltési üres lap megakadályozása">
 <!ENTITY edit.label "Szerkesztés">
 <!ENTITY speLink.label "Új lapon való megnyitás:">
@@ -61,8 +62,8 @@
 <!ENTITY updateLockState.label "Változtatások alkalmazása a nyitott lapokra">
 <!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
 <!ENTITY openBookmarks.label "Könyvjelzők">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.label "Könyvjelzők és Előzmények csoportjai">
+<!ENTITY openPlacesGroups.tooltip "Ne kezelje máshogy a lapokat, ha Könyvjelzők és Előzmények csoportot nyit meg">
 <!ENTITY openHistory.label "Előzmények">
 <!ENTITY openUrl.label "Hely mező">
 <!ENTITY openSearch.label "Keresés mező">
@@ -147,11 +148,10 @@
 <!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Rögzített lapok görgetésének engedélyezése">
 <!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
-<!ENTITY highlight.label "Kijelölés">
 <!ENTITY currenttab.style.label "Aktuális lap">
 <!ENTITY unloadedtabs.style.label "Kiürített lapok">
 <!ENTITY unreadtabs.style.label "Olvasatlan lapok">

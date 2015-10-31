@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Зі змінюваним розміром — у нових вікнах">
 <!ENTITY divertedWindowOpen.none "Усі спливаючі відкривати в нових вікнах">
 <!ENTITY linkTarget.label "Відкривати посилання з атрибутом &apos;target&apos; у поточній вкладці">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Не відкривати порожні вкладки при закачуванні файлів">
 <!ENTITY edit.label "Типи файлів">
 <!ENTITY speLink.label "Примусово відкривати в нових вкладках:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Прокручуючи частково показувати наступну приховану вкладку">
 <!ENTITY smoothScroll.label "Застосувати плавну прокрутку">
 <!ENTITY scrolldelay.label "Затримка Прокрутки">
-<!ENTITY highlight.label "Підсвічування:">
 <!ENTITY currenttab.style.label "Поточна вкладка">
 <!ENTITY unloadedtabs.style.label "Не завантажені вкладки">
 <!ENTITY unreadtabs.style.label "Непрочитані вкладки">

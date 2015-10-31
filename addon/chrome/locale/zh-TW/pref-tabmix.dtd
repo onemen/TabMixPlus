@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "指定屬性者以新視窗開啟">
 <!ENTITY divertedWindowOpen.none "全部以新視窗開啟">
 <!ENTITY linkTarget.label "鏈結若有指定 target 屬性則在目前分頁開啟">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "防止下載檔案時產生空白分頁">
 <!ENTITY edit.label "編輯檔案類型">
 <!ENTITY speLink.label "強制開啟在新分頁：">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "捲動時對將要看不見的分頁標籤只顯示一小部份（關閉分頁按鈕寬度）">
 <!ENTITY smoothScroll.label "啟用平滑捲動">
 <!ENTITY scrolldelay.label "捲動延遲（重覆捲動的間隔時間）">
-<!ENTITY highlight.label "強調">
 <!ENTITY currenttab.style.label "目前的分頁">
 <!ENTITY unloadedtabs.style.label "未載入的分頁">
 <!ENTITY unreadtabs.style.label "未讀的分頁">

@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Mukauta tyylejä">
 <!ENTITY currentTab.label "Nykyinen välilehti">
 <!ENTITY unloadedTabs.label "Suljetut välilehdet">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Hide RGB">
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Muut välilehdet">
 <!ENTITY italic.label "Kursiivi">
 <!ENTITY bold.label "Lihavoitu">

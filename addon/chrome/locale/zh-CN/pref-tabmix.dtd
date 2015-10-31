@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "允许尺寸固定的窗口">
 <!ENTITY divertedWindowOpen.none "允许所有窗口">
 <!ENTITY linkTarget.label "在当前标签页打开包含 target 属性的链接">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "阻止下载文件时弹出空白标签页">
 <!ENTITY edit.label "编辑">
 <!ENTITY speLink.label "强制在新标签页打开：">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "滚动鼠标时显示隐藏的下一个标签页">
 <!ENTITY smoothScroll.label "启用平滑滚动">
 <!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
-<!ENTITY highlight.label "高亮：">
 <!ENTITY currenttab.style.label "当前标签页">
 <!ENTITY unloadedtabs.style.label "未加载的标签页">
 <!ENTITY unreadtabs.style.label "未读标签页">

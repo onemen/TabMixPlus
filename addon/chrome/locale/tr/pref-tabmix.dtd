@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Yeniden boyutlandırılmış açılır pencerelere izin ver">
 <!ENTITY divertedWindowOpen.none "Tüm açılır pencerelere izin ver">
 <!ENTITY linkTarget.label "Bir hedefe sahip bağlantıları geçerli sekmede aç">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Dosya indirirken oluşan boş sekmeleri önle">
 <!ENTITY edit.label "Düzenle">
 <!ENTITY speLink.label "Yeni bir sekmede açılmaya zorla:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
-<!ENTITY highlight.label "Belirginleştir:">
 <!ENTITY currenttab.style.label "Geçerli sekmeyi">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Bakılmamış sekmeleri">

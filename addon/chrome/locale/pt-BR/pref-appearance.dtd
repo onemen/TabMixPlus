@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Personalizar estilos">
 <!ENTITY currentTab.label "Aba atual">
 <!ENTITY unloadedTabs.label "Abas descarregadas">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Ocultar RGB">
 <!ENTITY showRGB.label "Mostra RGB">
 <!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Aplicar a cor de fundo para abas quadradas.">
-<!ENTITY backgroundDisabled.label "Guias de cores de fundo são desativadas quando TreeStyleTabs está instalado">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">

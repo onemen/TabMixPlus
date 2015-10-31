@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "quando non ridimensionati">
 <!ENTITY divertedWindowOpen.none "tutti">
 <!ENTITY linkTarget.label "I link con attributo TARGET si aprono nella scheda attuale">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Non aprire nuove schede quando si scaricano determinati file">
 <!ENTITY edit.label "Modifica">
 <!ENTITY speLink.label "Forza ad aprirsi in nuove schede:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Durante lo scorrimento mostra parte della prossima scheda non visibile">
 <!ENTITY smoothScroll.label "Attiva lo scorrimento continuo">
 <!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
-<!ENTITY highlight.label "Da differenziare">
 <!ENTITY currenttab.style.label "Scheda attuale">
 <!ENTITY unloadedtabs.style.label "Schede non caricate">
 <!ENTITY unreadtabs.style.label "Schede non lette">
@@ -175,6 +175,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -190,6 +191,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

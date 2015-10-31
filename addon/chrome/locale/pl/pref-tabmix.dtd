@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Zezwalaj skryptom na otwieranie wyskakujących okien o zmiennej wielkości">
 <!ENTITY divertedWindowOpen.none "Zezwalaj skryptom na otwieranie wszystkich wyskakujących okien">
 <!ENTITY linkTarget.label "Odnośniki z atrybutem „target” otwieraj w aktywnej karcie">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Nie zezwalaj na otwieranie pustych kart podczas pobierania plików">
 <!ENTITY edit.label "Typy plików">
 <!ENTITY speLink.label "Wymuszaj otwieranie w nowych kartach">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Podczas przewijania wyświetlaj część następnej poza zasięgiem wzroku karty">
 <!ENTITY smoothScroll.label "Włącz płynne przewijanie">
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
-<!ENTITY highlight.label "Wyróżniaj:">
 <!ENTITY currenttab.style.label "aktywną kartę">
 <!ENTITY unloadedtabs.style.label "niewczytane karty">
 <!ENTITY unreadtabs.style.label "nieobejrzane karty">

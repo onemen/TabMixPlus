@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Tillåt orginalstorlek på popupfönster">
 <!ENTITY divertedWindowOpen.none "Tillåt alla popupfönster">
 <!ENTITY linkTarget.label "Öppna länk med &apos;Target&apos;-attribut i nuvarande flik">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Förhindra tomma flikar vid nerladdning av filer">
 <!ENTITY edit.label "Filtyper">
 <!ENTITY speLink.label "Tvinga öppning i ny flik:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "Belys:">
 <!ENTITY currenttab.style.label "Aktuell flik">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Oläst flik">

@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Baimendu edozein popup-leiho neurri">
 <!ENTITY divertedWindowOpen.none "Baimendu edozein popup">
 <!ENTITY linkTarget.label "Ireki fitxategi batera bidaltzen duten linkak gaineko fitxan">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Saihest fitxa zuriak fitxategiak deskargatzean">
 <!ENTITY edit.label "Editatu">
 <!ENTITY speLink.label "Fitxa berri gisa irekiarazi:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "Highlight">
 <!ENTITY currenttab.style.label "Current tab">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Unread tabs">

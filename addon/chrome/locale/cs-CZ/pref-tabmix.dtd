@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Povolit vyskakovací okna s pevně danými rozměry">
 <!ENTITY divertedWindowOpen.none "Povolit všechna vyskakovací okna">
 <!ENTITY linkTarget.label "Odkazy s atributem 'target' otevírat v aktuálním panelu">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Při stahování souborů neotevírat prázdný panel">
 <!ENTITY edit.label "Úpravy">
 <!ENTITY speLink.label "Vždy otevírat v novém panelu:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Při posouvání stránky zobrazit část dalšího panelu">
 <!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
-<!ENTITY highlight.label "Zvýraznit:">
 <!ENTITY currenttab.style.label "Aktuální panel">
 <!ENTITY unloadedtabs.style.label "Nenačtené panely">
 <!ENTITY unreadtabs.style.label "Nepřečtené panely">

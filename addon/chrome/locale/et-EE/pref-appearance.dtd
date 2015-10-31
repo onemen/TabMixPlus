@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Stiilide muutmine">
 <!ENTITY currentTab.label "Praegune kaart">
 <!ENTITY unloadedTabs.label "Laadimata kaardid">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Peida RGB-mudeli osavärvid">
 <!ENTITY showRGB.label "Näita RGB-mudeli osavärve">
 <!ENTITY unreadAfterReload.label "pärast uuestilaadimist muuda kaart lugemata kaardiks">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Rakenda taustavärvi kandilistele kaartidele">
-<!ENTITY backgroundDisabled.label "Kaartide taustavärvid on keelatud, kui TreeStyleTabs on installitud">
 <!ENTITY otherTabs.label "Teised kaardid">
 <!ENTITY italic.label "Kaldkiri">
 <!ENTITY bold.label "Paks">

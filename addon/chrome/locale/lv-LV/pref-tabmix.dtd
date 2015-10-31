@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Atļaut uzlecošos logus ar mainītu izmēru">
 <!ENTITY divertedWindowOpen.none "Atļaut visus uzlecošos logus">
 <!ENTITY linkTarget.label "Atvērt saites ar mērķa atribūtu pašreizējā cilnē">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Nepieļaut tukšas cilnes, lejupielādējot failus">
 <!ENTITY edit.label "Rediģēt">
 <!ENTITY speLink.label "Piespiest atvērt jaunā cilnē:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Ritinot rādīt daļu no nākamās neredzamās cilnes">
 <!ENTITY smoothScroll.label "Ieslēgt gludo ritināšanu">
 <!ENTITY scrolldelay.label "Ritināšanas aizture (laiks starp ritināšanas atkārtošanu)">
-<!ENTITY highlight.label "Izcelšana">
 <!ENTITY currenttab.style.label "Pašreizējā cilne">
 <!ENTITY unloadedtabs.style.label "Neielādētās cilnes">
 <!ENTITY unreadtabs.style.label "Nelasītās cilnes">

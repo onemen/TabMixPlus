@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "اجازه دادن به پنجره های با اندازه ثابت">
 <!ENTITY divertedWindowOpen.none "اجازه به تمام پنجره های تبلیغاتی">
 <!ENTITY linkTarget.label "باز کردن لینک ها در تب فعلی بهمراه یک ویژگی خاص">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "متوقف کردن تب های خالی هنگام دریافت فایل">
 <!ENTITY edit.label "ویرایش">
 <!ENTITY speLink.label "اجبار ... برای باز شدن در تب جدید">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "پر رنگ کردن:">
 <!ENTITY currenttab.style.label "تب فعلی">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "تب های خوانده نشده">

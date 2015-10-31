@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
 <!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
 <!ENTITY linkTarget.label "Открывать ссылки с атрибутом 'target' в текущей вкладке">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Не открывать пустые вкладки при закачке файлов">
 <!ENTITY edit.label "Типы файлов">
 <!ENTITY speLink.label "Принудительно открывать в новых вкладках:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Во время прокрутки показывать часть следующей вкладки">
 <!ENTITY smoothScroll.label "Использовать плавную прокрутку">
 <!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
-<!ENTITY highlight.label "Подсветка:">
 <!ENTITY currenttab.style.label "Текущая вкладка">
 <!ENTITY unloadedtabs.style.label "Незагруженные вкладки">
 <!ENTITY unreadtabs.style.label "Непрочитанные вкладки">

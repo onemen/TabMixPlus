@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "אפשר שינוי גודל של חלונות קופצים">
 <!ENTITY divertedWindowOpen.none "אפשר את כל החלונות הקופצים">
 <!ENTITY linkTarget.label "פתח קישורים עם תכונות מטרה (target attribute) בלשונית נוכחית">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "מנע לשוניות ריקות כשאני מוריד קבצים">
 <!ENTITY edit.label "ערוך">
 <!ENTITY speLink.label "הכרח לפתוח בלשונית חדשה">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "הדגש:">
 <!ENTITY currenttab.style.label "לשונית נוכחית">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "לשונית שלא נקראה">

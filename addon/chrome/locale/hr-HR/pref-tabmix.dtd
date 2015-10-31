@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Dozvoli skočne prozore prilagođenih veličina">
 <!ENTITY divertedWindowOpen.none "Dozvoli sve skočne prozore">
 <!ENTITY linkTarget.label "Otvori poveznice sa ciljanim svojstvima u trenutnoj kartici">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Spriječi prazne kartice kod preuzimanja datoteka">
 <!ENTITY edit.label "Uredi">
 <!ENTITY speLink.label "Nametni otvaranje u novoj kartici:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
-<!ENTITY highlight.label "Istakni:">
 <!ENTITY currenttab.style.label "Trenutnu karticu">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Nepročitane kartice">

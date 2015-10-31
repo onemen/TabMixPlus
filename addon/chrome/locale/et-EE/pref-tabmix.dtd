@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
 <!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
 <!ENTITY linkTarget.label "Ava 'target'-omadusega lingid praegusel kaardil">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Failide allalaadimisel ära näita tühje kaarte">
 <!ENTITY edit.label "Muuda">
 <!ENTITY speLink.label "Alati ava uuel kaardil:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
 <!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
-<!ENTITY highlight.label "Teistsugune stiil:">
 <!ENTITY currenttab.style.label "praegusel kaardil">
 <!ENTITY unloadedtabs.style.label "laadimata kaartidel">
 <!ENTITY unreadtabs.style.label "lugemata kaartidel">

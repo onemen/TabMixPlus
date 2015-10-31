@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "サイズ指定されたポップアップを許可">
 <!ENTITY divertedWindowOpen.none "すべてのポップアップを許可">
 <!ENTITY linkTarget.label "Target 属性が設定されているリンクを現在のタブに開く">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "ファイルをダウンロードするときに空白タブが開かないようにする">
 <!ENTITY edit.label "編集">
 <!ENTITY speLink.label "強制的に新しいタブに開くリンクの種類:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
 <!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">
-<!ENTITY highlight.label "ハイライト:">
 <!ENTITY currenttab.style.label "現在のタブ">
 <!ENTITY unloadedtabs.style.label "未読込のタブ">
 <!ENTITY unreadtabs.style.label "未読のタブ">

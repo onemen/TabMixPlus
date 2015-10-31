@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Pop-ups met gewijzigde afmetingen toestaan">
 <!ENTITY divertedWindowOpen.none "Alle pop-ups toestaan">
 <!ENTITY linkTarget.label "Koppelingen met een target attribuut in het huidige tabblad openen">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Blanco tabbladen bij het downloaden van bestanden voorkomen">
 <!ENTITY edit.label "Bewerken">
 <!ENTITY speLink.label "Openen in een nieuw tabblad forceren:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
 <!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
-<!ENTITY highlight.label "Attentie vragen voor:">
 <!ENTITY currenttab.style.label "Huidige tabblad">
 <!ENTITY unloadedtabs.style.label "Niet geladen tabbladen">
 <!ENTITY unreadtabs.style.label "Ongelezen tabbladen">

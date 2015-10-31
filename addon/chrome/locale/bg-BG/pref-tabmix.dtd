@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Разрешаване на изскачащи прозорци с изменен размер">
 <!ENTITY divertedWindowOpen.none "Разрешаване на всички изскачащи прозорци">
 <!ENTITY linkTarget.label "Отваряне на връзки с атрибут &quot;target&quot; в текущия подпрозорец">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Забрана на празни подпрозорци при изтегляне на файлове">
 <!ENTITY edit.label "Типове файлове">
 <!ENTITY speLink.label "Принудително отваряне в нови подпрозорци:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
 <!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
-<!ENTITY highlight.label "Открояване на:">
 <!ENTITY currenttab.style.label "Текущия подпрозорец">
 <!ENTITY unloadedtabs.style.label "Незаредените подпрозорци">
 <!ENTITY unreadtabs.style.label "Непрочетените подпрозорци">

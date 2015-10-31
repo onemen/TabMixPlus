@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "السماح بتحجيم النوافذ المنبثقة">
 <!ENTITY divertedWindowOpen.none "السماح بجميع النوافذ المنبثقة">
 <!ENTITY linkTarget.label "Open links with a target attribute in current tab">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "منع الألسنة الفارغة عند تنزيل ملفات">
 <!ENTITY edit.label "عدّل">
 <!ENTITY speLink.label "الإجبار على الفتح في لسان جديد:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "تفعيل التمرير السلس">
 <!ENTITY scrolldelay.label "مُهلة التمرير (الوقت بين تكرار التمرير)">
-<!ENTITY highlight.label "الإبراز والتمييز">
 <!ENTITY currenttab.style.label "اللسان المختار">
 <!ENTITY unloadedtabs.style.label "الألسنة غير المحملة">
 <!ENTITY unreadtabs.style.label "الألسنة غير المقروءة">

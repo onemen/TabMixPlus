@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Tillad popups med samme størrelse">
 <!ENTITY divertedWindowOpen.none "Tillad alle popups">
 <!ENTITY linkTarget.label "Åbn links med en målattribut i nuværende faneblad">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Forhindre blanke faneblade ved hentning af filer">
 <!ENTITY edit.label "Rediger">
 <!ENTITY speLink.label "Tving til at åbne i nyt faneblad:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">
-<!ENTITY highlight.label "Fremhæv:">
 <!ENTITY currenttab.style.label "Nuværende faneblad">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "Ulæste faneblade">

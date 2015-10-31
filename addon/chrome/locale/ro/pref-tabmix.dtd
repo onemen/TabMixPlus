@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Se permite redimensionarea ferestrelor instantanee">
 <!ENTITY divertedWindowOpen.none "Se permit toate ferestrele instantanee">
 <!ENTITY linkTarget.label "Se deschid legăturile cu un atribut țintă („target”) în fila curentă">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Se împiedică deschiderea filelor vide când se descarcă fișiere">
 <!ENTITY edit.label "Editează extensiile">
 <!ENTITY speLink.label "Se forțează deschiderea într-o filă nouă a:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "La derulare, se afișează parțial următoarea filă nevizibilă">
 <!ENTITY smoothScroll.label "Se activează derularea lină">
 <!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării):">
-<!ENTITY highlight.label "Se evidențiază:">
 <!ENTITY currenttab.style.label "Filă curentă">
 <!ENTITY unloadedtabs.style.label "File neîncărcate">
 <!ENTITY unreadtabs.style.label "File nevizualizate">
