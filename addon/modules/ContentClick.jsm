@@ -67,7 +67,14 @@ var ContentClickInternal = {
       return;
     this._initialized = true;
 
-    Cu.import("resource:///modules/ContentClick.jsm");
+    // ContentClick.jsm is not included in some Firefox forks:
+    // Cyberfox before version 42
+    try {
+      Cu.import("resource:///modules/ContentClick.jsm");
+    } catch (ex) {
+      this.functions = [];
+      return;
+    }
 
     let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
     mm.addMessageListener("TabmixContent:Click", this);
