@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["LinkNodeUtils"];
+this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
 const Cu = Components.utils;
 

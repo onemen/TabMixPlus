@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["Shortcuts"];
+this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";

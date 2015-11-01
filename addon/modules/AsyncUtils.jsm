@@ -1,7 +1,7 @@
 /* jshint esnext: true */
 "use strict";
 
-var EXPORTED_SYMBOLS = ["AsyncUtils"];
+this.EXPORTED_SYMBOLS = ["AsyncUtils"];
 
 const Cu = Components.utils;
 

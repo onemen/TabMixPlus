@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["RenameTab"];
+this.EXPORTED_SYMBOLS = ["RenameTab"];
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
 

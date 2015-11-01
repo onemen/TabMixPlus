@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
+this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["Decode"];
+this.EXPORTED_SYMBOLS = ["Decode"];
 
 /*
     The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.

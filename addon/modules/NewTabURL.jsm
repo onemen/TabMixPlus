@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
+this.EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 

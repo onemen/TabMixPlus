@@ -4,7 +4,7 @@
 
 "use strict";
 
-var EXPORTED_SYMBOLS = ["TabmixAddonManager"];
+this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
 const Cu = Components.utils;
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["AutoReload"];
+this.EXPORTED_SYMBOLS = ["AutoReload"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 

@@ -3,7 +3,7 @@
 /**
  * original code by onemen
  */
-var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
+this.EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
 this.TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow) {

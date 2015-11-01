@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["flst"];
+this.EXPORTED_SYMBOLS = ["flst"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 

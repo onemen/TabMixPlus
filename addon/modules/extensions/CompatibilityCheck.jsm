@@ -10,7 +10,7 @@
  *                   code modified by onemen 2006-01-13
  *                   code modified by onemen 2010-03-22 - work with new AddonManager for firefox 4.0
  */
-var EXPORTED_SYMBOLS = ["CompatibilityCheck"];
+this.EXPORTED_SYMBOLS = ["CompatibilityCheck"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 

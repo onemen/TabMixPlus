@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["MergeWindows"];
+this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cu = Components.utils;
 

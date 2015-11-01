@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["TabmixContentClick"];
+this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
