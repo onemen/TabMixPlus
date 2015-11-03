@@ -296,10 +296,17 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     };
   }
 
+  tabBrowser.getBrowserForTabPanel = function(notificationbox) {
+    let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
+    return document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
+  };
+
   tabBrowser.getTabForLastPanel = function() {
     let notificationbox = this.mPanelContainer.lastChild;
-    let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
-    let browser = document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
+    let browser = this.getBrowserForTabPanel(notificationbox);
+    if (browser == gBrowser._preloadedBrowser) {
+      browser = this.getBrowserForTabPanel(notificationbox.previousSibling);
+    }
     return this.getTabForBrowser(browser);
   };
 
