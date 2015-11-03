@@ -33,7 +33,15 @@ this.TabmixPlacesUtils = Object.freeze({
 
   onQuitApplication: function() {
     PlacesUtilsInternal.onQuitApplication();
-  }
+  },
+
+  applyCallBackOnUrl: function(aUrl, aCallBack) {
+    return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
+  },
+
+  getTitleFromBookmark: function(aUrl, aTitle, aItemId, aTab) {
+    return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
+  },
 });
 
 var Tabmix = {};
@@ -48,6 +56,7 @@ var PlacesUtilsInternal = {
     this._initialized = true;
 
     Tabmix._debugMode = aWindow.Tabmix._debugMode;
+    Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
 
     this.initPlacesUIUtils(aWindow);
@@ -178,5 +187,73 @@ var PlacesUtilsInternal = {
       'bookMarkId: aNode.itemId, initiatingDoc: null,\n' +
       '        $&'
     ).toCode();
-  }
+  },
+
+  // Lazy getter for titlefrombookmark preference
+  get titlefrombookmark() {
+    let updateValue = () => {
+      let value = Services.prefs.getBoolPref(PREF);
+      let definition = {value: value, configurable: true};
+      Object.defineProperty(this, "titlefrombookmark", definition);
+      return value;
+    };
+
+    const PREF = "extensions.tabmix.titlefrombookmark";
+    Services.prefs.addObserver(PREF, updateValue, false);
+    return updateValue();
+  },
+
+  getBookmarkTitle: function(aUrl, aID) {
+    let aItemId = aID.value || -1;
+    try {
+      if (aItemId > -1) {
+        var _URI = PlacesUtils.bookmarks.getBookmarkURI(aItemId);
+        if (_URI && _URI.spec == aUrl)
+          return PlacesUtils.bookmarks.getItemTitle(aItemId);
+      }
+    } catch (ex) { }
+    try {
+      let uri = Services.io.newURI(aUrl, null, null);
+      aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
+      if (aItemId > -1)
+        return PlacesUtils.bookmarks.getItemTitle(aItemId);
+    } catch (ex) { }
+    aID.value = null;
+    return null;
+  },
+
+  applyCallBackOnUrl: function(aUrl, aCallBack) {
+    let hasHref = aUrl.indexOf("#") > -1;
+    let result = aCallBack.apply(this, [aUrl]) ||
+        hasHref && aCallBack.apply(this, aUrl.split("#"));
+    // when IE Tab is installed try to find url with or without the prefix
+    let ietab = Tabmix.gIeTab;
+    if (!result && ietab) {
+      let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
+      if (aUrl != prefix) {
+        let url = aUrl.startsWith(prefix) ?
+            aUrl.replace(prefix, "") : prefix + aUrl;
+        result = aCallBack.apply(this, [url]) ||
+          hasHref && aCallBack.apply(this, url.split("#"));
+      }
+    }
+    return result;
+  },
+
+  getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+    if (!this.titlefrombookmark || !aUrl)
+      return aTitle;
+
+    var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
+    var getTitle = url => this.getBookmarkTitle(url, oID);
+    var title = this.applyCallBackOnUrl(aUrl, getTitle);
+    // setItem check if aTab exist and remove the attribute if
+    // oID.value is null
+    if (aTab) {
+      let win = aTab.ownerDocument.defaultView;
+      win.Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
+    }
+
+    return title || aTitle;
+  },
 };

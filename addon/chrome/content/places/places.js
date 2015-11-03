@@ -25,6 +25,8 @@ var TMP_Places = {
   },
 
   init: function TMP_PC_init() {
+    Tabmix.lazy_import(this, "PlacesUtils", "Places", "TabmixPlacesUtils");
+
     this.contextMenu.toggleEventListener(true);
 
     // use tab label for bookmark name when user renamed the tab
@@ -324,61 +326,13 @@ var TMP_Places = {
     return newTitle || title;
   },
 
-  _getBookmarkTitle: function(aUrl, aID) {
-    let aItemId = aID.value || -1;
-    try {
-      if (aItemId > -1) {
-        var _URI = PlacesUtils.bookmarks.getBookmarkURI(aItemId);
-        if (_URI && _URI.spec == aUrl)
-          return PlacesUtils.bookmarks.getItemTitle(aItemId);
-      }
-    } catch (ex) { }
-    try {
-      let uri = Services.io.newURI(aUrl, null, null);
-      aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
-      if (aItemId > -1)
-        return PlacesUtils.bookmarks.getItemTitle(aItemId);
-    } catch (ex) { }
-    aID.value = null;
-    return null;
-  },
-
   get _titlefrombookmark() {
     delete this._titlefrombookmark;
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  applyCallBackOnUrl: function(aUrl, aCallBack) {
- ///XXX need to work with nsURI
-    let hasHref = aUrl.indexOf("#") > -1;
-    let result = aCallBack.apply(this, [aUrl]) ||
-                 hasHref && aCallBack.apply(this, aUrl.split("#"));
-    // when IE Tab is installed try to find url with or without the prefix
-    let ietab = Tabmix.extensions.gIeTab;
-    if (!result && ietab) {
-      let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
-      if (aUrl != prefix) {
-        let url = aUrl.startsWith(prefix) ?
-            aUrl.replace(prefix, "") : prefix + aUrl;
-        result = aCallBack.apply(this, [url]) ||
-                 hasHref && aCallBack.apply(this, url.split("#"));
-      }
-    }
-    return result;
-  },
-
-  getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
-    if (!this._titlefrombookmark || !aUrl)
-      return aTitle;
-
-    var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
-    var getTitle = url => this._getBookmarkTitle(url, oID);
-    var title = this.applyCallBackOnUrl(aUrl, getTitle);
-    // setItem check if aTab exist and remove the attribute if
-    // oID.value is null
-    Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
-
-    return title || aTitle;
+  getTitleFromBookmark: function(aUrl, aTitle, aItemId, aTab) {
+    return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
   },
 
   isUserRenameTab: function(aTab, aUrl) {
@@ -488,7 +442,7 @@ var TMP_Places = {
       let url = tab.linkedBrowser.currentURI.spec;
       if (this.isUserRenameTab(tab, url))
         return;
-      let index = this.applyCallBackOnUrl(url, getIndex);
+      let index = this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
       if (index) {
         tab.setAttribute("tabmix_bookmarkId", aItemId[index - 1]);
         this.setTabTitle(tab, url);
