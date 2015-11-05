@@ -23,8 +23,7 @@ function FillData() {
   var data, items, item;
   try {
     data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
-  }
-  catch (e) {}
+  } catch (e) {}
 
   if (!data.length) {
     setButtonDisable(del, true);
@@ -50,8 +49,9 @@ function Save() {
 
   try {
     Services.prefs.setCharPref(list.getAttribute('prefstring'), filetype.join(" "));
+  } catch (ex) {
+    Tabmix.assert(ex, "error in filetype: " + filetype);
   }
-  catch (ex) {Tabmix.assert(ex, "error in filetype: " + filetype);}
   return true;
 }
 

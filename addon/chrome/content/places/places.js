@@ -408,8 +408,7 @@ var TMP_Places = {
         this.setTabTitle(tab);
       }, this);
       this.startObserver();
-    }
-    else {
+    } else {
       let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkId", "*");
       Array.slice(tabs).forEach(function(tab) {
         if (tab.hasAttribute("pending"))
@@ -588,8 +587,7 @@ TMP_Places.contextMenu = {
         open.hidden = where.lock;
       if (!open.hidden)
         Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
-    }
-    else {
+    } else {
       open.hidden = true;
       openInTab.hidden = true;
       openInWindow.hidden = false;

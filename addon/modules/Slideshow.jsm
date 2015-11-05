@@ -14,7 +14,9 @@ function flst() {
   this.flstOff = TabmixSvc.getString("flstOff.label");
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
-  XPCOMUtils.defineLazyGetter(this, "tabContainer", function() {return TabmixSvc.topWin().gBrowser.tabContainer;});
+  XPCOMUtils.defineLazyGetter(this, "tabContainer", function() {
+    return TabmixSvc.topWin().gBrowser.tabContainer;
+  });
 }
 
 flst.prototype = {
@@ -23,8 +25,7 @@ flst.prototype = {
       msg = msg.replace(/F8|F9/, Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
-    }
-    catch (e) { }
+    } catch (e) { }
   },
 
   // toggle flst on/off
@@ -32,8 +33,7 @@ flst.prototype = {
     if (TabmixSvc.prefBranch.getIntPref("focusTab") != 4) {
       TabmixSvc.prefBranch.setIntPref("focusTab", 4);
       this.showAlert(this.flstOn, "toggleFLST");
-    }
-    else {
+    } else {
       TabmixSvc.prefBranch.setIntPref("focusTab", 2);
       this.showAlert(this.flstOff, "toggleFLST");
     }
@@ -42,8 +42,7 @@ flst.prototype = {
   toggleSlideshow: function() {
     if (this.slideShowTimer) {
       this.cancel();
-    }
-    else if (this.moreThenOneTab) {
+    } else if (this.moreThenOneTab) {
       let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
       this.slideShowTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,

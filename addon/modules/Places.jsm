@@ -129,8 +129,7 @@ var PlacesUtilsInternal = {
           updateOpenTabset();
         }
       }.bind(this), 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
-    }
-    else { // TreeStyleTab not installed
+    } else { // TreeStyleTab not installed
       updateOpenTabset();
 
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(

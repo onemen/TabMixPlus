@@ -49,11 +49,15 @@ Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
 Tabmix.beforeBrowserInitOnLoad = function() {
   try {
     TabmixSvc.windowStartup.init(window);
-  } catch (ex) {this.assert(ex);}
+  } catch (ex) {
+    this.assert(ex);
+  }
 
   try {
     gTMPprefObserver.init();
-  } catch (ex) {this.assert(ex);}
+  } catch (ex) {
+    this.assert(ex);
+  }
 
   try {
     var SM = TabmixSessionManager;
@@ -71,8 +75,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
       if (SM.firstNonPrivateWindow)
         TabmixSvc.sm.private = false;
-    }
-    else {
+    } else {
       let pbs = Cc["@mozilla.org/privatebrowsing;1"].
                 getService(Ci.nsIPrivateBrowsingService);
       SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
@@ -89,12 +92,13 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // make tabmix compatible with ezsidebar extension
     var fnContainer, TMP_BrowserStartup;
-    if ("__ezsidebar__BrowserStartup" in window) // need to test this on firefox 16+
+    if ("__ezsidebar__BrowserStartup" in window) {// need to test this on firefox 16+
       [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
-    else if ("gBrowserInit" in window)
+    } else if ("gBrowserInit" in window) {
       [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
-    else // we probably never get here
+    } else { // we probably never get here
       [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
+    }
     var bowserStartup = this.changeCode(fnContainer, TMP_BrowserStartup);
 
     // Bug 756313 - Don't load homepage URI before first paint
@@ -236,7 +240,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
-  } catch (ex) {this.assert(ex);}
+  } catch (ex) {
+    this.assert(ex);
+  }
 };
 
 // this must run before all
@@ -413,8 +419,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
     }
-  }
-  else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
+  } else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
            ("faviconize" in window && Tabmix.callerName() == "onxbltransitionend")) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();

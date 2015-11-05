@@ -62,7 +62,9 @@ CompatibilityCheck.prototype = {
       this._version = addon.version;
     }
     AddOn.prototype = {
-      toString: function() {return this._name.toLowerCase();}
+      toString: function() {
+        return this._name.toLowerCase();
+      }
     };
 
     var guid_list = this.getList();
@@ -157,8 +159,7 @@ CompatibilityCheck.prototype = {
       var appStartup = Ci.nsIAppStartup;
       Cc["@mozilla.org/toolkit/app-startup;1"]
                   .getService(appStartup).quit(appStartup.eRestart | appStartup.eAttemptQuit);
-    }
-    else {
+    } else {
       let title = TabmixSvc.getString("incompatible.title");
       let msg = TabmixSvc.getString("incompatible.msg2");
       let button = TabmixSvc.setLabel("sm.button.continue");

@@ -212,7 +212,9 @@ var TMP_tabDNDObserver = {
             url = null;
 
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch (ex) { Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
 
         if (disAllowDrop)
           dt.effectAllowed = "none";
@@ -229,9 +231,8 @@ var TMP_tabDNDObserver = {
     if (canDrop && !isCopy && draggeType == this.DRAG_TAB_IN_SAME_WINDOW && oldIndex == newIndex) {
       canDrop = false;
       dt.effectAllowed = "none";
-    }
-    // if we don't set effectAllowed to none then the drop indicator stay
-    else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
+    } else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
+        // if we don't set effectAllowed to none then the drop indicator stay
         gBrowser.tabs[0].pinned &&
         Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)) {
       canDrop = false;
@@ -253,8 +254,7 @@ var TMP_tabDNDObserver = {
           this.gBackupLabel = statusTextFld.getAttribute("label");
         statusTextFld.label = this.gMsg;
         this.statusFieldChanged = true;
-      }
-      else if (!statusTextFld) {
+      } else if (!statusTextFld) {
         let tooltip = document.getElementById("tabmix-tooltip");
         if (tooltip.state == "closed") {
           tooltip.label = this.gMsg;
@@ -355,8 +355,7 @@ var TMP_tabDNDObserver = {
 
         if (draggeType == this.DRAG_TAB_TO_NEW_WINDOW || event.shiftKey)
           gBrowser.selectedTab = newTab;
-      }
-      else {
+      } else {
         // move the dropped tab
         newIndex += left_right - (newIndex > oldIndex);
 
@@ -376,8 +375,7 @@ var TMP_tabDNDObserver = {
 
       gBrowser.ensureTabIsVisible(gBrowser.tabs.item(newIndex));
       TabmixTabbar.updateBeforeAndAfter();
-    }
-    else if (draggedTab) {
+    } else if (draggedTab) {
       // swap the dropped tab with a new one we create and then close
       // it in the other window (making it seem to have moved between
       // windows)
@@ -407,8 +405,7 @@ var TMP_tabDNDObserver = {
       gBrowser.selectedTab = newTab;
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
       gBrowser.updateCurrentBrowser(true);
-    }
-    else {
+    } else {
       // Pass true to disallow dropping javascript: or data: urls
       let url;
       try {
@@ -427,8 +424,7 @@ var TMP_tabDNDObserver = {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {inBackground: bgLoad, allowThirdPartyFixup: true});
         gBrowser.moveTabTo(newTab, newIndex + left_right);
-      }
-      else {
+      } else {
         // Load in an existing tab.
         let tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
         try {
@@ -498,8 +494,7 @@ var TMP_tabDNDObserver = {
           aEvent.stopPropagation();
           return;
         }
-      }
-      else {// bottom
+      } else {// bottom
         var tb = gNavToolbox.boxObject;
         var toolboxEndScreenY = tb.screenY + tb.height;
         var startScreenY = bo.screenY - 0.5 * rowHeight;
@@ -603,8 +598,7 @@ var TMP_tabDNDObserver = {
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
           return i;
       }
-    }
-    else {
+    } else {
       let topY = Tabmix.tabsUtils.topTabY;
       for (let i = 0; i < numTabs; i++) {
         let tab = tabs[i];
@@ -637,8 +631,7 @@ var TMP_tabDNDObserver = {
       left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
       if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4)
         left_right = -1;
-    }
-    else {
+    } else {
       left_right = (mX < tabBo.screenX + tabBo.width / 2) ? _left : _right;
       if (!isCtrlKey && draggeType == this.DRAG_TAB_IN_SAME_WINDOW) {
         if (newIndex == oldIndex - 1)
@@ -677,8 +670,7 @@ var TMP_tabDNDObserver = {
         this.setDragmarkAttribute(gBrowser.tabs[newIndex], "atLeft");
       if (sameRow || left_right == 1)
         this.setDragmarkAttribute(gBrowser.tabs[newIndex - 1], "atRight");
-    }
-    else {
+    } else {
       // code for firefox indicator
       var ind = gBrowser.tabContainer._tabDropIndicator;
       var minMargin, maxMargin, newMargin;
@@ -710,8 +702,7 @@ var TMP_tabDNDObserver = {
         let addOnBar = document.getElementById("addon-bar");
         fixMargin = (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed) &&
           (Math.abs(newMarginY) < 0.5);
-      }
-      else {
+      } else {
         newMarginY = tabRect.bottom - rect.bottom;
         fixMargin = this.onLastToolbar && (Math.abs(newMarginY) < 0.5);
       }
@@ -838,7 +829,7 @@ var TMP_undocloseTabButtonObserver = {
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (sourceNode && sourceNode.localName == "tab")
       // let tabbrowser drag event time to end before we remove the sourceNode
-      setTimeout(function(b, aTab) {b.removeTab(aTab, {animate: true});}, 0, gBrowser, sourceNode);
+      setTimeout((b, aTab) => b.removeTab(aTab, {animate: true}), 0, gBrowser, sourceNode);
 
     this.onDragExit(aEvent);
   },
@@ -891,7 +882,9 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
 Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
   try {
     return parseInt(window.getComputedStyle(aObj, null)[aStyle]) || 0;
-  } catch (ex) {this.assert(ex);}
+  } catch (ex) {
+    this.assert(ex);
+  }
   return 0;
 };
 
@@ -1052,8 +1045,7 @@ Tabmix.navToolbox = {
       TabmixTabbar.visibleRows = 1;
       TabmixTabbar.updateSettings(false);
       this.resetUI = false;
-    }
-    else if (aToolboxChanged) {
+    } else if (aToolboxChanged) {
       TabmixTabbar.updateScrollStatus();
       TabmixTabbar.updateBeforeAndAfter();
     }
@@ -1345,10 +1337,9 @@ Tabmix.navToolbox = {
       let position = Tabmix.prefs.getIntPref(pref);
       Tabmix.prefs.clearUserPref(pref);
       CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
-    }
-    // try to restore button position from tabs-closebutton position
-    // if item with tabs-closebutton id exist, some other extension add it
-    else if (!document.getElementById("tabs-closebutton")) {
+    } else if (!document.getElementById("tabs-closebutton")) {
+      // try to restore button position from tabs-closebutton position
+      // if item with tabs-closebutton id exist, some other extension add it
       // will throw if called too early (before placements have been fetched)
       let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
       let position = currentset.indexOf("tabs-closebutton");

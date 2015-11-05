@@ -35,8 +35,7 @@ var SessionManager = {
       let tmp = {};
       Cu.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
       TabmixSvc.sessionManagerAddonInstalled = true;
-    }
-    catch (ex) {
+    } catch (ex) {
       TabmixSvc.sessionManagerAddonInstalled = false;
     }
   },

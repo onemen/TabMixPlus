@@ -19,8 +19,7 @@ var gMenuPane = { // jshint ignore:line
     if (browserWindow.TMP_TabView.installed) {
       let label = browserWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
       $("moveToGroup").label = label;
-    }
-    else {
+    } else {
       gPrefWindow.removeChild("pref_showMoveToGroup");
       gPrefWindow.removeChild("moveToGroup");
     }

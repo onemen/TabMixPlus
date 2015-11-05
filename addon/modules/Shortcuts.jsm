@@ -41,7 +41,9 @@ this.Shortcuts = {
     undoClose: {default: "VK_F12 accel"},
     undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
     clearClosedTabs: {
-      command: function() {this.TMP_ClosedTabs.restoreTab('original', -1);}
+      command: function() {
+        this.TMP_ClosedTabs.restoreTab('original', -1);
+      }
     },
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
@@ -153,7 +155,9 @@ this.Shortcuts = {
       }
 
       this.updatingShortcuts = false;
-    } catch (ex) {TabmixSvc.console.assert(ex);}
+    } catch (ex) {
+      TabmixSvc.console.assert(ex);
+    }
   },
 
   /* ........ Window Event Handlers .............. */
@@ -178,7 +182,9 @@ this.Shortcuts = {
       } else {
         win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
       }
-    } catch (ex) {TabmixSvc.console.assert(ex);}
+    } catch (ex) {
+      TabmixSvc.console.assert(ex);
+    }
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
@@ -240,8 +246,7 @@ this.Shortcuts = {
         aWindow.Tabmix.removedShortcuts.appendChild(keyItem);
       else if (keyItem.parentNode != keyset)
         keyset.appendChild(keyItem);
-    }
-    else {
+    } else {
       // don't add disabled key
       if (!keyset || disabled)
         return;
@@ -319,12 +324,10 @@ this.Shortcuts = {
           (val == "d&" && (!keyData.default || /^d&/.test(keyData.default)))) {
         delete shortcuts[key];
         updatePreference = true;
-      }
-      else if (keyData.default && (val == "d&" + keyData.default)) {
+      } else if (keyData.default && (val == "d&" + keyData.default)) {
         shortcuts[key] = "d&";
         updatePreference = true;
-      }
-      else if (val != "d&" && !this.prefBackup) {
+      } else if (val != "d&" && !this.prefBackup) {
         // make sure user didn't changed the preference in prefs.js
         let newValue = this._userChangedKeyPref(val) || keyData.value;
         if (newValue != val) {
@@ -390,10 +393,9 @@ this.Shortcuts = {
     if ((key.keycode && key.keycode == "VK_SCROLL_LOCK" || key.keycode == "VK_CONTEXT_MENU") ||
        (!key.key && !key.keycode)) {
       key = null;
-    }
-    // block ALT + TAB
-    else if (key.modifiers && /alt/.test(key.modifiers) && key.keycode &&
+    } else if (key.modifiers && /alt/.test(key.modifiers) && key.keycode &&
         (key.keycode == "VK_BACK_QUOTE" || key.keycode == "VK_TAB")) {
+      // block ALT + TAB
       key = null;
     }
 

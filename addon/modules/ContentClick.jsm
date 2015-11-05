@@ -597,7 +597,9 @@ var ContentClickInternal = {
           blocked = host == "developer.mozilla.org" && linkNode.host != host &&
                    linkNode.classList.contains("external");
         }
-      } catch (ex) {blocked = false;}
+      } catch (ex) {
+        blocked = false;
+      }
       if (!blocked)
         return "16";
 
@@ -754,8 +756,7 @@ var ContentClickInternal = {
       // add \ before first ?
         testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
         hrefExt = linkHref;
-      }
-      else {
+      } else {
         testString = "\\." + filetype[l];
         hrefExt = linkHrefExt;
         try {
@@ -1044,8 +1045,7 @@ var ContentClickInternal = {
         if (browser.getAttribute("remote") == "true") {
           browser.messageManager
                  .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
-        }
-        else {
+        } else {
           let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
                                                       this.frameData.href, this.frameData.name);
           this.result(browser, {result: result});

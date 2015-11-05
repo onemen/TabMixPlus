@@ -28,9 +28,9 @@ var tablib = { // eslint-disable-line
         return;
       this._loadURIWithFlagsinitialized = true;
       [obj, name] = [window, "window._loadURIWithFlags"];
-    }
-    else
+    } else {
       [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
+    }
     Tabmix.changeCode(obj, name)._replace(
       '{',
       '$&\n' +
@@ -125,16 +125,16 @@ var tablib = { // eslint-disable-line
     if (typeof rp == "object" && typeof rp.addTab == "object" &&
         typeof rp.addTab.main == "function") {
       [obj, fnName] = [rp.addTab, "rpcontinuedWrappedFunctions.addTab.main"];
-    } else if (typeof Fd == "object" && typeof Fd.addTab == "function")
+    } else if (typeof Fd == "object" && typeof Fd.addTab == "function") {
       [obj, fnName] = [Fd, "Fd.addTab"];
-    else if (Tabmix.extensions.ieTab2)
+    } else if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
     // NRA-ILA toolbar extension raplce the original addTab function
-    else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
+    } else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
       [obj, fnName] = [gBrowser, "origAddTab7c3de167ed6f494aa652f11a71ecb40c"];
-    }
-    else
+    } else {
       [obj, fnName] = [gBrowser, "addTab"];
+    }
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       '{', '{\n\
@@ -283,10 +283,11 @@ var tablib = { // eslint-disable-line
       ).toCode();
     }
 
-    if (Tabmix.extensions.ieTab2)
+    if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldSetTabTitle"];
-    else
+    } else {
       [obj, fnName] = [gBrowser, "setTabTitle"];
+    }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       'var title = browser.contentTitle;',
       '$&\
@@ -893,7 +894,9 @@ var tablib = { // eslint-disable-line
     let menuLabelString = gNavigatorBundle.getString("menuUndoCloseWindowLabel");
     let menuLabelStringSingleTab =
       gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel");
-    let checkForMiddleClick = function(e) {this.checkForMiddleClick(e);}.bind(TabmixSessionManager);
+    let checkForMiddleClick = function(e) {
+      this.checkForMiddleClick(e);
+    }.bind(TabmixSessionManager);
     for (let i = 0; i < undoPopup.childNodes.length; i++) {
       let m = undoPopup.childNodes[i];
       let undoItem = undoItems[i];
@@ -973,7 +976,9 @@ var tablib = { // eslint-disable-line
           var newEntry = {url: aHref}; // we don't know the page title at this moment
           tabState.entries.splice(activeIndex + 1, entriesToRemove, newEntry);
           tabState.index++;
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       // we need to update history title after the new page loaded for use in back/forword button
       function updateNewHistoryTitle() {
@@ -987,7 +992,9 @@ var tablib = { // eslint-disable-line
             let history = browser.webNavigation.sessionHistory;
             Tabmix.Utils.updateHistoryTitle(history, this.label);
           }
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       function urlForDownload() {
         /* jshint validthis: true */
@@ -996,7 +1003,9 @@ var tablib = { // eslint-disable-line
           let browser = this.linkedBrowser;
           browser.tabmix_allowLoad = true;
           browser.loadURI(aHref);
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       try {
         tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
@@ -1012,7 +1021,9 @@ var tablib = { // eslint-disable-line
         }
         tabState.pinned = false;
         TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
-      } catch (ex) {Tabmix.assert(ex);}
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
 
       return newTab;
     };
@@ -1024,11 +1035,9 @@ var tablib = { // eslint-disable-line
       if (Tabmix.singleWindowMode) {
         if (!aMoveTab)
           this.duplicateTab(aTab, null, aTabData);
-      }
-      else if (aMoveTab) {
+      } else if (aMoveTab) {
         this.replaceTabWithWindow(aTab);
-      }
-      else {
+      } else {
         aTab._tabmixCopyToWindow = {data: aTabData};
         // replaceTabWithWindow not working if there is only one tab in the the window
         window.openDialog("chrome://browser/content/browser.xul",
@@ -1048,8 +1057,7 @@ var tablib = { // eslint-disable-line
         // Firefox 26-37
         let doc = target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
-      }
-      else {
+      } else {
         // Firefox 17-25
         let doc = target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
@@ -1272,8 +1280,7 @@ var tablib = { // eslint-disable-line
         aTab.removeAttribute("_lockedAppTabs"); // we only have this if we locked AppTab
         aTab.removeAttribute("locked");
         aTab.setAttribute("_locked", "false");
-      }
-      else {
+      } else {
         aTab.setAttribute("locked", "true");
         aTab.setAttribute("_locked", "true");
       }
@@ -1500,8 +1507,7 @@ var tablib = { // eslint-disable-line
           shouldPrompt = 3;
         else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
           shouldPrompt = 2;
-      }
-      else if (numTabs > 1) {
+      } else if (numTabs > 1) {
         if (Services.prefs.getBoolPref(prefs[0]))
           shouldPrompt = 1;
         // when we close window with last tab and we don't have protected tabs
@@ -1599,8 +1605,7 @@ var tablib = { // eslint-disable-line
           message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
                                           TabmixSvc.getString("window.closeWarning.1");
-      }
-      else {
+      } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
         message = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
@@ -1708,8 +1713,7 @@ var tablib = { // eslint-disable-line
           return;
         this.numberOfTabsClosedLast++;
       };
-    }
-    else {
+    } else {
       Tabmix.startCountingClosedTabs = function() { };
       Tabmix.setNumberOfTabsClosedLast = function() { };
       Tabmix.countClosedTabs = function() { };
@@ -1717,13 +1721,13 @@ var tablib = { // eslint-disable-line
 
     /** DEPRECATED **/
     // we keep this function to saty compatible with other extensions that use it
-    gBrowser.undoRemoveTab = function() {TMP_ClosedTabs.undoCloseTab();};
+    gBrowser.undoRemoveTab = () => TMP_ClosedTabs.undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { };
-    gBrowser.closeTab = function(aTab) {this.removeTab(aTab);};
+    gBrowser.closeTab = aTab => this.removeTab(aTab);
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
-    gBrowser.renameTab = function(aTab) {Tabmix.renameTab.editTitle(aTab);};
+    gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
   },
 
   // prevent 'ReferenceError: reference to undefined property params'
@@ -1786,18 +1790,21 @@ var tablib = { // eslint-disable-line
 
     try {
       TMP_ClosedTabs.setButtonDisableState();
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in saveClosedTab");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in saveClosedTab"); }
 
     try {
       TabmixSessionManager.tabScrolled(tab);
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled"); }
 
     try {
       TabmixSessionManager.tabClosed(tab);
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabClosed");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabClosed"); }
   },
 
   closeLastTab: function TMP_closeLastTab() {

@@ -78,8 +78,7 @@ var gSessionPane = {
     if (useSessionManager) {
       sessionstorePrefs();
       sessionPrefs();
-    }
-    else {
+    } else {
       sessionPrefs();
       sessionstorePrefs();
     }
@@ -119,8 +118,7 @@ var gSessionPane = {
       $("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
       if (onStart)
         $("chooseFile").selectedIndex = 1;
-    }
-    else {
+    } else {
       this.isSessionStoreEnabled(onStart);
       TabmixSessionManager.createMenuForDialog($("onStart.popup"));
       $("onStart.loadsession").value = $("pref_onStart.loadsession").value;

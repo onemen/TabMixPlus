@@ -77,8 +77,7 @@ Tabmix.sessionInitialized = function() {
     if (this.isVersion(200)) {
       this.setItem("Browser:RestoreLastSession", "disabled",
         !SM.canRestoreLastSession || SM.isPrivateWindow);
-    }
-    else {
+    } else {
       this.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
         'this._ss', 'TabmixSessionManager'
       ).toCode();
@@ -211,7 +210,7 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TMP_extensionsCompatibility.onDelayedStartup();
 
   if (this.isVersion(280))
-    setTimeout(function() {Tabmix.getAfterTabsButtonsWidth();}, 100);
+    setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 100);
 
   gTMPprefObserver.setMenuIcons();
 
@@ -232,7 +231,9 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
 
   try {
     TMP_LastTab.init();
-  } catch (ex) {this.assert(ex);}
+  } catch (ex) {
+    this.assert(ex);
+  }
 
   // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
@@ -363,7 +364,9 @@ var TMP_eventListener = {
       Tabmix.lazy_import(Tabmix, "docShellCapabilities",
         "DocShellCapabilities", "DocShellCapabilities");
       Tabmix.lazy_import(Tabmix, "Utils", "Utils", "TabmixUtils");
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
 
     this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
@@ -372,11 +375,15 @@ var TMP_eventListener = {
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
 
     try {
       Tabmix.onContentLoaded.changeCode();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
 
     Tabmix.contentAreaClick.init();
 
@@ -396,7 +403,9 @@ var TMP_eventListener = {
     try {
       if (TMP_TabView.installed)
         TMP_TabView._patchBrowserTabview();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
@@ -414,29 +423,43 @@ var TMP_eventListener = {
 
     try {
       TabmixProgressListener.startup(gBrowser);
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
 
     gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // init tabmix functions
     try {
       TMP_extensionsCompatibility.onWindowOpen();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     try {
       tablib.init();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     try {
       TMP_Places.init();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     try {
       Tabmix.startup();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     try {
       Tabmix.linkHandling_init();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     try {
       TMP_tabDNDObserver.init();
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
 
     if (TabmixSvc.isMac) {
       tabBar.setAttribute("Mac", "true");
@@ -466,14 +489,12 @@ var TMP_eventListener = {
 ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
         Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
-      }
-      else {
+      } else {
         let version = navigator.oscpu.startsWith("Windows NT 6.1") ? "v40aero" : "v40";
         tabBar.setAttribute("classic40", version);
         Tabmix.setItem(tabsToolbar, "classic40", version);
       }
-    }
-    else {
+    } else {
       /**
        * some theme like Vista-aero 3.0.0.91 and BlueSky 3.0.0.91
        * use TMP_TBP_Startup in stylesheet window[onload="TMP_TBP_Startup()"]
@@ -603,7 +624,7 @@ var TMP_eventListener = {
     this.tabWidthCache.set(tab, width);
 
     TabmixTabbar.updateScrollStatus();
-    setTimeout(function() {TabmixTabbar.updateScrollStatus();}, 2500);
+    setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
   },
 
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
@@ -655,8 +676,7 @@ var TMP_eventListener = {
       if (!document.mozFullScreen) {
         fullScrToggler.hidden = false;
       }
-    }
-    else if (fullScrToggler && !enterFS) {
+    } else if (fullScrToggler && !enterFS) {
       this._updateMarginBottom("");
       fullScrToggler.hidden = true;
     }
@@ -698,8 +718,7 @@ var TMP_eventListener = {
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
       gTMPprefObserver.updateTabbarBottomPosition();
-    }
-    else {
+    } else {
       let bottombox = document.getElementById("browser-bottombox");
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
@@ -758,8 +777,7 @@ var TMP_eventListener = {
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
-    }
-    else if (!this._onOpenTimeout) {
+    } else if (!this._onOpenTimeout) {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
           Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
@@ -868,7 +886,7 @@ var TMP_eventListener = {
       Tabmix.tabsUtils.adjustNewtabButtonvisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
       _updateTabstrip();
-      setTimeout(function() {_updateTabstrip();}, 0);
+      setTimeout(() => _updateTabstrip(), 0);
     }
   },
 
@@ -975,8 +993,7 @@ var TMP_eventListener = {
       tabBar.advanceSelectedTab(direction, true);
       aEvent.stopPropagation();
       aEvent.preventDefault();
-    }
-    else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
+    } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml DOMMouseScroll event handler
       let tabsSrip = tabBar.mTabstrip;
       let orient = tabsSrip.orient;
@@ -989,8 +1006,7 @@ var TMP_eventListener = {
         if (aEvent.axis == aEvent.HORIZONTAL_AXIS)
           return;
         tabsSrip.scrollByIndex(direction);
-      }
-      else {
+      } else {
         let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
         if (tabsSrip._prevMouseScrolls.every(prev => prev == isVertical)) {
           tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
@@ -1019,7 +1035,7 @@ var TMP_eventListener = {
           if (aID != "tabmixopt")
             win.close();
           else
-            win.setTimeout(function() {win.close();}, 0);
+            win.setTimeout(() => win.close(), 0);
         }
       });
     }
@@ -1140,7 +1156,7 @@ Tabmix.initialization = {
     let result, currentPhase = this[aPhase].id;
     let getObj = function(list) {
       let obj = window;
-      list.split(".").forEach(function(prop) {obj = obj[prop];});
+      list.split(".").forEach(prop => obj = obj[prop]);
       return obj;
     };
     for (let key of Object.keys(this)) {

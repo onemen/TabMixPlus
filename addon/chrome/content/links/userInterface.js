@@ -26,8 +26,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     tabmixOptionsWin.gIncompatiblePane.checkForIncompatible(false);
 
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
-  }
-  else {
+  } else {
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
         "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
@@ -48,8 +47,7 @@ Tabmix.openURL = function TMP_openURL(aURL, event) {
   var linkTarget;
   try {
     linkTarget = Services.prefs.getIntPref("browser.link.open_newwindow");
-  }
-  catch (e) {
+  } catch (e) {
     linkTarget = 1;
   }
 
@@ -129,7 +127,9 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
         url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
         if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
           url = "about:privatebrowsing";
-      } catch (ex) { Tabmix.assert(ex); }
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
       // use this if we can't find the pref
       if (!url)
         url = newTabUrl;
@@ -217,7 +217,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
     if (this.isVersion(340) && gMultiProcessBrowser)
       aTab._skipContentFocus = true;
     if (aTimeOut)
-      setTimeout(function() {focusAndSelectUrlBar();}, 30);
+      setTimeout(() => focusAndSelectUrlBar(), 30);
     else
       focusAndSelectUrlBar();
   }
@@ -319,8 +319,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
     let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
     if (!isBlankTab)
       return "tab";
-  }
-  else if (opentabforLinks == 2) {
+  } else if (opentabforLinks == 2) {
     // Get current page url
     let curpage = gBrowser.currentURI.spec;
     if (this.ContentClick.isLinkToExternalDomain(curpage, url))

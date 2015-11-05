@@ -364,8 +364,7 @@ this.DynamicRules = {
       currentPrefValues = TabmixSvc.JSON.parse(prefString);
       if (currentPrefValues === null)
         throw Error(ruleName + " value is invalid\n" + prefString);
-    }
-    catch (ex) {
+    } catch (ex) {
       TabmixSvc.console.log(ex);
       TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
       Prefs.clearUserPref(ruleName);
@@ -381,8 +380,7 @@ this.DynamicRules = {
         let opacity = item.replace("Color", "Opacity");
         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
         value = getRGBcolor(value, opacityValue);
-      }
-      else if (value !== undefined && typeof value != "boolean") {
+      } else if (value !== undefined && typeof value != "boolean") {
         if (/^true$|^false$/.test(value.replace(/[\s]/g, "")))
           value = value == "true";
         else
@@ -416,8 +414,7 @@ function getRGBcolor(aColorCode, aOpacity) {
       if (isNaN(newRGB[i].replace(/[\s]/g, "") * 1))
         return null;
     }
-  }
-  else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {
+  } else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {
     aColorCode = aColorCode.replace("#", "");
     let subLength = _length == 7 ? 2 : 1;
     for (let i = 0; i < 3; i++) {

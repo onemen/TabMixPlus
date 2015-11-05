@@ -75,27 +75,21 @@ var TabmixTabClickOptions = {
     }
 
     var prefName;
-    /* middle click*/
-    if (aEvent.button == 1)
-      prefName = "middle";
-    /* shift click*/
-    else if (leftClick && aEvent.shiftKey && !aEvent.ctrlKey &&
+    if (aEvent.button == 1) {
+      prefName = "middle"; /* middle click*/
+    } else if (leftClick && aEvent.shiftKey && !aEvent.ctrlKey &&
         !aEvent.altKey && !aEvent.metaKey) {
-      prefName = "shift";
-    }
-    /* alt click*/
-    else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
+      prefName = "shift"; /* shift click*/
+    } else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
         !aEvent.shiftKey && !aEvent.metaKey) {
-      prefName = "alt";
+      prefName = "alt"; /* alt click*/
       window.addEventListener("keyup", function TMP_onKeyup_onTabClick(aEvent) {
         aEvent.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
         aEvent.stopPropagation();
       }, true);
-    }
-    /* ctrl click*/
-    else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
+    } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
         !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {
-      prefName = "ctrl";
+      prefName = "ctrl"; /* ctrl click*/
     }
 
     if (prefName)
@@ -221,8 +215,7 @@ var TabmixTabClickOptions = {
         if (window.IeView && window.IeView.ieViewLaunch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
           IeView.ieViewLaunch("Internet Explorer.lnk", href);
-        }
-        else if (Tabmix.extensions.gIeTab) {
+        } else if (Tabmix.extensions.gIeTab) {
           let ieTab = Tabmix.extensions.gIeTab;
           let gIeTabObj = window[ieTab.obj];
           if (typeof gIeTabObj.switchTabEngine == "function") {
@@ -230,8 +223,7 @@ var TabmixTabClickOptions = {
               gBrowser.selectedTab = aTab;
             gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
           }
-        }
-        else if (window.ieview && window.ieview.launch) {
+        } else if (window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
           ieview.launch(href);
         }
@@ -438,8 +430,7 @@ var TabmixContext = {
     if (clickOutTabs) {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
-    }
-    else {
+    } else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(TabContextMenu.contextTab);");
     }
@@ -588,8 +579,7 @@ var TabmixContext = {
             hideNextSeparator = true;
             lastVisible = mi;
           }
-        }
-        else if (hideNextSeparator) {
+        } else if (hideNextSeparator) {
           if (lastVisible.getAttribute("type") == "tabmix" && mi.getAttribute("type") != "tabmix") {
             mi.hidden = false;
             lastVisible.hidden = true;
@@ -598,8 +588,7 @@ var TabmixContext = {
           else
             mi.hidden = true;
         }
-      }
-      else if (!mi.hidden && !mi.collapsed) {
+      } else if (!mi.hidden && !mi.collapsed) {
         hideNextSeparator = false;
         hideMenu = false;
       }
@@ -728,7 +717,9 @@ var TabmixContext = {
           duplicateTabMenu.hidden && duplicateWinMenu.hidden && closeTabMenu.hidden &&
           lockTabMenu.hidden && protectTabMenu.hidden && tabsListMenu.hidden &&
           freezeTabMenu.hidden && undoCloseTabMenu.hidden && undoCloseListMenu.hidden;
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     return true;
   },
 
@@ -1055,8 +1046,7 @@ var TabmixAllTabs = {
     if (aTab.hasAttribute("busy")) {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));
       aMenuitem.removeAttribute("image");
-    }
-    else {
+    } else {
       aMenuitem.setAttribute("image", gBrowser.getIcon(aTab));
       aMenuitem.removeAttribute("busy");
     }

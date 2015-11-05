@@ -24,7 +24,9 @@ Tabmix.setSanitizer = {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
         } catch (ex) {
-          try {Tabmix.reportError(ex);} catch (e) { }
+          try {
+            Tabmix.reportError(ex);
+          } catch (e) { }
         }
       },
       get canClear() {
@@ -72,8 +74,7 @@ Tabmix.setSanitizer = {
         check.setAttribute("type", "checkbox");
         check.setAttribute("noduration", "true");
         itemList.setAttribute("rows", parseInt(itemList.getAttribute("rows")) + 1);
-      }
-      else if (container.childNodes.length > 1) {
+      } else if (container.childNodes.length > 1) {
         // don't add our checkbox to a row that already have 2 items
         let row = document.createElement("row");
         container.parentNode.appendChild(row);

@@ -153,9 +153,10 @@ var Tabmix = { // jshint ignore:line
       dpb.SetString(i, strParam[i]);
 
     if (typeof (aWindow) == "undefined") {
-      try { aWindow = window;
-      }
-      catch (e) { aWindow = null;
+      try {
+        aWindow = window;
+      } catch (e) {
+        aWindow = null;
       }
     }
 
@@ -202,7 +203,10 @@ var Tabmix = { // jshint ignore:line
     return window;
   },
 
-  compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
+  compare: function TMP_utils_compare(a, b, lessThan) {
+    return lessThan ? a < b : a > b;
+  },
+
   itemEnd: function TMP_utils_itemEnd(item, end) {
     return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);
   },

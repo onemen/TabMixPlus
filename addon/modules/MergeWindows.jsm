@@ -43,12 +43,10 @@ this.MergeWindows = {
     else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
       windows.unshift(aWindow);
       this.mergePopUpsToNewWindow(windows, options.private);
-    }
-    else if (options.multiple) {
+    } else if (options.multiple) {
       options.normalWindowsCount = normalWindowsCount;
       this.mergeMultipleWindows(aWindow, windows, options);
-    }
-    else {
+    } else {
       let tabsToMove = Array.slice(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
       this.mergeTwoWindows(windows[0], aWindow, tabsToMove, options);
     }
@@ -183,8 +181,7 @@ this.MergeWindows = {
           openerWindow = browser.contentWindow.opener;
         }
         this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
-      }
-      else {
+      } else {
         // we don't keep tab attributs: visited, tabmix_selectedID
         // see in Tabmix.copyTabData list of attributs we copy to the new tab
         tabbrowser.swapBrowsersAndCloseOther(newTab, tab);

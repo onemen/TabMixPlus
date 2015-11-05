@@ -66,7 +66,9 @@
       try {
         TabmixSessionManager._groupItemPushAway();
         this._patchTabviewFrame();
-      } catch (ex) {Tabmix.assert(ex);}
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
     }.bind(this);
 
     if (TabView._window)
@@ -287,8 +289,7 @@
       // We are here only when the restored session did not have tabview data
       // we creat new group and fill all the data
       tabviewData = setData(update.newGroupID);
-    }
-    else {
+    } else {
       tabviewData = tabdata.extData && tabdata.extData["tabview-tab"] || null;
       // make sure data is not "null"
       if (!tabviewData || tabviewData == "null") {
@@ -489,8 +490,7 @@
         groupItems[newID].id = newID;
         // we will update tabview-tab data later
         IDs[id] = newID;
-      }
-      else {
+      } else {
         groupItems[id] = newGroupItems[id];
         if (id > groupsData.nextID)
           groupsData.nextID = id;

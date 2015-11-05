@@ -92,8 +92,7 @@ var TabmixTabbar = {
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         tabBar.mTabstrip.resetFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip(true);
-      }
-      else if (isMultiRow && overflow) {
+      } else if (isMultiRow && overflow) {
         // if we are in overflow in one line we will have more then one line
         // in multi-row. we try to prevent extra over/underflow events by setting
         // the height in front.
@@ -115,7 +114,7 @@ var TabmixTabbar = {
         // Don't change tabstip orient on start before sessionStore ends.
         // if we set orient to vertical before sessionStore finish
         // sessionStore don't select the selected tab from last session.
-        setTimeout(function() {Tabmix.tabsUtils.setTabStripOrient();}, 0);
+        setTimeout(() => Tabmix.tabsUtils.setTabStripOrient(), 0);
       }
       else
         Tabmix.tabsUtils.setTabStripOrient();
@@ -183,9 +182,8 @@ var TabmixTabbar = {
       if (tabBar.mTabstrip.orient == "vertical") {
         this.setFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip();
-      }
-      // with Australis overflow not always trigger when tab changed width
-      else if (TabmixSvc.australis && !this.widthFitTitle) {
+      } else if (TabmixSvc.australis && !this.widthFitTitle) {
+        // with Australis overflow not always trigger when tab changed width
         tabBar.mTabstrip._enterVerticalMode();
         this.setFirstTabInRow();
       }
@@ -351,7 +349,7 @@ var TabmixTabbar = {
         Tabmix.tabsUtils.updateVerticalTabStrip();
 
       if (this.position == 1)
-        setTimeout(function() {Tabmix.tabsUtils.updateVerticalTabStrip();}, 0);
+        setTimeout(() => Tabmix.tabsUtils.updateVerticalTabStrip(), 0);
 
       this.updateBeforeAndAfter();
     }
@@ -458,8 +456,7 @@ var TabmixTabbar = {
         return lastTab.boxObject.height;
       else
         return firstTab.boxObject.height;
-    }
-    else if (lastTabRow == 2) { // multi-row
+    } else if (lastTabRow == 2) { // multi-row
       let newRowHeight;
       if (lastTab.getAttribute("selected") == "true") {
         // check if previous to last tab in the 1st row
@@ -469,8 +466,7 @@ var TabmixTabbar = {
           return lastTab.boxObject.height;
         else
           newRowHeight = prev.baseY - firstTab.baseY;
-      }
-      else if (firstTab.getAttribute("selected") == "true") {
+      } else if (firstTab.getAttribute("selected") == "true") {
         // check if 2nd visible tab is in the 2nd row
         // (not likely that user set tab width to more then half screen width)
         var next = Tabmix.visibleTabs.next(firstTab);
@@ -592,7 +588,9 @@ Tabmix.tabsUtils = {
     XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function() {
       return window.getComputedStyle(tabbrowser, null).direction == "rtl";
     });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function() {return !Tabmix.rtl;});
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function() {
+      return !Tabmix.rtl;
+    });
 
     // don't set button to left side if it is not inside tab-content
     let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
@@ -854,14 +852,13 @@ Tabmix.tabsUtils = {
       else
         this.disAllowNewtabbutton = true;
       return;
-    }
-    // button is NOT visible
-    //         A: 2 last tabs are in the same row:
-    //            check if we have room for the button in this row
-    //         B: 2 last tabs are NOT in the same row:
-    //            check if we have room for the last tab + button after
-    //            previous to last tab.
-    else {
+    } else {
+      // button is NOT visible
+      //         A: 2 last tabs are in the same row:
+      //            check if we have room for the button in this row
+      //         B: 2 last tabs are NOT in the same row:
+      //            check if we have room for the last tab + button after
+      //            previous to last tab.
       // ignor the case that this tab width is larger then the tabbar
       let previousTab = Tabmix.visibleTabs.previous(lastTab);
       if (!previousTab) {
@@ -889,8 +886,7 @@ Tabmix.tabsUtils = {
             newTabButtonWidth();
         this.disAllowNewtabbutton = buttonEnd > tsboEnd;
         return;
-      }
-      else {
+      } else {
         let lastTabEnd = previousTab.boxObject.screenX +
             previousTab.boxObject.width + lastTab.boxObject.width;
         // both last tab and new tab button are in the next row
@@ -940,8 +936,7 @@ Tabmix.tabsUtils = {
           tabBar._positionPinnedTabs();
           if (Tabmix.isVersion(190))
             tabBar._handleTabSelect(false);
-        }
-        else {
+        } else {
           if (tabBar._lastTabClosedByMouse)
             tabBar._expandSpacerBy(tabstrip._scrollButtonDown.clientWidth);
           gBrowser._removingTabs.forEach(gBrowser.removeTab, gBrowser);
@@ -1132,8 +1127,7 @@ var gTMPprefObserver = {
       // add Observer
       for (var i = 0; i < this.OBSERVING.length; ++i)
         Services.prefs.addObserver(this.OBSERVING[i], this, false);
-    }
-    catch (e) {
+    } catch (e) {
       Tabmix.log("prefs-Observer failed to attach:" + "\n" + e);
       Tabmix.prefs.setBoolPref("PrefObserver.error", true);
     }
@@ -1206,8 +1200,7 @@ var gTMPprefObserver = {
           // regardless if they were lock and unlocked before by the user
           if (updatePinned ? lockAppTabs : TabmixTabbar.lockallTabs) {
             tab.setAttribute("locked", "true");
-          }
-          else {
+          } else {
             tab.removeAttribute("locked");
           }
           if (updatePinned) {
@@ -1628,8 +1621,7 @@ var gTMPprefObserver = {
       newRule = iconRule.replace(/%favhideclose%/g, '[favhideclose="true"]')
                 .replace(/%faviconized%/g, ':not([faviconized="true"])');
       tabmix_setRule(newRule);
-    }
-    else {
+    } else {
       let newRule = iconRule.replace(/%favhideclose%/g, '').replace(/%faviconized%/g, '');
       tabmix_setRule(newRule);
     }
@@ -1681,8 +1673,7 @@ var gTMPprefObserver = {
       this.insertRule(newRule);
       newRule = '.tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {max-width: 36px !important;}';
       this.insertRule(newRule);
-    }
-    else {
+    } else {
       let newRule = iconRule.replace(/%favhideclose%/g, '')
                             .replace(/%faviconized%/g, '').replace(/%faviconized1%/g, '');
       this.insertRule(newRule);
@@ -1749,9 +1740,9 @@ var gTMPprefObserver = {
       else
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
                                        "rect(0pt, 180px, 18px, 162px)";
-    }
-    else
+    } else {
       [url, region] = ["newtab.png", "auto"];
+    }
     this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
 
     if (!TabmixSvc.australis)
@@ -1767,8 +1758,7 @@ var gTMPprefObserver = {
     if (bgMiddleMargin) {
       bgMiddleMargin.style.MozMarginStart = margin;
       bgMiddleMargin.style.MozMarginEnd = margin;
-    }
-    else {
+    } else {
       let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
                     '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
       this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
@@ -1885,8 +1875,9 @@ var gTMPprefObserver = {
       try {
         var prefValue = Services.prefs.getIntPref(pref);
         test = test ? prefValue == testVal : prefValue != testVal;
+      } catch (e) {
+        test = true;
       }
-      catch (e) { test = true; }
 
       if (test)
         Services.prefs.setIntPref(pref, newVal);
@@ -1939,8 +1930,7 @@ var gTMPprefObserver = {
       if (hideIcons) {
         for (let i = 0; i < items.length; ++i)
           items[i].removeAttribute("class");
-      }
-      else {
+      } else {
         for (let i = 0; i < items.length; ++i)
           items[i].setAttribute("class", items[i].getAttribute("tmp_iconic"));
       }
@@ -2038,8 +2028,7 @@ var gTMPprefObserver = {
         tabsToolbar.setAttribute("currentset", cSet.join(","));
         document.persist("TabsToolbar", "currentset");
       }
-    }
-    else {
+    } else {
       this.setShowNewTabButtonAttr(false);
       Tabmix.sideNewTabButton = null;
     }
@@ -2128,8 +2117,7 @@ var gTMPprefObserver = {
         gNavToolbox.tabmix_tabsontop = true;
         TabsOnTop.enabled = false;
       }
-    }
-    else if (gNavToolbox.tabmix_tabsontop) {
+    } else if (gNavToolbox.tabmix_tabsontop) {
       TabsOnTop.enabled = true;
       gNavToolbox.tabmix_tabsontop = false;
     }
@@ -2280,11 +2268,10 @@ var gTMPprefObserver = {
     if (Tabmix.prefs.prefHasUserValue("tabXMode")) {
       let val = getPrefByType("extensions.tabmix.tabXMode", 1, "IntPref");
       Tabmix.prefs.setIntPref("tabs.closeButtons", val);
-    }
-    // partly fix a bug from version 0.3.8.3
-    else if (Services.prefs.prefHasUserValue("browser.tabs.closeButtons") &&
-             !Tabmix.prefs.prefHasUserValue("version") &&
-             !Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
+    } else if (Services.prefs.prefHasUserValue("browser.tabs.closeButtons") &&
+               !Tabmix.prefs.prefHasUserValue("version") &&
+               !Tabmix.prefs.prefHasUserValue("tabs.closeButtons")) {
+      // partly fix a bug from version 0.3.8.3
       let value = getPrefByType("browser.tabs.closeButtons", 1, "IntPref");
       // these value are from 0.3.8.3. we don't know if 0,1 are also from 0.3.8.3 so we don't use 0,1.
       if (value > 1 && value <= 6) {
@@ -2382,7 +2369,9 @@ var gTMPprefObserver = {
         Services.prefs.setIntPref("browser.tabs.tabMaxWidth", val);
         Tabmix.prefs.clearUserPref("tabMaxWidth");
       }
-    } catch (ex) {Tabmix.assert(ex);}
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
     // 2013-01-21 - lock hideIcons to true in mac
     if (Services.appinfo.OS == "Darwin" && !Tabmix.prefs.prefIsLocked("hideIcons")) {
       Tabmix.defaultPrefs.setBoolPref("hideIcons", true);
@@ -2496,7 +2485,9 @@ var gTMPprefObserver = {
       try {
         let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
         getVersion(aAddon.version, shouldAutoUpdate);
-      } catch (ex) {Tabmix.assert(ex);}
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
     });
 
     // block item in tabclicking options that are not in use
@@ -2600,8 +2591,7 @@ var TabmixProgressListener = {
           tab.removeAttribute("busy");
           tab.removeAttribute("progress");
           this.mTabBrowser.setTabTitle(tab);
-        }
-        else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING)) {
+        } else if (!(aStateFlags & nsIWebProgressListener.STATE_RESTORING)) {
           if (tab.hasAttribute("tabmix_pending"))
             tab.removeAttribute("tabmix_pending");
           Tabmix.setTabStyle(tab);
@@ -2615,8 +2605,7 @@ var TabmixProgressListener = {
           if (tab.hasAttribute("tabmix_bookmarkId"))
             TMP_Places.setTabTitle(tab, url);
         }
-      }
-      else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
+      } else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let uri = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
         // remove blank tab that created by downloading a file.

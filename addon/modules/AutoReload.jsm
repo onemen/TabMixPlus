@@ -237,8 +237,7 @@ this.AutoReload = {
           aBrowser.messageManager
                   .sendAsyncMessage("Tabmix:setScrollPosition",
                                     aBrowser.__tabmixScrollPosition);
-        }
-        else {
+        } else {
           let {x, y} = aBrowser.__tabmixScrollPosition;
           aBrowser.contentWindow.scrollTo(x, y);
         }

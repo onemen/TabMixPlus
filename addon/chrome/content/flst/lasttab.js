@@ -59,8 +59,7 @@ var TMP_LastTab = {
     .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
-    }
-    else {
+    } else {
       tabBox._eventNode.removeEventListener("keypress", tabBox, false);
       els.addSystemEventListener(tabBox._eventNode, "keypress", this, false);
     }
@@ -121,8 +120,7 @@ var TMP_LastTab = {
         this.KeyboardNavigating = false;
       }
       this.TabIndex = this.inverseIndex(event.target.value);
-    }
-    else if (event.target.value != this.inverseIndex(this.TabIndex)) {
+    } else if (event.target.value != this.inverseIndex(this.TabIndex)) {
       event.target.setAttribute("_moz-menuactive", "false");
     }
   },
@@ -202,8 +200,7 @@ var TMP_LastTab = {
         this.TabIndex++;
         if (this.TabIndex >= tabCount)
           this.TabIndex = 0;
-      }
-      else {
+      } else {
         this.TabIndex--;
         if (this.TabIndex < 0)
           this.TabIndex = tabCount - 1;
@@ -223,8 +220,7 @@ var TMP_LastTab = {
             else
               this.DisplayTabList();
           }
-        }
-        else {
+        } else {
           let item = this.tabs[this.TabIndex].mCorrespondingMenuitem;
           item.setAttribute("_moz-menuactive", "true");
           TabmixAllTabs.updateMenuItemActive(null, item);
@@ -234,13 +230,11 @@ var TMP_LastTab = {
         TabmixAllTabs._tabSelectedFromList(this.tabs[this.TabIndex]);
       event.stopPropagation();
       event.preventDefault();
-    }
-    else if (this.TabListLock && this.CtrlKey &&
+    } else if (this.TabListLock && this.CtrlKey &&
              event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_SHIFT) {
       // don't hide the tabs list popup when user press shift
       return;
-    }
-    else {
+    } else {
       if (this.TabListLock)
         this.TabList.hidePopup();
 
@@ -327,8 +321,7 @@ var TMP_LastTab = {
         }
       }
       this.PushSelectedTab();
-    }
-    else if (!this.KeyLock) {
+    } else if (!this.KeyLock) {
       if (this.CtrlKey)
         this.KeyLock = true; // allow other tab navigation methods to work
       else

@@ -3,7 +3,9 @@
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
 var gTabMix_preferencesOverlay = { // jshint ignore:line
-  id: function(id) {return document.getElementById(id);},
+  id: function(id) {
+    return document.getElementById(id);
+  },
 
   incontentInit: function gTabMix_preferencesOverlay_incontentInit() {
     var box = this.id("linkTargeting");

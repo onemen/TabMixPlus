@@ -82,7 +82,9 @@ this.console = {
       else
         logMethod();
 
-    } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
+    } catch (ex) {
+      this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");
+    }
   },
 
   // get functions names from Error().stack
@@ -311,8 +313,7 @@ options = {
     if (typeof ex != "object" || ex instanceof OS.File.Error ||
         typeof ex.message != "string") {
       this._logMessage(msg + ex.toString(), "errorFlag");
-    }
-    else {
+    } else {
       if (typeof ex.filename == "undefined") {
         ex.filename = ex.fileName;
       }

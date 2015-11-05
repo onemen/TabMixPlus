@@ -120,13 +120,11 @@ this.SingleWindowModeUtils = {
         let urisstring = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
         urls.push(urisstring.data);
       }
-    }
-    else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
+    } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window
-    }
-    else if (args.length >= 3) {
+    } else if (args.length >= 3) {
       params.referrerURI = args[2];
       if (TabmixSvc.version(390)) {
         if (typeof (params.referrerURI) == "string") {
@@ -182,7 +180,9 @@ this.SingleWindowModeUtils = {
         obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
       }
       newWindow.gPrivateBrowsingUI.uninit = function() {};
-    } catch (ex) {existingWindow.Tabmix.obj(ex);}
+    } catch (ex) {
+      existingWindow.Tabmix.obj(ex);
+    }
     existingWindow.setTimeout(function() {
       try {
         // restore window dimensions, to prevent flickring in the next restart
@@ -198,7 +198,9 @@ this.SingleWindowModeUtils = {
         }
         // for the case the window is minimized or not in focus
         existingWindow.focus();
-      } catch (ex) {existingWindow.Tabmix.obj(ex);}
+      } catch (ex) {
+        existingWindow.Tabmix.obj(ex);
+      }
     }, 0);
   }
 };

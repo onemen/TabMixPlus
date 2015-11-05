@@ -39,8 +39,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
           doReplace = "check" in aParams ? aParams.check : true;
           flags = aParams.flags;
           silent = aParams.silent;
-        }
-        else if (typeof aParams == "boolean") {
+        } else if (typeof aParams == "boolean") {
           doReplace = aParams;
         }
         if (!doReplace)

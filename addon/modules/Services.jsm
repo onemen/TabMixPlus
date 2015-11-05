@@ -75,8 +75,7 @@ this.TabmixSvc = {
     if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
       key = this.getSMString(property + ".accesskey");
-    }
-    else {
+    } else {
       label = this.getString(property + ".label");
       key = this.getString(property + ".accesskey");
     }
@@ -161,7 +160,9 @@ this.TabmixSvc = {
         // replace old Settings.
         // we must call this before any other tabmix function
         aWindow.gTMPprefObserver.updateSettings();
-      } catch (ex) {TabmixSvc.console.assert(ex);}
+      } catch (ex) {
+        TabmixSvc.console.assert(ex);
+      }
 
       this.addMissingPrefs();
 
@@ -211,7 +212,9 @@ this.TabmixSvc = {
         case "browser-delayed-startup-finished":
           try {
             aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {TabmixSvc.console.assert(ex);}
+          } catch (ex) {
+            TabmixSvc.console.assert(ex);
+          }
           break;
       }
     }

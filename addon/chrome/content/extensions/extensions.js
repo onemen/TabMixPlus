@@ -51,7 +51,9 @@ var TMP_extensionsCompatibility = {
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
-    } catch (ex) {Tabmix.assert(ex, "error in TabGroupsManager.jsm");}
+    } catch (ex) {
+      Tabmix.assert(ex, "error in TabGroupsManager.jsm");
+    }
 
     // fix for Cluster Tabs - Cluster Tab look for TM_init
     // https://addons.mozilla.org/en-US/firefox/addon/cluster-tabs-for-firefox/
@@ -78,7 +80,9 @@ var TMP_extensionsCompatibility = {
         Tabmix.extensions.treeStyleTab = true;
         Tabmix.extensions.verticalTabBar = true;
       }
-    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
+    } catch (ex) {
+      Tabmix.assert(ex, this.treeStyleTab.errorMsg);
+    }
 
     // https://addons.mozilla.org/en-US/firefox/addon/second-search/
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
@@ -101,13 +105,11 @@ var TMP_extensionsCompatibility = {
       window.getBoolPref = function getBoolPref(prefname, def) {
         try {
           return Services.prefs.getBoolPref(prefname);
-        }
-        catch (ex) {
+        } catch (ex) {
           try {
             return (bgSaverPref.prefHasUserValue(prefname) &&
                     bgSaverPref.getBoolPref(prefname));
-          }
-          catch (e) {}
+          } catch (e) {}
         }
         return def;
       };
@@ -320,7 +322,9 @@ var TMP_extensionsCompatibility = {
     try {
       if ("TreeStyleTabService" in window)
         this.treeStyleTab.onWindowLoaded();
-    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
+    } catch (ex) {
+      Tabmix.assert(ex, this.treeStyleTab.errorMsg);
+    }
 
     /* fast dial FdUtils*/
     if ("FdUtils" in window && FdUtils.whereToOpenLink) {
@@ -387,11 +391,11 @@ var TMP_extensionsCompatibility = {
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
-      window.aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
+      window.aioDupTab = () => gBrowser.duplicateTab(gBrowser.mCurrentTab);
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      window.aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
+      window.aioDupWindow = () => gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab);
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
@@ -485,11 +489,9 @@ TMP_extensionsCompatibility.RSSTICKER = {
   onClick: function(event) {
     if (event.ctrlKey) {
       this.markAsRead(true);
-    }
-    else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
+    } else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
       this.onContextOpen("tab");
-    }
-    else if (event.which == 1) {
+    } else if (event.which == 1) {
       this.onContextOpen();
     }
   },
@@ -500,14 +502,12 @@ TMP_extensionsCompatibility.RSSTICKER = {
         this.parent.browser.openInNewTab(this.href);
       else
         window.loadURI(this.href);
-    }
-    else if (target == "window") {
+    } else if (target == "window") {
       if (Tabmix.singleWindowMode)
         this.parent.browser.openInNewTab(this.href);
       else
         window.open(this.href);
-    }
-    else if (target == "tab") {
+    } else if (target == "tab") {
       this.parent.browser.openInNewTab(this.href);
     }
 
