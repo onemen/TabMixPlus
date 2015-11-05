@@ -1,3 +1,4 @@
+/* exported TabmixConvertSession */
 "use strict";
 
 Tabmix.BUTTON_OK = 0;

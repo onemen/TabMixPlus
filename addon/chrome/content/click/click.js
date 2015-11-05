@@ -1,3 +1,4 @@
+/* exported TabmixTabClickOptions, TabmixAllTabs */
 "use strict";
 
 XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",

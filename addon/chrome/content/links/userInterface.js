@@ -1,3 +1,4 @@
+/* exported TMP_BrowserOpenTab */
 "use strict";
 
 /**

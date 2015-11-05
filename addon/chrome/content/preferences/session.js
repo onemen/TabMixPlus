@@ -1,3 +1,4 @@
+/* exported gSessionPane */
 "use strict";
 
 var gSessionPane = {

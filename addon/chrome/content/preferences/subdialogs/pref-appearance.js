@@ -1,3 +1,4 @@
+/* exported tabstyles */
 "use strict";
 
 var $ = id => document.getElementById(id);

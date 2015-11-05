@@ -1,3 +1,4 @@
+/* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
 /****    Drag and Drop observers    ****/

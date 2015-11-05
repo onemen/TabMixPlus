@@ -11,10 +11,6 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/AddonManager.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-function log(msg) { // jshint ignore:line
-  TabmixSvc.console.log(msg);
-}
-
 // https://addons.mozilla.org/en-US/firefox/addon/private-tab
 var PrivateTab = {
   id: "privateTab@infocatcher",

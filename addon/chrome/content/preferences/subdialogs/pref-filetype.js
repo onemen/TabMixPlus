@@ -1,3 +1,4 @@
+/* exported Init, Select, Mod, Input, Del, Restore */
 "use strict";
 
 var list, entry, edit, del, add;

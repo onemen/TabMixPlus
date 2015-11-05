@@ -1,3 +1,4 @@
+/* exported gMenuPane */
 "use strict";
 
 var gMenuPane = { // jshint ignore:line

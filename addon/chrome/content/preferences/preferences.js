@@ -1,5 +1,7 @@
 /* jshint esnext: true */
 /* globals _sminstalled, gPreferenceList */
+/* exported  defaultSetting, toggleSyncPreference, exportData, importData,
+             showPane, openHelp */
 "use strict";
 
 /***** Preference Dialog Functions *****/

@@ -1,4 +1,5 @@
 /* global gMenuPane */
+/* exported gEventsPane */
 "use strict";
 
 var gEventsPane = {

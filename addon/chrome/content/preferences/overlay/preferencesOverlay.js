@@ -92,3 +92,8 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
   }
 
 };
+
+window.addEventListener("load", function TMP_onLoad_preverenceOverlay(aEvent) {
+  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_preverenceOverlay, true);
+  gTabMix_preferencesOverlay.incontentInit();
+}, true);

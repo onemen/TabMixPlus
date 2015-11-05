@@ -1,3 +1,4 @@
+/* exported load, accept, onInput */
 "use strict";
 
 var gPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);

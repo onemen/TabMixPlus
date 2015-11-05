@@ -1,3 +1,4 @@
+/* exported gAppearancePane */
 "use strict";
 
 var gAppearancePane = { // jshint ignore:line

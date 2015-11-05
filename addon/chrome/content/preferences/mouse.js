@@ -1,3 +1,4 @@
+/* exported gMousePane */
 "use strict";
 
 var gMousePane = {

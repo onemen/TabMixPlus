@@ -1,3 +1,4 @@
+/* exported init */
 "use strict";
 
 function init() { // jshint ignore:line

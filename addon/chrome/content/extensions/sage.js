@@ -62,3 +62,8 @@ var TMP_Sage = {
   }
 
 };
+
+window.addEventListener("load", function TMP_onLoad_sageOverlay(aEvent) {
+  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sageOverlay, false);
+  TMP_Sage.init();
+}, false);

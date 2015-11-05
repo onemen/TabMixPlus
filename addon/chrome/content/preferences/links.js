@@ -1,9 +1,10 @@
+/* exported gLinksPane */
 "use strict";
 
 var gLinksPane = {
   init: function() {
     this.singleWindow($("singleWindow").checked);
-    gLinksPane.externalLinkValue($("externalLink").checked);
+    this.externalLinkValue($("externalLink").checked);
 
     gPrefWindow.initPane("paneLinks");
   },

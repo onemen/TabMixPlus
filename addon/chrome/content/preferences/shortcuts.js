@@ -2,6 +2,7 @@
  * based on keyconfig extension by dorando
  */
 
+/* exported getKeysForShortcut */
 "use strict";
 
 var getFormattedKey = key => Shortcuts.getFormattedKey(key);
