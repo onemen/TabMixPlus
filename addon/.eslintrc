@@ -141,7 +141,7 @@
         "no-warning-comments": [0, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],
         "no-with": 2,
 
-        "block-scoped-var": 0,
+        "block-scoped-var": 2,
         "brace-style": [2, "1tbs"],
         "camelcase": 0,
         // TODO - maybe in the future

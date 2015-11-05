@@ -144,10 +144,11 @@ this.SingleWindowModeUtils = {
     else
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
 
+    var firstTabAdded;
     try {
       // open the tabs in current window
       if (urls.length) {
-        var firstTabAdded = existingBrowser.selectedTab;
+        firstTabAdded = existingBrowser.selectedTab;
         let isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
         if (isBlankTab)
           existingWindow.openLinkIn(urls[0], "current", params);
