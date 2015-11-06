@@ -115,12 +115,13 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       var currentURI = gBrowser.currentURI;
       url = currentURI ? currentURI.spec : newTabUrl;
       break;
-    case 3 : // duplicate tab
+    case 3 : { // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
       let newTab = gBrowser.duplicateTab(selectedTab, null, null, null, true);
       Tabmix.clearUrlBar(newTab, currentUrl, true);
       return newTab;
-    case 4 : // user url
+    }
+    case 4 : {// user url
       let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
       TabmixSvc.newtabUrl;
       try {
@@ -134,6 +135,7 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       if (!url)
         url = newTabUrl;
       break;
+    }
     default:
       url = newTabUrl;
   }

@@ -675,13 +675,14 @@ Tabmix.tabsUtils = {
         if (this.tabBar.useTabmixDragstart(aEvent))
           TMP_tabDNDObserver.onDragStart(aEvent);
         break;
-      case "dragover":
+      case "dragover": {
         let target = aEvent.target.localName;
         if (target != "tab" && target != "tabs")
           return;
         if (this.tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.onDragOver(aEvent);
         break;
+      }
       case "drop":
         if (this.tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.onDrop(aEvent);
@@ -1175,7 +1176,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.tabbar.click_dragwindow":
         document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
         /* falls through */
-      case "extensions.tabmix.tabbar.dblclick_changesize":
+      case "extensions.tabmix.tabbar.dblclick_changesize": {
         let dragwindow = Tabmix.prefs.getBoolPref("tabbar.click_dragwindow");
         let changesize = Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize");
         if (!dragwindow && changesize) {
@@ -1184,10 +1185,11 @@ var gTMPprefObserver = {
         }
         TabmixTabClickOptions.toggleEventListener(dragwindow && !changesize);
         break;
+      }
       case "extensions.tabmix.lockallTabs":
         TabmixTabbar.lockallTabs = Services.prefs.getBoolPref(prefName);
         /* falls through */
-      case "extensions.tabmix.lockAppTabs":
+      case "extensions.tabmix.lockAppTabs": {
         if (!Tabmix.prefs.getBoolPref("updateOpenedTabsLockState"))
           break;
         let updatePinned = prefName == "extensions.tabmix.lockAppTabs";
@@ -1215,14 +1217,16 @@ var gTMPprefObserver = {
         // force Sessionstore to save our changes
         TabmixSvc.SessionStore.saveStateDelayed(window);
         break;
+      }
       case "extensions.tabmix.extraIcons.autoreload":
       case "extensions.tabmix.extraIcons.protected":
       case "extensions.tabmix.extraIcons.locked":
-      case "extensions.tabmix.extraIcons.notpinned":
+      case "extensions.tabmix.extraIcons.notpinned": {
         let addAtt = Services.prefs.getBoolPref(prefName);
         let name = prefName.substr(prefName.lastIndexOf(".") + 1);
         Tabmix.setAttributeList(gBrowser.tabContainer, "tabmix_icons", name, addAtt);
         break;
+      }
       case "extensions.tabmix.dblClickTab":
       case "extensions.tabmix.middleClickTab":
       case "extensions.tabmix.ctrlClickTab":
@@ -1258,7 +1262,7 @@ var gTMPprefObserver = {
         this.updateStyleAttributes();
         break;
       case "browser.tabs.tabMaxWidth":
-      case "browser.tabs.tabMinWidth":
+      case "browser.tabs.tabMinWidth": {
         var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
         let tabMaxWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
         let tabMinWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
@@ -1293,6 +1297,7 @@ var gTMPprefObserver = {
           });
         }
         break;
+      }
       case "browser.tabs.tabClipWidth":
         gBrowser.tabContainer.mTabClipWidth = Services.prefs.getIntPref(prefName);
         gBrowser.tabContainer.adjustTabstrip();
@@ -1335,7 +1340,7 @@ var gTMPprefObserver = {
         }
         break;
       case "extensions.tabmix.tabs.closeButtons.onLeft":
-      case "extensions.classicthemerestorer.closeonleft":
+      case "extensions.classicthemerestorer.closeonleft": {
         // let Classic theme restorer control close tab button placement when
         // the default theme is in use.
         if (Tabmix.extensions.ctr &&
@@ -1352,6 +1357,7 @@ var gTMPprefObserver = {
         let onLeft = Tabmix.defaultCloseButtons && Services.prefs.getBoolPref(prefName);
         gBrowser.tabContainer.setAttribute("closebuttons-side", onLeft ? "left" : "right");
         break;
+      }
       case "extensions.tabmix.tabs.closeButtons.enable":
         prefValue = Services.prefs.getBoolPref(prefName);
         Tabmix.tabsUtils.closeButtonsEnabled = prefValue;
@@ -1376,7 +1382,7 @@ var gTMPprefObserver = {
         else if (Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") === 0)
           Services.prefs.clearUserPref("browser.sessionstore.max_tabs_undo");
         break;
-      case "browser.sessionstore.max_tabs_undo":
+      case "browser.sessionstore.max_tabs_undo": {
         // Firefox's sessionStore mainain the right amount
         prefValue = Services.prefs.getIntPref(prefName);
         if (Tabmix.prefs.getBoolPref("undoClose") != (prefValue > 0))
@@ -1384,6 +1390,7 @@ var gTMPprefObserver = {
         let state = prefValue === 0 || undefined;
         TMP_ClosedTabs.setButtonDisableState(state);
         break;
+      }
       case "browser.warnOnRestart":
       case "browser.warnOnQuit":
       case "browser.sessionstore.resume_from_crash":
@@ -1448,7 +1455,7 @@ var gTMPprefObserver = {
       case "extensions.tabmix.reloadEvery.onReloadButton":
         this.showReloadEveryOnReloadButton();
         break;
-      case "extensions.tabmix.tabBarMaxRow":
+      case "extensions.tabmix.tabBarMaxRow": {
         var tabBar = gBrowser.tabContainer;
         let row = Tabmix.prefs.getIntPref("tabBarMaxRow");
         if (row < 2) {
@@ -1471,6 +1478,7 @@ var gTMPprefObserver = {
         }
         TabmixTabbar.updateBeforeAndAfter();
         break;
+      }
       case "extensions.tabmix.pinnedTabScroll":
         gBrowser.tabContainer._positionPinnedTabs();
         break;

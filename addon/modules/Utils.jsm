@@ -70,12 +70,13 @@ this.TabmixUtils = {
         tab = win.gBrowser.getTabForBrowser(browser);
         win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
-      case "Tabmix:reloadTab":
+      case "Tabmix:reloadTab": {
         let postData = message.data.postData;
         if (postData)
           message.data.postData = this.makeInputStream(postData);
         AutoReload.reloadRemoteTab(browser, message.data);
         break;
+      }
       case "Tabmix:getOpener":
         win = browser.ownerDocument.defaultView;
         tab = win.gBrowser.getTabForBrowser(browser);

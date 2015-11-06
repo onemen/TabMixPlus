@@ -1412,7 +1412,7 @@ var tablib = { // eslint-disable-line
           return currentIndex === 0 ? 1 : currentIndex - 1;
         case 3: // last tab
           return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
-        case 6: // last opened
+        case 6: {// last opened
           let lastTabIndex, maxID = -1;
           tabs.forEach(function(tab, index) {
             if (tab == oldTab)
@@ -1427,12 +1427,14 @@ var tablib = { // eslint-disable-line
             }
           });
           return lastTabIndex;
-        case 4: // last selected
+        }
+        case 4: {// last selected
           let tempIndex = this.previousTabIndex(oldTab, tabs);
           // if we don't find last selected we fall back to default
           if (tempIndex > -1)
             return tempIndex;
           /* falls through */
+        }
         case 2: // opener / right  (default )
         case 5: // right tab
           /* falls through */

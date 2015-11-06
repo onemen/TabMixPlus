@@ -64,7 +64,7 @@ var TabmixContentHandler = {
       return;
     }
     switch (name) {
-      case "Tabmix:restorePermissions":
+      case "Tabmix:restorePermissions": {
         let disallow = new Set(data.disallow && data.disallow.split(","));
         DocShellCapabilities.restore(docShell, disallow);
         sendSyncMessage("Tabmix:restorePermissionsComplete", {
@@ -72,34 +72,41 @@ var TabmixContentHandler = {
           reload: data.reload
         });
         break;
-      case "Tabmix:collectPermissions":
+      }
+      case "Tabmix:collectPermissions": {
         let caps = DocShellCapabilities.collect(docShell).join(",");
         sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
         break;
-      case "Tabmix:resetContentName":
+      }
+      case "Tabmix:resetContentName": {
         if (content.name)
           content.name = "";
         break;
-      case "Tabmix:sendDOMTitleChanged":
+      }
+      case "Tabmix:sendDOMTitleChanged": {
         // workaround for bug 1081891
         let title = content.document.title;
         if (title)
           sendAsyncMessage("DOMTitleChanged", {title: title});
         break;
-      case "Tabmix:updateHistoryTitle":
+      }
+      case "Tabmix:updateHistoryTitle": {
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
         TabmixUtils.updateHistoryTitle(history, data.title);
         break;
-      case "Tabmix:collectScrollPosition":
+      }
+      case "Tabmix:collectScrollPosition": {
         let scroll = {scrollX: content.scrollX,
                       scrollY: content.scrollY};
         sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
         break;
-      case "Tabmix:setScrollPosition":
+      }
+      case "Tabmix:setScrollPosition": {
         let {x, y} = data;
         content.scrollTo(x, y);
         break;
-      case "Tabmix:collectReloadData":
+      }
+      case "Tabmix:collectReloadData": {
         let json = {scrollX: content.scrollX,
                     scrollY: content.scrollY,
                     postData: null};
@@ -119,13 +126,16 @@ var TabmixContentHandler = {
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
-      case "Tabmix:isFrameInContent":
+      }
+      case "Tabmix:isFrameInContent": {
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
         sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
         break;
-      case "Tabmix:collectOpener":
+      }
+      case "Tabmix:collectOpener": {
         sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
         break;
+      }
     }
   },
 

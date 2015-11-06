@@ -304,7 +304,7 @@ var TMP_eventListener = {
       case "unload":
         this.onWindowClose(aEvent);
         break;
-      case "fullscreen":
+      case "fullscreen": {
         let enterFS = window.fullScreen;
         // Until Firefox 41 (Bug 1161802 part 2) we get the fullscreen event
         // before the window transitions into or out of FS mode.
@@ -312,6 +312,7 @@ var TMP_eventListener = {
           enterFS = !enterFS;
         this.onFullScreen(enterFS);
         break;
+      }
       case "PrivateTab:PrivateChanged":
         TabmixSessionManager.privateTabChanged(aEvent);
         break;
@@ -522,11 +523,12 @@ var TMP_eventListener = {
         case "CrystalFox_Qute-BigRedBrent":
           tabBar.setAttribute("tabmix_skin", "CrystalFox");
           break;
-        case "Vista-aero":
+        case "Vista-aero": {
           let rightBox = document.getElementById("myTabBarRightBox");
           if (rightBox)
             rightBox.setAttribute("vista_aero", true);
           break;
+        }
         case "classiccompact":
           tabBar.setAttribute("tabmix_skin", "classiccompact");
           break;

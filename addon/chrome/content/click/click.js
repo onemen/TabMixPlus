@@ -770,10 +770,11 @@ var TabmixAllTabs = {
   backupLabel: "",
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
-      case "TabAttrModified":
+      case "TabAttrModified": {
         let tab = aEvent.target;
         this._setMenuitemAttributes(tab.mCorrespondingMenuitem, tab);
         break;
+      }
       case "TabClose":
         this._tabOnTabClose(aEvent);
         break;
@@ -941,7 +942,7 @@ var TabmixAllTabs = {
     var i;
 
     switch (aType) {
-      case 1:
+      case 1: {
         let TabSorting = function _tabSorting(tab, index) {
           this.Tab = tab;
           this.Index = index;
@@ -957,7 +958,8 @@ var TabmixAllTabs = {
         for (i = 0; i < tabs.length; i++)
           this.createMenuItems(popup, tabs[i].Tab, tabs[i].Index);
         break;
-      case 2:
+      }
+      case 2: {
         tabs = gBrowser.visibleTabs;
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
@@ -975,7 +977,8 @@ var TabmixAllTabs = {
             this.createMenuItems(popup, tab, t);
         }
         break;
-      case 3:
+      }
+      case 3: {
         for (i = TMP_LastTab.tabs.length - 1; i >= 0; i--) {
           let tab = TMP_LastTab.tabs[i];
           if (tab.hidden)
@@ -983,6 +986,7 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tab, i);
         }
         break;
+      }
     }
 
     if (this._selectedItem)
