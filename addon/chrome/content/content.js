@@ -119,8 +119,6 @@ var TabmixContentHandler = {
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
-      case "Tabmix:setPostData":
-        break;
       case "Tabmix:isFrameInContent":
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
         sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
