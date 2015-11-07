@@ -25,7 +25,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "resource://tabmixplus/Utils.jsm");
 
-var self = this;
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
+  "resource://tabmixplus/AboutNewTab.jsm");
 
 var PROCESS_TYPE_CONTENT = TabmixSvc.version(380) &&
     Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
@@ -170,9 +171,9 @@ var TabmixContentHandler = {
 };
 
 var TabmixClickEventHandler = {
-  init: function init() {
+  init: function init(global) {
     if (PROCESS_TYPE_CONTENT) {
-      self.addEventListener("click", this, true);
+      global.addEventListener("click", this, true);
     }
   },
 
@@ -329,5 +330,42 @@ var TabmixClickEventHandler = {
   }
 };
 
+var AboutNewTabHandler = {
+  init: function(global) {
+    if (!TabmixSvc.version(420)) {
+      return;
+    }
+
+    addMessageListener("Tabmix:updateTitlefrombookmark", this);
+
+    let contentLoaded = false;
+    global.addEventListener("pageshow", event => {
+      if (event.target != content.document) {
+        return;
+      }
+      let doc = content.document;
+      // we don't need to update titles on first show if the pref is off
+      if (doc.documentURI.toLowerCase() == "about:newtab" &&
+          (contentLoaded || TabmixSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
+        contentLoaded = true;
+        this.updateTitles();
+      }
+    });
+  },
+
+  receiveMessage: function({name}) {
+    if (name == "Tabmix:updateTitlefrombookmark") {
+      this.updateTitles();
+    }
+  },
+
+  updateTitles: function() {
+    if (content && content.gGrid) {
+      TabmixAboutNewTab.updateTitles(content.gGrid.cells);
+    }
+  }
+};
+
 TabmixContentHandler.init();
-TabmixClickEventHandler.init();
+TabmixClickEventHandler.init(this);
+AboutNewTabHandler.init(this);

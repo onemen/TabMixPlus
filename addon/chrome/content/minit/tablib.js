@@ -1763,10 +1763,10 @@ var tablib = { // eslint-disable-line
       let width = aTab.boxObject.width;
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
-        TMP_Places.afterTabTitleChanged(true);
+        TMP_Places.afterTabTitleChanged(false);
     }
     else if (aTab.hasAttribute("fadein"))
-      TMP_Places.afterTabTitleChanged(true);
+      TMP_Places.afterTabTitleChanged(false);
     // don't keep unnecessary reference to current tab
     if (!TMP_Places.inUpdateBatch)
       TMP_Places.currentTab = null;

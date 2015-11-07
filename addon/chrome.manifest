@@ -49,7 +49,7 @@ overlay   chrome://browser/content/preferences/tabs.xul             chrome://tab
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css
 
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
-overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul
+overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul appversion<42.0
 overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/removeBlankTab.xul
 overlay   chrome://mozapps/content/handling/dialog.xul              chrome://tabmixplus/content/links/removeBlankTab.xul
 

@@ -16,8 +16,8 @@ const FMM_MESSAGES = [
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
@@ -26,6 +26,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
   "resource://tabmixplus/AutoReload.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "MergeWindows",
   "resource://tabmixplus/MergeWindows.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
+  "resource://tabmixplus/AboutNewTab.jsm");
 
 this.TabmixUtils = {
   initMessageManager: function(window) {
@@ -34,6 +36,18 @@ this.TabmixUtils = {
 
     // Load the frame script after registering listeners.
     mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
+
+    // call TabmixAboutNewTab.updateBrowser for gBrowser._preloadedBrowser,
+    // if it already exist before we loaded our frame script
+    if (TabmixSvc.version(420)) {
+      let {gBrowser, BROWSER_NEW_TAB_URL} = window;
+      if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
+          BROWSER_NEW_TAB_URL == "about:newtab" &&
+          gBrowser._preloadedBrowser && gBrowser._isPreloadingEnabled() &&
+          !PrivateBrowsingUtils.isWindowPrivate(window)) {
+        TabmixAboutNewTab.updateBrowser(gBrowser._preloadedBrowser);
+      }
+    }
   },
 
   deinit: function(window) {
