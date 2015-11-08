@@ -92,11 +92,12 @@ this.TMP_TabGroupsManager = {
       // open new group and add new tabs to it
       'else if (newtabsCount > 0 && !overwrite) {',
       '$&' +
-      '  gBrowser.selectedTab = TMP_addTab();' +
-      '  gBrowser.moveTabTo(gBrowser.selectedTab, gBrowser.tabs.length - 1);' +
-      '  newIndex = gBrowser.selectedTab._tPos;' +
+      '  let newTab = TMP_addTab();' +
+      '  gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);' +
+      '  gBrowser.selectedTab = newTab;' +
+      '  newIndex = newTab._tPos;' +
       '  let group = TabGroupsManager.allGroups.openNewGroupActive(' +
-      '        gBrowser.selectedTab, -1);' +
+      '        newTab, -1);' +
       '  for (let i = 1; i < newtabsCount; i++) {' +
       '    TMP_addTab();' +
       '  }' +

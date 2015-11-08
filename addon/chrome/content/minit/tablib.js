@@ -574,14 +574,14 @@ var tablib = { // eslint-disable-line
       '    let selectNewTab = where == "tab" ?\n' +
       '        !Tabmix.prefs.getBoolPref("loadDuplicateInBackground") :\n' +
       '        Tabmix.prefs.getBoolPref("loadDuplicateInBackground");\n' +
-      '    if (selectNewTab) {\n' +
-      '      gBrowser.selectedTab = newTab;\n' +
-      '    }\n' +
       '    let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?\n' +
       '               "openTabNext" : "openDuplicateNext";\n' +
       '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
       '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
       '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
+      '    }\n' +
+      '    if (selectNewTab) {\n' +
+      '      gBrowser.selectedTab = newTab;\n' +
       '    }\n' +
       '  }\n' +
       '$1$2'
