@@ -176,19 +176,19 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
     }
   }
 
-  // make sure to update recently used tabs
-  // if user open many tabs quickly select event don't have time to fire
-  // before new tab select
-  if (!loadInBackground) {
-    gBrowser.selectedTab = newTab;
-    TMP_LastTab.PushSelectedTab();
-  }
   if (aTab && aTab.localName == "tab")
     gBrowser.moveTabTo(newTab, aTab._tPos + 1);
   else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
     // we used to move tab after lastRelatedTab but we don't need it on new tabs
     // and it mess with recently used tabs order
     gBrowser.moveTabTo(newTab, selectedTab._tPos + 1);
+  }
+  // make sure to update recently used tabs
+  // if user open many tabs quickly select event don't have time to fire
+  // before new tab select
+  if (!loadInBackground) {
+    gBrowser.selectedTab = newTab;
+    TMP_LastTab.PushSelectedTab();
   }
 
   gBrowser.selectedBrowser.focus();

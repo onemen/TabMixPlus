@@ -956,6 +956,14 @@ var TMP_eventListener = {
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
 
     TabmixTabbar.updateBeforeAndAfter();
+
+    // Workaround for bug 115740, moveTabTo always set current tab
+    // visuallySelected to true
+    if (Tabmix.isVersion(390) && gBrowser._switcher &&
+        gBrowser._switcher.visibleTab != gBrowser.selectedTab) {
+      gBrowser._switcher.visibleTab._visuallySelected = true;
+      gBrowser.selectedTab._visuallySelected = false;
+    }
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
