@@ -1725,7 +1725,7 @@ var gTMPprefObserver = {
       '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule, "scrollbutton-height");
 
-    let _buttonsHeight = Tabmix.isVersion(310) ? Tabmix._buttonsHeight - 1 : Tabmix._buttonsHeight;
+    let _buttonsHeight = Tabmix._buttonsHeight - 1 * (Tabmix.isVersion(310) && !Tabmix.isVersion(420));
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1 {' +
       '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule, "toolbarbutton-height");
