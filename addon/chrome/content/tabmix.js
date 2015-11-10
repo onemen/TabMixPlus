@@ -709,9 +709,10 @@ var TMP_eventListener = {
 
   // for tabs bellow content
   toggleTabbarVisibility: function(aShow, aAnimate) {
-    if (TabmixTabbar.position != 1)
-      return;
     let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
+    if (TabmixTabbar.position != 1 || !fullScrToggler) {
+      return;
+    }
     fullScrToggler.hidden = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
