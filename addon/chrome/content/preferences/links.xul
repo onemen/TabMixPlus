@@ -82,6 +82,8 @@
             <hbox align="center">
               <checkbox_tmp id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
               <spacer flex="1"/>
+              <button class="content-help"
+                      oncommand="openHelp('links#file-type-editor');"/>
               <button id="advancedSetting" label="&edit.label;…" observes="obs_filetypeEnable"
                       oncommand="gLinksPane.openFiletypeEditor();"/>
             </hbox>

@@ -63,3 +63,7 @@ dialog[hide-RGB="true"] colorbox > *:not([class="visible"]) {
 .colorpicker-button-colorbox[disabled] {
   border-color: rgba(0,0,0,.2);
 }
+
+.dialog-button[icon="help"] {
+  list-style-image: url("chrome://global/skin/icons/question-16.png");
+}

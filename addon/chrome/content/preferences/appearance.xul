@@ -187,8 +187,12 @@
                 <checkbox_tmp id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
               </vbox>
               <vbox flex="1" align="end">
-                <button id="advancedAppearance" label="&setstyles.label;…"
-                        oncommand="gAppearancePane.openAdvanceAppearance();"/>
+                <hbox>
+                  <button class="content-help"
+                          oncommand="openHelp('display-tab#customize_styles');"/>
+                  <button id="advancedAppearance" label="&setstyles.label;…"
+                          oncommand="gAppearancePane.openAdvanceAppearance();"/>
+                </hbox>
               </vbox>
             </hbox>
             <checkbox_tmp id="unreadTabreload" class="indent" label="&unreadAfterReload.label;"

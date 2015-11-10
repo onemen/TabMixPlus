@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
 
 <!DOCTYPE dialog [
 <!ENTITY % dialogDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
