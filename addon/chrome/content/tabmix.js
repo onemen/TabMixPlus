@@ -472,9 +472,6 @@ var TMP_eventListener = {
     }
 
     var tabsToolbar = document.getElementById("TabsToolbar");
-    if (navigator.oscpu.startsWith("Windows NT 6.1")) {
-      Tabmix.setItem(tabsToolbar, "tabmix_aero", true);
-    }
 
     if (TabmixSvc.australis) {
       let australis = TabmixSvc.isAustralisBgStyle(tabBar.orient);

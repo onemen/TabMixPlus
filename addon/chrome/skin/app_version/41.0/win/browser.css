@@ -1,0 +1,30 @@
+/**
+Firefox version 41+
+
+Windows platform
+
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/all/win/browser.css");
+@import url("chrome://tabmixplus/skin/app_version/all/win/progress.css");
+@import url("chrome://tabmixplus/skin/app_version/39.0/win/tabStyles.css");
+@import url("chrome://tabmixplus/skin/app_version/39.0/tabStyles.css");
+
+/* for windows 7 and up */
+@media not all and (-moz-os-version: windows-xp) {
+  @media not all and (-moz-os-version: windows-vista) {
+    #tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+      vertical-align: bottom;
+    }
+
+    #tabmix-bottom-toolbox {
+      -moz-appearance: none;
+      border-top: none;
+      background-color: transparent;
+    }
+
+    #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+      -moz-appearance: none;
+    }
+  }
+}
