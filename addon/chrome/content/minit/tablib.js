@@ -526,26 +526,27 @@ var tablib = { // eslint-disable-line
     // FullScreen code related to tabs bellow content initialize by first
     // fullScreen event, see TMP_eventListener.onFullScreen
     if (Tabmix.isVersion(400)) {
-      Tabmix.changeCode(FullScreen, "FullScreen.showNavToolbox")._replace(
-        'if (!this._isChromeCollapsed) {',
-        '$&\n      ' +
-        'TMP_eventListener.showNavToolbox();'
-      )._replace(
-        /(\})(\)?)$/,
-        '  TMP_eventListener.showNavToolbox();\n' +
-        '$1$2'
-      ).toCode();
+      Tabmix.originalFunctions.FullScreen_showNavToolbox = FullScreen.showNavToolbox;
+      FullScreen.showNavToolbox = function() {
+        let result = Tabmix.originalFunctions.FullScreen_showNavToolbox.apply(this, arguments);
+        TMP_eventListener.showNavToolbox();
+        return result;
+      };
+    } else {
+      Tabmix.originalFunctions.FullScreen_mouseoverToggle = FullScreen.mouseoverToggle;
+      FullScreen.mouseoverToggle = function() {
+        let collapsed = this._isChromeCollapsed;
+        let result = Tabmix.originalFunctions.FullScreen_mouseoverToggle.apply(this, arguments);
+        if (collapsed !== this._isChromeCollapsed) {
+          if (!this._isChromeCollapsed)
+            TMP_eventListener.updateMultiRow();
+          if (TabmixTabbar.position == 1) {
+            TMP_eventListener.toggleTabbarVisibility(!this._isChromeCollapsed);
+          }
+        }
+        return result;
+      };
     }
-    else
-    Tabmix.changeCode(FullScreen, "FullScreen.mouseoverToggle")._replace(
-      'this._isChromeCollapsed = !aShow;',
-      '  $&' +
-      '  if (aShow)' +
-      '    TMP_eventListener.updateMultiRow();' +
-      '  if (TabmixTabbar.position == 1) {' +
-      '    TMP_eventListener.toggleTabbarVisibility(aShow);' +
-      '  }'
-    ).toCode();
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
