@@ -343,15 +343,15 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       this.setFirstTabInRow();
-      if (tabBar.mTabstrip.orient != "vertical")
+      if (tabBar.mTabstrip.orient != "vertical") {
         tabBar.mTabstrip._enterVerticalMode();
-      else
-        Tabmix.tabsUtils.updateVerticalTabStrip();
-
-      if (this.position == 1)
-        setTimeout(() => Tabmix.tabsUtils.updateVerticalTabStrip(), 0);
-
-      this.updateBeforeAndAfter();
+        this.updateBeforeAndAfter();
+      } else {
+        setTimeout(() => {
+          Tabmix.tabsUtils.updateVerticalTabStrip();
+          this.updateBeforeAndAfter();
+        }, 0);
+      }
     }
     /// maybe we cad add this to the popupshing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
