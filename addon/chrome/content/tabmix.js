@@ -687,8 +687,36 @@ var TMP_eventListener = {
     this._updateMarginBottom("");
     this.toggleTabbarVisibility(true);
     this.updateMultiRow();
-    setTimeout(() => this.updateMultiRow(), 0);
+    setTimeout(() => {
+      this.updateMultiRow();
+      // overwrite FullScreen.showNavToolbox calculation for _mouseTargetRect
+      if (TabmixTabbar.position == 1) {
+        this.updateMouseTargetRect();
+      }
+    }, 0);
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+  },
+
+ /**
+  * for use in Firefox 40+.
+  * update FullScreen._mouseTargetRect when in full screen and the tabbar is
+  * visible. we call this function from tabBarHeightModified and showNavToolbox
+  */
+  updateMouseTargetRect: function() {
+    if (!Tabmix.isVersion(400)) {
+      return;
+    }
+    if (!window.fullScreen || FullScreen._isChromeCollapsed) {
+      return;
+    }
+
+    let rect = gBrowser.mPanelContainer.getBoundingClientRect();
+    FullScreen._mouseTargetRect = {
+      top: rect.top + 50,
+      bottom: rect.bottom - (TabmixTabbar.position == 1) * 50,
+      left: rect.left,
+      right: rect.right
+    };
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {

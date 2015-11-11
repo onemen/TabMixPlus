@@ -264,6 +264,11 @@ var TabmixTabbar = {
       else
         newHeight = this.getRowHeight(tabsPosition) * aRows;
 
+      // don't proceed, probably the tabbar is not visible
+      if (newHeight === 0) {
+        return;
+      }
+
       this._heights[tabsPosition][aRows] = newHeight;
       if (fillRowsHeights || (aRows > 2 && typeof (this._heights[tabsPosition][aRows - 1]) == "undefined")) {
         let rowHeight = newHeight / aRows;
@@ -312,7 +317,7 @@ var TabmixTabbar = {
         mWin.style.setProperty("padding-top", newTabbarHeight + "px", "important");
       }
     }
-    gTMPprefObserver.updateTabbarBottomPosition();
+    this.tabBarHeightModified();
   },
 
   resetHeight: function TMP_resetHeight() {
@@ -336,7 +341,17 @@ var TabmixTabbar = {
     if (TabmixSvc.isMac) {
       document.getElementById("TabsToolbar").style.removeProperty("height");
     }
+    this.tabBarHeightModified();
+  },
+
+  tabBarHeightModified: function() {
     gTMPprefObserver.updateTabbarBottomPosition();
+    TMP_eventListener.updateMouseTargetRect();
+
+    // dispatch event
+    let event = document.createEvent("Events");
+    event.initEvent("Tabmix.TabBarHeightModified", true, false);
+    document.getElementById("TabsToolbar").dispatchEvent(event);
   },
 
   _handleResize: function TMP__handleResize() {
