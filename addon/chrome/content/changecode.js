@@ -75,7 +75,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
             ' }';
         }
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
-        if (this.isValidToChange(fnName)) {
+        if (this.isValidToChange(this.fullName)) {
           if (obj)
             Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this.value));
           else
