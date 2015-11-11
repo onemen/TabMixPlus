@@ -1204,11 +1204,14 @@ Tabmix.navToolbox = {
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
       let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
                                       [searchbar, "handleSearchCommand"];
+      let $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
-        '$& \
-        var forceNewTab = where == "current" && textBox._prefBranch.getBoolPref("browser.search.openintab"); \
-        if (forceNewTab) where = "tab";'
+        '$&' + $LF +
+        'let forceNewTab = where == "current" && Services.prefs.getBoolPref("browser.search.openintab");' + $LF +
+        'if (forceNewTab) {' + $LF +
+        '  where = "tab";' + $LF +
+        '}'
       ).toCode();
     }
 
