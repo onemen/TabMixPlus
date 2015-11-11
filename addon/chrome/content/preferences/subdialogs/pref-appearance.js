@@ -36,11 +36,9 @@ var tabstyles = { // jshint ignore:line
   },
 
   openHelp: function() {
-    var subPage = ["Current_Tab", "Unloaded_tabs", "Unread_tabs", "Other_Tabs", "Progress_meter_on_tabs"];
-    var index = $("AppearanceTabBox").selectedIndex;
     var win = window.opener || Tabmix.getTopWin();
     if (win)
-      win.openHelp("Customize_Styles_-_" + subPage[index]);
+      win.openHelp("display-tab#customize_styles");
     else
       document.documentElement.getButton("help").disabled = true;
   },

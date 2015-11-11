@@ -526,7 +526,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tmp.garyr.net/help/#";
+  var helpPage = "http://tmp.garyr.net/support/viewpage.php?t=3&p=";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -536,6 +536,7 @@ function openHelp(helpTopic) {
       let browser = browsers[i];
       if (browser.currentURI.spec.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
+        browser.tabmix_allowLoad = true;
         return true;
       }
     }
@@ -547,10 +548,11 @@ function openHelp(helpTopic) {
   if (!helpTopic) {
     var currentPane = document.documentElement.currentPane;
     helpTopic = currentPane.helpTopic;
-    if (currentPane.id == "paneSession" && helpTopic == "tabmix")
+    if (currentPane.id == "paneSession") {
       helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
+    }
   }
-
+  helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
