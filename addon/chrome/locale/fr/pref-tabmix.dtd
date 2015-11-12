@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Autoriser les popups non redimensionnées">
 <!ENTITY divertedWindowOpen.none "Autoriser toutes les popups à ouvrir une nouvelle fenêtre">
 <!ENTITY linkTarget.label "Ouvrir les liens avec un attribut target dans l&apos;onglet courant">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Ouvrir les liens avec cible dans le cadre existant de l'onglet courant">
 <!ENTITY download.label "Empêcher l&apos;ouverture d&apos;onglets vides lors d&apos;un téléchargement de fichier">
 <!ENTITY edit.label "Éditer">
 <!ENTITY speLink.label "Forcer l&apos;ouverture dans un nouvel onglet :">

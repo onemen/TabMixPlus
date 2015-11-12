@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "Stile">
 <!ENTITY styles.label "Aussehen anpassen">
 <!ENTITY currentTab.label "Aktiver Tab">
 <!ENTITY unloadedTabs.label "Nichtgeladene Tabs">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "RGB ausblenden">
 <!ENTITY showRGB.label "RGB anzeigen">
 <!ENTITY unreadAfterReload.label "Tab nach dem Neu-laden, als ungelesen markieren">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Standard-Hintergrundfarben deaktivieren">
 <!ENTITY squaredTabs.label "Hintergrundfarbe für rechteckige Tabs  anwenden">
 <!ENTITY otherTabs.label "Andere Tabs">
 <!ENTITY italic.label "Kursiv">

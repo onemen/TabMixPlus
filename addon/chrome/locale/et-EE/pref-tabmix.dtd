@@ -16,14 +16,14 @@
 <!ENTITY externalLinkTarget.label "Teistest rakendustest pärit linkide avamise asukoht:">
 <!ENTITY linkTarget.tab "Uus kaart">
 <!ENTITY linkTarget.window "Uus aken">
-<!ENTITY linkTarget.current "Praegune aken">
+<!ENTITY linkTarget.current "Praegune kaart">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript hüpikaknad:">
 <!ENTITY divertedWindowOpen.all "Ava kõik hüpikaknad kaartidel">
 <!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
 <!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
 <!ENTITY linkTarget.label "Ava 'target'-omadusega lingid praegusel kaardil">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Ava olemasolevale paneelile suunatud lingid praegusel kaardil">
 <!ENTITY download.label "Failide allalaadimisel ära näita tühje kaarte">
 <!ENTITY edit.label "Muuda">
 <!ENTITY speLink.label "Alati ava uuel kaardil:">
@@ -100,10 +100,10 @@
 <!ENTITY undoCloseCache.label "Suurim meeldejäetavate suletud kaartide arv:">
 <!ENTITY undoClosepos.label "Taasta kaardid nende esialgsele kohale">
 <!ENTITY menuonlybutton.label "Pane tööriistariba nupp näitama ainult loendit">
-<!ENTITY ctrltab.label "Ctrl+Tab vahetab kaarte viimati kasutatud järjekorras">
-<!ENTITY cmdtab.label "Cmd+Tab vahetab kaarte viimati kasutatud järjekorras">
+<!ENTITY ctrltab.label "Ctrl-Tab vahetab kaarte viimati kasutatud järjekorras">
+<!ENTITY cmdtab.label "Cmd-Tab vahetab kaarte viimati kasutatud järjekorras">
 <!ENTITY ctrltab.tabPreviews "Näita kaartide eelvaateid">
-<!ENTITY ctrltab.popup "Ctrl+Tab näitab kaartide loendi hüpikmenüüd">
+<!ENTITY ctrltab.popup "Ctrl-Tab näitab kaartide loendi hüpikmenüüd">
 <!ENTITY cmdtab.popup "Cmd-Tab näitab kaartide loendi hüpikmenüüd">
 <!ENTITY tabpopup.mouse "Kaartide loend reageerib hiirele">
 <!ENTITY mergeNoTabSelection.label "Kaartide ühendamine, kui ühtki kaarti pole märgistatud">
@@ -131,7 +131,7 @@
 <!ENTITY newTabButton.posiotion.afterlast.label "Viimase kaardi järel">
 <!ENTITY allTabsButton.label "Kõikide kaartide nuppu">
 <!ENTITY tabBarSpace.label "Lisaruumi mõlemal pool">
-<!ENTITY tabBarSpace.tooltip "Millegi lohistamiseks kaartide ribale">
+<!ENTITY tabBarSpace.tooltip "Klõpsamiseks ja millegi lohistamiseks kaartide ribale">
 <!ENTITY tabbar.label "Peida kaartide riba, kui lahti on ainult üks kaart">
 <!ENTITY moveTabOnDragging.label "Kaardi lohistamisel kasuta liigutamise animatsiooni">
 <!ENTITY dropIndicator.label "Lahtilaskmise tähis">
@@ -152,10 +152,10 @@
 <!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
 <!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
-<!ENTITY currenttab.style.label "praegusel kaardil">
-<!ENTITY unloadedtabs.style.label "laadimata kaartidel">
-<!ENTITY unreadtabs.style.label "lugemata kaartidel">
-<!ENTITY othertabs.style.label "teistel kaartidel">
+<!ENTITY currenttab.style.label "Praegune kaart">
+<!ENTITY unloadedtabs.style.label "Laadimata kaardid">
+<!ENTITY unreadtabs.style.label "Lugemata kaardid">
+<!ENTITY othertabs.style.label "Teised kaardid">
 <!ENTITY setstyles.label "Muuda stiile">
 <!ENTITY extraIcons.label1 "Nende olekute ikooni">
 <!ENTITY extraIcons.locked "Lukustatud">

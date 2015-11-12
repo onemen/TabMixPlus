@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permitir redimensionar ventanas emergentes">
 <!ENTITY divertedWindowOpen.none "Permitir todas las ventanas emergentes">
 <!ENTITY linkTarget.label "Abrir enlaces con atributos de archivo en pestaña actual">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Abrir enlaces que apuntan al marco existente en la pestaña actual">
 <!ENTITY download.label "Evitar abrir pestañas en blanco al descargar archivos">
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Obligar a abrir en nueva pestaña:">

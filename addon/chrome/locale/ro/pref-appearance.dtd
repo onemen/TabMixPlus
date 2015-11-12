@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "Stiluri">
 <!ENTITY styles.label "Personalizează stilurile">
 <!ENTITY currentTab.label "Filă curentă">
 <!ENTITY unloadedTabs.label "File neîncărcate">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "Ascunde profilul cromatic">
 <!ENTITY showRGB.label "Afișează profilul cromatic">
 <!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Se dezactivează culorile personalizate de fundal">
 <!ENTITY squaredTabs.label "Aplică culoarea de fundal filelor rectangulare">
 <!ENTITY otherTabs.label "Alte file">
 <!ENTITY italic.label "Cursiv">

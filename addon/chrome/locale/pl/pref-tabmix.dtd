@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Zezwalaj skryptom na otwieranie wyskakujących okien o zmiennej wielkości">
 <!ENTITY divertedWindowOpen.none "Zezwalaj skryptom na otwieranie wszystkich wyskakujących okien">
 <!ENTITY linkTarget.label "Odnośniki z atrybutem „target” otwieraj w aktywnej karcie">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Odnośniki z atrybutem „target” otwieraj w istniejącej ramce aktywnej karty">
 <!ENTITY download.label "Nie zezwalaj na otwieranie pustych kart podczas pobierania plików">
 <!ENTITY edit.label "Typy plików">
 <!ENTITY speLink.label "Wymuszaj otwieranie w nowych kartach">

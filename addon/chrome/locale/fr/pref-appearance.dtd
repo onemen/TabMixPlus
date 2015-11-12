@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "Masquer codes RVB">
 <!ENTITY showRGB.label "Afficher codes RVB">
 <!ENTITY unreadAfterReload.label "Marquer l'onglet comme non lu après rechargement">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Désactiver les couleurs de fond personnalisées">
 <!ENTITY squaredTabs.label "Appliquer la couleur d'arrière-plan sur les onglets rectangulaires">
 <!ENTITY otherTabs.label "Autres onglets">
 <!ENTITY italic.label "Italique">

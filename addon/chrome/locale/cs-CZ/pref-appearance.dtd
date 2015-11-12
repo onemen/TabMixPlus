@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "Styly">
 <!ENTITY styles.label "Upravit styly">
 <!ENTITY currentTab.label "Aktuální panel">
 <!ENTITY unloadedTabs.label "Nenačtené panely">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "Skrýt RGB">
 <!ENTITY showRGB.label "Zobrazit RGB">
 <!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Zakázat vlastní barvy pozadí">
 <!ENTITY squaredTabs.label "Použít barvu pozadí na čtvercové panely">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">

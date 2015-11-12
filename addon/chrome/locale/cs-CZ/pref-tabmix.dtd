@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Povolit vyskakovací okna s pevně danými rozměry">
 <!ENTITY divertedWindowOpen.none "Povolit všechna vyskakovací okna">
 <!ENTITY linkTarget.label "Odkazy s atributem 'target' otevírat v aktuálním panelu">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Odkazy s atributem 'target' do existujícího rámce otevírat v aktuálním panelu">
 <!ENTITY download.label "Při stahování souborů neotevírat prázdný panel">
 <!ENTITY edit.label "Úpravy">
 <!ENTITY speLink.label "Vždy otevírat v novém panelu:">
@@ -63,7 +63,7 @@
 <!ENTITY openNewTab.label "Otevírat panely z:">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openPlacesGroups.label "Seskupit záložky/historii">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Při otevírání skupiny záložek či historie nepřepsat karty">
 <!ENTITY openHistory.label "Historie">
 <!ENTITY openUrl.label "Adresní řádek">
 <!ENTITY openSearch.label "Lišta vyhledávání">
@@ -148,7 +148,7 @@
 <!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačítky nalevo">
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY pinnedTabScroll.label "Umožnit skrolování na připnutých kartách">
 <!ENTITY offsetAmountToScroll.label "Při posouvání stránky zobrazit část dalšího panelu">
 <!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">

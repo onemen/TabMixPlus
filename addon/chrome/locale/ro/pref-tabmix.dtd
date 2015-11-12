@@ -22,8 +22,8 @@
 <!ENTITY divertedWindowOpen.all "Se deschid toate ferestrele instantanee în file">
 <!ENTITY divertedWindowOpen.some "Se permite redimensionarea ferestrelor instantanee">
 <!ENTITY divertedWindowOpen.none "Se permit toate ferestrele instantanee">
-<!ENTITY linkTarget.label "Se deschid legăturile cu un atribut țintă („target”) în fila curentă">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY linkTarget.label "Se deschid legăturile cu un atribut „țintă” (target) în fila curentă">
+<!ENTITY targetIsFrame.label "Se deschid legăturile cu țintă într-un cadru existent în fila curentă">
 <!ENTITY download.label "Se împiedică deschiderea filelor vide când se descarcă fișiere">
 <!ENTITY edit.label "Editează extensiile">
 <!ENTITY speLink.label "Se forțează deschiderea într-o filă nouă a:">

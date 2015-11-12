@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permitir popups redimensionáveis">
 <!ENTITY divertedWindowOpen.none "Permitir todos os popups">
 <!ENTITY linkTarget.label "Abrir links com o atributo &quot;target&quot; na aba atual">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Abrir links com destino ao quadro existente na aba atual">
 <!ENTITY download.label "Prevenir abas em branco ao fazer downloads de arquivos">
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Forçar para que abram em nova aba:">

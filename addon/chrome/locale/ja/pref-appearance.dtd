@@ -1,12 +1,12 @@
-<!ENTITY tabStyles.label "Styles">
-<!ENTITY styles.label "カスタマイズ">
+<!ENTITY tabStyles.label "スタイル">
+<!ENTITY styles.label "スタイルをカスタマイズ">
 <!ENTITY currentTab.label "現在のタブ">
 <!ENTITY unloadedTabs.label "未読込のタブ">
 <!ENTITY unreadTab.label "未読のタブ">
 <!ENTITY hideRGB.label "RGB を表示しない">
 <!ENTITY showRGB.label "RGB を表示する">
 <!ENTITY unreadAfterReload.label "再読み込み後はタブを未読にする">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "カスタム背景色を無効化する">
 <!ENTITY squaredTabs.label "タブの背景色を設定する">
 <!ENTITY otherTabs.label "他のタブ">
 <!ENTITY italic.label "イタリック">

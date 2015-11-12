@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Nur Pop-ups mit Größenvorgaben als Fenster erlauben">
 <!ENTITY divertedWindowOpen.none "Alle Pop-ups als Fenster erlauben">
 <!ENTITY linkTarget.label "Links mit Zielangaben (&quot;target&quot;-Attribut) im aktiven Tab öffnen">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Links mit Zielangaben (&quot;target&quot;-Attribut) in einem existierendem Frame, im aktiven Tab öffnen">
 <!ENTITY download.label "Öffnen leerer Tabs/Fenster beim Datei-Download verhindern">
 <!ENTITY edit.label "Bearbeiten">
 <!ENTITY speLink.label "Immer in neuem Tab öffnen:">

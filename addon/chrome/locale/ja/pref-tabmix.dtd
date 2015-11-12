@@ -19,14 +19,14 @@
 <!ENTITY linkTarget.current "現在のタブ">
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript ポップアップの設定:">
-<!ENTITY divertedWindowOpen.all "すべてのポップアップをタブに開く">
+<!ENTITY divertedWindowOpen.all "すべてのポップアップをタブで開く">
 <!ENTITY divertedWindowOpen.some "サイズ指定されたポップアップを許可">
 <!ENTITY divertedWindowOpen.none "すべてのポップアップを許可">
-<!ENTITY linkTarget.label "Target 属性が設定されているリンクを現在のタブに開く">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY linkTarget.label "Target 属性が設定されているリンクを現在のタブで開く">
+<!ENTITY targetIsFrame.label "既存のフレームに Target 設定されているリンクを現在のタブで開く">
 <!ENTITY download.label "ファイルをダウンロードするときに空白タブが開かないようにする">
 <!ENTITY edit.label "編集">
-<!ENTITY speLink.label "強制的に新しいタブに開くリンクの種類:">
+<!ENTITY speLink.label "強制的に新しいタブで開くリンクの種類:">
 <!ENTITY speLink.none "なし">
 <!ENTITY speLink.allLinks "すべてのリンク">
 <!ENTITY speLink.external "他サイトへのリンク">

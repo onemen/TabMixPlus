@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Povoliť zmeny u vyskakovacích okien">
 <!ENTITY divertedWindowOpen.none "Povoliť všetky vyskakovacie okná">
 <!ENTITY linkTarget.label "Odkazy s atribútom &apos;target&apos; otvoriť na aktuálnej karte">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Otvoriť odkazy s cieľom na existujúce okno na aktuálnej karte">
 <!ENTITY download.label "Blokovať prázdne karty pri sťahovaní súborov">
 <!ENTITY edit.label "Upraviť">
 <!ENTITY speLink.label "Prinútiť otvoriť na novej karte:">

@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Pop-ups met gewijzigde afmetingen toestaan">
 <!ENTITY divertedWindowOpen.none "Alle pop-ups toestaan">
 <!ENTITY linkTarget.label "Koppelingen met een target attribuut in het huidige tabblad openen">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Koppelingen met doel naar bestaand frame in huidige tabblad openen">
 <!ENTITY download.label "Blanco tabbladen bij het downloaden van bestanden voorkomen">
 <!ENTITY edit.label "Bewerken">
 <!ENTITY speLink.label "Openen in een nieuw tabblad forceren:">

@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "Стилове">
 <!ENTITY styles.label "Настройка на стилове">
 <!ENTITY currentTab.label "Текущ подпрозорец">
 <!ENTITY unloadedTabs.label "Незаредени подпрозорци">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "Скриване на RGB">
 <!ENTITY showRGB.label "Показване на RGB">
 <!ENTITY unreadAfterReload.label "след презареждане, подпрозорецът да се маркира като непрочетен">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Изключване на потребителските цветове на фона">
 <!ENTITY squaredTabs.label "Стилът на фона да се приложи върху квадратни подпрозорци">
 <!ENTITY otherTabs.label "Други подпрозорци">
 <!ENTITY italic.label "Курсив">

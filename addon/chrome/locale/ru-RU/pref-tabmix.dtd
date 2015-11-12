@@ -23,7 +23,7 @@
 <!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
 <!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
 <!ENTITY linkTarget.label "Открывать ссылки с атрибутом 'target' в текущей вкладке">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY targetIsFrame.label "Открывать ссылки текущего фрейма в текущей вкладке">
 <!ENTITY download.label "Не открывать пустые вкладки при закачке файлов">
 <!ENTITY edit.label "Типы файлов">
 <!ENTITY speLink.label "Принудительно открывать в новых вкладках:">

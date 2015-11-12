@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "Стили">
 <!ENTITY styles.label "Настройка стилей">
 <!ENTITY currentTab.label "Текущая вкладка">
 <!ENTITY unloadedTabs.label "Незагруженные вкладки">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "Спрятать RGB">
 <!ENTITY showRGB.label "Показать RGB">
 <!ENTITY unreadAfterReload.label "отметить вкладку как непрочитанную после её обновления">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "Отключить пользовательские цвета фона">
 <!ENTITY squaredTabs.label "Применять цвет фона к квадратным вкладкам">
 <!ENTITY otherTabs.label "Другие вкладки">
 <!ENTITY italic.label "Курсив">
