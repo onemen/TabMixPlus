@@ -631,8 +631,11 @@ var tablib = { // eslint-disable-line
      * it is not likely that link in other application opened Firefox for downloading data
      */
     let fnObj = nsBrowserAccess.prototype, fnName, arg;
+    // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
+    let TSTopenURI = Tabmix.extensions.treeStyleTab &&
+        typeof fnObj.__treestyletab__openURI == "function" ? "__treestyletab__openURI" : "";
     [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
-                                            ["openURI", "isExternal"];
+                                            [TSTopenURI || "openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
 
     var loadURIWithFlags = Tabmix.isVersion(380) ?
@@ -673,7 +676,8 @@ var tablib = { // eslint-disable-line
 
     if (Tabmix.isVersion(260)) {
       _openURI.toCode();
-      _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype.openURI");
+      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "openURI");
+      _openURI = Tabmix.changeCode(fnObj, fnName);
     }
 
     _openURI._replace(
