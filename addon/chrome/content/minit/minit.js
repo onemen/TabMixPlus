@@ -398,9 +398,11 @@ var TMP_tabDNDObserver = {
       void newBrowser.docShell;
 
       let numPinned = gBrowser._numPinnedTabs;
+      newIndex += left_right;
       if (newIndex < numPinned || draggedTab.pinned && newIndex == numPinned)
         gBrowser.pinTab(newTab);
-      gBrowser.moveTabTo(newTab, newIndex + left_right);
+
+      gBrowser.moveTabTo(newTab, newIndex);
 
       gBrowser.selectedTab = newTab;
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
