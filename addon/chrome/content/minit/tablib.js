@@ -137,8 +137,9 @@ var tablib = { // eslint-disable-line
     }
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{', '{\n\
-      let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
+      '{', '{\n' +
+      '            let dontMove, isPending, callerName = Tabmix.callerName(),\n' +
+      '                isRestoringTab = callerName == "ssi_restoreWindow";\n'
     )._replace(
       'let params = arguments[1];',
       '$&\n' +
@@ -180,7 +181,7 @@ var tablib = { // eslint-disable-line
       't.dispatchEvent(evt);' +
       'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
       'if (openTabnext) {' +
-      '  if (dontMove || Tabmix.isCallerInList(this.TMP_blockedCallers))' +
+      '  if (dontMove || Tabmix.dontMoveNewTab(callerName))' +
       '    openTabnext = false;' +
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
       '    aRelatedToCurrent = true;' +
@@ -189,8 +190,13 @@ var tablib = { // eslint-disable-line
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
-    gBrowser.TMP_blockedCallers = ["sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
-                                   "sss_duplicateTab", "ssi_duplicateTab"]; // ssi_duplicateTab from Firefox 16+
+    Tabmix.dontMoveNewTab = function(caller) {
+      if (caller == "ssi_restoreWindow" ||
+          caller == "ssi_duplicateTab" && !Tabmix._moveDuplicatedTab) {
+        return true;
+      }
+      return false;
+    };
 
     // ContextMenu Extensions raplce the original removeTab function
     var _removeTab = "removeTab";
@@ -558,35 +564,31 @@ var tablib = { // eslint-disable-line
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
 
-    // we prevent sessionStore.duplicateTab from moving the tab
-    Tabmix.changeCode(window, "duplicateTabIn")._replace(
-      'switch (where)',
-      'if (where == "window" && Tabmix.getSingleWindowMode()) {\n' +
-      '    where = "tab";\n' +
-      '  }\n' +
-      '  $&'
-    )._replace(
-      'gBrowser.selectedTab = newTab;',
-      '// check tabmix preference before selecting the new tab'
-    )._replace(
-      /(\})(\)?)$/,
-      '  if (where != window) {\n' +
-      '    let newTab = gBrowser.getTabForLastPanel();\n' +
-      '    let selectNewTab = where == "tab" ?\n' +
-      '        !Tabmix.prefs.getBoolPref("loadDuplicateInBackground") :\n' +
-      '        Tabmix.prefs.getBoolPref("loadDuplicateInBackground");\n' +
-      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?\n' +
-      '               "openTabNext" : "openDuplicateNext";\n' +
-      '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
-      '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
-      '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
-      '    }\n' +
-      '    if (selectNewTab) {\n' +
-      '      gBrowser.selectedTab = newTab;\n' +
-      '    }\n' +
-      '  }\n' +
-      '$1$2'
-    ).toCode();
+    Tabmix.originalFunctions.duplicateTabIn = window.duplicateTabIn;
+    window.duplicateTabIn = function(aTab, where) {
+      if (where == "window" && Tabmix.getSingleWindowMode()) {
+        where = "tab";
+        arguments[1] = where;
+      }
+      if (where != window) {
+        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+            "openTabNext" : "openDuplicateNext";
+        // we prevent SessionStore.duplicateTab from moving the tab
+        // see Tabmix.dontMoveNewTab
+        Tabmix._moveDuplicatedTab = Tabmix.prefs.getBoolPref(pref);
+      }
+
+      let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
+      if (where != window) {
+        delete Tabmix._dontMoveDuplicatedTab;
+        let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
+        let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
+        if (selectNewTab) {
+          gBrowser.selectedTab = gBrowser.getTabForLastPanel();
+        }
+      }
+      return result;
+    };
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
