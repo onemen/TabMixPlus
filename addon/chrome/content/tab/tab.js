@@ -1773,9 +1773,12 @@ var gTMPprefObserver = {
 
     // Workaround bug 943308 - tab-background not fully overlap the tab curves
     // when layout.css.devPixelsPerPx is not 1.
-    let selectedTab = Tabmix.isVersion(390) && gBrowser._switcher ?
-        gBrowser._switcher.visibleTab : gBrowser.selectedTab;
-    let bgMiddle = document.getAnonymousElementByAttribute(selectedTab, "class", "tab-background-middle");
+    let tab = gBrowser.selectedTab;
+    let visuallyselected = !Tabmix.isVersion(390) || tab.hasAttribute("visuallyselected");
+    if (!visuallyselected) {
+      tab.setAttribute("visuallyselected", true);
+    }
+    let bgMiddle = document.getAnonymousElementByAttribute(tab, "class", "tab-background-middle");
     let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
     let bgMiddleMargin = this.dynamicRules.bgMiddleMargin;
     if (bgMiddleMargin) {
@@ -1785,6 +1788,9 @@ var gTMPprefObserver = {
       let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
                     '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
       this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
+    }
+    if (!visuallyselected) {
+      tab.removeAttribute("visuallyselected");
     }
   },
 
