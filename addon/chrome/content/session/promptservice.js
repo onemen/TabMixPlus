@@ -1,3 +1,5 @@
+/* eslint indent: 0, brace-style: 0, no-case-declarations: 0, block-scoped-var: 0,
+          no-lonely-if: 0, consistent-this: 0 */
 /* exported TMP_BUTTON_OK, TMP_BUTTON_CANCEL, TMP_BUTTON_EXTRA1, TMP_SHOW_MENULIST,
             TMP_SHOW_TEXTBOX, TMP_HIDE_MENUANDTEXT, TMP_CHECKBOX_UNCHECKED,
             TMP_CHECKBOX_CHECKED, TMP_HIDE_CHECKBOX, TMP_SELECT_DEFAULT,

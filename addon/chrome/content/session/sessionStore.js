@@ -1,3 +1,5 @@
+/* eslint indent: 0, brace-style: 0, no-case-declarations: 0, block-scoped-var: 0,
+          no-lonely-if: 0, consistent-this: 0 */
 "use strict";
 
 /*
