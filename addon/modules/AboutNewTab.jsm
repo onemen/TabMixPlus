@@ -42,7 +42,7 @@ var AboutNewTabInternal = {
     let tabBrowser = window.gBrowser;
     let tabPanels = tabBrowser.mPanelContainer.childNodes;
     let browsers = Array.map(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
-                        .filter(browser => browser.currentURI.spec == "about:newtab");
+                        .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
     browsers.forEach(browser => this.updateBrowser(browser));
   },
 

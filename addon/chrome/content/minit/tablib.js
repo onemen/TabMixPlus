@@ -1977,7 +1977,7 @@ Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
 };
 
 Tabmix.newTabUrls = [
-  "about:newtab", "about:blank",
+  TabmixSvc.aboutNewtab, TabmixSvc.aboutBlank,
   "chrome://abouttab/content/text.html",
   "chrome://abouttab/content/tab.html",
   "chrome://google-toolbar/content/new-tab.html",

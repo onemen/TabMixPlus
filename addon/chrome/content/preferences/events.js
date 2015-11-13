@@ -25,7 +25,7 @@ var gEventsPane = {
 
     $("pref_newTabUrl").name = TabmixSvc.newtabUrl;
     let prefValue = $("pref_newTabUrl").valueFromPreferences;
-    if (prefValue != "about:newtab")
+    if (prefValue != TabmixSvc.aboutNewtab)
       $("newTabUrl").value = $("pref_newTabUrl").valueFromPreferences;
 
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
@@ -93,8 +93,9 @@ var gEventsPane = {
 
   syncToNewTabUrlPref: function(value) {
     // If the value is "", use about:newtab.
-    if (value === "")
-      return "about:newtab";
+    if (value === "") {
+      return TabmixSvc.aboutNewtab;
+    }
 
     // Otherwise, use the actual textbox value.
     return undefined;

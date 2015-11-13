@@ -353,7 +353,7 @@ var AboutNewTabHandler = {
       }
       let doc = content.document;
       // we don't need to update titles on first show if the pref is off
-      if (doc.documentURI.toLowerCase() == "about:newtab" &&
+      if (doc.documentURI.toLowerCase() == TabmixSvc.aboutNewtab &&
           (contentLoaded || TabmixSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
         contentLoaded = true;
         this.updateTitles();

@@ -407,7 +407,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
          }
          m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
          m.setAttribute("value", i);
-         m.setAttribute("oncommand", "TMP_ClosedTabs.restoreTab('original', " + i + ");");
+         m.addEventListener("command", TMP_ClosedTabs.restoreCommand, false);
          m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
          if (i === 0)
             m.setAttribute("key", "key_undoCloseTab");
@@ -440,6 +440,14 @@ var TMP_ClosedTabs = { // jshint ignore:line
          TMP_ClosedTabs.restoreTab('original', -2);
       });
       return true;
+   },
+
+   restoreCommand: function(aEvent) {
+      var index = aEvent.originalTarget.value;
+      if (index < 0) {
+         return;
+      }
+      TMP_ClosedTabs.restoreTab("original", index);
    },
 
    checkForMiddleClick: function ct_checkForMiddleClick(aEvent) {

@@ -31,8 +31,8 @@ this.TabmixSvc = {
   },
 
   aboutBlank: "about:blank",
-  aboutNewtab: "about:newtab",
-  newtabUrl: "browser" + ".newtab.url",
+  aboutNewtab: "about:#".replace("#", "newtab"),
+  newtabUrl: "browser.#.url".replace("#", "newtab"),
 
   debugMode: function() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&

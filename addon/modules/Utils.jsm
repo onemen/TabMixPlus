@@ -42,7 +42,7 @@ this.TabmixUtils = {
     if (TabmixSvc.version(420)) {
       let {gBrowser, BROWSER_NEW_TAB_URL} = window;
       if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
-          BROWSER_NEW_TAB_URL == "about:newtab" &&
+          BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
           gBrowser._preloadedBrowser && gBrowser._isPreloadingEnabled() &&
           !PrivateBrowsingUtils.isWindowPrivate(window)) {
         TabmixAboutNewTab.updateBrowser(gBrowser._preloadedBrowser);
