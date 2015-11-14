@@ -192,7 +192,7 @@ var tablib = { // eslint-disable-line
 
     Tabmix.dontMoveNewTab = function(caller) {
       if (caller == "ssi_restoreWindow" ||
-          caller == "ssi_duplicateTab" && !Tabmix._moveDuplicatedTab) {
+          caller == "ssi_duplicateTab") {
         return true;
       }
       return false;
@@ -568,23 +568,29 @@ var tablib = { // eslint-disable-line
     window.duplicateTabIn = function(aTab, where) {
       if (where == "window" && Tabmix.getSingleWindowMode()) {
         where = "tab";
-        arguments[1] = where;
       }
-      if (where != window) {
-        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-            "openTabNext" : "openDuplicateNext";
-        // we prevent SessionStore.duplicateTab from moving the tab
-        // see Tabmix.dontMoveNewTab
-        Tabmix._moveDuplicatedTab = Tabmix.prefs.getBoolPref(pref);
+      // we prevent SessionStore.duplicateTab from moving the tab
+      // see gBrowser.addTab
+      // always set where to 'tabshifted' to prevent original function from
+      // selecting the new tab
+      if (where == "tab") {
+        arguments[1] = "tabshifted";
       }
 
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
+
       if (where != window) {
-        delete Tabmix._dontMoveDuplicatedTab;
+        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+            "openTabNext" : "openDuplicateNext";
+        let newTab = gBrowser.getTabForLastPanel();
+        if (Tabmix.prefs.getBoolPref(pref)) {
+          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
+          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
+        }
         let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
         let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
         if (selectNewTab) {
-          gBrowser.selectedTab = gBrowser.getTabForLastPanel();
+          gBrowser.selectedTab = newTab;
         }
       }
       return result;
