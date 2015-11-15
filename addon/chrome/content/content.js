@@ -206,7 +206,7 @@ var TabmixClickEventHandler = {
     if (!ownerDoc || /^about:[certerror|blocked|neterror]/.test(ownerDoc.documentURI))
       return;
 
-    let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
+    let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
 
     // get referrer attribute from clicked link and parse it
     // if per element referrer is enabled, the element referrer overrules
@@ -256,7 +256,7 @@ var TabmixClickEventHandler = {
     if (href) {
       if (TabmixSvc.version(410)) {
         try {
-          BrowserUtils.urlSecurityCheck(href, node.ownerDocument.nodePrincipal);
+          BrowserUtils.urlSecurityCheck(href, principal);
         } catch (e) {
           return;
         }
@@ -293,7 +293,8 @@ var TabmixClickEventHandler = {
    * @return [href, linkNode].
    *
    * @note linkNode will be null if the click wasn't on an anchor
-   *       element (or XLink).
+   *       element. This includes SVG links, because callers expect |node|
+   *       to behave like an <a> element, which SVG links (XLink) don't.
    */
   _hrefAndLinkNodeForClickEvent: function(event) {
     function isHTMLLink(aNode) {
@@ -309,7 +310,7 @@ var TabmixClickEventHandler = {
     }
 
     if (node)
-      return [node.href, node];
+      return [node.href, node, node.ownerDocument.nodePrincipal];
 
     // If there is no linkNode, try simple XLink.
     let href, baseURI;
@@ -326,7 +327,8 @@ var TabmixClickEventHandler = {
     // In case of XLink, we don't return the node we got href from since
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
-    return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null];
+    return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
+            node && node.ownerDocument.nodePrincipal];
   },
 
   get _focusedWindow() {
