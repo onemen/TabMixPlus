@@ -71,7 +71,14 @@ var tablib = { // eslint-disable-line
     }
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
+
     if (!allowLoad) {
+      // we allow Google Redirects Fixer & Tracking Remover to load fixed url
+      // to the same tab
+      if (TabmixSvc.isFixedGoogleUrl(uri)) {
+        browser.tabmix_allowLoad = true;
+        return null;
+      }
       try {
         let newURI = Services.io.newURI(uri, null, null);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);

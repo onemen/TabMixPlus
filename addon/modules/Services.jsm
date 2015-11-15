@@ -260,6 +260,8 @@ this.TabmixSvc = {
       !this.prefBranch.getBoolPref("squaredTabsStyle");
   },
 
+  isFixedGoogleUrl: () => false,
+
   blockedClickingOptions: []
 };
 
