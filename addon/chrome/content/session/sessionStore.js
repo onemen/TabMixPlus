@@ -575,37 +575,45 @@ var TMP_ClosedTabs = { // jshint ignore:line
       return tab;
    },
 
-   SSS_undoCloseTab: function ct_SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aTabToRemove, skipAnimation) {
+   SSS_undoCloseTab: function(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
       if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
          return null;
 
       // get tab data
       var tabData = this.getClosedTabAtIndex(aIndex);
+
+      var tabToRemove = null;
       var cTab = gBrowser.mCurrentTab;
-      if (aWhere == "current") {
-         aTabToRemove = cTab;
+      var isCurrentBlank = gBrowser.isBlankNotBusyTab(cTab);
+      if (aWhere == "current" && !isCurrentBlank) {
+         tabToRemove = cTab;
          tabData.pos = cTab._tPos;
+      } else if (typeof aBlankTabToReuse == "undefined" && isCurrentBlank) {
+         aBlankTabToReuse = cTab;
       }
-      else if (typeof (aTabToRemove) == "undefined" && gBrowser.isBlankNotBusyTab(cTab))
-         aTabToRemove = cTab;
 
-      if (TMP_TabView.installed)
-         TabView.prepareUndoCloseTab(aTabToRemove);
+      if (TMP_TabView.installed) {
+         TabView.prepareUndoCloseTab(tabToRemove);
+      }
 
-      if (aTabToRemove)
-         aTabToRemove.collapsed = true;
+      if (tabToRemove) {
+         tabToRemove.collapsed = true;
+      }
 
-      var newTab = gBrowser.addTab("about:blank", {skipAnimation: aTabToRemove || skipAnimation, dontMove: true});
+      var newTab = aBlankTabToReuse ||
+          gBrowser.addTab("about:blank", {skipAnimation: tabToRemove || skipAnimation, dontMove: true});
       newTab.linkedBrowser.stop();
       // if tababr is hidden when there is only one tab and
       // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveale
-      if (aTabToRemove)
-         gBrowser.removeTab(aTabToRemove);
+      if (tabToRemove) {
+         gBrowser.removeTab(tabToRemove, {animate: false});
+      }
       // add restored tab to current window
       TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
-      if (TMP_TabView.installed)
+      if (TMP_TabView.installed) {
          TabView.afterUndoCloseTab();
+      }
 
       // after we open new tab we only need to fix position if this is true
       // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
@@ -614,8 +622,12 @@ var TMP_ClosedTabs = { // jshint ignore:line
          gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
       }
       else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
-         let newTabPos = (gBrowser._lastRelatedTab || gBrowser.selectedTab)._tPos + 1;
-         gBrowser.moveTabTo(newTab, newTabPos);
+         let tab = gBrowser._lastRelatedTab || gBrowser.selectedTab;
+         let pos = newTab._tPos > tab._tPos ? 1 : 0;
+         gBrowser.moveTabTo(newTab, tab._tPos + pos);
+      } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {
+         // move reused tab to the end
+         gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);
       }
 
       if (aSelectRestoredTab) {
