@@ -707,6 +707,11 @@ var TMP_tabDNDObserver = {
       } else {
         newMarginY = tabRect.bottom - rect.bottom;
         fixMargin = this.onLastToolbar && (Math.abs(newMarginY) < 0.5);
+        // fix for PaleMoon on Mac OS X
+        if (TabmixTabbar.visibleRows > 1 &&
+            ind.parentNode.getBoundingClientRect().height === 0) {
+          newMarginY += tabRect.height;
+        }
       }
       // make indicator visible
       if (fixMargin)

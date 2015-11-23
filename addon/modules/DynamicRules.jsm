@@ -24,6 +24,10 @@ XPCOMUtils.defineLazyGetter(this, "SSS", function() {
   return sss;
 });
 
+XPCOMUtils.defineLazyGetter(this, "isMac", function() {
+  return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
+});
+
 const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n';
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 const EXTRAPREFS = ["squaredTabsStyle"];
@@ -134,10 +138,10 @@ this.DynamicRules = {
     let bgImage = {};
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
-    bgImage.bg = TabmixSvc.isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
+    bgImage.bg = isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
 ///XXX move -moz-appearance: to general rule when style have bg
     let backgroundRule = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
-    if (TabmixSvc.isMac) {
+    if (isMac) {
       backgroundRule = ' > .tab-stack > .tab-background >\n' +
         '      :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
     }

@@ -1746,6 +1746,13 @@ var gTMPprefObserver = {
     this.insertRule(newRule, "toolbarbutton-height");
     delete Tabmix._buttonsHeight;
 
+    if (TabmixSvc.isMac && TabmixSvc.isPaleMoon) {
+      newRule = '.tab-close-button:not([selected="true"]):not(:hover) {\n' +
+                '  -moz-image-region: rect(0, 16px, 16px, 0);\n' +
+                '  opacity: .7;\n}';
+      this.insertRule(newRule);
+    }
+
     // we don't show icons on menu on Mac OS X
     if (TabmixSvc.isMac)
       return;

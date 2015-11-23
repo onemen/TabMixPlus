@@ -224,6 +224,7 @@
         "gPrefWindow": false,
         "PromptSvc": false,
         "gMenuPane": false,
+        "isMac": false,
         "LinkNodeUtils": false,
         "Prefs": false,
         "reportError": false,
