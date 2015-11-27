@@ -437,14 +437,6 @@ var ContentClickInternal = {
     if (this.divertTargetedLink())
       return ["current@14"];
 
-   /*
-    * Don't change default behavior for link with spaces,
-    * support.hp.com uses special link format internally
-    */
-    if (decodeURI(href.trim()).indexOf(" ") > -1) {
-      return ["default@14a"];
-    }
-
     /*
      * open links to other sites in a tab only if certain conditions are met. See the
      * function comment for more details.
