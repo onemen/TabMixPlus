@@ -2679,8 +2679,9 @@ var TabmixProgressListener = {
         if (!tab.hasAttribute("busy")) {
           TabmixSessionManager.tabLoaded(tab);
           // we need to remove width from tabs with url label from here
-          if (tab.hasAttribute("width"))
-            tablib.onTabTitleChanged(tab);
+          if (tab.hasAttribute("width")) {
+            tablib.onTabTitleChanged(tab, aBrowser);
+          }
         }
       }
       if ((aStateFlags & nsIWebProgressListener.STATE_IS_WINDOW) &&

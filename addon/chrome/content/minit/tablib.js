@@ -317,7 +317,7 @@ var tablib = { // eslint-disable-line
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
          if (noChange)\
-           tablib.onTabTitleChanged(aTab, title == urlTitle);\
+           tablib.onTabTitleChanged(aTab, browser, title == urlTitle);\
        }\
        else if (noChange)\
          TMP_Places.currentTab = null;\
@@ -325,7 +325,7 @@ var tablib = { // eslint-disable-line
     )._replace(
       'aTab.crop = crop;',
       '$&\
-       tablib.onTabTitleChanged(aTab, title == urlTitle);'
+       tablib.onTabTitleChanged(aTab, browser, title == urlTitle);'
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar
@@ -1778,12 +1778,27 @@ var tablib = { // eslint-disable-line
     return TMP_Places.getTabTitle(aTab, url, title);
   },
 
-  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, isUrlTitle) {
+  get labels() {
+    delete this.labels;
+    this.labels = [
+      gBrowser.mStringBundle.getString("tabs.connecting"),
+      gBrowser.mStringBundle.getString("tabs.emptyTabTitle"),
+    ];
+    return this.labels;
+  },
+
+  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internaly, after load already finished and we have remove
     // width attribute
     if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
       return;
+
+    if (aBrowser.getAttribute("remote") == "true" &&
+        aBrowser.__SS_restoreState == 2 &&
+        this.labels.indexOf(aTab.label) > -1) {
+      return;
+    }
 
     if (aTab.hasAttribute("width")) {
       let width = aTab.boxObject.width;
