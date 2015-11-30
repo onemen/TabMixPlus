@@ -592,7 +592,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
          aBlankTabToReuse = cTab;
       }
 
-      if (TMP_TabView.installed) {
+      if (TMP_TabView.exist("prepareUndoCloseTab")) {
          TabView.prepareUndoCloseTab(tabToRemove);
       }
 
@@ -611,7 +611,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       // add restored tab to current window
       TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
 
-      if (TMP_TabView.installed) {
+      if (TMP_TabView.exist("afterUndoCloseTab")) {
          TabView.afterUndoCloseTab();
       }
 

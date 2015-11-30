@@ -916,6 +916,10 @@ var TMP_TabView = { /* jshint ignore: line */
     return (this.installed = installed);
   },
 
+  exist: function(id) {
+    return this.installed && typeof TabView[id] == "function";
+  },
+
   checkTabs: function(tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
