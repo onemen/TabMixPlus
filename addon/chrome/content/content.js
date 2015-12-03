@@ -216,7 +216,7 @@ var TabmixClickEventHandler = {
         Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
         node) {
       let referrerAttrValue = Services.netUtils.parseAttributePolicyString(node.
-                              getAttribute("referrer"));
+          getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer"));
       if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
         referrerPolicy = referrerAttrValue;
       }
