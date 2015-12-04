@@ -1074,6 +1074,72 @@ Tabmix.tabsUtils = {
   }
 };
 
+Tabmix.bottomToolbarUtils = {
+  initialized: false,
+
+  init: function() {
+    this.updatePosition();
+    if (this.initialized) {
+      return;
+    }
+    this.initialized = true;
+    //XXX we don't check for aEvent.target != window to catch changs in
+    // browser-bottombox. try to improve it...
+    window.addEventListener("resize", this, false);
+  },
+
+  onUnload: function() {
+    if (!this.initialized) {
+      return;
+    }
+    window.removeEventListener("resize", this, false);
+  },
+
+  updatePosition: function() {
+    var updateFullScreen,
+        tabBar = gBrowser.tabContainer;
+    Tabmix.setItem(tabBar.mTabstrip, "flowing", TabmixTabbar.flowing);
+    var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+    if (!bottomToolbox) {
+      bottomToolbox = document.createElement("toolbox");
+      bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
+      bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
+      // if we decide to move this box into browser-bottombox
+      // remember to fix background css rules for all platform
+      let referenceNode = document.getElementById("content-deck");
+      referenceNode = referenceNode ? referenceNode.nextSibling :
+      document.getElementById("browser-bottombox");
+      referenceNode.parentNode.insertBefore(bottomToolbox, referenceNode);
+      updateFullScreen = window.fullScreen;
+    }
+    if (tabBar.visible)
+      gTMPprefObserver.updateTabbarBottomPosition();
+    else {
+      // the tabbar is hidden on startup
+      let height = tabBar.mTabstrip.scrollClientRect.height;
+      bottomToolbox.style.setProperty("height", height + "px", "important");
+      let tabsToolbar = document.getElementById("TabsToolbar");
+      tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
+      tabsToolbar.setAttribute("width", screen.availWidth);
+    }
+    // force TabmixTabbar.setHeight to set tabbar height
+    TabmixTabbar.visibleRows = 1;
+    if (updateFullScreen) {
+      TMP_eventListener.toggleTabbarVisibility(false);
+      TabmixTabbar.updateSettings(false);
+    }
+  },
+
+  handleEvent: function(aEvent) {
+    switch (aEvent.type) {
+      case "resize": {
+        gTMPprefObserver.updateTabbarBottomPosition(aEvent);
+        break;
+      }
+    }
+  },
+};
+
 Tabmix.visibleTabs = {
   get first() {
     var tabs = gBrowser.tabs;

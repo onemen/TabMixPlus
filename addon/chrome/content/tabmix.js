@@ -1119,6 +1119,7 @@ var TMP_eventListener = {
     }
 
     Tabmix.tabsUtils.onUnload();
+    Tabmix.bottomToolbarUtils.onUnload();
   },
 
   // some theme not useing up to date Tabmix tab binding

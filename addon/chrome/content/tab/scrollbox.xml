@@ -582,8 +582,8 @@
   </binding>
 
   <!-- for tabbar on the bottom of the screen -->
-  <binding id="toolbar"
-           extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+  <binding id="firefox-bottom-toolbar"
+           extends="chrome://browser/content/customizableui/toolbar.xml#toolbar">
     <content>
         <xul:hbox flex="1"
                   xbl:inherits="orient,width"
@@ -595,72 +595,28 @@
     <implementation implements="nsIDOMEventListener">
       <constructor>
         <![CDATA[
-          //XXX we don't check for aEvent.target != window to catch changs in browser-bottombox
-          // try to improve it
-          window.addEventListener("resize", this.tabmixHandleEvent, false);
-          this.updatePosition();
+          Tabmix.bottomToolbarUtils.init();
         ]]>
       </constructor>
+    </implementation>
+  </binding>
 
-      <destructor>
+  <binding id="palemoon-bottom-toolbar"
+           extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+    <content>
+      <xul:hbox flex="1"
+                xbl:inherits="orient,width"
+                anonid="toolbar-innerbox"
+                class="tabmixplus-toolbar-inner-box">
+        <xbl:children/>
+      </xul:hbox>
+    </content>
+    <implementation implements="nsIDOMEventListener">
+      <constructor>
         <![CDATA[
-          window.removeEventListener("resize", this.tabmixHandleEvent, false);
+          Tabmix.bottomToolbarUtils.init();
         ]]>
-      </destructor>
-
-      <field name="tabmixToolbarInnerBox" readonly="true">
-        document.getAnonymousElementByAttribute(this, 'anonid', 'toolbar-innerbox');
-      </field>
-
-      <method name="updatePosition">
-        <body><![CDATA[
-          var updateFullScreen, tabBar = gBrowser.tabContainer;
-          Tabmix.setItem(tabBar.mTabstrip, "flowing", TabmixTabbar.flowing);
-          Tabmix.tabsUtils.tabstripInnerbox = document.getAnonymousElementByAttribute(
-            tabBar.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-          var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-          if (!bottomToolbox) {
-            bottomToolbox = document.createElement("toolbox");
-            bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
-            bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
-            // if we decide to move this box into browser-bottombox
-            // remember to fix background css rules for all platform
-            let referenceNode = document.getElementById("content-deck");
-            referenceNode = referenceNode ? referenceNode.nextSibling :
-              document.getElementById("browser-bottombox");
-            referenceNode.parentNode.insertBefore(bottomToolbox, referenceNode);
-            updateFullScreen = window.fullScreen;
-          }
-          if (tabBar.visible)
-            gTMPprefObserver.updateTabbarBottomPosition();
-          else {
-            // the tabbar is hidden on startup
-            let height = tabBar.mTabstrip.scrollClientRect.height;
-            bottomToolbox.style.setProperty("height", height + "px", "important");
-            let tabsToolbar = document.getElementById("TabsToolbar");
-            tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
-            tabsToolbar.setAttribute("width", screen.availWidth);
-          }
-          // force TabmixTabbar.setHeight to set tabbar height
-          TabmixTabbar.visibleRows = 1;
-          if (updateFullScreen) {
-            TMP_eventListener.toggleTabbarVisibility(false);
-            TabmixTabbar.updateSettings(false);
-          }
-        ]]></body>
-      </method>
-
-      <method name="tabmixHandleEvent">
-        <parameter name="aEvent"/>
-        <body><![CDATA[
-          switch (aEvent.type) {
-            case "resize":
-              gTMPprefObserver.updateTabbarBottomPosition(aEvent);
-              break;
-          }
-        ]]></body>
-      </method>
-
+      </constructor>
     </implementation>
   </binding>
 
