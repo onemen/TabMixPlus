@@ -421,7 +421,7 @@ this.Shortcuts = {
     let reload = aWindow.document.getElementsByAttribute("command", "Browser:Reload");
     if (!reload)
       return;
-    Array.some(reload, function(key) {
+    Array.prototype.some.call(reload, function(key) {
       if (key.getAttribute("keycode") != "VK_F5")
         return false;
       if (!this.keys.browserReload.id) {

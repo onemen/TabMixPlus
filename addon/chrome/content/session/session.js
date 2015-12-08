@@ -1479,7 +1479,7 @@ var TabmixSessionManager = { // jshint ignore:line
     if (gBrowser.isBlankWindow())
       return false;
     return typeof privateTab != "object" ||
-      Array.some(gBrowser.tabs, tab => !privateTab.isTabPrivate(tab));
+      Array.prototype.some.call(gBrowser.tabs, tab => !privateTab.isTabPrivate(tab));
   },
 
   saveOneOrAll: function(action, path, saveClosedTabs) {

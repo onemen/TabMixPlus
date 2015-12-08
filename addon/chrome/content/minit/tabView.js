@@ -361,7 +361,7 @@
     if (!excludeTabs)
       excludeTabs = [];
 
-    return !Array.some(gBrowser.tabs, function(tab) {
+    return !Array.prototype.some.call(gBrowser.tabs, function(tab) {
       if (!tab.pinned && !tab.hidden && !tab.closing && excludeTabs.indexOf(tab) == -1) {
         return true;
       }
