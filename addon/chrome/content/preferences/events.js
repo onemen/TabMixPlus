@@ -23,10 +23,9 @@ var gEventsPane = {
 
     this.disableInverseMiddleClick();
 
-    $("pref_newTabUrl").name = TabmixSvc.newtabUrl;
-    let prefValue = $("pref_newTabUrl").valueFromPreferences;
-    if (prefValue != TabmixSvc.aboutNewtab)
-      $("newTabUrl").value = $("pref_newTabUrl").valueFromPreferences;
+    let newTabUrl = $("pref_newTabUrl");
+    newTabUrl.name = TabmixSvc.newtabUrl;
+    newTabUrl.value = newTabUrl.valueFromPreferences;
 
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disabeleRplaceLastTabWith();
