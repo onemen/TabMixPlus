@@ -1,6 +1,6 @@
 "use strict";
 
-let {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 

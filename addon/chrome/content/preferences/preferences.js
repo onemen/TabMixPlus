@@ -5,8 +5,8 @@
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
-const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 this.$ = id => document.getElementById(id);
 
@@ -339,7 +339,7 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
-let sessionPrefs = ["browser.sessionstore.resume_from_crash",
+var sessionPrefs = ["browser.sessionstore.resume_from_crash",
                     "browser.startup.page",
                     "extensions.tabmix.sessions.manager",
                     "extensions.tabmix.sessions.crashRecovery"];

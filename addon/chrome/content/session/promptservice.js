@@ -6,21 +6,21 @@
             prompt_init, prompt_extra1 */
 "use strict";
 
-const TMP_BUTTON_OK = 0;
-const TMP_BUTTON_CANCEL = 1;
-const TMP_BUTTON_EXTRA1 = 2;
-const TMP_SHOW_MENULIST = 1;
-const TMP_SHOW_TEXTBOX = 0;
-const TMP_HIDE_MENUANDTEXT = 2;
-const TMP_CHECKBOX_UNCHECKED = 0;
-const TMP_CHECKBOX_CHECKED = 1;
-const TMP_HIDE_CHECKBOX = 2;
-const TMP_SELECT_DEFAULT = 0;
-const TMP_SELECT_LASTSESSION = 1;
-const TMP_SELECT_CRASH = 2;
-const TMP_SHOW_CLOSED_WINDOW_LIST = 3;
-const TMP_DLG_SAVE = 0;
-const TMP_DLG_RENAME = 1;
+var TMP_BUTTON_OK = 0;
+var TMP_BUTTON_CANCEL = 1;
+var TMP_BUTTON_EXTRA1 = 2;
+var TMP_SHOW_MENULIST = 1;
+var TMP_SHOW_TEXTBOX = 0;
+var TMP_HIDE_MENUANDTEXT = 2;
+var TMP_CHECKBOX_UNCHECKED = 0;
+var TMP_CHECKBOX_CHECKED = 1;
+var TMP_HIDE_CHECKBOX = 2;
+var TMP_SELECT_DEFAULT = 0;
+var TMP_SELECT_LASTSESSION = 1;
+var TMP_SELECT_CRASH = 2;
+var TMP_SHOW_CLOSED_WINDOW_LIST = 3;
+var TMP_DLG_SAVE = 0;
+var TMP_DLG_RENAME = 1;
 
 var dialogParams, gHideElmParam, gSavedName, gCancelLabel, gOrigName;
 
