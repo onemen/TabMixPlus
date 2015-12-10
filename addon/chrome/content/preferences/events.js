@@ -87,13 +87,13 @@ var gEventsPane = {
     let value = preference.value;
     if (value && value.toLowerCase() == TabmixSvc.aboutNewtab)
       return "";
-    return this.syncToNewTabUrlPref(value);
+    return this.syncToNewTabUrlPref(value, TabmixSvc.aboutBlank);
   },
 
-  syncToNewTabUrlPref: function(value) {
-    // If the value is "", use about:newtab.
+  syncToNewTabUrlPref: function(value, def = TabmixSvc.aboutNewtab) {
+    // If the value is "", use about:newtab or about:blank.
     if (value === "") {
-      return TabmixSvc.aboutNewtab;
+      return def;
     }
 
     // Otherwise, use the actual textbox value.
