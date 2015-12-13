@@ -47,9 +47,7 @@ this.TabmixContentClick = {
   },
 
   isUrlForDownload: function(url) {
-    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
-      return ContentClickInternal.isUrlForDownload(url);
-    return false;
+    return ContentClickInternal.isUrlForDownload(url);
   },
 
   selectExistingTab: function(window, href, targetAttr) {
@@ -700,9 +698,6 @@ var ContentClickInternal = {
         return true;
     }
 
-    if (!TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
-      return false;
-
     if (event.button !== 0 || event.ctrlKey || event.metaKey)
       return false;
 
@@ -732,9 +727,15 @@ var ContentClickInternal = {
     if (linkHref.startsWith("mailto:"))
       return true;
 
-    var filetype = TabmixSvc.prefBranch.getCharPref("filetype");
-    filetype = filetype.toLowerCase();
-    filetype = filetype.split(" ");
+    // always check if the link is an xpi link
+    let filetype = ["xpi"];
+    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
+      let types = TabmixSvc.prefBranch.getCharPref("filetype");
+      types = types.toLowerCase().split(" ")
+                   .filter(t => filetype.indexOf(t) == -1);
+      filetype = [...filetype, ...types];
+    }
+
     var linkHrefExt = "";
     if (linkHref) {
       linkHref = linkHref.toLowerCase();
