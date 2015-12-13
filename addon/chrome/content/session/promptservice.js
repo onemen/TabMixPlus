@@ -80,8 +80,9 @@ function prompt_init() {
     gSavedName = dialogParams.GetString(2).split("\n");
     textBox.value = gSavedName.shift();
     gOrigName = textBox.value.toLowerCase();
+  } else {
+    textBox.hidden = true;
   }
-  else textBox.hidden = true;
 
   // display the checkbox
   var checkBox = document.getElementById("tm_checkbox");
@@ -99,8 +100,9 @@ function prompt_init() {
     aButtons = document.documentElement.getButton(buttons[i]);
     if (i < btnLabels.length && btnLabels[i] !== "") {
       setLabelForNode(aButtons, btnLabels[i]);
+    } else {
+      aButtons.hidden = true; // hide extra button
     }
-    else aButtons.hidden = true; // hide extra button
   }
 
   // Set and focus default button
@@ -132,8 +134,9 @@ function prompt_deinit(button) {
       ///XXX item.fileName - in the new Tabmix.Sessions
       dialogParams.SetString(5, item.session || item.fileName);
       dialogParams.SetInt(6, item.getAttribute("value"));
+    } else {
+      dialogParams.SetString(5, document.getElementById("tm_textbox").value);
     }
-    else dialogParams.SetString(5, document.getElementById("tm_textbox").value);
   }
   // if we are not a modal use a callback function
   if (typeof window._callBackFunction == "function") {

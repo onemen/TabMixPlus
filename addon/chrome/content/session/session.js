@@ -274,9 +274,9 @@ var TabmixSessionManager = { // jshint ignore:line
       Tabmix.ssPromise.then(() => TMP_TabView.init())
                       .then(initializeSM)
                       .then(null, Tabmix.reportError);
-    }
-    else
+    } else {
       initializeSM();
+    }
   },
 
   _init: function SM__init() {
@@ -583,9 +583,9 @@ var TabmixSessionManager = { // jshint ignore:line
           // delete closed tab list for this session
           if (aRemoveClosedTabs)
             this.deleteAllClosedtabs(sessionContainer);
-        }
-        else // delete ALL closed window list.
+        } else { // delete ALL closed window list.
           this.deleteSubtree(this.gSessionPath[0]);
+        }
       }
       // clean-up....
       if (this.enableBackup)
@@ -802,9 +802,10 @@ var TabmixSessionManager = { // jshint ignore:line
     } else if (gBrowser.mCurrentTab.loadOnStartup) {
       for (var i = 0; i < gBrowser.tabs.length; i++)
         delete gBrowser.tabs[i].loadOnStartup;
-    }
-    else if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
+    } else if (window.toolbar.visible &&
+               gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab)) {
       focusAndSelectUrlBar();
+    }
   },
 
   // init common services
@@ -1260,9 +1261,9 @@ var TabmixSessionManager = { // jshint ignore:line
     if (aIndex < 0) {
       while (TabmixSvc.ss.getClosedWindowCount() > 0)
         TabmixSvc.ss.forgetClosedWindow(0);
-    }
-    else
+    } else {
       TabmixSvc.ss.forgetClosedWindow(aIndex);
+    }
     this.notifyClosedWindowsChanged();
   },
 
@@ -1894,11 +1895,11 @@ var TabmixSessionManager = { // jshint ignore:line
     if (sessionmanagerMenu) {
       parentID = "sessionmanagerMenu";
       menuCommand = "loadSession";
-    }
-    else if (popup.parentNode.getAttribute("anonid") == "delete")
+    } else if (popup.parentNode.getAttribute("anonid") == "delete") {
       parentID = "tm_prompt";
-    else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST)
+    } else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST) {
       parentID = popup.parentNode.id;
+    }
     var onClosedWindowsList = parentId.startsWith("tm-sm-closedwindows") || parentId == "btn_closedwindows";
     if (onClosedWindowsList)
       menuCommand = "openclosedwindow";
@@ -2087,13 +2088,15 @@ var TabmixSessionManager = { // jshint ignore:line
         this.deleteArrayNodes(sessionContainer, nodeToDelete, false);
         let count = this.countWinsAndTabs(crashedContainer);
         this.setLiteral(this.gSessionPath[3], "nameExt", this.getNameData(count.win, count.tab));
-      } // if firefox was crashed in middle of crash Recovery try again to restore the same data
-      else if (!this.containerEmpty(this.gSessionPath[0]))
+      } else if (!this.containerEmpty(this.gSessionPath[0])) {
+        // if firefox was crashed in middle of crash Recovery try again to
+        // restore the same data
         this.deleteWithProp(sessionContainer);
-    }
-    else if (!this.containerEmpty(this.gSessionPath[0]))
+      }
+    } else if (!this.containerEmpty(this.gSessionPath[0])) {
       // crash recovery is off, delete any remains from the crashed session
       this.deleteWithProp(sessionContainer);
+    }
   },
 
   openAfterCrash: function SM_openAfterCrash(status) {
@@ -2642,9 +2645,9 @@ var TabmixSessionManager = { // jshint ignore:line
         this.setLiteral(rdfNodeThisWindow, "status", "saved");
         this.updateClosedWindowsMenu(false);
       }
-    }
-    else
+    } else {
       this.setLiteral(rdfNodeThisWindow, "status", "");
+    }
     this.saveStateDelayed();
     return savedTabs;
   }, // end of "saveOneWindow : function ()"
@@ -3300,10 +3303,10 @@ var TabmixSessionManager = { // jshint ignore:line
             newPos--;
           // move selected tab to place
           gBrowser.moveTabTo(cTab, newPos + lastSelectedIndex);
-        }
-        else
+        } else {
           this.updateSelected(newPos + lastSelectedIndex, caller == "firstwindowopen" ||
                               caller == "windowopenedbytabmix");
+        }
       }
       newIndex = newPos;
     }

@@ -74,10 +74,10 @@ this.Shortcuts = {
       let tmp = {};
       Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
       this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    }
-    else
+    } else {
       this.permanentPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
           getService(Ci.nsIPrivateBrowsingService).autoStarted;
+    }
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
@@ -430,9 +430,9 @@ this.Shortcuts = {
           id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
-      }
-      else
+      } else {
         key.id = this.keys.browserReload.id;
+      }
       return true;
     }, this);
   }
@@ -570,9 +570,9 @@ function getFormattedKey(key) {
   if (key.key) {
     if (key.key == " ") {
       key.key = ""; key.keycode = "VK_SPACE";
-    }
-    else
+    } else {
       val += key.key.toUpperCase();
+    }
   }
   if (key.keycode) {
     try {

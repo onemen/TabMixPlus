@@ -567,9 +567,9 @@ var TMP_tabDNDObserver = {
       statusTextFld.label = "";
       this.gBackupLabel = "";
       this.statusFieldChanged = null;
-    }
-    else if (!statusTextFld)
+    } else if (!statusTextFld) {
       document.getElementById("tabmix-tooltip").hidePopup();
+    }
   },
 
   // get _tPos from group index
@@ -608,11 +608,11 @@ var TMP_tabDNDObserver = {
         if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
           while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
             i++;
+        } else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
+          return i;
+        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow) {
+          return i;
         }
-        else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
-          return i;
-        else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow)
-          return i;
       }
     }
     return numTabs;
@@ -741,9 +741,9 @@ var TMP_tabDNDObserver = {
         this.removetDragmarkAttribute(gBrowser.tabs[index]);
       if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
         this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
-    }
-    else
+    } else {
       this.setFirefoxDropIndicator(false);
+    }
 
     this.dragmarkindex = null;
   },
@@ -1108,11 +1108,11 @@ Tabmix.navToolbox = {
         'O.handleSearchQuery',
         'window.Omnibar.handleSearchQuery', {silent: true}
       ).toCode();
-    }
-    else if ("urlDot" in window && "handleCommand2" in gURLBar)
+    } else if ("urlDot" in window && "handleCommand2" in gURLBar) {
       fn = "handleCommand2";
-    else
+    } else {
       fn = "handleCommand";
+    }
 
     // Fix incompatibility with https://addons.mozilla.org/en-US/firefox/addon/url-fixer/
     if ("urlfixerOldHandler" in gURLBar.handleCommand) {

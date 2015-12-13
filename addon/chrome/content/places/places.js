@@ -49,7 +49,7 @@ var TMP_Places = {
             return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
           } finally {
             if (origTitle) {
-              setTimeout(() => aBrowser._contentTitle = origTitle, 100);
+              setTimeout(() => (aBrowser._contentTitle = origTitle), 100);
             }
           }
         };
@@ -252,9 +252,9 @@ var TMP_Places = {
             aTab.removeAttribute("tabmix_selectedID");
           } else
             aTab.setAttribute("reloadcurrent", true);
-        }
-        else
+        } else {
           aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
+        }
 
         this.setTabTitle(aTab, url, bmIds[i]);
       } catch (er) { }
@@ -438,9 +438,9 @@ var TMP_Places = {
       this._batchData.add.ids.push(aItemId);
       this._batchData.add.urls.push(aUrl);
       return;
-    }
-    else if (!Array.isArray(aItemId))
+    } else if (!Array.isArray(aItemId)) {
       [aItemId, aUrl] = [[aItemId], [aUrl]];
+    }
 
     let getIndex = url => aUrl.indexOf(url) + 1;
     for (let tab of gBrowser.tabs) {

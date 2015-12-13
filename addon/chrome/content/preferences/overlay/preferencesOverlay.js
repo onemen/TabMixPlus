@@ -71,9 +71,9 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
       let title = TabmixSvc.getString("tabmixoption.error.title");
       let msg = TabmixSvc.getString("tabmixoption.error.msg");
       Services.prompt.alert(window, title, msg);
-    }
-    else
+    } else {
       browserWindow.Tabmix.openOptionsDialog(panel);
+    }
   },
 
 /* ........ paneMain .............. */

@@ -230,9 +230,9 @@ var gPrefWindow = { // jshint ignore:line
         if (val !== null)
           tabs.selectedIndex = val;
       }
-    }
-    else if (preference.value != tabs.selectedIndex)
+    } else if (preference.value != tabs.selectedIndex) {
       preference.valueFromPreferences = tabs.selectedIndex;
+    }
   },
 
   afterShortcutsChanged: function() {
@@ -290,9 +290,9 @@ function setPref(aPref) {
     let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
     str.data = aPref.value;
     Services.prefs.setComplexValue(aPref.name, Ci.nsISupportsString, str);
-  }
-  else
+  } else {
     Services.prefs["set" + fn](aPref.name, aPref.value);
+  }
 }
 
 function setPrefAfterImport(aPref) {
@@ -424,7 +424,7 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      return OS.File.writeAtomic(file.path, patterns.join(""), {
+      OS.File.writeAtomic(file.path, patterns.join(""), {
         encoding: "utf-8", tmpPath: file.path + ".tmp"
       });
     }
@@ -464,8 +464,7 @@ function showFilePicker(mode) {
   fp.init(window, null, mode);
   fp.appendFilters(nsIFilePicker.filterText);
   return AsyncUtils.spawnFn(fp, fp.open).then(aResult => {
-    if (aResult != nsIFilePicker.returnCancel)
-      return fp.file;
+    return aResult != nsIFilePicker.returnCancel ? fp.file : null;
   });
 }
 

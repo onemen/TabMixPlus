@@ -347,9 +347,9 @@
         if (parsedData.groupID != activeGroupId)
           tabdata.hidden = true;
       }
-    }
-    else if (tabdata.extData)
+    } else if (tabdata.extData) {
       delete tabdata.extData["tabview-tab"];
+    }
   };
 
   TabmixSessionManager.isEmptyObject = function SM_isEmptyObject(obj) {

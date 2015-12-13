@@ -125,9 +125,9 @@ var Tabmix = { // jshint ignore:line
                  " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
                  (extensionName ? (" and " + extensionName + "developer.") : "."));
-    }
-    else
+    } else {
       this.clog(err.message + "\n\n" + stack);
+    }
   },
 
   promptService: function(intParam, strParam, aWindow, aCallBack) {

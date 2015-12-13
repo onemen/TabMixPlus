@@ -9,10 +9,9 @@
         "jasmine": false
     },
 
-    "ecmaFeatures": {
-        "blockBindings": true,
-        "forOf": true,
-        "jsx": true
+    // for eslint 2.0.0
+    "parserOptions": {
+        "ecmaVersion": 6
     },
 
     "rules": {
@@ -47,6 +46,8 @@
         "prefer-reflect": 0, // NOT YET
         // disallow generator functions that do not have yield
         "require-yield": 2,
+        // Enforce spacing around the * in yield* expressions
+        "yield-star-spacing": [2, "after"],
 
         "no-alert": 2,
         "no-array-constructor": 2,

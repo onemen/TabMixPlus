@@ -231,9 +231,9 @@ var TMP_SessionStore = { // jshint ignore:line
         Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
       }
       afterSessionRestore = true;
-    }
-    else if (this.afterSwitchThemes)
+    } else if (this.afterSwitchThemes) {
       afterSessionRestore = true;
+    }
 
     if (typeof afterSessionRestore == "boolean")
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
@@ -458,9 +458,9 @@ var TMP_ClosedTabs = { // jshint ignore:line
     if (deleteItem && TMP_ClosedTabs.count > 0) {
       aEvent.stopPropagation();
       TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
-    }
-    else
+    } else {
       closeMenus(aEvent.target);
+    }
   },
 
   addBookmarks: function ct_addBookmarks(index) {

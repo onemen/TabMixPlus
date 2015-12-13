@@ -542,9 +542,9 @@ TMP_extensionsCompatibility.wizzrss = {
     if (openNewTab) {
       var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
       tabBrowser.loadOneTab(uri, {inBackground: theBGPref});
-    }
-    else
+    } else {
       tabBrowser.loadURI(uri);
+    }
   }
 };
 

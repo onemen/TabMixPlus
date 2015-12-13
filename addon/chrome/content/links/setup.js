@@ -207,9 +207,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       insertionPoint = "PlacesToolbarHelper.init();";
       if (!this.isVersion(270))
         ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
-    }
-    else
+    } else {
       insertionPoint = 'Services.obs.addObserver';
+    }
 
     this.changeCode(gBrowserInit, fn)._replace(
       'Services.obs.addObserver', loadOnStartup, {check: this.isVersion(190) && !!loadOnStartup}

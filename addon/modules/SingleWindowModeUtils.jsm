@@ -140,9 +140,9 @@ this.SingleWindowModeUtils = {
       params.postData = args[3] || null;
       params.allowThirdPartyFixup = args[4] || false;
       urls = [uriToLoad];
-    }
-    else
+    } else {
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
+    }
 
     var firstTabAdded;
     try {

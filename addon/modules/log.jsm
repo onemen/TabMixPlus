@@ -36,7 +36,7 @@ this.console = {
       obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
-      methodsList.forEach(aFn => obj = obj[aFn]);
+      methodsList.forEach(aFn => (obj = obj[aFn]));
     } catch (ex) { }
     return obj || {toString: () => "undefined"};
   },
@@ -78,9 +78,9 @@ this.console = {
         }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
 
         this._timers[timerID] = timer;
-      }
-      else
+      } else {
         logMethod();
+      }
 
     } catch (ex) {
       this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");

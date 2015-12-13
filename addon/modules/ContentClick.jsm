@@ -929,8 +929,6 @@ var ContentClickInternal = {
     else
       // when the links target is in the same page don't open new tab
       return !isSame(href, '#');
-
-    return null;
   },
 
   /**
@@ -1024,9 +1022,9 @@ var ContentClickInternal = {
         // Focus the matching window & tab
         window.focus();
         window.gBrowser.selectedTab = tab;
-      }
-      else
+      } else {
         this.next(tab.nextSibling);
+      }
     },
     next: function(tab) {
       if (!tab && this.windows.length) {
@@ -1043,9 +1041,9 @@ var ContentClickInternal = {
                                                       this.frameData.href, this.frameData.name);
           this.result(browser, {result: result});
         }
-      }
-      else
+      } else {
         this.stop();
+      }
     }
   },
 

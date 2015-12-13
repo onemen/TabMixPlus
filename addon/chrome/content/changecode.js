@@ -21,11 +21,11 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     if (options && (options.setter || options.getter)) {
       this.type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
       this.value = this.obj[this.type](this.fnName).toString();
-    }
-    else if (typeof this.obj[this.fnName] == "function")
+    } else if (typeof this.obj[this.fnName] == "function") {
       this.value = this.obj[this.fnName].toString();
-    else
+    } else {
       this.errMsg = "\n" + this.fullName + " is undefined.";
+    }
     this.notFound = [];
   }
 
@@ -52,9 +52,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
       if (exist) {
         this.value = this.value.replace(substr, newString);
         this.needUpdate = true;
-      }
-      else if (!silent)
+      } else if (!silent) {
         this.notFound.push(substr);
+      }
       return this;
     },
 
@@ -136,9 +136,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
           "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
         if (debugMode)
           console.clog(caller + "\nfunction " + aName + " = " + this.value);
-      }
-      else if (!this.needUpdate && debugMode)
+      } else if (!this.needUpdate && debugMode) {
         console.clog(caller + " no update needed to " + aName);
+      }
       return false;
     }
   };
@@ -159,9 +159,9 @@ Tabmix.setNewFunction = function(aObj, aName, aCode) {
   if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
     Object.defineProperty(aObj, aName, {value: aCode,
                                         writable: true, configurable: true});
-  }
-  else
+  } else {
     aObj[aName] = aCode;
+  }
 };
 
 Tabmix.nonStrictMode = function(aObj, aFn, aArg) {

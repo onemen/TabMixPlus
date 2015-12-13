@@ -59,9 +59,9 @@ this.ContextMenu = {
       if (nextEpisode.nodeName == "li") {
         let node = nextEpisode.firstChild;
         url = node.nodeName == "p" ? node.firstChild.href : node.href;
-      }
-      else
+      } else {
         url = nextEpisode.href;
+      }
       if (securityCheck(url)) {
         if (check)
           return [true];

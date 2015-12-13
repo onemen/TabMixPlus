@@ -28,10 +28,10 @@ Tabmix.startup = function TMP_startup() {
     let originalCode = command.getAttribute("oncommand");
     Tabmix.setItem(command, "oncommand", "if (Tabmix._openNewTab(true)) {" + originalCode + "}");
     Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
-  }
-  else
+  } else {
     Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
                                           "else {" + originalNewNavigator + "}");
+  }
 
   TabmixContext.toggleEventListener(true);
 
@@ -97,10 +97,10 @@ Tabmix.sessionInitialized = function() {
         'ss = TabmixSessionManager;\
          $&'
       ).toCode();
-    }
-    // from Firefox 27 SessionStore notify sessionstore-last-session-cleared
-    else if (!this.isVersion(270))
+    } else if (!this.isVersion(270)) {
+      // from Firefox 27 SessionStore notify sessionstore-last-session-cleared
       SessionStore.canRestoreLastSession = false;
+    }
   }
 
   var tab = gBrowser.tabContainer.firstChild;
@@ -130,9 +130,9 @@ Tabmix.getButtonsHeight = function() {
     this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
     if (stripIsHidden)
       tabBar.visible = false;
-  }
-  else
+  } else {
     this._buttonsHeight = 24;
+  }
   return this._buttonsHeight;
 };
 
@@ -205,9 +205,9 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   if (this.prefs.getBoolPref("tabbar.click_dragwindow")) {
     if (!Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize"))
       TabmixTabClickOptions.toggleEventListener(true);
-  }
-  else
+  } else {
     document.getElementById("TabsToolbar")._dragBindingAlive = false;
+  }
 
   TMP_extensionsCompatibility.onDelayedStartup();
 
@@ -337,9 +337,9 @@ var TMP_eventListener = {
       if (aType != "load") {
         Tabmix.initialization.run("onContentLoaded");
         Tabmix.initialization.run("beforeBrowserInitOnLoad");
-      }
-      else
+      } else {
         Tabmix.initialization.run("onWindowOpen");
+      }
     else if (aType != "load")
       window.removeEventListener("load", this, false);
   },
@@ -556,9 +556,9 @@ var TMP_eventListener = {
         Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode === 0) {
       TabmixTabbar.hideMode = 1;
       Tabmix.prefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
-    }
-    else
+    } else {
       gTMPprefObserver.setAutoHidePref();
+    }
 
     if (TabmixTabbar.hideMode == 2)
       gBrowser.tabContainer.visible = false;
@@ -655,17 +655,17 @@ var TMP_eventListener = {
             '$&' + $LF +
             'TMP_eventListener.toggleTabbarVisibility(false, aAnimate);'
           ).toCode();
+        } else {
+          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
+            'gNavToolbox.style.marginTop = "";',
+            'TMP_eventListener._updateMarginBottom("");\
+             $&'
+          )._replace(
+            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";',
+            '$&\
+             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
+          ).toCode();
         }
-        else
-        Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
-          'gNavToolbox.style.marginTop = "";',
-          'TMP_eventListener._updateMarginBottom("");\
-           $&'
-        )._replace(
-          'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";',
-          '$&\
-           TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-        ).toCode();
       }
       if (!document.mozFullScreen) {
         fullScrToggler.hidden = false;
@@ -1186,7 +1186,7 @@ Tabmix.initialization = {
     let result, currentPhase = this[aPhase].id;
     let getObj = function(list) {
       let obj = window;
-      list.split(".").forEach(prop => obj = obj[prop]);
+      list.split(".").forEach(prop => (obj = obj[prop]));
       return obj;
     };
     for (let key of Object.keys(this)) {

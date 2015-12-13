@@ -216,18 +216,18 @@ var TMP_LastTab = {
                 if (!this.TabListLock)
                   this.DisplayTabList();
               }, 200);
-            }
-            else
+            } else {
               this.DisplayTabList();
+            }
           }
         } else {
           let item = this.tabs[this.TabIndex].mCorrespondingMenuitem;
           item.setAttribute("_moz-menuactive", "true");
           TabmixAllTabs.updateMenuItemActive(null, item);
         }
-      }
-      else
+      } else {
         TabmixAllTabs._tabSelectedFromList(this.tabs[this.TabIndex]);
+      }
       event.stopPropagation();
       event.preventDefault();
     } else if (this.TabListLock && this.CtrlKey &&
@@ -349,9 +349,9 @@ var TMP_LastTab = {
           for (var i = 0; i < this.TabHistory.length; i++) {
             ctrlTab._recentlyUsedTabs.unshift(this.TabHistory[i]);
           }
-        }
-        else
+        } else {
           ctrlTab.uninit();
+        }
       }
     }
 

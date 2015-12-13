@@ -115,9 +115,9 @@ var TabmixTabbar = {
         // if we set orient to vertical before sessionStore finish
         // sessionStore don't select the selected tab from last session.
         setTimeout(() => Tabmix.tabsUtils.setTabStripOrient(), 0);
-      }
-      else
+      } else {
         Tabmix.tabsUtils.setTabStripOrient();
+      }
     }
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
 
@@ -187,9 +187,9 @@ var TabmixTabbar = {
         tabBar.mTabstrip._enterVerticalMode();
         this.setFirstTabInRow();
       }
-    }
-    else
+    } else {
       Tabmix.tabsUtils.adjustNewtabButtonvisibility();
+    }
   },
 
   // in Firefox 4.0+ rowheight can change when TabsInTitlebar or TabsOnTop
@@ -257,12 +257,12 @@ var TabmixTabbar = {
           // We can get here if we switch to diffrent tabs position while in multibar
           let rowHeight = height / Tabmix.tabsUtils.lastTabRowNumber;
           newHeight = rowHeight * aRows;
-        }
-        else
+        } else {
           newHeight = height;
-      }
-      else
+        }
+      } else {
         newHeight = this.getRowHeight(tabsPosition) * aRows;
+      }
 
       // don't proceed, probably the tabbar is not visible
       if (newHeight === 0) {
@@ -489,9 +489,9 @@ var TabmixTabbar = {
           return lastTab.boxObject.height;
         else
           newRowHeight = lastTab.baseY - next.baseY;
-      }
-      else
+      } else {
         newRowHeight = lastTab.baseY - firstTab.baseY;
+      }
 
       this._rowHeight[tabsPosition] = newRowHeight;
       return newRowHeight;
@@ -812,9 +812,9 @@ Tabmix.tabsUtils = {
             this.adjustNewtabButtonTimeout = null;
           }.bind(this), timeout);
         }
-      }
-      else
+      } else {
         this.adjustNewtabButtonvisibility();
+      }
     }
 
     this._inUpdateVerticalTabStrip = false;
@@ -864,9 +864,9 @@ Tabmix.tabsUtils = {
         let buttonEnd = Tabmix.tabsNewtabButton.boxObject.screenX +
             Tabmix.tabsNewtabButton.boxObject.width;
         this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
-      }
-      else
+      } else {
         this.disAllowNewtabbutton = true;
+      }
       return;
     } else {
       // button is NOT visible
@@ -1289,9 +1289,9 @@ var gTMPprefObserver = {
           if (updatePinned) {
             tab.removeAttribute("_lockedAppTabs");
             tab.setAttribute("_locked", tab.hasAttribute("locked"));
-          }
-          else
+          } else {
             tab.removeAttribute("_locked");
+          }
           tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           TabmixSvc.saveTabAttributes(tab, "_locked", false);
         }
@@ -1412,10 +1412,9 @@ var gTMPprefObserver = {
         value = Services.prefs.getIntPref(prefName);
         if (value < 1 || value > 5) {
           Services.prefs.setIntPref(prefName, 1);
-        }
-        else if (value == 5 && TabmixTabbar.widthFitTitle)
+        } else if (value == 5 && TabmixTabbar.widthFitTitle) {
           Services.prefs.setIntPref(prefName, 1);
-        else {
+        } else {
           gBrowser.tabContainer.mCloseButtons = Services.prefs.getIntPref(prefName);
           gBrowser.tabContainer.adjustTabstrip();
         }
@@ -1459,9 +1458,9 @@ var gTMPprefObserver = {
       case "extensions.tabmix.undoClose":
         if (!Tabmix.prefs.getBoolPref("undoClose")) {
           Services.prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
-        }
-        else if (Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") === 0)
+        } else if (Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") === 0) {
           Services.prefs.clearUserPref("browser.sessionstore.max_tabs_undo");
+        }
         break;
       case "browser.sessionstore.max_tabs_undo": {
         // Firefox's sessionStore mainain the right amount
@@ -2022,9 +2021,9 @@ var gTMPprefObserver = {
       if (val) {
         Tabmix.setItem("menu_newRemoteWindow", "hidden", true);
         Tabmix.setItem("menu_newNonRemoteWindow", "hidden", true);
-      }
-      else
+      } else {
         gRemoteTabsUI.init();
+      }
       Tabmix.setItem("Tools:RemoteWindow", "disabled", val);
       Tabmix.setItem("Tools:NonRemoteWindow", "disabled", val);
     }

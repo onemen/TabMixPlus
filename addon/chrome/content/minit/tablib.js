@@ -60,9 +60,9 @@ var tablib = { // eslint-disable-line
         charset: arguments[4] || null,
         postdata: arguments[5] || null,
       };
-    }
-    else
+    } else {
       flags = params.flags;
+    }
 
     var tab = gBrowser.getTabForBrowser(browser);
     if (!tab) {
@@ -955,9 +955,9 @@ var tablib = { // eslint-disable-line
 
       if (!aHref && !aTabData) {
         newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
-      }
-      else
+      } else {
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
+      }
 
       if (!newTab && aTabData)
         throw new Error("Tabmix was unable to restore closed tab to new window");
@@ -1805,9 +1805,9 @@ var tablib = { // eslint-disable-line
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
         TMP_Places.afterTabTitleChanged(false);
-    }
-    else if (aTab.hasAttribute("fadein"))
+    } else if (aTab.hasAttribute("fadein")) {
       TMP_Places.afterTabTitleChanged(false);
+    }
     // don't keep unnecessary reference to current tab
     if (!TMP_Places.inUpdateBatch)
       TMP_Places.currentTab = null;
@@ -1869,9 +1869,9 @@ var tablib = { // eslint-disable-line
         returnVal.value = TabmixSessionManager.savedPrefs[aPrefName];
         returnVal.newValue = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
         delete TabmixSessionManager.savedPrefs[aPrefName];
-      }
-      else
+      } else {
         returnVal.value = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
+      }
 
       return returnVal;
     }
@@ -1898,9 +1898,9 @@ var tablib = { // eslint-disable-line
         let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
         if (!nonPrivateWindow)
           return false;
-      }
-      else if (TabmixSessionManager.globalPrivateBrowsing)
+      } else if (TabmixSessionManager.globalPrivateBrowsing) {
         return false;
+      }
 
       // last windows with tabs
       var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;

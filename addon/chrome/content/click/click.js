@@ -20,7 +20,7 @@ var TabmixTabClickOptions = {
       if (this._tabFlipTimeOut)
         this.clearTabFlipTimeOut();
       if (this._blockDblClick) {
-        setTimeout(() => this._blockDblClick = false, 0);
+        setTimeout(() => (this._blockDblClick = false), 0);
       }
       return; // double click (with left button)
     }
@@ -374,9 +374,9 @@ var TabmixContext = {
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
       tabBar.setAttribute("context", gBrowser.tabContextMenu.id);
-    }
-    else
+    } else {
       Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
+    }
   },
 
   toggleEventListener: function(enable) {
@@ -584,9 +584,9 @@ var TabmixContext = {
             mi.hidden = false;
             lastVisible.hidden = true;
             lastVisible = mi;
-          }
-          else
+          } else {
             mi.hidden = true;
+          }
         }
       } else if (!mi.hidden && !mi.collapsed) {
         hideNextSeparator = false;
@@ -875,8 +875,9 @@ var TabmixAllTabs = {
         let item = popup.parentNode.parentNode;
         if (item.parentNode.id == "btn_tabslist")
           this.createTabsList(item, aType);
+      } else {
+        popup.hidePopup();
       }
-      else popup.hidePopup();
     }
   },
 

@@ -68,9 +68,9 @@ this.MergeWindows = {
             tab.removeAttribute("mergeselected");
             tab.label = tab.label.substr(4);
             tabbrowser._tabAttrModified(tab);
-          }
-          else if (canClose)
+          } else if (canClose) {
             tabbrowser.removeTab(tab);
+          }
         }
         canClose = false;
       }
