@@ -7,7 +7,9 @@
     window.addEventListener("load", function loadGrid() {
       window.removeEventListener("load", loadGrid, false);
       let {updateTitles} = Cu.import("resource://tabmixplus/AboutNewTab.jsm", {}).TabmixAboutNewTab;
-      updateTitles(gGrid.cells);
+      if (gGrid.cells) {
+        updateTitles(gGrid.cells);
+      }
     }, false);
   }
 }());

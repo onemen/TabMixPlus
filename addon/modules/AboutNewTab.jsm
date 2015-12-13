@@ -90,7 +90,10 @@ var AboutNewTabInternal = {
       let link = site._querySelector(".newtab-link");
       link.setAttribute("title", tooltip);
       site._querySelector(".newtab-title").textContent = title;
-      site.refreshThumbnail();
+      // Pale Moon dot't have a refreshThumbnail function
+      if (typeof site.refreshThumbnail == "function") {
+        site.refreshThumbnail();
+      }
     });
   },
 };
