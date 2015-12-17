@@ -438,7 +438,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
   },
 
   restoreCommand: function(aEvent) {
-    var index = aEvent.originalTarget.value;
+    let index = aEvent.originalTarget.getAttribute("value");
     if (index < 0) {
       return;
     }
@@ -449,7 +449,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
     if (aEvent.button != 1)
       return;
 
-    var index = aEvent.originalTarget.value;
+    let index = aEvent.originalTarget.getAttribute("value");
     if (index < 0)
       return;
 
