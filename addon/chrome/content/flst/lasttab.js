@@ -365,3 +365,11 @@ var TMP_LastTab = {
   }
 
 };
+
+Tabmix.slideshow = {
+  cancel: function() {
+    if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) {
+      Tabmix.flst.cancel();
+    }
+  }
+};

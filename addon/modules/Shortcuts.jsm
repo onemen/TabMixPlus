@@ -270,9 +270,8 @@ this.Shortcuts = {
       items[i].setAttribute("acceltext", disabled ? " " : "");
 
     // turn off slideShow if need to
-    if (aKey == "slideShow" && disabled &&
-        aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
-      aWindow.Tabmix.flst.cancel();
+    if (aKey == "slideShow" && disabled) {
+      aWindow.Tabmix.slideshow.cancel();
     }
   },
 

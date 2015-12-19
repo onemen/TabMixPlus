@@ -50,11 +50,14 @@
     }
 
     // we need to stop tabs slideShow before Tabview starts
+    let $LF = '\n      ';
     Tabmix.changeCode(TabView, "TabView.toggle")._replace(
       'this.show();',
-      '{if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) Tabmix.flst.cancel();\
-       $&}'
-    ).toCode();
+      '{' + $LF +
+      '  Tabmix.slideshow.cancel();' + $LF +
+      '  $&' + $LF +
+      '}'
+    ).toCode(true);
 
     // don't do anything if Session Manager extension installed
     if (Tabmix.extensions.sessionManager)
