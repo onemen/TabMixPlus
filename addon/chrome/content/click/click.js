@@ -53,7 +53,7 @@ var TabmixTabClickOptions = {
     // always call onMouseCommand (if we need to) before we call tab flip.
     // tabcontainer click handler run before tab click handler.
     if (leftClick && !clickOutTabs && !tab.mouseDownSelect)
-      tab.onMouseCommand(aEvent);
+      tab.onMouseCommand(aEvent, true);
 
     // for tab flip
     if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {

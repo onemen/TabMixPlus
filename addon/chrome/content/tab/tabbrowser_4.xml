@@ -281,6 +281,7 @@
 
     <method name="onMouseCommand">
       <parameter name="aEvent"/>
+      <parameter name="aSelectNewTab"/>
       <body><![CDATA[
         var isSelected = this == this.parentNode.selectedItem;
         Tabmix.setItem(this, "clickOnCurrent",
@@ -291,7 +292,7 @@
         // don't allow mouse click/down with modifiers to select tab
         if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
           aEvent.stopPropagation();
-        else {
+        else if (aSelectNewTab) {
           this.parentNode._selectNewTab(this);
           let isTabFocused = false;
           try {
@@ -302,6 +303,7 @@
             this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
           }
         }
+        // on mousedown event fall through to default mousedown from tabbox.xml
       ]]></body>
     </method>
 
