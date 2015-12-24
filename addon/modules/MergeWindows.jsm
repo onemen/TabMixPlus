@@ -47,7 +47,7 @@ this.MergeWindows = {
       options.normalWindowsCount = normalWindowsCount;
       this.mergeMultipleWindows(aWindow, windows, options);
     } else {
-      let tabsToMove = Array.slice(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
+      let tabsToMove = Array.prototype.slice.call(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
       this.mergeTwoWindows(windows[0], aWindow, tabsToMove, options);
     }
   },
@@ -112,7 +112,7 @@ this.MergeWindows = {
   concatTabsAndMerge: function(aTargetWindow, aWindows) {
     let tabsToMove = [];
     for (let i = 0; i < aWindows.length; i++)
-      tabsToMove = tabsToMove.concat(Array.slice(aWindows[i].gBrowser.tabs));
+      tabsToMove = tabsToMove.concat(Array.prototype.slice.call(aWindows[i].gBrowser.tabs));
     this.swapTabs(aTargetWindow, tabsToMove);
   },
 

@@ -88,7 +88,9 @@ this.Shortcuts = {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      Array.slice(box.attributes).forEach(a => labels[a.name] = a.value);
+      for (let att of box.attributes) {
+        labels[att.name] = att.value;
+      }
       container.removeChild(box);
     }
     labels.togglePinTab =

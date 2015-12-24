@@ -65,7 +65,7 @@ var TMP_tabDNDObserver = {
       '\n\
         this.removeAttribute("movingBackgroundTab");\n\
         let tabs = this.getElementsByAttribute("dragged", "*");\n\
-        Array.slice(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
+        Array.prototype.slice.call(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
       $1$2'
     ).toCode();
 

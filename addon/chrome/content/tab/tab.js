@@ -2107,7 +2107,7 @@ var gTMPprefObserver = {
       }
 
       let tabsToolbar = $("TabsToolbar");
-      let toolBar = Array.slice(tabsToolbar.childNodes);
+      let toolBar = Array.prototype.slice.call(tabsToolbar.childNodes);
       let buttonPosition = toolBar.indexOf(newTabButton);
       let tabsPosition = toolBar.indexOf(gBrowser.tabContainer);
       let scrollBox = $("tabmixScrollBox");
@@ -2274,10 +2274,10 @@ var gTMPprefObserver = {
 
     let setContext = function(command) {
       let items = document.getElementsByAttribute("command", "Browser:" + command);
-      Array.slice(items).forEach(function(item) {
+      for (let item of items) {
         if (item.localName == "toolbarbutton")
           Tabmix.setItem(item, "context", show ? "autoreload_popup" : null);
-      });
+      }
     };
     setContext("ReloadOrDuplicate");
     setContext("Stop");

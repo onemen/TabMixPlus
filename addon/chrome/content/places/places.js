@@ -411,7 +411,7 @@ var TMP_Places = {
       this.startObserver();
     } else {
       let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkId", "*");
-      Array.slice(tabs).forEach(function(tab) {
+      Array.prototype.slice.call(tabs).forEach(function(tab) {
         if (tab.hasAttribute("pending"))
           this.setTabTitle(tab);
         else
@@ -464,7 +464,7 @@ var TMP_Places = {
     const ID = "tabmix_bookmarkId";
     let batch = Array.isArray(aItemId);
     let tabs = gBrowser.tabContainer.getElementsByAttribute(ID, batch ? "*" : aItemId);
-    Array.slice(tabs).forEach(function(tab) {
+    Array.prototype.slice.call(tabs).forEach(function(tab) {
       if (!batch ||
           aItemId.indexOf(parseInt(tab.getAttribute(ID))) > -1) {
         tab.removeAttribute(ID);

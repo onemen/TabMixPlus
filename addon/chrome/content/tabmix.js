@@ -1197,7 +1197,7 @@ Tabmix.initialization = {
         phase.initialized = true;
         try {
           let obj = getObj(phase.obj);
-          result = obj[key].apply(obj, Array.slice(arguments, 1));
+          result = obj[key].apply(obj, Array.prototype.slice.call(arguments, 1));
         } catch (ex) {
           Tabmix.assert(ex, phase.obj + "." + key + " failed");
         }

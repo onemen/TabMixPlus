@@ -73,9 +73,10 @@ var gPrefWindow = { // jshint ignore:line
     let style = window.getComputedStyle(content, "");
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
                        parseInt(style.marginLeft);
-    Array.slice(aPaneElement.getElementsByTagName("tabbox")).forEach(function(tabbox) {
+    let tabboxes = aPaneElement.getElementsByTagName("tabbox");
+    for (let tabbox of tabboxes) {
       diff = Math.max(diff, tabbox.boxObject.width - contentWidth);
-    });
+    }
     window.innerWidth += diff;
   },
 

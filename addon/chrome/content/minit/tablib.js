@@ -34,7 +34,7 @@ var tablib = { // eslint-disable-line
     Tabmix.changeCode(obj, name)._replace(
       '{',
       '$&\n' +
-      '  let args = Array.slice(arguments);\n' +
+      '  let args = Array.prototype.slice.call(arguments);\n' +
       '  if (!Tabmix.isVersion(360))\n' +
       '    args.unshift(this);\n' +
       '  var tabmixResult = tablib._loadURIWithFlags.apply(null, args);\n' +
