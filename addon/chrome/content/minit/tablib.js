@@ -1385,7 +1385,7 @@ var tablib = { // eslint-disable-line
     gBrowser.previousTabIndex = function _previousTabIndex(aTab, aTabs) {
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
-      var items = Array.filter(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
+      var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
           tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] == aTab)

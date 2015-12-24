@@ -72,7 +72,7 @@ var gMenuPane = { // jshint ignore:line
 
   _slideShow: "",
   updateShortcuts: function(aShortcuts, aCallBack) {
-    let boxes = Array.filter(aShortcuts.childNodes, aCallBack);
+    let boxes = Array.prototype.filter.call(aShortcuts.childNodes, aCallBack);
     $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
       this._slideShow = $("shortcut-group").keys.slideShow;

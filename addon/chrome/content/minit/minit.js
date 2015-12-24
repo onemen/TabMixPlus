@@ -945,13 +945,13 @@ var TMP_TabView = {
 
   // includung _removingTabs
   currentGroup: function() {
-    return Array.filter(gBrowser.tabs, tab => !tab.hidden);
+    return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
   getTabPosInCurrentGroup: function(aTab) {
     if (aTab) {
-      let tabs = Array.filter(gBrowser.tabs, tab => !tab.hidden);
+      let tabs = Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
     }
     return -1;

@@ -115,7 +115,7 @@
            inherited from the binding parent -->
       <method name="_getScrollableElements">
         <body><![CDATA[
-          return Array.filter(document.getBindingParent(this).childNodes,
+          return Array.prototype.filter.call(document.getBindingParent(this).childNodes,
                               this._canScrollToElement, this);
         ]]></body>
       </method>

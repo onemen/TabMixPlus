@@ -172,7 +172,7 @@ var TMP_LastTab = {
     if (this._tabs)
       return this._tabs;
     let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;
-    this._tabs = Array.filter(list, function(tab) {
+    this._tabs = Array.prototype.filter.call(list, function(tab) {
       return !tab.hidden && !tab.closing;
     });
     return this._tabs;
