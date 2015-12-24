@@ -1944,8 +1944,11 @@ var gTMPprefObserver = {
      *  changed unloaded or unread preference we need to set the proper tab
      *  style for each tab
      */
-    if (styleName == "unloaded" || styleName == "unread")
-      Array.forEach(gBrowser.tabs, tab => Tabmix.setTabStyle(tab));
+    if (styleName == "unloaded" || styleName == "unread") {
+      for (let tab of gBrowser.tabs) {
+        Tabmix.setTabStyle(tab);
+      }
+    }
 
     let isBold = function(attrib) {
       attrib = attrib.split(" ");

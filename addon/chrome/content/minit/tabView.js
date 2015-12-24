@@ -158,11 +158,8 @@
       'this.',
       'UI.', {flags: "g", silent: true}
     )._replace(
-      'items = TabItems.getItems();',
-      'items = gBrowser.tabs;'
-    )._replace(
       /items\.forEach\(function\s*\(item\)\s*{/,
-      'Array.forEach(items, function(tab) { \
+      'Array.prototype.forEach.call(gBrowser.tabs, function(tab) { \
        if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
     )._replace(
@@ -457,7 +454,7 @@
 
         // update tabs data
         let groupID = newGroupsData.activeGroupId;
-        Array.forEach(gBrowser.tabs, function(tab) {
+        for (let tab of gBrowser.tabs) {
           if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
             return;
           let data = {groupID: groupID};
@@ -465,7 +462,7 @@
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)
             this.setLiteral(this.getNodeForTab(tab), "tabview-tab", data);
-        }, TabmixSessionManager);
+        }
       }
       return;
     }

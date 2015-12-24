@@ -2542,9 +2542,9 @@ var TabmixSessionManager = { // jshint ignore:line
     if (tabview) {
       if (aBackup) {
         // update all tabs when we enter/exit panorama
-        Array.forEach(gBrowser.tabs, function SM_saveTabViewData_forEach(tab) {
+        for (let tab of gBrowser.tabs) {
           this.saveTabviewTab(this.getNodeForTab(tab), tab);
-        }, this);
+        }
       } else {
         // force Tabview to save when we save all window data
         // we will collect the data from SessionStore
@@ -3383,9 +3383,9 @@ var TabmixSessionManager = { // jshint ignore:line
     // when resuming at startup: add additionally requested pages to the end
     if (caller == "firstwindowopen" && loadOnStartup.length) {
       let lastPlace = gBrowser.tabs.length - 1;
-      Array.forEach(loadOnStartup, function(aTab) {
+      for (let aTab of loadOnStartup) {
         gBrowser.moveTabTo(aTab, lastPlace);
-      });
+      }
     }
 
     TMP_ClosedTabs.setButtonDisableState();

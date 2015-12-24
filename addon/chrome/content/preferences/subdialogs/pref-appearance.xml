@@ -237,7 +237,7 @@
 
       <constructor>
         <![CDATA[
-          Array.forEach(["red","green","blue", "opacity"], function(id) {
+          ["red","green","blue", "opacity"].forEach(function(id) {
             this._RGB.push(document.getAnonymousElementByAttribute(this, "anonid", id));
           }, this);
 

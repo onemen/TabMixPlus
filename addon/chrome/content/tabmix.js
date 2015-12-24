@@ -1060,7 +1060,7 @@ var TMP_eventListener = {
     var isLastWindow = Tabmix.numberOfWindows() === 0;
     // we close tabmix dialog windows on exit
     if (isLastWindow) {
-      Array.forEach(["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"], function(aID) {
+      ["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"].forEach(function(aID) {
         var win = Services.wm.getMostRecentWindow("mozilla:" + aID);
         if (win) {
           if (aID != "tabmixopt")

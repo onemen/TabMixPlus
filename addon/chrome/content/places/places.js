@@ -405,9 +405,9 @@ var TMP_Places = {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
-      Array.forEach(gBrowser.tabs, function(tab) {
+      for (let tab of gBrowser.tabs) {
         this.setTabTitle(tab);
-      }, this);
+      }
       this.startObserver();
     } else {
       let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkId", "*");
@@ -443,7 +443,7 @@ var TMP_Places = {
       [aItemId, aUrl] = [[aItemId], [aUrl]];
 
     let getIndex = url => aUrl.indexOf(url) + 1;
-    Array.forEach(gBrowser.tabs, function(tab) {
+    for (let tab of gBrowser.tabs) {
       let url = tab.linkedBrowser.currentURI.spec;
       if (this.isUserRenameTab(tab, url))
         return;
@@ -452,7 +452,7 @@ var TMP_Places = {
         tab.setAttribute("tabmix_bookmarkId", aItemId[index - 1]);
         this.setTabTitle(tab, url);
       }
-    }, this);
+    }
     this.afterTabTitleChanged();
   },
 

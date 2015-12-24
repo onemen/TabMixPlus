@@ -187,11 +187,11 @@ var gPrefWindow = { // jshint ignore:line
     var broadcasters = $(paneID + ":Broadcaster");
     if (!broadcasters)
       return;
-    Array.forEach(broadcasters.childNodes, function(broadcaster) {
+    for (let broadcaster of broadcasters.childNodes) {
       let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
         this.updateBroadcaster(preference, broadcaster);
-    }, this);
+    }
   },
 
   updateBroadcaster: function(aPreference, aBroadcaster) {
