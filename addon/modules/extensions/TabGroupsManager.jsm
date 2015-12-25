@@ -3,7 +3,7 @@
 /**
  * original code by onemen
  */
-var EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
+this.EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
 this.TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow) {
@@ -62,7 +62,7 @@ this.TMP_TabGroupsManager = {
     sessionManager._moveTabsToGroupByTGM = function(window, tabs) {
       let sessionStore = window.TabmixSvc.ss;
       let TGM = window.TabGroupsManager.session;
-      for (let i = 0; i < tabs.length ; i++) {
+      for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
         let data = sessionStore.getTabValue(tab, "__tabmixTGM");
         let [groupId, groupName] = data ? data.split(" ") : ["-1", ""];
@@ -92,11 +92,12 @@ this.TMP_TabGroupsManager = {
       // open new group and add new tabs to it
       'else if (newtabsCount > 0 && !overwrite) {',
       '$&' +
-      '  gBrowser.selectedTab = TMP_addTab();' +
-      '  gBrowser.moveTabTo(gBrowser.selectedTab, gBrowser.tabs.length - 1);' +
-      '  newIndex = gBrowser.selectedTab._tPos;' +
+      '  let newTab = TMP_addTab();' +
+      '  gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);' +
+      '  gBrowser.selectedTab = newTab;' +
+      '  newIndex = newTab._tPos;' +
       '  let group = TabGroupsManager.allGroups.openNewGroupActive(' +
-      '        gBrowser.selectedTab, -1);' +
+      '        newTab, -1);' +
       '  for (let i = 1; i < newtabsCount; i++) {' +
       '    TMP_addTab();' +
       '  }' +
@@ -122,7 +123,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use - don't change function name
-  tabmixSessionsManager: function () {
+  tabmixSessionsManager: function() {
     // this here reffer to the top browser window
     if (!this.Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in this)
       return false;
@@ -132,7 +133,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use
-  _saveAllGroupsData: function (jsonText, windowNode) {
+  _saveAllGroupsData: function(jsonText, windowNode) {
     if (!this.enableBackup && !windowNode)
       return;
     try {

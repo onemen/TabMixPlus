@@ -145,9 +145,9 @@
             <tabs id="session"
                   onselect="gPrefWindow.tabSelectionChanged(event);">
               <tab label="&sm.StartExit;" class="subtabs tabmix" helpTopic="Session_-_StartExit"/>
-              <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_Restore"/>
-              <tab label="tab" class="firefox" helpTopic=" "/>
-              <tab label="&sm.preserve;" class="subtabs tabmix" helpTopic="Session_-_Preserve"/>
+              <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Restore"/>
+              <tab label="tab" class="firefox" helpTopic="Session_-_StartExit"/>
+              <tab label="&sm.preserve;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Preserve"/>
             </tabs>
             <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels">
               <!-- Tabmix Session manager - start/exit -->

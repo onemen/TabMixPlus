@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Cho phép popup đã chỉnh kích thước">
 <!ENTITY divertedWindowOpen.none "Cho phép tất cả popup">
 <!ENTITY linkTarget.label "Mở liên kết có thuộc tính đích trong thẻ hiện tại">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Không mở thẻ trống khi đang tải xuống tập tin">
 <!ENTITY edit.label "Chỉnh sửa">
 <!ENTITY speLink.label "Bắt buộc mở trong thẻ mới:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Hiển thị phần không nhìn thấy của thẻ tiếp theo khi cuộn">
 <!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
-<!ENTITY highlight.label "Tô sáng:">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">
 <!ENTITY unloadedtabs.style.label "Các Thẻ chưa tải">
 <!ENTITY unreadtabs.style.label "Thẻ chưa đọc">

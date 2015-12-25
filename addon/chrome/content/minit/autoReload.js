@@ -1,8 +1,9 @@
+/* exported load, accept, onInput */
 "use strict";
 
 var gPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
-function load(){
+function load() {
   var customReloadTime = gPref.getIntPref("extensions.tabmix.reload_time");
   document.getElementById("autoreload_minutes").value = Math.floor(customReloadTime / 60);
   document.getElementById("autoreload_seconds").value = customReloadTime % 60;
@@ -14,10 +15,10 @@ function accept() {
   gPref.setIntPref("extensions.tabmix.reload_time", customReloadTime);
   var list = gPref.getCharPref("extensions.tabmix.custom_reload_list");
   list = list ? list.split(",") : [];
-  let defaultList = [60,120,300,900,1800];
+  let defaultList = [60, 120, 300, 900, 1800];
   if (list.concat(defaultList).indexOf(customReloadTime) == -1) {
     list.push(customReloadTime);
-    if (list.length > 6 )
+    if (list.length > 6)
       list.shift();
     gPref.setCharPref("extensions.tabmix.custom_reload_list", list.join(","));
   }
@@ -37,7 +38,7 @@ function getCustomReloadTime() {
     seconds = parseInt(document.getElementById("autoreload_seconds").value);
   else
     seconds = 0;
-  return minutes*60 + seconds;
+  return minutes * 60 + seconds;
 }
 
 function disable_OK() {

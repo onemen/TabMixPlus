@@ -1,10 +1,10 @@
 "use strict";
 
 if (!window.tablib || tablib.version != "tabmixplus")
-var tablib = {
-  version : "tabmixplus",
+var tablib = { // eslint-disable-line
+  version: "tabmixplus",
   _inited: false,
-  init : function TMP_tablib_init () {
+  init: function TMP_tablib_init() {
     if (this._inited)
       return;
     this._inited = true;
@@ -28,9 +28,9 @@ var tablib = {
         return;
       this._loadURIWithFlagsinitialized = true;
       [obj, name] = [window, "window._loadURIWithFlags"];
-    }
-    else
+    } else {
       [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
+    }
     Tabmix.changeCode(obj, name)._replace(
       '{',
       '$&\n' +
@@ -71,7 +71,14 @@ var tablib = {
     }
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
+
     if (!allowLoad) {
+      // we allow Google Redirects Fixer & Tracking Remover to load fixed url
+      // to the same tab
+      if (TabmixSvc.isFixedGoogleUrl(uri)) {
+        browser.tabmix_allowLoad = true;
+        return null;
+      }
       try {
         let newURI = Services.io.newURI(uri, null, null);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
@@ -80,7 +87,7 @@ var tablib = {
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlaged = function(flag) !!(flags & Ci.nsIWebNavigation[flag]);
+      let isFlaged = flag => !!(flags & Ci.nsIWebNavigation[flag]);
       params.inBackground = false;
       params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
       params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
@@ -114,26 +121,32 @@ var tablib = {
       return loadInCurrent;
 
     let stack = Error().stack || Components.stack.caller.formattedStack || "";
-    var re = keys.map(function(key) exceptionList[key]);
+    var re = keys.map(key => exceptionList[key]);
     return new RegExp(re.join("|")).test(stack);
   },
 
   change_gBrowser: function change_gBrowser() {
     var obj, fnName;
-    if (typeof Fd == "object" && typeof Fd.addTab == "function")
+    // RequestPolicy Continued extension https://requestpolicycontinued.github.io
+    var rp = gBrowser.rpcontinuedWrappedFunctions;
+    if (typeof rp == "object" && typeof rp.addTab == "object" &&
+        typeof rp.addTab.main == "function") {
+      [obj, fnName] = [rp.addTab, "rpcontinuedWrappedFunctions.addTab.main"];
+    } else if (typeof Fd == "object" && typeof Fd.addTab == "function") {
       [obj, fnName] = [Fd, "Fd.addTab"];
-    else if (Tabmix.extensions.ieTab2)
+    } else if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
     // NRA-ILA toolbar extension raplce the original addTab function
-    else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
+    } else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
       [obj, fnName] = [gBrowser, "origAddTab7c3de167ed6f494aa652f11a71ecb40c"];
-    }
-    else
+    } else {
       [obj, fnName] = [gBrowser, "addTab"];
+    }
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{','{\n\
-      let dontMove, isPending, isRestoringTab = Tabmix.callerName() == "ssi_restoreWindow";\n'
+      '{', '{\n' +
+      '            let dontMove, isPending, callerName = Tabmix.callerName(),\n' +
+      '                isRestoringTab = callerName == "ssi_restoreWindow";\n'
     )._replace(
       'let params = arguments[1];',
       '$&\n' +
@@ -175,18 +188,22 @@ var tablib = {
       't.dispatchEvent(evt);' +
       'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
       'if (openTabnext) {' +
-      '  if (dontMove || Tabmix.isCallerInList(this.TMP_blockedCallers))' +
+      '  if (dontMove || Tabmix.dontMoveNewTab(callerName))' +
       '    openTabnext = false;' +
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
       '    aRelatedToCurrent = true;' +
       '}'
-    )._replace( //  new tab can trigger selection change by some extensions (divX HiQ)
+    )._replace(//  new tab can trigger selection change by some extensions (divX HiQ)
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
-    gBrowser.TMP_blockedCallers = ["sss_restoreWindow", "ssi_restoreWindow", // ssi_restoreWindow from Firefox 16+
-                                   "sss_duplicateTab", "ssi_duplicateTab"]; // ssi_duplicateTab from Firefox 16+
-
+    Tabmix.dontMoveNewTab = function(caller) {
+      if (caller == "ssi_restoreWindow" ||
+          caller == "ssi_duplicateTab") {
+        return true;
+      }
+      return false;
+    };
 
     // ContextMenu Extensions raplce the original removeTab function
     var _removeTab = "removeTab";
@@ -279,10 +296,11 @@ var tablib = {
       ).toCode();
     }
 
-    if (Tabmix.extensions.ieTab2)
+    if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldSetTabTitle"];
-    else
+    } else {
       [obj, fnName] = [gBrowser, "setTabTitle"];
+    }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       'var title = browser.contentTitle;',
       '$&\
@@ -299,7 +317,7 @@ var tablib = {
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
          if (noChange)\
-           tablib.onTabTitleChanged(aTab, title == urlTitle);\
+           tablib.onTabTitleChanged(aTab, browser, title == urlTitle);\
        }\
        else if (noChange)\
          TMP_Places.currentTab = null;\
@@ -307,7 +325,7 @@ var tablib = {
     )._replace(
       'aTab.crop = crop;',
       '$&\
-       tablib.onTabTitleChanged(aTab, title == urlTitle);'
+       tablib.onTabTitleChanged(aTab, browser, title == urlTitle);'
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar
@@ -321,7 +339,7 @@ var tablib = {
     if (Tabmix._restoreMultipleTabs) {
       Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
         'let tabs = this.getTabsToTheEndFrom(aTab);',
-        '$&\n'+
+        '$&\n' +
         '              Tabmix.startCountingClosedTabs();'
       )._replace(
         '#1.setNumberOfTabsClosedLast(window, numberOfTabsToClose);'.
@@ -414,14 +432,14 @@ var tablib = {
     ).toCode();
 
     // we use our own preferences observer
-    if (!Tabmix.isVersion(310))
-    Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
-      'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
-      'break;'
-    )._replace(
-      'this.tabContainer.updateVisibility();',  '', {check: !Tabmix.isVersion(230)}
-    ).toCode();
-
+    if (!Tabmix.isVersion(310)) {
+      Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
+        'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
+        'break;'
+      )._replace(
+        'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(230)) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
@@ -461,11 +479,12 @@ var tablib = {
       ).toCode();
 
       // _expandSpacerBy not exsit in Firefox 21
-      if (typeof tabBar._expandSpacerBy == "function")
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
-        '{',
-        '{if (TabmixTabbar.widthFitTitle || !Tabmix.tabsUtils.isSingleRow()) return;'
-      ).toCode();
+      if (typeof tabBar._expandSpacerBy == "function") {
+        Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
+          '{',
+          '{if (TabmixTabbar.widthFitTitle || !Tabmix.tabsUtils.isSingleRow()) return;'
+        ).toCode();
+      }
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
         '{', '{\n' +
@@ -494,7 +513,7 @@ var tablib = {
       '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
     ).toCode();
 
-    Tabmix.changeCode(tabBar,  "gBrowser.tabContainer.visible", {setter: true})._replace(
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.visible", {setter: true})._replace(
       'this._container.collapsed = !val;',
       '  if (TabmixTabbar.hideMode == 2)' +
       '    val = false;' +
@@ -520,26 +539,27 @@ var tablib = {
     // FullScreen code related to tabs bellow content initialize by first
     // fullScreen event, see TMP_eventListener.onFullScreen
     if (Tabmix.isVersion(400)) {
-      Tabmix.changeCode(FullScreen, "FullScreen.showNavToolbox")._replace(
-        'if (!this._isChromeCollapsed) {',
-        '$&\n      ' +
-        'TMP_eventListener.showNavToolbox();'
-      )._replace(
-        /(\})(\)?)$/,
-        '  TMP_eventListener.showNavToolbox();\n' +
-        '$1$2'
-      ).toCode();
+      Tabmix.originalFunctions.FullScreen_showNavToolbox = FullScreen.showNavToolbox;
+      FullScreen.showNavToolbox = function() {
+        let result = Tabmix.originalFunctions.FullScreen_showNavToolbox.apply(this, arguments);
+        TMP_eventListener.showNavToolbox();
+        return result;
+      };
+    } else {
+      Tabmix.originalFunctions.FullScreen_mouseoverToggle = FullScreen.mouseoverToggle;
+      FullScreen.mouseoverToggle = function() {
+        let collapsed = this._isChromeCollapsed;
+        let result = Tabmix.originalFunctions.FullScreen_mouseoverToggle.apply(this, arguments);
+        if (collapsed !== this._isChromeCollapsed) {
+          if (!this._isChromeCollapsed)
+            TMP_eventListener.updateMultiRow();
+          if (TabmixTabbar.position == 1) {
+            TMP_eventListener.toggleTabbarVisibility(!this._isChromeCollapsed);
+          }
+        }
+        return result;
+      };
     }
-    else
-    Tabmix.changeCode(FullScreen, "FullScreen.mouseoverToggle")._replace(
-      'this._isChromeCollapsed = !aShow;',
-      '  $&' +
-      '  if (aShow)' +
-      '    TMP_eventListener.updateMultiRow();' +
-      '  if (TabmixTabbar.position == 1) {' +
-      '    TMP_eventListener.toggleTabbarVisibility(aShow);' +
-      '  }'
-    ).toCode();
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
@@ -551,35 +571,37 @@ var tablib = {
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
 
-    // we prevent sessionStore.duplicateTab from moving the tab
-    Tabmix.changeCode(window, "duplicateTabIn")._replace(
-      'switch (where)',
-      'if (where == "window" && Tabmix.getSingleWindowMode()) {\n' +
-      '    where = "tab";\n' +
-      '  }\n' +
-      '  $&'
-    )._replace(
-      'gBrowser.selectedTab = newTab;',
-      '// check tabmix preference before selecting the new tab'
-    )._replace(
-      /(\})(\)?)$/,
-      '  if (where != window) {\n' +
-      '    let newTab = gBrowser.getTabForLastPanel();\n' +
-      '    let selectNewTab = where == "tab" ?\n' +
-      '        !Tabmix.prefs.getBoolPref("loadDuplicateInBackground") :\n' +
-      '        Tabmix.prefs.getBoolPref("loadDuplicateInBackground");\n' +
-      '    if (selectNewTab) {\n' +
-      '      gBrowser.selectedTab = newTab;\n' +
-      '    }\n' +
-      '    let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?\n' +
-      '               "openTabNext" : "openDuplicateNext";\n' +
-      '    if (Tabmix.prefs.getBoolPref(pref)) {\n' +
-      '      let pos = newTab._tPos > aTab._tPos ? 1 : 0;\n' +
-      '      gBrowser.moveTabTo(newTab, aTab._tPos + pos);\n' +
-      '    }\n' +
-      '  }\n' +
-      '$1$2'
-    ).toCode();
+    Tabmix.originalFunctions.duplicateTabIn = window.duplicateTabIn;
+    window.duplicateTabIn = function(aTab, where) {
+      if (where == "window" && Tabmix.getSingleWindowMode()) {
+        where = "tab";
+      }
+      // we prevent SessionStore.duplicateTab from moving the tab
+      // see gBrowser.addTab
+      // always set where to 'tabshifted' to prevent original function from
+      // selecting the new tab
+      if (where == "tab") {
+        arguments[1] = "tabshifted";
+      }
+
+      let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
+
+      if (where != window) {
+        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+            "openTabNext" : "openDuplicateNext";
+        let newTab = gBrowser.getTabForLastPanel();
+        if (Tabmix.prefs.getBoolPref(pref)) {
+          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
+          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
+        }
+        let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
+        let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
+        if (selectNewTab) {
+          gBrowser.selectedTab = newTab;
+        }
+      }
+      return result;
+    };
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
@@ -622,8 +644,11 @@ var tablib = {
      * it is not likely that link in other application opened Firefox for downloading data
      */
     let fnObj = nsBrowserAccess.prototype, fnName, arg;
+    // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
+    let TSTopenURI = Tabmix.extensions.treeStyleTab &&
+        typeof fnObj.__treestyletab__openURI == "function" ? "__treestyletab__openURI" : "";
     [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
-                                            ["openURI", "isExternal"];
+                                            [TSTopenURI || "openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
 
     var loadURIWithFlags = Tabmix.isVersion(380) ?
@@ -664,7 +689,8 @@ var tablib = {
 
     if (Tabmix.isVersion(260)) {
       _openURI.toCode();
-      _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype.openURI");
+      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "openURI");
+      _openURI = Tabmix.changeCode(fnObj, fnName);
     }
 
     _openURI._replace(
@@ -688,7 +714,7 @@ var tablib = {
 
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    [fnObj, fnName] = TMP_Places.getXnotifierFunction("openNewTabWith");
+    [fnObj, fnName] = Tabmix.onContentLoaded.getXnotifierFunction("openNewTabWith");
     // inverse focus of middle/ctrl/meta clicked links
     // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
     Tabmix.changeCode(fnObj, fnName)._replace(
@@ -844,7 +870,7 @@ var tablib = {
       '                                   document.getElementById(arguments[0]);'
     )._replace(
       /(\})(\)?)$/,
-      '  tablib.populateUndoWindowSubmenu(undoPopup);\n'+
+      '  tablib.populateUndoWindowSubmenu(undoPopup);\n' +
       '$1$2'
     ).toCode();
 
@@ -852,15 +878,16 @@ var tablib = {
     if (popup)
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
-    if (!Tabmix.isVersion(290))
-    Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
-      'function switchIfURIInWindow',
-      'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
-    )._replace(
-      'gBrowser.selectedBrowser.loadURI(aURI.spec);',
-      '{$& \
-       gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
-    ).toCode();
+    if (!Tabmix.isVersion(290)) {
+      Tabmix.changeCode(window, "switchToTabHavingURI")._replace(
+        'function switchIfURIInWindow',
+        'let switchIfURIInWindow = $&', {check: Tabmix._debugMode}
+      )._replace(
+        'gBrowser.selectedBrowser.loadURI(aURI.spec);',
+        '{$& \
+         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);}'
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(300)) {
       Tabmix.changeCode(window, "BrowserOpenNewTabOrWindow")._replace(
@@ -887,14 +914,16 @@ var tablib = {
     let menuLabelString = gNavigatorBundle.getString("menuUndoCloseWindowLabel");
     let menuLabelStringSingleTab =
       gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel");
-    let checkForMiddleClick = function(e) {this.checkForMiddleClick(e);}.bind(TabmixSessionManager);
+    let checkForMiddleClick = function(e) {
+      this.checkForMiddleClick(e);
+    }.bind(TabmixSessionManager);
     for (let i = 0; i < undoPopup.childNodes.length; i++) {
       let m = undoPopup.childNodes[i];
       let undoItem = undoItems[i];
       if (undoItem && m.hasAttribute("targetURI")) {
         let otherTabsCount = undoItem.tabs.length - 1;
-        let label = (otherTabsCount === 0) ? menuLabelStringSingleTab
-                                          : PluralForm.get(otherTabsCount, menuLabelString);
+        let label = (otherTabsCount === 0) ?
+            menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
         TMP_SessionStore.getTitleForClosedWindow(undoItem);
         let menuLabel = label.replace("#1", undoItem.title)
                              .replace("#2", otherTabsCount);
@@ -964,10 +993,12 @@ var tablib = {
         try {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
-          var newEntry = { url: aHref }; // we don't know the page title at this moment
-          tabState.entries.splice(activeIndex + 1 , entriesToRemove, newEntry);
+          var newEntry = {url: aHref}; // we don't know the page title at this moment
+          tabState.entries.splice(activeIndex + 1, entriesToRemove, newEntry);
           tabState.index++;
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       // we need to update history title after the new page loaded for use in back/forword button
       function updateNewHistoryTitle() {
@@ -981,7 +1012,9 @@ var tablib = {
             let history = browser.webNavigation.sessionHistory;
             Tabmix.Utils.updateHistoryTitle(history, this.label);
           }
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       function urlForDownload() {
         /* jshint validthis: true */
@@ -990,7 +1023,9 @@ var tablib = {
           let browser = this.linkedBrowser;
           browser.tabmix_allowLoad = true;
           browser.loadURI(aHref);
-        } catch (ex) {Tabmix.assert(ex);}
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       try {
         tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
@@ -1006,23 +1041,23 @@ var tablib = {
         }
         tabState.pinned = false;
         TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
-      } catch (ex) {Tabmix.assert(ex);}
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
 
       return newTab;
     };
 
-    gBrowser.duplicateTabToWindow = function (aTab, aMoveTab, aTabData) {
+    gBrowser.duplicateTabToWindow = function(aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
       if (Tabmix.singleWindowMode) {
         if (!aMoveTab)
           this.duplicateTab(aTab, null, aTabData);
-      }
-      else if (aMoveTab) {
+      } else if (aMoveTab) {
         this.replaceTabWithWindow(aTab);
-      }
-      else {
+      } else {
         aTab._tabmixCopyToWindow = {data: aTabData};
         // replaceTabWithWindow not working if there is only one tab in the the window
         window.openDialog("chrome://browser/content/browser.xul",
@@ -1030,7 +1065,7 @@ var tablib = {
       }
     };
 
-    gBrowser.openLinkWithHistory = function () {
+    gBrowser.openLinkWithHistory = function() {
       var {target, linkURL, principal} = gContextMenu;
       var url = tablib.getValidUrl(linkURL, target);
       if (!url)
@@ -1042,8 +1077,7 @@ var tablib = {
         // Firefox 26-37
         let doc = target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
-      }
-      else {
+      } else {
         // Firefox 17-25
         let doc = target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
@@ -1052,13 +1086,7 @@ var tablib = {
       this.duplicateTab(gBrowser.selectedTab, url);
     };
 
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
-      /allowMixedContent:|charset:/,
-      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
-      '      $&'
-    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
-
-    gBrowser.openInverseLink = function () {
+    gBrowser.openInverseLink = function() {
       var {target, linkURL} = gContextMenu;
       var url = tablib.getValidUrl(linkURL, target);
       if (!url)
@@ -1131,7 +1159,7 @@ var tablib = {
 
       var URL = this.getBrowserForTab(aTab).currentURI.spec;
       var matches = URL.match(/(^.*\/)(.*)/);
-      var aDomain = matches ?  matches[1] : URL;
+      var aDomain = matches ? matches[1] : URL;
 
       if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
@@ -1149,21 +1177,21 @@ var tablib = {
       }
     };
 
-    gBrowser._closeLeftTabs = function (aTab) {
+    gBrowser._closeLeftTabs = function(aTab) {
       if (Tabmix.ltr)
         this.closeLeftTabs(aTab);
       else
         this.closeRightTabs(aTab);
     };
 
-    gBrowser._closeRightTabs = function (aTab) {
+    gBrowser._closeRightTabs = function(aTab) {
       if (Tabmix.ltr)
         this.closeRightTabs(aTab);
       else
         this.closeLeftTabs(aTab);
     };
 
-    gBrowser.closeRightTabs = function (aTab) {
+    gBrowser.closeRightTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
@@ -1223,41 +1251,41 @@ var tablib = {
       }
     });
 
-    gBrowser._reloadLeftTabs = function (aTab) {
+    gBrowser._reloadLeftTabs = function(aTab) {
       if (Tabmix.ltr)
         this.reloadLeftTabs(aTab);
       else
         this.reloadRightTabs(aTab);
     };
 
-    gBrowser._reloadRightTabs = function (aTab) {
+    gBrowser._reloadRightTabs = function(aTab) {
       if (Tabmix.ltr)
         this.reloadRightTabs(aTab);
       else
         this.reloadLeftTabs(aTab);
     };
 
-    gBrowser.reloadLeftTabs = function (aTab) {
+    gBrowser.reloadLeftTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var childNodes = this.visibleTabs;
-      if ( aTab._tPos > this.mCurrentTab._tPos )
+      if (aTab._tPos > this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
     };
 
-    gBrowser.reloadRightTabs = function (aTab) {
+    gBrowser.reloadRightTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var childNodes = this.visibleTabs;
-      if ( aTab._tPos < this.mCurrentTab._tPos )
+      if (aTab._tPos < this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       tablib.reloadTabs(childNodes.slice(tabPos + 1));
     };
 
-    gBrowser.reloadAllTabsBut = function (aTab) {
+    gBrowser.reloadAllTabsBut = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       else
@@ -1265,15 +1293,14 @@ var tablib = {
       tablib.reloadTabs(this.visibleTabs, aTab);
     };
 
-    gBrowser.lockTab = function (aTab) {
+    gBrowser.lockTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( aTab.hasAttribute("locked") ) {
+      if (aTab.hasAttribute("locked")) {
         aTab.removeAttribute("_lockedAppTabs"); // we only have this if we locked AppTab
         aTab.removeAttribute("locked");
         aTab.setAttribute("_locked", "false");
-      }
-      else {
+      } else {
         aTab.setAttribute("locked", "true");
         aTab.setAttribute("_locked", "true");
       }
@@ -1282,10 +1309,10 @@ var tablib = {
       TabmixSessionManager.updateTabProp(aTab);
     };
 
-    gBrowser.protectTab = function (aTab) {
+    gBrowser.protectTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( aTab.hasAttribute("protected") )
+      if (aTab.hasAttribute("protected"))
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
@@ -1297,10 +1324,10 @@ var tablib = {
       }
     };
 
-    gBrowser.freezeTab = function (aTab) {
+    gBrowser.freezeTab = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
-      if ( !aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")){
+      if (!aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")) {
         aTab.setAttribute("protected", "true");
         aTab.setAttribute("locked", "true");
         aTab.setAttribute("_locked", "true");
@@ -1338,7 +1365,7 @@ var tablib = {
       }
     };
 
-    gBrowser.copyTabUrl = function (aTab) {
+    gBrowser.copyTabUrl = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
@@ -1359,13 +1386,12 @@ var tablib = {
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.filter(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
-          function(tab) {return !tab.hidden && !tab.closing;
-      }, this);
-      for (var i = 0; i < items.length; ++i ) {
+          tab => !tab.hidden && !tab.closing);
+      for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] == aTab)
           continue;
         temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
-        if ( temp_id && temp_id > max_id ) {
+        if (temp_id && temp_id > max_id) {
           max_id = temp_id;
           tempIndex = tabs.indexOf(items[i]);
         }
@@ -1374,7 +1400,7 @@ var tablib = {
       return tempIndex;
     };
 
-    gBrowser.previousTab = function (aTab) {
+    gBrowser.previousTab = function(aTab) {
       var tabs = this.visibleTabs;
       if (tabs.length == 1)
         return;
@@ -1390,23 +1416,23 @@ var tablib = {
       this.selectedBrowser.focus();
     };
 
-    gBrowser.selectIndexAfterRemove = function (oldTab) {
+    gBrowser.selectIndexAfterRemove = function(oldTab) {
       var tabs = TMP_TabView.currentGroup();
       var currentIndex = tabs.indexOf(this.mCurrentTab);
       if (this.mCurrentTab != oldTab)
         return currentIndex;
       var l = tabs.length;
-      if (l==1)
+      if (l == 1)
         return 0;
       var mode = Tabmix.prefs.getIntPref("focusTab");
-      switch ( mode ) {
+      switch (mode) {
         case 0: // first tab
           return currentIndex === 0 ? 1 : 0;
         case 1: // left tab
-          return currentIndex === 0 ? 1 : currentIndex-1 ;
+          return currentIndex === 0 ? 1 : currentIndex - 1;
         case 3: // last tab
           return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
-        case 6: // last opened
+        case 6: {// last opened
           let lastTabIndex, maxID = -1;
           tabs.forEach(function(tab, index) {
             if (tab == oldTab)
@@ -1421,12 +1447,14 @@ var tablib = {
             }
           });
           return lastTabIndex;
-        case 4: // last selected
+        }
+        case 4: {// last selected
           let tempIndex = this.previousTabIndex(oldTab, tabs);
           // if we don't find last selected we fall back to default
           if (tempIndex > -1)
             return tempIndex;
           /* falls through */
+        }
         case 2: // opener / right  (default )
         case 5: // right tab
           /* falls through */
@@ -1445,27 +1473,27 @@ var tablib = {
     };
 
     gBrowser.stopMouseHoverSelect = function(aTab) {
-       // add extra delay after tab removed or after tab flip before we select by hover
-       // to let the user time to move the mouse
-       if (aTab.mouseHoverSelect) {
-          this.setAttribute("preventMouseHoverSelect",true);
-          var delay = aTab.mouseHoverSelectDelay + 50;
-          setTimeout(function removeDelayAfterClose(browser) {
-            browser.removeAttribute("preventMouseHoverSelect");
-          }, delay, this);
-       }
+      // add extra delay after tab removed or after tab flip before we select by hover
+      // to let the user time to move the mouse
+      if (aTab.mouseHoverSelect) {
+        this.setAttribute("preventMouseHoverSelect", true);
+        var delay = aTab.mouseHoverSelectDelay + 50;
+        setTimeout(function removeDelayAfterClose(browser) {
+          browser.removeAttribute("preventMouseHoverSelect");
+        }, delay, this);
+      }
     };
 
     Object.defineProperty(gBrowser, "closingTabsEnum",
-      {value: { ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5 }, writable: false});
+      {value: {ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5}, writable: false});
 
-    let warnAboutClosingTabs = function (whatToClose, aTab, aDomain) {
+    let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
       // see tablib.closeWindow comment
       if (Tabmix.isCallerInList("BG__onQuitRequest"))
         return true;
       var closing = this.closingTabsEnum;
       // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
-      if (typeof(whatToClose) == "boolean")
+      if (typeof (whatToClose) == "boolean")
         whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
 
       var onExit = whatToClose == closing.ALL_ONEXIT;
@@ -1474,11 +1502,11 @@ var tablib = {
       // calc the number of tab to close when there is protected tabs.
       let protectedTabs = [];
       function addProtected(tabs) {
-        for (let i = 0; i < tabs.length; i++ ) {
+        for (let i = 0; i < tabs.length; i++) {
           let tab = tabs[i];
           if (!onExit && tab.hidden)
             continue;
-          if (protectedTabs.indexOf(tab) == -1 )
+          if (protectedTabs.indexOf(tab) == -1)
             protectedTabs.push(tabs[i]);
         }
       }
@@ -1501,8 +1529,7 @@ var tablib = {
           shouldPrompt = 3;
         else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
           shouldPrompt = 2;
-      }
-      else if (numTabs > 1) {
+      } else if (numTabs > 1) {
         if (Services.prefs.getBoolPref(prefs[0]))
           shouldPrompt = 1;
         // when we close window with last tab and we don't have protected tabs
@@ -1539,7 +1566,7 @@ var tablib = {
           tabsToClose = numTabs - 1 - numProtected;
           break;
         case closing.GROUP:
-          for ( i = numTabs - 1; i > -1; --i) {
+          for (i = numTabs - 1; i > -1; --i) {
             let tab = tabs[i];
             if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
                 !tab._isProtected)
@@ -1558,7 +1585,7 @@ var tablib = {
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for ( i = 0; i < protectedTabs.length; i++ ) {
+          for (i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index <= tabPos)
               --numProtected;
@@ -1569,7 +1596,7 @@ var tablib = {
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for ( i = 0; i < protectedTabs.length; i++ ) {
+          for (i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index >= tabPos)
               --numProtected;
@@ -1588,7 +1615,7 @@ var tablib = {
         return true;
 
       // default to true: if it were false, we wouldn't get this far
-      var warnOnClose = { value:true };
+      var warnOnClose = {value: true};
       var bundle = this.mStringBundle;
 
       var message, chkBoxLabel;
@@ -1600,8 +1627,7 @@ var tablib = {
           message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
                                           TabmixSvc.getString("window.closeWarning.1");
-      }
-      else {
+      } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
         message = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
@@ -1633,18 +1659,18 @@ var tablib = {
     };
     Tabmix.setNewFunction(gBrowser, "warnAboutClosingTabs", warnAboutClosingTabs);
 
-    gBrowser.TMP_selectNewForegroundTab = function (aTab, aLoadInBackground, aUrl, addOwner) {
-       var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
-                      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-       if (!bgLoad) {
-          // set new tab owner
-          addOwner = typeof addOwner == "boolean" ? addOwner : true;
-          if (addOwner)
-             aTab.owner = this.selectedTab;
-          this.selectedTab = aTab;
-          if (aUrl && Tabmix.isNewTabUrls(aUrl))
-            tablib.setURLBarFocus();
-       }
+    gBrowser.TMP_selectNewForegroundTab = function(aTab, aLoadInBackground, aUrl, addOwner) {
+      var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
+      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
+      if (!bgLoad) {
+        // set new tab owner
+        addOwner = typeof addOwner == "boolean" ? addOwner : true;
+        if (addOwner)
+          aTab.owner = this.selectedTab;
+        this.selectedTab = aTab;
+        if (aUrl && Tabmix.isNewTabUrls(aUrl))
+          tablib.setURLBarFocus();
+      }
     };
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
@@ -1709,8 +1735,7 @@ var tablib = {
           return;
         this.numberOfTabsClosedLast++;
       };
-    }
-    else {
+    } else {
       Tabmix.startCountingClosedTabs = function() { };
       Tabmix.setNumberOfTabsClosedLast = function() { };
       Tabmix.countClosedTabs = function() { };
@@ -1718,24 +1743,24 @@ var tablib = {
 
     /** DEPRECATED **/
     // we keep this function to saty compatible with other extensions that use it
-    gBrowser.undoRemoveTab = function () {TMP_ClosedTabs.undoCloseTab();};
+    gBrowser.undoRemoveTab = () => TMP_ClosedTabs.undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { };
-    gBrowser.closeTab = function(aTab) {this.removeTab(aTab);};
+    gBrowser.closeTab = aTab => this.removeTab(aTab);
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
-    gBrowser.renameTab = function(aTab) {Tabmix.renameTab.editTitle(aTab);};
+    gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
   },
 
   // prevent 'ReferenceError: reference to undefined property params'
   // in gBrowser.addTab
-  props: ["referrerURI","charset","postData","ownerTab",
-          "allowThirdPartyFixup","fromExternal","relatedToCurrent",
-          "allowMixedContent","skipAnimation","isUTF8","dontMove","isPending",
+  props: ["referrerURI", "charset", "postData", "ownerTab",
+          "allowThirdPartyFixup", "fromExternal", "relatedToCurrent",
+          "allowMixedContent", "skipAnimation", "isUTF8", "dontMove", "isPending",
           "aForceNotRemote", "aNoReferrer"],
 
   definedParams: function(params) {
-    this.props.forEach(function(prop){
+    this.props.forEach(function(prop) {
       if (typeof params[prop] == "undefined")
         params[prop] = null;
     });
@@ -1748,26 +1773,41 @@ var tablib = {
         (!TMP_Places.inUpdateBatch || !TMP_Places.currentTab)) {
       let tab = gBrowser.selectedTab;
       if (Tabmix.tabsUtils.isElementVisible(tab))
-       TMP_Places.currentTab = tab;
+        TMP_Places.currentTab = tab;
     }
     return TMP_Places.getTabTitle(aTab, url, title);
   },
 
-  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, isUrlTitle) {
+  get labels() {
+    delete this.labels;
+    this.labels = [
+      gBrowser.mStringBundle.getString("tabs.connecting"),
+      gBrowser.mStringBundle.getString("tabs.emptyTabTitle"),
+    ];
+    return this.labels;
+  },
+
+  onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internaly, after load already finished and we have remove
     // width attribute
     if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
       return;
 
+    if (aBrowser.getAttribute("remote") == "true" &&
+        aBrowser.__SS_restoreState == 2 &&
+        this.labels.indexOf(aTab.label) > -1) {
+      return;
+    }
+
     if (aTab.hasAttribute("width")) {
       let width = aTab.boxObject.width;
       aTab.removeAttribute("width");
       if (width != aTab.boxObject.width)
-        TMP_Places.afterTabTitleChanged(true);
+        TMP_Places.afterTabTitleChanged(false);
     }
     else if (aTab.hasAttribute("fadein"))
-      TMP_Places.afterTabTitleChanged(true);
+      TMP_Places.afterTabTitleChanged(false);
     // don't keep unnecessary reference to current tab
     if (!TMP_Places.inUpdateBatch)
       TMP_Places.currentTab = null;
@@ -1787,18 +1827,21 @@ var tablib = {
 
     try {
       TMP_ClosedTabs.setButtonDisableState();
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in saveClosedTab");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in saveClosedTab"); }
 
     try {
       TabmixSessionManager.tabScrolled(tab);
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled"); }
 
     try {
       TabmixSessionManager.tabClosed(tab);
+    } catch (ex) {
+      Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabClosed");
     }
-    catch (ex) { Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabClosed"); }
   },
 
   closeLastTab: function TMP_closeLastTab() {
@@ -1860,7 +1903,7 @@ var tablib = {
         return false;
 
       // last windows with tabs
-      var windowtype  = aCountOnlyBrowserWindows ? "navigator:browser" : null;
+      var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;
       if (window.gBrowser.browsers.length < 2 || Tabmix.numberOfWindows(false, windowtype) > 1)
         return false;
 
@@ -1896,7 +1939,7 @@ var tablib = {
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
       canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
-      Services.prefs.setCharPref(pref, oldTime*1 + (new Date().valueOf() - startTime));
+      Services.prefs.setCharPref(pref, oldTime * 1 + (new Date().valueOf() - startTime));
     }
 
     TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);
@@ -1904,22 +1947,28 @@ var tablib = {
     return canClose;
   },
 
-  contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
-    var where;
-    var browser = gBrowser.selectedBrowser;
+  whereToOpenDrop: function(aEvent, aUri) {
+    let browser = gBrowser.selectedBrowser;
+    let where = "current";
     if (aUri != browser.currentURI.spec) {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ?
-                   (aEvent.dataTransfer.dropEffect == "copy") :
-                   (aEvent.ctrlKey || aEvent.metaKey);
+          TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
+          (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
           !gBrowser.isBlankNotBusyTab(tab) &&
           !Tabmix.ContentClick.isUrlForDownload(aUri)) {
         where = "tab";
       }
-      else
-        browser.tabmix_allowLoad = true;
     }
+    if (where == "current") {
+      browser.tabmix_allowLoad = true;
+    }
+    return where;
+  },
+
+  contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
+    let where = aEvent.tabmixContentDrop || this.whereToOpenDrop(aEvent, aUri);
     if (where == "tab")
       gBrowser.loadOneTab(aUri, null, null, aPostData, false, false);
     else
@@ -1939,7 +1988,7 @@ var tablib = {
         continue;
       try {
         tab.linkedBrowser.reload();
-      } catch (ex) {  }
+      } catch (ex) { }
     }
   }
 
@@ -1950,11 +1999,11 @@ Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
 };
 
 Tabmix.newTabUrls = [
-   "about:newtab", "about:blank",
-   "chrome://abouttab/content/text.html",
-   "chrome://abouttab/content/tab.html",
-   "chrome://google-toolbar/content/new-tab.html",
-   "chrome://fastdial/content/fastdial.html"
+  TabmixSvc.aboutNewtab, TabmixSvc.aboutBlank,
+  "chrome://abouttab/content/text.html",
+  "chrome://abouttab/content/tab.html",
+  "chrome://google-toolbar/content/new-tab.html",
+  "chrome://fastdial/content/fastdial.html"
 ];
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {

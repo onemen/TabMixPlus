@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["Shortcuts"];
+this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
@@ -40,6 +40,11 @@ this.Shortcuts = {
     removeright: {command: 18},
     undoClose: {default: "VK_F12 accel"},
     undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
+    clearClosedTabs: {
+      command: function() {
+        this.TMP_ClosedTabs.restoreTab('original', -1);
+      }
+    },
     ucatab: {command: 13},
     saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
     saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
@@ -76,19 +81,21 @@ this.Shortcuts = {
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
-    let $ = function(id) id && aWindow.document.getElementById(id);
+    let $ = id => id && aWindow.document.getElementById(id);
     let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
     let labels = {};
     if (container) {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      Array.slice(box.attributes).forEach(function(a) labels[a.name] = a.value);
+      Array.slice(box.attributes).forEach(a => labels[a.name] = a.value);
       container.removeChild(box);
     }
     labels.togglePinTab =
       $("context_pinTab").getAttribute("label") + "/" +
       $("context_unpinTab").getAttribute("label");
+    labels.clearClosedTabs =
+      TabmixSvc.getString("undoclosetab.clear.label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       keyData.value = keyData.default || "";
@@ -124,31 +131,33 @@ this.Shortcuts = {
   },
 
   onPrefChange: function TMP_SC_onPrefChange(aData) {
-   try {
-    if (this.updatingShortcuts ||
-        aData != "shortcuts" && aData != "sessions.manager")
-      return;
-    this.updatingShortcuts = true;
-    // instead of locking the preference just revert any changes user made
-    if (aData == "shortcuts" && !this.prefsChangedByTabmix) {
-      this.setShortcutsPref();
-      return;
-    }
-
-    let [changedKeys, needUpdate] = this._getChangedKeys({onChange: aData == "shortcuts"});
-    if (needUpdate) {
-      let windowsEnum = Services.wm.getEnumerator("navigator:browser");
-      while (windowsEnum.hasMoreElements()) {
-        let win = windowsEnum.getNext();
-        if (!win.closed)
-          this.updateWindowKeys(win, changedKeys);
+    try {
+      if (this.updatingShortcuts ||
+          aData != "shortcuts" && aData != "sessions.manager")
+        return;
+      this.updatingShortcuts = true;
+      // instead of locking the preference just revert any changes user made
+      if (aData == "shortcuts" && !this.prefsChangedByTabmix) {
+        this.setShortcutsPref();
+        return;
       }
-      if (this.keyConfigInstalled)
-        KeyConfig.syncToKeyConfig(changedKeys, true);
-    }
 
-    this.updatingShortcuts = false;
-   } catch (ex) {TabmixSvc.console.assert(ex);}
+      let [changedKeys, needUpdate] = this._getChangedKeys({onChange: aData == "shortcuts"});
+      if (needUpdate) {
+        let windowsEnum = Services.wm.getEnumerator("navigator:browser");
+        while (windowsEnum.hasMoreElements()) {
+          let win = windowsEnum.getNext();
+          if (!win.closed)
+            this.updateWindowKeys(win, changedKeys);
+        }
+        if (this.keyConfigInstalled)
+          KeyConfig.syncToKeyConfig(changedKeys, true);
+      }
+
+      this.updatingShortcuts = false;
+    } catch (ex) {
+      TabmixSvc.console.assert(ex);
+    }
   },
 
   /* ........ Window Event Handlers .............. */
@@ -165,11 +174,17 @@ this.Shortcuts = {
   },
 
   onCommand: function TMP_SC_onCommand(aKey) {
-   try {
-    let win = aKey.ownerDocument.defaultView;
-    let command = this.keys[aKey._id].command;
-    win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
-   } catch (ex) {TabmixSvc.console.assert(ex);}
+    try {
+      let win = aKey.ownerDocument.defaultView;
+      let command = this.keys[aKey._id].command;
+      if (typeof command == "function") {
+        command.apply(win, [win.gBrowser.selectedTab]);
+      } else {
+        win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
+      }
+    } catch (ex) {
+      TabmixSvc.console.assert(ex);
+    }
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
@@ -231,8 +246,7 @@ this.Shortcuts = {
         aWindow.Tabmix.removedShortcuts.appendChild(keyItem);
       else if (keyItem.parentNode != keyset)
         keyset.appendChild(keyItem);
-    }
-    else {
+    } else {
       // don't add disabled key
       if (!keyset || disabled)
         return;
@@ -258,7 +272,7 @@ this.Shortcuts = {
     // turn off slideShow if need to
     if (aKey == "slideShow" && disabled &&
         aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
-        aWindow.Tabmix.flst.cancel();
+      aWindow.Tabmix.flst.cancel();
     }
   },
 
@@ -310,12 +324,10 @@ this.Shortcuts = {
           (val == "d&" && (!keyData.default || /^d&/.test(keyData.default)))) {
         delete shortcuts[key];
         updatePreference = true;
-      }
-      else if (keyData.default && (val == "d&" + keyData.default)) {
+      } else if (keyData.default && (val == "d&" + keyData.default)) {
         shortcuts[key] = "d&";
         updatePreference = true;
-      }
-      else if (val != "d&" && !this.prefBackup) {
+      } else if (val != "d&" && !this.prefBackup) {
         // make sure user didn't changed the preference in prefs.js
         let newValue = this._userChangedKeyPref(val) || keyData.value;
         if (newValue != val) {
@@ -337,15 +349,16 @@ this.Shortcuts = {
     let key = value && this.keyParse(value);
     if (!key)
       return "";
-    let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"")
+    let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "")
           .replace("ctrl", "control").split(",");
-    key.modifiers = ["control","meta","accel","alt","shift"].filter(
-      function(mod) new RegExp(mod).test(modifiers)).join(",");
+    key.modifiers = ["control", "meta", "accel", "alt", "shift"].filter(mod => {
+      return new RegExp(mod).test(modifiers);
+    }).join(",");
 
     // make sure that key and keycod are valid
     key.key = key.key.toUpperCase();
     if (key.key == " ")
-      [key.key , key.keycode] = ["", "VK_SPACE"];
+      [key.key, key.keycode] = ["", "VK_SPACE"];
     else {
       key.keycode = "VK_" + key.keycode.toUpperCase().replace(/^VK_/, "");
       if (key.keycode != "VK_BACK" && !(("DOM_" + key.keycode) in Ci.nsIDOMKeyEvent))
@@ -365,7 +378,7 @@ this.Shortcuts = {
     let disabled = /^d&/.test(value);
     let [keyVal, modifiers] = value.replace(/^d&/, "").split(" ");
     let isKey = keyVal.length == 1;
-    return {modifiers: modifiers || "" ,key: isKey ? keyVal : "" ,keycode: isKey ? "" : keyVal, disabled: disabled};
+    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled: disabled};
   },
 
   // convert key object {modifiers, key, keycode} into a string with " " separator
@@ -380,10 +393,9 @@ this.Shortcuts = {
     if ((key.keycode && key.keycode == "VK_SCROLL_LOCK" || key.keycode == "VK_CONTEXT_MENU") ||
        (!key.key && !key.keycode)) {
       key = null;
-    }
-    // block ALT + TAB
-    else if (key.modifiers && /alt/.test(key.modifiers) && key.keycode &&
+    } else if (key.modifiers && /alt/.test(key.modifiers) && key.keycode &&
         (key.keycode == "VK_BACK_QUOTE" || key.keycode == "VK_TAB")) {
+      // block ALT + TAB
       key = null;
     }
 
@@ -414,7 +426,7 @@ this.Shortcuts = {
       if (!this.keys.browserReload.id) {
         let index = 2, id;
         do {
-         id = "key_reload#".replace("#", index++);
+          id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
       }
@@ -525,7 +537,7 @@ var KeyConfig = {
     }
   },
 
-  resetPref: function (prefName) {
+  resetPref: function(prefName) {
     this.prefs.clearUserPref(prefName);
   }
 
@@ -548,7 +560,7 @@ function getFormattedKey(key) {
 
   if (key.modifiers) {
     let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g,"").split(/[\s,]+/g).forEach(function(mod){
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(function(mod) {
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
     });
@@ -591,8 +603,8 @@ function getPlatformKeys(key) {
 
 function getPlatformAccel() {
   switch (Services.prefs.getIntPref("ui.key.accelKey")) {
-    case 17:  return "control";
-    case 18:  return "alt";
+    case 17: return "control";
+    case 18: return "alt";
     case 224: return "meta";
   }
   return (Services.appinfo.OS == "Darwin" ? "meta" : "control");

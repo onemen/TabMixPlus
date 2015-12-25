@@ -21,27 +21,8 @@
   background-image: none !important;
 }
 
-/*  new tab button after last tab on firefox 4.0  aero */
-#TabsToolbar[tabmix_aero] .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
-  vertical-align: bottom;
-}
-
-/* enable this rule after bug 738491 australis-tabs-win lands, and move it to diffrent file
-#tabbrowser-tabs[flowing="multibar"]:not([multibar]) > .tabbrowser-arrowscrollbox > toolbarbutton {
-  vertical-align: bottom;
-}
-*/
-
-/* for TabsToolbar on bottom with windows 7 */
-#tabmix-bottom-toolbox[tabmix_aero] {
-  -moz-appearance: none;
-  border-top: none;
-  background-color: transparent;
-}
-
-#TabsToolbar[tabbaronbottom][tabmix_aero]:not(:-moz-lwtheme) {
-  -moz-appearance: none;
-  border-style: none;
+#TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+  border-top: 1px solid rgba(10, 31, 51, 0.35);
 }
 
 /*  scrollbutton arrow - fix borders  */

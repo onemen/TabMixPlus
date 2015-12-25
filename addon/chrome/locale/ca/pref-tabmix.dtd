@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permet finestres emergents d'una altra mida">
 <!ENTITY divertedWindowOpen.none "Permet totes les finestres emergents">
 <!ENTITY linkTarget.label "Obre els enllaços amb atribut «target» a la pestanya actual">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Evita les pestanyes buides en baixar fitxers">
 <!ENTITY edit.label "Edita">
 <!ENTITY speLink.label "Obre sempre en una pestanya nova:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "En desplaçar-se, mostra part de la següent pestanya fora de vista">
 <!ENTITY smoothScroll.label "Habilita el desplaçament suau">
 <!ENTITY scrolldelay.label "Retard de desplaçament (temps entre la repetició del desplaçament)">
-<!ENTITY highlight.label "Ressalta:">
 <!ENTITY currenttab.style.label "Pestanya actual">
 <!ENTITY unloadedtabs.style.label "Pestanyes no carregades">
 <!ENTITY unreadtabs.style.label "Pestanyes pendents de llegir">

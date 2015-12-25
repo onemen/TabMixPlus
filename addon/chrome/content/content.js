@@ -1,6 +1,6 @@
 "use strict";
 
-let {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
@@ -25,9 +25,13 @@ XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "resource://tabmixplus/Utils.jsm");
 
-let global = this;
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
+  "resource://tabmixplus/AboutNewTab.jsm");
 
-let TabmixContentHandler = {
+var PROCESS_TYPE_CONTENT = TabmixSvc.version(380) &&
+    Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
+
+var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
     "Tabmix:collectPermissions",
@@ -41,22 +45,26 @@ let TabmixContentHandler = {
     "Tabmix:collectOpener",
   ],
 
-  init: function () {
+  init: function() {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
 
     // Send a CPOW to the parent so that it can synchronously request
     // docShell capabilities.
     sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
+
+    if (PROCESS_TYPE_CONTENT) {
+      addEventListener("drop", this.onDrop);
+    }
   },
 
-  receiveMessage: function ({name, data}) {
+  receiveMessage: function({name, data}) {
     // The docShell might be gone. Don't process messages,
     // that will just lead to errors anyway.
     if (!docShell) {
       return;
     }
     switch (name) {
-      case "Tabmix:restorePermissions":
+      case "Tabmix:restorePermissions": {
         let disallow = new Set(data.disallow && data.disallow.split(","));
         DocShellCapabilities.restore(docShell, disallow);
         sendSyncMessage("Tabmix:restorePermissionsComplete", {
@@ -64,34 +72,41 @@ let TabmixContentHandler = {
           reload: data.reload
         });
         break;
-      case "Tabmix:collectPermissions":
+      }
+      case "Tabmix:collectPermissions": {
         let caps = DocShellCapabilities.collect(docShell).join(",");
         sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
         break;
-      case "Tabmix:resetContentName":
+      }
+      case "Tabmix:resetContentName": {
         if (content.name)
           content.name = "";
         break;
-      case "Tabmix:sendDOMTitleChanged":
+      }
+      case "Tabmix:sendDOMTitleChanged": {
         // workaround for bug 1081891
         let title = content.document.title;
         if (title)
-          sendAsyncMessage("DOMTitleChanged", { title: title });
+          sendAsyncMessage("DOMTitleChanged", {title: title});
         break;
-      case "Tabmix:updateHistoryTitle":
+      }
+      case "Tabmix:updateHistoryTitle": {
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
         TabmixUtils.updateHistoryTitle(history, data.title);
         break;
-      case "Tabmix:collectScrollPosition":
+      }
+      case "Tabmix:collectScrollPosition": {
         let scroll = {scrollX: content.scrollX,
                       scrollY: content.scrollY};
-        sendAsyncMessage("Tabmix:updateScrollPosition", { scroll: scroll });
+        sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
         break;
-      case "Tabmix:setScrollPosition":
+      }
+      case "Tabmix:setScrollPosition": {
         let {x, y} = data;
         content.scrollTo(x, y);
         break;
-      case "Tabmix:collectReloadData":
+      }
+      case "Tabmix:collectReloadData": {
         let json = {scrollX: content.scrollX,
                     scrollY: content.scrollY,
                     postData: null};
@@ -111,15 +126,16 @@ let TabmixContentHandler = {
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
-      case "Tabmix:setPostData":
-        break;
-      case "Tabmix:isFrameInContent":
+      }
+      case "Tabmix:isFrameInContent": {
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
         sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
         break;
-      case "Tabmix:collectOpener":
+      }
+      case "Tabmix:collectOpener": {
         sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
         break;
+      }
     }
   },
 
@@ -134,21 +150,46 @@ let TabmixContentHandler = {
   wrapNode: function(node) {
     let window = TabmixClickEventHandler._focusedWindow;
     return LinkNodeUtils.wrap(node, window);
+  },
+
+  onDrop: function(event) {
+    let uri, name = { };
+    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"].
+    getService(Ci.nsIDroppedLinkHandler);
+    try {
+      // Pass true to prevent the dropping of javascript:/data: URIs
+      uri = linkHandler.dropLink(event, name, true);
+    } catch (ex) {
+      return;
+    }
+    let data = {
+      json: {
+        dataTransfer: {dropEffect: event.dataTransfer.dropEffect},
+        ctrlKey: event.ctrlKey, metaKey: event.metaKey,
+        shiftKey: event.shiftKey, altKey: event.altKey
+      },
+      uri: uri, name: name.value
+    };
+    let result = sendSyncMessage("Tabmix:contentDrop", data);
+    if (result[0]) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 };
 
 var TabmixClickEventHandler = {
-  init: function init() {
-    if (TabmixSvc.version(380) &&
-        Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT)
+  init: function init(global) {
+    if (PROCESS_TYPE_CONTENT) {
       global.addEventListener("click", this, true);
+    }
   },
 
   handleEvent: function(event) {
     switch (event.type) {
-    case "click":
-      this.contentAreaClick(event);
-      break;
+      case "click":
+        this.contentAreaClick(event);
+        break;
     }
   },
 
@@ -165,15 +206,26 @@ var TabmixClickEventHandler = {
     if (!ownerDoc || /^about:[certerror|blocked|neterror]/.test(ownerDoc.documentURI))
       return;
 
-    let [href, node] = this._hrefAndLinkNodeForClickEvent(event);
+    let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
 
-    let json = { button: event.button, shiftKey: event.shiftKey,
-                 ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-                 altKey: event.altKey, href: null, title: null,
-                 bookmark: false };
+    // get referrer attribute from clicked link and parse it
+    // if per element referrer is enabled, the element referrer overrules
+    // the document wide referrer
+    let referrerPolicy = TabmixSvc.version(380) ? ownerDoc.referrerPolicy : null;
+    if (TabmixSvc.version(420) &&
+        Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
+        node) {
+      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(node.
+          getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer"));
+      if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
+        referrerPolicy = referrerAttrValue;
+      }
+    }
 
-    if (TabmixSvc.version(380))
-      json.referrerPolicy = ownerDoc.referrerPolicy;
+    let json = {button: event.button, shiftKey: event.shiftKey,
+                ctrlKey: event.ctrlKey, metaKey: event.metaKey,
+                altKey: event.altKey, href: null, title: null,
+                bookmark: false, referrerPolicy: referrerPolicy};
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
@@ -198,10 +250,18 @@ var TabmixClickEventHandler = {
     if (data.where == "handled")
       return;
 
-    json.tabmix = data;
+    json.tabmixContentClick = data;
     href = data._href;
 
     if (href) {
+      if (TabmixSvc.version(410)) {
+        try {
+          BrowserUtils.urlSecurityCheck(href, principal);
+        } catch (e) {
+          return;
+        }
+      }
+
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
@@ -213,8 +273,7 @@ var TabmixClickEventHandler = {
           }
         }
       }
-      if (TabmixSvc.version(370))
-        json.noReferrer = BrowserUtils.linkHasNoReferrer(node);
+      json.noReferrer = TabmixSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
 
       sendAsyncMessage("Content:Click", json);
       return;
@@ -231,10 +290,11 @@ var TabmixClickEventHandler = {
    *
    * @param event
    *        The click event.
-   * @return [href, linkNode].
+   * @return [href, linkNode, linkPrincipal].
    *
    * @note linkNode will be null if the click wasn't on an anchor
-   *       element (or XLink).
+   *       element. This includes SVG links, because callers expect |node|
+   *       to behave like an <a> element, which SVG links (XLink) don't.
    */
   _hrefAndLinkNodeForClickEvent: function(event) {
     function isHTMLLink(aNode) {
@@ -250,16 +310,20 @@ var TabmixClickEventHandler = {
     }
 
     if (node)
-      return [node.href, node];
+      return [node.href, node, node.ownerDocument.nodePrincipal];
 
     // If there is no linkNode, try simple XLink.
     let href, baseURI;
     node = event.target;
     while (node && !href) {
-      if (node.nodeType == content.Node.ELEMENT_NODE) {
+      if (node.nodeType == content.Node.ELEMENT_NODE &&
+          (node.localName == "a" ||
+           node.namespaceURI == "http://www.w3.org/1998/Math/MathML")) {
         href = node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
-        if (href)
+        if (href) {
           baseURI = node.ownerDocument.baseURIObject;
+          break;
+        }
       }
       node = node.parentNode;
     }
@@ -267,7 +331,8 @@ var TabmixClickEventHandler = {
     // In case of XLink, we don't return the node we got href from since
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
-    return [href ? makeURI(href, null, baseURI).spec : null, null];
+    return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
+            node && node.ownerDocument.nodePrincipal];
   },
 
   get _focusedWindow() {
@@ -279,5 +344,42 @@ var TabmixClickEventHandler = {
   }
 };
 
+var AboutNewTabHandler = {
+  init: function(global) {
+    if (!TabmixSvc.version(420)) {
+      return;
+    }
+
+    addMessageListener("Tabmix:updateTitlefrombookmark", this);
+
+    let contentLoaded = false;
+    global.addEventListener("pageshow", event => {
+      if (event.target != content.document) {
+        return;
+      }
+      let doc = content.document;
+      // we don't need to update titles on first show if the pref is off
+      if (doc.documentURI.toLowerCase() == TabmixSvc.aboutNewtab &&
+          (contentLoaded || TabmixSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
+        contentLoaded = true;
+        this.updateTitles();
+      }
+    });
+  },
+
+  receiveMessage: function({name}) {
+    if (name == "Tabmix:updateTitlefrombookmark") {
+      this.updateTitles();
+    }
+  },
+
+  updateTitles: function() {
+    if (content && content.gGrid) {
+      TabmixAboutNewTab.updateTitles(content.gGrid.cells);
+    }
+  }
+};
+
 TabmixContentHandler.init();
-TabmixClickEventHandler.init();
+TabmixClickEventHandler.init(this);
+AboutNewTabHandler.init(this);

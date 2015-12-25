@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["TabmixContentClick"];
+this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
@@ -58,8 +58,6 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-let Tabmix = { };
-
 var ContentClickInternal = {
   _timer: null,
   _initialized: false,
@@ -69,16 +67,14 @@ var ContentClickInternal = {
       return;
     this._initialized = true;
 
+    // ContentClick.jsm is not included in some Firefox forks:
+    // Cyberfox before version 42
     try {
       Cu.import("resource:///modules/ContentClick.jsm");
-      ContentClick.contentAreaClick.toString();
     } catch (ex) {
       this.functions = [];
       return;
     }
-
-    Tabmix._debugMode = TabmixSvc.debugMode();
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
 
     let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
     mm.addMessageListener("TabmixContent:Click", this);
@@ -87,7 +83,7 @@ var ContentClickInternal = {
     this.initContentAreaClick();
   },
 
-  onQuitApplication: function () {
+  onQuitApplication: function() {
     if (this._timer)
       this._timer.clear();
 
@@ -106,24 +102,42 @@ var ContentClickInternal = {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });
 
-    Tabmix.changeCode(ContentClick, "ContentClick.contentAreaClick")._replace(
-      'var where = window.whereToOpenLink(json);',
-      'var data = json.tabmix || {where: window.whereToOpenLink(json)};\n' +
-      '    var {where, suppressTabsOnFileDownload} = data;'
-    )._replace(
-      'where == "current"',
-      '!json.tabmix && where == "current" || where == "default"'
-    )._replace(
-      'charset:',
-      'suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,\n' +
-      '                   $&'
-    ).toCode();
+    ContentClick.contentAreaClick = function(json, browser) {
+      this.tabmix_contentAreaClick.apply(this, arguments);
+
+      // we add preventDefault in our content.js when 'where' is not the
+      // 'default', original ContentClick.contentAreaClick handle all casses
+      // except when 'where' equals 'current'
+      if (!json.tabmixContentClick || !json.href || json.bookmark) {
+        return;
+      }
+
+      let window = browser.ownerDocument.defaultView;
+      var where = window.whereToOpenLink(json);
+      if (where != "current") {
+        return;
+      }
+
+      let suppressTabsOnFileDownload =
+          json.tabmixContentClick.suppressTabsOnFileDownload || false;
+      let params = {charset: browser.characterSet,
+                    suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+                    referrerURI: browser.documentURI,
+                    referrerPolicy: json.referrerPolicy,
+                    noReferrer: json.noReferrer};
+      window.openLinkIn(json.href, where, params);
+
+      try {
+        if (!PrivateBrowsingUtils.isWindowPrivate(window))
+          PlacesUIUtils.markPageAsFollowedLink(json.href);
+      } catch (ex) { /* Skip invalid URIs. */ }
+    };
   },
 
   receiveMessage: function(message) {
     if (message.name == "Tabmix:isFrameInContentResult") {
       this.isFrameInContent.result(message.target, message.data);
-      return;
+      return null;
     }
     if (message.name != "TabmixContent:Click")
       return null;
@@ -246,14 +260,22 @@ var ContentClickInternal = {
    * @return                 wrapped node including attribute functions
    */
   getWrappedNode: function(node, focusedWindow, getTargetIsFrame) {
-    function wrapNode(aNode, aGetTargetIsFrame) {
+    let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
       let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
-      nObj.hasAttribute = function(att) att in this._attributes;
-      nObj.getAttribute = function(att) this._attributes[att] || null;
-      nObj.parentNode.hasAttribute = function(att) att in this._attributes;
-      nObj.parentNode.getAttribute = function(att) this._attributes[att] || null;
+      nObj.hasAttribute = function(att) {
+        return att in this._attributes;
+      };
+      nObj.getAttribute = function(att) {
+        return this._attributes[att] || null;
+      };
+      nObj.parentNode.hasAttribute = function(att) {
+        return att in this._attributes;
+      };
+      nObj.parentNode.getAttribute = function(att) {
+        return this._attributes[att] || null;
+      };
       return nObj;
-    }
+    };
 
     return node ? wrapNode(node, getTargetIsFrame) : null;
   },
@@ -312,7 +334,7 @@ var ContentClickInternal = {
     }.bind(this);
 
   ///XXX check again how SubmitToTab work
-    if (typeof(this._window.SubmitToTab) != 'undefined') {
+    if (typeof (this._window.SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
@@ -332,7 +354,7 @@ var ContentClickInternal = {
     eventWhere = this._window.whereToOpenLink(event);
     if (/^save|window/.test(eventWhere)) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick; // jshint ignore:line
+      void this._data.hrefFromOnClick;
       return [eventWhere + "@2.1"];
     }
 
@@ -360,13 +382,13 @@ var ContentClickInternal = {
      * portions were taken from disable target for downloads by cusser
      */
     if (this.suppressTabsOnFileDownload()) {
-        // don't do anything if we are on gmail and let gmail take care of the download
-        let url = this._data.currentURL;
-        let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
-        let isHttps = /^https/.test(href);
-        if (isGmail || isHttps)
-           return ["default@6", true];
-        return ["current@7", true];
+      // don't do anything if we are on gmail and let gmail take care of the download
+      let url = this._data.currentURL;
+      let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
+      let isHttps = /^https/.test(href);
+      if (isGmail || isHttps)
+        return ["default@6", true];
+      return ["current@7", true];
     }
 
     // check this after we check for suppressTabsOnFileDownload
@@ -384,7 +406,7 @@ var ContentClickInternal = {
      */
     if (this.divertMiddleClick()) {
       // make sure to trigger hrefFromOnClick getter
-      this._data.hrefFromOnClick; // jshint ignore:line
+      void this._data.hrefFromOnClick;
       return [onClickInFrame ? "current.frame@10" : "current@10"];
     }
 
@@ -403,8 +425,10 @@ var ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (wrappedNode && wrappedNode.targetIsFrame)
+    if (wrappedNode && wrappedNode.targetIsFrame &&
+        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return ["default@13"];
+    }
 
     /*
      * open targeted links in the current tab only if certain conditions are met.
@@ -525,8 +549,10 @@ var ContentClickInternal = {
      * don't change default behavior for links that point to exiting frame
      * in the current page
      */
-    if (wrappedNode && wrappedNode.targetIsFrame)
+    if (wrappedNode && wrappedNode.targetIsFrame &&
+        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return "14";
+    }
 
     /*
      * open targeted links in the current tab only if certain conditions are met.
@@ -563,7 +589,9 @@ var ContentClickInternal = {
           blocked = host == "developer.mozilla.org" && linkNode.host != host &&
                    linkNode.classList.contains("external");
         }
-      } catch (ex) {blocked = false;}
+      } catch (ex) {
+        blocked = false;
+      }
       if (!blocked)
         return "16";
 
@@ -588,17 +616,17 @@ var ContentClickInternal = {
     try {
       // Greasemonkey >= 0.9.10
       Cu.import("resource://greasemonkey/util.js");
-      if ('function' == typeof window.GM_util.getEnabled) {
+      if (typeof window.GM_util.getEnabled == 'function') {
         GM_function = window.GM_util.getEnabled;
       }
     } catch (e) {
       // Greasemonkey < 0.9.10
-      if ('function' == typeof window.GM_getEnabled) {
+      if (typeof window.GM_getEnabled == 'function') {
         GM_function = window.GM_getEnabled;
       }
     }
 
-    if (typeof GM_function !=  "function")
+    if (typeof GM_function != "function")
       return;
 
     this._GM_function.set(window, GM_function);
@@ -667,7 +695,7 @@ var ContentClickInternal = {
     href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
-    if (event.button != 2 && typeof(custombuttons) !='undefined'){
+    if (event.button != 2 && typeof (custombuttons) != 'undefined') {
       if (this.checkAttr(href, "custombutton://"))
         return true;
     }
@@ -700,7 +728,7 @@ var ContentClickInternal = {
   },
 
   isUrlForDownload: function TMP_isUrlForDownload(linkHref) {
-    //we need this check when calling from onDragOver and onDrop
+    // we need this check when calling from onDragOver and onDrop
     if (linkHref.startsWith("mailto:"))
       return true;
 
@@ -710,18 +738,17 @@ var ContentClickInternal = {
     var linkHrefExt = "";
     if (linkHref) {
       linkHref = linkHref.toLowerCase();
-      linkHrefExt = linkHref.substring(linkHref.lastIndexOf("/"),linkHref.length);
-      linkHrefExt = linkHrefExt.substring(linkHrefExt.indexOf("."),linkHrefExt.length);
+      linkHrefExt = linkHref.substring(linkHref.lastIndexOf("/"), linkHref.length);
+      linkHrefExt = linkHrefExt.substring(linkHrefExt.indexOf("."), linkHrefExt.length);
     }
 
     var testString, hrefExt, testExt;
     for (var l = 0; l < filetype.length; l++) {
-      if (filetype[l].indexOf("/") != -1){
+      if (filetype[l].indexOf("/") != -1) {
       // add \ before first ?
-        testString = filetype[l].substring(1,filetype[l].length-1).replace(/^\?/,"\\?");
+        testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
         hrefExt = linkHref;
-      }
-      else {
+      } else {
         testString = "\\." + filetype[l];
         hrefExt = linkHrefExt;
         try {
@@ -876,9 +903,9 @@ var ContentClickInternal = {
 
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v\=/;
-    let isYoutube = function(href) youtube.test(current) && youtube.test(href);
-    let isSamePath = function(href, att) makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
-    let isSame = function(href, att) current.split(att)[0] == href.split(att)[0];
+    let isYoutube = href => youtube.test(current) && youtube.test(href);
+    let isSamePath = (href, att) => makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
+    let isSame = (href, att) => current.split(att)[0] == href.split(att)[0];
 
     if (hrefFromOnClick) {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();
@@ -924,7 +951,7 @@ var ContentClickInternal = {
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
-                 "/accounts/Logout", "/accounts/ServiceLogin","/u/2/stream/all"];
+                 "/accounts/Logout", "/accounts/ServiceLogin", "/u/2/stream/all"];
 
     let testPathname = _list.indexOf(node.pathname) > -1;
     if (testPathname)
@@ -1010,8 +1037,7 @@ var ContentClickInternal = {
         if (browser.getAttribute("remote") == "true") {
           browser.messageManager
                  .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
-        }
-        else {
+        } else {
           let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
                                                       this.frameData.href, this.frameData.name);
           this.result(browser, {result: result});
@@ -1031,7 +1057,7 @@ var ContentClickInternal = {
   *
   */
   checkAttr: function TMP_checkAttr(attr, string) {
-    if (typeof(attr) == "string")
+    if (typeof (attr) == "string")
       return attr.startsWith(string);
     return false;
   },
@@ -1052,7 +1078,7 @@ var ContentClickInternal = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     var self = this;
     let getDomain = function getDomain(url) {
-      if (typeof(url) != "string")
+      if (typeof (url) != "string")
         url = url.toString();
 
       if (url.match(/auth\?/))
@@ -1084,7 +1110,7 @@ var ContentClickInternal = {
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
           level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
-        } catch(e) {
+        } catch (e) {
           level = 2;
         }
         var host = url.hostPort.split(".");

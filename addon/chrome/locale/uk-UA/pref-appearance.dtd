@@ -1,3 +1,4 @@
+<!ENTITY tabStyles.label "Styles">
 <!ENTITY styles.label "Налаштування стилів">
 <!ENTITY currentTab.label "Поточна вкладка">
 <!ENTITY unloadedTabs.label "Незавантажені вкладки">
@@ -5,8 +6,8 @@
 <!ENTITY hideRGB.label "Приховати RGB">
 <!ENTITY showRGB.label "Показати RGB">
 <!ENTITY unreadAfterReload.label "позначити вкладки непрочитаними після перезавантаження">
+<!ENTITY disableBackground.label "Disable custom background colors">
 <!ENTITY squaredTabs.label "Застосувати колір фону для квадратних вкладок">
-<!ENTITY backgroundDisabled.label "Tabs background colors are disabled when TreeStyleTabs is installed">
 <!ENTITY otherTabs.label "Інші вкладки">
 <!ENTITY italic.label "Курсив">
 <!ENTITY bold.label "Напівжирний">

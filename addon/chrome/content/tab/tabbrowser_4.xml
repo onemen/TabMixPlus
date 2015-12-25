@@ -209,7 +209,7 @@
         if (!aTab || !aTab.parentNode)
           return; // this tab already removed....
 
-        let pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
+        var pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
         if (pref != 2 && pref != 4)
           return;
 
@@ -282,7 +282,7 @@
     <method name="onMouseCommand">
       <parameter name="aEvent"/>
       <body><![CDATA[
-        let isSelected = this == this.parentNode.selectedItem;
+        var isSelected = this == this.parentNode.selectedItem;
         Tabmix.setItem(this, "clickOnCurrent",
                        isSelected && aEvent.detail == 1 || null);
         if (isSelected)
@@ -307,7 +307,7 @@
 
     <method name="clearTimeouts">
       <body><![CDATA[
-        let timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
+        var timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
         timeouts.forEach(function(aTimeout) {
           if (aTimeout in this && this[aTimeout]) {
             clearTimeout(this[aTimeout]);

@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
+this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
@@ -51,20 +51,19 @@ this.SingleWindowModeUtils = {
 
   newWindow: function(aWindow) {
     if (!aWindow.Tabmix.singleWindowMode)
-      return;
+      return false;
 
     if (!aWindow.arguments || aWindow.arguments.length === 0)
-      return;
+      return false;
 
     this.initService();
-    var _this = this;
     aWindow.addEventListener("load", function _onLoad(aEvent) {
       let win = aEvent.currentTarget;
       win.removeEventListener("load", _onLoad, false);
       let docElement = win.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
-        _this.onLoad(win);
-    }, false);
+        this.onLoad(win);
+    }.bind(this), false);
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 
@@ -87,10 +86,10 @@ this.SingleWindowModeUtils = {
     aWindow.resizeTo(10, 10);
     aWindow.moveTo(-50, -50);
     win.removeAttribute("sizemode");
-    win.setAttribute("width" , 0);
-    win.setAttribute("height" , 0);
-    win.setAttribute("screenX" , aWindow.screen.availWidth + 10);
-    win.setAttribute("screenY" , aWindow.screen.availHeight + 10);
+    win.setAttribute("width", 0);
+    win.setAttribute("height", 0);
+    win.setAttribute("screenX", aWindow.screen.availWidth + 10);
+    win.setAttribute("screenY", aWindow.screen.availHeight + 10);
 
     return true;
   },
@@ -121,16 +120,14 @@ this.SingleWindowModeUtils = {
         let urisstring = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
         urls.push(urisstring.data);
       }
-    }
-    else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
+    } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window
-    }
-    else if (args.length >= 3) {
+    } else if (args.length >= 3) {
       params.referrerURI = args[2];
       if (TabmixSvc.version(390)) {
-        if (typeof(params.referrerURI) == "string") {
+        if (typeof (params.referrerURI) == "string") {
           try {
             params.referrerURI = existingWindow.makeURI(params.referrerURI);
           } catch (e) {
@@ -147,10 +144,11 @@ this.SingleWindowModeUtils = {
     else
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
 
+    var firstTabAdded;
     try {
       // open the tabs in current window
       if (urls.length) {
-        var firstTabAdded = existingBrowser.selectedTab;
+        firstTabAdded = existingBrowser.selectedTab;
         let isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
         if (isBlankTab)
           existingWindow.openLinkIn(urls[0], "current", params);
@@ -159,7 +157,7 @@ this.SingleWindowModeUtils = {
         for (let i = 1; i < urls.length; ++i)
           existingBrowser.addTab(urls[i]);
       }
-    } catch(ex) {  }
+    } catch (ex) { }
     try {
       // we need to close the window after timeout so other extensions don't fail.
       // if we don't add this here BrowserShutdown fails
@@ -170,18 +168,24 @@ this.SingleWindowModeUtils = {
         newWindow.PlacesStarButton.uninit = function() {};
       }
       newWindow.OfflineApps.uninit = function() {};
-      var obs = Services.obs;
-      obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
-      if (!TabmixSvc.version(340))
-        obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
       newWindow.IndexedDBPromptHelper.init();
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
-      obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
-      let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
-      obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
+      var obs = Services.obs;
+      if (!TabmixSvc.version(440)) {
+        obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
+        if (!TabmixSvc.version(340))
+          obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
+        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
+        let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
+        obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
+      }
       newWindow.gPrivateBrowsingUI.uninit = function() {};
-      existingWindow.setTimeout(function () {
+    } catch (ex) {
+      existingWindow.Tabmix.obj(ex);
+    }
+    existingWindow.setTimeout(function() {
+      try {
         // restore window dimensions, to prevent flickring in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
@@ -195,7 +199,9 @@ this.SingleWindowModeUtils = {
         }
         // for the case the window is minimized or not in focus
         existingWindow.focus();
-      },0);
-    }  catch(ex) {existingWindow.Tabmix.obj(ex);}
+      } catch (ex) {
+        existingWindow.Tabmix.obj(ex);
+      }
+    }, 0);
   }
 };

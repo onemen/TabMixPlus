@@ -1,17 +1,25 @@
+/* exported gMenuPane */
 "use strict";
 
 var gMenuPane = { // jshint ignore:line
-  init: function () {
+  init: function() {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
+    $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
     var browserWindow = Tabmix.getTopWin();
+    if (Tabmix.isVersion(430)) {
+      $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
+        browserWindow.gNavigatorBundle.getString("unmuteTab.label");
+    } else {
+      $("muteTab").hidden = true;
+    }
+
     // if Tabview exist copy its menu label
     if (browserWindow.TMP_TabView.installed) {
       let label = browserWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
       $("moveToGroup").label = label;
-    }
-    else {
+    } else {
       gPrefWindow.removeChild("pref_showMoveToGroup");
       gPrefWindow.removeChild("moveToGroup");
     }
@@ -42,7 +50,7 @@ var gMenuPane = { // jshint ignore:line
     let paneMenu = $("paneMenu");
     if (paneMenu.hasAttribute("editSlideShowKey")) {
       paneMenu.removeAttribute("editSlideShowKey");
-      setTimeout(function(self) {self.editSlideShowKey();},0, this);
+      setTimeout(() => this.editSlideShowKey(), 0);
     }
 
     gPrefWindow.initPane("paneMenu");
@@ -58,12 +66,12 @@ var gMenuPane = { // jshint ignore:line
       return;
     shortcuts.value = newValue;
     shortcuts.keys = TabmixSvc.JSON.parse(newValue);
-    let callBack = function(shortcut) shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
+    let callBack = shortcut => shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
     this.updateShortcuts(shortcuts, callBack);
   },
 
   _slideShow: "",
-  updateShortcuts: function (aShortcuts, aCallBack) {
+  updateShortcuts: function(aShortcuts, aCallBack) {
     let boxes = Array.filter(aShortcuts.childNodes, aCallBack);
     $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
@@ -72,14 +80,14 @@ var gMenuPane = { // jshint ignore:line
     }
   },
 
-  setSlideShowLabel: function () {
+  setSlideShowLabel: function() {
     let slideShow = $("slideShow");
     let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
     $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
     gPrefWindow.setDisabled("obs_slideDelay", slideShow.disabled);
   },
 
-  editSlideShowKey: function () {
+  editSlideShowKey: function() {
     $("menu").selectedIndex = 3;
     let slideShow = $("slideShow");
     let item = $("hide-unused-shortcuts");

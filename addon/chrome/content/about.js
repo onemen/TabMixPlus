@@ -1,14 +1,16 @@
+/* exported init */
 "use strict";
 
 function init() { // jshint ignore:line
   var addon = window.arguments[0];
   var extensionsStrings = document.getElementById("extensionsStrings");
+  var extensionVersion, currentVersion;
   document.title = extensionsStrings.getFormattedString("aboutWindowTitle", ["Tab Mix Plus"]);
   try {
-    var currentVersion = addon.version;
-    var extensionVersion = document.getElementById("extensionVersion");
+    currentVersion = addon.version;
+    extensionVersion = document.getElementById("extensionVersion");
     extensionVersion.value = extensionsStrings.getFormattedString("aboutWindowVersionString", [currentVersion]);
-  } catch(ex) {
+  } catch (ex) {
     extensionVersion.hidden = true;
   }
   var acceptButton = document.documentElement.getButton("accept");

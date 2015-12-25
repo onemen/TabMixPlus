@@ -22,10 +22,9 @@ this.ContextMenu = {
 
     let filter = {
       acceptNode: function(n) {
-        if(n.nodeName == 'A' || n.nodeName == 'li') {
+        if (n.nodeName == 'A' || n.nodeName == 'li') {
           return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
-        }
-        else {
+        } else {
           return Ci.nsIDOMNodeFilter.FILTER_SKIP;
         }
       }

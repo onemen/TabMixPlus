@@ -1,10 +1,12 @@
 /* jshint esnext: true */
 /* globals _sminstalled, gPreferenceList */
+/* exported  defaultSetting, toggleSyncPreference, exportData, importData,
+             showPane, openHelp */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
-const PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 this.$ = id => document.getElementById(id);
 
@@ -47,7 +49,7 @@ var gPrefWindow = { // jshint ignore:line
 
     // init buttons extra1, extra2, accept, cancel
     docElt.getButton("extra1").setAttribute("icon", "apply");
-    docElt.getButton("extra2").setAttribute("popup","tm-settings");
+    docElt.getButton("extra2").setAttribute("popup", "tm-settings");
     docElt.setAttribute("cancelbuttonlabel", docElt.mStrBundle.GetStringFromName("button-cancel"));
     this.setButtons(true);
 
@@ -87,22 +89,22 @@ var gPrefWindow = { // jshint ignore:line
 
   handleEvent: function(aEvent) {
     switch (aEvent.type) {
-    case "change":
-      if (aEvent.target.localName != "preference")
-        return;
-      this.updateBroadcaster(aEvent.target);
-      if (!this.instantApply)
-        this.updateApplyButton(aEvent);
-      break;
-    case "beforeaccept":
-      if (this.widthChanged)
-        gAppearancePane.changeTabsWidth();
-      if (!this.instantApply) {
-        // prevent TMP_SessionStore.setService from runing
-        Tabmix.getTopWin().tabmix_setSession = true;
-        Shortcuts.prefsChangedByTabmix = true;
-      }
-      break;
+      case "change":
+        if (aEvent.target.localName != "preference")
+          return;
+        this.updateBroadcaster(aEvent.target);
+        if (!this.instantApply)
+          this.updateApplyButton(aEvent);
+        break;
+      case "beforeaccept":
+        if (this.widthChanged)
+          gAppearancePane.changeTabsWidth();
+        if (!this.instantApply) {
+          // prevent TMP_SessionStore.setService from runing
+          Tabmix.getTopWin().tabmix_setSession = true;
+          Shortcuts.prefsChangedByTabmix = true;
+        }
+        break;
     }
   },
 
@@ -184,7 +186,7 @@ var gPrefWindow = { // jshint ignore:line
     var broadcasters = $(paneID + ":Broadcaster");
     if (!broadcasters)
       return;
-    Array.forEach(broadcasters.childNodes, function (broadcaster) {
+    Array.forEach(broadcasters.childNodes, function(broadcaster) {
       let preference = $(broadcaster.id.replace("obs", "pref"));
       if (preference)
         this.updateBroadcaster(preference, broadcaster);
@@ -204,13 +206,13 @@ var gPrefWindow = { // jshint ignore:line
   },
 
   setDisabled: function(itemOrId, val) {
-    var item = typeof(itemOrId) == "string" ? $(itemOrId) : itemOrId;
+    var item = typeof (itemOrId) == "string" ? $(itemOrId) : itemOrId;
     if (!item)
       return;
     if (item.hasAttribute("inverseDependency"))
       val = !val;
     // remove disabled when the value is false
-    Tabmix.setItem(item, "disabled" , val || null);
+    Tabmix.setItem(item, "disabled", val || null);
   },
 
   tabSelectionChanged: function(event) {
@@ -298,17 +300,17 @@ function setPrefAfterImport(aPref) {
 
   // preference that exist in the defaulbranch but no longer in use by Tabmix
   switch (aPref.name) {
-  case "browser.tabs.autoHide":
-    // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
-    Tabmix.prefs.setIntPref("hideTabbar", aPref.value ? 1 : 0);
-    return true;
-  case "browser.tabs.closeButtons":
-    // we use browser.tabs.closeButtons only in 0.3.8.3
-    if (aPref.value < 0 || aPref.value > 6)
-      aPref.value = 6;
-    aPref.value = [3,5,1,1,2,4,1][aPref.value];
-    Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
-    return true;
+    case "browser.tabs.autoHide":
+      // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
+      Tabmix.prefs.setIntPref("hideTabbar", aPref.value ? 1 : 0);
+      return true;
+    case "browser.tabs.closeButtons":
+      // we use browser.tabs.closeButtons only in 0.3.8.3
+      if (aPref.value < 0 || aPref.value > 6)
+        aPref.value = 6;
+      aPref.value = [3, 5, 1, 1, 2, 4, 1][aPref.value];
+      Tabmix.prefs.setIntPref("tabs.closeButtons", aPref.value);
+      return true;
   }
 
   // don't do anything if user locked a preference
@@ -337,27 +339,29 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
-let sessionPrefs = ["browser.sessionstore.resume_from_crash",
+var sessionPrefs = ["browser.sessionstore.resume_from_crash",
                     "browser.startup.page",
                     "extensions.tabmix.sessions.manager",
                     "extensions.tabmix.sessions.crashRecovery"];
 
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save
-  let otherPrefs = ["browser.allTabs.previews","browser.ctrlTab.previews",
-  "browser.link.open_newwindow","browser.link.open_newwindow.override.external",
-  "browser.link.open_newwindow.restriction",TabmixSvc.newtabUrl,
-  "browser.search.context.loadInBackground","browser.search.openintab",
-  "browser.sessionstore.interval","browser.sessionstore.max_tabs_undo",
-  "browser.sessionstore.postdata","browser.sessionstore.privacy_level",
-  "browser.sessionstore.restore_on_demand",
-  "browser.sessionstore.resume_from_crash","browser.startup.page",
-  "browser.tabs.animate","browser.tabs.closeWindowWithLastTab",
-  "browser.tabs.insertRelatedAfterCurrent","browser.tabs.loadBookmarksInBackground",
-  "browser.tabs.loadDivertedInBackground","browser.tabs.loadInBackground",
-  "browser.tabs.tabClipWidth","browser.tabs.tabMaxWidth","browser.tabs.tabMinWidth",
-  "browser.tabs.warnOnClose","browser.warnOnQuit",
-  "toolkit.scrollbox.clickToScroll.scrollDelay","toolkit.scrollbox.smoothScroll"];
+  let otherPrefs = [
+    "browser.allTabs.previews", "browser.ctrlTab.previews",
+    "browser.link.open_newwindow", "browser.link.open_newwindow.override.external",
+    "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
+    "browser.search.context.loadInBackground", "browser.search.openintab",
+    "browser.sessionstore.interval", "browser.sessionstore.max_tabs_undo",
+    "browser.sessionstore.postdata", "browser.sessionstore.privacy_level",
+    "browser.sessionstore.restore_on_demand",
+    "browser.sessionstore.resume_from_crash", "browser.startup.page",
+    "browser.tabs.animate", "browser.tabs.closeWindowWithLastTab",
+    "browser.tabs.insertRelatedAfterCurrent", "browser.tabs.loadBookmarksInBackground",
+    "browser.tabs.loadDivertedInBackground", "browser.tabs.loadInBackground",
+    "browser.tabs.tabClipWidth", "browser.tabs.tabMaxWidth", "browser.tabs.tabMinWidth",
+    "browser.tabs.warnOnClose", "browser.warnOnQuit",
+    "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
+  ];
 
   if (!Tabmix.isVersion(200))
     otherPrefs.push("browser.warnOnRestart");
@@ -365,7 +369,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
-  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref){
+  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref) {
     try {
       return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
     } catch (ex) { }
@@ -426,7 +430,7 @@ function exportData() {
   }).then(null, Tabmix.reportError);
 }
 
-function importData () {
+function importData() {
   showFilePicker("open").then(file => {
     return file && OS.File.read(file.path);
   }).then((input) => {
@@ -464,10 +468,12 @@ function showFilePicker(mode) {
   });
 }
 
-function loadData (pattern) {
-  if (pattern[0]!="tabmixplus") {
+function loadData(pattern) {
+  if (pattern[0] != "tabmixplus") {
     //  Can not import because it is not a valid file.
-    alert(TabmixSvc.getString("tmp.importPref.error1"));
+    let msg = TabmixSvc.getString("tmp.importPref.error1");
+    let title = TabmixSvc.getString("tabmixoption.error.title");
+    Services.prompt.alert(window, title, msg);
     return;
   }
 
@@ -493,13 +499,13 @@ function loadData (pattern) {
 
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
-  for (let i = 1; i < pattern.length; i++){
+  for (let i = 1; i < pattern.length; i++) {
     let index = pattern[i].indexOf("=");
-    if (index > 0){
-      prefName  = pattern[i].substring(0,index);
+    if (index > 0) {
+      prefName = pattern[i].substring(0, index);
       if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
         continue;
-      prefValue = pattern[i].substring(index+1,pattern[i].length);
+      prefValue = pattern[i].substring(index + 1, pattern[i].length);
       setPrefByType(prefName, prefValue, true);
     }
   }
@@ -514,13 +520,13 @@ function loadData (pattern) {
 function showPane(paneID) {
   let docElt = document.documentElement;
   let paneToLoad = document.getElementById(paneID);
-  if(!paneToLoad || paneToLoad.nodeName != "prefpane")
+  if (!paneToLoad || paneToLoad.nodeName != "prefpane")
     paneToLoad = $(docElt.lastSelected);
   docElt.showPane(paneToLoad);
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tmp.garyr.net/help/#";
+  var helpPage = "http://tmp.garyr.net/support/viewpage.php?t=3&p=";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -530,6 +536,7 @@ function openHelp(helpTopic) {
       let browser = browsers[i];
       if (browser.currentURI.spec.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
+        browser.tabmix_allowLoad = true;
         return true;
       }
     }
@@ -541,17 +548,18 @@ function openHelp(helpTopic) {
   if (!helpTopic) {
     var currentPane = document.documentElement.currentPane;
     helpTopic = currentPane.helpTopic;
-    if (currentPane.id == "paneSession" && helpTopic == "tabmix")
+    if (currentPane.id == "paneSession") {
       helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
+    }
   }
-
+  helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
 var gIncompatiblePane = {
   lastSelected: "paneLinks",
 
-  init: function (docElt) {
+  init: function(docElt) {
     this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this, false);
@@ -563,7 +571,7 @@ var gIncompatiblePane = {
     radioGroup.removeEventListener("command", this, false);
   },
 
-  handleEvent: function (aEvent) {
+  handleEvent: function(aEvent) {
     if (aEvent.type != "command")
       return;
     let prefWindow = document.documentElement;
@@ -571,14 +579,14 @@ var gIncompatiblePane = {
       this.lastSelected = prefWindow.lastSelected;
   },
 
-  checkForIncompatible: function (aShowList) {
-     let tmp = { };
-     Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
-     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
+  checkForIncompatible: function(aShowList) {
+    let tmp = {};
+    Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+    tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm
-  hide_IncompatibleNotice: function (aHide, aFocus) {
+  hide_IncompatibleNotice: function(aHide, aFocus) {
     if (this.paneButton.collapsed != aHide) {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;

@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["Decode"];
+this.EXPORTED_SYMBOLS = ["Decode"];
 
 /*
     The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.
@@ -27,16 +27,15 @@ this.Decode = {
   }
 };
 
-let escapeHash = {};
+var escapeHash = {};
 
-function getReturnValue (input) {
+function getReturnValue(input) {
   var ret = escapeHash[input];
   if (!ret) {
     if (input.length - 1) {
       let code = parseInt(input.substring(input.length - 3 ? 2 : 1), 16);
       ret = fixedFromCharCode(code);
-    }
-    else {
+    } else {
       let code = input.charCodeAt(0);
       ret = code < 256 ?
         "%" + ("0" + code.toString(16)).slice(-2).toUpperCase() :
@@ -58,8 +57,7 @@ function fixedFromCharCode(codePt) {
   if (codePt > 0xFFFF) {
     codePt -= 0x10000;
     return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 + (codePt & 0x3FF));
-  }
-  else {
+  } else {
     return String.fromCharCode(codePt);
   }
 }

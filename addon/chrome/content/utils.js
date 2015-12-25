@@ -23,19 +23,19 @@ var Tabmix = { // jshint ignore:line
 
   // Show/hide one item (specified via name or the item element itself).
   showItem: function(aItemOrId, aShow) {
-    var item = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var item = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (item && item.hidden == aShow)
       item.hidden = !aShow;
   },
 
   setItem: function(aItemOrId, aAttr, aVal) {
-    var elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
       if (aVal === null || aVal === undefined) {
         elem.removeAttribute(aAttr);
         return;
       }
-      if (typeof(aVal) == "boolean")
+      if (typeof (aVal) == "boolean")
         aVal = aVal ? "true" : "false";
 
       if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
@@ -44,7 +44,7 @@ var Tabmix = { // jshint ignore:line
   },
 
   setAttributeList: function(aItemOrId, aAttr, aValue, aAdd) {
-    let elem = typeof(aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    let elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
@@ -83,8 +83,8 @@ var Tabmix = { // jshint ignore:line
       this[aModule + "Initialized"] = false;
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, function() {
-      let tmp = { };
-      Components.utils.import("resource://tabmixplus/"+aModule+".jsm", tmp);
+      let tmp = {};
+      Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();
@@ -102,7 +102,7 @@ var Tabmix = { // jshint ignore:line
 
     var self = this;
     Object.defineProperty(aObject, aOldName, {
-      get: function () {
+      get: function() {
         self.informAboutChangeInTabmix(aOldName, aNewName);
         delete aObject[aOldName];
         return (aObject[aOldName] = self.getObject(window, aNewName));
@@ -124,7 +124,7 @@ var Tabmix = { // jshint ignore:line
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
-                 (extensionName ? ( " and " + extensionName + "developer.") : "."));
+                 (extensionName ? (" and " + extensionName + "developer.") : "."));
     }
     else
       this.clog(err.message + "\n\n" + stack);
@@ -143,7 +143,7 @@ var Tabmix = { // jshint ignore:line
 
     // we use non modal dialog when we call for prompt on startup
     // when we don't have a callBack function use modal dialog
-    let modal = typeof(aCallBack) != "function";
+    let modal = typeof (aCallBack) != "function";
     var i;
     for (i = 0; i < intParam.length; i++)
       dpb.SetInt(i, intParam[i]);
@@ -152,17 +152,18 @@ var Tabmix = { // jshint ignore:line
     for (i = 0; i < strParam.length; i++)
       dpb.SetString(i, strParam[i]);
 
-    if (typeof(aWindow) == "undefined") {
-      try { aWindow = window;
-      }
-      catch (e) { aWindow = null;
+    if (typeof (aWindow) == "undefined") {
+      try {
+        aWindow = window;
+      } catch (e) {
+        aWindow = null;
       }
     }
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul","","centerscreen" +
-           (modal ? ",modal" : ",dependent") ,dpb);
+           "chrome://tabmixplus/content/session/promptservice.xul", "", "centerscreen" +
+           (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
 
@@ -171,7 +172,7 @@ var Tabmix = { // jshint ignore:line
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
-    if (typeof(aWindowtype) == "undefined")
+    if (typeof (aWindowtype) == "undefined")
       aWindowtype = "navigator:browser";
     return Services.wm.getEnumerator(aWindowtype);
   },
@@ -202,7 +203,10 @@ var Tabmix = { // jshint ignore:line
     return window;
   },
 
-  compare: function TMP_utils_compare(a, b, lessThan) {return lessThan ? a < b : a > b;},
+  compare: function TMP_utils_compare(a, b, lessThan) {
+    return lessThan ? a < b : a > b;
+  },
+
   itemEnd: function TMP_utils_itemEnd(item, end) {
     return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);
   },

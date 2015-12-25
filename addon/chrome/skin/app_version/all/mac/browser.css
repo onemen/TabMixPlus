@@ -42,7 +42,8 @@
 
 #TabsToolbar[multibar]:not(:-moz-lwtheme) {
   background-repeat: repeat;
-  -moz-appearance: toolbar;
+  background-color: rgb(225, 225, 225);
+  background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
 }
 
 .tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {

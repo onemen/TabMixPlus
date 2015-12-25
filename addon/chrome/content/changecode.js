@@ -1,4 +1,5 @@
 /* jshint strict: false */
+/* eslint strict: 0 */
 
 // don't use strict for this file
 // so we don't evaluat all code as strict mode code
@@ -30,7 +31,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
   ChangeCode.prototype = {
     value: "", errMsg: "",
-    _replace: function TMP_utils__replace(substr ,newString, aParams) {
+    _replace: function TMP_utils__replace(substr, newString, aParams) {
       var silent;
       if (typeof aParams != "undefined") {
         let doReplace, flags;
@@ -38,8 +39,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
           doReplace = "check" in aParams ? aParams.check : true;
           flags = aParams.flags;
           silent = aParams.silent;
-        }
-        else if (typeof aParams == "boolean") {
+        } else if (typeof aParams == "boolean") {
           doReplace = aParams;
         }
         if (!doReplace)
@@ -48,7 +48,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
           substr = new RegExp(substr.replace(/[{[(\\^.$|?*+\/)\]}]/g, "\\$&"), flags);
       }
 
-      var exist = typeof(substr) == "string" ? this.value.indexOf(substr) > -1 : substr.test(this.value);
+      var exist = typeof (substr) == "string" ? this.value.indexOf(substr) > -1 : substr.test(this.value);
       if (exist) {
         this.value = this.value.replace(substr, newString);
         this.needUpdate = true;
@@ -75,7 +75,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
             ' }';
         }
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
-        if (this.isValidToChange(fnName)) {
+        if (this.isValidToChange(this.fullName)) {
           if (obj)
             Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this.value));
           else
@@ -91,7 +91,7 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
 
     defineProperty: function(aObj, aName, aCode) {
       if (!this.type)
-        throw "Tabmix:\n" +  this.fullName + " don't have setter or getter";
+        throw new Error("Tabmix:\n" + this.fullName + " don't have setter or getter");
 
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};
@@ -172,6 +172,10 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
   /* jshint moz: true, esnext: false */
   let global = Components.utils.getGlobalForObject(obj);
   let fn = global["ev" + "al"];
-  Tabmix._makeCode = function(name, code) name ?
-    fn(name + " = " + code) : fn("(" + code + ")");
-})(this);
+  Tabmix._makeCode = function(name, code) {
+    if (name) {
+      return fn(name + " = " + code);
+    }
+    return fn("(" + code + ")");
+  };
+}(this));

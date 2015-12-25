@@ -1,6 +1,6 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["console"];
+this.EXPORTED_SYMBOLS = ["console"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyGetter(this, "OS", function() {
   return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
 });
 
-let gNextID = 1;
+var gNextID = 1;
 
 this.console = {
   getObject: function(aWindow, aMethod) {
@@ -22,31 +22,29 @@ this.console = {
       msg += (msg ? "\n" : "") + "aMethod need to be a string";
     if (msg) {
       this.assert(msg);
-      return {toString: function() msg};
+      return {toString: () => msg};
     }
     var rootID, methodsList = aMethod.split(".");
     if (methodsList[0] == "window")
       methodsList.shift();
     else if (methodsList[0] == "document") {
       methodsList.shift();
-      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g , "");
+      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g, "");
     }
     var obj;
     try {
       obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
-      methodsList.forEach(function(aFn) {
-        obj = obj[aFn];
-      });
+      methodsList.forEach(aFn => obj = obj[aFn]);
     } catch (ex) { }
-    return obj || {toString: function() "undefined"};
+    return obj || {toString: () => "undefined"};
   },
 
   _timers: {},
   show: function(aMethod, aDelay, aWindow) {
     try {
-      if (typeof(aDelay) == "undefined")
+      if (typeof (aDelay) == "undefined")
         aDelay = 500;
 
       let logMethod = function _logMethod() {
@@ -84,7 +82,9 @@ this.console = {
       else
         logMethod();
 
-    } catch (ex) {this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");}
+    } catch (ex) {
+      this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");
+    }
   },
 
   // get functions names from Error().stack
@@ -129,7 +129,7 @@ this.console = {
     if (fn && !fnName) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
-      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf+1) : "?";
+      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf + 1) : "?";
     }
     return fnName;
   },
@@ -188,8 +188,8 @@ options = {
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     var offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
-    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof(aObj);
-    objS +=  ":\n";
+    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof (aObj);
+    objS += ":\n";
 
     for (let prop in aObj) {
       try {
@@ -266,8 +266,8 @@ options = {
   log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
-    let callerName = names[offset+0];
-    let callerCallerName = aShowCaller && names[offset+1] ? " (caller was " + names[offset+1] + ")" : "";
+    let callerName = names[offset + 0];
+    let callerCallerName = aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
     this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
   },
 
@@ -277,7 +277,9 @@ options = {
       this.trace(msg + (aError || ""), "errorFlag", this.caller);
       return;
     }
-    if (/Error/.test(Object.getPrototypeOf(aError))) {
+    if (typeof aError == "object" &&
+        (aError instanceof Components.Exception ||
+         aError instanceof Error)) {
       this.reportError(aError, aMsg);
     }
 
@@ -289,7 +291,7 @@ options = {
     this._logMessage(assertionText + stackText, "errorFlag");
   },
 
-  trace: function TMP_console_trace(aMsg, flag="infoFlag", caller=null) {
+  trace: function TMP_console_trace(aMsg, flag = "infoFlag", caller = null) {
     let stack = this._formatStack(this._getStackExcludingInternal());
     let msg = aMsg ? aMsg + "\n" : "";
     this._logMessage(":\n" + msg + "Stack Trace:\n" + stack, flag, caller);
@@ -303,7 +305,7 @@ options = {
     return parent;
   },
 
-  reportError: function(ex=null, msg="") {
+  reportError: function(ex = null, msg = "") {
     if (ex === null) {
       ex = "reportError was called with null";
     }
@@ -311,8 +313,7 @@ options = {
     if (typeof ex != "object" || ex instanceof OS.File.Error ||
         typeof ex.message != "string") {
       this._logMessage(msg + ex.toString(), "errorFlag");
-    }
-    else {
+    } else {
       if (typeof ex.filename == "undefined") {
         ex.filename = ex.fileName;
       }
@@ -320,7 +321,7 @@ options = {
     }
   },
 
-  _logMessage: function _logMessage(msg, flag="infoFlag", caller=null) {
+  _logMessage: function _logMessage(msg, flag = "infoFlag", caller = null) {
     msg = msg.replace(/\r\n/g, "\n");
     if (typeof Ci.nsIScriptError[flag] == "undefined") {
       Services.console.logStringMessage("Tabmix" + msg);
@@ -337,6 +338,6 @@ options = {
 
 };
 
-(function(self){
-  self.reportError = self.reportError.bind(self);
+(function(_this) {
+  _this.reportError = _this.reportError.bind(_this);
 }(this.console));

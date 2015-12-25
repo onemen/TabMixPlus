@@ -1,11 +1,13 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["AutoReload"];
+this.EXPORTED_SYMBOLS = ["AutoReload"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
+
+var _setItem = function() {};
 
 this.AutoReload = {
   init: function() {
@@ -30,7 +32,7 @@ this.AutoReload = {
     win.Tabmix.setItem(aPopup, "onpopuphidden", "this._tab = null;");
     win.Tabmix.setItem(aPopup, "oncommand",
                         "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
-    for (let i=0; i<popup.childNodes.length; i++)
+    for (let i = 0; i < popup.childNodes.length; i++)
       aPopup.appendChild(popup.childNodes[i].cloneNode(true));
     if (parent.id != "reload-button") {
       aPopup.childNodes[0].hidden = true;
@@ -46,7 +48,7 @@ this.AutoReload = {
       aTab = this._currentTab(aTab);
 
     // populate the menu on the first popupShowing
-    if (!aPopup.id  && !aPopup.inited)
+    if (!aPopup.id && !aPopup.inited)
       this.addClonePopup(aPopup, aTab);
     aPopup._tab = aTab;
 
@@ -56,7 +58,7 @@ this.AutoReload = {
     var enableItem = menuItems[2];
     if (!this._labels) {
       this._labels = {
-        minute:  enableItem.getAttribute("minute"),
+        minute: enableItem.getAttribute("minute"),
         minutes: enableItem.getAttribute("minutes"),
         seconds: enableItem.getAttribute("seconds")
       };
@@ -66,8 +68,8 @@ this.AutoReload = {
 
     this.updateCustomList(aPopup);
 
-    var radio = aPopup.getElementsByAttribute("value" , "*");
-    for (let i=0; i<radio.length; i++) {
+    var radio = aPopup.getElementsByAttribute("value", "*");
+    for (let i = 0; i < radio.length; i++) {
       _setItem(radio[i], "checked", radio[i].value == aPopup._tab.autoReloadTime || null);
     }
   },
@@ -84,17 +86,17 @@ this.AutoReload = {
       if (!prefs.prefHasUserValue(pref))
         return [];
       let list = prefs.getCharPref(pref).split(",");
-      if (!list.every(function(val) val==parseInt(val))) {
+      if (!list.every(val => val == parseInt(val))) {
         prefs.clearUserPref(pref);
         return [];
       }
-      let defaultList = ["30","60","120","300","900","1800"];
-      list = list.filter(function(val) defaultList.indexOf(val) == -1);
+      let defaultList = ["30", "60", "120", "300", "900", "1800"];
+      list = list.filter(val => defaultList.indexOf(val) == -1);
       let newList = [];
-      list.forEach(function(val){
+      list.forEach(function(val) {
         if (parseInt(val) && newList.indexOf(val) == -1)
           newList.push(val);
-        if (newList.length > 6 )
+        if (newList.length > 6)
           newList.shift();
       });
       prefs.setCharPref(pref, newList);
@@ -102,13 +104,13 @@ this.AutoReload = {
     }
 
     let doc = aPopup.ownerDocument.defaultView.document;
-    getList().sort(function(a,b) parseInt(a)>parseInt(b)).forEach(function(val) {
+    getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
       let mi = doc.createElement("menuitem");
       this.setLabel(mi, val);
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);
       aPopup.insertBefore(mi, end);
-    }, this);
+    });
   },
 
   setLabel: function(aItem, aSeconds) {
@@ -116,7 +118,7 @@ this.AutoReload = {
     if (aSeconds > 59) {
       let minutes = parseInt(aSeconds / 60);
       timeLabel += minutes + " " + (this._labels[minutes > 1 ? "minutes" : "minute"]);
-      aSeconds -= 60*minutes;
+      aSeconds -= 60 * minutes;
       if (aSeconds)
         timeLabel += " ";
     }
@@ -133,7 +135,7 @@ this.AutoReload = {
     this._enable(aTab);
   },
 
-  setCustomTime : function(aTab) {
+  setCustomTime: function(aTab) {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     let result = {ok: false};
@@ -147,7 +149,7 @@ this.AutoReload = {
 
   enableAllTabs: function(aTabBrowser) {
     var tabs = aTabBrowser.visibleTabs;
-    for(let i=0; i<tabs.length; i++) {
+    for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled === undefined)
         this.initTab(tab);
@@ -159,7 +161,7 @@ this.AutoReload = {
 
   disableAllTabs: function(aTabBrowser) {
     var tabs = aTabBrowser.visibleTabs;
-    for(let i=0; i<tabs.length; i++) {
+    for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled)
         this._disable(tab);
@@ -188,7 +190,7 @@ this.AutoReload = {
     aTab.autoReloadURI = url;
     var win = aTab.ownerDocument.defaultView;
     _clearTimeout(aTab, win);
-    aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime*1000, aTab);
+    aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
   },
 
@@ -235,8 +237,7 @@ this.AutoReload = {
           aBrowser.messageManager
                   .sendAsyncMessage("Tabmix:setScrollPosition",
                                     aBrowser.__tabmixScrollPosition);
-        }
-        else {
+        } else {
           let {x, y} = aBrowser.__tabmixScrollPosition;
           aBrowser.contentWindow.scrollTo(x, y);
         }
@@ -246,7 +247,7 @@ this.AutoReload = {
       if (!aTab.autoReloadEnabled)
         aTab.autoReloadEnabled = true;
 
-      aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime*1000, aTab);
+      aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
     }
     else if (aTab.autoReloadEnabled)
       aTab.autoReloadEnabled = false;
@@ -280,13 +281,11 @@ this.AutoReload = {
   }
 };
 
-function _setItem () {}
-
 function _reloadTab(aTab) {
   if (!aTab || !aTab.parentNode)
     return;
 
-  if (aTab.autoReloadEnabled === false ) {
+  if (aTab.autoReloadEnabled === false) {
     aTab.postDataAcceptedByUser = false;
     return;
   }
@@ -347,11 +346,11 @@ function doReloadTab(window, browser, data) {
                           .getInterface(Ci.nsIDOMWindowUtils);
 
   browser.messageManager.sendAsyncMessage("Browser:Reload",
-      { flags: loadFlags,
-        handlingUserInput: windowUtils.isHandlingUserInput });
+      {flags: loadFlags,
+        handlingUserInput: windowUtils.isHandlingUserInput});
 }
 
-function  _observe(aSubject, aTopic) {
+function _observe(aSubject, aTopic) {
   if (aTopic == "common-dialog-loaded") {
     Services.obs.removeObserver(_observe, "common-dialog-loaded");
     let icon = aSubject.document.getElementById("info.icon");
@@ -360,7 +359,7 @@ function  _observe(aSubject, aTopic) {
   }
 }
 
-function  _clearTimeout(aTab, aWindow) {
+function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow)
       aWindow = aTab.ownerDocument.defaultView;

@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "크기가 정해진 팝업만 허용">
 <!ENTITY divertedWindowOpen.none "모든 팝업을 허용">
 <!ENTITY linkTarget.label "target 속성이 있는 링크를 현재 탭에 열기">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "파일을 다운로드할 때 빈 탭을 만들지 않기">
 <!ENTITY edit.label "편집">
 <!ENTITY speLink.label "늘 새 탭으로 열 것:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "스크롤 지연시간(반복 스크롤 사이의 시간)">
-<!ENTITY highlight.label "강조하기:">
 <!ENTITY currenttab.style.label "현재 탭">
 <!ENTITY unloadedtabs.style.label "Unloaded tabs">
 <!ENTITY unreadtabs.style.label "읽지 않은 탭">

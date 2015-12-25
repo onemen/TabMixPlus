@@ -1,13 +1,13 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["MergeWindows"];
+this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-/*////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
 // extension for Mozilla Firefox.                                   //
 // version 0.5.1                                                    //
@@ -16,7 +16,7 @@ Cu.import("resource://tabmixplus/Services.jsm");
 //                                                                  //
 // Convert to module and modfied by onemen                          //
 //                                                                  //
-*/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 this.MergeWindows = {
   get prefs() {
     delete this.prefs;
@@ -43,12 +43,10 @@ this.MergeWindows = {
     else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
       windows.unshift(aWindow);
       this.mergePopUpsToNewWindow(windows, options.private);
-    }
-    else if (options.multiple) {
+    } else if (options.multiple) {
       options.normalWindowsCount = normalWindowsCount;
       this.mergeMultipleWindows(aWindow, windows, options);
-    }
-    else {
+    } else {
       let tabsToMove = Array.slice(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
       this.mergeTwoWindows(windows[0], aWindow, tabsToMove, options);
     }
@@ -64,7 +62,7 @@ this.MergeWindows = {
       if (aOptions.tabsSelected) {
         // merge tabs from the popup window into the current window
         // remove or move to new window tabs that wasn't selected
-        for (let i = tabbrowser.tabs.length - 1; i >=0; i--) {
+        for (let i = tabbrowser.tabs.length - 1; i >= 0; i--) {
           let tab = tabbrowser.tabs[i];
           if (tab.hasAttribute("mergeselected")) {
             tab.removeAttribute("mergeselected");
@@ -101,7 +99,7 @@ this.MergeWindows = {
   mergePopUpsToNewWindow: function(aWindows, aPrivate) {
     var features = "chrome,all,dialog=no";
     if (TabmixSvc.version(200))
-        features += aPrivate ? ",private" : ",non-private";
+      features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
         "_blank", features, null);
     let mergePopUps = function _mergePopUps() {
@@ -166,7 +164,7 @@ this.MergeWindows = {
       let newTab = tabbrowser.addTab("about:blank", {dontMove: isPopup});
       let newBrowser = newTab.linkedBrowser;
       newBrowser.stop();
-      newBrowser.docShell; // jshint ignore:line
+      void newBrowser.docShell;
       if (tab.hasAttribute("_TMP_selectAfterMerege")) {
         tab.removeAttribute("_TMP_selectAfterMerege");
         tabToSelect = newTab;
@@ -183,8 +181,7 @@ this.MergeWindows = {
           openerWindow = browser.contentWindow.opener;
         }
         this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
-      }
-      else {
+      } else {
         // we don't keep tab attributs: visited, tabmix_selectedID
         // see in Tabmix.copyTabData list of attributs we copy to the new tab
         tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
@@ -209,10 +206,10 @@ this.MergeWindows = {
     delete this.isWindowPrivate;
     if (TabmixSvc.version(200)) {
       Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-      this.isWindowPrivate = function(aWindow) PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      this.isWindowPrivate = aWindow => PrivateBrowsingUtils.isWindowPrivate(aWindow);
       return this.isWindowPrivate(arguments[0]);
     }
-    this.isWindowPrivate = function() false;
+    this.isWindowPrivate = () => false;
     return false;
   },
 
@@ -242,7 +239,7 @@ this.MergeWindows = {
                        "private" in aOptions;
 
     let privateNotMatch = 0;
-    let isSuitableBrowserWindow = function (win) {
+    let isSuitableBrowserWindow = function(win) {
       let suitable = win != aWindow && !win.closed;
       if (!suitable || !checkPrivacy)
         return suitable;
@@ -255,7 +252,7 @@ this.MergeWindows = {
 
     let windows = [], popUps = [];
     let isWINNT = Services.appinfo.OS == "WINNT";
-    let more = function() !isWINNT || aOptions.multiple || windows.length === 0;
+    let more = () => !isWINNT || aOptions.multiple || windows.length === 0;
     // getEnumerator return windows from oldest to newest, so we use unshift.
     // when OS is WINNT and option is not multiple the loop stops when we find the most
     // recent suitable window
@@ -294,7 +291,7 @@ this.MergeWindows = {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
       let notificationBar = notificationBox.appendNotification(errorMessage,
                                 name, errorimage, priority, null);
-      aWindow.setTimeout(function(){
+      aWindow.setTimeout(function() {
         notificationBox.removeNotification(notificationBar);
       }, 10000);
     }
@@ -310,7 +307,7 @@ this.MergeWindows = {
     if (!shouldPrompt)
       return true;
 
-    var promptAgain = { value:true };
+    var promptAgain = {value: true};
     canClose = Services.prompt.confirmCheck(aWindow,
                    TabmixSvc.getString('tmp.merge.warning.title'),
                    TabmixSvc.getString('tmp.merge.warning.message'),

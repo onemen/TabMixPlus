@@ -1,6 +1,6 @@
 "use strict";
 
-let TabmixRemoveBlankTab = {
+var TabmixRemoveBlankTab = {
   initialize: function() {
     switch (window.document.documentElement.id) {
       case "unknownContentType":
@@ -60,7 +60,7 @@ let TabmixRemoveBlankTab = {
       let doc;
       try {
         doc = nav.document;
-      } catch(ex) {
+      } catch (ex) {
         return result;
       }
       result.win = nav.QueryInterface(Ci.nsIDocShellTreeItem)

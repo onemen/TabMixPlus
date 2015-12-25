@@ -23,6 +23,7 @@
 <!ENTITY divertedWindowOpen.some "Permitir popups redimensionados">
 <!ENTITY divertedWindowOpen.none "Permitir todos os popups">
 <!ENTITY linkTarget.label "Abrir ligações com um atributo de destino no separador actual">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
 <!ENTITY download.label "Prevenir separadores em branco ao transferir ficheiros">
 <!ENTITY edit.label "Editar">
 <!ENTITY speLink.label "Forçar para abrir em novo separador:">
@@ -151,7 +152,6 @@
 <!ENTITY offsetAmountToScroll.label "Ao deslocar mostrar a parte do próximo separador">
 <!ENTITY smoothScroll.label "Ativar deslocamento suave">
 <!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
-<!ENTITY highlight.label "Destacar:">
 <!ENTITY currenttab.style.label "Separador actual">
 <!ENTITY unloadedtabs.style.label "Separadores não carregados">
 <!ENTITY unreadtabs.style.label "Separadores não lidos">

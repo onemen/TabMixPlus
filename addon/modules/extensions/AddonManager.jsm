@@ -4,19 +4,40 @@
 
 "use strict";
 
-var EXPORTED_SYMBOLS = ["TabmixAddonManager"];
+this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/AddonManager.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
-function log(msg) { // jshint ignore:line
-  TabmixSvc.console.log(msg);
-}
+const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;
+const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;
+const GOOGLE_PLUS_REGEXP = /http(s)?:\/\/plus.url.google.com\/url\?/;
+
+// https://addons.mozilla.org/en-US/firefox/addon/google-no-tracking-url/
+var GoogleNoTrackingUrl = {
+  id: "jid1-zUrvDCat3xoDSQ@jetpack",
+  pref: "extensions." + this.id + "aggresiveGoogleImagesCleanup",
+  onEnabled: function() {
+    const pref = this.pref;
+    TabmixSvc.isFixedGoogleUrl = function(url) {
+      const aggresiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
+      const isSearchResult = GOOGLE_REGEXP.test(url);
+      const isImageSearchResult = GOOGLE_IMGRES_REGEXP.test(url);
+      const isGooglePlusRedirect = GOOGLE_PLUS_REGEXP.test(url);
+
+      return isSearchResult || isGooglePlusRedirect ||
+        isImageSearchResult && aggresiveWithImageUrls;
+    };
+  },
+  onDisabled: function() {
+    TabmixSvc.isFixedGoogleUrl = () => false;
+  },
+};
 
 // https://addons.mozilla.org/en-US/firefox/addon/private-tab
-let PrivateTab = {
+var PrivateTab = {
   id: "privateTab@infocatcher",
   onEnabled: function() {
     this._resetNewTabButton();
@@ -31,18 +52,11 @@ let PrivateTab = {
   }
 };
 
-let SessionManager = {
+var SessionManager = {
   id: "{1280606b-2510-4fe0-97ef-9b5a22eafe30}",
   init: function() {
     this._saveTabmixPrefs();
-    try {
-      let tmp = {};
-      Cu.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
-      TabmixSvc.sessionManagerAddonInstalled = true;
-    }
-    catch (ex) {
-      TabmixSvc.sessionManagerAddonInstalled = false;
-    }
+    TabmixSvc.sessionManagerAddonInstalled = true;
   },
   _saveTabmixPrefs: function() {
     this.manager_enabled = TabmixSvc.prefBranch.getBoolPref("sessions.manager");
@@ -75,13 +89,22 @@ let SessionManager = {
   }
 };
 
-let TabmixListener = {
+var TabmixListener = {
+  init: function(id) {
+    if (id == SessionManager.id) {
+      SessionManager.init();
+    } else if (id == GoogleNoTrackingUrl.id) {
+      GoogleNoTrackingUrl.onEnabled();
+    }
+  },
   onChange: function(aAddon, aAction) {
     let id = aAddon.id;
     if (id == SessionManager.id)
       SessionManager[aAction]();
     else if (id == PrivateTab.id) {
       PrivateTab[aAction]();
+    } else if (id == GoogleNoTrackingUrl.id) {
+      GoogleNoTrackingUrl[aAction]();
     }
   },
   onEnabled: function(aAddon) {
@@ -97,15 +120,21 @@ let TabmixListener = {
   }
 };
 
-let TabmixAddonManager = {
+var TabmixAddonManager = {
   initialized: false,
   init: function() {
     if (this.initialized)
       return;
     this.initialized = true;
 
-    SessionManager.init();
     AddonManager.addAddonListener(TabmixListener);
+    AddonManager.getAddonsByTypes(["extension"], function(addons) {
+      addons.forEach(addon => {
+        if (addon.isActive) {
+          TabmixListener.init(addon.id);
+        }
+      });
+    });
   }
 };
 

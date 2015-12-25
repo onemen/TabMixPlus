@@ -1,8 +1,11 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["RenameTab"];
+this.EXPORTED_SYMBOLS = ["RenameTab"];
 
-Components.utils.import("resource://tabmixplus/Services.jsm");
+const Cu = Components.utils;
+
+Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://tabmixplus/Places.jsm");
 
 this.RenameTab = {
   window: null,
@@ -25,7 +28,7 @@ this.RenameTab = {
           this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
           browser.contentTitle;
     this.data.url = browser.currentURI.spec;
-    this.data.docTitle = this.window.TMP_Places.getTitleFromBookmark(this.data.url,
+    this.data.docTitle = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
         docTitle, null, aTab);
     if (!this.data.docTitle)
       this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
@@ -130,7 +133,7 @@ this.RenameTab = {
     this.hidePopup();
   },
 
-  handleEvent: function (aEvent) {
+  handleEvent: function(aEvent) {
     if (aEvent.type == "keypress" &&
          aEvent.keyCode == Components.interfaces.nsIDOMKeyEvent.DOM_VK_RETURN &&
          aEvent.target.localName != "button")

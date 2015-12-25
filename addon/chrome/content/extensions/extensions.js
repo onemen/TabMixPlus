@@ -4,7 +4,6 @@
  * original code by onemen
  */
 
-
 /**
  *
  * Fix compatibility with other extensions
@@ -18,10 +17,12 @@ var TMP_extensionsCompatibility = {
   },
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
-    Tabmix.extensions = {treeStyleTab: false, tabGroupManager: false,
-        verticalTabBar: false, ieTab2: false,
-        gIeTab: false, /* for ieTab and ieTab2 */
-        ctr: false /* classic theme restorer */};
+    Tabmix.extensions = {
+      treeStyleTab: false, tabGroupManager: false,
+      verticalTabBar: false, ieTab2: false,
+      gIeTab: false, /* for ieTab and ieTab2 */
+      ctr: false/* classic theme restorer */
+    };
 
     if (typeof classicthemerestorerjs == "object") {
       Tabmix.extensions.ctr = true;
@@ -44,19 +45,21 @@ var TMP_extensionsCompatibility = {
       if ("TabGroupsManagerApiVer1" in window) {
         Tabmix.extensions.tabGroupManager = true;
         window.TMP_TabGroupsManager = {};
-        window.TMP_TabGroupsManager.tabmixSessionsManager = function () {};
+        window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
         let tmp = {};
         Components.utils.import("resource://tabmixplus/extensions/TabGroupsManager.jsm", tmp);
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
-    } catch (ex) {Tabmix.assert(ex, "error in TabGroupsManager.jsm");}
+    } catch (ex) {
+      Tabmix.assert(ex, "error in TabGroupsManager.jsm");
+    }
 
     // fix for Cluster Tabs - Cluster Tab look for TM_init
     // https://addons.mozilla.org/en-US/firefox/addon/cluster-tabs-for-firefox/
-    if ("GlaxChrome" in window && typeof(window.GlaxChrome) == "object") {
+    if ("GlaxChrome" in window && typeof (window.GlaxChrome) == "object") {
       document.getElementById("main-window").setAttribute("gscltTMPinstalled", true);
-      let func = ["_setupForOtherExtensions","enableCustomDragDropMode"];
+      let func = ["_setupForOtherExtensions", "enableCustomDragDropMode"];
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
       func.forEach(function(aFn) {
         if (aFn in GlaxChrome) {
@@ -77,11 +80,13 @@ var TMP_extensionsCompatibility = {
         Tabmix.extensions.treeStyleTab = true;
         Tabmix.extensions.verticalTabBar = true;
       }
-    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
+    } catch (ex) {
+      Tabmix.assert(ex, this.treeStyleTab.errorMsg);
+    }
 
     // https://addons.mozilla.org/en-US/firefox/addon/second-search/
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
-      let func = ["canOpenNewTab","loadForSearch","checkToDoSearch"];
+      let func = ["canOpenNewTab", "loadForSearch", "checkToDoSearch"];
       let SSB = SecondSearchBrowser.prototype;
       func.forEach(function(aFn) {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
@@ -97,16 +102,14 @@ var TMP_extensionsCompatibility = {
     // we replace it back here
     if (typeof bgSaverInit == "function" && typeof getBoolPref == "function" &&
             getBoolPref.toString().indexOf("bgSaverPref.prefHasUserValue(sName)") != -1) {
-      window.getBoolPref = function getBoolPref ( prefname, def ) {
+      window.getBoolPref = function getBoolPref(prefname, def) {
         try {
           return Services.prefs.getBoolPref(prefname);
-        }
-        catch(ex) {
+        } catch (ex) {
           try {
             return (bgSaverPref.prefHasUserValue(prefname) &&
                     bgSaverPref.getBoolPref(prefname));
-          }
-          catch(e) {}
+          } catch (e) {}
         }
         return def;
       };
@@ -116,7 +119,7 @@ var TMP_extensionsCompatibility = {
 
     // workaround for extensions that look for updateIcon
     // Favicon Picker 2
-    if (typeof(gBrowser.updateIcon) == "undefined") {
+    if (typeof (gBrowser.updateIcon) == "undefined") {
       gBrowser.updateIcon = function updateIcon (aTab) {
         var browser = gBrowser.getBrowserForTab(aTab);
         if ((browser.mIconURL || "") != aTab.getAttribute("image")) {
@@ -132,7 +135,7 @@ var TMP_extensionsCompatibility = {
 
     /*
     // https://addons.mozilla.org/en-US/firefox/addon/tab-flick/
-    if ("TabFlick" in window && typeof(TabFlick.openPanel) == "function") {
+    if ("TabFlick" in window && typeof (TabFlick.openPanel) == "function") {
       Tabmix.changeCode(TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragEnd")._replace(
         'gBrowser.replaceTabWithWindow(draggedTab);',
         'gBrowser.selectedTab = draggedTab; TabFlick.openPanel(aEvent);'
@@ -140,10 +143,8 @@ var TMP_extensionsCompatibility = {
     }
     */
 
-
     // https://addons.mozilla.org/en-US/firefox/addon/bug489729-disable-detach-and-t//
     // we don't need to do any changes to bug489729 extension version 1.6+
-
 
     // https://addons.mozilla.org/en-US/firefox/addon/foxtab/
     if ("foxTab" in window) {
@@ -155,7 +156,7 @@ var TMP_extensionsCompatibility = {
         '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
         '  TMP_LastTab.PushSelectedTab();' +
         '}';
-      if (typeof(foxTab.openNewTab) == "function") {
+      if (typeof (foxTab.openNewTab) == "function") {
         Tabmix.changeCode(foxTab, "foxTab.openNewTab")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -171,7 +172,7 @@ var TMP_extensionsCompatibility = {
           'if( !loadNewInBackground) $&'
         ).toCode();
       }
-      if (typeof(foxTab.showNewTabMessage) == "function") {
+      if (typeof (foxTab.showNewTabMessage) == "function") {
         Tabmix.changeCode(foxTab, "foxTab.showNewTabMessage")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -202,6 +203,18 @@ var TMP_extensionsCompatibility = {
       Tabmix.extensions.gIeTab = {obj: "gIeTab2", folder: "ietab2"};
     else if (typeof window.gIeTab == "object")
       Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
+
+    // prevent faviconize use its own adjustTabstrip
+    // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
+    if ("faviconize" in window && "override" in window.faviconize) {
+      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
+        '!tab.pinned',
+        '$& && !tab.hasAttribute("faviconized")'
+      ).toCode();
+
+      // change adjustTabstrip
+      window.faviconize.override.adjustTabstrip = function() { };
+    }
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
@@ -222,7 +235,7 @@ var TMP_extensionsCompatibility = {
     if ("RSSTICKER" in window)
       this.RSSTICKER.init();
 
-    if ("PersonaController" in window && typeof(window.PersonaController) == "object") {
+    if ("PersonaController" in window && typeof (window.PersonaController) == "object") {
       Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
         /(\})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
@@ -309,7 +322,9 @@ var TMP_extensionsCompatibility = {
     try {
       if ("TreeStyleTabService" in window)
         this.treeStyleTab.onWindowLoaded();
-    } catch (ex) {Tabmix.assert(ex, this.treeStyleTab.errorMsg);}
+    } catch (ex) {
+      Tabmix.assert(ex, this.treeStyleTab.errorMsg);
+    }
 
     /* fast dial FdUtils*/
     if ("FdUtils" in window && FdUtils.whereToOpenLink) {
@@ -320,7 +335,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // for MR Tech's local install extention
-    if (typeof(Local_Install) == "object") {
+    if (typeof (Local_Install) == "object") {
       // don't open trober in current tab when tab is locked
       // or trober is to diffrent site then the current
       Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
@@ -376,11 +391,11 @@ var TMP_extensionsCompatibility = {
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
-      window.aioDupTab = function() { gBrowser.duplicateTab(gBrowser.mCurrentTab); };
+      window.aioDupTab = () => gBrowser.duplicateTab(gBrowser.mCurrentTab);
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      window.aioDupWindow = function() { gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab); };
+      window.aioDupWindow = () => gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab);
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
@@ -449,7 +464,7 @@ var TMP_extensionsCompatibility = {
     if (window.rdrb && typeof rdrb.cleanLink == "function") {
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
         'Tabmix.loadTabs(urls, false);',
-        'urls = urls.map(function(url) rdrb.cleanLink(url));\n' +
+        'urls = urls.map(url => rdrb.cleanLink(url));\n' +
         '      $&'
       ).toCode();
     }
@@ -458,64 +473,60 @@ var TMP_extensionsCompatibility = {
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {
-   init : function ()  {
-     Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
-       'tbb.setAttribute("onclick"',
-       'tbb.setAttribute("onclick", "this.onClick(event);");\
-        tbb.setAttribute("_onclick"'
-     )._replace(
-       'tbb.onContextOpen =',
-       'tbb.onContextOpen = TMP_extensionsCompatibility.RSSTICKER.onContextOpen; \
-        tbb.onClick = TMP_extensionsCompatibility.RSSTICKER.onClick; \
-        tbb._onContextOpen ='
-     ).toCode();
-   },
+  init: function() {
+    Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
+      'tbb.setAttribute("onclick"',
+      'tbb.setAttribute("onclick", "this.onClick(event);");\
+       tbb.setAttribute("_onclick"'
+    )._replace(
+      'tbb.onContextOpen =',
+      'tbb.onContextOpen = TMP_extensionsCompatibility.RSSTICKER.onContextOpen; \
+       tbb.onClick = TMP_extensionsCompatibility.RSSTICKER.onClick; \
+       tbb._onContextOpen ='
+    ).toCode();
+  },
 
-   onClick : function (event) {
-     if (event.ctrlKey) {
-       this.markAsRead(true);
-     }
-     else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
-       this.onContextOpen("tab");
-     }
-     else if (event.which == 1) {
-       this.onContextOpen();
-     }
-   },
+  onClick: function(event) {
+    if (event.ctrlKey) {
+      this.markAsRead(true);
+    } else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
+      this.onContextOpen("tab");
+    } else if (event.which == 1) {
+      this.onContextOpen();
+    }
+  },
 
-   onContextOpen : function (target) {
-     if (!target) {
-       if (Tabmix.whereToOpen(null).lock)
-         this.parent.browser.openInNewTab(this.href);
-       else
-         window.loadURI(this.href);
-     }
-     else if (target == "window") {
-       if (Tabmix.singleWindowMode)
-         this.parent.browser.openInNewTab(this.href);
-       else
-         window.open(this.href);
-     }
-     else if (target == "tab") {
-       this.parent.browser.openInNewTab(this.href);
-     }
+  onContextOpen: function(target) {
+    if (!target) {
+      if (Tabmix.whereToOpen(null).lock)
+        this.parent.browser.openInNewTab(this.href);
+      else
+        window.loadURI(this.href);
+    } else if (target == "window") {
+      if (Tabmix.singleWindowMode)
+        this.parent.browser.openInNewTab(this.href);
+      else
+        window.open(this.href);
+    } else if (target == "tab") {
+      this.parent.browser.openInNewTab(this.href);
+    }
 
-     this.markAsRead();
-   }
+    this.markAsRead();
+  }
 };
 
 // prevent Wizz RSS from load pages in locked tabs
 TMP_extensionsCompatibility.wizzrss = {
   started: null,
-  init : function ()  {
+  init: function() {
     if (this.started)
       return;
     this.started = true;
     var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
     const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
-    var _functions = ["addFeedbase","validate","gohome","tryagain","promptStuff",
-                      "doSearch","viewLog","renderItem","playEnc","renderAllEnc","playAllEnc",
-                      "gotoLink","itemLinkClick","itemListClick"];
+    var _functions = ["addFeedbase", "validate", "gohome", "tryagain", "promptStuff",
+                      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
+                      "gotoLink", "itemLinkClick", "itemListClick"];
 
     _functions.forEach(function(_function) {
       if (_function in window)
@@ -523,7 +534,7 @@ TMP_extensionsCompatibility.wizzrss = {
     });
   },
 
-  openURI : function (uri)  {
+  openURI: function(uri) {
     var w = Tabmix.getTopWin();
     var tabBrowser = w.gBrowser;
 
@@ -539,13 +550,13 @@ TMP_extensionsCompatibility.wizzrss = {
 
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
-   init : function ()  {
-      Tabmix.changeCode(window, "openNewsfox")._replace(
-         /if \(newTab\) {/,
-         'newTab = newTab || Tabmix.whereToOpen(null).lock; \
-         $&'
-      ).toCode();
-   }
+  init: function() {
+    Tabmix.changeCode(window, "openNewsfox")._replace(
+      /if \(newTab\) {/,
+      'newTab = newTab || Tabmix.whereToOpen(null).lock; \
+       $&'
+    ).toCode();
+  }
 };
 
 /**
@@ -557,7 +568,7 @@ TMP_extensionsCompatibility.newsfox = {
 TMP_extensionsCompatibility.treeStyleTab = {
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
-  preInit: function () {
+  preInit: function() {
     if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
       // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
       tablib._init = tablib.init;
@@ -571,7 +582,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onContentLoaded: function () {
+  onContentLoaded: function() {
     // workaround, with version 0.15.2015061300a003855
     // gBrowser.treeStyleTab.initTabContentsOrder throw on Firefox 41+
     Tabmix.TST_initTabContentsOrder = function() {
@@ -677,7 +688,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onWindowLoaded: function () {
+  onWindowLoaded: function() {
     /**
      *  TST have eval to TMP_Bookmark.openGroup
      *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830

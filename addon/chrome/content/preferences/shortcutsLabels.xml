@@ -3,6 +3,8 @@
 <!DOCTYPE bindings [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd">
+%shortcutsDTD;
 ]>
 
 <bindings id="tmp_shortcuts_labels"
@@ -31,7 +33,10 @@
              removeother="&clicktab.removeother;"
              removeleft="&clicktab.removetoLeft;"
              removeright="&clicktab.removetoRight;"
-             undoClose="&clicktab.uctab;">
+             undoClose="&clicktab.uctab;"
+             ucatab="&clicktab.ucatab;"
+             switchToLast="&shortcuts.switchToLast;"
+             >
     </content>
   </binding>
 

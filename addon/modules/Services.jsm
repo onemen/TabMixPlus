@@ -1,13 +1,13 @@
 "use strict";
 
-var EXPORTED_SYMBOLS = ["TabmixSvc"];
+this.EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-let _versions = {};
+var _versions = {};
 function isVersion(aVersionNo) {
   if (TabmixSvc.isPaleMoonID) {
     let paleMoonVer = arguments.length > 1 ? arguments[1] : -1;
@@ -20,7 +20,7 @@ function isVersion(aVersionNo) {
     return _versions[aVersionNo];
 
   let v = Services.appinfo.version;
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo/10 + ".0a1") >= 0);
+  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }
 
 this.TabmixSvc = {
@@ -31,8 +31,8 @@ this.TabmixSvc = {
   },
 
   aboutBlank: "about:blank",
-  aboutNewtab: "about:newtab",
-  newtabUrl: "browser" + ".newtab.url",
+  aboutNewtab: "about:#".replace("#", "newtab"),
+  newtabUrl: "browser.#.url".replace("#", "newtab"),
 
   debugMode: function() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
@@ -75,8 +75,7 @@ this.TabmixSvc = {
     if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
       key = this.getSMString(property + ".accesskey");
-    }
-    else {
+    } else {
       label = this.getString(property + ".label");
       key = this.getString(property + ".accesskey");
     }
@@ -95,7 +94,7 @@ this.TabmixSvc = {
     try {
       // this pref exist only in windows
       return (this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled"));
-    } catch(ex) {}
+    } catch (ex) {}
     return (this.direct2dDisabled = false);
   },
 
@@ -121,19 +120,23 @@ this.TabmixSvc = {
     parse: function TMP_parse(str) {
       try {
         return JSON.parse(str);
-      } catch(ex) {
+      } catch (ex) {
         try {
           return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch(er) {return null}
+        } catch (er) {
+          return null;
+        }
       }
     },
     stringify: function TMP_stringify(obj) {
       try {
         return JSON.stringify(obj);
-      } catch(ex) {
+      } catch (ex) {
         try {
           return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch(er) {return null}
+        } catch (er) {
+          return null;
+        }
       }
     }
   },
@@ -157,7 +160,9 @@ this.TabmixSvc = {
         // replace old Settings.
         // we must call this before any other tabmix function
         aWindow.gTMPprefObserver.updateSettings();
-      } catch (ex) {TabmixSvc.console.assert(ex);}
+      } catch (ex) {
+        TabmixSvc.console.assert(ex);
+      }
 
       this.addMissingPrefs();
 
@@ -180,10 +185,14 @@ this.TabmixSvc = {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
+      if (TabmixSvc.australis) {
+        prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
+      }
+
       if (isVersion(320))
         prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
 
-      if (isVersion(410)) {
+      if (isVersion(410) && !TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         Cu.import("resource://tabmixplus/NewTabURL.jsm", {});
       }
@@ -203,7 +212,9 @@ this.TabmixSvc = {
         case "browser-delayed-startup-finished":
           try {
             aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {TabmixSvc.console.assert(ex);}
+          } catch (ex) {
+            TabmixSvc.console.assert(ex);
+          }
           break;
       }
     }
@@ -241,6 +252,16 @@ this.TabmixSvc = {
     settingPreference: false,
   },
 
+  isAustralisBgStyle: function(orient) {
+    if (typeof orient != "string") {
+      throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);
+    }
+    return TabmixSvc.australis && orient == "horizontal" &&
+      !this.prefBranch.getBoolPref("squaredTabsStyle");
+  },
+
+  isFixedGoogleUrl: () => false,
+
   blockedClickingOptions: []
 };
 
@@ -250,8 +271,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
 
 // check if australis tab shape is implemented
 XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  return  this.topWin().document.getElementById("tab-curve-clip-path-start") ?
-          true : false;
+  if (this.topWin().document.getElementById("tab-curve-clip-path-start")) {
+    return true;
+  }
+  return false;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
@@ -263,32 +286,36 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
 });
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function() {
   return Services.prefs.getBranch("extensions.tabmix.");
 });
 // string bundle
-XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function() {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
   return Services.strings.createBundle(properties);
 });
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function() {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
   return Services.appinfo.OS == "Darwin";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
   return Services.appinfo.OS == "Linux";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", function() {
+  return Services.appinfo.name == "Cyberfox";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
   return Services.appinfo.name == "Pale Moon";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function () {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function() {
   return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
 });
 

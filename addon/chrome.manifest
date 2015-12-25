@@ -45,7 +45,7 @@ overlay   chrome://browser/content/preferences/tabs.xul             chrome://tab
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css
 
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
-overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul
+overlay   about:newtab                                              chrome://tabmixplus/content/links/newTab.xul appversion<42.0
 overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/links/removeBlankTab.xul
 overlay   chrome://mozapps/content/handling/dialog.xul              chrome://tabmixplus/content/links/removeBlankTab.xul
 
@@ -78,9 +78,13 @@ skin      tabmixplus   classic/1.0   chrome/skin/
 
 skin      tabmix-version tabmixplus  chrome/skin/app_version/before39.0/ appversion<39.0a1
 skin      tabmix-version tabmixplus  chrome/skin/app_version/39.0/       appversion>=39.0a1
-skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT appversion<41.0a1
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/41.0/win/   os=WINNT appversion>=41.0a1
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/linux/ os=Linux
 
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css
+
+style     chrome://browser/content/browser.xul chrome://tabmixplus/content/overlay/firefox.css  application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+style     chrome://browser/content/browser.xul chrome://tabmixplus/content/overlay/palemoon.css application={8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}

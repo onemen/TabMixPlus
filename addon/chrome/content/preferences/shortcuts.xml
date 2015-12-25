@@ -62,7 +62,7 @@
         <parameter name="aNewValue"/>
         <parameter name="aDisabled"/>
         <body><![CDATA[
-          let newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
+          var newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
           if (newValue != Shortcuts.keyStringify(this.key)) {
             let newKey = Shortcuts.keyParse(newValue)
             newKey.disabled = aDisabled;
@@ -73,7 +73,7 @@
             Shortcuts.prefsChangedByTabmix = true;
             $("pref_shortcuts").value = this.parentNode.value;
             Shortcuts.prefsChangedByTabmix = false;
-            let callBack = function(shortcut) shortcut.id && shortcut.updateNotification();
+            let callBack = shortcut => shortcut.id && shortcut.updateNotification();
             gMenuPane.updateShortcuts(this.parentNode, callBack);
           }
           this.editBox.select();
@@ -95,9 +95,9 @@
 
       <method name="updateNotification">
         <body><![CDATA[
-          let shortcut = !this.disabled && getFormattedKey(this.key);
-          let usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
-          let box = this.notificationbox;
+          var shortcut = !this.disabled && getFormattedKey(this.key);
+          var usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
+          var box = this.notificationbox;
           while (box.hasChildNodes())
             box.removeChild(box.firstChild);
           if (usedKey) {
@@ -120,7 +120,7 @@
         <parameter name="event"/>
         <body><![CDATA[
           // handle Ctrl/Command + W
-          let control = !event.shiftKey && (event.ctrlKey || event.metaKey);
+          var control = !event.shiftKey && (event.ctrlKey || event.metaKey);
           if (control && event.keyCode == 87)
             this.handleKeyEvents(event, true);
         ]]></body>
@@ -134,9 +134,9 @@
           event.stopPropagation();
           event.stopImmediatePropagation();
 
-          let key = {modifiers: "", key: "", keycode: ""};
+          var key = {modifiers: "", key: "", keycode: ""};
           key.modifiers =
-            ["ctrl","meta","alt","shift"].filter(function(mod) event[mod+"Key"]).
+            ["ctrl","meta","alt","shift"].filter(mod => event[mod + "Key"]).
             join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
@@ -180,7 +180,7 @@
               return;
           }
 
-          let newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);
+          var newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);
           this.applyNewValue(newValue, false);
         ]]></body>
       </method>
@@ -224,16 +224,16 @@
 
       <property name="defaultPref" readonly="true">
         <getter><![CDATA[
-          let defaultPref = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
-          if (defaultPref) {
+          var defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
+          if (defaultVal) {
             let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
             resetButton.hidden = false;
-            let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultPref));
+            let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
             resetButton.setAttribute("tooltiptext",
                 resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
           }
-          this.__defineGetter__("defaultPref",  function() defaultPref);
-          return defaultPref;
+          this.__defineGetter__("defaultPref", () => defaultVal);
+          return defaultVal;
         ]]></getter>
       </property>
 
