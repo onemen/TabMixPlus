@@ -1,4 +1,4 @@
-<!ENTITY tabStyles.label "Styles">
+<!ENTITY tabStyles.label "样式">
 <!ENTITY styles.label "定制样式">
 <!ENTITY currentTab.label "当前标签页">
 <!ENTITY unloadedTabs.label "未加载的标签页">
@@ -6,7 +6,7 @@
 <!ENTITY hideRGB.label "隐藏 RGB">
 <!ENTITY showRGB.label "显示 RGB">
 <!ENTITY unreadAfterReload.label "重新载入标签页后将其设为未读">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY disableBackground.label "禁用自定义的背景颜色">
 <!ENTITY squaredTabs.label "背景颜色应用到方形标签页">
 <!ENTITY otherTabs.label "其他标签页">
 <!ENTITY italic.label "斜体">
