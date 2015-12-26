@@ -271,8 +271,9 @@ var TabmixSessionManager = { // jshint ignore:line
 
     if (Tabmix.isVersion(250, 250) && !TabmixSvc.sm.promiseInitialized) {
       Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
-      Tabmix.ssPromise.then(initializeSM)
-        .then(null, Tabmix.reportError);
+      Tabmix.ssPromise.then(() => TMP_TabView.init())
+                      .then(initializeSM)
+                      .then(null, Tabmix.reportError);
     }
     else
       initializeSM();
@@ -2539,14 +2540,14 @@ var TabmixSessionManager = { // jshint ignore:line
       return;
     let tabview = this.tabViewInstalled && TabView._window;
     if (tabview) {
-      // update all tabs when we exit panorama (tabviewhidden)
       if (aBackup) {
+        // update all tabs when we enter/exit panorama
         Array.forEach(gBrowser.tabs, function SM_saveTabViewData_forEach(tab) {
           this.saveTabviewTab(this.getNodeForTab(tab), tab);
         }, this);
       } else {
-        // we don't need to save again when we exit panorama (tabviewhidden event)
         // force Tabview to save when we save all window data
+        // we will collect the data from SessionStore
         tabview.UI._save();
         tabview.GroupItems.saveAll();
         tabview.TabItems.saveAll();
@@ -3802,18 +3803,24 @@ var TabmixSessionManager = { // jshint ignore:line
   /* ............... TabView Data ............... */
 
   get tabViewInstalled() {
-    delete this.tabViewInstalled;
-    return (this.tabViewInstalled = TMP_TabView.installed);
+    return TMP_TabView.installed;
   },
 
+  notifyAboutMissingTabView: function() {
+    // TODO: notify the user when TabView is missing and the restored session
+    // contains groups
+  },
+
+  // we override these functions when TabView exist
   _setWindowStateBusy: function() {
     TabmixSvc.SessionStore._setWindowStateBusy(window);
   },
 
-  _setWindowStateReady: function() {
+  _setWindowStateReady: function(aOverwriteTabs, showNotification) {
     if (Tabmix.isVersion(350)) {
       TabmixSvc.SessionStore._setWindowStateReady(window);
     }
+    this.notifyAboutMissingTabView(showNotification);
   },
 
   _saveTabviewData: function() { },

@@ -1,4 +1,7 @@
+  /* globals TabItems */
   "use strict";
+
+  TMP_TabView.subScriptLoaded = true;
 
   TMP_TabView.handleEvent = function(aEvent) {
     switch (aEvent.type) {
@@ -30,6 +33,9 @@
           }, 0, aEvent);
         }
         break;
+      case "willshowtabview":
+        Tabmix.slideshow.cancel();
+        break;
     }
   };
 
@@ -41,6 +47,11 @@
    */
 
   TMP_TabView._patchBrowserTabview = function SM__patchBrowserTabview() {
+    if (TabView.hasOwnProperty("tabmixInitialized")) {
+      return;
+    }
+    TabView.tabmixInitialized = true;
+
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
       tabView.addEventListener("tabviewhidden", this, true);
@@ -50,14 +61,20 @@
     }
 
     // we need to stop tabs slideShow before Tabview starts
-    let $LF = '\n      ';
-    Tabmix.changeCode(TabView, "TabView.toggle")._replace(
-      'this.show();',
-      '{' + $LF +
-      '  Tabmix.slideshow.cancel();' + $LF +
-      '  $&' + $LF +
-      '}'
-    ).toCode(true);
+    if (window.hasOwnProperty("tabGroups")) {
+      // Tab Groups extension by Quicksaver
+      // https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/
+      window.addEventListener("willshowtabview", this, true);
+    } else {
+      let $LF = '\n      ';
+      Tabmix.changeCode(TabView, "TabView.toggle")._replace(
+        'this.show();',
+        '{' + $LF +
+        '  Tabmix.slideshow.cancel();' + $LF +
+        '  $&' + $LF +
+        '}'
+      ).toCode();
+    }
 
     // don't do anything if Session Manager extension installed
     if (Tabmix.extensions.sessionManager)
@@ -83,41 +100,51 @@
   TMP_TabView._patchInitialized = false;
   TMP_TabView._patchTabviewFrame = function SM__patchTabviewFrame() {
     this._patchInitialized = true;
-    // Firefox 8.0 use strict mode - we need to map global variable
     TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
-    Tabmix.changeCode(TabView._window.GroupItems, "TabView._window.GroupItems.reconstitute")._replace(
-      '"use strict";',
-      '$&' +
-      'let win = TabView._window;' +
-      'let GroupItem = win.GroupItem;' +
-      'let iQ = win.iQ;' +
-      'let UI = win.UI;' +
-      'let Utils = win.Utils;' +
-      'let GroupItems = win.GroupItems;' +
-      'let Storage = win.Storage;', {silent: true}
-    )._replace(
-      'this.',
-      'GroupItems.', {flags: "g"}
-    )._replace(
-      // This group is re-used by session restore
-      // make sure all of its children still belong to this group.
-      // Do it before setBounds trigger data save that will overwrite
-      // session restore data.
-      // We call TabItems.resumeReconnecting later to reconnect the tabItem.
-      'groupItem.userSize = data.userSize;',
-      'groupItem.getChildren().forEach(function TMP_GroupItems_reconstitute_groupItem_forEach(tabItem) {' +
-      '  var tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);' +
-      '  if (!tabData || tabData.groupID != data.id) {' +
-      '    tabItem._reconnected = false;' +
-      '  }' +
-      '});' +
-      '$&'
-    ).toCode();
+    TabView._window.GroupItems.reconstitute = function(groupItemsData, groupItemData) {
+      let validate = function(groupItem, data) {
+        // This group is re-used by session restore
+        // make sure all of its children still belong to this group.
+        // Do it before setBounds trigger data save that will overwrite
+        // session restore data.
+        // TabView will use TabItems.resumeReconnecting or UI.reset to reconnect the tabItem.
+        groupItem.getChildren().forEach(tabItem => {
+          let tabData = TabmixSessionData.getTabValue(tabItem.tab, "tabview-tab", true);
+          if (!tabData || tabData.groupID != data.id) {
+            tabItem._reconnected = false;
+          }
+        });
+      };
+      if (groupItemData) {
+        let storageSanity = this.groupItemStorageSanity || this.storageSanityGroupItem;
+        let ids = Object.keys(groupItemData);
+        for (let id of ids) {
+          let data = groupItemData[id];
+          if (storageSanity(data)) {
+            let groupItem = this.groupItem(data.id);
+            if (groupItem && !groupItem.hidden) {
+              validate(groupItem, data);
+            }
+          }
+        }
+      }
+      this._original_reconstitute.apply(this, arguments);
+    };
+
+    let fn = TabView._window.UI._original_reset = TabView._window.UI.reset;
+    if (window.hasOwnProperty("tabGroups")) {
+      // reconnect tabs that we disconnected in reconstitute
+      TabView._window.UI.reset = function() {
+        TabItems.resumeReconnecting();
+        this._original_reset.apply(this, arguments);
+      };
+      return;
+    }
 
     // add tab to the new group on tabs order not tabItem order
-    TabView._window.UI._original_reset = TabView._window.UI.reset;
+    let isStrict = (f) => f.toString().indexOf('"use strict";') > -1;
     Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
-      '"use strict";',
+      isStrict(fn) ? '"use strict";' : '{',
       '$&' +
       'let win = TabView._window;' +
       'let Trenches = win.Trenches;' +
@@ -139,36 +166,10 @@
        if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
     )._replace(
-      'groupItem.add(item, {immediately: true});',
+      /groupItem.add\(.*\);/,
       'item._reconnected = true; \
        $&'
-    )._replace(
-      /(\})(\)?)$/,
-      '  GroupItems.groupItems.forEach(function(group) {' +
-      '    if (group != groupItem)' +
-      '      group.close();' +
-      '  });' +
-      ' $1$2'
     ).toCode();
-
-    TabView._window.TabItems._original_resumeReconnecting = TabView._window.TabItems.resumeReconnecting;
-    TabView._window.TabItems.resumeReconnecting = function TabItems_resumeReconnecting() {
-      let TabItems = TabView._window.TabItems;
-      let Utils = TabView._window.Utils;
-      Utils.assertThrow(TabItems._reconnectingPaused, "should already be paused");
-      TabItems._reconnectingPaused = false;
-      Array.forEach(gBrowser.tabs, function(tab) {
-        if (tab.pinned)
-          return;
-        let item = tab._tabViewTabItem;
-        if ("__tabmix_reconnected" in item && !item.__tabmix_reconnected) {
-          item._reconnected = false;
-          delete item.__tabmix_reconnected;
-        }
-        if (!item._reconnected)
-          item._reconnect();
-      });
-    };
   };
 
   TMP_TabView._resetTabviewFrame = function SM__resetTabviewFrame() {
@@ -179,14 +180,13 @@
       gBrowser.tabContainer.removeEventListener("TabShow", this, true);
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
     }
+    window.removeEventListener("willshowtabview", this, true);
 
     if (this._patchInitialized && TabView._window) {
       TabView._window.GroupItems.reconstitute = TabView._window.GroupItems._original_reconstitute;
       delete TabView._window.GroupItems._original_reconstitute;
       TabView._window.UI.reset = TabView._window.UI._original_reset;
-      TabView._window.TabItems.resumeReconnecting = TabView._window.TabItems._original_resumeReconnecting;
       delete TabView._window.UI._original_reset;
-      delete TabView._window.TabItems._original_resumeReconnecting;
     }
   };
 
@@ -195,6 +195,10 @@
   // aWindow: rdfNodeWindow to read from
   TabmixSessionManager._setWindowStateBusy = function SM__setWindowStateBusy(aWindow) {
     TabmixSvc.SessionStore._setWindowStateBusy(window);
+    if (!this.tabViewInstalled) {
+      return;
+    }
+
     TMP_SessionStore.initService();
     this._getSessionTabviewData(aWindow);
 
@@ -207,6 +211,10 @@
   TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification) {
     if (Tabmix.isVersion(350)) {
       TabmixSvc.SessionStore._setWindowStateReady(window);
+    }
+    if (!this.tabViewInstalled) {
+      this.notifyAboutMissingTabView(showNotification);
+      return;
     }
 
     if (!aOverwriteTabs)
@@ -261,6 +269,10 @@
   };
 
   TabmixSessionManager._saveTabviewData = function SM__saveTabviewData() {
+    if (!this.tabViewInstalled) {
+      return;
+    }
+
     for (let id of Object.keys(this._tabviewData)) {
       this._setTabviewData(id, this._tabviewData[id]);
     }
@@ -279,7 +291,7 @@
   };
 
   TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, activeGroupId) {
-    if (tabdata.pinned)
+    if (!this.tabViewInstalled || tabdata.pinned)
       return;
 
     let parsedData;
@@ -409,6 +421,10 @@
   * blankTabs: remaining blank tabs in this windows
   */
   TabmixSessionManager._preperTabviewData = function SM__preperTabviewData(loadOnStartup, blankTabs) {
+    if (!this.tabViewInstalled) {
+      return;
+    }
+
     let newGroupItems = this._tabviewData["tabview-group"];
     let groupItems = TabmixSessionData.getWindowValue(window, "tabview-group", true);
     let newGroupItemsIsEmpty = this.isEmptyObject(newGroupItems);
@@ -540,13 +556,15 @@
   // update page bounds when we overwrite tabs
   TabmixSessionManager._setUIpageBounds = function SM__setUIpageBounds() {
     if (TabView._window) {
-      let data = TabView._window.Storage.readUIData(window);
+      let data = TabmixSessionData.getWindowValue(window, "tabview-ui", true);
       if (this.isEmptyObject(data))
         return;
 
-      TabView._window.UI._storageSanity(data);
-      if (data && data.pageBounds)
+      let UI = TabView._window.UI;
+      let storageSanity = UI._storageSanity || UI.storageSanity;
+      if (storageSanity(data) && data.pageBounds) {
         TabView._window.UI._pageBounds = data.pageBounds;
+      }
     }
   };
 

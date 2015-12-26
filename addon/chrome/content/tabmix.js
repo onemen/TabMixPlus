@@ -178,6 +178,8 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
+  TMP_TabView.init();
+
   if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
     this.ssPromise.then(this.sessionInitialized.bind(this), Tabmix.reportError);
   else
@@ -400,13 +402,6 @@ var TMP_eventListener = {
     // url-fixer also prevent the use of eval changes by using closure in the replcaed function
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
-
-    try {
-      if (TMP_TabView.installed)
-        TMP_TabView._patchBrowserTabview();
-    } catch (ex) {
-      Tabmix.assert(ex);
-    }
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {

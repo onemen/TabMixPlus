@@ -907,13 +907,24 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
   }
 };
 
-var TMP_TabView = { /* jshint ignore: line */
+var TMP_TabView = {
+  subScriptLoaded: false,
+  init: function() {
+    try {
+      if (this.installed) {
+        this._patchBrowserTabview();
+      }
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
+  },
+
   get installed() {
-    delete this.installed;
     let installed = typeof TabView == "object";
-    if (installed)
+    if (installed && !this.subScriptLoaded) {
       Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js", window);
-    return (this.installed = installed);
+    }
+    return installed;
   },
 
   exist: function(id) {
