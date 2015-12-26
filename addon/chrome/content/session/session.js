@@ -3375,10 +3375,9 @@ var TabmixSessionManager = { // jshint ignore:line
                                          "restoreHistoryPrecursor";
     TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
 
-    // SessionStore.restoreTabs send SSWindowStateReady
     // show notification and clean up our data
     var showNotification = caller != "firstwindowopen" || this.prefBranch.getIntPref("onStart") == 1;
-    this._aftertWindowStateReady(overwrite, showNotification);
+    this._setWindowStateReady(overwrite, showNotification);
 
     // when resuming at startup: add additionally requested pages to the end
     if (caller == "firstwindowopen" && loadOnStartup.length) {
@@ -3807,17 +3806,16 @@ var TabmixSessionManager = { // jshint ignore:line
     return (this.tabViewInstalled = TMP_TabView.installed);
   },
 
-  _sendWindowStateEvent: function SM__sendWindowStateEvent(aType) {
-    let event = document.createEvent("Events");
-    event.initEvent("SSWindowState" + aType, true, false);
-    window.dispatchEvent(event);
-  },
-
   _setWindowStateBusy: function() {
-    this._sendWindowStateEvent("Busy");
+    TabmixSvc.SessionStore._setWindowStateBusy(window);
   },
 
-  _aftertWindowStateReady: function() { },
+  _setWindowStateReady: function() {
+    if (Tabmix.isVersion(350)) {
+      TabmixSvc.SessionStore._setWindowStateReady(window);
+    }
+  },
+
   _saveTabviewData: function() { },
   _setTabviewTab: function() { },
   _tabviewData: {},

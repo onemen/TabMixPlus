@@ -191,8 +191,8 @@
 
   // aWindow: rdfNodeWindow to read from
   TabmixSessionManager._setWindowStateBusy = function SM__setWindowStateBusy(aWindow) {
+    TabmixSvc.SessionStore._setWindowStateBusy(window);
     TMP_SessionStore.initService();
-    this._sendWindowStateEvent("Busy");
     this._getSessionTabviewData(aWindow);
 
     // save group count before we start the restore
@@ -201,7 +201,11 @@
     this._updateUIpageBounds = false;
   };
 
-  TabmixSessionManager._aftertWindowStateReady = function(aOverwriteTabs, showNotification) {
+  TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification) {
+    if (Tabmix.isVersion(350)) {
+      TabmixSvc.SessionStore._setWindowStateReady(window);
+    }
+
     if (!aOverwriteTabs)
       this._groupItems = this._tabviewData["tabview-group"];
 
