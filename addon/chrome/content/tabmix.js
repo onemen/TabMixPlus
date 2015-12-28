@@ -73,16 +73,11 @@ Tabmix.sessionInitialized = function() {
     window.restoreLastSession = function restoreLastSession() {
       TabmixSessionManager.restoreLastSession();
     };
-    if (this.isVersion(200)) {
-      this.setItem("Browser:RestoreLastSession", "disabled",
-        !SM.canRestoreLastSession || SM.isPrivateWindow);
-    } else {
-      this.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.toggleRestoreLastSession")._replace(
-        'this._ss', 'TabmixSessionManager'
-      ).toCode();
-    }
 
-    if (!this.isVersion(260)) {
+    this.setItem("Browser:RestoreLastSession", "disabled",
+                 !SM.canRestoreLastSession || SM.isPrivateWindow);
+
+    if (TabmixSvc.isPaleMoon) {
       this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
         'function updateSearchEngine',
         'let updateSearchEngine = function _updateSearchEngine', {silent: true}
@@ -96,9 +91,6 @@ Tabmix.sessionInitialized = function() {
         'ss = TabmixSessionManager;\
          $&'
       ).toCode();
-    } else if (!this.isVersion(270)) {
-      // from Firefox 27 SessionStore notify sessionstore-last-session-cleared
-      SessionStore.canRestoreLastSession = false;
     }
   }
 

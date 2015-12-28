@@ -138,13 +138,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '    $&';
     }
 
-    if (Tabmix.isVersion(270) && sessionManager) {
-      this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
-        'SessionStore.canRestoreLastSession',
-        'TabmixSessionManager.canRestoreLastSession'
-      ).toCode();
-    }
-
     // At the moment we must init TabmixSessionManager before sessionStore.init
     var fn;
     if (typeof gBrowserInit.__treestyletab___delayedStartup == "function") {
@@ -166,9 +159,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       '  Tabmix.beforeSessionStoreInit();' +
       '} catch (ex) {Tabmix.assert(ex);}\n' +
       '    $&'
-    )._replace(
-      'SessionStore.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(260, 250) && sessionManager, silent: true}
     )._replace(
       /(\})(\)?)$/,
       '  Tabmix.runningDelayedStartup = false;\n' +

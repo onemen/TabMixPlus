@@ -2979,13 +2979,16 @@ var TabmixSessionManager = { // jshint ignore:line
   setLastSession: function(restoring) {
     let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
     TabmixSvc.sm.lastSessionPath = this.gSessionPath[1];
-    if (!Tabmix.isVersion(270))
-      return state;
+
     // add __SS_lastSessionWindowID to force SessionStore.restoreLastSession
     // to open new window
     if (restoring)
       window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
-    TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
+    if (Tabmix.isVersion(270)) {
+      TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
+    } else {
+      TabmixSvc.SessionStore._lastSessionState = state;
+    }
     return state;
   },
 
@@ -2995,10 +2998,10 @@ var TabmixSessionManager = { // jshint ignore:line
       this.setLastSession(true);
     if (path == lastSession) {
       TabmixSvc.sm.lastSessionPath = null;
+      // Since Firefox 27 SessionStore LastSession.clear send
+      // NOTIFY_LAST_SESSION_CLEARED
       TabmixSvc.ss.canRestoreLastSession = false;
       Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
-      if (Tabmix.isVersion(270))
-        Services.obs.notifyObservers(null, "sessionstore-last-session-cleared", null);
     }
 
     var sessionContainer = this.initContainer(path);
