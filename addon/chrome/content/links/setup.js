@@ -61,45 +61,19 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
   try {
     var SM = TabmixSessionManager;
-    if (this.isVersion(200)) {
-      SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
-      SM.isWindowPrivate = function(aWindow) {
-        return PrivateBrowsingUtils.isWindowPrivate(aWindow);
-      };
-      // isPrivateWindow is boolean property of this window, user can't change private status of a window
-      SM.isPrivateWindow = SM.isWindowPrivate(window);
-      SM.__defineGetter__("isPrivateSession", function() {
-        return this.globalPrivateBrowsing || TabmixSvc.sm.private;
-      });
-      // set this flag to false if user opens in a session at least one non-private window
-      SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
-      if (SM.firstNonPrivateWindow)
-        TabmixSvc.sm.private = false;
-    } else {
-      let pbs = Cc["@mozilla.org/privatebrowsing;1"].
-                getService(Ci.nsIPrivateBrowsingService);
-      SM.globalPrivateBrowsing = pbs.privateBrowsingEnabled;
-      SM.isWindowPrivate = function() {
-        return SM.globalPrivateBrowsing;
-      };
-      SM.__defineGetter__("isPrivateWindow", function() {
-        return this.globalPrivateBrowsing;
-      });
-      SM.__defineGetter__("isPrivateSession", function() {
-        return this.globalPrivateBrowsing;
-      });
-    }
-
-    // make tabmix compatible with ezsidebar extension
-    var fnContainer, TMP_BrowserStartup;
-    if ("__ezsidebar__BrowserStartup" in window) {// need to test this on firefox 16+
-      [fnContainer, TMP_BrowserStartup] = [window, "__ezsidebar__BrowserStartup"];
-    } else if ("gBrowserInit" in window) {
-      [fnContainer, TMP_BrowserStartup] = [gBrowserInit, "onLoad"];
-    } else { // we probably never get here
-      [fnContainer, TMP_BrowserStartup] = [window, "BrowserStartup"];
-    }
-    var bowserStartup = this.changeCode(fnContainer, TMP_BrowserStartup);
+    SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+    SM.isWindowPrivate = function(aWindow) {
+      return PrivateBrowsingUtils.isWindowPrivate(aWindow);
+    };
+    // isPrivateWindow is boolean property of this window, user can't change private status of a window
+    SM.isPrivateWindow = SM.isWindowPrivate(window);
+    SM.__defineGetter__("isPrivateSession", function() {
+      return this.globalPrivateBrowsing || TabmixSvc.sm.private;
+    });
+    // set this flag to false if user opens in a session at least one non-private window
+    SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
+    if (SM.firstNonPrivateWindow)
+      TabmixSvc.sm.private = false;
 
     // Bug 756313 - Don't load homepage URI before first paint
     // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
@@ -115,8 +89,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
       '   $&' +
       ' }';
-    if (!this.isVersion(190))
-      bowserStartup = bowserStartup._replace(swapOldCode, swapNewCode);
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
@@ -178,14 +150,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         '    gBrowser.selectedBrowser.stop();' +
         '  }\n' +
         '    $&';
-
-      if (!this.isVersion(190)) {
-        bowserStartup = bowserStartup._replace(
-          'if (window.opener && !window.opener.closed', loadOnStartup
-        );
-      }
     }
-    bowserStartup.toCode();
 
     if (Tabmix.isVersion(270) && sessionManager) {
       this.changeCode(RestoreLastSessionObserver, "RestoreLastSessionObserver.init")._replace(
@@ -203,16 +168,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     }
 
     let insertionPoint, ssPromise = "";
-    if (this.isVersion(250, 250)) {
-      insertionPoint = "PlacesToolbarHelper.init();";
-      if (!this.isVersion(270))
-        ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
-    } else {
-      insertionPoint = 'Services.obs.addObserver';
-    }
+    insertionPoint = "PlacesToolbarHelper.init();";
+    if (!this.isVersion(270))
+      ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
 
     this.changeCode(gBrowserInit, fn)._replace(
-      'Services.obs.addObserver', loadOnStartup, {check: this.isVersion(190) && !!loadOnStartup}
+      'Services.obs.addObserver', loadOnStartup, {check: !!loadOnStartup}
     )._replace(
       insertionPoint,
       'try {' +
@@ -220,10 +181,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       '} catch (ex) {Tabmix.assert(ex);}\n' +
       '    $&'
     )._replace(
-      swapOldCode, swapNewCode, {check: this.isVersion(190)}
+      swapOldCode, swapNewCode
     )._replace(
       'SessionStore.canRestoreLastSession',
-      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(260) && sessionManager, silent: true}
+      'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(260, 250) && sessionManager, silent: true}
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix
@@ -237,8 +198,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
-
-    fnContainer[TMP_BrowserStartup].bind(fnContainer);
 
   } catch (ex) {
     this.assert(ex);
@@ -303,8 +262,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
 
   tabBrowser.getBrowserForTabPanel = function(notificationbox) {
-    let attrName = Tabmix.isVersion(180) ? "class" : "anonid"; // changed by Bug 768442
-    return document.getAnonymousElementByAttribute(notificationbox, attrName, "browserStack").firstChild;
+    return document.getAnonymousElementByAttribute(notificationbox, "class", "browserStack").firstChild;
   };
 
   tabBrowser.getTabForLastPanel = function() {
