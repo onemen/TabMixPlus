@@ -792,11 +792,11 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "WindowIsClosing")._replace(
       '{',
-      '{window.tabmix_warnedBeforeClosing = false;'
+      '{Tabmix._warnedBeforeClosing = false;'
     )._replace(
       'if (!closeWindow(false, warnAboutClosingWindow))',
       'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
-       if (reallyClose && !window.tabmix_warnedBeforeClosing)\
+       if (reallyClose && !Tabmix._warnedBeforeClosing)\
          reallyClose = tablib.closeWindow();\
        if (!reallyClose)'
     ).toCode();
@@ -1858,7 +1858,7 @@ var tablib = { // eslint-disable-line
 
   closeWindow: function TMP_closeWindow(aCountOnlyBrowserWindows) {
     // we use this flag in WindowIsClosing
-    window.tabmix_warnedBeforeClosing = true;
+    Tabmix._warnedBeforeClosing = true;
 
     // since that some pref can changed by _onQuitRequest we catch it fisrt
     // by observe browser-lastwindow-close-requested
