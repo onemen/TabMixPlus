@@ -166,7 +166,6 @@ this.TabmixSvc = {
 
       this.addMissingPrefs();
 
-      Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
       if (isVersion(190))
@@ -208,13 +207,6 @@ this.TabmixSvc = {
           }
           delete TabmixSvc.SessionStoreGlobal;
           delete TabmixSvc.SessionStore;
-          break;
-        case "browser-delayed-startup-finished":
-          try {
-            aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {
-            TabmixSvc.console.assert(ex);
-          }
           break;
       }
     }

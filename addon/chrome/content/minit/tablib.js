@@ -1687,7 +1687,6 @@ var tablib = { // eslint-disable-line
           return;
         }
         Tabmix._afterTabduplicated = true;
-        TabmixSessionManager.init();
         let url = aOtherTab.linkedBrowser.currentURI.spec;
         gBrowser.tabContainer.adjustTabstrip(true, url);
       }

@@ -42,20 +42,12 @@ Tabmix.startup = function TMP_startup() {
 };
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js
-Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
-  // when gBrowserInit._delayedStartup broke by extension we don't get
-  // "browser-delayed-startup-finished" notification
-  setTimeout(function() {
-    Tabmix.initialization.run("delayedStartup");
-  }, 25);
-
+Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
     let tmp = {};
     Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
-
-  TabmixSessionManager.init();
 
   // if we call these functions earlier we get this warning:
   // XUL box for _moz_generated_content_before element contained an inline #text child
@@ -111,7 +103,7 @@ Tabmix.sessionInitialized = function() {
 };
 
 // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
-// from Tabmix.delayedStartup
+// from Tabmix.afterDelayedStartup
 Tabmix.getButtonsHeight = function() {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
@@ -166,7 +158,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   }
 };
 
-Tabmix.delayedStartup = function TMP_delayedStartup() {
+Tabmix.afterDelayedStartup = function() {
   TabmixTabbar._enablePositionCheck = true;
 
   TMP_TabView.init();
@@ -525,7 +517,7 @@ var TMP_eventListener = {
     Tabmix.Shortcuts.onWindowOpen(window);
 
     // if treeStyleTab extension installed we call this from
-    // Tabmix.delayedStartup
+    // Tabmix.afterDelayedStartup
     if (!Tabmix.extensions.treeStyleTab)
       Tabmix.navToolbox.tabStripAreaChanged();
 
@@ -1136,7 +1128,7 @@ Tabmix.initialization = {
   onContentLoaded: {id: 2, obj: "TMP_eventListener"},
   beforeBrowserInitOnLoad: {id: 3, obj: "Tabmix"},
   onWindowOpen: {id: 4, obj: "TMP_eventListener"},
-  delayedStartup: {id: 5, obj: "Tabmix"},
+  afterDelayedStartup: {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
     /**

@@ -256,7 +256,7 @@ var TabmixSessionManager = { // jshint ignore:line
     return (this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions."));
   },
 
-  // call by Tabmix.beforeSessionStoreInit
+  // call by Tabmix.beforeDelayedStartup
   init: function SM_init() {
     if (this._inited)
       return;

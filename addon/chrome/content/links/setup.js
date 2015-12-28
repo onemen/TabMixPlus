@@ -123,47 +123,46 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
-    var loadOnStartup;
     if (prepareLoadOnStartup) {
-      // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
-      loadOnStartup =
-        '  if (uriToLoad && uriToLoad != "about:blank") {' +
-        '    for (let i = 0; i < gBrowser.tabs.length ; i++) {' +
-        '      gBrowser.tabs[i].loadOnStartup = true;' +
-        '    }' +
-        '  }' +
-        '  if (uriToLoad == TabmixSvc.aboutBlank || "tabmixdata" in window) {' +
-        '    gBrowser.selectedBrowser.stop();' +
-        '  }\n' +
-        '    $&';
-    }
-
-    // At the moment we must init TabmixSessionManager before sessionStore.init
-    var fn;
-    if (typeof gBrowserInit.__treestyletab___delayedStartup == "function") {
-      fn = "gBrowserInit.__treestyletab___delayedStartup";
+      Tabmix.prepareLoadOnStartup = function() {
+        let uriToLoad = gBrowserInit._getUriToLoad();
+        if (uriToLoad && uriToLoad != TabmixSvc.aboutBlank) {
+          let tabs = gBrowser.tabs;
+          for (let tab of tabs) {
+            tab.loadOnStartup = true;
+          }
+        }
+        if (uriToLoad == TabmixSvc.aboutBlank || "tabmixdata" in window) {
+          gBrowser.selectedBrowser.stop();
+        }
+      };
     } else {
-      fn = "gBrowserInit._delayedStartup";
+      Tabmix.prepareLoadOnStartup = function() { };
     }
 
-    let insertionPoint = "PlacesToolbarHelper.init();";
-    this.changeCode(gBrowserInit, fn)._replace(
-      '{',
-      '{\n' +
-      '  Tabmix.runningDelayedStartup = true;\n'
-    )._replace(
-      'Services.obs.addObserver', loadOnStartup, {check: !!loadOnStartup}
-    )._replace(
-      insertionPoint,
-      'try {' +
-      '  Tabmix.beforeSessionStoreInit();' +
-      '} catch (ex) {Tabmix.assert(ex);}\n' +
-      '    $&'
-    )._replace(
-      /(\})(\)?)$/,
-      '  Tabmix.runningDelayedStartup = false;\n' +
-      '$1$2'
-    ).toCode();
+    Tabmix.originalFunctions.gBrowserInit__delayedStartup = gBrowserInit._delayedStartup;
+    gBrowserInit._delayedStartup = function() {
+      try {
+        Tabmix.beforeDelayedStartup();
+      } catch (ex) {
+        Tabmix.assert(ex);
+      }
+
+      let result;
+      try {
+        // we use runningDelayedStartup in gBrowser.swapBrowsersAndCloseOther
+        Tabmix.runningDelayedStartup = true;
+        result = Tabmix.originalFunctions.gBrowserInit__delayedStartup.apply(this, arguments);
+      } finally {
+        Tabmix.runningDelayedStartup = false;
+      }
+
+      Tabmix.prepareLoadOnStartup();
+      TabmixSessionManager.init();
+      Tabmix.initialization.run("afterDelayedStartup");
+
+      return result;
+    };
 
     // look for installed extensions that are incompatible with tabmix
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
