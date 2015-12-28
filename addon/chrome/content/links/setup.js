@@ -108,7 +108,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
     var loadOnStartup, swapNewCode =
       ' if (!Tabmix.singleWindowMode) {' +
-      '   window.tabmix_afterTabduplicated = true;' +
+      '   Tabmix._afterTabduplicated = true;' +
       '   TabmixSessionManager.init();' +
       '   let remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
       '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +

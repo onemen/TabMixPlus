@@ -291,7 +291,7 @@ var TabmixSessionManager = { // jshint ignore:line
     // we can get here before the browser window is loaded
     tablib.init();
 
-    var _afterTabduplicated = "tabmix_afterTabduplicated" in window && window.tabmix_afterTabduplicated;
+    var _afterTabduplicated = "_afterTabduplicated" in Tabmix && Tabmix._afterTabduplicated;
     var isFirstWindow = (Tabmix.isFirstWindow || this.firstNonPrivateWindow) && !_afterTabduplicated;
 
     this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;

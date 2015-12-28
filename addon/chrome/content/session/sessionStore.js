@@ -667,8 +667,9 @@ var TabmixConvertSession = { // jshint ignore:line
     if (!Tabmix.firstWindowInSession)
       return;
 
-    if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
+    if (!Tabmix.extensions.sessionManager || Tabmix._afterTabduplicated || !Tabmix.isFirstWindow) {
       return;
+    }
 
     var sessions = TabmixSessionManager.getSessionList();
     if (!sessions)
