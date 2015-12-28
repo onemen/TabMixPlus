@@ -75,21 +75,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (SM.firstNonPrivateWindow)
       TabmixSvc.sm.private = false;
 
-    // Bug 756313 - Don't load homepage URI before first paint
-    // moved this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup
-    var swapOldCode = this.isVersion(380) ?
-        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, tabToOpen);' :
-        'gBrowser.swapBrowsersAndCloseOther(gBrowser.selectedTab, uriToLoad);';
-    var loadOnStartup, swapNewCode =
-      ' if (!Tabmix.singleWindowMode) {' +
-      '   Tabmix._afterTabduplicated = true;' +
-      '   TabmixSessionManager.init();' +
-      '   let remoteBrowser = uriToLoad.ownerDocument.defaultView.gBrowser;' +
-      '   let url = remoteBrowser.getBrowserForTab(uriToLoad).currentURI.spec;' +
-      '   gBrowser.tabContainer.adjustTabstrip(true, url);' +
-      '   $&' +
-      ' }';
-
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
                       this.extensions.sessionManager;
@@ -138,6 +123,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
+    var loadOnStartup;
     if (prepareLoadOnStartup) {
       // move this code from gBrowserInit.onLoad to gBrowserInit._delayedStartup after bug 756313
       loadOnStartup =
@@ -173,6 +159,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
 
     this.changeCode(gBrowserInit, fn)._replace(
+      '{',
+      '{\n' +
+      '  Tabmix.runningDelayedStartup = true;\n'
+    )._replace(
       'Services.obs.addObserver', loadOnStartup, {check: !!loadOnStartup}
     )._replace(
       insertionPoint,
@@ -181,10 +171,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       '} catch (ex) {Tabmix.assert(ex);}\n' +
       '    $&'
     )._replace(
-      swapOldCode, swapNewCode
-    )._replace(
       'SessionStore.canRestoreLastSession',
       'TabmixSessionManager.canRestoreLastSession', {check: this.isVersion(260, 250) && sessionManager, silent: true}
+    )._replace(
+      /(\})(\)?)$/,
+      '  Tabmix.runningDelayedStartup = false;\n' +
+      '$1$2'
     ).toCode();
 
     // look for installed extensions that are incompatible with tabmix

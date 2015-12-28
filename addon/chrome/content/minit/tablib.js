@@ -1681,6 +1681,17 @@ var tablib = { // eslint-disable-line
           PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView))
         return;
 
+      if (Tabmix.runningDelayedStartup) {
+        // we probably will never get here in single window mode
+        if (Tabmix.singleWindowMode) {
+          return;
+        }
+        Tabmix._afterTabduplicated = true;
+        TabmixSessionManager.init();
+        let url = aOtherTab.linkedBrowser.currentURI.spec;
+        gBrowser.tabContainer.adjustTabstrip(true, url);
+      }
+
       Tabmix.copyTabData(aOurTab, aOtherTab);
 
       let copy = aOtherTab._tabmixCopyToWindow;
