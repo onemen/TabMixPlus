@@ -257,26 +257,22 @@ var TabmixSessionManager = { // jshint ignore:line
   },
 
   // call by Tabmix.beforeSessionStoreInit
-  init: function SM_init(aPromise) {
+  init: function SM_init() {
     if (this._inited)
       return;
     this._inited = true;
 
     let initializeSM = function() {
-      TabmixSvc.sm.promiseInitialized = true;
       this._init();
       if (this.notifyObservers)
         this._sendRestoreCompletedNotifications(false);
     }.bind(this);
 
-    if (Tabmix.isVersion(250, 250) && !TabmixSvc.sm.promiseInitialized) {
-      Tabmix.ssPromise = aPromise || TabmixSvc.ss.promiseInitialized;
-      Tabmix.ssPromise.then(() => TMP_TabView.init())
-                      .then(initializeSM)
-                      .then(null, Tabmix.reportError);
-    } else {
-      initializeSM();
-    }
+    TabmixSvc.ss.promiseInitialized
+      .then(() => TMP_TabView.init())
+      .then(initializeSM)
+      .then(() => Tabmix.sessionInitialized())
+      .then(null, Tabmix.reportError);
   },
 
   _init: function SM__init() {

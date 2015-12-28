@@ -42,7 +42,7 @@ Tabmix.startup = function TMP_startup() {
 };
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js
-Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
+Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit() {
   // when gBrowserInit._delayedStartup broke by extension we don't get
   // "browser-delayed-startup-finished" notification
   setTimeout(function() {
@@ -55,7 +55,7 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
     TMP_SessionStore.setService(1, true);
   }
 
-  TabmixSessionManager.init(aPromise);
+  TabmixSessionManager.init();
 
   // if we call these functions earlier we get this warning:
   // XUL box for _moz_generated_content_before element contained an inline #text child
@@ -68,7 +68,6 @@ Tabmix.beforeSessionStoreInit = function TMP_beforeSessionStoreInit(aPromise) {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
-  this.ssPromise = null;
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
@@ -179,11 +178,6 @@ Tabmix.delayedStartup = function TMP_delayedStartup() {
   TabmixTabbar._enablePositionCheck = true;
 
   TMP_TabView.init();
-
-  if (this.isVersion(250) && this.ssPromise && !TabmixSvc.sm.promiseInitialized)
-    this.ssPromise.then(this.sessionInitialized.bind(this), Tabmix.reportError);
-  else
-    this.sessionInitialized();
 
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle

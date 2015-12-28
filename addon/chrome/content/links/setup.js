@@ -153,11 +153,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       fn = "gBrowserInit._delayedStartup";
     }
 
-    let insertionPoint, ssPromise = "";
-    insertionPoint = "PlacesToolbarHelper.init();";
-    if (!this.isVersion(270))
-      ssPromise = 'typeof ssPromise == "object" ? ssPromise : null';
-
+    let insertionPoint = "PlacesToolbarHelper.init();";
     this.changeCode(gBrowserInit, fn)._replace(
       '{',
       '{\n' +
@@ -167,7 +163,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     )._replace(
       insertionPoint,
       'try {' +
-      '  Tabmix.beforeSessionStoreInit(' + ssPromise + ');' +
+      '  Tabmix.beforeSessionStoreInit();' +
       '} catch (ex) {Tabmix.assert(ex);}\n' +
       '    $&'
     )._replace(
