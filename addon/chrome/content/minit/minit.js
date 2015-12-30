@@ -48,12 +48,12 @@ var TMP_tabDNDObserver = {
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
       'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
     )._replace(
-      'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
-      'let halfWidth = boxObject.width / 2;\n\
-          let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
-                        getTabShift(tabs[mid], oldIndex);'
+      /let screenX = boxObject.*;/,
+      '$&\n            ' +
+      'let halfWidth = boxObject.width / 2;\n            ' +
+      'screenX += draggingRight * halfWidth;'
     )._replace(
-      'screenX + boxObject.width < tabCenter',
+      /screenX \+ boxObject.* \< tabCenter/,
       'screenX + halfWidth < tabCenter'
     )._replace(
       'newIndex >= oldIndex',
