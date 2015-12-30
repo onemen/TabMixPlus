@@ -81,7 +81,7 @@ var TMP_tabDNDObserver = {
     tabBar.useTabmixDnD = function(aEvent) {
       function checkTab(dt) {
         let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || "__tabmixDragStart" in tab ||
+        return !tab || tab.__tabmixDragStart ||
           TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
@@ -108,7 +108,7 @@ var TMP_tabDNDObserver = {
     return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart: function(event) {
+  onDragStart: function(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
     if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
@@ -116,11 +116,12 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    var tab = gBrowser.tabContainer._getDragTargetTab(event, false);
+    let tabBar = gBrowser.tabContainer;
+    let tab = tabBar._getDragTargetTab(event, false);
     if (!tab || this._isCustomizing)
       return;
 
-    tab.__tabmixDragStart = true;
+    tab.__tabmixDragStart = tabmixDragstart;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
     TabmixTabbar.removeShowButtonAttr();
@@ -142,31 +143,65 @@ var TMP_tabDNDObserver = {
     // canvas size (in CSS pixels) to the window's backing resolution in order
     // to get a full-resolution drag image for use on HiDPI displays.
     let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
-    let scale = !Tabmix.isVersion(180) ? 1 :
-                windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+    let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
+    let canvas = tabBar._dndCanvas ? tabBar._dndCanvas :
+                 document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
     canvas.mozOpaque = true;
     canvas.width = 160 * scale;
     canvas.height = 90 * scale;
-    if (!Tabmix.isVersion(340) || !gMultiProcessBrowser) {
-      // Bug 863512 - Make page thumbnails work in e10s
+    let toDrag;
+    let dragImageOffsetX = -16;
+    let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
+    if (gMultiProcessBrowser) {
+      let context = canvas.getContext('2d');
+      context.fillStyle = "white";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      // Create a panel to use it in setDragImage
+      // which will tell xul to render a panel that follows
+      // the pointer while a dnd session is on.
+      if (!tabBar._dndPanel) {
+        tabBar._dndCanvas = canvas;
+        tabBar._dndPanel = document.createElement("panel");
+        tabBar._dndPanel.setAttribute("type", "drag");
+        let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
+        wrapper.style.width = "160px";
+        wrapper.style.height = "90px";
+        wrapper.appendChild(canvas);
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        tabBar._dndPanel.appendChild(wrapper);
+        document.documentElement.appendChild(tabBar._dndPanel);
+      }
+      // PageThumb is async with e10s but that's fine
+      // since we can update the panel during the dnd.
+      PageThumbs.captureToCanvas(browser, canvas);
+      toDrag = tabBar._dndPanel;
+    } else {
+      // For the non e10s case we can just use PageThumbs
+      // sync. No need for xul magic, the native dnd will
+      // be fine, so let's use the canvas for setDragImage.
       let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
+      toDrag = canvas;
+      dragImageOffsetX = dragImageOffsetX * scale;
+      dragImageOffsetY = dragImageOffsetY * scale;
     }
-    let offset = (TabmixTabbar.visibleRows == 1 ? -16 : -30) * scale;
-    if (TabmixTabbar.position == 1)
-      offset = canvas.height - offset;
-    dt.setDragImage(canvas, -16 * scale, offset);
+    if (TabmixTabbar.position == 1) {
+      dragImageOffsetY = canvas.height - dragImageOffsetY;
+    }
+    dt.setDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
 
     // _dragData.offsetX/Y give the coordinates that the mouse should be
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
     let clientX = ele => ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) - clientX(gBrowser.tabContainer);
+    let tabOffsetX = clientX(tab) - clientX(tabBar);
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
-      offsetY: event.screenY - window.screenY
+      offsetY: event.screenY - window.screenY,
+      scrollX: tabBar.mTabstrip.scrollPosition,
+      screenX: event.screenX
     };
 
     event.stopPropagation();

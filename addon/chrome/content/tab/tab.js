@@ -686,10 +686,13 @@ Tabmix.tabsUtils = {
       case "click":
         TabmixTabClickOptions.onTabClick(aEvent);
         break;
-      case "dragstart":
-        if (this.tabBar.useTabmixDragstart(aEvent))
-          TMP_tabDNDObserver.onDragStart(aEvent);
+      case "dragstart": {
+        let tabmixDragstart = this.tabBar.useTabmixDragstart(aEvent);
+        if (tabmixDragstart || TabmixTabbar.position == 1) {
+          TMP_tabDNDObserver.onDragStart(aEvent, tabmixDragstart);
+        }
         break;
+      }
       case "dragover": {
         let target = aEvent.target.localName;
         if (target != "tab" && target != "tabs")
