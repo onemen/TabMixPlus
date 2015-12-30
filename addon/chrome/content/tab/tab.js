@@ -2536,7 +2536,7 @@ var gTMPprefObserver = {
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
-      let oldVersion = Tabmix.prefs.prefHasUserValue("version") ? Tabmix.prefs.getCharPref("version") : "";
+      let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
 
       let vCompare = (a, b) => Services.vc.compare(a, b) <= 0;
       if (oldVersion) {
@@ -2556,6 +2556,8 @@ var gTMPprefObserver = {
 
       let showNewVersionTab;
       if (currentVersion != oldVersion) {
+        // reset current preference in case it is not a string
+        Tabmix.prefs.clearUserPref("version");
         Tabmix.prefs.setCharPref("version", currentVersion);
         Services.prefs.savePrefFile(null);
         // show the new version page for all official versions and for development
