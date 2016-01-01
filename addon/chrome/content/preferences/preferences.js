@@ -615,7 +615,4 @@ XPCOMUtils.defineLazyGetter(this, "OS", () => {
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
                                   "resource://tabmixplus/AsyncUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "Task",
-                                  "resource://gre/modules/Task.jsm");
-
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");

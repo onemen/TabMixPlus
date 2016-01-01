@@ -32,7 +32,6 @@
 
   <!-- scripts -->
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/common.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
 
   <prefpane id="paneLinks" label="&tab.links;"
