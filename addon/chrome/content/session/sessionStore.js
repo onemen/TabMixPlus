@@ -745,7 +745,7 @@ var TabmixConvertSession = { // jshint ignore:line
         }
       }
     }
-    return {windows: _windows, tabsCount: tabsCount};
+    return {windows: _windows, selectedWindow: 1, tabsCount: tabsCount};
   },
 
   getWindowState: function cs_getWindowState(rdfNodeWindow) {
