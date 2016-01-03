@@ -99,6 +99,11 @@
 
   TMP_TabView._patchInitialized = false;
   TMP_TabView._patchTabviewFrame = function SM__patchTabviewFrame() {
+    // Tab Groups extension by Quicksaver includes these changes in its code
+    if (window.hasOwnProperty("tabGroups")) {
+      return;
+    }
+
     this._patchInitialized = true;
     TabView._window.GroupItems._original_reconstitute = TabView._window.GroupItems.reconstitute;
     TabView._window.GroupItems.reconstitute = function(groupItemsData, groupItemData) {
