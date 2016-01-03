@@ -370,9 +370,12 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   }
 
   let tabTitleChanged, boldChanged = {value: false};
-  Tabmix.setTabStyle(aTab, boldChanged);
-  if (pending)
+  if (pending) {
     tabTitleChanged = TMP_Places.setTabTitle(aTab);
+    aTab.removeAttribute("visited");
+    aTab.removeAttribute("tabmix_selectedID");
+  }
+  Tabmix.setTabStyle(aTab, boldChanged);
   if (tabTitleChanged || boldChanged.value) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();

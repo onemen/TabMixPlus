@@ -90,6 +90,7 @@ Tabmix.sessionInitialized = function() {
   if (!tab.selected) {
     tab.removeAttribute("visited");
     tab.removeAttribute("tabmix_selectedID");
+    Tabmix.setTabStyle(tab);
   }
 
   TMP_SessionStore.persistTabAttribute();
