@@ -1497,7 +1497,7 @@ var TabmixSessionManager = { // jshint ignore:line
     }
     if (numTabs > 0) return {win: numWindows, tab: numTabs};
     let msg = TabmixSvc.getSMString("sm.sessoinSave.error");
-    let title = TabmixSvc.getString("sm.title");
+    let title = TabmixSvc.getSMString("sm.title");
     Services.prompt.alert(window, title, msg);
     return false;
   },
@@ -3166,7 +3166,7 @@ var TabmixSessionManager = { // jshint ignore:line
     if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || this.containerEmpty(rdfNodeTabs)) {
       let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
           TabmixSvc.getSMString("sm.restoreError.msg1");
-      let title = TabmixSvc.getString("sm.title");
+      let title = TabmixSvc.getSMString("sm.title");
       Services.prompt.alert(window, title, msg);
       return;
     }
