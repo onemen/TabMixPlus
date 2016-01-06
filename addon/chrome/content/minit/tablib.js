@@ -359,6 +359,7 @@ var tablib = { // eslint-disable-line
           let visibleTab = this.visibleTab;
           this.original_updateDisplay.apply(this, arguments);
           if (visibleTab !== this.visibleTab) {
+            Tabmix.setTabStyle(visibleTab);
             TMP_eventListener.updateDisplay(this.visibleTab);
             TabmixTabbar.updateBeforeAndAfter();
           }
