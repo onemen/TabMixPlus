@@ -300,7 +300,7 @@
           } catch (e) {}
           if (!isTabFocused) {
             this.setAttribute("ignorefocus", "true");
-            this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
+            this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);
           }
         }
         // on mousedown event fall through to default mousedown from tabbox.xml
