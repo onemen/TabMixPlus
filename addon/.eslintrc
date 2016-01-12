@@ -187,14 +187,13 @@
         "semi": 2,
         "semi-spacing": [0, {"before": false, "after": true}],
         "sort-vars": 0,
-        "space-after-keywords": [2, "always"],
+        "keyword-spacing": 2,
         "space-before-blocks": [2, "always"],
         "space-before-function-paren": [2, "never"],
         "object-curly-spacing": [2, "never"],
         "array-bracket-spacing": [2, "never"],
         "space-in-parens": [2, "never"],
         "space-infix-ops": 2,
-        "space-return-throw-case": 2,
         "space-unary-ops": [2, { "words": true, "nonwords": false }],
         "spaced-comment": [2, "always", {"exceptions":["-", "+", "/"], "markers":["/", "/XXX", "XXX", "****", "***", "**"]}],
         "strict": [2, "global"],
@@ -209,6 +208,8 @@
 
     "globals": {
         // tabmix globals
+        // when extends will work in Brackets move each global to
+        // specific file in its folder
         "$": true,
         "self": true,
         "AsyncUtils": false,
@@ -236,6 +237,7 @@
         "syncPrefsList": false,
         "tablib": false,
         "Tabmix": true,
+        "TabmixAboutNewTab": false,
         "TabmixAllTabs": false,
         "TabmixClickEventHandler": true,
         "TabmixContext": false,
@@ -258,32 +260,6 @@
         "TMP_SessionStore": false,
         "TMP_tabDNDObserver": false,
         "TMP_TabView": false,
-
-        // when extends will work move each global to
-        // specific file in its folder
-        "DeferredSave": true,
-        "gTMPprefObserver": true,
-        "gAppearancePane": true,
-        "gMenuPane": true,
-        "gPrefWindow": true,
-        "getFormattedKey": true,
-        "tablib": true,
-        "TabmixAboutNewTab": false,
-        "TabmixAllTabs": true,
-        "TabmixTabClickOptions": true,
-        "TabmixContext": true,
-        "TabmixTabbar": true,
-        "TMP_extensionsCompatibility": true,
-        "TMP_LastTab": true,
-        "TMP_tabDNDObserver": true,
-        "TMP_TabView": true,
-        "TMP_Places": true,
-        "TMP_SessionStore": true,
-        "TMP_ClosedTabs": true,
-        "TabmixProgressListener": true,
-        "TabmixSessionData": true,
-        "TabmixSessionManager": true,
-        "TabmixConvertSession": true,
 
         // firefox globals
         "__defineGetter__": false,
