@@ -3359,7 +3359,8 @@ var TabmixSessionManager = { // jshint ignore:line
       gBrowser.selectedTab = gBrowser.tabs[newIndex + firstVisibleTab];
 
     // if all tabs to be restored are hidden, make the first one visible
-    if (!numVisibleTabs && tabsData.tabs.length) {
+    if (!this.groupUpdates.hideSessionActiveGroup &&
+        !numVisibleTabs && tabsData.length) {
       tabsData[0].hidden = false;
       gBrowser.showTab(tabs[0]);
     }
@@ -3827,6 +3828,7 @@ var TabmixSessionManager = { // jshint ignore:line
 
   _saveTabviewData: function() { },
   _setTabviewTab: function() { },
+  groupUpdates: {},
   _tabviewData: {},
 
   /* ............... DEPRECATED ............... */
