@@ -132,8 +132,8 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         console.clog(caller + " was unable to change " + aName + "." +
           (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
-          "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi," +
-          "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
+          "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
+          "\nReport about this to Tabmix developer at http://tabmixplus.org/forum/");
         if (debugMode)
           console.clog(caller + "\nfunction " + aName + " = " + this.value);
       } else if (!this.needUpdate && debugMode) {
