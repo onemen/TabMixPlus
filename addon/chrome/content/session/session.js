@@ -2857,9 +2857,6 @@ var TabmixSessionManager = { // jshint ignore:line
       this.setLiteral(this._rdfRoot + "/closedSession/thisSession", "status", "crash");
     }
 
-    var sessionHistory = browser.webNavigation.sessionHistory;
-    if (!sessionHistory)
-      return false;
     var tabState;
     try {
       tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
