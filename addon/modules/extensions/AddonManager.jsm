@@ -43,9 +43,8 @@ var TabGroups = {
 // https://addons.mozilla.org/en-US/firefox/addon/google-no-tracking-url/
 var GoogleNoTrackingUrl = {
   id: "jid1-zUrvDCat3xoDSQ@jetpack",
-  pref: "extensions." + this.id + "aggresiveGoogleImagesCleanup",
   onEnabled: function() {
-    const pref = this.pref;
+    const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
     TabmixSvc.isFixedGoogleUrl = function(url) {
       const aggresiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
       const isSearchResult = GOOGLE_REGEXP.test(url);
