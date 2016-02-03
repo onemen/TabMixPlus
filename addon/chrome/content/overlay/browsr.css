@@ -327,3 +327,7 @@ so display: none !important; does not hide the button */
 #tabmix-rows-tooltip:not([flowing="multibar"]) {
   display: none;
 }
+
+#main-window[tabsintitlebar] #TabsToolbar[tabmix-disallow-drag] {
+  -moz-window-dragging: no-drag;
+}

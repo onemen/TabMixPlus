@@ -185,7 +185,7 @@ Tabmix.afterDelayedStartup = function() {
     if (!Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize"))
       TabmixTabClickOptions.toggleEventListener(true);
   } else {
-    document.getElementById("TabsToolbar")._dragBindingAlive = false;
+    gTMPprefObserver.setTabbarDragging(false);
   }
 
   TMP_extensionsCompatibility.onDelayedStartup();

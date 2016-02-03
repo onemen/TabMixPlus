@@ -579,10 +579,12 @@ Tabmix.tabsUtils = {
     return document.documentElement.hasAttribute("inDOMFullscreen");
   },
 
-  events: ["MozMouseHittest", "dblclick", "click", "dragstart",
-           "drop", "dragend", "dragexit"],
+  events: ["dblclick", "click", "dragstart", "drop", "dragend", "dragexit"],
 
   init: function() {
+    if (!Tabmix.isVersion(470)) {
+      this.events.unshift("MozMouseHittest");
+    }
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
     // add dragover event handler to TabsToolbar to capture dragging over
     // tabbar margin area, filter out events that are out of the tabbar
@@ -1258,7 +1260,7 @@ var gTMPprefObserver = {
         TMP_Places.onPreferencChanged(Services.prefs.getBoolPref(prefName));
         break;
       case "extensions.tabmix.tabbar.click_dragwindow":
-        document.getElementById("TabsToolbar")._dragBindingAlive = Services.prefs.getBoolPref(prefName);
+        this.setTabbarDragging(Services.prefs.getBoolPref(prefName));
         /* falls through */
       case "extensions.tabmix.tabbar.dblclick_changesize": {
         let dragwindow = Tabmix.prefs.getBoolPref("tabbar.click_dragwindow");
@@ -1600,6 +1602,12 @@ var gTMPprefObserver = {
       default:
         break;
     }
+  },
+
+  setTabbarDragging: function(allowDrag) {
+    let TabsToolbar = document.getElementById("TabsToolbar");
+    TabsToolbar._dragBindingAlive = allowDrag;
+    Tabmix.setItem(TabsToolbar, "tabmix-disallow-drag", !allowDrag || null);
   },
 
   getStyleSheets: function TMP_PO_getStyleSheet(aHerf, aFirst) {

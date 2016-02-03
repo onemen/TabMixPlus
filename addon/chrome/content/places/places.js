@@ -617,7 +617,8 @@ Tabmix.onContentLoaded = {
         'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
       )._replace(
         'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
+        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")',
+        {check: !Tabmix.isVersion(470)}
       )._replace(
         'function rect(ele)',
         'let rect = function _rect(ele)', // for strict mode
