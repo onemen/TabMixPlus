@@ -93,14 +93,19 @@ var TMP_LastTab = {
 
   handleEvent: function(event) {
     switch (event.type) {
+      case "blur":
+        this.updateDisallowDrag(false);
+        break;
       case "keydown":
         this.OnKeyDown(event);
+        this.disallowDragwindow(true);
         break;
       case "keypress":
         this.OnKeyPress(event);
         break;
       case "keyup":
         this.OnKeyUp(event);
+        this.disallowDragwindow(false);
         break;
       case "DOMMenuItemActive":
         this.ItemActive(event);
@@ -109,6 +114,29 @@ var TMP_LastTab = {
         this.ItemInactive(event);
         break;
     }
+  },
+
+ /**
+  * disallow mouse down on TabsToolbar to start dragging the window when one
+  * of the key modifiers is down
+  */
+  disallowDragwindow: function(keyDown) {
+    if (!Tabmix.isVersion(470)) {
+      return;
+    }
+    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        keyDown == Tabmix.keyModifierDown &&
+        keyDown != this.disallowDragState) {
+      this.updateDisallowDrag(keyDown);
+    }
+  },
+
+  disallowDragState: false,
+  updateDisallowDrag: function(disallow) {
+    let el = disallow ? "addEventListener" : "removeEventListener";
+    window[el]("blur", this);
+    this.disallowDragState = disallow;
+    Tabmix.setItem("TabsToolbar", "tabmix-disallow-drag", disallow || null);
   },
 
   ItemActive: function(event) {
