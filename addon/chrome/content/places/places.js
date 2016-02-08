@@ -60,10 +60,15 @@ var TMP_Places = {
         ).toCode();
       }
 
+      let $LF = '\n        ';
       Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
         'URIs.push(tab.linkedBrowser.currentURI);',
-        'let uri = tab.linkedBrowser.currentURI; \
-         URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});'
+        'if (Tabmix.getCallerNameByIndex(2) == "PCH_updateBookmarkAllTabsCommand") {' + $LF +
+        '  $&' + $LF +
+        '} else {' + $LF +
+        '  let uri = tab.linkedBrowser.currentURI;' + $LF +
+        '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
+        '}'
       ).defineProperty();
     }
 
