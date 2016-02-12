@@ -28,3 +28,9 @@ Windows platform
     }
   }
 }
+
+#TabsToolbar[tabbaronbottom]::before,
+#TabsToolbar[tabbaronbottom]::after {
+  box-shadow: none !important;
+}
+
