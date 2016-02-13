@@ -414,7 +414,9 @@ var TMP_tabDNDObserver = {
       // swap the dropped tab with a new one we create and then close
       // it in the other window (making it seem to have moved between
       // windows)
-      let newTab = gBrowser.addTab("about:blank");
+      let newTab = Tabmix.isVersion(470) ?
+          gBrowser.addTab("about:blank", {eventDetail: {adoptedTab: draggedTab}}) :
+          gBrowser.addTab("about:blank");
       var newBrowser = gBrowser.getBrowserForTab(newTab);
       if (Tabmix.isVersion(330)) {
         let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
