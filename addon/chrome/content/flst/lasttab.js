@@ -21,7 +21,6 @@ var TMP_LastTab = {
   _inited: false,
 
   DisplayTabList: function() {
-    var element = document.documentElement;
     var tablist = this.TabList;
 
     TabmixAllTabs.createCommonList(tablist, this.handleCtrlTab ? 3 : 2);
@@ -29,18 +28,14 @@ var TMP_LastTab = {
     item.setAttribute("_moz-menuactive", "true");
     TabmixAllTabs.updateMenuItemActive(null, item);
 
-    // show offscreen to get popup measurements
-    tablist.showPopup(element, -element.boxObject.screenX, 10000, "popup", null, null);
-    var width = tablist.boxObject.width;
-    var height = tablist.boxObject.height;
-    this.SuppressTabListReset = true;
-    tablist.hidePopup();
-    this.SuppressTabListReset = false;
-
-    // show at the center of the screen
-    tablist.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
-                              screen.availTop + (screen.availHeight - height) / 2,
-                              false);
+    // show the list at the center of the screen
+    let box = tablist.boxObject;
+    let letf = () => screen.availLeft + (screen.availWidth - box.width) / 2;
+    let top = () => screen.availTop + (screen.availHeight - box.height) / 2;
+    tablist.style.visibility = "hidden";
+    tablist.openPopupAtScreen(letf(), top(), true);
+    tablist.moveTo(letf(), top());
+    tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
     if (gBrowser.currentURI.spec.startsWith(ietab))
