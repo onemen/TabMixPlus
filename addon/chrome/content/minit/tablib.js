@@ -1696,18 +1696,9 @@ var tablib = { // eslint-disable-line
 
       let copy = aOtherTab._tabmixCopyToWindow;
       delete aOtherTab._tabmixCopyToWindow;
-      let pendingTab = !copy && aOtherTab.hasAttribute("pending");
-      if (typeof copy == "object" || pendingTab) {
+      if (typeof copy == "object") {
         let tabData = copy ? copy.data : null;
         TabmixSvc.ss.setTabState(aOurTab, tabData || TabmixSvc.ss.getTabState(aOtherTab));
-        // Workarounds for bug 817947
-        // Move a background unloaded tab to New Window fails
-        if (pendingTab) {
-          let remoteBrowser = aOtherTab.ownerDocument.defaultView.gBrowser;
-          if (!remoteBrowser._beginRemoveTab(aOtherTab, true, true))
-            return;
-          remoteBrowser._endRemoveTab(aOtherTab);
-        }
         return;
       }
 
