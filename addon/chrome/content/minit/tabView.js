@@ -579,8 +579,9 @@
     for (let key of Object.keys(this._groupItems)) {
       let data = this._groupItems[key];
       if (data.newItem) {
-        if (GroupItems.groupItemStorageSanity(data)) {
-          GroupItems.groupItem(data.id).pushAway(true);
+        let group = GroupItems.groupItem(data.id);
+        if (group && GroupItems.groupItemStorageSanity(data)) {
+          group.pushAway(true);
         }
       }
     }
