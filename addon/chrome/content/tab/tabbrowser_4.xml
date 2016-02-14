@@ -29,7 +29,7 @@
   <binding id="tabmix-tab-label">
     <content>
       <xul:label flex="1"
-                 xbl:inherits="value=labelvalue,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
+                 xbl:inherits="value=visibleLabel,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
                  class="tab-text tab-label"
                  role="presentation"/>
     </content>
@@ -75,7 +75,7 @@
                      role="presentation"/>
           <xul:label flex="1"
                      anonid="tab-label" tabmix="true"
-                     xbl:inherits="value=visibleLabel,labelvalue=label,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
+                     xbl:inherits="value=label,visibleLabel,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
                      class="tab-text tab-label"
                      role="presentation"/>
           <xul:image xbl:inherits="soundplaying,pinned,muted"
