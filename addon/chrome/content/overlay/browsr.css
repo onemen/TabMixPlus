@@ -328,6 +328,7 @@ so display: none !important; does not hide the button */
   display: none;
 }
 
+#main-window[tabsintitlebar][tabmix-tabbaronbottom] .tabbrowser-tabbox,
 #main-window[tabsintitlebar] #TabsToolbar[tabmix-disallow-drag] {
   -moz-window-dragging: no-drag;
 }

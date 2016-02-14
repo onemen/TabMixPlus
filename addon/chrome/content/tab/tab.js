@@ -2109,7 +2109,11 @@ var gTMPprefObserver = {
           let newPosition = aPosition === 0 ? tabsPosition : after + 1;
           let doChange = function() {
             CustomizableUI.moveWidgetWithinArea("new-tab-button", newPosition);
-            Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
+            let onbottom = TabmixTabbar.position == 1 || null;
+            Tabmix.setItem(tabsToolbar, "tabbaronbottom", onbottom);
+            if (Tabmix.isVersion(470)) {
+              Tabmix.setItem("main-window", "tabmix-tabbaronbottom", onbottom);
+            }
           };
           if (TabmixTabbar.position == 1)
             setTimeout(() => doChange(), 15);
@@ -2197,7 +2201,11 @@ var gTMPprefObserver = {
     var tabsToolbar = document.getElementById("TabsToolbar");
     // setting tabbaronbottom attribute trigger updatePosition in our
     // scrollbox.xml\toolbar binding
-    Tabmix.setItem(tabsToolbar, "tabbaronbottom", TabmixTabbar.position == 1 || null);
+    let onbottom = TabmixTabbar.position == 1 || null;
+    Tabmix.setItem(tabsToolbar, "tabbaronbottom", onbottom);
+    if (Tabmix.isVersion(470)) {
+      Tabmix.setItem("main-window", "tabmix-tabbaronbottom", onbottom);
+    }
 
     // TabsOnTop removed by bug 755593
     if (window.TabsOnTop)
