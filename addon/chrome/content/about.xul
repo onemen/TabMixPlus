@@ -50,7 +50,7 @@
             <label value="&forum.label;" style="cursor:pointer;" class="text-link"
                    onclick="Tabmix.openURL('http://tabmixplus.org/forum', event)"/>
             <label value="&help.label;" style="cursor:pointer;" class="text-link"
-                   onclick="Tabmix.openURL('http://tabmixplus.org/support/viewpage.php?t=3&p=introduction', event)"/>
+                   onclick="Tabmix.openURL('http://tabmixplus.org/support/viewpage.php?t=3&amp;p=introduction', event)"/>
           </hbox>
         </vbox>
       </hbox>
