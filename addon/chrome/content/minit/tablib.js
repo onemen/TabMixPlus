@@ -1087,7 +1087,7 @@ var tablib = { // eslint-disable-line
       this.duplicateTab(gBrowser.selectedTab, url);
     };
 
-    gBrowser.openInverseLink = function() {
+    gBrowser.openInverseLink = function(event) {
       var {target, linkURL} = gContextMenu;
       var url = tablib.getValidUrl(linkURL, target);
       if (!url)
@@ -1096,7 +1096,7 @@ var tablib = { // eslint-disable-line
       gContextMenu.linkURL = url;
       // originalFunctions.openInverseLink is a copy of original
       // nsContextMenu.prototype.openLinkInTab
-      Tabmix.originalFunctions.openInverseLink.apply(gContextMenu);
+      Tabmix.originalFunctions.openInverseLink.call(gContextMenu, event);
     };
 
     tablib.openLinkInCurrent = function() {

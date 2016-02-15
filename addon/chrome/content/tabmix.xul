@@ -112,7 +112,7 @@
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"
-         oncommand="gBrowser.openInverseLink();"/>
+         oncommand="gBrowser.openInverseLink(event);"/>
       <menuitem id="tm-openAllLinks" label="&openalllinks.label;" accesskey="&openalllinks.accesskey;"
          insertafter="context-openlinkintab" oncommand="TabmixContext.openMultipleLinks();"/>
       <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
