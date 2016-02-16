@@ -89,10 +89,9 @@ var PlacesUtilsInternal = {
       PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
     });
 
-    var treeStyleTab = "TreeStyleTabBookmarksService" in aWindow;
-    function updateOpenTabset() {
+    function updateOpenTabset(fnName, treeStyleTab) {
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);";
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openTabset")._replace(
+      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
       )._replace(
@@ -117,20 +116,26 @@ var PlacesUtilsInternal = {
         openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
       ).toCode();
     }
-    if (treeStyleTab) {
+    var treeStyleTabInstalled = "TreeStyleTabBookmarksService" in aWindow;
+    if (treeStyleTabInstalled &&
+        typeof PlacesUIUtils.__treestyletab__openTabset == "function") {
+      updateOpenTabset("__treestyletab__openTabset");
+    } else if (treeStyleTabInstalled) {
       // wait until TreeStyleTab changed PlacesUIUtils._openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.__index = 0;
       timer.initWithCallback(function() {
-        if (++this.__index > 10 || PlacesUIUtils._openTabset.toString().indexOf("GroupBookmarkBehavior") > -1) {
+        let str = PlacesUIUtils._openTabset.toString();
+        if (++this.__index > 10 || str.indexOf("TreeStyleTabBookmarksService") > -1 ||
+            str.indexOf("GroupBookmarkBehavior") > -1) {
           timer.cancel();
           this._timer = null;
           this.__index = null;
-          updateOpenTabset();
+          updateOpenTabset("_openTabset", true);
         }
       }.bind(this), 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
     } else { // TreeStyleTab not installed
-      updateOpenTabset();
+      updateOpenTabset("_openTabset");
 
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(
         'push({uri: aNodes[i].uri,',
@@ -151,7 +156,9 @@ var PlacesUtilsInternal = {
       ).toCode();
     }
 
-    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeWithEvent")._replace(
+    let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
+        "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
+    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
       /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
     ).toCode();
 
