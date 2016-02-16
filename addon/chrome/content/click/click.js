@@ -390,6 +390,9 @@ var TabmixContext = {
     let id = aEvent.target.id;
     switch (aEvent.type) {
       case "popupshowing":
+        if (aEvent.target.state != "showing") {
+          return;
+        }
         if (id == "tabContextMenu")
           this.updateTabContextMenu(aEvent);
         else if (id == "contentAreaContextMenu")
