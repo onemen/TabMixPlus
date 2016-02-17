@@ -646,7 +646,9 @@ var TMP_eventListener = {
           ).toCode();
         }
       }
-      if (!document.mozFullScreen) {
+      let fullScreen = Tabmix.isVersion(470) ?
+          document.fullscreenElement : document.mozFullScreen;
+      if (!fullScreen) {
         fullScrToggler.hidden = false;
       }
     } else if (fullScrToggler && !enterFS) {
