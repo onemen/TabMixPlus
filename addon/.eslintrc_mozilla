@@ -1,0 +1,6 @@
+{
+    "plugins": ["eslint-plugin-mozilla"],
+
+    "rules": {
+    }
+}

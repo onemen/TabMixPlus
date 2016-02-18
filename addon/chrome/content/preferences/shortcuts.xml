@@ -64,7 +64,7 @@
         <body><![CDATA[
           var newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
           if (newValue != Shortcuts.keyStringify(this.key)) {
-            let newKey = Shortcuts.keyParse(newValue)
+            let newKey = Shortcuts.keyParse(newValue);
             newKey.disabled = aDisabled;
             this.key = newKey;
             this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
@@ -109,9 +109,9 @@
             }
             if (!this.hasAttribute("used"))
               this.setAttribute("used", true);
-          }
-          else
+          } else {
             this.removeAttribute("used");
+          }
           return usedKey;
         ]]></body>
       </method>
@@ -136,7 +136,7 @@
 
           var key = {modifiers: "", key: "", keycode: ""};
           key.modifiers =
-            ["ctrl","meta","alt","shift"].filter(mod => event[mod + "Key"]).
+            ["ctrl", "meta", "alt", "shift"].filter(mod => event[mod + "Key"]).
             join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
@@ -154,11 +154,11 @@
               this.disableKey();
               return;
             }
-          }
-          // when current modifier is accel replcae new modifier with accel
-          // if it match ui.key.accelKey
-          else if (this.key && this.key.modifiers.indexOf("accel") > -1)
+          } else if (this.key && this.key.modifiers.indexOf("accel") > -1) {
+            // when current modifier is accel replcae new modifier with accel
+            // if it match ui.key.accelKey
             key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
+          }
 
           if (event.charCode == Ci.nsIDOMKeyEvent.DOM_VK_SPACE)
             key.keycode = "VK_SPACE";

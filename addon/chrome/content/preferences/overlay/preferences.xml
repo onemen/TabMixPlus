@@ -23,7 +23,7 @@
               '  if (w && where == "window" && w.Tabmix.getSingleWindowMode())\n' +
               '    where = "tab";\n'
             ).toCode();
-          } catch(ex) {
+          } catch (ex) {
             TabmixSvc.console.log(
                 "TabMix :\n" +
                 "can't change openLinkIn from preferences.xml binding\n" + ex);

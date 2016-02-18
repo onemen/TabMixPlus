@@ -220,6 +220,7 @@
         "filenamesRegex": false,
         "MergeWindows": false,
         "getFormattedKey": false,
+        "getKeysForShortcut": false,
         "gTMPprefObserver": false,
         "gAppearancePane": false,
         "gPrefWindow": false,

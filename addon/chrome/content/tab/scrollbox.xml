@@ -231,7 +231,7 @@
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
 
           Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
-          this.firstVisible =  {tab: null, x: 0, y: 0};
+          this.firstVisible = {tab: null, x: 0, y: 0};
         ]]>
       </constructor>
 
@@ -252,19 +252,21 @@
         ]]></body>
       </method>
 
-      <field name="tabmixPrefObserver"><![CDATA[({
-        scrollbox: this,
-        observe: function (subject, topic, data) {
-          switch (data) {
-            case "toolkit.scrollbox.clickToScroll.scrollDelay":
-              this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
-              break;
-            case "toolkit.scrollbox.smoothScroll":
-              this.scrollbox.smoothScroll = Services.prefs.getBoolPref(data);
-              break;
+      <field name="tabmixPrefObserver"><![CDATA[
+        ({
+          scrollbox: this,
+          observe: function(subject, topic, data) {
+            switch (data) {
+              case "toolkit.scrollbox.clickToScroll.scrollDelay":
+                this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
+                break;
+              case "toolkit.scrollbox.smoothScroll":
+                this.scrollbox.smoothScroll = Services.prefs.getBoolPref(data);
+                break;
+            }
           }
-        }
-      });]]></field>
+        });
+      ]]></field>
 
       <!-- replace the original method -->
       <method name="scrollByPixels">
@@ -338,10 +340,10 @@
 
           // if selectedItem don't have height find other tab that does
           for (let i = 0; i < tabs.childNodes.length; i++) {
-             let tab = tabs.childNodes[i];
-             let height = tab.boxObject.height;
-             if (height)
-               return height;
+            let tab = tabs.childNodes[i];
+            let height = tab.boxObject.height;
+            if (height)
+              return height;
           }
 
           return this._scrollbox.boxObject.height;
@@ -364,7 +366,7 @@
           if (!tabs.length)
             return;
           var isFirstTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[0]);
-          var isLastTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[tabs.length-1]);
+          var isLastTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[tabs.length - 1]);
           if (!isFirstTabVisible || !isLastTabVisible) {
             // show Newtabbutton for the first time
             // for the case last tab in row fill the all strip and the button
@@ -374,7 +376,7 @@
             let tabBar = document.getBindingParent(this);
             Tabmix.setItem(tabBar, "multibar", true);
             Tabmix.setItem("TabsToolbar", "multibar", true);
-            if (Tabmix.tabsUtils.updateVerticalTabStrip() == null)
+            if (Tabmix.tabsUtils.updateVerticalTabStrip() === null)
               TabmixTabbar._failedToEnterVerticalMode = true;
             if (blockUnderflow && this.orient == "vertical")
               this.blockUnderflow = true;
@@ -384,6 +386,7 @@
       </method>
 
       <field name="firstVisibleRow">null</field>
+
       <method name="setFirstTabInRow">
         <parameter name="scroll"/>
         <body><![CDATA[
@@ -391,8 +394,7 @@
           if (scroll) {
             if (this.firstVisibleRow == firstVisibleRow)
               return;
-          }
-          else if (this.firstVisible.tab) {
+          } else if (this.firstVisible.tab) {
             let rect = this.firstVisible.tab.getBoundingClientRect();
             if (this.firstVisible.x == rect.left && this.firstVisible.y == rect.top)
               return;
@@ -400,8 +402,8 @@
 
           this.firstVisibleRow = firstVisibleRow;
 
-///XXX check if we can set the margin with animation when we scroll
-          var end = Tabmix.ltr ? "right": "left";
+          ///XXX check if we can set the margin with animation when we scroll
+          var end = Tabmix.ltr ? "right" : "left";
           var containerEnd = this.scrollClientRect[end];
           var topY = Tabmix.tabsUtils.topTabY;
           var tabs = this._getScrollableElements();
@@ -419,7 +421,8 @@
                 tab.setAttribute("tabmix-firstTabInRow", true);
               else if (i > 0) {
                 // remove the margin when the tab have place in the previous row
-                let tabEnd = tabs[i-1].getBoundingClientRect()[end] + (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
+                let tabEnd = tabs[i - 1].getBoundingClientRect()[end] +
+                  (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
                 if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                   tab.removeAttribute("tabmix-firstTabInRow");
                   continue;
@@ -431,8 +434,7 @@
                 index = ++i;
                 break;
               }
-            }
-            else if (tab.hasAttribute("tabmix-firstTabInRow"))
+            } else if (tab.hasAttribute("tabmix-firstTabInRow"))
               tab.removeAttribute("tabmix-firstTabInRow");
           }
           for (let i = index; i < tabs.length; i++) {
@@ -457,11 +459,11 @@
           // getElementsByAttribute return a live nodList
           // each time we remove the attribute we remove node from the list
           var tabBar = document.getBindingParent(this);
-          var tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow" , "*");
+          var tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow", "*");
           for (let i = 0, num = tabs.length; i < num; i++) {
             tabs[0].removeAttribute("tabmix-firstTabInRow");
           }
-          this.firstVisible =  {tab: null, x: 0, y: 0};
+          this.firstVisible = {tab: null, x: 0, y: 0};
         ]]></body>
       </method>
 
@@ -485,8 +487,7 @@
               if (childNodes && childNodes.length)
                 this.ensureElementIsVisible(childNodes[0], false);
             }
-          }
-          catch(e) {
+          } catch (e) {
             Tabmix.setItem(this, "notoverflowing", overflow || null);
           }
         ]]></body>
@@ -506,11 +507,9 @@
             this.blockUnderflow = false;
             return;
           }
-        }
-        else {
+        } else if (event.detail == 0) {
           // horizontal scrollbox - Ignore vertical events
-          if (event.detail == 0)
-            return;
+          return;
         }
 
         var tabs = document.getBindingParent(this);
@@ -521,9 +520,9 @@
               (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
             Tabmix.tabsUtils.updateVerticalTabStrip();
-        }
-        else
+        } else {
           Tabmix.tabsUtils.overflow = false;
+        }
       ]]></handler>
 
       <handler event="overflow"><![CDATA[
@@ -531,15 +530,13 @@
         if (event.originalTarget != this._scrollbox)
           return;
 
-        var tabs = document.getBindingParent(this);
         if (this.orient == "vertical") {
           // vertical scrollbox - Ignore horizontal events
           if (event.detail == 1 || this.blockOverflow) {
             this.blockOverflow = false;
             return;
           }
-        }
-        else {
+        } else {
           // horizontal scrollbox - Ignore vertical events
           if (event.detail == 0)
             return;
@@ -562,9 +559,9 @@
           if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
               !Tabmix.visibleTabs.last.hasAttribute("showbutton"))
             Tabmix.tabsUtils.updateVerticalTabStrip();
-        }
-        else
+        } else {
           Tabmix.tabsUtils.overflow = true;
+        }
       ]]></handler>
 
       <handler event="scroll"><![CDATA[
