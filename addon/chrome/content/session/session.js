@@ -1871,6 +1871,7 @@ var TabmixSessionManager = { // jshint ignore:line
   },
 
   createMenu: function SM_createMenu(popup, container, contents, aNoSeparators) {
+    /* eslint-disable mozilla/balanced-listeners */
     if (popup.id == "btn_closedwindows_menu") {
       let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
       document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
@@ -2006,6 +2007,7 @@ var TabmixSessionManager = { // jshint ignore:line
     var deleteItem = popup.getElementsByAttribute("anonid", "delete")[0];
     if (deleteItem)
       Tabmix.setItem(deleteItem, "disabled", allEmpty && count === 0 ? true : null);
+    /* eslint-enable mozilla/balanced-listeners */
   },
 
   // set defaultIndex, sessionIndex and default Attribute

@@ -359,6 +359,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
+    /* eslint-disable mozilla/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
 
@@ -435,6 +436,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       TMP_ClosedTabs.restoreTab('original', -2);
     });
     return true;
+    /* eslint-enable mozilla/balanced-listeners */
   },
 
   restoreCommand: function(aEvent) {

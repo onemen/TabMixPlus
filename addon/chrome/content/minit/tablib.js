@@ -909,6 +909,7 @@ var tablib = { // eslint-disable-line
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
+    /* eslint-disable mozilla/balanced-listeners */
     if (!undoPopup.hasAttribute("context"))
       undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = JSON.parse(TabmixSvc.ss.getClosedWindowData());
@@ -944,6 +945,7 @@ var tablib = { // eslint-disable-line
       TabmixSessionManager.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
+    /* eslint-enable mozilla/balanced-listeners */
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {

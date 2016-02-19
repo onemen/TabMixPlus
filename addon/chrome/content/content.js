@@ -1,3 +1,4 @@
+/* eslint mozilla/balanced-listeners:0 */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line

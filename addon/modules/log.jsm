@@ -66,7 +66,8 @@ this.console = {
           timer.cancel();
         }.bind(this);
         if (aWindow) {
-          aWindow.addEventListener("unload", function unload() {
+          aWindow.addEventListener("unload", function unload(event) {
+            event.currentTarget.removeEventListener("unload", unload, false);
             timer.clear();
           }, false);
         }

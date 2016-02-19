@@ -237,8 +237,8 @@
 
       <destructor>
         <![CDATA[
-          this._scrollButtonUpLeft.removeEventListener("oncontextmenu", this._createScrollButtonContextMenu, true);
-          this._scrollButtonDownLeft.removeEventListener("oncontextmenu", this._createScrollButtonContextMenu, true);
+          this._scrollButtonUpLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+          this._scrollButtonDownLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
 
           Services.prefs.removeObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
         ]]>

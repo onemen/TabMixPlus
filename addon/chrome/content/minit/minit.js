@@ -1057,6 +1057,11 @@ Tabmix.navToolbox = {
     CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
     if (Tabmix.isVersion(290))
       CustomizableUI.removeListener(this.listener);
+
+    let alltabsPopup = document.getElementById("alltabs-popup");
+    if (alltabsPopup && alltabsPopup._tabmix_inited) {
+      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+    }
   },
 
   cleanCurrentset: function() {

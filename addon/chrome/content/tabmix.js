@@ -1069,10 +1069,6 @@ var TMP_eventListener = {
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
-    let alltabsPopup = document.getElementById("alltabs-popup");
-    if (alltabsPopup && alltabsPopup._tabmix_inited)
-      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
-
     gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
 
     if (TMP_TabView.installed)

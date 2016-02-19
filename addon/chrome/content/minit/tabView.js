@@ -177,8 +177,8 @@
   TMP_TabView._resetTabviewFrame = function SM__resetTabviewFrame() {
     var tabView = document.getElementById("tab-view-deck");
     if (tabView) {
-      tabView.removeEventListener("tabviewhidden", this, false);
-      tabView.removeEventListener("tabviewshown", this, false);
+      tabView.removeEventListener("tabviewhidden", this, true);
+      tabView.removeEventListener("tabviewshown", this, true);
       gBrowser.tabContainer.removeEventListener("TabShow", this, true);
       gBrowser.tabContainer.removeEventListener("TabHide", this, true);
     }
