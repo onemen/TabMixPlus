@@ -3807,14 +3807,78 @@ TabmixSessionManager = {
     return TMP_TabView.installed;
   },
 
-  notifyAboutMissingTabView: function() {
-    // TODO: notify the user when TabView is missing and the restored session
-    // contains groups
+  notifyAboutMissingTabView: function(showNotification) {
+    // show notification when Tabview is missing and the session have hidden tabs
+    if (showNotification || !this.tabViewInstalled) {
+      let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
+      if (this._groupCount > 1 && hiddenTabs) {
+        this.missingTabViewNotification();
+      }
+    }
+  },
+
+  missingTabViewNotification: function(backup = "") {
+    let string = s => TabmixSvc.getSMString("sm.tabview." + s);
+
+    // If there's already an existing notification bar, don't do anything.
+    let notificationBox = document.getElementById("high-priority-global-notificationbox") ||
+                          document.getElementById("global-notificationbox");
+    let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
+    if (notification) {
+      if (notification.tabmixSavedBackup) {
+        notification.label += " " + string("hiddengroups");
+        delete notification.tabmixSavedBackup;
+      }
+      return;
+    }
+
+    let message = backup || string("hiddengroups");
+    let buttons = [{
+      label: string("install.label"),
+      accessKey: string("install.accesskey"),
+      callback: function() {
+        let link = TabmixSvc.isPaleMoon ?
+            "http://www.palemoon.org/tabgroups.shtml" :
+            "https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/";
+        openUILinkIn(link, "tab");
+      }
+    }];
+
+    if (!TabmixSvc.isPaleMoon) {
+      buttons.push({
+        label: string("removed.learnMore.label"),
+        accessKey: string("removed.learnMore.accesskey"),
+        callback: function() {
+          openUILinkIn("https://support.mozilla.org/kb/tab-groups-removal#w_tab-groups-replacement-add-ons", "tab");
+        }
+      });
+
+      message = string("removed") + " " + message;
+    }
+
+    notification = notificationBox.appendNotification(
+      message,
+      "tabmix-missing-tabview",
+      "chrome://tabmixplus/skin/tmpsmall.png",
+      notificationBox.PRIORITY_WARNING_MEDIUM,
+      buttons
+    );
+    if (backup) {
+      notification.tabmixSavedBackup = true;
+    }
+  },
+
+  _beforeRestore: function(rdfNodeWindow) {
+    TabmixSvc.SessionStore._setWindowStateBusy(window);
+    // save group count before we start the restore
+    let data = this.getLiteralValue(rdfNodeWindow, "tabview-groups", "{}");
+    let parsedData = TabmixSvc.JSON.parse(data);
+    this._groupCount = parsedData.totalNumber || 1;
   },
 
   // we override these functions when TabView exist
-  _setWindowStateBusy: function() {
-    TabmixSvc.SessionStore._setWindowStateBusy(window);
+  _setWindowStateBusy: function(rdfNodeWindow) {
+    this._beforeRestore(rdfNodeWindow);
   },
 
   _setWindowStateReady: function(aOverwriteTabs, showNotification) {
