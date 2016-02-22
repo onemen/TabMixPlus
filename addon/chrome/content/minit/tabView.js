@@ -158,6 +158,7 @@
       'let Rect = win.Rect;' +
       'let GroupItems = win.GroupItems;' +
       'let GroupItem = win.GroupItem;' +
+      'let TabItems = win.TabItems;' +
       'let UI = win.UI;', {silent: true}
     )._replace(
       'this.',
