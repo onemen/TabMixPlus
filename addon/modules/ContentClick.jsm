@@ -356,7 +356,7 @@ var ContentClickInternal = {
       return [eventWhere + "@2.1"];
     }
 
-    if (this.miscellaneous(wrappedNode))
+    if (this.miscellaneous(wrappedNode || wrappedOnClickNode))
       return ["default@2.2"];
 
     /*
