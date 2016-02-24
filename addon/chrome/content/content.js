@@ -32,6 +32,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
 var PROCESS_TYPE_CONTENT = TabmixSvc.version(380) &&
     Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
+var TabmixClickEventHandler;
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
@@ -179,7 +180,7 @@ var TabmixContentHandler = {
   }
 };
 
-var TabmixClickEventHandler = {
+TabmixClickEventHandler = {
   init: function init(global) {
     if (PROCESS_TYPE_CONTENT) {
       global.addEventListener("click", this, true);

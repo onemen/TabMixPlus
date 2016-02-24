@@ -21,6 +21,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
+var ContentClickInternal;
 this.TabmixContentClick = {
   init: function() {
     ContentClickInternal.init();
@@ -56,7 +57,7 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-var ContentClickInternal = {
+ContentClickInternal = {
   _timer: null,
   _initialized: false,
 

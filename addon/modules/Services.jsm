@@ -7,6 +7,7 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
+var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
   if (TabmixSvc.isPaleMoonID) {
@@ -325,7 +326,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 
-var tabStateCache = {
+tabStateCache = {
   get _update() {
     delete this._update;
     return (this._update = isVersion(260) ? "updateField" : "update");

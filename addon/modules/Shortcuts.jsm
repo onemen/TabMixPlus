@@ -8,6 +8,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+var KeyConfig;
 this.Shortcuts = {
   keys: {
     newTab: {id: "key_newNavigatorTab", default: "T accel"},
@@ -439,7 +440,7 @@ this.Shortcuts = {
 
 };
 
-var KeyConfig = {
+KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions

@@ -1,6 +1,6 @@
 "use strict";
 
-if (!window.tablib || tablib.version != "tabmixplus")
+if (!window.tablib || window.tablib.version != "tabmixplus")
 var tablib = { // eslint-disable-line
   version: "tabmixplus",
   _inited: false,

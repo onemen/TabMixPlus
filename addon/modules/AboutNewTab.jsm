@@ -21,6 +21,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
+var AboutNewTabInternal;
 this.TabmixAboutNewTab = Object.freeze({
   updateAllBrowsers: function(window) {
     AboutNewTabInternal.updateAllBrowsers(window);
@@ -35,7 +36,7 @@ this.TabmixAboutNewTab = Object.freeze({
   },
 });
 
-var AboutNewTabInternal = {
+AboutNewTabInternal = {
   // update all opened about:newtab browsers in a window including preloaded
   // browser if exist
   updateAllBrowsers: function(window) {

@@ -1,5 +1,7 @@
 "use strict";
 
+var gTMPprefObserver, TabmixProgressListener;
+
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
   visibleRows: 1,
@@ -397,7 +399,7 @@ var TabmixTabbar = {
         return tab._tPos == numPinnedTabs ? "after" : false;
       };
       let getAttVal = function(val, hoverAttr) {
-        if (!specialTab || hoverAttr && visible && /selected/.test(attrib))
+        if (!isSpecialTab() || hoverAttr && visible && /selected/.test(attrib))
           return val;
         return val ? "special" : val;
       };
@@ -409,9 +411,8 @@ var TabmixTabbar = {
         oldTab.removeAttribute(removed);
       }
       Tabmix.tabsUtils._tabmixPositionalTabs[type] = tab;
-      let specialTab = isSpecialTab();
       if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
-          multibar || tab.hasAttribute(removed) || specialTab)) {
+                  multibar || tab.hasAttribute(removed) || isSpecialTab())) {
         let sameRow = multibar ? tabRow == Tabmix.tabsUtils.getTabRowNumber(tab, topY) || null : true;
         Tabmix.setItem(tab, removed, !sameRow || null);
         Tabmix.setItem(tab, attrib, getAttVal(sameRow, true));
@@ -1193,7 +1194,7 @@ Tabmix.visibleTabs = {
 
 // Function to catch changes to Tab Mix preferences and update existing windows and tabs
 //
-var gTMPprefObserver = {
+gTMPprefObserver = {
   preventUpdate: false,
   init: function() {
     Tabmix.prefs.clearUserPref("setDefault");
@@ -2652,7 +2653,7 @@ var gTMPprefObserver = {
 
 };
 
-var TabmixProgressListener = {
+TabmixProgressListener = {
   startup: function TMP_PL_startup(tabBrowser) {
     // check the current window.  if we're in a popup, don't init this progressListener
     if (window.document.documentElement.getAttribute("chromehidden"))

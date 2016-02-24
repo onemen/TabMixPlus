@@ -26,6 +26,7 @@ XPCOMUtils.defineLazyGetter(this, "PlacesUtils", function() {
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "resource://tabmixplus/Services.jsm");
 
+var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({
   init: function(aWindow) {
     PlacesUtilsInternal.init(aWindow);
@@ -46,7 +47,7 @@ this.TabmixPlacesUtils = Object.freeze({
 
 var Tabmix = {};
 
-var PlacesUtilsInternal = {
+PlacesUtilsInternal = {
   _timer: null,
   _initialized: false,
 
@@ -197,6 +198,7 @@ var PlacesUtilsInternal = {
 
   // Lazy getter for titlefrombookmark preference
   get titlefrombookmark() {
+    const PREF = "extensions.tabmix.titlefrombookmark";
     let updateValue = () => {
       let value = Services.prefs.getBoolPref(PREF);
       let definition = {value: value, configurable: true};
@@ -204,7 +206,6 @@ var PlacesUtilsInternal = {
       return value;
     };
 
-    const PREF = "extensions.tabmix.titlefrombookmark";
     Services.prefs.addObserver(PREF, updateValue, false);
     return updateValue();
   },

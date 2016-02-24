@@ -1,5 +1,3 @@
-/**/
-/* exported TabmixConvertSession */
 "use strict";
 
 Tabmix.BUTTON_OK = 0;
@@ -18,6 +16,8 @@ Tabmix.SHOW_CLOSED_WINDOW_LIST = 3;
 Tabmix.DLG_SAVE = 0;
 Tabmix.DLG_RENAME = 1;
 Tabmix.NO_NEED_TO_REPLACE = -1;
+
+var TabmixSessionManager, TabmixSessionData;
 
 /**
  *  sanitize privte data by delete the files session.rdf session.old
@@ -116,7 +116,7 @@ Tabmix.Sanitizer = {
 
 };
 
-var TabmixSessionData = { // jshint ignore:line
+TabmixSessionData = {
   docShellItems: ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"],
   tabAttribute: ["protected", "locked"],
 
@@ -218,7 +218,7 @@ var TabmixSessionData = { // jshint ignore:line
   setTabProperties: function() { }
 };
 
-var TabmixSessionManager = { // jshint ignore:line
+TabmixSessionManager = {
   _rdfRoot: "rdf://tabmix",
   HSitems: 3,
   NC_TM: {},
@@ -1368,8 +1368,8 @@ var TabmixSessionManager = { // jshint ignore:line
       }
       pathToReplace = session.path;
     }
-    container = this.initContainer(path);
-    var container, extID = "";
+    let container = this.initContainer(path);
+    let extID = "";
     var node = aTriggerNode.parentNode.parentNode;
     if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows")
       extID = "/" + id;
@@ -3162,6 +3162,8 @@ var TabmixSessionManager = { // jshint ignore:line
         (caller == "firstwindowopen" && gBrowser.tabs.length > 1);
     var rdfNodeWindow = this.RDFService.GetResource(path);
     var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
+    var tabContainer = this.initContainer(rdfNodeTabs);
+    var newtabsCount = tabContainer.GetCount();
     if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || this.containerEmpty(rdfNodeTabs)) {
       let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
           TabmixSvc.getSMString("sm.restoreError.msg1");
@@ -3193,8 +3195,6 @@ var TabmixSessionManager = { // jshint ignore:line
     var smoothScroll = tabstrip.smoothScroll;
     tabstrip.smoothScroll = false;
 
-    var tabContainer = this.initContainer(rdfNodeTabs);
-    var newtabsCount = tabContainer.GetCount();
     var newIndex, aTab, loadOnStartup = [];
     if (newtabsCount > 0 && overwrite) {
       // unpinned tabs reorder tabs, so we loob backward

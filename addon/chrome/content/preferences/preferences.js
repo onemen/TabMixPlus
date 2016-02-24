@@ -5,6 +5,7 @@
 "use strict";
 
 /***** Preference Dialog Functions *****/
+var gIncompatiblePane;
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
@@ -16,12 +17,12 @@ var gPrefWindow = { // jshint ignore:line
   init: function() {
     this._initialized = true;
 
+    var prefWindow = $("TabMIxPreferences");
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "cfxec")
       prefWindow.setAttribute("chromifox", true);
 
-    var prefWindow = $("TabMIxPreferences");
     if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
     else if (TabmixSvc.isLinux) {
@@ -556,7 +557,7 @@ function openHelp(helpTopic) {
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
-var gIncompatiblePane = {
+gIncompatiblePane = {
   lastSelected: "paneLinks",
 
   init: function(docElt) {
