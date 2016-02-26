@@ -175,10 +175,7 @@ var TMP_SessionStore = { // jshint ignore:line
       let title = "TabMix " + TabmixSvc.getSMString("sm.title");
       let msg = start ? TabmixSvc.getSMString("sm.disable.msg") + "\n\n" : "";
       msg += TabmixSvc.getSMString("sm.disable.msg" + msgNo);
-      let bunService = Cc["@mozilla.org/intl/stringbundle;1"].
-      getService(Ci.nsIStringBundleService);
-      let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
-      let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
+      let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
       let self = this;
       let callBack = function(aResult) {
         if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button === 0))) {
@@ -723,10 +720,7 @@ var TabmixConvertSession = { // jshint ignore:line
   },
 
   confirm: function cs_confirm(aMsg, aCallBack) {
-    let bunService = Cc["@mozilla.org/intl/stringbundle;1"].
-    getService(Ci.nsIStringBundleService);
-    let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
-    let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
+    let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                                 [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
   },

@@ -524,9 +524,8 @@ TabmixSessionManager = {
     var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
     var chkBoxState = this.saveClosedTabs ? Tabmix.CHECKBOX_CHECKED : Tabmix.HIDE_CHECKBOX;
 
-    var stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
     var buttons = TabmixSvc.setLabel("sm.askBeforSave.button0") + "\n" +
-        stringBundle.GetStringFromName("Cancel") + "\n" +
+        TabmixSvc.getDialogStrings("Cancel") + "\n" +
         TabmixSvc.setLabel("sm.askBeforSave.button1");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                                 [title, msg, "", chkBoxLabel, buttons]);

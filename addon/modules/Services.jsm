@@ -86,6 +86,19 @@ this.TabmixSvc = {
     return label;
   },
 
+  getDialogStrings: function(...keys) {
+    let stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
+
+    return keys.map(key => {
+      try {
+        return stringBundle.GetStringFromName(key);
+      } catch (ex) {
+        this.console.log("Failed to get string " + key + " in bundle: commonDialogs.properties");
+        return key;
+      }
+    });
+  },
+
   topWin: function() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
