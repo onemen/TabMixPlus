@@ -821,8 +821,28 @@ var TMP_tabDNDObserver = {
       // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
       // data from external source, always have 'copy' dropEffect
       let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-      let move = !isCtrlKey && (dt.effectAllowed == "copyLink" &&
-          dt.mozSourceNode && dt.mozSourceNode._placesNode || !dt.mozSourceNode);
+      let sourceNode = dt.effectAllowed == "copyLink" &&
+          dt.mozSourceNode ? dt.mozSourceNode : {};
+
+      // return true when user drag text from the urlbar
+      let isUrlbar = node => {
+        let result;
+        // when user drag text from the address bar to another tab
+        // node.parentNode is null after selected tab changed
+        // save _tabmix_isUrlbar on the first run of this function
+        if (typeof sourceNode._tabmix_isUrlbar == "boolean") {
+          return sourceNode._tabmix_isUrlbar;
+        }
+        while (!result && node.parentNode) {
+          node = node.parentNode;
+          result = node.classList.contains("urlbar-input");
+        }
+        if (typeof sourceNode._tabmix_isUrlbar == "undefined") {
+          sourceNode._tabmix_isUrlbar = result;
+        }
+        return result;
+      };
+      let move = !isCtrlKey && (!dt.mozSourceNode || sourceNode._placesNode || isUrlbar(sourceNode));
       return !move;
     }
     return isCopy;
