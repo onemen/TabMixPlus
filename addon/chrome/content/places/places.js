@@ -699,17 +699,20 @@ Tabmix.onContentLoaded = {
       'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
     ).toCode();
 
-    Tabmix.changeCode(window, "openUILinkIn")._replace(
-      'params.fromChrome = true;',
-      '$&\n' +
-      '  if (Tabmix.isCallerInList("BG_observe"))\n' +
-      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
-    ).toCode();
-
     // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
     // in case it warp the function in its object
     let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
     Tabmix.changeCode(fnObj, fnName)._replace(
+      '{',
+      '{\n' +
+      '  let tabmixCaller = Tabmix.getCallerNameByIndex(2);\n' +
+      '  if (tabmixCaller == "BG_observe") {\n' +
+      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
+      '  } else if (where == "current" &&\n' +
+      '      tabmixCaller == "ReaderParent.toggleReaderMode") {\n' +
+      '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
+      '  }\n'
+    )._replace(
       /aRelatedToCurrent\s*= params.relatedToCurrent;/,
       '$&\n' +
       '  var bookMarkId            = params.bookMarkId;'
