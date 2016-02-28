@@ -73,12 +73,25 @@ this.TabmixGroupsMigrator = {
       return false;
     };
 
+    let bookmarkGroups = (session) => {
+      let state = window.TabmixConvertSession.getSessionState(session, true);
+      let groupData = this.gatherGroupData(state);
+      if (groupData.exist) {
+        this.bookmarkAllGroupsFromState(groupData.data);
+      }
+    };
+
     let string = s => TabmixSvc.getSMString("sm.tabview.backup." + s);
-    let saveSessions = (type, index) => {
+    let saveSessions = (type, index, bookmark) => {
       let session = sm.gSessionPath[index];
       if (!isSessionWithGroups(session)) {
         return;
       }
+
+      if (bookmark && index == 0) {
+        bookmarkGroups(session);
+      }
+
       sm.saveClosedSession({
         session: session,
         name: {name: string(type)},
@@ -93,9 +106,9 @@ this.TabmixGroupsMigrator = {
       // one more older session
       let index = isAfterCrash ? 1 : 0;
       saveSessions("session", index + 1);
-      saveSessions("session", index);
+      saveSessions("session", index, true);
       if (isAfterCrash) {
-        saveSessions("crashed", 0);
+        saveSessions("crashed", 0, true);
       }
       if (notify) {
         TabmixSvc.sm.showMissingTabViewNotification = {msg: string("msg")};
