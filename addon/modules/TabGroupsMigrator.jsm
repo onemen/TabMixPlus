@@ -72,6 +72,7 @@ this.TabmixGroupsMigrator = {
         saveSessions("crashed", 0);
       }
       if (notify) {
+        TabmixSvc.sm.showMissingTabViewNotification = {msg: string("msg")};
         this.missingTabViewNotification(window, string("msg"));
       }
     } catch (ex) {
@@ -79,13 +80,26 @@ this.TabmixGroupsMigrator = {
     }
   },
 
+  getNotificationBox: function(doc) {
+    return doc.getElementById("high-priority-global-notificationbox") ||
+      doc.getElementById("global-notificationbox");
+  },
+
+  closeNotificationFromAllWindows: function() {
+    TabmixSvc.forEachBrowserWindow(aWindow => {
+      let notificationBox = this.getNotificationBox(aWindow.document);
+      let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
+      if (notification) {
+        notificationBox.removeNotification(notification);
+      }
+    });
+  },
+
   missingTabViewNotification: function(win, backup = "") {
     let string = s => TabmixSvc.getSMString("sm.tabview." + s);
-    let doc = win.document;
 
     // If there's already an existing notification bar, don't do anything.
-    let notificationBox = doc.getElementById("high-priority-global-notificationbox") ||
-                          doc.getElementById("global-notificationbox");
+    let notificationBox = this.getNotificationBox(win.document);
     let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
     if (notification) {
       if (notification.tabmixSavedBackup) {
@@ -123,7 +137,13 @@ this.TabmixGroupsMigrator = {
       "tabmix-missing-tabview",
       "chrome://tabmixplus/skin/tmpsmall.png",
       notificationBox.PRIORITY_WARNING_MEDIUM,
-      buttons
+      buttons,
+      (aEventType) => {
+        if (aEventType == "removed") {
+          TabmixSvc.sm.showMissingTabViewNotification = null;
+          this.closeNotificationFromAllWindows();
+        }
+      }
     );
     if (backup) {
       notification.tabmixSavedBackup = true;

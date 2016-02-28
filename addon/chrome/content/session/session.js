@@ -403,6 +403,10 @@ TabmixSessionManager = {
 
       Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
     } else if (this.enableManager && "tabmixdata" in window) {
+      let show = TabmixSvc.sm.showMissingTabViewNotification;
+      if (show) {
+        this.TabmixGroupsMigrator.missingTabViewNotification(window, show.msg);
+      }
       let path = window.tabmixdata.path;
       let caller = window.tabmixdata.caller;
 
