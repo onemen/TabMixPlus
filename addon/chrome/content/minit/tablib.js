@@ -72,7 +72,14 @@ var tablib = { // eslint-disable-line
     var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
 
-    if (!allowLoad) {
+    let allowedUrls = [
+      "chrome://browser/content/aboutTabGroupsMigration.xhtml",
+      "about:sessionRestore"
+    ];
+    if (!allowLoad && uri == "about:blank" &&
+        allowedUrls.indexOf(browser.currentURI.spec) > -1) {
+      allowLoad = true;
+    } else if (!allowLoad) {
       // we allow Google Redirects Fixer & Tracking Remover to load fixed url
       // to the same tab
       if (TabmixSvc.isFixedGoogleUrl(uri)) {
