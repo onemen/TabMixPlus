@@ -3145,11 +3145,18 @@ TabmixSessionManager = {
   },
 
   openNewWindow: function SM_openNewWindow(aState, aCaller, aPrivate) {
-    var features = "chrome,all,dialog=no";
-    if (Tabmix.isVersion(200))
-      features += aPrivate ? ",private" : ",non-private";
-    var newWindow = window.openDialog("chrome://browser/content/browser.xul",
-                                      "_blank", features, null);
+    var argString = Cc["@mozilla.org/supports-string;1"].
+                    createInstance(Ci.nsISupportsString);
+    argString.data = "";
+
+    let features = "chrome,dialog=no,macsuppressanimation,all";
+    if (aPrivate) {
+      features += ",private";
+    }
+    var newWindow =
+        Services.ww.openWindow(null, Services.prefs.getCharPref("browser.chromeURL"),
+                               "_blank", features, argString);
+
     let ID;
     do {
       ID = "window" + Math.random();
