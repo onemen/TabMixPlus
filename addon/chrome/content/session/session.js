@@ -275,6 +275,66 @@ TabmixSessionManager = {
       .then(null, Tabmix.reportError);
   },
 
+  //XXX move this to a modules ????
+  _maybeBackupTabGroups: function(isAfterCrash) {
+    let notify;
+
+    let isSessionWithGroups = path => {
+      if (this.containerEmpty(path)) {
+        return false;
+      }
+      let sessionContainer = this.initContainer(path);
+      let sessionEnum = sessionContainer.GetElements();
+      while (sessionEnum.hasMoreElements()) {
+        let rdfNodeSession = sessionEnum.getNext();
+        if (rdfNodeSession instanceof Ci.nsIRDFResource) {
+          let windowPath = rdfNodeSession.QueryInterface(Ci.nsIRDFResource).Value;
+          if (this.nodeHasArc(windowPath, "dontLoad")) {
+            continue;
+          }
+          let data = this.getLiteralValue(windowPath, "tabview-groups", "{}");
+          let parsedData = TabmixSvc.JSON.parse(data);
+          if (parsedData.totalNumber > 1) {
+            notify = true;
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    let string = s => TabmixSvc.getSMString("sm.tabview.backup." + s);
+    let saveSessions = (type, index) => {
+      let session = this.gSessionPath[index];
+      if (!isSessionWithGroups(session)) {
+        return;
+      }
+      this.saveClosedSession({
+        session: session,
+        name: {name: string(type)},
+        nameExt: this.getLiteralValue(session, "nameExt", ""),
+        button: -1
+      });
+    };
+
+    try {
+      // we run this function before preparAfterCrash and prepareSavedSessions
+      // we need to backup 2 last session, if last session was crashed backup
+      // one more older session
+      let index = isAfterCrash ? 1 : 0;
+      saveSessions("session", index + 1);
+      saveSessions("session", index);
+      if (isAfterCrash) {
+        saveSessions("crashed", 0);
+      }
+      if (notify) {
+        this.missingTabViewNotification(string("msg"));
+      }
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
+  },
+
   _init: function SM__init() {
     if (Tabmix.isVersion(320)) {
       XPCOMUtils.defineLazyModuleGetter(this, "TabState",
@@ -334,18 +394,26 @@ TabmixSessionManager = {
       document.getElementById("tmp_disableSave").setAttribute("disabled", true);
     }
 
+    // check if last session was crashed
+    let crashed, sm_status;
+    if (this.enableBackup) {
+      let path = this._rdfRoot + "/closedSession/thisSession";
+      sm_status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
+      crashed = TabmixSvc.sm.crashed = sm_status.indexOf("crash") != -1;
+    }
+
+    if (Tabmix.isVersion(450) && !this.tabViewInstalled &&
+        !TabmixSvc.isPaleMoon && Tabmix.firstWindowInSession && !sanitized &&
+        !this.nodeHasArc("rdf:backupSessionWithGroups", "status")) {
+      this.setLiteral("rdf:backupSessionWithGroups", "status", "saved");
+      this._maybeBackupTabGroups(crashed);
+    }
+
     // If sessionStore restore the session after restart we do not need to do anything
     // when all tabs are pinned, session resore add the home page on restart
     // prepare history sessions
-    var crashed;
     if (Tabmix.firstWindowInSession && !this.globalPrivateBrowsing &&
         !sanitized && !Tabmix.isWindowAfterSessionRestore) {
-      let sm_status;
-      if (this.enableBackup) {
-        let path = this._rdfRoot + "/closedSession/thisSession";
-        sm_status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
-        crashed = TabmixSvc.sm.crashed = sm_status.indexOf("crash") != -1;
-      }
       if (this.enableManager || crashed) {
         if (crashed)
           this.preparAfterCrash(sm_status);
@@ -1356,7 +1424,8 @@ TabmixSessionManager = {
     var id = this.getAnonymousId();
     var path = this._rdfRoot + "/saved/" + id + "/window";
     var pathToReplace = "";
-    var session = this.getSessionName("saveprevious", this.getDecodedLiteralValue(oldPath, "name"));
+    var session = aTriggerNode.name ||
+        this.getSessionName("saveprevious", this.getDecodedLiteralValue(oldPath, "name"));
     if (session.button == Tabmix.BUTTON_CANCEL) return; // user cancel
     else if (session.button == Tabmix.BUTTON_EXTRA1) {
       // we replace exist session, Tabmix.BUTTON_OK - save new session
@@ -1368,12 +1437,17 @@ TabmixSessionManager = {
       pathToReplace = session.path;
     }
     let container = this.initContainer(path);
-    let extID = "";
-    var node = aTriggerNode.parentNode.parentNode;
-    if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows")
-      extID = "/" + id;
+    let node, isClosedWindow, extID = "";
+    if (aTriggerNode.parentNode) {
+      node = aTriggerNode.parentNode.parentNode;
+      isClosedWindow = node.id.startsWith("tm-sm-closedwindows") ||
+        node.id == "btn_closedwindows";
+      if (isClosedWindow) {
+        extID = "/" + id;
+      }
+    }
     this.copySubtree(oldPath, path + extID);
-    if (node.id.startsWith("tm-sm-closedwindows") || node.id == "btn_closedwindows") {
+    if (isClosedWindow) {
       node = this.RDFService.GetResource(path + extID);
       container.InsertElementAt(node, 1, true);
       this.DATASource.Unassert(node, this.getNC("dontLoad"), this.RDFService.GetLiteral("true"));
@@ -1381,10 +1455,12 @@ TabmixSessionManager = {
     var count = this.countWinsAndTabs(container); // we need it just to fix the date
     if (!session.saveClosedTabs)
       this.deleteAllClosedtabs(container);
-    if (count)
-      this.insertSession(count, session.name, path, pathToReplace);
-    else
+    if (count) {
+      let {nameExt} = aTriggerNode;
+      this.insertSession(count, session.name, path, pathToReplace, nameExt);
+    } else {
       Tabmix.log("Error in saveClosedSession");
+    }
   },
 
   copyNode: function(oldNode, newNode, oldRoot, newRoot) {
@@ -1501,7 +1577,7 @@ TabmixSessionManager = {
     return false;
   },
 
-  insertSession: function SM_insertSession(count, name, path, oldPath) {
+  insertSession: function SM_insertSession(count, name, path, oldPath, nameExt) {
     var container = this.initContainer(this._rdfRoot + "/windows");
     var index = 0;
     if (oldPath !== "") index = container.IndexOf(this.RDFService.GetResource(oldPath));
@@ -1512,7 +1588,8 @@ TabmixSessionManager = {
       this.removeSession(oldPath, this._rdfRoot + '/windows');
     }
     this.setLiteral(node, "name", name);
-    this.setLiteral(node, "nameExt", this.getNameData(count.win, count.tab));
+    nameExt = nameExt || this.getNameData(count.win, count.tab);
+    this.setLiteral(node, "nameExt", nameExt);
     this.saveStateDelayed();
     return true;
   },
@@ -1919,6 +1996,9 @@ TabmixSessionManager = {
       this.restoreSession(event.originalTarget);
       event.stopPropagation();
     }.bind(this);
+
+    let backups = [TabmixSvc.getSMString("sm.tabview.backup.session"),
+                   TabmixSvc.getSMString("sm.tabview.backup.crashed")];
     for (let i = 0; i < count; i++) {
       node = nodes[i];
       name = this.getDecodedLiteralValue(node, "name");
@@ -1928,6 +2008,9 @@ TabmixSessionManager = {
       mi.session = node.QueryInterface(Ci.nsIRDFResource).Value;
       mi.command = menuCommand;
       mi.setAttribute("session", mi.session);
+      if (backups.indexOf(name) > -1) {
+        mi.style.setProperty("color", "blue", "important");
+      }
       if (contents == 1 && loadsession > -1 && mi.session && mi.session == sessionpath) continue;
       mi.setAttribute("value", i);
       // Ubuntu global menu prevents Session manager menu from working from Tools menu
