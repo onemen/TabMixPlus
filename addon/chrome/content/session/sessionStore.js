@@ -725,7 +725,7 @@ var TabmixConvertSession = { // jshint ignore:line
                                 [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
   },
 
-  getSessionState: function cs_getSessionState(aPath) {
+  getSessionState: function cs_getSessionState(aPath, internal) {
     var _windows = [], tabsCount = 0;
     var sessionEnum = TabmixSessionManager.initContainer(aPath).GetElements();
     while (sessionEnum.hasMoreElements()) {
@@ -734,7 +734,7 @@ var TabmixConvertSession = { // jshint ignore:line
         let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
         if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
           continue;
-        let aWindowState = this.getWindowState(rdfNodeWindow);
+        let aWindowState = this.getWindowState(rdfNodeWindow, internal);
         if (aWindowState) {// don't save empty windows
           _windows.push(aWindowState);
           tabsCount += aWindowState.tabs.length;
@@ -744,14 +744,14 @@ var TabmixConvertSession = { // jshint ignore:line
     return {windows: _windows, selectedWindow: 1, tabsCount: tabsCount};
   },
 
-  getWindowState: function cs_getWindowState(rdfNodeWindow) {
+  getWindowState: function cs_getWindowState(rdfNodeWindow, internal) {
     var state = {tabs: [], selected: 0, _closedTabs: []};
 
     var rdfNodeTabs = TabmixSessionManager.getResource(rdfNodeWindow, "tabs");
     if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || TabmixSessionManager.containerEmpty(rdfNodeTabs)) {
       return null;
     }
-    state.tabs = this.getTabsState(rdfNodeTabs);
+    state.tabs = this.getTabsState(rdfNodeTabs, internal);
     state._closedTabs = this.getClosedTabsState(TabmixSessionManager.getResource(rdfNodeWindow, "closedtabs"));
     state.selected = TabmixSessionManager.getIntValue(rdfNodeWindow, "selectedIndex") + 1;
     // we don't save windowState in Tabmix, just get the current windowState for all the sessions

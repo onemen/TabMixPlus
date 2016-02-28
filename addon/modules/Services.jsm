@@ -256,6 +256,7 @@ this.TabmixSvc = {
     },
     private: true,
     settingPreference: false,
+    statesToRestore: {},
   },
 
   isAustralisBgStyle: function(orient) {

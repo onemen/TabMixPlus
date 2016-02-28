@@ -195,15 +195,15 @@
 
   /* ............... TabmixSessionManager TabView Data ............... */
 
-  // aWindow: rdfNodeWindow to read from
-  TabmixSessionManager._setWindowStateBusy = function SM__setWindowStateBusy(aWindow) {
-    this._beforeRestore(aWindow);
+  // winData: SessionStroe window state
+  TabmixSessionManager._setWindowStateBusy = function(winData) {
+    this._beforeRestore(winData);
     if (!this.tabViewInstalled) {
       return;
     }
 
     TMP_SessionStore.initService();
-    this._getSessionTabviewData(aWindow);
+    this._getSessionTabviewData(winData);
     this._updateUIpageBounds = false;
   };
 
@@ -246,13 +246,14 @@
   TabmixSessionManager._tabviewData = {};
   TabmixSessionManager._groupItems = null;
 
-  // aWindow: rdfNodeWindow to read from
-  TabmixSessionManager._getSessionTabviewData = function SM__getSessionTabviewData(aWindow) {
-    let self = this;
+  // winData: SessionStroe window state
+  TabmixSessionManager._getSessionTabviewData = function(winData) {
+    let extData = winData.extData || {};
     function _fixData(id, parse, def) {
-      let data = self.getLiteralValue(aWindow, id);
-      if (data && data != "null")
+      let data = extData[id] || null;
+      if (data) {
         return parse ? TabmixSvc.JSON.parse(data) : data;
+      }
       return def;
     }
 
