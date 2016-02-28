@@ -3085,6 +3085,10 @@ TabmixSessionManager = {
       // strips out the hidden tab groups and all tabview metadata
       let hiddenTabState = this.TabmixGroupsMigrator.removeHiddenTabGroupsFromState(state);
       tabsRemoved = hiddenTabState.windows.length > 0;
+      if (caller == "firstwindowopen" && hiddenTabState &&
+          this.showTabGroupRestorationPage) {
+        this.TabmixGroupsMigrator.showBackgroundTabGroupRestorationPage(state, hiddenTabState);
+      }
     }
     if (concatenate) {
       // move all tabs & closed tabs into one window

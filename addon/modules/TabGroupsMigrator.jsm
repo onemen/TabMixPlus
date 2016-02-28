@@ -77,6 +77,7 @@ this.TabmixGroupsMigrator = {
       let state = window.TabmixConvertSession.getSessionState(session, true);
       let groupData = this.gatherGroupData(state);
       if (groupData.exist) {
+        sm.showTabGroupRestorationPage = true;
         this.bookmarkAllGroupsFromState(groupData.data);
       }
     };
@@ -273,5 +274,14 @@ this.TabmixGroupsMigrator = {
       promise
     );
     return sessionsFolder;
+  },
+
+  showBackgroundTabGroupRestorationPage: function(state, backgroundData) {
+    const RECOVERY_URL = "chrome://browser/content/aboutTabGroupsMigration.xhtml";
+    let win = state.windows[state.windows.length - 1];
+    let formdata = {id: {sessionData: JSON.stringify(backgroundData)}, url: RECOVERY_URL};
+    let newTab = {entries: [{url: RECOVERY_URL}], formdata: formdata, index: 1};
+    // Add tab and mark it as selected:
+    win.selected = win.tabs.push(newTab);
   },
 };
