@@ -347,6 +347,9 @@
                   oncommand="TabmixSessionManager.saveClosedSession(this.parentNode.triggerNode);"/>
         <menuitem id="tm-sm-Rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;"
                   oncommand="TabmixSessionManager.renameSession(this.parentNode.triggerNode.session);"/>
+        <menuitem id="tm-sm-bookmark" label="&sm.context.bookmarkgroups;"
+                  accesskey="&sm.context.bookmarkgroups.key;" hidden="true"
+                  oncommand="TabmixSessionManager.bookmarkAllGroups(this.parentNode.triggerNode);"/>
         <menuseparator/>
         <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;"
                   oncommand="TabmixSessionManager.removeSavedSession(this.parentNode.triggerNode);"/>

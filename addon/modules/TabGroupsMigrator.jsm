@@ -1,3 +1,4 @@
+/* globals AsyncShutdown */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixGroupsMigrator"];
@@ -8,6 +9,9 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
                                   "resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Promise",
+                                  "resource://gre/modules/Promise.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
   if (!TabmixSvc.version(470)) {
@@ -25,8 +29,17 @@ XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
   return tmp.TabGroupsMigrator;
 });
 
+XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
+                                  "resource://gre/modules/PlacesUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "AsyncShutdown",
+                                  "resource://gre/modules/AsyncShutdown.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
                                   "resource://tabmixplus/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
+                                  "resource://tabmixplus/Places.jsm");
 
 this.TabmixGroupsMigrator = {
   /**
@@ -166,5 +179,86 @@ this.TabmixGroupsMigrator = {
     let groupData = TabGroupsMigrator._gatherGroupData(state);
     let hiddenTabState = TabGroupsMigrator._removeHiddenTabGroupsFromState(state, groupData);
     return hiddenTabState;
+  },
+
+  isGroupExist: function(groupData) {
+    return [...groupData.keys()].length > 0;
+  },
+
+  gatherGroupData: function(state) {
+    let data;
+    if (TabGroupsMigrator) {
+      data = TabGroupsMigrator._gatherGroupData(state);
+    }
+    return {
+      exist: this.isGroupExist(data || new Map()),
+      data: data
+    };
+  },
+
+  setTabTitle: function(groupData) {
+    for (let [, windowGroupMap] of groupData) {
+      let windowGroups = [... windowGroupMap.values()];
+      for (let group of windowGroups) {
+        for (let tab of group.tabs) {
+          let entry = tab.entries[tab.index - 1];
+          let title = tab.title || entry.title;
+          tab.title = TabmixPlacesUtils.getTitleFromBookmark(entry.url, title);
+        }
+      }
+    }
+  },
+
+  promiseItemId: function({guid}) {
+    return PlacesUtils.promiseItemId(guid).then(id => {
+      return {id: id, guid: guid};
+    });
+  },
+
+  createtSessionsFolder: function() {
+    let BM = PlacesUtils.bookmarks;
+    return BM.insert({
+      parentGuid: BM.menuGuid,
+      type: BM.TYPE_FOLDER,
+      index: 0,
+      title: TabmixSvc.getSMString("sm.bookmarks.sessionFolder"),
+    }).then(this.promiseItemId)
+      .catch(TabmixSvc.console.reportError);
+  },
+
+  getSessionsFolder: function(folder) {
+    return this.promiseItemId(folder).catch(this.createtSessionsFolder.bind(this));
+  },
+
+  bookmarkAllGroupsFromState: function(groupData, guid, name) {
+    let folder = {guid: guid};
+    if (!TabGroupsMigrator || !this.isGroupExist(groupData)) {
+      return Promise.resolve(folder);
+    }
+
+    // replaced title for previously bookmarked tabs with title of the bookmark
+    this.setTabTitle(groupData);
+    let bookmarksFinishedPromise = TabGroupsMigrator._bookmarkAllGroupsFromState(groupData);
+    let promise = bookmarksFinishedPromise;
+
+    let sessionsFolder;
+    if (name) {
+      // move the folder created by TabGroupsMigrator to our folder and replace
+      // its title with the session title
+      let groupsPromise = TabGroupsMigrator.bookmarkedGroupsPromise.then(this.promiseItemId);
+      sessionsFolder = this.getSessionsFolder(folder);
+      let movePromise = Promise.all([groupsPromise, sessionsFolder]).then(([item, parent]) => {
+        let BM = PlacesUtils.bookmarks;
+        BM.moveItem(item.id, parent.id, BM.DEFAULT_INDEX);
+        BM.setItemTitle(item.id, name);
+      });
+      promise = Promise.all([bookmarksFinishedPromise, movePromise]);
+    }
+
+    AsyncShutdown.profileBeforeChange.addBlocker(
+      "Tab groups migration bookmarks",
+      promise
+    );
+    return sessionsFolder;
   },
 };

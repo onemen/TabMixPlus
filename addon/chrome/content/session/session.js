@@ -1632,6 +1632,13 @@ TabmixSessionManager = {
     else
       document.getElementById("tm-sm-Rename").removeAttribute("disabled");
 
+    if (Tabmix.isVersion(450)) {
+      let bookmark = document.getElementById("tm-sm-bookmark");
+      triggerNode.state = TabmixConvertSession.getSessionState(triggerNode.session, true);
+      triggerNode.groupData = this.TabmixGroupsMigrator.gatherGroupData(triggerNode.state);
+      bookmark.hidden = !triggerNode.groupData.exist;
+    }
+
     var node = triggerNode.parentNode.parentNode;
     var mItem = document.getElementById("tm-sm-SetAsStartup");
     if (node.hasAttribute("sessionmanager-menu")) {
@@ -1723,6 +1730,25 @@ TabmixSessionManager = {
       this.setLiteral(node, "name", result.name);
       this.saveStateDelayed();
     }
+  },
+
+  bookmarkAllGroups: function(node) {
+    let {groupData, session} = node;
+    let name = this.getDecodedLiteralValue(session, "name");
+    if (groupData && groupData.exist) {
+      let oldGuid = this.getLiteralValue("rdf:backupSessionWithGroups", "guid");
+      let promise = this.TabmixGroupsMigrator.bookmarkAllGroupsFromState(groupData.data, oldGuid, name);
+      this.saveGuid(promise, oldGuid);
+    }
+  },
+
+  saveGuid: function(promise, oldGuid) {
+    promise.then(({guid}) => {
+      if (oldGuid != guid) {
+        this.setLiteral("rdf:backupSessionWithGroups", "guid", guid);
+        this.saveStateDelayed();
+      }
+    });
   },
 
   removeFromMenu: function(event, popup, root) {
