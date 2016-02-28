@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Umbenennen">
 <!ENTITY sm.context.rename.key "U">
+<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
+<!ENTITY sm.context.bookmarkgroups.key "B">
 <!ENTITY sm.context.delete "Löschen">
 <!ENTITY sm.context.delete.key "L">
 <!ENTITY sm.context.deleteall "Alle löschen">

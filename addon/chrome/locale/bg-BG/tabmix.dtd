@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "З">
 <!ENTITY sm.context.rename "Преименуване">
 <!ENTITY sm.context.rename.key "П">
+<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
+<!ENTITY sm.context.bookmarkgroups.key "B">
 <!ENTITY sm.context.delete "Изтриване">
 <!ENTITY sm.context.delete.key "И">
 <!ENTITY sm.context.deleteall "Изтриване на всички">
