@@ -275,66 +275,6 @@ TabmixSessionManager = {
       .then(null, Tabmix.reportError);
   },
 
-  //XXX move this to a modules ????
-  _maybeBackupTabGroups: function(isAfterCrash) {
-    let notify;
-
-    let isSessionWithGroups = path => {
-      if (this.containerEmpty(path)) {
-        return false;
-      }
-      let sessionContainer = this.initContainer(path);
-      let sessionEnum = sessionContainer.GetElements();
-      while (sessionEnum.hasMoreElements()) {
-        let rdfNodeSession = sessionEnum.getNext();
-        if (rdfNodeSession instanceof Ci.nsIRDFResource) {
-          let windowPath = rdfNodeSession.QueryInterface(Ci.nsIRDFResource).Value;
-          if (this.nodeHasArc(windowPath, "dontLoad")) {
-            continue;
-          }
-          let data = this.getLiteralValue(windowPath, "tabview-groups", "{}");
-          let parsedData = TabmixSvc.JSON.parse(data);
-          if (parsedData.totalNumber > 1) {
-            notify = true;
-            return true;
-          }
-        }
-      }
-      return false;
-    };
-
-    let string = s => TabmixSvc.getSMString("sm.tabview.backup." + s);
-    let saveSessions = (type, index) => {
-      let session = this.gSessionPath[index];
-      if (!isSessionWithGroups(session)) {
-        return;
-      }
-      this.saveClosedSession({
-        session: session,
-        name: {name: string(type)},
-        nameExt: this.getLiteralValue(session, "nameExt", ""),
-        button: -1
-      });
-    };
-
-    try {
-      // we run this function before preparAfterCrash and prepareSavedSessions
-      // we need to backup 2 last session, if last session was crashed backup
-      // one more older session
-      let index = isAfterCrash ? 1 : 0;
-      saveSessions("session", index + 1);
-      saveSessions("session", index);
-      if (isAfterCrash) {
-        saveSessions("crashed", 0);
-      }
-      if (notify) {
-        this.missingTabViewNotification(string("msg"));
-      }
-    } catch (ex) {
-      Tabmix.assert(ex);
-    }
-  },
-
   _init: function SM__init() {
     if (Tabmix.isVersion(320)) {
       XPCOMUtils.defineLazyModuleGetter(this, "TabState",
@@ -342,6 +282,10 @@ TabmixSessionManager = {
       XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
                                         "resource:///modules/sessionstore/TabStateCache.jsm");
     }
+
+    XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
+                                      "resource://tabmixplus/TabGroupsMigrator.jsm");
+
     // just in case tablib isn't init yet
     // when Webmail Notifier extension istalled and user have master password
     // we can get here before the browser window is loaded
@@ -406,7 +350,7 @@ TabmixSessionManager = {
         !TabmixSvc.isPaleMoon && Tabmix.firstWindowInSession && !sanitized &&
         !this.nodeHasArc("rdf:backupSessionWithGroups", "status")) {
       this.setLiteral("rdf:backupSessionWithGroups", "status", "saved");
-      this._maybeBackupTabGroups(crashed);
+      this.TabmixGroupsMigrator.backupSessions(window, crashed);
     }
 
     // If sessionStore restore the session after restart we do not need to do anything
@@ -3895,59 +3839,8 @@ TabmixSessionManager = {
     if (showNotification || !this.tabViewInstalled) {
       let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
       if (this._groupCount > 1 && hiddenTabs) {
-        this.missingTabViewNotification();
+        this.TabmixGroupsMigrator.missingTabViewNotification(window);
       }
-    }
-  },
-
-  missingTabViewNotification: function(backup = "") {
-    let string = s => TabmixSvc.getSMString("sm.tabview." + s);
-
-    // If there's already an existing notification bar, don't do anything.
-    let notificationBox = document.getElementById("high-priority-global-notificationbox") ||
-                          document.getElementById("global-notificationbox");
-    let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
-    if (notification) {
-      if (notification.tabmixSavedBackup) {
-        notification.label += " " + string("hiddengroups");
-        delete notification.tabmixSavedBackup;
-      }
-      return;
-    }
-
-    let message = backup || string("hiddengroups");
-    let buttons = [{
-      label: string("install.label"),
-      accessKey: string("install.accesskey"),
-      callback: function() {
-        let link = TabmixSvc.isPaleMoon ?
-            "http://www.palemoon.org/tabgroups.shtml" :
-            "https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/";
-        openUILinkIn(link, "tab");
-      }
-    }];
-
-    if (!TabmixSvc.isPaleMoon) {
-      buttons.push({
-        label: string("removed.learnMore.label"),
-        accessKey: string("removed.learnMore.accesskey"),
-        callback: function() {
-          openUILinkIn("https://support.mozilla.org/kb/tab-groups-removal#w_tab-groups-replacement-add-ons", "tab");
-        }
-      });
-
-      message = string("removed") + " " + message;
-    }
-
-    notification = notificationBox.appendNotification(
-      message,
-      "tabmix-missing-tabview",
-      "chrome://tabmixplus/skin/tmpsmall.png",
-      notificationBox.PRIORITY_WARNING_MEDIUM,
-      buttons
-    );
-    if (backup) {
-      notification.tabmixSavedBackup = true;
     }
   },
 
