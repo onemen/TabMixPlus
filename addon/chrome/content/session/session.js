@@ -3053,8 +3053,13 @@ TabmixSessionManager = {
     if (Tabmix.singleWindowMode)
       concatenate = true;
 
+    let tabsRemoved;
     let state = TabmixConvertSession.getSessionState(path, true);
-
+    if (!this.tabViewInstalled) {
+      // strips out the hidden tab groups and all tabview metadata
+      let hiddenTabState = this.TabmixGroupsMigrator.removeHiddenTabGroupsFromState(state);
+      tabsRemoved = hiddenTabState.windows.length > 0;
+    }
     if (concatenate) {
       // move all tabs & closed tabs into one window
       this.mergeWindows(state);
@@ -3077,6 +3082,7 @@ TabmixSessionManager = {
     }
 
     state.windows.forEach(winData => {
+      winData.tabsRemoved = tabsRemoved;
       sessionCount++;
       let win = windowsList.pop();
       let canOverwriteWindow = win && (overwriteWindows ||
@@ -3394,7 +3400,7 @@ TabmixSessionManager = {
 
     // show notification and clean up our data
     var showNotification = caller != "firstwindowopen" || this.prefBranch.getIntPref("onStart") == 1;
-    this._setWindowStateReady(overwrite, showNotification);
+    this._setWindowStateReady(overwrite, showNotification, winData.tabsRemoved);
 
     // when resuming at startup: add additionally requested pages to the end
     if (caller == "firstwindowopen" && loadOnStartup.length) {
@@ -3774,21 +3780,24 @@ TabmixSessionManager = {
 
   notifyAboutMissingTabView: function(showNotification) {
     // show notification when Tabview is missing and the session have hidden tabs
-    if (showNotification || !this.tabViewInstalled) {
+    if (TabmixSvc.isPaleMoon) {
       let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
-      if (this._groupCount > 1 && hiddenTabs) {
-        this.TabmixGroupsMigrator.missingTabViewNotification(window);
-      }
+      showNotification = this._groupCount > 1 && hiddenTabs;
+    }
+    if (showNotification) {
+      this.TabmixGroupsMigrator.missingTabViewNotification(window);
     }
   },
 
   _beforeRestore: function(winData) {
     TabmixSvc.SessionStore._setWindowStateBusy(window);
-    // save group count before we start the restore
-    let extData = winData.extData || {};
-    let data = extData["tabview-groups"] || "{}";
-    let parsedData = TabmixSvc.JSON.parse(data);
-    this._groupCount = parsedData.totalNumber || 1;
+    if (this.tabViewInstalled || TabmixSvc.isPaleMoon) {
+      // save group count before we start the restore
+      let extData = winData.extData || {};
+      let data = extData["tabview-groups"] || "{}";
+      let parsedData = TabmixSvc.JSON.parse(data);
+      this._groupCount = parsedData.totalNumber || 1;
+    }
   },
 
   // we override these functions when TabView exist
@@ -3796,11 +3805,11 @@ TabmixSessionManager = {
     this._beforeRestore(winData);
   },
 
-  _setWindowStateReady: function(aOverwriteTabs, showNotification) {
+  _setWindowStateReady: function(aOverwriteTabs, showNotification, tabsRemoved) {
     if (Tabmix.isVersion(350)) {
       TabmixSvc.SessionStore._setWindowStateReady(window);
     }
-    this.notifyAboutMissingTabView(showNotification);
+    this.notifyAboutMissingTabView(tabsRemoved);
   },
 
   _saveTabviewData: function() { },

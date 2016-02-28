@@ -207,12 +207,12 @@
     this._updateUIpageBounds = false;
   };
 
-  TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification) {
+  TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification, tabsRemoved) {
     if (Tabmix.isVersion(350)) {
       TabmixSvc.SessionStore._setWindowStateReady(window);
     }
     if (!this.tabViewInstalled) {
-      this.notifyAboutMissingTabView(showNotification);
+      this.notifyAboutMissingTabView(tabsRemoved);
       return;
     }
 

@@ -9,8 +9,21 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
                                   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabGroupsMigrator",
-                                  "resource:///modules/TabGroupsMigrator.jsm");
+XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
+  if (!TabmixSvc.version(470)) {
+    return null;
+  }
+
+  let tmp = {};
+  let resource = "resource:///modules/TabGroupsMigrator.jsm";
+  try {
+    Cu.import(resource, tmp);
+  } catch (ex) {
+    TabmixSvc.console.reportError("Failed to load module " + resource + ".");
+    return null;
+  }
+  return tmp.TabGroupsMigrator;
+});
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
                                   "resource://tabmixplus/Services.jsm");
@@ -102,14 +115,10 @@ this.TabmixGroupsMigrator = {
     let notificationBox = this.getNotificationBox(win.document);
     let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
     if (notification) {
-      if (notification.tabmixSavedBackup) {
-        notification.label += " " + string("hiddengroups");
-        delete notification.tabmixSavedBackup;
-      }
       return;
     }
 
-    let message = backup || string("hiddengroups");
+    let message = backup;
     let buttons = [{
       label: string("install.label"),
       accessKey: string("install.accesskey"),
@@ -121,7 +130,9 @@ this.TabmixGroupsMigrator = {
       }
     }];
 
-    if (!TabmixSvc.isPaleMoon) {
+    if (TabmixSvc.isPaleMoon) {
+      message = string("hiddengroups");
+    } else {
       buttons.push({
         label: string("removed.learnMore.label"),
         accessKey: string("removed.learnMore.accesskey"),
@@ -129,7 +140,7 @@ this.TabmixGroupsMigrator = {
           win.openUILinkIn("http://tabmixplus.org/support/viewpage.php?t=2&p=tab-groups-removal", "tab");
         }
       });
-      message = string("removed") + " " + message;
+      message = string("removed") + " " + string("hiddengroups.removed") + " " + message;
     }
 
     notification = notificationBox.appendNotification(
@@ -145,8 +156,15 @@ this.TabmixGroupsMigrator = {
         }
       }
     );
-    if (backup) {
-      notification.tabmixSavedBackup = true;
+  },
+
+  removeHiddenTabGroupsFromState: function(state) {
+    if (!TabGroupsMigrator) {
+      return {windows: []};
     }
+
+    let groupData = TabGroupsMigrator._gatherGroupData(state);
+    let hiddenTabState = TabGroupsMigrator._removeHiddenTabGroupsFromState(state, groupData);
+    return hiddenTabState;
   },
 };

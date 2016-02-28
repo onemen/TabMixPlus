@@ -345,6 +345,7 @@
         "SidebarUtils": false,
         "SessionStore": false,
         "TabContextMenu": false,
+        "TabGroupsMigrator": false,
         "TAB_DROP_TYPE": false,
         "TabsInTitlebar": false,
         "TabsOnTop": false,
