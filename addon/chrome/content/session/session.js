@@ -411,12 +411,9 @@ TabmixSessionManager = {
       if (show) {
         this.TabmixGroupsMigrator.missingTabViewNotification(window, show.msg);
       }
-      let {restoreID, caller} = window.tabmixdata;
+      let {restoreID} = window.tabmixdata;
       let state = this._statesToRestore[restoreID];
-      if (caller == "concatenatewindows")
-        this.loadSession(state, caller, false);
-      else
-        this.loadOneWindow(state, "windowopenedbytabmix");
+      this.loadOneWindow(state, "windowopenedbytabmix");
     } else if (this.enableManager && this.enableBackup && this.saveClosedtabs && TMP_ClosedTabs.count > 0) {
       // sync rdf list with sessionstore closed tab after restart
       // we need it when we delete/restore close tab
@@ -3058,12 +3055,9 @@ TabmixSessionManager = {
 
     let state = TabmixConvertSession.getSessionState(path, true);
 
-    // if this window is blank use it when reload session
-    if (!Tabmix.singleWindowMode && concatenate && !overwriteWindows &&
-        !gBrowser.isBlankWindow() && caller != "firstwindowopen" &&
-        caller != "concatenatewindows") {
-      this.openNewWindow(path, "concatenatewindows", this.isPrivateWindow);
-      return;
+    if (concatenate) {
+      // move all tabs & closed tabs into one window
+      this.mergeWindows(state);
     }
 
     // Firefox 20 introduced per-window private browsing mode
@@ -3082,40 +3076,25 @@ TabmixSessionManager = {
       windowsList.push(win);
     }
 
-    // if we join all window to one window
-    // call the same window for all saved window with overwritewindows=false
-    // and overwritetabs=false if this not the first saved for first saved
-    // window overwritetabs determined by user pref
     state.windows.forEach(winData => {
       sessionCount++;
-      if (winData) {
-        if (concatenate) {
-          if (caller != "concatenatewindows" && caller != "firstwindowopen" &&
-              sessionCount == 1 && saveBeforOverwrite && overwriteTabs) {
-            this.saveOneWindow(this.gSessionPath[0], "", true);
-          }
-          var newCaller = (sessionCount != 1) ? caller + "-concatenate" : caller;
-          this.loadOneWindow(winData, newCaller);
-        } else {
-          let win = windowsList.pop();
-          let canOverwriteWindow = win && (overwriteWindows ||
-                                           (caller == "firstwindowopen" && sessionCount == 1) ||
-                                           win.gBrowser.isBlankWindow());
-          if (canOverwriteWindow) {
-            // if we save overwrite windows in the closed windows list don't forget to set dontLoad==true
-            if (caller != "firstwindowopen" && saveBeforOverwrite && overwriteTabs)
-              win.TabmixSessionManager.saveOneWindow(this.gSessionPath[0], "", true);
-            win.TabmixSessionManager.loadOneWindow(winData, caller);
-          } else
-            this.openNewWindow(winData, caller, this.isPrivateWindow);
-        }
+      let win = windowsList.pop();
+      let canOverwriteWindow = win && (overwriteWindows ||
+                                       (caller == "firstwindowopen" && sessionCount == 1) ||
+                                       win.gBrowser.isBlankWindow());
+      if (canOverwriteWindow) {
+        // if we save overwrite windows in the closed windows list don't forget to set dontLoad==true
+        if (caller != "firstwindowopen" && saveBeforOverwrite && overwriteTabs)
+          win.TabmixSessionManager.saveOneWindow(this.gSessionPath[0], "", true);
+        win.TabmixSessionManager.loadOneWindow(winData, caller);
+      } else {
+        this.openNewWindow(winData, this.isPrivateWindow);
       }
     });
     // cloes extra windows if we overwrite open windows and set dontLoad==true
     if (Tabmix.numberOfWindows() > 1 && overwriteWindows) {
       while (windowsList.length > 0) {
         let win = windowsList.pop();
-        if (concatenate && win == window) continue;
         if (saveBeforOverwrite) win.TabmixSessionManager.overwriteWindow = true;
         else win.TabmixSessionManager.saveThisWindow = false;
         win.close();
@@ -3133,18 +3112,18 @@ TabmixSessionManager = {
 
     if (typeof (overwriteWindows) == "undefined")
       overwriteWindows = this.prefBranch.getBoolPref("restore.overwritewindows");
-    var saveBeforOverwrite = this.prefBranch.getBoolPref("restore.saveoverwrite");
-    var overwriteTabs = this.prefBranch.getBoolPref("restore.overwritetabs");
     if (overwriteWindows || gBrowser.isBlankWindow() || Tabmix.singleWindowMode) {
+      let saveBeforOverwrite = this.prefBranch.getBoolPref("restore.saveoverwrite");
+      let overwriteTabs = this.prefBranch.getBoolPref("restore.overwritetabs");
       if (saveBeforOverwrite && overwriteTabs)
         this.saveOneWindow(this.gSessionPath[0], "", true);
       this.loadOneWindow(winData, "openclosedwindow");
     } else {
-      this.openNewWindow(winData, "openclosedwindow", this.isPrivateWindow);
+      this.openNewWindow(winData, this.isPrivateWindow);
     }
   },
 
-  openNewWindow: function SM_openNewWindow(aState, aCaller, aPrivate) {
+  openNewWindow: function SM_openNewWindow(aState, aPrivate) {
     var argString = Cc["@mozilla.org/supports-string;1"].
                     createInstance(Ci.nsISupportsString);
     argString.data = "";
@@ -3162,7 +3141,7 @@ TabmixSessionManager = {
       ID = "window" + Math.random();
     } while (ID in this._statesToRestore);
     this._statesToRestore[ID] = aState;
-    newWindow.tabmixdata = {restoreID: ID, caller: aCaller};
+    newWindow.tabmixdata = {restoreID: ID};
   },
 
   loadOneWindow: function SM_loadOneWindow(winData, caller) {
@@ -3176,20 +3155,14 @@ TabmixSessionManager = {
         break;
       }
       case "windowopenedbytabmix":
-      case "concatenatewindows":
         overwrite = true;
         break;
       case "openclosedwindow":
       case "sessionrestore":
         overwrite = this.prefBranch.getBoolPref("restore.overwritetabs");
         break;
-      case "firstwindowopen-concatenate":
-      case "openclosedwindow-concatenate":
-      case "sessionrestore-concatenate":
-      case "concatenatewindows-concatenate":
-        overwrite = false;
-        break;
-      default: Tabmix.log("SessionManager \n error unidentifid caller " + caller);
+      default:
+        Tabmix.log("SessionManager \n error unidentifid caller " + caller);
     }
     /*
       1. when open first windows overwrite tab only if they are home page, if firefox open from link or with
@@ -3203,8 +3176,6 @@ TabmixSessionManager = {
          in the session.
     */
     var cTab = gBrowser.mCurrentTab;
-    var concatenate = caller.indexOf("-concatenate") != -1 ||
-        (caller == "firstwindowopen" && gBrowser.tabs.length > 1);
     if (!winData.tabs || winData.tabs.length == 0) {
       let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
           TabmixSvc.getSMString("sm.restoreError.msg1");
@@ -3311,7 +3282,8 @@ TabmixSessionManager = {
       if (currentTabIsBalnk)
         blankTabs.shift();
 
-      let needToMove = openTabNext && !concatenate;
+      let multipleTabsOnStartUp = caller == "firstwindowopen" && gBrowser.tabs.length > 1;
+      let needToMove = openTabNext && !multipleTabsOnStartUp;
       let newPos = needToMove ? cTab._tPos + 1 : lastIndex + 1;
       // move blank tabs to new position
       for (let t = 0; t < blankTabs.length; t++) {
@@ -3334,10 +3306,10 @@ TabmixSessionManager = {
       if (tabsCount == blankTabsCount)
         newPos = 0;
       else {
-        newPos = (openTabNext && cTab._tPos < gBrowser.tabs.length - 1 && !concatenate) ?
+        newPos = (openTabNext && cTab._tPos < gBrowser.tabs.length - 1 && !multipleTabsOnStartUp) ?
           cTab._tPos + 1 : tabsCount - blankTabsCount;
       }
-      if (!concatenate && restoreSelect) { // in concatenate mode we select tab only from first window
+      if (restoreSelect && !multipleTabsOnStartUp) {
         if (currentTabIsBalnk) { // if the current tab is not blank select new tab
           if (openTabNext && newPos > 0)
             newPos--;
