@@ -175,7 +175,16 @@ var TabmixTabbar = {
     gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
-  updateScrollStatus: function TMP_updateScrollStatus() {
+  updateScrollStatus: function TMP_updateScrollStatus(delay) {
+    if (delay) {
+      if (this.updateScrollStatus.timeout) {
+        return;
+      } else {
+        this.updateScrollStatus.timeout = setTimeout(() => {
+          this.updateScrollStatus.timeout = null;
+        }, 250);
+      }
+    }
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       //XXX we only need setFirstTabInRow from here when tab width changed

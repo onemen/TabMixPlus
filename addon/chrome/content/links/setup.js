@@ -341,6 +341,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   *  Don't use return in this function
   *  TreeStyleTabe add some code at the end
   */
+  let transitionend = Tabmix.callerName() == "onxbltransitionend";
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {
@@ -355,8 +356,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
       this.removeAttribute("closebuttons-hover");
     }
   } else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
-           ("faviconize" in window && Tabmix.callerName() == "onxbltransitionend")) {
-    TabmixTabbar.updateScrollStatus();
+             transitionend) {
+    TabmixTabbar.updateScrollStatus(transitionend);
     TabmixTabbar.updateBeforeAndAfter();
   }
 };
