@@ -27,7 +27,7 @@
 <!ENTITY reloadleft.accesskey "L">
 <!ENTITY reloadright.label "Odśwież karty po prawej stronie">
 <!ENTITY reloadright.accesskey "R">
-<!ENTITY autoReloadTab.label "Odśwież kartę co">
+<!ENTITY autoReloadTab.label "Odświeżaj kartę co">
 <!ENTITY autoReloadTab.accesskey "D">
 <!ENTITY autoReloadSite.label "Odśwież tę witrynę co">
 <!ENTITY autoReloadSite.accesskey "W">
@@ -86,7 +86,7 @@
 <!ENTITY settings.label "Ustawienia">
 <!ENTITY saveWindow.label "Zapisz to okno">
 <!ENTITY saveAllWindows.label "Zapisz wszystkie okna">
-<!ENTITY sm.context.overwrite "Odtwórz nadpisując istniejące okna">
+<!ENTITY sm.context.overwrite "Odtwórz, nadpisując istniejące okna">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "Odtwórz w nowych oknach">
 <!ENTITY sm.context.restore.newkey "N">
@@ -102,8 +102,8 @@
 <!ENTITY sm.context.save.key "Z">
 <!ENTITY sm.context.rename "Zmień nazwę">
 <!ENTITY sm.context.rename.key "M">
-<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
-<!ENTITY sm.context.bookmarkgroups.key "B">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Usuń">
 <!ENTITY sm.context.delete.key "U">
 <!ENTITY sm.context.deleteall "Usuń wszystko">

@@ -102,8 +102,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Byt namn">
 <!ENTITY sm.context.rename.key "B">
-<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
-<!ENTITY sm.context.bookmarkgroups.key "B">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Ta bort">
 <!ENTITY sm.context.delete.key "T">
 <!ENTITY sm.context.deleteall "Ta bort alla">

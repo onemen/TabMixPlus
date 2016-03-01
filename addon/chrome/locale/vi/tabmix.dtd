@@ -102,8 +102,8 @@
 <!ENTITY sm.context.save.key "L">
 <!ENTITY sm.context.rename "Đổi tên">
 <!ENTITY sm.context.rename.key "i">
-<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
-<!ENTITY sm.context.bookmarkgroups.key "B">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Xóa">
 <!ENTITY sm.context.delete.key "X">
 <!ENTITY sm.context.deleteall "Xóa tất cả">

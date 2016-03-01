@@ -102,8 +102,8 @@
 <!ENTITY sm.context.save.key "υ">
 <!ENTITY sm.context.rename "Μετονομασία">
 <!ENTITY sm.context.rename.key "ο">
-<!ENTITY sm.context.bookmarkgroups "Bookmark Groups">
-<!ENTITY sm.context.bookmarkgroups.key "B">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Διαγραφή">
 <!ENTITY sm.context.delete.key "Δ">
 <!ENTITY sm.context.deleteall "Διαγραφή όλων">
