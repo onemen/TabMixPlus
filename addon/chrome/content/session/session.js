@@ -342,6 +342,10 @@ TabmixSessionManager = {
       document.getElementById("tmp_disableSave").setAttribute("disabled", true);
     }
 
+    if (!Tabmix.isVersion(450)) {
+      document.getElementById("tm-sm-bookmark").hidden = true;
+    }
+
     // check if last session was crashed
     let crashed, sm_status;
     if (this.enableBackup) {
@@ -1632,13 +1636,6 @@ TabmixSessionManager = {
     else
       document.getElementById("tm-sm-Rename").removeAttribute("disabled");
 
-    if (Tabmix.isVersion(450)) {
-      let bookmark = document.getElementById("tm-sm-bookmark");
-      triggerNode.state = TabmixConvertSession.getSessionState(triggerNode.session, true);
-      triggerNode.groupData = this.TabmixGroupsMigrator.gatherGroupData(triggerNode.state);
-      bookmark.hidden = !triggerNode.groupData.exist;
-    }
-
     var node = triggerNode.parentNode.parentNode;
     var mItem = document.getElementById("tm-sm-SetAsStartup");
     if (node.hasAttribute("sessionmanager-menu")) {
@@ -1732,12 +1729,35 @@ TabmixSessionManager = {
     }
   },
 
-  bookmarkAllGroups: function(node) {
-    let {groupData, session} = node;
-    let name = this.getDecodedLiteralValue(session, "name");
-    if (groupData && groupData.exist) {
+  bookmarkSession: function(node) {
+    if (!Tabmix.isVersion(450)) {
+      return;
+    }
+    let {command, session, history} = node;
+    let state, name;
+    let data = () => {
+      let nameExt = this.getLiteralValue(session, "nameExt");
+      let re = /\((\d+\sW)*[,\s]*(\d+\sT)\)\s\((\d{4}\/\d{2}\/\d{2})\s(\d{2}:\d{2}:\d{2})/;
+      let matches = nameExt.match(re);
+      let timestamp = matches ? Date.parse(new Date(matches[3] + " " + matches[4])) : Date.now();
+      return (new Date(timestamp)).toLocaleFormat("%Y/%m/%d %H:%M:%S");
+    };
+    if (command == "openclosedwindow") {
+      let winData = TabmixConvertSession.getWindowState(session, true);
+      state = {windows: [winData]};
+      name = TabmixSvc.getSMString("sm.bookmarks.closedWindow") + ", " + data();
+    } else {
+      state = TabmixConvertSession.getSessionState(session, true);
+      if (history) {
+        name = TabmixSvc.getSMString("sm.bookmarks.historySession") + ", " + data();
+      } else {
+        name = this.getDecodedLiteralValue(session, "name");
+      }
+    }
+    let groupData = this.TabmixGroupsMigrator.gatherGroupData(state);
+    if (groupData) {
       let oldGuid = this.getLiteralValue("rdf:backupSessionWithGroups", "guid");
-      let promise = this.TabmixGroupsMigrator.bookmarkAllGroupsFromState(groupData.data, oldGuid, name);
+      let promise = this.TabmixGroupsMigrator.bookmarkAllGroupsFromState(groupData, oldGuid, name);
       this.saveGuid(promise, oldGuid);
     }
   },
@@ -1989,6 +2009,7 @@ TabmixSessionManager = {
       mi.setAttribute("session", mi.session);
       if (backups.indexOf(name) > -1) {
         mi.style.setProperty("color", "blue", "important");
+        mi.history = true;
       }
       if (contents == 1 && loadsession > -1 && mi.session && mi.session == sessionpath) continue;
       mi.setAttribute("value", i);
@@ -2031,6 +2052,7 @@ TabmixSessionManager = {
           menu = document.createElement("menuitem");
           var [sLabel, sessionIndex] = sessionLabel[i].split(" ");
           menu.session = this.gSessionPath[sessionIndex];
+          menu.history = true;
           menu.command = menuCommand;
           if (this.containerEmpty(menu.session) && contents != 1)
             menu.setAttribute("disabled", "true");

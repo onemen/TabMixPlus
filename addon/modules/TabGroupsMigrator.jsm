@@ -1,4 +1,4 @@
-/* globals AsyncShutdown */
+/* globals AsyncShutdown, gBrowserBundle */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixGroupsMigrator"];
@@ -40,6 +40,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
                                   "resource://tabmixplus/Places.jsm");
+
+XPCOMUtils.defineLazyGetter(this, "gBrowserBundle", function() {
+  return Services.strings.createBundle('chrome://browser/locale/browser.properties');
+});
 
 this.TabmixGroupsMigrator = {
   /**
@@ -199,15 +203,51 @@ this.TabmixGroupsMigrator = {
     return [...groupData.keys()].length > 0;
   },
 
+  // add windows without groups to the data as single group
+  // add window count to each folder title
   gatherGroupData: function(state) {
-    let data;
-    if (TabGroupsMigrator) {
-      data = TabGroupsMigrator._gatherGroupData(state);
+    if (!TabGroupsMigrator) {
+      return null;
     }
-    return {
-      exist: this.isGroupExist(data || new Map()),
-      data: data
+
+    let allGroupData = TabGroupsMigrator._gatherGroupData(state);
+    // add window count for each group title
+    let getWinTitle = id => {
+      const name = "sm.bookmarks.migration.windowID";
+      return TabmixSvc.SMstrings.formatStringFromName(name, [id], 1);
     };
+    let getTitle = id => {
+      const name = "tabgroups.migration.anonGroup";
+      return gBrowserBundle.formatStringFromName(name, [id], 1);
+    };
+    let winID = 0;
+    for (let win of state.windows) {
+      let winTitle = getWinTitle(++winID);
+      let windowGroupMap = allGroupData.get(win);
+      if (windowGroupMap) {
+        let anonGroupCount = 0;
+        let windowGroups = [... windowGroupMap.values()].sort(TabGroupsMigrator._groupSorter);
+        let singleanonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
+        if (singleanonGroup) {
+          windowGroups[0].tabGroupsMigrationTitle = winTitle;
+          continue;
+        }
+        for (let group of windowGroups) {
+          let title = group.anonGroupID ?
+              getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
+          group.tabGroupsMigrationTitle = winTitle + " " + title;
+        }
+      } else {
+        let windowGroupMap = new Map();
+        windowGroupMap.set("active group", {
+          tabs: win.tabs,
+          anonGroupID: 1,
+          tabGroupsMigrationTitle: winTitle
+        });
+        allGroupData.set(win, windowGroupMap);
+      }
+    }
+    return allGroupData;
   },
 
   setTabTitle: function(groupData) {
