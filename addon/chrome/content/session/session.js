@@ -3083,7 +3083,7 @@ TabmixSessionManager = {
     let state = TabmixConvertSession.getSessionState(path, true);
     if (!this.tabViewInstalled) {
       // strips out the hidden tab groups and all tabview metadata
-      let hiddenTabState = this.TabmixGroupsMigrator.removeHiddenTabGroupsFromState(state);
+      let {hiddenTabState} = this.TabmixGroupsMigrator.removeHiddenTabGroupsFromState(state);
       tabsRemoved = hiddenTabState.windows.length > 0;
       if (caller == "firstwindowopen" && hiddenTabState &&
           this.showTabGroupRestorationPage) {

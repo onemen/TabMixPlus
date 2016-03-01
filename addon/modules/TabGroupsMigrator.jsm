@@ -75,10 +75,10 @@ this.TabmixGroupsMigrator = {
 
     let bookmarkGroups = (session) => {
       let state = window.TabmixConvertSession.getSessionState(session, true);
-      let groupData = this.gatherGroupData(state);
-      if (groupData.exist) {
+      let {hiddenTabState, groupData} = this.removeHiddenTabGroupsFromState(state);
+      if (hiddenTabState.windows.length) {
         sm.showTabGroupRestorationPage = true;
-        this.bookmarkAllGroupsFromState(groupData.data);
+        this.bookmarkAllGroupsFromState(groupData);
       }
     };
 
@@ -187,12 +187,12 @@ this.TabmixGroupsMigrator = {
 
   removeHiddenTabGroupsFromState: function(state) {
     if (!TabGroupsMigrator) {
-      return {windows: []};
+      return {hiddenTabState: {windows: []}};
     }
 
     let groupData = TabGroupsMigrator._gatherGroupData(state);
     let hiddenTabState = TabGroupsMigrator._removeHiddenTabGroupsFromState(state, groupData);
-    return hiddenTabState;
+    return {hiddenTabState: hiddenTabState, groupData: groupData};
   },
 
   isGroupExist: function(groupData) {
