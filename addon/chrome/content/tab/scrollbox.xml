@@ -341,9 +341,10 @@
           // if selectedItem don't have height find other tab that does
           for (let i = 0; i < tabs.childNodes.length; i++) {
             let tab = tabs.childNodes[i];
-            let height = tab.boxObject.height;
-            if (height)
-              return height;
+            let tabHeight = tab.boxObject.height;
+            if (tabHeight) {
+              return tabHeight;
+            }
           }
 
           return this._scrollbox.boxObject.height;

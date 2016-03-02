@@ -12,7 +12,7 @@ function getKeysForShortcut(shortcut, id, win) {
   if (!win)
     win = Services.wm.getMostRecentWindow("navigator:browser");
 
-  let $ = id => id && win.document.getElementById(id);
+  let $ = aID => aID && win.document.getElementById(aID);
   let isDisabled = item => item && item.getAttribute("disabled");
 
   let ourKey = $(id);

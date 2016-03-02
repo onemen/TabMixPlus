@@ -83,9 +83,9 @@ var TabmixTabClickOptions = {
     } else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
         !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt"; /* alt click*/
-      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(aEvent) {
-        aEvent.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
-        aEvent.stopPropagation();
+      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(event) {
+        event.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
+        event.stopPropagation();
       }, true);
     } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
         !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {

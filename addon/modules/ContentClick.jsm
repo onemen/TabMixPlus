@@ -327,8 +327,8 @@ ContentClickInternal = {
 
   whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
-    let TMP_tabshifted = function TMP_tabshifted(event) {
-      var where = eventWhere || this._window.whereToOpenLink(event);
+    let TMP_tabshifted = function TMP_tabshifted(aEvent) {
+      var where = eventWhere || this._window.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
     }.bind(this);
 
@@ -905,9 +905,9 @@ ContentClickInternal = {
 
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v\=/;
-    let isYoutube = href => youtube.test(current) && youtube.test(href);
-    let isSamePath = (href, att) => makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
-    let isSame = (href, att) => current.split(att)[0] == href.split(att)[0];
+    let isYoutube = _href => youtube.test(current) && youtube.test(_href);
+    let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
+    let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
     if (hrefFromOnClick) {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();

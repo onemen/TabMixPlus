@@ -1790,9 +1790,10 @@ gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    let skin;
     // with Walnut theme we get wrong height on Firefox 36
     if (Tabmix._buttonsHeight > 50) {
-      let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+      skin = Services.prefs.getCharPref("general.skins.selectedSkin");
       Tabmix._buttonsHeight = skin == "walnut" ? 19 : 23;
     }
 
@@ -1848,7 +1849,7 @@ gTMPprefObserver = {
               'list-style-image: url("#URL");' +
               '-moz-image-region: #REGION;}';
     let url = "chrome://browser/skin/Toolbar.png", region;
-    let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    skin = Services.prefs.getCharPref("general.skins.selectedSkin");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
@@ -1878,8 +1879,8 @@ gTMPprefObserver = {
       bgMiddleMargin.style.MozMarginStart = margin;
       bgMiddleMargin.style.MozMarginEnd = margin;
     } else {
-      let newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
-                    '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
+      newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
+                '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
       this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
     }
     if (!visuallyselected) {
@@ -1907,13 +1908,13 @@ gTMPprefObserver = {
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      let newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
+      newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
       newRule = this._tabStyleSheet.cssRules[index];
       gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
         gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
-        let padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
+        padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
     }
@@ -2051,7 +2052,8 @@ gTMPprefObserver = {
   },
 
   setMenuIcons: function() {
-    function setClass(items, hideIcons) {
+    var hideIcons = Tabmix.prefs.getBoolPref("hideIcons");
+    function setClass(items) {
       if (hideIcons) {
         for (let i = 0; i < items.length; ++i)
           items[i].removeAttribute("class");
@@ -2060,12 +2062,11 @@ gTMPprefObserver = {
           items[i].setAttribute("class", items[i].getAttribute("tmp_iconic"));
       }
     }
-    var hideIcons = Tabmix.prefs.getBoolPref("hideIcons");
     var iconicItems = document.getElementsByAttribute("tmp_iconic", "*");
-    setClass(iconicItems, hideIcons);
+    setClass(iconicItems);
 
     iconicItems = gBrowser.tabContextMenu.getElementsByAttribute("tmp_iconic", "*");
-    setClass(iconicItems, hideIcons);
+    setClass(iconicItems);
   },
 
   setAutoHidePref: function() {
@@ -2130,32 +2131,31 @@ gTMPprefObserver = {
           else
             doChange();
         }
-        return;
-      }
-
-      let tabsToolbar = $("TabsToolbar");
-      let toolBar = Array.prototype.slice.call(tabsToolbar.childNodes);
-      let buttonPosition = toolBar.indexOf(newTabButton);
-      let tabsPosition = toolBar.indexOf(gBrowser.tabContainer);
-      let scrollBox = $("tabmixScrollBox");
-      let after = scrollBox && toolBar.indexOf(scrollBox) || tabsPosition;
-      let changePosition = (aPosition === 0 && buttonPosition > tabsPosition) ||
-                           (aPosition == 1 && buttonPosition < after) ||
-                           (aPosition == 2 && buttonPosition != after + 1);
-      if (changePosition) {
-        let newPosition = aPosition === 0 ? tabsPosition : after + 1;
-        tabsToolbar.insertBefore(newTabButton, tabsToolbar.childNodes.item(newPosition));
-        // update currentset
-        let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
-        cSet = cSet.split(",").filter(id => id != "new-tab-button");
-        let tabsIndex = cSet.indexOf("tabbrowser-tabs");
-        if (tabsIndex < 0)
-          return;
-        if (aPosition > 0)
-          tabsIndex++;
-        cSet.splice(tabsIndex, 0, "new-tab-button");
-        tabsToolbar.setAttribute("currentset", cSet.join(","));
-        document.persist("TabsToolbar", "currentset");
+      } else {
+        let tabsToolbar = $("TabsToolbar");
+        let toolBar = Array.prototype.slice.call(tabsToolbar.childNodes);
+        let buttonPosition = toolBar.indexOf(newTabButton);
+        let tabsPosition = toolBar.indexOf(gBrowser.tabContainer);
+        let scrollBox = $("tabmixScrollBox");
+        let after = scrollBox && toolBar.indexOf(scrollBox) || tabsPosition;
+        let changePosition = (aPosition === 0 && buttonPosition > tabsPosition) ||
+            (aPosition == 1 && buttonPosition < after) ||
+            (aPosition == 2 && buttonPosition != after + 1);
+        if (changePosition) {
+          let newPosition = aPosition === 0 ? tabsPosition : after + 1;
+          tabsToolbar.insertBefore(newTabButton, tabsToolbar.childNodes.item(newPosition));
+          // update currentset
+          let cSet = tabsToolbar.getAttribute("currentset") || tabsToolbar.getAttribute("defaultset");
+          cSet = cSet.split(",").filter(id => id != "new-tab-button");
+          let tabsIndex = cSet.indexOf("tabbrowser-tabs");
+          if (tabsIndex < 0)
+            return;
+          if (aPosition > 0)
+            tabsIndex++;
+          cSet.splice(tabsIndex, 0, "new-tab-button");
+          tabsToolbar.setAttribute("currentset", cSet.join(","));
+          document.persist("TabsToolbar", "currentset");
+        }
       }
     } else {
       this.setShowNewTabButtonAttr(false);
@@ -2270,9 +2270,9 @@ gTMPprefObserver = {
     if (aEvent && aEvent.target != window) {
       // when the event is not from the window check if tabmix-bottom-toolbox
       // change its position
-      let rect = bottomToolbox.getBoundingClientRect();
-      if (rect.top == this._bottomRect.top &&
-          rect.width == this._bottomRect.width)
+      let {top, width} = bottomToolbox.getBoundingClientRect();
+      if (top == this._bottomRect.top &&
+          width == this._bottomRect.width)
         return;
     }
 

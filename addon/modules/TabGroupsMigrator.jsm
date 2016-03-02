@@ -238,7 +238,7 @@ this.TabmixGroupsMigrator = {
           group.tabGroupsMigrationTitle = winTitle + " " + title;
         }
       } else {
-        let windowGroupMap = new Map();
+        windowGroupMap = new Map();
         windowGroupMap.set("active group", {
           tabs: win.tabs,
           anonGroupID: 1,

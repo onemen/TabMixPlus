@@ -244,8 +244,8 @@ options = {
           fileName = fileName.slice(0, columnIndex);
         }
         fileName = decodeURI(fileName).replace(re, "");
-        let atIndex = line.indexOf(_char);
-        let name = line.slice(0, atIndex).split("(").shift();
+        let index = line.indexOf(_char);
+        let name = line.slice(0, index).split("(").shift();
         let formated = '  File "' + fileName + '", line ' + lineNumber;
         if (colNumber)
           formated += ', col ' + colNumber;

@@ -761,7 +761,7 @@ var tablib = { // eslint-disable-line
     if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
       let loader = "FdTabLoader" in window && "BrowserGoHome" in FdTabLoader;
       let obj = loader ? FdTabLoader : window;
-      let fnName = loader ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
+      fnName = loader ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
       Tabmix.changeCode(obj, fnName)._replace(
         'var where = whereToOpenLink(aEvent, false, true);',
         '$&' +
@@ -1511,13 +1511,13 @@ var tablib = { // eslint-disable-line
       var numTabs = tabs.length;
       // calc the number of tab to close when there is protected tabs.
       let protectedTabs = [];
-      function addProtected(tabs) {
-        for (let i = 0; i < tabs.length; i++) {
-          let tab = tabs[i];
+      function addProtected(aTabs) {
+        for (let i = 0; i < aTabs.length; i++) {
+          let tab = aTabs[i];
           if (!onExit && tab.hidden)
             continue;
           if (protectedTabs.indexOf(tab) == -1)
-            protectedTabs.push(tabs[i]);
+            protectedTabs.push(aTabs[i]);
         }
       }
       // we always restore pinned tabs no need to warn about closing
@@ -1560,7 +1560,7 @@ var tablib = { // eslint-disable-line
       if (shouldPrompt === 0)
         return true;
 
-      var i, tabPos, tabsToClose = 0;
+      var tabPos, tabsToClose = 0;
       switch (whatToClose) {
         case closing.ALL:
           tabsToClose = numTabs - numProtected;
@@ -1576,7 +1576,7 @@ var tablib = { // eslint-disable-line
           tabsToClose = numTabs - 1 - numProtected;
           break;
         case closing.GROUP:
-          for (i = numTabs - 1; i > -1; --i) {
+          for (let i = numTabs - 1; i > -1; --i) {
             let tab = tabs[i];
             if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
                 !tab._isProtected)
@@ -1595,7 +1595,7 @@ var tablib = { // eslint-disable-line
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for (i = 0; i < protectedTabs.length; i++) {
+          for (let i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index <= tabPos)
               --numProtected;
@@ -1606,7 +1606,7 @@ var tablib = { // eslint-disable-line
           if (!aTab)
             throw new Error("Required argument missing: aTab");
           tabPos = tabs.indexOf(aTab);
-          for (i = 0; i < protectedTabs.length; i++) {
+          for (let i = 0; i < protectedTabs.length; i++) {
             let index = tabs.indexOf(protectedTabs[i]);
             if (index >= tabPos)
               --numProtected;

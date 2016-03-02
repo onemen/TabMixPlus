@@ -501,12 +501,12 @@ function loadData(pattern) {
   var prefName, prefValue;
   Shortcuts.prefsChangedByTabmix = true;
   for (let i = 1; i < pattern.length; i++) {
-    let index = pattern[i].indexOf("=");
-    if (index > 0) {
-      prefName = pattern[i].substring(0, index);
+    let valIndex = pattern[i].indexOf("=");
+    if (valIndex > 0) {
+      prefName = pattern[i].substring(0, valIndex);
       if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
         continue;
-      prefValue = pattern[i].substring(index + 1, pattern[i].length);
+      prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
       setPrefByType(prefName, prefValue, true);
     }
   }

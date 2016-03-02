@@ -90,9 +90,9 @@ PlacesUtilsInternal = {
       PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
     });
 
-    function updateOpenTabset(fnName, treeStyleTab) {
+    function updateOpenTabset(name, treeStyleTab) {
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);";
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
+      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + name)._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
       )._replace(

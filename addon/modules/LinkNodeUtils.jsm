@@ -9,7 +9,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
-const attribs = ["onclick", "rel", "onmousedown"];
+const ATTRIBS = ["onclick", "rel", "onmousedown"];
 
 this.LinkNodeUtils = {
   isFrameInContent: function(content, href, name) {
@@ -52,7 +52,7 @@ this.LinkNodeUtils = {
         _attributes: getAttributes(node.parentNode, ["onclick"])
       },
       _focusedWindowHref: focusedWindow.top.location.href,
-      _attributes: getAttributes(node, attribs)
+      _attributes: getAttributes(node, ATTRIBS)
     };
     if (getTargetIsFrame)
       wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);

@@ -3457,8 +3457,8 @@ TabmixSessionManager = {
     // when resuming at startup: add additionally requested pages to the end
     if (caller == "firstwindowopen" && loadOnStartup.length) {
       let lastPlace = gBrowser.tabs.length - 1;
-      for (let aTab of loadOnStartup) {
-        gBrowser.moveTabTo(aTab, lastPlace);
+      for (let tab of loadOnStartup) {
+        gBrowser.moveTabTo(tab, lastPlace);
       }
     }
 

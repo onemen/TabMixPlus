@@ -17,18 +17,18 @@
       case "TabShow":
         if (!gBrowser.tabContainer._onDelayTabShow) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function(aEvent) {
+          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function(event) {
             gBrowser.tabContainer._onDelayTabShow = null;
-            TMP_eventListener.onTabOpen_delayUpdateTabBar(aEvent.target);
+            TMP_eventListener.onTabOpen_delayUpdateTabBar(event.target);
           }, 0, aEvent);
         }
         break;
       case "TabHide":
         if (!gBrowser.tabContainer._onDelayTabHide) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function(aEvent) {
+          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function(event) {
             gBrowser.tabContainer._onDelayTabHide = null;
-            let tab = aEvent.target;
+            let tab = event.target;
             TMP_eventListener.onTabClose_updateTabBar(tab);
           }, 0, aEvent);
         }
@@ -295,8 +295,8 @@
       return;
 
     let parsedData;
-    function setData(id) {
-      let data = {groupID: id};
+    function setData(groupID) {
+      let data = {groupID: groupID};
       parsedData = data;
       return TabmixSvc.JSON.stringify(data);
     }

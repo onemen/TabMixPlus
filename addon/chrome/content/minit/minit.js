@@ -1280,15 +1280,16 @@ Tabmix.navToolbox = {
     if (!searchbar)
       return;
 
+    let obj, fn, $LF;
     let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
     let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() :
                                                searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
+      [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
                                       [searchbar, "handleSearchCommand"];
-      let $LF = '\n            ';
+      $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
         '$&' + $LF +
@@ -1300,7 +1301,7 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
+    [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
@@ -1311,7 +1312,7 @@ Tabmix.navToolbox = {
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
-    let $LF = '\n          ';
+    $LF = '\n          ';
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       /let params|openUILinkIn/,
       'aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);' + $LF +

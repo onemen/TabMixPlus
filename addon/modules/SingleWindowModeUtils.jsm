@@ -58,11 +58,11 @@ this.SingleWindowModeUtils = {
 
     this.initService();
     aWindow.addEventListener("load", function _onLoad(aEvent) {
-      let win = aEvent.currentTarget;
-      win.removeEventListener("load", _onLoad, false);
-      let docElement = win.document.documentElement;
+      let window = aEvent.currentTarget;
+      window.removeEventListener("load", _onLoad, false);
+      let docElement = window.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
-        this.onLoad(win);
+        this.onLoad(window);
     }.bind(this), false);
 
     aWindow.gTMPprefObserver.setLink_openPrefs();

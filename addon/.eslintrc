@@ -120,7 +120,7 @@
         "no-script-url": 0,
         "no-self-compare": 0,
         "no-sequences": 2,
-        "no-shadow": 0,
+        "no-shadow": [2, {"hoist": "all"}],
         "no-shadow-restricted-names": 2,
         "no-spaced-func": 2,
         "no-sparse-arrays": 2,

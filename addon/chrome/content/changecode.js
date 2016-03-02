@@ -5,7 +5,7 @@
 // so we don't evaluat all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
-Tabmix.changeCode = function(aParent, aName, aOptions) {
+Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
 
@@ -143,12 +143,12 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     }
   };
 
-  let fnName = aName.split(".").pop();
+  let name = afnName.split(".").pop();
   try {
-    return new ChangeCode({obj: aParent, fnName: fnName,
-      fullName: aName, options: aOptions});
+    return new ChangeCode({obj: aParent, fnName: name,
+                           fullName: afnName, options: aOptions});
   } catch (ex) {
-    console.clog(console.callerName() + " failed to change " + aName + "\nError: " + ex.message);
+    console.clog(console.callerName() + " failed to change " + afnName + "\nError: " + ex.message);
     if (debugMode)
       console.obj(aParent, "aParent");
   }
