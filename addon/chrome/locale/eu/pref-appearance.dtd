@@ -1,20 +1,20 @@
-<!ENTITY tabStyles.label "Styles">
-<!ENTITY styles.label "Customize Styles">
-<!ENTITY currentTab.label "Current Tab">
-<!ENTITY unloadedTabs.label "Unloaded Tabs">
-<!ENTITY unreadTab.label "Unread Tabs">
-<!ENTITY hideRGB.label "Hide RGB">
-<!ENTITY showRGB.label "Show RGB">
-<!ENTITY unreadAfterReload.label "set tab as unread after reload">
-<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY tabStyles.label "Estiloak">
+<!ENTITY styles.label "Aldatu estiloak">
+<!ENTITY currentTab.label "Oraingo fitxa">
+<!ENTITY unloadedTabs.label "Fitxa kargatu gabeak">
+<!ENTITY unreadTab.label "Fitxa irakurri gabeak">
+<!ENTITY hideRGB.label "RGB ezkutatu">
+<!ENTITY showRGB.label "RGB erakutsi">
+<!ENTITY unreadAfterReload.label "markatu fitxa irakurri gabe gisa birkargatu ondoren">
+<!ENTITY disableBackground.label "Ezgaitu atzeko planoko koloreak ezartzea">
 <!ENTITY squaredTabs.label "Apply background color for squared tabs">
-<!ENTITY otherTabs.label "Other Tabs">
-<!ENTITY italic.label "Italic">
-<!ENTITY bold.label "Bold">
-<!ENTITY underline.label "Underline">
-<!ENTITY textcolor.label "Text Color">
-<!ENTITY bgColor.label "Background Color">
-<!ENTITY bgTopColor.label "top">
-<!ENTITY bgBottomColor.label "bottom">
-<!ENTITY useThis.label "use this style for">
-<!ENTITY opacity.label "opacity">
+<!ENTITY otherTabs.label "Beste fitxak">
+<!ENTITY italic.label "Letra etzana">
+<!ENTITY bold.label "Letra lodia">
+<!ENTITY underline.label "Letra azpimarratua">
+<!ENTITY textcolor.label "Testu kolorea">
+<!ENTITY bgColor.label "Atze-planoko kolorea">
+<!ENTITY bgTopColor.label "Goikaldea">
+<!ENTITY bgBottomColor.label "Azpikaldea">
+<!ENTITY useThis.label "erabili estilo hau honentzat">
+<!ENTITY opacity.label "gardentasuna">

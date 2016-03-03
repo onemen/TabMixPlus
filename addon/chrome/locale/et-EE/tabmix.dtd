@@ -102,8 +102,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Muuda nimi">
 <!ENTITY sm.context.rename.key "M">
-<!ENTITY sm.context.bookmarkSession "Bookmark Session">
-<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.bookmarkSession "Lisa seanss järjehoidjatesse">
+<!ENTITY sm.context.bookmarkSession.key "s">
 <!ENTITY sm.context.delete "Kustuta">
 <!ENTITY sm.context.delete.key "K">
 <!ENTITY sm.context.deleteall "Kustuta kõik">

@@ -102,7 +102,7 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "リネーム">
 <!ENTITY sm.context.rename.key "R">
-<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession "セッションをブックマーク">
 <!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "削除">
 <!ENTITY sm.context.delete.key "D">
