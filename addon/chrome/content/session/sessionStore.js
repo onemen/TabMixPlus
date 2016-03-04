@@ -728,6 +728,7 @@ var TabmixConvertSession = { // jshint ignore:line
   getSessionState: function cs_getSessionState(aPath, internal) {
     var _windows = [], tabsCount = 0;
     var sessionEnum = TabmixSessionManager.initContainer(aPath).GetElements();
+    let index = 0;
     while (sessionEnum.hasMoreElements()) {
       let rdfNodeWindow = sessionEnum.getNext();
       if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
@@ -736,12 +737,19 @@ var TabmixConvertSession = { // jshint ignore:line
           continue;
         let aWindowState = this.getWindowState(rdfNodeWindow, internal);
         if (aWindowState) {// don't save empty windows
+          aWindowState.index = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "SSi", index++);
           _windows.push(aWindowState);
           tabsCount += aWindowState.tabs.length;
         }
       }
     }
-    return {windows: _windows, selectedWindow: 1, tabsCount: tabsCount};
+    let selected = _windows[_windows.length - 1];
+    _windows.sort((a, b) => a.index > b.index);
+    return {
+      windows: _windows,
+      selectedWindow: _windows.indexOf(selected) + 1,
+      tabsCount: tabsCount,
+    };
   },
 
   getWindowState: function cs_getWindowState(rdfNodeWindow, internal) {

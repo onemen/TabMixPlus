@@ -415,6 +415,9 @@ TabmixSessionManager = {
       if (show) {
         this.TabmixGroupsMigrator.missingTabViewNotification(window, show.msg);
       }
+      if (TabmixSvc.sm.windowToFocus) {
+        TabmixSvc.sm.windowToFocus.focus();
+      }
       let {restoreID} = window.tabmixdata;
       let state = this._statesToRestore[restoreID];
       this.loadOneWindow(state, "windowopenedbytabmix");
@@ -698,6 +701,9 @@ TabmixSessionManager = {
       let {restoreID} = window.tabmixdata;
       delete this._statesToRestore[restoreID];
       delete window.tabmixdata;
+    }
+    if (TabmixSvc.sm.windowToFocus && TabmixSvc.sm.windowToFocus == window) {
+      delete TabmixSvc.sm.windowToFocus;
     }
   },
 
@@ -2678,6 +2684,7 @@ TabmixSessionManager = {
     }
 
     var rdfNodeThisWindow = this.RDFService.GetResource(winPath);
+    this.setLiteral(rdfNodeThisWindow, "SSi", window.__SSi);
     if (this.prefBranch.getBoolPref("save.selectedtab")) // save selected tab index
       this.setIntLiteral(rdfNodeThisWindow, "selectedIndex", this.getTabPosition());
 
@@ -3133,7 +3140,10 @@ TabmixSessionManager = {
       windowsList.push(win);
     }
 
-    state.windows.forEach(winData => {
+    if (!state.selectedWindow || state.selectedWindow > state.windows.length) {
+      state.selectedWindow = 0;
+    }
+    state.windows.forEach((winData, index) => {
       winData.tabsRemoved = tabsRemoved;
       sessionCount++;
       let win = windowsList.pop();
@@ -3146,7 +3156,11 @@ TabmixSessionManager = {
           win.TabmixSessionManager.saveOneWindow(this.gSessionPath[0], "", true);
         win.TabmixSessionManager.loadOneWindow(winData, caller);
       } else {
-        this.openNewWindow(winData, this.isPrivateWindow);
+        win = this.openNewWindow(winData, this.isPrivateWindow);
+      }
+      if (index == state.selectedWindow - 1) {
+        win.focus();
+        TabmixSvc.sm.windowToFocus = win;
       }
     });
     // cloes extra windows if we overwrite open windows and set dontLoad==true
@@ -3177,7 +3191,8 @@ TabmixSessionManager = {
         this.saveOneWindow(this.gSessionPath[0], "", true);
       this.loadOneWindow(winData, "openclosedwindow");
     } else {
-      this.openNewWindow(winData, this.isPrivateWindow);
+      let win = this.openNewWindow(winData, this.isPrivateWindow);
+      TabmixSvc.sm.windowToFocus = win;
     }
   },
 
@@ -3200,6 +3215,7 @@ TabmixSessionManager = {
     } while (ID in this._statesToRestore);
     this._statesToRestore[ID] = aState;
     newWindow.tabmixdata = {restoreID: ID};
+    return newWindow;
   },
 
   loadOneWindow: function SM_loadOneWindow(winData, caller) {
