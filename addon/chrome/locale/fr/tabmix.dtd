@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "E">
 <!ENTITY sm.context.rename "Renommer">
 <!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Marquer la session">
+<!ENTITY sm.context.bookmarkSession.key "M">
 <!ENTITY sm.context.delete "Effacer">
 <!ENTITY sm.context.delete.key "E">
 <!ENTITY sm.context.deleteall "Effacer tout">

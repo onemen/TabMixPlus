@@ -125,8 +125,9 @@ this.TMP_TabGroupsManager = {
   // for TabGroupsManager use - don't change function name
   tabmixSessionsManager: function() {
     // this here reffer to the top browser window
-    if (!this.Tabmix.isFirstWindow || "tabmix_afterTabduplicated" in this)
+    if (!this.Tabmix.isFirstWindow || this.Tabmix._afterTabduplicated) {
       return false;
+    }
 
     return this.Tabmix.prefs.getBoolPref("sessions.manager") &&
         (!this.Tabmix.isWindowAfterSessionRestore || "tabmixdata" in this);

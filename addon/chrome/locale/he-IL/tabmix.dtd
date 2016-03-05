@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "ש">
 <!ENTITY sm.context.rename "שנה שם">
 <!ENTITY sm.context.rename.key "נ">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "מחק">
 <!ENTITY sm.context.delete.key "מ">
 <!ENTITY sm.context.deleteall "מחר הכל">

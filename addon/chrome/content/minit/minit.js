@@ -48,12 +48,12 @@ var TMP_tabDNDObserver = {
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
       'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
     )._replace(
-      'let screenX = boxObject.screenX + getTabShift(tabs[mid], oldIndex);',
-      'let halfWidth = boxObject.width / 2;\n\
-          let screenX = boxObject.screenX + draggingRight * halfWidth +\n\
-                        getTabShift(tabs[mid], oldIndex);'
+      /let screenX = boxObject.*;/,
+      '$&\n            ' +
+      'let halfWidth = boxObject.width / 2;\n            ' +
+      'screenX += draggingRight * halfWidth;'
     )._replace(
-      'screenX + boxObject.width < tabCenter',
+      /screenX \+ boxObject.* \< tabCenter/,
       'screenX + halfWidth < tabCenter'
     )._replace(
       'newIndex >= oldIndex',
@@ -65,7 +65,7 @@ var TMP_tabDNDObserver = {
       '\n\
         this.removeAttribute("movingBackgroundTab");\n\
         let tabs = this.getElementsByAttribute("dragged", "*");\n\
-        Array.slice(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
+        Array.prototype.slice.call(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
       $1$2'
     ).toCode();
 
@@ -81,7 +81,7 @@ var TMP_tabDNDObserver = {
     tabBar.useTabmixDnD = function(aEvent) {
       function checkTab(dt) {
         let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || "__tabmixDragStart" in tab ||
+        return !tab || tab.__tabmixDragStart ||
           TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
@@ -108,7 +108,7 @@ var TMP_tabDNDObserver = {
     return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart: function(event) {
+  onDragStart: function(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
     if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
@@ -116,11 +116,12 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    var tab = gBrowser.tabContainer._getDragTargetTab(event, false);
+    let tabBar = gBrowser.tabContainer;
+    let tab = tabBar._getDragTargetTab(event, false);
     if (!tab || this._isCustomizing)
       return;
 
-    tab.__tabmixDragStart = true;
+    tab.__tabmixDragStart = tabmixDragstart;
     this.draggedTab = tab;
     tab.setAttribute("dragged", true);
     TabmixTabbar.removeShowButtonAttr();
@@ -142,31 +143,65 @@ var TMP_tabDNDObserver = {
     // canvas size (in CSS pixels) to the window's backing resolution in order
     // to get a full-resolution drag image for use on HiDPI displays.
     let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
-    let scale = !Tabmix.isVersion(180) ? 1 :
-                windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+    let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
+    let canvas = tabBar._dndCanvas ? tabBar._dndCanvas :
+                 document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
     canvas.mozOpaque = true;
     canvas.width = 160 * scale;
     canvas.height = 90 * scale;
-    if (!Tabmix.isVersion(340) || !gMultiProcessBrowser) {
-      // Bug 863512 - Make page thumbnails work in e10s
+    let toDrag;
+    let dragImageOffsetX = -16;
+    let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
+    if (gMultiProcessBrowser) {
+      let context = canvas.getContext('2d');
+      context.fillStyle = "white";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      // Create a panel to use it in setDragImage
+      // which will tell xul to render a panel that follows
+      // the pointer while a dnd session is on.
+      if (!tabBar._dndPanel) {
+        tabBar._dndCanvas = canvas;
+        tabBar._dndPanel = document.createElement("panel");
+        tabBar._dndPanel.setAttribute("type", "drag");
+        let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
+        wrapper.style.width = "160px";
+        wrapper.style.height = "90px";
+        wrapper.appendChild(canvas);
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        tabBar._dndPanel.appendChild(wrapper);
+        document.documentElement.appendChild(tabBar._dndPanel);
+      }
+      // PageThumb is async with e10s but that's fine
+      // since we can update the panel during the dnd.
+      PageThumbs.captureToCanvas(browser, canvas);
+      toDrag = tabBar._dndPanel;
+    } else {
+      // For the non e10s case we can just use PageThumbs
+      // sync. No need for xul magic, the native dnd will
+      // be fine, so let's use the canvas for setDragImage.
       let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
+      toDrag = canvas;
+      dragImageOffsetX = dragImageOffsetX * scale;
+      dragImageOffsetY = dragImageOffsetY * scale;
     }
-    let offset = (TabmixTabbar.visibleRows == 1 ? -16 : -30) * scale;
-    if (TabmixTabbar.position == 1)
-      offset = canvas.height - offset;
-    dt.setDragImage(canvas, -16 * scale, offset);
+    if (TabmixTabbar.position == 1) {
+      dragImageOffsetY = canvas.height - dragImageOffsetY;
+    }
+    dt.setDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
 
     // _dragData.offsetX/Y give the coordinates that the mouse should be
     // positioned relative to the corner of the new window created upon
     // dragend such that the mouse appears to have the same position
     // relative to the corner of the dragged tab.
     let clientX = ele => ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) - clientX(gBrowser.tabContainer);
+    let tabOffsetX = clientX(tab) - clientX(tabBar);
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
-      offsetY: event.screenY - window.screenY
+      offsetY: event.screenY - window.screenY,
+      scrollX: tabBar.mTabstrip.scrollPosition,
+      screenX: event.screenX
     };
 
     event.stopPropagation();
@@ -379,7 +414,9 @@ var TMP_tabDNDObserver = {
       // swap the dropped tab with a new one we create and then close
       // it in the other window (making it seem to have moved between
       // windows)
-      let newTab = gBrowser.addTab("about:blank");
+      let newTab = Tabmix.isVersion(470) ?
+          gBrowser.addTab("about:blank", {eventDetail: {adoptedTab: draggedTab}}) :
+          gBrowser.addTab("about:blank");
       var newBrowser = gBrowser.getBrowserForTab(newTab);
       if (Tabmix.isVersion(330)) {
         let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
@@ -567,9 +604,9 @@ var TMP_tabDNDObserver = {
       statusTextFld.label = "";
       this.gBackupLabel = "";
       this.statusFieldChanged = null;
-    }
-    else if (!statusTextFld)
+    } else if (!statusTextFld) {
       document.getElementById("tabmix-tooltip").hidePopup();
+    }
   },
 
   // get _tPos from group index
@@ -608,11 +645,11 @@ var TMP_tabDNDObserver = {
         if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
           while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
             i++;
+        } else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
+          return i;
+        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow) {
+          return i;
         }
-        else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
-          return i;
-        else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow)
-          return i;
       }
     }
     return numTabs;
@@ -741,9 +778,9 @@ var TMP_tabDNDObserver = {
         this.removetDragmarkAttribute(gBrowser.tabs[index]);
       if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
         this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
-    }
-    else
+    } else {
       this.setFirefoxDropIndicator(false);
+    }
 
     this.dragmarkindex = null;
   },
@@ -784,8 +821,28 @@ var TMP_tabDNDObserver = {
       // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
       // data from external source, always have 'copy' dropEffect
       let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-      let move = !isCtrlKey && (dt.effectAllowed == "copyLink" &&
-          dt.mozSourceNode && dt.mozSourceNode._placesNode || !dt.mozSourceNode);
+      let sourceNode = dt.effectAllowed == "copyLink" &&
+          dt.mozSourceNode ? dt.mozSourceNode : {};
+
+      // return true when user drag text from the urlbar
+      let isUrlbar = node => {
+        let result;
+        // when user drag text from the address bar to another tab
+        // node.parentNode is null after selected tab changed
+        // save _tabmix_isUrlbar on the first run of this function
+        if (typeof sourceNode._tabmix_isUrlbar == "boolean") {
+          return sourceNode._tabmix_isUrlbar;
+        }
+        while (!result && node.parentNode) {
+          node = node.parentNode;
+          result = node.classList.contains("urlbar-input");
+        }
+        if (typeof sourceNode._tabmix_isUrlbar == "undefined") {
+          sourceNode._tabmix_isUrlbar = result;
+        }
+        return result;
+      };
+      let move = !isCtrlKey && (!dt.mozSourceNode || sourceNode._placesNode || isUrlbar(sourceNode));
       return !move;
     }
     return isCopy;
@@ -907,13 +964,24 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
   }
 };
 
-var TMP_TabView = { /* jshint ignore: line */
+var TMP_TabView = {
+  subScriptLoaded: false,
+  init: function() {
+    try {
+      if (this.installed) {
+        this._patchBrowserTabview();
+      }
+    } catch (ex) {
+      Tabmix.assert(ex);
+    }
+  },
+
   get installed() {
-    delete this.installed;
     let installed = typeof TabView == "object";
-    if (installed)
+    if (installed && !this.subScriptLoaded) {
       Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js", window);
-    return (this.installed = installed);
+    }
+    return installed;
   },
 
   exist: function(id) {
@@ -934,13 +1002,13 @@ var TMP_TabView = { /* jshint ignore: line */
 
   // includung _removingTabs
   currentGroup: function() {
-    return Array.filter(gBrowser.tabs, tab => !tab.hidden);
+    return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
   getTabPosInCurrentGroup: function(aTab) {
     if (aTab) {
-      let tabs = Array.filter(gBrowser.tabs, tab => !tab.hidden);
+      let tabs = Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
     }
     return -1;
@@ -1009,6 +1077,11 @@ Tabmix.navToolbox = {
     CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
     if (Tabmix.isVersion(290))
       CustomizableUI.removeListener(this.listener);
+
+    let alltabsPopup = document.getElementById("alltabs-popup");
+    if (alltabsPopup && alltabsPopup._tabmix_inited) {
+      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+    }
   },
 
   cleanCurrentset: function() {
@@ -1097,11 +1170,11 @@ Tabmix.navToolbox = {
         'O.handleSearchQuery',
         'window.Omnibar.handleSearchQuery', {silent: true}
       ).toCode();
-    }
-    else if ("urlDot" in window && "handleCommand2" in gURLBar)
+    } else if ("urlDot" in window && "handleCommand2" in gURLBar) {
       fn = "handleCommand2";
-    else
+    } else {
       fn = "handleCommand";
+    }
 
     // Fix incompatibility with https://addons.mozilla.org/en-US/firefox/addon/url-fixer/
     if ("urlfixerOldHandler" in gURLBar.handleCommand) {
@@ -1207,15 +1280,16 @@ Tabmix.navToolbox = {
     if (!searchbar)
       return;
 
+    let obj, fn, $LF;
     let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
     let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() :
                                                searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
+      [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
                                       [searchbar, "handleSearchCommand"];
-      let $LF = '\n            ';
+      $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
         '$&' + $LF +
@@ -1227,7 +1301,7 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    let [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
+    [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
@@ -1238,7 +1312,7 @@ Tabmix.navToolbox = {
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
-    let $LF = '\n          ';
+    $LF = '\n          ';
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       /let params|openUILinkIn/,
       'aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);' + $LF +

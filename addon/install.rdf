@@ -10,7 +10,7 @@
                    NS1:multiprocessCompatible="true"
                    NS1:description="Tab browsing with an added boost."
                    NS1:iconURL="chrome://tabmixplus/skin/tmp.png"
-                   NS1:homepageURL="http://tmp.garyr.net"
+                   NS1:homepageURL="http://tabmixplus.org"
                    NS1:optionsURL="chrome://tabmixplus/content/preferences/preferences.xul"
                    NS1:aboutURL="chrome://tabmixplus/content/about.xul"
                    NS1:creator="ONEMEN (tabmix.onemen@gmail.com)"
@@ -21,7 +21,7 @@
       <RDF:Description RDF:about="rdf:#$n83In3"
                    NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    NS1:minVersion="31.0"
-                   NS1:maxVersion="46.0a1" />
+                   NS1:maxVersion="47.0a1" />
     </NS1:targetApplication>
 
     <!-- PaleMoon -->

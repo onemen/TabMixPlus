@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "M">
 <!ENTITY sm.context.rename "Átnevezés">
 <!ENTITY sm.context.rename.key "t">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Törlés">
 <!ENTITY sm.context.delete.key "r">
 <!ENTITY sm.context.deleteall "Összes törlése">

@@ -29,7 +29,7 @@
   <binding id="tabmix-tab-label">
     <content>
       <xul:label flex="1"
-                 xbl:inherits="value=labelvalue,crop,accesskey,fadein,pinned,selected,visuallyselected"
+                 xbl:inherits="value=visibleLabel,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
                  class="tab-text tab-label"
                  role="presentation"/>
     </content>
@@ -54,7 +54,7 @@
           <xul:progressmeter class="tab-progress" mode="normal"
                              xbl:inherits="value=tab-progress,fadein,pinned,selected,visuallyselected"/>
         </xul:vbox>
-        <xul:hbox xbl:inherits="pinned,selected,visuallyselected,titlechanged"
+        <xul:hbox xbl:inherits="pinned,selected,visuallyselected,titlechanged,attention"
                   class="tab-content" align="center">
             <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected,visuallyselected">
               <xul:image xbl:inherits="fadein,pinned,busy,progress,selected,visuallyselected"
@@ -75,7 +75,7 @@
                      role="presentation"/>
           <xul:label flex="1"
                      anonid="tab-label" tabmix="true"
-                     xbl:inherits="value=visibleLabel,labelvalue=label,crop,accesskey,fadein,pinned,selected,visuallyselected"
+                     xbl:inherits="value=label,visibleLabel,crop,accesskey,fadein,pinned,selected,visuallyselected,attention"
                      class="tab-text tab-label"
                      role="presentation"/>
           <xul:image xbl:inherits="soundplaying,pinned,muted"
@@ -131,8 +131,7 @@
       <getter><![CDATA[
         try {
           return Tabmix.prefs.getBoolPref("mouseOverSelect");
-        }
-        catch(e) {
+        } catch (e) {
           return false;
         }
       ]]></getter>
@@ -141,8 +140,7 @@
       <getter><![CDATA[
         try {
           return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
-        }
-        catch(e) {
+        } catch (e) {
           return false;
         }
       ]]></getter>
@@ -151,8 +149,7 @@
       <getter><![CDATA[
         try {
           return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
-        }
-        catch(e) {
+        } catch (e) {
           return 250;
         }
       ]]></getter>
@@ -161,9 +158,8 @@
       <getter><![CDATA[
         try {
           return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
-        }
-        catch(e) {
-        return 0;
+        } catch (e) {
+          return 0;
         }
       ]]></getter>
     </property>
@@ -181,10 +177,10 @@
           this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
 
         if (TabmixSvc.australis) {
-          this.tabmix_mouseover = window.setTimeout(function(self) {
-            clearTimeout(self.tabmix_mouseover);
+          this.tabmix_mouseover = window.setTimeout(() => {
+            clearTimeout(this.tabmix_mouseover);
             TabmixTabbar.updateBeforeAndAfter(true);
-          }, 0, this);
+          }, 0);
         }
       ]]></body>
     </method>
@@ -197,9 +193,9 @@
 
         var b = aTab.parentNode.tabbrowser;
         if (b.hasAttribute("preventMouseHoverSelect"))
-            b.removeAttribute("preventMouseHoverSelect");
+          b.removeAttribute("preventMouseHoverSelect");
         else if (aTab.mIsHover)
-           aTab.parentNode.selectedItem = aTab;
+          aTab.parentNode.selectedItem = aTab;
       ]]></body>
     </method>
 
@@ -272,7 +268,7 @@
           // we use this in Linux to prevent underflow
           // that trigger by hidding the close button
           aTab.setAttribute("showbutton_removed", true);
-          setTimeout(function(tab) {tab.removeAttribute("showbutton_removed");}, 50, aTab);
+          setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
           if (aTab == aTab.parentNode.__showbuttonTab)
             delete aTab.parentNode.__showbuttonTab;
         }
@@ -281,6 +277,7 @@
 
     <method name="onMouseCommand">
       <parameter name="aEvent"/>
+      <parameter name="aSelectNewTab"/>
       <body><![CDATA[
         var isSelected = this == this.parentNode.selectedItem;
         Tabmix.setItem(this, "clickOnCurrent",
@@ -291,7 +288,7 @@
         // don't allow mouse click/down with modifiers to select tab
         if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
           aEvent.stopPropagation();
-        else {
+        else if (aSelectNewTab) {
           this.parentNode._selectNewTab(this);
           let isTabFocused = false;
           try {
@@ -299,9 +296,10 @@
           } catch (e) {}
           if (!isTabFocused) {
             this.setAttribute("ignorefocus", "true");
-            this.mSelect = setTimeout(function (tab) tab.removeAttribute("ignorefocus"), 0, this);
+            this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);
           }
         }
+        // on mousedown event fall through to default mousedown from tabbox.xml
       ]]></body>
     </method>
 
@@ -342,17 +340,15 @@
       <![CDATA[
         if (this.selected) {
           this.style.MozUserFocus = 'ignore';
-          this.clientTop; // just using this to flush style updates
+          void this.clientTop; // just using this to flush style updates
         }
         // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
         if (this.mOverCloseButton || this._overPlayingIcon) {
           event.stopPropagation();
-        }
-        else {
-          if (this.mouseDownSelect)
-            this.onMouseCommand(event);
-          else
-            event.stopPropagation();
+        } else if (this.mouseDownSelect) {
+          this.onMouseCommand(event);
+        } else {
+          event.stopPropagation();
         }
       ]]>
       </handler>
@@ -421,7 +417,7 @@
 
           if (!this._animateElement.hasAttribute("notifybgtab")) {
             this._animateElement.setAttribute("notifybgtab", "true");
-            setTimeout(function (ele) {
+            setTimeout(ele => {
               ele.removeAttribute("notifybgtab");
             }, 150, this._animateElement);
           }

@@ -248,9 +248,9 @@ this.AutoReload = {
         aTab.autoReloadEnabled = true;
 
       aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
-    }
-    else if (aTab.autoReloadEnabled)
+    } else if (aTab.autoReloadEnabled) {
       aTab.autoReloadEnabled = false;
+    }
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
   },
 

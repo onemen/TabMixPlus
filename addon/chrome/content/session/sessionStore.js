@@ -175,10 +175,7 @@ var TMP_SessionStore = { // jshint ignore:line
       let title = "TabMix " + TabmixSvc.getSMString("sm.title");
       let msg = start ? TabmixSvc.getSMString("sm.disable.msg") + "\n\n" : "";
       msg += TabmixSvc.getSMString("sm.disable.msg" + msgNo);
-      let bunService = Cc["@mozilla.org/intl/stringbundle;1"].
-      getService(Ci.nsIStringBundleService);
-      let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
-      let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
+      let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
       let self = this;
       let callBack = function(aResult) {
         if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button === 0))) {
@@ -231,9 +228,9 @@ var TMP_SessionStore = { // jshint ignore:line
         Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
       }
       afterSessionRestore = true;
-    }
-    else if (this.afterSwitchThemes)
+    } else if (this.afterSwitchThemes) {
       afterSessionRestore = true;
+    }
 
     if (typeof afterSessionRestore == "boolean")
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
@@ -359,6 +356,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
+    /* eslint-disable mozilla/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
 
@@ -435,6 +433,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
       TMP_ClosedTabs.restoreTab('original', -2);
     });
     return true;
+    /* eslint-enable mozilla/balanced-listeners */
   },
 
   restoreCommand: function(aEvent) {
@@ -458,9 +457,9 @@ var TMP_ClosedTabs = { // jshint ignore:line
     if (deleteItem && TMP_ClosedTabs.count > 0) {
       aEvent.stopPropagation();
       TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
-    }
-    else
+    } else {
       closeMenus(aEvent.target);
+    }
   },
 
   addBookmarks: function ct_addBookmarks(index) {
@@ -667,8 +666,9 @@ var TabmixConvertSession = { // jshint ignore:line
     if (!Tabmix.firstWindowInSession)
       return;
 
-    if (!Tabmix.extensions.sessionManager || "tabmix_afterTabduplicated" in window || !Tabmix.isFirstWindow)
+    if (!Tabmix.extensions.sessionManager || Tabmix._afterTabduplicated || !Tabmix.isFirstWindow) {
       return;
+    }
 
     var sessions = TabmixSessionManager.getSessionList();
     if (!sessions)
@@ -720,41 +720,46 @@ var TabmixConvertSession = { // jshint ignore:line
   },
 
   confirm: function cs_confirm(aMsg, aCallBack) {
-    let bunService = Cc["@mozilla.org/intl/stringbundle;1"].
-    getService(Ci.nsIStringBundleService);
-    let bundle = bunService.createBundle("chrome://global/locale/commonDialogs.properties");
-    let buttons = [bundle.GetStringFromName("Yes"), bundle.GetStringFromName("No")].join("\n");
+    let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
                                 [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
   },
 
-  getSessionState: function cs_getSessionState(aPath) {
+  getSessionState: function cs_getSessionState(aPath, internal) {
     var _windows = [], tabsCount = 0;
     var sessionEnum = TabmixSessionManager.initContainer(aPath).GetElements();
+    let index = 0;
     while (sessionEnum.hasMoreElements()) {
       let rdfNodeWindow = sessionEnum.getNext();
       if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
         let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
         if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
           continue;
-        let aWindowState = this.getWindowState(rdfNodeWindow);
+        let aWindowState = this.getWindowState(rdfNodeWindow, internal);
         if (aWindowState) {// don't save empty windows
+          aWindowState.index = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "SSi", index++);
           _windows.push(aWindowState);
           tabsCount += aWindowState.tabs.length;
         }
       }
     }
-    return {windows: _windows, tabsCount: tabsCount};
+    let selected = _windows[_windows.length - 1];
+    _windows.sort((a, b) => a.index > b.index);
+    return {
+      windows: _windows,
+      selectedWindow: _windows.indexOf(selected) + 1,
+      tabsCount: tabsCount,
+    };
   },
 
-  getWindowState: function cs_getWindowState(rdfNodeWindow) {
+  getWindowState: function cs_getWindowState(rdfNodeWindow, internal) {
     var state = {tabs: [], selected: 0, _closedTabs: []};
 
     var rdfNodeTabs = TabmixSessionManager.getResource(rdfNodeWindow, "tabs");
     if (!(rdfNodeTabs instanceof Ci.nsIRDFResource) || TabmixSessionManager.containerEmpty(rdfNodeTabs)) {
       return null;
     }
-    state.tabs = this.getTabsState(rdfNodeTabs);
+    state.tabs = this.getTabsState(rdfNodeTabs, internal);
     state._closedTabs = this.getClosedTabsState(TabmixSessionManager.getResource(rdfNodeWindow, "closedtabs"));
     state.selected = TabmixSessionManager.getIntValue(rdfNodeWindow, "selectedIndex") + 1;
     // we don't save windowState in Tabmix, just get the current windowState for all the sessions

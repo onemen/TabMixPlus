@@ -21,6 +21,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
+var ContentClickInternal;
 this.TabmixContentClick = {
   init: function() {
     ContentClickInternal.init();
@@ -47,9 +48,7 @@ this.TabmixContentClick = {
   },
 
   isUrlForDownload: function(url) {
-    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
-      return ContentClickInternal.isUrlForDownload(url);
-    return false;
+    return ContentClickInternal.isUrlForDownload(url);
   },
 
   selectExistingTab: function(window, href, targetAttr) {
@@ -58,7 +57,7 @@ this.TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
-var ContentClickInternal = {
+ContentClickInternal = {
   _timer: null,
   _initialized: false,
 
@@ -328,8 +327,8 @@ var ContentClickInternal = {
 
   whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
-    let TMP_tabshifted = function TMP_tabshifted(event) {
-      var where = eventWhere || this._window.whereToOpenLink(event);
+    let TMP_tabshifted = function TMP_tabshifted(aEvent) {
+      var where = eventWhere || this._window.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
     }.bind(this);
 
@@ -358,7 +357,7 @@ var ContentClickInternal = {
       return [eventWhere + "@2.1"];
     }
 
-    if (this.miscellaneous(wrappedNode))
+    if (this.miscellaneous(wrappedNode || wrappedOnClickNode))
       return ["default@2.2"];
 
     /*
@@ -700,9 +699,6 @@ var ContentClickInternal = {
         return true;
     }
 
-    if (!TabmixSvc.prefBranch.getBoolPref("enablefiletype"))
-      return false;
-
     if (event.button !== 0 || event.ctrlKey || event.metaKey)
       return false;
 
@@ -732,9 +728,15 @@ var ContentClickInternal = {
     if (linkHref.startsWith("mailto:"))
       return true;
 
-    var filetype = TabmixSvc.prefBranch.getCharPref("filetype");
-    filetype = filetype.toLowerCase();
-    filetype = filetype.split(" ");
+    // always check if the link is an xpi link
+    let filetype = ["xpi"];
+    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
+      let types = TabmixSvc.prefBranch.getCharPref("filetype");
+      types = types.toLowerCase().split(" ")
+                   .filter(t => filetype.indexOf(t) == -1);
+      filetype = [...filetype, ...types];
+    }
+
     var linkHrefExt = "";
     if (linkHref) {
       linkHref = linkHref.toLowerCase();
@@ -903,9 +905,9 @@ var ContentClickInternal = {
 
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v\=/;
-    let isYoutube = href => youtube.test(current) && youtube.test(href);
-    let isSamePath = (href, att) => makeURI(current).path.split(att)[0] == makeURI(href).path.split(att)[0];
-    let isSame = (href, att) => current.split(att)[0] == href.split(att)[0];
+    let isYoutube = _href => youtube.test(current) && youtube.test(_href);
+    let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
+    let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
     if (hrefFromOnClick) {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();
@@ -928,8 +930,6 @@ var ContentClickInternal = {
     else
       // when the links target is in the same page don't open new tab
       return !isSame(href, '#');
-
-    return null;
   },
 
   /**
@@ -1023,9 +1023,9 @@ var ContentClickInternal = {
         // Focus the matching window & tab
         window.focus();
         window.gBrowser.selectedTab = tab;
-      }
-      else
+      } else {
         this.next(tab.nextSibling);
+      }
     },
     next: function(tab) {
       if (!tab && this.windows.length) {
@@ -1042,9 +1042,9 @@ var ContentClickInternal = {
                                                       this.frameData.href, this.frameData.name);
           this.result(browser, {result: result});
         }
-      }
-      else
+      } else {
         this.stop();
+      }
     }
   },
 

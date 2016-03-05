@@ -97,6 +97,7 @@ this.TabmixUtils = {
         return false;
       }
     }
+    return null;
   },
 
   makeInputStream: function(aString) {

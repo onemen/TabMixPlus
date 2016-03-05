@@ -7,6 +7,7 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
+var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
   if (TabmixSvc.isPaleMoonID) {
@@ -83,6 +84,19 @@ this.TabmixSvc = {
     if (accessKeyIndex > -1)
       label = label.substr(0, accessKeyIndex) + "&" + label.substr(accessKeyIndex);
     return label;
+  },
+
+  getDialogStrings: function(...keys) {
+    let stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
+
+    return keys.map(key => {
+      try {
+        return stringBundle.GetStringFromName(key);
+      } catch (ex) {
+        this.console.log("Failed to get string " + key + " in bundle: commonDialogs.properties");
+        return key;
+      }
+    });
   },
 
   topWin: function() {
@@ -166,7 +180,6 @@ this.TabmixSvc = {
 
       this.addMissingPrefs();
 
-      Services.obs.addObserver(this, "browser-delayed-startup-finished", true);
       Services.obs.addObserver(this, "quit-application", true);
 
       if (isVersion(190))
@@ -209,13 +222,6 @@ this.TabmixSvc = {
           delete TabmixSvc.SessionStoreGlobal;
           delete TabmixSvc.SessionStore;
           break;
-        case "browser-delayed-startup-finished":
-          try {
-            aSubject.Tabmix.initialization.run("delayedStartup");
-          } catch (ex) {
-            TabmixSvc.console.assert(ex);
-          }
-          break;
       }
     }
   },
@@ -250,6 +256,7 @@ this.TabmixSvc = {
     },
     private: true,
     settingPreference: false,
+    statesToRestore: {},
   },
 
   isAustralisBgStyle: function(orient) {
@@ -333,7 +340,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 
-var tabStateCache = {
+tabStateCache = {
   get _update() {
     delete this._update;
     return (this._update = isVersion(260) ? "updateField" : "update");

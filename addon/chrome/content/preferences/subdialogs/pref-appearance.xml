@@ -73,7 +73,7 @@
 
           useThis.nextSibling.value = document.getElementById("_" + this.id).label;
           // colorpicker need some time untile its ready
-          window.setTimeout(() => {this._getPrefs(this._initPrefValues);}, 0);
+          window.setTimeout(() => this._getPrefs(this._initPrefValues), 0);
         ]]>
       </constructor>
 
@@ -90,10 +90,11 @@
         onget="return this.getAttribute('disabled');">
         <setter>
           <![CDATA[
-            if(val)
+            if (val) {
               this.setAttribute("disabled", true);
-            else
+            } else {
               this.removeAttribute("disabled");
+            }
           ]]>
         </setter>
       </property>
@@ -109,7 +110,7 @@
         <parameter name="aEnabled"/>
         <body><![CDATA[
           Tabmix.prefs.setBoolPref(this.id, aEnabled);
-          this.disabled = !aEnabled
+          this.disabled = !aEnabled;
           if ("text" in this._prefValues)
             this.updateDisableState("text");
           this.updateDisableState("bg");
@@ -136,25 +137,24 @@
         <parameter name="aPrefString"/>
         <body><![CDATA[
           try {
-            this._prefValues = TabmixSvc.JSON.parse(aPrefString)
-          }
-          catch (er) {
+            this._prefValues = TabmixSvc.JSON.parse(aPrefString);
+          } catch (er) {
             this._resetDefault(true);
             return;
           }
 
           for (var _id in this._prefValues) {
-             var item = this._getElementById(_id);
-             if (!item)
-               continue;
-             switch (item.localName) {
-               case "checkbox":
-               case "checkbox_tmp":
-                 item.checked = this._prefValues[_id];
-                 break;
-               case "colorbox":
-                 item.color = this._prefValues[_id];
-             }
+            var item = this._getElementById(_id);
+            if (!item)
+              continue;
+            switch (item.localName) {
+              case "checkbox":
+              case "checkbox_tmp":
+                item.checked = this._prefValues[_id];
+                break;
+              case "colorbox":
+                item.color = this._prefValues[_id];
+            }
           }
 
           if ("text" in this._prefValues)
@@ -237,12 +237,12 @@
 
       <constructor>
         <![CDATA[
-          Array.forEach(["red","green","blue", "opacity"], function(id) {
+          ["red", "green", "blue", "opacity"].forEach(function(id) {
             this._RGB.push(document.getAnonymousElementByAttribute(this, "anonid", id));
           }, this);
 
-           this._colorpicker = document.getAnonymousElementByAttribute(this, "anonid", "color");
-           this._parent = document.getBindingParent(this);
+          this._colorpicker = document.getAnonymousElementByAttribute(this, "anonid", "color");
+          this._parent = document.getBindingParent(this);
         ]]>
       </constructor>
 
@@ -299,9 +299,9 @@
         var item = event.originalTarget;
         if (item.localName == "colorpicker") {
           // colorpicker use rgb hexadecimal format
-          let color = item.color.replace("#","");
+          let color = item.color.replace("#", "");
           for (let i = 0; i < 3; i++) {
-            let subS = color.substr(i*2, 2);
+            let subS = color.substr(i * 2, 2);
             this._RGB[i].value = parseInt(subS, 16);
           }
         }

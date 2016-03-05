@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Preimenuj">
 <!ENTITY sm.context.rename.key "r">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Obriši">
 <!ENTITY sm.context.delete.key "b">
 <!ENTITY sm.context.deleteall "Obriši sve">

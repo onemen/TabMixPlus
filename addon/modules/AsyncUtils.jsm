@@ -29,7 +29,7 @@ this.AsyncUtils = {
   promisify: function(thisArg, fn, index) {
     return function() {
       let deferred = new Deferred();
-      let args = Array.slice(arguments);
+      let args = Array.prototype.slice.call(arguments);
       if (typeof index == "undefined")
         index = args.length;
       args.splice(index, 0, deferred.callback);

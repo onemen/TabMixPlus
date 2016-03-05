@@ -542,9 +542,9 @@ TMP_extensionsCompatibility.wizzrss = {
     if (openNewTab) {
       var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
       tabBrowser.loadOneTab(uri, {inBackground: theBGPref});
-    }
-    else
+    } else {
       tabBrowser.loadURI(uri);
+    }
   }
 };
 
@@ -569,7 +569,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
   preInit: function() {
-    if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
+    let tstHelper = TreeStyleTabWindowHelper;
+    if (typeof tstHelper.overrideExtensionsPreInit == "function") {
       // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
       tablib._init = tablib.init;
       tablib.init = function() {
@@ -578,6 +579,26 @@ TMP_extensionsCompatibility.treeStyleTab = {
           var newTab = null
           gBrowser.restoreTab = return newTab;
          */
+      };
+    }
+
+    // run our initialization function before TreeStyleTab functions:
+    // preInit and onBeforeBrowserInit
+    if (typeof tstHelper.preInit == "function") {
+      Tabmix.originalFunctions.tstHelper_preInit = tstHelper.preInit;
+      tstHelper.preInit = function() {
+        TMP_eventListener._onLoad("DOMContentLoaded");
+        let method = Tabmix.originalFunctions.tstHelper_preInit;
+        method.apply(this, arguments);
+      };
+    }
+
+    if (typeof tstHelper.onBeforeBrowserInit == "function") {
+      Tabmix.originalFunctions.tstHelper_onBeforeBrowserInit = tstHelper.onBeforeBrowserInit;
+      tstHelper.onBeforeBrowserInit = function() {
+        TMP_eventListener._onLoad("load");
+        let method = Tabmix.originalFunctions.tstHelper_onBeforeBrowserInit;
+        method.apply(this, arguments);
       };
     }
   },
@@ -689,36 +710,39 @@ TMP_extensionsCompatibility.treeStyleTab = {
   },
 
   onWindowLoaded: function() {
-    /**
-     *  TST have eval to TMP_Bookmark.openGroup
-     *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830
-     *  we also replace call to TreeStyleTabService.openGroupBookmarkBehavior();
-     *  with aOpenGroupBookmarkBehavior that we pass from PlacesUIUtils._openTabset
-     *  we only call this functiom from browserWindow so we don't need to call it for
-     *  other places windows
-     */
-    Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
-      'var tabs = gBrowser.visibleTabs;',
-      'let TSTOpenGroupBookmarkBehavior = arguments.length > 3 && arguments[3] ||\n' +
-      '        TreeStyleTabService.openGroupBookmarkBehavior();\n' +
-      '    $&'
-    )._replace(
-      'index = prevTab._tPos + 1;',
-      '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
-      '  if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);' +
-      '    index = index ? index._tPos : (prevTab._tPos + 1);'
-    )._replace(
-      'prevTab = aTab;',
-      '  $&' +
-      '  if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {' +
-      '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
-      '  }'
-    )._replace(
-      /(\})(\)?)$/,
-      '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
-      '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
-      '$1$2'
-    ).toCode();
+    // we don't need this hack since treestyletab version 0.16.2016021602
+    if (typeof PlacesUIUtils.__treestyletab__openTabset != "function") {
+      /**
+       *  TST have eval to TMP_Bookmark.openGroup
+       *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830
+       *  we also replace call to TreeStyleTabService.openGroupBookmarkBehavior();
+       *  with aOpenGroupBookmarkBehavior that we pass from PlacesUIUtils._openTabset
+       *  we only call this functiom from browserWindow so we don't need to call it for
+       *  other places windows
+       */
+      Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
+        'var tabs = gBrowser.visibleTabs;',
+        'let TSTOpenGroupBookmarkBehavior = arguments.length > 3 && arguments[3] ||\n' +
+        '        TreeStyleTabService.openGroupBookmarkBehavior();\n' +
+        '    $&'
+      )._replace(
+        'index = prevTab._tPos + 1;',
+        '  index = gBrowser.treeStyleTab.getNextSiblingTab(gBrowser.treeStyleTab.getRootTab(prevTab));' +
+        '  if (tabToSelect == aTab) index = gBrowser.treeStyleTab.getNextSiblingTab(index);' +
+        '    index = index ? index._tPos : (prevTab._tPos + 1);'
+      )._replace(
+        'prevTab = aTab;',
+        '  $&' +
+        '  if (tabToSelect == aTab && TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE) {' +
+        '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
+        '  }'
+      )._replace(
+        /(\})(\)?)$/,
+        '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
+        '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
+        '$1$2'
+      ).toCode();
+    }
 
     if (Services.prefs.getBoolPref("extensions.treestyletab.compatibility.TMP")) {
       // Added 2010-04-10

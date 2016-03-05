@@ -5,7 +5,7 @@
 // so we don't evaluat all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
-Tabmix.changeCode = function(aParent, aName, aOptions) {
+Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
 
@@ -21,11 +21,11 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
     if (options && (options.setter || options.getter)) {
       this.type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
       this.value = this.obj[this.type](this.fnName).toString();
-    }
-    else if (typeof this.obj[this.fnName] == "function")
+    } else if (typeof this.obj[this.fnName] == "function") {
       this.value = this.obj[this.fnName].toString();
-    else
+    } else {
       this.errMsg = "\n" + this.fullName + " is undefined.";
+    }
     this.notFound = [];
   }
 
@@ -52,9 +52,9 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
       if (exist) {
         this.value = this.value.replace(substr, newString);
         this.needUpdate = true;
-      }
-      else if (!silent)
+      } else if (!silent) {
         this.notFound.push(substr);
+      }
       return this;
     },
 
@@ -132,23 +132,23 @@ Tabmix.changeCode = function(aParent, aName, aOptions) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         console.clog(caller + " was unable to change " + aName + "." +
           (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
-          "\n\nTry Tabmix latest development version from tmp.garyr.net/tab_mix_plus-dev-build.xpi," +
-          "\nReport about this to Tabmix developer at http://tmp.garyr.net/forum/");
+          "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
+          "\nReport about this to Tabmix developer at http://tabmixplus.org/forum/");
         if (debugMode)
           console.clog(caller + "\nfunction " + aName + " = " + this.value);
-      }
-      else if (!this.needUpdate && debugMode)
+      } else if (!this.needUpdate && debugMode) {
         console.clog(caller + " no update needed to " + aName);
+      }
       return false;
     }
   };
 
-  let fnName = aName.split(".").pop();
+  let name = afnName.split(".").pop();
   try {
-    return new ChangeCode({obj: aParent, fnName: fnName,
-      fullName: aName, options: aOptions});
+    return new ChangeCode({obj: aParent, fnName: name,
+                           fullName: afnName, options: aOptions});
   } catch (ex) {
-    console.clog(console.callerName() + " failed to change " + aName + "\nError: " + ex.message);
+    console.clog(console.callerName() + " failed to change " + afnName + "\nError: " + ex.message);
     if (debugMode)
       console.obj(aParent, "aParent");
   }
@@ -159,9 +159,9 @@ Tabmix.setNewFunction = function(aObj, aName, aCode) {
   if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
     Object.defineProperty(aObj, aName, {value: aCode,
                                         writable: true, configurable: true});
-  }
-  else
+  } else {
     aObj[aName] = aCode;
+  }
 };
 
 Tabmix.nonStrictMode = function(aObj, aFn, aArg) {

@@ -1,0 +1,7 @@
+{
+    "plugins": ["eslint-plugin-mozilla"],
+
+    "rules": {
+      "mozilla/balanced-listeners": 2
+    }
+}

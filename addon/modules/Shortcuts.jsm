@@ -8,6 +8,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+var KeyConfig;
 this.Shortcuts = {
   keys: {
     newTab: {id: "key_newNavigatorTab", default: "T accel"},
@@ -74,10 +75,10 @@ this.Shortcuts = {
       let tmp = {};
       Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
       this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    }
-    else
+    } else {
       this.permanentPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
           getService(Ci.nsIPrivateBrowsingService).autoStarted;
+    }
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
@@ -88,7 +89,9 @@ this.Shortcuts = {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      Array.slice(box.attributes).forEach(a => labels[a.name] = a.value);
+      for (let att of box.attributes) {
+        labels[att.name] = att.value;
+      }
       container.removeChild(box);
     }
     labels.togglePinTab =
@@ -270,9 +273,8 @@ this.Shortcuts = {
       items[i].setAttribute("acceltext", disabled ? " " : "");
 
     // turn off slideShow if need to
-    if (aKey == "slideShow" && disabled &&
-        aWindow.Tabmix.SlideshowInitialized && aWindow.Tabmix.flst.slideShowTimer) {
-      aWindow.Tabmix.flst.cancel();
+    if (aKey == "slideShow" && disabled) {
+      aWindow.Tabmix.slideshow.cancel();
     }
   },
 
@@ -420,7 +422,7 @@ this.Shortcuts = {
     let reload = aWindow.document.getElementsByAttribute("command", "Browser:Reload");
     if (!reload)
       return;
-    Array.some(reload, function(key) {
+    Array.prototype.some.call(reload, function(key) {
       if (key.getAttribute("keycode") != "VK_F5")
         return false;
       if (!this.keys.browserReload.id) {
@@ -429,16 +431,16 @@ this.Shortcuts = {
           id = "key_reload#".replace("#", index++);
         } while (aWindow.document.getElementById(id));
         this.keys.browserReload.id = key.id = id;
-      }
-      else
+      } else {
         key.id = this.keys.browserReload.id;
+      }
       return true;
     }, this);
   }
 
 };
 
-var KeyConfig = {
+KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions
@@ -569,9 +571,9 @@ function getFormattedKey(key) {
   if (key.key) {
     if (key.key == " ") {
       key.key = ""; key.keycode = "VK_SPACE";
-    }
-    else
+    } else {
       val += key.key.toUpperCase();
+    }
   }
   if (key.keycode) {
     try {

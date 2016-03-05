@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Redenumește">
 <!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Sesiune de semne de carte">
+<!ENTITY sm.context.bookmarkSession.key "c">
 <!ENTITY sm.context.delete "Șterge">
 <!ENTITY sm.context.delete.key "t">
 <!ENTITY sm.context.deleteall "Șterge tot">

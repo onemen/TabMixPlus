@@ -431,9 +431,9 @@ function getRGBcolor(aColorCode, aOpacity) {
         return null;
       newRGB.push(newNumber);
     }
-  }
-  else
+  } else {
     return null;
+  }
 
   if (aOpacity !== null)
     newRGB[3] = aOpacity;

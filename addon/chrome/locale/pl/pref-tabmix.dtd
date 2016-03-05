@@ -62,7 +62,7 @@
 <!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
 <!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
 <!ENTITY openBookmarks.label "zakładek">
-<!ENTITY openPlacesGroups.label "Grupy zakładek/historii">
+<!ENTITY openPlacesGroups.label "grupy zakładek/historii">
 <!ENTITY openPlacesGroups.tooltip "Nie zastępuj kart, gdy jest otwierana grupa zakładek/historii">
 <!ENTITY openHistory.label "historii">
 <!ENTITY openUrl.label "paska adresu">
@@ -72,7 +72,7 @@
 <!ENTITY tabFocus.caption "Uaktywniaj karty otwierane z:">
 <!ENTITY selectTab.label "odnośników">
 <!ENTITY selectDivertedTab.label "przekierowanych okien">
-<!ENTITY selectTabFromExternal.label "Inne aplikacje">
+<!ENTITY selectTabFromExternal.label "innych aplikacji">
 <!ENTITY selectTabCommand.label "poleceń nowych kart">
 <!ENTITY contextMenuSearch.label "menu kontekstowego „Szukaj w…”">
 <!ENTITY selectTabBH.label "zakładek/historii">
@@ -105,17 +105,17 @@
 <!ENTITY ctrltab.tabPreviews "Wyświetlaj podglądy kart">
 <!ENTITY ctrltab.popup "Skrót klawiszowy [Ctrl+Tab] wyświetla rozwijaną listę kart">
 <!ENTITY cmdtab.popup "Skrót klawiszowy [command+Tab] wyświetla rozwijaną listę kart">
-<!ENTITY tabpopup.mouse "Uaktywniaj kartę wskazaną przez kursor myszy">
+<!ENTITY tabpopup.mouse "Uaktywniaj kartę wskazaną kursorem">
 <!ENTITY mergeNoTabSelection.label "Łączenie okien, gdy nie zaznaczono żadnych kart">
 <!ENTITY mergeTabSelection.label "Łączenie okien po zaznaczeniu kart">
 <!ENTITY mergeall.label "Łącz wszystkie okna w jedno">
 <!ENTITY mergelastfocused.label "Łącz tylko aktywne okno z poprzednio aktywnym">
-<!ENTITY mergePopups.label "Dołączaj także wyskakujące okienka">
+<!ENTITY mergePopups.label "Dołączaj także wyskakujące okna">
 <!ENTITY popupNextToOpener.label "Umieszczaj wyskakujące okna za oknami, z których są one wywoływane">
 <!ENTITY activateSlideshow.label "Naciśnięcie klawisza 1 powoduje rotację kart co">
 <!ENTITY toggleAnimation.label "Wyłącz przełączanie animacji kart">
 <!ENTITY reloadEvery.matchAddress.label "Odświeżaj kartę bez względu na jej adres">
-<!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odśwież co… w przycisku narzędziowym Odśwież">
+<!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odświeżaj co… w przycisku narzędziowym Odśwież">
 <!ENTITY seconds.label "s">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Pasek kart">
@@ -123,7 +123,7 @@
 <!ENTITY toolBarAppearance.label "Pasek narzędzi">
 <!ENTITY show.ontabbar.label "Wyświetlaj na pasku kart">
 <!ENTITY show.ontab.label "Wyświetlaj na etykiecie karty">
-<!ENTITY dragNewTabButton.tooltip "Przeciągnij przycisk „Nowa karta” na pasek kart, by włączyć te funkcję.">
+<!ENTITY dragNewTabButton.tooltip "Przeciągnij przycisk „Nowa karta” na pasek kart, by włączyć te funkcję">
 <!ENTITY hideTabBarButton.label "Przycisk zamykania kart">
 <!ENTITY newTabButton.label "Przycisk Nowa karta">
 <!ENTITY newTabButton.posiotion.left.label "po lewej stronie">
@@ -160,7 +160,7 @@
 <!ENTITY extraIcons.label1 "Ikony dla">
 <!ENTITY extraIcons.locked "zablokowana">
 <!ENTITY extraIcons.protected "zabezpieczona">
-<!ENTITY extraIcons.autoreload "Automatyczne odświeżanie">
+<!ENTITY extraIcons.autoreload "automatyczne odświeżanie">
 <!ENTITY extraIcons.hideonpinned "Ukryj przypięte karty">
 <!ENTITY progressMeter.label "Pasek postępu na etykietach kart">
 <!ENTITY showTabX.labelBegin "Przycisk zamykania karty">
@@ -191,7 +191,7 @@
 <!ENTITY mouseGesture.label "Gesty myszy">
 <!ENTITY mouseClick.label "Użycie przycisków myszy">
 <!ENTITY mouseHoverSelect.labelBegin "Po umieszczeniu wskaźnika myszy nad etykietą karty uaktywniaj kartę po">
-<!ENTITY tabFlip.label "Kliknięcie na etykiecie aktywnej karty przełącza do poprzednio aktywnej karty">
+<!ENTITY tabFlip.label "Kliknięcie etykiety aktywnej karty przełącza do poprzednio aktywnej karty">
 <!ENTITY tabFlip.delay "Opóźnienie wykonania">
 <!ENTITY clickFocus.label "Uaktywniaj kartę po pełnym cyklu kliknięcia przyciskiem myszy (naciśnięcie i puszczenie przycisku)">
 <!ENTITY removeEntries.label "Kliknięcie ś.p.m. usuwa elementy z rozwijanych list Tab Mix Plusa">
@@ -208,11 +208,11 @@
 <!ENTITY cmd.label "Cmd+kliknięcie">
 <!ENTITY shift.label "Shift+kliknięcie">
 <!ENTITY alt.label "Alt+kliknięcie">
-<!ENTITY ontab.label "Na etykiecie karty:">
-<!ENTITY ontabbar.label "Na pasku kart:">
-<!ENTITY clicktab.label "Wybierz działanie jakie zostanie wykonane po kliknięciu na etykiecie karty/pasku kart">
-<!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie paska kart.">
-<!ENTITY ontabbar.click.label "Nie zezwalaj na przeciąganie okna po kliknięciu paska kart.">
+<!ENTITY ontab.label "Etykieta karty">
+<!ENTITY ontabbar.label "Pasek kart">
+<!ENTITY clicktab.label "Wybierz działanie, jakie zostanie wykonane po kliknięciu etykiety karty/paska kart">
+<!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie paska kart">
+<!ENTITY ontabbar.click.label "Nie zezwalaj na przeciąganie okna po kliknięciu paska kart">
 <!ENTITY clicktab.default "Domyślne Firefoksa lub innego rozszerzenia">
 <!ENTITY clicktab.nothing "Brak reakcji">
 <!ENTITY clicktab.addtab "Otwórz nową kartę">

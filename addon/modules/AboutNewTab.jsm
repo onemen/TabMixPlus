@@ -21,6 +21,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
+var AboutNewTabInternal;
 this.TabmixAboutNewTab = Object.freeze({
   updateAllBrowsers: function(window) {
     AboutNewTabInternal.updateAllBrowsers(window);
@@ -35,13 +36,13 @@ this.TabmixAboutNewTab = Object.freeze({
   },
 });
 
-var AboutNewTabInternal = {
+AboutNewTabInternal = {
   // update all opened about:newtab browsers in a window including preloaded
   // browser if exist
   updateAllBrowsers: function(window) {
     let tabBrowser = window.gBrowser;
     let tabPanels = tabBrowser.mPanelContainer.childNodes;
-    let browsers = Array.map(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
+    let browsers = Array.prototype.map.call(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
                         .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
     browsers.forEach(browser => this.updateBrowser(browser));
   },

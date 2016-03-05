@@ -20,7 +20,7 @@ var TabmixTabClickOptions = {
       if (this._tabFlipTimeOut)
         this.clearTabFlipTimeOut();
       if (this._blockDblClick) {
-        setTimeout(() => this._blockDblClick = false, 0);
+        setTimeout(() => (this._blockDblClick = false), 0);
       }
       return; // double click (with left button)
     }
@@ -53,7 +53,7 @@ var TabmixTabClickOptions = {
     // always call onMouseCommand (if we need to) before we call tab flip.
     // tabcontainer click handler run before tab click handler.
     if (leftClick && !clickOutTabs && !tab.mouseDownSelect)
-      tab.onMouseCommand(aEvent);
+      tab.onMouseCommand(aEvent, true);
 
     // for tab flip
     if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {
@@ -83,9 +83,9 @@ var TabmixTabClickOptions = {
     } else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
         !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt"; /* alt click*/
-      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(aEvent) {
-        aEvent.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
-        aEvent.stopPropagation();
+      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(event) {
+        event.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
+        event.stopPropagation();
       }, true);
     } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
         !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {
@@ -374,9 +374,9 @@ var TabmixContext = {
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
       tabBar.setAttribute("context", gBrowser.tabContextMenu.id);
-    }
-    else
+    } else {
       Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
+    }
   },
 
   toggleEventListener: function(enable) {
@@ -390,6 +390,9 @@ var TabmixContext = {
     let id = aEvent.target.id;
     switch (aEvent.type) {
       case "popupshowing":
+        if (aEvent.target.state != "showing") {
+          return;
+        }
         if (id == "tabContextMenu")
           this.updateTabContextMenu(aEvent);
         else if (id == "contentAreaContextMenu")
@@ -584,9 +587,9 @@ var TabmixContext = {
             mi.hidden = false;
             lastVisible.hidden = true;
             lastVisible = mi;
-          }
-          else
+          } else {
             mi.hidden = true;
+          }
         }
       } else if (!mi.hidden && !mi.collapsed) {
         hideNextSeparator = false;
@@ -875,8 +878,9 @@ var TabmixAllTabs = {
         let item = popup.parentNode.parentNode;
         if (item.parentNode.id == "btn_tabslist")
           this.createTabsList(item, aType);
+      } else {
+        popup.hidePopup();
       }
-      else popup.hidePopup();
     }
   },
 
@@ -997,7 +1001,7 @@ var TabmixAllTabs = {
     var popup = event.target;
     popup.removeEventListener("popupshown", this, false);
     let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
-    let items = Array.slice(popup.childNodes);
+    let items = Array.prototype.slice.call(popup.childNodes);
     let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
     scrollBox.ensureElementIsVisible(element);
     scrollBox.ensureElementIsVisible(this._selectedItem);

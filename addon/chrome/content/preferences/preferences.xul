@@ -20,6 +20,7 @@
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
+            onload="window.sizeToContent();"
             ondialogaccept="gPrefWindow.deinit();"
             ondialogcancel="gPrefWindow.deinit();"
             ondialogextra1="gPrefWindow.onApply();"
@@ -32,7 +33,6 @@
 
   <!-- scripts -->
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/common.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
 
   <prefpane id="paneLinks" label="&tab.links;"

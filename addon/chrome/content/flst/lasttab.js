@@ -21,7 +21,6 @@ var TMP_LastTab = {
   _inited: false,
 
   DisplayTabList: function() {
-    var element = document.documentElement;
     var tablist = this.TabList;
 
     TabmixAllTabs.createCommonList(tablist, this.handleCtrlTab ? 3 : 2);
@@ -29,18 +28,14 @@ var TMP_LastTab = {
     item.setAttribute("_moz-menuactive", "true");
     TabmixAllTabs.updateMenuItemActive(null, item);
 
-    // show offscreen to get popup measurements
-    tablist.showPopup(element, -element.boxObject.screenX, 10000, "popup", null, null);
-    var width = tablist.boxObject.width;
-    var height = tablist.boxObject.height;
-    this.SuppressTabListReset = true;
-    tablist.hidePopup();
-    this.SuppressTabListReset = false;
-
-    // show at the center of the screen
-    tablist.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
-                              screen.availTop + (screen.availHeight - height) / 2,
-                              false);
+    // show the list at the center of the screen
+    let box = tablist.boxObject;
+    let letf = () => screen.availLeft + (screen.availWidth - box.width) / 2;
+    let top = () => screen.availTop + (screen.availHeight - box.height) / 2;
+    tablist.style.visibility = "hidden";
+    tablist.openPopupAtScreen(letf(), top(), true);
+    tablist.moveTo(letf(), top());
+    tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
     if (gBrowser.currentURI.spec.startsWith(ietab))
@@ -93,14 +88,19 @@ var TMP_LastTab = {
 
   handleEvent: function(event) {
     switch (event.type) {
+      case "blur":
+        this.updateDisallowDrag(false);
+        break;
       case "keydown":
         this.OnKeyDown(event);
+        this.disallowDragwindow(true);
         break;
       case "keypress":
         this.OnKeyPress(event);
         break;
       case "keyup":
         this.OnKeyUp(event);
+        this.disallowDragwindow(false);
         break;
       case "DOMMenuItemActive":
         this.ItemActive(event);
@@ -109,6 +109,29 @@ var TMP_LastTab = {
         this.ItemInactive(event);
         break;
     }
+  },
+
+ /**
+  * disallow mouse down on TabsToolbar to start dragging the window when one
+  * of the key modifiers is down
+  */
+  disallowDragwindow: function(keyDown) {
+    if (!Tabmix.isVersion(470)) {
+      return;
+    }
+    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        keyDown == Tabmix.keyModifierDown &&
+        keyDown != this.disallowDragState) {
+      this.updateDisallowDrag(keyDown);
+    }
+  },
+
+  disallowDragState: false,
+  updateDisallowDrag: function(disallow) {
+    let el = disallow ? "addEventListener" : "removeEventListener";
+    window[el]("blur", this);
+    this.disallowDragState = disallow;
+    Tabmix.setItem("TabsToolbar", "tabmix-disallow-drag", disallow || null);
   },
 
   ItemActive: function(event) {
@@ -172,7 +195,7 @@ var TMP_LastTab = {
     if (this._tabs)
       return this._tabs;
     let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;
-    this._tabs = Array.filter(list, function(tab) {
+    this._tabs = Array.prototype.filter.call(list, function(tab) {
       return !tab.hidden && !tab.closing;
     });
     return this._tabs;
@@ -216,18 +239,18 @@ var TMP_LastTab = {
                 if (!this.TabListLock)
                   this.DisplayTabList();
               }, 200);
-            }
-            else
+            } else {
               this.DisplayTabList();
+            }
           }
         } else {
           let item = this.tabs[this.TabIndex].mCorrespondingMenuitem;
           item.setAttribute("_moz-menuactive", "true");
           TabmixAllTabs.updateMenuItemActive(null, item);
         }
-      }
-      else
+      } else {
         TabmixAllTabs._tabSelectedFromList(this.tabs[this.TabIndex]);
+      }
       event.stopPropagation();
       event.preventDefault();
     } else if (this.TabListLock && this.CtrlKey &&
@@ -349,9 +372,9 @@ var TMP_LastTab = {
           for (var i = 0; i < this.TabHistory.length; i++) {
             ctrlTab._recentlyUsedTabs.unshift(this.TabHistory[i]);
           }
-        }
-        else
+        } else {
           ctrlTab.uninit();
+        }
       }
     }
 
@@ -364,4 +387,12 @@ var TMP_LastTab = {
     return this.handleCtrlTab ? index : this.tabs.length - 1 - index;
   }
 
+};
+
+Tabmix.slideshow = {
+  cancel: function() {
+    if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) {
+      Tabmix.flst.cancel();
+    }
+  }
 };

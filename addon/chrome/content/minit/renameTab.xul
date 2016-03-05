@@ -62,7 +62,6 @@
               oncommand="Tabmix.renameTab.update();"/>
       <button id="tabmixRenametab_deleteButton"
               class="editBookmarkPanelBottomButton"
-              label="&editBookmark.cancel.label;"
               oncommand="Tabmix.renameTab.hidePopup();"/>
     </hbox>
   </panel>

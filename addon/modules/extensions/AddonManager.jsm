@@ -15,12 +15,36 @@ const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;
 const GOOGLE_PLUS_REGEXP = /http(s)?:\/\/plus.url.google.com\/url\?/;
 
+// https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/
+// check if TabView exist in a window and update our code if not initialized
+// since more than one extension can replace panorama we check if we need to
+// update the code after every extensions change
+var TabGroups = {
+  tabViewState: false,
+  isUpdateNeeded: function() {
+    let win = TabmixSvc.topWin();
+    let needUpdate = typeof win.TabView == "object" &&
+        !win.TabView.hasOwnProperty("tabmixInitialized");
+    let currentState = this.tabViewState;
+    this.tabViewState = needUpdate;
+    return needUpdate && !currentState;
+  },
+  onEnabled: function() {
+    if (this.isUpdateNeeded()) {
+      TabmixSvc.forEachBrowserWindow(function(aWindow) {
+        aWindow.TMP_TabView.init();
+      });
+    }
+  },
+  onDisabled: function() {
+  },
+};
+
 // https://addons.mozilla.org/en-US/firefox/addon/google-no-tracking-url/
 var GoogleNoTrackingUrl = {
   id: "jid1-zUrvDCat3xoDSQ@jetpack",
-  pref: "extensions." + this.id + "aggresiveGoogleImagesCleanup",
   onEnabled: function() {
-    const pref = this.pref;
+    const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
     TabmixSvc.isFixedGoogleUrl = function(url) {
       const aggresiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
       const isSearchResult = GOOGLE_REGEXP.test(url);
@@ -95,6 +119,8 @@ var TabmixListener = {
       SessionManager.init();
     } else if (id == GoogleNoTrackingUrl.id) {
       GoogleNoTrackingUrl.onEnabled();
+    } else {
+      TabGroups.onEnabled();
     }
   },
   onChange: function(aAddon, aAction) {
@@ -105,6 +131,8 @@ var TabmixListener = {
       PrivateTab[aAction]();
     } else if (id == GoogleNoTrackingUrl.id) {
       GoogleNoTrackingUrl[aAction]();
+    } else {
+      TabGroups[aAction]();
     }
   },
   onEnabled: function(aAddon) {

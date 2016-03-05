@@ -49,7 +49,7 @@ var TMP_Places = {
             return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
           } finally {
             if (origTitle) {
-              setTimeout(() => aBrowser._contentTitle = origTitle, 100);
+              setTimeout(() => (aBrowser._contentTitle = origTitle), 100);
             }
           }
         };
@@ -60,10 +60,15 @@ var TMP_Places = {
         ).toCode();
       }
 
+      let $LF = '\n        ';
       Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
         'URIs.push(tab.linkedBrowser.currentURI);',
-        'let uri = tab.linkedBrowser.currentURI; \
-         URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});'
+        'if (Tabmix.getCallerNameByIndex(2) == "PCH_updateBookmarkAllTabsCommand") {' + $LF +
+        '  $&' + $LF +
+        '} else {' + $LF +
+        '  let uri = tab.linkedBrowser.currentURI;' + $LF +
+        '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
+        '}'
       ).defineProperty();
     }
 
@@ -252,9 +257,9 @@ var TMP_Places = {
             aTab.removeAttribute("tabmix_selectedID");
           } else
             aTab.setAttribute("reloadcurrent", true);
-        }
-        else
+        } else {
           aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
+        }
 
         this.setTabTitle(aTab, url, bmIds[i]);
       } catch (er) { }
@@ -405,13 +410,13 @@ var TMP_Places = {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
-      Array.forEach(gBrowser.tabs, function(tab) {
+      for (let tab of gBrowser.tabs) {
         this.setTabTitle(tab);
-      }, this);
+      }
       this.startObserver();
     } else {
       let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkId", "*");
-      Array.slice(tabs).forEach(function(tab) {
+      Array.prototype.slice.call(tabs).forEach(function(tab) {
         if (tab.hasAttribute("pending"))
           this.setTabTitle(tab);
         else
@@ -438,12 +443,12 @@ var TMP_Places = {
       this._batchData.add.ids.push(aItemId);
       this._batchData.add.urls.push(aUrl);
       return;
-    }
-    else if (!Array.isArray(aItemId))
+    } else if (!Array.isArray(aItemId)) {
       [aItemId, aUrl] = [[aItemId], [aUrl]];
+    }
 
     let getIndex = url => aUrl.indexOf(url) + 1;
-    Array.forEach(gBrowser.tabs, function(tab) {
+    for (let tab of gBrowser.tabs) {
       let url = tab.linkedBrowser.currentURI.spec;
       if (this.isUserRenameTab(tab, url))
         return;
@@ -452,7 +457,7 @@ var TMP_Places = {
         tab.setAttribute("tabmix_bookmarkId", aItemId[index - 1]);
         this.setTabTitle(tab, url);
       }
-    }, this);
+    }
     this.afterTabTitleChanged();
   },
 
@@ -464,7 +469,7 @@ var TMP_Places = {
     const ID = "tabmix_bookmarkId";
     let batch = Array.isArray(aItemId);
     let tabs = gBrowser.tabContainer.getElementsByAttribute(ID, batch ? "*" : aItemId);
-    Array.slice(tabs).forEach(function(tab) {
+    Array.prototype.slice.call(tabs).forEach(function(tab) {
       if (!batch ||
           aItemId.indexOf(parseInt(tab.getAttribute(ID))) > -1) {
         tab.removeAttribute(ID);
@@ -617,7 +622,8 @@ Tabmix.onContentLoaded = {
         'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
       )._replace(
         'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")'
+        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")',
+        {check: !Tabmix.isVersion(470)}
       )._replace(
         'function rect(ele)',
         'let rect = function _rect(ele)', // for strict mode
@@ -693,17 +699,20 @@ Tabmix.onContentLoaded = {
       'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
     ).toCode();
 
-    Tabmix.changeCode(window, "openUILinkIn")._replace(
-      'params.fromChrome = true;',
-      '$&\n' +
-      '  if (Tabmix.isCallerInList("BG_observe"))\n' +
-      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");'
-    ).toCode();
-
     // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
     // in case it warp the function in its object
     let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
     Tabmix.changeCode(fnObj, fnName)._replace(
+      '{',
+      '{\n' +
+      '  let tabmixCaller = Tabmix.getCallerNameByIndex(2);\n' +
+      '  if (tabmixCaller == "BG_observe") {\n' +
+      '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
+      '  } else if (where == "current" &&\n' +
+      '      tabmixCaller == "ReaderParent.toggleReaderMode") {\n' +
+      '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
+      '  }\n'
+    )._replace(
       /aRelatedToCurrent\s*= params.relatedToCurrent;/,
       '$&\n' +
       '  var bookMarkId            = params.bookMarkId;'

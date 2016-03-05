@@ -29,9 +29,10 @@ var tabstyles = { // jshint ignore:line
   },
 
   cancel: function() {
-    Array.forEach($("stylespanels").childNodes, function(panel) {
+    let panels = $("stylespanels").childNodes;
+    for (let panel of panels) {
       $(panel.id)._ondialogcancel();
-    });
+    }
     this.save();
   },
 

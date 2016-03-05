@@ -102,6 +102,8 @@
 <!ENTITY sm.context.save.key "G">
 <!ENTITY sm.context.rename "Renombrar">
 <!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Marcador de sesión">
+<!ENTITY sm.context.bookmarkSession.key "M">
 <!ENTITY sm.context.delete "Eliminar">
 <!ENTITY sm.context.delete.key "E">
 <!ENTITY sm.context.deleteall "Eliminar todo">

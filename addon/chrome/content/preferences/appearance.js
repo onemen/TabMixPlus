@@ -80,9 +80,9 @@ var gAppearancePane = { // jshint ignore:line
         tabCbUI.value = 1;
         Tabmix.setItem("tabXwidthBox", "hidden", true);
       }
-    }
-    else
+    } else {
       $("alltabsItem").disabled = false;
+    }
   },
 
   tabsScrollChanged: function() {

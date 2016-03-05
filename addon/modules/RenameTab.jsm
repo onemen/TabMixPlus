@@ -68,6 +68,8 @@ this.RenameTab = {
     this.panel._overlayLoaded = true;
     this.panel.hidden = false;
 
+    this._element("tabmixRenametab_deleteButton").label = TabmixSvc.getDialogStrings("Cancel");
+
     // reorder buttons for MacOS & Linux
     if (TabmixSvc.isLinux || TabmixSvc.isMac) {
       let buttons = this._element("tabmixRenametab_buttons");

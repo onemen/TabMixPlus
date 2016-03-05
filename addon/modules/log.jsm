@@ -36,7 +36,7 @@ this.console = {
       obj = aWindow;
       if (rootID)
         obj = obj.document.getElementById(rootID);
-      methodsList.forEach(aFn => obj = obj[aFn]);
+      methodsList.forEach(aFn => (obj = obj[aFn]));
     } catch (ex) { }
     return obj || {toString: () => "undefined"};
   },
@@ -66,7 +66,8 @@ this.console = {
           timer.cancel();
         }.bind(this);
         if (aWindow) {
-          aWindow.addEventListener("unload", function unload() {
+          aWindow.addEventListener("unload", function unload(event) {
+            event.currentTarget.removeEventListener("unload", unload, false);
             timer.clear();
           }, false);
         }
@@ -78,9 +79,9 @@ this.console = {
         }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
 
         this._timers[timerID] = timer;
-      }
-      else
+      } else {
         logMethod();
+      }
 
     } catch (ex) {
       this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");
@@ -243,8 +244,8 @@ options = {
           fileName = fileName.slice(0, columnIndex);
         }
         fileName = decodeURI(fileName).replace(re, "");
-        let atIndex = line.indexOf(_char);
-        let name = line.slice(0, atIndex).split("(").shift();
+        let index = line.indexOf(_char);
+        let name = line.slice(0, index).split("(").shift();
         let formated = '  File "' + fileName + '", line ' + lineNumber;
         if (colNumber)
           formated += ', col ' + colNumber;

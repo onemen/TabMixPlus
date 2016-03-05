@@ -102,10 +102,12 @@
 <!ENTITY sm.context.save.key "U">
 <!ENTITY sm.context.rename "Přejmenovat">
 <!ENTITY sm.context.rename.key "P">
+<!ENTITY sm.context.bookmarkSession "Relace záložek">
+<!ENTITY sm.context.bookmarkSession.key "Z">
 <!ENTITY sm.context.delete "Smazat">
 <!ENTITY sm.context.delete.key "S">
 <!ENTITY sm.context.deleteall "Smazat vše">
-<!ENTITY sm.context.deleteall.key "Z">
+<!ENTITY sm.context.deleteall.key "V">
 <!ENTITY sm.context.startup "Nastavit jako relaci po spuštění">
 <!ENTITY sm.context.startup.key "R">
 <!ENTITY sm.context.details "Zobrazit počítadla, datum a čas v nabídce relace">
