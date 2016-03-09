@@ -875,9 +875,17 @@ var TMP_eventListener = {
 
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
-      if (tabBar.getAttribute("multibar") == "true" &&
-          Tabmix.tabsUtils.lastTabRowNumber < TabmixTabbar.visibleRows)
-        Tabmix.tabsUtils.updateVerticalTabStrip();
+      // underflow not always fires when Classic theme restorer installed
+      let multibar = tabBar.getAttribute("multibar");
+      if (multibar) {
+        let lastTabRowNumber = Tabmix.tabsUtils.lastTabRowNumber;
+        if (multibar == "true" &&
+            lastTabRowNumber < TabmixTabbar.visibleRows ||
+            multibar == "scrollbar" && Tabmix.extensions.ctr &&
+            lastTabRowNumber <= Tabmix.prefs.getIntPref("tabBarMaxRow")) {
+          Tabmix.tabsUtils.updateVerticalTabStrip();
+        }
+      }
       TabmixTabbar.updateBeforeAndAfter();
     }
 
