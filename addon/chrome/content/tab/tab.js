@@ -290,6 +290,12 @@ var TabmixTabbar = {
 
     if (tabstrip.style.maxHeight != tabstrip.style.height || tabstrip.style.maxHeight != newHeight + "px")
       this.setHeightByPixels(newHeight);
+
+    // fix multi-row background on windows XP
+    if (this.updateAppearanceOnce) {
+      this.updateAppearanceOnce = false;
+      TabsInTitlebar.updateAppearance(true);
+    }
   },
 
   setHeightByPixels: function TMP_setHeightByPixels(newHeight) {
@@ -568,6 +574,10 @@ var TabmixTabbar = {
   }
 
 }; // TabmixTabbar end
+
+XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", function() {
+  return navigator.oscpu.startsWith("Windows NT 5.1");
+});
 
 Tabmix.tabsUtils = {
   initialized: false,
