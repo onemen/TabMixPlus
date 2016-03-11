@@ -482,14 +482,18 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
+    var tabsCount = gBrowser.visibleTabs.length;
+    var unpinnedTabsCount = tabsCount - TabmixTabbar._real_numPinnedTabs;
+    var unpinnedTabs = unpinnedTabsCount > 0;
+
     // Close tab Commands
     var pinnedTab = TabContextMenu.contextTab.pinned;
     Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
-    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
-    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && !pinnedTab);
+    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && unpinnedTabs);
+    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && unpinnedTabs);
+    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && unpinnedTabs);
     Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
+    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && unpinnedTabs);
 
     //  ---------------- menuseparator ---------------- //
 
@@ -521,18 +525,18 @@ var TabmixContext = {
 
     var protectedTab = aTab.hasAttribute("protected");
     var lockedTab = aTab.hasAttribute("locked");
-    var tabsCount = gBrowser.visibleTabs.length;
-    var unpinnedTabs = tabsCount - TabmixTabbar._real_numPinnedTabs;
+    var noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
     var cIndex = Tabmix.visibleTabs.indexOf(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
-    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || unpinnedTabs <= 1);
-    Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabs <= 1);
-    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
-    Tabmix.setItem("tm-closeLeftTabs", "disabled", cIndex === 0 || unpinnedTabs <= 1);
+    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
+    Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
+    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || noTabsToClose);
+    Tabmix.setItem("tm-closeLeftTabs", "disabled",
+                   cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
     Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);
