@@ -118,7 +118,10 @@ var tablib = { // eslint-disable-line
     let exceptionList = {
       // secureLogin extension expect to execute the login in the current page
       // https://addons.mozilla.org/en-us/firefox/addon/secure-login/?src=ss
-      secureLogin: "secureLogin.login"
+      secureLogin: "secureLogin.login",
+      // https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/
+      // paneSession.clearData load about.blank to all opened tabs in the active window
+      tabGroups: "paneSession.clearData",
     };
     let keys = Object.keys(exceptionList);
     let isInstalled = keys.some(function(item) {
