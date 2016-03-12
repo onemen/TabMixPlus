@@ -13,9 +13,6 @@ var gSessionPane = {
     this.isSessionStoreEnabled(true);
     this.updateSessionShortcuts();
 
-    if (Tabmix.isVersion(200))
-      gPrefWindow.removeChild("pref_browser.warnOnRestart");
-
     gPrefWindow.initPane("paneSession");
   },
 
@@ -65,9 +62,6 @@ var gSessionPane = {
 
     // sessionstore pref
     function sessionstorePrefs() {
-      // browser.warnOnRestart remove on Firefox 20
-      if (!Tabmix.isVersion(200))
-        updatePrefs("browser.warnOnRestart", !useSessionManager);
       updatePrefs("browser.warnOnQuit", !useSessionManager);
       updatePrefs("resume_from_crash", !useSessionManager);
       // "browser.startup.page"

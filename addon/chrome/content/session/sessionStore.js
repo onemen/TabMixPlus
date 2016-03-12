@@ -185,7 +185,7 @@ var TMP_SessionStore = { // jshint ignore:line
         } else {
           // we don't change any of sessionstore default setting
           // the user will be ask on exit what to do.
-          // (browser.warnOnRestart and browser.warnOnQuit are both true on default)
+          // browser.warnOnQuit default value is true
           Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
           Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
         }
@@ -195,12 +195,8 @@ var TMP_SessionStore = { // jshint ignore:line
                                         [title, msg, "", "", buttons], window, start ? callBack : null);
       if (!start)
         callBack(result);
-    } else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
-               !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-      // when user start new profile or update from firefox 2.0 profile
-      // browser.warnOnRestart and browser.warnOnQuit are both true on default
-      if (!Tabmix.isVersion(200))
-        Services.prefs.setBoolPref("browser.warnOnRestart", false);
+    } else if (!Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
+      // browser.warnOnQuit default value is true
       Services.prefs.setBoolPref("browser.warnOnQuit", false);
       TabmixSvc.sm.settingPreference = false;
     }
@@ -255,8 +251,6 @@ var TMP_SessionStore = { // jshint ignore:line
   },
 
   setSessionRestore: function(aEnable) {
-    if (!Tabmix.isVersion(200))
-      Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
     Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
     Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
     if (aEnable)

@@ -28,8 +28,6 @@
                   onchange="gSessionPane.updateSessionShortcuts();"/>
       <preference id="pref_sessionCrashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"            type="bool"/>
-      <preference id="pref_browser.warnOnRestart"
-                  name="browser.warnOnRestart"                               type="bool"/>
       <preference id="pref_browser.warnOnQuit"
                   name="browser.warnOnQuit"                                  type="bool"/>
       <preference id="pref_browserStartupPage"

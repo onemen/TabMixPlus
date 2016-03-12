@@ -1222,7 +1222,6 @@ gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     }.bind(this);
-    addObserver("browser.warnOnRestart", !Tabmix.isVersion(200));
     addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
@@ -1495,7 +1494,6 @@ gTMPprefObserver = {
         TMP_ClosedTabs.setButtonDisableState(state);
         break;
       }
-      case "browser.warnOnRestart":
       case "browser.warnOnQuit":
       case "browser.sessionstore.resume_from_crash":
         if (!Services.prefs.getBoolPref(prefName))
