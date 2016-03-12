@@ -975,8 +975,7 @@ Tabmix.tabsUtils = {
         // overflow/underflow handler from tabbrowser-arrowscrollbox binding
         if (val) {
           tabBar._positionPinnedTabs();
-          if (Tabmix.isVersion(190))
-            tabBar._handleTabSelect(false);
+          tabBar._handleTabSelect(false);
         } else {
           if (tabBar._lastTabClosedByMouse)
             tabBar._expandSpacerBy(tabstrip._scrollButtonDown.clientWidth);

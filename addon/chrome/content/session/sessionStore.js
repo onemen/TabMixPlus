@@ -702,10 +702,7 @@ var TabmixConvertSession = { // jshint ignore:line
     fp.appendFilter(this.getString("rdffiles"), "*.rdf");
     fp.appendFilter(this.getString("sessionfiles"), "*session*.*");
     fp.appendFilters(nsIFilePicker.filterText | nsIFilePicker.filterAll);
-    if (Tabmix.isVersion(180))
-      fp.open(fpCallback);
-    else
-      fpCallback(fp.show());
+    fp.open(fpCallback);
   },
 
   convertFile: function cs_convertFile(aFileUri, aSilent) {

@@ -182,8 +182,7 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
-      if (isVersion(190))
-        Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+      Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
 
       Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
