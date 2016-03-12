@@ -783,8 +783,7 @@ var tablib = { // eslint-disable-line
     ).toCode();
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      Tabmix.isVersion(240) ? 'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)' :
-                              'gBrowser.warnAboutClosingTabs(true)',
+      'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
       'tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
