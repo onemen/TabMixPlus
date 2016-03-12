@@ -24,7 +24,7 @@ var gAppearancePane = { // jshint ignore:line
     Tabmix.setItem("onLeftDisabled", "hidden", browserWindow.Tabmix.defaultCloseButtons || null);
 
     // browser.allTabs.previews
-    if (Tabmix.isVersion(210) && !TabmixSvc.isPaleMoon) {
+    if (!TabmixSvc.isPaleMoon) {
       gPrefWindow.removeChild("pref_allTabsPpreviews");
       gPrefWindow.removeChild("obs_hideAllTabsButton");
       gPrefWindow.removeChild("allTabsPpreviews");
