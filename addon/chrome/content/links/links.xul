@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://tabmixplus/content/links/text_link.css" type="text/css"?>
-
 <overlay id="tabmixplus-tabprefs-overlay"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -20,5 +18,4 @@
    ]]>
 
    </script>
-   <!-- text_link.css fix the links in the EM/TM -->
 </overlay>

@@ -1,3 +1,0 @@
-label.text-link, label[onclick] {
-  -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
-}
