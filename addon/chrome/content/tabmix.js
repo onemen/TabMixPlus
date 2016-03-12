@@ -525,13 +525,7 @@ var TMP_eventListener = {
     *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar
     *  is set to 1 "Hide tabbar when i have only one tab":
     */
-    if (!Tabmix.isVersion(230) &&
-        Services.prefs.getBoolPref("browser.tabs.autoHide") && TabmixTabbar.hideMode === 0) {
-      TabmixTabbar.hideMode = 1;
-      Tabmix.prefs.setIntPref("hideTabbar", TabmixTabbar.hideMode);
-    } else {
-      gTMPprefObserver.setAutoHidePref();
-    }
+    gTMPprefObserver.setAutoHidePref();
 
     if (TabmixTabbar.hideMode == 2)
       gBrowser.tabContainer.visible = false;

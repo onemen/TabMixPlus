@@ -1219,7 +1219,6 @@ gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     }.bind(this);
-    addObserver("browser.tabs.autoHide", !Tabmix.isVersion(230));
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
     addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
@@ -2076,16 +2075,7 @@ gTMPprefObserver = {
 
   setAutoHidePref: function() {
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
-    if (Tabmix.isVersion(230)) {// after Bug 855370
-      gBrowser.tabContainer.updateVisibility();
-      return;
-    }
-    var autoHide = TabmixTabbar.hideMode !== 0;
-    if (autoHide != Services.prefs.getBoolPref("browser.tabs.autoHide")) {
-      Services.prefs.setBoolPref("browser.tabs.autoHide", autoHide);
-      if (TabmixTabbar.hideMode == 1)
-        gBrowser.tabContainer.updateVisibility();
-    }
+    gBrowser.tabContainer.updateVisibility();
   },
 
   setTabBarVisibility: function TMP_PO_setTabBarVisibility() {

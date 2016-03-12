@@ -447,17 +447,13 @@ var tablib = { // eslint-disable-line
       Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
         'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
         'break;'
-      )._replace(
-        'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
       ).toCode();
     }
 
-    if (Tabmix.isVersion(230)) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
-        'window.toolbar.visible',
-        '$& && TabmixTabbar.hideMode == 0'
-      ).toCode();
-    }
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
+      'window.toolbar.visible',
+      '$& && TabmixTabbar.hideMode == 0'
+    ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(

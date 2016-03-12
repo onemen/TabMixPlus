@@ -284,10 +284,8 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
-  let svc = isVersion(230) ? "resource://gre/modules/Preferences.jsm" :
-                             "resource://services-common/preferences.js";
   let tmp = {};
-  Cu.import(svc, tmp);
+  Cu.import("resource://gre/modules/Preferences.jsm", tmp);
   return new tmp.Preferences("");
 });
 

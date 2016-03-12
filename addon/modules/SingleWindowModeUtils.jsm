@@ -151,10 +151,6 @@ this.SingleWindowModeUtils = {
       // if we don't add this here BrowserShutdown fails
       newWindow.FullZoom.init = function() {};
       newWindow.FullZoom.destroy = function() {};
-      if (!TabmixSvc.version(230)) {
-        newWindow.PlacesStarButton.updateState = function() {};
-        newWindow.PlacesStarButton.uninit = function() {};
-      }
       newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
       var obs = Services.obs;
