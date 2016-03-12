@@ -200,7 +200,6 @@
       return;
     }
 
-    TMP_SessionStore.initService();
     this._getSessionTabviewData(winData);
     this._updateUIpageBounds = false;
   };

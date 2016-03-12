@@ -229,17 +229,6 @@ this.TabmixSvc = {
     tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
-  get ss() {
-    delete this.ss;
-    if (isVersion(250, 250)) {
-      let tmp = {};
-      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-      return (this.ss = tmp.SessionStore);
-    }
-    return (this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
-                     getService(Ci.nsISessionStore));
-  },
-
   sm: {
     lastSessionPath: null,
     persistTabAttributeSet: false,
@@ -329,6 +318,12 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+  let tmp = {};
+  Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+  return tmp.SessionStore;
+});
+
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
   return Cu.getGlobalForObject(this.ss);
 });
@@ -353,8 +348,9 @@ tabStateCache = {
   },
 
   saveTabAttributes: function(tab, attrib, save = true) {
-    if (!isVersion(250))
+    if (TabmixSvc.isPaleMoon) {
       return;
+    }
 
     // force Sessionstore to save our persisted tab attributes
     if (save) {

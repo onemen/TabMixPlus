@@ -568,10 +568,10 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
-      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: !Tabmix.isVersion(250)}
+      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
-      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: Tabmix.isVersion(250)}
+      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: !TabmixSvc.isPaleMoon}
     ).toCode();
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;

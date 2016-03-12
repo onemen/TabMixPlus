@@ -7,21 +7,6 @@
  *
  */
 var TMP_SessionStore = { // jshint ignore:line
-   // make sure sessionstore is init
-  _ssInited: null,
-  initService: function TMP_ss_start() {
-    if (Tabmix.isVersion(250, 250) || this._ssInited)
-      return;
-    try {
-      TabmixSvc.ss.init(window);
-      this._ssInited = true;
-    } catch (ex) {
-      dump("nsSessionStore could not be initialized: " + ex + "\n");
-      Tabmix.assert(ex);
-      return;
-    }
-  },
-
   // get title for closed window from bookmark title or user tab title
   getTitleForClosedWindow: function TMP_ss_getTitleForClosedWindow(aUndoItem) {
     // if user already rename this item wo don't use other title
@@ -238,8 +223,6 @@ var TMP_SessionStore = { // jshint ignore:line
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
         getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
-        if (!Tabmix.isVersion(250, 250))
-          return ss.doRestore();
         ss.onceInitialized.then(function() {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
         }).then(null, Tabmix.reportError);

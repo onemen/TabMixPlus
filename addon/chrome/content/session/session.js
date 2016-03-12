@@ -2375,7 +2375,6 @@ TabmixSessionManager = {
     this.saveStateDelayed();
 
     // now that we open our tabs init TabView again
-    TMP_SessionStore.initService();
     if (this.tabViewInstalled)
       TabView.init();
 
