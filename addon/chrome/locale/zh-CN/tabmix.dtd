@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "关闭标签页的左边">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "关闭右侧标签页">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "网页许可">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "冻结标签页">

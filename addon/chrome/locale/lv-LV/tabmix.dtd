@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "L">
 <!ENTITY closeTabsToLeft.label "Aizvērt cilnes pa kreisi">
 <!ENTITY closeleft.accesskey "K">
-<!ENTITY closeTabstoRight.label "Aizvērt cilnes pa labi">
-<!ENTITY closeright.accesskey "L">
 <!ENTITY docShellMenu.label "Atļaujas">
 <!ENTITY docShellMenu.accesskey "J">
 <!ENTITY freezeTabMenu.label "Sasaldēt cilni">

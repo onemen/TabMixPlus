@@ -166,7 +166,7 @@
                     <!-- Close left tabs -->
                     <checkbox_tmp id="showCloseLeft" label="&closeTabsToLeft.label;" preference="pref_showCloseLeft"/>
                     <!-- Close right tabs -->
-                    <checkbox_tmp id="showCloseRight" label="&closeTabstoRight.label;" preference="pref_showCloseRight"/>
+                    <checkbox_tmp id="showCloseRight" label="&closeTabsToTheEnd.label;" preference="pref_showCloseRight"/>
                     <!-- docShell -->
                     <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
                     <!-- freeze tab -->

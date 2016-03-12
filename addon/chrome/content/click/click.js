@@ -303,7 +303,6 @@ var TabmixTabClickOptions = {
 };
 
 var TabmixContext = {
-  _closeRightTabs: "tm-closeRightTabs",
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = id => document.getElementById(id);
@@ -313,7 +312,12 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_openTabInWindow"), $id("context_pinTab"));
     tabContextMenu.insertBefore($id("context_bookmarkAllTabs"), $id("context_bookmarkTab").nextSibling);
     tabContextMenu.insertBefore($id("context_closeTab"), $id("tm-closeAllTabs"));
-    tabContextMenu.insertBefore($id("context_closeOtherTabs"), $id("tm-closeLeftTabs"));
+    let closeLeftTabs = $id("tm-closeLeftTabs");
+    let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
+    tabContextMenu.insertBefore($id("context_closeOtherTabs"), closeLeftTabs);
+    tabContextMenu.insertBefore(closeTabsToTheEnd, closeLeftTabs.nextSibling);
+    Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
 
@@ -344,15 +348,6 @@ var TabmixContext = {
     // fix conflict with CookiePie extension
     if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
       cookiepieContextMenu.init();
-
-    // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
-    if (Tabmix.isVersion(240)) {
-      let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
-      tabContextMenu.insertBefore(closeTabsToTheEnd, $id("tm-closeRightTabs"));
-      Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
-      tabContextMenu.removeChild($id("tm-closeRightTabs"));
-      this._closeRightTabs = "context_closeTabsToTheEnd";
-    }
 
     if (Tabmix._restoreMultipleTabs) {
       let multipletablabel = $id("context_undoCloseTab").getAttribute("multipletablabel");
@@ -493,7 +488,7 @@ var TabmixContext = {
     Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && unpinnedTabs);
     Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && unpinnedTabs);
     Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && unpinnedTabs);
+    Tabmix.showItem("context_closeTabsToTheEnd", Tabmix.prefs.getBoolPref("closeRightMenu") && unpinnedTabs);
 
     //  ---------------- menuseparator ---------------- //
 
@@ -534,7 +529,7 @@ var TabmixContext = {
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
     Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
-    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || noTabsToClose);
+    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
     Tabmix.setItem("tm-closeLeftTabs", "disabled",
                    cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
 

@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "Zatvoriť karty naľavo">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Zatvoriť karty napravo">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Oprávnenia">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Zmraziť kartu">

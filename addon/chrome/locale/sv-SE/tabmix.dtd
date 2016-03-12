@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "l">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "v">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "h">
 <!ENTITY docShellMenu.label "Rättigheter">
 <!ENTITY docShellMenu.accesskey "R">
 <!ENTITY freezeTabMenu.label "Frys flik">

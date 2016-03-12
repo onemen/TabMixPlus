@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "h">
 <!ENTITY closeTabsToLeft.label "Linke Tabs schließen">
 <!ENTITY closeleft.accesskey "i">
-<!ENTITY closeTabstoRight.label "Rechte Tabs schließen">
-<!ENTITY closeright.accesskey "e">
 <!ENTITY docShellMenu.label "Berechtigungen für diesen Tab">
 <!ENTITY docShellMenu.accesskey "B">
 <!ENTITY freezeTabMenu.label "Tab einfrieren">

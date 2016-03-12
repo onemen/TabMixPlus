@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "G">
 <!ENTITY closeTabsToLeft.label "Tabbladen links afsluiten">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Tabbladen rechts afsluiten">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Toestemmingen">
 <!ENTITY docShellMenu.accesskey "T">
 <!ENTITY freezeTabMenu.label "Tabblad bevriezen">

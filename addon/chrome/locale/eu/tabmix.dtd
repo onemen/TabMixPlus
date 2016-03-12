@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "Z">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "E">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Baimenak">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Izoztu fitxa">

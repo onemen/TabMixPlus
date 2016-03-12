@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "č">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "l">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Dopuštenja">
 <!ENTITY docShellMenu.accesskey "p">
 <!ENTITY freezeTabMenu.label "Zamrzni karticu">

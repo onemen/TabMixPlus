@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "i">
 <!ENTITY closeTabsToLeft.label "Fermer les onglets à gauche">
 <!ENTITY closeleft.accesskey "g">
-<!ENTITY closeTabstoRight.label "fermer les onglets à droite">
-<!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permissions">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Geler l&apos;onglet">

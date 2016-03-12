@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "ش">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "س">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "م">
 <!ENTITY docShellMenu.label "الأذونات">
 <!ENTITY docShellMenu.accesskey "ذ">
 <!ENTITY freezeTabMenu.label "جمّد اللسان">

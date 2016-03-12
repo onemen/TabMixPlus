@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "기능 사용 여부">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "탭 얼리기">

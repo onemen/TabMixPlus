@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "M">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "V">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "O">
 <!ENTITY docShellMenu.label "Oikeudet">
 <!ENTITY docShellMenu.accesskey "O">
 <!ENTITY freezeTabMenu.label "Jäädytä välilehti">

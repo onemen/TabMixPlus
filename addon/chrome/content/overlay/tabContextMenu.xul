@@ -90,9 +90,9 @@
         <menuitem id="tm-closeLeftTabs" insertbefore="context_closeTab"
                  label="&closeTabsToLeft.label;" accesskey="&closeleft.accesskey;"
                  oncommand="gBrowser._closeLeftTabs(TabContextMenu.contextTab);"/>
-        <menuitem id="tm-closeRightTabs" insertbefore="context_closeTab"
-                 label="&closeTabstoRight.label;" accesskey="&closeright.accesskey;"
-                 oncommand="gBrowser._closeRightTabs(TabContextMenu.contextTab);"/>
+<!--
+        <menuitem id="context_closeTabsToTheEnd"
+-->
         <menuseparator id="tm-separator-2" insertbefore="context_closeTab" type="tabmix"/>
         <menu id="tm-docShell" insertbefore="context_closeTab"
                 label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
