@@ -938,12 +938,6 @@ var TMP_eventListener = {
     if (tab.hasAttribute("showbutton") &&
         gBrowser.tabContainer.getAttribute("closebuttons") == "activetab")
       tab.style.removeProperty("width");
-
-    // tabBar.updateCurrentBrowser call tabBar._setPositionalAttributes after
-    // TabSelect event.
-    // Since Firefox 220 we call updateBeforeAndAfter from _setPositionalAttributes
-    if (!Tabmix.isVersion(220))
-      TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabMove: function TMP_EL_onTabMove(aEvent) {

@@ -454,12 +454,7 @@ ContentClickInternal = {
   contentLinkClick: function(event, browser, focusedWindow) {
     this._contentLinkClick(event, browser, focusedWindow);
     if (event.__hrefFromOnClick) {
-      if (TabmixSvc.version(220))
-        event.stopImmediatePropagation();
-      else {
-        event.stopPropagation();
-        browser.ownerDocument.defaultView.contentAreaClick(event);
-      }
+      event.stopImmediatePropagation();
     }
     this.resetData();
   },

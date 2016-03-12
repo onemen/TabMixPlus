@@ -458,10 +458,7 @@ var TabmixTabbar = {
       let selectedIndex = visibleTabs.indexOf(selected);
       if (selectedIndex > 0)
         prev = visibleTabs[selectedIndex - 1];
-      if (Tabmix.isVersion(220))
-        next = tabBar._afterSelectedTab;
-      else if (selectedIndex < visibleTabs.length - 1)
-        next = visibleTabs[selectedIndex + 1];
+      next = tabBar._afterSelectedTab;
     }
 
     if (multibar) {
@@ -469,7 +466,7 @@ var TabmixTabbar = {
       tabRow = Tabmix.tabsUtils.getTabRowNumber(selected, topY);
     }
     updateAtt(prev, "beforeSelectedTab", "beforeselected", TabmixSvc.australis, "tabmix-");
-    updateAtt(next, "afterSelectedTab", "afterselected", Tabmix.isVersion(220), "");
+    updateAtt(next, "afterSelectedTab", "afterselected", true, "");
   },
 
   getRowHeight: function TMP_getRowHeight(tabsPosition) {
