@@ -32,6 +32,17 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
   ChangeCode.prototype = {
     value: "", errMsg: "",
     _replace: function TMP_utils__replace(substr, newString, aParams) {
+      // Don't insert new code before "use strict";
+      if (substr == "{") {
+        let re = /['|"]use strict['|"];/;
+        let result = re.exec(this.value);
+        if (result) {
+          if (!newString.startsWith("$&")) {
+            newString = newString.replace(substr, result[0] + "\n");
+          }
+          substr = result[0];
+        }
+      }
       var silent;
       if (typeof aParams != "undefined") {
         let doReplace, flags;

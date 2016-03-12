@@ -136,7 +136,6 @@
       this._original_reconstitute.apply(this, arguments);
     };
 
-    let fn = TabView._window.UI._original_reset = TabView._window.UI.reset;
     if (window.hasOwnProperty("tabGroups")) {
       // reconnect tabs that we disconnected in reconstitute
       TabView._window.UI.reset = function() {
@@ -147,9 +146,8 @@
     }
 
     // add tab to the new group on tabs order not tabItem order
-    let isStrict = (f) => f.toString().indexOf('"use strict";') > -1;
     Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
-      isStrict(fn) ? '"use strict";' : '{',
+      '{',
       '$&' +
       'let win = TabView._window;' +
       'let Trenches = win.Trenches;' +
