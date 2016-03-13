@@ -840,8 +840,6 @@ var TMP_eventListener = {
     if (updateNow)
       this.onTabClose_updateTabBar(tab);
 
-    Tabmix.countClosedTabs(tab);
-
     if (Tabmix.selectedTab == tab) {
       Tabmix.selectedTab = null;
       Tabmix.userTypedValue = "";

@@ -468,7 +468,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
           this.removeAllClosedTabs();
           break;
         } else if (aIndex == -2) {
-          this.SSS_restoerClosedTabs(this.count);
+          this.SSS_restoerAllClosedTabs();
           break;
         }
         // else do the default
@@ -476,9 +476,6 @@ var TMP_ClosedTabs = { // jshint ignore:line
       default:
         this.SSS_undoCloseTab(aIndex, aWhere, true);
     }
-
-    // Reset the number of tabs closed last time to the default.
-    Tabmix.setNumberOfTabsClosedLast(1);
   },
 
   removeAllClosedTabs: function() {
@@ -516,9 +513,10 @@ var TMP_ClosedTabs = { // jshint ignore:line
     return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
   },
 
-  SSS_restoerClosedTabs: function ct_SSS_restoerClosedTabs(closedTabCount) {
+  SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
+    var closedTabCount = this.count;
     if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
-      return null;
+      return;
 
     this.setButtonDisableState(true);
 
@@ -529,10 +527,10 @@ var TMP_ClosedTabs = { // jshint ignore:line
         blankTabs.push(gBrowser.tabs[i]);
     }
 
-    var tab, multiple = closedTabCount > 1;
+    var multiple = closedTabCount > 1;
     for (let i = 0; i < closedTabCount; i++) {
       let blankTab = blankTabs.pop() || null;
-      tab = this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
+      this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
     }
 
     // remove unused blank tabs
@@ -541,8 +539,6 @@ var TMP_ClosedTabs = { // jshint ignore:line
       blankTab.collapsed = true;
       gBrowser.removeTab(blankTab);
     }
-
-    return tab;
   },
 
   SSS_undoCloseTab: function(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
@@ -603,29 +599,11 @@ var TMP_ClosedTabs = { // jshint ignore:line
       window.focus();
       gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
     }
-
     return newTab;
   },
 
   undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-    let numberOfTabsToUndoClose = 1;
-    let index = Number(aIndex);
-    if (isNaN(index)) {
-      index = 0;
-      if (Tabmix._restoreMultipleTabs)
-        numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
-    } else if (index < 0 || index >= this.count)
-      return null;
-
-    let tab = null;
-    if (numberOfTabsToUndoClose > 1)
-      tab = this.SSS_restoerClosedTabs(numberOfTabsToUndoClose);
-    else
-      tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
-
-    // Reset the number of tabs closed last time to the default.
-    Tabmix.setNumberOfTabsClosedLast(1);
-    return tab;
+    return this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
   }
 
 };

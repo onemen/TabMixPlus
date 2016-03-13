@@ -344,20 +344,6 @@ var tablib = { // eslint-disable-line
       'if (!aShow || TabmixTabbar.hideMode != 2) $&'
     ).toCode();
 
-    // Follow up bug 887515 - add ability to restore multiple tabs
-    // bug 914258 backout 887515 changes from Firefox 25
-    if (Tabmix._restoreMultipleTabs) {
-      Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
-        'let tabs = this.getTabsToTheEndFrom(aTab);',
-        '$&\n' +
-        '              Tabmix.startCountingClosedTabs();'
-      )._replace(
-        '#1.setNumberOfTabsClosedLast(window, numberOfTabsToClose);'.
-         replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
-        'Tabmix.setNumberOfTabsClosedLast();'
-      ).toCode();
-    }
-
     if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
       /*
        TabSwitchDone event fire late when the tab is busy, we call our
@@ -1144,12 +1130,10 @@ var tablib = { // eslint-disable-line
         // remove current tab last
         if (!this.mCurrentTab.pinned)
           tabs.unshift(tabs.splice(tabs.indexOf(this.mCurrentTab), 1)[0]);
-        Tabmix.startCountingClosedTabs();
         tabs.reverse().forEach(function TMP_removeTab(tab) {
           if (!tab.pinned)
             this.removeTab(tab, {animate: false});
         }, this);
-        Tabmix.setNumberOfTabsClosedLast();
         // _handleTabSelect will call mTabstrip.ensureElementIsVisible
       }
     };
@@ -1164,7 +1148,6 @@ var tablib = { // eslint-disable-line
 
       if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
-        Tabmix.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
               this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
@@ -1174,7 +1157,6 @@ var tablib = { // eslint-disable-line
           this.removeTab(aTab, {animate: true});
           this.ensureTabIsVisible(this.selectedTab);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1202,12 +1184,10 @@ var tablib = { // eslint-disable-line
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(aTab);
-        Tabmix.startCountingClosedTabs();
         for (let i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1223,12 +1203,10 @@ var tablib = { // eslint-disable-line
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(aTab);
-        Tabmix.startCountingClosedTabs();
         for (let i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1243,12 +1221,10 @@ var tablib = { // eslint-disable-line
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           Tabmix.tabsUtils.updateVerticalTabStrip(true);
-        Tabmix.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     });
 
@@ -1713,36 +1689,6 @@ var tablib = { // eslint-disable-line
       if (Tabmix.tabsUtils.overflow)
         this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
     };
-
-    // Follow up bug 887515 - add ability to restore multiple tabs
-    // bug 914258 backout 887515 changes from Firefox 25
-    if (Tabmix._restoreMultipleTabs) {
-      Tabmix.startCountingClosedTabs = function() {
-        this.shouldCountClosedTabs = true;
-        this.numberOfTabsClosedLast = 0;
-      };
-      Tabmix.setNumberOfTabsClosedLast = function(aNum) {
-        TabmixSvc.ss.setNumberOfTabsClosedLast(window, aNum || this.numberOfTabsClosedLast);
-        this.shouldCountClosedTabs = false;
-        this.numberOfTabsClosedLast = 0;
-      };
-      Tabmix.countClosedTabs = function(aTab) {
-        if (!this.shouldCountClosedTabs ||
-            Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") === 0)
-          return;
-        var tabState = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-        if (!tabState.entries || tabState.entries.length == 1 &&
-           (tabState.entries[0].url == TabmixSvc.aboutBlank ||
-            tabState.entries[0].url == TabmixSvc.aboutNewtab) &&
-            !tabState.userTypedValue)
-          return;
-        this.numberOfTabsClosedLast++;
-      };
-    } else {
-      Tabmix.startCountingClosedTabs = function() { };
-      Tabmix.setNumberOfTabsClosedLast = function() { };
-      Tabmix.countClosedTabs = function() { };
-    }
 
     /** DEPRECATED **/
     // we keep this function to saty compatible with other extensions that use it

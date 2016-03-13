@@ -349,13 +349,6 @@ var TabmixContext = {
     if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
       cookiepieContextMenu.init();
 
-    if (Tabmix._restoreMultipleTabs) {
-      let multipletablabel = $id("context_undoCloseTab").getAttribute("multipletablabel");
-      let undoCloseTabMenu = $id("tm-content-undoCloseTab");
-      undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
-      undoCloseTabMenu.setAttribute("multipletablabel", multipletablabel);
-    }
-
     if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
       this.updateTabbarContextMenu(true);
 
@@ -683,11 +676,6 @@ var TabmixContext = {
       Tabmix.showItem(undoCloseTabMenu, !contentClick &&
           !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
           Tabmix.prefs.getBoolPref("undoCloseTabContent"));
-      if (Tabmix._restoreMultipleTabs) {
-        let closedTabCount = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
-        let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
-        undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
-      }
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
       Tabmix.showItem(undoCloseListMenu, !contentClick &&

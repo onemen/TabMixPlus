@@ -361,13 +361,3 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     TabmixTabbar.updateBeforeAndAfter();
   }
 };
-
-/**
- bug 887515 - add ability to restore multiple tabs
- bug 914258 backout 887515 changes from Firefox 25
- bug 931891 backout 887515 changes from Firefox 26-29
-*/
-XPCOMUtils.defineLazyGetter(Tabmix, "_restoreMultipleTabs", function() {
-  return this.isVersion(290) &&
-         typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function";
-});
