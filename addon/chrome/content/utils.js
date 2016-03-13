@@ -75,7 +75,7 @@ var Tabmix = { // jshint ignore:line
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
     return !this.getSingleWindowMode() ||
-      this.isVersion(200) && !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
+      !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
@@ -238,11 +238,8 @@ var Tabmix = { // jshint ignore:line
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
     this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-    if (this.isVersion(200)) {
-      let resource = this.isVersion(210) ? "resource:///" : "resource://gre/";
-      XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-                 resource + "modules/RecentWindow.jsm");
-    }
+    XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+                                      "resource:///modules/RecentWindow.jsm");
 
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);

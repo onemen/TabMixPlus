@@ -8,6 +8,9 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+                                  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 var KeyConfig;
 this.Shortcuts = {
   keys: {
@@ -63,22 +66,12 @@ this.Shortcuts = {
   updatingShortcuts: false,
   prefBackup: null,
   initialized: false,
-  permanentPrivateBrowsing: false,
   keyConfigInstalled: false,
 
   initService: function(aWindow) {
     if (this.initialized)
       return;
     this.initialized = true;
-
-    if (TabmixSvc.version(200)) {
-      let tmp = {};
-      Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
-      this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    } else {
-      this.permanentPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
-          getService(Ci.nsIPrivateBrowsingService).autoStarted;
-    }
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
@@ -282,7 +275,7 @@ this.Shortcuts = {
 
   _getChangedKeys: function TMP_SC__getChangedKeys(aOptions) {
     let shortcuts = !aOptions.onChange && this.prefBackup || this._getShortcutsPref();
-    let disableSessionKeys = this.permanentPrivateBrowsing ||
+    let disableSessionKeys = PrivateBrowsingUtils.permanentPrivateBrowsing ||
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let key of Object.keys(this.keys)) {

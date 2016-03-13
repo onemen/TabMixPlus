@@ -9,29 +9,23 @@
 Tabmix.startup = function TMP_startup() {
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
-  // Firefox 20+ implemented per-window Private Browsing
   // When in single window mode allow one normal window and one private window.
   // otherwise open new tab in most recent window of the appropriate type
-  if (this.isVersion(200)) {
-    this._openNewTab = function(aPrivate) {
-      if (this.singleWindowMode) {
-        let win = this.RecentWindow.getMostRecentBrowserWindow({private: aPrivate});
-        if (win) {
-          win.focus();
-          win.BrowserOpenTab();
-          return false;
-        }
+  this._openNewTab = function(aPrivate) {
+    if (this.singleWindowMode) {
+      let win = this.RecentWindow.getMostRecentBrowserWindow({private: aPrivate});
+      if (win) {
+        win.focus();
+        win.BrowserOpenTab();
+        return false;
       }
-      return true;
-    };
-    let command = document.getElementById("Tools:PrivateBrowsing");
-    let originalCode = command.getAttribute("oncommand");
-    Tabmix.setItem(command, "oncommand", "if (Tabmix._openNewTab(true)) {" + originalCode + "}");
-    Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
-  } else {
-    Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix.singleWindowMode) BrowserOpenTab(); " +
-                                          "else {" + originalNewNavigator + "}");
-  }
+    }
+    return true;
+  };
+  let command = document.getElementById("Tools:PrivateBrowsing");
+  let originalCode = command.getAttribute("oncommand");
+  Tabmix.setItem(command, "oncommand", "if (Tabmix._openNewTab(true)) {" + originalCode + "}");
+  Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
 
   TabmixContext.toggleEventListener(true);
 

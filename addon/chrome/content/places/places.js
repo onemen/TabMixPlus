@@ -723,7 +723,7 @@ Tabmix.onContentLoaded = {
       'var w = getTopWin();',
       '$&\n' +
       '  if (w && where == "window" &&\n' +
-      '      !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) {\n' +
+      '      !Tabmix.isNewWindowAllow(aIsPrivate)) {\n' +
       '    where = "tab";\n' +
       '  }'
     )._replace(

@@ -627,24 +627,21 @@ var tablib = { // eslint-disable-line
       Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
         /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
       )._replace(
-        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&',
-        {check: Tabmix.isVersion(200)}
+        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
       ).toCode();
 
-      if (Tabmix.isVersion(200)) {
-        Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
-          'openLinkIn(this.linkURL, "window",',
-          'var [win, where] = [window, "window"];\
-           if (Tabmix.singleWindowMode) {\
-             let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
-             if (pbWindow) {\
-               [win, where] = [pbWindow, "tab"];\
-               pbWindow.focus();\
-             }\
+      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
+        'openLinkIn(this.linkURL, "window",',
+        'var [win, where] = [window, "window"];\
+         if (Tabmix.singleWindowMode) {\
+           let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
+           if (pbWindow) {\
+             [win, where] = [pbWindow, "tab"];\
+             pbWindow.focus();\
            }\
-           win.openLinkIn(this.linkURL, where,'
-        ).toCode();
-      }
+         }\
+         win.openLinkIn(this.linkURL, where,'
+      ).toCode();
     }
 
     /**
@@ -826,9 +823,7 @@ var tablib = { // eslint-disable-line
       'window = #1.undoCloseWindow(aIndex || 0);'.
        replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
-         window = TabmixSvc.version(200) ?\
-            Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false}) :\
-            Tabmix.getTopWin();\
+          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
        }\
        if (window) {\
         window.focus();\
@@ -869,7 +864,7 @@ var tablib = { // eslint-disable-line
       '$& \
        let SM = TabmixSessionManager;\
        Tabmix.setItem("Browser:RestoreLastSession", "disabled", !SM.canRestoreLastSession || SM.isPrivateWindow);',
-       {check: Tabmix.isVersion(200) && Tabmix.prefs.getBoolPref("sessions.manager")}
+       {check: Tabmix.prefs.getBoolPref("sessions.manager")}
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
@@ -1690,9 +1685,10 @@ var tablib = { // eslint-disable-line
     let swapTab = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
       // Do not allow transfering a private tab to a non-private window
       // and vice versa.
-      if (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView))
+      if (PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView)) {
         return;
+      }
 
       if (Tabmix.runningDelayedStartup) {
         // we probably will never get here in single window mode
@@ -1907,14 +1903,10 @@ var tablib = { // eslint-disable-line
       if (Services.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
         return false;
 
-      if (Tabmix.isVersion(200)) {
-        // try to find non-private window
-        let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
-        if (!nonPrivateWindow)
-          return false;
-      } else if (TabmixSessionManager.globalPrivateBrowsing) {
+      // try to find non-private window
+      let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
+      if (!nonPrivateWindow)
         return false;
-      }
 
       // last windows with tabs
       var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;

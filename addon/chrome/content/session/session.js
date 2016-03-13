@@ -325,17 +325,13 @@ TabmixSessionManager = {
     obs.addObserver(this, "quit-application-requested", true);
     obs.addObserver(this, "browser-lastwindow-close-requested", true);
     obs.addObserver(this, "browser:purge-session-history", true);
-    if (!Tabmix.isVersion(200)) {
-      obs.addObserver(this, "private-browsing", true);
-      obs.addObserver(this, "private-browsing-change-granted", true);
-    }
     if (Tabmix.isVersion(270)) {
       if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
         window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
       obs.addObserver(this, "sessionstore-last-session-cleared", true);
     }
 
-    if (Tabmix.isVersion(200) && this.isPrivateWindow) {
+    if (this.isPrivateWindow) {
       // disable saveing or changeing any data on the disk in private window
       document.getElementById("tmp_contextmenu_ThisWindow").setAttribute("disabled", true);
       document.getElementById("tmp_contextmenu_AllWindows").setAttribute("disabled", true);
@@ -438,7 +434,7 @@ TabmixSessionManager = {
       this.saveStateDelayed();
   },
 
-  // we call this function after session restored by sessionStore, after restart or after exit private-browsing
+  // we call this function after session restored by sessionStore
   onSessionRestored: function SM_onSessionRestored(aKeepClosedWindows) {
     // sync rdf list with sessionstore closed tab after restart
     // we need it when we delete/restore close tab
@@ -449,7 +445,6 @@ TabmixSessionManager = {
 
     // we keep the old session after restart.
     // just remove the restored session from close window list
-    // if we are not exiting private browsing mode
     var sessionContainer = this.initContainer(this.gSessionPath[0]);
     if (!aKeepClosedWindows)
       this.deleteWithProp(sessionContainer, "status", "saved");
@@ -537,12 +532,10 @@ TabmixSessionManager = {
     window.focus();
     var title = TabmixSvc.getSMString("sm.askBeforSave.title");
     var msg = TabmixSvc.getSMString("sm.askBeforSave.msg0");
-    if (Tabmix.isVersion(200)) {
-      // add remark - Only non-private windows will save
-      // when there is one private window or more..
-      if (Tabmix.RecentWindow.getMostRecentBrowserWindow({private: true}))
-        msg += "\n" + TabmixSvc.getSMString("sm.askBeforSave.msg2");
-    }
+    // add remark - Only non-private windows will save
+    // when there is one private window or more..
+    if (Tabmix.RecentWindow.getMostRecentBrowserWindow({private: true}))
+      msg += "\n" + TabmixSvc.getSMString("sm.askBeforSave.msg2");
     msg += "\n\n" + TabmixSvc.getSMString("sm.askBeforSave.msg1");
     var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
     var chkBoxState = this.saveClosedTabs ? Tabmix.CHECKBOX_CHECKED : Tabmix.HIDE_CHECKBOX;
@@ -557,8 +550,9 @@ TabmixSessionManager = {
   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
                                                 aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
 
-    if (Tabmix.isVersion(200) && this.isPrivateWindow)
+    if (this.isPrivateWindow) {
       this.removeSession(this.gThisWin, this.gSessionPath[0]);
+    }
 
     if (this.windowClosed || this.isPrivateSession)
       return;
@@ -593,7 +587,6 @@ TabmixSessionManager = {
         if (aSaveSession) {
           var rdfNodeClosedWindows = this.RDFService.GetResource(this.gSessionPath[0]);
           var sessionContainer = this.initContainer(rdfNodeClosedWindows);
-          // don't remove closed windows when entring private browsing mode
           if (!aKeepClosedWindows)
             this.deleteWithProp(sessionContainer, "dontLoad");
           var count = this.countWinsAndTabs(sessionContainer, "dontLoad");
@@ -686,16 +679,8 @@ TabmixSessionManager = {
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
       obs.removeObserver(this, "browser:purge-session-history", true);
-      if (!Tabmix.isVersion(200)) {
-        obs.removeObserver(this, "private-browsing");
-        obs.removeObserver(this, "private-browsing-change-granted");
-      }
       if (Tabmix.isVersion(270))
         obs.removeObserver(this, "sessionstore-last-session-cleared");
-      if (this.afterExitPrivateBrowsing) {
-        clearTimeout(this.afterExitPrivateBrowsing);
-        this.afterExitPrivateBrowsing = null;
-      }
     }
     if ("tabmixdata" in window) {
       let {restoreID} = window.tabmixdata;
@@ -1121,7 +1106,7 @@ TabmixSessionManager = {
   },
 
   savedPrefs: {},
-  observe: function SM_observe(aSubject, aTopic, aData) {
+  observe: function SM_observe(aSubject, aTopic) {
     switch (aTopic) {
       case "quit-application-requested":
         // TabView
@@ -1168,76 +1153,6 @@ TabmixSessionManager = {
           TMP_ClosedTabs.setButtonDisableState();
           this.toggleRecentlyClosedWindowsButton();
         }, 0);
-        break;
-      case "private-browsing-change-granted":
-        // Whether we restore the session upon resume will be determined by the
-        // usual startup prefs see Bug 660785
-        if (aData == "enter" && (this.prefBranch.getBoolPref("manager") ||
-                                 this.prefBranch.getBoolPref("crashRecovery"))) {
-          this.canQuitApplication(true, true);
-        }
-        break;
-      case "private-browsing":
-        switch (aData) {
-          case "enter":
-            // check if we need to close protected tab here
-            var needToCloseProtected = true;
-            try {
-              if (Services.prefs.getBoolPref("browser.privatebrowsing.keep_current_session"))
-                needToCloseProtected = false;
-            } catch (ex) { }
-            // noting to do here if we are not using tabmix session manager
-            if (!this.prefBranch.getBoolPref("manager") && !this.prefBranch.getBoolPref("crashRecovery")) {
-              // nsPrivateBrowsingService.js can not close protected tab we have to do it our self
-              // we only close this tab here after nsPrivateBrowsingService save the session
-              if (needToCloseProtected)
-                this.closeProtectedTabs();
-              this.globalPrivateBrowsing = true;
-              TMP_ClosedTabs.setButtonDisableState(true);
-              this.toggleRecentlyClosedWindowsButton();
-              break;
-            }
-            this.globalPrivateBrowsing = true;
-            if (needToCloseProtected)
-              this.closeProtectedTabs();
-            this.enableManager = this.prefBranch.getBoolPref("manager") && !this.globalPrivateBrowsing;
-            this.enableBackup = this.prefBranch.getBoolPref("crashRecovery") && !this.globalPrivateBrowsing;
-            this.updateSettings();
-            TMP_ClosedTabs.setButtonDisableState(true);
-            break;
-          case "exit":
-            // nsPrivateBrowsingService.js can not close protected tab we have to do it our self
-            this.closeProtectedTabs();
-            aSubject.QueryInterface(Ci.nsISupportsPRBool);
-            var quitting = aSubject.data;
-            if (quitting)
-              break;
-            // build-in sessionStore restore the session for us
-            if (!this.prefBranch.getBoolPref("manager") && !this.prefBranch.getBoolPref("crashRecovery")) {
-              this.globalPrivateBrowsing = false;
-              window.setTimeout(() => {
-                TMP_ClosedTabs.setButtonDisableState();
-                this.toggleRecentlyClosedWindowsButton();
-              }, 100);
-              break;
-            }
-            TMP_ClosedTabs.removeAllClosedTabs(); // to be on the safe side...
-            this.removeSession(this.gThisWin, this.gSessionPath[0]);
-            window.setTimeout(() => {
-              TMP_ClosedTabs.setButtonDisableState();
-            }, 0);
-            this.afterExitPrivateBrowsing = window.setTimeout(() => {
-              this.globalPrivateBrowsing = false;
-              this.windowClosed = false;
-              this.onSessionRestored(true);
-              this.updateSettings();
-              this.removeAttribute(this.gThisWin, "dontLoad");
-              this.saveStateDelayed();
-              this.updateClosedWindowsMenu("check");
-              this.afterExitPrivateBrowsing = null;
-            }, 0);
-            break;
-        }
         break;
     }
   },
@@ -2288,9 +2203,7 @@ TabmixSessionManager = {
   },
 
   prepareSavedSessions: function SM_prepareSavedSessions() {
-    // make sure we delete closed windows that may exist if we exit Firefox
-    // from private browsing mode. we skip this command in windowIsClosing
-    // when entring private browsing mode
+    // make sure we delete closed windows
     this.deleteWithProp(this.initContainer(this.gSessionPath[0]), "dontLoad");
 
     // don't remove oldest session if last session was empty
@@ -3124,7 +3037,6 @@ TabmixSessionManager = {
       this.mergeWindows(state);
     }
 
-    // Firefox 20 introduced per-window private browsing mode
     // we restore multi-windows session to the same privacy state of the current window
     var windowEnum = Tabmix.windowEnumerator();
     var windowsList = [];

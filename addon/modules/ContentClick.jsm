@@ -978,11 +978,10 @@ ContentClickInternal = {
     let isValidWindow = function(aWindow) {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
-      if ((TabmixSvc.version(200) &&
-           PrivateBrowsingUtils.isWindowPrivate(window) !=
-           PrivateBrowsingUtils.isWindowPrivate(aWindow)) ||
-          (TabmixSvc.version(320) &&
-           window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser)) {
+      if (PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aWindow) ||
+          TabmixSvc.version(320) &&
+          window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser) {
         return false;
       }
       return true;

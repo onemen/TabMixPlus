@@ -7,6 +7,9 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 //////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
 // extension for Mozilla Firefox.                                   //
@@ -33,7 +36,7 @@ this.MergeWindows = {
     var selectedTabs = tabbrowser.tabContainer.getElementsByAttribute("mergeselected", true);
     let options = {
       skipPopup: !this.prefs.getBoolPref("mergePopups"),
-      private: TabmixSvc.version(200) ? this.isWindowPrivate(aWindow) : false,
+      private: this.isWindowPrivate(aWindow),
       tabsSelected: selectedTabs.length > 0,
       multiple: mergeAllWindows && !selectedTabs.length
     };
@@ -98,8 +101,7 @@ this.MergeWindows = {
 
   mergePopUpsToNewWindow: function(aWindows, aPrivate) {
     var features = "chrome,all,dialog=no";
-    if (TabmixSvc.version(200))
-      features += aPrivate ? ",private" : ",non-private";
+    features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
         "_blank", features, null);
     let mergePopUps = function _mergePopUps() {
@@ -201,16 +203,10 @@ this.MergeWindows = {
     return !aWindow.toolbar.visible;
   },
 
-  // we use it only for Fireofx 20+, before that always return false
   isWindowPrivate: function() {
     delete this.isWindowPrivate;
-    if (TabmixSvc.version(200)) {
-      Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-      this.isWindowPrivate = aWindow => PrivateBrowsingUtils.isWindowPrivate(aWindow);
-      return this.isWindowPrivate(arguments[0]);
-    }
-    this.isWindowPrivate = () => false;
-    return false;
+    this.isWindowPrivate = aWindow => PrivateBrowsingUtils.isWindowPrivate(aWindow);
+    return this.isWindowPrivate(arguments[0]);
   },
 
   /*

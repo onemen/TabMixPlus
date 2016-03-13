@@ -6,18 +6,9 @@ const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 this.SingleWindowModeUtils = {
-  initialized: false,
-  initService: function() {
-    if (this.initialized)
-      return;
-    this.initialized = true;
-
-    if (TabmixSvc.version(200))
-      Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-  },
-
  /**
   * @brief Locate a browser window.
   *
@@ -30,14 +21,12 @@ this.SingleWindowModeUtils = {
   getBrowserWindow: function(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
-    var checkPrivacy = TabmixSvc.version(200);
-    var isPrivate = checkPrivacy && PrivateBrowsingUtils.isWindowPrivate(aExclude);
+    var isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
       return (!win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
-              (!checkPrivacy ||
-                PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate));
+              PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate);
     }
 
     var windows = Services.wm.getEnumerator("navigator:browser");
@@ -56,7 +45,6 @@ this.SingleWindowModeUtils = {
     if (!aWindow.arguments || aWindow.arguments.length === 0)
       return false;
 
-    this.initService();
     aWindow.addEventListener("load", function _onLoad(aEvent) {
       let window = aEvent.currentTarget;
       window.removeEventListener("load", _onLoad, false);
