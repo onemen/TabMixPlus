@@ -3501,12 +3501,7 @@ TabmixSessionManager = {
     if (!aOverwrite)
       closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
     closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
-    if (Tabmix.isVersion(260))
-      TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
-    else {
-      let state = {windows: [{_closedTabs: closedTabsData, selected: 0}], _firstTabs: true};
-      TabmixSvc.ss.setWindowState(window, TabmixSvc.JSON.stringify(state), false);
-    }
+    TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
     TMP_ClosedTabs.setButtonDisableState();
   },
 
