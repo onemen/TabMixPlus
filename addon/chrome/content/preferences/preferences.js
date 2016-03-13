@@ -380,7 +380,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   return tabmixPrefs;
 });
 
-__defineGetter__("_sminstalled", function() {
+XPCOMUtils.defineLazyGetter(this, "_sminstalled", function() {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 

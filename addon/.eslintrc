@@ -260,7 +260,6 @@
         "TMP_TabView": false,
 
         // firefox globals
-        "__defineGetter__": false,
         "aboutNewTabService": false,
         "addMessageListener": false,
         "AddonManager": false,
