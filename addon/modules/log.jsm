@@ -177,6 +177,16 @@ this.console = {
     return false;
   },
 
+  stackTrace: function TMP_console_stackTrace() {
+    let stack = this._getStackExcludingInternal().join("\n");
+
+    return {
+      contain: function(...names) {
+        return names.some(name => stack.indexOf(name) > -1);
+      },
+    };
+  },
+
 /*
 options = {
   msg: msg

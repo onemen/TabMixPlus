@@ -155,8 +155,8 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       '{', '{\n' +
-      '            let dontMove, isPending, callerName = Tabmix.callerName(),\n' +
-      '                isRestoringTab = callerName == "ssi_restoreWindow";\n'
+      '            let dontMove, isPending, stack = Tabmix.stackTrace(),\n' +
+      '                isRestoringTab = stack.contain("ssi_restoreWindow");\n'
     )._replace(
       'let params = arguments[1];',
       '$&\n' +
@@ -198,7 +198,7 @@ var tablib = { // eslint-disable-line
       't.dispatchEvent(evt);' +
       'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
       'if (openTabnext) {' +
-      '  if (dontMove || Tabmix.dontMoveNewTab(callerName))' +
+      '  if (dontMove || Tabmix.dontMoveNewTab(stack))' +
       '    openTabnext = false;' +
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
       '    aRelatedToCurrent = true;' +
@@ -207,12 +207,8 @@ var tablib = { // eslint-disable-line
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
 
-    Tabmix.dontMoveNewTab = function(caller) {
-      if (caller == "ssi_restoreWindow" ||
-          caller == "ssi_duplicateTab") {
-        return true;
-      }
-      return false;
+    Tabmix.dontMoveNewTab = function(stack) {
+      return stack.contain("ssi_restoreWindow", "ssi_duplicateTab");
     };
 
     // ContextMenu Extensions raplce the original removeTab function
