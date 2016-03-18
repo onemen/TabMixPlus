@@ -8,6 +8,8 @@ var gMenuPane = { // jshint ignore:line
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
     var browserWindow = Tabmix.getTopWin();
+    let $$ = id => browserWindow.document.getElementById(id);
+
     if (Tabmix.isVersion(430)) {
       $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
         browserWindow.gNavigatorBundle.getString("unmuteTab.label");
@@ -16,16 +18,17 @@ var gMenuPane = { // jshint ignore:line
     }
 
     // if Tabview exist copy its menu label
-    if (browserWindow.TMP_TabView.installed) {
-      let label = browserWindow.document.getElementById("context_tabViewMenu").getAttribute("label");
-      $("moveToGroup").label = label;
+    let tabViewMenu = browserWindow.TMP_TabView.installed &&
+        ($$("context_tabViewMenu") || $$("tabGroups-context_tabViewMenu"));
+    if (tabViewMenu) {
+      $("moveToGroup").label = tabViewMenu.getAttribute("label");
     } else {
       gPrefWindow.removeChild("pref_showMoveToGroup");
       gPrefWindow.removeChild("moveToGroup");
     }
 
     if (Tabmix.isVersion(320)) {
-      let openNonRemote = browserWindow.document.getElementById("context_openNonRemoteWindow");
+      let openNonRemote = $$("context_openNonRemoteWindow");
       if (openNonRemote) {
         let item = $("openNonRemoteWindow");
         item.setAttribute("label", openNonRemote.getAttribute("label"));
@@ -38,7 +41,7 @@ var gMenuPane = { // jshint ignore:line
     }
 
     // check if bookmark item in tab context menu
-    Tabmix.setItem("bmMenu", "hidden", !(browserWindow.document.getElementById("context_bookmarkAllTabs")));
+    Tabmix.setItem("bmMenu", "hidden", !($$("context_bookmarkAllTabs")));
 
     this.setInverseLinkLabel();
 

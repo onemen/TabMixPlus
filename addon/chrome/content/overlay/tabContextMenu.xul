@@ -29,6 +29,8 @@
         <menuitem id="context_pinTab">
         <menuitem id="context_unpinTab"/>
         <menuitem id="context_tabViewMenu"/>
+     or
+        <menuitem id="tabGroups-context_tabViewMenu"/>
 -->
         <menuitem id="tm-mergeWindowsTab" insertbefore="context_openTabInWindow"
                  key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"

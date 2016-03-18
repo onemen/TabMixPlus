@@ -443,7 +443,12 @@ var TabmixContext = {
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
     Tabmix.showItem("context_unpinTab", show && aTab.pinned);
-    Tabmix.showItem("context_tabViewMenu", Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
+    setTimeout(() => {
+      // we need to set our show/hide after tabGroups extension
+      let tabViewMenu = document.getElementById("context_tabViewMenu") ||
+          document.getElementById("tabGroups-context_tabViewMenu");
+      Tabmix.showItem(tabViewMenu, Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
+    });
     Tabmix.showItem("tm-mergeWindowsTab",
                     Tabmix.prefs.getBoolPref("showMergeWindow") &&
                     (!Tabmix.singleWindowMode ||
