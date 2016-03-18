@@ -51,7 +51,7 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-    .getService(Ci.nsIEventListenerService);
+                .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
     } else {
@@ -60,6 +60,9 @@ var TMP_LastTab = {
     }
     els.addSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.addSystemEventListener(tabBox._eventNode, "keyup", this, false);
+    if (!Tabmix.isVersion(470)) {
+      els.addSystemEventListener(window, "focus", this, true);
+    }
 
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -79,15 +82,23 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-    .getService(Ci.nsIEventListenerService);
+                .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
     if (!Tabmix.isVersion(320))
       els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
+    if (!Tabmix.isVersion(470)) {
+      els.removeSystemEventListener(window, "focus", this, true);
+    }
   },
 
   handleEvent: function(event) {
     switch (event.type) {
+      case "focus":
+        if (event.target == window.content) {
+          Tabmix.keyModifierDown = false;
+        }
+        break;
       case "blur":
         this.updateDisallowDrag(false);
         break;

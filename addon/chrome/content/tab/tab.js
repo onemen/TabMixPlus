@@ -686,6 +686,9 @@ Tabmix.tabsUtils = {
   handleEvent: function(aEvent) {
     switch (aEvent.type) {
       case "MozMouseHittest":
+        if (Tabmix.keyModifierDown && !document.hasFocus()) {
+          Tabmix.keyModifierDown = false;
+        }
         if (aEvent.button === 0 && (Tabmix.keyModifierDown || aEvent.detail > 0))
           aEvent.stopPropagation();
         break;
