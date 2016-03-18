@@ -1,5 +1,11 @@
 "use strict";
 
+const Cu = Components.utils;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Services",
+  "resource://gre/modules/Services.jsm");
+
 var TabmixRemoveBlankTab = {
   initialize: function() {
     switch (window.document.documentElement.id) {
@@ -68,7 +74,15 @@ var TabmixRemoveBlankTab = {
                     .QueryInterface(Ci.nsIInterfaceRequestor)
                     .getInterface(Ci.nsIDOMWindow)
                     .wrappedJSObject;
-      result.b = result.win.gBrowser.getBrowserForDocument(doc);
+      let tabBrowser = result.win.gBrowser;
+      result.b = tabBrowser.getBrowserForDocument(doc);
+      if (!result.b) {
+        // try to find tab with _tabmix_downloadingTimeout
+        let tabs = Array.prototype.filter.call(tabBrowser.tabs, t => t._tabmix_downloadingTimeout);
+        if (tabs.length) {
+          result.b = tabs[0].linkedBrowser;
+        }
+      }
     }
     return result;
   },
@@ -78,8 +92,17 @@ var TabmixRemoveBlankTab = {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
       if (win && !win.closed) {
         win.setTimeout(function() {
-          if (win && win.gBrowser && tab && tab.parentNode)
-            win.gBrowser.removeTab(tab, {animate: false});
+          let tabBrowser = win && win.gBrowser;
+          if (!tabBrowser || !tab || !tab.parentNode) {
+            return;
+          }
+          // don't remove the tab if it going to close the window
+          let closeWindow = tabBrowser.tabs.length - tabBrowser._removingTabs.length == 1 &&
+              Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab");
+          if (closeWindow) {
+            return;
+          }
+          tabBrowser.removeTab(tab, {animate: false});
         }, 250);
       }
     }, false);
