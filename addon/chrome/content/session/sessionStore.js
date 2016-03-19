@@ -6,7 +6,7 @@
  * original code by onemen
  *
  */
-var TMP_SessionStore = { // jshint ignore:line
+var TMP_SessionStore = {
   // get title for closed window from bookmark title or user tab title
   getTitleForClosedWindow: function TMP_ss_getTitleForClosedWindow(aUndoItem) {
     // if user already rename this item wo don't use other title
@@ -287,7 +287,7 @@ var TMP_SessionStore = { // jshint ignore:line
 
 };
 
-var TMP_ClosedTabs = { // jshint ignore:line
+var TMP_ClosedTabs = {
   _buttonBroadcaster: null,
   get buttonBroadcaster() {
     if (!this._buttonBroadcaster)
@@ -608,7 +608,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
 
 };
 
-var TabmixConvertSession = { // jshint ignore:line
+var TabmixConvertSession = {
   get getTitle() {
     return TabmixSvc.getString("incompatible.title") + " - " + TabmixSvc.getSMString("sm.title");
   },

@@ -2,7 +2,7 @@
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
-var gTabMix_preferencesOverlay = { // jshint ignore:line
+var gTabMix_preferencesOverlay = {
   id: function(id) {
     return document.getElementById(id);
   },

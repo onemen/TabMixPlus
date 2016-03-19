@@ -1,7 +1,7 @@
 /* exported gMenuPane */
 "use strict";
 
-var gMenuPane = { // jshint ignore:line
+var gMenuPane = {
   init: function() {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);

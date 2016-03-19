@@ -1,4 +1,3 @@
-/* jshint strict: false */
 /* eslint strict: 0 */
 
 // don't use strict for this file
@@ -180,7 +179,6 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
 };
 
 (function(obj) {
-  /* jshint moz: true, esnext: false */
   let global = Components.utils.getGlobalForObject(obj);
   let fn = global["ev" + "al"];
   Tabmix._makeCode = function(name, code) {

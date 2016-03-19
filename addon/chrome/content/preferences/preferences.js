@@ -1,4 +1,3 @@
-/* jshint esnext: true */
 /* globals _sminstalled, gPreferenceList */
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              showPane, openHelp */
@@ -6,12 +5,12 @@
 
 /***** Preference Dialog Functions *****/
 var gIncompatiblePane;
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 this.$ = id => document.getElementById(id);
 
-var gPrefWindow = { // jshint ignore:line
+var gPrefWindow = {
   widthChanged: false,
   _initialized: false,
   init: function() {

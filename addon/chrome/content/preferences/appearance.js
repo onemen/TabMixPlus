@@ -1,7 +1,7 @@
 /* exported gAppearancePane */
 "use strict";
 
-var gAppearancePane = { // jshint ignore:line
+var gAppearancePane = {
   init: function() {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed

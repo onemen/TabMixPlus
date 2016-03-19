@@ -1,4 +1,3 @@
-/* jshint esnext: true */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["AsyncUtils"];

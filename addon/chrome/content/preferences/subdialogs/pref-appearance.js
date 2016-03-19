@@ -3,7 +3,7 @@
 
 var $ = id => document.getElementById(id);
 
-var tabstyles = { // jshint ignore:line
+var tabstyles = {
   pref: "appearance_tab",
   init: function() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?

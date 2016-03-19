@@ -985,7 +985,6 @@ var tablib = { // eslint-disable-line
       }
       // we need to update history title after the new page loaded for use in back/forword button
       function updateNewHistoryTitle() {
-        /* jshint validthis: true */
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
@@ -1000,7 +999,6 @@ var tablib = { // eslint-disable-line
         }
       }
       function urlForDownload() {
-        /* jshint validthis: true */
         try {
           this.removeEventListener("SSTabRestored", urlForDownload, true);
           let browser = this.linkedBrowser;

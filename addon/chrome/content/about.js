@@ -1,7 +1,7 @@
 /* exported init */
 "use strict";
 
-function init() { // jshint ignore:line
+function init() {
   var addon = window.arguments[0];
   var extensionsStrings = document.getElementById("extensionsStrings");
   var extensionVersion, currentVersion;

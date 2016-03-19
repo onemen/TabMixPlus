@@ -365,10 +365,10 @@ var TMP_tabDNDObserver = {
     event.stopPropagation();
 
     document.getElementById("tabmix-tooltip").hidePopup();
-    /* jshint ignore:start */ /* eslint-disable */
+    /* eslint-disable */
     // old TreeStyleTab extension version look for isTabReorder in our code
     var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW;
-    /* jshint ignore:end */ /* eslint-enable */
+    /* eslint-enable */
     var newIndex = this._getDNDIndex(event);
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;

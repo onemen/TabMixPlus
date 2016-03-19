@@ -1,7 +1,7 @@
 /* eslint mozilla/balanced-listeners:0 */
 "use strict";
 
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 

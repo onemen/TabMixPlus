@@ -1,6 +1,6 @@
 "use strict";
 
-var Tabmix = { // jshint ignore:line
+var Tabmix = {
   get prefs() {
     delete this.prefs;
     return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
