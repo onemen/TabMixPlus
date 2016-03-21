@@ -2755,7 +2755,7 @@ TabmixProgressListener = {
             tab._tabmix_downloadingTimeout = null;
             if (this && this.mTabBrowser && tab && tab.parentNode)
               this.mTabBrowser.removeTab(tab, {animate: false});
-          }, 500, this);
+          }, 1000, this);
         }
 
         let tabsCount = this.mTabBrowser.visibleTabs.length;
