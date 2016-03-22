@@ -127,7 +127,7 @@ var TMP_extensionsCompatibility = {
             aTab.setAttribute("image", browser.mIconURL);
           else
             aTab.removeAttribute("image");
-          gBrowser._tabAttrModified(aTab);
+          gBrowser._tabAttrModified(aTab, ["image"]);
         }
       }
     }

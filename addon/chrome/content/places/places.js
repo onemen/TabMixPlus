@@ -312,7 +312,7 @@ var TMP_Places = {
       aTab.label = title;
       aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
-      gBrowser._tabAttrModified(aTab);
+      gBrowser._tabAttrModified(aTab, ["label", "crop"]);
       if (aTab.selected)
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))

@@ -1329,7 +1329,7 @@ var tablib = { // eslint-disable-line
         aTab.setAttribute("mergeselected", "true");
         aTab.label = "(*) " + aTab.label;
       }
-      this._tabAttrModified(aTab);
+      this._tabAttrModified(aTab, ["label"]);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
         TabmixTabbar.updateBeforeAndAfter();
