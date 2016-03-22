@@ -177,7 +177,7 @@ this.console = {
     return false;
   },
 
-  stackTrace: function TMP_console_stackTrace() {
+  callerTrace: function TMP_console_callerTrace() {
     let stack = this._getStackExcludingInternal().join("\n");
 
     return {

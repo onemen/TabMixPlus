@@ -248,7 +248,7 @@ var Tabmix = {
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
                    "getObject", "log", "getCallerNameByIndex", "callerName",
-                   "clog", "isCallerInList", "stackTrace",
+                   "clog", "isCallerInList", "callerTrace",
                    "obj", "assert", "trace", "reportError"];
     methods.forEach(function(id) {
       this[id] = function TMP_console_wrapper() {
