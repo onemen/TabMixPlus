@@ -1191,6 +1191,7 @@ Tabmix.navToolbox = {
         Tabmix.originalFunctions.oldHandleCommand.toString().indexOf(TMP_fn) > -1)
       return;
 
+    let $LF = "\n                ";
     // we don't do anything regarding IeTab and URL Suffix extensions
     Tabmix.changeCode(obj, "gURLBar." + fn, {silent: this.urlBarInitialized})._replace(
       '{',
@@ -1218,8 +1219,14 @@ Tabmix.navToolbox = {
       '(where == "current" || !isMouseEvent && !loadNewTab && /^tab/.test(where))'
     )._replace(
       'openUILinkIn(url, where, params);',
-      'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");\
-       $&'
+      'params.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");' + $LF +
+      'if (/^tab/.test(where)) {' + $LF +
+      '  let openTabNext = Tabmix.prefs.getBoolPref("openTabNext") &&' + $LF +
+      '    !Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent");' + $LF +
+      '  TMP_extensionsCompatibility.treeStyleTab' + $LF +
+      '    .openNewTabNext(gBrowser.selectedTab, openTabNext);' + $LF +
+      '}' + $LF +
+      '$&'
     ).toCode();
 
     // don't call ChangeCode.isValidToChange after urlbar initialized,

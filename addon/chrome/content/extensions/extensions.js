@@ -77,6 +77,7 @@ var TMP_extensionsCompatibility = {
     try {
       if ("TreeStyleTabService" in window) {
         this.treeStyleTab.onContentLoaded();
+        this.treeStyleTab.installed = true;
         Tabmix.extensions.treeStyleTab = true;
         Tabmix.extensions.verticalTabBar = true;
       }
@@ -566,6 +567,7 @@ TMP_extensionsCompatibility.newsfox = {
  *  https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
  */
 TMP_extensionsCompatibility.treeStyleTab = {
+  installed: false,
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
   preInit: function() {
@@ -766,10 +768,41 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
+  },
 
-    Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
-      'var newTab = gBrowser.addTab',
-      'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
-    ).toCode();
-  }
+  onBeforeNewTabCommand: function(tab, openTabNext) {
+    if (!this.installed) {
+      return;
+    }
+    if (openTabNext) {
+      this.openNewTabNext(tab, true);
+    } else {
+      gBrowser.treeStyleTab.onBeforeNewTabCommand();
+    }
+  },
+
+  // instruct treeStyleTab to use 'kNEWTAB_OPEN_AS_NEXT_SIBLING' when our preference
+  // is to open the tab next
+  openNewTabNext: function(tab, openTabNext, clean) {
+    if (!this.installed || !openTabNext) {
+      return;
+    }
+
+    let tst = gBrowser.treeStyleTab;
+    let browser = tst.getBrowserFromTabBrowserElements(tab);
+    if (!browser) {
+      return;
+    }
+    let baseTab = tst.getTabFromBrowser(browser, tst.getTabBrowserFromChild(browser));
+
+    // clean previously ready state set by treeStyleTab
+    if (clean) {
+      tst.stopToOpenChildTab(baseTab);
+      let parentTab = tst.getParentTab(baseTab);
+      if (parentTab) {
+        tst.stopToOpenChildTab(parentTab);
+      }
+    }
+    tst.readyToOpenNextSiblingTabNow(baseTab);
+  },
 };

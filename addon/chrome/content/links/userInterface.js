@@ -158,6 +158,10 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
     privateTab.readyToOpenTab(false);
   }
+
+  let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
+  let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+  TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
   var newTab = gBrowser.addTab(url, {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
     ownerTab: loadInBackground ? null : selectedTab,
@@ -176,12 +180,8 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
     }
   }
 
-  if (aTab && aTab.localName == "tab")
-    gBrowser.moveTabTo(newTab, aTab._tPos + 1);
-  else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
-    // we used to move tab after lastRelatedTab but we don't need it on new tabs
-    // and it mess with recently used tabs order
-    gBrowser.moveTabTo(newTab, selectedTab._tPos + 1);
+  if (openTabNext) {
+    gBrowser.moveTabTo(newTab, (baseTab || selectedTab)._tPos + 1);
   }
   // make sure to update recently used tabs
   // if user open many tabs quickly select event don't have time to fire

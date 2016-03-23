@@ -571,22 +571,28 @@ var tablib = { // eslint-disable-line
         arguments[1] = "tabshifted";
       }
 
+      if (where == window) {
+        return Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
+      }
+
+      let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+          "openTabNext" : "openDuplicateNext";
+      let openTabNext = Tabmix.prefs.getBoolPref(pref);
+      TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
+
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
 
-      if (where != window) {
-        let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-            "openTabNext" : "openDuplicateNext";
-        let newTab = gBrowser.getTabForLastPanel();
-        if (Tabmix.prefs.getBoolPref(pref)) {
-          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
-        }
-        let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
-        let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
-        if (selectNewTab) {
-          gBrowser.selectedTab = newTab;
-        }
+      let newTab = gBrowser.getTabForLastPanel();
+      if (openTabNext) {
+        let pos = newTab._tPos > aTab._tPos ? 1 : 0;
+        gBrowser.moveTabTo(newTab, aTab._tPos + pos);
       }
+      let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
+      let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
+      if (selectNewTab) {
+        gBrowser.selectedTab = newTab;
+      }
+
       return result;
     };
 
@@ -934,8 +940,11 @@ var tablib = { // eslint-disable-line
         aTab = this.mCurrentTab;
 
       var newTab = null;
-      // try to have SessionStore duplicate the given tab
+      let copyToNewWindow = window != aTab.ownerDocument.defaultView;
+      let openDuplicateNext = !disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext");
+      TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openDuplicateNext);
 
+      // try to have SessionStore duplicate the given tab
       if (!aHref && !aTabData) {
         newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
       } else {
@@ -952,8 +961,7 @@ var tablib = { // eslint-disable-line
       this.selectedBrowser.focus();
 
       // move new tab to place before we select it
-      var copyToNewWindow = window != aTab.ownerDocument.defaultView;
-      if (!disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext")) {
+      if (openDuplicateNext) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
         this.moveTabTo(newTab, aTab._tPos + pos);
       }
