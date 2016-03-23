@@ -118,7 +118,7 @@
         "no-restricted-modules": 0, // node
         "no-return-assign": [2, "except-parens"],
         "no-script-url": 0,
-        "no-self-compare": 0,
+        "no-self-compare": 2,
         "no-sequences": 2,
         "no-shadow": [2, {"hoist": "all"}],
         "no-shadow-restricted-names": 2,
@@ -183,7 +183,7 @@
         "quotes": [0, "double"],
         "radix": 0,
         "semi": 2,
-        "semi-spacing": [0, {"before": false, "after": true}],
+        "semi-spacing": [2, {"before": false, "after": true}],
         "sort-vars": 0,
         "keyword-spacing": 2,
         "space-before-blocks": [2, "always"],
