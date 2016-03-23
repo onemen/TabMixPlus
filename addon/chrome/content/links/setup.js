@@ -341,7 +341,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   *  Don't use return in this function
   *  TreeStyleTabe add some code at the end
   */
-  let transitionend = Tabmix.callerName() == "onxbltransitionend";
+  let transitionend = Tabmix.callerTrace("onxbltransitionend");
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {

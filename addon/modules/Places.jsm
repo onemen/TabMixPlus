@@ -181,9 +181,9 @@ PlacesUtilsInternal = {
       '        if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
       '                       TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
       '        else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\n' +
-      '          let caller = browserWindow.Tabmix.getCallerNameByIndex(2);\n' +
-      '          if (caller != "PC_doCommand")\n' +
+      '          if (!browserWindow.Tabmix.callerTrace("PC_doCommand")) {\n' +
       '            aWhere = TMP_Places.fixWhereToOpen(null, aWhere);\n' +
+      '          }\n' +
       '        }\n' +
       '      }\n' +
       '      if (browserWindow && aWhere == "current")\n' +

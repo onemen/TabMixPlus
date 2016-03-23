@@ -826,8 +826,8 @@ Tabmix.tabsUtils = {
           Services.prefs.getBoolPref("browser.tabs.animate")) {
         // after 250ms new tab is fully opened
         if (!this.adjustNewtabButtonTimeout) {
-          let timeout = 250, callerName = Tabmix.callerName();
-          if (callerName == "onxbloverflow") {
+          let timeout = 250;
+          if (Tabmix.callerTrace("onxbloverflow")) {
             let timeFromLastTabOpened = Date.now() - Tabmix._lastTabOpenedTime;
             if (timeFromLastTabOpened < 250)
               timeout = 0;

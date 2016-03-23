@@ -499,7 +499,7 @@ var tablib = { // eslint-disable-line
     // before our mousedown handler can prevent it
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
       '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer.visible", {setter: true})._replace(
@@ -574,7 +574,7 @@ var tablib = { // eslint-disable-line
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
 
       if (where != window) {
-        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+        let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
             "openTabNext" : "openDuplicateNext";
         let newTab = gBrowser.getTabForLastPanel();
         if (Tabmix.prefs.getBoolPref(pref)) {
@@ -786,7 +786,7 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
       'var appStartup',
-      'let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");' +
+      'let closedtByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
       'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
       '  return false;' +
       '$&'
@@ -1460,8 +1460,9 @@ var tablib = { // eslint-disable-line
 
     let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
       // see tablib.closeWindow comment
-      if (Tabmix.isCallerInList("BG__onQuitRequest"))
+      if (Tabmix.callerTrace("BG__onQuitRequest")) {
         return true;
+      }
       var closing = this.closingTabsEnum;
       // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
       if (typeof (whatToClose) == "boolean")
@@ -1865,8 +1866,7 @@ var tablib = { // eslint-disable-line
     // we always show our prompt on Mac
     var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
-    var quitType = Tabmix.getCallerNameByIndex(2);
-    var askBeforSave = quitType != "restartApp" && quitType != "restart";
+    var askBeforSave = !Tabmix.callerTrace("restartApp", "restart");
     var isLastWindow = Tabmix.isLastBrowserWindow;
     var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);
     var canClose = result.canClose;

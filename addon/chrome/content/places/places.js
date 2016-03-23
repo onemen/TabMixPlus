@@ -63,7 +63,7 @@ var TMP_Places = {
       let $LF = '\n        ';
       Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
         'URIs.push(tab.linkedBrowser.currentURI);',
-        'if (Tabmix.getCallerNameByIndex(2) == "PCH_updateBookmarkAllTabsCommand") {' + $LF +
+        'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
         '  $&' + $LF +
         '} else {' + $LF +
         '  let uri = tab.linkedBrowser.currentURI;' + $LF +
@@ -683,11 +683,12 @@ Tabmix.onContentLoaded = {
     )._replace(
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +
+      'let callerTrace = Tabmix.callerTrace();' + $LF +
       'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick"];' + $LF +
-      'let pref = Tabmix.isCallerInList(list) ?' + $LF +
+      'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
       'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
-      '                        Tabmix.callerName() != "onPopupClick";' + $LF +
+      '                        !callerTrace.contain("onPopupClick");' + $LF +
       'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
       '  shift = !shift;' + $LF +
       '$&' + $LF +
@@ -703,11 +704,11 @@ Tabmix.onContentLoaded = {
     Tabmix.changeCode(fnObj, fnName)._replace(
       '{',
       '{\n' +
-      '  let tabmixCaller = Tabmix.getCallerNameByIndex(2);\n' +
-      '  if (tabmixCaller == "BG_observe") {\n' +
+      '  let callerTrace = Tabmix.callerTrace();\n' +
+      '  if (callerTrace.contain("BG_observe")) {\n' +
       '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
-      '      tabmixCaller == "ReaderParent.toggleReaderMode") {\n' +
+      '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '  }\n'
     )._replace(

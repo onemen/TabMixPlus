@@ -135,20 +135,6 @@ this.console = {
     return fnName;
   },
 
-/*
-  _nameFromComponentsStack: function(Cs) {
-    return Cs.name ||
-           Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
-  },
-
-  callerName: function() {
-    try {
-      var name = this._nameFromComponentsStack(Components.stack.caller.caller);
-    } catch (ex) { }
-    return name || "";
-  },
-*/
-
   callerName: function TMP_console_callerName() {
     return this.getCallerNameByIndex(1);
   },
@@ -177,14 +163,24 @@ this.console = {
     return false;
   },
 
-  callerTrace: function TMP_console_callerTrace() {
-    let stack = this._getStackExcludingInternal().join("\n");
+  callerTrace: function TMP_console_callerTrace(...args) {
+    let stack = this._getStackExcludingInternal();
 
-    return {
+    let stackUtil = {
       contain: function(...names) {
-        return names.some(name => stack.indexOf(name) > -1);
+        if (Array.isArray(names[0])) {
+          names = names[0];
+        }
+        let _isCallerInList = function(caller) {
+          return names.some(name => caller.startsWith(name + "@"));
+        };
+        return stack.some(_isCallerInList);
       },
     };
+    if (args.length) {
+      return stackUtil.contain.apply(null, args);
+    }
+    return stackUtil;
   },
 
 /*
