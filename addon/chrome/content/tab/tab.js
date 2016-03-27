@@ -1796,6 +1796,13 @@ gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
+    // make sure we have valid height for the buttons. with some extensions
+    // combination it is possible to get zero height, if Tabmix.getButtonsHeight
+    // called to early
+    if (!Tabmix._buttonsHeight) {
+      Tabmix.getButtonsHeight(true);
+    }
+
     let skin;
     // with Walnut theme we get wrong height on Firefox 36
     if (Tabmix._buttonsHeight > 50) {

@@ -99,7 +99,7 @@ Tabmix.sessionInitialized = function() {
 
 // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
 // from Tabmix.afterDelayedStartup
-Tabmix.getButtonsHeight = function() {
+Tabmix.getButtonsHeight = function(setDefault) {
   if (gBrowser.tabContainer.orient == "horizontal") {
     let tabBar = gBrowser.tabContainer;
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
@@ -108,6 +108,10 @@ Tabmix.getButtonsHeight = function() {
     this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
     if (stripIsHidden)
       tabBar.visible = false;
+
+    if (setDefault && !this._buttonsHeight) {
+      this._buttonsHeight = TabmixSvc.australis ? 31 : 24;
+    }
   } else {
     this._buttonsHeight = 24;
   }

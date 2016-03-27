@@ -284,7 +284,7 @@ this.DynamicRules = {
     this.createTemplates();
 
     function updateButtonHeight(Tabmix, rules) {
-      let newHeight = Tabmix.getButtonsHeight();
+      let newHeight = Tabmix.getButtonsHeight(true);
       ["new-tab", "pb-indicator", "scrollbutton", "toolbarbutton"].forEach(name => {
         let rule = rules[name + "-height"];
         if (typeof rule == "object") {
