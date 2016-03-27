@@ -254,7 +254,7 @@ var TabmixTabbar = {
       return;
     }
 
-    var newHeight, fillRowsHeights;
+    var newHeight, fillRowsHeights, updateAppearanceOnce;
     if (typeof (this._heights[tabsPosition]) == "undefined") {
       this._heights[tabsPosition] = {};
       fillRowsHeights = true;
@@ -262,6 +262,7 @@ var TabmixTabbar = {
     if (aRows in this._heights[tabsPosition])
       newHeight = this._heights[tabsPosition][aRows];
     else {
+      updateAppearanceOnce = true;
       if (Tabmix.tabsUtils.tabstripInnerbox) {
         let height = Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
         if (tabBar.getAttribute("multibar") == "scrollbar") {
@@ -292,8 +293,7 @@ var TabmixTabbar = {
       this.setHeightByPixels(newHeight);
 
     // fix multi-row background on windows XP
-    if (this.updateAppearanceOnce) {
-      this.updateAppearanceOnce = false;
+    if (this.updateAppearanceOnce && updateAppearanceOnce) {
       TabsInTitlebar.updateAppearance(true);
     }
   },
