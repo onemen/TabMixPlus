@@ -833,9 +833,6 @@ var TMP_eventListener = {
     }
 
     // clean WeakMap
-    let browser = tab.linkedBrowser;
-    if (Tabmix.isVersion(320) && browser && TabmixSvc.syncHandlers.has(browser.permanentKey))
-      TabmixSvc.syncHandlers.delete(browser.permanentKey);
     if (this.tabWidthCache.has(tab))
       this.tabWidthCache.delete(tab);
   },

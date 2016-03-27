@@ -36,15 +36,12 @@ this.DocShellCapabilities = {
       return this.caps.filter(cap => !browser.docShell["allow" + cap]);
     }
 
-    if (tab.ownerDocument.defaultView.__SSi) {
+    let window = tab.ownerDocument.defaultView;
+    if (window && window.__SSi) {
       let tabState = TabState.collect(tab);
       return tabState.disallow || "";
     }
 
-    try {
-      let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-      return handler.getCapabilities();
-    } catch (ex) { }
     return "";
   },
 

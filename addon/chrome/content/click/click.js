@@ -608,6 +608,9 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
+    gContextMenu.tabmixLinks = Tabmix.contextMenuLinks;
+    Tabmix.contextMenuLinks = null;
+
     var tab = gBrowser.selectedTab;
     try {
       var contentClick = gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage;
@@ -730,26 +733,8 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = [];
-    let browser = window.gBrowser.selectedBrowser;
-
-    function getLinks() {
-      try {
-        let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-        let result = handler.getSelectedLinks();
-        gContextMenu.tabmixLinks = result && result.split('\n');
-      } catch (ex) {
-        Tabmix.log("unable to get syncHandlers for page " +
-                   browser.currentURI.spec + "\n" + ex);
-      }
-      return gContextMenu.tabmixLinks || [];
-    }
-
-    if (Tabmix.isVersion(320))
-      urls = gContextMenu.tabmixLinks || getLinks();
-    // getSelectedLinks was not implemented for remote tabs before Firefox 32
-    else if (browser.getAttribute("remote") != "true")
-      urls = Tabmix.ContextMenu.getSelectedLinks(content, check);
+    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
+        Tabmix.ContextMenu.getSelectedLinks(content, check);
 
     if (!check && urls.length) {
       Tabmix.loadTabs(urls, false);

@@ -50,10 +50,6 @@ var TabmixContentHandler = {
   init: function() {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
 
-    // Send a CPOW to the parent so that it can synchronously request
-    // docShell capabilities.
-    sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
-
     if (PROCESS_TYPE_CONTENT) {
       addEventListener("drop", this.onDrop);
     }
@@ -143,15 +139,6 @@ var TabmixContentHandler = {
 
   getCapabilities: function() {
     return DocShellCapabilities.collect(docShell).join(",") || "";
-  },
-
-  getSelectedLinks: function() {
-    return ContextMenu.getSelectedLinks(content).join("\n");
-  },
-
-  wrapNode: function(node) {
-    let window = TabmixClickEventHandler._focusedWindow;
-    return LinkNodeUtils.wrap(node, window);
   },
 
   onDrop: function(event) {
@@ -382,6 +369,28 @@ var AboutNewTabHandler = {
   }
 };
 
+var ContextMenuHandler = {
+  init: function(global) {
+    Cc["@mozilla.org/eventlistenerservice;1"]
+      .getService(Ci.nsIEventListenerService)
+      .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+  },
+
+  prepareContextMenu: function(event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    let links;
+    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks")) {
+      links = ContextMenu.getSelectedLinks(content).join("\n");
+    }
+
+    sendRpcMessage("Tabmix:contextmenu", {links: links});
+  }
+};
+
 TabmixContentHandler.init();
 TabmixClickEventHandler.init(this);
 AboutNewTabHandler.init(this);
+ContextMenuHandler.init(this);

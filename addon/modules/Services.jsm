@@ -155,8 +155,6 @@ this.TabmixSvc = {
     }
   },
 
-  syncHandlers: new WeakMap(),
-
   windowStartup: {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
                                            Ci.nsISupportsWeakReference]),

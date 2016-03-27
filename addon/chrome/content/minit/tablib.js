@@ -1117,8 +1117,10 @@ var tablib = { // eslint-disable-line
         let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
                     altKey: false, target: {},
                     tabmix_openLinkWithHistory: true};
+        // we only get here when it is safe to use contentWindowAsCPOW
+        // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, url, browser, document.commandDispatcher.focusedWindow);
+              target, url, browser, gBrowser.selectedBrowser._contentWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
       return url;

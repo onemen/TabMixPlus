@@ -340,6 +340,7 @@
         "Scratchpad": false,
         "sendAsyncMessage": false,
         "sendSyncMessage": false,
+        "sendRpcMessage": false,
         "Services": false,
         "SidebarUtils": false,
         "SessionStore": false,

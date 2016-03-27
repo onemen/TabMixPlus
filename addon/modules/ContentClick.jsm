@@ -180,11 +180,6 @@ ContentClickInternal = {
   },
 
   getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
-    if (browser.getAttribute("remote") == "true" &&
-        TabmixSvc.syncHandlers.has(browser.permanentKey)) {
-      let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-      linkNode = handler.wrapNode(linkNode);
-    }
     let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button === 0);
     return this._getParamsForLink(event, wrappedNode, href, browser);
   },

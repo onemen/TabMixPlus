@@ -6,12 +6,12 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
-  "Tabmix:SetSyncHandler",
   "Tabmix:restorePermissionsComplete",
   "Tabmix:updateScrollPosition",
   "Tabmix:reloadTab",
   "Tabmix:getOpener",
   "Tabmix:contentDrop",
+  "Tabmix:contextmenu",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -59,9 +59,6 @@ this.TabmixUtils = {
     let browser = message.target;
     let win, tab;
     switch (message.name) {
-      case "Tabmix:SetSyncHandler":
-        TabmixSvc.syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
-        break;
       case "Tabmix:restorePermissionsComplete":
         DocShellCapabilities.update(browser, message.data);
         break;
@@ -95,6 +92,12 @@ this.TabmixUtils = {
           return true;
         }
         return false;
+      }
+      case "Tabmix:contextmenu": {
+        win = browser.ownerDocument.defaultView;
+        let links = message.data.links;
+        win.Tabmix.contextMenuLinks = links && links.split("\n") || [];
+        break;
       }
     }
     return null;

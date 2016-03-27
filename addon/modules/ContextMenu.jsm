@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["ContextMenu"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm");
@@ -12,11 +12,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 this.ContextMenu = {
   getSelectedLinks: function(content, check) {
-    // get focused window selection
-    let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
-    let focusedWindow = {};
-    fm.getFocusedElementForWindow(content, true, focusedWindow);
-    let selectionObject = focusedWindow.value.getSelection();
+    let doc = content.document;
+    let selectionObject = doc.getSelection();
     if (selectionObject.isCollapsed) // nothing selected
       return [];
 
@@ -31,7 +28,6 @@ this.ContextMenu = {
     };
 
     // do urlSecurityCheck for each link in the treeWalker....
-    let doc = content.document;
     let secMan = Services.scriptSecurityManager;
     let securityCheck = function(url) {
       if (!url)
