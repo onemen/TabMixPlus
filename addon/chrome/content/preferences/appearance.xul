@@ -121,7 +121,7 @@
             <separator/>
             <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
                          hidden="true" id="treeStyleTab.msg">
-                &verticalTabbar.description;
+                &verticalTabbar.description1;
             </description>
             <!-- choose tab bar position -->
             <hbox align="center">

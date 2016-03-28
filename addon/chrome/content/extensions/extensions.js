@@ -221,7 +221,9 @@ var TMP_extensionsCompatibility = {
   onWindowOpen: function TMP_EC_onWindowOpen() {
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
     // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
-    if (typeof VerticalTabs == "object" || typeof sidetabs == "object") {
+    // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
+    if (typeof VerticalTabs == "object" || typeof sidetabs == "object" ||
+        typeof tabkitGlobal == "object") {
       Tabmix.extensions.verticalTabs = true;
       Tabmix.extensions.verticalTabBar = true;
     }
