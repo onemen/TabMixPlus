@@ -382,7 +382,8 @@ var ContextMenuHandler = {
     }
 
     let links;
-    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks")) {
+    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks") &&
+        typeof content.document.getSelection == "function") {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 
