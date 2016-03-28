@@ -3,8 +3,6 @@
 <!DOCTYPE overlay [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd">
-%tabsDTD;
 ]>
 
 <overlay id="SessionPaneOverlay"
@@ -66,8 +64,6 @@
                   name="extensions.tabmix.sessions.restore.concatenate"      type="bool"/>
       <preference id="pref_onRestore.reloadall"
                   name="extensions.tabmix.sessions.restore.reloadall"        type="bool"/>
-      <preference id="pref_restore_on_demand"
-                  name="browser.sessionstore.restore_on_demand"              type="bool"/>
       <preference id="pref_session.History"
                   name="extensions.tabmix.sessions.save.history"             type="bool"/>
       <preference id="pref_session.Permissions"
@@ -213,8 +209,6 @@
                             preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
                   <checkbox_tmp id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
                   <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
-                  <checkbox id="restoreOnDemand" label="&restoreTabsOnDemand.label;"
-                            preference="pref_restore_on_demand"/>
                 </groupbox>
               </tabpanel>
               <!-- Build-in SessionStore (we hide thid panel, don't put it in first or last tab)-->
