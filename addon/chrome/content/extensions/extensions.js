@@ -783,6 +783,14 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
+  // Don't call openNewTabNext if treeStyleTab already set readiedToAttachNewTab
+  checkToOpenTabNext: function(tab, check) {
+    if (this.installed && check &&
+        !gBrowser.treeStyleTab.checkToOpenChildTab(tab)) {
+      this.openNewTabNext(tab, true);
+    }
+  },
+
   // instruct treeStyleTab to use 'kNEWTAB_OPEN_AS_NEXT_SIBLING' when our preference
   // is to open the tab next
   openNewTabNext: function(tab, openTabNext, clean) {

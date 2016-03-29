@@ -153,6 +153,7 @@ var tablib = { // eslint-disable-line
       [obj, fnName] = [gBrowser, "addTab"];
     }
 
+    let $LF = '\n            ';
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       '{', '{\n' +
       '            let dontMove, isPending, callerTrace = Tabmix.callerTrace(),\n' +
@@ -192,17 +193,20 @@ var tablib = { // eslint-disable-line
       'Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")',
       'openTabnext'
     )._replace(
-      't.dispatchEvent(evt);',
+      'this.tabContainer.appendChild(t);',
       'var _selectedTab = this.selectedTab;' +
       'var _lastRelatedTab = this._lastRelatedTab;' +
-      't.dispatchEvent(evt);' +
       'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
       'if (openTabnext) {' +
       '  if (dontMove || Tabmix.dontMoveNewTab(callerTrace))' +
       '    openTabnext = false;' +
       '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
-      '    aRelatedToCurrent = true;' +
-      '}'
+      '    aRelatedToCurrent = true;' + $LF +
+      '  let checkToOpenTabNext = openTabnext && (callerTrace.contain("openUILinkIn") || aFromExternal) &&' + $LF +
+      '      (aRelatedToCurrent == null ? aReferrerURI : aRelatedToCurrent);' + $LF +
+      '  TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);' + $LF +
+      '}' + $LF +
+      '$&'
     )._replace(//  new tab can trigger selection change by some extensions (divX HiQ)
       't.owner = this.selectedTab;', 't.owner = _selectedTab;'
     ).toCode();
