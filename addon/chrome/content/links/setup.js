@@ -61,19 +61,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
   try {
     var SM = TabmixSessionManager;
-    SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
-    SM.isWindowPrivate = function(aWindow) {
-      return PrivateBrowsingUtils.isWindowPrivate(aWindow);
-    };
-    // isPrivateWindow is boolean property of this window, user can't change private status of a window
-    SM.isPrivateWindow = SM.isWindowPrivate(window);
-    SM.__defineGetter__("isPrivateSession", function() {
-      return this.globalPrivateBrowsing || TabmixSvc.sm.private;
-    });
-    // set this flag to false if user opens in a session at least one non-private window
-    SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
-    if (SM.firstNonPrivateWindow)
-      TabmixSvc.sm.private = false;
+    SM.initializePrivateStateVars();
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||

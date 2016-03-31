@@ -247,9 +247,27 @@ TabmixSessionManager = {
   afterCrash: false,
   lastSessionWasEmpty: false,
 
-  // whether we are in private browsing mode
+  // private window functions
   globalPrivateBrowsing: false,
   firstNonPrivateWindow: false,
+
+  initializePrivateStateVars: function() {
+    this.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
+    this.isPrivateWindow = this.isWindowPrivate(window);
+    this.firstNonPrivateWindow = TabmixSvc.sm.private && !this.isPrivateWindow;
+    if (this.firstNonPrivateWindow) {
+      // set this flag to false if user opens in a session at least one non-private window
+      TabmixSvc.sm.private = false;
+    }
+  },
+
+  get isPrivateSession() {
+    return this.globalPrivateBrowsing || TabmixSvc.sm.private;
+  },
+
+  isWindowPrivate: function(aWindow) {
+    return PrivateBrowsingUtils.isWindowPrivate(aWindow);
+  },
 
   get _statesToRestore() {
     return TabmixSvc.sm.statesToRestore;
