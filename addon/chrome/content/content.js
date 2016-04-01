@@ -391,7 +391,76 @@ var ContextMenuHandler = {
   }
 };
 
+const AMO = "https://addons.mozilla.org/en-us/firefox/addon/tab-mix-plus/";
+const BITBUCKET = "https://bitbucket.org/onemen/tabmixplus/issues?status=new&status=open";
+
+var TabmixPageHandler = {
+  init: function(global) {
+    global.addEventListener("DOMContentLoaded", this);
+  },
+
+  handleEvent: function(event) {
+    const doc = content.document;
+    if (event.target != doc) {
+      return;
+    }
+
+    switch (doc.documentURI.toLowerCase()) {
+      case AMO:
+        if (event.type == "DOMContentLoaded") {
+          this.count = 0;
+          content.addEventListener("pageshow", this);
+        }
+        this.addAMOButton(event.type);
+        break;
+      case BITBUCKET:
+        this.styleBitbucket();
+        break;
+    }
+  },
+
+  count: 0,
+  addAMOButton: function(eventType) {
+    const doc = content.document;
+    // add-review is null on DOMContentLoaded
+    const addReview = doc.getElementById("add-review");
+    if (eventType != "pageshow" && !addReview && this.count++ < 10) {
+      this._timeoutID = setTimeout(() => this.addAMOButton("timeout"), 250);
+      return;
+    }
+    if (eventType == "pageshow" || addReview) {
+      content.removeEventListener("pageshow", this);
+    }
+    if (addReview && this._timeoutID) {
+      clearTimeout(this._timeoutID);
+      this._timeoutID = null;
+    }
+    const ID = "tabmixplus-bug-report";
+    if (addReview && !doc.getElementById(ID)) {
+      const bugReport = doc.createElement("a");
+      bugReport.href = BITBUCKET;
+      bugReport.textContent = TabmixSvc.getString("bugReport.label");
+      bugReport.id = ID;
+      bugReport.className = "button";
+      bugReport.target = "_blank";
+      bugReport.style.marginBottom = "4px";
+      const div = doc.createElement("DIV");
+      div.appendChild(bugReport);
+      addReview.parentNode.insertBefore(div, addReview);
+    }
+  },
+
+  styleBitbucket: function() {
+    let createIssue = content.document.getElementById("create-issue-contextual");
+    if (createIssue) {
+      createIssue.classList.remove("aui-button-subtle");
+      createIssue.classList.add("aui-button-primary");
+    }
+  },
+};
+
 TabmixContentHandler.init();
 TabmixClickEventHandler.init(this);
 AboutNewTabHandler.init(this);
 ContextMenuHandler.init(this);
+TabmixPageHandler.init(this);
