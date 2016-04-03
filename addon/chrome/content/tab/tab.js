@@ -1229,7 +1229,7 @@ gTMPprefObserver = {
       for (var i = 0; i < this.OBSERVING.length; ++i)
         Services.prefs.addObserver(this.OBSERVING[i], this, false);
     } catch (e) {
-      Tabmix.log("prefs-Observer failed to attach:" + "\n" + e);
+      Tabmix.log("prefs-Observer failed to attach:\n" + e);
       Tabmix.prefs.setBoolPref("PrefObserver.error", true);
     }
   },

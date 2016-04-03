@@ -131,7 +131,7 @@ module.exports = {
     "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
     "no-use-before-define": [2, "nofunc"],
     "no-useless-call": 0,
-    "no-useless-concat": 0,
+    "no-useless-concat": 2,
     "no-useless-constructor": 2,
     "no-useless-escape": 0,
     "no-void": 0,

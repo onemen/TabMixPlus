@@ -964,7 +964,7 @@ TabmixSessionManager = {
     var root = this.getResource(path, prop);
     var container = this.initContainer(root);
     if (container == "error") {
-      Tabmix.log("wrapContainer error path " + path + "\n" + "prop " + prop);
+      Tabmix.log("wrapContainer error path " + path + "\nprop " + prop);
       return "error";
     }
     return {
@@ -1255,7 +1255,7 @@ TabmixSessionManager = {
         this._interval += 500;
         this.saveStateDelayed();
       }
-      Services.console.logStringMessage("TabMix :\n" + "Error when tabmix try to write to session.rdf file");
+      Services.console.logStringMessage("TabMix :\nError when tabmix try to write to session.rdf file");
     }
   },
 

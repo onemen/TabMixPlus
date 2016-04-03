@@ -122,7 +122,7 @@ var Tabmix = {
       let extensionName = index > -1 ?
          path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
+                 " from:\nfile: chrome:" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
                  (extensionName ? (" and " + extensionName + "developer.") : "."));
     } else {
