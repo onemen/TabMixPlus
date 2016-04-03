@@ -18,7 +18,7 @@ this.AsyncUtils = {
   },
 
   spawnFn: function(thisArg, fn, index) {
-    return this.promisify(thisArg, fn, index).call(undefined);
+    return this.promisify(thisArg, fn, index)();
   },
 
   asyncFn: function(thisArg, fn, index) {

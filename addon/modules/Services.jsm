@@ -123,7 +123,7 @@ this.TabmixSvc = {
     while (windowsEnum.hasMoreElements()) {
       let window = windowsEnum.getNext();
       if (!window.closed) {
-        aFunc.call(null, window);
+        aFunc(window);
       }
     }
   },
