@@ -94,7 +94,7 @@ var tablib = { // eslint-disable-line
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlaged = flag => !!(flags & Ci.nsIWebNavigation[flag]);
+      let isFlaged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
       params.inBackground = false;
       params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
       params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
@@ -1892,7 +1892,7 @@ var tablib = { // eslint-disable-line
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
       canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
-      Services.prefs.setCharPref(pref, oldTime * 1 + (new Date().valueOf() - startTime));
+      Services.prefs.setCharPref(pref, Number(oldTime) + (new Date().valueOf() - startTime));
     }
 
     TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);

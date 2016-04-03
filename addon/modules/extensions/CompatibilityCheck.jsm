@@ -53,7 +53,7 @@ CompatibilityCheck.prototype = {
   getIncompatibleList: function TMP_EX_getIncompatibleList() {
     function isPending(aAddon, aAction) {
       var action = AddonManager["PENDING_" + aAction.toUpperCase()];
-      return !!(aAddon.pendingOperations & action);
+      return Boolean(aAddon.pendingOperations & action);
     }
 
     function AddOn(addon) {

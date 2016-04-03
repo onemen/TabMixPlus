@@ -374,7 +374,7 @@ var TMP_LastTab = {
     var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
     if (tabPreviews) {
-      var tabPreviewsCurentStatus = !!ctrlTab._recentlyUsedTabs;
+      var tabPreviewsCurentStatus = Boolean(ctrlTab._recentlyUsedTabs);
       tabPreviews = mostRecentlyUsed && Tabmix.prefs.getBoolPref("lasttab.tabPreviews");
       if (tabPreviewsCurentStatus != tabPreviews) {
         if (tabPreviews) {

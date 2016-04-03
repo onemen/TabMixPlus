@@ -1837,7 +1837,7 @@ gTMPprefObserver = {
       '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule, "scrollbutton-height");
 
-    let _buttonsHeight = Tabmix._buttonsHeight - 1 * (Tabmix.isVersion(310) && !Tabmix.isVersion(420));
+    let _buttonsHeight = Tabmix._buttonsHeight - Number(Tabmix.isVersion(310) && !Tabmix.isVersion(420));
     newRule = '#TabsToolbar[multibar] > .toolbarbutton-1 {' +
       '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule, "toolbarbutton-height");
@@ -2168,9 +2168,8 @@ gTMPprefObserver = {
   setShowNewTabButtonAttr: function(aShow, aPosition) {
     // check new tab button visibility when we are in multi-row and the
     // preference is to show new-tab-button after last tab
-    Tabmix.tabsUtils.checkNewtabButtonVisibility =
-                  TabmixTabbar.isMultiRow && ((aShow && aPosition == 2) ||
-                  !!TabmixTabbar.newPrivateTabButton());
+    Tabmix.tabsUtils.checkNewtabButtonVisibility = TabmixTabbar.isMultiRow &&
+      ((aShow && aPosition == 2) || Boolean(TabmixTabbar.newPrivateTabButton()));
 
    /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
     *  aftertabs       - show the button after tabs

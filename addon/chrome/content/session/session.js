@@ -345,7 +345,7 @@ TabmixSessionManager = {
     obs.addObserver(this, "browser:purge-session-history", true);
     if (Tabmix.isVersion(270)) {
       if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
-        window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
+        window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
       obs.addObserver(this, "sessionstore-last-session-cleared", true);
     }
 
@@ -2537,9 +2537,9 @@ TabmixSessionManager = {
     if (aPopUp || this.isPrivateWindow)
       curTime = this.getLiteralValue(thisSession, "timestamp", 0);
     else {
-      var pref = "warnAboutClosingTabs.timeout";
-      var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) * 1 : 0;
-      curTime = new Date().valueOf() - delay;
+      let pref = "warnAboutClosingTabs.timeout";
+      let delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) : 0;
+      curTime = new Date().valueOf() - Number(delay);
     }
     var windowEnum = container.GetElements();
     while (windowEnum.hasMoreElements()) {
@@ -2651,9 +2651,9 @@ TabmixSessionManager = {
       }
       this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
       this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));
-      var pref = "warnAboutClosingTabs.timeout";
-      var delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) * 1 : 0;
-      var newTime = new Date().valueOf() - delay;
+      let pref = "warnAboutClosingTabs.timeout";
+      let delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) : 0;
+      let newTime = new Date().valueOf() - Number(delay);
       this.setLiteral(rdfNodeThisWindow, "timestamp", newTime);
       // if we overwrite window we don't load it again on restart
       if (this.overwriteWindow || overwriteWindow)
@@ -3002,7 +3002,7 @@ TabmixSessionManager = {
     // add __SS_lastSessionWindowID to force SessionStore.restoreLastSession
     // to open new window
     if (restoring)
-      window.__SS_lastSessionWindowID = "" + Date.now() + Math.random();
+      window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
     if (Tabmix.isVersion(270)) {
       TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
     } else {

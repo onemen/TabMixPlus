@@ -57,7 +57,7 @@ module.exports = {
     "no-fallthrough": 2,
     "no-floating-decimal": 0,
     "no-func-assign": 2,
-    "no-implicit-coercion": 0,
+    "no-implicit-coercion": 2,
     "no-implicit-globals": 0,
     "no-implied-eval": 2,
     "no-inline-comments": 0,

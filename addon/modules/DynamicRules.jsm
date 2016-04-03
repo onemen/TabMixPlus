@@ -416,7 +416,8 @@ function getRGBcolor(aColorCode, aOpacity) {
     if (newRGB.length < 3)
       return null;
     for (let i = 0; i < newRGB.length; i++) {
-      if (isNaN(newRGB[i].replace(/[\s]/g, "") * 1))
+      let val = Number(newRGB[i].replace(/[\s]/g, ""));
+      if (isNaN(val))
         return null;
     }
   } else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {

@@ -41,7 +41,7 @@ this.LinkNodeUtils = {
         URL: doc.URL,
         documentURI: doc.documentURI,
         defaultView: {
-          frameElement: !!doc.defaultView.frameElement
+          frameElement: Boolean(doc.defaultView.frameElement)
         },
         location: {
           href: doc.location ? doc.location.href : ""

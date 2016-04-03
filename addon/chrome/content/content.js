@@ -120,7 +120,7 @@ var TabmixContentHandler = {
             let referrer = entry.referrerURI;
             json.referrer = referrer ? referrer.spec : null;
           }
-          json.isPostData = !!json.postData;
+          json.isPostData = Boolean(json.postData);
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;

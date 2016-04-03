@@ -978,7 +978,7 @@ ContentClickInternal = {
     };
 
     let windows = [];
-    if (!!window.gBrowser && isValidWindow(window))
+    if (window.gBrowser && isValidWindow(window))
       windows.push(window);
 
     let winEnum = Services.wm.getEnumerator("navigator:browser");

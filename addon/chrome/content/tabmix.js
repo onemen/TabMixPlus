@@ -165,7 +165,7 @@ Tabmix.afterDelayedStartup = function() {
   // when we open bookmark in new window
   // get bookmark itemId and url - for use in getBookmarkTitle
   if ("bookMarkIds" in window) {
-    let items = (window.bookMarkIds + "").split("|");
+    let items = String(window.bookMarkIds).split("|");
     for (let i = 0; i < items.length; i++) {
       if (items[i] && items[i] > -1)
         gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
