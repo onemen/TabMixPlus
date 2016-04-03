@@ -146,7 +146,7 @@ module.exports = {
     "arrow-spacing": [2, {"before": true, "after": true}],
     "accessor-pairs": 2,
     "block-scoped-var": 2,
-    "block-spacing": 0,
+    "block-spacing": [2, "never"],
     "brace-style": [2, "1tbs"],
     // "callback-return": 0, // node
     "camelcase": 0,

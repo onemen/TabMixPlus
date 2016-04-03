@@ -129,7 +129,9 @@ ContentClickInternal = {
       try {
         if (!PrivateBrowsingUtils.isWindowPrivate(window))
           PlacesUIUtils.markPageAsFollowedLink(json.href);
-      } catch (ex) { /* Skip invalid URIs. */ }
+      } catch (ex) {
+        /* Skip invalid URIs. */
+      }
     };
   },
 
