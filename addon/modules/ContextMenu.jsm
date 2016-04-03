@@ -21,9 +21,8 @@ this.ContextMenu = {
       acceptNode: function(n) {
         if (n.nodeName == 'A' || n.nodeName == 'li') {
           return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
-        } else {
-          return Ci.nsIDOMNodeFilter.FILTER_SKIP;
         }
+        return Ci.nsIDOMNodeFilter.FILTER_SKIP;
       }
     };
 

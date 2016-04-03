@@ -66,7 +66,7 @@ module.exports = {
     "no-dupe-keys": 2,
     "no-dupe-args": 2,
     "no-duplicate-case": 2,
-    "no-else-return": 0,
+    "no-else-return": 2,
     "no-eq-null": 2,
     "no-eval": 0,
     // this show error on catch empty block unless there is a comment

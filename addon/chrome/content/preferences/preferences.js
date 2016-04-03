@@ -264,8 +264,8 @@ function getPrefByType(prefName) {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
     if (fn == "CharPref")
       return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-    else
-      return Services.prefs["get" + fn](prefName);
+
+    return Services.prefs["get" + fn](prefName);
   } catch (ex) {
     Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
   }

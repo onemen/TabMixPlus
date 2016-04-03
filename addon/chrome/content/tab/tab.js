@@ -179,11 +179,10 @@ var TabmixTabbar = {
     if (delay) {
       if (this.updateScrollStatus.timeout) {
         return;
-      } else {
-        this.updateScrollStatus.timeout = setTimeout(() => {
-          this.updateScrollStatus.timeout = null;
-        }, 250);
       }
+      this.updateScrollStatus.timeout = setTimeout(() => {
+        this.updateScrollStatus.timeout = null;
+      }, 250);
     }
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
@@ -482,8 +481,8 @@ var TabmixTabbar = {
     if (lastTabRow == 1) { // one row
       if (firstTab.getAttribute("selected") == "true")
         return lastTab.boxObject.height;
-      else
-        return firstTab.boxObject.height;
+
+      return firstTab.boxObject.height;
     } else if (lastTabRow == 2) { // multi-row
       let newRowHeight;
       if (lastTab.getAttribute("selected") == "true") {
@@ -492,16 +491,16 @@ var TabmixTabbar = {
         var prev = Tabmix.visibleTabs.previous(lastTab);
         if (prev && Tabmix.tabsUtils.getTabRowNumber(prev, topY) == 1)
           return lastTab.boxObject.height;
-        else
-          newRowHeight = prev.baseY - firstTab.baseY;
+
+        newRowHeight = prev.baseY - firstTab.baseY;
       } else if (firstTab.getAttribute("selected") == "true") {
         // check if 2nd visible tab is in the 2nd row
         // (not likely that user set tab width to more then half screen width)
         var next = Tabmix.visibleTabs.next(firstTab);
         if (next && Tabmix.tabsUtils.getTabRowNumber(next, topY) == 2)
           return lastTab.boxObject.height;
-        else
-          newRowHeight = lastTab.baseY - next.baseY;
+
+        newRowHeight = lastTab.baseY - next.baseY;
       } else {
         newRowHeight = lastTab.baseY - firstTab.baseY;
       }
@@ -518,11 +517,12 @@ var TabmixTabbar = {
     while (this.inSameRow(tabs.item(i), tabs.item(j)))
       i++;
 
-    if (!tabs[i]) // only one row
+    if (!tabs[i]) {// only one row
       if (tabs[j])
         return tabs[j].boxObject.height;
-      else
-        return tabs[0].boxObject.height;
+
+      return tabs[0].boxObject.height;
+    }
 
     if (tabs[i].getAttribute("selected") == "true")
       i++;
@@ -893,51 +893,48 @@ Tabmix.tabsUtils = {
         this.disAllowNewtabbutton = true;
       }
       return;
-    } else {
-      // button is NOT visible
-      //         A: 2 last tabs are in the same row:
-      //            check if we have room for the button in this row
-      //         B: 2 last tabs are NOT in the same row:
-      //            check if we have room for the last tab + button after
-      //            previous to last tab.
-      // ignor the case that this tab width is larger then the tabbar
-      let previousTab = Tabmix.visibleTabs.previous(lastTab);
-      if (!previousTab) {
-        this.disAllowNewtabbutton = false;
-        return;
-      }
-
-      // buttons that are not on TabsToolbar or not visible are null
-      let newTabButtonWidth = function(aOnSide) {
-        let width = 0, privatTabButton = TabmixTabbar.newPrivateTabButton();
-        if (privatTabButton) {
-          width += aOnSide ? privatTabButton.boxObject.width :
-                   Tabmix.afterTabsButtonsWidth[1];
-        }
-        if (Tabmix.sideNewTabButton) {
-          width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width :
-                   Tabmix.afterTabsButtonsWidth[0];
-        }
-        return width;
-      };
-      let tsbo = this.tabBar.mTabstrip.scrollBoxObject;
-      let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
-      if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-        let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width +
-            newTabButtonWidth();
-        this.disAllowNewtabbutton = buttonEnd > tsboEnd;
-        return;
-      } else {
-        let lastTabEnd = previousTab.boxObject.screenX +
-            previousTab.boxObject.width + lastTab.boxObject.width;
-        // both last tab and new tab button are in the next row
-        if (lastTabEnd > tsboEnd)
-          this.disAllowNewtabbutton = false;
-        else
-          this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
-        return;
-      }
     }
+    // button is NOT visible
+    //         A: 2 last tabs are in the same row:
+    //            check if we have room for the button in this row
+    //         B: 2 last tabs are NOT in the same row:
+    //            check if we have room for the last tab + button after
+    //            previous to last tab.
+    // ignor the case that this tab width is larger then the tabbar
+    let previousTab = Tabmix.visibleTabs.previous(lastTab);
+    if (!previousTab) {
+      this.disAllowNewtabbutton = false;
+      return;
+    }
+
+    // buttons that are not on TabsToolbar or not visible are null
+    let newTabButtonWidth = function(aOnSide) {
+      let width = 0, privatTabButton = TabmixTabbar.newPrivateTabButton();
+      if (privatTabButton) {
+        width += aOnSide ? privatTabButton.boxObject.width :
+        Tabmix.afterTabsButtonsWidth[1];
+      }
+      if (Tabmix.sideNewTabButton) {
+        width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width :
+        Tabmix.afterTabsButtonsWidth[0];
+      }
+      return width;
+    };
+    let tsbo = this.tabBar.mTabstrip.scrollBoxObject;
+    let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
+    if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
+      let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width +
+          newTabButtonWidth();
+      this.disAllowNewtabbutton = buttonEnd > tsboEnd;
+      return;
+    }
+    let lastTabEnd = previousTab.boxObject.screenX +
+        previousTab.boxObject.width + lastTab.boxObject.width;
+    // both last tab and new tab button are in the next row
+    if (lastTabEnd > tsboEnd)
+      this.disAllowNewtabbutton = false;
+    else
+      this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
   },
 
   get disAllowNewtabbutton() {

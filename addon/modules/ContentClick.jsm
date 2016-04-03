@@ -903,8 +903,8 @@ ContentClickInternal = {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();
       if (isYoutube(hrefFromOnClick))
         return !isSamePath(hrefFromOnClick, '&t=');
-      else
-        return !isSame(hrefFromOnClick, '#');
+
+      return !isSame(hrefFromOnClick, '#');
     }
 
     if (href)
@@ -917,9 +917,9 @@ ContentClickInternal = {
       return null;
     else if (isYoutube(href))
       return !isSamePath(href, '&t=');
-    else
-      // when the links target is in the same page don't open new tab
-      return !isSame(href, '#');
+
+    // when the links target is in the same page don't open new tab
+    return !isSame(href, '#');
   },
 
   /**
