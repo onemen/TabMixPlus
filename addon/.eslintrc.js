@@ -25,7 +25,7 @@ module.exports = {
     "no-catch-shadow": 2,
     "no-class-assign": 2,
     "no-cond-assign": 2,
-    "no-confusing-arrow": 0,
+    "no-confusing-arrow": [2, {"allowParens": true}],
     "no-console": 0,
     "no-const-assign": 2,
     "no-constant-condition": 2,
@@ -34,11 +34,11 @@ module.exports = {
     "no-debugger": 2,
     "no-delete-var": 2,
     "no-div-regex": 0,
-    "no-dupe-class-members": 0,
+    "no-dupe-class-members": 2,
     "no-dupe-keys": 2,
     "no-dupe-args": 2,
     "no-duplicate-case": 2,
-    "no-duplicate-imports": 0,
+    "no-duplicate-imports": [2, {"includeExports": true}],
     "no-else-return": 2,
     // this show error on catch empty block unless there is a comment
     "no-empty": 0,
@@ -85,7 +85,7 @@ module.exports = {
     "no-new-func": 2,
     "no-new-object": 2,
     // "no-new-require": 0, // node
-    "no-new-symbol": 0,
+    "no-new-symbol": 2,
     "no-new-wrappers": 2,
     "no-obj-calls": 2,
     "no-octal": 2,
@@ -132,7 +132,7 @@ module.exports = {
     "no-use-before-define": [2, "nofunc"],
     "no-useless-call": 0,
     "no-useless-concat": 0,
-    "no-useless-constructor": 0,
+    "no-useless-constructor": 2,
     "no-useless-escape": 0,
     "no-void": 0,
     "no-var": 0,
@@ -142,7 +142,7 @@ module.exports = {
     "array-bracket-spacing": [2, "never"],
     "array-callback-return": 0,
     "arrow-body-style": 0,
-    "arrow-parens": 0,
+    "arrow-parens": [2, "as-needed"],
     "arrow-spacing": [2, {"before": true, "after": true}],
     "accessor-pairs": 0,
     "block-scoped-var": 2,
@@ -194,18 +194,18 @@ module.exports = {
     "newline-before-return": 0,
     "newline-per-chained-call": 0,
     "object-curly-spacing": [2, "never"],
-    "object-shorthand": 0,
+    "object-shorthand": 0, // since Firefox 33
     "one-var": 0,
     "one-var-declaration-per-line": 0,
     "operator-assignment": [0, "always"],
     "operator-linebreak": [2, "after"],
     "padded-blocks": [0, "never"],
-    "prefer-arrow-callback": 0,
-    "prefer-const": 0,  // TODO many error in old code
-    "prefer-reflect": 0, // NOT YET
-    "prefer-rest-params": 0,
-    "prefer-spread": 0, // since Firefox 34
-    "prefer-template": 0,
+    "prefer-arrow-callback": 0, // TODO many errors in old code
+    "prefer-const": 0,  // TODO many errors in old code
+    "prefer-reflect": 0, // since Firefox 42
+    "prefer-rest-params": 0, // I don’t want to be notified about arguments variables,
+    "prefer-spread": 0, // Spread operator for function calls (Firefox 27)
+    "prefer-template": 0, // since Firefox 34
     // in Firefox i can use properties obj - {default: x, private: y}
     "quote-props": [0, "as-needed", {"keywords": true}],
     "quotes": [0, "double"],
@@ -228,7 +228,7 @@ module.exports = {
       "markers": ["/", "/XXX", "XXX", "****", "***", "**"]
     }],
     "strict": [2, "global"],
-    "template-curly-spacing": 0,
+    "template-curly-spacing": [2, "never"],
     "use-isnan": 2,
     "valid-jsdoc": 0,
     "valid-typeof": 2,

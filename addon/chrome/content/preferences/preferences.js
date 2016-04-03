@@ -431,7 +431,7 @@ function exportData() {
 function importData() {
   showFilePicker("open").then(file => {
     return file && OS.File.read(file.path);
-  }).then((input) => {
+  }).then(input => {
     if (input) {
       let decoder = new TextDecoder();
       input = decoder.decode(input);

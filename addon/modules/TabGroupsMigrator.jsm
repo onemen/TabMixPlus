@@ -77,7 +77,7 @@ this.TabmixGroupsMigrator = {
       return false;
     };
 
-    let bookmarkGroups = (session) => {
+    let bookmarkGroups = session => {
       let state = window.TabmixConvertSession.getSessionState(session, true);
       let {hiddenTabState, groupData} = this.removeHiddenTabGroupsFromState(state);
       if (hiddenTabState.windows.length) {
@@ -180,7 +180,7 @@ this.TabmixGroupsMigrator = {
       "chrome://tabmixplus/skin/tmpsmall.png",
       notificationBox.PRIORITY_WARNING_MEDIUM,
       buttons,
-      (aEventType) => {
+      aEventType => {
         if (aEventType == "removed") {
           TabmixSvc.sm.showMissingTabViewNotification = null;
           this.closeNotificationFromAllWindows();

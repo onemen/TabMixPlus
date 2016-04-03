@@ -620,7 +620,7 @@ var TMP_tabDNDObserver = {
   },
 
   getNewIndex: function(event) {
-    let getTabRowNumber = (tab, top) => tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top);
+    let getTabRowNumber = (tab, top) => (tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top));
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,

@@ -2599,7 +2599,7 @@ gTMPprefObserver = {
           showNewVersionTab = true;
         else if (shouldAutoUpdate || oldVersion === "") {
           let re = /([A-Za-z]*)\d*$/;
-          let subs = obj => obj[1] ? obj.input.substring(0, obj.index) : obj.input;
+          let subs = obj => (obj[1] ? obj.input.substring(0, obj.index) : obj.input);
           showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));
         }
       }
