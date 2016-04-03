@@ -1296,23 +1296,24 @@ gTMPprefObserver = {
         let lockAppTabs = Tabmix.prefs.getBoolPref("lockAppTabs");
         for (let i = 0; i < gBrowser.tabs.length; i++) {
           let tab = gBrowser.tabs[i];
-          if (tab.pinned != updatePinned)
-            continue; // only update for the appropriate tabs type
-          // when user change settings to lock all tabs we always lock all tabs
-          // regardless if they were lock and unlocked before by the user
-          if (updatePinned ? lockAppTabs : TabmixTabbar.lockallTabs) {
-            tab.setAttribute("locked", "true");
-          } else {
-            tab.removeAttribute("locked");
+          // only update for the appropriate tabs type
+          if (tab.pinned == updatePinned) {
+            // when user change settings to lock all tabs we always lock all tabs
+            // regardless if they were lock and unlocked before by the user
+            if (updatePinned ? lockAppTabs : TabmixTabbar.lockallTabs) {
+              tab.setAttribute("locked", "true");
+            } else {
+              tab.removeAttribute("locked");
+            }
+            if (updatePinned) {
+              tab.removeAttribute("_lockedAppTabs");
+              tab.setAttribute("_locked", tab.hasAttribute("locked"));
+            } else {
+              tab.removeAttribute("_locked");
+            }
+            tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
+            TabmixSvc.saveTabAttributes(tab, "_locked", false);
           }
-          if (updatePinned) {
-            tab.removeAttribute("_lockedAppTabs");
-            tab.setAttribute("_locked", tab.hasAttribute("locked"));
-          } else {
-            tab.removeAttribute("_locked");
-          }
-          tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
-          TabmixSvc.saveTabAttributes(tab, "_locked", false);
         }
         // force Sessionstore to save our changes
         TabmixSvc.SessionStore.saveStateDelayed(window);

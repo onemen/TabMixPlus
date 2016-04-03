@@ -784,15 +784,12 @@ var TabmixAllTabs = {
 
     for (var i = 0; i < this.childNodes.length; i++) {
       let curTab = this.childNodes[i].tab;
-      if (!curTab) // "Tab Groups" menuitem and its menuseparator
-        continue;
-      let curTabBO = curTab.boxObject;
-      if (!curTabBO) // "Tabs From Other Computers" menuitem
-        continue;
-      if (Tabmix.tabsUtils.isElementVisible(curTab))
-        this.childNodes[i].setAttribute("tabIsVisible", "true");
-      else
-        this.childNodes[i].removeAttribute("tabIsVisible");
+      if (curTab && curTab.boxObject) {
+        if (Tabmix.tabsUtils.isElementVisible(curTab))
+          this.childNodes[i].setAttribute("tabIsVisible", "true");
+        else
+          this.childNodes[i].removeAttribute("tabIsVisible");
+      }
     }
   },
 
@@ -947,24 +944,24 @@ var TabmixAllTabs = {
           let tab = tabs[t];
           let visible = side && Tabmix.tabsUtils.isElementVisible(tab);
           if (visible) {
-            if (tab.pinned)
-              continue;
-            else if (side == "left")
-              break;
-            addToMenu = true;
-            continue;
-          }
-          if (addToMenu)
+            if (!tab.pinned) {
+              if (side == "left") {
+                break;
+              }
+              addToMenu = true;
+            }
+          } else if (addToMenu) {
             this.createMenuItems(popup, tab, t);
+          }
         }
         break;
       }
       case 3: {
         for (i = TMP_LastTab.tabs.length - 1; i >= 0; i--) {
           let tab = TMP_LastTab.tabs[i];
-          if (tab.hidden)
-            continue;
-          this.createMenuItems(popup, tab, i);
+          if (!tab.hidden) {
+            this.createMenuItems(popup, tab, i);
+          }
         }
         break;
       }

@@ -411,11 +411,8 @@
           var index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            if (tab.closing) {
-              tab.removeAttribute("tabmix-firstTabInRow");
-              continue;
-            }
-            let row = Tabmix.tabsUtils.getTabRowNumber(tab, topY);
+            let row = tab.closing ? -1 :
+                Tabmix.tabsUtils.getTabRowNumber(tab, topY);
             if (row > current) {
               current = row;
               if (!tab.hasAttribute("tabmix-firstTabInRow"))
@@ -426,7 +423,8 @@
                   (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
                 if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                   tab.removeAttribute("tabmix-firstTabInRow");
-                  continue;
+                  // continue
+                  row = -1;
                 }
               }
               if (row == firstVisibleRow) {

@@ -145,9 +145,7 @@
 
           for (let _id of Object.keys(this._prefValues)) {
             var item = this._getElementById(_id);
-            if (!item)
-              continue;
-            switch (item.localName) {
+            switch (item && item.localName) {
               case "checkbox":
               case "checkbox_tmp":
                 item.checked = this._prefValues[_id];

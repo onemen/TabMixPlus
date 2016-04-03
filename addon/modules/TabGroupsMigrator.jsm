@@ -63,14 +63,13 @@ this.TabmixGroupsMigrator = {
         let rdfNodeSession = sessionEnum.getNext();
         if (rdfNodeSession instanceof Ci.nsIRDFResource) {
           let windowPath = rdfNodeSession.QueryInterface(Ci.nsIRDFResource).Value;
-          if (sm.nodeHasArc(windowPath, "dontLoad")) {
-            continue;
-          }
-          let data = sm.getLiteralValue(windowPath, "tabview-groups", "{}");
-          let parsedData = TabmixSvc.JSON.parse(data);
-          if (parsedData.totalNumber > 1) {
-            notify = true;
-            return true;
+          if (!sm.nodeHasArc(windowPath, "dontLoad")) {
+            let data = sm.getLiteralValue(windowPath, "tabview-groups", "{}");
+            let parsedData = TabmixSvc.JSON.parse(data);
+            if (parsedData.totalNumber > 1) {
+              notify = true;
+              return true;
+            }
           }
         }
       }
@@ -230,12 +229,12 @@ this.TabmixGroupsMigrator = {
         let singleanonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
         if (singleanonGroup) {
           windowGroups[0].tabGroupsMigrationTitle = winTitle;
-          continue;
-        }
-        for (let group of windowGroups) {
-          let title = group.anonGroupID ?
-              getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
-          group.tabGroupsMigrationTitle = winTitle + " " + title;
+        } else {
+          for (let group of windowGroups) {
+            let title = group.anonGroupID ?
+                getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
+            group.tabGroupsMigrationTitle = winTitle + " " + title;
+          }
         }
       } else {
         windowGroupMap = new Map();

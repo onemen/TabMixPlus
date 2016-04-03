@@ -1373,12 +1373,12 @@ var tablib = { // eslint-disable-line
       var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
           tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
-        if (aTab && items[i] == aTab)
-          continue;
-        temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
-        if (temp_id && temp_id > max_id) {
-          max_id = temp_id;
-          tempIndex = tabs.indexOf(items[i]);
+        if (aTab && items[i] != aTab) {
+          temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
+          if (temp_id && temp_id > max_id) {
+            max_id = temp_id;
+            tempIndex = tabs.indexOf(items[i]);
+          }
         }
       }
 
@@ -1490,10 +1490,10 @@ var tablib = { // eslint-disable-line
       function addProtected(aTabs) {
         for (let i = 0; i < aTabs.length; i++) {
           let tab = aTabs[i];
-          if (!onExit && tab.hidden)
-            continue;
-          if (protectedTabs.indexOf(tab) == -1)
+          if (protectedTabs.indexOf(tab) == -1 &&
+              (onExit || !tab.hidden)) {
             protectedTabs.push(aTabs[i]);
+          }
         }
       }
       // we always restore pinned tabs no need to warn about closing
@@ -1937,11 +1937,11 @@ var tablib = { // eslint-disable-line
     let l = tabs.length;
     for (let i = 0; i < l; i++) {
       let tab = tabs[i];
-      if (tab == skipTab || tab.linkedBrowser.__SS_restoreState == 2)
-        continue;
-      try {
-        tab.linkedBrowser.reload();
-      } catch (ex) { }
+      if (tab != skipTab && tab.linkedBrowser.__SS_restoreState != 2) {
+        try {
+          tab.linkedBrowser.reload();
+        } catch (ex) { }
+      }
     }
   }
 

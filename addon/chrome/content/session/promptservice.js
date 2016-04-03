@@ -63,8 +63,8 @@ function prompt_init() {
         var item;
         for (i = 1; i < popup.childNodes.length; ++i) {
           item = popup.childNodes[i];
-          if (item.localName == "menuseparator") continue;
-          if (item.getAttribute("disabled") != "true") {
+          if (item.localName != "menuseparator" &&
+              item.getAttribute("disabled") != "true") {
             index = i;
             break;
           }
@@ -209,13 +209,13 @@ function inputText(textBox) {
   if (validName === 0) {
     for (var i = 0; i < gSavedName.length; i++) {
       if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "") {
-        if (dialogParams.GetInt(3) == TMP_DLG_RENAME) {
-          if (gOrigName != name) validName = 2;
-          continue;
+        if (dialogParams.GetInt(3) != TMP_DLG_RENAME) {
+          validName = 3;
+          dialogParams.SetInt(6, i);
+          break;
+        } else if (gOrigName != name) {
+          validName = 2;
         }
-        validName = 3;
-        dialogParams.SetInt(6, i);
-        break;
       }
     }
   }

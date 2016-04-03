@@ -182,11 +182,13 @@ var Tabmix = {
     var count = 0;
     while (enumerator.hasMoreElements()) {
       let win = enumerator.getNext();
-      if ("TabmixSessionManager" in win && win.TabmixSessionManager.windowClosed)
-        continue;
-      count++;
-      if (!all && count == 2)
-        break;
+      let isClosed = "TabmixSessionManager" in win &&
+          win.TabmixSessionManager.windowClosed;
+      if (!isClosed) {
+        count++;
+        if (!all && count == 2)
+          break;
+      }
     }
     return count;
   },

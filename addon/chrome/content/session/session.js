@@ -474,9 +474,9 @@ TabmixSessionManager = {
     while (windowEnum.hasMoreElements()) {
       var rdfNodeWindow = windowEnum.getNext();
       // skip this window....
-      if (rdfNodeThisWin == rdfNodeWindow)
-        continue;
-      this.setLiteral(rdfNodeWindow, "dontLoad", "true");
+      if (rdfNodeThisWin != rdfNodeWindow) {
+        this.setLiteral(rdfNodeWindow, "dontLoad", "true");
+      }
     }
 
     if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
@@ -1532,13 +1532,14 @@ TabmixSessionManager = {
     var windowEnum = container.GetElements();
     while (windowEnum.hasMoreElements()) {
       var rdfNodeWindow = windowEnum.getNext();
-      if (prop && this.nodeHasArc(rdfNodeWindow, prop))
-        continue;
-      numWindows += 1;
-      var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
-      if (rdfNodeTabs instanceof Ci.nsIRDFResource) {
-        var tabContainer = this.initContainer(rdfNodeTabs);
-        numTabs += tabContainer.GetCount();
+      let skip = prop && this.nodeHasArc(rdfNodeWindow, prop);
+      if (!skip) {
+        numWindows += 1;
+        var rdfNodeTabs = this.getResource(rdfNodeWindow, "tabs");
+        if (rdfNodeTabs instanceof Ci.nsIRDFResource) {
+          var tabContainer = this.initContainer(rdfNodeTabs);
+          numTabs += tabContainer.GetCount();
+        }
       }
     }
     return {win: numWindows, tab: numTabs};
@@ -1844,10 +1845,7 @@ TabmixSessionManager = {
         if (!menu.parentNode.hasAttribute("sessionmanager-menu") &&
             menu.parentNode.getAttribute("anonid") != "delete")
           break;
-        else
-          continue;
-      }
-      if (destroy) {
+      } else if (destroy) {
         i--;
         menu.removeChild(item);
       } else if (item.id.indexOf("-startSeparator") != -1) destroy = true;
@@ -1925,9 +1923,12 @@ TabmixSessionManager = {
     var closedWinList = parentId.indexOf("closedwindows") != -1;
     while (containerEnum.hasMoreElements()) {
       node = containerEnum.getNext();
-      if (this.nodeHasArc(node, "private") || this.nodeHasArc(node, "status") &&
-          this.getLiteralValue(node, "status") != "saved") continue;
-      nodes.push(node);
+      let skipNode = this.nodeHasArc(node, "private") ||
+          this.nodeHasArc(node, "status") &&
+          this.getLiteralValue(node, "status") != "saved";
+      if (!skipNode) {
+        nodes.push(node);
+      }
     }
     var count = nodes.length;
     let restoreSession = function(event) {
@@ -1950,23 +1951,24 @@ TabmixSessionManager = {
         mi.style.setProperty("color", "blue", "important");
         mi.history = true;
       }
-      if (contents == 1 && loadsession > -1 && mi.session && mi.session == sessionpath) continue;
-      mi.setAttribute("value", i);
-      // Ubuntu global menu prevents Session manager menu from working from Tools menu
-      // this hack is only for left click, middle click and right click still not working
-      if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
-        mi.addEventListener("command", restoreSession);
-      mi.value = i;
-      if (parentID != "onStart.loadsession") {
-        index = closedWinList ? count - 1 - i : i;
-        accessKey = (index > 25) ? "" : String.fromCharCode(65 + index) + "  ";
-        mi.setAttribute("accesskey", accessKey);
-        mi.setAttribute("label", accessKey + name + (showNameExt ? nameExt : ""));
-        if (showTooltip) mi.setAttribute("tooltiptext", accessKey + name + nameExt);
-      } else {
-        mi.setAttribute("label", name);
+      if (contents != 1 || loadsession < 0 || mi.session != sessionpath) {
+        mi.setAttribute("value", i);
+        // Ubuntu global menu prevents Session manager menu from working from Tools menu
+        // this hack is only for left click, middle click and right click still not working
+        if (TabmixSvc.isLinux && parentId == "tm-sessionmanager")
+          mi.addEventListener("command", restoreSession);
+        mi.value = i;
+        if (parentID != "onStart.loadsession") {
+          index = closedWinList ? count - 1 - i : i;
+          accessKey = (index > 25) ? "" : String.fromCharCode(65 + index) + "  ";
+          mi.setAttribute("accesskey", accessKey);
+          mi.setAttribute("label", accessKey + name + (showNameExt ? nameExt : ""));
+          if (showTooltip) mi.setAttribute("tooltiptext", accessKey + name + nameExt);
+        } else {
+          mi.setAttribute("label", name);
+        }
+        popup.insertBefore(mi, closedWinList ? popup.childNodes[1] : endSeparator);
       }
-      popup.insertBefore(mi, closedWinList ? popup.childNodes[1] : endSeparator);
     }
     var allEmpty = true;
     switch (parentID) {
@@ -2039,15 +2041,16 @@ TabmixSessionManager = {
     var i, item, value, checked;
     for (i = 0; i < popup.childNodes.length; i++) {
       item = popup.childNodes[i];
-      if (item.localName == "menuseparator") continue;
-      value = item.getAttribute("value");
-      checked = ((loadsession > -1 && item.session && item.session == sessionpath) ||
-                 (loadsession <= -1 && value && value == loadsession));
-      if (checked) {
-        item.setAttribute("default", "true");
-        popup.parentNode.defaultIndex = i;
-        popup.parentNode.sessionIndex = value;
-      } else item.removeAttribute("default");
+      if (item.localName != "menuseparator") {
+        value = item.getAttribute("value");
+        checked = ((loadsession > -1 && item.session && item.session == sessionpath) ||
+                   (loadsession <= -1 && value && value == loadsession));
+        if (checked) {
+          item.setAttribute("default", "true");
+          popup.parentNode.defaultIndex = i;
+          popup.parentNode.sessionIndex = value;
+        } else item.removeAttribute("default");
+      }
     }
   },
 
@@ -2515,11 +2518,11 @@ TabmixSessionManager = {
     var wnd, savedTabs = 0, savedWin = 0, thisWin;
     while (enumerator.hasMoreElements()) {
       wnd = enumerator.getNext();
-      if (this.isWindowPrivate(wnd))
-        continue;
-      thisWin = wnd.TabmixSessionManager.saveOneWindow(path, caller, false, saveClosedTabs);
-      savedTabs += thisWin;
-      if (thisWin > 0) savedWin += 1;
+      if (!this.isWindowPrivate(wnd)) {
+        thisWin = wnd.TabmixSessionManager.saveOneWindow(path, caller, false, saveClosedTabs);
+        savedTabs += thisWin;
+        if (thisWin > 0) savedWin += 1;
+      }
     }
     return {win: savedWin, tab: savedTabs};
   },
@@ -3058,14 +3061,13 @@ TabmixSessionManager = {
     var windowsList = [];
     while (windowEnum.hasMoreElements()) {
       let win = windowEnum.getNext();
-      if (win.TabmixSessionManager.windowClosed)
-        continue;
+      let closed = win.TabmixSessionManager.windowClosed;
       if (this.isWindowPrivate(win) != this.isPrivateWindow) {
-        if (overwriteWindows)
+        if (overwriteWindows && !closed)
           win.close();
-        continue;
+      } else if (!closed) {
+        windowsList.push(win);
       }
-      windowsList.push(win);
     }
 
     if (!state.selectedWindow || state.selectedWindow > state.windows.length) {
@@ -3531,15 +3533,11 @@ TabmixSessionManager = {
     var rdfNodeTabs = this.getResource(winPath, "tabs");
     var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
     var ctabs = TMP_ClosedTabs.getClosedTabData;
-    var tabCount = ctabs.length;
     var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
-    for (var i = tabCount - 1; i >= 0; i--) {
-      let tabData = ctabs[i];
-      let data = this.getSessionStoreDataForRDF(tabData);
-      if (!data)
-        continue;
+    ctabs = ctabs.filter(tabData => this.getSessionStoreDataForRDF(tabData));
+    ctabs.reverse().forEach(data => {
       let uniqueId, rdfLabelSession, newNode;
-      uniqueId = "panel" + Date.now() + i;
+      uniqueId = "panel" + Date.now() + Math.random();
       rdfLabelSession = rdfLabelTabs + "/" + uniqueId;
       newNode = this.RDFService.GetResource(rdfLabelSession);
       toContainer.AppendElement(newNode);
@@ -3548,7 +3546,7 @@ TabmixSessionManager = {
       // delete old entry if closedTabs container wasn't empty
       if (toContainer.GetCount() > maxTabsUndo)
         this.deleteClosedtabAt(1, winPath);
-    }
+    });
     this.saveStateDelayed();
   },
 

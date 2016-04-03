@@ -500,10 +500,10 @@ function loadData(pattern) {
     let valIndex = pattern[i].indexOf("=");
     if (valIndex > 0) {
       prefName = pattern[i].substring(0, valIndex);
-      if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
-        continue;
-      prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
-      setPrefByType(prefName, prefValue, true);
+      if (!SMinstalled || sessionPrefs.indexOf(prefName) == -1) {
+        prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
+        setPrefByType(prefName, prefValue, true);
+      }
     }
   }
   gPrefWindow.afterShortcutsChanged();

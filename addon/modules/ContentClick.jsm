@@ -738,6 +738,7 @@ ContentClickInternal = {
 
     var testString, hrefExt, testExt;
     for (var l = 0; l < filetype.length; l++) {
+      let doTest = true;
       if (filetype[l].indexOf("/") != -1) {
       // add \ before first ?
         testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
@@ -749,13 +750,15 @@ ContentClickInternal = {
           // prevent filetype catch if it is in the middle of a word
           testExt = new RegExp(testString + "[a-z0-9?.]+", 'i');
           if (testExt.test(hrefExt))
-            continue;
+            doTest = false;
         } catch (ex) {}
       }
       try {
-        testExt = new RegExp(testString, 'i');
-        if (testExt.test(hrefExt))
-          return true;
+        if (doTest) {
+          testExt = new RegExp(testString, 'i');
+          if (testExt.test(hrefExt))
+            return true;
+        }
       } catch (ex) {}
     }
     return false;
@@ -986,10 +989,10 @@ ContentClickInternal = {
     let winEnum = Services.wm.getEnumerator("navigator:browser");
     while (winEnum.hasMoreElements()) {
       let browserWin = winEnum.getNext();
-      if (browserWin.closed || browserWin == window)
-        continue;
-      if (isValidWindow(browserWin))
+      if (!browserWin.closed && browserWin != window &&
+          isValidWindow(browserWin)) {
         windows.push(browserWin);
+      }
     }
     this.isFrameInContent.start(windows, {href: href, name: targetFrame});
   },

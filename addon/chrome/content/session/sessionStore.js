@@ -686,9 +686,8 @@ var TabmixConvertSession = {
       let rdfNodeWindow = sessionEnum.getNext();
       if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
         let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
-        if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
-          continue;
-        let aWindowState = this.getWindowState(rdfNodeWindow, internal);
+        let getState = !TabmixSessionManager.nodeHasArc(windowPath, "dontLoad");
+        let aWindowState = getState && this.getWindowState(rdfNodeWindow, internal);
         if (aWindowState) {// don't save empty windows
           aWindowState.index = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "SSi", index++);
           _windows.push(aWindowState);
@@ -911,11 +910,11 @@ var TabmixConvertSession = {
       let entry = {url: "", children: [], ID: 0};
       let index = i * 3;
       entry.url = historyData[index + 1];
-      if (!entry.url)
-        continue;
-      entry.title = decodeData(historyData[index], !newFormat);
-      entry.scroll = historyData[index + 2];
-      entries.push(entry);
+      if (entry.url) {
+        entry.title = decodeData(historyData[index], !newFormat);
+        entry.scroll = historyData[index + 2];
+        entries.push(entry);
+      }
     }
     return entries;
   }
