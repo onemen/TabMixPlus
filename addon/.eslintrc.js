@@ -197,7 +197,7 @@ module.exports = {
     "object-shorthand": 0, // since Firefox 33
     "one-var": 0,
     "one-var-declaration-per-line": 0,
-    "operator-assignment": [0, "always"],
+    "operator-assignment": [2, "always"],
     "operator-linebreak": [2, "after"],
     "padded-blocks": [2, "never"],
     "prefer-arrow-callback": 0, // TODO many errors in old code

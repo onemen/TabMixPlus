@@ -183,8 +183,8 @@ var TMP_tabDNDObserver = {
       let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
       toDrag = canvas;
-      dragImageOffsetX = dragImageOffsetX * scale;
-      dragImageOffsetY = dragImageOffsetY * scale;
+      dragImageOffsetX *= scale;
+      dragImageOffsetY *= scale;
     }
     if (TabmixTabbar.position == 1) {
       dragImageOffsetY = canvas.height - dragImageOffsetY;

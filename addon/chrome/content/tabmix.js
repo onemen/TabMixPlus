@@ -965,8 +965,9 @@ var TMP_eventListener = {
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
     var direction = aEvent.detail;
-    if (Tabmix.prefs.getBoolPref("reversedScroll"))
-      direction = -1 * direction;
+    if (Tabmix.prefs.getBoolPref("reversedScroll")) {
+      direction *= -1;
+    }
 
     if (shouldMoveFocus) {
       direction = direction > 0 ? 1 : -1;

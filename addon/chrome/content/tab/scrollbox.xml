@@ -151,10 +151,10 @@
 
           this._calcTabMargins(aTab);
           if (this._tabMarginLeft < 0) {
-            tabStart = tabStart + this._tabMarginLeft;
+            tabStart += this._tabMarginLeft;
           }
           if (this._tabMarginRight < 0) {
-            tabEnd = tabEnd - this._tabMarginRight;
+            tabEnd -= this._tabMarginRight;
           }
           return [tabStart, tabEnd];
         ]]></body>

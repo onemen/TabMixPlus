@@ -390,8 +390,8 @@
               if (selected) {
                 selected = {left: selected.left, right: selected.right};
                 // Need to take in to account the width of the left/right margins on tabs.
-                selected.left = selected.left + this.mTabstrip._tabMarginLeft;
-                selected.right = selected.right - this.mTabstrip._tabMarginRight;
+                selected.left += this.mTabstrip._tabMarginLeft;
+                selected.right -= this.mTabstrip._tabMarginRight;
               }
 
               tab.left += this.mTabstrip._tabMarginLeft;
