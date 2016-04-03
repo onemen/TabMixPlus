@@ -199,7 +199,7 @@ module.exports = {
     "one-var-declaration-per-line": 0,
     "operator-assignment": [0, "always"],
     "operator-linebreak": [2, "after"],
-    "padded-blocks": [0, "never"],
+    "padded-blocks": [2, "never"],
     "prefer-arrow-callback": 0, // TODO many errors in old code
     "prefer-const": 0,  // TODO many errors in old code
     "prefer-reflect": 0, // since Firefox 42

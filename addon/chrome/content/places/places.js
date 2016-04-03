@@ -661,7 +661,6 @@ Tabmix.onContentLoaded = {
       '  TabmixTabbar.updateScrollStatus();' +
       '  TabmixTabbar.updateBeforeAndAfter();'
     ).toCode();
-
   },
 
   change_utilityOverlay: function() {

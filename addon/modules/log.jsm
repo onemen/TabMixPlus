@@ -82,7 +82,6 @@ this.console = {
       } else {
         logMethod();
       }
-
     } catch (ex) {
       this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");
     }
@@ -156,7 +155,6 @@ this.console = {
 
       let args = Array.prototype.slice.call(arguments);
       return args.indexOf(callerName) > -1;
-
     } catch (ex) {
       this.assert(ex, "Error we can't check for caller name");
     }

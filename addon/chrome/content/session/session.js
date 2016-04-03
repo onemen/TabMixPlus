@@ -568,7 +568,6 @@ TabmixSessionManager = {
 
   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
                                                 aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
-
     if (this.isPrivateWindow) {
       this.removeSession(this.gThisWin, this.gSessionPath[0]);
     }
@@ -2193,7 +2192,6 @@ TabmixSessionManager = {
       this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                          [title, msg, "", chkBoxLabel, buttons], window, callBack);
     }
-
   },
 
   afterCrashPromptCallBack: function SM_afterCrashPromptCallBack(aResult) {

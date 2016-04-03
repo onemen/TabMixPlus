@@ -163,7 +163,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
-
   } catch (ex) {
     this.assert(ex);
   }
