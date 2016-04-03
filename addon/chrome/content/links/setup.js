@@ -102,8 +102,8 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       // Prevent the default homepage from loading if we're going to restore a session
       let hasFirstArgument = window.arguments && window.arguments[0];
       if (hasFirstArgument) {
-        let defaultArgs = Cc["@mozilla.org/browser/clh;1"].
-                          getService(Ci.nsIBrowserHandler).defaultArgs;
+        let defaultArgs = Cc["@mozilla.org/browser/clh;1"]
+                            .getService(Ci.nsIBrowserHandler).defaultArgs;
         if (window.arguments[0] == defaultArgs) {
           SM.overrideHomepage = window.arguments[0];
           window.arguments[0] = null;

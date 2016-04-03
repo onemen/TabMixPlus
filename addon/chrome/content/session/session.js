@@ -3126,8 +3126,8 @@ TabmixSessionManager = {
   },
 
   openNewWindow: function SM_openNewWindow(aState, aPrivate) {
-    var argString = Cc["@mozilla.org/supports-string;1"].
-                    createInstance(Ci.nsISupportsString);
+    var argString = Cc["@mozilla.org/supports-string;1"]
+                      .createInstance(Ci.nsISupportsString);
     argString.data = "";
 
     let features = "chrome,dialog=no,macsuppressanimation,all";

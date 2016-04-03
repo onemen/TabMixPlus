@@ -220,8 +220,8 @@ var TMP_SessionStore = {
       // sessionstroe.js file throw error since Firefox 28, and force
       // syncRead in Firefox 25-27
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
-        let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
-        getService(Ci.nsISessionStartup);
+        let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
+                   .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
         ss.onceInitialized.then(function() {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();

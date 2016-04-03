@@ -805,8 +805,8 @@ var tablib = { // eslint-disable-line
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
-      'window = #1.undoCloseWindow(aIndex || 0);'.
-       replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
+      'window = #1.undoCloseWindow(aIndex || 0);'
+        .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
           window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
        }\

@@ -135,9 +135,9 @@
           event.stopImmediatePropagation();
 
           var key = {modifiers: "", key: "", keycode: ""};
-          key.modifiers =
-            ["ctrl", "meta", "alt", "shift"].filter(mod => event[mod + "Key"]).
-            join(",").replace("ctrl", "control");
+          let modifiers = ["ctrl", "meta", "alt", "shift"];
+          key.modifiers = modifiers.filter(mod => event[mod + "Key"])
+                                   .join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
             let ns = Ci.nsIDOMKeyEvent;

@@ -163,7 +163,7 @@ module.exports = {
     // TODO - currently there are more the 1500 errors if we set "curly": 2
     "curly": [0, "all"],
     "default-case": 0,
-    "dot-location": 0,
+    "dot-location": [2, "property"],
     "dot-notation": [2, { "allowKeywords": true }],
     "eol-last": 2,
     "eqeqeq": 0,

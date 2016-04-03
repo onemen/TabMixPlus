@@ -143,8 +143,8 @@ var TabmixContentHandler = {
 
   onDrop: function(event) {
     let uri, name = { };
-    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"].
-    getService(Ci.nsIDroppedLinkHandler);
+    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
+                        .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
       uri = linkHandler.dropLink(event, name, true);
@@ -204,8 +204,8 @@ TabmixClickEventHandler = {
     if (TabmixSvc.version(420) &&
         Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
         node) {
-      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(node.
-          getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer"));
+      let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
+      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
       if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
         referrerPolicy = referrerAttrValue;
       }
