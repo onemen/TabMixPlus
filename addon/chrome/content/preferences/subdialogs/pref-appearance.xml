@@ -252,7 +252,7 @@
           var rgba = this.rgba;
           if (format) {
             rgba[3] = this.getAttribute("disabled") ? 0.2 :
-                          Math.max(.2, rgba[3]);
+                          Math.max(0.2, rgba[3]);
           }
           return "rgba(#1)".replace("#1", rgba.join(","));
         ]]></body>

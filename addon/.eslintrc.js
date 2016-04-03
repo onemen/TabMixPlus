@@ -55,7 +55,7 @@ module.exports = {
     "no-extra-parens": [2, "functions"], // TODO need to fix this for [2, "all"]
     "no-extra-semi": 2,
     "no-fallthrough": 2,
-    "no-floating-decimal": 0,
+    "no-floating-decimal": 2,
     "no-func-assign": 2,
     "no-implicit-coercion": 2,
     "no-implicit-globals": 0,
