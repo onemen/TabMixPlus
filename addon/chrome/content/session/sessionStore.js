@@ -352,7 +352,8 @@ var TMP_ClosedTabs = {
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
       else try {
-        url = _uri.scheme + ":\/\/" + _uri.hostPort + _uri.path;
+        url = _uri.scheme == "about" ? _uri.spec :
+          _uri.scheme + "://" + _uri.hostPort + _uri.path;
       } catch (e) {
         url = title;
       }

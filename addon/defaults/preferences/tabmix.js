@@ -223,7 +223,7 @@ pref("extensions.tabmix.middleclickDelete", true);
 pref("extensions.tabmix.optionsToolMenu", true);
 
 pref("extensions.tabmix.enablefiletype", true);
-pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ php\?attachmentid=.* php\?act=Attach&type=post&id=.* /download.php\?*/");
+pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ /php?attachmentid=.*/ /php?act=Attach&type=post&id=.*/ /download.php?*/");
 
 pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");
 

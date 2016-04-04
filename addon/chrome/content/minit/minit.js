@@ -53,7 +53,7 @@ var TMP_tabDNDObserver = {
       'let halfWidth = boxObject.width / 2;\n            ' +
       'screenX += draggingRight * halfWidth;'
     )._replace(
-      /screenX \+ boxObject.* \< tabCenter/,
+      /screenX \+ boxObject.* < tabCenter/,
       'screenX + halfWidth < tabCenter'
     )._replace(
       'newIndex >= oldIndex',

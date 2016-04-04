@@ -201,7 +201,7 @@ options = {
         let val = aObj[prop];
         let type = typeof val;
         if (type == "string")
-          val = "\'" + val + "\'";
+          val = "'" + val + "'";
         if (type == "function" && typeof level == "string") {
           val = val.toString();
           let code = val.toString().indexOf("native code") > -1 ?

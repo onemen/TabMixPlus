@@ -308,7 +308,7 @@ ContentClickInternal = {
         * Get current page url
         * if user click a link while the page is reloading node.ownerDocument.location can be null
         */
-        let youtube = /www\.youtube\.com\/watch\?v\=/;
+        let youtube = /www\.youtube\.com\/watch\?v=/;
         let curpage = this.currentURL;
         if (!youtube.test(curpage)) {
           let node = this.wrappedNode || this.wrappedOnClickNode;
@@ -896,7 +896,7 @@ ContentClickInternal = {
       return false;
 
     let current = this._data.currentURL.toLowerCase();
-    let youtube = /www\.youtube\.com\/watch\?v\=/;
+    let youtube = /www\.youtube\.com\/watch\?v=/;
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
     let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];

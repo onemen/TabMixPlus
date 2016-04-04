@@ -133,7 +133,7 @@ module.exports = {
     "no-useless-call": 2,
     "no-useless-concat": 2,
     "no-useless-constructor": 2,
-    "no-useless-escape": 0,
+    "no-useless-escape": 2,
     "no-void": 0,
     "no-var": 0,
     "no-warning-comments": [0, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],
