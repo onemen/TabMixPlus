@@ -1,8 +1,0 @@
-{
-    "plugins": ["eslint-plugin-mozilla"],
-
-    "rules": {
-      "mozilla/balanced-listeners": 2,
-      "linebreak-style": [2, "windows"]
-    }
-}
