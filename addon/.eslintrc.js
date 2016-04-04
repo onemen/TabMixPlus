@@ -171,7 +171,7 @@ module.exports = {
     "func-style": [0, "declaration"],
     "generator-star-spacing": [2, "after"],
     // "global-require": 0, // node
-    "guard-for-in": 0,
+    "guard-for-in": 2,
     // "handle-callback-err": 0, // node
     "id-length": 0,
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": {"var": 2, "let": 2, "const": 3}}],

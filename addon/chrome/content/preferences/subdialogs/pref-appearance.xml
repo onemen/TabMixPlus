@@ -143,7 +143,7 @@
             return;
           }
 
-          for (var _id in this._prefValues) {
+          for (let _id of Object.keys(this._prefValues)) {
             var item = this._getElementById(_id);
             if (!item)
               continue;
@@ -166,7 +166,7 @@
       <method name="_savePrefs">
         <body><![CDATA[
           var newPrefSValue = {};
-          for (let _id in this._prefValues) {
+          for (let _id of Object.keys(this._prefValues)) {
             var item = this._getElementById(_id);
             switch (item.localName) {
               case "checkbox":

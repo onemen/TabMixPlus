@@ -3571,7 +3571,7 @@ TabmixSessionManager = {
     }
     if ("attributes" in tabState && tabState.attributes) {
       delete tabState.attributes._locked;
-      for (var name in tabState.attributes) {
+      for (let name of Object.keys(tabState.attributes)) {
         data.properties += " " + name + "=" + encodeURI(tabState.attributes[name]);
       }
     }

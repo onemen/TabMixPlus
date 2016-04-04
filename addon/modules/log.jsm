@@ -196,7 +196,7 @@ options = {
     var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof (aObj);
     objS += ":\n";
 
-    for (let prop in aObj) {
+    for (let prop of Object.keys(aObj)) {
       try {
         let val = aObj[prop];
         let type = typeof val;

@@ -379,7 +379,7 @@ this.DynamicRules = {
 
     // make sure we have all the item
     // if item is missing set it to default
-    for (let item in defaultPrefValues) {
+    for (let item of Object.keys(defaultPrefValues)) {
       let value = currentPrefValues[item];
       if (value && item.indexOf("Color") > -1) {
         let opacity = item.replace("Color", "Opacity");

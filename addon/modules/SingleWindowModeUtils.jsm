@@ -180,8 +180,9 @@ this.SingleWindowModeUtils = {
         // restore window dimensions, to prevent flickring in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
-          for (let attr in newWindow.__winRect)
+          for (let attr of Object.keys(newWindow.__winRect)) {
             win.setAttribute(attr, newWindow.__winRect[attr]);
+          }
         }
         newWindow.close();
         if (firstTabAdded) {
