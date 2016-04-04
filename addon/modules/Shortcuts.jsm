@@ -563,7 +563,8 @@ function getFormattedKey(key) {
 
   if (key.key) {
     if (key.key == " ") {
-      key.key = ""; key.keycode = "VK_SPACE";
+      key.key = "";
+      key.keycode = "VK_SPACE";
     } else {
       val += key.key.toUpperCase();
     }

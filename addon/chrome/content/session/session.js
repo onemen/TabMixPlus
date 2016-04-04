@@ -109,7 +109,8 @@ Tabmix.Sanitizer = {
       try {
         aFile.remove(aFile.isDirectory());
       } catch (ex) {
-        dump(ex + "\n"); Tabmix.assert(ex);
+        dump(ex + "\n");
+        Tabmix.assert(ex);
       } // couldn't remove the file - what now?
     }
   }
