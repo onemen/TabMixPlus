@@ -326,6 +326,7 @@
         "openUILinkIn": false,
         "openURI": false,
         "OS": false,
+        "PanelUI": false,
         "PageThumbs": false,
         "PlacesCommandHook": false,
         "PlacesOrganizer": false,

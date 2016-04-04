@@ -153,8 +153,15 @@ this.SingleWindowModeUtils = {
       newWindow.FullZoom.destroy = function() {};
       newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
-      var obs = Services.obs;
+      if (TabmixSvc.version(420)) {
+        newWindow.gMenuButtonBadgeManager.uninit = function() {
+          if (typeof PanelUI == "object" && PanelUI.panel) {
+            PanelUI.panel.removeEventListener("popupshowing", this, true);
+          }
+        };
+      }
       if (!TabmixSvc.version(440)) {
+        let obs = Services.obs;
         obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
         if (!TabmixSvc.version(340))
           obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
