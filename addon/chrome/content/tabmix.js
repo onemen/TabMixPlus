@@ -615,8 +615,8 @@ var TMP_eventListener = {
         fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
         fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
         fullScrToggler.hidden = true;
-        let main = document.getElementById("main-window");
-        main.appendChild(fullScrToggler);
+        let bottombox = document.getElementById("browser-bottombox");
+        bottombox.appendChild(fullScrToggler);
 
         if (Tabmix.isVersion(400)) {
           let $LF = '\n    ';
@@ -624,7 +624,7 @@ var TMP_eventListener = {
             'this._isChromeCollapsed = true;',
             'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
             '$&' + $LF +
-            'TMP_eventListener.toggleTabbarVisibility(false);'
+            'TMP_eventListener.toggleTabbarVisibility(false, aAnimate);'
           ).toCode();
         } else {
           Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
@@ -704,7 +704,7 @@ var TMP_eventListener = {
   },
 
   // for tabs bellow content
-  toggleTabbarVisibility: function(aShow) {
+  toggleTabbarVisibility: function(aShow, aAnimate) {
     let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
     if (TabmixTabbar.position != 1 || !fullScrToggler) {
       return;
@@ -719,6 +719,19 @@ var TMP_eventListener = {
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
+
+      if (Tabmix.isVersion(400) && aAnimate &&
+          Services.prefs.getBoolPref("browser.fullscreen.animate")) {
+        // Hide the fullscreen toggler until the transition ends.
+        let listener = function() {
+          gNavToolbox.removeEventListener("transitionend", listener, true);
+          if (FullScreen._isChromeCollapsed)
+            fullScrToggler.hidden = false;
+        };
+        gNavToolbox.addEventListener("transitionend", listener, true);
+        fullScrToggler.hidden = true;
+      }
+
       // Until Firefox 41 changing the margin trigger resize event that calls
       // updateTabbarBottomPosition
       if (Tabmix.isVersion(410))
