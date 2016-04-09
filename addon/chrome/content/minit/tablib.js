@@ -739,11 +739,13 @@ var tablib = { // eslint-disable-line
     };
     Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
 
-    // Fix for Fast Dial
-    if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
-      let loader = "FdTabLoader" in window && "BrowserGoHome" in FdTabLoader;
-      let obj = loader ? FdTabLoader : window;
-      fnName = loader ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
+    // Fix for old Fast Dial versions before 4.6.1
+    // https://addons.mozilla.org/en-us/firefox/addon/fast-dial/
+    let fastDial = window.FdTabLoader,
+        fdGoHome = fastDial && fastDial.BrowserGoHome;
+    if (window.BrowserGoHome || fdGoHome) {
+      let obj = fdGoHome ? window.FdTabLoader : window;
+      fnName = fdGoHome ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
       Tabmix.changeCode(obj, fnName)._replace(
         'var where = whereToOpenLink(aEvent, false, true);',
         '$&' +

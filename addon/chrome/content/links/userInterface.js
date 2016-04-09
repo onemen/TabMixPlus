@@ -90,9 +90,12 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
   Tabmix.prefs.getBoolPref("loadNewInBackground");
   var loadBlank = isBlankPageURL(url);
   if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
-      typeof privateTab == "object" && privateTab.isTabPrivate(selectedTab) &&
-      TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
-    privateTab.readyToOpenTab(false);
+      typeof privateTab == "object") {
+    let privateTab = window.privateTab;
+    if (privateTab.isTabPrivate(selectedTab) &&
+        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
+      privateTab.readyToOpenTab(false);
+    }
   }
 
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;

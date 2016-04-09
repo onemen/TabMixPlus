@@ -1379,7 +1379,7 @@ gTMPprefObserver = {
         // fix bug in classiccompact
         if (typeof classiccompactoptions == "object" &&
             Services.prefs.getCharPref("general.skins.selectedSkin") == "classiccompact") {
-          classiccompactoptions.setTabWidths(document);
+          window.classiccompactoptions.setTabWidths(document);
         }
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs

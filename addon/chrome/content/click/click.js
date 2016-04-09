@@ -182,10 +182,12 @@ var TabmixTabClickOptions = {
       case 11:
         Tabmix.renameTab.editTitle(aTab);
         break;
-      case 12: // taken from tco
+      case 12: { // taken from tco
+        let SessionSaver = window.SessionSaver;
         if (SessionSaver && SessionSaver.snapBackTab)
           SessionSaver.snapBackTab(SessionSaver.snapback_noFX, SessionSaver.snapback_willFocus);
         break;
+      }
       case 13:
         TMP_ClosedTabs.restoreTab("original", -2);
         break;
@@ -210,11 +212,11 @@ var TabmixTabClickOptions = {
       case 20:
         gBrowser._reloadRightTabs(aTab);
         break;
-      case 21: // taken from tco
-        var href;
+      case 21: { // taken from tco
+        let href;
         if (window.IeView && window.IeView.ieViewLaunch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
-          IeView.ieViewLaunch("Internet Explorer.lnk", href);
+          window.IeView.ieViewLaunch("Internet Explorer.lnk", href);
         } else if (Tabmix.extensions.gIeTab) {
           let ieTab = Tabmix.extensions.gIeTab;
           let gIeTabObj = window[ieTab.obj];
@@ -225,9 +227,10 @@ var TabmixTabClickOptions = {
           }
         } else if (window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
-          ieview.launch(href);
+          window.ieview.launch(href);
         }
         break;
+      }
       case 22:
         gBrowser.SelectToMerge(aTab);
         break;
@@ -336,6 +339,7 @@ var TabmixContext = {
 
     // insert IE Tab menu-items before Bookmarks menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
+      let IeTab = window.IeTab;
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
@@ -346,8 +350,12 @@ var TabmixContext = {
     }
 
     // fix conflict with CookiePie extension
-    if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
-      cookiepieContextMenu.init();
+    if ("cookiepieContextMenu" in window) {
+      let cookiepieContextMenu = window.cookiepieContextMenu;
+      if (!cookiepieContextMenu.initialized) {
+        cookiepieContextMenu.init();
+      }
+    }
 
     if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
       this.updateTabbarContextMenu(true);
@@ -1004,7 +1012,7 @@ var TabmixAllTabs = {
     // for ColorfulTabs 6.0+
     if (typeof colorfulTabs == "object") {
       let rule = "none";
-      if (colorfulTabs.clrAllTabsPopPref) {
+      if (window.colorfulTabs.clrAllTabsPopPref) {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"

@@ -768,13 +768,19 @@ Tabmix.onContentLoaded = {
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
   // object name wmn replace with xnotifier for version 3.0+
   getXnotifierFunction: function(aName) {
+    let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(function(f) {
+        let t = Tabmix.obj(com.tobwithu[f] || {}, "name " + f, false, true);
+        Tabmix.trace();
+        Tabmix.xlog(t);
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });
-      if (fn.length)
+      if (fn.length) {
+        Tabmix.obj(fn[0], aName);
         return [com.tobwithu[fn[0]], aName];
+      }
     }
     return [window, aName];
   }

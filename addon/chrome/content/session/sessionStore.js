@@ -664,8 +664,8 @@ var TabmixConvertSession = {
       let tmp = {};
       Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp);
       tmp.SessionConverter.convertTMP(aFileUri, aSilent);
-    } else {
-      let sm = com.morac.SessionManagerAddon.gSessionManagerWindowObject;
+    } else if ("com" in window && window.com.morac) {
+      let sm = window.com.morac.SessionManagerAddon.gSessionManagerWindowObject;
       sm.doTMPConvertFile(aFileUri, aSilent);
     }
   },

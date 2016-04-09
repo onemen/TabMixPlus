@@ -165,6 +165,7 @@ TabmixSessionData = {
     tabProperties += " hidden=" + aTab.hidden;
 
     if ("colorfulTabs" in window) {
+      let colorfulTabs = window.colorfulTabs;
       try {
         let ctreadonly = colorfulTabs.clrSession.getTabValue(aTab, "ctreadonly");
         if (ctreadonly)
@@ -1444,7 +1445,7 @@ TabmixSessionManager = {
     if (gBrowser.isBlankWindow())
       return false;
     return typeof privateTab != "object" ||
-      Array.prototype.some.call(gBrowser.tabs, tab => !privateTab.isTabPrivate(tab));
+      Array.prototype.some.call(gBrowser.tabs, tab => !window.privateTab.isTabPrivate(tab));
   },
 
   saveOneOrAll: function(action, path, saveClosedTabs) {
@@ -2836,7 +2837,7 @@ TabmixSessionManager = {
   },
 
   isTabPrivate: function(aTab) {
-    return typeof privateTab == "object" && privateTab.isTabPrivate(aTab);
+    return typeof privateTab == "object" && window.privateTab.isTabPrivate(aTab);
   },
 
   privateTabChanged: function(aEvent) {

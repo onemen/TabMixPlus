@@ -264,8 +264,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
 
   // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
-  if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
-    TMP_SessionStore.afterSwitchThemes = true;
+  if ("SwitchThemesModule" in window) {
+    let SwitchThemesModule = window.SwitchThemesModule;
+    if (SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length) {
+      TMP_SessionStore.afterSwitchThemes = true;
+    }
+  }
 
   TMP_extensionsCompatibility.preInit();
 };
