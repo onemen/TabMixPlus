@@ -1,3 +1,4 @@
+/* exported gTabMix_preferencesOverlay */
 "use strict";
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
@@ -94,8 +95,3 @@ var gTabMix_preferencesOverlay = {
   }
 
 };
-
-window.addEventListener("load", function TMP_onLoad_preverenceOverlay(aEvent) {
-  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_preverenceOverlay, true);
-  gTabMix_preferencesOverlay.incontentInit();
-}, true);
