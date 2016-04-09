@@ -1254,13 +1254,19 @@ Tabmix.navToolbox = {
       return;
 
     let obj, fn, $LF;
-    let searchLoadExt = "esteban_torres" in window && "searchLoad_Options" in esteban_torres;
-    let _handleSearchCommand = searchLoadExt ? esteban_torres.searchLoad_Options.MOZhandleSearch.toString() :
+    // https://addons.palemoon.org/extensions/search-tools/searchload-options-revived/
+    // searchLoadExt will be null when searchload-options extension is restartless
+    let searchLoadExt = (est => {
+      return est && typeof est.searchLoad_Options == "object" &&
+        est.searchLoad_Options;
+    })(window.esteban_torres || window);
+
+    let _handleSearchCommand = searchLoadExt ? searchLoadExt.MOZhandleSearch.toString() :
                                                searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZhandleSearch"] :
+      [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZhandleSearch"] :
                                       [searchbar, "handleSearchCommand"];
       $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
@@ -1274,7 +1280,7 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    [obj, fn] = searchLoadExt ? [esteban_torres.searchLoad_Options, "MOZdoSearch"] :
+    [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZdoSearch"] :
                                     [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
