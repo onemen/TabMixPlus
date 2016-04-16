@@ -219,14 +219,7 @@ var TMP_extensionsCompatibility = {
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
-    // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
-    // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
-    // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
-    if (typeof VerticalTabs == "object" || typeof sidetabs == "object" ||
-        typeof tabkitGlobal == "object") {
-      Tabmix.extensions.verticalTabs = true;
-      Tabmix.extensions.verticalTabBar = true;
-    }
+    this.setVerticalTabs();
 
     // Look for RSS/Atom News Reader
     if ("gotoLink" in window)
@@ -471,8 +464,18 @@ var TMP_extensionsCompatibility = {
         '      $&'
       ).toCode();
     }
-  }
+  },
 
+  setVerticalTabs: function() {
+    // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+    // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
+    // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
+    let isVertical = typeof VerticalTabs == "object" || typeof sidetabs == "object" ||
+        typeof tabkitGlobal == "object";
+    let treeStyleTab = typeof TreeStyleTabService == "object";
+    Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
+    Tabmix.extensions.verticalTabs = isVertical && !treeStyleTab;
+  },
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {

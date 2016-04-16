@@ -741,10 +741,10 @@ Tabmix.tabsUtils = {
   initializeTabmixUI: function() {
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
     // verticalTabs 0.9.1+ is restartless.
-    if (typeof VerticalTabs == "object" && !Tabmix.extensions.verticalTabs) {
+    let isVertical = Tabmix.extensions.verticalTabs;
+    TMP_extensionsCompatibility.setVerticalTabs();
+    if (isVertical != Tabmix.extensions.verticalTabs) {
       Tabmix.setItem("TabsToolbar", "collapsed", null);
-      Tabmix.extensions.verticalTabs = true;
-      Tabmix.extensions.verticalTabBar = true;
       TabmixTabbar.updateSettings();
     }
 

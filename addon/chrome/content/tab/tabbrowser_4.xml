@@ -362,6 +362,7 @@
 
       <constructor>
         <![CDATA[
+          Tabmix.initialization.init.initialized = false;
           Tabmix.initialization.run("init", this);
         ]]>
       </constructor>
