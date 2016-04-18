@@ -271,43 +271,17 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  *
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
-  // in Firefox 17 /(openUILinkIn[^\(]*\([^\)]+)(\))/, find the first
-  // openUILinkIn in the comment
   if ("openUILink" in window) {
-    let code = ["openUILinkIn(url, where, params);",
-                "openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);"];
-    let source, str = openUILink.toString();
-    if (str.indexOf(code[0]) > -1)
-      source = code[0];
-    else if (str.indexOf(code[1]) > -1)
-      source = code[1];
-    else
-      return; // nothing we can do
-    /**
-     * don't open blank tab when we are about to add new livemark
-     * divert call from PanelUI-history to our function
-     */
+    // divert all the calls from places UI to use our preferences
     this.changeCode(window, "openUILink")._replace(
-      '{',
-      '{\n' +
-       '  if (event && event.target && event.target.parentNode &&\n' +
-       '      event.target.parentNode.id == "PanelUI-historyItems") {\n' +
-       '    TMP_Places.openHistoryItem(url, event);\n' +
-       '    return;\n' +
-       '  }', {check: Tabmix.isVersion(280)}
-    )._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
-      source,
-      '  var win = getTopWin();' +
-      '  if (win && where == "current") {' +
-      '    let _addLivemark = /^feed:/.test(url) &&' +
-      '       Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";' +
-      '    if (!_addLivemark)' +
-      '      where = win.Tabmix.checkCurrent(url);' +
-      '  }' +
-      '  try {$&}  catch (ex) {  }'
+      /openUILinkIn\(.*\);/,
+      'where = TMP_Places.openUILink(url, event, where, params);\n' +
+      '  if (where) {\n' +
+      '    try {\n      $&\n    } catch (ex) {  }\n' +
+      '  }\n'
     )._replace(// fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}

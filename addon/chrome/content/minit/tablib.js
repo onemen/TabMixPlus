@@ -834,12 +834,6 @@ var tablib = { // eslint-disable-line
       TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
     };
 
-    // history menu open in new tab if the curren tab is locked
-    // open in current tab if it blank or if middle click and setting is on
-    HistoryMenu.prototype._onCommand = function HM__onCommand(aEvent) {
-      TMP_Places.historyMenu(aEvent);
-    };
-
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype._onPopupShowing")._replace(
       'this.toggleRecentlyClosedWindows();',
       '$& \

@@ -72,13 +72,6 @@ var TMP_Places = {
       ).defineProperty();
     }
 
-    if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
-      Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._setLivemarkSiteURIMenuItem")._replace(
-        "openUILink(this.getAttribute('targetURI'), event);",
-        "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
-      ).toCode();
-    }
-
     // prevent error when closing window with sidbar open
     var docURI = window.document.documentURI;
     if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
@@ -113,37 +106,63 @@ var TMP_Places = {
     }
   },
 
-  // replace openlivemarksite-menuitem with tabmix function
-  openLivemarkSite: function TMP_PC_openLivemarkSite(aUrl, aEvent) {
-    var where = this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent), this.prefBookmark);
+  openMenuItem: function(aUri, aEvent, aParams, aPref) {
+    let pref = "extensions.tabmix.opentabfor." + aPref;
+    let where = this.isBookmarklet(aUri) ? "current" :
+                this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
-    openUILinkIn(aUrl, where, {
-      inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
-      initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
-    });
+    aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+    openUILinkIn(aUri, where, aParams);
   },
 
-  // we replace HistoryMenu.prototype._onCommand with this function
-  // look in tablib.js
-  historyMenu: function TMP_PC_historyMenu(aEvent) {
-    var node = aEvent.target._placesNode;
+  idsMap: {
+    "PanelUI-historyItems": "history",
+    goPopup: "history",
+    bookmarksMenuPopup: "bookmarks",
+    BMB_bookmarksPopup: "bookmarks",
+  },
+
+  openUILink: function(url, event, where, params) {
+    // divert all the calls from places UI to use our preferences
+    //   HistoryMenu.prototype._onCommand
+    //   BookmarkingUI._updateRecentBookmarks/onItemCommand
+    //   CustomizableWidgets<.onViewShowing/<.handleResult/onItemCommand
+    //   PlacesViewBase.prototype._setLivemarkSiteURIMenuItem
+    //   FeedHandler.loadFeed
+    let node = event && event.target ? event.target.parentNode : null;
     if (node) {
-      PlacesUIUtils.markPageAsTyped(node.uri);
-      this.openHistoryItem(node.uri, aEvent);
+      // if the id is not in the list, set pref to "bookmarks" when
+      // _placesNode exist
+      let pref = this.idsMap[node.id] || node._placesNode && "bookmarks";
+      if (pref) {
+        this.openMenuItem(url, event, params, pref);
+        return null;
+      }
     }
-  },
 
-  // open PanelUI-historyItems from history button, diverted from openUILink
-  openHistoryItem: function(aUri, aEvent) {
-    var where = this.isBookmarklet(aUri) ? "current" :
-    this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
-    if (where == "current")
-      Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
-    openUILinkIn(aUri, where, {
-      inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
-      initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
-    });
+    let win = Tabmix.getTopWin();
+    if (!win || where != "current") {
+      return where;
+    }
+
+    let isLoadFeed = Tabmix.callerTrace("FeedHandler.loadFeed", "loadFeed");
+    if (isLoadFeed) {
+      // since Firefox 42 clicking 'Subscribe to This Page' always show
+      // 'Subscribe to this feed' page
+      let subscribe = Tabmix.isVersion(420) ||
+          Services.prefs.getCharPref("browser.feeds.handler") == "ask";
+      let openNewTab = subscribe && Tabmix.whereToOpen(this.prefBookmark).inNew;
+      if (openNewTab) {
+        where = "tab";
+        params.inBackground = getBoolPref("browser.tabs.loadBookmarksInBackground");
+      } else {
+        win.gBrowser.selectedBrowser.tabmix_allowLoad = true;
+      }
+    } else {
+      where = win.Tabmix.checkCurrent(url);
+    }
+    return where;
   },
 
   isBookmarklet: function(url) {
