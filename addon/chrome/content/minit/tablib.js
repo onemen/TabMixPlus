@@ -1022,6 +1022,7 @@ var tablib = { // eslint-disable-line
           if (Tabmix.ContentClick.isUrlForDownload(aHref))
             newTab.addEventListener("SSTabRestored", urlForDownload, true);
           else {
+            delete tabState.scroll;
             addNewHistoryEntry();
             newTab.addEventListener("SSTabRestored", updateNewHistoryTitle, true);
           }
