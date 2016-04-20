@@ -98,7 +98,7 @@
                 <description> &sm.extension.description3;.</description>
               </vbox>
               <spacer flex="1"/>
-              <button style="min-width: 0px;" id="sessionmanager_button"
+              <button style="min-width: 0;" id="sessionmanager_button"
                       oncommand="gSessionPane.sessionManagerOptions();"/>
             </hbox>
             <separator class="groove"/>

@@ -60,7 +60,7 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
 
 .shortcut-content {
   height: 24px;
-  margin: 1px 0px;
+  margin: 1px 0;
 }
 
 .shortcut-notificationbox,
@@ -104,7 +104,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 }
 
 .shortcut-content > * > .text-link {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 #shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) + hbox,

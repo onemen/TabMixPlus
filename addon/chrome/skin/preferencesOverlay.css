@@ -3,15 +3,15 @@
 }
 
 .tabmixplus-button .button-icon {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  -moz-margin-start: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
+  -moz-margin-start: 0;
   -moz-margin-end: 5px;
 }
 
 #startupGroup > hbox > .tabmixplus-button {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 #whenBrowserStartBox {

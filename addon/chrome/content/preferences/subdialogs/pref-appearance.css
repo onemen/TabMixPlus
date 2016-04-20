@@ -34,7 +34,7 @@ colorbox {
 
 .rgbcontrol {
   margin-left: -1px;
-  margin-right: 0px;
+  margin-right: 0;
 }
 
 .rgbcontrol > .textbox-input-box > .numberbox-input {

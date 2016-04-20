@@ -132,7 +132,7 @@ vbox[shortcutsLabels="true"] {
 }
 
 #tabmixScrollBox > toolbarbutton {
-  margin: 0px;
+  margin: 0;
 }
 
 
@@ -148,7 +148,7 @@ vbox[shortcutsLabels="true"] {
 #TabsToolbar[tabmix-show-newtabbutton*="side"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   display: none;
   border: none;
-  margin: 0px;
+  margin: 0;
   vertical-align: bottom;
 }
 
@@ -217,7 +217,7 @@ so display: none !important; does not hide the button */
 .tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
   display: -moz-box !important;
   visibility: collapse !important;
-  width: 0px !important;
+  width: 0 !important;
 }
 
 /* we don't remove top and bottom borders to prevent tab height from shrinking */
@@ -310,7 +310,7 @@ so display: none !important; does not hide the button */
 /* Firefox 32+ */
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   visibility: collapse;
 }
 

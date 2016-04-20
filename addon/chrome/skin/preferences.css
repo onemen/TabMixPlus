@@ -14,7 +14,7 @@ radio[pane] {
 }
 
 radio[pane=paneLinks] {
-  -moz-image-region: rect(0px 24px 24px 0px);
+  -moz-image-region: rect(0px 24px 24px 0);
 }
 radio[pane=paneEvents] {
   -moz-image-region: rect(0px 48px 24px 24px)
@@ -30,7 +30,7 @@ radio[pane=paneMenu] {
 }
 radio[pane=paneSession] {
   list-style-image: url(sessionmanager.png);
-  -moz-image-region: rect(0px 24px 24px 0px);
+  -moz-image-region: rect(0px 24px 24px 0);
 }
 
 radio[pane=paneIncompatible] {
@@ -47,7 +47,7 @@ radio[pane=paneIncompatible][show=true] {
   -moz-appearance: none;
   margin: 0;
   min-width: 20px;
-  border: 0px solid transparent;
+  border: 0 solid transparent;
   background-color: transparent;
   color: transparent;
 }
@@ -93,8 +93,8 @@ tabpanel {
 }
 
 .bottom-separator {
-  height: 0px !important;
-  margin-bottom: 0px !important;
+  height: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .subtabs .tab-text {
@@ -198,7 +198,7 @@ tabbox > tabs {
 }
 
 .extraIcons .checkbox-icon {
-  padding: 2px 0px 2px 0px;
+  padding: 2px 0 2px 0;
   -moz-margin-end: 3px;
 }
 
@@ -237,7 +237,7 @@ prefpane > tabbox {
 
 tabbox {
   -moz-box-flex: 1;
-  padding: 0px 1px;
+  padding: 0 1px;
 }
 
 tabbox > tabpanels {
@@ -299,5 +299,5 @@ tabbox > tabpanels {
 }
 
 .menu checkbox {
-  padding-top: 0px;
+  padding-top: 0;
 }

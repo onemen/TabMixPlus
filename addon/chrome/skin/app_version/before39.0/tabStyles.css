@@ -143,14 +143,14 @@
 #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"]:not(:hover) > .tab-stack > .tab-background > .tab-background-end,
 #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"]:not(:hover) > .tab-stack > .tab-background > .tab-background-end,
 #tabbrowser-tabs[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState]):not(:hover) > .tab-stack > .tab-background > .tab-background-end {
-  width: 0px !important;
+  width: 0 !important;
 }
 
 #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"]:not(:hover) > .tab-stack > .tab-background,
 #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"]:not(:hover) > .tab-stack > .tab-background,
 #tabbrowser-tabs[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState]):not(:hover) > .tab-stack > .tab-background {
-  -moz-margin-start: 0px;
-  -moz-margin-end: 0px;
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
 }
 
 #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"]:not(:hover) > .tab-stack > .tab-background > .tab-background-middle,
@@ -217,7 +217,7 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-end::before,
 #tabbrowser-tabs:not([movingtab])[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-end::before,
 #tabbrowser-tabs:not([movingtab])[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState])[tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-end::before {
-  width: 0px !important;
+  width: 0 !important;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"][afterselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
@@ -227,9 +227,9 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl),
 #tabbrowser-tabs:not([movingtab])[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState])[tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, left bottom, right bottom;
-  background-size: 0% 0%, calc(100% - (1 * 30px)) 100%, 30px 100%;
+  background-size: 0 0, calc(100% - (1 * 30px)) 100%, 30px 100%;
   border-radius: 16px 0 0 20px;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"][afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
@@ -240,7 +240,7 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState])[tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-left: 2px solid rgba(26 ,26, 26, 0.25);
   border-radius: 16px 0 0 20px;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(ltr),
@@ -250,9 +250,9 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_unreadStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unread"][afterselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl),
 #tabbrowser-tabs:not([movingtab])[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState])[afterselected-visible="true"]:hover > .tab-stack > .tab-background:-moz-locale-dir(rtl) {
   background-position: left bottom, 30px bottom, right bottom;
-  background-size: 30px 100%, calc(100% - (1 * 30px)) 100%, 0% 0%;
+  background-size: 30px 100%, calc(100% - (1 * 30px)) 100%, 0 0;
   border-radius: 0 16px 20px 0;
-  margin-right: 0px;
+  margin-right: 0;
 }
 
 #tabbrowser-tabs:not([movingtab])[tabmix_unloadedStyle~="aus"] > .tabbrowser-tab:not([selected="true"])[tabmix_tabState="unloaded"][tabmix-beforeselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(ltr),
@@ -263,5 +263,5 @@
 #tabbrowser-tabs:not([movingtab])[tabmix_otherStyle~="aus"] > .tabbrowser-tab:not([selected="true"]):not([tabmix_tabState])[afterselected-visible="true"]:hover > .tab-stack > .tab-background > .tab-background-middle:-moz-locale-dir(rtl) {
   border-right: 2px solid rgba(26, 26, 26, 0.25);
   border-radius: 0 16px 20px 0;
-  margin-right: 0px;
+  margin-right: 0;
 }

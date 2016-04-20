@@ -103,7 +103,7 @@ toolbar[iconsize=small] #btn_undoclose:hover, .closedtabs-icon:hover > .menu-ico
 #main-window:not([customizing]) toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
 #btn_undoclose[type=menu-button] .toolbarbutton-icon {
-   margin-right: 0px;
+   margin-right: 0;
 }
 
 #btn_undoclose[type=menu-button] .toolbarbutton-menubutton-button{
@@ -188,21 +188,21 @@ toolbar[mode="full"] .tabmix-button[type="menu"] {
 .tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
   height: 22px;
   max-height: 22px;
-  margin: 1px 0px 1px;
+  margin: 1px 0 1px;
 }
 
 .tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
 .tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
   height: 23px;
   max-height: 23px;
-  margin: 0px 0px 1px;
+  margin: 0 0 1px;
 }
 
 .tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
 .tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
   height: 24px;
   max-height: 24px;
-  margin: 0px 0px 0px;
+  margin: 0 0 0;
 }
 
 .tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,

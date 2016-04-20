@@ -17,7 +17,7 @@
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"] >
     #tabbrowser-tabs[flowing="multibar"] > .tabbrowser-arrowscrollbox >
     .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
-  margin: -2px 0px;
+  margin: -2px 0;
 }
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton */
