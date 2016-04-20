@@ -31,9 +31,7 @@ function getKeysForShortcut(shortcut, id, win) {
       key: key.getAttribute("key"),
       keycode: key.getAttribute("keycode")
     };
-    if (getFormattedKey(_key) == shortcut)
-      return true;
-    return false;
+    return getFormattedKey(_key) == shortcut;
   }).map(key => "     " + _getKeyName(win, key).replace(dots, ""));
 
   return usedKeys.join("\n");

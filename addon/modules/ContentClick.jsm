@@ -640,11 +640,8 @@ ContentClickInternal = {
     }
 
     // don't interrupt with fastdial links
-    if ("ownerDocument" in node &&
-        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI))
-      return true;
-
-    return false;
+    return "ownerDocument" in node &&
+        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI);
   },
 
   /**
@@ -791,10 +788,7 @@ ContentClickInternal = {
       return false;
 
     let {event} = this._data;
-    if (event.button == 1 || event.button === 0 && (event.ctrlKey || event.metaKey))
-      return true;
-
-    return false;
+    return event.button == 1 || event.button === 0 && (event.ctrlKey || event.metaKey);
   },
 
   /**
@@ -834,10 +828,7 @@ ContentClickInternal = {
         this.targetPref == 2 && this._data.isLinkToExternalDomain)
       return false;
 
-    if (this.checkOnClick())
-      return false;
-
-    return true;
+    return !this.checkOnClick();
   },
 
   /**
@@ -868,12 +859,9 @@ ContentClickInternal = {
       return false;
 
     let {href, hrefFromOnClick, isLinkToExternalDomain, wrappedNode} = this._data;
-    if (/^(http|about)/.test(hrefFromOnClick || href) &&
+    return /^(http|about)/.test(hrefFromOnClick || href) &&
         (isLinkToExternalDomain || wrappedNode &&
-        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt")))
-      return true;
-
-    return false;
+        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt"));
   },
 
   /**
@@ -953,11 +941,7 @@ ContentClickInternal = {
       return true;
 
     let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
-    let testHost = _host.indexOf(node.host) > -1;
-    if (testHost)
-      return true;
-
-    return false;
+    return _host.indexOf(node.host) > -1;
   },
 
   /**
@@ -973,13 +957,10 @@ ContentClickInternal = {
     let isValidWindow = function(aWindow) {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
-      if (PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aWindow) ||
-          TabmixSvc.version(320) &&
-          window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser) {
-        return false;
-      }
-      return true;
+      return PrivateBrowsingUtils.isWindowPrivate(window) ==
+          PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
+          (!TabmixSvc.version(320) ||
+          window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser);
     };
 
     let windows = [];

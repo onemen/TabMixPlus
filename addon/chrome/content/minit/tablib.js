@@ -1102,10 +1102,8 @@ var tablib = { // eslint-disable-line
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
-        if (!aUrl || !aUrl.length || aUrl.indexOf(" ", 0) != -1 ||
-             /^\s*(javascript|data):/.test(aUrl))
-          return false;
-        return true;
+        return aUrl && aUrl.length && aUrl.indexOf(" ") == -1 &&
+            !(/^\s*(javascript|data):/).test(aUrl);
       };
 
       let browser = gBrowser.selectedBrowser;
@@ -1956,9 +1954,6 @@ Tabmix.newTabUrls = [
 ];
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
-  if (Tabmix.prefs.getBoolPref("openTabNext") &&
-       (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent))
-    return true;
-
-  return false;
+  return Tabmix.prefs.getBoolPref("openTabNext") &&
+      (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent);
 };

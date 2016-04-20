@@ -47,9 +47,7 @@ var TMP_SessionStore = {
     let entries = tabData && tabData.entries;
     if (entries && entries.length > 1)
       return false;
-    if (entries[0] && entries[0].url != "about:blank")
-      return false;
-    return true;
+    return !entries[0] || entries[0].url == "about:blank";
   },
 
  /**

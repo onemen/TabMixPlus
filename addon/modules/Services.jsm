@@ -264,10 +264,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
 
 // check if australis tab shape is implemented
 XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  if (this.topWin().document.getElementById("tab-curve-clip-path-start")) {
-    return true;
-  }
-  return false;
+  return Boolean(this.topWin().document.getElementById("tab-curve-clip-path-start"));
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {

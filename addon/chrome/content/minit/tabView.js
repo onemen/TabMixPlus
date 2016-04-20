@@ -362,10 +362,8 @@
       excludeTabs = [];
 
     return !Array.prototype.some.call(gBrowser.tabs, function(tab) {
-      if (!tab.pinned && !tab.hidden && !tab.closing && excludeTabs.indexOf(tab) == -1) {
-        return true;
-      }
-      return false;
+      return !tab.pinned && !tab.hidden && !tab.closing &&
+          excludeTabs.indexOf(tab) == -1;
     });
   };
 
