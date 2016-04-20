@@ -267,7 +267,7 @@ var TMP_LastTab = {
     } else if (this.TabListLock && this.CtrlKey &&
              event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_SHIFT) {
       // don't hide the tabs list popup when user press shift
-      return;
+      // return;
     } else {
       if (this.TabListLock)
         this.TabList.hidePopup();
