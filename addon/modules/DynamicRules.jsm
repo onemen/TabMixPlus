@@ -365,16 +365,20 @@ this.DynamicRules = {
 
     var currentPrefValues, prefValues = {};
     let prefString = Prefs.getCharPref(ruleName);
-    try {
-      currentPrefValues = TabmixSvc.JSON.parse(prefString);
-      if (currentPrefValues === null)
-        throw Error(ruleName + " value is invalid\n" + prefString);
-    } catch (ex) {
+    let handleError = function(ex) {
       TabmixSvc.console.log(ex);
       TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
       Prefs.clearUserPref(ruleName);
       // set prev value to default so we can continue with this function
       currentPrefValues = defaultPrefValues;
+    };
+    try {
+      currentPrefValues = TabmixSvc.JSON.parse(prefString);
+    } catch (ex) {
+      handleError(ex);
+    }
+    if (currentPrefValues === null) {
+      handleError(ruleName + " value is invalid\n" + prefString);
     }
 
     // make sure we have all the item
