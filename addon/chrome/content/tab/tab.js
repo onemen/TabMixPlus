@@ -1076,13 +1076,14 @@ Tabmix.tabsUtils = {
     if (element.pinned)
       return true;
 
+    let round = val => Math.ceil(val);
     var [start, end] = this.tabBar.mTabstrip._startEndProps;
     var rect = this.tabBar.mTabstrip.scrollClientRect;
-    var containerStart = rect[start];
-    var containerEnd = rect[end];
+    var containerStart = round(rect[start]);
+    var containerEnd = round(rect[end]);
     rect = element.getBoundingClientRect();
-    var elementStart = rect[start];
-    var elementEnd = rect[end];
+    var elementStart = round(rect[start]);
+    var elementEnd = round(rect[end]);
 
     // we don't need the extra check with scrollContentRect
     // like in ensureElementIsVisible, the element will be invisible anyhow.
