@@ -646,8 +646,7 @@ var TabmixContext = {
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {
-        let {target, linkURL} = gContextMenu;
-        gContextMenu.tabmixLinkURL = tablib.getValidUrl(linkURL, target);
+        gContextMenu.tabmixLinkURL = tablib.getValidUrl();
       }
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");

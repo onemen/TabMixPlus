@@ -1054,20 +1054,19 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openLinkWithHistory = function() {
-      var {target, linkURL, principal} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
       if (Tabmix.isVersion(380))
-        urlSecurityCheck(url, principal);
+        urlSecurityCheck(url, gContextMenu.principal);
       else if (typeof gContextMenu._unremotePrincipal == "function") {
         // Firefox 26-37
-        let doc = target.ownerDocument;
+        let doc = gContextMenu.target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
       } else {
         // Firefox 17-25
-        let doc = target.ownerDocument;
+        let doc = gContextMenu.target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
       }
 
@@ -1075,8 +1074,7 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openInverseLink = function(event) {
-      var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1087,8 +1085,7 @@ var tablib = { // eslint-disable-line
     };
 
     tablib.openLinkInCurrent = function() {
-      var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1097,7 +1094,11 @@ var tablib = { // eslint-disable-line
       gContextMenu.openLinkInCurrent();
     };
 
-    tablib.getValidUrl = function(url, target) {
+    tablib.getValidUrl = function() {
+      if (!gContextMenu) {
+        return null;
+      }
+      let {target, linkURL} = gContextMenu;
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
@@ -1112,17 +1113,17 @@ var tablib = { // eslint-disable-line
           typeof gContextMenu.tabmixLinkURL != "undefined")
         return gContextMenu.tabmixLinkURL;
 
-      if (!isValid(url)) {
+      if (!isValid(linkURL)) {
         let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
                     altKey: false, target: {},
                     tabmix_openLinkWithHistory: true};
         // we only get here when it is safe to use contentWindowAsCPOW
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, url, browser, gBrowser.selectedBrowser._contentWindow);
+              target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
-      return url;
+      return linkURL;
     };
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
