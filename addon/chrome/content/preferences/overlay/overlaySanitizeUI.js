@@ -3,6 +3,10 @@
 Tabmix.setSanitizer = {
   init: function() {
     this.isPromptDialog = typeof window.gSanitizePromptDialog == "object";
+    let dialog = document.getElementById("SanitizeDialog");
+    ["_label", "_accesskey", "_confirm"].forEach(att => {
+      this[att] = dialog.getAttribute("tabmix" + att);
+    });
     this.addSanitizeItem();
     this.addMenuItem();
     if (this.isPromptDialog) {
