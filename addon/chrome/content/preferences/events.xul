@@ -243,7 +243,7 @@
                 <checkbox_tmp id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
               </vbox>
               <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
-                        style="width: 19em" align="start"
+                        style="width: 19em;" align="start"
                         preference="pref_inverseother" observes="obs_midcurrent"/>
             </hbox>
           </groupbox>

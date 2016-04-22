@@ -119,7 +119,7 @@
               </menulist>
             </hbox>
             <separator/>
-            <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
+            <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;;"
                          hidden="true" id="treeStyleTab.msg">
                 &verticalTabbar.description1;
             </description>
@@ -222,7 +222,7 @@
             </hbox>
             <hbox id="tabxDependant" class="indent" align="center">
               <menulist id="tabCloseButton" preference="pref_tabCloseButton"
-                        style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
+                        style="width: &showTabX.popup.width;;" sizetopopup="none" observes="obs_showTabX">
                 <menupopup>
                   <menuitem value="1" label="&showTabX.always;"/>
                   <menuitem value="5" label="&showTabX.alwaysExeption;" id="alltabsItem"/>
@@ -263,7 +263,7 @@
         <tabpanel>
           <groupbox flex="1">
             <hbox align="start">
-              <description class="header" style="width: &toolbar.description.width;">&toolbar.description;</description>
+              <description class="header" style="width: &toolbar.description.width;;">&toolbar.description;</description>
               <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>

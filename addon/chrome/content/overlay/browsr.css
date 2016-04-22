@@ -7,7 +7,7 @@
  **/
 
 vbox[shortcutsLabels="true"] {
-  -moz-binding: url(chrome://tabmixplus/content/preferences/shortcutsLabels.xml#shortcut-labels) !important;
+  -moz-binding: url("chrome://tabmixplus/content/preferences/shortcutsLabels.xml#shortcut-labels") !important;
 }
 
 /*  we don't use .tabbrowser-tab > .tab-close-button here
@@ -262,7 +262,7 @@ so display: none !important; does not hide the button */
 }
 
 /* :::: multi-row :::: */
-.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > scrollbox > .scrollbox-innerbox {
+.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
   display: block !important;
 }
 

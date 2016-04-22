@@ -17,16 +17,16 @@ radio[pane=paneLinks] {
   -moz-image-region: rect(0px 24px 24px 0);
 }
 radio[pane=paneEvents] {
-  -moz-image-region: rect(0px 48px 24px 24px)
+  -moz-image-region: rect(0px 48px 24px 24px);
 }
 radio[pane=paneAppearance] {
-  -moz-image-region: rect(0px 72px 24px 48px)
+  -moz-image-region: rect(0px 72px 24px 48px);
 }
 radio[pane=paneMouse] {
-  -moz-image-region: rect(0px 96px 24px 72px)
+  -moz-image-region: rect(0px 96px 24px 72px);
 }
 radio[pane=paneMenu] {
-  -moz-image-region: rect(0px 120px 24px 96px)
+  -moz-image-region: rect(0px 120px 24px 96px);
 }
 radio[pane=paneSession] {
   list-style-image: url(sessionmanager.png);

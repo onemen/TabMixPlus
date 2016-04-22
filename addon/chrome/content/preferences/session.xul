@@ -147,7 +147,7 @@
               <!-- Tabmix Session manager - start/exit -->
               <tabpanel>
                 <hbox>
-                  <groupbox style="min-width: 14.6em">
+                  <groupbox style="min-width: 14.6em;">
                     <caption label="&sm.start;"/>
                     <radiogroup id="onStart" align="start" preference="pref_onStart">
                       <radio value="0" id="onStart.restoresession" label="&sm.start.restore;"/>
