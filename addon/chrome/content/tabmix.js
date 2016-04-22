@@ -274,6 +274,7 @@ var TMP_eventListener = {
         this.onTabUnpinned(aEvent);
         break;
       case "DOMMouseScroll":
+      case "wheel":
         this.onTabBarScroll(aEvent);
         break;
       case "DOMContentLoaded":
@@ -391,8 +392,8 @@ var TMP_eventListener = {
     }
 
     var tabBar = gBrowser.tabContainer;
-
-    tabBar.addEventListener("DOMMouseScroll", this, true);
+    this._wheelEvent = Tabmix.isVersion(480) ? "wheel" : "DOMMouseScroll";
+    tabBar.addEventListener(this._wheelEvent, this, true);
 
     try {
       TabmixProgressListener.startup(gBrowser);
@@ -971,13 +972,32 @@ var TMP_eventListener = {
       aEvent.preventDefault();
       return;
     }
-    var tabBar = gBrowser.tabContainer;
+    let tabBar = gBrowser.tabContainer;
+    let tabsSrip = tabBar.mTabstrip;
+    let orient = tabsSrip.orient;
     TabmixTabbar.removeShowButtonAttr();
 
     let shouldMoveFocus = scrollTabs == 1;
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
-    var direction = aEvent.detail;
+
+    let direction, isVertical;
+    if (Tabmix.isVersion(480)) {
+      if (orient == "vertical") {
+        direction = aEvent.deltaY;
+      } else {
+        isVertical = Math.abs(aEvent.deltaY) > Math.abs(aEvent.deltaX);
+        let delta = isVertical ? aEvent.deltaY : aEvent.deltaX;
+        direction = isVertical && tabsSrip._isRTLScrollbox ? -delta : delta;
+      }
+    } else {
+      direction = aEvent.detail;
+      if (orient != "vertical") {
+        isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
+        direction = isVertical && tabsSrip._isRTLScrollbox ? -direction : direction;
+      }
+    }
+
     if (Tabmix.prefs.getBoolPref("reversedScroll")) {
       direction *= -1;
     }
@@ -988,22 +1008,28 @@ var TMP_eventListener = {
       aEvent.stopPropagation();
       aEvent.preventDefault();
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
-      // this code is based on scrollbox.xml DOMMouseScroll event handler
-      let tabsSrip = tabBar.mTabstrip;
-      let orient = tabsSrip.orient;
-
-      // scroll the tabbar by one tab
-      if (orient == "horizontal" || TabmixTabbar.isMultiRow)
-        direction = direction > 0 ? 1 : -1;
+      // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
+      let scrollByDelta = function(delta) {
+        if (Tabmix.isVersion(480) &&
+            aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
+          tabsSrip.scrollByPixels(delta);
+        } else {
+          // scroll the tabbar by one tab
+          if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
+            delta = delta > 0 ? 1 : -1;
+          }
+          tabsSrip.scrollByIndex(delta);
+        }
+      };
 
       if (orient == "vertical") {
-        if (aEvent.axis == aEvent.HORIZONTAL_AXIS)
+        if (!Tabmix.isVersion(480) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
           return;
-        tabsSrip.scrollByIndex(direction);
+        }
+        scrollByDelta(direction);
       } else {
-        let isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
         if (tabsSrip._prevMouseScrolls.every(prev => prev == isVertical)) {
-          tabsSrip.scrollByIndex(isVertical && tabsSrip._isRTLScrollbox ? -direction : direction);
+          scrollByDelta(direction);
         }
 
         if (tabsSrip._prevMouseScrolls.length > 1)
@@ -1051,7 +1077,7 @@ var TMP_eventListener = {
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
-    gBrowser.tabContainer.removeEventListener("DOMMouseScroll", this, true);
+    gBrowser.tabContainer.removeEventListener(this._wheelEvent, this, true);
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();

@@ -764,9 +764,6 @@ var TabmixAllTabs = {
       case "DOMMenuItemInactive":
         this.updateMenuItemInactive(aEvent);
         break;
-      case "DOMMouseScroll":
-        TMP_eventListener.onTabBarScroll(aEvent);
-        /* falls through */
       case "scroll":
         this._popup._updateTabsVisibilityStatus();
         break;
