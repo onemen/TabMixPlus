@@ -162,7 +162,7 @@
       'this.',
       'UI.', {flags: "g", silent: true}
     )._replace(
-      /items\.forEach\(function\s*\(item\)\s*{/,
+      /items\.forEach\(function\s*\(item\)\s*\{/,
       'Array.prototype.forEach.call(gBrowser.tabs, function(tab) { \
        if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
