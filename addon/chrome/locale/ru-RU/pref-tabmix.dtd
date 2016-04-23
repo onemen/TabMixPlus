@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Перетащите кнопку &apos;Новая вкладка&apos; на панель вкладок, чтобы использовать этот параметр.">
 <!ENTITY hideTabBarButton.label "Общая кнопка закрытия вкладок">
 <!ENTITY newTabButton.label "Кнопка добавления новой вкладки">
-<!ENTITY newTabButton.posiotion.left.label "Слева">
-<!ENTITY newTabButton.posiotion.right.label "Справа">
-<!ENTITY newTabButton.posiotion.afterlast.label "После последней вкладки">
+<!ENTITY newTabButton.position.left.label "Слева">
+<!ENTITY newTabButton.position.right.label "Справа">
+<!ENTITY newTabButton.position.afterlast.label "После последней вкладки">
 <!ENTITY allTabsButton.label "Кнопка всех вкладок">
 <!ENTITY tabBarSpace.label "Пустые поля по краям панели вкладок">
 <!ENTITY tabBarSpace.tooltip "Пустые поля для перетаскивания вкладок по панели и щелчков мышью">

@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Posizionare il pulsante &apos;Nuova scheda&apos; nelle barre degli strumenti per attivare l&apos;opzione">
 <!ENTITY hideTabBarButton.label "Pulsante di chiusura schede">
 <!ENTITY newTabButton.label "Pulsante di nuova scheda">
-<!ENTITY newTabButton.posiotion.left.label "nella parte sinistra">
-<!ENTITY newTabButton.posiotion.right.label "nella parte destra">
-<!ENTITY newTabButton.posiotion.afterlast.label "dopo l&apos;ultima scheda">
+<!ENTITY newTabButton.position.left.label "nella parte sinistra">
+<!ENTITY newTabButton.position.right.label "nella parte destra">
+<!ENTITY newTabButton.position.afterlast.label "dopo l&apos;ultima scheda">
 <!ENTITY allTabsButton.label "Pulsante di tutte le schede">
 <!ENTITY tabBarSpace.label "Spazio ai lati della barra delle schede">
 <!ENTITY tabBarSpace.tooltip "Lascia spazio su entrambi i lati della barra delle schede per trascinarvi le schede">
@@ -168,7 +168,7 @@
 <!ENTITY showTabX.rtl "sulla parte destra">
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
-          change this only if you need to change the width 
+          change this only if you need to change the width
 
 
 
@@ -192,8 +192,8 @@
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
-<!-- LOCALIZATION NOTE          
-          change this only if you need to change the width 
+<!-- LOCALIZATION NOTE
+          change this only if you need to change the width
 
 
 

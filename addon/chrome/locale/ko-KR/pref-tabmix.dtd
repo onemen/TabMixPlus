@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "탭 닫기 버튼">
 <!ENTITY newTabButton.label "새 탭 버튼">
-<!ENTITY newTabButton.posiotion.left.label "왼쪽">
-<!ENTITY newTabButton.posiotion.right.label "오른쪽">
-<!ENTITY newTabButton.posiotion.afterlast.label "마지막 탭 다음">
+<!ENTITY newTabButton.position.left.label "왼쪽">
+<!ENTITY newTabButton.position.right.label "오른쪽">
+<!ENTITY newTabButton.position.afterlast.label "마지막 탭 다음">
 <!ENTITY allTabsButton.label "탭 목록 버튼">
 <!ENTITY tabBarSpace.label "양쪽 끝에 빈 공간">
 <!ENTITY tabBarSpace.tooltip "탭 도구 모음에 무언가를 떨어뜨리거나 탭 도구 모음을 클릭하기 위한 공간">

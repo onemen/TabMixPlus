@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Glisser le bouton &quot;Nouvel onglet&quot; dans votre barre d'onglets pour activer cette option.">
 <!ENTITY hideTabBarButton.label "Bouton de fermeture">
 <!ENTITY newTabButton.label "Bouton de nouvel onglet">
-<!ENTITY newTabButton.posiotion.left.label "Côté gauche">
-<!ENTITY newTabButton.posiotion.right.label "Côté droit">
-<!ENTITY newTabButton.posiotion.afterlast.label "Après le dernier onglet">
+<!ENTITY newTabButton.position.left.label "Côté gauche">
+<!ENTITY newTabButton.position.right.label "Côté droit">
+<!ENTITY newTabButton.position.afterlast.label "Après le dernier onglet">
 <!ENTITY allTabsButton.label "Bouton donnant la liste des onglets ouverts">
 <!ENTITY tabBarSpace.label "Espaces supplémentaires de part et d'autre de la barre d'onglets">
 <!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d'onglets">

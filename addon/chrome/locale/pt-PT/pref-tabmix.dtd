@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Arraste o botão &quot;Novo separador&quot; na sua barra do separador para activar esta opção.">
 <!ENTITY hideTabBarButton.label "Botão de encerrar separador">
 <!ENTITY newTabButton.label "Botão de novo separador">
-<!ENTITY newTabButton.posiotion.left.label "Lado esquerdo">
-<!ENTITY newTabButton.posiotion.right.label "Lado direito">
-<!ENTITY newTabButton.posiotion.afterlast.label "Depois do último separador">
+<!ENTITY newTabButton.position.left.label "Lado esquerdo">
+<!ENTITY newTabButton.position.right.label "Lado direito">
+<!ENTITY newTabButton.position.afterlast.label "Depois do último separador">
 <!ENTITY allTabsButton.label "Botão todos os separadores">
 <!ENTITY tabBarSpace.label "Espaços extra em ambos os lados">
 <!ENTITY tabBarSpace.tooltip "Para clicar e deixar algo na barra de separadores">

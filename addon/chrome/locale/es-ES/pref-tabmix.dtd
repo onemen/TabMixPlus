@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Arrastre el botón de Nueva pestaña a la barra de pestañas para activar esta opción.">
 <!ENTITY hideTabBarButton.label "Botón cerrar pestaña">
 <!ENTITY newTabButton.label "Botón nueva pestaña">
-<!ENTITY newTabButton.posiotion.left.label "Izquierda">
-<!ENTITY newTabButton.posiotion.right.label "Derecha">
-<!ENTITY newTabButton.posiotion.afterlast.label "Tras última pestaña">
+<!ENTITY newTabButton.position.left.label "Izquierda">
+<!ENTITY newTabButton.position.right.label "Derecha">
+<!ENTITY newTabButton.position.afterlast.label "Tras última pestaña">
 <!ENTITY allTabsButton.label "Botón en todas las pestañas">
 <!ENTITY tabBarSpace.label "Espacios extra a ambos lados">
 <!ENTITY tabBarSpace.tooltip "Para hacer clic y arrastrar algo a la barra de pestañas">

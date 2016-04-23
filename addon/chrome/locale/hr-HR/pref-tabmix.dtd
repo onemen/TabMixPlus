@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Gumb Zatvori karticu">
 <!ENTITY newTabButton.label "Gumb Nova kartica">
-<!ENTITY newTabButton.posiotion.left.label "on Left side">
-<!ENTITY newTabButton.posiotion.right.label "on Right side">
-<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
 <!ENTITY allTabsButton.label "Gumb svih kartica">
 <!ENTITY tabBarSpace.label "Višak mjesta na obje strane">
 <!ENTITY tabBarSpace.tooltip "Za klikanje i ispuštanje nečega na traku kartica">

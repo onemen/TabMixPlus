@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Kéo nút &quot;Tạo thẻ mới&quot; vào thanh chứa thẻ để bật tính năng này.">
 <!ENTITY hideTabBarButton.label "Nút đóng thẻ">
 <!ENTITY newTabButton.label "Nút thẻ mới">
-<!ENTITY newTabButton.posiotion.left.label "ở bên Trái">
-<!ENTITY newTabButton.posiotion.right.label "ở bên Phải">
-<!ENTITY newTabButton.posiotion.afterlast.label "Sau thẻ cuối cùng">
+<!ENTITY newTabButton.position.left.label "ở bên Trái">
+<!ENTITY newTabButton.position.right.label "ở bên Phải">
+<!ENTITY newTabButton.position.afterlast.label "Sau thẻ cuối cùng">
 <!ENTITY allTabsButton.label "Nút tất cả thẻ">
 <!ENTITY tabBarSpace.label "Thêm khoảng trống ở cả hai bên">
 <!ENTITY tabBarSpace.tooltip "Khi nhấn và thả thứ nào đó trên thanh thẻ">

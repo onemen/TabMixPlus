@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Включването става чрез плъзгане на бутона &quot;Нов подпрозорец&quot; върху лентата с подпрозорци.">
 <!ENTITY hideTabBarButton.label "Бутон за затваряне на подпрозореца">
 <!ENTITY newTabButton.label "Бутон за добавяне на нов подпрозорец">
-<!ENTITY newTabButton.posiotion.left.label "Отляво">
-<!ENTITY newTabButton.posiotion.right.label "Отдясно">
-<!ENTITY newTabButton.posiotion.afterlast.label "След последния подпрозорец">
+<!ENTITY newTabButton.position.left.label "Отляво">
+<!ENTITY newTabButton.position.right.label "Отдясно">
+<!ENTITY newTabButton.position.afterlast.label "След последния подпрозорец">
 <!ENTITY allTabsButton.label "Бутон &quot;Всички подпрозорци&quot;">
 <!ENTITY tabBarSpace.label "Празни полета по краищата на лентата с подпрозорци">
 <!ENTITY tabBarSpace.tooltip "Използват се за щракване и за пускане на различни елементи върху лентата с подпрозорци">

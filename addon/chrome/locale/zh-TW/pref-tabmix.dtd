@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "拖曳「新增分頁按鈕」至分頁標籤列來啟用這個功能">
 <!ENTITY hideTabBarButton.label "關閉分頁按鈕">
 <!ENTITY newTabButton.label "新增分頁按鈕">
-<!ENTITY newTabButton.posiotion.left.label "左邊">
-<!ENTITY newTabButton.posiotion.right.label "右邊">
-<!ENTITY newTabButton.posiotion.afterlast.label "最後一個分頁後面">
+<!ENTITY newTabButton.position.left.label "左邊">
+<!ENTITY newTabButton.position.right.label "右邊">
+<!ENTITY newTabButton.position.afterlast.label "最後一個分頁後面">
 <!ENTITY allTabsButton.label "列出所有分頁按鈕">
 <!ENTITY tabBarSpace.label "兩側額外空間">
 <!ENTITY tabBarSpace.tooltip "當分頁數量很多時，方便滑鼠拖曳或點擊分頁標籤列之用">

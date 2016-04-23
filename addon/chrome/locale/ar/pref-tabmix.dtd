@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "زر غلق اللسان">
 <!ENTITY newTabButton.label "زر فتح لسان جديد">
-<!ENTITY newTabButton.posiotion.left.label "في الجانب الأيسر">
-<!ENTITY newTabButton.posiotion.right.label "في الجانب الأيمن">
-<!ENTITY newTabButton.posiotion.afterlast.label "بعد اللسان الأخير">
+<!ENTITY newTabButton.position.left.label "في الجانب الأيسر">
+<!ENTITY newTabButton.position.right.label "في الجانب الأيمن">
+<!ENTITY newTabButton.position.afterlast.label "بعد اللسان الأخير">
 <!ENTITY allTabsButton.label "جميع أزرار الألسنة">
 <!ENTITY tabBarSpace.label "مساحة إضافية في كلا الجانبين">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">

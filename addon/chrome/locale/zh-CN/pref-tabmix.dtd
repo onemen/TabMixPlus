@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "拖动&apos;新建标签页&apos;按钮到标签栏来启用该选项。">
 <!ENTITY hideTabBarButton.label "标签页关闭按钮">
 <!ENTITY newTabButton.label "新建标签页按钮">
-<!ENTITY newTabButton.posiotion.left.label "左侧">
-<!ENTITY newTabButton.posiotion.right.label "右侧">
-<!ENTITY newTabButton.posiotion.afterlast.label "最后一个标签页之后">
+<!ENTITY newTabButton.position.left.label "左侧">
+<!ENTITY newTabButton.position.right.label "右侧">
+<!ENTITY newTabButton.position.afterlast.label "最后一个标签页之后">
 <!ENTITY allTabsButton.label "所有标签页按钮">
 <!ENTITY tabBarSpace.label "两侧额外空间">
 <!ENTITY tabBarSpace.tooltip "是用于在标签栏点击或拖放某项">

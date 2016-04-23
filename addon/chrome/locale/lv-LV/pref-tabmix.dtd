@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Lai ieslēgtu šo opciju, pārnesiet pogu 'Jauna cilne' uz ciļņu joslas.">
 <!ENTITY hideTabBarButton.label "Poga 'Aizvērt cilni'">
 <!ENTITY newTabButton.label "Poga 'Jauna cilne'">
-<!ENTITY newTabButton.posiotion.left.label "kreisajā pusē">
-<!ENTITY newTabButton.posiotion.right.label "labajā pusē">
-<!ENTITY newTabButton.posiotion.afterlast.label "Pēc pēdējās cilnes">
+<!ENTITY newTabButton.position.left.label "kreisajā pusē">
+<!ENTITY newTabButton.position.right.label "labajā pusē">
+<!ENTITY newTabButton.position.afterlast.label "Pēc pēdējās cilnes">
 <!ENTITY allTabsButton.label "Poga 'Visas cilnes'">
 <!ENTITY tabBarSpace.label "Papildu atstarpe abās pusēs">
 <!ENTITY tabBarSpace.tooltip "Klikšķināšanai un kaut kā nomešanai uz ciļņu joslas">

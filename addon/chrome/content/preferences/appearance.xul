@@ -22,7 +22,7 @@
       <preference id="pref_appearance"        name="extensions.tabmix.appearance.selectedTabIndex"
                   type="int"/>
       <preference id="pref_newTabButton"      name="extensions.tabmix.newTabButton"             type="bool"/>
-      <preference id="pref_newTabButton.posiotion"
+      <preference id="pref_newTabButton.position"
                   name="extensions.tabmix.newTabButton.position"                                type="int"/>
       <preference id="pref_hideTabBarButton"  name="extensions.tabmix.hideTabBarButton"         type="bool"
                   inverted="true"/>
@@ -84,12 +84,12 @@
             <hbox align="center">
               <checkbox_tmp id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
               <!-- new tab button on tabbar position -->
-              <menulist id="newTabButton.posiotion"
-                        preference="pref_newTabButton.posiotion" observes="obs_newTabButton">
+              <menulist id="newTabButton.position"
+                        preference="pref_newTabButton.position" observes="obs_newTabButton">
                 <menupopup>
-                  <menuitem value="0" id="newTabButton.posiotion.left"  label="&newTabButton.posiotion.left.label;"/>
-                  <menuitem value="1" id="newTabButton.posiotion.right" label="&newTabButton.posiotion.right.label;"/>
-                  <menuitem value="2" id="newTabButton.posiotion.afterlast" label="&newTabButton.posiotion.afterlast.label;"/>
+                  <menuitem value="0" id="newTabButton.position.left"  label="&newTabButton.position.left.label;"/>
+                  <menuitem value="1" id="newTabButton.position.right" label="&newTabButton.position.right.label;"/>
+                  <menuitem value="2" id="newTabButton.position.afterlast" label="&newTabButton.position.afterlast.label;"/>
                 </menupopup>
               </menulist>
               <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"

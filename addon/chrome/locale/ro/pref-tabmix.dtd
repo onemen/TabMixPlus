@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Glisați butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
 <!ENTITY hideTabBarButton.label "Butonul „Închidere filă”">
 <!ENTITY newTabButton.label "Butonul „Filă nouă”">
-<!ENTITY newTabButton.posiotion.left.label "în marginea stângă">
-<!ENTITY newTabButton.posiotion.right.label "în marginea dreaptă">
-<!ENTITY newTabButton.posiotion.afterlast.label "după ultima filă">
+<!ENTITY newTabButton.position.left.label "în marginea stângă">
+<!ENTITY newTabButton.position.right.label "în marginea dreaptă">
+<!ENTITY newTabButton.position.afterlast.label "după ultima filă">
 <!ENTITY allTabsButton.label "Butonul „Listă file deschise”">
 <!ENTITY tabBarSpace.label "Spațiu suplimentar la ambele margini">
 <!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau fixarea obiectelor pe bara de file">

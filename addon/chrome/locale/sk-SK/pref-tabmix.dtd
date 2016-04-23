@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Presunúť tlačidlo &apos;Nová karta&apos; na panel kariet pre zapnutie tejto možnosti.">
 <!ENTITY hideTabBarButton.label "Tlačidlo zatvoriť kartu">
 <!ENTITY newTabButton.label "Tlačidlo nová karta">
-<!ENTITY newTabButton.posiotion.left.label "Naľavo">
-<!ENTITY newTabButton.posiotion.right.label "Napravo">
-<!ENTITY newTabButton.posiotion.afterlast.label "Za poslednou kartou">
+<!ENTITY newTabButton.position.left.label "Naľavo">
+<!ENTITY newTabButton.position.right.label "Napravo">
+<!ENTITY newTabButton.position.afterlast.label "Za poslednou kartou">
 <!ENTITY allTabsButton.label "Tlačidlo všetkých kariet">
 <!ENTITY tabBarSpace.label "Miesto naviac na oboch stranách">
 <!ENTITY tabBarSpace.tooltip "Pre kliknutie a zhodenie niečoho na lištu s kartami">

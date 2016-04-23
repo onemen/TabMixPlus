@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Close tab button">
 <!ENTITY newTabButton.label "New tab button">
-<!ENTITY newTabButton.posiotion.left.label "on Left side">
-<!ENTITY newTabButton.posiotion.right.label "on Right side">
-<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
 <!ENTITY allTabsButton.label "All tabs button">
 <!ENTITY tabBarSpace.label "Extra spaces on both sides">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">

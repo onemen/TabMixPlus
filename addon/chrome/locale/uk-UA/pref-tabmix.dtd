@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Перетягніть клавішу Нова Вкладка до вашої панелі вкладок для того щоб включити дану можливість.">
 <!ENTITY hideTabBarButton.label "Загальна кнопка закриття вкладок">
 <!ENTITY newTabButton.label "Кнопка додавання нової вкладки">
-<!ENTITY newTabButton.posiotion.left.label "Ліворуч">
-<!ENTITY newTabButton.posiotion.right.label "Праворуч">
-<!ENTITY newTabButton.posiotion.afterlast.label "Після останньої вкладки">
+<!ENTITY newTabButton.position.left.label "Ліворуч">
+<!ENTITY newTabButton.position.right.label "Праворуч">
+<!ENTITY newTabButton.position.afterlast.label "Після останньої вкладки">
 <!ENTITY allTabsButton.label "Кнопка всіх вкладок">
 <!ENTITY tabBarSpace.label "Порожні поля по краях панелі вкладок">
 <!ENTITY tabBarSpace.tooltip "Порожні поля для перетаскування вкладок по панелі й клацань мишею">

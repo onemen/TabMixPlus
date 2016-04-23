@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Превуците дугме „Нови језичак” на траку са језичцима да бисте омогућили ову опцију.">
 <!ENTITY hideTabBarButton.label "Дугме за затварање картице">
 <!ENTITY newTabButton.label "Дугме за нову картицу">
-<!ENTITY newTabButton.posiotion.left.label "Лева страна">
-<!ENTITY newTabButton.posiotion.right.label "Десна страна">
-<!ENTITY newTabButton.posiotion.afterlast.label "После последње картице">
+<!ENTITY newTabButton.position.left.label "Лева страна">
+<!ENTITY newTabButton.position.right.label "Десна страна">
+<!ENTITY newTabButton.position.afterlast.label "После последње картице">
 <!ENTITY allTabsButton.label "Дугме за све картице">
 <!ENTITY tabBarSpace.label "Додатни простор са обе стране">
 <!ENTITY tabBarSpace.tooltip "За клик и испуштање на линију картица">

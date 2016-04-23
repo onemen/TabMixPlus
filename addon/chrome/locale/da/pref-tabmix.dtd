@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Luk faneblad-knap">
 <!ENTITY newTabButton.label "Nyt faneblad-knap">
-<!ENTITY newTabButton.posiotion.left.label "på venstre side">
-<!ENTITY newTabButton.posiotion.right.label "på højre side">
-<!ENTITY newTabButton.posiotion.afterlast.label "Efter sidste faneblad">
+<!ENTITY newTabButton.position.left.label "på venstre side">
+<!ENTITY newTabButton.position.right.label "på højre side">
+<!ENTITY newTabButton.position.afterlast.label "Efter sidste faneblad">
 <!ENTITY allTabsButton.label "Alle faneblade knap">
 <!ENTITY tabBarSpace.label "Ekstra mellemrum til begge sider">
 <!ENTITY tabBarSpace.tooltip "For at klikke og slippe noget på fanebladslinje">

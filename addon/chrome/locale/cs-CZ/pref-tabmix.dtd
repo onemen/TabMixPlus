@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Přetažením tlačítka Nový panel na lištu panelů tuto možnost povolíte.">
 <!ENTITY hideTabBarButton.label "Tlačítko Zavřít panel">
 <!ENTITY newTabButton.label "Tlačítko Nový panel">
-<!ENTITY newTabButton.posiotion.left.label "nalevo">
-<!ENTITY newTabButton.posiotion.right.label "napravo">
-<!ENTITY newTabButton.posiotion.afterlast.label "za posledním panelem">
+<!ENTITY newTabButton.position.left.label "nalevo">
+<!ENTITY newTabButton.position.right.label "napravo">
+<!ENTITY newTabButton.position.afterlast.label "za posledním panelem">
 <!ENTITY allTabsButton.label "Tlačítko Všechny panely">
 <!ENTITY tabBarSpace.label "Místo navíc na obou stranách">
 <!ENTITY tabBarSpace.tooltip "Pro umístění na lištu s panely v případě velkého množství panelů">

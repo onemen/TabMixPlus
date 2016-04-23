@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Az beállítás engedélyezéséhez húzza az „Új lap” gombbot a lapok eszköztárra.">
 <!ENTITY hideTabBarButton.label "Lap bezárása gomb">
 <!ENTITY newTabButton.label "Új lap gomb">
-<!ENTITY newTabButton.posiotion.left.label "Bal oldal">
-<!ENTITY newTabButton.posiotion.right.label "Jobb oldal">
-<!ENTITY newTabButton.posiotion.afterlast.label "Legutolsó lap után">
+<!ENTITY newTabButton.position.left.label "Bal oldal">
+<!ENTITY newTabButton.position.right.label "Jobb oldal">
+<!ENTITY newTabButton.position.afterlast.label "Legutolsó lap után">
 <!ENTITY allTabsButton.label "Gomb minden lapon">
 <!ENTITY tabBarSpace.label "Nagyobb hely mindkét oldalon">
 <!ENTITY tabBarSpace.tooltip "A Lapok eszköztáron történő kattintás és ejtés megkönnyítésére, amikor már túl sok lap van megnyitva">

@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Visa knapp för stäng flik">
 <!ENTITY newTabButton.label "Visa knapp för ny knapp">
-<!ENTITY newTabButton.posiotion.left.label "on Left side">
-<!ENTITY newTabButton.posiotion.right.label "on Right side">
-<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
 <!ENTITY allTabsButton.label "Knapp för alla flikar">
 <!ENTITY tabBarSpace.label "Extra mellanrum på båda sidorna">
 <!ENTITY tabBarSpace.tooltip "Vid klickning eller när något släpps på flikfältet">

@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Selle sätte lubamiseks lohista uue kaardi avamise nupp kaartide ribale.">
 <!ENTITY hideTabBarButton.label "Kaardi sulgemise nuppu">
 <!ENTITY newTabButton.label "Uue kaardi nuppu">
-<!ENTITY newTabButton.posiotion.left.label "Vasakul pool">
-<!ENTITY newTabButton.posiotion.right.label "Paremal pool">
-<!ENTITY newTabButton.posiotion.afterlast.label "Viimase kaardi järel">
+<!ENTITY newTabButton.position.left.label "Vasakul pool">
+<!ENTITY newTabButton.position.right.label "Paremal pool">
+<!ENTITY newTabButton.position.afterlast.label "Viimase kaardi järel">
 <!ENTITY allTabsButton.label "Kõikide kaartide nuppu">
 <!ENTITY tabBarSpace.label "Lisaruumi mõlemal pool">
 <!ENTITY tabBarSpace.tooltip "Klõpsamiseks ja millegi lohistamiseks kaartide ribale">

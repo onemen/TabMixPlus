@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "גרור כפתור &apos;לשונית חדשה לסרגל הלשונית">
 <!ENTITY hideTabBarButton.label "לחצן סגור לשונית">
 <!ENTITY newTabButton.label "לחצן לשונית חדשה">
-<!ENTITY newTabButton.posiotion.left.label "בצד שמאל">
-<!ENTITY newTabButton.posiotion.right.label "בצד ימין">
-<!ENTITY newTabButton.posiotion.afterlast.label "סמוך ללשונית האחרונה">
+<!ENTITY newTabButton.position.left.label "בצד שמאל">
+<!ENTITY newTabButton.position.right.label "בצד ימין">
+<!ENTITY newTabButton.position.afterlast.label "סמוך ללשונית האחרונה">
 <!ENTITY allTabsButton.label "כל לחצני הלשוניות">
 <!ENTITY tabBarSpace.label "רווח נוסף משני הצדדים">
 <!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">

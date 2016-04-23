@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "کلید تب بسته شده">
 <!ENTITY newTabButton.label "کلید تب جدید">
-<!ENTITY newTabButton.posiotion.left.label "on Left side">
-<!ENTITY newTabButton.posiotion.right.label "on Right side">
-<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
 <!ENTITY allTabsButton.label "کلید تمام تب ها">
 <!ENTITY tabBarSpace.label "فضای اضافی در دو طرف">
 <!ENTITY tabBarSpace.tooltip "برای کلیک و رها کردن چیزی روی نوار تب ها">

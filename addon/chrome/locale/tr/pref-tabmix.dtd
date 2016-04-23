@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Bu seçeneği aktifleştirmek için &apos;Yeni Sekme&apos; butonunu sekme çubuğuna sürükleyin.">
 <!ENTITY hideTabBarButton.label "Sekmeyi kapat düğmesi">
 <!ENTITY newTabButton.label "Yeni sekme düğmesi">
-<!ENTITY newTabButton.posiotion.left.label "Sol tarafta">
-<!ENTITY newTabButton.posiotion.right.label "Sağ tarafta">
-<!ENTITY newTabButton.posiotion.afterlast.label "Son sekmeden sonra">
+<!ENTITY newTabButton.position.left.label "Sol tarafta">
+<!ENTITY newTabButton.position.right.label "Sağ tarafta">
+<!ENTITY newTabButton.position.afterlast.label "Son sekmeden sonra">
 <!ENTITY allTabsButton.label "Tüm sekmeler düğmesi">
 <!ENTITY tabBarSpace.label "İki yanda fazladan boşluklar">
 <!ENTITY tabBarSpace.tooltip "Tıklama ve sekme çubuğuna herhangi bir şey bırakmak için boşluklar">

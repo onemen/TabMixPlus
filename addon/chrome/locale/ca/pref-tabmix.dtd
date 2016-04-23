@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Arrossegueu el botó «Pestanya nova» a la barra de pestanyes per habilitar aquesta opció.">
 <!ENTITY hideTabBarButton.label "Botó per tancar la pestanya">
 <!ENTITY newTabButton.label "Botó per obrir una pestanya nova">
-<!ENTITY newTabButton.posiotion.left.label "A la part esquerra">
-<!ENTITY newTabButton.posiotion.right.label "A la part dreta">
-<!ENTITY newTabButton.posiotion.afterlast.label "Després de l'última pestanya">
+<!ENTITY newTabButton.position.left.label "A la part esquerra">
+<!ENTITY newTabButton.position.right.label "A la part dreta">
+<!ENTITY newTabButton.position.afterlast.label "Després de l'última pestanya">
 <!ENTITY allTabsButton.label "Botó de llista de totes les pestanyes">
 <!ENTITY tabBarSpace.label "Espai addicional a tots dos costats">
 <!ENTITY tabBarSpace.tooltip "Per poder-hi fer clic i deixar anar pestanyes a la barra de pestanyes">

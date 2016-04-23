@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Σύρετε το κουμπί «Νέα καρτέλα» στην εργαλειοθήκη καρτελών για να ενεργοποιηθεί η επιλογή.">
 <!ENTITY hideTabBarButton.label "Κουμπί κλεισίματος καρτέλας">
 <!ENTITY newTabButton.label "Κουμπί νέας καρτέλας">
-<!ENTITY newTabButton.posiotion.left.label "Στα αριστερά">
-<!ENTITY newTabButton.posiotion.right.label "Στα δεξιά">
-<!ENTITY newTabButton.posiotion.afterlast.label "Μετά την τελευταία καρτέλα">
+<!ENTITY newTabButton.position.left.label "Στα αριστερά">
+<!ENTITY newTabButton.position.right.label "Στα δεξιά">
+<!ENTITY newTabButton.position.afterlast.label "Μετά την τελευταία καρτέλα">
 <!ENTITY allTabsButton.label "Κουμπί για όλες τις καρτέλες">
 <!ENTITY tabBarSpace.label "Επιπλέον διαστήματα και στις δύο πλευρές">
 <!ENTITY tabBarSpace.tooltip "Για κλικ και εναπόθεση στοιχείου στην εργαλειοθήκη καρτελών">

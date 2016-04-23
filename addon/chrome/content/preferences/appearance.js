@@ -34,8 +34,9 @@ var gAppearancePane = {
     // rtl update
     var direction = window.getComputedStyle($("appearance"), null).direction;
     if (direction == "rtl") {
-      let right = $("newTabButton.posiotion.right");
-      let left = $("newTabButton.posiotion.left");
+      let right = $("newTabButton.position.right");
+      // let left = $("newTabButton.position.left");
+      let left = $("newTabButton.position.left");
       [right.label, left.label] = [left.label, right.label];
 
       let tabsScroll = $("tabsScroll").firstChild.childNodes;

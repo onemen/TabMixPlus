@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "タブバーに [新しいタブ] ボタンをドラッグするとこのオプションが有効になります">
 <!ENTITY hideTabBarButton.label "[タブを閉じる] ボタンを表示">
 <!ENTITY newTabButton.label "[新しいタブ] ボタンを表示">
-<!ENTITY newTabButton.posiotion.left.label "左側">
-<!ENTITY newTabButton.posiotion.right.label "右側">
-<!ENTITY newTabButton.posiotion.afterlast.label "最後のタブの隣">
+<!ENTITY newTabButton.position.left.label "左側">
+<!ENTITY newTabButton.position.right.label "右側">
+<!ENTITY newTabButton.position.afterlast.label "最後のタブの隣">
 <!ENTITY allTabsButton.label "[タブの一覧] ボタンを表示">
 <!ENTITY tabBarSpace.label "両端にスペースを表示">
 <!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">

@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "&apos;Nieuw tabblad&apos; knop naar tabbladenbalk slepen om deze optie in te schakelen.">
 <!ENTITY hideTabBarButton.label "Knop Tabblad sluiten">
 <!ENTITY newTabButton.label "Knop Nieuw tabblad">
-<!ENTITY newTabButton.posiotion.left.label "Linkerkant">
-<!ENTITY newTabButton.posiotion.right.label "Rechterkant">
-<!ENTITY newTabButton.posiotion.afterlast.label "Na laatste tabblad">
+<!ENTITY newTabButton.position.left.label "Linkerkant">
+<!ENTITY newTabButton.position.right.label "Rechterkant">
+<!ENTITY newTabButton.position.afterlast.label "Na laatste tabblad">
 <!ENTITY allTabsButton.label "Knop Alle tabbladen">
 <!ENTITY tabBarSpace.label "Extra ruimte aan beide zijden">
 <!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
