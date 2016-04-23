@@ -233,7 +233,7 @@ var TMP_extensionsCompatibility = {
 
     if ("PersonaController" in window && typeof (window.PersonaController) == "object") {
       Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = this._footer.style.backgroundImage; \
            gBrowser.tabContainer.setAttribute("persona", persona.id); \
@@ -242,7 +242,7 @@ var TMP_extensionsCompatibility = {
       ).toCode();
 
       Tabmix.changeCode(PersonaController, "PersonaController._applyDefault")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = ""; \
            gBrowser.tabContainer.removeAttribute("persona"); \
@@ -275,7 +275,7 @@ var TMP_extensionsCompatibility = {
     // trigger tabmix function when user change tab width with faviconize extension
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.changeCode(faviconize, "faviconize.toggle")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  tab.removeAttribute("minwidth");' +
         '  tab.removeAttribute("maxwidth");' +
         '  TabmixTabbar.updateScrollStatus();' +
@@ -744,7 +744,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
         '  }'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
         '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
         '$1$2'
@@ -762,7 +762,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'gBrowser.treeStyleTab.initTabAttributes(tab); \
          Tabmix.TST_initTabContentsOrder(tab); \
          $1$2'

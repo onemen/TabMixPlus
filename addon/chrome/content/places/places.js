@@ -654,7 +654,7 @@ Tabmix.onContentLoaded = {
         'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
         {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         '  if (TabmixTabbar._enablePositionCheck &&\n  ' +
         '      TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition) {\n  ' +
@@ -750,7 +750,7 @@ Tabmix.onContentLoaded = {
       '        newWin.bookMarkIds = bookMarkId;\n' +
       '    }'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  var tab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
       '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +

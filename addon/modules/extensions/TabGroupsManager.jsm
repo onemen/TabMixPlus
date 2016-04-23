@@ -8,7 +8,7 @@ this.EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 this.TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow) {
     this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '    try {\n' +
       '      if (TabGroupsManager.apiEnabled)\n' +
       '        TabGroupsManager.eventListener.onTabOpen(aEvent);\n' +

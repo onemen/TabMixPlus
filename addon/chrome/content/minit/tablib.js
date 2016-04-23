@@ -41,7 +41,7 @@ var tablib = { // eslint-disable-line
       '  if (tabmixResult)\n' +
       '    return tabmixResult;\n'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  return null;\n' +
       '$1$2'
     )._replace(
@@ -300,7 +300,7 @@ var tablib = { // eslint-disable-line
         '{',
         '{try {'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '} catch (ex) {} \
          $1$2'
       ).toCode();
@@ -414,7 +414,7 @@ var tablib = { // eslint-disable-line
         '  }' +
         '  else $&'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
         '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
         '}' +
@@ -423,7 +423,7 @@ var tablib = { // eslint-disable-line
     }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._handleNewTab")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       'TMP_eventListener.onTabOpen_delayUpdateTabBar(tab); \
        $1$2'
     ).toCode();
@@ -484,7 +484,7 @@ var tablib = { // eslint-disable-line
         '          var updateScrollStatus = this.hasAttribute("using-closing-tabs-spacer") ||\n' +
         '                                   this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
         '    this._hasTabTempWidth = false;' +
         '    let tabs = this.tabbrowser.visibleTabs;' +
@@ -519,7 +519,7 @@ var tablib = { // eslint-disable-line
     ).defineProperty();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '          Tabmix.setTabStyle(this.selectedItem);\n' +
       '          TabmixTabbar.updateBeforeAndAfter();\n' +
       '$1$2'
@@ -854,7 +854,7 @@ var tablib = { // eslint-disable-line
       'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] :\n' +
       '                                   document.getElementById(arguments[0]);'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  tablib.populateUndoWindowSubmenu(undoPopup);\n' +
       '$1$2'
     ).toCode();

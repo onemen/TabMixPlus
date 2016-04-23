@@ -219,7 +219,7 @@
               'this.scrollSize',
               '(this.orient == "vertical" && this.isMultiRow ? this.innerbox.getBoundingClientRect().height : $&)'
             )._replace(
-              /(\})(\)?)$/,
+              /(})(\)?)$/,
               '          var box = document.getElementById("tabmixScrollBox");\n' +
               '          Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);\n' +
               '          Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);\n' +

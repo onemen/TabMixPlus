@@ -61,7 +61,7 @@ var TMP_tabDNDObserver = {
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '\n\
         this.removeAttribute("movingBackgroundTab");\n\
         let tabs = this.getElementsByAttribute("dragged", "*");\n\
