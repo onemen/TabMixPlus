@@ -733,8 +733,8 @@ TabmixSessionManager = {
     var undoClose = Tabmix.prefs.getBoolPref("undoClose");
 
     // hide or show session manager buttons & menus
-    var showInMenu = !sessionManager || !Tabmix.prefs.getBoolPref("sessionToolsMenu");
-    document.getElementById("tm-sessionmanager").hidden = showInMenu;
+    document.getElementById("tm-sessionmanager").hidden =
+        !sessionManager || !Tabmix.prefs.getBoolPref("sessionToolsMenu");
     let sm = document.getElementById("appmenu-sessionmanager");
     if (sm)
       sm.hidden = !sessionManager;
@@ -1352,8 +1352,7 @@ TabmixSessionManager = {
     if (!session.saveClosedTabs)
       this.deleteAllClosedtabs(container);
     if (count) {
-      let {nameExt} = aTriggerNode;
-      this.insertSession(count, session.name, path, pathToReplace, nameExt);
+      this.insertSession(count, session.name, path, pathToReplace, aTriggerNode.nameExt);
     } else {
       Tabmix.log("Error in saveClosedSession");
     }
@@ -3121,8 +3120,7 @@ TabmixSessionManager = {
         this.saveOneWindow(this.gSessionPath[0], "", true);
       this.loadOneWindow(winData, "openclosedwindow");
     } else {
-      let win = this.openNewWindow(winData, this.isPrivateWindow);
-      TabmixSvc.sm.windowToFocus = win;
+      TabmixSvc.sm.windowToFocus = this.openNewWindow(winData, this.isPrivateWindow);
     }
   },
 

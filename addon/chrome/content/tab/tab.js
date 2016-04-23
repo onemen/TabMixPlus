@@ -85,8 +85,7 @@ var TabmixTabbar = {
         Tabmix.setItem(tabmixScrollBox, "collapsed", true);
       }
 
-      let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
-      this.flowing = flowing;
+      this.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
       let isDefault = tabscroll == this.SCROLL_BUTTONS_LEFT_RIGHT || null;
       Tabmix.setItem(tabBar, "defaultScrollButtons", isDefault);
       Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
@@ -1028,9 +1027,8 @@ Tabmix.tabsUtils = {
     let active = this.getTabRowNumber(gBrowser.selectedTab, this.topTabY);
     let rowsStr = TabmixSvc.getString("rowsTooltip.rowscount");
     let activeStr = TabmixSvc.getString("rowsTooltip.activetab");
-    let tooltip = PluralForm.get(rows, rowsStr).replace("#1", rows) +
+    box.label = PluralForm.get(rows, rowsStr).replace("#1", rows) +
         "\n" + activeStr.replace("#1", active);
-    box.label = tooltip;
   },
 
   isSingleRow: function(visibleTabs) {

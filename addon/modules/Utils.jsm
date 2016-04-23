@@ -40,9 +40,9 @@ this.TabmixUtils = {
     // call TabmixAboutNewTab.updateBrowser for gBrowser._preloadedBrowser,
     // if it already exist before we loaded our frame script
     if (TabmixSvc.version(420)) {
-      let {gBrowser, BROWSER_NEW_TAB_URL} = window;
+      let gBrowser = window.gBrowser;
       if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
-          BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
+          window.BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
           gBrowser._preloadedBrowser && gBrowser._isPreloadingEnabled() &&
           !PrivateBrowsingUtils.isWindowPrivate(window)) {
         TabmixAboutNewTab.updateBrowser(gBrowser._preloadedBrowser);

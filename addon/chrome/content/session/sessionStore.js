@@ -851,9 +851,9 @@ var TabmixConvertSession = {
               extData.__tabmixTGM = RegExp.$2;
               break;
             }
-            let [groupId, groupName] = RegExp.$2.split(" ");
-            extData.TabGroupsManagerGroupId = groupId;
-            extData.TabGroupsManagerGroupName = groupName;
+            let data = RegExp.$2.split(" ");
+            extData.TabGroupsManagerGroupId = data[0];
+            extData.TabGroupsManagerGroupName = data[1];
             break;
           }
           case "faviconized":

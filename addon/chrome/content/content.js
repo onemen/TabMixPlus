@@ -100,8 +100,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:setScrollPosition": {
-        let {x, y} = data;
-        content.scrollTo(x, y);
+        content.scrollTo(data.x, data.y);
         break;
       }
       case "Tabmix:collectReloadData": {
