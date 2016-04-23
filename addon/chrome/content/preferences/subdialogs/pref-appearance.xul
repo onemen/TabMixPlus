@@ -13,7 +13,6 @@
 <dialog id="pref-TMPstyles"
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help,extra2"
         ondialoghelp="tabstyles.openHelp();"
         title="&styles.label;"

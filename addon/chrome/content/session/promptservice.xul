@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
 
-<!DOCTYPE dialog SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+<!DOCTYPE dialog [
+  <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+  %pref-tabmixDTD;
+]>
 
 <dialog id="tabmix-prompt"
    windowtype="mozilla:tabmixprompt"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-   xmlns:html="http://www.w3.org/1999/xhtml"
    resizable="no"
    onload="prompt_init();"
    buttons="accept, cancel, extra1"
