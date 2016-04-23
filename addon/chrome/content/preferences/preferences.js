@@ -101,7 +101,7 @@ var gPrefWindow = {
         if (this.widthChanged)
           gAppearancePane.changeTabsWidth();
         if (!this.instantApply) {
-          // prevent TMP_SessionStore.setService from runing
+          // prevent TMP_SessionStore.setService from running
           Tabmix.getTopWin().tabmix_setSession = true;
           Shortcuts.prefsChangedByTabmix = true;
         }
@@ -299,7 +299,7 @@ function setPrefAfterImport(aPref) {
   // in prev version we use " " for to export string to file
   aPref.value = aPref.value.replace(/^"*|"*$/g, "");
 
-  // preference that exist in the defaulbranch but no longer in use by Tabmix
+  // preference that exist in the default branch but no longer in use by Tabmix
   switch (aPref.name) {
     case "browser.tabs.autoHide":
       // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
@@ -404,9 +404,9 @@ function toggleSyncPreference() {
   const sync = "services.sync.prefs.sync.";
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
-  let exclode = ["extensions.tabmix.sessions.onStart.sessionpath"];
+  let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(function(pref) {
-    if (exclode.indexOf(pref) == -1)
+    if (exclude.indexOf(pref) == -1)
       Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);

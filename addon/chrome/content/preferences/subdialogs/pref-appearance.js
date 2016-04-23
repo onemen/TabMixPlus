@@ -44,7 +44,7 @@ var tabstyles = {
       document.documentElement.getButton("help").disabled = true;
   },
 
-  toggleRGBvisibility: function() {
+  toggleRGB_visibility: function() {
     let doc = document.documentElement;
     let extra = doc.getButton("extra2");
     let item = $("hide-RGB");

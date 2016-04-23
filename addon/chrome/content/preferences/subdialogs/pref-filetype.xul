@@ -10,7 +10,7 @@
 %filetypeDTD;
 ]>
 
-<dialog id="pref-TMPfiletype"
+<dialog id="pref-TMP-filetype"
         windowtype="mozilla:tabmixopt-filetype"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         buttons="accept,cancel,help"

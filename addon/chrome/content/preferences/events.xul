@@ -72,10 +72,10 @@
       <preference id="pref_warnOnCloseWindow"   name="browser.tabs.warnOnClose"               type="bool"/>
       <preference id="pref_warnOnCloseProtected"
                   name="extensions.tabmix.protectedtabs.warnOnClose"                          type="bool"/>
-      <preference id="pref_keepWindow"          name="browser.tabs.closeWindowWithLastTab"    type="bool"
-                  onchange="gEventsPane.disabeleRplaceLastTabWith();" inverted="true"/>
+      <preference id="pref_keepWindow" name="browser.tabs.closeWindowWithLastTab" type="bool"
+                  onchange="gEventsPane.disableReplaceLastTabWith();" inverted="true"/>
       <preference id="pref_keepLastTab"             name="extensions.tabmix.keepLastTab"          type="bool"
-                  onchange="gEventsPane.disabeleRplaceLastTabWith();"/>
+                  onchange="gEventsPane.disableReplaceLastTabWith();"/>
       <preference id="pref_replaceLastTabWith"  name="extensions.tabmix.replaceLastTabWith.type"   type="int"
                   onchange="gEventsPane.newTabUrl(this, false, true);"/>
       <preference id="pref_newTabUrl_1"         name="extensions.tabmix.replaceLastTabWith.newtab.url"
@@ -94,9 +94,9 @@
       <preference id="pref_menuonlybutton"
                   name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
       <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"
-                  onchange="gEventsPane.disabeleShowTabList();"/>
+                  onchange="gEventsPane.disableShowTabList();"/>
       <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
-                  onchange="gEventsPane.disabeleShowTabList();"/>
+                  onchange="gEventsPane.disableShowTabList();"/>
       <preference id="pref_showTabList"         name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
       <preference id="pref_respondToMouse"
                   name="extensions.tabmix.lasttab.respondToMouseInTabList"                    type="bool"/>

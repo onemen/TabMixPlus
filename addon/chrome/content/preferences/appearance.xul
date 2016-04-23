@@ -28,7 +28,7 @@
                   inverted="true"/>
       <preference id="pref_hideAllTabsButton" name="extensions.tabmix.hideAllTabsButton"        type="bool"
                   inverted="true"/>
-      <preference id="pref_allTabsPpreviews"  name="browser.allTabs.previews"                   type="bool"/>
+      <preference id="pref_allTabsPreviews"  name="browser.allTabs.previews"                   type="bool"/>
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
@@ -100,7 +100,7 @@
             <!-- all-tabs-button on tabbar -->
             <hbox align="center">
               <checkbox_tmp id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
-              <checkbox_tmp id="allTabsPpreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPpreviews" observes="obs_hideAllTabsButton"/>
+              <checkbox_tmp id="allTabsPreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPreviews" observes="obs_hideAllTabsButton"/>
             </hbox>
             <!-- Space on tabbar -->
             <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
@@ -175,13 +175,13 @@
             <caption label="&tabStyles.label;"/>
             <hbox>
               <vbox flex="1">
-                <!-- Hightlight Current tab -->
+                <!-- Highlight Current tab -->
                 <checkbox_tmp id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
                 <!-- Highlight unread tabs -->
                 <checkbox_tmp id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
               </vbox>
               <vbox flex="1">
-                <!-- Hightlight Unloaded tabs -->
+                <!-- Highlight Unloaded tabs -->
                 <checkbox_tmp id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
                 <!-- Highlight other tabs -->
                 <checkbox_tmp id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
@@ -231,12 +231,12 @@
                   <menuitem value="4" label="&showTabX.currentHover;"/>
                 </menupopup>
               </menulist>
-              <hbox id="tabXdelaycheck" align="center">
+              <hbox id="tabDelayCheck" align="center">
                 <textbox id="tabXDelay" size="4" maxlength="4" preference="pref_tabXDelay"
                          observes="obs_showTabX" type="number"/>
                 <label value="&milliseconds.label;" observes="obs_showTabX" class="timelabel"/>
               </hbox>
-              <hbox id="tabXwidthBox" align="center">
+              <hbox id="tabWidthBox" align="center">
                 <textbox id="tabXwidth" size="4" maxlength="4" preference="pref_tabClipWidth"
                          observes="obs_showTabX" type="number"/>
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>

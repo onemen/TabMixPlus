@@ -33,10 +33,10 @@
                   onchange="gTabMix_preferencesOverlay.setSingleWindowUI();"/>
       <preference id="tabmix.sm"
                   name="extensions.tabmix.sessions.manager"          type="bool"
-                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
       <preference id="tabmix.cr"
                   name="extensions.tabmix.sessions.crashRecovery"    type="bool"
-                  onchange="gTabMix_preferencesOverlay.onStartupPrefchanged();"/>
+                  onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
     </preferences>
 
     <button id="tabmixSessionManager"

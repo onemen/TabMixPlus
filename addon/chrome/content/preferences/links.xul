@@ -55,7 +55,7 @@
               <!-- Open external links in: New Window, New Tab, Current Browser -->
               <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget" observes="obs_externalLink"/>
               <menulist id="externalLinkTarget" preference="pref_externalLinkTarget" observes="obs_externalLink"
-                        onsyncfrompreference="gLinksPane.updateExternalLinkCeckbox(this);">
+                        onsyncfrompreference="gLinksPane.updateExternalLinkCheckBox(this);">
                 <menupopup>
                   <menuitem value="-1" label="&linkTarget.tab;">
                     <observes element="generalWindowOpen" attribute="label"/>
@@ -67,7 +67,7 @@
               </menulist>
             </hbox>
             <hbox align="center">
-              <!-- Open only these JavaScript popups in new tabs: All Popups, Popups That Create resized Windows, No Popups. -->
+              <!-- Open only these JavaScript popups in new tabs: All Popups, Popups That Create resize Windows, No Popups. -->
               <label flex="1" value="&divertedWindowOpen.label;" control="divertedWindowOpen"/>
                 <menulist id="divertedWindowOpen" preference="pref_divertedWindowOpen">
                   <menupopup>

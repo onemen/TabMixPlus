@@ -198,7 +198,7 @@
                   <vbox align="start">
                     <!-- links in current tab -->
                     <checkbox_tmp id="showLinkHere" label="&linkhere.label;" preference="pref_showLinkHere"/>
-                    <!-- links in invserse tab -->
+                    <!-- links in inverse tab -->
                     <checkbox_tmp id="showInverseLink" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;" preference="pref_showInverseLink"/>
                     <!-- multiple links -->
                     <checkbox_tmp id="openAllLinks" label="&openalllinks.label;" preference="pref_openAllLinks"/>

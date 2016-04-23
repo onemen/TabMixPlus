@@ -47,7 +47,7 @@
       <preference id="pref_altClickTabbar"    name="extensions.tabmix.altClickTabbar"     type="int"/>
       <preference id="pref_click_dragwindow"       name="extensions.tabmix.tabbar.click_dragwindow"
                   type="bool" inverted="true"
-                  onchange="gMousePane.updatedblClickTabbar(this);"/>
+                  onchange="gMousePane.updateDblClickTabbar(this);"/>
       <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
                   type="bool" inverted="true"/>
     </preferences>

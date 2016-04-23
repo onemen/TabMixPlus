@@ -20,7 +20,7 @@
                   type="int"/>
       <preference id="pref_sessionManagerAddon"
                   name="extensions.tabmix.sessionManagerAddon.isActive"      type="bool"
-                  onchange="gSessionPane.setVisiblecontent(this.value);"/>
+                  onchange="gSessionPane.setVisibleContent(this.value);"/>
       <preference id="pref_sessionManager"
                   name="extensions.tabmix.sessions.manager"                  type="bool"
                   onchange="gSessionPane.updateSessionShortcuts();"/>
@@ -114,7 +114,7 @@
             </radiogroup>
           </groupbox>
         </tabpanel>
-        <tabpanel id="sesionsPanel">
+        <tabpanel id="sessionsPanel">
           <groupbox align="start">
             <checkbox_tmp id="sessionsOptions" label="&ss.enable.label;"
                       tooltiptext="&ss.enable.tooltip;"
@@ -211,7 +211,7 @@
                   <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
                 </groupbox>
               </tabpanel>
-              <!-- Build-in SessionStore (we hide thid panel, don't put it in first or last tab)-->
+              <!-- Build-in SessionStore (we hide this panel, don't put it in first or last tab)-->
               <tabpanel orient="horizontal" flex="1">
                 <vbox>
                   <label value="&ss.advanced_setting;" class="header"

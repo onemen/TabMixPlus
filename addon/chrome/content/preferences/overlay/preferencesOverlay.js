@@ -56,7 +56,7 @@ var gTabMix_preferencesOverlay = {
     let item = this.id("linkTargetWindow");
     item.disabled = val;
     if (val)
-      item.setAttribute("style", "color: graytext !important; text-shadow: none !important;");
+      item.setAttribute("style", "color: GrayText !important; text-shadow: none !important;");
     else
       item.removeAttribute("style");
   },
@@ -83,10 +83,10 @@ var gTabMix_preferencesOverlay = {
     var hBox = menuList.parentNode;
     menuList.parentNode.id = "whenBrowserStartBox";
     hBox.insertBefore(this.id("tabmixSessionManager"), menuList);
-    this.onStartupPrefchanged();
+    this.onStartupPrefChanged();
   },
 
-  onStartupPrefchanged: function() {
+  onStartupPrefChanged: function() {
     var tabmixSession = this.id('tabmix.sm').value || this.id('tabmix.cr').value;
     if (tabmixSession)
       this.id("whenBrowserStartBox").setAttribute("tabmixSession", true);

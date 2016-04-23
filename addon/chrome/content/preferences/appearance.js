@@ -7,7 +7,7 @@ var gAppearancePane = {
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.extensions.verticalTabBar) {
       Tabmix.setItem("treeStyleTab.msg", "hidden", null);
-      Tabmix.setItem("tabBarDisplay", "TSTinstalled", true);
+      Tabmix.setItem("tabBarDisplay", "tstInstalled", true);
       Tabmix.setItem("tabBarPosition", "disabled", true);
       Tabmix.setItem("tabsScroll", "disabled", true);
       Tabmix.setItem("maxrow", "disabled", true);
@@ -26,12 +26,12 @@ var gAppearancePane = {
 
     // browser.allTabs.previews
     if (!TabmixSvc.isPaleMoon) {
-      gPrefWindow.removeChild("pref_allTabsPpreviews");
+      gPrefWindow.removeChild("pref_allTabsPreviews");
       gPrefWindow.removeChild("obs_hideAllTabsButton");
-      gPrefWindow.removeChild("allTabsPpreviews");
+      gPrefWindow.removeChild("allTabsPreviews");
     }
 
-    // rtl update
+    // rtl update position
     var direction = window.getComputedStyle($("appearance"), null).direction;
     if (direction == "rtl") {
       let right = $("newTabButton.position.right");
@@ -54,8 +54,8 @@ var gAppearancePane = {
     var hbox = $("tabsScroll-box");
     var label = $("tabsScroll.label").boxObject.width;
     var menulist = $("tabsScroll");
-    var ident = 23; // we have class="ident"
-    if (hbox.boxObject.width > label + menulist.boxObject.width - ident) {
+    var indent = 23; // we have class="indent"
+    if (hbox.boxObject.width > label + menulist.boxObject.width - indent) {
       menulist.parentNode.removeAttribute("pack");
       menulist.parentNode.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");
@@ -70,8 +70,8 @@ var gAppearancePane = {
 
   tabCloseButtonChanged: function() {
     var tabCbValue = $("pref_tabCloseButton").value;
-    Tabmix.setItem("tabXdelaycheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
-    Tabmix.setItem("tabXwidthBox", "hidden", tabCbValue != 5);
+    Tabmix.setItem("tabDelayCheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
+    Tabmix.setItem("tabWidthBox", "hidden", tabCbValue != 5);
   },
 
   setTabCloseButtonUI: function() {
@@ -80,7 +80,7 @@ var gAppearancePane = {
       let tabCbUI = $("tabCloseButton");
       if (tabCbUI.selectedItem.value == 5) {
         tabCbUI.value = 1;
-        Tabmix.setItem("tabXwidthBox", "hidden", true);
+        Tabmix.setItem("tabWidthBox", "hidden", true);
       }
     } else {
       $("alltabsItem").disabled = false;
@@ -130,9 +130,9 @@ var gAppearancePane = {
     }
   },
 
-  // block width cange on instantApply
+  // block width change on instantApply
   // user is force to hit apply
-  userchangedWidth: function(item) {
+  userChangedWidth: function(item) {
     gPrefWindow.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
                         $("maxWidth").value != $("pref_maxWidth").valueFromPreferences;
     if (!gPrefWindow.instantApply)
