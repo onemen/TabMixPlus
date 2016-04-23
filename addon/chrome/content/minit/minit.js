@@ -212,22 +212,22 @@ var TMP_tabDNDObserver = {
     var tabBar = gBrowser.tabContainer;
 
     var sourceNode = this.getSourceNode(dt);
-    var draggeType = this.getDragType(sourceNode);
+    var dragType = this.getDragType(sourceNode);
     var newIndex = this._getDNDIndex(event);
-    var oldIndex = draggeType != this.DRAG_LINK ? sourceNode._tPos : -1;
+    var oldIndex = dragType != this.DRAG_LINK ? sourceNode._tPos : -1;
     var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
 ///XXX check if we need here visibleTabs insteadof gBrowser.tabs
 ///    check with groups with or without pinned tabs
     if (newIndex < gBrowser.tabs.length)
-      left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
+      left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
     else {
-      newIndex = draggeType != this.DRAG_TAB_IN_SAME_WINDOW &&
-                 Tabmix.getOpenTabNextPref(draggeType == this.DRAG_LINK) ?
+      newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
+                 Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
                      tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
-    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
+    var isCopy = this.isCopyDropEffect(dt, event, dragType);
     var effects = this._getDropEffectForTabDrag(event);
 
     var replaceTab = (left_right == -1);
@@ -263,7 +263,7 @@ var TMP_tabDNDObserver = {
       return;
     }
     canDrop = effects != "none";
-    if (canDrop && !isCopy && draggeType == this.DRAG_TAB_IN_SAME_WINDOW && oldIndex == newIndex) {
+    if (canDrop && !isCopy && dragType == this.DRAG_TAB_IN_SAME_WINDOW && oldIndex == newIndex) {
       canDrop = false;
       dt.effectAllowed = "none";
     } else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
@@ -278,7 +278,7 @@ var TMP_tabDNDObserver = {
     event.stopPropagation();
 
     // show Drag & Drop message
-    if (draggeType == this.DRAG_LINK) {
+    if (dragType == this.DRAG_LINK) {
       this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
                               this.gBackupLabel : this.draglink;
       if (event.target.localName != "tab" && event.target.localName != "tabs")
@@ -329,7 +329,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (draggeType == this.DRAG_LINK) {
+    if (dragType == this.DRAG_LINK) {
       let tab = tabBar._getDragTargetTab(event, true);
       if (tab && tab.linkedBrowser.currentURI.spec != "about:customizing") {
         if (!this._dragTime)
@@ -352,10 +352,10 @@ var TMP_tabDNDObserver = {
     this.updateStatusField();
     var dt = event.dataTransfer;
     var sourceNode = this.getSourceNode(dt);
-    var draggeType = this.getDragType(sourceNode);
-    var isCopy = this.isCopyDropEffect(dt, event, draggeType);
+    var dragType = this.getDragType(sourceNode);
+    var isCopy = this.isCopyDropEffect(dt, event, dragType);
     var draggedTab;
-    if (draggeType != this.DRAG_LINK) {
+    if (dragType != this.DRAG_LINK) {
       draggedTab = sourceNode;
       // not our drop then
       if (!draggedTab)
@@ -367,28 +367,28 @@ var TMP_tabDNDObserver = {
     document.getElementById("tabmix-tooltip").hidePopup();
     /* eslint-disable */
     // old TreeStyleTab extension version look for isTabReorder in our code
-    var isTabReorder = draggeType == this.DRAG_TAB_IN_SAME_WINDOW;
+    var isTabReorder = dragType == this.DRAG_TAB_IN_SAME_WINDOW;
     /* eslint-enable */
     var newIndex = this._getDNDIndex(event);
     var oldIndex = draggedTab ? draggedTab._tPos : -1;
     var left_right;
 
     if (newIndex < gBrowser.tabs.length)
-      left_right = this.getLeft_Right(event, newIndex, oldIndex, draggeType);
+      left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
     else {
-      newIndex = draggeType != this.DRAG_TAB_IN_SAME_WINDOW &&
-                 Tabmix.getOpenTabNextPref(draggeType == this.DRAG_LINK) ?
+      newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
+                 Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
                      gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
-    if (draggedTab && (isCopy || draggeType == this.DRAG_TAB_IN_SAME_WINDOW)) {
+    if (draggedTab && (isCopy || dragType == this.DRAG_TAB_IN_SAME_WINDOW)) {
       if (isCopy) {
         // copy the dropped tab (wherever it's from)
         let newTab = gBrowser.duplicateTab(draggedTab);
         gBrowser.moveTabTo(newTab, newIndex + left_right);
 
-        if (draggeType == this.DRAG_TAB_TO_NEW_WINDOW || event.shiftKey)
+        if (dragType == this.DRAG_TAB_TO_NEW_WINDOW || event.shiftKey)
           gBrowser.selectedTab = newTab;
       } else {
         // move the dropped tab
@@ -655,7 +655,7 @@ var TMP_tabDNDObserver = {
     return numTabs;
   },
 
-  getLeft_Right: function(event, newIndex, oldIndex, draggeType) {
+  getLeft_Right: function(event, newIndex, oldIndex, dragType) {
     var mX = event.screenX;
     var left_right;
     var tab = gBrowser.tabs[newIndex];
@@ -666,13 +666,13 @@ var TMP_tabDNDObserver = {
 
     var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
     var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
-    if ((draggeType == this.DRAG_LINK && lockedTab) || (draggeType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
+    if ((dragType == this.DRAG_LINK && lockedTab) || (dragType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
       left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
       if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4)
         left_right = -1;
     } else {
       left_right = (mX < tabBo.screenX + tabBo.width / 2) ? _left : _right;
-      if (!isCtrlKey && draggeType == this.DRAG_TAB_IN_SAME_WINDOW) {
+      if (!isCtrlKey && dragType == this.DRAG_TAB_IN_SAME_WINDOW) {
         if (newIndex == oldIndex - 1)
           left_right = ltr ? _left : _right;
         else if (newIndex == oldIndex + 1)
