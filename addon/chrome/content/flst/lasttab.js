@@ -30,11 +30,11 @@ var TMP_LastTab = {
 
     // show the list at the center of the screen
     let box = tablist.boxObject;
-    let letf = () => screen.availLeft + (screen.availWidth - box.width) / 2;
+    let left = () => screen.availLeft + (screen.availWidth - box.width) / 2;
     let top = () => screen.availTop + (screen.availHeight - box.height) / 2;
     tablist.style.visibility = "hidden";
-    tablist.openPopupAtScreen(letf(), top(), true);
-    tablist.moveTo(letf(), top());
+    tablist.openPopupAtScreen(left(), top(), true);
+    tablist.moveTo(left(), top());
     tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
@@ -374,9 +374,9 @@ var TMP_LastTab = {
     var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
     if (tabPreviews) {
-      var tabPreviewsCurentStatus = Boolean(ctrlTab._recentlyUsedTabs);
+      var tabPreviewsCurrentStatus = Boolean(ctrlTab._recentlyUsedTabs);
       tabPreviews = mostRecentlyUsed && Tabmix.prefs.getBoolPref("lasttab.tabPreviews");
-      if (tabPreviewsCurentStatus != tabPreviews) {
+      if (tabPreviewsCurrentStatus != tabPreviews) {
         if (tabPreviews) {
           ctrlTab.init();
           ctrlTab._recentlyUsedTabs = [];

@@ -30,9 +30,9 @@ var TMP_tabDNDObserver = {
 
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
     // Determine what tab we're dragging over.
-    // * In tabmix tabs can have diffrent width
+    // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab when
-    //   draging left and the end when draging right. If that point
+    //   dragging left and the end when dragging right. If that point
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
@@ -131,7 +131,7 @@ var TMP_tabDNDObserver = {
     let browser = tab.linkedBrowser;
 
     // We must not set text/x-moz-url or text/plain data here,
-    // otherwise trying to deatch the tab by dropping it on the desktop
+    // otherwise trying to detach the tab by dropping it on the desktop
     // may result in an "internet shortcut"
     dt.mozSetDataAt("text/x-moz-text-internal", browser.currentURI.spec, 0);
 
@@ -431,7 +431,7 @@ var TMP_tabDNDObserver = {
 
       // Stop the about:blank load
       newBrowser.stop();
-      // make sure it has a docshell
+      // make sure it has a docShell
       void newBrowser.docShell;
 
       let numPinned = gBrowser._numPinnedTabs;
@@ -775,9 +775,9 @@ var TMP_tabDNDObserver = {
     if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
       var index = this.dragmarkindex.newIndex;
       if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
-        this.removetDragmarkAttribute(gBrowser.tabs[index]);
+        this.removeDragmarkAttribute(gBrowser.tabs[index]);
       if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
-        this.removetDragmarkAttribute(gBrowser.tabs[index - 1]);
+        this.removeDragmarkAttribute(gBrowser.tabs[index - 1]);
     } else {
       this.setFirefoxDropIndicator(false);
     }
@@ -789,7 +789,7 @@ var TMP_tabDNDObserver = {
     gBrowser.tabContainer._tabDropIndicator.collapsed = !val;
   },
 
-  removetDragmarkAttribute: function(tab) {
+  removeDragmarkAttribute: function(tab) {
     tab.removeAttribute("dragmark");
   },
 
@@ -931,7 +931,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
 
   var openTabPref = typeof (pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
   if (typeof (altKey) != "undefined") {
-    // don't reuse balnk tab if the user press alt key when the pref is to open in current tab
+    // don't reuse blank tab if the user press alt key when the pref is to open in current tab
     if (altKey && !openTabPref)
       isBlankTab = false;
 
@@ -1000,7 +1000,7 @@ var TMP_TabView = {
     return firstTab;
   },
 
-  // includung _removingTabs
+  // including _removingTabs
   currentGroup: function() {
     return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
   },
@@ -1058,7 +1058,7 @@ Tabmix.navToolbox = {
     gNavToolbox.removeEventListener("beforecustomization", this, false);
     gNavToolbox.removeEventListener("aftercustomization", this, false);
 
-    // fix bug 1034394 - tab mix plus's tabmixscrollbox is not cleaned up after
+    // fix bug 1034394 - tab mix plus's tabmixScrollBox is not cleaned up after
     // uninstalling tab mix plus
     if (!Tabmix.isVersion(290)) {
       this.cleanCurrentset();
@@ -1155,7 +1155,7 @@ Tabmix.navToolbox = {
         typeof gURLBar.handleCommand == "undefined")
       return;
 
-    // onblur attribut reset each time we exit ToolboxCustomize
+    // onblur attribute reset each time we exit ToolboxCustomize
     var blur = gURLBar.getAttribute("onblur") || "";
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
@@ -1347,8 +1347,8 @@ Tabmix.navToolbox = {
     /**
      * we need to position three elements in TabsToolbar :
      * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
-     * we resotre tabmixScrollBox positoin first since its postion is fixed,
-     * to be on the safe side we check tabmixScrollBox positoin again after we
+     * we restore tabmixScrollBox position first since its position is fixed,
+     * to be on the safe side we check tabmixScrollBox position again after we
      * restore tabmix-tabs-closebutton and new-tab-button position.
      */
     this.setScrollButtons();

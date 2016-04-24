@@ -20,7 +20,7 @@
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
 <!ENTITY divertedWindowOpen.all "Open all popups in tabs">
-<!ENTITY divertedWindowOpen.some "Allows resized popups">
+<!ENTITY divertedWindowOpen.some "Allows resize popups">
 <!ENTITY divertedWindowOpen.none "Allows all popups">
 <!ENTITY linkTarget.label "Open links with a target attribute in current tab">
 <!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">

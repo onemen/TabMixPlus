@@ -105,7 +105,7 @@ this.TabmixGroupsMigrator = {
     };
 
     try {
-      // we run this function before preparAfterCrash and prepareSavedSessions
+      // we run this function before prepareAfterCrash and prepareSavedSessions
       // we need to backup 2 last session, if last session was crashed backup
       // one more older session
       let index = isAfterCrash ? 1 : 0;

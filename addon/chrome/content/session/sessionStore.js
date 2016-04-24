@@ -118,7 +118,7 @@ var TMP_SessionStore = {
     TabmixSvc.sm.settingPreference = true;
     // if session manager extension is install disable TMP session manager
     if (msgNo == -1 || Tabmix.extensions.sessionManager) {
-      // update session manager settings accourding to current tabmix settings
+      // update session manager settings according to current tabmix settings
       if (TMP_manager_enabled) {
         Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
         switch (Tabmix.prefs.getIntPref("sessions.onStart")) {
@@ -149,7 +149,7 @@ var TMP_SessionStore = {
       TabmixSvc.sm.settingPreference = false;
     } else if (this.isSessionStoreEnabled()) {
       // ask the user to choose between TMP session manager and sessionstore
-      // we use non modal promptService on start up, so we disabled Tabmix session managerto let the startup
+      // we use non modal promptService on start up, so we disabled Tabmix session manager to let the startup
       // process continue and set the appropriate preference after the dialog prompt dismissed.
       if (start) {
         Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
@@ -215,7 +215,7 @@ var TMP_SessionStore = {
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
     else {
       // calling doRestore before sessionstartup finished to read
-      // sessionstroe.js file throw error since Firefox 28, and force
+      // sessionStore.js file throw error since Firefox 28, and force
       // syncRead in Firefox 25-27
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
@@ -467,7 +467,7 @@ var TMP_ClosedTabs = {
           this.removeAllClosedTabs();
           break;
         } else if (aIndex == -2) {
-          this.SSS_restoerAllClosedTabs();
+          this.SSS_restoreAllClosedTabs();
           break;
         }
         // else do the default
@@ -512,7 +512,7 @@ var TMP_ClosedTabs = {
     return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
   },
 
-  SSS_restoerAllClosedTabs: function ct_SSS_restoerAllClosedTabs() {
+  SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
     var closedTabCount = this.count;
     if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
       return;
@@ -568,8 +568,8 @@ var TMP_ClosedTabs = {
     var newTab = aBlankTabToReuse ||
         gBrowser.addTab("about:blank", {skipAnimation: tabToRemove || skipAnimation, dontMove: true});
     newTab.linkedBrowser.stop();
-    // if tababr is hidden when there is only one tab and
-    // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveale
+    // if tabbar is hidden when there is only one tab and
+    // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveals
     if (tabToRemove) {
       gBrowser.removeTab(tabToRemove, {animate: false});
     }
@@ -894,7 +894,7 @@ var TabmixConvertSession = {
     };
     var history = TabmixSessionManager.getLiteralValue(rdfNodeTab, "history");
     var tmpData = history.split("|-|");
-    var sep = tmpData.shift(); // remove seperator from data
+    var sep = tmpData.shift(); // remove separator from data
     tmpData = tmpData.join("|-|");
     // if all history data was encoded (file saved with version
     // 0.4.1.2pre.131006a1 or newer, changeset 684a4b2302e4)

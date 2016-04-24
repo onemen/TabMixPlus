@@ -46,7 +46,7 @@
 /*  Tab scrollbox arrow buttons - fix border */
 
 /* this rule make hover active on the button
- * the default button don't change on hover, so we add the next rule to hide the eefect
+ * the default button don't change on hover, so we add the next rule to hide the effect
  */
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:not([disabled]),
 #tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),

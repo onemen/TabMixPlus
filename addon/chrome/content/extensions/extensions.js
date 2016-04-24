@@ -252,7 +252,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // Firefox sync
-    // fix bug in firefox sync that add new menu itep from each popupshowing
+    // fix bug in firefox sync that add new menu item from each popupshowing
     if ("gFxWeaveGlue" in window) {
       Tabmix.changeCode(gFxWeaveGlue, "gFxWeaveGlue.handleEvent")._replace(
         'else if (this.getPageIndex() == -1)',
@@ -330,10 +330,10 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // for MR Tech's local install extention
+    // for MR Tech's local install extension
     if (typeof (Local_Install) == "object") {
-      // don't open trober in current tab when tab is locked
-      // or trober is to diffrent site then the current
+      // don't open 'Throbber' in current tab when tab is locked
+      // or 'Throbber' is to different site then the current
       Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
         'local_common.openURL(local_common.getThrobberURL(), inNewTab);',
         'var url = local_common.getThrobberURL(); \
@@ -349,7 +349,7 @@ var TMP_extensionsCompatibility = {
     }
 
     if ("FireGestures" in window) {
-      // unable to close surce tab after duplicate with FireGestures esextension
+      // unable to close source tab after duplicate with FireGestures extension
       // problem fix in FireGestures 1.5.7 keep this here for users with older versions
       let performAction = FireGestures._performAction.toString();
       let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);";
@@ -724,7 +724,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
        *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830
        *  we also replace call to TreeStyleTabService.openGroupBookmarkBehavior();
        *  with aOpenGroupBookmarkBehavior that we pass from PlacesUIUtils._openTabset
-       *  we only call this functiom from browserWindow so we don't need to call it for
+       *  we only call this function from browserWindow so we don't need to call it for
        *  other places windows
        */
       Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(

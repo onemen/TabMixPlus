@@ -334,7 +334,7 @@ var TabmixContext = {
       }
     }
 
-    // insret IE Tab menu-items before Bookmakrs menu-items
+    // insert IE Tab menu-items before Bookmarks menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
@@ -622,7 +622,7 @@ var TabmixContext = {
      /**
       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
       * Firefox only show this menu when the selection text is url see Bug 454518
-      * we cahck if gContextMenu.linkURL contain URL
+      * we check if gContextMenu.linkURL contain URL
       */
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
       Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);

@@ -5,7 +5,7 @@
  * chrome://tabmixplus/content/links/userInterface.js
  *
  * original code by Bradley Chapman
- * modified and developped by Hemiola SUN
+ * modified and developed by Hemiola SUN
  * modified again by Bradley Chapman
  *
  * modified again and again... by onemen
@@ -208,7 +208,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
   if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aTab.selected && !isBlankPageURL(aUrl)) {
-    // clean the the address bar as if the user laod about:blank tab
+    // clean the the address bar as if the user load about:blank tab
     this.selectedTab = aTab;
     this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
@@ -227,7 +227,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
 
 /**
  * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
- *        if the user or onload from a page blur the urlbar befroe user typed new value
+ *        if the user or onload from a page blur the urlbar before user typed new value
  *        we restore the current url
  */
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {

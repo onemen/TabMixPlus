@@ -16,7 +16,7 @@
   margin-top: 1px !important;
 }
 
-/* -moz-window-dragging is not recognize by Plaemoon */
+/* -moz-window-dragging is not recognize by Pale Moon */
 #main-window[tabsintitlebar][tabmix-tabbaronbottom] .tabbrowser-tabbox,
 #main-window[tabsintitlebar] #TabsToolbar[tabmix-disallow-drag] {
   -moz-window-dragging: no-drag;

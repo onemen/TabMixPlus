@@ -142,7 +142,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     }
 
     // when privateTab extension installed add its new tab button width
-    // for the use of adjustNewtabButtonvisibility set tabsNewtabButton to be
+    // for the use of adjustNewtabButtonVisibility set tabsNewtabButton to be
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
@@ -214,7 +214,7 @@ Tabmix.afterDelayedStartup = function() {
     this.assert(ex);
   }
 
-  // starting with Fireofox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
+  // starting with Firefox 17.0+ we calculate TMP_tabDNDObserver.paddingLeft
   // in gBrowser.tabContainer._positionPinnedTabs
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 
@@ -231,7 +231,7 @@ Tabmix.afterDelayedStartup = function() {
       }
     }];
     let msg = "Tab Mix is in debug mode!\n " +
-      "In case it's activated accidentally, click the button to disalbe it " +
+      "In case it's activated accidentally, click the button to disable it " +
       "or set 'extensions.tabmix.enableDebug' in about:config to false. " +
       "Once you disable 'Debug Mode' restart your browser.";
     const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
@@ -377,7 +377,7 @@ var TMP_eventListener = {
 
     // initialize our gURLBar.handleCommand function early before other extensions change
     // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
-    // url-fixer also prevent the use of eval changes by using closure in the replcaed function
+    // url-fixer also prevent the use of eval changes by using closure in the replaced function
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
   },
@@ -857,7 +857,7 @@ var TMP_eventListener = {
 
   // TGM extension use it
   onTabClose_updateTabBar: function TMP_EL_onTabClose_updateTabBar(aTab) {
-    // if the tab is not in the curent group we don't have to do anything here.
+    // if the tab is not in the current group we don't have to do anything here.
     if (typeof aTab._tPosInGroup == "number" && aTab._tPosInGroup == -1)
       return;
 
@@ -883,7 +883,7 @@ var TMP_eventListener = {
       tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
-      Tabmix.tabsUtils.adjustNewtabButtonvisibility();
+      Tabmix.tabsUtils.adjustNewtabButtonVisibility();
     if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
       _updateTabstrip();
       setTimeout(() => _updateTabstrip(), 0);
@@ -894,7 +894,7 @@ var TMP_eventListener = {
     var tab = aEvent.target;
 
     // for ColorfulTabs 6.0+
-    // ColorfulTabs trapp TabSelect event after we do
+    // ColorfulTabs traps TabSelect event after we do
     // we need to set standout class before we check for getTabRowNumber
     // and mTabstrip.ensureElementIsVisible
     // this class change tab height (by changing the borders)
@@ -973,8 +973,8 @@ var TMP_eventListener = {
       return;
     }
     let tabBar = gBrowser.tabContainer;
-    let tabsSrip = tabBar.mTabstrip;
-    let orient = tabsSrip.orient;
+    let tabStrip = tabBar.mTabstrip;
+    let orient = tabStrip.orient;
     TabmixTabbar.removeShowButtonAttr();
 
     let shouldMoveFocus = scrollTabs == 1;
@@ -988,13 +988,13 @@ var TMP_eventListener = {
       } else {
         isVertical = Math.abs(aEvent.deltaY) > Math.abs(aEvent.deltaX);
         let delta = isVertical ? aEvent.deltaY : aEvent.deltaX;
-        direction = isVertical && tabsSrip._isRTLScrollbox ? -delta : delta;
+        direction = isVertical && tabStrip._isRTLScrollbox ? -delta : delta;
       }
     } else {
       direction = aEvent.detail;
       if (orient != "vertical") {
         isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
-        direction = isVertical && tabsSrip._isRTLScrollbox ? -direction : direction;
+        direction = isVertical && tabStrip._isRTLScrollbox ? -direction : direction;
       }
     }
 
@@ -1012,13 +1012,13 @@ var TMP_eventListener = {
       let scrollByDelta = function(delta) {
         if (Tabmix.isVersion(480) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
-          tabsSrip.scrollByPixels(delta);
+          tabStrip.scrollByPixels(delta);
         } else {
           // scroll the tabbar by one tab
           if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
             delta = delta > 0 ? 1 : -1;
           }
-          tabsSrip.scrollByIndex(delta);
+          tabStrip.scrollByIndex(delta);
         }
       };
 
@@ -1028,13 +1028,13 @@ var TMP_eventListener = {
         }
         scrollByDelta(direction);
       } else {
-        if (tabsSrip._prevMouseScrolls.every(prev => prev == isVertical)) {
+        if (tabStrip._prevMouseScrolls.every(prev => prev == isVertical)) {
           scrollByDelta(direction);
         }
 
-        if (tabsSrip._prevMouseScrolls.length > 1)
-          tabsSrip._prevMouseScrolls.shift();
-        tabsSrip._prevMouseScrolls.push(isVertical);
+        if (tabStrip._prevMouseScrolls.length > 1)
+          tabStrip._prevMouseScrolls.shift();
+        tabStrip._prevMouseScrolls.push(isVertical);
       }
       aEvent.stopPropagation();
       aEvent.preventDefault();
@@ -1100,7 +1100,7 @@ var TMP_eventListener = {
     Tabmix.bottomToolbarUtils.onUnload();
   },
 
-  // some theme not useing up to date Tabmix tab binding
+  // some theme not using up to date Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
     let reloadIcon = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
@@ -1141,7 +1141,7 @@ Tabmix.initialization = {
     /**
       * don't initialize Tabmix functions on this window if one of this is true:
       *  - the window is about to close by SingleWindowModeUtils
-      *  - tabbrowser-tabs binding didn't start (i onlly saw it happened
+      *  - tabbrowser-tabs binding didn't start (i only saw it happened
       *       when ImTranslator extension installed)
       */
     let stopInitialization = false;

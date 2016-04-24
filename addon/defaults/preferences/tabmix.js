@@ -63,10 +63,10 @@ pref("extensions.tabmix.hideAllTabsButton", false);
 pref("extensions.tabmix.newTabButton", true);
 /*
 2009-01-31
-repalced with extensions.tabmix.newTabButton.position
+replaced with extensions.tabmix.newTabButton.position
 0 - Left side
 1 - Right side
-2 - After last tab (default) - for version befor Fx 3.1 2 - Right side
+2 - After last tab (default) - for version before Fx 3.1 2 - Right side
 pref("extensions.tabmix.newTabButton.leftside", false);
 */
 pref("extensions.tabmix.newTabButton.position", 2);
@@ -223,6 +223,7 @@ pref("extensions.tabmix.middleclickDelete", true);
 pref("extensions.tabmix.optionsToolMenu", true);
 
 pref("extensions.tabmix.enablefiletype", true);
+// noinspection SpellCheckingInspection
 pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ /php?attachmentid=.*/ /php?act=Attach&type=post&id=.*/ /download.php?*/");
 
 pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");

@@ -226,7 +226,7 @@ so display: none !important; does not hide the button */
   border-right: none;
 }
 
-/*** backword compatibility with theme that still use old tabmix tab binding ***/
+/*** backward compatibility with theme that still use old tabmix tab binding ***/
 .tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
   display: none !important;
 }

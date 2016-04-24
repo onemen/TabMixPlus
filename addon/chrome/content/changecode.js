@@ -1,7 +1,7 @@
 /* eslint strict: 0 */
 
 // don't use strict for this file
-// so we don't evaluat all code as strict mode code
+// so we don't evaluate all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
 Tabmix.changeCode = function(aParent, afnName, aOptions) {

@@ -362,7 +362,7 @@
           if (this.orient == "vertical")
             return;
 
-          Tabmix.tabsUtils.adjustNewtabButtonvisibility();
+          Tabmix.tabsUtils.adjustNewtabButtonVisibility();
           var tabs = this._getScrollableElements();
           if (!tabs.length)
             return;

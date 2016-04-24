@@ -4,7 +4,7 @@
  * chrome://tabmixplus/content/links/setup.js
  *
  * original code by Bradley Chapman
- * modified and developped by Hemiola SUN
+ * modified and developed by Hemiola SUN
  * modified again by Bradley Chapman
  *
  */
@@ -211,8 +211,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   /**
    * add gBrowser.getTabForBrowser if it is not exist
-   * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
-   * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+   * gBrowser.getTabForBrowser exist since Firefox 35 (Bug 1039500)
+   * gBrowser._getTabForBrowser exist since Firefox 23 (Bug 662008)
    */
   if (typeof tabBrowser.getTabForBrowser != "function") {
     // this is _getTabForBrowser version from Firefox 23
@@ -325,7 +325,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
 
  /**
   *  Don't use return in this function
-  *  TreeStyleTabe add some code at the end
+  *  TreeStyleTab add some code at the end
   */
   let transitionend = Tabmix.callerTrace("onxbltransitionend");
   if (tabsCount == 1) {

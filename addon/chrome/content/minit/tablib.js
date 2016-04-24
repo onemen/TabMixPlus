@@ -14,7 +14,7 @@ var tablib = { // eslint-disable-line
     this.addNewFunctionsTo_gBrowser();
   },
 
-  _loadURIWithFlagsinitialized: false,
+  _loadURIWithFlagsInitialized: false,
   setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
@@ -24,9 +24,9 @@ var tablib = { // eslint-disable-line
     // added _loadURIWithFlags to browser.js (Firefox 36+)
     var obj, name;
     if (Tabmix.isVersion(360)) {
-      if (this._loadURIWithFlagsinitialized)
+      if (this._loadURIWithFlagsInitialized)
         return;
-      this._loadURIWithFlagsinitialized = true;
+      this._loadURIWithFlagsInitialized = true;
       [obj, name] = [window, "window._loadURIWithFlags"];
     } else {
       [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
@@ -94,11 +94,11 @@ var tablib = { // eslint-disable-line
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlaged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
+      let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
       params.inBackground = false;
-      params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
-      params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
-      params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+      params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+      params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
+      params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
     browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
@@ -146,7 +146,7 @@ var tablib = { // eslint-disable-line
       [obj, fnName] = [Fd, "Fd.addTab"];
     } else if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
-    // NRA-ILA toolbar extension raplce the original addTab function
+    // NRA-ILA toolbar extension replace the original addTab function
     } else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
       [obj, fnName] = [gBrowser, "origAddTab7c3de167ed6f494aa652f11a71ecb40c"];
     } else {
@@ -215,7 +215,7 @@ var tablib = { // eslint-disable-line
       return callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
     };
 
-    // ContextMenu Extensions raplce the original removeTab function
+    // ContextMenu Extensions replace the original removeTab function
     var _removeTab = "removeTab";
     if ("__ctxextensions__removeTab" in gBrowser)
       _removeTab = "__ctxextensions__removeTab";
@@ -233,7 +233,7 @@ var tablib = { // eslint-disable-line
        '            if ("clearTimeouts" in aTab)\n' +
        '              aTab.clearTimeouts();'
     )._replace(
-      // fix bug in TGM when closeing last tab in a group with animation
+      // fix bug in TGM when closing last tab in a group with animation
       'if (aParams)',
       'if (lastTabInGroup) {aParams ? aParams.animate = false : aParams = {animate: false}};\
        $&', {check: Tabmix.extensions.tabGroupManager}
@@ -471,7 +471,7 @@ var tablib = { // eslint-disable-line
         '  $&'
       ).toCode();
 
-      // _expandSpacerBy not exsit in Firefox 21
+      // _expandSpacerBy not exist in Firefox 21
       if (typeof tabBar._expandSpacerBy == "function") {
         Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
           '{',
@@ -796,8 +796,8 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
       'var appStartup',
-      'let closedtByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
-      'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
+      'let closedByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
+      'if (!TabmixSessionManager.canQuitApplication(closedByToolkit))' +
       '  return false;' +
       '$&'
     ).toCode();
@@ -989,7 +989,7 @@ var tablib = { // eslint-disable-line
           Tabmix.assert(ex);
         }
       }
-      // we need to update history title after the new page loaded for use in back/forword button
+      // we need to update history title after the new page loaded for use in back/forward button
       function updateNewHistoryTitle() {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
@@ -1472,7 +1472,7 @@ var tablib = { // eslint-disable-line
         return true;
       }
       var closing = this.closingTabsEnum;
-      // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
+      // try to catch call from other extensions to warnAboutClosingTabs (before Firefox 24)
       if (typeof (whatToClose) == "boolean")
         whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
 
@@ -1655,7 +1655,7 @@ var tablib = { // eslint-disable-line
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
     let swapTab = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
-      // Do not allow transfering a private tab to a non-private window
+      // Do not allow transferring a private tab to a non-private window
       // and vice versa.
       if (PrivateBrowsingUtils.isWindowPrivate(window) !=
           PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView)) {
@@ -1694,7 +1694,7 @@ var tablib = { // eslint-disable-line
     };
 
     /** DEPRECATED **/
-    // we keep this function to saty compatible with other extensions that use it
+    // we keep this function to stay compatible with other extensions that use it
     gBrowser.undoRemoveTab = () => TMP_ClosedTabs.undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
@@ -1741,7 +1741,7 @@ var tablib = { // eslint-disable-line
 
   onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
-    // some site, like Gmail change title internaly, after load already finished and we have remove
+    // some site, like Gmail change title internally, after load already finished and we have remove
     // width attribute
     if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
       return;
@@ -1812,7 +1812,7 @@ var tablib = { // eslint-disable-line
     // we use this flag in WindowIsClosing
     Tabmix._warnedBeforeClosing = true;
 
-    // since that some pref can changed by _onQuitRequest we catch it fisrt
+    // since that some pref can changed by _onQuitRequest we catch it first
     // by observe browser-lastwindow-close-requested
     function getSavedPref(aPrefName, type) {
       let returnVal = {saved: false};
@@ -1855,7 +1855,7 @@ var tablib = { // eslint-disable-line
       if (window.gBrowser.browsers.length < 2 || Tabmix.numberOfWindows(false, windowtype) > 1)
         return false;
 
-      // since this pref can change by _onQuitRequest we catch it fisrt
+      // since this pref can change by _onQuitRequest we catch it first
       // by observe browser-lastwindow-close-requested
       let saveSessionPref = getSavedPref("browser.startup.page", "int");
       if (saveSessionPref.saved && saveSessionPref.value == 3)
@@ -1867,7 +1867,7 @@ var tablib = { // eslint-disable-line
       // when we quit or close last browser window.
       // if "browser.showQuitWarning" is false and we close last window firefox design
       // to show warnAboutClosingTabs dialog but we block it in order to call warnAboutClosingTabs
-      // from here and catch dispaly time here.
+      // from here and catch display time here.
       return getSavedPref("browser.showQuitWarning").value;
     }
 

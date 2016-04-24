@@ -216,7 +216,7 @@ tabbox > tabs {
   display: none !important;
 }
 
-groupbox[TSTinstalled] label[TSTdisabled="true"] {
+groupbox[tstInstalled] label[TSTdisabled="true"] {
   color: GrayText;
 }
 
@@ -278,13 +278,13 @@ tabbox > tabpanels {
 }
 
 /* session panel */
-#sesionsPanel:not([manager]),
-#sesionsPanel[manager=tabmix] .firefox,
-#sesionsPanel[manager=firefox] .tabmix {
+#sessionsPanel:not([manager]),
+#sessionsPanel[manager=tabmix] .firefox,
+#sessionsPanel[manager=firefox] .tabmix {
   display: none;
 }
 
-#sesionsPanel > groupbox > vbox {
+#sessionsPanel > groupbox > vbox {
   height: 55px;
 }
 
@@ -294,7 +294,7 @@ tabbox > tabpanels {
   margin-bottom: 2px;
 }
 
-#sesionsPanel[manager=firefox] tab.firefox {
+#sessionsPanel[manager=firefox] tab.firefox {
   visibility: hidden;
 }
 

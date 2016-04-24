@@ -110,7 +110,7 @@ function prompt_init() {
   var dialog = document.documentElement;
   dialog.defaultButton = dButton;
   if (gHideElmParam == TMP_HIDE_MENUANDTEXT) { // hide menulist & text box and set focus to default Button
-    document.getElementById("space_befor_checkbox").hidden = true;
+    document.getElementById("space_before_checkbox").hidden = true;
     dialog.getButton(dButton).focus();
   }
 

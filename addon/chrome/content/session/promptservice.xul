@@ -37,7 +37,7 @@
       </menulist>
       <!-- textbox -->
       <textbox id="tm_textbox" maxlength="50" oninput="inputText(this);"/>
-      <separator id="space_befor_checkbox" class="thin"/>
+      <separator id="space_before_checkbox" class="thin"/>
       <!-- checkbox -->
       <vbox id="checkboxContainer" align="start" collapsed="true">
          <checkbox id="tm_checkbox"/>

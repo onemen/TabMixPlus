@@ -221,7 +221,7 @@ var Tabmix = {
   // caller list
   _getMethod: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
-      this.installeChangecode();
+      this.installChangecode();
       return this[id].apply(this, args);
     }
     if (typeof TabmixSvc.console[id] == "function") {
@@ -231,9 +231,9 @@ var Tabmix = {
     return null;
   },
 
-  installeChangecode: function() {
+  installChangecode: function() {
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
-    this.installeChangecode = function() {};
+    this.installChangecode = function() {};
   },
 
   _init: function() {

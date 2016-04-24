@@ -72,7 +72,7 @@ var TMP_Places = {
       ).defineProperty();
     }
 
-    // prevent error when closing window with sidbar open
+    // prevent error when closing window with sidebar open
     var docURI = window.document.documentURI;
     if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
         docURI == "chrome://browser/content/history/history-panel.xul") {
@@ -423,7 +423,7 @@ var TMP_Places = {
   },
 
   // extensions.tabmix.titlefrombookmark changed
-  onPreferencChanged: function(aPrefValue) {
+  onPreferenceChanged: function(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
@@ -455,7 +455,7 @@ var TMP_Places = {
     Ci.nsINavBookmarkObserver
   ]),
 
-  addItemIdtoTabsWithUrl: function TMP_PC_addItemIdtoTabsWithUrl(aItemId, aUrl) {
+  addItemIdToTabsWithUrl: function TMP_PC_addItemIdToTabsWithUrl(aItemId, aUrl) {
     if (this.inUpdateBatch) {
       this._batchData.add.ids.push(aItemId);
       this._batchData.add.urls.push(aUrl);
@@ -478,7 +478,7 @@ var TMP_Places = {
     this.afterTabTitleChanged();
   },
 
-  updateTitleonTabs: function TMP_PC_updateTitleonTabs(aItemId) {
+  updateTabsTitleForId: function TMP_PC_updateTabsTitleForId(aItemId) {
     if (this.inUpdateBatch) {
       this._batchData.updateIDs.push(aItemId);
       return;
@@ -507,13 +507,13 @@ var TMP_Places = {
       return;
     var url = aURI ? aURI.spec : null;
     if (url && !isBlankPageURL(url))
-      this.addItemIdtoTabsWithUrl(aItemId, url);
+      this.addItemIdToTabsWithUrl(aItemId, url);
   },
 
   onItemRemoved: function TMP_PC_onItemRemoved(aItemId, aFolder, aIndex, aItemType) {
     if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
       return;
-    this.updateTitleonTabs(aItemId);
+    this.updateTabsTitleForId(aItemId);
   },
 
   // onItemChanged also fired when page is loaded (visited count changed ?)
@@ -524,8 +524,8 @@ var TMP_Places = {
       return;
 
     if (aProperty == "uri" && aNewValue && !isBlankPageURL(aNewValue))
-      this.addItemIdtoTabsWithUrl(aItemId, aNewValue);
-    this.updateTitleonTabs(aItemId);
+      this.addItemIdToTabsWithUrl(aItemId, aNewValue);
+    this.updateTabsTitleForId(aItemId);
   },
 
   onBeginUpdateBatch: function TMP_PC_onBeginUpdateBatch() {
@@ -542,9 +542,9 @@ var TMP_Places = {
     this.inUpdateBatch = false;
     var [updateIDs, addIDs, addURLs] = [data.updateIDs, data.add.ids, data.add.urls];
     if (addIDs.length)
-      this.addItemIdtoTabsWithUrl(addIDs, addURLs);
+      this.addItemIdToTabsWithUrl(addIDs, addURLs);
     if (updateIDs.length)
-      this.updateTitleonTabs(updateIDs);
+      this.updateTabsTitleForId(updateIDs);
 
     this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
 

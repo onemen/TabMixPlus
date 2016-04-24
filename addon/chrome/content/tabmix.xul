@@ -328,7 +328,7 @@
       <menupopup id="tm_sessionmanagerContextMenu"
                   onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
                   onpopuphidden="Tabmix.hidePopup(this);">
-        <menuitem id="tm-sm-OpenInCurrenWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
+        <menuitem id="tm-sm-OpenInCurrentWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
                   oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, true);"/>
         <menuitem id="tm-sm-OpenInNewWindow" label="&sm.context.restore.new;" accesskey="&sm.context.restore.newkey;"
                   oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, false);"/>
