@@ -105,7 +105,7 @@ ContentClickInternal = {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
-      // 'default', original ContentClick.contentAreaClick handle all casses
+      // 'default', original ContentClick.contentAreaClick handle all cases
       // except when 'where' equals 'current'
       if (!json.tabmixContentClick || !json.href || json.bookmark) {
         return;
@@ -388,7 +388,7 @@ ContentClickInternal = {
     }
 
     // check this after we check for suppressTabsOnFileDownload
-    // for the case the link have a matche in our list
+    // for the case the link have a match in our list
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       return ["current@9"];
 
@@ -589,7 +589,7 @@ ContentClickInternal = {
       let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
       // in Firefox 17.0-20.0 we can't pass aEvent.__where to handleLinkClick
-      // add 4th argumens with where value
+      // add 4th arguments with where value
       this._window.handleLinkClick(aEvent, aEvent.__hrefFromOnClick || href, linkNode, {where: aEvent.__where});
       aEvent.stopPropagation();
       aEvent.preventDefault();
@@ -865,7 +865,7 @@ ContentClickInternal = {
   },
 
   /**
-   * @brief Open links in new tabs when tab is lock or preference is to always opne tab from links.
+   * @brief Open links in new tabs when tab is lock or preference is to always open tab from links.
    *
    * @returns null if the caller need to handled the click,
               true to load link in new tab
@@ -1047,7 +1047,7 @@ ContentClickInternal = {
   *
   * @param target    The target link.
   * @param curpage   The current page url
-  * @returns         true when curpage and target are in diffrent domains
+  * @returns         true when curpage and target are in different domains
   *
   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {

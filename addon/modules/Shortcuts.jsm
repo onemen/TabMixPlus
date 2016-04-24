@@ -283,14 +283,14 @@ this.Shortcuts = {
       let _default = keyData.default || "";
       let currentValue = onOpen ? _default : keyData.value;
       let newValue = shortcuts[key] || _default;
-      let updatBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
+      let updateBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
           disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
       // on start report disabled by default shortcut as changed so _updateKey
       // can move these shortcuts to removedShortcuts
-      if (currentValue != newValue || updatBlockState ||
+      if (currentValue != newValue || updateBlockState ||
           onOpen && /^d&/.test(_default)) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
@@ -350,7 +350,7 @@ this.Shortcuts = {
       return new RegExp(mod).test(modifiers);
     }).join(",");
 
-    // make sure that key and keycod are valid
+    // make sure that key and keycode are valid
     key.key = key.key.toUpperCase();
     if (key.key == " ")
       [key.key, key.keycode] = ["", "VK_SPACE"];
@@ -449,7 +449,7 @@ KeyConfig = {
 
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
-    // sync non defualt shortcuts
+    // sync non default shortcuts
     if (Object.keys(shortcuts).length > 0)
       this.syncToKeyConfig(shortcuts);
     else {

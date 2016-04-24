@@ -34,7 +34,7 @@ const EXTRAPREFS = ["squaredTabsStyle"];
 
 this.DynamicRules = {
 
-  // hold templets for our css rules
+  // hold templates for our css rules
   cssTemplates: {},
 
   // hold the current state for each style according to its preference
@@ -83,7 +83,7 @@ this.DynamicRules = {
   },
 
   registerMutationObserver: function(window) {
-    function tabsMotate(aMutations) {
+    function tabsMutate(aMutations) {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
           this.orient = mutation.target.orient;
@@ -92,7 +92,7 @@ this.DynamicRules = {
         }
       }
     }
-    let Observer = new window.MutationObserver(tabsMotate.bind(this));
+    let Observer = new window.MutationObserver(tabsMutate.bind(this));
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
     window.addEventListener("unload", function unload() {
       window.removeEventListener("unload", unload);
@@ -313,7 +313,7 @@ this.DynamicRules = {
    *  we get here in these cases
    *      - when we initialize this service
    *      - when user changed text or background color
-   *      - when user disable/enable the sytle
+   *      - when user disable/enable the style
    */
   registerSheet: function(name) {
     let enabled = TabmixSvc.prefBranch.getBoolPref(name);
@@ -338,10 +338,10 @@ this.DynamicRules = {
   },
 
   unregisterSheet: function(name) {
-    let styleShhet = this.registered[name] || null;
-    if (styleShhet &&
-        SSS.sheetRegistered(styleShhet, TYPE))
-      SSS.unregisterSheet(styleShhet, TYPE);
+    let styleSheet = this.registered[name] || null;
+    if (styleSheet &&
+        SSS.sheetRegistered(styleSheet, TYPE))
+      SSS.unregisterSheet(styleSheet, TYPE);
   },
 
   get defaultPrefs() {
@@ -357,7 +357,7 @@ this.DynamicRules = {
   validatePrefValue: function(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
-    //                bg:boolean, bgColor:string, bgOpacity:striung
+    //                bg:boolean, bgColor:string, bgOpacity:string
     // if we don't catch the problem here it can break the rest of tabmix startup
     var defaultPrefValues = TabmixSvc.JSON.parse(this.defaultPrefs[ruleName]);
     if (!Prefs.prefHasUserValue(ruleName))

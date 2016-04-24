@@ -74,7 +74,7 @@ this.TMP_TabGroupsManager = {
     };
 
     this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
-      // get saved group data and repalce ids with new one
+      // get saved group data and replace ids with new one
       'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
       '$&' +
       '  var [_restoreSelect, _lastSelectedIndex] = [restoreSelect, lastSelectedIndex];' +
@@ -122,7 +122,7 @@ this.TMP_TabGroupsManager = {
 
   // for TabGroupsManager use - don't change function name
   tabmixSessionsManager: function() {
-    // this here reffer to the top browser window
+    // this here refers to the top browser window
     if (!this.Tabmix.isFirstWindow || this.Tabmix._afterTabduplicated) {
       return false;
     }

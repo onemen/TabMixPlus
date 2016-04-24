@@ -105,8 +105,8 @@ this.SingleWindowModeUtils = {
     if (uriToLoad instanceof Ci.nsISupportsArray) {
       let count = uriToLoad.Count();
       for (let i = 0; i < count; i++) {
-        let urisstring = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
-        urls.push(urisstring.data);
+        let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
+        urls.push(uriString.data);
       }
     } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
@@ -177,7 +177,7 @@ this.SingleWindowModeUtils = {
     }
     existingWindow.setTimeout(function() {
       try {
-        // restore window dimensions, to prevent flickring in the next restart
+        // restore window dimensions, to prevent flickering in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
           for (let attr of Object.keys(newWindow.__winRect)) {

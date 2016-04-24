@@ -15,9 +15,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
 // extension for Mozilla Firefox.                                   //
 // version 0.5.1                                                    //
 // The Initial Developer of the Original Code is Twanno.            //
-// Modfied for TMP by CPU                                           //
+// Modified for TMP by CPU                                           //
 //                                                                  //
-// Convert to module and modfied by onemen                          //
+// Convert to module and modified by onemen                          //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 this.MergeWindows = {
@@ -26,7 +26,7 @@ this.MergeWindows = {
     return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
 
-  // merge several windows to one window, or only selected tabs to previous focussed window,
+  // merge several windows to one window, or only selected tabs to previous focused window,
   // or only current window with previous window
   mergeWindows: function _mergeWindows(aWindow) {
     var tabbrowser = aWindow.gBrowser;
@@ -55,8 +55,8 @@ this.MergeWindows = {
     }
   },
 
-  // merge current window into previously focussed window, unless it was popup
-  // in that case merge previously focussed window into current window
+  // merge current window into previously focused window, unless it was popup
+  // in that case merge previously focused window into current window
   mergeTwoWindows: function TMP_mergeTwoWindows(aTargetWindow, aWindow, aTabs, aOptions) {
     let tabbrowser = aWindow.gBrowser;
     let canClose = aOptions.tabsSelected && tabbrowser.tabs.length > aTabs.length &&
@@ -80,7 +80,7 @@ this.MergeWindows = {
       [aTargetWindow, aTabs] = [aWindow, aTargetWindow.gBrowser.tabs];
     }
     this.swapTabs(aTargetWindow, aTabs);
-    // _endRemoveTab set _windowIsClosing if the last tab moved to a diffrenent window
+    // _endRemoveTab set _windowIsClosing if the last tab moved to a different window
     if (canClose && !tabbrowser._windowIsClosing)
       aWindow.close();
   },
@@ -150,7 +150,7 @@ this.MergeWindows = {
       // after merge select currently selected tab or first merged tab
       let selectedTab = currentWindow.gBrowser.selectedTab;
       let tab = tabs.indexOf(selectedTab) > -1 ? selectedTab : tabs[0];
-      tab.setAttribute("_TMP_selectAfterMerege", true);
+      tab.setAttribute("_TMP_selectAfterMerge", true);
     }
 
     var tabbrowser = aWindow.gBrowser;
@@ -167,8 +167,8 @@ this.MergeWindows = {
       let newBrowser = newTab.linkedBrowser;
       newBrowser.stop();
       void newBrowser.docShell;
-      if (tab.hasAttribute("_TMP_selectAfterMerege")) {
-        tab.removeAttribute("_TMP_selectAfterMerege");
+      if (tab.hasAttribute("_TMP_selectAfterMerge")) {
+        tab.removeAttribute("_TMP_selectAfterMerge");
         tabToSelect = newTab;
       }
       if (isPopup) {
@@ -184,8 +184,8 @@ this.MergeWindows = {
         }
         this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
       } else {
-        // we don't keep tab attributs: visited, tabmix_selectedID
-        // see in Tabmix.copyTabData list of attributs we copy to the new tab
+        // we don't keep tab attributes: visited, tabmix_selectedID
+        // see in Tabmix.copyTabData list of attributes we copy to the new tab
         tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
       }
     }
@@ -221,7 +221,7 @@ this.MergeWindows = {
    *        in both groups, don't specify the private property.
    *
    *        set skipPopup property to true when the preference is not
-   *        to merge popus.
+   *        to merge popups.
    *
    *        set multiple property to true to get all suitable windows
    *
@@ -272,8 +272,8 @@ this.MergeWindows = {
     if (aOptions.multiple)
       return {windows: windows.concat(popUps), normalWindowsCount: normalWindowsCount};
 
-    let traget = windows[0] || popUps[0] || null;
-    return {windows: traget ? [traget] : [], normalWindowsCount: normalWindowsCount};
+    let target = windows[0] || popUps[0] || null;
+    return {windows: target ? [target] : [], normalWindowsCount: normalWindowsCount};
   },
 
   notify: function TMP_mergeNotify(aWindow, privateNotMatch) {
@@ -294,7 +294,7 @@ this.MergeWindows = {
   },
 
   warnBeforeClosingWindow: function(aWindow) {
-    // prompt a warning before closing a window with left ovar tabs
+    // prompt a warning before closing a window with left over tabs
     var canClose = this.prefs.getBoolPref("closeOnSelect");
     if (!canClose)
       return false;

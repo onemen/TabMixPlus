@@ -250,12 +250,12 @@ options = {
         fileName = decodeURI(fileName).replace(re, "");
         let index = line.indexOf(_char);
         let name = line.slice(0, index).split("(").shift();
-        let formated = '  File "' + fileName + '", line ' + lineNumber;
+        let formatted = '  File "' + fileName + '", line ' + lineNumber;
         if (colNumber)
-          formated += ', col ' + colNumber;
+          formatted += ', col ' + colNumber;
         if (name)
-          formated += ', in ' + name.replace("/<", "");
-        lines.push(formated);
+          formatted += ', in ' + name.replace("/<", "");
+        lines.push(formatted);
       }
     });
 

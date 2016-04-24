@@ -226,8 +226,8 @@ this.TabmixGroupsMigrator = {
       if (windowGroupMap) {
         let anonGroupCount = 0;
         let windowGroups = [... windowGroupMap.values()].sort(TabGroupsMigrator._groupSorter);
-        let singleanonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
-        if (singleanonGroup) {
+        let singleAnonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
+        if (singleAnonGroup) {
           windowGroups[0].tabGroupsMigrationTitle = winTitle;
         } else {
           for (let group of windowGroups) {
@@ -268,7 +268,8 @@ this.TabmixGroupsMigrator = {
     });
   },
 
-  createtSessionsFolder: function() {
+  // create SessionsFolder: function() {
+  createSessionsFolder: function() {
     let BM = PlacesUtils.bookmarks;
     return BM.insert({
       parentGuid: BM.menuGuid,
@@ -280,7 +281,7 @@ this.TabmixGroupsMigrator = {
   },
 
   getSessionsFolder: function(folder) {
-    return this.promiseItemId(folder).catch(this.createtSessionsFolder.bind(this));
+    return this.promiseItemId(folder).catch(this.createSessionsFolder.bind(this));
   },
 
   bookmarkAllGroupsFromState: function(groupData, guid, name) {

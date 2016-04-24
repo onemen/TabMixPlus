@@ -76,8 +76,10 @@ var PrivateTab = {
   }
 };
 
+// noinspection SpellCheckingInspection
+const SMID = "{1280606b-2510-4fe0-97ef-9b5a22eafe30}";
 var SessionManager = {
-  id: "{1280606b-2510-4fe0-97ef-9b5a22eafe30}",
+  id: SMID,
   init: function() {
     this._saveTabmixPrefs();
     TabmixSvc.sessionManagerAddonInstalled = true;
