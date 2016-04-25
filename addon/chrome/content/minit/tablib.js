@@ -1874,9 +1874,9 @@ var tablib = { // eslint-disable-line
     // we always show our prompt on Mac
     var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
-    var askBeforSave = !Tabmix.callerTrace("restartApp", "restart");
+    var askBeforeSave = !Tabmix.callerTrace("restartApp", "restart");
     var isLastWindow = Tabmix.isLastBrowserWindow;
-    var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);
+    var result = TabmixSessionManager.deinit(isLastWindow, askBeforeSave);
     var canClose = result.canClose;
     // we only show warnAboutClose if firefox or tabmix didn't do it already
     // if showPrompt is false then prompt was shown by firefox code from BrowserGlue.prototype._onQuitRequest

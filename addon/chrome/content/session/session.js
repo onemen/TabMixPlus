@@ -484,7 +484,7 @@ TabmixSessionManager = {
   },
 
   // calls from: tablib.closeWindow, this.onWindowClose and this.canQuitApplication
-  deinit: function SM_deinit(aLastWindow, askBeforSave, aPopUp) {
+  deinit: function SM_deinit(aLastWindow, askBeforeSave, aPopUp) {
     // When Exit Firefox:
     //       pref "extensions.tabmix.sessions.onClose"
     //       0 - Save
@@ -520,7 +520,7 @@ TabmixSessionManager = {
 
     if (this.enableManager) {
       var result = {button: this.prefBranch.getIntPref("onClose"), checked: this.saveClosedtabs};
-      if (result.button == 1 && !askBeforSave)
+      if (result.button == 1 && !askBeforeSave)
         result.button = Tabmix.BUTTON_OK;
       var sessionNotEmpty = this.updateClosedWindowList(aPopUp);
       if (sessionNotEmpty && result.button == 1) { // Ask me before Save
@@ -549,19 +549,19 @@ TabmixSessionManager = {
 
   warnBeforeSaveSession: function SM_warnBeforeSaveSession() {
     window.focus();
-    var title = TabmixSvc.getSMString("sm.askBeforSave.title");
-    var msg = TabmixSvc.getSMString("sm.askBeforSave.msg0");
+    var title = TabmixSvc.getSMString("sm.askBeforeSave.title");
+    var msg = TabmixSvc.getSMString("sm.askBeforeSave.msg0");
     // add remark - Only non-private windows will save
     // when there is one private window or more..
     if (Tabmix.RecentWindow.getMostRecentBrowserWindow({private: true}))
-      msg += "\n" + TabmixSvc.getSMString("sm.askBeforSave.msg2");
-    msg += "\n\n" + TabmixSvc.getSMString("sm.askBeforSave.msg1");
+      msg += "\n" + TabmixSvc.getSMString("sm.askBeforeSave.msg2");
+    msg += "\n\n" + TabmixSvc.getSMString("sm.askBeforeSave.msg1");
     var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
     var chkBoxState = this.saveClosedTabs ? Tabmix.CHECKBOX_CHECKED : Tabmix.HIDE_CHECKBOX;
 
-    var buttons = TabmixSvc.setLabel("sm.askBeforSave.button0") + "\n" +
+    var buttons = TabmixSvc.setLabel("sm.askBeforeSave.button0") + "\n" +
         TabmixSvc.getDialogStrings("Cancel") + "\n" +
-        TabmixSvc.setLabel("sm.askBeforSave.button1");
+        TabmixSvc.setLabel("sm.askBeforeSave.button1");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                                 [title, msg, "", chkBoxLabel, buttons]);
   },
@@ -1506,8 +1506,8 @@ TabmixSessionManager = {
       actionFlag = Tabmix.DLG_RENAME;
     } else {
       label = action == "saveprevious" ? old : gBrowser.mCurrentTab.label;
-      buttons = [TabmixSvc.setLabel("sm.askBeforSave.button0"),
-                 TabmixSvc.setLabel("sm.askBeforSave.button1"),
+      buttons = [TabmixSvc.setLabel("sm.askBeforeSave.button0"),
+                 TabmixSvc.setLabel("sm.askBeforeSave.button1"),
                  TabmixSvc.setLabel("sm.replaceStartup.button0") + "..."].join("\n");
       actionFlag = Tabmix.DLG_SAVE;
     }
