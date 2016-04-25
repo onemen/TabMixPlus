@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Platzierungsanzeige beim Verschieben von Tabs">
 <!ENTITY dropIndicator-native.label "Firefox-Stil">
 <!ENTITY dropIndicator-builtin.label "TMP-Stil">
-<!ENTITY verticalTabbar.description "Verwenden Sie die Einstellungen der Erweiterungen &quot;Tree Style Tab&quot; oder &quot;Vertical Tabs&quot; für diese Einstellungen.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Position der Tab-Leiste:">
 <!ENTITY tabBarPosition.top.label "oberhalb des Inhaltsbereichs">
 <!ENTITY tabBarPosition.bottom.label "unterhalb des Inhaltsbereichs">

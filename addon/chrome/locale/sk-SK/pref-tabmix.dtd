@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Klapka">
 <!ENTITY dropIndicator-native.label "Pôvodný štýl">
 <!ENTITY dropIndicator-builtin.label "Zabudovaný štýl">
-<!ENTITY verticalTabbar.description "Použiť treeStyleTab alebo VerticalTab príponu pre ovládanie týchto nastavení.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Poloha:">
 <!ENTITY tabBarPosition.top.label "Začiatok (nad obsahom)">
 <!ENTITY tabBarPosition.bottom.label "Spodok (pod obsahom)">

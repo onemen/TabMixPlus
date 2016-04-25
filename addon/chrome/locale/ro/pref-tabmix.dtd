@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicator de fixare (când fila nu se deplasează)">
 <!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
 <!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
-<!ENTITY verticalTabbar.description "Se utilizează extensiile „Tree Style Tab” sau  „VerticalTab” pentru a controla aceste opțiuni.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Se poziționează bara de file:">
 <!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
 <!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">

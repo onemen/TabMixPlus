@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Индикатор испуштања">
 <!ENTITY dropIndicator-native.label "Изворни стил">
 <!ENTITY dropIndicator-builtin.label "Уграђени стил">
-<!ENTITY verticalTabbar.description "Користите додатке treeStyleTab или VerticalTab да бисте контролисали ова подешавања.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Позиција:">
 <!ENTITY tabBarPosition.top.label "на врху (изнад садржаја)">
 <!ENTITY tabBarPosition.bottom.label "на дну (испод садржаја)">

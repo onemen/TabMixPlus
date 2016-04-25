@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Индикатор перетаскивания">
 <!ENTITY dropIndicator-native.label "Встроенный стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
-<!ENTITY verticalTabbar.description "Используйте расширение treeStyleTab или VerticalTab, чтобы контролировать эти настройки.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Расположение панели:">
 <!ENTITY tabBarPosition.top.label "Сверху (над контентом)">
 <!ENTITY tabBarPosition.bottom.label "Снизу (под контентом)">

@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Δείκτης απόθεσης">
 <!ENTITY dropIndicator-native.label "Εγγενές στυλ">
 <!ENTITY dropIndicator-builtin.label "Ενσωματωμένο στυλ">
-<!ENTITY verticalTabbar.description "Χρησιμοποιήστε τις επεκτάσεις treeStyleTab ή VerticalTab για τον έλεγχο αυτών των προτιμήσεων.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Θέση:">
 <!ENTITY tabBarPosition.top.label "Πάνω (από το περιεχόμενο)">
 <!ENTITY tabBarPosition.bottom.label "Κάτω (από το περιεχόμενο)">

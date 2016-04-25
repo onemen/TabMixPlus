@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Bırakma göstergesi">
 <!ENTITY dropIndicator-native.label "Yerel stil">
 <!ENTITY dropIndicator-builtin.label "Dahili stil">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Pozisyon:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">
 <!ENTITY tabBarPosition.bottom.label "Bottom (below content)">

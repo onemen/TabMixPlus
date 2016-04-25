@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Індикатор перетаскування">
 <!ENTITY dropIndicator-native.label "Вбудований стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль TabMix">
-<!ENTITY verticalTabbar.description "Використовувати розширення treeStyleTab або VerticalTab для контролю цих налаштувань.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Розташування панелі:">
 <!ENTITY tabBarPosition.top.label "Зверху (над вмістом)">
 <!ENTITY tabBarPosition.bottom.label "Знизу (під вмістом)">

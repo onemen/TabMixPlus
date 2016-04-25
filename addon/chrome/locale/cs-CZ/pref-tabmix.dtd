@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavěný styl">
-<!ENTITY verticalTabbar.description "Chcete-li spravovat toto nastavení, použijte rozšíření treeStyleTab nebo VerticalTab.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
 <!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
 <!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">

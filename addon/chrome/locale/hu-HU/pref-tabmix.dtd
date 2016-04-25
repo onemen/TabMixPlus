@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Ejtés jelző">
 <!ENTITY dropIndicator-native.label "Egyedi stílus">
 <!ENTITY dropIndicator-builtin.label "Beépített stílus">
-<!ENTITY verticalTabbar.description "A treeStyleTab vagy a VerticalTab kiterjesztések használata ezen beállítások szabályzására.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Pozíció:">
 <!ENTITY tabBarPosition.top.label "Fent (a tartalom felett)">
 <!ENTITY tabBarPosition.bottom.label "Lent (a tartalom alatt)">

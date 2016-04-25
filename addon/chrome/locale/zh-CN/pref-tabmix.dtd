@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "拖放指示器">
 <!ENTITY dropIndicator-native.label "原始的样式">
 <!ENTITY dropIndicator-builtin.label "内建的样式">
-<!ENTITY verticalTabbar.description "让 treeStyleTab 或 VerticalTab 扩展接管这些选项。">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "标签栏位置：">
 <!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（内容区域下方）">

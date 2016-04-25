@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicateur de déplacement">
 <!ENTITY dropIndicator-native.label "Style natif">
 <!ENTITY dropIndicator-builtin.label "Style intégré">
-<!ENTITY verticalTabbar.description "Utiliser les extensions Tree Style Tab ou Vertical Tabs pour contrôler ces préférences.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
 <!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">

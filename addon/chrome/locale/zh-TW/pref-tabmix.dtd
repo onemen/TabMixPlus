@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "分頁標籤拖曳指標">
 <!ENTITY dropIndicator-native.label "原始樣式">
 <!ENTITY dropIndicator-builtin.label "內建樣式">
-<!ENTITY verticalTabbar.description "由 treeStyleTab 或 VerticalTab 擴充套件來控制這些設定">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "分頁標籤列位置：">
 <!ENTITY tabBarPosition.top.label "頂部（內容上方）">
 <!ENTITY tabBarPosition.bottom.label "底部（內容下方）">

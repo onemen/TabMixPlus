@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicatori di trascinamento">
 <!ENTITY dropIndicator-native.label "stile predefinito del browser">
 <!ENTITY dropIndicator-builtin.label "stile incorporato">
-<!ENTITY verticalTabbar.description "Utilizzare Tree Style Tab oppure Vertical Tabs per le seguenti impostazioni">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Sposta la barra delle schede:">
 <!ENTITY tabBarPosition.top.label "in alto (sopra al contenuto)">
 <!ENTITY tabBarPosition.bottom.label "in basso (sotto al contenuto)">
@@ -168,7 +168,8 @@
 <!ENTITY showTabX.rtl "sulla parte destra">
 <!ENTITY milliseconds.label " ">
 <!-- LOCALIZATION NOTE
-          change this only if you need to change the width
+          change this only if you need to change the width 
+
 
 
 
@@ -192,8 +193,9 @@
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width
+<!-- LOCALIZATION NOTE          
+          change this only if you need to change the width 
+
 
 
 

@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Dấu chỉ báo việc thả">
 <!ENTITY dropIndicator-native.label "Kiểu địa phương">
 <!ENTITY dropIndicator-builtin.label "Kiểu cài sẵn">
-<!ENTITY verticalTabbar.description "Dùng ứng dụng StyleTab hoặc VerticalTab để điều khiển các thiết đặt này.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Vị trí:">
 <!ENTITY tabBarPosition.top.label "Trên (trên nội dung)">
 <!ENTITY tabBarPosition.bottom.label "Dưới (dưới nội dung)">

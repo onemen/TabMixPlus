@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "الموضع:">
 <!ENTITY tabBarPosition.top.label "علوي (فوق المحتوى)">
 <!ENTITY tabBarPosition.bottom.label "سفلي (تحت المحتوى)">

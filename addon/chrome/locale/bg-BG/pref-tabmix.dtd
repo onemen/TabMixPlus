@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Индикатор за пускане">
 <!ENTITY dropIndicator-native.label "Стандартен стил">
 <!ENTITY dropIndicator-builtin.label "Вграден стил">
-<!ENTITY verticalTabbar.description "Използвайте някое от разширенията treeStyleTab или VerticalTab, за да контролирате тези настройки.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Разположение на лентата:">
 <!ENTITY tabBarPosition.top.label "Подпрозорците отгоре">
 <!ENTITY tabBarPosition.bottom.label "Подпрозорците отдолу">

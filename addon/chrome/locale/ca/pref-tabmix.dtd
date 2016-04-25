@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicador de deixar anar">
 <!ENTITY dropIndicator-native.label "Estil nadiu">
 <!ENTITY dropIndicator-builtin.label "Estil integrat">
-<!ENTITY verticalTabbar.description "Utilitza les extensions treeStyleTab o VerticalTab per controlar aquestes preferències.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Posició:">
 <!ENTITY tabBarPosition.top.label "Superior (sobre el contingut)">
 <!ENTITY tabBarPosition.bottom.label "Inferior (sota el contingut)">
