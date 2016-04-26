@@ -4,6 +4,7 @@ this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cu = Components.utils;
 
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
@@ -203,10 +204,8 @@ this.MergeWindows = {
     return !aWindow.toolbar.visible;
   },
 
-  isWindowPrivate: function() {
-    delete this.isWindowPrivate;
-    this.isWindowPrivate = aWindow => PrivateBrowsingUtils.isWindowPrivate(aWindow);
-    return this.isWindowPrivate(arguments[0]);
+  isWindowPrivate: function(aWindow) {
+    return PrivateBrowsingUtils.isWindowPrivate(aWindow);
   },
 
   /*
