@@ -327,7 +327,7 @@ options = {
   },
 
   _logMessage: function _logMessage(msg, flag = "infoFlag", caller = null) {
-    msg = msg.replace(/\r\n/g, "\n");
+    msg = msg.replace(/\r\n/g, "\n") + "\n";
     if (typeof Ci.nsIScriptError[flag] == "undefined") {
       Services.console.logStringMessage("Tabmix" + msg);
       return;
