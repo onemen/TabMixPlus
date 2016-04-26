@@ -806,16 +806,43 @@ TMP_extensionsCompatibility.treeStyleTab = {
     if (!browser) {
       return;
     }
-    let baseTab = tst.getTabFromBrowser(browser, tst.getTabBrowserFromChild(browser));
+    let ownerBrowser = tst.getTabBrowserFromChild(browser);
+    let baseTab = tst.getTabFromBrowser(browser, ownerBrowser);
+    let parentTab = tst.getParentTab(baseTab);
 
     // clean previously ready state set by treeStyleTab
     if (clean) {
       tst.stopToOpenChildTab(baseTab);
-      let parentTab = tst.getParentTab(baseTab);
       if (parentTab) {
         tst.stopToOpenChildTab(parentTab);
       }
     }
-    tst.readyToOpenNextSiblingTabNow(baseTab);
+
+    // based on treeStyleTab.readyToOpenNextSiblingTabNow
+    // we also set ready state for pinned tabs
+    let readyToOpenNextSiblingTab = function() {
+      if (!baseTab)
+        return false;
+      let nextTab = tst.getNextSiblingTab(baseTab);
+      if (parentTab) {
+        return tst.readyToOpenChildTab(parentTab, false, nextTab);
+      } else if (nextTab) {
+        ownerBrowser.treeStyleTab.readiedToAttachNewTab = true;
+        ownerBrowser.treeStyleTab.parentTab = null;
+        ownerBrowser.treeStyleTab.insertBefore = nextTab.getAttribute(tst.kID);
+        return true;
+      }
+      return false;
+    };
+
+    if (readyToOpenNextSiblingTab()) {
+      setTimeout(() => {
+        try {
+          tst.stopToOpenChildTab(baseTab);
+        } catch (ex) {
+          tst.defaultErrorHandler(ex);
+        }
+      }, 0);
+    }
   },
 };
