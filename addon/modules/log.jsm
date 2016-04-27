@@ -191,10 +191,21 @@ options = {
 }
 */
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
-    var offset = typeof level == "string" ? "  " : "";
+    if (!aObj || typeof aObj != "object") {
+      let msg = "log.obj was called with non-object argument\n";
+      if (aMessage) {
+        msg += aMessage + "\n";
+      }
+      let type = aObj === null ? "null" : typeof aObj;
+      msg += "typeof aObj is '" + type + "'\n'" + aObj + "'";
+      if (!aDisallowLog) {
+        this.log(msg, true, false, this.caller);
+      }
+      return msg;
+    }
+    let offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
-    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof (aObj);
-    objS += ":\n";
+    let objS = offset + aObj.toString() + ":\n";
 
     for (let prop of Object.keys(aObj)) {
       try {
