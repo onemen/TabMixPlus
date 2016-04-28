@@ -106,16 +106,24 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};
 
+      let removeSpaces = function(match, p1, p2) {
+        return p1 + p2.replace(/\s/g, '_');
+      };
+
       let setDescriptor = function(type) {
         let fnType = "__lookup#ter__".replace("#", type);
         type = type.toLowerCase();
         let code = aCode && aCode[type + "ter"] ||
                    this.type == fnType ? this.value : obj[fnType](fnName);
 
-        if (typeof code == "string")
+        if (typeof code == "string") {
+          // bug 1255925 - Give a name to getters/setters add space before the function name
+          // replace function get Foo() to function get_Foo()
+          code = code.replace(/(^function\s*)(.*\()/, removeSpaces);
           descriptor[type] = Tabmix._makeCode(null, code);
-        else if (typeof code != "undefined")
+        } else if (typeof code != "undefined") {
           descriptor[type] = code;
+        }
       }.bind(this);
 
       setDescriptor("Get");
