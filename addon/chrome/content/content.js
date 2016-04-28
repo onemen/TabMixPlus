@@ -206,7 +206,8 @@ TabmixClickEventHandler = {
         node) {
       let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
       let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
-      if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
+      let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
+      if (referrerAttrValue !== Ci.nsIHttpChannel[policy]) {
         referrerPolicy = referrerAttrValue;
       }
     }

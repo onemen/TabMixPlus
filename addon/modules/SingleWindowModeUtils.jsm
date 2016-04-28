@@ -95,10 +95,17 @@ this.SingleWindowModeUtils = {
     var existingBrowser = existingWindow.gBrowser;
     existingWindow.tablib.init(); // just in case tablib isn't init yet
     var uriToLoad = args[0];
+
     var urls = [];
     var params = {
       referrerURI: null,
-      referrerPolicy: TabmixSvc.version(390) && Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT,
+      referrerPolicy: (function() {
+        if (TabmixSvc.version(390)) {
+          let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
+          return Ci.nsIHttpChannel[policy];
+        }
+        return null;
+      }()),
       postData: null,
       allowThirdPartyFixup: false
     };
