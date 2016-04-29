@@ -461,7 +461,11 @@ var TMP_tabDNDObserver = {
 
       if (left_right > -1 && !Tabmix.ContentClick.isUrlForDownload(url)) {
         // We're adding a new tab.
-        let newTab = gBrowser.loadOneTab(url, {inBackground: bgLoad, allowThirdPartyFixup: true});
+        let newTab = gBrowser.loadOneTab(url, {
+          inBackground: bgLoad,
+          allowThirdPartyFixup: true,
+          userContextId: this.selectedItem.getAttribute("usercontextid")
+        });
         gBrowser.moveTabTo(newTab, newIndex + left_right);
       } else {
         // Load in an existing tab.
