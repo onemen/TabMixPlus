@@ -1432,8 +1432,8 @@ var tablib = { // eslint-disable-line
           // if we don't find last selected we fall back to default
           if (tempIndex > -1)
             return tempIndex;
-          /* falls through */
         }
+          /* falls through */
         case 2: // opener / right  (default )
         case 5: // right tab
           /* falls through */

@@ -206,8 +206,8 @@ var TMP_Places = {
             node.parent && node.parent.itemId == historyId;
         if (!historySelected)
           return this.prefBookmark;
-        /* falls through */
       }
+        /* falls through */
       case "chrome://browser/content/history/history-panel.xul":
         return this.prefHistory;
       case "chrome://browser/content/browser.xul":
