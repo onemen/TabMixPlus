@@ -304,8 +304,12 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function() {
-  // noinspection SpellCheckingInspection
-  return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+  try {
+    // noinspection SpellCheckingInspection
+    return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+  } catch (ex) {
+  }
+  return false;
 });
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
