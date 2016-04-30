@@ -331,7 +331,7 @@ var TMP_tabDNDObserver = {
 
     if (dragType == this.DRAG_LINK) {
       let tab = tabBar._getDragTargetTab(event, true);
-      if (tab && tab.linkedBrowser.currentURI.spec != "about:customizing") {
+      if (tab && !this._isCustomizing) {
         if (!this._dragTime)
           this._dragTime = Date.now();
         if (Date.now() >= this._dragTime + this._dragOverDelay)
