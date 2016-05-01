@@ -569,7 +569,9 @@ ContentClickInternal = {
         // for the moment just do it for Google and Yahoo....
         // tvguide.com    - added 2013-07-20
         // duckduckgo.com - added 2014-12-24
-        blocked = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+        // jetbrains.com - added 2016-05-01
+        let re = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com|jetbrains.com/;
+        blocked = re.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
            (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
