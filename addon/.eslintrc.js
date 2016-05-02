@@ -114,7 +114,7 @@ module.exports = {
     "no-sparse-arrays": 2,
     // "no-sync": 0, // node
     "no-ternary": 0,
-    // the editore remove trailing-spaces on save
+    // the editor remove trailing-spaces on save
     "no-trailing-spaces": 0,
     "no-this-before-super": 2,
     "no-throw-literal": 2,
