@@ -468,9 +468,12 @@ var TMP_extensionsCompatibility = {
 
   setVerticalTabs: function() {
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+    // https://addons.mozilla.org/en-US/firefox/addon/vertical-tabs-reloaded/
     // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
     // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
-    let isVertical = typeof VerticalTabs == "object" || typeof sidetabs == "object" ||
+    let isVertical = typeof VerticalTabs == "object" ||
+        typeof VerticalTabsReloaded == "object" ||
+        typeof sidetabs == "object" ||
         typeof tabkitGlobal == "object";
     let treeStyleTab = typeof TreeStyleTabService == "object";
     Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
