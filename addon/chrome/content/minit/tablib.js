@@ -263,22 +263,22 @@ var tablib = { // eslint-disable-line
        $&'
     ).toCode();
 
-    Tabmix.changeCode(gBrowser, "gBrowser._blurTab")._replace(
-      'if (aTab.owner &&',
-      'if (false &&'
-    )._replace(
-      'var tab = aTab;',
-      'var tab, newIndex = this.selectIndexAfterRemove(aTab);\
-       if (newIndex > -1) {\
-         let tabs = TMP_TabView.currentGroup();\
-         tab = tabs[newIndex];\
-         if (tab && !tab.closing) {\
-           this.selectedTab = tab;\
-           return;\
-         }\
-       }\
-       tab = aTab;'
-    ).toCode();
+    Tabmix.originalFunctions.gBrowser_blurTab = gBrowser._blurTab;
+    gBrowser._blurTab = function(aTab) {
+      if (!aTab.selected)
+        return;
+
+      let newIndex = this.selectIndexAfterRemove(aTab);
+      if (newIndex > -1) {
+        let tabs = TMP_TabView.currentGroup();
+        let tab = tabs[newIndex];
+        if (tab && !tab.closing) {
+          this.selectedTab = tab;
+          return;
+        }
+      }
+      Tabmix.originalFunctions.gBrowser_blurTab.apply(this, arguments);
+    };
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
