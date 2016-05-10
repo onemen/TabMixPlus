@@ -474,6 +474,7 @@ var TMP_extensionsCompatibility = {
     let isVertical = typeof VerticalTabs == "object" ||
         typeof VerticalTabsReloaded == "object" ||
         typeof sidetabs == "object" ||
+        typeof tabkit == "object" ||
         typeof tabkitGlobal == "object";
     let treeStyleTab = typeof TreeStyleTabService == "object";
     Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
