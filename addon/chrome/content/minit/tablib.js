@@ -212,29 +212,27 @@ var tablib = { // eslint-disable-line
       return tab;
     };
 
-    // ContextMenu Extensions replace the original removeTab function
-    var _removeTab = "removeTab";
-    if ("__ctxextensions__removeTab" in gBrowser)
-      _removeTab = "__ctxextensions__removeTab";
-
-    // we add compatibility fix for tabGroupManager here
-    // so we don't have to work on the same function twice.
-    Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
-      '{',
-      '{\n' +
-       '            if (aTab.hasAttribute("protected"))\n' +
-       '              return;\n' +
-       '            let lastTabInGroup = this.visibleTabs.length == 1;\n' +
-       '            if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab"))\n' +
-       '              return;\n' +
-       '            if ("clearTimeouts" in aTab)\n' +
-       '              aTab.clearTimeouts();'
-    )._replace(
-      // fix bug in TGM when closing last tab in a group with animation
-      'if (aParams)',
-      'if (lastTabInGroup) {aParams ? aParams.animate = false : aParams = {animate: false}};\
-       $&', {check: Tabmix.extensions.tabGroupManager}
-    ).toCode();
+    Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
+    gBrowser.removeTab = function(aTab, aParams = {}, ...args) {
+      let result;
+      if (!aTab || aTab.hasAttribute("protected")) {
+        return result;
+      }
+      let lastTabInGroup = this.visibleTabs.length == 1;
+      if (lastTabInGroup) {
+        if (Tabmix.prefs.getBoolPref("keepLastTab")) {
+          return result;
+        }
+        // fix bug in TGM when closing last tab in a group with animation
+        if (Tabmix.extensions.tabGroupManager) {
+          aParams.animate = false;
+        }
+      }
+      if (typeof aTab.clearTimeouts == "function") {
+        aTab.clearTimeouts();
+      }
+      return Tabmix.originalFunctions.gBrowser_removeTab.apply(this, [aTab, aParams, ...args]);
+    };
 
     // changed by bug #563337
     if (!Tabmix.extensions.tabGroupManager) {
