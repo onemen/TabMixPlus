@@ -14,12 +14,7 @@
  *
  * @returns   Nothing.
  */
-Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
-  if (aWindowType == "Extension:Manager") {
-    // we're in the EM
-    window.openURL = this.openURL;
-  }
-
+Tabmix.linkHandling_init = function TMP_TBP_init() {
   // for normal click this function calls urlbar.handleCommand
   // for middle click or click with modifiers whereToOpenLink can't be "current"
   // so we don't need to check for locked tabs only for blanks tabs

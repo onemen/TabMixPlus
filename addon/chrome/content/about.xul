@@ -45,12 +45,12 @@
         </vbox>
         <vbox id="extensionHomepage" style="cursor:default;">
           <label class="text-link" value="&homepage.label;" style="cursor:pointer;"
-                 onclick="Tabmix.openURL('http://tabmixplus.org', event)"/>
+                 href="http://tabmixplus.org"/>
           <hbox flex="1">
             <label value="&forum.label;" style="cursor:pointer;" class="text-link"
-                   onclick="Tabmix.openURL('http://tabmixplus.org/forum', event)"/>
+                   href="http://tabmixplus.org/forum"/>
             <label value="&help.label;" style="cursor:pointer;" class="text-link"
-                   onclick="Tabmix.openURL('http://tabmixplus.org/support/viewpage.php?t=3&amp;p=introduction', event)"/>
+                   href="http://tabmixplus.org/support/viewpage.php?t=3&amp;p=introduction"/>
           </hbox>
         </vbox>
       </hbox>
