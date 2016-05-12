@@ -136,83 +136,80 @@ var tablib = { // eslint-disable-line
   },
 
   change_gBrowser: function change_gBrowser() {
-    var obj, fnName;
-    // RequestPolicy Continued extension https://requestpolicycontinued.github.io
-    var rp = gBrowser.rpcontinuedWrappedFunctions;
-    if (typeof rp == "object" && typeof rp.addTab == "object" &&
-        typeof rp.addTab.main == "function") {
-      [obj, fnName] = [rp.addTab, "rpcontinuedWrappedFunctions.addTab.main"];
-    } else if (typeof Fd == "object" && typeof Fd.addTab == "function") {
-      [obj, fnName] = [Fd, "Fd.addTab"];
-    } else if (Tabmix.extensions.ieTab2) {
-      [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
-    // NRA-ILA toolbar extension replace the original addTab function
-    } else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
-      [obj, fnName] = [gBrowser, "origAddTab7c3de167ed6f494aa652f11a71ecb40c"];
-    } else {
-      [obj, fnName] = [gBrowser, "addTab"];
-    }
+    Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
+    gBrowser.addTab = function(...args) {
+      let dontMove, isPending, referrerURI, fromExternal, relatedToCurrent,
+          callerTrace = Tabmix.callerTrace(),
+          isRestoringTab = callerTrace.contain("ssi_restoreWindow"),
+          // new tab can trigger selection change by some extensions (divX HiQ)
+          // see use below
+          selectedTab = this.selectedTab,
+          lastRelatedTab = this._lastRelatedTab;
 
-    let $LF = '\n            ';
-    Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{', '{\n' +
-      '            let dontMove, isPending, callerTrace = Tabmix.callerTrace(),\n' +
-      '                isRestoringTab = callerTrace.contain("ssi_restoreWindow");\n'
-    )._replace(
-      'let params = arguments[1];',
-      '$&\n' +
-      '              params = tablib.definedParams(params);\n' +
-      '              dontMove              = params.dontMove;\n' +
-      '              isPending             = params.isPending;'
-    )._replace(
-      't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && !aURI.startsWith("about") ?\n' +
-      '                              this.mStringBundle.getString("tabs.connecting") : aURI);',
-      {check: !Tabmix.isVersion(280)}
-    )._replace(
-      't.className = "tabbrowser-tab";',
-      '$&\
-       t.setAttribute("last-tab", "true"); \
-       if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
-         t.setAttribute("tabmix_pending", "true"); \
-       var lastChild = this.tabContainer.lastChild; \
-       if (lastChild) lastChild.removeAttribute("last-tab");'
-    )._replace(
-      'this._lastRelatedTab = t;',
-      'if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {\
-         TMP_LastTab.attachTab(t, _lastRelatedTab);\
-         $&\
-       }'
-    )._replace(
-      'this.selectedTab)._tPos + 1', '_selectedTab)._tPos + 1'
-    )._replace(
-      /*
-        replace Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")
-        before we use it in the next section.
-      */
-      'Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")',
-      'openTabnext'
-    )._replace(
-      'this.tabContainer.appendChild(t);',
-      'var _selectedTab = this.selectedTab;' +
-      'var _lastRelatedTab = this._lastRelatedTab;' +
-      'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
-      'if (openTabnext) {' +
-      '  if (dontMove || Tabmix.dontMoveNewTab(callerTrace))' +
-      '    openTabnext = false;' +
-      '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
-      '    aRelatedToCurrent = true;' + $LF +
-      '  let checkToOpenTabNext = openTabnext && (callerTrace.contain("openUILinkIn") || aFromExternal) &&' + $LF +
-      '      (aRelatedToCurrent == null ? aReferrerURI : aRelatedToCurrent);' + $LF +
-      '  TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);' + $LF +
-      '}' + $LF +
-      '$&'
-    )._replace(//  new tab can trigger selection change by some extensions (divX HiQ)
-      't.owner = this.selectedTab;', 't.owner = _selectedTab;'
-    ).toCode();
+      // we prevents the original function from moving the new tab by setting
+      // params.relatedToCurrent to false
+      let params = args[1];
+      if (args.length <= 6 && params &&
+          (typeof params != "object" || params instanceof Ci.nsIURI)) {
+        referrerURI = params;
+        params = {
+          referrerURI: referrerURI,
+          charset: args[2],
+          postData: args[3],
+          ownerTab: args[4],
+          allowThirdPartyFixup: args[5],
+          relatedToCurrent: false
+        };
+        let uri = args[0];
+        args = [uri, params];
+      } else if (args.length == 2 &&
+          typeof params == "object" &&
+          !(params instanceof Ci.nsIURI)) {
+        dontMove = params.dontMove;
+        isPending = params.isPending;
+        referrerURI = params.referrerURI;
+        fromExternal = params.fromExternal;
+        relatedToCurrent = params.relatedToCurrent;
+        params.relatedToCurrent = false;
+        args[1] = params;
+      }
 
-    Tabmix.dontMoveNewTab = function(callerTrace) {
-      return callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
+      let openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
+      if (openTabnext) {
+        let dontMoveNewTab = dontMove ||
+            callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
+        if (dontMoveNewTab) {
+          openTabnext = false;
+        } else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) {
+          relatedToCurrent = true;
+        }
+        let checkToOpenTabNext = openTabnext && (callerTrace.contain("openUILinkIn") || fromExternal) &&
+            (relatedToCurrent === null ? referrerURI : relatedToCurrent);
+        TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
+      }
+
+      let tab = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
+
+      if (isPending || isRestoringTab &&
+          Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
+        tab.setAttribute("tabmix_pending", "true");
+      }
+
+      if ((relatedToCurrent === null ? referrerURI : relatedToCurrent) &&
+          openTabnext) {
+        let newTabPos = (this._lastRelatedTab || selectedTab)._tPos + 1;
+        if (this._lastRelatedTab) {
+          this._lastRelatedTab.owner = null;
+        } else {
+          tab.owner = selectedTab;
+        }
+        this.moveTabTo(tab, newTabPos);
+        if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
+          TMP_LastTab.attachTab(tab, lastRelatedTab);
+          this._lastRelatedTab = tab;
+        }
+      }
+      return tab;
     };
 
     // ContextMenu Extensions replace the original removeTab function
@@ -306,6 +303,7 @@ var tablib = { // eslint-disable-line
       ).toCode();
     }
 
+    var obj, fnName;
     if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldSetTabTitle"];
     } else {
@@ -1702,21 +1700,6 @@ var tablib = { // eslint-disable-line
     gBrowser.closeTab = aTab => this.removeTab(aTab);
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
-  },
-
-  // prevent 'ReferenceError: reference to undefined property params'
-  // in gBrowser.addTab
-  props: ["referrerURI", "charset", "postData", "ownerTab",
-          "allowThirdPartyFixup", "fromExternal", "relatedToCurrent",
-          "allowMixedContent", "skipAnimation", "isUTF8", "dontMove", "isPending",
-          "aForceNotRemote", "aNoReferrer"],
-
-  definedParams: function(params) {
-    this.props.forEach(function(prop) {
-      if (typeof params[prop] == "undefined")
-        params[prop] = null;
-    });
-    return params;
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
