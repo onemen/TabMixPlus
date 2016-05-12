@@ -462,15 +462,16 @@ ContentClickInternal = {
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
   _contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
-    aEvent.tabmix_isRemote = aBrowser.getAttribute("remote") == "true";
-    if (aEvent.tabmix_isRemote)
+    let ownerDoc = aBrowser.ownerDocument;
+    let win = ownerDoc.defaultView;
+    aEvent.tabmix_isMultiProcessBrowser = win.gMultiProcessBrowser;
+    if (aEvent.tabmix_isMultiProcessBrowser) {
       return "1";
+    }
 
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return "2";
 
-    let ownerDoc = aBrowser.ownerDocument;
-    let win = ownerDoc.defaultView;
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
       let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);

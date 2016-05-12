@@ -170,7 +170,7 @@ var TabmixContentHandler = {
 
 TabmixClickEventHandler = {
   init: function init(global) {
-    if (PROCESS_TYPE_CONTENT) {
+    if (TabmixSvc.version(380)) {
       global.addEventListener("click", this, true);
     }
   },
@@ -184,8 +184,10 @@ TabmixClickEventHandler = {
   },
 
   contentAreaClick: function(event) {
+    // tabmix_isMultiProcessBrowser is undefined for remote browser when
+    // window.gMultiProcessBrowser is true
     if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
-        event.tabmix_isRemote === false) {
+        event.tabmix_isMultiProcessBrowser === false) {
       return;
     }
 
