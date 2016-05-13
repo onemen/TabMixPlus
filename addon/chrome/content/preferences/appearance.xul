@@ -250,10 +250,10 @@
             <hbox align="center">
               <label value="&minWidth.label;"/>
               <textbox id="minWidth" size="3" maxlength="3" preference="pref_minWidth" type="number"
-                       onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
+                       onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthTo.label;"/>
               <textbox id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number"
-                       onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
+                       onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthPixels.label;"/>
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
