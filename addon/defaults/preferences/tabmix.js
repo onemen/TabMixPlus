@@ -1,3 +1,4 @@
+/* globals pref */
 /* eslint strict: 0 */
 
 pref("extensions.tabmix.disableIncompatible", true);

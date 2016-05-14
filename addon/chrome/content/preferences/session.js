@@ -1,3 +1,4 @@
+/* globals TabmixSessionManager */
 /* exported gSessionPane */
 "use strict";
 

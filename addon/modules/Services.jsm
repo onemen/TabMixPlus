@@ -1,3 +1,4 @@
+/* globals dump */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixSvc"];
@@ -6,6 +7,9 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
+  "resource://tabmixplus/Places.jsm");
 
 var tabStateCache;
 var _versions = {};
@@ -182,7 +186,6 @@ this.TabmixSvc = {
 
       Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
 
-      Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
 
       TabmixSvc.tabStylePrefs = {};

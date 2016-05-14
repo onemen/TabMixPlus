@@ -239,7 +239,6 @@ var Tabmix = {
   _init: function() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
-    this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
     XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
                                       "resource:///modules/RecentWindow.jsm");
 
@@ -268,3 +267,4 @@ var Tabmix = {
 };
 
 Tabmix._init();
+Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");

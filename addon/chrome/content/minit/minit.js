@@ -1,3 +1,4 @@
+/* globals ChromeWindow, XULElement */
 /* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
@@ -1232,9 +1233,9 @@ Tabmix.navToolbox = {
       this.urlBarInitialized = obj[fn].toString().indexOf(TMP_fn) > -1;
 
     // For the case Omnibar version 0.7.7.20110418+ change handleCommand before we do.
-    if (_Omnibar && typeof (Omnibar.intercepted_handleCommand) == "function") {
+    if (_Omnibar && typeof (window.Omnibar.intercepted_handleCommand) == "function") {
       window.Omnibar.intercepted_handleCommand = gURLBar[fn];
-      Tabmix.changeCode(Omnibar, "Omnibar.intercepted_handleCommand")._replace(
+      Tabmix.changeCode(window.Omnibar, "Omnibar.intercepted_handleCommand")._replace(
         'Omnibar.handleSearchQuery',
         'false && Omnibar.handleSearchQuery', {silent: true}
       ).toCode();

@@ -1,6 +1,9 @@
-/* globals _sminstalled, gPreferenceList */
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              showPane, openHelp */
+/* import-globals-from ../utils.js */
+/* import-globals-from shortcuts.js */
+/* import-globals-from menu.js */
+/* import-globals-from appearance.js */
 "use strict";
 
 /***** Preference Dialog Functions *****/

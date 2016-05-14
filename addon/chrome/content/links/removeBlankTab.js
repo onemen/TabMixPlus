@@ -1,3 +1,4 @@
+/* globals dialog, Ci */
 "use strict";
 
 const Cu = Components.utils;

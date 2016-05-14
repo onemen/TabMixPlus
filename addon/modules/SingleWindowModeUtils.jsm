@@ -1,3 +1,4 @@
+/* globals PanelUI */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];

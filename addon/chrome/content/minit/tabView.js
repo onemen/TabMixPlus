@@ -1,4 +1,3 @@
-  /* globals TabItems */
   "use strict";
 
   TMP_TabView.subScriptLoaded = true;

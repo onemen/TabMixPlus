@@ -1,4 +1,6 @@
 /* eslint mozilla/balanced-listeners:0 */
+/* globals content, docShell, addMessageListener, sendSyncMessage,
+           sendAsyncMessage, sendRpcMessage */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;

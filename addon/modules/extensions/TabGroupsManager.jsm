@@ -136,13 +136,13 @@ this.TMP_TabGroupsManager = {
     if (!this.enableBackup && !windowNode)
       return;
     try {
-      let value = jsonText || TabmixSvc.ss.getWindowValue(window, "TabGroupsManagerAllGroupsData");
+      let value = jsonText || window.TabmixSvc.ss.getWindowValue(window, "TabGroupsManagerAllGroupsData");
       if (!windowNode)
         windowNode = this.gThisWin;
       this.setLiteral(windowNode, "tgm_jsonText", encodeURI(value));
       this.saveStateDelayed();
     } catch (ex) {
-      Tabmix.assert(ex);
+      window.Tabmix.assert(ex);
     }
   }
 
