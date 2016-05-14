@@ -578,9 +578,12 @@ var TMP_tabDNDObserver = {
       window.moveTo(left, top);
       window.focus();
     } else {
-      gBrowser.replaceTabWithWindow(draggedTab, {screenX: left,
-                                                 screenY: top,
-                                                });
+      let props = {screenX: left, screenY: top};
+      if (!TabmixSvc.isWindows) {
+        props.outerWidth = winWidth;
+        props.outerHeight = winHeight;
+      }
+      gBrowser.replaceTabWithWindow(draggedTab, props);
     }
     aEvent.stopPropagation();
   },
