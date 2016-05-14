@@ -443,6 +443,7 @@ var TMP_tabDNDObserver = {
       gBrowser.moveTabTo(newTab, newIndex);
 
       gBrowser.selectedTab = newTab;
+      draggedTab.parentNode._finishAnimateTabMove();
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
       gBrowser.updateCurrentBrowser(true);
     } else {
