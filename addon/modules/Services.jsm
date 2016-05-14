@@ -290,12 +290,32 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function() {
   return Services.strings.createBundle(properties);
 });
 
+XPCOMUtils.defineLazyGetter(this, "Platform", function() {
+  if (isVersion(390)) {
+    return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
+  }
+  let platform,
+      os = Services.appinfo.OS.toLowerCase();
+  if (os.startsWith("win")) {
+    platform = "win";
+  } else if (os == "darwin") {
+    platform = "macosx";
+  } else if (os == "linux") {
+    platform = "linux";
+  }
+  return platform;
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", function() {
+  return Platform == "win";
+});
+
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
-  return Services.appinfo.OS == "Darwin";
+  return Platform == "macosx";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
-  return Services.appinfo.OS == "Linux";
+  return Platform == "linux";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", function() {
