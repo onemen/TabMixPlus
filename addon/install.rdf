@@ -1,36 +1,38 @@
 <?xml version="1.0"?>
-<RDF:RDF xmlns:NS1="http://www.mozilla.org/2004/em-rdf#"
-         xmlns:NC="http://home.netscape.com/NC-rdf#"
-         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <RDF:Description RDF:about="urn:mozilla:install-manifest"
-                   NS1:id="{dc572301-7619-498c-a57d-39143191b318}"
-                   NS1:name="Tab Mix Plus"
-                   NS1:version="0.4.99"
-                   NS1:type="2"
-                   NS1:multiprocessCompatible="true"
-                   NS1:description="Tab browsing with an added boost."
-                   NS1:iconURL="chrome://tabmixplus/skin/tmp.png"
-                   NS1:homepageURL="http://tabmixplus.org"
-                   NS1:optionsURL="chrome://tabmixplus/content/preferences/preferences.xul"
-                   NS1:aboutURL="chrome://tabmixplus/content/about.xul"
-                   NS1:creator="ONEMEN (tabmix.onemen@gmail.com)"
-                   NS1:developer="ONEMEN">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{dc572301-7619-498c-a57d-39143191b318}</em:id>
+    <em:name>Tab Mix Plus</em:name>
+    <em:version>0.5.99</em:version>
+    <em:type>2</em:type>
+    <em:multiprocessCompatible>true</em:multiprocessCompatible>
+    <em:description>Tab browsing with an added boost.</em:description>
+    <em:iconURL>chrome://tabmixplus/skin/tmp.png</em:iconURL>
+    <em:homepageURL>http://tabmixplus.org</em:homepageURL>
+    <em:optionsURL>chrome://tabmixplus/content/preferences/preferences.xul</em:optionsURL>
+    <em:aboutURL>chrome://tabmixplus/content/about.xul</em:aboutURL>
+    <em:creator>ONEMEN (tabmix.onemen@gmail.com)</em:creator>
+    <em:developer>ONEMEN</em:developer>
 
     <!-- Firefox -->
-    <NS1:targetApplication>
-      <RDF:Description RDF:about="rdf:#$n83In3"
-                   NS1:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   NS1:minVersion="31.0"
-                   NS1:maxVersion="49.0a1" />
-    </NS1:targetApplication>
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>31.0</em:minVersion>
+        <em:maxVersion>49.0a1</em:maxVersion>
+      </Description>
+    </em:targetApplication>
 
     <!-- PaleMoon -->
-    <NS1:targetApplication>
-      <RDF:Description RDF:about="rdf:#$n74Pm2"
-                   NS1:id="{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}"
-                   NS1:minVersion="25.0"
-                   NS1:maxVersion="26.*" />
-    </NS1:targetApplication>
+    <em:targetApplication>
+      <Description>
+        <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
+        <em:minVersion>25.0</em:minVersion>
+        <em:maxVersion>26.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
 
-  </RDF:Description>
-</RDF:RDF>
+  </Description>
+</RDF>
