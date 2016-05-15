@@ -771,14 +771,10 @@ Tabmix.onContentLoaded = {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(function(f) {
-        let t = Tabmix.obj(com.tobwithu[f] || {}, "name " + f, false, true);
-        Tabmix.trace();
-        Tabmix.xlog(t);
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });
       if (fn.length) {
-        Tabmix.obj(fn[0], aName);
         return [com.tobwithu[fn[0]], aName];
       }
     }
