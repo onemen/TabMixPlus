@@ -885,8 +885,8 @@ ContentClickInternal = {
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
-    // don't open new tab from facebook chat settings
-    if (/www\.facebook\.com\/ajax/.test(href))
+    // don't open new tab from facebook chat and settings
+    if (/www\.facebook\.com\/(?:ajax|settings)/.test(href))
       return false;
 
     let current = this._data.currentURL.toLowerCase();
