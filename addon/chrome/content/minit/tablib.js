@@ -368,13 +368,13 @@ var tablib = { // eslint-disable-line
 
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
-      'this.adjustTabstrip',
-      'TabmixTabbar._handleResize(); \
-       $&'
-    ).toCode();
-
     if (!Tabmix.extensions.verticalTabs) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
+        'this.adjustTabstrip',
+        'TabmixTabbar._handleResize(); \
+         $&'
+      ).toCode();
+
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',

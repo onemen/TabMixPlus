@@ -473,6 +473,7 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
     let isVertical = typeof VerticalTabs == "object" ||
         typeof VerticalTabsReloaded == "object" ||
+        typeof gBrowser.tabContainer._verticalTabs == "boolean" ||
         typeof sidetabs == "object" ||
         typeof tabkit == "object" ||
         typeof tabkitGlobal == "object";
