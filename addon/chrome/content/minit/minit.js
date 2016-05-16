@@ -466,7 +466,7 @@ var TMP_tabDNDObserver = {
         let newTab = gBrowser.loadOneTab(url, {
           inBackground: bgLoad,
           allowThirdPartyFixup: true,
-          userContextId: this.selectedItem.getAttribute("usercontextid")
+          userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid")
         });
         gBrowser.moveTabTo(newTab, newIndex + left_right);
       } else {
