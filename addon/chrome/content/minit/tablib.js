@@ -138,7 +138,7 @@ var tablib = { // eslint-disable-line
   change_gBrowser: function change_gBrowser() {
     Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
     gBrowser.addTab = function(...args) {
-      let dontMove, isPending, referrerURI, relatedToCurrent,
+      let dontMove, isPending, referrerURI, relatedToCurrent = null,
           callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow"),
           // new tab can trigger selection change by some extensions (divX HiQ)
@@ -168,7 +168,7 @@ var tablib = { // eslint-disable-line
         dontMove = params.dontMove;
         isPending = params.isPending;
         referrerURI = params.referrerURI;
-        relatedToCurrent = params.relatedToCurrent;
+        relatedToCurrent = params.relatedToCurrent || null;
         params.relatedToCurrent = false;
         args[1] = params;
       }
