@@ -154,7 +154,7 @@ module.exports = {
     "accessor-pairs": 2,
     "block-scoped-var": 2,
     "block-spacing": [2, "never"],
-    "brace-style": [2, "1tbs"],
+    "brace-style": [2, "1tbs", {"allowSingleLine": true}],
     // "callback-return": 0, // node
     "camelcase": 0,
     // TODO - maybe in the future
