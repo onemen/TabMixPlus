@@ -21,7 +21,9 @@ var gAppearancePane = {
       Tabmix.setItem("squaredTabs", "hidden", true);
     }
 
-    Tabmix.setItem("tabXLeft", "disabled", !browserWindow.Tabmix.defaultCloseButtons || null);
+    let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons ||
+        browserWindow.Tabmix.extensions.treeStyleTab;
+    Tabmix.setItem("tabXLeft", "disabled", disableButtonOnLefSide || null);
     Tabmix.setItem("onLeftDisabled", "hidden", browserWindow.Tabmix.defaultCloseButtons || null);
 
     // browser.allTabs.previews

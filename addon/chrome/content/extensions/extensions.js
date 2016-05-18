@@ -644,42 +644,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
         return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
       };
 
-      fn = obj.initTabContentsOrderInternal;
-      if (fn.toString().indexOf("closebuttons-side") == -1) {
-        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabContentsOrderInternal")._replace(
-          'if (this.mTabBrowser.getAttribute(this.kTAB_CONTENTS_INVERTED) == \'true\')',
-          'let button = aNamedNodes.close;\n    ' +
-          'index = nodes.indexOf(button);\n   ' +
-          'if (index > -1) {\n    ' +
-          ' let tabbar = this.mTabBrowser.tabContainer;\n   ' +
-          ' let side = tabbar.getAttribute("closebuttons-side");\n    ' +
-          ' if (side == "left") {\n   ' +
-          '   let before = nodes.indexOf(aNamedNodes.twistyAnchor);\n   ' +
-          '   if (before > -1) {\n    ' +
-          '     nodes.splice(index, 1);\n   ' +
-          '     let mOver = tabbar.mCloseButtons;\n   ' +
-          '     mOver = mOver == 4 && button.getAttribute("selected") != "true" || mOver == 2;\n    ' +
-          '     let offset = mOver ? 1 : 0;\n   ' +
-          '     nodes.splice(before + offset, 0, button);\n   ' +
-          '   }\n   ' +
-          ' }\n   ' +
-          '}\n\n    ' +
-          '$&'
-        )._replace(
-          'let key = \'initTabContentsOrderInternal_\'',
-          'let self = this;\n     ' +
-          '$&'
-        ).toCode();
-
-        let callback = function() {
-          TabmixSvc.forEachBrowserWindow(function(aWindow) {
-            aWindow.gBrowser.treeStyleTab.updateInvertedTabContentsOrder(true);
-          });
-        };
-        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons", callback);
-        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons.onLeft", callback);
-      }
-
       // update ordinal on previous selected tab when close tab button is on the
       // left side and CloseButtons preference is 4 - close buttons on hover
       // and active tabs
