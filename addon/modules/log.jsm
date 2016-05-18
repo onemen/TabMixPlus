@@ -318,7 +318,7 @@ options = {
     parent = parent.name == "_logMessage" ? parent.caller.caller : parent.caller;
     if (parent.name == "TMP_console_wrapper")
       parent = parent.caller.caller;
-    return parent;
+    return parent || {};
   },
 
   reportError: function(ex = null, msg = "") {
