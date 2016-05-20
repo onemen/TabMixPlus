@@ -25,8 +25,7 @@
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
                   notChecked="0"
-                  onchange="if (typeof gEventsPane == 'object') gEventsPane.disableInverseMiddleClick();
-                            gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
+                  onchange="gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
     </preferences>
 
     <tabbox>

@@ -21,8 +21,6 @@ var gEventsPane = {
       gPrefWindow.removeChild("ctrltab.tabPreviews");
     }
 
-    this.disableInverseMiddleClick();
-
     let newTabUrl = $("pref_newTabUrl");
     newTabUrl.name = TabmixSvc.newtabUrl;
     newTabUrl.value = newTabUrl.valueFromPreferences;
@@ -105,11 +103,6 @@ var gEventsPane = {
     if (event.keyCode == 32) {
       event.preventDefault();
     }
-  },
-
-  disableInverseMiddleClick: function() {
-    var val = ($("pref_opentabforLinks") || $("pref_opentabforLinks1")).value;
-    gPrefWindow.setDisabled("inverselinks", val != 2 && $("midcurrent").checked);
   },
 
   editSlideShowKey: function() {

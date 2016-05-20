@@ -41,8 +41,7 @@
                   type="bool" inverted="true"/>
       <preference id="pref_openSearch"          name="browser.search.openintab"               type="bool"/>
       <preference id="pref_openHistory"         name="extensions.tabmix.opentabfor.history"   type="bool"/>
-      <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent"        type="bool"
-                  onchange="gEventsPane.disableInverseMiddleClick();"/>
+      <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent" type="bool"/>
       <preference id="pref_selectTab"           name="browser.tabs.loadInBackground"
                                                                               inverted="true" type="bool"
                   onchange="if (typeof gMenuPane == 'object') gMenuPane.setInverseLinkLabel();"/>
@@ -64,8 +63,6 @@
                   type="bool" inverted="true"/>
       <preference id="pref_selectBMKGroups"     name="extensions.tabmix.loadBookmarksGroupInBackground"
                   type="bool" inverted="true"/>
-      <preference id="pref_opentabforLinks1"            name="extensions.tabmix.opentabforLinks"      type="int"
-                  onchange="if (typeof gLinksPane == 'undefined') gEventsPane.disableInverseMiddleClick();"/>
       <preference id="pref_inverselinks"        name="extensions.tabmix.inversefocusLinks"    type="bool"/>
       <preference id="pref_inverseother"        name="extensions.tabmix.inversefocusOther"    type="bool"/>
       <preference id="pref_warnOnClose"         name="extensions.tabmix.tabs.warnOnClose"     type="bool"/>
@@ -243,8 +240,7 @@
                 <checkbox_tmp id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
               </vbox>
               <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
-                        style="width: 19em;" align="start"
-                        preference="pref_inverseother" observes="obs_midcurrent"/>
+                            style="width: 19em;" align="start" preference="pref_inverseother"/>
             </hbox>
           </groupbox>
         </tabpanel>
@@ -381,7 +377,6 @@
 
    <broadcasterset id="paneEvents:Broadcaster">
       <broadcaster id="obs_openTabNext"/>
-      <broadcaster id="obs_midcurrent" inverseDependency="true"/>
       <broadcaster id="obs_mergePopups"/>
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>
