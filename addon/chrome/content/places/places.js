@@ -706,7 +706,7 @@ Tabmix.onContentLoaded = {
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +
       'let callerTrace = Tabmix.callerTrace();' + $LF +
-      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick"];' + $LF +
+      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick", "BG_observe"];' + $LF +
       'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
       'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
