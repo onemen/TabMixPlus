@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
 <!ENTITY dropIndicator-native.label "natywny styl">
 <!ENTITY dropIndicator-builtin.label "wbudowany styl">
-<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY verticalTabbar.description1 "Te ustawienia są kontrolowane przez inne dodatki mające zastosowanie do pionowego ustawienia kart.">
 <!ENTITY tabBarPosition.label "Położenie paska kart:">
 <!ENTITY tabBarPosition.top.label "Na górze">
 <!ENTITY tabBarPosition.bottom.label "Na dole">

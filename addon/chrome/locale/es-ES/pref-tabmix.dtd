@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicador de arrastre">
 <!ENTITY dropIndicator-native.label "Estilo original">
 <!ENTITY dropIndicator-builtin.label "Estilo añadido">
-<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY verticalTabbar.description1 "Estas preferencias las controla otra extensión que usa pestañas verticales.">
 <!ENTITY tabBarPosition.label "Posición:">
 <!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">
 <!ENTITY tabBarPosition.bottom.label "Abajo (debajo del contenido)">

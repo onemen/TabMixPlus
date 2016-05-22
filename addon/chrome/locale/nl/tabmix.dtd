@@ -100,7 +100,7 @@
 <!ENTITY sm.context.save.key "s">
 <!ENTITY sm.context.rename "Hernoemen">
 <!ENTITY sm.context.rename.key "r">
-<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession "Bladwijzersessie">
 <!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Verwijderen">
 <!ENTITY sm.context.delete.key "V">
