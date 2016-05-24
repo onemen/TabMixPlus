@@ -186,11 +186,14 @@ var tablib = { // eslint-disable-line
         TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
       }
 
-      let tab = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
+      // we use var here to allow other extensions that wrap our code with
+      // try-catch-finally to have access to 't' outside of the current scope
+      // (see https://addons.mozilla.org/en-US/firefox/addon/mclickfocustab/)
+      var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
 
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
-        tab.setAttribute("tabmix_pending", "true");
+        t.setAttribute("tabmix_pending", "true");
       }
 
       if ((relatedToCurrent === null ? referrerURI : relatedToCurrent) &&
@@ -199,15 +202,15 @@ var tablib = { // eslint-disable-line
         if (this._lastRelatedTab) {
           this._lastRelatedTab.owner = null;
         } else {
-          tab.owner = selectedTab;
+          t.owner = selectedTab;
         }
-        this.moveTabTo(tab, newTabPos);
+        this.moveTabTo(t, newTabPos);
         if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
-          TMP_LastTab.attachTab(tab, lastRelatedTab);
-          this._lastRelatedTab = tab;
+          TMP_LastTab.attachTab(t, lastRelatedTab);
+          this._lastRelatedTab = t;
         }
       }
-      return tab;
+      return t;
     };
 
     Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
