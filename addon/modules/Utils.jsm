@@ -35,7 +35,7 @@ this.TabmixUtils = {
     FMM_MESSAGES.forEach(msg => mm.addMessageListener(msg, this));
 
     // Load the frame script after registering listeners.
-    mm.loadFrameScript("chrome://tabmixplus/content/content.js", true);
+    mm.loadFrameScript("chrome://tabmixplus/content/scripts/content.js", true);
 
     // call TabmixAboutNewTab.updateBrowser for gBrowser._preloadedBrowser,
     // if it already exist before we loaded our frame script
