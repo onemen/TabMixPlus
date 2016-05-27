@@ -162,7 +162,7 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul", "", "centerscreen" +
+           "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
            (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
