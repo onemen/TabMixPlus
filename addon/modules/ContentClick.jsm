@@ -127,8 +127,11 @@ ContentClickInternal = {
       window.openLinkIn(json.href, where, params);
 
       try {
-        if (!PrivateBrowsingUtils.isWindowPrivate(window))
+        if (!PrivateBrowsingUtils.isWindowPrivate(window)) {
+          // this function is bound to ContentClick that import PlacesUIUtils
+          // eslint-disable-next-line no-undef
           PlacesUIUtils.markPageAsFollowedLink(json.href);
+        }
       } catch (ex) {
         /* Skip invalid URIs. */
       }
