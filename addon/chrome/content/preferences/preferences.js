@@ -1,13 +1,8 @@
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              showPane, openHelp */
-/* import-globals-from ../utils.js */
-/* import-globals-from shortcuts.js */
-/* import-globals-from menu.js */
-/* import-globals-from appearance.js */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-var gIncompatiblePane;
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
@@ -44,7 +39,7 @@ var gPrefWindow = {
                           writable: true, configurable: true});
     docElt.setAttribute("animated", "false");
 
-    gIncompatiblePane.init(docElt);
+    window.gIncompatiblePane.init(docElt);
 
     this.instantApply = docElt.instantApply;
     window.addEventListener("change", this, false);
@@ -88,7 +83,7 @@ var gPrefWindow = {
     window.removeEventListener("beforeaccept", this, false);
     delete Tabmix.getTopWin().tabmix_setSession;
     Shortcuts.prefsChangedByTabmix = false;
-    gIncompatiblePane.deinit();
+    window.gIncompatiblePane.deinit();
   },
 
   handleEvent: function(aEvent) {
@@ -556,7 +551,7 @@ function openHelp(helpTopic) {
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
-gIncompatiblePane = {
+window.gIncompatiblePane = {
   lastSelected: "paneLinks",
 
   init: function(docElt) {

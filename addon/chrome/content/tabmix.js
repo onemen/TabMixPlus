@@ -1,14 +1,3 @@
-/* import-globals-from utils.js */
-/* import-globals-from ./click/click.js */
-/* import-globals-from ./extensions/extensions.js */
-/* import-globals-from ./flst/lasttab.js */
-/* import-globals-from ./links/userInterface.js */
-/* import-globals-from ./minit/minit.js */
-/* import-globals-from ./minit/tablib.js */
-/* import-globals-from ./places/places.js */
-/* import-globals-from ./session/sessionStore.js */
-/* import-globals-from ./session/session.js */
-/* import-globals-from ./tab/tab.js */
 "use strict";
 
 /*

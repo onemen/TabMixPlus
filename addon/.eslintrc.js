@@ -2,14 +2,10 @@
 /* global module */
 module.exports = {
   "root": true,
-  "plugins": ["mozilla"],
+  "plugins": ["tabmix"],
   "env": {
-    "browser": true,
     "es6": true,
-    "node": false,
-    "amd": false,
-    "mocha": false,
-    "jasmine": false
+    "tabmix/browser": true,
   },
 
   // for eslint 2.0.0
@@ -18,10 +14,8 @@ module.exports = {
   },
 
   "rules": {
-    "mozilla/balanced-listeners": 2,
-    "mozilla/import-globals": 2,
-    "mozilla/import-browserjs-globals": 2,
-
+    "tabmix/balanced-listeners": 2,
+    "tabmix/import-globals": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
@@ -247,16 +241,5 @@ module.exports = {
   },
 
   "globals": {
-    // firefox globals
-    "Components": false,
-
-    // globals that removed from Firefox
-    "TabsOnTop": false,
-    "TabView": false,
-    "TabItems": false,
-
-    // Firefox defining these in placesOverlay.xul
-    "PlacesUtils": false,
-    "PlacesUIUtils": false,
   }
 };

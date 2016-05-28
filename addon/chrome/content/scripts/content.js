@@ -1,11 +1,12 @@
-/* eslint mozilla/balanced-listeners:0 */
+/* eslint tabmix/balanced-listeners:0 */
 /* globals content, docShell, addMessageListener, sendSyncMessage,
            sendAsyncMessage, sendRpcMessage */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",

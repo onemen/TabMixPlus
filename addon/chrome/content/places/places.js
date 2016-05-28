@@ -1,7 +1,3 @@
-/* globals XULCommandEvent */
-/* import-globals-from-firefox browser/content/browser/places/places.js */
-/* import-globals-from-firefox browser/content/browser/places/browserPlacesViews.js */
-/* import-globals-from-firefox browser/content/browser/bookmarks/sidebarUtils.js */
 "use strict";
 
 // code by onemen

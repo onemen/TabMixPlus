@@ -1881,7 +1881,7 @@ TabmixSessionManager = {
   },
 
   createMenu: function SM_createMenu(popup, container, contents, aNoSeparators) {
-    /* eslint-disable mozilla/balanced-listeners */
+    /* eslint-disable tabmix/balanced-listeners */
     if (popup.id == "btn_closedwindows_menu") {
       let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
       document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
@@ -2029,7 +2029,7 @@ TabmixSessionManager = {
     var deleteItem = popup.getElementsByAttribute("anonid", "delete")[0];
     if (deleteItem)
       Tabmix.setItem(deleteItem, "disabled", allEmpty && count === 0 ? true : null);
-    /* eslint-enable mozilla/balanced-listeners */
+    /* eslint-enable tabmix/balanced-listeners */
   },
 
   // set defaultIndex, sessionIndex and default Attribute

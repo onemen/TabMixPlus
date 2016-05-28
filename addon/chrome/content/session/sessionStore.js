@@ -331,7 +331,7 @@ var TMP_ClosedTabs = {
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
-    /* eslint-disable mozilla/balanced-listeners */
+    /* eslint-disable tabmix/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
 
@@ -409,7 +409,7 @@ var TMP_ClosedTabs = {
       TMP_ClosedTabs.restoreTab('original', -2);
     });
     return true;
-    /* eslint-enable mozilla/balanced-listeners */
+    /* eslint-enable tabmix/balanced-listeners */
   },
 
   restoreCommand: function(aEvent) {

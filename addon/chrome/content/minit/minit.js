@@ -1,4 +1,3 @@
-/* globals ChromeWindow, XULElement */
 /* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
