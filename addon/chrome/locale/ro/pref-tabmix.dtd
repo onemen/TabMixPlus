@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Glisați butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
 <!ENTITY hideTabBarButton.label "Butonul „Închidere filă”">
 <!ENTITY newTabButton.label "Butonul „Filă nouă”">
-<!ENTITY newTabButton.posiotion.left.label "în marginea stângă">
-<!ENTITY newTabButton.posiotion.right.label "în marginea dreaptă">
-<!ENTITY newTabButton.posiotion.afterlast.label "după ultima filă">
+<!ENTITY newTabButton.position.left.label "în marginea stângă">
+<!ENTITY newTabButton.position.right.label "în marginea dreaptă">
+<!ENTITY newTabButton.position.afterlast.label "după ultima filă">
 <!ENTITY allTabsButton.label "Butonul „Listă file deschise”">
 <!ENTITY tabBarSpace.label "Spațiu suplimentar la ambele margini">
 <!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau fixarea obiectelor pe bara de file">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicator de fixare (când fila nu se deplasează)">
 <!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
 <!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
-<!ENTITY verticalTabbar.description "Se utilizează extensiile „Tree Style Tab” sau  „VerticalTab” pentru a controla aceste opțiuni.">
+<!ENTITY verticalTabbar.description1 "Aceste setări sunt monitorizate de alte extensii care controlează filele verticale.">
 <!ENTITY tabBarPosition.label "Se poziționează bara de file:">
 <!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
 <!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">

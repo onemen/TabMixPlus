@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "B">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "O">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "Ğ">
 <!ENTITY docShellMenu.label "İzinler">
 <!ENTITY docShellMenu.accesskey "İ">
 <!ENTITY freezeTabMenu.label "Sekmeyi dondur">

@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "關閉左側分頁">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "關閉右側分頁">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "網頁內容允許">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "保護並鎖定分頁">

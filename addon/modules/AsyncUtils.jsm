@@ -1,4 +1,3 @@
-/* jshint esnext: true */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["AsyncUtils"];
@@ -13,13 +12,13 @@ XPCOMUtils.defineLazyModuleGetter(this, "Promise",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
                                   "resource://tabmixplus/Services.jsm");
 this.AsyncUtils = {
-  /* PromiseUtils.defer exsit since Firefox 39 */
+  /* PromiseUtils.defer exist since Firefox 39 */
   defer: function() {
     return new Deferred();
   },
 
   spawnFn: function(thisArg, fn, index) {
-    return this.promisify(thisArg, fn, index).call(undefined);
+    return this.promisify(thisArg, fn, index)();
   },
 
   asyncFn: function(thisArg, fn, index) {

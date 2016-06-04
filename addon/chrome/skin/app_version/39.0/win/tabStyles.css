@@ -17,7 +17,7 @@
   clip-path: none !important;
 }
 
-/* Override Windows 10 rulse */
+/* Override Windows 10 rules */
 @media not all and (-moz-os-version: windows-xp) {
   @media not all and (-moz-os-version: windows-vista) {
     @media not all and (-moz-os-version: windows-win7) {

@@ -4,7 +4,7 @@
  * chrome://tabmixplus/content/links/setup.js
  *
  * original code by Bradley Chapman
- * modified and developped by Hemiola SUN
+ * modified and developed by Hemiola SUN
  * modified again by Bradley Chapman
  *
  */
@@ -14,12 +14,7 @@
  *
  * @returns   Nothing.
  */
-Tabmix.linkHandling_init = function TMP_TBP_init(aWindowType) {
-  if (aWindowType == "Extension:Manager") {
-    // we're in the EM
-    window.openURL = this.openURL;
-  }
-
+Tabmix.linkHandling_init = function TMP_TBP_init() {
   // for normal click this function calls urlbar.handleCommand
   // for middle click or click with modifiers whereToOpenLink can't be "current"
   // so we don't need to check for locked tabs only for blanks tabs
@@ -61,19 +56,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
   try {
     var SM = TabmixSessionManager;
-    SM.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
-    SM.isWindowPrivate = function(aWindow) {
-      return PrivateBrowsingUtils.isWindowPrivate(aWindow);
-    };
-    // isPrivateWindow is boolean property of this window, user can't change private status of a window
-    SM.isPrivateWindow = SM.isWindowPrivate(window);
-    SM.__defineGetter__("isPrivateSession", function() {
-      return this.globalPrivateBrowsing || TabmixSvc.sm.private;
-    });
-    // set this flag to false if user opens in a session at least one non-private window
-    SM.firstNonPrivateWindow = TabmixSvc.sm.private && !SM.isPrivateWindow;
-    if (SM.firstNonPrivateWindow)
-      TabmixSvc.sm.private = false;
+    SM.initializePrivateStateVars();
 
     var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
@@ -114,8 +97,8 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       // Prevent the default homepage from loading if we're going to restore a session
       let hasFirstArgument = window.arguments && window.arguments[0];
       if (hasFirstArgument) {
-        let defaultArgs = Cc["@mozilla.org/browser/clh;1"].
-                          getService(Ci.nsIBrowserHandler).defaultArgs;
+        let defaultArgs = Cc["@mozilla.org/browser/clh;1"]
+                            .getService(Ci.nsIBrowserHandler).defaultArgs;
         if (window.arguments[0] == defaultArgs) {
           SM.overrideHomepage = window.arguments[0];
           window.arguments[0] = null;
@@ -175,7 +158,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
     TabmixContext.buildTabContextMenu();
-
   } catch (ex) {
     this.assert(ex);
   }
@@ -224,8 +206,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   /**
    * add gBrowser.getTabForBrowser if it is not exist
-   * gBrowser.getTabForBrowser exsit since Firefox 35 (Bug 1039500)
-   * gBrowser._getTabForBrowser exsit since Firefox 23 (Bug 662008)
+   * gBrowser.getTabForBrowser exist since Firefox 35 (Bug 1039500)
+   * gBrowser._getTabForBrowser exist since Firefox 23 (Bug 662008)
    */
   if (typeof tabBrowser.getTabForBrowser != "function") {
     // this is _getTabForBrowser version from Firefox 23
@@ -279,12 +261,15 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     tabscroll = 1;
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
-  let flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
-  TabmixTabbar.flowing = flowing;
+  TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
 
   // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
-  if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
-    TMP_SessionStore.afterSwitchThemes = true;
+  if ("SwitchThemesModule" in window) {
+    let SwitchThemesModule = window.SwitchThemesModule;
+    if (SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length) {
+      TMP_SessionStore.afterSwitchThemes = true;
+    }
+  }
 
   TMP_extensionsCompatibility.preInit();
 };
@@ -339,9 +324,9 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
 
  /**
   *  Don't use return in this function
-  *  TreeStyleTabe add some code at the end
+  *  TreeStyleTab add some code at the end
   */
-  let transitionend = Tabmix.callerName() == "onxbltransitionend";
+  let transitionend = Tabmix.callerTrace("onxbltransitionend");
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {
@@ -361,13 +346,3 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     TabmixTabbar.updateBeforeAndAfter();
   }
 };
-
-/**
- bug 887515 - add ability to restore multiple tabs
- bug 914258 backout 887515 changes from Firefox 25
- bug 931891 backout 887515 changes from Firefox 26-29
-*/
-XPCOMUtils.defineLazyGetter(Tabmix, "_restoreMultipleTabs", function() {
-  return this.isVersion(290) &&
-         typeof TabmixSvc.ss.setNumberOfTabsClosedLast == "function";
-});

@@ -22,13 +22,13 @@
       <preference id="pref_appearance"        name="extensions.tabmix.appearance.selectedTabIndex"
                   type="int"/>
       <preference id="pref_newTabButton"      name="extensions.tabmix.newTabButton"             type="bool"/>
-      <preference id="pref_newTabButton.posiotion"
+      <preference id="pref_newTabButton.position"
                   name="extensions.tabmix.newTabButton.position"                                type="int"/>
       <preference id="pref_hideTabBarButton"  name="extensions.tabmix.hideTabBarButton"         type="bool"
                   inverted="true"/>
       <preference id="pref_hideAllTabsButton" name="extensions.tabmix.hideAllTabsButton"        type="bool"
                   inverted="true"/>
-      <preference id="pref_allTabsPpreviews"  name="browser.allTabs.previews"                   type="bool"/>
+      <preference id="pref_allTabsPreviews"  name="browser.allTabs.previews"                   type="bool"/>
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
@@ -84,12 +84,12 @@
             <hbox align="center">
               <checkbox_tmp id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
               <!-- new tab button on tabbar position -->
-              <menulist id="newTabButton.posiotion"
-                        preference="pref_newTabButton.posiotion" observes="obs_newTabButton">
+              <menulist id="newTabButton.position"
+                        preference="pref_newTabButton.position" observes="obs_newTabButton">
                 <menupopup>
-                  <menuitem value="0" id="newTabButton.posiotion.left"  label="&newTabButton.posiotion.left.label;"/>
-                  <menuitem value="1" id="newTabButton.posiotion.right" label="&newTabButton.posiotion.right.label;"/>
-                  <menuitem value="2" id="newTabButton.posiotion.afterlast" label="&newTabButton.posiotion.afterlast.label;"/>
+                  <menuitem value="0" id="newTabButton.position.left"  label="&newTabButton.position.left.label;"/>
+                  <menuitem value="1" id="newTabButton.position.right" label="&newTabButton.position.right.label;"/>
+                  <menuitem value="2" id="newTabButton.position.afterlast" label="&newTabButton.position.afterlast.label;"/>
                 </menupopup>
               </menulist>
               <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"
@@ -100,7 +100,7 @@
             <!-- all-tabs-button on tabbar -->
             <hbox align="center">
               <checkbox_tmp id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
-              <checkbox_tmp id="allTabsPpreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPpreviews" observes="obs_hideAllTabsButton"/>
+              <checkbox_tmp id="allTabsPreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPreviews" observes="obs_hideAllTabsButton"/>
             </hbox>
             <!-- Space on tabbar -->
             <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
@@ -119,9 +119,9 @@
               </menulist>
             </hbox>
             <separator/>
-            <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
+            <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;;"
                          hidden="true" id="treeStyleTab.msg">
-                &verticalTabbar.description;
+                &verticalTabbar.description1;
             </description>
             <!-- choose tab bar position -->
             <hbox align="center">
@@ -175,13 +175,13 @@
             <caption label="&tabStyles.label;"/>
             <hbox>
               <vbox flex="1">
-                <!-- Hightlight Current tab -->
+                <!-- Highlight Current tab -->
                 <checkbox_tmp id="currentTab" label="&currenttab.style.label;" preference="pref_currentTab"/>
                 <!-- Highlight unread tabs -->
                 <checkbox_tmp id="unreadTab" label="&unreadtabs.style.label;" preference="pref_unreadTab"/>
               </vbox>
               <vbox flex="1">
-                <!-- Hightlight Unloaded tabs -->
+                <!-- Highlight Unloaded tabs -->
                 <checkbox_tmp id="unloadedTab" label="&unloadedtabs.style.label;" preference="pref_unloadedTab"/>
                 <!-- Highlight other tabs -->
                 <checkbox_tmp id="otherTab" label="&othertabs.style.label;" preference="pref_otherTab"/>
@@ -222,7 +222,7 @@
             </hbox>
             <hbox id="tabxDependant" class="indent" align="center">
               <menulist id="tabCloseButton" preference="pref_tabCloseButton"
-                        style="width: &showTabX.popup.width;" sizetopopup="none" observes="obs_showTabX">
+                        style="width: &showTabX.popup.width;;" sizetopopup="none" observes="obs_showTabX">
                 <menupopup>
                   <menuitem value="1" label="&showTabX.always;"/>
                   <menuitem value="5" label="&showTabX.alwaysExeption;" id="alltabsItem"/>
@@ -231,12 +231,12 @@
                   <menuitem value="4" label="&showTabX.currentHover;"/>
                 </menupopup>
               </menulist>
-              <hbox id="tabXdelaycheck" align="center">
+              <hbox id="tabDelayCheck" align="center">
                 <textbox id="tabXDelay" size="4" maxlength="4" preference="pref_tabXDelay"
                          observes="obs_showTabX" type="number"/>
                 <label value="&milliseconds.label;" observes="obs_showTabX" class="timelabel"/>
               </hbox>
-              <hbox id="tabXwidthBox" align="center">
+              <hbox id="tabWidthBox" align="center">
                 <textbox id="tabXwidth" size="4" maxlength="4" preference="pref_tabClipWidth"
                          observes="obs_showTabX" type="number"/>
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
@@ -250,10 +250,10 @@
             <hbox align="center">
               <label value="&minWidth.label;"/>
               <textbox id="minWidth" size="3" maxlength="3" preference="pref_minWidth" type="number"
-                       onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
+                       onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthTo.label;"/>
               <textbox id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number"
-                       onsynctopreference="return gAppearancePane.userchangedWidth(this);"/>
+                       onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthPixels.label;"/>
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
@@ -263,7 +263,7 @@
         <tabpanel>
           <groupbox flex="1">
             <hbox align="start">
-              <description class="header" style="width: &toolbar.description.width;">&toolbar.description;</description>
+              <description class="header" style="width: &toolbar.description.width;;">&toolbar.description;</description>
               <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>

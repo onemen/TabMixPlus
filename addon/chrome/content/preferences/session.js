@@ -1,3 +1,4 @@
+/* globals TabmixSessionManager */
 /* exported gSessionPane */
 "use strict";
 
@@ -7,14 +8,11 @@ var gSessionPane = {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
-    this.setVisiblecontent(!!this.sessionManagerAddon, true);
+    this.setVisibleContent(Boolean(this.sessionManagerAddon), true);
 
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
     this.updateSessionShortcuts();
-
-    if (Tabmix.isVersion(200))
-      gPrefWindow.removeChild("pref_browser.warnOnRestart");
 
     gPrefWindow.initPane("paneSession");
   },
@@ -31,7 +29,7 @@ var gSessionPane = {
     var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
         Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
     $("sessionsOptions").checked = sessionStoreEnabled;
-    $("sesionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
+    $("sessionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
     if (!onStart || sessionStoreEnabled)
       $("session").selectedIndex = sessionStoreEnabled ? 2 : 0;
     else if ($("session").selectedIndex == 2)
@@ -41,7 +39,7 @@ var gSessionPane = {
   setSessionsOptions: function(item) {
     let instantApply = document.documentElement.instantApply;
     var useSessionManager = !item.checked;
-    $("sesionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
+    $("sessionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
 
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);
@@ -65,9 +63,6 @@ var gSessionPane = {
 
     // sessionstore pref
     function sessionstorePrefs() {
-      // browser.warnOnRestart remove on Firefox 20
-      if (!Tabmix.isVersion(200))
-        updatePrefs("browser.warnOnRestart", !useSessionManager);
       updatePrefs("browser.warnOnQuit", !useSessionManager);
       updatePrefs("resume_from_crash", !useSessionManager);
       // "browser.startup.page"
@@ -106,7 +101,7 @@ var gSessionPane = {
     return sm && sm.gSessionManager || sm;
   },
 
-  setVisiblecontent: function(sessionManagerInstalled, onStart) {
+  setVisibleContent: function(sessionManagerInstalled, onStart) {
     if (typeof sessionManagerInstalled != "boolean")
       return;
 

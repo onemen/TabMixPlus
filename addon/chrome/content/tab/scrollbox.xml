@@ -151,10 +151,10 @@
 
           this._calcTabMargins(aTab);
           if (this._tabMarginLeft < 0) {
-            tabStart = tabStart + this._tabMarginLeft;
+            tabStart += this._tabMarginLeft;
           }
           if (this._tabMarginRight < 0) {
-            tabEnd = tabEnd - this._tabMarginRight;
+            tabEnd -= this._tabMarginRight;
           }
           return [tabStart, tabEnd];
         ]]></body>
@@ -219,7 +219,7 @@
               'this.scrollSize',
               '(this.orient == "vertical" && this.isMultiRow ? this.innerbox.getBoundingClientRect().height : $&)'
             )._replace(
-              /(\})(\)?)$/,
+              /(})(\)?)$/,
               '          var box = document.getElementById("tabmixScrollBox");\n' +
               '          Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);\n' +
               '          Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);\n' +
@@ -362,7 +362,7 @@
           if (this.orient == "vertical")
             return;
 
-          Tabmix.tabsUtils.adjustNewtabButtonvisibility();
+          Tabmix.tabsUtils.adjustNewtabButtonVisibility();
           var tabs = this._getScrollableElements();
           if (!tabs.length)
             return;
@@ -411,11 +411,8 @@
           var index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            if (tab.closing) {
-              tab.removeAttribute("tabmix-firstTabInRow");
-              continue;
-            }
-            let row = Tabmix.tabsUtils.getTabRowNumber(tab, topY);
+            let row = tab.closing ? -1 :
+                Tabmix.tabsUtils.getTabRowNumber(tab, topY);
             if (row > current) {
               current = row;
               if (!tab.hasAttribute("tabmix-firstTabInRow"))
@@ -426,7 +423,8 @@
                   (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
                 if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                   tab.removeAttribute("tabmix-firstTabInRow");
-                  continue;
+                  // continue
+                  row = -1;
                 }
               }
               if (row == firstVisibleRow) {

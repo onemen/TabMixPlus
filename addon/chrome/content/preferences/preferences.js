@@ -1,17 +1,19 @@
-/* jshint esnext: true */
-/* globals _sminstalled, gPreferenceList */
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              showPane, openHelp */
+/* import-globals-from ../utils.js */
+/* import-globals-from shortcuts.js */
+/* import-globals-from menu.js */
+/* import-globals-from appearance.js */
 "use strict";
 
 /***** Preference Dialog Functions *****/
 var gIncompatiblePane;
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 this.$ = id => document.getElementById(id);
 
-var gPrefWindow = { // jshint ignore:line
+var gPrefWindow = {
   widthChanged: false,
   _initialized: false,
   init: function() {
@@ -102,7 +104,7 @@ var gPrefWindow = { // jshint ignore:line
         if (this.widthChanged)
           gAppearancePane.changeTabsWidth();
         if (!this.instantApply) {
-          // prevent TMP_SessionStore.setService from runing
+          // prevent TMP_SessionStore.setService from running
           Tabmix.getTopWin().tabmix_setSession = true;
           Shortcuts.prefsChangedByTabmix = true;
         }
@@ -265,8 +267,8 @@ function getPrefByType(prefName) {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
     if (fn == "CharPref")
       return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-    else
-      return Services.prefs["get" + fn](prefName);
+
+    return Services.prefs["get" + fn](prefName);
   } catch (ex) {
     Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
   }
@@ -300,7 +302,7 @@ function setPrefAfterImport(aPref) {
   // in prev version we use " " for to export string to file
   aPref.value = aPref.value.replace(/^"*|"*$/g, "");
 
-  // preference that exist in the defaulbranch but no longer in use by Tabmix
+  // preference that exist in the default branch but no longer in use by Tabmix
   switch (aPref.name) {
     case "browser.tabs.autoHide":
       // from tabmix 0.3.6.0.080223 we use extensions.tabmix.hideTabbar
@@ -365,9 +367,6 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
     "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
   ];
 
-  if (!Tabmix.isVersion(200))
-    otherPrefs.push("browser.warnOnRestart");
-
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
@@ -380,7 +379,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   return tabmixPrefs;
 });
 
-__defineGetter__("_sminstalled", function() {
+XPCOMUtils.defineLazyGetter(this, "_sminstalled", function() {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 
@@ -408,9 +407,9 @@ function toggleSyncPreference() {
   const sync = "services.sync.prefs.sync.";
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
-  let exclode = ["extensions.tabmix.sessions.onStart.sessionpath"];
+  let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(function(pref) {
-    if (exclode.indexOf(pref) == -1)
+    if (exclude.indexOf(pref) == -1)
       Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);
@@ -435,7 +434,7 @@ function exportData() {
 function importData() {
   showFilePicker("open").then(file => {
     return file && OS.File.read(file.path);
-  }).then((input) => {
+  }).then(input => {
     if (input) {
       let decoder = new TextDecoder();
       input = decoder.decode(input);
@@ -504,10 +503,10 @@ function loadData(pattern) {
     let valIndex = pattern[i].indexOf("=");
     if (valIndex > 0) {
       prefName = pattern[i].substring(0, valIndex);
-      if (SMinstalled && sessionPrefs.indexOf(prefName) > -1)
-        continue;
-      prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
-      setPrefByType(prefName, prefValue, true);
+      if (!SMinstalled || sessionPrefs.indexOf(prefName) == -1) {
+        prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
+        setPrefByType(prefName, prefValue, true);
+      }
     }
   }
   gPrefWindow.afterShortcutsChanged();

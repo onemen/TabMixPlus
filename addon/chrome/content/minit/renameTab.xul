@@ -1,3 +1,6 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://tabmixplus/skin/renameTab.css" type="text/css"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
@@ -5,8 +8,6 @@
 <!ENTITY % miscDTD SYSTEM "chrome://tabmixplus/locale/misc.dtd" >
 %miscDTD;
 ]>
-
-<?xml-stylesheet href="chrome://tabmixplus/skin/renameTab.css" type="text/css"?>
 
 <overlay id="renameTabOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">

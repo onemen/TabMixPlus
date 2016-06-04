@@ -6,22 +6,7 @@
  * original code by onemen
  *
  */
-var TMP_SessionStore = { // jshint ignore:line
-   // make sure sessionstore is init
-  _ssInited: null,
-  initService: function TMP_ss_start() {
-    if (Tabmix.isVersion(250, 250) || this._ssInited)
-      return;
-    try {
-      TabmixSvc.ss.init(window);
-      this._ssInited = true;
-    } catch (ex) {
-      dump("nsSessionStore could not be initialized: " + ex + "\n");
-      Tabmix.assert(ex);
-      return;
-    }
-  },
-
+var TMP_SessionStore = {
   // get title for closed window from bookmark title or user tab title
   getTitleForClosedWindow: function TMP_ss_getTitleForClosedWindow(aUndoItem) {
     // if user already rename this item wo don't use other title
@@ -62,9 +47,7 @@ var TMP_SessionStore = { // jshint ignore:line
     let entries = tabData && tabData.entries;
     if (entries && entries.length > 1)
       return false;
-    if (entries[0] && entries[0].url != "about:blank")
-      return false;
-    return true;
+    return !entries[0] || entries[0].url == "about:blank";
   },
 
  /**
@@ -135,7 +118,7 @@ var TMP_SessionStore = { // jshint ignore:line
     TabmixSvc.sm.settingPreference = true;
     // if session manager extension is install disable TMP session manager
     if (msgNo == -1 || Tabmix.extensions.sessionManager) {
-      // update session manager settings accourding to current tabmix settings
+      // update session manager settings according to current tabmix settings
       if (TMP_manager_enabled) {
         Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
         switch (Tabmix.prefs.getIntPref("sessions.onStart")) {
@@ -166,7 +149,7 @@ var TMP_SessionStore = { // jshint ignore:line
       TabmixSvc.sm.settingPreference = false;
     } else if (this.isSessionStoreEnabled()) {
       // ask the user to choose between TMP session manager and sessionstore
-      // we use non modal promptService on start up, so we disabled Tabmix session managerto let the startup
+      // we use non modal promptService on start up, so we disabled Tabmix session manager to let the startup
       // process continue and set the appropriate preference after the dialog prompt dismissed.
       if (start) {
         Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
@@ -185,7 +168,7 @@ var TMP_SessionStore = { // jshint ignore:line
         } else {
           // we don't change any of sessionstore default setting
           // the user will be ask on exit what to do.
-          // (browser.warnOnRestart and browser.warnOnQuit are both true on default)
+          // browser.warnOnQuit default value is true
           Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
           Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
         }
@@ -195,12 +178,8 @@ var TMP_SessionStore = { // jshint ignore:line
                                         [title, msg, "", "", buttons], window, start ? callBack : null);
       if (!start)
         callBack(result);
-    } else if (!Services.prefs.prefHasUserValue("browser.warnOnRestart") ||
-               !Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-      // when user start new profile or update from firefox 2.0 profile
-      // browser.warnOnRestart and browser.warnOnQuit are both true on default
-      if (!Tabmix.isVersion(200))
-        Services.prefs.setBoolPref("browser.warnOnRestart", false);
+    } else if (!Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
+      // browser.warnOnQuit default value is true
       Services.prefs.setBoolPref("browser.warnOnQuit", false);
       TabmixSvc.sm.settingPreference = false;
     }
@@ -236,14 +215,12 @@ var TMP_SessionStore = { // jshint ignore:line
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
     else {
       // calling doRestore before sessionstartup finished to read
-      // sessionstroe.js file throw error since Firefox 28, and force
+      // sessionStore.js file throw error since Firefox 28, and force
       // syncRead in Firefox 25-27
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
-        let ss = Cc["@mozilla.org/browser/sessionstartup;1"].
-        getService(Ci.nsISessionStartup);
+        let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
+                   .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
-        if (!Tabmix.isVersion(250, 250))
-          return ss.doRestore();
         ss.onceInitialized.then(function() {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
         }).then(null, Tabmix.reportError);
@@ -255,8 +232,6 @@ var TMP_SessionStore = { // jshint ignore:line
   },
 
   setSessionRestore: function(aEnable) {
-    if (!Tabmix.isVersion(200))
-      Services.prefs.setBoolPref("browser.warnOnRestart", aEnable);
     Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
     Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
     if (aEnable)
@@ -310,7 +285,7 @@ var TMP_SessionStore = { // jshint ignore:line
 
 };
 
-var TMP_ClosedTabs = { // jshint ignore:line
+var TMP_ClosedTabs = {
   _buttonBroadcaster: null,
   get buttonBroadcaster() {
     if (!this._buttonBroadcaster)
@@ -375,7 +350,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
       else try {
-        url = _uri.scheme + ":\/\/" + _uri.hostPort + _uri.path;
+        url = _uri.scheme == "about" ? _uri.spec :
+          _uri.scheme + "://" + _uri.hostPort + _uri.path;
       } catch (e) {
         url = title;
       }
@@ -491,7 +467,7 @@ var TMP_ClosedTabs = { // jshint ignore:line
           this.removeAllClosedTabs();
           break;
         } else if (aIndex == -2) {
-          this.SSS_restoerClosedTabs(this.count);
+          this.SSS_restoreAllClosedTabs();
           break;
         }
         // else do the default
@@ -499,9 +475,6 @@ var TMP_ClosedTabs = { // jshint ignore:line
       default:
         this.SSS_undoCloseTab(aIndex, aWhere, true);
     }
-
-    // Reset the number of tabs closed last time to the default.
-    Tabmix.setNumberOfTabsClosedLast(1);
   },
 
   removeAllClosedTabs: function() {
@@ -539,9 +512,10 @@ var TMP_ClosedTabs = { // jshint ignore:line
     return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
   },
 
-  SSS_restoerClosedTabs: function ct_SSS_restoerClosedTabs(closedTabCount) {
+  SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
+    var closedTabCount = this.count;
     if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
-      return null;
+      return;
 
     this.setButtonDisableState(true);
 
@@ -552,10 +526,10 @@ var TMP_ClosedTabs = { // jshint ignore:line
         blankTabs.push(gBrowser.tabs[i]);
     }
 
-    var tab, multiple = closedTabCount > 1;
+    var multiple = closedTabCount > 1;
     for (let i = 0; i < closedTabCount; i++) {
       let blankTab = blankTabs.pop() || null;
-      tab = this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
+      this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
     }
 
     // remove unused blank tabs
@@ -564,8 +538,6 @@ var TMP_ClosedTabs = { // jshint ignore:line
       blankTab.collapsed = true;
       gBrowser.removeTab(blankTab);
     }
-
-    return tab;
   },
 
   SSS_undoCloseTab: function(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
@@ -596,8 +568,8 @@ var TMP_ClosedTabs = { // jshint ignore:line
     var newTab = aBlankTabToReuse ||
         gBrowser.addTab("about:blank", {skipAnimation: tabToRemove || skipAnimation, dontMove: true});
     newTab.linkedBrowser.stop();
-    // if tababr is hidden when there is only one tab and
-    // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveale
+    // if tabbar is hidden when there is only one tab and
+    // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveals
     if (tabToRemove) {
       gBrowser.removeTab(tabToRemove, {animate: false});
     }
@@ -626,34 +598,16 @@ var TMP_ClosedTabs = { // jshint ignore:line
       window.focus();
       gBrowser.TMP_selectNewForegroundTab(newTab, false, null, false);
     }
-
     return newTab;
   },
 
   undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-    let numberOfTabsToUndoClose = 1;
-    let index = Number(aIndex);
-    if (isNaN(index)) {
-      index = 0;
-      if (Tabmix._restoreMultipleTabs)
-        numberOfTabsToUndoClose = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
-    } else if (index < 0 || index >= this.count)
-      return null;
-
-    let tab = null;
-    if (numberOfTabsToUndoClose > 1)
-      tab = this.SSS_restoerClosedTabs(numberOfTabsToUndoClose);
-    else
-      tab = this.SSS_undoCloseTab(index, aWhere || "original", true);
-
-    // Reset the number of tabs closed last time to the default.
-    Tabmix.setNumberOfTabsClosedLast(1);
-    return tab;
+    return this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
   }
 
 };
 
-var TabmixConvertSession = { // jshint ignore:line
+var TabmixConvertSession = {
   get getTitle() {
     return TabmixSvc.getString("incompatible.title") + " - " + TabmixSvc.getSMString("sm.title");
   },
@@ -702,10 +656,7 @@ var TabmixConvertSession = { // jshint ignore:line
     fp.appendFilter(this.getString("rdffiles"), "*.rdf");
     fp.appendFilter(this.getString("sessionfiles"), "*session*.*");
     fp.appendFilters(nsIFilePicker.filterText | nsIFilePicker.filterAll);
-    if (Tabmix.isVersion(180))
-      fp.open(fpCallback);
-    else
-      fpCallback(fp.show());
+    fp.open(fpCallback);
   },
 
   convertFile: function cs_convertFile(aFileUri, aSilent) {
@@ -713,8 +664,8 @@ var TabmixConvertSession = { // jshint ignore:line
       let tmp = {};
       Cu.import("chrome://sessionmanager/content/modules/session_convert.jsm", tmp);
       tmp.SessionConverter.convertTMP(aFileUri, aSilent);
-    } else {
-      let sm = com.morac.SessionManagerAddon.gSessionManagerWindowObject;
+    } else if ("com" in window && window.com.morac) {
+      let sm = window.com.morac.SessionManagerAddon.gSessionManagerWindowObject;
       sm.doTMPConvertFile(aFileUri, aSilent);
     }
   },
@@ -733,9 +684,8 @@ var TabmixConvertSession = { // jshint ignore:line
       let rdfNodeWindow = sessionEnum.getNext();
       if (rdfNodeWindow instanceof Ci.nsIRDFResource) {
         let windowPath = rdfNodeWindow.QueryInterface(Ci.nsIRDFResource).Value;
-        if (TabmixSessionManager.nodeHasArc(windowPath, "dontLoad"))
-          continue;
-        let aWindowState = this.getWindowState(rdfNodeWindow, internal);
+        let getState = !TabmixSessionManager.nodeHasArc(windowPath, "dontLoad");
+        let aWindowState = getState && this.getWindowState(rdfNodeWindow, internal);
         if (aWindowState) {// don't save empty windows
           aWindowState.index = TabmixSessionManager.getLiteralValue(rdfNodeWindow, "SSi", index++);
           _windows.push(aWindowState);
@@ -901,9 +851,9 @@ var TabmixConvertSession = { // jshint ignore:line
               extData.__tabmixTGM = RegExp.$2;
               break;
             }
-            let [groupId, groupName] = RegExp.$2.split(" ");
-            extData.TabGroupsManagerGroupId = groupId;
-            extData.TabGroupsManagerGroupName = groupName;
+            let data = RegExp.$2.split(" ");
+            extData.TabGroupsManagerGroupId = data[0];
+            extData.TabGroupsManagerGroupName = data[1];
             break;
           }
           case "faviconized":
@@ -944,7 +894,7 @@ var TabmixConvertSession = { // jshint ignore:line
     };
     var history = TabmixSessionManager.getLiteralValue(rdfNodeTab, "history");
     var tmpData = history.split("|-|");
-    var sep = tmpData.shift(); // remove seperator from data
+    var sep = tmpData.shift(); // remove separator from data
     tmpData = tmpData.join("|-|");
     // if all history data was encoded (file saved with version
     // 0.4.1.2pre.131006a1 or newer, changeset 684a4b2302e4)
@@ -958,11 +908,11 @@ var TabmixConvertSession = { // jshint ignore:line
       let entry = {url: "", children: [], ID: 0};
       let index = i * 3;
       entry.url = historyData[index + 1];
-      if (!entry.url)
-        continue;
-      entry.title = decodeData(historyData[index], !newFormat);
-      entry.scroll = historyData[index + 2];
-      entries.push(entry);
+      if (entry.url) {
+        entry.title = decodeData(historyData[index], !newFormat);
+        entry.scroll = historyData[index + 2];
+        entries.push(entry);
+      }
     }
     return entries;
   }

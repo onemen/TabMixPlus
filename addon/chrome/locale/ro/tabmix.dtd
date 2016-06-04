@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "i">
 <!ENTITY closeTabsToLeft.label "Închide filele din stânga">
 <!ENTITY closeleft.accesskey "s">
-<!ENTITY closeTabstoRight.label "Închide filele din dreapta">
-<!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permisiuni">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Îngheață fila">

@@ -13,8 +13,8 @@
 
 /* override some rules for toolbarbutton-1 and tabs-closebutton*/
 #TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
-  -moz-padding-end: 0px !important;
-  -moz-padding-start: 0px !important;
+  -moz-padding-end: 0 !important;
+  -moz-padding-start: 0 !important;
 }
 
 /* for tabs close button on Firefox 31+ */
@@ -60,8 +60,8 @@
 
 /* :::: Space on tab bar :::: */
 .tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
-  -moz-margin-start: 0px;
-  -moz-margin-end: 0px;
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
   -moz-padding-start: 15px;
   -moz-padding-end: 15px;
 }

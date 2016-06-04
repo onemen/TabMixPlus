@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Posizionare il pulsante &apos;Nuova scheda&apos; nelle barre degli strumenti per attivare l&apos;opzione">
 <!ENTITY hideTabBarButton.label "Pulsante di chiusura schede">
 <!ENTITY newTabButton.label "Pulsante di nuova scheda">
-<!ENTITY newTabButton.posiotion.left.label "nella parte sinistra">
-<!ENTITY newTabButton.posiotion.right.label "nella parte destra">
-<!ENTITY newTabButton.posiotion.afterlast.label "dopo l&apos;ultima scheda">
+<!ENTITY newTabButton.position.left.label "nella parte sinistra">
+<!ENTITY newTabButton.position.right.label "nella parte destra">
+<!ENTITY newTabButton.position.afterlast.label "dopo l&apos;ultima scheda">
 <!ENTITY allTabsButton.label "Pulsante di tutte le schede">
 <!ENTITY tabBarSpace.label "Spazio ai lati della barra delle schede">
 <!ENTITY tabBarSpace.tooltip "Lascia spazio su entrambi i lati della barra delle schede per trascinarvi le schede">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicatori di trascinamento">
 <!ENTITY dropIndicator-native.label "stile predefinito del browser">
 <!ENTITY dropIndicator-builtin.label "stile incorporato">
-<!ENTITY verticalTabbar.description "Utilizzare Tree Style Tab oppure Vertical Tabs per le seguenti impostazioni">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Sposta la barra delle schede:">
 <!ENTITY tabBarPosition.top.label "in alto (sopra al contenuto)">
 <!ENTITY tabBarPosition.bottom.label "in basso (sotto al contenuto)">
@@ -178,6 +178,8 @@
 
 
 
+
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -193,6 +195,8 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
+
 
 
 

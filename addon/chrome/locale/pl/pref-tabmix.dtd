@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Przeciągnij przycisk „Nowa karta” na pasek kart, by włączyć te funkcję">
 <!ENTITY hideTabBarButton.label "Przycisk zamykania kart">
 <!ENTITY newTabButton.label "Przycisk Nowa karta">
-<!ENTITY newTabButton.posiotion.left.label "po lewej stronie">
-<!ENTITY newTabButton.posiotion.right.label "po prawej stronie">
-<!ENTITY newTabButton.posiotion.afterlast.label "za ostatnią etykietą">
+<!ENTITY newTabButton.position.left.label "po lewej stronie">
+<!ENTITY newTabButton.position.right.label "po prawej stronie">
+<!ENTITY newTabButton.position.afterlast.label "za ostatnią etykietą">
 <!ENTITY allTabsButton.label "Przycisk Wszystkie karty">
 <!ENTITY tabBarSpace.label "Dodatkową przestrzeń po obu stronach paska kart">
 <!ENTITY tabBarSpace.tooltip "Gdy jest otwartych dużo kart, przestrzeń ta służy dla przeciągania i kliknięć na pasku kart">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
 <!ENTITY dropIndicator-native.label "natywny styl">
 <!ENTITY dropIndicator-builtin.label "wbudowany styl">
-<!ENTITY verticalTabbar.description "Aby kontrolować te ustawienia, użyj dodatku treeStyleTab lub VerticalTab.">
+<!ENTITY verticalTabbar.description1 "Te ustawienia są kontrolowane przez inne dodatki mające zastosowanie do pionowego ustawienia kart.">
 <!ENTITY tabBarPosition.label "Położenie paska kart:">
 <!ENTITY tabBarPosition.top.label "Na górze">
 <!ENTITY tabBarPosition.bottom.label "Na dole">

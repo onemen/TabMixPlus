@@ -77,6 +77,7 @@ var TMP_extensionsCompatibility = {
     try {
       if ("TreeStyleTabService" in window) {
         this.treeStyleTab.onContentLoaded();
+        this.treeStyleTab.installed = true;
         Tabmix.extensions.treeStyleTab = true;
         Tabmix.extensions.verticalTabBar = true;
       }
@@ -127,7 +128,7 @@ var TMP_extensionsCompatibility = {
             aTab.setAttribute("image", browser.mIconURL);
           else
             aTab.removeAttribute("image");
-          gBrowser._tabAttrModified(aTab);
+          gBrowser._tabAttrModified(aTab, ["image"]);
         }
       }
     }
@@ -218,12 +219,7 @@ var TMP_extensionsCompatibility = {
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
-    // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
-    // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
-    if (typeof VerticalTabs == "object" || typeof sidetabs == "object") {
-      Tabmix.extensions.verticalTabs = true;
-      Tabmix.extensions.verticalTabBar = true;
-    }
+    this.setVerticalTabs();
 
     // Look for RSS/Atom News Reader
     if ("gotoLink" in window)
@@ -237,7 +233,7 @@ var TMP_extensionsCompatibility = {
 
     if ("PersonaController" in window && typeof (window.PersonaController) == "object") {
       Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = this._footer.style.backgroundImage; \
            gBrowser.tabContainer.setAttribute("persona", persona.id); \
@@ -246,7 +242,7 @@ var TMP_extensionsCompatibility = {
       ).toCode();
 
       Tabmix.changeCode(PersonaController, "PersonaController._applyDefault")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
            gBrowser.tabContainer.style.backgroundImage = ""; \
            gBrowser.tabContainer.removeAttribute("persona"); \
@@ -256,7 +252,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // Firefox sync
-    // fix bug in firefox sync that add new menu itep from each popupshowing
+    // fix bug in firefox sync that add new menu item from each popupshowing
     if ("gFxWeaveGlue" in window) {
       Tabmix.changeCode(gFxWeaveGlue, "gFxWeaveGlue.handleEvent")._replace(
         'else if (this.getPageIndex() == -1)',
@@ -279,7 +275,7 @@ var TMP_extensionsCompatibility = {
     // trigger tabmix function when user change tab width with faviconize extension
     if ("faviconize" in window && "toggle" in faviconize) {
       Tabmix.changeCode(faviconize, "faviconize.toggle")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  tab.removeAttribute("minwidth");' +
         '  tab.removeAttribute("maxwidth");' +
         '  TabmixTabbar.updateScrollStatus();' +
@@ -334,10 +330,10 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // for MR Tech's local install extention
+    // for MR Tech's local install extension
     if (typeof (Local_Install) == "object") {
-      // don't open trober in current tab when tab is locked
-      // or trober is to diffrent site then the current
+      // don't open 'Throbber' in current tab when tab is locked
+      // or 'Throbber' is to different site then the current
       Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
         'local_common.openURL(local_common.getThrobberURL(), inNewTab);',
         'var url = local_common.getThrobberURL(); \
@@ -353,7 +349,7 @@ var TMP_extensionsCompatibility = {
     }
 
     if ("FireGestures" in window) {
-      // unable to close surce tab after duplicate with FireGestures esextension
+      // unable to close source tab after duplicate with FireGestures extension
       // problem fix in FireGestures 1.5.7 keep this here for users with older versions
       let performAction = FireGestures._performAction.toString();
       let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);";
@@ -468,8 +464,23 @@ var TMP_extensionsCompatibility = {
         '      $&'
       ).toCode();
     }
-  }
+  },
 
+  setVerticalTabs: function() {
+    // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
+    // https://addons.mozilla.org/en-US/firefox/addon/vertical-tabs-reloaded/
+    // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
+    // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
+    let isVertical = typeof VerticalTabs == "object" ||
+        typeof VerticalTabsReloaded == "object" ||
+        typeof gBrowser.tabContainer._verticalTabs == "boolean" ||
+        typeof sidetabs == "object" ||
+        typeof tabkit == "object" ||
+        typeof tabkitGlobal == "object";
+    let treeStyleTab = typeof TreeStyleTabService == "object";
+    Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
+    Tabmix.extensions.verticalTabs = isVertical && !treeStyleTab;
+  },
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {
@@ -566,6 +577,7 @@ TMP_extensionsCompatibility.newsfox = {
  *  https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/
  */
 TMP_extensionsCompatibility.treeStyleTab = {
+  installed: false,
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
   preInit: function() {
@@ -632,42 +644,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
         return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
       };
 
-      fn = obj.initTabContentsOrderInternal;
-      if (fn.toString().indexOf("closebuttons-side") == -1) {
-        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabContentsOrderInternal")._replace(
-          'if (this.mTabBrowser.getAttribute(this.kTAB_CONTENTS_INVERTED) == \'true\')',
-          'let button = aNamedNodes.close;\n    ' +
-          'index = nodes.indexOf(button);\n   ' +
-          'if (index > -1) {\n    ' +
-          ' let tabbar = this.mTabBrowser.tabContainer;\n   ' +
-          ' let side = tabbar.getAttribute("closebuttons-side");\n    ' +
-          ' if (side == "left") {\n   ' +
-          '   let before = nodes.indexOf(aNamedNodes.twistyAnchor);\n   ' +
-          '   if (before > -1) {\n    ' +
-          '     nodes.splice(index, 1);\n   ' +
-          '     let mOver = tabbar.mCloseButtons;\n   ' +
-          '     mOver = mOver == 4 && button.getAttribute("selected") != "true" || mOver == 2;\n    ' +
-          '     let offset = mOver ? 1 : 0;\n   ' +
-          '     nodes.splice(before + offset, 0, button);\n   ' +
-          '   }\n   ' +
-          ' }\n   ' +
-          '}\n\n    ' +
-          '$&'
-        )._replace(
-          'let key = \'initTabContentsOrderInternal_\'',
-          'let self = this;\n     ' +
-          '$&'
-        ).toCode();
-
-        let callback = function() {
-          TabmixSvc.forEachBrowserWindow(function(aWindow) {
-            aWindow.gBrowser.treeStyleTab.updateInvertedTabContentsOrder(true);
-          });
-        };
-        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons", callback);
-        TabmixSvc.prefs.observe("extensions.tabmix.tabs.closeButtons.onLeft", callback);
-      }
-
       // update ordinal on previous selected tab when close tab button is on the
       // left side and CloseButtons preference is 4 - close buttons on hover
       // and active tabs
@@ -717,7 +693,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
        *  we replace TMP_Bookmark.openGroup with TMP_Places.openGroup at Tabmix 0.3.8.2pre.090830
        *  we also replace call to TreeStyleTabService.openGroupBookmarkBehavior();
        *  with aOpenGroupBookmarkBehavior that we pass from PlacesUIUtils._openTabset
-       *  we only call this functiom from browserWindow so we don't need to call it for
+       *  we only call this function from browserWindow so we don't need to call it for
        *  other places windows
        */
       Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
@@ -737,7 +713,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         '    TreeStyleTabService.readyToOpenChildTab(tabToSelect, true, gBrowser.treeStyleTab.getNextSiblingTab(tabToSelect));' +
         '  }'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  if (TSTOpenGroupBookmarkBehavior & TreeStyleTabService.kGROUP_BOOKMARK_SUBTREE)' +
         '    TreeStyleTabService.stopToOpenChildTab(tabToSelect);' +
         '$1$2'
@@ -755,7 +731,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'gBrowser.treeStyleTab.initTabAttributes(tab); \
          Tabmix.TST_initTabContentsOrder(tab); \
          $1$2'
@@ -766,10 +742,76 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
+  },
 
-    Tabmix.changeCode(window, "window.TMP_BrowserOpenTab")._replace(
-      'var newTab = gBrowser.addTab',
-      'gBrowser.treeStyleTab.onBeforeNewTabCommand();\n   $&'
-    ).toCode();
-  }
+  onBeforeNewTabCommand: function(tab, openTabNext) {
+    if (!this.installed) {
+      return;
+    }
+    if (openTabNext) {
+      this.openNewTabNext(tab, true);
+    } else {
+      gBrowser.treeStyleTab.onBeforeNewTabCommand();
+    }
+  },
+
+  // Don't call openNewTabNext if treeStyleTab already set readiedToAttachNewTab
+  checkToOpenTabNext: function(tab, check) {
+    if (this.installed && check &&
+        !gBrowser.treeStyleTab.checkToOpenChildTab(tab)) {
+      this.openNewTabNext(tab, true);
+    }
+  },
+
+  // instruct treeStyleTab to use 'kNEWTAB_OPEN_AS_NEXT_SIBLING' when our preference
+  // is to open the tab next
+  openNewTabNext: function(tab, openTabNext, clean) {
+    if (!this.installed || !openTabNext) {
+      return;
+    }
+
+    let tst = gBrowser.treeStyleTab;
+    let browser = tst.getBrowserFromTabBrowserElements(tab);
+    if (!browser) {
+      return;
+    }
+    let ownerBrowser = tst.getTabBrowserFromChild(browser);
+    let baseTab = tst.getTabFromBrowser(browser, ownerBrowser);
+    let parentTab = tst.getParentTab(baseTab);
+
+    // clean previously ready state set by treeStyleTab
+    if (clean) {
+      tst.stopToOpenChildTab(baseTab);
+      if (parentTab) {
+        tst.stopToOpenChildTab(parentTab);
+      }
+    }
+
+    // based on treeStyleTab.readyToOpenNextSiblingTabNow
+    // we also set ready state for pinned tabs
+    let readyToOpenNextSiblingTab = function() {
+      if (!baseTab)
+        return false;
+      let nextTab = tst.getNextSiblingTab(baseTab);
+      if (parentTab) {
+        return tst.readyToOpenChildTab(parentTab, false, nextTab);
+      } else if (nextTab) {
+        ownerBrowser.treeStyleTab.readiedToAttachNewTab = true;
+        ownerBrowser.treeStyleTab.parentTab = null;
+        ownerBrowser.treeStyleTab.insertBefore = nextTab.getAttribute(tst.kID);
+        return true;
+      }
+      return false;
+    };
+
+    if (readyToOpenNextSiblingTab()) {
+      setTimeout(() => {
+        try {
+          tst.stopToOpenChildTab(baseTab);
+        } catch (ex) {
+          tst.defaultErrorHandler(ex);
+        }
+      }, 0);
+    }
+  },
 };

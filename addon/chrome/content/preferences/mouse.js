@@ -27,7 +27,7 @@ var gMousePane = {
     this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
-    this.updatedblClickTabbar($("pref_click_dragwindow"));
+    this.updateDblClickTabbar($("pref_click_dragwindow"));
 
     gPrefWindow.initPane("paneMouse");
   },
@@ -82,7 +82,7 @@ var gMousePane = {
     menulist.previousSibling.checked = !menulist.disabled;
   },
 
-  updatedblClickTabbar: function(pref) {
+  updateDblClickTabbar: function(pref) {
     let dblClickTabbar = $("pref_dblclick_changesize");
     if (pref.value && !dblClickTabbar.value)
       dblClickTabbar.value = pref.value;

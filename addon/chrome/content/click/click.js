@@ -182,10 +182,12 @@ var TabmixTabClickOptions = {
       case 11:
         Tabmix.renameTab.editTitle(aTab);
         break;
-      case 12: // taken from tco
+      case 12: { // taken from tco
+        let SessionSaver = window.SessionSaver;
         if (SessionSaver && SessionSaver.snapBackTab)
           SessionSaver.snapBackTab(SessionSaver.snapback_noFX, SessionSaver.snapback_willFocus);
         break;
+      }
       case 13:
         TMP_ClosedTabs.restoreTab("original", -2);
         break;
@@ -210,11 +212,11 @@ var TabmixTabClickOptions = {
       case 20:
         gBrowser._reloadRightTabs(aTab);
         break;
-      case 21: // taken from tco
-        var href;
+      case 21: { // taken from tco
+        let href;
         if (window.IeView && window.IeView.ieViewLaunch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
-          IeView.ieViewLaunch("Internet Explorer.lnk", href);
+          window.IeView.ieViewLaunch("Internet Explorer.lnk", href);
         } else if (Tabmix.extensions.gIeTab) {
           let ieTab = Tabmix.extensions.gIeTab;
           let gIeTabObj = window[ieTab.obj];
@@ -225,9 +227,10 @@ var TabmixTabClickOptions = {
           }
         } else if (window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
-          ieview.launch(href);
+          window.ieview.launch(href);
         }
         break;
+      }
       case 22:
         gBrowser.SelectToMerge(aTab);
         break;
@@ -303,7 +306,6 @@ var TabmixTabClickOptions = {
 };
 
 var TabmixContext = {
-  _closeRightTabs: "tm-closeRightTabs",
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = id => document.getElementById(id);
@@ -313,7 +315,12 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_openTabInWindow"), $id("context_pinTab"));
     tabContextMenu.insertBefore($id("context_bookmarkAllTabs"), $id("context_bookmarkTab").nextSibling);
     tabContextMenu.insertBefore($id("context_closeTab"), $id("tm-closeAllTabs"));
-    tabContextMenu.insertBefore($id("context_closeOtherTabs"), $id("tm-closeLeftTabs"));
+    let closeLeftTabs = $id("tm-closeLeftTabs");
+    let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
+    tabContextMenu.insertBefore($id("context_closeOtherTabs"), closeLeftTabs);
+    tabContextMenu.insertBefore(closeTabsToTheEnd, closeLeftTabs.nextSibling);
+    Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
 
@@ -330,8 +337,9 @@ var TabmixContext = {
       }
     }
 
-    // insret IE Tab menu-items before Bookmakrs menu-items
+    // insert IE Tab menu-items before Bookmarks menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
+      let IeTab = window.IeTab;
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
@@ -342,23 +350,11 @@ var TabmixContext = {
     }
 
     // fix conflict with CookiePie extension
-    if ("cookiepieContextMenu" in window && !cookiepieContextMenu.initialized)
-      cookiepieContextMenu.init();
-
-    // Bug 866880 - Implement "Close Tabs to the Right" as a built-in feature
-    if (Tabmix.isVersion(240)) {
-      let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
-      tabContextMenu.insertBefore(closeTabsToTheEnd, $id("tm-closeRightTabs"));
-      Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
-      tabContextMenu.removeChild($id("tm-closeRightTabs"));
-      this._closeRightTabs = "context_closeTabsToTheEnd";
-    }
-
-    if (Tabmix._restoreMultipleTabs) {
-      let multipletablabel = $id("context_undoCloseTab").getAttribute("multipletablabel");
-      let undoCloseTabMenu = $id("tm-content-undoCloseTab");
-      undoCloseTabMenu.setAttribute("singletablabel", undoCloseTabMenu.label);
-      undoCloseTabMenu.setAttribute("multipletablabel", multipletablabel);
+    if ("cookiepieContextMenu" in window) {
+      let cookiepieContextMenu = window.cookiepieContextMenu;
+      if (!cookiepieContextMenu.initialized) {
+        cookiepieContextMenu.init();
+      }
     }
 
     if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
@@ -455,7 +451,12 @@ var TabmixContext = {
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
     Tabmix.showItem("context_unpinTab", show && aTab.pinned);
-    Tabmix.showItem("context_tabViewMenu", Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
+    setTimeout(() => {
+      // we need to set our show/hide after tabGroups extension
+      let tabViewMenu = document.getElementById("context_tabViewMenu") ||
+          document.getElementById("tabGroups-context_tabViewMenu");
+      Tabmix.showItem(tabViewMenu, Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
+    });
     Tabmix.showItem("tm-mergeWindowsTab",
                     Tabmix.prefs.getBoolPref("showMergeWindow") &&
                     (!Tabmix.singleWindowMode ||
@@ -482,14 +483,18 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
+    var tabsCount = gBrowser.visibleTabs.length;
+    var unpinnedTabsCount = tabsCount - TabmixTabbar._real_numPinnedTabs;
+    var unpinnedTabs = unpinnedTabsCount > 0;
+
     // Close tab Commands
     var pinnedTab = TabContextMenu.contextTab.pinned;
     Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
-    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && !pinnedTab);
-    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && !pinnedTab);
-    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && !pinnedTab);
+    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && unpinnedTabs);
+    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && unpinnedTabs);
+    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && unpinnedTabs);
     Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem(this._closeRightTabs, Tabmix.prefs.getBoolPref("closeRightMenu") && !pinnedTab);
+    Tabmix.showItem("context_closeTabsToTheEnd", Tabmix.prefs.getBoolPref("closeRightMenu") && unpinnedTabs);
 
     //  ---------------- menuseparator ---------------- //
 
@@ -521,18 +526,18 @@ var TabmixContext = {
 
     var protectedTab = aTab.hasAttribute("protected");
     var lockedTab = aTab.hasAttribute("locked");
-    var tabsCount = gBrowser.visibleTabs.length;
-    var unpinnedTabs = tabsCount - TabmixTabbar._real_numPinnedTabs;
+    var noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
     var cIndex = Tabmix.visibleTabs.indexOf(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
-    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || unpinnedTabs <= 1);
-    Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabs <= 1);
-    Tabmix.setItem(this._closeRightTabs, "disabled", cIndex == tabsCount - 1 || unpinnedTabs <= 1);
-    Tabmix.setItem("tm-closeLeftTabs", "disabled", cIndex === 0 || unpinnedTabs <= 1);
+    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
+    Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
+    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
+    Tabmix.setItem("tm-closeLeftTabs", "disabled",
+                   cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
     Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);
@@ -611,6 +616,9 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
+    gContextMenu.tabmixLinks = Tabmix.contextMenuLinks;
+    Tabmix.contextMenuLinks = null;
+
     var tab = gBrowser.selectedTab;
     try {
       var contentClick = gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage;
@@ -622,7 +630,7 @@ var TabmixContext = {
      /**
       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
       * Firefox only show this menu when the selection text is url see Bug 454518
-      * we cahck if gContextMenu.linkURL contain URL
+      * we check if gContextMenu.linkURL contain URL
       */
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
       Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
@@ -646,8 +654,7 @@ var TabmixContext = {
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {
-        let {target, linkURL} = gContextMenu;
-        gContextMenu.tabmixLinkURL = tablib.getValidUrl(linkURL, target);
+        gContextMenu.tabmixLinkURL = tablib.getValidUrl();
       }
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");
@@ -684,11 +691,6 @@ var TabmixContext = {
       Tabmix.showItem(undoCloseTabMenu, !contentClick &&
           !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
           Tabmix.prefs.getBoolPref("undoCloseTabContent"));
-      if (Tabmix._restoreMultipleTabs) {
-        let closedTabCount = TabmixSvc.ss.getNumberOfTabsClosedLast(window);
-        let visibleLabel = closedTabCount <= 1 ? "singletablabel" : "multipletablabel";
-        undoCloseTabMenu.setAttribute("label", undoCloseTabMenu.getAttribute(visibleLabel));
-      }
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
       Tabmix.showItem(undoCloseListMenu, !contentClick &&
@@ -738,26 +740,8 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = [];
-    let browser = window.gBrowser.selectedBrowser;
-
-    function getLinks() {
-      try {
-        let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-        let result = handler.getSelectedLinks();
-        gContextMenu.tabmixLinks = result && result.split('\n');
-      } catch (ex) {
-        Tabmix.log("unable to get syncHandlers for page " +
-                   browser.currentURI.spec + "\n" + ex);
-      }
-      return gContextMenu.tabmixLinks || [];
-    }
-
-    if (Tabmix.isVersion(320))
-      urls = gContextMenu.tabmixLinks || getLinks();
-    // getSelectedLinks was not implemented for remote tabs before Firefox 32
-    else if (browser.getAttribute("remote") != "true")
-      urls = Tabmix.ContextMenu.getSelectedLinks(content, check);
+    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
+        Tabmix.ContextMenu.getSelectedLinks(window.content, check);
 
     if (!check && urls.length) {
       Tabmix.loadTabs(urls, false);
@@ -787,9 +771,6 @@ var TabmixAllTabs = {
       case "DOMMenuItemInactive":
         this.updateMenuItemInactive(aEvent);
         break;
-      case "DOMMouseScroll":
-        TMP_eventListener.onTabBarScroll(aEvent);
-        /* falls through */
       case "scroll":
         this._popup._updateTabsVisibilityStatus();
         break;
@@ -807,15 +788,12 @@ var TabmixAllTabs = {
 
     for (var i = 0; i < this.childNodes.length; i++) {
       let curTab = this.childNodes[i].tab;
-      if (!curTab) // "Tab Groups" menuitem and its menuseparator
-        continue;
-      let curTabBO = curTab.boxObject;
-      if (!curTabBO) // "Tabs From Other Computers" menuitem
-        continue;
-      if (Tabmix.tabsUtils.isElementVisible(curTab))
-        this.childNodes[i].setAttribute("tabIsVisible", "true");
-      else
-        this.childNodes[i].removeAttribute("tabIsVisible");
+      if (curTab && curTab.boxObject) {
+        if (Tabmix.tabsUtils.isElementVisible(curTab))
+          this.childNodes[i].setAttribute("tabIsVisible", "true");
+        else
+          this.childNodes[i].removeAttribute("tabIsVisible");
+      }
     }
   },
 
@@ -970,24 +948,24 @@ var TabmixAllTabs = {
           let tab = tabs[t];
           let visible = side && Tabmix.tabsUtils.isElementVisible(tab);
           if (visible) {
-            if (tab.pinned)
-              continue;
-            else if (side == "left")
-              break;
-            addToMenu = true;
-            continue;
-          }
-          if (addToMenu)
+            if (!tab.pinned) {
+              if (side == "left") {
+                break;
+              }
+              addToMenu = true;
+            }
+          } else if (addToMenu) {
             this.createMenuItems(popup, tab, t);
+          }
         }
         break;
       }
       case 3: {
         for (i = TMP_LastTab.tabs.length - 1; i >= 0; i--) {
           let tab = TMP_LastTab.tabs[i];
-          if (tab.hidden)
-            continue;
-          this.createMenuItems(popup, tab, i);
+          if (!tab.hidden) {
+            this.createMenuItems(popup, tab, i);
+          }
         }
         break;
       }
@@ -1034,7 +1012,7 @@ var TabmixAllTabs = {
     // for ColorfulTabs 6.0+
     if (typeof colorfulTabs == "object") {
       let rule = "none";
-      if (colorfulTabs.clrAllTabsPopPref) {
+      if (window.colorfulTabs.clrAllTabsPopPref) {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"

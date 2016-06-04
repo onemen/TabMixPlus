@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "u">
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "r">
-<!ENTITY closeTabstoRight.label "Close Tabs to the Right">
-<!ENTITY closeright.accesskey "P">
 <!ENTITY docShellMenu.label "Quyền hạn">
 <!ENTITY docShellMenu.accesskey "Q">
 <!ENTITY freezeTabMenu.label "Đông cứng Thẻ">

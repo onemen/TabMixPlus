@@ -14,23 +14,23 @@ radio[pane] {
 }
 
 radio[pane=paneLinks] {
-  -moz-image-region: rect(0px 24px 24px 0px);
+  -moz-image-region: rect(0px 24px 24px 0);
 }
 radio[pane=paneEvents] {
-  -moz-image-region: rect(0px 48px 24px 24px)
+  -moz-image-region: rect(0px 48px 24px 24px);
 }
 radio[pane=paneAppearance] {
-  -moz-image-region: rect(0px 72px 24px 48px)
+  -moz-image-region: rect(0px 72px 24px 48px);
 }
 radio[pane=paneMouse] {
-  -moz-image-region: rect(0px 96px 24px 72px)
+  -moz-image-region: rect(0px 96px 24px 72px);
 }
 radio[pane=paneMenu] {
-  -moz-image-region: rect(0px 120px 24px 96px)
+  -moz-image-region: rect(0px 120px 24px 96px);
 }
 radio[pane=paneSession] {
   list-style-image: url(sessionmanager.png);
-  -moz-image-region: rect(0px 24px 24px 0px);
+  -moz-image-region: rect(0px 24px 24px 0);
 }
 
 radio[pane=paneIncompatible] {
@@ -47,7 +47,7 @@ radio[pane=paneIncompatible][show=true] {
   -moz-appearance: none;
   margin: 0;
   min-width: 20px;
-  border: 0px solid transparent;
+  border: 0 solid transparent;
   background-color: transparent;
   color: transparent;
 }
@@ -93,8 +93,8 @@ tabpanel {
 }
 
 .bottom-separator {
-  height: 0px !important;
-  margin-bottom: 0px !important;
+  height: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .subtabs .tab-text {
@@ -198,7 +198,7 @@ tabbox > tabs {
 }
 
 .extraIcons .checkbox-icon {
-  padding: 2px 0px 2px 0px;
+  padding: 2px 0 2px 0;
   -moz-margin-end: 3px;
 }
 
@@ -216,7 +216,7 @@ tabbox > tabs {
   display: none !important;
 }
 
-groupbox[TSTinstalled] label[TSTdisabled="true"] {
+groupbox[tstInstalled] label[TSTdisabled="true"] {
   color: GrayText;
 }
 
@@ -237,7 +237,7 @@ prefpane > tabbox {
 
 tabbox {
   -moz-box-flex: 1;
-  padding: 0px 1px;
+  padding: 0 1px;
 }
 
 tabbox > tabpanels {
@@ -278,13 +278,13 @@ tabbox > tabpanels {
 }
 
 /* session panel */
-#sesionsPanel:not([manager]),
-#sesionsPanel[manager=tabmix] .firefox,
-#sesionsPanel[manager=firefox] .tabmix {
+#sessionsPanel:not([manager]),
+#sessionsPanel[manager=tabmix] .firefox,
+#sessionsPanel[manager=firefox] .tabmix {
   display: none;
 }
 
-#sesionsPanel > groupbox > vbox {
+#sessionsPanel > groupbox > vbox {
   height: 55px;
 }
 
@@ -294,10 +294,10 @@ tabbox > tabpanels {
   margin-bottom: 2px;
 }
 
-#sesionsPanel[manager=firefox] tab.firefox {
+#sessionsPanel[manager=firefox] tab.firefox {
   visibility: hidden;
 }
 
 .menu checkbox {
-  padding-top: 0px;
+  padding-top: 0;
 }

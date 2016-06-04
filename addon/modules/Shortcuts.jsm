@@ -8,6 +8,9 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+                                  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 var KeyConfig;
 this.Shortcuts = {
   keys: {
@@ -63,22 +66,12 @@ this.Shortcuts = {
   updatingShortcuts: false,
   prefBackup: null,
   initialized: false,
-  permanentPrivateBrowsing: false,
   keyConfigInstalled: false,
 
   initService: function(aWindow) {
     if (this.initialized)
       return;
     this.initialized = true;
-
-    if (TabmixSvc.version(200)) {
-      let tmp = {};
-      Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", tmp);
-      this.permanentPrivateBrowsing = tmp.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    } else {
-      this.permanentPrivateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].
-          getService(Ci.nsIPrivateBrowsingService).autoStarted;
-    }
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
@@ -282,7 +275,7 @@ this.Shortcuts = {
 
   _getChangedKeys: function TMP_SC__getChangedKeys(aOptions) {
     let shortcuts = !aOptions.onChange && this.prefBackup || this._getShortcutsPref();
-    let disableSessionKeys = this.permanentPrivateBrowsing ||
+    let disableSessionKeys = PrivateBrowsingUtils.permanentPrivateBrowsing ||
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let key of Object.keys(this.keys)) {
@@ -290,14 +283,14 @@ this.Shortcuts = {
       let _default = keyData.default || "";
       let currentValue = onOpen ? _default : keyData.value;
       let newValue = shortcuts[key] || _default;
-      let updatBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
+      let updateBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
           disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
       // on start report disabled by default shortcut as changed so _updateKey
       // can move these shortcuts to removedShortcuts
-      if (currentValue != newValue || updatBlockState ||
+      if (currentValue != newValue || updateBlockState ||
           onOpen && /^d&/.test(_default)) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
@@ -357,7 +350,7 @@ this.Shortcuts = {
       return new RegExp(mod).test(modifiers);
     }).join(",");
 
-    // make sure that key and keycod are valid
+    // make sure that key and keycode are valid
     key.key = key.key.toUpperCase();
     if (key.key == " ")
       [key.key, key.keycode] = ["", "VK_SPACE"];
@@ -456,7 +449,7 @@ KeyConfig = {
 
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
-    // sync non defualt shortcuts
+    // sync non default shortcuts
     if (Object.keys(shortcuts).length > 0)
       this.syncToKeyConfig(shortcuts);
     else {
@@ -570,7 +563,8 @@ function getFormattedKey(key) {
 
   if (key.key) {
     if (key.key == " ") {
-      key.key = ""; key.keycode = "VK_SPACE";
+      key.key = "";
+      key.keycode = "VK_SPACE";
     } else {
       val += key.key.toUpperCase();
     }

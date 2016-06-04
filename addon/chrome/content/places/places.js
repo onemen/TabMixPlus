@@ -1,3 +1,7 @@
+/* globals XULCommandEvent */
+/* import-globals-from-firefox browser/content/browser/places/places.js */
+/* import-globals-from-firefox browser/content/browser/places/browserPlacesViews.js */
+/* import-globals-from-firefox browser/content/browser/bookmarks/sidebarUtils.js */
 "use strict";
 
 // code by onemen
@@ -63,7 +67,7 @@ var TMP_Places = {
       let $LF = '\n        ';
       Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
         'URIs.push(tab.linkedBrowser.currentURI);',
-        'if (Tabmix.getCallerNameByIndex(2) == "PCH_updateBookmarkAllTabsCommand") {' + $LF +
+        'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
         '  $&' + $LF +
         '} else {' + $LF +
         '  let uri = tab.linkedBrowser.currentURI;' + $LF +
@@ -72,14 +76,7 @@ var TMP_Places = {
       ).defineProperty();
     }
 
-    if ("PlacesViewBase" in window && PlacesViewBase.prototype) {
-      Tabmix.changeCode(PlacesViewBase.prototype, "PlacesViewBase.prototype._setLivemarkSiteURIMenuItem")._replace(
-        "openUILink(this.getAttribute('targetURI'), event);",
-        "TMP_Places.openLivemarkSite(this.getAttribute('targetURI'), event);"
-      ).toCode();
-    }
-
-    // prevent error when closing window with sidbar open
+    // prevent error when closing window with sidebar open
     var docURI = window.document.documentURI;
     if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
         docURI == "chrome://browser/content/history/history-panel.xul") {
@@ -113,37 +110,63 @@ var TMP_Places = {
     }
   },
 
-  // replace openlivemarksite-menuitem with tabmix function
-  openLivemarkSite: function TMP_PC_openLivemarkSite(aUrl, aEvent) {
-    var where = this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent), this.prefBookmark);
+  openMenuItem: function(aUri, aEvent, aParams, aPref) {
+    let pref = "extensions.tabmix.opentabfor." + aPref;
+    let where = this.isBookmarklet(aUri) ? "current" :
+                this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
-    openUILinkIn(aUrl, where, {
-      inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
-      initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
-    });
+    aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+    openUILinkIn(aUri, where, aParams);
   },
 
-  // we replace HistoryMenu.prototype._onCommand with this function
-  // look in tablib.js
-  historyMenu: function TMP_PC_historyMenu(aEvent) {
-    var node = aEvent.target._placesNode;
+  idsMap: {
+    "PanelUI-historyItems": "history",
+    goPopup: "history",
+    bookmarksMenuPopup: "bookmarks",
+    BMB_bookmarksPopup: "bookmarks",
+  },
+
+  openUILink: function(url, event, where, params) {
+    // divert all the calls from places UI to use our preferences
+    //   HistoryMenu.prototype._onCommand
+    //   BookmarkingUI._updateRecentBookmarks/onItemCommand
+    //   CustomizableWidgets<.onViewShowing/<.handleResult/onItemCommand
+    //   PlacesViewBase.prototype._setLivemarkSiteURIMenuItem
+    //   FeedHandler.loadFeed
+    let node = event && event.target ? event.target.parentNode : null;
     if (node) {
-      PlacesUIUtils.markPageAsTyped(node.uri);
-      this.openHistoryItem(node.uri, aEvent);
+      // if the id is not in the list, set pref to "bookmarks" when
+      // _placesNode exist
+      let pref = this.idsMap[node.id] || node._placesNode && "bookmarks";
+      if (pref) {
+        this.openMenuItem(url, event, params, pref);
+        return null;
+      }
     }
-  },
 
-  // open PanelUI-historyItems from history button, diverted from openUILink
-  openHistoryItem: function(aUri, aEvent) {
-    var where = this.isBookmarklet(aUri) ? "current" :
-    this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), this.prefHistory);
-    if (where == "current")
-      Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
-    openUILinkIn(aUri, where, {
-      inBackground: Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground"),
-      initiatingDoc: aEvent ? aEvent.target.ownerDocument : null
-    });
+    let win = Tabmix.getTopWin();
+    if (!win || where != "current") {
+      return where;
+    }
+
+    let isLoadFeed = Tabmix.callerTrace("FeedHandler.loadFeed", "loadFeed");
+    if (isLoadFeed) {
+      // since Firefox 42 clicking 'Subscribe to This Page' always show
+      // 'Subscribe to this feed' page
+      let subscribe = Tabmix.isVersion(420) ||
+          Services.prefs.getCharPref("browser.feeds.handler") == "ask";
+      let openNewTab = subscribe && Tabmix.whereToOpen(this.prefBookmark).inNew;
+      if (openNewTab) {
+        where = "tab";
+        params.inBackground = getBoolPref("browser.tabs.loadBookmarksInBackground");
+      } else {
+        win.gBrowser.selectedBrowser.tabmix_allowLoad = true;
+      }
+    } else {
+      where = win.Tabmix.checkCurrent(url);
+    }
+    return where;
   },
 
   isBookmarklet: function(url) {
@@ -187,8 +210,8 @@ var TMP_Places = {
             node.parent && node.parent.itemId == historyId;
         if (!historySelected)
           return this.prefBookmark;
-        /* falls through */
       }
+        /* falls through */
       case "chrome://browser/content/history/history-panel.xul":
         return this.prefHistory;
       case "chrome://browser/content/browser.xul":
@@ -312,7 +335,7 @@ var TMP_Places = {
       aTab.label = title;
       aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
-      gBrowser._tabAttrModified(aTab);
+      gBrowser._tabAttrModified(aTab, ["label", "crop"]);
       if (aTab.selected)
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))
@@ -380,8 +403,6 @@ var TMP_Places = {
   startObserver: function TMP_PC_startObserver() {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
-      if (!Tabmix.isVersion(210))
-        this.onBeforeItemRemoved = function() {};
       try {
         PlacesUtils.addLazyBookmarkObserver(this);
         this._hasBookmarksObserver = true;
@@ -406,7 +427,7 @@ var TMP_Places = {
   },
 
   // extensions.tabmix.titlefrombookmark changed
-  onPreferencChanged: function(aPrefValue) {
+  onPreferenceChanged: function(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
@@ -438,7 +459,7 @@ var TMP_Places = {
     Ci.nsINavBookmarkObserver
   ]),
 
-  addItemIdtoTabsWithUrl: function TMP_PC_addItemIdtoTabsWithUrl(aItemId, aUrl) {
+  addItemIdToTabsWithUrl: function TMP_PC_addItemIdToTabsWithUrl(aItemId, aUrl) {
     if (this.inUpdateBatch) {
       this._batchData.add.ids.push(aItemId);
       this._batchData.add.urls.push(aUrl);
@@ -461,7 +482,7 @@ var TMP_Places = {
     this.afterTabTitleChanged();
   },
 
-  updateTitleonTabs: function TMP_PC_updateTitleonTabs(aItemId) {
+  updateTabsTitleForId: function TMP_PC_updateTabsTitleForId(aItemId) {
     if (this.inUpdateBatch) {
       this._batchData.updateIDs.push(aItemId);
       return;
@@ -490,13 +511,13 @@ var TMP_Places = {
       return;
     var url = aURI ? aURI.spec : null;
     if (url && !isBlankPageURL(url))
-      this.addItemIdtoTabsWithUrl(aItemId, url);
+      this.addItemIdToTabsWithUrl(aItemId, url);
   },
 
   onItemRemoved: function TMP_PC_onItemRemoved(aItemId, aFolder, aIndex, aItemType) {
     if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
       return;
-    this.updateTitleonTabs(aItemId);
+    this.updateTabsTitleForId(aItemId);
   },
 
   // onItemChanged also fired when page is loaded (visited count changed ?)
@@ -507,8 +528,8 @@ var TMP_Places = {
       return;
 
     if (aProperty == "uri" && aNewValue && !isBlankPageURL(aNewValue))
-      this.addItemIdtoTabsWithUrl(aItemId, aNewValue);
-    this.updateTitleonTabs(aItemId);
+      this.addItemIdToTabsWithUrl(aItemId, aNewValue);
+    this.updateTabsTitleForId(aItemId);
   },
 
   onBeginUpdateBatch: function TMP_PC_onBeginUpdateBatch() {
@@ -525,9 +546,9 @@ var TMP_Places = {
     this.inUpdateBatch = false;
     var [updateIDs, addIDs, addURLs] = [data.updateIDs, data.add.ids, data.add.urls];
     if (addIDs.length)
-      this.addItemIdtoTabsWithUrl(addIDs, addURLs);
+      this.addItemIdToTabsWithUrl(addIDs, addURLs);
     if (updateIDs.length)
-      this.updateTitleonTabs(updateIDs);
+      this.updateTabsTitleForId(updateIDs);
 
     this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
 
@@ -637,7 +658,7 @@ Tabmix.onContentLoaded = {
         'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
         {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         '  if (TabmixTabbar._enablePositionCheck &&\n  ' +
         '      TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition) {\n  ' +
@@ -663,7 +684,6 @@ Tabmix.onContentLoaded = {
       '  TabmixTabbar.updateScrollStatus();' +
       '  TabmixTabbar.updateBeforeAndAfter();'
     ).toCode();
-
   },
 
   change_utilityOverlay: function() {
@@ -685,11 +705,12 @@ Tabmix.onContentLoaded = {
     )._replace(
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +
-      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick"];' + $LF +
-      'let pref = Tabmix.isCallerInList(list) ?' + $LF +
+      'let callerTrace = Tabmix.callerTrace();' + $LF +
+      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick", "BG_observe"];' + $LF +
+      'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
       'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
-      '                        Tabmix.callerName() != "onPopupClick";' + $LF +
+      '                        !callerTrace.contain("onPopupClick");' + $LF +
       'if (notOneClickSearch && getBoolPref(pref, true))' + $LF +
       '  shift = !shift;' + $LF +
       '$&' + $LF +
@@ -705,11 +726,11 @@ Tabmix.onContentLoaded = {
     Tabmix.changeCode(fnObj, fnName)._replace(
       '{',
       '{\n' +
-      '  let tabmixCaller = Tabmix.getCallerNameByIndex(2);\n' +
-      '  if (tabmixCaller == "BG_observe") {\n' +
+      '  let callerTrace = Tabmix.callerTrace();\n' +
+      '  if (callerTrace.contain("BG_observe")) {\n' +
       '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
-      '      tabmixCaller == "ReaderParent.toggleReaderMode") {\n' +
+      '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '  }\n'
     )._replace(
@@ -723,7 +744,7 @@ Tabmix.onContentLoaded = {
       'var w = getTopWin();',
       '$&\n' +
       '  if (w && where == "window" &&\n' +
-      '      !Tabmix.isNewWindowAllow(Tabmix.isVersion(200) ? aIsPrivate : false)) {\n' +
+      '      !Tabmix.isNewWindowAllow(aIsPrivate)) {\n' +
       '    where = "tab";\n' +
       '  }'
     )._replace(
@@ -733,7 +754,7 @@ Tabmix.onContentLoaded = {
       '        newWin.bookMarkIds = bookMarkId;\n' +
       '    }'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  var tab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
       '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
@@ -747,13 +768,15 @@ Tabmix.onContentLoaded = {
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
   // object name wmn replace with xnotifier for version 3.0+
   getXnotifierFunction: function(aName) {
+    let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(function(f) {
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });
-      if (fn.length)
+      if (fn.length) {
         return [com.tobwithu[fn[0]], aName];
+      }
     }
     return [window, aName];
   }

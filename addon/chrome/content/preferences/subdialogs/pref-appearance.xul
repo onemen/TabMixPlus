@@ -10,10 +10,9 @@
 %appearanceDTD;
 ]>
 
-<dialog id="pref-TMPstyles"
+<dialog id="pref-TMP-styles"
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help,extra2"
         ondialoghelp="tabstyles.openHelp();"
         title="&styles.label;"
@@ -21,7 +20,7 @@
         onload="tabstyles.init();"
         ondialogcancel="tabstyles.cancel();"
         ondialogaccept="tabstyles.save();"
-        ondialogextra2="tabstyles.toggleRGBvisibility();">
+        ondialogextra2="tabstyles.toggleRGB_visibility();">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.js"/>

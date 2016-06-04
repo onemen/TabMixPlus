@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Zum Aktivieren dieser Option die &quot;Neuer Tab&quot;-Schaltfläche auf die Tab-Leiste ziehen">
 <!ENTITY hideTabBarButton.label "&quot;Tab schließen&quot;-Schaltfläche">
 <!ENTITY newTabButton.label "&quot;Neuer Tab&quot;-Schaltfläche">
-<!ENTITY newTabButton.posiotion.left.label "auf der linken Seite">
-<!ENTITY newTabButton.posiotion.right.label "auf der rechten Seite">
-<!ENTITY newTabButton.posiotion.afterlast.label "nach letztem Tab">
+<!ENTITY newTabButton.position.left.label "auf der linken Seite">
+<!ENTITY newTabButton.position.right.label "auf der rechten Seite">
+<!ENTITY newTabButton.position.afterlast.label "nach letztem Tab">
 <!ENTITY allTabsButton.label "&quot;Alle Tabs auflisten&quot;-Schaltfläche">
 <!ENTITY tabBarSpace.label "Abstände auf beiden Seiten der Tab-Leiste">
 <!ENTITY tabBarSpace.tooltip "Für Klicks sowie Ziehen &amp; Ablegen auf die Tab-Leiste">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Platzierungsanzeige beim Verschieben von Tabs">
 <!ENTITY dropIndicator-native.label "Firefox-Stil">
 <!ENTITY dropIndicator-builtin.label "TMP-Stil">
-<!ENTITY verticalTabbar.description "Verwenden Sie die Einstellungen der Erweiterungen &quot;Tree Style Tab&quot; oder &quot;Vertical Tabs&quot; für diese Einstellungen.">
+<!ENTITY verticalTabbar.description1 "Diese Einstellungen werden von einer anderen Erweiterung, wie Vertical Tabs, gesteuert.">
 <!ENTITY tabBarPosition.label "Position der Tab-Leiste:">
 <!ENTITY tabBarPosition.top.label "oberhalb des Inhaltsbereichs">
 <!ENTITY tabBarPosition.bottom.label "unterhalb des Inhaltsbereichs">

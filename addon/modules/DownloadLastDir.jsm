@@ -1,6 +1,5 @@
 /// "use strict";
 
-/* jshint strict: false */
 /* eslint strict: 0 */
 
 this.EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
@@ -23,7 +22,7 @@ this.TabmixDownloadLastDir = {
     this._initialized = true;
 
     // original DownloadLastDir.jsm query Ci.nsILoadContext on this.window,
-    // it faile if we already closed the tab that initialized the download
+    // it fails if we already closed the tab that initialized the download
     // with TypeError: can't access dead object
     let descriptor = {
       get: function() {

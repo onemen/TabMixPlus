@@ -105,7 +105,7 @@ ContentClickInternal = {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
-      // 'default', original ContentClick.contentAreaClick handle all casses
+      // 'default', original ContentClick.contentAreaClick handle all cases
       // except when 'where' equals 'current'
       if (!json.tabmixContentClick || !json.href || json.bookmark) {
         return;
@@ -129,7 +129,9 @@ ContentClickInternal = {
       try {
         if (!PrivateBrowsingUtils.isWindowPrivate(window))
           PlacesUIUtils.markPageAsFollowedLink(json.href);
-      } catch (ex) { /* Skip invalid URIs. */ }
+      } catch (ex) {
+        /* Skip invalid URIs. */
+      }
     };
   },
 
@@ -180,11 +182,6 @@ ContentClickInternal = {
   },
 
   getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
-    if (browser.getAttribute("remote") == "true" &&
-        TabmixSvc.syncHandlers.has(browser.permanentKey)) {
-      let handler = TabmixSvc.syncHandlers.get(browser.permanentKey);
-      linkNode = handler.wrapNode(linkNode);
-    }
     let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button === 0);
     return this._getParamsForLink(event, wrappedNode, href, browser);
   },
@@ -311,7 +308,7 @@ ContentClickInternal = {
         * Get current page url
         * if user click a link while the page is reloading node.ownerDocument.location can be null
         */
-        let youtube = /www\.youtube\.com\/watch\?v\=/;
+        let youtube = /www\.youtube\.com\/watch\?v=/;
         let curpage = this.currentURL;
         if (!youtube.test(curpage)) {
           let node = this.wrappedNode || this.wrappedOnClickNode;
@@ -337,7 +334,7 @@ ContentClickInternal = {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
-        if (SubmitToTab.contentAreaClick(event) === false) {
+        if (this._window.SubmitToTab.SubmitToTab.contentAreaClick(event) === false) {
           return ["default@1"];
         }
       }
@@ -391,7 +388,7 @@ ContentClickInternal = {
     }
 
     // check this after we check for suppressTabsOnFileDownload
-    // for the case the link have a matche in our list
+    // for the case the link have a match in our list
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       return ["current@9"];
 
@@ -454,12 +451,7 @@ ContentClickInternal = {
   contentLinkClick: function(event, browser, focusedWindow) {
     this._contentLinkClick(event, browser, focusedWindow);
     if (event.__hrefFromOnClick) {
-      if (TabmixSvc.version(220))
-        event.stopImmediatePropagation();
-      else {
-        event.stopPropagation();
-        browser.ownerDocument.defaultView.contentAreaClick(event);
-      }
+      event.stopImmediatePropagation();
     }
     this.resetData();
   },
@@ -470,15 +462,16 @@ ContentClickInternal = {
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
   _contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
-    aEvent.tabmix_isRemote = aBrowser.getAttribute("remote") == "true";
-    if (aEvent.tabmix_isRemote)
+    let ownerDoc = aBrowser.ownerDocument;
+    let win = ownerDoc.defaultView;
+    aEvent.tabmix_isMultiProcessBrowser = win.gMultiProcessBrowser;
+    if (aEvent.tabmix_isMultiProcessBrowser) {
       return "1";
+    }
 
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return "2";
 
-    let ownerDoc = aBrowser.ownerDocument;
-    let win = ownerDoc.defaultView;
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
       let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
@@ -577,7 +570,9 @@ ContentClickInternal = {
         // for the moment just do it for Google and Yahoo....
         // tvguide.com    - added 2013-07-20
         // duckduckgo.com - added 2014-12-24
-        blocked = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com/.test(currentHref);
+        // jetbrains.com - added 2016-05-01
+        let re = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com|jetbrains.com/;
+        blocked = re.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
            (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
@@ -597,7 +592,7 @@ ContentClickInternal = {
       let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
       // in Firefox 17.0-20.0 we can't pass aEvent.__where to handleLinkClick
-      // add 4th argumens with where value
+      // add 4th arguments with where value
       this._window.handleLinkClick(aEvent, aEvent.__hrefFromOnClick || href, linkNode, {where: aEvent.__where});
       aEvent.stopPropagation();
       aEvent.preventDefault();
@@ -648,11 +643,8 @@ ContentClickInternal = {
     }
 
     // don't interrupt with fastdial links
-    if ("ownerDocument" in node &&
-        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI))
-      return true;
-
-    return false;
+    return "ownerDocument" in node &&
+        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI);
   },
 
   /**
@@ -746,6 +738,7 @@ ContentClickInternal = {
 
     var testString, hrefExt, testExt;
     for (var l = 0; l < filetype.length; l++) {
+      let doTest = true;
       if (filetype[l].indexOf("/") != -1) {
       // add \ before first ?
         testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
@@ -757,13 +750,15 @@ ContentClickInternal = {
           // prevent filetype catch if it is in the middle of a word
           testExt = new RegExp(testString + "[a-z0-9?.]+", 'i');
           if (testExt.test(hrefExt))
-            continue;
+            doTest = false;
         } catch (ex) {}
       }
       try {
-        testExt = new RegExp(testString, 'i');
-        if (testExt.test(hrefExt))
-          return true;
+        if (doTest) {
+          testExt = new RegExp(testString, 'i');
+          if (testExt.test(hrefExt))
+            return true;
+        }
       } catch (ex) {}
     }
     return false;
@@ -796,10 +791,7 @@ ContentClickInternal = {
       return false;
 
     let {event} = this._data;
-    if (event.button == 1 || event.button === 0 && (event.ctrlKey || event.metaKey))
-      return true;
-
-    return false;
+    return event.button == 1 || event.button === 0 && (event.ctrlKey || event.metaKey);
   },
 
   /**
@@ -839,10 +831,7 @@ ContentClickInternal = {
         this.targetPref == 2 && this._data.isLinkToExternalDomain)
       return false;
 
-    if (this.checkOnClick())
-      return false;
-
-    return true;
+    return !this.checkOnClick();
   },
 
   /**
@@ -873,16 +862,13 @@ ContentClickInternal = {
       return false;
 
     let {href, hrefFromOnClick, isLinkToExternalDomain, wrappedNode} = this._data;
-    if (/^(http|about)/.test(hrefFromOnClick || href) &&
+    return /^(http|about)/.test(hrefFromOnClick || href) &&
         (isLinkToExternalDomain || wrappedNode &&
-        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt")))
-      return true;
-
-    return false;
+        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt"));
   },
 
   /**
-   * @brief Open links in new tabs when tab is lock or preference is to always opne tab from links.
+   * @brief Open links in new tabs when tab is lock or preference is to always open tab from links.
    *
    * @returns null if the caller need to handled the click,
               true to load link in new tab
@@ -899,12 +885,12 @@ ContentClickInternal = {
     if (!/^(http|about)/.test(hrefFromOnClick || href))
       return null;
 
-    // don't open new tab from facebook chat settings
-    if (/www\.facebook\.com\/ajax/.test(href))
+    // don't open new tab from facebook chat and settings
+    if (/www\.facebook\.com\/(?:ajax|settings)/.test(href))
       return false;
 
     let current = this._data.currentURL.toLowerCase();
-    let youtube = /www\.youtube\.com\/watch\?v\=/;
+    let youtube = /www\.youtube\.com\/watch\?v=/;
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
     let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
@@ -913,8 +899,8 @@ ContentClickInternal = {
       hrefFromOnClick = hrefFromOnClick.toLowerCase();
       if (isYoutube(hrefFromOnClick))
         return !isSamePath(hrefFromOnClick, '&t=');
-      else
-        return !isSame(hrefFromOnClick, '#');
+
+      return !isSame(hrefFromOnClick, '#');
     }
 
     if (href)
@@ -927,9 +913,9 @@ ContentClickInternal = {
       return null;
     else if (isYoutube(href))
       return !isSamePath(href, '&t=');
-    else
-      // when the links target is in the same page don't open new tab
-      return !isSame(href, '#');
+
+    // when the links target is in the same page don't open new tab
+    return !isSame(href, '#');
   },
 
   /**
@@ -958,11 +944,7 @@ ContentClickInternal = {
       return true;
 
     let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
-    let testHost = _host.indexOf(node.host) > -1;
-    if (testHost)
-      return true;
-
-    return false;
+    return _host.indexOf(node.host) > -1;
   },
 
   /**
@@ -978,27 +960,23 @@ ContentClickInternal = {
     let isValidWindow = function(aWindow) {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
-      if ((TabmixSvc.version(200) &&
-           PrivateBrowsingUtils.isWindowPrivate(window) !=
-           PrivateBrowsingUtils.isWindowPrivate(aWindow)) ||
-          (TabmixSvc.version(320) &&
-           window.gMultiProcessBrowser != aWindow.gMultiProcessBrowser)) {
-        return false;
-      }
-      return true;
+      return PrivateBrowsingUtils.isWindowPrivate(window) ==
+          PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
+          (!TabmixSvc.version(320) ||
+          window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser);
     };
 
     let windows = [];
-    if (!!window.gBrowser && isValidWindow(window))
+    if (window.gBrowser && isValidWindow(window))
       windows.push(window);
 
     let winEnum = Services.wm.getEnumerator("navigator:browser");
     while (winEnum.hasMoreElements()) {
       let browserWin = winEnum.getNext();
-      if (browserWin.closed || browserWin == window)
-        continue;
-      if (isValidWindow(browserWin))
+      if (!browserWin.closed && browserWin != window &&
+          isValidWindow(browserWin)) {
         windows.push(browserWin);
+      }
     }
     this.isFrameInContent.start(windows, {href: href, name: targetFrame});
   },
@@ -1072,7 +1050,7 @@ ContentClickInternal = {
   *
   * @param target    The target link.
   * @param curpage   The current page url
-  * @returns         true when curpage and target are in diffrent domains
+  * @returns         true when curpage and target are in different domains
   *
   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {

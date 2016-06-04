@@ -3,8 +3,6 @@
 <!DOCTYPE overlay [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % tabsDTD SYSTEM "chrome://browser/locale/preferences/tabs.dtd">
-%tabsDTD;
 ]>
 
 <overlay id="SessionPaneOverlay"
@@ -22,14 +20,12 @@
                   type="int"/>
       <preference id="pref_sessionManagerAddon"
                   name="extensions.tabmix.sessionManagerAddon.isActive"      type="bool"
-                  onchange="gSessionPane.setVisiblecontent(this.value);"/>
+                  onchange="gSessionPane.setVisibleContent(this.value);"/>
       <preference id="pref_sessionManager"
                   name="extensions.tabmix.sessions.manager"                  type="bool"
                   onchange="gSessionPane.updateSessionShortcuts();"/>
       <preference id="pref_sessionCrashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"            type="bool"/>
-      <preference id="pref_browser.warnOnRestart"
-                  name="browser.warnOnRestart"                               type="bool"/>
       <preference id="pref_browser.warnOnQuit"
                   name="browser.warnOnQuit"                                  type="bool"/>
       <preference id="pref_browserStartupPage"
@@ -68,8 +64,6 @@
                   name="extensions.tabmix.sessions.restore.concatenate"      type="bool"/>
       <preference id="pref_onRestore.reloadall"
                   name="extensions.tabmix.sessions.restore.reloadall"        type="bool"/>
-      <preference id="pref_restore_on_demand"
-                  name="browser.sessionstore.restore_on_demand"              type="bool"/>
       <preference id="pref_session.History"
                   name="extensions.tabmix.sessions.save.history"             type="bool"/>
       <preference id="pref_session.Permissions"
@@ -104,7 +98,7 @@
                 <description> &sm.extension.description3;.</description>
               </vbox>
               <spacer flex="1"/>
-              <button style="min-width: 0px;" id="sessionmanager_button"
+              <button style="min-width: 0;" id="sessionmanager_button"
                       oncommand="gSessionPane.sessionManagerOptions();"/>
             </hbox>
             <separator class="groove"/>
@@ -120,7 +114,7 @@
             </radiogroup>
           </groupbox>
         </tabpanel>
-        <tabpanel id="sesionsPanel">
+        <tabpanel id="sessionsPanel">
           <groupbox align="start">
             <checkbox_tmp id="sessionsOptions" label="&ss.enable.label;"
                       tooltiptext="&ss.enable.tooltip;"
@@ -146,14 +140,14 @@
                   onselect="gPrefWindow.tabSelectionChanged(event);">
               <tab label="&sm.StartExit;" class="subtabs tabmix" helpTopic="Session_-_StartExit"/>
               <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Restore"/>
-              <tab label="tab" class="firefox" helpTopic="Session_-_StartExit"/>
+              <tab label="tab" disabled="true" class="firefox" helpTopic="Session_-_StartExit"/>
               <tab label="&sm.preserve;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Preserve"/>
             </tabs>
             <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels">
               <!-- Tabmix Session manager - start/exit -->
               <tabpanel>
                 <hbox>
-                  <groupbox style="min-width: 14.6em">
+                  <groupbox style="min-width: 14.6em;">
                     <caption label="&sm.start;"/>
                     <radiogroup id="onStart" align="start" preference="pref_onStart">
                       <radio value="0" id="onStart.restoresession" label="&sm.start.restore;"/>
@@ -215,11 +209,9 @@
                             preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
                   <checkbox_tmp id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
                   <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
-                  <checkbox id="restoreOnDemand" label="&restoreTabsOnDemand.label;"
-                            preference="pref_restore_on_demand"/>
                 </groupbox>
               </tabpanel>
-              <!-- Build-in SessionStore (we hide thid panel, don't put it in first or last tab)-->
+              <!-- Build-in SessionStore (we hide this panel, don't put it in first or last tab)-->
               <tabpanel orient="horizontal" flex="1">
                 <vbox>
                   <label value="&ss.advanced_setting;" class="header"

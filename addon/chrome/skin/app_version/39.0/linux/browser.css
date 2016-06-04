@@ -13,5 +13,6 @@
 #TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"]:not(:hover) .tab-close-button,
 #TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"]:not(:hover) .tab-close-button,
 #TabsToolbar[brighttext] > #tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]):not(:hover) > .tab-close-button {
+  /*noinspection CssInvalidFunction*/
   background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 16, 16, 0);
 }

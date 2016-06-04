@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+
+<!--suppress XmlUnusedNamespaceDeclaration -->
 <bindings id="DEPRECATED_tabxbindings_30"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"

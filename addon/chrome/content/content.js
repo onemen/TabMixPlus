@@ -1,7 +1,9 @@
 /* eslint mozilla/balanced-listeners:0 */
+/* globals content, docShell, addMessageListener, sendSyncMessage,
+           sendAsyncMessage, sendRpcMessage */
 "use strict";
 
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components; // jshint ignore:line
+var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
@@ -49,10 +51,6 @@ var TabmixContentHandler = {
 
   init: function() {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
-
-    // Send a CPOW to the parent so that it can synchronously request
-    // docShell capabilities.
-    sendSyncMessage("Tabmix:SetSyncHandler", {}, {syncHandler: this});
 
     if (PROCESS_TYPE_CONTENT) {
       addEventListener("drop", this.onDrop);
@@ -104,8 +102,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:setScrollPosition": {
-        let {x, y} = data;
-        content.scrollTo(x, y);
+        content.scrollTo(data.x, data.y);
         break;
       }
       case "Tabmix:collectReloadData": {
@@ -124,7 +121,7 @@ var TabmixContentHandler = {
             let referrer = entry.referrerURI;
             json.referrer = referrer ? referrer.spec : null;
           }
-          json.isPostData = !!json.postData;
+          json.isPostData = Boolean(json.postData);
         }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
@@ -145,19 +142,10 @@ var TabmixContentHandler = {
     return DocShellCapabilities.collect(docShell).join(",") || "";
   },
 
-  getSelectedLinks: function() {
-    return ContextMenu.getSelectedLinks(content).join("\n");
-  },
-
-  wrapNode: function(node) {
-    let window = TabmixClickEventHandler._focusedWindow;
-    return LinkNodeUtils.wrap(node, window);
-  },
-
   onDrop: function(event) {
     let uri, name = { };
-    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"].
-    getService(Ci.nsIDroppedLinkHandler);
+    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
+                        .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
       uri = linkHandler.dropLink(event, name, true);
@@ -182,7 +170,7 @@ var TabmixContentHandler = {
 
 TabmixClickEventHandler = {
   init: function init(global) {
-    if (PROCESS_TYPE_CONTENT) {
+    if (TabmixSvc.version(380)) {
       global.addEventListener("click", this, true);
     }
   },
@@ -196,8 +184,10 @@ TabmixClickEventHandler = {
   },
 
   contentAreaClick: function(event) {
+    // tabmix_isMultiProcessBrowser is undefined for remote browser when
+    // window.gMultiProcessBrowser is true
     if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
-        event.tabmix_isRemote === false) {
+        event.tabmix_isMultiProcessBrowser === false) {
       return;
     }
 
@@ -205,8 +195,9 @@ TabmixClickEventHandler = {
     let ownerDoc = originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (!ownerDoc || /^about:[certerror|blocked|neterror]/.test(ownerDoc.documentURI))
+    if (!ownerDoc || /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
       return;
+    }
 
     let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
 
@@ -217,9 +208,10 @@ TabmixClickEventHandler = {
     if (TabmixSvc.version(420) &&
         Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
         node) {
-      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(node.
-          getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer"));
-      if (referrerAttrValue !== Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT) {
+      let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
+      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
+      let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
+      if (referrerAttrValue !== Ci.nsIHttpChannel[policy]) {
         referrerPolicy = referrerAttrValue;
       }
     }
@@ -276,6 +268,25 @@ TabmixClickEventHandler = {
         }
       }
       json.noReferrer = TabmixSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
+
+      if (TabmixSvc.version(480)) {
+        // Check if the link needs to be opened with mixed content allowed.
+        // Only when the owner doc has |mixedContentChannel| and the same origin
+        // should we allow mixed content.
+        json.allowMixedContent = false;
+        let docshell = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
+            .getInterface(Ci.nsIWebNavigation)
+            .QueryInterface(Ci.nsIDocShell);
+        if (docShell.mixedContentChannel) {
+          const sm = Services.scriptSecurityManager;
+          try {
+            let targetURI = BrowserUtils.makeURI(href);
+            sm.checkSameOriginURI(docshell.mixedContentChannel.URI, targetURI, false);
+            json.allowMixedContent = true;
+          } catch (ex) {
+          }
+        }
+      }
 
       sendAsyncMessage("Content:Click", json);
       return;
@@ -382,6 +393,110 @@ var AboutNewTabHandler = {
   }
 };
 
+var ContextMenuHandler = {
+  init: function(global) {
+    Cc["@mozilla.org/eventlistenerservice;1"]
+      .getService(Ci.nsIEventListenerService)
+      .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+  },
+
+  prepareContextMenu: function(event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    let links;
+    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks") &&
+        typeof content.document.getSelection == "function") {
+      links = ContextMenu.getSelectedLinks(content).join("\n");
+    }
+
+    sendRpcMessage("Tabmix:contextmenu", {links: links});
+  }
+};
+
+const AMO = new RegExp("https://addons.mozilla.org/.+/firefox/addon/tab-mix-plus/");
+const BITBUCKET = "https://bitbucket.org/onemen/tabmixplus/issues?status=new&status=open";
+
+var TabmixPageHandler = {
+  init: function(global) {
+    global.addEventListener("DOMContentLoaded", this);
+  },
+
+  handleEvent: function(event) {
+    const doc = content.document;
+    if (event.target != doc) {
+      return;
+    }
+
+    let uri = doc.documentURI.toLowerCase();
+    if (AMO.exec(uri)) {
+      if (event.type == "DOMContentLoaded") {
+        this.count = 0;
+        content.addEventListener("pageshow", this);
+        this.createAMOButton();
+      }
+      this.moveAMOButton(event.type);
+    } else if (uri == BITBUCKET) {
+      this.styleBitbucket();
+    }
+  },
+
+  buttonID: "tabmixplus-bug-report",
+  createAMOButton: function() {
+    const doc = content.document;
+    const email = doc.querySelector('ul>li>.email[href="mailto:tabmix.onemen@gmail.com"]');
+    if (email && !doc.getElementById(this.buttonID)) {
+      const bugReport = doc.createElement("a");
+      bugReport.href = BITBUCKET;
+      bugReport.textContent = TabmixSvc.getString("bugReport.label");
+      bugReport.id = this.buttonID;
+      bugReport.className = "button";
+      bugReport.target = "_blank";
+      bugReport.style.marginBottom = "4px";
+      let ul = email.parentNode.parentNode;
+      ul.parentNode.insertBefore(bugReport, ul);
+    }
+  },
+
+  count: 0,
+  moveAMOButton: function(eventType) {
+    const doc = content.document;
+    // add-review is null on DOMContentLoaded
+    const addReview = doc.getElementById("add-review");
+    if (eventType != "pageshow" && !addReview && this.count++ < 10) {
+      this._timeoutID = setTimeout(() => {
+        // make sure content exist after timeout
+        if (content) {
+          this.moveAMOButton("timeout");
+        }
+      }, 250);
+      return;
+    }
+    if (eventType == "pageshow" || addReview) {
+      content.removeEventListener("pageshow", this);
+    }
+    if (addReview && this._timeoutID) {
+      clearTimeout(this._timeoutID);
+      this._timeoutID = null;
+    }
+    let button = doc.getElementById(this.buttonID);
+    if (addReview && button) {
+      addReview.parentNode.insertBefore(button, addReview);
+    }
+  },
+
+  styleBitbucket: function() {
+    let createIssue = content.document.getElementById("create-issue-contextual");
+    if (createIssue) {
+      createIssue.classList.remove("aui-button-subtle");
+      createIssue.classList.add("aui-button-primary");
+    }
+  },
+};
+
 TabmixContentHandler.init();
 TabmixClickEventHandler.init(this);
 AboutNewTabHandler.init(this);
+ContextMenuHandler.init(this);
+TabmixPageHandler.init(this);

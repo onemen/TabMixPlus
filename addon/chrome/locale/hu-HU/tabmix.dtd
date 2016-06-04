@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "z">
 <!ENTITY closeTabsToLeft.label "Balra lévő lapok bezárása">
 <!ENTITY closeleft.accesskey "a">
-<!ENTITY closeTabstoRight.label "Jobbra lévő lapok bezárása">
-<!ENTITY closeright.accesskey "o">
 <!ENTITY docShellMenu.label "Engedélyek">
 <!ENTITY docShellMenu.accesskey "E">
 <!ENTITY freezeTabMenu.label "Lapfagyasztás">

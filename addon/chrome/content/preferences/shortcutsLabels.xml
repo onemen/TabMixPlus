@@ -7,6 +7,7 @@
 %shortcutsDTD;
 ]>
 
+<!--suppress XmlUnusedNamespaceDeclaration -->
 <bindings id="tmp_shortcuts_labels"
           xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"

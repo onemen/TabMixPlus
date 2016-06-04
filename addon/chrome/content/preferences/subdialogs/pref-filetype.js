@@ -32,9 +32,10 @@ function FillData() {
 
   items = data.split(' ');
   for (var i = 0; i < items.length; ++i) {
-    if (items[i] === "") continue;
-    item = items[i].trim();
-    list.appendItem(item, item.toLowerCase());
+    if (items[i] !== "") {
+      item = items[i].trim();
+      list.appendItem(item, item.toLowerCase());
+    }
   }
 
   list.selectedIndex = 0;
@@ -102,7 +103,7 @@ function Input() {
     setButtonDisable(edit, true);
     setButtonDisable(add, true);
   } else {
-    // chack if the input value is in the list
+    // check if the input value is in the list
     var items = list.getElementsByAttribute("value", entry.value.toLowerCase());
     if (items.length > 0) {
       SelectItemAt(list.getIndexOfItem(items[0]), false);

@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "A">
 <!ENTITY closeTabsToLeft.label "Zavřít panely nalevo">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Zavřít panely napravo">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Oprávnění">
 <!ENTITY docShellMenu.accesskey "O">
 <!ENTITY freezeTabMenu.label "Zmrazit panel">

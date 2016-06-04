@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "גרור כפתור &apos;לשונית חדשה לסרגל הלשונית">
 <!ENTITY hideTabBarButton.label "לחצן סגור לשונית">
 <!ENTITY newTabButton.label "לחצן לשונית חדשה">
-<!ENTITY newTabButton.posiotion.left.label "בצד שמאל">
-<!ENTITY newTabButton.posiotion.right.label "בצד ימין">
-<!ENTITY newTabButton.posiotion.afterlast.label "סמוך ללשונית האחרונה">
+<!ENTITY newTabButton.position.left.label "בצד שמאל">
+<!ENTITY newTabButton.position.right.label "בצד ימין">
+<!ENTITY newTabButton.position.afterlast.label "סמוך ללשונית האחרונה">
 <!ENTITY allTabsButton.label "כל לחצני הלשוניות">
 <!ENTITY tabBarSpace.label "רווח נוסף משני הצדדים">
 <!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "מיקום">
 <!ENTITY tabBarPosition.top.label "למעלה (מעל תוכן)">
 <!ENTITY tabBarPosition.bottom.label "למטה (מתחת תוכן)">

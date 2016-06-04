@@ -14,7 +14,7 @@ var tablib = { // eslint-disable-line
     this.addNewFunctionsTo_gBrowser();
   },
 
-  _loadURIWithFlagsinitialized: false,
+  _loadURIWithFlagsInitialized: false,
   setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
@@ -24,9 +24,9 @@ var tablib = { // eslint-disable-line
     // added _loadURIWithFlags to browser.js (Firefox 36+)
     var obj, name;
     if (Tabmix.isVersion(360)) {
-      if (this._loadURIWithFlagsinitialized)
+      if (this._loadURIWithFlagsInitialized)
         return;
-      this._loadURIWithFlagsinitialized = true;
+      this._loadURIWithFlagsInitialized = true;
       [obj, name] = [window, "window._loadURIWithFlags"];
     } else {
       [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
@@ -41,7 +41,7 @@ var tablib = { // eslint-disable-line
       '  if (tabmixResult)\n' +
       '    return tabmixResult;\n'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  return null;\n' +
       '$1$2'
     )._replace(
@@ -94,11 +94,11 @@ var tablib = { // eslint-disable-line
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlaged = flag => !!(flags & Ci.nsIWebNavigation[flag]);
+      let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
       params.inBackground = false;
-      params.allowThirdPartyFixup = isFlaged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
-      params.fromExternal = isFlaged("LOAD_FLAGS_FROM_EXTERNAL");
-      params.allowMixedContent = isFlaged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+      params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+      params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
+      params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
       return gBrowser.loadOneTab(uri, params);
     }
     browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
@@ -118,7 +118,10 @@ var tablib = { // eslint-disable-line
     let exceptionList = {
       // secureLogin extension expect to execute the login in the current page
       // https://addons.mozilla.org/en-us/firefox/addon/secure-login/?src=ss
-      secureLogin: "secureLogin.login"
+      secureLogin: "secureLogin.login",
+      // https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/
+      // paneSession.clearData load about.blank to all opened tabs in the active window
+      tabGroups: "paneSession.clearData",
     };
     let keys = Object.keys(exceptionList);
     let isInstalled = keys.some(function(item) {
@@ -133,108 +136,101 @@ var tablib = { // eslint-disable-line
   },
 
   change_gBrowser: function change_gBrowser() {
-    var obj, fnName;
-    // RequestPolicy Continued extension https://requestpolicycontinued.github.io
-    var rp = gBrowser.rpcontinuedWrappedFunctions;
-    if (typeof rp == "object" && typeof rp.addTab == "object" &&
-        typeof rp.addTab.main == "function") {
-      [obj, fnName] = [rp.addTab, "rpcontinuedWrappedFunctions.addTab.main"];
-    } else if (typeof Fd == "object" && typeof Fd.addTab == "function") {
-      [obj, fnName] = [Fd, "Fd.addTab"];
-    } else if (Tabmix.extensions.ieTab2) {
-      [obj, fnName] = [Tabmix.originalFunctions, "oldAddTab"];
-    // NRA-ILA toolbar extension raplce the original addTab function
-    } else if ("origAddTab7c3de167ed6f494aa652f11a71ecb40c" in gBrowser) {
-      [obj, fnName] = [gBrowser, "origAddTab7c3de167ed6f494aa652f11a71ecb40c"];
-    } else {
-      [obj, fnName] = [gBrowser, "addTab"];
-    }
+    Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
+    gBrowser.addTab = function(...args) {
+      let dontMove, isPending, referrerURI, relatedToCurrent = null,
+          callerTrace = Tabmix.callerTrace(),
+          isRestoringTab = callerTrace.contain("ssi_restoreWindow"),
+          // new tab can trigger selection change by some extensions (divX HiQ)
+          // see use below
+          selectedTab = this.selectedTab,
+          lastRelatedTab = this._lastRelatedTab;
 
-    Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      '{', '{\n' +
-      '            let dontMove, isPending, callerName = Tabmix.callerName(),\n' +
-      '                isRestoringTab = callerName == "ssi_restoreWindow";\n'
-    )._replace(
-      'let params = arguments[1];',
-      '$&\n' +
-      '              params = tablib.definedParams(params);\n' +
-      '              dontMove              = params.dontMove;\n' +
-      '              isPending             = params.isPending;'
-    )._replace(
-      't.setAttribute("label", aURI);',
-      't.setAttribute("label", TabmixTabbar.widthFitTitle && !aURI.startsWith("about") ?\n' +
-      '                              this.mStringBundle.getString("tabs.connecting") : aURI);',
-      {check: !Tabmix.isVersion(280)}
-    )._replace(
-      't.className = "tabbrowser-tab";',
-      '$&\
-       t.setAttribute("last-tab", "true"); \
-       if (isPending || isRestoringTab && Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) \
-         t.setAttribute("tabmix_pending", "true"); \
-       var lastChild = this.tabContainer.lastChild; \
-       if (lastChild) lastChild.removeAttribute("last-tab");'
-    )._replace(
-      'this._lastRelatedTab = t;',
-      'if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {\
-         TMP_LastTab.attachTab(t, _lastRelatedTab);\
-         $&\
-       }'
-    )._replace(
-      'this.selectedTab)._tPos + 1', '_selectedTab)._tPos + 1'
-    )._replace(
-      /*
-        replace Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")
-        before we use it in the next section.
-      */
-      'Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")',
-      'openTabnext'
-    )._replace(
-      't.dispatchEvent(evt);',
-      'var _selectedTab = this.selectedTab;' +
-      'var _lastRelatedTab = this._lastRelatedTab;' +
-      't.dispatchEvent(evt);' +
-      'var openTabnext = Tabmix.prefs.getBoolPref("openTabNext");' +
-      'if (openTabnext) {' +
-      '  if (dontMove || Tabmix.dontMoveNewTab(callerName))' +
-      '    openTabnext = false;' +
-      '  else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent"))' +
-      '    aRelatedToCurrent = true;' +
-      '}'
-    )._replace(//  new tab can trigger selection change by some extensions (divX HiQ)
-      't.owner = this.selectedTab;', 't.owner = _selectedTab;'
-    ).toCode();
-
-    Tabmix.dontMoveNewTab = function(caller) {
-      if (caller == "ssi_restoreWindow" ||
-          caller == "ssi_duplicateTab") {
-        return true;
+      // we prevents the original function from moving the new tab by setting
+      // params.relatedToCurrent to false
+      let params = args[1];
+      if (args.length <= 6 && params &&
+          (typeof params != "object" || params instanceof Ci.nsIURI)) {
+        referrerURI = params;
+        params = {
+          referrerURI: referrerURI,
+          charset: args[2],
+          postData: args[3],
+          ownerTab: args[4],
+          allowThirdPartyFixup: args[5],
+          relatedToCurrent: false
+        };
+        let uri = args[0];
+        args = [uri, params];
+      } else if (args.length == 2 &&
+          typeof params == "object" &&
+          !(params instanceof Ci.nsIURI)) {
+        dontMove = params.dontMove;
+        isPending = params.isPending;
+        referrerURI = params.referrerURI;
+        relatedToCurrent = params.relatedToCurrent || null;
+        params.relatedToCurrent = false;
+        args[1] = params;
       }
-      return false;
+
+      let openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
+      if (openTabnext) {
+        let dontMoveNewTab = dontMove ||
+            callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
+        if (dontMoveNewTab) {
+          openTabnext = false;
+        } else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) {
+          relatedToCurrent = true;
+        }
+        let checkToOpenTabNext = (relatedToCurrent === null ? referrerURI : relatedToCurrent) && openTabnext;
+        TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
+      }
+
+      let tab = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
+
+      if (isPending || isRestoringTab &&
+          Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
+        tab.setAttribute("tabmix_pending", "true");
+      }
+
+      if ((relatedToCurrent === null ? referrerURI : relatedToCurrent) &&
+          openTabnext) {
+        let newTabPos = (this._lastRelatedTab || selectedTab)._tPos + 1;
+        if (this._lastRelatedTab) {
+          this._lastRelatedTab.owner = null;
+        } else {
+          tab.owner = selectedTab;
+        }
+        this.moveTabTo(tab, newTabPos);
+        if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
+          TMP_LastTab.attachTab(tab, lastRelatedTab);
+          this._lastRelatedTab = tab;
+        }
+      }
+      return tab;
     };
 
-    // ContextMenu Extensions raplce the original removeTab function
-    var _removeTab = "removeTab";
-    if ("__ctxextensions__removeTab" in gBrowser)
-      _removeTab = "__ctxextensions__removeTab";
-
-    // we add compatibility fix for tabGroupManager here
-    // so we don't have to work on the same function twice.
-    Tabmix.changeCode(gBrowser, "gBrowser." + _removeTab)._replace(
-      '{',
-      '{\n' +
-       '            if (aTab.hasAttribute("protected"))\n' +
-       '              return;\n' +
-       '            let lastTabInGroup = this.visibleTabs.length == 1;\n' +
-       '            if (lastTabInGroup && Tabmix.prefs.getBoolPref("keepLastTab"))\n' +
-       '              return;\n' +
-       '            if ("clearTimeouts" in aTab)\n' +
-       '              aTab.clearTimeouts();'
-    )._replace(
-      // fix bug in TGM when closeing last tab in a group with animation
-      'if (aParams)',
-      'if (lastTabInGroup) {aParams ? aParams.animate = false : aParams = {animate: false}};\
-       $&', {check: Tabmix.extensions.tabGroupManager}
-    ).toCode();
+    Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
+    gBrowser.removeTab = function(aTab, aParams = {}, ...args) {
+      let result;
+      if (!aTab || aTab.hasAttribute("protected")) {
+        return result;
+      }
+      let lastTabInGroup = this.visibleTabs.length == 1;
+      if (lastTabInGroup) {
+        if (Tabmix.prefs.getBoolPref("keepLastTab")) {
+          return result;
+        }
+        // fix bug in TGM when closing last tab in a group with animation
+        if (Tabmix.extensions.tabGroupManager) {
+          aParams.animate = false;
+        }
+      }
+      if (typeof aTab.clearTimeouts == "function") {
+        aTab.clearTimeouts();
+      }
+      return Tabmix.originalFunctions.gBrowser_removeTab.apply(this, [aTab, aParams, ...args]);
+    };
 
     // changed by bug #563337
     if (!Tabmix.extensions.tabGroupManager) {
@@ -265,22 +261,22 @@ var tablib = { // eslint-disable-line
        $&'
     ).toCode();
 
-    Tabmix.changeCode(gBrowser, "gBrowser._blurTab")._replace(
-      'if (aTab.owner &&',
-      'if (false &&'
-    )._replace(
-      'var tab = aTab;',
-      'var tab, newIndex = this.selectIndexAfterRemove(aTab);\
-       if (newIndex > -1) {\
-         let tabs = TMP_TabView.currentGroup();\
-         tab = tabs[newIndex];\
-         if (tab && !tab.closing) {\
-           this.selectedTab = tab;\
-           return;\
-         }\
-       }\
-       tab = aTab;'
-    ).toCode();
+    Tabmix.originalFunctions.gBrowser_blurTab = gBrowser._blurTab;
+    gBrowser._blurTab = function(aTab) {
+      if (!aTab.selected)
+        return;
+
+      let newIndex = this.selectIndexAfterRemove(aTab);
+      if (newIndex > -1) {
+        let tabs = TMP_TabView.currentGroup();
+        let tab = tabs[newIndex];
+        if (tab && !tab.closing) {
+          this.selectedTab = tab;
+          return;
+        }
+      }
+      Tabmix.originalFunctions.gBrowser_blurTab.apply(this, arguments);
+    };
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
@@ -297,12 +293,13 @@ var tablib = { // eslint-disable-line
         '{',
         '{try {'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '} catch (ex) {} \
          $1$2'
       ).toCode();
     }
 
+    var obj, fnName;
     if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldSetTabTitle"];
     } else {
@@ -341,20 +338,6 @@ var tablib = { // eslint-disable-line
       'if (!aShow || TabmixTabbar.hideMode != 2) $&'
     ).toCode();
 
-    // Follow up bug 887515 - add ability to restore multiple tabs
-    // bug 914258 backout 887515 changes from Firefox 25
-    if (Tabmix._restoreMultipleTabs) {
-      Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
-        'let tabs = this.getTabsToTheEndFrom(aTab);',
-        '$&\n' +
-        '              Tabmix.startCountingClosedTabs();'
-      )._replace(
-        '#1.setNumberOfTabsClosedLast(window, numberOfTabsToClose);'.
-         replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
-        'Tabmix.setNumberOfTabsClosedLast();'
-      ).toCode();
-    }
-
     if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
       /*
        TabSwitchDone event fire late when the tab is busy, we call our
@@ -383,13 +366,13 @@ var tablib = { // eslint-disable-line
 
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
-      'this.adjustTabstrip',
-      'TabmixTabbar._handleResize(); \
-       $&'
-    ).toCode();
-
     if (!Tabmix.extensions.verticalTabs) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
+        'this.adjustTabstrip',
+        'TabmixTabbar._handleResize(); \
+         $&'
+      ).toCode();
+
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
@@ -425,7 +408,7 @@ var tablib = { // eslint-disable-line
         '  }' +
         '  else $&'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
         '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
         '}' +
@@ -434,7 +417,7 @@ var tablib = { // eslint-disable-line
     }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._handleNewTab")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       'TMP_eventListener.onTabOpen_delayUpdateTabBar(tab); \
        $1$2'
     ).toCode();
@@ -444,17 +427,13 @@ var tablib = { // eslint-disable-line
       Tabmix.changeCode(tabBar._prefObserver, "gBrowser.tabContainer._prefObserver.observe")._replace(
         'this.tabContainer.mCloseButtons = Services.prefs.getIntPref(data);',
         'break;'
-      )._replace(
-        'this.tabContainer.updateVisibility();', '', {check: !Tabmix.isVersion(230)}
       ).toCode();
     }
 
-    if (Tabmix.isVersion(230)) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
-        'window.toolbar.visible',
-        '$& && TabmixTabbar.hideMode == 0'
-      ).toCode();
-    }
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
+      'window.toolbar.visible',
+      '$& && TabmixTabbar.hideMode == 0'
+    ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(
@@ -486,7 +465,7 @@ var tablib = { // eslint-disable-line
         '  $&'
       ).toCode();
 
-      // _expandSpacerBy not exsit in Firefox 21
+      // _expandSpacerBy not exist in Firefox 21
       if (typeof tabBar._expandSpacerBy == "function") {
         Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandSpacerBy")._replace(
           '{',
@@ -499,7 +478,7 @@ var tablib = { // eslint-disable-line
         '          var updateScrollStatus = this.hasAttribute("using-closing-tabs-spacer") ||\n' +
         '                                   this._hasTabTempMaxWidth || this._hasTabTempWidth;'
       )._replace(
-        /(\})(\)?)$/,
+        /(})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
         '    this._hasTabTempWidth = false;' +
         '    let tabs = this.tabbrowser.visibleTabs;' +
@@ -518,7 +497,7 @@ var tablib = { // eslint-disable-line
     // before our mousedown handler can prevent it
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
       '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.isCallerInList("onxblmousedown")) return;'
+      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer.visible", {setter: true})._replace(
@@ -533,14 +512,12 @@ var tablib = { // eslint-disable-line
       '  }'
     ).defineProperty();
 
-    if (Tabmix.isVersion(220)) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
-        /(\})(\)?)$/,
-        '          Tabmix.setTabStyle(this.selectedItem);\n' +
-        '          TabmixTabbar.updateBeforeAndAfter();\n' +
-        '$1$2'
-      ).toCode();
-    }
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
+      /(})(\)?)$/,
+      '          Tabmix.setTabStyle(this.selectedItem);\n' +
+      '          TabmixTabbar.updateBeforeAndAfter();\n' +
+      '$1$2'
+    ).toCode();
   },
 
   change_utility: function change_utility() {
@@ -571,10 +548,10 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
-      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: !Tabmix.isVersion(250)}
+      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
-      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: Tabmix.isVersion(250)}
+      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: !TabmixSvc.isPaleMoon}
     ).toCode();
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
@@ -592,22 +569,28 @@ var tablib = { // eslint-disable-line
         arguments[1] = "tabshifted";
       }
 
+      if (where == window) {
+        return Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
+      }
+
+      let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
+          "openTabNext" : "openDuplicateNext";
+      let openTabNext = Tabmix.prefs.getBoolPref(pref);
+      TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
+
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
 
-      if (where != window) {
-        let pref = Tabmix.isCallerInList("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-            "openTabNext" : "openDuplicateNext";
-        let newTab = gBrowser.getTabForLastPanel();
-        if (Tabmix.prefs.getBoolPref(pref)) {
-          let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-          gBrowser.moveTabTo(newTab, aTab._tPos + pos);
-        }
-        let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
-        let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
-        if (selectNewTab) {
-          gBrowser.selectedTab = newTab;
-        }
+      let newTab = gBrowser.getTabForLastPanel();
+      if (openTabNext) {
+        let pos = newTab._tPos > aTab._tPos ? 1 : 0;
+        gBrowser.moveTabTo(newTab, aTab._tPos + pos);
       }
+      let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
+      let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
+      if (selectNewTab) {
+        gBrowser.selectedTab = newTab;
+      }
+
       return result;
     };
 
@@ -624,24 +607,21 @@ var tablib = { // eslint-disable-line
       Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
         /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
       )._replace(
-        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&',
-        {check: Tabmix.isVersion(200)}
+        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
       ).toCode();
 
-      if (Tabmix.isVersion(200)) {
-        Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
-          'openLinkIn(this.linkURL, "window",',
-          'var [win, where] = [window, "window"];\
-           if (Tabmix.singleWindowMode) {\
-             let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
-             if (pbWindow) {\
-               [win, where] = [pbWindow, "tab"];\
-               pbWindow.focus();\
-             }\
+      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
+        'openLinkIn(this.linkURL, "window",',
+        'var [win, where] = [window, "window"];\
+         if (Tabmix.singleWindowMode) {\
+           let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
+           if (pbWindow) {\
+             [win, where] = [pbWindow, "tab"];\
+             pbWindow.focus();\
            }\
-           win.openLinkIn(this.linkURL, where,'
-        ).toCode();
-      }
+         }\
+         win.openLinkIn(this.linkURL, where,'
+      ).toCode();
     }
 
     /**
@@ -757,11 +737,13 @@ var tablib = { // eslint-disable-line
     };
     Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
 
-    // Fix for Fast Dial
-    if ("BrowserGoHome" in window || "BrowserGoHome" in FdTabLoader) {
-      let loader = "FdTabLoader" in window && "BrowserGoHome" in FdTabLoader;
-      let obj = loader ? FdTabLoader : window;
-      fnName = loader ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
+    // Fix for old Fast Dial versions before 4.6.1
+    // https://addons.mozilla.org/en-us/firefox/addon/fast-dial/
+    let fastDial = window.FdTabLoader,
+        fdGoHome = fastDial && fastDial.BrowserGoHome;
+    if (window.BrowserGoHome || fdGoHome) {
+      let obj = fdGoHome ? window.FdTabLoader : window;
+      fnName = fdGoHome ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
       Tabmix.changeCode(obj, fnName)._replace(
         'var where = whereToOpenLink(aEvent, false, true);',
         '$&' +
@@ -789,8 +771,7 @@ var tablib = { // eslint-disable-line
     ).toCode();
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      Tabmix.isVersion(240) ? 'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)' :
-                              'gBrowser.warnAboutClosingTabs(true)',
+      'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
       'tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
@@ -811,8 +792,8 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
       'var appStartup',
-      'let closedtByToolkit = Tabmix.isCallerInList("toolkitCloseallOnUnload");' +
-      'if (!TabmixSessionManager.canQuitApplication(closedtByToolkit))' +
+      'let closedByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
+      'if (!TabmixSessionManager.canQuitApplication(closedByToolkit))' +
       '  return false;' +
       '$&'
     ).toCode();
@@ -820,12 +801,10 @@ var tablib = { // eslint-disable-line
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
-      'window = #1.undoCloseWindow(aIndex || 0);'.
-       replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
+      'window = #1.undoCloseWindow(aIndex || 0);'
+        .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
-         window = TabmixSvc.version(200) ?\
-            Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false}) :\
-            Tabmix.getTopWin();\
+          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
        }\
        if (window) {\
         window.focus();\
@@ -851,12 +830,6 @@ var tablib = { // eslint-disable-line
       TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
     };
 
-    // history menu open in new tab if the curren tab is locked
-    // open in current tab if it blank or if middle click and setting is on
-    HistoryMenu.prototype._onCommand = function HM__onCommand(aEvent) {
-      TMP_Places.historyMenu(aEvent);
-    };
-
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype._onPopupShowing")._replace(
       'this.toggleRecentlyClosedWindows();',
       '$& \
@@ -866,7 +839,7 @@ var tablib = { // eslint-disable-line
       '$& \
        let SM = TabmixSessionManager;\
        Tabmix.setItem("Browser:RestoreLastSession", "disabled", !SM.canRestoreLastSession || SM.isPrivateWindow);',
-       {check: Tabmix.isVersion(200) && Tabmix.prefs.getBoolPref("sessions.manager")}
+       {check: Tabmix.prefs.getBoolPref("sessions.manager")}
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
@@ -877,7 +850,7 @@ var tablib = { // eslint-disable-line
       'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] :\n' +
       '                                   document.getElementById(arguments[0]);'
     )._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '  tablib.populateUndoWindowSubmenu(undoPopup);\n' +
       '$1$2'
     ).toCode();
@@ -961,8 +934,11 @@ var tablib = { // eslint-disable-line
         aTab = this.mCurrentTab;
 
       var newTab = null;
-      // try to have SessionStore duplicate the given tab
+      let copyToNewWindow = window != aTab.ownerDocument.defaultView;
+      let openDuplicateNext = !disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext");
+      TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openDuplicateNext);
 
+      // try to have SessionStore duplicate the given tab
       if (!aHref && !aTabData) {
         newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
       } else {
@@ -979,8 +955,7 @@ var tablib = { // eslint-disable-line
       this.selectedBrowser.focus();
 
       // move new tab to place before we select it
-      var copyToNewWindow = window != aTab.ownerDocument.defaultView;
-      if (!disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext")) {
+      if (openDuplicateNext) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
         this.moveTabTo(newTab, aTab._tPos + pos);
       }
@@ -1010,9 +985,8 @@ var tablib = { // eslint-disable-line
           Tabmix.assert(ex);
         }
       }
-      // we need to update history title after the new page loaded for use in back/forword button
+      // we need to update history title after the new page loaded for use in back/forward button
       function updateNewHistoryTitle() {
-        /* jshint validthis: true */
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
@@ -1027,7 +1001,6 @@ var tablib = { // eslint-disable-line
         }
       }
       function urlForDownload() {
-        /* jshint validthis: true */
         try {
           this.removeEventListener("SSTabRestored", urlForDownload, true);
           let browser = this.linkedBrowser;
@@ -1045,6 +1018,7 @@ var tablib = { // eslint-disable-line
           if (Tabmix.ContentClick.isUrlForDownload(aHref))
             newTab.addEventListener("SSTabRestored", urlForDownload, true);
           else {
+            delete tabState.scroll;
             addNewHistoryEntry();
             newTab.addEventListener("SSTabRestored", updateNewHistoryTitle, true);
           }
@@ -1076,20 +1050,19 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openLinkWithHistory = function() {
-      var {target, linkURL, principal} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
       if (Tabmix.isVersion(380))
-        urlSecurityCheck(url, principal);
+        urlSecurityCheck(url, gContextMenu.principal);
       else if (typeof gContextMenu._unremotePrincipal == "function") {
         // Firefox 26-37
-        let doc = target.ownerDocument;
+        let doc = gContextMenu.target.ownerDocument;
         urlSecurityCheck(url, gContextMenu._unremotePrincipal(doc.nodePrincipal));
       } else {
         // Firefox 17-25
-        let doc = target.ownerDocument;
+        let doc = gContextMenu.target.ownerDocument;
         urlSecurityCheck(url, doc.nodePrincipal);
       }
 
@@ -1097,8 +1070,7 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openInverseLink = function(event) {
-      var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1109,8 +1081,7 @@ var tablib = { // eslint-disable-line
     };
 
     tablib.openLinkInCurrent = function() {
-      var {target, linkURL} = gContextMenu;
-      var url = tablib.getValidUrl(linkURL, target);
+      var url = tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1119,14 +1090,16 @@ var tablib = { // eslint-disable-line
       gContextMenu.openLinkInCurrent();
     };
 
-    tablib.getValidUrl = function(url, target) {
+    tablib.getValidUrl = function() {
+      if (!gContextMenu) {
+        return null;
+      }
+      let {target, linkURL} = gContextMenu;
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
-        if (!aUrl || !aUrl.length || aUrl.indexOf(" ", 0) != -1 ||
-             /^\s*(javascript|data):/.test(aUrl))
-          return false;
-        return true;
+        return aUrl && aUrl.length && aUrl.indexOf(" ") == -1 &&
+            !(/^\s*(javascript|data):/).test(aUrl);
       };
 
       let browser = gBrowser.selectedBrowser;
@@ -1134,15 +1107,17 @@ var tablib = { // eslint-disable-line
           typeof gContextMenu.tabmixLinkURL != "undefined")
         return gContextMenu.tabmixLinkURL;
 
-      if (!isValid(url)) {
+      if (!isValid(linkURL)) {
         let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
                     altKey: false, target: {},
                     tabmix_openLinkWithHistory: true};
+        // we only get here when it is safe to use contentWindowAsCPOW
+        // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, url, browser, document.commandDispatcher.focusedWindow);
+              target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
-      return url;
+      return linkURL;
     };
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
@@ -1153,12 +1128,10 @@ var tablib = { // eslint-disable-line
         // remove current tab last
         if (!this.mCurrentTab.pinned)
           tabs.unshift(tabs.splice(tabs.indexOf(this.mCurrentTab), 1)[0]);
-        Tabmix.startCountingClosedTabs();
         tabs.reverse().forEach(function TMP_removeTab(tab) {
           if (!tab.pinned)
             this.removeTab(tab, {animate: false});
         }, this);
-        Tabmix.setNumberOfTabsClosedLast();
         // _handleTabSelect will call mTabstrip.ensureElementIsVisible
       }
     };
@@ -1173,7 +1146,6 @@ var tablib = { // eslint-disable-line
 
       if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
-        Tabmix.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
               this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
@@ -1183,7 +1155,6 @@ var tablib = { // eslint-disable-line
           this.removeTab(aTab, {animate: true});
           this.ensureTabIsVisible(this.selectedTab);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1211,12 +1182,10 @@ var tablib = { // eslint-disable-line
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(aTab);
-        Tabmix.startCountingClosedTabs();
         for (let i = childNodes.length - 1; i > tabPos; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1232,12 +1201,10 @@ var tablib = { // eslint-disable-line
 
         let childNodes = this.visibleTabs;
         let tabPos = childNodes.indexOf(aTab);
-        Tabmix.startCountingClosedTabs();
         for (let i = tabPos - 1; i >= 0; i--) {
           if (!childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     };
 
@@ -1252,12 +1219,10 @@ var tablib = { // eslint-disable-line
         var childNodes = this.visibleTabs;
         if (TabmixTabbar.visibleRows > 1)
           Tabmix.tabsUtils.updateVerticalTabStrip(true);
-        Tabmix.startCountingClosedTabs();
         for (var i = childNodes.length - 1; i >= 0; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned)
             this.removeTab(childNodes[i]);
         }
-        Tabmix.setNumberOfTabsClosedLast();
       }
     });
 
@@ -1368,7 +1333,7 @@ var tablib = { // eslint-disable-line
         aTab.setAttribute("mergeselected", "true");
         aTab.label = "(*) " + aTab.label;
       }
-      this._tabAttrModified(aTab);
+      this._tabAttrModified(aTab, ["label"]);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
         TabmixTabbar.updateBeforeAndAfter();
@@ -1398,12 +1363,12 @@ var tablib = { // eslint-disable-line
       var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
           tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
-        if (aTab && items[i] == aTab)
-          continue;
-        temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
-        if (temp_id && temp_id > max_id) {
-          max_id = temp_id;
-          tempIndex = tabs.indexOf(items[i]);
+        if (aTab && items[i] != aTab) {
+          temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
+          if (temp_id && temp_id > max_id) {
+            max_id = temp_id;
+            tempIndex = tabs.indexOf(items[i]);
+          }
         }
       }
 
@@ -1463,8 +1428,8 @@ var tablib = { // eslint-disable-line
           // if we don't find last selected we fall back to default
           if (tempIndex > -1)
             return tempIndex;
-          /* falls through */
         }
+          /* falls through */
         case 2: // opener / right  (default )
         case 5: // right tab
           /* falls through */
@@ -1499,10 +1464,11 @@ var tablib = { // eslint-disable-line
 
     let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
       // see tablib.closeWindow comment
-      if (Tabmix.isCallerInList("BG__onQuitRequest"))
+      if (Tabmix.callerTrace("BG__onQuitRequest")) {
         return true;
+      }
       var closing = this.closingTabsEnum;
-      // try to cach call from other extensions to warnAboutClosingTabs (before Firefox 24)
+      // try to catch call from other extensions to warnAboutClosingTabs (before Firefox 24)
       if (typeof (whatToClose) == "boolean")
         whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
 
@@ -1514,10 +1480,10 @@ var tablib = { // eslint-disable-line
       function addProtected(aTabs) {
         for (let i = 0; i < aTabs.length; i++) {
           let tab = aTabs[i];
-          if (!onExit && tab.hidden)
-            continue;
-          if (protectedTabs.indexOf(tab) == -1)
+          if (protectedTabs.indexOf(tab) == -1 &&
+              (onExit || !tab.hidden)) {
             protectedTabs.push(aTabs[i]);
+          }
         }
       }
       // we always restore pinned tabs no need to warn about closing
@@ -1685,11 +1651,12 @@ var tablib = { // eslint-disable-line
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
     let swapTab = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
-      // Do not allow transfering a private tab to a non-private window
+      // Do not allow transferring a private tab to a non-private window
       // and vice versa.
-      if (Tabmix.isVersion(200) && PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView))
+      if (PrivateBrowsingUtils.isWindowPrivate(window) !=
+          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView)) {
         return;
+      }
 
       if (Tabmix.runningDelayedStartup) {
         // we probably will never get here in single window mode
@@ -1722,38 +1689,8 @@ var tablib = { // eslint-disable-line
         this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
     };
 
-    // Follow up bug 887515 - add ability to restore multiple tabs
-    // bug 914258 backout 887515 changes from Firefox 25
-    if (Tabmix._restoreMultipleTabs) {
-      Tabmix.startCountingClosedTabs = function() {
-        this.shouldCountClosedTabs = true;
-        this.numberOfTabsClosedLast = 0;
-      };
-      Tabmix.setNumberOfTabsClosedLast = function(aNum) {
-        TabmixSvc.ss.setNumberOfTabsClosedLast(window, aNum || this.numberOfTabsClosedLast);
-        this.shouldCountClosedTabs = false;
-        this.numberOfTabsClosedLast = 0;
-      };
-      Tabmix.countClosedTabs = function(aTab) {
-        if (!this.shouldCountClosedTabs ||
-            Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") === 0)
-          return;
-        var tabState = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-        if (!tabState.entries || tabState.entries.length == 1 &&
-           (tabState.entries[0].url == TabmixSvc.aboutBlank ||
-            tabState.entries[0].url == TabmixSvc.aboutNewtab) &&
-            !tabState.userTypedValue)
-          return;
-        this.numberOfTabsClosedLast++;
-      };
-    } else {
-      Tabmix.startCountingClosedTabs = function() { };
-      Tabmix.setNumberOfTabsClosedLast = function() { };
-      Tabmix.countClosedTabs = function() { };
-    }
-
     /** DEPRECATED **/
-    // we keep this function to saty compatible with other extensions that use it
+    // we keep this function to stay compatible with other extensions that use it
     gBrowser.undoRemoveTab = () => TMP_ClosedTabs.undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
@@ -1761,21 +1698,6 @@ var tablib = { // eslint-disable-line
     gBrowser.closeTab = aTab => this.removeTab(aTab);
     gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
-  },
-
-  // prevent 'ReferenceError: reference to undefined property params'
-  // in gBrowser.addTab
-  props: ["referrerURI", "charset", "postData", "ownerTab",
-          "allowThirdPartyFixup", "fromExternal", "relatedToCurrent",
-          "allowMixedContent", "skipAnimation", "isUTF8", "dontMove", "isPending",
-          "aForceNotRemote", "aNoReferrer"],
-
-  definedParams: function(params) {
-    this.props.forEach(function(prop) {
-      if (typeof params[prop] == "undefined")
-        params[prop] = null;
-    });
-    return params;
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url, title) {
@@ -1800,7 +1722,7 @@ var tablib = { // eslint-disable-line
 
   onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
-    // some site, like Gmail change title internaly, after load already finished and we have remove
+    // some site, like Gmail change title internally, after load already finished and we have remove
     // width attribute
     if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
       return;
@@ -1871,7 +1793,7 @@ var tablib = { // eslint-disable-line
     // we use this flag in WindowIsClosing
     Tabmix._warnedBeforeClosing = true;
 
-    // since that some pref can changed by _onQuitRequest we catch it fisrt
+    // since that some pref can changed by _onQuitRequest we catch it first
     // by observe browser-lastwindow-close-requested
     function getSavedPref(aPrefName, type) {
       let returnVal = {saved: false};
@@ -1904,21 +1826,17 @@ var tablib = { // eslint-disable-line
       if (Services.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
         return false;
 
-      if (Tabmix.isVersion(200)) {
-        // try to find non-private window
-        let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
-        if (!nonPrivateWindow)
-          return false;
-      } else if (TabmixSessionManager.globalPrivateBrowsing) {
+      // try to find non-private window
+      let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
+      if (!nonPrivateWindow)
         return false;
-      }
 
       // last windows with tabs
       var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;
       if (window.gBrowser.browsers.length < 2 || Tabmix.numberOfWindows(false, windowtype) > 1)
         return false;
 
-      // since this pref can change by _onQuitRequest we catch it fisrt
+      // since this pref can change by _onQuitRequest we catch it first
       // by observe browser-lastwindow-close-requested
       let saveSessionPref = getSavedPref("browser.startup.page", "int");
       if (saveSessionPref.saved && saveSessionPref.value == 3)
@@ -1930,17 +1848,16 @@ var tablib = { // eslint-disable-line
       // when we quit or close last browser window.
       // if "browser.showQuitWarning" is false and we close last window firefox design
       // to show warnAboutClosingTabs dialog but we block it in order to call warnAboutClosingTabs
-      // from here and catch dispaly time here.
+      // from here and catch display time here.
       return getSavedPref("browser.showQuitWarning").value;
     }
 
     // we always show our prompt on Mac
     var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
     // get caller caller name and make sure we are not on restart
-    var quitType = Tabmix.getCallerNameByIndex(2);
-    var askBeforSave = quitType != "restartApp" && quitType != "restart";
+    var askBeforeSave = !Tabmix.callerTrace("restartApp", "restart");
     var isLastWindow = Tabmix.isLastBrowserWindow;
-    var result = TabmixSessionManager.deinit(isLastWindow, askBeforSave);
+    var result = TabmixSessionManager.deinit(isLastWindow, askBeforeSave);
     var canClose = result.canClose;
     // we only show warnAboutClose if firefox or tabmix didn't do it already
     // if showPrompt is false then prompt was shown by firefox code from BrowserGlue.prototype._onQuitRequest
@@ -1950,7 +1867,7 @@ var tablib = { // eslint-disable-line
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
       canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
-      Services.prefs.setCharPref(pref, oldTime * 1 + (new Date().valueOf() - startTime));
+      Services.prefs.setCharPref(pref, Number(oldTime) + (new Date().valueOf() - startTime));
     }
 
     TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);
@@ -1995,11 +1912,11 @@ var tablib = { // eslint-disable-line
     let l = tabs.length;
     for (let i = 0; i < l; i++) {
       let tab = tabs[i];
-      if (tab == skipTab || tab.linkedBrowser.__SS_restoreState == 2)
-        continue;
-      try {
-        tab.linkedBrowser.reload();
-      } catch (ex) { }
+      if (tab != skipTab && tab.linkedBrowser.__SS_restoreState != 2) {
+        try {
+          tab.linkedBrowser.reload();
+        } catch (ex) { }
+      }
     }
   }
 
@@ -2018,9 +1935,6 @@ Tabmix.newTabUrls = [
 ];
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
-  if (Tabmix.prefs.getBoolPref("openTabNext") &&
-       (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent))
-    return true;
-
-  return false;
+  return Tabmix.prefs.getBoolPref("openTabNext") &&
+      (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent);
 };

@@ -1,3 +1,4 @@
+/* globals PanelUI */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
@@ -6,18 +7,9 @@ const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 this.SingleWindowModeUtils = {
-  initialized: false,
-  initService: function() {
-    if (this.initialized)
-      return;
-    this.initialized = true;
-
-    if (TabmixSvc.version(200))
-      Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-  },
-
  /**
   * @brief Locate a browser window.
   *
@@ -30,14 +22,12 @@ this.SingleWindowModeUtils = {
   getBrowserWindow: function(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
-    var checkPrivacy = TabmixSvc.version(200);
-    var isPrivate = checkPrivacy && PrivateBrowsingUtils.isWindowPrivate(aExclude);
+    var isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
       return (!win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
-              (!checkPrivacy ||
-                PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate));
+              PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate);
     }
 
     var windows = Services.wm.getEnumerator("navigator:browser");
@@ -56,7 +46,6 @@ this.SingleWindowModeUtils = {
     if (!aWindow.arguments || aWindow.arguments.length === 0)
       return false;
 
-    this.initService();
     aWindow.addEventListener("load", function _onLoad(aEvent) {
       let window = aEvent.currentTarget;
       window.removeEventListener("load", _onLoad, false);
@@ -107,18 +96,25 @@ this.SingleWindowModeUtils = {
     var existingBrowser = existingWindow.gBrowser;
     existingWindow.tablib.init(); // just in case tablib isn't init yet
     var uriToLoad = args[0];
+
     var urls = [];
     var params = {
       referrerURI: null,
-      referrerPolicy: TabmixSvc.version(390) && Ci.nsIHttpChannel.REFERRER_POLICY_DEFAULT,
+      referrerPolicy: (function() {
+        if (TabmixSvc.version(390)) {
+          let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
+          return Ci.nsIHttpChannel[policy];
+        }
+        return null;
+      }()),
       postData: null,
       allowThirdPartyFixup: false
     };
     if (uriToLoad instanceof Ci.nsISupportsArray) {
       let count = uriToLoad.Count();
       for (let i = 0; i < count; i++) {
-        let urisstring = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
-        urls.push(urisstring.data);
+        let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
+        urls.push(uriString.data);
       }
     } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
@@ -163,14 +159,17 @@ this.SingleWindowModeUtils = {
       // if we don't add this here BrowserShutdown fails
       newWindow.FullZoom.init = function() {};
       newWindow.FullZoom.destroy = function() {};
-      if (!TabmixSvc.version(230)) {
-        newWindow.PlacesStarButton.updateState = function() {};
-        newWindow.PlacesStarButton.uninit = function() {};
-      }
       newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
-      var obs = Services.obs;
+      if (TabmixSvc.version(420)) {
+        newWindow.gMenuButtonBadgeManager.uninit = function() {
+          if (typeof PanelUI == "object" && PanelUI.panel) {
+            PanelUI.panel.removeEventListener("popupshowing", this, true);
+          }
+        };
+      }
       if (!TabmixSvc.version(440)) {
+        let obs = Services.obs;
         obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
         if (!TabmixSvc.version(340))
           obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
@@ -186,11 +185,12 @@ this.SingleWindowModeUtils = {
     }
     existingWindow.setTimeout(function() {
       try {
-        // restore window dimensions, to prevent flickring in the next restart
+        // restore window dimensions, to prevent flickering in the next restart
         var win = newWindow.document.documentElement;
         if (typeof newWindow.__winRect == "object") {
-          for (let attr in newWindow.__winRect)
+          for (let attr of Object.keys(newWindow.__winRect)) {
             win.setAttribute(attr, newWindow.__winRect[attr]);
+          }
         }
         newWindow.close();
         if (firstTabAdded) {

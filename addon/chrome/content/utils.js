@@ -1,6 +1,6 @@
 "use strict";
 
-var Tabmix = { // jshint ignore:line
+var Tabmix = {
   get prefs() {
     delete this.prefs;
     return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
@@ -24,7 +24,7 @@ var Tabmix = { // jshint ignore:line
   // Show/hide one item (specified via name or the item element itself).
   showItem: function(aItemOrId, aShow) {
     var item = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
-    if (item && item.hidden == aShow)
+    if (item && item.hidden == Boolean(aShow))
       item.hidden = !aShow;
   },
 
@@ -75,7 +75,7 @@ var Tabmix = { // jshint ignore:line
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
     return !this.getSingleWindowMode() ||
-      this.isVersion(200) && !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
+      !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
   },
 
   lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
@@ -122,7 +122,7 @@ var Tabmix = { // jshint ignore:line
       let extensionName = index > -1 ?
          path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\n" + "file: " + "chrome:" + path + "\nline: " + line +
+                 " from:\nfile: chrome:" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
                  (extensionName ? (" and " + extensionName + "developer.") : "."));
     } else {
@@ -182,11 +182,13 @@ var Tabmix = { // jshint ignore:line
     var count = 0;
     while (enumerator.hasMoreElements()) {
       let win = enumerator.getNext();
-      if ("TabmixSessionManager" in win && win.TabmixSessionManager.windowClosed)
-        continue;
-      count++;
-      if (!all && count == 2)
-        break;
+      let isClosed = "TabmixSessionManager" in win &&
+          win.TabmixSessionManager.windowClosed;
+      if (!isClosed) {
+        count++;
+        if (!all && count == 2)
+          break;
+      }
     }
     return count;
   },
@@ -219,7 +221,7 @@ var Tabmix = { // jshint ignore:line
   // caller list
   _getMethod: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
-      this.installeChangecode();
+      this.installChangecode();
       return this[id].apply(this, args);
     }
     if (typeof TabmixSvc.console[id] == "function") {
@@ -229,20 +231,16 @@ var Tabmix = { // jshint ignore:line
     return null;
   },
 
-  installeChangecode: function() {
+  installChangecode: function() {
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
-    this.installeChangecode = function() {};
+    this.installChangecode = function() {};
   },
 
   _init: function() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
-    this.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
-    if (this.isVersion(200)) {
-      let resource = this.isVersion(210) ? "resource:///" : "resource://gre/";
-      XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-                 resource + "modules/RecentWindow.jsm");
-    }
+    XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+                                      "resource:///modules/RecentWindow.jsm");
 
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);
@@ -251,7 +249,8 @@ var Tabmix = { // jshint ignore:line
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
                    "getObject", "log", "getCallerNameByIndex", "callerName",
-                   "clog", "isCallerInList", "obj", "assert", "trace", "reportError"];
+                   "clog", "isCallerInList", "callerTrace",
+                   "obj", "assert", "trace", "reportError"];
     methods.forEach(function(id) {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
@@ -268,3 +267,4 @@ var Tabmix = { // jshint ignore:line
 };
 
 Tabmix._init();
+Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");

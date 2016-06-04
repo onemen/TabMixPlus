@@ -3,7 +3,7 @@
 
 var $ = id => document.getElementById(id);
 
-var tabstyles = { // jshint ignore:line
+var tabstyles = {
   pref: "appearance_tab",
   init: function() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
@@ -44,7 +44,7 @@ var tabstyles = { // jshint ignore:line
       document.documentElement.getButton("help").disabled = true;
   },
 
-  toggleRGBvisibility: function() {
+  toggleRGB_visibility: function() {
     let doc = document.documentElement;
     let extra = doc.getButton("extra2");
     let item = $("hide-RGB");

@@ -1,3 +1,4 @@
+/* globals dump */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixSvc"];
@@ -6,6 +7,9 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
+  "resource://tabmixplus/Places.jsm");
 
 var tabStateCache;
 var _versions = {};
@@ -123,7 +127,7 @@ this.TabmixSvc = {
     while (windowsEnum.hasMoreElements()) {
       let window = windowsEnum.getNext();
       if (!window.closed) {
-        aFunc.call(null, window);
+        aFunc(window);
       }
     }
   },
@@ -155,8 +159,6 @@ this.TabmixSvc = {
     }
   },
 
-  syncHandlers: new WeakMap(),
-
   windowStartup: {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
                                            Ci.nsISupportsWeakReference]),
@@ -182,10 +184,8 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
-      if (isVersion(190))
-        Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+      Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
 
-      Cu.import("resource://tabmixplus/Places.jsm");
       TabmixPlacesUtils.init(aWindow);
 
       TabmixSvc.tabStylePrefs = {};
@@ -230,17 +230,6 @@ this.TabmixSvc = {
     tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
-  get ss() {
-    delete this.ss;
-    if (isVersion(250, 250)) {
-      let tmp = {};
-      Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-      return (this.ss = tmp.SessionStore);
-    }
-    return (this.ss = Cc["@mozilla.org/browser/sessionstore;1"].
-                     getService(Ci.nsISessionStore));
-  },
-
   sm: {
     lastSessionPath: null,
     persistTabAttributeSet: false,
@@ -278,17 +267,12 @@ XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
 
 // check if australis tab shape is implemented
 XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  if (this.topWin().document.getElementById("tab-curve-clip-path-start")) {
-    return true;
-  }
-  return false;
+  return Boolean(this.topWin().document.getElementById("tab-curve-clip-path-start"));
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
-  let svc = isVersion(230) ? "resource://gre/modules/Preferences.jsm" :
-                             "resource://services-common/preferences.js";
   let tmp = {};
-  Cu.import(svc, tmp);
+  Cu.import("resource://gre/modules/Preferences.jsm", tmp);
   return new tmp.Preferences("");
 });
 
@@ -306,12 +290,32 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function() {
   return Services.strings.createBundle(properties);
 });
 
+XPCOMUtils.defineLazyGetter(this, "Platform", function() {
+  if (isVersion(390)) {
+    return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
+  }
+  let platform,
+      os = Services.appinfo.OS.toLowerCase();
+  if (os.startsWith("win")) {
+    platform = "win";
+  } else if (os == "darwin") {
+    platform = "macosx";
+  } else if (os == "linux") {
+    platform = "linux";
+  }
+  return platform;
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", function() {
+  return Platform == "win";
+});
+
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
-  return Services.appinfo.OS == "Darwin";
+  return Platform == "macosx";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
-  return Services.appinfo.OS == "Linux";
+  return Platform == "linux";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", function() {
@@ -323,7 +327,12 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function() {
-  return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+  try {
+    // noinspection SpellCheckingInspection
+    return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+  } catch (ex) {
+  }
+  return false;
 });
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
@@ -331,6 +340,12 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+  let tmp = {};
+  Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
+  return tmp.SessionStore;
+});
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
   return Cu.getGlobalForObject(this.ss);
@@ -356,8 +371,9 @@ tabStateCache = {
   },
 
   saveTabAttributes: function(tab, attrib, save = true) {
-    if (!isVersion(250))
+    if (TabmixSvc.isPaleMoon) {
       return;
+    }
 
     // force Sessionstore to save our persisted tab attributes
     if (save) {

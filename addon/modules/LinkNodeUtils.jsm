@@ -41,7 +41,7 @@ this.LinkNodeUtils = {
         URL: doc.URL,
         documentURI: doc.documentURI,
         defaultView: {
-          frameElement: !!doc.defaultView.frameElement
+          frameElement: Boolean(doc.defaultView.frameElement)
         },
         location: {
           href: doc.location ? doc.location.href : ""
@@ -93,7 +93,7 @@ function getTargetAttr(targetAttr, focusedWindow) {
 }
 
 /**
- * @brief check if traget attribute exist and point to frame in the document
+ * @brief check if target attribute exist and point to frame in the document
  *        frame pool
  */
 function targetIsFrame(targetAttr, focusedWindow) {

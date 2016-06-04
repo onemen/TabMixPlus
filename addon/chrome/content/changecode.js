@@ -1,8 +1,7 @@
-/* jshint strict: false */
 /* eslint strict: 0 */
 
 // don't use strict for this file
-// so we don't evaluat all code as strict mode code
+// so we don't evaluate all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
 Tabmix.changeCode = function(aParent, afnName, aOptions) {
@@ -32,6 +31,17 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
   ChangeCode.prototype = {
     value: "", errMsg: "",
     _replace: function TMP_utils__replace(substr, newString, aParams) {
+      // Don't insert new code before "use strict";
+      if (substr == "{") {
+        let re = /['|"]use strict['|"];/;
+        let result = re.exec(this.value);
+        if (result) {
+          if (!newString.startsWith("$&")) {
+            newString = newString.replace(substr, result[0] + "\n");
+          }
+          substr = result[0];
+        }
+      }
       var silent;
       if (typeof aParams != "undefined") {
         let doReplace, flags;
@@ -96,16 +106,24 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};
 
+      let removeSpaces = function(match, p1, p2) {
+        return p1 + p2.replace(/\s/g, '_');
+      };
+
       let setDescriptor = function(type) {
         let fnType = "__lookup#ter__".replace("#", type);
         type = type.toLowerCase();
         let code = aCode && aCode[type + "ter"] ||
                    this.type == fnType ? this.value : obj[fnType](fnName);
 
-        if (typeof code == "string")
+        if (typeof code == "string") {
+          // bug 1255925 - Give a name to getters/setters add space before the function name
+          // replace function get Foo() to function get_Foo()
+          code = code.replace(/(^function\s*)(.*\()/, removeSpaces);
           descriptor[type] = Tabmix._makeCode(null, code);
-        else if (typeof code != "undefined")
+        } else if (typeof code != "undefined") {
           descriptor[type] = code;
+        }
       }.bind(this);
 
       setDescriptor("Get");
@@ -169,8 +187,8 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
 };
 
 (function(obj) {
-  /* jshint moz: true, esnext: false */
   let global = Components.utils.getGlobalForObject(obj);
+  // eslint-disable-next-line no-useless-concat
   let fn = global["ev" + "al"];
   Tabmix._makeCode = function(name, code) {
     if (name) {

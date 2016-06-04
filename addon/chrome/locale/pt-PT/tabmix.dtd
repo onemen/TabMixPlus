@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "h">
 <!ENTITY closeTabsToLeft.label "Fechar os separadores à esquerda">
 <!ENTITY closeleft.accesskey "q">
-<!ENTITY closeTabstoRight.label "Fechar os separadores à direita">
-<!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permissões">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Congelar separador">

@@ -6,12 +6,12 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
-  "Tabmix:SetSyncHandler",
   "Tabmix:restorePermissionsComplete",
   "Tabmix:updateScrollPosition",
   "Tabmix:reloadTab",
   "Tabmix:getOpener",
   "Tabmix:contentDrop",
+  "Tabmix:contextmenu",
 ];
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -40,9 +40,9 @@ this.TabmixUtils = {
     // call TabmixAboutNewTab.updateBrowser for gBrowser._preloadedBrowser,
     // if it already exist before we loaded our frame script
     if (TabmixSvc.version(420)) {
-      let {gBrowser, BROWSER_NEW_TAB_URL} = window;
+      let gBrowser = window.gBrowser;
       if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
-          BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
+          window.BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
           gBrowser._preloadedBrowser && gBrowser._isPreloadingEnabled() &&
           !PrivateBrowsingUtils.isWindowPrivate(window)) {
         TabmixAboutNewTab.updateBrowser(gBrowser._preloadedBrowser);
@@ -59,9 +59,6 @@ this.TabmixUtils = {
     let browser = message.target;
     let win, tab;
     switch (message.name) {
-      case "Tabmix:SetSyncHandler":
-        TabmixSvc.syncHandlers.set(browser.permanentKey, message.objects.syncHandler);
-        break;
       case "Tabmix:restorePermissionsComplete":
         DocShellCapabilities.update(browser, message.data);
         break;
@@ -96,13 +93,19 @@ this.TabmixUtils = {
         }
         return false;
       }
+      case "Tabmix:contextmenu": {
+        win = browser.ownerDocument.defaultView;
+        let links = message.data.links;
+        win.Tabmix.contextMenuLinks = links && links.split("\n") || [];
+        break;
+      }
     }
     return null;
   },
 
   makeInputStream: function(aString) {
-    let stream = Cc["@mozilla.org/io/string-input-stream;1"].
-    createInstance(Ci.nsISupportsCString);
+    let stream = Cc["@mozilla.org/io/string-input-stream;1"]
+                   .createInstance(Ci.nsISupportsCString);
     stream.data = aString;
     return stream;
   },

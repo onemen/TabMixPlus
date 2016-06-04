@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "Fechar abas para a esquerda">
 <!ENTITY closeleft.accesskey "Q">
-<!ENTITY closeTabstoRight.label "Fechar abas para a direita">
-<!ENTITY closeright.accesskey "T">
 <!ENTITY docShellMenu.label "Permissões">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Congelar aba">
@@ -102,7 +100,7 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Renomear">
 <!ENTITY sm.context.rename.key "R">
-<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession "Sessão de Favoritos">
 <!ENTITY sm.context.bookmarkSession.key "B">
 <!ENTITY sm.context.delete "Excluir">
 <!ENTITY sm.context.delete.key "E">

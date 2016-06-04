@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "左側のタブをすべて閉じる">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "右側のタブをすべて閉じる">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "機能の許可">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "タブを凍結">

@@ -1,4 +1,3 @@
-  /* globals TabItems */
   "use strict";
 
   TMP_TabView.subScriptLoaded = true;
@@ -136,7 +135,6 @@
       this._original_reconstitute.apply(this, arguments);
     };
 
-    let fn = TabView._window.UI._original_reset = TabView._window.UI.reset;
     if (window.hasOwnProperty("tabGroups")) {
       // reconnect tabs that we disconnected in reconstitute
       TabView._window.UI.reset = function() {
@@ -147,9 +145,8 @@
     }
 
     // add tab to the new group on tabs order not tabItem order
-    let isStrict = (f) => f.toString().indexOf('"use strict";') > -1;
     Tabmix.changeCode(TabView._window.UI, "TabView._window.UI.reset")._replace(
-      isStrict(fn) ? '"use strict";' : '{',
+      '{',
       '$&' +
       'let win = TabView._window;' +
       'let Trenches = win.Trenches;' +
@@ -164,7 +161,7 @@
       'this.',
       'UI.', {flags: "g", silent: true}
     )._replace(
-      /items\.forEach\(function\s*\(item\)\s*{/,
+      /items\.forEach\(function\s*\(item\)\s*\{/,
       'Array.prototype.forEach.call(gBrowser.tabs, function(tab) { \
        if (tab.pinned) return;\
        let item = tab._tabViewTabItem;'
@@ -195,14 +192,13 @@
 
   /* ............... TabmixSessionManager TabView Data ............... */
 
-  // winData: SessionStroe window state
+  // winData: SessionStore window state
   TabmixSessionManager._setWindowStateBusy = function(winData) {
     this._beforeRestore(winData);
     if (!this.tabViewInstalled) {
       return;
     }
 
-    TMP_SessionStore.initService();
     this._getSessionTabviewData(winData);
     this._updateUIpageBounds = false;
   };
@@ -230,7 +226,7 @@
 
     // update page bounds when we overwrite tabs
     if (aOverwriteTabs || this._updateUIpageBounds)
-      this._setUIpageBounds();
+      this._setPageBounds();
 
     if (TabView._window && !aOverwriteTabs) {
       // when we don't overwriting tabs try to rearrange the groupItems
@@ -246,7 +242,7 @@
   TabmixSessionManager._tabviewData = {};
   TabmixSessionManager._groupItems = null;
 
-  // winData: SessionStroe window state
+  // winData: SessionStore window state
   TabmixSessionManager._getSessionTabviewData = function(winData) {
     let extData = winData.extData || {};
     function _fixData(id, parse, def) {
@@ -306,7 +302,7 @@
     var tabviewData;
     if (update.newGroupID) {
       // We are here only when the restored session did not have tabview data
-      // we creat new group and fill all the data
+      // we create new group and fill all the data
       tabviewData = setData(update.newGroupID);
     } else {
       tabviewData = tabdata.extData && tabdata.extData["tabview-tab"] || null;
@@ -365,10 +361,8 @@
       excludeTabs = [];
 
     return !Array.prototype.some.call(gBrowser.tabs, function(tab) {
-      if (!tab.pinned && !tab.hidden && !tab.closing && excludeTabs.indexOf(tab) == -1) {
-        return true;
-      }
-      return false;
+      return !tab.pinned && !tab.hidden && !tab.closing &&
+          excludeTabs.indexOf(tab) == -1;
     });
   };
 
@@ -416,11 +410,11 @@
   };
 
  /**
-  * when we append tab to this window we merge group data from the session into the curent group data
+  * when we append tab to this window we merge group data from the session into the current group data
   * loadOnStartup: array of tabs that load on startup from application
   * blankTabs: remaining blank tabs in this windows
   */
-  TabmixSessionManager._preperTabviewData = function SM__preperTabviewData(loadOnStartup, blankTabs) {
+  TabmixSessionManager._prepareTabviewData = function SM__prepareTabviewData(loadOnStartup, blankTabs) {
     if (!this.tabViewInstalled) {
       return;
     }
@@ -554,7 +548,7 @@
   /* ............... TabView Code Fix  ............... */
 
   // update page bounds when we overwrite tabs
-  TabmixSessionManager._setUIpageBounds = function SM__setUIpageBounds() {
+  TabmixSessionManager._setPageBounds = function SM__setPageBounds() {
     if (TabView._window) {
       let data = TabmixSessionData.getWindowValue(window, "tabview-ui", true);
       if (this.isEmptyObject(data))

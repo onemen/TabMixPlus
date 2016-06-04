@@ -30,11 +30,11 @@ var TMP_LastTab = {
 
     // show the list at the center of the screen
     let box = tablist.boxObject;
-    let letf = () => screen.availLeft + (screen.availWidth - box.width) / 2;
+    let left = () => screen.availLeft + (screen.availWidth - box.width) / 2;
     let top = () => screen.availTop + (screen.availHeight - box.height) / 2;
     tablist.style.visibility = "hidden";
-    tablist.openPopupAtScreen(letf(), top(), true);
-    tablist.moveTo(letf(), top());
+    tablist.openPopupAtScreen(left(), top(), true);
+    tablist.moveTo(left(), top());
     tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
@@ -51,7 +51,7 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-    .getService(Ci.nsIEventListenerService);
+                .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
     } else {
@@ -60,6 +60,9 @@ var TMP_LastTab = {
     }
     els.addSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.addSystemEventListener(tabBox._eventNode, "keyup", this, false);
+    if (!Tabmix.isVersion(470)) {
+      els.addSystemEventListener(window, "focus", this, true);
+    }
 
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -79,15 +82,23 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-    .getService(Ci.nsIEventListenerService);
+                .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
     if (!Tabmix.isVersion(320))
       els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
+    if (!Tabmix.isVersion(470)) {
+      els.removeSystemEventListener(window, "focus", this, true);
+    }
   },
 
   handleEvent: function(event) {
     switch (event.type) {
+      case "focus":
+        if (event.target == window.content) {
+          Tabmix.keyModifierDown = false;
+        }
+        break;
       case "blur":
         this.updateDisallowDrag(false);
         break;
@@ -256,7 +267,7 @@ var TMP_LastTab = {
     } else if (this.TabListLock && this.CtrlKey &&
              event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_SHIFT) {
       // don't hide the tabs list popup when user press shift
-      return;
+      // return;
     } else {
       if (this.TabListLock)
         this.TabList.hidePopup();
@@ -363,9 +374,9 @@ var TMP_LastTab = {
     var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
     if (tabPreviews) {
-      var tabPreviewsCurentStatus = !!ctrlTab._recentlyUsedTabs;
+      var tabPreviewsCurrentStatus = Boolean(ctrlTab._recentlyUsedTabs);
       tabPreviews = mostRecentlyUsed && Tabmix.prefs.getBoolPref("lasttab.tabPreviews");
-      if (tabPreviewsCurentStatus != tabPreviews) {
+      if (tabPreviewsCurrentStatus != tabPreviews) {
         if (tabPreviews) {
           ctrlTab.init();
           ctrlTab._recentlyUsedTabs = [];

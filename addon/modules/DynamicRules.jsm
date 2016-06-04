@@ -34,7 +34,7 @@ const EXTRAPREFS = ["squaredTabsStyle"];
 
 this.DynamicRules = {
 
-  // hold templets for our css rules
+  // hold templates for our css rules
   cssTemplates: {},
 
   // hold the current state for each style according to its preference
@@ -83,7 +83,7 @@ this.DynamicRules = {
   },
 
   registerMutationObserver: function(window) {
-    function tabsMotate(aMutations) {
+    function tabsMutate(aMutations) {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
           this.orient = mutation.target.orient;
@@ -92,7 +92,7 @@ this.DynamicRules = {
         }
       }
     }
-    let Observer = new window.MutationObserver(tabsMotate.bind(this));
+    let Observer = new window.MutationObserver(tabsMutate.bind(this));
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
     window.addEventListener("unload", function unload() {
       window.removeEventListener("unload", unload);
@@ -284,7 +284,7 @@ this.DynamicRules = {
     this.createTemplates();
 
     function updateButtonHeight(Tabmix, rules) {
-      let newHeight = Tabmix.getButtonsHeight();
+      let newHeight = Tabmix.getButtonsHeight(true);
       ["new-tab", "pb-indicator", "scrollbutton", "toolbarbutton"].forEach(name => {
         let rule = rules[name + "-height"];
         if (typeof rule == "object") {
@@ -313,7 +313,7 @@ this.DynamicRules = {
    *  we get here in these cases
    *      - when we initialize this service
    *      - when user changed text or background color
-   *      - when user disable/enable the sytle
+   *      - when user disable/enable the style
    */
   registerSheet: function(name) {
     let enabled = TabmixSvc.prefBranch.getBoolPref(name);
@@ -338,10 +338,10 @@ this.DynamicRules = {
   },
 
   unregisterSheet: function(name) {
-    let styleShhet = this.registered[name] || null;
-    if (styleShhet &&
-        SSS.sheetRegistered(styleShhet, TYPE))
-      SSS.unregisterSheet(styleShhet, TYPE);
+    let styleSheet = this.registered[name] || null;
+    if (styleSheet &&
+        SSS.sheetRegistered(styleSheet, TYPE))
+      SSS.unregisterSheet(styleSheet, TYPE);
   },
 
   get defaultPrefs() {
@@ -357,7 +357,7 @@ this.DynamicRules = {
   validatePrefValue: function(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
-    //                bg:boolean, bgColor:string, bgOpacity:striung
+    //                bg:boolean, bgColor:string, bgOpacity:string
     // if we don't catch the problem here it can break the rest of tabmix startup
     var defaultPrefValues = TabmixSvc.JSON.parse(this.defaultPrefs[ruleName]);
     if (!Prefs.prefHasUserValue(ruleName))
@@ -365,21 +365,25 @@ this.DynamicRules = {
 
     var currentPrefValues, prefValues = {};
     let prefString = Prefs.getCharPref(ruleName);
-    try {
-      currentPrefValues = TabmixSvc.JSON.parse(prefString);
-      if (currentPrefValues === null)
-        throw Error(ruleName + " value is invalid\n" + prefString);
-    } catch (ex) {
+    let handleError = function(ex) {
       TabmixSvc.console.log(ex);
       TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
       Prefs.clearUserPref(ruleName);
       // set prev value to default so we can continue with this function
       currentPrefValues = defaultPrefValues;
+    };
+    try {
+      currentPrefValues = TabmixSvc.JSON.parse(prefString);
+    } catch (ex) {
+      handleError(ex);
+    }
+    if (currentPrefValues === null) {
+      handleError(ruleName + " value is invalid\n" + prefString);
     }
 
     // make sure we have all the item
     // if item is missing set it to default
-    for (let item in defaultPrefValues) {
+    for (let item of Object.keys(defaultPrefValues)) {
       let value = currentPrefValues[item];
       if (value && item.indexOf("Color") > -1) {
         let opacity = item.replace("Color", "Opacity");
@@ -416,7 +420,8 @@ function getRGBcolor(aColorCode, aOpacity) {
     if (newRGB.length < 3)
       return null;
     for (let i = 0; i < newRGB.length; i++) {
-      if (isNaN(newRGB[i].replace(/[\s]/g, "") * 1))
+      let val = Number(newRGB[i].replace(/[\s]/g, ""));
+      if (isNaN(val))
         return null;
     }
   } else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {

@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "&apos;Nieuw tabblad&apos; knop naar tabbladenbalk slepen om deze optie in te schakelen.">
 <!ENTITY hideTabBarButton.label "Knop Tabblad sluiten">
 <!ENTITY newTabButton.label "Knop Nieuw tabblad">
-<!ENTITY newTabButton.posiotion.left.label "Linkerkant">
-<!ENTITY newTabButton.posiotion.right.label "Rechterkant">
-<!ENTITY newTabButton.posiotion.afterlast.label "Na laatste tabblad">
+<!ENTITY newTabButton.position.left.label "Linkerkant">
+<!ENTITY newTabButton.position.right.label "Rechterkant">
+<!ENTITY newTabButton.position.afterlast.label "Na laatste tabblad">
 <!ENTITY allTabsButton.label "Knop Alle tabbladen">
 <!ENTITY tabBarSpace.label "Extra ruimte aan beide zijden">
 <!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Indicator laten vallen">
 <!ENTITY dropIndicator-native.label "Logische stijl">
 <!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
-<!ENTITY verticalTabbar.description "Gebruik de gratis StyleTab of VerticalTab extensie om deze voorkeuren in te stellen.">
+<!ENTITY verticalTabbar.description1 "Deze voorkeuren worden beheerd door een andere extensie die verticale tabbladen toepast.">
 <!ENTITY tabBarPosition.label "Positie:">
 <!ENTITY tabBarPosition.top.label "Bovenkant (boven inhoud)">
 <!ENTITY tabBarPosition.bottom.label "Onderkant (onder inhoud)">

@@ -8,7 +8,7 @@ this.EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 this.TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow) {
     this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
-      /(\})(\)?)$/,
+      /(})(\)?)$/,
       '    try {\n' +
       '      if (TabGroupsManager.apiEnabled)\n' +
       '        TabGroupsManager.eventListener.onTabOpen(aEvent);\n' +
@@ -74,7 +74,7 @@ this.TMP_TabGroupsManager = {
     };
 
     this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
-      // get saved group data and repalce ids with new one
+      // get saved group data and replace ids with new one
       'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
       '$&' +
       '  var [_restoreSelect, _lastSelectedIndex] = [restoreSelect, lastSelectedIndex];' +
@@ -82,8 +82,6 @@ this.TMP_TabGroupsManager = {
       '  let jsonText = this.getLiteralValue(rdfNodeWindow, "tgm_jsonText");' +
       '  TabGroupsManager.session.groupRestored = 1;' +
       '  if (jsonText) {' +
-      '    /* make sure sessionstore is init */' +
-      '    TMP_SessionStore.initService();' +
       '    if ("__SSi" in window)' +
       '      TabmixSvc.ss.setWindowValue(window, "TabGroupsManagerAllGroupsData", decodeURI(jsonText));' +
       '    TabGroupsManager.allGroups.loadAllGroupsData();' +
@@ -105,7 +103,7 @@ this.TMP_TabGroupsManager = {
       'if (false) {'
     )._replace(
       'TMP_ClosedTabs.setButtonDisableState();',
-      '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBalnk)))' +
+      '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBlank)))' +
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite ||' +
       '                        caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
       '  $&'
@@ -124,7 +122,7 @@ this.TMP_TabGroupsManager = {
 
   // for TabGroupsManager use - don't change function name
   tabmixSessionsManager: function() {
-    // this here reffer to the top browser window
+    // this here refers to the top browser window
     if (!this.Tabmix.isFirstWindow || this.Tabmix._afterTabduplicated) {
       return false;
     }
@@ -138,13 +136,13 @@ this.TMP_TabGroupsManager = {
     if (!this.enableBackup && !windowNode)
       return;
     try {
-      let value = jsonText || TabmixSvc.ss.getWindowValue(window, "TabGroupsManagerAllGroupsData");
+      let value = jsonText || window.TabmixSvc.ss.getWindowValue(window, "TabGroupsManagerAllGroupsData");
       if (!windowNode)
         windowNode = this.gThisWin;
       this.setLiteral(windowNode, "tgm_jsonText", encodeURI(value));
       this.saveStateDelayed();
     } catch (ex) {
-      Tabmix.assert(ex);
+      window.Tabmix.assert(ex);
     }
   }
 

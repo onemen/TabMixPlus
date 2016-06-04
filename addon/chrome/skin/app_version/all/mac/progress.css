@@ -8,7 +8,7 @@
 /* :::: progress bar on tabs :::: */
 .tab-progress {
   -moz-appearance: none;
-  min-height: 0px;
+  min-height: 0;
   height: 4px;
 }
 
@@ -22,7 +22,7 @@
 
 .tabbrowser-tabs[tabmix_australis="true"]:not([treestyletab-mode="vertical"])
     > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
-  margin: 4px 7px 0px 7px;
+  margin: 4px 7px 0 7px;
 }
 
 .tab-progress > .progress-bar {

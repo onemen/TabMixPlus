@@ -7,12 +7,7 @@
  **/
 
 vbox[shortcutsLabels="true"] {
-  -moz-binding: url(chrome://tabmixplus/content/preferences/shortcutsLabels.xml#shortcut-labels) !important;
-}
-
-/* for Firefox 11.0-19.0, not in use for Firefox 20.0+ */
-label.text-link, label[onclick] {
-  -moz-binding: url(chrome://tabmixplus/content/tab/text.xml#tmp-text-link);
+  -moz-binding: url("chrome://tabmixplus/content/preferences/shortcutsLabels.xml#shortcut-labels") !important;
 }
 
 /*  we don't use .tabbrowser-tab > .tab-close-button here
@@ -137,7 +132,7 @@ label.text-link, label[onclick] {
 }
 
 #tabmixScrollBox > toolbarbutton {
-  margin: 0px;
+  margin: 0;
 }
 
 
@@ -153,7 +148,7 @@ label.text-link, label[onclick] {
 #TabsToolbar[tabmix-show-newtabbutton*="side"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
   display: none;
   border: none;
-  margin: 0px;
+  margin: 0;
   vertical-align: bottom;
 }
 
@@ -222,7 +217,7 @@ so display: none !important; does not hide the button */
 .tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
   display: -moz-box !important;
   visibility: collapse !important;
-  width: 0px !important;
+  width: 0 !important;
 }
 
 /* we don't remove top and bottom borders to prevent tab height from shrinking */
@@ -231,7 +226,7 @@ so display: none !important; does not hide the button */
   border-right: none;
 }
 
-/*** backword compatibility with theme that still use old tabmix tab binding ***/
+/*** backward compatibility with theme that still use old tabmix tab binding ***/
 .tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
   display: none !important;
 }
@@ -267,7 +262,7 @@ so display: none !important; does not hide the button */
 }
 
 /* :::: multi-row :::: */
-.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > scrollbox > .scrollbox-innerbox {
+.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
   display: block !important;
 }
 
@@ -315,7 +310,7 @@ so display: none !important; does not hide the button */
 /* Firefox 32+ */
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
 .tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   visibility: collapse;
 }
 
@@ -326,9 +321,4 @@ so display: none !important; does not hide the button */
 
 #tabmix-rows-tooltip:not([flowing="multibar"]) {
   display: none;
-}
-
-#main-window[tabsintitlebar][tabmix-tabbaronbottom] .tabbrowser-tabbox,
-#main-window[tabsintitlebar] #TabsToolbar[tabmix-disallow-drag] {
-  -moz-window-dragging: no-drag;
 }

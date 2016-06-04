@@ -5,7 +5,7 @@
  * chrome://tabmixplus/content/links/userInterface.js
  *
  * original code by Bradley Chapman
- * modified and developped by Hemiola SUN
+ * modified and developed by Hemiola SUN
  * modified again by Bradley Chapman
  *
  * modified again and again... by onemen
@@ -30,70 +30,6 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
         "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
-};
-
-/**
- * @brief Load URLs from the Extension/Theme Managers, and item with text-link class
- *
- * This redefines chrome://mozapps/content/extensions/extensions.js:openURL()
- *
- * @param aURL       A valid URI string.
- * @param event      A valid event union. This can be null when
- *                   calling this function.
- * @return           true.
- *
- */
-Tabmix.openURL = function TMP_openURL(aURL, event) {
-  var linkTarget;
-  try {
-    linkTarget = Services.prefs.getIntPref("browser.link.open_newwindow");
-  } catch (e) {
-    linkTarget = 1;
-  }
-
-  if (!aURL)
-    aURL = "about:blank";
-
-  // check for an existing window and focus it; it's not application modal
-  var browserWindow = this.getTopWin();
-
-  if (!browserWindow) {
-    openDialog("chrome://browser/content/browser.xul", "_blank", "chrome,all,dialog=no", aURL, null, null, null);
-    if (event && event instanceof Event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    return true;
-  }
-
-  var tabBrowser = browserWindow.gBrowser;
-  var originCharset = tabBrowser.selectedBrowser.characterSet;
-
-  // if the current tab is empty, then do not open a new tab
-  if (tabBrowser.currentURI.spec == TabmixSvc.aboutBlank) {
-    // 1: CURRENT_TAB
-    linkTarget = 1;
-    originCharset = null;
-  }
-
-  switch (linkTarget) {
-    case 1 :
-      tabBrowser.loadURI(aURL, null, originCharset);
-      break;
-    case 2 :
-      browserWindow.openNewWindowWith(aURL, null, null, false);
-      break;
-    case 3 :
-      // added by request, for extensions with multiple homepages
-      browserWindow.Tabmix.loadTabs(aURL.split("|"), false);
-      break;
-  }
-
-  if (event && event instanceof Event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-  return true;
 };
 
 // Don't change this function name other extensions using it
@@ -154,10 +90,17 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
   Tabmix.prefs.getBoolPref("loadNewInBackground");
   var loadBlank = isBlankPageURL(url);
   if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
-      typeof privateTab == "object" && privateTab.isTabPrivate(selectedTab) &&
-      TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
-    privateTab.readyToOpenTab(false);
+      typeof privateTab == "object") {
+    let privateTab = window.privateTab;
+    if (privateTab.isTabPrivate(selectedTab) &&
+        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
+      privateTab.readyToOpenTab(false);
+    }
   }
+
+  let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
+  let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+  TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
   var newTab = gBrowser.addTab(url, {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
     ownerTab: loadInBackground ? null : selectedTab,
@@ -176,12 +119,8 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
     }
   }
 
-  if (aTab && aTab.localName == "tab")
-    gBrowser.moveTabTo(newTab, aTab._tPos + 1);
-  else if (!replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext")) {
-    // we used to move tab after lastRelatedTab but we don't need it on new tabs
-    // and it mess with recently used tabs order
-    gBrowser.moveTabTo(newTab, selectedTab._tPos + 1);
+  if (openTabNext) {
+    gBrowser.moveTabTo(newTab, (baseTab || selectedTab)._tPos + 1);
   }
   // make sure to update recently used tabs
   // if user open many tabs quickly select event don't have time to fire
@@ -208,7 +147,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
   if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aTab.selected && !isBlankPageURL(aUrl)) {
-    // clean the the address bar as if the user laod about:blank tab
+    // clean the the address bar as if the user load about:blank tab
     this.selectedTab = aTab;
     this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
@@ -227,7 +166,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
 
 /**
  * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
- *        if the user or onload from a page blur the urlbar befroe user typed new value
+ *        if the user or onload from a page blur the urlbar before user typed new value
  *        we restore the current url
  */
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
@@ -271,43 +210,17 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  *
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
-  // in Firefox 17 /(openUILinkIn[^\(]*\([^\)]+)(\))/, find the first
-  // openUILinkIn in the comment
   if ("openUILink" in window) {
-    let code = ["openUILinkIn(url, where, params);",
-                "openUILinkIn(url, where, allowKeywordFixup, postData, referrerUrl);"];
-    let source, str = openUILink.toString();
-    if (str.indexOf(code[0]) > -1)
-      source = code[0];
-    else if (str.indexOf(code[1]) > -1)
-      source = code[1];
-    else
-      return; // nothing we can do
-    /**
-     * don't open blank tab when we are about to add new livemark
-     * divert call from PanelUI-history to our function
-     */
+    // divert all the calls from places UI to use our preferences
     this.changeCode(window, "openUILink")._replace(
-      '{',
-      '{\n' +
-       '  if (event && event.target && event.target.parentNode &&\n' +
-       '      event.target.parentNode.id == "PanelUI-historyItems") {\n' +
-       '    TMP_Places.openHistoryItem(url, event);\n' +
-       '    return;\n' +
-       '  }', {check: Tabmix.isVersion(280)}
-    )._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
-      source,
-      '  var win = getTopWin();' +
-      '  if (win && where == "current") {' +
-      '    let _addLivemark = /^feed:/.test(url) &&' +
-      '       Services.prefs.getCharPref("browser.feeds.handler") == "bookmarks";' +
-      '    if (!_addLivemark)' +
-      '      where = win.Tabmix.checkCurrent(url);' +
-      '  }' +
-      '  try {$&}  catch (ex) {  }'
+      /openUILinkIn\(.*\);/,
+      'where = TMP_Places.openUILink(url, event, where, params);\n' +
+      '  if (where) {\n' +
+      '    try {\n      $&\n    } catch (ex) {  }\n' +
+      '  }\n'
     )._replace(// fix incompatibility with Omnibar (O is not defined)
       'O.handleSearchQuery',
       'window.Omnibar.handleSearchQuery', {silent: true}

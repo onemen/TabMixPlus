@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "π">
 <!ENTITY closeTabsToLeft.label "Κλείσιμο αριστερών καρτελών">
 <!ENTITY closeleft.accesskey "ρ">
-<!ENTITY closeTabstoRight.label "Κλείσιμο δεξιών καρτελών">
-<!ENTITY closeright.accesskey "δ">
 <!ENTITY docShellMenu.label "Δικαιώματα">
 <!ENTITY docShellMenu.accesskey "ι">
 <!ENTITY freezeTabMenu.label "Πάγωμα καρτέλας">

@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "с">
 <!ENTITY closeTabsToLeft.label "Затвори картице са леве стране">
 <!ENTITY closeleft.accesskey "л">
-<!ENTITY closeTabstoRight.label "Затвори картице са десне стране">
-<!ENTITY closeright.accesskey "д">
 <!ENTITY docShellMenu.label "Дозволе">
 <!ENTITY docShellMenu.accesskey "в">
 <!ENTITY freezeTabMenu.label "Замрзни картицу">

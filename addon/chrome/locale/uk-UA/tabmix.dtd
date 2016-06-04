@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "S">
 <!ENTITY closeTabsToLeft.label "Закрити всі вкладки Ліворуч">
 <!ENTITY closeleft.accesskey "L">
-<!ENTITY closeTabstoRight.label "Закрити всі вкладки Праворуч">
-<!ENTITY closeright.accesskey "R">
 <!ENTITY docShellMenu.label "Дозволи">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Заморозити вкладку">

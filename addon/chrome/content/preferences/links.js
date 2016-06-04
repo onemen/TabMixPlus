@@ -21,7 +21,7 @@ var gLinksPane = {
     gPrefWindow.setDisabled("obs_externalLink", !checked);
   },
 
-  updateExternalLinkCeckbox: function(external) {
+  updateExternalLinkCheckBox: function(external) {
     let preference = $(external.getAttribute("preference"));
     if (external.value == preference.value)
       return;

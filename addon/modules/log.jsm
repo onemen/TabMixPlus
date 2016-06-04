@@ -82,7 +82,6 @@ this.console = {
       } else {
         logMethod();
       }
-
     } catch (ex) {
       this.assert(ex, "Error we can't show " + aMethod + " in Tabmix.show");
     }
@@ -135,20 +134,6 @@ this.console = {
     return fnName;
   },
 
-/*
-  _nameFromComponentsStack: function(Cs) {
-    return Cs.name ||
-           Cs.filename.substr(Cs.filename.lastIndexOf("/") + 1) + ":" + Cs.lineNumber;
-  },
-
-  callerName: function() {
-    try {
-      var name = this._nameFromComponentsStack(Components.stack.caller.caller);
-    } catch (ex) { }
-    return name || "";
-  },
-*/
-
   callerName: function TMP_console_callerName() {
     return this.getCallerNameByIndex(1);
   },
@@ -170,11 +155,30 @@ this.console = {
 
       let args = Array.prototype.slice.call(arguments);
       return args.indexOf(callerName) > -1;
-
     } catch (ex) {
       this.assert(ex, "Error we can't check for caller name");
     }
     return false;
+  },
+
+  callerTrace: function TMP_console_callerTrace(...args) {
+    let stack = this._getStackExcludingInternal();
+
+    let stackUtil = {
+      contain: function(...names) {
+        if (Array.isArray(names[0])) {
+          names = names[0];
+        }
+        let _isCallerInList = function(caller) {
+          return names.some(name => caller.startsWith(name + "@"));
+        };
+        return stack.some(_isCallerInList);
+      },
+    };
+    if (args.length) {
+      return stackUtil.contain.apply(null, args);
+    }
+    return stackUtil;
   },
 
 /*
@@ -187,28 +191,39 @@ options = {
 }
 */
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
-    var offset = typeof level == "string" ? "  " : "";
+    if (!aObj || typeof aObj != "object") {
+      let msg = "log.obj was called with non-object argument\n";
+      if (aMessage) {
+        msg += aMessage + "\n";
+      }
+      let type = aObj === null ? "null" : typeof aObj;
+      msg += "typeof aObj is '" + type + "'\n'" + aObj + "'";
+      if (!aDisallowLog) {
+        this.log(msg, true, false, this.caller);
+      }
+      return msg;
+    }
+    let offset = typeof level == "string" ? "  " : "";
     aMessage = aMessage ? offset + aMessage + "\n" : "";
-    var objS = aObj ? offset + aObj.toString() : offset + "aObj is " + typeof (aObj);
-    objS += ":\n";
+    let objS = offset + aObj.toString() + ":\n";
 
-    for (let prop in aObj) {
+    for (let prop of Object.keys(aObj)) {
       try {
         let val = aObj[prop];
         let type = typeof val;
         if (type == "string")
-          val = "\'" + val + "\'";
+          val = "'" + val + "'";
         if (type == "function" && typeof level == "string") {
           val = val.toString();
           let code = val.toString().indexOf("native code") > -1 ?
             "[native code]" : "[code]";
           val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
         }
-        objS += offset + prop + "[" + type + "]" + " =  " + val + "\n";
+        objS += offset + prop + "[" + type + "] =  " + val + "\n";
         if (type == "object" && val !== null && level && typeof level == "boolean")
           objS += this.obj(val, "", true, "deep") + "\n";
       } catch (ex) {
-        objS += offset + prop + " =  " + "[!!error retrieving property]" + "\n";
+        objS += offset + prop + " =  [!!error retrieving property]\n";
       }
     }
     if (aDisallowLog)
@@ -246,12 +261,12 @@ options = {
         fileName = decodeURI(fileName).replace(re, "");
         let index = line.indexOf(_char);
         let name = line.slice(0, index).split("(").shift();
-        let formated = '  File "' + fileName + '", line ' + lineNumber;
+        let formatted = '  File "' + fileName + '", line ' + lineNumber;
         if (colNumber)
-          formated += ', col ' + colNumber;
+          formatted += ', col ' + colNumber;
         if (name)
-          formated += ', in ' + name.replace("/<", "");
-        lines.push(formated);
+          formatted += ', in ' + name.replace("/<", "");
+        lines.push(formatted);
       }
     });
 
@@ -303,7 +318,7 @@ options = {
     parent = parent.name == "_logMessage" ? parent.caller.caller : parent.caller;
     if (parent.name == "TMP_console_wrapper")
       parent = parent.caller.caller;
-    return parent;
+    return parent || {};
   },
 
   reportError: function(ex = null, msg = "") {
@@ -323,7 +338,7 @@ options = {
   },
 
   _logMessage: function _logMessage(msg, flag = "infoFlag", caller = null) {
-    msg = msg.replace(/\r\n/g, "\n");
+    msg = msg.replace(/\r\n/g, "\n") + "\n";
     if (typeof Ci.nsIScriptError[flag] == "undefined") {
       Services.console.logStringMessage("Tabmix" + msg);
       return;

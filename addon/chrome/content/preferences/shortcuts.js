@@ -31,9 +31,7 @@ function getKeysForShortcut(shortcut, id, win) {
       key: key.getAttribute("key"),
       keycode: key.getAttribute("keycode")
     };
-    if (getFormattedKey(_key) == shortcut)
-      return true;
-    return false;
+    return getFormattedKey(_key) == shortcut;
   }).map(key => "     " + _getKeyName(win, key).replace(dots, ""));
 
   return usedKeys.join("\n");
@@ -68,7 +66,7 @@ function _getKeyName(win, aKey) {
     return aKey.getAttribute("label");
 
   let id = command && command.indexOf(":") > -1 ? command :
-           aKey.id.replace(/xxx_key.+?_/, "") || // keyconfig foramt
+           aKey.id.replace(/xxx_key.+?_/, "") || // keyconfig format
            command || aKey.getAttribute("oncommand");
   let gUnicodeConverter = Cc['@mozilla.org/intl/scriptableunicodeconverter']
           .createInstance(Ci.nsIScriptableUnicodeConverter);

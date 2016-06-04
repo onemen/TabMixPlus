@@ -1,4 +1,3 @@
-/* globals AsyncShutdown, gBrowserBundle */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixGroupsMigrator"];
@@ -63,21 +62,20 @@ this.TabmixGroupsMigrator = {
         let rdfNodeSession = sessionEnum.getNext();
         if (rdfNodeSession instanceof Ci.nsIRDFResource) {
           let windowPath = rdfNodeSession.QueryInterface(Ci.nsIRDFResource).Value;
-          if (sm.nodeHasArc(windowPath, "dontLoad")) {
-            continue;
-          }
-          let data = sm.getLiteralValue(windowPath, "tabview-groups", "{}");
-          let parsedData = TabmixSvc.JSON.parse(data);
-          if (parsedData.totalNumber > 1) {
-            notify = true;
-            return true;
+          if (!sm.nodeHasArc(windowPath, "dontLoad")) {
+            let data = sm.getLiteralValue(windowPath, "tabview-groups", "{}");
+            let parsedData = TabmixSvc.JSON.parse(data);
+            if (parsedData.totalNumber > 1) {
+              notify = true;
+              return true;
+            }
           }
         }
       }
       return false;
     };
 
-    let bookmarkGroups = (session) => {
+    let bookmarkGroups = session => {
       let state = window.TabmixConvertSession.getSessionState(session, true);
       let {hiddenTabState, groupData} = this.removeHiddenTabGroupsFromState(state);
       if (hiddenTabState.windows.length) {
@@ -106,7 +104,7 @@ this.TabmixGroupsMigrator = {
     };
 
     try {
-      // we run this function before preparAfterCrash and prepareSavedSessions
+      // we run this function before prepareAfterCrash and prepareSavedSessions
       // we need to backup 2 last session, if last session was crashed backup
       // one more older session
       let index = isAfterCrash ? 1 : 0;
@@ -180,7 +178,7 @@ this.TabmixGroupsMigrator = {
       "chrome://tabmixplus/skin/tmpsmall.png",
       notificationBox.PRIORITY_WARNING_MEDIUM,
       buttons,
-      (aEventType) => {
+      aEventType => {
         if (aEventType == "removed") {
           TabmixSvc.sm.showMissingTabViewNotification = null;
           this.closeNotificationFromAllWindows();
@@ -227,15 +225,15 @@ this.TabmixGroupsMigrator = {
       if (windowGroupMap) {
         let anonGroupCount = 0;
         let windowGroups = [... windowGroupMap.values()].sort(TabGroupsMigrator._groupSorter);
-        let singleanonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
-        if (singleanonGroup) {
+        let singleAnonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
+        if (singleAnonGroup) {
           windowGroups[0].tabGroupsMigrationTitle = winTitle;
-          continue;
-        }
-        for (let group of windowGroups) {
-          let title = group.anonGroupID ?
-              getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
-          group.tabGroupsMigrationTitle = winTitle + " " + title;
+        } else {
+          for (let group of windowGroups) {
+            let title = group.anonGroupID ?
+                getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
+            group.tabGroupsMigrationTitle = winTitle + " " + title;
+          }
         }
       } else {
         windowGroupMap = new Map();
@@ -269,7 +267,8 @@ this.TabmixGroupsMigrator = {
     });
   },
 
-  createtSessionsFolder: function() {
+  // create SessionsFolder: function() {
+  createSessionsFolder: function() {
     let BM = PlacesUtils.bookmarks;
     return BM.insert({
       parentGuid: BM.menuGuid,
@@ -281,7 +280,7 @@ this.TabmixGroupsMigrator = {
   },
 
   getSessionsFolder: function(folder) {
-    return this.promiseItemId(folder).catch(this.createtSessionsFolder.bind(this));
+    return this.promiseItemId(folder).catch(this.createSessionsFolder.bind(this));
   },
 
   bookmarkAllGroupsFromState: function(groupData, guid, name) {

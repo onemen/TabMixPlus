@@ -41,8 +41,6 @@
 <!ENTITY closeSimilarTab.accesskey "h">
 <!ENTITY closeTabsToLeft.label "Chiudi le schede a sinistra">
 <!ENTITY closeleft.accesskey "s">
-<!ENTITY closeTabstoRight.label "Chiudi le schede a destra">
-<!ENTITY closeright.accesskey "d">
 <!ENTITY docShellMenu.label "Permetti">
 <!ENTITY docShellMenu.accesskey "P">
 <!ENTITY freezeTabMenu.label "Congela scheda">

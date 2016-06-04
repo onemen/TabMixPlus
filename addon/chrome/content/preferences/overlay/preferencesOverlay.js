@@ -1,8 +1,9 @@
+/* exported gTabMix_preferencesOverlay */
 "use strict";
 
 Components.utils.import("resource://tabmixplus/Services.jsm");
 
-var gTabMix_preferencesOverlay = { // jshint ignore:line
+var gTabMix_preferencesOverlay = {
   id: function(id) {
     return document.getElementById(id);
   },
@@ -55,7 +56,7 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
     let item = this.id("linkTargetWindow");
     item.disabled = val;
     if (val)
-      item.setAttribute("style", "color: graytext !important; text-shadow: none !important;");
+      item.setAttribute("style", "color: GrayText !important; text-shadow: none !important;");
     else
       item.removeAttribute("style");
   },
@@ -82,10 +83,10 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
     var hBox = menuList.parentNode;
     menuList.parentNode.id = "whenBrowserStartBox";
     hBox.insertBefore(this.id("tabmixSessionManager"), menuList);
-    this.onStartupPrefchanged();
+    this.onStartupPrefChanged();
   },
 
-  onStartupPrefchanged: function() {
+  onStartupPrefChanged: function() {
     var tabmixSession = this.id('tabmix.sm').value || this.id('tabmix.cr').value;
     if (tabmixSession)
       this.id("whenBrowserStartBox").setAttribute("tabmixSession", true);
@@ -94,8 +95,3 @@ var gTabMix_preferencesOverlay = { // jshint ignore:line
   }
 
 };
-
-window.addEventListener("load", function TMP_onLoad_preverenceOverlay(aEvent) {
-  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_preverenceOverlay, true);
-  gTabMix_preferencesOverlay.incontentInit();
-}, true);

@@ -20,7 +20,7 @@
 <!ENTITY linkTarget.accesskey "C">
 <!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
 <!ENTITY divertedWindowOpen.all "Open all popups in tabs">
-<!ENTITY divertedWindowOpen.some "Allows resized popups">
+<!ENTITY divertedWindowOpen.some "Allows resize popups">
 <!ENTITY divertedWindowOpen.none "Allows all popups">
 <!ENTITY linkTarget.label "Open links with a target attribute in current tab">
 <!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
@@ -126,9 +126,9 @@
 <!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
 <!ENTITY hideTabBarButton.label "Close tab button">
 <!ENTITY newTabButton.label "New tab button">
-<!ENTITY newTabButton.posiotion.left.label "on Left side">
-<!ENTITY newTabButton.posiotion.right.label "on Right side">
-<!ENTITY newTabButton.posiotion.afterlast.label "After last tab">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
 <!ENTITY allTabsButton.label "All tabs button">
 <!ENTITY tabBarSpace.label "Extra spaces on both sides">
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Drop indicator">
 <!ENTITY dropIndicator-native.label "Native style">
 <!ENTITY dropIndicator-builtin.label "Built-in style">
-<!ENTITY verticalTabbar.description "Use treeStyleTab or VerticalTab extension to control these preferences.">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Position:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">
 <!ENTITY tabBarPosition.bottom.label "Bottom (below content)">

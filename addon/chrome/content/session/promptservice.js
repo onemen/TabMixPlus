@@ -63,8 +63,8 @@ function prompt_init() {
         var item;
         for (i = 1; i < popup.childNodes.length; ++i) {
           item = popup.childNodes[i];
-          if (item.localName == "menuseparator") continue;
-          if (item.getAttribute("disabled") != "true") {
+          if (item.localName != "menuseparator" &&
+              item.getAttribute("disabled") != "true") {
             index = i;
             break;
           }
@@ -110,7 +110,7 @@ function prompt_init() {
   var dialog = document.documentElement;
   dialog.defaultButton = dButton;
   if (gHideElmParam == TMP_HIDE_MENUANDTEXT) { // hide menulist & text box and set focus to default Button
-    document.getElementById("space_befor_checkbox").hidden = true;
+    document.getElementById("space_before_checkbox").hidden = true;
     dialog.getButton(dButton).focus();
   }
 
@@ -163,16 +163,16 @@ function prompt_extra1(button) {
 // copy from commonDialog.js
 function setLabelForNode(aNode, aLabel, aIsLabelFlag) {
   var accessKey = null;
-  if (/ *\(\&([^&])\)(:?)$/.test(aLabel)) {
+  if (/ *\(&([^&])\)(:?)$/.test(aLabel)) {
     aLabel = RegExp.leftContext + RegExp.$2;
     accessKey = RegExp.$1;
-  } else if (/^([^&]*)\&(([^&]).*$)/.test(aLabel)) {
+  } else if (/^([^&]*)&(([^&]).*$)/.test(aLabel)) {
     aLabel = RegExp.$1 + RegExp.$2;
     accessKey = RegExp.$3;
   }
 
   // && is the magic sequence to embed an & in your label.
-  aLabel = aLabel.replace(/\&\&/g, "&");
+  aLabel = aLabel.replace(/&&/g, "&");
   if (aIsLabelFlag) { // Set text for <label> element
     aNode.setAttribute("value", aLabel);
   } else { // Set text for other xul elements
@@ -209,13 +209,13 @@ function inputText(textBox) {
   if (validName === 0) {
     for (var i = 0; i < gSavedName.length; i++) {
       if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "") {
-        if (dialogParams.GetInt(3) == TMP_DLG_RENAME) {
-          if (gOrigName != name) validName = 2;
-          continue;
+        if (dialogParams.GetInt(3) != TMP_DLG_RENAME) {
+          validName = 3;
+          dialogParams.SetInt(6, i);
+          break;
+        } else if (gOrigName != name) {
+          validName = 2;
         }
-        validName = 3;
-        dialogParams.SetInt(6, i);
-        break;
       }
     }
   }
