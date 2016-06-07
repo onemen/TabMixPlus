@@ -214,6 +214,7 @@ module.exports = {
     "id-blacklist": 0,
     "require-jsdoc": 0,
     "require-yield": 2,
+    "rest-spread-spacing": 2,
     "semi": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "sort-vars": 0,
