@@ -9,11 +9,14 @@ Cu.import("resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
+                                  "resource://tabmixplus/Utils.jsm");
 
 this.ContextMenu = {
   getSelectedLinks: function(content, check) {
     let doc = content.document;
-    let selectionObject = doc.getSelection();
+    // get focused window selection
+    let selectionObject = TabmixUtils.focusedWindow(content).getSelection();
     if (selectionObject.isCollapsed) // nothing selected
       return [];
 

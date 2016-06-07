@@ -103,6 +103,14 @@ this.TabmixUtils = {
     return null;
   },
 
+  focusedWindow: function(content) {
+    let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
+
+    let focusedWindow = {};
+    fm.getFocusedElementForWindow(content, true, focusedWindow);
+    return focusedWindow.value;
+  },
+
   makeInputStream: function(aString) {
     let stream = Cc["@mozilla.org/io/string-input-stream;1"]
                    .createInstance(Ci.nsISupportsCString);

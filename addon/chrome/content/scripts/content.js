@@ -228,9 +228,10 @@ TabmixClickEventHandler = {
     // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
     // for the case there is no href
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
-    if (linkNode)
-      linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
-                                         href && event.button === 0);
+    if (linkNode) {
+      linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
+                                    href && event.button === 0);
+    }
 
     let result = sendSyncMessage("TabmixContent:Click",
                     {json: json, href: href, node: linkNode});
@@ -348,14 +349,6 @@ TabmixClickEventHandler = {
     return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
             node && node.ownerDocument.nodePrincipal];
   },
-
-  get _focusedWindow() {
-    let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
-
-    let focusedWindow = {};
-    fm.getFocusedElementForWindow(content, true, focusedWindow);
-    return focusedWindow.value;
-  }
 };
 
 var AboutNewTabHandler = {
@@ -407,8 +400,7 @@ var ContextMenuHandler = {
     }
 
     let links;
-    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks") &&
-        typeof content.document.getSelection == "function") {
+    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks")) {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 
