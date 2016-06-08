@@ -181,8 +181,7 @@ module.exports = {
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "keyword-spacing": 2,
     "lines-around-comment": [0, {"beforeBlockComment": true, "allowBlockStart": true, "allowBlockEnd": true}],
-    // XX error in Brackets - Eslint complain that first line is LF
-    "linebreak-style": [0, "windows"],
+    "linebreak-style": [2, "windows"],
     "max-depth": [0, 4],
     "max-len": [0, 120, 4],
     "max-nested-callbacks": [0, 2],
