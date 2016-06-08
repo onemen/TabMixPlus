@@ -135,6 +135,10 @@ this.SingleWindowModeUtils = {
       }
       params.postData = args[3] || null;
       params.allowThirdPartyFixup = args[4] || false;
+      if (TabmixSvc.version(500)) {
+        params.userContextId = args[6] != undefined ? args[6] :
+                               Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+      }
       urls = [uriToLoad];
     } else {
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
