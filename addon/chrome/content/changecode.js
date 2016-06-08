@@ -103,6 +103,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       if (!this.type)
         throw new Error("Tabmix:\n" + this.fullName + " don't have setter or getter");
 
+      if (!this.isValidToChange(this.fullName)) {
+        return;
+      }
+
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
       let descriptor = {enumerable: true, configurable: true};
 
