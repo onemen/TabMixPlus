@@ -155,7 +155,7 @@
               return;
             }
           } else if (this.key && this.key.modifiers.indexOf("accel") > -1) {
-            // when current modifier is accel replcae new modifier with accel
+            // when current modifier is accel replace new modifier with accel
             // if it match ui.key.accelKey
             key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
           }
