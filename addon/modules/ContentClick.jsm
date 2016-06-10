@@ -126,6 +126,9 @@ ContentClickInternal = {
         referrerPolicy: json.referrerPolicy,
         noReferrer: json.noReferrer
       };
+      if (json.originAttributes.userContextId) {
+        params.userContextId = json.originAttributes.userContextId;
+      }
       window.openLinkIn(json.href, where, params);
 
       try {
