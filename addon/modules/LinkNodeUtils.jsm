@@ -2,13 +2,6 @@
 
 this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
-
 const ATTRIBS = ["onclick", "rel", "onmousedown"];
 
 this.LinkNodeUtils = {

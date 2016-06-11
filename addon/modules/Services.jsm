@@ -184,6 +184,7 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
+      // eslint-disable-next-line tabmix/import-globals
       Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
 
       TabmixPlacesUtils.init(aWindow);

@@ -9,8 +9,6 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "Promise",
                                   "resource://gre/modules/Promise.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-                                  "resource://tabmixplus/Services.jsm");
 this.AsyncUtils = {
   /* PromiseUtils.defer exist since Firefox 39 */
   defer: function() {

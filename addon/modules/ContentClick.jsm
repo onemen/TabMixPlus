@@ -612,6 +612,7 @@ ContentClickInternal = {
     var GM_function;
     try {
       // Greasemonkey >= 0.9.10
+      // eslint-disable-next-line tabmix/import-globals
       Cu.import("resource://greasemonkey/util.js");
       if (typeof window.GM_util.getEnabled == 'function') {
         GM_function = window.GM_util.getEnabled;

@@ -4,11 +4,9 @@ this.EXPORTED_SYMBOLS = ["ContextMenu"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
                                   "resource://tabmixplus/Utils.jsm");
 
