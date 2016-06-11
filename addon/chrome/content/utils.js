@@ -167,8 +167,10 @@ var Tabmix = {
     if (!modal)
       dialog._callBackFunction = aCallBack;
 
-    return {button: dpb.GetInt(4), checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
-            label: dpb.GetString(5), value: dpb.GetInt(6)};
+    return {
+      button: dpb.GetInt(4), checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
+      label: dpb.GetString(5), value: dpb.GetInt(6)
+    };
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {

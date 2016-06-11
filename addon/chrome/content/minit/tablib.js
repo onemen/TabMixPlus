@@ -1111,9 +1111,11 @@ var tablib = { // eslint-disable-line
         return gContextMenu.tabmixLinkURL;
 
       if (!isValid(linkURL)) {
-        let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
-                    altKey: false, target: {},
-                    tabmix_openLinkWithHistory: true};
+        let json = {
+          button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
+          altKey: false, target: {},
+          tabmix_openLinkWithHistory: true
+        };
         // we only get here when it is safe to use contentWindowAsCPOW
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,

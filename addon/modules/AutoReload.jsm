@@ -317,8 +317,10 @@ function _reloadTab(aTab) {
 }
 
 function doReloadTab(window, browser, data) {
-  browser.__tabmixScrollPosition = {x: data.scrollX,
-                                    y: data.scrollY};
+  browser.__tabmixScrollPosition = {
+    x: data.scrollX,
+    y: data.scrollY
+  };
   var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
                               Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
@@ -345,9 +347,10 @@ function doReloadTab(window, browser, data) {
   let windowUtils = window.QueryInterface(Ci.nsIInterfaceRequestor)
                           .getInterface(Ci.nsIDOMWindowUtils);
 
-  browser.messageManager.sendAsyncMessage("Browser:Reload",
-      {flags: loadFlags,
-        handlingUserInput: windowUtils.isHandlingUserInput});
+  browser.messageManager.sendAsyncMessage("Browser:Reload", {
+    flags: loadFlags,
+    handlingUserInput: windowUtils.isHandlingUserInput
+  });
 }
 
 function _observe(aSubject, aTopic) {

@@ -1518,8 +1518,10 @@ TabmixSessionManager = {
       case Tabmix.BUTTON_OK:
       case Tabmix.BUTTON_EXTRA1 :
         var trimResult = result.label.replace(/^[\s]+/g, "").replace(/[\s]+$/g, "");
-        return {button: result.button, name: encodeURI(trimResult),
-                path: sessionList.path[result.value], saveClosedTabs: result.checked};
+        return {
+          button: result.button, name: encodeURI(trimResult),
+          path: sessionList.path[result.value], saveClosedTabs: result.checked
+        };
     }
     return {};
   },

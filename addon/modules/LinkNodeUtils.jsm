@@ -33,12 +33,8 @@ this.LinkNodeUtils = {
       ownerDocument: {
         URL: doc.URL,
         documentURI: doc.documentURI,
-        defaultView: {
-          frameElement: Boolean(doc.defaultView.frameElement)
-        },
-        location: {
-          href: doc.location ? doc.location.href : ""
-        }
+        defaultView: {frameElement: Boolean(doc.defaultView.frameElement)},
+        location: {href: doc.location ? doc.location.href : ""}
       },
       parentNode: {
         baseURI: node.parentNode.baseURI,

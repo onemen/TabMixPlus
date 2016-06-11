@@ -22,7 +22,8 @@
     </implementation>
   </binding>
 
-  <binding id="checkbox" extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+  <binding id="checkbox"
+           extends="chrome://global/content/bindings/checkbox.xml#checkbox">
     <content>
       <xul:image class="checkbox-check" xbl:inherits="checked,disabled"/>
       <xul:hbox class="checkbox-label-box" xbl:inherits="flex=flexlabel">
@@ -30,11 +31,10 @@
         <xul:label class="checkbox-label" xbl:inherits="xbl:text=label,accesskey,crop,flex=flexlabel"/>
       </xul:hbox>
     </content>
-    <implementation>
-    </implementation>
   </binding>
 
-  <binding id="preference" extends="chrome://global/content/bindings/preferences.xml#preference">
+  <binding id="preference"
+           extends="chrome://global/content/bindings/preferences.xml#preference">
     <implementation>
       <constructor>
         <![CDATA[

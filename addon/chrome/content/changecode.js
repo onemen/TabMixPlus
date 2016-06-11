@@ -167,8 +167,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
 
   let name = afnName.split(".").pop();
   try {
-    return new ChangeCode({obj: aParent, fnName: name,
-                           fullName: afnName, options: aOptions});
+    return new ChangeCode({
+      obj: aParent, fnName: name,
+      fullName: afnName, options: aOptions
+    });
   } catch (ex) {
     console.clog(console.callerName() + " failed to change " + afnName + "\nError: " + ex.message);
     if (debugMode)
@@ -179,8 +181,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
 
 Tabmix.setNewFunction = function(aObj, aName, aCode) {
   if (!Object.getOwnPropertyDescriptor(aObj, aName)) {
-    Object.defineProperty(aObj, aName, {value: aCode,
-                                        writable: true, configurable: true});
+    Object.defineProperty(aObj, aName, {
+      value: aCode,
+      writable: true, configurable: true
+    });
   } else {
     aObj[aName] = aCode;
   }

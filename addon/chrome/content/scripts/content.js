@@ -97,8 +97,10 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectScrollPosition": {
-        let scroll = {scrollX: content.scrollX,
-                      scrollY: content.scrollY};
+        let scroll = {
+          scrollX: content.scrollX,
+          scrollY: content.scrollY
+        };
         sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
         break;
       }
@@ -107,9 +109,11 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
-        let json = {scrollX: content.scrollX,
-                    scrollY: content.scrollY,
-                    postData: null};
+        let json = {
+          scrollX: content.scrollX,
+          scrollY: content.scrollY,
+          postData: null
+        };
         let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
                          .QueryInterface(Ci.nsISHistoryInternal);
         if (sh) {
@@ -217,10 +221,12 @@ TabmixClickEventHandler = {
       }
     }
 
-    let json = {button: event.button, shiftKey: event.shiftKey,
-                ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-                altKey: event.altKey, href: null, title: null,
-                bookmark: false, referrerPolicy: referrerPolicy};
+    let json = {
+      button: event.button, shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey, metaKey: event.metaKey,
+      altKey: event.altKey, href: null, title: null,
+      bookmark: false, referrerPolicy: referrerPolicy
+    };
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;

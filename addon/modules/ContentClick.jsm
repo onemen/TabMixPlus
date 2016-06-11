@@ -119,11 +119,13 @@ ContentClickInternal = {
 
       let suppressTabsOnFileDownload =
           json.tabmixContentClick.suppressTabsOnFileDownload || false;
-      let params = {charset: browser.characterSet,
-                    suppressTabsOnFileDownload: suppressTabsOnFileDownload,
-                    referrerURI: browser.documentURI,
-                    referrerPolicy: json.referrerPolicy,
-                    noReferrer: json.noReferrer};
+      let params = {
+        charset: browser.characterSet,
+        suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+        referrerURI: browser.documentURI,
+        referrerPolicy: json.referrerPolicy,
+        noReferrer: json.noReferrer
+      };
       window.openLinkIn(json.href, where, params);
 
       try {

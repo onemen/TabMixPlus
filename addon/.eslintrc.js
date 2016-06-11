@@ -193,6 +193,10 @@ module.exports = {
     "newline-after-var": 0,
     "newline-before-return": 0,
     "newline-per-chained-call": 0,
+    "object-curly-newline": [2, {
+      "ObjectExpression": {"multiline": true},
+      "ObjectPattern": "never"
+    }],
     "object-curly-spacing": [2, "never"],
     "object-shorthand": 0, // since Firefox 33
     "one-var": 0,

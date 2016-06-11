@@ -1163,8 +1163,10 @@ Tabmix.initialization = {
 
     delete this.isValidWindow;
     Object.defineProperty(this, "run", {enumerable: false});
-    Object.defineProperty(this, "isValidWindow", {value: !stopInitialization,
-                                                  enumerable: false});
+    Object.defineProperty(this, "isValidWindow", {
+      value: !stopInitialization,
+      enumerable: false
+    });
     return this.isValidWindow;
   },
 

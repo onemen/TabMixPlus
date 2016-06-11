@@ -141,10 +141,12 @@ function prompt_deinit(button) {
   // if we are not a modal use a callback function
   if (typeof window._callBackFunction == "function") {
     if (window.opener && !window.opener.closed) {
-      let returnData = {button: dialogParams.GetInt(4),
-                        checked: (dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED),
-                        label: dialogParams.GetString(5),
-                        value: dialogParams.GetInt(6)};
+      let returnData = {
+        button: dialogParams.GetInt(4),
+        checked: (dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED),
+        label: dialogParams.GetString(5),
+        value: dialogParams.GetInt(6)
+      };
       try {
         window._callBackFunction(returnData);
       } catch (ex) {

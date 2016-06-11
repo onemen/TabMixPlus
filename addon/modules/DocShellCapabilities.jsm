@@ -20,9 +20,7 @@ this.DocShellCapabilities = {
 
   update: function(browser, data) {
     // Update the persistent tab state cache
-    TabStateCache.update(browser, {
-      disallow: data.disallow || null
-    });
+    TabStateCache.update(browser, {disallow: data.disallow || null});
     if (data.reload)
       browser.reload();
   },

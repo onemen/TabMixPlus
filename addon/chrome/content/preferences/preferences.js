@@ -35,8 +35,10 @@ var gPrefWindow = {
     var docElt = document.documentElement;
 
     // don't use browser.preferences.animateFadeIn
-    Object.defineProperty(docElt, "_shouldAnimate", {value: false,
-                          writable: true, configurable: true});
+    Object.defineProperty(docElt, "_shouldAnimate", {
+      value: false,
+      writable: true, configurable: true
+    });
     docElt.setAttribute("animated", "false");
 
     window.gIncompatiblePane.init(docElt);
@@ -271,8 +273,10 @@ function getPrefByType(prefName) {
 }
 
 function setPrefByType(prefName, newValue, atImport) {
-  let pref = {name: prefName, value: newValue,
-              type: Services.prefs.getPrefType(prefName)};
+  let pref = {
+    name: prefName, value: newValue,
+    type: Services.prefs.getPrefType(prefName)
+  };
   try {
     if (!atImport || !setPrefAfterImport(pref))
       setPref(pref);
@@ -419,9 +423,7 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      OS.File.writeAtomic(file.path, patterns.join(""), {
-        encoding: "utf-8", tmpPath: file.path + ".tmp"
-      });
+      OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
     }
   }).then(null, Tabmix.reportError);
 }
