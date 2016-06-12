@@ -242,7 +242,8 @@
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
               </hbox>
             </hbox>
-            <label id="onLeftDisabled" value="&onLeftDisabled.label;" hidden="true"
+            <label id="onLeftDisabled" value="&onLeftDisabled.label;"
+                   tst="&onLeftDisabled.tst.label;" hidden="true"
                    style="text-decoration: underline; color: #CC0000;"/>
           </groupbox>
           <groupbox flex="1">
