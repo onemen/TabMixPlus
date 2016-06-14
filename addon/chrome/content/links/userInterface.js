@@ -58,14 +58,16 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
       return dupTab;
     }
     case 4 : {// user url
-      let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
-      TabmixSvc.newtabUrl;
-      try {
-        url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-        if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
-          url = "about:privatebrowsing";
-      } catch (ex) {
-        Tabmix.assert(ex);
+      if (replaceLastTab || !Tabmix.isVersion(410) || TabmixSvc.isCyberfox) {
+        let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
+                       TabmixSvc.newtabUrl;
+        try {
+          url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+          if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
+            url = "about:privatebrowsing";
+        } catch (ex) {
+          Tabmix.assert(ex);
+        }
       }
       // use this if we can't find the pref
       if (!url)
