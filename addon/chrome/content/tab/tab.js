@@ -637,8 +637,10 @@ Tabmix.tabsUtils = {
     this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
     this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
     this._tabmixPositionalTabs = {
-      beforeSelectedTab: null, afterSelectedTab: null,
-      beforeHoveredTab: null, afterHoveredTab: null
+      beforeSelectedTab: null,
+      afterSelectedTab: null,
+      beforeHoveredTab: null,
+      afterHoveredTab: null
     };
 
     Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];

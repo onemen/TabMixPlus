@@ -37,7 +37,8 @@ var gPrefWindow = {
     // don't use browser.preferences.animateFadeIn
     Object.defineProperty(docElt, "_shouldAnimate", {
       value: false,
-      writable: true, configurable: true
+      writable: true,
+      configurable: true
     });
     docElt.setAttribute("animated", "false");
 
@@ -274,7 +275,8 @@ function getPrefByType(prefName) {
 
 function setPrefByType(prefName, newValue, atImport) {
   let pref = {
-    name: prefName, value: newValue,
+    name: prefName,
+    value: newValue,
     type: Services.prefs.getPrefType(prefName)
   };
   try {

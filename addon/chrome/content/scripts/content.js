@@ -160,10 +160,13 @@ var TabmixContentHandler = {
     let data = {
       json: {
         dataTransfer: {dropEffect: event.dataTransfer.dropEffect},
-        ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-        shiftKey: event.shiftKey, altKey: event.altKey
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey
       },
-      uri: uri, name: name.value
+      uri: uri,
+      name: name.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
     if (result[0]) {
@@ -222,10 +225,15 @@ TabmixClickEventHandler = {
     }
 
     let json = {
-      button: event.button, shiftKey: event.shiftKey,
-      ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-      altKey: event.altKey, href: null, title: null,
-      bookmark: false, referrerPolicy: referrerPolicy,
+      button: event.button,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      metaKey: event.metaKey,
+      altKey: event.altKey,
+      href: null,
+      title: null,
+      bookmark: false,
+      referrerPolicy: referrerPolicy,
       originAttributes: principal ? principal.originAttributes : {},
     };
 

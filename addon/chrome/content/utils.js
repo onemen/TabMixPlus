@@ -168,8 +168,10 @@ var Tabmix = {
       dialog._callBackFunction = aCallBack;
 
     return {
-      button: dpb.GetInt(4), checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
-      label: dpb.GetString(5), value: dpb.GetInt(6)
+      button: dpb.GetInt(4),
+      checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
+      label: dpb.GetString(5),
+      value: dpb.GetInt(6)
     };
   },
 

@@ -499,7 +499,8 @@ KeyConfig = {
     else {
       let newKey = {
         modifiers: prefValue[0].replace(" ", ","),
-        key: prefValue[1], keycode: prefValue[2]
+        key: prefValue[1],
+        keycode: prefValue[2]
       };
       if (keyData.value.indexOf("accel") > -1)
         newKey.modifiers = newKey.modifiers.replace(getPlatformAccel(), "accel");

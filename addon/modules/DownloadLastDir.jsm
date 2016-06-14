@@ -37,7 +37,8 @@ this.TabmixDownloadLastDir = {
         this._window = val;
         return val;
       },
-      configurable: true, enumerable: true
+      configurable: true,
+      enumerable: true
     };
 
     let downloadModule = {};

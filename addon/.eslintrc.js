@@ -113,8 +113,7 @@ module.exports = {
     "no-sparse-arrays": 2,
     // "no-sync": 0, // node
     "no-ternary": 0,
-    // the editor remove trailing-spaces on save
-    "no-trailing-spaces": 0,
+    "no-trailing-spaces": 2,
     "no-this-before-super": 2,
     "no-throw-literal": 2,
     "no-undef": 2,
@@ -198,6 +197,7 @@ module.exports = {
       "ObjectPattern": "never"
     }],
     "object-curly-spacing": [2, "never"],
+    "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
     "object-shorthand": 0, // since Firefox 33
     "one-var": 0,
     "one-var-declaration-per-line": 0,

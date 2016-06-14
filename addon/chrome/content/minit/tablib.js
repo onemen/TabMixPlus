@@ -1112,8 +1112,12 @@ var tablib = { // eslint-disable-line
 
       if (!isValid(linkURL)) {
         let json = {
-          button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
-          altKey: false, target: {},
+          button: 0,
+          shiftKey: false,
+          ctrlKey: false,
+          metaKey: false,
+          altKey: false,
+          target: {},
           tabmix_openLinkWithHistory: true
         };
         // we only get here when it is safe to use contentWindowAsCPOW
