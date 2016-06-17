@@ -163,6 +163,7 @@ var TMP_tabDNDObserver = {
         tabBar._dndCanvas = canvas;
         tabBar._dndPanel = document.createElement("panel");
         tabBar._dndPanel.setAttribute("type", "drag");
+        tabBar._dndPanel.className = "dragfeedback-tab";
         let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
         wrapper.style.width = "160px";
         wrapper.style.height = "90px";
