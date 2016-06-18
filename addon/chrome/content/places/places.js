@@ -60,16 +60,18 @@ var TMP_Places = {
         ).toCode();
       }
 
-      let $LF = '\n        ';
-      Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
-        'URIs.push(tab.linkedBrowser.currentURI);',
-        'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
-        '  $&' + $LF +
-        '} else {' + $LF +
-        '  let uri = tab.linkedBrowser.currentURI;' + $LF +
-        '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
-        '}'
-      ).defineProperty();
+      if (!Tabmix.isVersion(490)) {
+        let $LF = '\n        ';
+        Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
+          'URIs.push(tab.linkedBrowser.currentURI);',
+          'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
+          '  $&' + $LF +
+          '} else {' + $LF +
+          '  let uri = tab.linkedBrowser.currentURI;' + $LF +
+          '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
+          '}'
+        ).defineProperty();
+      }
     }
 
     // prevent error when closing window with sidebar open
