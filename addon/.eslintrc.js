@@ -70,7 +70,8 @@ module.exports = {
     "no-lone-blocks": 2,
     "no-lonely-if": 2,
     "no-loop-func": 2,
-    // "no-mixed-requires": [0, false], // node
+    "no-mixed-operators": 0,
+    "no-mixed-requires": [0, false], // node
     "no-mixed-spaces-and-tabs": [2, false],
     "no-multi-spaces": 2,
     // TODO need to fix this...
@@ -83,23 +84,24 @@ module.exports = {
     "no-new": 2,
     "no-new-func": 2,
     "no-new-object": 2,
-    // "no-new-require": 0, // node
+    "no-new-require": 0, // node
     "no-new-symbol": 2,
     "no-new-wrappers": 2,
     "no-obj-calls": 2,
     "no-octal": 2,
     "no-octal-escape": 2,
     "no-param-reassign": 0,
-    // "no-path-concat": 0, // node
+    "no-path-concat": 0, // node
     "no-plusplus": 0,
-    // "no-process-env": 0, // node
-    // "no-process-exit": 2, // node
+    "no-process-env": 0, // node
+    "no-process-exit": 2, // node
     "no-proto": 2,
+    "no-prototype-builtins": 0,
     "no-redeclare": 2,
     "no-regex-spaces": 2,
     "no-restricted-globals": 0,
     "no-restricted-imports": 0,
-    // "no-restricted-modules": 0, // node
+    "no-restricted-modules": 0, // node
     "no-restricted-syntax": 0,
     "no-return-assign": [2, "except-parens"],
     "no-script-url": 0,
@@ -111,7 +113,7 @@ module.exports = {
     "no-whitespace-before-property": 2,
     "no-spaced-func": 2,
     "no-sparse-arrays": 2,
-    // "no-sync": 0, // node
+    "no-sync": 0, // node
     "no-ternary": 0,
     "no-trailing-spaces": 2,
     "no-this-before-super": 2,
@@ -149,7 +151,7 @@ module.exports = {
     "block-scoped-var": 2,
     "block-spacing": [2, "never"],
     "brace-style": [2, "1tbs", {"allowSingleLine": true}],
-    // "callback-return": 0, // node
+    "callback-return": 0,
     "camelcase": 0,
     // TODO - maybe in the future
     // "comma-dangle": [2, "always-multiline"],
@@ -171,9 +173,9 @@ module.exports = {
     "func-names": 0,
     "func-style": [0, "declaration"],
     "generator-star-spacing": [2, "after"],
-    // "global-require": 0, // node
+    "global-require": 0, // node
     "guard-for-in": 2,
-    // "handle-callback-err": 0, // node
+    "handle-callback-err": 0, // node
     "id-length": 0,
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": {"var": 2, "let": 2, "const": 3}}],
     "init-declarations": 0,
@@ -184,6 +186,7 @@ module.exports = {
     "linebreak-style": [2, "windows"],
     "max-depth": [0, 4],
     "max-len": [0, 120, 4],
+    "max-lines": 0,
     "max-nested-callbacks": [0, 2],
     "max-params": [0, 3],
     "max-statements": [0, 10],
@@ -235,6 +238,7 @@ module.exports = {
     }],
     "strict": [2, "global"],
     "template-curly-spacing": [2, "never"],
+    "unicode-bom": 0,
     "use-isnan": 2,
     "valid-jsdoc": 0,
     "valid-typeof": 2,
