@@ -83,6 +83,23 @@ this.SingleWindowModeUtils = {
     return true;
   },
 
+  restoreDimensionsAndPosition: function(newWindow, restorePosition) {
+    const rect = newWindow.__winRect;
+    if (typeof rect != "object") {
+      return;
+    }
+    const doc = newWindow.document.documentElement;
+    for (let attr of Object.keys(rect)) {
+      doc.setAttribute(attr, rect[attr]);
+    }
+    if (restorePosition) {
+      const {width, height, screenX, screenY} = rect;
+      newWindow.resizeTo(width, height);
+      newWindow.moveTo(screenX, screenY);
+    }
+    delete newWindow.__winRect;
+  },
+
   onLoad: function(newWindow) {
     var existingWindow = this.getBrowserWindow(newWindow);
     // no navigator:browser window open yet?
@@ -92,6 +109,12 @@ this.SingleWindowModeUtils = {
     if (!newWindow.arguments || newWindow.arguments.length === 0)
       return;
     var args = newWindow.arguments;
+
+    // don't close windows that was probably opened by extension
+    if (args.length == 1 && args[0] === null) {
+      this.restoreDimensionsAndPosition(newWindow, true);
+      return;
+    }
 
     var existingBrowser = existingWindow.gBrowser;
     existingWindow.tablib.init(); // just in case tablib isn't init yet
@@ -187,15 +210,10 @@ this.SingleWindowModeUtils = {
     } catch (ex) {
       existingWindow.Tabmix.obj(ex);
     }
-    existingWindow.setTimeout(function() {
+    existingWindow.setTimeout(() => {
       try {
         // restore window dimensions, to prevent flickering in the next restart
-        var win = newWindow.document.documentElement;
-        if (typeof newWindow.__winRect == "object") {
-          for (let attr of Object.keys(newWindow.__winRect)) {
-            win.setAttribute(attr, newWindow.__winRect[attr]);
-          }
-        }
+        this.restoreDimensionsAndPosition(newWindow);
         newWindow.close();
         if (firstTabAdded) {
           existingBrowser.selectedTab = firstTabAdded;
