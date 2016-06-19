@@ -41,7 +41,7 @@ this.MergeWindows = {
       tabsSelected: selectedTabs.length > 0,
       multiple: mergeAllWindows && !selectedTabs.length
     };
-    let {windows: windows, normalWindowsCount: normalWindowsCount} = this.getWindowsList(aWindow, options);
+    let {windows, normalWindowsCount} = this.getWindowsList(aWindow, options);
     if (!windows.length)
       this.notify(aWindow, options.privateNotMatch);
     else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
