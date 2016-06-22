@@ -1045,10 +1045,26 @@ var tablib = { // eslint-disable-line
       } else if (aMoveTab) {
         this.replaceTabWithWindow(aTab);
       } else {
-        aTab._tabmixCopyToWindow = {data: aTabData};
-        // replaceTabWithWindow not working if there is only one tab in the the window
-        window.openDialog("chrome://browser/content/browser.xul",
-            "_blank", "chrome,dialog=no,all", aTab);
+        let otherWin = OpenBrowserWindow();
+        let delayedStartupFinished = (subject, topic) => {
+          if (topic == "browser-delayed-startup-finished" &&
+              subject == otherWin) {
+            Services.obs.removeObserver(delayedStartupFinished, topic);
+            let otherGBrowser = otherWin.gBrowser;
+            let otherTab = otherGBrowser.selectedTab;
+            if (aTabData) {
+              // restore closed tab to new window
+              TabmixSvc.ss.setTabState(otherTab, aTabData);
+            } else {
+              TabmixSvc.ss.duplicateTab(otherWin, aTab);
+              otherGBrowser.removeTab(otherTab, {animate: false});
+            }
+          }
+        };
+
+        Services.obs.addObserver(delayedStartupFinished,
+                                 "browser-delayed-startup-finished",
+                                 false);
       }
     };
 
@@ -1678,15 +1694,6 @@ var tablib = { // eslint-disable-line
       }
 
       Tabmix.copyTabData(aOurTab, aOtherTab);
-
-      let copy = aOtherTab._tabmixCopyToWindow;
-      delete aOtherTab._tabmixCopyToWindow;
-      if (typeof copy == "object") {
-        let tabData = copy ? copy.data : null;
-        TabmixSvc.ss.setTabState(aOurTab, tabData || TabmixSvc.ss.getTabState(aOtherTab));
-        return;
-      }
-
       Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
