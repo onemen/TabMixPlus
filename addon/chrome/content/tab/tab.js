@@ -1818,6 +1818,11 @@ gTMPprefObserver = {
       this.insertRule('.tab-icon-sound {display: none;}');
     }
 
+    /* tab-sharing-icon-overlay added by Bug 1275262, Firefox 50+ */
+    if (!Tabmix.isVersion(500)) {
+      this.insertRule('.tab-sharing-icon-overlay {display: none;}');
+    }
+
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +

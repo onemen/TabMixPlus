@@ -56,19 +56,23 @@
         </xul:vbox>
         <xul:hbox xbl:inherits="pinned,selected,visuallyselected,titlechanged,attention"
                   class="tab-content" align="center">
-            <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected,visuallyselected">
-              <xul:image xbl:inherits="fadein,pinned,busy,progress,selected,visuallyselected"
-                         class="tab-throbber"
-                         role="presentation"/>
-              <xul:image xbl:inherits="src=image,fadein,pinned,selected,visuallyselected,busy,crashed"
-                         anonid="tab-icon-image"
-                         class="tab-icon-image"
-                         validate="never"
-                         role="presentation"/>
-              <xul:image class="tab-protect-icon" />
-              <xul:image class="tab-lock-icon"/>
-              <xul:image class="tab-reload-icon"/>
-            </xul:stack>
+          <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected,visuallyselected">
+            <xul:image xbl:inherits="fadein,pinned,busy,progress,selected,visuallyselected"
+                       class="tab-throbber"
+                       role="presentation"/>
+            <xul:image xbl:inherits="src=image,fadein,pinned,selected,visuallyselected,busy,crashed,sharing"
+                       anonid="tab-icon-image"
+                       class="tab-icon-image"
+                       validate="never"
+                       role="presentation"/>
+            <xul:image class="tab-protect-icon"/>
+            <xul:image class="tab-lock-icon"/>
+            <xul:image class="tab-reload-icon"/>
+          </xul:stack>
+          <xul:image xbl:inherits="sharing,selected"
+                     anonid="sharing-icon"
+                     class="tab-sharing-icon-overlay"
+                     role="presentation"/>
           <xul:image xbl:inherits="crashed,busy,soundplaying,pinned,muted"
                      anonid="overlay-icon"
                      class="tab-icon-overlay"
