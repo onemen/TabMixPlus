@@ -132,8 +132,7 @@ this.MergeWindows = {
     if (openerWindow) {
       // since we merge popup after all other tabs was merged,
       // we only look for opener in the target window
-      let openerTab = openerWindow &&
-          tabbrowser._getTabForContentWindow(openerWindow.top);
+      let openerTab = tabbrowser._getTabForContentWindow(openerWindow);
       if (openerTab)
         index = openerTab._tPos + 1;
     }
