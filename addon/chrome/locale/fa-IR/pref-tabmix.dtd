@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "در">
 <!ENTITY widthPixels.label "پیکسل">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "عرض تب با اندازه عنوان تب متناسب شود">
 <!ENTITY bookastitle.label "از نام نشانه گذاری شده برای عنوان تب استفاده کن">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

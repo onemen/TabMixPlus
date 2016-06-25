@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
 <!ENTITY onLeftDisabled.label "Није могуће поставити дугме на левој страни тренутне теме">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Ширина картице је пропорционална наслову картице">
 <!ENTITY bookastitle.label "Користи име обележивача као наслов картице">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

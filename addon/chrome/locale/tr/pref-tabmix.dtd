@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "ile">
 <!ENTITY widthPixels.label "piksel">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Sekme genişliği başlığına uysun">
 <!ENTITY bookastitle.label "Yer imi ismini sekme başlığı olarak kullan">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

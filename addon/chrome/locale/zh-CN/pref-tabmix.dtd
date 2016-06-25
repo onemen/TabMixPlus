@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "至">
 <!ENTITY widthPixels.label "像素">
 <!ENTITY onLeftDisabled.label "无法在当前主题下降按钮放置在左侧">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "标签页宽度适合其标题长度">
 <!ENTITY bookastitle.label "使用书签名作为标签页标题">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

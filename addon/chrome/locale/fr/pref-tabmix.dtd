@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "à">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Impossible de positionner le bouton sur le côté gauche avec le thème actuel&apos;">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "La largeur de l&apos;onglet s&apos;adapte au titre">
 <!ENTITY bookastitle.label "Utiliser le nom du marque-page comme titre d&apos;onglet">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

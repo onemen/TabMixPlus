@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "až">
 <!ENTITY widthPixels.label "pixelov">
 <!ENTITY onLeftDisabled.label "Nepridať tlačidlo naľavo s aktuálnou témou">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Karty sú široké podľa svojho obsahu">
 <!ENTITY bookastitle.label "Použiť názov záložky ako názov karty">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

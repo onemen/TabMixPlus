@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "إلى">
 <!ENTITY widthPixels.label "بكسل">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "عرض اللسان يلائم عنوان اللسان">
 <!ENTITY bookastitle.label "استخدام اسم العلامة كعنوان للسان">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

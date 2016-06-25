@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "til">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Fanebredde tilpasset fanebladstitlen">
 <!ENTITY bookastitle.label "Brug bogmærkenavn som fanebladstitel">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

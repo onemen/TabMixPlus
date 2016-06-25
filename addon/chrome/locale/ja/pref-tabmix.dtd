@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "から">
 <!ENTITY widthPixels.label "ピクセル">
 <!ENTITY onLeftDisabled.label "このテーマではボタンを左サイドに配置できません">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "タブ幅をページタイトルの長さに合わせて調節する">
 <!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

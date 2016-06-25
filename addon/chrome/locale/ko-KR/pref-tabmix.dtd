@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "에서">
 <!ENTITY widthPixels.label "픽셀">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "텝 너비를 탭 제목에 맞추기">
 <!ENTITY bookastitle.label "북마크 이름을 탭 제목으로 사용">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

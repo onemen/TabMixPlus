@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "para">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Can&apos;t colocará o botão do lado esquerdo com o tema atual">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Abas flexíveis">
 <!ENTITY bookastitle.label "Usar nome do Favorito como título da aba">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

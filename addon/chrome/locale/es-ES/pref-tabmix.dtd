@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "hasta">
 <!ENTITY widthPixels.label "píxeles">
 <!ENTITY onLeftDisabled.label "No puede poner el botón a la izquierda con el tema actual">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Ajustar ancho pestaña al título">
 <!ENTITY bookastitle.label "Usar nombre marcador como título de pestaña">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "至">
 <!ENTITY widthPixels.label "像素">
 <!ENTITY onLeftDisabled.label "在目前的主題下無法將按鈕置於左側">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "分頁標籤寬度配合標題文字長度">
 <!ENTITY bookastitle.label "使用書籤名稱做為分頁標題">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
