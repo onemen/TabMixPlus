@@ -725,7 +725,7 @@ Tabmix.onContentLoaded = {
       '{',
       '{\n' +
       '  let callerTrace = Tabmix.callerTrace();\n' +
-      '  if (callerTrace.contain("BG_observe")) {\n' +
+      '  if (callerTrace.contain("BG_observe", "loadHomepage")) {\n' +
       '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
       '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +
