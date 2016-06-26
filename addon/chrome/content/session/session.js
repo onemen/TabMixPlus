@@ -3536,7 +3536,8 @@ TabmixSessionManager = {
     var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
     var ctabs = TMP_ClosedTabs.getClosedTabData;
     var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
-    ctabs = ctabs.filter(tabData => this.getSessionStoreDataForRDF(tabData));
+    ctabs = ctabs.map(data => this.getSessionStoreDataForRDF(data))
+                 .filter(data => data);
     ctabs.reverse().forEach(data => {
       let uniqueId, rdfLabelSession, newNode;
       uniqueId = "panel" + Date.now() + Math.random();
