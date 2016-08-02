@@ -91,7 +91,15 @@ var tablib = { // eslint-disable-line
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
       } catch (ex) {}
     }
-    var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
+    let isBlankTab = (function() {
+      // first tab is busy when browser window starts on Firefox 51
+      let checkIfBusy = gBrowserInit.delayedStartupFinished || tab._tPos > 0;
+      if (checkIfBusy && tab.hasAttribute("busy") || tab.hasAttribute("pending")) {
+        return false;
+      }
+
+      return gBrowser.isBlankBrowser(browser);
+    }());
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
       let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
