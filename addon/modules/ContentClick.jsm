@@ -1063,7 +1063,13 @@ ContentClickInternal = {
   *
   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
-    var self = this;
+    const fixupURI = url => {
+      try {
+        return this.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+      } catch (ex) { }
+      return null;
+    };
+
     let getDomain = function getDomain(url) {
       if (typeof (url) != "string")
         url = url.toString();
@@ -1074,18 +1080,25 @@ ContentClickInternal = {
       if (url.match(/^file:/))
         return "local_file";
 
-      let fixedURI;
-      try {
-        fixedURI = self.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+      const fixedURI = fixupURI(url);
+      if (fixedURI) {
         url = fixedURI.spec;
-      } catch (ex) { }
+      }
 
       if (url.match(/^http/)) {
         url = fixedURI || makeURI(url);
 
         // catch redirect
-        if (url.path.match(/^\/r\/\?http/))
-          url = makeURI(url.path.substr("/r/?".length));
+        const path = url.path;
+        if (path.match(/^\/r\/\?http/)) {
+          url = fixupURI(path.substr("/r/?".length));
+        } else if (path.match(/^.*\?url=http/)) {
+          // redirect in www.reddit.com
+          url = fixupURI(path.replace(/^.*\?url=/, ""));
+        }
+        if (!url) {
+          return null;
+        }
     /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
