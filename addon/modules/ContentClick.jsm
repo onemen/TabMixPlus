@@ -124,7 +124,8 @@ ContentClickInternal = {
         suppressTabsOnFileDownload: suppressTabsOnFileDownload,
         referrerURI: browser.documentURI,
         referrerPolicy: json.referrerPolicy,
-        noReferrer: json.noReferrer
+        noReferrer: json.noReferrer,
+        allowMixedContent: json.allowMixedContent || null,
       };
       if (json.originAttributes.userContextId) {
         params.userContextId = json.originAttributes.userContextId;
