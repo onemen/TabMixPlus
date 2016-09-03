@@ -1191,6 +1191,56 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
+    if (Tabmix.isVersion(510)) {
+      if (!this.urlBarInitialized) {
+        Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
+        gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
+        this.urlBarInitialized = true;
+      }
+    } else {
+      this.handleCommand_beforeV51();
+    }
+  },
+
+  handleCommand: function(event, openUILinkWhere, openUILinkParams) {
+    let prevTab, prevTabPos;
+    let action = this._parseActionUrl(this.value);
+    if (action && action.type == "switchtab" && this.hasAttribute("actiontype")) {
+      prevTab = gBrowser.selectedTab;
+      prevTabPos = prevTab._tPos;
+    }
+
+    if (!openUILinkWhere) {
+      let isMouseEvent = event instanceof MouseEvent;
+      let altEnter = !isMouseEvent && event &&
+          event.altKey && !isTabEmpty(gBrowser.selectedTab);
+      let where = "current";
+      let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
+              altEnter).inNew && !(/^ *javascript:/.test(this.value));
+      if (isMouseEvent || altEnter || loadNewTab) {
+        // Use the standard UI link behaviors for clicks or Alt+Enter
+        where = "tab";
+        if (isMouseEvent || event && !altEnter)
+          where = whereToOpenLink(event, false, false);
+        if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
+          where = "tab";
+        else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
+          where = "current";
+      }
+      openUILinkWhere = where;
+    }
+
+    Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
+
+    // move the tab that was switched to after the previously selected tab
+    if (prevTabPos) {
+      let pos = prevTabPos + Number(gBrowser.selectedTab._tPos > prevTabPos) -
+          Number(!prevTab || !prevTab.parentNode);
+      gBrowser.moveTabTo(gBrowser.selectedTab, pos);
+    }
+  },
+
+  handleCommand_beforeV51: function() {
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
@@ -1339,11 +1389,15 @@ Tabmix.navToolbox = {
       'inBackground: aWhere == "tab-background"',
       '$& ||' + $LF +
       '                Tabmix.prefs.getBoolPref("loadSearchInBackground")',
-      {check: Tabmix.isVersion(350)}
+      {check: Tabmix.isVersion(350) && !Tabmix.isVersion(510)}
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
       'var loadInBackground = aWhere == "tab-background" || Tabmix.prefs.getBoolPref("loadSearchInBackground");',
-      {check: !searchLoadExt && organizeSE}
+      {check: !searchLoadExt && organizeSE && !Tabmix.isVersion(510)}
+    )._replace(
+      'openUILinkIn',
+      'params.inBackground = params.inBackground || Tabmix.prefs.getBoolPref("loadSearchInBackground");' + $LF +
+      '$&', {check: Tabmix.isVersion(510)}
     )._replace(
       /searchbar\.currentEngine/g,
       'this.currentEngine', {check: pIte}

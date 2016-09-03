@@ -15,25 +15,28 @@
  * @returns   Nothing.
  */
 Tabmix.linkHandling_init = function TMP_TBP_init() {
-  // for normal click this function calls urlbar.handleCommand
-  // for middle click or click with modifiers whereToOpenLink can't be "current"
-  // so we don't need to check for locked tabs only for blanks tabs
-  var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
-  if (autoComplete) {
-    // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
-    let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
-        "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
-    let n = '\n            ';
-    this.changeCode(autoComplete, fn)._replace(
-      /openUILink\(url, aEvent.*\);/,
-      'var tabmixOptions = typeof options == "object" ? options : {};' + n +
-      'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
-      'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
-      'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
-      'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
-      'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
-      'openUILinkIn(url, where, tabmixOptions);'
-    ).toCode();
+  // Since bug 1180944 onPopupClick always call urlbar.handleCommand
+  if (!Tabmix.isVersion(510)) {
+    // for normal click this function calls urlbar.handleCommand
+    // for middle click or click with modifiers whereToOpenLink can't be "current"
+    // so we don't need to check for locked tabs only for blanks tabs
+    var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
+    if (autoComplete) {
+      // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
+      let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
+               "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
+      let n = '\n            ';
+      this.changeCode(autoComplete, fn)._replace(
+          /openUILink\(url, aEvent.*\);/,
+          'var tabmixOptions = typeof options == "object" ? options : {};' + n +
+          'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
+          'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
+          'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
+          'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
+          'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
+          'openUILinkIn(url, where, tabmixOptions);'
+      ).toCode();
+    }
   }
 
   window.BrowserOpenTab = TMP_BrowserOpenTab;
