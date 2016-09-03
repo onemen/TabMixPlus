@@ -431,7 +431,7 @@ var TabmixContext = {
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
     } else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(TabContextMenu.contextTab);");
+      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(null, TabContextMenu.contextTab);");
     }
 
     // Duplicate Commands

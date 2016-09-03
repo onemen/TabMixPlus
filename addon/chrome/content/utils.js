@@ -62,11 +62,13 @@ var Tabmix = {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
+  skipSingleWindowModeCheck: false,
   getSingleWindowMode: function TMP_getSingleWindowMode() {
     // if we don't have any browser window opened return false
     // so we can open new window
-    if (!this.getTopWin())
+    if (this.skipSingleWindowModeCheck || !this.getTopWin()) {
       return false;
+    }
     return this.prefs.getBoolPref("singleWindow");
   },
 

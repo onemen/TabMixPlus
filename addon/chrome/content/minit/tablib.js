@@ -250,7 +250,7 @@ var tablib = { // eslint-disable-line
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
                  aboutNewtab : aboutBlank;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
-        code, 'TMP_BrowserOpenTab(null, true)'
+        code, 'TMP_BrowserOpenTab(null, null, true)'
       ).toCode();
     }
 
@@ -881,7 +881,7 @@ var tablib = { // eslint-disable-line
       ).toCode();
     }
 
-    if (Tabmix.isVersion(300)) {
+    if (Tabmix.isVersion(300) && !Tabmix.isVersion(510)) {
       Tabmix.changeCode(window, "BrowserOpenNewTabOrWindow")._replace(
         'event.shiftKey',
         '$& && !Tabmix.singleWindowMode'

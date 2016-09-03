@@ -34,7 +34,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
-function TMP_BrowserOpenTab(aTab, replaceLastTab) {
+function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
                                        Tabmix.prefs.getIntPref("loadOnNewTab.type");
   var url;
@@ -87,9 +87,6 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
   if (TabmixTabbar.widthFitTitle && replaceLastTab && !selectedTab.collapsed)
     selectedTab.collapsed = true;
 
-  // always select new tab when replacing last tab
-  var loadInBackground = replaceLastTab ? false :
-  Tabmix.prefs.getBoolPref("loadNewInBackground");
   var loadBlank = isBlankPageURL(url);
   if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
       typeof privateTab == "object") {
@@ -100,8 +97,34 @@ function TMP_BrowserOpenTab(aTab, replaceLastTab) {
     }
   }
 
+  // always select new tab when replacing last tab
+  var loadInBackground = replaceLastTab ? false :
+                         Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
   let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+  // Let accel-click and middle-click on the new tab button toggle openTabNext preference
+  // see bug 528005
+  if (Tabmix.isVersion(510) && aEvent && !aTab && !replaceLastTab &&
+      (aEvent instanceof MouseEvent || aEvent instanceof XULCommandEvent)) {
+    // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
+    Tabmix.skipSingleWindowModeCheck = true;
+    let where = whereToOpenLink(aEvent, false, true);
+    Tabmix.skipSingleWindowModeCheck = false;
+    switch (where) {
+      case "tabshifted":
+        loadInBackground = !loadInBackground;
+        /* falls through */
+      case "tab":
+        openTabNext = !openTabNext;
+        break;
+      case "window":
+        if (!Tabmix.getSingleWindowMode()) {
+          openUILinkIn(url, where);
+          return null;
+        }
+        break;
+    }
+  }
   TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
   var newTab = gBrowser.addTab(url, {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
