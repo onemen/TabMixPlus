@@ -126,6 +126,7 @@ ContentClickInternal = {
         referrerPolicy: json.referrerPolicy,
         noReferrer: json.noReferrer,
         allowMixedContent: json.allowMixedContent || null,
+        isContentWindowPrivate: json.isContentWindowPrivate,
       };
       if (json.originAttributes.userContextId) {
         params.userContextId = json.originAttributes.userContextId;

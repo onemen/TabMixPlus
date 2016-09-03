@@ -14,6 +14,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
 XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
@@ -235,6 +238,7 @@ TabmixClickEventHandler = {
       bookmark: false,
       referrerPolicy: referrerPolicy,
       originAttributes: principal ? principal.originAttributes : {},
+      isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
     };
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
