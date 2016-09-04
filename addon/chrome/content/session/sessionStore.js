@@ -821,6 +821,7 @@ var TabmixConvertSession = {
         tabData.scroll = {scroll: scroll};
       }
     }
+    tabData.userContextId = TabmixSessionManager.getIntValue(rdfNodeTab, "userContextId", 0);
 
     var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
     var tabAttribute = ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"];
