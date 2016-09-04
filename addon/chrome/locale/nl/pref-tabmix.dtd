@@ -178,7 +178,7 @@
 <!ENTITY widthTo.label "tot">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Kan met het huidige thema geen knop links plaatsen">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Kan knop niet links plaatsen wanneer treeStyleTab is geïnstalleerd.">
 <!ENTITY flexTabs.label "Tabbladbreedte aanpassen aan titellengte">
 <!ENTITY bookastitle.label "Bladwijzernaam als tabbladtitel gebruiken">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

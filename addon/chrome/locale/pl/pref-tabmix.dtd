@@ -178,7 +178,7 @@
 <!ENTITY widthTo.label "do">
 <!ENTITY widthPixels.label "pikseli">
 <!ENTITY onLeftDisabled.label "W aktualnie używanym motywie nie można umieścić przycisku po lewej stronie">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Gdy dodatek treeStyleTab jest zainstalowany, nie można umieścić przycisku po lewej stronie">
 <!ENTITY flexTabs.label "Dopasuj szerokość etykiety karty do tytułu">
 <!ENTITY bookastitle.label "Używaj nazwy zakładki jako tytułu karty">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->

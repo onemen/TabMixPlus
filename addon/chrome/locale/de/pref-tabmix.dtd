@@ -178,7 +178,7 @@
 <!ENTITY widthTo.label "bis">
 <!ENTITY widthPixels.label "Pixel">
 <!ENTITY onLeftDisabled.label "Schaltfläche kann mit aktuellem Theme, nicht auf der linken Seite positioniert werden.">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Schaltfläche kann nicht auf der linken Seite plaziert werden, wenn Tree Style Tab Erweiterung installiert ist.">
 <!ENTITY flexTabs.label "Breite der Tabs flexibel an die Länge des Titels anpassen">
 <!ENTITY bookastitle.label "Namen der Lesezeichen als Tab-Titel verwenden">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->

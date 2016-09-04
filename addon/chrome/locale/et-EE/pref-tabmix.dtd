@@ -178,7 +178,7 @@
 <!ENTITY widthTo.label "kuni">
 <!ENTITY widthPixels.label "pikslit">
 <!ENTITY onLeftDisabled.label "Praeguse teemaga ei saa nuppu vasakule poole paigutada">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Ei saa nuppu vasakule küljele paigutada, kui treeStyleTab on installitud">
 <!ENTITY flexTabs.label "Kaardi laius vastab kaardi pealkirja pikkusele">
 <!ENTITY bookastitle.label "Kasuta kaardi pealkirjana järjehoidja nime">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

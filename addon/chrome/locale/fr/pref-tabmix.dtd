@@ -12,24 +12,24 @@
 <!ENTITY settings.default "Restaurer les réglages par défaut">
 <!ENTITY settings.revert "Annuler">
 <!ENTITY generalWindowOpen.label "Ouvrir les liens qui ouvrent une nouvelle fenêtre dans :">
-<!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d&apos;autres applications">
-<!ENTITY externalLinkTarget.label "Ouvrir les liens des autres applications dans :">
+<!ENTITY externalLink.useSeparate.label "Utiliser des préférences distinctes pour les liens venant d'autres applications">
+<!ENTITY externalLinkTarget.label "Ouvrir les liens venant d'autres applications dans :">
 <!ENTITY linkTarget.tab "Nouvel onglet">
 <!ENTITY linkTarget.window "Nouvelle fenêtre">
 <!ENTITY linkTarget.current "Onglet courant">
 <!ENTITY linkTarget.accesskey "c">
 <!ENTITY divertedWindowOpen.label "Popups JavaScript :">
 <!ENTITY divertedWindowOpen.all "Ouvrir toutes les popups dans des onglets">
-<!ENTITY divertedWindowOpen.some "Autoriser les popups non redimensionnées">
+<!ENTITY divertedWindowOpen.some "N'autoriser que les popups dimensionnées à ouvrir une nouvelle fenêtre">
 <!ENTITY divertedWindowOpen.none "Autoriser toutes les popups à ouvrir une nouvelle fenêtre">
-<!ENTITY linkTarget.label "Ouvrir les liens avec un attribut target dans l&apos;onglet courant">
-<!ENTITY targetIsFrame.label "Ouvrir les liens avec cible dans le cadre existant de l'onglet courant">
-<!ENTITY download.label "Empêcher l&apos;ouverture d&apos;onglets vides lors d&apos;un téléchargement de fichier">
+<!ENTITY linkTarget.label "Ouvrir dans l'onglet courant les liens ayant un attribut target">
+<!ENTITY targetIsFrame.label "Ouvrir dans l'onglet courant les liens avec cible vers un cadre existant">
+<!ENTITY download.label "Empêcher l'ouverture d'onglets vides lors d'un téléchargement de fichier">
 <!ENTITY edit.label "Éditer">
-<!ENTITY speLink.label "Forcer l&apos;ouverture dans un nouvel onglet :">
-<!ENTITY speLink.none "Rien">
-<!ENTITY speLink.allLinks "Tous les liens">
-<!ENTITY speLink.external "Liens vers d&apos;autres sites">
+<!ENTITY speLink.label "Forcer l'ouverture dans un nouvel onglet de :">
+<!ENTITY speLink.none "rien">
+<!ENTITY speLink.allLinks "tous les liens">
+<!ENTITY speLink.external "les liens vers d'autres sites">
 <!ENTITY singleWindow.label "Activer le mode Fenêtre Unique">
 <!ENTITY newTabs.label "Nouveaux onglets">
 <!ENTITY tabOpen.label "Ouverture des onglets">
@@ -37,57 +37,57 @@
 <!ENTITY tabClose.label "Fermeture des onglets">
 <!ENTITY tabMerge.label "Fusion des onglets">
 <!ENTITY tabFeature.label "Fonctionnalités des onglets">
-<!ENTITY newtab.label "Charger dans un nouvel onglet :">
-<!ENTITY replaceLastTabWith.label "Lorsque je ferme le dernier onglet le remplacer par">
+<!ENTITY newtab.label "Dans les nouveaux onglets, charger :">
+<!ENTITY replaceLastTabWith.label "Lorsque je ferme le dernier onglet, le remplacer par">
 <!ENTITY newtab.blank "une page vide">
-<!ENTITY newtab.home "la page d&apos;accueil">
+<!ENTITY newtab.home "la page d'accueil">
 <!ENTITY newtab.current "la page courante">
 <!ENTITY newtab.duplicate "la page dupliquée">
 <!ENTITY newtab.location.1 "l'adresse spécifiée">
-<!ENTITY newtab.placeholder.label "Page par défaut du nouvel onglet">
+<!ENTITY newtab.placeholder.label "Page par défaut des nouveaux onglets">
 <!ENTITY location.label.1 "Adresse">
-<!ENTITY focusContent.label "À l&apos;ouverture de l&apos;onglet, positionner le curseur dans la page et non dans la barre d&apos;adresse">
-<!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l&apos;onglet courant">
-<!ENTITY openOtherTabNext.label "Ouvrir d&apos;autres onglets près de l&apos;onglet courant">
-<!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l&apos;onglet courant">
+<!ENTITY focusContent.label "À l'ouverture d'un onglet non vide, positionner le curseur dans la page et non dans la barre d'adresse">
+<!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l'onglet courant">
+<!ENTITY openOtherTabNext.label "Ouvrir les autres onglets à la suite de l'onglet courant">
+<!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l'onglet courant">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openDuplicateNext.label "Ouvrir les onglets dupliqués à la suite de l&apos;original">
+<!ENTITY openDuplicateNext.label "Ouvrir les onglets dupliqués à la suite de l'original">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Modifier l&apos;ordre d&apos;ouverture">
+<!ENTITY openTabNextInverse.label "Modifier l'ordre d'ouverture">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Ouvrir un nouvel onglet près du dernier onglet ouvert à partir de l&apos;onglet courant (depuis la sélection)">
+<!ENTITY openTabNextInverse.tooltip1 "Ouvrir les nouveaux onglets à la suite du dernier onglet ouvert à partir de l'onglet courant (depuis la dernière fois qu'il a été sélectionné)">
 <!ENTITY lockTabs.label "Verrouiller les onglets">
 <!ENTITY lockNewTabs.label "Verrouiller les nouveaux onglets">
 <!ENTITY lockAppTabs.label "Verrouiller les onglets des applications">
 <!ENTITY updateLockState.label "Appliquer les changements aux onglets ouverts">
-<!ENTITY openNewTab.label "Ouvrir des onglets depuis :">
-<!ENTITY openBookmarks.label "Les marque-pages">
-<!ENTITY openPlacesGroups.label "Groupes de marques-pages/historique">
+<!ENTITY openNewTab.label "Utiliser un nouvel onglet :">
+<!ENTITY openBookmarks.label "pour ouvrir un marque-page">
+<!ENTITY openPlacesGroups.label "pour ouvrir un groupe de marques-pages/historique">
 <!ENTITY openPlacesGroups.tooltip "Ne pas remplacer les onglets à l'ouverture d'un groupe de marques-pages/historique">
-<!ENTITY openHistory.label "L&apos;historique">
-<!ENTITY openUrl.label "La barre d&apos;adresse">
-<!ENTITY openSearch.label "La barre de recherche">
-<!ENTITY middlecurrent1.label "Clic-milieu ou Ctrl-clic ouvre les éléments dans l&apos;onglet courant">
-<!ENTITY middlecurrent.tooltip "Uniquement pour les marque-pages, l&apos;historique et les onglets verrouillés">
-<!ENTITY tabFocus.caption "Sélectionner les onglets provenant de :">
+<!ENTITY openHistory.label "pour ouvrir une page de l'historique">
+<!ENTITY openUrl.label "quand je modifie la barre d'adresse">
+<!ENTITY openSearch.label "quand j'utilise la barre de recherche">
+<!ENTITY middlecurrent1.label "Clic-milieu ou Ctrl-clic ouvre les éléments dans l'onglet courant">
+<!ENTITY middlecurrent.tooltip "Uniquement pour les marque-pages, l'historique et les onglets verrouillés">
+<!ENTITY tabFocus.caption "Donner le focus aux onglets provenant de :">
 <!ENTITY selectTab.label "Liens">
 <!ENTITY selectDivertedTab.label "Fenêtres ouvertes par un lien">
 <!ENTITY selectTabFromExternal.label "Autres applications">
 <!ENTITY selectTabCommand.label "Commandes de nouvel onglet">
 <!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
-<!ENTITY selectTabBH.label "Marque-pages ou Historique">
-<!ENTITY duplicateTab.label "Dupliquer l&apos;onglet">
+<!ENTITY selectTabBH.label "Marque-pages et historique">
+<!ENTITY duplicateTab.label "Dupliquer l'onglet">
 <!ENTITY inversefocus1.label "Inverser ce comportement en cas de clic-milieu ou Ctrl-clic pour les :">
-<!ENTITY warning.caption.label "Avertissement">
-<!ENTITY warnOnCloseProtected.label "Avertir lors de la fermeture d&apos;une fenêtre contenant des onglets protégés">
-<!ENTITY warnOnCloseWindow.label "M&apos;avertir à la fermeture d&apos;une fenêtre qui comporte plusieurs onglets">
+<!ENTITY warning.caption.label "Avertissements">
+<!ENTITY warnOnCloseProtected.label "M'avertir à la fermeture d'une fenêtre contenant des onglets protégés">
+<!ENTITY warnOnCloseWindow.label "M'avertir à la fermeture d'une fenêtre qui comporte plusieurs onglets">
 <!ENTITY lasttab.caption.label "Fermeture du dernier onglet">
 <!ENTITY keepWindow.label.3.1 "Ne pas fermer la fenêtre lors de la fermeture du dernier onglet">
 <!ENTITY keeptab.label "Empêcher la fermeture du dernier onglet">
 <!ENTITY closeOnMerge.label "Fermer les fenêtres une fois fusionnées">
-<!ENTITY warnOnMerge.label "Avertir lors de la fermeture d&apos;onglets non fusionnés">
-<!ENTITY currenttab.caption.label "Fermeture de l&apos;onglet courant">
-<!ENTITY focusTab.labelBegin "À la fermeture d&apos;un onglet, passer :">
+<!ENTITY warnOnMerge.label "Avertir lors de la fermeture d'onglets non fusionnés">
+<!ENTITY currenttab.caption.label "Fermeture de l'onglet courant">
+<!ENTITY focusTab.labelBegin "À la fermeture d'un onglet, donner le focus à :">
 <!ENTITY focusTab.firstTab "Premier onglet">
 <!ENTITY focusTab.leftTab "Onglet de gauche">
 <!ENTITY focusTab.rightTab "Onglet de droite">
@@ -97,9 +97,9 @@
 <!ENTITY focusTab.openerTab.rtl "Déclencheur/onglet de gauche">
 <!ENTITY focusTab.lastOpenedTab "Dernier onglet ouvert">
 <!ENTITY undoClose.label "Activer la réouverture des derniers onglets fermés">
-<!ENTITY undoCloseCache.label "Nombre maximum d&apos;onglets fermés mis en cache :">
+<!ENTITY undoCloseCache.label "Nombre maximum d'onglets fermés mémorisés :">
 <!ENTITY undoClosepos.label "Restaurer la position initiale des onglets">
-<!ENTITY menuonlybutton.label "Le bouton de la barre d&apos;outils n&apos;affiche qu&apos;une liste">
+<!ENTITY menuonlybutton.label "Le bouton de la barre d'outils n'affiche qu'une liste">
 <!ENTITY ctrltab.label "Ctrl-Tab parcourt les onglets du dernier au premier utilisé">
 <!ENTITY cmdtab.label "Cmd-Tab parcourt les onglets du dernier au premier utilisé">
 <!ENTITY ctrltab.tabPreviews "Afficher les aperçus miniatures des onglets">
@@ -111,11 +111,11 @@
 <!ENTITY mergeall.label "Fusionner toutes les fenêtres en une seule">
 <!ENTITY mergelastfocused.label "Fusionner seulement la fenêtre courante avec la dernière sélectionnée">
 <!ENTITY mergePopups.label "Prendre également les fenêtres popups">
-<!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les générant">
+<!ENTITY popupNextToOpener.label "Placer les popups à la suite des onglets les ayant générées">
 <!ENTITY activateSlideshow.label "Presser #1 alterne les onglets toutes les">
 <!ENTITY toggleAnimation.label "Désactiver l'animation d'ouverture/fermeture des onglets">
 <!ENTITY reloadEvery.matchAddress.label "Actualiser un onglet sans tenir compte de son adresse">
-<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu Tout actualiser sous le bouton Actualiser">
+<!ENTITY reloadEvery.onReloadButton.label "Afficher le menu «Tout actualiser» sous le bouton «Actualiser»">
 <!ENTITY seconds.label "secondes">
 <!ENTITY minutes.label "min">
 <!ENTITY tabBarAppearance.label "Barre d'onglets">
@@ -140,7 +140,7 @@
 <!ENTITY verticalTabbar.description1 "Ces préférences sont contrôlées par une autre extension qui utilise des onglets verticaux.">
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">
-<!ENTITY tabBarPosition.bottom.label "En bas (au-dessous du contenu)">
+<!ENTITY tabBarPosition.bottom.label "En bas (en-dessous du contenu)">
 <!ENTITY tabScroll.label "Lorsqu'il y a trop d'onglets ouverts :">
 <!ENTITY tabScroll.none "Faire défiler avec la molette de la souris">
 <!ENTITY tabScroll.leftRightButtons "Faire défiler avec les boutons fléchés situés à gauche et à droite">
@@ -178,7 +178,7 @@
 <!ENTITY widthTo.label "à">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Impossible de positionner le bouton sur le côté gauche avec le thème actuel&apos;">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Le bouton ne peut pas être placé à gauche quand «treeStyleTab» est installé">
 <!ENTITY flexTabs.label "La largeur de l&apos;onglet s&apos;adapte au titre">
 <!ENTITY bookastitle.label "Utiliser le nom du marque-page comme titre d&apos;onglet">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
