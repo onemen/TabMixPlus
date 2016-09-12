@@ -797,7 +797,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
         return false;
       let nextTab = tst.getNextSiblingTab(baseTab);
       if (parentTab) {
-        return tst.readyToOpenChildTab(parentTab, false, nextTab);
+        return tst.readyToOpenChildTab(parentTab, false, {
+          insertBefore: nextTab,
+          insertAfter: baseTab
+        });
       } else if (nextTab) {
         ownerBrowser.treeStyleTab.readiedToAttachNewTab = true;
         ownerBrowser.treeStyleTab.parentTab = null;
