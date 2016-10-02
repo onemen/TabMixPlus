@@ -134,7 +134,7 @@ var TabmixTabClickOptions = {
     if (!pref) return; // just in case we missed something
     pref += clickOutTabs ? "ClickTabbar" : "ClickTab";
     var command = Tabmix.prefs.getIntPref(pref);
-    if (command > -1 && this.doCommand(command, aTab, clickOutTabs)) {
+    if (command > -1 && this.doCommand(command, aTab, clickOutTabs, event)) {
       event.stopPropagation();
       event.preventDefault();
     }
@@ -142,7 +142,7 @@ var TabmixTabClickOptions = {
 
 /// add option to open new tab after current one
 /// convert this switch to object
-  doCommand: function TMP_doCommand(command, aTab, clickOutTabs) {
+  doCommand: function TMP_doCommand(command, aTab, clickOutTabs, event) {
     gBrowser.selectedBrowser.focus();
     switch (command) {
       case 0 :
@@ -151,8 +151,10 @@ var TabmixTabClickOptions = {
         BrowserOpenTab();
         break;
       case 2 :
-        if (aTab && aTab.parentNode)
-          gBrowser.removeTab(aTab, {animate: true, byMouse: true});
+        if (aTab && aTab.parentNode) {
+          let byMouse = Tabmix.isVersion(520) ? event && event.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE : true;
+          gBrowser.removeTab(aTab, {animate: true, byMouse: byMouse});
+        }
         break;
       case 3 :
         gBrowser.duplicateTab(aTab);
@@ -255,7 +257,7 @@ var TabmixTabClickOptions = {
       case 29:
         // changed on 2011-03-09 - open new tab when clicked on tabbar
         // or when the tab is locked
-        var event = document.createEvent("Events");
+        event = document.createEvent("Events");
         var opennewTab = clickOutTabs || (aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab));
         event.ctrlKey = opennewTab;
         event.initEvent("click", true, true);
