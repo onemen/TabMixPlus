@@ -1191,14 +1191,14 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
-    if (Tabmix.isVersion(510)) {
+    if (Tabmix.isVersion(500)) {
       if (!this.urlBarInitialized) {
         Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
         gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
         this.urlBarInitialized = true;
       }
     } else {
-      this.handleCommand_beforeV51();
+      this.handleCommand_beforeV50();
     }
   },
 
@@ -1240,7 +1240,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand_beforeV51: function() {
+  handleCommand_beforeV50: function() {
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension

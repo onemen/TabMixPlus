@@ -16,7 +16,7 @@
  */
 Tabmix.linkHandling_init = function TMP_TBP_init() {
   // Since bug 1180944 onPopupClick always call urlbar.handleCommand
-  if (!Tabmix.isVersion(510)) {
+  if (!Tabmix.isVersion(500)) {
     // for normal click this function calls urlbar.handleCommand
     // for middle click or click with modifiers whereToOpenLink can't be "current"
     // so we don't need to check for locked tabs only for blanks tabs
