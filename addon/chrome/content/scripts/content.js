@@ -308,6 +308,7 @@ TabmixClickEventHandler = {
           }
         }
       }
+      json.originPrincipal = ownerDoc.nodePrincipal;
 
       sendAsyncMessage("Content:Click", json);
       return;
