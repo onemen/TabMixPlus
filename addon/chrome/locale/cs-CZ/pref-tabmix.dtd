@@ -137,7 +137,7 @@
 <!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
 <!ENTITY dropIndicator-native.label "Původní styl">
 <!ENTITY dropIndicator-builtin.label "Vestavěný styl">
-<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY verticalTabbar.description1 "Toto nastavení je převzato z jiného rozšíření za použití vertikálních panelů.">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
 <!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
 <!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">
@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "až">
 <!ENTITY widthPixels.label "pixelů">
 <!ENTITY onLeftDisabled.label "V použitém motivu nelze umístit tlačítko doleva.">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Šířku panelu určí jeho název">
 <!ENTITY bookastitle.label "Zobrazit název záložky v názvu panelu">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

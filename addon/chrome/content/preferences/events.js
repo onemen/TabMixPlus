@@ -1,4 +1,3 @@
-/* global gMenuPane */
 /* exported gEventsPane */
 "use strict";
 

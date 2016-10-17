@@ -224,7 +224,7 @@ this.TabmixGroupsMigrator = {
       let windowGroupMap = allGroupData.get(win);
       if (windowGroupMap) {
         let anonGroupCount = 0;
-        let windowGroups = [... windowGroupMap.values()].sort(TabGroupsMigrator._groupSorter);
+        let windowGroups = [...windowGroupMap.values()].sort(TabGroupsMigrator._groupSorter);
         let singleAnonGroup = windowGroups[0].anonGroupID && windowGroups.length == 1;
         if (singleAnonGroup) {
           windowGroups[0].tabGroupsMigrationTitle = winTitle;
@@ -250,7 +250,7 @@ this.TabmixGroupsMigrator = {
 
   setTabTitle: function(groupData) {
     for (let [, windowGroupMap] of groupData) {
-      let windowGroups = [... windowGroupMap.values()];
+      let windowGroups = [...windowGroupMap.values()];
       for (let group of windowGroups) {
         for (let tab of group.tabs) {
           let entry = tab.entries[tab.index - 1];

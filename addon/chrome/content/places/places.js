@@ -1,7 +1,3 @@
-/* globals XULCommandEvent */
-/* import-globals-from-firefox browser/content/browser/places/places.js */
-/* import-globals-from-firefox browser/content/browser/places/browserPlacesViews.js */
-/* import-globals-from-firefox browser/content/browser/bookmarks/sidebarUtils.js */
 "use strict";
 
 // code by onemen
@@ -64,16 +60,18 @@ var TMP_Places = {
         ).toCode();
       }
 
-      let $LF = '\n        ';
-      Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
-        'URIs.push(tab.linkedBrowser.currentURI);',
-        'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
-        '  $&' + $LF +
-        '} else {' + $LF +
-        '  let uri = tab.linkedBrowser.currentURI;' + $LF +
-        '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
-        '}'
-      ).defineProperty();
+      if (!Tabmix.isVersion(490)) {
+        let $LF = '\n        ';
+        Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
+          'URIs.push(tab.linkedBrowser.currentURI);',
+          'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
+          '  $&' + $LF +
+          '} else {' + $LF +
+          '  let uri = tab.linkedBrowser.currentURI;' + $LF +
+          '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
+          '}'
+        ).defineProperty();
+      }
     }
 
     // prevent error when closing window with sidebar open
@@ -727,7 +725,7 @@ Tabmix.onContentLoaded = {
       '{',
       '{\n' +
       '  let callerTrace = Tabmix.callerTrace();\n' +
-      '  if (callerTrace.contain("BG_observe")) {\n' +
+      '  if (callerTrace.contain("BG_observe", "loadHomepage")) {\n' +
       '    params.inBackground = getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
       '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +

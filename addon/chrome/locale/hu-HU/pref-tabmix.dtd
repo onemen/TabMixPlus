@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "maximum:">
 <!ENTITY widthPixels.label "képpont">
 <!ENTITY onLeftDisabled.label "A jelenlegi témánál nem helyezhet el bal oldalra gombokat">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Lap optimális kitöltése">
 <!ENTITY bookastitle.label "Könyvjelző nevének felhasználása a lap neveként">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

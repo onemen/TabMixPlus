@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
 <!ENTITY onLeftDisabled.label "При сега използваната тема, бутонът не може да бъде разположен отляво">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Ширината е съобразно дължината на заглавието">
 <!ENTITY bookastitle.label "Използване името на отметката като заглавие на подпрозореца">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

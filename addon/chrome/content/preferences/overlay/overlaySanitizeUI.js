@@ -1,4 +1,4 @@
-/* import-globals-from-firefox browser/content/browser/sanitizeDialog.js */
+/* global gSanitizePromptDialog, Sanitizer */
 "use strict";
 
 Tabmix.setSanitizer = {

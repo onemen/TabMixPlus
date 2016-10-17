@@ -2,14 +2,10 @@
 /* global module */
 module.exports = {
   "root": true,
-  "plugins": ["mozilla"],
+  "plugins": ["tabmix"],
   "env": {
-    "browser": true,
     "es6": true,
-    "node": false,
-    "amd": false,
-    "mocha": false,
-    "jasmine": false
+    "tabmix/browser": true,
   },
 
   // for eslint 2.0.0
@@ -18,14 +14,13 @@ module.exports = {
   },
 
   "rules": {
-    "mozilla/balanced-listeners": 2,
-    "mozilla/import-globals": 2,
-    "mozilla/import-browserjs-globals": 2,
-
+    "tabmix/balanced-listeners": 2,
+    "tabmix/import-globals": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
     "no-caller": 2,
+    "func-call-spacing": 2,
     "no-case-declarations": 2,
     "no-catch-shadow": 2,
     "no-class-assign": 2,
@@ -62,6 +57,7 @@ module.exports = {
     "no-fallthrough": 2,
     "no-floating-decimal": 2,
     "no-func-assign": 2,
+    "no-global-assign": 2,
     "no-implicit-coercion": 2,
     "no-implicit-globals": 0,
     "no-implied-eval": 2,
@@ -76,36 +72,36 @@ module.exports = {
     "no-lone-blocks": 2,
     "no-lonely-if": 2,
     "no-loop-func": 2,
-    // "no-mixed-requires": [0, false], // node
+    "no-mixed-operators": 0,
+    "no-mixed-requires": [0, false], // node
     "no-mixed-spaces-and-tabs": [2, false],
     "no-multi-spaces": 2,
     // TODO need to fix this...
     "no-multi-str": 0,
     "no-multiple-empty-lines": [2, {"max": 1}],
-    "no-native-reassign": 2,
     "no-negated-condition": 0,
-    "no-negated-in-lhs": 2,
     "no-nested-ternary": 0,
     "no-new": 2,
     "no-new-func": 2,
     "no-new-object": 2,
-    // "no-new-require": 0, // node
+    "no-new-require": 0, // node
     "no-new-symbol": 2,
     "no-new-wrappers": 2,
     "no-obj-calls": 2,
     "no-octal": 2,
     "no-octal-escape": 2,
     "no-param-reassign": 0,
-    // "no-path-concat": 0, // node
+    "no-path-concat": 0, // node
     "no-plusplus": 0,
-    // "no-process-env": 0, // node
-    // "no-process-exit": 2, // node
+    "no-process-env": 0, // node
+    "no-process-exit": 2, // node
     "no-proto": 2,
+    "no-prototype-builtins": 0,
     "no-redeclare": 2,
     "no-regex-spaces": 2,
     "no-restricted-globals": 0,
     "no-restricted-imports": 0,
-    // "no-restricted-modules": 0, // node
+    "no-restricted-modules": 0, // node
     "no-restricted-syntax": 0,
     "no-return-assign": [2, "except-parens"],
     "no-script-url": 0,
@@ -115,12 +111,12 @@ module.exports = {
     "no-shadow": [2, {"hoist": "all"}],
     "no-shadow-restricted-names": 2,
     "no-whitespace-before-property": 2,
-    "no-spaced-func": 2,
     "no-sparse-arrays": 2,
-    // "no-sync": 0, // node
+    "no-sync": 0, // node
+    "no-tabs": 0,
+    "no-template-curly-in-string": 2,
     "no-ternary": 0,
-    // the editor remove trailing-spaces on save
-    "no-trailing-spaces": 0,
+    "no-trailing-spaces": 2,
     "no-this-before-super": 2,
     "no-throw-literal": 2,
     "no-undef": 2,
@@ -132,6 +128,7 @@ module.exports = {
     "no-unneeded-ternary": 2,
     "no-unreachable": 2,
     "no-unsafe-finally": 2,
+    "no-unsafe-negation": 2,
     "no-unused-expressions": 2,
     "no-unused-labels": 2,
     "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
@@ -141,6 +138,7 @@ module.exports = {
     "no-useless-constructor": 2,
     "no-useless-computed-key": 2,
     "no-useless-escape": 2,
+    "no-useless-rename": 2,
     "no-void": 0,
     "no-var": 0,
     "no-warning-comments": [0, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],
@@ -155,7 +153,7 @@ module.exports = {
     "block-scoped-var": 2,
     "block-spacing": [2, "never"],
     "brace-style": [2, "1tbs", {"allowSingleLine": true}],
-    // "callback-return": 0, // node
+    "callback-return": 0,
     "camelcase": 0,
     // TODO - maybe in the future
     // "comma-dangle": [2, "always-multiline"],
@@ -174,12 +172,13 @@ module.exports = {
     "dot-notation": [2, { "allowKeywords": true }],
     "eol-last": 2,
     "eqeqeq": 0,
+    "func-call-spacing": [2, "never"],
     "func-names": 0,
     "func-style": [0, "declaration"],
     "generator-star-spacing": [2, "after"],
-    // "global-require": 0, // node
+    "global-require": 0, // node
     "guard-for-in": 2,
-    // "handle-callback-err": 0, // node
+    "handle-callback-err": 0, // node
     "id-length": 0,
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": {"var": 2, "let": 2, "const": 3}}],
     "init-declarations": 0,
@@ -187,10 +186,10 @@ module.exports = {
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "keyword-spacing": 2,
     "lines-around-comment": [0, {"beforeBlockComment": true, "allowBlockStart": true, "allowBlockEnd": true}],
-    // XX error in Brackets - Eslint complain that first line is LF
-    "linebreak-style": [0, "windows"],
+    "linebreak-style": [2, "windows"],
     "max-depth": [0, 4],
     "max-len": [0, 120, 4],
+    "max-lines": 0,
     "max-nested-callbacks": [0, 2],
     "max-params": [0, 3],
     "max-statements": [0, 10],
@@ -200,7 +199,12 @@ module.exports = {
     "newline-after-var": 0,
     "newline-before-return": 0,
     "newline-per-chained-call": 0,
+    "object-curly-newline": [2, {
+      "ObjectExpression": {"multiline": true},
+      "ObjectPattern": "never"
+    }],
     "object-curly-spacing": [2, "never"],
+    "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
     "object-shorthand": 0, // since Firefox 33
     "one-var": 0,
     "one-var-declaration-per-line": 0,
@@ -221,6 +225,7 @@ module.exports = {
     "id-blacklist": 0,
     "require-jsdoc": 0,
     "require-yield": 2,
+    "rest-spread-spacing": 2,
     "semi": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "sort-vars": 0,
@@ -236,6 +241,7 @@ module.exports = {
     }],
     "strict": [2, "global"],
     "template-curly-spacing": [2, "never"],
+    "unicode-bom": 0,
     "use-isnan": 2,
     "valid-jsdoc": 0,
     "valid-typeof": 2,
@@ -247,16 +253,5 @@ module.exports = {
   },
 
   "globals": {
-    // firefox globals
-    "Components": false,
-
-    // globals that removed from Firefox
-    "TabsOnTop": false,
-    "TabView": false,
-    "TabItems": false,
-
-    // Firefox defining these in placesOverlay.xul
-    "PlacesUtils": false,
-    "PlacesUIUtils": false,
   }
 };

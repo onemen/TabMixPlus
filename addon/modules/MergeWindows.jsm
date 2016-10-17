@@ -41,7 +41,7 @@ this.MergeWindows = {
       tabsSelected: selectedTabs.length > 0,
       multiple: mergeAllWindows && !selectedTabs.length
     };
-    let {windows: windows, normalWindowsCount: normalWindowsCount} = this.getWindowsList(aWindow, options);
+    let {windows, normalWindowsCount} = this.getWindowsList(aWindow, options);
     if (!windows.length)
       this.notify(aWindow, options.privateNotMatch);
     else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
@@ -132,8 +132,7 @@ this.MergeWindows = {
     if (openerWindow) {
       // since we merge popup after all other tabs was merged,
       // we only look for opener in the target window
-      let openerTab = openerWindow &&
-          tabbrowser._getTabForContentWindow(openerWindow.top);
+      let openerTab = tabbrowser._getTabForContentWindow(openerWindow);
       if (openerTab)
         index = openerTab._tPos + 1;
     }
@@ -164,10 +163,24 @@ this.MergeWindows = {
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       let isPopup = !tab.ownerDocument.defaultView.toolbar.visible;
-      let newTab = tabbrowser.addTab("about:blank", {dontMove: isPopup});
+      let params = {dontMove: isPopup};
+      if (TabmixSvc.version(470)) {
+        params = {eventDetail: {adoptedTab: tab}};
+        if (tab.hasAttribute("usercontextid")) {
+          params.userContextId = tab.getAttribute("usercontextid");
+        }
+      }
+      let newTab = tabbrowser.addTab("about:blank", params);
       let newBrowser = newTab.linkedBrowser;
+      if (TabmixSvc.version(330)) {
+        let newURL = tab.linkedBrowser.currentURI.spec;
+        tabbrowser.updateBrowserRemotenessByURL(newBrowser, newURL);
+      }
       newBrowser.stop();
       void newBrowser.docShell;
+      if (tab.pinned) {
+        tabbrowser.pinTab(newTab);
+      }
       if (tab.hasAttribute("_TMP_selectAfterMerge")) {
         tab.removeAttribute("_TMP_selectAfterMerge");
         tabToSelect = newTab;

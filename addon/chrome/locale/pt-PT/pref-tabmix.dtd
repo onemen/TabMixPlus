@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "para">
 <!ENTITY widthPixels.label "picéis">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "A largura do separador encaixa na largura">
 <!ENTITY bookastitle.label "USar nome do marcador como titulo do separador">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

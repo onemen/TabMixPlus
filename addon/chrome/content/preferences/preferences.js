@@ -1,13 +1,8 @@
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              showPane, openHelp */
-/* import-globals-from ../utils.js */
-/* import-globals-from shortcuts.js */
-/* import-globals-from menu.js */
-/* import-globals-from appearance.js */
 "use strict";
 
 /***** Preference Dialog Functions *****/
-var gIncompatiblePane;
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
@@ -40,11 +35,14 @@ var gPrefWindow = {
     var docElt = document.documentElement;
 
     // don't use browser.preferences.animateFadeIn
-    Object.defineProperty(docElt, "_shouldAnimate", {value: false,
-                          writable: true, configurable: true});
+    Object.defineProperty(docElt, "_shouldAnimate", {
+      value: false,
+      writable: true,
+      configurable: true
+    });
     docElt.setAttribute("animated", "false");
 
-    gIncompatiblePane.init(docElt);
+    window.gIncompatiblePane.init(docElt);
 
     this.instantApply = docElt.instantApply;
     window.addEventListener("change", this, false);
@@ -88,7 +86,7 @@ var gPrefWindow = {
     window.removeEventListener("beforeaccept", this, false);
     delete Tabmix.getTopWin().tabmix_setSession;
     Shortcuts.prefsChangedByTabmix = false;
-    gIncompatiblePane.deinit();
+    window.gIncompatiblePane.deinit();
   },
 
   handleEvent: function(aEvent) {
@@ -276,8 +274,11 @@ function getPrefByType(prefName) {
 }
 
 function setPrefByType(prefName, newValue, atImport) {
-  let pref = {name: prefName, value: newValue,
-              type: Services.prefs.getPrefType(prefName)};
+  let pref = {
+    name: prefName,
+    value: newValue,
+    type: Services.prefs.getPrefType(prefName)
+  };
   try {
     if (!atImport || !setPrefAfterImport(pref))
       setPref(pref);
@@ -424,9 +425,7 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      OS.File.writeAtomic(file.path, patterns.join(""), {
-        encoding: "utf-8", tmpPath: file.path + ".tmp"
-      });
+      OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
     }
   }).then(null, Tabmix.reportError);
 }
@@ -556,7 +555,7 @@ function openHelp(helpTopic) {
   recentWindow.openUILinkIn(helpPage + helpTopic, where);
 }
 
-gIncompatiblePane = {
+window.gIncompatiblePane = {
   lastSelected: "paneLinks",
 
   init: function(docElt) {

@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "a">
 <!ENTITY widthPixels.label "píxels">
 <!ENTITY onLeftDisabled.label "No es pot col·locar el botó a l&apos;esquerra amb el tema actual">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Ajusta l'amplada al títol de la pestanya">
 <!ENTITY bookastitle.label "Utilitza el nom de l'adreça d'interès com a títol de la pestanya">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

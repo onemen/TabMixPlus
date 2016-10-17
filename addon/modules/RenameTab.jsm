@@ -60,7 +60,7 @@ this.RenameTab = {
     popup.id = "tabmixRenametab_panel";
     this._element("mainPopupSet").appendChild(popup);
     this.window.document.loadOverlay(
-      "chrome://tabmixplus/content/minit/renameTab.xul", this
+      "chrome://tabmixplus/content/overlay/renameTab.xul", this
     );
   },
 

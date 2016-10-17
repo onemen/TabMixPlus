@@ -11,9 +11,6 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
-
 this.TabmixDownloadLastDir = {
   _initialized: false,
   init: function() {
@@ -40,7 +37,8 @@ this.TabmixDownloadLastDir = {
         this._window = val;
         return val;
       },
-      configurable: true, enumerable: true
+      configurable: true,
+      enumerable: true
     };
 
     let downloadModule = {};

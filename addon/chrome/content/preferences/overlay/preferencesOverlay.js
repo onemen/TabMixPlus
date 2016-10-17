@@ -11,7 +11,7 @@ var gTabMix_preferencesOverlay = {
   incontentInit: function gTabMix_preferencesOverlay_incontentInit() {
     var box = this.id("linkTargeting");
     box.collapsed = true;
-    box.parentNode.insertBefore(this.id("tabmixplusBox"), box);
+    box.parentNode.insertBefore(this.id("tabmixplusBox"), box.parentNode.firstChild);
 
     var warnOnCloseWindow = this.id("warnOnCloseWindow");
     var warnCloseMultiple = this.id("warnCloseMultiple");

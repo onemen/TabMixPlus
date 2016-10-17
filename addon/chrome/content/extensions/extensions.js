@@ -18,8 +18,10 @@ var TMP_extensionsCompatibility = {
 
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {
-      treeStyleTab: false, tabGroupManager: false,
-      verticalTabBar: false, ieTab2: false,
+      treeStyleTab: false,
+      tabGroupManager: false,
+      verticalTabBar: false,
+      ieTab2: false,
       gIeTab: false, /* for ieTab and ieTab2 */
       ctr: false/* classic theme restorer */
     };
@@ -405,7 +407,8 @@ var TMP_extensionsCompatibility = {
         '  title = "(*) " + title;' +
         '$&';
 
-      let func = {styleTiledTabs: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
+      let func = {
+        styleTiledTabs: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showProperties: 'if (tab.hasAttribute("image"))',
         onTabAttrModified: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
         showTabList: /menuItem\.setAttribute\("label",\s*title\);/,

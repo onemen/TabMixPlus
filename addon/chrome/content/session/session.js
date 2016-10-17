@@ -1518,8 +1518,12 @@ TabmixSessionManager = {
       case Tabmix.BUTTON_OK:
       case Tabmix.BUTTON_EXTRA1 :
         var trimResult = result.label.replace(/^[\s]+/g, "").replace(/[\s]+$/g, "");
-        return {button: result.button, name: encodeURI(trimResult),
-                path: sessionList.path[result.value], saveClosedTabs: result.checked};
+        return {
+          button: result.button,
+          name: encodeURI(trimResult),
+          path: sessionList.path[result.value],
+          saveClosedTabs: result.checked
+        };
     }
     return {};
   },
@@ -1881,7 +1885,7 @@ TabmixSessionManager = {
   },
 
   createMenu: function SM_createMenu(popup, container, contents, aNoSeparators) {
-    /* eslint-disable mozilla/balanced-listeners */
+    /* eslint-disable tabmix/balanced-listeners */
     if (popup.id == "btn_closedwindows_menu") {
       let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
       document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
@@ -2029,7 +2033,7 @@ TabmixSessionManager = {
     var deleteItem = popup.getElementsByAttribute("anonid", "delete")[0];
     if (deleteItem)
       Tabmix.setItem(deleteItem, "disabled", allEmpty && count === 0 ? true : null);
-    /* eslint-enable mozilla/balanced-listeners */
+    /* eslint-enable tabmix/balanced-listeners */
   },
 
   // set defaultIndex, sessionIndex and default Attribute
@@ -2892,6 +2896,7 @@ TabmixSessionManager = {
       return false;
     data.pos = aTab._tPos;
     data.image = tabState.image;
+    data.userContextId = tabState.userContextId || null;
     data.properties = TabmixSessionData.getTabProperties(aTab, true);
     var rdfLabelTab = rdfLabelTabs + "/" + aTab.linkedPanel;
     var rdfNodeTab = this.RDFService.GetResource(rdfLabelTab);
@@ -2920,6 +2925,9 @@ TabmixSessionManager = {
   saveTabData: function SM_saveTabData(aNode, aData) {
     this.setIntLiteral(aNode, "index", aData.index);
     this.setIntLiteral(aNode, "tabPos", aData.pos);
+    if (aData.userContextId) {
+      this.setIntLiteral(aNode, "userContextId", aData.userContextId);
+    }
     this.setLiteral(aNode, "image", aData.image || "");
     this.setLiteral(aNode, "properties", aData.properties);
     this.setLiteral(aNode, "history", aData.history);
@@ -3342,6 +3350,22 @@ TabmixSessionManager = {
     for (let t = 0; t < tabsData.length; t++) {
       let data = tabsData[t];
       let tab = gBrowser.tabs[newIndex + t];
+
+      let userContextId = data.userContextId;
+      let reuseExisting = !Tabmix.isVersion(490) ||
+          tab.getAttribute("usercontextid") == (userContextId || "");
+      if (!reuseExisting) {
+        let tabToRemove = tab;
+        let forceNotRemote = !data.pinned;
+        tab = gBrowser.addTab("about:blank", {
+          skipAnimation: true,
+          forceNotRemote: forceNotRemote,
+          userContextId: userContextId,
+        });
+        gBrowser.removeTab(tabToRemove);
+        gBrowser.moveTabTo(tab, newIndex + t);
+      }
+
       tabs.push(tab);
       // flag. dont save tab that are in restore phase
       if (!tab.hasAttribute("inrestore"))
@@ -3532,7 +3556,8 @@ TabmixSessionManager = {
     var rdfLabelTabs = rdfNodeTabs.QueryInterface(Ci.nsIRDFResource).Value;
     var ctabs = TMP_ClosedTabs.getClosedTabData;
     var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
-    ctabs = ctabs.filter(tabData => this.getSessionStoreDataForRDF(tabData));
+    ctabs = ctabs.map(data => this.getSessionStoreDataForRDF(data))
+                 .filter(data => data);
     ctabs.reverse().forEach(data => {
       let uniqueId, rdfLabelSession, newNode;
       uniqueId = "panel" + Date.now() + Math.random();
@@ -3556,6 +3581,7 @@ TabmixSessionManager = {
     data.pos = aTabData.pos;
     data.closedAt = aTabData.closedAt || Date.now();
     data.image = aTabData.image;
+    data.userContextId = aTabData.userContextId || null;
     // closed tab can not be protected - set protected to 0
     var _locked = TMP_SessionStore._getAttribute(tabState, "_locked") != "false" ? "1" : "0";
     data.properties = "0" + _locked;

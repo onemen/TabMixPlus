@@ -637,8 +637,10 @@ Tabmix.tabsUtils = {
     this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
     this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
     this._tabmixPositionalTabs = {
-      beforeSelectedTab: null, afterSelectedTab: null,
-      beforeHoveredTab: null, afterHoveredTab: null
+      beforeSelectedTab: null,
+      afterSelectedTab: null,
+      beforeHoveredTab: null,
+      afterHoveredTab: null
     };
 
     Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];
@@ -1814,6 +1816,11 @@ gTMPprefObserver = {
     /* tab-icon-sound added by Bug 486262, Firefox 42+ */
     if (!Tabmix.isVersion(420)) {
       this.insertRule('.tab-icon-sound {display: none;}');
+    }
+
+    /* tab-sharing-icon-overlay added by Bug 1275262, Firefox 50+ */
+    if (!Tabmix.isVersion(500)) {
+      this.insertRule('.tab-sharing-icon-overlay {display: none;}');
     }
 
     // height shrink to actual size when the tabbar is in display: block (multi-row)

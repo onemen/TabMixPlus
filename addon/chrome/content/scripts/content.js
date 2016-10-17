@@ -1,17 +1,21 @@
-/* eslint mozilla/balanced-listeners:0 */
+/* eslint tabmix/balanced-listeners:0 */
 /* globals content, docShell, addMessageListener, sendSyncMessage,
            sendAsyncMessage, sendRpcMessage */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
@@ -96,8 +100,10 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectScrollPosition": {
-        let scroll = {scrollX: content.scrollX,
-                      scrollY: content.scrollY};
+        let scroll = {
+          scrollX: content.scrollX,
+          scrollY: content.scrollY
+        };
         sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
         break;
       }
@@ -106,9 +112,11 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
-        let json = {scrollX: content.scrollX,
-                    scrollY: content.scrollY,
-                    postData: null};
+        let json = {
+          scrollX: content.scrollX,
+          scrollY: content.scrollY,
+          postData: null
+        };
         let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
                          .QueryInterface(Ci.nsISHistoryInternal);
         if (sh) {
@@ -155,10 +163,13 @@ var TabmixContentHandler = {
     let data = {
       json: {
         dataTransfer: {dropEffect: event.dataTransfer.dropEffect},
-        ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-        shiftKey: event.shiftKey, altKey: event.altKey
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey
       },
-      uri: uri, name: name.value
+      uri: uri,
+      name: name.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
     if (result[0]) {
@@ -216,10 +227,19 @@ TabmixClickEventHandler = {
       }
     }
 
-    let json = {button: event.button, shiftKey: event.shiftKey,
-                ctrlKey: event.ctrlKey, metaKey: event.metaKey,
-                altKey: event.altKey, href: null, title: null,
-                bookmark: false, referrerPolicy: referrerPolicy};
+    let json = {
+      button: event.button,
+      shiftKey: event.shiftKey,
+      ctrlKey: event.ctrlKey,
+      metaKey: event.metaKey,
+      altKey: event.altKey,
+      href: null,
+      title: null,
+      bookmark: false,
+      referrerPolicy: referrerPolicy,
+      originAttributes: principal ? principal.originAttributes : {},
+      isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
+    };
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
@@ -227,9 +247,10 @@ TabmixClickEventHandler = {
     // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
     // for the case there is no href
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
-    if (linkNode)
-      linkNode = LinkNodeUtils.wrap(linkNode, this._focusedWindow,
-                                         href && event.button === 0);
+    if (linkNode) {
+      linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
+                                    href && event.button === 0);
+    }
 
     let result = sendSyncMessage("TabmixContent:Click",
                     {json: json, href: href, node: linkNode});
@@ -332,7 +353,8 @@ TabmixClickEventHandler = {
       if (node.nodeType == content.Node.ELEMENT_NODE &&
           (node.localName == "a" ||
            node.namespaceURI == "http://www.w3.org/1998/Math/MathML")) {
-        href = node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+        href = TabmixSvc.version(510) && node.getAttribute("href") ||
+            node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
         if (href) {
           baseURI = node.ownerDocument.baseURIObject;
           break;
@@ -347,14 +369,6 @@ TabmixClickEventHandler = {
     return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
             node && node.ownerDocument.nodePrincipal];
   },
-
-  get _focusedWindow() {
-    let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
-
-    let focusedWindow = {};
-    fm.getFocusedElementForWindow(content, true, focusedWindow);
-    return focusedWindow.value;
-  }
 };
 
 var AboutNewTabHandler = {
@@ -406,8 +420,7 @@ var ContextMenuHandler = {
     }
 
     let links;
-    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks") &&
-        typeof content.document.getSelection == "function") {
+    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks")) {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 

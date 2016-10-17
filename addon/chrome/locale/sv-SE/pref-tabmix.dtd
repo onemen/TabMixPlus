@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "till">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Flikbredd anpassas till rubrik">
 <!ENTITY bookastitle.label "Använd namn på bokmärke som fliknamn">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

@@ -1,14 +1,3 @@
-/* import-globals-from utils.js */
-/* import-globals-from ./click/click.js */
-/* import-globals-from ./extensions/extensions.js */
-/* import-globals-from ./flst/lasttab.js */
-/* import-globals-from ./links/userInterface.js */
-/* import-globals-from ./minit/minit.js */
-/* import-globals-from ./minit/tablib.js */
-/* import-globals-from ./places/places.js */
-/* import-globals-from ./session/sessionStore.js */
-/* import-globals-from ./session/session.js */
-/* import-globals-from ./tab/tab.js */
 "use strict";
 
 /*
@@ -334,6 +323,11 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    if (!Tabmix.isVersion(510)) {
+      let newRule = '.tabbrowser-tab {' +
+          '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab-before-v51") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    }
     if (Tabmix.isVersion(280) && !Tabmix.isVersion(470)) {
       let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-label[tabmix="true"] {' +
         '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-label") !important;}';
@@ -1174,8 +1168,10 @@ Tabmix.initialization = {
 
     delete this.isValidWindow;
     Object.defineProperty(this, "run", {enumerable: false});
-    Object.defineProperty(this, "isValidWindow", {value: !stopInitialization,
-                                                  enumerable: false});
+    Object.defineProperty(this, "isValidWindow", {
+      value: !stopInitialization,
+      enumerable: false
+    });
     return this.isValidWindow;
   },
 

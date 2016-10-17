@@ -55,6 +55,11 @@ vbox[shortcutsLabels="true"] {
   -moz-box-ordinal-group: 1 !important;
 }
 
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-sharing-icon-overlay,
+.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-sharing-icon-overlay {
+  -moz-box-ordinal-group: 2 !important;
+}
+
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
 .tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
   -moz-box-ordinal-group: 2 !important;

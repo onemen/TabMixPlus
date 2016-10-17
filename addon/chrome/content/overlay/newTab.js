@@ -1,4 +1,4 @@
-/* globals gGrid, Cu*/
+/* globals gGrid, Cu, Services */
 "use strict";
 
 // This file is in use for all versions before Firefox 42.0

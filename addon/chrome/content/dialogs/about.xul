@@ -15,7 +15,7 @@
         onload="init();">
 
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-  <script type="application/javascript" src="chrome://tabmixplus/content/about.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/dialogs/about.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/links/userInterface.js"/>
 
   <stringbundleset id="aboutSet">

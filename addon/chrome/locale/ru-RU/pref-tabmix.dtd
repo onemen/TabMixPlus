@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пикселей (30-1000)">
 <!ENTITY onLeftDisabled.label "Невозможно разместить кнопку слева при использовании текущей темы оформления">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Выравнивать ширину вкладок по длине их заголовков">
 <!ENTITY bookastitle.label "Использовать имя закладки в качестве заголовка вкладки">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

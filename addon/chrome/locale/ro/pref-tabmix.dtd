@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "la">
 <!ENTITY widthPixels.label "pixeli">
 <!ENTITY onLeftDisabled.label "Nu se poate plasa butonul în partea stângă în tema curentă">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Se adaptează lungimea filei la lungimea titlului ei">
 <!ENTITY bookastitle.label "Se folosește denumirea semnului de carte ca titlu al filei">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

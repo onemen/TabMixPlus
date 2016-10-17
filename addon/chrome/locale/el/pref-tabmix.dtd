@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "σε">
 <!ENTITY widthPixels.label "πίξελ">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Το πλάτος καρτέλας να προσαρμόζεται στο πλάτος τίτλου">
 <!ENTITY bookastitle.label "Χρήση τίτλου σελιδοδείκτη ως τίτλου καρτέλας">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->

@@ -1,4 +1,3 @@
-/* globals ChromeWindow, XULElement */
 /* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
@@ -164,6 +163,7 @@ var TMP_tabDNDObserver = {
         tabBar._dndCanvas = canvas;
         tabBar._dndPanel = document.createElement("panel");
         tabBar._dndPanel.setAttribute("type", "drag");
+        tabBar._dndPanel.className = "dragfeedback-tab";
         let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
         wrapper.style.width = "160px";
         wrapper.style.height = "90px";
@@ -415,9 +415,15 @@ var TMP_tabDNDObserver = {
       // swap the dropped tab with a new one we create and then close
       // it in the other window (making it seem to have moved between
       // windows)
-      let newTab = Tabmix.isVersion(470) ?
-          gBrowser.addTab("about:blank", {eventDetail: {adoptedTab: draggedTab}}) :
-          gBrowser.addTab("about:blank");
+      let params = {};
+      if (Tabmix.isVersion(470)) {
+        params = {eventDetail: {adoptedTab: draggedTab}};
+        if (draggedTab.hasAttribute("usercontextid")) {
+          // new tab must have the same usercontextid as the old one
+          params.userContextId = draggedTab.getAttribute("usercontextid");
+        }
+      }
+      let newTab = gBrowser.addTab("about:blank", params);
       var newBrowser = gBrowser.getBrowserForTab(newTab);
       if (Tabmix.isVersion(330)) {
         let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
@@ -555,18 +561,34 @@ var TMP_tabDNDObserver = {
 
     // screen.availLeft et. al. only check the screen that this window is on,
     // but we want to look at the screen the tab is being dropped onto.
-    var sX = {}, sY = {}, sWidth = {}, sHeight = {};
-    Cc["@mozilla.org/gfx/screenmanager;1"]
-      .getService(Ci.nsIScreenManager)
-      .screenForRect(eX, eY, 1, 1)
-      .GetAvailRect(sX, sY, sWidth, sHeight);
+    var screen = Cc["@mozilla.org/gfx/screenmanager;1"]
+                   .getService(Ci.nsIScreenManager)
+                   .screenForRect(eX, eY, 1, 1);
+    var fullX = {}, fullY = {}, fullWidth = {}, fullHeight = {};
+    var availX = {}, availY = {}, availWidth = {}, availHeight = {};
+    // get full screen rect and available rect, both in desktop pix
+    screen.GetRectDisplayPix(fullX, fullY, fullWidth, fullHeight);
+    screen.GetAvailRectDisplayPix(availX, availY, availWidth, availHeight);
+
+    // scale factor to convert desktop pixels to CSS px
+    var scaleFactor =
+        screen.contentsScaleFactor / screen.defaultCSSScaleFactor;
+    // synchronize CSS-px top-left coordinates with the screen's desktop-px
+    // coordinates, to ensure uniqueness across multiple screens
+    // (compare the equivalent adjustments in nsGlobalWindow::GetScreenXY()
+    // and related methods)
+    availX.value = (availX.value - fullX.value) * scaleFactor + fullX.value;
+    availY.value = (availY.value - fullY.value) * scaleFactor + fullY.value;
+    availWidth.value *= scaleFactor;
+    availHeight.value *= scaleFactor;
+
     // ensure new window entirely within screen
-    var winWidth = Math.min(window.outerWidth, sWidth.value);
-    var winHeight = Math.min(window.outerHeight, sHeight.value);
-    var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, sX.value),
-                          sX.value + sWidth.value - winWidth);
-    var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, sY.value),
-                        sY.value + sHeight.value - winHeight);
+    var winWidth = Math.min(window.outerWidth, availWidth.value);
+    var winHeight = Math.min(window.outerHeight, availHeight.value);
+    var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, availX.value),
+        availX.value + availWidth.value - winWidth);
+    var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, availY.value),
+        availY.value + availHeight.value - winHeight);
 
     delete draggedTab._dragData;
 
@@ -1169,6 +1191,56 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
+    if (Tabmix.isVersion(500)) {
+      if (!this.urlBarInitialized) {
+        Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
+        gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
+        this.urlBarInitialized = true;
+      }
+    } else {
+      this.handleCommand_beforeV50();
+    }
+  },
+
+  handleCommand: function(event, openUILinkWhere, openUILinkParams) {
+    let prevTab, prevTabPos;
+    let action = this._parseActionUrl(this.value);
+    if (action && action.type == "switchtab" && this.hasAttribute("actiontype")) {
+      prevTab = gBrowser.selectedTab;
+      prevTabPos = prevTab._tPos;
+    }
+
+    if (!openUILinkWhere) {
+      let isMouseEvent = event instanceof MouseEvent;
+      let altEnter = !isMouseEvent && event &&
+          event.altKey && !isTabEmpty(gBrowser.selectedTab);
+      let where = "current";
+      let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
+              altEnter).inNew && !(/^ *javascript:/.test(this.value));
+      if (isMouseEvent || altEnter || loadNewTab) {
+        // Use the standard UI link behaviors for clicks or Alt+Enter
+        where = "tab";
+        if (isMouseEvent || event && !altEnter)
+          where = whereToOpenLink(event, false, false);
+        if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
+          where = "tab";
+        else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
+          where = "current";
+      }
+      openUILinkWhere = where;
+    }
+
+    Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
+
+    // move the tab that was switched to after the previously selected tab
+    if (prevTabPos) {
+      let pos = prevTabPos + Number(gBrowser.selectedTab._tPos > prevTabPos) -
+          Number(!prevTab || !prevTab.parentNode);
+      gBrowser.moveTabTo(gBrowser.selectedTab, pos);
+    }
+  },
+
+  handleCommand_beforeV50: function() {
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
@@ -1317,11 +1389,15 @@ Tabmix.navToolbox = {
       'inBackground: aWhere == "tab-background"',
       '$& ||' + $LF +
       '                Tabmix.prefs.getBoolPref("loadSearchInBackground")',
-      {check: Tabmix.isVersion(350)}
+      {check: Tabmix.isVersion(350) && !Tabmix.isVersion(510)}
     )._replace(
       'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
       'var loadInBackground = aWhere == "tab-background" || Tabmix.prefs.getBoolPref("loadSearchInBackground");',
-      {check: !searchLoadExt && organizeSE}
+      {check: !searchLoadExt && organizeSE && !Tabmix.isVersion(510)}
+    )._replace(
+      'openUILinkIn',
+      'params.inBackground = params.inBackground || Tabmix.prefs.getBoolPref("loadSearchInBackground");' + $LF +
+      '$&', {check: Tabmix.isVersion(510)}
     )._replace(
       /searchbar\.currentEngine/g,
       'this.currentEngine', {check: pIte}

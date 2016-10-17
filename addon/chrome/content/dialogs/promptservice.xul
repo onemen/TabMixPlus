@@ -19,7 +19,7 @@
    style="-moz-user-focus: ignore;">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
-   <script type="application/javascript" src="chrome://tabmixplus/content/session/promptservice.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/dialogs/promptservice.js"/>
 
   <hbox >
     <hbox align="start">

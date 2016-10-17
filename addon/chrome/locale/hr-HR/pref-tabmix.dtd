@@ -178,6 +178,7 @@
 <!ENTITY widthTo.label "sa">
 <!ENTITY widthPixels.label "piksela">
 <!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Širina kartice se prilagođava širini naslova kartice">
 <!ENTITY bookastitle.label "Koristi naziv iz zabilješki kao naslov kartice">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

@@ -62,11 +62,13 @@ var Tabmix = {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
+  skipSingleWindowModeCheck: false,
   getSingleWindowMode: function TMP_getSingleWindowMode() {
     // if we don't have any browser window opened return false
     // so we can open new window
-    if (!this.getTopWin())
+    if (this.skipSingleWindowModeCheck || !this.getTopWin()) {
       return false;
+    }
     return this.prefs.getBoolPref("singleWindow");
   },
 
@@ -162,13 +164,17 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/session/promptservice.xul", "", "centerscreen" +
+           "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
            (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
 
-    return {button: dpb.GetInt(4), checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
-            label: dpb.GetString(5), value: dpb.GetInt(6)};
+    return {
+      button: dpb.GetInt(4),
+      checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
+      label: dpb.GetString(5),
+      value: dpb.GetInt(6)
+    };
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {

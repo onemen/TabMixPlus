@@ -331,7 +331,7 @@ var TMP_ClosedTabs = {
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
-    /* eslint-disable mozilla/balanced-listeners */
+    /* eslint-disable tabmix/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
 
@@ -409,7 +409,7 @@ var TMP_ClosedTabs = {
       TMP_ClosedTabs.restoreTab('original', -2);
     });
     return true;
-    /* eslint-enable mozilla/balanced-listeners */
+    /* eslint-enable tabmix/balanced-listeners */
   },
 
   restoreCommand: function(aEvent) {
@@ -514,7 +514,8 @@ var TMP_ClosedTabs = {
 
   SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
     var closedTabCount = this.count;
-    if (!PlacesUIUtils._confirmOpenInTabs(closedTabCount))
+    let confirmOpenInTabs = Tabmix.isVersion(510) ? "confirmOpenInTabs" : "_confirmOpenInTabs";
+    if (!PlacesUIUtils[confirmOpenInTabs](closedTabCount))
       return;
 
     this.setButtonDisableState(true);
@@ -545,14 +546,14 @@ var TMP_ClosedTabs = {
       return null;
 
     // get tab data
-    var tabData = this.getClosedTabAtIndex(aIndex);
+    let {state, pos} = this.getClosedTabAtIndex(aIndex);
 
     var tabToRemove = null;
     var cTab = gBrowser.mCurrentTab;
     var isCurrentBlank = gBrowser.isBlankNotBusyTab(cTab);
     if (aWhere == "current" && !isCurrentBlank) {
       tabToRemove = cTab;
-      tabData.pos = cTab._tPos;
+      pos = cTab._tPos;
     } else if (typeof aBlankTabToReuse == "undefined" && isCurrentBlank) {
       aBlankTabToReuse = cTab;
     }
@@ -565,8 +566,20 @@ var TMP_ClosedTabs = {
       tabToRemove.collapsed = true;
     }
 
-    var newTab = aBlankTabToReuse ||
-        gBrowser.addTab("about:blank", {skipAnimation: tabToRemove || skipAnimation, dontMove: true});
+    let userContextId = state.userContextId;
+    let reuseExisting = aBlankTabToReuse &&
+        (!Tabmix.isVersion(490) ||
+        aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
+    let newTab = reuseExisting ? aBlankTabToReuse :
+        gBrowser.addTab("about:blank", {
+          skipAnimation: tabToRemove || skipAnimation,
+          dontMove: true,
+          userContextId: userContextId,
+        });
+    if (!reuseExisting && aBlankTabToReuse) {
+      gBrowser.removeTab(aBlankTabToReuse, {animate: false});
+    }
+
     newTab.linkedBrowser.stop();
     // if tabbar is hidden when there is only one tab and
     // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveals
@@ -574,7 +587,7 @@ var TMP_ClosedTabs = {
       gBrowser.removeTab(tabToRemove, {animate: false});
     }
     // add restored tab to current window
-    TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabData.state));
+    TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
 
     if (TMP_TabView.exist("afterUndoCloseTab")) {
       TabView.afterUndoCloseTab();
@@ -584,11 +597,11 @@ var TMP_ClosedTabs = {
     // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
     var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
     if (aWhere == "current" || (aWhere == "original" && restorePosition)) {
-      gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, tabData.pos));
+      gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
       let tab = gBrowser._lastRelatedTab || gBrowser.selectedTab;
-      let pos = newTab._tPos > tab._tPos ? 1 : 0;
-      gBrowser.moveTabTo(newTab, tab._tPos + pos);
+      let offset = newTab._tPos > tab._tPos ? 1 : 0;
+      gBrowser.moveTabTo(newTab, tab._tPos + offset);
     } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {
       // move reused tab to the end
       gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);
@@ -808,6 +821,7 @@ var TabmixConvertSession = {
         tabData.scroll = {scroll: scroll};
       }
     }
+    tabData.userContextId = TabmixSessionManager.getIntValue(rdfNodeTab, "userContextId", 0);
 
     var properties = TabmixSessionManager.getLiteralValue(rdfNodeTab, "properties");
     var tabAttribute = ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"];

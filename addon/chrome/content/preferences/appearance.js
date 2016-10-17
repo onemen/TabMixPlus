@@ -21,10 +21,14 @@ var gAppearancePane = {
       Tabmix.setItem("squaredTabs", "hidden", true);
     }
 
-    let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons ||
-        browserWindow.Tabmix.extensions.treeStyleTab;
+    let treeStyleTab = browserWindow.Tabmix.extensions.treeStyleTab;
+    let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons || treeStyleTab;
+    let comment = $("onLeftDisabled");
     Tabmix.setItem("tabXLeft", "disabled", disableButtonOnLefSide || null);
-    Tabmix.setItem("onLeftDisabled", "hidden", browserWindow.Tabmix.defaultCloseButtons || null);
+    Tabmix.setItem(comment, "hidden", !disableButtonOnLefSide || null);
+    if (treeStyleTab) {
+      comment.value = comment.getAttribute("tst");
+    }
 
     // browser.allTabs.previews
     if (!TabmixSvc.isPaleMoon) {

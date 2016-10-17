@@ -119,16 +119,26 @@ ContentClickInternal = {
 
       let suppressTabsOnFileDownload =
           json.tabmixContentClick.suppressTabsOnFileDownload || false;
-      let params = {charset: browser.characterSet,
-                    suppressTabsOnFileDownload: suppressTabsOnFileDownload,
-                    referrerURI: browser.documentURI,
-                    referrerPolicy: json.referrerPolicy,
-                    noReferrer: json.noReferrer};
+      let params = {
+        charset: browser.characterSet,
+        suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+        referrerURI: browser.documentURI,
+        referrerPolicy: json.referrerPolicy,
+        noReferrer: json.noReferrer,
+        allowMixedContent: json.allowMixedContent || null,
+        isContentWindowPrivate: json.isContentWindowPrivate,
+      };
+      if (json.originAttributes.userContextId) {
+        params.userContextId = json.originAttributes.userContextId;
+      }
       window.openLinkIn(json.href, where, params);
 
       try {
-        if (!PrivateBrowsingUtils.isWindowPrivate(window))
+        if (!PrivateBrowsingUtils.isWindowPrivate(window)) {
+          // this function is bound to ContentClick that import PlacesUIUtils
+          // eslint-disable-next-line no-undef
           PlacesUIUtils.markPageAsFollowedLink(json.href);
+        }
       } catch (ex) {
         /* Skip invalid URIs. */
       }
@@ -571,7 +581,7 @@ ContentClickInternal = {
         // tvguide.com    - added 2013-07-20
         // duckduckgo.com - added 2014-12-24
         // jetbrains.com - added 2016-05-01
-        let re = /duckduckgo.com|tvguide.com|google|yahoo.com\/search|my.yahoo.com|jetbrains.com/;
+        let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com/;
         blocked = re.test(currentHref);
         // youtube.com - added 2013-11-15
         if (!blocked && /youtube.com/.test(currentHref) &&
@@ -609,6 +619,7 @@ ContentClickInternal = {
     var GM_function;
     try {
       // Greasemonkey >= 0.9.10
+      // eslint-disable-next-line tabmix/import-globals
       Cu.import("resource://greasemonkey/util.js");
       if (typeof window.GM_util.getEnabled == 'function') {
         GM_function = window.GM_util.getEnabled;
@@ -1054,7 +1065,13 @@ ContentClickInternal = {
   *
   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
-    var self = this;
+    const fixupURI = url => {
+      try {
+        return this.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+      } catch (ex) { }
+      return null;
+    };
+
     let getDomain = function getDomain(url) {
       if (typeof (url) != "string")
         url = url.toString();
@@ -1065,18 +1082,25 @@ ContentClickInternal = {
       if (url.match(/^file:/))
         return "local_file";
 
-      let fixedURI;
-      try {
-        fixedURI = self.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+      const fixedURI = fixupURI(url);
+      if (fixedURI) {
         url = fixedURI.spec;
-      } catch (ex) { }
+      }
 
       if (url.match(/^http/)) {
         url = fixedURI || makeURI(url);
 
         // catch redirect
-        if (url.path.match(/^\/r\/\?http/))
-          url = makeURI(url.path.substr("/r/?".length));
+        const path = url.path;
+        if (path.match(/^\/r\/\?http/)) {
+          url = fixupURI(path.substr("/r/?".length));
+        } else if (path.match(/^.*\?url=http/)) {
+          // redirect in www.reddit.com
+          url = fixupURI(path.replace(/^.*\?url=/, ""));
+        }
+        if (!url) {
+          return null;
+        }
     /* DONT DELETE
       var host = url.hostPort.split(".");
       //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need

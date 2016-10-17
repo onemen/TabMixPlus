@@ -91,7 +91,15 @@ var tablib = { // eslint-disable-line
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
       } catch (ex) {}
     }
-    var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
+    let isBlankTab = (function() {
+      // first tab is busy when browser window starts on Firefox 51
+      let checkIfBusy = gBrowserInit.delayedStartupFinished || tab._tPos > 0;
+      if (checkIfBusy && tab.hasAttribute("busy") || tab.hasAttribute("pending")) {
+        return false;
+      }
+
+      return gBrowser.isBlankBrowser(browser);
+    }());
     var isLockedTab = tab.hasAttribute("locked");
     if (!allowLoad && !isBlankTab && isLockedTab) {
       let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
@@ -186,11 +194,14 @@ var tablib = { // eslint-disable-line
         TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
       }
 
-      let tab = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
+      // we use var here to allow other extensions that wrap our code with
+      // try-catch-finally to have access to 't' outside of the current scope
+      // (see https://addons.mozilla.org/en-US/firefox/addon/mclickfocustab/)
+      var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
 
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
-        tab.setAttribute("tabmix_pending", "true");
+        t.setAttribute("tabmix_pending", "true");
       }
 
       if ((relatedToCurrent === null ? referrerURI : relatedToCurrent) &&
@@ -199,15 +210,15 @@ var tablib = { // eslint-disable-line
         if (this._lastRelatedTab) {
           this._lastRelatedTab.owner = null;
         } else {
-          tab.owner = selectedTab;
+          t.owner = selectedTab;
         }
-        this.moveTabTo(tab, newTabPos);
+        this.moveTabTo(t, newTabPos);
         if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
-          TMP_LastTab.attachTab(tab, lastRelatedTab);
-          this._lastRelatedTab = tab;
+          TMP_LastTab.attachTab(t, lastRelatedTab);
+          this._lastRelatedTab = t;
         }
       }
-      return tab;
+      return t;
     };
 
     Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
@@ -239,7 +250,7 @@ var tablib = { // eslint-disable-line
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
                  aboutNewtab : aboutBlank;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
-        code, 'TMP_BrowserOpenTab(null, true)'
+        code, 'TMP_BrowserOpenTab(null, null, true)'
       ).toCode();
     }
 
@@ -870,7 +881,7 @@ var tablib = { // eslint-disable-line
       ).toCode();
     }
 
-    if (Tabmix.isVersion(300)) {
+    if (Tabmix.isVersion(300) && !Tabmix.isVersion(510)) {
       Tabmix.changeCode(window, "BrowserOpenNewTabOrWindow")._replace(
         'event.shiftKey',
         '$& && !Tabmix.singleWindowMode'
@@ -889,7 +900,7 @@ var tablib = { // eslint-disable-line
   },
 
   populateUndoWindowSubmenu: function(undoPopup) {
-    /* eslint-disable mozilla/balanced-listeners */
+    /* eslint-disable tabmix/balanced-listeners */
     if (!undoPopup.hasAttribute("context"))
       undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = JSON.parse(TabmixSvc.ss.getClosedWindowData());
@@ -925,7 +936,7 @@ var tablib = { // eslint-disable-line
       TabmixSessionManager.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
-    /* eslint-enable mozilla/balanced-listeners */
+    /* eslint-enable tabmix/balanced-listeners */
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
@@ -1042,10 +1053,26 @@ var tablib = { // eslint-disable-line
       } else if (aMoveTab) {
         this.replaceTabWithWindow(aTab);
       } else {
-        aTab._tabmixCopyToWindow = {data: aTabData};
-        // replaceTabWithWindow not working if there is only one tab in the the window
-        window.openDialog("chrome://browser/content/browser.xul",
-            "_blank", "chrome,dialog=no,all", aTab);
+        let otherWin = OpenBrowserWindow();
+        let delayedStartupFinished = (subject, topic) => {
+          if (topic == "browser-delayed-startup-finished" &&
+              subject == otherWin) {
+            Services.obs.removeObserver(delayedStartupFinished, topic);
+            let otherGBrowser = otherWin.gBrowser;
+            let otherTab = otherGBrowser.selectedTab;
+            if (aTabData) {
+              // restore closed tab to new window
+              TabmixSvc.ss.setTabState(otherTab, aTabData);
+            } else {
+              TabmixSvc.ss.duplicateTab(otherWin, aTab);
+              otherGBrowser.removeTab(otherTab, {animate: false});
+            }
+          }
+        };
+
+        Services.obs.addObserver(delayedStartupFinished,
+                                 "browser-delayed-startup-finished",
+                                 false);
       }
     };
 
@@ -1108,9 +1135,15 @@ var tablib = { // eslint-disable-line
         return gContextMenu.tabmixLinkURL;
 
       if (!isValid(linkURL)) {
-        let json = {button: 0, shiftKey: false, ctrlKey: false, metaKey: false,
-                    altKey: false, target: {},
-                    tabmix_openLinkWithHistory: true};
+        let json = {
+          button: 0,
+          shiftKey: false,
+          ctrlKey: false,
+          metaKey: false,
+          altKey: false,
+          target: {},
+          tabmix_openLinkWithHistory: true
+        };
         // we only get here when it is safe to use contentWindowAsCPOW
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
@@ -1669,15 +1702,6 @@ var tablib = { // eslint-disable-line
       }
 
       Tabmix.copyTabData(aOurTab, aOtherTab);
-
-      let copy = aOtherTab._tabmixCopyToWindow;
-      delete aOtherTab._tabmixCopyToWindow;
-      if (typeof copy == "object") {
-        let tabData = copy ? copy.data : null;
-        TabmixSvc.ss.setTabState(aOurTab, tabData || TabmixSvc.ss.getTabState(aOtherTab));
-        return;
-      }
-
       Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
