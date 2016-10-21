@@ -667,7 +667,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_howToOpen function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
-      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit")._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit", {silent: true})._replace(
         /eval\(["|']window\.TMP_howToOpen/,
         'if (false) $&'
       ).toCode();
@@ -675,7 +675,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_openTabNext function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
-      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed")._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed", {silent: true})._replace(
         'var newTab',
         'gContextMenu.linkURL = url;'
       )._replace(
