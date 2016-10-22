@@ -437,8 +437,9 @@
       <method name="_notifyBackgroundTab">
         <parameter name="aTab"/>
         <body><![CDATA[
-          if (aTab.pinned)
+          if (aTab.pinned || aTab.hidden) {
             return;
+          }
           // Is the new tab already completely visible?
           if (Tabmix.tabsUtils.isElementVisible(aTab))
             return;
