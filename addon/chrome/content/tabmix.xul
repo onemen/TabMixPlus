@@ -300,23 +300,24 @@
       </menupopup>
       <!-- context menu for undoclosetab menupopup -->
       <menupopup id="tm_undocloseContextMenu"
-                  onpopupshowing="return this.triggerNode.value >= 0;">
+                  oncommand="TMP_ClosedTabs.contextMenuOnCommand(event);"
+                  onpopupshowing="return TMP_ClosedTabs.contextMenuOnPopupShowing(this);">
         <menuitem id="tmOpen" label="&restoreincurrent.label;" accesskey="&restoreincurrent.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('current', this.parentNode.triggerNode.value);"/>
+                  commandData="restoreTab,current"/>
         <menuitem id="tmOpenInNewWindow" label="&restoreinwin.label;" accesskey="&restoreinwin.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('window', this.parentNode.triggerNode.value);"/>
+                  commandData="restoreTab,window"/>
         <menuitem id="tmOpenInNewTab" label="&restoreintab.label;" accesskey="&restoreintab.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('tab', this.parentNode.triggerNode.value);"/>
+                  commandData="restoreTab,tab"/>
         <menuitem id="tmRestoreTab" label="&restoretab.label;" accesskey="&restoretab.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('original', this.parentNode.triggerNode.value);" default="true"/>
+                  commandData="restoreTab,original" default="true"/>
         <menuseparator id="tmpre-bookmarks-separator"/>
         <menuitem id="tmAddBookmark" label="&bookmark.label;" accesskey="&bookmark.accesskey;"
-                  oncommand="TMP_ClosedTabs.addBookmarks(this.parentNode.triggerNode.value);"/>
+                  commandData="addBookmarks"/>
         <menuitem id="tmcopyTabUrl" label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
-                  oncommand="TMP_ClosedTabs.copyTabUrl(this.parentNode.triggerNode.value);"/>
+                  commandData="copyTabUrl"/>
         <menuseparator id="tmpost-bookmarks-separator"/>
         <menuitem id="tm_delete" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
-                  oncommand="TMP_ClosedTabs.restoreTab('delete', this.parentNode.triggerNode.value);"/>
+                  commandData="restoreTab,delete"/>
       </menupopup>
       <!-- context menu for undoclosewindow menupopup for use with sessionRestore -->
       <menupopup id="tm_undocloseWindowContextMenu"

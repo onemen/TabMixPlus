@@ -1,3 +1,4 @@
+/* exported TMP_ClosedTabs */
 "use strict";
 
 /*
@@ -330,6 +331,10 @@ var TMP_ClosedTabs = {
 
   /* .......... functions for closedtabs list menu and context menu .......... */
 
+  get keepMenuOpen() {
+    return true;
+  },
+
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
     /* eslint-disable tabmix/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
@@ -376,8 +381,9 @@ var TMP_ClosedTabs = {
       }
       m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
       m.setAttribute("value", i);
-      m.addEventListener("command", TMP_ClosedTabs.restoreCommand, false);
-      m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
+      m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+      m.addEventListener("command", this, false);
+      m.addEventListener("click", this, false);
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");
       aPopup.appendChild(m);
@@ -395,9 +401,7 @@ var TMP_ClosedTabs = {
     m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
     m.setAttribute("value", -1);
     addKey(m, "clearClosedTabs");
-    m.addEventListener("command", function() {
-      TMP_ClosedTabs.restoreTab('original', -1);
-    });
+    m.addEventListener("command", this);
 
     // "Restore All Tabs"
     m = aPopup.appendChild(document.createElement("menuitem"));
@@ -405,36 +409,61 @@ var TMP_ClosedTabs = {
     m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
     m.setAttribute("value", -2);
     addKey(m, "ucatab");
-    m.addEventListener("command", function() {
-      TMP_ClosedTabs.restoreTab('original', -2);
-    });
+    m.addEventListener("command", this);
     return true;
     /* eslint-enable tabmix/balanced-listeners */
   },
 
-  restoreCommand: function(aEvent) {
-    let index = aEvent.originalTarget.getAttribute("value");
-    if (index < 0) {
-      return;
+  handleEvent: function(event) {
+    switch (event.type) {
+      case "click":
+        this.checkForMiddleClick(event);
+        break;
+      case "command":
+        this.restoreCommand(event);
+        break;
     }
-    TMP_ClosedTabs.restoreTab("original", index);
+  },
+
+  restoreCommand: function(aEvent) {
+    this.doCommand("restoreTab", "original", aEvent.originalTarget);
   },
 
   checkForMiddleClick: function ct_checkForMiddleClick(aEvent) {
     if (aEvent.button != 1)
       return;
 
-    let index = aEvent.originalTarget.getAttribute("value");
-    if (index < 0)
-      return;
+    const deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
+    const where = deleteItem ? "delete" : "tab";
+    this.doCommand("restoreTab", where, aEvent.originalTarget, deleteItem);
+  },
 
-    let deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
-    TMP_ClosedTabs.restoreTab(deleteItem ? "delete" : "tab", index);
-    if (deleteItem && TMP_ClosedTabs.count > 0) {
-      aEvent.stopPropagation();
-      TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
-    } else {
-      closeMenus(aEvent.target);
+  contextMenuOnPopupShowing: function(popup) {
+    const val = this.keepMenuOpen ? "single" : "auto";
+    Array.prototype.forEach.call(popup.childNodes, item => {
+      item.setAttribute("closemenu", val);
+    });
+    return popup.triggerNode.value >= 0;
+  },
+
+  contextMenuOnCommand: function(event) {
+    const menuItem = event.originalTarget;
+    const [command, where] = menuItem.getAttribute("commandData").split(",");
+    const popup = menuItem.parentNode;
+    this.doCommand(command, where, popup.triggerNode);
+  },
+
+  doCommand: function(command, where, item, keepMenuOpen) {
+    const popup = item.parentNode;
+    const index = Number(item.value);
+    this[command](where || index, index);
+    const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
+    if (rePopulate) {
+      if (command == "restoreTab") {
+        this.populateUndoSubmenu(popup);
+      }
+    } else if (item.getAttribute("closemenu") == "none") {
+      closeMenus(popup);
     }
   },
 

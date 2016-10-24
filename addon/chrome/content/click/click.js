@@ -909,7 +909,8 @@ var TabmixAllTabs = {
       var menuItem = popup.firstChild;
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
-      menuItem.removeEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
+      menuItem.removeEventListener("command", TMP_ClosedTabs, false);
+      menuItem.removeEventListener("click", TMP_ClosedTabs, false);
       popup.removeChild(menuItem);
     }
 
