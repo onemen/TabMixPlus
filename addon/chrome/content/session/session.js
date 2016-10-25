@@ -1650,15 +1650,22 @@ TabmixSessionManager = {
       var aValue = node.getAttribute("value"); // -1, -2 for for closed session, 1, 2.... for saved session
       var loadsession = aValue && aValue <= -1 ? aValue : 0;
       this.prefBranch.setIntPref("onStart.loadsession", loadsession);
-      if (loadsession > -1)
+      if (loadsession > -1) {
         this.prefBranch.setCharPref("onStart.sessionpath", node.session);
+      } else {
+        this.prefBranch.clearUserPref("onStart.sessionpath");
+      }
       Services.prefs.savePrefFile(null); // store the pref immediately
+      this.updateMenuPopupContent(node.parentNode);
     }
   },
 
-  setShowNameExt: function() {
+  setShowNameExt: function(contextMenu) {
     this.prefBranch.setBoolPref("menu.showext", !this.prefBranch.getBoolPref("menu.showext"));
     Services.prefs.savePrefFile(null); // store the pref immediately
+    if (contextMenu) {
+      this.updateMenuPopupContent(contextMenu.triggerNode.parentNode);
+    }
   },
 
   renameSession: function SM_renameSession(thisSession) {
@@ -1742,6 +1749,7 @@ TabmixSessionManager = {
       this.removeSession(path, this.gSessionPath[0]);
       this.updateClosedWindowsMenu("check");
     }
+    this.updateMenuPopupContent(aMenuItem.parentNode);
   },
 
   removeAllSavedSession: function SM_removeAllSavedSession(aMenuItem) {
@@ -1884,8 +1892,24 @@ TabmixSessionManager = {
     }
   },
 
+  updateMenuPopupContent: function(popupMenu) {
+    const update = popup => {
+      if (!popup.parentNode.open) {
+        return;
+      }
+      const [container, contents, aNoSeparators] = popup.tabmixArgs || [];
+      this.createMenu(popup, container, contents, aNoSeparators);
+    };
+    update(popupMenu);
+    const anonid = popupMenu.parentNode.getAttribute("anonid");
+    if (anonid == "delete" || anonid == "rename") {
+      update(popupMenu.parentNode.parentNode);
+    }
+  },
+
   createMenu: function SM_createMenu(popup, container, contents, aNoSeparators) {
     /* eslint-disable tabmix/balanced-listeners */
+    popup.tabmixArgs = [container, contents, aNoSeparators];
     if (popup.id == "btn_closedwindows_menu") {
       let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
       document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
@@ -1902,12 +1926,13 @@ TabmixSessionManager = {
     if (parentId == "btn_sessionmanager" || parentId == "btn_closedwindows")
       popup.parentNode.removeAttribute("tooltiptext");
     var sessionmanagerMenu = popup.parentNode.hasAttribute("sessionmanager-menu");
-    var parentID, menuCommand;
+    var parentID, menuCommand, keepMenuOpen;
     if (sessionmanagerMenu) {
       parentID = "sessionmanagerMenu";
       menuCommand = "loadSession";
     } else if (popup.parentNode.getAttribute("anonid") == "delete") {
       parentID = "tm_prompt";
+      keepMenuOpen = true;
     } else if (contents != Tabmix.SHOW_CLOSED_WINDOW_LIST) {
       parentID = popup.parentNode.id;
     }
@@ -1946,6 +1971,7 @@ TabmixSessionManager = {
       nameExt = this.getLiteralValue(node, "nameExt");
       // Insert a menu item for session in the container
       mi = document.createElement("menuitem");
+      mi.setAttribute("closemenu", keepMenuOpen ? "none" : "auto");
       mi.session = node.QueryInterface(Ci.nsIRDFResource).Value;
       mi.command = menuCommand;
       mi.setAttribute("session", mi.session);
@@ -1993,6 +2019,7 @@ TabmixSessionManager = {
         var empty = ", (" + TabmixSvc.getSMString("sm.session.empty") + ")";
         for (let i = 0; i < sessionLabel.length; i++) {
           menu = document.createElement("menuitem");
+          menu.setAttribute("closemenu", keepMenuOpen ? "none" : "auto");
           var [sLabel, sessionIndex] = sessionLabel[i].split(" ");
           menu.session = this.gSessionPath[sessionIndex];
           menu.history = true;

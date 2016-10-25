@@ -352,15 +352,17 @@
                   accesskey="&sm.context.bookmarkSession.key;"
                   oncommand="TabmixSessionManager.bookmarkSession(this.parentNode.triggerNode);"/>
         <menuseparator/>
-        <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;"
+        <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;" closemenu="single"
                   oncommand="TabmixSessionManager.removeSavedSession(this.parentNode.triggerNode);"/>
         <menuitem id="tm-sm-DeleteAll" label="&sm.context.deleteall;" accesskey="&sm.context.deleteall.key;"
                   oncommand="TabmixSessionManager.removeAllSavedSession(this.parentNode.triggerNode);"/>
         <menuseparator/>
-        <menuitem id="tm-sm-SetAsStartup" label="&sm.context.startup;" accesskey="&sm.context.startup.key;" type="checkbox"
+        <menuitem id="tm-sm-SetAsStartup" label="&sm.context.startup;" accesskey="&sm.context.startup.key;"
+                  type="checkbox" closemenu="single"
                   oncommand="TabmixSessionManager.setSessionAsStartup(this);"/>
-        <menuitem id="tm-sm-showext" label="&sm.context.details;" accesskey="&sm.context.details.key;" type="checkbox"
-                  oncommand="TabmixSessionManager.setShowNameExt(this);"/>
+        <menuitem id="tm-sm-showext" label="&sm.context.details;" accesskey="&sm.context.details.key;"
+                  type="checkbox" closemenu="single"
+                  oncommand="TabmixSessionManager.setShowNameExt(this.parentNode);"/>
       </menupopup>
       <!-- menupopup for lasttab -->
       <menupopup id="lasttabTabList" ignorekeys="true" flex="1"
