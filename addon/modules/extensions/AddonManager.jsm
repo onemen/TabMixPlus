@@ -1,7 +1,6 @@
 /**
  * original code by onemen
  */
-
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
