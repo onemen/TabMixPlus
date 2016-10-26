@@ -139,6 +139,12 @@ this.SingleWindowModeUtils = {
         let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
         urls.push(uriString.data);
       }
+    } else if (uriToLoad instanceof Ci.nsIArray) {
+      let count = uriToLoad.length;
+      for (let i = 0; i < count; i++) {
+        let uriString = uriToLoad.queryElementAt(i, Ci.nsISupportsString);
+        urls.push(uriString.data);
+      }
     } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
