@@ -254,9 +254,9 @@ var Tabmix = {
     }.bind(this), false);
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
-                   "getObject", "log", "getCallerNameByIndex", "callerName",
-                   "clog", "isCallerInList", "callerTrace",
-                   "obj", "assert", "trace", "reportError"];
+      "getObject", "log", "getCallerNameByIndex", "callerName",
+      "clog", "isCallerInList", "callerTrace",
+      "obj", "assert", "trace", "reportError"];
     methods.forEach(function(id) {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);

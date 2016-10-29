@@ -1274,21 +1274,21 @@ TabmixSessionManager = {
         msg = TabmixSvc.getSMString("sm.addtoStartup.msg." + msgType) + "\n" +
           label + "\n" + areYouSure + "\n\n" + chooseStartup;
         buttons = [TabmixSvc.setLabel("sm.addtoStartup.button0"),
-                   TabmixSvc.setLabel("sm.addtoStartup.button1")].join("\n");
+          TabmixSvc.setLabel("sm.addtoStartup.button1")].join("\n");
         break;
       case "replaceSession":
         title = TabmixSvc.getSMString("sm.replaceStartup.title");
         msg = TabmixSvc.getSMString("sm.replaceStartup.msg") + "\n" +
           label + "\n" + areYouSure + "\n\n" + chooseStartup;
         buttons = [TabmixSvc.setLabel("sm.replaceStartup.button0"),
-                   TabmixSvc.setLabel("sm.replaceStartup.button1")].join("\n");
+          TabmixSvc.setLabel("sm.replaceStartup.button1")].join("\n");
         break;
       case "removeSavedSession":
         title = TabmixSvc.getSMString("sm.removeStartup.title");
         msg = TabmixSvc.getSMString("sm.removeStartup.msg0") + "\n" +
           label + "\n" + areYouSure + "\n\n" + TabmixSvc.getSMString("sm.removeStartup.msg1");
         buttons = [TabmixSvc.setLabel("sm.removeStartup.button0"),
-                   TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
+          TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
         selectionFlag = Tabmix.SELECT_LASTSESSION;
         break;
     }
@@ -1435,7 +1435,7 @@ TabmixSessionManager = {
       var msg = TabmixSvc.getSMString("sm.dontSaveBlank.msg");
       var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
       Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT,
-                            Tabmix.HIDE_CHECKBOX], [title, msg, "", "", buttons]);
+        Tabmix.HIDE_CHECKBOX], [title, msg, "", "", buttons]);
       return false;
     }
     return true;
@@ -1501,13 +1501,13 @@ TabmixSessionManager = {
     if (action == "rename") {
       label = old;
       buttons = [TabmixSvc.setLabel("sm.sessionName.button0"),
-                 TabmixSvc.setLabel("sm.sessionName.button1")].join("\n");
+        TabmixSvc.setLabel("sm.sessionName.button1")].join("\n");
       actionFlag = Tabmix.DLG_RENAME;
     } else {
       label = action == "saveprevious" ? old : gBrowser.mCurrentTab.label;
       buttons = [TabmixSvc.setLabel("sm.askBeforeSave.button0"),
-                 TabmixSvc.setLabel("sm.askBeforeSave.button1"),
-                 TabmixSvc.setLabel("sm.replaceStartup.button0") + "..."].join("\n");
+        TabmixSvc.setLabel("sm.askBeforeSave.button1"),
+        TabmixSvc.setLabel("sm.replaceStartup.button0") + "..."].join("\n");
       actionFlag = Tabmix.DLG_SAVE;
     }
     label = label + "\n" + sessionList.list.join("\n");
@@ -1550,10 +1550,10 @@ TabmixSessionManager = {
   getNameData: function(numWindows, numTabs) {
     var d = new Date();
     var date = [d.getFullYear(), '/', d.getMonth() < 9 ? "0" : "",
-                d.getMonth() + 1, '/', d.getDate() < 10 ? "0" : "", d.getDate()].join('');
+      d.getMonth() + 1, '/', d.getDate() < 10 ? "0" : "", d.getDate()].join('');
     var time = [d.getHours() < 10 ? "0" : "", d.getHours(), ':',
-                d.getMinutes() < 10 ? "0" : "", d.getMinutes(), ':',
-                d.getSeconds() < 10 ? "0" : "", d.getSeconds()].join('');
+      d.getMinutes() < 10 ? "0" : "", d.getMinutes(), ':',
+      d.getSeconds() < 10 ? "0" : "", d.getSeconds()].join('');
     var empty = TabmixSvc.getSMString("sm.session.empty");
     var T = TabmixSvc.getSMString("sm.session.tabs");
     var W = TabmixSvc.getSMString("sm.session.windows");
@@ -1756,7 +1756,7 @@ TabmixSessionManager = {
     var node = aMenuItem.parentNode.parentNode;
     var result, title, msg;
     var buttons = [TabmixSvc.setLabel("sm.removeStartup.button0"),
-                   TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
+      TabmixSvc.setLabel("sm.removeStartup.button1")].join("\n");
     if (node.hasAttribute("sessionmanager-menu")) {
       title = TabmixSvc.getSMString("sm.removeAll.title.session");
       msg = TabmixSvc.getSMString("sm.removeAll.msg0") + "\n\n";
@@ -1964,7 +1964,7 @@ TabmixSessionManager = {
     }.bind(this);
 
     let backups = [TabmixSvc.getSMString("sm.tabview.backup.session"),
-                   TabmixSvc.getSMString("sm.tabview.backup.crashed")];
+      TabmixSvc.getSMString("sm.tabview.backup.crashed")];
     for (let i = 0; i < count; i++) {
       node = nodes[i];
       name = this.getDecodedLiteralValue(node, "name");
@@ -2181,7 +2181,7 @@ TabmixSessionManager = {
       if (this.enableManager && !isAllEmpty) {
         msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
-                   TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
+          TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
         this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_CRASH],
                            [title, msg, "", "", buttons], window, callBack);
       } else {
@@ -2191,7 +2191,7 @@ TabmixSessionManager = {
         else
           msg += "\n" + TabmixSvc.getSMString("sm.afterCrash.msg4");
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0.crashed"),
-                   TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
+          TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
         this.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
         this.callBackData.label = this.gSessionPath[3];
@@ -2200,7 +2200,7 @@ TabmixSessionManager = {
       msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg5") + "\n\n" +
         TabmixSvc.getSMString("sm.afterCrash.msg1");
       buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
-                 TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
+        TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
       this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_DEFAULT],
                          [title, msg, "", "", buttons], window, callBack);
     } else if (closedWinList !== 0) {
@@ -2212,7 +2212,7 @@ TabmixSessionManager = {
         msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg7") + " " +
           TabmixSvc.getSMString("sm.afterCrash.msg8") + ":";
       buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
-                 TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
+        TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
       this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SHOW_CLOSED_WINDOW_LIST],
                          [title, msg, "", chkBoxLabel, buttons], window, callBack);
       this.callBackData.whatToLoad = "closedwindow";
@@ -2388,7 +2388,7 @@ TabmixSessionManager = {
         if (!loadSessionIsValid) msg += TabmixSvc.getSMString("sm.start.msg2");
         msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
-                   TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
+          TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
         let callBack = function(aResult) {
           this.onFirstWindowPromptCallBack(aResult);
         }.bind(this);
@@ -3508,7 +3508,7 @@ TabmixSessionManager = {
 
     // if we need to remove extra tabs make sure they are not protected
     let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
-                      "pending", "hidden", "image"];
+      "pending", "hidden", "image"];
     // remove visited and tabmix_selectedID from all tabs but the current
     if (aTab != gBrowser.mCurrentTab)
       attributes = attributes.concat(["visited", "tabmix_selectedID"]);
@@ -3756,7 +3756,7 @@ TabmixSessionManager = {
     // and makes the alphabetical order of multiple backup files more useful.
     var d = new Date();
     var date = [d.getFullYear(), '-', d.getMonth() < 9 ? "0" : "", d.getMonth() + 1, '-',
-                d.getDate() < 10 ? "0" : "", d.getDate()].join('');
+      d.getDate() < 10 ? "0" : "", d.getDate()].join('');
     var backupFilename = "tabmix_sessions-" + date + ".rdf";
     var backupFile = null;
     if (!aForceArchive) {

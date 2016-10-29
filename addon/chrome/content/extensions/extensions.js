@@ -539,8 +539,8 @@ TMP_extensionsCompatibility.wizzrss = {
     var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
     const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
     var _functions = ["addFeedbase", "validate", "gohome", "tryagain", "promptStuff",
-                      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
-                      "gotoLink", "itemLinkClick", "itemListClick"];
+      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
+      "gotoLink", "itemLinkClick", "itemListClick"];
 
     _functions.forEach(function(_function) {
       if (_function in window)
@@ -741,7 +741,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       ).toCode();
       // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        /(Tabmix.loadTabs\([^\)]+\);)/g,
+        /(Tabmix.loadTabs\([^)]+\);)/g,
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }

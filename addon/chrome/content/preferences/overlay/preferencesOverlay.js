@@ -27,7 +27,7 @@ var gTabMix_preferencesOverlay = {
 
     if (TabmixSvc.version(260)) {
       let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
-                   "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
+        "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
       boxes.forEach(function(id) {
         let item = this.id(id);
         item.removeAttribute("data-category");

@@ -115,7 +115,7 @@ CompatibilityCheck.prototype = {
               TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
     var chkBoxLabel = TabmixSvc.getString("incompatible.chkbox.label");
     var buttons = [TabmixSvc.setLabel("incompatible.button0"),
-            TabmixSvc.setLabel("incompatible.button1")];
+      TabmixSvc.setLabel("incompatible.button1")];
     buttons.push(TabmixSvc.setLabel("incompatible.button2"));
 
     // make promptService non modal on startup

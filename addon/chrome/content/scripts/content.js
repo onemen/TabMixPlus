@@ -368,7 +368,7 @@ TabmixClickEventHandler = {
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
     return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
-            node && node.ownerDocument.nodePrincipal];
+      node && node.ownerDocument.nodePrincipal];
   },
 };
 

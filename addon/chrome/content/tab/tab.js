@@ -649,9 +649,9 @@ Tabmix.tabsUtils = {
     this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected",
-                "locked"].filter(function(att) {
-                  return Tabmix.prefs.getBoolPref("extraIcons." + att);
-                });
+      "locked"].filter(function(att) {
+        return Tabmix.prefs.getBoolPref("extraIcons." + att);
+      });
     if (attr.length)
       this.tabBar.setAttribute("tabmix_icons", attr.join(" "));
 
@@ -1236,17 +1236,17 @@ gTMPprefObserver = {
   },
 
   OBSERVING: ["extensions.tabmix.",
-              "browser.tabs.tabMinWidth",
-              "browser.tabs.tabMaxWidth",
-              "browser.tabs.tabClipWidth",
-              "browser.sessionstore.max_tabs_undo",
-              "browser.warnOnQuit",
-              "browser.sessionstore.resume_from_crash",
-              "browser.startup.page",
-              "browser.link.open_newwindow.override.external",
-              "browser.link.open_newwindow.restriction",
-              "browser.link.open_newwindow",
-              "browser.ctrlTab.previews"],
+    "browser.tabs.tabMinWidth",
+    "browser.tabs.tabMaxWidth",
+    "browser.tabs.tabClipWidth",
+    "browser.sessionstore.max_tabs_undo",
+    "browser.warnOnQuit",
+    "browser.sessionstore.resume_from_crash",
+    "browser.startup.page",
+    "browser.link.open_newwindow.override.external",
+    "browser.link.open_newwindow.restriction",
+    "browser.link.open_newwindow",
+    "browser.ctrlTab.previews"],
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers: function() {
@@ -1952,8 +1952,8 @@ gTMPprefObserver = {
       // set bold, italic and underline only when we control the style
       // to override theme default rule if exist
       attribValue = [prefValues.bold ? "bold" : "not-bold",
-               prefValues.italic ? "italic" : "not-italic",
-               prefValues.underline ? "underline" : "not-underline"
+        prefValues.italic ? "italic" : "not-italic",
+        prefValues.underline ? "underline" : "not-underline"
       ];
       if (prefValues.text)
         attribValue.push("text");
@@ -2654,7 +2654,7 @@ gTMPprefObserver = {
 
   updateTabClickingOptions: function() {
     var c = ["dblClickTab", "middleClickTab", "ctrlClickTab", "shiftClickTab", "altClickTab",
-             "dblClickTabbar", "middleClickTabbar", "ctrlClickTabbar", "shiftClickTabbar", "altClickTabbar"];
+      "dblClickTabbar", "middleClickTabbar", "ctrlClickTabbar", "shiftClickTabbar", "altClickTabbar"];
     for (let i = 0; i < c.length; i++)
       this.blockTabClickingOptions("extensions.tabmix." + c[i]);
   },

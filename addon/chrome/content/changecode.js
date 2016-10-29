@@ -56,7 +56,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         if (!doReplace)
           return this;
         if (flags && typeof substr == "string")
-          substr = new RegExp(substr.replace(/[{[(\\^.$|?*+\/)\]}]/g, "\\$&"), flags);
+          substr = new RegExp(substr.replace(/[{[(\\^.$|?*+/)\]}]/g, "\\$&"), flags);
       }
 
       var exist = typeof (substr) == "string" ? this.value.indexOf(substr) > -1 : substr.test(this.value);

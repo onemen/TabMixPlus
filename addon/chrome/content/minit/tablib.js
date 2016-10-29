@@ -1531,8 +1531,8 @@ var tablib = { // eslint-disable-line
       var numProtected = protectedTabs.length;
       var shouldPrompt = 0;
       var prefs = ["extensions.tabmix.tabs.warnOnClose",
-                  "extensions.tabmix.protectedtabs.warnOnClose",
-                  "browser.tabs.warnOnClose"];
+        "extensions.tabmix.protectedtabs.warnOnClose",
+        "browser.tabs.warnOnClose"];
       if (onExit) {
         if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;

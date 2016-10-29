@@ -161,7 +161,7 @@ this.TabmixSvc = {
 
   windowStartup: {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
-                                           Ci.nsISupportsWeakReference]),
+      Ci.nsISupportsWeakReference]),
     _initialized: false,
     init: function(aWindow) {
       // windowStartup must only be called once for each window

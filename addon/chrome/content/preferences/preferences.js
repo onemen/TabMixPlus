@@ -345,9 +345,9 @@ function setPrefAfterImport(aPref) {
 }
 
 var sessionPrefs = ["browser.sessionstore.resume_from_crash",
-                    "browser.startup.page",
-                    "extensions.tabmix.sessions.manager",
-                    "extensions.tabmix.sessions.crashRecovery"];
+  "browser.startup.page",
+  "extensions.tabmix.sessions.manager",
+  "extensions.tabmix.sessions.crashRecovery"];
 
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   // other settings not in extensions.tabmix. branch that we save

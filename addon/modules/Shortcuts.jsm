@@ -381,7 +381,7 @@ this.Shortcuts = {
     if (!value)
       return "";
     return [(value.disabled ? "d&" : "") + (value.key || value.keycode),
-             value.modifiers].join(" ").replace(/[\s|;]$/, "");
+      value.modifiers].join(" ").replace(/[\s|;]$/, "");
   },
 
   validateKey: function validateKey(key) {
