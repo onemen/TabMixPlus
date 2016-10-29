@@ -40,8 +40,7 @@ module.exports = {
     "no-duplicate-case": 2,
     "no-duplicate-imports": [2, {"includeExports": true}],
     "no-else-return": 2,
-    // this show error on catch empty block unless there is a comment
-    "no-empty": 0,
+    "no-empty": [2, {"allowEmptyCatch": true}],
     "no-empty-character-class": 2,
     "no-empty-function": 0,
     "no-empty-pattern": 2,
