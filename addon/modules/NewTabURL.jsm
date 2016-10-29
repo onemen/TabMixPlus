@@ -8,14 +8,14 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyServiceGetter(this, "aboutNewTabService",
-                                   "@mozilla.org/browser/aboutnewtab-service;1",
-                                   "nsIAboutNewTabService");
+  "@mozilla.org/browser/aboutnewtab-service;1",
+  "nsIAboutNewTabService");
 
 XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
-                                  "resource:///modules/NewTabURL.jsm");
+  "resource:///modules/NewTabURL.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-                                  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/Services.jsm");
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");

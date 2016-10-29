@@ -300,13 +300,13 @@ TabmixSessionManager = {
   _init: function SM__init() {
     if (Tabmix.isVersion(320)) {
       XPCOMUtils.defineLazyModuleGetter(this, "TabState",
-                                        "resource:///modules/sessionstore/TabState.jsm");
+        "resource:///modules/sessionstore/TabState.jsm");
       XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
-                                        "resource:///modules/sessionstore/TabStateCache.jsm");
+        "resource:///modules/sessionstore/TabStateCache.jsm");
     }
 
     XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
-                                      "resource://tabmixplus/TabGroupsMigrator.jsm");
+      "resource://tabmixplus/TabGroupsMigrator.jsm");
 
     // just in case tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
@@ -566,7 +566,7 @@ TabmixSessionManager = {
   },
 
   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
-                                                aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
+                                               aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
     if (this.isPrivateWindow) {
       this.removeSession(this.gThisWin, this.gSessionPath[0]);
     }
@@ -590,12 +590,12 @@ TabmixSessionManager = {
     }
 
     this.shutDown(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs,
-                  aKeepClosedWindows, _flush);
+      aKeepClosedWindows, _flush);
   },
 
   sessionShutDown: false,
   shutDown: function(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs,
-                      aKeepClosedWindows, _flush) {
+                     aKeepClosedWindows, _flush) {
     if (this.sessionShutDown)
       return;
     if (aLastWindow && aCanClose) {
@@ -3170,7 +3170,7 @@ TabmixSessionManager = {
     }
     var newWindow =
         Services.ww.openWindow(null, Services.prefs.getCharPref("browser.chromeURL"),
-                               "_blank", features, argString);
+          "_blank", features, argString);
 
     let ID;
     do {

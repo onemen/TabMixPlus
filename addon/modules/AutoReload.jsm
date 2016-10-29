@@ -31,7 +31,7 @@ this.AutoReload = {
     let parent = aPopup.parentNode;
     win.Tabmix.setItem(aPopup, "onpopuphidden", "this._tab = null;");
     win.Tabmix.setItem(aPopup, "oncommand",
-                        "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
+      "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
     for (let i = 0; i < popup.childNodes.length; i++)
       aPopup.appendChild(popup.childNodes[i].cloneNode(true));
     if (parent.id != "reload-button") {
@@ -236,7 +236,7 @@ this.AutoReload = {
         if (TabmixSvc.version(330)) {
           aBrowser.messageManager
                   .sendAsyncMessage("Tabmix:setScrollPosition",
-                                    aBrowser.__tabmixScrollPosition);
+            aBrowser.__tabmixScrollPosition);
         } else {
           let {x, y} = aBrowser.__tabmixScrollPosition;
           aBrowser.contentWindow.scrollTo(x, y);

@@ -26,8 +26,8 @@
             ).toCode();
           } catch (ex) {
             TabmixSvc.console.log(
-                "TabMix :\n" +
-                "can't change openLinkIn from preferences.xml binding\n" + ex);
+              "TabMix :\n" +
+              "can't change openLinkIn from preferences.xml binding\n" + ex);
           }
         ]]>
       </constructor>

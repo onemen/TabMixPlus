@@ -52,6 +52,6 @@ var gLinksPane = {
 
   openFiletypeEditor: function() {
     window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul",
-        "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
+      "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
   }
 };

@@ -76,6 +76,6 @@ Tabmix.contentAreaClick = {
    */
   _contentLinkClick: function TMP__contentLinkClick(event) {
     Tabmix.ContentClick.contentLinkClick(event,
-        gBrowser.selectedBrowser, document.commandDispatcher.focusedWindow);
+      gBrowser.selectedBrowser, document.commandDispatcher.focusedWindow);
   }
 };

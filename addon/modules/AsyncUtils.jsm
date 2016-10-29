@@ -7,7 +7,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "Promise",
-                                  "resource://gre/modules/Promise.jsm");
+  "resource://gre/modules/Promise.jsm");
 
 this.AsyncUtils = {
   /* PromiseUtils.defer exist since Firefox 39 */

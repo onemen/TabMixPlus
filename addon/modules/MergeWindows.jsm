@@ -104,7 +104,7 @@ this.MergeWindows = {
     var features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
-        "_blank", features, null);
+      "_blank", features, null);
     let mergePopUps = function _mergePopUps() {
       newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
       this.concatTabsAndMerge(newWindow, aWindows);
@@ -298,7 +298,7 @@ this.MergeWindows = {
     if (!notificationBox.getNotificationWithValue(name)) {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
       let notificationBar = notificationBox.appendNotification(errorMessage,
-                                name, errorimage, priority, null);
+        name, errorimage, priority, null);
       aWindow.setTimeout(function() {
         notificationBox.removeNotification(notificationBar);
       }, 10000);
@@ -317,10 +317,10 @@ this.MergeWindows = {
 
     var promptAgain = {value: true};
     canClose = Services.prompt.confirmCheck(aWindow,
-                   TabmixSvc.getString('tmp.merge.warning.title'),
-                   TabmixSvc.getString('tmp.merge.warning.message'),
-                   TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
-                   promptAgain);
+      TabmixSvc.getString('tmp.merge.warning.title'),
+      TabmixSvc.getString('tmp.merge.warning.message'),
+      TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
+      promptAgain);
 
     if (canClose && !promptAgain.value)
       this.prefs.setBoolPref("warnOnClose", false);

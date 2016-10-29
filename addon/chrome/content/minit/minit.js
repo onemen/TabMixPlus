@@ -433,7 +433,7 @@ var TMP_tabDNDObserver = {
         // ensure that the remoteness of the newly created browser is
         // appropriate for the URL of the tab being dragged in.
         gBrowser.updateBrowserRemotenessByURL(newBrowser,
-                                              draggedBrowserURL);
+          draggedBrowserURL);
       }
 
       // Stop the about:blank load
@@ -586,9 +586,9 @@ var TMP_tabDNDObserver = {
     var winWidth = Math.min(window.outerWidth, availWidth.value);
     var winHeight = Math.min(window.outerHeight, availHeight.value);
     var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, availX.value),
-        availX.value + availWidth.value - winWidth);
+      availX.value + availWidth.value - winWidth);
     var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, availY.value),
-        availY.value + availHeight.value - winHeight);
+      availY.value + availHeight.value - winHeight);
 
     delete draggedTab._dragData;
 
@@ -1216,7 +1216,7 @@ Tabmix.navToolbox = {
           event.altKey && !isTabEmpty(gBrowser.selectedTab);
       let where = "current";
       let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
-              altEnter).inNew && !(/^ *javascript:/.test(this.value));
+        altEnter).inNew && !(/^ *javascript:/.test(this.value));
       if (isMouseEvent || altEnter || loadNewTab) {
         // Use the standard UI link behaviors for clicks or Alt+Enter
         where = "tab";
@@ -1424,7 +1424,7 @@ Tabmix.navToolbox = {
 
       // alltabs-popup fix visibility for multi-row
       Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
-          TabmixAllTabs._updateTabsVisibilityStatus);
+        TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },
 

@@ -128,7 +128,7 @@ var TabmixTabbar = {
     // fix bug in positioning the popup off screen or on the button when window
     // is not maximize or when tab bar is in the bottom
     Tabmix.setItem("alltabs-popup", "position",
-           (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
+      (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
 
     // for light weight themes
     Tabmix.setItem("main-window", "tabmix_lwt", isMultiRow || this.position == 1 || null);
@@ -385,7 +385,7 @@ var TabmixTabbar = {
     }
     /// maybe we cad add this to the popupshowing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
-        (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
+      (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
   // Update positional attributes when we are in multi-row mode
@@ -988,7 +988,7 @@ Tabmix.tabsUtils = {
   showNewTabButtonOnSide: function(aCondition, aValue) {
     if (this._show_newtabbutton) {
       Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-                     aCondition ? aValue : this._show_newtabbutton);
+        aCondition ? aValue : this._show_newtabbutton);
     }
   },
 
@@ -1652,7 +1652,7 @@ gTMPprefObserver = {
   dynamicRules: {},
   insertRule: function(cssText, name) {
     let index = this.tabStyleSheet.insertRule(cssText,
-        this.tabStyleSheet.cssRules.length);
+      this.tabStyleSheet.cssRules.length);
     if (name)
       this.dynamicRules[name] = this.tabStyleSheet.cssRules[index];
     return index;
@@ -2365,13 +2365,13 @@ gTMPprefObserver = {
     // 2008-09-23
     if (Services.prefs.prefHasUserValue("browser.ctrlTab.mostRecentlyUsed")) {
       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                 Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
+        Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
       Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
     }
     // 2008-09-28
     if (Tabmix.prefs.prefHasUserValue("lasttab.handleCtrlTab")) {
       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                 Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
+        Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
       Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
     }
     // 2008-11-29
@@ -2488,10 +2488,10 @@ gTMPprefObserver = {
     }
     _setNewTabUrl("extensions.tabmix.newTabUrl", TabmixSvc.newtabUrl, "loadOnNewTab.type");
     _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                  "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
+      "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
     _setNewTabUrl("extensions.tabmix.newtab.url", TabmixSvc.newtabUrl);
     _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
-                  "extensions.tabmix.replaceLastTabWith.newtab.url");
+      "extensions.tabmix.replaceLastTabWith.newtab.url");
     // 2012-04-12
     var pref = "browser.tabs.loadFolderAndReplace";
     if (Services.prefs.prefHasUserValue(pref)) {
@@ -2709,8 +2709,8 @@ TabmixProgressListener = {
     },
 
     onProgressChange: function(aBrowser, aWebProgress, aRequest,
-                                aCurSelfProgress, aMaxSelfProgress,
-                                aCurTotalProgress, aMaxTotalProgress) {
+                               aCurSelfProgress, aMaxSelfProgress,
+                               aCurTotalProgress, aMaxTotalProgress) {
       if (!this.showProgressOnTab || TabmixTabbar.hideMode == 2 || !aMaxTotalProgress)
         return;
       var percentage = Math.ceil((aCurTotalProgress * 100) / aMaxTotalProgress);

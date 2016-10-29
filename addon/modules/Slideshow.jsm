@@ -46,7 +46,7 @@ flst.prototype = {
       let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
       this.slideShowTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
-                        Ci.nsITimer.TYPE_REPEATING_SLACK);
+        Ci.nsITimer.TYPE_REPEATING_SLACK);
       this.showAlert(this.slideshowOn, "slideShow");
     }
   },

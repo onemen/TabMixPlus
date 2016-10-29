@@ -588,7 +588,7 @@ TMP_Places.contextMenu = {
   // update context menu for bookmarks manager and sidebar
   // for bookmarks/places, history, sage and more.....
   update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
-                                           openInTab, pref) {
+                                          openInTab, pref) {
     // if all 4 is hidden... probably "Open all in Tabs" is visible
     if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
         openInTab.hidden) {

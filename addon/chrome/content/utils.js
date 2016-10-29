@@ -164,7 +164,7 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
+      "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
            (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
@@ -246,7 +246,7 @@ var Tabmix = {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
     XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-                                      "resource:///modules/RecentWindow.jsm");
+      "resource:///modules/RecentWindow.jsm");
 
     window.addEventListener("unload", function tabmix_destroy() {
       window.removeEventListener("unload", tabmix_destroy, false);

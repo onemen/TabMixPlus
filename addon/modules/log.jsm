@@ -348,7 +348,7 @@ options = {
     let {filename, lineNumber, columnNumber} = caller;
     let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
     consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
-                    Ci.nsIScriptError[flag], "component javascript");
+      Ci.nsIScriptError[flag], "component javascript");
     Services.console.logMessage(consoleMsg);
   },
 

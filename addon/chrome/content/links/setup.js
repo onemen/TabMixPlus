@@ -27,14 +27,14 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
                "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
       let n = '\n            ';
       this.changeCode(autoComplete, fn)._replace(
-          /openUILink\(url, aEvent.*\);/,
-          'var tabmixOptions = typeof options == "object" ? options : {};' + n +
-          'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
-          'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
-          'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
-          'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
-          'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
-          'openUILinkIn(url, where, tabmixOptions);'
+        /openUILink\(url, aEvent.*\);/,
+        'var tabmixOptions = typeof options == "object" ? options : {};' + n +
+        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
+        'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
+        'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
+        'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
+        'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
+        'openUILinkIn(url, where, tabmixOptions);'
       ).toCode();
     }
   }

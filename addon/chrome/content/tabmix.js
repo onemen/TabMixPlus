@@ -61,7 +61,7 @@ Tabmix.sessionInitialized = function() {
     };
 
     this.setItem("Browser:RestoreLastSession", "disabled",
-                 !SM.canRestoreLastSession || SM.isPrivateWindow);
+      !SM.canRestoreLastSession || SM.isPrivateWindow);
 
     if (TabmixSvc.isPaleMoon) {
       this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
@@ -236,7 +236,7 @@ Tabmix.afterDelayedStartup = function() {
       "Once you disable 'Debug Mode' restart your browser.";
     const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
     gnb.appendNotification(msg, "tabmix-debugmode-enabled",
-        errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
+      errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
   }
 };
 

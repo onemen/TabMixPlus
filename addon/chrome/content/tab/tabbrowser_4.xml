@@ -348,7 +348,7 @@
       <body><![CDATA[
         var isSelected = this == this.parentNode.selectedItem;
         Tabmix.setItem(this, "clickOnCurrent",
-                       isSelected && aEvent.detail == 1 || null);
+          isSelected && aEvent.detail == 1 || null);
         if (isSelected)
           return;
 

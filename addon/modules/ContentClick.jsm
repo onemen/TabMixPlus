@@ -169,7 +169,7 @@ ContentClickInternal = {
   // for non-link element with onclick that change location.href
   getHrefFromNodeOnClick: function(event, browser, wrappedOnClickNode) {
     if (!wrappedOnClickNode || !this.getHrefFromOnClick(event, null, wrappedOnClickNode,
-                      wrappedOnClickNode.getAttribute("onclick")))
+      wrappedOnClickNode.getAttribute("onclick")))
       return false;
 
     let href = event.__hrefFromOnClick;
@@ -1023,7 +1023,7 @@ ContentClickInternal = {
                  .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
         } else {
           let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
-                                                      this.frameData.href, this.frameData.name);
+            this.frameData.href, this.frameData.name);
           this.result(browser, {result: result});
         }
       } else {

@@ -116,7 +116,7 @@
       <method name="_getScrollableElements">
         <body><![CDATA[
           return Array.prototype.filter.call(document.getBindingParent(this).childNodes,
-                              this._canScrollToElement, this);
+            this._canScrollToElement, this);
         ]]></body>
       </method>
 

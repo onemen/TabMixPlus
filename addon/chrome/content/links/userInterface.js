@@ -28,7 +28,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
   } else {
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
-        "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
+      "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
 };
 

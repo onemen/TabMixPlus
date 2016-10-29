@@ -249,7 +249,7 @@ TabmixClickEventHandler = {
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode) {
       linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
-                                    href && event.button === 0);
+        href && event.button === 0);
     }
 
     let result = sendSyncMessage("TabmixContent:Click",

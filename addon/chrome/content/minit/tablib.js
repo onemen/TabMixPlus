@@ -760,8 +760,8 @@ var tablib = { // eslint-disable-line
         '$&' +
         'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(
-       'loadOneOrMoreURIs(homePage);',
-       '$& \
+        'loadOneOrMoreURIs(homePage);',
+        '$& \
         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
       ).toCode();
     }
@@ -1071,8 +1071,8 @@ var tablib = { // eslint-disable-line
         };
 
         Services.obs.addObserver(delayedStartupFinished,
-                                 "browser-delayed-startup-finished",
-                                 false);
+          "browser-delayed-startup-finished",
+          false);
       }
     };
 
@@ -1147,7 +1147,7 @@ var tablib = { // eslint-disable-line
         // we only get here when it is safe to use contentWindowAsCPOW
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
+          target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
       return linkURL;
@@ -1394,7 +1394,7 @@ var tablib = { // eslint-disable-line
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
-          tab => !tab.hidden && !tab.closing);
+        tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] != aTab) {
           temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
@@ -1650,14 +1650,14 @@ var tablib = { // eslint-disable-line
       window.focus();
       var promptService = Services.prompt;
       var buttonPressed = promptService.confirmEx(window,
-                                                  bundle.getString("tabs.closeWarningTitle"),
-                                                  message,
-                                                  (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
-                                                  (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
-                                                  buttonLabel,
-                                                  null, null,
-                                                  chkBoxLabel,
-                                                  warnOnClose);
+        bundle.getString("tabs.closeWarningTitle"),
+        message,
+        (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
+        (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
+        buttonLabel,
+        null, null,
+        chkBoxLabel,
+        warnOnClose);
       var reallyClose = (buttonPressed === 0);
       // don't set the pref unless they press OK and it's false
       if (reallyClose && !warnOnClose.value) {

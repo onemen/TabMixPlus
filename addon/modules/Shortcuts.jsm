@@ -9,7 +9,7 @@ Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://tabmixplus/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
-                                  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 var KeyConfig;
 this.Shortcuts = {
