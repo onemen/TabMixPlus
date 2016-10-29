@@ -5,9 +5,9 @@ this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
-Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://tabmixplus/Services.jsm", this);
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", this);
 
 this.SingleWindowModeUtils = {
  /**

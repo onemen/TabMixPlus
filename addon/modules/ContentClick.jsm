@@ -4,7 +4,10 @@ this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+
+XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
+  "resource:///modules/ContentClick.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -69,8 +72,13 @@ ContentClickInternal = {
     // ContentClick.jsm is not included in some Firefox forks:
     // Cyberfox before version 42
     try {
-      Cu.import("resource:///modules/ContentClick.jsm");
+      if (typeof ContentClick.contentAreaClick !== "function") {
+        TabmixSvc.console.log("ContentClick.contentAreaClick is not a function");
+        this.functions = [];
+        return;
+      }
     } catch (ex) {
+      TabmixSvc.console.log("ContentClick.jsm is not included");
       this.functions = [];
       return;
     }

@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["flst"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://tabmixplus/Services.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Shortcuts",
   "resource://tabmixplus/Shortcuts.jsm");
 

@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
 
 XPCOMUtils.defineLazyServiceGetter(this, "aboutNewTabService",
   "@mozilla.org/browser/aboutnewtab-service;1",

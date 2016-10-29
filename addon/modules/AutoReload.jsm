@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["AutoReload"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://tabmixplus/Services.jsm", this);
 
 var _setItem = function() {};
 

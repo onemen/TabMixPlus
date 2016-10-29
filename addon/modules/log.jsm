@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["console"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyGetter(this, "OS", function() {
   return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;

@@ -5,8 +5,8 @@ this.EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
@@ -185,7 +185,7 @@ this.TabmixSvc = {
       Services.obs.addObserver(this, "quit-application", true);
 
       // eslint-disable-next-line tabmix/import-globals
-      Cu.import("resource://tabmixplus/DownloadLastDir.jsm");
+      Cu.import("resource://tabmixplus/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
 
