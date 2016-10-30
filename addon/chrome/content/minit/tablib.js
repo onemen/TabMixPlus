@@ -562,7 +562,17 @@ var tablib = { // eslint-disable-line
       'tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
-      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: !TabmixSvc.isPaleMoon}
+      'tablib.contentAreaOnDrop(event, data.url, data.postData);',
+      {check: !Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+    )._replace(
+      'let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;',
+      'let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;\n  ' +
+      '$&',
+      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+    )._replace(
+      'replace: true',
+      'replace: (tabmixContentDrop || tablib.whereToOpenDrop(event, urls[0])) != "tab"',
+      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
     ).toCode();
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
@@ -1900,6 +1910,9 @@ var tablib = { // eslint-disable-line
   },
 
   whereToOpenDrop: function(aEvent, aUri) {
+    if (!aEvent) {
+      return "current";
+    }
     let browser = gBrowser.selectedBrowser;
     let where = "current";
     if (aUri != browser.currentURI.spec) {

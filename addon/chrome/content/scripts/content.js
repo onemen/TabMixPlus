@@ -151,12 +151,22 @@ var TabmixContentHandler = {
   },
 
   onDrop: function(event) {
-    let uri, name = { };
-    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
+    let links;
+    const linkName = { };
+    const linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
                         .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
-      uri = linkHandler.dropLink(event, name, true);
+      if (TabmixSvc.version(520)) {
+        links = linkHandler.dropLinks(event, true);
+        // we can not send a message with array of wrapped nsIDroppedLinkItem
+        links = links.map(link => {
+          const {url, name, type} = link;
+          return {url: url, name: name, type: type};
+        });
+      } else {
+        links = [{url: linkHandler.dropLink(event, linkName, true)}];
+      }
     } catch (ex) {
       return;
     }
@@ -168,8 +178,8 @@ var TabmixContentHandler = {
         shiftKey: event.shiftKey,
         altKey: event.altKey
       },
-      uri: uri,
-      name: name.value
+      links: links,
+      name: linkName.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
     if (result[0]) {
