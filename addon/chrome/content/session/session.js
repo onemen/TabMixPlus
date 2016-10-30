@@ -133,7 +133,7 @@ TabmixSessionData = {
       tabProperties += "11111";
     else {
       let disallow = Tabmix.docShellCapabilities.collect(aTab);
-      this.docShellItems.forEach(function(item) {
+      this.docShellItems.forEach(item => {
         tabProperties += disallow.indexOf(item) != -1 ? "0" : "1";
       });
     }
@@ -857,7 +857,7 @@ TabmixSessionManager = {
           TabmixSvc.getSMString("sm.corrupted.msg1");
       var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
       this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                         [title, msg, "", "", buttons], window, function() {});
+                         [title, msg, "", "", buttons], window, () => {});
       Tabmix.assert(e);
       file.moveTo(this.profileDir, "session.old");
       this.DATASource = this.RDFService.GetDataSourceBlocking(uri);
@@ -2482,7 +2482,7 @@ TabmixSessionManager = {
     if (!win._closedTabs)
       win._closedTabs = [];
     // Move tabs to first window
-    state.windows.forEach(function(aWindow) {
+    state.windows.forEach(aWindow => {
       win.tabs = win.tabs.concat(aWindow.tabs);
       if (aWindow._closedTabs)
         win._closedTabs = win._closedTabs.concat(aWindow._closedTabs);
@@ -3513,7 +3513,7 @@ TabmixSessionManager = {
     if (aTab != gBrowser.mCurrentTab)
       attributes = attributes.concat(["visited", "tabmix_selectedID"]);
 
-    attributes.forEach(function(attrib) {
+    attributes.forEach(attrib => {
       if (aTab.hasAttribute(attrib))
         aTab.removeAttribute(attrib);
     });

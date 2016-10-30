@@ -554,7 +554,7 @@ var TMP_eventListener = {
 
     // apply style on tabs
     let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
-    styles.forEach(function(ruleName) {
+    styles.forEach(ruleName => {
       gTMPprefObserver.updateTabsStyle(ruleName);
     });
     // progressMeter on tabs
@@ -1057,7 +1057,7 @@ var TMP_eventListener = {
     var isLastWindow = Tabmix.numberOfWindows() === 0;
     // we close tabmix dialog windows on exit
     if (isLastWindow) {
-      ["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"].forEach(function(aID) {
+      ["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"].forEach(aID => {
         var win = Services.wm.getMostRecentWindow("mozilla:" + aID);
         if (win) {
           if (aID != "tabmixopt")

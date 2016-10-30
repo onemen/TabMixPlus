@@ -12,7 +12,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
 XPCOMUtils.defineLazyModuleGetter(this, "Promise",
   "resource://gre/modules/Promise.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
+XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", () => {
   if (!TabmixSvc.version(450)) {
     return null;
   }
@@ -40,7 +40,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "gBrowserBundle", function() {
+XPCOMUtils.defineLazyGetter(this, "gBrowserBundle", () => {
   return Services.strings.createBundle('chrome://browser/locale/browser.properties');
 });
 

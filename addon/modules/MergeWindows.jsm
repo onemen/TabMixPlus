@@ -299,7 +299,7 @@ this.MergeWindows = {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
       let notificationBar = notificationBox.appendNotification(errorMessage,
         name, errorimage, priority, null);
-      aWindow.setTimeout(function() {
+      aWindow.setTimeout(() => {
         notificationBox.removeNotification(notificationBar);
       }, 10000);
     }

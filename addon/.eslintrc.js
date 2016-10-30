@@ -226,7 +226,7 @@ module.exports = {
     "operator-assignment": [2, "always"],
     "operator-linebreak": [2, "after"],
     "padded-blocks": [2, "never"],
-    "prefer-arrow-callback": 0, // TODO many errors in old code
+    "prefer-arrow-callback": [2, {"allowNamedFunctions": true}],
     "prefer-const": 0,  // TODO many errors in old code
     "prefer-numeric-literals": 0,
     "prefer-rest-params": 0, // I don’t want to be notified about arguments variables,

@@ -9,7 +9,7 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "DirectoryLinksProvider",
   "resource:///modules/DirectoryLinksProvider.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "gAllPages", function() {
+XPCOMUtils.defineLazyGetter(this, "gAllPages", () => {
   let tmp = {};
   Cu.import("resource://gre/modules/NewTabUtils.jsm", tmp);
   return tmp.NewTabUtils.allPages;

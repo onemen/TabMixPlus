@@ -21,7 +21,7 @@ function getKeysForShortcut(shortcut, id, win) {
 
   let dots = "…";
   let keys = win.document.getElementsByTagName("key");
-  let usedKeys = Array.prototype.filter.call(keys, function(key) {
+  let usedKeys = Array.prototype.filter.call(keys, key => {
     if (ourKey == key)
       return false;
     if (isDisabled(key) || isDisabled($(key.getAttribute("command"))))

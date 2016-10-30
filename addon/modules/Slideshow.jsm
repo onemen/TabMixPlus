@@ -14,7 +14,7 @@ function flst() {
   this.flstOff = TabmixSvc.getString("flstOff.label");
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
-  XPCOMUtils.defineLazyGetter(this, "tabContainer", function() {
+  XPCOMUtils.defineLazyGetter(this, "tabContainer", () => {
     return TabmixSvc.topWin().gBrowser.tabContainer;
   });
 }

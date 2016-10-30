@@ -30,7 +30,7 @@ var TabGroups = {
   },
   onEnabled: function() {
     if (this.isUpdateNeeded()) {
-      TabmixSvc.forEachBrowserWindow(function(aWindow) {
+      TabmixSvc.forEachBrowserWindow(aWindow => {
         aWindow.TMP_TabView.init();
       });
     }
@@ -69,7 +69,7 @@ var PrivateTab = {
     this._resetNewTabButton();
   },
   _resetNewTabButton: function() {
-    TabmixSvc.forEachBrowserWindow(function(aWindow) {
+    TabmixSvc.forEachBrowserWindow(aWindow => {
       aWindow.TMP_eventListener.updateMultiRow(true);
     });
   }
@@ -157,7 +157,7 @@ var TabmixAddonManager = {
     this.initialized = true;
 
     AddonManager.addAddonListener(TabmixListener);
-    AddonManager.getAddonsByTypes(["extension"], function(addons) {
+    AddonManager.getAddonsByTypes(["extension"], addons => {
       addons.forEach(addon => {
         if (addon.isActive) {
           TabmixListener.init(addon.id);

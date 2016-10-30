@@ -7,7 +7,7 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/Services.jsm", this);
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
-XPCOMUtils.defineLazyGetter(this, "OS", function() {
+XPCOMUtils.defineLazyGetter(this, "OS", () => {
   return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
 });
 
@@ -245,7 +245,7 @@ options = {
 
   _formatStack: function(stack) {
     let lines = [], _char = this._char, re = this._pathRegExp;
-    stack.forEach(function(line) {
+    stack.forEach(line => {
       let atIndex = line.indexOf("@");
       let columnIndex = line.lastIndexOf(":");
       let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();

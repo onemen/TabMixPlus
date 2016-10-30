@@ -75,7 +75,7 @@ var TMP_SessionStore = {
       if ("TreeStyleTabBrowser" in window)
         _xulAttributes = _xulAttributes.concat(TabmixSessionData.tabTSTProperties);
 
-      _xulAttributes.forEach(function(aAttr) {
+      _xulAttributes.forEach(aAttr => {
         TabmixSvc.ss.persistTabAttribute(aAttr);
       });
 
@@ -218,11 +218,11 @@ var TMP_SessionStore = {
       // calling doRestore before sessionstartup finished to read
       // sessionStore.js file throw error since Firefox 28, and force
       // syncRead in Firefox 25-27
-      XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
+      XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
                    .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
-        ss.onceInitialized.then(function() {
+        ss.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
         }).then(null, Tabmix.reportError);
         // until sessionstartup initialized just return the pref value,
@@ -677,7 +677,7 @@ var TabmixConvertSession = {
     TabmixSessionManager.saveStateDelayed();
     var callBack = function(aResult) {
       if (aResult.button == Tabmix.BUTTON_OK) {
-        setTimeout(function(a, b) {
+        setTimeout((a, b) => {
           TabmixConvertSession.convertFile(a, b);
         }, 50, null, true);
       }
@@ -798,7 +798,7 @@ var TabmixConvertSession = {
         tabsData.push(new _tabData(rdfNodeTab));
       }
     }
-    tabsData.sort(function(a, b) {
+    tabsData.sort((a, b) => {
       return a - b;
     });
     for (let i = 0; i < tabsData.length; i++) {
@@ -875,13 +875,13 @@ var TabmixConvertSession = {
       let TSTProps = properties.split('|');
       properties = TSTProps.shift();
       let PREFIX = "tmp-session-data-";
-      TSTProps.forEach(function(aProp) {
+      TSTProps.forEach(aProp => {
         if (/^([^\s=]+)=(.*)/.test(aProp) &&
             RegExp.$1.startsWith(PREFIX) && RegExp.$2)
           extData[RegExp.$1.substr(PREFIX.length)] = decodeURIComponent(RegExp.$2);
       });
       properties = properties.substr(booleanAttrLength + 1).split(" ");
-      properties.forEach(function(aAttr) {
+      properties.forEach(aAttr => {
         aAttr = TabmixSessionManager.getDecodedLiteralValue(null, aAttr);
         if (!/^([^\s=]+)=(.*)/.test(aAttr))
           return;

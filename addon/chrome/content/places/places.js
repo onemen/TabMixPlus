@@ -768,7 +768,7 @@ Tabmix.onContentLoaded = {
   getXnotifierFunction: function(aName) {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
-      let fn = ["wmn", "xnotifier"].filter(function(f) {
+      let fn = ["wmn", "xnotifier"].filter(f => {
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });

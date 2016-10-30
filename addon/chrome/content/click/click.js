@@ -867,7 +867,7 @@ var TabmixAllTabs = {
   // show sort/unsort tabs list popup after click on sorted tab menu
   showTabsListPopup: function TMP_showTabsListPopup(event) {
     event.stopPropagation();
-    setTimeout(function(popup) {
+    setTimeout(popup => {
       popup.showPopup(popup.parentNode, -1, -1, "popup", "bottomleft", "topleft");
     }, 0, event.target.parentNode);
   },

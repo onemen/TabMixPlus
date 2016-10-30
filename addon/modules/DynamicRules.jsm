@@ -12,19 +12,19 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/Services.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
+XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 var TYPE;
-XPCOMUtils.defineLazyGetter(this, "SSS", function() {
+XPCOMUtils.defineLazyGetter(this, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
   .getService(Ci.nsIStyleSheetService);
   TYPE = sss.AGENT_SHEET;
   return sss;
 });
 
-XPCOMUtils.defineLazyGetter(this, "isMac", function() {
+XPCOMUtils.defineLazyGetter(this, "isMac", () => {
   return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
 });
 
@@ -348,7 +348,7 @@ this.DynamicRules = {
     delete this.defaultPrefs;
     let defaults = {};
     let getDefaultBranch = Services.prefs.getDefaultBranch("extensions.tabmix.styles.");
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.forEach(pref => {
       defaults[pref] = getDefaultBranch.getCharPref(pref);
     }, this);
     return (this.defaultPrefs = defaults);

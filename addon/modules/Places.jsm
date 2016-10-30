@@ -68,7 +68,7 @@ PlacesUtilsInternal = {
     if (this._timer)
       this._timer.clear();
 
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       PlacesUIUtils[aFn] = PlacesUIUtils["tabmix_" + aFn];
       delete PlacesUIUtils["tabmix_" + aFn];
     });
@@ -87,7 +87,7 @@ PlacesUtilsInternal = {
       return;
     }
 
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
     });
 
@@ -126,7 +126,7 @@ PlacesUtilsInternal = {
       // wait until TreeStyleTab changed PlacesUIUtils._openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.__index = 0;
-      timer.initWithCallback(function() {
+      timer.initWithCallback(() => {
         let str = PlacesUIUtils._openTabset.toString();
         if (++this.__index > 10 || str.indexOf("TreeStyleTabBookmarksService") > -1 ||
             str.indexOf("GroupBookmarkBehavior") > -1) {
@@ -135,7 +135,7 @@ PlacesUtilsInternal = {
           this.__index = null;
           updateOpenTabset("_openTabset", true);
         }
-      }.bind(this), 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
+      }, 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
     } else { // TreeStyleTab not installed
       updateOpenTabset("_openTabset");
 

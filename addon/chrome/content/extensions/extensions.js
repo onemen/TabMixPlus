@@ -37,7 +37,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // sessionManager extension is restartless since version 0.8
-    Tabmix.extensions.__defineGetter__("sessionManager", function() {
+    Tabmix.extensions.__defineGetter__("sessionManager", () => {
       return TabmixSvc.sessionManagerAddonInstalled ||
         "com" in window && com.morac &&
         typeof com.morac.SessionManagerAddon == "object";
@@ -63,7 +63,7 @@ var TMP_extensionsCompatibility = {
       document.getElementById("main-window").setAttribute("gscltTMPinstalled", true);
       let func = ["_setupForOtherExtensions", "enableCustomDragDropMode"];
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
-      func.forEach(function(aFn) {
+      func.forEach(aFn => {
         if (aFn in GlaxChrome) {
           Tabmix.changeCode(GlaxChrome, "GlaxChrome.CLT.DragDropManager." + aFn)._replace(
             '{', '{var TabDNDObserver = TMP_tabDNDObserver;',
@@ -91,7 +91,7 @@ var TMP_extensionsCompatibility = {
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
       let func = ["canOpenNewTab", "loadForSearch", "checkToDoSearch"];
       let SSB = SecondSearchBrowser.prototype;
-      func.forEach(function(aFn) {
+      func.forEach(aFn => {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
           Tabmix.changeCode(SSB, "SecondSearchBrowser.prototype." + aFn)._replace(
             'TM_init', 'Tabmix.startup'
@@ -542,7 +542,7 @@ TMP_extensionsCompatibility.wizzrss = {
       "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
       "gotoLink", "itemLinkClick", "itemListClick"];
 
-    _functions.forEach(function(_function) {
+    _functions.forEach(_function => {
       if (_function in window)
         Tabmix.changeCode(window, _function)._replace(codeToReplace, newCode).toCode();
     });

@@ -202,7 +202,7 @@ this.Shortcuts = {
 
     aWindow.addEventListener("unload", this, false);
 
-    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", function() {
+    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;
       return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
     });
@@ -558,7 +558,7 @@ function getFormattedKey(key) {
 
   if (key.modifiers) {
     let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(function(mod) {
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(mod => {
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
     });

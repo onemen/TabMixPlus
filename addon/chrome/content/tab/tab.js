@@ -571,7 +571,7 @@ var TabmixTabbar = {
 
 }; // TabmixTabbar end
 
-XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", function() {
+XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", () => {
   return navigator.oscpu.startsWith("Windows NT 5.1");
 });
 
@@ -618,10 +618,10 @@ Tabmix.tabsUtils = {
     var tabbrowser = this.tabBar.tabbrowser;
     let tab = this.tabBar.firstChild;
 
-    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function() {
+    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
       return window.getComputedStyle(tabbrowser, null).direction == "rtl";
     });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function() {
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => {
       return !Tabmix.rtl;
     });
 
@@ -649,7 +649,7 @@ Tabmix.tabsUtils = {
     this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected",
-      "locked"].filter(function(att) {
+      "locked"].filter(att => {
         return Tabmix.prefs.getBoolPref("extraIcons." + att);
       });
     if (attr.length)
@@ -833,10 +833,10 @@ Tabmix.tabsUtils = {
             if (timeFromLastTabOpened < 250)
               timeout = 0;
           }
-          this.adjustNewtabButtonTimeout = setTimeout(function() {
+          this.adjustNewtabButtonTimeout = setTimeout(() => {
             this.adjustNewtabButtonVisibility();
             this.adjustNewtabButtonTimeout = null;
-          }.bind(this), timeout);
+          }, timeout);
         }
       } else {
         this.adjustNewtabButtonVisibility();
@@ -1388,7 +1388,7 @@ gTMPprefObserver = {
         if (typeof this._tabWidthChanged == "undefined") {
           let self = this;
           this._tabWidthChanged = true;
-          [50, 100, 250, 500].forEach(function(timeout) {
+          [50, 100, 250, 500].forEach(timeout => {
             setTimeout(function TMP_tabWidthChanged() {
               if (currentVisible)
                 gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
@@ -2611,7 +2611,7 @@ gTMPprefObserver = {
       }
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
-        window.setTimeout(function() {
+        window.setTimeout(() => {
           let defaultChanged = "";
           let showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
@@ -2624,7 +2624,7 @@ gTMPprefObserver = {
         // noting more to do at the moment
       }
     };
-    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", function(aAddon) {
+    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", aAddon => {
       try {
         let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
         getVersion(aAddon.version, shouldAutoUpdate);

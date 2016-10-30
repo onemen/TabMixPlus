@@ -132,7 +132,7 @@ var tablib = { // eslint-disable-line
       tabGroups: "paneSession.clearData",
     };
     let keys = Object.keys(exceptionList);
-    let isInstalled = keys.some(function(item) {
+    let isInstalled = keys.some(item => {
       return typeof window[item] == "object";
     });
     if (!isInstalled)
@@ -932,7 +932,7 @@ var tablib = { // eslint-disable-line
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
-    clearList.addEventListener("command", function() {
+    clearList.addEventListener("command", () => {
       TabmixSessionManager.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
@@ -1442,7 +1442,7 @@ var tablib = { // eslint-disable-line
           return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
         case 6: {// last opened
           let lastTabIndex, maxID = -1;
-          tabs.forEach(function(tab, index) {
+          tabs.forEach((tab, index) => {
             if (tab == oldTab)
               return;
             let linkedPanel = tab.linkedPanel.replace('panel', '');
@@ -1775,7 +1775,7 @@ var tablib = { // eslint-disable-line
     // Not in use since Firefox 27, see comment in TabmixTabClickOptions
     if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
         TabmixTabClickOptions._blockDblClick) {
-      setTimeout(function() {
+      setTimeout(() => {
         TabmixTabClickOptions._blockDblClick = false;
         if (!Tabmix.isVersion(270))
           gBrowser.tabContainer._blockDblClick = false;

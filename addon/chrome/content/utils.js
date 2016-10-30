@@ -84,7 +84,7 @@ var Tabmix = {
     if (aFlag)
       this[aModule + "Initialized"] = false;
     var self = this;
-    XPCOMUtils.defineLazyGetter(aObject, aName, function() {
+    XPCOMUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = {};
       Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];

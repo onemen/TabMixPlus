@@ -97,7 +97,7 @@ ContentClickInternal = {
     if (!this._initialized)
       return;
 
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       ContentClick[aFn] = ContentClick["tabmix_" + aFn];
       delete ContentClick["tabmix_" + aFn];
     });
@@ -105,7 +105,7 @@ ContentClickInternal = {
 
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });
 
@@ -224,12 +224,12 @@ ContentClickInternal = {
     if (href && browser.getAttribute("remote") == "true" &&
         where == "default" && targetAttr) {
       let win = this._window;
-      win.setTimeout(function() {
+      win.setTimeout(() => {
         // don't try to select new tab if the original browser is no longer
         // the selected browser
         if (win.gBrowser.selectedBrowser == browser)
           this.selectExistingTab(win, href, targetAttr);
-      }.bind(this), 300);
+      }, 300);
     }
 
     // don't call this._data.hrefFromOnClick
@@ -255,12 +255,12 @@ ContentClickInternal = {
   },
 
   getPref: function() {
-    XPCOMUtils.defineLazyGetter(this, "targetPref", function() {
+    XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
       return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
     let tabBrowser = this._window.gBrowser;
-    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", function() {
+    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", () => {
       return tabBrowser.selectedTab.hasAttribute("locked");
     });
   },
@@ -309,7 +309,7 @@ ContentClickInternal = {
       this.wrappedNode = wrappedNode || null;
       this.wrappedOnClickNode = wrappedOnClickNode || null;
       this.targetAttr = wrappedNode && wrappedNode.target;
-      XPCOMUtils.defineLazyGetter(this, "currentURL", function() {
+      XPCOMUtils.defineLazyGetter(this, "currentURL", () => {
         return self._browser.currentURI ? self._browser.currentURI.spec : "";
       });
       XPCOMUtils.defineLazyGetter(this, "onclick", function() {

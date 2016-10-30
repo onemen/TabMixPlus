@@ -93,7 +93,7 @@ this.AutoReload = {
       let defaultList = ["30", "60", "120", "300", "900", "1800"];
       list = list.filter(val => defaultList.indexOf(val) == -1);
       let newList = [];
-      list.forEach(function(val) {
+      list.forEach(val => {
         if (parseInt(val) && newList.indexOf(val) == -1)
           newList.push(val);
         if (newList.length > 6)

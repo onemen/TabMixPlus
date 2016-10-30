@@ -262,7 +262,7 @@ this.TabmixSvc = {
   blockedClickingOptions: []
 };
 
-XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", () => {
   return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
 });
 
@@ -271,27 +271,27 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
   return Boolean(this.topWin().document.getElementById("tab-curve-clip-path-start"));
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
   let tmp = {};
   Cu.import("resource://gre/modules/Preferences.jsm", tmp);
   return new tmp.Preferences("");
 });
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", () => {
   return Services.prefs.getBranch("extensions.tabmix.");
 });
 // string bundle
-XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", () => {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
   return Services.strings.createBundle(properties);
 });
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
 
-XPCOMUtils.defineLazyGetter(this, "Platform", function() {
+XPCOMUtils.defineLazyGetter(this, "Platform", () => {
   if (isVersion(390)) {
     return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
   }
@@ -307,27 +307,27 @@ XPCOMUtils.defineLazyGetter(this, "Platform", function() {
   return platform;
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
   return Platform == "win";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", () => {
   return Platform == "macosx";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", () => {
   return Platform == "linux";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
   return Services.appinfo.name == "Cyberfox";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", () => {
   return Services.appinfo.name == "Pale Moon";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", () => {
   try {
     // noinspection SpellCheckingInspection
     return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
@@ -342,7 +342,7 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", () => {
   let tmp = {};
   Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
   return tmp.SessionStore;
@@ -387,7 +387,7 @@ tabStateCache = {
 
     let attribs = attrib.split(",");
     function update(attributes) {
-      attribs.forEach(function(key) {
+      attribs.forEach(key => {
         if (tab.hasAttribute(key))
           attributes[key] = tab.getAttribute(key);
         else if (key in attributes)
