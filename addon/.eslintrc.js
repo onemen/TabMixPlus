@@ -79,9 +79,7 @@ module.exports = {
     // TODO need to fix this...
     "no-multi-str": 0,
     "no-multiple-empty-lines": [2, {"max": 1}],
-    "no-native-reassign": 2,
     "no-negated-condition": 0,
-    "no-negated-in-lhs": 2,
     "no-nested-ternary": 0,
     "no-new": 2,
     "no-new-func": 2,
@@ -113,7 +111,6 @@ module.exports = {
     "no-sequences": 2,
     "no-shadow": [2, {"hoist": "all"}],
     "no-shadow-restricted-names": 2,
-    "no-spaced-func": 2,
     "no-sparse-arrays": 2,
     "no-sync": 0, // node
     "no-tabs": 0,
@@ -225,7 +222,6 @@ module.exports = {
     "prefer-arrow-callback": 0, // TODO many errors in old code
     "prefer-const": 0,  // TODO many errors in old code
     "prefer-numeric-literals": 0,
-    "prefer-reflect": 0, // since Firefox 42
     "prefer-rest-params": 0, // I don’t want to be notified about arguments variables,
     "prefer-spread": 0, // Spread operator for function calls (Firefox 27)
     "prefer-template": 0, // since Firefox 34
