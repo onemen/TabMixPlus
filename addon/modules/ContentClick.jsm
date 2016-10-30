@@ -617,18 +617,13 @@ ContentClickInternal = {
    */
   isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled(window) {
     var GM_function;
-    try {
-      // Greasemonkey >= 0.9.10
-      // eslint-disable-next-line tabmix/import-globals
-      Cu.import("resource://greasemonkey/util.js");
-      if (typeof window.GM_util.getEnabled == 'function') {
-        GM_function = window.GM_util.getEnabled;
-      }
-    } catch (e) {
-      // Greasemonkey < 0.9.10
-      if (typeof window.GM_getEnabled == 'function') {
-        GM_function = window.GM_getEnabled;
-      }
+    // Greasemonkey >= 0.9.10
+    if (typeof window.GM_util == "object" &&
+      typeof window.GM_util.getEnabled == 'function') {
+      GM_function = window.GM_util.getEnabled;
+    // Greasemonkey < 0.9.10
+    } else if (typeof window.GM_getEnabled == 'function') {
+      GM_function = window.GM_getEnabled;
     }
 
     if (typeof GM_function != "function")
