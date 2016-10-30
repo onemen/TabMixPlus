@@ -280,7 +280,7 @@ this.TabmixGroupsMigrator = {
   },
 
   getSessionsFolder: function(folder) {
-    return this.promiseItemId(folder).catch(this.createSessionsFolder.bind(this));
+    return this.promiseItemId(folder).catch(() => this.createSessionsFolder());
   },
 
   bookmarkAllGroupsFromState: function(groupData, guid, name) {

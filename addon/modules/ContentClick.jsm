@@ -342,10 +342,10 @@ ContentClickInternal = {
 
   whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
-    let TMP_tabshifted = function TMP_tabshifted(aEvent) {
+    let TMP_tabshifted = aEvent => {
       var where = eventWhere || this._window.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
-    }.bind(this);
+    };
 
   ///XXX check again how SubmitToTab work
     if (typeof (this._window.SubmitToTab) != 'undefined') {

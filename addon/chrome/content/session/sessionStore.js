@@ -688,10 +688,10 @@ var TabmixConvertSession = {
   selectFile: function cs_selectFile(aWindow) {
     const nsIFilePicker = Ci.nsIFilePicker;
     var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    var fpCallback = function fpCallback_done(aResult) {
+    var fpCallback = aResult => {
       if (aResult == nsIFilePicker.returnOK)
         this.convertFile(fp.fileURL.spec);
-    }.bind(this);
+    };
 
     fp.init(aWindow, this.getString("selectfile"), nsIFilePicker.modeOpen);
     fp.defaultString = "session.rdf";

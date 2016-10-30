@@ -83,7 +83,7 @@ this.DynamicRules = {
   },
 
   registerMutationObserver: function(window) {
-    function tabsMutate(aMutations) {
+    const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
           this.orient = mutation.target.orient;
@@ -91,8 +91,8 @@ this.DynamicRules = {
           return;
         }
       }
-    }
-    let Observer = new window.MutationObserver(tabsMutate.bind(this));
+    };
+    let Observer = new window.MutationObserver(tabsMutate);
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
     window.addEventListener("unload", function unload() {
       window.removeEventListener("unload", unload);

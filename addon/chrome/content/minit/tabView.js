@@ -81,14 +81,14 @@
 
     // add our function to the TabView initFrameCallbacks
     // we don't need our patch for the first run
-    var callback = function callback_TMP_TabView_patchTabviewFrame() {
+    var callback = () => {
       try {
         TabmixSessionManager._groupItemPushAway();
         this._patchTabviewFrame();
       } catch (ex) {
         Tabmix.assert(ex);
       }
-    }.bind(this);
+    };
 
     if (TabView._window)
       callback();

@@ -105,10 +105,10 @@ this.MergeWindows = {
     features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
       "_blank", features, null);
-    let mergePopUps = function _mergePopUps() {
-      newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
+    let mergePopUps = () => {
+      newWindow.removeEventListener("SSWindowStateReady", mergePopUps, false);
       this.concatTabsAndMerge(newWindow, aWindows);
-    }.bind(this);
+    };
     newWindow.addEventListener("SSWindowStateReady", mergePopUps, false);
   },
 
@@ -247,7 +247,7 @@ this.MergeWindows = {
                        "private" in aOptions;
 
     let privateNotMatch = 0;
-    let isSuitableBrowserWindow = function(win) {
+    let isSuitableBrowserWindow = win => {
       let suitable = win != aWindow && !win.closed;
       if (!suitable || !checkPrivacy)
         return suitable;
@@ -256,7 +256,7 @@ this.MergeWindows = {
         return true;
       privateNotMatch++;
       return false;
-    }.bind(this);
+    };
 
     let windows = [], popUps = [];
     let isWINNT = Services.appinfo.OS == "WINNT";

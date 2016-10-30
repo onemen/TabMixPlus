@@ -47,7 +47,7 @@ this.console = {
       if (typeof (aDelay) == "undefined")
         aDelay = 500;
 
-      let logMethod = function _logMethod() {
+      let logMethod = () => {
         let result = "", isObj = typeof aMethod == "object";
         if (typeof aMethod != "function") {
           result = isObj ? aMethod.obj[aMethod.name] :
@@ -55,16 +55,16 @@ this.console = {
           result = " = " + result.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
-      }.bind(this);
+      };
 
       if (aDelay >= 0) {
         let timerID = gNextID++;
         let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
-        timer.clear = function() {
+        timer.clear = () => {
           if (timerID in this._timers)
             delete this._timers[timerID];
           timer.cancel();
-        }.bind(this);
+        };
         if (aWindow) {
           aWindow.addEventListener("unload", function unload(event) {
             event.currentTarget.removeEventListener("unload", unload, false);

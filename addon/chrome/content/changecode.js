@@ -115,7 +115,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         return p1 + p2.replace(/\s/g, '_');
       };
 
-      let setDescriptor = function(type) {
+      let setDescriptor = type => {
         let fnType = "__lookup#ter__".replace("#", type);
         type = type.toLowerCase();
         let code = aCode && aCode[type + "ter"] ||
@@ -129,7 +129,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         } else if (typeof code != "undefined") {
           descriptor[type] = code;
         }
-      }.bind(this);
+      };
 
       setDescriptor("Get");
       setDescriptor("Set");

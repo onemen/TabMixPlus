@@ -284,11 +284,11 @@ TabmixSessionManager = {
       return;
     this._inited = true;
 
-    let initializeSM = function() {
+    let initializeSM = () => {
       this._init();
       if (this.notifyObservers)
         this._sendRestoreCompletedNotifications(false);
-    }.bind(this);
+    };
 
     TabmixSvc.ss.promiseInitialized
       .then(() => TMP_TabView.init())
@@ -1958,10 +1958,10 @@ TabmixSessionManager = {
       }
     }
     var count = nodes.length;
-    let restoreSession = function(event) {
+    let restoreSession = event => {
       this.restoreSession(event.originalTarget);
       event.stopPropagation();
-    }.bind(this);
+    };
 
     let backups = [TabmixSvc.getSMString("sm.tabview.backup.session"),
       TabmixSvc.getSMString("sm.tabview.backup.crashed")];
@@ -2167,9 +2167,9 @@ TabmixSessionManager = {
     var prevtoLast = this.containerEmpty(this.gSessionPath[2]); // previous to last
     var savedSession = this.containerEmpty(this._rdfRoot + '/windows'); // saved session
     var isAllEmpty = lastSession && prevtoLast && savedSession;
-    var callBack = function(aResult) {
+    var callBack = aResult => {
       this.afterCrashPromptCallBack(aResult);
-    }.bind(this);
+    };
     this.callBackData = {label: null, whatToLoad: "session"};
     this.waitForCallBack = true;
     if (!this.containerEmpty(this.gSessionPath[3])) { // if Crashed Session is not empty
@@ -2329,10 +2329,10 @@ TabmixSessionManager = {
         if (afterCrash)
           msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
         buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
-        let callBack = function(aResult) {
+        let callBack = aResult => {
           this.enableCrashRecovery(aResult);
           this._sendRestoreCompletedNotifications(true);
-        }.bind(this);
+        };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);
@@ -2389,9 +2389,9 @@ TabmixSessionManager = {
         msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg1");
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
-        let callBack = function(aResult) {
+        let callBack = aResult => {
           this.onFirstWindowPromptCallBack(aResult);
-        }.bind(this);
+        };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
                            [title, msg, "", chkBoxLabel, buttons], window, callBack);

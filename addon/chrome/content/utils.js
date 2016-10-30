@@ -248,10 +248,11 @@ var Tabmix = {
     XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
       "resource:///modules/RecentWindow.jsm");
 
-    window.addEventListener("unload", function tabmix_destroy() {
-      window.removeEventListener("unload", tabmix_destroy, false);
+    const destroy = () => {
+      window.removeEventListener("unload", destroy, false);
       this.destroy();
-    }.bind(this), false);
+    };
+    window.addEventListener("unload", destroy, false);
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
       "getObject", "log", "getCallerNameByIndex", "callerName",

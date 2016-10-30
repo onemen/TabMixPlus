@@ -621,9 +621,7 @@ Tabmix.tabsUtils = {
     XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
       return window.getComputedStyle(tabbrowser, null).direction == "rtl";
     });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => {
-      return !Tabmix.rtl;
-    });
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
 
     // don't set button to left side if it is not inside tab-content
     let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
@@ -1216,10 +1214,10 @@ gTMPprefObserver = {
     Tabmix.prefs.clearUserPref("setDefault");
     Tabmix.prefs.clearUserPref("PrefObserver.error");
 
-    let addObserver = function(pref, condition) {
+    let addObserver = (pref, condition) => {
       if (condition)
         this.OBSERVING.push(pref);
-    }.bind(this);
+    };
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
     addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
@@ -1718,12 +1716,12 @@ gTMPprefObserver = {
     if (parseInt(marginStart) < parseInt(marginEnd))
       return;
 
-    let tabmix_setRule = function(aRule) {
+    let tabmix_setRule = aRule => {
       let newRule = aRule.replace(/%S/g, "tab-icon-image").replace("%PX", marginEnd);
       this.insertRule(newRule);
       newRule = aRule.replace(/%S/g, "tab-lock-icon").replace("%PX", marginEnd);
       this.insertRule(newRule);
-    }.bind(this);
+    };
     iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
                '.tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
