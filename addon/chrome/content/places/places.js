@@ -736,7 +736,8 @@ Tabmix.onContentLoaded = {
       '$&\n' +
       '  var bookMarkId            = params.bookMarkId;'
     )._replace(
-      'where == "current" && w.gBrowser.selectedTab.pinned',
+      'where == "current" && #1.pinned'
+        .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
       '$& && !params.suppressTabsOnFileDownload'
     )._replace(
       'var w = getTopWin();',
@@ -753,9 +754,9 @@ Tabmix.onContentLoaded = {
       '    }'
     )._replace(
       /(})(\)?)$/,
-      '  var tab = where == "current" ?\n' +
+      '  const targetTab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+      '  w.TMP_Places.setTabTitle(targetTab, url, bookMarkId);\n' +
       '  if (where == "current") {\n' +
       '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
       '  }\n' +
