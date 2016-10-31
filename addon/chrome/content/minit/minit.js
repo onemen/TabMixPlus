@@ -241,16 +241,17 @@ var TMP_tabDNDObserver = {
     if (replaceTab && !isCopy) {
       let disAllowDrop, targetTab = gBrowser.tabs[newIndex];
       if (targetTab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(targetTab)) {
+        // Pass true to disallow dropping javascript: or data: urls
+        let links;
         try {
-          var url = browserDragAndDrop.drop(event, {});
-          if (!url || !url.length || url.indexOf(" ", 0) != -1 ||
-              /^\s*(javascript|data):/.test(url))
-            url = null;
-
+          if (Tabmix.isVersion(520)) {
+            links = browserDragAndDrop.dropLinks(event, true);
+          } else {
+            links = [{url: browserDragAndDrop.drop(event, {}, true)}];
+          }
+          const url = links && links.length ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch (ex) {
-          Tabmix.assert(ex);
-        }
+        } catch (ex) {}
 
         if (disAllowDrop)
           dt.effectAllowed = "none";
@@ -454,20 +455,43 @@ var TMP_tabDNDObserver = {
       gBrowser.updateCurrentBrowser(true);
     } else {
       // Pass true to disallow dropping javascript: or data: urls
-      let url;
+      let links;
       try {
-        url = browserDragAndDrop.drop(event, {}, true);
+        if (Tabmix.isVersion(520)) {
+          links = browserDragAndDrop.dropLinks(event, true);
+        } else {
+          links = [{url: browserDragAndDrop.drop(event, {}, true)}];
+        }
       } catch (ex) {}
 
-      if (!url)
+      if (!links || links.length === 0) {
         return;
+      }
 
       let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
 
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      if (left_right > -1 && !Tabmix.ContentClick.isUrlForDownload(url)) {
+      const url = links[0].url;
+      const replaceCurrentTab = left_right == -1 || Tabmix.ContentClick.isUrlForDownload(url);
+      let tab;
+      if (replaceCurrentTab) {
+        tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
+        // allow to load in locked tab
+        tab.linkedBrowser.tabmix_allowLoad = true;
+      }
+      if (Tabmix.isVersion(520)) {
+        let urls = links.map(link => link.url);
+        gBrowser.tabContainer.tabbrowser.loadTabs(urls, {
+          inBackground: bgLoad,
+          replace: replaceCurrentTab,
+          allowThirdPartyFixup: true,
+          targetTab: tab,
+          newIndex: newIndex + left_right,
+          userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
+        });
+      } else if (!replaceCurrentTab) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {
           inBackground: bgLoad,
@@ -477,11 +501,8 @@ var TMP_tabDNDObserver = {
         gBrowser.moveTabTo(newTab, newIndex + left_right);
       } else {
         // Load in an existing tab.
-        let tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
         try {
           let browser = tab.linkedBrowser;
-          // allow to load in locked tab
-          browser.tabmix_allowLoad = true;
           let webNav = Ci.nsIWebNavigation;
           let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
           if (Tabmix.isVersion(290))
