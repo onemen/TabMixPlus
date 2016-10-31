@@ -656,6 +656,13 @@ ContentClickInternal = {
         return true;
     }
 
+    if (node.hasAttribute("href") && node.hasAttribute("role")) {
+      const role = node.getAttribute("role");
+      if (role == "button" || role == "menu") {
+        return true;
+      }
+    }
+
     // don't interrupt with fastdial links
     return "ownerDocument" in node &&
         this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI);
