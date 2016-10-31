@@ -1008,8 +1008,10 @@ var TMP_eventListener = {
     }
 
     if (shouldMoveFocus) {
-      direction = direction > 0 ? 1 : -1;
-      tabBar.advanceSelectedTab(direction, true);
+      if (aEvent.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE) {
+        direction = direction > 0 ? 1 : -1;
+        tabBar.advanceSelectedTab(direction, true);
+      }
       aEvent.stopPropagation();
       aEvent.preventDefault();
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
