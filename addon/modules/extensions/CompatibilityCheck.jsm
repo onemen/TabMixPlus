@@ -23,7 +23,7 @@ const TMP_HIDE_CHECKBOX = 2;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/AddonManager.jsm", this);
-Cu.import("resource://tabmixplus/Services.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 

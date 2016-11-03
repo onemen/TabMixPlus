@@ -1,7 +1,7 @@
 /* exported gTabMix_preferencesOverlay */
 "use strict";
 
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Components.utils.import("resource://tabmixplus/TabmixSvc.jsm");
 
 var gTabMix_preferencesOverlay = {
   id: function(id) {

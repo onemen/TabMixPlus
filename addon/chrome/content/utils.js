@@ -274,4 +274,4 @@ var Tabmix = {
 };
 
 Tabmix._init();
-Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
+Tabmix.lazy_import(window, "TabmixSvc", "TabmixSvc", "TabmixSvc");

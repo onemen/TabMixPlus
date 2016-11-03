@@ -10,7 +10,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");

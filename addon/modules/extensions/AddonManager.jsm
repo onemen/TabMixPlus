@@ -8,7 +8,7 @@ this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/AddonManager.jsm", this);
-Cu.import("resource://tabmixplus/Services.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 
 const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;

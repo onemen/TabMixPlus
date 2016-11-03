@@ -25,7 +25,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/Services.jsm");
+  "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
 
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({

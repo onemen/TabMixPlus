@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabState",
 XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
   "resource:///modules/sessionstore/TabStateCache.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 this.DocShellCapabilities = {
   init: function() {
