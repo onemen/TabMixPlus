@@ -45,6 +45,10 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
+      'draggedTab._dragData.animLastScreenX = screenX;',
+      'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
+      '$&', {check: Tabmix.isVersion(520)}
+    )._replace(
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
       'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
     )._replace(
