@@ -665,6 +665,7 @@ var tablib = { // eslint-disable-line
         '        flags: loadflags,\n' +
         '        referrerURI: aReferrer,\n' +
         '        referrerPolicy: aReferrerPolicy,\n' +
+        '        userContextId: typeof aUserContextId == "undefined" ? 0 : aUserContextId,\n' +
         '      });' :
         '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
         .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
