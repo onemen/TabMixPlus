@@ -57,8 +57,8 @@ overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tab
 overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul
 overlay   chrome://browser/content/places/places.xul                chrome://tabmixplus/content/places/places.xul
 # bookmarkProperties.xul is not in use since Firefox 49 (bug 446171)
-overlay   chrome://browser/content/places/bookmarkProperties.xul    chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<=48.0
-overlay   chrome://browser/content/places/bookmarkProperties2.xul   chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<=48.0
+overlay   chrome://browser/content/places/bookmarkProperties.xul    chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<49.0
+overlay   chrome://browser/content/places/bookmarkProperties2.xul   chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<49.0
 
 overlay   chrome://browser/content/preferences/sanitize.xul         chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
 overlay   chrome://browser/content/sanitize.xul                     chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
