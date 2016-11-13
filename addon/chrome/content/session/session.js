@@ -356,7 +356,7 @@ TabmixSessionManager = {
       document.getElementById("tmp_disableSave").setAttribute("disabled", true);
     }
 
-    if (!Tabmix.isVersion(450)) {
+    if (!Tabmix.isVersion(450) || Tabmix.isVersion(520)) {
       document.getElementById("tm-sm-bookmark").hidden = true;
     }
 
@@ -1679,7 +1679,7 @@ TabmixSessionManager = {
   },
 
   bookmarkSession: function(node) {
-    if (!Tabmix.isVersion(450)) {
+    if (!Tabmix.isVersion(450) || Tabmix.isVersion(520)) {
       return;
     }
     let {command, session, history} = node;

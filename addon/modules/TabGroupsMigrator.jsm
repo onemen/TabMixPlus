@@ -13,7 +13,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Promise",
   "resource://gre/modules/Promise.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", () => {
-  if (!TabmixSvc.version(450)) {
+  if (!TabmixSvc.version(450) || TabmixSvc.version(520)) {
     return null;
   }
 
