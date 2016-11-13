@@ -802,12 +802,14 @@ var TabmixAllTabs = {
   checkForCtrlClick: function TMP_checkForCtrlClick(aEvent) {
     var aButton = aEvent.target;
     if (!aButton.disabled && aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) {
-      if (aButton.id == "btn_undoclose")
+      if (aButton.id == "btn_undoclose") {
         TMP_ClosedTabs.undoCloseTab();
-      else
+        aButton.setAttribute("afterctrlclick", true);
+      } else if (aButton.id == "btn_tabslist" ||
+          aButton.parentNode && aButton.parentNode.id == "btn_tabslist_menu") {
         BrowserCloseTabOrWindow();
-
-      aButton.setAttribute("afterctrlclick", true);
+        aButton.setAttribute("afterctrlclick", true);
+      }
     }
   },
 
