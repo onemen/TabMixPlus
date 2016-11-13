@@ -29,6 +29,10 @@ var TMP_tabDNDObserver = {
     }
 
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+
+    // https://addons.mozilla.org/en-US/firefox/addon/multiple-tab-handler/
+    const tabsDragUtils = "piro.sakura.ne.jp" in window &&
+      "tabsDragUtils" in window["piro.sakura.ne.jp"];
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab when
@@ -47,12 +51,13 @@ var TMP_tabDNDObserver = {
     )._replace(
       'draggedTab._dragData.animLastScreenX = screenX;',
       'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-      '$&', {check: Tabmix.isVersion(520)}
+      '$&', {check: Tabmix.isVersion(520) && !tabsDragUtils}
     )._replace(
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
       'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
     )._replace(
-      /let screenX = boxObject.*;/,
+      tabsDragUtils ? /let screenX = boxObject\[TDUContext.*;/ :
+                      /let screenX = boxObject.*;/,
       '$&\n            ' +
       'let halfWidth = boxObject.width / 2;\n            ' +
       'screenX += draggingRight * halfWidth;'
