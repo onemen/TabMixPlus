@@ -455,11 +455,11 @@ var TMP_ClosedTabs = {
 
   doCommand: function(command, where, item, keepMenuOpen) {
     const popup = item.parentNode;
-    const index = Number(item.value);
+    const index = Number(item.getAttribute("value"));
     this[command](where || index, index);
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
-      if (command == "restoreTab") {
+      if (popup && command == "restoreTab") {
         this.populateUndoSubmenu(popup);
       }
     } else if (item.getAttribute("closemenu") == "none") {
