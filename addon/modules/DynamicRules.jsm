@@ -71,7 +71,9 @@ this.DynamicRules = {
   observe: function(subject, topic, data) {
     switch (topic) {
       case "browser-window-before-show":
-        this.registerMutationObserver(subject);
+        if (!TabmixSvc.isPaleMoon) {
+          this.registerMutationObserver(subject);
+        }
         break;
       case "nsPref:changed":
         this.onPrefChange(data);

@@ -211,13 +211,13 @@
             'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
           ).toCode();
 
-          if (Tabmix.isVersion(320)) {
+          if (Tabmix.isVersion(320, 270)) {
             Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
               // when theme or extension add negative margin-bottom to the tab or
               // tab content the scrollHeight can be larger than the actual
               // inner-box height
               'this.scrollSize',
-              '(this.orient == "vertical" && this.isMultiRow ? this.innerbox.getBoundingClientRect().height : $&)'
+              'this.tabmixScrollSize'
             )._replace(
               /(})(\)?)$/,
               '          var box = document.getElementById("tabmixScrollBox");\n' +
@@ -318,6 +318,16 @@
       <property name="isMultiRow" readonly="true">
         <getter><![CDATA[
           return this.getAttribute("flowing") == "multibar";
+        ]]></getter>
+      </property>
+
+      <property name="tabmixScrollSize" readonly="true">
+        <getter><![CDATA[
+          if (this.orient == "vertical" && this.isMultiRow) {
+            const height = this.innerbox.getBoundingClientRect().height;
+            return Math.round(height);
+          }
+          return this.scrollSize;
         ]]></getter>
       </property>
 

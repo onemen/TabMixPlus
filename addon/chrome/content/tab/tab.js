@@ -285,6 +285,10 @@ var TabmixTabbar = {
         for (let row = 2; row < aRows; row++)
           this._heights[tabsPosition][row] = rowHeight * row;
       }
+
+      // make sure our scroll buttons box height is no more than 2 rows
+      const box = document.getElementById("tabmixScrollBox");
+      box.style.setProperty("max-height", this._heights[tabsPosition][2] + "px", "important");
     }
 
     if (tabstrip.style.maxHeight != tabstrip.style.height || tabstrip.style.maxHeight != newHeight + "px")
@@ -1059,7 +1063,7 @@ Tabmix.tabsUtils = {
       document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-up");
     tabstrip._updateScrollButtonsDisabledState();
 
-    if (!Tabmix.isVersion(320)) {
+    if (!Tabmix.isVersion(320, 270)) {
       let overflow = this.overflow;
       tabstrip._scrollButtonUp.collapsed = !overflow;
       tabstrip._scrollButtonDown.collapsed = !overflow;
@@ -1853,6 +1857,10 @@ gTMPprefObserver = {
                 '  -moz-image-region: rect(0, 16px, 16px, 0);\n' +
                 '  opacity: .7;\n}';
       this.insertRule(newRule);
+    }
+
+    if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
+      this.insertRule('#tabmixScrollBox{ margin-top: -1px;}');
     }
 
     // we don't show icons on menu on Mac OS X

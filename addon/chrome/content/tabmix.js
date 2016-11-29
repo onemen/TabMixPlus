@@ -115,6 +115,11 @@ Tabmix.getButtonsHeight = function(setDefault) {
   } else {
     this._buttonsHeight = 24;
   }
+
+  if (TabmixSvc.isPaleMoon && this.isVersion(0, 270)) {
+    this._buttonsHeight = Math.round(this._buttonsHeight);
+  }
+
   return this._buttonsHeight;
 };
 
