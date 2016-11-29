@@ -1237,7 +1237,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand: function(event, openUILinkWhere, openUILinkParams) {
+  handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
     let action = this._parseActionUrl(this.value);
     if (action && action.type == "switchtab" && this.hasAttribute("actiontype")) {
@@ -1265,6 +1265,7 @@ Tabmix.navToolbox = {
       openUILinkWhere = where;
     }
 
+    openUILinkParams.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");
     Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
 
     // move the tab that was switched to after the previously selected tab
