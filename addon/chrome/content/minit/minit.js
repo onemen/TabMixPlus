@@ -40,7 +40,7 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+    let newCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
             $&\n\
@@ -56,8 +56,8 @@ var TMP_tabDNDObserver = {
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
       'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
     )._replace(
-      tabsDragUtils ? /let screenX = boxObject\[TDUContext.*;/ :
-                      /let screenX = boxObject.*;/,
+      tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
+                      /screenX = boxObject.*;/,
       '$&\n            ' +
       'let halfWidth = boxObject.width / 2;\n            ' +
       'screenX += draggingRight * halfWidth;'
@@ -67,7 +67,12 @@ var TMP_tabDNDObserver = {
     )._replace(
       'newIndex >= oldIndex',
       'rtl ? $& : draggingRight && newIndex > -1'
-    ).toCode();
+    );
+    if (tabsDragUtils) {
+      setTimeout(() => newCode.toCode(), 0);
+    } else {
+      newCode.toCode();
+    }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
