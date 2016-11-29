@@ -738,14 +738,19 @@ Tabmix.onContentLoaded = {
     )._replace(
       'where == "current" && #1.pinned'
         .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
-      '$& && !params.suppressTabsOnFileDownload'
+      '$& && !params.suppressTabsOnFileDownload',
+      {check: !Tabmix.isVersion(530)}
     )._replace(
-      'var w = getTopWin();',
-      '$&\n' +
-      '  if (w && where == "window" &&\n' +
+      '(targetBrowser).pinned',
+      '$& && !params.suppressTabsOnFileDownload',
+      {check: Tabmix.isVersion(530)}
+    )._replace(
+      'if ((where == "tab" ||',
+      'if (w && where == "window" &&\n' +
       '      !Tabmix.isNewWindowAllow(aIsPrivate)) {\n' +
       '    where = "tab";\n' +
-      '  }'
+      '  }\n' +
+      '  $&'
     )._replace(
       /Services.ww.openWindow[^;]*;/,
       'let newWin = $&\n' +
