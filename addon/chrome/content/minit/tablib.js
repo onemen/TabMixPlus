@@ -52,6 +52,10 @@ var tablib = { // eslint-disable-line
   },
 
   _loadURIWithFlags: function(browser, uri, params) {
+    if (tablib.allowLoad(browser, uri)) {
+      return null;
+    }
+    // redirect load request to a new tab
     let flags;
     if (!Tabmix.isVersion(380)) {
       flags = params;
@@ -64,12 +68,21 @@ var tablib = { // eslint-disable-line
       flags = params.flags;
     }
 
+    let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
+    params.inBackground = false;
+    params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+    params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
+    params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+    return gBrowser.loadOneTab(uri, params);
+  },
+
+  allowLoad: function(browser, uri) {
     var tab = gBrowser.getTabForBrowser(browser);
     if (!tab) {
       browser.tabmix_allowLoad = true;
-      return null;
+      return true;
     }
-    var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
+    var allowLoad = this.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
 
     let allowedUrls = [
@@ -101,16 +114,11 @@ var tablib = { // eslint-disable-line
       return gBrowser.isBlankBrowser(browser);
     }());
     var isLockedTab = tab.hasAttribute("locked");
-    if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
-      params.inBackground = false;
-      params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
-      params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
-      params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
-      return gBrowser.loadOneTab(uri, params);
+    if (allowLoad || isBlankTab || !isLockedTab) {
+      browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
+      return true;
     }
-    browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
-    return null;
+    return false;
   },
 
   /**
