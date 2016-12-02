@@ -27,28 +27,31 @@ var tablib = { // eslint-disable-line
       if (this._loadURIWithFlagsInitialized)
         return;
       this._loadURIWithFlagsInitialized = true;
-      [obj, name] = [window, "window._loadURIWithFlags"];
+      [obj, name] = [window, "_loadURIWithFlags"];
     } else {
-      [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
+      [obj, name] = [aBrowser, "loadURIWithFlags"];
     }
-    Tabmix.changeCode(obj, name)._replace(
-      '{',
-      '$&\n' +
-      '  let args = Array.prototype.slice.call(arguments);\n' +
-      '  if (!Tabmix.isVersion(360))\n' +
-      '    args.unshift(this);\n' +
-      '  var tabmixResult = tablib._loadURIWithFlags.apply(null, args);\n' +
-      '  if (tabmixResult)\n' +
-      '    return tabmixResult;\n'
-    )._replace(
-      /(})(\)?)$/,
-      '  return null;\n' +
-      '$1$2'
-    )._replace(
-      'this.webNavigation.LOAD_FLAGS_FROM_EXTERNAL',
-      'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL',
-      {check: !Tabmix.isVersion(360) && ("loadTabsProgressively" in window)}
-    ).toCode();
+
+    Tabmix.originalFunctions._loadURIWithFlags = obj[name];
+    obj[name] = function(...args) {
+      try {
+        const arg0 = [];
+        if (!Tabmix.isVersion(360)) {
+          arg0.push(this);
+        }
+
+        // if we redirected the load request to a new tab return it
+        const tabmixResult = tablib._loadURIWithFlags.apply(null, arg0.concat(args));
+        if (tabmixResult) {
+          return tabmixResult;
+        }
+
+        Tabmix.originalFunctions._loadURIWithFlags.apply(this, args);
+      } catch (ex) {
+        Tabmix.reportError(ex);
+      }
+      return null;
+    };
   },
 
   _loadURIWithFlags: function(browser, uri, params) {
