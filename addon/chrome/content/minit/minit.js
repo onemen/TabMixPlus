@@ -1239,8 +1239,8 @@ Tabmix.navToolbox = {
 
   handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
-    let action = this._parseActionUrl(this.value);
-    if (action && action.type == "switchtab" && this.hasAttribute("actiontype")) {
+    let action = this._parseActionUrl(this.value) || {};
+    if (action.type == "switchtab" && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
       prevTabPos = prevTab._tPos;
     }
@@ -1250,8 +1250,9 @@ Tabmix.navToolbox = {
       let altEnter = !isMouseEvent && event &&
           event.altKey && !isTabEmpty(gBrowser.selectedTab);
       let where = "current";
+      let url = action.params ? action.params.url : this.value;
       let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
-        altEnter).inNew && !(/^ *javascript:/.test(this.value));
+        altEnter).inNew && !(/^ *javascript:/.test(url));
       if (isMouseEvent || altEnter || loadNewTab) {
         // Use the standard UI link behaviors for clicks or Alt+Enter
         where = "tab";
