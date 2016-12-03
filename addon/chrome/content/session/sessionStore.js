@@ -332,11 +332,17 @@ var TMP_ClosedTabs = {
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   get keepMenuOpen() {
-    return true;
+    return TabmixSvc.prefs.get("extensions.tabmix.undoClose.keepMenuOpen", false);
+  },
+
+  set keepMenuOpen(val) {
+    val = Boolean(val);
+    const fn = val ? "set" : "reset";
+    TabmixSvc.prefs[fn]("extensions.tabmix.undoClose.keepMenuOpen", val);
+    return val;
   },
 
   populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
-    /* eslint-disable tabmix/balanced-listeners */
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
 
@@ -382,36 +388,44 @@ var TMP_ClosedTabs = {
       m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+      /* eslint-disable tabmix/balanced-listeners */
       m.addEventListener("command", this, false);
       m.addEventListener("click", this, false);
+      /* eslint-enable tabmix/balanced-listeners */
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");
       aPopup.appendChild(m);
     }
 
     aPopup.appendChild(document.createElement("menuseparator"));
-    function addKey(item, id) {
-      if (document.getElementById("key_tm_" + id)) {
-        item.setAttribute("key", "key_tm_" + id);
-      }
-    }
-    // "Clear Closed Tabs List"
-    m = aPopup.appendChild(document.createElement("menuitem"));
-    m.setAttribute("id", "clearClosedTabsList");
-    m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
-    m.setAttribute("value", -1);
-    addKey(m, "clearClosedTabs");
-    m.addEventListener("command", this);
 
+    const addMenu = this.addMenuItem.bind(this, aPopup);
+    // "Keep menu open"
+    m = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
+    m.setAttribute("description", TabmixSvc.getString("undoclosetab.keepOpen.description"));
+    m.setAttribute("closemenu", "none");
+    const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
+    m.setAttribute("image", image);
+    // "Clear Closed Tabs List"
+    addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
     // "Restore All Tabs"
-    m = aPopup.appendChild(document.createElement("menuitem"));
-    m.setAttribute("id", "restoreAllClosedTabs");
-    m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
-    m.setAttribute("value", -2);
-    addKey(m, "ucatab");
-    m.addEventListener("command", this);
+    addMenu("restoreAllClosedTabs", gNavigatorBundle.getString("menuRestoreAllTabs.label"), -2, "ucatab");
+
     return true;
-    /* eslint-enable tabmix/balanced-listeners */
+  },
+
+  addMenuItem: function(popup, id, label, val, keyId) {
+    const m = popup.appendChild(document.createElement("menuitem"));
+    m.setAttribute("id", id);
+    m.setAttribute("label", label);
+    m.setAttribute("value", val);
+    m.setAttribute("class", "menuitem-iconic");
+    if (keyId && document.getElementById("key_tm_" + keyId)) {
+      m.setAttribute("key", "key_tm_" + keyId);
+    }
+    /* eslint-disable tabmix/balanced-listeners */
+    m.addEventListener("command", this);
+    return m;
   },
 
   handleEvent: function(event) {
@@ -426,7 +440,17 @@ var TMP_ClosedTabs = {
   },
 
   restoreCommand: function(aEvent) {
-    this.doCommand("restoreTab", "original", aEvent.originalTarget);
+    const item = aEvent.originalTarget;
+    const index = Number(item.getAttribute("value"));
+    if (index == -3) {
+      this.keepMenuOpen = !this.keepMenuOpen;
+      const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
+      item.setAttribute("image", image);
+      this.populateUndoSubmenu(item.parentNode);
+      return;
+    }
+
+    this.doCommand("restoreTab", "original", item);
   },
 
   checkForMiddleClick: function ct_checkForMiddleClick(aEvent) {
