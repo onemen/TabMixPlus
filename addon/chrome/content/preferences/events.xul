@@ -234,7 +234,7 @@
             </hbox>
             <spacer flex="1"/>
             <separator class="groove"/>
-            <label value="&inversefocus1.label;"/>
+            <label value="&inversefocus2.label;"/>
             <hbox align="start">
               <vbox id="tabopening3">
                 <checkbox_tmp id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
