@@ -109,7 +109,7 @@ ContentClickInternal = {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });
 
-    ContentClick.contentAreaClick = function(json, browser) {
+    ContentClick.contentAreaClick = function contentAreaClick(json, browser) {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
@@ -340,7 +340,7 @@ ContentClickInternal = {
     this._data = new LinkData();
   },
 
-  whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
+  whereToOpen: function TMP_whereToOpenLink(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
     let TMP_tabshifted = aEvent => {
       var where = eventWhere || this._window.whereToOpenLink(aEvent);
@@ -479,7 +479,7 @@ ContentClickInternal = {
    *        handle left-clicks on links when preference is to open new tabs from links
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
-  _contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
+  _contentLinkClick: function TMP_contentLinkClick(aEvent, aBrowser, aFocusedWindow) {
     let ownerDoc = aBrowser.ownerDocument;
     let win = ownerDoc.defaultView;
     aEvent.tabmix_isMultiProcessBrowser = win.gMultiProcessBrowser;

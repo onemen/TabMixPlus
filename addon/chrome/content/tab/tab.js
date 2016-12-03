@@ -2701,7 +2701,7 @@ TabmixProgressListener = {
     // Bug 1081891: Calling webNavigation.loadURI with url that trigger
     // unknownContentType.xul dialog change the tab title to its address
     // as a workaround we trigger DOMTitleChanged async message
-    _fixTabTitle: function TMP__contentLinkClick(tab, browser, url) {
+    _fixTabTitle: function TMP__fixTabTitle(tab, browser, url) {
       if (browser.getAttribute("remote") != "true" || /^about/.test(url) ||
           browser._contentTitle !== "" || this.mTabBrowser.isBlankTab(tab))
         return;
