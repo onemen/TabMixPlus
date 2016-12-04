@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Búsqueda en menú contextual">
 <!ENTITY selectTabBH.label "Marcadores/Historial">
 <!ENTITY duplicateTab.label "Duplicar pestaña">
-<!ENTITY inversefocus1.label "Invertir el enfoque de Clic-central o Ctrl-clic de:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Aviso">
 <!ENTITY warnOnCloseProtected.label "Avisar cuando se cierre una ventana con pestañas protegidas">
 <!ENTITY warnOnCloseWindow.label "Avisar al cerrar una ventana con varias pestañas">

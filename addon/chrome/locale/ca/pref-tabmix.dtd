@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Menú contextual «Cerca a»">
 <!ENTITY selectTabBH.label "Adreces d'interès/Historial">
 <!ENTITY duplicateTab.label "Pestanya duplicada">
-<!ENTITY inversefocus1.label "En obrir amb el botó del mig o amb Ctrl-clic, inverteix l'enfocament de:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Avís">
 <!ENTITY warnOnCloseProtected.label "Avisa'm en tancar una finestra que conté pestanyes blocades">
 <!ENTITY warnOnCloseWindow.label "Avisa'm en tancar una finestra amb diverses pestanyes">

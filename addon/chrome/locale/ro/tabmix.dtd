@@ -33,7 +33,7 @@
 <!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "După această filă">
 <!ENTITY bookmarktab.label "Pune semn de carte la această filă">
-<!ENTITY undoCloseListMenu.label "Lista filelor închise">
+<!ENTITY undoCloseListMenu.label "Afișează lista filelor închise">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Închide toate filele">
 <!ENTITY closeall.accesskey "t">

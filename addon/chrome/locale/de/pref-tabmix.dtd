@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Kontextmenü-Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
-<!ENTITY inversefocus1.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Warnhinweise">
 <!ENTITY warnOnCloseProtected.label "Warnen, wenn ein Fenster mit geschützten Tabs geschlossen werden soll">
 <!ENTITY warnOnCloseWindow.label "Warnen, wenn ein Fenster mit mehreren Tabs geschlossen werden soll">

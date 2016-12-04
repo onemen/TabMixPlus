@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Поиск по контекстному меню">
 <!ENTITY selectTabBH.label "Закладки / Журнал посещений">
 <!ENTITY duplicateTab.label "Клонировать вкладку">
-<!ENTITY inversefocus1.label "Инвертировать фокус для действия клик СКМ или Ctrl+ЛКМ">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Предупреждения">
 <!ENTITY warnOnCloseProtected.label "Предупреждать при закрытии окна с защищёнными вкладками">
 <!ENTITY warnOnCloseWindow.label "Предупреждать при закрытии окна с несколькими вкладками">

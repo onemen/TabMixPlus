@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Buscar pelo menu de contexto por">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">
 <!ENTITY duplicateTab.label "Duplicar aba">
-<!ENTITY inversefocus1.label "Clique com o botão do meio ou Ctrl+clique inverte o foco de:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Alertas">
 <!ENTITY warnOnCloseProtected.label "Alertar ao fechar janela com abas protegidas">
 <!ENTITY warnOnCloseWindow.label "Alertar-me quando fechar uma janela com várias abas">

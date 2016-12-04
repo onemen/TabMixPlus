@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
 <!ENTITY selectTabBH.label "Отметки/История">
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
-<!ENTITY inversefocus1.label "Инвертиране на фокуса при щракване със среден бутон или CTRL+ляв бутон върху:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Предупреждения">
 <!ENTITY warnOnCloseProtected.label "Предупреждение при затваряне на прозорец със защитени подпрозорци">
 <!ENTITY warnOnCloseWindow.label "Предупреждение при затваряне на прозорец с няколко подпрозореца">

@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Keresés a helyi menüben">
 <!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">
 <!ENTITY duplicateTab.label "Lap megkettőzése">
-<!ENTITY inversefocus1.label "Inverz középső kattintás vagy a Control-kattintás fókusza:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Figyelmeztetés">
 <!ENTITY warnOnCloseProtected.label "Figyelmeztessen védett lapok bezárása esetén">
 <!ENTITY warnOnCloseWindow.label "Figyelmeztetés több lap bezárása előtt">

@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Контекстне меню пошуку для">
 <!ENTITY selectTabBH.label "З журналу / закладок">
 <!ENTITY duplicateTab.label "Копія Вкладки">
-<!ENTITY inversefocus1.label "Інвертувати Натиснення середньої клавіші миші чи Control для">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Застереження">
 <!ENTITY warnOnCloseProtected.label "Попереджати при закритті вікна із захищеними вкладками">
 <!ENTITY warnOnCloseWindow.label "Повідомляти мене про закриття вікна з багатьма вкладками">

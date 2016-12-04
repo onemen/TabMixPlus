@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
 <!ENTITY selectTabBH.label "Marque-pages et historique">
 <!ENTITY duplicateTab.label "Dupliquer l'onglet">
-<!ENTITY inversefocus1.label "Inverser ce comportement en cas de clic-milieu ou Ctrl-clic pour les :">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Avertissements">
 <!ENTITY warnOnCloseProtected.label "M'avertir à la fermeture d'une fenêtre contenant des onglets protégés">
 <!ENTITY warnOnCloseWindow.label "M'avertir à la fermeture d'une fenêtre qui comporte plusieurs onglets">

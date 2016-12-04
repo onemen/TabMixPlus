@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Konteksta izvēles meklēšana">
 <!ENTITY selectTabBH.label "Grāmatzīmes/Vēsture">
 <!ENTITY duplicateTab.label "Dublicēt cilni">
-<!ENTITY inversefocus1.label "Apgriezt vidējā klikšķa vai Control-klikšķa fokusu:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Brīdinājums">
 <!ENTITY warnOnCloseProtected.label "Brīdināt mani, kad tiek aizvērts logs ar aizsargātām cilnēm">
 <!ENTITY warnOnCloseWindow.label "Brīdināt mani, kad tiek aizvērts logs ar vairākām cilnēm">

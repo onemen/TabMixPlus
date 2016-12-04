@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Bogmærker/Historik">
 <!ENTITY duplicateTab.label "Dupliker faneblad">
-<!ENTITY inversefocus1.label "Modsat midterklik eller Ctrl-klik fokus på:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Advarsel">
 <!ENTITY warnOnCloseProtected.label "Advar ved lukning af vindue med beskyttede faneblade">
 <!ENTITY warnOnCloseWindow.label "Advar mig ved lukning af vindue med flere faneblade">

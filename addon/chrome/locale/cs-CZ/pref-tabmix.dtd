@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Vyhledávání z kontextové nabídky">
 <!ENTITY selectTabBH.label "Záložky/Historie">
 <!ENTITY duplicateTab.label "Duplikovaný panel">
-<!ENTITY inversefocus1.label "Kliknutí prostředním tlačítkem myši přepnutým pro levou ruku nebo stisknutí tlačítka Ctrl a zároveň kliknutí přepne na:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Upozornění">
 <!ENTITY warnOnCloseProtected.label "Upozornit při zavírání okna s chráněnými panely">
 <!ENTITY warnOnCloseWindow.label "Upozornit při zavírání okna s více panely">

@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Tìm kiếm trình đơn ngữ cành">
 <!ENTITY selectTabBH.label "Trang đánh dấu / Lược sử">
 <!ENTITY duplicateTab.label "Tạo bản sao của Thẻ">
-<!ENTITY inversefocus1.label "Đảo ngược sự tập trung của Chuột giữa hoặc Ctrl-nhấp chuột của:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Cảnh báo">
 <!ENTITY warnOnCloseProtected.label "Cảnh báo tôi khi đóng cửa sổ có các thẻ được bảo vệ">
 <!ENTITY warnOnCloseWindow.label "Cảnh báo tôi khi đóng cửa sổ có nhiều thẻ">

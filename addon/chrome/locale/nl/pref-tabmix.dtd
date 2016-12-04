@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Contextmenu zoeken naar">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
 <!ENTITY duplicateTab.label "Tabblad dupliceren">
-<!ENTITY inversefocus1.label "Middelklik- of Ctrl-klik-focus omdraaien van:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Waarschuwing">
 <!ENTITY warnOnCloseProtected.label "Waarschuwen wanneer een venster met beschermde tabbladen wordt gesloten">
 <!ENTITY warnOnCloseWindow.label "Waarschuwen wanneer een venster met meerdere tabbladen wordt gesloten">

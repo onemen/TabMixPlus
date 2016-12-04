@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Yer imi/Geçmişten">
 <!ENTITY duplicateTab.label "Sekmeyi çiftle">
-<!ENTITY inversefocus1.label "Orta-tıklama ya da Control+tıklama odaklanmayı tersine çevirir:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Uyarı">
 <!ENTITY warnOnCloseProtected.label "Korunan sekmeler bulunan pencereleri kapatırken uyar">
 <!ENTITY warnOnCloseWindow.label "Çok sayıda sekmesi bulunan pencereyi kapatırken beni uyar">

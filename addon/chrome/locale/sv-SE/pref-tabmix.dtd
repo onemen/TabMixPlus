@@ -4,34 +4,34 @@
 <!ENTITY tab.appearance "Utseende">
 <!ENTITY tab.menu "Meny">
 <!ENTITY tab.session "Session">
-<!ENTITY tab.incompatible "Error">
+<!ENTITY tab.incompatible "Fel">
 <!ENTITY apply.label "Verkställ">
 <!ENTITY settings.export "Exportera inställningar">
 <!ENTITY settings.import "Importera inställningar">
-<!ENTITY settings.sync "Sync Preferences">
-<!ENTITY settings.default "Återställ standard">
-<!ENTITY settings.revert "Revert">
+<!ENTITY settings.sync "Synkronisera inställningar">
+<!ENTITY settings.default "Återställ standardvärden">
+<!ENTITY settings.revert "Återställ">
 <!ENTITY generalWindowOpen.label "Öppna länk som öppnas i nytt fönster i:">
-<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLink.useSeparate.label "Använd separata inställningar för länkar från andra applikationer">
 <!ENTITY externalLinkTarget.label "Öppna länkar från andra program i:">
 <!ENTITY linkTarget.tab "Ny flik">
 <!ENTITY linkTarget.window "Nytt fönster">
 <!ENTITY linkTarget.current "Nuvarande flik">
 <!ENTITY linkTarget.accesskey "f">
-<!ENTITY divertedWindowOpen.label "JavaScript popup:">
+<!ENTITY divertedWindowOpen.label "JavaScript-popup:">
 <!ENTITY divertedWindowOpen.all "Öppna alla popupfönster i flikar">
-<!ENTITY divertedWindowOpen.some "Tillåt orginalstorlek på popupfönster">
+<!ENTITY divertedWindowOpen.some "Tillåt originalstorlek på popupfönster">
 <!ENTITY divertedWindowOpen.none "Tillåt alla popupfönster">
-<!ENTITY linkTarget.label "Öppna länk med &apos;Target&apos;-attribut i nuvarande flik">
-<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
-<!ENTITY download.label "Förhindra tomma flikar vid nerladdning av filer">
-<!ENTITY edit.label "Filtyper">
+<!ENTITY linkTarget.label "Öppna länk med attributen 'Target' i nuvarande flik">
+<!ENTITY targetIsFrame.label "Öppna länkar med mål till befintlig ram i den aktuella fliken">
+<!ENTITY download.label "Förhindra tomma flikar vid nedladdning av filer">
+<!ENTITY edit.label "Redigera">
 <!ENTITY speLink.label "Tvinga öppning i ny flik:">
-<!ENTITY speLink.none "Inget">
-<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.none "Ingenting">
+<!ENTITY speLink.allLinks "Alla länkar">
 <!ENTITY speLink.external "Länk till annan hemsida">
 <!ENTITY singleWindow.label "Använd alltid endast ett Firefox-fönster">
-<!ENTITY newTabs.label "New Tabs">
+<!ENTITY newTabs.label "Nya flikar">
 <!ENTITY tabOpen.label "Öppna flik">
 <!ENTITY tabFocus.label "Fokusera flik">
 <!ENTITY tabClose.label "Stäng flik">
@@ -42,130 +42,130 @@
 <!ENTITY newtab.blank "Blank sida">
 <!ENTITY newtab.home "Startsidan">
 <!ENTITY newtab.current "Aktuell sida">
-<!ENTITY newtab.duplicate "Duplicera sida">
-<!ENTITY newtab.location.1 "New Tab Page">
-<!ENTITY newtab.placeholder.label "Default New Tab Page">
-<!ENTITY location.label.1 "Address">
-<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY newtab.duplicate "Duplicera flik med historik">
+<!ENTITY newtab.location.1 "Sida för ny flik">
+<!ENTITY newtab.placeholder.label "Standardsida för ny flik">
+<!ENTITY location.label.1 "Adress">
+<!ENTITY focusContent.label "Lägg fokus på innehållet när en icke-tom sida läses in">
 <!ENTITY openTabNext.label "Öppna ny flik intill nuvarande">
 <!ENTITY openOtherTabNext.label "Öppna andra flikar intill aktuell flik">
 <!ENTITY relatedAfterCurrent.label "Endast vid relevans med aktuell flik">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openDuplicateNext.label "Öppna duplicerad flik intill orginalfliken">
+<!ENTITY openDuplicateNext.label "Öppna duplicerade flikar intill originalfliken">
 <!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
 <!ENTITY openTabNextInverse.label "Ändra öppningsordning">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
-<!ENTITY lockTabs.label "Lock tabs">
-<!ENTITY lockNewTabs.label "Lock New tabs">
-<!ENTITY lockAppTabs.label "Lock App tabs">
-<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openTabNextInverse.tooltip1 "Öppna ny flik intill den senaste fliken som öppnades från den aktuella fliken (då den var senast markerad)">
+<!ENTITY lockTabs.label "Lås flikar">
+<!ENTITY lockNewTabs.label "Lås nya flikar">
+<!ENTITY lockAppTabs.label "Lås fastnålade flikar">
+<!ENTITY updateLockState.label "Tillämpa ändringar till öppna flikar">
 <!ENTITY openNewTab.label "Öppna ny flik från:">
-<!ENTITY openBookmarks.label "Bokmärke">
-<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
-<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
-<!ENTITY openHistory.label "Historik">
-<!ENTITY openUrl.label "Adressfält">
-<!ENTITY openSearch.label "Sökfält">
-<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY openBookmarks.label "Bokmärken">
+<!ENTITY openPlacesGroups.label "Grupper av bokmärken/historik">
+<!ENTITY openPlacesGroups.tooltip "Skriv inte över flikar när en grupp av bokmärken/historik öppnas">
+<!ENTITY openHistory.label "Historiken">
+<!ENTITY openUrl.label "Adressfältet">
+<!ENTITY openSearch.label "Sökfältet">
+<!ENTITY middlecurrent1.label "Mittenklick eller Ctrl-klick öppnar objekt i aktuell flik">
 <!ENTITY middlecurrent.tooltip "Endast för bokmärken, historik och låsta flikar">
 <!ENTITY tabFocus.caption "Fokus på flik som öppnas från:">
 <!ENTITY selectTab.label "Länkar">
 <!ENTITY selectDivertedTab.label "Omdirigerade fönster">
-<!ENTITY selectTabFromExternal.label "Other applications">
-<!ENTITY selectTabCommand.label "Kommandot &apos;Ny flik&apos;">
-<!ENTITY contextMenuSearch.label "Context menu search for">
-<!ENTITY selectTabBH.label "Bokmärken/Historik">
-<!ENTITY duplicateTab.label "Duplicate Tab">
-<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
-<!ENTITY warning.caption.label "Warning">
-<!ENTITY warnOnCloseProtected.label "Varna vid stängning av fönster med skyddade flikar">
-<!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">
-<!ENTITY lasttab.caption.label "Closing last tab">
+<!ENTITY selectTabFromExternal.label "Andra applikationer">
+<!ENTITY selectTabCommand.label "Kommandot 'Ny flik'">
+<!ENTITY contextMenuSearch.label "Snabbmenyssökning för">
+<!ENTITY selectTabBH.label "Bokmärken/Historiken">
+<!ENTITY duplicateTab.label "Duplicera flik">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Varning">
+<!ENTITY warnOnCloseProtected.label "Varna mig när jag stänger fönster med skyddade flikar">
+<!ENTITY warnOnCloseWindow.label "Varna mig när jag stänger fönster med flera flikar">
+<!ENTITY lasttab.caption.label "Stäng sista fliken">
 <!ENTITY keepWindow.label.3.1 "Stäng inte fönstret när sista fliken stängs">
 <!ENTITY keeptab.label "Förhindra sista flik att stängas">
 <!ENTITY closeOnMerge.label "Stäng fönster när de har slagits ihop">
 <!ENTITY warnOnMerge.label "Varna när flikar som inte slås ihop stängs">
-<!ENTITY currenttab.caption.label "Closing current tab">
+<!ENTITY currenttab.caption.label "Stäng aktuell flik">
 <!ENTITY focusTab.labelBegin "När nuvarande flik stängs, fokusera på:">
-<!ENTITY focusTab.firstTab "First tab">
-<!ENTITY focusTab.leftTab "Left tab">
-<!ENTITY focusTab.rightTab "Right tab">
-<!ENTITY focusTab.lastTab "Last tab">
-<!ENTITY focusTab.lastSelectedTab "Last selected tab">
-<!ENTITY focusTab.openerTab "Opener/right tab">
-<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
-<!ENTITY focusTab.lastOpenedTab "Last opened tab">
+<!ENTITY focusTab.firstTab "första fliken">
+<!ENTITY focusTab.leftTab "flik till vänster">
+<!ENTITY focusTab.rightTab "flik till höger">
+<!ENTITY focusTab.lastTab "sista fliken">
+<!ENTITY focusTab.lastSelectedTab "senast markerad flik">
+<!ENTITY focusTab.openerTab "öppnad/höger flik">
+<!ENTITY focusTab.openerTab.rtl "öppnad/vänster flik">
+<!ENTITY focusTab.lastOpenedTab "senast öppnad flik">
 <!ENTITY undoClose.label "Aktivera återställning av stängd flik">
 <!ENTITY undoCloseCache.label "Max antal stängda flikar att komma ihåg:">
-<!ENTITY undoClosepos.label "Återställ flikens orginalposition">
+<!ENTITY undoClosepos.label "Återställ flikens originalposition">
 <!ENTITY menuonlybutton.label "Visa bara lista på knapp i verktygsfält">
-<!ENTITY ctrltab.label "Ctrl-Tab cirkulerar mellan flikar i &apos;senast visad&apos;-ordning">
-<!ENTITY cmdtab.label "Cmd-Tab cirkulerar mellan flikar i &apos;senast visad&apos;-ordning">
-<!ENTITY ctrltab.tabPreviews "Förhansvisa flikar">
+<!ENTITY ctrltab.label "Ctrl-Tab cirkulerar mellan flikar i 'senast visad'-ordning">
+<!ENTITY cmdtab.label "Cmd-Tab cirkulerar mellan flikar i 'senast visad'-ordning">
+<!ENTITY ctrltab.tabPreviews "Förhandsvisa flikar">
 <!ENTITY ctrltab.popup "Ctrl-Tab visar en popup-lista">
 <!ENTITY cmdtab.popup "Cmd-Tab visar en popup-lista">
 <!ENTITY tabpopup.mouse "Popup-lista valbar med muspekare">
 <!ENTITY mergeNoTabSelection.label "Slå ihop fönster när inga flikar är valda">
-<!ENTITY mergeTabSelection.label "Slå ihop efter val av flikar:">
+<!ENTITY mergeTabSelection.label "Slå ihop efter val av flikar">
 <!ENTITY mergeall.label "Slå ihop alla fönster till ett">
 <!ENTITY mergelastfocused.label "Slå endast ihop nuvarande fönster med det senast fokuserade">
 <!ENTITY mergePopups.label "Inkludera popup-fönster">
 <!ENTITY popupNextToOpener.label "Placera popup-fönster intill källsidan">
-<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
-<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
-<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
-<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY activateSlideshow.label "Tryck på #1 för att byta flik varje">
+<!ENTITY toggleAnimation.label "Inaktivera animering för öppning/stängning av flik">
+<!ENTITY reloadEvery.matchAddress.label "Uppdatera en flik oavsett adressen">
+<!ENTITY reloadEvery.onReloadButton.label "Visa menyn 'Uppdatera flik automatiskt' på uppdateringsknappen">
 <!ENTITY seconds.label "sekunder">
 <!ENTITY minutes.label "minuter">
 <!ENTITY tabBarAppearance.label "Flikfält">
 <!ENTITY tabAppearance.label "Flik">
-<!ENTITY toolBarAppearance.label "ToolBar">
-<!ENTITY show.ontabbar.label "Show on Tab bar">
-<!ENTITY show.ontab.label "Show on Tab">
-<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY toolBarAppearance.label "Verktygsfält">
+<!ENTITY show.ontabbar.label "Visa på flikfält">
+<!ENTITY show.ontab.label "Visa på flik">
+<!ENTITY dragNewTabButton.tooltip "Dra knappen 'Ny flik' till ditt flikfält för att aktivera detta alternativ.">
 <!ENTITY hideTabBarButton.label "Visa knapp för stäng flik">
-<!ENTITY newTabButton.label "Visa knapp för ny knapp">
-<!ENTITY newTabButton.position.left.label "on Left side">
-<!ENTITY newTabButton.position.right.label "on Right side">
-<!ENTITY newTabButton.position.afterlast.label "After last tab">
+<!ENTITY newTabButton.label "Visa knapp för ny flik">
+<!ENTITY newTabButton.position.left.label "på vänster sida">
+<!ENTITY newTabButton.position.right.label "på höger sida">
+<!ENTITY newTabButton.position.afterlast.label "efter sista fliken">
 <!ENTITY allTabsButton.label "Knapp för alla flikar">
 <!ENTITY tabBarSpace.label "Extra mellanrum på båda sidorna">
 <!ENTITY tabBarSpace.tooltip "Vid klickning eller när något släpps på flikfältet">
 <!ENTITY tabbar.label "Göm flikfält när bara en flik är öppen">
-<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY moveTabOnDragging.label "Flytta flikar direkt när de dras">
 <!ENTITY dropIndicator.label "Symbol för dra-och-släpp">
 <!ENTITY dropIndicator-native.label "Standard">
-<!ENTITY dropIndicator-builtin.label "Ingyggd">
-<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY dropIndicator-builtin.label "Inbyggd">
+<!ENTITY verticalTabbar.description1 "Dessa inställningar styrs av andra tillägg som gäller vertikala flikar.">
 <!ENTITY tabBarPosition.label "Position:">
-<!ENTITY tabBarPosition.top.label "Top (above content)">
-<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabBarPosition.top.label "Överkant (ovanför innehåll)">
+<!ENTITY tabBarPosition.bottom.label "Nederkant (under innehåll)">
 <!ENTITY tabScroll.label "När flikar inte får plats, visa:">
-<!ENTITY tabScroll.none "Rullningsbar utan knappar">
+<!ENTITY tabScroll.none "Rullbar utan knappar">
 <!ENTITY tabScroll.leftRightButtons "Rullbar med knappar på vänster och höger sida">
 <!ENTITY tabScroll.rightButtons "Rullbar med knappar på höger sida">
-<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
-<!ENTITY tabScroll.multibar "Fler-radig">
-<!ENTITY maxrow.label "Max antal av rader att visa:">
-<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
-<!ENTITY smoothScroll.label "Enable smooth scroll">
-<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY tabScroll.rightButtons.rtl "Rullbar med knappar på vänster sida">
+<!ENTITY tabScroll.multibar "Flera rader">
+<!ENTITY maxrow.label "Max antal rader att visa:">
+<!ENTITY pinnedTabScroll.label "Låt fastnålade flikar rulla">
+<!ENTITY offsetAmountToScroll.label "Visa del av nästa flik utom synhåll vid rullning">
+<!ENTITY smoothScroll.label "Aktivera mjuk rullning">
+<!ENTITY scrolldelay.label "Rullfördröjning (tid mellan varje rullning)">
 <!ENTITY currenttab.style.label "Aktuell flik">
-<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unloadedtabs.style.label "Oinlästa flikar">
 <!ENTITY unreadtabs.style.label "Oläst flik">
-<!ENTITY othertabs.style.label "Other tabs">
-<!ENTITY setstyles.label "Skräddarsy stilar">
-<!ENTITY extraIcons.label1 "Icons for">
-<!ENTITY extraIcons.locked "Locked">
-<!ENTITY extraIcons.protected "Protected">
-<!ENTITY extraIcons.autoreload "Auto Reload">
-<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY othertabs.style.label "Andra flikar">
+<!ENTITY setstyles.label "Anpassa stilar">
+<!ENTITY extraIcons.label1 "Ikoner för">
+<!ENTITY extraIcons.locked "Låst">
+<!ENTITY extraIcons.protected "Skyddad">
+<!ENTITY extraIcons.autoreload "Autouppdatering">
+<!ENTITY extraIcons.hideonpinned "Dölj för fastnålade flikar">
 <!ENTITY progressMeter.label "Förloppsmätare på flik">
 <!ENTITY showTabX.labelBegin "Knapp för stäng flik">
-<!ENTITY showTabX.left "På vänster sida">
-<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY showTabX.left "Placera på vänster sida">
+<!ENTITY showTabX.rtl "Placera på höger sida">
 <!ENTITY milliseconds.label "millisekunder">
 <!-- LOCALIZATION NOTE          change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
@@ -176,19 +176,19 @@
 <!ENTITY showTabX.currentHover "på aktuell &amp; och pekad på">
 <!ENTITY minWidth.label "Bredd:">
 <!ENTITY widthTo.label "till">
-<!ENTITY widthPixels.label "pixels">
-<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY widthPixels.label "bildpunkter">
+<!ENTITY onLeftDisabled.label "Kan inte placera knappen på vänster sida med aktuellt tema">
+<!ENTITY onLeftDisabled.tst.label "Kan inte placera knappen på vänster sida när treeStyleTab är installerat">
 <!ENTITY flexTabs.label "Flikbredd anpassas till rubrik">
 <!ENTITY bookastitle.label "Använd namn på bokmärke som fliknamn">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
-<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
-<!ENTITY toolbar.button.label "Customize">
-<!ENTITY toolbar.visible.caption "Visible buttons">
-<!ENTITY toolbar.novisible.label "There are no visible buttons">
-<!ENTITY toolbar.hidden.caption "Hidden buttons">
-<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
+<!ENTITY toolbar.description "Du kan anpassa vilka av Tab Mix Plus knappar som visas i ditt verktygsfält">
+<!ENTITY toolbar.button.label "Anpassa">
+<!ENTITY toolbar.visible.caption "Synliga knappar">
+<!ENTITY toolbar.novisible.label "Det finns inga synliga knappar">
+<!ENTITY toolbar.hidden.caption "Dolda knappar">
+<!ENTITY toolbar.nohidden.label "Det finns inga dolda knappar">
 <!ENTITY mouseGesture.label "Musgester">
 <!ENTITY mouseClick.label "Musklickningar">
 <!ENTITY mouseHoverSelect.labelBegin "Välj flik när den pekas på i">
@@ -196,13 +196,13 @@
 <!ENTITY tabFlip.delay "Använd fördröjning på">
 <!ENTITY clickFocus.label "Musklick (klicka och släpp) för val av flik">
 <!ENTITY removeEntries.label "Ta bort Tab Mix Plus-meny vid mittenklick">
-<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY lockTabSizingOnClose.label "När en flik stängs ska andra flikar inte storleksändras innan muspekaren lämnar verktygsfältet">
 <!ENTITY removeEntries.tooltip "Inkluderar stängda flikar, stängda fönster och sparade sessioner">
-<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
-<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
-<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
-<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
-<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY tabbarscrolling.caption "Vid rullning på flikfältet">
+<!ENTITY tabbarscrolling.holdShift.label "Håll ned Shift och rulla för att växla mellan dessa alternativ">
+<!ENTITY tabbarscrolling.selectTab.label "Ändra vald flik">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rulla alla flikar">
+<!ENTITY tabbarscrolling.inverse.label "Omvänd rullriktning">
 <!ENTITY double.label "Dubbelklick">
 <!ENTITY middle.label "Mittenklick">
 <!ENTITY ctrl.label "Ctrl-klick">
@@ -212,10 +212,10 @@
 <!ENTITY ontab.label "på en flik:">
 <!ENTITY ontabbar.label "på flikfältet:">
 <!ENTITY clicktab.label "Välj kommande att utföra vid klick på flikar">
-<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
-<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
-<!ENTITY clicktab.default "Firefox default or other extension">
-<!ENTITY clicktab.nothing "Inget">
+<!ENTITY ontabbar.dblClick.label "Förhindra att fönster storleksändras när du dubbelklickar på flikfältet.">
+<!ENTITY ontabbar.click.label "Förhindra att fönster flyttas när du klickar på flikfältet.">
+<!ENTITY clicktab.default "Firefox-standard eller andra tillägg">
+<!ENTITY clicktab.nothing "Gör ingenting">
 <!ENTITY clicktab.addtab "Öppna ny flik">
 <!ENTITY clicktab.duplicatetab "Duplicera flik">
 <!ENTITY clicktab.duplicatetabw "Duplicera flik i nytt fönster">
@@ -224,8 +224,8 @@
 <!ENTITY clicktab.locktab "Lås flik">
 <!ENTITY clicktab.freezetab "Skydda och lås flik">
 <!ENTITY clicktab.renametab "Byt namn på flik">
-<!ENTITY clicktab.copyTabUrl "Kopierar flikens URL till Urklipp">
-<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.copyTabUrl "Kopierar flikens URL till urklipp">
+<!ENTITY clicktab.copyUrlFromClipboard "Läs URL från urklipp">
 <!ENTITY clicktab.selectMerge "Väljer flik för sammanslagning">
 <!ENTITY clicktab.mergeTabs "Slå samman fönster">
 <!ENTITY clicktab.bookTab "Lägg till bokmärke för flik">
@@ -235,79 +235,79 @@
 <!ENTITY clicktab.reloadothertabs "Uppdatera andra flikar">
 <!ENTITY clicktab.reloadlefttabs "Uppdatera flikar till vänster">
 <!ENTITY clicktab.reloadrighttabs "Uppdatera flikar till höger">
-<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.autoReloadTab "Aktivera/inaktivera autouppdatering av flik">
 <!ENTITY clicktab.removeall "Stäng alla flikar">
 <!ENTITY clicktab.removeother "Stäng andra flikar">
 <!ENTITY clicktab.removesimilar "Stäng flikar från liknande domän">
-<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
-<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.removetoLeft "Stäng flikar till vänster">
+<!ENTITY clicktab.removetoRight "Stäng flikar till höger">
 <!ENTITY clicktab.uctab "Återställ stängd flik">
 <!ENTITY clicktab.ucatab "Återställ alla stängda flikar">
-<!ENTITY clicktab.snapback "SnapBack flik">
+<!ENTITY clicktab.snapback "SnapBack-flik">
 <!ENTITY clicktab.ietab "Öppna flik i IE">
-<!ENTITY contentLoad "Mitten-klick laddar URL från klippbord">
-<!ENTITY context.tab "Flikmeny - Kontext">
-<!ENTITY context.main "Huvudmeny - Kontext">
+<!ENTITY contentLoad "Mitten-klick laddar URL från urklipp">
+<!ENTITY context.tab "Flikmeny">
+<!ENTITY context.main "Huvudmeny">
 <!ENTITY context.tools "Verktygsmeny">
-<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
-<!ENTITY showtabBarContext.label "Visa i meny vid högerklick på flik:">
-<!ENTITY showContentAreaContext.label "Visa i huvudmeny vid högerklick:">
-<!ENTITY showToolsMenu.label "Visa i verktygsmeny:">
+<!ENTITY showOnTabbar.label "Visa högerklicksmeny för flikar på flikfältet">
+<!ENTITY showtabBarContext.label "Visa i högerklicksmenyn för flikar">
+<!ENTITY showContentAreaContext.label "Visa i huvudhögerklicksmenyn">
+<!ENTITY showToolsMenu.label "Visa i verktygsmenyn">
 <!ENTITY startupHomePage.label "Visa min hemsida">
-<!ENTITY startupBlankPage.label "Visa en blank sida">
+<!ENTITY startupBlankPage.label "Visa en tom sida">
 <!ENTITY startupLastSession.label "Visa mina fönster och flikar från föregående session">
-<!ENTITY sm.extension.description1 "Tab Mix Plus har upptäckt att Session Manager är installerad">
+<!ENTITY sm.extension.description1 "Tab Mix Plus har upptäckt att Sessionshanteraren är installerad">
 <!ENTITY sm.extension.description2 "Tab Mix Plus sessionshanterare kommer att inaktiveras">
-<!ENTITY sm.extension.description3 "Du kan klicka knappen till höger för att öppna dialogen Session Manager Options">
-<!ENTITY sm.extension.description4 "Konvertera Mina sessioner från Tab Mix Plus-format till Session manager-format">
+<!ENTITY sm.extension.description3 "Du kan klicka knappen till höger för att öppna dialogen Sessionshanteraralternativ">
+<!ENTITY sm.extension.description4 "Konvertera Mina sessioner från Tab Mix Plus-format till Sessionshanterar-format">
 <!ENTITY sm.extension.convert.label "Konvertera">
-<!ENTITY sm.extension.chooseFile.label0 "Låt mig välja vilken datafil som skall konverteras">
+<!ENTITY sm.extension.chooseFile.label0 "Låt mig välja vilken datafil som ska konverteras">
 <!ENTITY sm.extension.chooseFile.label1 "Konvertera Tab Mix Plus-sessioner från aktuell profil">
-<!ENTITY ss.enable.label "Använd inbyggd sessionshanterare">
-<!ENTITY ss.enable.tooltip "Avmarkera för användning med Tab Mix Plus sessionshaterare">
+<!ENTITY ss.enable.label "Använd Firefox inbyggda sessionsåterställare">
+<!ENTITY ss.enable.tooltip "Avmarkera för att använda Tab Mix Plus sessionshanterare">
 <!ENTITY ss.advanced_setting "Avancerade inställningar">
 <!ENTITY ss.advanced_setting.warning "Ändra inte dessa om du inte vet vad du gör">
-<!ENTITY ss.interval "Min. tidsintervall mellan sparande av två sessionser">
+<!ENTITY ss.interval "Min. tidsintervall mellan sparande av två sessioner">
 <!ENTITY ss.interval.seconds "(i millisekunder)">
 <!ENTITY ss.privacy_level "Spara känslig data (formulärdata, POSTDATA och kakor) för">
 <!ENTITY ss.privacy_level.allsites "Alla webbplatser">
-<!ENTITY ss.privacy_level.unencrypted "Bara okrypterade webbplatser">
-<!ENTITY ss.privacy_level.nosites "Inga webbplatser">
-<!ENTITY ss.postdata.label1 "Max. mängd av POSTDATA som kan sparas">
-<!ENTITY ss.postdata.label2 "(i bytes, -1=allt)">
+<!ENTITY ss.privacy_level.unencrypted "Endast okrypterade webbplatser">
+<!ENTITY ss.privacy_level.nosites "Inga webbplatser alls">
+<!ENTITY ss.postdata.label1 "Maximal mängd av POSTDATA som ska sparas">
+<!ENTITY ss.postdata.label2 "(i byte, -1 = allting)">
 <!ENTITY sessionManger.enable "Aktivera aktivitetshanteraren">
 <!ENTITY crashRecovery.enable "Aktivera återställning vid krasch">
-<!ENTITY sm.StartExit "Start/Stopp">
+<!ENTITY sm.StartExit "Uppstart/Nedstängning">
 <!ENTITY sm.restore "Återställ">
 <!ENTITY sm.preserve "Skydda">
 <!ENTITY sm.start "När webbläsaren startar:">
 <!ENTITY sm.start.restore "Återställ">
 <!ENTITY sm.start.ask "Fråga innan återställning">
 <!ENTITY sm.start.nothing "Återställ inte">
-<!ENTITY sm.exit "När webbläsare stängs:">
+<!ENTITY sm.exit "När webbläsaren stängs:">
 <!ENTITY sm.exit.save "Spara session">
 <!ENTITY sm.exit.ask "Fråga innan spara">
 <!ENTITY sm.exit.nothing "Spara inte">
 <!ENTITY sm.startup "Session vid uppstart:">
 <!ENTITY sm.lastsession "Senaste session">
-<!ENTITY sm.previouslast "Senaste till Sista">
+<!ENTITY sm.previouslast "Föregående till sista">
 <!ENTITY sm.chooseifempty "Välj en annan om den är tom">
 <!ENTITY sm.restore.options "Vid återställning av session:">
 <!ENTITY sm.restore.overwrite "Skriv över befintligt fönster">
-<!ENTITY sm.restore.overwriteTabs "Och flikar">
-<!ENTITY sm.restore.closedWinList "Spara fönster i listan &apos;Stängda fönster&apos;">
+<!ENTITY sm.restore.overwriteTabs "och flikar">
+<!ENTITY sm.restore.closedWinList "Spara fönster i listan över stängda fönster">
 <!ENTITY sm.restore.merge "Slå ihop flera fönster till ett">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restore.bypassCache "Kringgå cache vid återställning">
+<!ENTITY sm.notrestore.label "När ingen återställning görs vid start">
+<!ENTITY sm.restorePinned.label "Återställ mina fastnålade flikar från senaste gången">
 <!ENTITY sm.preserve.options "Skydda flikar:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Status för skydd">
 <!ENTITY sm.preserve.locked "Status för lås">
-<!ENTITY sm.preserve.permission "Rättigheter">
-<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.preserve.permission "Behörigheter">
+<!ENTITY sm.preserve.scroll1 "Rullposition">
 <!ENTITY sm.restore.winOptions "Skydda fönster:">
 <!ENTITY sm.restore.selectedTab "Vald flik">
-<!ENTITY sm.restore.closedTabs "Lista &apos;Stängda fönster&apos;">
-<!ENTITY incompatible.extensions "Några installerade tillägg är inte kompatibla med Tab Mix Plus och det rekommenderas att du avaktiverar eller avinstallerar dom.">
+<!ENTITY sm.restore.closedTabs "Lista 'Stängda fönster'">
+<!ENTITY incompatible.extensions "Några installerade tillägg är inte kompatibla med Tab Mix Plus och det rekommenderas att du inaktiverar eller avinstallerar dem.">
 <!ENTITY incompatible.button.label "Visa lista">

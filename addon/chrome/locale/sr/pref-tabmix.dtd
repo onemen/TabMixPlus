@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Приручним менијем потражи">
 <!ENTITY selectTabBH.label "Обележивача/историјата">
 <!ENTITY duplicateTab.label "Дуплирај картицу">
-<!ENTITY inversefocus1.label "Обрни средњи клик или ктрл+клик пребацивање за:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Упозорење">
 <!ENTITY warnOnCloseProtected.label "Упозори ме приликом затварања прозора са заштићеним картицама">
 <!ENTITY warnOnCloseWindow.label "Упозори ме при затварању прозора са више картица">

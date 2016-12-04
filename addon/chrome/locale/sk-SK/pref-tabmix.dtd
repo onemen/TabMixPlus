@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Kontextová ponuka vyhľadávania pre">
 <!ENTITY selectTabBH.label "Záložky/História">
 <!ENTITY duplicateTab.label "Duplikovať kartu">
-<!ENTITY inversefocus1.label "Zmena zamerania kliknutia prostredným a Control:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Upozornenie">
 <!ENTITY warnOnCloseProtected.label "Upozorniť pri zatváraní okna s chránenými kartami">
 <!ENTITY warnOnCloseWindow.label "Upozorniť pri zatváraní okna s viacerými kartami">

@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">
 <!ENTITY duplicateTab.label "複製したタブ">
-<!ENTITY inversefocus1.label "以下を中クリックまたは Ctrl + クリックで開いたとき、フォーカスを移動する：">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "確認">
 <!ENTITY warnOnCloseProtected.label "保護されたタブのあるウィンドウを閉じるときは確認する">
 <!ENTITY warnOnCloseWindow.label "複数のタブがあるウィンドウを閉じるときは確認する">

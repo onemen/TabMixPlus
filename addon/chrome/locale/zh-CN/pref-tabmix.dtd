@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">
 <!ENTITY duplicateTab.label "复制的标签页">
-<!ENTITY inversefocus1.label "中键点击或 Ctrl-点击时已相反方式打开以下项目：">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "警告">
 <!ENTITY warnOnCloseProtected.label "关闭含有受保护标签页的窗口时警告我">
 <!ENTITY warnOnCloseWindow.label "关闭含多个标签页的窗口时警告我">

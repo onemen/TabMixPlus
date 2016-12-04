@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "نشانه گذاری شده ها/تاریخچه">
 <!ENTITY duplicateTab.label "Duplicate Tab">
-<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Warning">
 <!ENTITY warnOnCloseProtected.label "هشدار هنگام بسته شدن پنجره با تب محافظت شده">
 <!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">

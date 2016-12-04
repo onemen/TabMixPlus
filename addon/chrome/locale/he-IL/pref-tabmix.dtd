@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "סימניות/היסטוריה">
 <!ENTITY duplicateTab.label "שכפל לשונית">
-<!ENTITY inversefocus1.label "הפוך מיקוד לחצן אמצעי:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "אזהרה">
 <!ENTITY warnOnCloseProtected.label "אזהר אותי כשאני סוגר חלון עם לשוניות מוגנות">
 <!ENTITY warnOnCloseWindow.label "התרע כשאני מנסה לסגור חלון עם מספר לשוניות">

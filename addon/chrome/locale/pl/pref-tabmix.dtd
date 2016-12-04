@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "menu kontekstowego „Szukaj w…”">
 <!ENTITY selectTabBH.label "zakładek/historii">
 <!ENTITY duplicateTab.label "powielonych kart">
-<!ENTITY inversefocus1.label "Zmień kolejność otwierania dla czynności kliknięcia ś.p.m lub Ctrl+kliknięcie:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Ostrzeżenia">
 <!ENTITY warnOnCloseProtected.label "Ostrzegaj przed zamknięciem okna z zabezpieczonymi kartami">
 <!ENTITY warnOnCloseWindow.label "Ostrzegaj przed zamknięciem okna z otwartymi wieloma kartami">

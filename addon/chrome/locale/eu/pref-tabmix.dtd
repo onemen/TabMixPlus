@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Lastermarkak/Historia">
 <!ENTITY duplicateTab.label "Bikoiztu fitxa">
-<!ENTITY inversefocus1.label "Erdiko klikak edo CTRL-klikak hautatzen du:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Iragarpenak">
 <!ENTITY warnOnCloseProtected.label "Iragarri babestutako fitxak ixtekotan">
 <!ENTITY warnOnCloseWindow.label "Iragarri fitxa bat baino gehiagoko leihoa ixtekoan">

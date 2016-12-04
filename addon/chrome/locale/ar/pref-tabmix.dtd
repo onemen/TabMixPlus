@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "العلامات/التأريخ">
 <!ENTITY duplicateTab.label "Duplicate Tab">
-<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "التنبيه">
 <!ENTITY warnOnCloseProtected.label "نبهني عند إغلاق نافذة تحتوي ألسنة محمية">
 <!ENTITY warnOnCloseWindow.label "نبهني عند إغلاق نافذة تحتوي عدة ألسنة">

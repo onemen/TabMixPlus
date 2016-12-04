@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Risultati di ricerca della voce di menu contestuale Cerca con">
 <!ENTITY selectTabBH.label "Segnalibri o cronologia">
 <!ENTITY duplicateTab.label "Duplica scheda">
-<!ENTITY inversefocus1.label "Selezionare gli elementi la cui apertura primo/secondo piano verrà invertita con clic centrale/Ctrl+clic">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Avvisi di Tab Mix Plus">
 <!ENTITY warnOnCloseProtected.label "Avvisa quando si chiudono finestre con schede protette aperte">
 <!ENTITY warnOnCloseWindow.label "Avvisa quando si chiudono finestre con molteplici schede aperte">
@@ -181,6 +181,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -197,6 +198,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 

@@ -77,7 +77,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Zabilješke/Povijest">
 <!ENTITY duplicateTab.label "Duplicate Tab">
-<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Warning">
 <!ENTITY warnOnCloseProtected.label "Upozori prilikom zatvaranja Firefoxa sa zaštićenim karticama">
 <!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">
