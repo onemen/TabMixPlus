@@ -1817,6 +1817,10 @@ TabmixSessionManager = {
   },
 
   deleteSession: function SM_deleteSession(nodLabel, prop, value) {
+    // make sure that corrupted session.rdf don't stops the closing process
+    if (!nodLabel) {
+      return;
+    }
     var rdfNode = this.RDFService.GetResource(nodLabel);
     var container = this.initContainer(rdfNode);
     if (!this.containerEmpty(nodLabel)) this.deleteWithProp(container, prop, value);
