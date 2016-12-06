@@ -26,7 +26,7 @@ this.Shortcuts = {
     copyTabUrl: {command: 28},
     pasteTabUrl: {command: 29},
     selectMerge: {command: 22},
-    mergeWin: {default: "M accel,shift"},
+    mergeWin: {default: "E accel,shift"},
     addBookmark: {id: "addBookmarkAsKb", default: "D accel"},
     bookmarkAllTabs: {id: "bookmarkAllTabsKb", default: "D accel,shift"},
     reload: {id: "key_reload", default: "R accel"},
@@ -94,6 +94,20 @@ this.Shortcuts = {
       TabmixSvc.getString("undoclosetab.clear.label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
+      // get default value for all keys
+      // default can be different between languages
+      if (keyData.default) {
+        const elm = $(keyData.id || "key_tm_" + key);
+        if (elm) {
+          const modifiers = elm.getAttribute("modifiers");
+          const key_ = elm.getAttribute("key");
+          const keycode = elm.getAttribute("keycode");
+          const disabled = /^d&/.test(keyData.default || "") ? "d&" : "";
+          const newDefault = disabled + (key_ || keycode).toUpperCase() +
+              (modifiers ? " " + modifiers.replace(/\s/g, "") : "");
+          keyData.default = newDefault;
+        }
+      }
       keyData.value = keyData.default || "";
       if (container && key in labels)
         keyData.label = labels[key];
