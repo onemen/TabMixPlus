@@ -10,11 +10,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "Promise",
   "resource://gre/modules/Promise.jsm");
 
 this.AsyncUtils = {
-  /* PromiseUtils.defer exist since Firefox 39 */
-  defer: function() {
-    return new Deferred();
-  },
-
   spawnFn: function(thisArg, fn, index) {
     return this.promisify(thisArg, fn, index)();
   },
@@ -24,31 +19,24 @@ this.AsyncUtils = {
   },
 
   promisify: function(thisArg, fn, index) {
-    return function() {
-      let deferred = new Deferred();
-      let args = Array.prototype.slice.call(arguments);
-      if (typeof index == "undefined")
-        index = args.length;
-      args.splice(index, 0, deferred.callback);
+    return function(...args) {
+      return new Promise((resolve, reject) => {
+        if (typeof index == "undefined")
+          index = args.length;
+        args.splice(index, 0, (result, error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        });
 
-      try {
-        fn.apply(thisArg, args);
-      } catch (ex) {
-        deferred.reject(ex);
-      }
-      return deferred.promise;
+        try {
+          fn.apply(thisArg, args);
+        } catch (ex) {
+          reject(ex);
+        }
+      });
     };
   }
 };
-
-function Deferred() {
-  let defer = Promise.defer();
-  this.promise = defer.promise;
-  this.resolve = defer.resolve;
-  this.reject = defer.reject;
-  this.callback = (result, error) => {
-    if (error)
-      return this.reject(error);
-    return this.resolve(result);
-  };
-}
