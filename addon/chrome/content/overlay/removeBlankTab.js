@@ -7,6 +7,10 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
+if (typeof Ci == "undefined") {
+  this.Ci = Components.interfaces;
+}
+
 var TabmixRemoveBlankTab = {
   initialize: function() {
     switch (window.document.documentElement.id) {
