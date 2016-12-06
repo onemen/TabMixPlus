@@ -332,13 +332,11 @@ var TMP_ClosedTabs = {
   /* .......... functions for closedtabs list menu and context menu .......... */
 
   get keepMenuOpen() {
-    return TabmixSvc.prefs.get("extensions.tabmix.undoClose.keepMenuOpen", false);
+    return Tabmix.prefs.getBoolPref("undoClose.keepMenuOpen");
   },
 
   set keepMenuOpen(val) {
-    val = Boolean(val);
-    const fn = val ? "set" : "reset";
-    TabmixSvc.prefs[fn]("extensions.tabmix.undoClose.keepMenuOpen", val);
+    Tabmix.prefs.setBoolPref("undoClose.keepMenuOpen", Boolean(val));
     return val;
   },
 

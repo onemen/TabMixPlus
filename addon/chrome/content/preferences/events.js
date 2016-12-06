@@ -13,6 +13,8 @@ var gEventsPane = {
       hbox.setAttribute("align", "center");
     }
 
+    $("keepMenuOpen").label = TabmixSvc.getString("undoclosetab.keepOpen.label");
+
     var browserWindow = Tabmix.getTopWin();
     let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {

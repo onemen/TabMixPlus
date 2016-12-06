@@ -90,6 +90,8 @@
       <preference id="pref_undoClosepos"        name="extensions.tabmix.undoClosePosition"    type="bool"/>
       <preference id="pref_menuonlybutton"
                   name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
+      <preference id="pref_keepMenuOpen"
+                  name="extensions.tabmix.undoClose.keepMenuOpen"                             type="bool"/>
       <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"
                   onchange="gEventsPane.disableShowTabList();"/>
       <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
@@ -349,6 +351,7 @@
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
+                <checkbox_tmp id="keepMenuOpen" preference="pref_keepMenuOpen" observes="obs_undoClose"/>
               </vbox>
             </vbox>
             <separator class="groove"/>

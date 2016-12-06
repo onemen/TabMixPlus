@@ -162,6 +162,7 @@ pref("extensions.tabmix.lasttab.showTabList", false);
 pref("extensions.tabmix.slideDelay", 10);
 
 pref("extensions.tabmix.undoClose", true);
+pref("extensions.tabmix.undoClose.keepMenuOpen", false);
 /*
  * we use browser.sessionstore.max_tabs_undo from 2008-02-26
  */
