@@ -285,10 +285,6 @@ var TabmixTabbar = {
         for (let row = 2; row < aRows; row++)
           this._heights[tabsPosition][row] = rowHeight * row;
       }
-
-      // make sure our scroll buttons box height is no more than 2 rows
-      const box = document.getElementById("tabmixScrollBox");
-      box.style.setProperty("max-height", this._heights[tabsPosition][2] + "px", "important");
     }
 
     if (tabstrip.style.maxHeight != tabstrip.style.height || tabstrip.style.maxHeight != newHeight + "px")
