@@ -69,7 +69,14 @@ var TMP_tabDNDObserver = {
       'rtl ? $& : draggingRight && newIndex > -1'
     );
     if (tabsDragUtils) {
-      setTimeout(() => newCode.toCode(), 0);
+      const topic = "browser-delayed-startup-finished";
+      const observer = function(subject) {
+        if (subject == window) {
+          Services.obs.removeObserver(observer, topic);
+          newCode.toCode();
+        }
+      };
+      Services.obs.addObserver(observer, topic, false);
     } else {
       newCode.toCode();
     }
