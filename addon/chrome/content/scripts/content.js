@@ -136,7 +136,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:isFrameInContent": {
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
-        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
+        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result, epoch: data.epoch});
         break;
       }
       case "Tabmix:collectOpener": {
