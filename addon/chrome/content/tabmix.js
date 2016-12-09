@@ -364,6 +364,9 @@ var TMP_eventListener = {
       "TabAttrModified"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
+    gBrowser.selectedTab.tabmixKey = {};
+    this.tabWidthCache.set(gBrowser.selectedTab.tabmixKey, 0);
+
     try {
       TMP_extensionsCompatibility.onContentLoaded();
     } catch (ex) {
@@ -583,21 +586,20 @@ var TMP_eventListener = {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
-    // when browser.tabs.animate is true and a new tab is still opening we wait
-    // until onTabOpen_delayUpdateTabBar call updateScrollStatus
-    let lastTab = Services.prefs.getBoolPref("browser.tabs.animate") &&
-        gBrowser.getTabForLastPanel();
-    if (lastTab && !lastTab._fullyOpen)
-      return;
-
     // catch tab width changed when label attribute changed
     // or when busy attribute changed hide/show image
     var tab = aEvent.target;
-    var width = tab.boxObject.width;
-    if (this.tabWidthCache.has(tab) && this.tabWidthCache.get(tab) == width)
+    var key = tab.tabmixKey;
+    if (!this.tabWidthCache.has(key)) {
       return;
+    }
 
-    this.tabWidthCache.set(tab, width);
+    var width = tab.boxObject.width;
+    if (this.tabWidthCache.get(key) == width) {
+      return;
+    }
+
+    this.tabWidthCache.set(key, width);
 
     TabmixTabbar.updateScrollStatus();
     setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
@@ -780,6 +782,10 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+    // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
+    aTab.tabmixKey = {};
+    this.tabWidthCache.set(aTab.tabmixKey, aTab.boxObject.width);
+
     let newTime = Date.now();
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
@@ -861,8 +867,9 @@ var TMP_eventListener = {
     }
 
     // clean WeakMap
-    if (this.tabWidthCache.has(tab))
-      this.tabWidthCache.delete(tab);
+    if (this.tabWidthCache.has(tab.tabmixKey)) {
+      this.tabWidthCache.delete(tab.tabmixKey);
+    }
   },
 
   // TGM extension use it
