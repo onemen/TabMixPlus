@@ -332,7 +332,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   // if pending tab is blank we don't style it as unload or unread
   if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
       (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending"))) {
-    style = aTab.hasAttribute("visited") ||
+    style = aTab.pinned || aTab.hasAttribute("visited") ||
       TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab)) {
