@@ -339,7 +339,7 @@ var tablib = { // eslint-disable-line
       'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
-       var noChange = aTab.label == title && aTab.crop == crop;\
+       const noChange = aTab.label == title && (Tabmix.isVersion(530) || aTab.crop == crop);\
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
          if (noChange)\
@@ -349,9 +349,9 @@ var tablib = { // eslint-disable-line
          TMP_Places.currentTab = null;\
        $&'
     )._replace(
-      'aTab.crop = crop;',
-      '$&\
-       tablib.onTabTitleChanged(aTab, browser, title == urlTitle);'
+      'this._tabAttrModified',
+      `tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
+            $&`
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar

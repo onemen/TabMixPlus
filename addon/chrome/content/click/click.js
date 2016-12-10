@@ -1032,7 +1032,7 @@ var TabmixAllTabs = {
       return;
 
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
-    aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
+    aMenuitem.setAttribute("crop", Tabmix.isVersion(530) ? "end" : aTab.getAttribute("crop"));
 
     if (aTab.hasAttribute("busy")) {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));

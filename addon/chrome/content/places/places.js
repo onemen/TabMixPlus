@@ -331,9 +331,13 @@ var TMP_Places = {
     let title = this.getTabTitle(aTab, aUrl, aTab.label);
     if (title != aTab.label) {
       aTab.label = title;
-      aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
-      gBrowser._tabAttrModified(aTab, ["label", "crop"]);
+      if (Tabmix.isVersion(530)) {
+        gBrowser._tabAttrModified(aTab, ["label"]);
+      } else {
+        aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
+        gBrowser._tabAttrModified(aTab, ["label", "crop"]);
+      }
       if (aTab.selected)
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))

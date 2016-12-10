@@ -139,7 +139,17 @@
                      anonid="overlay-icon"
                      class="tab-icon-overlay"
                      role="presentation"/>
+          <xul:hbox class="tab-label-container"
+                    xbl:inherits="pinned,selected=visuallyselected"
+                    onoverflow="this.setAttribute('textoverflow', 'true');"
+                    onunderflow="this.removeAttribute('textoverflow');"
+                    flex="1">
+            <xul:label class="tab-text tab-label"
+                       xbl:inherits="xbl:text=label,accesskey,fadein,pinned,selected=visuallyselected,attention"
+                       role="presentation"/>
+          </xul:hbox>
           <xul:label flex="1"
+                     hidden="true"
                      anonid="tab-label" tabmix="true"
                      xbl:inherits="value=label,visibleLabel,crop,accesskey,fadein,pinned,selected=visuallyselected,attention"
                      class="tab-text tab-label"
@@ -167,6 +177,12 @@
         if (!Tabmix.isVersion(420)) {
           let context = document.getElementById('context_closeTab');
           this.setAttribute('closetabtext', context.getAttribute('label'));
+        }
+        if (Tabmix.isVersion(510) && !Tabmix.isVersion(530)) {
+          const tabLabel = document.getAnonymousElementByAttribute(this, "anonid", "tab-label");
+          tabLabel.hidden = false;
+          const tabLabelContainer = document.getAnonymousElementByAttribute(this, "class", "tab-label-container");
+          tabLabelContainer.hidden = true;
         }
         this.tabmix_inited = true;
       ]]>
