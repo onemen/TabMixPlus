@@ -11,6 +11,9 @@ Cu.import("resource://gre/modules/Services.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
+  "resource://tabmixplus/syncedTabs.jsm");
+
 var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
@@ -188,6 +191,9 @@ this.TabmixSvc = {
       Cu.import("resource://tabmixplus/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
+      if (TabmixSvc.version(470)) {
+        SyncedTabs.init(aWindow);
+      }
 
       TabmixSvc.tabStylePrefs = {};
       let tmp = {};
@@ -216,6 +222,7 @@ this.TabmixSvc = {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
+          SyncedTabs.onQuitApplication();
           for (let id of Object.keys(TabmixSvc.console._timers)) {
             let timer = TabmixSvc.console._timers[id];
             timer.cancel();

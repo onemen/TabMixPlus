@@ -39,16 +39,44 @@ var gEventsPane = {
       focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
     }
 
-    // align Tab opening group boxes
-    var vbox1 = $("tabopening1");
-    var vbox2 = $("tabopening2");
-    var vbox3 = $("tabopening3");
-    var max = Math.max(vbox1.boxObject.width, vbox2.boxObject.width, vbox3.boxObject.width);
-    vbox1.style.setProperty("width", max + "px", "important");
-    vbox2.style.setProperty("width", max + "px", "important");
-    vbox3.style.setProperty("width", max + "px", "important");
+    // bug 1210586 - Create a Synced tabs sidebar
+    if (Tabmix.isVersion(470)) {
+      const {label: syncedTabs} = browserWindow.document.getElementById("menu_tabsSidebar");
+      $("syncedTabs").label = syncedTabs;
+      $("selectSyncedTabs").label = syncedTabs;
+    } else {
+      $("syncedTabs").hidden = true;
+      $("selectSyncedTabs").hidden = true;
+    }
+
+    this.alignTabOpeningBoxes();
 
     gPrefWindow.initPane("paneEvents");
+  },
+
+  // align Tab opening group boxes
+  // add setWidth attribute to columns that need to be aligned
+  alignTabOpeningBoxes: function() {
+    const widths = {};
+    const rows = $("tabopening").querySelectorAll("hbox");
+    function updateGrid(fn) {
+      for (let row of rows) {
+        let id = 0;
+        const cols = row.querySelectorAll("vbox");
+        for (let col of cols) {
+          if (++id && col.hasAttribute("setWidth")) {
+            fn(col, id);
+          }
+        }
+      }
+    }
+    updateGrid((col, id) => {
+      widths[id] = Math.max(widths[id] || 0, col.boxObject.width);
+    });
+
+    updateGrid((col, id) => {
+      col.style.setProperty("width", widths[id] + "px", "important");
+    });
   },
 
   disableShowTabList: function() {

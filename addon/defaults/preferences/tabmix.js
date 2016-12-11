@@ -15,6 +15,9 @@ pref("extensions.tabmix.opentabfor.bookmarks", false);
 // pref("extensions.tabmix.opentabfor.search", false); - replace with Firefox pref
 pref("extensions.tabmix.opentabfor.history", false);
 pref("extensions.tabmix.opentabfor.urlbar", false);
+pref("extensions.tabmix.loadBookmarksAndReplace", false);
+pref("extensions.tabmix.opentabfor.syncedTabs", false);
+
 pref("extensions.tabmix.middlecurrent", false);
 pref("extensions.tabmix.inversefocusLinks", false);
 pref("extensions.tabmix.inversefocusOther", false);
@@ -25,7 +28,7 @@ pref("extensions.tabmix.loadExternalInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("extensions.tabmix.loadBookmarksAndReplace", false);
+pref("extensions.tabmix.loadSyncedTabsInBackground", false);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
