@@ -75,6 +75,7 @@
                     onunderflow="this.removeAttribute('textoverflow');"
                     flex="1">
             <xul:label class="tab-text tab-label"
+                       tabmix="true"
                        xbl:inherits="xbl:text=label,accesskey,fadein,pinned,selected=visuallyselected,attention"
                        role="presentation"/>
           </xul:hbox>
