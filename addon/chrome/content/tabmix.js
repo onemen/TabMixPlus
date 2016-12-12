@@ -328,14 +328,19 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    if (Tabmix.isVersion(510) && !Tabmix.isVersion(530)) {
+      let newRule = '.tabbrowser-tab {' +
+          '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v51-52") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    }
     if (!Tabmix.isVersion(510)) {
       let newRule = '.tabbrowser-tab {' +
-          '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab-before-v51") !important;}';
+          '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-before-v51") !important;}';
       gTMPprefObserver.insertRule(newRule);
     }
     if (Tabmix.isVersion(280) && !Tabmix.isVersion(470)) {
       let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-label[tabmix="true"] {' +
-        '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-label") !important;}';
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tab-label") !important;}';
       gTMPprefObserver.insertRule(newRule);
     }
 
