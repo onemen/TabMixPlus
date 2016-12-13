@@ -489,7 +489,7 @@ var TMP_ClosedTabs = {
       if (popup && command == "restoreTab") {
         this.populateUndoSubmenu(popup, true);
       }
-    } else if (item.getAttribute("closemenu") == "none") {
+    } else if (!this.count || item.getAttribute("closemenu") == "none") {
       closeMenus(popup);
     }
   },
