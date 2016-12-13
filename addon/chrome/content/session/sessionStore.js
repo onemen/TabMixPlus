@@ -340,9 +340,14 @@ var TMP_ClosedTabs = {
     return val;
   },
 
-  populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
+  populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup, keepWidth) {
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
+
+    if (keepWidth && !aPopup.hasAttribute("width")) {
+      const width = aPopup.getBoundingClientRect().width;
+      aPopup.setAttribute("width", width);
+    }
 
     TabmixAllTabs.beforeCommonList(aPopup, true);
 
@@ -444,7 +449,7 @@ var TMP_ClosedTabs = {
       this.keepMenuOpen = !this.keepMenuOpen;
       const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
       item.setAttribute("image", image);
-      this.populateUndoSubmenu(item.parentNode);
+      this.populateUndoSubmenu(item.parentNode, true);
       return;
     }
 
@@ -482,7 +487,7 @@ var TMP_ClosedTabs = {
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
       if (popup && command == "restoreTab") {
-        this.populateUndoSubmenu(popup);
+        this.populateUndoSubmenu(popup, true);
       }
     } else if (item.getAttribute("closemenu") == "none") {
       closeMenus(popup);
