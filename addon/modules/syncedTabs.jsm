@@ -69,7 +69,16 @@ this.SyncedTabs = {
       configurable: true
     });
 
-    if (TabmixSvc.version(510)) {
+    if (TabmixSvc.version(530)) {
+      Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onClick")._replace(
+        'this.props.onOpenTabs(urls, where);',
+        `if (/^tab/.test(where)) {
+          // reverse the background here since props.onOpenTabs reverse it again
+          where = where == 'tab' ^ this.tabmix_inBackground ? "tab" : "tabshifted";
+        }
+        $&`
+      ).toCode();
+    } else if (TabmixSvc.version(510)) {
       Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onClick")._replace(
         'this.props.onOpenTabs(urls, where, {});',
         `if (/^tab/.test(where)) {
