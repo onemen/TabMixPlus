@@ -12,6 +12,8 @@ pref("extensions.tabmix.updateOpenedTabsLockState", true); // added 2012-12-29
 pref("extensions.tabmix.singleWindow", false);
 
 pref("extensions.tabmix.opentabfor.bookmarks", false);
+pref("extensions.tabmix.load_tabs_progressively", 9);
+pref("extensions.tabmix.restore_on_demand", 9);
 // pref("extensions.tabmix.opentabfor.search", false); - replace with Firefox pref
 pref("extensions.tabmix.opentabfor.history", false);
 pref("extensions.tabmix.opentabfor.urlbar", false);

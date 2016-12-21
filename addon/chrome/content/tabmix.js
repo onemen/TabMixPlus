@@ -836,6 +836,7 @@ var TMP_eventListener = {
     tab._tPosInGroup = TMP_TabView.getTabPosInCurrentGroup(tab);
     TMP_LastTab.tabs = null;
     TMP_LastTab.detachTab(tab);
+    TMP_Places.updateRestoringTabsList(tab);
     var tabBar = gBrowser.tabContainer;
 
     // if we close the 2nd tab and tabbar is hide when there is only one tab

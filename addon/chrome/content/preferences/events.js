@@ -50,6 +50,7 @@ var gEventsPane = {
     }
 
     this.alignTabOpeningBoxes();
+    this.loadProgressively.init();
 
     gPrefWindow.initPane("paneEvents");
   },
@@ -140,5 +141,64 @@ var gEventsPane = {
       gMenuPane.editSlideShowKey();
     else
       $("paneMenu").setAttribute("editSlideShowKey", true);
-  }
+  },
+
+  loadProgressively: {
+    init() {
+      this._init("pref_loadProgressively");
+      this._init("pref_restoreOnDemand");
+      this.syncToPref();
+      this.setOnDemandState();
+    },
+
+    _init(id) {
+      const preference = $(id);
+      if (preference.value == 0) {
+        preference.value = 1;
+      }
+      if (preference.hasAttribute("notChecked")) {
+        preference.setAttribute("notChecked", -Math.abs(preference.value));
+      }
+    },
+
+    syncToCheckBox: function(item) {
+      let preference = $(item.getAttribute("preference"));
+      return preference.value > -1;
+    },
+
+    syncFromCheckBox: function(item) {
+      let preference = $(item.getAttribute("preference"));
+      let control = $(item.getAttribute("control"));
+      if (preference.hasAttribute("notChecked")) {
+        preference.setAttribute("notChecked", -Math.abs(preference.value));
+      }
+      control.disabled = !item.checked;
+      this.setOnDemandState();
+      return -preference.value;
+    },
+
+    syncFromPref(item) {
+      const preference = $(item.getAttribute("preference"));
+      return Math.abs(preference.value);
+    },
+
+    syncToPref() {
+      const onDemand = $("restoreOnDemand");
+      const item = $("loadProgressively");
+      onDemand.min = item.valueNumber;
+      onDemand._enableDisableButtons();
+      const preference = $("pref_loadProgressively");
+      const restoreOnDemand = $("pref_restoreOnDemand");
+      if (Math.abs(preference.value) > Math.abs(restoreOnDemand.value)) {
+        const val = Math.abs(preference.value);
+        restoreOnDemand.value = $("chk_restoreOnDemand").checked ? val : -val;
+      }
+    },
+
+    setOnDemandState() {
+      const disabled = !$("chk_loadProgressively").checked ||
+                       !$("chk_restoreOnDemand").checked;
+      gPrefWindow.setDisabled("restoreOnDemand", disabled);
+    },
+  },
 };

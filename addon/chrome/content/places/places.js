@@ -21,6 +21,9 @@ var TMP_Places = {
         window.removeEventListener("unload", this, false);
         this.deinit();
         break;
+      case "SSTabRestored":
+        this.updateRestoringTabsList(aEvent.target);
+        break;
     }
   },
 
@@ -33,6 +36,7 @@ var TMP_Places = {
     // use tab label for bookmark name when user renamed the tab
     // PlacesCommandHook exist on browser window
     if ("PlacesCommandHook" in window) {
+      gBrowser.tabContainer.addEventListener("SSTabRestored", this);
       if (Tabmix.isVersion(400)) {
         if (!Tabmix.originalFunctions.placesBookmarkPage) {
           Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
@@ -87,6 +91,10 @@ var TMP_Places = {
   },
 
   deinit: function TMP_PC_deinit() {
+    if ("gBrowser" in window) {
+      gBrowser.tabContainer.removeEventListener("SSTabRestored", this);
+      this.restoringTabs = [];
+    }
     this.stopObserver();
   },
 
@@ -226,10 +234,8 @@ var TMP_Places = {
   //        locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
-  //
-  // TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
-    var tabs = gBrowser.visibleTabs;
+    var openTabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
         Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
@@ -241,8 +247,8 @@ var TMP_Places = {
     // catch tab for reuse
     var aTab, reuseTabs = [], removeTabs = [], i;
     var tabIsBlank, canReplace;
-    for (i = 0; i < tabs.length; i++) {
-      aTab = tabs[i];
+    for (i = 0; i < openTabs.length; i++) {
+      aTab = openTabs[i];
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
       canReplace = (doReplace && !aTab.hasAttribute("locked") &&
@@ -258,32 +264,33 @@ var TMP_Places = {
     }
 
     var tabToSelect = null;
-    var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < tabs.length - 1) ?
+    var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
                    gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
+    let tabs = [], tabsData = [];
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
-      try { // bug 300911
-        if (i < reuseTabs.length) {
-          aTab = reuseTabs[i];
-          let browser = gBrowser.getBrowserForTab(aTab);
-          browser.userTypedValue = url;
-          browser.loadURI(url);
-          // setTabTitle will call TabmixTabbar.updateScrollStatus for us
-          aTab.collapsed = false;
-          // reset visited & tabmix_selectedID attribute
-          if (!aTab.selected) {
-            aTab.removeAttribute("visited");
-            aTab.removeAttribute("tabmix_selectedID");
-          } else
-            aTab.setAttribute("reloadcurrent", true);
-        } else {
-          aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
-        }
-
-        this.setTabTitle(aTab, url, bmIds[i]);
-      } catch (er) { }
+      if (i < reuseTabs.length) {
+        aTab = reuseTabs[i];
+        this.resetRestoreState(aTab);
+        aTab.collapsed = false;
+        // reset visited & tabmix_selectedID attribute
+        if (!aTab.selected) {
+          aTab.removeAttribute("visited");
+          aTab.removeAttribute("tabmix_selectedID");
+        } else
+          aTab.setAttribute("reloadcurrent", true);
+      } else {
+        aTab = gBrowser.addTab("about:blank", {
+          skipAnimation: multiple,
+          dontMove: true,
+          forceNotRemote: true,
+        });
+      }
+      this.setTabTitle(aTab, url, bmIds[i]);
+      tabs.push(aTab);
+      tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
 
       if (!tabToSelect)
         tabToSelect = aTab;
@@ -318,6 +325,83 @@ var TMP_Places = {
     // Close any remaining open tabs or blank tabs that are left over.
     while (removeTabs.length > 0) {
       gBrowser.removeTab(removeTabs.pop());
+    }
+
+    // we use two preferences to control this feature:
+    // load_tabs_progressively - type int:
+    // When the number of tabs to load is more than the number in the preference
+    // we use SessionStore to restore each tab otherwise we use browser.loadURI.
+    //
+    // restore_on_demand - type int:
+    // when the number of tabs to load exceed the number in the preference we
+    // instruct SessionStore to use restore on demand for the current set of tabs.
+    const tabCount = this.restoringTabs.length + tabs.length;
+    const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
+    if (loadProgressively) {
+      this.restoreTabs(tabs, tabsData, this.bookmarksOnDemand || restoreOnDemand);
+    } else {
+      this.loadTabs(tabs, tabsData, bmIds);
+    }
+  },
+
+  getPreferences(tabCount) {
+    // negative value indicate that the feature is disabled
+    const progressively = Tabmix.prefs.getIntPref("load_tabs_progressively");
+    if (progressively < 0) {
+      return [false, false];
+    }
+    let onDemand = Tabmix.prefs.getIntPref("restore_on_demand");
+    if (onDemand < 0) {
+      return [tabCount > progressively, false];
+    }
+    if (onDemand < progressively) {
+      Tabmix.prefs.setIntPref("restore_on_demand", progressively);
+      onDemand = progressively;
+    }
+    return [tabCount > progressively, tabCount > onDemand];
+  },
+
+  restoreTabs: function(tabs, tabsData, restoreOnDemand) {
+    this.restoringTabs.push(...tabs);
+    this.bookmarksOnDemand = restoreOnDemand;
+    let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
+                                         "restoreHistoryPrecursor";
+    TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
+  },
+
+  loadTabs: function(tabs, tabsData, ids) {
+    for (let tab of tabs) {
+      const url = tabsData.shift().entries[0].url;
+      const browser = tab.linkedBrowser;
+      try {
+        browser.stop();
+        browser.userTypedValue = url;
+        browser.loadURI(url);
+        this.setTabTitle(tab, url, ids.shift());
+      } catch (ex) { }
+    }
+  },
+
+  bookmarksOnDemand: false,
+  restoringTabs: [],
+
+  resetRestoreState: function(tab) {
+    if (tab.linkedBrowser.__SS_restoreState) {
+      TabmixSvc.SessionStore._resetTabRestoringState(tab);
+    }
+    this.updateRestoringTabsList(tab);
+  },
+
+  updateRestoringTabsList: function(tab) {
+    if (!this.restoringTabs.length && !this.bookmarksOnDemand) {
+      return;
+    }
+    let index = this.restoringTabs.indexOf(tab);
+    if (index > -1) {
+      this.restoringTabs.splice(index, 1);
+    }
+    if (!this.restoringTabs.length) {
+      this.bookmarksOnDemand = false;
     }
   },
 

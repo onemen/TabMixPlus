@@ -199,6 +199,8 @@ this.TabmixSvc = {
       let tmp = {};
       Cu.import("resource://tabmixplus/DynamicRules.jsm", tmp);
       tmp.DynamicRules.init(aWindow);
+
+      Cu.import("resource://tabmixplus/TabRestoreQueue.jsm", {});
     },
 
     addMissingPrefs: function() {

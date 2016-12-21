@@ -6,6 +6,8 @@ var gLinksPane = {
     this.singleWindow($("singleWindow").checked);
     this.externalLinkValue($("externalLink").checked);
 
+    gPrefWindow.setDisabled("obs_opentabforAllLinks", $("pref_opentabforLinks").value == 1);
+
     gPrefWindow.initPane("paneLinks");
   },
 

@@ -31,6 +31,9 @@
       <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"/>
       <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
+      <preference id="pref_loadProgressively"   name="extensions.tabmix.load_tabs_progressively"
+                  type="int" notChecked=""/>
+      <preference id="pref_restoreOnDemand"     name="extensions.tabmix.restore_on_demand"    type="int"/>
       <preference id="pref_lockallTabs"         name="extensions.tabmix.lockallTabs"          type="bool"/>
       <preference id="pref_lockAppTabs"         name="extensions.tabmix.lockAppTabs"          type="bool"/>
       <preference id="pref_updateLockState"     name="extensions.tabmix.updateOpenedTabsLockState"
@@ -167,14 +170,45 @@
                       preference="pref_openDuplicateNext"/>
           </groupbox>
           <groupbox flex="1">
+            <!-- Load Bookmarks/History progressively -->
+            <caption label="&openPlacesGroups.label;"/>
+            <hbox align="center">
+              <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label;, &moreThan.label;"
+                            preference="pref_loadProgressively" control="loadProgressively"
+                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
+              <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
+                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       onsynctopreference="return gEventsPane.loadProgressively.syncToPref(this);"
+                       observes="obs_loadProgressively"
+                       type="number" min="1" maxwidth="36"/>
+              <label value="&tabs.label;"/>
+            </hbox>
+            <hbox align="center" class="indent">
+              <checkbox_tmp id="chk_restoreOnDemand" label="&restoreOnDemand.label;, &moreThan.label;"
+                            preference="pref_restoreOnDemand" control="restoreOnDemand"
+                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
+                            observes="obs_loadProgressively"/>
+              <textbox id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
+                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       type="number" min="1" maxwidth="36"/>
+              <label value="&tabs.label;" observes="obs_loadProgressively"/>
+            </hbox>
+          </groupbox>
+          <groupbox flex="1" orient="horizontal">
             <caption label="&lockTabs.label;"/>
-            <!-- Look All Tabs -->
-            <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
-            <!-- Look App Tabs -->
-            <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
-            <spacer style="height: 1em;"/>
-            <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
-                      preference="pref_updateLockState"/>
+            <vbox flex="1" pack="end">
+              <!-- Look All Tabs -->
+              <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
+              <!-- Look App Tabs -->
+              <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
+            </vbox>
+            <vbox flex="1" pack="end">
+              <!--<spacer style="height: 3px;"/>-->
+              <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
+                          preference="pref_updateLockState"/>
+            </vbox>
           </groupbox>
         </tabpanel>
 <!-- ======================================================== -->
@@ -399,6 +433,7 @@
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>
       <broadcaster id="obs_showTabList"/>
+      <broadcaster id="obs_loadProgressively"/>
   </broadcasterset>
 
   <broadcasterset>
