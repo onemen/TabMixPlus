@@ -33,6 +33,13 @@ var TMP_tabDNDObserver = {
     // https://addons.mozilla.org/en-US/firefox/addon/multiple-tab-handler/
     const tabsDragUtils = "piro.sakura.ne.jp" in window &&
       "tabsDragUtils" in window["piro.sakura.ne.jp"];
+    Tabmix.handleAnimateTabMove = function(dragContext) {
+      if (gBrowser.tabContainer.orient != "horizontal") {
+        return false;
+      }
+      return !dragContext || !dragContext.draggedTabs ||
+          dragContext.draggedTabs.length == 1;
+    };
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab when
@@ -41,6 +48,10 @@ var TMP_tabDNDObserver = {
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
     let newCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+      'if (this.getAttribute("movingtab")',
+      `let tabmixHandleMove = Tabmix.handleAnimateTabMove(typeof TDUContext == "object" ? TDUContext : null);
+          $&`
+    )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
             $&\n\
@@ -54,19 +65,27 @@ var TMP_tabDNDObserver = {
       '$&', {check: Tabmix.isVersion(520) && !tabsDragUtils}
     )._replace(
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-      'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
+      'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
     )._replace(
       tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
                       /screenX = boxObject.*;/,
       '$&\n            ' +
-      'let halfWidth = boxObject.width / 2;\n            ' +
-      'screenX += draggingRight * halfWidth;'
+      `let halfWidth;
+            if (tabmixHandleMove) {
+              halfWidth = boxObject.width / 2;
+              screenX += draggingRight * halfWidth;
+            }`
     )._replace(
-      /screenX \+ boxObject.* < tabCenter/,
-      'screenX + halfWidth < tabCenter'
+      tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
+                      /screenX \+ boxObject.* < tabCenter/,
+      'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
+    )._replace(
+      'screenX > TDUContext.lastTabCenter',
+      'tabmixHandleMove ? screenX > tabCenter : $&',
+      {check: tabsDragUtils}
     )._replace(
       'newIndex >= oldIndex',
-      'rtl ? $& : draggingRight && newIndex > -1'
+      'rtl || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
     );
     if (tabsDragUtils) {
       const topic = "browser-delayed-startup-finished";
