@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Skift åbnings-sortering">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Åbn ny fane ved siden af det sidst åbnede faneblad fra nuværende (siden det sidst blev valgt)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">

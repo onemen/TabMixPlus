@@ -46,7 +46,7 @@
 <!ENTITY newtab.location.1 "stronę o poniższym adresie">
 <!ENTITY newtab.placeholder.label "Zestaw stron przycisku Nowa karta">
 <!ENTITY location.label.1 "Adres">
-<!ENTITY focusContent.label "Uaktywniaj strony z treścią podczas wczytywania">
+<!ENTITY focusContent.label "Strony z treścią uaktywniaj podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
 <!ENTITY openOtherTabNext.label "Otwieraj inne karty za aktywną kartą">
 <!ENTITY relatedAfterCurrent.label "Tylko jeśli są z nią powiązane">
@@ -56,18 +56,22 @@
 <!ENTITY openTabNextInverse.label "Zmień kolejność otwierania">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otwieraj nową kartę za ostatnio otwartą kartą z aktywnej karty">
+<!ENTITY loadTabsProgressively.label "Wczytuj karty sukcesywnie">
+<!ENTITY restoreOnDemand.label "Nie wczytuj kart przed wybraniem">
+<!ENTITY moreThan.label "gdy jest otwierane więcej niż">
+<!ENTITY tabs.label "kart">
 <!ENTITY lockTabs.label "Blokowanie kart">
 <!ENTITY lockNewTabs.label "Blokuj nowe karty">
 <!ENTITY lockAppTabs.label "Blokuj karty programów">
 <!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
 <!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
 <!ENTITY openBookmarks.label "zakładek">
-<!ENTITY openPlacesGroups.label "grupy zakładek/historii">
+<!ENTITY openPlacesGroups.label "Grupy zakładek/historii">
 <!ENTITY openPlacesGroups.tooltip "Nie zastępuj kart, gdy jest otwierana grupa zakładek/historii">
 <!ENTITY openHistory.label "historii">
 <!ENTITY openUrl.label "paska adresu">
 <!ENTITY openSearch.label "paska wyszukiwania">
-<!ENTITY middlecurrent1.label "Kliknięcie ś.p.m lub Ctrl+kliknięcie otwiera elementy w aktywnej karcie">
+<!ENTITY middlecurrent1.label "Kliknięcie ś.p lub Ctrl+kliknięcie otwiera elementy w aktywnej karcie">
 <!ENTITY middlecurrent.tooltip "Tylko dla zakładek, historii i odnośników wymuszających otwieranie w nowych kartach">
 <!ENTITY tabFocus.caption "Uaktywniaj karty otwierane z:">
 <!ENTITY selectTab.label "odnośników">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "menu kontekstowego „Szukaj w…”">
 <!ENTITY selectTabBH.label "zakładek/historii">
 <!ENTITY duplicateTab.label "powielonych kart">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Kliknięcie ś.p lub Ctrl+kliknięcie odwraca zachowanie:">
 <!ENTITY warning.caption.label "Ostrzeżenia">
 <!ENTITY warnOnCloseProtected.label "Ostrzegaj przed zamknięciem okna z zabezpieczonymi kartami">
 <!ENTITY warnOnCloseWindow.label "Ostrzegaj przed zamknięciem okna z otwartymi wieloma kartami">

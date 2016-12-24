@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Volgorde van openen wijzigen">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Nieuw tabblad openen naast laatste vanuit huidige tabblad geopende (laatst geselecteerde)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Tabbladen op slot zetten">
 <!ENTITY lockNewTabs.label "Nieuwe tabbladen op slot zetten">
 <!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Contextmenu zoeken naar">
 <!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
 <!ENTITY duplicateTab.label "Tabblad dupliceren">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Middelklik of Ctrl-klik wisselt de focus van:">
 <!ENTITY warning.caption.label "Waarschuwing">
 <!ENTITY warnOnCloseProtected.label "Waarschuwen wanneer een venster met beschermde tabbladen wordt gesloten">
 <!ENTITY warnOnCloseWindow.label "Waarschuwen wanneer een venster met meerdere tabbladen wordt gesloten">

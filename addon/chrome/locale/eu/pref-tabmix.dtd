@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Aldatu irekitzeko hurrenkera">
 <!ENTITY openTabNextInverse.tooltip "[æ][3][2][1][b][c]-&gt;[a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Ireki fitxa berrian gainekoaren aurrekoaren ondoan">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Kateatu fitxak">
 <!ENTITY lockNewTabs.label "Kateatu fitxa berriak">
 <!ENTITY lockAppTabs.label "Kateatu aplikazioen fitxak">

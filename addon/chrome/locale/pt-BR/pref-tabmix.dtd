@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Mudar ordem de abertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir nova aba próxima da última aba aberta a partir da aba atual (desde que foi a última a ser selecionada)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Bloquear abas">
 <!ENTITY lockNewTabs.label "Bloquear novas abas">
 <!ENTITY lockAppTabs.label "Bloquear abas de aplicativos">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Buscar pelo menu de contexto por">
 <!ENTITY selectTabBH.label "Favoritos/Histórico">
 <!ENTITY duplicateTab.label "Duplicar aba">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Clique com o botão do meio ou com o botão direito do mouse sobre o foco inverso:">
 <!ENTITY warning.caption.label "Alertas">
 <!ENTITY warnOnCloseProtected.label "Alertar ao fechar janela com abas protegidas">
 <!ENTITY warnOnCloseWindow.label "Alertar-me quando fechar uma janela com várias abas">
@@ -178,7 +182,7 @@
 <!ENTITY widthTo.label "para">
 <!ENTITY widthPixels.label "pixels">
 <!ENTITY onLeftDisabled.label "Can&apos;t colocará o botão do lado esquerdo com o tema atual">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Não é possível colocar o botão no lado esquerdo quando o treeStyleTab está instalado.">
 <!ENTITY flexTabs.label "Abas flexíveis">
 <!ENTITY bookastitle.label "Usar nome do Favorito como título da aba">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

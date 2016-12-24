@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Изменять порядок открытия">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Открывать новую вкладку сразу после последней вкладки, открытой с этой же страницы">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Блокирование вкладок">
 <!ENTITY lockNewTabs.label "Блокировать новые вкладки">
 <!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">

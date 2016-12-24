@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Modifica l&apos;ordine di apertura">
 <!ENTITY openTabNextInverse.tooltip "Effettua l&apos;apertura [a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 " ">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Schede da bloccare">
 <!ENTITY lockNewTabs.label "Blocca tutte le schede nuove">
 <!ENTITY lockAppTabs.label "Blocca le schede applicazione">
@@ -182,6 +186,8 @@
 
 
 
+
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -198,6 +204,8 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
+
 
 
 

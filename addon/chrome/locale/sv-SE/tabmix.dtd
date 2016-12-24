@@ -6,7 +6,7 @@
 <!ENTITY closedwindowsbtn.label "Stängda fönster">
 <!ENTITY closedwindowsbtn.tooltip "Visa listan över stängda fönster">
 <!ENTITY page.header.title "Tab Mix Plus-alternativ">
-<!ENTITY options.main.sessionbutton.label "Tab Mix Plus sessionshanterare">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus-sessionshanterare">
 <!ENTITY session.Tools "Sessionshanteraren">
 <!ENTITY closedWin.label "Lista över stängda fönster">
 <!ENTITY duplicateTabMenu.label "Duplicera flik">
@@ -51,7 +51,7 @@
 <!ENTITY lockTabMenu.label "Lås flik">
 <!ENTITY lockTabMenu.tooltip "Alla länkar öppnas i ny flik">
 <!ENTITY lockTabMenu.accesskey "k">
-<!ENTITY bookmarktabs.label "Lägg till bokmärke för alla flikar">
+<!ENTITY bookmarktabs.label "Lägg till bokmärken för alla flikar">
 <!ENTITY linkhere.label "Öppna länk i denna flik">
 <!ENTITY linkhere.accesskey "Ö">
 <!ENTITY linkBackgroundTab.label "Öppna länk i ny flik i bakgrunden">
@@ -77,7 +77,7 @@
 <!ENTITY restoreintab.accesskey "y">
 <!ENTITY restoretab.label "Återställ flik">
 <!ENTITY restoretab.accesskey "Å">
-<!ENTITY bookmark.label "Lägg till bokmärke för denna länk...">
+<!ENTITY bookmark.label "Bokmärk denna länk...">
 <!ENTITY bookmark.accesskey "b">
 <!ENTITY deletelist.label "Radera från listan">
 <!ENTITY deletelist.accesskey "b">
@@ -86,7 +86,7 @@
 <!ENTITY saveAllWindows.label "Spara alla fönster">
 <!ENTITY sm.context.overwrite "Återställ och skriv över befintliga fönster">
 <!ENTITY sm.context.overwrite.key "Å">
-<!ENTITY sm.context.restore.new "Återställ i nytt fönster">
+<!ENTITY sm.context.restore.new "Återställ till nya fönster">
 <!ENTITY sm.context.restore.newkey "n">
 <!ENTITY sm.context.replacethis "Ersätt med detta fönster">
 <!ENTITY sm.context.replacethis.key "ö">
@@ -108,7 +108,7 @@
 <!ENTITY sm.context.deleteall.key "l">
 <!ENTITY sm.context.startup "Ange som uppstartssession">
 <!ENTITY sm.context.startup.key "u">
-<!ENTITY sm.context.details "Visa räknare, datum och tid i aktivitetshanterare">
+<!ENTITY sm.context.details "Visa räknare, datum och tid i sessionsmenyn">
 <!ENTITY sm.context.details.key "r">
 <!ENTITY tab.key "F">
 <!ENTITY window.key "N">

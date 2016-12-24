@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Reihenfolge beim Öffnen umkehren">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Neuen Tab öffnen neben dem zuletzt vom aktuellen Tab aus geöffneten Tab (solange dieser der zuletzt aktive ist)">
+<!ENTITY loadTabsProgressively.label "Tabs nach und nach laden">
+<!ENTITY restoreOnDemand.label "Tabs erst nach Auswahl laden">
+<!ENTITY moreThan.label "wenn mehr als ein Tab geöffnet wird">
+<!ENTITY tabs.label "Tabs">
 <!ENTITY lockTabs.label "Tabs sperren">
 <!ENTITY lockNewTabs.label "Neue Tabs sperren">
 <!ENTITY lockAppTabs.label "App-Tabs sperren">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Kontextmenü-Suche für">
 <!ENTITY selectTabBH.label "Lesezeichen und Chronik">
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
 <!ENTITY warning.caption.label "Warnhinweise">
 <!ENTITY warnOnCloseProtected.label "Warnen, wenn ein Fenster mit geschützten Tabs geschlossen werden soll">
 <!ENTITY warnOnCloseWindow.label "Warnen, wenn ein Fenster mit mehreren Tabs geschlossen werden soll">

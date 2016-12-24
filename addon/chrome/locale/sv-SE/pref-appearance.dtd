@@ -7,7 +7,7 @@
 <!ENTITY showRGB.label "Visa RGB">
 <!ENTITY unreadAfterReload.label "Gör flik oläst efter uppdatering">
 <!ENTITY disableBackground.label "Inaktivera anpassade bakgrundsfärger">
-<!ENTITY squaredTabs.label "Verkställ bakgrundsfärg för kvadratiska flikar">
+<!ENTITY squaredTabs.label "Tillämpa bakgrundsfärg för fyrkantiga flikar">
 <!ENTITY otherTabs.label "Andra flikar">
 <!ENTITY italic.label "Kursiv">
 <!ENTITY bold.label "Fet">

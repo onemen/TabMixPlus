@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Thay đổi thứ tự mở">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Mở thẻ mới kế bên thẻ được mở cuối cùng từ thẻ hiện tại (kể từ lúc nó được chọn cuối cùng)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Khóa thẻ">
 <!ENTITY lockNewTabs.label "Khóa các thẻ mới">
 <!ENTITY lockAppTabs.label "Khóa các thẻ ứng dụng">

@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Промяна на поредността на отваряне">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Отваряне на нов подпрозорец непосредствено до последния подпрозорец, отворен от текущия подпрозорец">
+<!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
+<!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
+<!ENTITY moreThan.label "при отваряне на повече от">
+<!ENTITY tabs.label "подпрозорци">
 <!ENTITY lockTabs.label "Заключване на подпрозорци">
 <!ENTITY lockNewTabs.label "Заключване на нови подпрозорци">
 <!ENTITY lockAppTabs.label "Заключване на прикрепени подпрозорци">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
 <!ENTITY selectTabBH.label "Отметки/История">
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Щракване със средния бутон (или CTRL+щракване) обръща фокуса на:">
 <!ENTITY warning.caption.label "Предупреждения">
 <!ENTITY warnOnCloseProtected.label "Предупреждение при затваряне на прозорец със защитени подпрозорци">
 <!ENTITY warnOnCloseWindow.label "Предупреждение при затваряне на прозорец с няколко подпрозореца">
@@ -178,7 +182,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пиксела">
 <!ENTITY onLeftDisabled.label "При сега използваната тема, бутонът не може да бъде разположен отляво">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "При инсталиран дървовиден StyleTab, вляво не може да бъде поставян бутон">
 <!ENTITY flexTabs.label "Ширината е съобразно дължината на заглавието">
 <!ENTITY bookastitle.label "Използване името на отметката като заглавие на подпрозореца">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

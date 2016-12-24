@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Změnit pořadí otevíraných panelů">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otevře nový panel vedle panelu, který byl otevřen z aktuálního panelu (naposledy vybraného)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Zamykání panelů">
 <!ENTITY lockNewTabs.label "Zamknout nové panely">
 <!ENTITY lockAppTabs.label "Zamknout panely aplikací">

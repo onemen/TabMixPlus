@@ -7,7 +7,7 @@
 <!ENTITY shortcuts.hideDetails "Dölj detaljer">
 <!ENTITY shortcuts.switchToLast "Byt till senast aktiva flik">
 <!ENTITY shortcuts.slideshow "Bläddra bland flikar">
-<!ENTITY shortcuts.toggleFLST "Ändra fokus efter aktuell flik har stängts">
+<!ENTITY shortcuts.toggleFLST "Ändra fokus efter nuvarande flik har stängts">
 <!ENTITY shortcuts.toggleFLST.tooltip "växla mellan fokus till höger eller senast valda flik">
 <!ENTITY shortcuts.placeholder "Ange modifierare och tangent">
 <!ENTITY shortcuts.reset "Återställ">

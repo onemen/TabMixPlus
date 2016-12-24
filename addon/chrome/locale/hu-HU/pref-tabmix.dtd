@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Lapnyitási sorrend megváltoztatása">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c] Copy">
 <!ENTITY openTabNextInverse.tooltip1 "Új lapok megnyitása az aktuális lapból legutóbb megnyitott után">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lapok zárolása">
 <!ENTITY lockNewTabs.label "Új lapok zárolása">
 <!ENTITY lockAppTabs.label "Alkalmazás lapok zárolása">

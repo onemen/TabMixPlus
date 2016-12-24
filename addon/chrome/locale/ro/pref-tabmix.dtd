@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Se modifică ordinea deschiderii acestora">
 <!ENTITY openTabNextInverse.tooltip "[a´][`3][`2][`1][b][c] -&gt; [a´][`1][`2][`3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Se deschide nouă filă alături de ultima filă deschisă din fila curentă (dacă aceasta a fost ultima selectată):">
+<!ENTITY loadTabsProgressively.label "Se încarcă filele în mod progresiv">
+<!ENTITY restoreOnDemand.label "Nu se încarcă filele dacă nu au fost selectate">
+<!ENTITY moreThan.label "când se deschid mai mult de">
+<!ENTITY tabs.label "file">
 <!ENTITY lockTabs.label "File blocate">
 <!ENTITY lockNewTabs.label "Se blochează filele noi">
 <!ENTITY lockAppTabs.label "Se blochează filele cu aplicații">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Căutari din meniul contextual">
 <!ENTITY selectTabBH.label "Semne de carte / istoric">
 <!ENTITY duplicateTab.label "Duplicări de file">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Se inversează modul de activare/selectare cu clic-mijloc sau Ctrl+clic pentru:">
 <!ENTITY warning.caption.label "Atenționări">
 <!ENTITY warnOnCloseProtected.label "Avertizează-mă la închiderea unei ferestre cu file protejate">
 <!ENTITY warnOnCloseWindow.label "Avertizează-mă la închiderea unei ferestre cu mai multe file">

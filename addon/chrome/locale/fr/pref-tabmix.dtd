@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Modifier l'ordre d'ouverture">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Ouvrir les nouveaux onglets à la suite du dernier onglet ouvert à partir de l'onglet courant (depuis la dernière fois qu'il a été sélectionné)">
+<!ENTITY loadTabsProgressively.label "Charger les onglets progressivement">
+<!ENTITY restoreOnDemand.label "Ne pas charger les onglets avant qu'ils soient sélectionnés">
+<!ENTITY moreThan.label "lorsque j'ouvre plus de">
+<!ENTITY tabs.label "onglets">
 <!ENTITY lockTabs.label "Verrouiller les onglets">
 <!ENTITY lockNewTabs.label "Verrouiller les nouveaux onglets">
 <!ENTITY lockAppTabs.label "Verrouiller les onglets des applications">
@@ -77,7 +81,7 @@
 <!ENTITY contextMenuSearch.label "Menu contextuel de recherche">
 <!ENTITY selectTabBH.label "Marque-pages et historique">
 <!ENTITY duplicateTab.label "Dupliquer l'onglet">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Clic-milieu ou Ctrl-clic inverse le focus de :">
 <!ENTITY warning.caption.label "Avertissements">
 <!ENTITY warnOnCloseProtected.label "M'avertir à la fermeture d'une fenêtre contenant des onglets protégés">
 <!ENTITY warnOnCloseWindow.label "M'avertir à la fermeture d'une fenêtre qui comporte plusieurs onglets">

@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "تغيير ترتيب الفتح">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "فتح اللسان الجديد بجوار اللسان المفتوح مؤخرا من اللسان الحالي">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "إيصاد الألسنة">
 <!ENTITY lockNewTabs.label "إيصاد الألسنة الجديدة">
 <!ENTITY lockAppTabs.label "إيصاد الألسنة المُثبّتة">

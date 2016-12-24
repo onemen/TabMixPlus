@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Промени редослед отварања">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Отвори нову картицу поред картице која је последња отворена из текуће картице (јер је била последља одабрана)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Закључај језичке">
 <!ENTITY lockNewTabs.label "Закључај нове језичке">
 <!ENTITY lockAppTabs.label "Закључани App језичци">

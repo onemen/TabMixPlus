@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Αλλαγή σειράς ανοίγματος">
 <!ENTITY openTabNextInverse.tooltip "[α][3][2][1][β][γ] -&gt; [α][1][2][3][β][γ]">
 <!ENTITY openTabNextInverse.tooltip1 "Άνοιγμα νέας καρτέλας δίπλα από την τελευταία καρτέλα που ανοίχτηκε μέσα από την τρέχουσα (αφού ήταν η τελευταία επιλεγμένη)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Κλείδωμα καρτελών">
 <!ENTITY lockNewTabs.label "Κλείδωμα νέων καρτελών">
 <!ENTITY lockAppTabs.label "Κλείδωμα πρωτευόντων καρτελών">

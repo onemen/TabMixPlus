@@ -56,6 +56,10 @@
 <!ENTITY openTabNextInverse.label "Canvia l'ordre d'obertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Obre la pestanya nova al costat de l'última pestanya oberta des de la pestanya actual (des que s'ha seleccionat per darrera vegada)">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Bloca les pestanyes">
 <!ENTITY lockNewTabs.label "Bloca les pestanyes noves">
 <!ENTITY lockAppTabs.label "Bloca les pestanyes d'aplicació">
