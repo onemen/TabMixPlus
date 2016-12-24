@@ -112,7 +112,7 @@
 <!ENTITY sm.context.details.key "n">
 <!ENTITY tab.key "F">
 <!ENTITY window.key "N">
-<!ENTITY merge.key "E">
+<!ENTITY merge.key "U">
 <!ENTITY sortedTabs.label "File sortate">
 <!ENTITY sortedTabs.tooltip "Afișează lista sortată alfabetic">
 <!ENTITY enable.label "Activează">

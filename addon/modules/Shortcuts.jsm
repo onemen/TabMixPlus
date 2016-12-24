@@ -26,7 +26,7 @@ this.Shortcuts = {
     copyTabUrl: {command: 28},
     pasteTabUrl: {command: 29},
     selectMerge: {command: 22},
-    mergeWin: {default: "E accel,shift"},
+    mergeWin: {default: "U accel,shift"},
     addBookmark: {id: "addBookmarkAsKb", default: "D accel"},
     bookmarkAllTabs: {id: "bookmarkAllTabsKb", default: "D accel,shift"},
     reload: {id: "key_reload", default: "R accel"},
