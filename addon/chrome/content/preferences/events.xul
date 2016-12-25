@@ -173,7 +173,7 @@
             <!-- Load Bookmarks/History progressively -->
             <caption label="&openPlacesGroups.label;"/>
             <hbox align="center">
-              <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label;, &moreThan.label;"
+              <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label; &moreThan.label;"
                             preference="pref_loadProgressively" control="loadProgressively"
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
@@ -185,7 +185,7 @@
               <label value="&tabs.label;"/>
             </hbox>
             <hbox align="center" class="indent">
-              <checkbox_tmp id="chk_restoreOnDemand" label="&restoreOnDemand.label;, &moreThan.label;"
+              <checkbox_tmp id="chk_restoreOnDemand" label="&restoreOnDemand.label; &moreThan.label;"
                             preference="pref_restoreOnDemand" control="restoreOnDemand"
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
