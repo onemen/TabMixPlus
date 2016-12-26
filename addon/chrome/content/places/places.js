@@ -367,6 +367,19 @@ var TMP_Places = {
     let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
                                          "restoreHistoryPrecursor";
     TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
+    // set icon on pending tabs
+    const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
+        .filter(({tab, url}) => tab.hasAttribute("pending") && url != "about:blank");
+    for (let data of pendingData) {
+      const {tab, url} = data;
+      const entryURI = BrowserUtils.makeURI(url, null, null);
+      PlacesUtils.favicons.getFaviconURLForPage(entryURI, uri => {
+        // skip tab that already restored
+        if (tab.hasAttribute("pending") && uri) {
+          gBrowser.setIcon(tab, uri);
+        }
+      });
+    }
   },
 
   loadTabs: function(tabs, tabsData, ids) {
