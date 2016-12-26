@@ -69,7 +69,7 @@ this.SyncedTabs = {
       configurable: true
     });
 
-    if (TabmixSvc.version(530)) {
+    if (TabmixSvc.version(510)) {
       Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onClick")._replace(
         'this.props.onOpenTabs(urls, where);',
         `if (/^tab/.test(where)) {
@@ -77,19 +77,6 @@ this.SyncedTabs = {
           where = where == 'tab' ^ this.tabmix_inBackground ? "tab" : "tabshifted";
         }
         $&`
-      ).toCode();
-    } else if (TabmixSvc.version(510)) {
-      Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onClick")._replace(
-        'this.props.onOpenTabs(urls, where, {});',
-        `if (/^tab/.test(where)) {
-            let window = getChromeWindow(this._window);
-            let whereFirst = window.Tabmix.whereToOpen(true).inNew ? where : "current";
-            // make sure other tabs are inBackground
-            where = "tab";
-            let inBackground = this.tabmix_inBackground;
-            this.props.onOpenTab(urls.shift(), whereFirst, {inBackground});
-          }
-          this.props.onOpenTabs(urls, where, {inBackground: true})`
       ).toCode();
     }
 
