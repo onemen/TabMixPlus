@@ -184,46 +184,59 @@ var TMP_tabDNDObserver = {
     // to get a full-resolution drag image for use on HiDPI displays.
     let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
     let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = tabBar._dndCanvas ? tabBar._dndCanvas :
-                 document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-    canvas.mozOpaque = true;
+    let canvas = tabBar._dndCanvas;
+    if (!canvas) {
+      tabBar._dndCanvas = canvas =
+          document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.mozOpaque = true;
+    }
+
     canvas.width = 160 * scale;
     canvas.height = 90 * scale;
-    let toDrag;
+    let toDrag = canvas;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
     if (gMultiProcessBrowser) {
       let context = canvas.getContext('2d');
       context.fillStyle = "white";
       context.fillRect(0, 0, canvas.width, canvas.height);
-      // Create a panel to use it in setDragImage
-      // which will tell xul to render a panel that follows
-      // the pointer while a dnd session is on.
-      if (!tabBar._dndPanel) {
-        tabBar._dndCanvas = canvas;
-        tabBar._dndPanel = document.createElement("panel");
-        tabBar._dndPanel.setAttribute("type", "drag");
-        tabBar._dndPanel.className = "dragfeedback-tab";
-        let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-        wrapper.style.width = "160px";
-        wrapper.style.height = "90px";
-        wrapper.appendChild(canvas);
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        tabBar._dndPanel.appendChild(wrapper);
-        document.documentElement.appendChild(tabBar._dndPanel);
+
+      let captureListener;
+      let platform = gBrowser.AppConstants.platform;
+      // On Windows and Mac we can update the drag image during a drag
+      // using updateDragImage. On Linux, we can use a panel.
+      if (Tabmix.isVersion(530) && (platform == "win" || platform == "macosx")) {
+        captureListener = function() {
+          dt.updateDragImage(canvas, dragImageOffsetX, dragImageOffsetY);
+        };
+      } else {
+        // Create a panel to use it in setDragImage
+        // which will tell xul to render a panel that follows
+        // the pointer while a dnd session is on.
+        if (!tabBar._dndPanel) {
+          tabBar._dndCanvas = canvas;
+          tabBar._dndPanel = document.createElement("panel");
+          tabBar._dndPanel.className = "dragfeedback-tab";
+          tabBar._dndPanel.setAttribute("type", "drag");
+          let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
+          wrapper.style.width = "160px";
+          wrapper.style.height = "90px";
+          wrapper.appendChild(canvas);
+          tabBar._dndPanel.appendChild(wrapper);
+          document.documentElement.appendChild(tabBar._dndPanel);
+        }
+        toDrag = tabBar._dndPanel;
       }
       // PageThumb is async with e10s but that's fine
-      // since we can update the panel during the dnd.
-      PageThumbs.captureToCanvas(browser, canvas);
-      toDrag = tabBar._dndPanel;
+      // since we can update the image during the dnd.
+      PageThumbs.captureToCanvas(browser, canvas, captureListener);
     } else {
       // For the non e10s case we can just use PageThumbs
-      // sync. No need for xul magic, the native dnd will
-      // be fine, so let's use the canvas for setDragImage.
+      // sync, so let's use the canvas for setDragImage.
       let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
-      toDrag = canvas;
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
