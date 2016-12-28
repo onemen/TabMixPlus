@@ -263,6 +263,18 @@ var TMP_Places = {
       }
     }
 
+    // load tabs progressively:
+    // we use two preferences to control this feature:
+    // load_tabs_progressively - type int:
+    // when the number of tabs to load is more than the number in the preference
+    // we use SessionStore to restore each tab otherwise we use browser.loadURI.
+    //
+    // restore_on_demand - type int:
+    // when the number of tabs to load exceed the number in the preference we
+    // instruct SessionStore to use restore on demand for the current set of tabs.
+    const tabCount = this.restoringTabs.length + bmGroup.length;
+    const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
+
     var tabToSelect = null;
     var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
                    gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
@@ -273,6 +285,13 @@ var TMP_Places = {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
         aTab = reuseTabs[i];
+        if (!loadProgressively) {
+          const browser = aTab.linkedBrowser;
+          try {
+            browser.userTypedValue = url;
+            browser.loadURI(url);
+          } catch (ex) { }
+        }
         this.resetRestoreState(aTab);
         aTab.collapsed = false;
         // reset visited & tabmix_selectedID attribute
@@ -282,15 +301,17 @@ var TMP_Places = {
         } else
           aTab.setAttribute("reloadcurrent", true);
       } else {
-        aTab = gBrowser.addTab("about:blank", {
+        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, {
           skipAnimation: multiple,
           dontMove: true,
-          forceNotRemote: true,
+          forceNotRemote: loadProgressively,
         });
       }
       this.setTabTitle(aTab, url, bmIds[i]);
-      tabs.push(aTab);
-      tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
+      if (loadProgressively) {
+        tabs.push(aTab);
+        tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
+      }
 
       if (!tabToSelect)
         tabToSelect = aTab;
@@ -327,20 +348,8 @@ var TMP_Places = {
       gBrowser.removeTab(removeTabs.pop());
     }
 
-    // we use two preferences to control this feature:
-    // load_tabs_progressively - type int:
-    // When the number of tabs to load is more than the number in the preference
-    // we use SessionStore to restore each tab otherwise we use browser.loadURI.
-    //
-    // restore_on_demand - type int:
-    // when the number of tabs to load exceed the number in the preference we
-    // instruct SessionStore to use restore on demand for the current set of tabs.
-    const tabCount = this.restoringTabs.length + tabs.length;
-    const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
     if (loadProgressively) {
       this.restoreTabs(tabs, tabsData, this.bookmarksOnDemand || restoreOnDemand);
-    } else {
-      this.loadTabs(tabs, tabsData, bmIds);
     }
   },
 
@@ -379,19 +388,6 @@ var TMP_Places = {
           gBrowser.setIcon(tab, uri);
         }
       });
-    }
-  },
-
-  loadTabs: function(tabs, tabsData, ids) {
-    for (let tab of tabs) {
-      const url = tabsData.shift().entries[0].url;
-      const browser = tab.linkedBrowser;
-      try {
-        browser.stop();
-        browser.userTypedValue = url;
-        browser.loadURI(url);
-        this.setTabTitle(tab, url, ids.shift());
-      } catch (ex) { }
     }
   },
 
