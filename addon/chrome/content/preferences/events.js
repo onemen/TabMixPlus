@@ -50,7 +50,6 @@ var gEventsPane = {
     }
 
     this.alignTabOpeningBoxes();
-    this.loadProgressively.init();
 
     gPrefWindow.initPane("paneEvents");
   },
@@ -144,60 +143,48 @@ var gEventsPane = {
   },
 
   loadProgressively: {
-    init() {
-      this._init("pref_loadProgressively");
-      this._init("pref_restoreOnDemand");
-      this.syncToPref();
-      this.setOnDemandState();
-    },
-
-    _init(id) {
-      const preference = $(id);
+    syncToCheckBox: function(item) {
+      let preference = $(item.getAttribute("preference"));
       if (preference.value == 0) {
         preference.value = 1;
       }
       if (preference.hasAttribute("notChecked")) {
         preference.setAttribute("notChecked", -Math.abs(preference.value));
       }
-    },
-
-    syncToCheckBox: function(item) {
-      let preference = $(item.getAttribute("preference"));
+      this.setOnDemandDisabledState();
       return preference.value > -1;
     },
 
     syncFromCheckBox: function(item) {
       let preference = $(item.getAttribute("preference"));
       let control = $(item.getAttribute("control"));
-      if (preference.hasAttribute("notChecked")) {
-        preference.setAttribute("notChecked", -Math.abs(preference.value));
-      }
       control.disabled = !item.checked;
-      this.setOnDemandState();
       return -preference.value;
     },
 
     syncFromPref(item) {
       const preference = $(item.getAttribute("preference"));
-      return Math.abs(preference.value);
+      const prefValue = Math.abs(preference.value);
+      this.setOnDemandMinValue(item, prefValue);
+      return prefValue;
     },
 
-    syncToPref() {
+    setOnDemandMinValue(item, prefValue) {
+      if (item.id != "loadProgressively") {
+        return;
+      }
       const onDemand = $("restoreOnDemand");
-      const item = $("loadProgressively");
       onDemand.min = item.valueNumber;
       onDemand._enableDisableButtons();
-      const preference = $("pref_loadProgressively");
       const restoreOnDemand = $("pref_restoreOnDemand");
-      if (Math.abs(preference.value) > Math.abs(restoreOnDemand.value)) {
-        const val = Math.abs(preference.value);
-        restoreOnDemand.value = $("chk_restoreOnDemand").checked ? val : -val;
+      if (prefValue > Math.abs(restoreOnDemand.value)) {
+        restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;
       }
     },
 
-    setOnDemandState() {
-      const disabled = !$("chk_loadProgressively").checked ||
-                       !$("chk_restoreOnDemand").checked;
+    setOnDemandDisabledState() {
+      const disabled = $("pref_loadProgressively").value < 0 ||
+                       $("pref_restoreOnDemand").value < 0;
       gPrefWindow.setDisabled("restoreOnDemand", disabled);
     },
   },

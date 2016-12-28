@@ -179,7 +179,6 @@
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
               <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
-                       onsynctopreference="return gEventsPane.loadProgressively.syncToPref(this);"
                        observes="obs_loadProgressively"
                        type="number" min="1" maxwidth="36"/>
               <label value="&tabs.label;"/>
