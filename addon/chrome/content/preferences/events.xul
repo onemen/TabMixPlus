@@ -31,6 +31,7 @@
       <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"/>
       <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
+      <preference id="pref_moveSwitchToTabNext" name="extensions.tabmix.moveSwitchToTabNext"  type="bool"/>
       <preference id="pref_loadProgressively"   name="extensions.tabmix.load_tabs_progressively"
                   type="int" notChecked=""/>
       <preference id="pref_restoreOnDemand"     name="extensions.tabmix.restore_on_demand"    type="int"/>
@@ -168,6 +169,8 @@
             <separator class="groove"/>
             <checkbox_tmp id="openDuplicateNext" label="&openDuplicateNext.label;"
                       preference="pref_openDuplicateNext"/>
+            <checkbox_tmp id="moveSwitchToTabNext" label="&moveSwitchToTabNext.label;"
+                      preference="pref_moveSwitchToTabNext"/>
           </groupbox>
           <groupbox flex="1">
             <!-- Load Bookmarks/History progressively -->

@@ -1279,7 +1279,8 @@ Tabmix.navToolbox = {
   handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
     let action = this._parseActionUrl(this.value) || {};
-    if (action.type == "switchtab" && this.hasAttribute("actiontype")) {
+    if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
+        action.type == "switchtab" && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
       prevTabPos = prevTab._tPos;
     }
@@ -1309,7 +1310,7 @@ Tabmix.navToolbox = {
     Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
 
     // move the tab that was switched to after the previously selected tab
-    if (prevTabPos) {
+    if (typeof prevTabPos == "number") {
       let pos = prevTabPos + Number(gBrowser.selectedTab._tPos > prevTabPos) -
           Number(!prevTab || !prevTab.parentNode);
       gBrowser.moveTabTo(gBrowser.selectedTab, pos);

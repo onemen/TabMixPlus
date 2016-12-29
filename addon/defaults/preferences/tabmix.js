@@ -41,6 +41,7 @@ pref("extensions.tabmix.openNewTabNext", false);
 pref("extensions.tabmix.openTabNext", false);
 pref("extensions.tabmix.openTabNextInverse", true);
 pref("extensions.tabmix.openDuplicateNext", true);
+pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);
 pref("extensions.tabmix.protectedtabs.warnOnClose", true);
 /*
