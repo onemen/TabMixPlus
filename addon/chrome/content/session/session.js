@@ -176,6 +176,8 @@ TabmixSessionData = {
       } catch (ex) {}
     }
 
+    tabProperties += TMP_extensionsCompatibility.treeStyleTab.getProperties(aTab);
+
     return tabProperties;
   },
 

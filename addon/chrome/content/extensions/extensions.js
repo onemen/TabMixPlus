@@ -820,4 +820,17 @@ TMP_extensionsCompatibility.treeStyleTab = {
       }, 0);
     }
   },
+
+  getProperties: function(tab) {
+    if (!this.installed) {
+      return "";
+    }
+
+    let props = "TreeStyleTabWindowHelper" in window &&
+        TreeStyleTabWindowHelper.extraProperties || [];
+    props = props.filter(prop => tab.hasAttribute(prop))
+                 .map(prop => `${prop}=${encodeURI(tab.getAttribute(prop))}`)
+                 .join(" ");
+    return props.length ? ` ${props}` : "";
+  },
 };

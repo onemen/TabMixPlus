@@ -249,7 +249,7 @@
       <parameter name="aEvent"/>
       <parameter name="aOver"/>
       <body><![CDATA[
-        var anonid = aEvent.originalTarget.getAttribute("anonid");
+        var anonid = aEvent.originalTarget && aEvent.originalTarget.getAttribute("anonid");
         if (anonid == "tmp-close-button") {
           this.mOverCloseButton = aOver;
         }

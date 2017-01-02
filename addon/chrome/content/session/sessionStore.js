@@ -943,6 +943,10 @@ var TabmixConvertSession = {
             extData.tabClr = RegExp.$2;
             break;
           default:
+            // treestyletab data
+            if (RegExp.$1.startsWith("treestyletab-")) {
+              extData[RegExp.$1] = RegExp.$2;
+            }
             tabData.attributes[RegExp.$1] = RegExp.$2;
         }
       });
