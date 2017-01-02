@@ -3219,7 +3219,7 @@ TabmixSessionManager = {
          in the session.
     */
     var cTab = gBrowser.mCurrentTab;
-    if (!winData.tabs || winData.tabs.length == 0) {
+    if (!winData.tabs || winData.tabs.length === 0) {
       let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
           TabmixSvc.getSMString("sm.restoreError.msg1");
       let title = TabmixSvc.getSMString("sm.title");

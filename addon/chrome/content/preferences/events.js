@@ -145,7 +145,7 @@ var gEventsPane = {
   loadProgressively: {
     syncToCheckBox(item) {
       let preference = $(item.getAttribute("preference"));
-      if (preference.value == 0) {
+      if (preference.value === 0) {
         preference.value = 1;
       }
       if (preference.hasAttribute("notChecked")) {

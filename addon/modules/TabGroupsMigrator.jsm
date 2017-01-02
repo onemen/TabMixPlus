@@ -91,7 +91,7 @@ this.TabmixGroupsMigrator = {
         return;
       }
 
-      if (bookmark && index == 0) {
+      if (bookmark && index === 0) {
         bookmarkGroups(session);
       }
 
