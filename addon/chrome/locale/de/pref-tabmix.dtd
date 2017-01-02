@@ -56,9 +56,10 @@
 <!ENTITY openTabNextInverse.label "Reihenfolge beim Öffnen umkehren">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Neuen Tab öffnen neben dem zuletzt vom aktuellen Tab aus geöffneten Tab (solange dieser der zuletzt aktive ist)">
-<!ENTITY loadTabsProgressively.label "Tabs nach und nach laden">
-<!ENTITY restoreOnDemand.label "Tabs erst nach Auswahl laden">
-<!ENTITY moreThan.label "wenn mehr als ein Tab geöffnet wird">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Progressives laden von Tabs">
+<!ENTITY restoreOnDemand.label "Tabs erst nach dem Auswählen laden">
+<!ENTITY moreThan.label "beim Öffnen von mehr als">
 <!ENTITY tabs.label "Tabs">
 <!ENTITY lockTabs.label "Tabs sperren">
 <!ENTITY lockNewTabs.label "Neue Tabs sperren">

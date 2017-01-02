@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Se modifică ordinea deschiderii acestora">
 <!ENTITY openTabNextInverse.tooltip "[a´][`3][`2][`1][b][c] -&gt; [a´][`1][`2][`3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Se deschide nouă filă alături de ultima filă deschisă din fila curentă (dacă aceasta a fost ultima selectată):">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Se încarcă filele în mod progresiv">
 <!ENTITY restoreOnDemand.label "Nu se încarcă filele dacă nu au fost selectate">
 <!ENTITY moreThan.label "când se deschid mai mult de">

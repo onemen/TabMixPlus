@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Cambiar orden de apertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir nueva pestaña junto a la última abierta desde la pestaña actual (desde que se seleccionó por última vez)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Cargar pestañas progresivamente">
 <!ENTITY restoreOnDemand.label "No cargar pestañas antes de seleccionarlas">
 <!ENTITY moreThan.label "cuando abra más de">

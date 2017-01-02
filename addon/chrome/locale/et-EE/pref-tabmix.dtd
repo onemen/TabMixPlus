@@ -56,10 +56,11 @@
 <!ENTITY openTabNextInverse.label "Muuda avanemise järjekorda">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Ava uus kaart praegusest kaardist viimati avatud kaardi kõrval (kuna seda valiti viimasena)">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
-<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Laadi kaardid järk-järgult">
+<!ENTITY restoreOnDemand.label "Ära laadi kaarte enne nende valimist">
+<!ENTITY moreThan.label "kui avan rohkem kui">
+<!ENTITY tabs.label "kaarti">
 <!ENTITY lockTabs.label "Lukusta kaardid">
 <!ENTITY lockNewTabs.label "Lukusta uued kaardid">
 <!ENTITY lockAppTabs.label "Lukusta püsikaardid">

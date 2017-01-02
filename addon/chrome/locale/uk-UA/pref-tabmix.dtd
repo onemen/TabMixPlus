@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Змінити порядок відкриття">
 <!ENTITY openTabNextInverse.tooltip "[а][3][2][1][б][в] -&gt; [а][1][2][3][б][в]">
 <!ENTITY openTabNextInverse.tooltip1 "Відкривати нову вкладку відразу за останньою відкритою з поточної (оскільки вона була вибрана останньою)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
 <!ENTITY moreThan.label "when I open more than">

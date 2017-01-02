@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Zmień kolejność otwierania">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otwieraj nową kartę za ostatnio otwartą kartą z aktywnej karty">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Wczytuj karty sukcesywnie">
 <!ENTITY restoreOnDemand.label "Nie wczytuj kart przed wybraniem">
 <!ENTITY moreThan.label "gdy jest otwierane więcej niż">

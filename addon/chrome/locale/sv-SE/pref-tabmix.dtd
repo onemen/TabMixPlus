@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Ändra öppningsordning">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Öppna ny flik intill den senaste fliken som öppnades från nuvarande flik (då den var senast markerad)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Läs in flikar progressivt">
 <!ENTITY restoreOnDemand.label "Läs inte in flikar förrän de väljs">
 <!ENTITY moreThan.label "när jag öppnar fler än">

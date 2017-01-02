@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Промяна на поредността на отваряне">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Отваряне на нов подпрозорец непосредствено до последния подпрозорец, отворен от текущия подпрозорец">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
 <!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
 <!ENTITY moreThan.label "при отваряне на повече от">

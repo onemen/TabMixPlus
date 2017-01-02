@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "更改标签页打开次序">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
 <!ENTITY moreThan.label "when I open more than">

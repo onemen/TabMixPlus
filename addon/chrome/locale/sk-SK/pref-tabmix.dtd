@@ -56,10 +56,11 @@
 <!ENTITY openTabNextInverse.label "Zmeniť poradie otvárania">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otvoriť ďalšiu kartu vedľa naposledy otvorenej z aktuálnej karty (odvtedy, čo bola naposledy vybratá)">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
-<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Načítať karty progresívne">
+<!ENTITY restoreOnDemand.label "Nenačítať karty pokiaľ nie sú vybraté">
+<!ENTITY moreThan.label "ak otvorým viac ako">
+<!ENTITY tabs.label "karty">
 <!ENTITY lockTabs.label "Zamknúť karty">
 <!ENTITY lockNewTabs.label "Zamknúť nové karty">
 <!ENTITY lockAppTabs.label "Zamknúť karty aplikácie">
@@ -81,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Kontextová ponuka vyhľadávania pre">
 <!ENTITY selectTabBH.label "Záložky/História">
 <!ENTITY duplicateTab.label "Duplikovať kartu">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "Kliknutie prostredným tlačidlom alebo Ctrl-kliknutie inverzné zameranie:">
 <!ENTITY warning.caption.label "Upozornenie">
 <!ENTITY warnOnCloseProtected.label "Upozorniť pri zatváraní okna s chránenými kartami">
 <!ENTITY warnOnCloseWindow.label "Upozorniť pri zatváraní okna s viacerými kartami">
@@ -182,7 +183,7 @@
 <!ENTITY widthTo.label "až">
 <!ENTITY widthPixels.label "pixelov">
 <!ENTITY onLeftDisabled.label "Nepridať tlačidlo naľavo s aktuálnou témou">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Nemôžete tlačidlo umiestniť na ľavej strane pri nainštalovaní treeStyleTab">
 <!ENTITY flexTabs.label "Karty sú široké podľa svojho obsahu">
 <!ENTITY bookastitle.label "Použiť názov záložky ako názov karty">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->

@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "열리는 순서 바꾸기">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "새탭을 현재 탭으로부터 마지막으로 열렸던 탭 다음에 엽니다.">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
 <!ENTITY moreThan.label "when I open more than">

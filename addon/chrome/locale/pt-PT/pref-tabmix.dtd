@@ -56,6 +56,7 @@
 <!ENTITY openTabNextInverse.label "Alterar ordem de abertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir separador ao pé do último separador aberto (desde a última selecção)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
 <!ENTITY moreThan.label "when I open more than">
