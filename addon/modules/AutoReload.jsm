@@ -10,11 +10,11 @@ Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 var _setItem = function() {};
 
 this.AutoReload = {
-  init: function() {
+  init() {
     _setItem = TabmixSvc.topWin().Tabmix.setItem;
   },
 
-  initTab: function(aTab) {
+  initTab(aTab) {
     aTab.autoReloadEnabled = false;
     aTab.removeAttribute("_reload");
     aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
@@ -25,7 +25,7 @@ this.AutoReload = {
  /**
   * Popup command
   */
-  addClonePopup: function(aPopup, aTab) {
+  addClonePopup(aPopup, aTab) {
     var win = aTab.ownerDocument.defaultView;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
@@ -41,7 +41,7 @@ this.AutoReload = {
     aPopup.inited = true;
   },
 
-  onPopupShowing: function(aPopup, aTab) {
+  onPopupShowing(aPopup, aTab) {
     var menuItems = aPopup.childNodes;
     aPopup._tab = null;
     if (aTab.localName != "tab")
@@ -74,7 +74,7 @@ this.AutoReload = {
     }
   },
 
-  updateCustomList: function(aPopup) {
+  updateCustomList(aPopup) {
     let start = aPopup.getElementsByAttribute("anonid", "start_custom_list")[0];
     let end = aPopup.getElementsByAttribute("anonid", "end_custom_list")[0];
     while (start.nextSibling && start.nextSibling != end)
@@ -113,7 +113,7 @@ this.AutoReload = {
     });
   },
 
-  setLabel: function(aItem, aSeconds) {
+  setLabel(aItem, aSeconds) {
     var timeLabel = aItem.hasAttribute("_label") ? aItem.getAttribute("_label") + " " : "";
     if (aSeconds > 59) {
       let minutes = parseInt(aSeconds / 60);
@@ -127,7 +127,7 @@ this.AutoReload = {
     aItem.setAttribute("label", timeLabel);
   },
 
-  setTime: function(aTab, aReloadTime) {
+  setTime(aTab, aReloadTime) {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     aTab.autoReloadTime = aReloadTime;
@@ -135,7 +135,7 @@ this.AutoReload = {
     this._enable(aTab);
   },
 
-  setCustomTime: function(aTab) {
+  setCustomTime(aTab) {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     let result = {ok: false};
@@ -147,7 +147,7 @@ this.AutoReload = {
     }
   },
 
-  enableAllTabs: function(aTabBrowser) {
+  enableAllTabs(aTabBrowser) {
     var tabs = aTabBrowser.visibleTabs;
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
@@ -159,7 +159,7 @@ this.AutoReload = {
     }
   },
 
-  disableAllTabs: function(aTabBrowser) {
+  disableAllTabs(aTabBrowser) {
     var tabs = aTabBrowser.visibleTabs;
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
@@ -171,7 +171,7 @@ this.AutoReload = {
  /**
   * called from popup and from tabclick options
   */
-  toggle: function(aTab) {
+  toggle(aTab) {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     if (aTab.autoReloadEnabled)
@@ -180,7 +180,7 @@ this.AutoReload = {
       this._enable(aTab);
   },
 
-  _enable: function(aTab) {
+  _enable(aTab) {
     var browser = aTab.linkedBrowser;
     var url = browser.currentURI.spec;
     if (url.match(/^about:/) || url.match(/^(http|https):\/\/mail.google.com/))
@@ -194,7 +194,7 @@ this.AutoReload = {
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
   },
 
-  _disable: function(aTab) {
+  _disable(aTab) {
     aTab.autoReloadEnabled = false;
     _setItem(aTab, "_reload", null);
     aTab.autoReloadURI = null;
@@ -203,7 +203,7 @@ this.AutoReload = {
     this._update(aTab);
   },
 
-  _update: function(aTab, aValue) {
+  _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
     let win = aTab.ownerDocument.defaultView;
     TabmixSvc.saveTabAttributes(aTab, "reload-data");
@@ -214,7 +214,7 @@ this.AutoReload = {
    * we supposed to get here only when using firefox 3
    * keep it just to be on the safe side.
    */
-  _currentTab: function(aTabContainer) {
+  _currentTab(aTabContainer) {
     if (aTabContainer && aTabContainer.localName == "tabs")
       return aTabContainer.selectedItem;
 
@@ -225,7 +225,7 @@ this.AutoReload = {
   *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
   *  for pending tabs
   */
-  onTabReloaded: function(aTab, aBrowser) {
+  onTabReloaded(aTab, aBrowser) {
     var win = aTab.ownerDocument.defaultView;
     if (aTab.autoReloadTimerID)
       _clearTimeout(aTab, win);
@@ -254,7 +254,7 @@ this.AutoReload = {
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
   },
 
-  confirm: function(window, tab, isRemote) {
+  confirm(window, tab, isRemote) {
     if (tab.postDataAcceptedByUser)
       return true;
     let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
@@ -270,7 +270,7 @@ this.AutoReload = {
     return resultOK;
   },
 
-  reloadRemoteTab: function(browser, data) {
+  reloadRemoteTab(browser, data) {
     var window = browser.ownerDocument.defaultView;
     let tab = window.gBrowser.getTabForBrowser(browser);
     // RemoteWebNavigation accepting postdata or headers only from Firefox 42.

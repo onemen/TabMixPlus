@@ -2,7 +2,7 @@
 "use strict";
 
 var gEventsPane = {
-  init: function() {
+  init() {
     // for locales with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").boxObject.width;
@@ -56,7 +56,7 @@ var gEventsPane = {
 
   // align Tab opening group boxes
   // add setWidth attribute to columns that need to be aligned
-  alignTabOpeningBoxes: function() {
+  alignTabOpeningBoxes() {
     const widths = {};
     const rows = $("tabopening").querySelectorAll("hbox");
     function updateGrid(fn) {
@@ -79,7 +79,7 @@ var gEventsPane = {
     });
   },
 
-  disableShowTabList: function() {
+  disableShowTabList() {
     var ctrlTabPv = $("pref_ctrltab.tabPreviews");
     var disableShowTabList = $("pref_ctrltab").value &&
                              ctrlTabPv && ctrlTabPv.value;
@@ -88,7 +88,7 @@ var gEventsPane = {
       gPrefWindow.setDisabled("respondToMouse", disableShowTabList);
   },
 
-  disableReplaceLastTabWith: function() {
+  disableReplaceLastTabWith() {
     // we disable replaceLastTabWith if one of this test is true
     // browser.tabs.closeWindowWithLastTab = true OR
     // extensions.tabmix.keepLastTab = true
@@ -97,7 +97,7 @@ var gEventsPane = {
     this.newTabUrl($("pref_replaceLastTabWith"), disable, !disable);
   },
 
-  newTabUrl: function(preference, disable, setFocus) {
+  newTabUrl(preference, disable, setFocus) {
     var showTabUrlBox = preference.value == 4;
     var item = $(preference.id.replace("pref_", ""));
     var idnum = item.getAttribute("idnum") || "";
@@ -107,7 +107,7 @@ var gEventsPane = {
       $("newTabUrl" + idnum).focus();
   },
 
-  syncFromNewTabUrlPref: function(item) {
+  syncFromNewTabUrlPref(item) {
     var preference = $(item.getAttribute("preference"));
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
@@ -117,7 +117,7 @@ var gEventsPane = {
     return this.syncToNewTabUrlPref(value, TabmixSvc.aboutBlank);
   },
 
-  syncToNewTabUrlPref: function(value, def = TabmixSvc.aboutNewtab) {
+  syncToNewTabUrlPref(value, def = TabmixSvc.aboutNewtab) {
     // If the value is "", use about:newtab or about:blank.
     if (value === "") {
       return def;
@@ -127,14 +127,14 @@ var gEventsPane = {
     return undefined;
   },
 
-  onNewTabKeyDown: function(event) {
+  onNewTabKeyDown(event) {
     // block spaces from the user to go to about:newtab preference
     if (event.keyCode == 32) {
       event.preventDefault();
     }
   },
 
-  editSlideShowKey: function() {
+  editSlideShowKey() {
     document.documentElement.showPane($("paneMenu"));
     if (typeof gMenuPane == "object")
       gMenuPane.editSlideShowKey();
@@ -143,7 +143,7 @@ var gEventsPane = {
   },
 
   loadProgressively: {
-    syncToCheckBox: function(item) {
+    syncToCheckBox(item) {
       let preference = $(item.getAttribute("preference"));
       if (preference.value == 0) {
         preference.value = 1;
@@ -155,7 +155,7 @@ var gEventsPane = {
       return preference.value > -1;
     },
 
-    syncFromCheckBox: function(item) {
+    syncFromCheckBox(item) {
       let preference = $(item.getAttribute("preference"));
       let control = $(item.getAttribute("control"));
       control.disabled = !item.checked;

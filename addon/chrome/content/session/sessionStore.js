@@ -35,13 +35,13 @@ var TMP_SessionStore = {
     return aData.entries[activeIndex] || {};
   },
 
-  getTitleFromTabState: function(aTab) {
+  getTitleFromTabState(aTab) {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
     return this.getActiveEntryData(tabData).title || null;
   },
 
   // check if pending tab has no history or is about:blank
-  isBlankPendingTab: function(aTab) {
+  isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending"))
       return false;
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
@@ -186,7 +186,7 @@ var TMP_SessionStore = {
     }
   },
 
-  isSessionStoreEnabled: function() {
+  isSessionStoreEnabled() {
     return Services.prefs.getIntPref("browser.startup.page") == 3 ||
       Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
   },
@@ -195,7 +195,7 @@ var TMP_SessionStore = {
   // we call this only one time on window load
   // and store the value in Tabmix.isWindowAfterSessionRestore
   // we call this from onContentLoaded before nsSessionStore run its onLoad
-  setAfterSessionRestored: function() {
+  setAfterSessionRestored() {
     let afterSessionRestore;
     if (!Tabmix.isFirstWindow)
       afterSessionRestore = false;
@@ -232,7 +232,7 @@ var TMP_SessionStore = {
     }
   },
 
-  setSessionRestore: function(aEnable) {
+  setSessionRestore(aEnable) {
     Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
     Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
     if (aEnable)
@@ -295,7 +295,7 @@ var TMP_ClosedTabs = {
   },
 
   // make btn_undoclose single-functionality or dual-functionality
-  setButtonType: function(menuOnly) {
+  setButtonType(menuOnly) {
     var buttonType = menuOnly ? "menu" : "menu-button";
     if (this.buttonBroadcaster.getAttribute("type") != buttonType)
       this.buttonBroadcaster.setAttribute("type", buttonType);
@@ -417,7 +417,7 @@ var TMP_ClosedTabs = {
     return true;
   },
 
-  addMenuItem: function(popup, id, label, val, keyId) {
+  addMenuItem(popup, id, label, val, keyId) {
     const m = popup.appendChild(document.createElement("menuitem"));
     m.setAttribute("id", id);
     m.setAttribute("label", label);
@@ -431,7 +431,7 @@ var TMP_ClosedTabs = {
     return m;
   },
 
-  handleEvent: function(event) {
+  handleEvent(event) {
     switch (event.type) {
       case "click":
         this.checkForMiddleClick(event);
@@ -442,7 +442,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  restoreCommand: function(aEvent) {
+  restoreCommand(aEvent) {
     const item = aEvent.originalTarget;
     const index = Number(item.getAttribute("value"));
     if (index == -3) {
@@ -465,7 +465,7 @@ var TMP_ClosedTabs = {
     this.doCommand("restoreTab", where, aEvent.originalTarget, deleteItem);
   },
 
-  contextMenuOnPopupShowing: function(popup) {
+  contextMenuOnPopupShowing(popup) {
     const val = this.keepMenuOpen ? "single" : "auto";
     Array.prototype.forEach.call(popup.childNodes, item => {
       item.setAttribute("closemenu", val);
@@ -473,14 +473,14 @@ var TMP_ClosedTabs = {
     return popup.triggerNode.value >= 0;
   },
 
-  contextMenuOnCommand: function(event) {
+  contextMenuOnCommand(event) {
     const menuItem = event.originalTarget;
     const [command, where] = menuItem.getAttribute("commandData").split(",");
     const popup = menuItem.parentNode;
     this.doCommand(command, where, popup.triggerNode);
   },
 
-  doCommand: function(command, where, item, keepMenuOpen) {
+  doCommand(command, where, item, keepMenuOpen) {
     const popup = item.parentNode;
     const index = Number(item.getAttribute("value"));
     this[command](where || index, index);
@@ -533,7 +533,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  removeAllClosedTabs: function() {
+  removeAllClosedTabs() {
     // update our session data
     var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
     if (updateRDF)
@@ -597,7 +597,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  SSS_undoCloseTab: function(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
+  SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
     if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
       return null;
 
@@ -630,7 +630,7 @@ var TMP_ClosedTabs = {
         gBrowser.addTab("about:blank", {
           skipAnimation: tabToRemove || skipAnimation,
           dontMove: true,
-          userContextId: userContextId,
+          userContextId,
         });
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
@@ -767,7 +767,7 @@ var TabmixConvertSession = {
     return {
       windows: _windows,
       selectedWindow: _windows.indexOf(selected) + 1,
-      tabsCount: tabsCount,
+      tabsCount,
     };
   },
 
@@ -874,7 +874,7 @@ var TabmixConvertSession = {
       // until version 0.4.1.5 textZoom was included in scroll data
       scroll = scroll.split(",").splice(0, 2).join(",");
       if (scroll != "0,0") {
-        tabData.scroll = {scroll: scroll};
+        tabData.scroll = {scroll};
       }
     }
     tabData.userContextId = TabmixSessionManager.getIntValue(rdfNodeTab, "userContextId", 0);

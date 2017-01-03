@@ -54,7 +54,7 @@ var tablib = { // eslint-disable-line
     };
   },
 
-  _loadURIWithFlags: function(browser, uri, params) {
+  _loadURIWithFlags(browser, uri, params) {
     if (tablib.allowLoad(browser, uri)) {
       return null;
     }
@@ -79,7 +79,7 @@ var tablib = { // eslint-disable-line
     return gBrowser.loadOneTab(uri, params);
   },
 
-  allowLoad: function(browser, uri) {
+  allowLoad(browser, uri) {
     var tab = gBrowser.getTabForBrowser(browser);
     if (!tab) {
       browser.tabmix_allowLoad = true;
@@ -130,7 +130,7 @@ var tablib = { // eslint-disable-line
    *
    * current code only check if the caller is in the exception list
    */
-  isException: function(loadInCurrent) {
+  isException(loadInCurrent) {
     if (loadInCurrent)
       return loadInCurrent;
 
@@ -172,7 +172,7 @@ var tablib = { // eslint-disable-line
           (typeof params != "object" || params instanceof Ci.nsIURI)) {
         referrerURI = params;
         params = {
-          referrerURI: referrerURI,
+          referrerURI,
           charset: args[2],
           postData: args[3],
           ownerTab: args[4],
@@ -921,7 +921,7 @@ var tablib = { // eslint-disable-line
     Tabmix.setNewFunction(window, "URLBarSetURI", _URLBarSetURI);
   },
 
-  populateUndoWindowSubmenu: function(undoPopup) {
+  populateUndoWindowSubmenu(undoPopup) {
     /* eslint-disable tabmix/balanced-listeners */
     if (!undoPopup.hasAttribute("context"))
       undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
@@ -1921,7 +1921,7 @@ var tablib = { // eslint-disable-line
     return canClose;
   },
 
-  whereToOpenDrop: function(aEvent, aUri) {
+  whereToOpenDrop(aEvent, aUri) {
     if (!aEvent) {
       return "current";
     }
@@ -1957,7 +1957,7 @@ var tablib = { // eslint-disable-line
       gURLBar.focus();
   },
 
-  reloadTabs: function(tabs, skipTab) {
+  reloadTabs(tabs, skipTab) {
     let l = tabs.length;
     for (let i = 0; i < l; i++) {
       let tab = tabs[i];

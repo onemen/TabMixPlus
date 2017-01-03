@@ -96,7 +96,7 @@ var TabmixTabClickOptions = {
       this.clickAction(prefName, clickOutTabs, tab, aEvent);
   },
 
-  clearTabFlipTimeOut: function() {
+  clearTabFlipTimeOut() {
     clearTimeout(this._tabFlipTimeOut);
     this._tabFlipTimeOut = null;
   },
@@ -153,7 +153,7 @@ var TabmixTabClickOptions = {
       case 2 :
         if (aTab && aTab.parentNode) {
           let byMouse = Tabmix.isVersion(520) ? event && event.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE : true;
-          gBrowser.removeTab(aTab, {animate: true, byMouse: byMouse});
+          gBrowser.removeTab(aTab, {animate: true, byMouse});
         }
         break;
       case 3 :
@@ -288,7 +288,7 @@ var TabmixTabClickOptions = {
     return true;
   },
 
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     let eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("TabsToolbar")[eventListener]("dblclick", this.blockDblclick, false);
   },
@@ -297,7 +297,7 @@ var TabmixTabClickOptions = {
    * block dblclick on TabsToolbar when tabbar.dblclick_changesize is false
    * and tabbar.click_dragwindow is true
    */
-  blockDblclick: function(aEvent) {
+  blockDblclick(aEvent) {
     if (aEvent.button !== 0 || aEvent.target.localName == "tabs" ||
         Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
         !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
@@ -367,7 +367,7 @@ var TabmixContext = {
     sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
   },
 
-  updateTabbarContextMenu: function(show) {
+  updateTabbarContextMenu(show) {
     let tabBar = gBrowser.tabContainer;
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
@@ -377,14 +377,14 @@ var TabmixContext = {
     }
   },
 
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
     gBrowser.tabContextMenu[eventListener]("popupshowing", this, false);
     gBrowser.tabContextMenu[eventListener]("popupshown", this, false);
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     let id = aEvent.target.id;
     switch (aEvent.type) {
       case "popupshowing":

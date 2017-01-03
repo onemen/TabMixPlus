@@ -19,7 +19,7 @@ this.SingleWindowModeUtils = {
   *                  window that is not the same as aExclude, and is
   *                  additionally not a popup window.
   */
-  getBrowserWindow: function(aExclude) {
+  getBrowserWindow(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
     var isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
@@ -39,7 +39,7 @@ this.SingleWindowModeUtils = {
     return null;
   },
 
-  newWindow: function(aWindow) {
+  newWindow(aWindow) {
     if (!aWindow.Tabmix.singleWindowMode)
       return false;
 
@@ -84,7 +84,7 @@ this.SingleWindowModeUtils = {
     return true;
   },
 
-  restoreDimensionsAndPosition: function(newWindow, restorePosition) {
+  restoreDimensionsAndPosition(newWindow, restorePosition) {
     const rect = newWindow.__winRect;
     if (typeof rect != "object") {
       return;
@@ -101,7 +101,7 @@ this.SingleWindowModeUtils = {
     delete newWindow.__winRect;
   },
 
-  onLoad: function(newWindow) {
+  onLoad(newWindow) {
     var existingWindow = this.getBrowserWindow(newWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)

@@ -12,7 +12,7 @@ if (typeof Ci == "undefined") {
 }
 
 var TabmixRemoveBlankTab = {
-  initialize: function() {
+  initialize() {
     switch (window.document.documentElement.id) {
       case "unknownContentType":
         // chrome\toolkit\content\mozapps\downloads\unknownContentType.xul
@@ -25,7 +25,7 @@ var TabmixRemoveBlankTab = {
     }
   },
 
-  unknownContentType: function() {
+  unknownContentType() {
     let {win, b} = this.getWindowAndBrowser(dialog.mContext);
     if (win && b) {
       let tab = win.gBrowser.getTabForBrowser(b);
@@ -41,7 +41,7 @@ var TabmixRemoveBlankTab = {
     }
   },
 
-  handlingDialog: function() {
+  handlingDialog() {
     /*
     * from chrome\toolkit\content\mozapps\handling\dialog.js
     * window.arguments[8]:
@@ -63,7 +63,7 @@ var TabmixRemoveBlankTab = {
     }
   },
 
-  getWindowAndBrowser: function(aContext) {
+  getWindowAndBrowser(aContext) {
     let result = {win: null, b: null};
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
@@ -92,7 +92,7 @@ var TabmixRemoveBlankTab = {
     return result;
   },
 
-  removeTab: function(win, tab) {
+  removeTab(win, tab) {
     window.addEventListener("unload", function _unload(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
       if (win && !win.closed) {

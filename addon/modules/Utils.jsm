@@ -30,7 +30,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
   "resource://tabmixplus/AboutNewTab.jsm");
 
 this.TabmixUtils = {
-  initMessageManager: function(window) {
+  initMessageManager(window) {
     let mm = window.getGroupMessageManager("browsers");
     FMM_MESSAGES.forEach(msg => mm.addMessageListener(msg, this));
 
@@ -50,12 +50,12 @@ this.TabmixUtils = {
     }
   },
 
-  deinit: function(window) {
+  deinit(window) {
     let mm = window.getGroupMessageManager("browsers");
     FMM_MESSAGES.forEach(msg => mm.removeMessageListener(msg, this));
   },
 
-  receiveMessage: function(message) {
+  receiveMessage(message) {
     let browser = message.target;
     let win, tab;
     switch (message.name) {
@@ -110,7 +110,7 @@ this.TabmixUtils = {
     return null;
   },
 
-  focusedWindow: function(content) {
+  focusedWindow(content) {
     let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
 
     let focusedWindow = {};
@@ -118,7 +118,7 @@ this.TabmixUtils = {
     return focusedWindow.value;
   },
 
-  makeInputStream: function(aString) {
+  makeInputStream(aString) {
     let stream = Cc["@mozilla.org/io/string-input-stream;1"]
                    .createInstance(Ci.nsISupportsCString);
     stream.data = aString;
@@ -126,7 +126,7 @@ this.TabmixUtils = {
   },
 
   // change current history title
-  updateHistoryTitle: function(history, title) {
+  updateHistoryTitle(history, title) {
     var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
     shEntry.setTitle(title);
   }

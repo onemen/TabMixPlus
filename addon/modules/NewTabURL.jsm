@@ -27,7 +27,7 @@ this.Tabmix_NewTabURL = {
     Ci.nsISupportsWeakReference
   ]),
 
-  init: function() {
+  init() {
     if (!TabmixSvc.version(440)) {
       this.updateNewTabURL = this._updateNewTabURL;
     }
@@ -38,7 +38,7 @@ this.Tabmix_NewTabURL = {
     Services.prefs.addObserver(FIREFOX_PREF, this, true);
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe(aSubject, aTopic, aData) {
     switch (aTopic) {
       case "nsPref:changed":
         if (aData == FIREFOX_PREF)
@@ -48,7 +48,7 @@ this.Tabmix_NewTabURL = {
   },
 
   // for Firefox 41 - 43
-  _updateNewTabURL: function() {
+  _updateNewTabURL() {
     let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
     if (value == ABOUT_NEW_TAB)
       NewTabURL.reset();
@@ -57,7 +57,7 @@ this.Tabmix_NewTabURL = {
   },
 
   // for Firefox 44+
-  updateNewTabURL: function() {
+  updateNewTabURL() {
     let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
     if (value == ABOUT_NEW_TAB) {
       aboutNewTabService.resetNewTabURL();

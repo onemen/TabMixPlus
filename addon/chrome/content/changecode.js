@@ -100,7 +100,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       }
     },
 
-    defineProperty: function(aObj, aName, aCode) {
+    defineProperty(aObj, aName, aCode) {
       if (!this.type)
         throw new Error("Tabmix:\n" + this.fullName + " don't have setter or getter");
 
@@ -137,7 +137,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       Object.defineProperty(obj, fnName, descriptor);
     },
 
-    show: function(aObj, aName) {
+    show(aObj, aName) {
       if (aObj && aName in aObj)
         console.show({obj: aObj, name: aName, fullName: this.fullName});
       else if (typeof this.fullName == "string") {
@@ -146,7 +146,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       }
     },
 
-    isValidToChange: function(aName) {
+    isValidToChange(aName) {
       var notFoundCount = this.notFound.length;
       if (this.needUpdate && !notFoundCount)
         return true;
@@ -168,10 +168,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       return false;
     },
 
-    getCallerData: function(stack) {
+    getCallerData(stack) {
       let caller = (stack.caller || {}).caller || {};
       let {filename, lineNumber, columnNumber, name} = caller;
-      return {filename: filename, lineNumber: lineNumber, columnNumber: columnNumber, fnName: name};
+      return {filename, lineNumber, columnNumber, fnName: name};
     }
   };
 

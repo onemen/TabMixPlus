@@ -2,7 +2,7 @@
 "use strict";
 
 var gMenuPane = {
-  init: function() {
+  init() {
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
@@ -59,7 +59,7 @@ var gMenuPane = {
     gPrefWindow.initPane("paneMenu");
   },
 
-  initializeShortcuts: function() {
+  initializeShortcuts() {
     if (Shortcuts.prefsChangedByTabmix)
       return;
 
@@ -74,7 +74,7 @@ var gMenuPane = {
   },
 
   _slideShow: "",
-  updateShortcuts: function(aShortcuts, aCallBack) {
+  updateShortcuts(aShortcuts, aCallBack) {
     let boxes = Array.prototype.filter.call(aShortcuts.childNodes, aCallBack);
     $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
@@ -83,14 +83,14 @@ var gMenuPane = {
     }
   },
 
-  setSlideShowLabel: function() {
+  setSlideShowLabel() {
     let slideShow = $("slideShow");
     let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
     $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
     gPrefWindow.setDisabled("obs_slideDelay", slideShow.disabled);
   },
 
-  editSlideShowKey: function() {
+  editSlideShowKey() {
     $("menu").selectedIndex = 3;
     let slideShow = $("slideShow");
     let item = $("hide-unused-shortcuts");
@@ -102,7 +102,7 @@ var gMenuPane = {
     shortcuts.scrollTop = shortcuts.scrollHeight - shortcuts.clientHeight;
   },
 
-  updateSessionShortcuts: function() {
+  updateSessionShortcuts() {
     let block = !($("pref_sessionManager") || $("pref_sessionManager1")).value ||
         Shortcuts.permanentPrivateBrowsing;
     $("saveWindow").blocked = block;
@@ -110,7 +110,7 @@ var gMenuPane = {
   },
 
   // for shortcuts panel
-  toggleLinkLabel: function(item) {
+  toggleLinkLabel(item) {
     var panel = $("shortcuts-panel");
     var wasShow = panel.getAttribute(item.id) == 'false';
     item.value = item.getAttribute(wasShow ? 'show' : 'hide');
@@ -119,7 +119,7 @@ var gMenuPane = {
 
   // update item showInverseLink label in menu pane
   // when "Links" in Events > Tab Focus changed
-  setInverseLinkLabel: function() {
+  setInverseLinkLabel() {
     var showInverseLink = $("showInverseLink");
     var val = ($("pref_selectTab") || $("pref_selectTab1")).value;
     var label = showInverseLink.getAttribute((val ? "bg" : "fg") + "label");

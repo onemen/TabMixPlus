@@ -469,7 +469,7 @@ var TMP_extensionsCompatibility = {
     }
   },
 
-  setVerticalTabs: function() {
+  setVerticalTabs() {
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
     // https://addons.mozilla.org/en-US/firefox/addon/vertical-tabs-reloaded/
     // https://addons.mozilla.org/EN-US/firefox/addon/side-tabs/
@@ -487,7 +487,7 @@ var TMP_extensionsCompatibility = {
 };
 
 TMP_extensionsCompatibility.RSSTICKER = {
-  init: function() {
+  init() {
     Tabmix.changeCode(RSSTICKER, "RSSTICKER.writeFeed")._replace(
       'tbb.setAttribute("onclick"',
       'tbb.setAttribute("onclick", "this.onClick(event);");\
@@ -500,7 +500,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
     ).toCode();
   },
 
-  onClick: function(event) {
+  onClick(event) {
     if (event.ctrlKey) {
       this.markAsRead(true);
     } else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
@@ -510,7 +510,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
     }
   },
 
-  onContextOpen: function(target) {
+  onContextOpen(target) {
     if (!target) {
       if (Tabmix.whereToOpen(null).lock)
         this.parent.browser.openInNewTab(this.href);
@@ -532,7 +532,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
 // prevent Wizz RSS from load pages in locked tabs
 TMP_extensionsCompatibility.wizzrss = {
   started: null,
-  init: function() {
+  init() {
     if (this.started)
       return;
     this.started = true;
@@ -548,7 +548,7 @@ TMP_extensionsCompatibility.wizzrss = {
     });
   },
 
-  openURI: function(uri) {
+  openURI(uri) {
     var w = Tabmix.getTopWin();
     var tabBrowser = w.gBrowser;
 
@@ -564,7 +564,7 @@ TMP_extensionsCompatibility.wizzrss = {
 
 // prevent Newsfox from load pages in locked tabs
 TMP_extensionsCompatibility.newsfox = {
-  init: function() {
+  init() {
     Tabmix.changeCode(window, "openNewsfox")._replace(
       /if \(newTab\) {/,
       'newTab = newTab || Tabmix.whereToOpen(null).lock; \
@@ -583,7 +583,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
   installed: false,
   errorMsg: "Error in Tabmix when trying to load compatible functions with TreeStyleTab extension",
 
-  preInit: function() {
+  preInit() {
     let tstHelper = TreeStyleTabWindowHelper;
     if (typeof tstHelper.overrideExtensionsPreInit == "function") {
       // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
@@ -618,7 +618,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onContentLoaded: function() {
+  onContentLoaded() {
     // workaround, with version 0.15.2015061300a003855
     // gBrowser.treeStyleTab.initTabContentsOrder throw on Firefox 41+
     Tabmix.TST_initTabContentsOrder = function() {
@@ -688,7 +688,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onWindowLoaded: function() {
+  onWindowLoaded() {
     // we don't need this hack since treestyletab version 0.16.2016021602
     if (typeof PlacesUIUtils.__treestyletab__openTabset != "function") {
       /**
@@ -747,7 +747,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  onBeforeNewTabCommand: function(tab, openTabNext) {
+  onBeforeNewTabCommand(tab, openTabNext) {
     if (!this.installed) {
       return;
     }
@@ -759,7 +759,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
   },
 
   // Don't call openNewTabNext if treeStyleTab already set readiedToAttachNewTab
-  checkToOpenTabNext: function(tab, check) {
+  checkToOpenTabNext(tab, check) {
     if (this.installed && check &&
         !gBrowser.treeStyleTab.checkToOpenChildTab(tab)) {
       this.openNewTabNext(tab, true);
@@ -768,7 +768,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
   // instruct treeStyleTab to use 'kNEWTAB_OPEN_AS_NEXT_SIBLING' when our preference
   // is to open the tab next
-  openNewTabNext: function(tab, openTabNext, clean) {
+  openNewTabNext(tab, openTabNext, clean) {
     if (!this.installed || !openTabNext) {
       return;
     }
@@ -821,7 +821,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
-  getProperties: function(tab) {
+  getProperties(tab) {
     if (!this.installed) {
       return "";
     }

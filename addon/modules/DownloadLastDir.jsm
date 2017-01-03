@@ -13,7 +13,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
 
 this.TabmixDownloadLastDir = {
   _initialized: false,
-  init: function() {
+  init() {
     if (this._initialized)
       return;
     this._initialized = true;
@@ -22,7 +22,7 @@ this.TabmixDownloadLastDir = {
     // it fails if we already closed the tab that initialized the download
     // with TypeError: can't access dead object
     let descriptor = {
-      get: function() {
+      get() {
         if (this._window) {
           try {
             this._window.QueryInterface(Ci.nsIInterfaceRequestor);
@@ -33,7 +33,7 @@ this.TabmixDownloadLastDir = {
         }
         return this._window;
       },
-      set: function(val) {
+      set(val) {
         this._window = val;
         return val;
       },

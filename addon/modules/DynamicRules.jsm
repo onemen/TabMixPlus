@@ -49,7 +49,7 @@ this.DynamicRules = {
     return TabmixSvc.isAustralisBgStyle(this.orient);
   },
 
-  init: function(aWindow) {
+  init(aWindow) {
     if (this._initialized)
       return;
     this._initialized = true;
@@ -68,7 +68,7 @@ this.DynamicRules = {
     this.createTemplates();
   },
 
-  observe: function(subject, topic, data) {
+  observe(subject, topic, data) {
     switch (topic) {
       case "browser-window-before-show":
         if (!TabmixSvc.isPaleMoon) {
@@ -84,7 +84,7 @@ this.DynamicRules = {
     }
   },
 
-  registerMutationObserver: function(window) {
+  registerMutationObserver(window) {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
@@ -102,7 +102,7 @@ this.DynamicRules = {
     });
   },
 
-  onPrefChange: function(data) {
+  onPrefChange(data) {
     let prefName = data.split(".").pop();
     if (STYLENAMES.indexOf(prefName) > -1) {
       if (prefName == data)
@@ -114,7 +114,7 @@ this.DynamicRules = {
     }
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     Services.obs.removeObserver(this, "browser-window-before-show", false);
     Services.obs.removeObserver(this, "quit-application");
     Prefs.removeObserver("", this);
@@ -124,7 +124,7 @@ this.DynamicRules = {
     }, this);
   },
 
-  updateOpenedWindows: function(ruleName) {
+  updateOpenedWindows(ruleName) {
     // update all opened windows
     TabmixSvc.forEachBrowserWindow(window => {
       if (ruleName != "progressMeter")
@@ -134,7 +134,7 @@ this.DynamicRules = {
     });
   },
 
-  createTemplates: function() {
+  createTemplates() {
     let space20 = ' '.repeat(20);
     let space26 = ' '.repeat(26);
     let bgImage = {};
@@ -224,7 +224,7 @@ this.DynamicRules = {
     }
   },
 
-  userChangedStyle: function(ruleName, notifyWindows) {
+  userChangedStyle(ruleName, notifyWindows) {
     if (ruleName in this && this[ruleName] == "preventUpdate")
       return;
 
@@ -256,7 +256,7 @@ this.DynamicRules = {
       this.updateOpenedWindows(ruleName);
   },
 
-  updateStyles: function(name, prefObj) {
+  updateStyles(name, prefObj) {
     let templates = this.cssTemplates[name];
     let style = {};
     for (let rule of Object.keys(templates)) {
@@ -275,7 +275,7 @@ this.DynamicRules = {
 
   // update background type when squaredTabsStyle pref or tabbar
   // orient changed
-  updateStyleType: function() {
+  updateStyleType() {
     let australis = this.isAustralis;
     if (australis == (this.styleType == "australis")) {
       return;
@@ -317,7 +317,7 @@ this.DynamicRules = {
    *      - when user changed text or background color
    *      - when user disable/enable the style
    */
-  registerSheet: function(name) {
+  registerSheet(name) {
     let enabled = TabmixSvc.prefBranch.getBoolPref(name);
     if (!enabled)
       return;
@@ -339,7 +339,7 @@ this.DynamicRules = {
     }
   },
 
-  unregisterSheet: function(name) {
+  unregisterSheet(name) {
     let styleSheet = this.registered[name] || null;
     if (styleSheet &&
         SSS.sheetRegistered(styleSheet, TYPE))
@@ -356,7 +356,7 @@ this.DynamicRules = {
     return (this.defaultPrefs = defaults);
   },
 
-  validatePrefValue: function(ruleName) {
+  validatePrefValue(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
     //                bg:boolean, bgColor:string, bgOpacity:string

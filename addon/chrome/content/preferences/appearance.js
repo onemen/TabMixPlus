@@ -2,7 +2,7 @@
 "use strict";
 
 var gAppearancePane = {
-  init: function() {
+  init() {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.extensions.verticalTabBar) {
@@ -74,13 +74,13 @@ var gAppearancePane = {
     this.toolbarButtons(browserWindow);
   },
 
-  tabCloseButtonChanged: function() {
+  tabCloseButtonChanged() {
     var tabCbValue = $("pref_tabCloseButton").value;
     Tabmix.setItem("tabDelayCheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
     Tabmix.setItem("tabWidthBox", "hidden", tabCbValue != 5);
   },
 
-  setTabCloseButtonUI: function() {
+  setTabCloseButtonUI() {
     if ($("pref_flexTabs").value) {
       $("alltabsItem").disabled = true;
       let tabCbUI = $("tabCloseButton");
@@ -93,18 +93,18 @@ var gAppearancePane = {
     }
   },
 
-  tabsScrollChanged: function() {
+  tabsScrollChanged() {
     var multiRow = $("pref_tabsScroll").value == 2;
     $("multi-rows").hidden = !multiRow;
     $("one-row").hidden = multiRow;
   },
 
-  tabmixCustomizeToolbar: function() {
+  tabmixCustomizeToolbar() {
     this._tabmixCustomizeToolbar = true;
     Tabmix.getTopWin().BrowserCustomizeToolbar();
   },
 
-  toolbarButtons: function(aWindow) {
+  toolbarButtons(aWindow) {
     // Display > Toolbar
     var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
     var onToolbar = $("onToolbar");
@@ -138,7 +138,7 @@ var gAppearancePane = {
 
   // block width change on instantApply
   // user is force to hit apply
-  userChangedWidth: function(item) {
+  userChangedWidth(item) {
     gPrefWindow.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
                         $("maxWidth").value != $("pref_maxWidth").valueFromPreferences;
     if (!gPrefWindow.instantApply)
@@ -148,7 +148,7 @@ var gAppearancePane = {
     return $(item.getAttribute("preference")).value;
   },
 
-  changeTabsWidth: function() {
+  changeTabsWidth() {
     if (!gPrefWindow.widthChanged)
       return;
     gPrefWindow.widthChanged = false;
@@ -158,13 +158,13 @@ var gAppearancePane = {
     [$("pref_minWidth").value, $("pref_maxWidth").value] = [minWidth, maxWidth];
   },
 
-  resetWidthChange: function() {
+  resetWidthChange() {
     gPrefWindow.widthChanged = false;
     $("minWidth").value = $("pref_minWidth").value;
     $("maxWidth").value = $("pref_maxWidth").value;
   },
 
-  openAdvanceAppearance: function() {
+  openAdvanceAppearance() {
     window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xul",
       "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
   }

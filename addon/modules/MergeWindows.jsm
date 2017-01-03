@@ -100,7 +100,7 @@ this.MergeWindows = {
     this.concatTabsAndMerge(aTargetWindow, aWindows);
   },
 
-  mergePopUpsToNewWindow: function(aWindows, aPrivate) {
+  mergePopUpsToNewWindow(aWindows, aPrivate) {
     var features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
@@ -112,7 +112,7 @@ this.MergeWindows = {
     newWindow.addEventListener("SSWindowStateReady", mergePopUps, false);
   },
 
-  concatTabsAndMerge: function(aTargetWindow, aWindows) {
+  concatTabsAndMerge(aTargetWindow, aWindows) {
     let tabsToMove = [];
     for (let i = 0; i < aWindows.length; i++)
       tabsToMove = tabsToMove.concat(Array.prototype.slice.call(aWindows[i].gBrowser.tabs));
@@ -122,7 +122,7 @@ this.MergeWindows = {
   // tabs from popup windows open after opener or at the end
   // other tabs open according to our openTabNext preference
   // and move to place by tabbrowser.addTab
-  moveTabsFromPopups: function(newTab, aTab, openerWindow, tabbrowser) {
+  moveTabsFromPopups(newTab, aTab, openerWindow, tabbrowser) {
     if (!newTab) {
       newTab = aTab.__tabmixNewTab;
       delete aTab.__tabmixNewTab;
@@ -213,11 +213,11 @@ this.MergeWindows = {
     }
   },
 
-  isPopupWindow: function(aWindow) {
+  isPopupWindow(aWindow) {
     return !aWindow.toolbar.visible;
   },
 
-  isWindowPrivate: function(aWindow) {
+  isWindowPrivate(aWindow) {
     return PrivateBrowsingUtils.isWindowPrivate(aWindow);
   },
 
@@ -242,7 +242,7 @@ this.MergeWindows = {
    *        multiple is false most recent non-popup windows or most recent
    *        popup windows
    */
-  getWindowsList: function(aWindow, aOptions) {
+  getWindowsList(aWindow, aOptions) {
     let checkPrivacy = typeof aOptions == "object" &&
                        "private" in aOptions;
 
@@ -282,10 +282,10 @@ this.MergeWindows = {
 
     let normalWindowsCount = windows.length;
     if (aOptions.multiple)
-      return {windows: windows.concat(popUps), normalWindowsCount: normalWindowsCount};
+      return {windows: windows.concat(popUps), normalWindowsCount};
 
     let target = windows[0] || popUps[0] || null;
-    return {windows: target ? [target] : [], normalWindowsCount: normalWindowsCount};
+    return {windows: target ? [target] : [], normalWindowsCount};
   },
 
   notify: function TMP_mergeNotify(aWindow, privateNotMatch) {
@@ -305,7 +305,7 @@ this.MergeWindows = {
     }
   },
 
-  warnBeforeClosingWindow: function(aWindow) {
+  warnBeforeClosingWindow(aWindow) {
     // prompt a warning before closing a window with left over tabs
     var canClose = this.prefs.getBoolPref("closeOnSelect");
     if (!canClose)

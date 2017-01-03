@@ -121,7 +121,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use - don't change function name
-  tabmixSessionsManager: function() {
+  tabmixSessionsManager() {
     // this here refers to the top browser window
     if (!this.Tabmix.isFirstWindow || this.Tabmix._afterTabduplicated) {
       return false;
@@ -132,7 +132,7 @@ this.TMP_TabGroupsManager = {
   },
 
   // for TabGroupsManager use
-  _saveAllGroupsData: function(jsonText, windowNode) {
+  _saveAllGroupsData(jsonText, windowNode) {
     if (!this.enableBackup && !windowNode)
       return;
     try {

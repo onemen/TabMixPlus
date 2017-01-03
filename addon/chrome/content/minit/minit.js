@@ -148,7 +148,7 @@ var TMP_tabDNDObserver = {
     return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart: function(event, tabmixDragstart) {
+  onDragStart(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
     if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
@@ -703,7 +703,7 @@ var TMP_tabDNDObserver = {
     this.updateStatusField();
   },
 
-  updateStatusField: function() {
+  updateStatusField() {
     var statusTextFld = document.getElementById("statusbar-display");
     if (statusTextFld && this.statusFieldChanged) {
       statusTextFld.label = "";
@@ -715,7 +715,7 @@ var TMP_tabDNDObserver = {
   },
 
   // get _tPos from group index
-  _getDNDIndex: function(aEvent) {
+  _getDNDIndex(aEvent) {
     var indexInGroup = this.getNewIndex(aEvent);
     var tabs = gBrowser.visibleTabs;
     var lastIndex = tabs.length - 1;
@@ -724,7 +724,7 @@ var TMP_tabDNDObserver = {
     return tabs[indexInGroup]._tPos;
   },
 
-  getNewIndex: function(event) {
+  getNewIndex(event) {
     let getTabRowNumber = (tab, top) => (tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top));
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
@@ -760,7 +760,7 @@ var TMP_tabDNDObserver = {
     return numTabs;
   },
 
-  getLeft_Right: function(event, newIndex, oldIndex, dragType) {
+  getLeft_Right(event, newIndex, oldIndex, dragType) {
     var mX = event.screenX;
     var left_right;
     var tab = gBrowser.tabs[newIndex];
@@ -870,7 +870,7 @@ var TMP_tabDNDObserver = {
       ind.style.MozMarginStart = (-ind.clientWidth) + "px";
     }
 
-    this.dragmarkindex = {newIndex: newIndex, index: index};
+    this.dragmarkindex = {newIndex, index};
   },
 
   clearDragmark: function minit_clearDragmark() {
@@ -890,22 +890,22 @@ var TMP_tabDNDObserver = {
     this.dragmarkindex = null;
   },
 
-  setFirefoxDropIndicator: function(val) {
+  setFirefoxDropIndicator(val) {
     gBrowser.tabContainer._tabDropIndicator.collapsed = !val;
   },
 
-  removeDragmarkAttribute: function(tab) {
+  removeDragmarkAttribute(tab) {
     tab.removeAttribute("dragmark");
   },
 
-  setDragmarkAttribute: function(tab, markSide) {
+  setDragmarkAttribute(tab, markSide) {
     tab.setAttribute("dragmark", markSide);
   },
 
   /*
    *  helper functions
    */
-  _getDropEffectForTabDrag: function(event) {
+  _getDropEffectForTabDrag(event) {
     let tabBar = gBrowser.tabContainer;
     if (Tabmix.isVersion(440)) {
       return tabBar._getDropEffectForTabDrag(event);
@@ -920,7 +920,7 @@ var TMP_tabDNDObserver = {
     return null;
   },
 
-  isCopyDropEffect: function(dt, event, type) {
+  isCopyDropEffect(dt, event, type) {
     let isCopy = dt.dropEffect == "copy";
     if (isCopy && type == this.DRAG_LINK) {
       // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
@@ -956,7 +956,7 @@ var TMP_tabDNDObserver = {
 }; // TMP_tabDNDObserver end
 
 var TMP_undocloseTabButtonObserver = {
-  onDragOver: function(aEvent) {
+  onDragOver(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (!sourceNode || sourceNode.localName != "tab") {
@@ -981,7 +981,7 @@ var TMP_undocloseTabButtonObserver = {
     return true;
   },
 
-  onDragExit: function(aEvent) {
+  onDragExit(aEvent) {
     if (aEvent.target.hasAttribute("dragover")) {
       var statusTextFld = document.getElementById("statusbar-display");
       if (statusTextFld)
@@ -993,7 +993,7 @@ var TMP_undocloseTabButtonObserver = {
     }
   },
 
-  onDrop: function(aEvent) {
+  onDrop(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (sourceNode && sourceNode.localName == "tab")
@@ -1071,7 +1071,7 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 
 var TMP_TabView = {
   subScriptLoaded: false,
-  init: function() {
+  init() {
     try {
       if (this.installed) {
         this._patchBrowserTabview();
@@ -1089,11 +1089,11 @@ var TMP_TabView = {
     return installed;
   },
 
-  exist: function(id) {
+  exist(id) {
     return this.installed && typeof TabView[id] == "function";
   },
 
-  checkTabs: function(tabs) {
+  checkTabs(tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
@@ -1106,12 +1106,12 @@ var TMP_TabView = {
   },
 
   // including _removingTabs
-  currentGroup: function() {
+  currentGroup() {
     return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
-  getTabPosInCurrentGroup: function(aTab) {
+  getTabPosInCurrentGroup(aTab) {
     if (aTab) {
       let tabs = Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
@@ -1119,7 +1119,7 @@ var TMP_TabView = {
     return -1;
   },
 
-  getIndexInVisibleTabsFromTab: function(aTab) {
+  getIndexInVisibleTabsFromTab(aTab) {
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
@@ -1189,7 +1189,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  cleanCurrentset: function() {
+  cleanCurrentset() {
     let tabsToolbar = document.getElementById("TabsToolbar");
     let cSet = tabsToolbar.getAttribute("currentset");
     if (cSet.indexOf("tabmixScrollBox") > -1) {
@@ -1276,7 +1276,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
+  handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
     let action = this._parseActionUrl(this.value) || {};
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
@@ -1317,7 +1317,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand_beforeV50: function() {
+  handleCommand_beforeV50() {
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
@@ -1395,7 +1395,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  whereToOpenSearch: function(aWhere) {
+  whereToOpenSearch(aWhere) {
     var tab = gBrowser.selectedTab;
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockTab = !isBlankTab && tab.hasAttribute("locked");
@@ -1505,7 +1505,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  tabStripAreaChanged: function() {
+  tabStripAreaChanged() {
     /**
      * we need to position three elements in TabsToolbar :
      * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
@@ -1525,7 +1525,7 @@ Tabmix.navToolbox = {
       TMP_eventListener.updateMultiRow(true);
   },
 
-  setScrollButtons: function(reset, onlyPosition) {
+  setScrollButtons(reset, onlyPosition) {
     let box = document.getElementById("tabmixScrollBox");
     if (!box)
       return;
@@ -1553,7 +1553,7 @@ Tabmix.navToolbox = {
   },
 
   _closeButtonInitialized: false,
-  setCloseButtonPosition: function() {
+  setCloseButtonPosition() {
     if (this._closeButtonInitialized)
       return;
 

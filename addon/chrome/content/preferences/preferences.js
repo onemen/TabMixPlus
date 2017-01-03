@@ -11,7 +11,7 @@ this.$ = id => document.getElementById(id);
 var gPrefWindow = {
   widthChanged: false,
   _initialized: false,
-  init: function() {
+  init() {
     this._initialized = true;
 
     var prefWindow = $("TabMIxPreferences");
@@ -62,7 +62,7 @@ var gPrefWindow = {
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
   },
 
-  initPane: function(aPaneID) {
+  initPane(aPaneID) {
     this.initBroadcasters(aPaneID);
     // let _selectPane method set width for first prefpane
     if (!this._initialized) {
@@ -81,7 +81,7 @@ var gPrefWindow = {
     window.innerWidth += diff;
   },
 
-  deinit: function() {
+  deinit() {
     window.removeEventListener("change", this, false);
     window.removeEventListener("beforeaccept", this, false);
     delete Tabmix.getTopWin().tabmix_setSession;
@@ -89,7 +89,7 @@ var gPrefWindow = {
     window.gIncompatiblePane.deinit();
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     switch (aEvent.type) {
       case "change":
         if (aEvent.target.localName != "preference")
@@ -111,7 +111,7 @@ var gPrefWindow = {
   },
 
   changes: [],
-  resetChanges: function() {
+  resetChanges() {
     // remove all pending changes
     if (!this.instantApply || this.widthChanged) {
       if (this.widthChanged)
@@ -126,7 +126,7 @@ var gPrefWindow = {
     }
   },
 
-  updateApplyButton: function(aEvent) {
+  updateApplyButton(aEvent) {
     var item = aEvent.target;
     if (item.localName != "preference")
       return;
@@ -139,7 +139,7 @@ var gPrefWindow = {
     this.setButtons(!this.changes.length);
   },
 
-  onApply: function() {
+  onApply() {
     this.setButtons(true);
     if (this.widthChanged)
       gAppearancePane.changeTabsWidth();
@@ -161,7 +161,7 @@ var gPrefWindow = {
     Services.prefs.savePrefFile(null);
   },
 
-  setButtons: function(disable) {
+  setButtons(disable) {
     var docElt = document.documentElement;
     // when in instantApply mode apply and accept buttons are hidden except when user
     // change min/max width value
@@ -176,7 +176,7 @@ var gPrefWindow = {
     cancelButton.setAttribute("icon", action);
   },
 
-  removeChild: function(id) {
+  removeChild(id) {
     let child = $(id);
     // override preferences getter before we remove the preference
     if (child.localName == "preference")
@@ -184,7 +184,7 @@ var gPrefWindow = {
     child.parentNode.removeChild(child);
   },
 
-  initBroadcasters: function(paneID) {
+  initBroadcasters(paneID) {
     var broadcasters = $(paneID + ":Broadcaster");
     if (!broadcasters)
       return;
@@ -195,7 +195,7 @@ var gPrefWindow = {
     }
   },
 
-  updateBroadcaster: function(aPreference, aBroadcaster) {
+  updateBroadcaster(aPreference, aBroadcaster) {
     if (aPreference.type != "bool" && !aPreference.hasAttribute("notChecked"))
       return;
     let broadcaster = aBroadcaster ||
@@ -207,7 +207,7 @@ var gPrefWindow = {
     }
   },
 
-  setDisabled: function(itemOrId, val) {
+  setDisabled(itemOrId, val) {
     var item = typeof (itemOrId) == "string" ? $(itemOrId) : itemOrId;
     if (!item)
       return;
@@ -217,7 +217,7 @@ var gPrefWindow = {
     Tabmix.setItem(item, "disabled", val || null);
   },
 
-  tabSelectionChanged: function(event) {
+  tabSelectionChanged(event) {
     var tabs = event.target;
     if (tabs.localName != "tabs" || !tabs.hasAttribute("onselect"))
       return;
@@ -236,7 +236,7 @@ var gPrefWindow = {
     }
   },
 
-  afterShortcutsChanged: function() {
+  afterShortcutsChanged() {
     Shortcuts.prefsChangedByTabmix = false;
     if (typeof gMenuPane == "object" &&
         $("pref_shortcuts").value != $("shortcut-group").value)
@@ -245,12 +245,12 @@ var gPrefWindow = {
 
   // syncfrompreference and synctopreference are for checkbox preference
   // controlled by int preference
-  syncfrompreference: function(item) {
+  syncfrompreference(item) {
     let preference = $(item.getAttribute("preference"));
     return preference.value != parseInt(preference.getAttribute("notChecked"));
   },
 
-  synctopreference: function(item, checkedVal) {
+  synctopreference(item, checkedVal) {
     let preference = $(item.getAttribute("preference"));
     let control = $(item.getAttribute("control"));
     let notChecked = parseInt(preference.getAttribute("notChecked"));
@@ -558,19 +558,19 @@ function openHelp(helpTopic) {
 window.gIncompatiblePane = {
   lastSelected: "paneLinks",
 
-  init: function(docElt) {
+  init(docElt) {
     this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this, false);
     this.checkForIncompatible(false);
   },
 
-  deinit: function() {
+  deinit() {
     let radioGroup = this.paneButton.parentNode;
     radioGroup.removeEventListener("command", this, false);
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     if (aEvent.type != "command")
       return;
     let prefWindow = document.documentElement;
@@ -578,14 +578,14 @@ window.gIncompatiblePane = {
       this.lastSelected = prefWindow.lastSelected;
   },
 
-  checkForIncompatible: function(aShowList) {
+  checkForIncompatible(aShowList) {
     let tmp = {};
     Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm
-  hide_IncompatibleNotice: function(aHide, aFocus) {
+  hide_IncompatibleNotice(aHide, aFocus) {
     if (this.paneButton.collapsed != aHide) {
       this.paneButton.collapsed = aHide;
       $("paneIncompatible").collapsed = aHide;

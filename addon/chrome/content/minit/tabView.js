@@ -292,7 +292,7 @@
 
     let parsedData;
     function setData(groupID) {
-      let data = {groupID: groupID};
+      let data = {groupID};
       parsedData = data;
       return TabmixSvc.JSON.stringify(data);
     }
@@ -373,7 +373,7 @@
       this._lastSessionGroupName = "";
     }
     let bounds = {left: 0, top: 0, width: 350, height: 300};
-    aGroupItems[groupID] = {bounds: bounds, userSize: null, title: "", id: groupID, newItem: true};
+    aGroupItems[groupID] = {bounds, userSize: null, title: "", id: groupID, newItem: true};
     aGroupsData.totalNumber = Object.keys(aGroupItems).length;
     this._tabviewData["tabview-group"] = aGroupItems;
     this._tabviewData["tabview-groups"] = aGroupsData;
@@ -454,7 +454,7 @@
         for (let tab of gBrowser.tabs) {
           if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
             return;
-          let data = {groupID: groupID};
+          let data = {groupID};
           data = TabmixSvc.JSON.stringify(data);
           TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
           if (this.enableBackup)

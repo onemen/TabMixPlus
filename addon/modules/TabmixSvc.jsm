@@ -42,16 +42,16 @@ this.TabmixSvc = {
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
 
-  debugMode: function() {
+  debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
   },
 
-  version: function() {
+  version() {
     return isVersion.apply(null, arguments);
   },
 
-  getString: function(aStringKey) {
+  getString(aStringKey) {
     try {
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
@@ -60,7 +60,7 @@ this.TabmixSvc = {
     }
   },
 
-  getFormattedString: function(aStringKey, aStringsArray) {
+  getFormattedString(aStringKey, aStringsArray) {
     try {
       return this._strings.formatStringFromName(aStringKey, aStringsArray, aStringsArray.length);
     } catch (e) {
@@ -69,7 +69,7 @@ this.TabmixSvc = {
     }
   },
 
-  getSMString: function(aStringKey) {
+  getSMString(aStringKey) {
     try {
       return this.SMstrings.GetStringFromName(aStringKey);
     } catch (e) {
@@ -78,7 +78,7 @@ this.TabmixSvc = {
     }
   },
 
-  setLabel: function(property) {
+  setLabel(property) {
     var label, key;
     if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
@@ -93,7 +93,7 @@ this.TabmixSvc = {
     return label;
   },
 
-  getDialogStrings: function(...keys) {
+  getDialogStrings(...keys) {
     let stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
 
     return keys.map(key => {
@@ -106,7 +106,7 @@ this.TabmixSvc = {
     });
   },
 
-  topWin: function() {
+  topWin() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
@@ -125,7 +125,7 @@ this.TabmixSvc = {
    * @param aFunc
    *        Callback each window is passed to
    */
-  forEachBrowserWindow: function(aFunc) {
+  forEachBrowserWindow(aFunc) {
     let windowsEnum = Services.wm.getEnumerator("navigator:browser");
     while (windowsEnum.hasMoreElements()) {
       let window = windowsEnum.getNext();
@@ -166,7 +166,7 @@ this.TabmixSvc = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
       Ci.nsISupportsWeakReference]),
     _initialized: false,
-    init: function(aWindow) {
+    init(aWindow) {
       // windowStartup must only be called once for each window
       if ("firstWindowInSession" in aWindow.Tabmix)
         return;
@@ -203,7 +203,7 @@ this.TabmixSvc = {
       Cu.import("resource://tabmixplus/TabRestoreQueue.jsm", {});
     },
 
-    addMissingPrefs: function() {
+    addMissingPrefs() {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
@@ -220,7 +220,7 @@ this.TabmixSvc = {
       }
     },
 
-    observe: function(aSubject, aTopic) {
+    observe(aSubject, aTopic) {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
@@ -236,7 +236,7 @@ this.TabmixSvc = {
     }
   },
 
-  saveTabAttributes: function(tab, attrib, save) {
+  saveTabAttributes(tab, attrib, save) {
     tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
@@ -258,7 +258,7 @@ this.TabmixSvc = {
     statesToRestore: {},
   },
 
-  isAustralisBgStyle: function(orient) {
+  isAustralisBgStyle(orient) {
     if (typeof orient != "string") {
       throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);
     }
@@ -380,7 +380,7 @@ tabStateCache = {
     return this.TabStateCache;
   },
 
-  saveTabAttributes: function(tab, attrib, save = true) {
+  saveTabAttributes(tab, attrib, save = true) {
     if (TabmixSvc.isPaleMoon) {
       return;
     }

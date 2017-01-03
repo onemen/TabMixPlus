@@ -45,7 +45,7 @@ this.Shortcuts = {
     undoClose: {default: "VK_F12 accel"},
     undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
     clearClosedTabs: {
-      command: function() {
+      command() {
         this.TMP_ClosedTabs.restoreTab('original', -1);
       }
     },
@@ -68,7 +68,7 @@ this.Shortcuts = {
   initialized: false,
   keyConfigInstalled: false,
 
-  initService: function(aWindow) {
+  initService(aWindow) {
     if (this.initialized)
       return;
     this.initialized = true;
@@ -125,7 +125,7 @@ this.Shortcuts = {
     Services.obs.addObserver(this, "quit-application", false);
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe(aSubject, aTopic, aData) {
     switch (aTopic) {
       case "nsPref:changed":
         this.onPrefChange(aData);
@@ -172,7 +172,7 @@ this.Shortcuts = {
 
   /* ........ Window Event Handlers .............. */
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     switch (aEvent.type) {
       case "command":
         this.onCommand(aEvent.currentTarget);
@@ -354,7 +354,7 @@ this.Shortcuts = {
     return shortcuts;
   },
 
-  _userChangedKeyPref: function(value) {
+  _userChangedKeyPref(value) {
     let key = value && this.keyParse(value);
     if (!key)
       return "";
@@ -377,7 +377,7 @@ this.Shortcuts = {
     return this.validateKey(key);
   },
 
-  setShortcutsPref: function() {
+  setShortcutsPref() {
     this.updatingShortcuts = true;
     setPref("extensions.tabmix.shortcuts", JSON.stringify(this.prefBackup));
     this.updatingShortcuts = false;
@@ -387,7 +387,7 @@ this.Shortcuts = {
     let disabled = /^d&/.test(value);
     let [keyVal, modifiers] = value.replace(/^d&/, "").split(" ");
     let isKey = keyVal.length == 1;
-    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled: disabled};
+    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled};
   },
 
   // convert key object {modifiers, key, keycode} into a string with " " separator
@@ -411,21 +411,21 @@ this.Shortcuts = {
     return key ? this.keyStringify(key) : "";
   },
 
-  getFormattedKey: function(key) {
+  getFormattedKey(key) {
     return getFormattedKey(key);
   },
 
-  getFormattedKeyForID: function(id) {
+  getFormattedKeyForID(id) {
     let key = this.keyParse(this.keys[id].value);
     return getFormattedKey(key);
   },
 
-  getPlatformAccel: function() {
+  getPlatformAccel() {
     return getPlatformAccel();
   },
 
   // add id for key Browser:Reload
-  _setReloadKeyId: function(aWindow) {
+  _setReloadKeyId(aWindow) {
     let reload = aWindow.document.getElementsByAttribute("command", "Browser:Reload");
     if (!reload)
       return;
@@ -451,7 +451,7 @@ KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions
-  init: function() {
+  init() {
     this.keyIdsMap = {};
     // keyConfig use index number for its ids
     let oldReloadId = "xxx_key29_Browser:Reload";
@@ -482,11 +482,11 @@ KeyConfig = {
     this.prefs.addObserver("", this, false);
   },
 
-  deinit: function() {
+  deinit() {
     this.prefs.removeObserver("", this);
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe(aSubject, aTopic, aData) {
     if (this.prefsChangedByTabmix)
       return;
     let key = this.keyIdsMap[aData];
@@ -501,7 +501,7 @@ KeyConfig = {
     }
   },
 
-  syncFromKeyConfig: function(aKey, aPrefName, aShortcuts) {
+  syncFromKeyConfig(aKey, aPrefName, aShortcuts) {
     let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
@@ -530,7 +530,7 @@ KeyConfig = {
     return false;
   },
 
-  syncToKeyConfig: function(aChangedKeys, onChange) {
+  syncToKeyConfig(aChangedKeys, onChange) {
     for (let key of Object.keys(aChangedKeys)) {
       let prefVal = aChangedKeys[key];
       this.prefsChangedByTabmix = true;
@@ -549,7 +549,7 @@ KeyConfig = {
     }
   },
 
-  resetPref: function(prefName) {
+  resetPref(prefName) {
     this.prefs.clearUserPref(prefName);
   }
 

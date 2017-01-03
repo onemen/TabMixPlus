@@ -4,7 +4,7 @@
 
 var gSessionPane = {
   gSessionManager: null,
-  init: function() {
+  init() {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
@@ -17,12 +17,12 @@ var gSessionPane = {
     gPrefWindow.initPane("paneSession");
   },
 
-  updateSessionShortcuts: function() {
+  updateSessionShortcuts() {
     if (typeof gMenuPane == "object")
       gMenuPane.updateSessionShortcuts();
   },
 
-  isSessionStoreEnabled: function(onStart) {
+  isSessionStoreEnabled(onStart) {
     if (this.gSessionManager)
       return;
 
@@ -36,7 +36,7 @@ var gSessionPane = {
       $("session").selectedIndex = 0;
   },
 
-  setSessionsOptions: function(item) {
+  setSessionsOptions(item) {
     let instantApply = document.documentElement.instantApply;
     var useSessionManager = !item.checked;
     $("sessionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
@@ -85,7 +85,7 @@ var gSessionPane = {
       gPrefWindow.setButtons(!gPrefWindow.changes.length);
   },
 
-  setSessionpath: function(val) {
+  setSessionpath(val) {
     var menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
     $("pref_sessionpath").value = menuItem.getAttribute("session");
   },
@@ -101,7 +101,7 @@ var gSessionPane = {
     return sm && sm.gSessionManager || sm;
   },
 
-  setVisibleContent: function(sessionManagerInstalled, onStart) {
+  setVisibleContent(sessionManagerInstalled, onStart) {
     if (typeof sessionManagerInstalled != "boolean")
       return;
 
@@ -120,11 +120,11 @@ var gSessionPane = {
     }
   },
 
-  sessionManagerOptions: function() {
+  sessionManagerOptions() {
     this.sessionManagerAddon.openOptions();
   },
 
-  convertSession: function() {
+  convertSession() {
     var browserWindow = Tabmix.getTopWin();
     if ($("chooseFile").selectedItem.value == "0")
       browserWindow.TabmixConvertSession.selectFile(window);

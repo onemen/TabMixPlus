@@ -2,7 +2,7 @@
 "use strict";
 
 Tabmix.setSanitizer = {
-  init: function() {
+  init() {
     this.isPromptDialog = typeof window.gSanitizePromptDialog == "object";
     let dialog = document.getElementById("SanitizeDialog");
     ["_label", "_accesskey", "_confirm"].forEach(att => {
@@ -19,12 +19,12 @@ Tabmix.setSanitizer = {
     }
   },
 
-  addSanitizeItem: function() {
+  addSanitizeItem() {
     if (typeof Sanitizer != 'function')
       return;
     // Sanitizer will execute this
     Sanitizer.prototype.items['extensions-tabmix'] = {
-      clear: function() {
+      clear() {
         try {
           let win = Tabmix.getTopWin();
           win.Tabmix.Sanitizer.sanitize();
@@ -41,7 +41,7 @@ Tabmix.setSanitizer = {
     };
   },
 
-  addMenuItem: function() {
+  addMenuItem() {
     var prefs = document.getElementsByTagName("preferences")[0];
     var _item;
     var itemList = document.getElementById("itemList");
@@ -98,7 +98,7 @@ Tabmix.setSanitizer = {
   },
 
   checked: false,
-  disableMenuItem: function() {
+  disableMenuItem() {
     let disabled = gSanitizePromptDialog.selectedTimespan !== Sanitizer.TIMESPAN_EVERYTHING;
     let checkbox = document.getElementById("extensions-tabmix");
     checkbox.setAttribute("disabled", disabled);
@@ -109,7 +109,7 @@ Tabmix.setSanitizer = {
     }
   },
 
-  confirm: function(aCheckbox) {
+  confirm(aCheckbox) {
     if (!aCheckbox.checked)
       return;
 

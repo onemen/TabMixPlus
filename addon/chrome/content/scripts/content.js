@@ -53,7 +53,7 @@ var TabmixContentHandler = {
     "Tabmix:collectOpener",
   ],
 
-  init: function() {
+  init() {
     this.MESSAGES.forEach(m => addMessageListener(m, this));
 
     if (PROCESS_TYPE_CONTENT) {
@@ -61,7 +61,7 @@ var TabmixContentHandler = {
     }
   },
 
-  receiveMessage: function({name, data}) {
+  receiveMessage({name, data}) {
     // The docShell might be gone. Don't process messages,
     // that will just lead to errors anyway.
     if (!docShell) {
@@ -79,7 +79,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:collectPermissions": {
         let caps = DocShellCapabilities.collect(docShell).join(",");
-        sendSyncMessage("Tabmix:collectPermissionsComplete", {caps: caps});
+        sendSyncMessage("Tabmix:collectPermissionsComplete", {caps});
         break;
       }
       case "Tabmix:resetContentName": {
@@ -91,7 +91,7 @@ var TabmixContentHandler = {
         // workaround for bug 1081891
         let title = content.document.title;
         if (title)
-          sendAsyncMessage("DOMTitleChanged", {title: title});
+          sendAsyncMessage("DOMTitleChanged", {title});
         break;
       }
       case "Tabmix:updateHistoryTitle": {
@@ -104,7 +104,7 @@ var TabmixContentHandler = {
           scrollX: content.scrollX,
           scrollY: content.scrollY
         };
-        sendAsyncMessage("Tabmix:updateScrollPosition", {scroll: scroll});
+        sendAsyncMessage("Tabmix:updateScrollPosition", {scroll});
         break;
       }
       case "Tabmix:setScrollPosition": {
@@ -136,7 +136,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:isFrameInContent": {
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
-        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result, epoch: data.epoch});
+        sendAsyncMessage("Tabmix:isFrameInContentResult", {result, epoch: data.epoch});
         break;
       }
       case "Tabmix:collectOpener": {
@@ -146,11 +146,11 @@ var TabmixContentHandler = {
     }
   },
 
-  getCapabilities: function() {
+  getCapabilities() {
     return DocShellCapabilities.collect(docShell).join(",") || "";
   },
 
-  onDrop: function(event) {
+  onDrop(event) {
     let links;
     const linkName = { };
     const linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
@@ -162,7 +162,7 @@ var TabmixContentHandler = {
         // we can not send a message with array of wrapped nsIDroppedLinkItem
         links = links.map(link => {
           const {url, name, type} = link;
-          return {url: url, name: name, type: type};
+          return {url, name, type};
         });
       } else {
         links = [{url: linkHandler.dropLink(event, linkName, true)}];
@@ -178,7 +178,7 @@ var TabmixContentHandler = {
         shiftKey: event.shiftKey,
         altKey: event.altKey
       },
-      links: links,
+      links,
       name: linkName.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
@@ -196,7 +196,7 @@ TabmixClickEventHandler = {
     }
   },
 
-  handleEvent: function(event) {
+  handleEvent(event) {
     switch (event.type) {
       case "click":
         this.contentAreaClick(event);
@@ -204,7 +204,7 @@ TabmixClickEventHandler = {
     }
   },
 
-  contentAreaClick: function(event) {
+  contentAreaClick(event) {
     // tabmix_isMultiProcessBrowser is undefined for remote browser when
     // window.gMultiProcessBrowser is true
     if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
@@ -246,7 +246,7 @@ TabmixClickEventHandler = {
       href: null,
       title: null,
       bookmark: false,
-      referrerPolicy: referrerPolicy,
+      referrerPolicy,
       originAttributes: principal ? principal.originAttributes : {},
       isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
     };
@@ -263,7 +263,7 @@ TabmixClickEventHandler = {
     }
 
     let result = sendSyncMessage("TabmixContent:Click",
-                    {json: json, href: href, node: linkNode});
+                    {json, href, node: linkNode});
     let data = result[0];
     if (data.where == "default")
       return;
@@ -341,7 +341,7 @@ TabmixClickEventHandler = {
    *       element. This includes SVG links, because callers expect |node|
    *       to behave like an <a> element, which SVG links (XLink) don't.
    */
-  _hrefAndLinkNodeForClickEvent: function(event) {
+  _hrefAndLinkNodeForClickEvent(event) {
     function isHTMLLink(aNode) {
       // Be consistent with what nsContextMenu.js does.
       return ((aNode instanceof content.HTMLAnchorElement && aNode.href) ||
@@ -383,7 +383,7 @@ TabmixClickEventHandler = {
 };
 
 var AboutNewTabHandler = {
-  init: function(global) {
+  init(global) {
     if (!TabmixSvc.version(420)) {
       return;
     }
@@ -405,13 +405,13 @@ var AboutNewTabHandler = {
     });
   },
 
-  receiveMessage: function({name}) {
+  receiveMessage({name}) {
     if (name == "Tabmix:updateTitlefrombookmark") {
       this.updateTitles();
     }
   },
 
-  updateTitles: function() {
+  updateTitles() {
     if (content && content.gGrid) {
       TabmixAboutNewTab.updateTitles(content.gGrid.cells);
     }
@@ -419,13 +419,13 @@ var AboutNewTabHandler = {
 };
 
 var ContextMenuHandler = {
-  init: function(global) {
+  init(global) {
     Cc["@mozilla.org/eventlistenerservice;1"]
       .getService(Ci.nsIEventListenerService)
       .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
   },
 
-  prepareContextMenu: function(event) {
+  prepareContextMenu(event) {
     if (event.defaultPrevented) {
       return;
     }
@@ -435,7 +435,7 @@ var ContextMenuHandler = {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 
-    sendRpcMessage("Tabmix:contextmenu", {links: links});
+    sendRpcMessage("Tabmix:contextmenu", {links});
   }
 };
 
@@ -443,11 +443,11 @@ const AMO = new RegExp("https://addons.mozilla.org/.+/firefox/addon/tab-mix-plus
 const BITBUCKET = "https://bitbucket.org/onemen/tabmixplus/issues?status=new&status=open";
 
 var TabmixPageHandler = {
-  init: function(global) {
+  init(global) {
     global.addEventListener("DOMContentLoaded", this);
   },
 
-  handleEvent: function(event) {
+  handleEvent(event) {
     const doc = content.document;
     if (event.target != doc) {
       return;
@@ -467,7 +467,7 @@ var TabmixPageHandler = {
   },
 
   buttonID: "tabmixplus-bug-report",
-  createAMOButton: function() {
+  createAMOButton() {
     const doc = content.document;
     const email = doc.querySelector('ul>li>.email[href="mailto:tabmix.onemen@gmail.com"]');
     if (email && !doc.getElementById(this.buttonID)) {
@@ -484,7 +484,7 @@ var TabmixPageHandler = {
   },
 
   count: 0,
-  moveAMOButton: function(eventType) {
+  moveAMOButton(eventType) {
     const doc = content.document;
     // add-review is null on DOMContentLoaded
     const addReview = doc.getElementById("add-review");
@@ -510,7 +510,7 @@ var TabmixPageHandler = {
     }
   },
 
-  styleBitbucket: function() {
+  styleBitbucket() {
     let createIssue = content.document.getElementById("create-issue-contextual");
     if (createIssue) {
       createIssue.classList.remove("aui-button-subtle");

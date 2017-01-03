@@ -255,7 +255,7 @@
       <field name="tabmixPrefObserver"><![CDATA[
         ({
           scrollbox: this,
-          observe: function(subject, topic, data) {
+          observe(subject, topic, data) {
             switch (data) {
               case "toolkit.scrollbox.clickToScroll.scrollDelay":
                 this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
@@ -439,7 +439,7 @@
               }
               if (row == firstVisibleRow) {
                 let rect = tab.getBoundingClientRect();
-                this.firstVisible = {tab: tab, x: rect.left, y: rect.top};
+                this.firstVisible = {tab, x: rect.left, y: rect.top};
                 index = ++i;
                 break;
               }

@@ -231,7 +231,7 @@ Tabmix.afterDelayedStartup = function() {
     let buttons = [{
       label: "Disable Debug Mode",
       accessKey: "D",
-      callback: function() {
+      callback() {
         Tabmix.prefs.setBoolPref("enableDebug", false);
       }
     }];
@@ -304,7 +304,7 @@ var TMP_eventListener = {
     }
   },
 
-  toggleEventListener: function(aObj, aArray, aEnable, aHandler) {
+  toggleEventListener(aObj, aArray, aEnable, aHandler) {
     var handler = aHandler || this;
     var eventListener = aEnable ? "addEventListener" : "removeEventListener";
     aArray.forEach(function(eventName) {
@@ -587,7 +587,7 @@ var TMP_eventListener = {
   },
 
   tabWidthCache: new WeakMap(),
-  onTabAttrModified: function(aEvent) {
+  onTabAttrModified(aEvent) {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
@@ -669,7 +669,7 @@ var TMP_eventListener = {
       this.updateMultiRow();
   },
 
-  showNavToolbox: function() {
+  showNavToolbox() {
     this._updateMarginBottom("");
     this.toggleTabbarVisibility(true);
     this.updateMultiRow();
@@ -688,7 +688,7 @@ var TMP_eventListener = {
   * update FullScreen._mouseTargetRect when in full screen and the tabbar is
   * visible. we call this function from tabBarHeightModified and showNavToolbox
   */
-  updateMouseTargetRect: function() {
+  updateMouseTargetRect() {
     if (!Tabmix.isVersion(400)) {
       return;
     }
@@ -722,7 +722,7 @@ var TMP_eventListener = {
   },
 
   // for tabs bellow content
-  toggleTabbarVisibility: function(aShow, aAnimate) {
+  toggleTabbarVisibility(aShow, aAnimate) {
     let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
     if (TabmixTabbar.position != 1 || !fullScrToggler) {
       return;
@@ -757,7 +757,7 @@ var TMP_eventListener = {
     }
   },
 
-  updateMultiRow: function(aReset) {
+  updateMultiRow(aReset) {
     if (aReset)
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
@@ -944,7 +944,7 @@ var TMP_eventListener = {
     TabmixSessionManager.tabSelected(true);
   },
 
-  updateDisplay: function(tab) {
+  updateDisplay(tab) {
     if (!tab.hasAttribute("visited"))
       tab.setAttribute("visited", true);
 

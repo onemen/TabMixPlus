@@ -20,7 +20,7 @@ var TMP_LastTab = {
   TabListLock: false,
   _inited: false,
 
-  DisplayTabList: function() {
+  DisplayTabList() {
     var tablist = this.TabList;
 
     TabmixAllTabs.createCommonList(tablist, this.handleCtrlTab ? 3 : 2);
@@ -44,7 +44,7 @@ var TMP_LastTab = {
     this.TabListLock = true;
   },
 
-  init: function() {
+  init() {
     this._inited = true;
 
     this.TabList = document.getElementById("lasttabTabList");
@@ -76,7 +76,7 @@ var TMP_LastTab = {
     this.ReadPreferences();
   },
 
-  deinit: function() {
+  deinit() {
     if (!this._inited)
       return;
 
@@ -92,7 +92,7 @@ var TMP_LastTab = {
     }
   },
 
-  handleEvent: function(event) {
+  handleEvent(event) {
     switch (event.type) {
       case "focus":
         if (event.target == window.content) {
@@ -126,7 +126,7 @@ var TMP_LastTab = {
   * disallow mouse down on TabsToolbar to start dragging the window when one
   * of the key modifiers is down
   */
-  disallowDragwindow: function(keyDown) {
+  disallowDragwindow(keyDown) {
     if (!Tabmix.isVersion(470)) {
       return;
     }
@@ -138,14 +138,14 @@ var TMP_LastTab = {
   },
 
   disallowDragState: false,
-  updateDisallowDrag: function(disallow) {
+  updateDisallowDrag(disallow) {
     let el = disallow ? "addEventListener" : "removeEventListener";
     window[el]("blur", this);
     this.disallowDragState = disallow;
     Tabmix.setItem("TabsToolbar", "tabmix-disallow-drag", disallow || null);
   },
 
-  ItemActive: function(event) {
+  ItemActive(event) {
     TabmixAllTabs.updateMenuItemActive(event);
     if (this.respondToMouseInTabList) {
       if (this.KeyboardNavigating) {
@@ -159,7 +159,7 @@ var TMP_LastTab = {
     }
   },
 
-  ItemInactive: function(event) {
+  ItemInactive(event) {
     TabmixAllTabs.updateMenuItemInactive(event);
     if (!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex))
       event.target.setAttribute("_moz-menuactive", "true");
@@ -182,13 +182,13 @@ var TMP_LastTab = {
       this.TabHistory.splice(i, 1);
   },
 
-  isCtrlTab: function(event) {
+  isCtrlTab(event) {
     return (this.handleCtrlTab || this.showTabList) &&
       event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB &&
       event.ctrlKey && !event.altKey && !event.metaKey;
   },
 
-  OnKeyDown: function(event) {
+  OnKeyDown(event) {
     this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
     Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
     if (Tabmix.isVersion(320))
@@ -312,19 +312,19 @@ var TMP_LastTab = {
     this._tabs = null;
   },
 
-  onMenuCommand: function(event) {
+  onMenuCommand(event) {
     if (this.respondToMouseInTabList) {
       TabmixAllTabs._tabSelectedFromList(event.target.tab);
       this.PushSelectedTab();
     }
   },
 
-  onPopupshowing: function() {
+  onPopupshowing() {
     this.TabList.addEventListener("DOMMenuItemActive", this, true);
     this.TabList.addEventListener("DOMMenuItemInactive", this, true);
   },
 
-  onPopuphidden: function() {
+  onPopuphidden() {
     this.TabList.removeEventListener("DOMMenuItemActive", this, true);
     this.TabList.removeEventListener("DOMMenuItemInactive", this, true);
     if (!this.SuppressTabListReset) {
@@ -341,7 +341,7 @@ var TMP_LastTab = {
     }
   },
 
-  OnSelect: function() {
+  OnSelect() {
     // session manager can select new tab before TMP_LastTab is init
     if (!this._inited)
       return;
@@ -369,7 +369,7 @@ var TMP_LastTab = {
     this.TabHistory.push(selectedTab);
   },
 
-  ReadPreferences: function() {
+  ReadPreferences() {
     // when Build-in tabPreviews is on we disable our own function
     var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
@@ -394,14 +394,14 @@ var TMP_LastTab = {
     this.respondToMouseInTabList = Tabmix.prefs.getBoolPref("lasttab.respondToMouseInTabList");
   },
 
-  inverseIndex: function(index) {
+  inverseIndex(index) {
     return this.handleCtrlTab ? index : this.tabs.length - 1 - index;
   }
 
 };
 
 Tabmix.slideshow = {
-  cancel: function() {
+  cancel() {
     if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) {
       Tabmix.flst.cancel();
     }

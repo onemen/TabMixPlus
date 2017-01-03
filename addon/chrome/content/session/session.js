@@ -23,7 +23,7 @@ var TabmixSessionManager, TabmixSessionData;
  *  sanitize private data by delete the files session.rdf session.old
  */
 Tabmix.Sanitizer = {
-  isSanitizeTMPwithoutPrompet: function(aOnExit) {
+  isSanitizeTMPwithoutPrompet(aOnExit) {
     /*
       * The behavior is:
       *   - Tools > Clear Recent History... - Always show the UI
@@ -44,7 +44,7 @@ Tabmix.Sanitizer = {
     return sanitizeTabmix;
   },
 
-  tryToSanitize: function(aOnExit) {
+  tryToSanitize(aOnExit) {
     if (this.isSanitizeTMPwithoutPrompet(aOnExit)) {
       this.sanitize();
       return true;
@@ -104,7 +104,7 @@ Tabmix.Sanitizer = {
     TabmixSvc.sm.sanitized = true;
   },
 
-  clearDisk: function(aFile) {
+  clearDisk(aFile) {
     if (aFile.exists()) {
       try {
         aFile.remove(aFile.isDirectory());
@@ -218,7 +218,7 @@ TabmixSessionData = {
   /* ............... DEPRECATED ............... */
 
   // treeStyleTab extension look for it
-  setTabProperties: function() { }
+  setTabProperties() { }
 };
 
 TabmixSessionManager = {
@@ -253,7 +253,7 @@ TabmixSessionManager = {
   globalPrivateBrowsing: false,
   firstNonPrivateWindow: false,
 
-  initializePrivateStateVars: function() {
+  initializePrivateStateVars() {
     this.globalPrivateBrowsing = PrivateBrowsingUtils.permanentPrivateBrowsing;
     this.isPrivateWindow = this.isWindowPrivate(window);
     this.firstNonPrivateWindow = TabmixSvc.sm.private && !this.isPrivateWindow;
@@ -267,7 +267,7 @@ TabmixSessionManager = {
     return this.globalPrivateBrowsing || TabmixSvc.sm.private;
   },
 
-  isWindowPrivate: function(aWindow) {
+  isWindowPrivate(aWindow) {
     return PrivateBrowsingUtils.isWindowPrivate(aWindow);
   },
 
@@ -596,8 +596,8 @@ TabmixSessionManager = {
   },
 
   sessionShutDown: false,
-  shutDown: function(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs,
-                     aKeepClosedWindows, _flush) {
+  shutDown(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs,
+           aKeepClosedWindows, _flush) {
     if (this.sessionShutDown)
       return;
     if (aLastWindow && aCanClose) {
@@ -800,7 +800,7 @@ TabmixSessionManager = {
     }
   },
 
-  restoreWindowArguments: function() {
+  restoreWindowArguments() {
     if (this.overrideHomepage)
       window.arguments[0] = this.overrideHomepage;
     this.overrideHomepage = null;
@@ -839,7 +839,7 @@ TabmixSessionManager = {
   },
 
   // init common services
-  initService: function() {
+  initService() {
     this.RDFService = Components.classes["@mozilla.org/rdf/rdf-service;1"]
       .getService(Components.interfaces.nsIRDFService);
     this.CONUtils = Components.classes["@mozilla.org/rdf/container-utils;1"]
@@ -893,7 +893,7 @@ TabmixSessionManager = {
     return TabmixSvc.FileUtils.getDir("ProfD", []);
   },
 
-  getAnonymousId: function() {
+  getAnonymousId() {
     const kSaltTable = [
       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
       'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -908,14 +908,14 @@ TabmixSessionManager = {
     return id;
   },
 
-  getNC: function(arc) {
+  getNC(arc) {
     if (arc in this.NC_TM)
       return this.NC_TM[arc];
     const NC_NS = "http://home.netscape.com/NC-rdf#";
     return (this.NC_TM[arc] = this.RDFService.GetResource(NC_NS + arc));
   },
 
-  deleteNode: function(rdfNode) {
+  deleteNode(rdfNode) {
     var arcOut = this.DATASource.ArcLabelsOut(rdfNode);
     while (arcOut.hasMoreElements()) {
       var aLabel = arcOut.getNext();
@@ -926,7 +926,7 @@ TabmixSessionManager = {
     }
   },
 
-  deleteSubtree: function(labelRoot) {
+  deleteSubtree(labelRoot) {
     var allElements = this.DATASource.GetAllResources();
     while (allElements.hasMoreElements()) {
       var aResource = allElements.getNext();
@@ -935,7 +935,7 @@ TabmixSessionManager = {
     }
   },
 
-  initContainer: function(node) {
+  initContainer(node) {
     try {
       if (typeof (node) == "string")
         node = this.RDFService.GetResource(node);
@@ -947,7 +947,7 @@ TabmixSessionManager = {
   },
 
   // return true if node is empty container or node is not container
-  containerEmpty: function(node) {
+  containerEmpty(node) {
     try {
       if (typeof (node) == "string")
         node = this.RDFService.GetResource(node);
@@ -975,14 +975,14 @@ TabmixSessionManager = {
     };
   },
 
-  getValue: function(node, label, typeID, def) {
+  getValue(node, label, typeID, def) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     label = this.getNC(label);
     var rdfNode = this.DATASource.GetTarget(node, label, true);
     return (rdfNode instanceof Components.interfaces[typeID]) ? rdfNode.Value : def;
   },
 
-  getLiteralValue: function(node, arc, def) {
+  getLiteralValue(node, arc, def) {
     if (typeof (def) == "undefined") def = "";
     return this.getValue(node, arc, "nsIRDFLiteral", def);
   },
@@ -992,7 +992,7 @@ TabmixSessionManager = {
   * we use this code only for the case that old escape string was left unused after
   * unescape was removed.
   */
-  getDecodedLiteralValue: function(node, key) {
+  getDecodedLiteralValue(node, key) {
     let encodedString = node ? this.getLiteralValue(node, key) : key;
     // in the past we use escape for encoding, we try first to decode with decodeURI
     // only if we fail we use deprecated unescape
@@ -1018,23 +1018,23 @@ TabmixSessionManager = {
     }
   },
 
-  getIntValue: function(node, arc, def) {
+  getIntValue(node, arc, def) {
     if (typeof (def) == "undefined") def = 0;
     return this.getValue(node, arc, "nsIRDFInt", def);
   },
 
-  getResourceValue: function(node, arc, def) {
+  getResourceValue(node, arc, def) {
     if (typeof (def) == "undefined") def = null;
     return this.getValue(node, arc, "nsIRDFResource", def);
   },
 
-  getResource: function(node, arc) {
+  getResource(node, arc) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     arc = this.getNC(arc);
     return this.DATASource.GetTarget(node, arc, true);
   },
 
-  nodeHasArc: function(node, arc) {
+  nodeHasArc(node, arc) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     arc = this.getNC(arc);
     return this.DATASource.hasArcOut(node, arc);
@@ -1051,21 +1051,21 @@ TabmixSessionManager = {
     this.changeValue(node, arc, value);
   },
 
-  setIntLiteral: function(node, arc, value) {
+  setIntLiteral(node, arc, value) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     arc = this.getNC(arc);
     value = this.RDFService.GetIntLiteral(value);
     this.changeValue(node, arc, value);
   },
 
-  setResource: function(node, arc, value) {
+  setResource(node, arc, value) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     arc = this.getNC(arc);
     if (typeof (value) == "string") value = this.RDFService.GetResource(value);
     this.changeValue(node, arc, value);
   },
 
-  changeValue: function(node, arc, newValue) {
+  changeValue(node, arc, newValue) {
     if (this.DATASource.hasArcOut(node, arc)) {
       var oldValue = this.DATASource.GetTarget(node, arc, true);
       if (newValue != oldValue) this.DATASource.Change(node, arc, oldValue, newValue);
@@ -1073,7 +1073,7 @@ TabmixSessionManager = {
   },
 
   // use it only to remove node with literal value
-  removeAttribute: function(node, arc) {
+  removeAttribute(node, arc) {
     if (typeof (node) == "string") node = this.RDFService.GetResource(node);
     if (this.nodeHasArc(node, arc)) {
       var value = this.getLiteralValue(node, arc);
@@ -1115,7 +1115,7 @@ TabmixSessionManager = {
     throw Components.results.NS_NOINTERFACE;
   },
 
-  closeProtectedTabs: function() {
+  closeProtectedTabs() {
     var protectedTabs = gBrowser.tabContainer.getElementsByAttribute("protected", true);
     for (var i = protectedTabs.length - 1; i >= 0; i--) {
       var tab = protectedTabs[i];
@@ -1259,7 +1259,7 @@ TabmixSessionManager = {
     }
   },
 
-  promptReplaceStartup: function(caller, path) {
+  promptReplaceStartup(caller, path) {
     var loadsession = this.prefBranch.getIntPref("onStart.loadsession");
     var sessionpath = this.prefBranch.getCharPref("onStart.sessionpath");
     var result = {button: Tabmix.NO_NEED_TO_REPLACE};
@@ -1359,7 +1359,7 @@ TabmixSessionManager = {
     }
   },
 
-  copyNode: function(oldNode, newNode, oldRoot, newRoot) {
+  copyNode(oldNode, newNode, oldRoot, newRoot) {
     var newTarget;
     var arcOut = this.DATASource.ArcLabelsOut(oldNode);
     while (arcOut.hasMoreElements()) {
@@ -1375,7 +1375,7 @@ TabmixSessionManager = {
     }
   },
 
-  copySubtree: function(oldRoot, newRoot) {
+  copySubtree(oldRoot, newRoot) {
     var allElements = this.DATASource.GetAllResources();
     while (allElements.hasMoreElements()) {
       var aResource = allElements.getNext();
@@ -1386,7 +1386,7 @@ TabmixSessionManager = {
     }
   },
 
-  replaceStartupPref: function(result, newPath) {
+  replaceStartupPref(result, newPath) {
     var sessionpath = !newPath ? "--" : this.prefBranch.getCharPref("onStart.sessionpath");
     this.prefBranch.setIntPref("onStart.loadsession", result.value);
     if (result.value > -1) {
@@ -1396,7 +1396,7 @@ TabmixSessionManager = {
     Services.prefs.savePrefFile(null); // store the pref immediately
   },
 
-  sessionUtil: function(action, what, sessionPath) {
+  sessionUtil(action, what, sessionPath) {
     // action = save , replace
     // type = thiswindow , allwindows
     if (Tabmix.isSingleBrowserWindow)
@@ -1430,7 +1430,7 @@ TabmixSessionManager = {
     else Tabmix.log("Error in " + action + " " + what);
   },
 
-  isValidtoSave: function() {
+  isValidtoSave() {
     if (!this.enableManager) return false;
     if (!this.isWindowValidtoSave()) {
       var title = TabmixSvc.getSMString("sm.title");
@@ -1443,14 +1443,14 @@ TabmixSessionManager = {
     return true;
   },
 
-  isWindowValidtoSave: function() {
+  isWindowValidtoSave() {
     if (gBrowser.isBlankWindow())
       return false;
     return typeof privateTab != "object" ||
       Array.prototype.some.call(gBrowser.tabs, tab => !window.privateTab.isTabPrivate(tab));
   },
 
-  saveOneOrAll: function(action, path, saveClosedTabs) {
+  saveOneOrAll(action, path, saveClosedTabs) {
     if (this.isPrivateWindow)
       return false;
     var numTabs, numWindows;
@@ -1490,7 +1490,7 @@ TabmixSessionManager = {
     return true;
   },
 
-  getSessionName: function(action, old) {
+  getSessionName(action, old) {
     var showCheckbox, closedtabMsg, saveClosedTabs = this.saveClosedtabs;
     if (action != "rename" && saveClosedTabs) {
       closedtabMsg = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");
@@ -1549,7 +1549,7 @@ TabmixSessionManager = {
     return {win: numWindows, tab: numTabs};
   },
 
-  getNameData: function(numWindows, numTabs) {
+  getNameData(numWindows, numTabs) {
     var d = new Date();
     var date = [d.getFullYear(), '/', d.getMonth() < 9 ? "0" : "",
       d.getMonth() + 1, '/', d.getDate() < 10 ? "0" : "", d.getDate()].join('');
@@ -1564,7 +1564,7 @@ TabmixSessionManager = {
     return ", (" + numWindows + " " + W + ", " + numTabs + " " + T + ") (" + date + " " + time + ")";
   },
 
-  updateSessionMenu: function(menu) {
+  updateSessionMenu(menu) {
     var triggerNode = menu.triggerNode;
     if (typeof (triggerNode.session) == "undefined")
       return false;
@@ -1628,7 +1628,7 @@ TabmixSessionManager = {
     return true;
   },
 
-  restoreSession: function(node, overwriteWindows) {
+  restoreSession(node, overwriteWindows) {
     if (!this.enableManager)
       return;
     // call restoreSession after delay to let the popup menu time to hide
@@ -1637,7 +1637,7 @@ TabmixSessionManager = {
     }, 0);
   },
 
-  delayRestoreSession: function(node, overwriteWindows) {
+  delayRestoreSession(node, overwriteWindows) {
     var path = node.session;
     var command = node.command;
     if (command == "loadSession")
@@ -1646,7 +1646,7 @@ TabmixSessionManager = {
       this.openclosedwindow(path, overwriteWindows);
   },
 
-  setSessionAsStartup: function(popup) {
+  setSessionAsStartup(popup) {
     if (popup.getAttribute("checked")) {
       let node = popup.parentNode.triggerNode;
       var aValue = node.getAttribute("value"); // -1, -2 for for closed session, 1, 2.... for saved session
@@ -1662,7 +1662,7 @@ TabmixSessionManager = {
     }
   },
 
-  setShowNameExt: function(contextMenu) {
+  setShowNameExt(contextMenu) {
     this.prefBranch.setBoolPref("menu.showext", !this.prefBranch.getBoolPref("menu.showext"));
     Services.prefs.savePrefFile(null); // store the pref immediately
     if (contextMenu) {
@@ -1680,7 +1680,7 @@ TabmixSessionManager = {
     }
   },
 
-  bookmarkSession: function(node) {
+  bookmarkSession(node) {
     if (!Tabmix.isVersion(450) || Tabmix.isVersion(520)) {
       return;
     }
@@ -1713,7 +1713,7 @@ TabmixSessionManager = {
     }
   },
 
-  saveGuid: function(promise, oldGuid) {
+  saveGuid(promise, oldGuid) {
     promise.then(({guid}) => {
       if (oldGuid != guid) {
         this.setLiteral("rdf:backupSessionWithGroups", "guid", guid);
@@ -1722,7 +1722,7 @@ TabmixSessionManager = {
     });
   },
 
-  removeFromMenu: function(event, popup, root) {
+  removeFromMenu(event, popup, root) {
     if (!Tabmix.prefs.getBoolPref("middleclickDelete")) return;
     if (event.button == 1 && ("session" in event.target)) {
       this.removeSavedSession(event.target);
@@ -1731,7 +1731,7 @@ TabmixSessionManager = {
     }
   },
 
-  removeSavedSession: function(aMenuItem, aRemoveSession) {
+  removeSavedSession(aMenuItem, aRemoveSession) {
     var node = aMenuItem.parentNode.parentNode;
     var path = aMenuItem.session;
     if (aRemoveSession || node.hasAttribute("sessionmanager-menu")) {
@@ -1808,7 +1808,7 @@ TabmixSessionManager = {
     }
   },
 
-  removeAllClosedWindows: function() {
+  removeAllClosedWindows() {
     var currentSession = this.gSessionPath[0];
     if (!this.containerEmpty(currentSession)) {
       let sessionContainer = this.initContainer(currentSession);
@@ -1829,7 +1829,7 @@ TabmixSessionManager = {
     if (!container.GetCount()) this.deleteNode(rdfNode);
   },
 
-  deleteWithProp: function(container, prop, value) {
+  deleteWithProp(container, prop, value) {
     var containerEnum = container.GetElements();
     var nodeToDelete = [];
     var noProp = typeof (prop) == "undefined";
@@ -1843,7 +1843,7 @@ TabmixSessionManager = {
     this.deleteArrayNodes(container, nodeToDelete, true);
   },
 
-  deleteArrayNodes: function(container, nodeToDelete, deleteSubTree) {
+  deleteArrayNodes(container, nodeToDelete, deleteSubTree) {
     for (var i = 0; i < nodeToDelete.length; i++) {
       var nodeValue = nodeToDelete[i].QueryInterface(Ci.nsIRDFResource).Value;
       if (deleteSubTree) this.deleteSubtree(nodeValue);
@@ -1851,7 +1851,7 @@ TabmixSessionManager = {
     }
   },
 
-  destroyMenuItems: function(menu, aRemoveAllItems) {
+  destroyMenuItems(menu, aRemoveAllItems) {
     // Destroy the items.
     var destroy = aRemoveAllItems || false, endSeparator;
     for (var i = 0; i < menu.childNodes.length; i++) {
@@ -1880,7 +1880,7 @@ TabmixSessionManager = {
     this.createMenu(popup_menu, this._rdfRoot + '/windows');
   },
 
-  createMenuForDialog: function(popup, contents) {
+  createMenuForDialog(popup, contents) {
     if (contents == Tabmix.SHOW_CLOSED_WINDOW_LIST) {
       // create closed window list popup menu
       this.createMenu(popup, window.opener.this.gSessionPath[0], contents);
@@ -1898,7 +1898,7 @@ TabmixSessionManager = {
     }
   },
 
-  updateMenuPopupContent: function(popupMenu) {
+  updateMenuPopupContent(popupMenu) {
     const update = popup => {
       if (!popup.parentNode.open) {
         return;
@@ -2070,7 +2070,7 @@ TabmixSessionManager = {
   },
 
   // set defaultIndex, sessionIndex and default Attribute
-  setDefaultIndex: function(popup, loadsession, sessionpath) {
+  setDefaultIndex(popup, loadsession, sessionpath) {
     popup.parentNode.defaultIndex = -1; // index with menuseparator
     popup.parentNode.sessionIndex = -1; // index without menuseparator
     var i, item, value, checked;
@@ -2090,7 +2090,7 @@ TabmixSessionManager = {
   },
 
   // update disable/enable to closed window list in tool menu and toolbar
-  updateClosedWindowsMenu: function(action) {
+  updateClosedWindowsMenu(action) {
     var disabled = (action == "check") ? this.isClosedWindowsEmpty() : action;
     var wnd, enumerator = Tabmix.windowEnumerator();
     while (enumerator.hasMoreElements()) {
@@ -2438,7 +2438,7 @@ TabmixSessionManager = {
   },
 
   // Add delay when calling prompt on startup
-  promptService: function(intParam, strParam, aWindow, aCallBack) {
+  promptService(intParam, strParam, aWindow, aCallBack) {
     setTimeout(() => {
       Tabmix.promptService(intParam, strParam, aWindow, aCallBack);
     }, 0);
@@ -2448,7 +2448,7 @@ TabmixSessionManager = {
   * user wants to restore only pinned tabs
   * use SessionStore functions to prepare and restore
   */
-  deferredRestore: function(afterCrash) {
+  deferredRestore(afterCrash) {
     if (!this.prefBranch.getBoolPref("onStart.restorePinned"))
       return;
 
@@ -2477,7 +2477,7 @@ TabmixSessionManager = {
   * move all tabs & closed tabs into one window
   * (original code by Session Manager extension)
   */
-  mergeWindows: function(state) {
+  mergeWindows(state) {
     if (state.windows.length < 2)
       return;
     // take off first window
@@ -2498,7 +2498,7 @@ TabmixSessionManager = {
     state.windows = [win];
   },
 
-  _sendRestoreCompletedNotifications: function(waitForCallBack) {
+  _sendRestoreCompletedNotifications(waitForCallBack) {
     // notify observers things are complete.
     // we send sessionstore-windows-restored notification as soon as _init
     // function finished, if there are pending call back from one of our
@@ -2742,7 +2742,7 @@ TabmixSessionManager = {
       this.saveStateDelayed();
   },
 
-  updateTabPos: function(aTab, label, add0_1) {
+  updateTabPos(aTab, label, add0_1) {
     var tab, node;
     if (!add0_1) add0_1 = 0;
     for (var i = aTab._tPos + add0_1; i < gBrowser.tabs.length; i++) {
@@ -2820,7 +2820,7 @@ TabmixSessionManager = {
     this.saveStateDelayed();
   },
 
-  setTabsScroll: function() {
+  setTabsScroll() {
     if (this.prefBranch.getBoolPref("save.scrollposition"))
       for (var i = 0; i < gBrowser.tabs.length; i++)
         this.tabScrolled(gBrowser.tabs[i]);
@@ -2839,12 +2839,12 @@ TabmixSessionManager = {
       this.updateScrollPosition(aTab, aBrowser.contentWindow);
   },
 
-  updateScrollPosition: function(tab, scroll) {
+  updateScrollPosition(tab, scroll) {
     if (scroll)
       this.setLiteral(this.getNodeForTab(tab), "scroll", scroll.scrollX + "," + scroll.scrollY);
   },
 
-  tabSelected: function(needFlush) {
+  tabSelected(needFlush) {
     if (!this.enableBackup || this.windowClosed)
       return;
     let tab = gBrowser.mCurrentTab;
@@ -2860,7 +2860,7 @@ TabmixSessionManager = {
       this.saveStateDelayed();
   },
 
-  getTabPosition: function() { // calc selected tab position if blank tab not restore
+  getTabPosition() { // calc selected tab position if blank tab not restore
     if (gBrowser.isBlankTab(gBrowser.mCurrentTab)) return 0; // if the current tab is blank we don't restore the index
     var blankTab = 0;
     for (var i = 0; i < gBrowser.mCurrentTab._tPos; i++) {
@@ -2869,15 +2869,15 @@ TabmixSessionManager = {
     return gBrowser.mCurrentTab._tPos - blankTab;
   },
 
-  getNodeForTab: function(aTab) {
+  getNodeForTab(aTab) {
     return this.gThisWinTabs + "/" + aTab.linkedPanel;
   },
 
-  isTabPrivate: function(aTab) {
+  isTabPrivate(aTab) {
     return typeof privateTab == "object" && window.privateTab.isTabPrivate(aTab);
   },
 
-  privateTabChanged: function(aEvent) {
+  privateTabChanged(aEvent) {
     if (!this.enableBackup || this.windowClosed || typeof privateTab != "object")
       return;
 
@@ -2977,7 +2977,7 @@ TabmixSessionManager = {
   * @return object containing history entries, current history index and
   *                current history scroll position
   */
-  serializeHistory: function(state) {
+  serializeHistory(state) {
     if (!state)
       return null;
     // Ensure sure that all entries have url
@@ -3017,7 +3017,7 @@ TabmixSessionManager = {
       // insert the separator to history so we can extract it in
       // TabmixConvertSession.getHistoryState
       history: separator + "|-|" + encodeURI(history.join(separator)),
-      index: index,
+      index,
       scroll: currentScroll
     };
   },
@@ -3037,7 +3037,7 @@ TabmixSessionManager = {
       TabmixSvc.ss.restoreLastSession();
   },
 
-  setLastSession: function(restoring) {
+  setLastSession(restoring) {
     let state = TabmixConvertSession.getSessionState(this.gSessionPath[1]);
     TabmixSvc.sm.lastSessionPath = this.gSessionPath[1];
 
@@ -3392,8 +3392,8 @@ TabmixSessionManager = {
         let forceNotRemote = !data.pinned;
         tab = gBrowser.addTab("about:blank", {
           skipAnimation: true,
-          forceNotRemote: forceNotRemote,
-          userContextId: userContextId,
+          forceNotRemote,
+          userContextId,
         });
         gBrowser.removeTab(tabToRemove);
         gBrowser.moveTabTo(tab, newIndex + t);
@@ -3547,7 +3547,7 @@ TabmixSessionManager = {
     }
   },
 
-  updateSelected: function(newIndex, removeAttribute) {
+  updateSelected(newIndex, removeAttribute) {
     let oldIndex = gBrowser.tabContainer.selectedIndex;
     if (newIndex != oldIndex) {
       let tabs = gBrowser.tabs;
@@ -3559,7 +3559,7 @@ TabmixSessionManager = {
     }
   },
 
-  setStripVisibility: function(tabCount) {
+  setStripVisibility(tabCount) {
     // un-hide the tab bar
     if (tabCount > 1 && Tabmix.prefs.getIntPref("hideTabbar") != 2 &&
         !gBrowser.tabContainer.visible) {
@@ -3567,7 +3567,7 @@ TabmixSessionManager = {
     }
   },
 
-  copyClosedTabsToSessionStore: function(winData, aOverwrite) {
+  copyClosedTabsToSessionStore(winData, aOverwrite) {
     if (!this.saveClosedtabs)
       return;
     this.copyClosedTabsToRDF(this.gThisWin);
@@ -3638,7 +3638,7 @@ TabmixSessionManager = {
     return data;
   },
 
-  deleteAllClosedtabs: function(sessionContainer) { // delete all closed tabs in this session
+  deleteAllClosedtabs(sessionContainer) { // delete all closed tabs in this session
     var windowEnum = sessionContainer.GetElements();
     while (windowEnum.hasMoreElements()) {
       var rdfNodeWindow = windowEnum.getNext();
@@ -3674,7 +3674,7 @@ TabmixSessionManager = {
     this.saveStateDelayed();
   },
 
-  removeTab: function(aTab) {
+  removeTab(aTab) {
     // add blank tab before removing last tab to prevent browser closing with last tab
     // and the default replacing last tab option
     if (gBrowser.tabs.length == 1)
@@ -3824,7 +3824,7 @@ TabmixSessionManager = {
     return TMP_TabView.installed;
   },
 
-  notifyAboutMissingTabView: function(showNotification) {
+  notifyAboutMissingTabView(showNotification) {
     // show notification when Tabview is missing and the session have hidden tabs
     if (TabmixSvc.isPaleMoon) {
       let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
@@ -3835,7 +3835,7 @@ TabmixSessionManager = {
     }
   },
 
-  _beforeRestore: function(winData) {
+  _beforeRestore(winData) {
     TabmixSvc.SessionStore._setWindowStateBusy(window);
     if (this.tabViewInstalled || TabmixSvc.isPaleMoon) {
       // save group count before we start the restore
@@ -3847,26 +3847,26 @@ TabmixSessionManager = {
   },
 
   // we override these functions when TabView exist
-  _setWindowStateBusy: function(winData) {
+  _setWindowStateBusy(winData) {
     this._beforeRestore(winData);
   },
 
-  _setWindowStateReady: function(aOverwriteTabs, showNotification, tabsRemoved) {
+  _setWindowStateReady(aOverwriteTabs, showNotification, tabsRemoved) {
     if (Tabmix.isVersion(350)) {
       TabmixSvc.SessionStore._setWindowStateReady(window);
     }
     this.notifyAboutMissingTabView(tabsRemoved);
   },
 
-  _saveTabviewData: function() { },
-  _setTabviewTab: function() { },
+  _saveTabviewData() { },
+  _setTabviewTab() { },
   groupUpdates: {},
   _tabviewData: {},
 
   /* ............... DEPRECATED ............... */
 
   // treeStyleTab extension look for it
-  loadOneTab: function() { }
+  loadOneTab() { }
 };
 
 /**

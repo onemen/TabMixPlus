@@ -1,7 +1,7 @@
 "use strict";
 
 Tabmix.contentAreaClick = {
-  init: function() {
+  init() {
     // this getter trigger by call to isGreasemonkeyInstalled from
     // TMP_extensionsCompatibility.onDelayedStartup
     XPCOMUtils.defineLazyGetter(Tabmix, "ContentClick", () => {

@@ -26,35 +26,35 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 var ContentClickInternal;
 this.TabmixContentClick = {
-  init: function() {
+  init() {
     ContentClickInternal.init();
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     ContentClickInternal.onQuitApplication();
   },
 
-  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+  getParamsForLink(event, linkNode, href, browser, focusedWindow) {
     return ContentClickInternal.getParamsForLink(event, linkNode, href, browser, focusedWindow);
   },
 
-  contentLinkClick: function(event, browser, focusedWindow) {
+  contentLinkClick(event, browser, focusedWindow) {
     ContentClickInternal.contentLinkClick(event, browser, focusedWindow);
   },
 
-  isGreasemonkeyInstalled: function(window) {
+  isGreasemonkeyInstalled(window) {
     ContentClickInternal.isGreasemonkeyInstalled(window);
   },
 
-  isLinkToExternalDomain: function(curpage, url) {
+  isLinkToExternalDomain(curpage, url) {
     return ContentClickInternal.isLinkToExternalDomain(curpage, url);
   },
 
-  isUrlForDownload: function(url) {
+  isUrlForDownload(url) {
     return ContentClickInternal.isUrlForDownload(url);
   },
 
-  selectExistingTab: function(window, href, targetAttr) {
+  selectExistingTab(window, href, targetAttr) {
     ContentClickInternal.selectExistingTab(window, href, targetAttr);
   }
 };
@@ -64,7 +64,7 @@ ContentClickInternal = {
   _timer: null,
   _initialized: false,
 
-  init: function() {
+  init() {
     if (!TabmixSvc.version(380) || this._initialized)
       return;
     this._initialized = true;
@@ -90,7 +90,7 @@ ContentClickInternal = {
     this.initContentAreaClick();
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     if (this._timer)
       this._timer.clear();
 
@@ -129,7 +129,7 @@ ContentClickInternal = {
           json.tabmixContentClick.suppressTabsOnFileDownload || false;
       let params = {
         charset: browser.characterSet,
-        suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+        suppressTabsOnFileDownload,
         referrerURI: browser.documentURI,
         referrerPolicy: json.referrerPolicy,
         noReferrer: json.noReferrer,
@@ -153,7 +153,7 @@ ContentClickInternal = {
     };
   },
 
-  receiveMessage: function(message) {
+  receiveMessage(message) {
     if (message.name == "Tabmix:isFrameInContentResult") {
       const {epoch} = message.data;
       if (this.frameSearch.has(epoch)) {
@@ -179,7 +179,7 @@ ContentClickInternal = {
   },
 
   // for non-link element with onclick that change location.href
-  getHrefFromNodeOnClick: function(event, browser, wrappedOnClickNode) {
+  getHrefFromNodeOnClick(event, browser, wrappedOnClickNode) {
     if (!wrappedOnClickNode || !this.getHrefFromOnClick(event, null, wrappedOnClickNode,
       wrappedOnClickNode.getAttribute("onclick")))
       return false;
@@ -203,12 +203,12 @@ ContentClickInternal = {
     return true;
   },
 
-  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+  getParamsForLink(event, linkNode, href, browser, focusedWindow) {
     let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button === 0);
     return this._getParamsForLink(event, wrappedNode, href, browser);
   },
 
-  _getParamsForLink: function(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
+  _getParamsForLink(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
     this._browser = browser;
     this._window = browser.ownerDocument.defaultView;
 
@@ -244,21 +244,21 @@ ContentClickInternal = {
     this.resetData();
 
     return {
-      where: where,
+      where,
       _href: href,
       suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,
-      targetAttr: targetAttr
+      targetAttr
     };
   },
 
   _data: null,
-  resetData: function() {
+  resetData() {
     this._data = null;
     this._browser = null;
     this._window = null;
   },
 
-  getPref: function() {
+  getPref() {
     XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
       return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
@@ -277,7 +277,7 @@ ContentClickInternal = {
    *
    * @return                 wrapped node including attribute functions
    */
-  getWrappedNode: function(node, focusedWindow, getTargetIsFrame) {
+  getWrappedNode(node, focusedWindow, getTargetIsFrame) {
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
       let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
       nObj.hasAttribute = function(att) {
@@ -305,7 +305,7 @@ ContentClickInternal = {
    * @param wrappedOnClickNode   wrapped DOM node containing onclick, may exist only
    *                         when link node is null.
    */
-  getData: function(event, href, wrappedNode, wrappedOnClickNode) {
+  getData(event, href, wrappedNode, wrappedOnClickNode) {
     let self = this;
     function LinkData() {
       this.event = event;
@@ -470,7 +470,7 @@ ContentClickInternal = {
     return ["default@17"];
   },
 
-  contentLinkClick: function(event, browser, focusedWindow) {
+  contentLinkClick(event, browser, focusedWindow) {
     this._contentLinkClick(event, browser, focusedWindow);
     if (event.__hrefFromOnClick) {
       event.stopImmediatePropagation();
@@ -644,7 +644,7 @@ ContentClickInternal = {
     this._GM_function.set(window, GM_function);
   },
 
-  miscellaneous: function(node) {
+  miscellaneous(node) {
     if ("className" in node) {
       // don't interrupt with noscript
       if (node.className.indexOf("__noscriptPlaceholder__") > -1)
@@ -688,7 +688,7 @@ ContentClickInternal = {
 
   _GM_function: new WeakMap(),
 
-  isGMEnabled: function() {
+  isGMEnabled() {
     if (this._GM_function.has(this._window))
       return this._GM_function.get(this._window)();
     return false;
@@ -1012,13 +1012,13 @@ ContentClickInternal = {
         addValidWindow(browserWin);
       }
     }
-    this.isFrameInContent(windows, {href: href, name: targetFrame}, isMultiProcess);
+    this.isFrameInContent(windows, {href, name: targetFrame}, isMultiProcess);
   },
 
   frameSearchEpoch: 0,
   frameSearch: new Map(),
 
-  isFrameInContent: function(windows, frameData, isMultiProcess) {
+  isFrameInContent(windows, frameData, isMultiProcess) {
     const deleteEpoch = epoch => {
       if (this.frameSearch.has(epoch)) {
         this.frameSearch.delete(epoch);
@@ -1028,7 +1028,7 @@ ContentClickInternal = {
       epoch: 0,
       frameData: null,
       windows: null,
-      start: function(epoch) {
+      start(epoch) {
         this.frameData = frameData;
         this.epoch = epoch;
         this.frameData.epoch = this.epoch;
@@ -1036,12 +1036,12 @@ ContentClickInternal = {
         let window = this.windows.shift();
         this.next(window.gBrowser.tabs[0]);
       },
-      stop: function() {
+      stop() {
         this.frameData = null;
         this.windows = null;
         deleteEpoch(this.epoch);
       },
-      result: function(browser, data) {
+      result(browser, data) {
         let window = browser.ownerDocument.defaultView;
         let tab = window.gBrowser.getTabForBrowser(browser);
         if (data.result) {
@@ -1054,7 +1054,7 @@ ContentClickInternal = {
           this.next(tab.nextSibling);
         }
       },
-      next: function(tab) {
+      next(tab) {
         if (!tab && this.windows.length) {
           let window = this.windows.shift();
           tab = window.gBrowser.tabs[0];
@@ -1067,7 +1067,7 @@ ContentClickInternal = {
           } else {
             let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
               this.frameData.href, this.frameData.name);
-            this.result(browser, {result: result});
+            this.result(browser, {result});
           }
         } else {
           this.stop();
@@ -1197,7 +1197,7 @@ ContentClickInternal = {
    * @brief prevent onclick function with the form javascript:top.location.href = url
    *        or the form window.location = url when we force new tab from link
    */
-  getHrefFromOnClick: function(event, href, node, onclick) {
+  getHrefFromOnClick(event, href, node, onclick) {
     if (typeof event.__hrefFromOnClick != "undefined")
       return event.__hrefFromOnClick;
 
@@ -1213,7 +1213,7 @@ ContentClickInternal = {
     return (event.__hrefFromOnClick = result.__hrefFromOnClick);
   },
 
-  _hrefFromOnClick: function(href, node, onclick, result) {
+  _hrefFromOnClick(href, node, onclick, result) {
     let re = /^(javascript:)?(window\.|top\.)?(document\.)?location(\.href)?=/;
     if (!re.test(onclick))
       return;

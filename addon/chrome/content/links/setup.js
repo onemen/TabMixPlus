@@ -84,7 +84,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         get isStopped() {
           return TabmixSvc.SessionStore._loadState === 0; // STATE_STOPPED
         },
-        setRunning: function() {
+        setRunning() {
           TabmixSvc.SessionStore._loadState = 1; // STATE_RUNNING
         }
       };

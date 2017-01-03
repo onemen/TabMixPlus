@@ -23,15 +23,15 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
 
 var AboutNewTabInternal;
 this.TabmixAboutNewTab = Object.freeze({
-  updateAllBrowsers: function(window) {
+  updateAllBrowsers(window) {
     AboutNewTabInternal.updateAllBrowsers(window);
   },
 
-  updateBrowser: function(browser) {
+  updateBrowser(browser) {
     AboutNewTabInternal.updateBrowser(browser);
   },
 
-  updateTitles: function(cells) {
+  updateTitles(cells) {
     AboutNewTabInternal.updateTitles(cells);
   },
 });
@@ -39,7 +39,7 @@ this.TabmixAboutNewTab = Object.freeze({
 AboutNewTabInternal = {
   // update all opened about:newtab browsers in a window including preloaded
   // browser if exist
-  updateAllBrowsers: function(window) {
+  updateAllBrowsers(window) {
     let tabBrowser = window.gBrowser;
     let tabPanels = tabBrowser.mPanelContainer.childNodes;
     let browsers = Array.prototype.map.call(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
@@ -47,7 +47,7 @@ AboutNewTabInternal = {
     browsers.forEach(browser => this.updateBrowser(browser));
   },
 
-  updateBrowser: function(browser) {
+  updateBrowser(browser) {
     if (TabmixSvc.version(420)) {
       browser.messageManager.sendAsyncMessage("Tabmix:updateTitlefrombookmark");
     } else {
@@ -60,7 +60,7 @@ AboutNewTabInternal = {
     }
   },
 
-  updateTitles: function(cells = []) {
+  updateTitles(cells = []) {
     cells.forEach(cell => {
       let site = cell.site;
       if (!site) {

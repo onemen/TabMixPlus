@@ -14,11 +14,11 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "resource://tabmixplus/TabmixSvc.jsm");
 
 this.DocShellCapabilities = {
-  init: function() {
+  init() {
     this.useFrameScript = TabmixSvc.version(320);
   },
 
-  update: function(browser, data) {
+  update(browser, data) {
     // Update the persistent tab state cache
     TabStateCache.update(browser, {disallow: data.disallow || null});
     if (data.reload)
@@ -27,7 +27,7 @@ this.DocShellCapabilities = {
 
   caps: ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"],
 
-  collect: function(tab) {
+  collect(tab) {
     let browser = tab.linkedBrowser;
 
     if (!this.useFrameScript) {
@@ -43,7 +43,7 @@ this.DocShellCapabilities = {
     return "";
   },
 
-  restore: function(tab, disallow, reload) {
+  restore(tab, disallow, reload) {
     let browser = tab.linkedBrowser;
     if (reload && tab.getAttribute("pending") == "true")
       reload = false;
@@ -64,14 +64,14 @@ this.DocShellCapabilities = {
 
   /*** for tab context menu ***/
 
-  onGet: function(nodes, tab) {
+  onGet(nodes, tab) {
     let disallow = this.collect(tab);
     for (let i = 0; i < nodes.length; i++) {
       nodes[i].setAttribute("checked", disallow.indexOf(nodes[i].value) == -1);
     }
   },
 
-  onSet: function(tab, node) {
+  onSet(tab, node) {
     let nodes = node.parentNode.childNodes;
     let disallow = [];
     for (let i = 0; i < nodes.length; i++) {

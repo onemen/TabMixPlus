@@ -11,7 +11,7 @@ var Tabmix = {
     return (this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix."));
   },
 
-  isVersion: function() {
+  isVersion() {
     return TabmixSvc.version.apply(null, arguments);
   },
 
@@ -22,13 +22,13 @@ var Tabmix = {
   },
 
   // Show/hide one item (specified via name or the item element itself).
-  showItem: function(aItemOrId, aShow) {
+  showItem(aItemOrId, aShow) {
     var item = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (item && item.hidden == Boolean(aShow))
       item.hidden = !aShow;
   },
 
-  setItem: function(aItemOrId, aAttr, aVal) {
+  setItem(aItemOrId, aAttr, aVal) {
     var elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
       if (aVal === null || aVal === undefined) {
@@ -43,7 +43,7 @@ var Tabmix = {
     }
   },
 
-  setAttributeList: function(aItemOrId, aAttr, aValue, aAdd) {
+  setAttributeList(aItemOrId, aAttr, aValue, aAdd) {
     let elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
@@ -58,7 +58,7 @@ var Tabmix = {
       elem.removeAttribute(aAttr);
   },
 
-  getTopWin: function() {
+  getTopWin() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
@@ -72,7 +72,7 @@ var Tabmix = {
     return this.prefs.getBoolPref("singleWindow");
   },
 
-  isNewWindowAllow: function(isPrivate) {
+  isNewWindowAllow(isPrivate) {
     // allow to open new window if:
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
@@ -80,7 +80,7 @@ var Tabmix = {
       !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
   },
 
-  lazy_import: function(aObject, aName, aModule, aSymbol, aFlag, aArg) {
+  lazy_import(aObject, aName, aModule, aSymbol, aFlag, aArg) {
     if (aFlag)
       this[aModule + "Initialized"] = false;
     var self = this;
@@ -98,13 +98,13 @@ var Tabmix = {
     });
   },
 
-  backwardCompatibilityGetter: function(aObject, aOldName, aNewName) {
+  backwardCompatibilityGetter(aObject, aOldName, aNewName) {
     if (aOldName in aObject)
       return;
 
     var self = this;
     Object.defineProperty(aObject, aOldName, {
-      get: function() {
+      get() {
         self.informAboutChangeInTabmix(aOldName, aNewName);
         delete aObject[aOldName];
         return (aObject[aOldName] = self.getObject(window, aNewName));
@@ -113,7 +113,7 @@ var Tabmix = {
     });
   },
 
-  informAboutChangeInTabmix: function(aOldName, aNewName) {
+  informAboutChangeInTabmix(aOldName, aNewName) {
     let err = Error(aOldName + " is deprecated in Tabmix, use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
     let stack = Error().stack.split("\n").slice(3);
@@ -132,7 +132,7 @@ var Tabmix = {
     }
   },
 
-  promptService: function(intParam, strParam, aWindow, aCallBack) {
+  promptService(intParam, strParam, aWindow, aCallBack) {
     var dpb = Cc["@mozilla.org/embedcomp/dialogparam;1"]
                             .createInstance(Ci.nsIDialogParamBlock);
     // intParam[0] - default button accept=0, cancel=1, extra1=2
@@ -219,7 +219,7 @@ var Tabmix = {
     return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);
   },
 
-  show: function(aMethod, aDelay, aWindow) {
+  show(aMethod, aDelay, aWindow) {
     TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
   },
 
@@ -237,12 +237,12 @@ var Tabmix = {
     return null;
   },
 
-  installChangecode: function() {
+  installChangecode() {
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
     this.installChangecode = function() {};
   },
 
-  _init: function() {
+  _init() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
     XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",

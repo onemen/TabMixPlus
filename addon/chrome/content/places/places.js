@@ -116,7 +116,7 @@ var TMP_Places = {
     }
   },
 
-  openMenuItem: function(aUri, aEvent, aParams, aPref) {
+  openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
     let where = this.isBookmarklet(aUri) ? "current" :
                 this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
@@ -133,7 +133,7 @@ var TMP_Places = {
     BMB_bookmarksPopup: "bookmarks",
   },
 
-  openUILink: function(url, event, where, params) {
+  openUILink(url, event, where, params) {
     // divert all the calls from places UI to use our preferences
     //   HistoryMenu.prototype._onCommand
     //   BookmarkingUI._updateRecentBookmarks/onItemCommand
@@ -175,12 +175,12 @@ var TMP_Places = {
     return where;
   },
 
-  isBookmarklet: function(url) {
+  isBookmarklet(url) {
     var jsURL = /^ *javascript:/;
     return jsURL.test(url);
   },
 
-  fixWhereToOpen: function(aEvent, aWhere, aPref) {
+  fixWhereToOpen(aEvent, aWhere, aPref) {
     var w = Tabmix.getTopWin();
     if (!w)
       return aWhere;
@@ -206,7 +206,7 @@ var TMP_Places = {
     return aWhere;
   },
 
-  getPrefByDocumentURI: function(aWindow) {
+  getPrefByDocumentURI(aWindow) {
     switch (aWindow.document.documentURI) {
       case "chrome://browser/content/places/places.xul": {
         let history = PlacesUIUtils.getString("OrganizerQueryHistory");
@@ -310,7 +310,7 @@ var TMP_Places = {
       this.setTabTitle(aTab, url, bmIds[i]);
       if (loadProgressively) {
         tabs.push(aTab);
-        tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
+        tabsData.push({entries: [{url, title: aTab.label}], index: 0});
       }
 
       if (!tabToSelect)
@@ -370,7 +370,7 @@ var TMP_Places = {
     return [tabCount > progressively, tabCount > onDemand];
   },
 
-  restoreTabs: function(tabs, tabsData, restoreOnDemand) {
+  restoreTabs(tabs, tabsData, restoreOnDemand) {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
     let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
@@ -394,14 +394,14 @@ var TMP_Places = {
   bookmarksOnDemand: false,
   restoringTabs: [],
 
-  resetRestoreState: function(tab) {
+  resetRestoreState(tab) {
     if (tab.linkedBrowser.__SS_restoreState) {
       TabmixSvc.SessionStore._resetTabRestoringState(tab);
     }
     this.updateRestoringTabsList(tab);
   },
 
-  updateRestoringTabsList: function(tab) {
+  updateRestoringTabsList(tab) {
     if (!this.restoringTabs.length && !this.bookmarksOnDemand) {
       return;
     }
@@ -456,11 +456,11 @@ var TMP_Places = {
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  getTitleFromBookmark: function(aUrl, aTitle, aItemId, aTab) {
+  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
     return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
   },
 
-  isUserRenameTab: function(aTab, aUrl) {
+  isUserRenameTab(aTab, aUrl) {
     if (aTab.hasAttribute("label-uri")) {
       let label = aTab.getAttribute("label-uri");
       if (label == aUrl || label == "*")
@@ -469,7 +469,7 @@ var TMP_Places = {
     return false;
   },
 
-  afterTabTitleChanged: function(bookmarkChanged = true) {
+  afterTabTitleChanged(bookmarkChanged = true) {
     if (bookmarkChanged && !this.inUpdateBatch) {
       this.AboutNewTab.updateAllBrowsers(window);
     }
@@ -514,7 +514,7 @@ var TMP_Places = {
     }
   },
 
-  onDelayedStartup: function() {
+  onDelayedStartup() {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
@@ -522,7 +522,7 @@ var TMP_Places = {
   },
 
   // extensions.tabmix.titlefrombookmark changed
-  onPreferenceChanged: function(aPrefValue) {
+  onPreferenceChanged(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
@@ -651,18 +651,18 @@ var TMP_Places = {
     this.currentTab = null;
   },
 
-  onItemVisited: function() {},
-  onItemMoved: function() {}
+  onItemVisited() {},
+  onItemMoved() {}
 };
 
 TMP_Places.contextMenu = {
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     window[eventListener]("unload", this, false);
     document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     switch (aEvent.type) {
       case "popupshowing":
         this.buildContextMenu();
@@ -719,12 +719,12 @@ TMP_Places.contextMenu = {
 };
 
 Tabmix.onContentLoaded = {
-  changeCode: function() {
+  changeCode() {
     this.change_miscellaneous();
     this.change_utilityOverlay();
   },
 
-  change_miscellaneous: function() {
+  change_miscellaneous() {
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
       /allowMixedContent:|charset:/,
       'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
@@ -781,7 +781,7 @@ Tabmix.onContentLoaded = {
     ).toCode();
   },
 
-  change_utilityOverlay: function() {
+  change_utilityOverlay() {
     // fix small bug when the event is not mouse event
     // inverse focus of middle/ctrl/meta clicked bookmarks/history
     // don't inverse focus when called from onPopupClick and One-Click Search
@@ -869,7 +869,7 @@ Tabmix.onContentLoaded = {
 
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
   // object name wmn replace with xnotifier for version 3.0+
-  getXnotifierFunction: function(aName) {
+  getXnotifierFunction(aName) {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(f => {

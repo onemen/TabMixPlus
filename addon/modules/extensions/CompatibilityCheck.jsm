@@ -62,7 +62,7 @@ CompatibilityCheck.prototype = {
       this._version = addon.version;
     }
     AddOn.prototype = {
-      toString: function() {
+      toString() {
         return this._name.toLowerCase();
       }
     };

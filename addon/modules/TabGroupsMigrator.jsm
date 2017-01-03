@@ -48,7 +48,7 @@ this.TabmixGroupsMigrator = {
   /**
    * If previous or last session contains tab groups, save a back
    */
-  backupSessions: function(window, isAfterCrash) {
+  backupSessions(window, isAfterCrash) {
     let sm = window.TabmixSessionManager;
     let notify;
 
@@ -96,7 +96,7 @@ this.TabmixGroupsMigrator = {
       }
 
       sm.saveClosedSession({
-        session: session,
+        session,
         name: {name: string(type)},
         nameExt: sm.getLiteralValue(session, "nameExt", ""),
         button: -1
@@ -122,12 +122,12 @@ this.TabmixGroupsMigrator = {
     }
   },
 
-  getNotificationBox: function(doc) {
+  getNotificationBox(doc) {
     return doc.getElementById("high-priority-global-notificationbox") ||
       doc.getElementById("global-notificationbox");
   },
 
-  closeNotificationFromAllWindows: function() {
+  closeNotificationFromAllWindows() {
     TabmixSvc.forEachBrowserWindow(aWindow => {
       let notificationBox = this.getNotificationBox(aWindow.document);
       let notification = notificationBox.getNotificationWithValue("tabmix-missing-tabview");
@@ -137,7 +137,7 @@ this.TabmixGroupsMigrator = {
     });
   },
 
-  missingTabViewNotification: function(win, backup = "") {
+  missingTabViewNotification(win, backup = "") {
     let string = s => TabmixSvc.getSMString("sm.tabview." + s);
 
     // If there's already an existing notification bar, don't do anything.
@@ -151,7 +151,7 @@ this.TabmixGroupsMigrator = {
     let buttons = [{
       label: string("install.label"),
       accessKey: string("install.accesskey"),
-      callback: function() {
+      callback() {
         let link = TabmixSvc.isPaleMoon ?
             "http://www.palemoon.org/tabgroups.shtml" :
             "https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/";
@@ -165,7 +165,7 @@ this.TabmixGroupsMigrator = {
       buttons.push({
         label: string("removed.learnMore.label"),
         accessKey: string("removed.learnMore.accesskey"),
-        callback: function() {
+        callback() {
           win.openUILinkIn("http://tabmixplus.org/support/viewpage.php?t=2&p=tab-groups-removal", "tab");
         }
       });
@@ -187,23 +187,23 @@ this.TabmixGroupsMigrator = {
     );
   },
 
-  removeHiddenTabGroupsFromState: function(state) {
+  removeHiddenTabGroupsFromState(state) {
     if (!TabGroupsMigrator) {
       return {hiddenTabState: {windows: []}};
     }
 
     let groupData = TabGroupsMigrator._gatherGroupData(state);
     let hiddenTabState = TabGroupsMigrator._removeHiddenTabGroupsFromState(state, groupData);
-    return {hiddenTabState: hiddenTabState, groupData: groupData};
+    return {hiddenTabState, groupData};
   },
 
-  isGroupExist: function(groupData) {
+  isGroupExist(groupData) {
     return [...groupData.keys()].length > 0;
   },
 
   // add windows without groups to the data as single group
   // add window count to each folder title
-  gatherGroupData: function(state) {
+  gatherGroupData(state) {
     if (!TabGroupsMigrator) {
       return null;
     }
@@ -248,7 +248,7 @@ this.TabmixGroupsMigrator = {
     return allGroupData;
   },
 
-  setTabTitle: function(groupData) {
+  setTabTitle(groupData) {
     for (let [, windowGroupMap] of groupData) {
       let windowGroups = [...windowGroupMap.values()];
       for (let group of windowGroups) {
@@ -261,14 +261,14 @@ this.TabmixGroupsMigrator = {
     }
   },
 
-  promiseItemId: function({guid}) {
+  promiseItemId({guid}) {
     return PlacesUtils.promiseItemId(guid).then(id => {
-      return {id: id, guid: guid};
+      return {id, guid};
     });
   },
 
   // create SessionsFolder: function() {
-  createSessionsFolder: function() {
+  createSessionsFolder() {
     let BM = PlacesUtils.bookmarks;
     return BM.insert({
       parentGuid: BM.menuGuid,
@@ -279,12 +279,12 @@ this.TabmixGroupsMigrator = {
       .catch(TabmixSvc.console.reportError);
   },
 
-  getSessionsFolder: function(folder) {
+  getSessionsFolder(folder) {
     return this.promiseItemId(folder).catch(() => this.createSessionsFolder());
   },
 
-  bookmarkAllGroupsFromState: function(groupData, guid, name) {
-    let folder = {guid: guid};
+  bookmarkAllGroupsFromState(groupData, guid, name) {
+    let folder = {guid};
     if (!TabGroupsMigrator || !this.isGroupExist(groupData)) {
       return Promise.resolve(folder);
     }
@@ -315,11 +315,11 @@ this.TabmixGroupsMigrator = {
     return sessionsFolder;
   },
 
-  showBackgroundTabGroupRestorationPage: function(state, backgroundData) {
+  showBackgroundTabGroupRestorationPage(state, backgroundData) {
     const RECOVERY_URL = "chrome://browser/content/aboutTabGroupsMigration.xhtml";
     let win = state.windows[state.windows.length - 1];
     let formdata = {id: {sessionData: JSON.stringify(backgroundData)}, url: RECOVERY_URL};
-    let newTab = {entries: [{url: RECOVERY_URL}], formdata: formdata, index: 1};
+    let newTab = {entries: [{url: RECOVERY_URL}], formdata, index: 1};
     // Add tab and mark it as selected:
     win.selected = win.tabs.push(newTab);
   },

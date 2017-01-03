@@ -223,7 +223,7 @@ module.exports = {
     }],
     "object-curly-spacing": [2, "never"],
     "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
-    "object-shorthand": 0, // since Firefox 33
+    "object-shorthand": [2, "always", {"avoidQuotes": true}],
     "one-var": 0,
     "one-var-declaration-per-line": 0,
     "operator-assignment": [2, "always"],

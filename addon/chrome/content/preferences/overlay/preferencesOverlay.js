@@ -4,7 +4,7 @@
 Components.utils.import("resource://tabmixplus/TabmixSvc.jsm");
 
 var gTabMix_preferencesOverlay = {
-  id: function(id) {
+  id(id) {
     return document.getElementById(id);
   },
 
@@ -42,7 +42,7 @@ var gTabMix_preferencesOverlay = {
   },
 
 /* ........ paneTabs .............. */
-  initPaneTabsOptions: function() {
+  initPaneTabsOptions() {
     this.id("_hideTabbar").value = this.id("extensions.tabmix.hideTabbar").value;
     this.id("generalWindowOpen").value = this.id("browser.link.open_newwindow").value;
     this.id("warnCloseMultiple").checked = this.id("extensions.tabmix.tabs.warnOnClose").value;
@@ -51,7 +51,7 @@ var gTabMix_preferencesOverlay = {
     this.setSingleWindowUI();
   },
 
-  setSingleWindowUI: function() {
+  setSingleWindowUI() {
     var val = TabmixSvc.prefBranch.getBoolPref("singleWindow");
     let item = this.id("linkTargetWindow");
     item.disabled = val;
@@ -61,7 +61,7 @@ var gTabMix_preferencesOverlay = {
       item.removeAttribute("style");
   },
 
-  showTabmixOptions: function(panel) {
+  showTabmixOptions(panel) {
     var windowMediator = Services.wm;
     var browserWindow = windowMediator.getMostRecentWindow('navigator:browser');
 
@@ -78,7 +78,7 @@ var gTabMix_preferencesOverlay = {
   },
 
 /* ........ paneMain .............. */
-  initMainPane: function() {
+  initMainPane() {
     var menuList = this.id("browserStartupPage");
     var hBox = menuList.parentNode;
     menuList.parentNode.id = "whenBrowserStartBox";
@@ -86,7 +86,7 @@ var gTabMix_preferencesOverlay = {
     this.onStartupPrefChanged();
   },
 
-  onStartupPrefChanged: function() {
+  onStartupPrefChanged() {
     var tabmixSession = this.id('tabmix.sm').value || this.id('tabmix.cr').value;
     if (tabmixSession)
       this.id("whenBrowserStartBox").setAttribute("tabmixSession", true);

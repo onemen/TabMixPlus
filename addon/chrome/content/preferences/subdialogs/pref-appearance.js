@@ -5,7 +5,7 @@ var $ = id => document.getElementById(id);
 
 var tabstyles = {
   pref: "appearance_tab",
-  init: function() {
+  init() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
         Tabmix.prefs.getIntPref(this.pref) : 0;
 
@@ -22,13 +22,13 @@ var tabstyles = {
     extra.classList.add("text-link");
   },
 
-  save: function() {
+  save() {
     Tabmix.prefs.setIntPref(this.pref, $("stylestabs").selectedIndex);
     // store the pref immediately
     Services.prefs.savePrefFile(null);
   },
 
-  cancel: function() {
+  cancel() {
     let panels = $("stylespanels").childNodes;
     for (let panel of panels) {
       $(panel.id)._ondialogcancel();
@@ -36,7 +36,7 @@ var tabstyles = {
     this.save();
   },
 
-  openHelp: function() {
+  openHelp() {
     var win = window.opener || Tabmix.getTopWin();
     if (win)
       win.openHelp("display-tab#customize_styles");
@@ -44,7 +44,7 @@ var tabstyles = {
       document.documentElement.getButton("help").disabled = true;
   },
 
-  toggleRGB_visibility: function() {
+  toggleRGB_visibility() {
     let doc = document.documentElement;
     let extra = doc.getButton("extra2");
     let item = $("hide-RGB");
