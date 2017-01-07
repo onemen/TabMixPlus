@@ -4,10 +4,10 @@ this.EXPORTED_SYMBOLS = ["console"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
-XPCOMUtils.defineLazyGetter(this, "OS", function() {
+XPCOMUtils.defineLazyGetter(this, "OS", () => {
   return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
 });
 
@@ -47,7 +47,7 @@ this.console = {
       if (typeof (aDelay) == "undefined")
         aDelay = 500;
 
-      let logMethod = function _logMethod() {
+      let logMethod = () => {
         let result = "", isObj = typeof aMethod == "object";
         if (typeof aMethod != "function") {
           result = isObj ? aMethod.obj[aMethod.name] :
@@ -55,16 +55,16 @@ this.console = {
           result = " = " + result.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
-      }.bind(this);
+      };
 
       if (aDelay >= 0) {
         let timerID = gNextID++;
         let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
-        timer.clear = function() {
+        timer.clear = () => {
           if (timerID in this._timers)
             delete this._timers[timerID];
           timer.cancel();
-        }.bind(this);
+        };
         if (aWindow) {
           aWindow.addEventListener("unload", function unload(event) {
             event.currentTarget.removeEventListener("unload", unload, false);
@@ -245,7 +245,7 @@ options = {
 
   _formatStack: function(stack) {
     let lines = [], _char = this._char, re = this._pathRegExp;
-    stack.forEach(function(line) {
+    stack.forEach(line => {
       let atIndex = line.indexOf("@");
       let columnIndex = line.lastIndexOf(":");
       let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
@@ -348,7 +348,7 @@ options = {
     let {filename, lineNumber, columnNumber} = caller;
     let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
     consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
-                    Ci.nsIScriptError[flag], "component javascript");
+      Ci.nsIScriptError[flag], "component javascript");
     Services.console.logMessage(consoleMsg);
   },
 

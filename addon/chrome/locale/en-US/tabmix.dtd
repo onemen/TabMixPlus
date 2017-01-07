@@ -112,7 +112,7 @@
 <!ENTITY sm.context.details.key "C">
 <!ENTITY tab.key "T">
 <!ENTITY window.key "N">
-<!ENTITY merge.key "M">
+<!ENTITY merge.key "U">
 <!ENTITY sortedTabs.label "Sorted Tabs">
 <!ENTITY sortedTabs.tooltip "Check to show the list sorted alphabetically">
 <!ENTITY enable.label "Enable">

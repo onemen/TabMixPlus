@@ -230,7 +230,7 @@
             resetButton.hidden = false;
             let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
             resetButton.setAttribute("tooltiptext",
-                resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
+              resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
           }
           this.__defineGetter__("defaultPref", () => defaultVal);
           return defaultVal;

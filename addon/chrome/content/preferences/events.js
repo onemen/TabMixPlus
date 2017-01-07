@@ -13,6 +13,8 @@ var gEventsPane = {
       hbox.setAttribute("align", "center");
     }
 
+    $("keepMenuOpen").label = TabmixSvc.getString("undoclosetab.keepOpen.label");
+
     var browserWindow = Tabmix.getTopWin();
     let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {
@@ -37,16 +39,44 @@ var gEventsPane = {
       focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
     }
 
-    // align Tab opening group boxes
-    var vbox1 = $("tabopening1");
-    var vbox2 = $("tabopening2");
-    var vbox3 = $("tabopening3");
-    var max = Math.max(vbox1.boxObject.width, vbox2.boxObject.width, vbox3.boxObject.width);
-    vbox1.style.setProperty("width", max + "px", "important");
-    vbox2.style.setProperty("width", max + "px", "important");
-    vbox3.style.setProperty("width", max + "px", "important");
+    // bug 1210586 - Create a Synced tabs sidebar
+    if (Tabmix.isVersion(470)) {
+      const {label: syncedTabs} = browserWindow.document.getElementById("menu_tabsSidebar");
+      $("syncedTabs").label = syncedTabs;
+      $("selectSyncedTabs").label = syncedTabs;
+    } else {
+      $("syncedTabs").hidden = true;
+      $("selectSyncedTabs").hidden = true;
+    }
+
+    this.alignTabOpeningBoxes();
 
     gPrefWindow.initPane("paneEvents");
+  },
+
+  // align Tab opening group boxes
+  // add setWidth attribute to columns that need to be aligned
+  alignTabOpeningBoxes: function() {
+    const widths = {};
+    const rows = $("tabopening").querySelectorAll("hbox");
+    function updateGrid(fn) {
+      for (let row of rows) {
+        let id = 0;
+        const cols = row.querySelectorAll("vbox");
+        for (let col of cols) {
+          if (++id && col.hasAttribute("setWidth")) {
+            fn(col, id);
+          }
+        }
+      }
+    }
+    updateGrid((col, id) => {
+      widths[id] = Math.max(widths[id] || 0, col.boxObject.width);
+    });
+
+    updateGrid((col, id) => {
+      col.style.setProperty("width", widths[id] + "px", "important");
+    });
   },
 
   disableShowTabList: function() {
@@ -110,5 +140,52 @@ var gEventsPane = {
       gMenuPane.editSlideShowKey();
     else
       $("paneMenu").setAttribute("editSlideShowKey", true);
-  }
+  },
+
+  loadProgressively: {
+    syncToCheckBox: function(item) {
+      let preference = $(item.getAttribute("preference"));
+      if (preference.value == 0) {
+        preference.value = 1;
+      }
+      if (preference.hasAttribute("notChecked")) {
+        preference.setAttribute("notChecked", -Math.abs(preference.value));
+      }
+      this.setOnDemandDisabledState();
+      return preference.value > -1;
+    },
+
+    syncFromCheckBox: function(item) {
+      let preference = $(item.getAttribute("preference"));
+      let control = $(item.getAttribute("control"));
+      control.disabled = !item.checked;
+      return -preference.value;
+    },
+
+    syncFromPref(item) {
+      const preference = $(item.getAttribute("preference"));
+      const prefValue = Math.abs(preference.value);
+      this.setOnDemandMinValue(item, prefValue);
+      return prefValue;
+    },
+
+    setOnDemandMinValue(item, prefValue) {
+      if (item.id != "loadProgressively") {
+        return;
+      }
+      const onDemand = $("restoreOnDemand");
+      onDemand.min = item.valueNumber;
+      onDemand._enableDisableButtons();
+      const restoreOnDemand = $("pref_restoreOnDemand");
+      if (prefValue > Math.abs(restoreOnDemand.value)) {
+        restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;
+      }
+    },
+
+    setOnDemandDisabledState() {
+      const disabled = $("pref_loadProgressively").value < 0 ||
+                       $("pref_restoreOnDemand").value < 0;
+      gPrefWindow.setDisabled("restoreOnDemand", disabled);
+    },
+  },
 };

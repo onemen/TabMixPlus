@@ -84,7 +84,7 @@ var Tabmix = {
     if (aFlag)
       this[aModule + "Initialized"] = false;
     var self = this;
-    XPCOMUtils.defineLazyGetter(aObject, aName, function() {
+    XPCOMUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = {};
       Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];
@@ -164,7 +164,7 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-           "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
+      "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
            (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
@@ -246,17 +246,18 @@ var Tabmix = {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
     XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-                                      "resource:///modules/RecentWindow.jsm");
+      "resource:///modules/RecentWindow.jsm");
 
-    window.addEventListener("unload", function tabmix_destroy() {
-      window.removeEventListener("unload", tabmix_destroy, false);
+    const destroy = () => {
+      window.removeEventListener("unload", destroy, false);
       this.destroy();
-    }.bind(this), false);
+    };
+    window.addEventListener("unload", destroy, false);
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
-                   "getObject", "log", "getCallerNameByIndex", "callerName",
-                   "clog", "isCallerInList", "callerTrace",
-                   "obj", "assert", "trace", "reportError"];
+      "getObject", "log", "getCallerNameByIndex", "callerName",
+      "clog", "isCallerInList", "callerTrace",
+      "obj", "assert", "trace", "reportError"];
     methods.forEach(function(id) {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
@@ -273,4 +274,4 @@ var Tabmix = {
 };
 
 Tabmix._init();
-Tabmix.lazy_import(window, "TabmixSvc", "Services", "TabmixSvc");
+Tabmix.lazy_import(window, "TabmixSvc", "TabmixSvc", "TabmixSvc");

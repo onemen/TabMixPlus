@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["flst"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Shortcuts",
   "resource://tabmixplus/Shortcuts.jsm");
 
@@ -14,7 +14,7 @@ function flst() {
   this.flstOff = TabmixSvc.getString("flstOff.label");
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
-  XPCOMUtils.defineLazyGetter(this, "tabContainer", function() {
+  XPCOMUtils.defineLazyGetter(this, "tabContainer", () => {
     return TabmixSvc.topWin().gBrowser.tabContainer;
   });
 }
@@ -46,7 +46,7 @@ flst.prototype = {
       let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
       this.slideShowTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.slideShowTimer.initWithCallback(this, timerInterval,
-                        Ci.nsITimer.TYPE_REPEATING_SLACK);
+        Ci.nsITimer.TYPE_REPEATING_SLACK);
       this.showAlert(this.slideshowOn, "slideShow");
     }
   },

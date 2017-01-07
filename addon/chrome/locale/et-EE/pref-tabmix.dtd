@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Muuda avanemise järjekorda">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Ava uus kaart praegusest kaardist viimati avatud kaardi kõrval (kuna seda valiti viimasena)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Laadi kaardid järk-järgult">
+<!ENTITY restoreOnDemand.label "Ära laadi kaarte enne nende valimist">
+<!ENTITY moreThan.label "kui avan rohkem kui">
+<!ENTITY tabs.label "kaarti">
 <!ENTITY lockTabs.label "Lukusta kaardid">
 <!ENTITY lockNewTabs.label "Lukusta uued kaardid">
 <!ENTITY lockAppTabs.label "Lukusta püsikaardid">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Kontekstimenüü kaudu otsimine">
 <!ENTITY selectTabBH.label "Järjehoidjad/Ajalugu">
 <!ENTITY duplicateTab.label "Tee kaardist koopia">
-<!ENTITY inversefocus1.label "Hiire keskmise nupuga klõpsamisel või Control-klõpsamisel on fookustamine vastupidine nende puhul:">
+<!ENTITY inversefocus2.label "Hiire keskmise nupuga või Control-klõpsamine pöörab nende fookuse:">
 <!ENTITY warning.caption.label "Hoiatus">
 <!ENTITY warnOnCloseProtected.label "Hoiata kaitstud kaartidega akna sulgemisel">
 <!ENTITY warnOnCloseWindow.label "Hoiata mitme kaardiga akna sulgemisel">

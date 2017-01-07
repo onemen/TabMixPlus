@@ -16,7 +16,7 @@
       case "TabShow":
         if (!gBrowser.tabContainer._onDelayTabShow) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(function(event) {
+          gBrowser.tabContainer._onDelayTabShow = window.setTimeout(event => {
             gBrowser.tabContainer._onDelayTabShow = null;
             TMP_eventListener.onTabOpen_delayUpdateTabBar(event.target);
           }, 0, aEvent);
@@ -25,7 +25,7 @@
       case "TabHide":
         if (!gBrowser.tabContainer._onDelayTabHide) {
           // pass aEvent to this function for use in TGM
-          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(function(event) {
+          gBrowser.tabContainer._onDelayTabHide = window.setTimeout(event => {
             gBrowser.tabContainer._onDelayTabHide = null;
             let tab = event.target;
             TMP_eventListener.onTabClose_updateTabBar(tab);
@@ -81,14 +81,14 @@
 
     // add our function to the TabView initFrameCallbacks
     // we don't need our patch for the first run
-    var callback = function callback_TMP_TabView_patchTabviewFrame() {
+    var callback = () => {
       try {
         TabmixSessionManager._groupItemPushAway();
         this._patchTabviewFrame();
       } catch (ex) {
         Tabmix.assert(ex);
       }
-    }.bind(this);
+    };
 
     if (TabView._window)
       callback();
@@ -360,7 +360,7 @@
     if (!excludeTabs)
       excludeTabs = [];
 
-    return !Array.prototype.some.call(gBrowser.tabs, function(tab) {
+    return !Array.prototype.some.call(gBrowser.tabs, tab => {
       return !tab.pinned && !tab.hidden && !tab.closing &&
           excludeTabs.indexOf(tab) == -1;
     });
@@ -398,7 +398,7 @@
     let keys = Object.keys(aGroupItems);
     if (!aGroupsData.nextID) {
       let nextID = 0;
-      keys.forEach(function(key) {
+      keys.forEach(key => {
         nextID = Math.max(aGroupItems[key].id, nextID);
       });
       aGroupsData.nextID = nextID++;

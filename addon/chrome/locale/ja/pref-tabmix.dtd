@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "タブを開く順番を変更する">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "新しいタブを現在のタブから最後に開いたタブの直後に開く(最後にフォーカスしたタブに続いて)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "タブのロック">
 <!ENTITY lockNewTabs.label "新しいタブをロックする">
 <!ENTITY lockAppTabs.label "ピン留めしたアプリケーションタブをロックする">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
 <!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">
 <!ENTITY duplicateTab.label "複製したタブ">
-<!ENTITY inversefocus1.label "以下を中クリックまたは Ctrl + クリックで開いたとき、フォーカスを移動する：">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "確認">
 <!ENTITY warnOnCloseProtected.label "保護されたタブのあるウィンドウを閉じるときは確認する">
 <!ENTITY warnOnCloseWindow.label "複数のタブがあるウィンドウを閉じるときは確認する">

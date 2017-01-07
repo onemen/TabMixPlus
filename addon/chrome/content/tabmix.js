@@ -61,7 +61,7 @@ Tabmix.sessionInitialized = function() {
     };
 
     this.setItem("Browser:RestoreLastSession", "disabled",
-                 !SM.canRestoreLastSession || SM.isPrivateWindow);
+      !SM.canRestoreLastSession || SM.isPrivateWindow);
 
     if (TabmixSvc.isPaleMoon) {
       this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
@@ -115,6 +115,11 @@ Tabmix.getButtonsHeight = function(setDefault) {
   } else {
     this._buttonsHeight = 24;
   }
+
+  if (TabmixSvc.isPaleMoon && this.isVersion(0, 270)) {
+    this._buttonsHeight = Math.round(this._buttonsHeight);
+  }
+
   return this._buttonsHeight;
 };
 
@@ -236,7 +241,7 @@ Tabmix.afterDelayedStartup = function() {
       "Once you disable 'Debug Mode' restart your browser.";
     const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
     gnb.appendNotification(msg, "tabmix-debugmode-enabled",
-        errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
+      errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
   }
 };
 
@@ -323,14 +328,19 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    if (Tabmix.isVersion(510) && !Tabmix.isVersion(530)) {
+      let newRule = '.tabbrowser-tab {' +
+          '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v51-52") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    }
     if (!Tabmix.isVersion(510)) {
       let newRule = '.tabbrowser-tab {' +
-          '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab-before-v51") !important;}';
+          '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-before-v51") !important;}';
       gTMPprefObserver.insertRule(newRule);
     }
     if (Tabmix.isVersion(280) && !Tabmix.isVersion(470)) {
       let newRule = '.tabbrowser-tab > .tab-stack > .tab-content > .tab-label[tabmix="true"] {' +
-        '-moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tab-label") !important;}';
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tab-label") !important;}';
       gTMPprefObserver.insertRule(newRule);
     }
 
@@ -358,6 +368,9 @@ var TMP_eventListener = {
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
       "TabAttrModified"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
+
+    gBrowser.selectedTab.tabmixKey = {};
+    this.tabWidthCache.set(gBrowser.selectedTab.tabmixKey, 0);
 
     try {
       TMP_extensionsCompatibility.onContentLoaded();
@@ -554,7 +567,7 @@ var TMP_eventListener = {
 
     // apply style on tabs
     let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
-    styles.forEach(function(ruleName) {
+    styles.forEach(ruleName => {
       gTMPprefObserver.updateTabsStyle(ruleName);
     });
     // progressMeter on tabs
@@ -578,21 +591,20 @@ var TMP_eventListener = {
     if (!TabmixTabbar.widthFitTitle)
       return;
 
-    // when browser.tabs.animate is true and a new tab is still opening we wait
-    // until onTabOpen_delayUpdateTabBar call updateScrollStatus
-    let lastTab = Services.prefs.getBoolPref("browser.tabs.animate") &&
-        gBrowser.getTabForLastPanel();
-    if (lastTab && !lastTab._fullyOpen)
-      return;
-
     // catch tab width changed when label attribute changed
     // or when busy attribute changed hide/show image
     var tab = aEvent.target;
-    var width = tab.boxObject.width;
-    if (this.tabWidthCache.has(tab) && this.tabWidthCache.get(tab) == width)
+    var key = tab.tabmixKey;
+    if (!this.tabWidthCache.has(key)) {
       return;
+    }
 
-    this.tabWidthCache.set(tab, width);
+    var width = tab.boxObject.width;
+    if (this.tabWidthCache.get(key) == width) {
+      return;
+    }
+
+    this.tabWidthCache.set(key, width);
 
     TabmixTabbar.updateScrollStatus();
     setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
@@ -775,6 +787,10 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+    // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
+    aTab.tabmixKey = {};
+    this.tabWidthCache.set(aTab.tabmixKey, aTab.boxObject.width);
+
     let newTime = Date.now();
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
@@ -820,6 +836,7 @@ var TMP_eventListener = {
     tab._tPosInGroup = TMP_TabView.getTabPosInCurrentGroup(tab);
     TMP_LastTab.tabs = null;
     TMP_LastTab.detachTab(tab);
+    TMP_Places.updateRestoringTabsList(tab);
     var tabBar = gBrowser.tabContainer;
 
     // if we close the 2nd tab and tabbar is hide when there is only one tab
@@ -856,8 +873,9 @@ var TMP_eventListener = {
     }
 
     // clean WeakMap
-    if (this.tabWidthCache.has(tab))
-      this.tabWidthCache.delete(tab);
+    if (this.tabWidthCache.has(tab.tabmixKey)) {
+      this.tabWidthCache.delete(tab.tabmixKey);
+    }
   },
 
   // TGM extension use it
@@ -1008,8 +1026,10 @@ var TMP_eventListener = {
     }
 
     if (shouldMoveFocus) {
-      direction = direction > 0 ? 1 : -1;
-      tabBar.advanceSelectedTab(direction, true);
+      if (aEvent.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE) {
+        direction = direction > 0 ? 1 : -1;
+        tabBar.advanceSelectedTab(direction, true);
+      }
       aEvent.stopPropagation();
       aEvent.preventDefault();
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
@@ -1020,7 +1040,7 @@ var TMP_eventListener = {
           tabStrip.scrollByPixels(delta);
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
-          tabStrip.scrollByPage(delta);
+          tabStrip.scrollByPixels(delta * tabStrip.scrollClientSize);
         } else {
           // scroll the tabbar by one tab
           if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
@@ -1057,7 +1077,7 @@ var TMP_eventListener = {
     var isLastWindow = Tabmix.numberOfWindows() === 0;
     // we close tabmix dialog windows on exit
     if (isLastWindow) {
-      ["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"].forEach(function(aID) {
+      ["tabmixopt-filetype", "tabmixopt-appearance", "tabmixopt"].forEach(aID => {
         var win = Services.wm.getMostRecentWindow("mozilla:" + aID);
         if (win) {
           if (aID != "tabmixopt")

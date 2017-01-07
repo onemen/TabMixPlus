@@ -4,7 +4,10 @@ this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+
+XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
+  "resource:///modules/ContentClick.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -19,7 +22,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
   "resource://tabmixplus/LinkNodeUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 var ContentClickInternal;
 this.TabmixContentClick = {
@@ -69,8 +72,13 @@ ContentClickInternal = {
     // ContentClick.jsm is not included in some Firefox forks:
     // Cyberfox before version 42
     try {
-      Cu.import("resource:///modules/ContentClick.jsm");
+      if (typeof ContentClick.contentAreaClick !== "function") {
+        TabmixSvc.console.log("ContentClick.contentAreaClick is not a function");
+        this.functions = [];
+        return;
+      }
     } catch (ex) {
+      TabmixSvc.console.log("ContentClick.jsm is not included");
       this.functions = [];
       return;
     }
@@ -89,7 +97,7 @@ ContentClickInternal = {
     if (!this._initialized)
       return;
 
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       ContentClick[aFn] = ContentClick["tabmix_" + aFn];
       delete ContentClick["tabmix_" + aFn];
     });
@@ -97,11 +105,11 @@ ContentClickInternal = {
 
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
-    this.functions.forEach(function(aFn) {
+    this.functions.forEach(aFn => {
       ContentClick["tabmix_" + aFn] = ContentClick[aFn];
     });
 
-    ContentClick.contentAreaClick = function(json, browser) {
+    ContentClick.contentAreaClick = function contentAreaClick(json, browser) {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
@@ -147,7 +155,11 @@ ContentClickInternal = {
 
   receiveMessage: function(message) {
     if (message.name == "Tabmix:isFrameInContentResult") {
-      this.isFrameInContent.result(message.target, message.data);
+      const {epoch} = message.data;
+      if (this.frameSearch.has(epoch)) {
+        const frameSearch = this.frameSearch.get(epoch);
+        frameSearch.result(message.target, message.data);
+      }
       return null;
     }
     if (message.name != "TabmixContent:Click")
@@ -169,7 +181,7 @@ ContentClickInternal = {
   // for non-link element with onclick that change location.href
   getHrefFromNodeOnClick: function(event, browser, wrappedOnClickNode) {
     if (!wrappedOnClickNode || !this.getHrefFromOnClick(event, null, wrappedOnClickNode,
-                      wrappedOnClickNode.getAttribute("onclick")))
+      wrappedOnClickNode.getAttribute("onclick")))
       return false;
 
     let href = event.__hrefFromOnClick;
@@ -216,12 +228,12 @@ ContentClickInternal = {
     if (href && browser.getAttribute("remote") == "true" &&
         where == "default" && targetAttr) {
       let win = this._window;
-      win.setTimeout(function() {
+      win.setTimeout(() => {
         // don't try to select new tab if the original browser is no longer
         // the selected browser
         if (win.gBrowser.selectedBrowser == browser)
           this.selectExistingTab(win, href, targetAttr);
-      }.bind(this), 300);
+      }, 300);
     }
 
     // don't call this._data.hrefFromOnClick
@@ -247,12 +259,12 @@ ContentClickInternal = {
   },
 
   getPref: function() {
-    XPCOMUtils.defineLazyGetter(this, "targetPref", function() {
+    XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
       return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
     let tabBrowser = this._window.gBrowser;
-    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", function() {
+    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", () => {
       return tabBrowser.selectedTab.hasAttribute("locked");
     });
   },
@@ -301,7 +313,7 @@ ContentClickInternal = {
       this.wrappedNode = wrappedNode || null;
       this.wrappedOnClickNode = wrappedOnClickNode || null;
       this.targetAttr = wrappedNode && wrappedNode.target;
-      XPCOMUtils.defineLazyGetter(this, "currentURL", function() {
+      XPCOMUtils.defineLazyGetter(this, "currentURL", () => {
         return self._browser.currentURI ? self._browser.currentURI.spec : "";
       });
       XPCOMUtils.defineLazyGetter(this, "onclick", function() {
@@ -332,12 +344,12 @@ ContentClickInternal = {
     this._data = new LinkData();
   },
 
-  whereToOpen: function TMP_whereToOpen(event, href, wrappedNode, wrappedOnClickNode) {
+  whereToOpen: function TMP_whereToOpenLink(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
-    let TMP_tabshifted = function TMP_tabshifted(aEvent) {
+    let TMP_tabshifted = aEvent => {
       var where = eventWhere || this._window.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
-    }.bind(this);
+    };
 
   ///XXX check again how SubmitToTab work
     if (typeof (this._window.SubmitToTab) != 'undefined') {
@@ -471,7 +483,7 @@ ContentClickInternal = {
    *        handle left-clicks on links when preference is to open new tabs from links
    *        links that are not handled here go on to the page code and then to contentAreaClick
    */
-  _contentLinkClick: function(aEvent, aBrowser, aFocusedWindow) {
+  _contentLinkClick: function TMP_contentLinkClick(aEvent, aBrowser, aFocusedWindow) {
     let ownerDoc = aBrowser.ownerDocument;
     let win = ownerDoc.defaultView;
     aEvent.tabmix_isMultiProcessBrowser = win.gMultiProcessBrowser;
@@ -617,18 +629,13 @@ ContentClickInternal = {
    */
   isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled(window) {
     var GM_function;
-    try {
-      // Greasemonkey >= 0.9.10
-      // eslint-disable-next-line tabmix/import-globals
-      Cu.import("resource://greasemonkey/util.js");
-      if (typeof window.GM_util.getEnabled == 'function') {
-        GM_function = window.GM_util.getEnabled;
-      }
-    } catch (e) {
-      // Greasemonkey < 0.9.10
-      if (typeof window.GM_getEnabled == 'function') {
-        GM_function = window.GM_getEnabled;
-      }
+    // Greasemonkey >= 0.9.10
+    if (typeof window.GM_util == "object" &&
+      typeof window.GM_util.getEnabled == 'function') {
+      GM_function = window.GM_util.getEnabled;
+    // Greasemonkey < 0.9.10
+    } else if (typeof window.GM_getEnabled == 'function') {
+      GM_function = window.GM_getEnabled;
     }
 
     if (typeof GM_function != "function")
@@ -651,6 +658,13 @@ ContentClickInternal = {
       let isAMO = /^(http|https):\/\/addons.mozilla.org/.test(this._data.currentURL);
       if (isAMO && /flag-review/.test(className))
         return true;
+    }
+
+    if (node.hasAttribute("href") && node.hasAttribute("role")) {
+      const role = node.getAttribute("role");
+      if (role == "button" || role == "menu") {
+        return true;
+      }
     }
 
     // don't interrupt with fastdial links
@@ -948,7 +962,7 @@ ContentClickInternal = {
       return true;
 
     let _list = ["/preferences", "/advanced_search", "/language_tools", "/profiles",
-                 "/accounts/Logout", "/accounts/ServiceLogin", "/u/2/stream/all"];
+      "/accounts/Logout", "/accounts/ServiceLogin", "/u/2/stream/all"];
 
     let testPathname = _list.indexOf(node.pathname) > -1;
     if (testPathname)
@@ -977,64 +991,96 @@ ContentClickInternal = {
           window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser);
     };
 
+    let isMultiProcess;
     let windows = [];
-    if (window.gBrowser && isValidWindow(window))
-      windows.push(window);
+    let addValidWindow = aWindow => {
+      windows.push(aWindow);
+      if (TabmixSvc.version(320)) {
+        isMultiProcess = isMultiProcess || aWindow.gMultiProcessBrowser;
+      }
+    };
+
+    if (window.gBrowser && isValidWindow(window)) {
+      addValidWindow(window);
+    }
 
     let winEnum = Services.wm.getEnumerator("navigator:browser");
     while (winEnum.hasMoreElements()) {
       let browserWin = winEnum.getNext();
       if (!browserWin.closed && browserWin != window &&
           isValidWindow(browserWin)) {
-        windows.push(browserWin);
+        addValidWindow(browserWin);
       }
     }
-    this.isFrameInContent.start(windows, {href: href, name: targetFrame});
+    this.isFrameInContent(windows, {href: href, name: targetFrame}, isMultiProcess);
   },
 
-  isFrameInContent: {
-    start: function(windows, frameData) {
-      this.frameData = frameData;
-      this.windows = windows;
-      let window = this.windows.shift();
-      this.next(window.gBrowser.tabs[0]);
-    },
-    stop: function() {
-      this.frameData = null;
-      this.windows = null;
-    },
-    result: function(browser, data) {
-      let window = browser.ownerDocument.defaultView;
-      let tab = window.gBrowser.getTabForBrowser(browser);
-      if (data.result) {
-        this.stop();
-        window.gURLBar.handleRevert();
-        // Focus the matching window & tab
-        window.focus();
-        window.gBrowser.selectedTab = tab;
-      } else {
-        this.next(tab.nextSibling);
+  frameSearchEpoch: 0,
+  frameSearch: new Map(),
+
+  isFrameInContent: function(windows, frameData, isMultiProcess) {
+    const deleteEpoch = epoch => {
+      if (this.frameSearch.has(epoch)) {
+        this.frameSearch.delete(epoch);
       }
-    },
-    next: function(tab) {
-      if (!tab && this.windows.length) {
+    };
+    const frameSearch = {
+      epoch: 0,
+      frameData: null,
+      windows: null,
+      start: function(epoch) {
+        this.frameData = frameData;
+        this.epoch = epoch;
+        this.frameData.epoch = this.epoch;
+        this.windows = windows;
         let window = this.windows.shift();
-        tab = window.gBrowser.tabs[0];
-      }
-      if (tab) {
-        let browser = tab.linkedBrowser;
-        if (browser.getAttribute("remote") == "true") {
-          browser.messageManager
-                 .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
+        this.next(window.gBrowser.tabs[0]);
+      },
+      stop: function() {
+        this.frameData = null;
+        this.windows = null;
+        deleteEpoch(this.epoch);
+      },
+      result: function(browser, data) {
+        let window = browser.ownerDocument.defaultView;
+        let tab = window.gBrowser.getTabForBrowser(browser);
+        if (data.result) {
+          this.stop();
+          window.gURLBar.handleRevert();
+          // Focus the matching window & tab
+          window.focus();
+          window.gBrowser.selectedTab = tab;
         } else {
-          let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
-                                                      this.frameData.href, this.frameData.name);
-          this.result(browser, {result: result});
+          this.next(tab.nextSibling);
         }
-      } else {
-        this.stop();
+      },
+      next: function(tab) {
+        if (!tab && this.windows.length) {
+          let window = this.windows.shift();
+          tab = window.gBrowser.tabs[0];
+        }
+        if (tab) {
+          let browser = tab.linkedBrowser;
+          if (browser.getAttribute("remote") == "true") {
+            browser.messageManager
+                   .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
+          } else {
+            let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
+              this.frameData.href, this.frameData.name);
+            this.result(browser, {result: result});
+          }
+        } else {
+          this.stop();
+        }
       }
+    };
+
+    const newEpoch = this.frameSearchEpoch++;
+    // some open windows have gMultiProcessBrowser == true
+    if (isMultiProcess) {
+      this.frameSearch.set(newEpoch, frameSearch);
     }
+    frameSearch.start(newEpoch);
   },
 
  /**

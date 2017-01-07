@@ -4,27 +4,27 @@ this.EXPORTED_SYMBOLS = ["DynamicRules"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
+XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 var TYPE;
-XPCOMUtils.defineLazyGetter(this, "SSS", function() {
+XPCOMUtils.defineLazyGetter(this, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
   .getService(Ci.nsIStyleSheetService);
   TYPE = sss.AGENT_SHEET;
   return sss;
 });
 
-XPCOMUtils.defineLazyGetter(this, "isMac", function() {
+XPCOMUtils.defineLazyGetter(this, "isMac", () => {
   return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
 });
 
@@ -71,7 +71,9 @@ this.DynamicRules = {
   observe: function(subject, topic, data) {
     switch (topic) {
       case "browser-window-before-show":
-        this.registerMutationObserver(subject);
+        if (!TabmixSvc.isPaleMoon) {
+          this.registerMutationObserver(subject);
+        }
         break;
       case "nsPref:changed":
         this.onPrefChange(data);
@@ -83,7 +85,7 @@ this.DynamicRules = {
   },
 
   registerMutationObserver: function(window) {
-    function tabsMutate(aMutations) {
+    const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
           this.orient = mutation.target.orient;
@@ -91,8 +93,8 @@ this.DynamicRules = {
           return;
         }
       }
-    }
-    let Observer = new window.MutationObserver(tabsMutate.bind(this));
+    };
+    let Observer = new window.MutationObserver(tabsMutate);
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
     window.addEventListener("unload", function unload() {
       window.removeEventListener("unload", unload);
@@ -348,7 +350,7 @@ this.DynamicRules = {
     delete this.defaultPrefs;
     let defaults = {};
     let getDefaultBranch = Services.prefs.getDefaultBranch("extensions.tabmix.styles.");
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.forEach(pref => {
       defaults[pref] = getDefaultBranch.getCharPref(pref);
     }, this);
     return (this.defaultPrefs = defaults);

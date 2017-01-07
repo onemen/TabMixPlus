@@ -128,7 +128,7 @@ var TabmixTabbar = {
     // fix bug in positioning the popup off screen or on the button when window
     // is not maximize or when tab bar is in the bottom
     Tabmix.setItem("alltabs-popup", "position",
-           (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
+      (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
 
     // for light weight themes
     Tabmix.setItem("main-window", "tabmix_lwt", isMultiRow || this.position == 1 || null);
@@ -385,7 +385,7 @@ var TabmixTabbar = {
     }
     /// maybe we cad add this to the popupshowing / or as css rule ?
     Tabmix.setItem("alltabs-popup", "position",
-        (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
+      (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
   // Update positional attributes when we are in multi-row mode
@@ -571,7 +571,7 @@ var TabmixTabbar = {
 
 }; // TabmixTabbar end
 
-XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", function() {
+XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", () => {
   return navigator.oscpu.startsWith("Windows NT 5.1");
 });
 
@@ -618,12 +618,10 @@ Tabmix.tabsUtils = {
     var tabbrowser = this.tabBar.tabbrowser;
     let tab = this.tabBar.firstChild;
 
-    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", function() {
+    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
       return window.getComputedStyle(tabbrowser, null).direction == "rtl";
     });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", function() {
-      return !Tabmix.rtl;
-    });
+    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
 
     // don't set button to left side if it is not inside tab-content
     let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
@@ -649,9 +647,9 @@ Tabmix.tabsUtils = {
     this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected",
-                "locked"].filter(function(att) {
-                  return Tabmix.prefs.getBoolPref("extraIcons." + att);
-                });
+      "locked"].filter(att => {
+        return Tabmix.prefs.getBoolPref("extraIcons." + att);
+      });
     if (attr.length)
       this.tabBar.setAttribute("tabmix_icons", attr.join(" "));
 
@@ -833,10 +831,10 @@ Tabmix.tabsUtils = {
             if (timeFromLastTabOpened < 250)
               timeout = 0;
           }
-          this.adjustNewtabButtonTimeout = setTimeout(function() {
+          this.adjustNewtabButtonTimeout = setTimeout(() => {
             this.adjustNewtabButtonVisibility();
             this.adjustNewtabButtonTimeout = null;
-          }.bind(this), timeout);
+          }, timeout);
         }
       } else {
         this.adjustNewtabButtonVisibility();
@@ -988,7 +986,7 @@ Tabmix.tabsUtils = {
   showNewTabButtonOnSide: function(aCondition, aValue) {
     if (this._show_newtabbutton) {
       Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton",
-                     aCondition ? aValue : this._show_newtabbutton);
+        aCondition ? aValue : this._show_newtabbutton);
     }
   },
 
@@ -1061,7 +1059,7 @@ Tabmix.tabsUtils = {
       document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-up");
     tabstrip._updateScrollButtonsDisabledState();
 
-    if (!Tabmix.isVersion(320)) {
+    if (!Tabmix.isVersion(320, 270)) {
       let overflow = this.overflow;
       tabstrip._scrollButtonUp.collapsed = !overflow;
       tabstrip._scrollButtonDown.collapsed = !overflow;
@@ -1216,10 +1214,10 @@ gTMPprefObserver = {
     Tabmix.prefs.clearUserPref("setDefault");
     Tabmix.prefs.clearUserPref("PrefObserver.error");
 
-    let addObserver = function(pref, condition) {
+    let addObserver = (pref, condition) => {
       if (condition)
         this.OBSERVING.push(pref);
-    }.bind(this);
+    };
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
     addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
@@ -1236,17 +1234,17 @@ gTMPprefObserver = {
   },
 
   OBSERVING: ["extensions.tabmix.",
-              "browser.tabs.tabMinWidth",
-              "browser.tabs.tabMaxWidth",
-              "browser.tabs.tabClipWidth",
-              "browser.sessionstore.max_tabs_undo",
-              "browser.warnOnQuit",
-              "browser.sessionstore.resume_from_crash",
-              "browser.startup.page",
-              "browser.link.open_newwindow.override.external",
-              "browser.link.open_newwindow.restriction",
-              "browser.link.open_newwindow",
-              "browser.ctrlTab.previews"],
+    "browser.tabs.tabMinWidth",
+    "browser.tabs.tabMaxWidth",
+    "browser.tabs.tabClipWidth",
+    "browser.sessionstore.max_tabs_undo",
+    "browser.warnOnQuit",
+    "browser.sessionstore.resume_from_crash",
+    "browser.startup.page",
+    "browser.link.open_newwindow.override.external",
+    "browser.link.open_newwindow.restriction",
+    "browser.link.open_newwindow",
+    "browser.ctrlTab.previews"],
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers: function() {
@@ -1388,7 +1386,7 @@ gTMPprefObserver = {
         if (typeof this._tabWidthChanged == "undefined") {
           let self = this;
           this._tabWidthChanged = true;
-          [50, 100, 250, 500].forEach(function(timeout) {
+          [50, 100, 250, 500].forEach(timeout => {
             setTimeout(function TMP_tabWidthChanged() {
               if (currentVisible)
                 gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
@@ -1652,7 +1650,7 @@ gTMPprefObserver = {
   dynamicRules: {},
   insertRule: function(cssText, name) {
     let index = this.tabStyleSheet.insertRule(cssText,
-        this.tabStyleSheet.cssRules.length);
+      this.tabStyleSheet.cssRules.length);
     if (name)
       this.dynamicRules[name] = this.tabStyleSheet.cssRules[index];
     return index;
@@ -1718,12 +1716,12 @@ gTMPprefObserver = {
     if (parseInt(marginStart) < parseInt(marginEnd))
       return;
 
-    let tabmix_setRule = function(aRule) {
+    let tabmix_setRule = aRule => {
       let newRule = aRule.replace(/%S/g, "tab-icon-image").replace("%PX", marginEnd);
       this.insertRule(newRule);
       newRule = aRule.replace(/%S/g, "tab-lock-icon").replace("%PX", marginEnd);
       this.insertRule(newRule);
-    }.bind(this);
+    };
     iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
                '.tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
@@ -1857,6 +1855,10 @@ gTMPprefObserver = {
       this.insertRule(newRule);
     }
 
+    if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
+      this.insertRule('#tabmixScrollBox{ margin-top: -1px;}');
+    }
+
     // we don't show icons on menu on Mac OS X
     if (TabmixSvc.isMac)
       return;
@@ -1952,8 +1954,8 @@ gTMPprefObserver = {
       // set bold, italic and underline only when we control the style
       // to override theme default rule if exist
       attribValue = [prefValues.bold ? "bold" : "not-bold",
-               prefValues.italic ? "italic" : "not-italic",
-               prefValues.underline ? "underline" : "not-underline"
+        prefValues.italic ? "italic" : "not-italic",
+        prefValues.underline ? "underline" : "not-underline"
       ];
       if (prefValues.text)
         attribValue.push("text");
@@ -2365,13 +2367,13 @@ gTMPprefObserver = {
     // 2008-09-23
     if (Services.prefs.prefHasUserValue("browser.ctrlTab.mostRecentlyUsed")) {
       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                 Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
+        Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
       Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
     }
     // 2008-09-28
     if (Tabmix.prefs.prefHasUserValue("lasttab.handleCtrlTab")) {
       Services.prefs.setBoolPref("browser.ctrlTab.previews",
-                                 Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
+        Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
       Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
     }
     // 2008-11-29
@@ -2488,10 +2490,10 @@ gTMPprefObserver = {
     }
     _setNewTabUrl("extensions.tabmix.newTabUrl", TabmixSvc.newtabUrl, "loadOnNewTab.type");
     _setNewTabUrl("extensions.tabmix.newTabUrl_afterLastTab",
-                  "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
+      "extensions.tabmix.replaceLastTabWith.newtab.url", "replaceLastTabWith.type");
     _setNewTabUrl("extensions.tabmix.newtab.url", TabmixSvc.newtabUrl);
     _setNewTabUrl("extensions.tabmix.replaceLastTabWith.newTabUrl",
-                  "extensions.tabmix.replaceLastTabWith.newtab.url");
+      "extensions.tabmix.replaceLastTabWith.newtab.url");
     // 2012-04-12
     var pref = "browser.tabs.loadFolderAndReplace";
     if (Services.prefs.prefHasUserValue(pref)) {
@@ -2611,7 +2613,7 @@ gTMPprefObserver = {
       }
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
-        window.setTimeout(function() {
+        window.setTimeout(() => {
           let defaultChanged = "";
           let showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
@@ -2624,7 +2626,7 @@ gTMPprefObserver = {
         // noting more to do at the moment
       }
     };
-    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", function(aAddon) {
+    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", aAddon => {
       try {
         let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
         getVersion(aAddon.version, shouldAutoUpdate);
@@ -2654,7 +2656,7 @@ gTMPprefObserver = {
 
   updateTabClickingOptions: function() {
     var c = ["dblClickTab", "middleClickTab", "ctrlClickTab", "shiftClickTab", "altClickTab",
-             "dblClickTabbar", "middleClickTabbar", "ctrlClickTabbar", "shiftClickTabbar", "altClickTabbar"];
+      "dblClickTabbar", "middleClickTabbar", "ctrlClickTabbar", "shiftClickTabbar", "altClickTabbar"];
     for (let i = 0; i < c.length; i++)
       this.blockTabClickingOptions("extensions.tabmix." + c[i]);
   },
@@ -2695,7 +2697,7 @@ TabmixProgressListener = {
     // Bug 1081891: Calling webNavigation.loadURI with url that trigger
     // unknownContentType.xul dialog change the tab title to its address
     // as a workaround we trigger DOMTitleChanged async message
-    _fixTabTitle: function TMP__contentLinkClick(tab, browser, url) {
+    _fixTabTitle: function TMP__fixTabTitle(tab, browser, url) {
       if (browser.getAttribute("remote") != "true" || /^about/.test(url) ||
           browser._contentTitle !== "" || this.mTabBrowser.isBlankTab(tab))
         return;
@@ -2709,8 +2711,8 @@ TabmixProgressListener = {
     },
 
     onProgressChange: function(aBrowser, aWebProgress, aRequest,
-                                aCurSelfProgress, aMaxSelfProgress,
-                                aCurTotalProgress, aMaxTotalProgress) {
+                               aCurSelfProgress, aMaxSelfProgress,
+                               aCurTotalProgress, aMaxTotalProgress) {
       if (!this.showProgressOnTab || TabmixTabbar.hideMode == 2 || !aMaxTotalProgress)
         return;
       var percentage = Math.ceil((aCurTotalProgress * 100) / aMaxTotalProgress);

@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Змінити порядок відкриття">
 <!ENTITY openTabNextInverse.tooltip "[а][3][2][1][б][в] -&gt; [а][1][2][3][б][в]">
 <!ENTITY openTabNextInverse.tooltip1 "Відкривати нову вкладку відразу за останньою відкритою з поточної (оскільки вона була вибрана останньою)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Заблокувати вкладки">
 <!ENTITY lockNewTabs.label "Заблокувати Нові вкладки">
 <!ENTITY lockAppTabs.label "Заблокувати вкладки з Додатками">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Контекстне меню пошуку для">
 <!ENTITY selectTabBH.label "З журналу / закладок">
 <!ENTITY duplicateTab.label "Копія Вкладки">
-<!ENTITY inversefocus1.label "Інвертувати Натиснення середньої клавіші миші чи Control для">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Застереження">
 <!ENTITY warnOnCloseProtected.label "Попереджати при закритті вікна із захищеними вкладками">
 <!ENTITY warnOnCloseWindow.label "Повідомляти мене про закриття вікна з багатьма вкладками">

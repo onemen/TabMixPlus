@@ -112,7 +112,7 @@
 <!ENTITY sm.context.details.key "C">
 <!ENTITY tab.key "T">
 <!ENTITY window.key "N">
-<!ENTITY merge.key "M">
+<!ENTITY merge.key "U">
 <!ENTITY sortedTabs.label "标签页排序">
 <!ENTITY sortedTabs.tooltip "检查并按字母表顺序显示列表">
 <!ENTITY enable.label "启用">

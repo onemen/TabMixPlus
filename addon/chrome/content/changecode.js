@@ -56,7 +56,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         if (!doReplace)
           return this;
         if (flags && typeof substr == "string")
-          substr = new RegExp(substr.replace(/[{[(\\^.$|?*+\/)\]}]/g, "\\$&"), flags);
+          substr = new RegExp(substr.replace(/[{[(\\^.$|?*+/)\]}]/g, "\\$&"), flags);
       }
 
       var exist = typeof (substr) == "string" ? this.value.indexOf(substr) > -1 : substr.test(this.value);
@@ -115,7 +115,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         return p1 + p2.replace(/\s/g, '_');
       };
 
-      let setDescriptor = function(type) {
+      let setDescriptor = type => {
         let fnType = "__lookup#ter__".replace("#", type);
         type = type.toLowerCase();
         let code = aCode && aCode[type + "ter"] ||
@@ -129,7 +129,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         } else if (typeof code != "undefined") {
           descriptor[type] = code;
         }
-      }.bind(this);
+      };
 
       setDescriptor("Get");
       setDescriptor("Set");
@@ -150,27 +150,35 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       var notFoundCount = this.notFound.length;
       if (this.needUpdate && !notFoundCount)
         return true;
-      var caller = console.getCallerNameByIndex(2);
+
+      const ex = this.getCallerData(Components.stack);
       if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
-        console.clog(caller + " was unable to change " + aName + "." +
-          (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
-          "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
-          "\nReport about this to Tabmix developer at http://tabmixplus.org/forum/");
-        if (debugMode)
-          console.clog(caller + "\nfunction " + aName + " = " + this.value);
+        ex.message = ex.fnName + " was unable to change " + aName + "." +
+            (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
+            "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
+            "\nReport about this to Tabmix developer at http://tabmixplus.org/forum/";
+        console.reportError(ex);
+        if (debugMode) {
+          console.clog(ex.fnName + "\nfunction " + aName + " = " + this.value, ex);
+        }
       } else if (!this.needUpdate && debugMode) {
-        console.clog(caller + " no update needed to " + aName);
+        console.clog(ex.fnName + " no update needed to " + aName, ex);
       }
       return false;
+    },
+
+    getCallerData: function(stack) {
+      let caller = (stack.caller || {}).caller || {};
+      let {filename, lineNumber, columnNumber, name} = caller;
+      return {filename: filename, lineNumber: lineNumber, columnNumber: columnNumber, fnName: name};
     }
   };
 
-  let name = afnName.split(".").pop();
   try {
     return new ChangeCode({
       obj: aParent,
-      fnName: name,
+      fnName: afnName.split(".").pop(),
       fullName: afnName,
       options: aOptions
     });

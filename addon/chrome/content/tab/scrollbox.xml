@@ -116,7 +116,7 @@
       <method name="_getScrollableElements">
         <body><![CDATA[
           return Array.prototype.filter.call(document.getBindingParent(this).childNodes,
-                              this._canScrollToElement, this);
+            this._canScrollToElement, this);
         ]]></body>
       </method>
 
@@ -211,13 +211,13 @@
             'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
           ).toCode();
 
-          if (Tabmix.isVersion(320)) {
+          if (Tabmix.isVersion(320, 270)) {
             Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
               // when theme or extension add negative margin-bottom to the tab or
               // tab content the scrollHeight can be larger than the actual
               // inner-box height
               'this.scrollSize',
-              '(this.orient == "vertical" && this.isMultiRow ? this.innerbox.getBoundingClientRect().height : $&)'
+              'this.tabmixScrollSize'
             )._replace(
               /(})(\)?)$/,
               '          var box = document.getElementById("tabmixScrollBox");\n' +
@@ -318,6 +318,16 @@
       <property name="isMultiRow" readonly="true">
         <getter><![CDATA[
           return this.getAttribute("flowing") == "multibar";
+        ]]></getter>
+      </property>
+
+      <property name="tabmixScrollSize" readonly="true">
+        <getter><![CDATA[
+          if (this.orient == "vertical" && this.isMultiRow) {
+            const height = this.innerbox.getBoundingClientRect().height;
+            return Math.round(height);
+          }
+          return this.scrollSize;
         ]]></getter>
       </property>
 
@@ -543,10 +553,9 @@
             this.__needToSetVerticalOrient = true;
             // when widthFitTitle is false we enter vertical mode only after we are in overflow
             // if first or last tab is not visible enter vertical mode
-            var self = this;
-            this._enterVerticalModeTimeout = setTimeout(function() {
-              self._enterVerticalModeTimeout = null;
-              self._enterVerticalMode(true);
+            this._enterVerticalModeTimeout = setTimeout(() => {
+              this._enterVerticalModeTimeout = null;
+              this._enterVerticalMode(true);
             }, 25);
             return;
           }

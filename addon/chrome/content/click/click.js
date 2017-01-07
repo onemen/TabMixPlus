@@ -345,8 +345,8 @@ var TabmixContext = {
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
-             'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
-             'separator = document.getElementById("tm-separator-3"); $&'
+          'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
+          'separator = document.getElementById("tm-separator-3"); $&'
         ).toCode();
       }
     }
@@ -442,8 +442,8 @@ var TabmixContext = {
     Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
     if (Tabmix.isVersion(320)) {
       Tabmix.showItem("context_openNonRemoteWindow",
-                      Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
-                      !Tabmix.singleWindowMode && gMultiProcessBrowser);
+        Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
+        !Tabmix.singleWindowMode && gMultiProcessBrowser);
     }
 
     if (Tabmix.isVersion(430)) {
@@ -460,9 +460,9 @@ var TabmixContext = {
       Tabmix.showItem(tabViewMenu, Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
     });
     Tabmix.showItem("tm-mergeWindowsTab",
-                    Tabmix.prefs.getBoolPref("showMergeWindow") &&
-                    (!Tabmix.singleWindowMode ||
-                    (Tabmix.singleWindowMode && !isOneWindow)));
+      Tabmix.prefs.getBoolPref("showMergeWindow") &&
+      (!Tabmix.singleWindowMode ||
+      (Tabmix.singleWindowMode && !isOneWindow)));
     var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
     Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));
@@ -539,7 +539,7 @@ var TabmixContext = {
     Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
     Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
     Tabmix.setItem("tm-closeLeftTabs", "disabled",
-                   cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
+      cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
     Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);
@@ -704,11 +704,11 @@ var TabmixContext = {
       Tabmix.showItem(mergeMenu, !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent"));
 
       this._showAutoReloadMenu("tm-autoreload_menu", "autoReloadContent",
-                               !contentClick && !gContextMenu.isTextSelected);
+        !contentClick && !gContextMenu.isTextSelected);
 
       Tabmix.showItem("tm-openAllLinks",
-                      Tabmix.prefs.getBoolPref("openAllLinks") &&
-                      !TabmixContext.openMultipleLinks(true));
+        Tabmix.prefs.getBoolPref("openAllLinks") &&
+        !TabmixContext.openMultipleLinks(true));
 
       // show/hide menuseparator
       var undoCloseSep = document.getElementById("tm-content-undoCloseSep");
@@ -802,12 +802,14 @@ var TabmixAllTabs = {
   checkForCtrlClick: function TMP_checkForCtrlClick(aEvent) {
     var aButton = aEvent.target;
     if (!aButton.disabled && aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) {
-      if (aButton.id == "btn_undoclose")
+      if (aButton.id == "btn_undoclose") {
         TMP_ClosedTabs.undoCloseTab();
-      else
+        aButton.setAttribute("afterctrlclick", true);
+      } else if (aButton.id == "btn_tabslist" ||
+          aButton.parentNode && aButton.parentNode.id == "btn_tabslist_menu") {
         BrowserCloseTabOrWindow();
-
-      aButton.setAttribute("afterctrlclick", true);
+        aButton.setAttribute("afterctrlclick", true);
+      }
     }
   },
 
@@ -867,7 +869,7 @@ var TabmixAllTabs = {
   // show sort/unsort tabs list popup after click on sorted tab menu
   showTabsListPopup: function TMP_showTabsListPopup(event) {
     event.stopPropagation();
-    setTimeout(function(popup) {
+    setTimeout(popup => {
       popup.showPopup(popup.parentNode, -1, -1, "popup", "bottomleft", "topleft");
     }, 0, event.target.parentNode);
   },
@@ -909,7 +911,8 @@ var TabmixAllTabs = {
       var menuItem = popup.firstChild;
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
-      menuItem.removeEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
+      menuItem.removeEventListener("command", TMP_ClosedTabs, false);
+      menuItem.removeEventListener("click", TMP_ClosedTabs, false);
       popup.removeChild(menuItem);
     }
 
@@ -1029,7 +1032,7 @@ var TabmixAllTabs = {
       return;
 
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
-    aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
+    aMenuitem.setAttribute("crop", Tabmix.isVersion(530) ? "end" : aTab.getAttribute("crop"));
 
     if (aTab.hasAttribute("busy")) {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));

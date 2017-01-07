@@ -4,12 +4,12 @@ this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
-                                  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+  "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 var KeyConfig;
 this.Shortcuts = {
@@ -26,7 +26,7 @@ this.Shortcuts = {
     copyTabUrl: {command: 28},
     pasteTabUrl: {command: 29},
     selectMerge: {command: 22},
-    mergeWin: {default: "M accel,shift"},
+    mergeWin: {default: "U accel,shift"},
     addBookmark: {id: "addBookmarkAsKb", default: "D accel"},
     bookmarkAllTabs: {id: "bookmarkAllTabsKb", default: "D accel,shift"},
     reload: {id: "key_reload", default: "R accel"},
@@ -94,6 +94,20 @@ this.Shortcuts = {
       TabmixSvc.getString("undoclosetab.clear.label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
+      // get default value for all keys
+      // default can be different between languages
+      if (keyData.default) {
+        const elm = $(keyData.id || "key_tm_" + key);
+        if (elm) {
+          const modifiers = elm.getAttribute("modifiers");
+          const key_ = elm.getAttribute("key");
+          const keycode = elm.getAttribute("keycode");
+          const disabled = /^d&/.test(keyData.default || "") ? "d&" : "";
+          const newDefault = disabled + (key_ || keycode).toUpperCase() +
+              (modifiers ? " " + modifiers.replace(/\s/g, "") : "");
+          keyData.default = newDefault;
+        }
+      }
       keyData.value = keyData.default || "";
       if (container && key in labels)
         keyData.label = labels[key];
@@ -202,7 +216,7 @@ this.Shortcuts = {
 
     aWindow.addEventListener("unload", this, false);
 
-    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", function() {
+    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;
       return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
     });
@@ -381,7 +395,7 @@ this.Shortcuts = {
     if (!value)
       return "";
     return [(value.disabled ? "d&" : "") + (value.key || value.keycode),
-             value.modifiers].join(" ").replace(/[\s|;]$/, "");
+      value.modifiers].join(" ").replace(/[\s|;]$/, "");
   },
 
   validateKey: function validateKey(key) {
@@ -558,7 +572,7 @@ function getFormattedKey(key) {
 
   if (key.modifiers) {
     let sep = getPlatformKeys("MODIFIER_SEPARATOR");
-    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(function(mod) {
+    key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "").split(/[\s,]+/g).forEach(mod => {
       if (/alt|shift|control|meta|accel/.test(mod))
         val += getPlatformKeys("VK_" + mod.toUpperCase()) + sep;
     });

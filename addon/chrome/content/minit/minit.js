@@ -29,6 +29,17 @@ var TMP_tabDNDObserver = {
     }
 
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+
+    // https://addons.mozilla.org/en-US/firefox/addon/multiple-tab-handler/
+    const tabsDragUtils = "piro.sakura.ne.jp" in window &&
+      "tabsDragUtils" in window["piro.sakura.ne.jp"];
+    Tabmix.handleAnimateTabMove = function(dragContext) {
+      if (gBrowser.tabContainer.orient != "horizontal") {
+        return false;
+      }
+      return !dragContext || !dragContext.draggedTabs ||
+          dragContext.draggedTabs.length == 1;
+    };
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab when
@@ -36,7 +47,11 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+    let newCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+      'if (this.getAttribute("movingtab")',
+      `let tabmixHandleMove = Tabmix.handleAnimateTabMove(typeof TDUContext == "object" ? TDUContext : null);
+          $&`
+    )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
             $&\n\
@@ -45,20 +60,45 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
+      'draggedTab._dragData.animLastScreenX = screenX;',
+      'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
+      '$&', {check: Tabmix.isVersion(520) && !tabsDragUtils}
+    )._replace(
       'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-      'let tabCenter = tabScreenX + translateX + draggingRight * tabWidth;'
+      'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
     )._replace(
-      /let screenX = boxObject.*;/,
+      tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
+                      /screenX = boxObject.*;/,
       '$&\n            ' +
-      'let halfWidth = boxObject.width / 2;\n            ' +
-      'screenX += draggingRight * halfWidth;'
+      `let halfWidth;
+            if (tabmixHandleMove) {
+              halfWidth = boxObject.width / 2;
+              screenX += draggingRight * halfWidth;
+            }`
     )._replace(
-      /screenX \+ boxObject.* < tabCenter/,
-      'screenX + halfWidth < tabCenter'
+      tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
+                      /screenX \+ boxObject.* < tabCenter/,
+      'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
+    )._replace(
+      'screenX > TDUContext.lastTabCenter',
+      'tabmixHandleMove ? screenX > tabCenter : $&',
+      {check: tabsDragUtils}
     )._replace(
       'newIndex >= oldIndex',
-      'rtl ? $& : draggingRight && newIndex > -1'
-    ).toCode();
+      'rtl || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
+    );
+    if (tabsDragUtils) {
+      const topic = "browser-delayed-startup-finished";
+      const observer = function(subject) {
+        if (subject == window) {
+          Services.obs.removeObserver(observer, topic);
+          newCode.toCode();
+        }
+      };
+      Services.obs.addObserver(observer, topic, false);
+    } else {
+      newCode.toCode();
+    }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
@@ -144,46 +184,59 @@ var TMP_tabDNDObserver = {
     // to get a full-resolution drag image for use on HiDPI displays.
     let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
     let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = tabBar._dndCanvas ? tabBar._dndCanvas :
-                 document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-    canvas.mozOpaque = true;
+    let canvas = tabBar._dndCanvas;
+    if (!canvas) {
+      tabBar._dndCanvas = canvas =
+          document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.mozOpaque = true;
+    }
+
     canvas.width = 160 * scale;
     canvas.height = 90 * scale;
-    let toDrag;
+    let toDrag = canvas;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
     if (gMultiProcessBrowser) {
       let context = canvas.getContext('2d');
       context.fillStyle = "white";
       context.fillRect(0, 0, canvas.width, canvas.height);
-      // Create a panel to use it in setDragImage
-      // which will tell xul to render a panel that follows
-      // the pointer while a dnd session is on.
-      if (!tabBar._dndPanel) {
-        tabBar._dndCanvas = canvas;
-        tabBar._dndPanel = document.createElement("panel");
-        tabBar._dndPanel.setAttribute("type", "drag");
-        tabBar._dndPanel.className = "dragfeedback-tab";
-        let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-        wrapper.style.width = "160px";
-        wrapper.style.height = "90px";
-        wrapper.appendChild(canvas);
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        tabBar._dndPanel.appendChild(wrapper);
-        document.documentElement.appendChild(tabBar._dndPanel);
+
+      let captureListener;
+      let platform = gBrowser.AppConstants.platform;
+      // On Windows and Mac we can update the drag image during a drag
+      // using updateDragImage. On Linux, we can use a panel.
+      if (Tabmix.isVersion(530) && (platform == "win" || platform == "macosx")) {
+        captureListener = function() {
+          dt.updateDragImage(canvas, dragImageOffsetX, dragImageOffsetY);
+        };
+      } else {
+        // Create a panel to use it in setDragImage
+        // which will tell xul to render a panel that follows
+        // the pointer while a dnd session is on.
+        if (!tabBar._dndPanel) {
+          tabBar._dndCanvas = canvas;
+          tabBar._dndPanel = document.createElement("panel");
+          tabBar._dndPanel.className = "dragfeedback-tab";
+          tabBar._dndPanel.setAttribute("type", "drag");
+          let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
+          wrapper.style.width = "160px";
+          wrapper.style.height = "90px";
+          wrapper.appendChild(canvas);
+          tabBar._dndPanel.appendChild(wrapper);
+          document.documentElement.appendChild(tabBar._dndPanel);
+        }
+        toDrag = tabBar._dndPanel;
       }
       // PageThumb is async with e10s but that's fine
-      // since we can update the panel during the dnd.
-      PageThumbs.captureToCanvas(browser, canvas);
-      toDrag = tabBar._dndPanel;
+      // since we can update the image during the dnd.
+      PageThumbs.captureToCanvas(browser, canvas, captureListener);
     } else {
       // For the non e10s case we can just use PageThumbs
-      // sync. No need for xul magic, the native dnd will
-      // be fine, so let's use the canvas for setDragImage.
+      // sync, so let's use the canvas for setDragImage.
       let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
-      toDrag = canvas;
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
@@ -241,16 +294,17 @@ var TMP_tabDNDObserver = {
     if (replaceTab && !isCopy) {
       let disAllowDrop, targetTab = gBrowser.tabs[newIndex];
       if (targetTab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(targetTab)) {
+        // Pass true to disallow dropping javascript: or data: urls
+        let links;
         try {
-          var url = browserDragAndDrop.drop(event, {});
-          if (!url || !url.length || url.indexOf(" ", 0) != -1 ||
-              /^\s*(javascript|data):/.test(url))
-            url = null;
-
+          if (Tabmix.isVersion(520)) {
+            links = browserDragAndDrop.dropLinks(event, true);
+          } else {
+            links = [{url: browserDragAndDrop.drop(event, {}, true)}];
+          }
+          const url = links && links.length ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch (ex) {
-          Tabmix.assert(ex);
-        }
+        } catch (ex) {}
 
         if (disAllowDrop)
           dt.effectAllowed = "none";
@@ -433,7 +487,7 @@ var TMP_tabDNDObserver = {
         // ensure that the remoteness of the newly created browser is
         // appropriate for the URL of the tab being dragged in.
         gBrowser.updateBrowserRemotenessByURL(newBrowser,
-                                              draggedBrowserURL);
+          draggedBrowserURL);
       }
 
       // Stop the about:blank load
@@ -454,20 +508,43 @@ var TMP_tabDNDObserver = {
       gBrowser.updateCurrentBrowser(true);
     } else {
       // Pass true to disallow dropping javascript: or data: urls
-      let url;
+      let links;
       try {
-        url = browserDragAndDrop.drop(event, {}, true);
+        if (Tabmix.isVersion(520)) {
+          links = browserDragAndDrop.dropLinks(event, true);
+        } else {
+          links = [{url: browserDragAndDrop.drop(event, {}, true)}];
+        }
       } catch (ex) {}
 
-      if (!url)
+      if (!links || links.length === 0) {
         return;
+      }
 
       let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
 
       if (event.shiftKey)
         bgLoad = !bgLoad; // shift Key reverse the pref
 
-      if (left_right > -1 && !Tabmix.ContentClick.isUrlForDownload(url)) {
+      const url = links[0].url;
+      const replaceCurrentTab = left_right == -1 || Tabmix.ContentClick.isUrlForDownload(url);
+      let tab;
+      if (replaceCurrentTab) {
+        tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
+        // allow to load in locked tab
+        tab.linkedBrowser.tabmix_allowLoad = true;
+      }
+      if (Tabmix.isVersion(520)) {
+        let urls = links.map(link => link.url);
+        gBrowser.tabContainer.tabbrowser.loadTabs(urls, {
+          inBackground: bgLoad,
+          replace: replaceCurrentTab,
+          allowThirdPartyFixup: true,
+          targetTab: tab,
+          newIndex: newIndex + left_right,
+          userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
+        });
+      } else if (!replaceCurrentTab) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {
           inBackground: bgLoad,
@@ -477,11 +554,8 @@ var TMP_tabDNDObserver = {
         gBrowser.moveTabTo(newTab, newIndex + left_right);
       } else {
         // Load in an existing tab.
-        let tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
         try {
           let browser = tab.linkedBrowser;
-          // allow to load in locked tab
-          browser.tabmix_allowLoad = true;
           let webNav = Ci.nsIWebNavigation;
           let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
           if (Tabmix.isVersion(290))
@@ -586,9 +660,9 @@ var TMP_tabDNDObserver = {
     var winWidth = Math.min(window.outerWidth, availWidth.value);
     var winHeight = Math.min(window.outerHeight, availHeight.value);
     var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, availX.value),
-        availX.value + availWidth.value - winWidth);
+      availX.value + availWidth.value - winWidth);
     var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, availY.value),
-        availY.value + availHeight.value - winHeight);
+      availY.value + availHeight.value - winHeight);
 
     delete draggedTab._dragData;
 
@@ -1202,10 +1276,11 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand: function(event, openUILinkWhere, openUILinkParams) {
+  handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
-    let action = this._parseActionUrl(this.value);
-    if (action && action.type == "switchtab" && this.hasAttribute("actiontype")) {
+    let action = this._parseActionUrl(this.value) || {};
+    if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
+        action.type == "switchtab" && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
       prevTabPos = prevTab._tPos;
     }
@@ -1215,8 +1290,9 @@ Tabmix.navToolbox = {
       let altEnter = !isMouseEvent && event &&
           event.altKey && !isTabEmpty(gBrowser.selectedTab);
       let where = "current";
+      let url = action.params ? action.params.url : this.value;
       let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
-              altEnter).inNew && !(/^ *javascript:/.test(this.value));
+        altEnter).inNew && !(/^ *javascript:/.test(url));
       if (isMouseEvent || altEnter || loadNewTab) {
         // Use the standard UI link behaviors for clicks or Alt+Enter
         where = "tab";
@@ -1230,10 +1306,11 @@ Tabmix.navToolbox = {
       openUILinkWhere = where;
     }
 
+    openUILinkParams.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");
     Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
 
     // move the tab that was switched to after the previously selected tab
-    if (prevTabPos) {
+    if (typeof prevTabPos == "number") {
       let pos = prevTabPos + Number(gBrowser.selectedTab._tPos > prevTabPos) -
           Number(!prevTab || !prevTab.parentNode);
       gBrowser.moveTabTo(gBrowser.selectedTab, pos);
@@ -1424,7 +1501,7 @@ Tabmix.navToolbox = {
 
       // alltabs-popup fix visibility for multi-row
       Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
-          TabmixAllTabs._updateTabsVisibilityStatus);
+        TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },
 

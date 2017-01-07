@@ -6,6 +6,8 @@ var gLinksPane = {
     this.singleWindow($("singleWindow").checked);
     this.externalLinkValue($("externalLink").checked);
 
+    gPrefWindow.setDisabled("obs_opentabforAllLinks", $("pref_opentabforLinks").value == 1);
+
     gPrefWindow.initPane("paneLinks");
   },
 
@@ -51,7 +53,7 @@ var gLinksPane = {
   },
 
   openFiletypeEditor: function() {
-    let url = "chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul";
-    window.openDialog(url, "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
+    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul",
+      "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
   }
 };

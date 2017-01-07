@@ -4,14 +4,14 @@ this.EXPORTED_SYMBOLS = ["DocShellCapabilities"];
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabState",
   "resource:///modules/sessionstore/TabState.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
   "resource:///modules/sessionstore/TabStateCache.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 this.DocShellCapabilities = {
   init: function() {

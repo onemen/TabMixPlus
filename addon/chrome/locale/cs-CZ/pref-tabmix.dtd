@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Změnit pořadí otevíraných panelů">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otevře nový panel vedle panelu, který byl otevřen z aktuálního panelu (naposledy vybraného)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Zamykání panelů">
 <!ENTITY lockNewTabs.label "Zamknout nové panely">
 <!ENTITY lockAppTabs.label "Zamknout panely aplikací">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Vyhledávání z kontextové nabídky">
 <!ENTITY selectTabBH.label "Záložky/Historie">
 <!ENTITY duplicateTab.label "Duplikovaný panel">
-<!ENTITY inversefocus1.label "Kliknutí prostředním tlačítkem myši přepnutým pro levou ruku nebo stisknutí tlačítka Ctrl a zároveň kliknutí přepne na:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Upozornění">
 <!ENTITY warnOnCloseProtected.label "Upozornit při zavírání okna s chráněnými panely">
 <!ENTITY warnOnCloseWindow.label "Upozornit při zavírání okna s více panely">

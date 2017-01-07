@@ -38,7 +38,7 @@
     <implementation>
       <constructor>
         <![CDATA[
-          var update = Tabmix.isVersion(320) ? "" : " && aUpdate";
+          var update = Tabmix.isVersion(320, 270) ? "" : " && aUpdate";
           Tabmix.changeCode(this, "_setValue")._replace(
             'return aValue;',
             'else if (!this.instantApply' + update + ' && this.value === aValue) {' +

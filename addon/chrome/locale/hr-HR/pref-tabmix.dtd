@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Change opening order">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
 <!ENTITY lockAppTabs.label "Lock App tabs">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Context menu search for">
 <!ENTITY selectTabBH.label "Zabilješke/Povijest">
 <!ENTITY duplicateTab.label "Duplicate Tab">
-<!ENTITY inversefocus1.label "Inverse Middle-click or Control-click focus of:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Warning">
 <!ENTITY warnOnCloseProtected.label "Upozori prilikom zatvaranja Firefoxa sa zaštićenim karticama">
 <!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">

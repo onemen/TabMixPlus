@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Промени редослед отварања">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Отвори нову картицу поред картице која је последња отворена из текуће картице (јер је била последља одабрана)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Закључај језичке">
 <!ENTITY lockNewTabs.label "Закључај нове језичке">
 <!ENTITY lockAppTabs.label "Закључани App језичци">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Приручним менијем потражи">
 <!ENTITY selectTabBH.label "Обележивача/историјата">
 <!ENTITY duplicateTab.label "Дуплирај картицу">
-<!ENTITY inversefocus1.label "Обрни средњи клик или ктрл+клик пребацивање за:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Упозорење">
 <!ENTITY warnOnCloseProtected.label "Упозори ме приликом затварања прозора са заштићеним картицама">
 <!ENTITY warnOnCloseWindow.label "Упозори ме при затварању прозора са више картица">

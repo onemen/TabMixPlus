@@ -31,21 +31,29 @@
       <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"/>
       <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
+      <preference id="pref_moveSwitchToTabNext" name="extensions.tabmix.moveSwitchToTabNext"  type="bool"/>
+      <preference id="pref_loadProgressively"   name="extensions.tabmix.load_tabs_progressively"
+                  type="int" notChecked=""/>
+      <preference id="pref_restoreOnDemand"     name="extensions.tabmix.restore_on_demand"    type="int"/>
       <preference id="pref_lockallTabs"         name="extensions.tabmix.lockallTabs"          type="bool"/>
       <preference id="pref_lockAppTabs"         name="extensions.tabmix.lockAppTabs"          type="bool"/>
       <preference id="pref_updateLockState"     name="extensions.tabmix.updateOpenedTabsLockState"
                   type="bool"/>
       <preference id="pref_openBookmarks"       name="extensions.tabmix.opentabfor.bookmarks" type="bool"/>
       <preference id="pref_openUrl"             name="extensions.tabmix.opentabfor.urlbar"    type="bool"/>
+      <preference id="pref_syncedTabs"          name="extensions.tabmix.opentabfor.syncedTabs"
+                  type="bool"/>
       <preference id="pref_openBMKGroups"       name="extensions.tabmix.loadBookmarksAndReplace"
                   type="bool" inverted="true"/>
       <preference id="pref_openSearch"          name="browser.search.openintab"               type="bool"/>
       <preference id="pref_openHistory"         name="extensions.tabmix.opentabfor.history"   type="bool"/>
       <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent" type="bool"/>
       <preference id="pref_selectTab"           name="browser.tabs.loadInBackground"
-                                                                              inverted="true" type="bool"
+                  inverted="true" type="bool"
                   onchange="if (typeof gMenuPane == 'object') gMenuPane.setInverseLinkLabel();"/>
       <preference id="pref_selectTabUrl"        name="extensions.tabmix.loadUrlInBackground"
+                  type="bool" inverted="true"/>
+      <preference id="pref_selectSyncedTabs"    name="extensions.tabmix.loadSyncedTabsInBackground"
                   type="bool" inverted="true"/>
       <preference id="pref_selectDivertedTab"   name="browser.tabs.loadDivertedInBackground"
                   type="bool" inverted="true"/>
@@ -90,6 +98,8 @@
       <preference id="pref_undoClosepos"        name="extensions.tabmix.undoClosePosition"    type="bool"/>
       <preference id="pref_menuonlybutton"
                   name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
+      <preference id="pref_keepMenuOpen"
+                  name="extensions.tabmix.undoClose.keepMenuOpen"                             type="bool"/>
       <preference id="pref_ctrltab"             name="browser.ctrlTab.previews"               type="bool"
                   onchange="gEventsPane.disableShowTabList();"/>
       <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
@@ -159,24 +169,56 @@
             <separator class="groove"/>
             <checkbox_tmp id="openDuplicateNext" label="&openDuplicateNext.label;"
                       preference="pref_openDuplicateNext"/>
+            <checkbox_tmp id="moveSwitchToTabNext" label="&moveSwitchToTabNext.label;"
+                      preference="pref_moveSwitchToTabNext"/>
           </groupbox>
           <groupbox flex="1">
+            <!-- Load Bookmarks/History progressively -->
+            <caption label="&openPlacesGroups.label;"/>
+            <hbox align="center">
+              <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label; &moreThan.label;"
+                            preference="pref_loadProgressively" control="loadProgressively"
+                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
+              <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
+                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       observes="obs_loadProgressively"
+                       type="number" min="1" maxwidth="36"/>
+              <label value="&tabs.label;"/>
+            </hbox>
+            <hbox align="center" class="indent">
+              <checkbox_tmp id="chk_restoreOnDemand" label="&restoreOnDemand.label; &moreThan.label;"
+                            preference="pref_restoreOnDemand" control="restoreOnDemand"
+                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
+                            observes="obs_loadProgressively"/>
+              <textbox id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
+                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       type="number" min="1" maxwidth="36"/>
+              <label value="&tabs.label;" observes="obs_loadProgressively"/>
+            </hbox>
+          </groupbox>
+          <groupbox flex="1" orient="horizontal">
             <caption label="&lockTabs.label;"/>
-            <!-- Look All Tabs -->
-            <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
-            <!-- Look App Tabs -->
-            <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
-            <spacer style="height: 1em;"/>
-            <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
-                      preference="pref_updateLockState"/>
+            <vbox flex="1" pack="end">
+              <!-- Look All Tabs -->
+              <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
+              <!-- Look App Tabs -->
+              <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
+            </vbox>
+            <vbox flex="1" pack="end">
+              <!--<spacer style="height: 3px;"/>-->
+              <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
+                          preference="pref_updateLockState"/>
+            </vbox>
           </groupbox>
         </tabpanel>
 <!-- ======================================================== -->
-        <tabpanel>
+        <tabpanel id="tabopening">
           <groupbox flex="1">
             <caption label="&openNewTab.label;"/>
             <hbox>
-              <vbox align="start" id="tabopening1">
+              <vbox align="start" setWidth="true">
                 <!-- Bookmarks open in new tab -->
                 <checkbox_tmp id="openBookmarks" label="&openBookmarks.label;"
                           preference="pref_openBookmarks"/>
@@ -184,13 +226,18 @@
                 <checkbox_tmp id="openHistory" label="&openHistory.label;"
                           preference="pref_openHistory"/>
               </vbox>
-              <vbox>
+              <vbox setWidth="true">
                 <!-- URL open in new tab -->
                 <checkbox_tmp id="openUrl" label="&openUrl.label;"
                           preference="pref_openUrl"/>
                 <!-- Search results open in new tab -->
                 <checkbox_tmp id="openSearch" label="&openSearch.label;"
                           preference="pref_openSearch"/>
+              </vbox>
+              <vbox>
+                <!-- Synced tabs open in new tab -->
+                <checkbox_tmp id="syncedTabs"
+                              preference="pref_syncedTabs"/>
               </vbox>
             </hbox>
             <!-- Groups of Bookmarks/History open in new tabs -->
@@ -205,7 +252,7 @@
           <groupbox flex="1">
             <caption label="&tabFocus.caption;"/>
             <hbox>
-              <vbox align="start" id="tabopening2">
+              <vbox align="start" setWidth="true">
                 <!-- select Links -->
                 <checkbox_tmp id="selectTab" label="&selectTab.label;" preference="pref_selectTab"/>
                 <!-- Select Diverted Windows -->
@@ -219,7 +266,7 @@
                 <!-- duplicate tab -->
                 <checkbox_tmp id="selectDuplicate" label="&duplicateTab.label;" preference="pref_selectDuplicate"/>
               </vbox>
-              <vbox align="start">
+              <vbox align="start" setWidth="true">
                 <!-- Select from url bar -->
                 <checkbox_tmp id="selectTabUrl" label="&openUrl.label;" preference="pref_selectTabUrl"/>
                 <!-- Select from Search Bar-->
@@ -231,16 +278,22 @@
                 <!-- Select first tab from Bookmark Groups -->
                 <checkbox_tmp id="selectBMKGroups" label="&openPlacesGroups.label;" preference="pref_selectBMKGroups"/>
               </vbox>
+              <vbox align="start">
+                <!-- Select from synced tabs -->
+                <checkbox_tmp id="selectSyncedTabs" preference="pref_selectSyncedTabs"/>
+              </vbox>
             </hbox>
             <spacer flex="1"/>
             <separator class="groove"/>
-            <label value="&inversefocus1.label;"/>
+            <label value="&inversefocus2.label;"/>
             <hbox align="start">
-              <vbox id="tabopening3">
+              <vbox setWidth="true">
                 <checkbox_tmp id="inverselinks" label="&selectTab.label;" preference="pref_inverselinks"/>
               </vbox>
-              <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
-                            style="width: 19em;" align="start" preference="pref_inverseother"/>
+              <vbox>
+                <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
+                              style="width: 19em;" align="start" preference="pref_inverseother"/>
+              </vbox>
             </hbox>
           </groupbox>
         </tabpanel>
@@ -349,6 +402,7 @@
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
+                <checkbox_tmp id="keepMenuOpen" preference="pref_keepMenuOpen" observes="obs_undoClose"/>
               </vbox>
             </vbox>
             <separator class="groove"/>
@@ -381,6 +435,7 @@
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>
       <broadcaster id="obs_showTabList"/>
+      <broadcaster id="obs_loadProgressively"/>
   </broadcasterset>
 
   <broadcasterset>

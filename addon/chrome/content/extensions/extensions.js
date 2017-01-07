@@ -37,7 +37,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // sessionManager extension is restartless since version 0.8
-    Tabmix.extensions.__defineGetter__("sessionManager", function() {
+    Tabmix.extensions.__defineGetter__("sessionManager", () => {
       return TabmixSvc.sessionManagerAddonInstalled ||
         "com" in window && com.morac &&
         typeof com.morac.SessionManagerAddon == "object";
@@ -63,7 +63,7 @@ var TMP_extensionsCompatibility = {
       document.getElementById("main-window").setAttribute("gscltTMPinstalled", true);
       let func = ["_setupForOtherExtensions", "enableCustomDragDropMode"];
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
-      func.forEach(function(aFn) {
+      func.forEach(aFn => {
         if (aFn in GlaxChrome) {
           Tabmix.changeCode(GlaxChrome, "GlaxChrome.CLT.DragDropManager." + aFn)._replace(
             '{', '{var TabDNDObserver = TMP_tabDNDObserver;',
@@ -91,7 +91,7 @@ var TMP_extensionsCompatibility = {
     if ("SecondSearchBrowser" in window && SecondSearchBrowser.prototype) {
       let func = ["canOpenNewTab", "loadForSearch", "checkToDoSearch"];
       let SSB = SecondSearchBrowser.prototype;
-      func.forEach(function(aFn) {
+      func.forEach(aFn => {
         if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
           Tabmix.changeCode(SSB, "SecondSearchBrowser.prototype." + aFn)._replace(
             'TM_init', 'Tabmix.startup'
@@ -539,10 +539,10 @@ TMP_extensionsCompatibility.wizzrss = {
     var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
     const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
     var _functions = ["addFeedbase", "validate", "gohome", "tryagain", "promptStuff",
-                      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
-                      "gotoLink", "itemLinkClick", "itemListClick"];
+      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
+      "gotoLink", "itemLinkClick", "itemListClick"];
 
-    _functions.forEach(function(_function) {
+    _functions.forEach(_function => {
       if (_function in window)
         Tabmix.changeCode(window, _function)._replace(codeToReplace, newCode).toCode();
     });
@@ -667,7 +667,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_howToOpen function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit) {
-      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit")._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsAfterBrowserInit", {silent: true})._replace(
         /eval\(["|']window\.TMP_howToOpen/,
         'if (false) $&'
       ).toCode();
@@ -675,7 +675,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
 
     // we removed TMP_openTabNext function 2011-11-15
     if ("TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
-      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed")._replace(
+      Tabmix.changeCode(TreeStyleTabWindowHelper, "TreeStyleTabWindowHelper.overrideExtensionsDelayed", {silent: true})._replace(
         'var newTab',
         'gContextMenu.linkURL = url;'
       )._replace(
@@ -741,7 +741,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       ).toCode();
       // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        /(Tabmix.loadTabs\([^\)]+\);)/g,
+        /(Tabmix.loadTabs\([^)]+\);)/g,
         'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
       ).toCode();
     }
@@ -797,7 +797,10 @@ TMP_extensionsCompatibility.treeStyleTab = {
         return false;
       let nextTab = tst.getNextSiblingTab(baseTab);
       if (parentTab) {
-        return tst.readyToOpenChildTab(parentTab, false, nextTab);
+        return tst.readyToOpenChildTab(parentTab, false, {
+          insertBefore: nextTab,
+          insertAfter: baseTab
+        });
       } else if (nextTab) {
         ownerBrowser.treeStyleTab.readiedToAttachNewTab = true;
         ownerBrowser.treeStyleTab.parentTab = null;

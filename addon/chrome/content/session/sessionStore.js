@@ -1,3 +1,4 @@
+/* exported TMP_ClosedTabs */
 "use strict";
 
 /*
@@ -74,7 +75,7 @@ var TMP_SessionStore = {
       if ("TreeStyleTabBrowser" in window)
         _xulAttributes = _xulAttributes.concat(TabmixSessionData.tabTSTProperties);
 
-      _xulAttributes.forEach(function(aAttr) {
+      _xulAttributes.forEach(aAttr => {
         TabmixSvc.ss.persistTabAttribute(aAttr);
       });
 
@@ -217,11 +218,11 @@ var TMP_SessionStore = {
       // calling doRestore before sessionstartup finished to read
       // sessionStore.js file throw error since Firefox 28, and force
       // syncRead in Firefox 25-27
-      XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", function() {
+      XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
                    .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
-        ss.onceInitialized.then(function() {
+        ss.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
         }).then(null, Tabmix.reportError);
         // until sessionstartup initialized just return the pref value,
@@ -330,10 +331,23 @@ var TMP_ClosedTabs = {
 
   /* .......... functions for closedtabs list menu and context menu .......... */
 
-  populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup) {
-    /* eslint-disable tabmix/balanced-listeners */
+  get keepMenuOpen() {
+    return Tabmix.prefs.getBoolPref("undoClose.keepMenuOpen");
+  },
+
+  set keepMenuOpen(val) {
+    Tabmix.prefs.setBoolPref("undoClose.keepMenuOpen", Boolean(val));
+    return val;
+  },
+
+  populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup, keepWidth) {
     if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
       return false;
+
+    if (keepWidth && !aPopup.hasAttribute("width")) {
+      const width = aPopup.getBoundingClientRect().width;
+      aPopup.setAttribute("width", width);
+    }
 
     TabmixAllTabs.beforeCommonList(aPopup, true);
 
@@ -376,65 +390,107 @@ var TMP_ClosedTabs = {
       }
       m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
       m.setAttribute("value", i);
-      m.addEventListener("command", TMP_ClosedTabs.restoreCommand, false);
-      m.addEventListener("click", TMP_ClosedTabs.checkForMiddleClick, false);
+      m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+      /* eslint-disable tabmix/balanced-listeners */
+      m.addEventListener("command", this, false);
+      m.addEventListener("click", this, false);
+      /* eslint-enable tabmix/balanced-listeners */
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");
       aPopup.appendChild(m);
     }
 
     aPopup.appendChild(document.createElement("menuseparator"));
-    function addKey(item, id) {
-      if (document.getElementById("key_tm_" + id)) {
-        item.setAttribute("key", "key_tm_" + id);
-      }
-    }
-    // "Clear Closed Tabs List"
-    m = aPopup.appendChild(document.createElement("menuitem"));
-    m.setAttribute("id", "clearClosedTabsList");
-    m.setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
-    m.setAttribute("value", -1);
-    addKey(m, "clearClosedTabs");
-    m.addEventListener("command", function() {
-      TMP_ClosedTabs.restoreTab('original', -1);
-    });
 
+    const addMenu = this.addMenuItem.bind(this, aPopup);
+    // "Keep menu open"
+    m = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
+    m.setAttribute("description", TabmixSvc.getString("undoclosetab.keepOpen.description"));
+    m.setAttribute("closemenu", "none");
+    const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
+    m.setAttribute("image", image);
+    // "Clear Closed Tabs List"
+    addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
     // "Restore All Tabs"
-    m = aPopup.appendChild(document.createElement("menuitem"));
-    m.setAttribute("id", "restoreAllClosedTabs");
-    m.setAttribute("label", gNavigatorBundle.getString("menuRestoreAllTabs.label"));
-    m.setAttribute("value", -2);
-    addKey(m, "ucatab");
-    m.addEventListener("command", function() {
-      TMP_ClosedTabs.restoreTab('original', -2);
-    });
+    addMenu("restoreAllClosedTabs", gNavigatorBundle.getString("menuRestoreAllTabs.label"), -2, "ucatab");
+
     return true;
-    /* eslint-enable tabmix/balanced-listeners */
+  },
+
+  addMenuItem: function(popup, id, label, val, keyId) {
+    const m = popup.appendChild(document.createElement("menuitem"));
+    m.setAttribute("id", id);
+    m.setAttribute("label", label);
+    m.setAttribute("value", val);
+    m.setAttribute("class", "menuitem-iconic");
+    if (keyId && document.getElementById("key_tm_" + keyId)) {
+      m.setAttribute("key", "key_tm_" + keyId);
+    }
+    /* eslint-disable tabmix/balanced-listeners */
+    m.addEventListener("command", this);
+    return m;
+  },
+
+  handleEvent: function(event) {
+    switch (event.type) {
+      case "click":
+        this.checkForMiddleClick(event);
+        break;
+      case "command":
+        this.restoreCommand(event);
+        break;
+    }
   },
 
   restoreCommand: function(aEvent) {
-    let index = aEvent.originalTarget.getAttribute("value");
-    if (index < 0) {
+    const item = aEvent.originalTarget;
+    const index = Number(item.getAttribute("value"));
+    if (index == -3) {
+      this.keepMenuOpen = !this.keepMenuOpen;
+      const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
+      item.setAttribute("image", image);
+      this.populateUndoSubmenu(item.parentNode, true);
       return;
     }
-    TMP_ClosedTabs.restoreTab("original", index);
+
+    this.doCommand("restoreTab", "original", item);
   },
 
   checkForMiddleClick: function ct_checkForMiddleClick(aEvent) {
     if (aEvent.button != 1)
       return;
 
-    let index = aEvent.originalTarget.getAttribute("value");
-    if (index < 0)
-      return;
+    const deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
+    const where = deleteItem ? "delete" : "tab";
+    this.doCommand("restoreTab", where, aEvent.originalTarget, deleteItem);
+  },
 
-    let deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
-    TMP_ClosedTabs.restoreTab(deleteItem ? "delete" : "tab", index);
-    if (deleteItem && TMP_ClosedTabs.count > 0) {
-      aEvent.stopPropagation();
-      TMP_ClosedTabs.populateUndoSubmenu(aEvent.originalTarget.parentNode);
-    } else {
-      closeMenus(aEvent.target);
+  contextMenuOnPopupShowing: function(popup) {
+    const val = this.keepMenuOpen ? "single" : "auto";
+    Array.prototype.forEach.call(popup.childNodes, item => {
+      item.setAttribute("closemenu", val);
+    });
+    return popup.triggerNode.value >= 0;
+  },
+
+  contextMenuOnCommand: function(event) {
+    const menuItem = event.originalTarget;
+    const [command, where] = menuItem.getAttribute("commandData").split(",");
+    const popup = menuItem.parentNode;
+    this.doCommand(command, where, popup.triggerNode);
+  },
+
+  doCommand: function(command, where, item, keepMenuOpen) {
+    const popup = item.parentNode;
+    const index = Number(item.getAttribute("value"));
+    this[command](where || index, index);
+    const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
+    if (rePopulate) {
+      if (popup && command == "restoreTab") {
+        this.populateUndoSubmenu(popup, true);
+      }
+    } else if (!this.count || item.getAttribute("closemenu") == "none") {
+      closeMenus(popup);
     }
   },
 
@@ -648,7 +704,7 @@ var TabmixConvertSession = {
     TabmixSessionManager.saveStateDelayed();
     var callBack = function(aResult) {
       if (aResult.button == Tabmix.BUTTON_OK) {
-        setTimeout(function(a, b) {
+        setTimeout((a, b) => {
           TabmixConvertSession.convertFile(a, b);
         }, 50, null, true);
       }
@@ -659,10 +715,10 @@ var TabmixConvertSession = {
   selectFile: function cs_selectFile(aWindow) {
     const nsIFilePicker = Ci.nsIFilePicker;
     var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    var fpCallback = function fpCallback_done(aResult) {
+    var fpCallback = aResult => {
       if (aResult == nsIFilePicker.returnOK)
         this.convertFile(fp.fileURL.spec);
-    }.bind(this);
+    };
 
     fp.init(aWindow, this.getString("selectfile"), nsIFilePicker.modeOpen);
     fp.defaultString = "session.rdf";
@@ -769,7 +825,7 @@ var TabmixConvertSession = {
         tabsData.push(new _tabData(rdfNodeTab));
       }
     }
-    tabsData.sort(function(a, b) {
+    tabsData.sort((a, b) => {
       return a - b;
     });
     for (let i = 0; i < tabsData.length; i++) {
@@ -846,13 +902,13 @@ var TabmixConvertSession = {
       let TSTProps = properties.split('|');
       properties = TSTProps.shift();
       let PREFIX = "tmp-session-data-";
-      TSTProps.forEach(function(aProp) {
+      TSTProps.forEach(aProp => {
         if (/^([^\s=]+)=(.*)/.test(aProp) &&
             RegExp.$1.startsWith(PREFIX) && RegExp.$2)
           extData[RegExp.$1.substr(PREFIX.length)] = decodeURIComponent(RegExp.$2);
       });
       properties = properties.substr(booleanAttrLength + 1).split(" ");
-      properties.forEach(function(aAttr) {
+      properties.forEach(aAttr => {
         aAttr = TabmixSessionManager.getDecodedLiteralValue(null, aAttr);
         if (!/^([^\s=]+)=(.*)/.test(aAttr))
           return;

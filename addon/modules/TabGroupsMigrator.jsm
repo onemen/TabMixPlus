@@ -4,16 +4,16 @@ this.EXPORTED_SYMBOLS = ["TabmixGroupsMigrator"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
-                                  "resource://gre/modules/Services.jsm");
+  "resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "Promise",
-                                  "resource://gre/modules/Promise.jsm");
+  "resource://gre/modules/Promise.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
-  if (!TabmixSvc.version(450)) {
+XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", () => {
+  if (!TabmixSvc.version(450) || TabmixSvc.version(520)) {
     return null;
   }
 
@@ -29,18 +29,18 @@ XPCOMUtils.defineLazyGetter(this, "TabGroupsMigrator", function() {
 });
 
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
-                                  "resource://gre/modules/PlacesUtils.jsm");
+  "resource://gre/modules/PlacesUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncShutdown",
-                                  "resource://gre/modules/AsyncShutdown.jsm");
+  "resource://gre/modules/AsyncShutdown.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-                                  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
-                                  "resource://tabmixplus/Places.jsm");
+  "resource://tabmixplus/Places.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "gBrowserBundle", function() {
+XPCOMUtils.defineLazyGetter(this, "gBrowserBundle", () => {
   return Services.strings.createBundle('chrome://browser/locale/browser.properties');
 });
 
@@ -280,7 +280,7 @@ this.TabmixGroupsMigrator = {
   },
 
   getSessionsFolder: function(folder) {
-    return this.promiseItemId(folder).catch(this.createSessionsFolder.bind(this));
+    return this.promiseItemId(folder).catch(() => this.createSessionsFolder());
   },
 
   bookmarkAllGroupsFromState: function(groupData, guid, name) {

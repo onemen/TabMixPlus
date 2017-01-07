@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "變更開啟順序">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "將新分頁開啟於最後一個由本分頁開啟的分頁旁（因為該分頁是最後選取的）">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "鎖定分頁">
 <!ENTITY lockNewTabs.label "鎖定新分頁">
 <!ENTITY lockAppTabs.label "鎖定應用程式分頁">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "右鍵搜尋">
 <!ENTITY selectTabBH.label "書籤、瀏覽記錄">
 <!ENTITY duplicateTab.label "複製分頁">
-<!ENTITY inversefocus1.label "配合上述設定將滑鼠中鍵或 [Ctrl]+左鍵 設為相反效果：">
+<!ENTITY inversefocus2.label "點擊滑鼠中鍵或 [Ctrl]+左鍵 切換至該分頁：">
 <!ENTITY warning.caption.label "警告">
 <!ENTITY warnOnCloseProtected.label "關閉視窗時若仍有被保護的分頁則發出警告">
 <!ENTITY warnOnCloseWindow.label "關閉視窗時若仍有多個分頁則發出警告">
@@ -178,7 +183,7 @@
 <!ENTITY widthTo.label "至">
 <!ENTITY widthPixels.label "像素">
 <!ENTITY onLeftDisabled.label "在目前的主題下無法將按鈕置於左側">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "安裝 treeStyleTab 後，便無法按鈕置於左側">
 <!ENTITY flexTabs.label "分頁標籤寬度配合標題文字長度">
 <!ENTITY bookastitle.label "使用書籤名稱做為分頁標題">
 <!-- LOCALIZATION NOTE:           change this only if you need to change the width -->

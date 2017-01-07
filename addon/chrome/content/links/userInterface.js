@@ -28,7 +28,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
   } else {
     window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
-        "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
+      "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
 };
 
@@ -324,6 +324,18 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 };
 
+Tabmix.isPendingTab = function(aTab) {
+  const pending = aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending");
+  if (pending) {
+    if (TMP_Places.restoringTabs.indexOf(aTab) > -1) {
+      // don't show tab as pending when bookmarks restore_on_demand is false
+      return TMP_Places.bookmarksOnDemand;
+    }
+    return true;
+  }
+  return false;
+};
+
 Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
@@ -331,8 +343,8 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   let isSelected = aTab.getAttribute(TabmixSvc.selectedAtt) == "true";
   // if pending tab is blank we don't style it as unload or unread
   if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
-      (aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending"))) {
-    style = aTab.hasAttribute("visited") ||
+      this.isPendingTab(aTab)) {
+    style = aTab.pinned || aTab.hasAttribute("visited") ||
       TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
       !aTab.hasAttribute("visited") && !isTabEmpty(aTab)) {

@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-const ATTRIBS = ["onclick", "rel", "onmousedown"];
+const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
 this.LinkNodeUtils = {
   isFrameInContent: function(content, href, name) {

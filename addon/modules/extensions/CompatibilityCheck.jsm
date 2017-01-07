@@ -21,9 +21,9 @@ const TMP_CHECKBOX_UNCHECKED = 0;
 const TMP_CHECKBOX_CHECKED = 1;
 const TMP_HIDE_CHECKBOX = 2;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/AddonManager.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/AddonManager.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
@@ -69,7 +69,7 @@ CompatibilityCheck.prototype = {
 
     var guid_list = this.getList();
     var self = this;
-    AddonManager.getAddonsByTypes(["extension"], function(aAddonsList) {
+    AddonManager.getAddonsByTypes(["extension"], aAddonsList => {
       for (let i = 0; i < aAddonsList.length; i++) {
         let addon = aAddonsList[i];
         if (addon.id.toLowerCase() in guid_list) {
@@ -115,7 +115,7 @@ CompatibilityCheck.prototype = {
               TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
     var chkBoxLabel = TabmixSvc.getString("incompatible.chkbox.label");
     var buttons = [TabmixSvc.setLabel("incompatible.button0"),
-            TabmixSvc.setLabel("incompatible.button1")];
+      TabmixSvc.setLabel("incompatible.button1")];
     buttons.push(TabmixSvc.setLabel("incompatible.button2"));
 
     // make promptService non modal on startup
@@ -147,8 +147,8 @@ CompatibilityCheck.prototype = {
 
   doDisable: function TMP_EX_doDisable() {
     var list = this.list;
-    list.forEach(function(aAddonToDisable) {
-      AddonManager.getAddonByID(aAddonToDisable.id, function(aAddon) {
+    list.forEach(aAddonToDisable => {
+      AddonManager.getAddonByID(aAddonToDisable.id, aAddon => {
         aAddon.userDisabled = true;
       });
     });

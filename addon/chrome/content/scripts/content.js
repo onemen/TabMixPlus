@@ -5,8 +5,8 @@
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
 
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
@@ -21,7 +21,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
   "resource://tabmixplus/LinkNodeUtils.jsm");
@@ -136,7 +136,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:isFrameInContent": {
         let result = LinkNodeUtils.isFrameInContent(content, data.href, data.name);
-        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result});
+        sendAsyncMessage("Tabmix:isFrameInContentResult", {result: result, epoch: data.epoch});
         break;
       }
       case "Tabmix:collectOpener": {
@@ -151,12 +151,22 @@ var TabmixContentHandler = {
   },
 
   onDrop: function(event) {
-    let uri, name = { };
-    let linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
+    let links;
+    const linkName = { };
+    const linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
                         .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
-      uri = linkHandler.dropLink(event, name, true);
+      if (TabmixSvc.version(520)) {
+        links = linkHandler.dropLinks(event, true);
+        // we can not send a message with array of wrapped nsIDroppedLinkItem
+        links = links.map(link => {
+          const {url, name, type} = link;
+          return {url: url, name: name, type: type};
+        });
+      } else {
+        links = [{url: linkHandler.dropLink(event, linkName, true)}];
+      }
     } catch (ex) {
       return;
     }
@@ -168,8 +178,8 @@ var TabmixContentHandler = {
         shiftKey: event.shiftKey,
         altKey: event.altKey
       },
-      uri: uri,
-      name: name.value
+      links: links,
+      name: linkName.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
     if (result[0]) {
@@ -249,7 +259,7 @@ TabmixClickEventHandler = {
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode) {
       linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
-                                    href && event.button === 0);
+        href && event.button === 0);
     }
 
     let result = sendSyncMessage("TabmixContent:Click",
@@ -308,6 +318,7 @@ TabmixClickEventHandler = {
           }
         }
       }
+      json.originPrincipal = ownerDoc.nodePrincipal;
 
       sendAsyncMessage("Content:Click", json);
       return;
@@ -367,7 +378,7 @@ TabmixClickEventHandler = {
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
     return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
-            node && node.ownerDocument.nodePrincipal];
+      node && node.ownerDocument.nodePrincipal];
   },
 };
 

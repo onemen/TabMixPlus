@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "Αλλαγή σειράς ανοίγματος">
 <!ENTITY openTabNextInverse.tooltip "[α][3][2][1][β][γ] -&gt; [α][1][2][3][β][γ]">
 <!ENTITY openTabNextInverse.tooltip1 "Άνοιγμα νέας καρτέλας δίπλα από την τελευταία καρτέλα που ανοίχτηκε μέσα από την τρέχουσα (αφού ήταν η τελευταία επιλεγμένη)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Κλείδωμα καρτελών">
 <!ENTITY lockNewTabs.label "Κλείδωμα νέων καρτελών">
 <!ENTITY lockAppTabs.label "Κλείδωμα πρωτευόντων καρτελών">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "Αναζήτηση στο μενού περιεχομένου">
 <!ENTITY selectTabBH.label "Σελιδοδείκτες/Ιστορικό">
 <!ENTITY duplicateTab.label "Αντίγραφο καρτέλας">
-<!ENTITY inversefocus1.label "Αντιστροφή εστίασης μεσαίου ή Control+ κλικ για:">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Προειδοποίηση">
 <!ENTITY warnOnCloseProtected.label "Προειδοποίηση στο κλείσιμο παραθύρων που περιέχουν προστατευμένες καρτέλες">
 <!ENTITY warnOnCloseWindow.label "Προειδοποίηση για κλείσιμο παραθύρου με πολλές καρτέλες">

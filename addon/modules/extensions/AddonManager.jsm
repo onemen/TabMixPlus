@@ -1,15 +1,14 @@
 /**
  * original code by onemen
  */
-
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/AddonManager.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/AddonManager.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 
 const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;
@@ -31,7 +30,7 @@ var TabGroups = {
   },
   onEnabled: function() {
     if (this.isUpdateNeeded()) {
-      TabmixSvc.forEachBrowserWindow(function(aWindow) {
+      TabmixSvc.forEachBrowserWindow(aWindow => {
         aWindow.TMP_TabView.init();
       });
     }
@@ -70,7 +69,7 @@ var PrivateTab = {
     this._resetNewTabButton();
   },
   _resetNewTabButton: function() {
-    TabmixSvc.forEachBrowserWindow(function(aWindow) {
+    TabmixSvc.forEachBrowserWindow(aWindow => {
       aWindow.TMP_eventListener.updateMultiRow(true);
     });
   }
@@ -158,7 +157,7 @@ var TabmixAddonManager = {
     this.initialized = true;
 
     AddonManager.addAddonListener(TabmixListener);
-    AddonManager.getAddonsByTypes(["extension"], function(addons) {
+    AddonManager.getAddonsByTypes(["extension"], addons => {
       addons.forEach(addon => {
         if (addon.isActive) {
           TabmixListener.init(addon.id);

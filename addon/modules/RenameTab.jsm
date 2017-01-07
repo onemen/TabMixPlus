@@ -4,8 +4,8 @@ this.EXPORTED_SYMBOLS = ["RenameTab"];
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
@@ -32,7 +32,7 @@ this.RenameTab = {
           browser.contentTitle;
     this.data.url = browser.currentURI.spec;
     this.data.docTitle = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
-        docTitle, null, aTab);
+      docTitle, null, aTab);
     if (!this.data.docTitle)
       this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
         gBrowser.mStringBundle.getString("tabs.emptyTabTitle") : this.data.url;
@@ -95,10 +95,10 @@ this.RenameTab = {
       let width = popup.boxObject.width || 330;
       let height = popup.boxObject.height || 215;
       popup.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
-          screen.availTop + (screen.availHeight - height) / 2, false);
+        screen.availTop + (screen.availHeight - height) / 2, false);
       if (popup.boxObject.width != width) {
         popup.moveTo(screen.availLeft + (screen.availWidth - popup.boxObject.width) / 2,
-            screen.availTop + (screen.availHeight - popup.boxObject.height) / 2);
+          screen.availTop + (screen.availHeight - popup.boxObject.height) / 2);
       }
     }
 

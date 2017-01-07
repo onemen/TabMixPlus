@@ -345,11 +345,11 @@ function setPrefAfterImport(aPref) {
 }
 
 var sessionPrefs = ["browser.sessionstore.resume_from_crash",
-                    "browser.startup.page",
-                    "extensions.tabmix.sessions.manager",
-                    "extensions.tabmix.sessions.crashRecovery"];
+  "browser.startup.page",
+  "extensions.tabmix.sessions.manager",
+  "extensions.tabmix.sessions.crashRecovery"];
 
-XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
+XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
     "browser.allTabs.previews", "browser.ctrlTab.previews",
@@ -371,7 +371,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value
-  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(function(pref) {
+  tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(pref => {
     try {
       return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
     } catch (ex) { }
@@ -380,7 +380,7 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", function() {
   return tabmixPrefs;
 });
 
-XPCOMUtils.defineLazyGetter(this, "_sminstalled", function() {
+XPCOMUtils.defineLazyGetter(this, "_sminstalled", () => {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 
@@ -392,7 +392,7 @@ function defaultSetting() {
   let SMinstalled = _sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
       gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
-  prefs.forEach(function(pref) {
+  prefs.forEach(pref => {
     Services.prefs.clearUserPref(pref);
   });
   // we enable our session manager on default
@@ -409,7 +409,7 @@ function toggleSyncPreference() {
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
   let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
-  gPreferenceList.forEach(function(pref) {
+  gPreferenceList.forEach(pref => {
     if (exclude.indexOf(pref) == -1)
       Services.prefs[fn](sync + pref, true);
   });
@@ -421,7 +421,7 @@ function exportData() {
   gPrefWindow.onApply();
   showFilePicker("save").then(file => {
     if (file) {
-      let patterns = gPreferenceList.map(function(pref) {
+      let patterns = gPreferenceList.map(pref => {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
@@ -525,7 +525,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tabmixplus.org/support/viewpage.php?t=3&p=";
+  var helpPage = "http://tabmixplus.org/support/viewtopic.php?t=3&p=";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -601,7 +601,7 @@ window.gIncompatiblePane = {
 
 };
 
-XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", function() {
+XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
   let win = Tabmix.getTopWin();
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
          win.document.getElementById("context_unpinTab").getAttribute("label");
@@ -612,6 +612,6 @@ XPCOMUtils.defineLazyGetter(this, "OS", () => {
 });
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
-                                  "resource://tabmixplus/AsyncUtils.jsm");
+  "resource://tabmixplus/AsyncUtils.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");

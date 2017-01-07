@@ -5,9 +5,9 @@ this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
-Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", this);
 
 this.SingleWindowModeUtils = {
  /**
@@ -46,13 +46,14 @@ this.SingleWindowModeUtils = {
     if (!aWindow.arguments || aWindow.arguments.length === 0)
       return false;
 
-    aWindow.addEventListener("load", function _onLoad(aEvent) {
+    const onLoad = aEvent => {
       let window = aEvent.currentTarget;
-      window.removeEventListener("load", _onLoad, false);
+      window.removeEventListener("load", onLoad, false);
       let docElement = window.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
         this.onLoad(window);
-    }.bind(this), false);
+    };
+    aWindow.addEventListener("load", onLoad, false);
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 
@@ -137,6 +138,12 @@ this.SingleWindowModeUtils = {
       let count = uriToLoad.Count();
       for (let i = 0; i < count; i++) {
         let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
+        urls.push(uriString.data);
+      }
+    } else if (uriToLoad instanceof Ci.nsIArray) {
+      let count = uriToLoad.length;
+      for (let i = 0; i < count; i++) {
+        let uriString = uriToLoad.queryElementAt(i, Ci.nsISupportsString);
         urls.push(uriString.data);
       }
     } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {

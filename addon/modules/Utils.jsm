@@ -14,12 +14,12 @@ const FMM_MESSAGES = [
   "Tabmix:contextmenu",
 ];
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource://tabmixplus/DocShellCapabilities.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
@@ -80,14 +80,21 @@ this.TabmixUtils = {
         MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
       case "Tabmix:contentDrop": {
-        let {json, uri, name} = message.data;
+        const {json, links, name} = message.data;
+        const url = links[0].url;
         win = browser.ownerDocument.defaultView;
-        let where = win.tablib.whereToOpenDrop(json, uri);
+        const where = win.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
-          // handleDroppedLink call preventDefault
-          json.preventDefault = function() {};
-          json.tabmixContentDrop = "tab";
-          browser.droppedLinkHandler(json, uri, name);
+          if (TabmixSvc.version(520)) {
+            links[0].tabmixContentDrop = "tab";
+            // see browser.xml dropLinks method
+            browser.droppedLinkHandler(null, links);
+          } else {
+            // handleDroppedLink call preventDefault
+            json.preventDefault = function() {};
+            json.tabmixContentDrop = "tab";
+            browser.droppedLinkHandler(json, url, name);
+          }
           // prevent default
           return true;
         }

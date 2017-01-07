@@ -91,8 +91,8 @@ Tabmix.setSanitizer = {
         Tabmix.setSanitizer.disableMenuItem();
         pref.setAttribute("readonly", "true");
         Tabmix.setItem(check, "onsyncfrompreference",
-                           "Tabmix.setSanitizer.checked = this.checked; " +
-                           "return gSanitizePromptDialog.onReadGeneric();");
+          "Tabmix.setSanitizer.checked = this.checked; " +
+          "return gSanitizePromptDialog.onReadGeneric();");
       }
     }
   },
@@ -117,11 +117,11 @@ Tabmix.setSanitizer = {
     var title = "Tab Mix Plus - " + document.title;
     var msg = this._confirm;
     var buttonPressed = promptService.confirmEx(null,
-                    title,
-                    msg,
-                    (promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0) +
-                    (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
-                    null, null, null, null, {});
+      title,
+      msg,
+      (promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0) +
+      (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
+      null, null, null, null, {});
     if (buttonPressed == 1)
       aCheckbox.checked = false;
   }

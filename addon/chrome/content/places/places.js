@@ -21,6 +21,9 @@ var TMP_Places = {
         window.removeEventListener("unload", this, false);
         this.deinit();
         break;
+      case "SSTabRestored":
+        this.updateRestoringTabsList(aEvent.target);
+        break;
     }
   },
 
@@ -33,6 +36,7 @@ var TMP_Places = {
     // use tab label for bookmark name when user renamed the tab
     // PlacesCommandHook exist on browser window
     if ("PlacesCommandHook" in window) {
+      gBrowser.tabContainer.addEventListener("SSTabRestored", this);
       if (Tabmix.isVersion(400)) {
         if (!Tabmix.originalFunctions.placesBookmarkPage) {
           Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
@@ -87,6 +91,10 @@ var TMP_Places = {
   },
 
   deinit: function TMP_PC_deinit() {
+    if ("gBrowser" in window) {
+      gBrowser.tabContainer.removeEventListener("SSTabRestored", this);
+      this.restoringTabs = [];
+    }
     this.stopObserver();
   },
 
@@ -226,10 +234,8 @@ var TMP_Places = {
   //        locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
-  //
-  // TODO - try to use sessionStore to add many tabs
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
-    var tabs = gBrowser.visibleTabs;
+    var openTabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
         Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
@@ -241,8 +247,8 @@ var TMP_Places = {
     // catch tab for reuse
     var aTab, reuseTabs = [], removeTabs = [], i;
     var tabIsBlank, canReplace;
-    for (i = 0; i < tabs.length; i++) {
-      aTab = tabs[i];
+    for (i = 0; i < openTabs.length; i++) {
+      aTab = openTabs[i];
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
       canReplace = (doReplace && !aTab.hasAttribute("locked") &&
@@ -257,33 +263,55 @@ var TMP_Places = {
       }
     }
 
+    // load tabs progressively:
+    // we use two preferences to control this feature:
+    // load_tabs_progressively - type int:
+    // when the number of tabs to load is more than the number in the preference
+    // we use SessionStore to restore each tab otherwise we use browser.loadURI.
+    //
+    // restore_on_demand - type int:
+    // when the number of tabs to load exceed the number in the preference we
+    // instruct SessionStore to use restore on demand for the current set of tabs.
+    const tabCount = this.restoringTabs.length + bmGroup.length;
+    const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
+
     var tabToSelect = null;
-    var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < tabs.length - 1) ?
+    var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
                    gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
+    let tabs = [], tabsData = [];
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
-      try { // bug 300911
-        if (i < reuseTabs.length) {
-          aTab = reuseTabs[i];
-          let browser = gBrowser.getBrowserForTab(aTab);
-          browser.userTypedValue = url;
-          browser.loadURI(url);
-          // setTabTitle will call TabmixTabbar.updateScrollStatus for us
-          aTab.collapsed = false;
-          // reset visited & tabmix_selectedID attribute
-          if (!aTab.selected) {
-            aTab.removeAttribute("visited");
-            aTab.removeAttribute("tabmix_selectedID");
-          } else
-            aTab.setAttribute("reloadcurrent", true);
-        } else {
-          aTab = gBrowser.addTab(url, {skipAnimation: multiple, dontMove: true});
+      if (i < reuseTabs.length) {
+        aTab = reuseTabs[i];
+        if (!loadProgressively) {
+          const browser = aTab.linkedBrowser;
+          try {
+            browser.userTypedValue = url;
+            browser.loadURI(url);
+          } catch (ex) { }
         }
-
-        this.setTabTitle(aTab, url, bmIds[i]);
-      } catch (er) { }
+        this.resetRestoreState(aTab);
+        aTab.collapsed = false;
+        // reset visited & tabmix_selectedID attribute
+        if (!aTab.selected) {
+          aTab.removeAttribute("visited");
+          aTab.removeAttribute("tabmix_selectedID");
+        } else
+          aTab.setAttribute("reloadcurrent", true);
+      } else {
+        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, {
+          skipAnimation: multiple,
+          dontMove: true,
+          forceNotRemote: loadProgressively,
+        });
+      }
+      this.setTabTitle(aTab, url, bmIds[i]);
+      if (loadProgressively) {
+        tabs.push(aTab);
+        tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
+      }
 
       if (!tabToSelect)
         tabToSelect = aTab;
@@ -319,6 +347,71 @@ var TMP_Places = {
     while (removeTabs.length > 0) {
       gBrowser.removeTab(removeTabs.pop());
     }
+
+    if (loadProgressively) {
+      this.restoreTabs(tabs, tabsData, this.bookmarksOnDemand || restoreOnDemand);
+    }
+  },
+
+  getPreferences(tabCount) {
+    // negative value indicate that the feature is disabled
+    const progressively = Tabmix.prefs.getIntPref("load_tabs_progressively");
+    if (progressively < 0) {
+      return [false, false];
+    }
+    let onDemand = Tabmix.prefs.getIntPref("restore_on_demand");
+    if (onDemand < 0) {
+      return [tabCount > progressively, false];
+    }
+    if (onDemand < progressively) {
+      Tabmix.prefs.setIntPref("restore_on_demand", progressively);
+      onDemand = progressively;
+    }
+    return [tabCount > progressively, tabCount > onDemand];
+  },
+
+  restoreTabs: function(tabs, tabsData, restoreOnDemand) {
+    this.restoringTabs.push(...tabs);
+    this.bookmarksOnDemand = restoreOnDemand;
+    let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
+                                         "restoreHistoryPrecursor";
+    TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
+    // set icon on pending tabs
+    const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
+        .filter(({tab, url}) => tab.hasAttribute("pending") && url != "about:blank");
+    for (let data of pendingData) {
+      const {tab, url} = data;
+      const entryURI = BrowserUtils.makeURI(url, null, null);
+      PlacesUtils.favicons.getFaviconURLForPage(entryURI, uri => {
+        // skip tab that already restored
+        if (tab.hasAttribute("pending") && uri) {
+          gBrowser.setIcon(tab, uri);
+        }
+      });
+    }
+  },
+
+  bookmarksOnDemand: false,
+  restoringTabs: [],
+
+  resetRestoreState: function(tab) {
+    if (tab.linkedBrowser.__SS_restoreState) {
+      TabmixSvc.SessionStore._resetTabRestoringState(tab);
+    }
+    this.updateRestoringTabsList(tab);
+  },
+
+  updateRestoringTabsList: function(tab) {
+    if (!this.restoringTabs.length && !this.bookmarksOnDemand) {
+      return;
+    }
+    let index = this.restoringTabs.indexOf(tab);
+    if (index > -1) {
+      this.restoringTabs.splice(index, 1);
+    }
+    if (!this.restoringTabs.length) {
+      this.bookmarksOnDemand = false;
+    }
   },
 
   setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID) {
@@ -331,9 +424,13 @@ var TMP_Places = {
     let title = this.getTabTitle(aTab, aUrl, aTab.label);
     if (title != aTab.label) {
       aTab.label = title;
-      aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
       aTab.setAttribute("tabmix_changed_label", title);
-      gBrowser._tabAttrModified(aTab, ["label", "crop"]);
+      if (Tabmix.isVersion(530)) {
+        gBrowser._tabAttrModified(aTab, ["label"]);
+      } else {
+        aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
+        gBrowser._tabAttrModified(aTab, ["label", "crop"]);
+      }
       if (aTab.selected)
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))
@@ -588,7 +685,7 @@ TMP_Places.contextMenu = {
   // update context menu for bookmarks manager and sidebar
   // for bookmarks/places, history, sage and more.....
   update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
-                                           openInTab, pref) {
+                                          openInTab, pref) {
     // if all 4 is hidden... probably "Open all in Tabs" is visible
     if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
         openInTab.hidden) {
@@ -704,7 +801,8 @@ Tabmix.onContentLoaded = {
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +
       'let callerTrace = Tabmix.callerTrace();' + $LF +
-      'let list = ["openUILink", "handleLinkClick", "TMP_tabshifted", "TMP_contentLinkClick", "BG_observe"];' + $LF +
+      'let list = ["openUILink", "handleLinkClick", "BG_observe", "contentAreaClick",' + $LF +
+      '            "TMP_tabshifted", "TMP_whereToOpenLink", "TMP_contentLinkClick"];' + $LF +
       'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
       'let notOneClickSearch = !getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
@@ -736,15 +834,21 @@ Tabmix.onContentLoaded = {
       '$&\n' +
       '  var bookMarkId            = params.bookMarkId;'
     )._replace(
-      'where == "current" && w.gBrowser.selectedTab.pinned',
-      '$& && !params.suppressTabsOnFileDownload'
+      'where == "current" && #1.pinned'
+        .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
+      '$& && !params.suppressTabsOnFileDownload',
+      {check: !Tabmix.isVersion(530)}
     )._replace(
-      'var w = getTopWin();',
-      '$&\n' +
-      '  if (w && where == "window" &&\n' +
+      '(targetBrowser).pinned',
+      '$& && !params.suppressTabsOnFileDownload',
+      {check: Tabmix.isVersion(530)}
+    )._replace(
+      'if ((where == "tab" ||',
+      'if (w && where == "window" &&\n' +
       '      !Tabmix.isNewWindowAllow(aIsPrivate)) {\n' +
       '    where = "tab";\n' +
-      '  }'
+      '  }\n' +
+      '  $&'
     )._replace(
       /Services.ww.openWindow[^;]*;/,
       'let newWin = $&\n' +
@@ -753,9 +857,9 @@ Tabmix.onContentLoaded = {
       '    }'
     )._replace(
       /(})(\)?)$/,
-      '  var tab = where == "current" ?\n' +
+      '  const targetTab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.setTabTitle(tab, url, bookMarkId);\n' +
+      '  w.TMP_Places.setTabTitle(targetTab, url, bookMarkId);\n' +
       '  if (where == "current") {\n' +
       '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
       '  }\n' +
@@ -768,7 +872,7 @@ Tabmix.onContentLoaded = {
   getXnotifierFunction: function(aName) {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
-      let fn = ["wmn", "xnotifier"].filter(function(f) {
+      let fn = ["wmn", "xnotifier"].filter(f => {
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });

@@ -56,6 +56,11 @@
 <!ENTITY openTabNextInverse.label "更改标签页打开次序">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY moreThan.label "when I open more than">
+<!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "锁定标签页">
 <!ENTITY lockNewTabs.label "锁定新标签页">
 <!ENTITY lockAppTabs.label "锁定应用程序标签页">
@@ -77,7 +82,7 @@
 <!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">
 <!ENTITY duplicateTab.label "复制的标签页">
-<!ENTITY inversefocus1.label "中键点击或 Ctrl-点击时已相反方式打开以下项目：">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "警告">
 <!ENTITY warnOnCloseProtected.label "关闭含有受保护标签页的窗口时警告我">
 <!ENTITY warnOnCloseWindow.label "关闭含多个标签页的窗口时警告我">

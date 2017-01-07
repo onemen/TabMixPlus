@@ -12,9 +12,14 @@ pref("extensions.tabmix.updateOpenedTabsLockState", true); // added 2012-12-29
 pref("extensions.tabmix.singleWindow", false);
 
 pref("extensions.tabmix.opentabfor.bookmarks", false);
+pref("extensions.tabmix.load_tabs_progressively", 9);
+pref("extensions.tabmix.restore_on_demand", 9);
 // pref("extensions.tabmix.opentabfor.search", false); - replace with Firefox pref
 pref("extensions.tabmix.opentabfor.history", false);
 pref("extensions.tabmix.opentabfor.urlbar", false);
+pref("extensions.tabmix.loadBookmarksAndReplace", false);
+pref("extensions.tabmix.opentabfor.syncedTabs", false);
+
 pref("extensions.tabmix.middlecurrent", false);
 pref("extensions.tabmix.inversefocusLinks", false);
 pref("extensions.tabmix.inversefocusOther", false);
@@ -25,7 +30,7 @@ pref("extensions.tabmix.loadExternalInBackground", false);
 pref("extensions.tabmix.loadSearchInBackground", false);
 pref("extensions.tabmix.loadDuplicateInBackground", false);
 pref("extensions.tabmix.loadBookmarksGroupInBackground", false);
-pref("extensions.tabmix.loadBookmarksAndReplace", false);
+pref("extensions.tabmix.loadSyncedTabsInBackground", false);
 
 pref("extensions.tabmix.loadOnNewTab.type", 4); // 2012-03-21 changed default from 0 to 4
 pref("extensions.tabmix.replaceLastTabWith.type", 4); // 2012-03-21 changed default from 0 to 4
@@ -36,6 +41,7 @@ pref("extensions.tabmix.openNewTabNext", false);
 pref("extensions.tabmix.openTabNext", false);
 pref("extensions.tabmix.openTabNextInverse", true);
 pref("extensions.tabmix.openDuplicateNext", true);
+pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);
 pref("extensions.tabmix.protectedtabs.warnOnClose", true);
 /*
@@ -162,6 +168,7 @@ pref("extensions.tabmix.lasttab.showTabList", false);
 pref("extensions.tabmix.slideDelay", 10);
 
 pref("extensions.tabmix.undoClose", true);
+pref("extensions.tabmix.undoClose.keepMenuOpen", false);
 /*
  * we use browser.sessionstore.max_tabs_undo from 2008-02-26
  */

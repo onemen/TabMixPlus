@@ -4,11 +4,11 @@ this.EXPORTED_SYMBOLS = ["ContextMenu"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
-                                  "resource://tabmixplus/Utils.jsm");
+  "resource://tabmixplus/Utils.jsm");
 
 this.ContextMenu = {
   getSelectedLinks: function(content, check) {
@@ -38,7 +38,7 @@ this.ContextMenu = {
 
       try {
         secMan.checkLoadURIStrWithPrincipal(
-            doc.nodePrincipal, url, secMan.STANDARD);
+          doc.nodePrincipal, url, secMan.STANDARD);
       } catch (e) {
         return false;
       }
@@ -47,7 +47,7 @@ this.ContextMenu = {
 
     let range = selectionObject.getRangeAt(0).cloneContents();
     let treeWalker = doc.createTreeWalker(range,
-                          Ci.nsIDOMNodeFilter.SHOW_ELEMENT, filter, true);
+      Ci.nsIDOMNodeFilter.SHOW_ELEMENT, filter, true);
     let nextEpisode = treeWalker.nextNode();
     let urls = [];
     while (nextEpisode !== null) {

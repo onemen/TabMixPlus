@@ -3,9 +3,13 @@
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
+
+if (typeof Ci == "undefined") {
+  this.Ci = Components.interfaces;
+}
 
 var TabmixRemoveBlankTab = {
   initialize: function() {
@@ -92,7 +96,7 @@ var TabmixRemoveBlankTab = {
     window.addEventListener("unload", function _unload(aEvent) {
       aEvent.currentTarget.removeEventListener("unload", _unload, false);
       if (win && !win.closed) {
-        win.setTimeout(function() {
+        win.setTimeout(() => {
           let tabBrowser = win && win.gBrowser;
           if (!tabBrowser || !tab || !tab.parentNode) {
             return;

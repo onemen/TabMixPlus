@@ -1,7 +1,7 @@
 /* exported gTabMix_preferencesOverlay */
 "use strict";
 
-Components.utils.import("resource://tabmixplus/Services.jsm");
+Components.utils.import("resource://tabmixplus/TabmixSvc.jsm");
 
 var gTabMix_preferencesOverlay = {
   id: function(id) {
@@ -27,7 +27,7 @@ var gTabMix_preferencesOverlay = {
 
     if (TabmixSvc.version(260)) {
       let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
-                   "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
+        "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
       boxes.forEach(function(id) {
         let item = this.id(id);
         item.removeAttribute("data-category");

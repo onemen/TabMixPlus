@@ -27,31 +27,38 @@ var tablib = { // eslint-disable-line
       if (this._loadURIWithFlagsInitialized)
         return;
       this._loadURIWithFlagsInitialized = true;
-      [obj, name] = [window, "window._loadURIWithFlags"];
+      [obj, name] = [window, "_loadURIWithFlags"];
     } else {
-      [obj, name] = [aBrowser, "browser.loadURIWithFlags"];
+      [obj, name] = [aBrowser, "loadURIWithFlags"];
     }
-    Tabmix.changeCode(obj, name)._replace(
-      '{',
-      '$&\n' +
-      '  let args = Array.prototype.slice.call(arguments);\n' +
-      '  if (!Tabmix.isVersion(360))\n' +
-      '    args.unshift(this);\n' +
-      '  var tabmixResult = tablib._loadURIWithFlags.apply(null, args);\n' +
-      '  if (tabmixResult)\n' +
-      '    return tabmixResult;\n'
-    )._replace(
-      /(})(\)?)$/,
-      '  return null;\n' +
-      '$1$2'
-    )._replace(
-      'this.webNavigation.LOAD_FLAGS_FROM_EXTERNAL',
-      'Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL',
-      {check: !Tabmix.isVersion(360) && ("loadTabsProgressively" in window)}
-    ).toCode();
+
+    Tabmix.originalFunctions._loadURIWithFlags = obj[name];
+    obj[name] = function(...args) {
+      try {
+        const arg0 = [];
+        if (!Tabmix.isVersion(360)) {
+          arg0.push(this);
+        }
+
+        // if we redirected the load request to a new tab return it
+        const tabmixResult = tablib._loadURIWithFlags.apply(null, arg0.concat(args));
+        if (tabmixResult) {
+          return tabmixResult;
+        }
+
+        Tabmix.originalFunctions._loadURIWithFlags.apply(this, args);
+      } catch (ex) {
+        Tabmix.reportError(ex);
+      }
+      return null;
+    };
   },
 
   _loadURIWithFlags: function(browser, uri, params) {
+    if (tablib.allowLoad(browser, uri)) {
+      return null;
+    }
+    // redirect load request to a new tab
     let flags;
     if (!Tabmix.isVersion(380)) {
       flags = params;
@@ -64,12 +71,21 @@ var tablib = { // eslint-disable-line
       flags = params.flags;
     }
 
+    let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
+    params.inBackground = false;
+    params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
+    params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
+    params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+    return gBrowser.loadOneTab(uri, params);
+  },
+
+  allowLoad: function(browser, uri) {
     var tab = gBrowser.getTabForBrowser(browser);
     if (!tab) {
       browser.tabmix_allowLoad = true;
-      return null;
+      return true;
     }
-    var allowLoad = tablib.isException(browser.tabmix_allowLoad !== false ||
+    var allowLoad = this.isException(browser.tabmix_allowLoad !== false ||
                                        uri.match(/^javascript:/));
 
     let allowedUrls = [
@@ -101,16 +117,11 @@ var tablib = { // eslint-disable-line
       return gBrowser.isBlankBrowser(browser);
     }());
     var isLockedTab = tab.hasAttribute("locked");
-    if (!allowLoad && !isBlankTab && isLockedTab) {
-      let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
-      params.inBackground = false;
-      params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
-      params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
-      params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
-      return gBrowser.loadOneTab(uri, params);
+    if (allowLoad || isBlankTab || !isLockedTab) {
+      browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
+      return true;
     }
-    browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
-    return null;
+    return false;
   },
 
   /**
@@ -132,7 +143,7 @@ var tablib = { // eslint-disable-line
       tabGroups: "paneSession.clearData",
     };
     let keys = Object.keys(exceptionList);
-    let isInstalled = keys.some(function(item) {
+    let isInstalled = keys.some(item => {
       return typeof window[item] == "object";
     });
     if (!isInstalled)
@@ -328,7 +339,7 @@ var tablib = { // eslint-disable-line
       'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
-       var noChange = aTab.label == title && aTab.crop == crop;\
+       const noChange = aTab.label == title && (Tabmix.isVersion(530) || aTab.crop == crop);\
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
          if (noChange)\
@@ -338,9 +349,9 @@ var tablib = { // eslint-disable-line
          TMP_Places.currentTab = null;\
        $&'
     )._replace(
-      'aTab.crop = crop;',
-      '$&\
-       tablib.onTabTitleChanged(aTab, browser, title == urlTitle);'
+      'this._tabAttrModified',
+      `tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
+            $&`
     ).toCode();
 
     // after bug 347930 - change Tab strip to be a toolbar
@@ -562,7 +573,17 @@ var tablib = { // eslint-disable-line
       'tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
-      'tablib.contentAreaOnDrop(event, data.url, data.postData);', {check: !TabmixSvc.isPaleMoon}
+      'tablib.contentAreaOnDrop(event, data.url, data.postData);',
+      {check: !Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+    )._replace(
+      'let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;',
+      'let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;\n  ' +
+      '$&',
+      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+    )._replace(
+      'replace: true',
+      'replace: (tabmixContentDrop || tablib.whereToOpenDrop(event, urls[0])) != "tab"',
+      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
     ).toCode();
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
@@ -655,6 +676,7 @@ var tablib = { // eslint-disable-line
         '        flags: loadflags,\n' +
         '        referrerURI: aReferrer,\n' +
         '        referrerPolicy: aReferrerPolicy,\n' +
+        '        userContextId: typeof aUserContextId == "undefined" ? 0 : aUserContextId,\n' +
         '      });' :
         '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
         .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
@@ -760,8 +782,8 @@ var tablib = { // eslint-disable-line
         '$&' +
         'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(
-       'loadOneOrMoreURIs(homePage);',
-       '$& \
+        'loadOneOrMoreURIs(homePage);',
+        '$& \
         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
       ).toCode();
     }
@@ -932,7 +954,7 @@ var tablib = { // eslint-disable-line
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
-    clearList.addEventListener("command", function() {
+    clearList.addEventListener("command", () => {
       TabmixSessionManager.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
@@ -1071,8 +1093,8 @@ var tablib = { // eslint-disable-line
         };
 
         Services.obs.addObserver(delayedStartupFinished,
-                                 "browser-delayed-startup-finished",
-                                 false);
+          "browser-delayed-startup-finished",
+          false);
       }
     };
 
@@ -1147,7 +1169,7 @@ var tablib = { // eslint-disable-line
         // we only get here when it is safe to use contentWindowAsCPOW
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
-              target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
+          target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
         return result._href && isValid(result._href) ? result._href : null;
       }
       return linkURL;
@@ -1394,7 +1416,7 @@ var tablib = { // eslint-disable-line
       var temp_id, tempIndex = -1, max_id = 0;
       var tabs = aTabs || this.visibleTabs;
       var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
-          tab => !tab.hidden && !tab.closing);
+        tab => !tab.hidden && !tab.closing);
       for (var i = 0; i < items.length; ++i) {
         if (aTab && items[i] != aTab) {
           temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
@@ -1442,7 +1464,7 @@ var tablib = { // eslint-disable-line
           return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
         case 6: {// last opened
           let lastTabIndex, maxID = -1;
-          tabs.forEach(function(tab, index) {
+          tabs.forEach((tab, index) => {
             if (tab == oldTab)
               return;
             let linkedPanel = tab.linkedPanel.replace('panel', '');
@@ -1531,8 +1553,8 @@ var tablib = { // eslint-disable-line
       var numProtected = protectedTabs.length;
       var shouldPrompt = 0;
       var prefs = ["extensions.tabmix.tabs.warnOnClose",
-                  "extensions.tabmix.protectedtabs.warnOnClose",
-                  "browser.tabs.warnOnClose"];
+        "extensions.tabmix.protectedtabs.warnOnClose",
+        "browser.tabs.warnOnClose"];
       if (onExit) {
         if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
@@ -1650,14 +1672,14 @@ var tablib = { // eslint-disable-line
       window.focus();
       var promptService = Services.prompt;
       var buttonPressed = promptService.confirmEx(window,
-                                                  bundle.getString("tabs.closeWarningTitle"),
-                                                  message,
-                                                  (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
-                                                  (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
-                                                  buttonLabel,
-                                                  null, null,
-                                                  chkBoxLabel,
-                                                  warnOnClose);
+        bundle.getString("tabs.closeWarningTitle"),
+        message,
+        (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
+        (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
+        buttonLabel,
+        null, null,
+        chkBoxLabel,
+        warnOnClose);
       var reallyClose = (buttonPressed === 0);
       // don't set the pref unless they press OK and it's false
       if (reallyClose && !warnOnClose.value) {
@@ -1775,7 +1797,7 @@ var tablib = { // eslint-disable-line
     // Not in use since Firefox 27, see comment in TabmixTabClickOptions
     if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
         TabmixTabClickOptions._blockDblClick) {
-      setTimeout(function() {
+      setTimeout(() => {
         TabmixTabClickOptions._blockDblClick = false;
         if (!Tabmix.isVersion(270))
           gBrowser.tabContainer._blockDblClick = false;
@@ -1900,6 +1922,9 @@ var tablib = { // eslint-disable-line
   },
 
   whereToOpenDrop: function(aEvent, aUri) {
+    if (!aEvent) {
+      return "current";
+    }
     let browser = gBrowser.selectedBrowser;
     let where = "current";
     if (aUri != browser.currentURI.spec) {

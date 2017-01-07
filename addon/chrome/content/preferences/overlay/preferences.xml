@@ -14,7 +14,7 @@
           // we call this from here to apply the changes to all dialog windows
           // that are based on prefwindow
           try {
-            Components.utils.import("resource://tabmixplus/Services.jsm");
+            Components.utils.import("resource://tabmixplus/TabmixSvc.jsm");
             window.Tabmix = { };
             Tabmix._debugMode = false;
             Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", Tabmix);
@@ -26,8 +26,8 @@
             ).toCode();
           } catch (ex) {
             TabmixSvc.console.log(
-                "TabMix :\n" +
-                "can't change openLinkIn from preferences.xml binding\n" + ex);
+              "TabMix :\n" +
+              "can't change openLinkIn from preferences.xml binding\n" + ex);
           }
         ]]>
       </constructor>

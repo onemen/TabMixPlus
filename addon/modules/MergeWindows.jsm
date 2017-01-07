@@ -4,9 +4,9 @@ this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://tabmixplus/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
+Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -104,11 +104,11 @@ this.MergeWindows = {
     var features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
-        "_blank", features, null);
-    let mergePopUps = function _mergePopUps() {
-      newWindow.removeEventListener("SSWindowStateReady", _mergePopUps, false);
+      "_blank", features, null);
+    let mergePopUps = () => {
+      newWindow.removeEventListener("SSWindowStateReady", mergePopUps, false);
       this.concatTabsAndMerge(newWindow, aWindows);
-    }.bind(this);
+    };
     newWindow.addEventListener("SSWindowStateReady", mergePopUps, false);
   },
 
@@ -247,7 +247,7 @@ this.MergeWindows = {
                        "private" in aOptions;
 
     let privateNotMatch = 0;
-    let isSuitableBrowserWindow = function(win) {
+    let isSuitableBrowserWindow = win => {
       let suitable = win != aWindow && !win.closed;
       if (!suitable || !checkPrivacy)
         return suitable;
@@ -256,7 +256,7 @@ this.MergeWindows = {
         return true;
       privateNotMatch++;
       return false;
-    }.bind(this);
+    };
 
     let windows = [], popUps = [];
     let isWINNT = Services.appinfo.OS == "WINNT";
@@ -298,8 +298,8 @@ this.MergeWindows = {
     if (!notificationBox.getNotificationWithValue(name)) {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
       let notificationBar = notificationBox.appendNotification(errorMessage,
-                                name, errorimage, priority, null);
-      aWindow.setTimeout(function() {
+        name, errorimage, priority, null);
+      aWindow.setTimeout(() => {
         notificationBox.removeNotification(notificationBar);
       }, 10000);
     }
@@ -317,10 +317,10 @@ this.MergeWindows = {
 
     var promptAgain = {value: true};
     canClose = Services.prompt.confirmCheck(aWindow,
-                   TabmixSvc.getString('tmp.merge.warning.title'),
-                   TabmixSvc.getString('tmp.merge.warning.message'),
-                   TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
-                   promptAgain);
+      TabmixSvc.getString('tmp.merge.warning.title'),
+      TabmixSvc.getString('tmp.merge.warning.message'),
+      TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
+      promptAgain);
 
     if (canClose && !promptAgain.value)
       this.prefs.setBoolPref("warnOnClose", false);

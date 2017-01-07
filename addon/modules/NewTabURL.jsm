@@ -4,18 +4,18 @@ this.EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
 const {interfaces: Ci, utils: Cu} = Components;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+Cu.import("resource://gre/modules/Services.jsm", this);
 
 XPCOMUtils.defineLazyServiceGetter(this, "aboutNewTabService",
-                                   "@mozilla.org/browser/aboutnewtab-service;1",
-                                   "nsIAboutNewTabService");
+  "@mozilla.org/browser/aboutnewtab-service;1",
+  "nsIAboutNewTabService");
 
 XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
-                                  "resource:///modules/NewTabURL.jsm");
+  "resource:///modules/NewTabURL.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-                                  "resource://tabmixplus/Services.jsm");
+  "resource://tabmixplus/TabmixSvc.jsm");
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
