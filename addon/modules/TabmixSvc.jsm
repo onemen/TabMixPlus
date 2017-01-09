@@ -366,20 +366,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
 });
 
 tabStateCache = {
-  get _update() {
-    delete this._update;
-    return (this._update = isVersion(260) ? "updateField" : "update");
-  },
-
-  get TabStateCache() {
-    delete this.TabStateCache;
-    if (isVersion(270))
-      Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
-    else
-      this.TabStateCache = TabmixSvc.SessionStoreGlobal.TabStateCache;
-    return this.TabStateCache;
-  },
-
   saveTabAttributes(tab, attrib, save = true) {
     if (TabmixSvc.isPaleMoon) {
       return;
@@ -409,18 +395,6 @@ tabStateCache = {
       if (!browser.__SS_data.attributes)
         browser.__SS_data.attributes = {};
       update(browser.__SS_data.attributes);
-    }
-
-    // Bug 905049 fixed by Bug 960903 - Broadcast session history
-    if (isVersion(290))
-      return;
-
-    let tabHasCache = isVersion(270) ? this.TabStateCache.has(browser) :
-                               this.TabStateCache._data.has(browser);
-    if (tabHasCache) {
-      let attributes = this.TabStateCache.get(browser).attributes || {};
-      update(attributes);
-      this.TabStateCache[this._update](browser, "attributes", attributes);
     }
   }
 };
