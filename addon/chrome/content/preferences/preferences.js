@@ -427,7 +427,7 @@ function exportData() {
       patterns.unshift("tabmixplus");
       OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
     }
-  }).then(null, Tabmix.reportError);
+  }).catch(Tabmix.reportError);
 }
 
 function importData() {
@@ -439,7 +439,7 @@ function importData() {
       input = decoder.decode(input);
       loadData(input.replace(/\r\n/g, "\n").split("\n"));
     }
-  }).then(null, Tabmix.reportError);
+  }).catch(Tabmix.reportError);
 }
 
 /**

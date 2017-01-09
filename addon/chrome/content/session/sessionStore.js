@@ -224,7 +224,7 @@ var TMP_SessionStore = {
         // when TMP session manager is enabled ss.doRestore is true only after restart
         ss.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
-        }).then(null, Tabmix.reportError);
+        }).catch(Tabmix.reportError);
         // until sessionstartup initialized just return the pref value,
         // we only use isWindowAfterSessionRestore when our Session Manager enable
         return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");

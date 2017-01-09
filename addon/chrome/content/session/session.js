@@ -296,7 +296,7 @@ TabmixSessionManager = {
       .then(() => TMP_TabView.init())
       .then(initializeSM)
       .then(() => Tabmix.sessionInitialized())
-      .then(null, Tabmix.reportError);
+      .catch(Tabmix.reportError);
   },
 
   _init: function SM__init() {
