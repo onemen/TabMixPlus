@@ -17,6 +17,7 @@ module.exports = {
     "tabmix/balanced-listeners": 2,
     "tabmix/import-globals": 2,
     "tabmix/no-single-arg-cu-import": 2,
+    "tabmix/no-import-into-var-and-global": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
