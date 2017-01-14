@@ -697,7 +697,7 @@ TabmixSessionManager = {
       obs.removeObserver(this, "sessionstore-browser-state-restored");
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
-      obs.removeObserver(this, "browser:purge-session-history", true);
+      obs.removeObserver(this, "browser:purge-session-history");
       if (Tabmix.isVersion(270))
         obs.removeObserver(this, "sessionstore-last-session-cleared");
     }

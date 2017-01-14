@@ -115,7 +115,7 @@ this.DynamicRules = {
   },
 
   onQuitApplication() {
-    Services.obs.removeObserver(this, "browser-window-before-show", false);
+    Services.obs.removeObserver(this, "browser-window-before-show");
     Services.obs.removeObserver(this, "quit-application");
     Prefs.removeObserver("", this);
     STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
