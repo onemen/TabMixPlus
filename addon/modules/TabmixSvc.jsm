@@ -12,7 +12,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
-  "resource://tabmixplus/syncedTabs.jsm");
+  "resource://tabmixplus/SyncedTabs.jsm");
 
 var tabStateCache;
 var _versions = {};

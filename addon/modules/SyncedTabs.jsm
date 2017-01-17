@@ -70,7 +70,9 @@ this.SyncedTabs = {
     });
 
     if (TabmixSvc.version(510)) {
-      Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onClick")._replace(
+      const fnName = typeof TabListView.prototype._openAllClientTabs == "function" ?
+          "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
+      Tabmix.changeCode(TabListView.prototype, fnName)._replace(
         'this.props.onOpenTabs(urls, where);',
         `if (/^tab/.test(where)) {
           // reverse the background here since props.onOpenTabs reverse it again
