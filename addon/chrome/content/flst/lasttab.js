@@ -55,7 +55,7 @@ var TMP_LastTab = {
     if (Tabmix.isVersion(320)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
     } else {
-      tabBox._eventNode.removeEventListener("keypress", tabBox, false);
+      tabBox._eventNode.removeEventListener("keypress", tabBox);
       els.addSystemEventListener(tabBox._eventNode, "keypress", this, false);
     }
     els.addSystemEventListener(tabBox._eventNode, "keydown", this, false);

@@ -85,7 +85,7 @@ this.RenameTab = {
 
   _doShowPanel() {
     var popup = this.panel;
-    popup.addEventListener("keypress", this, false);
+    popup.addEventListener("keypress", this);
     // dock the panel to the tab icon when possible, otherwise show the panel
     // at screen center
     if (this.window.Tabmix.tabsUtils.isElementVisible(this.data.tab))
@@ -155,7 +155,7 @@ this.RenameTab = {
 
   onpopuphidden(aEvent) {
     if (aEvent.originalTarget == this.panel) {
-      this.panel.removeEventListener("keypress", this, false);
+      this.panel.removeEventListener("keypress", this);
       this.window = null;
       this.panel = null;
       this.data = {};

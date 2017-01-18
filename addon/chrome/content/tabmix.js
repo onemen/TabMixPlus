@@ -247,8 +247,8 @@ Tabmix.afterDelayedStartup = function() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
-    window.addEventListener("DOMContentLoaded", this, false);
-    window.addEventListener("load", this, false);
+    window.addEventListener("DOMContentLoaded", this);
+    window.addEventListener("load", this);
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
@@ -257,7 +257,7 @@ var TMP_eventListener = {
         this.onTabAttrModified(aEvent);
         break;
       case "SSWindowClosing":
-        window.removeEventListener("SSWindowClosing", this, false);
+        window.removeEventListener("SSWindowClosing", this);
         TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
         break;
       case "SSTabRestoring":
@@ -314,7 +314,7 @@ var TMP_eventListener = {
 
   // ignore non-browser windows
   _onLoad: function TMP_EL_onContentLoaded(aType) {
-    window.removeEventListener(aType, this, false);
+    window.removeEventListener(aType, this);
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype == "navigator:browser")
       if (aType != "load") {
@@ -324,7 +324,7 @@ var TMP_eventListener = {
         Tabmix.initialization.run("onWindowOpen");
       }
     else if (aType != "load")
-      window.removeEventListener("load", this, false);
+      window.removeEventListener("load", this);
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
@@ -401,8 +401,8 @@ var TMP_eventListener = {
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
-    window.addEventListener("unload", this, false);
-    window.addEventListener("SSWindowClosing", this, false);
+    window.addEventListener("unload", this);
+    window.addEventListener("SSWindowClosing", this);
     window.addEventListener("fullscreen", this, true);
 
     if (Tabmix.isVersion(320)) {
@@ -630,8 +630,8 @@ var TMP_eventListener = {
       if (!fullScrToggler) {
         fullScrToggler = document.createElement("hbox");
         fullScrToggler.id = "fullscr-bottom-toggler";
-        fullScrToggler.addEventListener("mouseover", this._expandCallback, false);
-        fullScrToggler.addEventListener("dragenter", this._expandCallback, false);
+        fullScrToggler.addEventListener("mouseover", this._expandCallback);
+        fullScrToggler.addEventListener("dragenter", this._expandCallback);
         fullScrToggler.hidden = true;
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
@@ -1070,8 +1070,8 @@ var TMP_eventListener = {
   },
 
   onWindowClose: function TMP_EL_onWindowClose() {
-    window.removeEventListener("unload", this, false);
-    window.removeEventListener("SSWindowClosing", this, false);
+    window.removeEventListener("unload", this);
+    window.removeEventListener("SSWindowClosing", this);
 
     // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() === 0;
@@ -1099,8 +1099,8 @@ var TMP_eventListener = {
     window.removeEventListener("fullscreen", this, true);
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
     if (fullScrToggler) {
-      fullScrToggler.removeEventListener("mouseover", this._expandCallback, false);
-      fullScrToggler.removeEventListener("dragenter", this._expandCallback, false);
+      fullScrToggler.removeEventListener("mouseover", this._expandCallback);
+      fullScrToggler.removeEventListener("dragenter", this._expandCallback);
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
@@ -1182,8 +1182,8 @@ Tabmix.initialization = {
 
     if (stopInitialization) {
       this.run = function() {};
-      window.removeEventListener("DOMContentLoaded", TMP_eventListener, false);
-      window.removeEventListener("load", TMP_eventListener, false);
+      window.removeEventListener("DOMContentLoaded", TMP_eventListener);
+      window.removeEventListener("load", TMP_eventListener);
     }
 
     delete this.isValidWindow;

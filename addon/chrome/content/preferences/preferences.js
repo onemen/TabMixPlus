@@ -45,8 +45,8 @@ var gPrefWindow = {
     window.gIncompatiblePane.init(docElt);
 
     this.instantApply = docElt.instantApply;
-    window.addEventListener("change", this, false);
-    window.addEventListener("beforeaccept", this, false);
+    window.addEventListener("change", this);
+    window.addEventListener("beforeaccept", this);
 
     // init buttons extra1, extra2, accept, cancel
     docElt.getButton("extra1").setAttribute("icon", "apply");
@@ -82,8 +82,8 @@ var gPrefWindow = {
   },
 
   deinit() {
-    window.removeEventListener("change", this, false);
-    window.removeEventListener("beforeaccept", this, false);
+    window.removeEventListener("change", this);
+    window.removeEventListener("beforeaccept", this);
     delete Tabmix.getTopWin().tabmix_setSession;
     Shortcuts.prefsChangedByTabmix = false;
     window.gIncompatiblePane.deinit();
@@ -561,13 +561,13 @@ window.gIncompatiblePane = {
   init(docElt) {
     this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
     let radioGroup = this.paneButton.parentNode;
-    radioGroup.addEventListener("command", this, false);
+    radioGroup.addEventListener("command", this);
     this.checkForIncompatible(false);
   },
 
   deinit() {
     let radioGroup = this.paneButton.parentNode;
-    radioGroup.removeEventListener("command", this, false);
+    radioGroup.removeEventListener("command", this);
   },
 
   handleEvent(aEvent) {

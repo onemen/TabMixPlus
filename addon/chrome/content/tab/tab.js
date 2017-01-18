@@ -1105,14 +1105,14 @@ Tabmix.bottomToolbarUtils = {
     this.initialized = true;
     //XXX we don't check for aEvent.target != window to catch changes in
     // browser-bottombox. try to improve it...
-    window.addEventListener("resize", this, false);
+    window.addEventListener("resize", this);
   },
 
   onUnload() {
     if (!this.initialized) {
       return;
     }
-    window.removeEventListener("resize", this, false);
+    window.removeEventListener("resize", this);
   },
 
   updatePosition() {

@@ -249,10 +249,10 @@ var Tabmix = {
       "resource:///modules/RecentWindow.jsm");
 
     const destroy = () => {
-      window.removeEventListener("unload", destroy, false);
+      window.removeEventListener("unload", destroy);
       this.destroy();
     };
-    window.addEventListener("unload", destroy, false);
+    window.addEventListener("unload", destroy);
 
     var methods = ["changeCode", "setNewFunction", "nonStrictMode",
       "getObject", "log", "getCallerNameByIndex", "callerName",

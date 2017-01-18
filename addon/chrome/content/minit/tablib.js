@@ -945,7 +945,7 @@ var tablib = { // eslint-disable-line
         m.setAttribute("label", menuLabel);
         m.setAttribute("value", i);
         m.fileName = "closedwindow";
-        m.addEventListener("click", checkForMiddleClick, false);
+        m.addEventListener("click", checkForMiddleClick);
       }
     }
     let restoreAllWindows = undoPopup.lastChild;

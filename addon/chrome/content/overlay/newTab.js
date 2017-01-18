@@ -6,11 +6,11 @@
   let PREF = "extensions.tabmix.titlefrombookmark";
   if (Services.prefs.getBoolPref(PREF)) {
     window.addEventListener("load", function loadGrid() {
-      window.removeEventListener("load", loadGrid, false);
+      window.removeEventListener("load", loadGrid);
       let {updateTitles} = Cu.import("resource://tabmixplus/AboutNewTab.jsm", {}).TabmixAboutNewTab;
       if (gGrid.cells) {
         updateTitles(gGrid.cells);
       }
-    }, false);
+    });
   }
 }());

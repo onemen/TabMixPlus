@@ -1134,8 +1134,8 @@ Tabmix.navToolbox = {
 
   init: function TMP_navToolbox_init() {
     this.updateToolboxItems();
-    gNavToolbox.addEventListener("beforecustomization", this, false);
-    gNavToolbox.addEventListener("aftercustomization", this, false);
+    gNavToolbox.addEventListener("beforecustomization", this);
+    gNavToolbox.addEventListener("aftercustomization", this);
 
     if (!Tabmix.isVersion(290))
       return;
@@ -1160,8 +1160,8 @@ Tabmix.navToolbox = {
   },
 
   deinit: function TMP_navToolbox_deinit() {
-    gNavToolbox.removeEventListener("beforecustomization", this, false);
-    gNavToolbox.removeEventListener("aftercustomization", this, false);
+    gNavToolbox.removeEventListener("beforecustomization", this);
+    gNavToolbox.removeEventListener("aftercustomization", this);
 
     // fix bug 1034394 - tab mix plus's tabmixScrollBox is not cleaned up after
     // uninstalling tab mix plus
@@ -1185,7 +1185,7 @@ Tabmix.navToolbox = {
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited) {
-      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
     }
   },
 
@@ -1205,7 +1205,7 @@ Tabmix.navToolbox = {
         this.customizeStart();
         break;
       case "customizationchange":
-        gNavToolbox.removeEventListener("customizationchange", this, false);
+        gNavToolbox.removeEventListener("customizationchange", this);
         this.toolboxChanged = true;
         break;
       case "aftercustomization":
@@ -1215,13 +1215,13 @@ Tabmix.navToolbox = {
   },
 
   customizeStart: function TMP_navToolbox_customizeStart() {
-    gNavToolbox.addEventListener("customizationchange", this, false);
+    gNavToolbox.addEventListener("customizationchange", this);
     this.toolboxChanged = false;
     this.customizeStarted = true;
   },
 
   customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
-    gNavToolbox.removeEventListener("customizationchange", this, false);
+    gNavToolbox.removeEventListener("customizationchange", this);
     this.customizeStarted = false;
 
     if (aToolboxChanged)
@@ -1497,7 +1497,7 @@ Tabmix.navToolbox = {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
         scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
       };
-      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
 
       // alltabs-popup fix visibility for multi-row
       Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",

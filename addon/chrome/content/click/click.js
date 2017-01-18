@@ -403,7 +403,7 @@ var TabmixContext = {
         break;
       case "popuphidden":
         if (id == "tabContextMenu") {
-          aEvent.target.removeEventListener("popuphidden", this, false);
+          aEvent.target.removeEventListener("popuphidden", this);
           Tabmix.hidePopup(aEvent.target);
         }
         break;
@@ -415,7 +415,7 @@ var TabmixContext = {
     if (event.originalTarget != gBrowser.tabContextMenu)
       return true;
 
-    gBrowser.tabContextMenu.addEventListener("popuphidden", this, false);
+    gBrowser.tabContextMenu.addEventListener("popuphidden", this);
 
     var item, triggerNode = gBrowser.tabContextMenu.triggerNode;
     if (triggerNode.parentNode)
@@ -894,7 +894,7 @@ var TabmixAllTabs = {
       popup.setAttribute("minwidth", popup.boxObject.width);
     }
 
-    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
+    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this);
     this._popup = popup;
     if (!this._popup._updateTabsVisibilityStatus)
       this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
@@ -913,17 +913,17 @@ var TabmixAllTabs = {
       var menuItem = popup.firstChild;
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
-      menuItem.removeEventListener("command", TMP_ClosedTabs, false);
-      menuItem.removeEventListener("click", TMP_ClosedTabs, false);
+      menuItem.removeEventListener("command", TMP_ClosedTabs);
+      menuItem.removeEventListener("click", TMP_ClosedTabs);
       popup.removeChild(menuItem);
     }
 
     if (!aCloseTabsPopup) {
-      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
-      gBrowser.tabContainer.addEventListener("TabClose", this, false);
+      gBrowser.tabContainer.addEventListener("TabAttrModified", this);
+      gBrowser.tabContainer.addEventListener("TabClose", this);
     }
-    popup.addEventListener("DOMMenuItemActive", this, false);
-    popup.addEventListener("DOMMenuItemInactive", this, false);
+    popup.addEventListener("DOMMenuItemActive", this);
+    popup.addEventListener("DOMMenuItemInactive", this);
   },
 
   createCommonList: function TMP_createCommonList(popup, aType, side) {
@@ -979,12 +979,12 @@ var TabmixAllTabs = {
     }
 
     if (this._selectedItem)
-      popup.addEventListener("popupshown", this, false);
+      popup.addEventListener("popupshown", this);
   },
 
   _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
     var popup = event.target;
-    popup.removeEventListener("popupshown", this, false);
+    popup.removeEventListener("popupshown", this);
     let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
     let items = Array.prototype.slice.call(popup.childNodes);
     let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
@@ -1095,11 +1095,11 @@ var TabmixAllTabs = {
       popup.removeAttribute("minwidth");
     }
 
-    gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
-    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
-    gBrowser.tabContainer.removeEventListener("TabClose", this, false);
-    popup.removeEventListener("DOMMenuItemActive", this, false);
-    popup.removeEventListener("DOMMenuItemInactive", this, false);
+    gBrowser.tabContainer.removeEventListener("TabAttrModified", this);
+    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this);
+    gBrowser.tabContainer.removeEventListener("TabClose", this);
+    popup.removeEventListener("DOMMenuItemActive", this);
+    popup.removeEventListener("DOMMenuItemInactive", this);
 
     this.backupLabel = "";
     this._selectedItem = null;

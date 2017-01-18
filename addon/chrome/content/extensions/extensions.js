@@ -660,9 +660,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
       };
       gBrowser.tabContainer.addEventListener("TabSelect", ontabselect, true);
       window.addEventListener("unload", function onunload() {
-        window.removeEventListener("unload", onunload, false);
+        window.removeEventListener("unload", onunload);
         gBrowser.tabContainer.removeEventListener("TabSelect", ontabselect, true);
-      }, false);
+      });
     }
 
     // we removed TMP_howToOpen function 2011-11-15

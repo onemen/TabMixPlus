@@ -392,8 +392,8 @@ var TMP_ClosedTabs = {
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
       /* eslint-disable tabmix/balanced-listeners */
-      m.addEventListener("command", this, false);
-      m.addEventListener("click", this, false);
+      m.addEventListener("command", this);
+      m.addEventListener("click", this);
       /* eslint-enable tabmix/balanced-listeners */
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");

@@ -67,9 +67,9 @@ this.console = {
         };
         if (aWindow) {
           aWindow.addEventListener("unload", function unload(event) {
-            event.currentTarget.removeEventListener("unload", unload, false);
+            event.currentTarget.removeEventListener("unload", unload);
             timer.clear();
-          }, false);
+          });
         }
         timer.initWithCallback({
           notify: function notify() {

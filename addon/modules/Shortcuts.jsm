@@ -198,7 +198,7 @@ this.Shortcuts = {
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
-    aWindow.removeEventListener("unload", this, false);
+    aWindow.removeEventListener("unload", this);
     let doc = aWindow.document;
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
@@ -214,7 +214,7 @@ this.Shortcuts = {
     this._setReloadKeyId(aWindow);
     this.initService(aWindow);
 
-    aWindow.addEventListener("unload", this, false);
+    aWindow.addEventListener("unload", this);
 
     XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;

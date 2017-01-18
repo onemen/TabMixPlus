@@ -94,7 +94,7 @@ var TabmixRemoveBlankTab = {
 
   removeTab(win, tab) {
     window.addEventListener("unload", function _unload(aEvent) {
-      aEvent.currentTarget.removeEventListener("unload", _unload, false);
+      aEvent.currentTarget.removeEventListener("unload", _unload);
       if (win && !win.closed) {
         win.setTimeout(() => {
           let tabBrowser = win && win.gBrowser;
@@ -110,7 +110,7 @@ var TabmixRemoveBlankTab = {
           tabBrowser.removeTab(tab, {animate: false});
         }, 250);
       }
-    }, false);
+    });
   }
 };
 

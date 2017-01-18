@@ -72,6 +72,6 @@ var TMP_Sage = {
 };
 
 window.addEventListener("load", function TMP_onLoad_sageOverlay(aEvent) {
-  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sageOverlay, false);
+  aEvent.currentTarget.removeEventListener("load", TMP_onLoad_sageOverlay);
   TMP_Sage.init();
-}, false);
+});

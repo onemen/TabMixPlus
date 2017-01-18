@@ -6,19 +6,19 @@ var TMP_Places = {
   prefBookmark: "extensions.tabmix.opentabfor.bookmarks",
 
   addEvent: function TMP_PC_addEvent() {
-    window.addEventListener("load", this, false);
-    window.addEventListener("unload", this, false);
+    window.addEventListener("load", this);
+    window.addEventListener("unload", this);
   },
 
   handleEvent: function TMP_PC_handleEvent(aEvent) {
     switch (aEvent.type) {
       case "load":
-        window.removeEventListener("load", this, false);
+        window.removeEventListener("load", this);
         this.init();
         Tabmix.onContentLoaded.change_utilityOverlay();
         break;
       case "unload":
-        window.removeEventListener("unload", this, false);
+        window.removeEventListener("unload", this);
         this.deinit();
         break;
       case "SSTabRestored":

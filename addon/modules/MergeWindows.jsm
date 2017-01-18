@@ -106,10 +106,10 @@ this.MergeWindows = {
     var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
       "_blank", features, null);
     let mergePopUps = () => {
-      newWindow.removeEventListener("SSWindowStateReady", mergePopUps, false);
+      newWindow.removeEventListener("SSWindowStateReady", mergePopUps);
       this.concatTabsAndMerge(newWindow, aWindows);
     };
-    newWindow.addEventListener("SSWindowStateReady", mergePopUps, false);
+    newWindow.addEventListener("SSWindowStateReady", mergePopUps);
   },
 
   concatTabsAndMerge(aTargetWindow, aWindows) {
