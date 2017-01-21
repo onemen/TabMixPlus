@@ -1657,12 +1657,12 @@ var tablib = { // eslint-disable-line
         else
           message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
-                                          TabmixSvc.getString("window.closeWarning.1");
+                                          TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
         message = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
-        var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.1" : "protectedtabs.closeWarning.4";
+        var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.2" : "protectedtabs.closeWarning.5";
         chkBoxLabel = TabmixSvc.getString(chkBoxKey);
       }
 

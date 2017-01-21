@@ -319,7 +319,7 @@ this.MergeWindows = {
     canClose = Services.prompt.confirmCheck(aWindow,
       TabmixSvc.getString('tmp.merge.warning.title'),
       TabmixSvc.getString('tmp.merge.warning.message'),
-      TabmixSvc.getString('tmp.merge.warning.checkboxLabel'),
+      TabmixSvc.getString('tmp.merge.warning.checkbox'),
       promptAgain);
 
     if (canClose && !promptAgain.value)

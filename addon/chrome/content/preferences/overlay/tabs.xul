@@ -59,11 +59,11 @@
       <!-- Warn when closing multiple tabs -->
       <checkbox id="warnCloseMultiple" preference="extensions.tabmix.tabs.warnOnClose"/>
       <!-- Warn when closing window with tabs -->
-      <checkbox id="warnOnCloseWindow" label="&warnOnCloseWindow.label;"
+      <checkbox id="warnOnCloseWindow" label="&warnOnCloseWindow1.label;"
                 insertafter="warnCloseMultiple"
                 preference="browser.tabs.warnOnClose"/>
       <!-- Warn when closing window with protected tabs -->
-      <checkbox id="warnOnCloseProtected" label="&warnOnCloseProtected.label;"
+      <checkbox id="warnOnCloseProtected" label="&warnOnCloseProtected1.label;"
                 insertafter="warnOnCloseWindow"
                 preference="extensions.tabmix.protectedtabs.warnOnClose"/>
       <separator insertafter="warnOnCloseProtected"/>
@@ -74,7 +74,7 @@
         <radiogroup id="_hideTabbar" orient="horizontal"
                     preference="extensions.tabmix.hideTabbar">
           <radio value="0" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
-          <radio value="1" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+          <radio value="1" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
           <radio value="2" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
         </radiogroup>
       </groupbox>

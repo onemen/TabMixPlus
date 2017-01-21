@@ -378,7 +378,7 @@
         <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator/>
         <menuitem value="0" type="radio" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
-        <menuitem value="1" type="radio" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+        <menuitem value="1" type="radio" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
         <menuitem value="2" type="radio" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
       </menupopup >
       <!-- tabmix tooltip for button -->
