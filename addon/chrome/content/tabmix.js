@@ -316,15 +316,16 @@ var TMP_eventListener = {
   _onLoad: function TMP_EL_onContentLoaded(aType) {
     window.removeEventListener(aType, this);
     let wintype = window.document.documentElement.getAttribute("windowtype");
-    if (wintype == "navigator:browser")
+    if (wintype == "navigator:browser") {
       if (aType != "load") {
         Tabmix.initialization.run("onContentLoaded");
         Tabmix.initialization.run("beforeBrowserInitOnLoad");
       } else {
         Tabmix.initialization.run("onWindowOpen");
       }
-    else if (aType != "load")
+    } else if (aType != "load") {
       window.removeEventListener("load", this);
+    }
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
