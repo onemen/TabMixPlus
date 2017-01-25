@@ -247,6 +247,7 @@ TabmixClickEventHandler = {
       title: null,
       bookmark: false,
       referrerPolicy,
+      triggeringPrincipal: principal,
       originAttributes: principal ? principal.originAttributes : {},
       isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
     };

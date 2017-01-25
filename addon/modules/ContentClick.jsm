@@ -196,6 +196,8 @@ ContentClickInternal = {
       referrerURI: browser.documentURI,
       referrerPolicy: event.referrerPolicy,
       noReferrer: event.noReferrer,
+      triggeringPrincipal: event.triggeringPrincipal,
+      isContentWindowPrivate: event.isContentWindowPrivate,
       charset: browser.characterSet,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
     });
