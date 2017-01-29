@@ -2963,7 +2963,7 @@ TabmixSessionManager = {
     }
     this.setLiteral(aNode, "image", aData.image || "");
     this.setLiteral(aNode, "properties", aData.properties);
-    this.setLiteral(aNode, "history", aData.history);
+    this.setLiteral(aNode, "historyData", aData.history);
     this.setLiteral(aNode, "scroll", aData.scroll);
     if (aData.closedAt)
       this.setLiteral(aNode, "closedAt", aData.closedAt);
@@ -3000,23 +3000,21 @@ TabmixSessionManager = {
     for (let j = historyStart; j < historyEnd; j++) {
       try {
         let historyEntry = entries[j];
-        history.push(historyEntry.title || "");
-        history.push(historyEntry.url);
-        history.push(saveScroll && historyEntry.scroll || "0,0");
+        let entry = {
+          url: historyEntry.url,
+          title: historyEntry.title || "",
+          scroll: saveScroll && historyEntry.scroll || "0,0",
+        };
+        if (historyEntry.triggeringPrincipal_base64) {
+          entry.triggeringPrincipal_base64 = historyEntry.triggeringPrincipal_base64;
+        }
+        history.push(entry);
       } catch (ex) {
         Tabmix.assert(ex, "serializeHistory error at index " + j);
       }
     }
-    // generate unique separator and combine the array to one string
-    var separator = "][", extraSeparator = "@";
-    for (var i = 0; i < history.length; ++i) {
-      while (history[i].indexOf(separator) > -1)
-        separator += extraSeparator;
-    }
     return {
-      // insert the separator to history so we can extract it in
-      // TabmixConvertSession.getHistoryState
-      history: separator + "|-|" + encodeURI(history.join(separator)),
+      history: encodeURI(JSON.stringify(history)),
       index,
       scroll: currentScroll
     };

@@ -861,9 +861,11 @@ var TabmixConvertSession = {
 
   getTabState: function cs_getTabState(rdfNodeTab, aClosedTab, internal) {
     var tabData = {entries: [], index: 0, zoom: 1, disallow: "", text: ""};
-    tabData.entries = this.getHistoryState(rdfNodeTab);
-    if (!tabData.entries.length)
+    const entries = this.getHistoryState(rdfNodeTab);
+    if (!entries.length) {
       return null;
+    }
+    tabData.entries = this.addTriggeringPrincipal(entries);
     tabData.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image", null);
     let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
     tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
@@ -963,6 +965,13 @@ var TabmixConvertSession = {
   },
 
   getHistoryState: function cs_getHistoryState(rdfNodeTab) {
+    // starting with version 0.5.0.3 history data serialized with JSON.stringify
+    let isJSONData = TabmixSessionManager.nodeHasArc(rdfNodeTab, "historyData");
+    if (isJSONData) {
+      const state = TabmixSessionManager.getLiteralValue(rdfNodeTab, "historyData");
+      return JSON.parse(decodeURI(state));
+    }
+
     let decodeData = function(data, decode) {
       return decode ? TabmixSessionManager.getDecodedLiteralValue(null, data) : data;
     };
@@ -989,5 +998,18 @@ var TabmixConvertSession = {
       }
     }
     return entries;
-  }
+  },
+
+  // add triggeringPrincipal to history entries that was saved before Firefox 54 (Bug 1307736)
+  addTriggeringPrincipal(entries) {
+    if (!TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL) {
+      return entries;
+    }
+    return entries.map(entry => {
+      if (!entry.triggeringPrincipal_base64) {
+        entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+      }
+      return entry;
+    });
+  },
 };

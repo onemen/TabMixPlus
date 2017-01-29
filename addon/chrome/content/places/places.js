@@ -281,6 +281,7 @@ var TMP_Places = {
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
+    let savePrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
@@ -310,7 +311,11 @@ var TMP_Places = {
       this.setTabTitle(aTab, url, bmIds[i]);
       if (loadProgressively) {
         tabs.push(aTab);
-        tabsData.push({entries: [{url, title: aTab.label}], index: 0});
+        let entry = {url, title: aTab.label};
+        if (savePrincipal) {
+          entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+        }
+        tabsData.push({entries: [entry], index: 0});
       }
 
       if (!tabToSelect)

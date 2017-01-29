@@ -365,6 +365,13 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 
+// Firefox 54
+// Bug 1307736 - Assert history loads pass a valid triggeringPrincipal for docshell loads
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() {
+  return this.SessionStoreGlobal.Utils &&
+      this.SessionStoreGlobal.Utils.SERIALIZED_SYSTEMPRINCIPAL || null;
+});
+
 tabStateCache = {
   saveTabAttributes(tab, attrib, save = true) {
     if (TabmixSvc.isPaleMoon) {

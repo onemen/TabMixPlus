@@ -1012,6 +1012,10 @@ var tablib = { // eslint-disable-line
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
           var newEntry = {url: aHref}; // we don't know the page title at this moment
+          let triggeringPrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+          if (triggeringPrincipal) {
+            newEntry.triggeringPrincipal_base64 = triggeringPrincipal;
+          }
           tabState.entries.splice(activeIndex + 1, entriesToRemove, newEntry);
           tabState.index++;
         } catch (ex) {
