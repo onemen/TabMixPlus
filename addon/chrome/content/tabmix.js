@@ -917,6 +917,11 @@ var TMP_eventListener = {
   onTabSelect: function TMP_EL_TabSelect(aEvent) {
     var tab = aEvent.target;
 
+    if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle &&
+        !tab.hasAttribute("width") && tab.hasAttribute("pending")) {
+      tab.setAttribute("width", tab.getBoundingClientRect().width);
+    }
+
     // for ColorfulTabs 6.0+
     // ColorfulTabs traps TabSelect event after we do
     // we need to set standout class before we check for getTabRowNumber
