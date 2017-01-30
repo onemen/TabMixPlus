@@ -619,7 +619,7 @@ Tabmix.tabsUtils = {
     let tab = this.tabBar.firstChild;
 
     XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
-      return window.getComputedStyle(tabbrowser, null).direction == "rtl";
+      return window.getComputedStyle(tabbrowser).direction == "rtl";
     });
     XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
 
@@ -1005,7 +1005,7 @@ Tabmix.tabsUtils = {
     if (!height) // don't panic
       return 1;
     // some theme add marginTop/marginBottom to tabs
-    var cStyle = window.getComputedStyle(aTab, null);
+    var cStyle = window.getComputedStyle(aTab);
     var marginTop = parseInt(cStyle.marginTop) || 0;
     var marginBottom = parseInt(cStyle.marginBottom) || 0;
     height += marginTop + marginBottom;
@@ -1668,7 +1668,7 @@ gTMPprefObserver = {
     *  we apply these value dynamically here to our tab-protect-icon tab-lock-icon class
     *  since each theme can use different values
     */
-    let style = window.getComputedStyle(icon, null);
+    let style = window.getComputedStyle(icon);
     let pinned;
     pinned = icon.hasAttribute("pinned");
     if (pinned)
@@ -1760,7 +1760,7 @@ gTMPprefObserver = {
 
     // set right margin to tab-label when close button is not right to it
     // on default theme the margin is zero, so we set the end margin to be the same as the start margin
-    let style = window.getComputedStyle(icon, null);
+    let style = window.getComputedStyle(icon);
     let marginEnd = style.getPropertyValue(sMarginEnd);
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;

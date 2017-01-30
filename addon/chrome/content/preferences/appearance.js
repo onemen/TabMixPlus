@@ -38,7 +38,7 @@ var gAppearancePane = {
     }
 
     // rtl update position
-    var direction = window.getComputedStyle($("appearance"), null).direction;
+    var direction = window.getComputedStyle($("appearance")).direction;
     if (direction == "rtl") {
       let right = $("newTabButton.position.right");
       // let left = $("newTabButton.position.left");

@@ -30,7 +30,7 @@ var gEventsPane = {
     this.disableReplaceLastTabWith();
     this.disableShowTabList();
 
-    var direction = window.getComputedStyle($("paneEvents"), null).direction;
+    var direction = window.getComputedStyle($("paneEvents")).direction;
     if (direction == "rtl") {
       let focusTab = $("focusTab").firstChild.childNodes;
       let [rightLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];

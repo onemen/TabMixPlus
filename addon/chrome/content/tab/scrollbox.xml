@@ -134,7 +134,7 @@
         <body><![CDATA[
           if (this._tabMarginLeft === null || this._tabMarginRight === null) {
             let tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
-            let tabMiddleStyle = window.getComputedStyle(tabMiddle, null);
+            let tabMiddleStyle = window.getComputedStyle(tabMiddle);
             this._tabMarginLeft = parseFloat(tabMiddleStyle.marginLeft);
             this._tabMarginRight = parseFloat(tabMiddleStyle.marginRight);
           }

@@ -135,7 +135,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
     this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
-    let style = window.getComputedStyle(this.tabsNewtabButton, null);
+    let style = window.getComputedStyle(this.tabsNewtabButton);
     let marginStart = style.getPropertyValue("margin-left");
     // it doesn't work when marginEnd add to buttonWidth
     // let marginEnd = style.getPropertyValue("margin-right");

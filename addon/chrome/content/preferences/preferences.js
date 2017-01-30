@@ -71,7 +71,7 @@ var gPrefWindow = {
     }
     let aPaneElement = $(aPaneID), diff = 0;
     let content = document.getAnonymousElementByAttribute(aPaneElement, "class", "content-box");
-    let style = window.getComputedStyle(content, "");
+    let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
                        parseInt(style.marginLeft);
     let tabboxes = aPaneElement.getElementsByTagName("tabbox");

@@ -1050,7 +1050,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
 
 Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
   try {
-    return parseInt(window.getComputedStyle(aObj, null)[aStyle]) || 0;
+    return parseInt(window.getComputedStyle(aObj)[aStyle]) || 0;
   } catch (ex) {
     this.assert(ex);
   }
