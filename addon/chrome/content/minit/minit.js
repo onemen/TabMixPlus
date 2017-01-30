@@ -792,7 +792,7 @@ var TMP_tabDNDObserver = {
     if (aSourceNode && aSourceNode instanceof XULElement && aSourceNode.localName == "tab") {
       if (aSourceNode.parentNode == gBrowser.tabContainer)
         return this.DRAG_TAB_IN_SAME_WINDOW; // 2
-      if (aSourceNode.ownerDocument.defaultView instanceof ChromeWindow &&
+      if (aSourceNode.ownerGlobal instanceof ChromeWindow &&
            aSourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser")
         return this.DRAG_TAB_TO_NEW_WINDOW; // 1
     }

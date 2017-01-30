@@ -119,7 +119,7 @@ ContentClickInternal = {
         return;
       }
 
-      let window = browser.ownerDocument.defaultView;
+      let window = browser.ownerGlobal;
       var where = window.whereToOpenLink(json);
       if (where != "current") {
         return;
@@ -191,7 +191,7 @@ ContentClickInternal = {
       return false;
     }
 
-    let win = browser.ownerDocument.defaultView;
+    let win = browser.ownerGlobal;
     win.openLinkIn(href, result.where, {
       referrerURI: browser.documentURI,
       referrerPolicy: event.referrerPolicy,
@@ -212,7 +212,7 @@ ContentClickInternal = {
 
   _getParamsForLink(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
     this._browser = browser;
-    this._window = browser.ownerDocument.defaultView;
+    this._window = browser.ownerGlobal;
 
     let [where, suppressTabsOnFileDownload] =
         this.whereToOpen(event, href, wrappedNode, wrappedOnClickNode);
@@ -1044,7 +1044,7 @@ ContentClickInternal = {
         deleteEpoch(this.epoch);
       },
       result(browser, data) {
-        let window = browser.ownerDocument.defaultView;
+        let window = browser.ownerGlobal;
         let tab = window.gBrowser.getTabForBrowser(browser);
         if (data.result) {
           this.stop();

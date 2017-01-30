@@ -126,7 +126,7 @@ this.MergeWindows = {
     if (!newTab) {
       newTab = aTab.__tabmixNewTab;
       delete aTab.__tabmixNewTab;
-      tabbrowser = newTab.ownerDocument.defaultView.gBrowser;
+      tabbrowser = newTab.ownerGlobal.gBrowser;
     }
     let index = tabbrowser.tabs.length - 1;
     if (openerWindow) {
@@ -162,7 +162,7 @@ this.MergeWindows = {
     this.prefs.setBoolPref("openTabNextInverse", true);
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
-      let isPopup = !tab.ownerDocument.defaultView.toolbar.visible;
+      let isPopup = !tab.ownerGlobal.toolbar.visible;
       let params = {dontMove: isPopup};
       if (TabmixSvc.version(470)) {
         params = {eventDetail: {adoptedTab: tab}};

@@ -17,7 +17,7 @@ let internal = {
       }
 
       const tab = tabToRestoreSoon || visible[0];
-      const win = tab.ownerDocument.defaultView;
+      const win = tab.ownerGlobal;
       const {restoringTabs, bookmarksOnDemand} = win.TMP_Places;
       const index = restoringTabs.indexOf(tab);
       if (index > -1) {

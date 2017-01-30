@@ -26,7 +26,7 @@ this.AutoReload = {
   * Popup command
   */
   addClonePopup(aPopup, aTab) {
-    var win = aTab.ownerDocument.defaultView;
+    var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
     win.Tabmix.setItem(aPopup, "onpopuphidden", "this._tab = null;");
@@ -103,7 +103,7 @@ this.AutoReload = {
       return newList;
     }
 
-    let doc = aPopup.ownerDocument.defaultView.document;
+    let doc = aPopup.ownerGlobal.document;
     getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
       let mi = doc.createElement("menuitem");
       this.setLabel(mi, val);
@@ -139,7 +139,7 @@ this.AutoReload = {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
     let result = {ok: false};
-    var win = aTab.ownerDocument.defaultView;
+    var win = aTab.ownerGlobal;
     win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
       aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
@@ -188,7 +188,7 @@ this.AutoReload = {
     aTab.autoReloadEnabled = true;
     _setItem(aTab, "_reload", true);
     aTab.autoReloadURI = url;
-    var win = aTab.ownerDocument.defaultView;
+    var win = aTab.ownerGlobal;
     _clearTimeout(aTab, win);
     aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
@@ -205,7 +205,7 @@ this.AutoReload = {
 
   _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
-    let win = aTab.ownerDocument.defaultView;
+    let win = aTab.ownerGlobal;
     TabmixSvc.saveTabAttributes(aTab, "reload-data");
     win.TabmixSessionManager.updateTabProp(aTab);
   },
@@ -226,7 +226,7 @@ this.AutoReload = {
   *  for pending tabs
   */
   onTabReloaded(aTab, aBrowser) {
-    var win = aTab.ownerDocument.defaultView;
+    var win = aTab.ownerGlobal;
     if (aTab.autoReloadTimerID)
       _clearTimeout(aTab, win);
 
@@ -271,7 +271,7 @@ this.AutoReload = {
   },
 
   reloadRemoteTab(browser, data) {
-    var window = browser.ownerDocument.defaultView;
+    var window = browser.ownerGlobal;
     let tab = window.gBrowser.getTabForBrowser(browser);
     // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
     if (data.isPostData && !this.confirm(window, tab, !TabmixSvc.version(420)))
@@ -297,7 +297,7 @@ function _reloadTab(aTab) {
   }
 
   var data = {};
-  var window = aTab.ownerDocument.defaultView;
+  var window = aTab.ownerGlobal;
 
   try {
     let sh = browser.webNavigation.sessionHistory;
@@ -365,7 +365,7 @@ function _observe(aSubject, aTopic) {
 function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow)
-      aWindow = aTab.ownerDocument.defaultView;
+      aWindow = aTab.ownerGlobal;
     aWindow.clearTimeout(aTab.autoReloadTimerID);
   }
 }

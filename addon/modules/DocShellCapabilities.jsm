@@ -34,7 +34,7 @@ this.DocShellCapabilities = {
       return this.caps.filter(cap => !browser.docShell["allow" + cap]);
     }
 
-    let window = tab.ownerDocument.defaultView;
+    let window = tab.ownerGlobal;
     if (window && window.__SSi) {
       let tabState = TabState.collect(tab);
       return tabState.disallow || "";

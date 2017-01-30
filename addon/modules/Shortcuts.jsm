@@ -185,7 +185,7 @@ this.Shortcuts = {
 
   onCommand: function TMP_SC_onCommand(aKey) {
     try {
-      let win = aKey.ownerDocument.defaultView;
+      let win = aKey.ownerGlobal;
       let command = this.keys[aKey._id].command;
       if (typeof command == "function") {
         command.apply(win, [win.gBrowser.selectedTab]);

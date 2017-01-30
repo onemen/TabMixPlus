@@ -258,7 +258,7 @@ PlacesUtilsInternal = {
     // setItem check if aTab exist and remove the attribute if
     // oID.value is null
     if (aTab) {
-      let win = aTab.ownerDocument.defaultView;
+      let win = aTab.ownerGlobal;
       win.Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
     }
 

@@ -63,7 +63,7 @@ this.TabmixUtils = {
         DocShellCapabilities.update(browser, message.data);
         break;
       case "Tabmix:updateScrollPosition":
-        win = browser.ownerDocument.defaultView;
+        win = browser.ownerGlobal;
         tab = win.gBrowser.getTabForBrowser(browser);
         win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
@@ -75,14 +75,14 @@ this.TabmixUtils = {
         break;
       }
       case "Tabmix:getOpener":
-        win = browser.ownerDocument.defaultView;
+        win = browser.ownerGlobal;
         tab = win.gBrowser.getTabForBrowser(browser);
         MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
       case "Tabmix:contentDrop": {
         const {json, links, name} = message.data;
         const url = links[0].url;
-        win = browser.ownerDocument.defaultView;
+        win = browser.ownerGlobal;
         const where = win.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           if (TabmixSvc.version(520)) {
@@ -101,7 +101,7 @@ this.TabmixUtils = {
         return false;
       }
       case "Tabmix:contextmenu": {
-        win = browser.ownerDocument.defaultView;
+        win = browser.ownerGlobal;
         let links = message.data.links;
         win.Tabmix.contextMenuLinks = links && links.split("\n") || [];
         break;

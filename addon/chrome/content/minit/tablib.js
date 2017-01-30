@@ -967,7 +967,7 @@ var tablib = { // eslint-disable-line
         aTab = this.mCurrentTab;
 
       var newTab = null;
-      let copyToNewWindow = window != aTab.ownerDocument.defaultView;
+      let copyToNewWindow = window != aTab.ownerGlobal;
       let openDuplicateNext = !disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext");
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openDuplicateNext);
 
@@ -1713,7 +1713,7 @@ var tablib = { // eslint-disable-line
       // Do not allow transferring a private tab to a non-private window
       // and vice versa.
       if (PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerDocument.defaultView)) {
+          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)) {
         return;
       }
 

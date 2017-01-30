@@ -380,7 +380,7 @@ tabStateCache = {
 
     // force Sessionstore to save our persisted tab attributes
     if (save) {
-      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerDocument.defaultView);
+      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerGlobal);
     }
 
     // After bug 1166757 - Remove browser.__SS_data, we have nothing more to do.

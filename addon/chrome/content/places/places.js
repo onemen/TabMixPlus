@@ -892,6 +892,6 @@ Tabmix.onContentLoaded = {
 
 /** DEPRECATED **/
 TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
-  let win = aBrowser.ownerDocument.defaultView;
+  let win = aBrowser.ownerGlobal;
   return win.TMP_Places.getTabTitle(win.gBrowser.getTabForBrowser(aBrowser), aUri.spec);
 };

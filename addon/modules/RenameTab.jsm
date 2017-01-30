@@ -22,7 +22,7 @@ this.RenameTab = {
     if (this.panel && this.panel.state != "closed")
       this.hidePopup();
 
-    this.window = aTab.ownerDocument.defaultView;
+    this.window = aTab.ownerGlobal;
     var gBrowser = this.window.gBrowser;
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
