@@ -14,6 +14,7 @@ module.exports = {
   },
 
   "rules": {
+    "tabmix/avoid-removeChild": 2,
     "tabmix/balanced-listeners": 2,
     "tabmix/import-globals": 2,
     "tabmix/no-single-arg-cu-import": 2,

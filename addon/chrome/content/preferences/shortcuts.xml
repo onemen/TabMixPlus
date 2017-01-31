@@ -98,8 +98,9 @@
           var shortcut = !this.disabled && getFormattedKey(this.key);
           var usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
           var box = this.notificationbox;
-          while (box.hasChildNodes())
-            box.removeChild(box.firstChild);
+          while (box.hasChildNodes()) {
+            box.firstChild.remove();
+          }
           if (usedKey) {
             let msg = (box.getAttribute("inuse") + ":\n" + usedKey).split("\n");
             for (let i = 0, l = msg.length; i < l; i++) {

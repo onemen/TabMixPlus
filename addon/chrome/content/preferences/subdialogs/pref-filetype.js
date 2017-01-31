@@ -17,7 +17,7 @@ function Init() {
 function FillData() {
   // remove all the item from the list
   while (list.hasChildNodes()) {
-    list.removeChild(list.lastChild);
+    list.lastChild.remove();
   }
 
   var data, items, item;
@@ -125,7 +125,7 @@ function Del() {
     SelectItemAt(index == list.getRowCount() - 1 ? index - 1 : index + 1, true);
   else
     entry.value = null;
-  list.removeChild(item);
+  item.remove();
 }
 
 function Restore() {

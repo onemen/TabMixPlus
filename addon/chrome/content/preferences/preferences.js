@@ -181,7 +181,7 @@ var gPrefWindow = {
     // override preferences getter before we remove the preference
     if (child.localName == "preference")
       Object.defineProperty(child, "preferences", {value: child.parentNode});
-    child.parentNode.removeChild(child);
+    child.remove();
   },
 
   initBroadcasters(paneID) {

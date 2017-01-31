@@ -77,8 +77,9 @@ this.AutoReload = {
   updateCustomList(aPopup) {
     let start = aPopup.getElementsByAttribute("anonid", "start_custom_list")[0];
     let end = aPopup.getElementsByAttribute("anonid", "end_custom_list")[0];
-    while (start.nextSibling && start.nextSibling != end)
-      aPopup.removeChild(start.nextSibling);
+    while (start.nextSibling && start.nextSibling != end) {
+      start.nextSibling.remove();
+    }
 
     // get the custom list and validate its values
     function getList() {

@@ -1863,7 +1863,7 @@ TabmixSessionManager = {
           break;
       } else if (destroy) {
         i--;
-        menu.removeChild(item);
+        item.remove();
       } else if (item.id.indexOf("-startSeparator") != -1) destroy = true;
     }
     return endSeparator;

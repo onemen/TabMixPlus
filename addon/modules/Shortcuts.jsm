@@ -85,7 +85,7 @@ this.Shortcuts = {
       for (let att of box.attributes) {
         labels[att.name] = att.value;
       }
-      container.removeChild(box);
+      box.remove();
     }
     labels.togglePinTab =
       $("context_pinTab").getAttribute("label") + "/" +

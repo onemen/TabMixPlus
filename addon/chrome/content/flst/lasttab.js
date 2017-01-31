@@ -330,8 +330,9 @@ var TMP_LastTab = {
     if (!this.SuppressTabListReset) {
       var tablist = this.TabList;
 
-      while (tablist.childNodes.length > 0)
-        tablist.removeChild(tablist.childNodes[0]);
+      while (tablist.childNodes.length > 0) {
+        tablist.firstChild.remove();
+      }
 
       this.TabListLock = false;
       this.TabIndex = 0;

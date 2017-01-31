@@ -915,7 +915,7 @@ var TabmixAllTabs = {
         break;
       menuItem.removeEventListener("command", TMP_ClosedTabs);
       menuItem.removeEventListener("click", TMP_ClosedTabs);
-      popup.removeChild(menuItem);
+      menuItem.remove();
     }
 
     if (!aCloseTabsPopup) {
@@ -1057,8 +1057,9 @@ var TabmixAllTabs = {
 
   _tabOnTabClose: function TMP__tabOnTabClose(aEvent) {
     var menuItem = aEvent.target.mCorrespondingMenuitem;
-    if (menuItem && menuItem.parentNode)
-      menuItem.parentNode.removeChild(menuItem);
+    if (menuItem) {
+      menuItem.remove();
+    }
   },
 
   _tabsListOncommand: function TMP__tabsListOncommand(aEvent) {
@@ -1083,7 +1084,7 @@ var TabmixAllTabs = {
       if ("tab" in menuItem) {
         menuItem.tab.mCorrespondingMenuitem = null;
       }
-      popup.removeChild(menuItem);
+      menuItem.remove();
     }
 
     var item = popup.parentNode;
