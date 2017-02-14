@@ -20,6 +20,7 @@ module.exports = {
     "tabmix/no-single-arg-cu-import": 2,
     "tabmix/no-import-into-var-and-global": 2,
     "tabmix/no-useless-parameters": 2,
+    "tabmix/use-ownerGlobal": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
