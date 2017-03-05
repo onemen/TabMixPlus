@@ -859,7 +859,15 @@ Tabmix.onContentLoaded = {
       'let newWin = $&\n' +
       '    if (newWin && bookMarkId) {\n' +
       '        newWin.bookMarkIds = bookMarkId;\n' +
-      '    }'
+      '    }',
+      {check: !Tabmix.isVersion(540)}
+    )._replace(
+      /win = Services.ww.openWindow[^;]*;/,
+      '$&\n' +
+      '    if (win && bookMarkId) {\n' +
+      '        win.bookMarkIds = bookMarkId;\n' +
+      '    }',
+      {check: Tabmix.isVersion(540)}
     )._replace(
       /(})(\)?)$/,
       '  const targetTab = where == "current" ?\n' +

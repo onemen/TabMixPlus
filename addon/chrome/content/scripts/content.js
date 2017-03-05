@@ -237,6 +237,13 @@ TabmixClickEventHandler = {
       }
     }
 
+    let frameOuterWindowID;
+    if (TabmixSvc.version(540)) {
+      frameOuterWindowID = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
+          .getInterface(Ci.nsIDOMWindowUtils)
+          .outerWindowID;
+    }
+
     let json = {
       button: event.button,
       shiftKey: event.shiftKey,
@@ -247,6 +254,7 @@ TabmixClickEventHandler = {
       title: null,
       bookmark: false,
       referrerPolicy,
+      frameOuterWindowID,
       triggeringPrincipal: principal,
       originAttributes: principal ? principal.originAttributes : {},
       isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
