@@ -3689,16 +3689,12 @@ TabmixSessionManager = {
     const SESSIONS_ARCHIVE_INTERVAL = 86400 * 1000;
     if (!lastBackup ||
         Date.now() - lastBackup.lastModifiedTime > SESSIONS_ARCHIVE_INTERVAL) {
-      var maxBackups = 7;
       // The maximum number of daily sessions backups to
       // keep in <profile>/sessionbackups. Special values:
       // -1: unlimited
       //  0: no backups created (and deletes all existing backups)
       // "extensions.tabmix.sessions.max_backups";
-      try {
-        maxBackups = this.prefBranch.getIntPref("max_backups");
-      } catch (ex) { }
-
+      var maxBackups = this.prefBranch.getIntPref("max_backups");
       this.archiveSessionsFile(maxBackups, false /* don't force */);
     }
   },

@@ -20,10 +20,8 @@ function FillData() {
     list.lastChild.remove();
   }
 
-  var data, items, item;
-  try {
-    data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
-  } catch (e) {}
+  var data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
+  var items, item;
 
   if (!data.length) {
     setButtonDisable(del, true);
