@@ -214,6 +214,9 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
     if (name) {
       return fn(name + " = " + code);
     }
+    if (!code.startsWith("function")) {
+      return fn("(function " + code + ")");
+    }
     return fn("(" + code + ")");
   };
 }(this));
