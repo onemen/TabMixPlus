@@ -33,13 +33,13 @@
                 class="tab-image-left tab-startcap tab-left tab-left-border"/>
       <xul:hbox class="tab-drag-indicator-left"/>
       <xul:stack class="tab-stack" flex="1">
-        <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged,fadein"
+        <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
                   class="tab-background">
-          <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged"
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-start"/>
-          <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged"
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-middle"/>
-          <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged"
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-end"/>
         </xul:hbox>
         <xul:vbox class="tab-progress-container">
@@ -52,7 +52,7 @@
             <xul:image xbl:inherits="fadein,pinned,busy,progress,selected=visuallyselected"
                        class="tab-throbber"
                        role="presentation"/>
-            <xul:image xbl:inherits="src=image,fadein,pinned,selected=visuallyselected,busy,crashed,sharing"
+            <xul:image xbl:inherits="src=image,loadingprincipal=iconLoadingPrincipal,fadein,pinned,selected=visuallyselected,busy,crashed,sharing"
                        anonid="tab-icon-image"
                        class="tab-icon-image"
                        validate="never"
@@ -65,7 +65,7 @@
                      anonid="sharing-icon"
                      class="tab-sharing-icon-overlay"
                      role="presentation"/>
-          <xul:image xbl:inherits="crashed,busy,soundplaying,pinned,muted,selected=visuallyselected"
+          <xul:image xbl:inherits="crashed,busy,soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected"
                      anonid="overlay-icon"
                      class="tab-icon-overlay"
                      role="presentation"/>
@@ -79,7 +79,7 @@
                        xbl:inherits="xbl:text=label,accesskey,fadein,pinned,selected=visuallyselected,attention"
                        role="presentation"/>
           </xul:hbox>
-          <xul:image xbl:inherits="soundplaying,pinned,muted,selected=visuallyselected"
+          <xul:image xbl:inherits="soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected"
                      anonid="soundplaying-icon"
                      class="tab-icon-sound"
                      role="presentation"/>
