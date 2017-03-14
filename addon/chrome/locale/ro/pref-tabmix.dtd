@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Îmbinare file">
 <!ENTITY tabFeature.label "Diverse">
 <!ENTITY newtab.label "Se deschide în filele noi:">
-<!ENTITY replaceLastTabWith.label "Se înlocuiește ultima filă închisă cu">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "pagina vidă">
 <!ENTITY newtab.home "pagina de start">
 <!ENTITY newtab.current "pagina curentă">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Se încarcă filele în mod progresiv">
 <!ENTITY restoreOnDemand.label "Nu se încarcă filele dacă nu au fost selectate">
-<!ENTITY moreThan.label "când se deschid mai mult de">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "file">
 <!ENTITY lockTabs.label "File blocate">
 <!ENTITY lockNewTabs.label "Se blochează filele noi">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicări de file">
 <!ENTITY inversefocus2.label "Se inversează modul de activare/selectare cu clic-mijloc sau Ctrl+clic pentru:">
 <!ENTITY warning.caption.label "Atenționări">
-<!ENTITY warnOnCloseProtected.label "Avertizează-mă la închiderea unei ferestre cu file protejate">
-<!ENTITY warnOnCloseWindow.label "Avertizează-mă la închiderea unei ferestre cu mai multe file">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Închiderea ultimei file">
 <!ENTITY keepWindow.label.3.1 "Nu se închide fereastra când se închide ultima filă">
 <!ENTITY keeptab.label "Se împiedică închiderea ultimei file">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Comenzi afișate în meniul contextual al filei:">
 <!ENTITY showContentAreaContext.label "Comenzi afișate în meniul contextual principal:">
 <!ENTITY showToolsMenu.label "Elemente afișate în meniul Unelte:">
-<!ENTITY startupHomePage.label "se afișează pagina de start">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "se afișează o pagină vidă">
-<!ENTITY startupLastSession.label "se afișează ferestrele și filele de dinainte de închidere">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus a descoperit că extensia „Gestionar de sesiuni” este instalată.">
 <!ENTITY sm.extension.description2 "Gestionarul de sesiuni al Tab Mix Plus va fi dezactivat.">
 <!ENTITY sm.extension.description3 "Puteți da clic pe butonul din partea dreaptă pentru a deschide caseta de opțiuni a extensiei „Gestionar de sesiuni”.">
-<!ENTITY sm.extension.description4 "Conversie de sesiuni din formatul Tab Mix Plus în cel al extensiei „Gestionar de sesiuni”">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Convertește">
-<!ENTITY sm.extension.chooseFile.label0 "Se convertește fișierul de date specificat">
 <!ENTITY sm.extension.chooseFile.label1 "Se convertesc sesiunile Tab Mix Plus din profilul curent">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Se folosește facilitatea internă a Firefox de restaurare a sesiunilor">
 <!ENTITY ss.enable.tooltip "Se demarchează pentru a permite utilizarea gestionarului de sesiuni al Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Opțiuni complexe">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
 <!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
 <!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
-<!ENTITY sm.restorePinned.label "Restaurează filele fixate ultima dată">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Se memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
 <!ENTITY sm.preserve.protect "Starea de protecție">

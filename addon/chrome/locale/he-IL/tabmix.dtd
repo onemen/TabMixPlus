@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "הסתר את סרגל הלשוניות">
 <!ENTITY hideTabBar.never.label "לעולם לא">
 <!ENTITY hideTabBar.never.key "ל">
-<!ENTITY hideTabBar.onOneTab.label "כשיש לשונית אחת בלבד">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "א">
 <!ENTITY hideTabBar.always.label "תמיד">
 <!ENTITY hideTabBar.always.key "ת">

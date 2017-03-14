@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Скриване на лентата с подпрозорци">
 <!ENTITY hideTabBar.never.label "Никога">
 <!ENTITY hideTabBar.never.key "Н">
-<!ENTITY hideTabBar.onOneTab.label "Когато е отворен само един подпрозорец">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "е">
 <!ENTITY hideTabBar.always.label "Винаги">
 <!ENTITY hideTabBar.always.key "В">

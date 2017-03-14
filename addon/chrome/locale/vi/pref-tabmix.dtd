@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Trộn Thẻ">
 <!ENTITY tabFeature.label "Tính năng Thẻ">
 <!ENTITY newtab.label "Thẻ mới sẽ mở:">
-<!ENTITY replaceLastTabWith.label "Khi tôi đóng thẻ cuối cùng, thay nó bằng">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Trang trống">
 <!ENTITY newtab.home "Trang nhà">
 <!ENTITY newtab.current "Trang hiện tại">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Khóa thẻ">
 <!ENTITY lockNewTabs.label "Khóa các thẻ mới">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Tạo bản sao của Thẻ">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Cảnh báo">
-<!ENTITY warnOnCloseProtected.label "Cảnh báo tôi khi đóng cửa sổ có các thẻ được bảo vệ">
-<!ENTITY warnOnCloseWindow.label "Cảnh báo tôi khi đóng cửa sổ có nhiều thẻ">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Đóng thẻ cuối cùng">
 <!ENTITY keepWindow.label.3.1 "Không đóng cửa sổ khi đóng thẻ cuối cùng">
 <!ENTITY keeptab.label "Không để thẻ cuối cùng bị đóng">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Hiện trong Trình đơn Ngữ cảnh của Thẻ">
 <!ENTITY showContentAreaContext.label "Hiện trong Trình đơn Ngữ cảnh Chính">
 <!ENTITY showToolsMenu.label "Hiện trong Trình đơn Công cụ">
-<!ENTITY startupHomePage.label "Hiện trang chủ của tôi">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Hiện một trang trống">
-<!ENTITY startupLastSession.label "Hiện cửa sổ và thẻ lần trước của tôi">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus phát hiện phần mở rộng Session Manager đã được cài">
 <!ENTITY sm.extension.description2 "Trình quản lí phiên của Tab Mix Plus sẽ bị vô hiệu hóa">
 <!ENTITY sm.extension.description3 "Bạn có thể nhấn nút bên phải để mở hộp thoại Tùy chọn Quản lí Phiên">
-<!ENTITY sm.extension.description4 "Chuyển đổi dữ liệu phiên của tôi từ định dạng Tab Mix Plus sang định dạng của phần mở rộng Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Chuyển đổi">
-<!ENTITY sm.extension.chooseFile.label0 "Để tôi chọn tập tin dữ liệu cần chuyển đổi">
 <!ENTITY sm.extension.chooseFile.label1 "Chuyển đổi phiên làm việc Tab Mix Plus của hồ sơ hiện tại">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Sử dụng tính năng “Khôi phục Phiên” có sẵn trong Firefox">
 <!ENTITY ss.enable.tooltip "Không chọn để cho phép sử dụng với Quản lí Phiên của Tabmix">
 <!ENTITY ss.advanced_setting "Thiết lập Nâng cao">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Trộn nhiều cửa sổ lại thành một">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Khi không khôi phục lúc khởi động">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bảo toàn các Thẻ:">
 <!ENTITY sm.preserve.history "Lược sử">
 <!ENTITY sm.preserve.protect "Bảo vệ Trạng thái">

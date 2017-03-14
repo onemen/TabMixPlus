@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "מיזוג לשונית">
 <!ENTITY tabFeature.label "תכונות לשונית">
 <!ENTITY newtab.label "טען בלשונית חדשה">
-<!ENTITY replaceLastTabWith.label "כשאני סוגר את הלשונית האחרונה החלפך אותה ב">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "דף ריק">
 <!ENTITY newtab.home "דף הבית">
 <!ENTITY newtab.current "עמוד נוכחי">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "נעל לשוניות">
 <!ENTITY lockNewTabs.label "נעל לשוניות חדשות">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "שכפל לשונית">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "אזהרה">
-<!ENTITY warnOnCloseProtected.label "אזהר אותי כשאני סוגר חלון עם לשוניות מוגנות">
-<!ENTITY warnOnCloseWindow.label "התרע כשאני מנסה לסגור חלון עם מספר לשוניות">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "סוגר לשונית אחרונה">
 <!ENTITY keepWindow.label.3.1 "אל תסגור חלון כשנסגרת לשונית אחרונה">
 <!ENTITY keeptab.label "מנע מלשונית אחרונה מלהיסגר">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "הצג בתפריט הלשונית">
 <!ENTITY showContentAreaContext.label "הצג בתפריט הדף הראשי">
 <!ENTITY showToolsMenu.label "הצג בתפריט כלים">
-<!ENTITY startupHomePage.label "הצג את דף הבית">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "הצג דף ריק">
-<!ENTITY startupLastSession.label "הצג חלונות ולשוניות מהפעם האחרונה">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus זיהה ש Session Manager מותקן">
 <!ENTITY sm.extension.description2 "מנהל ההפעלות של Tab Mix Plus ינוטרל">
 <!ENTITY sm.extension.description3 "הלחצן מימין יפתח את חלון האפשרויות ל Session Manager.">
-<!ENTITY sm.extension.description4 "המר את ההפעלות שלי מפורמט של Tab Mix Plus לפורמט של Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "המר">
-<!ENTITY sm.extension.chooseFile.label0 "תן לי לבחור מה להמיר">
 <!ENTITY sm.extension.chooseFile.label1 "המר הפעלות מפרופיל נוכחי">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "השתמש בשחזור ההפעלות של פיירפוקס">
 <!ENTITY ss.enable.tooltip "אל תסמן על מנת לאפשר את מנהל ההפעלות של Tabmix.">
 <!ENTITY ss.advanced_setting "אפשרויות מתקדמות">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "שימור לשוניות:">
 <!ENTITY sm.preserve.history "היסטוריה">
 <!ENTITY sm.preserve.protect "מצב הגנה">

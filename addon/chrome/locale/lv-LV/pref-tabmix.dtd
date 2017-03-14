@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Ciļņu apvienošana">
 <!ENTITY tabFeature.label "Ciļņu iespējas">
 <!ENTITY newtab.label "Jaunajās cilnēs ielādēt:">
-<!ENTITY replaceLastTabWith.label "Aizverot pēdējo cilni, aizvietot to ar">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Tukšu lapu">
 <!ENTITY newtab.home "Mājas lapu">
 <!ENTITY newtab.current "Pašreizējo lapu">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Noslēgt cilnes">
 <!ENTITY lockNewTabs.label "Noslēgt jaunās cilnes">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Dublicēt cilni">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Brīdinājums">
-<!ENTITY warnOnCloseProtected.label "Brīdināt mani, kad tiek aizvērts logs ar aizsargātām cilnēm">
-<!ENTITY warnOnCloseWindow.label "Brīdināt mani, kad tiek aizvērts logs ar vairākām cilnēm">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Aizverot pēdējo cilni">
 <!ENTITY keepWindow.label.3.1 "Neaizvērt logu, kad tiek aizvērta pēdējā cilne">
 <!ENTITY keeptab.label "Novērst pēdējās cilnes aizvēršanu">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Rādīt cilnes konteksta izvēlnē">
 <!ENTITY showContentAreaContext.label "Rādīt galvenajā konteksta izvēlnē">
 <!ENTITY showToolsMenu.label "Rādīt rīku izvēlnē">
-<!ENTITY startupHomePage.label "Rādīt manu mājas lapu">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Rādīt tukšu lapu">
-<!ENTITY startupLastSession.label "Rādīt manus logus un cilnes no iepriekšējās reizes">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus konstatēja, ka ir instalēts paplašinājums Session Manager">
 <!ENTITY sm.extension.description2 "Tab Mix Plus sesiju pārvaldnieks tiks atslēgts">
 <!ENTITY sm.extension.description3 "Lai atvērtu Session Manager opciju logu, varat noklikšķināt uz pogas pa labi">
-<!ENTITY sm.extension.description4 "Pārveidot manu sesiju datus no Tab Mix Plus formāta uz Session Manager paplašinājuma formātu">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Pārveidot">
-<!ENTITY sm.extension.chooseFile.label0 "Ļaut man izvēlēties, kuru datu failu pārveidot">
 <!ENTITY sm.extension.chooseFile.label1 "Pārveidot Tab Mix Plus sesijas no pašreizējā profila">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Lietot Firefox iebūvēto sesijas atjaunošanas iespēju">
 <!ENTITY ss.enable.tooltip "Neatzīmējiet, lai ļautu izmantot Tab Mix Plus sesiju pārvaldnieku">
 <!ENTITY ss.advanced_setting "Paplašinātie iestatījumi">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Apvienot vairākus logus vienā">
 <!ENTITY sm.restore.bypassCache "Atjaunojot apiet kešatmiņu">
 <!ENTITY sm.notrestore.label "Kad neatjauno palaižot">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Saglabāt ciļņu:">
 <!ENTITY sm.preserve.history "Vēsturi">
 <!ENTITY sm.preserve.protect "Aizsargāšanas statusu">

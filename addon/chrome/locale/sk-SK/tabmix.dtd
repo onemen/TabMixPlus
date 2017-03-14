@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Skryť panel karty">
 <!ENTITY hideTabBar.never.label "Nikdy">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Ak mám len jednu kartu">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "A">
 <!ENTITY hideTabBar.always.label "Vždy">
 <!ENTITY hideTabBar.always.key "V">

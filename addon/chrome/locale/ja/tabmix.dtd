@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "タブバーの表示">
 <!ENTITY hideTabBar.never.label "常に表示する">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "タブが一つのときは隠す">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "常に隠す">
 <!ENTITY hideTabBar.always.key "A">

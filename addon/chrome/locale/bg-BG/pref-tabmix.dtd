@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Обединяване на подпрозорци">
 <!ENTITY tabFeature.label "Настройки на подпрозорците">
 <!ENTITY newtab.label "Отваряне в нови подпрозорци:">
-<!ENTITY replaceLastTabWith.label "Замяна на последния подпрозорец при затварянето му">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Празна страница">
 <!ENTITY newtab.home "Началната страница">
 <!ENTITY newtab.current "Текущата страница">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
 <!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
-<!ENTITY moreThan.label "при отваряне на повече от">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "подпрозорци">
 <!ENTITY lockTabs.label "Заключване на подпрозорци">
 <!ENTITY lockNewTabs.label "Заключване на нови подпрозорци">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
 <!ENTITY inversefocus2.label "Щракване със средния бутон (или CTRL+щракване) обръща фокуса на:">
 <!ENTITY warning.caption.label "Предупреждения">
-<!ENTITY warnOnCloseProtected.label "Предупреждение при затваряне на прозорец със защитени подпрозорци">
-<!ENTITY warnOnCloseWindow.label "Предупреждение при затваряне на прозорец с няколко подпрозореца">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Затваряне на последния подпрозорец">
 <!ENTITY keepWindow.label.3.1 "Прозорецът да остане отворен дори и след затварянето на последния подпрозорец">
 <!ENTITY keeptab.label "Забрана за затваряне на последния подпрозорец">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Пунктове в контекстното меню на подпрозореца">
 <!ENTITY showContentAreaContext.label "Пунктове в основното контекстно меню">
 <!ENTITY showToolsMenu.label "Пунктове в меню &quot;Инструменти&quot;">
-<!ENTITY startupHomePage.label "Показване на началната страница">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Показване на празна страница">
-<!ENTITY startupLastSession.label "Показване на прозорците и подпрозорците, отворени предния път">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus установи, че има инсталирана добавка Session Manager">
 <!ENTITY sm.extension.description2 "Мениджърът на сесии Tab Mix Plus ще бъде изключен">
 <!ENTITY sm.extension.description3 "Можете да натиснете бутона вдясно, за да отворите настройките на Session Manager">
-<!ENTITY sm.extension.description4 "Преобразуване на данните за сесиите от формат Tab Mix Plus във формат Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Преобразуване">
-<!ENTITY sm.extension.chooseFile.label0 "Избиране на файлове с данни за преобразуване">
 <!ENTITY sm.extension.chooseFile.label1 "Преобразуване на сесиите Тab Mix Plus от текущия профил">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Използване на вградената функция на Firefox за възстановяване на сесии">
 <!ENTITY ss.enable.tooltip "Премахнете тази отметка, за да позволите използването на Мениджъра на сесии Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Допълнителни настройки">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
 <!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
 <!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
-<!ENTITY sm.restorePinned.label "Възстановяване на забодените от предния път подпрозорци">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
 <!ENTITY sm.preserve.history "Историята">
 <!ENTITY sm.preserve.protect "Статуса на защита">

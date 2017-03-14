@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Tabbladen samenvoegen">
 <!ENTITY tabFeature.label "Tabbladfuncties">
 <!ENTITY newtab.label "Laden in nieuwe tabbladen:">
-<!ENTITY replaceLastTabWith.label "Na sluiten laatste tabblad deze vervangen door">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Lege pagina">
 <!ENTITY newtab.home "Startpagina">
 <!ENTITY newtab.current "Huidige pagina">
@@ -56,11 +56,11 @@
 <!ENTITY openTabNextInverse.label "Volgorde van openen wijzigen">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Nieuw tabblad openen naast laatste vanuit huidige tabblad geopende (laatst geselecteerde)">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
-<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY moveSwitchToTabNext.label "Tabblad van ‘Naar tabblad wisselen’ naar positie naast huidige verplaatsen">
+<!ENTITY loadTabsProgressively.label "Tabbladen progressief laden">
+<!ENTITY restoreOnDemand.label "Tabbladen niet laden voor selectie">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabbladen open">
 <!ENTITY lockTabs.label "Tabbladen op slot zetten">
 <!ENTITY lockNewTabs.label "Nieuwe tabbladen op slot zetten">
 <!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Tabblad dupliceren">
 <!ENTITY inversefocus2.label "Middelklik of Ctrl-klik wisselt de focus van:">
 <!ENTITY warning.caption.label "Waarschuwing">
-<!ENTITY warnOnCloseProtected.label "Waarschuwen wanneer een venster met beschermde tabbladen wordt gesloten">
-<!ENTITY warnOnCloseWindow.label "Waarschuwen wanneer een venster met meerdere tabbladen wordt gesloten">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Sluiten laatste tabblad">
 <!ENTITY keepWindow.label.3.1 "Venster niet sluiten indien laatste tabblad wordt gesloten">
 <!ENTITY keeptab.label "Sluiten van laatste tabblad voorkomen">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "In tabbladcontextmenu weergeven:">
 <!ENTITY showContentAreaContext.label "In hoofdcontextmenu weergeven:">
 <!ENTITY showToolsMenu.label "In het menu Extra weergeven:">
-<!ENTITY startupHomePage.label "Mijn startpagina weergeven">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Een blanco pagina weergeven">
-<!ENTITY startupLastSession.label "Mijn vensters en tabbladen van de vorige sessie weergeven">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus heeft gedetecteerd dat de SessionManager-extensie is geïnstalleerd">
 <!ENTITY sm.extension.description2 "Tab Mix Plus sessiebeheerder zal worden uitgeschakeld">
 <!ENTITY sm.extension.description3 "Klik op de rechterknop om het Session Manager optiesvenster te openen">
-<!ENTITY sm.extension.description4 "Mijn sessiegegevens van Tab Mix Plus opmaak converteren naar SessionManager-extensie opmaak">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Converteren">
-<!ENTITY sm.extension.chooseFile.label0 "Mij het te converteren gegevensbestand laten selecteren">
 <!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus sessies van het huidige profiel converteren">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Ingebouwde sessieherstelmogelijkheid Firefox gebruiken">
 <!ENTITY ss.enable.tooltip "Vink dit uit om de Tab Mix Sessiebeheerder te gebruiken">
 <!ENTITY ss.advanced_setting "Geavanceerde instellingen">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
 <!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
 <!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
-<!ENTITY sm.restorePinned.label "Mijn vastgezetten tabbladen van de laatste keer herstellen">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">
 <!ENTITY sm.preserve.protect "Status beschermen">

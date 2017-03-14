@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Fusion des onglets">
 <!ENTITY tabFeature.label "Fonctionnalités des onglets">
 <!ENTITY newtab.label "Dans les nouveaux onglets, charger :">
-<!ENTITY replaceLastTabWith.label "Lorsque je ferme le dernier onglet, le remplacer par">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "une page vide">
 <!ENTITY newtab.home "la page d'accueil">
 <!ENTITY newtab.current "la page courante">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Charger les onglets progressivement">
 <!ENTITY restoreOnDemand.label "Ne pas charger les onglets avant qu'ils soient sélectionnés">
-<!ENTITY moreThan.label "lorsque j'ouvre plus de">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "onglets">
 <!ENTITY lockTabs.label "Verrouiller les onglets">
 <!ENTITY lockNewTabs.label "Verrouiller les nouveaux onglets">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Dupliquer l'onglet">
 <!ENTITY inversefocus2.label "Clic-milieu ou Ctrl-clic inverse le focus de :">
 <!ENTITY warning.caption.label "Avertissements">
-<!ENTITY warnOnCloseProtected.label "M'avertir à la fermeture d'une fenêtre contenant des onglets protégés">
-<!ENTITY warnOnCloseWindow.label "M'avertir à la fermeture d'une fenêtre qui comporte plusieurs onglets">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Fermeture du dernier onglet">
 <!ENTITY keepWindow.label.3.1 "Ne pas fermer la fenêtre lors de la fermeture du dernier onglet">
 <!ENTITY keeptab.label "Empêcher la fermeture du dernier onglet">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Afficher dans le menu contextuel de la barre d&apos;onglets :">
 <!ENTITY showContentAreaContext.label "Afficher dans le menu contextuel principal de la page courante :">
 <!ENTITY showToolsMenu.label "Afficher dans le menu des outils">
-<!ENTITY startupHomePage.label "Afficher ma page d'accueil">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Afficher une page blanche">
-<!ENTITY startupLastSession.label "Afficher mes fenêtres et onglets de la session précédente">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus a détecté que l'extension Session Manager est installée">
 <!ENTITY sm.extension.description2 "Le gestionnaire de session Tax Mix Plus est désactivé">
 <!ENTITY sm.extension.description3 "Vous pouvez cliquer sur le bouton situé à droite pour ouvrir les options de l'extension Session Manager">
-<!ENTITY sm.extension.description4 "Convertir les données de sessions Tab Mix Plus au format de l'extension Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Convertir">
-<!ENTITY sm.extension.chooseFile.label0 "Me laisser choisir quel fichier de données convertir">
 <!ENTITY sm.extension.chooseFile.label1 "Convertir les sessions Tab Mix Plus du profil courant">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Utiliser la fonctionnalité de restauration de sessions intégrée">
 <!ENTITY ss.enable.tooltip "Décocher pour autoriser l'utilisation avec le gestionnaire de sessions de Tabmix">
 <!ENTITY ss.advanced_setting "Réglages avancés">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Regrouper plusieurs fenêtres en une seule">
 <!ENTITY sm.restore.bypassCache "Ne pas utiliser le cache lors d'une restauration">
 <!ENTITY sm.notrestore.label "En cas de non restauration au démarrage">
-<!ENTITY sm.restorePinned.label "Restaurer mes onglets précédemment épinglés">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conserver dans les onglets :">
 <!ENTITY sm.preserve.history "Historique">
 <!ENTITY sm.preserve.protect "États de protection">

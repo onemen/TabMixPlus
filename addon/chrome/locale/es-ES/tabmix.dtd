@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Ocultar la barra de pestañas">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Cuando haya una sola pestaña">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "C">
 <!ENTITY hideTabBar.always.label "Siempre">
 <!ENTITY hideTabBar.always.key "S">

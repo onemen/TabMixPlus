@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "隐藏标签栏">
 <!ENTITY hideTabBar.never.label "不隐藏">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "只打开一个标签页时隐藏">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "总是隐藏">
 <!ENTITY hideTabBar.always.key "A">

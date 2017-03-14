@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Zlúčenie karty">
 <!ENTITY tabFeature.label "Vlastnosti karty">
 <!ENTITY newtab.label "Otvoriť na novú kartu:">
-<!ENTITY replaceLastTabWith.label "Pri zatvorení poslednej karty nahradiť s">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Prázdna stránka">
 <!ENTITY newtab.home "Domovská stránka">
 <!ENTITY newtab.current "Aktuálna stránka">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Načítať karty progresívne">
 <!ENTITY restoreOnDemand.label "Nenačítať karty pokiaľ nie sú vybraté">
-<!ENTITY moreThan.label "ak otvorým viac ako">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "karty">
 <!ENTITY lockTabs.label "Zamknúť karty">
 <!ENTITY lockNewTabs.label "Zamknúť nové karty">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplikovať kartu">
 <!ENTITY inversefocus2.label "Kliknutie prostredným tlačidlom alebo Ctrl-kliknutie inverzné zameranie:">
 <!ENTITY warning.caption.label "Upozornenie">
-<!ENTITY warnOnCloseProtected.label "Upozorniť pri zatváraní okna s chránenými kartami">
-<!ENTITY warnOnCloseWindow.label "Upozorniť pri zatváraní okna s viacerými kartami">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Zatváranie poslednej karty">
 <!ENTITY keepWindow.label.3.1 "Nezatvoriť okno pri zatvorení poslednej karty">
 <!ENTITY keeptab.label "Nepovoliť zatvorenie poslednej karty">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Zobraziť v panel Kontextová ponuka:">
 <!ENTITY showContentAreaContext.label "Zobraziť v Hlavná kontextová ponuka:">
 <!ENTITY showToolsMenu.label "Zobraziť v Nástroje:">
-<!ENTITY startupHomePage.label "Zobraziť domovskú stránku">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Zobraziť prázdnu stránku">
-<!ENTITY startupLastSession.label "Zobraziť okná a karty z posledného sedenia">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus zistil, že máte nainštalované rozšírenie Session Manager">
 <!ENTITY sm.extension.description2 "Správca relácií Tab Mix Plus bude vypnutý">
 <!ENTITY sm.extension.description3 "Môžete klinúť na tlačidlo vpravo pre otvorenie okna možnosti Session Manager">
-<!ENTITY sm.extension.description4 "Previesť údaje Moje ralácie z Tab Mix Plus formátu do formátu rozšírenia Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Previesť">
-<!ENTITY sm.extension.chooseFile.label0 "Umožniť, ktoré súbory údajov previesť">
 <!ENTITY sm.extension.chooseFile.label1 "Previesť relácie Tab Mix Plus z aktuálneho profilu">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Použiť zabudovanú obnovu relácie">
 <!ENTITY ss.enable.tooltip "Odznačiť pre použitie s Tabmix Manažér relácie">
 <!ENTITY ss.advanced_setting "Pokročilé nastavenia">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
 <!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
 <!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
-<!ENTITY sm.restorePinned.label "Obnoviť naposledy pripnuté karty">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Zachovať karty:">
 <!ENTITY sm.preserve.history "História">
 <!ENTITY sm.preserve.protect "Chrániť stav">

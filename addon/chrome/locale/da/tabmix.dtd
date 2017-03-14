@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Skjul fanebladslinjen">
 <!ENTITY hideTabBar.never.label "Aldrig">
 <!ENTITY hideTabBar.never.key "l">
-<!ENTITY hideTabBar.onOneTab.label "Når jeg kun har ét faneblad">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "N">
 <!ENTITY hideTabBar.always.label "Altid">
 <!ENTITY hideTabBar.always.key "A">

@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "پنهان کردن نوار برگه ها">
 <!ENTITY hideTabBar.never.label "هیچ وقت">
 <!ENTITY hideTabBar.never.key "و">
-<!ENTITY hideTabBar.onOneTab.label "هنگامی که یک برگه باز وجود دارد">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "ز">
 <!ENTITY hideTabBar.always.label "همیشه">
 <!ENTITY hideTabBar.always.key "ه">

@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Lapok eszköztár elrejtése">
 <!ENTITY hideTabBar.never.label "Soha">
 <!ENTITY hideTabBar.never.key "S">
-<!ENTITY hideTabBar.onOneTab.label "Ha csak egy lap van">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "e">
 <!ENTITY hideTabBar.always.label "Mindig">
 <!ENTITY hideTabBar.always.key "M">

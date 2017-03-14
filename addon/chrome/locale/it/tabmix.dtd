@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Visualizzazione della barra delle schede">
 <!ENTITY hideTabBar.never.label "Attiva sempre">
 <!ENTITY hideTabBar.never.key "v">
-<!ENTITY hideTabBar.onOneTab.label "Attiva quando è aperta più di una scheda">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "q">
 <!ENTITY hideTabBar.always.label "Disattiva">
 <!ENTITY hideTabBar.always.key "D">

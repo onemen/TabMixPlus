@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Slå ihop flikar">
 <!ENTITY tabFeature.label "Egenskaper">
 <!ENTITY newtab.label "Ladda vid ny flik:">
-<!ENTITY replaceLastTabWith.label "När jag stänger sista fliken ersätt den med">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Blank sida">
 <!ENTITY newtab.home "Startsidan">
 <!ENTITY newtab.current "Aktuell sida">
@@ -56,10 +56,10 @@
 <!ENTITY openTabNextInverse.label "Ändra öppningsordning">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Öppna ny flik intill den senaste fliken som öppnades från nuvarande flik (då den var senast markerad)">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY moveSwitchToTabNext.label "Flytta flik från &quot;Byt till flik&quot; intill nuvarande flik">
 <!ENTITY loadTabsProgressively.label "Läs in flikar progressivt">
 <!ENTITY restoreOnDemand.label "Läs inte in flikar förrän de väljs">
-<!ENTITY moreThan.label "när jag öppnar fler än">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "flikar">
 <!ENTITY lockTabs.label "Lås flikar">
 <!ENTITY lockNewTabs.label "Lås nya flikar">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicera flik">
 <!ENTITY inversefocus2.label "Invertera fokus vid mittenklick eller Ctrl-klick för:">
 <!ENTITY warning.caption.label "Varning">
-<!ENTITY warnOnCloseProtected.label "Varna mig när jag stänger fönster med skyddade flikar">
-<!ENTITY warnOnCloseWindow.label "Varna mig när jag stänger fönster med flera flikar">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Stäng sista fliken">
 <!ENTITY keepWindow.label.3.1 "Stäng inte fönster när sista fliken stängs">
 <!ENTITY keeptab.label "Förhindra att sista fliken stängs">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Visa i högerklicksmenyn för flikar">
 <!ENTITY showContentAreaContext.label "Visa i huvudhögerklicksmenyn">
 <!ENTITY showToolsMenu.label "Visa i verktygsmenyn">
-<!ENTITY startupHomePage.label "Visa min hemsida">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Visa en tom sida">
-<!ENTITY startupLastSession.label "Visa mina fönster och flikar från föregående session">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus har upptäckt att tillägget Session Manager är installerat">
 <!ENTITY sm.extension.description2 "Tab Mix Plus egen sessionshanterare kommer att inaktiveras">
 <!ENTITY sm.extension.description3 "Du kan klicka på knappen till höger för att öppna alternativdialogen för Session Manager">
-<!ENTITY sm.extension.description4 "Konvertera min sessionsdata från Tab Mix Plus-format till Session Manager-format">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Konvertera">
-<!ENTITY sm.extension.chooseFile.label0 "Låt mig välja vilken datafil som ska konverteras">
 <!ENTITY sm.extension.chooseFile.label1 "Konvertera Tab Mix Plus-sessioner från aktuell profil">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Använd Firefoxs inbyggda sessionsåterställare">
 <!ENTITY ss.enable.tooltip "Avmarkera för att använda Tab Mix Plus egen sessionshanterare">
 <!ENTITY ss.advanced_setting "Avancerade inställningar">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Slå ihop flera fönster till ett">
 <!ENTITY sm.restore.bypassCache "Kringgå cache vid återställning">
 <!ENTITY sm.notrestore.label "När ingen återställning görs vid start">
-<!ENTITY sm.restorePinned.label "Återställ mina fastnålade flikar från senaste gången">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Behåll flikar:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Status för skydd">

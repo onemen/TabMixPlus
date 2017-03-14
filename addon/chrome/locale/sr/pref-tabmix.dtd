@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Спајање картицa">
 <!ENTITY tabFeature.label "Својства картицe">
 <!ENTITY newtab.label "Учитај на новим картицама:">
-<!ENTITY replaceLastTabWith.label "Кад затворим последњу картицу, замени је">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "празном страницом">
 <!ENTITY newtab.home "почетном страницом">
 <!ENTITY newtab.current "тренутном страницом">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Закључај језичке">
 <!ENTITY lockNewTabs.label "Закључај нове језичке">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Дуплирај картицу">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Упозорење">
-<!ENTITY warnOnCloseProtected.label "Упозори ме приликом затварања прозора са заштићеним картицама">
-<!ENTITY warnOnCloseWindow.label "Упозори ме при затварању прозора са више картица">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Затварање последње картице">
 <!ENTITY keepWindow.label.3.1 "При затварању последње картице, не затварај цели прозор">
 <!ENTITY keeptab.label "Спречи затварање последње картице">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Прикажи у садржајном менију картице:">
 <!ENTITY showContentAreaContext.label "Прикажи у главном садржајном менију:">
 <!ENTITY showToolsMenu.label "Прикажи у менију алатки:">
-<!ENTITY startupHomePage.label "Прикажи моју веб страницу">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Прикажи празну страницу">
-<!ENTITY startupLastSession.label "Прикажи прозоре и картице од прошлог пута">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus је детектовао да је инсталиран додатак Session Manager">
 <!ENTITY sm.extension.description2 "Tab Mix Plus управљач сесијама ће бити онемогућен">
 <!ENTITY sm.extension.description3 "Кликните на дугме са десне стране да бисте отворили дијалог опција управљача сесијама">
-<!ENTITY sm.extension.description4 "Претвори податке из мојих сесија из формата Tab Mix Plus-а у формат Session Manager-а">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Конвертуј">
-<!ENTITY sm.extension.chooseFile.label0 "Пусти ме да изаберем коју датотеку да конвертујем">
 <!ENTITY sm.extension.chooseFile.label1 "Конвертуј Tab Mix Plus сесије из текућег профила">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Користи Фајерфоксову уграђену могућност обнављања сесија">
 <!ENTITY ss.enable.tooltip "Одштиклирајте да бисте омогућили употребу са Tab Mix Plus управљачем сесија">
 <!ENTITY ss.advanced_setting "Напредна подешавања">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Споји више прозора у један">
 <!ENTITY sm.restore.bypassCache "Прескочи кеш приликом враћања">
 <!ENTITY sm.notrestore.label "Када се не враћају картице при покретању">
-<!ENTITY sm.restorePinned.label "Врати моје закачене картице од прошлог пута">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "За картице очувај:">
 <!ENTITY sm.preserve.history "Историјат">
 <!ENTITY sm.preserve.protect "Заштићени статус">

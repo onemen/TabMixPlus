@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Объединение вкладок">
 <!ENTITY tabFeature.label "Настройки вкладок">
 <!ENTITY newtab.label "Открывать в новых вкладках:">
-<!ENTITY replaceLastTabWith.label "При закрытии последней вкладки заменять её">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Пустые страницы">
 <!ENTITY newtab.home "Домашнюю страницу">
 <!ENTITY newtab.current "Текущую страницу">
@@ -57,10 +57,10 @@
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Открывать новую вкладку сразу после последней вкладки, открытой с этой же страницы">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY loadTabsProgressively.label "Загружать вкладки прогрессивно,">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "вкладок">
 <!ENTITY lockTabs.label "Блокирование вкладок">
 <!ENTITY lockNewTabs.label "Блокировать новые вкладки">
 <!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">
@@ -82,10 +82,11 @@
 <!ENTITY contextMenuSearch.label "Поиск по контекстному меню">
 <!ENTITY selectTabBH.label "Закладки / Журнал посещений">
 <!ENTITY duplicateTab.label "Клонировать вкладку">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "СКМ или Ctrl+ЛКМ инвертирует фокус:">
 <!ENTITY warning.caption.label "Предупреждения">
-<!ENTITY warnOnCloseProtected.label "Предупреждать при закрытии окна с защищёнными вкладками">
-<!ENTITY warnOnCloseWindow.label "Предупреждать при закрытии окна с несколькими вкладками">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Закрытие последней вкладки">
 <!ENTITY keepWindow.label.3.1 "Не закрывать окно, когда закрывается последняя вкладка">
 <!ENTITY keeptab.label "Не закрывать последнюю вкладку, если панель вкладок всегда отображается">
@@ -142,7 +143,7 @@
 <!ENTITY dropIndicator.label "Индикатор перетаскивания">
 <!ENTITY dropIndicator-native.label "Встроенный стиль">
 <!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
-<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY verticalTabbar.description1 "Эти настройки контролируются другим расширением, управляющим вертикальными вкладками.">
 <!ENTITY tabBarPosition.label "Расположение панели:">
 <!ENTITY tabBarPosition.top.label "Сверху (над контентом)">
 <!ENTITY tabBarPosition.bottom.label "Снизу (под контентом)">
@@ -183,7 +184,7 @@
 <!ENTITY widthTo.label "до">
 <!ENTITY widthPixels.label "пикселей (30-1000)">
 <!ENTITY onLeftDisabled.label "Невозможно разместить кнопку слева при использовании текущей темы оформления">
-<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY onLeftDisabled.tst.label "Нельзя разместить кнопку слева, когда treeStyleTab установлено">
 <!ENTITY flexTabs.label "Выравнивать ширину вкладок по длине их заголовков">
 <!ENTITY bookastitle.label "Использовать имя закладки в качестве заголовка вкладки">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Состав контекстного меню панели вкладок:">
 <!ENTITY showContentAreaContext.label "Состав контекстного меню веб-страниц:">
 <!ENTITY showToolsMenu.label "Добавить в меню &apos;Инструменты&apos;:">
-<!ENTITY startupHomePage.label "Показывать домашнюю страницу">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Показывать пустую страницу">
-<!ENTITY startupLastSession.label "Показывать окна и вкладки открытые в последний раз">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus обнаружил, что установлено расширение Session Manager">
 <!ENTITY sm.extension.description2 "Менеджер сессий Tab Mix Plus будет отключён">
 <!ENTITY sm.extension.description3 "Вы можете нажать на кнопку справа, чтобы открыть окно настроек Session Manager">
-<!ENTITY sm.extension.description4 "Конвертировать данные о моих сессиях из формата Tab Mix Plus в формат расширения Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Конвертировать">
-<!ENTITY sm.extension.chooseFile.label0 "Позволить мне выбрать файлы с данными для конвертации">
 <!ENTITY sm.extension.chooseFile.label1 "Конвертировать сессии Tab Mix Plus из текущего профиля">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Использовать встроенную функцию восстановления сессий">
 <!ENTITY ss.enable.tooltip "Уберите галочку, чтобы использовать менеджер сессий Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Расширенные настройки">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Объединять несколько окон в одно">
 <!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
 <!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
-<!ENTITY sm.restorePinned.label "Восстанавливать прикреплённые вкладки">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">
 <!ENTITY sm.preserve.protect "Статус защиты">

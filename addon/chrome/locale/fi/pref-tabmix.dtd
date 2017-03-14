@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Välilehtien yhdistäminen">
 <!ENTITY tabFeature.label "Välilehtien ominaisuudet">
 <!ENTITY newtab.label "Lataa uusiin välilehtiin">
-<!ENTITY replaceLastTabWith.label "Suljettaessa viimeinen välilehti, korvaa se">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "tyhjällä sivulla">
 <!ENTITY newtab.home "kotisivulla">
 <!ENTITY newtab.current "Nykyisellä sivulla">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Warning">
-<!ENTITY warnOnCloseProtected.label "Warn me when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow.label "Warn me when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Closing last tab">
 <!ENTITY keepWindow.label.3.1 "Do not close window when closing last tab">
 <!ENTITY keeptab.label "Prevent last tab from closing">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Show in Tab Context Menu">
 <!ENTITY showContentAreaContext.label "Show in Main Context Menu">
 <!ENTITY showToolsMenu.label "Show in Tools Menu">
-<!ENTITY startupHomePage.label "Show my home page">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Show a blank page">
-<!ENTITY startupLastSession.label "Show my windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
 <!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
 <!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
-<!ENTITY sm.extension.description4 "Convert My sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Convert">
-<!ENTITY sm.extension.chooseFile.label0 "Let me choose which data file to convert">
 <!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Use Firefox&apos;s built-in Session Restore feature">
 <!ENTITY ss.enable.tooltip "Uncheck to allow the use with Tab Mix Plus Session Manager">
 <!ENTITY ss.advanced_setting "Advanced Setting">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Join multiple windows into one">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preserve Tabs:">
 <!ENTITY sm.preserve.history "History">
 <!ENTITY sm.preserve.protect "Protect Status">

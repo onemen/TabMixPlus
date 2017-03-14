@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Ocultar a barra do separador">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Quando tenho apenas um separador">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "e">
 <!ENTITY hideTabBar.always.label "Sempre">
 <!ENTITY hideTabBar.always.key "m">

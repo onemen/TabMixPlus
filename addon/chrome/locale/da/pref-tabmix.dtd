@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Faneblad-sammenlægning">
 <!ENTITY tabFeature.label "Faneblad-funktioner">
 <!ENTITY newtab.label "Indlæs på nye faneblade:">
-<!ENTITY replaceLastTabWith.label "Når jeg lukker sidste faneblad, erstat det med">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Blank side">
 <!ENTITY newtab.home "Hjemmeside">
 <!ENTITY newtab.current "Nuværende side">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Dupliker faneblad">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Advarsel">
-<!ENTITY warnOnCloseProtected.label "Advar ved lukning af vindue med beskyttede faneblade">
-<!ENTITY warnOnCloseWindow.label "Advar mig ved lukning af vindue med flere faneblade">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Lukning af sidste faneblad">
 <!ENTITY keepWindow.label.3.1 "Luk ikke vinduet når sidste faneblad lukkes">
 <!ENTITY keeptab.label "Forhindre sidste faneblad i at blive lukket">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Vis i faneblad kontekstmenu:">
 <!ENTITY showContentAreaContext.label "Vis i hoved kontekstmenu:">
 <!ENTITY showToolsMenu.label "Vis i Funktioner-menu:">
-<!ENTITY startupHomePage.label "Vis min hjemmeside">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Vis en blank side">
-<!ENTITY startupLastSession.label "Vis mine vinduer og faneblade fra sidste gang">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus kan se at Session Manager-udvidelsen er installeret">
 <!ENTITY sm.extension.description2 "Tab Mix Plus sessionsadministration vil blive deaktiveret">
 <!ENTITY sm.extension.description3 "Du kan klikke knappen til højre for at åbne Session Managers Indstillinger-dialog">
-<!ENTITY sm.extension.description4 "Konverter Mine sessionsdata fra Tab Mix Plus-format til Session Manager-udvidelsens format">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Konverter">
-<!ENTITY sm.extension.chooseFile.label0 "Lad mig vælge hvilke datafiler der skal konverteres">
 <!ENTITY sm.extension.chooseFile.label1 "Konverter Tab Mix Plus-sessioner fra den nuværende profil">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Brug indbygget sessions-genetablering">
 <!ENTITY ss.enable.tooltip "Fjern markering for at tillade brug af TabMix Sessionsadministration">
 <!ENTITY ss.advanced_setting "Avancerede indstillinger">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Foren flere vinduer til et">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Når der ikke genetableres ved start">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bevar faneblade:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Beskyt status">

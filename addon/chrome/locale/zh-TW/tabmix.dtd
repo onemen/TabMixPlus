@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "隱藏分頁工具列">
 <!ENTITY hideTabBar.never.label "永遠顯示">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "僅有一個分頁時隱藏">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "永遠隱藏">
 <!ENTITY hideTabBar.always.key "A">

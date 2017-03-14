@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Paslēpt ciļņu joslu">
 <!ENTITY hideTabBar.never.label "Nekad">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Kad atvērta tikai viena cilne">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "Vienmēr">
 <!ENTITY hideTabBar.always.key "V">

@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Tabs zusammenführen">
 <!ENTITY tabFeature.label "Tab-Funktionen">
 <!ENTITY newtab.label "Beim Öffnen eines neuen Tabs anzeigen:">
-<!ENTITY replaceLastTabWith.label "Beim Schließen des letzten Tabs diesen ersetzen durch">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "eine leere Seite">
 <!ENTITY newtab.home "die Startseite">
 <!ENTITY newtab.current "die aktuelle Seite">
@@ -56,10 +56,10 @@
 <!ENTITY openTabNextInverse.label "Reihenfolge beim Öffnen umkehren">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Neuen Tab öffnen neben dem zuletzt vom aktuellen Tab aus geöffneten Tab (solange dieser der zuletzt aktive ist)">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY moveSwitchToTabNext.label "Tab mit 'Zum Tab wechseln' neben den aktuellen Tab verschieben">
 <!ENTITY loadTabsProgressively.label "Progressives laden von Tabs">
 <!ENTITY restoreOnDemand.label "Tabs erst nach dem Auswählen laden">
-<!ENTITY moreThan.label "beim Öffnen von mehr als">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "Tabs">
 <!ENTITY lockTabs.label "Tabs sperren">
 <!ENTITY lockNewTabs.label "Neue Tabs sperren">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
 <!ENTITY inversefocus2.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
 <!ENTITY warning.caption.label "Warnhinweise">
-<!ENTITY warnOnCloseProtected.label "Warnen, wenn ein Fenster mit geschützten Tabs geschlossen werden soll">
-<!ENTITY warnOnCloseWindow.label "Warnen, wenn ein Fenster mit mehreren Tabs geschlossen werden soll">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Schließen des letzten Tabs">
 <!ENTITY keepWindow.label.3.1 "Fenster geöffnet lassen beim Schließen des letzten Tabs">
 <!ENTITY keeptab.label "Den letzten Tab nicht schließen">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Einträge im Tab-Kontextmenü anzeigen">
 <!ENTITY showContentAreaContext.label "Einträge im Hauptkontextmenü der Seite anzeigen">
 <!ENTITY showToolsMenu.label "Einträge im Menü &quot;Extras&quot; anzeigen">
-<!ENTITY startupHomePage.label "Startseite anzeigen">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Leere Seite anzeigen">
-<!ENTITY startupLastSession.label "Fenster und Tabs der letzten Sitzung anzeigen">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus hat festgestellt, dass die Erweiterung Session Manager installiert ist.">
 <!ENTITY sm.extension.description2 "Der Sitzungs-Manager von Tab Mix Plus wurde deaktiviert.">
 <!ENTITY sm.extension.description3 "Über die Schaltfläche auf der rechten Seite können Sie den Einstellungen-Dialog von Session Manager öffnen.">
-<!ENTITY sm.extension.description4 "Sitzungsdaten vom TMP-Format in das Format von Session Manager konvertieren">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Konvertieren">
-<!ENTITY sm.extension.chooseFile.label0 "Datei für die Konvertierung auswählen">
 <!ENTITY sm.extension.chooseFile.label1 "TMP-Sitzungen aus dem aktuellen Profil konvertieren">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Integrierte Sitzungswiederherstellung von Firefox verwenden">
 <!ENTITY ss.enable.tooltip "Deaktivieren, um den TMP-Sitzungs-Manager zu verwenden">
 <!ENTITY ss.advanced_setting "Erweiterte Einstellungen">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
 <!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
 <!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
-<!ENTITY sm.restorePinned.label "Angeheftete Tabs wieder herstellen">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">
 <!ENTITY sm.preserve.protect "den Geschützt-Status">

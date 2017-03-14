@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "タブのマージ">
 <!ENTITY tabFeature.label "タブ機能">
 <!ENTITY newtab.label "新しいタブに:">
-<!ENTITY replaceLastTabWith.label "最後のタブを閉じたときに">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "空白ページを表示">
 <!ENTITY newtab.home "ホームページを表示">
 <!ENTITY newtab.current "現在のページを表示">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "タブのロック">
 <!ENTITY lockNewTabs.label "新しいタブをロックする">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "複製したタブ">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "確認">
-<!ENTITY warnOnCloseProtected.label "保護されたタブのあるウィンドウを閉じるときは確認する">
-<!ENTITY warnOnCloseWindow.label "複数のタブがあるウィンドウを閉じるときは確認する">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "最後のタブを閉じるとき：">
 <!ENTITY keepWindow.label.3.1 "最後のタブを閉じたとき、ウィンドウ自体は閉じない">
 <!ENTITY keeptab.label "タブバーを常に表示するよう設定している場合、最後のタブを閉じられないようにする">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "タブのコンテキストメニューに表示する項目:">
 <!ENTITY showContentAreaContext.label "ページのコンテキストメニューに表示する項目:">
 <!ENTITY showToolsMenu.label "[ツール] メニューに表示する項目:">
-<!ENTITY startupHomePage.label "ホームページを表示する">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "空白ページを表示する">
-<!ENTITY startupLastSession.label "前回終了時のウィンドウとタブを表示する">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Session Manager がインストールされています">
 <!ENTITY sm.extension.description2 "Tab Mix Plus のセッションマネージャは無効になります">
 <!ENTITY sm.extension.description3 "右のボタンをクリックすると、セッションマネージャオプションのウィンドウが開きます">
-<!ENTITY sm.extension.description4 "セッションデータを Tab Mix Plus 形式から Session Manager 形式へ変換します">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "変換">
-<!ENTITY sm.extension.chooseFile.label0 "変換するファイルの選択">
 <!ENTITY sm.extension.chooseFile.label1 "現在のプロファイルの Tab Mix Plus のセッションデータを変換">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
 <!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
 <!ENTITY ss.advanced_setting "拡張設定">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
 <!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
-<!ENTITY sm.restorePinned.label "前回ピン留めしていたタブを復元する">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "タブで状態保持する項目:">
 <!ENTITY sm.preserve.history "履歴">
 <!ENTITY sm.preserve.protect "[タブを保護] の状態">

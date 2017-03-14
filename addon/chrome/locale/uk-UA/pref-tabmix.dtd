@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Об&apos;єднання вкладок">
 <!ENTITY tabFeature.label "Налаштування вкладок">
 <!ENTITY newtab.label "Відкривати в нових вкладках:">
-<!ENTITY replaceLastTabWith.label "Коли я закриваю останню вкладку замінити її на">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Пусті сторінки">
 <!ENTITY newtab.home "Домашню сторінку">
 <!ENTITY newtab.current "Поточну сторінку">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Заблокувати вкладки">
 <!ENTITY lockNewTabs.label "Заблокувати Нові вкладки">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Копія Вкладки">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Застереження">
-<!ENTITY warnOnCloseProtected.label "Попереджати при закритті вікна із захищеними вкладками">
-<!ENTITY warnOnCloseWindow.label "Повідомляти мене про закриття вікна з багатьма вкладками">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Закриття останньої вкладки">
 <!ENTITY keepWindow.label.3.1 "Не закривати вікно при закритті останньої вкладки">
 <!ENTITY keeptab.label "Не закривати останню вкладку, якщо панель вкладок завжди відображається">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Склад контекстного меню панелі вкладок:">
 <!ENTITY showContentAreaContext.label "Склад контекстного меню веб-сторінок:">
 <!ENTITY showToolsMenu.label "Додати в меню &apos;Інструменти&apos;:">
-<!ENTITY startupHomePage.label "Показувати домашню сторінку">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Показувати порожню сторінку">
-<!ENTITY startupLastSession.label "Показувати вікна і вкладки відкриті востаннє">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus виявив, що встановлений додаток Session Manager">
 <!ENTITY sm.extension.description2 "Менеджер сесій Tab Mix Plus буде відключений">
 <!ENTITY sm.extension.description3 "Ви можете натискувати на кнопку справа, щоб відкрити вікно налаштувань Session Manager">
-<!ENTITY sm.extension.description4 "Конвертувати дані про мої сесії з формату Tab Mix Plus у формат додатку Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Конвертувати">
-<!ENTITY sm.extension.chooseFile.label0 "Дозволити мені вибрати файли з даними для конвертації">
 <!ENTITY sm.extension.chooseFile.label1 "Конвертувати сесії Tab Mix Plus з поточного профілю">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Використовувати вбудовану функцію відновлення сесій">
 <!ENTITY ss.enable.tooltip "Приберіть галочку, щоб використовувати менеджер сесій Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Розширені налаштування">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Об&apos;єднувати декілька вікон в одне">
 <!ENTITY sm.restore.bypassCache "Не використовувати кеш під час відновлення">
 <!ENTITY sm.notrestore.label "Не відновлюючи під час старту">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Зберігати наступні параметри вкладок:">
 <!ENTITY sm.preserve.history "Журнал">
 <!ENTITY sm.preserve.protect "Статус захисту">
