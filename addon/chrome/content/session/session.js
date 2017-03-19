@@ -3251,6 +3251,10 @@ TabmixSessionManager = {
 
     var newIndex, aTab, loadOnStartup = [];
     if (newtabsCount > 0 && overwrite) {
+      // reset treeStyleTab data
+      if (Tabmix.extensions.treeStyleTab) {
+        gBrowser.treeStyleTab.resetAllTabs(true);
+      }
       // unpinned tabs reorder tabs, so we loop backward
       for (let i = gBrowser.tabs.length - 1; i >= 0; i--) {
         this.resetTab(gBrowser.tabs[i]);
