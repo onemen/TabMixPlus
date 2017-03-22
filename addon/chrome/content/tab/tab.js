@@ -174,6 +174,20 @@ var TabmixTabbar = {
     gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
+  updateTabsInTitlebarAppearance() {
+    if (this._enablePositionCheck &&
+        (this.isMultiRow && !this._updatingAppearance ||
+        this.getTabsPosition() != this._tabsPosition)) {
+      const rows = this.visibleRows;
+      this.updateScrollStatus();
+      if (!this._updatingAppearance && rows != this.visibleRows) {
+        this._updatingAppearance = true;
+        TabsInTitlebar.updateAppearance(true);
+        this._updatingAppearance = false;
+      }
+    }
+  },
+
   updateScrollStatus: function TMP_updateScrollStatus(delay) {
     if (delay) {
       if (this.updateScrollStatus.timeout) {

@@ -760,10 +760,9 @@ Tabmix.onContentLoaded = {
       )._replace(
         /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
-        '  if (TabmixTabbar._enablePositionCheck &&\n  ' +
-        '      TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition) {\n  ' +
-        '    TabmixTabbar.updateScrollStatus();\n  ' +
-        '  }\n' +
+        // force another update when rows number changed by Tabmix to update
+        // titlebar and titlebarContent height
+        '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
       ).toCode();
     }
