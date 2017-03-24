@@ -419,7 +419,14 @@
                                                  selected.left - scrollRect.left);
           }
 
-          if (!this._animateElement.hasAttribute("notifybgtab")) {
+          if (Tabmix.isVersion(540)) {
+            if (!this._animateElement.hasAttribute("highlight")) {
+              this._animateElement.setAttribute("highlight", "true");
+              setTimeout(ele => {
+                ele.removeAttribute("highlight");
+              }, 150, this._animateElement);
+            }
+          } else if (!this._animateElement.hasAttribute("notifybgtab")) {
             this._animateElement.setAttribute("notifybgtab", "true");
             setTimeout(ele => {
               ele.removeAttribute("notifybgtab");

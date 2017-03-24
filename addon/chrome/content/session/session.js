@@ -3234,7 +3234,12 @@ TabmixSessionManager = {
 
     let pending = Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand");
     function TMP_addTab() {
-      let newTab = gBrowser.addTab("about:blank", {skipAnimation: true, dontMove: true, isPending: pending});
+      let newTab = gBrowser.addTab("about:blank", {
+        skipAnimation: true,
+        skipBackgroundNotify: true,
+        dontMove: true,
+        isPending: pending
+      });
       // flag. dont save tab that are in restore phase
       newTab.setAttribute("inrestore", "true");
 
@@ -3396,6 +3401,7 @@ TabmixSessionManager = {
           skipAnimation: true,
           forceNotRemote,
           userContextId,
+          skipBackgroundNotify: true,
         });
         gBrowser.removeTab(tabToRemove);
         gBrowser.moveTabTo(tab, newIndex + t);
