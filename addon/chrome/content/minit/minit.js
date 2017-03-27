@@ -204,7 +204,7 @@ var TMP_tabDNDObserver = {
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       let captureListener;
-      let platform = gBrowser.AppConstants.platform;
+      let platform = AppConstants.platform;
       // On Windows and Mac we can update the drag image during a drag
       // using updateDragImage. On Linux, we can use a panel.
       if (Tabmix.isVersion(530) && (platform == "win" || platform == "macosx")) {
