@@ -673,6 +673,7 @@ var tablib = { // eslint-disable-line
 
     var loadURIWithFlags = Tabmix.isVersion(380) ?
         '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
+        '        triggeringPrincipal: typeof aTriggeringPrincipal == "undefined" ? 0 : aTriggeringPrincipal,\n' +
         '        flags: loadflags,\n' +
         '        referrerURI: aReferrer,\n' +
         '        referrerPolicy: aReferrerPolicy,\n' +
