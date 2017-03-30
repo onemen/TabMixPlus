@@ -52,7 +52,7 @@ var TMP_LastTab = {
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
                 .getService(Ci.nsIEventListenerService);
-    if (Tabmix.isVersion(320)) {
+    if (Tabmix.isVersion(320, 270)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
     } else {
       tabBox._eventNode.removeEventListener("keypress", tabBox);
@@ -85,7 +85,7 @@ var TMP_LastTab = {
                 .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
-    if (!Tabmix.isVersion(320))
+    if (!Tabmix.isVersion(320, 270))
       els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
     if (!Tabmix.isVersion(470)) {
       els.removeSystemEventListener(window, "focus", this, true);
@@ -191,7 +191,7 @@ var TMP_LastTab = {
   OnKeyDown(event) {
     this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
     Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-    if (Tabmix.isVersion(320))
+    if (Tabmix.isVersion(320, 270))
       this.OnKeyPress(event);
   },
 
