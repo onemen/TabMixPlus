@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Tab-Leiste ausblenden">
 <!ENTITY hideTabBar.never.label "nie">
 <!ENTITY hideTabBar.never.key "n">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Bei nur einem geöffneten Tab">
 <!ENTITY hideTabBar.onOneTab.key "e">
 <!ENTITY hideTabBar.always.label "immer">
 <!ENTITY hideTabBar.always.key "i">

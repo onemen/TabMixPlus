@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Peida kaartide riba">
 <!ENTITY hideTabBar.never.label "Mitte kunagi">
 <!ENTITY hideTabBar.never.key "M">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Kui avatud on ainult üks kaart">
 <!ENTITY hideTabBar.onOneTab.key "K">
 <!ENTITY hideTabBar.always.label "Alati">
 <!ENTITY hideTabBar.always.key "A">

@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Tabs zusammenführen">
 <!ENTITY tabFeature.label "Tab-Funktionen">
 <!ENTITY newtab.label "Beim Öffnen eines neuen Tabs anzeigen:">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "Beim Schließen des letzten Tabs diesen ersetzen durch:">
 <!ENTITY newtab.blank "eine leere Seite">
 <!ENTITY newtab.home "die Startseite">
 <!ENTITY newtab.current "die aktuelle Seite">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Tab mit 'Zum Tab wechseln' neben den aktuellen Tab verschieben">
 <!ENTITY loadTabsProgressively.label "Progressives laden von Tabs">
 <!ENTITY restoreOnDemand.label "Tabs erst nach dem Auswählen laden">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "beim Öffnen von mehr als">
 <!ENTITY tabs.label "Tabs">
 <!ENTITY lockTabs.label "Tabs sperren">
 <!ENTITY lockNewTabs.label "Neue Tabs sperren">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "Duplizierte Tabs">
 <!ENTITY inversefocus2.label "Verhalten beim Öffnen im Vorder-/Hintergrund mit Mittelklick oder Strg+Klick umkehren für:">
 <!ENTITY warning.caption.label "Warnhinweise">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Warnen, wenn mehrere Tabs geschlossen werden">
+<!ENTITY warnOnCloseProtected1.label "Warnen, wenn ein Fenster mit geschützten Tabs geschlossen werden soll">
+<!ENTITY warnOnCloseWindow1.label "Warnen, wenn ein Fenster mit mehreren Tabs geschlossen werden soll">
 <!ENTITY lasttab.caption.label "Schließen des letzten Tabs">
 <!ENTITY keepWindow.label.3.1 "Fenster geöffnet lassen beim Schließen des letzten Tabs">
 <!ENTITY keeptab.label "Den letzten Tab nicht schließen">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Einträge im Tab-Kontextmenü anzeigen">
 <!ENTITY showContentAreaContext.label "Einträge im Hauptkontextmenü der Seite anzeigen">
 <!ENTITY showToolsMenu.label "Einträge im Menü &quot;Extras&quot; anzeigen">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "Startseite anzeigen">
 <!ENTITY startupBlankPage.label "Leere Seite anzeigen">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Fenster und Tabs der letzten Sitzung anzeigen">
 <!ENTITY sm.extension.description1 "Tab Mix Plus hat festgestellt, dass die Erweiterung Session Manager installiert ist.">
 <!ENTITY sm.extension.description2 "Der Sitzungs-Manager von Tab Mix Plus wurde deaktiviert.">
 <!ENTITY sm.extension.description3 "Über die Schaltfläche auf der rechten Seite können Sie den Einstellungen-Dialog von Session Manager öffnen.">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Konvertieren Sie Ihre Sitzungsdaten aus dem Tab Mix Plus-Format in das Session Manager-Erweiterungsformat">
 <!ENTITY sm.extension.convert.label "Konvertieren">
 <!ENTITY sm.extension.chooseFile.label1 "TMP-Sitzungen aus dem aktuellen Profil konvertieren">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Datendatei zum Konvertieren auswählen">
 <!ENTITY ss.enable.label "Integrierte Sitzungswiederherstellung von Firefox verwenden">
 <!ENTITY ss.enable.tooltip "Deaktivieren, um den TMP-Sitzungs-Manager zu verwenden">
 <!ENTITY ss.advanced_setting "Erweiterte Einstellungen">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
 <!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
 <!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Angeheftete Tabs wieder herstellen">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">
 <!ENTITY sm.preserve.protect "den Geschützt-Status">

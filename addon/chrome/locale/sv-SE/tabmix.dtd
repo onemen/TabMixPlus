@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Göm flikfältet">
 <!ENTITY hideTabBar.never.label "Aldrig">
 <!ENTITY hideTabBar.never.key "A">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "När endast en flik finns">
 <!ENTITY hideTabBar.onOneTab.key "e">
 <!ENTITY hideTabBar.always.label "Alltid">
 <!ENTITY hideTabBar.always.key "l">

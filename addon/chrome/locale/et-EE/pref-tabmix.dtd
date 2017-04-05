@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Kaartide ühendamine">
 <!ENTITY tabFeature.label "Kaartide funktsioonid">
 <!ENTITY newtab.label "Uue kaardi avamisel näita:">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "Viimase kaardi sulgemisel näidatakse selle asemel">
 <!ENTITY newtab.blank "tühja lehte">
 <!ENTITY newtab.home "avalehte">
 <!ENTITY newtab.current "praegust lehte">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Funktsiooni 'Vaheta kaarti' kasutamisel teisalda sihtkaart praeguse kõrvale">
 <!ENTITY loadTabsProgressively.label "Laadi kaardid järk-järgult">
 <!ENTITY restoreOnDemand.label "Ära laadi kaarte enne nende valimist">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "kui avatakse rohkem kui">
 <!ENTITY tabs.label "kaarti">
 <!ENTITY lockTabs.label "Lukusta kaardid">
 <!ENTITY lockNewTabs.label "Lukusta uued kaardid">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "Tee kaardist koopia">
 <!ENTITY inversefocus2.label "Hiire keskmise nupuga või Control-klõpsamine pöörab nende fookuse:">
 <!ENTITY warning.caption.label "Hoiatus">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Hoiatatakse, kui olen sulgemas mitut kaarti">
+<!ENTITY warnOnCloseProtected1.label "Hoiatatakse, kui olen sulgemas kaitstud kaartidega akent">
+<!ENTITY warnOnCloseWindow1.label "Hoiatatakse, kui olen sulgemas mitme kaardiga akent">
 <!ENTITY lasttab.caption.label "Viimase kaardi sulgemine">
 <!ENTITY keepWindow.label.3.1 "Viimase kaardi sulgemisel ära sulge akent">
 <!ENTITY keeptab.label "Ära luba viimast kaarti sulgeda">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Kaardi hüpikmenüüs näidatakse:">
 <!ENTITY showContentAreaContext.label "Peamises hüpikmenüüs näidatakse:">
 <!ENTITY showToolsMenu.label "Menüüs 'Tööriistad' näidatakse:">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "Kuvatakse avalehte">
 <!ENTITY startupBlankPage.label "Kuvatakse tühja lehte">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Kuvatakse viimati lahti olnud aknaid ja kaarte">
 <!ENTITY sm.extension.description1 "Tab Mix Plus tuvastas, et paigaldatud on lisa Session Manager">
 <!ENTITY sm.extension.description2 "Tab Mix Plus'i Seansside halduri kasutamine keelatakse">
 <!ENTITY sm.extension.description3 "Sa võid Seansside halduri sätete dialoogiakna avamiseks klõpsata paremal oleval nupul">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Teisenda oma seansside andmed Tab Mix Plusi formaadist laienduse Session Manager formaati">
 <!ENTITY sm.extension.convert.label "Teisenda">
 <!ENTITY sm.extension.chooseFile.label1 "Teisenda praeguse kasutajaprofiili Tab Mix Plus'i seansid">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Vali, millist andmefaili teisendada">
 <!ENTITY ss.enable.label "Kasuta Firefoxi sisseehitatud seansi taastamise funktsiooni">
 <!ENTITY ss.enable.tooltip "Tab Mix Plus'i Seansside halduri kasutamiseks eemalda märgistus">
 <!ENTITY ss.advanced_setting "Täpsemad sätted">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Ühenda kõik aknad">
 <!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
 <!ENTITY sm.notrestore.label "Kui käivitumisel seanssi ei taastata, siis">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Taasta oma viimase seansi püsikaardid">
 <!ENTITY sm.preserve.options "Jäta meelde kaartide:">
 <!ENTITY sm.preserve.history "Ajalugu">
 <!ENTITY sm.preserve.protect "Kaitstuse olek">
