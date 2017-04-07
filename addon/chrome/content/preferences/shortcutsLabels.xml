@@ -40,6 +40,19 @@
              switchToLast="&shortcuts.switchToLast;"
              >
     </content>
+    <implementation>
+      <constructor>
+        <![CDATA[
+          let {keys} = Cu.import("resource://tabmixplus/Shortcuts.jsm", {}).Shortcuts;
+          for (let att of this.attributes) {
+            if (keys[att.name]) {
+              keys[att.name].label = att.value;
+            }
+          }
+          this.remove();
+        ]]>
+      </constructor>
+    </implementation>
   </binding>
 
 </bindings>

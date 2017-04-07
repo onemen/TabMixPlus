@@ -76,22 +76,12 @@ this.Shortcuts = {
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
     let $ = id => id && aWindow.document.getElementById(id);
-    let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
-    let labels = {};
+    let container = $("TabsToolbar");
     if (container) {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      for (let att of box.attributes) {
-        labels[att.name] = att.value;
-      }
-      box.remove();
     }
-    labels.togglePinTab =
-      $("context_pinTab").getAttribute("label") + "/" +
-      $("context_unpinTab").getAttribute("label");
-    labels.clearClosedTabs =
-      TabmixSvc.getString("undoclosetab.clear.label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       // get default value for all keys
@@ -109,11 +99,15 @@ this.Shortcuts = {
         }
       }
       keyData.value = keyData.default || "";
-      if (container && key in labels)
-        keyData.label = labels[key];
-      else if (!container && !key.id)
+      if (!container && !key.id) {
         keyData.label = "tabmix_key_" + key;
+      }
     }
+    this.keys.togglePinTab.label =
+        $("context_pinTab").getAttribute("label") + "/" +
+        $("context_unpinTab").getAttribute("label");
+    this.keys.clearClosedTabs.label =
+        TabmixSvc.getString("undoclosetab.clear.label");
 
     if (aWindow.keyconfig) {
       this.keyConfigInstalled = true;
