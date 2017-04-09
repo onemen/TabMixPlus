@@ -2454,6 +2454,13 @@ TabmixSessionManager = {
 
     let state = this.setLastSession();
     let iniState = TabmixSvc.SessionStore._prepDataForDeferredRestore(state)[0];
+    // prepDataForDeferredRestore set wrong selected index when the selected tab
+    // was pinned tab
+    for (let win of iniState.windows) {
+      if (win.tabs.length < win.selected) {
+        win.selected = 1;
+      }
+    }
     let pinnedExist = iniState.windows.length > 0;
     if (pinnedExist) {
       // move all tabs and closed tabs into one window
@@ -2464,7 +2471,8 @@ TabmixSessionManager = {
       let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
       if (Tabmix.isVersion(260)) {
         let options = {firstWindow: true, overwriteTabs: overwrite};
-        TabmixSvc.SessionStore.restoreWindow(window, iniState, options);
+        const restoreFunction = Tabmix.isVersion(400) ? "restoreWindows" : "restoreWindow";
+        TabmixSvc.SessionStore[restoreFunction](window, iniState, options);
       } else {
         iniState._firstTabs = true;
         TabmixSvc.SessionStore.restoreWindow(window, iniState, overwrite);
