@@ -310,10 +310,10 @@ TabmixSessionManager = {
     XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
       "resource://tabmixplus/TabGroupsMigrator.jsm");
 
-    // just in case tablib isn't init yet
+    // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
     // we can get here before the browser window is loaded
-    tablib.init();
+    Tabmix.tablib.init();
 
     var _afterTabduplicated = "_afterTabduplicated" in Tabmix && Tabmix._afterTabduplicated;
     var isFirstWindow = (Tabmix.isFirstWindow || this.firstNonPrivateWindow) && !_afterTabduplicated;
@@ -484,7 +484,7 @@ TabmixSessionManager = {
       focusAndSelectUrlBar();
   },
 
-  // calls from: tablib.closeWindow, this.onWindowClose and this.canQuitApplication
+  // calls from: Tabmix.tablib.closeWindow, this.onWindowClose and this.canQuitApplication
   deinit: function SM_deinit(aLastWindow, askBeforeSave, aPopUp) {
     // When Exit Firefox:
     //       pref "extensions.tabmix.sessions.onClose"

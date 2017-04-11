@@ -681,7 +681,7 @@ Tabmix.tabsUtils = {
       tab.tabmix_allowLoad = false;
     }
     if ("linkedBrowser" in tab)
-      tablib.setLoadURIWithFlags(tab.linkedBrowser);
+      Tabmix.tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
     Tabmix.initialization.run("beforeStartup", tabbrowser, this.tabBar);
   },
@@ -2803,7 +2803,7 @@ TabmixProgressListener = {
           TabmixSessionManager.tabLoaded(tab);
           // we need to remove width from tabs with url label from here
           if (tab.hasAttribute("width")) {
-            tablib.onTabTitleChanged(tab, aBrowser);
+            Tabmix.tablib.onTabTitleChanged(tab, aBrowser);
           }
         }
       }

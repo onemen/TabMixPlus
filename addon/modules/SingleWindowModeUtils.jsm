@@ -118,7 +118,7 @@ this.SingleWindowModeUtils = {
     }
 
     var existingBrowser = existingWindow.gBrowser;
-    existingWindow.tablib.init(); // just in case tablib isn't init yet
+    existingWindow.Tabmix.tablib.init(); // just in case Tabmix.tablib isn't init yet
     var uriToLoad = args[0];
 
     var urls = [];

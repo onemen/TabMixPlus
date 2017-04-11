@@ -1,10 +1,11 @@
 "use strict";
 
-if (!window.tablib || window.tablib.version != "tabmixplus")
-var tablib = { // eslint-disable-line
+Tabmix.backwardCompatibilityGetter(window, "tablib", "Tabmix.tablib");
+
+Tabmix.tablib = {
   version: "tabmixplus",
   _inited: false,
-  init: function TMP_tablib_init() {
+  init: function tabmix_tablib_init() {
     if (this._inited)
       return;
     this._inited = true;
@@ -15,7 +16,7 @@ var tablib = { // eslint-disable-line
   },
 
   _loadURIWithFlagsInitialized: false,
-  setLoadURIWithFlags: function tablib_setLoadURIWithFlags(aBrowser) {
+  setLoadURIWithFlags: function tabmix_tablib_setLoadURIWithFlags(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
@@ -41,7 +42,7 @@ var tablib = { // eslint-disable-line
         }
 
         // if we redirected the load request to a new tab return it
-        const tabmixResult = tablib._loadURIWithFlags.apply(null, arg0.concat(args));
+        const tabmixResult = Tabmix.tablib._loadURIWithFlags.apply(null, arg0.concat(args));
         if (tabmixResult) {
           return tabmixResult;
         }
@@ -55,7 +56,7 @@ var tablib = { // eslint-disable-line
   },
 
   _loadURIWithFlags(browser, uri, params) {
-    if (tablib.allowLoad(browser, uri)) {
+    if (Tabmix.tablib.allowLoad(browser, uri)) {
       return null;
     }
     // redirect load request to a new tab
@@ -267,7 +268,7 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")._replace(
       'this._blurTab(aTab);',
-      'tablib.onRemoveTab(aTab); \
+      'Tabmix.tablib.onRemoveTab(aTab); \
        if (Services.prefs.getBoolPref("browser.tabs.animate")) { \
          TMP_eventListener.onTabClose_updateTabBar(aTab);\
        } \
@@ -330,7 +331,7 @@ var tablib = { // eslint-disable-line
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       'var title = browser.contentTitle;',
       '$&\
-       var urlTitle, title = tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
+       var urlTitle, title = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
     )._replace(
       'title = textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
       '$&\
@@ -343,14 +344,14 @@ var tablib = { // eslint-disable-line
        if (aTab.hasAttribute("tabmix_changed_label")) {\
          aTab.removeAttribute("tabmix_changed_label");\
          if (noChange)\
-           tablib.onTabTitleChanged(aTab, browser, title == urlTitle);\
+           Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);\
        }\
        else if (noChange)\
          TMP_Places.currentTab = null;\
        $&'
     )._replace(
       'this._tabAttrModified',
-      `tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
+      `Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
             $&`
     ).toCode();
 
@@ -570,10 +571,10 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
-      'tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
+      'Tabmix.tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
-      'tablib.contentAreaOnDrop(event, data.url, data.postData);',
+      'Tabmix.tablib.contentAreaOnDrop(event, data.url, data.postData);',
       {check: !Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
     )._replace(
       'let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;',
@@ -582,7 +583,7 @@ var tablib = { // eslint-disable-line
       {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
     )._replace(
       'replace: true',
-      'replace: (tabmixContentDrop || tablib.whereToOpenDrop(event, urls[0])) != "tab"',
+      'replace: (tabmixContentDrop || Tabmix.tablib.whereToOpenDrop(event, urls[0])) != "tab"',
       {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
     ).toCode();
     // update current browser
@@ -628,10 +629,10 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
       'closeWindow(true);', // Mac
-      'tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
+      'Tabmix.tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
     )._replace(
       'gBrowser.removeCurrentTab({animate: true})',
-      'tablib.closeLastTab();'
+      'Tabmix.tablib.closeLastTab();'
     ).toCode();
 
     // hide open link in window in single window mode
@@ -688,7 +689,7 @@ var tablib = { // eslint-disable-line
        $&'
     )._replace(
       'win.BrowserOpenTab()',
-      'if (currentIsBlank) tablib.setURLBarFocus(); \
+      'if (currentIsBlank) Tabmix.tablib.setURLBarFocus(); \
       else $&'
     )._replace(
       '"browser.tabs.loadDivertedInBackground"',
@@ -806,10 +807,10 @@ var tablib = { // eslint-disable-line
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
       'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
-      'tablib.closeWindow(true)', {flags: "g"}
+      'Tabmix.tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
-      'if (!TabmixSvc.isMac && !tablib.closeWindow(true)) return false;\
+      'if (!TabmixSvc.isMac && !Tabmix.tablib.closeWindow(true)) return false;\
        $&'
     ).toCode();
 
@@ -820,7 +821,7 @@ var tablib = { // eslint-disable-line
       'if (!closeWindow(false, warnAboutClosingWindow))',
       'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
        if (reallyClose && !Tabmix._warnedBeforeClosing)\
-         reallyClose = tablib.closeWindow();\
+         reallyClose = Tabmix.tablib.closeWindow();\
        if (!reallyClose)'
     ).toCode();
 
@@ -885,7 +886,7 @@ var tablib = { // eslint-disable-line
       '                                   document.getElementById(arguments[0]);'
     )._replace(
       /(})(\)?)$/,
-      '  tablib.populateUndoWindowSubmenu(undoPopup);\n' +
+      '  Tabmix.tablib.populateUndoWindowSubmenu(undoPopup);\n' +
       '$1$2'
     ).toCode();
 
@@ -1104,7 +1105,7 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openLinkWithHistory = function() {
-      var url = tablib.getValidUrl();
+      var url = Tabmix.tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1124,7 +1125,7 @@ var tablib = { // eslint-disable-line
     };
 
     gBrowser.openInverseLink = function(event) {
-      var url = tablib.getValidUrl();
+      var url = Tabmix.tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1134,8 +1135,8 @@ var tablib = { // eslint-disable-line
       Tabmix.originalFunctions.openInverseLink.call(gContextMenu, event);
     };
 
-    tablib.openLinkInCurrent = function() {
-      var url = tablib.getValidUrl();
+    Tabmix.tablib.openLinkInCurrent = function() {
+      var url = Tabmix.tablib.getValidUrl();
       if (!url)
         return;
 
@@ -1144,7 +1145,7 @@ var tablib = { // eslint-disable-line
       gContextMenu.openLinkInCurrent();
     };
 
-    tablib.getValidUrl = function() {
+    Tabmix.tablib.getValidUrl = function() {
       if (!gContextMenu) {
         return null;
       }
@@ -1307,7 +1308,7 @@ var tablib = { // eslint-disable-line
       if (aTab._tPos > this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
-      tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
+      Tabmix.tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
     };
 
     gBrowser.reloadRightTabs = function(aTab) {
@@ -1317,7 +1318,7 @@ var tablib = { // eslint-disable-line
       if (aTab._tPos < this.mCurrentTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
-      tablib.reloadTabs(childNodes.slice(tabPos + 1));
+      Tabmix.tablib.reloadTabs(childNodes.slice(tabPos + 1));
     };
 
     gBrowser.reloadAllTabsBut = function(aTab) {
@@ -1325,7 +1326,7 @@ var tablib = { // eslint-disable-line
         aTab = this.mCurrentTab;
       else
         this.selectedTab = aTab;
-      tablib.reloadTabs(this.visibleTabs, aTab);
+      Tabmix.tablib.reloadTabs(this.visibleTabs, aTab);
     };
 
     gBrowser.lockTab = function(aTab) {
@@ -1523,7 +1524,7 @@ var tablib = { // eslint-disable-line
       {value: {ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5}, writable: false});
 
     let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
-      // see tablib.closeWindow comment
+      // see Tabmix.tablib.closeWindow comment
       if (Tabmix.callerTrace("BG__onQuitRequest")) {
         return true;
       }
@@ -1705,7 +1706,7 @@ var tablib = { // eslint-disable-line
           aTab.owner = this.selectedTab;
         this.selectedTab = aTab;
         if (aUrl && Tabmix.isNewTabUrls(aUrl))
-          tablib.setURLBarFocus();
+          Tabmix.tablib.setURLBarFocus();
       }
     };
 
@@ -1974,7 +1975,7 @@ var tablib = { // eslint-disable-line
     }
   }
 
-}; // end tablib
+}; // end Tabmix.tablib
 
 Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
   return this.newTabUrls.indexOf(aUrl) > -1;

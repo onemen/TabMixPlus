@@ -170,7 +170,7 @@ var TabmixTabClickOptions = {
         gBrowser.lockTab(aTab);
         break;
       case 7 :
-        tablib.reloadTabs(gBrowser.visibleTabs);
+        Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);
         break;
       case 8:
         gBrowser.removeAllTabsBut(aTab);
@@ -658,7 +658,7 @@ var TabmixContext = {
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {
-        gContextMenu.tabmixLinkURL = tablib.getValidUrl();
+        gContextMenu.tabmixLinkURL = Tabmix.tablib.getValidUrl();
       }
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");

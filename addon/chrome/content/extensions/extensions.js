@@ -586,9 +586,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
   preInit() {
     let tstHelper = TreeStyleTabWindowHelper;
     if (typeof tstHelper.overrideExtensionsPreInit == "function") {
-      // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in tablib.init
-      tablib._init = tablib.init;
-      tablib.init = function() {
+      // overrideExtensionsPreInit look for 'gBrowser.restoreTab' in Tabmix.tablib.init
+      Tabmix.tablib._init = Tabmix.tablib.init;
+      Tabmix.tablib.init = function() {
         this._init();
         /*
           var newTab = null

@@ -429,7 +429,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
     try {
-      tablib.init();
+      Tabmix.tablib.init();
     } catch (ex) {
       Tabmix.assert(ex);
     }
@@ -776,7 +776,7 @@ var TMP_eventListener = {
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;
     TMP_LastTab.attachTab(tab);
-    tablib.setLoadURIWithFlags(tab.linkedBrowser);
+    Tabmix.tablib.setLoadURIWithFlags(tab.linkedBrowser);
     if (TabmixTabbar.lockallTabs) {
       tab.setAttribute("locked", "true");
       tab.tabmix_allowLoad = false;

@@ -83,7 +83,7 @@ this.TabmixUtils = {
         const {json, links, name} = message.data;
         const url = links[0].url;
         win = browser.ownerGlobal;
-        const where = win.tablib.whereToOpenDrop(json, url);
+        const where = win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           if (TabmixSvc.version(520)) {
             links[0].tabmixContentDrop = "tab";

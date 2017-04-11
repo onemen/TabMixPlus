@@ -53,7 +53,7 @@
 <!--
         replace "context_reloadAllTabs" oncommand
 -->
-        <menuitem id="context_reloadAllTabs" oncommand="tablib.reloadTabs(gBrowser.visibleTabs);" />
+        <menuitem id="context_reloadAllTabs" oncommand="Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);" />
         <menuitem id="tm-reloadOther" insertafter="context_reloadAllTabs"
                  label="&reloadother.label;" accesskey="&reloadother.accesskey;"
                  oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />

@@ -108,7 +108,7 @@
 
     <popup id="contentAreaContextMenu">
       <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
-                oncommand="tablib.openLinkInCurrent();"/>
+                oncommand="Tabmix.tablib.openLinkInCurrent();"/>
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"
