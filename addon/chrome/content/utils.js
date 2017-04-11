@@ -117,14 +117,14 @@ var Tabmix = {
     let err = Error(aOldName + " is deprecated in Tabmix, use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
     let stack = Error().stack.split("\n").slice(3);
-    let file = stack[0] ? stack[0].split(":") : null;
-    if (file) {
-      let [path, line] = file;
-      let index = path.indexOf("/", 2) - 3;
+    let stackData = stack[0] ? stack[0].split("@") : null;
+    if (stackData && stackData.length == 2) {
+      let [path, line] = stackData[1].replace("chrome://", "").split(":");
+      let index = path.indexOf("/") - 1;
       let extensionName = index > -1 ?
-         path.charAt(2).toUpperCase() + path.substr(3, index) + " " : "";
+         path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\nfile: chrome:" + path + "\nline: " + line +
+                 " from:\nfile: chrome://" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
                  (extensionName ? (" and " + extensionName + "developer.") : "."));
     } else {
