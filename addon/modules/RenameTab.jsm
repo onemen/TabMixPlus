@@ -28,8 +28,8 @@ this.RenameTab = {
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle = aTab.hasAttribute("pending") ?
-          this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
-          browser.contentTitle;
+      this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
+      browser.contentTitle;
     this.data.url = browser.currentURI.spec;
     this.data.docTitle = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
       docTitle, null, aTab);

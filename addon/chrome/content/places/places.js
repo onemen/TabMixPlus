@@ -119,7 +119,7 @@ var TMP_Places = {
   openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
     let where = this.isBookmarklet(aUri) ? "current" :
-                this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
+      this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
@@ -217,7 +217,7 @@ var TMP_Places = {
         if (!historySelected)
           return this.prefBookmark;
       }
-        /* falls through */
+      /* falls through */
       case "chrome://browser/content/history/history-panel.xul":
         return this.prefHistory;
       case "chrome://browser/content/browser.xul":
@@ -238,10 +238,10 @@ var TMP_Places = {
     var openTabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-        Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
+      Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
-        Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
-        Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+      Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
+      Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
@@ -277,7 +277,7 @@ var TMP_Places = {
 
     var tabToSelect = null;
     var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
-                   gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
+      gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
@@ -379,7 +379,7 @@ var TMP_Places = {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
     let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
-                                         "restoreHistoryPrecursor";
+      "restoreHistoryPrecursor";
     TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
     // set icon on pending tabs
     const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
@@ -839,7 +839,7 @@ Tabmix.onContentLoaded = {
       '  var bookMarkId            = params.bookMarkId;'
     )._replace(
       'where == "current" && #1.pinned'
-        .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
+          .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
       '$& && !params.suppressTabsOnFileDownload',
       {check: !Tabmix.isVersion(530)}
     )._replace(

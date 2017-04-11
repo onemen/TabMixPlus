@@ -51,7 +51,7 @@ this.console = {
         let result = "", isObj = typeof aMethod == "object";
         if (typeof aMethod != "function") {
           result = isObj ? aMethod.obj[aMethod.name] :
-                this.getObject(aWindow, aMethod);
+            this.getObject(aWindow, aMethod);
           result = " = " + result.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
@@ -181,15 +181,15 @@ this.console = {
     return stackUtil;
   },
 
-/*
-options = {
-  msg: msg
-  log: true / false; default true
-  function: true / false default false
-  deep: true / false default false
-  offset; for internal use only true / false default false
-}
-*/
+  /*
+  options = {
+    msg: msg
+    log: true / false; default true
+    function: true / false default false
+    deep: true / false default false
+    offset; for internal use only true / false default false
+  }
+  */
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     if (!aObj || typeof aObj != "object") {
       let msg = "log.obj was called with non-object argument\n";

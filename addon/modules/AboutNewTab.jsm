@@ -43,7 +43,7 @@ AboutNewTabInternal = {
     let tabBrowser = window.gBrowser;
     let tabPanels = tabBrowser.mPanelContainer.childNodes;
     let browsers = Array.prototype.map.call(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
-                        .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
+        .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
     browsers.forEach(browser => this.updateBrowser(browser));
   },
 
@@ -79,8 +79,8 @@ AboutNewTabInternal = {
       if (TabmixSvc.version(400)) {
         let tabmixTitle = TabmixPlacesUtils.getTitleFromBookmark(url, site.title);
         title = enhancedTitle ? enhancedTitle :
-                site.link.type == "history" ? site.link.baseDomain :
-                tabmixTitle;
+          site.link.type == "history" ? site.link.baseDomain :
+            tabmixTitle;
         tooltip = (tabmixTitle == url ? tabmixTitle : tabmixTitle + "\n" + url);
       } else {
         title = enhancedTitle ||

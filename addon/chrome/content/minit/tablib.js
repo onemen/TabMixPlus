@@ -260,7 +260,7 @@ Tabmix.tablib = {
       let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true})';
       let aboutNewtab = 'this.addTab(BROWSER_NEW_TAB_URL, {skipAnimation: true})';
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutNewtab) > -1 ?
-                 aboutNewtab : aboutBlank;
+        aboutNewtab : aboutBlank;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
         code, 'TMP_BrowserOpenTab(null, null, true)'
       ).toCode();
@@ -607,7 +607,7 @@ Tabmix.tablib = {
       }
 
       let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-          "openTabNext" : "openDuplicateNext";
+        "openTabNext" : "openDuplicateNext";
       let openTabNext = Tabmix.prefs.getBoolPref(pref);
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
 
@@ -669,19 +669,19 @@ Tabmix.tablib = {
     let TSTopenURI = Tabmix.extensions.treeStyleTab &&
         typeof fnObj.__treestyletab__openURI == "function" ? "__treestyletab__openURI" : "";
     [fnName, arg] = Tabmix.isVersion(260) ? ["_openURIInNewTab", "aIsExternal"] :
-                                            [TSTopenURI || "openURI", "isExternal"];
+      [TSTopenURI || "openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
 
     var loadURIWithFlags = Tabmix.isVersion(380) ?
-        '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
-        '        triggeringPrincipal: typeof aTriggeringPrincipal == "undefined" ? 0 : aTriggeringPrincipal,\n' +
-        '        flags: loadflags,\n' +
-        '        referrerURI: aReferrer,\n' +
-        '        referrerPolicy: aReferrerPolicy,\n' +
-        '        userContextId: typeof aUserContextId == "undefined" ? 0 : aUserContextId,\n' +
-        '      });' :
-        '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
-        .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
+      '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
+      '        triggeringPrincipal: typeof aTriggeringPrincipal == "undefined" ? 0 : aTriggeringPrincipal,\n' +
+      '        flags: loadflags,\n' +
+      '        referrerURI: aReferrer,\n' +
+      '        referrerPolicy: aReferrerPolicy,\n' +
+      '        userContextId: typeof aUserContextId == "undefined" ? 0 : aUserContextId,\n' +
+      '      });' :
+      '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
+          .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
 
     _openURI = _openURI._replace(
       'if (#1 && (!aURI || aURI.spec == "'.replace("#1", arg) + TabmixSvc.aboutBlank + '")) {',
@@ -837,7 +837,7 @@ Tabmix.tablib = {
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
       'window = #1.undoCloseWindow(aIndex || 0);'
-        .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
+          .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
           window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
        }\
@@ -874,7 +874,7 @@ Tabmix.tablib = {
       '$& \
        let SM = TabmixSessionManager;\
        Tabmix.setItem("Browser:RestoreLastSession", "disabled", !SM.canRestoreLastSession || SM.isPrivateWindow);',
-       {check: Tabmix.prefs.getBoolPref("sessions.manager")}
+      {check: Tabmix.prefs.getBoolPref("sessions.manager")}
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
@@ -940,10 +940,10 @@ Tabmix.tablib = {
       if (undoItem && m.hasAttribute("targetURI")) {
         let otherTabsCount = undoItem.tabs.length - 1;
         let label = (otherTabsCount === 0) ?
-            menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
+          menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
         TMP_SessionStore.getTitleForClosedWindow(undoItem);
         let menuLabel = label.replace("#1", undoItem.title)
-                             .replace("#2", otherTabsCount);
+            .replace("#2", otherTabsCount);
         m.setAttribute("label", menuLabel);
         m.setAttribute("value", i);
         m.fileName = "closedwindow";
@@ -1405,12 +1405,12 @@ Tabmix.tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
-                   .getService(Components.interfaces.nsIClipboardHelper);
+          .getService(Components.interfaces.nsIClipboardHelper);
 
       clipboard.copyString(this.getBrowserForTab(aTab).currentURI.spec);
     };
 
-  /** XXX need to fix this functions:
+    /** XXX need to fix this functions:
     previousTabIndex
     previousTab
     selectIndexAfterRemove
@@ -1445,7 +1445,7 @@ Tabmix.tablib = {
       // if no tabmix_selectedID go to previous tab, from first tab go to the next tab
       if (tempIndex == -1)
         this.selectedTab = aTab == tabs[0] ? Tabmix.visibleTabs.next(aTab) :
-                                             Tabmix.visibleTabs.previous(aTab);
+          Tabmix.visibleTabs.previous(aTab);
       else
         this.selectedTab = tabs[tempIndex];
 
@@ -1490,7 +1490,7 @@ Tabmix.tablib = {
           if (tempIndex > -1)
             return tempIndex;
         }
-          /* falls through */
+        /* falls through */
         case 2: // opener / right  (default )
         case 5: // right tab
           /* falls through */
@@ -1659,11 +1659,11 @@ Tabmix.tablib = {
       if (shouldPrompt == 1 || numProtected === 0) {
         if (Tabmix.isVersion(290))
           message = PluralForm.get(tabsToClose, bundle.getString("tabs.closeWarningMultiple"))
-                      .replace("#1", tabsToClose);
+              .replace("#1", tabsToClose);
         else
           message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
         chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
-                                          TabmixSvc.getString("window.closeWarning.2");
+          TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
@@ -1673,7 +1673,7 @@ Tabmix.tablib = {
       }
 
       var buttonLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeButtonMultiple") :
-                                            TabmixSvc.getString("closeWindow.label");
+        TabmixSvc.getString("closeWindow.label");
 
       window.focus();
       var promptService = Services.prompt;
@@ -1698,7 +1698,7 @@ Tabmix.tablib = {
 
     gBrowser.TMP_selectNewForegroundTab = function(aTab, aLoadInBackground, aUrl, addOwner) {
       var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
-      Services.prefs.getBoolPref("browser.tabs.loadInBackground");
+        Services.prefs.getBoolPref("browser.tabs.loadInBackground");
       if (!bgLoad) {
         // set new tab owner
         addOwner = typeof addOwner == "boolean" ? addOwner : true;
@@ -1936,8 +1936,8 @@ Tabmix.tablib = {
     if (aUri != browser.currentURI.spec) {
       let tab = gBrowser.mCurrentTab;
       let isCopy = "dataTransfer" in aEvent ?
-          TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
-          (aEvent.ctrlKey || aEvent.metaKey);
+        TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
+        (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
           !gBrowser.isBlankNotBusyTab(tab) &&
           !Tabmix.ContentClick.isUrlForDownload(aUri)) {

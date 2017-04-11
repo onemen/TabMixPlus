@@ -194,11 +194,15 @@ module.exports = {
     "id-length": 0,
     "id-match": 0,
     "indent": [2, 2, {
-      "CallExpression": {"arguments": 1},
+      "SwitchCase": 1,
+      "VariableDeclarator": {"var": 2, "let": 2, "const": 3},
+      "outerIIFEBody": 1,
+      "MemberExpression": 2,
       "FunctionDeclaration": {"body": 1, "parameters": "first"},
       "FunctionExpression": {"body": 1, "parameters": "first"},
-      "SwitchCase": 1,
-      "VariableDeclarator": {"var": 2, "let": 2, "const": 3}
+      "CallExpression": {"arguments": 1},
+      "ArrayExpression": 1,
+      "ObjectExpression": 1
     }],
     "init-declarations": 0,
     "jsx-quotes": 0,

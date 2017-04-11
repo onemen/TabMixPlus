@@ -159,7 +159,7 @@ PlacesUtilsInternal = {
     }
 
     let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
-        "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
+      "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
     Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
       /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
     ).toCode();
@@ -240,7 +240,7 @@ PlacesUtilsInternal = {
       let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
       if (aUrl != prefix) {
         let url = aUrl.startsWith(prefix) ?
-            aUrl.replace(prefix, "") : prefix + aUrl;
+          aUrl.replace(prefix, "") : prefix + aUrl;
         result = aCallBack.apply(this, [url]) ||
           hasHref && aCallBack.apply(this, url.split("#"));
       }

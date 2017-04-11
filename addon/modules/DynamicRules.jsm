@@ -19,7 +19,7 @@ XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
 var TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
-  .getService(Ci.nsIStyleSheetService);
+      .getService(Ci.nsIStyleSheetService);
   TYPE = sss.AGENT_SHEET;
   return sss;
 });
@@ -141,7 +141,7 @@ this.DynamicRules = {
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
     bgImage.bg = isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
-///XXX move -moz-appearance: to general rule when style have bg
+    ///XXX move -moz-appearance: to general rule when style have bg
     let backgroundRule = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     if (isMac) {
       backgroundRule = ' > .tab-stack > .tab-background >\n' +
@@ -199,7 +199,7 @@ this.DynamicRules = {
         delete style.bg;
         let styleName = rule.replace("Tab", "");
         let ruleSelector = _selector.replace("#RULE", styleName)
-                                    .replace("#STATE", tabState[styleName]);
+            .replace("#STATE", tabState[styleName]);
         let hover = rule == "currentTab" ? "" : ":hover";
         let selector = ruleSelector.replace("#HOVER", hover);
         let type = hover.replace(":", "") || "selected";
@@ -266,7 +266,7 @@ this.DynamicRules = {
           style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
       } else if (prefObj.bg) {
         style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
-                             .replace(/#topColor/g, prefObj.bgTopColor);
+            .replace(/#topColor/g, prefObj.bgTopColor);
       }
     }
     this.styles[name] = Object.keys(style).length ? style : null;
@@ -399,7 +399,7 @@ this.DynamicRules = {
       }
       if (value === undefined) {
         prefValues[item] = item == "bgTopColor" ? prefValues.bgColor :
-                                                  defaultPrefValues[item];
+          defaultPrefValues[item];
       } else {
         prefValues[item] = value;
       }

@@ -415,8 +415,7 @@
               this.mTabstrip._smoothScrollByPixels(selected.top - scrollRect.top);
             else
               this.mTabstrip._smoothScrollByPixels(this.mTabstrip._isRTLScrollbox ?
-                                                 selected.right - scrollRect.right :
-                                                 selected.left - scrollRect.left);
+                selected.right - scrollRect.right : selected.left - scrollRect.left);
           }
 
           if (Tabmix.isVersion(540)) {

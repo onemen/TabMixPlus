@@ -266,7 +266,7 @@ this.MergeWindows = {
     // recent suitable window
     let fn = isWINNT ? "push" : "unshift";
     let windowList = !isWINNT ? Services.wm.getEnumerator("navigator:browser") :
-        Services.wm.getZOrderDOMWindowEnumerator("navigator:browser", true);
+      Services.wm.getZOrderDOMWindowEnumerator("navigator:browser", true);
     while (more() && windowList.hasMoreElements()) {
       let nextWin = windowList.getNext();
       if (isSuitableBrowserWindow(nextWin)) {

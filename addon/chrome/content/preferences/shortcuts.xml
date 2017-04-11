@@ -138,7 +138,7 @@
           var key = {modifiers: "", key: "", keycode: ""};
           let modifiers = ["ctrl", "meta", "alt", "shift"];
           key.modifiers = modifiers.filter(mod => event[mod + "Key"])
-                                   .join(",").replace("ctrl", "control");
+              .join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
             let ns = Ci.nsIDOMKeyEvent;

@@ -71,7 +71,7 @@ this.SyncedTabs = {
 
     if (TabmixSvc.version(510)) {
       const fnName = typeof TabListView.prototype._openAllClientTabs == "function" ?
-          "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
+        "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
       Tabmix.changeCode(TabListView.prototype, fnName)._replace(
         'this.props.onOpenTabs(urls, where);',
         `if (/^tab/.test(where)) {

@@ -10,15 +10,15 @@ Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", this);
 
 this.SingleWindowModeUtils = {
- /**
-  * @brief Locate a browser window.
-  *
-  * @param aExclude  A scripted window object that we do not want to use.
-  *
-  * @returns         A scripted window object representing a browser
-  *                  window that is not the same as aExclude, and is
-  *                  additionally not a popup window.
-  */
+  /**
+   * @brief Locate a browser window.
+   *
+   * @param aExclude  A scripted window object that we do not want to use.
+   *
+   * @returns         A scripted window object representing a browser
+   *                  window that is not the same as aExclude, and is
+   *                  additionally not a popup window.
+   */
   getBrowserWindow(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
@@ -167,7 +167,7 @@ this.SingleWindowModeUtils = {
       params.allowThirdPartyFixup = args[4] || false;
       if (TabmixSvc.version(500)) {
         params.userContextId = args[6] != undefined ? args[6] :
-                               Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+          Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
       }
       urls = [uriToLoad];
     } else {

@@ -67,7 +67,7 @@ var TabmixRemoveBlankTab = {
     let result = {win: null, b: null};
     if (aContext) {
       let nav = aContext.QueryInterface(Ci.nsIInterfaceRequestor)
-                    .getInterface(Ci.nsIWebNavigation);
+          .getInterface(Ci.nsIWebNavigation);
       let doc;
       try {
         doc = nav.document;
@@ -75,10 +75,10 @@ var TabmixRemoveBlankTab = {
         return result;
       }
       result.win = nav.QueryInterface(Ci.nsIDocShellTreeItem)
-                    .rootTreeItem
-                    .QueryInterface(Ci.nsIInterfaceRequestor)
-                    .getInterface(Ci.nsIDOMWindow)
-                    .wrappedJSObject;
+          .rootTreeItem
+          .QueryInterface(Ci.nsIInterfaceRequestor)
+          .getInterface(Ci.nsIDOMWindow)
+          .wrappedJSObject;
       let tabBrowser = result.win.gBrowser;
       result.b = tabBrowser.getBrowserForDocument(doc);
       if (!result.b) {

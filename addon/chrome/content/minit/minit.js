@@ -68,7 +68,7 @@ var TMP_tabDNDObserver = {
       'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
     )._replace(
       tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
-                      /screenX = boxObject.*;/,
+        /screenX = boxObject.*;/,
       '$&\n            ' +
       `let halfWidth;
             if (tabmixHandleMove) {
@@ -77,7 +77,7 @@ var TMP_tabDNDObserver = {
             }`
     )._replace(
       tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
-                      /screenX \+ boxObject.* < tabCenter/,
+        /screenX \+ boxObject.* < tabCenter/,
       'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
     )._replace(
       'screenX > TDUContext.lastTabCenter',
@@ -270,14 +270,14 @@ var TMP_tabDNDObserver = {
     var newIndex = this._getDNDIndex(event);
     var oldIndex = dragType != this.DRAG_LINK ? sourceNode._tPos : -1;
     var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
-///XXX check if we need here visibleTabs insteadof gBrowser.tabs
-///    check with groups with or without pinned tabs
+    ///XXX check if we need here visibleTabs insteadof gBrowser.tabs
+    ///    check with groups with or without pinned tabs
     if (newIndex < gBrowser.tabs.length)
       left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
     else {
       newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-                     tabBar.selectedIndex : gBrowser.tabs.length - 1;
+        tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
@@ -335,7 +335,7 @@ var TMP_tabDNDObserver = {
     // show Drag & Drop message
     if (dragType == this.DRAG_LINK) {
       this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
-                              this.gBackupLabel : this.draglink;
+        this.gBackupLabel : this.draglink;
       if (event.target.localName != "tab" && event.target.localName != "tabs")
         this.gMsg = this.gBackupLabel;
       var statusTextFld = document.getElementById("statusbar-display");
@@ -378,7 +378,7 @@ var TMP_tabDNDObserver = {
       }
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
-            Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
+          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
         tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
         hideIndicator = true;
       }
@@ -433,7 +433,7 @@ var TMP_tabDNDObserver = {
     else {
       newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-                     gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
+        gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
@@ -636,8 +636,8 @@ var TMP_tabDNDObserver = {
     // screen.availLeft et. al. only check the screen that this window is on,
     // but we want to look at the screen the tab is being dropped onto.
     var screen = Cc["@mozilla.org/gfx/screenmanager;1"]
-                   .getService(Ci.nsIScreenManager)
-                   .screenForRect(eX, eY, 1, 1);
+        .getService(Ci.nsIScreenManager)
+        .screenForRect(eX, eY, 1, 1);
     var fullX = {}, fullY = {}, fullWidth = {}, fullHeight = {};
     var availX = {}, availY = {}, availWidth = {}, availHeight = {};
     // get full screen rect and available rect, both in desktop pix
@@ -736,7 +736,7 @@ var TMP_tabDNDObserver = {
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       let i = event.target.localName == "tab" ?
-          Tabmix.visibleTabs.indexOf(event.target) : 0;
+        Tabmix.visibleTabs.indexOf(event.target) : 0;
       for (; i < numTabs; i++) {
         let tab = tabs[i];
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
@@ -1420,12 +1420,12 @@ Tabmix.navToolbox = {
     })(window.esteban_torres || window);
 
     let _handleSearchCommand = searchLoadExt ? searchLoadExt.MOZhandleSearch.toString() :
-                                               searchbar.handleSearchCommand.toString();
+      searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
       [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZhandleSearch"] :
-                                      [searchbar, "handleSearchCommand"];
+        [searchbar, "handleSearchCommand"];
       $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
@@ -1439,7 +1439,7 @@ Tabmix.navToolbox = {
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZdoSearch"] :
-                                    [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+      [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
     let fnString = obj[fn].toString();

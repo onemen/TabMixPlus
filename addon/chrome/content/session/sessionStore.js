@@ -51,15 +51,15 @@ var TMP_SessionStore = {
     return !entries[0] || entries[0].url == "about:blank";
   },
 
- /**
-  * @brief       - Add attribute to nsSessionStore persistTabAttribute.
-  *
-  *   we call this after nsSessionStore.init
-  *   we add this also when we use TMP session manager.
-  *   we use Firefox SessionStore closed tab service and for restore after restart
-  *
-  * @returns        Nothing.
-  */
+  /**
+   * @brief       - Add attribute to nsSessionStore persistTabAttribute.
+   *
+   *   we call this after nsSessionStore.init
+   *   we add this also when we use TMP session manager.
+   *   we use Firefox SessionStore closed tab service and for restore after restart
+   *
+   * @returns        Nothing.
+   */
   persistTabAttribute: function TMP_ss_persistTabAttribute() {
     if (TabmixSvc.sm.persistTabAttributeSet)
       return;
@@ -85,29 +85,29 @@ var TMP_SessionStore = {
     }
   },
 
- /**
-  * @brief         make sure that we don't enable both sessionStore and session manager
-  *
-  * @param msgNo   a Integer value - msg no. to show.
-  *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
-  *
-  * @param start   a Boolean value - true if we call this function before startup.
-  *
-  * @returns       Nothing.
-  */
+  /**
+   * @brief         make sure that we don't enable both sessionStore and session manager
+   *
+   * @param msgNo   a Integer value - msg no. to show.
+   *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
+   *
+   * @param start   a Boolean value - true if we call this function before startup.
+   *
+   * @returns       Nothing.
+   */
   setService: function TMP_ss_setSessionService(msgNo, start) {
     if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
-   /*
-    * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
-    * we use nsISessionStore service in TMP.
-    * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
-    *
-    * Bug 449596 - remove the browser.sessionstore.enabled pref
-    * so here we don't set it to true, we just clear user pref to the default
-    * if the pref exist in firefox this set the pref to true
-    * if the pref don't exist this will remove the pref
-    */
+    /*
+     * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
+     * we use nsISessionStore service in TMP.
+     * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
+     *
+     * Bug 449596 - remove the browser.sessionstore.enabled pref
+     * so here we don't set it to true, we just clear user pref to the default
+     * if the pref exist in firefox this set the pref to true
+     * if the pref don't exist this will remove the pref
+     */
     const TMP_SS_MANAGER = "extensions.tabmix.sessions.manager";
     const TMP_SS_CRASHRECOVERY = "extensions.tabmix.sessions.crashRecovery";
     var TMP_manager_enabled = Services.prefs.getBoolPref(TMP_SS_MANAGER);
@@ -176,7 +176,7 @@ var TMP_SessionStore = {
         TabmixSvc.sm.settingPreference = false;
       };
       let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                        [title, msg, "", "", buttons], window, start ? callBack : null);
+        [title, msg, "", "", buttons], window, start ? callBack : null);
       if (!start)
         callBack(result);
     } else if (!Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
@@ -220,7 +220,7 @@ var TMP_SessionStore = {
       // syncRead in Firefox 25-27
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
-                   .getService(Ci.nsISessionStartup);
+            .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
         ss.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
@@ -241,17 +241,17 @@ var TMP_SessionStore = {
       Services.prefs.setIntPref("browser.startup.page", 1);
   },
 
- /**
-  * @brief           update tab title from user name or bookmark.
-  *
-  * @param aTabData  an object value - tabData from nsSessionStore
-  *
-  * @param aUri      string value - url address
-  *
-  * @param aTitle    string value - title
-  *
-  * @returns         tab title - string.
-  */
+  /**
+   * @brief           update tab title from user name or bookmark.
+   *
+   * @param aTabData  an object value - tabData from nsSessionStore
+   *
+   * @param aUri      string value - url address
+   *
+   * @param aTitle    string value - title
+   *
+   * @returns         tab title - string.
+   */
   _getTitle: function ct_getTitle(aData, aUri, aTitle) {
     var fixedLabelUri = this._getAttribute(aData, "label-uri");
     if (fixedLabelUri == aUri || fixedLabelUri == "*")
@@ -260,15 +260,15 @@ var TMP_SessionStore = {
     return TMP_Places.getTitleFromBookmark(aUri, aTitle, this._getAttribute(aData, "tabmix_bookmarkId"));
   },
 
- /**
-  * @brief           get attribute xultab data
-  *
-  * @param aTabData  an object value - tabData from nsSessionStore
-  *
-  * @param attrib    attribute name as string
-  *
-  * @returns         attribute value as string or empty string.
-  */
+  /**
+   * @brief           get attribute xultab data
+   *
+   * @param aTabData  an object value - tabData from nsSessionStore
+   *
+   * @param attrib    attribute name as string
+   *
+   * @returns         attribute value as string or empty string.
+   */
   _getAttribute: function TMP_ss__getAttribute(aTabData, attrib) {
     if (aTabData.attributes && attrib in aTabData.attributes)
       return aTabData.attributes[attrib];
@@ -307,16 +307,16 @@ var TMP_ClosedTabs = {
     Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
   },
 
- /**
-  * Get closed tabs count
-  */
+  /**
+   * Get closed tabs count
+   */
   get count() {
     return window.__SSi ? TabmixSvc.ss.getClosedTabCount(window) : 0;
   },
 
- /**
-  * Get closed tabs data
-  */
+  /**
+   * Get closed tabs data
+   */
   get getClosedTabData() {
     return window.__SSi ? TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window)) : {};
   },
@@ -364,11 +364,11 @@ var TMP_ClosedTabs = {
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
       else try {
-        url = _uri.scheme == "about" ? _uri.spec :
-          _uri.scheme + "://" + _uri.hostPort + _uri.path;
-      } catch (e) {
-        url = title;
-      }
+          url = _uri.scheme == "about" ? _uri.spec :
+            _uri.scheme + "://" + _uri.hostPort + _uri.path;
+        } catch (e) {
+          url = title;
+        }
       var label = title ? title : url;
       let count = "";
       if (ltr) {
@@ -505,7 +505,7 @@ var TMP_ClosedTabs = {
     var tabData = this.getClosedTabData[index];
     var url = this.getUrl(tabData);
     var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
-    .getService(Components.interfaces.nsIClipboardHelper);
+        .getService(Components.interfaces.nsIClipboardHelper);
 
     clipboard.copyString(url);
   },
@@ -543,11 +543,11 @@ var TMP_ClosedTabs = {
     this.setButtonDisableState(true);
   },
 
- /**
-  * @brief           fetch the data of closed tab, while removing it from the array
-  * @param aIndex    a Integer value - 0 or grater index to remove
-  * @returns         closed tab data at aIndex.
-  */
+  /**
+   * @brief           fetch the data of closed tab, while removing it from the array
+   * @param aIndex    a Integer value - 0 or grater index to remove
+   * @returns         closed tab data at aIndex.
+   */
   getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
     if (aIndex < 0 || aIndex >= this.count)
       return null;
@@ -627,11 +627,11 @@ var TMP_ClosedTabs = {
         (!Tabmix.isVersion(490) ||
         aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
     let newTab = reuseExisting ? aBlankTabToReuse :
-        gBrowser.addTab("about:blank", {
-          skipAnimation: tabToRemove || skipAnimation,
-          dontMove: true,
-          userContextId,
-        });
+      gBrowser.addTab("about:blank", {
+        skipAnimation: tabToRemove || skipAnimation,
+        dontMove: true,
+        userContextId,
+      });
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
@@ -742,7 +742,7 @@ var TabmixConvertSession = {
   confirm: function cs_confirm(aMsg, aCallBack) {
     let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
+      [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
   },
 
   getSessionState: function cs_getSessionState(aPath, internal) {

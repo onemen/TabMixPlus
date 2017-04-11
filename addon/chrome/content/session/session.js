@@ -52,7 +52,7 @@ Tabmix.Sanitizer = {
     return false;
   },
 
-// XXX need to add test if we fail to delete then alert the user or ....?
+  // XXX need to add test if we fail to delete then alert the user or ....?
   sanitize: function TMP_SN_sanitize() {
     // get file references
     var sessionFile = TabmixSvc.FileUtils.getDir("ProfD", []);
@@ -293,10 +293,10 @@ TabmixSessionManager = {
     };
 
     TabmixSvc.ss.promiseInitialized
-      .then(() => TMP_TabView.init())
-      .then(initializeSM)
-      .then(() => Tabmix.sessionInitialized())
-      .catch(Tabmix.reportError);
+        .then(() => TMP_TabView.init())
+        .then(initializeSM)
+        .then(() => Tabmix.sessionInitialized())
+        .catch(Tabmix.reportError);
   },
 
   _init: function SM__init() {
@@ -447,7 +447,7 @@ TabmixSessionManager = {
     // initialize closed window list broadcaster
     var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.firstWindowInSession;
     var disabled = this.enableManager ? status || this.isClosedWindowsEmpty() :
-    TabmixSvc.ss.getClosedWindowCount() === 0;
+      TabmixSvc.ss.getClosedWindowCount() === 0;
     Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
     if (!this.isPrivateWindow)
@@ -564,7 +564,7 @@ TabmixSessionManager = {
         TabmixSvc.getDialogStrings("Cancel") + "\n" +
         TabmixSvc.setLabel("sm.askBeforeSave.button1");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
-                                [title, msg, "", chkBoxLabel, buttons]);
+      [title, msg, "", chkBoxLabel, buttons]);
   },
 
   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
@@ -841,9 +841,9 @@ TabmixSessionManager = {
   // init common services
   initService() {
     this.RDFService = Components.classes["@mozilla.org/rdf/rdf-service;1"]
-      .getService(Components.interfaces.nsIRDFService);
+        .getService(Components.interfaces.nsIRDFService);
     this.CONUtils = Components.classes["@mozilla.org/rdf/container-utils;1"]
-      .getService(Components.interfaces.nsIRDFContainerUtils);
+        .getService(Components.interfaces.nsIRDFContainerUtils);
     this.initDATASource();
   },
 
@@ -859,7 +859,7 @@ TabmixSessionManager = {
           TabmixSvc.getSMString("sm.corrupted.msg1");
       var buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
       this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                         [title, msg, "", "", buttons], window, () => {});
+        [title, msg, "", "", buttons], window, () => {});
       Tabmix.assert(e);
       file.moveTo(this.profileDir, "session.old");
       this.DATASource = this.RDFService.GetDataSourceBlocking(uri);
@@ -987,11 +987,11 @@ TabmixSessionManager = {
     return this.getValue(node, arc, "nsIRDFLiteral", def);
   },
 
- /*
-  * The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.
-  * we use this code only for the case that old escape string was left unused after
-  * unescape was removed.
-  */
+  /**
+   * The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.
+   * we use this code only for the case that old escape string was left unused after
+   * unescape was removed.
+   */
   getDecodedLiteralValue(node, key) {
     let encodedString = node ? this.getLiteralValue(node, key) : key;
     // in the past we use escape for encoding, we try first to decode with decodeURI
@@ -1189,13 +1189,13 @@ TabmixSessionManager = {
     }
   },
 
- /**
-  * @brief           catch middle click from closed windows list,
-  *                  delete window from the list or restore according to the pref
-  * @param aEvent    a valid event union.
-  * @returns         noting.
-  *
-  */
+  /**
+   * @brief           catch middle click from closed windows list,
+   *                  delete window from the list or restore according to the pref
+   * @param aEvent    a valid event union.
+   * @returns         noting.
+   *
+   */
   checkForMiddleClick: function SM_checkForMiddleClick(aEvent) {
     if (aEvent.button != 1)
       return;
@@ -1295,7 +1295,7 @@ TabmixSessionManager = {
         break;
     }
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, selectionFlag],
-                                [title, msg, "", "", buttons]);
+      [title, msg, "", "", buttons]);
   },
 
   addWinToSession: function SM_addWinToSession(action, path) {
@@ -1514,7 +1514,7 @@ TabmixSessionManager = {
     }
     label = label + "\n" + sessionList.list.join("\n");
     var result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_TEXTBOX, showCheckbox, actionFlag],
-                                      [title, msg, label, closedtabMsg, buttons]);
+      [title, msg, label, closedtabMsg, buttons]);
     switch (result.button) {
       case Tabmix.BUTTON_CANCEL: return {button: result.button};
       case Tabmix.BUTTON_OK:
@@ -1765,7 +1765,7 @@ TabmixSessionManager = {
       if (this.prefBranch.getIntPref("onStart.loadsession") > -1)
         msg += TabmixSvc.getSMString("sm.removeAll.msg1");
       result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                    [title, msg, "", "", buttons]);
+        [title, msg, "", "", buttons]);
       if (result.button == Tabmix.BUTTON_OK) {
         this.deleteSubtree(this.gSessionPath[1]);
         this.deleteSubtree(this.gSessionPath[2]);
@@ -1780,7 +1780,7 @@ TabmixSessionManager = {
       title = TabmixSvc.getSMString("sm.removeAll.title.closedwindow");
       msg = TabmixSvc.getSMString("sm.removeAll.msg2");
       result = Tabmix.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                    [title, msg, "", "", buttons]);
+        [title, msg, "", "", buttons]);
       if (result.button == Tabmix.BUTTON_OK)
         this.removeAllClosedWindows();
     }
@@ -2189,7 +2189,7 @@ TabmixSessionManager = {
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
         this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_CRASH],
-                           [title, msg, "", "", buttons], window, callBack);
+          [title, msg, "", "", buttons], window, callBack);
       } else {
         msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg2") + ".....";
         if (!this.enableManager)
@@ -2199,7 +2199,7 @@ TabmixSessionManager = {
         buttons = [TabmixSvc.setLabel("sm.afterCrash.button0.crashed"),
           TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
         this.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
-                           [title, msg, "", chkBoxLabel, buttons], window, callBack);
+          [title, msg, "", chkBoxLabel, buttons], window, callBack);
         this.callBackData.label = this.gSessionPath[3];
       }
     } else if (this.enableManager && !isAllEmpty) {
@@ -2208,7 +2208,7 @@ TabmixSessionManager = {
       buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
         TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
       this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, Tabmix.HIDE_CHECKBOX, Tabmix.SELECT_DEFAULT],
-                         [title, msg, "", "", buttons], window, callBack);
+        [title, msg, "", "", buttons], window, callBack);
     } else if (closedWinList !== 0) {
       msg += " " + TabmixSvc.getSMString("sm.afterCrash.msg6");
       if (!this.enableManager)
@@ -2220,7 +2220,7 @@ TabmixSessionManager = {
       buttons = [TabmixSvc.setLabel("sm.afterCrash.button0"),
         TabmixSvc.setLabel("sm.afterCrash.button1")].join("\n");
       this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SHOW_CLOSED_WINDOW_LIST],
-                         [title, msg, "", chkBoxLabel, buttons], window, callBack);
+        [title, msg, "", chkBoxLabel, buttons], window, callBack);
       this.callBackData.whatToLoad = "closedwindow";
     } else {// nothing to restore
       msg = TabmixSvc.getSMString("sm.afterCrash.msg9") + "\n" + TabmixSvc.getSMString("sm.afterCrash.msg10");
@@ -2228,7 +2228,7 @@ TabmixSessionManager = {
         msg += "\n\n" + TabmixSvc.getSMString("sm.afterCrash.msg3");
       buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
       this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
-                         [title, msg, "", chkBoxLabel, buttons], window, callBack);
+        [title, msg, "", chkBoxLabel, buttons], window, callBack);
     }
   },
 
@@ -2341,7 +2341,7 @@ TabmixSessionManager = {
         };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
-                           [title, msg, "", chkBoxLabel, buttons], window, callBack);
+          [title, msg, "", chkBoxLabel, buttons], window, callBack);
       }
       this.loadHomePage();
       return;
@@ -2400,7 +2400,7 @@ TabmixSessionManager = {
         };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_OK, Tabmix.SHOW_MENULIST, chkBoxState, Tabmix.SELECT_DEFAULT],
-                           [title, msg, "", chkBoxLabel, buttons], window, callBack);
+          [title, msg, "", chkBoxLabel, buttons], window, callBack);
       } catch (ex) {
         Tabmix.assert(ex);
       }
@@ -2444,10 +2444,10 @@ TabmixSessionManager = {
     }, 0);
   },
 
- /**
-  * user wants to restore only pinned tabs
-  * use SessionStore functions to prepare and restore
-  */
+  /**
+   * user wants to restore only pinned tabs
+   * use SessionStore functions to prepare and restore
+   */
   deferredRestore(afterCrash) {
     if (!this.prefBranch.getBoolPref("onStart.restorePinned"))
       return;
@@ -2481,10 +2481,10 @@ TabmixSessionManager = {
     this.loadHomePage(pinnedExist);
   },
 
- /**
-  * move all tabs & closed tabs into one window
-  * (original code by Session Manager extension)
-  */
+  /**
+   * move all tabs & closed tabs into one window
+   * (original code by Session Manager extension)
+   */
   mergeWindows(state) {
     if (state.windows.length < 2)
       return;
@@ -2571,11 +2571,11 @@ TabmixSessionManager = {
     return {win: savedWin, tab: savedTabs};
   },
 
- /*
-  *  update closed window list flag 'dontLoad'
-  *  all window that where closed more then 10 sec ago will mark 'dontLoad'
-  *  return true if we left out with windows to load
-  */
+  /**
+   *  update closed window list flag 'dontLoad'
+   *  all window that where closed more then 10 sec ago will mark 'dontLoad'
+   *  return true if we left out with windows to load
+   */
   updateClosedWindowList: function SM_updateClosedWindowList(aPopUp) {
     var thisSession = this.RDFService.GetResource(this.gSessionPath[0]);
     var container = this.initContainer(thisSession);
@@ -2977,14 +2977,14 @@ TabmixSessionManager = {
       this.setLiteral(aNode, "closedAt", aData.closedAt);
   },
 
- /**
-  * Convert SessionStore tab history state object
-  *
-  * @param state
-  *        SessionStore tab state object
-  * @return object containing history entries, current history index and
-  *                current history scroll position
-  */
+  /**
+   * Convert SessionStore tab history state object
+   *
+   * @param state
+   *        SessionStore tab state object
+   * @return object containing history entries, current history index and
+   *                current history scroll position
+   */
   serializeHistory(state) {
     if (!state)
       return null;
@@ -3030,7 +3030,7 @@ TabmixSessionManager = {
 
   get canRestoreLastSession() {
     return this.enableManager ? TabmixSvc.sm.lastSessionPath && !this.containerEmpty(TabmixSvc.sm.lastSessionPath) :
-    TabmixSvc.ss.canRestoreLastSession;
+      TabmixSvc.ss.canRestoreLastSession;
   },
 
   restoreLastSession: function SM_restoreLastSession() {
@@ -3173,7 +3173,7 @@ TabmixSessionManager = {
 
   openNewWindow: function SM_openNewWindow(aState, aPrivate) {
     var argString = Cc["@mozilla.org/supports-string;1"]
-                      .createInstance(Ci.nsISupportsString);
+        .createInstance(Ci.nsISupportsString);
     argString.data = "";
 
     let features = "chrome,dialog=no,macsuppressanimation,all";
@@ -3464,7 +3464,7 @@ TabmixSessionManager = {
       }
     }
     let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
-                                         "restoreHistoryPrecursor";
+      "restoreHistoryPrecursor";
     TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
 
     // show notification and clean up our data
@@ -3606,7 +3606,7 @@ TabmixSessionManager = {
     var ctabs = TMP_ClosedTabs.getClosedTabData;
     var maxTabsUndo = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo");
     ctabs = ctabs.map(data => this.getSessionStoreDataForRDF(data))
-                 .filter(data => data);
+        .filter(data => data);
     ctabs.reverse().forEach(data => {
       let uniqueId, rdfLabelSession, newNode;
       uniqueId = "panel" + Date.now() + Math.random();

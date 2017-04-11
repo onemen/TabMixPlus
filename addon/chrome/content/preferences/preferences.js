@@ -202,7 +202,7 @@ var gPrefWindow = {
                       $(aPreference.id.replace("pref_", "obs_"));
     if (broadcaster) {
       let disable = aPreference.type == "bool" ? !aPreference.value :
-          aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
+        aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
       this.setDisabled(broadcaster, disable);
     }
   },
@@ -326,7 +326,7 @@ function setPrefAfterImport(aPref) {
   if (aPref.type == Services.prefs.PREF_INVALID) {
     let val = parseInt(aPref.value);
     aPref.type = typeof val == "number" && !isNaN(val) ?
-               64 : /true|false/i.test(aPref.value) ? 128 : 32;
+      64 : /true|false/i.test(aPref.value) ? 128 : 32;
     if (aPref.type == 128)
       aPref.value = /true/i.test(aPref.value);
     let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
@@ -391,7 +391,7 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = true;
   let SMinstalled = _sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
-      gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
+    gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
   prefs.forEach(pref => {
     Services.prefs.clearUserPref(pref);
   });

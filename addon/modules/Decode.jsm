@@ -21,8 +21,8 @@ this.Decode = {
     if (typeof unescape == "function")
       return unescape(str);
 
-   //    let self = this;
-   //    return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, function(seq) {return self._(seq);});
+    //    let self = this;
+    //    return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, function(seq) {return self._(seq);});
     return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, getReturnValue);
   }
 };

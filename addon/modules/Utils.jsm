@@ -120,7 +120,7 @@ this.TabmixUtils = {
 
   makeInputStream(aString) {
     let stream = Cc["@mozilla.org/io/string-input-stream;1"]
-                   .createInstance(Ci.nsISupportsCString);
+        .createInstance(Ci.nsISupportsCString);
     stream.data = aString;
     return stream;
   },

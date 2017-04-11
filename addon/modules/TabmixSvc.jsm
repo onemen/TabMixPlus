@@ -34,8 +34,7 @@ function isVersion(aVersionNo) {
 this.TabmixSvc = {
   get selectedAtt() {
     delete this.selectedAtt;
-    return (this.selectedAtt = isVersion(390) ?
-            "visuallyselected" : "selected");
+    return (this.selectedAtt = isVersion(390) ? "visuallyselected" : "selected");
   },
 
   aboutBlank: "about:blank",

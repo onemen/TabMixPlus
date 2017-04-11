@@ -153,8 +153,8 @@ this.TabmixGroupsMigrator = {
       accessKey: string("install.accesskey"),
       callback() {
         let link = TabmixSvc.isPaleMoon ?
-            "http://www.palemoon.org/tabgroups.shtml" :
-            "https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/";
+          "http://www.palemoon.org/tabgroups.shtml" :
+          "https://addons.mozilla.org/en-US/firefox/addon/tab-groups-panorama/";
         win.openUILinkIn(link, "tab");
       }
     }];
@@ -231,7 +231,7 @@ this.TabmixGroupsMigrator = {
         } else {
           for (let group of windowGroups) {
             let title = group.anonGroupID ?
-                getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
+              getTitle(++anonGroupCount) : group.tabGroupsMigrationTitle;
             group.tabGroupsMigrationTitle = winTitle + " " + title;
           }
         }
@@ -276,7 +276,7 @@ this.TabmixGroupsMigrator = {
       index: 0,
       title: TabmixSvc.getSMString("sm.bookmarks.sessionFolder"),
     }).then(this.promiseItemId)
-      .catch(TabmixSvc.console.reportError);
+        .catch(TabmixSvc.console.reportError);
   },
 
   getSessionsFolder(folder) {

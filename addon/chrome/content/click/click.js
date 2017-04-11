@@ -140,8 +140,8 @@ var TabmixTabClickOptions = {
     }
   },
 
-/// add option to open new tab after current one
-/// convert this switch to object
+  /// add option to open new tab after current one
+  /// convert this switch to object
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs, event) {
     gBrowser.selectedBrowser.focus();
     switch (command) {
@@ -631,11 +631,11 @@ var TabmixContext = {
       var protectedTab = tab.hasAttribute("protected");
       var lockedTab = tab.hasAttribute("locked");
 
-     /**
-      * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
-      * Firefox only show this menu when the selection text is url see Bug 454518
-      * we check if gContextMenu.linkURL contain URL
-      */
+      /**
+       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
+       * Firefox only show this menu when the selection text is url see Bug 454518
+       * we check if gContextMenu.linkURL contain URL
+       */
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
       Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
@@ -745,7 +745,7 @@ var TabmixContext = {
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
     let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
-        Tabmix.ContextMenu.getSelectedLinks(window.content, check);
+      Tabmix.ContextMenu.getSelectedLinks(window.content, check);
 
     if (!check && urls.length) {
       Tabmix.loadTabs(urls, false);
@@ -1023,7 +1023,7 @@ var TabmixAllTabs = {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
-                 .replace(/#1/g, tabClr);
+              .replace(/#1/g, tabClr);
       }
       mi.style.setProperty('background-image', rule, 'important');
     }

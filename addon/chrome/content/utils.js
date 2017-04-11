@@ -122,7 +122,7 @@ var Tabmix = {
       let [path, line] = stackData[1].replace("chrome://", "").split(":");
       let index = path.indexOf("/") - 1;
       let extensionName = index > -1 ?
-         path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
+        path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\nfile: chrome://" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
@@ -134,13 +134,13 @@ var Tabmix = {
 
   promptService(intParam, strParam, aWindow, aCallBack) {
     var dpb = Cc["@mozilla.org/embedcomp/dialogparam;1"]
-                            .createInstance(Ci.nsIDialogParamBlock);
+        .createInstance(Ci.nsIDialogParamBlock);
     // intParam[0] - default button accept=0, cancel=1, extra1=2
     // intParam[1] - show menuList= 1 , show textBox= 0, hide_both= 2
     // intParam[2] - set checkbox checked  true=1 , false=0, hide=2
     // intParam[3] - flag  - for menuList contents: flag to set menu selected item
     //                     - for textBox rename: 1 , save: 0
-///XXX temp fix
+    ///XXX temp fix
     // intParam[4] - flag  - 1 - use Tabmix.Sessions.createMenuForDialog
 
     // we use non modal dialog when we call for prompt on startup

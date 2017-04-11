@@ -55,7 +55,7 @@ let internal = {
   willRestoreSoon(tab) {
     let {priority, hidden, visible} = this.tabs;
     let {restoreOnDemand, restorePinnedTabsOnDemand,
-        restoreHiddenTabs} = this.prefs;
+      restoreHiddenTabs} = this.prefs;
     let restorePinned = !(restoreOnDemand && restorePinnedTabsOnDemand);
     let candidateSet = [];
 

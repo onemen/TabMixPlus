@@ -476,7 +476,7 @@ var TMP_eventListener = {
         tabBar.setAttribute("classic", "v4Mac");
       else if (TabmixSvc.isLinux) {
         tabBar.setAttribute("classic", "v3Linux");
-///XXX test if this is still the case
+        ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
         Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
       } else {
@@ -543,12 +543,12 @@ var TMP_eventListener = {
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
 
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
-   /*
-    *  In the first time TMP is running we need to match extensions.tabmix.hideTabbar to browser.tabs.autoHide.
-    *  extensions.tabmix.hideTabbar default is 0 "Never Hide tabbar"
-    *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar
-    *  is set to 1 "Hide tabbar when i have only one tab":
-    */
+    /**
+     *  In the first time TMP is running we need to match extensions.tabmix.hideTabbar to browser.tabs.autoHide.
+     *  extensions.tabmix.hideTabbar default is 0 "Never Hide tabbar"
+     *  if browser.tabs.autoHide is true we need to make sure extensions.tabmix.hideTabbar
+     *  is set to 1 "Hide tabbar when i have only one tab":
+     */
     gTMPprefObserver.setAutoHidePref();
 
     if (TabmixTabbar.hideMode == 2)
@@ -658,7 +658,7 @@ var TMP_eventListener = {
         }
       }
       let fullScreen = Tabmix.isVersion(470) ?
-          document.fullscreenElement : document.mozFullScreen;
+        document.fullscreenElement : document.mozFullScreen;
       if (!fullScreen) {
         fullScrToggler.hidden = false;
       }
@@ -684,11 +684,11 @@ var TMP_eventListener = {
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
   },
 
- /**
-  * for use in Firefox 40+.
-  * update FullScreen._mouseTargetRect when in full screen and the tabbar is
-  * visible. we call this function from tabBarHeightModified and showNavToolbox
-  */
+  /**
+   * for use in Firefox 40+.
+   * update FullScreen._mouseTargetRect when in full screen and the tabbar is
+   * visible. we call this function from tabBarHeightModified and showNavToolbox
+   */
   updateMouseTargetRect() {
     if (!Tabmix.isVersion(400)) {
       return;

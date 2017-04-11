@@ -293,7 +293,7 @@ this.Shortcuts = {
       let newValue = shortcuts[key] || _default;
       let updateBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
-          disableSessionKeys != keyData.blocked);
+            disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
       // on start report disabled by default shortcut as changed so _updateKey
@@ -353,7 +353,7 @@ this.Shortcuts = {
     if (!key)
       return "";
     let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "")
-          .replace("ctrl", "control").split(",");
+        .replace("ctrl", "control").split(",");
     key.modifiers = ["control", "meta", "accel", "alt", "shift"].filter(mod => {
       return new RegExp(mod).test(modifiers);
     }).join(",");

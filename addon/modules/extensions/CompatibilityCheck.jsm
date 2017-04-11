@@ -121,12 +121,12 @@ CompatibilityCheck.prototype = {
     // make promptService non modal on startup
     var self = this;
     var callBack = this.callbackDialog ? null :
-                   function(aResult) {
-                     aResult.showatStart = showatStart;
-                     self.promptCallBack(aResult);
-                   };
+      function(aResult) {
+        aResult.showatStart = showatStart;
+        self.promptCallBack(aResult);
+      };
     var result = this.window.Tabmix.promptService([TMP_BUTTON_EXTRA1, TMP_HIDE_MENUANDTEXT, chkBoxState],
-                      [title, msg, "", chkBoxLabel, buttons.join("\n")], this.window, callBack);
+      [title, msg, "", chkBoxLabel, buttons.join("\n")], this.window, callBack);
     if (!callBack)
       this.promptCallBack(result);
   },
@@ -158,7 +158,7 @@ CompatibilityCheck.prototype = {
     if (aRestart && TabmixSvc.topWin().canQuitApplication()) {
       var appStartup = Ci.nsIAppStartup;
       Cc["@mozilla.org/toolkit/app-startup;1"]
-                  .getService(appStartup).quit(appStartup.eRestart | appStartup.eAttemptQuit);
+          .getService(appStartup).quit(appStartup.eRestart | appStartup.eAttemptQuit);
     } else {
       let title = TabmixSvc.getString("incompatible.title");
       let msg = TabmixSvc.getString("incompatible.msg2");
@@ -167,7 +167,7 @@ CompatibilityCheck.prototype = {
       // make it not modal on startup
       let callBack = this.callbackDialog ? null : function() {/* nothing to do */};
       this.window.Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
-                   [title, msg, "", "", buttons], this.window, callBack);
+        [title, msg, "", "", buttons], this.window, callBack);
     }
   },
 

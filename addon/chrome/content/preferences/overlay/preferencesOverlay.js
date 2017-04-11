@@ -41,7 +41,7 @@ var gTabMix_preferencesOverlay = {
     setTimeout(() => this.initPaneTabsOptions(), 0);
   },
 
-/* ........ paneTabs .............. */
+  /* ........ paneTabs .............. */
   initPaneTabsOptions() {
     this.id("_hideTabbar").value = this.id("extensions.tabmix.hideTabbar").value;
     this.id("generalWindowOpen").value = this.id("browser.link.open_newwindow").value;
@@ -77,7 +77,7 @@ var gTabMix_preferencesOverlay = {
     }
   },
 
-/* ........ paneMain .............. */
+  /* ........ paneMain .............. */
   initMainPane() {
     var menuList = this.id("browserStartupPage");
     var hBox = menuList.parentNode;

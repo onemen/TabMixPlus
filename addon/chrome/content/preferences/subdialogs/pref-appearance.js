@@ -7,7 +7,7 @@ var tabstyles = {
   pref: "appearance_tab",
   init() {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
-        Tabmix.prefs.getIntPref(this.pref) : 0;
+      Tabmix.prefs.getIntPref(this.pref) : 0;
 
     /* Chromifox theme force button height to 25px */
     var skin = Services.prefs.getCharPref("general.skins.selectedSkin");

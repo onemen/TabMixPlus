@@ -51,7 +51,7 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-                .getService(Ci.nsIEventListenerService);
+        .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320, 270)) {
       els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
     } else {
@@ -82,7 +82,7 @@ var TMP_LastTab = {
 
     let tabBox = gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
-                .getService(Ci.nsIEventListenerService);
+        .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
     els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
     if (!Tabmix.isVersion(320, 270))
@@ -122,10 +122,10 @@ var TMP_LastTab = {
     }
   },
 
- /**
-  * disallow mouse down on TabsToolbar to start dragging the window when one
-  * of the key modifiers is down
-  */
+  /**
+   * disallow mouse down on TabsToolbar to start dragging the window when one
+   * of the key modifiers is down
+   */
   disallowDragwindow(keyDown) {
     if (!Tabmix.isVersion(470)) {
       return;

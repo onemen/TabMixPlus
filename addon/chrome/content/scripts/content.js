@@ -118,7 +118,7 @@ var TabmixContentHandler = {
           postData: null
         };
         let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
-                         .QueryInterface(Ci.nsISHistoryInternal);
+            .QueryInterface(Ci.nsISHistoryInternal);
         if (sh) {
           let entry = sh.getEntryAtIndex(sh.index, false);
           let postData = entry.postData;
@@ -154,7 +154,7 @@ var TabmixContentHandler = {
     let links;
     const linkName = { };
     const linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
-                        .getService(Ci.nsIDroppedLinkHandler);
+        .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
       if (TabmixSvc.version(520)) {
@@ -272,7 +272,7 @@ TabmixClickEventHandler = {
     }
 
     let result = sendSyncMessage("TabmixContent:Click",
-                    {json, href, node: linkNode});
+      {json, href, node: linkNode});
     let data = result[0];
     if (data.where == "default")
       return;
@@ -430,8 +430,8 @@ var AboutNewTabHandler = {
 var ContextMenuHandler = {
   init(global) {
     Cc["@mozilla.org/eventlistenerservice;1"]
-      .getService(Ci.nsIEventListenerService)
-      .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+        .getService(Ci.nsIEventListenerService)
+        .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
   },
 
   prepareContextMenu(event) {

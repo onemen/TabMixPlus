@@ -22,9 +22,9 @@ this.AutoReload = {
     aTab.postDataAcceptedByUser = false;
   },
 
- /**
-  * Popup command
-  */
+  /**
+   * Popup command
+   */
   addClonePopup(aPopup, aTab) {
     var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
@@ -169,9 +169,9 @@ this.AutoReload = {
     }
   },
 
- /**
-  * called from popup and from tabclick options
-  */
+  /**
+   * called from popup and from tabclick options
+   */
   toggle(aTab) {
     if (aTab.localName != "tab")
       aTab = this._currentTab(aTab);
@@ -222,10 +222,10 @@ this.AutoReload = {
     throw new Error("Tabmix: unexpected argument");
   },
 
- /**
-  *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
-  *  for pending tabs
-  */
+  /**
+   *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
+   *  for pending tabs
+   */
   onTabReloaded(aTab, aBrowser) {
     var win = aTab.ownerGlobal;
     if (aTab.autoReloadTimerID)
@@ -236,8 +236,8 @@ this.AutoReload = {
       if (aBrowser.__tabmixScrollPosition || null) {
         if (TabmixSvc.version(330)) {
           aBrowser.messageManager
-                  .sendAsyncMessage("Tabmix:setScrollPosition",
-            aBrowser.__tabmixScrollPosition);
+              .sendAsyncMessage("Tabmix:setScrollPosition",
+                aBrowser.__tabmixScrollPosition);
         } else {
           let {x, y} = aBrowser.__tabmixScrollPosition;
           aBrowser.contentWindow.scrollTo(x, y);
@@ -340,13 +340,13 @@ function doReloadTab(window, browser, data) {
 
   if (!TabmixSvc.version(330)) {
     let webNav = browser.webNavigation.sessionHistory
-                        .QueryInterface(Ci.nsIWebNavigation);
+        .QueryInterface(Ci.nsIWebNavigation);
     webNav.reload(loadFlags);
     return;
   }
 
   let windowUtils = window.QueryInterface(Ci.nsIInterfaceRequestor)
-                          .getInterface(Ci.nsIDOMWindowUtils);
+      .getInterface(Ci.nsIDOMWindowUtils);
 
   browser.messageManager.sendAsyncMessage("Browser:Reload", {
     flags: loadFlags,

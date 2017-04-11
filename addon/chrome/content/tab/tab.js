@@ -144,8 +144,8 @@ var TabmixTabbar = {
 
     // show on tabbar
     let tabstripClosebutton = Tabmix.isVersion(310) ?
-        document.getElementById("tabmix-tabs-closebutton") :
-        document.getElementById("tabs-closebutton");
+      document.getElementById("tabmix-tabs-closebutton") :
+      document.getElementById("tabs-closebutton");
     if (this.isButtonOnTabsToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
@@ -461,7 +461,7 @@ var TabmixTabbar = {
       return;
 
     let selected = Tabmix.isVersion(390) && gBrowser._switcher ?
-        gBrowser._switcher.visibleTab : tabBar.selectedItem;
+      gBrowser._switcher.visibleTab : tabBar.selectedItem;
     let prev = null, next = null;
     if (!selected.closing) {
       let visibleTabs = gBrowser.visibleTabs;
@@ -925,11 +925,11 @@ Tabmix.tabsUtils = {
       let width = 0, privateTabButton = TabmixTabbar.newPrivateTabButton();
       if (privateTabButton) {
         width += aOnSide ? privateTabButton.boxObject.width :
-        Tabmix.afterTabsButtonsWidth[1];
+          Tabmix.afterTabsButtonsWidth[1];
       }
       if (Tabmix.sideNewTabButton) {
         width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width :
-        Tabmix.afterTabsButtonsWidth[0];
+          Tabmix.afterTabsButtonsWidth[0];
       }
       return width;
     };
@@ -1142,7 +1142,7 @@ Tabmix.bottomToolbarUtils = {
       // remember to fix background css rules for all platform
       let referenceNode = document.getElementById("content-deck");
       referenceNode = referenceNode ? referenceNode.nextSibling :
-      document.getElementById("browser-bottombox");
+        document.getElementById("browser-bottombox");
       referenceNode.parentNode.insertBefore(bottomToolbox, referenceNode);
       updateFullScreen = window.fullScreen;
     }
@@ -1267,11 +1267,11 @@ gTMPprefObserver = {
       prefSvc.removeObserver(this.OBSERVING[i], this);
   },
 
- /**
-  * Observer-function
-  * subject: [wrapped nsISupports :: nsIPrefBranch], nsIPrefBranch Internal
-  * topic: "changed"
-  */
+  /**
+   * Observer-function
+   * subject: [wrapped nsISupports :: nsIPrefBranch], nsIPrefBranch Internal
+   * topic: "changed"
+   */
   observe: function TMP_pref_observer(subject, topic, prefName) {
     if (this.preventUpdate)
       return;
@@ -1459,8 +1459,8 @@ gTMPprefObserver = {
         if (Tabmix.extensions.ctr &&
             Services.prefs.getCharPref("general.skins.selectedSkin") == "classic/1.0") {
           let otherPref = prefName == "extensions.tabmix.tabs.closeButtons.onLeft" ?
-                                      "extensions.classicthemerestorer.closeonleft" :
-                                      "extensions.tabmix.tabs.closeButtons.onLeft";
+            "extensions.classicthemerestorer.closeonleft" :
+            "extensions.tabmix.tabs.closeButtons.onLeft";
           value = Services.prefs.getBoolPref(prefName);
           if (Services.prefs.getBoolPref(otherPref) != value)
             Services.prefs.setBoolPref(otherPref, Services.prefs.getBoolPref(prefName));
@@ -1676,12 +1676,12 @@ gTMPprefObserver = {
     if (!icon)
       return; // nothing to do....
 
-   /**
-    *  from Firefox 3 tab-icon-image class have -moz-margin-start: value;
-    *                                           -margin-end-value: value;
-    *  we apply these value dynamically here to our tab-protect-icon tab-lock-icon class
-    *  since each theme can use different values
-    */
+    /**
+     *  from Firefox 3 tab-icon-image class have -moz-margin-start: value;
+     *                                           -margin-end-value: value;
+     *  we apply these value dynamically here to our tab-protect-icon tab-lock-icon class
+     *  since each theme can use different values
+     */
     let style = window.getComputedStyle(icon);
     let pinned;
     pinned = icon.hasAttribute("pinned");
@@ -1695,7 +1695,7 @@ gTMPprefObserver = {
                            selector + '.tab-reload-icon,' +
                            selector + '.tab-lock-icon {' +
                            '-moz-margin-start: %S; -moz-margin-end: %S;}'
-                           .replace("%S", marginStart).replace("%S", marginEnd);
+                               .replace("%S", marginStart).replace("%S", marginEnd);
     this.insertRule(iconRule);
 
     /** at the moment we move the button over the title - see setCloseButtonMargin
@@ -1718,15 +1718,15 @@ gTMPprefObserver = {
                          _selector + '.tab-reload-icon,' +
                          _selector + '.tab-lock-icon {' +
                          '-moz-margin-start: %S; -moz-margin-end: %S;}'
-                         .replace("%S", _marginStart).replace("%S", _marginEnd);
+                             .replace("%S", _marginStart).replace("%S", _marginEnd);
     this.insertRule(_iconRule);
     if (!pinned)
       icon.removeAttribute("pinned");
 
-   /**
-    *  set smaller left margin for the tab icon when the close button is on the left side
-    *  only do it if start margin is bigger then end margin
-    */
+    /**
+     *  set smaller left margin for the tab icon when the close button is on the left side
+     *  only do it if start margin is bigger then end margin
+     */
     if (parseInt(marginStart) < parseInt(marginEnd))
       return;
 
@@ -1745,7 +1745,7 @@ gTMPprefObserver = {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])').replace(/%faviconized%/g, '');
       tabmix_setRule(newRule);
       newRule = iconRule.replace(/%favhideclose%/g, '[favhideclose="true"]')
-                .replace(/%faviconized%/g, ':not([faviconized="true"])');
+          .replace(/%faviconized%/g, ':not([faviconized="true"])');
       tabmix_setRule(newRule);
     } else {
       let newRule = iconRule.replace(/%favhideclose%/g, '').replace(/%faviconized%/g, '');
@@ -1790,18 +1790,18 @@ gTMPprefObserver = {
         '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])')
-                            .replace(/%faviconized%/g, '')
-                            .replace(/%faviconized1%/g, ':not([faviconized="true"])');
+          .replace(/%faviconized%/g, '')
+          .replace(/%faviconized1%/g, ':not([faviconized="true"])');
       this.insertRule(newRule);
       newRule = iconRule.replace(/%favhideclose%/g, '[favhideclose="true"]')
-                        .replace(/%faviconized%/g, ':not([faviconized="true"])')
-                        .replace(/%faviconized1%/g, ':not([faviconized="true"])');
+          .replace(/%faviconized%/g, ':not([faviconized="true"])')
+          .replace(/%faviconized1%/g, ':not([faviconized="true"])');
       this.insertRule(newRule);
       newRule = '.tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {max-width: 36px !important;}';
       this.insertRule(newRule);
     } else {
       let newRule = iconRule.replace(/%favhideclose%/g, '')
-                            .replace(/%faviconized%/g, '').replace(/%faviconized1%/g, '');
+          .replace(/%faviconized%/g, '').replace(/%faviconized1%/g, '');
       this.insertRule(newRule);
     }
   },
@@ -1839,7 +1839,7 @@ gTMPprefObserver = {
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
                   ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'
-                  .replace("#", Tabmix._buttonsHeight);
+                      .replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule, "new-tab-height");
 
     if (TabmixSvc.australis && !Tabmix.isVersion(310) && !TabmixSvc.isLinux && !TabmixSvc.isMac) {
@@ -1886,10 +1886,10 @@ gTMPprefObserver = {
     if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
-                                       "rect(0px, 96px, 24px, 72px)";
+          "rect(0px, 96px, 24px, 72px)";
       else
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
-                                       "rect(0pt, 180px, 18px, 162px)";
+          "rect(0pt, 180px, 18px, 162px)";
     } else {
       [url, region] = ["newtab.png", "auto"];
     }
@@ -2194,14 +2194,14 @@ gTMPprefObserver = {
     Tabmix.tabsUtils.checkNewtabButtonVisibility = TabmixTabbar.isMultiRow &&
       ((aShow && aPosition == 2) || Boolean(TabmixTabbar.newPrivateTabButton()));
 
-   /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
-    *  aftertabs       - show the button after tabs
-    *  temporary-right-side
-    *                  - show the button on right side when there is no place
-    *                    for the button aftertabs in multi-row mode
-    *  right-side      - show the button on right side
-    *  left-side       - show the button on left side
-    */
+    /** values for tabmix-show-newtabbutton to show tabs-newtab-button are:
+     *  aftertabs       - show the button after tabs
+     *  temporary-right-side
+     *                  - show the button on right side when there is no place
+     *                    for the button aftertabs in multi-row mode
+     *  right-side      - show the button on right side
+     *  left-side       - show the button on left side
+     */
     let attrValue;
     if (!aShow)
       attrValue = null;
@@ -2304,7 +2304,7 @@ gTMPprefObserver = {
     // when we here after many tabs closed fast mTabstrip height can larger
     // then one row.
     let newHeight = TabmixTabbar.visibleRows == 1 ? TabmixTabbar.singleRowHeight :
-            gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
+      gBrowser.tabContainer.mTabstrip.scrollClientRect.height;
     if (this._bottomRect.height != newHeight) {
       this._bottomRect.height = newHeight;
       bottomToolbox.style.setProperty("height", newHeight + "px", "important");

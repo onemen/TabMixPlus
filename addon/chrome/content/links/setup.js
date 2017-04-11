@@ -24,7 +24,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
     if (autoComplete) {
       // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
       let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
-               "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
+        "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
       let n = '\n            ';
       this.changeCode(autoComplete, fn)._replace(
         /openUILink\(url, aEvent.*\);/,
@@ -101,7 +101,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       let hasFirstArgument = window.arguments && window.arguments[0];
       if (hasFirstArgument) {
         let defaultArgs = Cc["@mozilla.org/browser/clh;1"]
-                            .getService(Ci.nsIBrowserHandler).defaultArgs;
+            .getService(Ci.nsIBrowserHandler).defaultArgs;
         if (window.arguments[0] == defaultArgs) {
           SM.overrideHomepage = window.arguments[0];
           window.arguments[0] = null;
@@ -200,7 +200,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
       if (aBrowser.canGoForward || aBrowser.canGoBack)
         return false;
       return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
-      Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
+        Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
     } catch (ex) {
       Tabmix.assert(ex);
       return true;
@@ -325,10 +325,10 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
       break;
   }
 
- /**
-  *  Don't use return in this function
-  *  TreeStyleTab add some code at the end
-  */
+  /**
+   *  Don't use return in this function
+   *  TreeStyleTab add some code at the end
+   */
   let transitionend = Tabmix.callerTrace("onxbltransitionend");
   if (tabsCount == 1) {
     let tab = this.selectedItem;

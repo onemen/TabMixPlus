@@ -424,8 +424,7 @@
           var index, current = 0;
           for (let i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            let row = tab.closing ? -1 :
-                Tabmix.tabsUtils.getTabRowNumber(tab, topY);
+            let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);
             if (row > current) {
               current = row;
               if (!tab.hasAttribute("tabmix-firstTabInRow"))

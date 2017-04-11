@@ -328,11 +328,11 @@ ContentClickInternal = {
         return self.getHrefFromOnClick(event, href, this.wrappedNode, this.onclick);
       });
       XPCOMUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
-       /*
-        * Check if link refers to external domain.
-        * Get current page url
-        * if user click a link while the page is reloading node.ownerDocument.location can be null
-        */
+        /**
+         * Check if link refers to external domain.
+         * Get current page url
+         * if user click a link while the page is reloading node.ownerDocument.location can be null
+         */
         let youtube = /www\.youtube\.com\/watch\?v=/;
         let curpage = this.currentURL;
         if (!youtube.test(curpage)) {
@@ -354,7 +354,7 @@ ContentClickInternal = {
       return where == "tabshifted" ? "tabshifted" : "tab";
     };
 
-  ///XXX check again how SubmitToTab work
+    ///XXX check again how SubmitToTab work
     if (typeof (this._window.SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
@@ -437,7 +437,7 @@ ContentClickInternal = {
     // catch other middle & right click
     if (event.button !== 0) {
       return event.button == 1 && this._data.hrefFromOnClick ?
-              [TMP_tabshifted(event) + "@12"] : ["default@12"];
+        [TMP_tabshifted(event) + "@12"] : ["default@12"];
     }
 
     // the rest of the code if for left-click only
@@ -753,7 +753,7 @@ ContentClickInternal = {
     if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
       let types = TabmixSvc.prefBranch.getCharPref("filetype");
       types = types.toLowerCase().split(" ")
-                   .filter(t => filetype.indexOf(t) == -1);
+          .filter(t => filetype.indexOf(t) == -1);
       filetype = [...filetype, ...types];
     }
 
@@ -1066,7 +1066,7 @@ ContentClickInternal = {
           let browser = tab.linkedBrowser;
           if (browser.getAttribute("remote") == "true") {
             browser.messageManager
-                   .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
+                .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
           } else {
             let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
               this.frameData.href, this.frameData.name);
@@ -1086,14 +1086,14 @@ ContentClickInternal = {
     frameSearch.start(newEpoch);
   },
 
- /**
-  * @brief Check for certain JavaScript strings inside an attribute.
-  *
-  * @param attr     The attribute to check.
-  * @param string   The string to check for.
-  * @returns        true if the strings are present, false if they aren't.
-  *
-  */
+  /**
+   * @brief Check for certain JavaScript strings inside an attribute.
+   *
+   * @param attr     The attribute to check.
+   * @param string   The string to check for.
+   * @returns        true if the strings are present, false if they aren't.
+   *
+   */
   checkAttr: function TMP_checkAttr(attr, string) {
     if (typeof (attr) == "string")
       return attr.startsWith(string);
@@ -1105,14 +1105,14 @@ ContentClickInternal = {
     return (this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup));
   },
 
- /**
-  * @brief Check if link refers to external domain.
-  *
-  * @param target    The target link.
-  * @param curpage   The current page url
-  * @returns         true when curpage and target are in different domains
-  *
-  */
+  /**
+   * @brief Check if link refers to external domain.
+   *
+   * @param target    The target link.
+   * @param curpage   The current page url
+   * @returns         true when curpage and target are in different domains
+   *
+   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     const fixupURI = url => {
       try {
@@ -1150,13 +1150,13 @@ ContentClickInternal = {
         if (!url) {
           return null;
         }
-    /* DONT DELETE
-      var host = url.hostPort.split(".");
-      //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
-      while (host.length > 2)
-        host.shift();
-      return host.join(".");
-    */
+        /* DONT DELETE
+        var host = url.hostPort.split(".");
+        //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
+        while (host.length > 2)
+          host.shift();
+        return host.join(".");
+        */
         let level;
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
