@@ -168,6 +168,9 @@ this.SingleWindowModeUtils = {
       if (TabmixSvc.version(500)) {
         params.userContextId = args[6] != undefined ? args[6] :
           Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+        params.originPrincipal = args[7];
+        params.forceAboutBlankViewerInCurrent = Boolean(args[7]);
+        params.triggeringPrincipal = args[8];
       }
       urls = [uriToLoad];
     } else {

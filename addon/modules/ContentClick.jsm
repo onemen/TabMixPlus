@@ -197,7 +197,9 @@ ContentClickInternal = {
       referrerURI: browser.documentURI,
       referrerPolicy: event.referrerPolicy,
       noReferrer: event.noReferrer,
+      originPrincipal: event.nodePrincipal,
       triggeringPrincipal: event.triggeringPrincipal,
+      frameOuterWindowID: event.frameOuterWindowID,
       isContentWindowPrivate: event.isContentWindowPrivate,
       charset: browser.characterSet,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload

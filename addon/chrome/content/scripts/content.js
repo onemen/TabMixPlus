@@ -267,6 +267,10 @@ TabmixClickEventHandler = {
     // for the case there is no href
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode) {
+      if (!href) {
+        json.originPrincipal = ownerDoc.nodePrincipal;
+        json.triggeringPrincipal = ownerDoc.nodePrincipal;
+      }
       linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
         href && event.button === 0);
     }
@@ -328,6 +332,7 @@ TabmixClickEventHandler = {
         }
       }
       json.originPrincipal = ownerDoc.nodePrincipal;
+      json.triggeringPrincipal = ownerDoc.nodePrincipal;
 
       sendAsyncMessage("Content:Click", json);
       return;
