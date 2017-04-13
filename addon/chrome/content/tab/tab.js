@@ -50,7 +50,7 @@ var TabmixTabbar = {
       return;
 
     var tabBar = gBrowser.tabContainer;
-    var tabStrip = tabBar.mTabstrip;
+    var tabstrip = tabBar.mTabstrip;
 
     var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
     if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
@@ -91,18 +91,23 @@ var TabmixTabbar = {
       Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
-        tabBar.mTabstrip.resetFirstTabInRow();
+        tabstrip.resetFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip(true);
       } else if (isMultiRow && overflow) {
         // if we are in overflow in one line we will have more then one line
         // in multi-row. we try to prevent extra over/underflow events by setting
         // the height in front.
-        tabStrip.orient = "vertical";
+        tabstrip.orient = "vertical";
         if (Tabmix.tabsUtils.updateVerticalTabStrip() == "scrollbar")
           Tabmix.tabsUtils.overflow = true;
       }
       Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
+      if (gBrowser._numPinnedTabs && tabBar._pinnedTabsLayoutCache) {
+        tabBar._pinnedTabsLayoutCache.paddingStart = tabstrip.scrollboxPaddingStart;
+        tabBar._pinnedTabsLayoutCache.scrollButtonWidth = tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT ?
+          0 : tabstrip._scrollButtonDown.getBoundingClientRect().width;
+      }
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");

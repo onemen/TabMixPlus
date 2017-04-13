@@ -403,7 +403,7 @@ Tabmix.tablib = {
            this.mTabstrip.resetFirstTabInRow();\
          $&'
       )._replace(
-        /this.mTabstrip._scrollButtonDown.(scrollWidth|getBoundingClientRect\(\).width)/,
+        /(tabstrip|this.mTabstrip)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
@@ -411,13 +411,20 @@ Tabmix.tablib = {
         '    Tabmix.prefs.getBoolPref("pinnedTabScroll")) {' + $LF +
         '  doPosition = false;' + $LF +
         '}' + $LF +
-        '  if (doPosition && TabmixTabbar.isMultiRow) {' +
-        '    this.setAttribute("positionpinnedtabs", "true");' +
+        'if (doPosition && TabmixTabbar.isMultiRow) {' + $LF +
+        '  this.setAttribute("positionpinnedtabs", "true");' + $LF +
+        '  let layoutData = this._pinnedTabsLayoutCache;' + $LF +
+        '  if (!layoutData) {' + $LF +
+        '    layoutData = {pinnedTabWidth: this.childNodes[0].getBoundingClientRect().width};' + $LF +
+        '    if (Tabmix.isVersion(550)) {' + $LF +
+        '      this._pinnedTabsLayoutCache = layoutData;' + $LF +
+        '    }' + $LF +
+        '  }' + $LF +
         '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
         '      tab.style.MozMarginStart = width + "px";' +
-        '      width += tab.getBoundingClientRect().width;' +
+        '      width += layoutData.pinnedTabWidth;' +
         '    }' +
         '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
         '      this.mTabstrip.firstTabInRowMargin = width;' +
