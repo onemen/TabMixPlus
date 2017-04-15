@@ -605,9 +605,13 @@ Tabmix.tabsUtils = {
 
   get tabstripInnerbox() {
     delete this.tabstripInnerbox;
-    let elm = document.getAnonymousElementByAttribute(
-      this.tabBar.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-    return (this.tabstripInnerbox = elm);
+    return (this.tabstripInnerbox = this.getInnerbox());
+  },
+
+  getInnerbox() {
+    return document.getAnonymousElementByAttribute(
+      this.tabBar.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"
+    );
   },
 
   get inDOMFullscreen() {
@@ -757,6 +761,12 @@ Tabmix.tabsUtils = {
   },
 
   initializeTabmixUI() {
+    // tabstripInnerbox is not valid after Toolbar Position Changer add-on
+    // moves the toolbar
+    const resetSettings = this.topTabY == 0;
+    delete this.tabstripInnerbox;
+    this.tabstripInnerbox = this.getInnerbox();
+
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
     // verticalTabs 0.9.1+ is restartless.
     let isVertical = Tabmix.extensions.verticalTabs;
@@ -786,7 +796,7 @@ Tabmix.tabsUtils = {
     // fix incompatibility with Personal Titlebar extension
     // the extensions trigger tabbar binding reset on toolbars customize
     // we need to init our ui settings from here and again after customization
-    if (Tabmix.navToolbox.customizeStarted) {
+    if (Tabmix.navToolbox.customizeStarted || resetSettings) {
       TabmixTabbar.visibleRows = 1;
       TabmixTabbar.updateSettings(false);
       Tabmix.navToolbox.resetUI = true;
