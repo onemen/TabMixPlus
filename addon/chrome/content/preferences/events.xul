@@ -139,7 +139,7 @@
                 </menupopup>
               </menulist>
             </hbox>
-            <hbox class="indent" align="center" flex="1">
+            <hbox class="indent" align="center">
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
               <textbox id="newTabUrl" class="padded uri-element" flex="1"
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
@@ -329,7 +329,7 @@
                     </menupopup>
                   </menulist>
               </hbox>
-              <hbox class="indent" align="center" flex="1">
+              <hbox class="indent" align="center">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
