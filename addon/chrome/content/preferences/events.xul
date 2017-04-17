@@ -181,7 +181,7 @@
               <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        observes="obs_loadProgressively"
-                       type="number" min="1" maxwidth="36"/>
+                       type="number" min="1" maxwidth="42"/>
               <label value="&tabs.label;"/>
             </hbox>
             <hbox align="center" class="indent">
@@ -192,7 +192,7 @@
                             observes="obs_loadProgressively"/>
               <textbox id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
-                       type="number" min="1" maxwidth="36"/>
+                       type="number" min="1" maxwidth="42"/>
               <label value="&tabs.label;" observes="obs_loadProgressively"/>
             </hbox>
           </groupbox>
