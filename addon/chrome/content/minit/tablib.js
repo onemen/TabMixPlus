@@ -816,7 +816,7 @@ Tabmix.tablib = {
       'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
       'Tabmix.tablib.closeWindow(true)', {flags: "g"}
     )._replace(
-      'os.notifyObservers(null, "browser-lastwindow-close-granted", null);',
+      /os\.notifyObservers\(null, "browser-lastwindow-close-granted"(?:, null)?\);/,
       'if (!TabmixSvc.isMac && !Tabmix.tablib.closeWindow(true)) return false;\
        $&'
     ).toCode();
