@@ -36,9 +36,9 @@
 <!ENTITY tabFocus.label "Foco das abas">
 <!ENTITY tabClose.label "Fechando abas">
 <!ENTITY tabMerge.label "Unindo abas">
-<!ENTITY tabFeature.label "Facilidades das abas">
+<!ENTITY tabFeature.label "Recursos das abas">
 <!ENTITY newtab.label "Carregar em novas abas:">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "Quando fechar a última aba, substití-la por">
 <!ENTITY newtab.blank "Página em branco">
 <!ENTITY newtab.home "Página inicial">
 <!ENTITY newtab.current "Página atual">
@@ -56,11 +56,11 @@
 <!ENTITY openTabNextInverse.label "Mudar ordem de abertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir nova aba próxima da última aba aberta a partir da aba atual (desde que foi a última a ser selecionada)">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
-<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY openMoreThan.label "when you open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY moveSwitchToTabNext.label "Mover a aba de 'Alternar para a aba' próximo ao atual">
+<!ENTITY loadTabsProgressively.label "Carregar abas progressivamente">
+<!ENTITY restoreOnDemand.label "Não carregue abas até que esteja selecionado.">
+<!ENTITY openMoreThan.label "quando você abre mais de">
+<!ENTITY tabs.label "abas">
 <!ENTITY lockTabs.label "Bloquear abas">
 <!ENTITY lockNewTabs.label "Bloquear novas abas">
 <!ENTITY lockAppTabs.label "Bloquear abas de aplicativos">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicar aba">
 <!ENTITY inversefocus2.label "Clique com o botão do meio ou com o botão direito do mouse sobre o foco inverso:">
 <!ENTITY warning.caption.label "Alertas">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Avisar ao fechar várias abas">
+<!ENTITY warnOnCloseProtected1.label "Avisar quando fechar janela com abas protegidas">
+<!ENTITY warnOnCloseWindow1.label "Avisar quando fechar janela com múltiplas abas">
 <!ENTITY lasttab.caption.label "Fechando última aba">
 <!ENTITY keepWindow.label.3.1 "Não fechar a janela depois que a última aba for fechada">
 <!ENTITY keeptab.label "Evitar o fechamento da última aba">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Mostrar no Menu de Contexto da Aba:">
 <!ENTITY showContentAreaContext.label "Mostrar no Menu de Contexto Principal:">
 <!ENTITY showToolsMenu.label "Mostrar no Menu &quot;Ferramentas&quot;:">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "Mostrar a sua página inicial">
 <!ENTITY startupBlankPage.label "Mostrar página em branco">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Mostrar suas janelas e abas pela última vez">
 <!ENTITY sm.extension.description1 "Tab Mix Plus detectou que a Extensão Session Manager está instalada">
 <!ENTITY sm.extension.description2 "O gerenciador de sessão do Tab Mix Plus será desativado">
 <!ENTITY sm.extension.description3 "Você pode clicar à direita para abrir a janela de opções do Session Manager.">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Converter seus dados de sessões do formato Tab Mix Plus para o formato de extensão do Gerenciador de Sessões">
 <!ENTITY sm.extension.convert.label "Converter">
 <!ENTITY sm.extension.chooseFile.label1 "Converter sessões do Tab Mix Plus do perfil atual">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Escolher qual arquivo de dados a converter">
 <!ENTITY ss.enable.label "Usar Restaurador de Sessão nativo">
 <!ENTITY ss.enable.tooltip "Desmarque para permitir o uso com o Restaurador de Sessão do Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Configuração Avançada">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
 <!ENTITY sm.restore.bypassCache "Limpar o cache ao restaurar">
 <!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restaurar as abas fixadas pela última vez">
 <!ENTITY sm.preserve.options "Preservar abas:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado de proteção">

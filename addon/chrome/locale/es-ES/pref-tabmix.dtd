@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Fusión de pestañas">
 <!ENTITY tabFeature.label "Funciones de pestañas">
 <!ENTITY newtab.label "Cargar en nuevas pestañas:">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "Al cerrar la última pestaña reemplazar por">
 <!ENTITY newtab.blank "Página en blanco">
 <!ENTITY newtab.home "Página inicio">
 <!ENTITY newtab.current "Página actual">
@@ -56,10 +56,10 @@
 <!ENTITY openTabNextInverse.label "Cambiar orden de apertura">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Abrir nueva pestaña junto a la última abierta desde la pestaña actual (desde que se seleccionó por última vez)">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY moveSwitchToTabNext.label "Mover pestaña desde &quot;Cambiar a pestaña&quot; a continuación de la actual">
 <!ENTITY loadTabsProgressively.label "Cargar pestañas progresivamente">
 <!ENTITY restoreOnDemand.label "No cargar pestañas antes de seleccionarlas">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "cuando abra más de">
 <!ENTITY tabs.label "pestañas">
 <!ENTITY lockTabs.label "Bloquear pestañas">
 <!ENTITY lockNewTabs.label "Bloquear nuevas pestañas">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicar pestaña">
 <!ENTITY inversefocus2.label "Clic intermedio o Control+clic invierte el enfoque de:">
 <!ENTITY warning.caption.label "Aviso">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Avisar antes de cerrar varias pestañas">
+<!ENTITY warnOnCloseProtected1.label "Avisar antes de cerrar una ventana con pestañas protegidas">
+<!ENTITY warnOnCloseWindow1.label "Avisar antes de cerrar una ventana con varias pestañas">
 <!ENTITY lasttab.caption.label "Cerrar última pestaña">
 <!ENTITY keepWindow.label.3.1 "No cerrar la ventana al cerrar la última pestaña">
 <!ENTITY keeptab.label "No permitir que se cierre la última pestaña">
@@ -147,7 +147,7 @@
 <!ENTITY tabBarPosition.label "Posición:">
 <!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">
 <!ENTITY tabBarPosition.bottom.label "Abajo (debajo del contenido)">
-<!ENTITY tabScroll.label "Cuando las pestañas no caben en la barra:">
+<!ENTITY tabScroll.label "Cuando las pestañas no quepan en la barra:">
 <!ENTITY tabScroll.none "se pueden rotar sin botones">
 <!ENTITY tabScroll.leftRightButtons "se pueden rotar con botones a derecha e izquierda">
 <!ENTITY tabScroll.rightButtons "se pueden rotar con botones a la derecha">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Mostrar en menú contextual de pestañas:">
 <!ENTITY showContentAreaContext.label "Mostrar en menú contextual principal:">
 <!ENTITY showToolsMenu.label "Mostrar en menú Herramientas:">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "Mostrar su página de inicio">
 <!ENTITY startupBlankPage.label "Mostrar página en blanco">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Mostrar ventana y pestañas de última sesión">
 <!ENTITY sm.extension.description1 "Tab Mix Plus ha detectado que está instalada la extensión Session Manager">
 <!ENTITY sm.extension.description2 "Se deshabilitará el administrador de sesiones de Tab Mix Plus">
 <!ENTITY sm.extension.description3 "Pulse en el botón de la derecha si desea abrir el diálogo de Opciones de Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Formatear sus datos de sesión del formato de Tab Mix Plus al de la extensión Session Manager">
 <!ENTITY sm.extension.convert.label "Formatear">
 <!ENTITY sm.extension.chooseFile.label1 "Formatear las sesiones de Tab Mix Plus del perfil actual">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Elegir el fichero de datos a convertir">
 <!ENTITY ss.enable.label "Utilizar la funcionalidad interna de restaurar sesión de Firefox">
 <!ENTITY ss.enable.tooltip "Deseleccionar si se quiere utilizar el Administrador de sesiones de Tabmix">
 <!ENTITY ss.advanced_setting "Predisposiciones avanzadas">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Combinar varias ventanas en una">
 <!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
 <!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restaurar sus pestañas fijas de la última sesión">
 <!ENTITY sm.preserve.options "Conservar pestañas:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Estatus de protección">

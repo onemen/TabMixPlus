@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Esconder a barra de abas">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Quando você tem apenas uma aba">
 <!ENTITY hideTabBar.onOneTab.key "U">
 <!ENTITY hideTabBar.always.label "Sempre">
 <!ENTITY hideTabBar.always.key "S">

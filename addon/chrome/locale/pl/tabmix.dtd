@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Wyświetlanie paska kart">
 <!ENTITY hideTabBar.never.label "Zawsze">
 <!ENTITY hideTabBar.never.key "W">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Gdy jest tylko jedna karta">
 <!ENTITY hideTabBar.onOneTab.key "N">
 <!ENTITY hideTabBar.always.label "Nie wyświetlaj">
 <!ENTITY hideTabBar.always.key "E">

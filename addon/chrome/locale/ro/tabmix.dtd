@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Se ascunde bara de file">
 <!ENTITY hideTabBar.never.label "niciodată">
 <!ENTITY hideTabBar.never.key "n">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "când există o singură filă">
 <!ENTITY hideTabBar.onOneTab.key "f">
 <!ENTITY hideTabBar.always.label "întotdeauna">
 <!ENTITY hideTabBar.always.key "t">

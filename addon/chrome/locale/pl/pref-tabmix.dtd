@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Łączenie kart">
 <!ENTITY tabFeature.label "Właściwości kart">
 <!ENTITY newtab.label "Otwieraj w nowej karcie">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "Gdy jest zamykana ostatnia karta zamień ją na">
 <!ENTITY newtab.blank "pustą stronę">
 <!ENTITY newtab.home "stronę startową">
 <!ENTITY newtab.current "aktywną stronę">
@@ -56,10 +56,10 @@
 <!ENTITY openTabNextInverse.label "Zmień kolejność otwierania">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Otwieraj nową kartę za ostatnio otwartą kartą z aktywnej karty">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY moveSwitchToTabNext.label "Umieszczaj przełączaną kartę za aktywną kartą">
 <!ENTITY loadTabsProgressively.label "Wczytuj karty sukcesywnie">
 <!ENTITY restoreOnDemand.label "Nie wczytuj kart przed wybraniem">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "gdy jest otwierane więcej niż">
 <!ENTITY tabs.label "kart">
 <!ENTITY lockTabs.label "Blokowanie kart">
 <!ENTITY lockNewTabs.label "Blokuj nowe karty">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "powielonych kart">
 <!ENTITY inversefocus2.label "Kliknięcie ś.p lub Ctrl+kliknięcie odwraca zachowanie:">
 <!ENTITY warning.caption.label "Ostrzeżenia">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Ostrzegaj przed zamknięciem wielu kart">
+<!ENTITY warnOnCloseProtected1.label "Ostrzegaj przed zamknięciem okna z zabezpieczonymi kartami">
+<!ENTITY warnOnCloseWindow1.label "Ostrzegaj przed zamknięciem okna z wieloma kartami">
 <!ENTITY lasttab.caption.label "Zamykanie ostatniej karty">
 <!ENTITY keepWindow.label.3.1 "Nie zamykaj okna, gdy jest zamykana ostatnia karta">
 <!ENTITY keeptab.label "Nie zamykaj ostatniej karty">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Wyświetlaj w menu kontekstowym kart elementy:">
 <!ENTITY showContentAreaContext.label "Wyświetlaj w głównym menu kontekstowym elementy:">
 <!ENTITY showToolsMenu.label "Wyświetlaj w menu Narzędzia elementy:">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "wyświetlaj stronę startową">
 <!ENTITY startupBlankPage.label "wyświetlaj pustą stronę">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "wyświetlaj okna i karty z poprzedniej sesji">
 <!ENTITY sm.extension.description1 "Tab Mix Plus wykrył, że jest zainstalowane rozszerzenie Session Manager">
 <!ENTITY sm.extension.description2 "Menedżer sesji Tab Mix Plusa zostanie wyłączony">
 <!ENTITY sm.extension.description3 "Można kliknąć na przycisku po prawej stronie, aby otworzyć opcje rozszerzenia Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Konwertuj dane sesji z formatu Tab Mix Plusa na format Session Managera">
 <!ENTITY sm.extension.convert.label "Konwertuj">
 <!ENTITY sm.extension.chooseFile.label1 "Konwertuj dane sesji Tab Mix Plusa z aktywnego profilu">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Wybierz dane do konwersji">
 <!ENTITY ss.enable.label "Używaj menedżera sesji Firefoksa">
 <!ENTITY ss.enable.tooltip "Odznacz tę opcję, aby używać menedżera sesji Tab Mix Plusa">
 <!ENTITY ss.advanced_setting "Ustawienia zaawansowane">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
 <!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
 <!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Odtwarzaj przypięte karty z poprzedniej sesji">
 <!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
 <!ENTITY sm.preserve.history "historię">
 <!ENTITY sm.preserve.protect "status zabezpieczenia">

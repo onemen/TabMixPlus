@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "De tabbladenbalk verbergen">
 <!ENTITY hideTabBar.never.label "Nooit">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Als slechts één tabblad geopend is">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "Altijd">
 <!ENTITY hideTabBar.always.key "A">

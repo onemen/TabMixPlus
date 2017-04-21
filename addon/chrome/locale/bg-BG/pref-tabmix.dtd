@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Обединяване на подпрозорци">
 <!ENTITY tabFeature.label "Настройки на подпрозорците">
 <!ENTITY newtab.label "Отваряне в нови подпрозорци:">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "При затваряне на последния подпрозорец, заместване с">
 <!ENTITY newtab.blank "Празна страница">
 <!ENTITY newtab.home "Началната страница">
 <!ENTITY newtab.current "Текущата страница">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
 <!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "при отваряне на повече от">
 <!ENTITY tabs.label "подпрозорци">
 <!ENTITY lockTabs.label "Заключване на подпрозорци">
 <!ENTITY lockNewTabs.label "Заключване на нови подпрозорци">

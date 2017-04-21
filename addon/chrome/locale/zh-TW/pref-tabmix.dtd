@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "合併分頁">
 <!ENTITY tabFeature.label "分頁功能">
 <!ENTITY newtab.label "新增分頁時自動載入：">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "關閉最後一個分頁時，取代為">
 <!ENTITY newtab.blank "空白頁">
 <!ENTITY newtab.home "首頁">
 <!ENTITY newtab.current "目前頁面">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "將「要切換過去的分頁」移動到目前分頁旁">
 <!ENTITY loadTabsProgressively.label "逐步載入分頁">
 <!ENTITY restoreOnDemand.label "選取後才載入分頁">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label "當開啟超過">
 <!ENTITY tabs.label "分頁">
 <!ENTITY lockTabs.label "鎖定分頁">
 <!ENTITY lockNewTabs.label "鎖定新分頁">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "複製分頁">
 <!ENTITY inversefocus2.label "點擊滑鼠中鍵或 [Ctrl]+左鍵 切換至該分頁：">
 <!ENTITY warning.caption.label "警告">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "關閉多個分頁時發出警告">
+<!ENTITY warnOnCloseProtected1.label "關閉視窗時若仍有被保護的分頁則發出警告">
+<!ENTITY warnOnCloseWindow1.label "關閉視窗時若仍有多個分頁則發出警告">
 <!ENTITY lasttab.caption.label "關閉最後一個分頁">
 <!ENTITY keepWindow.label.3.1 "關閉最後一個分頁時不要關閉視窗">
 <!ENTITY keeptab.label "防止最後一個分頁被關閉">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "在分頁標籤右鍵選單中的內容">
 <!ENTITY showContentAreaContext.label "在視窗頁面右鍵選單中的內容">
 <!ENTITY showToolsMenu.label "在主功能表工具選單中的內容">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "顯示首頁">
 <!ENTITY startupBlankPage.label "顯示空白頁">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "顯示上次瀏覽的視窗和分頁">
 <!ENTITY sm.extension.description1 "偵測到 Session Manager 套件已安裝">
 <!ENTITY sm.extension.description2 "Tab Mix Plus 的瀏覽狀態管理功能已經停用">
 <!ENTITY sm.extension.description3 "請點擊右方按鈕開啟 Session Manager 選項設定">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "將瀏覽狀態資料轉換為 Session Manager 支援之格式">
 <!ENTITY sm.extension.convert.label "執行轉換">
 <!ENTITY sm.extension.chooseFile.label1 "直接讀取目前使用中的瀏覽狀態資料檔">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "讓我手動選擇欲轉換的瀏覽狀態資料檔">
 <!ENTITY ss.enable.label "使用 Firefox 內建的瀏覽狀態回復功能">
 <!ENTITY ss.enable.tooltip "取消勾選，可啟用 Tab Mix Plus 瀏覽狀態管理">
 <!ENTITY ss.advanced_setting "進階設定">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "自動合併所有視窗">
 <!ENTITY sm.restore.bypassCache "還原時不使用快取的資料">
 <!ENTITY sm.notrestore.label "當關閉「啟動時還原」功能">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "還原上次釘選的分頁">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">
 <!ENTITY sm.preserve.protect "保護狀態">
