@@ -851,7 +851,7 @@ Tabmix.tabsUtils = {
     if (!this.overflow) {
       // prevent new-tab-button on the right from flickering when new tabs animate is on.
       if (this.disAllowNewtabbutton &&
-          Services.prefs.getBoolPref("browser.tabs.animate")) {
+          TabmixSvc.tabAnimationsEnabled) {
         // after 250ms new tab is fully opened
         if (!this.adjustNewtabButtonTimeout) {
           let timeout = 250;

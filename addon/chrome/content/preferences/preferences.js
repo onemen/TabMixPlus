@@ -368,6 +368,11 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
     "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
   ];
 
+  if (Tabmix.isVersion(550)) {
+    const index = otherPrefs.indexOf("browser.tabs.animate");
+    otherPrefs.splice(index, 1);
+  }
+
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();
   // filter out preference without default value

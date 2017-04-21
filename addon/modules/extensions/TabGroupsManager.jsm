@@ -16,12 +16,12 @@ this.TMP_TabGroupsManager = {
       '    $1$2'
     ).toCode();
 
-    // in Firefox 4.0 we call TabGroupsManager.eventListener.onTabClose regardless of browser.tabs.animate
+    // we call TabGroupsManager.eventListener.onTabClose regardless of tab animations
     this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabClose")._replace(
       'this.onTabClose_updateTabBar(tab);',
       'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) {Tabmix.log(e);}'
     )._replace(
-      '!Services.prefs.getBoolPref("browser.tabs.animate")', 'true'
+      '!TabmixSvc.tabAnimationsEnabled', 'true'
     ).toCode();
 
     this.changeCode(aWindow.TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragExit")._replace(

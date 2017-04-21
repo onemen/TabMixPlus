@@ -371,6 +371,14 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() 
       this.SessionStoreGlobal.Utils.SERIALIZED_SYSTEMPRINCIPAL || null;
 });
 
+// Firefox 55
+// Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
+XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
+  return isVersion(550) ?
+    Services.prefs.getBoolPref("toolkit.cosmeticAnimations.enabled") :
+    Services.prefs.getBoolPref("browser.tabs.animate");
+});
+
 tabStateCache = {
   saveTabAttributes(tab, attrib, save = true) {
     if (TabmixSvc.isPaleMoon) {

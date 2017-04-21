@@ -49,6 +49,13 @@ var gEventsPane = {
       $("selectSyncedTabs").hidden = true;
     }
 
+    // Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
+    // remove the UI for the old 'browser.tabs.animate'
+    if (Tabmix.isVersion(550)) {
+      gPrefWindow.removeChild("pref_disableTabsAnimate");
+      gPrefWindow.removeChild("disableTabsAnimate");
+    }
+
     this.alignTabOpeningBoxes();
 
     gPrefWindow.initPane("paneEvents");

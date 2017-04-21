@@ -799,7 +799,7 @@ var TMP_eventListener = {
     } else if (!this._onOpenTimeout) {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
-          Services.prefs.getBoolPref("browser.tabs.animate") ? 0 : 200;
+          TabmixSvc.tabAnimationsEnabled ? 0 : 200;
       this._onOpenTimeout = window.setTimeout(function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
           clearTimeout(self._onOpenTimeout);
@@ -851,10 +851,10 @@ var TMP_eventListener = {
       }
     }
 
-    // when browser.tabs.animate is true gBrowser._endRemoveTab calls
+    // when tab animations enabled is true gBrowser._endRemoveTab calls
     // onTabClose_updateTabBar.
     // we would like to get early respond when row height is going to change.
-    var updateNow = !Services.prefs.getBoolPref("browser.tabs.animate");
+    var updateNow = !TabmixSvc.tabAnimationsEnabled;
     if (!updateNow && tabBar.hasAttribute("multibar")) {
       let lastTab = Tabmix.visibleTabs.last;
       if (!TabmixTabbar.inSameRow(lastTab, Tabmix.visibleTabs.previous(lastTab))) {
