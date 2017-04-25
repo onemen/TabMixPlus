@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Ẩn thanh thẻ">
 <!ENTITY hideTabBar.never.label "Không bao giờ">
 <!ENTITY hideTabBar.never.key "K">
-<!ENTITY hideTabBar.onOneTab.label "Khi tôi chỉ có một thẻ">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "t">
 <!ENTITY hideTabBar.always.label "Luôn luôn">
 <!ENTITY hideTabBar.always.key "L">

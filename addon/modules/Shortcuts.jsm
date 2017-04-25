@@ -45,7 +45,7 @@ this.Shortcuts = {
     undoClose: {default: "VK_F12 accel"},
     undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
     clearClosedTabs: {
-      command: function() {
+      command() {
         this.TMP_ClosedTabs.restoreTab('original', -1);
       }
     },
@@ -68,7 +68,7 @@ this.Shortcuts = {
   initialized: false,
   keyConfigInstalled: false,
 
-  initService: function(aWindow) {
+  initService(aWindow) {
     if (this.initialized)
       return;
     this.initialized = true;
@@ -76,22 +76,12 @@ this.Shortcuts = {
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
     let $ = id => id && aWindow.document.getElementById(id);
-    let container = $("tabmixScrollBox") || $("tabbrowser-tabs");
-    let labels = {};
+    let container = $("TabsToolbar");
     if (container) {
       let box = aWindow.document.createElement("vbox");
       box.setAttribute("shortcutsLabels", true);
       container.appendChild(box);
-      for (let att of box.attributes) {
-        labels[att.name] = att.value;
-      }
-      container.removeChild(box);
     }
-    labels.togglePinTab =
-      $("context_pinTab").getAttribute("label") + "/" +
-      $("context_unpinTab").getAttribute("label");
-    labels.clearClosedTabs =
-      TabmixSvc.getString("undoclosetab.clear.label");
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       // get default value for all keys
@@ -109,11 +99,15 @@ this.Shortcuts = {
         }
       }
       keyData.value = keyData.default || "";
-      if (container && key in labels)
-        keyData.label = labels[key];
-      else if (!container && !key.id)
+      if (!container && !key.id) {
         keyData.label = "tabmix_key_" + key;
+      }
     }
+    this.keys.togglePinTab.label =
+        $("context_pinTab").getAttribute("label") + "/" +
+        $("context_unpinTab").getAttribute("label");
+    this.keys.clearClosedTabs.label =
+        TabmixSvc.getString("undoclosetab.clear.label");
 
     if (aWindow.keyconfig) {
       this.keyConfigInstalled = true;
@@ -125,7 +119,7 @@ this.Shortcuts = {
     Services.obs.addObserver(this, "quit-application", false);
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe(aSubject, aTopic, aData) {
     switch (aTopic) {
       case "nsPref:changed":
         this.onPrefChange(aData);
@@ -172,7 +166,7 @@ this.Shortcuts = {
 
   /* ........ Window Event Handlers .............. */
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     switch (aEvent.type) {
       case "command":
         this.onCommand(aEvent.currentTarget);
@@ -185,7 +179,7 @@ this.Shortcuts = {
 
   onCommand: function TMP_SC_onCommand(aKey) {
     try {
-      let win = aKey.ownerDocument.defaultView;
+      let win = aKey.ownerGlobal;
       let command = this.keys[aKey._id].command;
       if (typeof command == "function") {
         command.apply(win, [win.gBrowser.selectedTab]);
@@ -198,7 +192,7 @@ this.Shortcuts = {
   },
 
   onUnload: function TMP_SC_onUnload(aWindow) {
-    aWindow.removeEventListener("unload", this, false);
+    aWindow.removeEventListener("unload", this);
     let doc = aWindow.document;
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
@@ -214,7 +208,7 @@ this.Shortcuts = {
     this._setReloadKeyId(aWindow);
     this.initService(aWindow);
 
-    aWindow.addEventListener("unload", this, false);
+    aWindow.addEventListener("unload", this);
 
     XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;
@@ -299,7 +293,7 @@ this.Shortcuts = {
       let newValue = shortcuts[key] || _default;
       let updateBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
           (onOpen ? disableSessionKeys :
-          disableSessionKeys != keyData.blocked);
+            disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
       // on start report disabled by default shortcut as changed so _updateKey
@@ -354,12 +348,12 @@ this.Shortcuts = {
     return shortcuts;
   },
 
-  _userChangedKeyPref: function(value) {
+  _userChangedKeyPref(value) {
     let key = value && this.keyParse(value);
     if (!key)
       return "";
     let modifiers = key.modifiers.replace(/^[\s,]+|[\s,]+$/g, "")
-          .replace("ctrl", "control").split(",");
+        .replace("ctrl", "control").split(",");
     key.modifiers = ["control", "meta", "accel", "alt", "shift"].filter(mod => {
       return new RegExp(mod).test(modifiers);
     }).join(",");
@@ -377,7 +371,7 @@ this.Shortcuts = {
     return this.validateKey(key);
   },
 
-  setShortcutsPref: function() {
+  setShortcutsPref() {
     this.updatingShortcuts = true;
     setPref("extensions.tabmix.shortcuts", JSON.stringify(this.prefBackup));
     this.updatingShortcuts = false;
@@ -387,7 +381,7 @@ this.Shortcuts = {
     let disabled = /^d&/.test(value);
     let [keyVal, modifiers] = value.replace(/^d&/, "").split(" ");
     let isKey = keyVal.length == 1;
-    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled: disabled};
+    return {modifiers: modifiers || "", key: isKey ? keyVal : "", keycode: isKey ? "" : keyVal, disabled};
   },
 
   // convert key object {modifiers, key, keycode} into a string with " " separator
@@ -411,21 +405,21 @@ this.Shortcuts = {
     return key ? this.keyStringify(key) : "";
   },
 
-  getFormattedKey: function(key) {
+  getFormattedKey(key) {
     return getFormattedKey(key);
   },
 
-  getFormattedKeyForID: function(id) {
+  getFormattedKeyForID(id) {
     let key = this.keyParse(this.keys[id].value);
     return getFormattedKey(key);
   },
 
-  getPlatformAccel: function() {
+  getPlatformAccel() {
     return getPlatformAccel();
   },
 
   // add id for key Browser:Reload
-  _setReloadKeyId: function(aWindow) {
+  _setReloadKeyId(aWindow) {
     let reload = aWindow.document.getElementsByAttribute("command", "Browser:Reload");
     if (!reload)
       return;
@@ -451,7 +445,7 @@ KeyConfig = {
   prefsChangedByTabmix: false,
   // when keyConfig extension installed sync the preference
   // user may change shortcuts in both extensions
-  init: function() {
+  init() {
     this.keyIdsMap = {};
     // keyConfig use index number for its ids
     let oldReloadId = "xxx_key29_Browser:Reload";
@@ -482,11 +476,11 @@ KeyConfig = {
     this.prefs.addObserver("", this, false);
   },
 
-  deinit: function() {
+  deinit() {
     this.prefs.removeObserver("", this);
   },
 
-  observe: function(aSubject, aTopic, aData) {
+  observe(aSubject, aTopic, aData) {
     if (this.prefsChangedByTabmix)
       return;
     let key = this.keyIdsMap[aData];
@@ -501,7 +495,7 @@ KeyConfig = {
     }
   },
 
-  syncFromKeyConfig: function(aKey, aPrefName, aShortcuts) {
+  syncFromKeyConfig(aKey, aPrefName, aShortcuts) {
     let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
@@ -530,7 +524,7 @@ KeyConfig = {
     return false;
   },
 
-  syncToKeyConfig: function(aChangedKeys, onChange) {
+  syncToKeyConfig(aChangedKeys, onChange) {
     for (let key of Object.keys(aChangedKeys)) {
       let prefVal = aChangedKeys[key];
       this.prefsChangedByTabmix = true;
@@ -549,7 +543,7 @@ KeyConfig = {
     }
   },
 
-  resetPref: function(prefName) {
+  resetPref(prefName) {
     this.prefs.clearUserPref(prefName);
   }
 

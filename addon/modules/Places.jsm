@@ -29,19 +29,19 @@ XPCOMUtils.defineLazyModuleGetter(this,
 
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({
-  init: function(aWindow) {
+  init(aWindow) {
     PlacesUtilsInternal.init(aWindow);
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     PlacesUtilsInternal.onQuitApplication();
   },
 
-  applyCallBackOnUrl: function(aUrl, aCallBack) {
+  applyCallBackOnUrl(aUrl, aCallBack) {
     return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
   },
 
-  getTitleFromBookmark: function(aUrl, aTitle, aItemId, aTab) {
+  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
     return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
   },
 });
@@ -52,7 +52,7 @@ PlacesUtilsInternal = {
   _timer: null,
   _initialized: false,
 
-  init: function(aWindow) {
+  init(aWindow) {
     if (this._initialized)
       return;
     this._initialized = true;
@@ -64,7 +64,7 @@ PlacesUtilsInternal = {
     this.initPlacesUIUtils(aWindow);
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     if (this._timer)
       this._timer.clear();
 
@@ -159,7 +159,7 @@ PlacesUtilsInternal = {
     }
 
     let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
-        "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
+      "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
     Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
       /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
     ).toCode();
@@ -202,7 +202,7 @@ PlacesUtilsInternal = {
     const PREF = "extensions.tabmix.titlefrombookmark";
     let updateValue = () => {
       let value = Services.prefs.getBoolPref(PREF);
-      let definition = {value: value, configurable: true};
+      let definition = {value, configurable: true};
       Object.defineProperty(this, "titlefrombookmark", definition);
       return value;
     };
@@ -211,7 +211,7 @@ PlacesUtilsInternal = {
     return updateValue();
   },
 
-  getBookmarkTitle: function(aUrl, aID) {
+  getBookmarkTitle(aUrl, aID) {
     let aItemId = aID.value || -1;
     try {
       if (aItemId > -1) {
@@ -230,7 +230,7 @@ PlacesUtilsInternal = {
     return null;
   },
 
-  applyCallBackOnUrl: function(aUrl, aCallBack) {
+  applyCallBackOnUrl(aUrl, aCallBack) {
     let hasHref = aUrl.indexOf("#") > -1;
     let result = aCallBack.apply(this, [aUrl]) ||
         hasHref && aCallBack.apply(this, aUrl.split("#"));
@@ -240,7 +240,7 @@ PlacesUtilsInternal = {
       let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
       if (aUrl != prefix) {
         let url = aUrl.startsWith(prefix) ?
-            aUrl.replace(prefix, "") : prefix + aUrl;
+          aUrl.replace(prefix, "") : prefix + aUrl;
         result = aCallBack.apply(this, [url]) ||
           hasHref && aCallBack.apply(this, url.split("#"));
       }
@@ -258,7 +258,7 @@ PlacesUtilsInternal = {
     // setItem check if aTab exist and remove the attribute if
     // oID.value is null
     if (aTab) {
-      let win = aTab.ownerDocument.defaultView;
+      let win = aTab.ownerGlobal;
       win.Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
     }
 

@@ -10,15 +10,15 @@ XPCOMUtils.defineLazyModuleGetter(this, "Promise",
   "resource://gre/modules/Promise.jsm");
 
 this.AsyncUtils = {
-  spawnFn: function(thisArg, fn, index) {
+  spawnFn(thisArg, fn, index) {
     return this.promisify(thisArg, fn, index)();
   },
 
-  asyncFn: function(thisArg, fn, index) {
+  asyncFn(thisArg, fn, index) {
     return this.promisify(thisArg, fn, index);
   },
 
-  promisify: function(thisArg, fn, index) {
+  promisify(thisArg, fn, index) {
     return function(...args) {
       return new Promise((resolve, reject) => {
         if (typeof index == "undefined")

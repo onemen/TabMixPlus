@@ -96,7 +96,7 @@ var TabmixTabClickOptions = {
       this.clickAction(prefName, clickOutTabs, tab, aEvent);
   },
 
-  clearTabFlipTimeOut: function() {
+  clearTabFlipTimeOut() {
     clearTimeout(this._tabFlipTimeOut);
     this._tabFlipTimeOut = null;
   },
@@ -140,8 +140,8 @@ var TabmixTabClickOptions = {
     }
   },
 
-/// add option to open new tab after current one
-/// convert this switch to object
+  /// add option to open new tab after current one
+  /// convert this switch to object
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs, event) {
     gBrowser.selectedBrowser.focus();
     switch (command) {
@@ -153,7 +153,7 @@ var TabmixTabClickOptions = {
       case 2 :
         if (aTab && aTab.parentNode) {
           let byMouse = Tabmix.isVersion(520) ? event && event.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE : true;
-          gBrowser.removeTab(aTab, {animate: true, byMouse: byMouse});
+          gBrowser.removeTab(aTab, {animate: true, byMouse});
         }
         break;
       case 3 :
@@ -170,7 +170,7 @@ var TabmixTabClickOptions = {
         gBrowser.lockTab(aTab);
         break;
       case 7 :
-        tablib.reloadTabs(gBrowser.visibleTabs);
+        Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);
         break;
       case 8:
         gBrowser.removeAllTabsBut(aTab);
@@ -225,6 +225,8 @@ var TabmixTabClickOptions = {
           if (typeof gIeTabObj.switchTabEngine == "function") {
             if (!aTab.selected)
               gBrowser.selectedTab = aTab;
+            // IeTab2.getBoolPref accept default value
+            // eslint-disable-next-line tabmix/no-useless-parameters
             gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
           }
         } else if (window.ieview && window.ieview.launch) {
@@ -288,7 +290,7 @@ var TabmixTabClickOptions = {
     return true;
   },
 
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     let eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("TabsToolbar")[eventListener]("dblclick", this.blockDblclick, false);
   },
@@ -297,7 +299,7 @@ var TabmixTabClickOptions = {
    * block dblclick on TabsToolbar when tabbar.dblclick_changesize is false
    * and tabbar.click_dragwindow is true
    */
-  blockDblclick: function(aEvent) {
+  blockDblclick(aEvent) {
     if (aEvent.button !== 0 || aEvent.target.localName == "tabs" ||
         Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
         !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
@@ -367,7 +369,7 @@ var TabmixContext = {
     sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
   },
 
-  updateTabbarContextMenu: function(show) {
+  updateTabbarContextMenu(show) {
     let tabBar = gBrowser.tabContainer;
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
@@ -377,14 +379,14 @@ var TabmixContext = {
     }
   },
 
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
     gBrowser.tabContextMenu[eventListener]("popupshowing", this, false);
     gBrowser.tabContextMenu[eventListener]("popupshown", this, false);
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     let id = aEvent.target.id;
     switch (aEvent.type) {
       case "popupshowing":
@@ -401,7 +403,7 @@ var TabmixContext = {
         break;
       case "popuphidden":
         if (id == "tabContextMenu") {
-          aEvent.target.removeEventListener("popuphidden", this, false);
+          aEvent.target.removeEventListener("popuphidden", this);
           Tabmix.hidePopup(aEvent.target);
         }
         break;
@@ -413,7 +415,7 @@ var TabmixContext = {
     if (event.originalTarget != gBrowser.tabContextMenu)
       return true;
 
-    gBrowser.tabContextMenu.addEventListener("popuphidden", this, false);
+    gBrowser.tabContextMenu.addEventListener("popuphidden", this);
 
     var item, triggerNode = gBrowser.tabContextMenu.triggerNode;
     if (triggerNode.parentNode)
@@ -629,11 +631,11 @@ var TabmixContext = {
       var protectedTab = tab.hasAttribute("protected");
       var lockedTab = tab.hasAttribute("locked");
 
-     /**
-      * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
-      * Firefox only show this menu when the selection text is url see Bug 454518
-      * we check if gContextMenu.linkURL contain URL
-      */
+      /**
+       * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
+       * Firefox only show this menu when the selection text is url see Bug 454518
+       * we check if gContextMenu.linkURL contain URL
+       */
       var onLink = gContextMenu.onLink || gContextMenu.linkURL;
       Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
       var inverseLink = document.getElementById("tm-openinverselink");
@@ -656,7 +658,7 @@ var TabmixContext = {
           onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
                      Tabmix.prefs.getBoolPref("openInverseLink") ||
                      Tabmix.prefs.getBoolPref("linkWithHistory"))) {
-        gContextMenu.tabmixLinkURL = tablib.getValidUrl();
+        gContextMenu.tabmixLinkURL = Tabmix.tablib.getValidUrl();
       }
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");
@@ -743,7 +745,7 @@ var TabmixContext = {
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
     let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
-        Tabmix.ContextMenu.getSelectedLinks(window.content, check);
+      Tabmix.ContextMenu.getSelectedLinks(window.content, check);
 
     if (!check && urls.length) {
       Tabmix.loadTabs(urls, false);
@@ -892,7 +894,7 @@ var TabmixAllTabs = {
       popup.setAttribute("minwidth", popup.boxObject.width);
     }
 
-    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this, false);
+    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this);
     this._popup = popup;
     if (!this._popup._updateTabsVisibilityStatus)
       this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
@@ -911,17 +913,17 @@ var TabmixAllTabs = {
       var menuItem = popup.firstChild;
       if (menuItem.id.indexOf("btn_tabslist") != -1)
         break;
-      menuItem.removeEventListener("command", TMP_ClosedTabs, false);
-      menuItem.removeEventListener("click", TMP_ClosedTabs, false);
-      popup.removeChild(menuItem);
+      menuItem.removeEventListener("command", TMP_ClosedTabs);
+      menuItem.removeEventListener("click", TMP_ClosedTabs);
+      menuItem.remove();
     }
 
     if (!aCloseTabsPopup) {
-      gBrowser.tabContainer.addEventListener("TabAttrModified", this, false);
-      gBrowser.tabContainer.addEventListener("TabClose", this, false);
+      gBrowser.tabContainer.addEventListener("TabAttrModified", this);
+      gBrowser.tabContainer.addEventListener("TabClose", this);
     }
-    popup.addEventListener("DOMMenuItemActive", this, false);
-    popup.addEventListener("DOMMenuItemInactive", this, false);
+    popup.addEventListener("DOMMenuItemActive", this);
+    popup.addEventListener("DOMMenuItemInactive", this);
   },
 
   createCommonList: function TMP_createCommonList(popup, aType, side) {
@@ -977,12 +979,12 @@ var TabmixAllTabs = {
     }
 
     if (this._selectedItem)
-      popup.addEventListener("popupshown", this, false);
+      popup.addEventListener("popupshown", this);
   },
 
   _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
     var popup = event.target;
-    popup.removeEventListener("popupshown", this, false);
+    popup.removeEventListener("popupshown", this);
     let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
     let items = Array.prototype.slice.call(popup.childNodes);
     let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
@@ -1021,7 +1023,7 @@ var TabmixAllTabs = {
         let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
-                 .replace(/#1/g, tabClr);
+              .replace(/#1/g, tabClr);
       }
       mi.style.setProperty('background-image', rule, 'important');
     }
@@ -1055,8 +1057,9 @@ var TabmixAllTabs = {
 
   _tabOnTabClose: function TMP__tabOnTabClose(aEvent) {
     var menuItem = aEvent.target.mCorrespondingMenuitem;
-    if (menuItem && menuItem.parentNode)
-      menuItem.parentNode.removeChild(menuItem);
+    if (menuItem) {
+      menuItem.remove();
+    }
   },
 
   _tabsListOncommand: function TMP__tabsListOncommand(aEvent) {
@@ -1081,7 +1084,7 @@ var TabmixAllTabs = {
       if ("tab" in menuItem) {
         menuItem.tab.mCorrespondingMenuitem = null;
       }
-      popup.removeChild(menuItem);
+      menuItem.remove();
     }
 
     var item = popup.parentNode;
@@ -1093,11 +1096,11 @@ var TabmixAllTabs = {
       popup.removeAttribute("minwidth");
     }
 
-    gBrowser.tabContainer.removeEventListener("TabAttrModified", this, false);
-    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this, false);
-    gBrowser.tabContainer.removeEventListener("TabClose", this, false);
-    popup.removeEventListener("DOMMenuItemActive", this, false);
-    popup.removeEventListener("DOMMenuItemInactive", this, false);
+    gBrowser.tabContainer.removeEventListener("TabAttrModified", this);
+    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this);
+    gBrowser.tabContainer.removeEventListener("TabClose", this);
+    popup.removeEventListener("DOMMenuItemActive", this);
+    popup.removeEventListener("DOMMenuItemInactive", this);
 
     this.backupLabel = "";
     this._selectedItem = null;

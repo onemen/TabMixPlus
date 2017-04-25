@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Sekme Birleştirme">
 <!ENTITY tabFeature.label "Sekme Özellikleri">
 <!ENTITY newtab.label "Yeni sekmelerde bunu yükle:">
-<!ENTITY replaceLastTabWith.label "Son sekmeyi kapattığımda yerine bunu koy">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Boş sayfa">
 <!ENTITY newtab.home "Başlangıç sayfası">
 <!ENTITY newtab.current "Geçerli sayfa">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Sekmeleri kilitle">
 <!ENTITY lockNewTabs.label "Yeni sekmeleri kilitle">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Sekmeyi çiftle">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Uyarı">
-<!ENTITY warnOnCloseProtected.label "Korunan sekmeler bulunan pencereleri kapatırken uyar">
-<!ENTITY warnOnCloseWindow.label "Çok sayıda sekmesi bulunan pencereyi kapatırken beni uyar">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Son sekmeyi kapatma">
 <!ENTITY keepWindow.label.3.1 "Son sekme kapatıldığında pencereyi kapatma">
 <!ENTITY keeptab.label "Son sekmeyi kapanmaktan koru">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Sekme açılır menüsünde göster:">
 <!ENTITY showContentAreaContext.label "Ana açılır menüde göster:">
 <!ENTITY showToolsMenu.label "Araçlar menüsünde göster:">
-<!ENTITY startupHomePage.label "Giriş sayfamı göster">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Boş sayfa göster">
-<!ENTITY startupLastSession.label "Son seferki pencere ve sekmelerimi göster">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus, bu Oturum Yöneticisi Eklentisinin kurulu olduğunu algıladı">
 <!ENTITY sm.extension.description2 "Tab Mix Plus Oturum Yöneticisi etkisizleştirilecek">
 <!ENTITY sm.extension.description3 "Oturum Yöneticisi Tercihleri penceresini açmak için sağdaki butona tıklayabilirsiniz">
-<!ENTITY sm.extension.description4 "Oturum bilgilerimi Tab Mix Plus formatından Oturum Yöneticisi eklentisi formatına çevir">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Çevir">
-<!ENTITY sm.extension.chooseFile.label0 "Hangi veri dosyasının çevrileceğini seçmeme izin ver">
 <!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus oturumlarını şu anki profilden çevir">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Firefox&apos;un dahili Oturum Geri Yükleme özelliğini kullan">
 <!ENTITY ss.enable.tooltip "Tab Mix Oturum Yöneticisini kullanmak için işareti kaldırın">
 <!ENTITY ss.advanced_setting "Gelişmiş Ayarlar">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Pencereleri tek pencerede birleştir">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "Başlangıçta geriyüklenmediğinde">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Sekmelerde muhafaza et:">
 <!ENTITY sm.preserve.history "Geçmişi">
 <!ENTITY sm.preserve.protect "Korunma durumunu">

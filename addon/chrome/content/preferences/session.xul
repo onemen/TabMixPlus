@@ -103,13 +103,13 @@
             </hbox>
             <separator class="groove"/>
             <hbox id="exportsession" align="end">
-              <description style="width: 24em;"> &sm.extension.description4;.</description>
+              <description style="width: 24em;"> &sm.extension.description5;.</description>
               <spacer flex="1"/>
               <button label="&sm.extension.convert.label;…"
                       oncommand="gSessionPane.convertSession();"/>
             </hbox>
             <radiogroup id="chooseFile" align="start">
-              <radio value="0" label="&sm.extension.chooseFile.label0;"/>
+              <radio value="0" label="&sm.extension.chooseFile.label2;"/>
               <radio value="1" label="&sm.extension.chooseFile.label1;"/>
             </radiogroup>
           </groupbox>
@@ -124,9 +124,9 @@
               <label value="&sm.start;" control="browserStartupPage" class="firefox"/>
               <menulist id="browserStartupPage" class="indent firefox" preference="pref_browserStartupPage">
                 <menupopup>
-                  <menuitem label="&startupHomePage.label;"     value="1"/>
+                  <menuitem label="&startupHomePage1.label;"     value="1"/>
                   <menuitem label="&startupBlankPage.label;"    value="0"/>
-                  <menuitem label="&startupLastSession.label;"  value="3"/>
+                  <menuitem label="&startupLastSession1.label;"  value="3"/>
                 </menupopup>
               </menulist>
               <checkbox_tmp id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"
@@ -186,12 +186,12 @@
                     <label value="&sm.notrestore.label;:" control="browserStartupPage1"/>
                     <menulist id="browserStartupPage1" preference="pref_browserStartupPage">
                       <menupopup>
-                        <menuitem label="&startupHomePage.label;"     value="1"/>
+                        <menuitem label="&startupHomePage1.label;"     value="1"/>
                         <menuitem label="&startupBlankPage.label;"    value="0"/>
                       </menupopup>
                     </menulist>
                   </hbox>
-                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="&sm.restorePinned.label;"
+                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="&sm.restorePinned1.label;"
                             preference="pref_onStart.restorePinned"/>
                 </groupbox>
               </tabpanel>

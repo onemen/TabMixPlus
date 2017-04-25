@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "탭 합치기">
 <!ENTITY tabFeature.label "탭 기능">
 <!ENTITY newtab.label "새 탭에 불러올 것:">
-<!ENTITY replaceLastTabWith.label "마지막 탭을 닫는 대신 불러올 것">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "빈 페이지">
 <!ENTITY newtab.home "홈페이지">
 <!ENTITY newtab.current "현재 페이지">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lock tabs">
 <!ENTITY lockNewTabs.label "Lock New tabs">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "복제된 탭">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "알려주기">
-<!ENTITY warnOnCloseProtected.label "보호받는 탭이 있는 창을 닫을 때 알려주기">
-<!ENTITY warnOnCloseWindow.label "여러 탭을 가진 창을 닫을 때 알려주기">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "마지막 탭을 닫을 때">
 <!ENTITY keepWindow.label.3.1 "마지막 탭을 닫을 때 창을 닫지 않기">
 <!ENTITY keeptab.label "마지막 탭을 닫지 않기">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "탭 문맥 메뉴에서 보여줄 것:">
 <!ENTITY showContentAreaContext.label "페이지 문맥 메뉴에서 보여줄 것:">
 <!ENTITY showToolsMenu.label "도구 메뉴에서 보여줄 것:">
-<!ENTITY startupHomePage.label "홈페이지 열기">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "빈 페이지 열기">
-<!ENTITY startupLastSession.label "이전 종료시 창과 탭 열기">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus가 Session Manager 확장 기능이 설치된 것을 감지했습니다.">
 <!ENTITY sm.extension.description2 "Tab Mix Plus 세션 관리자는 비활성화 됩니다.">
 <!ENTITY sm.extension.description3 "오른쪽의 버튼으로 Session Manager 설정창을 열 수 있습니다.">
-<!ENTITY sm.extension.description4 "Tab Mix Plus 형식의 세션 데이터를 Session Manager 확장 기능 형식으로 변환하기">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "변환">
-<!ENTITY sm.extension.chooseFile.label0 "변환할 데이터를 선택하기">
 <!ENTITY sm.extension.chooseFile.label1 "현재 프로필의 Tab Mix Plus 세션을 변환하기">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "내장된 세션 복구 기능 쓰기">
 <!ENTITY ss.enable.tooltip "선택하지 않으면 Tab Mix Plus 세션 관리자를 씁니다.">
 <!ENTITY ss.advanced_setting "고급 설정">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "하나의 창에 여러개의 창 연결하기">
 <!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
 <!ENTITY sm.notrestore.label "시작할 때 복구 안하기">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "탭 상태 중 보존할 것:">
 <!ENTITY sm.preserve.history "방문 기록">
 <!ENTITY sm.preserve.protect "보호된 상태">

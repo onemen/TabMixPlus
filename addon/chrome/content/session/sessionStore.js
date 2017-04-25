@@ -35,13 +35,13 @@ var TMP_SessionStore = {
     return aData.entries[activeIndex] || {};
   },
 
-  getTitleFromTabState: function(aTab) {
+  getTitleFromTabState(aTab) {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
     return this.getActiveEntryData(tabData).title || null;
   },
 
   // check if pending tab has no history or is about:blank
-  isBlankPendingTab: function(aTab) {
+  isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending"))
       return false;
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
@@ -51,15 +51,15 @@ var TMP_SessionStore = {
     return !entries[0] || entries[0].url == "about:blank";
   },
 
- /**
-  * @brief       - Add attribute to nsSessionStore persistTabAttribute.
-  *
-  *   we call this after nsSessionStore.init
-  *   we add this also when we use TMP session manager.
-  *   we use Firefox SessionStore closed tab service and for restore after restart
-  *
-  * @returns        Nothing.
-  */
+  /**
+   * @brief       - Add attribute to nsSessionStore persistTabAttribute.
+   *
+   *   we call this after nsSessionStore.init
+   *   we add this also when we use TMP session manager.
+   *   we use Firefox SessionStore closed tab service and for restore after restart
+   *
+   * @returns        Nothing.
+   */
   persistTabAttribute: function TMP_ss_persistTabAttribute() {
     if (TabmixSvc.sm.persistTabAttributeSet)
       return;
@@ -85,29 +85,29 @@ var TMP_SessionStore = {
     }
   },
 
- /**
-  * @brief         make sure that we don't enable both sessionStore and session manager
-  *
-  * @param msgNo   a Integer value - msg no. to show.
-  *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
-  *
-  * @param start   a Boolean value - true if we call this function before startup.
-  *
-  * @returns       Nothing.
-  */
+  /**
+   * @brief         make sure that we don't enable both sessionStore and session manager
+   *
+   * @param msgNo   a Integer value - msg no. to show.
+   *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
+   *
+   * @param start   a Boolean value - true if we call this function before startup.
+   *
+   * @returns       Nothing.
+   */
   setService: function TMP_ss_setSessionService(msgNo, start) {
     if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
-   /*
-    * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
-    * we use nsISessionStore service in TMP.
-    * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
-    *
-    * Bug 449596 - remove the browser.sessionstore.enabled pref
-    * so here we don't set it to true, we just clear user pref to the default
-    * if the pref exist in firefox this set the pref to true
-    * if the pref don't exist this will remove the pref
-    */
+    /*
+     * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
+     * we use nsISessionStore service in TMP.
+     * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
+     *
+     * Bug 449596 - remove the browser.sessionstore.enabled pref
+     * so here we don't set it to true, we just clear user pref to the default
+     * if the pref exist in firefox this set the pref to true
+     * if the pref don't exist this will remove the pref
+     */
     const TMP_SS_MANAGER = "extensions.tabmix.sessions.manager";
     const TMP_SS_CRASHRECOVERY = "extensions.tabmix.sessions.crashRecovery";
     var TMP_manager_enabled = Services.prefs.getBoolPref(TMP_SS_MANAGER);
@@ -176,7 +176,7 @@ var TMP_SessionStore = {
         TabmixSvc.sm.settingPreference = false;
       };
       let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                        [title, msg, "", "", buttons], window, start ? callBack : null);
+        [title, msg, "", "", buttons], window, start ? callBack : null);
       if (!start)
         callBack(result);
     } else if (!Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
@@ -186,7 +186,7 @@ var TMP_SessionStore = {
     }
   },
 
-  isSessionStoreEnabled: function() {
+  isSessionStoreEnabled() {
     return Services.prefs.getIntPref("browser.startup.page") == 3 ||
       Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
   },
@@ -195,7 +195,7 @@ var TMP_SessionStore = {
   // we call this only one time on window load
   // and store the value in Tabmix.isWindowAfterSessionRestore
   // we call this from onContentLoaded before nsSessionStore run its onLoad
-  setAfterSessionRestored: function() {
+  setAfterSessionRestored() {
     let afterSessionRestore;
     if (!Tabmix.isFirstWindow)
       afterSessionRestore = false;
@@ -220,11 +220,11 @@ var TMP_SessionStore = {
       // syncRead in Firefox 25-27
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         let ss = Cc["@mozilla.org/browser/sessionstartup;1"]
-                   .getService(Ci.nsISessionStartup);
+            .getService(Ci.nsISessionStartup);
         // when TMP session manager is enabled ss.doRestore is true only after restart
         ss.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = ss.doRestore();
-        }).then(null, Tabmix.reportError);
+        }).catch(Tabmix.reportError);
         // until sessionstartup initialized just return the pref value,
         // we only use isWindowAfterSessionRestore when our Session Manager enable
         return Services.prefs.getBoolPref("browser.sessionstore.resume_session_once");
@@ -232,7 +232,7 @@ var TMP_SessionStore = {
     }
   },
 
-  setSessionRestore: function(aEnable) {
+  setSessionRestore(aEnable) {
     Services.prefs.setBoolPref("browser.warnOnQuit", aEnable);
     Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", aEnable);
     if (aEnable)
@@ -241,17 +241,17 @@ var TMP_SessionStore = {
       Services.prefs.setIntPref("browser.startup.page", 1);
   },
 
- /**
-  * @brief           update tab title from user name or bookmark.
-  *
-  * @param aTabData  an object value - tabData from nsSessionStore
-  *
-  * @param aUri      string value - url address
-  *
-  * @param aTitle    string value - title
-  *
-  * @returns         tab title - string.
-  */
+  /**
+   * @brief           update tab title from user name or bookmark.
+   *
+   * @param aTabData  an object value - tabData from nsSessionStore
+   *
+   * @param aUri      string value - url address
+   *
+   * @param aTitle    string value - title
+   *
+   * @returns         tab title - string.
+   */
   _getTitle: function ct_getTitle(aData, aUri, aTitle) {
     var fixedLabelUri = this._getAttribute(aData, "label-uri");
     if (fixedLabelUri == aUri || fixedLabelUri == "*")
@@ -260,15 +260,15 @@ var TMP_SessionStore = {
     return TMP_Places.getTitleFromBookmark(aUri, aTitle, this._getAttribute(aData, "tabmix_bookmarkId"));
   },
 
- /**
-  * @brief           get attribute xultab data
-  *
-  * @param aTabData  an object value - tabData from nsSessionStore
-  *
-  * @param attrib    attribute name as string
-  *
-  * @returns         attribute value as string or empty string.
-  */
+  /**
+   * @brief           get attribute xultab data
+   *
+   * @param aTabData  an object value - tabData from nsSessionStore
+   *
+   * @param attrib    attribute name as string
+   *
+   * @returns         attribute value as string or empty string.
+   */
   _getAttribute: function TMP_ss__getAttribute(aTabData, attrib) {
     if (aTabData.attributes && attrib in aTabData.attributes)
       return aTabData.attributes[attrib];
@@ -295,7 +295,7 @@ var TMP_ClosedTabs = {
   },
 
   // make btn_undoclose single-functionality or dual-functionality
-  setButtonType: function(menuOnly) {
+  setButtonType(menuOnly) {
     var buttonType = menuOnly ? "menu" : "menu-button";
     if (this.buttonBroadcaster.getAttribute("type") != buttonType)
       this.buttonBroadcaster.setAttribute("type", buttonType);
@@ -307,16 +307,16 @@ var TMP_ClosedTabs = {
     Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
   },
 
- /**
-  * Get closed tabs count
-  */
+  /**
+   * Get closed tabs count
+   */
   get count() {
     return window.__SSi ? TabmixSvc.ss.getClosedTabCount(window) : 0;
   },
 
- /**
-  * Get closed tabs data
-  */
+  /**
+   * Get closed tabs data
+   */
   get getClosedTabData() {
     return window.__SSi ? TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window)) : {};
   },
@@ -364,11 +364,11 @@ var TMP_ClosedTabs = {
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
       else try {
-        url = _uri.scheme == "about" ? _uri.spec :
-          _uri.scheme + "://" + _uri.hostPort + _uri.path;
-      } catch (e) {
-        url = title;
-      }
+          url = _uri.scheme == "about" ? _uri.spec :
+            _uri.scheme + "://" + _uri.hostPort + _uri.path;
+        } catch (e) {
+          url = title;
+        }
       var label = title ? title : url;
       let count = "";
       if (ltr) {
@@ -392,8 +392,8 @@ var TMP_ClosedTabs = {
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
       /* eslint-disable tabmix/balanced-listeners */
-      m.addEventListener("command", this, false);
-      m.addEventListener("click", this, false);
+      m.addEventListener("command", this);
+      m.addEventListener("click", this);
       /* eslint-enable tabmix/balanced-listeners */
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");
@@ -417,7 +417,7 @@ var TMP_ClosedTabs = {
     return true;
   },
 
-  addMenuItem: function(popup, id, label, val, keyId) {
+  addMenuItem(popup, id, label, val, keyId) {
     const m = popup.appendChild(document.createElement("menuitem"));
     m.setAttribute("id", id);
     m.setAttribute("label", label);
@@ -431,7 +431,7 @@ var TMP_ClosedTabs = {
     return m;
   },
 
-  handleEvent: function(event) {
+  handleEvent(event) {
     switch (event.type) {
       case "click":
         this.checkForMiddleClick(event);
@@ -442,7 +442,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  restoreCommand: function(aEvent) {
+  restoreCommand(aEvent) {
     const item = aEvent.originalTarget;
     const index = Number(item.getAttribute("value"));
     if (index == -3) {
@@ -465,7 +465,7 @@ var TMP_ClosedTabs = {
     this.doCommand("restoreTab", where, aEvent.originalTarget, deleteItem);
   },
 
-  contextMenuOnPopupShowing: function(popup) {
+  contextMenuOnPopupShowing(popup) {
     const val = this.keepMenuOpen ? "single" : "auto";
     Array.prototype.forEach.call(popup.childNodes, item => {
       item.setAttribute("closemenu", val);
@@ -473,14 +473,14 @@ var TMP_ClosedTabs = {
     return popup.triggerNode.value >= 0;
   },
 
-  contextMenuOnCommand: function(event) {
+  contextMenuOnCommand(event) {
     const menuItem = event.originalTarget;
     const [command, where] = menuItem.getAttribute("commandData").split(",");
     const popup = menuItem.parentNode;
     this.doCommand(command, where, popup.triggerNode);
   },
 
-  doCommand: function(command, where, item, keepMenuOpen) {
+  doCommand(command, where, item, keepMenuOpen) {
     const popup = item.parentNode;
     const index = Number(item.getAttribute("value"));
     this[command](where || index, index);
@@ -505,7 +505,7 @@ var TMP_ClosedTabs = {
     var tabData = this.getClosedTabData[index];
     var url = this.getUrl(tabData);
     var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
-    .getService(Components.interfaces.nsIClipboardHelper);
+        .getService(Components.interfaces.nsIClipboardHelper);
 
     clipboard.copyString(url);
   },
@@ -533,7 +533,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  removeAllClosedTabs: function() {
+  removeAllClosedTabs() {
     // update our session data
     var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
     if (updateRDF)
@@ -543,11 +543,11 @@ var TMP_ClosedTabs = {
     this.setButtonDisableState(true);
   },
 
- /**
-  * @brief           fetch the data of closed tab, while removing it from the array
-  * @param aIndex    a Integer value - 0 or grater index to remove
-  * @returns         closed tab data at aIndex.
-  */
+  /**
+   * @brief           fetch the data of closed tab, while removing it from the array
+   * @param aIndex    a Integer value - 0 or grater index to remove
+   * @returns         closed tab data at aIndex.
+   */
   getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
     if (aIndex < 0 || aIndex >= this.count)
       return null;
@@ -597,7 +597,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  SSS_undoCloseTab: function(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
+  SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
     if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
       return null;
 
@@ -627,11 +627,11 @@ var TMP_ClosedTabs = {
         (!Tabmix.isVersion(490) ||
         aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
     let newTab = reuseExisting ? aBlankTabToReuse :
-        gBrowser.addTab("about:blank", {
-          skipAnimation: tabToRemove || skipAnimation,
-          dontMove: true,
-          userContextId: userContextId,
-        });
+      gBrowser.addTab("about:blank", {
+        skipAnimation: tabToRemove || skipAnimation,
+        dontMove: true,
+        userContextId,
+      });
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
@@ -742,7 +742,7 @@ var TabmixConvertSession = {
   confirm: function cs_confirm(aMsg, aCallBack) {
     let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
     return Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-                                [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
+      [this.getTitle, aMsg, "", "", buttons], window, aCallBack);
   },
 
   getSessionState: function cs_getSessionState(aPath, internal) {
@@ -767,7 +767,7 @@ var TabmixConvertSession = {
     return {
       windows: _windows,
       selectedWindow: _windows.indexOf(selected) + 1,
-      tabsCount: tabsCount,
+      tabsCount,
     };
   },
 
@@ -861,9 +861,11 @@ var TabmixConvertSession = {
 
   getTabState: function cs_getTabState(rdfNodeTab, aClosedTab, internal) {
     var tabData = {entries: [], index: 0, zoom: 1, disallow: "", text: ""};
-    tabData.entries = this.getHistoryState(rdfNodeTab);
-    if (!tabData.entries.length)
+    const entries = this.getHistoryState(rdfNodeTab);
+    if (!entries.length) {
       return null;
+    }
+    tabData.entries = this.addTriggeringPrincipal(entries);
     tabData.image = TabmixSessionManager.getLiteralValue(rdfNodeTab, "image", null);
     let index = TabmixSessionManager.getIntValue(rdfNodeTab, "index");
     tabData.index = Math.max(1, Math.min(index + 1, tabData.entries.length));
@@ -874,7 +876,7 @@ var TabmixConvertSession = {
       // until version 0.4.1.5 textZoom was included in scroll data
       scroll = scroll.split(",").splice(0, 2).join(",");
       if (scroll != "0,0") {
-        tabData.scroll = {scroll: scroll};
+        tabData.scroll = {scroll};
       }
     }
     tabData.userContextId = TabmixSessionManager.getIntValue(rdfNodeTab, "userContextId", 0);
@@ -943,6 +945,10 @@ var TabmixConvertSession = {
             extData.tabClr = RegExp.$2;
             break;
           default:
+            // treestyletab data
+            if (RegExp.$1.startsWith("treestyletab-")) {
+              extData[RegExp.$1] = RegExp.$2;
+            }
             tabData.attributes[RegExp.$1] = RegExp.$2;
         }
       });
@@ -959,6 +965,13 @@ var TabmixConvertSession = {
   },
 
   getHistoryState: function cs_getHistoryState(rdfNodeTab) {
+    // starting with version 0.5.0.3 history data serialized with JSON.stringify
+    let isJSONData = TabmixSessionManager.nodeHasArc(rdfNodeTab, "historyData");
+    if (isJSONData) {
+      const state = TabmixSessionManager.getLiteralValue(rdfNodeTab, "historyData");
+      return JSON.parse(decodeURI(state));
+    }
+
     let decodeData = function(data, decode) {
       return decode ? TabmixSessionManager.getDecodedLiteralValue(null, data) : data;
     };
@@ -985,5 +998,18 @@ var TabmixConvertSession = {
       }
     }
     return entries;
-  }
+  },
+
+  // add triggeringPrincipal to history entries that was saved before Firefox 54 (Bug 1307736)
+  addTriggeringPrincipal(entries) {
+    if (!TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL) {
+      return entries;
+    }
+    return entries.map(entry => {
+      if (!entry.triggeringPrincipal_base64) {
+        entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+      }
+      return entry;
+    });
+  },
 };

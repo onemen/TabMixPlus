@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Σύμπτυξη καρτελών">
 <!ENTITY tabFeature.label "Χαρακτηριστικά καρτέλας">
 <!ENTITY newtab.label "Φόρτωση σε νέες καρτέλες:">
-<!ENTITY replaceLastTabWith.label "Αφού κλείσει η τελευταία καρτέλα, αντικατάσταση της με">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Κενής σελίδας">
 <!ENTITY newtab.home "Αρχικής σελίδας">
 <!ENTITY newtab.current "Τρέχουσας σελίδας">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Κλείδωμα καρτελών">
 <!ENTITY lockNewTabs.label "Κλείδωμα νέων καρτελών">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Αντίγραφο καρτέλας">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Προειδοποίηση">
-<!ENTITY warnOnCloseProtected.label "Προειδοποίηση στο κλείσιμο παραθύρων που περιέχουν προστατευμένες καρτέλες">
-<!ENTITY warnOnCloseWindow.label "Προειδοποίηση για κλείσιμο παραθύρου με πολλές καρτέλες">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Κλείσιμο τελευταίας καρτέλας">
 <!ENTITY keepWindow.label.3.1 "Όταν κλείνει η τελευταία καρτέλα να μην κλείνει και το παράθυρο">
 <!ENTITY keeptab.label "Να μην επιτρέπεται το κλείσιμο της τελευταίας καρτέλας">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Προβολή στο μενού περιεχομένου καρτελών :">
 <!ENTITY showContentAreaContext.label "Προβολή στο βασικό μενού περιεχομένου :">
 <!ENTITY showToolsMenu.label "Προβολή στο μενού εργαλείων:">
-<!ENTITY startupHomePage.label "Προβολή αρχικής σελίδας">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Προβολή κενής σελίδας">
-<!ENTITY startupLastSession.label "Προβολή παραθύρων και καρτελών προηγούμενης συνεδρίας">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Το Tab Mix Plus ανίχνευσε ότι έχετε εγκαταστήσει το πρόσθετο Session Manager">
 <!ENTITY sm.extension.description2 "Ο διαχειριστής συνεδρίας του Tab Mix Plus θα απενεργοποιηθεί">
 <!ENTITY sm.extension.description3 "Μπορείτε να κάνετε κλικ στο κουμπί δεξιά για να ανοίξετε τον διάλογο επιλογών του Session Manager">
-<!ENTITY sm.extension.description4 "Μετατροπή των δεδομένων συνεδρίας από τη μορφή του Tab Mix Plus στη μορφή του Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Μετατροπή">
-<!ENTITY sm.extension.chooseFile.label0 "Προσωπική επιλογή αρχείου δεδομένων για μετατροπή">
 <!ENTITY sm.extension.chooseFile.label1 "Μετατροπή συνεδριών Tab Mix Plus του τρέχοντος προφίλ">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Χρήση ενσωματωμένης αποκατάστασης συνεδρίας">
 <!ENTITY ss.enable.tooltip "Απεπιλέξτε για να επιτραπεί η χρήση του διαχειριστή συνεδρίας του Tabmix">
 <!ENTITY ss.advanced_setting "Ρυθμίσεις για προχωρημένους">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Συνένωση όλων των παραθύρων σε ένα">
 <!ENTITY sm.restore.bypassCache "Παράκαμψη λανθάνουσας κατά την επαναφορά">
 <!ENTITY sm.notrestore.label "Όταν δεν γίνεται επαναφορά κατά την εκκίνηση">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Διατήρηση καρτελών:">
 <!ENTITY sm.preserve.history "Ιστορικό">
 <!ENTITY sm.preserve.protect "Κατάσταση προστασίας">

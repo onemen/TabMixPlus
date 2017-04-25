@@ -68,7 +68,7 @@ var TMP_tabDNDObserver = {
       'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
     )._replace(
       tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
-                      /screenX = boxObject.*;/,
+        /screenX = boxObject.*;/,
       '$&\n            ' +
       `let halfWidth;
             if (tabmixHandleMove) {
@@ -77,7 +77,7 @@ var TMP_tabDNDObserver = {
             }`
     )._replace(
       tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
-                      /screenX \+ boxObject.* < tabCenter/,
+        /screenX \+ boxObject.* < tabCenter/,
       'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
     )._replace(
       'screenX > TDUContext.lastTabCenter',
@@ -148,7 +148,7 @@ var TMP_tabDNDObserver = {
     return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart: function(event, tabmixDragstart) {
+  onDragStart(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
     if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
@@ -204,7 +204,7 @@ var TMP_tabDNDObserver = {
       context.fillRect(0, 0, canvas.width, canvas.height);
 
       let captureListener;
-      let platform = gBrowser.AppConstants.platform;
+      let platform = AppConstants.platform;
       // On Windows and Mac we can update the drag image during a drag
       // using updateDragImage. On Linux, we can use a panel.
       if (Tabmix.isVersion(530) && (platform == "win" || platform == "macosx")) {
@@ -270,14 +270,14 @@ var TMP_tabDNDObserver = {
     var newIndex = this._getDNDIndex(event);
     var oldIndex = dragType != this.DRAG_LINK ? sourceNode._tPos : -1;
     var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
-///XXX check if we need here visibleTabs insteadof gBrowser.tabs
-///    check with groups with or without pinned tabs
+    ///XXX check if we need here visibleTabs insteadof gBrowser.tabs
+    ///    check with groups with or without pinned tabs
     if (newIndex < gBrowser.tabs.length)
       left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
     else {
       newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-                     tabBar.selectedIndex : gBrowser.tabs.length - 1;
+        tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
@@ -335,7 +335,7 @@ var TMP_tabDNDObserver = {
     // show Drag & Drop message
     if (dragType == this.DRAG_LINK) {
       this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
-                              this.gBackupLabel : this.draglink;
+        this.gBackupLabel : this.draglink;
       if (event.target.localName != "tab" && event.target.localName != "tabs")
         this.gMsg = this.gBackupLabel;
       var statusTextFld = document.getElementById("statusbar-display");
@@ -378,7 +378,7 @@ var TMP_tabDNDObserver = {
       }
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
-            Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
+          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
         tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
         hideIndicator = true;
       }
@@ -433,7 +433,7 @@ var TMP_tabDNDObserver = {
     else {
       newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-                     gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
+        gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
 
@@ -636,8 +636,8 @@ var TMP_tabDNDObserver = {
     // screen.availLeft et. al. only check the screen that this window is on,
     // but we want to look at the screen the tab is being dropped onto.
     var screen = Cc["@mozilla.org/gfx/screenmanager;1"]
-                   .getService(Ci.nsIScreenManager)
-                   .screenForRect(eX, eY, 1, 1);
+        .getService(Ci.nsIScreenManager)
+        .screenForRect(eX, eY, 1, 1);
     var fullX = {}, fullY = {}, fullWidth = {}, fullHeight = {};
     var availX = {}, availY = {}, availWidth = {}, availHeight = {};
     // get full screen rect and available rect, both in desktop pix
@@ -703,7 +703,7 @@ var TMP_tabDNDObserver = {
     this.updateStatusField();
   },
 
-  updateStatusField: function() {
+  updateStatusField() {
     var statusTextFld = document.getElementById("statusbar-display");
     if (statusTextFld && this.statusFieldChanged) {
       statusTextFld.label = "";
@@ -715,7 +715,7 @@ var TMP_tabDNDObserver = {
   },
 
   // get _tPos from group index
-  _getDNDIndex: function(aEvent) {
+  _getDNDIndex(aEvent) {
     var indexInGroup = this.getNewIndex(aEvent);
     var tabs = gBrowser.visibleTabs;
     var lastIndex = tabs.length - 1;
@@ -724,7 +724,7 @@ var TMP_tabDNDObserver = {
     return tabs[indexInGroup]._tPos;
   },
 
-  getNewIndex: function(event) {
+  getNewIndex(event) {
     let getTabRowNumber = (tab, top) => (tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top));
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
@@ -736,7 +736,7 @@ var TMP_tabDNDObserver = {
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       let i = event.target.localName == "tab" ?
-          Tabmix.visibleTabs.indexOf(event.target) : 0;
+        Tabmix.visibleTabs.indexOf(event.target) : 0;
       for (; i < numTabs; i++) {
         let tab = tabs[i];
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
@@ -760,7 +760,7 @@ var TMP_tabDNDObserver = {
     return numTabs;
   },
 
-  getLeft_Right: function(event, newIndex, oldIndex, dragType) {
+  getLeft_Right(event, newIndex, oldIndex, dragType) {
     var mX = event.screenX;
     var left_right;
     var tab = gBrowser.tabs[newIndex];
@@ -792,7 +792,7 @@ var TMP_tabDNDObserver = {
     if (aSourceNode && aSourceNode instanceof XULElement && aSourceNode.localName == "tab") {
       if (aSourceNode.parentNode == gBrowser.tabContainer)
         return this.DRAG_TAB_IN_SAME_WINDOW; // 2
-      if (aSourceNode.ownerDocument.defaultView instanceof ChromeWindow &&
+      if (aSourceNode.ownerGlobal instanceof ChromeWindow &&
            aSourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser")
         return this.DRAG_TAB_TO_NEW_WINDOW; // 1
     }
@@ -870,7 +870,7 @@ var TMP_tabDNDObserver = {
       ind.style.MozMarginStart = (-ind.clientWidth) + "px";
     }
 
-    this.dragmarkindex = {newIndex: newIndex, index: index};
+    this.dragmarkindex = {newIndex, index};
   },
 
   clearDragmark: function minit_clearDragmark() {
@@ -890,22 +890,22 @@ var TMP_tabDNDObserver = {
     this.dragmarkindex = null;
   },
 
-  setFirefoxDropIndicator: function(val) {
+  setFirefoxDropIndicator(val) {
     gBrowser.tabContainer._tabDropIndicator.collapsed = !val;
   },
 
-  removeDragmarkAttribute: function(tab) {
+  removeDragmarkAttribute(tab) {
     tab.removeAttribute("dragmark");
   },
 
-  setDragmarkAttribute: function(tab, markSide) {
+  setDragmarkAttribute(tab, markSide) {
     tab.setAttribute("dragmark", markSide);
   },
 
   /*
    *  helper functions
    */
-  _getDropEffectForTabDrag: function(event) {
+  _getDropEffectForTabDrag(event) {
     let tabBar = gBrowser.tabContainer;
     if (Tabmix.isVersion(440)) {
       return tabBar._getDropEffectForTabDrag(event);
@@ -920,7 +920,7 @@ var TMP_tabDNDObserver = {
     return null;
   },
 
-  isCopyDropEffect: function(dt, event, type) {
+  isCopyDropEffect(dt, event, type) {
     let isCopy = dt.dropEffect == "copy";
     if (isCopy && type == this.DRAG_LINK) {
       // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
@@ -956,7 +956,7 @@ var TMP_tabDNDObserver = {
 }; // TMP_tabDNDObserver end
 
 var TMP_undocloseTabButtonObserver = {
-  onDragOver: function(aEvent) {
+  onDragOver(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (!sourceNode || sourceNode.localName != "tab") {
@@ -981,7 +981,7 @@ var TMP_undocloseTabButtonObserver = {
     return true;
   },
 
-  onDragExit: function(aEvent) {
+  onDragExit(aEvent) {
     if (aEvent.target.hasAttribute("dragover")) {
       var statusTextFld = document.getElementById("statusbar-display");
       if (statusTextFld)
@@ -993,7 +993,7 @@ var TMP_undocloseTabButtonObserver = {
     }
   },
 
-  onDrop: function(aEvent) {
+  onDrop(aEvent) {
     var dt = aEvent.dataTransfer;
     var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
     if (sourceNode && sourceNode.localName == "tab")
@@ -1050,7 +1050,7 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
 
 Tabmix.getStyle = function TMP_getStyle(aObj, aStyle) {
   try {
-    return parseInt(window.getComputedStyle(aObj, null)[aStyle]) || 0;
+    return parseInt(window.getComputedStyle(aObj)[aStyle]) || 0;
   } catch (ex) {
     this.assert(ex);
   }
@@ -1071,7 +1071,7 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
 
 var TMP_TabView = {
   subScriptLoaded: false,
-  init: function() {
+  init() {
     try {
       if (this.installed) {
         this._patchBrowserTabview();
@@ -1089,11 +1089,11 @@ var TMP_TabView = {
     return installed;
   },
 
-  exist: function(id) {
+  exist(id) {
     return this.installed && typeof TabView[id] == "function";
   },
 
-  checkTabs: function(tabs) {
+  checkTabs(tabs) {
     var firstTab;
     for (var i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
@@ -1106,12 +1106,12 @@ var TMP_TabView = {
   },
 
   // including _removingTabs
-  currentGroup: function() {
+  currentGroup() {
     return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
   },
 
   // visibleTabs don't include  _removingTabs
-  getTabPosInCurrentGroup: function(aTab) {
+  getTabPosInCurrentGroup(aTab) {
     if (aTab) {
       let tabs = Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
       return tabs.indexOf(aTab);
@@ -1119,7 +1119,7 @@ var TMP_TabView = {
     return -1;
   },
 
-  getIndexInVisibleTabsFromTab: function(aTab) {
+  getIndexInVisibleTabsFromTab(aTab) {
     if (aTab)
       return gBrowser.visibleTabs.indexOf(aTab);
     return -1;
@@ -1134,8 +1134,8 @@ Tabmix.navToolbox = {
 
   init: function TMP_navToolbox_init() {
     this.updateToolboxItems();
-    gNavToolbox.addEventListener("beforecustomization", this, false);
-    gNavToolbox.addEventListener("aftercustomization", this, false);
+    gNavToolbox.addEventListener("beforecustomization", this);
+    gNavToolbox.addEventListener("aftercustomization", this);
 
     if (!Tabmix.isVersion(290))
       return;
@@ -1160,8 +1160,8 @@ Tabmix.navToolbox = {
   },
 
   deinit: function TMP_navToolbox_deinit() {
-    gNavToolbox.removeEventListener("beforecustomization", this, false);
-    gNavToolbox.removeEventListener("aftercustomization", this, false);
+    gNavToolbox.removeEventListener("beforecustomization", this);
+    gNavToolbox.removeEventListener("aftercustomization", this);
 
     // fix bug 1034394 - tab mix plus's tabmixScrollBox is not cleaned up after
     // uninstalling tab mix plus
@@ -1185,11 +1185,11 @@ Tabmix.navToolbox = {
 
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && alltabsPopup._tabmix_inited) {
-      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
     }
   },
 
-  cleanCurrentset: function() {
+  cleanCurrentset() {
     let tabsToolbar = document.getElementById("TabsToolbar");
     let cSet = tabsToolbar.getAttribute("currentset");
     if (cSet.indexOf("tabmixScrollBox") > -1) {
@@ -1205,7 +1205,7 @@ Tabmix.navToolbox = {
         this.customizeStart();
         break;
       case "customizationchange":
-        gNavToolbox.removeEventListener("customizationchange", this, false);
+        gNavToolbox.removeEventListener("customizationchange", this);
         this.toolboxChanged = true;
         break;
       case "aftercustomization":
@@ -1215,13 +1215,13 @@ Tabmix.navToolbox = {
   },
 
   customizeStart: function TMP_navToolbox_customizeStart() {
-    gNavToolbox.addEventListener("customizationchange", this, false);
+    gNavToolbox.addEventListener("customizationchange", this);
     this.toolboxChanged = false;
     this.customizeStarted = true;
   },
 
   customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
-    gNavToolbox.removeEventListener("customizationchange", this, false);
+    gNavToolbox.removeEventListener("customizationchange", this);
     this.customizeStarted = false;
 
     if (aToolboxChanged)
@@ -1276,7 +1276,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand: function(event, openUILinkWhere, openUILinkParams = {}) {
+  handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
     let action = this._parseActionUrl(this.value) || {};
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
@@ -1317,7 +1317,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand_beforeV50: function() {
+  handleCommand_beforeV50() {
     let obj = gURLBar, fn;
     // Fix incompatibility with Omnibar (O is not defined)
     // URL Dot 0.4.x extension
@@ -1395,7 +1395,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  whereToOpenSearch: function(aWhere) {
+  whereToOpenSearch(aWhere) {
     var tab = gBrowser.selectedTab;
     var isBlankTab = gBrowser.isBlankNotBusyTab(tab);
     var isLockTab = !isBlankTab && tab.hasAttribute("locked");
@@ -1420,12 +1420,12 @@ Tabmix.navToolbox = {
     })(window.esteban_torres || window);
 
     let _handleSearchCommand = searchLoadExt ? searchLoadExt.MOZhandleSearch.toString() :
-                                               searchbar.handleSearchCommand.toString();
+      searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
       [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZhandleSearch"] :
-                                      [searchbar, "handleSearchCommand"];
+        [searchbar, "handleSearchCommand"];
       $LF = '\n            ';
       Tabmix.changeCode(obj, "searchbar." + fn)._replace(
         'where = whereToOpenLink(aEvent, false, true);',
@@ -1439,7 +1439,7 @@ Tabmix.navToolbox = {
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
     [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZdoSearch"] :
-                                    [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+      [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
     let fnString = obj[fn].toString();
@@ -1497,7 +1497,7 @@ Tabmix.navToolbox = {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
         scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
       };
-      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible, false);
+      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
 
       // alltabs-popup fix visibility for multi-row
       Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
@@ -1505,7 +1505,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  tabStripAreaChanged: function() {
+  tabStripAreaChanged() {
     /**
      * we need to position three elements in TabsToolbar :
      * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
@@ -1525,7 +1525,7 @@ Tabmix.navToolbox = {
       TMP_eventListener.updateMultiRow(true);
   },
 
-  setScrollButtons: function(reset, onlyPosition) {
+  setScrollButtons(reset, onlyPosition) {
     let box = document.getElementById("tabmixScrollBox");
     if (!box)
       return;
@@ -1553,7 +1553,7 @@ Tabmix.navToolbox = {
   },
 
   _closeButtonInitialized: false,
-  setCloseButtonPosition: function() {
+  setCloseButtonPosition() {
     if (this._closeButtonInitialized)
       return;
 

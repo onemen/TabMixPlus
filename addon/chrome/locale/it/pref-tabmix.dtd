@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Incorporazione">
 <!ENTITY tabFeature.label "Varie">
 <!ENTITY newtab.label "Carica in una nuova scheda:">
-<!ENTITY replaceLastTabWith.label "Alla chiusura dell&apos;ultima scheda sostituirla con">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "una pagina vuota">
 <!ENTITY newtab.home "la pagina iniziale">
 <!ENTITY newtab.current "la pagina attuale">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Schede da bloccare">
 <!ENTITY lockNewTabs.label "Blocca tutte le schede nuove">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplica scheda">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Avvisi di Tab Mix Plus">
-<!ENTITY warnOnCloseProtected.label "Avvisa quando si chiudono finestre con schede protette aperte">
-<!ENTITY warnOnCloseWindow.label "Avvisa quando si chiudono finestre con molteplici schede aperte">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Chiusura dell&apos;ultima scheda">
 <!ENTITY keepWindow.label.3.1 "Non chiudere la finestra del browser quando si chiude l&apos;ultima scheda">
 <!ENTITY keeptab.label "Non visualizzare una pagina vuota quando si chiude l&apos;ultima scheda">
@@ -190,6 +191,7 @@
 
 
 
+
 -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
@@ -206,6 +208,7 @@
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
 <!-- LOCALIZATION NOTE          
           change this only if you need to change the width 
+
 
 
 
@@ -294,16 +297,16 @@
 <!ENTITY showtabBarContext.label "Elementi da visualizzare nel menu contestuale della barra delle schede">
 <!ENTITY showContentAreaContext.label "Elementi da visualizzare nel menu contestuale delle pagine web">
 <!ENTITY showToolsMenu.label "Elementi da visualizzare nel menu &apos;Strumenti&apos; di Firefox">
-<!ENTITY startupHomePage.label "mostra la pagina iniziale">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "mostra una pagina vuota">
-<!ENTITY startupLastSession.label "mostra finestre e schede dell&apos;ultima sessione">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Tab Mix Plus ha rilevato che è installata l&apos;estensione Session Manager, per cui la funzionalità di ripristino delle sessioni di Tab Mix Plus è stata disattivata">
 <!ENTITY sm.extension.description2 "(Per ripristinare tale funzionalità è necessario disinstallare Session Manager)">
 <!ENTITY sm.extension.description3 "Fare clic sul pulsante a destra per aprire la finestra delle opzioni di Session Manager">
-<!ENTITY sm.extension.description4 "Converti i file dei dati della propria sessione dal formato di Tab Mix Plus a quello di Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Converti">
-<!ENTITY sm.extension.chooseFile.label0 "Seleziona il file dei dati da convertire">
 <!ENTITY sm.extension.chooseFile.label1 "Converti il file dei dati della sessione di Tab Mix Plus dell&apos;attuale profilo">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Attiva il ripristino delle sessioni nativo del browser">
 <!ENTITY ss.enable.tooltip "Deselezionare per permettere il ripristino delle sessioni di Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Impostazioni avanzate">
@@ -340,7 +343,7 @@
 <!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
 <!ENTITY sm.restore.bypassCache "Bypassa la cache">
 <!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
-<!ENTITY sm.restorePinned.label "Ripristina le schede applicazione dell'ultima sessione">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Dati da preservare per le schede">
 <!ENTITY sm.preserve.history "Cronologia">
 <!ENTITY sm.preserve.protect "Stato &apos;protetto&apos;">

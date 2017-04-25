@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Amaga la barra de pestanyes">
 <!ENTITY hideTabBar.never.label "Mai">
 <!ENTITY hideTabBar.never.key "M">
-<!ENTITY hideTabBar.onOneTab.label "Quan només hi hagi una pestanya oberta">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "P">
 <!ENTITY hideTabBar.always.label "Sempre">
 <!ENTITY hideTabBar.always.key "S">

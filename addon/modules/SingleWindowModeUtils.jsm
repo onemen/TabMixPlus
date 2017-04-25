@@ -10,16 +10,16 @@ Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
 Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", this);
 
 this.SingleWindowModeUtils = {
- /**
-  * @brief Locate a browser window.
-  *
-  * @param aExclude  A scripted window object that we do not want to use.
-  *
-  * @returns         A scripted window object representing a browser
-  *                  window that is not the same as aExclude, and is
-  *                  additionally not a popup window.
-  */
-  getBrowserWindow: function(aExclude) {
+  /**
+   * @brief Locate a browser window.
+   *
+   * @param aExclude  A scripted window object that we do not want to use.
+   *
+   * @returns         A scripted window object representing a browser
+   *                  window that is not the same as aExclude, and is
+   *                  additionally not a popup window.
+   */
+  getBrowserWindow(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
     var isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
@@ -39,7 +39,7 @@ this.SingleWindowModeUtils = {
     return null;
   },
 
-  newWindow: function(aWindow) {
+  newWindow(aWindow) {
     if (!aWindow.Tabmix.singleWindowMode)
       return false;
 
@@ -48,12 +48,12 @@ this.SingleWindowModeUtils = {
 
     const onLoad = aEvent => {
       let window = aEvent.currentTarget;
-      window.removeEventListener("load", onLoad, false);
+      window.removeEventListener("load", onLoad);
       let docElement = window.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
         this.onLoad(window);
     };
-    aWindow.addEventListener("load", onLoad, false);
+    aWindow.addEventListener("load", onLoad);
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 
@@ -84,7 +84,7 @@ this.SingleWindowModeUtils = {
     return true;
   },
 
-  restoreDimensionsAndPosition: function(newWindow, restorePosition) {
+  restoreDimensionsAndPosition(newWindow, restorePosition) {
     const rect = newWindow.__winRect;
     if (typeof rect != "object") {
       return;
@@ -101,7 +101,7 @@ this.SingleWindowModeUtils = {
     delete newWindow.__winRect;
   },
 
-  onLoad: function(newWindow) {
+  onLoad(newWindow) {
     var existingWindow = this.getBrowserWindow(newWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)
@@ -118,7 +118,7 @@ this.SingleWindowModeUtils = {
     }
 
     var existingBrowser = existingWindow.gBrowser;
-    existingWindow.tablib.init(); // just in case tablib isn't init yet
+    existingWindow.Tabmix.tablib.init(); // just in case Tabmix.tablib isn't init yet
     var uriToLoad = args[0];
 
     var urls = [];
@@ -167,7 +167,10 @@ this.SingleWindowModeUtils = {
       params.allowThirdPartyFixup = args[4] || false;
       if (TabmixSvc.version(500)) {
         params.userContextId = args[6] != undefined ? args[6] :
-                               Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+          Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
+        params.originPrincipal = args[7];
+        params.forceAboutBlankViewerInCurrent = Boolean(args[7]);
+        params.triggeringPrincipal = args[8];
       }
       urls = [uriToLoad];
     } else {

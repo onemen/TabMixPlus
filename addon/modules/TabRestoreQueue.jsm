@@ -11,13 +11,13 @@ XPCOMUtils.defineLazyModuleGetter(this,
 
 let internal = {
   tabmix: {
-    restoreOnDemand: function(restoreOnDemand, visible, tabToRestoreSoon) {
+    restoreOnDemand(restoreOnDemand, visible, tabToRestoreSoon) {
       if (!visible.length) {
         return restoreOnDemand;
       }
 
       const tab = tabToRestoreSoon || visible[0];
-      const win = tab.ownerDocument.defaultView;
+      const win = tab.ownerGlobal;
       const {restoringTabs, bookmarksOnDemand} = win.TMP_Places;
       const index = restoringTabs.indexOf(tab);
       if (index > -1) {
@@ -33,7 +33,7 @@ let internal = {
   },
 
   // Returns and removes the tab with the highest priority.
-  shift: function() {
+  shift() {
     let set;
     let {priority, hidden, visible} = this.tabs;
 
@@ -52,10 +52,10 @@ let internal = {
     return set && set.shift();
   },
 
-  willRestoreSoon: function(tab) {
+  willRestoreSoon(tab) {
     let {priority, hidden, visible} = this.tabs;
     let {restoreOnDemand, restorePinnedTabsOnDemand,
-        restoreHiddenTabs} = this.prefs;
+      restoreHiddenTabs} = this.prefs;
     let restorePinned = !(restoreOnDemand && restorePinnedTabsOnDemand);
     let candidateSet = [];
 
@@ -75,7 +75,7 @@ let internal = {
 };
 
 this.TabRestoreQueue = {
-  init: function() {
+  init() {
     const global = {};
     const tabRestoreQueue = TabmixSvc.SessionStoreGlobal.TabRestoreQueue;
     global.TabRestoreQueue = tabRestoreQueue;

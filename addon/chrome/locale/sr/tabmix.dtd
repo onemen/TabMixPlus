@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Сакриј линију с картицама">
 <!ENTITY hideTabBar.never.label "Никад">
 <!ENTITY hideTabBar.never.key "Н">
-<!ENTITY hideTabBar.onOneTab.label "Када је отворена само једна картица">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "ј">
 <!ENTITY hideTabBar.always.label "Увек">
 <!ENTITY hideTabBar.always.key "У">

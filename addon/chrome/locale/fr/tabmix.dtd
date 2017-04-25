@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Cacher la barre d&apos;onglets">
 <!ENTITY hideTabBar.never.label "Jamais">
 <!ENTITY hideTabBar.never.key "J">
-<!ENTITY hideTabBar.onOneTab.label "Quand un seul onglet est ouvert">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "s">
 <!ENTITY hideTabBar.always.label "Toujours">
 <!ENTITY hideTabBar.always.key "T">

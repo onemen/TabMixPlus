@@ -108,7 +108,7 @@
 
     <popup id="contentAreaContextMenu">
       <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
-                oncommand="tablib.openLinkInCurrent();"/>
+                oncommand="Tabmix.tablib.openLinkInCurrent();"/>
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
          insertafter="context-openlinkintab"
@@ -378,7 +378,7 @@
         <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator/>
         <menuitem value="0" type="radio" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
-        <menuitem value="1" type="radio" label="&hideTabBar.onOneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+        <menuitem value="1" type="radio" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
         <menuitem value="2" type="radio" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
       </menupopup >
       <!-- tabmix tooltip for button -->

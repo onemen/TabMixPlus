@@ -14,22 +14,22 @@ this.RenameTab = {
   window: null,
   panel: null,
   data: {},
-  _element: function(aID) {
+  _element(aID) {
     return this.window.document.getElementById(aID);
   },
 
-  editTitle: function(aTab) {
+  editTitle(aTab) {
     if (this.panel && this.panel.state != "closed")
       this.hidePopup();
 
-    this.window = aTab.ownerDocument.defaultView;
+    this.window = aTab.ownerGlobal;
     var gBrowser = this.window.gBrowser;
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle = aTab.hasAttribute("pending") ?
-          this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
-          browser.contentTitle;
+      this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
+      browser.contentTitle;
     this.data.url = browser.currentURI.spec;
     this.data.docTitle = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
       docTitle, null, aTab);
@@ -64,7 +64,7 @@ this.RenameTab = {
     );
   },
 
-  observe: function(aSubject, aTopic) {
+  observe(aSubject, aTopic) {
     if (aTopic != "xul-overlay-merged")
       return;
 
@@ -83,9 +83,9 @@ this.RenameTab = {
     this._doShowPanel();
   },
 
-  _doShowPanel: function() {
+  _doShowPanel() {
     var popup = this.panel;
-    popup.addEventListener("keypress", this, false);
+    popup.addEventListener("keypress", this);
     // dock the panel to the tab icon when possible, otherwise show the panel
     // at screen center
     if (this.window.Tabmix.tabsUtils.isElementVisible(this.data.tab))
@@ -114,12 +114,12 @@ this.RenameTab = {
     this.data.permanently = permanently.checked;
   },
 
-  resetTitle: function() {
+  resetTitle() {
     this.data.value = this.data.docTitle;
     this.update(true);
   },
 
-  update: function(aReset) {
+  update(aReset) {
     var data = this.data;
     var tab = data.tab;
     var label = data.value;
@@ -138,14 +138,14 @@ this.RenameTab = {
     this.hidePopup();
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     if (aEvent.type == "keypress" &&
          aEvent.keyCode == Components.interfaces.nsIDOMKeyEvent.DOM_VK_RETURN &&
          aEvent.target.localName != "button")
       this.update();
   },
 
-  onpopupshown: function(aEvent) {
+  onpopupshown(aEvent) {
     if (aEvent.target == this.panel) {
       var textbox = this._element("tabmixRenametab_titleField");
       textbox.focus();
@@ -153,22 +153,22 @@ this.RenameTab = {
     }
   },
 
-  onpopuphidden: function(aEvent) {
+  onpopuphidden(aEvent) {
     if (aEvent.originalTarget == this.panel) {
-      this.panel.removeEventListener("keypress", this, false);
+      this.panel.removeEventListener("keypress", this);
       this.window = null;
       this.panel = null;
       this.data = {};
     }
   },
 
-  onNewTitle: function(aTitle) {
+  onNewTitle(aTitle) {
     this.data.value = aTitle;
     if (!this.data.modified)
       this.window.Tabmix.setItem(this.panel, "modified", aTitle != this.data.docTitle || null);
   },
 
-  hidePopup: function() {
+  hidePopup() {
     this.panel.hidePopup();
   }
 };

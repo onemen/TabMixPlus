@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Slučování panelů">
 <!ENTITY tabFeature.label "Vlastnosti panelů">
 <!ENTITY newtab.label "V novém panelu bude načtena:">
-<!ENTITY replaceLastTabWith.label "Pokud zavřu poslední panel, nahradí jej">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Prázdná stránka">
 <!ENTITY newtab.home "Domovská stránka">
 <!ENTITY newtab.current "Současná stránka">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Zamykání panelů">
 <!ENTITY lockNewTabs.label "Zamknout nové panely">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplikovaný panel">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Upozornění">
-<!ENTITY warnOnCloseProtected.label "Upozornit při zavírání okna s chráněnými panely">
-<!ENTITY warnOnCloseWindow.label "Upozornit při zavírání okna s více panely">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Zavírání posledního panelu">
 <!ENTITY keepWindow.label.3.1 "Nezavřít okno, je-li zavírán poslední panel">
 <!ENTITY keeptab.label "Nepovolit zavření posledního panelu">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Zobrazit v kontextové nabídce panelu">
 <!ENTITY showContentAreaContext.label "Zobrazit v hlavní kontextové nabídce">
 <!ENTITY showToolsMenu.label "Zobrazit v nabídce Nástroje">
-<!ENTITY startupHomePage.label "Zobrazit domovskou stránku">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Zobrazit prázdnou stránku">
-<!ENTITY startupLastSession.label "Zobrazit okna a panely z minula">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "Rozšíření Tab Mix Plus zjistilo, že je nainstalováno rozšíření Session Manager.">
 <!ENTITY sm.extension.description2 "Správce relací rozšíření Tab Mix Plus bude zakázán">
 <!ENTITY sm.extension.description3 "Kliknutím na tlačítko napravo otevřete dialogové okno s možnostmi rozšíření Session Manager">
-<!ENTITY sm.extension.description4 "Převést data Mých relací z formátu rozšíření Tab Mix Plus do formátu rozšíření Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Převést">
-<!ENTITY sm.extension.chooseFile.label0 "Chci vybrat, která data budou převedena.">
 <!ENTITY sm.extension.chooseFile.label1 "Převést relace rozšíření Tab Mix Plus ze současného profilu">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Použít vestavěnou funkci obnovy relací prohlížeče Firefox">
 <!ENTITY ss.enable.tooltip "Pokud zrušíte zaškrtnutí tohoto pole, povolíte správce relací rozšíření Tab Mix Plus.">
 <!ENTITY ss.advanced_setting "Rozšířené nastavení">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Sloučit více oken do jednoho">
 <!ENTITY sm.restore.bypassCache "Při obnově relace obejít vyrovnávací paměť">
 <!ENTITY sm.notrestore.label "Pokud nedojde k obnově po spuštění">
-<!ENTITY sm.restorePinned.label "Obnovit připnuté panely z minula">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Zachovat panely:">
 <!ENTITY sm.preserve.history "Historie">
 <!ENTITY sm.preserve.protect "Stav Chránit">

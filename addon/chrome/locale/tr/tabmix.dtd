@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Sekme çubuğunu gizle">
 <!ENTITY hideTabBar.never.label "Asla">
 <!ENTITY hideTabBar.never.key "A">
-<!ENTITY hideTabBar.onOneTab.label "Yalnızca tek sekme açmışsam">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "Y">
 <!ENTITY hideTabBar.always.label "Her zaman">
 <!ENTITY hideTabBar.always.key "H">

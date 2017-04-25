@@ -14,7 +14,7 @@ XPCOMUtils.defineLazyGetter(this, "OS", () => {
 var gNextID = 1;
 
 this.console = {
-  getObject: function(aWindow, aMethod) {
+  getObject(aWindow, aMethod) {
     let msg = "";
     if (!aWindow)
       msg += "aWindow is undefined";
@@ -42,7 +42,7 @@ this.console = {
   },
 
   _timers: {},
-  show: function(aMethod, aDelay, aWindow) {
+  show(aMethod, aDelay, aWindow) {
     try {
       if (typeof (aDelay) == "undefined")
         aDelay = 500;
@@ -51,7 +51,7 @@ this.console = {
         let result = "", isObj = typeof aMethod == "object";
         if (typeof aMethod != "function") {
           result = isObj ? aMethod.obj[aMethod.name] :
-                this.getObject(aWindow, aMethod);
+            this.getObject(aWindow, aMethod);
           result = " = " + result.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
@@ -67,9 +67,9 @@ this.console = {
         };
         if (aWindow) {
           aWindow.addEventListener("unload", function unload(event) {
-            event.currentTarget.removeEventListener("unload", unload, false);
+            event.currentTarget.removeEventListener("unload", unload);
             timer.clear();
-          }, false);
+          });
         }
         timer.initWithCallback({
           notify: function notify() {
@@ -89,7 +89,7 @@ this.console = {
 
   // get functions names from Error().stack
   // excluding any internal caller (name start with TMP_console_)
-  _getNames: function(aCount, stack) {
+  _getNames(aCount, stack) {
     stack = this._getStackExcludingInternal(stack);
     if (!aCount)
       aCount = 1;
@@ -104,14 +104,14 @@ this.console = {
 
   // get the name of the function that is in the nth place in Error().stack
   // excluding any internal caller in the count
-  getCallerNameByIndex: function(aIndex) {
+  getCallerNameByIndex(aIndex) {
     let fn = this._getStackExcludingInternal()[aIndex];
     if (fn)
       return this._name(fn);
     return null;
   },
 
-  _getStackExcludingInternal: function(stack) {
+  _getStackExcludingInternal(stack) {
     if (!stack)
       stack = Error().stack.split("\n").slice(2);
     else
@@ -124,7 +124,7 @@ this.console = {
   },
 
   _char: "@",
-  _name: function(fn) {
+  _name(fn) {
     let fnName = fn.substr(0, fn.indexOf(this._char));
     if (fn && !fnName) {
       // get file name and line number
@@ -165,7 +165,7 @@ this.console = {
     let stack = this._getStackExcludingInternal();
 
     let stackUtil = {
-      contain: function(...names) {
+      contain(...names) {
         if (Array.isArray(names[0])) {
           names = names[0];
         }
@@ -181,15 +181,15 @@ this.console = {
     return stackUtil;
   },
 
-/*
-options = {
-  msg: msg
-  log: true / false; default true
-  function: true / false default false
-  deep: true / false default false
-  offset; for internal use only true / false default false
-}
-*/
+  /*
+  options = {
+    msg: msg
+    log: true / false; default true
+    function: true / false default false
+    deep: true / false default false
+    offset; for internal use only true / false default false
+  }
+  */
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     if (!aObj || typeof aObj != "object") {
       let msg = "log.obj was called with non-object argument\n";
@@ -243,7 +243,7 @@ options = {
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
-  _formatStack: function(stack) {
+  _formatStack(stack) {
     let lines = [], _char = this._char, re = this._pathRegExp;
     stack.forEach(line => {
       let atIndex = line.indexOf("@");
@@ -275,7 +275,7 @@ options = {
 
   /* logMessage */
 
-  clog: function(aMessage, caller) {
+  clog(aMessage, caller) {
     this._logMessage(":\n" + aMessage, "infoFlag", caller);
   },
 
@@ -321,7 +321,7 @@ options = {
     return parent || {};
   },
 
-  reportError: function(ex = null, msg = "") {
+  reportError(ex = null, msg = "") {
     if (ex === null) {
       ex = "reportError was called with null";
     }

@@ -1,3 +1,4 @@
+/* eslint "tabmix/use-ownerGlobal": 0 */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
@@ -26,35 +27,35 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 var ContentClickInternal;
 this.TabmixContentClick = {
-  init: function() {
+  init() {
     ContentClickInternal.init();
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     ContentClickInternal.onQuitApplication();
   },
 
-  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+  getParamsForLink(event, linkNode, href, browser, focusedWindow) {
     return ContentClickInternal.getParamsForLink(event, linkNode, href, browser, focusedWindow);
   },
 
-  contentLinkClick: function(event, browser, focusedWindow) {
+  contentLinkClick(event, browser, focusedWindow) {
     ContentClickInternal.contentLinkClick(event, browser, focusedWindow);
   },
 
-  isGreasemonkeyInstalled: function(window) {
+  isGreasemonkeyInstalled(window) {
     ContentClickInternal.isGreasemonkeyInstalled(window);
   },
 
-  isLinkToExternalDomain: function(curpage, url) {
+  isLinkToExternalDomain(curpage, url) {
     return ContentClickInternal.isLinkToExternalDomain(curpage, url);
   },
 
-  isUrlForDownload: function(url) {
+  isUrlForDownload(url) {
     return ContentClickInternal.isUrlForDownload(url);
   },
 
-  selectExistingTab: function(window, href, targetAttr) {
+  selectExistingTab(window, href, targetAttr) {
     ContentClickInternal.selectExistingTab(window, href, targetAttr);
   }
 };
@@ -64,7 +65,7 @@ ContentClickInternal = {
   _timer: null,
   _initialized: false,
 
-  init: function() {
+  init() {
     if (!TabmixSvc.version(380) || this._initialized)
       return;
     this._initialized = true;
@@ -90,7 +91,7 @@ ContentClickInternal = {
     this.initContentAreaClick();
   },
 
-  onQuitApplication: function() {
+  onQuitApplication() {
     if (this._timer)
       this._timer.clear();
 
@@ -119,7 +120,7 @@ ContentClickInternal = {
         return;
       }
 
-      let window = browser.ownerDocument.defaultView;
+      let window = browser.ownerGlobal;
       var where = window.whereToOpenLink(json);
       if (where != "current") {
         return;
@@ -129,7 +130,7 @@ ContentClickInternal = {
           json.tabmixContentClick.suppressTabsOnFileDownload || false;
       let params = {
         charset: browser.characterSet,
-        suppressTabsOnFileDownload: suppressTabsOnFileDownload,
+        suppressTabsOnFileDownload,
         referrerURI: browser.documentURI,
         referrerPolicy: json.referrerPolicy,
         noReferrer: json.noReferrer,
@@ -153,7 +154,7 @@ ContentClickInternal = {
     };
   },
 
-  receiveMessage: function(message) {
+  receiveMessage(message) {
     if (message.name == "Tabmix:isFrameInContentResult") {
       const {epoch} = message.data;
       if (this.frameSearch.has(epoch)) {
@@ -179,7 +180,7 @@ ContentClickInternal = {
   },
 
   // for non-link element with onclick that change location.href
-  getHrefFromNodeOnClick: function(event, browser, wrappedOnClickNode) {
+  getHrefFromNodeOnClick(event, browser, wrappedOnClickNode) {
     if (!wrappedOnClickNode || !this.getHrefFromOnClick(event, null, wrappedOnClickNode,
       wrappedOnClickNode.getAttribute("onclick")))
       return false;
@@ -191,11 +192,15 @@ ContentClickInternal = {
       return false;
     }
 
-    let win = browser.ownerDocument.defaultView;
+    let win = browser.ownerGlobal;
     win.openLinkIn(href, result.where, {
       referrerURI: browser.documentURI,
       referrerPolicy: event.referrerPolicy,
       noReferrer: event.noReferrer,
+      originPrincipal: event.nodePrincipal,
+      triggeringPrincipal: event.triggeringPrincipal,
+      frameOuterWindowID: event.frameOuterWindowID,
+      isContentWindowPrivate: event.isContentWindowPrivate,
       charset: browser.characterSet,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
     });
@@ -203,14 +208,14 @@ ContentClickInternal = {
     return true;
   },
 
-  getParamsForLink: function(event, linkNode, href, browser, focusedWindow) {
+  getParamsForLink(event, linkNode, href, browser, focusedWindow) {
     let wrappedNode = this.getWrappedNode(linkNode, focusedWindow, event.button === 0);
     return this._getParamsForLink(event, wrappedNode, href, browser);
   },
 
-  _getParamsForLink: function(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
+  _getParamsForLink(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
     this._browser = browser;
-    this._window = browser.ownerDocument.defaultView;
+    this._window = browser.ownerGlobal;
 
     let [where, suppressTabsOnFileDownload] =
         this.whereToOpen(event, href, wrappedNode, wrappedOnClickNode);
@@ -244,21 +249,21 @@ ContentClickInternal = {
     this.resetData();
 
     return {
-      where: where,
+      where,
       _href: href,
       suppressTabsOnFileDownload: suppressTabsOnFileDownload || false,
-      targetAttr: targetAttr
+      targetAttr
     };
   },
 
   _data: null,
-  resetData: function() {
+  resetData() {
     this._data = null;
     this._browser = null;
     this._window = null;
   },
 
-  getPref: function() {
+  getPref() {
     XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
       return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
@@ -277,7 +282,7 @@ ContentClickInternal = {
    *
    * @return                 wrapped node including attribute functions
    */
-  getWrappedNode: function(node, focusedWindow, getTargetIsFrame) {
+  getWrappedNode(node, focusedWindow, getTargetIsFrame) {
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
       let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
       nObj.hasAttribute = function(att) {
@@ -305,7 +310,7 @@ ContentClickInternal = {
    * @param wrappedOnClickNode   wrapped DOM node containing onclick, may exist only
    *                         when link node is null.
    */
-  getData: function(event, href, wrappedNode, wrappedOnClickNode) {
+  getData(event, href, wrappedNode, wrappedOnClickNode) {
     let self = this;
     function LinkData() {
       this.event = event;
@@ -325,11 +330,11 @@ ContentClickInternal = {
         return self.getHrefFromOnClick(event, href, this.wrappedNode, this.onclick);
       });
       XPCOMUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
-       /*
-        * Check if link refers to external domain.
-        * Get current page url
-        * if user click a link while the page is reloading node.ownerDocument.location can be null
-        */
+        /**
+         * Check if link refers to external domain.
+         * Get current page url
+         * if user click a link while the page is reloading node.ownerDocument.location can be null
+         */
         let youtube = /www\.youtube\.com\/watch\?v=/;
         let curpage = this.currentURL;
         if (!youtube.test(curpage)) {
@@ -351,7 +356,7 @@ ContentClickInternal = {
       return where == "tabshifted" ? "tabshifted" : "tab";
     };
 
-  ///XXX check again how SubmitToTab work
+    ///XXX check again how SubmitToTab work
     if (typeof (this._window.SubmitToTab) != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
@@ -434,7 +439,7 @@ ContentClickInternal = {
     // catch other middle & right click
     if (event.button !== 0) {
       return event.button == 1 && this._data.hrefFromOnClick ?
-              [TMP_tabshifted(event) + "@12"] : ["default@12"];
+        [TMP_tabshifted(event) + "@12"] : ["default@12"];
     }
 
     // the rest of the code if for left-click only
@@ -470,7 +475,7 @@ ContentClickInternal = {
     return ["default@17"];
   },
 
-  contentLinkClick: function(event, browser, focusedWindow) {
+  contentLinkClick(event, browser, focusedWindow) {
     this._contentLinkClick(event, browser, focusedWindow);
     if (event.__hrefFromOnClick) {
       event.stopImmediatePropagation();
@@ -644,7 +649,7 @@ ContentClickInternal = {
     this._GM_function.set(window, GM_function);
   },
 
-  miscellaneous: function(node) {
+  miscellaneous(node) {
     if ("className" in node) {
       // don't interrupt with noscript
       if (node.className.indexOf("__noscriptPlaceholder__") > -1)
@@ -688,7 +693,7 @@ ContentClickInternal = {
 
   _GM_function: new WeakMap(),
 
-  isGMEnabled: function() {
+  isGMEnabled() {
     if (this._GM_function.has(this._window))
       return this._GM_function.get(this._window)();
     return false;
@@ -750,7 +755,7 @@ ContentClickInternal = {
     if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
       let types = TabmixSvc.prefBranch.getCharPref("filetype");
       types = types.toLowerCase().split(" ")
-                   .filter(t => filetype.indexOf(t) == -1);
+          .filter(t => filetype.indexOf(t) == -1);
       filetype = [...filetype, ...types];
     }
 
@@ -1012,13 +1017,13 @@ ContentClickInternal = {
         addValidWindow(browserWin);
       }
     }
-    this.isFrameInContent(windows, {href: href, name: targetFrame}, isMultiProcess);
+    this.isFrameInContent(windows, {href, name: targetFrame}, isMultiProcess);
   },
 
   frameSearchEpoch: 0,
   frameSearch: new Map(),
 
-  isFrameInContent: function(windows, frameData, isMultiProcess) {
+  isFrameInContent(windows, frameData, isMultiProcess) {
     const deleteEpoch = epoch => {
       if (this.frameSearch.has(epoch)) {
         this.frameSearch.delete(epoch);
@@ -1028,7 +1033,7 @@ ContentClickInternal = {
       epoch: 0,
       frameData: null,
       windows: null,
-      start: function(epoch) {
+      start(epoch) {
         this.frameData = frameData;
         this.epoch = epoch;
         this.frameData.epoch = this.epoch;
@@ -1036,13 +1041,13 @@ ContentClickInternal = {
         let window = this.windows.shift();
         this.next(window.gBrowser.tabs[0]);
       },
-      stop: function() {
+      stop() {
         this.frameData = null;
         this.windows = null;
         deleteEpoch(this.epoch);
       },
-      result: function(browser, data) {
-        let window = browser.ownerDocument.defaultView;
+      result(browser, data) {
+        let window = browser.ownerGlobal;
         let tab = window.gBrowser.getTabForBrowser(browser);
         if (data.result) {
           this.stop();
@@ -1054,7 +1059,7 @@ ContentClickInternal = {
           this.next(tab.nextSibling);
         }
       },
-      next: function(tab) {
+      next(tab) {
         if (!tab && this.windows.length) {
           let window = this.windows.shift();
           tab = window.gBrowser.tabs[0];
@@ -1063,11 +1068,11 @@ ContentClickInternal = {
           let browser = tab.linkedBrowser;
           if (browser.getAttribute("remote") == "true") {
             browser.messageManager
-                   .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
+                .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
           } else {
             let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
               this.frameData.href, this.frameData.name);
-            this.result(browser, {result: result});
+            this.result(browser, {result});
           }
         } else {
           this.stop();
@@ -1083,14 +1088,14 @@ ContentClickInternal = {
     frameSearch.start(newEpoch);
   },
 
- /**
-  * @brief Check for certain JavaScript strings inside an attribute.
-  *
-  * @param attr     The attribute to check.
-  * @param string   The string to check for.
-  * @returns        true if the strings are present, false if they aren't.
-  *
-  */
+  /**
+   * @brief Check for certain JavaScript strings inside an attribute.
+   *
+   * @param attr     The attribute to check.
+   * @param string   The string to check for.
+   * @returns        true if the strings are present, false if they aren't.
+   *
+   */
   checkAttr: function TMP_checkAttr(attr, string) {
     if (typeof (attr) == "string")
       return attr.startsWith(string);
@@ -1102,14 +1107,14 @@ ContentClickInternal = {
     return (this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup));
   },
 
- /**
-  * @brief Check if link refers to external domain.
-  *
-  * @param target    The target link.
-  * @param curpage   The current page url
-  * @returns         true when curpage and target are in different domains
-  *
-  */
+  /**
+   * @brief Check if link refers to external domain.
+   *
+   * @param target    The target link.
+   * @param curpage   The current page url
+   * @returns         true when curpage and target are in different domains
+   *
+   */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     const fixupURI = url => {
       try {
@@ -1147,13 +1152,13 @@ ContentClickInternal = {
         if (!url) {
           return null;
         }
-    /* DONT DELETE
-      var host = url.hostPort.split(".");
-      //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
-      while (host.length > 2)
-        host.shift();
-      return host.join(".");
-    */
+        /* DONT DELETE
+        var host = url.hostPort.split(".");
+        //XXX      while (host.length > 3) <---- this make problem to site like yahoo mail.yahoo.com ard.yahoo.com need
+        while (host.length > 2)
+          host.shift();
+        return host.join(".");
+        */
         let level;
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
@@ -1197,7 +1202,7 @@ ContentClickInternal = {
    * @brief prevent onclick function with the form javascript:top.location.href = url
    *        or the form window.location = url when we force new tab from link
    */
-  getHrefFromOnClick: function(event, href, node, onclick) {
+  getHrefFromOnClick(event, href, node, onclick) {
     if (typeof event.__hrefFromOnClick != "undefined")
       return event.__hrefFromOnClick;
 
@@ -1213,7 +1218,7 @@ ContentClickInternal = {
     return (event.__hrefFromOnClick = result.__hrefFromOnClick);
   },
 
-  _hrefFromOnClick: function(href, node, onclick, result) {
+  _hrefFromOnClick(href, node, onclick, result) {
     let re = /^(javascript:)?(window\.|top\.)?(document\.)?location(\.href)?=/;
     if (!re.test(onclick))
       return;

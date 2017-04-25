@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "resource://tabmixplus/Utils.jsm");
 
 this.ContextMenu = {
-  getSelectedLinks: function(content, check) {
+  getSelectedLinks(content, check) {
     let doc = content.document;
     // get focused window selection
     let selectionObject = TabmixUtils.focusedWindow(content).getSelection();
@@ -19,7 +19,7 @@ this.ContextMenu = {
       return [];
 
     let filter = {
-      acceptNode: function(n) {
+      acceptNode(n) {
         if (n.nodeName == 'A' || n.nodeName == 'li') {
           return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
         }

@@ -20,7 +20,7 @@ function flst() {
 }
 
 flst.prototype = {
-  showAlert: function(msg, id) {
+  showAlert(msg, id) {
     try {
       msg = msg.replace(/F8|F9/, Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
@@ -29,7 +29,7 @@ flst.prototype = {
   },
 
   // toggle flst on/off
-  toggle: function() {
+  toggle() {
     if (TabmixSvc.prefBranch.getIntPref("focusTab") != 4) {
       TabmixSvc.prefBranch.setIntPref("focusTab", 4);
       this.showAlert(this.flstOn, "toggleFLST");
@@ -39,7 +39,7 @@ flst.prototype = {
     }
   },
 
-  toggleSlideshow: function() {
+  toggleSlideshow() {
     if (this.slideShowTimer) {
       this.cancel();
     } else if (this.moreThenOneTab) {
@@ -51,14 +51,14 @@ flst.prototype = {
     }
   },
 
-  notify: function() {
+  notify() {
     if (this.moreThenOneTab)
       this.tabContainer.advanceSelectedTab(1, true);
     else
       this.cancel();
   },
 
-  cancel: function() {
+  cancel() {
     this.slideShowTimer.cancel();
     this.slideShowTimer = null;
     this.showAlert(this.slideshowOff, "slideShow");

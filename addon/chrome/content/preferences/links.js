@@ -2,7 +2,7 @@
 "use strict";
 
 var gLinksPane = {
-  init: function() {
+  init() {
     this.singleWindow($("singleWindow").checked);
     this.externalLinkValue($("externalLink").checked);
 
@@ -11,7 +11,7 @@ var gLinksPane = {
     gPrefWindow.initPane("paneLinks");
   },
 
-  externalLinkValue: function(checked) {
+  externalLinkValue(checked) {
     let external = $("externalLinkTarget");
     let preference = $(external.getAttribute("preference"));
     if (!checked)
@@ -23,7 +23,7 @@ var gLinksPane = {
     gPrefWindow.setDisabled("obs_externalLink", !checked);
   },
 
-  updateExternalLinkCheckBox: function(external) {
+  updateExternalLinkCheckBox(external) {
     let preference = $(external.getAttribute("preference"));
     if (external.value == preference.value)
       return;
@@ -36,7 +36,7 @@ var gLinksPane = {
     }
   },
 
-  singleWindow: function(enableSingleWindow) {
+  singleWindow(enableSingleWindow) {
     function updateStatus(itemId, testVal, test, newVal) {
       var item = $(itemId);
       if (test ? item.value == testVal : item.value != testVal) {
@@ -52,7 +52,7 @@ var gLinksPane = {
     }
   },
 
-  openFiletypeEditor: function() {
+  openFiletypeEditor() {
     window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul",
       "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
   }

@@ -6,19 +6,19 @@ var TMP_Places = {
   prefBookmark: "extensions.tabmix.opentabfor.bookmarks",
 
   addEvent: function TMP_PC_addEvent() {
-    window.addEventListener("load", this, false);
-    window.addEventListener("unload", this, false);
+    window.addEventListener("load", this);
+    window.addEventListener("unload", this);
   },
 
   handleEvent: function TMP_PC_handleEvent(aEvent) {
     switch (aEvent.type) {
       case "load":
-        window.removeEventListener("load", this, false);
+        window.removeEventListener("load", this);
         this.init();
         Tabmix.onContentLoaded.change_utilityOverlay();
         break;
       case "unload":
-        window.removeEventListener("unload", this, false);
+        window.removeEventListener("unload", this);
         this.deinit();
         break;
       case "SSTabRestored":
@@ -116,10 +116,10 @@ var TMP_Places = {
     }
   },
 
-  openMenuItem: function(aUri, aEvent, aParams, aPref) {
+  openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
     let where = this.isBookmarklet(aUri) ? "current" :
-                this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
+      this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
@@ -133,7 +133,7 @@ var TMP_Places = {
     BMB_bookmarksPopup: "bookmarks",
   },
 
-  openUILink: function(url, event, where, params) {
+  openUILink(url, event, where, params) {
     // divert all the calls from places UI to use our preferences
     //   HistoryMenu.prototype._onCommand
     //   BookmarkingUI._updateRecentBookmarks/onItemCommand
@@ -175,12 +175,12 @@ var TMP_Places = {
     return where;
   },
 
-  isBookmarklet: function(url) {
+  isBookmarklet(url) {
     var jsURL = /^ *javascript:/;
     return jsURL.test(url);
   },
 
-  fixWhereToOpen: function(aEvent, aWhere, aPref) {
+  fixWhereToOpen(aEvent, aWhere, aPref) {
     var w = Tabmix.getTopWin();
     if (!w)
       return aWhere;
@@ -206,7 +206,7 @@ var TMP_Places = {
     return aWhere;
   },
 
-  getPrefByDocumentURI: function(aWindow) {
+  getPrefByDocumentURI(aWindow) {
     switch (aWindow.document.documentURI) {
       case "chrome://browser/content/places/places.xul": {
         let history = PlacesUIUtils.getString("OrganizerQueryHistory");
@@ -217,7 +217,7 @@ var TMP_Places = {
         if (!historySelected)
           return this.prefBookmark;
       }
-        /* falls through */
+      /* falls through */
       case "chrome://browser/content/history/history-panel.xul":
         return this.prefHistory;
       case "chrome://browser/content/browser.xul":
@@ -238,10 +238,10 @@ var TMP_Places = {
     var openTabs = gBrowser.visibleTabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
-        Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
+      Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
     var loadInBackground = bmGroup.length > 1 ?
-        Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
-        Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+      Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
+      Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
@@ -277,10 +277,11 @@ var TMP_Places = {
 
     var tabToSelect = null;
     var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
-                   gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
+      gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
+    let savePrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
@@ -310,7 +311,11 @@ var TMP_Places = {
       this.setTabTitle(aTab, url, bmIds[i]);
       if (loadProgressively) {
         tabs.push(aTab);
-        tabsData.push({entries: [{url: url, title: aTab.label}], index: 0});
+        let entry = {url, title: aTab.label};
+        if (savePrincipal) {
+          entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+        }
+        tabsData.push({entries: [entry], index: 0});
       }
 
       if (!tabToSelect)
@@ -370,11 +375,11 @@ var TMP_Places = {
     return [tabCount > progressively, tabCount > onDemand];
   },
 
-  restoreTabs: function(tabs, tabsData, restoreOnDemand) {
+  restoreTabs(tabs, tabsData, restoreOnDemand) {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
     let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
-                                         "restoreHistoryPrecursor";
+      "restoreHistoryPrecursor";
     TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
     // set icon on pending tabs
     const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
@@ -394,14 +399,14 @@ var TMP_Places = {
   bookmarksOnDemand: false,
   restoringTabs: [],
 
-  resetRestoreState: function(tab) {
+  resetRestoreState(tab) {
     if (tab.linkedBrowser.__SS_restoreState) {
       TabmixSvc.SessionStore._resetTabRestoringState(tab);
     }
     this.updateRestoringTabsList(tab);
   },
 
-  updateRestoringTabsList: function(tab) {
+  updateRestoringTabsList(tab) {
     if (!this.restoringTabs.length && !this.bookmarksOnDemand) {
       return;
     }
@@ -456,11 +461,11 @@ var TMP_Places = {
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  getTitleFromBookmark: function(aUrl, aTitle, aItemId, aTab) {
+  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
     return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
   },
 
-  isUserRenameTab: function(aTab, aUrl) {
+  isUserRenameTab(aTab, aUrl) {
     if (aTab.hasAttribute("label-uri")) {
       let label = aTab.getAttribute("label-uri");
       if (label == aUrl || label == "*")
@@ -469,7 +474,7 @@ var TMP_Places = {
     return false;
   },
 
-  afterTabTitleChanged: function(bookmarkChanged = true) {
+  afterTabTitleChanged(bookmarkChanged = true) {
     if (bookmarkChanged && !this.inUpdateBatch) {
       this.AboutNewTab.updateAllBrowsers(window);
     }
@@ -514,7 +519,7 @@ var TMP_Places = {
     }
   },
 
-  onDelayedStartup: function() {
+  onDelayedStartup() {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
 
@@ -522,7 +527,7 @@ var TMP_Places = {
   },
 
   // extensions.tabmix.titlefrombookmark changed
-  onPreferenceChanged: function(aPrefValue) {
+  onPreferenceChanged(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
 
     if (aPrefValue) {
@@ -651,18 +656,18 @@ var TMP_Places = {
     this.currentTab = null;
   },
 
-  onItemVisited: function() {},
-  onItemMoved: function() {}
+  onItemVisited() {},
+  onItemMoved() {}
 };
 
 TMP_Places.contextMenu = {
-  toggleEventListener: function(enable) {
+  toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     window[eventListener]("unload", this, false);
     document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
   },
 
-  handleEvent: function(aEvent) {
+  handleEvent(aEvent) {
     switch (aEvent.type) {
       case "popupshowing":
         this.buildContextMenu();
@@ -719,12 +724,12 @@ TMP_Places.contextMenu = {
 };
 
 Tabmix.onContentLoaded = {
-  changeCode: function() {
+  changeCode() {
     this.change_miscellaneous();
     this.change_utilityOverlay();
   },
 
-  change_miscellaneous: function() {
+  change_miscellaneous() {
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
       /allowMixedContent:|charset:/,
       'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
@@ -755,10 +760,9 @@ Tabmix.onContentLoaded = {
       )._replace(
         /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
-        '  if (TabmixTabbar._enablePositionCheck &&\n  ' +
-        '      TabmixTabbar.getTabsPosition() != TabmixTabbar._tabsPosition) {\n  ' +
-        '    TabmixTabbar.updateScrollStatus();\n  ' +
-        '  }\n' +
+        // force another update when rows number changed by Tabmix to update
+        // titlebar and titlebarContent height
+        '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
       ).toCode();
     }
@@ -781,7 +785,7 @@ Tabmix.onContentLoaded = {
     ).toCode();
   },
 
-  change_utilityOverlay: function() {
+  change_utilityOverlay() {
     // fix small bug when the event is not mouse event
     // inverse focus of middle/ctrl/meta clicked bookmarks/history
     // don't inverse focus when called from onPopupClick and One-Click Search
@@ -835,7 +839,7 @@ Tabmix.onContentLoaded = {
       '  var bookMarkId            = params.bookMarkId;'
     )._replace(
       'where == "current" && #1.pinned'
-        .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
+          .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
       '$& && !params.suppressTabsOnFileDownload',
       {check: !Tabmix.isVersion(530)}
     )._replace(
@@ -854,7 +858,15 @@ Tabmix.onContentLoaded = {
       'let newWin = $&\n' +
       '    if (newWin && bookMarkId) {\n' +
       '        newWin.bookMarkIds = bookMarkId;\n' +
-      '    }'
+      '    }',
+      {check: !Tabmix.isVersion(540)}
+    )._replace(
+      /win = Services.ww.openWindow[^;]*;/,
+      '$&\n' +
+      '    if (win && bookMarkId) {\n' +
+      '        win.bookMarkIds = bookMarkId;\n' +
+      '    }',
+      {check: Tabmix.isVersion(540)}
     )._replace(
       /(})(\)?)$/,
       '  const targetTab = where == "current" ?\n' +
@@ -869,7 +881,7 @@ Tabmix.onContentLoaded = {
 
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
   // object name wmn replace with xnotifier for version 3.0+
-  getXnotifierFunction: function(aName) {
+  getXnotifierFunction(aName) {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(f => {
@@ -887,6 +899,6 @@ Tabmix.onContentLoaded = {
 
 /** DEPRECATED **/
 TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
-  let win = aBrowser.ownerDocument.defaultView;
+  let win = aBrowser.ownerGlobal;
   return win.TMP_Places.getTabTitle(win.gBrowser.getTabForBrowser(aBrowser), aUri.spec);
 };

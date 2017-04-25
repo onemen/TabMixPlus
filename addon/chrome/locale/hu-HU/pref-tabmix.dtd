@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Lap összefűzés">
 <!ENTITY tabFeature.label "Lap szolgáltatások">
 <!ENTITY newtab.label "Betöltés új lapra:">
-<!ENTITY replaceLastTabWith.label "Az utolsó lap bezárásakor">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Üres oldal">
 <!ENTITY newtab.home "Kezdőlap">
 <!ENTITY newtab.current "Aktuális oldal">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Lapok zárolása">
 <!ENTITY lockNewTabs.label "Új lapok zárolása">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Lap megkettőzése">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Figyelmeztetés">
-<!ENTITY warnOnCloseProtected.label "Figyelmeztessen védett lapok bezárása esetén">
-<!ENTITY warnOnCloseWindow.label "Figyelmeztetés több lap bezárása előtt">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "Utolsó lap bezárása">
 <!ENTITY keepWindow.label.3.1 "Ne zárja be az ablakot, ha az az utolsó lap be lett zárva">
 <!ENTITY keeptab.label "Ne zárja be a lapot, ha a Lapok eszköztár állandó megjelenítése be van kapcsolva">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Lapok eszköztáron megjelenő menü:">
 <!ENTITY showContentAreaContext.label "Weboldal-területen megjelenő menü:">
 <!ENTITY showToolsMenu.label "Megjelenítés az Eszközök menüben">
-<!ENTITY startupHomePage.label "Kezdőlap megjelenítése">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Üres oldal megjelenítése">
-<!ENTITY startupLastSession.label "A legutóbbi ablakok és lapok megjelenítése">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "A Tab Mix Plus úgy érzékeli, hogy a Munkamenet-kezelő kiterjesztés telepítve van">
 <!ENTITY sm.extension.description2 "A Tab Mix Plus munkamenet-kezelője ilyen esetben letiltásra kerül">
 <!ENTITY sm.extension.description3 "A jobb oldali gombra kattintva megnyithatja a Munkamenet-kezelő Beállítások párbeszédablakot">
-<!ENTITY sm.extension.description4 "A munkamenet-adatok átalakítása Tab Mix Plus formátumról a Munkamenet-kezelő kiterjesztés formátumára">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Átalakítás">
-<!ENTITY sm.extension.chooseFile.label0 "Az átalakítandó adatfájl kiválasztása">
 <!ENTITY sm.extension.chooseFile.label1 "Az aktuális profil munkamenet adatainak átalakítása">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Beépített munkamenet-visszaállító használata">
 <!ENTITY ss.enable.tooltip "Kijelölés nélkül a TabMix Munkamenet-kezelője kerül engedélyezésre">
 <!ENTITY ss.advanced_setting "Haladó beállítások">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
 <!ENTITY sm.restore.bypassCache "Gyorsítótár figyelmen kívül hagyása visszaállításkor">
 <!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
-<!ENTITY sm.restorePinned.label "Legutóbbi rögzített lapok visszaállítása">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Védett lapok">
 <!ENTITY sm.preserve.history "Előzmények">
 <!ENTITY sm.preserve.protect "Védelem állapota">

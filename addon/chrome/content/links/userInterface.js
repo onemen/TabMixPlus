@@ -36,7 +36,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 // Speed-Dial, Fast-Dial, TabGroupManager
 function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
-                                       Tabmix.prefs.getIntPref("loadOnNewTab.type");
+    Tabmix.prefs.getIntPref("loadOnNewTab.type");
   var url;
   var newTabUrl = BROWSER_NEW_TAB_URL;
   var selectedTab = gBrowser.selectedTab;
@@ -60,7 +60,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     case 4 : {// user url
       if (replaceLastTab || !Tabmix.isVersion(410) || TabmixSvc.isCyberfox) {
         let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
-                       TabmixSvc.newtabUrl;
+          TabmixSvc.newtabUrl;
         try {
           url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
           if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
@@ -99,7 +99,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
 
   // always select new tab when replacing last tab
   var loadInBackground = replaceLastTab ? false :
-                         Tabmix.prefs.getBoolPref("loadNewInBackground");
+    Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
   let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference

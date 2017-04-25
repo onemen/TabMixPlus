@@ -12,7 +12,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "resource://tabmixplus/Places.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
-  "resource://tabmixplus/syncedTabs.jsm");
+  "resource://tabmixplus/SyncedTabs.jsm");
 
 var tabStateCache;
 var _versions = {};
@@ -34,24 +34,23 @@ function isVersion(aVersionNo) {
 this.TabmixSvc = {
   get selectedAtt() {
     delete this.selectedAtt;
-    return (this.selectedAtt = isVersion(390) ?
-            "visuallyselected" : "selected");
+    return (this.selectedAtt = isVersion(390) ? "visuallyselected" : "selected");
   },
 
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
 
-  debugMode: function() {
+  debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
   },
 
-  version: function() {
+  version() {
     return isVersion.apply(null, arguments);
   },
 
-  getString: function(aStringKey) {
+  getString(aStringKey) {
     try {
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
@@ -60,7 +59,7 @@ this.TabmixSvc = {
     }
   },
 
-  getFormattedString: function(aStringKey, aStringsArray) {
+  getFormattedString(aStringKey, aStringsArray) {
     try {
       return this._strings.formatStringFromName(aStringKey, aStringsArray, aStringsArray.length);
     } catch (e) {
@@ -69,7 +68,7 @@ this.TabmixSvc = {
     }
   },
 
-  getSMString: function(aStringKey) {
+  getSMString(aStringKey) {
     try {
       return this.SMstrings.GetStringFromName(aStringKey);
     } catch (e) {
@@ -78,7 +77,7 @@ this.TabmixSvc = {
     }
   },
 
-  setLabel: function(property) {
+  setLabel(property) {
     var label, key;
     if (property.startsWith("sm.")) {
       label = this.getSMString(property + ".label");
@@ -93,7 +92,7 @@ this.TabmixSvc = {
     return label;
   },
 
-  getDialogStrings: function(...keys) {
+  getDialogStrings(...keys) {
     let stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
 
     return keys.map(key => {
@@ -106,7 +105,7 @@ this.TabmixSvc = {
     });
   },
 
-  topWin: function() {
+  topWin() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
@@ -125,7 +124,7 @@ this.TabmixSvc = {
    * @param aFunc
    *        Callback each window is passed to
    */
-  forEachBrowserWindow: function(aFunc) {
+  forEachBrowserWindow(aFunc) {
     let windowsEnum = Services.wm.getEnumerator("navigator:browser");
     while (windowsEnum.hasMoreElements()) {
       let window = windowsEnum.getNext();
@@ -166,7 +165,7 @@ this.TabmixSvc = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
       Ci.nsISupportsWeakReference]),
     _initialized: false,
-    init: function(aWindow) {
+    init(aWindow) {
       // windowStartup must only be called once for each window
       if ("firstWindowInSession" in aWindow.Tabmix)
         return;
@@ -203,7 +202,7 @@ this.TabmixSvc = {
       Cu.import("resource://tabmixplus/TabRestoreQueue.jsm", {});
     },
 
-    addMissingPrefs: function() {
+    addMissingPrefs() {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
@@ -220,7 +219,7 @@ this.TabmixSvc = {
       }
     },
 
-    observe: function(aSubject, aTopic) {
+    observe(aSubject, aTopic) {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
@@ -236,7 +235,7 @@ this.TabmixSvc = {
     }
   },
 
-  saveTabAttributes: function(tab, attrib, save) {
+  saveTabAttributes(tab, attrib, save) {
     tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
@@ -258,7 +257,7 @@ this.TabmixSvc = {
     statesToRestore: {},
   },
 
-  isAustralisBgStyle: function(orient) {
+  isAustralisBgStyle(orient) {
     if (typeof orient != "string") {
       throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);
     }
@@ -365,29 +364,30 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 
+// Firefox 54
+// Bug 1307736 - Assert history loads pass a valid triggeringPrincipal for docshell loads
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() {
+  return this.SessionStoreGlobal.Utils &&
+      this.SessionStoreGlobal.Utils.SERIALIZED_SYSTEMPRINCIPAL || null;
+});
+
+// Firefox 55
+// Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
+XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
+  return isVersion(550) ?
+    Services.prefs.getBoolPref("toolkit.cosmeticAnimations.enabled") :
+    Services.prefs.getBoolPref("browser.tabs.animate");
+});
+
 tabStateCache = {
-  get _update() {
-    delete this._update;
-    return (this._update = isVersion(260) ? "updateField" : "update");
-  },
-
-  get TabStateCache() {
-    delete this.TabStateCache;
-    if (isVersion(270))
-      Cu.import("resource:///modules/sessionstore/TabStateCache.jsm", this);
-    else
-      this.TabStateCache = TabmixSvc.SessionStoreGlobal.TabStateCache;
-    return this.TabStateCache;
-  },
-
-  saveTabAttributes: function(tab, attrib, save = true) {
+  saveTabAttributes(tab, attrib, save = true) {
     if (TabmixSvc.isPaleMoon) {
       return;
     }
 
     // force Sessionstore to save our persisted tab attributes
     if (save) {
-      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerDocument.defaultView);
+      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerGlobal);
     }
 
     // After bug 1166757 - Remove browser.__SS_data, we have nothing more to do.
@@ -409,18 +409,6 @@ tabStateCache = {
       if (!browser.__SS_data.attributes)
         browser.__SS_data.attributes = {};
       update(browser.__SS_data.attributes);
-    }
-
-    // Bug 905049 fixed by Bug 960903 - Broadcast session history
-    if (isVersion(290))
-      return;
-
-    let tabHasCache = isVersion(270) ? this.TabStateCache.has(browser) :
-                               this.TabStateCache._data.has(browser);
-    if (tabHasCache) {
-      let attributes = this.TabStateCache.get(browser).attributes || {};
-      update(attributes);
-      this.TabStateCache[this._update](browser, "attributes", attributes);
     }
   }
 };

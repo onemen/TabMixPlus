@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Juntar separador">
 <!ENTITY tabFeature.label "Funcionalidades do separador">
 <!ENTITY newtab.label "Carregar em novos separadores:">
-<!ENTITY replaceLastTabWith.label "Quando encerro o último separador substituir com">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Página em branco">
 <!ENTITY newtab.home "Página inicial">
 <!ENTITY newtab.current "Página actual">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Bloquear separadores">
 <!ENTITY lockNewTabs.label "Bloquear novos separadores">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Duplicar separador">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Aviso">
-<!ENTITY warnOnCloseProtected.label "Avisar-me quando fechar janelas com separadores protegidos">
-<!ENTITY warnOnCloseWindow.label "Avisar-me quando fechar janelas com múltiplos separadores">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "A fechar último separador">
 <!ENTITY keepWindow.label.3.1 "Não fechar janela ao fechar o último separador">
 <!ENTITY keeptab.label "Prevenir que o último separador feche">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Mostrar no menu de contexto do separador:">
 <!ENTITY showContentAreaContext.label "Mostrar no menu de contexto principal:">
 <!ENTITY showToolsMenu.label "Mostrar no">
-<!ENTITY startupHomePage.label "Mostrar a minha página inicial">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Mostrar uma página em branco">
-<!ENTITY startupLastSession.label "Mostrar janelas e separadores da última vez">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "O Tab Mix Plus detectou que a extensão Session manager está instalada">
 <!ENTITY sm.extension.description2 "O gestor de sessão do Tab Mix Plus será desactivado">
 <!ENTITY sm.extension.description3 "Pode clicar no botão do lado direito para abrir o diálogo do gestor de sessão">
-<!ENTITY sm.extension.description4 "Converter os dados das minhas sessões do formato Tab Mix Plus para o formato da extensão Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Converter">
-<!ENTITY sm.extension.chooseFile.label0 "Deixar-me escolher que ficheiro de dados converter">
 <!ENTITY sm.extension.chooseFile.label1 "Converter as sessões do Tab Mix Plus do perfil actual">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Usara funcionalidade de restauro de sessão do Firefox">
 <!ENTITY ss.enable.tooltip "De-seleccionar para permitir o uso do Gestor de sessões do Tabmix">
 <!ENTITY ss.advanced_setting "Definições avançadas">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
 <!ENTITY sm.restore.bypassCache "Bypass cache ao restaurar">
 <!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
-<!ENTITY sm.restorePinned.label "Restore my pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preservar separadores:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado da protecção">

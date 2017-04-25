@@ -23,15 +23,15 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
 
 var AboutNewTabInternal;
 this.TabmixAboutNewTab = Object.freeze({
-  updateAllBrowsers: function(window) {
+  updateAllBrowsers(window) {
     AboutNewTabInternal.updateAllBrowsers(window);
   },
 
-  updateBrowser: function(browser) {
+  updateBrowser(browser) {
     AboutNewTabInternal.updateBrowser(browser);
   },
 
-  updateTitles: function(cells) {
+  updateTitles(cells) {
     AboutNewTabInternal.updateTitles(cells);
   },
 });
@@ -39,15 +39,15 @@ this.TabmixAboutNewTab = Object.freeze({
 AboutNewTabInternal = {
   // update all opened about:newtab browsers in a window including preloaded
   // browser if exist
-  updateAllBrowsers: function(window) {
+  updateAllBrowsers(window) {
     let tabBrowser = window.gBrowser;
     let tabPanels = tabBrowser.mPanelContainer.childNodes;
     let browsers = Array.prototype.map.call(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
-                        .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
+        .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
     browsers.forEach(browser => this.updateBrowser(browser));
   },
 
-  updateBrowser: function(browser) {
+  updateBrowser(browser) {
     if (TabmixSvc.version(420)) {
       browser.messageManager.sendAsyncMessage("Tabmix:updateTitlefrombookmark");
     } else {
@@ -60,7 +60,7 @@ AboutNewTabInternal = {
     }
   },
 
-  updateTitles: function(cells = []) {
+  updateTitles(cells = []) {
     cells.forEach(cell => {
       let site = cell.site;
       if (!site) {
@@ -79,8 +79,8 @@ AboutNewTabInternal = {
       if (TabmixSvc.version(400)) {
         let tabmixTitle = TabmixPlacesUtils.getTitleFromBookmark(url, site.title);
         title = enhancedTitle ? enhancedTitle :
-                site.link.type == "history" ? site.link.baseDomain :
-                tabmixTitle;
+          site.link.type == "history" ? site.link.baseDomain :
+            tabmixTitle;
         tooltip = (tabmixTitle == url ? tabmixTitle : tabmixTitle + "\n" + url);
       } else {
         title = enhancedTitle ||

@@ -20,7 +20,7 @@ const GOOGLE_PLUS_REGEXP = /http(s)?:\/\/plus.url.google.com\/url\?/;
 // update the code after every extensions change
 var TabGroups = {
   tabViewState: false,
-  isUpdateNeeded: function() {
+  isUpdateNeeded() {
     let win = TabmixSvc.topWin();
     let needUpdate = typeof win.TabView == "object" &&
         !win.TabView.hasOwnProperty("tabmixInitialized");
@@ -28,21 +28,21 @@ var TabGroups = {
     this.tabViewState = needUpdate;
     return needUpdate && !currentState;
   },
-  onEnabled: function() {
+  onEnabled() {
     if (this.isUpdateNeeded()) {
       TabmixSvc.forEachBrowserWindow(aWindow => {
         aWindow.TMP_TabView.init();
       });
     }
   },
-  onDisabled: function() {
+  onDisabled() {
   },
 };
 
 // https://addons.mozilla.org/en-US/firefox/addon/google-no-tracking-url/
 var GoogleNoTrackingUrl = {
   id: "jid1-zUrvDCat3xoDSQ@jetpack",
-  onEnabled: function() {
+  onEnabled() {
     const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
     TabmixSvc.isFixedGoogleUrl = function(url) {
       const aggresiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
@@ -54,7 +54,7 @@ var GoogleNoTrackingUrl = {
         isImageSearchResult && aggresiveWithImageUrls;
     };
   },
-  onDisabled: function() {
+  onDisabled() {
     TabmixSvc.isFixedGoogleUrl = () => false;
   },
 };
@@ -62,13 +62,13 @@ var GoogleNoTrackingUrl = {
 // https://addons.mozilla.org/en-US/firefox/addon/private-tab
 var PrivateTab = {
   id: "privateTab@infocatcher",
-  onEnabled: function() {
+  onEnabled() {
     this._resetNewTabButton();
   },
-  onDisabled: function() {
+  onDisabled() {
     this._resetNewTabButton();
   },
-  _resetNewTabButton: function() {
+  _resetNewTabButton() {
     TabmixSvc.forEachBrowserWindow(aWindow => {
       aWindow.TMP_eventListener.updateMultiRow(true);
     });
@@ -79,15 +79,15 @@ var PrivateTab = {
 const SMID = "{1280606b-2510-4fe0-97ef-9b5a22eafe30}";
 var SessionManager = {
   id: SMID,
-  init: function() {
+  init() {
     this._saveTabmixPrefs();
     TabmixSvc.sessionManagerAddonInstalled = true;
   },
-  _saveTabmixPrefs: function() {
+  _saveTabmixPrefs() {
     this.manager_enabled = TabmixSvc.prefBranch.getBoolPref("sessions.manager");
     this.crashRecovery_enabled = TabmixSvc.prefBranch.getBoolPref("sessions.crashRecovery");
   },
-  onEnabled: function() {
+  onEnabled() {
     TabmixSvc.sessionManagerAddonInstalled = true;
     this._saveTabmixPrefs();
     let win = TabmixSvc.topWin();
@@ -95,7 +95,7 @@ var SessionManager = {
       win.TMP_SessionStore.setService(-1);
     this._notify(true);
   },
-  onDisabled: function() {
+  onDisabled() {
     TabmixSvc.sessionManagerAddonInstalled = false;
     if (this.manager_enabled || this.crashRecovery_enabled) {
       let win = TabmixSvc.topWin();
@@ -106,7 +106,7 @@ var SessionManager = {
     }
     this._notify(false);
   },
-  _notify: function(isActive) {
+  _notify(isActive) {
     // in preference/session.js we only care when the preference is boolean
     let pref = "sessionManagerAddon.isActive";
     TabmixSvc.prefBranch.setBoolPref(pref, isActive);
@@ -115,7 +115,7 @@ var SessionManager = {
 };
 
 var TabmixListener = {
-  init: function(id) {
+  init(id) {
     if (id == SessionManager.id) {
       SessionManager.init();
     } else if (id == GoogleNoTrackingUrl.id) {
@@ -124,7 +124,7 @@ var TabmixListener = {
       TabGroups.onEnabled();
     }
   },
-  onChange: function(aAddon, aAction) {
+  onChange(aAddon, aAction) {
     let id = aAddon.id;
     if (id == SessionManager.id)
       SessionManager[aAction]();
@@ -136,13 +136,13 @@ var TabmixListener = {
       TabGroups[aAction]();
     }
   },
-  onEnabled: function(aAddon) {
+  onEnabled(aAddon) {
     this.onChange(aAddon, "onEnabled");
   },
-  onDisabled: function(aAddon) {
+  onDisabled(aAddon) {
     this.onChange(aAddon, "onDisabled");
   },
-  onInstalled: function(aAddon) {
+  onInstalled(aAddon) {
     if (!aAddon.isActive || aAddon.userDisabled || aAddon.appDisabled)
       return;
     this.onEnabled(aAddon);
@@ -151,7 +151,7 @@ var TabmixListener = {
 
 var TabmixAddonManager = {
   initialized: false,
-  init: function() {
+  init() {
     if (this.initialized)
       return;
     this.initialized = true;

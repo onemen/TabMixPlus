@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "Fusionar pestanyes">
 <!ENTITY tabFeature.label "Característiques de pestanyes">
 <!ENTITY newtab.label "Carrega en pestanyes noves:">
-<!ENTITY replaceLastTabWith.label "En tancar l'última pestanya, substitueix-la per">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
 <!ENTITY newtab.blank "Pàgina en blanc">
 <!ENTITY newtab.home "Pàgina d'inici">
 <!ENTITY newtab.current "Pàgina actual">
@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY moreThan.label "when I open more than">
+<!ENTITY openMoreThan.label "when you open more than">
 <!ENTITY tabs.label "tabs">
 <!ENTITY lockTabs.label "Bloca les pestanyes">
 <!ENTITY lockNewTabs.label "Bloca les pestanyes noves">
@@ -84,8 +84,9 @@
 <!ENTITY duplicateTab.label "Pestanya duplicada">
 <!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
 <!ENTITY warning.caption.label "Avís">
-<!ENTITY warnOnCloseProtected.label "Avisa'm en tancar una finestra que conté pestanyes blocades">
-<!ENTITY warnOnCloseWindow.label "Avisa'm en tancar una finestra amb diverses pestanyes">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
 <!ENTITY lasttab.caption.label "En tancar l'última pestanya">
 <!ENTITY keepWindow.label.3.1 "No tanquis la finestra en tancar l'última pestanya">
 <!ENTITY keeptab.label "Impedeix que es tanqui l'última pestanya">
@@ -258,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Mostra al menú contextual de la pestanya:">
 <!ENTITY showContentAreaContext.label "Mostra al menú contextual principal">
 <!ENTITY showToolsMenu.label "Mostra al menú Eines:">
-<!ENTITY startupHomePage.label "Mostra la meva pàgina d'inici">
+<!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Mostra una pàgina en blanc">
-<!ENTITY startupLastSession.label "Mostra les finestres i pestanyes de la darrera vegada">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
 <!ENTITY sm.extension.description1 "El Tab Mix Plus ha detectat que teniu instal·lat el complement Session Manager">
 <!ENTITY sm.extension.description2 "El gestor de sessions del Tab Mix Plus s&apos;inhabilitarà">
 <!ENTITY sm.extension.description3 "Podeu fer clic al botó de la dreta per obrir el diàleg d&apos;opcions del Session Manager">
-<!ENTITY sm.extension.description4 "Converteix les dades de Les meves sessions del format del Tab Mix Plus al format del complement Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
 <!ENTITY sm.extension.convert.label "Converteix">
-<!ENTITY sm.extension.chooseFile.label0 "Deixa&apos;m decidir quin fitxer de dades cal convertir">
 <!ENTITY sm.extension.chooseFile.label1 "Converteix les sessions del Tab Mix Plus del perfil actual">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Utilitza la funció de restauració de sessió integrada al Firefox">
 <!ENTITY ss.enable.tooltip "Desmarqueu aquesta opció per permetre l&apos;ús del Gestor de sessions del Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Paràmetres avançats">
@@ -304,7 +305,7 @@
 <!ENTITY sm.restore.merge "Uneix diverses finestres en una">
 <!ENTITY sm.restore.bypassCache "Omet la memòria cau en restaurar">
 <!ENTITY sm.notrestore.label "Quan no es restaura a l&apos;inici">
-<!ENTITY sm.restorePinned.label "Restaura les pestanyes fixes de l'última vegada">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conserva les pestanyes:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Protegides">

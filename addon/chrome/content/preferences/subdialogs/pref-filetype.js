@@ -17,13 +17,11 @@ function Init() {
 function FillData() {
   // remove all the item from the list
   while (list.hasChildNodes()) {
-    list.removeChild(list.lastChild);
+    list.lastChild.remove();
   }
 
-  var data, items, item;
-  try {
-    data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
-  } catch (e) {}
+  var data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
+  var items, item;
 
   if (!data.length) {
     setButtonDisable(del, true);
@@ -125,7 +123,7 @@ function Del() {
     SelectItemAt(index == list.getRowCount() - 1 ? index - 1 : index + 1, true);
   else
     entry.value = null;
-  list.removeChild(item);
+  item.remove();
 }
 
 function Restore() {

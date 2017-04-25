@@ -5,7 +5,7 @@ this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
 this.LinkNodeUtils = {
-  isFrameInContent: function(content, href, name) {
+  isFrameInContent(content, href, name) {
     if (!content)
       return false;
     if (content.location.href == href && content.name == name)
@@ -18,7 +18,7 @@ this.LinkNodeUtils = {
     return false;
   },
 
-  wrap: function(node, focusedWindow, getTargetIsFrame) {
+  wrap(node, focusedWindow, getTargetIsFrame) {
     if (!node || typeof node.__tabmix == "boolean")
       return node;
 
@@ -48,7 +48,7 @@ this.LinkNodeUtils = {
     return wrapper;
   },
 
-  getNodeWithOnClick: function(node) {
+  getNodeWithOnClick(node) {
     // for safety reason look only 3 level up
     let i = 0;
     while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {

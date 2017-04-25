@@ -10,19 +10,19 @@ this.EXPORTED_SYMBOLS = ["Decode"];
     use unescape if exist, if removed from firefox we use our own function
 */
 this.Decode = {
-  escape: function(str) {
+  escape(str) {
     // we always use encodeURI
     return encodeURI(str);
     // let self = this;
     // return str.replace(/[^\w @\*\-\+\.\/]/g, function(aChar) {return self._(aChar);});
     // return str.replace(/[^\w @\*\-\+\.\/]/g, getReturnValue);
   },
-  unescape: function(str) {
+  unescape(str) {
     if (typeof unescape == "function")
       return unescape(str);
 
-   //    let self = this;
-   //    return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, function(seq) {return self._(seq);});
+    //    let self = this;
+    //    return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, function(seq) {return self._(seq);});
     return str.replace(/%(u[\da-f]{4}|[\da-f]{2})/gi, getReturnValue);
   }
 };

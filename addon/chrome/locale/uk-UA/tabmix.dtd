@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Приховати панель вкладок">
 <!ENTITY hideTabBar.never.label "Ніколи">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.onOneTab.label "Коли відкрита лише одна вкладка">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "Завжди">
 <!ENTITY hideTabBar.always.key "A">

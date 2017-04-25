@@ -14,9 +14,13 @@ module.exports = {
   },
 
   "rules": {
+    "tabmix/avoid-removeChild": 2,
     "tabmix/balanced-listeners": 2,
     "tabmix/import-globals": 2,
     "tabmix/no-single-arg-cu-import": 2,
+    "tabmix/no-import-into-var-and-global": 2,
+    "tabmix/no-useless-parameters": 2,
+    "tabmix/use-ownerGlobal": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
@@ -190,11 +194,15 @@ module.exports = {
     "id-length": 0,
     "id-match": 0,
     "indent": [2, 2, {
-      "CallExpression": {"arguments": 1},
+      "SwitchCase": 1,
+      "VariableDeclarator": {"var": 2, "let": 2, "const": 3},
+      "outerIIFEBody": 1,
+      "MemberExpression": 2,
       "FunctionDeclaration": {"body": 1, "parameters": "first"},
       "FunctionExpression": {"body": 1, "parameters": "first"},
-      "SwitchCase": 1,
-      "VariableDeclarator": {"var": 2, "let": 2, "const": 3}
+      "CallExpression": {"arguments": 1},
+      "ArrayExpression": 1,
+      "ObjectExpression": 1
     }],
     "init-declarations": 0,
     "jsx-quotes": 0,
@@ -223,7 +231,7 @@ module.exports = {
     }],
     "object-curly-spacing": [2, "never"],
     "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
-    "object-shorthand": 0, // since Firefox 33
+    "object-shorthand": [2, "always", {"avoidQuotes": true}],
     "one-var": 0,
     "one-var-declaration-per-line": 0,
     "operator-assignment": [2, "always"],
