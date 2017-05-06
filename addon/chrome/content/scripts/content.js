@@ -222,13 +222,14 @@ TabmixClickEventHandler = {
 
     let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
 
-    // get referrer attribute from clicked link and parse it
-    // if per element referrer is enabled, the element referrer overrules
-    // the document wide referrer
+    // first get document wide referrer policy, then
+    // get referrer attribute from clicked link and parse it and
+    // allow per element referrer to overrule the document wide referrer if enabled
     let referrerPolicy = TabmixSvc.version(380) ? ownerDoc.referrerPolicy : null;
-    if (TabmixSvc.version(420) &&
-        Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
-        node) {
+    let setReferrerPolicy = node && (TabmixSvc.version(550) ||
+      TabmixSvc.version(420) &&
+      Services.prefs.getBoolPref("network.http.enablePerElementReferrer"));
+    if (setReferrerPolicy) {
       let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
       let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
       let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
