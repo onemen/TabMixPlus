@@ -261,7 +261,7 @@ var TMP_eventListener = {
         TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
         break;
       case "SSTabRestoring":
-        this.onSSTabRestoring(aEvent);
+        this.onSSTabRestoring(aEvent.target);
         break;
       case "TabOpen":
         this.onTabOpen(aEvent);
@@ -611,15 +611,14 @@ var TMP_eventListener = {
     setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
   },
 
-  onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
-    var tab = aEvent.target;
+  onSSTabRestoring: function TMP_EL_onSSTabRestoring(tab) {
     Tabmix.restoreTabState(tab);
     TabmixSessionManager.restoreHistoryComplete(tab);
 
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
-    var url = tab.linkedBrowser.currentURI.spec;
+    let url = tab.__SS_lazyData ? tab.__SS_lazyData.url : tab.linkedBrowser.currentURI.spec;
     if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
       tab.setAttribute("visited", true);
   },
@@ -788,6 +787,13 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+    if (aTab.__SS_lazyData) {
+      this.onSSTabRestoring(aTab);
+      if (aTab.label == "about:blank") {
+        aTab.label = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+        gBrowser._tabAttrModified(aTab, ["label"]);
+      }
+    }
     // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
     aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.boxObject.width);
