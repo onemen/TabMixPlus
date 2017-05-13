@@ -807,10 +807,12 @@ Tabmix.tablib = {
        }'
     ).toCode();
 
-    Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDrop")._replace(
-      '{',
-      '{if (Tabmix.singleWindowMode) return;'
-    ).toCode();
+    Tabmix.originalFunctions.newWindowButtonObserver_onDrop = newWindowButtonObserver.onDrop;
+    newWindowButtonObserver.onDrop = function onDrop(...args) {
+      if (!Tabmix.singleWindowMode) {
+        Tabmix.originalFunctions.newWindowButtonObserver_onDrop.apply(this, args);
+      }
+    };
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
       'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
