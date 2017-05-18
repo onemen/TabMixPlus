@@ -304,11 +304,15 @@ var TMP_Places = {
       } else {
         aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, {
           skipAnimation: multiple,
+          noInitialLabel: true,
           dontMove: true,
           forceNotRemote: loadProgressively,
         });
       }
       this.setTabTitle(aTab, url, bmIds[i]);
+      if (Tabmix.isVersion(550)) {
+        aTab._suppressTransientPlaceholderLabel = true;
+      }
       if (loadProgressively) {
         tabs.push(aTab);
         let entry = {url, title: aTab.label};

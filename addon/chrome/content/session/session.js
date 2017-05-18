@@ -3246,6 +3246,7 @@ TabmixSessionManager = {
     function TMP_addTab() {
       let newTab = gBrowser.addTab("about:blank", {
         skipAnimation: true,
+        noInitialLabel: true,
         skipBackgroundNotify: true,
         dontMove: true,
         isPending: pending
@@ -3409,6 +3410,7 @@ TabmixSessionManager = {
         let forceNotRemote = !data.pinned;
         tab = gBrowser.addTab("about:blank", {
           skipAnimation: true,
+          noInitialLabel: true,
           forceNotRemote,
           userContextId,
           skipBackgroundNotify: true,
