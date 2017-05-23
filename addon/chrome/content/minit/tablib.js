@@ -303,8 +303,8 @@ Tabmix.tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
-      'let tab = this.getTabForBrowser(aBrowser);\
-       if (tab.hasAttribute("tabmix_changed_label"))\
+      (Tabmix.isVersion(550) ? '' : 'let tab = this.getTabForBrowser(aBrowser);\n') +
+      'if (tab.hasAttribute("tabmix_changed_label"))\
          docTitle = tab.getAttribute("tabmix_changed_label");\
        else\
          docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
@@ -337,7 +337,7 @@ Tabmix.tablib = {
       '$&\
       urlTitle = title;'
     )._replace(
-      'if (aTab.label == title',
+      Tabmix.isVersion(550) ? 'return this._setTabLabel' : 'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
        const noChange = aTab.label == title && (Tabmix.isVersion(530) || aTab.crop == crop);\
@@ -352,8 +352,21 @@ Tabmix.tablib = {
     )._replace(
       'this._tabAttrModified',
       `Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
-            $&`
+            $&`, {check: !Tabmix.isVersion(550)}
+    )._replace(
+      '{ isContentTitle }',
+      '{ isContentTitle, urlTitle }',
+      {check: Tabmix.isVersion(550)}
     ).toCode();
+
+    if (Tabmix.isVersion(550)) {
+      Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
+        'this._tabAttrModified',
+        `let urlTitle = aOptions && aOptions.urlTitle;
+              Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
+              $&`
+      ).toCode();
+    }
 
     // after bug 347930 - change Tab strip to be a toolbar
     Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
