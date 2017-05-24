@@ -1852,6 +1852,11 @@ gTMPprefObserver = {
       this.insertRule('.tab-sharing-icon-overlay {display: none;}');
     }
 
+    /* bottom border of top hidden row is visible in Firefox 55 */
+    if (Tabmix.isVersion(550)) {
+      this.insertRule('#tabbrowser-tabs[flowing="multibar"] {padding-top: 1px !important;}');
+    }
+
     // height shrink to actual size when the tabbar is in display: block (multi-row)
     let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
                   '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
