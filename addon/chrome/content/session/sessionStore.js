@@ -37,7 +37,11 @@ var TMP_SessionStore = {
 
   getTitleFromTabState(aTab) {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    return this.getActiveEntryData(tabData).title || null;
+    let data = this.getActiveEntryData(tabData);
+    if (data.url == TabmixSvc.aboutBlank) {
+      return gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+    }
+    return data.title || null;
   },
 
   // check if pending tab has no history or is about:blank

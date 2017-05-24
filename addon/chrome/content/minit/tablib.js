@@ -361,6 +361,12 @@ Tabmix.tablib = {
 
     if (Tabmix.isVersion(550)) {
       Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
+        '{',
+        `{
+            if (aLabel == TabmixSvc.aboutBlank) {
+              aLabel = this.mStringBundle.getString("tabs.emptyTabTitle");
+            }`
+      )._replace(
         'this._tabAttrModified',
         `let urlTitle = aOptions && aOptions.urlTitle;
               Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
