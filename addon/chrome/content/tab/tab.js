@@ -745,8 +745,11 @@ Tabmix.tabsUtils = {
         break;
       }
       case "drop":
-        if (this.tabBar.useTabmixDnD(aEvent))
+        if (this.tabBar.useTabmixDnD(aEvent)) {
           TMP_tabDNDObserver.onDrop(aEvent);
+        } else {
+          TMP_tabDNDObserver.drop(aEvent);
+        }
         break;
       case "dragend":
         if (this.tabBar.orient == "horizontal")

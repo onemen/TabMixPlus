@@ -402,6 +402,78 @@ var TMP_tabDNDObserver = {
     this.setDragmark(newIndex, left_right);
   },
 
+  // built-in drop method doesn't take into account different tab width
+  drop(event) {
+    if (!Tabmix.isVersion(550)) {
+      return;
+    }
+
+    var tabBar = gBrowser.tabContainer;
+    var dt = event.dataTransfer;
+    var dropEffect = dt.dropEffect;
+    var draggedTab;
+    if (dt.mozTypesAt(0)[0] == TAB_DROP_TYPE) { // tab copy or move
+      draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+      // not our drop then
+      if (!draggedTab)
+        return;
+    }
+
+    // fall back to build-in drop method
+    if (!draggedTab || dropEffect == "copy" || draggedTab.parentNode != tabBar) {
+      return;
+    }
+
+    tabBar._tabDropIndicator.collapsed = true;
+    event.stopPropagation();
+    let oldTranslateX = draggedTab._dragData.translateX;
+    let dropIndex = "animDropIndex" in draggedTab._dragData &&
+        draggedTab._dragData.animDropIndex;
+    if (dropIndex && dropIndex > draggedTab._tPos)
+      dropIndex--;
+
+    let newTranslateX = 0;
+    if (oldTranslateX && dropIndex !== false) {
+      let tabIndex = draggedTab._tPos;
+      if (dropIndex > tabIndex) {
+        for (let i = tabIndex + 1; i <= dropIndex; i++) {
+          newTranslateX += gBrowser.tabs[i].getBoundingClientRect().width;
+        }
+      } else if (dropIndex < tabIndex) {
+        for (let i = dropIndex; i < tabIndex; i++) {
+          newTranslateX -= gBrowser.tabs[i].getBoundingClientRect().width;
+        }
+      }
+    }
+
+    if (oldTranslateX && oldTranslateX != newTranslateX) {
+      draggedTab.setAttribute("tabdrop-samewindow", "true");
+      draggedTab.style.transform = "translateX(" + newTranslateX + "px)";
+      let onTransitionEnd = transitionendEvent => {
+        if (transitionendEvent.propertyName != "transform" ||
+            transitionendEvent.originalTarget != draggedTab) {
+          return;
+        }
+        draggedTab.removeEventListener("transitionend", onTransitionEnd);
+
+        draggedTab.removeAttribute("tabdrop-samewindow");
+
+        tabBar._finishAnimateTabMove();
+        if (dropIndex !== false)
+          gBrowser.moveTabTo(draggedTab, dropIndex);
+      };
+      draggedTab.addEventListener("transitionend", onTransitionEnd);
+    } else {
+      tabBar._finishAnimateTabMove();
+      if (dropIndex !== false)
+        gBrowser.moveTabTo(draggedTab, dropIndex);
+    }
+
+    if (draggedTab) {
+      delete draggedTab._dragData;
+    }
+  },
+
   onDrop: function minit_onDrop(event) {
     this.clearDragmark();
     this.updateStatusField();
@@ -577,8 +649,20 @@ var TMP_tabDNDObserver = {
 
   onDragEnd: function minit_onDragEnd(aEvent) {
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.useTabmixDnD(aEvent))
+
+    var dt = aEvent.dataTransfer;
+    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+
+    if (!tabBar.useTabmixDnD(aEvent)) {
+      // Prevent this code from running if a tabdrop animation is
+      // running since calling _finishAnimateTabMove would clear
+      // any CSS transition that is running.
+      if (draggedTab.hasAttribute("tabdrop-samewindow")) {
+        return;
+      }
+
       tabBar._finishAnimateTabMove();
+    }
 
     if (this.draggedTab) {
       delete this.draggedTab.__tabmixDragStart;
@@ -586,8 +670,6 @@ var TMP_tabDNDObserver = {
       this.draggedTab = null;
     }
     // see comment in gBrowser.tabContainer.dragEnd
-    var dt = aEvent.dataTransfer;
-    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
     if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
       delete draggedTab._dragData;
       return;
