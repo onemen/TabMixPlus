@@ -2689,11 +2689,13 @@ TabmixSessionManager = {
         }
       }
       var label = _tab.label;
-      // replace "Loading..." with the document title (with minimal side-effects)
-      let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
-      if (label == tabLoadingTitle) {
-        gBrowser.setTabTitle(_tab);
-        [label, _tab.label] = [_tab.label, label];
+      if (!Tabmix.isVersion(550)) {
+        // replace "Loading..." with the document title (with minimal side-effects)
+        let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
+        if (label == tabLoadingTitle) {
+          gBrowser.setTabTitle(_tab);
+          [label, _tab.label] = [_tab.label, label];
+        }
       }
       this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
       this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));

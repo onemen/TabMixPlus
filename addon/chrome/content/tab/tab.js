@@ -2706,12 +2706,14 @@ TabmixProgressListener = {
     // check the current window.  if we're in a popup, don't init this progressListener
     if (window.document.documentElement.getAttribute("chromehidden"))
       return;
-    Tabmix.changeCode(gBrowser, "gBrowser.setTabTitleLoading")._replace(
-      'aTab.label = this.mStringBundle.getString("tabs.connecting");',
-      'if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))' +
-      '  aTab.setAttribute("width", aTab.getBoundingClientRect().width);' +
-      '$&'
-    ).toCode();
+    if (!Tabmix.isVersion(550)) {
+      Tabmix.changeCode(gBrowser, "gBrowser.setTabTitleLoading")._replace(
+        'aTab.label = this.mStringBundle.getString("tabs.connecting");',
+        'if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))' +
+        '  aTab.setAttribute("width", aTab.getBoundingClientRect().width);' +
+        '$&'
+      ).toCode();
+    }
     this.listener.mTabBrowser = tabBrowser;
     // Bug 1081891 fixed on Firefox 38
     if (!Tabmix.isVersion(340) || Tabmix.isVersion(380))

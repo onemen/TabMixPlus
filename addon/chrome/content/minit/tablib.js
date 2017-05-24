@@ -1773,9 +1773,11 @@ Tabmix.tablib = {
   get labels() {
     delete this.labels;
     this.labels = [
-      gBrowser.mStringBundle.getString("tabs.connecting"),
       gBrowser.mStringBundle.getString("tabs.emptyTabTitle"),
     ];
+    if (!Tabmix.isVersion(550)) {
+      this.labels.push(gBrowser.mStringBundle.getString("tabs.connecting"));
+    }
     return this.labels;
   },
 
