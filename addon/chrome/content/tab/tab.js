@@ -669,10 +669,9 @@ Tabmix.tabsUtils = {
       document.getAnonymousElementByAttribute(this.tabBar, "command", "cmd_newNavigatorTab");
     this._show_newtabbutton = "aftertabs";
 
-    let attr = ["notpinned", "autoreload", "protected",
-      "locked"].filter(att => {
-        return Tabmix.prefs.getBoolPref("extraIcons." + att);
-      });
+    let attr = ["notpinned", "autoreload", "protected", "locked"].filter(att => {
+      return Tabmix.prefs.getBoolPref("extraIcons." + att);
+    });
     if (attr.length)
       this.tabBar.setAttribute("tabmix_icons", attr.join(" "));
 

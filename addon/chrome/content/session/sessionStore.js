@@ -363,12 +363,14 @@ var TMP_ClosedTabs = {
       var _uri = makeURI(url);
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
-      else try {
+      else {
+        try {
           url = _uri.scheme == "about" ? _uri.spec :
             _uri.scheme + "://" + _uri.hostPort + _uri.path;
         } catch (e) {
           url = title;
         }
+      }
       var label = title ? title : url;
       let count = "";
       if (ltr) {

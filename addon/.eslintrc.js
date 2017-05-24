@@ -10,7 +10,7 @@ module.exports = {
 
   // for eslint 2.0.0
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 8
   },
 
   "rules": {
