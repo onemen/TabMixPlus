@@ -1841,7 +1841,9 @@ Tabmix.tablib = {
     }
 
     try {
-      TabmixSessionManager.tabScrolled(tab);
+      if (!Tabmix.isVersion(320)) {
+        TabmixSessionManager.tabScrolled(tab);
+      }
     } catch (ex) {
       Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled");
     }

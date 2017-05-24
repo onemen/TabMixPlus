@@ -195,6 +195,10 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
     try {
+      if (Tabmix.isVersion(550) && aBrowser.hasAttribute("pending")) {
+        let tab = this.getTabForBrowser(aBrowser);
+        return TMP_SessionStore.isBlankPendingTab(tab);
+      }
       if (!aBrowser || !aBrowser.currentURI)
         return true;
       if (aBrowser.canGoForward || aBrowser.canGoBack)

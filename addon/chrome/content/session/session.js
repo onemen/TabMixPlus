@@ -3423,8 +3423,12 @@ TabmixSessionManager = {
       // flag. dont save tab that are in restore phase
       if (!tab.hasAttribute("inrestore"))
         tab.setAttribute("inrestore", "true");
-      if (data.pinned)
+      if (data.pinned) {
+        if (Tabmix.isVersion(550)) {
+          gBrowser._insertBrowser(tab);
+        }
         gBrowser.pinTab(tab);
+      }
 
       this._setTabviewTab(tab, data, activeGroupId);
 
@@ -3518,7 +3522,9 @@ TabmixSessionManager = {
   // reset tab's attributes and history
   resetTab: function TMP_resetAttributes(aTab) {
     let browser = gBrowser.getBrowserForTab(aTab);
-    browser.stop();
+    if (!browser.hasAttribute("pending")) {
+      browser.stop();
+    }
     // reset old history
     if (browser.getAttribute("remote") != "true") {
       let history = browser.webNavigation.sessionHistory;
@@ -3556,6 +3562,10 @@ TabmixSessionManager = {
     // delete any sessionRestore data
     if (!Tabmix.isVersion(410))
       delete browser.__SS_data;
+
+    if (Tabmix.isVersion(550) && aTab.__SS_lazyData) {
+      delete aTab.__SS_lazyData;
+    }
 
     // clear TabStateCache
     if (Tabmix.isVersion(320)) {
