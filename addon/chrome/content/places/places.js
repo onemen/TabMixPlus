@@ -320,6 +320,9 @@ var TMP_Places = {
           entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
         }
         tabsData.push({entries: [entry], index: 0});
+        if (!url.startsWith("file:") && url != "about:blank") {
+          aTab.setAttribute("_tabmix_load_bypass_cache", true);
+        }
       }
 
       if (!tabToSelect)
