@@ -810,7 +810,7 @@ Tabmix.tablib = {
         '$&' +
         'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(
-        'loadOneOrMoreURIs(homePage);',
+        /loadOneOrMoreURIs\([^;]+;/,
         '$& \
         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
       ).toCode();
