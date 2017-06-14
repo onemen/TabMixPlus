@@ -267,6 +267,7 @@ module.exports = {
       "markers": ["/", "/XXX", "XXX", "****", "***", "**"]
     }],
     "strict": [2, "global"],
+    "switch-colon-spacing": [2, {"after": true, "before": false}],
     "symbol-description": 2,
     "template-curly-spacing": [2, "never"],
     "unicode-bom": 0,

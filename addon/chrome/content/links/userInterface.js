@@ -41,23 +41,23 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   var newTabUrl = BROWSER_NEW_TAB_URL;
   var selectedTab = gBrowser.selectedTab;
   switch (newTabContent) {
-    case 0 : // blank tab, by default
+    case 0: // blank tab, by default
       url = "about:blank";
       break;
-    case 1 : // home page
+    case 1: // home page
       url = gHomeButton.getHomePage().split("|")[0];
       break;
-    case 2 : // current URI
+    case 2: // current URI
       var currentURI = gBrowser.currentURI;
       url = currentURI ? currentURI.spec : newTabUrl;
       break;
-    case 3 : { // duplicate tab
+    case 3: { // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
       let dupTab = gBrowser.duplicateTab(selectedTab, null, null, null, true);
       Tabmix.clearUrlBar(dupTab, currentUrl, true);
       return dupTab;
     }
-    case 4 : {// user url
+    case 4: {// user url
       if (replaceLastTab || !Tabmix.isVersion(410) || TabmixSvc.isCyberfox) {
         let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
           TabmixSvc.newtabUrl;

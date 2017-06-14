@@ -1518,7 +1518,7 @@ TabmixSessionManager = {
     switch (result.button) {
       case Tabmix.BUTTON_CANCEL: return {button: result.button};
       case Tabmix.BUTTON_OK:
-      case Tabmix.BUTTON_EXTRA1 :
+      case Tabmix.BUTTON_EXTRA1:
         var trimResult = result.label.replace(/^[\s]+/g, "").replace(/[\s]+$/g, "");
         return {
           button: result.button,
