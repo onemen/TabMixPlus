@@ -426,7 +426,7 @@ var TMP_tabDNDObserver = {
 
     tabBar._tabDropIndicator.collapsed = true;
     event.stopPropagation();
-    let oldTranslateX = draggedTab._dragData.translateX;
+    let oldTranslateX = draggedTab._dragData && draggedTab._dragData.translateX;
     let dropIndex = "animDropIndex" in draggedTab._dragData &&
         draggedTab._dragData.animDropIndex;
     if (dropIndex && dropIndex > draggedTab._tPos)
