@@ -1590,7 +1590,8 @@ Tabmix.tablib = {
         "extensions.tabmix.protectedtabs.warnOnClose",
         "browser.tabs.warnOnClose"];
       if (onExit) {
-        if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
+        let openTabs = numTabs - this._removingTabs.length;
+        if (openTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
         else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
           shouldPrompt = 2;
