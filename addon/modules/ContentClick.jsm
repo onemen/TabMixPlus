@@ -1064,7 +1064,7 @@ ContentClickInternal = {
           let window = this.windows.shift();
           tab = window.gBrowser.tabs[0];
         }
-        if (tab) {
+        if (tab && !tab.hasAttribute("pending")) {
           let browser = tab.linkedBrowser;
           if (browser.getAttribute("remote") == "true") {
             browser.messageManager
