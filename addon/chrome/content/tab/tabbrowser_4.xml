@@ -70,7 +70,7 @@
                      class="tab-icon-overlay"
                      role="presentation"/>
           <xul:hbox class="tab-label-container"
-                    xbl:inherits="pinned,selected=visuallyselected"
+                    xbl:inherits="pinned,selected=visuallyselected,labeldirection"
                     onoverflow="this.setAttribute('textoverflow', 'true');"
                     onunderflow="this.removeAttribute('textoverflow');"
                     flex="1">
