@@ -883,6 +883,10 @@ Tabmix.tabsUtils = {
         (TabmixTabbar.widthFitTitle || this.tabBar.hasAttribute("multibar"));
     let tabstrip = this.tabBar.mTabstrip;
     Tabmix.setItem(tabstrip, "orient", vertical ? "vertical" : "horizontal");
+    if (Tabmix.isVersion(550)) {
+      // arrowscrollbox._startEndProps is field since Firefox 55 (Bug 1371604)
+      tabstrip._startEndProps = vertical ? ["top", "bottom"] : ["left", "right"];
+    }
     tabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
   },
 
