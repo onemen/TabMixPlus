@@ -583,6 +583,12 @@ var TMP_eventListener = {
     Tabmix.setItem("tmp_undocloseButton", "disabled", true);
     Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
+    if (Tabmix.isVersion(550)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.adjustTabstrip")._replace(
+        'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
+        'TMP_TabView.checkTabs(this.tabbrowser.visibleTabs);'
+      ).toCode(false, tabBar, "tabmix_adjustTabstrip");
+    }
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
   },
