@@ -290,7 +290,14 @@ var TMP_Places = {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
-            browser.loadURI(url);
+            if (Tabmix.isVersion(550)) {
+              browser.loadURIWithFlags(url, {
+                flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
+                triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
+              });
+            } else {
+              browser.loadURI(url);
+            }
           } catch (ex) { }
         }
         this.resetRestoreState(aTab);
@@ -302,12 +309,16 @@ var TMP_Places = {
         } else
           aTab.setAttribute("reloadcurrent", true);
       } else {
-        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, {
+        let params = {
           skipAnimation: multiple,
           noInitialLabel: true,
           dontMove: true,
           forceNotRemote: loadProgressively,
-        });
+        };
+        if (Tabmix.isVersion(550)) {
+          params.triggeringPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+        }
+        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, params);
       }
       this.setTabTitle(aTab, url, bmIds[i]);
       if (Tabmix.isVersion(550)) {

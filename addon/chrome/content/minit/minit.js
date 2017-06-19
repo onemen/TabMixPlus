@@ -608,14 +608,19 @@ var TMP_tabDNDObserver = {
       }
       if (Tabmix.isVersion(520)) {
         let urls = links.map(link => link.url);
-        gBrowser.tabContainer.tabbrowser.loadTabs(urls, {
+        let params = {
           inBackground: bgLoad,
           replace: replaceCurrentTab,
           allowThirdPartyFixup: true,
           targetTab: tab,
           newIndex: newIndex + left_right,
           userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
-        });
+        };
+        if (Tabmix.isVersion(550)) {
+          params.triggeringPrincipal = dt.mozSourceNode ?
+            dt.mozSourceNode.nodePrincipal : Services.scriptSecurityManager.getSystemPrincipal();
+        }
+        gBrowser.tabContainer.tabbrowser.loadTabs(urls, params);
       } else if (!replaceCurrentTab) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {
