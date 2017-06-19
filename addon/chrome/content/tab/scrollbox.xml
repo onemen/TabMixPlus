@@ -227,6 +227,13 @@
             ).toCode();
           }
 
+          if (Tabmix.isVersion(530)) {
+            Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
+              'totalWidth / elements.length',
+              'this.isMultiRow ? totalWidth / Tabmix.tabsUtils.lastTabRowNumber : $&'
+            ).defineProperty();
+          }
+
           this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
           this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
 

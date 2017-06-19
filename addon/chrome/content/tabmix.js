@@ -1053,6 +1053,8 @@ var TMP_eventListener = {
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
           tabStrip.scrollByPixels(delta * tabStrip.scrollClientSize);
+        } else if (Tabmix.isVersion(530) && !TabmixTabbar.isMultiRow) {
+          tabStrip.scrollByPixels(delta * tabStrip.lineScrollAmount);
         } else {
           // scroll the tabbar by one tab
           if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
