@@ -3522,7 +3522,7 @@ TabmixSessionManager = {
   // reset tab's attributes and history
   resetTab: function TMP_resetAttributes(aTab) {
     let browser = gBrowser.getBrowserForTab(aTab);
-    if (!browser.hasAttribute("pending")) {
+    if (!aTab.hasAttribute("pending")) {
       browser.stop();
     }
     // reset old history
