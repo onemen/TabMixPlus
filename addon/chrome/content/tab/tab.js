@@ -230,6 +230,12 @@ var TabmixTabbar = {
       tabsPosition = "tabsontop";
     else
       tabsPosition = "tabsonbottom";
+
+    if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
+      let sizemode = (window.windowState == window.STATE_MAXIMIZED) ? "_maximized" : "_normal";
+      tabsPosition += sizemode;
+    }
+
     return tabsPosition;
   },
 
@@ -391,6 +397,9 @@ var TabmixTabbar = {
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
+      if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
+        TabmixTabbar.setHeight(this.visibleRows);
+      }
       this.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical") {
         tabBar.mTabstrip._enterVerticalMode();

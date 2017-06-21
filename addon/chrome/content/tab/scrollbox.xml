@@ -336,7 +336,7 @@
           let scrollPosition = this.scrollClientSize + this.scrollPosition;
           if (this.orient == "vertical" && this.isMultiRow) {
             const height = this.innerbox.getBoundingClientRect().height;
-            if (scrollPosition == Math.round(height)) {
+            if (Math.round(height) - scrollPosition < 2) {
               return true;
             }
           }
