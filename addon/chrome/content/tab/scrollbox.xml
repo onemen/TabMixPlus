@@ -216,8 +216,8 @@
               // when theme or extension add negative margin-bottom to the tab or
               // tab content the scrollHeight can be larger than the actual
               // inner-box height
-              'this.scrollSize',
-              'this.tabmixScrollSize'
+              'this.scrollClientSize + this.scrollPosition == this.scrollSize',
+              'this.isScrolledToEnd'
             )._replace(
               /(})(\)?)$/,
               '          var box = document.getElementById("tabmixScrollBox");\n' +
@@ -331,13 +331,16 @@
         ]]></getter>
       </property>
 
-      <property name="tabmixScrollSize" readonly="true">
+      <property name="isScrolledToEnd" readonly="true">
         <getter><![CDATA[
+          let scrollPosition = this.scrollClientSize + this.scrollPosition;
           if (this.orient == "vertical" && this.isMultiRow) {
             const height = this.innerbox.getBoundingClientRect().height;
-            return Math.round(height);
+            if (scrollPosition == Math.round(height)) {
+              return true;
+            }
           }
-          return this.scrollSize;
+          return scrollPosition == this.scrollSize;
         ]]></getter>
       </property>
 
