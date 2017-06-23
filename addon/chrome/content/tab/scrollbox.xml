@@ -110,6 +110,13 @@
         document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
       </field>
 
+      <field name="scrollboxPaddingTop"><![CDATA[
+        parseFloat(window.getComputedStyle(this._scrollbox).paddingTop);
+      ]]></field>
+      <field name="scrollboxPaddingBottom"><![CDATA[
+        parseFloat(window.getComputedStyle(this._scrollbox).paddingBottom);
+      ]]></field>
+
       <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
            Override scrollbox.xml method, since our scrollbox's children are
            inherited from the binding parent -->
@@ -211,7 +218,31 @@
             'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
           ).toCode();
 
-          if (Tabmix.isVersion(320, 270)) {
+          if (Tabmix.isVersion(560)) {
+            let $LF = '\n            ';
+            Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
+              'if (this.hasAttribute("notoverflowing")) {',
+              '$&' + $LF +
+              'let box = document.getElementById("tabmixScrollBox");' + $LF +
+              'Tabmix.setItem(box, "scrolledtoend", true);' + $LF +
+              'Tabmix.setItem(box, "scrolledtostart", true);'
+            )._replace(
+              'this.scrollboxPaddingStart',
+              'this.isMultiRow ? this.scrollboxPaddingTop : $&'
+            )._replace(
+              'this.scrollboxPaddingEnd',
+              'this.isMultiRow ? this.scrollboxPaddingBottom : $&'
+            )._replace(
+              'this._isRTLScrollbox',
+              '$& && !this.isMultiRow'
+            )._replace(
+              'if (scrolledToEnd) {',
+              'let box = document.getElementById("tabmixScrollBox");' + $LF +
+              '  Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);' + $LF +
+              '  Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);' + $LF +
+              '  $&'
+            ).toCode();
+          } else if (Tabmix.isVersion(320, 270)) {
             Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
               // when theme or extension add negative margin-bottom to the tab or
               // tab content the scrollHeight can be larger than the actual
