@@ -782,6 +782,10 @@ Tabmix.onContentLoaded = {
         // titlebar and titlebarContent height
         '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
+      )._replace(
+        'titlebarContentHeight = Math.max(titlebarContentHeight, fullTabsHeight)',
+        'titlebarContentHeight = Math.max(titlebarContentHeight, TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles))',
+        {check: Tabmix.isVersion(550)}
       ).toCode();
     }
 
