@@ -592,29 +592,10 @@ ContentClickInternal = {
       openNewTab = true;
 
     if (openNewTab) {
-      let blocked;
-      try {
-        // for the moment just do it for Google and Yahoo....
-        // tvguide.com    - added 2013-07-20
-        // duckduckgo.com - added 2014-12-24
-        // jetbrains.com - added 2016-05-01
-        let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com/;
-        blocked = re.test(currentHref);
-        // youtube.com - added 2013-11-15
-        if (!blocked && /youtube.com/.test(currentHref) &&
-           (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
-          blocked = true;
-        else if (!blocked) {
-          // make sure external links in developer.mozilla.org open new tab
-          let host = this._browser.currentURI.host;
-          blocked = host == "developer.mozilla.org" && linkNode.host != host &&
-                   linkNode.classList.contains("external");
-        }
-      } catch (ex) {
-        blocked = false;
-      }
-      if (!blocked)
+      let blocked = LinkNodeUtils.isSpecialPage(href, linkNode, currentHref, this._window);
+      if (!blocked) {
         return "16";
+      }
 
       let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
@@ -646,7 +627,7 @@ ContentClickInternal = {
     if (typeof GM_function != "function")
       return;
 
-    this._GM_function.set(window, GM_function);
+    LinkNodeUtils._GM_function.set(window, GM_function);
   },
 
   miscellaneous(node) {
@@ -684,18 +665,10 @@ ContentClickInternal = {
    *
    */
   isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
-    if (this.isGMEnabled()) {
+    if (LinkNodeUtils.isGMEnabled(this._window)) {
       if (href && href.match(/\.user\.js(\?|$)/i))
         return true;
     }
-    return false;
-  },
-
-  _GM_function: new WeakMap(),
-
-  isGMEnabled() {
-    if (this._GM_function.has(this._window))
-      return this._GM_function.get(this._window)();
     return false;
   },
 

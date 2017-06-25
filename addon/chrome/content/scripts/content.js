@@ -192,35 +192,55 @@ var TabmixContentHandler = {
 TabmixClickEventHandler = {
   init: function init(global) {
     if (TabmixSvc.version(380)) {
-      global.addEventListener("click", this, true);
+      global.addEventListener("click", event => {
+        let linkData = this.getLinkData(event);
+        if (linkData) {
+          let [href, node] = linkData;
+          let currentHref = event.originalTarget.ownerDocument.documentURI;
+          if (LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+            this.contentAreaClick(event, linkData);
+          }
+        }
+      }, true);
+      Cc["@mozilla.org/eventlistenerservice;1"]
+          .getService(Ci.nsIEventListenerService)
+          .addSystemEventListener(global, "click", this, true);
     }
   },
 
   handleEvent(event) {
     switch (event.type) {
       case "click":
-        this.contentAreaClick(event);
+        this.contentAreaClick(event, this.getLinkData(event));
         break;
     }
   },
 
-  contentAreaClick(event) {
+  getLinkData(event) {
     // tabmix_isMultiProcessBrowser is undefined for remote browser when
     // window.gMultiProcessBrowser is true
     if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
         event.tabmix_isMultiProcessBrowser === false) {
-      return;
+      return null;
     }
 
-    let originalTarget = event.originalTarget;
-    let ownerDoc = originalTarget.ownerDocument;
+    let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
     if (!ownerDoc || /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
+      return null;
+    }
+
+    return this._hrefAndLinkNodeForClickEvent(event);
+  },
+
+  contentAreaClick(event, linkData) {
+    if (!linkData) {
       return;
     }
 
-    let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
+    let [href, node, principal] = linkData;
+    let ownerDoc = event.originalTarget.ownerDocument;
 
     // first get document wide referrer policy, then
     // get referrer attribute from clicked link and parse it and
