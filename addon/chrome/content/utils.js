@@ -58,6 +58,24 @@ var Tabmix = {
       elem.removeAttribute(aAttr);
   },
 
+  getBoundsWithoutFlushing(element) {
+    if (!("_DOMWindowUtils" in this)) {
+      try {
+        this._DOMWindowUtils =
+          window.QueryInterface(Ci.nsIInterfaceRequestor)
+              .getInterface(Ci.nsIDOMWindowUtils);
+        if (!this._DOMWindowUtils.getBoundsWithoutFlushing) {
+          this._DOMWindowUtils = null;
+        }
+      } catch (ex) {
+        this._DOMWindowUtils = null;
+      }
+    }
+    return this._DOMWindowUtils ?
+      this._DOMWindowUtils.getBoundsWithoutFlushing(element) :
+      element.getBoundingClientRect();
+  },
+
   getTopWin() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },

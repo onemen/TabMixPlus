@@ -3536,7 +3536,7 @@ TabmixSessionManager = {
     }
 
     if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
-      aTab.setAttribute("width", aTab.getBoundingClientRect().width);
+      aTab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(aTab).width);
 
     // if we need to remove extra tabs make sure they are not protected
     let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",

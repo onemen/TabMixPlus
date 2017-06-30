@@ -349,7 +349,7 @@ var TMP_ClosedTabs = {
       return false;
 
     if (keepWidth && !aPopup.hasAttribute("width")) {
-      const width = aPopup.getBoundingClientRect().width;
+      const width = Tabmix.getBoundsWithoutFlushing(aPopup).width;
       aPopup.setAttribute("width", width);
     }
 

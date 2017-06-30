@@ -137,10 +137,14 @@ var TMP_tabDNDObserver = {
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
 
     if (Tabmix.isVersion(280)) {
-      let t = document.getElementById("TabsToolbar").parentNode.getBoundingClientRect();
-      let r = gBrowser.tabContainer.getBoundingClientRect();
-      let c = document.getElementById("content-deck").getBoundingClientRect();
-      this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          let t = Tabmix.getBoundsWithoutFlushing(document.getElementById("TabsToolbar").parentNode);
+          let r = Tabmix.getBoundsWithoutFlushing(gBrowser.tabContainer);
+          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("content-deck"));
+          this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
+        });
+      });
     }
   },
 
@@ -443,11 +447,11 @@ var TMP_tabDNDObserver = {
       let tabIndex = draggedTab._tPos;
       if (dropIndex > tabIndex) {
         for (let i = tabIndex + 1; i <= dropIndex; i++) {
-          newTranslateX += gBrowser.tabs[i].getBoundingClientRect().width;
+          newTranslateX += Tabmix.getBoundsWithoutFlushing(gBrowser.tabs[i]).width;
         }
       } else if (dropIndex < tabIndex) {
         for (let i = dropIndex; i < tabIndex; i++) {
-          newTranslateX -= gBrowser.tabs[i].getBoundingClientRect().width;
+          newTranslateX -= Tabmix.getBoundsWithoutFlushing(gBrowser.tabs[i]).width;
         }
       }
     }

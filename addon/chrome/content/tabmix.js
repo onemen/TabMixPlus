@@ -105,7 +105,7 @@ Tabmix.getButtonsHeight = function(setDefault) {
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
+    this._buttonsHeight = Tabmix.getBoundsWithoutFlushing(Tabmix.visibleTabs.first).height;
     if (stripIsHidden)
       tabBar.visible = false;
 
@@ -134,7 +134,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     this.tabsNewtabButton =
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
     this.tabsNewtabButton.setAttribute("force-display", true);
-    let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
+    let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);
     let marginStart = style.getPropertyValue("margin-left");
     // it doesn't work when marginEnd add to buttonWidth
@@ -151,7 +151,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
-      let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
+      let openNewPrivateTabRect = Tabmix.getBoundsWithoutFlushing(openNewPrivateTab);
       this.afterTabsButtonsWidth.push(openNewPrivateTabRect.width);
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
@@ -931,7 +931,7 @@ var TMP_eventListener = {
 
     if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle &&
         !tab.hasAttribute("width") && tab.hasAttribute("pending")) {
-      tab.setAttribute("width", tab.getBoundingClientRect().width);
+      tab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(tab).width);
     }
 
     // for ColorfulTabs 6.0+

@@ -332,7 +332,7 @@
             else
               tab = Tabmix.visibleTabs.previous(element);
             if (tab) {
-              offset = Math.min(this.minOffset, this.offsetRatio * tab.getBoundingClientRect().width);
+              offset = Math.min(this.minOffset, this.offsetRatio * Tabmix.getBoundsWithoutFlushing(tab).width);
               if (!isScrollingLeft)
                 offset = Math.min(this.scrollPosition, offset);
             }
