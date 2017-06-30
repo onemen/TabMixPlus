@@ -394,18 +394,18 @@ var TabmixTabbar = {
     document.getElementById("TabsToolbar").dispatchEvent(event);
   },
 
+  _waitAfterMaximized: false,
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
-      if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
-        TabmixTabbar.setHeight(this.visibleRows);
-      }
       this.setFirstTabInRow();
       if (tabBar.mTabstrip.orient != "vertical") {
         tabBar.mTabstrip._enterVerticalMode();
         this.updateBeforeAndAfter();
       } else {
+        this._waitAfterMaximized = window.windowState == window.STATE_MAXIMIZED;
         setTimeout(() => {
+          this._waitAfterMaximized = false;
           Tabmix.tabsUtils.updateVerticalTabStrip();
           this.updateBeforeAndAfter();
         }, 0);
@@ -817,6 +817,7 @@ Tabmix.tabsUtils = {
   updateVerticalTabStrip(aReset) {
     if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
+        TabmixTabbar._waitAfterMaximized ||
         !this.tabBar.visible && TabmixTabbar.visibleRows == 1)
       return null;
     if (this._inUpdateVerticalTabStrip)
@@ -1901,6 +1902,16 @@ gTMPprefObserver = {
 
     if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
       this.insertRule('#tabmixScrollBox{ margin-top: -1px;}');
+      newRule = `#main-window[sizemode="maximized"][tabsontop=true] .tabbrowser-tabs[multibar] > .tabbrowser-tab,
+         #main-window[sizemode="fullscreen"][tabsontop=true] .tabbrowser-tabs[multibar] > .tabbrowser-tab {
+           margin-top: -1px;
+         }`;
+      this.insertRule(newRule);
+      newRule = `#main-window[sizemode="maximized"][tabsontop=true] .tabbrowser-tabs[multibar],
+         #main-window[sizemode="fullscreen"][tabsontop=true] .tabbrowser-tabs[multibar] {
+           padding-top: 1px;
+         }`;
+      this.insertRule(newRule);
     }
 
     // we don't show icons on menu on Mac OS X
