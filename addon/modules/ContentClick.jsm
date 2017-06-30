@@ -946,7 +946,12 @@ ContentClickInternal = {
     if (testPathname)
       return true;
 
-    let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
+    let _host = [
+      "profiles.google.com",
+      "accounts.google.com",
+      "groups.google.com",
+      "news.google.com",
+    ];
     return _host.indexOf(node.host) > -1;
   },
 
