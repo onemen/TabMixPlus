@@ -12,19 +12,19 @@
                            xbl:inherits="orient,disabled=scrolledtostart"
                            oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
                            anonid="scrollbutton-up-right"
-                           onclick="gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
-                           onmousedown="if (event.button === 0) gBrowser.tabContainer.mTabstrip._startScroll(-1);"
+                           onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
+                           onmousedown="if (event.button === 0 &amp;&amp; !this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(-1);"
                            onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
-                           onmouseover="gBrowser.tabContainer.mTabstrip._continueScroll(-1);"
+                           onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(-1);"
                            onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();"/>
         <xul:toolbarbutton class="scrollbutton-down"
                            xbl:inherits="orient,disabled=scrolledtoend"
                            oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
                            anonid="scrollbutton-down-right"
-                           onclick="gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
-                           onmousedown="if (event.button === 0) gBrowser.tabContainer.mTabstrip._startScroll(1);"
+                           onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
+                           onmousedown="if (event.button === 0 &amp;&amp; !this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(1);"
                            onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
-                           onmouseover="gBrowser.tabContainer.mTabstrip._continueScroll(1);"
+                           onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(1);"
                            onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();"/>
     </content>
     <implementation>
