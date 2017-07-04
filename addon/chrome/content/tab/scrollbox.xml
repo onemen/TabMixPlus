@@ -227,10 +227,10 @@
               'Tabmix.setItem(box, "scrolledtoend", true);' + $LF +
               'Tabmix.setItem(box, "scrolledtostart", true);'
             )._replace(
-              'this.scrollboxPaddingStart',
+              'this.scrollboxPaddingLeft',
               'this.isMultiRow ? this.scrollboxPaddingTop : $&'
             )._replace(
-              'this.scrollboxPaddingEnd',
+              'this.scrollboxPaddingRight',
               'this.isMultiRow ? this.scrollboxPaddingBottom : $&'
             )._replace(
               'this._isRTLScrollbox',
