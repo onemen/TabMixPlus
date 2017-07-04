@@ -236,6 +236,17 @@
               'this._isRTLScrollbox',
               '$& && !this.isMultiRow'
             )._replace(
+              'if (leftOrTopElement',
+              `if (this.isMultiRow) {
+                  if (leftOrTopElement &&
+                      leftOrTopEdge(leftOrTopElement) >= leftOrTopEdge(this._scrollbox) + scrollboxPaddingLeft) {
+                    scrolledToStart = true;
+                  } else if (rightOrBottomElement &&
+                             rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this._scrollbox) - scrollboxPaddingRight + 2) {
+                    scrolledToEnd = true;
+                  }
+                } else $&`,
+            )._replace(
               'if (scrolledToEnd) {',
               'let box = document.getElementById("tabmixScrollBox");' + $LF +
               '  Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);' + $LF +
