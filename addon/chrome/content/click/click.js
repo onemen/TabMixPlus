@@ -744,7 +744,7 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
+    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks || [] :
       Tabmix.ContextMenu.getSelectedLinks(window.content, check);
 
     if (!check && urls.length) {
