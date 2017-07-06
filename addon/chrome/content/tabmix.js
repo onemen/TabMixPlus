@@ -1053,20 +1053,33 @@ var TMP_eventListener = {
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
+        let scrollByPixels = true;
+        let scrollAmount = 0;
         if (Tabmix.isVersion(480) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
-          tabStrip.scrollByPixels(delta);
+          scrollAmount = delta;
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
-          tabStrip.scrollByPixels(delta * tabStrip.scrollClientSize);
+          scrollAmount = delta * tabStrip.scrollClientSize;
         } else if (Tabmix.isVersion(530) && !TabmixTabbar.isMultiRow) {
-          tabStrip.scrollByPixels(delta * tabStrip.lineScrollAmount);
+          scrollAmount = delta * tabStrip.lineScrollAmount;
         } else {
           // scroll the tabbar by one tab
           if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
             delta = delta > 0 ? 1 : -1;
           }
+          scrollByPixels = false;
           tabStrip.scrollByIndex(delta);
+        }
+
+        if (scrollByPixels) {
+          let useSmoothScroll = Tabmix.isVersion(530) &&
+            aEvent.deltaMode != aEvent.DOM_DELTA_PIXEL && tabStrip.smoothScroll;
+          if (useSmoothScroll) {
+            tabStrip._smoothScrollByPixels(scrollAmount);
+          } else {
+            tabStrip.scrollByPixels(scrollAmount);
+          }
         }
       };
 
