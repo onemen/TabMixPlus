@@ -522,7 +522,11 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        PlacesUtils.addLazyBookmarkObserver(this);
+        if (Tabmix.isVersion(560)) {
+          PlacesUtils.bookmarks.addObserver(this);
+        } else {
+          PlacesUtils.addLazyBookmarkObserver(this);
+        }
         this._hasBookmarksObserver = true;
       } catch (ex) {
         Tabmix.reportError(ex, "Failed to add bookmarks observer:");
@@ -532,7 +536,11 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      PlacesUtils.removeLazyBookmarkObserver(this);
+      if (Tabmix.isVersion(560)) {
+        PlacesUtils.bookmarks.removeObserver(this);
+      } else {
+        PlacesUtils.removeLazyBookmarkObserver(this);
+      }
       this._hasBookmarksObserver = false;
     }
   },
