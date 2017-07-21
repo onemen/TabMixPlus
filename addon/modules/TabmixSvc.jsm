@@ -186,7 +186,6 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
-      // eslint-disable-next-line tabmix/import-globals
       Cu.import("resource://tabmixplus/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
@@ -200,6 +199,14 @@ this.TabmixSvc = {
       tmp.DynamicRules.init(aWindow);
 
       Cu.import("resource://tabmixplus/TabRestoreQueue.jsm", {});
+
+      if (TabmixSvc.version(510)) {
+        try {
+          Cu.import("resource://tabmixplus/extensions/EmbeddedWebExtension.jsm", {});
+        } catch (ex) {
+          TabmixSvc.console.reportError(ex);
+        }
+      }
     },
 
     addMissingPrefs() {
