@@ -8,9 +8,13 @@ var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 
+XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
+  "resource://gre/modules/AppConstants.jsm");
+
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
 
@@ -197,7 +201,10 @@ TabmixClickEventHandler = {
         if (linkData) {
           let [href, node] = linkData;
           let currentHref = event.originalTarget.ownerDocument.documentURI;
-          if (LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+          const divertMiddleClick = event.button == 1 && TabmixSvc.prefBranch.getBoolPref("middlecurrent");
+          const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
+          if (divertMiddleClick || ctrlKey ||
+              LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
             this.contentAreaClick(event, linkData);
           }
         }
