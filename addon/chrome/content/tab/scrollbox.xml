@@ -245,7 +245,7 @@
                              rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this._scrollbox) - scrollboxPaddingRight + 2) {
                     scrolledToEnd = true;
                   }
-                } else $&`,
+                } else $&`
             )._replace(
               'if (scrolledToEnd) {',
               'let box = document.getElementById("tabmixScrollBox");' + $LF +
