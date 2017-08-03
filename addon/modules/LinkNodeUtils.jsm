@@ -75,7 +75,7 @@ this.LinkNodeUtils = {
       // tvguide.com    - added 2013-07-20
       // duckduckgo.com - added 2014-12-24
       // jetbrains.com - added 2016-05-01
-      let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com/;
+      let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com|github.io|github.com/;
       blocked = re.test(currentHref);
       // youtube.com - added 2013-11-15
       if (!blocked && /youtube.com/.test(currentHref) &&
