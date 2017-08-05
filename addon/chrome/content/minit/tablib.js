@@ -329,7 +329,7 @@ Tabmix.tablib = {
       [obj, fnName] = [gBrowser, "setTabTitle"];
     }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      'var title = browser.contentTitle;',
+      Tabmix.isVersion(550) ? 'let isContentTitle = false;' : 'var title = browser.contentTitle;',
       '$&\
        var urlTitle, title = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
     )._replace(
@@ -360,13 +360,16 @@ Tabmix.tablib = {
     ).toCode();
 
     if (Tabmix.isVersion(550)) {
+      Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
+      gBrowser.setInitialTabTitle = function(aTab) {
+        if (aTab._labelIsInitialTitle &&
+            aTab.hasAttribute("tabmix_changed_label")) {
+          return;
+        }
+        Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, arguments);
+      };
+
       Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
-        '{',
-        `{
-            if (aLabel == TabmixSvc.aboutBlank) {
-              aLabel = this.mStringBundle.getString("tabs.emptyTabTitle");
-            }`
-      )._replace(
         'this._tabAttrModified',
         `let urlTitle = aOptions && aOptions.urlTitle;
               Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);

@@ -322,7 +322,7 @@ var TMP_Places = {
       }
       this.setTabTitle(aTab, url, bmIds[i]);
       if (Tabmix.isVersion(550)) {
-        aTab._suppressTransientPlaceholderLabel = true;
+        aTab._labelIsInitialTitle = true;
       }
       if (loadProgressively) {
         tabs.push(aTab);
