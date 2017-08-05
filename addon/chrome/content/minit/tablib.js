@@ -377,11 +377,13 @@ Tabmix.tablib = {
       ).toCode();
     }
 
-    // after bug 347930 - change Tab strip to be a toolbar
-    Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
-      'this.tabContainer.visible = aShow;',
-      'if (!aShow || TabmixTabbar.hideMode != 2) $&'
-    ).toCode();
+    if (!Tabmix.isVersion(570)) {
+      // after bug 347930 - change Tab strip to be a toolbar
+      Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
+        'this.tabContainer.visible = aShow;',
+        'if (!aShow || TabmixTabbar.hideMode != 2) $&'
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
       /*
